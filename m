@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C406AFB15
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 043C96AFB17
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjCHA2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 19:28:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
+        id S229870AbjCHA31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 19:29:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjCHA2t (ORCPT
+        with ESMTP id S229662AbjCHA3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 19:28:49 -0500
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2B2968F4;
-        Tue,  7 Mar 2023 16:28:44 -0800 (PST)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1767a208b30so15192327fac.2;
-        Tue, 07 Mar 2023 16:28:44 -0800 (PST)
+        Tue, 7 Mar 2023 19:29:24 -0500
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CE08E3EA;
+        Tue,  7 Mar 2023 16:29:23 -0800 (PST)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-176261d7f45so17088594fac.11;
+        Tue, 07 Mar 2023 16:29:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678235323;
+        d=1e100.net; s=20210112; t=1678235362;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9Z8MWeIzOL2NSe+eXgUZNrGgoSCOxaDj1NniKwarPGg=;
-        b=l3B1r89lfd1uirBLw+vjF+ooedd5iWuRQjKkL9pXSx7YM8sQ46ZEcevqwcNYjVp8UT
-         26lxQfdXyVAXhf9UbvdNHY1n+z5OQIXRq7IO3zZKdN8/x/0U4BhIqIcSZOCR/wL9yrkW
-         9u9wUhZtsbdUXXaEx7zD3rgA7RnTNu7TP/HxBYgVc+hVzQPXMg5DyAyErvM5VNSevqRP
-         TUqlM9t1U3JDEsmVf1ZqAtgDmLOCb/t2VEiaDm+ekVXGQZIegdZI76qbTO/AizCAaC/y
-         3Snn4nZHBFH/UQethxQWHBAn5+GGqUDq0q64L/oICV5767BzH3v07L0pdODFmn2GFswU
-         4oog==
-X-Gm-Message-State: AO0yUKWWCYYd5tjrgXO/Y27awDDQ0BNQmnfi4JSFkJHnPgz5sPq8asak
-        OaT+WnT7IFdn7mu1PiACrQ==
-X-Google-Smtp-Source: AK7set8z7WL4Pj8aQSImXn4LYOIvg29D0qOLXTnCMATeozbAUq7ddyS+TF1G8QaEVomIScXh56tpuQ==
-X-Received: by 2002:a05:6870:e38e:b0:171:d1e4:f9da with SMTP id x14-20020a056870e38e00b00171d1e4f9damr8424206oad.2.1678235323686;
-        Tue, 07 Mar 2023 16:28:43 -0800 (PST)
+        bh=GbkJoaBSLlit3t2d1saVpRVwe6uVOOAmLerdrHEmPA4=;
+        b=p2yvaWYjckX+CNvJpkwIpdrMm6QazUzIHgpvQzgBCqGWYwKquKcfWvGbOiT1TnDYIa
+         yhPsptKrQInoBwF9PMIjmST+Plyv7FodJrzAkQycV1J4OqZSwO2KA3PEMyDS292diVsC
+         Qo9hXoECrzSP1djufQ4JpyhyP75U3QR5mxIS5QjJUuYdaO+Zn66zr88nm/CzVFyXY6I5
+         SAInM0yJdHdWrstvxYhK1SqWoN5lNOfmCEZjXhfXObHaZ1tWQwpzpWhNQngNM0GBPzft
+         tsyxZ6zoywifYYIFg9hhS+To+LiW1fyi2G3NUbrAmijket0viforcDPaz/tuL2qEy5dV
+         gZiA==
+X-Gm-Message-State: AO0yUKWAYAYN6l6dd40ptTQh9ks+r/2lCDrkBR6lLcHFDUYVQzjFgIZe
+        lHvLLAfWtNBPYftyT41asg==
+X-Google-Smtp-Source: AK7set83LoWLF5mpats1V58zuDPQ+pBXFeCwEfyRTuwpQDFg/1Md/+txVRbI6H1CFcRNahYc39uAKg==
+X-Received: by 2002:a05:6870:c0d5:b0:176:55ad:9237 with SMTP id e21-20020a056870c0d500b0017655ad9237mr9249005oad.38.1678235362468;
+        Tue, 07 Mar 2023 16:29:22 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v42-20020a056870956a00b001762d1bf6a9sm5659756oal.45.2023.03.07.16.28.42
+        by smtp.gmail.com with ESMTPSA id c22-20020a056870a59600b0017197629658sm5660538oam.56.2023.03.07.16.29.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 16:28:43 -0800 (PST)
-Received: (nullmailer pid 534577 invoked by uid 1000);
-        Wed, 08 Mar 2023 00:28:42 -0000
-Date:   Tue, 7 Mar 2023 18:28:42 -0600
+        Tue, 07 Mar 2023 16:29:21 -0800 (PST)
+Received: (nullmailer pid 535800 invoked by uid 1000);
+        Wed, 08 Mar 2023 00:29:21 -0000
+Date:   Tue, 7 Mar 2023 18:29:21 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, David Airlie <airlied@gmail.com>,
+        devicetree@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Walle <michael@walle.cc>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 02/21] of: Update of_device_get_modalias()
-Message-ID: <20230308002842.GA533766-robh@kernel.org>
-References: <20230307165359.225361-1-miquel.raynal@bootlin.com>
- <20230307165359.225361-3-miquel.raynal@bootlin.com>
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH] dt-bindings: display: bridge: parade,ps8622: convert to
+ dtschema
+Message-ID: <167823536016.535746.4969388774205630189.robh@kernel.org>
+References: <20230221170955.62448-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230307165359.225361-3-miquel.raynal@bootlin.com>
+In-Reply-To: <20230221170955.62448-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -72,19 +74,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 05:53:40PM +0100, Miquel Raynal wrote:
-> This function only needs a "struct device_node" to work, but for
-> convenience the author (and only user) of this helper did use a "struct
-> device" and put it in device.c.
-> 
-> Let's convert this helper to take a "struct device node" instead. This
-> change asks for two additional changes: renaming it "of_modalias()"
-> to fit the current naming, and moving it outside of device.c which will
-> be done in a follow-up commit.
-> 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  drivers/of/device.c | 29 +++++++++++++++++------------
->  1 file changed, 17 insertions(+), 12 deletions(-)
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On Tue, 21 Feb 2023 18:09:55 +0100, Krzysztof Kozlowski wrote:
+> Convert the Parade PS8622/PS8625 DisplayPort to LVDS Converter bindings
+> to DT schema.  Changes during conversion: add missing vdd12-supply, used
+> by Linux driver.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../display/bridge/parade,ps8622.yaml         | 115 ++++++++++++++++++
+>  .../bindings/display/bridge/ps8622.txt        |  31 -----
+>  2 files changed, 115 insertions(+), 31 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/display/bridge/parade,ps8622.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/display/bridge/ps8622.txt
+> 
+
+Applied, thanks!
+
