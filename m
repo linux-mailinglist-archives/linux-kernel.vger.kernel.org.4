@@ -2,236 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47126AFF18
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 07:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0687F6AFF1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 07:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjCHGqu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Mar 2023 01:46:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
+        id S229735AbjCHGrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 01:47:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjCHGqs (ORCPT
+        with ESMTP id S229501AbjCHGrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 01:46:48 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7794815C8A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 22:46:46 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2E17124E38B;
-        Wed,  8 Mar 2023 14:46:45 +0800 (CST)
-Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Mar
- 2023 14:46:45 +0800
-Received: from localhost.localdomain (183.27.97.46) by EXMBX067.cuchost.com
- (172.16.6.67) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Mar
- 2023 14:46:44 +0800
-From:   Mason Huo <mason.huo@starfivetech.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        "Mason Huo" <mason.huo@starfivetech.com>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        Sia Jee Heng <jeeheng.sia@starfivetech.com>
-Subject: [PATCH v4] irqchip/irq-sifive-plic: Add syscore callbacks for hibernation
-Date:   Wed, 8 Mar 2023 14:46:43 +0800
-Message-ID: <20230308064643.24805-1-mason.huo@starfivetech.com>
-X-Mailer: git-send-email 2.39.2
+        Wed, 8 Mar 2023 01:47:45 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FEA9E668
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 22:47:44 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id p3-20020a17090ad30300b0023a1cd5065fso1074162pju.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 22:47:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678258064;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gG2oN8vtildG2P61+wI9F4PrJ+MvdmYrBhZL9NTK/Uo=;
+        b=qrtN7j5AXKWJsCG3E0PH4oiCMNwLFR6JCjdwKskXS/mauDKDcisfSfVFXcUnjsBlEC
+         ax3etlGwgmryLx5JXpm28/mwLf2AV7y6/B5orDESXqchdDaCntCp7hrjMuxEJdWQv5IT
+         AgCeScSiNGdLQAlN4bi06JOmybvt9w49xghgqxwRID4jZN4j6s3FLjJiNfBKrezBJUtD
+         p6iFalHB5coyIDEkCp8PxdBSaszXHzQcAilmx0+npCC88zVByWDRXfvCkqVbjlL3IbYe
+         Cc0SNWskqmmLHHu8PGumzRfI1SttVg1HYgrUfgJrnBRN0pkvdtNOacd31XdSqldMp0TG
+         qIFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678258064;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gG2oN8vtildG2P61+wI9F4PrJ+MvdmYrBhZL9NTK/Uo=;
+        b=HhXic7ndzxYFUkFffY0QFS80lHOeAYki7BB5CPOoVqjEhAIfA1kuqHggjHMKwGVVH8
+         KoTcK8XOjuMTnQ69er/NydIGDqO1Fn5L03LPO6D+wBs8S9BlkJb0qObeU3Cd9FWHclLS
+         VUa3betfbAxw7EPkTAwGTudOMyOaZCb65cAWTr9VmJqVNDSvjamCNXRw04FU8EFB/H/j
+         97WMirs4ef7R2tDnehZutXdbWDlLAORCKhcGSKeEGTnqWWCoAl9S48rHgfXrwLlzvNMZ
+         rDoZhBBpQOWrldRMh1U9UZNef0cdyqxHl2jNk9hO99P7V78MoxZsvbncD11pz2J6zJiD
+         9tOA==
+X-Gm-Message-State: AO0yUKWWyYUP9DC9wUdTxukerdlZAx8mU4IP54F0NQk20MEGNSD23RdI
+        QJ/5FChcaGIjkOitJOz6y3c=
+X-Google-Smtp-Source: AK7set9j5/uTj4qvRxW7bRO0mbX+0sl5auSDS2wZRxqHsunyU90ihaJiYjiNyp921WUS0zv/keFrDg==
+X-Received: by 2002:a17:90b:204:b0:23a:2038:bf4b with SMTP id fy4-20020a17090b020400b0023a2038bf4bmr17014620pjb.3.1678258063791;
+        Tue, 07 Mar 2023 22:47:43 -0800 (PST)
+Received: from localhost.localdomain ([221.226.144.218])
+        by smtp.gmail.com with ESMTPSA id y20-20020a17090aca9400b0023317104415sm10149201pjt.17.2023.03.07.22.47.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 22:47:43 -0800 (PST)
+From:   Song Shuai <suagrfillet@gmail.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        pierre.gondois@arm.com, conor.dooley@microchip.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Song Shuai <suagrfillet@gmail.com>
+Subject: [PATCH] Revert "riscv: Set more data to cacheinfo"
+Date:   Wed,  8 Mar 2023 14:47:34 +0800
+Message-Id: <20230308064734.512457-1-suagrfillet@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [183.27.97.46]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX067.cuchost.com
- (172.16.6.67)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The priority and enable registers of plic will be reset
-during hibernation power cycle in poweroff mode,
-add the syscore callbacks to save/restore those registers.
+This reverts commit baf7cbd94b5688f167443a2cc3dcea3300132099.
 
-Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
-Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-Reviewed-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://lore.kernel.org/r/202302140709.CdkxgtPi-lkp@intel.com/
+There are some duplicate cache attributes populations executed
+in both ci_leaf_init() and later cache_setup_properties().
+
+Revert the commit baf7cbd94b56 ("riscv: Set more data to cacheinfo")
+to setup only the level and type attributes at this early place.
+
+Signed-off-by: Song Shuai <suagrfillet@gmail.com>
 ---
- drivers/irqchip/irq-sifive-plic.c | 93 ++++++++++++++++++++++++++++++-
- 1 file changed, 91 insertions(+), 2 deletions(-)
+ arch/riscv/kernel/cacheinfo.c | 66 ++++++++---------------------------
+ 1 file changed, 15 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
-index ff47bd0dec45..2800e7bb149a 100644
---- a/drivers/irqchip/irq-sifive-plic.c
-+++ b/drivers/irqchip/irq-sifive-plic.c
-@@ -17,6 +17,7 @@
- #include <linux/of_irq.h>
- #include <linux/platform_device.h>
- #include <linux/spinlock.h>
-+#include <linux/syscore_ops.h>
- #include <asm/smp.h>
- 
- /*
-@@ -67,6 +68,8 @@ struct plic_priv {
- 	struct irq_domain *irqdomain;
- 	void __iomem *regs;
- 	unsigned long plic_quirks;
-+	unsigned int nr_irqs;
-+	unsigned long *prio_save;
- };
- 
- struct plic_handler {
-@@ -78,6 +81,7 @@ struct plic_handler {
- 	 */
- 	raw_spinlock_t		enable_lock;
- 	void __iomem		*enable_base;
-+	u32			*enable_save;
- 	struct plic_priv	*priv;
- };
- static int plic_parent_irq __ro_after_init;
-@@ -229,6 +233,71 @@ static int plic_irq_set_type(struct irq_data *d, unsigned int type)
- 	return IRQ_SET_MASK_OK;
+diff --git a/arch/riscv/kernel/cacheinfo.c b/arch/riscv/kernel/cacheinfo.c
+index 3a13113f1b29..305ebbdc780d 100644
+--- a/arch/riscv/kernel/cacheinfo.c
++++ b/arch/riscv/kernel/cacheinfo.c
+@@ -64,53 +64,12 @@ uintptr_t get_cache_geometry(u32 level, enum cache_type type)
+ 			   0;
  }
  
-+static int plic_irq_suspend(void)
-+{
-+	unsigned int i, cpu;
-+	u32 __iomem *reg;
-+	struct plic_priv *priv;
-+
-+	priv = per_cpu_ptr(&plic_handlers, smp_processor_id())->priv;
-+
-+	for (i = 0; i < priv->nr_irqs; i++)
-+		if (readl(priv->regs + PRIORITY_BASE + i * PRIORITY_PER_ID))
-+			__set_bit(i, priv->prio_save);
-+		else
-+			__clear_bit(i, priv->prio_save);
-+
-+	for_each_cpu(cpu, cpu_present_mask) {
-+		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
-+
-+		if (!handler->present)
-+			continue;
-+
-+		raw_spin_lock(&handler->enable_lock);
-+		for (i = 0; i < DIV_ROUND_UP(priv->nr_irqs, 32); i++) {
-+			reg = handler->enable_base + i * sizeof(u32);
-+			handler->enable_save[i] = readl(reg);
-+		}
-+		raw_spin_unlock(&handler->enable_lock);
-+	}
-+
-+	return 0;
-+}
-+
-+static void plic_irq_resume(void)
-+{
-+	unsigned int i, index, cpu;
-+	u32 __iomem *reg;
-+	struct plic_priv *priv;
-+
-+	priv = per_cpu_ptr(&plic_handlers, smp_processor_id())->priv;
-+
-+	for (i = 0; i < priv->nr_irqs; i++) {
-+		index = (i / BITS_PER_LONG);
-+		writel((priv->prio_save[index] & BIT(i % BITS_PER_LONG)) ? 1 : 0,
-+		       priv->regs + PRIORITY_BASE + i * PRIORITY_PER_ID);
-+	}
-+
-+	for_each_cpu(cpu, cpu_present_mask) {
-+		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
-+
-+		if (!handler->present)
-+			continue;
-+
-+		raw_spin_lock(&handler->enable_lock);
-+		for (i = 0; i < DIV_ROUND_UP(priv->nr_irqs, 32); i++) {
-+			reg = handler->enable_base + i * sizeof(u32);
-+			writel(handler->enable_save[i], reg);
-+		}
-+		raw_spin_unlock(&handler->enable_lock);
-+	}
-+}
-+
-+static struct syscore_ops plic_irq_syscore_ops = {
-+	.suspend	= plic_irq_suspend,
-+	.resume		= plic_irq_resume,
-+};
-+
- static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
- 			      irq_hw_number_t hwirq)
+-static void ci_leaf_init(struct cacheinfo *this_leaf, enum cache_type type,
+-			 unsigned int level, unsigned int size,
+-			 unsigned int sets, unsigned int line_size)
++static void ci_leaf_init(struct cacheinfo *this_leaf,
++			 struct device_node *node,
++			 enum cache_type type, unsigned int level)
  {
-@@ -345,6 +414,7 @@ static int __init __plic_init(struct device_node *node,
- 	u32 nr_irqs;
- 	struct plic_priv *priv;
- 	struct plic_handler *handler;
-+	unsigned int cpu;
+ 	this_leaf->level = level;
+ 	this_leaf->type = type;
+-	this_leaf->size = size;
+-	this_leaf->number_of_sets = sets;
+-	this_leaf->coherency_line_size = line_size;
+-
+-	/*
+-	 * If the cache is fully associative, there is no need to
+-	 * check the other properties.
+-	 */
+-	if (sets == 1)
+-		return;
+-
+-	/*
+-	 * Set the ways number for n-ways associative, make sure
+-	 * all properties are big than zero.
+-	 */
+-	if (sets > 0 && size > 0 && line_size > 0)
+-		this_leaf->ways_of_associativity = (size / sets) / line_size;
+-}
+-
+-static void fill_cacheinfo(struct cacheinfo **this_leaf,
+-			   struct device_node *node, unsigned int level)
+-{
+-	unsigned int size, sets, line_size;
+-
+-	if (!of_property_read_u32(node, "cache-size", &size) &&
+-	    !of_property_read_u32(node, "cache-block-size", &line_size) &&
+-	    !of_property_read_u32(node, "cache-sets", &sets)) {
+-		ci_leaf_init((*this_leaf)++, CACHE_TYPE_UNIFIED, level, size, sets, line_size);
+-	}
+-
+-	if (!of_property_read_u32(node, "i-cache-size", &size) &&
+-	    !of_property_read_u32(node, "i-cache-sets", &sets) &&
+-	    !of_property_read_u32(node, "i-cache-block-size", &line_size)) {
+-		ci_leaf_init((*this_leaf)++, CACHE_TYPE_INST, level, size, sets, line_size);
+-	}
+-
+-	if (!of_property_read_u32(node, "d-cache-size", &size) &&
+-	    !of_property_read_u32(node, "d-cache-sets", &sets) &&
+-	    !of_property_read_u32(node, "d-cache-block-size", &line_size)) {
+-		ci_leaf_init((*this_leaf)++, CACHE_TYPE_DATA, level, size, sets, line_size);
+-	}
+ }
  
- 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -363,15 +433,21 @@ static int __init __plic_init(struct device_node *node,
- 	if (WARN_ON(!nr_irqs))
- 		goto out_iounmap;
+ int populate_cache_leaves(unsigned int cpu)
+@@ -121,24 +80,29 @@ int populate_cache_leaves(unsigned int cpu)
+ 	struct device_node *prev = NULL;
+ 	int levels = 1, level = 1;
  
-+	priv->nr_irqs = nr_irqs;
-+
-+	priv->prio_save = bitmap_alloc(nr_irqs, GFP_KERNEL);
-+	if (!priv->prio_save)
-+		goto out_free_priority_reg;
-+
- 	nr_contexts = of_irq_count(node);
- 	if (WARN_ON(!nr_contexts))
--		goto out_iounmap;
-+		goto out_free_priority_reg;
+-	/* Level 1 caches in cpu node */
+-	fill_cacheinfo(&this_leaf, np, level);
++	if (of_property_read_bool(np, "cache-size"))
++		ci_leaf_init(this_leaf++, np, CACHE_TYPE_UNIFIED, level);
++	if (of_property_read_bool(np, "i-cache-size"))
++		ci_leaf_init(this_leaf++, np, CACHE_TYPE_INST, level);
++	if (of_property_read_bool(np, "d-cache-size"))
++		ci_leaf_init(this_leaf++, np, CACHE_TYPE_DATA, level);
  
- 	error = -ENOMEM;
- 	priv->irqdomain = irq_domain_add_linear(node, nr_irqs + 1,
- 			&plic_irqdomain_ops, priv);
- 	if (WARN_ON(!priv->irqdomain))
--		goto out_iounmap;
-+		goto out_free_priority_reg;
- 
- 	for (i = 0; i < nr_contexts; i++) {
- 		struct of_phandle_args parent;
-@@ -441,6 +517,11 @@ static int __init __plic_init(struct device_node *node,
- 		handler->enable_base = priv->regs + CONTEXT_ENABLE_BASE +
- 			i * CONTEXT_ENABLE_SIZE;
- 		handler->priv = priv;
-+
-+		handler->enable_save =  kcalloc(DIV_ROUND_UP(nr_irqs, 32),
-+						sizeof(*handler->enable_save), GFP_KERNEL);
-+		if (!handler->enable_save)
-+			goto out_free_enable_reg;
- done:
- 		for (hwirq = 1; hwirq <= nr_irqs; hwirq++) {
- 			plic_toggle(handler, hwirq, 0);
-@@ -461,11 +542,19 @@ static int __init __plic_init(struct device_node *node,
- 				  plic_starting_cpu, plic_dying_cpu);
- 		plic_cpuhp_setup_done = true;
+-	/* Next level caches in cache nodes */
+ 	prev = np;
+ 	while ((np = of_find_next_cache_node(np))) {
+ 		of_node_put(prev);
+ 		prev = np;
+-
+ 		if (!of_device_is_compatible(np, "cache"))
+ 			break;
+ 		if (of_property_read_u32(np, "cache-level", &level))
+ 			break;
+ 		if (level <= levels)
+ 			break;
+-
+-		fill_cacheinfo(&this_leaf, np, level);
+-
++		if (of_property_read_bool(np, "cache-size"))
++			ci_leaf_init(this_leaf++, np, CACHE_TYPE_UNIFIED, level);
++		if (of_property_read_bool(np, "i-cache-size"))
++			ci_leaf_init(this_leaf++, np, CACHE_TYPE_INST, level);
++		if (of_property_read_bool(np, "d-cache-size"))
++			ci_leaf_init(this_leaf++, np, CACHE_TYPE_DATA, level);
+ 		levels = level;
  	}
-+	register_syscore_ops(&plic_irq_syscore_ops);
- 
- 	pr_info("%pOFP: mapped %d interrupts with %d handlers for"
- 		" %d contexts.\n", node, nr_irqs, nr_handlers, nr_contexts);
- 	return 0;
- 
-+out_free_enable_reg:
-+	for_each_cpu(cpu, cpu_present_mask) {
-+		handler = per_cpu_ptr(&plic_handlers, cpu);
-+		kfree(handler->enable_save);
-+	}
-+out_free_priority_reg:
-+	kfree(priv->prio_save);
- out_iounmap:
- 	iounmap(priv->regs);
- out_free_priv:
+ 	of_node_put(np);
 -- 
-2.39.2
+2.20.1
 
