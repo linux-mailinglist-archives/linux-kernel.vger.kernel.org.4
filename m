@@ -2,105 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588AF6B152D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F87E6B1531
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjCHWgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 17:36:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59214 "EHLO
+        id S230092AbjCHWh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 17:37:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjCHWgG (ORCPT
+        with ESMTP id S229525AbjCHWh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 17:36:06 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E10765135
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 14:36:05 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id o12so71793312edb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 14:36:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678314964;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jzDf4+4sG/Th13nL0Nk+rTjw3K6s3TCf1TZrS78TwVk=;
-        b=TKYPU3ZRnNzZcIrmpbFdrOELb3qHa4Mmd5uxjy5Awp0yXXXvcwOqQf7P4LJRy6hkvm
-         356DfYqVabeiY6tfx37KrcRPlwazFBeFFB9Tfnx+EGs0XQr2QklDBe15O3uLbQEeDkAH
-         JmAbzE6hh+DjMf80YADuMmOQEB+qci9YSSMdgo0AIOXb5GeAeoAx5z2V/5hfke90LAtN
-         4HhBVyxVkWoEeVADYD4Ktn11RWIcpUdql83m+s3RlPW/v5kQ1tvko9IhKGHHdQcs5GRS
-         tH19/5tiBmopZIsq2eiEuXXp73MF6ezkSL6HYF1SHmoSgQJ7NYIHmtkVH/LK0IG3dBK1
-         7Lsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678314964;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jzDf4+4sG/Th13nL0Nk+rTjw3K6s3TCf1TZrS78TwVk=;
-        b=fNcnWHUO/SD/AVgDf8B4cM/xvHsmsFUEBDPJJ4sOhr37FfN0QKGGTQsMKeWFzTI7/+
-         MSIFT2uyQ0IaTUU4ag+rXgGn+5MUteJfOJyKL+zaEITO3jy1xUQqMlOiaXJvw+KZoJ0F
-         H28hO1uasLXEYgl/DQ0uFY2Y5bsujwccMxrtHkYJeJHNsn0mefWQYIIBOQFUh+8TuujR
-         A79JkVFTljiGwBqOf5LrptIj+aNsokry0NsnPnKFDiaA413B3l0GTuNnA7uSMdIed+im
-         xSBlgeYIOuwK3t6vQaztdnRRJORW7qnEQ1f7UmAEbVtc0WpDoNy1Y6V0LwtiQON7+FsP
-         2pTw==
-X-Gm-Message-State: AO0yUKVeq2KTVyFC3MCLW4HFZbvE7Tp7Ofgx13SNplh1SqAKk7mP5/G1
-        +7Be86A2B2dVISP7CxhQPbc=
-X-Google-Smtp-Source: AK7set/8kMxm9e7Ww76G9dAgDiHgWhS+pXwdbv/atF+1sdRH7bnZyj6ZiiACFFD6T7xTA7L5lspPLA==
-X-Received: by 2002:a17:907:7748:b0:8e8:6b69:2093 with SMTP id kx8-20020a170907774800b008e86b692093mr22362157ejc.25.1678314963862;
-        Wed, 08 Mar 2023 14:36:03 -0800 (PST)
-Received: from [192.168.0.151] (ip5f5abbd3.dynamic.kabel-deutschland.de. [95.90.187.211])
-        by smtp.gmail.com with ESMTPSA id q1-20020a50c341000000b004bbb691a334sm8862127edb.2.2023.03.08.14.36.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 14:36:03 -0800 (PST)
-Message-ID: <9e4d7f04-3114-8240-341b-1fff5ae69b0b@gmail.com>
-Date:   Wed, 8 Mar 2023 23:36:02 +0100
+        Wed, 8 Mar 2023 17:37:27 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED52565460;
+        Wed,  8 Mar 2023 14:37:25 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328Lupav015496;
+        Wed, 8 Mar 2023 22:37:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=ngea5itn2PRHnG9Bc1YLjFtw8iaYKohomeLhBkd2C7c=;
+ b=plX2UNx21H/FvW/kkh0Mnk1zaesasKk5BYnh4fqQxv6P8SABxyJw0GCbtiRldKdnAoj8
+ c6Oh4RBZ8Ep927PtJeBv2luRvpiEnS51MSfV91kbD+yJ1fcU5C4LOTdxvfZKYRyZ/BTc
+ kESzaAXlfFFJQc35/bQMjLJSqFrFbqQ9GKHMb/0pKkhhskt6y49wJ7nJRkQfX6JYc0Cy
+ XkgEG/h94vj6zsR0d2xm/EcD+F2WgvKDphM8M835q7+ySFwCd5+gFabLU2V2CS7m1Dv2
+ 8hNiNljE0A1G68LO8JAnAH0XQax7P9dSjdW9UlX18VtaQfdI7D2lPepBCs086dRC/LgO uA== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p72qar2b3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Mar 2023 22:37:04 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 328Mb3iR019155
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 8 Mar 2023 22:37:03 GMT
+Received: from [192.168.143.77] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 8 Mar 2023
+ 14:37:03 -0800
+Message-ID: <ec627f76-380b-bdfd-e736-1626d5bde0e4@quicinc.com>
+Date:   Wed, 8 Mar 2023 14:37:02 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] staging: r8188eu: delete driver
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Hans de Goede <hdegoede@redhat.com>,
-        Martin Kaiser <martin@kaiser.cx>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>
-References: <20230308131934.380395-1-gregkh@linuxfoundation.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH v1 4/4] ufs: mcq: Added ufshcd_mcq_abort()
 Content-Language: en-US
-From:   Michael Straube <straube.linux@gmail.com>
-In-Reply-To: <20230308131934.380395-1-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Bart Van Assche <bvanassche@acm.org>, <quic_asutoshd@quicinc.com>,
+        <quic_cang@quicinc.com>, <mani@kernel.org>,
+        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
+        <beanhuo@micron.com>, <avri.altman@wdc.com>,
+        <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1678247309.git.quic_nguyenb@quicinc.com>
+ <c7fcbb70f0e74d225c1a09f107ba1058270739be.1678247309.git.quic_nguyenb@quicinc.com>
+ <85994527-d09d-f381-3dda-7cfb9ce98d4b@acm.org>
+From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+In-Reply-To: <85994527-d09d-f381-3dda-7cfb9ce98d4b@acm.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: UlNTLqGm8QTih0AwmmEQuOMzwQbdmbSe
+X-Proofpoint-ORIG-GUID: UlNTLqGm8QTih0AwmmEQuOMzwQbdmbSe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-08_15,2023-03-08_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 impostorscore=0 suspectscore=0 clxscore=1015 bulkscore=0
+ mlxlogscore=804 spamscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303080189
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 14:19, Greg Kroah-Hartman wrote:
-> Now that the same hardware that the r8188eu driver supported is
-> supported by the real wireless driver rtl8xxxu, the r8188eu driver can
-> be deleted.
-> 
-> Also the rtl8xxxu driver supports way more devices, and is a fraction of
-> the overall size, making this a much better overall solution.
-> 
-> Thanks to the r8188eu developers and maintainers and reviewers over the
-> years, your work allowed Linux users to use their hardware before the
-> real driver was implemented properly.
-> 
-> Reported-by: Hans de Goede <hdegoede@redhat.com>
-> Cc: Martin Kaiser <martin@kaiser.cx>
-> Cc: Larry Finger <Larry.Finger@lwfinger.net>
-> Cc: Phillip Potter <phil@philpotter.co.uk>
-> Cc: Pavel Skripkin <paskripkin@gmail.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
+On 3/8/2023 11:02 AM, Bart Van Assche wrote:
+> On 3/7/23 20:01, Bao D. Nguyen wrote:
+>> +    if (ufshcd_mcq_cqe_search(hba, hwq, tag)) {
+>> +        dev_err(hba->dev, "%s: cmd found in cq. hwq=%d, tag=%d\n",
+>> +                __func__, hwq->id, tag);
+>> +        /*
+>> +         * The command should not be 'stuck' in the CQ for such a 
+>> long time.
+>> +         * Is interrupt missing? Process the CQEs here. If the 
+>> interrupt is
+>> +         * invoked at a later time, the CQ will be empty because the 
+>> CQEs
+>> +         * are already processed here.
+>> +         */
+>> +        ufshcd_mcq_poll_cqe_lock(hba, hwq);
+>> +        err = SUCCESS;
+>> +        goto out;
+>> +    }
+>
+> Please remove the above code and also the definition of the 
+> ufshcd_mcq_cqe_search() function. The SCSI error handler submits an 
+> abort to deal with command processing timeouts. 
+> ufshcd_mcq_cqe_search() can only return true in case of a software bug 
+> at the host side. Addressing such bugs is out of scope for the SCSI 
+> error handler.
 
-The rtl8xxxu driver works well for me.
+This is an attempt to handle the error case similar to SDB mode where it 
+prints "%s: cmd was completed, but without a notifying intr, tag = %d" 
+in the ufshcd_abort() function.
 
-Acked-by: Michael Straube <straube.linux@gmail.com>
+In this case the command has been completed by the hardware, but some 
+reasons the software has not processed it. We have seen this print 
+happened during debug sessions, so the error case does happen in SBL mode.
+
+Are you suggesting we should return error in this case without calling 
+ufshcd_mcq_poll_cqe_lock()?
+
+Thanks.
+
+>
+>
+> Thanks,
+>
+> Bart.
+
 
