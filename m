@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7786B1326
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4234A6B132C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbjCHUee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 15:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58972 "EHLO
+        id S230352AbjCHUfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 15:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjCHUe2 (ORCPT
+        with ESMTP id S230383AbjCHUeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:34:28 -0500
+        Wed, 8 Mar 2023 15:34:46 -0500
 Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2628B32A;
-        Wed,  8 Mar 2023 12:34:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B8ECE94E;
+        Wed,  8 Mar 2023 12:34:26 -0800 (PST)
 Received: from [192.168.1.103] (178.176.73.253) by msexch01.omp.ru
  (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 8 Mar 2023
- 23:33:59 +0300
+ 23:34:10 +0300
 Subject: Re: [PATCH 04/32] pata_parport-bpck6: pass around struct pi_adapter *
 To:     Ondrej Zary <linux@zary.sk>,
         Damien Le Moal <damien.lemoal@opensource.wdc.com>,
@@ -31,8 +31,8 @@ References: <20230307224627.28011-1-linux@zary.sk>
  <20230307224627.28011-5-linux@zary.sk>
 From:   Sergey Shtylyov <s.shtylyov@omp.ru>
 Organization: Open Mobile Platform
-Message-ID: <6040658f-990f-8cca-eabb-09e97e09c547@omp.ru>
-Date:   Wed, 8 Mar 2023 23:33:59 +0300
+Message-ID: <d06b45e6-5dbe-852f-f79a-66ee77f0bd07@omp.ru>
+Date:   Wed, 8 Mar 2023 23:34:10 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
@@ -48,23 +48,16 @@ X-KSE-AntiSpam-Interceptor-Info: scan successful
 X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 03/08/2023 20:12:45
 X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
 X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Rate: 0
 X-KSE-AntiSpam-Info: Lua profiles 175961 [Mar 08 2023]
 X-KSE-AntiSpam-Info: Version: 5.9.59.0
 X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
 X-KSE-AntiSpam-Info: LuaCore: 507 507 08d345461d9bcca7095738422a5279ab257bb65a
 X-KSE-AntiSpam-Info: {rep_avail}
 X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.253 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.253 in (user)
- dbl.spamhaus.org}
 X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2
 X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.253
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Rate: 0
 X-KSE-AntiSpam-Info: Status: not_detected
 X-KSE-AntiSpam-Info: Method: none
 X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
