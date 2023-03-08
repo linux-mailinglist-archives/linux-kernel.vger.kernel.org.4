@@ -2,124 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826C16B02C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:23:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9B26B02CB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbjCHJXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 04:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
+        id S231174AbjCHJYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 04:24:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbjCHJXc (ORCPT
+        with ESMTP id S230521AbjCHJYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 04:23:32 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D2376F71;
-        Wed,  8 Mar 2023 01:23:31 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9637E1EC0691;
-        Wed,  8 Mar 2023 10:23:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678267409;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=802coS+HxbpOP0Cayz2V/ZmNxZUObxQN5WW++zeQd1k=;
-        b=f40c4cP7e6n+tchcjwucO7lAQuNx4scQ0Zxa/wJFrusM2kjP65DJOobsS+A4fZx0N2tqxn
-        ObA+C7n+KvQLDyHulxod5y6RaUSxFzNqDULV2cTjsGGYH7I89sVhiHA1K0LqN/vi8BjDpO
-        fvfErsztx6I36Hkn7IcRdGEz1ePE1Bk=
-Date:   Wed, 8 Mar 2023 10:23:24 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com
-Subject: Re: [PATCH v7 27/41] x86/mm: Warn if create Write=0,Dirty=1 with raw
- prot
-Message-ID: <ZAhUDE+6F71onz0W@zn.tnic>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-28-rick.p.edgecombe@intel.com>
+        Wed, 8 Mar 2023 04:24:11 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839DFA17F0;
+        Wed,  8 Mar 2023 01:23:59 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id ec29so32142375edb.6;
+        Wed, 08 Mar 2023 01:23:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678267438;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CDrNWFI668GD0hnej03xw5wrA2ehb8uxzEH/VH608bc=;
+        b=WWUXmy11KRg3Y9ocgjf6+kaMCvpWsm1AD55PYIG1Nnb9vv2vvdZB99P89xhsOUaK24
+         /Y4Oy5lyM5Q/8tHdbIvhiAiZTdDwYuofjpD+UPKqwAitN90a0Cw6tUwt+boGWjcF5ay1
+         r3uvCt1uAgV6codhBt1JWgNXUmQJHNYeUI3g2HwmGciClIs2wGuukluuNbrG47lhxSvb
+         8xrS62W3aY8Saa5pli6zhsOy04kYX/D/k7boaR3B24/bXnHG101UzPIrA6+r+3ygZWZH
+         sZRe9XVCSqfxOj0LAE1/Vc0zt7fvLIPp1lGO87IirRUI2irQ7RcyuBrPoQ0JqjLehan8
+         Jw4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678267438;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CDrNWFI668GD0hnej03xw5wrA2ehb8uxzEH/VH608bc=;
+        b=FkF/2vlAes2GjuQKCbWSnQG5AVCciGEAJ/AWqKa1AI663GVuNlJhI1LxwrpDZVKH11
+         xsW7fC5HYzTWpiXxbEAerrVwq3SmO38vIL75MLd7ZXj4WAEMgWSb4mOg5Sg7AToSRBPH
+         BX0QZ+1AbdRtxu29PPFn85URcfJjvHaDqrP0PEA19LASBKCwtvr21icAMKqoEjAl2bKh
+         NQAnEx+bIbzrGhnfq60toc0hJ+8nngxfXgmelEL4R6x5NVVkpN4G2Di19JkfH6HVf9y7
+         i1D9xOqTkkfqYVyxAFReMXKY/BX9/iiSByzNaMUMqLV/IWC9UHFUUmPULPMQ4B665VqF
+         cjTQ==
+X-Gm-Message-State: AO0yUKUMA43AQD+xe8ugkPcW5L8RVTskVejCCdV7kme3Thgm6cPxexhQ
+        wTQRGYCbqyBMo32RiKry7XGiWwKZ5CRCYqcb2qHOAMlCqks=
+X-Google-Smtp-Source: AK7set++oYRF40WedQZ6ojGmG/FH1iT/MTSIZRr49bD9esqX8F65/q+8irUkZWmgB9gJFQmt/yR6D2wvx6t6Awuhtlo=
+X-Received: by 2002:a17:907:ca29:b0:882:cdb5:4e60 with SMTP id
+ uk41-20020a170907ca2900b00882cdb54e60mr8742615ejc.11.1678267437991; Wed, 08
+ Mar 2023 01:23:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230227222957.24501-28-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230308084419.11934-1-clamor95@gmail.com> <20230308084419.11934-5-clamor95@gmail.com>
+ <c04d4306-de81-363c-2d2e-60f5283a5249@linaro.org>
+In-Reply-To: <c04d4306-de81-363c-2d2e-60f5283a5249@linaro.org>
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+Date:   Wed, 8 Mar 2023 11:23:27 +0200
+Message-ID: <CAPVz0n0DNpn7uO+2X9QREpdc51R--ogsLSXWTyL1TybDsO2GvQ@mail.gmail.com>
+Subject: Re: [PATCH v1 4/4] power: max17040: get thermal data from adc if available
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Iskren Chernev <me@iskren.info>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:29:43PM -0800, Rick Edgecombe wrote:
-> When user shadow stack is use, Write=0,Dirty=1 is treated by the CPU as
-			   ^
-			   in
+=D1=81=D1=80, 8 =D0=B1=D0=B5=D1=80. 2023=E2=80=AF=D1=80. =D0=BE 11:08 Krzys=
+ztof Kozlowski
+<krzysztof.kozlowski@linaro.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On 08/03/2023 09:44, Svyatoslav Ryhel wrote:
+> > Since fuel gauge does not support thermal monitoring,
+> > some vendors may couple this fuel gauge with thermal/adc
+> > sensor to monitor battery cell exact temperature.
+> >
+> > Add this feature by adding optional iio thermal channel.
+> >
+> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> > ---
+> >  drivers/power/supply/max17040_battery.c | 24 ++++++++++++++++++++++++
+> >  1 file changed, 24 insertions(+)
+> >
+> > diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/su=
+pply/max17040_battery.c
+> > index 6dfce7b1309e..8c743c26dc6e 100644
+> > --- a/drivers/power/supply/max17040_battery.c
+> > +++ b/drivers/power/supply/max17040_battery.c
+> > @@ -18,6 +18,7 @@
+> >  #include <linux/of_device.h>
+> >  #include <linux/regmap.h>
+> >  #include <linux/slab.h>
+> > +#include <linux/iio/consumer.h>
+> >
+> >  #define MAX17040_VCELL       0x02
+> >  #define MAX17040_SOC 0x04
+> > @@ -143,6 +144,7 @@ struct max17040_chip {
+> >       struct power_supply             *battery;
+> >       struct power_supply_battery_info        *batt_info;
+> >       struct chip_data                data;
+> > +     struct iio_channel              *channel_temp;
+> >
+> >       /* battery capacity */
+> >       int soc;
+> > @@ -416,6 +418,11 @@ static int max17040_get_property(struct power_supp=
+ly *psy,
+> >       case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+> >               val->intval =3D chip->batt_info->charge_full_design_uah;
+> >               break;
+> > +     case POWER_SUPPLY_PROP_TEMP:
+> > +             iio_read_channel_raw(chip->channel_temp,
+> > +                                  &val->intval);
+> > +             val->intval *=3D 10;
+>
+> I am not convinced this is needed at all. You basically chain two
+> subsystems only to report to user-space via power supply, but it is
+> already reported via IIO. I would understand it if you use the value for
+> something, e.g. control the charger. Here, it's just feeding different
+> user-space interface. Therefore:
+> 1. IO channels are not a hardware property of the fuel gauge,
+> 2. I have doubts this should be even exposed via power supply interface.
+>
 
-> shadow stack memory. So for shadow stack memory this bit combination is
-> valid, but when Dirty=1,Write=1 (conventionally writable) memory is being
-> write protected, the kernel has been taught to transition the Dirty=1
-> bit to SavedDirty=1, to avoid inadvertently creating shadow stack
-> memory. It does this inside pte_wrprotect() because it knows the PTE is
-> not intended to be a writable shadow stack entry, it is supposed to be
-> write protected.
+I can assure you that this is only the beginning of weird vendor solutions
+I have discovered. Nonetheless, max17040 has no battery temp property,
+this means in case I have a critical battery overheating, userspace
+will tell me nothing
+since instead of having direct battery temp property under power supply I h=
+ave
+separate iio sensor, which may not even be monitored. It is always nice to =
+have
+battery explosions.
 
-
-> 
-> However, when a PTE is created by a raw prot using mk_pte(), mk_pte()
-> can't know whether to adjust Dirty=1 to SavedDirty=1. It can't
-> distinguish between the caller intending to create a shadow stack PTE or
-> needing the SavedDirty shift.
-> 
-> The kernel has been updated to not do this, and so Write=0,Dirty=1
-> memory should only be created by the pte_mkfoo() helpers. Add a warning
-> to make sure no new mk_pte() start doing this.
-
-Might wanna add the note from below here:
-
-"... start doing this, like, for example, set_memory_rox() did."
-
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Tested-by: Kees Cook <keescook@chromium.org>
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> 
-> ---
-> v6:
->  - New patch (Note, this has already been a useful warning, it caught the
->    newly added set_memory_rox() doing this)
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+>
+> Best regards,
+> Krzysztof
+>
