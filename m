@@ -2,33 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7FC6B0CC0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2580A6B0CC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjCHPcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:32:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
+        id S232022AbjCHPcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:32:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbjCHPcH (ORCPT
+        with ESMTP id S231816AbjCHPcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:32:07 -0500
+        Wed, 8 Mar 2023 10:32:08 -0500
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B8ED08D2;
-        Wed,  8 Mar 2023 07:32:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A5B8C514;
+        Wed,  8 Mar 2023 07:32:06 -0800 (PST)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 85DEDFF80B;
-        Wed,  8 Mar 2023 15:32:00 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9C810FF80F;
+        Wed,  8 Mar 2023 15:32:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678289523;
+        t=1678289525;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=FwO2zlWObkQcohsTankX+8VhI452lIAhVfKscDEj0uo=;
-        b=lUcVVGwWezei7P+WTOSOzVnm29voph2nQSGHK1CcFmrm0FoE0yandRI9dj8XdeFZcrmFlI
-        xod0L3DxK++0afQ1x3S+tES51F5D7Y3XEO08VxwR5cKBzTMJqTQWOKVxg+oBPj2qfCiFWT
-        6JL1cD8mZOs26M1tR2+F30m9YTg0536ekBrS6ngJ32eucomeMGfxaNwUtkF/HBj56Pukho
-        X+aLcjfG/MXm7+VSh4bT3tX6vMxXD6BeqrY6xTkNOR5WLI2kpgUc2DZDpufsok7QRbMtJU
-        8ZuDLj3yxEM6/6RoQY95m8gm3z77yLNL1zI/Ve8a/VVuPMf/WehdZVhRFD0CIg==
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IJ3o8unBTMIe9q90/GtJ5ny60FdItpVL7wHmQ3YSkUw=;
+        b=CJFcNjdd9fcOXVkHGwRZGNuoq0mkCfr5tUfdHT1Pa1l85hzCFkDM2s5KFO7RIKnuk7LhI8
+        sRJqdVpg8k3Zz8hwucefY4gQTbjof3zCKTM+m9I8AnXN7UoRzpGMhfkej83IQ9apvsy+vr
+        hBBDAi5nlLRO8eaTxB/EAykV1zvGhJ9231v7hkONWBhvYsz2xC0RpZN5ovtcvLsoGhMrN7
+        4hRALJR3alssliRMa17xCMgXk9Fu/HgMdkBWZwAgD7jRClxxOmzrdybgfED7R8JVww3lRK
+        kJunlnjLlRd+Wi5ZGAgzF770Fa1sWhqrb3Lc2p5U63d8UlCWxKaNrhAqRGLyaQ==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         <linux-kernel@vger.kernel.org>
@@ -44,20 +45,14 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Peter Chen <peter.chen@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: [PATCH v3 00/20] [PATCH v3 00/20] nvmem: Layouts support
-Date:   Wed,  8 Mar 2023 16:31:40 +0100
-Message-Id: <20230308153200.682248-1-miquel.raynal@bootlin.com>
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v3 01/20] of: Fix modalias string generation
+Date:   Wed,  8 Mar 2023 16:31:41 +0100
+Message-Id: <20230308153200.682248-2-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230308153200.682248-1-miquel.raynal@bootlin.com>
+References: <20230308153200.682248-1-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -68,124 +63,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The helper generating an OF based modalias (of_device_get_modalias())
+works fine, but due to the use of snprintf() internally it needs a
+buffer one byte longer than what should be needed just for the entire
+string (excluding the '\0'). Most users of this helper are sysfs hooks
+providing the modalias string to users. They all provide a PAGE_SIZE
+buffer which is way above the number of bytes required to fit the
+modalias string and hence do not suffer from this issue.
 
-This is a fully featured series with hopefully all what is needed for
-upstream acceptance, ie:
-* A bit of OF cleanup
-* Full nvmem layout support merging Michael's and my patches
-* Only the fixes not applying to this series have been kept "un merged"
-* Support for SL28 VPD and ONIE TLV table layouts
-* Layouts can be compiled as modules
+There is another user though, of_device_request_module(), which is only
+called by drivers/usb/common/ulpi.c. This request module function is
+faulty, but maybe because in most cases there is an alternative, ULPI
+driver users have not noticed it.
 
-A linux-0day branch for kernel test robot has been pushed to get wider
-testing.
+In this function, of_device_get_modalias() is called twice. The first
+time without buffer just to get the number of bytes required by the
+modalias string (excluding the null byte), and a second time, after
+buffer allocation, to fill the buffer. The allocation asks for an
+additional byte, in order to store the trailing '\0'. However, the
+buffer *length* provided to of_device_get_modalias() excludes this extra
+byte. The internal use of snprintf() with a length that is exactly the
+number of bytes to be written has the effect of using the last available
+byte to store a '\0', which then smashes the last character of the
+modalias string.
 
-In order for this series to work out-of-the-box it requires to be
-applied on top of Michael Walle's mtd fixes series. There is an
-immutable tag on the mtd repository available:
+Provide the actual size of the buffer to of_device_get_modalias() to fix
+this issue.
 
-----------------------------------------------------------------
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+Note: the "str[size - 1] = '\0';" line is not really needed as snprintf
+will anyway end the string with a null byte, but there is a possibility
+that this function might be called on a struct device_node without
+compatible, in this case snprintf() would not be executed. So we keep it
+just to avoid possible unbounded strings.
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Peter Chen <peter.chen@kernel.org>
+Fixes: 9c829c097f2f ("of: device: Support loading a module with OF based modalias")
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ drivers/of/device.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git tags/mtd/core-fixes-before-nvmem-layouts-for-6.4
-
-for you to fetch changes up to 281f7a6c1a33fffcde32001bacbb4f672140fbf9:
-
-  mtd: core: prepare mtd_otp_nvmem_add() to handle -EPROBE_DEFER (2023-03-08 14:31:49 +0100)
-----------------------------------------------------------------
-
-So to summarize:
-* Rob's feedback is welcome on the remaining un-acked OF patche
-* Greg's and Srinivas feedback is welcome on the nvmem patches
-* If everybody agrees I expect the full series to be applied rather
-  early by Srinivas on top of the -rc he wants.
-* Once time for the final PR I expect Greg to merge the immutable tag
-  above with Michael's patches before taking this series in.
-
-Thanks,
-Miquèl
-
-Changes in v3:
-* Rebased on top of nvmem-next and handled a few conflicts.
-* Minor changes in the OF commit logs.
-* Fixed a missing header reported by kernel test robot.
-* Mention immutable tag.
-* Collected more tags.
-* Fix of/module.c license.
-
-Changes in v2:
-* Included all initial core nvmem changes.
-* Merged all the relevant fixes.
-* Updated the commit logs of the Fixes tag when relevant.
-* Followed Rob advises to migrate the module related helpers into
-  of/module.c and get the useless helpers out of of_device.c
-* Added my Signed-off-by when relevant.
-* Collected tags.
-
-Colin Ian King (1):
-  dt-bindings: nvmem: Fix spelling mistake "platforn" -> "platform"
-
-Michael Walle (8):
-  nvmem: core: introduce NVMEM layouts
-  nvmem: core: add per-cell post processing
-  nvmem: core: allow to modify a cell before adding it
-  nvmem: imx-ocotp: replace global post processing with layouts
-  nvmem: cell: drop global cell_post_process
-  nvmem: core: provide own priv pointer in post process callback
-  nvmem: layouts: sl28vpd: Add new layout driver
-  MAINTAINERS: add myself as sl28vpd nvmem layout driver
-
-Miquel Raynal (11):
-  of: Fix modalias string generation
-  of: Update of_device_get_modalias()
-  of: Rename of_modalias_node()
-  of: Move of_modalias() to module.c
-  of: Move the request module helper logic to module.c
-  usb: ulpi: Use of_request_module()
-  of: device: Kill of_device_request_module()
-  nvmem: core: handle the absence of expected layouts
-  nvmem: core: request layout modules loading
-  nvmem: layouts: onie-tlv: Add new layout driver
-  MAINTAINERS: Add myself as ONIE tlv NVMEM layout maintainer
-
- .../nvmem/layouts/onie,tlv-layout.yaml        |   2 +-
- Documentation/driver-api/nvmem.rst            |  15 +
- MAINTAINERS                                   |  12 +
- drivers/acpi/bus.c                            |   7 +-
- drivers/gpu/drm/drm_mipi_dsi.c                |   2 +-
- drivers/hsi/hsi_core.c                        |   2 +-
- drivers/i2c/busses/i2c-powermac.c             |   2 +-
- drivers/i2c/i2c-core-of.c                     |   2 +-
- drivers/nvmem/Kconfig                         |   4 +
- drivers/nvmem/Makefile                        |   1 +
- drivers/nvmem/core.c                          | 160 ++++++++++-
- drivers/nvmem/imx-ocotp.c                     |  30 +-
- drivers/nvmem/layouts/Kconfig                 |  23 ++
- drivers/nvmem/layouts/Makefile                |   7 +
- drivers/nvmem/layouts/onie-tlv.c              | 257 ++++++++++++++++++
- drivers/nvmem/layouts/sl28vpd.c               | 165 +++++++++++
- drivers/of/Makefile                           |   2 +-
- drivers/of/base.c                             |  18 +-
- drivers/of/device.c                           |  75 +----
- drivers/of/module.c                           |  74 +++++
- drivers/spi/spi.c                             |   4 +-
- drivers/usb/common/ulpi.c                     |   2 +-
- include/linux/nvmem-consumer.h                |   7 +
- include/linux/nvmem-provider.h                |  66 ++++-
- include/linux/of.h                            |  18 +-
- include/linux/of_device.h                     |   6 -
- 26 files changed, 851 insertions(+), 112 deletions(-)
- create mode 100644 drivers/nvmem/layouts/Kconfig
- create mode 100644 drivers/nvmem/layouts/Makefile
- create mode 100644 drivers/nvmem/layouts/onie-tlv.c
- create mode 100644 drivers/nvmem/layouts/sl28vpd.c
- create mode 100644 drivers/of/module.c
-
+diff --git a/drivers/of/device.c b/drivers/of/device.c
+index 955bfb3d1a83..c91bb5899256 100644
+--- a/drivers/of/device.c
++++ b/drivers/of/device.c
+@@ -297,12 +297,15 @@ int of_device_request_module(struct device *dev)
+ 	if (size < 0)
+ 		return size;
+ 
+-	str = kmalloc(size + 1, GFP_KERNEL);
++	/* Reserve an additional byte for the trailing '\0' */
++	size++;
++
++	str = kmalloc(size, GFP_KERNEL);
+ 	if (!str)
+ 		return -ENOMEM;
+ 
+ 	of_device_get_modalias(dev, str, size);
+-	str[size] = '\0';
++	str[size - 1] = '\0';
+ 	ret = request_module(str);
+ 	kfree(str);
+ 
 -- 
 2.34.1
 
