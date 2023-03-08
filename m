@@ -2,226 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D73F6B0C69
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A0F56B0C76
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjCHPTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57066 "EHLO
+        id S230136AbjCHPUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbjCHPSd (ORCPT
+        with ESMTP id S232196AbjCHPTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:18:33 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FC24108E;
-        Wed,  8 Mar 2023 07:18:30 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 622BA41F78;
-        Wed,  8 Mar 2023 15:18:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1678288709;
-        bh=LmsELnvNppKSIw1uomPRrZaTWF5g2NJzpFeIFnsgn7U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=uVC2jkrfjynzQsvbHySQcGCPBDD9vbROb59eRCFeeK0zHteVuDaP6C66Myomr6ebM
-         wcZNCfcUMgFYTj0A+Z/rIZPCJgq7MnRspLTSC9sVCRbHfu63XvS5MSTtYd/lS4JjcH
-         iJGKN6nAAkyQSWzR3MohpsI6j8burzsd1HZWV/Y/52Su2g4eg6NoP1j5yDSTSHwOhf
-         Zu8b4F4wXYXhav8jDRjTja4TUIjRa3HyCFtSB0H4ickQZf+MKApr55owkDRzWJlQq1
-         XNw5xC+L3KtOCfrhU0ISWaAFU277dHEDb4MeYA/KeWwgZEyFu+ZD64oyltslT1BMKA
-         qCvhRk7brj5Qw==
-Message-ID: <3320e497-09c0-6eb6-84c5-bab2e63f28ec@asahilina.net>
-Date:   Thu, 9 Mar 2023 00:18:20 +0900
+        Wed, 8 Mar 2023 10:19:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D424CA26
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 07:19:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678288745;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RqMveydNu6XNejp+shWEpKdVrYy02V5i0PEhRKX7Rrc=;
+        b=VkMeXOqlFoEL/A4jESsdAc73MCRlfYFwwHDiLVcJGsLLH6rDvRwPKGzfB5sBAqrJ7Lw0a5
+        qL145PaJXmyR/lDwB2s0PRILDAjWmTRZXj7xsbGKTXe6wq/9L+SNAxzjWklBLIBFB5ubu+
+        xJoLBg8sn+JoKfwDsNe1na8LK7m4Xfs=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-280-WdbQPSoPOz6fjPl_uYc9ZA-1; Wed, 08 Mar 2023 10:18:58 -0500
+X-MC-Unique: WdbQPSoPOz6fjPl_uYc9ZA-1
+Received: by mail-wr1-f71.google.com with SMTP id l14-20020a5d526e000000b002cd851d79b2so2939521wrc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 07:18:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678288737;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RqMveydNu6XNejp+shWEpKdVrYy02V5i0PEhRKX7Rrc=;
+        b=Hsw0WKwE9Lx6U5L1qswEkqoikL7QTn7coxPoiAexQv6cy3iYj3U83hFy8YrJ2eKlBY
+         utn1OUbt1tBwPGVBlIrqfoYEEBzEGPazNQlio3nvcwnCmYkOQ7KvIZGYVmvKGMrnSjw2
+         OVwIwzrmu5R7IBHATCWiiU/Zxg5pLacRlCWmsa5+dQ2X6RTzQu69JGK2yAVCjoLOXua0
+         4/x/mi6jJ/CJ82c8uMtK98ntmIFIeSFyHDH5GKYNhZXAhKV8LmAqnOQDYQPDb3hv0yik
+         h79R+lDt6FORx823ukysS4lwNuQXamcV+VNgR8X9x2BGz7Nz6I3ND8rYTqsgVOpolYvL
+         C3ng==
+X-Gm-Message-State: AO0yUKXhfi/2KeDqLT+DmhBiPLfNml6RiCDPVTNDgUEHGCBqd/l+dNBX
+        qpNEo5ErTdlw5VCKz38NdTWWRn5yF6dG1Ka5U4SJvd04Dh9ccQUmgwvoJ2wOPNXkZvFopfnek2U
+        Mp7GdE4ar5sg7a1Z8JF9lND91
+X-Received: by 2002:a5d:4ac6:0:b0:2c5:4ca3:d56c with SMTP id y6-20020a5d4ac6000000b002c54ca3d56cmr16363765wrs.0.1678288737553;
+        Wed, 08 Mar 2023 07:18:57 -0800 (PST)
+X-Google-Smtp-Source: AK7set+eeUD0ndDLPrfGROs+plKRbr9juDzI5L0SeuXOPDJn6wu4tn5amO/mlEW4MhS+El2M6NvXZw==
+X-Received: by 2002:a5d:4ac6:0:b0:2c5:4ca3:d56c with SMTP id y6-20020a5d4ac6000000b002c54ca3d56cmr16363758wrs.0.1678288737334;
+        Wed, 08 Mar 2023 07:18:57 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id p7-20020a5d4e07000000b002c5694aef92sm15528270wrt.21.2023.03.08.07.18.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 07:18:56 -0800 (PST)
+Message-ID: <59b703ac-9660-a0e5-09f7-c5b69d4f39cb@redhat.com>
+Date:   Wed, 8 Mar 2023 16:18:55 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH RFC 11/18] drm/scheduler: Clean up jobs when the scheduler
- is torn down
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] maple_tree: export symbol mas_preallocate()
 Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-11-917ff5bc80a8@asahilina.net>
- <bbd7c5ee-c2f0-3e19-757d-a9aff1a26d3d@linux.intel.com>
- <585fa052-4eff-940e-b307-2415c315686a@amd.com>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <585fa052-4eff-940e-b307-2415c315686a@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org
+References: <20230302011035.4928-1-dakr@redhat.com>
+ <20230302015242.xi3y53okc4skmonn@revolver>
+ <9abef101-3a9b-0bdd-7139-ced7d5e28ebe@suse.cz>
+ <da65d59e-f918-d7d5-644b-33cc51c2ba6c@redhat.com>
+ <20230308144343.GA16259@lst.de>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <20230308144343.GA16259@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 19.03, Christian König wrote:
-> Am 08.03.23 um 10:57 schrieb Maarten Lankhorst:
+On 3/8/23 15:43, Christoph Hellwig wrote:
+> On Wed, Mar 08, 2023 at 03:34:29PM +0100, Danilo Krummrich wrote:
+>> On 3/8/23 11:59, Vlastimil Babka wrote:
+>>> On 3/2/23 02:52, Liam R. Howlett wrote:
+>>>> Thanks for the patch.  This should indeed be exported.
+>>>>
+>>>> Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+>>>
+>>> What uses it? Don't we export only things used by in-kernel modules?
 >>
->> On 2023-03-07 15:25, Asahi Lina wrote:
->>> drm_sched_fini() currently leaves any pending jobs dangling, which
->>> causes segfaults and other badness when job completion fences are
->>> signaled after the scheduler is torn down.
->>>
->>> Explicitly detach all jobs from their completion callbacks and free
->>> them. This makes it possible to write a sensible safe abstraction for
->>> drm_sched, without having to externally duplicate the tracking of
->>> in-flight jobs.
->>>
->>> This shouldn't regress any existing drivers, since calling
->>> drm_sched_fini() with any pending jobs is broken and this change should
->>> be a no-op if there are no pending jobs.
->>>
->>> Signed-off-by: Asahi Lina <lina@asahilina.net>
->>> ---
->>>   drivers/gpu/drm/scheduler/sched_main.c | 27 
->>> +++++++++++++++++++++++++--
->>>   1 file changed, 25 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c 
->>> b/drivers/gpu/drm/scheduler/sched_main.c
->>> index 5c0add2c7546..0aab1e0aebdd 100644
->>> --- a/drivers/gpu/drm/scheduler/sched_main.c
->>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
->>> @@ -1119,10 +1119,33 @@ EXPORT_SYMBOL(drm_sched_init);
->>>   void drm_sched_fini(struct drm_gpu_scheduler *sched)
->>>   {
->>>       struct drm_sched_entity *s_entity;
->>> +    struct drm_sched_job *s_job, *tmp;
->>>       int i;
->>>   -    if (sched->thread)
->>> -        kthread_stop(sched->thread);
->>> +    if (!sched->thread)
->>> +        return;
->>> +
->>> +    /*
->>> +     * Stop the scheduler, detaching all jobs from their hardware 
->>> callbacks
->>> +     * and cleaning up complete jobs.
->>> +     */
->>> +    drm_sched_stop(sched, NULL);
->>> +
->>> +    /*
->>> +     * Iterate through the pending job list and free all jobs.
->>> +     * This assumes the driver has either guaranteed jobs are 
->>> already stopped, or that
->>> +     * otherwise it is responsible for keeping any necessary data 
->>> structures for
->>> +     * in-progress jobs alive even when the free_job() callback is 
->>> called early (e.g. by
->>> +     * putting them in its own queue or doing its own refcounting).
->>> +     */
->>> +    list_for_each_entry_safe(s_job, tmp, &sched->pending_list, list) {
->>> +        spin_lock(&sched->job_list_lock);
->>> +        list_del_init(&s_job->list);
->>> +        spin_unlock(&sched->job_list_lock);
->>> +        sched->ops->free_job(s_job);
->>> +    }
+>> mas_preallocate() is part of the maple tree's 'Advanced API'. All other
+>> functions of this API are exported already.
 >>
->> I would stop the kthread first, then delete all jobs without spinlock 
->> since nothing else can race against sched_fini?
+>> More specifically, e.g. mas_store_prealloc() is exported which doesn't make
+>> a lot of sense without mas_preallocate() being available too.
 >>
->> If you do need the spinlock, It would need to guard 
->> list_for_each_entry too.
+>> I don't think it is used outside of mm yet, but as a generic tree
+>> implementation maple tree is pretty likely to be used in code built as
+>> module, e.g. drivers.
 > 
-> Well this case here actually should not happen in the first place.
+> If anyone wants to use they can add the export as needed.
+> 
 
-"This should not happen in the first place" is how you end up with C
-APIs that have corner cases that lead to kernel oopses...
+Valid perception, though personally I wouldn't share it in this specific 
+case.
 
-The idea with Rust abstractions is that it needs to be actually
-impossible to create memory safety problems for the user of the
-abstraction, you can't impose arbitrary constraints like "you must wait
-for all jobs to finish before destroying the scheduler"... it needs to
-be intrinsically safe.
+Anyway, it's just that all other functions of the 'Advanced API' are 
+exported already without them having other users than mm either, e.g. 
+mas_store_prealloc() can't be used without mas_preallocate(), hence 
+exporting one, but not the other doesn't really make sense.
 
-> Jobs depend on their device, so as long as there are jobs there should 
-> also be a reference to the scheduler.
+Consistency wise I think we should either also export mas_preallocate() 
+or don't export the other ones either.
 
-These schedulers are created dynamically per userspace queue. The memory
-management and reference counting involved make it safe to destroy the
-scheduler even when behind the scenes hardware jobs are still running,
-as long as drm_sched itself doesn't crash on fences firing without a
-scheduler (which is what this patch fixes).
-
-This is the power of Rust: it forces you to architect your code in a way
-that you don't have complex high-level dependencies that span the entire
-driver and are difficult to prove hold. In my driver, you can kill a
-process and that destroys the drm_sched, closes all GEM objects,
-everything, even if the GPU is still running jobs from that process. The
-worst that can happen is that the GPU faults as in-use userspace buffers
-are unmapped out from under the running user job, but that's fine (GPU
-faults are recoverable). The actual firmware resources, queues, etc. in
-use are all kept alive until the commands finish executing (or fault,
-which is just an abnormal completion), even if the userspace process
-that owned them is long gone. I've tested this extensively by doing
-things like large-resolution glmark runs in a loop that get `kill -9`'d
-repeatedly, and it works very well! Tons of GPU faults but no firmware
-crashes, no oopses, nothing. And the firmware *will* crash irrecoverably
-if anything goes wrong with its shared memory structures, so that it
-doesn't is pretty good evidence that all this works!
-
-> What could be is that you have allocated a scheduler instance 
-> dynamically, but even then you should first tear down all entities and 
-> then the scheduler.
-
-This is about creating a safe Rust abstraction, so we can't impose
-requirements on users like that, the abstraction has to take care of it.
-Unfortunately, the jobs cannot depend on the scheduler at the
-abstraction level. I tried that (putting a reference counted reference
-to the scheduler in the job abstraction), but it doesn't work because a
-job completing can end up dropping the last reference to the scheduler,
-and then you end up trying to stop and clean up the scheduler from a
-callback called from the scheduler kthread itself, which deadlocks. We
-could throw those cleanups into a workqueue or something, but that's
-just adding bandages around the problem that the drm_sched interface
-today is just not safe without this patch...
-
-Right now, it is not possible to create a safe Rust abstraction for
-drm_sched without doing something like duplicating all job tracking in
-the abstraction, or the above backreference + deferred cleanup mess, or
-something equally silly. So let's just fix the C side please ^^
-
-So far, drm_sched is the only DRM API that has had such a fundamental
-API safety issue that I had to make a change like this to the C to make
-the Rust abstraction possible/reasonable... drm_sched has also been by
-far the hardest DRM component API to understand from a safety point of
-view, with the most inconsistent documentation about what the
-ownership/freeing rules are, and what objects need to outlive what other
-objects (I had to just read the code to figure most of this out). That's
-also one nice outcome of writing Rust abstractions: it forces us to make
-all these rules and invariants explicit, instead of leaving them as
-unwritten assumptions (almost nobody consistently documents this in C
-APIs...).
-
-If I got it right, anyone using the Rust drm_sched abstraction doesn't
-have to worry about this any more because if they do something that
-would oops with it, their code won't compile. But I need this patch to
-be able to make that guarantee...
-
-~~ Lina
