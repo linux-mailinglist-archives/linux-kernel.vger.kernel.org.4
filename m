@@ -2,248 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4878C6B0BF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:54:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5196B0BFA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbjCHOyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:54:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
+        id S230464AbjCHO4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:56:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231460AbjCHOyJ (ORCPT
+        with ESMTP id S229780AbjCHO4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:54:09 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88E78316D;
-        Wed,  8 Mar 2023 06:54:03 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 77318419B4;
-        Wed,  8 Mar 2023 14:53:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1678287241;
-        bh=+F2IE9mYcrZU9xlDbgO4z41NX87Z8Z/O5LvIJKtyeMY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=ztMiA7oVkDrIm0IJcNP8cghNEdjwO4Bp4sfNi+CEwU60gJKGmq6DoT4wxKI2aeQ+j
-         RIXIheVLmjEbHvDfVNFY4pY0mNYgLrpmHrJ9Syfj3JAsqa5J0yIAaUjleNiJIC59bp
-         nJ67E45kQ5f36WrSgRAtQ7kO19dnQrmgtnralQ7zBxPp0ExMSOs4NptX/f7Q5KTxbd
-         EhB0UWjuXFAuFanI6hPckpWJyPVmk7/cJuLBg5W+OxLSxWmaxSlGgOA50uefH8bE64
-         ZJoUHChD8Irel5Ce3ju+PT91TgmhHcTjXFRlGoI9mkZ27JqPLaiAR7H9IX23IOlxcj
-         bcnp5P3N/oE6A==
-Message-ID: <9f76bb68-b462-b138-d0ad-d27c972530d4@asahilina.net>
-Date:   Wed, 8 Mar 2023 23:53:52 +0900
+        Wed, 8 Mar 2023 09:56:48 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1C8399250;
+        Wed,  8 Mar 2023 06:56:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=1/N3h
+        jcEE32fI6fL0Z3K+IWx7N5W1QPfJk9RK/70oxw=; b=fCEy6aRtuIDUpeHjL6IP/
+        0EpnbGHbwt+uWbpS3ypliZ05qmljgdqt4FF74LgPT1htUBTIkFLrPC2oTzakqbIL
+        VpFETSpv7CxfXdPNKuadtN3zxbhI4w6PfxskNgqioGEqP3iPBYkmG/v2t4CHZ1ZL
+        Y0bHG9OB4zLxYchZIx5y10=
+Received: from lizhe.. (unknown [120.245.132.200])
+        by zwqz-smtp-mta-g2-2 (Coremail) with SMTP id _____wC3TkP7oQhkdGRNCg--.27004S4;
+        Wed, 08 Mar 2023 22:56:27 +0800 (CST)
+From:   Lizhe <sensor1010@163.com>
+To:     fancer.lancer@gmail.com, broonie@kernel.org
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lizhe <sensor1010@163.com>
+Subject: [PATCH v1] drivers/spi-dw-core.c : remove redundant function spi_controller_set_devdata
+Date:   Wed,  8 Mar 2023 22:55:51 +0800
+Message-Id: <20230308145551.3240-1-sensor1010@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
- <cd788ccf-0cf1-85d5-1bf8-efc259bd7e11@amd.com>
- <a075d886-0820-b6fb-fcd0-45bfdc75e37d@asahilina.net>
- <2b1060e9-86ba-7e16-14f1-5b5fa63de719@amd.com>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <2b1060e9-86ba-7e16-14f1-5b5fa63de719@amd.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wC3TkP7oQhkdGRNCg--.27004S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZrWrZr13GF4DJFyxWw4fuFg_yoWDWrbE9a
+        1UA34xWr47JFn7tFn7ur48Xr9IvFW5ur4vkF4ktFZ3WF98Ww4DC3srWr4Y9FyUAwsxArWk
+        C3s0g3yS934rAjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRM5l8UUUUUU==
+X-Originating-IP: [120.245.132.200]
+X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/1tbiKAIsq17WMQlXGwAAsR
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 19.00, Christian König wrote:
-> Am 08.03.23 um 10:41 schrieb Asahi Lina:
->> On 08/03/2023 17.46, Christian König wrote:
->>> Am 07.03.23 um 15:25 schrieb Asahi Lina:
->>>> Some hardware may require more complex resource utilization accounting
->>>> than the simple job count supported by drm_sched internally. Add a
->>>> can_run_job callback to allow drivers to implement more logic before
->>>> deciding whether to run a GPU job.
->>> Well complete NAK.
->>>
->>> This is clearly going against the idea of having jobs only depend on
->>> fences and nothing else which is mandatory for correct memory management.
->>>
->>> If the hw is busy with something you need to return the fence for this
->>> from the prepare_job callback so that the scheduler can be notified when
->>> the hw is available again.
->> I think you misunderstood the intent here... This isn't about job
->> dependencies, it's about in-flight resource limits.
->>
->> drm_sched already has a hw_submission_limit that specifies the number of
->> submissions that can be in flight, but that doesn't work for us because
->> each job from drm_sched's point of view consists of multiple commands
->> split among 3 firmware queues. The firmware can only support up to 128
->> work commands in flight per queue (barriers don't count), otherwise it
->> overflows a fixed-size buffer.
->>
->> So we need more complex accounting of how many underlying commands are
->> in flight per queue to determine whether it is safe to run a new job,
->> and that is what this callback accomplishes. This has to happen even
->> when individual jobs have no buffer/resource dependencies between them
->> (which is what the fences would express).
-> 
-> Yeah, I already assumed that you have something like this.
-> 
-> And to make it clear this is unfortunately a complete NAK to this 
-> approach! You can't do this!
+in spi_alloc_master() already exists master_controller_set_devdata()
+called, add the struct dw_spi is passed to the spi_alloc_master() as
+the second parameter.
 
-I think you still have some significant misconception about how this
-driver works and uses drm_sched... I would appreciate it if you listen
-and try to understand the design before giving hard NAKs... (this isn't
-a Radeon)
+Signed-off-by: Lizhe <sensor1010@163.com>
+---
+ drivers/spi/spi-dw-core.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-> The background is that core memory management requires that signaling a 
-> fence only depends on signaling other fences and hardware progress and 
-> nothing else. Otherwise you immediately run into problems because of 
-> circle dependencies or what we call infinite fences.
+diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+index c3bfb6c84cab..ad776c7eb66c 100644
+--- a/drivers/spi/spi-dw-core.c
++++ b/drivers/spi/spi-dw-core.c
+@@ -892,7 +892,7 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+ 	if (!dws)
+ 		return -EINVAL;
+ 
+-	master = spi_alloc_master(dev, 0);
++	master = spi_alloc_master(dev, sizeof(*dws));
+ 	if (!master)
+ 		return -ENOMEM;
+ 
+@@ -901,8 +901,6 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+ 	dws->master = master;
+ 	dws->dma_addr = (dma_addr_t)(dws->paddr + DW_SPI_DR);
+ 
+-	spi_controller_set_devdata(master, dws);
+-
+ 	/* Basic HW init */
+ 	dw_spi_hw_init(dev, dws);
+ 
+-- 
+2.34.1
 
-And hardware progress is exactly the only dependency here...
-
-> Jason Ekstrand gave a create presentation on that problem a few years 
-> ago on LPC. I strongly suggest you google that one up.
-
-Faith Ekstrand (it looks like you mistyped that name...) is the person
-who proposed that I should use drm_sched in this way (see below), we've
-had a few private meetings about this design ^^
-
->> You can see the driver implementation of that callback in
->> drivers/gpu/drm/asahi/queue/mod.rs (QueueJob::can_run()), which then
->> calls into drivers/gpu/drm/asahi/workqueue.rs (Job::can_submit()) that
->> does the actual available slot count checks.
->>
->> The can_run_job logic is written to mirror the hw_submission_limit logic
->> (just a bit later in the sched main loop since we need to actually pick
->> a job to do the check), and just like for that case, completion of any
->> job in the same scheduler will cause another run of the main loop and
->> another check (which is exactly what we want here).
-> 
-> Yeah and that hw_submission_limit is based on a fence signaling again.
-
-I don't think so...? It's just an atomic that gets checked in
-drm_sched_ready(). There are no extra fences involved (other than the
-job completion fences that trigger another scheduler run). The idea is
-that when the hardware queue makes forward progress you check against
-the limit again and submit more jobs as needed. I'm doing the same exact
-thing, I'm just using more complex logic for the notion of in-flight
-queue limits!
-
-> When you have some firmware limitation that a job needs resources which 
-> are currently in use by other submissions then those other submissions 
-> have fences as well and you can return those in the prepare_job callback.
-> 
-> If those other submissions don't have fences, then you have a major 
-> design problem inside your driver and we need to get back to square one 
-> and talk about that dependency handling.
-
-I think we have a disconnect in our views of what is going on here...
-
-This hardware has firmware-side scheduling with an arbitrary (as far as
-I know) number of queues. There is one scheduler instance and one entity
-per userspace queue (not global!). These queues process jobs in some
-logical sequence, though at the firmware level they get split into up to
-three queues each (and there is some parallelism allowed). The
-limitation here is in the number of in-flight jobs per firmware queue,
-not global.
-
-There is no way for things to deadlock. If jobs have been submitted to
-the firmware queue, that means their dependencies were signaled already.
-Jobs have intra-job dependencies via driver barriers (which drm_sched
-knows nothing about), but the submission code in the driver guarantees
-that they are deadlock-free since you can only barrier on past commands,
-which by definition submit first.
-
-If a firmware queue is full, drm_sched blocks. Since it is full, that
-means it will run those commands (since they have no outside
-dependencies and they are already queued and ready to run by the
-firmware), eventually space will be freed, and each time a job completes
-drm_sched will do the can_run_job check again and decide whether to run
-a new job.
-
-Since the firmware queues contain commands which only have past-facing
-barriers on other already submitted commands, by definition they will
-become empty at some point as long as the firmware is making forward
-progress. And therefore, by definition, can_run_job will eventually
-return true at some point after a job completion fence is signaled (the
-one for the last job submitted prior). There is a check in the driver to
-ensure that we do not allow submissions which, by themselves, would
-exceed the queued command limit (we actually just limit to 64 commands
-overall right now, which is conservative but seems reasonable given the
-128-per-firmware-queue limit).
-
-I get the feeling that you are conflating pending jobs with submitted
-jobs. This isn't about how many jobs you can have pending in drm_sched
-before running them or anything like that. Of course, at that point,
-arbitrary dependencies come into play and you can end up with deadlocks
-on dependency fences. But that's not the case here. What can_run_job is
-waiting on is guaranteed to make forward progress.
-
->> This case (potentially scheduling more than the FW job limit) is rare
->> but handling it is necessary, since otherwise the entire job
->> completion/tracking logic gets screwed up on the firmware end and queues
->> end up stuck (I've managed to trigger this before).
-> 
-> Actually that's a pretty normal use case. I've have rejected similar 
-> requirements like this before as well.
-> 
-> For an example how this can work see amdgpu_job_prepare_job(): 
-> https://elixir.bootlin.com/linux/v6.3-rc1/source/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c#L251
-> 
-> The gang submit gives and example of a global fence lock and the VMIDs 
-> are an example of a global shared firmware resource.
-
-But the resource can_run_job is checking on isn't globally shared! It's
-specific to this scheduler instance, just like hw_submission_limit is,
-so as long as the firmware behind the scheduler is making forward
-progress, the resource will be guaranteed to be freed until another job
-can run.
-
-I actually know I have a different theoretical deadlock issue along
-these lines in the driver because right now we grab actually global
-resources (including a VMID) before job submission to drm_sched. This is
-a known issue, and to fix it without reducing performance I need to
-introduce some kind of "patching/fixup" system for firmware commands
-(because we need to inject those identifiers in dozens of places, but we
-don't want to construct those commands from scratch at job run time
-because that introduces latency at the wrong time and makes error
-handling/validation more complicated and error-prone), and that is
-exactly what should happen in prepare_job, as you say. And yes, at that
-point that should use fences to block when those resources are
-exhausted. But that's a different discussion we should have when
-reviewing the driver, it has nothing to do with the DRM abstractions nor
-the can_run_job callback I'm adding here nor the firmware queue length
-limit issue! (And also the global hardware devices are plentiful enough
-that I would be very surprised if anyone ever deadlocks it in practice
-even with the current code, so I honestly don't think that should be a
-blocker for driver submission either, I can and will fix it later...)
-
-~~ Lina
