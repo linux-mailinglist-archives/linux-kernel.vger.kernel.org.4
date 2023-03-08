@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F496B0D1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CAB6B0D1D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbjCHPkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
+        id S232065AbjCHPk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:40:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232438AbjCHPkN (ORCPT
+        with ESMTP id S232463AbjCHPkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:40:13 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE2D5F6D4;
-        Wed,  8 Mar 2023 07:39:53 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328CkOQ7024262;
-        Wed, 8 Mar 2023 15:39:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=wsMjISGOQQMRy1FfKaAzLdVqMOJ5UvtspiE3r+kEdRw=;
- b=QCXYR0nHC79J8J7Xrf/zW9fB9zRjkwCTA2goDWvtym/Xto7NozTIJ9r4+f4KM+mjfA2F
- Tmpub8XbjNVR/j9mtgCx3DCewt1T/jSBSm1W1A5GjEzVU61BhTraKsFUuu+bZTsppIkj
- 2vAuWZmnN+bejLnWjHKOAei5OpSzenApM4+CVfmRS6c6eTr45Zhcgr4SzhvRiCg6S29P
- SQgMX/oMNQmVQ5to8EMtsLqiKmv8LnRtqQsxneO8GQ9PJxxj8Yg821brRJOroUg2cUec
- hbpiKN7ehTUItx1JW9tGSueVg7G78A2U8t6KjMXBjuJWQI8++WQ1AgrR08io0CL1620R Rg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p6fgft2cj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 15:39:25 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 328FdOtp025042
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Mar 2023 15:39:24 GMT
-Received: from [10.50.21.231] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 8 Mar 2023
- 07:39:16 -0800
-Message-ID: <ab803e21-76bf-308c-9df0-8b7b45b472b2@quicinc.com>
-Date:   Wed, 8 Mar 2023 21:09:11 +0530
+        Wed, 8 Mar 2023 10:40:17 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3905DEE9
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 07:39:59 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id t22so12440066oiw.12
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 07:39:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678289999;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BaAUtb/N9UL1YS9AZl0SE37nPbeXIoJeDvkrLAar53k=;
+        b=kpbqi66Gx1HUmzbNTjMnEaY0fUaP1rVbAomOrfPAi6GcirN4TmHcJZpl5yUCh4UNdS
+         U4IDL+DM0ggo2lH3wHX/dnuTn/mpin2tE/Gj8L7gY5gv/NyN2Gge346/MazBZ4W2N2fg
+         jgao/+S/aHEmZbK3Jk6+1IjLZmTiWLxYTTdgbUBb76oHb/wY08vCu88wfQf6y+IOZvao
+         H3AML1UGkdJgfPY1UtiJhSHPjt7nNXel5yiWfJ1V8y9HF1dzPGsQ6WMzcHUEekR09tGC
+         dcX/F9eBZF3eUUSdNU1G+3HRSSW45zh/JrcRmFjnnocojr2YSAQjfE2mZimv+iTK0ykr
+         Nlbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678289999;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BaAUtb/N9UL1YS9AZl0SE37nPbeXIoJeDvkrLAar53k=;
+        b=14R1F1/QTcXaRSoseu+X+tozRLR14gL2vHCY/Gw8UfYbTX4FjxLngd7IJgsa7w8lIh
+         T5sMhQDaF8mCiNR77Jgm/g4nCTu4xotzgFJJuo4JEzLgcN/e1uHU68gVOf3VWVj/M61c
+         vRRpW3mkH0oLCGi3cCA5CdWLNw/bczSj+qje6r5YIMh8zZwxn77jltA5/G+HEMdxhzPH
+         DFo3ExntzwaYCz4MZSV//Yvq+Kbwh09inphhMFuw1990xnCbuY+ON8kneEcFebhnsS7H
+         ScEfa613GPHY126ZNPXq1l12HuMV6B56FZqQbb2SRmdiFE1/Sn73J3CpqtKZ2iahvRPp
+         NdDw==
+X-Gm-Message-State: AO0yUKXhSH6VOrBGGJ1bzGJpoDO3CrLVdG47P1Si6CUxj7JHgK2j63OY
+        RTf6VB73Y5D4l1BHpkISd/3Hs2GZLaGYXWDkImY=
+X-Google-Smtp-Source: AK7set/l1y6f5wm26prcQWrhc6hlrODYBjN/jrOtHMUH61GhN/Z+0wVcB3PTAdG/g3xV47wB9O//ChhmmBH37L39xEw=
+X-Received: by 2002:a05:6808:8f7:b0:36e:f6f5:5cf0 with SMTP id
+ d23-20020a05680808f700b0036ef6f55cf0mr5499115oic.3.1678289999154; Wed, 08 Mar
+ 2023 07:39:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH V6 7/9] dt-bindings: firmware: qcom,scm: document IPQ5332
- SCM
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <catalin.marinas@arm.com>, <will@kernel.org>,
-        <arnd@arndb.de>, <dmitry.baryshkov@linaro.org>,
-        <geert+renesas@glider.be>, <nfraprado@collabora.com>,
-        <broonie@kernel.org>, <rafal@milecki.pl>, <robimarko@gmail.com>,
-        <quic_gurus@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-References: <20230307062232.4889-1-quic_kathirav@quicinc.com>
- <20230307062232.4889-8-quic_kathirav@quicinc.com>
- <754a2d38-dd7b-48b6-80e5-683ca193e0b1@linaro.org>
-Content-Language: en-US
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-In-Reply-To: <754a2d38-dd7b-48b6-80e5-683ca193e0b1@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 5qu3b1LRn2GCRGTi8U7WtYPrUuzDIKJo
-X-Proofpoint-ORIG-GUID: 5qu3b1LRn2GCRGTi8U7WtYPrUuzDIKJo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-08_08,2023-03-08_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- impostorscore=0 mlxscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
- suspectscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=973
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303080132
+References: <20230308140943.2009970-1-trix@redhat.com>
+In-Reply-To: <20230308140943.2009970-1-trix@redhat.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 8 Mar 2023 10:39:47 -0500
+Message-ID: <CADnq5_PdEGjvc59HjaYdffrNmAfFWuVe5M23wenHZMyF9LdCOA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: remove unused variable res_pool
+To:     Tom Rix <trix@redhat.com>
+Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, lyude@redhat.com, Wayne.Lin@amd.com,
+        hersenxs.wu@amd.com, hamza.mahfooz@amd.com, Jerry.Zuo@amd.com,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Applied.  Thanks!
 
-On 3/8/2023 4:31 PM, Konrad Dybcio wrote:
+On Wed, Mar 8, 2023 at 9:10 AM Tom Rix <trix@redhat.com> wrote:
 >
-> On 7.03.2023 07:22, Kathiravan T wrote:
->> Document the compatible for IPQ5332 SCM.
->>
->> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->> ---
-> Does this board not have a crypto engine / CE1 clock exposed via
-> RPMCC? It will be enabled by default, but Linux should be aware
-> of it, so that we don't gate it by accident.
-
-
-IPQ5332 doesn't have the crypto engine and also it doesn't have RPMCC. 
-Sorry, could you please help to explain how it is related to SCM?
-
-Thanks, Kathiravan T.
+> With gcc and W=3D1, there is this error
+> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_mst_types.c:121=
+4:31:
+>   error: variable =E2=80=98res_pool=E2=80=99 set but not used [-Werror=3D=
+unused-but-set-variable]
+>  1214 |         struct resource_pool *res_pool;
+>       |                               ^~~~~~~~
+>
+> Since res_pool is unused, remove it.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c =
+b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> index 2739bef9b90c..4b9b5e4050fc 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> @@ -1211,7 +1211,6 @@ static int pre_compute_mst_dsc_configs_for_state(st=
+ruct drm_atomic_state *state,
+>         bool computed_streams[MAX_PIPES];
+>         struct amdgpu_dm_connector *aconnector;
+>         struct drm_dp_mst_topology_mgr *mst_mgr;
+> -       struct resource_pool *res_pool;
+>         int link_vars_start_index =3D 0;
+>         int ret =3D 0;
+>
+> @@ -1220,7 +1219,6 @@ static int pre_compute_mst_dsc_configs_for_state(st=
+ruct drm_atomic_state *state,
+>
+>         for (i =3D 0; i < dc_state->stream_count; i++) {
+>                 stream =3D dc_state->streams[i];
+> -               res_pool =3D stream->ctx->dc->res_pool;
+>
+>                 if (stream->signal !=3D SIGNAL_TYPE_DISPLAY_PORT_MST)
+>                         continue;
+> --
+> 2.27.0
+>
