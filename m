@@ -2,405 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D693D6B0D49
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 079B46B0D59
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:50:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbjCHPsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:48:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
+        id S231517AbjCHPuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:50:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjCHPs2 (ORCPT
+        with ESMTP id S231949AbjCHPtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:48:28 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA6EF3D900;
-        Wed,  8 Mar 2023 07:48:26 -0800 (PST)
-Received: from [192.168.2.24] (77-166-152-30.fixed.kpn.net [77.166.152.30])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4026220C14D7;
-        Wed,  8 Mar 2023 07:48:25 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4026220C14D7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1678290506;
-        bh=ARQrceL3+wT2jD97un/kmuZ56IAlnxpVrHWJjIbRFfk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ik3GgKWT6qNSz4gwPQqkSw3k0Xk0BtaXQiVXe1vUfn7VYh0rH7vyNHKNWbyPtUImp
-         bSySGUn3tdcXiDqiESLZyO0TQFLR+st7InQglysc5LWEkdg4euSc/gqhUalZp0FdJA
-         hAfnZ4wW1egFg4Sm+4djLrMaxWauCZ6jZjX8AFBw=
-Message-ID: <80ccfedc-c6fb-8038-4e3e-24e1d806a021@linux.microsoft.com>
-Date:   Wed, 8 Mar 2023 16:48:23 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
-Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Tianyu Lan <ltykernel@gmail.com>,
-        Michael Kelley <mikelley@microsoft.com>
-References: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
- <ZAd2MRNLw1JAXmOf@google.com>
- <CABgObfa1578yKuw3sqnCeLXpyyKmMPgNaftP9HCdgHNM9Tztjw@mail.gmail.com>
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-In-Reply-To: <CABgObfa1578yKuw3sqnCeLXpyyKmMPgNaftP9HCdgHNM9Tztjw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 8 Mar 2023 10:49:33 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CD677C83;
+        Wed,  8 Mar 2023 07:49:32 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328E0jxG029741;
+        Wed, 8 Mar 2023 15:49:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=r7QigcP4koZz2N/hARwQn5ZjQ91M8EoTaDPjGQz7YSk=;
+ b=bU1e3jm165qXpq3F7K/0ICL9f26/gTMbd4ZHQe5ywKPGfxA5Kr1+6GIzDd8FXOGImcHS
+ 3SxJrsIj3cb/E4Giys9l6IbgYsZiyhRg0JjV4arf84QN98ojKw7gm8eUMZVfAsx19/G/
+ LxRTW0KhHGDGX7MirMDS/8y7jlPsTWtxxrScIdQFbZD0Nqp0TdMBh6Ik0uvNKnITJsPo
+ A7sQs5r3esWIaeDtiBHrK9knd0Yj1ipPTSmB96TT53mLar8HG9x8OMiN2PrkUljj+xoY
+ WOpZNjtvyy9D6zF2iMK9FWvKtyEIfST6Ej36pQgXHXhFQSO5HXd1TSbP7ZnnPZLvCK6V 0g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6sdf6hx0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Mar 2023 15:49:14 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 328EWt5n009887;
+        Wed, 8 Mar 2023 15:49:14 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6sdf6hwg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Mar 2023 15:49:13 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 328F0Xn8011833;
+        Wed, 8 Mar 2023 15:49:12 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3p6gbv4qxe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Mar 2023 15:49:12 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 328FnBKQ11993642
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Mar 2023 15:49:11 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5219158060;
+        Wed,  8 Mar 2023 15:49:11 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 71B5958056;
+        Wed,  8 Mar 2023 15:49:08 +0000 (GMT)
+Received: from sig-9-77-134-135.ibm.com (unknown [9.77.134.135])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  8 Mar 2023 15:49:08 +0000 (GMT)
+Message-ID: <0bbc02290e7c3dbea7be73af1705855ec10b8648.camel@linux.ibm.com>
+Subject: Re: [PATCH 22/28] security: Introduce key_post_create_or_update hook
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
+        jlayton@kernel.org, dmitry.kasatkin@gmail.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, dhowells@redhat.com,
+        jarkko@kernel.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 08 Mar 2023 10:49:07 -0500
+In-Reply-To: <20230303181842.1087717-23-roberto.sassu@huaweicloud.com>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+         <20230303181842.1087717-23-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1vbuhYhACK2EedBbBvkkuL5iLrz8__5H
+X-Proofpoint-ORIG-GUID: JZH2ZToRfkizdGzsQgW-mZ5Dt3xrgZre
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-08_09,2023-03-08_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 mlxscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
+ bulkscore=0 phishscore=0 suspectscore=0 mlxlogscore=999 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303080133
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 01:00, Paolo Bonzini wrote:
-> On Tue, Mar 7, 2023 at 6:36 PM Sean Christopherson <seanjc@google.com> wrote:
->> Thinking about this more, I would rather revert commit 1e0c7d40758b ("KVM: SVM:
->> hyper-v: Remote TLB flush for SVM") or fix the thing properly straitaway.  KVM
->> doesn't magically handle the flushes correctly for the shadow/legacy MMU, KVM just
->> happens to get lucky and not run afoul of the underlying bugs.
-> 
-> I don't think it's about luck---the legacy MMU's zapping/invalidation
-> seems to invoke the flush hypercall correctly:
-> 
-> Jeremi, did you ever track the call stack where
-> hyperv_nested_flush_guest_mapping is triggered?
-> 
-> Paolo
-> 
+On Fri, 2023-03-03 at 19:18 +0100, Roberto Sassu wrote:
 
-Yes, here's all the stacktraces I get for hyperv_nested_flush_guest_mapping with legacy MMU:
+> diff --git a/security/security.c b/security/security.c
+> index b3a9c317f75..322090a50cd 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -5195,6 +5195,25 @@ int security_key_getsecurity(struct key *key, char **_buffer)
+>  	*_buffer = NULL;
+>  	return call_int_hook(key_getsecurity, 0, key, _buffer);
+>  }
+> +
+> +/**
+> + * security_key_post_create_or_update() - Tell caller of key creation or update
 
-1
- entry_SYSCALL_64_after_hwframe
-  do_syscall_64
-   __x64_sys_ioctl
-    kvm_vcpu_ioctl
-     kvm_arch_vcpu_ioctl_run
-      svm_handle_exit
-       svm_invoke_exit_handler
-        npf_interception
-         kvm_mmu_page_fault
-          kvm_mmu_do_page_fault
-           kvm_tdp_page_fault
-            direct_page_fault
-             kvm_faultin_pfn
-              __gfn_to_pfn_memslot
-               hva_to_pfn
-                get_user_pages_unlocked
-                 __gup_longterm_locked
-                  __get_user_pages
-                   handle_mm_fault
-                    __handle_mm_fault
-                     do_huge_pmd_wp_page
-                      __split_huge_pmd
-                       __mmu_notifier_invalidate_range_start
-                        kvm_mmu_notifier_invalidate_range_start
-                         kvm_flush_remote_tlbs
-                          hv_remote_flush_tlb
-                           hv_remote_flush_tlb_with_range
-                            hyperv_flush_guest_mapping
-1
- entry_SYSCALL_64_after_hwframe
-  do_syscall_64
-   syscall_exit_to_user_mode
-    exit_to_user_mode_prepare
-     arch_do_signal_or_restart
-      get_signal
-       do_group_exit
-        do_exit
-         mmput
-          __mmput
-           exit_mmap
-            __mmu_notifier_release
-             kvm_mmu_notifier_release
-              kvm_arch_flush_shadow_all
-               kvm_mmu_zap_all
-                kvm_mmu_commit_zap_page.part.0
-                 kvm_flush_remote_tlbs
-                  hv_remote_flush_tlb
-                   hv_remote_flush_tlb_with_range
-                    hyperv_flush_guest_mapping
-1
- entry_SYSCALL_64_after_hwframe
-  do_syscall_64
-   syscall_exit_to_user_mode
-    exit_to_user_mode_prepare
-     arch_do_signal_or_restart
-      get_signal
-       do_group_exit
-        do_exit
-         task_work_run
-          ____fput
-           __fput
-            kvm_vm_release
-             kvm_put_kvm
-              kvm_destroy_vm
-               kvm_arch_destroy_vm
-                kvm_mmu_unload
-                 kvm_mmu_free_roots
-                  kvm_mmu_commit_zap_page.part.0
-                   kvm_flush_remote_tlbs
-                    hv_remote_flush_tlb
-                     hv_remote_flush_tlb_with_range
-                      hyperv_flush_guest_mapping
-6
- entry_SYSCALL_64_after_hwframe
-  do_syscall_64
-   __x64_sys_ioctl
-    kvm_vcpu_ioctl
-     kvm_arch_vcpu_ioctl_run
-      svm_handle_exit
-       svm_invoke_exit_handler
-        npf_interception
-         kvm_mmu_page_fault
-          kvm_mmu_do_page_fault
-           kvm_tdp_page_fault
-            direct_page_fault
-             kvm_faultin_pfn
-              __gfn_to_pfn_memslot
-               hva_to_pfn
-                get_user_pages_unlocked
-                 __gup_longterm_locked
-                  __get_user_pages
-                   handle_mm_fault
-                    __handle_mm_fault
-                     do_wp_page
-                      __mmu_notifier_invalidate_range_start
-                       kvm_mmu_notifier_invalidate_range_start
-                        kvm_flush_remote_tlbs
-                         hv_remote_flush_tlb
-                          hv_remote_flush_tlb_with_range
-                           hyperv_flush_guest_mapping
-8
- entry_SYSCALL_64_after_hwframe
-  do_syscall_64
-   __x64_sys_ioctl
-    kvm_vcpu_ioctl
-     kvm_arch_vcpu_ioctl_run
-      kvm_apic_accept_events
-       kvm_vcpu_reset
-        kvm_mmu_reset_context
-         kvm_mmu_free_roots
-          kvm_mmu_commit_zap_page.part.0
-           kvm_flush_remote_tlbs
-            hv_remote_flush_tlb
-             hv_remote_flush_tlb_with_range
-              hyperv_flush_guest_mapping
-20
- entry_SYSCALL_64_after_hwframe
-  do_syscall_64
-   __x64_sys_ioctl
-    kvm_vcpu_ioctl
-     kvm_arch_vcpu_ioctl_run
-      svm_handle_exit
-       svm_invoke_exit_handler
-        npf_interception
-         kvm_mmu_page_fault
-          kvm_mmu_do_page_fault
-           kvm_tdp_page_fault
-            direct_page_fault
-             mmu_set_spte
-              hv_remote_flush_tlb_with_range
-               hyperv_flush_guest_mapping_range
-406
- entry_SYSCALL_64_after_hwframe
-  do_syscall_64
-   __x64_sys_ioctl
-    kvm_vm_ioctl
-     __kvm_set_memory_region
-      kvm_set_memslot
-       kvm_arch_flush_shadow_memslot
-        kvm_page_track_flush_slot
-         kvm_mmu_invalidate_zap_pages_in_memslot
-          kvm_mmu_zap_all_fast
-           kvm_mmu_commit_zap_page.part.0
-            kvm_flush_remote_tlbs
-             hv_remote_flush_tlb
-              hv_remote_flush_tlb_with_range
-               hyperv_flush_guest_mapping
-406
- entry_SYSCALL_64_after_hwframe
-  do_syscall_64
-   __x64_sys_ioctl
-    kvm_vcpu_ioctl
-     kvm_arch_vcpu_ioctl_run
-      kvm_mmu_free_obsolete_roots
-       __kvm_mmu_free_obsolete_roots
-        kvm_mmu_free_roots
-         kvm_mmu_commit_zap_page.part.0
-          kvm_flush_remote_tlbs
-           hv_remote_flush_tlb
-            hv_remote_flush_tlb_with_range
-             hyperv_flush_guest_mapping
+^Notification of key create or update
 
+-- 
+thanks,
 
-and here's the stacks for TDP MMU:
+Mimi
 
-1
- entry_SYSCALL_64_after_hwframe
-  do_syscall_64
-   __x64_sys_ioctl
-    kvm_vcpu_ioctl
-     kvm_arch_vcpu_ioctl_run
-      svm_handle_exit
-       svm_invoke_exit_handler
-        npf_interception
-         kvm_mmu_page_fault
-          kvm_mmu_do_page_fault
-           kvm_tdp_page_fault
-            kvm_faultin_pfn
-             __gfn_to_pfn_memslot
-              hva_to_pfn
-               get_user_pages_unlocked
-                __gup_longterm_locked
-                 __get_user_pages
-                  handle_mm_fault
-                   __handle_mm_fault
-                    do_huge_pmd_wp_page
-                     __split_huge_pmd
-                      __mmu_notifier_invalidate_range_start
-                       kvm_mmu_notifier_invalidate_range_start
-                        kvm_flush_remote_tlbs
-                         hv_remote_flush_tlb
-                          hv_remote_flush_tlb_with_range
-                           hyperv_flush_guest_mapping
-6
- entry_SYSCALL_64_after_hwframe
-  do_syscall_64
-   __x64_sys_ioctl
-    kvm_vcpu_ioctl
-     kvm_arch_vcpu_ioctl_run
-      svm_handle_exit
-       svm_invoke_exit_handler
-        npf_interception
-         kvm_mmu_page_fault
-          kvm_mmu_do_page_fault
-           kvm_tdp_page_fault
-            kvm_faultin_pfn
-             __gfn_to_pfn_memslot
-              hva_to_pfn
-               get_user_pages_unlocked
-                __gup_longterm_locked
-                 __get_user_pages
-                  handle_mm_fault
-                   __handle_mm_fault
-                    do_wp_page
-                     __mmu_notifier_invalidate_range_start
-                      kvm_mmu_notifier_invalidate_range_start
-                       kvm_flush_remote_tlbs
-                        hv_remote_flush_tlb
-                         hv_remote_flush_tlb_with_range
-                          hyperv_flush_guest_mapping
-
->> The revert appears
->> to be reasonably straightforward (see bottom).
->>
->> And _if_ we want to hack-a-fix it, then I would strongly prefer a very isolated,
->> obviously hacky fix, e.g.
->>
->> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
->> index 36e4561554ca..a9ba4ae14fda 100644
->> --- a/arch/x86/kvm/mmu/mmu.c
->> +++ b/arch/x86/kvm/mmu/mmu.c
->> @@ -5779,8 +5779,13 @@ void kvm_configure_mmu(bool enable_tdp, int tdp_forced_root_level,
->>         tdp_root_level = tdp_forced_root_level;
->>         max_tdp_level = tdp_max_root_level;
->>
->> +       /*
->> +        * FIXME: Remove the enlightened TLB restriction when KVM properly
->> +        * handles TLB flushes for said enlightenment.
->> +        */.
->>  #ifdef CONFIG_X86_64
->> -       tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled;
->> +       tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled &&
->> +                         !(ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB);
->>  #endif
->>         /*
->>          * max_huge_page_level reflects KVM's MMU capabilities irrespective
->>
->>
->>
->>
->> The revert...
->>
->> ---
->>  arch/x86/kvm/svm/svm.c          |  3 ---
->>  arch/x86/kvm/svm/svm_onhyperv.h | 27 ---------------------------
->>  2 files changed, 30 deletions(-)
->>
->> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
->> index 11068e8eb969..292650dc85a0 100644
->> --- a/arch/x86/kvm/svm/svm.c
->> +++ b/arch/x86/kvm/svm/svm.c
->> @@ -1320,7 +1320,6 @@ static void init_vmcb(struct kvm_vcpu *vcpu)
->>         if (sev_guest(vcpu->kvm))
->>                 sev_init_vmcb(svm);
->>
->> -       svm_hv_init_vmcb(vmcb);
->>         init_vmcb_after_set_cpuid(vcpu);
->>
->>         vmcb_mark_all_dirty(vmcb);
->> @@ -4075,8 +4074,6 @@ static void svm_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa,
->>                 svm->vmcb->control.nested_cr3 = __sme_set(root_hpa);
->>                 vmcb_mark_dirty(svm->vmcb, VMCB_NPT);
->>
->> -               hv_track_root_tdp(vcpu, root_hpa);
->> -
->>                 cr3 = vcpu->arch.cr3;
->>         } else if (root_level >= PT64_ROOT_4LEVEL) {
->>                 cr3 = __sme_set(root_hpa) | kvm_get_active_pcid(vcpu);
->> diff --git a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
->> index 6981c1e9a809..5118fd273e73 100644
->> --- a/arch/x86/kvm/svm/svm_onhyperv.h
->> +++ b/arch/x86/kvm/svm/svm_onhyperv.h
->> @@ -15,31 +15,8 @@ static struct kvm_x86_ops svm_x86_ops;
->>
->>  int svm_hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu);
->>
->> -static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
->> -{
->> -       struct hv_vmcb_enlightenments *hve = &vmcb->control.hv_enlightenments;
->> -
->> -       BUILD_BUG_ON(sizeof(vmcb->control.hv_enlightenments) !=
->> -                    sizeof(vmcb->control.reserved_sw));
->> -
->> -       if (npt_enabled &&
->> -           ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB)
->> -               hve->hv_enlightenments_control.enlightened_npt_tlb = 1;
->> -
->> -       if (ms_hyperv.nested_features & HV_X64_NESTED_MSR_BITMAP)
->> -               hve->hv_enlightenments_control.msr_bitmap = 1;
->> -}
->> -
->>  static inline void svm_hv_hardware_setup(void)
->>  {
->> -       if (npt_enabled &&
->> -           ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB) {
->> -               pr_info(KBUILD_MODNAME ": Hyper-V enlightened NPT TLB flush enabled\n");
->> -               svm_x86_ops.tlb_remote_flush = hv_remote_flush_tlb;
->> -               svm_x86_ops.tlb_remote_flush_with_range =
->> -                               hv_remote_flush_tlb_with_range;
->> -       }
->> -
->>         if (ms_hyperv.nested_features & HV_X64_NESTED_DIRECT_FLUSH) {
->>                 int cpu;
->>
->> @@ -80,10 +57,6 @@ static inline void svm_hv_update_vp_id(struct vmcb *vmcb, struct kvm_vcpu *vcpu)
->>  }
->>  #else
->>
->> -static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
->> -{
->> -}
->> -
->>  static inline void svm_hv_hardware_setup(void)
->>  {
->>  }
->>
->> base-commit: cb8748a781fe983e451f616ce4861a1c49ce79dd
->> --
->>
