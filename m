@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3566B0665
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C906B0667
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbjCHLxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
+        id S230293AbjCHLxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 06:53:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbjCHLxZ (ORCPT
+        with ESMTP id S230481AbjCHLx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:53:25 -0500
+        Wed, 8 Mar 2023 06:53:27 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A08226CEB;
-        Wed,  8 Mar 2023 03:53:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23494D280;
+        Wed,  8 Mar 2023 03:53:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F056961655;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B327561758;
+        Wed,  8 Mar 2023 11:53:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F46C433A0;
         Wed,  8 Mar 2023 11:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6CC4C433D2;
-        Wed,  8 Mar 2023 11:53:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678276387;
-        bh=ZkVhJIkKT/UYTmS7WbDcXYK9TEkAwrVF1Ql4lmc2Mhc=;
+        s=k20201202; t=1678276390;
+        bh=ItNl/VUdFsdbRrM3FYDQwEWNJZg7o1tpHGJGDk3Q3uE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vsd5CVbV1PoPpTPc7I4dJkA9DptzliuNU/OO92MKuJkgXQjffDnCWDLTofFP4qc1o
-         V12RE3UK1V3PmTMHZpHKs1VI17AA1u4Za+bA3Ykwbd/OztMLes/XAGGMWmK5109DSY
-         oJmOIXFw6yV81jOMcf0AvLnyLLRV4sclBYrmELndDxoO9M5k1A/o7z82PUQbMIWHGd
-         BH1gRujdy4fgNRWearLeF3WbAjX09Kp7AgstPy0Q+4UdhFbQNMrHfbBpucrJ8Iv1NU
-         ucjgZQddu8Z98G7hHhVklDHlEMD2vB385s4/bLbQXeVv7E7/K+FOX8V5yPsolCnVZ4
-         LZfS963zU9B5Q==
+        b=DuQdIWp3o2rCCF0WNC47R0nVaUQFAnWL/A5R99rxnkqvJBtyU0kfQxOwCLLHFjsZk
+         bN9BYnebAVV2QRjWh8Fu/brb56KLp4LlrZDEwOGWU+z1TUS6AXOS30yO/tSIU4jfLp
+         SjXYAr8wdzaIn21GDPOCvSWfpgudc6oImq/K1EdjsILTbPtsxTN5xEE+2y2U/eOLLL
+         VQF3t9dIbPQdj3W5pSxdp5jmyUo2nNJPQsv63GQ4vyxGJLnMeSQ/c4wQ9DVtbtO9sU
+         ZZ4xnmAEIu+E9EA+d0QdObBK5f55B7laDtW1SwT9Bb0FCht4F3Giq366viOoZ7WF+Z
+         Qewp4S7u7uYBw==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Zhen Lei <thunder.leizhen@huawei.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 6/8] scripts/kallsyms: change the output order
-Date:   Wed,  8 Mar 2023 20:52:41 +0900
-Message-Id: <20230308115243.82592-6-masahiroy@kernel.org>
+Subject: [PATCH 7/8] scripts/kallsyms: decrease expand_symbol() / cleanup_symbol_name() calls
+Date:   Wed,  8 Mar 2023 20:52:42 +0900
+Message-Id: <20230308115243.82592-7-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230308115243.82592-1-masahiroy@kernel.org>
 References: <20230308115243.82592-1-masahiroy@kernel.org>
@@ -55,186 +55,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, this tool outputs symbol data in the following order.
+Currently, expand_symbol() is called many times to get the uncompressed
+symbol names for sorting, and also for adding comments.
 
- (1) kallsyms_addressed / kallsyms_offsets
- (2) kallsyms_relative_base
- (3) kallsyms_num_syms
- (4) kallsyms_names
- (5) kallsyms_markers
- (6) kallsyms_seq_of_names
- (7) kallsyms_token_table
- (8) kallsyms_token_index
-
-This commit changes the order as follows:
+With the output order shuffled in the previous commit, the symbol data
+are now written in the following order:
 
  (1) kallsyms_num_syms
- (2) kallsyms_names
+ (2) kallsyms_names                         <-- need compressed names
  (3) kallsyms_markers
  (4) kallsyms_token_table
  (5) kallsyms_token_index
- (6) kallsyms_addressed / kallsyms_offsets
+ (6) kallsyms_addressed / kallsyms_offsets  <-- need uncompressed names (for commenting)
  (7) kallsyms_relative_base
- (8) kallsyms_seq_of_names
+ (8) kallsyms_seq_of_names                  <-- need uncompressed names (for sorting)
 
-The motivation is to decrease the number of function calls to
-expand_symbol() and cleanup_symbol_name().
+The compressed names are only needed by (2).
 
-The compressed names are only required for writing 'kallsyms_names'.
-If you do this first, we can restore the original symbol names.
-You do not need to repeat the same operation over again.
+Call expand_symbol() between (2) and (3) to restore the original symbol
+names. This requires just one expand_symbol() call for each symbol.
 
-The actual refactoring will happen in the next commit.
+Call cleanup_symbol_name() between (7) and (8) instead of during sorting.
+It is allowed to overwrite the ->sym field because (8) just outputs the
+index instead of the name of each symbol. Again, this requires just one
+cleanup_symbol_name() call for each symbol.
+
+This refactoring makes it ~30% faster.
+
+[Before]
+
+  $ time scripts/kallsyms --all-symbols --absolute-percpu --base-relative \
+    .tmp_vmlinux.kallsyms2.syms >/dev/null
+
+  real    0m1.027s
+  user    0m1.010s
+  sys     0m0.016s
+
+  $ time scripts/kallsyms --all-symbols --absolute-percpu --base-relative \
+    .tmp_vmlinux.kallsyms2.syms >/dev/null
+
+  real    0m0.717s
+  user    0m0.717s
+  sys     0m0.000s
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- scripts/kallsyms.c | 118 ++++++++++++++++++++++-----------------------
- 1 file changed, 59 insertions(+), 59 deletions(-)
+ scripts/kallsyms.c | 33 +++++++++++++++------------------
+ 1 file changed, 15 insertions(+), 18 deletions(-)
 
 diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 97d514c0fc8f..5996f1e61bcf 100644
+index 5996f1e61bcf..937900823fa8 100644
 --- a/scripts/kallsyms.c
 +++ b/scripts/kallsyms.c
-@@ -412,56 +412,6 @@ static void write_src(void)
- 
- 	printf("\t.section .rodata, \"a\"\n");
- 
--	if (!base_relative)
--		output_label("kallsyms_addresses");
--	else
--		output_label("kallsyms_offsets");
--
--	for (i = 0; i < table_cnt; i++) {
--		if (base_relative) {
--			/*
--			 * Use the offset relative to the lowest value
--			 * encountered of all relative symbols, and emit
--			 * non-relocatable fixed offsets that will be fixed
--			 * up at runtime.
--			 */
--
--			long long offset;
--			int overflow;
--
--			if (!absolute_percpu) {
--				offset = table[i]->addr - relative_base;
--				overflow = (offset < 0 || offset > UINT_MAX);
--			} else if (symbol_absolute(table[i])) {
--				offset = table[i]->addr;
--				overflow = (offset < 0 || offset > INT_MAX);
--			} else {
--				offset = relative_base - table[i]->addr - 1;
--				overflow = (offset < INT_MIN || offset >= 0);
--			}
--			if (overflow) {
--				fprintf(stderr, "kallsyms failure: "
--					"%s symbol value %#llx out of range in relative mode\n",
--					symbol_absolute(table[i]) ? "absolute" : "relative",
--					table[i]->addr);
--				exit(EXIT_FAILURE);
--			}
--			expand_symbol(table[i]->sym, table[i]->len, buf);
--			printf("\t.long\t%#x	/* %s */\n", (int)offset, buf);
--		} else if (!symbol_absolute(table[i])) {
--			output_address(table[i]->addr);
--		} else {
--			printf("\tPTR\t%#llx\n", table[i]->addr);
--		}
--	}
--	printf("\n");
--
--	if (base_relative) {
--		output_label("kallsyms_relative_base");
--		output_address(relative_base);
--		printf("\n");
--	}
--
- 	output_label("kallsyms_num_syms");
- 	printf("\t.long\t%u\n", table_cnt);
- 	printf("\n");
-@@ -521,15 +471,6 @@ static void write_src(void)
- 
- 	free(markers);
- 
--	sort_symbols_by_name();
--	output_label("kallsyms_seqs_of_names");
--	for (i = 0; i < table_cnt; i++)
--		printf("\t.byte 0x%02x, 0x%02x, 0x%02x\n",
--			(unsigned char)(table[i]->seq >> 16),
--			(unsigned char)(table[i]->seq >> 8),
--			(unsigned char)(table[i]->seq >> 0));
--	printf("\n");
--
- 	output_label("kallsyms_token_table");
- 	off = 0;
- 	for (i = 0; i < 256; i++) {
-@@ -544,6 +485,65 @@ static void write_src(void)
- 	for (i = 0; i < 256; i++)
- 		printf("\t.short\t%d\n", best_idx[i]);
- 	printf("\n");
-+
-+	if (!base_relative)
-+		output_label("kallsyms_addresses");
-+	else
-+		output_label("kallsyms_offsets");
-+
-+	for (i = 0; i < table_cnt; i++) {
-+		if (base_relative) {
-+			/*
-+			 * Use the offset relative to the lowest value
-+			 * encountered of all relative symbols, and emit
-+			 * non-relocatable fixed offsets that will be fixed
-+			 * up at runtime.
-+			 */
-+
-+			long long offset;
-+			int overflow;
-+
-+			if (!absolute_percpu) {
-+				offset = table[i]->addr - relative_base;
-+				overflow = (offset < 0 || offset > UINT_MAX);
-+			} else if (symbol_absolute(table[i])) {
-+				offset = table[i]->addr;
-+				overflow = (offset < 0 || offset > INT_MAX);
-+			} else {
-+				offset = relative_base - table[i]->addr - 1;
-+				overflow = (offset < INT_MIN || offset >= 0);
-+			}
-+			if (overflow) {
-+				fprintf(stderr, "kallsyms failure: "
-+					"%s symbol value %#llx out of range in relative mode\n",
-+					symbol_absolute(table[i]) ? "absolute" : "relative",
-+					table[i]->addr);
-+				exit(EXIT_FAILURE);
-+			}
-+			expand_symbol(table[i]->sym, table[i]->len, buf);
-+			printf("\t.long\t%#x	/* %s */\n", (int)offset, buf);
-+		} else if (!symbol_absolute(table[i])) {
-+			output_address(table[i]->addr);
-+		} else {
-+			printf("\tPTR\t%#llx\n", table[i]->addr);
-+		}
-+	}
-+	printf("\n");
-+
-+	if (base_relative) {
-+		output_label("kallsyms_relative_base");
-+		output_address(relative_base);
-+		printf("\n");
-+	}
-+
-+	sort_symbols_by_name();
-+	output_label("kallsyms_seqs_of_names");
-+	for (i = 0; i < table_cnt; i++)
-+		printf("\t.byte 0x%02x, 0x%02x, 0x%02x\n",
-+			(unsigned char)(table[i]->seq >> 16),
-+			(unsigned char)(table[i]->seq >> 8),
-+			(unsigned char)(table[i]->seq >> 0));
-+	printf("\n");
+@@ -335,19 +335,10 @@ static int symbol_absolute(const struct sym_entry *s)
+ 	return s->percpu_absolute;
  }
  
+-static char * s_name(char *buf)
+-{
+-	/* Skip the symbol type */
+-	return buf + 1;
+-}
+-
+ static void cleanup_symbol_name(char *s)
+ {
+ 	char *p;
  
+-	if (!lto_clang)
+-		return;
+-
+ 	/*
+ 	 * ASCII[.]   = 2e
+ 	 * ASCII[0-9] = 30,39
+@@ -366,16 +357,10 @@ static void cleanup_symbol_name(char *s)
+ static int compare_names(const void *a, const void *b)
+ {
+ 	int ret;
+-	char sa_namebuf[KSYM_NAME_LEN];
+-	char sb_namebuf[KSYM_NAME_LEN];
+ 	const struct sym_entry *sa = *(const struct sym_entry **)a;
+ 	const struct sym_entry *sb = *(const struct sym_entry **)b;
+ 
+-	expand_symbol(sa->sym, sa->len, sa_namebuf);
+-	expand_symbol(sb->sym, sb->len, sb_namebuf);
+-	cleanup_symbol_name(s_name(sa_namebuf));
+-	cleanup_symbol_name(s_name(sb_namebuf));
+-	ret = strcmp(s_name(sa_namebuf), s_name(sb_namebuf));
++	ret = strcmp(sym_name(sa), sym_name(sb));
+ 	if (!ret) {
+ 		if (sa->addr > sb->addr)
+ 			return 1;
+@@ -464,6 +449,15 @@ static void write_src(void)
+ 	}
+ 	printf("\n");
+ 
++	/*
++	 * Now that we wrote out the compressed symbol names, restore the
++	 * original names, which are needed in some of the later steps.
++	 */
++	for (i = 0; i < table_cnt; i++) {
++		expand_symbol(table[i]->sym, table[i]->len, buf);
++		strcpy((char *)table[i]->sym, buf);
++	}
++
+ 	output_label("kallsyms_markers");
+ 	for (i = 0; i < ((table_cnt + 255) >> 8); i++)
+ 		printf("\t.long\t%u\n", markers[i]);
+@@ -520,8 +514,7 @@ static void write_src(void)
+ 					table[i]->addr);
+ 				exit(EXIT_FAILURE);
+ 			}
+-			expand_symbol(table[i]->sym, table[i]->len, buf);
+-			printf("\t.long\t%#x	/* %s */\n", (int)offset, buf);
++			printf("\t.long\t%#x	/* %s */\n", (int)offset, table[i]->sym);
+ 		} else if (!symbol_absolute(table[i])) {
+ 			output_address(table[i]->addr);
+ 		} else {
+@@ -536,6 +529,10 @@ static void write_src(void)
+ 		printf("\n");
+ 	}
+ 
++	if (lto_clang)
++		for (i = 0; i < table_cnt; i++)
++			cleanup_symbol_name((char *)table[i]->sym);
++
+ 	sort_symbols_by_name();
+ 	output_label("kallsyms_seqs_of_names");
+ 	for (i = 0; i < table_cnt; i++)
 -- 
 2.34.1
 
