@@ -2,63 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF5A6B03B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8626B03B8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjCHKG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
+        id S230256AbjCHKHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:07:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbjCHKGU (ORCPT
+        with ESMTP id S229617AbjCHKHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:06:20 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57710900B2;
-        Wed,  8 Mar 2023 02:05:54 -0800 (PST)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PWnvc0Ff9zKqCv;
-        Wed,  8 Mar 2023 18:03:40 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 8 Mar 2023 18:05:39 +0800
-Message-ID: <3600f642-a15e-b817-bca0-612233d18416@huawei.com>
-Date:   Wed, 8 Mar 2023 18:05:39 +0800
+        Wed, 8 Mar 2023 05:07:50 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63CC43440
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:07:48 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id v11so17156781plz.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:07:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678270068;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vJzcc6rKR0/tJP4lO1Zyy6/g4sV6V23DXqlI9X2wTrc=;
+        b=dCSpcvbFiVJczZSZf05BTKfBfJqu4a2BMXshWHoRhZPYqHAGUiwAwOE3q/5t3pikj4
+         do3uU7A8nvTTTj6oqeJEW1WteP8Y56FeKrSvdvhelMWlwye8f7vwiODoKBjLiyl9idw4
+         VQtyflVLgF5aZsvzdR/b0XU7gS/734/8vSQ5qvxfvvJGFX2Q+FdUboKWjSvRoFw4O3IN
+         Eti5UKQfJMuXQNQLVmn1WjQK5Vl7ULwrxQJ/Uhj1lFwoT4Ut6vbOeZJXCKnYDQh09jbN
+         cKD6vLZzBSMIS+wpf+VohzWdDuqCg2Azvkob06R8gj9WQXpxgHLC/TtkFVxqma/J6CoM
+         67eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678270068;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vJzcc6rKR0/tJP4lO1Zyy6/g4sV6V23DXqlI9X2wTrc=;
+        b=cgJV8wo7lERelORviHXU4P1Q91lMxgPUA6WoiWeq9/CDLOtoF+HpfQ7mtUpPMNni8Q
+         bYAI7uxaClXrNuD5ACO0gEV63/eksKSfFmUAZoURjAb7LT4kNHSTsYWn0jPts4MYS/9c
+         uAfSlsgDJxr2oj2mVu4u1IDxXhowB73ZCMAHMy987ALNvGa4NDSfoP2ziJtjzdS6JkNv
+         A2IiwlD6Tw8Mb8w9kbbnqrg4tsuYwC/o1YeceaA5VTrCk1MUNiwLRCf1tJU/+gR+c7CI
+         ZA8o5bPfDIBAA4GP2MvtSHl+ptKVVqcYLXteukSy2aezZ3j/nqVa75m+TW6nCxh9yRwo
+         3ovw==
+X-Gm-Message-State: AO0yUKUkU3JRFtH0YJWYQL1kAtNvOcHJHq9RYyb3O572abaDKmgcoddr
+        1df+H8FeEsdDBtX79iS+qm0J5vXi5zbCCekP9daOoRpqNYsWhQ==
+X-Google-Smtp-Source: AK7set/mDMvw2QSltP121J0ZchHsEbTyS6nQNIk3D+lK/r5s25PVzFJPhTu3QQrKq0RaQMYYiPkVxMlKminD8zVOHos=
+X-Received: by 2002:a17:90a:6389:b0:236:6e4c:8a1e with SMTP id
+ f9-20020a17090a638900b002366e4c8a1emr6354749pjj.1.1678270068002; Wed, 08 Mar
+ 2023 02:07:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next 1/2] bpf: update 32-bit bounds when the lower
- 32-bit value is not wrapping
-Content-Language: en-US
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Xu Kuohai <xukuohai@huaweicloud.com>
-CC:     bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-References: <20230307220449.2933650-1-xukuohai@huaweicloud.com>
- <20230307220449.2933650-2-xukuohai@huaweicloud.com>
- <CAADnVQLDmP0A7Pr7628nH8YSo3-xTjzAr5-x-0YCZvuS8xu09A@mail.gmail.com>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <CAADnVQLDmP0A7Pr7628nH8YSo3-xTjzAr5-x-0YCZvuS8xu09A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Received: by 2002:a05:7022:fa6:b0:5f:9f12:d99c with HTTP; Wed, 8 Mar 2023
+ 02:07:46 -0800 (PST)
+In-Reply-To: <CAHk-=wgr1D8hb75Z+nn+4LXUnosp0HM+gP+YJEcEav1DgTC=Cw@mail.gmail.com>
+References: <CAHk-=wgr1D8hb75Z+nn+4LXUnosp0HM+gP+YJEcEav1DgTC=Cw@mail.gmail.com>
+From:   Luna Jernberg <droidbittin@gmail.com>
+Date:   Wed, 8 Mar 2023 11:07:46 +0100
+Message-ID: <CADo9pHgCSdrwG7J8NZB3EBpvfH9KCpmitXKA88tSqqPAgPC9zA@mail.gmail.com>
+Subject: Re: Linux 6.3-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        droidbittin@gmail.com
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,205 +71,464 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/2023 1:22 AM, Alexei Starovoitov wrote:
-> On Tue, Mar 7, 2023 at 1:05 AM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
->>
->> The following XDP prog is accepted by verifier.
->>
->> 0: (61) r2 = *(u32 *)(r1 +0)          ; R2_w=pkt(off=0,r=0,imm=0)
->> 1: (61) r3 = *(u32 *)(r1 +4)          ; R3_w=pkt_end(off=0,imm=0)
->> 2: (bf) r1 = r2
->> 3: (07) r1 += 1
->> 4: (2d) if r1 > r3 goto pc+6
->> 5: (71) r1 = *(u8 *)(r2 +0)           ; R1_w=scalar(umax=255,var_off=(0x0; 0xff))
->> 6: (b4) w0 = 0x7fffff10
->> 7: (0c) w1 += w0                      ; R1_w=scalar(umin=0x7fffff10,umax=0x8000000f,var_off=(0x0; 0xffffffff))
->> 8: (b4) w0 = 0x80000000
->> 9: (04) w0 += 1
->> 10: (ae) if w0 < w1 goto pc-2
->> 11: (b7) r0 = 0
->> 12: (95) exit
->>
->> while the following 64-bit version is rejected.
->>
->> 0: (61) r2 = *(u32 *)(r1 +0)          ; R2_w=pkt(off=0,r=0,imm=0)
->> 1: (61) r3 = *(u32 *)(r1 +4)          ; R3_w=pkt_end(off=0,imm=0)
->> 2: (bf) r1 = r2
->> 3: (07) r1 += 1
->> 4: (2d) if r1 > r3 goto pc+8
->> 5: (71) r1 = *(u8 *)(r2 +0)           ; R1_w=scalar(umax=255,var_off=(0x0; 0xff))
->> 6: (18) r0 = 0x7fffffffffffff10
->> 8: (0f) r1 += r0                      ; R1_w=scalar(umin=0x7fffffffffffff10,umax=0x800000000000000f)
->> 9: (18) r0 = 0x8000000000000000
->> 11: (07) r0 += 1
->> 12: (ad) if r0 < r1 goto pc-2
->> 13: (b7) r0 = 0
->> 14: (95) exit
-> 
-> These two programs are not equivalent.
-> Not clear how apples to oranges comparison explains anything.
-> 
+Works on my machine :)
 
-Yes, they are not equivalent. I assumed the 32-bit prog being accepted
-implies it is unreasonable for the 64-bit prog to be rejected. Regardless
-of this assumption and the 32-bit prog, the above 64-bit prog is expected
-to be accepted, right?
-
->> The verifier log says:
->>
->> [...]
->>
->> from 12 to 11: R0_w=-9223372036854775794 R1=scalar(umin=9223372036854775823,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
->> 11: (07) r0 += 1                      ; R0_w=-9223372036854775793
->> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=-9223372036854775793 R1=scalar(umin=9223372036854775823,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
->> 13: safe
->>
->> from 12 to 11: R0_w=-9223372036854775793 R1=scalar(umin=9223372036854775824,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
-> 
-> First thing to debug is why umin is higher than umax.
-> 
-
-Well, it's because the loop does not stop, when r0 increases to -9223372036854775793,
-the following code in reg_set_min_max() sets umin_value to 9223372036854775824:
-
-case BPF_JGT:
-{
-         if (is_jmp32) {
-                 [...]
-         } else {
-                 u64 false_umax = opcode == BPF_JGT ? val    : val - 1;
-                 u64 true_umin = opcode == BPF_JGT ? val + 1 : val;
-
-                 false_reg->umax_value = min(false_reg->umax_value, false_umax);
-                 true_reg->umin_value = max(true_reg->umin_value, true_umin);
-         }
-         break;
-}
-
-To avoid umin > umax, it could be changed it to:
-
-case BPF_JGT:
-{
-         if (is_jmp32) {
-                 [...]
-         } else {
-                 u64 false_umax = opcode == BPF_JGT ? val    : val - 1;
-                 u64 true_umin = opcode == BPF_JGT ? val + 1 : val;
-
-                 false_reg->umax_value = min(false_reg->umax_value, false_umax);
-                 false_reg->umax_value = max(false_reg->umax_value, false_reg->umin_value);
-
-                 true_reg->umin_value = max(true_reg->umin_value, true_umin);
-                 true_reg->umin_value = min(true_reg->umax_value, true_reg->umin_value);
-         }
-         break;
-}
-
-The problem is that the loop still does not stop because tnum_is_const(src_reg->var_off)
-always returns false and is_branch_taken() is skipped:
-
-         if (BPF_SRC(insn->code) == BPF_K) {
-                 [...]
-         } else if (src_reg->type == SCALAR_VALUE &&
-                    is_jmp32 && tnum_is_const(tnum_subreg(src_reg->var_off))) {
-                 [...]
-         } else if (src_reg->type == SCALAR_VALUE &&
-                    !is_jmp32 && tnum_is_const(src_reg->var_off)) {
-                 pred = is_branch_taken(dst_reg,   // could not reach here
-                                        src_reg->var_off.value,
-                                        opcode,
-                                        is_jmp32);
-         } else if (reg_is_pkt_pointer_any(dst_reg) &&
-                    reg_is_pkt_pointer_any(src_reg) &&
-                    !is_jmp32) {
-                 [...]
-         }
-
-Why tnum_is_const(src_reg->var_off) returns false is because the lower 32-bit
-is not constant since the lower 32-bit range is [U32_MIN, U32_MAX].
-
->> 11: (07) r0 += 1                      ; R0_w=-9223372036854775792
->> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=-9223372036854775792 R1=scalar(umin=9223372036854775824,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
->> 13: safe
->>
->> [...]
->>
->> The loop crosses termination condition r0 == r1.umax, and does not stop.
->>
->> The reason is that when the verifier enumerates to r1.umin == r1.umax, the value
->> 0x800000000000000f of r1.umin is greater than U32_MAX, so __reg_combine_64_into_32
->> sets the u32 range of r1 to [0, U32_MAX] instead of marking r1 as a constant,
->> making is_branch_taken() in check_cond_jmp_op() be skipped.
-> 
-> And it's fine. The verifier is conservative.
-> 
->>
->> To fix it, update 32-bit bounds when the lower 32-bit value is not wrapping,
->> even if the 64-bit value is beyond the range of [0, U32_MAX] or [S32_MIN, S32_MAX].
-> 
-> That's not safe in general.
+On 3/6/23, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> So after several releases where the merge windows had something odd
+> going on, we finally had just a regular "two weeks of just merge
+> window". It was quite nice.
 >
->>
->> Signed-off-by: Xu Kuohai <xukuohai@huaweicloud.com>
->> ---
->>   kernel/bpf/verifier.c | 27 +++++++++++----------------
->>   1 file changed, 11 insertions(+), 16 deletions(-)
->>
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index b2116ca78d9a..64c9ee3857ec 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -2013,26 +2013,21 @@ static void __reg_combine_32_into_64(struct bpf_reg_state *reg)
->>          reg_bounds_sync(reg);
->>   }
->>
->> -static bool __reg64_bound_s32(s64 a)
->> -{
->> -       return a >= S32_MIN && a <= S32_MAX;
->> -}
->> -
->> -static bool __reg64_bound_u32(u64 a)
->> -{
->> -       return a >= U32_MIN && a <= U32_MAX;
->> -}
->> -
->>   static void __reg_combine_64_into_32(struct bpf_reg_state *reg)
->>   {
->> +       s64 smin = reg->smin_value;
->> +       s64 smax = reg->smax_value;
->> +       u64 umin = reg->umin_value;
->> +       u64 umax = reg->umax_value;
->> +
->>          __mark_reg32_unbounded(reg);
->> -       if (__reg64_bound_s32(reg->smin_value) && __reg64_bound_s32(reg->smax_value)) {
->> -               reg->s32_min_value = (s32)reg->smin_value;
->> -               reg->s32_max_value = (s32)reg->smax_value;
->> +       if ((u64)(smax - smin) <= (u64)U32_MAX && (s32)smin <= (s32)smax) {
->> +               reg->s32_min_value = (s32)smin;
->> +               reg->s32_max_value = (s32)smax;
->>          }
->> -       if (__reg64_bound_u32(reg->umin_value) && __reg64_bound_u32(reg->umax_value)) {
->> -               reg->u32_min_value = (u32)reg->umin_value;
->> -               reg->u32_max_value = (u32)reg->umax_value;
->> +       if (umax - umin <= U32_MAX && (u32)umin <= (u32)umax) {
->> +               reg->u32_min_value = (u32)umin;
->> +               reg->u32_max_value = (u32)umax;
-> 
-> This looks like a workaround for umin > umax issue.
-> Please debug that instead.
+> In fact, it was quite nice in a couple of ways: not only didn't I have
+> a hugely compressed merge window where I felt I had to cram as much as
+> possible into the first few days, but the fact that we _have_ had a
+> couple of merge windows where I really asked for people to have
+> everything ready when the merge window opened seems to have set a
+> pattern: the bulk of everything really did come in early.
 >
-
-"__reg64_bound_u32(umin) && __reg64_bound_u32(max)" is a special case of
-"umax - umin <= U32_MAX && (u32)umin <= (u32)umax " when umax <= U32_MAX.
-
-If it's only safe to set lower 32-bit range to [U32_MIN, U32_MAX] when
-umax > U32_MAX, could we infer the 64-bit value is a constant from umin == umax?
-
->>          }
->>          reg_bounds_sync(reg);
->>   }
->> --
->> 2.30.2
->>
-> .
-
+> And again, that just makes the merge window work nicer for me, when I
+> don't sit there waiting, knowing that there's stuff pending that just
+> hasn't had a pull request done yet.
+>
+> So it all felt rather good. Of course, the fact that I had no machine
+> issues, no holidays, and no travel coming up, then meant that I may
+> have noticed a few more of the "people, please write good commit
+> messages for merges" issues, so there's a possible downside to me not
+> being as hurried as the last few merge windows have been.
+>
+> And of course, smooth or not, now that the merge window is closed, we
+> need to make sure it all *works*. We had a couple of exciting merges
+> already, and I think the fallout from that got sorted out, but I'm
+> sure there's more to come. Let's hope the calming-down period of 6.3
+> works as well as the merge window did... Knock wood.
+>
+> Anyway, as always, the shortlog is much too large to post, since we
+> had 12500+ commits (and that's not counting the merges - closer to a
+> thousand of those). So below is just my usual merge log which gives
+> only a very high-level view of what I merged and from who. It all
+> looks fairly normal, with ~55% of the patch being drivers, ~20% being
+> architecture updates. and the rest being the usual random mix
+> (documentation, tooling, networking, filesystem, and just core kernel
+> stuff).
+>
+> Please do test,
+>
+>                 Linus
+>
+> ---
+>
+> Al Viro (8):
+>     minix updates
+>     sysv updates
+>     alpha updates
+>     ipc namespace update
+>     misc vfs updates
+>     alpha updates
+>     VM_FAULT_RETRY fixes
+>     vfs update
+>
+> Alex Williamson (1):
+>     VFIO updates
+>
+> Alexandre Belloni (2):
+>     i3c updates
+>     RTC updates
+>
+> Andreas Gruenbacher (1):
+>     gfs2 updates
+>
+> Andrew Morton (3):
+>     MM updates
+>     non-MM updates
+>     misc fixes
+>
+> Anna Schumaker (1):
+>     NFS client updates
+>
+> Ard Biesheuvel (1):
+>     EFI updates
+>
+> Arnaldo Carvalho de Melo (1):
+>     perf tools updates
+>
+> Arnd Bergmann (7):
+>     ARM SoC updates
+>     ARM defconfigs updates
+>     SoC DT updates
+>     asm-generic cleanups
+>     ARM SoC driver updates
+>     ARM SoC fixes
+>     ARM SoC boardfile updates
+>
+> Bartosz Golaszewski (1):
+>     gpio updates
+>
+> Benjamin Tissoires (1):
+>     HID updates
+>
+> Bjorn Andersson (3):
+>     hwspinlock updates
+>     rpmsg updates
+>     remoteproc updates
+>
+> Bjorn Helgaas (1):
+>     PCI updates
+>
+> Borislav Petkov (7):
+>     RAS updates
+>     EDAC updates
+>     x86 asm alternatives updates
+>     x86 resource control updates
+>     x86 microcode loader updates
+>     x86 vdso updates
+>     x86 cpuid updates
+>
+> Casey Schaufler (1):
+>     smack update
+>
+> Catalin Marinas (2):
+>     arm64 updates
+>     arm64 fixes
+>
+> Christian Brauner (3):
+>     vfs idmapping updates
+>     vfs hardening update
+>     vfs acl update
+>
+> Christoph Hellwig (1):
+>     dma-mapping updates
+>
+> Chuck Lever (2):
+>     nfsd updates
+>     nfsd fix
+>
+> Corey Minyard (1):
+>     IPMI updates
+>
+> Damien Le Moal (3):
+>     ATA updates
+>     zonefs updates
+>     ATA fix
+>
+> Dan Williams (1):
+>     Compute Express Link (CXL) updates
+>
+> Darrick Wong (3):
+>     iomap updates
+>     xfs updates
+>     moar xfs updates
+>
+> Dave Airlie (2):
+>     drm updates
+>     drm fixes
+>
+> Dave Hansen (1):
+>     Intel Trust Domain Extensions (TDX) updates
+>
+> Dave Kleikamp (1):
+>     jfs update
+>
+> David Sterba (1):
+>     btrfs updates
+>
+> David Teigland (1):
+>     dlm updates
+>
+> Dmitry Torokhov (1):
+>     input updates
+>
+> Eric Biggers (2):
+>     fscrypt updates
+>     fsverity updates
+>
+> Eric Van Hensbergen (1):
+>     9p updates
+>
+> Gao Xiang (1):
+>     erofs updates
+>
+> Geert Uytterhoeven (1):
+>     m68k updates
+>
+> Greg KH (6):
+>     USB / Thunderbolt driver updates
+>     tty / serial driver updates
+>     staging driver updates
+>     char/misc and other driver subsystem updates
+>     driver core updates
+>     driver core fixes
+>
+> Greg Ungerer (1):
+>     m68knommu updates
+>
+> Guenter Roeck (1):
+>     hwmon updates
+>
+> Guo Ren (1):
+>     csky update
+>
+> Gustavo Silva (1):
+>     flexible-array updates
+>
+> Hans de Goede (1):
+>     x86 platform driver updates
+>
+> Heiko Carstens (2):
+>     s390 updates
+>     more s390 updates
+>
+> Herbert Xu (2):
+>     crypto update
+>     crypto fix
+>
+> Huacai Chen (1):
+>     LoongArch updates
+>
+> Ilya Dryomov (1):
+>     ceph fixes
+>
+> Ingo Molnar (11):
+>     locking updates
+>     perf updates
+>     scheduler updates
+>     x86 asm updates
+>     x86 boot updates
+>     x86 build update
+>     x86 core updates
+>     x86 fpu updates
+>     x86 mm update
+>     x86 platform update
+>     objtool updates
+>
+> Jaegeuk Kim (1):
+>     f2fs updates
+>
+> Jakub Kicinski (2):
+>     networking updates
+>     networking fixes
+>
+> James Bottomley (2):
+>     SCSI updates
+>     more SCSI updates
+>
+> Jan Kara (2):
+>     fsnotify updates
+>     UDF and ext2 fixes
+>
+> Jarkko Sakkinen (1):
+>     tpm updates
+>
+> Jason Gunthorpe (2):
+>     iommufd updates
+>     rdma updates
+>
+> Jassi Brar (1):
+>     mailbox updates
+>
+> Jeff Layton (2):
+>     file locking updates
+>     i_version updates
+>
+> Jens Axboe (6):
+>     io_uring updates
+>     io_uring ITER_UBUF conversion
+>     legacy dio update
+>     block updates
+>     block fixes
+>     more io_uring updates
+>
+> Jens Wiklander (1):
+>     TEE update
+>
+> Joerg Roedel (1):
+>     iommu updates
+>
+> John Paul Adrian Glaubitz (1):
+>     sh updates
+>
+> Jonathan Corbet (2):
+>     documentation updates
+>     Documentation stragglers
+>
+> Juergen Gross (1):
+>     xen updates
+>
+> Julia Lawall (1):
+>     coccinelle updates
+>
+> Kees Cook (2):
+>     seccomp update
+>     hardening updates
+>
+> Lee Jones (3):
+>     MFD updates
+>     backlight updates
+>     LED updates
+>
+> Linus Walleij (1):
+>     pin control updates
+>
+> Luis Chamberlain (2):
+>     modules updates
+>     sysctl update
+>
+> Mark Brown (5):
+>     regmap updates
+>     regulator updates
+>     spi updates
+>     regulator fixes
+>     spi fixes
+>
+> Masahiro Yamada (1):
+>     Kbuild updates
+>
+> Masami Hiramatsu (3):
+>     kprobes updates
+>     bootconfig updates
+>     kprobes cleanup updates
+>
+> Mauro Carvalho Chehab (1):
+>     media updates
+>
+> Michael Ellerman (2):
+>     powerpc updates
+>     powerpc fixes
+>
+> Michael Tsirkin (1):
+>     virtio updates
+>
+> Micka=C3=ABl Sala=C3=BCn (1):
+>     landlock updates
+>
+> Miguel Ojeda (3):
+>     Rust updates
+>     auxdisplay fix
+>     Rust fix
+>
+> Mike Rapoport (1):
+>     memblock updates
+>
+> Mike Snitzer (1):
+>     device mapper updates
+>
+> Miklos Szeredi (1):
+>     fuse updates
+>
+> Mimi Zohar (1):
+>     integrity update
+>
+> Miquel Raynal (1):
+>     MTD updates
+>
+> Namjae Jeon (1):
+>     exfat updates
+>
+> Palmer Dabbelt (2):
+>     RISC-V updates
+>     more RISC-V updates
+>
+> Paolo Bonzini (1):
+>     kvm updates
+>
+> Paul McKenney (5):
+>     RCU updates
+>     LKMM (Linux Kernel Memory Model) updates
+>     x86 NMI diagnostics
+>     nolibc updates
+>     kernel concurrency sanitizer (KCSAN) updates
+>
+> Paul Moore (1):
+>     audit update
+>
+> Petr Mladek (2):
+>     printk updates
+>     livepatching updates
+>
+> Rafael Wysocki (6):
+>     power management updates
+>     ACPI updates
+>     thermal control updates
+>     more power management updates
+>     more ACPI updates
+>     more thermal control updates
+>
+> Richard Weinberger (2):
+>     jffs2, ubi and ubifs updates
+>     UML updates
+>
+> Rob Herring (1):
+>     devicetree updates
+>
+> Russell King (1):
+>     ARM udpates
+>
+> Sebastian Reichel (2):
+>     power supply and reset updates
+>     more power supply updates
+>
+> Shuah Khan (2):
+>     Kselftest update
+>     KUnit update
+>
+> Stephen Boyd (1):
+>     clk updates
+>
+> Steve French (3):
+>     ksmbd server updates
+>     cifs client updates
+>     more cifs updates
+>
+> Steven Rostedt (4):
+>     ktest updates
+>     tracing tools updates
+>     tracing fix
+>     tracing updates
+>
+> Takashi Iwai (2):
+>     sound updates
+>     sound fixes
+>
+> Ted Ts'o (1):
+>     ext4 updates
+>
+> Tejun Heo (2):
+>     workqueue updates
+>     cgroup updates
+>
+> Thierry Reding (1):
+>     pwm updates
+>
+> Thomas Bogendoerfer (2):
+>     MIPS updates
+>     more MIPS updates
+>
+> Thomas Gleixner (5):
+>     miscellaneous x86 cleanups
+>     timer updates
+>     irq updates
+>     irq updates
+>     x86 updates
+>
+> Tzung-Bi Shih (1):
+>     chrome platform updates
+>
+> Ulf Hansson (1):
+>     MMC updates
+>
+> Vinod Koul (3):
+>     dmaengine updates
+>     phy updates
+>     soundwire updates
+>
+> Vlastimil Babka (1):
+>     slab updates
+>
+> Wei Liu (1):
+>     hyperv updates
+>
+> Wim Van Sebroeck (1):
+>     watchdog updates
+>
+> Wolfram Sang (2):
+>     i2c updates
+>     more i2c updates
+>
