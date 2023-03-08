@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9A86B04C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F5A6B04CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjCHKk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:40:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        id S229603AbjCHKkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:40:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjCHKkS (ORCPT
+        with ESMTP id S230183AbjCHKkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:40:18 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E489CBE2
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:40:17 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so841269wmq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:40:17 -0800 (PST)
+        Wed, 8 Mar 2023 05:40:19 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A189E067
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:40:18 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so944576wms.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:40:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678272016;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678272017;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NuXf3qcdLoRKFYAi7wFYWNuVj8BPbd9z/6kD6caVGIg=;
-        b=5C2/LiaFtyBREM0JKDYWoNNVB0qyOVdu3+HWqwuEmRi9luVy+Tb8FlJGMh529yIb6a
-         B1u20kfEWf34yjdQu0vAh8P94GiqO7uoClkfIRpGnrrqMhDTMs+1dalCCTWF3/fpiNuq
-         OsOCSnPGMTfqSwEJxljS4tNsrKXr7B9sCvKFTF8L4Gv3o03aakCCcCktX59/HzeIIoBv
-         sMUjU2POXr4ikDUM+fNl/4IvcrKbQJMy1fadFOU5NbgXJhSy8K7qZeQszP+EiopswKUt
-         IUmNtZmxDrHBHkEMxmx5iRiKXMEIzaYwu57EDLYUnxlQ6b502yJ7Rf6xXIL575QpRNXq
-         pzGw==
+        bh=BnjTJUURheMCpnq/4EiXlRkiu/sc76vfGYo6X61pH2Y=;
+        b=mEWqN68IZDo7BbTn6nrr6q3NjbOYAEmJ80biTam7iaw4ucC2q5F/U9AynauXFbpM9F
+         5fRhGVZZV/oxnVHzvTCpd0JWtuc1RA0eOJ7uHRq3IliOdp5epBxkDT5mOMU2PjizCGd5
+         VrNBnTQkWi0lrchIim3C1R4QC4/sKDTIIZ2XHvhXf0EuhmzzF3KX/SqNrLOo6J0nl/cg
+         EbokRk4gq00YdpmeoEIG1xmzS4u7rWlzPNSOq1lzPXURMjHhzN65G5F9rx9r5nR/G3DS
+         odpRY9cALfkXqBPhhubqoqNUc1g4EFhh3lpm0AWZYW7R9mfKvJ/AQMUImbzFZ4zMInK+
+         BZlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678272016;
+        d=1e100.net; s=20210112; t=1678272017;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NuXf3qcdLoRKFYAi7wFYWNuVj8BPbd9z/6kD6caVGIg=;
-        b=5ubCbloAXM/lEk9h+fw+7AEDF+qt6LacGdlyT2uRGrgAvBMlzK5Ld6FMKT3hvYNLyl
-         qCb7FbLGJ/nxJUcPd14eNxMXF4CmcOzEoGxcuiigBd7vszktduQdEO9MYca6OVUVRkEL
-         8APpIExY4OjiasuTQPl0reJIlgPxfr+ZwhG9BcoCCvagdJZHUvMwZ+5pOp47mGwxwojV
-         2Y+9RXT5w1Qxvg7jxu8QeUBoffwlbhNV1ZyYQ4DrtjBTrVNtTA4oHVdvNe1TtDJFfkAB
-         YPoe17LOf/6G6LCf2Rf6eg6nTSXmIkUOvsdMLgfqYnhViEWp7usOcjM73OXMs150ARij
-         0vNA==
-X-Gm-Message-State: AO0yUKVu8ytJzXdP7uxuM+wy+T2hDhGIjc1RZuqXjiWsTgvFUEp+v8Ql
-        LCO5+mgyQL6hCAXqJ1ynFuoDgg==
-X-Google-Smtp-Source: AK7set88f9VDY6OD221xEGqrJMUuKOEV9ESLdXbIpXkTqVnktny20FFDQ9dOQeDTodNGIYCG6iJazw==
-X-Received: by 2002:a05:600c:3512:b0:3ea:e554:7815 with SMTP id h18-20020a05600c351200b003eae5547815mr16735930wmq.9.1678272015962;
-        Wed, 08 Mar 2023 02:40:15 -0800 (PST)
+        bh=BnjTJUURheMCpnq/4EiXlRkiu/sc76vfGYo6X61pH2Y=;
+        b=SqPeG0ABHX1OYL1iHRkWlEvz+bRXqkGUz0F5+Tga4pzFYBZDx1eZhalFfuxqUF/pZ6
+         WNcJVlWJou+HSp7TP71X98D3FfE145UPkyDwZTJUM3ZvFMGMiCDpyVSxLioWCnS7hJ3u
+         YgY2bj6FNePYq1pefd9ih3imGoBzJ8MfgGolW7dCbNJYYBZFTqwRzGcZmTmmm57bOuBo
+         7plBqaV6IYzjlkU7yxnH1cWsyvZfoaJU+s/kUcfPXf6Js8ddrwqV/5761BE3Ezg8mPXe
+         DVK6MKATZ13ICDep7UM6v+jqtyipjx2LVeuPSgJThkIUwuiaU7O1+0D2xtcQL9RMCILy
+         qAzw==
+X-Gm-Message-State: AO0yUKUQDaHemJ9gSrSlwdtgmAKG2U90MlVpu6GINyEyivgjp5ZGup84
+        PhYm9PJ6+ogvJ59Loajw2u1W2w==
+X-Google-Smtp-Source: AK7set/yKNjhw3OrFGGNhe+/0iHT1/hwDEfDKcewPZELynzxrzbdgJSPWp1VQMl49ECDG3D1x78zKA==
+X-Received: by 2002:a05:600c:1c9e:b0:3ea:e7f7:4faa with SMTP id k30-20020a05600c1c9e00b003eae7f74faamr16031738wms.26.1678272016909;
+        Wed, 08 Mar 2023 02:40:16 -0800 (PST)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:2326:fd4c:82e3:7e07])
-        by smtp.gmail.com with ESMTPSA id v7-20020a05600c444700b003eb0d6f48f3sm20664135wmn.27.2023.03.08.02.40.15
+        by smtp.gmail.com with ESMTPSA id v7-20020a05600c444700b003eb0d6f48f3sm20664135wmn.27.2023.03.08.02.40.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 02:40:15 -0800 (PST)
+        Wed, 08 Mar 2023 02:40:16 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v4 2/9] arm64: dts: qcom: sa8775p-ride: enable QUPv3 #2
-Date:   Wed,  8 Mar 2023 11:40:02 +0100
-Message-Id: <20230308104009.260451-3-brgl@bgdev.pl>
+Subject: [PATCH v4 3/9] arm64: dts: qcom: sa8775p: add the i2c18 node
+Date:   Wed,  8 Mar 2023 11:40:03 +0100
+Message-Id: <20230308104009.260451-4-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230308104009.260451-1-brgl@bgdev.pl>
 References: <20230308104009.260451-1-brgl@bgdev.pl>
@@ -78,28 +78,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Enable the second instance of the QUPv3 engine on the sa8775p-ride board.
+Add a disabled node for the I2C interface that's exposed on the
+sa8775p-ride development board.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-index 3adf7349f4e5..a538bb79c04a 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-@@ -24,6 +24,10 @@ &qupv3_id_1 {
- 	status = "okay";
- };
+diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+index 5efb3e4f2335..d65e7826f1d7 100644
+--- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
++++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+@@ -3,6 +3,7 @@
+  * Copyright (c) 2023, Linaro Limited
+  */
  
-+&qupv3_id_2 {
-+	status = "okay";
-+};
++#include <dt-bindings/interconnect/qcom,icc.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ #include <dt-bindings/clock/qcom,rpmh.h>
+ #include <dt-bindings/clock/qcom,sa8775p-gcc.h>
+@@ -502,6 +503,27 @@ qupv3_id_2: geniqup@8c0000 {
+ 			clock-names = "m-ahb", "s-ahb";
+ 			iommus = <&apps_smmu 0x5a3 0x0>;
+ 			status = "disabled";
 +
- &sleep_clk {
- 	clock-frequency = <32764>;
- };
++			i2c18: i2c@890000 {
++				compatible = "qcom,geni-i2c";
++				reg = <0x0 0x00890000 0x0 0x4000>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				interrupts = <GIC_SPI 586 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&gcc GCC_QUPV3_WRAP2_S4_CLK>;
++				clock-names = "se";
++				interconnects = <&clk_virt MASTER_QUP_CORE_2 QCOM_ICC_TAG_ALWAYS
++						 &clk_virt SLAVE_QUP_CORE_2 QCOM_ICC_TAG_ALWAYS>,
++						<&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ALWAYS
++						 &config_noc SLAVE_QUP_2 QCOM_ICC_TAG_ALWAYS>,
++						<&aggre2_noc MASTER_QUP_2 QCOM_ICC_TAG_ALWAYS
++						 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>;
++				interconnect-names = "qup-core",
++						     "qup-config",
++						     "qup-memory";
++				power-domains = <&rpmhpd SA8775P_CX>;
++				status = "disabled";
++			};
+ 		};
+ 
+ 		intc: interrupt-controller@17a00000 {
 -- 
 2.37.2
 
