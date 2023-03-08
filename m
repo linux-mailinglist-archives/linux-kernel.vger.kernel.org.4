@@ -2,196 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0AC6B0C1E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D8F6B0C23
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjCHPEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:04:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
+        id S231517AbjCHPG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:06:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbjCHPEd (ORCPT
+        with ESMTP id S231143AbjCHPF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:04:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CC899C01;
-        Wed,  8 Mar 2023 07:04:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 430EDB81CC0;
-        Wed,  8 Mar 2023 15:04:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7696C433D2;
-        Wed,  8 Mar 2023 15:04:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678287845;
-        bh=2jKVyaEpzl5bzsbm3jbTPTL4bnwl+r5C6jslj1q+q3Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Nj52tIyh1sCsIOMF4baTxUDQmYfk5ZlGv8OlTT47qCkew3m1fdHHFFPSxTImJYnBS
-         Z7vEosYRQOu64dKIKaNOw2UrKSfvn78HjVEor/MYSd9xezrdejRzR0Aayk2/CsraJA
-         Ov9ZEjhliB73hMvtA5YqnvTirxWJe47AJJPHM6fe6jV4XIMPTUFQd/qQ+pJ2v4cfNq
-         W9PBxRrXWXjJd071UDWJAF3O5JdVI0UcqayPbnX/2xY52ayL7vO8rlRde8G4kYLxYK
-         NFrjGaqNUqTzIPY8Z+gPyAgf5veZrffb2toDMEGKGs5PF8LQtZMmLlGAxAZGiIj4Jv
-         usnrQDdLQU41w==
-Date:   Wed, 8 Mar 2023 15:03:59 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v1 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-Message-ID: <1f0c2592-4433-47cb-9b73-d345e157dbf2@sirena.org.uk>
-References: <20230308025908.21491-1-zhuyinbo@loongson.cn>
- <20230308025908.21491-3-zhuyinbo@loongson.cn>
+        Wed, 8 Mar 2023 10:05:58 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C377BA6483;
+        Wed,  8 Mar 2023 07:05:56 -0800 (PST)
+Received: from vm02.corp.microsoft.com (unknown [167.220.196.155])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 203922057632;
+        Wed,  8 Mar 2023 07:05:54 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 203922057632
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1678287956;
+        bh=QkPW0b4JKJYOY+ydGniGfxGyfybl9ASnRP6QMnV+APc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=h37ac6NzZ3rlhj1wvqYJSkPM/ZApxAC1yOO3gyj1JfwTQdCcA9+wFfXCCWyVIIxe6
+         0+AZTeTdhW4KFWsefedOrGZhrS1NxlRYTOtoHR1MPOGTSUBbGAAM+4HVICU/L1OIOV
+         cj0kql/9yQeSNL0SMqIjudTiCmE65n54vYqlml3U=
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        netdev@vger.kernel.org, Richard Cochran <richardcochran@gmail.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH v2 RESEND] ptp: kvm: Use decrypted memory in confidential guest on x86
+Date:   Wed,  8 Mar 2023 15:05:31 +0000
+Message-Id: <20230308150531.477741-1-jpiotrowski@linux.microsoft.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8YYtAqBs0rIPZTzi"
-Content-Disposition: inline
-In-Reply-To: <20230308025908.21491-3-zhuyinbo@loongson.cn>
-X-Cookie: Minnie Mouse is a slow maze learner.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+KVM_HC_CLOCK_PAIRING currently fails inside SEV-SNP guests because the
+guest passes an address to static data to the host. In confidential
+computing the host can't access arbitrary guest memory so handling the
+hypercall runs into an "rmpfault". To make the hypercall work, the guest
+needs to explicitly mark the memory as decrypted. Do that in
+kvm_arch_ptp_init(), but retain the previous behavior for
+non-confidential guests to save us from having to allocate memory.
 
---8YYtAqBs0rIPZTzi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Add a new arch-specific function (kvm_arch_ptp_exit()) to free the
+allocation and mark the memory as encrypted again.
 
-On Wed, Mar 08, 2023 at 10:59:08AM +0800, Yinbo Zhu wrote:
+Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+---
+Hi,
 
-> +config SPI_LOONGSON
-> +	tristate "Loongson SPI Controller Support"
-> +	depends on LOONGARCH && OF && PCI
+I would love to not allocate a whole page just for this driver, swiotlb is
+decrypted but I don't have access to a 'struct device' here. Does anyone have
+any suggestion?
 
-I'm not seeing any build time dependencies here (possibly PCI?) so
-please add an || COMPILE_TEST to improve build coverage.  It'd be better
-to have separate modules for the platform and PCI functionality, that
-way someone who has a system without PCI can still use the driver even
-with PCI support disabled.
+Jeremi
 
-> +++ b/drivers/spi/spi-loongson.c
-> @@ -0,0 +1,502 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Loongson SPI Support
-> + *
-> + * Copyright (C) 2023 Loongson Technology Corporation Limited
+Changes since v1:
+- forgot to commit include/linux/ptp_kvm.h
 
-Please make the entire comment block a C++ one so things look more
-intentional.
+ drivers/ptp/ptp_kvm_arm.c    |  4 +++
+ drivers/ptp/ptp_kvm_common.c |  1 +
+ drivers/ptp/ptp_kvm_x86.c    | 59 +++++++++++++++++++++++++++++-------
+ include/linux/ptp_kvm.h      |  1 +
+ 4 files changed, 54 insertions(+), 11 deletions(-)
 
-> +static int loongson_spi_update_state(struct loongson_spi *loongson_spi,
-> +				     struct spi_device *spi, struct spi_transfer *t)
-> +{
-> +	unsigned int hz;
-> +	unsigned int div, div_tmp;
-> +	unsigned int bit;
-> +	unsigned char val;
-> +	const char rdiv[12] = {0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 11};
-> +
-> +	hz  = t ? t->speed_hz : spi->max_speed_hz;
+diff --git a/drivers/ptp/ptp_kvm_arm.c b/drivers/ptp/ptp_kvm_arm.c
+index b7d28c8dfb84..e68e6943167b 100644
+--- a/drivers/ptp/ptp_kvm_arm.c
++++ b/drivers/ptp/ptp_kvm_arm.c
+@@ -22,6 +22,10 @@ int kvm_arch_ptp_init(void)
+ 	return 0;
+ }
+ 
++void kvm_arch_ptp_exit(void)
++{
++}
++
+ int kvm_arch_ptp_get_clock(struct timespec64 *ts)
+ {
+ 	return kvm_arch_ptp_get_crosststamp(NULL, ts, NULL);
+diff --git a/drivers/ptp/ptp_kvm_common.c b/drivers/ptp/ptp_kvm_common.c
+index 9141162c4237..2418977989be 100644
+--- a/drivers/ptp/ptp_kvm_common.c
++++ b/drivers/ptp/ptp_kvm_common.c
+@@ -130,6 +130,7 @@ static struct kvm_ptp_clock kvm_ptp_clock;
+ static void __exit ptp_kvm_exit(void)
+ {
+ 	ptp_clock_unregister(kvm_ptp_clock.ptp_clock);
++	kvm_arch_ptp_exit();
+ }
+ 
+ static int __init ptp_kvm_init(void)
+diff --git a/drivers/ptp/ptp_kvm_x86.c b/drivers/ptp/ptp_kvm_x86.c
+index 4991054a2135..902844cc1a17 100644
+--- a/drivers/ptp/ptp_kvm_x86.c
++++ b/drivers/ptp/ptp_kvm_x86.c
+@@ -14,27 +14,64 @@
+ #include <uapi/linux/kvm_para.h>
+ #include <linux/ptp_clock_kernel.h>
+ #include <linux/ptp_kvm.h>
++#include <linux/set_memory.h>
+ 
+ static phys_addr_t clock_pair_gpa;
+-static struct kvm_clock_pairing clock_pair;
++static struct kvm_clock_pairing clock_pair_glbl;
++static struct kvm_clock_pairing *clock_pair;
+ 
+ int kvm_arch_ptp_init(void)
+ {
++	struct page *p;
+ 	long ret;
+ 
+ 	if (!kvm_para_available())
+ 		return -ENODEV;
+ 
+-	clock_pair_gpa = slow_virt_to_phys(&clock_pair);
+-	if (!pvclock_get_pvti_cpu0_va())
+-		return -ENODEV;
++	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
++		p = alloc_page(GFP_KERNEL | __GFP_ZERO);
++		if (!p)
++			return -ENOMEM;
++
++		clock_pair = page_address(p);
++		ret = set_memory_decrypted((unsigned long)clock_pair, 1);
++		if (ret) {
++			__free_page(p);
++			clock_pair = NULL;
++			goto nofree;
++		}
++	} else {
++		clock_pair = &clock_pair_glbl;
++	}
++
++	clock_pair_gpa = slow_virt_to_phys(clock_pair);
++	if (!pvclock_get_pvti_cpu0_va()) {
++		ret = -ENODEV;
++		goto err;
++	}
+ 
+ 	ret = kvm_hypercall2(KVM_HC_CLOCK_PAIRING, clock_pair_gpa,
+ 			     KVM_CLOCK_PAIRING_WALLCLOCK);
+-	if (ret == -KVM_ENOSYS)
+-		return -ENODEV;
++	if (ret == -KVM_ENOSYS) {
++		ret = -ENODEV;
++		goto err;
++	}
+ 
+ 	return ret;
++
++err:
++	kvm_arch_ptp_exit();
++nofree:
++	return ret;
++}
++
++void kvm_arch_ptp_exit(void)
++{
++	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
++		WARN_ON(set_memory_encrypted((unsigned long)clock_pair, 1));
++		free_page((unsigned long)clock_pair);
++		clock_pair = NULL;
++	}
+ }
+ 
+ int kvm_arch_ptp_get_clock(struct timespec64 *ts)
+@@ -49,8 +86,8 @@ int kvm_arch_ptp_get_clock(struct timespec64 *ts)
+ 		return -EOPNOTSUPP;
+ 	}
+ 
+-	ts->tv_sec = clock_pair.sec;
+-	ts->tv_nsec = clock_pair.nsec;
++	ts->tv_sec = clock_pair->sec;
++	ts->tv_nsec = clock_pair->nsec;
+ 
+ 	return 0;
+ }
+@@ -81,9 +118,9 @@ int kvm_arch_ptp_get_crosststamp(u64 *cycle, struct timespec64 *tspec,
+ 			pr_err_ratelimited("clock pairing hypercall ret %lu\n", ret);
+ 			return -EOPNOTSUPP;
+ 		}
+-		tspec->tv_sec = clock_pair.sec;
+-		tspec->tv_nsec = clock_pair.nsec;
+-		*cycle = __pvclock_read_cycles(src, clock_pair.tsc);
++		tspec->tv_sec = clock_pair->sec;
++		tspec->tv_nsec = clock_pair->nsec;
++		*cycle = __pvclock_read_cycles(src, clock_pair->tsc);
+ 	} while (pvclock_read_retry(src, version));
+ 
+ 	*cs = &kvm_clock;
+diff --git a/include/linux/ptp_kvm.h b/include/linux/ptp_kvm.h
+index c2e28deef33a..746fd67c3480 100644
+--- a/include/linux/ptp_kvm.h
++++ b/include/linux/ptp_kvm.h
+@@ -14,6 +14,7 @@ struct timespec64;
+ struct clocksource;
+ 
+ int kvm_arch_ptp_init(void);
++void kvm_arch_ptp_exit(void);
+ int kvm_arch_ptp_get_clock(struct timespec64 *ts);
+ int kvm_arch_ptp_get_crosststamp(u64 *cycle,
+ 		struct timespec64 *tspec, struct clocksource **cs);
+-- 
+2.25.1
 
-Please write normal conditional statements so that things are legible,
-though in this case the core will ensure that there's a speed_hz in
-every transfer so there's no need for any of the logic around ensuring
-it's set.
-
-> +static int loongson_spi_setup(struct spi_device *spi)
-> +{
-> +	struct loongson_spi *loongson_spi;
-> +
-> +	loongson_spi = spi_master_get_devdata(spi->master);
-> +	if (spi->bits_per_word % 8)
-> +		return -EINVAL;
-> +
-> +	if (spi->chip_select >= spi->master->num_chipselect)
-> +		return -EINVAL;
-> +
-> +	loongson_spi_update_state(loongson_spi, spi, NULL);
-> +	loongson_spi_set_cs(loongson_spi, spi, 1);
-
-Note that setup() needs to be able to run for one device while there are
-transfers for other devices on the same controller active.
-
-> +static int loongson_spi_write_read_8bit(struct spi_device *spi, const u8 **tx_buf,
-> +					u8 **rx_buf, unsigned int num)
-> +{
-> +	struct loongson_spi *loongson_spi = spi_master_get_devdata(spi->master);
-> +
-> +	if (tx_buf && *tx_buf) {
-> +		loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_FIFO_REG, *((*tx_buf)++));
-> +		while ((loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPSR_REG) & 0x1) == 1)
-
-> +			;
-
-A timeout would be good on these spins in case the controller gets
-stuck.  It'd also be polite to have a cpu_relax() somewhere either here
-or in the caller given that it's busy waiting.
-
-> +static void loongson_spi_work(struct work_struct *work)
-> +{
-> +	int param;
-> +	struct spi_message *m;
-> +	struct spi_device  *spi;
-> +	struct spi_transfer *t = NULL;
-> +	struct loongson_spi *loongson_spi = container_of(work, struct loongson_spi, work);
-> +
-> +	spin_lock(&loongson_spi->lock);
-> +	param = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_PARA_REG);
-> +	loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_PARA_REG, param&~1);
-> +	while (!list_empty(&loongson_spi->msg_queue)) {
-> +		m = container_of(loongson_spi->msg_queue.next, struct spi_message, queue);
-> +
-
-This all looks like it's open coding the core's message pump, only
-without the heavy optimisation work that the core has and missing some
-handling of cs_change and delays.  You should implement
-spi_transfer_one() instead, this will save a lot of code and should be
-more performant.
-
-> +static int loongson_spi_transfer(struct spi_device *spi, struct spi_message *m)
-> +{
-
-In general you'd need an extremely strong reason to implement transfer()
-in a new driver.
-
-> +static int __maybe_unused loongson_spi_resume(struct device *dev)
-> +{
-
-> +static const struct dev_pm_ops loongson_spi_dev_pm_ops = {
-> +	.suspend = loongson_spi_suspend,
-> +	.resume = loongson_spi_resume,
-> +};
-
-The suspend/resume ops are assigned unconditionally.
-
-> +subsys_initcall(loongson_spi_init);
-> +module_exit(loongson_spi_exit);
-
-Why not just a regular module initcall like most SPI drivers?
-
---8YYtAqBs0rIPZTzi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQIo94ACgkQJNaLcl1U
-h9BkRgf/dHyMZTWRbxoaxLX8YGUhsH5fGZlT2fvwplpo0B35nQMit4iS5/kFkpNs
-d1Yo9FLlcdu6Ojw6tXquR/RTYQ+D28k/XqZXrh8YvAuzSpDN09DkC9OPilFGDrWQ
-AfmyB3+5HcaeTzy+zIDqYoGSV4DuZbMdexerHu6ItD+WJG7TSrixyUCcbI/vFgjn
-tm40MIRBVQuGxpeMn17AQ5GqbgXF37lcS2t5yABeuAZj1Bfttv7+LVA5Fb1ki0PA
-CY+WAtQ0zeD3rziU6dDFwAPAnps4zz4RUZMAhiXOmPcz+zByVqCRZ9LqZIEtdc6b
-ZvvWPp4baPCxZ6IQRQwt9q0/gtQAaw==
-=EKhR
------END PGP SIGNATURE-----
-
---8YYtAqBs0rIPZTzi--
