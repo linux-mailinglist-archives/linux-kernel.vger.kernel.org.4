@@ -2,318 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D54D6B0D2F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1525A6B0D2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:44:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjCHPof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
+        id S232057AbjCHPob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:44:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbjCHPoK (ORCPT
+        with ESMTP id S231460AbjCHPoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:44:10 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2062f.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eab::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F052919F1F;
+        Wed, 8 Mar 2023 10:44:07 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06C31A674;
         Wed,  8 Mar 2023 07:43:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NKjC8oX43M//bhoevDZtzY41sjLOiMLYVb1LcImD4UEw4BuqIMVOq8PbkBp2+0nGyD6NWtuS5deNeNSQ82rB8jBuoWwb2xriJW0e1G8XjZcoWeYng06OQhlBpq8WYyBDbQVtyiqnGZansL1f3kYldMbiH7IS2V7eoZ0wAEpBpDR9LntIhXuf1zAmddCsU+Jm4cFX4JIQNN9j0XP1kq2lVf8phrnO/5TRcr0y4n5oEDxBAKBu9fyATYdV6Lg7H7t7UsPPSlKAGTjIOvJ0dkzGqirDx3QH65NQvGlscqD6/kvg+5CyixbwyG5TpmGE4541UlV0Y+mdcwTGxlEVlddu9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SCRNt3vCcZvQpdhgoNQZq2Xl9owEUwlhakuJ/93hQDY=;
- b=Kxdct5pnYWttFhLtHi/lDyyUZYCHhLnj03ykrIq+WTY7vqquxszoagdrz94skZC1uRpDY8w2e1Oxe10vO5+UhVod65QwwZvFydblJfpF75RiUpnNICHyQs/r9134V/Eu81JsOgYF4NItUmSwiKuVYogNFv0ahMYMd9LlGRsBROpvG04hMiAMkLgJguypBTuiZqdJjkwQJJOALcOWJrQtazFnkh9P/GI8mwuIGRH/40WatkQ8+XxK7Rx+jzQPoaT7W3BvSk3HCh/0BK93j+HNNhuntoWeHzoPwOjbSbcl+glpYavZcyyWEIE1re/UE2qJaNhUDv5ycnuQd8Btr47Svg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SCRNt3vCcZvQpdhgoNQZq2Xl9owEUwlhakuJ/93hQDY=;
- b=Xms1m8oRzU0aMhP5vnI+1UGUkImV9J3pvGOlkekvzVDcT9ZDs8klBSIOwx0UKgQL0vL2dDkPzXHq26k47DYwwqf+t0zQ9IW5n07s+pwVr+cAXZ5l6Hxf9LuLXYwPRJyJN9fPEEjsASXp9T6mrAfAum1htn7FZuPacOiJlF/gJ2c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by CH0PR12MB5043.namprd12.prod.outlook.com (2603:10b6:610:e2::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Wed, 8 Mar
- 2023 15:42:47 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d23f:bb1:df95:3918]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d23f:bb1:df95:3918%4]) with mapi id 15.20.6178.017; Wed, 8 Mar 2023
- 15:42:47 +0000
-Message-ID: <7b39ef96-3ec5-c492-6e1b-bf065b7c90a2@amd.com>
-Date:   Wed, 8 Mar 2023 16:42:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH RFC 11/18] drm/scheduler: Clean up jobs when the scheduler
- is torn down
-Content-Language: en-US
-To:     Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-11-917ff5bc80a8@asahilina.net>
- <bbd7c5ee-c2f0-3e19-757d-a9aff1a26d3d@linux.intel.com>
- <585fa052-4eff-940e-b307-2415c315686a@amd.com>
- <3320e497-09c0-6eb6-84c5-bab2e63f28ec@asahilina.net>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <3320e497-09c0-6eb6-84c5-bab2e63f28ec@asahilina.net>
+Received: by mail-lj1-x231.google.com with SMTP id z5so17039251ljc.8;
+        Wed, 08 Mar 2023 07:43:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678290178;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vOs0iyxhwHc1V8xriX+vpDIxtXfxz3jlhHgNbQ6dRkY=;
+        b=KD42Vr+glYj1oCL8i0V2FYuzc9WtlLulVscKDIrjTKPoJxkIg6x11Y7p0Wv8iP4Sex
+         yVFuv0chGe4+SbpPZnNUluOjDEDYorU0/ZKpwEUzngcG06SezQYFKim7c/OuQ4l8UVfw
+         Ozke2M0wqNjmv6cN2MbU//+A6dCcHLdn+vjN682rehANzzLSASMTqq7tqBmTzYSyAo4z
+         p5QDSYdLxmKU71+4B4TYs4xVT/utPFUosyspyE+LpPy7Fh47pbYnI/iFAL0TSFYjNu06
+         4eVL4awgqVgYZWb1MNl3t8pJHcU8t5hnxyX/B0SxzwSG9jIyVmi56s10848a7afHKFk2
+         Kp1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678290178;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vOs0iyxhwHc1V8xriX+vpDIxtXfxz3jlhHgNbQ6dRkY=;
+        b=yjMDMLqiXaTBJcbL4FsLXTZrjxSH98vdwO+zs3vex5angNFT0ibPH0eFiBey6vN8y6
+         IQgoGNg0C2hQqYHRvQXpeLUWZXDN35v2yWPKvZIdBRAa5Rm0tE+WDiAwnOBlSH/DRxJP
+         dosLfP4+J9n3ahSUK75TPWfOG5N3ramFxUwPgItZdFVUDhniokPKXoLew3zVvWMCVbmz
+         LI0Co2ds9n8CGjceg1QADqvsentRqLw9bCtE70HjN4f36AORNwsrOBAviBP2GodAbfLe
+         c8d7BdXOXoV0ODeCprGF4rJUClYOtrpiGBgfxvwswK09u5AnD1YGz74NM8VUK5IoYzZO
+         BtHA==
+X-Gm-Message-State: AO0yUKUpeOORp7tUTs7H4/nIk74dTOjGoMMWLRzicS2cdKvHlCfmnrW9
+        Kp1Q8V+TRECDiI7ht5i4rOHfizrNxwg=
+X-Google-Smtp-Source: AK7set9ANgxfUA3AnstqXs0zAbjnZVAktlqKsWKgvMz6DSCnyBEYt7t6Os79HTpsoPUzpt844g0qMg==
+X-Received: by 2002:a2e:a26b:0:b0:295:bc01:6d98 with SMTP id k11-20020a2ea26b000000b00295bc016d98mr5849330ljm.48.1678290178143;
+        Wed, 08 Mar 2023 07:42:58 -0800 (PST)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id d2-20020a2e96c2000000b00295a2d07558sm2620211ljj.112.2023.03.08.07.42.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 07:42:57 -0800 (PST)
+Message-ID: <83c3e403-7e4c-a29a-95de-f30d74863769@gmail.com>
+Date:   Wed, 8 Mar 2023 16:42:55 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH V4 2/2] nvmem: add generic driver for devices with MMIO
+ access
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20230228072936.1108-1-zajec5@gmail.com>
+ <20230228072936.1108-3-zajec5@gmail.com>
+ <7853ff04-02cf-9430-d84a-c8fe8b1d6725@linaro.org>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <7853ff04-02cf-9430-d84a-c8fe8b1d6725@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR2P281CA0074.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9a::16) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|CH0PR12MB5043:EE_
-X-MS-Office365-Filtering-Correlation-Id: 30c4b218-8d6d-41ad-a246-08db1febc454
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SY5M3FDVotZ3R+Yjx1vhrhBKEysG3m+AJy+dPL0qdwMHPaBN+jXGptpRVMeIWU3yIjg/N3tkyQqFT5DkkGRjubUiPrGUj6Z5yqo5DwHFzdsWR4hK2DywdltiGe1jV7IRIiu9Qqt+Ah68s3xmQMSt0wxhpCx3tXT1p7fHlbUb2pKrUgQycUuusv1sqVaPleHMrGKnD7TPOMLTSZDEaEi+Vm3sT5/LTfnFcUohuEEJ0jHEmpDiT2WvAFEu/UYvbLfaQdfEfIxZu8q1OfQt8eFSR893px5ZyAxkFuYr3pQwGdcbPqYq2abUHKR8gqw9vfvMRKvlHY0Sm1f5IyHEELr7HBi6sx9IBMi0cvNxijUWtnX7g5Q1FPpAW7GCV9c32ZzYFMJ6Eo1omYA8nK39HmdSzXHaG26wwUK9xdaJiopDeego62RfjHeykFUa8lCaZnv3R2kUO7U+g0OOKZDBzJVwCL5SJqDxfEC72QAxJkkFw+b+mtCw4aoBlFSXld6QQ8Fv1FphDLloS3u8hPUxrfbF88hVBXzdNtAZBKHgV5DKnYIwJ3oyrYOa9XMkqoDsqZ7YyMTESmxCi+FShDMfNj1quvd+t3J/KiVbJZVbYxG+SkQihWuxlu9Ura2TCptkSJfjpWlL/BoNyTFvDwW4uYQ5PJRjTa8IhSHG1xpNoW7fob0pTh4qxJDj9aPvSwJPY04Tqsz+Q9K0FQufz6BY9IYsU3BXsuKelVVmugG1xb5Srb8bIRsLju5MJKqexEJuu+u+
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(136003)(366004)(376002)(396003)(451199018)(2906002)(31686004)(66946007)(4326008)(5660300002)(7416002)(36756003)(8936002)(41300700001)(110136005)(31696002)(66556008)(66476007)(8676002)(86362001)(316002)(54906003)(478600001)(921005)(6486002)(6666004)(38100700002)(6512007)(6506007)(53546011)(186003)(2616005)(83380400001)(66574015)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VVZTVlB3UEl1K0hxU3ltUCtwU2NOQTRYcENYL1FKV2NuenFwdXVlVVhKeHUw?=
- =?utf-8?B?cG1IMElMWStSM1Q5NVcvOTAxSDhCa1FkVTluZDREajRNOWZHbTU5VlVSR2RE?=
- =?utf-8?B?YlF6RkJnWlQ0Q2VsNGkxNFlDT2lMNjE0Y2xYOHBPcE5iNUh3U1RZMVRYdW9n?=
- =?utf-8?B?RHc0Rjc0c3FQaVpYV2djQmlJUTR3bXNPVDV6eFFJQUpLSUJYaUVhd0Urb2NL?=
- =?utf-8?B?YUMzaHpJSE9qNG40LzRQc3JzYzUySjFZcGtEeXdETzZQTUZacndwUHVGR0N1?=
- =?utf-8?B?T2dPT1lJczNMdnNCRnhjVllRd3NDQW44YmRXRThadHh6eGswTnFPZFdOUkw4?=
- =?utf-8?B?c1RXK3FJYlRldmZnMDN1K1FUR0RhbVdha3llZkJuY1I4YnFPb29FQXF3Vk0x?=
- =?utf-8?B?bGZNOFNMZWE5VTZwT1VxMUJ1bmU4K0N2WVQrQ1o2bXZzS1ZQTkpJdDQ2TUl5?=
- =?utf-8?B?QWM2M01VSDBSR2ZsckRIOGdiZVBic2FSc1BuODNORWNkOU5ncklKcmJVZTho?=
- =?utf-8?B?aUpES2J1WkV0WjR6ZXh2WTVrRHlqcGVxMWkxSGVTWEtHMDB2c0QraGJ0S3hE?=
- =?utf-8?B?bHBtUENWeGpEUGYrb1N6amFFMUs0R2ZndEsrSm4wa0x0aXJtUEVHcXBHZFBP?=
- =?utf-8?B?aDIrSElSSVltdnNsZDQ0aFZYbGZPL3kyK0U3WmdZYmtJOTdZNGVicHRIYnRY?=
- =?utf-8?B?RW5BZnh3dWpLeFMvT0pkRWRodUxtZGRYVy8wR0FleGN1MEpDOHB6WEhjajFx?=
- =?utf-8?B?b1BQTVVuajE4TzBEUHErb3FreFRoWlJsajVlc2tkYWtSNW1rVm1MRlN1bnc0?=
- =?utf-8?B?RjUxNGEvSXhyQU83dVB4SllRTWx6L1FYTFZTeG9HeVdzWUZFbHRncHJDcDgr?=
- =?utf-8?B?L3paMEtZd1J5cFV1SCt1eFo5NlAxeXJLQW53NFlML1VjQnRkL0xmVm9ja0tk?=
- =?utf-8?B?NTR0ck9CSTNtSjAvVldKd0lvTGVEcDhGQy9oVGVXYm1aTmRiWk1ISEszZTZ4?=
- =?utf-8?B?cExZR0lOc05LT2hSclJLbXNUNVdnL3NvMXZVdk1WRkYzaUN5RFFkajhNVUNK?=
- =?utf-8?B?NXRseTlpbDA0QnZ6NkNuRm1kZXI1bW05R1UzSlplY3VmbE15N1huZHpJTHlz?=
- =?utf-8?B?cUZHbC9hdlF6aWdOOUpmb1MvTW95eVV0WUZwSHJkbUNBM1lyQW8vSmU0Nm1N?=
- =?utf-8?B?WXNkakRlVEFFU2JBY3hyWTc0dDJxQUJZcndwdVU4N0dzSmZVb0p4Q2VxQis2?=
- =?utf-8?B?OEhydXNaL0xCczlZKzZFM2Z1T3FIVXhQbkE2ZTNPTGYvQ20ycHh3ZG1FMXdR?=
- =?utf-8?B?QXdIYko3T3hOam5ucUN0NUpWNisrSVBnaUExRmhvS2QyQnF2ZHdYbWN0aHFu?=
- =?utf-8?B?UTUrUDcvbTVzcExtL09ydWx1TksxMTlpZWs5amlCTW94QVlZYjNZVmlITmRN?=
- =?utf-8?B?d29UdUgyZGM3SVc0VDM0MEdRMU95MlhaR3gxMktkZG4zREpOa2dXOVdBRFNO?=
- =?utf-8?B?RXY3TEhwN0NqTEhTUnJMeEpnYUp0VW5VcFVlTjY2N3FTcFVOODF2RjljZW93?=
- =?utf-8?B?ZlZKOU1iVDVBSmZvZStUSUVwMHBVbFhGTnFDbmc1UDVEMUdlbGJxaHIzRk5S?=
- =?utf-8?B?bzA4dlgveGdsQUNDa0d5RjI3ZXA0WG9OR2FkSDlBZi9XZFJjd3h2elQvTzdK?=
- =?utf-8?B?dzhjZm91VU1aNzlpaWlmZlFoWUY2UDlaRFNlWGtNbjBSblIrL1BsaVNEUnF1?=
- =?utf-8?B?bnEyTnc2S3UwVjZXRkhIUXBhV29hdzZqQi9tWWNVZHJWZlF4Mm16Zmg3aUNu?=
- =?utf-8?B?NGx1UXc4ekhWS2pNK2w2aXVURGhISk1jVzZGbnR5OWM3MkQ0Rkk5RWZiQUhl?=
- =?utf-8?B?YWdkbGlabjZybFJYb1hVK2g4K0o3YktaMnNMd0NLMGp0c3QwcUtYZmNsWXp2?=
- =?utf-8?B?UWREUHRzaVRneU9BMnFaZ3ZDL012SlNjNUhpM3h4M1pDM2dVYXcvN0lmVDlE?=
- =?utf-8?B?eDh2aXRlbmN1VU9uUkh5dktyY3Q4TnNlRy9iaDVyM0pxOHhpTWVIaUxrbjhk?=
- =?utf-8?B?RUVoK1BIYVo5a3E5OEJpMEU3dUNkV1RZdHhSYUg0RVZHNVVwZDRtRXNpQVBN?=
- =?utf-8?B?c3FydVpuc3ZXQnZSMURtSThKS1prWXZxc2ZNUUM5aDZKeStvSEdzVTloekZD?=
- =?utf-8?Q?/w6J4Qq3PC7rBXzEGEtOfTx/d4Y/ObY4N/JlrYGL0b0N?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30c4b218-8d6d-41ad-a246-08db1febc454
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 15:42:47.7994
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8kCTJe/VeNNy5KSaMLttBB1WZR3Xr8SJYpOfIsQLDrARPjfTNir4KwPkSsXlg/1f
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5043
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 08.03.23 um 16:18 schrieb Asahi Lina:
-> On 08/03/2023 19.03, Christian König wrote:
->> Am 08.03.23 um 10:57 schrieb Maarten Lankhorst:
->>> On 2023-03-07 15:25, Asahi Lina wrote:
->>>> drm_sched_fini() currently leaves any pending jobs dangling, which
->>>> causes segfaults and other badness when job completion fences are
->>>> signaled after the scheduler is torn down.
->>>>
->>>> Explicitly detach all jobs from their completion callbacks and free
->>>> them. This makes it possible to write a sensible safe abstraction for
->>>> drm_sched, without having to externally duplicate the tracking of
->>>> in-flight jobs.
->>>>
->>>> This shouldn't regress any existing drivers, since calling
->>>> drm_sched_fini() with any pending jobs is broken and this change should
->>>> be a no-op if there are no pending jobs.
->>>>
->>>> Signed-off-by: Asahi Lina <lina@asahilina.net>
->>>> ---
->>>>    drivers/gpu/drm/scheduler/sched_main.c | 27
->>>> +++++++++++++++++++++++++--
->>>>    1 file changed, 25 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c
->>>> b/drivers/gpu/drm/scheduler/sched_main.c
->>>> index 5c0add2c7546..0aab1e0aebdd 100644
->>>> --- a/drivers/gpu/drm/scheduler/sched_main.c
->>>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
->>>> @@ -1119,10 +1119,33 @@ EXPORT_SYMBOL(drm_sched_init);
->>>>    void drm_sched_fini(struct drm_gpu_scheduler *sched)
->>>>    {
->>>>        struct drm_sched_entity *s_entity;
->>>> +    struct drm_sched_job *s_job, *tmp;
->>>>        int i;
->>>>    -    if (sched->thread)
->>>> -        kthread_stop(sched->thread);
->>>> +    if (!sched->thread)
->>>> +        return;
->>>> +
->>>> +    /*
->>>> +     * Stop the scheduler, detaching all jobs from their hardware
->>>> callbacks
->>>> +     * and cleaning up complete jobs.
->>>> +     */
->>>> +    drm_sched_stop(sched, NULL);
->>>> +
->>>> +    /*
->>>> +     * Iterate through the pending job list and free all jobs.
->>>> +     * This assumes the driver has either guaranteed jobs are
->>>> already stopped, or that
->>>> +     * otherwise it is responsible for keeping any necessary data
->>>> structures for
->>>> +     * in-progress jobs alive even when the free_job() callback is
->>>> called early (e.g. by
->>>> +     * putting them in its own queue or doing its own refcounting).
->>>> +     */
->>>> +    list_for_each_entry_safe(s_job, tmp, &sched->pending_list, list) {
->>>> +        spin_lock(&sched->job_list_lock);
->>>> +        list_del_init(&s_job->list);
->>>> +        spin_unlock(&sched->job_list_lock);
->>>> +        sched->ops->free_job(s_job);
->>>> +    }
->>> I would stop the kthread first, then delete all jobs without spinlock
->>> since nothing else can race against sched_fini?
->>>
->>> If you do need the spinlock, It would need to guard
->>> list_for_each_entry too.
->> Well this case here actually should not happen in the first place.
-> "This should not happen in the first place" is how you end up with C
-> APIs that have corner cases that lead to kernel oopses...
->
-> The idea with Rust abstractions is that it needs to be actually
-> impossible to create memory safety problems for the user of the
-> abstraction, you can't impose arbitrary constraints like "you must wait
-> for all jobs to finish before destroying the scheduler"... it needs to
-> be intrinsically safe.
->
->> Jobs depend on their device, so as long as there are jobs there should
->> also be a reference to the scheduler.
-> These schedulers are created dynamically per userspace queue. The memory
-> management and reference counting involved make it safe to destroy the
-> scheduler even when behind the scenes hardware jobs are still running,
-> as long as drm_sched itself doesn't crash on fences firing without a
-> scheduler (which is what this patch fixes).
+On 8.03.2023 14:31, Srinivas Kandagatla wrote:
+> Thanks for doing this,
 
-We have originally rejected that approach, but I still think it might 
-work if done right.
+Thank you for reviewing. Sadly it seems it still isn't clear if we can
+have this generic driver.
 
-> This is the power of Rust: it forces you to architect your code in a way
-> that you don't have complex high-level dependencies that span the entire
-> driver and are difficult to prove hold. In my driver, you can kill a
-> process and that destroys the drm_sched, closes all GEM objects,
-> everything, even if the GPU is still running jobs from that process. The
-> worst that can happen is that the GPU faults as in-use userspace buffers
-> are unmapped out from under the running user job, but that's fine (GPU
-> faults are recoverable). The actual firmware resources, queues, etc. in
-> use are all kept alive until the commands finish executing (or fault,
-> which is just an abnormal completion), even if the userspace process
-> that owned them is long gone. I've tested this extensively by doing
-> things like large-resolution glmark runs in a loop that get `kill -9`'d
-> repeatedly, and it works very well! Tons of GPU faults but no firmware
-> crashes, no oopses, nothing. And the firmware *will* crash irrecoverably
-> if anything goes wrong with its shared memory structures, so that it
-> doesn't is pretty good evidence that all this works!
+I guess I missed some important questions or comments. In previous
+series we were discussing implementation details so I thought it's OK to
+have this driver after all. Not sure if I didn't waste time working on
+V4. I'll see if I can I address your concerns (see below).
 
-Well testing is no prove at all of a correct design.
 
->> What could be is that you have allocated a scheduler instance
->> dynamically, but even then you should first tear down all entities and
->> then the scheduler.
-> This is about creating a safe Rust abstraction, so we can't impose
-> requirements on users like that, the abstraction has to take care of it.
-> Unfortunately, the jobs cannot depend on the scheduler at the
-> abstraction level. I tried that (putting a reference counted reference
-> to the scheduler in the job abstraction), but it doesn't work because a
-> job completing can end up dropping the last reference to the scheduler,
-> and then you end up trying to stop and clean up the scheduler from a
-> callback called from the scheduler kthread itself, which deadlocks. We
-> could throw those cleanups into a workqueue or something, but that's
-> just adding bandages around the problem that the drm_sched interface
-> today is just not safe without this patch...
+> On 28/02/2023 07:29, Rafał Miłecki wrote:
+>> From: Rafał Miłecki <rafal@milecki.pl>
+>>
+>> Some NVMEM devices can be accessed by simply mapping memory and reading
+>> from / writing to it. This driver adds support for a generic
+>> "mmio-nvmem" DT binding used by such devices.
+>>
+>> One of such devices is Broadcom's NVRAM. It's already supported (see
+>> NVMEM_BRCM_NVRAM) but existing driver covers both:
+> 
+> What will happen to the old "brcm,nvram" compatible and the dt firmware that already have this node?
 
-Well that won't work like this. The scheduler has a pretty clear tear 
-down procedure.
+I treat backward compatibility with previouly used bindings very
+seriously. I'm going to keep it. I may make an attempt to drop it in
+few years if it's very unlikely to break any setups.
 
-And that procedure implies that all entities which might provide jobs 
-are destroyed before the scheduler is destroyed.
 
-Destroying the entities in turn cleans up the pending jobs inside of 
-them. We could add a warning when users of this API doesn't do this 
-correctly, but cleaning up incorrect API use is clearly something we 
-don't want here.
+> If there is only one user for this then one would object that why do we need this DT level of abstraction to start with?
+> If this is not the case please consider adding those patches to this series.
 
-> Right now, it is not possible to create a safe Rust abstraction for
-> drm_sched without doing something like duplicating all job tracking in
-> the abstraction, or the above backreference + deferred cleanup mess, or
-> something equally silly. So let's just fix the C side please ^^
+Existing Linux drivers prove that there is more hardware with MMIO based
+read access: brcm_nvram, mtk-efuse, uniphier-efuse. Migration of other
+drivers (mtk, unipher) is on hold as apparently there may be support for
+writing support soon. In any case this MMIO solution isn't completely
+unique to Broadcom.
+I don't have other patches to add to it right now.
 
-Nope, as far as I can see this is just not correctly tearing down the 
-objects in the right order.
 
-So you are trying to do something which is not supposed to work in the 
-first place.
+>> 1. NVMEM device access
+>> 2. NVMEM content parsing
+>>
+>> Once we get support for NVMEM layouts then existing NVRAM driver will
+>> get converted into a layout and generic driver will take over
+>> responsibility for data access.
+>>
+> 
+> Even though this series is simple, but it is really confusing for two reasons.
+> 
+> 1> Generic mmio nvmem bindings are incomplete and potentially change/evolve on every new user. Ex clks, regulators, endianess ... So it looks really fragile and incomplete to me as a generic bindings.
+> Is this want you are expecting?
 
-Regards,
-Christian.
+All 3 existing hardware support MMIO reads without extra clocks or
+regulators. I'm not sure if endianess belongs to this layer. Isn't that
+NVMEM content thing?
 
->
-> So far, drm_sched is the only DRM API that has had such a fundamental
-> API safety issue that I had to make a change like this to the C to make
-> the Rust abstraction possible/reasonable... drm_sched has also been by
-> far the hardest DRM component API to understand from a safety point of
-> view, with the most inconsistent documentation about what the
-> ownership/freeing rules are, and what objects need to outlive what other
-> objects (I had to just read the code to figure most of this out). That's
-> also one nice outcome of writing Rust abstractions: it forces us to make
-> all these rules and invariants explicit, instead of leaving them as
-> unwritten assumptions (almost nobody consistently documents this in C
-> APIs...).
->
-> If I got it right, anyone using the Rust drm_sched abstraction doesn't
-> have to worry about this any more because if they do something that
-> would oops with it, their code won't compile. But I need this patch to
-> be able to make that guarantee...
->
-> ~~ Lina
+I'm not claiming this driver is in its final and perfect state. For
+simple hardware that needs minor fixups we can add those later to this
+generic driver. Adding clocks should be possible, fine and easy.
+
+I'm sure there will be more complex hardware that we will not be able
+to support with this driver. It's require another driver and I'm fine
+with that.
+
+
+> 2> As you mentioned that this will replace broadcom NVMRAM, but this patch does nothing in relation to updating that driver, so the code is dead as it is. If you are considering to use it for Broadcom NVMRAM, please add those patches to this series so that we could see the real user for this code.
+
+Of course it does nothing because there are no layouts yet. I could
+migrate brcm_nvram into layout once there is layouts support.
+
+I don't agree this code is dead. It support new binding. It works.
+Every new binding and its driver are "dead" until you add first DT
+users.
+
+Here is real use:
+
+nvmem@1eff0000 {
+	compatible = "mmio-nvmem";
+	reg = <0x1eff0000 0x10000>;
+};
 
