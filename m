@@ -2,143 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8BB6B0D23
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 332456B0D27
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbjCHPm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
+        id S230464AbjCHPnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:43:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbjCHPmF (ORCPT
+        with ESMTP id S231785AbjCHPn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:42:05 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9980DC3B3
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 07:40:59 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id p13-20020a9d744d000000b0069438f0db7eso9207646otk.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 07:40:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678290058;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l1eaevzD/VPDBLno7am529FO5BQItrE1PVYk+UmlJ30=;
-        b=jo7rya6xSxN51x9Agv7lCoYt3NELUGNXEedCdddprWZMyEetydQ+VAzjhfsveqPncT
-         U4OyFqbRxprUag/By3VxXdmsuY2RVJU/msDixT15maV8wgkSpTAv3wXuVsKS7DB9SKeL
-         wqB8/HNzPeUWM15t6WQz3t8RRJrSsAd3inuqxvUgnUCLvP03jMmjh7XNmNuJVKRGd+hI
-         jLqruPfGAiNzz5wFrUsJgqPPj9Kcg5+ToW18Zr/vrJligw92oiYGcWq8H6/wNNA6THGq
-         32iu2QBeI7T+IKQz4/WtUGE4Pamkdfwm7P0UNgeizuDfP1cVfy1y6hfRvT8DHsseOfYa
-         jHTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678290058;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l1eaevzD/VPDBLno7am529FO5BQItrE1PVYk+UmlJ30=;
-        b=6sTA8L+H26x+phLP2utXdg4ipPAnsfFnoaN5D1Q4AvMC6Ul7RVWyg0GhPYulXji1pf
-         VitlSV1Kx9Kq4t/WApZnYOVvz0z7+URBYYGXCi3lwJTydqKGf1xKTAC6Bdytpnc8hvEl
-         3naT/UtIIGITX4vHqj+/LsFwb7ETPmTJrp3HRow5ifex0vhlc3NTxeW66w+Aa82C9VYd
-         mv9qKBRIKN6I/tfTNo3Gv/7NCIwTKnEIOaeE+LZKgVwC69zZyXU3ihBoIUdRqAvuK7+K
-         4fs/aMaBYgbFrx46CzztTsEVu8tUk9PT2meb7YHU9OELuCzvvI/D44P7HrPKYLTgmKKk
-         kyBA==
-X-Gm-Message-State: AO0yUKVOGn02tNgYe6HoFWk7fTD02JVkTP0zwNzfqWan+XpjSXFK7p1P
-        5KcuSHqnocaW3vh+ez+E45+scVEtz7QkqvKRSqo=
-X-Google-Smtp-Source: AK7set/3YXnoE0ouW6QKye+UdVIfFc6/NcrKfnpl+KoXnboudNx6jNlvIiSmQTAgHzhdNCUl12UfKeVmimwBzUUsk9Y=
-X-Received: by 2002:a9d:724c:0:b0:68b:ccee:5ead with SMTP id
- a12-20020a9d724c000000b0068bccee5eadmr6361844otk.3.1678290058340; Wed, 08 Mar
- 2023 07:40:58 -0800 (PST)
+        Wed, 8 Mar 2023 10:43:27 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A379F92723;
+        Wed,  8 Mar 2023 07:42:25 -0800 (PST)
+Received: from [192.168.2.24] (77-166-152-30.fixed.kpn.net [77.166.152.30])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0157520BBF92;
+        Wed,  8 Mar 2023 07:42:04 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0157520BBF92
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1678290126;
+        bh=zFYFwWuo+Y9TAr6dR2+IlULhrthw608V/1+z0YyYpdU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NDsDPBY6Xgj+5a6Lg6mE1Gz5DnyeO49hu+svsM4CkiX5/NFRXKUXhiq8Z0zfnW+pm
+         MmKpNJT0ZsmoDh3z6D+8SZXt1LnGAeHVurJ7RHPyXwNQ6vr5GAm/svD7mKmwNEf/EX
+         PnjCNIsBtOpmjMv/hnpUibqpV9Ejc7QrJSlFK3yk=
+Message-ID: <ef5f6c79-3c75-1bda-80d3-bb6d84cc27b2@linux.microsoft.com>
+Date:   Wed, 8 Mar 2023 16:42:03 +0100
 MIME-Version: 1.0
-References: <20230308141057.2010361-1-trix@redhat.com>
-In-Reply-To: <20230308141057.2010361-1-trix@redhat.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 8 Mar 2023 10:40:46 -0500
-Message-ID: <CADnq5_PtFqWKvVePq+jydpC06QG35q420-9iQErv6OcgYcPzJQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: remove unused variable available
-To:     Tom Rix <trix@redhat.com>
-Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, wenjing.liu@amd.com, qingqing.zhuo@amd.com,
-        Jun.Lei@amd.com, mghaddar@amd.com, candice.li@amd.com,
-        aric.cyr@amd.com, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
+Content-Language: en-US
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     kvm@vger.kernel.org, Tianyu Lan <ltykernel@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>
+References: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
+ <87lek9zs05.fsf@redhat.com>
+ <c6bb4b57-f134-d992-7f30-be80151fb67e@linux.microsoft.com>
+ <87a60ozxga.fsf@redhat.com>
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+In-Reply-To: <87a60ozxga.fsf@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On 07/03/2023 11:07, Vitaly Kuznetsov wrote:
+> Jeremi Piotrowski <jpiotrowski@linux.microsoft.com> writes:
+> 
+>> On 06/03/2023 18:52, Vitaly Kuznetsov wrote:
+>>> Jeremi Piotrowski <jpiotrowski@linux.microsoft.com> writes:
+>>>
+>>>> TDP MMU has been broken on AMD CPUs when running on Hyper-V since v5.17.
+>>>> The issue was first introduced by two commmits:
+>>>>
+>>>> - bb95dfb9e2dfbe6b3f5eb5e8a20e0259dadbe906 "KVM: x86/mmu: Defer TLB
+>>>>   flush to caller when freeing TDP MMU shadow pages"
+>>>> - efd995dae5eba57c5d28d6886a85298b390a4f07 "KVM: x86/mmu: Zap defunct
+>>>>   roots via asynchronous worker"
+>>>>
+>>>> The root cause is that since then there are missing TLB flushes which
+>>>> are required by HV_X64_NESTED_ENLIGHTENED_TLB.
+>>>
+>>> Please share more details on what's actually missing as you get them,
+>>> I'd like to understand which flushes can be legally avoided on bare
+>>> hardware and Hyper-V/VMX but not on Hyper-V/SVM.
+>>>
+>>
+>> See the linked thread here
+>> https://lore.kernel.org/lkml/20d189fc-8d20-8083-b448-460cc0420151@linux.microsoft.com/#t
+>> for all the details/analyses but the summary was that either of these 2
+>> options would work, with a) having less flushes (footnote: less flushes is not necessarily
+>> better):
+>>
+>> a) adding a hyperv_flush_guest_mapping(__pa(root->spt) after kvm_tdp_mmu_get_vcpu_root_hpa's call to tdp_mmu_alloc_sp()
+>> b) adding a hyperv_flush_guest_mapping(vcpu->arch.mmu->root.hpa) to svm_flush_tlb_current()
+>>
+>> These are only needed on Hyper-V/SVM because of how the enlightenment works (needs an explicit
+>> flush to rebuild L0 shadow page tables). Hyper-V/VMX does not need any changes and currently
+>> works. Let me know if you need more information on something here, I'll try to get it.
+>>
+> 
+> Ah, I missed the whole party! Thanks for the pointers!
+> 
+>>>>  The failure manifests
+>>>> as L2 guest VMs being unable to complete boot due to memory
+>>>> inconsistencies between L1 and L2 guests which lead to various
+>>>> assertion/emulation failures.
+> 
+> Which levels are we talking about here, *real* L1 and L2 or L1 and L2
+> from KVM's perspective (real L2 and L3)?
 
-On Wed, Mar 8, 2023 at 9:11 AM Tom Rix <trix@redhat.com> wrote:
->
-> With gcc and W=3D1, there is this error
-> drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_dpia_bw.c=
-:297:13: error:
->   variable =E2=80=98available=E2=80=99 set but not used [-Werror=3Dunused=
--but-set-variable]
->   297 |         int available =3D 0;
->       |             ^~~~~~~~~
->
-> Since available is unused, remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  .../drm/amd/display/dc/link/protocols/link_dp_dpia_bw.c   | 8 --------
->  1 file changed, 8 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_dpia_b=
-w.c b/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_dpia_bw.c
-> index f14217cc16fd..2f0311c42f90 100644
-> --- a/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_dpia_bw.c
-> +++ b/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_dpia_bw.c
-> @@ -294,7 +294,6 @@ bool link_dp_dpia_set_dptx_usb4_bw_alloc_support(stru=
-ct dc_link *link)
->  void dpia_handle_bw_alloc_response(struct dc_link *link, uint8_t bw, uin=
-t8_t result)
->  {
->         int bw_needed =3D 0;
-> -       int available =3D 0;
->         int estimated =3D 0;
->         int host_router_total_estimated_bw =3D 0;
->
-> @@ -373,20 +372,13 @@ void dpia_handle_bw_alloc_response(struct dc_link *=
-link, uint8_t bw, uint8_t res
->
->                 // 1. If due to unplug of other sink
->                 if (estimated =3D=3D host_router_total_estimated_bw) {
-> -
->                         // First update the estimated & max_bw fields
->                         if (link->dpia_bw_alloc_config.estimated_bw < est=
-imated) {
-> -                               available =3D estimated - link->dpia_bw_a=
-lloc_config.estimated_bw;
->                                 link->dpia_bw_alloc_config.estimated_bw =
-=3D estimated;
->                         }
->                 }
->                 // 2. If due to realloc bw btw 2 dpia due to plug OR real=
-loc unused Bw
->                 else {
-> -
-> -                       // We took from another unplugged/problematic sin=
-k to give to us
-> -                       if (link->dpia_bw_alloc_config.estimated_bw < est=
-imated)
-> -                               available =3D estimated - link->dpia_bw_a=
-lloc_config.estimated_bw;
-> -
->                         // We lost estimated bw usually due to plug event=
- of other dpia
->                         link->dpia_bw_alloc_config.estimated_bw =3D estim=
-ated;
->                 }
-> --
-> 2.27.0
->
+Real L1 and L2. In this whole discussion L0 is Hyper-V, L1 is KVM and L2 is a Linux VM.
+
+> 
+>>>>
+>>>> The HV_X64_NESTED_ENLIGHTENED_TLB enlightenment is always exposed by
+>>>> Hyper-V on AMD and is always used by Linux. The TLB flush required by
+>>>> HV_X64_NESTED_ENLIGHTENED_TLB is much stricter than the local TLB flush
+>>>> that TDP MMU wants to issue. We have also found that with TDP MMU L2 guest
+>>>> boot performance on AMD is reproducibly slower compared to when TDP MMU is
+>>>> disabled.
+>>>>
+>>>> Disable TDP MMU when using SVM Hyper-V for the time being while we
+>>>> search for a better fix.
+>>>
+>>> I'd suggest we go the other way around: disable
+>>> HV_X64_NESTED_ENLIGHTENED_TLB on SVM:
+>>
+>> Paolo suggested disabling TDP_MMU when HV_X64_NESTED_ENLIGHTENED_TLB is used, and
+>> I prefer that option too. The enlighenment does offer a nice performance advantage
+>> with non-TDP_MMU, and I did not see TDP_MMU perform any better compared to that.
+>> Afaik the code to use the enlightenment on Hyper-V/SVM was written/tested before
+>> TDP_MMU became the default.
+>>
+>> If you have a specific scenario in mind, we could test and see what the implications
+>> are there.
+> 
+> I don't have a strong opinion here, I've suggested a smaller change so
+> it's easier to backport it to stable kernels and easier to revert when a
+> proper fix comes to mainline.
+
+Noted. My concern here is about changing a default in a way that lowers performance,
+because the proper fix that comes later might end up not being suitable for stable.
+
+> For performance implication, I'd only
+> consider non-nested scenarios from KVM's perspective (i.e. real L2 from
+> Hyper-V's PoV), as running L3 is unlikely a common use-case and, if I
+> understood correctly, is broken anyway.
+
+I agree with that. Right now L2 is broken, I've never even attempted L3 to
+see if it would work.
+
+Jeremi
