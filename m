@@ -2,290 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CF16AFC6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A88B6AFC73
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjCHBci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 20:32:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
+        id S229483AbjCHBgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 20:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjCHBcf (ORCPT
+        with ESMTP id S229610AbjCHBgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 20:32:35 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486426E99;
-        Tue,  7 Mar 2023 17:32:31 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id da10so59933861edb.3;
-        Tue, 07 Mar 2023 17:32:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678239150;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Wv48Gse23GWhV4FLS1xvq7CesexYNmHf7o1A7VPU4I=;
-        b=HvK/f42Y5ig5MN8aX47N3PuVZvSPA1BhAXTgq6b6lKRV3NqmUH/ObA5gOi5V+CqApT
-         nTteFKtmLGN8jNrOs6TqdkL3NuiT1Kz7PtVgJKiqoghNTsNQqEUcymiwVCiLTHUVGZT0
-         GgeVZ8/4EGdJ46z7tgDYVHEEqK43hy90eDnLt61wWFeKsgLXFPTAaM25NaaZHgV0rRRg
-         u5qiPbQVzjVVNyo9xJfkgbDKcW5/88FM89Y8BsAcpFhjCfdsKOOgIUWc1NuTfREuOCO9
-         NJNTl2V8m7jrt44najZFbNkLCDEwCdL3C1iKx6duDu8aCaAAO95Zqc04qT9OmVIhMJsn
-         i4hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678239150;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1Wv48Gse23GWhV4FLS1xvq7CesexYNmHf7o1A7VPU4I=;
-        b=V2oKngOFkyx8PKS2K7Fat9cZZugcIEdHYmK2Gjd0uegg33LHDZidPliV5QWJtjqqX/
-         X2dwKD6F9gciwSwSu/SKWg6U/u2NIPNWp2R0zI5cce3iUWn15IJLUQZ8ZHs5XVeyavfi
-         C4QJL/Yyvbyjhe0d9aWNX/1PDrBydHRaKMGGHadaUsc4J4s+coVDDdV80SoU/b15AltT
-         3aPHd5gOCCC/0/8oUkjUbgXK3EzGkyLk7b73nVi50L9jBT4Px18nI0s+pqvpsg2zkL2z
-         aBBZ0VDIzFjddyNqNFtiap7LaLPf8ExvhoWsUOYEq6wUZ51E1zs4yz+r7KSsyshavVLX
-         XFgg==
-X-Gm-Message-State: AO0yUKXlC9mqm0fyKYDEE8lHGbdI5vgoP9+fvRWHkgMj0L2ghU9NeuE+
-        hne96LWYEaRR2QVMT64BWHixNpKDaC/T87lNHCw=
-X-Google-Smtp-Source: AK7set9tlVLl+pNXDkJWR0/BfgTGqh/6bOnzUAAw53wzvgVE4mGyUQGzsX9ht3WJeYZ/lMkpWqINJ5xdHLd9HBpzY5c=
-X-Received: by 2002:a17:906:2adb:b0:8de:c6a6:5134 with SMTP id
- m27-20020a1709062adb00b008dec6a65134mr7369382eje.15.1678239149687; Tue, 07
- Mar 2023 17:32:29 -0800 (PST)
+        Tue, 7 Mar 2023 20:36:06 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF7FE59E73;
+        Tue,  7 Mar 2023 17:36:00 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxAf9_5gdkiagJAA--.12791S3;
+        Wed, 08 Mar 2023 09:35:59 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxzr535gdkMctOAA--.16378S3;
+        Wed, 08 Mar 2023 09:35:58 +0800 (CST)
+Subject: Re: [PATCH v13 1/2] dt-bindings: clock: add loongson-2 boot clock
+ index
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230307115022.12846-1-zhuyinbo@loongson.cn>
+ <692a62da-a9a1-fa23-6e24-723d73c3a423@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <5e9b3bd5-d885-6237-5e14-2becb3c956cc@loongson.cn>
+Date:   Wed, 8 Mar 2023 09:35:50 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20230228093206.821563-1-jolsa@kernel.org> <20230228093206.821563-10-jolsa@kernel.org>
-In-Reply-To: <20230228093206.821563-10-jolsa@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 7 Mar 2023 17:32:17 -0800
-Message-ID: <CAEf4BzbLz5q8NgREMEiOPumSBEhKMh0rDC=1ii8Muvm4Whg59w@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 bpf-next 9/9] selftests/bpf: Add
- iter_task_vma_buildid test
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, bpf@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Namhyung Kim <namhyung@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <692a62da-a9a1-fa23-6e24-723d73c3a423@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8Bxzr535gdkMctOAA--.16378S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Aw47tFW5JF1kGr1UAFW5Wrg_yoW8AFyxpr
+        4v9FW3KFW2yF4Igws2qwnxKr45uw47J3WUCF47ur1UZF17J3W8JrsrJF4fArn8XrZ3JFyx
+        ZFWDuw4F9ayDWw7anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bD8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq
+        07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7
+        xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+        z7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxV
+        WUAVWUtwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF
+        7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j0HqcUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 1:34=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> Testing iterator access to build id in vma->vm_file->f_inode
-> object by storing each binary with buildid into map and checking
-> it against buildid retrieved in user space.
->
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  .../selftests/bpf/prog_tests/bpf_iter.c       | 78 +++++++++++++++++++
->  .../bpf/progs/bpf_iter_task_vma_buildid.c     | 60 ++++++++++++++
->  2 files changed, 138 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_vma_b=
-uildid.c
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/te=
-sting/selftests/bpf/prog_tests/bpf_iter.c
-> index 1f02168103dd..c7dd89e7cad0 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-> @@ -33,6 +33,7 @@
->  #include "bpf_iter_bpf_link.skel.h"
->  #include "bpf_iter_ksym.skel.h"
->  #include "bpf_iter_sockmap.skel.h"
-> +#include "bpf_iter_task_vma_buildid.skel.h"
->
->  static int duration;
->
-> @@ -1536,6 +1537,81 @@ static void test_task_vma_dead_task(void)
->         bpf_iter_task_vma__destroy(skel);
->  }
->
-> +#define D_PATH_BUF_SIZE        1024
-> +
-> +struct build_id {
-> +       u32 sz;
-> +       char data[BPF_BUILD_ID_SIZE];
-> +};
-> +
-> +static void test_task_vma_buildid(void)
-> +{
-> +       int err, iter_fd =3D -1, proc_maps_fd =3D -1, sz;
-> +       struct bpf_iter_task_vma_buildid *skel;
-> +       char key[D_PATH_BUF_SIZE], *prev_key;
-> +       char build_id[BPF_BUILD_ID_SIZE];
-> +       int len, files_fd, cnt =3D 0;
-> +       struct build_id val;
-> +       char c;
-> +
-> +       skel =3D bpf_iter_task_vma_buildid__open_and_load();
-> +       if (!ASSERT_OK_PTR(skel, "bpf_iter_task_vma_buildid__open_and_loa=
-d"))
-> +               return;
-> +
-> +       skel->links.proc_maps =3D bpf_program__attach_iter(
-> +               skel->progs.proc_maps, NULL);
-> +
-> +       if (!ASSERT_OK_PTR(skel->links.proc_maps, "bpf_program__attach_it=
-er")) {
-> +               skel->links.proc_maps =3D NULL;
-> +               goto out;
-> +       }
-> +
-> +       iter_fd =3D bpf_iter_create(bpf_link__fd(skel->links.proc_maps));
-> +       if (!ASSERT_GE(iter_fd, 0, "create_iter"))
-> +               goto out;
-> +
-> +       /* trigger the iterator, there's no output, just map */
-> +       len =3D read(iter_fd, &c, 1);
-> +       ASSERT_EQ(len, 0, "len_check");
-> +
-> +       files_fd =3D bpf_map__fd(skel->maps.files);
-> +
-> +       prev_key =3D NULL;
-> +
-> +       while (true) {
-> +               err =3D bpf_map_get_next_key(files_fd, prev_key, &key);
-> +               if (err) {
-> +                       if (errno =3D=3D ENOENT)
-> +                               err =3D 0;
-> +                       break;
-> +               }
-> +               if (bpf_map_lookup_elem(files_fd, key, &val))
-> +                       break;
-> +               if (!ASSERT_LE(val.sz, BPF_BUILD_ID_SIZE, "buildid_size")=
-)
-> +                       break;
-> +
-> +               sz =3D read_build_id(key, build_id);
-> +               /* If there's an error, the build id is not present or ma=
-lformed, kernel
-> +                * should see the same result and bpf program pushed zero=
- build id.
-> +                */
-> +               if (sz < 0) {
-> +                       memset(build_id, 0x0, BPF_BUILD_ID_SIZE);
-> +                       sz =3D BPF_BUILD_ID_SIZE;
-> +               }
-> +               ASSERT_EQ(val.sz, sz, "build_id_size");
-> +               ASSERT_MEMEQ(val.data, build_id, sz, "build_id_data");
-> +
-> +               prev_key =3D key;
-> +               cnt++;
-> +       }
-> +
-> +       printf("checked %d files\n", cnt);
-> +out:
-> +       close(proc_maps_fd);
-> +       close(iter_fd);
-> +       bpf_iter_task_vma_buildid__destroy(skel);
-> +}
-> +
->  void test_bpf_sockmap_map_iter_fd(void)
->  {
->         struct bpf_iter_sockmap *skel;
-> @@ -1659,6 +1735,8 @@ void test_bpf_iter(void)
->                 test_task_vma();
->         if (test__start_subtest("task_vma_dead_task"))
->                 test_task_vma_dead_task();
-> +       if (test__start_subtest("task_vma_buildid"))
-> +               test_task_vma_buildid();
->         if (test__start_subtest("task_btf"))
->                 test_task_btf();
->         if (test__start_subtest("tcp4"))
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task_vma_buildid.=
-c b/tools/testing/selftests/bpf/progs/bpf_iter_task_vma_buildid.c
-> new file mode 100644
-> index 000000000000..dc528a4783ec
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_task_vma_buildid.c
-> @@ -0,0 +1,60 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include "bpf_iter.h"
-> +#include "err.h"
-> +#include <bpf/bpf_helpers.h>
-> +#include <string.h>
-> +
-> +char _license[] SEC("license") =3D "GPL";
-> +
-> +#define VM_EXEC                0x00000004
-> +#define D_PATH_BUF_SIZE        1024
-> +
-> +struct {
-> +       __uint(type, BPF_MAP_TYPE_HASH);
-> +       __uint(max_entries, 10000);
-> +       __type(key, char[D_PATH_BUF_SIZE]);
-> +       __type(value, struct build_id);
-> +} files SEC(".maps");
-> +
-> +static char path[D_PATH_BUF_SIZE];
-> +static struct build_id build_id;
-> +
-> +SEC("iter/task_vma")
-> +int proc_maps(struct bpf_iter__task_vma *ctx)
-> +{
-> +       struct vm_area_struct *vma =3D ctx->vma;
-> +       struct seq_file *seq =3D ctx->meta->seq;
-> +       struct task_struct *task =3D ctx->task;
-> +       unsigned long file_key;
-> +       struct inode *inode;
-> +       struct file *file;
-> +
-> +       if (task =3D=3D (void *)0 || vma =3D=3D (void *)0)
-> +               return 0;
-> +
-> +       if (!(vma->vm_flags & VM_EXEC))
-> +               return 0;
-> +
-> +       file =3D vma->vm_file;
-> +       if (!file)
-> +               return 0;
-> +
-> +       __builtin_memset(path, 0x0, D_PATH_BUF_SIZE);
-> +       bpf_d_path(&file->f_path, (char *) &path, D_PATH_BUF_SIZE);
-> +
-> +       if (bpf_map_lookup_elem(&files, &path))
-> +               return 0;
-> +
-> +       inode =3D file->f_inode;
-> +       if (IS_ERR_OR_NULL(inode->i_build_id)) {
-> +               /* On error return empty build id. */
-> +               __builtin_memset(&build_id.data, 0x0, sizeof(build_id.dat=
-a));
-> +               build_id.sz =3D 20;
 
-let's replace `#define BUILD_ID_SIZE_MAX 20` in
-include/linux/buildid.h with `enum { BUILD_ID_SIZE_MAX =3D 20 };`. This
-will "expose" this constant into BTF and thus vmlinux.h, so we won't
-have to hard-code anything. BPF users would be grateful as well.
+在 2023/3/7 下午8:47, Krzysztof Kozlowski 写道:
+> On 07/03/2023 12:50, Yinbo Zhu wrote:
+>> The Loongson-2 boot clock was used to spi and lio peripheral and
+>> this patch was to add boot clock index number.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+> This is v13? Where is the changelog then?
 
-No downsides of doing this.
+in fact, this is a new patch(v1),   but another clock driver patch in 
+this series had send as v13 and need depend on
 
-> +       } else {
-> +               __builtin_memcpy(&build_id, inode->i_build_id, sizeof(*in=
-ode->i_build_id));
-> +       }
-> +
-> +       bpf_map_update_elem(&files, &path, &build_id, 0);
-> +       return 0;
-> +}
-> --
-> 2.39.2
+this patch so set current patch as v13.
+
 >
+>
+>>   include/dt-bindings/clock/loongson,ls2k-clk.h | 25 ++++++++++---------
+>>   1 file changed, 13 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/include/dt-bindings/clock/loongson,ls2k-clk.h b/include/dt-bindings/clock/loongson,ls2k-clk.h
+>> index db1e27e792ff1..e86804365e506 100644
+>> --- a/include/dt-bindings/clock/loongson,ls2k-clk.h
+>> +++ b/include/dt-bindings/clock/loongson,ls2k-clk.h
+>> @@ -13,17 +13,18 @@
+>>   #define LOONGSON2_DC_PLL				3
+>>   #define LOONGSON2_PIX0_PLL				4
+>>   #define LOONGSON2_PIX1_PLL				5
+>> -#define LOONGSON2_NODE_CLK				6
+>> -#define LOONGSON2_HDA_CLK				7
+>> -#define LOONGSON2_GPU_CLK				8
+>> -#define LOONGSON2_DDR_CLK				9
+>> -#define LOONGSON2_GMAC_CLK				10
+>> -#define LOONGSON2_DC_CLK				11
+>> -#define LOONGSON2_APB_CLK				12
+>> -#define LOONGSON2_USB_CLK				13
+>> -#define LOONGSON2_SATA_CLK				14
+>> -#define LOONGSON2_PIX0_CLK				15
+>> -#define LOONGSON2_PIX1_CLK				16
+>> -#define LOONGSON2_CLK_END				17
+>> +#define LOONGSON2_BOOT_CLK				6
+> That's an ABI break and commit msg does not explain it.
+you meaning is that need add a explanation in commit msg that why
+
+LOONGSON2_BOOT_CLK was added after LOONGSON2_PIX1_PLL and not add it in ending, right?
+
+>
+>> +#define LOONGSON2_NODE_CLK				7
+>
+>
+> Best regards,
+> Krzysztof
+
