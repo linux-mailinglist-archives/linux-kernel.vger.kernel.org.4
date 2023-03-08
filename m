@@ -2,248 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6746B14A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD136B14B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjCHV7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 16:59:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S229544AbjCHWDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 17:03:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjCHV7U (ORCPT
+        with ESMTP id S229462AbjCHWDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 16:59:20 -0500
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129F366D1C;
-        Wed,  8 Mar 2023 13:59:17 -0800 (PST)
-Received: by mail-ot1-f42.google.com with SMTP id l15-20020a9d7a8f000000b0069447f0db6fso19085otn.4;
-        Wed, 08 Mar 2023 13:59:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678312756;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8zlXSnMRJPYfLbixN9EXHHN0qB6jtGkytaRGS5ki5aI=;
-        b=GAowi4RRzbsNwzcoj8tlHtmtCX95llXN6jLSkF33CHimkm++9MOjzDTb/GctDMEWli
-         HOuWt22aovc1IIXTF/iXDhb4WuS2c8RswrU2q3590rOZAfkkcDlBxVbr0PwODFvbFcrf
-         hGOgIfplFnGzQIZsNrOG/Rx25527ft2N+2eQG2rLyc8uc+DqAzWCPzMI47DMio37gwZB
-         OoiOidyKwSnnkC6BnVGGXCsC4qVs/Uc4Gb7r0DUnPtLICQ4gYa5IxlpWNEBIwnn6Cddj
-         n7bQhzGPqdvCGVa6xw+kujlekqCONiqRYl2pSXtJUwRdoyupOiH3guvkq5PdID6LaRu5
-         Eqag==
-X-Gm-Message-State: AO0yUKWTaQyhdskteUfjOkccBYRrs4od04oz0+/jPFoBqzyFXiKvmJzL
-        Uz/esm50gaRlXNtrQaAzDVfAbpHFcg==
-X-Google-Smtp-Source: AK7set+Df1FSt526SUD1t+1ggqqkwsSf4k6oWoLoO/zuzY//dQhI/mu1F1AFSzIePg/LVfuSOjZVhA==
-X-Received: by 2002:a9d:855:0:b0:68d:7a7b:bd61 with SMTP id 79-20020a9d0855000000b0068d7a7bbd61mr9263669oty.23.1678312756277;
-        Wed, 08 Mar 2023 13:59:16 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n25-20020a9d7119000000b0068bd922a244sm7007247otj.20.2023.03.08.13.59.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 13:59:15 -0800 (PST)
-Received: (nullmailer pid 3914250 invoked by uid 1000);
-        Wed, 08 Mar 2023 21:59:15 -0000
-Date:   Wed, 8 Mar 2023 15:59:15 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Samin Guo <samin.guo@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-Subject: Re: [PATCH v5 04/12] dt-bindings: net: Add support StarFive dwmac
-Message-ID: <20230308215915.GA3911690-robh@kernel.org>
-References: <20230303085928.4535-1-samin.guo@starfivetech.com>
- <20230303085928.4535-5-samin.guo@starfivetech.com>
+        Wed, 8 Mar 2023 17:03:14 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E382ED46;
+        Wed,  8 Mar 2023 14:03:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1678312981; i=deller@gmx.de;
+        bh=URLRtCYvCA2OfgePK0dWq7nXnf4urDizzWJ5/29Hrz8=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=WP8JmQN1foHTYW81fe2J8bKqCKZZ0E3SuwAPCuk9mCCQ1EOBOitwYn2waiV/lhM+Y
+         HkjWCkWVMHsqWVkMICOWJKG+/GVQ5vv7PUrND0/FuQ/f++uuohdua7obODUxWIJ6Xk
+         gBqRbpByUTVEuCKjwLThbudN6kZPCh7y4P3oe3vNOQus1W4TkKSM40ywb4/mDfANE+
+         ASG4vHH8Wxitbfz8uqRjVVUSsEGFnlgSB5NN/9tgTrMhQHyVScrH00B3orSgZRITJp
+         l+3stHKU1C7p4rCL4MItI5G3GQ2ZGlbldxvC29QPZ5w83eE8hJqDiB8VQKrIrh75KL
+         3zIK2oZffpHZg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.151.44]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MYNNo-1q5UnP0E54-00VU3c; Wed, 08
+ Mar 2023 23:03:01 +0100
+Message-ID: <53d85de3-3072-50e2-9ce8-1fd48a2cfd69@gmx.de>
+Date:   Wed, 8 Mar 2023 23:03:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230303085928.4535-5-samin.guo@starfivetech.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] MAINTAINERS: orphan SIS FRAMEBUFFER DRIVER
+Content-Language: en-US
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Thomas Winischhofer <thomas@winischhofer.net>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230308071921.10963-1-lukas.bulwahn@gmail.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20230308071921.10963-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:YAJsaXgvOu0OB9fOwoTOiZ/2PC23B/DNDuSZiQLGjU07wjsxQAl
+ qd03dqtJO4F5q0zf2FXWuptrt4RJpXMT8Vv1EEogkxZ3n/nbynNOH3TxJzMdh+MlXKYuBzE
+ 2DxQsF8p6tjUoC3Hhgm15bW3puUSfVeGj3PRwGMk2/Dpve6F3/dWQkvnPd59HUFH6F5R1Do
+ Pi9Tq/HT/NiT9ybm37e3Q==
+UI-OutboundReport: notjunk:1;M01:P0:/hk/TkyoQ98=;e5NDFwsJ3f7fGsOUSw2qIsKpg+k
+ yJM5wYNEbIUAePkbQ876OyFBHJu+NpvPto3JPqpjgHIAd5qf/e7GjRFRA/NnJCZAqXpdui4wW
+ 2WvTRC7QQOhreRFsPIGqskl2bZp2AGRU2ItKrlK+jAlBx21gkLYKsaOtndQJzrjCfHe/zR7ed
+ 5GEGL5OsA+h1NZfBfKwBaeu0JYy77W7IWOL5Td62Ry5/wAE+94MGa4vQVrggL0Qzhmn8DFGHS
+ 3fz6w6SP/9gx7aW1/MAQPhqPkZkhtk/7BvmiwPFDg5LoqsW1esPv0VrvGEnHETae5JgWrGuoc
+ zXiKPjtkzudN4zUGJ8o7+qrDZBSRl8oJMfkmIz0HEoBKPSVKHgKaUss+ZHvU6/i7d8HbrcabC
+ Bis3RxmYGybOPqlp5K8Qok+KbqsdsRGmcMOp8aBGF+YX8Vh1T8Lh3MPOfuxOns65KsiS/MR11
+ qBiFd+wgVpRkSiFP0KNiWwG80ba9C2b2g7fcEoAjNnvIvt3le8sGaDw/n4tKDkjXYmuSp0heC
+ i+Lr/socogqSjdZ/rwrglN1jpoazN2UltdyMDIwIxY5EnvildsqG5qZgaHbrve3np+8IvNolg
+ /lQSL9HatYpA2l+xqcPZNGLo/5UG0EZtfzPqACCDd0Af25mLr/1w0p055gDKXIz36AYoqQSfh
+ R/cBLeo4L51faCiteXZFeip+EnBu/ryyy470Or+CiBirVmGewHfjVzRpNXxMvaJ7pLpOhSsEi
+ jTps5QXABvCsZwaNgfvg6hmMMxEJLSm8dQCx1ym41RSdk7pHXgb7r71wO/Zg3O8GYpj3U9uYD
+ qPjY7B/w8CzfjuyRqSjScLiXyavsytvJrTXfXP2tmai0q6Yr8OUKmBTitOvR8f/Jc0VyIjTr1
+ iE4hq6gyKOFpZe9mV7HHcnfcUEjnOG0E9O0E71osoC2qaOjew9vjn7oNZ4L067lIRdY2FFfRQ
+ 2tg+W3BvGr9lIpikmTge6TtvPAo=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 04:59:20PM +0800, Samin Guo wrote:
-> From: Yanhong Wang <yanhong.wang@starfivetech.com>
-> 
-> Add documentation to describe StarFive dwmac driver(GMAC).
-> 
-> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
-> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+On 3/8/23 08:19, Lukas Bulwahn wrote:
+> This was triggered by the fact that the webpage:
+>
+>    http://www.winischhofer.net/linuxsisvga.shtml
+>
+> cannot be reached anymore.
+>
+> Thomas Winischhofer is still reachable at the given email address, but h=
+e
+> has not been active since 2005.
+>
+> Mark the SIS FRAMEBUFFER DRIVER as orphan to reflect the current state.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+
+applied to fbdev git tree.
+
+Thanks!
+Helge
+
+
+
 > ---
->  .../devicetree/bindings/net/snps,dwmac.yaml   |   1 +
->  .../bindings/net/starfive,jh7110-dwmac.yaml   | 117 ++++++++++++++++++
->  MAINTAINERS                                   |   6 +
->  3 files changed, 124 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> index 89099a888f0b..395f081161ce 100644
-> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> @@ -91,6 +91,7 @@ properties:
->          - snps,dwmac-5.20
->          - snps,dwxgmac
->          - snps,dwxgmac-2.10
-> +        - starfive,jh7110-dwmac
->  
->    reg:
->      minItems: 1
-> diff --git a/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml b/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
-> new file mode 100644
-> index 000000000000..ca49f08d50dd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
-> @@ -0,0 +1,117 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) 2022 StarFive Technology Co., Ltd.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/starfive,jh7110-dwmac.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive JH7110 DWMAC glue layer
-> +
-> +maintainers:
-> +  - Emil Renner Berthing <kernel@esmil.dk>
-> +  - Samin Guo <samin.guo@starfivetech.com>
-> +
-> +select:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        enum:
-> +          - starfive,jh7110-dwmac
-> +  required:
-> +    - compatible
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - starfive,jh7110-dwmac
-> +      - const: snps,dwmac-5.20
-> +
-> +  clocks:
-> +    items:
-> +      - description: GMAC main clock
-> +      - description: GMAC AHB clock
-> +      - description: PTP clock
-> +      - description: TX clock
-> +      - description: GTX clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: stmmaceth
-> +      - const: pclk
-> +      - const: ptp_ref
-> +      - const: tx
-> +      - const: gtx
-> +
-> +  resets:
-> +    items:
-> +      - description: MAC Reset signal.
-> +      - description: AHB Reset signal.
-> +
-> +  reset-names:
-> +    items:
-> +      - const: stmmaceth
-> +      - const: ahb
-> +
-> +  starfive,tx-use-rgmii-clk:
-> +    description:
-> +      Tx clock is provided by external rgmii clock.
-> +    type: boolean
-> +
-> +allOf:
-> +  - $ref: snps,dwmac.yaml#
-> +
-> +unevaluatedProperties: true
-
-This must be false.
-
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - reset-names
-> +
-> +examples:
-> +  - |
-> +    ethernet@16030000 {
-> +        compatible = "starfive,jh7110-dwmac", "snps,dwmac-5.20";
-> +        reg = <0x16030000 0x10000>;
-> +        clocks = <&clk 3>, <&clk 2>, <&clk 109>,
-> +                 <&clk 6>, <&clk 111>;
-> +        clock-names = "stmmaceth", "pclk", "ptp_ref",
-> +                      "tx", "gtx";
-> +        resets = <&rst 1>, <&rst 2>;
-> +        reset-names = "stmmaceth", "ahb";
-> +        interrupts = <7>, <6>, <5>;
-> +        interrupt-names = "macirq", "eth_wake_irq", "eth_lpi";
-> +        phy-mode = "rgmii-id";
-> +        snps,multicast-filter-bins = <64>;
-> +        snps,perfect-filter-entries = <8>;
-> +        rx-fifo-depth = <2048>;
-> +        tx-fifo-depth = <2048>;
-> +        snps,fixed-burst;
-> +        snps,no-pbl-x8;
-> +        snps,tso;
-> +        snps,force_thresh_dma_mode;
-> +        snps,axi-config = <&stmmac_axi_setup>;
-> +        snps,en-tx-lpi-clockgating;
-> +        snps,txpbl = <16>;
-> +        snps,rxpbl = <16>;
-> +        phy-handle = <&phy0>;
-> +
-> +        mdio {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            compatible = "snps,dwmac-mdio";
-> +
-> +            phy0: ethernet-phy@0 {
-> +                reg = <0>;
-> +            };
-> +        };
-> +
-> +        stmmac_axi_setup: stmmac-axi-config {
-> +            snps,lpi_en;
-> +            snps,wr_osr_lmt = <4>;
-> +            snps,rd_osr_lmt = <4>;
-> +            snps,blen = <256 128 64 32 0 0 0>;
-> +        };
-> +    };
+>   MAINTAINERS | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+>
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5c67c75a940f..4e236b7c7fd2 100644
+> index 5d8f46f35aa4..354577534aef 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -19912,6 +19912,12 @@ M:	Emil Renner Berthing <kernel@esmil.dk>
->  S:	Maintained
->  F:	arch/riscv/boot/dts/starfive/
->  
-> +STARFIVE DWMAC GLUE LAYER
-> +M:	Emil Renner Berthing <kernel@esmil.dk>
-> +M:	Samin Guo <samin.guo@starfivetech.com>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
-> +
->  STARFIVE JH71X0 CLOCK DRIVERS
->  M:	Emil Renner Berthing <kernel@esmil.dk>
->  M:	Hal Feng <hal.feng@starfivetech.com>
-> -- 
-> 2.17.1
-> 
+> @@ -19191,9 +19191,7 @@ W:	http://www.brownhat.org/sis900.html
+>   F:	drivers/net/ethernet/sis/sis900.*
+>
+>   SIS FRAMEBUFFER DRIVER
+> -M:	Thomas Winischhofer <thomas@winischhofer.net>
+> -S:	Maintained
+> -W:	http://www.winischhofer.net/linuxsisvga.shtml
+> +S:	Orphan
+>   F:	Documentation/fb/sisfb.rst
+>   F:	drivers/video/fbdev/sis/
+>   F:	include/video/sisfb.h
+
