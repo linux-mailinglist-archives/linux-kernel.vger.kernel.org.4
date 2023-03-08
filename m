@@ -2,111 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4268A6B13C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4396B13CB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjCHVX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 16:23:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S229735AbjCHVZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 16:25:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjCHVXy (ORCPT
+        with ESMTP id S229484AbjCHVZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 16:23:54 -0500
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BB894F61
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:23:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1678310583; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=e4ajlNbGQNsC3O1B1WPmQsT6/2dnUqMg5MPbTYH0m9CHHnYPoqQIbvSGaxdvE+wRvDQU4ahiJWltyzBws/pQzwIDuZgN1e9rBV8Q4gCBDkarCD3fribvo7MfQqyPUf4PymjRCQEnDEe8tqgTzdPnPHgGQfZEd9MDWy5iM3Vp+8c=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1678310583; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=MVXS8KDoDhOM/NALqKC+cp6/ciQN+TQg0DQlrMhKv8E=; 
-        b=YjEYjwd2GCNGsGMgbn7Hzii58PHYaiC4egDNq0Iar9fXyZAcBi0sb3JtRjJzqUJFQBozt1fi26xBeX3AhOGpoPuYZhcRJCB8vzSD3+2nZwFlpnlBEo3XnG+3/qvDoz3eegTnVAwvIseCNKKSMS+yO5uUSKAir2kI/mb11TmHWkA=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1678310583;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=MVXS8KDoDhOM/NALqKC+cp6/ciQN+TQg0DQlrMhKv8E=;
-        b=DeJOdnvKTnhzen1ZAfJv3wlrsqe9/C8dx6jV1G19Prur97d5hd8xayoL8hVL7+cl
-        5f9BWGKhOxLrosINyDRYR5Ifr2rHJuPltENN9Gquqs/iaQFV4fX5ROqCyDzQOxytJqi
-        HbKjXd+nMavGY8C+pp1adfHx1IjtoA+/43ifLShM=
-Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
-        with SMTPS id 1678310581456117.44812708718553; Wed, 8 Mar 2023 13:23:01 -0800 (PST)
-Message-ID: <27dcf711-859e-6d21-f46f-3169bc1d4568@arinc9.com>
-Date:   Thu, 9 Mar 2023 00:22:55 +0300
+        Wed, 8 Mar 2023 16:25:11 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E00F25E12;
+        Wed,  8 Mar 2023 13:25:10 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id ay14so67517211edb.11;
+        Wed, 08 Mar 2023 13:25:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112; t=1678310709;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bEQQ5y1rU+jovQ+RQSf9fz570XBj+oRwE2jbrv64UoU=;
+        b=fABAaGcHA/JuPb3YorxwiN0BG3dM5Jrc4WdT1Gn7VVAIfLK3U7vLy2EJ2Xp4Sm17ht
+         29Ifww1kkszG+k5IqQjNXr/Mh5ersO6r3HKPR8x/3nSdp5b7MEn1Oh9LxJdNgSgUt7Fl
+         00uwgKmEnn6RZ8oNQrbBdUzNMagOg5I6IRSSCvMEIjN4ZKVAthF8L086oMxrZSu8o/6R
+         tWkU4thGaBUQh3WI3aioiNUlcoSyrAnqsfM7+jKYyfdDBBnjG8Q5NklbJTXNuRjZ3wZP
+         gf4+bqoKx3Q67FM331Ro0JSoBkcv0c8KBOp69zIl1rcqAYGGsyyVaDC6OWz4sHljtaM8
+         Zeqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678310709;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bEQQ5y1rU+jovQ+RQSf9fz570XBj+oRwE2jbrv64UoU=;
+        b=xLhSHS8oi36SoxzrZEbmZ0UQwvaITGminH3ZGgVLP/nvtytj4xx9ghuz30PwHj3c6B
+         1Y1+TKlbvoSJsZrvbiJRUFG3kU0F/3eCNlEK2U1kbcuOklapa4Fn0SAHZqMEAZTt4YrQ
+         WB8i9+sDIiPUsDOobPBFV0SlcwtJRO+R2UWUiWR5iKeV0B4+r673MljbQUrk0z06vqN7
+         vVJ5SYMxKwTaxT4AMthJqqGHEofmGgspu91AehrFAytVt5bUbcoyv6jfqUKNXWM0C/W/
+         t2RZczG1RCIZPbrrD+IUjJbFQ15tg8vkKJ0rC4xPf8UF1ZZatkXYaajsJVtuGp6DUdQk
+         37Rw==
+X-Gm-Message-State: AO0yUKWS+LWRC1J6fmM3kT5t31/y2zN6XQCmI92K2HYQV+rdhvFaykUW
+        YgjDWGJZDDuwB7PUwAgA7Md80i3cFu5YzNt5ZOU=
+X-Google-Smtp-Source: AK7set9EbJ+kG0WoXhSVXEi4hP8885ePLJPbBRoToqjisvKkiPtNHvmh0Nsh0/o4zHrybOasiIZDvzc3QK81g6iwFc8=
+X-Received: by 2002:a17:906:ce38:b0:8b1:30da:b585 with SMTP id
+ sd24-20020a170906ce3800b008b130dab585mr10042710ejb.6.1678310708691; Wed, 08
+ Mar 2023 13:25:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 17/20] dt-bindings: pinctrl: mediatek: mt7986: fix
- patternProperties regex
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
+References: <20221117-b4-amlogic-bindings-convert-v4-0-34e623dbf789@linaro.org>
+ <20221117-b4-amlogic-bindings-convert-v4-2-34e623dbf789@linaro.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v4-2-34e623dbf789@linaro.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 8 Mar 2023 22:24:57 +0100
+Message-ID: <CAFBinCAiS_1nJyPb1+disehZSJTe=ES72pDTeKxazUdpzX+VAw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/5] dt-bindings: nvmem: convert amlogic-meson-mx-efuse.txt
+ to dt-schema
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230303002850.51858-1-arinc.unal@arinc9.com>
- <20230303002850.51858-18-arinc.unal@arinc9.com>
- <20230308211511.GA3850618-robh@kernel.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20230308211511.GA3850618-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9.03.2023 00:15, Rob Herring wrote:
-> On Fri, Mar 03, 2023 at 03:28:46AM +0300, arinc9.unal@gmail.com wrote:
->> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>
->> Set second level patternProperties to '^.*mux.*$' and '^.*conf.*$' on
->> mediatek,mt7986-pinctrl.yaml.
->>
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> ---
->>   .../devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml  | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
->> index 46b7228920ed..e937881210c5 100644
->> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
->> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
->> @@ -72,7 +72,7 @@ patternProperties:
->>       additionalProperties: false
->>   
->>       patternProperties:
->> -      '.*mux.*':
->> +      '^.*mux.*$':
-> 
-> These are equivalent (so is just 'mux', but that's ambiguous). Why are
-> we changing them? Ideally, we'd only have a wildcard on one end.
-
-I've seen your review on Daniel's patch for adding mt7981 pinctrl schema 
-so I wanted other schemas to be on par with your review.
-
-https://lore.kernel.org/linux-mediatek/20230123225943.GA2781371-robh@kernel.org/
-
-Arınç
+On Wed, Mar 8, 2023 at 2:27=E2=80=AFPM Neil Armstrong <neil.armstrong@linar=
+o.org> wrote:
+>
+> Convert the Amlogic Meson6 eFuse bindings to dt-schema.
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
