@@ -2,188 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570CD6B1471
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0F86B146D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjCHVqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 16:46:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
+        id S229529AbjCHVpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 16:45:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjCHVqc (ORCPT
+        with ESMTP id S229956AbjCHVpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 16:46:32 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF2DD49C8;
-        Wed,  8 Mar 2023 13:46:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678311981; x=1709847981;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CYtLrclcsUPbmZzfRccyQP2tLDDi2ZL/pL8AHy1pWGs=;
-  b=KQ2wu0iaipgaTaLlEWdp1/+WfIWo75fOPqXZaTkNamBMqr2pT+7s4htK
-   YVkXyhMN9Jfnr8fbSz++rmsJGfehV+P3XsK2dvnjRgsVFm+D1+U9QMw5z
-   q9LA5xrByHd3lcu6UEjdCyigr7EtfIBiwcy8FwqQV+XbZFzRkQaFx8JTs
-   Zm9+Za0ThYnKveUEPRzcX5sZ0SsQHs1zNpr99S0Dh60BFtmS6XdulfTHc
-   lILUCplLuLKQjHJ+yKKs2tAVPGV/vBDApRCOc7s7ktMtsCYTZlghYS3Ob
-   hL4mkfZ5Y/mwxkNBpxjTyyQD2ROu/mt6asDLJtqq0piAaHyIam4wLv3Lp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="324600131"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="324600131"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 13:42:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="709592466"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="709592466"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 08 Mar 2023 13:41:59 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pa1Xq-0002Pt-2A;
-        Wed, 08 Mar 2023 21:41:58 +0000
-Date:   Thu, 9 Mar 2023 05:41:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused
- variable 'mmpcam_of_match'
-Message-ID: <202303090557.mLLxrNKE-lkp@intel.com>
+        Wed, 8 Mar 2023 16:45:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B82559D6
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:44:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678311778;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FdnsXLolUJxCc29xMKmh4dWAYjznbbiQcfHEwgveAgs=;
+        b=VVJ228pOogFnRelhE7bkyKSP031GbdrjZCIxgewK5aCfOaggIeDIEYXZJG2d8UoMuEFwAo
+        yLfzCrWwJVKyn24QA32jTHIPGWOpqLQIvh9WP3P1nZVlvHnJ/uM5yhkQ57W69eNYUDpLEC
+        20DakzfZQZLJWgVh7ZA4EVGjp5EtSgc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-100-AvipUr7jOD25WLIQ8vSGaQ-1; Wed, 08 Mar 2023 16:42:53 -0500
+X-MC-Unique: AvipUr7jOD25WLIQ8vSGaQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7931185A588;
+        Wed,  8 Mar 2023 21:42:52 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3F0932166B26;
+        Wed,  8 Mar 2023 21:42:52 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id E5BF74015389B; Wed,  8 Mar 2023 18:42:27 -0300 (-03)
+Date:   Wed, 8 Mar 2023 18:42:27 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Russell King <linux@armlinux.org.uk>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org
+Subject: Re: [PATCH v4 05/12] this_cpu_cmpxchg: x86: switch this_cpu_cmpxchg
+ to locked, add _local function
+Message-ID: <ZAkBQ+Vtdn1alEyK@tpad>
+References: <20230305133657.255737580@redhat.com>
+ <20230305134053.537803923@redhat.com>
+ <20230306112240.GB1267364@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230306112240.GB1267364@hirez.programming.kicks-ass.net>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+On Mon, Mar 06, 2023 at 12:22:40PM +0100, Peter Zijlstra wrote:
+> On Sun, Mar 05, 2023 at 10:37:02AM -0300, Marcelo Tosatti wrote:
+> > Goal is to have vmstat_shepherd to transfer from
+> > per-CPU counters to global counters remotely. For this,
+> > an atomic this_cpu_cmpxchg is necessary.
+> > 
+> > Following the kernel convention for cmpxchg/cmpxchg_local,
+> > change x86's this_cpu_cmpxchg_ helpers to be atomic.
+> > and add this_cpu_cmpxchg_local_ helpers which are not atomic.
+> 
+> Urgh.. much hate for this. this_cpu_*() is local, per definition,
+> always.
 
-FYI, the error/warning still remains.
+:Author: Christoph Lameter, August 4th, 2014
+:Author: Pranith Kumar, Aug 2nd, 2014
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6a98c9cae232800c319ed69e1063480d31430887
-commit: dc7bbea90075b57772e9a28043061bf71d96f06f media: platform: rename marvell-ccic/ to marvell/
-date:   12 months ago
-config: s390-buildonly-randconfig-r003-20230308 (https://download.01.org/0day-ci/archive/20230309/202303090557.mLLxrNKE-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dc7bbea90075b57772e9a28043061bf71d96f06f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dc7bbea90075b57772e9a28043061bf71d96f06f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/
+this_cpu operations are a way of optimizing access to per cpu
+variables associated with the *currently* executing processor. This is
+done through the use of segment registers (or a dedicated register where
+the cpu permanently stored the beginning of the per cpu area for a
+specific processor).
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303090557.mLLxrNKE-lkp@intel.com/
+this_cpu operations add a per cpu variable offset to the processor
+specific per cpu base and encode that operation in the instruction
+operating on the per cpu variable.
 
-All warnings (new ones prefixed by >>):
+This means that there are no atomicity issues between the calculation of
+the offset and the operation on the data. Therefore it is not
+necessary to disable preemption or interrupts to ensure that the
+processor is not changed between the calculation of the address and
+the operation on the data.
 
-   In file included from drivers/media/platform/marvell/mmp-driver.c:17:
-   In file included from include/media/v4l2-device.h:13:
-   In file included from include/media/v4l2-subdev.h:15:
-   In file included from include/media/v4l2-common.h:270:
-   In file included from include/linux/spi/spi.h:15:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/media/platform/marvell/mmp-driver.c:17:
-   In file included from include/media/v4l2-device.h:13:
-   In file included from include/media/v4l2-subdev.h:15:
-   In file included from include/media/v4l2-common.h:270:
-   In file included from include/linux/spi/spi.h:15:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/media/platform/marvell/mmp-driver.c:17:
-   In file included from include/media/v4l2-device.h:13:
-   In file included from include/media/v4l2-subdev.h:15:
-   In file included from include/media/v4l2-common.h:270:
-   In file included from include/linux/spi/spi.h:15:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused variable 'mmpcam_of_match' [-Wunused-const-variable]
-   static const struct of_device_id mmpcam_of_match[] = {
-                                    ^
-   13 warnings generated.
+>> Call the above [1].
 
+>> Up to this point, everything remains valid with adding lock
+>> to cmpxchg. That is, it makes sense to have a locked
+>> this_cpu_cmpxchg, operating on per-CPU data, without the need
+>> to disable preemption/interrupts to ensure processor is not
+>> changed.
 
-vim +/mmpcam_of_match +364 drivers/media/platform/marvell/mmp-driver.c
+Read-modify-write operations are of particular interest. Frequently
+processors have special lower latency instructions that can operate
+without the typical synchronization overhead, but still provide some
+sort of relaxed atomicity guarantees. The x86, for example, can execute
+RMW (Read Modify Write) instructions like inc/dec/cmpxchg without the
+lock prefix and the associated latency penalty.
 
-bb0a896e3d5083 drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-12-30  363  
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28 @364  static const struct of_device_id mmpcam_of_match[] = {
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  365  	{ .compatible = "marvell,mmp2-ccic", },
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  366  	{},
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  367  };
-08aac0e32fe44b drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-07-22  368  MODULE_DEVICE_TABLE(of, mmpcam_of_match);
-67a8dbbc4e04cd drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-06-11  369  
+>> This sentence above makes sense if the data is accessed locally.
+>> However, we are extending it (this_cpu_cmpxchg) to the case
+>> where we want the data to be accessed remotely (therefore need
+>> to be a locked access), but still want the benefits of [1].
+>>
+>> For example, this_cpu_xchg implies LOCK semantics.
 
-:::::: The code at line 364 was first introduced by commit
-:::::: 83c40e6611ec1e548ece34f6940f516333abc16a media: marvell-ccic/mmp: add devicetree support
+Access to the variable without the lock prefix is not synchronized but
+synchronization is not necessary since we are dealing with per cpu
+data specific to the currently executing processor. Only the current
+processor should be accessing that variable and therefore there are no
+concurrency issues with other processors in the system.
 
-:::::: TO: Lubomir Rintel <lkundrak@v3.sk>
-:::::: CC: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+----
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+So in summary, i understand your POV, but:
+
+1) Have outlined arguments above which point that this_cpu_xxx and 
+locked instructions can co-exist (in fact, they are already do, for
+this_cpu_xchg).
+
+2) In case you still think this is a bad idea, any suggestions for
+improvements?
+
+Thanks
+
