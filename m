@@ -2,97 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3864E6B10E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6527F6B10EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjCHSRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 13:17:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
+        id S230062AbjCHSVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 13:21:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjCHSRU (ORCPT
+        with ESMTP id S229546AbjCHSVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 13:17:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113202684
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 10:17:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9DCE618EE
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 18:17:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9319BC433EF;
-        Wed,  8 Mar 2023 18:17:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678299439;
-        bh=WSCK4EjboqTykWYFTwfbIgSgksqAobdYHV2zBrtxayQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fm9Tp+jDqiNJLqPdubQL+sEqoF7WZwjzbyVuKq+9MWn9ysbdCt5ZNPU6JbsKRN9Zg
-         JkNLuMwYtPX2w/9tvhKaBqMIj07vlY3iYlZlBEYZJPY9ZMIejpGFpG1QswMMXHZAP5
-         YNk/VSlUjOYLNxMQknxZksyrIkd43L/P54M3dWwVGmuGZuqoyVE94rUkuy0/CjfH7C
-         9xk+6GsVbcc/U3HEIPRscOwUkG2+2HIyUaaP8ISTMxMUgD+3f/BkZjqMgaeq03nomF
-         Sm74VuBfnURUVXRNZbd1apZCYyTbaV/1QwjQfG33+M+J5fNwGfJNRZ0xXRDIhX6jBF
-         /ibogoPIXwq4A==
-From:   SeongJae Park <sj@kernel.org>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, damon@lists.linux.dev
-Subject: Re: [PATCH v3 0/3] mm/damon/paddr: minor code improvement
-Date:   Wed,  8 Mar 2023 18:17:17 +0000
-Message-Id: <20230308181717.46186-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230308083311.120951-1-wangkefeng.wang@huawei.com>
-References: 
+        Wed, 8 Mar 2023 13:21:02 -0500
+Received: from irl.hu (irl.hu [95.85.9.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2566C298DC;
+        Wed,  8 Mar 2023 10:21:00 -0800 (PST)
+Received: from [192.168.2.4] (51b69c8d.dsl.pool.telekom.hu [::ffff:81.182.156.141])
+  (AUTH: CRAM-MD5 soyer@irl.hu, )
+  by irl.hu with ESMTPSA
+  id 000000000006FCB9.000000006408D209.000A514F; Wed, 08 Mar 2023 19:20:57 +0100
+Message-ID: <600394e8-371e-59bc-8620-ef976b3b671b@irl.hu>
+Date:   Wed, 8 Mar 2023 19:20:50 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] arm64: dts: qcom: sdm845-oneplus-common: add PN553 NFC
+From:   Gergo Koteles <soyer@irl.hu>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org
+References: <20230307185942.1737867-1-soyer@irl.hu>
+ <22b91a6c-7a27-039c-21b8-0d3913e73dbc@linaro.org>
+ <78de9402-d14a-4897-a602-9fd214c31c20@irl.hu>
+Content-Language: en-US, hu
+In-Reply-To: <78de9402-d14a-4897-a602-9fd214c31c20@irl.hu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kefeng,
-
-On Wed, 8 Mar 2023 16:33:08 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
-
-> Unify folio_put() to make code more clear, and also fix minor issue in
-> damon_pa_young().
+On 2023. 03. 07. 20:04, Gergo Koteles wrote:
+> On 2023. 03. 07. 20:02, Konrad Dybcio wrote:
+>>
+>>
+>> On 7.03.2023 19:59, Gergo Koteles wrote:
+>>> The OnePlus 6/6T both have a NQ330 (PN553 + P73N2M0).
+>>> The PN533 supported by the nxp-nci-i2c driver in mainline.
+>>> It detects/reads NFC tags using "nfctool".
+>>>
+>>> Signed-off-by: Gergo Koteles <soyer@irl.hu>
+>>> ---
+>> Next time include a changelog below this --- line detailing
+>> what changed between revisions.
+>>
+> Okey. Thanks for the suggestion and the review.
 > 
-> v3: 
-> - as SJ split the bugfix from v2, and it has merged[1], only do code
->   improvement
-> - fix a missing folio_sz update in damon_pa_young()
-> - add RB from SJ
-> - rebase on next-20230308
+>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>
+>> Konrad
+>>>   .../boot/dts/qcom/sdm845-oneplus-common.dtsi  | 39 +++++++++++++++++++
+>>>   1 file changed, 39 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi 
+>>> b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+>>> index 64638ea94db7..5e45801031d8 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+>>> @@ -380,6 +380,24 @@ zap-shader {
+>>>       };
+>>>   };
+>>> +&i2c3 {
+>>> +    clock-frequency = <400000>;
+>>> +    status = "okay";
+>>> +
+>>> +    nfc@28 {
+>>> +        compatible = "nxp,nxp-nci-i2c";
+>>> +        reg = <0x28>;
+>>> +
+>>> +        interrupts-extended = <&tlmm 63 IRQ_TYPE_EDGE_RISING>;
+>>> +
+>>> +        enable-gpios = <&tlmm 12 GPIO_ACTIVE_HIGH>;
+>>> +        firmware-gpios = <&tlmm 62 GPIO_ACTIVE_HIGH>;
+>>> +
+>>> +        pinctrl-0 = <&nfc_int_active &nfc_enable_active 
+>>> &nfc_firmware_active>;
+>>> +        pinctrl-names = "default";
+>>> +    };
+>>> +};
+>>> +
+>>>   &i2c10 {
+>>>       status = "okay";
+>>>       clock-frequency = <100000>;
+>>> @@ -753,6 +771,27 @@ &usb_1_hsphy {
+>>>   &tlmm {
+>>>       gpio-reserved-ranges = <0 4>, <81 4>;
+>>> +    nfc_int_active: nfc-int-active-state {
+>>> +        pins = "gpio63";
+>>> +        function = "gpio";
+>>> +        drive-strength = <2>;
+>>> +        bias-pull-up;
+>>> +    };
+>>> +
+>>> +    nfc_enable_active: nfc-enable-active-state {
+>>> +        pins = "gpio12";
+>>> +        function = "gpio";
+>>> +        drive-strength = <2>;
+>>> +        bias-pull-up;
+>>> +    };
+>>> +
+>>> +    nfc_firmware_active: nfc-firmware-active-state {
+>>> +        pins = "gpio62";
+>>> +        function = "gpio";
+>>> +        drive-strength = <2>;
+>>> +        bias-pull-up;
+>>> +    };
+>>> +
+>>>       tri_state_key_default: tri-state-key-default-state {
+>>>           pins = "gpio40", "gpio42", "gpio26";
+>>>           function = "gpio";
 > 
-> [1] https://lkml.kernel.org/r/20230304193949.296391-1-sj@kernel.org
-> 
-> v2: 
-> - use goto lable in damon_pa_pageout() and refact too more functions
-> 
-> Kefeng Wang (3):
->   mm/damon/paddr: minor refactor of damon_pa_pageout()
->   mm/damon/paddr: minor refactor of
->     damon_pa_mark_accessed_or_deactivate()
->   mm/damon/paddr: fix missing folio_sz update in damon_pa_young()
-> 
->  mm/damon/paddr.c | 26 ++++++++++----------------
->  1 file changed, 10 insertions(+), 16 deletions(-)
+Hi,
 
-For the series,
+Please disregard this patch. Although it can detect the tags and the 
+tags type, the full readout does not work. I will send a new version 
+when I figure out what's wrong.
 
-Reviewed-by: SeongJae Park <sj@kernel.org>
+Thanks
 
-Thank you for your efforts on this, Kefeng!
-
-
-Thanks,
-SJ
-
-> 
-> -- 
-> 2.35.3
-> 
