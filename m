@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1606B0741
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 745756B0744
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjCHMg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 07:36:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
+        id S230257AbjCHMhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 07:37:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbjCHMgV (ORCPT
+        with ESMTP id S229772AbjCHMhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:36:21 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F3DAF6BD
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:36:15 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-53852143afcso302262727b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 04:36:15 -0800 (PST)
+        Wed, 8 Mar 2023 07:37:05 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D405FBF8CF
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:36:54 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id j11so45587047edq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 04:36:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678278974;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xO1hBBzWC5xPl3/6643V8lJnrCNoLWUVWizLzOaN//c=;
-        b=lQUclai1rdzYsqXvn59DO1R8bwwSUY5U6B0bbjA2BDU+047RJ9UdyK6bU2MzTyfIDS
-         mUOgqgbbsNvQEqS4UHjZ0k3oCBKr18Met1VXlMA8hkhqPG0nAWVSlTZqoMdmM+k1+6if
-         0qKiFs1m/bEwpmBCA4N9YsVAas+9sQv/jvH6iR6VSku+mxSKbuS9p0g/hIZ1T/yJnPrC
-         IiNE2aSNK/9/8neaOW0e/ZzeRHXDblGy+5Bsqtt4JfquMhvk/rBR8azNf9r9GPGcgMlR
-         e2ygBT1S03YLBSS6/2Oca1YUPMq8HAvm1omdtlfB1tDB4fRxUpy8QKLunc5yyLiY200H
-         yFnQ==
+        d=linaro.org; s=google; t=1678279013;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6GKBb6kXCj8IrQlzVxgZe7N+HQnXLiN6ZWwRdX8kCbc=;
+        b=mVcd0/i9/l4WNM5n9E4tDTmyaJABsSm0mjw+4cyaD/uSMbmp+St/B8IxAyUz93mImS
+         i+SLwK3l4qf4/QOryd7sv49Fl7S6LHIFxDPEw44TaWFnFkrw2/ebepWMZNjQltIrd0AF
+         JIDHscgjW2OPAKvRC2GGd3U1A4TINw8dKO47yXq1hNPYaVf1ENE7/3OaX/MIFoRWMwd2
+         T74Pl1E4jOLW5HE5xVllwHdHR1b0kWWGScNi7nZ5BD0pQWo5dW+b08PK/pjR9BGJIoFd
+         clq47lzOiomdqr1SUtqwesPpQF24PMj4yB7wVKTQDCqgagJobbyyrzPyN+tJpBcejt9O
+         Pqpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678278974;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xO1hBBzWC5xPl3/6643V8lJnrCNoLWUVWizLzOaN//c=;
-        b=8HVFMJwkG8D7tc0u4J9kO7nXdmMdWSnQ4VD9TUmXadVIOpWAGrcNrP8vFt+hLGg09k
-         ULnvZHIke9H80o8nIOHv+7yaJUsBigcVD7MD4YZptOJRG632AeUEecnl3nDcnj+R8yE1
-         5qIPtxf5izo+arY38VOhzZogHn7abwD7/hwMrxI6KLd/OwtK6pzICNYo9IyEU9QLoGVv
-         sKalyscFEsGLvhFOAqlhbOLkAhD0p36VlNG7Hn8KI3ZmHCRbrSZrbSB9bNW6qE2a7e8K
-         marXNOfho9jcMC/9MT/8loiTiQ0YxTQE/9xGOkmoEQbyWQW0QdnrKrYZaqRAfUrg5l3z
-         RinQ==
-X-Gm-Message-State: AO0yUKUEHktxnwyGkk4G1iQYpg3bZ0E8GKQY5pyzsrm6/MM0asTUmMTm
-        3VzC3ntiq6PvpU4rXsuPMp4ZzBNxCiuXQPxjxfIB9g==
-X-Google-Smtp-Source: AK7set85Mr1/+R8baj8+S6hdGBaznKQDfCA4bpt2xrYC83pDU9GtCFHK2UnDuGKv9cj1bNhC1nqZUhy9JWYm4X7LHNE=
-X-Received: by 2002:a81:b288:0:b0:52e:ee55:a81e with SMTP id
- q130-20020a81b288000000b0052eee55a81emr11524770ywh.7.1678278974522; Wed, 08
- Mar 2023 04:36:14 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678279013;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6GKBb6kXCj8IrQlzVxgZe7N+HQnXLiN6ZWwRdX8kCbc=;
+        b=t96G0S6hBfK2dLx24zVzb0hPw5lJpCHeGMJALyQX2laSEHpYYbZkgFPs6+s3Gc2EHo
+         sJNe6nibAAKG4pin/Ed02d+dw2hSbbK5JZdO8AX4DNthB3N33GM6DDMQIM5DCitHCyg4
+         hLS8Go8+q4jgfKxzoNinLg3g6R3kKtJqCX5fR+Rb45mmnDPC2e+h0MRg5QTbEbM/VRqN
+         AngfMhA5owmRC+X61PtZ0K39oF2Qs2BRnfCeMYs10h+kt9yvg6GpbRhu3DYs/4dHDX8M
+         OdZ0ixZSb5R6nS1fNkZ59rxQrECxaAQhAl9DP6C6o5XGPy56bKsM8rm3K5ZSlDQVfAte
+         eWKg==
+X-Gm-Message-State: AO0yUKWxNYE16JOHJNqeYIIFRbzY1wuacOY1HoH0fgqHU37CuMc4RVhf
+        W+nETNMPL7XAv/YLQpNVCx5yyg==
+X-Google-Smtp-Source: AK7set84lbXKZOJNt3FRVlRb4jkKKSLIkuPEbxq/uASmuTblYP+Gz4gKIodsvXuvbZ1xLWs/64XiSw==
+X-Received: by 2002:a17:907:8691:b0:8b1:3009:536b with SMTP id qa17-20020a170907869100b008b13009536bmr22082511ejc.29.1678279013309;
+        Wed, 08 Mar 2023 04:36:53 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:ff33:9b14:bdd2:a3da? ([2a02:810d:15c0:828:ff33:9b14:bdd2:a3da])
+        by smtp.gmail.com with ESMTPSA id ky24-20020a170907779800b008edf49f10a7sm7398003ejc.100.2023.03.08.04.36.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 04:36:52 -0800 (PST)
+Message-ID: <8f7bddf8-84de-27b5-26a3-d80b2e2f0097@linaro.org>
+Date:   Wed, 8 Mar 2023 13:36:52 +0100
 MIME-Version: 1.0
-References: <20230308104009.260451-1-brgl@bgdev.pl> <20230308104009.260451-7-brgl@bgdev.pl>
- <5aacecc9-e3e4-f229-350d-14d547b52578@linaro.org>
-In-Reply-To: <5aacecc9-e3e4-f229-350d-14d547b52578@linaro.org>
-From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date:   Wed, 8 Mar 2023 13:36:03 +0100
-Message-ID: <CACMJSetFuejNBPQBr8OBeq-edqhwNZfQ+Uz6iBJYf_kt+i_OeQ@mail.gmail.com>
-Subject: Re: [PATCH v4 6/9] arm64: dts: qcom: sa8775p-ride: enable the SPI node
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] arm64: dts: qcom: sa8540p-ride: correct name of
+ remoteproc_nsp0 firmware
+Content-Language: en-US
+To:     Brian Masney <bmasney@redhat.com>
+Cc:     andersson@kernel.org, quic_shazhuss@quicinc.com, agross@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230307232340.2370476-1-bmasney@redhat.com>
+ <1a915c33-ef32-852c-a856-10c8d35be151@linaro.org> <ZAh6O9TbX/pnOnxp@x1>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZAh6O9TbX/pnOnxp@x1>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,68 +79,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Mar 2023 at 11:58, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 8.03.2023 11:40, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > Enable the SPI interface exposed on the sa8775p-ride development board.
-> >
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-> > index 5fdce8279537..d01ca3a9ee37 100644
-> > --- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-> > +++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-> > @@ -14,6 +14,7 @@ / {
-> >       aliases {
-> >               serial0 = &uart10;
-> >               i2c18 = &i2c18;
-> > +             spi16 = &spi16;
-> >       };
-> >
-> >       chosen {
-> > @@ -40,12 +41,25 @@ &sleep_clk {
-> >       clock-frequency = <32764>;
-> >  };
-> >
-> > +&spi16 {
-> > +     pinctrl-0 = <&qup_spi16_default>;
-> > +     pinctrl-names = "default";
-> > +     status = "okay";
-> > +};
-> > +
-> >  &tlmm {
-> >       qup_uart10_default: qup-uart10-state {
-> >               pins = "gpio46", "gpio47";
-> >               function = "qup1_se3";
-> >       };
-> >
-> > +     qup_spi16_default: qup-spi16-state {
-> > +             pins = "gpio86", "gpio87", "gpio88", "gpio89";
-> Rather weird to have an identical configuration for all
-> MOSI/MISO/CS/CLK pins.. Please doublecheck
->
+On 08/03/2023 13:06, Brian Masney wrote:
+> On Wed, Mar 08, 2023 at 12:02:04PM +0100, Krzysztof Kozlowski wrote:
+>> On 08/03/2023 00:23, Brian Masney wrote:
+>>> The cdsp.mbn firmware that's referenced in sa8540p-ride.dts is actually
+>>> named cdsp0.mbn in the deliverables from Qualcomm. Let's go ahead and
+>>> correct the name to match what's in Qualcomm's deliverable.
+>>
+>> I don't think vendor deliverables matter. linux-firmware is here more
+>> important. The file will be cdsp.mbn in the firmware, won't it?
+> 
+> cdsp0.mbn and cdsp1.mbn for the sa8540p are not in linux-firmware and I
+> far as I know there's no plan for someone to submit those since QC would
+> need to approve that. I can ask though since the DTS for these two bits
+> has been submitted upstream.
 
-This is in line with many other boards in arch/arm64/boot/dts/qcom/
-that have the same config for all SPI pins. Some of them unnecessarily
-split the config into separate state nodes with the same config
-though.
+If they are never going to be submitted, vendor is allowed to rename
+them all the time in their "deliverables". Are you going to rename the
+file every time Qualcomm decides to rename them? There is no single
+guarantee the names would be fixed, because vendor is allowed to do
+absolutely anything.
 
-Bart
+Sorry, but any argument in upstream DTS that "someone downstream does
+something" is deemed to fail in many cases.
 
-> Konrad
-> > +             function = "qup2_se2";
-> > +             drive-strength = <6>;
-> > +             bias-disable;
-> > +     };
-> > +
-> >       qup_i2c18_default: qup-i2c18-state {
-> >               pins = "gpio95", "gpio96";
-> >               function = "qup2_se4";
+Best regards,
+Krzysztof
+
