@@ -2,72 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38306B1022
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C65636B1026
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbjCHRYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 12:24:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
+        id S229574AbjCHRZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 12:25:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjCHRYU (ORCPT
+        with ESMTP id S229468AbjCHRZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 12:24:20 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE294311DD
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 09:24:10 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id l7-20020a05600c4f0700b003e79fa98ce1so1611778wmq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 09:24:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678296249;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DcGUcMsaep9Sz9s+gH/VvnsZCqctQ0iZxaFub1OCSCw=;
-        b=ZU6ZJGzD4UDtFCQ35p1nXj3ZLJzS2aFS/dsinOjeKL18alNhvzkowov7XN8ZrG0fhn
-         LHXgkERT1igoi9Me9dljwzniTIxl+/CBKCmEFJcPqt3pUipcZpZ9gGjZWG+wMuIRGF56
-         8Dct37N74oD7lpJwV8GMn1ZllUh0j6c5WJC3xknA54HEY9OUY/rHzLe8fjdxeFwqyTtQ
-         SY9gYgNGm+3X1tJ1062oSpXxlK20GWOd3gM2VxcIUyzgveS5hiTBC5kiTmYb9B4FjSj2
-         GknA0+Osyur6B3vT8P0LbAzvabvc0JL+4Gjr7uCCQgzmfiQkotaQoP7F1oG16ywdsERj
-         VdpQ==
+        Wed, 8 Mar 2023 12:25:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B9C22025
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 09:24:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678296276;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LPQJ89LugumAZFsgY4YTmoOcQfUcQJ8Obmpk4rX3dbQ=;
+        b=RpmnDQPlZC+sRew7pi/JdyZUKF2rvMqHA4jAALOVJXvy0uBnqJn/5vptvhMdA+ikU0esK/
+        tezTKnt2KFQIrqIdWDEN/kSSaH6iRReP5d8zexbU+MUlqchPF/BG7s8t3cZBpKEIKxbib1
+        moA0kM67x/4IY8C2Nh2MVA0AEdblvwo=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-589-PLIFhnJlNoq1JWbK46fUcg-1; Wed, 08 Mar 2023 12:24:34 -0500
+X-MC-Unique: PLIFhnJlNoq1JWbK46fUcg-1
+Received: by mail-qt1-f199.google.com with SMTP id g13-20020ac8124d000000b003bfba5d76a3so9504679qtj.15
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 09:24:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678296249;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DcGUcMsaep9Sz9s+gH/VvnsZCqctQ0iZxaFub1OCSCw=;
-        b=ANdd96/zY78QhBZ07nyzzuM+5IlJwYpeTXqJjLzhT8nKhU39Eqd5+tVQuxLY4zLLgi
-         yX2gWCiCxhlElTGjgNo1VwjQaKDshXFulvOTZvKSw2dzWn+gL8MCQsMp5aNErNvWwG9J
-         QM1spP3oi6i8h2cYpS+O5ZZ9DJmyMZ+L7zaSRdCbgAztco9Skid1q4RbkF6aujk5Hi/a
-         CxtWo4/pmfw5k3lpwg2ynqB7EN4hFgItroAjIa2g2VPoENNPe+zhDTwgEOyKYZtsPCDf
-         Ds06V1cJ/HK8Q+B48ftsjBY7yS2ssr3LNO1BNx1OZTMgNL4xbMbbDz1UZAjfR6OJo98m
-         CXyg==
-X-Gm-Message-State: AO0yUKVsG29fupo3Xtj3rsH35T7SgWs2gBHyV3YWzIjgk/nTLplLNh9e
-        2tJL8tU1xuD2MAs/3jrKo0iTEkcs8gDy3GzQMPhJrvKkg7/6ew==
-X-Google-Smtp-Source: AK7set9gNpVrN7hb/ZmjTIrII5MZaQHJrMpv//MkZZZyAjVSbynWSrzfr0tLOKx/OOwBTgYOySTPrBguhXnAmDJSKj8=
-X-Received: by 2002:a05:600c:997:b0:3df:97fd:2221 with SMTP id
- w23-20020a05600c099700b003df97fd2221mr4000756wmp.7.1678296249000; Wed, 08 Mar
- 2023 09:24:09 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678296274;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LPQJ89LugumAZFsgY4YTmoOcQfUcQJ8Obmpk4rX3dbQ=;
+        b=0PJXYlRNXbnmrQXnMARb7dlNXX2CLUptsGZ4uCAUeYyEiCBpdxuVHz1Tc6C4LCl5iz
+         RNGfFXHQkba6fe4d+79YlDi45I3hCtm61vzQ9jTf5+ORmlGBroj8HwIUWIQYcziSJKZz
+         SvzgSpLSz4upJcRCmvY6GSKnqwHwcMjKCfA8AsTAVSz2mIbN/kR82S4B6FTcC5EuFHMV
+         Ijcsk8++fenH73P1Uetbw9A0DyfDHjB/Q6+zRDvItK4EFLCn7snSKFDJbvHCHXvBCs+g
+         1oXO2X9ySjqzWix9DykM41sF/UKYFDPrAHm5J4m9iDuUEvfQRmUEBsC4VXAzUX1p1x11
+         25hg==
+X-Gm-Message-State: AO0yUKU+Fb3V/kgCl0N+sLnEuSKdtO5bVYLJ1JfJMnqaN92yxvSKHYbj
+        GJW7UbgmC4IW3HIeufNN4nyIlkE7dli871depP6uNsUmAfDt0/AVM6LCDnK00EbesIasxk35ZP4
+        WOANWMi8NfnW8Bnj09AqEoENU
+X-Received: by 2002:a05:622a:1a1c:b0:3b8:6788:bf25 with SMTP id f28-20020a05622a1a1c00b003b86788bf25mr31680506qtb.23.1678296274308;
+        Wed, 08 Mar 2023 09:24:34 -0800 (PST)
+X-Google-Smtp-Source: AK7set/O2FzdqotFaGnCpsXoZJ+sIqm3xrIxOl15eWdAqcdkdwA+CLA5ctetlB0UcvXYkd3YXuF88g==
+X-Received: by 2002:a05:622a:1a1c:b0:3b8:6788:bf25 with SMTP id f28-20020a05622a1a1c00b003b86788bf25mr31680478qtb.23.1678296274062;
+        Wed, 08 Mar 2023 09:24:34 -0800 (PST)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::21])
+        by smtp.gmail.com with ESMTPSA id o26-20020ac8429a000000b003b8484fdfccsm12094243qtl.42.2023.03.08.09.24.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 09:24:33 -0800 (PST)
+Date:   Wed, 8 Mar 2023 11:24:31 -0600
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/4] serial: qcom-geni: fix console shutdown hang
+Message-ID: <20230308172431.pcjyhc2dq6geuk76@halaney-x13s>
+References: <20230307164405.14218-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-References: <299fbb80-e3ab-3b7c-3491-e85cac107930@intel.com>
-In-Reply-To: <299fbb80-e3ab-3b7c-3491-e85cac107930@intel.com>
-From:   Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Date:   Wed, 8 Mar 2023 18:24:05 +0100
-Message-ID: <CAPAsAGyG2_sUfb7aPSPuMatMraDbPCFKxhv2kSDkrV1XxQ8_bw@mail.gmail.com>
-Subject: Re: KASLR vs. KASAN on x86
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        kasan-dev@googlegroups.com, Kees Cook <keescook@chromium.org>,
-        Thomas Garnier <thgarnie@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230307164405.14218-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,72 +85,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 11:35=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
- wrote:
->
-> Hi KASAN folks,
->
-> Currently, x86 disables (most) KASLR when KASAN is enabled:
->
-> > /*
-> >  * Apply no randomization if KASLR was disabled at boot or if KASAN
-> >  * is enabled. KASAN shadow mappings rely on regions being PGD aligned.
-> >  */
-> > static inline bool kaslr_memory_enabled(void)
-> > {
-> >         return kaslr_enabled() && !IS_ENABLED(CONFIG_KASAN);
-> > }
->
-> I'm a bit confused by this, though.  This code predates 5-level paging
-> so a PGD should be assumed to be 512G.  The kernel_randomize_memory()
-> granularity seems to be 1 TB, which *is* PGD-aligned.
->
-> Are KASAN and kernel_randomize_memory()/KASLR (modules and
-> cpu_entry_area randomization is separate) really incompatible?  Does
-> anyone have a more thorough explanation than that comment?
->
+On Tue, Mar 07, 2023 at 05:44:01PM +0100, Johan Hovold wrote:
+> This series fixes some of the fallout after a recent series adding
+> support for DMA transfers to the Qualcomm geni serial driver.
+> 
+> Most importantly it fixes a hang during reboot when using a serial
+> console and the getty is stopped during reboot.
+> 
+> Doug just posted an equivalent fix here:
+> 
+> 	https://lore.kernel.org/lkml/20230307073155.1.Iaab0159b8d268060a0e131ebb27125af4750ef99@changeid
+> 
+> but the commit message only mentions the regression with respect to
+> kgdb, which is not as widely used serial consoles generally, so I
+> figured I'd post my version for completeness.
+> 
+> Either version of that fix should address the immediate regression, but
+> fixing the underlying problems which have been there since the driver
+> was first merged is going to be a bit more involved.
+> 
+> The rest of the series fixes a few bugs in the new DMA support that I
+> found while investigating the console regression.
+> 
+> Johan
+> 
+> 
+> Johan Hovold (4):
+>   serial: qcom-geni: fix console shutdown hang
+>   serial: qcom-geni: fix DMA mapping leak on shutdown
+>   serial: qcom-geni: fix mapping of empty DMA buffer
+>   serial: qcom-geni: drop bogus uart_write_wakeup()
+> 
+>  drivers/tty/serial/qcom_geni_serial.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> -- 
+> 2.39.2
+> 
 
-Yeah, I agree with you here, the comment doesn't make sense to me as well.
-However, I see one problem with KASAN and kernel_randomize_memory()
-compatibility:
-vaddr_start - vaddr_end includes KASAN shadow memory
-(Documentation/x86/x86_64/mm.rst):
-   ffffea0000000000 |  -22    TB | ffffeaffffffffff |    1 TB |
-virtual memory map (vmemmap_base)
-   ffffeb0000000000 |  -21    TB | ffffebffffffffff |    1 TB | ... unused =
-hole
-   ffffec0000000000 |  -20    TB | fffffbffffffffff |   16 TB | KASAN
-shadow memory
-   fffffc0000000000 |   -4    TB | fffffdffffffffff |    2 TB | ... unused =
-hole
-                    |            |                  |         |
-vaddr_end for KASLR
+Realized this has been affecting me (with me blaming it on something
+else prior) off and on. Thanks for the fix!
 
-So the vmemmap_base and probably some part of vmalloc could easily end
-up in KASAN shadow.
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
 
-> This isn't a big deal since KASAN is a debugging option after all.  But,
-> I'm trying to unravel why this:
->
-> >         if (kaslr_enabled()) {
-> >                 pr_emerg("Kernel Offset: 0x%lx from 0x%lx (relocation r=
-ange: 0x%lx-0x%lx)\n",
-> >                          kaslr_offset(),
-> >                          __START_KERNEL,
-> >                          __START_KERNEL_map,
-> >                          MODULES_VADDR-1);
->
-> for instance uses kaslr_enabled() which includes just randomizing
-> module_load_offset, but *not* __START_KERNEL.  I think this case should
-> be using kaslr_memory_enabled() to match up with the check in
-> kernel_randomize_memory().  But this really boils down to what the
-> difference is between kaslr_memory_enabled() and kaslr_enabled().
-
-This code looks correct to me. __START_KERNEL is just a constant, it's
-never randomized.
-The location of the kernel image (.text, .data ...) however is
-randomized, kaslr_offset() - is the random number here.
-So
-kaslr_enabled() - randomization of the kernel image and modules.
-kaslr_memory_enabled() - randomization of the linear mapping
-(__PAGE_OFFSET), vmalloc (VMALLOC_START) and vmemmap (VMEMMAP_START)
