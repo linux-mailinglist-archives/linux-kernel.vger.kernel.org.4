@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4396B13CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 075CC6B13CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjCHVZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 16:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
+        id S229758AbjCHVZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 16:25:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCHVZL (ORCPT
+        with ESMTP id S229639AbjCHVZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 16:25:11 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E00F25E12;
-        Wed,  8 Mar 2023 13:25:10 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id ay14so67517211edb.11;
-        Wed, 08 Mar 2023 13:25:10 -0800 (PST)
+        Wed, 8 Mar 2023 16:25:40 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806D8D290B
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:25:33 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id bo22so158865pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 13:25:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1678310709;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bEQQ5y1rU+jovQ+RQSf9fz570XBj+oRwE2jbrv64UoU=;
-        b=fABAaGcHA/JuPb3YorxwiN0BG3dM5Jrc4WdT1Gn7VVAIfLK3U7vLy2EJ2Xp4Sm17ht
-         29Ifww1kkszG+k5IqQjNXr/Mh5ersO6r3HKPR8x/3nSdp5b7MEn1Oh9LxJdNgSgUt7Fl
-         00uwgKmEnn6RZ8oNQrbBdUzNMagOg5I6IRSSCvMEIjN4ZKVAthF8L086oMxrZSu8o/6R
-         tWkU4thGaBUQh3WI3aioiNUlcoSyrAnqsfM7+jKYyfdDBBnjG8Q5NklbJTXNuRjZ3wZP
-         gf4+bqoKx3Q67FM331Ro0JSoBkcv0c8KBOp69zIl1rcqAYGGsyyVaDC6OWz4sHljtaM8
-         Zeqg==
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1678310733;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bmzOoZCs46sKhyhk59+DKFkb2aMBcXcrxeigQ+YCTU4=;
+        b=x+EOuqn0mahV8jZh36jVG1TqrbzDt4BkgHSUp64S/nzFR4bMgwuOV+A7UWHRqC1Fra
+         tJNV4Gs3xd3tNPygxRby1lh2exQb1616GniHerwmF1ZZwPVmRqRz0uhMm92Qb+5s/JAI
+         w3SM2Q/oHxZdVaAMVsOu00dzNvekOlF+Td2IBs1We1cpDEA6JK8w8K0rQUnLC24xJP+Y
+         HJuvddvXWtILX8pClXLxfRdn3HZinj7K5mCAImuLcIt0LBOO0t6jJSwLO5RRtNPDLuSs
+         aSnkU473AdphasIATUDAV/md8kxR7DoOy45rEy+1dHhLdX6mK471kCuchTCeYjqL6e5P
+         ew7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678310709;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bEQQ5y1rU+jovQ+RQSf9fz570XBj+oRwE2jbrv64UoU=;
-        b=xLhSHS8oi36SoxzrZEbmZ0UQwvaITGminH3ZGgVLP/nvtytj4xx9ghuz30PwHj3c6B
-         1Y1+TKlbvoSJsZrvbiJRUFG3kU0F/3eCNlEK2U1kbcuOklapa4Fn0SAHZqMEAZTt4YrQ
-         WB8i9+sDIiPUsDOobPBFV0SlcwtJRO+R2UWUiWR5iKeV0B4+r673MljbQUrk0z06vqN7
-         vVJ5SYMxKwTaxT4AMthJqqGHEofmGgspu91AehrFAytVt5bUbcoyv6jfqUKNXWM0C/W/
-         t2RZczG1RCIZPbrrD+IUjJbFQ15tg8vkKJ0rC4xPf8UF1ZZatkXYaajsJVtuGp6DUdQk
-         37Rw==
-X-Gm-Message-State: AO0yUKWS+LWRC1J6fmM3kT5t31/y2zN6XQCmI92K2HYQV+rdhvFaykUW
-        YgjDWGJZDDuwB7PUwAgA7Md80i3cFu5YzNt5ZOU=
-X-Google-Smtp-Source: AK7set9EbJ+kG0WoXhSVXEi4hP8885ePLJPbBRoToqjisvKkiPtNHvmh0Nsh0/o4zHrybOasiIZDvzc3QK81g6iwFc8=
-X-Received: by 2002:a17:906:ce38:b0:8b1:30da:b585 with SMTP id
- sd24-20020a170906ce3800b008b130dab585mr10042710ejb.6.1678310708691; Wed, 08
- Mar 2023 13:25:08 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678310733;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bmzOoZCs46sKhyhk59+DKFkb2aMBcXcrxeigQ+YCTU4=;
+        b=Z7lCFD7v/Gz46DqbJmiOZ+jqSTti8S8BpZrGYmVMqb94kMVhGwAxqxYuIeeNGo9u7z
+         8CU/tnZluzMauDq4tgAt3JM6a1O5P4ucOrphlzrfzZXS5cwZRb3Drnm8JEsrOIhz43yN
+         RKHkHDpZpmLzA/t1AdOGPh4v6Y/1DFIkKrt1XKoADUig6MJuyJKwhF8cuWyFPBVPksrL
+         a9TEfd8UEJ2oTAF5zXRjxn7527uUhBK6NaAqOT7rHGnkh4mhSM5qq75tTo4ducoci4V9
+         dQrKfKteZrPlD0WcX8VtHxL8wEErmHEeBQmHtCBgzpiRr9y7RgW017QRGxYeF/uhn8FC
+         0TVA==
+X-Gm-Message-State: AO0yUKVBZbydJKBQUPr3C55tfurJSb7/nzuwnk50FUgq/No5+YYBQpDh
+        6fjSebBqWtyUUFwo4ECA1s5xAA==
+X-Google-Smtp-Source: AK7set8yE4FKZ4iGjtNFh1nXJmjGKqxf5HRTViI0SSES4LOMIfUP8zBqmb/iTGtU5aDyftUVC3B8oQ==
+X-Received: by 2002:a05:6a20:a624:b0:cc:92ee:b119 with SMTP id bb36-20020a056a20a62400b000cc92eeb119mr15111745pzb.45.1678310733057;
+        Wed, 08 Mar 2023 13:25:33 -0800 (PST)
+Received: from dread.disaster.area (pa49-186-4-237.pa.vic.optusnet.com.au. [49.186.4.237])
+        by smtp.gmail.com with ESMTPSA id a14-20020a62e20e000000b00582f222f088sm9837681pfi.47.2023.03.08.13.25.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 13:25:32 -0800 (PST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pa1Ht-006RAm-Na; Thu, 09 Mar 2023 08:25:29 +1100
+Date:   Thu, 9 Mar 2023 08:25:29 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v1 0/2] Ignore non-LRU-based reclaim in memcg reclaim
+Message-ID: <20230308212529.GL360264@dread.disaster.area>
+References: <20230228085002.2592473-1-yosryahmed@google.com>
+ <20230308160056.GA414058@cmpxchg.org>
+ <CAJD7tka=6b-U3m0FdMoP=9nC8sYuJ9thghb9muqN5hQ5ZMrDag@mail.gmail.com>
+ <20230308201629.GB476158@cmpxchg.org>
+ <CAJD7tkbDN2LUG_EZHV8VZd3M4-wtY9TCO5uS2c5qvqEWpoMvoA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221117-b4-amlogic-bindings-convert-v4-0-34e623dbf789@linaro.org>
- <20221117-b4-amlogic-bindings-convert-v4-2-34e623dbf789@linaro.org>
-In-Reply-To: <20221117-b4-amlogic-bindings-convert-v4-2-34e623dbf789@linaro.org>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Wed, 8 Mar 2023 22:24:57 +0100
-Message-ID: <CAFBinCAiS_1nJyPb1+disehZSJTe=ES72pDTeKxazUdpzX+VAw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] dt-bindings: nvmem: convert amlogic-meson-mx-efuse.txt
- to dt-schema
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJD7tkbDN2LUG_EZHV8VZd3M4-wtY9TCO5uS2c5qvqEWpoMvoA@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 2:27=E2=80=AFPM Neil Armstrong <neil.armstrong@linar=
-o.org> wrote:
->
-> Convert the Amlogic Meson6 eFuse bindings to dt-schema.
->
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+On Wed, Mar 08, 2023 at 12:24:08PM -0800, Yosry Ahmed wrote:
+> > I tried to come up with something better, but wasn't happy with any of
+> > the options, either. So I defaulted to just leaving it alone :-)
+> >
+> > It's part of the shrinker API and the name hasn't changed since the
+> > initial git import of the kernel tree. It should be fine, churn-wise.
+> 
+> Last attempt, just update_reclaim_state() (corresponding to
+> flush_reclaim_state() below). It doesn't tell a story, but neither
+> does incrementing a counter in current->reclaim_state. If that doesn't
+> make you happy I'll give up now and leave it as-is :)
+
+This is used in different subsystem shrinkers outside mm/, so the
+name needs to be correctly namespaced. Please prefix it with the
+subsystem the function belongs to, at minimum.
+
+mm_account_reclaimed_pages() is what is actually being done here.
+It is self describing  and leaves behind no ambiguity as to what is
+being accounted and why, nor which subsystem the accounting belongs
+to.
+
+It doesn't matter what the internal mm/vmscan structures are called,
+all we care about is telling the mm infrastructure how many extra
+pages were freed by the shrinker....
+
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
