@@ -2,193 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492B36B0838
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 457EB6B083A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:16:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbjCHNPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:15:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
+        id S230392AbjCHNP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:15:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbjCHNPI (ORCPT
+        with ESMTP id S230246AbjCHNP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:15:08 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07C6D162D;
-        Wed,  8 Mar 2023 05:11:52 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 1D117604F3;
-        Wed,  8 Mar 2023 14:11:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678281107; bh=9YOSH9fsyQWwKgc7rYyqDCSYLUM86K9yyDYVc5F0/Vc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=U7VOEF/wK5DEXiApc/3iVem4s5vxgIyWW+BNudaqs37JsDK/w/MCLj7mGBPK/LNEp
-         HGcoUchtNEX5SHW/EN1hGIHKjfyitbGR72Sq+/7Ah20s8VYBOVOY1zlz9kfPTmctO1
-         twQlKkSfiUoME6+17LxQBjEJNS7WCmBYjo+HnHJelUtU/PmSOAg+6X7WjpY/HFwGhq
-         00ETNKpDPjLlz60DnmetHlsDeKZwCxEOWIBQAaJ8Cd37rPhCqXdHN4+rZN3sEMdPFl
-         kl8jkU3bzj3x3w6khSNzeFQbwuzIYu+6qqiaz/qVbrV3o6NKMRjQ66UQTbtjiIy3O4
-         eC8dW3U/zaOQA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id SeE9Gx7tn6T1; Wed,  8 Mar 2023 14:11:44 +0100 (CET)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id C6F4D604F5;
-        Wed,  8 Mar 2023 14:11:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678281104; bh=9YOSH9fsyQWwKgc7rYyqDCSYLUM86K9yyDYVc5F0/Vc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=g3TkGpUQlkwUumtS5q6MmMBvvm9Qy4TdoDMIkg67yvd+dYj79RKFVWM5G1+jPMShW
-         f+ZgKBWBiXj2gtnAjacN5r8VD4EWoxxRHzeNGkJuYWhyae5OWHAbbT3HGEULRADsnW
-         HFe7OnpIZ0S3gNfEf1TTwfQnie7wq/wTq3GTnHHpBZ7f1Ff1BiXjw+Tf4UJMX+s5yS
-         lWwY423Gw0iqjrk3dlPiWHT9KfxDce/xKcP7z3cKv45KzZK2XzN4OK2VvmlIx1HXqU
-         HjyqeOmwa48wWFE686RY9gHpJD04ZqVZwQ9R/J5HgCdC7kwr1qOD9zuksaYasNXu7c
-         R1lELc85gDnlA==
-Message-ID: <93d606c4-fe48-757b-28fa-4786ed3302c3@alu.unizg.hr>
-Date:   Wed, 8 Mar 2023 14:11:39 +0100
+        Wed, 8 Mar 2023 08:15:28 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894FCC5611;
+        Wed,  8 Mar 2023 05:12:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=a9sAgt042t8o6ny+aE48pC0mQiSu4cCbNHTT4FuPqyA=; b=YEenRdjR/S2/qI3IoQN+qT86KQ
+        Be65vqLNIn+vK+bBO02Hib6TbHGArTU4HbExSququReIK5DHwOLPxq/h3gWkD7dJrLRzqS76D0vWT
+        TpL4ZTf8yMOUFmZosAhpbSUMWMlbkcJEQSS+kL1uieLXhHyFVCH+IR2bN+DnJceuITaFiubJU4Nzk
+        xefBhv/2GNo5nc9jv9wd54vIbrGD/fOhFfQ2hDP+bjktfOwHe7P5BEwDJtvLEIJNADk86P7OHyZ4K
+        X8FWcNfUWzT/5J/8oYnMrvXy8/frmTAfy2Mr8HrHQrqwp5eq8B/Zf26EvtuXPsWAhAQ3vsP5ExkdM
+        KLaT95dw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46720)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pZtaY-0002ac-UP; Wed, 08 Mar 2023 13:12:15 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pZtaU-0002c3-F8; Wed, 08 Mar 2023 13:12:10 +0000
+Date:   Wed, 8 Mar 2023 13:12:10 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Re: [PATCH net-next v12 08/18] net: ethernet: mtk_eth_soc: fix
+ 1000Base-X and 2500Base-X modes
+Message-ID: <ZAiJqvzcUob2Aafq@shell.armlinux.org.uk>
+References: <cover.1678201958.git.daniel@makrotopia.org>
+ <fd5c7ea79a7f84caac7d0b64b39fe5c4043edfa8.1678201958.git.daniel@makrotopia.org>
+ <ZAhzDDjZ8+gxyo3V@shell.armlinux.org.uk>
+ <ZAh7hA4JuJm1b2M6@makrotopia.org>
+ <ZAiCh8wkdTBT+6Id@shell.armlinux.org.uk>
+ <ZAiFOTRQI36nGo+w@makrotopia.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: INFO: REPRODUCED: memory leak in gpio device in 6.2-rc6
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-References: <Y+y5nZJwZ6ykf0Fz@smile.fi.intel.com>
- <3d96e50b-ed17-9bf5-149b-8a50c7b4cca2@alu.unizg.hr>
- <CAMRc=Mcx=Ko5H_c1YGzA5Jfu3KJqx1pfL3RZuMrV6oTObnUrhQ@mail.gmail.com>
- <4b001ce6-b35d-3ad1-b757-f5f6baca7b51@alu.unizg.hr>
- <Y/N5Dt6G397rkfBd@smile.fi.intel.com>
- <d7762f6f-5b58-cf71-3400-557799de43c0@alu.unizg.hr>
- <Y/Tlq9aY3btfoVUN@smile.fi.intel.com>
- <7856e5a8-d84e-4f41-721b-80b6fc413919@alu.unizg.hr>
- <Y/j2ikfd/wvrDdws@smile.fi.intel.com>
- <2373a9ab-1c38-35fd-e961-9a172f8ce622@alu.unizg.hr>
- <Y/05Nizuc+VJ7GNU@smile.fi.intel.com>
-Content-Language: en-US, hr
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <Y/05Nizuc+VJ7GNU@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAiFOTRQI36nGo+w@makrotopia.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/23 00:13, Andy Shevchenko wrote:
-
-Hi, Andy!
-
->> The logs are extensive if you are willing to skim over them, but I believe the interesting
->> part is this:
+On Wed, Mar 08, 2023 at 12:53:13PM +0000, Daniel Golle wrote:
+> On Wed, Mar 08, 2023 at 12:41:43PM +0000, Russell King (Oracle) wrote:
+> > On Wed, Mar 08, 2023 at 12:11:48PM +0000, Daniel Golle wrote:
+> > > On Wed, Mar 08, 2023 at 11:35:40AM +0000, Russell King (Oracle) wrote:
+> > > > On Tue, Mar 07, 2023 at 03:53:58PM +0000, Daniel Golle wrote:
+> > > > > After conversion to phylink_pcs the 1000Base-X and 2500Base-X modes
+> > > > > would work only after `ethtool -s eth1 autoneg off`.
+> > > > > As ethtool autoneg and the ETHTOOL_LINK_MODE_Autoneg_BIT is supposed
+> > > > > to control auto-negotiation on the external interface it doesn't make
+> > > > > much sense to use it to control on-board SGMII auto-negotiation between
+> > > > > MAC and PHY.
+> > > > > Set correct values to really only enable SGMII auto-negotiation when
+> > > > > actually operating in SGMII mode. For 1000Base-X and 2500Base-X mode,
+> > > > > enable remote-fault detection only if in-band-status is enabled.
+> > > > > This fixes using 1000Base-X and 2500Base-X SFPs on the BananaPi R3
+> > > > > board and also makes it possible to use interface-mode-switching PHYs
+> > > > > operating in either SGMII mode for 10M/100M/1000M or in 2500Base-X for
+> > > > > 2500M mode on other boards.
+> > > > > 
+> > > > > Fixes: 14a44ab0330d ("net: mtk_eth_soc: partially convert to phylink_pcs")
+> > > > > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> > > > 
+> > > > NAK.
+> > > > 
+> > > > There are PHYs out there which operate in SGMII mode but do not
+> > > > exchange the SGMII 16-bit configuration word. The code implemented
+> > > > here by me was explicitly to allow such a configuration to work,
+> > > > which is defined as:
+> > > > 
+> > > > 	SGMII *without* mode == inband
+> > > > 
+> > > > An example of this is the Broadcom 84881 PHY which can be found on
+> > > > SFP modules.
+> > > 
+> > > I also have multiple such 1000Base-T SFP modules here (finisar, AJYA),
+> > > and this change doesn't touch the codepaths relevant for those. They
+> > > are operating in SGMII mode, they have always been working fine.
+> > > 
+> > > What I'm trying to fix here is 1000Base-X and 2500Base-X mode which
+> > > has been broken by introducing ETHTOOL_LINK_MODE_Autoneg_BIT as the
+> > > deciding factor for in-band AN here.
+> > 
+> > ... which is correct.
+> > 
+> > > Can you explain why ETHTOOL_LINK_MODE_Autoneg_BIT was used there in
+> > > first place? Is my understanding of this bit controlling autoneg on the
+> > > *external* interface rather than on the *system-side* interface wrong?
+> > 
+> > Think about what 1000BASE-X is for. It's not really for internal links,
+> > it's intended by IEEE 802.3 to be the 1G *media* side protocol for
+> > 1000BASE-SX, 1000BASE-LX, 1000BASE-CX etc links.
+> > 
+> > Therefore, when being used in that case, one may wish to disable
+> > autoneg over the fibre link. Hence, turning off autoneg via ethtool
+> > *should* turn off autoneg over the fibre link. So, using
+> > ETHTOOL_LINK_MODE_Autoneg_BIT to gate 802.3z autonegotiation the
+> > correct thing to do.
+> > 
+> > If we have a PHY using 1000BASE-X, then it is at odds with the
+> > primary purpose of this protocol, especially with it comes to AN.
+> > This is why phylink used to refuse to accept PHYs when using 802.3z
+> > mode, but Marek wanted this to work, so relaxed the checks
+> > preventing such a setup working.
 > 
-> I'm not sure I understand where the problem is.
+> Sadly 2500Base-X is very commonly used to connect 2500Base-T-capable
+> PHYs or SFP modules. I also got an ATS branded 1000M/100M/10M copper
+> SFP module which uses 1000Base-X as system-side interface, independently
+> of the speed of the link partner on the TP interface.
+> All of them do not work with inband-AN enabled and a link only comes
+> up after `ethtool -s eth1 autoneg off` in the current implementation,
+> while previously they were working just fine.
 > 
->> [ 4830.764748] kobject: 'gpio-sim' (000000005b8d0726): kobject_release, parent 000000007425b13f (delayed 750)
->> [ 4833.908238] kobject: 'gpio-sim' (000000005b8d0726): kobject_cleanup, parent 000000007425b13f
->> [ 4833.908244] kobject: 'gpio-sim' (000000005b8d0726): auto cleanup kobject_del
->> [ 4833.908245] kobject: 'gpio-sim' (000000005b8d0726): auto cleanup 'remove' event
->> [ 4833.908247] kobject: 'gpio-sim' (000000005b8d0726): kobject_uevent_env
->> [ 4833.908273] kobject: 'gpio-sim' (000000005b8d0726): fill_kobj_path: path = '/bus/platform/drivers/gpio-sim'
->> [ 4833.908311] kobject: 'gpio-sim' (000000005b8d0726): calling ktype release
->> [ 4833.908315] kobject: 'gpio-sim': free name
->> [ 4834.932303] kobject: 'gpio_sim' (0000000096ea0bb1): kobject_release, parent 0000000093357d30 (delayed 250)
->> [ 4835.952388] kobject: 'gpio_sim' (0000000096ea0bb1): kobject_cleanup, parent 0000000093357d30
->> [ 4835.952413] kobject: 'gpio_sim' (0000000096ea0bb1): auto cleanup kobject_del
->> [ 4835.952415] kobject: 'gpio_sim' (0000000096ea0bb1): auto cleanup 'remove' event
->> [ 4835.952416] kobject: 'gpio_sim' (0000000096ea0bb1): kobject_uevent_env
->> [ 4835.952424] kobject: 'gpio_sim' (0000000096ea0bb1): fill_kobj_path: path = '/module/gpio_sim'
->> [ 4835.952445] kobject: 'gpio_sim' (0000000096ea0bb1): calling ktype release
->> [ 4835.952448] kobject: 'gpio_sim': free name
->>
->> Or, with CONFIG_DEBUG_DEVRES=y, it looks like this:
+> I understand that there isn't really a good solution for 1000Base-X as
+> thanks to you I now understand that SerDes autoneg just transparently
+> ends up being autoneg on a fiber link.
 > 
-> I don't see that been enabled (it requires to pass a command line option to the kernel).
+> 2500Base-X, however, is hardly used for fiber links, but rather mostly
+> for 2500Base-T PHYs and SFP module as well as xPON SFPs. Maybe we could
+> at least have in-band AN disabled by default for those to get them
+> working without requiring the user to carry out ethtool settings?
 
-I don't think I have found this command line option to LK.
+We could _possibly_ make 2500base-X ignore the autoneg bit, but in
+order to do that I would want to make other changes, because this
+is getting absolutely stupid to have these decisions being made in
+each and every PCS - and have each PCS author implementing different
+decision making in their PCS driver.
 
-So far it seems that the kobject_release() was called for both /bus/platform/drivers/gpio-sim
-and /module/gpio_sim . Is there soemthing I'm missing?
+The problem that gives is it makes phylink maintenance in hard,
+because it becomes impossible to predict what the effect of any
+change is.
 
-However, I've found one relatively unrelated failure to call kobject_release().
-This happens during shutdown, after the syslog is shutdown, so I can only provide
-a screenshot as a proof and for diagnostics:
+It also means that plugging the same SFP module into different
+hardware will give different results (maybe it works, maybe it
+doesn't.)
 
-https://domac.alu.hr/~mtodorov/linux/bugreports/integrity/20230308_123748.jpg
+So, what I would want to do is to move the decision about whether
+the PCS should enable in-band into the phylink core code instead
+of these random decisions being made in each PCS.
 
-https://domac.alu.hr/~mtodorov/linux/bugreports/integrity/20230308_123752.jpg
+At that point, we can then make the decision about whether the
+ethtool autoneg bit should affect whether the PCS uses inband
+depending on whether the PCS is effectively the media facing
+entity, or whether there is a PHY attached - and if there is a PHY
+attached, ask the PHY whether it will be using in-band or not.
 
-I failed to locate the driver and responsible maintainers to the present moment.
-It is happening on shutdown and it isn't that critical IMHO, except if it shows
-some other problem in the code :-/
+This also would give a way to ensure that all PCS adopt the same
+behaviour.
 
->>>>>>> Or maybe the chip->gc.parent should be changed to something else (actual GPIO
->>>>>>> device, but then it's unclear how to provide the attributes in non-racy way
->>>>>> Really, dunno. I have to repeat that my learning curve cannot adapt so quickly.
->>>>>>
->>>>>> I merely gave the report of KMEMLEAK, otherwise I am not a Linux kernel
->>>>>> device expert nor would be appropriate to try the craft not earned ;-)
->>
->> With all of these additional debugging, cat /sys/kernel/debug/kmemleak
->> showed nothing new.
->>
->> I believe this is reasonably safe.
->>
->> However, I was unsuccessful in seeing gpio trace, even with
->> echo 1 > /sys/kernel/tracing/events/gpio/enable ... :-/
-> 
-> It's available in the trace buffer (you need to read a documentation to
-> understand how it works).
+Does that sound a reasonable approach?
 
-Still working on that, had other tasks to do ... So far I got to this:
+Strangely, I already have some patches along those lines in my
+net-queue branch. See:
 
-  1020  echo "1" > /sys/kernel/tracing/events/gpio/enable
-  1021  more /sys/kernel/tracing/trace
-  1022  cd ~marvin/linux/kernel/linux_torvalds/tools/testing/selftests/gpio/
-  1023  ls
-  1024  ./gpio-sim.sh
-  1025  more /sys/kernel/tracing/trace
-# tracer: nop
-#
-# entries-in-buffer/entries-written: 9/9   #P:6
-#
-#                                _-----=> irqs-off/BH-disabled
-#                               / _----=> need-resched
-#                              | / _---=> hardirq/softirq
-#                              || / _--=> preempt-depth
-#                              ||| / _-=> migrate-disable
-#                              |||| /     delay
-#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-#              | |         |   |||||     |         |
-      gpio-sim.sh-21157   [000] .....  2705.538025: gpio_direction: 560  in (0)
-  gpio-mockup-cde-21471   [000] .....  2705.579730: gpio_direction: 564  in (0)
-  gpio-mockup-cde-21471   [000] .....  2705.579745: gpio_value: 564 get 1
-  gpio-mockup-cde-21478   [003] .....  2705.589475: gpio_direction: 565  in (0)
-  gpio-mockup-cde-21478   [003] .....  2705.589488: gpio_value: 565 get 0
-  gpio-mockup-cde-21561   [003] .....  2705.721427: gpio_value: 589 set 1
-  gpio-mockup-cde-21561   [003] .....  2705.721427: gpio_direction: 589 out (0)
-  gpio-mockup-cde-21595   [000] .....  2705.855861: gpio_direction: 597  in (0)
-  gpio-mockup-cde-21595   [000] .....  2705.855875: gpio_value: 597 get 1
-[root@pc-mtodorov gpio]#
+net: phylink: add helpers for decoding mode
+net: use phylink_mode_*() helpers
+net: phylink: split PCS in-band from inband mode
 
-I hope I did this right. However, I have to play a bit with these results before
-I could make any interpretation.
-
-I just wanted to provide some feedback.
-
-Regards,
-Mirsad
+It's nowhere near finished though, it was just an idea back in
+2021 when the problem of getting rid of differing PCS behaviours
+was on my mind.
 
 -- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
