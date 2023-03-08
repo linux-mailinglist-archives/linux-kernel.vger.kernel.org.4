@@ -2,231 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65ABB6B0BC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6BE46B0BD1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbjCHOri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
+        id S232089AbjCHOs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjCHOq7 (ORCPT
+        with ESMTP id S232199AbjCHOrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:46:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6D95505B;
-        Wed,  8 Mar 2023 06:45:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 8 Mar 2023 09:47:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6287B5AB4C
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:45:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678286744;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0XZvYNzaxOA1OpFqzgjQReDW70l14ij3I5KokteR4is=;
+        b=fv8T9NLvD9uJPqdm7PTv4gxWoYGewNiTH8QT+hCcgUSohXmHgJzw3zmf6wkp9gjmYj1sp6
+        ECBFJ36Bs1mRH0G3sY34/j0KoBx+57EC5roRcBjhBQtKE2IWllKMClo50NLmkedweCKTUW
+        A/iVY3KsEUcPwNTxfYYCIPo3Oa4iU3U=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-481-t3WYAKcYM9GIHjzwAF-H7Q-1; Wed, 08 Mar 2023 09:45:41 -0500
+X-MC-Unique: t3WYAKcYM9GIHjzwAF-H7Q-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 352DA6185C;
-        Wed,  8 Mar 2023 14:45:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91458C433EF;
-        Wed,  8 Mar 2023 14:45:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678286728;
-        bh=cpG3drh4kB9pYK/4rse4/GW0nNf8RUQJsGAqB2pn/kU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ZVX/AbxMJpcfd0rDXQHqWi5fBIMPjLVdSqWwj0hXpLVQP+N1phaQRL36+6Usz2+lo
-         E3aXMGymIMTM/nSPPGhA6BkDaqIXw8IPZqvJ7++DaWyZ3QKfY5Px3ZycdziOijfuP2
-         +319SB9ayuMKA3p5CiQObX3ySMVzQ7M4gIKXQB8JoFfSxhY8mSVw92P4drn9yOBd6G
-         +Mwe5RuMGIex0EUN7Zl+sjIdaEibdoPZgnFBI0Q5AnY33CB4X3jfedqZvOOpj/snSW
-         6b+PQLliVioDCwLxHRcZuGugDDiQdoBqrImKLg8WSfWRHmXyF/G3fOOgI/Db+QifOX
-         eIDxrhEWnJGwg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 27B7D5C01E4; Wed,  8 Mar 2023 06:45:28 -0800 (PST)
-Date:   Wed, 8 Mar 2023 06:45:28 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
-Message-ID: <20230308144528.GR1301832@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230303213851.2090365-1-joel@joelfernandes.org>
- <ZAc1wsvd4trjP/xi@lothringen>
- <ZAc+vVZUhXdhpSki@pc636>
- <CAEXW_YRTLQpQpOW-+n+X59pmB=4TkV=gdsMiQfBkdK_4wO9Jug@mail.gmail.com>
- <20230307173313.GJ1301832@paulmck-ThinkPad-P17-Gen-1>
- <20230307185443.GA516865@google.com>
- <20230307192726.GL1301832@paulmck-ThinkPad-P17-Gen-1>
- <ZAhYP9a8u05hzsOn@pc636>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 896841C2CAA0;
+        Wed,  8 Mar 2023 14:45:40 +0000 (UTC)
+Received: from [172.16.176.1] (unknown [10.22.48.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A143C440D9;
+        Wed,  8 Mar 2023 14:45:39 +0000 (UTC)
+From:   Benjamin Coddington <bcodding@redhat.com>
+To:     Chengen Du <chengen.du@canonical.com>
+Cc:     trond.myklebust@hammerspace.com, anna@kernel.org,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] NFS: Correct timing for assigning access cache timestamp
+Date:   Wed, 08 Mar 2023 09:45:37 -0500
+Message-ID: <1B808CC0-49C6-4AF6-B7E2-0772A71DB490@redhat.com>
+In-Reply-To: <20230308080327.33906-1-chengen.du@canonical.com>
+References: <20230308080327.33906-1-chengen.du@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZAhYP9a8u05hzsOn@pc636>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 10:41:19AM +0100, Uladzislau Rezki wrote:
-> On Tue, Mar 07, 2023 at 11:27:26AM -0800, Paul E. McKenney wrote:
-> > On Tue, Mar 07, 2023 at 06:54:43PM +0000, Joel Fernandes wrote:
-> > > On Tue, Mar 07, 2023 at 09:33:13AM -0800, Paul E. McKenney wrote:
-> > > > On Tue, Mar 07, 2023 at 08:48:52AM -0500, Joel Fernandes wrote:
-> > > > > On Tue, Mar 7, 2023 at 8:40 AM Uladzislau Rezki <urezki@gmail.com> wrote:
-> > > > > >
-> > > > > > On Tue, Mar 07, 2023 at 02:01:54PM +0100, Frederic Weisbecker wrote:
-> > > > > > > On Fri, Mar 03, 2023 at 09:38:51PM +0000, Joel Fernandes (Google) wrote:
-> > > > > > > > On many systems, a great deal of boot (in userspace) happens after the
-> > > > > > > > kernel thinks the boot has completed. It is difficult to determine if
-> > > > > > > > the system has really booted from the kernel side. Some features like
-> > > > > > > > lazy-RCU can risk slowing down boot time if, say, a callback has been
-> > > > > > > > added that the boot synchronously depends on. Further expedited callbacks
-> > > > > > > > can get unexpedited way earlier than it should be, thus slowing down
-> > > > > > > > boot (as shown in the data below).
-> > > > > > > >
-> > > > > > > > For these reasons, this commit adds a config option
-> > > > > > > > 'CONFIG_RCU_BOOT_END_DELAY' and a boot parameter rcupdate.boot_end_delay.
-> > > > > > > > Userspace can also make RCU's view of the system as booted, by writing the
-> > > > > > > > time in milliseconds to: /sys/module/rcupdate/parameters/rcu_boot_end_delay
-> > > > > > > > Or even just writing a value of 0 to this sysfs node.
-> > > > > > > > However, under no circumstance will the boot be allowed to end earlier
-> > > > > > > > than just before init is launched.
-> > > > > > > >
-> > > > > > > > The default value of CONFIG_RCU_BOOT_END_DELAY is chosen as 15s. This
-> > > > > > > > suites ChromeOS and also a PREEMPT_RT system below very well, which need
-> > > > > > > > no config or parameter changes, and just a simple application of this patch. A
-> > > > > > > > system designer can also choose a specific value here to keep RCU from marking
-> > > > > > > > boot completion.  As noted earlier, RCU's perspective of the system as booted
-> > > > > > > > will not be marker until at least rcu_boot_end_delay milliseconds have passed
-> > > > > > > > or an update is made via writing a small value (or 0) in milliseconds to:
-> > > > > > > > /sys/module/rcupdate/parameters/rcu_boot_end_delay.
-> > > > > > > >
-> > > > > > > > One side-effect of this patch is, there is a risk that a real-time workload
-> > > > > > > > launched just after the kernel boots will suffer interruptions due to expedited
-> > > > > > > > RCU, which previous ended just before init was launched. However, to mitigate
-> > > > > > > > such an issue (however unlikely), the user should either tune
-> > > > > > > > CONFIG_RCU_BOOT_END_DELAY to a smaller value than 15 seconds or write a value
-> > > > > > > > of 0 to /sys/module/rcupdate/parameters/rcu_boot_end_delay, once userspace
-> > > > > > > > boots, and before launching the real-time workload.
-> > > > > > > >
-> > > > > > > > Qiuxu also noted impressive boot-time improvements with earlier version
-> > > > > > > > of patch. An excerpt from the data he shared:
-> > > > > > > >
-> > > > > > > > 1) Testing environment:
-> > > > > > > >     OS            : CentOS Stream 8 (non-RT OS)
-> > > > > > > >     Kernel     : v6.2
-> > > > > > > >     Machine : Intel Cascade Lake server (2 sockets, each with 44 logical threads)
-> > > > > > > >     Qemu  args  : -cpu host -enable-kvm, -smp 88,threads=2,sockets=2, …
-> > > > > > > >
-> > > > > > > > 2) OS boot time definition:
-> > > > > > > >     The time from the start of the kernel boot to the shell command line
-> > > > > > > >     prompt is shown from the console. [ Different people may have
-> > > > > > > >     different OS boot time definitions. ]
-> > > > > > > >
-> > > > > > > > 3) Measurement method (very rough method):
-> > > > > > > >     A timer in the kernel periodically prints the boot time every 100ms.
-> > > > > > > >     As soon as the shell command line prompt is shown from the console,
-> > > > > > > >     we record the boot time printed by the timer, then the printed boot
-> > > > > > > >     time is the OS boot time.
-> > > > > > > >
-> > > > > > > > 4) Measured OS boot time (in seconds)
-> > > > > > > >    a) Measured 10 times w/o this patch:
-> > > > > > > >         8.7s, 8.4s, 8.6s, 8.2s, 9.0s, 8.7s, 8.8s, 9.3s, 8.8s, 8.3s
-> > > > > > > >         The average OS boot time was: ~8.7s
-> > > > > > > >
-> > > > > > > >    b) Measure 10 times w/ this patch:
-> > > > > > > >         8.5s, 8.2s, 7.6s, 8.2s, 8.7s, 8.2s, 7.8s, 8.2s, 9.3s, 8.4s
-> > > > > > > >         The average OS boot time was: ~8.3s.
-> > > > > > > >
-> > > > > > > > Tested-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-> > > > > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > > > > >
-> > > > > > > I still don't really like that:
-> > > > > > >
-> > > > > > > 1) It feels like we are curing a symptom for which we don't know the cause.
-> > > > > > >    Which RCU write side caller is the source of this slow boot? Some tracepoints
-> > > > > > >    reporting the wait duration within synchronize_rcu() calls between the end of
-> > > > > > >    the kernel boot and the end of userspace boot may be helpful.
-> > > > > > >
-> > > > > > > 2) The kernel boot was already covered before this patch so this is about
-> > > > > > >    userspace code calling into the kernel. Is that piece of code also called
-> > > > > > >    after the boot? In that case are we missing a conversion from
-> > > > > > >    synchronize_rcu() to synchronize_rcu_expedited() somewhere? Because then
-> > > > > > >    the problem is more general than just boot.
-> > > > > > >
-> > > > > > > This needs to be analyzed first and if it happens that the issue really
-> > > > > > > needs to be fixed with telling the kernel that userspace has completed
-> > > > > > > booting, eg: because the problem is not in a few callsites that need conversion
-> > > > > > > to expedited but instead in the accumulation of lots of calls that should stay
-> > > > > > > as is:
-> > > > > > >
-> > > > > > > 3) This arbitrary timeout looks dangerous to me as latency sensitive code
-> > > > > > >    may run right after the boot. Either you choose a value that is too low
-> > > > > > >    and you miss the optimization or the value is too high and you may break
-> > > > > > >    things.
-> > > > > > >
-> > > > > > > 4) This should be fixed the way you did:
-> > > > > > >    a) a kernel parameter like you did
-> > > > > > >    b) The init process (systemd?) tells the kernel when it judges that userspace
-> > > > > > >       has completed booting.
-> > > > > > >    c) Make these interfaces more generic, maybe that information will be useful
-> > > > > > >       outside RCU. For example the kernel parameter should be
-> > > > > > >       "user_booted_reported" and the sysfs (should be sysctl?):
-> > > > > > >       kernel.user_booted = 1
-> > > > > > >    d) But yuck, this means we must know if the init process supports that...
-> > > > > > >
-> > > > > > > For these reasons, let's make sure we know exactly what is going on first.
-> > > > > > >
-> > > > > > > Thanks.
-> > > > > > Just add some notes and thoughts. There is a rcupdate.rcu_expedited=1
-> > > > > > parameter that can be used during the boot. For example on our devices
-> > > > > > to speedup a boot we boot the kernel with rcu_expedited:
-> > > > > >
-> > > > > > XQ-DQ54:/ # cat /proc/cmdline
-> > > > > > XQ-DQ54:/ #
-> > > > > >
-> > > > > > then a user space can decides if it is needed or not:
-> > > > > >
-> > > > > > <snip>
-> > > > > > rcu_expedited  rcu_normal
-> > > > > > XQ-DQ54:/ # ls -al /sys/kernel/rcu_*
-> > > > > > -rw-r--r-- 1 root root 4096 2023-02-16 09:27 /sys/kernel/rcu_expedited
-> > > > > > -rw-r--r-- 1 root root 4096 2023-02-16 09:27 /sys/kernel/rcu_normal
-> > > > > > XQ-DQ54:/ #
-> > > > > > <snip>
-> > > > > >
-> > > > > > for lazy we can add "rcu_cb_lazy" parameter and boot the kernel with
-> > > > > > true or false. So we can follow and be aligned with rcu_expedited and
-> > > > > > rcu_normal parameters.
-> > > > > 
-> > > > > Speaking of aligning, there is also the automated
-> > > > > rcu_normal_after_boot boot option correct? I prefer the automated
-> > > > > option of doing this. So the approach here is not really unprecedented
-> > > > > and is much more robust than relying on userspace too much (I am ok
-> > > > > with adding your suggestion *on top* of the automated toggle, but I
-> > > > > probably would not have ChromeOS use it if the automated way exists).
-> > > > > Or did I miss something?
-> > > > 
-> > > > See this commit:
-> > > > 
-> > > > 3705b88db0d7cc ("rcu: Add a module parameter to force use of expedited RCU primitives")
-> > > > 
-> > > > Antti provided this commit precisely in order to allow Android devices
-> > > > to expedite the boot process and to shut off the expediting at a time of
-> > > > Android userspace's choosing.  So Android has been making this work for
-> > > > about ten years, which strikes me as an adequate proof of concept.  ;-)
-> > > 
-> > > Thanks for the pointer. That's true. Looking at Android sources, I find that
-> > > Android Mediatek devices at least are setting rcu_expedited to 1 at late
-> > > stage of their userspace boot (which is weird, it should be set to 1 as early
-> > > as possible), and interestingly I cannot find them resetting it back to 0!.
-> > > Maybe they set rcu_normal to 1? But I cannot find that either. Vlad? :P
-> > 
-> > Interesting.  Though this is consistent with Antti's commit log, where
-> > he talks about expediting grace periods but not unexpediting them.
-> > 
-> Do you think we need to unexpedite it? :))))
+On 8 Mar 2023, at 3:03, Chengen Du wrote:
 
-Android runs on smallish systems, so quite possibly not!
+> When the user's login time is newer than the cache's timestamp,
+> the original entry in the RB-tree will be replaced by a new entry.
+> Currently, the timestamp is only set if the entry is not found in
+> the RB-tree, which can cause the timestamp to be undefined when
+> the entry exists. This may result in a significant increase in
+> ACCESS operations if the timestamp is set to zero.
+>
+> Signed-off-by: Chengen Du <chengen.du@canonical.com>
+> ---
+>  fs/nfs/dir.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
+> index a41c3ee4549c..6fbcbb8d6587 100644
+> --- a/fs/nfs/dir.c
+> +++ b/fs/nfs/dir.c
+> @@ -3089,7 +3089,6 @@ static void nfs_access_add_rbtree(struct inode *i=
+node,
+>  		else
+>  			goto found;
+>  	}
+> -	set->timestamp =3D ktime_get_ns();
+>  	rb_link_node(&set->rb_node, parent, p);
+>  	rb_insert_color(&set->rb_node, root_node);
+>  	list_add_tail(&set->lru, &nfsi->access_cache_entry_lru);
+> @@ -3114,6 +3113,7 @@ void nfs_access_add_cache(struct inode *inode, st=
+ruct nfs_access_entry *set,
+>  	cache->fsgid =3D cred->fsgid;
+>  	cache->group_info =3D get_group_info(cred->group_info);
+>  	cache->mask =3D set->mask;
+> +	cache->timestamp =3D ktime_get_ns();
+>
+>  	/* The above field assignments must be visible
+>  	 * before this item appears on the lru.  We cannot easily
+> -- =
 
-							Thanx, Paul
+> 2.37.2
+
+Looks good to me.
+
+Reviewed-by: Benjamin Coddington <bcodding@redhat.com>
+
