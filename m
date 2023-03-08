@@ -2,70 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3596B0E2E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C2B6B0E33
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbjCHQIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:08:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
+        id S232498AbjCHQI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:08:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbjCHQHw (ORCPT
+        with ESMTP id S232432AbjCHQIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:07:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7755838A9
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:07:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1939661476
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 16:07:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA98C433D2;
-        Wed,  8 Mar 2023 16:07:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678291634;
-        bh=TkylqFak7vZZsSeE/sFaN6QWkOyeNoj88OqtgJhVEnU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UnVe4f1U0ySARhRvz0POBdWwCF9g073DYKdRJWFUUAX/dy2tZFhEAm/N0KCaS/E4A
-         JawrAG7PJSHqX3dtQDCtY9y9UPhGbX6g4xmc3geCVG3tXoXtEbDrh1LjQ+2hl2/U7z
-         gCOdfA6rydggeccce/+8Y5UBVhTgqAqkdGq8PdZI=
-Date:   Wed, 8 Mar 2023 17:06:54 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8192e: Remove function
- ..dm_check_ac_dc_power calling a script
-Message-ID: <ZAiynpIQKYs246z5@kroah.com>
-References: <20230228202857.GA16442@matrix-ESPRIMO-P710>
+        Wed, 8 Mar 2023 11:08:10 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D99B56C3
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:07:40 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZwK7-00035i-Ai; Wed, 08 Mar 2023 17:07:27 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZwK4-002kXG-Q7; Wed, 08 Mar 2023 17:07:24 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZwK4-003KOq-0o; Wed, 08 Mar 2023 17:07:24 +0100
+Date:   Wed, 8 Mar 2023 17:07:23 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        thierry.reding@gmail.com, matthias.bgg@gmail.com,
+        weiqing.kong@mediatek.com, jitao.shi@mediatek.com,
+        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH 0/2] pwm: mtk-disp: Fix backlight configuration at boot
+Message-ID: <20230308160723.rhgsghtxxkfhbsu6@pengutronix.de>
+References: <20230123160615.375969-1-angelogioacchino.delregno@collabora.com>
+ <06918fde-64ea-37b2-da1a-1c8316457223@collabora.com>
+ <06909bd8-3da2-1cf0-82ac-3ed4f3e63def@collabora.com>
+ <ZAigsHAgqkLlBD1y@kroah.com>
+ <28142704-d82d-d533-d2a8-b1061182f1f6@collabora.com>
+ <ZAitHYRCUHsIvZMk@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ktav3puihvogk7lj"
 Content-Disposition: inline
-In-Reply-To: <20230228202857.GA16442@matrix-ESPRIMO-P710>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZAitHYRCUHsIvZMk@kroah.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 09:28:57PM +0100, Philipp Hortmann wrote:
-> Remove function _rtl92e_dm_check_ac_dc_power calling a script
-> /etc/acpi/wireless-rtl-ac-dc-power.sh that is not available. This script
-> is not part of the kernel and it is not available on the www. The result
-> is that this function is just dead code.
-> 
-> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-> ---
-> I found a hint in this blog about the content of the script:
-> https://www.kubuntuforums.net/forum/archives/eol-releases/-9-10/network-
-> support-ai/41269-realtek-lan-connection-timeout
-> 
-> If you know more about the purpose and the need for this script please
-> respond.
 
-Good catch, that shouldn't be there at all.
+--ktav3puihvogk7lj
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-greg k-h
+On Wed, Mar 08, 2023 at 04:43:25PM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Mar 08, 2023 at 03:55:59PM +0100, AngeloGioacchino Del Regno wrot=
+e:
+> > Il 08/03/23 15:50, Greg Kroah-Hartman ha scritto:
+> > > On Wed, Mar 08, 2023 at 12:46:07PM +0100, AngeloGioacchino Del Regno =
+wrote:
+> > > > Il 23/02/23 15:16, AngeloGioacchino Del Regno ha scritto:
+> > > > > Il 23/01/23 17:06, AngeloGioacchino Del Regno ha scritto:
+> > > > > > Since the pwm-mtk-disp driver was fixed to get PWM_EN state fro=
+m the
+> > > > > > right register, an old two-wrongs-make-one-right issue emerged:=
+ as a
+> > > > > > result, MT8192 Asurada Spherion got no backlight at boot unless=
+ a
+> > > > > > suspend/resume cycle was performed.
+> > > > > > Also, the backlight would sometimes not get updated with the re=
+quested
+> > > > > > value, requiring the user to change it back and forth until it =
+worked.
+> > > > > >=20
+> > > > > > This series fixes both of the aforementioned issues found on MT=
+8192.
+> > > > > >=20
+> > > > > > AngeloGioacchino Del Regno (2):
+> > > > > >  =A0=A0 pwm: mtk-disp: Disable shadow registers before setting =
+backlight
+> > > > > >  =A0=A0=A0=A0 values
+> > > > > >  =A0=A0 pwm: mtk-disp: Configure double buffering before readin=
+g in
+> > > > > >  =A0=A0=A0=A0 .get_state()
+> > > > > >=20
+> > > > > >  =A0 drivers/pwm/pwm-mtk-disp.c | 34 +++++++++++++++++++++++---=
+--------
+> > > > > >  =A0 1 file changed, 23 insertions(+), 11 deletions(-)
+> > > > > >=20
+> > > > >=20
+> > > > > Gentle ping for this one: this is fixing backlight issues on mult=
+iple MediaTek
+> > > > > SoCs and was well tested.
+> > > > >=20
+> > > > > Thanks,
+> > > > > Angelo
+> > > >=20
+> > > > Since this series was sent more than one month ago, and since this =
+fixes broken
+> > > > backlight on a number of Chromebooks with MT8183 and MT8192 SoCs, a=
+nd seen the
+> > > > urgency of getting these fixes in, I'm adding Greg to the loop.
+> > >=20
+> > > $ ./scripts/get_maintainer.pl drivers/pwm/pwm-mtk-disp.c
+> > > Thierry Reding <thierry.reding@gmail.com> (maintainer:PWM SUBSYSTEM)
+> > > "Uwe Kleine-K=F6nig" <u.kleine-koenig@pengutronix.de> (reviewer:PWM S=
+UBSYSTEM)
+> > > Matthias Brugger <matthias.bgg@gmail.com> (maintainer:ARM/Mediatek So=
+C support)
+> > > AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> =
+(reviewer:ARM/Mediatek SoC support)
+> > > linux-pwm@vger.kernel.org (open list:PWM SUBSYSTEM)
+> > > linux-kernel@vger.kernel.org (open list:ARM/Mediatek SoC support)
+> > > linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC=
+ support)
+> > > linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC s=
+upport)
+> > >=20
+> > > I don't see my name in there, did I become the PWM maintainer somehow?
+> > >=20
+> > > What's wrong with Thierry taking this like normal?
+> > >=20
+> >=20
+> > Nothing wrong with that. I felt like this series got ignored as I've ne=
+ver
+> > received any reply from Thierry, even though it's a Fixes series that I=
+ deem
+> > to be moderately urgent; that's why I added you to the loop.
+>=20
+> Then ask Thierry and Uwe, what would you want to have happen if you were
+> the maintainer of a subsystem?
+>=20
+> > If that created unnecessary noise, I'm extremely sorry and won't happen=
+ again.
+>=20
+> Not noise, just confusion on my part.  I'm glad to take patches that
+> have no obvious maintainers, or maintainers that have disappeared, but
+> that doesn't seem to be the case here.
+
+I'm aware that there is a big backlog on PWM patches. I'm trying to
+catch up but there is only so much time. Sorry this results in delays
+for you (and others), I'm not happy with this situation either.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--ktav3puihvogk7lj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQIsrgACgkQwfwUeK3K
+7AmgSwf7B3y69Q4iYv/xi1xc6LYfsDU2LWsLiewM1J93Wig3bmxGsw2xu3z7LefN
+YthxYf2xylEq1KstnkALgviEYrO2YMip5hehZmT0+oU1XV9aqo4MW3J0eGbnFu3H
+B1eh5ek0N7wUoxaiEaAFo760STCtOdXtw1MMaLkw6STdz97Cja53X8B/zUIy7Fcl
+Ptx2FXXXjcO2GE4FZOfaYwKhbxdpRAQ8tmwKq/3bNs2NmQ2vDWEpOkq47chVmx4s
++EAHKogcbAgHB6brcNqKytU/2G41l1VRNcbiHZsVjZ6cY5kSWVDyLxHG89dtN5Ej
+17nXfuwFkQW7Jr1gGxyfLtx/Oir3AA==
+=Ca5l
+-----END PGP SIGNATURE-----
+
+--ktav3puihvogk7lj--
