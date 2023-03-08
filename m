@@ -2,118 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95D66B0A9D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314466B0AB0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:12:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbjCHOKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:10:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
+        id S230434AbjCHOMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:12:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbjCHOJd (ORCPT
+        with ESMTP id S232208AbjCHOLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:09:33 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8979780914;
-        Wed,  8 Mar 2023 06:08:28 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 902AA604F7;
-        Wed,  8 Mar 2023 15:08:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678284506; bh=b2xoRH8uNDDGrJhbs5P0hRrhL431AvtCXSHN4BCG9iM=;
-        h=Date:To:Cc:From:Subject:From;
-        b=SjYWgelJmI+V54+dNftTuCQLspEDfJm/jFUgUMFJOjSPwm2poQIgE0UAdM7Rbvqac
-         YW/OwryV355G23WrMAWWEJP4O1nkcBc/s2g7bf9uCKsF8wd2kb+iViJXqwF4EHYGHY
-         ZNO9kqO45TVEjazCeQaCVk0L0aF7Pn/p3l7hoh6dDghZ9ZdI52RvR+3HqIf1wTJskp
-         uZdaiae4U6CbM5+f6PnXDZM6amOR4CkC7AbpOfJXpqqdAISBy6ry9CnHZhEQzaDnOG
-         YGI770sX24RqDbGWt2Uxt6AcV536hoDnocVZU2i23M5DgO7e7+F+5mrXDzM62EeLh7
-         P+yaERoM7NhwQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id PdUCo2nhzweR; Wed,  8 Mar 2023 15:08:24 +0100 (CET)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id 99FA6604F3;
-        Wed,  8 Mar 2023 15:08:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678284504; bh=b2xoRH8uNDDGrJhbs5P0hRrhL431AvtCXSHN4BCG9iM=;
-        h=Date:To:Cc:From:Subject:From;
-        b=XBz4R8ChK2fqGd1hXAtG54Brll2MmLQYgBXL6W3cqLLuXn3w04tssnwN5N9HsN1WC
-         NcS4/946Z5GqmPDE2NWjfz/RjM9kRQ1lrwqZ1BGCoHflp27YwZ/J0gFkKrXTQu5is9
-         lhNDbfVAuvF3bv8QvJnE5T4k2Xqwepid9Huc2R+3v4p1jc/J5UUS5SemOfq40Ir01O
-         yrjy848vWm0HZasOo14hGWlzY4IpE9tKZWH7fiNYT0gggmhrxbPBfidpukxwv0ToSl
-         TmJOFgMqmVjvVhDtih4c4oSRbR9j8hfkG0riAmY5kiFTE0CBw76VCOiYqhVNJzigea
-         o27A6e257eGjA==
-Message-ID: <60b2b66c-22c9-1d38-ed1c-7b7d95e32720@alu.unizg.hr>
-Date:   Wed, 8 Mar 2023 15:08:21 +0100
+        Wed, 8 Mar 2023 09:11:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638668F52E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:10:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678284597;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=mXndFig5MxMz39oru/IvohSxV+rytJfkgOQsYDdo+fQ=;
+        b=LOBGK1Dh8UmBVToSwzAy80BbcGExuuNZSavuqNWtZVEpyk645Ifxg1BLJzE9KL7j1LV4pt
+        UA4z7cTRRF/Sc2vNkjPHEqxaypLqbWa/CiKXFvFAN8ax6CR+D3Ubi2Xdm92JYpDTbSX8yc
+        k5GvVIoIkohQlVvVPqs6B6EFWajP+TY=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-196-KHFF2M-fPqi48-0Mhji4YA-1; Wed, 08 Mar 2023 09:09:54 -0500
+X-MC-Unique: KHFF2M-fPqi48-0Mhji4YA-1
+Received: by mail-qt1-f199.google.com with SMTP id i24-20020ac84f58000000b003bfe3358691so9090558qtw.21
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 06:09:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678284593;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mXndFig5MxMz39oru/IvohSxV+rytJfkgOQsYDdo+fQ=;
+        b=fzzwouMTteWoqSm36vBME2rjcPnWe/DFdlXC+4r663kZOt8gW6b5J1mUPHd9v5qXFP
+         pIDU835TMlisKfptcFIpV3VWWBJbU/7cYT4EVFzp0KxPRLCTPjBJFYZ7f++e/1iuHXwN
+         xKJd5zZUlI6Ss8UA5NttxHQ48faRWZpx6ewVHaVJLAVaQZB+ioJa17iAbMQHKkRTi31s
+         ZOQ39oo4aFHQnEk8D4VtkDCBtZNppDayYAtT9PoAd0OZikTE7qiUeRjqyp1Oy83uuTdQ
+         o1KiVv6PwQGc3wGcNl25fPyvlAFluAnNJvCXyNJiuYRBzmT6zXBkXmc4YFwJG5HtTXx7
+         HN/Q==
+X-Gm-Message-State: AO0yUKVQeGhIskoJV76id8GJaPHcNGLmK69HhXyn5ar0pMEjamvWjhSQ
+        XsWOulj1ojyNYIptrwPZpHIKP4qSREL9hToOITrjmZ5J4QcRQdhV7pY7z9mTWBvo9pd30vWnWfq
+        oKQgyG+cbY6Hw6Zbr3/FRc/c9bSwQ3Vxc
+X-Received: by 2002:a05:622a:1443:b0:3bf:d4c3:365d with SMTP id v3-20020a05622a144300b003bfd4c3365dmr4212470qtx.14.1678284593677;
+        Wed, 08 Mar 2023 06:09:53 -0800 (PST)
+X-Google-Smtp-Source: AK7set/OjUR2DEyaB2HDQqosX6A/GPRFh2BbK8gtM7CV145ROLD4Op15ZKZMuAH5bQJg0F1d3/souw==
+X-Received: by 2002:a05:622a:1443:b0:3bf:d4c3:365d with SMTP id v3-20020a05622a144300b003bfd4c3365dmr4212441qtx.14.1678284593432;
+        Wed, 08 Mar 2023 06:09:53 -0800 (PST)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id b1-20020ac812c1000000b003bfa932525dsm11523571qtj.51.2023.03.08.06.09.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 06:09:53 -0800 (PST)
+From:   Tom Rix <trix@redhat.com>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, lyude@redhat.com, Wayne.Lin@amd.com,
+        hersenxs.wu@amd.com, hamza.mahfooz@amd.com, Jerry.Zuo@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amd/display: remove unused variable res_pool
+Date:   Wed,  8 Mar 2023 09:09:43 -0500
+Message-Id: <20230308140943.2009970-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, hr
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org,
-        James Morris <jmorris@namei.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: INFO: BUG: kobject: 'integrity' (000000005198bea8): does not have a
- release() function, it is broken and must be fixed. See ...
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, all!
+With gcc and W=1, there is this error
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_mst_types.c:1214:31:
+  error: variable ‘res_pool’ set but not used [-Werror=unused-but-set-variable]
+ 1214 |         struct resource_pool *res_pool;
+      |                               ^~~~~~~~
 
-This one is said to be bug, if we trust the Linux kernel debug output.
+Since res_pool is unused, remove it.
 
-Usually I wouldn't have noticed it, but we were debugging the other module under
-supervision from Andy of Intel. So it happened that I was accidentally monitoring
-how the kobject_release() was called for kernel objects at shutdown of the OS.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-It is past the rsyslog lifetime, so the only way I could capture it was a photo
-from the smartphone.
-
-Please see the bug reports from the kernel log:
-
-https://domac.alu.hr/~mtodorov/linux/bugreports/integrity/20230308_123748.jpg
-
-https://domac.alu.hr/~mtodorov/linux/bugreports/integrity/20230308_123752.jpg
-
-The kernel is Linux 6.2.0-mg-andy-devres-12485-gf3a2439f20d9-dirty x86_64
-on a LENOVO_MT_10TX_BU_Lenovo_FM_V530S-07ICB running AlmaLinux 8.7.
-
-I was unable to reproduce on the other Lenovo laptop box, for the kernel
-refused to boot, unable to find root drive on NVMe (other kernels w/o
-CONFIG_DEBUG_KOBJECT=y run smoothly).
-
-Config used is:
-
-https://domac.alu.hr/~mtodorov/linux/bugreports/integrity/config-6.2.0-mg-andy-devres-12485-gf3a2439f20d9-dirty
-
-As I already said to Andy, this might not be a critical bug, for it happens
-only at shutdown AFAICS. However, it can be a sign of some more serious problem
-in the code. :-/
-
-Hope this helps.
-
-Regards,
-Mirsad
-
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+index 2739bef9b90c..4b9b5e4050fc 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+@@ -1211,7 +1211,6 @@ static int pre_compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
+ 	bool computed_streams[MAX_PIPES];
+ 	struct amdgpu_dm_connector *aconnector;
+ 	struct drm_dp_mst_topology_mgr *mst_mgr;
+-	struct resource_pool *res_pool;
+ 	int link_vars_start_index = 0;
+ 	int ret = 0;
+ 
+@@ -1220,7 +1219,6 @@ static int pre_compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
+ 
+ 	for (i = 0; i < dc_state->stream_count; i++) {
+ 		stream = dc_state->streams[i];
+-		res_pool = stream->ctx->dc->res_pool;
+ 
+ 		if (stream->signal != SIGNAL_TYPE_DISPLAY_PORT_MST)
+ 			continue;
 -- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
+2.27.0
 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
