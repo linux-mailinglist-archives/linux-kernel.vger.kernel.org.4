@@ -2,117 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD136B14B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 284B86B14B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjCHWDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 17:03:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
+        id S230043AbjCHWDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 17:03:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjCHWDO (ORCPT
+        with ESMTP id S229727AbjCHWDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 17:03:14 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E382ED46;
-        Wed,  8 Mar 2023 14:03:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1678312981; i=deller@gmx.de;
-        bh=URLRtCYvCA2OfgePK0dWq7nXnf4urDizzWJ5/29Hrz8=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=WP8JmQN1foHTYW81fe2J8bKqCKZZ0E3SuwAPCuk9mCCQ1EOBOitwYn2waiV/lhM+Y
-         HkjWCkWVMHsqWVkMICOWJKG+/GVQ5vv7PUrND0/FuQ/f++uuohdua7obODUxWIJ6Xk
-         gBqRbpByUTVEuCKjwLThbudN6kZPCh7y4P3oe3vNOQus1W4TkKSM40ywb4/mDfANE+
-         ASG4vHH8Wxitbfz8uqRjVVUSsEGFnlgSB5NN/9tgTrMhQHyVScrH00B3orSgZRITJp
-         l+3stHKU1C7p4rCL4MItI5G3GQ2ZGlbldxvC29QPZ5w83eE8hJqDiB8VQKrIrh75KL
-         3zIK2oZffpHZg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.151.44]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MYNNo-1q5UnP0E54-00VU3c; Wed, 08
- Mar 2023 23:03:01 +0100
-Message-ID: <53d85de3-3072-50e2-9ce8-1fd48a2cfd69@gmx.de>
-Date:   Wed, 8 Mar 2023 23:03:00 +0100
+        Wed, 8 Mar 2023 17:03:18 -0500
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2094130B2D;
+        Wed,  8 Mar 2023 14:03:12 -0800 (PST)
+Received: by mail-ot1-f41.google.com with SMTP id f19-20020a9d5f13000000b00693ce5a2f3eso14366oti.8;
+        Wed, 08 Mar 2023 14:03:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678312991;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/H1xZsO9sdRZyA8gZC8r55Vi2llw8sEWwYx39dSujuw=;
+        b=mYR1Ma4cDYhLhiMLT+lWOldsVP1/uyF1oiJCbB9mNhnpT8SqWoEDynWi/h5HQEoMEX
+         dqHxdlH7ei9iIjeU6G622rShNvxu/elPzOnOn81MsJdXuMEq7dFps8rvN1WCJjKanHEW
+         n/uhWbH2KiZYGuCUrjpgdP9wvdLXd1k2nBFuBasijifaBm3WwcFilealnMvPjvlOAzrI
+         /C5TX99cQA7G9FTZ62rXO0efWGpz5gMrchO4Eu/SYXCfuTFdHTumIH546D6JHdNTsgD0
+         kdhKIrhc8MJm4K0bsNCMkX91xrQONjn4uO+3w0ueKsU6T7FjEm+crzqImPE+D1oXwR6+
+         /oPA==
+X-Gm-Message-State: AO0yUKWjriFQLyG71pwweh3futKH5BDRd7lM1Bo6vuG1v3AvRJBLumuP
+        ZgzAvw8byNTs01xlqJdrAg==
+X-Google-Smtp-Source: AK7set8j/Ty7lxEdGegJ4aQZTitSIzTHicNnBX3DhgGM19m8ws9dl2kuKR2wZrxKUQHXbvg0vyfafg==
+X-Received: by 2002:a9d:3e7:0:b0:694:88ea:671a with SMTP id f94-20020a9d03e7000000b0069488ea671amr3094525otf.14.1678312991323;
+        Wed, 08 Mar 2023 14:03:11 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a26-20020a056830101a00b00693ea7bfdc2sm6856004otp.76.2023.03.08.14.03.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 14:03:11 -0800 (PST)
+Received: (nullmailer pid 3923609 invoked by uid 1000);
+        Wed, 08 Mar 2023 22:03:09 -0000
+Date:   Wed, 8 Mar 2023 16:03:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Samin Guo <samin.guo@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Subject: Re: [PATCH v5 07/12] dt-bindings: net: starfive,jh7110-dwmac: Add
+ starfive,syscon
+Message-ID: <20230308220309.GA3914591-robh@kernel.org>
+References: <20230303085928.4535-1-samin.guo@starfivetech.com>
+ <20230303085928.4535-8-samin.guo@starfivetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] MAINTAINERS: orphan SIS FRAMEBUFFER DRIVER
-Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Thomas Winischhofer <thomas@winischhofer.net>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230308071921.10963-1-lukas.bulwahn@gmail.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20230308071921.10963-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:YAJsaXgvOu0OB9fOwoTOiZ/2PC23B/DNDuSZiQLGjU07wjsxQAl
- qd03dqtJO4F5q0zf2FXWuptrt4RJpXMT8Vv1EEogkxZ3n/nbynNOH3TxJzMdh+MlXKYuBzE
- 2DxQsF8p6tjUoC3Hhgm15bW3puUSfVeGj3PRwGMk2/Dpve6F3/dWQkvnPd59HUFH6F5R1Do
- Pi9Tq/HT/NiT9ybm37e3Q==
-UI-OutboundReport: notjunk:1;M01:P0:/hk/TkyoQ98=;e5NDFwsJ3f7fGsOUSw2qIsKpg+k
- yJM5wYNEbIUAePkbQ876OyFBHJu+NpvPto3JPqpjgHIAd5qf/e7GjRFRA/NnJCZAqXpdui4wW
- 2WvTRC7QQOhreRFsPIGqskl2bZp2AGRU2ItKrlK+jAlBx21gkLYKsaOtndQJzrjCfHe/zR7ed
- 5GEGL5OsA+h1NZfBfKwBaeu0JYy77W7IWOL5Td62Ry5/wAE+94MGa4vQVrggL0Qzhmn8DFGHS
- 3fz6w6SP/9gx7aW1/MAQPhqPkZkhtk/7BvmiwPFDg5LoqsW1esPv0VrvGEnHETae5JgWrGuoc
- zXiKPjtkzudN4zUGJ8o7+qrDZBSRl8oJMfkmIz0HEoBKPSVKHgKaUss+ZHvU6/i7d8HbrcabC
- Bis3RxmYGybOPqlp5K8Qok+KbqsdsRGmcMOp8aBGF+YX8Vh1T8Lh3MPOfuxOns65KsiS/MR11
- qBiFd+wgVpRkSiFP0KNiWwG80ba9C2b2g7fcEoAjNnvIvt3le8sGaDw/n4tKDkjXYmuSp0heC
- i+Lr/socogqSjdZ/rwrglN1jpoazN2UltdyMDIwIxY5EnvildsqG5qZgaHbrve3np+8IvNolg
- /lQSL9HatYpA2l+xqcPZNGLo/5UG0EZtfzPqACCDd0Af25mLr/1w0p055gDKXIz36AYoqQSfh
- R/cBLeo4L51faCiteXZFeip+EnBu/ryyy470Or+CiBirVmGewHfjVzRpNXxMvaJ7pLpOhSsEi
- jTps5QXABvCsZwaNgfvg6hmMMxEJLSm8dQCx1ym41RSdk7pHXgb7r71wO/Zg3O8GYpj3U9uYD
- qPjY7B/w8CzfjuyRqSjScLiXyavsytvJrTXfXP2tmai0q6Yr8OUKmBTitOvR8f/Jc0VyIjTr1
- iE4hq6gyKOFpZe9mV7HHcnfcUEjnOG0E9O0E71osoC2qaOjew9vjn7oNZ4L067lIRdY2FFfRQ
- 2tg+W3BvGr9lIpikmTge6TtvPAo=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230303085928.4535-8-samin.guo@starfivetech.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 08:19, Lukas Bulwahn wrote:
-> This was triggered by the fact that the webpage:
->
->    http://www.winischhofer.net/linuxsisvga.shtml
->
-> cannot be reached anymore.
->
-> Thomas Winischhofer is still reachable at the given email address, but h=
-e
-> has not been active since 2005.
->
-> Mark the SIS FRAMEBUFFER DRIVER as orphan to reflect the current state.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+On Fri, Mar 03, 2023 at 04:59:23PM +0800, Samin Guo wrote:
+> A phandle to syscon with two arguments that configure phy mode.
 
-applied to fbdev git tree.
+This change belongs in patch 4.
 
-Thanks!
-Helge
-
-
-
+> 
+> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
 > ---
->   MAINTAINERS | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5d8f46f35aa4..354577534aef 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19191,9 +19191,7 @@ W:	http://www.brownhat.org/sis900.html
->   F:	drivers/net/ethernet/sis/sis900.*
->
->   SIS FRAMEBUFFER DRIVER
-> -M:	Thomas Winischhofer <thomas@winischhofer.net>
-> -S:	Maintained
-> -W:	http://www.winischhofer.net/linuxsisvga.shtml
-> +S:	Orphan
->   F:	Documentation/fb/sisfb.rst
->   F:	drivers/video/fbdev/sis/
->   F:	include/video/sisfb.h
-
+>  .../bindings/net/starfive,jh7110-dwmac.yaml         | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml b/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
+> index ca49f08d50dd..79ae635db0a5 100644
+> --- a/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
+> @@ -58,6 +58,18 @@ properties:
+>        Tx clock is provided by external rgmii clock.
+>      type: boolean
+>  
+> +  starfive,syscon:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      - items:
+> +          - description: phandle to syscon that configures phy mode
+> +          - description: Offset of phy mode selection
+> +          - description: Mask of phy mode selection
+> +    description:
+> +      A phandle to syscon with two arguments that configure phy mode.
+> +      The argument one is the offset of phy mode selection, the
+> +      argument two is the mask of phy mode selection.
+> +
+>  allOf:
+>    - $ref: snps,dwmac.yaml#
+>  
+> @@ -96,6 +108,7 @@ examples:
+>          snps,en-tx-lpi-clockgating;
+>          snps,txpbl = <16>;
+>          snps,rxpbl = <16>;
+> +        starfive,syscon = <&aon_syscon 0xc 0x1c0000>;
+>          phy-handle = <&phy0>;
+>  
+>          mdio {
+> -- 
+> 2.17.1
+> 
