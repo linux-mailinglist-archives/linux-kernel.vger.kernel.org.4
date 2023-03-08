@@ -2,114 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0824A6AFB9B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A376AFB58
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjCHAzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 19:55:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
+        id S229997AbjCHAhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 19:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCHAzv (ORCPT
+        with ESMTP id S230074AbjCHAhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 19:55:51 -0500
-X-Greylist: delayed 886 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Mar 2023 16:55:49 PST
-Received: from a27-22.smtp-out.us-west-2.amazonses.com (a27-22.smtp-out.us-west-2.amazonses.com [54.240.27.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8A29AFE1;
-        Tue,  7 Mar 2023 16:55:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=s25kmyuhzvo7troimxqpmtptpemzlc6l; d=exabit.dev; t=1678235640;
-        h=Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:Mime-Version:Content-Type:Content-Transfer-Encoding;
-        bh=hByjQKgqwH57WOIPZC7o+pxFfUYAeO+49C7DJJ1GLFg=;
-        b=cla1TKtKRJlLNHsclYB6ouf58iP213dERQku7qUDNb99l6+1ojWseCYpQtgzRUqj
-        WVu1msPYYPc1sne/Mck5YzOyzjugqXi/ew3lF4pwRQmrctL3zER392MztS0rhF4w7CS
-        DvuDjWo6fEtr3NVuGoto0U70wGfTuBxigOCcB0Sf5olKOtL8BnxBojyvj70tE99Rj+U
-        Ilc066Zp2hXpH552xfR64zpc4p4hyj+ZzODbFupoAaNcMF4dvlurLlvG9WwK0eMRiyc
-        35+6MjkJEvo6YEHH4qvgosIh9GjSXaO0tS5sk0Tt2h4/R1N8+EPTdXLYq9izphQkuKm
-        CqW961Hfig==
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1678235640;
-        h=Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:Mime-Version:Content-Type:Content-Transfer-Encoding:Feedback-ID;
-        bh=hByjQKgqwH57WOIPZC7o+pxFfUYAeO+49C7DJJ1GLFg=;
-        b=JwoYJ7oqGdOXLAyST48LCg5VhHIPmUZqxUaIHd+jr2C47JOaUT2AqLmkK/uG2AVt
-        jeNygHV/az/u5WqnszR90X3BdKn2ac6TfvPSdnLStkUKdvpEYhAYHfadihg1viRNfnI
-        VUWkAg537oGvqNuo9Q4MvsPdl++Kd/ZI8OT1VSzc=
-Date:   Wed, 8 Mar 2023 00:33:59 +0000
-Message-ID: <01010186bea3a046-f1f68507-2d3c-41c3-9066-44199e2ce071-000000@us-west-2.amazonses.com>
-To:     bjorn3_gh@protonmail.com
-Cc:     daniel.almeida@collabora.com, wedsonaf@gmail.com, ojeda@kernel.org,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kernel@collabora.com
-Subject: Re: [PATCH] rust: virtio: add virtio support
-From:   FUJITA Tomonori <tomo@exabit.dev>
-In-Reply-To: <OBVROfBri9SuVdfyos-71URYovcNLhbDb_50cECWMwhycY2sHH90w28f0qlJ_q_dMuCnOD_4nQCVUnwOkgyCEH1298nsVLW0YFuuiIlLPow=@protonmail.com>
-References: <20230307130332.53029-1-daniel.almeida@collabora.com>
-        <OBVROfBri9SuVdfyos-71URYovcNLhbDb_50cECWMwhycY2sHH90w28f0qlJ_q_dMuCnOD_4nQCVUnwOkgyCEH1298nsVLW0YFuuiIlLPow=@protonmail.com>
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=iso-8859-1
+        Tue, 7 Mar 2023 19:37:25 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F91B0B9E;
+        Tue,  7 Mar 2023 16:36:56 -0800 (PST)
+Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3321A27C;
+        Wed,  8 Mar 2023 01:36:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1678235796;
+        bh=/SiZ/SnUZaXl45SfRpnKybJKwHQE7m3GNk+YSHsQfvQ=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=kS7QgudtNnSLQ7b9uMa5oT2EwmGy5QQPQtuM2EnJCXKvap5+e1BOSRzac8jGf0bD0
+         +iXtbZRr9GOO70xDv34jwhfSyVCrhLb+dZo8gK7RIrV26Xuv/SHkahGpGyv928wB9Y
+         MtVYgAlfjKwAMyUQXC7LTQxVidX+Gd7H3t0fM9yo=
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-Feedback-ID: 1.us-west-2.j0GTvY5MHQQ5Spu+i4ZGzzYI1gDE7m7iuMEacWMZbe8=:AmazonSES
-X-SES-Outgoing: 2023.03.08-54.240.27.22
+In-Reply-To: <20230307163041.3815-6-wsa+renesas@sang-engineering.com>
+References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com> <20230307163041.3815-6-wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH 05/11] media: renesas: fdp1: remove R-Car H3 ES1.* handling
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org
+Date:   Wed, 08 Mar 2023 00:36:32 +0000
+Message-ID: <167823579297.93391.2081091035435718250@Monstersaurus>
+User-Agent: alot/0.10
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 07 Mar 2023 17:09:27 +0000
-Bj=F6rn Roy Baron <bjorn3_gh@protonmail.com> wrote:
+Quoting Wolfram Sang (2023-03-07 16:30:33)
+> R-Car H3 ES1.* was only available to an internal development group and
+> needed a lot of quirks and workarounds. These become a maintenance
+> burden now, so our development group decided to remove upstream support
+> and disable booting for this SoC. Public users only have ES2 onwards.
+>=20
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-> On Tuesday, March 7th, 2023 at 14:03, Daniel Almeida <daniel.almeida@=
-collabora.com> wrote:
-> =
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
->> This patch adds virtIO support to the rust crate. This includes the
->> capability to create a virtIO driver (through the module_virtio_driv=
-er
->> macro and the respective Driver trait) as well as initial virtqueue
->> support.
->> =
-
->> A sample virtIO module is included for conveninence.
->> =
-
->> Signed-off-by: Daniel Almeida daniel.almeida@collabora.com
->> =
-
->> ---
->> =
-
->> Ok so this is my first Rust contribution here. It's part of a virtIO=
-
->> driver I was originally writing. Both the probing and the virtqueue
->> support in here were confirmed as working in said prototype driver, =
-and
->> the pieces were picked separately into this patch.
->> =
-
->> Feel free to point me to the best practices around Rust patch
->> submission, as the C stuff like checkpatch etc probably does not app=
-ly
->> yet. I did take care to run clippy though.
->> =
-
-> =
-
-> Great to see Rust support for the driver side of VirtIO! I've got a c=
-ouple of review comments, but I don't see any big issues. Maybe you cou=
-ld write an actual driver which uses add_sgs though? It doesn't have to=
- be complicated, but just something to show how it will work. That may =
-help with checking if the api is usable. You might try something like v=
-irtio-console or virtio-entropy I think.
-
-There was an attempt to implement virtio-net, which might be useful:
-
-https://github.com/Rust-for-Linux/linux/pull/886
-
-C versions of virtio-console, virtio-rng, and virtio-net exists. Both
-C and Rust versions in mainline?
-
-Are there guidelines on pushing a Rust driver in mainline?
+> ---
+> Please apply individually per subsystem. There are no dependencies and th=
+e SoC
+> doesn't boot anymore since v6.3-rc1.
+>=20
+>  drivers/media/platform/renesas/rcar_fdp1.c | 4 ----
+>  1 file changed, 4 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/renesas/rcar_fdp1.c b/drivers/media/p=
+latform/renesas/rcar_fdp1.c
+> index 37ecf489d112..f4a1fc8ce595 100644
+> --- a/drivers/media/platform/renesas/rcar_fdp1.c
+> +++ b/drivers/media/platform/renesas/rcar_fdp1.c
+> @@ -254,7 +254,6 @@ MODULE_PARM_DESC(debug, "activate debug info");
+> =20
+>  /* Internal Data (HW Version) */
+>  #define FD1_IP_INTDATA                 0x0800
+> -#define FD1_IP_H3_ES1                  0x02010101
+>  #define FD1_IP_M3W                     0x02010202
+>  #define FD1_IP_H3                      0x02010203
+>  #define FD1_IP_M3N                     0x02010204
+> @@ -2359,9 +2358,6 @@ static int fdp1_probe(struct platform_device *pdev)
+> =20
+>         hw_version =3D fdp1_read(fdp1, FD1_IP_INTDATA);
+>         switch (hw_version) {
+> -       case FD1_IP_H3_ES1:
+> -               dprintk(fdp1, "FDP1 Version R-Car H3 ES1\n");
+> -               break;
+>         case FD1_IP_M3W:
+>                 dprintk(fdp1, "FDP1 Version R-Car M3-W\n");
+>                 break;
+> --=20
+> 2.35.1
+>
