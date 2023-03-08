@@ -2,52 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E78E6B14D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C14746B14DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjCHWQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 17:16:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
+        id S230235AbjCHWQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 17:16:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbjCHWQQ (ORCPT
+        with ESMTP id S230209AbjCHWQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 17:16:16 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F9685B01
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 14:16:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=dGp9vIk2lHmCEzh30vPS3w1b6P+mkS45Ij2om+aNJ0M=; b=JJ9D9SIdtY1y/UzJkqPz2s2H7c
-        fIhU4OFC9CdY6gnk2qHgk9uVC0pbeWp1Ce9A+gsFMAb6s3DM4+XDclHyGkeyMgzdL8z2NGkEH2sV2
-        V5zKkZSvaHwh2itkctgjLiyL+/F0+6DdVYY6fESwiW4mv/4QwNzKLvZa2g9/lLYxySxAE03jgaMjY
-        aBHD3FDRQVArTD4CZ2BViM2QO+DmVsV7d3O1SwY+U2H4otRe3O1zkO6TcwO4Zxw7jOCUmxWkSKlUx
-        KLaXNaSuT5ZnrMwletNpV5kuyWu+LDzKj9+7UY3KBUL+CDeESyGLW+Kf33BNHs5P9F7dYA9LDb4e+
-        L0UFsYGQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pa24o-006wOM-Nx; Wed, 08 Mar 2023 22:16:02 +0000
-Date:   Wed, 8 Mar 2023 14:16:02 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     hughd@google.com, akpm@linux-foundation.org, willy@infradead.org,
-        brauner@kernel.org, linux-mm@kvack.org, p.raghav@samsung.com,
-        da.gomez@samsung.com, a.manzanares@samsung.com, dave@stgolabs.net,
-        yosryahmed@google.com, keescook@chromium.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] shmem: update documentation
-Message-ID: <ZAkJInU6iufkI0j5@bombadil.infradead.org>
-References: <20230302232758.888157-1-mcgrof@kernel.org>
- <20230302232758.888157-6-mcgrof@kernel.org>
- <efae0531-7f72-a78c-07c9-82879adf5666@redhat.com>
+        Wed, 8 Mar 2023 17:16:40 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AEB87348
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 14:16:38 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id u5so19096120plq.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 14:16:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1678313798;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tkhViH9kdWNjYXwKnPEs08Xl3095dV6IZ6LM3uHmPgg=;
+        b=bPXrjsfNIA8aCilQN80V8tZJJRnYiUaUiYYE6WDP0poZXHmgRnngHO4Lb96J8qrY8s
+         0UFv5K7lMRJloKD0tWGMmVKDB1rB7L2PYgY245lC/cGDS2TdHabWAHsD74tYHk7XWX+9
+         ctSErcrpU4ra1h7MNt4j2JB1T46qH5KSu8XZMjjoIq7fVYdLws67bRDNtSSAyq5ddIEU
+         URzRfvXhHoHE7mhDjTIo/KgBW+4k4yBsfFL5q4a+jwiG/cTxuGsLWCziz32JVyllZ+pC
+         DZbdjHIIJFo9Zy6iaSLyCS5thVAOwak49iMLSnuOr6HQ+YCMlQc6/QjcnOmMkEQALnF5
+         7qLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678313798;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tkhViH9kdWNjYXwKnPEs08Xl3095dV6IZ6LM3uHmPgg=;
+        b=gPfyRtoRFkqK1EUTOmylj8pS59cn0mJ19yrmZD+IJ6Afjq4+Y6FqD8K3HtRTmVuIPj
+         pNw2Q46ao/MgeUDCvr9ZXBoVHUIrV/Sszfd1WZy7v8NuHQnH1wuk4Ee1weY0Kj88Tj6m
+         g+v6Qiwl5FWCx7aFBVqjlr5Ve1ot3lCVerYqPHO4Pg0uZV0hymiGISdBvLYGoQyz8IWV
+         rktAMc9ipc/u+0NdV9Fn/1djIdFahxLwlmwqewP5mTc/9fP/4HqsZILCz5ksdSdnOyRE
+         qtpm8YoeNYRn9zsiX9QACmw6kLKPU10IGSe8mWg2fAWGWvMjI69IVBp4SpMSL+eOzU6y
+         taKA==
+X-Gm-Message-State: AO0yUKXqzZIeMnd7OE26455dl8z7B0JdRY01WHDxAL3IOUAM3wB+Xc5g
+        eLGO4/vSZWxsTfXUNYButeqISqX7ZgYoFV3m24nC
+X-Google-Smtp-Source: AK7set++0GvPRL/fArYHKN0SqlsLssuQ2AVagfsEuJmq+L5qFprSO0qSDic4f0ylWLwNIoHyQ3gpdgkwfLpUMJ7FI+Y=
+X-Received: by 2002:a17:903:2587:b0:19a:9f86:adab with SMTP id
+ jb7-20020a170903258700b0019a9f86adabmr7646529plb.7.1678313797868; Wed, 08 Mar
+ 2023 14:16:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <efae0531-7f72-a78c-07c9-82879adf5666@redhat.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 8 Mar 2023 17:16:26 -0500
+Message-ID: <CAHC9VhTRT=o9Rv+EhZ4aab1FDCyTNa7XEYuhuOiSEkWh0Cdrnw@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] evm: Do HMAC of multiple per LSM xattrs for new inodes
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,38 +77,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 03:04:57PM +0100, David Hildenbrand wrote:
-> On 03.03.23 00:27, Luis Chamberlain wrote:
-> > Update the docs to reflect a bit better why some folks prefer tmpfs
-> > over ramfs and clarify a bit more about the difference between brd
-> > ramdisks.
-> > 
-> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> > ---
-> >   Documentation/filesystems/tmpfs.rst | 27 +++++++++++++++++++--------
-> >   1 file changed, 19 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/Documentation/filesystems/tmpfs.rst b/Documentation/filesystems/tmpfs.rst
-> > index 0408c245785e..e77ebdacadd0 100644
-> > --- a/Documentation/filesystems/tmpfs.rst
-> > +++ b/Documentation/filesystems/tmpfs.rst
-> > @@ -13,14 +13,25 @@ everything stored therein is lost.
-> >   tmpfs puts everything into the kernel internal caches and grows and
-> >   shrinks to accommodate the files it contains and is able to swap
-> > -unneeded pages out to swap space. It has maximum size limits which can
-> > -be adjusted on the fly via 'mount -o remount ...'
-> > -
-> > -If you compare it to ramfs (which was the template to create tmpfs)
-> > -you gain swapping and limit checking. Another similar thing is the RAM
-> > -disk (/dev/ram*), which simulates a fixed size hard disk in physical
-> > -RAM, where you have to create an ordinary filesystem on top. Ramdisks
-> > -cannot swap and you do not have the possibility to resize them.
-> > +unneeded pages out to swap space.
-> 
-> I suppose, in contrast to ramfs, tmpfs also supports THP. Maybe worth adding
-> as well.
+On Thu, Dec 1, 2022 at 5:42=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> One of the major goals of LSM stacking is to run multiple LSMs side by si=
+de
+> without interfering with each other. The ultimate decision will depend on
+> individual LSM decision.
+>
+> Several changes need to be made to the LSM infrastructure to be able to
+> support that. This patch set tackles one of them: gives to each LSM the
+> ability to specify one or multiple xattrs to be set at inode creation
+> time and, at the same time, gives to EVM the ability to access all those
+> xattrs and calculate the HMAC on them.
 
-Good call, both the mount and the sysfs file (which is registered by
-THP) lacks any documentation so I'll just add docs for both.
+Hi Roberto,
 
-  Luis
+The v7 draft of this patchset had some good discussion, and based on a
+quick read of the comments it looks like everyone was eventually
+satisfied that the v7 draft was good and no further changes were
+necessary, is that correct or do you have an updated draft of this
+patchset?
+
+--=20
+paul-moore.com
