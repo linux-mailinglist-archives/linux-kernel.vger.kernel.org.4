@@ -2,128 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFEE6B03D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B854F6B03D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjCHKRJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Mar 2023 05:17:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
+        id S230317AbjCHKSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjCHKRG (ORCPT
+        with ESMTP id S229614AbjCHKSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:17:06 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE653A5699
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:17:04 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-94-zZEPLqmLP0yTudXVspLNZQ-1; Wed, 08 Mar 2023 10:17:01 +0000
-X-MC-Unique: zZEPLqmLP0yTudXVspLNZQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Wed, 8 Mar
- 2023 10:16:59 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.047; Wed, 8 Mar 2023 10:16:59 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Chao Yu' <chao@kernel.org>,
-        "jaegeuk@kernel.org" <jaegeuk@kernel.org>
-CC:     "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Zhiguo Niu <zhiguo.niu@unisoc.com>
-Subject: RE: [PATCH] f2fs: fix unaligned field offset in 32-bits platform
-Thread-Topic: [PATCH] f2fs: fix unaligned field offset in 32-bits platform
-Thread-Index: AQHZUQf4b45n81mohk6KYf6qmq4uP67wqZ1A
-Date:   Wed, 8 Mar 2023 10:16:59 +0000
-Message-ID: <942fe8111fdb48e583b846f3e2902228@AcuMS.aculab.com>
-References: <20230307151408.58490-1-chao@kernel.org>
-In-Reply-To: <20230307151408.58490-1-chao@kernel.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 8 Mar 2023 05:18:05 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288FB1B2E3
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:18:03 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id a32so2070535ljq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:18:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678270681;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=krZQpr7uIm4vLx88h00ljILNedqe5S23Jc9CthZt6vU=;
+        b=PEerjSzms92KVfFhY/EDDlsfRjdHx3uWqwcch/aK80fwALOeLAy74p2WPgAFoQNSSr
+         sonOqt17DNZvs3NnL7QFpRcFnb/rklcHvxjsoXqPYtgwyQe8ahAiuPmtrYNDQLWG+XTb
+         tbvH0r/yU5DXqsZxHw4ggMmgkQgS/DOmH2q3TLWciwkiXcnwB7pQFO8y78XRgdoK+v0H
+         2FT7VtiOankxEG3I3fZUkq6pNqY5MQJtuGBlLYr88pEuOw2Q/ddpZz6JPf+1gtzX8KqH
+         +WizrEyfHbtEKvSwd8SG6RyPFdt273usiyvAh84KpFdLTG2bDzvdZeoGpfg3xL3nqSsf
+         NMWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678270681;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=krZQpr7uIm4vLx88h00ljILNedqe5S23Jc9CthZt6vU=;
+        b=FktW7KZ+0pU5zt99XmLwB5mgg6yVHV9Tccai+gPoSIrd1VkCIjtQyZ+N0UBF/0Etse
+         zEKT2mh6WL4EE2rhT2toXqy/t9xMIMVlwCYmpIJWWY3kMRQGCms9CCxS3YKdRJfNO/y7
+         /IxcCvakZ1PPoDyBNUApWeBp2q1K9zIQjRlTRAgsz9+EdSNNdClEllqAKUos/xn5+MJX
+         VsCTLs/Rzn1Jg7Jf0SJeXNyhD/0eVzMDv1FyPgtDjg3p4IA+Ktylwrx8Q1jxFrOXbSdK
+         ZaLvj9D9+Q91xkD1zVIUbAVk8Slnf8WlVh5ftWiYuNaneh6TLxdXYMf4zsbt8c4QXK4n
+         VG5Q==
+X-Gm-Message-State: AO0yUKVAkfHAd/A4arRtutRUP9uahzMthjemntZ3qUICP7E2FlOc8Oos
+        XwQBYDsIHElcWGXqMQgVTuFojw==
+X-Google-Smtp-Source: AK7set9n1U1YMBH0wlOoSKEkMVTtc4syUR8K40rQA+XD5LofbKGrhDBmIn2Es6laJf5Gpzy+YqdFcg==
+X-Received: by 2002:a2e:3111:0:b0:290:6e3b:be34 with SMTP id x17-20020a2e3111000000b002906e3bbe34mr4957732ljx.42.1678270681440;
+        Wed, 08 Mar 2023 02:18:01 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id c19-20020ac244b3000000b004cc9c2932a9sm2304433lfm.302.2023.03.08.02.17.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 02:18:01 -0800 (PST)
+Message-ID: <b72d54ac-5152-bc6c-55a9-dd59d32614d6@linaro.org>
+Date:   Wed, 8 Mar 2023 11:17:58 +0100
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v7 4/6] arm64: dts: qcom: sm6125: Add UFS nodes
 Content-Language: en-US
+To:     Lux Aliaga <they@mint.lgbt>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, alim.akhtar@samsung.com, avri.altman@wdc.com,
+        bvanassche@acm.org, keescook@chromium.org, tony.luck@intel.com,
+        gpiccoli@igalia.com
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-hardening@vger.kernel.org,
+        phone-devel@vger.kernel.org, martin.botka@somainline.org,
+        marijn.suijten@somainline.org
+References: <20230306170817.3806-1-they@mint.lgbt>
+ <20230306170817.3806-5-they@mint.lgbt>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230306170817.3806-5-they@mint.lgbt>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
-> Sent: 07 March 2023 15:14
+
+
+On 6.03.2023 18:08, Lux Aliaga wrote:
+> Adds a UFS host controller node and its corresponding PHY to
+> the sm6125 platform.
 > 
-> F2FS-fs (dm-x): inconsistent rbtree, cur(3470333575168) next(3320009719808)
-> ------------[ cut here ]------------
-> kernel BUG at fs/f2fs/gc.c:602!
-> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
-> PC is at get_victim_by_default+0x13c0/0x1498
-> LR is at f2fs_check_rb_tree_consistence+0xc4/0xd4
-> ....
-> [<c04d98b0>] (get_victim_by_default) from [<c04d4f44>] (f2fs_gc+0x220/0x6cc)
-> [<c04d4f44>] (f2fs_gc) from [<c04d4780>] (gc_thread_func+0x2ac/0x708)
-> [<c04d4780>] (gc_thread_func) from [<c015c774>] (kthread+0x1a8/0x1b4)
-> [<c015c774>] (kthread) from [<c01010b4>] (ret_from_fork+0x14/0x20)
-> 
-> The reason is there is __packed attribute in struct rb_entry, but there
-> is no __packed attribute in struct victim_entry, so wrong offset of key
-> field will be parsed in struct rb_entry in f2fs_check_rb_tree_consistence,
-> it describes memory layouts of struct rb_entry and struct victim_entry in
-> 32-bits platform as below:
-> 
-> struct rb_entry {
->    [0] struct rb_node rb_node;
->        union {
->            struct {...};
->   [12]     unsigned long long key;
->        } __packed;
+> Signed-off-by: Lux Aliaga <they@mint.lgbt>
+> ---
+[...]
 
-This __packed removes the 4-byte pad before the union.
-I bet it should be removed...
+> +		ufs_mem_phy: phy@4807000 {
+> +			compatible = "qcom,sm6125-qmp-ufs-phy";
+> +			reg = <0x04807000 0xdb8>;
+> +
+> +			clocks = <&gcc GCC_UFS_MEM_CLKREF_CLK>, <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
+> +			clock-names = "ref", "ref_aux";
+Please wrap it into
 
-> }
-> size of struct rb_entry: 20
-> 
-> struct victim_entry {
->    [0] struct rb_node rb_node;
->        union {
->            struct {...};
->   [16]     struct victim_info vi;
->        };
->   [32] struct list_head list;
-> }
-> size of struct victim_entry: 40
-> 
-> This patch tries to add __packed attribute in below structure:
-> - discard_info, discard_cmd
-> - extent_info, extent_node
-> - victim_info, victim_entry
-> in order to fix this unaligned field offset issue in 32-bits platform.
+clocks = <&gcc GCC_UFS_MEM_CLKREF_CLK>,
+	 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
+clock-names = "ref",
+	      "ref_aux";
 
-Have you looked at the amount of extra code that gets generated
-on systems that fault misaligned accesses?
 
-Plausibly adding __packed __aligned(4) will restrict the compiler
-to just aligning 64bit items on 32bit boundaries.
-But even then is you pass the address of a misaligned structure
-to another function it will fault later of.
+and resolve the binding/offset situation. Otherwise, LGTM!
 
-You haven't actually said where the misalignment comes from.
-If the code is doing (foo *)(ptr + 1) then that is broken
-when the alignments of 'ptr' and 'foo' differ.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Konrad
+> +
+> +			resets = <&ufs_mem_hc 0>;
+> +			reset-names = "ufsphy";
+> +
+> +			power-domains = <&gcc UFS_PHY_GDSC>;
+> +
+> +			#phy-cells = <0>;
+> +
+> +			status = "disabled";
+> +		};
+> +
+>  		gpi_dma0: dma-controller@4a00000 {
+>  			compatible = "qcom,sm6125-gpi-dma", "qcom,sdm845-gpi-dma";
+>  			reg = <0x04a00000 0x60000>;
