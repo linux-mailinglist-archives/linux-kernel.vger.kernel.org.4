@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785EB6B16B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 00:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9287C6B16BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 00:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbjCHXjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 18:39:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
+        id S229668AbjCHXnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 18:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbjCHXii (ORCPT
+        with ESMTP id S229513AbjCHXnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 18:38:38 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECCF65C61
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 15:38:34 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17683b570b8so508696fac.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 15:38:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678318713;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=59RnUUeXUSnsMfT51jFg2QQnLPiQn/N+3fHwfoGuKl0=;
-        b=pF1RglZCkn5XIyOdWnyrmL8yTgBs1+95aNqxPg2mjlZQLm4EI99ZyCF4ldmppwfY7m
-         SasK2e3cl9aIuv9zdQTbmuso94/gVRjDw6jWdUERQkAAXL9apO+VWMzkOrgFIqE1R/oE
-         HcAp8jLvUWFPE/I744zd/Yaq51nSaZC413gL8BSvdQ6+2Eva13dMptuK2LvPsvaYj3dm
-         BCdH/rGisBSwjztRqyj4WqXu+hr9/dQJXBye8LZ7PES1L0heGNKxMfQmQTU8wdhJF23J
-         M1E0z2xB2rnNkGoTqMTTkeXqAsMtWXKmzeTV79if8Cnj3q6Nv6LAk4YxntEpCsXyPbZi
-         pOBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678318713;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=59RnUUeXUSnsMfT51jFg2QQnLPiQn/N+3fHwfoGuKl0=;
-        b=CNxOIJ4xehZSazN4a4+4rFhRAGn1GjqPskUwOvxSHb9jk5yFAnFWMmz1jc5Aq5PFv2
-         d0KHpwzQ6/RHKZ7uTJgsM92eFFZU1FdZgJ3d4icZ9foUQmFECZUP35YOFlaKee9tM49c
-         PgROheVEkh73zSWhsRz+D6GaY1/GwV8ZJRGFZx6crs1suBrUxCnyGIKBy83FaG/1a5vm
-         TcQC6bkPx+ae6hFyeKhPR9bpTElsBtBLxqS0HcbsSnQZjYzGFTKFpGSD6BR5Exed7WX+
-         vl0EcDVxeFaqzF72GUjbdXRMYHxH/+qVvN0+YrKAAVjkt5Y+nlWPrL1+0p/lX4ZV6M4c
-         O+Lg==
-X-Gm-Message-State: AO0yUKU0yM1l4iHB3RFkByC6X99U8DurKe1oA79h/sI2QqeodqQ+35Ai
-        zcEppnfQBYl0oIcM+lF91C+2Pg==
-X-Google-Smtp-Source: AK7set8plTEasFR06vuaD6t4Lm3l0XcW1Bwx+tNAfbenG0REitnea0SJSCX6JNlqc4IDv6vB7Dd2Mg==
-X-Received: by 2002:a05:6870:d1c3:b0:172:36ce:91d0 with SMTP id b3-20020a056870d1c300b0017236ce91d0mr2341540oac.38.1678318713251;
-        Wed, 08 Mar 2023 15:38:33 -0800 (PST)
-Received: from localhost ([136.49.140.41])
-        by smtp.gmail.com with ESMTPSA id ax39-20020a05687c022700b0016b0369f08fsm6735660oac.15.2023.03.08.15.38.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 15:38:32 -0800 (PST)
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 7/7] arm64: dts: exynos: Remove clock from Exynos850 pmu_system_controller
-Date:   Wed,  8 Mar 2023 17:38:22 -0600
-Message-Id: <20230308233822.31180-8-semen.protsenko@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230308233822.31180-1-semen.protsenko@linaro.org>
-References: <20230308233822.31180-1-semen.protsenko@linaro.org>
+        Wed, 8 Mar 2023 18:43:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1D161897
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 15:42:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678318963;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z4+90+ZxONY2XZZy5o49XHYJX/j1G6CBk1SjoO4mL6Q=;
+        b=gWWJhCdB7q8/Cfv8zYX1M+k/muejMDW0CWdX/qx6Gt7NUtCdjsbBDdfXmgBKsVCZKPZ1cF
+        HQ8LW9eUHc7VxVmaRqFSuArCvb+Vm0lAnDATS0YQ3hq1QxC72QAJEtWhAjnvlS+2PeQW4F
+        rQc40yHEu/ZMepp0uz3Xnzituj4ApeQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-395-WEXlRhpyMhWZy7SX8kvLaw-1; Wed, 08 Mar 2023 18:42:37 -0500
+X-MC-Unique: WEXlRhpyMhWZy7SX8kvLaw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 78A1E101A521;
+        Wed,  8 Mar 2023 23:42:35 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E59B440C945A;
+        Wed,  8 Mar 2023 23:42:32 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAHk-=wjYR3h5Q-_i3Q2Et=P8WsrjwNA20fYpEQf9nafHwBNALA@mail.gmail.com>
+References: <CAHk-=wjYR3h5Q-_i3Q2Et=P8WsrjwNA20fYpEQf9nafHwBNALA@mail.gmail.com> <20230308165251.2078898-1-dhowells@redhat.com> <20230308165251.2078898-4-dhowells@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Daniel Golle <daniel@makrotopia.org>,
+        Guenter Roeck <groeck7@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [PATCH v17 03/14] shmem: Implement splice-read
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2139516.1678318952.1@warthog.procyon.org.uk>
+Date:   Wed, 08 Mar 2023 23:42:32 +0000
+Message-ID: <2139517.1678318952@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,31 +77,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As described in the corresponding binding documentation for
-"samsung,exynos850-pmu", the "clocks" property should be used for
-specifying CLKOUT mux inputs. Therefore, the clock provided to exynos850
-pmu_system_controller is incorrect and should be removed. Instead of
-making syscon regmap keep that clock running for PMU accesses, it should
-be made always running in the clock driver, because the kernel is not
-the only software accessing PMU registers on Exynos850 platform.
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
----
- arch/arm64/boot/dts/exynos/exynos850.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+> I get the feeling that the zeropage case just isn't so important that we'd
+> need to duplicate filemap_splice_read() just for that, and I think that the
+> code should either
+> 
+>  (a) just make a silly "read_folio()" for shmfs that just clears the page.
+> 
+>      Ugly but maybe simple and not horrid?
 
-diff --git a/arch/arm64/boot/dts/exynos/exynos850.dtsi b/arch/arm64/boot/dts/exynos/exynos850.dtsi
-index d67e98120313..aa077008b3be 100644
---- a/arch/arm64/boot/dts/exynos/exynos850.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynos850.dtsi
-@@ -200,7 +200,6 @@ gic: interrupt-controller@12a01000 {
- 		pmu_system_controller: system-controller@11860000 {
- 			compatible = "samsung,exynos850-pmu", "syscon";
- 			reg = <0x11860000 0x10000>;
--			clocks = <&cmu_apm CLK_GOUT_PMU_ALIVE_PCLK>;
- 
- 			reboot: syscon-reboot {
- 				compatible = "syscon-reboot";
--- 
-2.39.2
+The problem with that is that once a page is in the pagecache attached to a
+shmem file, we can't get rid of it without deleting or truncating the file...
+At least, I think that the case.  For all other regular filesystems, a page
+full of zeros can be flushed/discarded by the LRU.
+
+shmem also has its own function for allocating folios in its pagecache, the
+caller of ->read_folio() would probably have to use that.
+
+>  (b) teach filemap_splice_read() that a NULL 'read_folio' function
+> means "use the zero page"
+> 
+>      That might not be splice() itself, but maybe in
+> filemap_get_pages() or something.
+
+It would require some special handling in filemap_get_pages() - and/or
+probably better filemap_splice_read() since, for shmem, it's only relevant to
+splice.  An additional flag could be added to filemap_get_pages() to tell it
+to stop at a hole in the pagecache rather than invoking readahead.
+filemap_splice_read() would then need to examine the pagecache to work out how
+big the hole is and insert the appropriate number of zeropages before calling
+back into filemap_get_pages() again.  Possibly it could use SEEK_DATA.
+
+> or
+> 
+>  (c) go even further, and teach read_folio() in general about file
+> holes, and allow *any* filesystem to read zeroes that way in general
+> without creating a folio for it.
+
+Nice idea, but we'd need a way to store a "negative" marker (as opposed to
+"unknown") in the pagecache for the filemap code to be able to use it.  This
+sort of thing might become easier if xarray gets switched to a maple tree
+implementation as that would better allow for caching of a known file hole of
+arbitrary size with a single entry.
+
+But for the moment, the filemap code would have to jump through a filesystem's
+->readahead or ->read_folio vectors to work out if there's a hole there or not
+- but in both cases it must already have allocated the pages it wants to
+query.
+
+David
 
