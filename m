@@ -2,131 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DAC6B135E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC9B6B136C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbjCHUvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 15:51:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
+        id S229801AbjCHU5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 15:57:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbjCHUvF (ORCPT
+        with ESMTP id S229875AbjCHU5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:51:05 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0EC898D2;
-        Wed,  8 Mar 2023 12:51:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678308664; x=1709844664;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dawFCN46X6uTJdbZMi5dw9X68cMnBDF1sYbDOL4D3x4=;
-  b=NSKa5Ya3AyO2stxmoTXLJgUKseT7wl7lRDC+5CqGIXigcbplEZGYtrSO
-   ZYKI99809uee6AbhBDhsCGwLVk0NwyeXqtmWu/C1SMDDYfiyXyd+6ecKc
-   iB0wiM4tbO9fONcNEuIVm235SaPMAzeSY5eBUC+tQJ0HZ33y+wdxAvrHT
-   30YQn89wXufPWV3YKzlmnubKJup1lRD41+9wGXaIL81Mc2dn7QD3FuSkE
-   XYHzoEqyJHUblIawSFIAF4TH6h8tC9+h7q0qDvguJ8qS29jfE91W/gnUb
-   vXata/rZNUsagfRH3lCg5sdeE9/Pb828gK0ohIeKx5p4Are0YEGoT4fk5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="320103101"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="320103101"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 12:51:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="670468950"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="670468950"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 08 Mar 2023 12:50:58 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pa0kT-0002Oc-1p;
-        Wed, 08 Mar 2023 20:50:57 +0000
-Date:   Thu, 9 Mar 2023 04:50:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Youling Tang <tangyouling@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, Xuerui Wang <kernel@xen0n.name>,
-        linux-efi@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH] efistub: LoongArch: Reimplement kernel_entry_address()
-Message-ID: <202303090430.e6BB0Txr-lkp@intel.com>
-References: <1678186653-27659-1-git-send-email-tangyouling@loongson.cn>
+        Wed, 8 Mar 2023 15:57:19 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEECBCCEAB;
+        Wed,  8 Mar 2023 12:57:17 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5384ff97993so328086797b3.2;
+        Wed, 08 Mar 2023 12:57:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678309037;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UTT8n29DWNd3urgPa1kCRTbJVOAEGECiIIU8nl+Nkjg=;
+        b=LfDjf6FYZTWA5GSZkgEi8KpG8mClAxawA58QJzzzQpRHpAylJ8Ui8zyXXL3vFD9LGB
+         I97hm3W/sKpiwn9wm36pwbGuTvp7gRkAAtV9dhE7w3gImFb2C3uSBfhP0T6lq8/4xTHL
+         FP9D3ATdgkVTTjOhLvtBgvICoSgTaaSLo/RnkFvajnSDZOmOZsiWo8u3U6kRHD3AJtni
+         v87R7WGAKJ1Kvv6ZmgMM8JQpsbIj1QEZx5P1l546HIC8DV010jWiy5PDZERJdRD2M69L
+         92H6LrPUqLzwL+oFb4LLSNI0bFXOLcepOkoIPG3TQBJB8ITp/V3DvyJwgeF2jpnj+Aoi
+         Hgug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678309037;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UTT8n29DWNd3urgPa1kCRTbJVOAEGECiIIU8nl+Nkjg=;
+        b=iW95AegMM8MMpo7fskTVVFtALEfxlE7Z/lRKgi6Od/E2QhtY2r09HM5yuHe17nnWBq
+         qRkZHtlsgC5edR81HevfSVSjQ0pAzv2xASkNT8MhF3z787d1w7RPx0GhcU1xGRE+pPBP
+         Cz2l4aIysP28VEpl2uFtMxUa/50n1Km1aOuNOWmLgTrjiKbzdqr2PJiJjKmDLPTF1ngg
+         GSezpFVyGR5qIJx2rSJ6oO+SO32hQ9JIxGMu4GOWX1nPDf48ldCe736u9vCWYS1uwvJY
+         vA2JvyGjxuQVHB8gfXKDjivWFMOFkuY1303zlzYtqMH9N8wLlrzoEYikk2kkdtUjQvG8
+         M5YQ==
+X-Gm-Message-State: AO0yUKWiTthEy1AZH4qdz0Jv7tyztLiNq62GDjbRRAzmAZ56XeHw+5Gs
+        kw0IgwTMsBcPbr19sCAk733tGAwuijkPzFsvV7Mb5wDfFTyeGg==
+X-Google-Smtp-Source: AK7set+gyItpNI/8KIIH66pLospwhy4B/I9V63tct8DgMY8dLQRXpobXiGACii8Apv2vV5+Zq300kWyV7ixpz86xuEY=
+X-Received: by 2002:a81:a9c8:0:b0:533:9c5b:7278 with SMTP id
+ g191-20020a81a9c8000000b005339c5b7278mr12170063ywh.0.1678309037046; Wed, 08
+ Mar 2023 12:57:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1678186653-27659-1-git-send-email-tangyouling@loongson.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230224-rust-macros-v1-0-b39fae46e102@asahilina.net>
+ <20230224-rust-macros-v1-2-b39fae46e102@asahilina.net> <20230225003156.4858d79e.gary@garyguo.net>
+In-Reply-To: <20230225003156.4858d79e.gary@garyguo.net>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 8 Mar 2023 21:57:06 +0100
+Message-ID: <CANiq72kaLzV4qajxXjWeDGXLwobhevWcuWLdf9DsZUrc9nGymQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] rust: macros: concat_idents: Allow :: paths in the
+ first argument
+To:     Gary Guo <gary@garyguo.net>
+Cc:     Asahi Lina <lina@asahilina.net>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Youling,
+On Sat, Feb 25, 2023 at 1:32=E2=80=AFAM Gary Guo <gary@garyguo.net> wrote:
+>
+> It seems weird to me that this is called `concat_idents` despite
+> working for more things than just idents.
+>
+> How about just implement a simple version of the `paste` macro instead?
 
-Thank you for the patch! Perhaps something to improve:
+We discussed this in our latest meeting: what about a change of name
+to `concat_paths`? That addresses the concern plus it avoids sharing
+the name with the unstable `concat_idents` which could be even more
+confusing after this patch.
 
-[auto build test WARNING on efi/next]
-[also build test WARNING on linus/master v6.3-rc1 next-20230308]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Youling-Tang/efistub-LoongArch-Reimplement-kernel_entry_address/20230307-190013
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
-patch link:    https://lore.kernel.org/r/1678186653-27659-1-git-send-email-tangyouling%40loongson.cn
-patch subject: [PATCH] efistub: LoongArch: Reimplement kernel_entry_address()
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20230309/202303090430.e6BB0Txr-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1f509b49ceeeeb3c59483c685592f8d87b70f169
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Youling-Tang/efistub-LoongArch-Reimplement-kernel_entry_address/20230307-190013
-        git checkout 1f509b49ceeeeb3c59483c685592f8d87b70f169
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/firmware/efi/libstub/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303090430.e6BB0Txr-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/firmware/efi/libstub/loongarch.c: In function 'get_kernel_offset':
-   drivers/firmware/efi/libstub/loongarch.c:46:45: error: 'PHYS_LINK_KADDR' undeclared (first use in this function)
-      46 |         return EFI_KIMG_PREFERRED_ADDRESS - PHYS_LINK_KADDR;
-         |                                             ^~~~~~~~~~~~~~~
-   drivers/firmware/efi/libstub/loongarch.c:46:45: note: each undeclared identifier is reported only once for each function it appears in
-   drivers/firmware/efi/libstub/loongarch.c: At top level:
->> drivers/firmware/efi/libstub/loongarch.c:49:15: warning: no previous prototype for 'kernel_entry_address' [-Wmissing-prototypes]
-      49 | unsigned long kernel_entry_address(void)
-         |               ^~~~~~~~~~~~~~~~~~~~
-   drivers/firmware/efi/libstub/loongarch.c: In function 'get_kernel_offset':
-   drivers/firmware/efi/libstub/loongarch.c:47:1: error: control reaches end of non-void function [-Werror=return-type]
-      47 | }
-         | ^
-   cc1: some warnings being treated as errors
-
-
-vim +/kernel_entry_address +49 drivers/firmware/efi/libstub/loongarch.c
-
-    48	
-  > 49	unsigned long kernel_entry_address(void)
-    50	{
-    51		return *(unsigned long *)(EFI_KIMG_PREFERRED_ADDRESS + 8) +
-    52			get_kernel_offset();
-    53	}
-    54	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Cheers,
+Miguel
