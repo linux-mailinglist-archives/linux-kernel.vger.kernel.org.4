@@ -2,139 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A7D6B033B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E08D46B0341
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbjCHJmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 04:42:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52112 "EHLO
+        id S230173AbjCHJnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 04:43:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjCHJmA (ORCPT
+        with ESMTP id S230176AbjCHJmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 04:42:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA09B7185
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 01:41:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B119B81C0B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 09:41:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E84C433D2;
-        Wed,  8 Mar 2023 09:41:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678268500;
-        bh=FOZyjqFesuEnEwpUW1WYq+F0fxn2qMQwF+XDs3hZBQk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=leVKbWeo/7qOftIstG5B9Wgf9MRXnwDGvaQUihQL6sWuanLYUQozOUwMx4mEYxlep
-         SK+6GKBux58RzySSLw+ASPQ2LI0d6QdcBWHG4l2uuE9FqQyRWANesgRaYuCvprRtL2
-         994aEBWZuA/D8wD0+MLrSqO/8JSauc/E8A48GBC4UFCF0Mteg/IOFl9IH+v5CGnkmX
-         78RxsHHsDeqbtilOWnIuJihopZEwO+M4DIWXi6/YmWDg7iUB7fVn9xfYNiaJ5WWZ4p
-         tvTaCpCyYZdmV2vKLa1pPMyu6s3qL5dgi4J4Ywy5j0orqUR0qA92pNM5IFhFjn/keq
-         6l9vE6tUdD9qw==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Song Liu <song@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-Subject: [RFC PATCH 5/5] EXPERIMENTAL: mm/secretmem: use __GFP_UNMAPPED
-Date:   Wed,  8 Mar 2023 11:41:06 +0200
-Message-Id: <20230308094106.227365-6-rppt@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230308094106.227365-1-rppt@kernel.org>
-References: <20230308094106.227365-1-rppt@kernel.org>
+        Wed, 8 Mar 2023 04:42:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24BCB53C8
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 01:41:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678268476;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m7Td16p3TbD+kDYru97cnkRp6o+vBB7jl8z2uw+Ca3w=;
+        b=aUNrwLAh9Pzu0jUqV79rsH5eNZJw5TQaw0JBUmgt8puYqfADOZQZArP0Lgn1qHZ0t3dhbU
+        22jD6uje5Fo0YOXxbJ+bOVV960J5Zk/gv/XRcnhJOn68+nygmxZ3CcUpSZfrzRzSHvfLbW
+        Rp11n1js5xexda1p4m+mQXEHUCOffjw=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-629-ONKqIuTzM8e5LayvgClPiA-1; Wed, 08 Mar 2023 04:41:13 -0500
+X-MC-Unique: ONKqIuTzM8e5LayvgClPiA-1
+Received: by mail-wm1-f69.google.com with SMTP id l20-20020a05600c1d1400b003e10d3e1c23so735378wms.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 01:41:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678268472;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m7Td16p3TbD+kDYru97cnkRp6o+vBB7jl8z2uw+Ca3w=;
+        b=rPghSiEJTJp8daFGMea3yaIPO5TrDcja4stbR6XJXdk3E8+jB6PdvnxJNUlTj+++tO
+         XFm1GRDbGdddn1lBGBTKrO0OEVKYE/pd1BdabzGLTpE12Q7JRWHDxjke71NRGWdAT5e0
+         WRNlrg9FwF0uNE87Cn5OKWZp554vhQUndtd9Bt9DDVDLhUW638vni4p+fEsieopIXAIU
+         GIP69tTIwtcINZHbk/+63KbNE1L+DhrSX6h7pS8t1gvMkB3iRw+DvvWTtzK7vJVR3ps8
+         pi6CSuu+huV/KsiEeOQavrYGo3nf5fu4dLgA+qFtfEmBJRZdCBqyIv+wHjLQlztg1f54
+         AaMw==
+X-Gm-Message-State: AO0yUKVYR2zGB2UfpohbwNcPFtA6ztyJt70CxkEDtfDiFAsFpTlPl3YQ
+        7Cb3rITPjsxXdgnpzTQL28c7bxoW8rveVVmKIH+AzTUjyrLv/aQ4VRSZKodVoHBPS42MLCdFhk8
+        VgH0EXiZrz5DocqdyV2uYw8t/
+X-Received: by 2002:adf:f048:0:b0:2c7:1757:3a8e with SMTP id t8-20020adff048000000b002c717573a8emr11809181wro.34.1678268472208;
+        Wed, 08 Mar 2023 01:41:12 -0800 (PST)
+X-Google-Smtp-Source: AK7set8Ymu+LXx9nCtK2pvrM5/lBSUM962NTfLkeMSnJCReM+FspgE/w457FUI4GWu9X+B6h9vVsRA==
+X-Received: by 2002:adf:f048:0:b0:2c7:1757:3a8e with SMTP id t8-20020adff048000000b002c717573a8emr11809163wro.34.1678268471894;
+        Wed, 08 Mar 2023 01:41:11 -0800 (PST)
+Received: from ?IPV6:2003:cb:c71b:cb00:d372:1da8:9e9e:422d? (p200300cbc71bcb00d3721da89e9e422d.dip0.t-ipconnect.de. [2003:cb:c71b:cb00:d372:1da8:9e9e:422d])
+        by smtp.gmail.com with ESMTPSA id z7-20020a5d4407000000b002c5503a8d21sm15012364wrq.70.2023.03.08.01.41.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 01:41:11 -0800 (PST)
+Message-ID: <d6670aa7-37ee-85aa-1053-96284a2f6720@redhat.com>
+Date:   Wed, 8 Mar 2023 10:41:10 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        maple-tree@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Pengfei Xu <pengfei.xu@intel.com>,
+        syzbot+2ee18845e89ae76342c5@syzkaller.appspotmail.com,
+        Matthew Wilcox <willy@infradead.org>, heng.su@intel.com,
+        lkp@intel.com, Stable@vger.kernel.org
+References: <20230307205951.2465275-1-Liam.Howlett@oracle.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] mm/ksm: Fix race with ksm_exit() in VMA iteration
+In-Reply-To: <20230307205951.2465275-1-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On 07.03.23 21:59, Liam R. Howlett wrote:
+> ksm_exit() may remove the mm from the ksm_scan between the unlocking of
+> the ksm_mmlist and the start of the VMA iteration.  This results in the
+> mmap_read_lock() not being taken and a report from lockdep that the mm
+> isn't locked in the maple tree code.
 
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- mm/secretmem.c | 26 +-------------------------
- 1 file changed, 1 insertion(+), 25 deletions(-)
+I'm confused. The code does
 
-diff --git a/mm/secretmem.c b/mm/secretmem.c
-index 0b502625cd30..f66dfd16a0c3 100644
---- a/mm/secretmem.c
-+++ b/mm/secretmem.c
-@@ -53,7 +53,6 @@ static vm_fault_t secretmem_fault(struct vm_fault *vmf)
- 	struct inode *inode = file_inode(vmf->vma->vm_file);
- 	pgoff_t offset = vmf->pgoff;
- 	gfp_t gfp = vmf->gfp_mask;
--	unsigned long addr;
- 	struct page *page;
- 	vm_fault_t ret;
- 	int err;
-@@ -66,38 +65,22 @@ static vm_fault_t secretmem_fault(struct vm_fault *vmf)
- retry:
- 	page = find_lock_page(mapping, offset);
- 	if (!page) {
--		page = alloc_page(gfp | __GFP_ZERO);
-+		page = alloc_page(gfp | __GFP_ZERO | __GFP_UNMAPPED);
- 		if (!page) {
- 			ret = VM_FAULT_OOM;
- 			goto out;
- 		}
- 
--		err = set_direct_map_invalid_noflush(page);
--		if (err) {
--			put_page(page);
--			ret = vmf_error(err);
--			goto out;
--		}
--
- 		__SetPageUptodate(page);
- 		err = add_to_page_cache_lru(page, mapping, offset, gfp);
- 		if (unlikely(err)) {
- 			put_page(page);
--			/*
--			 * If a split of large page was required, it
--			 * already happened when we marked the page invalid
--			 * which guarantees that this call won't fail
--			 */
--			set_direct_map_default_noflush(page);
- 			if (err == -EEXIST)
- 				goto retry;
- 
- 			ret = vmf_error(err);
- 			goto out;
- 		}
--
--		addr = (unsigned long)page_address(page);
--		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
- 	}
- 
- 	vmf->page = page;
-@@ -150,15 +133,8 @@ static int secretmem_migrate_folio(struct address_space *mapping,
- 	return -EBUSY;
- }
- 
--static void secretmem_free_folio(struct folio *folio)
--{
--	set_direct_map_default_noflush(&folio->page);
--	folio_zero_segment(folio, 0, folio_size(folio));
--}
--
- const struct address_space_operations secretmem_aops = {
- 	.dirty_folio	= noop_dirty_folio,
--	.free_folio	= secretmem_free_folio,
- 	.migrate_folio	= secretmem_migrate_folio,
- };
- 
+mmap_read_lock(mm);
+...
+for_each_vma(vmi, vma) {
+mmap_read_unlock(mm);
+
+How can we not take the mmap_read_lock() ? Or am I staring at the wrong 
+mmap_read_lock() ?
+
+> 
+> Fix the race by checking if this mm has been removed before iterating
+> the VMAs. __ksm_exit() uses the mmap lock to synchronize the freeing of
+> an mm, so it is safe to keep iterating over the VMAs when it is going to
+> be freed.
+> 
+> This change will slow down the mm exit during the race condition, but
+> will speed up the non-race scenarios iteration over the VMA list, which
+> should be much more common.
+
+Would leaving the existing check in help to just stop scanning faster in 
+that case?
+
+> 
+> Reported-by: Pengfei Xu <pengfei.xu@intel.com>
+> Link: https://lore.kernel.org/lkml/ZAdUUhSbaa6fHS36@xpf.sh.intel.com/
+> Reported-by: syzbot+2ee18845e89ae76342c5@syzkaller.appspotmail.com
+> Link: https://syzkaller.appspot.com/bug?id=64a3e95957cd3deab99df7cd7b5a9475af92c93e
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Cc: heng.su@intel.com
+> Cc: lkp@intel.com
+> Cc: <Stable@vger.kernel.org>
+> Fixes: a5f18ba07276 ("mm/ksm: use vma iterators instead of vma linked list")
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> ---
+>   mm/ksm.c | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/ksm.c b/mm/ksm.c
+> index 525c3306e78b..723ddbe6ea97 100644
+> --- a/mm/ksm.c
+> +++ b/mm/ksm.c
+> @@ -1044,9 +1044,10 @@ static int unmerge_and_remove_all_rmap_items(void)
+>   
+>   		mm = mm_slot->slot.mm;
+>   		mmap_read_lock(mm);
+
+Better add a comment:
+
+/*
+  * Don't iterate any VMAs if we might be racing against ksm_exit(),
+  * just exit early.
+  */
+
+> +		if (ksm_test_exit(mm))
+> +			goto mm_exiting;
+> +
+>   		for_each_vma(vmi, vma) {
+> -			if (ksm_test_exit(mm))
+> -				break;
+>   			if (!(vma->vm_flags & VM_MERGEABLE) || !vma->anon_vma)
+>   				continue;
+>   			err = unmerge_ksm_pages(vma,
+> @@ -1055,6 +1056,7 @@ static int unmerge_and_remove_all_rmap_items(void)
+>   				goto error;
+>   		}
+>   
+> +mm_exiting:
+>   		remove_trailing_rmap_items(&mm_slot->rmap_list);
+>   		mmap_read_unlock(mm);
+>   
+
+
+
 -- 
-2.35.1
+Thanks,
+
+David / dhildenb
 
