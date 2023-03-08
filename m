@@ -2,171 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54BA26B0C3A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A776B6B0C40
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbjCHPKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:10:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
+        id S229926AbjCHPLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:11:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbjCHPJr (ORCPT
+        with ESMTP id S230240AbjCHPLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:09:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475BB16881
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 07:09:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678288138;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2BnqD+81nCal2yLTQN92JWzrb8KpwRfcqu8eYT7DAKQ=;
-        b=aUUZYfjPAzqMsWAzOkrH+s4Rw5JJxH2KL5yDW0yidR58c9K1onsy4kVuko6MIUz3qYr14V
-        MKX+Hv9YGsxX7/xV1GBSmUdHGRONFKNzlAljfFDmDhqA8UmJdv1cbdfT/fixzjX7Zx6rko
-        QFNIu2AymuVs5rEcT892wKZH74g7Whg=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-605-uUZFWuqKM5SuRsPBSQHQhg-1; Wed, 08 Mar 2023 10:08:22 -0500
-X-MC-Unique: uUZFWuqKM5SuRsPBSQHQhg-1
-Received: by mail-qk1-f199.google.com with SMTP id b22-20020ae9eb16000000b007427f9339c0so9523062qkg.17
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 07:08:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678288097;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2BnqD+81nCal2yLTQN92JWzrb8KpwRfcqu8eYT7DAKQ=;
-        b=EcWZr11EGm7+nWPqXSDDZMtMWqDfZ11/iFBeC/NDlYHAbYW+aFF6vv/qvKNNkK2itP
-         jwK9LJKWxwY/9ezsy+o3qsdcxnUlq7kSanGncvHNt83oH6hsHhRktxlAJQ0j0pajgh+f
-         jzBRGe21At0TjtOsa+uWvPfqYk0W+9FKcPX3oh1ynszWxYpbOTUlvaB1GNZ/V4844wa5
-         HEkzXaRbXw19F+P5EdYnGH96TD/Yr5ZtOeafpAb9PFwkTKvVgA7DM+CjauZJzYEV5JRn
-         y9j03F0m5KjlrSywfJ6EERS64rJgs9ifLW953G5dgUgGuyalz5NgN0HBjDOerrFNuUWe
-         wH8A==
-X-Gm-Message-State: AO0yUKXzfgUQfxVhI6N4twIpvVfsQB3MQQLdg5rdv3VfsMidtSd2y+Bq
-        HlFxXH52AU+8ATVvmqYblhqYnkNMxnktH40KczUGxVwIl779zELVka/dm07nJNKirQ0HXqrlLZG
-        v8q2QE44ewTZjgquEpL5YUZnL
-X-Received: by 2002:ac8:5a96:0:b0:3bf:cc1b:9512 with SMTP id c22-20020ac85a96000000b003bfcc1b9512mr5698875qtc.1.1678288097349;
-        Wed, 08 Mar 2023 07:08:17 -0800 (PST)
-X-Google-Smtp-Source: AK7set90507PYoUM+Jlyh4YHTT3wJEfvvW4+2hu/qzxxuItg/QPKpPxf3VHQA3LvpODkPX3Li/FGXQ==
-X-Received: by 2002:ac8:5a96:0:b0:3bf:cc1b:9512 with SMTP id c22-20020ac85a96000000b003bfcc1b9512mr5698828qtc.1.1678288097053;
-        Wed, 08 Mar 2023 07:08:17 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id b1-20020ac812c1000000b003bfa932525dsm11608784qtj.51.2023.03.08.07.08.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 07:08:16 -0800 (PST)
-Date:   Wed, 8 Mar 2023 10:08:15 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Shuah Khan <shuah@kernel.org>,
-        James Houghton <jthoughton@google.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v3 2/5] mm: userfaultfd: don't pass around both mm and vma
-Message-ID: <ZAik38rpBfa5Ctyg@x1n>
-References: <20230306225024.264858-1-axelrasmussen@google.com>
- <20230306225024.264858-3-axelrasmussen@google.com>
- <ZAaNXTXs5ey4QYTl@x1n>
- <54D49E2C-F2EF-4C1E-AFE9-FD742CEA33EB@vmware.com>
+        Wed, 8 Mar 2023 10:11:13 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C269BAD1E;
+        Wed,  8 Mar 2023 07:10:48 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pZvR8-0003fl-2r;
+        Wed, 08 Mar 2023 16:10:39 +0100
+Date:   Wed, 8 Mar 2023 15:08:55 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Re: [PATCH net-next v12 08/18] net: ethernet: mtk_eth_soc: fix
+ 1000Base-X and 2500Base-X modes
+Message-ID: <ZAik+I1Ei+grJdUQ@makrotopia.org>
+References: <fd5c7ea79a7f84caac7d0b64b39fe5c4043edfa8.1678201958.git.daniel@makrotopia.org>
+ <ZAhzDDjZ8+gxyo3V@shell.armlinux.org.uk>
+ <ZAh7hA4JuJm1b2M6@makrotopia.org>
+ <ZAiCh8wkdTBT+6Id@shell.armlinux.org.uk>
+ <ZAiFOTRQI36nGo+w@makrotopia.org>
+ <ZAiJqvzcUob2Aafq@shell.armlinux.org.uk>
+ <20230308134642.cdxqw4lxtlgfsl4g@skbuf>
+ <ZAiXvNT8EzHTmFPh@shell.armlinux.org.uk>
+ <ZAiciK5fElvLXYQ9@makrotopia.org>
+ <ZAijM91F18lWC80+@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <54D49E2C-F2EF-4C1E-AFE9-FD742CEA33EB@vmware.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZAijM91F18lWC80+@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 01:44:05AM +0000, Nadav Amit wrote:
+On Wed, Mar 08, 2023 at 03:01:07PM +0000, Russell King (Oracle) wrote:
+> On Wed, Mar 08, 2023 at 02:32:40PM +0000, Daniel Golle wrote:
+> > In general it sound reasonable. We may need more SFP qurik bits to
+> > indicate presence of a PHY on SFP modules which do not expose that
+> > PHY via i2c-mdio or otherwise let the host know about it's presence.
 > 
+> That's a whole load of fun - some modules where the PHY is inaccessible
+> will be using 1000base-X, others will be using SGMII. So yes, its
+> likely that we may need quirks for these. We don't have quirks yet
+> because you're the first to suggest there's a problem.
 > 
-> > On Mar 6, 2023, at 5:03 PM, Peter Xu <peterx@redhat.com> wrote:
-> > 
-> > !! External Email
-> > 
-> > On Mon, Mar 06, 2023 at 02:50:21PM -0800, Axel Rasmussen wrote:
-> >> Quite a few userfaultfd functions took both mm and vma pointers as
-> >> arguments. Since the mm is trivially accessible via vma->vm_mm, there's
-> >> no reason to pass both; it just needlessly extends the already long
-> >> argument list.
-> >> 
-> >> Get rid of the mm pointer, where possible, to shorten the argument list.
-> >> 
-> >> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> > 
-> > Acked-by: Peter Xu <peterx@redhat.com>
-> > 
-> > One nit below:
-> > 
-> >> @@ -6277,7 +6276,7 @@ int hugetlb_mfill_atomic_pte(struct mm_struct *dst_mm,
-> >>              folio_in_pagecache = true;
-> >>      }
-> >> 
-> >> -     ptl = huge_pte_lock(h, dst_mm, dst_pte);
-> >> +     ptl = huge_pte_lock(h, dst_vma->vm_mm, dst_pte);
-> >> 
-> >>      ret = -EIO;
-> >>      if (folio_test_hwpoison(folio))
-> >> @@ -6319,9 +6318,9 @@ int hugetlb_mfill_atomic_pte(struct mm_struct *dst_mm,
-> >>      if (wp_copy)
-> >>              _dst_pte = huge_pte_mkuffd_wp(_dst_pte);
-> >> 
-> >> -     set_huge_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
-> >> +     set_huge_pte_at(dst_vma->vm_mm, dst_addr, dst_pte, _dst_pte);
-> >> 
-> >> -     hugetlb_count_add(pages_per_huge_page(h), dst_mm);
-> >> +     hugetlb_count_add(pages_per_huge_page(h), dst_vma->vm_mm);
-> > 
-> > When vm_mm referenced multiple times (say, >=3?), let's still cache it in a
-> > temp var?
-> > 
-> > I'm not sure whether compiler is smart enough to already do that with a
-> > reg, even if so it may slightly improve readability too, imho, by avoiding
-> > the multiple but same indirection for the reader.
+> > For my TP-LINK TL-SM410U 2500Base-T SFP this unfortunately seems to
+> > be the case, and I assume it's actually like that for most
+> > 2500Base-T as well as xPON SFPs... (xPON SFPs are usually managed
+> > via high-level protocols, even Web-UI is common there. They don't
+> > tell you much about them via I2C, I suppose to get them to work in
+> > as many SFP host devices as possible without any software changes).
 > 
-> I am not sure if you referred to this code specifically or in general.
-
-In general.  IIRC there're more than one such case in this patch.
-
-> I once looked into it, and the compiler is really stupid in this regard
-> and super conservative when it comes to aliasing. Even if you use
-> “restrict” keyword or “__pure” or “__const” function attributes, in
-> certain cases (function calls to other compilation units, or inline
-> assembly - I don’t remember) the compiler might ignore them. Worse, llvm
-> and gcc are inconsistent.
+> xPON SFPs are a whole different ball game. For some, they auto-detect
+> while booting and try 2500base-X or 1000base-X to see which will sync
+> and if not they try the other. Other xPON SFPs run their host interface
+> at a speed determined by the configuration set by the remote end. Other
+> xPON SFPs may do something entirely different.
 > 
-> From code-generated perspective, I did not see a clear cut that benefits
-> caching over not. From performance perspective the impact is negligible. I
-> mention all of that because I thought it matters too, but it mostly does
-> not.
+> In many cases, their EEPROM is a full of errors - such as advertising
+> that they're 1.2 or 1.3 Gbd while operating in 2500base-X mode.
 > 
-> That’s all to say that in most cases, I think that whatever makes the code
-> more readable should be preferred. I think that you are correct in saying
-> that “caching” it will make the code more readable, but performance-wise
-> it is probably meaningless.
+> They do weird stuff with their status pins as well, for example, some
+> use the RX_LOS pin as a uart - which is a problem if it's e.g. tied
+> from the cage to a switch that uses the pin to gate the link-up
+> indication without any software control of that!
+> 
+> With xPON SFPs, it's just a total minefield, which lots of SFF MSA
+> violations all over the place. They're essentially a law to themselves
+> (this is exactly why we have the quirks infrastructure.)
+> 
+> > FYI:
+> > TP-LINK TL-SM410U 2500Base-T module:
+> > 
+> > sfp EE: 00000000: 03 04 07 00 00 00 00 00 00 40 00 01 1f 00 00 00  .........@......
+> > sfp EE: 00000010: 00 00 00 00 54 50 2d 4c 49 4e 4b 20 20 20 20 20  ....TP-LINK     
+> > sfp EE: 00000020: 20 20 20 20 00 30 b5 c2 54 4c 2d 53 4d 34 31 30      .0..TL-SM410
+> > sfp EE: 00000030: 55 20 20 20 20 20 20 20 32 2e 30 20 00 00 00 1b  U       2.0 ....
+> > sfp EE: 00000040: 00 08 01 00 80 ff ff ff 40 3d f0 0d c0 ff ff ff  ........@=......
+> > sfp EE: 00000050: c8 39 7a 08 c0 ff ff ff 50 3d f0 0d c0 ff ff ff  .9z.....P=......
+> > sfp sfp2: module TP-LINK          TL-SM410U        rev 2.0  sn 12260M4001782    dc 220622  
+> 
+> I'm guessing this is a module with a checksum problem...
 
-Thanks for the knowledge.  I would suspect no matter how the output layout
-of the compilers will be the difference will be small.  I prefer it more
-for readability as you said but not strongly either way.
+No, the checksum of the TL-SM410U is correct. I have patched the kernel
+to always dump the EEPROM, so I can share it with you.
 
--- 
-Peter Xu
+> 
+> > And this is the ATS SFP-GE-T 10/100/1000M copper module doing
+> > rate-adaptation to 1000Base-X:
+> > 
+> > sfp sfp1: EEPROM extended structure checksum failure: 0xb0 != 0xaf
+> 
+> Given how close that is, it looks like they used the wrong algorithm.
+> 
+> > sfp EE: 00000000: 03 04 07 00 00 00 02 12 00 01 01 01 0c 00 03 00  ................
+> > sfp EE: 00000010: 00 00 00 00 4f 45 4d 20 20 20 20 20 20 20 20 20  ....OEM         
+> > sfp EE: 00000020: 20 20 20 20 00 00 90 65 53 46 50 2d 47 45 2d 54      ...eSFP-GE-T
+> > sfp EE: 00000030: 20 20 20 20 00 00 00 00 43 20 20 20 00 00 00 f0      ....C   ....
+> > sfp EE: 00000040: 00 12 00 00 32 31 30 37 31 30 41 30 30 31 32 37  ....210710A00127
+> > sfp EE: 00000050: 33 39 00 00 32 31 30 37 31 30 20 20 60 00 01 af  39..210710  `...
+> > sfp sfp1: module OEM              SFP-GE-T     rev C    sn  dc 
+> 
+> Welcome to the wonderful world of horribly broken SFPs.
+> 
+> Do we know what form of rate adaption this module needs on the
+> transmit path? Does it require the host to pace itself to the media
+> speed (which I suspect will be unreadable if the PHY isn't accessible)
+> or will it send pause frames?
+> 
+> It would be nice to add these to my database - please send me the
+> output of ethtool -m $iface raw on > foo.bin for each module.
+> 
+> > That one already needs quirks to even work at all as TX-FAULT is not
+> > reported properly by the module, see
+> > 
+> > https://github.com/dangowrt/linux/commit/2c694bd494583f08858fabca97cfdc79de8ba089
+> 
+> I'm guessing that's not on a kernel version that has:
+> 
+> 73472c830eae net: sfp: add support for HALNy GPON SFP
+> 5029be761161 net: sfp: move Huawei MA5671A fixup
+> 275416754e9a net: sfp: move Alcatel Lucent 3FE46541AA fixup
+> 23571c7b9643 net: sfp: move quirk handling into sfp.c
+> 8475c4b70b04 net: sfp: re-implement soft state polling setup
+> 
+> which reworks how we deal with the soft/hard state signals.
+> 
+> I think the problem space is growing, and I fear that if we try to
+> address all these issues in one go, we're going to end up with way
+> too much to deal with in one go (which means poor reviews etc.)
+> 
+> Can we try to concentrate on fixing one problem at a time, rather
+> than throwing a whole load of problems into the mix?
 
+Ok. I'll just repost tomorrow without the ????Base-X AN realted patches.
+
+> 
+> Thanks.
+> 
+> -- 
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
