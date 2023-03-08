@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBAC6B0141
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2166B0147
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjCHI0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
+        id S229956AbjCHI03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:26:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjCHIZV (ORCPT
+        with ESMTP id S230305AbjCHIZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:25:21 -0500
+        Wed, 8 Mar 2023 03:25:57 -0500
 Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817BCB1A4E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:25:12 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so1495333pjg.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:25:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AE9B1EE7
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:25:16 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id me6-20020a17090b17c600b0023816b0c7ceso1518814pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:25:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678263912;
+        d=linaro.org; s=google; t=1678263916;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AfPfJbuBCr/z6UPf30LbgTiprhegyjugmOR3U4nPOZw=;
-        b=JzrgFsMkZEbo/x9XSaSLYAe3Xh0Ys+qsISvV8tYJb1YGAkQL1+CAgyekEEDsUIsPI6
-         iaegsZRji2odfHxrMAnzaRtslPruxPs/i3tMqJoMrKFfL6ADGXfB5UvR80s6BXm8tK7U
-         CjNyNJdShcE0omGpLz+KWJPgCaGD1Rvn5fmd3PEYED9ZSrr7sGaLvpl/D/hB5HHEDNvz
-         Kxtu6WNVa0GjT3O4TtJP59xFfzguORhj2CzPWkLxhYmHTph8qGeH+uPRMsKF58SyHDbC
-         yG7tpeWMzXzcT3Tx7GKIFC0kSL4FfmMbnXJG71GP6oQIZ+8sffc9ykpKGql0zCiBN0NR
-         a9fA==
+        bh=eQJpuyMO7No6L3do6sf/Hyh8x/cG+HXQS31simvwRLQ=;
+        b=dZxg1CAelNmm3jMmmG/QhR2zOCkilkJgVekkRZC2c821qOXoNOX8isPquaa2KibZIP
+         FPlFQyiwOLdOsF/f4duejnpaQFSkrORqcxLjb9ckCHIx8TnrrKraEl+HqdO76fNVE/va
+         dEuSlnbwF2oXWYj/Yx/Gqe7WkODhRBcBQgftfts1w8NS0uvK+Mn1m0Y+Hw5Vmoggwmm2
+         glUnEfZY4IqgfiSQ6Pecv7UOARPnbXEH8XoeFKnHruLkbweH6nRCk5tx3xy/CcygveYb
+         j5aBIGg+HTc9+FIPzgasDoOZarDhMoG6kQbIBtT+XJPkKXcS5VzFDyVcMLl7JeArlncd
+         Eq5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678263912;
+        d=1e100.net; s=20210112; t=1678263916;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AfPfJbuBCr/z6UPf30LbgTiprhegyjugmOR3U4nPOZw=;
-        b=WRIZSUZSME/aNNQr2PmCNHrdtKneFsr2HJDXn/7ak2lMPq1h9ApwJyzHsIzq/MvRZd
-         NjTxAvaccJGfRDTR3PM4nH343WtlPXi/4vQYExiosEjZBF/2YZxmr64fwewtwX6kIBr4
-         huKPkCKrdIG3VADgtbuyCOTeNtn7Yo3AIvBhbVBOm/H0EvZoz35zfBFtI+BHJW9eDvYe
-         ftZ+q0dbse9yb4ZM9CmbJYGQ7gHtECxrbiT6N5rvHuw3fRSDH3HVa3NJWKGySdBVfivN
-         YrMzv51s7sczA6i8j6j8xwOivNBJwpgjTZ9Ab1w1GaCvgCim2qRatrBb9a/lzCFhgjAu
-         YOTQ==
-X-Gm-Message-State: AO0yUKV2bHT4CvsJTdQzNmkVTl8OSm8cAz1Jj+18Oog7aotinBqupX6B
-        wO8B+fvS355kyj+v+zyHyKrtP9b/nf0R92ywXA==
-X-Google-Smtp-Source: AK7set/L1dsF97m39ajoh8yMTStHAFCR7t7AZ4VJpnF8cskdN97rs2QONWSB8stY+iDUtg3E0onT5w==
-X-Received: by 2002:a17:903:441:b0:19a:b5cd:6e73 with SMTP id iw1-20020a170903044100b0019ab5cd6e73mr13939201plb.3.1678263911955;
-        Wed, 08 Mar 2023 00:25:11 -0800 (PST)
+        bh=eQJpuyMO7No6L3do6sf/Hyh8x/cG+HXQS31simvwRLQ=;
+        b=ZLD9fuNIp0xJuuIxD9IxV+UTB0Z/hQpIVE2HtyqwJX9AJUqDxRLnYDmgAzefYBIBso
+         NNPUT2fEmggq/DofAxoTYP92mu+BZWRztxGoRdyC0a+TJIN9kEFRArkv+EE2Vp0JBddg
+         NpjBA059Iu7gfzOr2EKiB2nsBhyLnqlikmM9VQcZ/t53ReesdgSYRwBJUY8SBi9ZjqQu
+         kLHf/yUhRv101CpcWpfZUmjSTjZDqfKSntlu0/I2AGPaLR6qoQFzWhrXnYu0//jPFAOb
+         ibx+DUskuG8XN/pXi60v9YOdbsyNPpxFprfzjI934VE98i1Ae+/oTFm2dKHOcLIpsYD3
+         Zsow==
+X-Gm-Message-State: AO0yUKWO6DmYMoc+ZUopMd+vbvxHmSgXoASCJsNfnDVhgZTYcMfznLsF
+        zQy8wnM4cfKuo/vwClqczCg4
+X-Google-Smtp-Source: AK7set/MGu+yLUTnUKn3Isz//Xdy2WvlQQjBxO+mqV0OTaRRoJ+vXI6X/oZgqiccnjZACZAkSO4/9g==
+X-Received: by 2002:a17:902:e549:b0:19e:76c4:2d30 with SMTP id n9-20020a170902e54900b0019e76c42d30mr22750201plf.61.1678263916357;
+        Wed, 08 Mar 2023 00:25:16 -0800 (PST)
 Received: from localhost.localdomain ([59.97.52.140])
-        by smtp.gmail.com with ESMTPSA id s10-20020a170902ea0a00b0019aaab3f9d7sm9448086plg.113.2023.03.08.00.25.07
+        by smtp.gmail.com with ESMTPSA id s10-20020a170902ea0a00b0019aaab3f9d7sm9448086plg.113.2023.03.08.00.25.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 00:25:11 -0800 (PST)
+        Wed, 08 Mar 2023 00:25:16 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     andersson@kernel.org, lpieralisi@kernel.org, robh@kernel.org,
         kw@linux.com, krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org
@@ -58,9 +58,9 @@ Cc:     konrad.dybcio@linaro.org, bhelgaas@google.com, kishon@kernel.org,
         linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
         devicetree@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 09/13] ARM: dts: qcom: sdx55-t55: Enable PCIe RC support
-Date:   Wed,  8 Mar 2023 13:54:20 +0530
-Message-Id: <20230308082424.140224-10-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v3 10/13] ARM: dts: qcom: sdx55-t55: Move "status" property down
+Date:   Wed,  8 Mar 2023 13:54:21 +0530
+Message-Id: <20230308082424.140224-11-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230308082424.140224-1-manivannan.sadhasivam@linaro.org>
 References: <20230308082424.140224-1-manivannan.sadhasivam@linaro.org>
@@ -76,74 +76,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable PCIe RC support on Thundercomm T55 board.
+To align with rest of the devicetree files, let's move the "status"
+property down
 
+Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- arch/arm/boot/dts/qcom-sdx55-t55.dts | 42 ++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ arch/arm/boot/dts/qcom-sdx55-t55.dts | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/arch/arm/boot/dts/qcom-sdx55-t55.dts b/arch/arm/boot/dts/qcom-sdx55-t55.dts
-index d5343bb0daee..5edc09af8e0d 100644
+index 5edc09af8e0d..51058b065279 100644
 --- a/arch/arm/boot/dts/qcom-sdx55-t55.dts
 +++ b/arch/arm/boot/dts/qcom-sdx55-t55.dts
-@@ -242,6 +242,23 @@ &ipa {
- 	status = "okay";
+@@ -278,8 +278,8 @@ nand@0 {
  };
  
-+&pcie_phy {
-+	vdda-phy-supply = <&vreg_l1e_bb_1p2>;
-+	vdda-pll-supply = <&vreg_l4e_bb_0p875>;
-+
-+	status = "okay";
-+};
-+
-+&pcie_rc {
-+	perst-gpios = <&tlmm 57 GPIO_ACTIVE_LOW>;
-+	wake-gpios = <&tlmm 53 GPIO_ACTIVE_HIGH>;
-+
-+	pinctrl-0 = <&pcie_default>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+};
-+
- &qpic_bam {
- 	status = "okay";
- };
-@@ -265,6 +282,31 @@ &remoteproc_mpss {
+ &remoteproc_mpss {
+-	status = "okay";
  	memory-region = <&mpss_adsp_mem>;
++	status = "okay";
  };
  
-+&tlmm {
-+	pcie_default: pcie-default-state {
-+		clkreq-pins {
-+			pins = "gpio56";
-+			function = "pcie_clkreq";
-+			drive-strength = <2>;
-+			bias-pull-up;
-+		};
-+
-+		perst-pins {
-+			pins = "gpio57";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-pull-down;
-+		};
-+
-+		wake-pins {
-+		       pins = "gpio53";
-+		       function = "gpio";
-+		       drive-strength = <2>;
-+		       bias-pull-up;
-+	       };
-+	};
-+};
-+
+ &tlmm {
+@@ -308,16 +308,18 @@ wake-pins {
+ };
+ 
  &usb_hsphy {
- 	status = "okay";
+-	status = "okay";
  	vdda-pll-supply = <&vreg_l4e_bb_0p875>;
+ 	vdda33-supply = <&vreg_l10e_3p1>;
+ 	vdda18-supply = <&vreg_l5e_bb_1p7>;
++
++	status = "okay";
+ };
+ 
+ &usb_qmpphy {
+-	status = "okay";
+ 	vdda-phy-supply = <&vreg_l4e_bb_0p875>;
+ 	vdda-pll-supply = <&vreg_l1e_bb_1p2>;
++
++	status = "okay";
+ };
+ 
+ &usb {
 -- 
 2.25.1
 
