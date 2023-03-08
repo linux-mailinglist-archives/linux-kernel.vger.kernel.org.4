@@ -2,71 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2D06B0A8D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C426B0A84
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjCHOIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:08:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45934 "EHLO
+        id S232151AbjCHOIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:08:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbjCHOHu (ORCPT
+        with ESMTP id S231971AbjCHOHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:07:50 -0500
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39ADD34F48;
-        Wed,  8 Mar 2023 06:06:28 -0800 (PST)
-Received: by mail-ot1-f51.google.com with SMTP id g6-20020a056830308600b0068d4b30536aso9008486ots.9;
-        Wed, 08 Mar 2023 06:06:28 -0800 (PST)
+        Wed, 8 Mar 2023 09:07:49 -0500
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECA430B25;
+        Wed,  8 Mar 2023 06:06:24 -0800 (PST)
+Received: by mail-ot1-f46.google.com with SMTP id 32-20020a9d0323000000b0069426a71d79so9005640otv.10;
+        Wed, 08 Mar 2023 06:06:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678284387;
+        d=1e100.net; s=20210112; t=1678284384;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=W3V1JTSU4mAasV6Yy4rBnCyWxykGtCx/CwR52o/KvEc=;
-        b=nnP+miKgKM/KR2c1KRRD4udbdSculU2TMaEuxACq1Uhxy8fwllFzYOZZBklvcu6qlT
-         jHQK0ZQlfTY6ZW3iRQau9dMhm/ek6eiR4xJN5n/5JWBroSdlxEkYFPfJLMkQm/WcM83o
-         pqae3rk7hQmPCAEAUllStD/i5HJYfBV0kh/Gs9jMDWak2FcxujhXEFKlcDU/3+5Fu3m0
-         YnVa8bZES4BFfLyUstl8FPHYI8Sqc1E77i7VNdyuJ7aYI9Llaqd2arq1extz/R0uxXQ4
-         t4tfrLQGCGP/yIqpAZSl1srAKInyKDHQHlWdjy9nEGip+DHW8Y8z5tKcbxLb9xC4fmre
-         V0wA==
-X-Gm-Message-State: AO0yUKV8CNdMxNbng2t8+iRPjScThNEtvSCIqLqic6fRyWKi7dXxniXR
-        ftZatoSZkTjwQgWkmlkkHA==
-X-Google-Smtp-Source: AK7set+6pXcrDnyjZYZJ0PqF6YB97KGKOLOLPb2e+N3hu1Ms1rlAgf+tDK3agSRy0jFFRDTN4/rVRQ==
-X-Received: by 2002:a9d:18f:0:b0:690:e7f9:bb61 with SMTP id e15-20020a9d018f000000b00690e7f9bb61mr8863276ote.26.1678284387420;
-        Wed, 08 Mar 2023 06:06:27 -0800 (PST)
+        bh=qsP4LH+jP/I53IC0MPmff0Hsl8QZENzWh0+pWXfTco4=;
+        b=EJX8z89ngMLKnLjLrr+O38I9MG7mbYVlghmDgUOFNcyNcBFCwmAjYFU1/+aO5BZYIn
+         kKDD3NA9IucEgi8km3cQn0orBSuA+YpWMNe9zMqx2yQ1dlYZ2S508t/9JW1BiQ8MiKtm
+         ySPLMAN13zAypL25QlsngBXl1nO5r9JeKkTa14+dd8IQdAG9N3ipCpUJkPtA/vm+QmxF
+         KRfV2OVRp4DmLq32hrKW2GdGg0sElpRbiqthj6EdUZLfh3yS9p3/NCy5CxNBtBlSqq3I
+         4k+Xj4TvJTTCFHtj2aTWfLe71gAyU3zZs9eUUpIY47rgdbf2Y1yz3p9kUaRa6aU/RDgN
+         VI0g==
+X-Gm-Message-State: AO0yUKWXG/YfFGpk0ubmYtGQRXJH5Rxyh70YzdO72sX615mV18FYy6yK
+        RchTjvOQ+ClSwd44ryDwcA==
+X-Google-Smtp-Source: AK7set+Zbw7EyeuNPMCkpj6IQPnLXaNQIQOMlGUW7lXZ4HwtW5PLAJ2eBzxT4rkdpmbwwGgjfgVofQ==
+X-Received: by 2002:a05:6830:24b6:b0:68b:dcbe:d0af with SMTP id v22-20020a05683024b600b0068bdcbed0afmr8794679ots.2.1678284383790;
+        Wed, 08 Mar 2023 06:06:23 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y22-20020a056830071600b0068d4dda3d61sm6434064ots.39.2023.03.08.06.06.25
+        by smtp.gmail.com with ESMTPSA id y22-20020a056830071600b0068d4dda3d61sm6434007ots.39.2023.03.08.06.06.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 06:06:26 -0800 (PST)
-Received: (nullmailer pid 2666451 invoked by uid 1000);
+        Wed, 08 Mar 2023 06:06:22 -0800 (PST)
+Received: (nullmailer pid 2666443 invoked by uid 1000);
         Wed, 08 Mar 2023 14:06:21 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Minda Chen <minda.chen@starfivetech.com>
-Cc:     Pawel Laszczak <pawell@cadence.com>, Vinod Koul <vkoul@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-phy@lists.infradead.org,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-In-Reply-To: <20230308082800.3008-2-minda.chen@starfivetech.com>
-References: <20230308082800.3008-1-minda.chen@starfivetech.com>
- <20230308082800.3008-2-minda.chen@starfivetech.com>
-Message-Id: <167828360080.2613078.14112010625330944896.robh@kernel.org>
-Subject: Re: [PATCH v2 1/3] dt-bindings: phy: Add StarFive JH7110 USB
- dt-binding
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liu Peibao <liupeibao@loongson.cn>, devicetree@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn, Mark Brown <broonie@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Rob Herring <robh+dt@kernel.org>, wanghongliang@loongson.cn
+In-Reply-To: <20230308025908.21491-2-zhuyinbo@loongson.cn>
+References: <20230308025908.21491-1-zhuyinbo@loongson.cn>
+ <20230308025908.21491-2-zhuyinbo@loongson.cn>
+Message-Id: <167828359942.2612999.3798783623764270312.robh@kernel.org>
+Subject: Re: [PATCH v1 1/2] dt-bindings: spi: add loongson spi
 Date:   Wed, 08 Mar 2023 08:06:21 -0600
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -80,15 +69,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 08 Mar 2023 16:27:58 +0800, Minda Chen wrote:
-> Add StarFive JH7110 SoC USB 3.0 phy dt-binding.
-> USB controller is cadence USB 3.0 IP.
+On Wed, 08 Mar 2023 10:59:07 +0800, Yinbo Zhu wrote:
+> Add the Loongson platform spi binding with DT schema format using
+> json-schema.
 > 
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 > ---
->  .../bindings/phy/starfive,jh7110-usb-phy.yaml | 158 ++++++++++++++++++
->  1 file changed, 158 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
+>  .../bindings/spi/loongson,ls-spi.yaml         | 47 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
+>  2 files changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -97,16 +87,15 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.example.dtb: usb@10100000: phy-names:1: 'anyOf' conditional failed, one must be fixed:
-	'cdns3,usb2-phy' was expected
-	'cdns3,usb3-phy' was expected
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.example.dtb: usb@10100000: 'phys' is a dependency of 'phy-names'
-	From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/phy/phy-consumer.yaml
+Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1512: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230308082800.3008-2-minda.chen@starfivetech.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230308025908.21491-2-zhuyinbo@loongson.cn
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
