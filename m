@@ -2,212 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15706B0E8A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E55A66B0E96
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjCHQXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:23:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
+        id S230001AbjCHQYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:24:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjCHQXN (ORCPT
+        with ESMTP id S229835AbjCHQYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:23:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03762193CE
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:23:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9076B6170C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 16:23:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0E42C433EF
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 16:23:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678292591;
-        bh=wtbSZIjnuVouf3TNMqbx2fEORr7Wb2sFxFP0LJArqos=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HHMvccU6j87lRjL4E7fcoWtU43PEayhFPDixHhIYkN3HRzmGcR8WQR9+fxolKOQwX
-         5CV8zsiRjp0VEXE4Yr/1JYS8DRKHi2dYfQVcNUm6o8SdBinkt+25yecIcPLi7lSktI
-         CF997R8QMc4O4MDgOQ7F51vWFcF7sldDLCI85gsoa5jGkk5/6Jkjn69rXuVqrxB3PU
-         HZF4CUJHSAU+OFsSvaMtl+6rsMxgia5YHivnasNjttbI8fgv4+FsNSvV5owJdm7Qs5
-         kI5UfQ++ndCum/2do06Yiv0j0kBiVmGKWHqaKVGgL28P3H5B+Ftnlta+JgA9l0r7b3
-         HHRyaCigHRj9Q==
-Received: by mail-ed1-f52.google.com with SMTP id a25so68202892edb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 08:23:10 -0800 (PST)
-X-Gm-Message-State: AO0yUKX6NXMBgCSjvma6mMHld87WTa3HeUNLtOsr+rKtF0qJgP4TyNtT
-        zH2k+f5McFQvzCX15Gprkyt/3wa7ChXGMNM5dIM5Ig==
-X-Google-Smtp-Source: AK7set8xrdBJlgLKcZJ8Ls9Cykn3HUp+jJMyiUPKHEnnwDi6Pc1f0Gubr89vOkRYF6mpOiNQedaKihAX1ERLrU1kUOo=
-X-Received: by 2002:a17:906:b10d:b0:878:561c:6665 with SMTP id
- u13-20020a170906b10d00b00878561c6665mr9467953ejy.0.1678292589161; Wed, 08 Mar
- 2023 08:23:09 -0800 (PST)
-MIME-Version: 1.0
-References: <CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com>
- <50a96bb9-113a-cb06-919c-f544f6b59493@intel.com> <CA+G9fYtDtUbKr-Kf_ZVF0z_xLsP3_2MVsMrvHmvV1UemXbfe3g@mail.gmail.com>
-In-Reply-To: <CA+G9fYtDtUbKr-Kf_ZVF0z_xLsP3_2MVsMrvHmvV1UemXbfe3g@mail.gmail.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Wed, 8 Mar 2023 08:22:57 -0800
-X-Gmail-Original-Message-ID: <CALCETrX56SGHMQFqKT2JWpkhnNDbmtB15-Kam5iYvZz3SD7ixg@mail.gmail.com>
-Message-ID: <CALCETrX56SGHMQFqKT2JWpkhnNDbmtB15-Kam5iYvZz3SD7ixg@mail.gmail.com>
-Subject: Re: selftests: sigaltstack: sas # exit=1 - # Bail out! SP is not on
- sigaltstack - on clang build
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>, llvm@lists.linux.dev,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-api@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Len Brown <len.brown@intel.com>, Borislav Petkov <bp@suse.de>,
-        Stas Sergeev <stsp@list.ru>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>
+        Wed, 8 Mar 2023 11:24:13 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30ACEC1C0C;
+        Wed,  8 Mar 2023 08:24:02 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PWy7j4CqPz9xHM1;
+        Thu,  9 Mar 2023 00:14:41 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBHHGN5tghkH4B+AQ--.22743S2;
+        Wed, 08 Mar 2023 17:23:35 +0100 (CET)
+Message-ID: <0a15c85e9de2235c313b10839aabf750f276552f.camel@huaweicloud.com>
+Subject: Re: [PATCH 00/28] security: Move IMA and EVM to the LSM
+ infrastructure
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
+        chuck.lever@oracle.com, jlayton@kernel.org,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 08 Mar 2023 17:23:18 +0100
+In-Reply-To: <59eb6d6d2ffd5522b2116000ab48b1711d57f5e5.camel@linux.ibm.com>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+         <59eb6d6d2ffd5522b2116000ab48b1711d57f5e5.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwBHHGN5tghkH4B+AQ--.22743S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxArW7Aw17XFWDGryDJw4fXwb_yoW5ZF15pF
+        Z8K3W5Kr4ktF109rs2v3y8uFWfCa1fJ3yUJr95K34UZa45GF1FqFWvkF15uFyDG3s0kFyF
+        qF4jq3s5Z3WDZrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4pXogABsA
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 7:14=E2=80=AFPM Naresh Kamboju <naresh.kamboju@linar=
-o.org> wrote:
->
-> + LLVM
+On Wed, 2023-03-08 at 10:14 -0500, Mimi Zohar wrote:
+> Hi Roberto,
+> 
+> On Fri, 2023-03-03 at 19:18 +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > This patch set depends on:
+> > - https://lore.kernel.org/linux-integrity/20221201104125.919483-1-roberto.sassu@huaweicloud.com/ (there will be a v8 shortly)
+> > - https://lore.kernel.org/linux-security-module/20230217032625.678457-1-paul@paul-moore.com/
+> > 
+> > IMA and EVM are not effectively LSMs, especially due the fact that in the
+> > past they could not provide a security blob while there is another LSM
+> > active.
+> > 
+> > That changed in the recent years, the LSM stacking feature now makes it
+> > possible to stack together multiple LSMs, and allows them to provide a
+> > security blob for most kernel objects. While the LSM stacking feature has
+> > some limitations being worked out, it is already suitable to make IMA and
+> > EVM as LSMs.
+> > 
+> > In short, while this patch set is big, it does not make any functional
+> > change to IMA and EVM. IMA and EVM functions are called by the LSM
+> > infrastructure in the same places as before (except ima_post_path_mknod()),
+> > rather being hardcoded calls, and the inode metadata pointer is directly
+> > stored in the inode security blob rather than in a separate rbtree.
+> > 
+> > More specifically, patches 1-13 make IMA and EVM functions suitable to
+> > be registered to the LSM infrastructure, by aligning function parameters.
+> > 
+> > Patches 14-22 add new LSM hooks in the same places where IMA and EVM
+> > functions are called, if there is no LSM hook already.
+> > 
+> > Patch 23 adds the 'last' ordering strategy for LSMs, so that IMA and EVM
+> > functions are called in the same order as of today. Also, like with the
+> > 'first' strategy, LSMs using it are always enabled, so IMA and EVM
+> > functions will be always called (if IMA and EVM are compiled built-in).
+> > 
+> > Patches 24-27 do the bulk of the work, remove hardcoded calls to IMA and
+> > EVM functions, register those functions in the LSM infrastructure, and let
+> > the latter call them. In addition, they also reserve one slot for EVM to 
+> > supply an xattr to the inode_init_security hook.
+> > 
+> > Finally, patch 28 removes the rbtree used to bind metadata to the inodes,
+> > and instead reserve a space in the inode security blob to store the pointer
+> > to metadata. This also brings performance improvements due to retrieving
+> > metadata in constant time, as opposed to logarithmic.
+> 
+> Prior to IMA being upstreamed, it went through a number of iterations,
+> first on the security hooks, then as a separate parallel set of
+> integrity hooks, and, finally, co-located with the security hooks,
+> where they exist.  With this patch set we've come full circle.
+> 
+> With the LSM stacking support, multiple LSMs can now use the
+> 'i_security' field removing the need for the rbtree indirection for
+> accessing integrity state info.
+> 
+> Roberto, thank you for making this change.  Mostly it looks good.  
+> Reviewing the patch set will be easier once the prereq's and this patch
+> set can be properly applied.
 
-The offending code seems to be:
+Welcome. Yes, once Paul reviews the other patch set, we can
+progressively apply the patches.
 
-#if __s390x__
-        register unsigned long sp asm("%15");
-#else
-        register unsigned long sp asm("sp");
-#endif
+Thanks
 
-        if (sp < (unsigned long)sstack ||
-                        sp >=3D (unsigned long)sstack + stack_size) {
-                ksft_exit_fail_msg("SP is not on sigaltstack\n");
-        }
+Roberto
 
-Is that actually expected to work?  asm("sp") is a horrible hack.  I
-would, maybe naively, expect a compiler to analyze this code, think
-"sp is unconditionally uninitialized", and treat the comparison as
-always-UB and thus generate whatever code seems convenient.
-
---Andy
-
->
-> On Wed, 8 Mar 2023 at 00:58, Chang S. Bae <chang.seok.bae@intel.com> wrot=
-e:
-> >
-> > On 3/6/2023 10:57 PM, Naresh Kamboju wrote:
-> > > kselftest: sigaltstack built with clang-16 getting failed but passed =
-with
-> > > gcc-12 build. Please find more details about test logs on clang-16 an=
-d
-> > > gcc-12 and steps to reproduce locally on your machine by using tuxrun=
-.
-> > >
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > >
-> > > Test log:
-> > > ----------
-> > >
-> > > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake) (Debian clang
-> > > version 16.0.0 (++20230228093516+60692a66ced6-1~exp1~20230228093525.4=
-1),
-> > > Debian LLD 16.0.0) #1 SMP PREEMPT @1678159722
-> > > ...
-> > > kselftest: Running tests in sigaltstack
-> > > TAP version 13
-> > > 1..1
-> > > # selftests: sigaltstack: sas
-> > > # # [NOTE] the stack size is 21104
-> > > # TAP version 13
-> > > # 1..3
-> > > # ok 1 Initial sigaltstack state was SS_DISABLE
-> > > # Bail out! SP is not on sigaltstack
-> > > # # Planned tests !=3D run tests (3 !=3D 1)
-> > > # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > > not ok 1 selftests: sigaltstack: sas # exit=3D1
-> > <snip>
-> >
-> > > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake)
-> > > (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutil=
-s
-> > > for Debian) 2.40) #1 SMP PREEMPT @1678159736
-> > > ...
-> > > kselftest: Running tests in sigaltstack
-> > > TAP version 13
-> > > 1..1
-> > > # selftests: sigaltstack: sas
-> > > # # [NOTE] the stack size is 50080
-> > > # TAP version 13
-> > > # 1..3
-> > > # ok 1 Initial sigaltstack state was SS_DISABLE
-> > > # # [RUN] signal USR1
-> > > # ok 2 sigaltstack is disabled in sighandler
-> > > # # [RUN] switched to user ctx
-> > > # # [RUN] signal USR2
-> > > # # [OK] Stack preserved
-> > > # ok 3 sigaltstack is still SS_AUTODISARM after signal
-> > > # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > > ok 1 selftests: sigaltstack: sas
-> >
-> > At glance, the log shows the altstack size difference between LLVM and =
-GCC.
-> >
-> > But, when I tried with the LLVM that I have,
-> >
-> >      $ clang --version
-> >      clang version 13.0.0 ...
-> >
-> > it failed only with this compiler:
-> >
-> >      $ rm sas;clang -o sas sas.c;./sas
-> >      # [NOTE]        the stack size is 8192
-> >      TAP version 13
-> >      1..3
-> >      ok 1 Initial sigaltstack state was SS_DISABLE
-> >      Bail out! SP is not on sigaltstack
-> >      # Planned tests !=3D run tests (3 !=3D 1)
-> >      # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-> >
-> >      $ rm sas;gcc -o sas sas.c;./sas
-> >      # [NOTE]        the stack size is 8192
-> >      TAP version 13
-> >      1..3
-> >      ok 1 Initial sigaltstack state was SS_DISABLE
-> >      # [RUN] signal USR1
-> >      ok 2 sigaltstack is disabled in sighandler
-> >      # [RUN] switched to user ctx
-> >      # [RUN] signal USR2
-> >      # [OK]  Stack preserved
-> >      ok 3 sigaltstack is still SS_AUTODISARM after signal
-> >      # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-> >
-> > The same is true with some old versions -- e.g. the one that came with
-> > commit 0c49ad415512 ("tools/testing/selftests/sigaltstack/sas.c: improv=
-e
-> > output of sigaltstack testcase"):
-> >
-> >      $ rm sas;clang -o sas sas.c;./sas
-> >      [OK]    Initial sigaltstack state was SS_DISABLE
-> >      [FAIL]  SP is not on sigaltstack
-> >
-> >      $ rm sas;gcc -o sas sas.c;./sas
-> >      [OK]    Initial sigaltstack state was SS_DISABLE
-> >      [RUN]   signal USR1
-> >      [OK]    sigaltstack is disabled in sighandler
-> >      [RUN]   switched to user ctx
-> >      [RUN]   signal USR2
-> >      [OK]    Stack preserved
-> >      [OK]    sigaltstack is still SS_AUTODISARM after signal
-> >      [OK]    Test passed
-> >
-> > So, this test failure appears to have been there for a while. I think
-> > the LLVM folks need to take a look at it.
-> >
-> > Thanks,
-> > Chang
