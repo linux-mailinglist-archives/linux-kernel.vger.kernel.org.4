@@ -2,216 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC806B11D5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:12:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B066B11D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjCHTMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 14:12:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
+        id S230043AbjCHTNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 14:13:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjCHTMC (ORCPT
+        with ESMTP id S229691AbjCHTM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 14:12:02 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601F172B0
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 11:12:01 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id l24-20020a25b318000000b007eba3f8e3baso18292693ybj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 11:12:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678302720;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fw2hLbVqL5SgHu0yC2jKBnr76E23Fn3jrIrBYUu2agc=;
-        b=d/8zt05dy3n7YdgyvlG/ZVVUTzcOMdR6coISyHK+JNpiS/QghTGvQoyP01I/rGR+BJ
-         lJtM2/uOjEckgQj5foG9YaT1tAV+92pXB4s8ImQVMjPYWnPEM4XRAsy9HXKawnqX0EOs
-         dn/gm7nSlK8hoY9Psy3NnWccliKHBc2zbJitYY3k+oybLNEI+g/1XWCE5rvgnxHBbpU4
-         mYTwWsTz4ib93zqW0yxJwyFJJmuo/MILCqzqHZJVSXlJ88qK7BTf0XE2e/htSoXbbaT/
-         7N54IM4L18cDjJ66Tg9GGrE1I1QXhsv90sWEWB19rJ6OH2hlN+tZUUAILs22Qe/nyK0y
-         /jmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678302720;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fw2hLbVqL5SgHu0yC2jKBnr76E23Fn3jrIrBYUu2agc=;
-        b=Dv1OFx9HJPg/fetFSVvwHwhen1QuY0lFKgIEZGVl9Pt/fsIfyZh08d2rZbG5ZWc8/u
-         jkHP9/jNDR2tEOzkjsmzl4qyTylWH2CTHXq63xqaNkcsXGvkLvQegiguiBLL3mj3NRhR
-         felomk8/VBt/Mfv2Dv7a2zOHzsWE1ey+ujU44uehryxRrCP/8USf/zJmNja0L24GVF0t
-         irFGwWsy0QXG+xwHRKOma/Jn8SPled+om0eea+3CYlsi5kGru3lrg8nHcdMVswf4XCtW
-         otT385f46ZTfLsxsF+Nwib6+G70XHPhUw1sM1DeKutMl8QwnybNeDVwYwRXKr9c+hjZL
-         VH0A==
-X-Gm-Message-State: AO0yUKXhnNnjccuxhJl7dtBkIdmHXnOb2PuzcBbYHo92gZzNx6S1r98R
-        kzAKWXuxjIjtpaIbHo2fcEWBsflkAaU=
-X-Google-Smtp-Source: AK7set9TU9lXDs4kxvj5e+Thvl8AKWgxlgGcLBUP85taJjXQ9TonCcX0lJT9aDbYwFLweK2nOQllXUnyhl4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:4520:0:b0:534:515:e472 with SMTP id
- s32-20020a814520000000b005340515e472mr12577476ywa.4.1678302720319; Wed, 08
- Mar 2023 11:12:00 -0800 (PST)
-Date:   Wed, 8 Mar 2023 11:11:58 -0800
-In-Reply-To: <fb088e26-8c9c-bcac-6083-5945d2d9c16e@linux.microsoft.com>
-Mime-Version: 1.0
-References: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
- <ZAd2MRNLw1JAXmOf@google.com> <CABgObfa1578yKuw3sqnCeLXpyyKmMPgNaftP9HCdgHNM9Tztjw@mail.gmail.com>
- <ZAfZPA5Ed7STUT2B@google.com> <fb088e26-8c9c-bcac-6083-5945d2d9c16e@linux.microsoft.com>
-Message-ID: <ZAjd/ktCeT8D5anK@google.com>
-Subject: Re: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Tianyu Lan <ltykernel@gmail.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 8 Mar 2023 14:12:56 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2063.outbound.protection.outlook.com [40.107.101.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC61893E8;
+        Wed,  8 Mar 2023 11:12:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hsIzhhhJhNQJI+GgAD5LPIkN74pb1OqvQ8WZts6NYi3PXBEgSBrpn23KfBpwzYUTBh4lb8iZDcnDzFvxU2BdSaWXaHg1/nmLYcaRiUSzP27piqiIdbVacQAjg9Rk70ob3jgdblJV2uEcl18V1303k5cGmKOIJbUsa3X1FuJ4oGGufQFeUiaX7XcUbDh45n5Dk4TaAJXYaut3jXFvmjMugBGmwYEh+WLj0QbnObkZFameSlmlWFTOGKYXCLkJaVfOl3isDPX8/Ap8cObFqKJM9ybpTyPox9BSFaoYcWUcURFmJS2aCaxtuUQOfI0XeMw/hT+WFkQiFji8SiW4u8rr6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PvMD3rZpKrsRWBRWHQxk8uzdVjcRQHwxZeP2qm9YdQI=;
+ b=GCbtaxV85Pa0NCjJYYJAW/g1zjtB07LRbAfyTZMJRWTH2x1h3VOYbeskoAcib6pP6At7aKw+9OfwnArXMP4VAGUXsU0m0L/Pxl+fC6rzSGxVo+erXvcE7b1BneHoACLBkx81DSJWitHPxaOa6pc9VkpgC39InTfadmurqKx66ys+OYLqggGMhxByG2p0ZJ0wK/L6YjYZayMwaOqI5AXXnnRcj7HgxhuDiFCFYsrKZiUF7jcWBXF9FT+fk60fRIMFBvavkMf8oOvJQGCVENFmIQWyffA54xrQfVK3CVicF0y0tskX5L0bYFl8gVW8b+m4E86M030uYe875d+QbL//HA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PvMD3rZpKrsRWBRWHQxk8uzdVjcRQHwxZeP2qm9YdQI=;
+ b=GO9o37qxNf8WTfuQ/HddSTq8UUgIIrzWu/OIcmGw+dhABcA4NEwkTptby2m80kb2V+KSdGkU9f15iXrx4I1Ii+OUDu6JPAKb9zxTHWAF4SHcHsEJgFIME9HlxSiYxh7hlhtqt9zItFCpS3cy51rioVBBrKp4UppvfwYQ2GaCQro=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM6PR12MB4973.namprd12.prod.outlook.com (2603:10b6:5:1b7::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Wed, 8 Mar
+ 2023 19:12:47 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d23f:bb1:df95:3918]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d23f:bb1:df95:3918%4]) with mapi id 15.20.6178.017; Wed, 8 Mar 2023
+ 19:12:46 +0000
+Message-ID: <d1fccceb-ca77-f653-17fc-63168e0da884@amd.com>
+Date:   Wed, 8 Mar 2023 20:12:38 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
+Content-Language: en-US
+To:     Asahi Lina <lina@asahilina.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
+ <cd788ccf-0cf1-85d5-1bf8-efc259bd7e11@amd.com>
+ <a075d886-0820-b6fb-fcd0-45bfdc75e37d@asahilina.net>
+ <2b1060e9-86ba-7e16-14f1-5b5fa63de719@amd.com>
+ <9f76bb68-b462-b138-d0ad-d27c972530d4@asahilina.net>
+ <a39c6b40-f190-002d-ae1c-8b58c6442df2@amd.com>
+ <4bbfc1a3-cfc3-87f4-897b-b6637bac3bd0@asahilina.net>
+ <b0aa78b2-b432-200a-8953-a80c462fa6ee@amd.com>
+ <c0624252-070e-bd44-2116-93a1d63a1359@asahilina.net>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <c0624252-070e-bd44-2116-93a1d63a1359@asahilina.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0087.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1f::9) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DM6PR12MB4973:EE_
+X-MS-Office365-Filtering-Correlation-Id: df2adce0-35d2-4c67-92d7-08db20091a09
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QcjVi5hmeuvy/3DWBIYqNlbwa4ui/wb8QJv1MXE5XLCSq3hx+er3+afflHmlbc+zspZKGiT7cpcuV0EfgtDZs7qbQ57EbVylJidHC8G5nPxD0c+XubWJsvbnAombmap1AA2rXvjKtKX3E+Th30Ak9abLI6p/jvGwmgvshiFrNwufSS4TbZiqfLHOeTU0vJ2zhuUj/EgfVHAvrXHzvZCcbDNiQOnMHL1R6r0TGxRHq4J10fXQNnsPM+VQ8Md6TJujuajhSk7RQeUxxGdebZ8FtO9WOzCToZISqUqUIRMZ3DNixsVcjA9yD7btNQcls60ojz1Mx/EQltune4rvI8e4PajlHBlX0L3QpZuvo10nChLiiTa+7Q/+E1SYhQAHMyjX4knZmQV3xBNlV+76ndWOIqDG+hMrxa2RxqWxJ0f9IM/ZAFNSBnpqCHpu60331GJFb08WRg01gqYrjESYPNUkzE58uv/K9lo18NyYwstHyScyLv4HoTqWHiv0CvUvmMaRwCzugUtXcfIsV7kLmTc8FDPsYENyi7x1LAIs8fyvRHEEwcTQM7e+M+GW5AYPxndtHScfEA1D1sJCTCUw6XkQaLm5x7UKB9eRpSG+7ndWPBGFme6pw9wHrbLmnTnTaOLHcxQDkadzKqdVAm8tE94uWFXgg9cYSVJl0Kdw2wZCcCHLebsS72VDjtCJl6UwVn5CiEkIJ7jduaQorVnx5nvHfQPMJ74i8WkYM76swemqyKejGo3vxZ4nhYnAWZ2xZPUr
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(396003)(39860400002)(346002)(366004)(451199018)(921005)(186003)(2906002)(38100700002)(31696002)(2616005)(31686004)(6506007)(6512007)(5660300002)(6666004)(7416002)(8936002)(41300700001)(66476007)(110136005)(6486002)(86362001)(66946007)(66556008)(4326008)(8676002)(478600001)(316002)(36756003)(83380400001)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dG5EQllEM3VXWFAxZUhTb0FtMEIwYVlreFFkVXRndWJQVUFhcWRlVTRLSlNk?=
+ =?utf-8?B?NXlHN3RFbzFqSExVZmRSWGU2eDk1bDd4RDkvNEM4b3RkMG8yanBHTHJmdUgx?=
+ =?utf-8?B?SmludkZ4WTk0ODU4TUxtUTJ2QUg0czZ5YWFzc1ViOUlsd2ZUMEVpdFBqUlJ0?=
+ =?utf-8?B?Mkd4bHpMbHFWOWo2SDN4VUN5QmZIMU44UUNYU2Nod21oZDNZUlIya0JBVHd5?=
+ =?utf-8?B?ejNsRG5taGNLQzM1SnRqR2drUFlGOWQvSFl1bStROXpFRzFES29GWjhWYi83?=
+ =?utf-8?B?S3RmbytoNTdLM3R1ZFo3bG1td0wyUnVRVW9OZkNsUGU3YXBoQ3NRNU45ZUJ0?=
+ =?utf-8?B?cnJYbkp0akdxcUdoZDFtNmNudUE5YUwxUCtmRmYwdkEvL1pGdTErUFpWY2pK?=
+ =?utf-8?B?RzJSRW1pT29mUWdtT1lZZkdmK3Y1dUZJaXFRSkdwY0Iyakw5YVoxMnkvTEdq?=
+ =?utf-8?B?Tms1d0NzcjRGbXZ4cDdvcGR6aDNZcDJVWnVwb1RLQ2kxQnRpSmF5MS9KM004?=
+ =?utf-8?B?OUwrSDBmWEhSYWkzck9JNlhoVldSanFkM1kzdjIyd2NrOUxOekpPTGxjRnU2?=
+ =?utf-8?B?WWllYXhkYjN4aUt5VXlyVnQxcUdOeXFrSEtzQTFqbkgrUlZXOU5lYWg4YW1X?=
+ =?utf-8?B?Nmp5RTQ2b1NjaTVuNVdTVUljRmI0QzhLMUFxWS9oYkd0WmgrZDF3K3FEZ3RY?=
+ =?utf-8?B?Szc5ckhSMi9NQ25tVnFqcXcyU1BiS2lyL0pTcEowNnJ0ZkFLZXVGMU9JV0c4?=
+ =?utf-8?B?VlRRUkgyUVVReTE0ZHg2aGxYU2Y2V1l3dFZxSSsyR2xIM2NrbDg4blJwcHJl?=
+ =?utf-8?B?UGZpbCs4bWNmQ3BCK3RsR1M4cHZMSVlNMHp4UytFcjJGcDhDTkNYTU0zOFp0?=
+ =?utf-8?B?cVViNzFDQ2xNd1JoWFVmMFovdHcxZXBreWhleEd0QnRCNEltQU9OUlpBalR5?=
+ =?utf-8?B?S2hVd003cmxjT2t6VlV2cGJTMktWTjZ1WkhaOWhnVEdlbWs1TnlUYW5mSUVk?=
+ =?utf-8?B?SFVwZ0hMUjhUaFRhOFgxRVBqVG1memZtRDRWUmg0SUI3aGwwbEk4cGlIVEhq?=
+ =?utf-8?B?clB5eTZIVy83SG1nQU00ZE5tTjZYTmN5aDA5RGlEb1FkNUZ3SmtqcTJrdzFD?=
+ =?utf-8?B?Q1JuUnVHSFQ3MGZnSVhIdnFQMHQzZmE3dURnY3R0anBYTzczMmNhRVNsTDQ1?=
+ =?utf-8?B?QjJ1VlQvZVhveDI5eGpIeEg3alNBNGNZN1dqWUZQbXhtR2tDemhOZkRDNHFP?=
+ =?utf-8?B?eXdMZSs5bXc1KzBMSnFuYnJLMjZrMzk0aGs5dFJlKzA2RFVKTmw4TndRZTdk?=
+ =?utf-8?B?ZEUvS0JYZVNQUWVxTnpZU2FIckdLdmlKZDFhekhKc2FhZkd0Rys4NEQ5L2Nh?=
+ =?utf-8?B?YzJGS2p0NjRpWnFsU2JJZTByMmhHY1hTTDBoWld1WkJ4SXNVM1k1bThXY0E2?=
+ =?utf-8?B?K0hrNTdkYzdLOTZXRTRTV1NiNURrK1Z0eExGNVFvSzZmNHUwMmxJWnhOcFRv?=
+ =?utf-8?B?SkNpemU0YXYxcGJ3VUN0RUE3VDlSTzg1a1BkWmxoaUxYUXdLVEJEZ3o5OUpO?=
+ =?utf-8?B?cEU0Rzd5Y3N4S2NvY2FPUkU5aDBEZ3V2a21RK2JXRlQyN05pL09GTCtLTnE2?=
+ =?utf-8?B?aXBVd1doUjRSd2swWDhOY2NGZjJKcVYyNHZ4NXBFSURabUNjb09UTzFXSnl6?=
+ =?utf-8?B?RGpsN1M2Vk1JQ3hGSTl0eDFLS1ByUVM4ZERROVhBRjBHUElPLzFqdVZITnJ1?=
+ =?utf-8?B?Syt6OUNuVEhrWnAvUUlBeFZpSjFEeFVTWkFBa0VuaGdFNm5wQkw5THh1YkZL?=
+ =?utf-8?B?VzV4K204MTZjbU80M3BGNm1FcXJUVFp1emZJeWlCblFTQ3hKRkxxUVVSNlJn?=
+ =?utf-8?B?OFA2a3BJRUQ0M1dIRzZhYzF4dHFKVDNsS2ZMUStKaGRVQUFzUXdyT2p6UlZH?=
+ =?utf-8?B?SGNLQjcyYk1iN2V1OVZOTjlINWNCa0szS0lxaitnc0JqTDJ4NlU4VTVKSXlF?=
+ =?utf-8?B?UEpxZ21FcEtIK1puazIzVEkvTTQ2M3dNZWV0UnR4cEZKMzZtWFIxVHZNSnlr?=
+ =?utf-8?B?KytidWRIaFo2ekI4NHhjc083dGFrMWNSTlB4bmZGVGdQamErUG9sa0JiTWdo?=
+ =?utf-8?B?djdZWXp5cDJWc0IxMXlZQkhHVm96ZTdTbzJyNXhkRWdiZnhEYS8vR01QZnhX?=
+ =?utf-8?Q?zRezKXKqu/PLtbjsJKW7L98v6z0s7WST1D9kXGNF2Nkz?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: df2adce0-35d2-4c67-92d7-08db20091a09
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 19:12:46.7936
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lPTO/QENqHbzUqYfdSbRXNkNSbPt17YR4XkDt1mTXHc9cydJINFqy0/9JphLz9fS
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4973
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023, Jeremi Piotrowski wrote:
-> On 08/03/2023 01:39, Sean Christopherson wrote:
-> > On Wed, Mar 08, 2023, Paolo Bonzini wrote:
-> >> On Tue, Mar 7, 2023 at 6:36=E2=80=AFPM Sean Christopherson <seanjc@goo=
-gle.com> wrote:
-> >>> Thinking about this more, I would rather revert commit 1e0c7d40758b (=
-"KVM: SVM:
-> >>> hyper-v: Remote TLB flush for SVM") or fix the thing properly straita=
-way.  KVM
-> >>> doesn't magically handle the flushes correctly for the shadow/legacy =
-MMU, KVM just
-> >>> happens to get lucky and not run afoul of the underlying bugs.
-> >>
-> >> I don't think it's about luck---the legacy MMU's zapping/invalidation
-> >> seems to invoke the flush hypercall correctly:
-> >=20
-> > ...for the paths that Jeremi has exercised, and for which a stale TLB e=
-ntry is
-> > fatal to L2.  E.g. kvm_unmap_gfn_range() does not have a range-based TL=
-B flush
-> > in its path and fully relies on the buggy kvm_flush_remote_tlbs().
-> >
->=20
-> Why do you say "buggy kvm_flush_remote_tlbs"? kvm_flush_remote_tlbs calls=
- the
-> hypercall that is needed, I don't see how this might be an issue of a mis=
-sing
-> "range-based TLB flush".
+Am 08.03.23 um 20:05 schrieb Asahi Lina:
+> [SNIP]
+>> Well it's not the better way, it's the only way that works.
+>>
+>> I have to admit that my bet on your intentions was wrong, but even that
+>> use case doesn't work correctly.
+>>
+>> See when your callback returns false it is perfectly possible that all
+>> hw fences are signaled between returning that information and processing it.
+>>
+>> The result would be that the scheduler goes to sleep and never wakes up
+>> again.
+> That can't happen, because it will just go into another iteration of the
+> drm_sched main loop since there is an entity available still.
+>
+> Rather there is probably the opposite bug in this patch: the can_run_job
+> logic should be moved into the wait_event_interruptible() condition
+> check, otherwise I think it can end up busy-looping since the condition
+> itself can be true even when the can_run_job check blocks it.
+>
+> But there is no risk of it going to sleep and never waking up because
+> job completions will wake up the waitqueue by definition, and that
+> happens after the driver-side queues are popped. If this problem could
+> happen, then the existing hw_submission_limit logic would be broken in
+> the same way. It is logically equivalent in how it works.
+>
+> Basically, if properly done in wait_event_interruptible, it is exactly
+> the logic of that macro that prevents this race condition and makes
+> everything work at all. Without it, drm_sched would be completely broken.
+>
+>> As I said we exercised those ideas before and yes this approach here
+>> came up before as well and no it doesn't work.
+> It can never deadlock with this patch as it stands (though it could busy
+> loop), and if properly moved into the wait_event_interruptible(), it
+> would also never busy loop and work entirely as intended. The actual API
+> change is sound.
+>
+> I don't know why you're trying so hard to convince everyone that this
+> approach is fundamentally broken... It might be a bad idea for other
+> reasons, it might encourage incorrect usage, it might not be the best
+> option, there are plenty of arguments you can make... but you just keep
+> trying to make an argument that it just can't work at all for some
+> reason. Why? I already said I'm happy dropping it in favor of the fences...
 
-Doh, I forgot that the arch hook in kvm_flush_remote_tlbs() leads to the Hy=
-per-V
-hook.
+Well because it is broken.
 
-svm_flush_tlb_current is very much broken, but in practice it doesn't matte=
-r outside
-of the direct call from kvm_mmu_load(), because in all other paths KVM will=
- flow
-through a Hyper-V flush if KVM actually modifies its MMU in any ways.  E.g.=
- the
-request from kvm_mmu_new_pgd() when force_flush_and_sync_on_reuse=3Dtrue is=
- neutered,
-but that exists only as a safeguard against MMU bugs.  And for things like
-kvm_invalidate_pcid() and kvm_post_set_cr4(), my understanding is that Hype=
-r-V
-will still flush the bare metal TLB, it's only Hyper-V's shadow page tables=
- that
-are stale.
+When you move the check into the wait_event_interruptible condition then 
+who is going to call wait_event_interruptible when the condition changes?
 
-Depending on how Hyper-V handles ASIDs, pre_svm_run() may also be broken.  =
-If
-Hyper-V tracks and rebuilds only the current ASID, then bumping the ASID wo=
-n't
-rebuild potentially stale page tables.  But I'm guessing Hyper-V ignores th=
-e ASID
-since the hypercall takes only the root PA.
+As I said this idea came up before and was rejected multiple times.
 
-The truly problematic case is kvm_mmu_load(), where KVM relies on the flush=
- to
-force Hyper-V to rebuild shadow page tables for an old, possibly stale nCR3=
-.  This
-affects only the TDP MMU because of an explicit optimization in the TDP MMU=
-.  So
-in practice we could squeak by with something like this:
+Regards,
+Christian.
 
-	if (kvm_x86_ops.tlb_remote_flush =3D=3D hv_remote_flush_tlb)
-		hyperv_flush_guest_mapping(vcpu->arch.mmu->root.hpa);
-	else
-		static_call(kvm_x86_flush_tlb_current)(vcpu);
-
-but I'm not convinced that avoiding a hypercall in svm_flush_tlb_current() =
-just
-to avoid overhead when running an L3 (nested VM from L1 KVM's perspective) =
-is
-worthwhile.  The real problem there is that KVM nested SVM TLB/ASID support=
- is an
-unoptimized mess, and I can't imagine someone running an L3 is going to be =
-super
-concerned with performance.
-
-I also think we should have a sanity check in the flush_tlb_all() path, i.e=
-. WARN
-if kvm_flush_remote_tlbs() falls back.
-
-Something like this (probably doesn't compile, likely needs #ifdefs or help=
-ers):
-
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 7ef4f9e3b35a..38afc5cac1c4 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -3770,7 +3770,7 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vc=
-pu)
-        svm->vmcb->save.rflags |=3D (X86_EFLAGS_TF | X86_EFLAGS_RF);
- }
-=20
--static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
-+static void svm_flush_tlb_asid(struct kvm_vcpu *vcpu)
- {
-        struct vcpu_svm *svm =3D to_svm(vcpu);
-=20
-@@ -3794,6 +3794,23 @@ static void svm_flush_tlb_current(struct kvm_vcpu *v=
-cpu)
-                svm->current_vmcb->asid_generation--;
- }
-=20
-+static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
-+{
-+       if (kvm_x86_ops.tlb_remote_flush =3D=3D hv_remote_flush_tlb &&
-+           VALID_PAGE(vcpu->arch.mmu->root.hpa))
-+               hyperv_flush_guest_mapping(vcpu->arch.mmu->root.hpa);
-+
-+       svm_flush_tlb_asid(vcpu);
-+}
-+
-+static void svm_flush_tlb_all(struct kvm_vcpu *vcpu)
-+{
-+       if (WARN_ON_ONCE(kvm_x86_ops.tlb_remote_flush =3D=3D hv_remote_flus=
-h_tlb))
-+               hv_remote_flush_tlb(vcpu->kvm);
-+
-+       svm_flush_tlb_asid(vcpu);
-+}
-+
- static void svm_flush_tlb_gva(struct kvm_vcpu *vcpu, gva_t gva)
- {
-        struct vcpu_svm *svm =3D to_svm(vcpu);
-@@ -4786,10 +4803,10 @@ static struct kvm_x86_ops svm_x86_ops __initdata =
-=3D {
-        .set_rflags =3D svm_set_rflags,
-        .get_if_flag =3D svm_get_if_flag,
-=20
--       .flush_tlb_all =3D svm_flush_tlb_current,
-+       .flush_tlb_all =3D svm_flush_tlb_all,
-        .flush_tlb_current =3D svm_flush_tlb_current,
-        .flush_tlb_gva =3D svm_flush_tlb_gva,
--       .flush_tlb_guest =3D svm_flush_tlb_current,
-+       .flush_tlb_guest =3D svm_flush_tlb_asid,
-=20
-        .vcpu_pre_run =3D svm_vcpu_pre_run,
-        .vcpu_run =3D svm_vcpu_run,
+>
+> It's intended to mirror the hw_submission_limit logic. If you think this
+> is broken, then that's broken too. They are equivalent mechanisms.
+>
+>>> This particular issue aside, fairness in global resource allocation is a
+>>> conversation I'd love to have! Right now the driver doesn't try to
+>>> ensure that, a queue can easily monopolize certain hardware resources
+>>> (though one queue can only monopolize one of each, so you'd need
+>>> something like 63 queues with 63 distinct VMs all submitting
+>>> free-running jobs back to back in order to starve other queues of
+>>> resources forever). For starters, one thing I'm thinking of doing is
+>>> reserving certain subsets of hardware resources for queues with a given
+>>> priority, so you can at least guarantee forward progress of
+>>> higher-priority queues when faced with misbehaving lower-priority
+>>> queues. But if we want to guarantee proper fairness, I think I'll have
+>>> to start doing things like switching to a CPU-roundtrip submission model
+>>> when resources become scarce (to guarantee that queues actually release
+>>> the resources once in a while) and then figure out how to add fairness
+>>> to the allocation code...
+>>>
+>>> But let's have that conversation when we talk about the driver (or maybe
+>>> on IRC or something?), right now I'm more interested in getting the
+>>> abstractions reviewed ^^
+>> Well that stuff is highly problematic as well. The fairness aside you
+>> risk starvation which in turn breaks the guarantee of forward progress.
+>>
+>> In this particular case you can catch this with a timeout for the hw
+>> operation, but you should consider blocking that from the sw side as well.
+> In the current state I actually think it's not really that problematic,
+> because the resources are acquired directly in the ioctl path. So that
+> can block if starved, but if that can cause overall forward progress to
+> stop because some fence doesn't get signaled, then so can just not doing
+> the ioctl in the first place, so there's not much point (userspace can
+> always misbehave with its fence usage...). By the time anything gets
+> submitted to drm_sched, the resources are already guaranteed to be
+> acquired, we never block in the run callback.
+>
+> It needs to be fixed of course, but if the threat model is a malicious
+> GPU process, well, there are many other ways to DoS your system... and I
+> don't think it's very likely that 63+ queues (which usually means 63+
+> processes with OpenGL) will end up accidentally starving the GPU in a
+> tight loop at the same time. I'd love to hear about real-world scenarios
+> where this kind of thing has been a real problem and not just a
+> theoretical one though... maybe I'm missing something?
+>
+> Basically my priorities with the driver are:
+>
+> 1. Make sure it never crashes
+> 2. Make sure it works well for real users
+> 3. Make it work smoothly for real users under reasonable load
+> (priorities, CPU scheduler interactions, etc.)
+> 4. Make it handle accidental problems more gracefully (OOMs etc, I need
+> to look into private GEM BO accounting to processes so the OOM killer
+> has better data to work with)
+> 5. Make it more robust against deliberate abuse/starvation (this should
+> matter more once we have some kind of paravirtualization solution...)
+>
+> And right now we're somewhere between 2 and 3. So if there are cases
+> where this resource acquisition stuff can cause a problem for real
+> users, I'll want to fix it earlier. But if this is more theoretical than
+> anything (with the resource limits of AGX GPUs), I'd rather focus on
+> things like memory accounting and shrinker support first.
+>
+>>> We don't even have a shrinker yet, and I'm sure that's going to be a lot
+>>> of fun when we add it too... but yes, if we can't do any memory
+>>> allocations in some of these callbacks (is this documented anywhere?),
+>>> that's going to be interesting...
+>> Yes, that is all part of the dma_fence documentation. It's just
+>> absolutely not obvious what all this means.
+> I mean is there any documentation on how this interacts with drm_sched?
+> Like, am I not allowed to allocate memory in prepare()? What about
+> run()? What about GPU interrupt work? (not a raw IRQ handler context, I
+> mean the execution path from GPU IRQ to drm_sched run() fences getting
+> signaled)
+>
+>>> It's not all bad news though! All memory allocations are fallible in
+>>> kernel Rust (and therefore explicit, and also failures have to be
+>>> explicitly handled or propagated), so it's pretty easy to point out
+>>> where they are, and there are already discussions of higher-level
+>>> tooling to enforce rules like that (and things like wait contexts).
+>>> Also, Rust makes it a lot easier to refactor code in general and not be
+>>> scared that you're going to regress everything, so I'm not really
+>>> worried if I need to turn a chunk of the driver on its head to solve
+>>> some of these problems in the future ^^ (I already did that when I
+>>> switched it from the "demo" synchronous submission model to the proper
+>>> explicit sync + fences one.)
+>> Yeah, well the problem isn't that you run into memory allocation failure.
+> What I mean is that the mandatory failure handling means it's relatively
+> easy to audit where memory allocations can actually happen.
+>
+>> The problem is rather something like this:
+>> 1. You try to allocate memory to signal your fence.
+>> 2. This memory allocation can't be fulfilled and goes to sleep to wait
+>> for reclaim.
+>> 3. On another CPU reclaim is running and through the general purpose
+>> shrinker, page fault or MMU notifier ends up wait for your dma_fence.
+>>
+>> You don't even need to implement the shrinker for this to go boom
+>> extremely easy.
+> Hmm, can you actually get something waiting on a dma_fence like that
+> today with this driver? We don't have a shrinker, we don't have
+> synchronous page faults or MMU notifications for the GPU, and this is
+> explicit sync so all in/out fences cross over into userspace so surely
+> they can't be trusted anyway?
+>
+> I'm definitely not familiar with the intricacies of DMA fences and how
+> they interact with everything else yet, but it's starting to sound like
+> either this isn't quite broken for our simple driver yet, or it must be
+> broken pretty much everywhere in some way...
+>
+>> So everything involved with signaling the fence can allocate memory only
+>> with GFP_ATOMIC and only if you absolutely have to.
+> I don't think we even have a good story for passing around gfp_flags in
+> Rust code so that will be interesting... though I need to actually audit
+> the code paths and see how many allocations we really do. I know I alloc
+> some vectors for holding completed commands and stuff like that, but I'm
+> pretty sure I can fix that one with some reworking, and I'm not sure how
+> many other random things there really are...? Obviously most allocations
+> happen at command creation time, on completion you mostly get a lot of
+> freeing, so maybe I can just eliminate all allocs and not worry about
+> GFP_ATOMIC.
+>
+> ~~ Lina
 
