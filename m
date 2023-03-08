@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1916AFE82
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 06:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 530406AFE86
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 06:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjCHFik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 00:38:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
+        id S229720AbjCHFkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 00:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjCHFih (ORCPT
+        with ESMTP id S229475AbjCHFkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 00:38:37 -0500
+        Wed, 8 Mar 2023 00:40:11 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD89B92F24
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 21:38:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD92974A0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 21:40:09 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 85B5D219CE;
-        Wed,  8 Mar 2023 05:38:35 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A3E31219CE;
+        Wed,  8 Mar 2023 05:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678253915; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1678254008; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Ube8GcqjKGLuvipMPbT99w7IezkCRhfrWpkYxrn2r5I=;
-        b=dUDz2YqAa5lPOM62M+Hdr4MqHc0u8Ag4msG7tzNubmockswfwo9aXH+9m8nNefX9rsO1cD
-        AJTytMlq76y3n6kyuIALeD0rCML9kQfsQfmRwjZCGTUzGWLlVdKMHl7/OeBq25JMQBoUVa
-        os9YOi6QRygjAz+cd4Gc+pBfOcRRQNI=
+        bh=SETYpkpQMST49MYA3BJbWtmG/kyTZaprDENnjGclN4M=;
+        b=N/Xyvu55i0lMn43T8vdaknu3x7Dn38FeXrixfhP/EyEb1pllzLflDrrZQM4lFbX1iDG7Lc
+        E6YejEa6SrqMaCD0RKZ0PQEG6NRjNXrVyARFdO2P9YNdvzEsnbsn6QKPupq68HCIdb+ymH
+        ZuLYD2Lpk1F3uoeGXmOiXRS/ddwd0Dc=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678253915;
+        s=susede2_ed25519; t=1678254008;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Ube8GcqjKGLuvipMPbT99w7IezkCRhfrWpkYxrn2r5I=;
-        b=k3+5wtlQwtDD029dz0wiVO/WliHWewIaZIKP09A/rBA17SsvKmZZBb9uWzxkEi5mCiBeOo
-        NPykOtTYJrWyqYAQ==
+        bh=SETYpkpQMST49MYA3BJbWtmG/kyTZaprDENnjGclN4M=;
+        b=MsSFLmMgNpHVspljo64fgULCejAWOxbQBM/qRj2sde0MMcqxcR4pZom2sOyrFbrqdcCouV
+        aT6gmM1uKDBnyqCA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6508513596;
-        Wed,  8 Mar 2023 05:38:35 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 792D913596;
+        Wed,  8 Mar 2023 05:40:08 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id MKTjF1sfCGS4PwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 08 Mar 2023 05:38:35 +0000
-Date:   Wed, 08 Mar 2023 06:38:34 +0100
-Message-ID: <87ilfbiyzp.wl-tiwai@suse.de>
+        id dlO0HLgfCGRmQAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 08 Mar 2023 05:40:08 +0000
+Date:   Wed, 08 Mar 2023 06:40:07 +0100
+Message-ID: <87h6uviyx4.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     "Hamidreza H. Fard" <nitocris@posteo.net>
-Cc:     tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ALSA: hda/realtek: Fix the speaker output on Samsung Galaxy Book2 Pro
-In-Reply-To: <20230307163741.3878-1-nitocris@posteo.net>
-References: <20230307163741.3878-1-nitocris@posteo.net>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH] ALSA: hda: Match only Intel devices with CONTROLLER_IN_GPU()
+In-Reply-To: <20230307214054.886721-1-helgaas@kernel.org>
+References: <20230307214054.886721-1-helgaas@kernel.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -68,14 +69,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 07 Mar 2023 17:37:41 +0100,
-Hamidreza H. Fard wrote:
+On Tue, 07 Mar 2023 22:40:54 +0100,
+Bjorn Helgaas wrote:
 > 
-> Samsung Galaxy Book2 Pro (13" 2022 NP930XED-KA1DE) with codec SSID
-> 144d:c868 requires the same workaround for enabling the speaker amp
-> like other Samsung models with ALC298 code.
+> From: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> Signed-off-by: Hamidreza H. Fard <nitocris@posteo.net>
+> CONTROLLER_IN_GPU() is clearly intended to match only Intel devices, but
+> previously it checked only the PCI Device ID, not the Vendor ID, so it
+> could match devices from other vendors that happened to use the same Device
+> ID.
+> 
+> Update CONTROLLER_IN_GPU() so it matches only Intel devices.
+> 
+> Fixes: 535115b5ff51 ("ALSA: hda - Abort the probe without i915 binding for HSW/B")
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 
 Thanks, applied now.
 
