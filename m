@@ -2,68 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3ACA6B105C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7948C6B105F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjCHRoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 12:44:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
+        id S229747AbjCHRo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 12:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCHRoS (ORCPT
+        with ESMTP id S229522AbjCHRox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 12:44:18 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00958136CA
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 09:43:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hVlYW22a9H4WbVtUhENiaLSg/BVsrcRwxpU47Z6jYfI=; b=wUFyHJJFRm/W9C+KbbbQLDShKL
-        8zmtCiBbugfrYh+ZZtIfj8CfdBNJ0Fr0kwQyxjgXB8yQ1vfz8NR8fEDByALiap6VqffsAbuNm03m4
-        pyfT4vxxi4KNvAX+A8ENvidEGL0glxQ77WutIYBywdtZmv8yfkP/O58E+5LVzkZO4VW35NlDv4XwB
-        lnauB9HHihOfLlH3uLmR9LPkm3kKvQKOlmOlceCeisaPoNAoej7XnRO1Rorj9Xs7/ukMInHFoRUeG
-        bH4H4tD9g8DVhjEgorkJ4FkJ2dJiG+49o8D+V1F/cZ7FT7UZV/ErvpuGriSRxsyvn5s4tU4b2fWn3
-        LTjCxlxA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pZxpM-007ahZ-JC; Wed, 08 Mar 2023 17:43:48 +0000
-Date:   Wed, 8 Mar 2023 17:43:48 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Danilo Krummrich <dakr@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org
-Subject: Re: [PATCH] maple_tree: export symbol mas_preallocate()
-Message-ID: <ZAjJVNOkv/xL6GBC@casper.infradead.org>
-References: <20230302011035.4928-1-dakr@redhat.com>
- <20230302015242.xi3y53okc4skmonn@revolver>
- <9abef101-3a9b-0bdd-7139-ced7d5e28ebe@suse.cz>
- <da65d59e-f918-d7d5-644b-33cc51c2ba6c@redhat.com>
- <20230308144343.GA16259@lst.de>
- <59b703ac-9660-a0e5-09f7-c5b69d4f39cb@redhat.com>
- <20230308152913.GA19628@lst.de>
+        Wed, 8 Mar 2023 12:44:53 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701C7498BC;
+        Wed,  8 Mar 2023 09:44:52 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id DAE6041DF4;
+        Wed,  8 Mar 2023 17:44:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1678297490;
+        bh=fhXB/EYYX9j8qxFHx1ZRx8caCPXojBAtmHMmCPfk7/c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=D8uQBUHl406auUb4dgJPw/yDLp3vQCmgE9+0F5HY1bdli22kwGEGbT4SkxZaMNooS
+         ZpLzFCm5pCeALq5rxsxhI4v/XdIR1ZIGHaoDM2on86t0B9wBOopKdlyvAKXzprhS1Q
+         HodEPkB7neoFcykRt8Qd+kTERz10lzWtJSVHUoZlnUMVdhM2VjGNIUyhjs+QJEeUlD
+         82GrtZJ1mTeafPZkk97TBy0XztQZgjtu7wJdGgymG56KQpHZaU3s8kttKkfv2r/3tu
+         fklvJcKvD3EPQlvr9EIXkAT2GCYbGzlBHVw+mNPPPjTXLJMtoNWs2qVp2wEluvsT+a
+         5dBzDRJfxskDQ==
+Message-ID: <c82660f4-e2d0-35ca-304a-57d1abcf814d@asahilina.net>
+Date:   Thu, 9 Mar 2023 02:44:42 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230308152913.GA19628@lst.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH RFC 11/18] drm/scheduler: Clean up jobs when the scheduler
+ is torn down
+Content-Language: en-US
+To:     alyssa@rosenzweig.io,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+References: <0f14c1ae-0c39-106c-9563-7c1c672154c0@asahilina.net>
+ <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-11-917ff5bc80a8@asahilina.net>
+ <bbd7c5ee-c2f0-3e19-757d-a9aff1a26d3d@linux.intel.com>
+ <585fa052-4eff-940e-b307-2415c315686a@amd.com>
+ <3320e497-09c0-6eb6-84c5-bab2e63f28ec@asahilina.net>
+ <7b39ef96-3ec5-c492-6e1b-bf065b7c90a2@amd.com>
+ <8e93126cfaf47ebad0dc70e038ccc92f@rosenzweig.io>
+From:   Asahi Lina <lina@asahilina.net>
+In-Reply-To: <8e93126cfaf47ebad0dc70e038ccc92f@rosenzweig.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 04:29:13PM +0100, Christoph Hellwig wrote:
-> On Wed, Mar 08, 2023 at 04:18:55PM +0100, Danilo Krummrich wrote:
-> > Consistency wise I think we should either also export mas_preallocate() or 
-> > don't export the other ones either.
+On 09/03/2023 02.39, alyssa@rosenzweig.io wrote:
+>> You can't ask me for a list
+>> of pending jobs (the scheduler knows this, it doesn't make any sense to
+>> duplicate that outside)
 > 
-> Please send a patch to drop all unused exports.
+> Silly question: could you add a new exported function to drm_sched to get the list of pending jobs, to be used by the Rust abstraction internally? IDK if that makes any sense.
 
-While that's usually a good rule, it just creates unnecessary friction
-in this kind of case -- a set of library functions which have only been
-introduced in the last few months.  If they're still unused in a year,
-sure, let's get rid of the exports.
+The drm_sched struct is public, we could just go in there and do it
+anyway... but then I need to figure out how to do
+`list_for_each_entry_safe` in Rust and this all makes very little sense
+when it's clearly the scheduler's job to provide some form of cleanup
+function users can use to do it...
+
+I mean, I guess I can do that if Christian is adamantly against
+providing a safe C API, but it's clearly not the right solution and I
+hope this is not the approach maintainers take with Rust abstractions,
+because that's going to make our lives a lot harder for no good reason,
+and it also means C users don't get any of the benefits of Rust
+abstraction work if the APIs can't be improved at all along with it.
+
+~~ Lina
