@@ -2,63 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9276A6B055C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CED16B055E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbjCHLFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:05:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39682 "EHLO
+        id S231435AbjCHLFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 06:05:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbjCHLEn (ORCPT
+        with ESMTP id S231502AbjCHLEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:04:43 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6EA9B2D7;
-        Wed,  8 Mar 2023 03:03:58 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2615C24E32C;
-        Wed,  8 Mar 2023 19:03:56 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Mar
- 2023 19:03:56 +0800
-Received: from [192.168.60.130] (180.164.60.184) by EXMBX073.cuchost.com
- (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Mar
- 2023 19:03:55 +0800
-Message-ID: <05465184-5976-6cee-9925-e3712a1ea650@starfivetech.com>
-Date:   Wed, 8 Mar 2023 19:03:55 +0800
+        Wed, 8 Mar 2023 06:04:55 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C9FB9535
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 03:04:23 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id b13so16172398ljf.6
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 03:04:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678273461;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8VV/rTwRnKU6UEDzet7JK45QLgODlSkCmiX3BH1I/DM=;
+        b=HQOU5vTycAVVSRYho/hu0pGY10vRB6gem4HEXKnxf+e6Kio8lh9290+DjmqanEo/uR
+         SUTVd0ixFCjUXhTI20G0c1OSsRFE7mlHOfggVuhtY/EzovMdj+jiTql//MUHgNnK/RSN
+         6++wErjIBKvMsB12VTgOlvoFOOC4mlQuCFexib4jJ50fFEE/Uh10luiQ/wVoV/oOHwrI
+         HgZSDpJYAJm6v9ySVAaz76eohfO4qADYgjPuA7zww4CQDB/QbKjeP0d2bQS9s/OFcMv/
+         8WRdwNGoiP+q5MFW5HQ8IlSZE8dRZg+nwW7hmz1G+HX7XAbgWu/VXw05s6AXM5LMhvJc
+         3cyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678273461;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8VV/rTwRnKU6UEDzet7JK45QLgODlSkCmiX3BH1I/DM=;
+        b=dWnfma53Bbi4B44mG9oZD334YFuUvwczvgFkPpnQeLJt7Nlqi/DMDX5yInE/RdY7fg
+         B7Km1wOVwHoq/uDbLRQyjuXFT1Dgv0NPEcFwU6cqZtAbKUB3it97axQ81VxWv0bLoeXu
+         s45yd1YcE6O9alSSZIW4WSkcOR3Y4CwbK+Ysip/IET2pX6VrtFGT8Lw8CTUpJRJjc3Eq
+         Lwcxi5dju5KAZiWAPudJDtzARZk5qHaLWKU6148QiybmvrNilv93x623vjGOH56aSv2e
+         D5PcTmvaqVwDCTaD85lyRCgfYAr9zncAaEtsa+Xf0XXlLOp+ZWpZ/vgCZx8oViidwDaU
+         b1bw==
+X-Gm-Message-State: AO0yUKVg4wIgnO/dkzf+dg+VURNMIHe8obl9kfGGQok7T8KWo+0fEtnK
+        kv8N1cR2A6HbmNSxLhC1G+UqQA==
+X-Google-Smtp-Source: AK7set8sOg8LE4msTJbUjDfsJsqcsmqcDij63xRlHars6UR3HN5ROaMU5DoLkueW01X5wuMKUb1Q9Q==
+X-Received: by 2002:a2e:3002:0:b0:295:a8fa:c627 with SMTP id w2-20020a2e3002000000b00295a8fac627mr5389644ljw.14.1678273461605;
+        Wed, 08 Mar 2023 03:04:21 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id k19-20020a2e8893000000b002934fe524d2sm2527508lji.83.2023.03.08.03.04.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 03:04:21 -0800 (PST)
+Message-ID: <dff4732c-df1f-0df8-b414-b039ab34c54b@linaro.org>
+Date:   Wed, 8 Mar 2023 12:04:19 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v1 11/11] media: starfive: enable building
+Subject: Re: [PATCH v2 2/2] drm/panel: Add driver for Novatek NT36523
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
+To:     Jianhua Lu <lujianhua000@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <changhuang.liang@starfivetech.com>
-References: <20230302091921.43309-1-jack.zhu@starfivetech.com>
- <20230302091921.43309-12-jack.zhu@starfivetech.com>
- <bd6c9135-e12c-a6ac-db46-416403850751@linaro.org>
- <15b29a5b-29a1-8440-2b46-0c201c20defd@starfivetech.com>
- <edf4febc-1629-45c6-ea48-ece8df12a4a5@linaro.org>
-From:   Jack Zhu <jack.zhu@starfivetech.com>
-In-Reply-To: <edf4febc-1629-45c6-ea48-ece8df12a4a5@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [180.164.60.184]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
- (172.16.6.83)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230220121258.10727-1-lujianhua000@gmail.com>
+ <20230220121258.10727-2-lujianhua000@gmail.com>
+ <CACRpkdbZCZiMM_qeqMd9=txVvPVHEzM4szOnPR-gCYdiXW_9eA@mail.gmail.com>
+ <ZAfasb9aKTgyjbFc@Gentoo>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <ZAfasb9aKTgyjbFc@Gentoo>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,41 +88,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/3/8 18:33, Krzysztof Kozlowski wrote:
-> On 07/03/2023 10:46, Jack Zhu wrote:
->> 
->> 
->> On 2023/3/3 16:43, Krzysztof Kozlowski wrote:
->>> On 02/03/2023 10:19, jack.zhu wrote:
->>>> Add Kconfig and Makefie, update platform/Kconfig and platform/Makefile
->>>> to enable building of the Starfive Camera subsystem driver.
->>>>
->>>> Signed-off-by: jack.zhu <jack.zhu@starfivetech.com>
->>>> ---
->>>>  drivers/media/platform/Kconfig           |  1 +
->>>>  drivers/media/platform/Makefile          |  1 +
->>>>  drivers/media/platform/starfive/Kconfig  | 18 ++++++++++++++++++
->>>>  drivers/media/platform/starfive/Makefile | 14 ++++++++++++++
+On 8.03.2023 01:45, Jianhua Lu wrote:
+> On Tue, Mar 07, 2023 at 11:34:55PM +0100, Linus Walleij wrote:
+>> Hi Jianhua,
+>>
+>> thanks for your patch!
+>>
+>> It appears Konrad is working on a very similar driver, so I suggest merging
+>> them into one Novatek NT36523 driver.
+>>
+>> Possibly we can fix this up first and then add Konrads Lenovo-panel with
+>> a patch on top.
+>>
+>> On Mon, Feb 20, 2023 at 1:13 PM Jianhua Lu <lujianhua000@gmail.com> wrote:
+>>
+>>> Add a driver for panels using the Novatek NT36523 display driver IC.
 >>>
->>> This is not a separate commit. If it were, it would mean you just added
->>> dead code in previous commits, so why adding dead code in first place?
->>>
->> 
->> The previous patches are made according to the module function.I think
->> it is helpful to explain the composition of the code file. 
->> 
->> stf_camss[patch 9] as a platform device manages all resources including
->> ISP and VIN. ISP/VIN [patch 7/8]as a sub-device needs to access other
->> resources managed by stf_camss.There is mutual reference between them.
->> Therefore, this patch is used for the overall compilation of the starfive
->> directory.
-> 
-> So previous code is dead? Again, what is the reason for adding dead
-> code? Mutual reference is not the answer.
-> 
+>>> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+>>
+>> (...)
+>>
+>> I like how you abstract the panel with init commands in the panel info.
+>>
+>>> +enum dsi_cmd_type {
+>>> +       INIT_DCS_CMD,
+>>> +       DELAY_CMD,
+>>> +};
+>>> +
+>>> +struct panel_init_cmd {
+>>> +       enum dsi_cmd_type type;
+>>> +       size_t len;
+>>> +       const char *data;
+>>> +};
+>>> +
+>>> +#define _INIT_DCS_CMD(...) { \
+>>> +       .type = INIT_DCS_CMD, \
+>>> +       .len = sizeof((char[]){__VA_ARGS__}), \
+>>> +       .data = (char[]){__VA_ARGS__} }
+>>> +
+>>> +#define _INIT_DELAY_CMD(...) { \
+>>> +       .type = DELAY_CMD,\
+>>> +       .len = sizeof((char[]){__VA_ARGS__}), \
+>>> +       .data = (char[]){__VA_ARGS__} }
+>>
+>> I have seen this type of reinvented wheels a few times now. Don't do this.
+>>
+>> Look into other recently merged drivers and look how they do it, for example
+>> drivers/gpu/drm/panel/panel-himax-hx8394.c
+>>
+>> For example:
+>>
+>> - Use mipi_dsi_dcs_write_seq()
+>>
+>> - If the delay is just used at one point in the sequence, do not invent
+>>   a command language like above for it, open code the delay instead
+>>
+>> - Try to decode as much magic as possible, if you look in Konrads
+>>   driver you clearly see some standard MIPI commands, I bet you have
+>>   some too.
+>>
+>> - Maybe use callbacks to send sequences instead of tables, like in
+>>   the himax driver?
+> Maybe I should create a wrapper of mipi_dsi_dcs_write_seq() for sync dual dsi mode.
+Yes please, it'll come in useful.
 
-Maybe I need to merge the previous patches[6-11] into one patch to submit?
-
-> Best regards,
-> Krzysztof
-> 
+Konrad
+>>
+>> Other than that it seems like something that could also handle the Lenovo
+>> display, or the other way around, I don't know which driver is the best
+>> starting point, but this one has the right Novatek name at least.
+>>
+>> Yours,
+>> Linus Walleij
