@@ -2,198 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14E16B09DE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C92096B09E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:52:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbjCHNvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:51:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
+        id S231614AbjCHNwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:52:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231517AbjCHNvj (ORCPT
+        with ESMTP id S231620AbjCHNwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:51:39 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00971BDD1D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 05:51:30 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id f14so6787809iow.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 05:51:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678283490;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O2ScB8i7PrG39DRTErC7kF+bBBVGcw9XNhNSA0VqouI=;
-        b=imkqhCCosUh66ifIsRQPbANxZXdmJpEwCj2rF7iSVxboMb7R9EE2AFrdMjLL16Y/Kw
-         ooGlAR2bIPsm2FI/6N4VeIN+MSDg7j79K5/3wNTcuCOl8Gx8dM0twquGzlpwCcPl1klq
-         NicNIX+rKLK1R+g/ECbCTeA/17uvvBo5G2SJU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678283490;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O2ScB8i7PrG39DRTErC7kF+bBBVGcw9XNhNSA0VqouI=;
-        b=WDEMH0cIDWqU0NxOQVp9qEzjbsm297q/drFMHftDC7FaY9rCqjE7Jxclv5J0JnXRZF
-         BoDTJu0q+fKHsS99shBwcV+kp6KVRypmNGFwKNPn4lOUeqZgrYXYANbD/LgwgiOhsdbL
-         lGS5HuB5doLjMz9VzUco4M+XNRf/k7iidiNrGTBZnxsOPdsMYKVMZJD6S7DycJsbx1Pb
-         dJO2BGVofmwHW3Gwq7sKg9TtRefQMcYsXBqYuqNq+Jf6xLDcBi24KPYe4oEbEkB21Xt7
-         E5ZLUvSVAEKdoFhOnLL8k7iIGH6RUmj+vixuBdnpzusY6h1kwBak0bNOzX7gO75nmtmq
-         tXeQ==
-X-Gm-Message-State: AO0yUKW55r7PFKFYgT/BDN8UeMsC8liUmvYTzgvWGL7r39A6oq2MqaGI
-        onAWemXZho3IgwzBivgytZMiBsftiju4e3/e04SRQw==
-X-Google-Smtp-Source: AK7set8VM1H7ES454XkYoww9M66+Aop3lkGBIArzYN2bvLHb4IHDHyckUz3PiQcAOs/tKbPekPyLMzsgcHMc8Vkk8wo=
-X-Received: by 2002:a6b:dc0c:0:b0:743:5fb0:2ca8 with SMTP id
- s12-20020a6bdc0c000000b007435fb02ca8mr8414193ioc.4.1678283490142; Wed, 08 Mar
- 2023 05:51:30 -0800 (PST)
+        Wed, 8 Mar 2023 08:52:15 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2079.outbound.protection.outlook.com [40.107.237.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8907DBCFD8;
+        Wed,  8 Mar 2023 05:51:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g0K7vtWoliZeenORc/TtorQWzaLZ9i+DkdpvF1z2SKUzF1D/ZbOF3CtGy2/2bXwyETKaGBfI3LOMgbVQMvunhuz83M3xhzd6Y/N8MoPN5GVTWgkaOnBZYlt9n+7x2WUNZ2YQCZ86NpZ9atGTof1hNU+cejjnO7qgYsA6Kc9mPxBMijeGN/pllRdBautsM4/5ygpyqI5n+BbVh4yTLc+tX9uRzuZvVTUQl1+ZAQG3WeCIJECSf9kmV1BOFinU98HjW3wTafS8p6FtmDcN9UtJmV/hmExZppkmTMXuWiJxSC+vkWDs8PlnnkQcHE1i3PpbU3CcdY9naaICb2+oh7iy8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ClY3TUL37roBLG/WyBycah8+A8pFfESxHjna6nMYiO8=;
+ b=RnZJz7sWPwkzfXkqSSrV6lpR02ZTIdYfUAQ73a3C1mTxAIiFkocQRYqvSzwRyM2OCfi/Tl+jw5Ix5QDnPkf1bmrElX9bvfLDXYXVf7lDYBrhIH5ZpwTGVkJeJcYJuu8Hmwi/3gTMNdIrleF8co8AUpdqNrs3OqoxyRAMEQuzCMuC4ZowPimWMfi1My49sV9RLIs76NFZ607JHqYOg41MXP8YoF24eZUArkurt5i0Bl2Sv9rqKnSy6qxdGR05c7S++6zgfx1SzqzdMiX5IWp55XeWd5alQNG/0DrDaKiTZwFirapM49FpkJxzBvyUX+NzXs0bPb/cpXOjWMw9o5j0Pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ClY3TUL37roBLG/WyBycah8+A8pFfESxHjna6nMYiO8=;
+ b=szvzf2thBoX0mqk2FCuVGHfBDShVpPQhadNN7if9azNDGFLL+i8fRXhdxHAEiDfaM6uTVZQiNLwth0pIQ19QI2R2zc/pyoxW7wnPVZzYNa3UKcIDqH4bkpNjlmTiCWsFEmwtdO9nl9rZWQB5aAlMIzGelDYzpqOdzNQJjif+rkrItoJ0nsO1gp2gxg1iZn66NI4pmtlpdjSiXTiA0ay6ehmJYpQ3Jabugu1cN+hh/ewG1/zSsNhKNOwjm9C5e3spCfgWO4/DXiSGip4cARvTonapcek6IVMpPC62PHe1ti+aKdNoZIJBRMZinwsAmCQGgoyc5j/8aYlT4Ma5dJkZOg==
+Received: from DM6PR10CA0023.namprd10.prod.outlook.com (2603:10b6:5:60::36) by
+ SA0PR12MB4575.namprd12.prod.outlook.com (2603:10b6:806:73::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.29; Wed, 8 Mar 2023 13:51:56 +0000
+Received: from DM6NAM11FT109.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:60:cafe::8d) by DM6PR10CA0023.outlook.office365.com
+ (2603:10b6:5:60::36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17 via Frontend
+ Transport; Wed, 8 Mar 2023 13:51:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT109.mail.protection.outlook.com (10.13.173.178) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.18 via Frontend Transport; Wed, 8 Mar 2023 13:51:56 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 8 Mar 2023
+ 05:51:50 -0800
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Wed, 8 Mar 2023
+ 05:51:49 -0800
+Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
+ Transport; Wed, 8 Mar 2023 05:51:49 -0800
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 6.1 000/887] 6.1.16-rc2 review
+In-Reply-To: <20230308091853.132772149@linuxfoundation.org>
+References: <20230308091853.132772149@linuxfoundation.org>
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-References: <20230303143350.815623-1-treapking@chromium.org>
- <20230303143350.815623-11-treapking@chromium.org> <ZAXWbkq4oLfrWUR7@smile.fi.intel.com>
-In-Reply-To: <ZAXWbkq4oLfrWUR7@smile.fi.intel.com>
-From:   Pin-yen Lin <treapking@chromium.org>
-Date:   Wed, 8 Mar 2023 21:51:19 +0800
-Message-ID: <CAEXTbpe=e1iA7cnzuTtcsyFxpG37YCWSK_SqZb2A8hxcyCnJBg@mail.gmail.com>
-Subject: Re: [PATCH v13 10/10] drm/bridge: it6505: Register Type C mode switches
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Xin Ji <xji@analogixsemi.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        chrome-platform@lists.linux.dev,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Marek Vasut <marex@denx.de>,
-        Hsin-Yi Wang <hsinyi@chromium.org>, devicetree@vger.kernel.org,
-        Allen Chen <allen.chen@ite.com.tw>,
-        dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Stephen Boyd <swboyd@chromium.org>, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-ID: <37ca75d7-cbbd-4d41-b360-d597e0e8bf18@rnnvmail204.nvidia.com>
+Date:   Wed, 8 Mar 2023 05:51:49 -0800
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT109:EE_|SA0PR12MB4575:EE_
+X-MS-Office365-Filtering-Correlation-Id: 29e35677-45dc-4134-48df-08db1fdc4814
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gTbcb6dx8cRz3ZzfobNhHxDK4jyS/ceazUlScofUbia5NUP+us/UWo1boEnpq1TTmJ4T2IGghhPJSs90Ok6TZB/NwNUAhyoZmqB6lg7XW5PgQQi+zOjWoDFJZbJcKuq2Zw9Roblnn5A1AqT7sAb7p60h49KmRmgDJ65xdNySH3wSBidrC5879CIMSShulERf4hywdU9e4jLz+JqZ298rNlCPjMFIiXV4woEwlXgT4v2RhHWFTSxjuJiVwjSZPuPqevpw2fUEwGwVFgGKJMFv2RWmJpSg98m4vWLgVbfCwwSsjVPxeo92jEdgLAy1d9N2vmkfQJwH+bbWtZo5tIONeQeON7V6BrfYckKk9+3cySA94CosLERpZ95h7571Xqad8KzBmGgv+FRIHNw5SzQjzzGqz73xQeMKLNtfAyxsgOmFhnsNH0Igg5SrK9FTMNETw8UKZaV2P9fOSmGRbXe+blLZTcMMphFQkJP3Sr9mYeXf4k0y5fDkVQ6KbBDztqk1KYgPDmCol6gmwpzS2Ll25xt9hihIKYvj8bIPmAp+WI2i3l3MPi5vqCfwUtp7Y7efS3a4U4iqMKIPD2/8+gQ/ACdOVokq5+YtoWGWn5iuLegzE2K/gF2enjgJPfarhCY/WuuZiX4wjK5UvDpYMYgxsXH9PipQxjyYFGZvIBm9iIFswTTan6OgrjH1OXvnnsZQuts4Es8jRboJejgRhiDY8bZZfJ7Nv05AwMUKIQD/9daA+iCU9tJ3pKHCRQLuQCJV
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(396003)(39860400002)(346002)(451199018)(36840700001)(46966006)(40470700004)(36860700001)(86362001)(31696002)(356005)(7636003)(70206006)(5660300002)(4326008)(7416002)(70586007)(2906002)(41300700001)(8936002)(82740400003)(6916009)(8676002)(82310400005)(40480700001)(40460700003)(186003)(336012)(26005)(47076005)(426003)(966005)(316002)(478600001)(31686004)(54906003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 13:51:56.4206
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29e35677-45dc-4134-48df-08db1fdc4814
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT109.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4575
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Wed, 08 Mar 2023 10:29:31 +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.16 release.
+> There are 887 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 10 Mar 2023 09:16:12 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.16-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Thanks for the review.
+All tests passing for Tegra ...
 
-On Mon, Mar 6, 2023 at 8:03=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Fri, Mar 03, 2023 at 10:33:50PM +0800, Pin-yen Lin wrote:
-> > Register USB Type-C mode switches when the "mode-switch" property and
-> > relevant port are available in Device Tree. Configure the "lane_swap"
-> > state based on the entered alternate mode for a specific Type-C
-> > connector, which ends up updating the lane swap registers of the it6505
-> > chip.
->
-> ...
->
-> > +     it6505->port_data =3D devm_kcalloc(dev, switch_desc->num_typec_sw=
-itches,
-> > +                                      sizeof(struct it6505_typec_port_=
-data),
-> > +                                      GFP_KERNEL);
->
-> > +
->
-> Same, no need for a blank line here.
->
-I'll fix this in the next version.
-> > +     if (!it6505->port_data) {
-> > +             ret =3D -ENOMEM;
-> > +             goto unregister_mux;
-> > +     }
->
-> ...
->
-> > +             it6505->port_data[i].lane_swap =3D (dp_lanes[0] / 2 =3D=
-=3D 1);
->
-> ' % 2 =3D=3D 0' ?
->
-Per another patch, I'll update this into `< 2`
-> ...
->
-> Wouldn't be better to have
->
->         ret =3D PTR_ERR_OR_ZERO(extcon);
->
-> here and amend the following accordingly?
->
-> >       if (PTR_ERR(extcon) =3D=3D -EPROBE_DEFER)
-> >               return -EPROBE_DEFER;
-> >       if (IS_ERR(extcon)) {
-> > -             dev_err(dev, "can not get extcon device!");
-> > -             return PTR_ERR(extcon);
-> > +             if (PTR_ERR(extcon) !=3D -ENODEV)
-> > +                     dev_warn(dev, "Cannot get extcon device: %ld\n",
-> > +                              PTR_ERR(extcon));
-> > +             it6505->extcon =3D NULL;
-> > +     } else {
-> > +             it6505->extcon =3D extcon;
-> >       }
-> >
-> > -     it6505->extcon =3D extcon;
-> > +     init_completion(&it6505->mux_register);
-> > +     ret =3D it6505_register_typec_switches(dev, it6505);
-> > +     if (ret) {
-> > +             if (ret !=3D -ENODEV)
-> > +                     dev_warn(dev, "Didn't register Type-C switches, e=
-rr: %d\n",
-> > +                              ret);
-> > +             if (!it6505->extcon) {
-> > +                     dev_err(dev, "Both extcon and typec-switch are no=
-t registered.\n");
-> > +                     return -EINVAL;
-> > +             }
-> > +     }
->
->
-> Perhaps
->
->         if (ret !=3D -ENODEV)
->                 dev_warn(dev, "Didn't register Type-C switches, err: %d\n=
-", ret);
->
->         if (ret && !it6505->extcon) {
->                 dev_err(dev, "Both extcon and typec-switch are not regist=
-ered.\n");
->                 return ret;
->         }
->
-> ?
+Test results for stable-v6.1:
+    11 builds:	11 pass, 0 fail
+    28 boots:	28 pass, 0 fail
+    130 tests:	130 pass, 0 fail
 
+Linux version:	6.1.16-rc2-g328c6bc301e2
+Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
+                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
+                tegra20-ventana, tegra210-p2371-2180,
+                tegra210-p3450-0000, tegra30-cardhu-a04
 
-Thanks for the suggestion! I'll update this in v14.
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
-Best regards,
-Pin-yen
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
+
+Jon
