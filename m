@@ -2,86 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F112E6B02F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE3B6B02FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbjCHJcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 04:32:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
+        id S229893AbjCHJeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 04:34:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbjCHJbw (ORCPT
+        with ESMTP id S229605AbjCHJeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 04:31:52 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F32B854D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 01:31:34 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id a25so63302701edb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 01:31:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112; t=1678267892;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YmxXJHvQxfbDrLAWch03k5xnRMut7MXIx9gMNxn4uhY=;
-        b=OJ+Fshl6p4wQwfjnQ7Wu1DMBjivuuttYpOO2S1744KYFu1VdWDzM2mrbbop/MBibWl
-         nqGh/HVAAipXTKPjazricJRIcgdWKN4zTOAEEqIE1huj8lkVYGyPvBUFpIhY+Mpw9sGT
-         kB19U5+5ugE5oE5FZNbEPqHnOpz9a12nbuUYUZ+1RU9VNO3cZIbEZQz6jm4dEcyJUTIP
-         vJ1Pe129zIOglZgs6sel8ROQuOZkqF4a0oRcA8xA24xM/Zt/+/AiJZmZ2pLbmjdK+lxg
-         G1/q8ufDsCrBPpJfwzeKRsrTPyuHmaY3hi0/JPonrNhP4IHl4DRVoA++5WsyNNflINqu
-         aFtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678267892;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YmxXJHvQxfbDrLAWch03k5xnRMut7MXIx9gMNxn4uhY=;
-        b=3bTNbGImK2bmfw5p0gNRLfuAlDZ6lmMdUDLFqdIyondDlpg4d3r3CoTsOG+d3zweeb
-         ongIg0vYrwG6s1g52cDxStxtJCqUb7mOoAxHLkndQAuYFdW7UG/OaxyI7VQm2mqe6b47
-         1Pa7fORj6GKb7gvQzEpf/bnBgLXvmZRXUfD750Hf8mwPivQTcdcaBaaB+aOcalyiPCSv
-         DMfWp7pvUveiuPhyp233NqplzK+pyFdY5iROzkECj2MJ2iOrVBXsGjUI8CGPFUM1tOct
-         OYm57ft3gwgxhUzGvaWlFnwd4ArwKuBuXT7y4oaF3YRxNNzlEQYptycRHp6OCBYiWwuW
-         ZQuw==
-X-Gm-Message-State: AO0yUKUySlGmCF849+WARVyHd2YFXnG6m79L9VIFkipIHTR3XG0K8OkD
-        f86owkRcyiqsszxeMNW8OsuB5g==
-X-Google-Smtp-Source: AK7set9f9BPCcWpi1PJQqIc99NrzF34rCnuqLJbhNbcxkqwL4pDsGdVSBZfi393m/qGblUav7G30kA==
-X-Received: by 2002:a05:6402:1291:b0:4ad:66b:84a5 with SMTP id w17-20020a056402129100b004ad066b84a5mr16119629edv.22.1678267892393;
-        Wed, 08 Mar 2023 01:31:32 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id v24-20020a50d598000000b004bfc59042e5sm7858518edi.61.2023.03.08.01.31.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 01:31:31 -0800 (PST)
-Date:   Wed, 8 Mar 2023 10:31:30 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, idosch@mellanox.com,
-        danieller@mellanox.com, petrm@mellanox.com, shuah@kernel.org,
-        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net
-Subject: Re: [PATCHv2] selftests: net: devlink_port_split.py: skip test if no
- suitable device available
-Message-ID: <ZAhV8nKuLVAQHQGl@nanopsycho>
-References: <20230307150030.527726-1-po-hsu.lin@canonical.com>
+        Wed, 8 Mar 2023 04:34:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281513B85C;
+        Wed,  8 Mar 2023 01:34:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBB7661723;
+        Wed,  8 Mar 2023 09:34:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28865C4339C;
+        Wed,  8 Mar 2023 09:34:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678268055;
+        bh=1KV96xkQ/3t6nnAo2Wh01Ryockokv9RTDCDMFXLIeRU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=H13BECuQJacRifJdk2avdkBpVnO/OLgoyPwyDkBpLEeUlpsahHbSiWGX85fLUqTS9
+         al9rC2Nv7Ni/ZuNc+OFNea0hzQbdX7UkxGvGVYLe11npXVeqcMDr5RsxPk7RMYILQI
+         SYGnzX/4XOqyYhFz3/uNJAxExyrzyg0OMyjXcEwI8ABbLwQngwVJT4Vv6qMCAmNdqG
+         GqM0zuUbNf1uWbzvQiV76Erp/nqd9+UmxoM0WdI7iZTCbZaU+kXZLlnXyl6Njtoq46
+         usPJ7ZhZqSmRfYITFN86PSaaMwOpD6mSAn7LHlmOuvvBs2zBlGsxjyRqrKVj1zHMVf
+         D7D8pzJbqvRYg==
+Received: by mail-lf1-f46.google.com with SMTP id f18so20528720lfa.3;
+        Wed, 08 Mar 2023 01:34:15 -0800 (PST)
+X-Gm-Message-State: AO0yUKVo/EpWMIe04tQH/usCcKHRWeLR+xhhnsrYSxKGfj6gIGRN7J9o
+        SDquJQ63RzM830V8ilx4afBVRcnYTro9TkH6dnk=
+X-Google-Smtp-Source: AK7set9TzylTWEMKly0Kp7ZgtVCa95OLKC2rbX2Wxw0cFgbNnwoICiYHoMHuzY1g9c6tiGbG4J1UtG/F+ut2nI7iwpU=
+X-Received: by 2002:ac2:43d0:0:b0:4db:f0a:d574 with SMTP id
+ u16-20020ac243d0000000b004db0f0ad574mr5237905lfl.7.1678268053173; Wed, 08 Mar
+ 2023 01:34:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307150030.527726-1-po-hsu.lin@canonical.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <cover.1671098103.git.baskov@ispras.ru> <3ca525852ce14a8e04949ff115cb6ec28c8f120b.1671098103.git.baskov@ispras.ru>
+In-Reply-To: <3ca525852ce14a8e04949ff115cb6ec28c8f120b.1671098103.git.baskov@ispras.ru>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 8 Mar 2023 10:34:01 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEMk1mLiwUuUTH4V1ro93MmBnwPnPMzJfSG+eH5ts8j3g@mail.gmail.com>
+Message-ID: <CAMj1kXEMk1mLiwUuUTH4V1ro93MmBnwPnPMzJfSG+eH5ts8j3g@mail.gmail.com>
+Subject: Re: [PATCH v4 07/26] x86/build: Check W^X of vmlinux during build
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tue, Mar 07, 2023 at 04:00:30PM CET, po-hsu.lin@canonical.com wrote:
->The `devlink -j port show` command output may not contain the "flavour"
->key, an example from s390x LPAR with Ubuntu 22.10 (5.19.0-37-generic),
->iproute2-5.15.0:
->  {"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},
->           "pci/0001:00:00.0/2":{"type":"eth","netdev":"ens301d1"},
->           "pci/0002:00:00.0/1":{"type":"eth","netdev":"ens317"},
->           "pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d1"}}}
+On Thu, 15 Dec 2022 at 13:38, Evgeniy Baskov <baskov@ispras.ru> wrote:
+>
+> Check if there are simultaneously writable and executable
+> program segments in vmlinux ELF image and fail build if there are any.
+>
+> This would prevent accidental introduction of RWX segments.
+>
+> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+> Tested-by: Peter Jones <pjones@redhat.com>
+> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+> ---
+>  arch/x86/boot/compressed/Makefile | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+> index 1acff356d97a..4dcab38f5a38 100644
+> --- a/arch/x86/boot/compressed/Makefile
+> +++ b/arch/x86/boot/compressed/Makefile
+> @@ -112,11 +112,17 @@ vmlinux-objs-$(CONFIG_EFI) += $(obj)/efi.o
+>  vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_mixed.o
+>  vmlinux-objs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
+>
+> +quiet_cmd_wx_check = WXCHK   $<
+> +cmd_wx_check = if $(OBJDUMP) -p $< | grep "flags .wx" > /dev/null; \
+> +              then (echo >&2 "$<: Simultaneously writable and executable sections are prohibited"; \
+> +                    /bin/false); fi
+> +
+>  $(obj)/vmlinux: $(vmlinux-objs-y) FORCE
+>         $(call if_changed,ld)
+>
+>  OBJCOPYFLAGS_vmlinux.bin :=  -R .comment -S
+>  $(obj)/vmlinux.bin: vmlinux FORCE
+> +       $(call cmd,wx_check)
 
-As Jakub wrote, this is odd. Could you debug if kernel sends the flavour
-attr and if not why? Also, could you try with most recent kernel?
+This breaks the way we track dependencies between make targets: the
+FORCE will result in the check being performed every time, even if
+nothing gets rebuilt.
+
+Better to do something like the below (apologies for the alphabet soup)
+
+
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -112,18 +112,17 @@ vmlinux-objs-$(CONFIG_EFI) += $(obj)/efi.o
+ vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_mixed.o
+ vmlinux-objs-$(CONFIG_EFI_STUB) +=
+$(objtree)/drivers/firmware/efi/libstub/lib.a
+
+-quiet_cmd_wx_check = WXCHK   $<
+-cmd_wx_check = if $(OBJDUMP) -p $< | grep "flags .wx" > /dev/null; \
+-              then (echo >&2 "$<: Simultaneously writable and
+executable sections are prohibited"; \
+-                    /bin/false); fi
++quiet_cmd_objcopy_and_wx_check = $(quiet_cmd_objcopy)
++      cmd_objcopy_and_wx_check = if $(OBJDUMP) -p $< | grep "flags
+.wx" > /dev/null; then \
++                                       (echo >&2 "$<: Simultaneously
+writable and executable sections are prohibited"; \
++                                       /bin/false); else $(cmd_objcopy); fi
+
+ $(obj)/vmlinux: $(vmlinux-objs-y) FORCE
+        $(call if_changed,ld)
+
+ OBJCOPYFLAGS_vmlinux.bin :=  -R .comment -S
+ $(obj)/vmlinux.bin: vmlinux FORCE
+-       $(call cmd,wx_check)
+-       $(call if_changed,objcopy)
++       $(call if_changed,objcopy_and_wx_check)
