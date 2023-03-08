@@ -2,234 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4795B6B039B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8968F6B039F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjCHKBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:01:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
+        id S230248AbjCHKBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbjCHKBJ (ORCPT
+        with ESMTP id S230259AbjCHKB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:01:09 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20604.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::604])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56EE559C4;
-        Wed,  8 Mar 2023 02:01:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TxILmI+8/G+VyBEeJC5YYo//c8ziAHU40/RhZVr63pUGQy0YH5pA5H7T7vg2bSnTb66+lcWEDIhNc5paVszi63RGbS0AT9uNcMKqYZjdvJ2LuaZwNugzLxMEDR6B2JXuHqov3uV/1PlvZc+SNak9wsxAzhwRgivERtBYVEyWGnpFL4AC8hafSl/hXwQ3/5ZxqMcXlL7MadDPyVxsVYfYi8b0W5/oI7G9vNekwPdrpgypC79N+TQJnpMUGnyTOyfiS3iGvhNZCSkFsb7L3Nwt0OyuFvzEKiNbZKuOUrjH7rQpv8AjrimBHom+zdze2UQzWRNhqje5uCBiGN5Xqj2QwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V3SWSuItj0/YT9siycK/+X3qSxIvFMt5r3pqvM07iFo=;
- b=MX86YE0qfyWwFyvw1y/SwdmQAVhMkUhpm5FoA2CFU1caZiz+OKdS2GHTVUO+AqLxYC2aFtt5R7uumgBRh36RXEEWH88cLAFbLMDwFZtsk5hjjbXu8Ip8hg7UNszxIrzGL1EyCu/lLbGOW3JrEGzttOBe2YybPock62aGi5IXQSyugbV7pBFUSD5L58qCz7BGil1G5Z2JW5oib06lT0fZ4YmdJLXgv1mbTKS10y/fUiFLmFeu3Wykh4Vco1wakXRGhX534UO3YiiirE/QU0tQTFNrUOUF9XfbmhtM/n2RgxvF/j1oi4rRlzSzvqjB92I5Jeo08rpbqYjzxD+sLY+Q0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V3SWSuItj0/YT9siycK/+X3qSxIvFMt5r3pqvM07iFo=;
- b=QkVl4DtBGra658QWfFxaDKLFxNCAUFuzvs59XIh+LXFjX4TjhauysZNRJte3poBPemuqroIY+VGqh8z7q0u01dHEDo+I6R0R+jncPE9Uwck2C9VHiAHZzRJIgB7fcfxQKXgxSH4iCdJMkL3iiN4WLMpBuA/XXaozqyzVkHhCZbM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by CO6PR12MB5428.namprd12.prod.outlook.com (2603:10b6:5:35c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Wed, 8 Mar
- 2023 10:01:01 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d23f:bb1:df95:3918]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d23f:bb1:df95:3918%4]) with mapi id 15.20.6178.017; Wed, 8 Mar 2023
- 10:01:01 +0000
-Message-ID: <2b1060e9-86ba-7e16-14f1-5b5fa63de719@amd.com>
-Date:   Wed, 8 Mar 2023 11:00:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
-Content-Language: en-US
-To:     Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
- <cd788ccf-0cf1-85d5-1bf8-efc259bd7e11@amd.com>
- <a075d886-0820-b6fb-fcd0-45bfdc75e37d@asahilina.net>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <a075d886-0820-b6fb-fcd0-45bfdc75e37d@asahilina.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0078.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1f::19) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Wed, 8 Mar 2023 05:01:28 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78019B53FF
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:01:21 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id ay29-20020a05600c1e1d00b003e9f4c2b623so853598wmb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:01:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678269679;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=8mVYfCy4h+ar44SO5DohBBcWvMpXi6+GmpLszBmt6kY=;
+        b=OQjii0yUgXByulhMWFwrXxQOX+wNoddH6dZGsFcafcOzdmMpOEIZD6IMXq4PsSB2Hm
+         rsvwANX8I09/q3pOUJBL+Cx1CibaG88qAlMOe+EherBOj+MypgYNA+oiQzzISQzFnU2M
+         ONZcbge9uQSJpSD1Ut1VuSuKY7leWuikYqZVk0FY8Qs1nLERH1uuyq9mc41EGkrjLiNn
+         xH5AUHVe3rRUhag5lS3W7jUWSXCuXsWRV2y71a4UrLTntnsQPGEzYRTVS42Uh/tZraT+
+         OSel95Nywx3P5l5OuQJuw9Fg7dQNDBRjVi7H80wCzh/cMQ3gnimMrJ1pXHtRJGXDpbgQ
+         IQew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678269679;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8mVYfCy4h+ar44SO5DohBBcWvMpXi6+GmpLszBmt6kY=;
+        b=OZ6Y6FGSpNa8XAE/xhZNolU76ltpFLV5oQgExkeIuF3ceBDWLPY9qpRQKmgVtmouT2
+         J0+FksdkScpP4CEut774krMcoYeBegoUZJRKFVlcE1LZvu31wEcfgi09qP40UVN+kcCu
+         gjgMBvsOACU0nINSKZlxwY0/L2Lz3K+AlBEqtggcm3GIb9SmhLTxJ3Eez9UhDfE/RXY/
+         sH+3kzicyqUlrTSP+4FIrQ5cD26s4WfdaVW7d0lCo+kzUtg8dn0fLbrwdBLxOJlqa+ER
+         uNmD/ShYfFV8gP5vRXjNHHHvpJyUoKve8cU9bGrVVepIrGNKa58K1gxE0yiomb93SxsV
+         YDlw==
+X-Gm-Message-State: AO0yUKV3NaoqxEvaS2CLgUqbvQDwBFyyLXkicH+FrT0wmSGi2Jk3wUEo
+        VNeTbCW5nl/t10kAUwZjetgoMErVF3Rwk3N2XKkZYg==
+X-Google-Smtp-Source: AK7set+xpA3kkdUP3qiBPPiA0Zbfc64AMtu19o48Sss/SWrBE2Ohs7sJCfY2LonvczDS4LxC99qS4g==
+X-Received: by 2002:a05:600c:3153:b0:3ea:f73e:9d8c with SMTP id h19-20020a05600c315300b003eaf73e9d8cmr15944317wmo.16.1678269679566;
+        Wed, 08 Mar 2023 02:01:19 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:b029:83b9:1fb8:7c34? ([2a01:e0a:982:cbb0:b029:83b9:1fb8:7c34])
+        by smtp.gmail.com with ESMTPSA id h19-20020a05600c30d300b003db06224953sm14798819wmn.41.2023.03.08.02.01.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 02:01:19 -0800 (PST)
+Message-ID: <6d57008d-7343-2365-a167-690b710e8688@linaro.org>
+Date:   Wed, 8 Mar 2023 11:01:18 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|CO6PR12MB5428:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9bcb2c75-30c6-49c8-fdbf-08db1fbc05cb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: enovnqP8+30LnLQx01JmIy/22NFO/n/mDOqvoVwSo1eKvutksVIv1kBNmx6ACCU+JNEgIE2Fjc60REVLV9bmB2KFukBb1evzIF4F6oMCwn4vGgCKFCqfL74xeRHTSerkVXYPnPcfTdlrurDuwOQN1D7RGKEJ9IMcPSeOBVao16+68A64NgIdiPYo69KCkyztZduIbETbt/pvxpdopVdlmuAgD+Ky2sGKOg9sUzUjAhk74flNpvruTkSfwCyh0E8O2YGQPztxOjZfZVdEsPaYYk4AJSheztyWY29AVsyr5R5L74IIrVgs+BiEkksBfo0TgTrbw1ocvX2kkrEkv6y3ceqoog/RFosiRPJuQt1DA5vXWeTkDzCyIbtSyALGhGDbR44X1WMYIuDXu3tqtkqYYOv3aeUzzCO7es/NOGiXrU4n0JMDqOH41QWKneME646tMtfxZqtDLtQ0uit0Mmr2XNohrolqJedXSA3/lpndcFF0HPbc5uakobqGBNDNm/GoLyS0Hemr5uXm+Eui3bbyGF7Z7ZWgQYaFeBIzokBg0V4asjW6dycAm0xX+yZDJxpGjspUVS2XfaFjtOWcHVx2O/kIly3ROh5DdwUwz5GjYG++sU5nKLV2qSNB+Qv8kbbOEFoqpwQdxcWZnUfPCX0Ucd5nOoM+6w+617IwDkG+pixjr4Esp/P696OxZP4XKOVorlknWJbMhLn+xq4KRqIs4mpn+zwDmppIv7vQ2wN+/06Ry+pRx6bzRpKZUn8ElPEI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(39860400002)(396003)(376002)(346002)(451199018)(6666004)(110136005)(31696002)(54906003)(66574015)(41300700001)(8676002)(86362001)(83380400001)(4326008)(36756003)(316002)(8936002)(66946007)(966005)(66476007)(478600001)(66556008)(7416002)(6486002)(5660300002)(186003)(921005)(2906002)(38100700002)(2616005)(31686004)(6512007)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TnpiSXJJZVl2eEdxQUJQdDJFaTFwMTlOaHJheXRpN05aZ2syNnFKeUtPM2ZH?=
- =?utf-8?B?QktPQVdEZVFJeEs1a0FyVWdoY01vU000eDc1NUZTeFdSNVZXSk02MXBGSHdN?=
- =?utf-8?B?bEhwL21vaHhGanphZkFac012dWtnSXNDcXhXdDRiZzVXY1UzMDBTRjR5aE4v?=
- =?utf-8?B?WlRqYndkQUpuSW83cWV6RzdSaEJHU1NPL0xhbUtselZnVmNTTlpWYThuNzBp?=
- =?utf-8?B?U2x4Nkl3R0NFK2VFYVZpUGo4aVJYODN6UUtGNVBtYUVJZ00xak5qWktCQ3R6?=
- =?utf-8?B?cVhaUmJjdzhQa0tJdmtOVmNVZUl2MmlqVWtKa2laVHgxdlR0cnd4TkxlRG1T?=
- =?utf-8?B?SG5Md0tiaGJST3F5MGFwdGtQcXRJL2hmSXBjMS80Mm5XNitGOWFVcDd5TVpG?=
- =?utf-8?B?am8wSGhJQThoV0ZCYi96Ni9iWldVbHRBVktiKzZCOW02QmJPSGFFWWRnNDJW?=
- =?utf-8?B?c1hhakw5NXhIUWlrN2xVSGRKY2Uxd2pSOW9HRGFQd3FFbCs1K3ArdlhUaEw4?=
- =?utf-8?B?dFYvdjltWnZjc3RDU0t1MkloYm1jRW9sWmoyeHMzYVhtaTFxL1laY05FNDZh?=
- =?utf-8?B?emtxNjcxZC9HcTdhT0NXeHg5T0YvYmovWGhFR3E5bUcvNDFsR0dUL1lTUXZ3?=
- =?utf-8?B?SlZpN0tRVkNwa0tBb0dQSEdLYmcrZDRRVnpnVFZqdGlnUDBwZndYMHF1TkhC?=
- =?utf-8?B?ajZNVXp4UDNueTc1STlBVUJNQzg4ZENDSUg0Zkw0eUZINElJNi9DMXpRSVlJ?=
- =?utf-8?B?eTRnSHZ2K0pmUlhCRnAvRFRnNjZvTXpTOUxSSTZ1Z3oxWEJTYmVxQ081UTlE?=
- =?utf-8?B?ZWRyNDZlNjNTc1JjTVNyTUxrUTZVemZTRXFiSUJXZWtsRVpqRi9UbExtVEw0?=
- =?utf-8?B?R0FPblloTi9vTTdEbVlCYU51dGRTZHgwdmkzODBuUXdSaXBsSWtBcXdTMlVX?=
- =?utf-8?B?MzgrbjA5ZGVxOTZjTkp4eTk1ZWEzWEZ3TnhQRjg5eG5MYmRmcEJEMlRhOTZO?=
- =?utf-8?B?ejUvTUF4NFRnZUJsWlVCcU9EWlFDU0hwNzd4YnFTbnJyRHdLQ3pJNDZYZ2du?=
- =?utf-8?B?Sy9ERkVKS3o0Qk1qcW5OLzYxN0Q1MFZDYWJUeUNFb2p6NkpvV0hFZEd1ZEJV?=
- =?utf-8?B?NDhiM3V3azRtU0xJU2FQMGJ6bm1TemJwa00xR3hONjV2MEMxL09NMW8zcE8v?=
- =?utf-8?B?U0RIa3ptSXJvSGZlTERLTGphK2UrSWJaNDZsVGtjbnM3K3I4NlhvcDY1WUNk?=
- =?utf-8?B?VTF0bTlwRU9sTE5tL0l4TXpaU25sbjQ3V0ZyTjRZNUJINE1ZVVNDeDZVcUty?=
- =?utf-8?B?UStPLy9WZEhEbG9DVjJpcDdtYnYwbXBpSENVNEFQaUxGcUw2UTFrWDBlODhL?=
- =?utf-8?B?Q0cvNE5oK1lxU3BSK2hVaWg2cFFYa2xScW9OdHFGMm9OVG1KOGhWeC9WMUhr?=
- =?utf-8?B?Y0xCbU5zalhuVzlyZm5XUEVsdVZmTmRpcXEyQmlPR0x3LzhJZE1WRzIrb3lX?=
- =?utf-8?B?YXFWdWcwdzdPUThQekc2Y2NRbmVobFVUenZ5RDJCaWFucHkzVTRvQjM1OVpB?=
- =?utf-8?B?QlAycDFZUnlRMHNTeFN1WG9PZWpvUS9MUlJteTVqbFFwOFZGOHQ4cHNlTGtU?=
- =?utf-8?B?anZGdmdRYlpkcnBZc09zQ3JCTVFuMmNYMlljekR0RlBjTmZDblJJbGltcTNC?=
- =?utf-8?B?VE80Lyt6ZVFySXRGMmdIRjJ3WnRGOUY4VG9hcWJGT2pZT1I4TElkSUNnMnJx?=
- =?utf-8?B?M3ZEUGlYMVRVbnBtNmE3Y1VkZnd2cWF4Y1g5bXJTUTlscFU0Z094MjFIUHNa?=
- =?utf-8?B?dlNoVlhGdXdScmloYkY0bzdDajVNNXdBanI0eHhlSWxDRlZFWlcxOTNwaUQ0?=
- =?utf-8?B?dHRxUE0wUWtzaWJrM1VITUJ1ZFBBRUloLzZHRHRlUUIxRzFCam56U2UyR01Z?=
- =?utf-8?B?b2xWSExZZEFWNm8zdDQ3NUYyaUdmQ2NwTklqNHhORTkyQVlUa2FGaFFpVEYv?=
- =?utf-8?B?blNGWEJIdCtZaTJpM1A4UE5jV04yNVhWU3BsTFNEcWZGR0lPb0dxRzNnYWtM?=
- =?utf-8?B?dGx2RWYxdjR5OTZEN0V5dERFK2liVWtHQ2E1RzBoN1ExMk50dHRROC9xdWdq?=
- =?utf-8?B?bW9QTEFvTC9iNlZ1b1RuZ1pPWWttTjIwMHNZT0N6MHdyOXNzWTJrM1JhR2tx?=
- =?utf-8?Q?vO8VX5TJ7Oebu6EOdcJYUXFUEKbZeJ9KQoJ1wwI2wus3?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9bcb2c75-30c6-49c8-fdbf-08db1fbc05cb
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 10:01:01.6343
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4Ye4Y4F+gWQKYc2TSb/0izUB2OWVW5cpoqs32ymWr+xxOKbNRQ5qFsOOUIShMtpW
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5428
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/3] arm64: dts: qcom: sm8550: replace 0x0 to 0
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230308-topic-sm8550-upstream-dt-fixups-v1-0-595b02067672@linaro.org>
+ <20230308-topic-sm8550-upstream-dt-fixups-v1-1-595b02067672@linaro.org>
+ <50cc134a-eb21-3b06-0c6e-41a4a5a5fd76@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <50cc134a-eb21-3b06-0c6e-41a4a5a5fd76@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 08.03.23 um 10:41 schrieb Asahi Lina:
-> On 08/03/2023 17.46, Christian König wrote:
->> Am 07.03.23 um 15:25 schrieb Asahi Lina:
->>> Some hardware may require more complex resource utilization accounting
->>> than the simple job count supported by drm_sched internally. Add a
->>> can_run_job callback to allow drivers to implement more logic before
->>> deciding whether to run a GPU job.
->> Well complete NAK.
+On 08/03/2023 10:59, Konrad Dybcio wrote:
+> 
+> 
+> On 8.03.2023 09:32, Neil Armstrong wrote:
+>> Unify the sm8550.dtsi style by replacing the 0x0 to 0 as it was
+>> required in the initial file submission.
 >>
->> This is clearly going against the idea of having jobs only depend on
->> fences and nothing else which is mandatory for correct memory management.
+>> Fixes: 377972ac743f ("arm64: dts: qcom: sm8550: add I2C Master Hub nodes")
+>> Fixes: 433477c3bf0b ("arm64: dts: qcom: sm8550: add QCrypto nodes")
+>> Fixes: 35cf1aaab169 ("arm64: dts: qcom: sm8550: Add UFS host controller and phy nodes")
+>> Fixes: d0c061e366ed ("arm64: dts: qcom: sm8550: add adsp, cdsp & mdss nodes")
+>> Fixes: 7d1158c984d3 ("arm64: dts: qcom: sm8550: Add PCIe PHYs and controllers nodes")
+>> Fixes: 7f7e5c1b037f ("arm64: dts: qcom: sm8550: Add USB PHYs and controller nodes")
+>> Fixes: 6de7f9c34358 ("arm64: dts: qcom: sm8550: add GPR and LPASS pin controller")
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+> I think the sentiment is towards 0x0, as these are register addreses/
+> sizes, but nobody wants to send a big giant commit changing it everywhere
+> as - frankly - it's just a lot of work and noise..
+
+Yep I understand, but let's unify it somehow, either 0x0 or 0... here the majority is 0
+
+Neil
+
+> 
+> Konrad
+>>   arch/arm64/boot/dts/qcom/sm8550.dtsi | 60 ++++++++++++++++++------------------
+>>   1 file changed, 30 insertions(+), 30 deletions(-)
 >>
->> If the hw is busy with something you need to return the fence for this
->> from the prepare_job callback so that the scheduler can be notified when
->> the hw is available again.
-> I think you misunderstood the intent here... This isn't about job
-> dependencies, it's about in-flight resource limits.
->
-> drm_sched already has a hw_submission_limit that specifies the number of
-> submissions that can be in flight, but that doesn't work for us because
-> each job from drm_sched's point of view consists of multiple commands
-> split among 3 firmware queues. The firmware can only support up to 128
-> work commands in flight per queue (barriers don't count), otherwise it
-> overflows a fixed-size buffer.
->
-> So we need more complex accounting of how many underlying commands are
-> in flight per queue to determine whether it is safe to run a new job,
-> and that is what this callback accomplishes. This has to happen even
-> when individual jobs have no buffer/resource dependencies between them
-> (which is what the fences would express).
-
-Yeah, I already assumed that you have something like this.
-
-And to make it clear this is unfortunately a complete NAK to this 
-approach! You can't do this!
-
-The background is that core memory management requires that signaling a 
-fence only depends on signaling other fences and hardware progress and 
-nothing else. Otherwise you immediately run into problems because of 
-circle dependencies or what we call infinite fences.
-
-Jason Ekstrand gave a create presentation on that problem a few years 
-ago on LPC. I strongly suggest you google that one up.
-
-> You can see the driver implementation of that callback in
-> drivers/gpu/drm/asahi/queue/mod.rs (QueueJob::can_run()), which then
-> calls into drivers/gpu/drm/asahi/workqueue.rs (Job::can_submit()) that
-> does the actual available slot count checks.
->
-> The can_run_job logic is written to mirror the hw_submission_limit logic
-> (just a bit later in the sched main loop since we need to actually pick
-> a job to do the check), and just like for that case, completion of any
-> job in the same scheduler will cause another run of the main loop and
-> another check (which is exactly what we want here).
-
-Yeah and that hw_submission_limit is based on a fence signaling again.
-
-When you have some firmware limitation that a job needs resources which 
-are currently in use by other submissions then those other submissions 
-have fences as well and you can return those in the prepare_job callback.
-
-If those other submissions don't have fences, then you have a major 
-design problem inside your driver and we need to get back to square one 
-and talk about that dependency handling.
-
-> This case (potentially scheduling more than the FW job limit) is rare
-> but handling it is necessary, since otherwise the entire job
-> completion/tracking logic gets screwed up on the firmware end and queues
-> end up stuck (I've managed to trigger this before).
-
-Actually that's a pretty normal use case. I've have rejected similar 
-requirements like this before as well.
-
-For an example how this can work see amdgpu_job_prepare_job(): 
-https://elixir.bootlin.com/linux/v6.3-rc1/source/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c#L251
-
-The gang submit gives and example of a global fence lock and the VMIDs 
-are an example of a global shared firmware resource.
-
-Regards,
-Christian.
-
->
-> ~~ Lina
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>> index ff4d342c0725..fe8b92954550 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>> @@ -547,7 +547,7 @@ adspslpi_mem: adspslpi-region@9ea00000 {
+>>   
+>>   		rmtfs_mem: rmtfs-region@d4a80000 {
+>>   			compatible = "qcom,rmtfs-mem";
+>> -			reg = <0x0 0xd4a80000 0x0 0x280000>;
+>> +			reg = <0 0xd4a80000 0 0x280000>;
+>>   			no-map;
+>>   
+>>   			qcom,client-id = <1>;
+>> @@ -1078,7 +1078,7 @@ spi15: spi@89c000 {
+>>   
+>>   		i2c_master_hub_0: geniqup@9c0000 {
+>>   			compatible = "qcom,geni-se-i2c-master-hub";
+>> -			reg = <0x0 0x009c0000 0x0 0x2000>;
+>> +			reg = <0 0x009c0000 0 0x2000>;
+>>   			clock-names = "s-ahb";
+>>   			clocks = <&gcc GCC_QUPV3_I2C_S_AHB_CLK>;
+>>   			#address-cells = <2>;
+>> @@ -1088,7 +1088,7 @@ i2c_master_hub_0: geniqup@9c0000 {
+>>   
+>>   			i2c_hub_0: i2c@980000 {
+>>   				compatible = "qcom,geni-i2c-master-hub";
+>> -				reg = <0x0 0x00980000 0x0 0x4000>;
+>> +				reg = <0 0x00980000 0 0x4000>;
+>>   				clock-names = "se", "core";
+>>   				clocks = <&gcc GCC_QUPV3_I2C_S0_CLK>,
+>>   					 <&gcc GCC_QUPV3_I2C_CORE_CLK>;
+>> @@ -1105,7 +1105,7 @@ i2c_hub_0: i2c@980000 {
+>>   
+>>   			i2c_hub_1: i2c@984000 {
+>>   				compatible = "qcom,geni-i2c-master-hub";
+>> -				reg = <0x0 0x00984000 0x0 0x4000>;
+>> +				reg = <0 0x00984000 0 0x4000>;
+>>   				clock-names = "se", "core";
+>>   				clocks = <&gcc GCC_QUPV3_I2C_S1_CLK>,
+>>   					 <&gcc GCC_QUPV3_I2C_CORE_CLK>;
+>> @@ -1122,7 +1122,7 @@ i2c_hub_1: i2c@984000 {
+>>   
+>>   			i2c_hub_2: i2c@988000 {
+>>   				compatible = "qcom,geni-i2c-master-hub";
+>> -				reg = <0x0 0x00988000 0x0 0x4000>;
+>> +				reg = <0 0x00988000 0 0x4000>;
+>>   				clock-names = "se", "core";
+>>   				clocks = <&gcc GCC_QUPV3_I2C_S2_CLK>,
+>>   					 <&gcc GCC_QUPV3_I2C_CORE_CLK>;
+>> @@ -1139,7 +1139,7 @@ i2c_hub_2: i2c@988000 {
+>>   
+>>   			i2c_hub_3: i2c@98c000 {
+>>   				compatible = "qcom,geni-i2c-master-hub";
+>> -				reg = <0x0 0x0098c000 0x0 0x4000>;
+>> +				reg = <0 0x0098c000 0 0x4000>;
+>>   				clock-names = "se", "core";
+>>   				clocks = <&gcc GCC_QUPV3_I2C_S3_CLK>,
+>>   					 <&gcc GCC_QUPV3_I2C_CORE_CLK>;
+>> @@ -1156,7 +1156,7 @@ i2c_hub_3: i2c@98c000 {
+>>   
+>>   			i2c_hub_4: i2c@990000 {
+>>   				compatible = "qcom,geni-i2c-master-hub";
+>> -				reg = <0x0 0x00990000 0x0 0x4000>;
+>> +				reg = <0 0x00990000 0 0x4000>;
+>>   				clock-names = "se", "core";
+>>   				clocks = <&gcc GCC_QUPV3_I2C_S4_CLK>,
+>>   					 <&gcc GCC_QUPV3_I2C_CORE_CLK>;
+>> @@ -1653,8 +1653,8 @@ pcie0: pci@1c00000 {
+>>   			reg-names = "parf", "dbi", "elbi", "atu", "config";
+>>   			#address-cells = <3>;
+>>   			#size-cells = <2>;
+>> -			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
+>> -				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
+>> +			ranges = <0x01000000 0 0x60200000 0 0x60200000 0 0x100000>,
+>> +				 <0x02000000 0 0x60300000 0 0x60300000 0 0x3d00000>;
+>>   			bus-range = <0x00 0xff>;
+>>   
+>>   			dma-coherent;
+>> @@ -1693,7 +1693,7 @@ pcie0: pci@1c00000 {
+>>   			interconnects = <&pcie_noc MASTER_PCIE_0 0 &mc_virt SLAVE_EBI1 0>;
+>>   
+>>   			iommus = <&apps_smmu 0x1400 0x7f>;
+>> -			iommu-map = <0x0   &apps_smmu 0x1400 0x1>,
+>> +			iommu-map = <0     &apps_smmu 0x1400 0x1>,
+>>   				    <0x100 &apps_smmu 0x1401 0x1>;
+>>   
+>>   			resets = <&gcc GCC_PCIE_0_BCR>;
+>> @@ -1744,16 +1744,16 @@ pcie0_phy: phy@1c06000 {
+>>   		pcie1: pci@1c08000 {
+>>   			device_type = "pci";
+>>   			compatible = "qcom,pcie-sm8550";
+>> -			reg = <0x0 0x01c08000 0x0 0x3000>,
+>> -			      <0x0 0x40000000 0x0 0xf1d>,
+>> -			      <0x0 0x40000f20 0x0 0xa8>,
+>> -			      <0x0 0x40001000 0x0 0x1000>,
+>> -			      <0x0 0x40100000 0x0 0x100000>;
+>> +			reg = <0 0x01c08000 0 0x3000>,
+>> +			      <0 0x40000000 0 0xf1d>,
+>> +			      <0 0x40000f20 0 0xa8>,
+>> +			      <0 0x40001000 0 0x1000>,
+>> +			      <0 0x40100000 0 0x100000>;
+>>   			reg-names = "parf", "dbi", "elbi", "atu", "config";
+>>   			#address-cells = <3>;
+>>   			#size-cells = <2>;
+>> -			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
+>> -				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
+>> +			ranges = <0x01000000 0 0x40200000 0 0x40200000 0 0x100000>,
+>> +				 <0x02000000 0 0x40300000 0 0x40300000 0 0x1fd00000>;
+>>   			bus-range = <0x00 0xff>;
+>>   
+>>   			dma-coherent;
+>> @@ -1797,7 +1797,7 @@ pcie1: pci@1c08000 {
+>>   			interconnects = <&pcie_noc MASTER_PCIE_1 0 &mc_virt SLAVE_EBI1 0>;
+>>   
+>>   			iommus = <&apps_smmu 0x1480 0x7f>;
+>> -			iommu-map = <0x0   &apps_smmu 0x1480 0x1>,
+>> +			iommu-map = <0     &apps_smmu 0x1480 0x1>,
+>>   				    <0x100 &apps_smmu 0x1481 0x1>;
+>>   
+>>   			resets = <&gcc GCC_PCIE_1_BCR>,
+>> @@ -1821,7 +1821,7 @@ pcie1: pci@1c08000 {
+>>   
+>>   		pcie1_phy: phy@1c0e000 {
+>>   			compatible = "qcom,sm8550-qmp-gen4x2-pcie-phy";
+>> -			reg = <0x0 0x01c0e000 0x0 0x2000>;
+>> +			reg = <0 0x01c0e000 0 0x2000>;
+>>   
+>>   			clocks = <&gcc GCC_PCIE_1_AUX_CLK>,
+>>   				 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
+>> @@ -1851,7 +1851,7 @@ pcie1_phy: phy@1c0e000 {
+>>   
+>>   		cryptobam: dma-controller@1dc4000 {
+>>   			compatible = "qcom,bam-v1.7.0";
+>> -			reg = <0x0 0x01dc4000 0x0 0x28000>;
+>> +			reg = <0 0x01dc4000 0 0x28000>;
+>>   			interrupts = <GIC_SPI 272 IRQ_TYPE_LEVEL_HIGH>;
+>>   			#dma-cells = <1>;
+>>   			qcom,ee = <0>;
+>> @@ -1862,7 +1862,7 @@ cryptobam: dma-controller@1dc4000 {
+>>   
+>>   		crypto: crypto@1de0000 {
+>>   			compatible = "qcom,sm8550-qce";
+>> -			reg = <0x0 0x01dfa000 0x0 0x6000>;
+>> +			reg = <0 0x01dfa000 0 0x6000>;
+>>   			dmas = <&cryptobam 4>, <&cryptobam 5>;
+>>   			dma-names = "rx", "tx";
+>>   			iommus = <&apps_smmu 0x480 0x0>,
+>> @@ -1873,7 +1873,7 @@ crypto: crypto@1de0000 {
+>>   
+>>   		ufs_mem_phy: phy@1d80000 {
+>>   			compatible = "qcom,sm8550-qmp-ufs-phy";
+>> -			reg = <0x0 0x01d80000 0x0 0x2000>;
+>> +			reg = <0 0x01d80000 0 0x2000>;
+>>   			clocks = <&tcsr TCSR_UFS_CLKREF_EN>,
+>>   				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
+>>   			clock-names = "ref", "ref_aux";
+>> @@ -1892,7 +1892,7 @@ ufs_mem_phy: phy@1d80000 {
+>>   		ufs_mem_hc: ufs@1d84000 {
+>>   			compatible = "qcom,sm8550-ufshc", "qcom,ufshc",
+>>   				     "jedec,ufs-2.0";
+>> -			reg = <0x0 0x01d84000 0x0 0x3000>;
+>> +			reg = <0 0x01d84000 0 0x3000>;
+>>   			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
+>>   			phys = <&ufs_mem_phy>;
+>>   			phy-names = "ufsphy";
+>> @@ -1954,7 +1954,7 @@ tcsr: clock-controller@1fc0000 {
+>>   
+>>   		remoteproc_mpss: remoteproc@4080000 {
+>>   			compatible = "qcom,sm8550-mpss-pas";
+>> -			reg = <0x0 0x04080000 0x0 0x4040>;
+>> +			reg = <0 0x04080000 0 0x4040>;
+>>   
+>>   			interrupts-extended = <&intc GIC_SPI 264 IRQ_TYPE_EDGE_RISING>,
+>>   					      <&smp2p_modem_in 0 IRQ_TYPE_EDGE_RISING>,
+>> @@ -2383,7 +2383,7 @@ dispcc: clock-controller@af00000 {
+>>   
+>>   		usb_1_hsphy: phy@88e3000 {
+>>   			compatible = "qcom,sm8550-snps-eusb2-phy";
+>> -			reg = <0x0 0x088e3000 0x0 0x154>;
+>> +			reg = <0 0x088e3000 0 0x154>;
+>>   			#phy-cells = <0>;
+>>   
+>>   			clocks = <&tcsr TCSR_USB2_CLKREF_EN>;
+>> @@ -2396,7 +2396,7 @@ usb_1_hsphy: phy@88e3000 {
+>>   
+>>   		usb_dp_qmpphy: phy@88e8000 {
+>>   			compatible = "qcom,sm8550-qmp-usb3-dp-phy";
+>> -			reg = <0x0 0x088e8000 0x0 0x3000>;
+>> +			reg = <0 0x088e8000 0 0x3000>;
+>>   
+>>   			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
+>>   				 <&rpmhcc RPMH_CXO_CLK>,
+>> @@ -2418,7 +2418,7 @@ usb_dp_qmpphy: phy@88e8000 {
+>>   
+>>   		usb_1: usb@a6f8800 {
+>>   			compatible = "qcom,sm8550-dwc3", "qcom,dwc3";
+>> -			reg = <0x0 0x0a6f8800 0x0 0x400>;
+>> +			reg = <0 0x0a6f8800 0 0x400>;
+>>   			#address-cells = <2>;
+>>   			#size-cells = <2>;
+>>   			ranges;
+>> @@ -2458,7 +2458,7 @@ usb_1: usb@a6f8800 {
+>>   
+>>   			usb_1_dwc3: usb@a600000 {
+>>   				compatible = "snps,dwc3";
+>> -				reg = <0x0 0x0a600000 0x0 0xcd00>;
+>> +				reg = <0 0x0a600000 0 0xcd00>;
+>>   				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
+>>   				iommus = <&apps_smmu 0x40 0x0>;
+>>   				snps,dis_u2_susphy_quirk;
+>> @@ -3444,7 +3444,7 @@ system-cache-controller@25000000 {
+>>   
+>>   		remoteproc_adsp: remoteproc@30000000 {
+>>   			compatible = "qcom,sm8550-adsp-pas";
+>> -			reg = <0x0 0x30000000 0x0 0x100>;
+>> +			reg = <0 0x30000000 0 0x100>;
+>>   
+>>   			interrupts-extended = <&pdc 6 IRQ_TYPE_EDGE_RISING>,
+>>   					      <&smp2p_adsp_in 0 IRQ_TYPE_EDGE_RISING>,
+>> @@ -3576,7 +3576,7 @@ nsp_noc: interconnect@320c0000 {
+>>   
+>>   		remoteproc_cdsp: remoteproc@32300000 {
+>>   			compatible = "qcom,sm8550-cdsp-pas";
+>> -			reg = <0x0 0x32300000 0x0 0x1400000>;
+>> +			reg = <0 0x32300000 0 0x1400000>;
+>>   
+>>   			interrupts-extended = <&intc GIC_SPI 578 IRQ_TYPE_EDGE_RISING>,
+>>   					      <&smp2p_cdsp_in 0 IRQ_TYPE_EDGE_RISING>,
+>>
 
