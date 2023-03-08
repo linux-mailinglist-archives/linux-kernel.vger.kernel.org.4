@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF10C6B0CDD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 686016B0CDF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbjCHPdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:33:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
+        id S231967AbjCHPeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:34:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231836AbjCHPc6 (ORCPT
+        with ESMTP id S232235AbjCHPdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:32:58 -0500
+        Wed, 8 Mar 2023 10:33:06 -0500
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216725D259;
-        Wed,  8 Mar 2023 07:32:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D93D5D253;
+        Wed,  8 Mar 2023 07:32:32 -0800 (PST)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 71657FF817;
-        Wed,  8 Mar 2023 15:32:28 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id CB060FF807;
+        Wed,  8 Mar 2023 15:32:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678289549;
+        t=1678289551;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=A/ImksdSBrmaV0urK8R+sWRAcEcl9MKuKFJL/MM1X44=;
-        b=UdT+678g6P+qOlbMDH0Z1fjEu1gOEcMJgU8+4g1tZ8k33FtN0HFlb9D/L3WV3domz6fOV+
-        VN3ujGIXt9jepInYoazwxUCsYww837N663VJajS8aVaF2RriflzrzIvgGW/ZmEIhKfGv+x
-        WqdWco6FuZ9Hhb1u8eEzlVKjkCnbNSQBL7i8ANSnE750zjeuNwyLInPX1QzAoM2p5/YWH+
-        VcnjNc78M0CMyFJKJ0ScxyJ9gn1fe+UJ2fqCesxZ7sdc6O2TczLamDg/NIzsb5fQq74M5x
-        EORFsmezHZ7kREEENV6hyYbRsiG0m8We37exUA994hHtATr/Mn/6alwAaSEAmQ==
+        bh=EhEP0p7cTgU2NYHkJBTt1zaHHLH70q1d3GVrDXZ/qrs=;
+        b=X6gOZgA+OwTX9CO3gJJjRDk3sGu9vCOMiuNbeDIwq+JnxYcAt+lBDTU2PuJS8/p82NMspL
+        9fdLtlz4m+6EUFEiQUYDEDlq/3M1uVmmfPS218moRA7TL5gMHWl77IWrYp9dh9lQY4ey/4
+        2+bIFRMHaa0sisfiDEUmxepkvil2WxXVghn1LsSXf3SXyC4WSR4RMppXYlUtq4ZtXkFF/5
+        lUoDWncTLyZIw2SfTicQKYt6oDsKxXGSpvb3eS9d2U+de7pE5bcBD10moP5PIv9O4TzlmL
+        9m2i4uo7YEHw+NoWzMJAiDPnUilYAwU3e5gb2wNL9JvMvW9l/bAB+fVtJDlZ0w==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         <linux-kernel@vger.kernel.org>
@@ -43,9 +43,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Frank Rowand <frowand.list@gmail.com>,
         devicetree@vger.kernel.org,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v3 15/20] nvmem: cell: drop global cell_post_process
-Date:   Wed,  8 Mar 2023 16:31:55 +0100
-Message-Id: <20230308153200.682248-16-miquel.raynal@bootlin.com>
+Subject: [PATCH v3 16/20] nvmem: core: provide own priv pointer in post process callback
+Date:   Wed,  8 Mar 2023 16:31:56 +0100
+Message-Id: <20230308153200.682248-17-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230308153200.682248-1-miquel.raynal@bootlin.com>
 References: <20230308153200.682248-1-miquel.raynal@bootlin.com>
@@ -62,70 +62,77 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Michael Walle <michael@walle.cc>
 
-There are no users anymore for the global cell_post_process callback
-anymore. New users should use proper nvmem layouts.
+It doesn't make any more sense to have a opaque pointer set up by the
+nvmem device. Usually, the layout isn't associated with a particular
+nvmem device. Instead, let the caller who set the post process callback
+provide the priv pointer.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/nvmem/core.c           | 9 ---------
- include/linux/nvmem-provider.h | 2 --
- 2 files changed, 11 deletions(-)
+ drivers/nvmem/core.c           | 4 +++-
+ include/linux/nvmem-provider.h | 5 ++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index f43025ad315b..fccb2728193a 100644
+index fccb2728193a..212c5ba5789f 100644
 --- a/drivers/nvmem/core.c
 +++ b/drivers/nvmem/core.c
-@@ -39,7 +39,6 @@ struct nvmem_device {
- 	unsigned int		nkeepout;
- 	nvmem_reg_read_t	reg_read;
- 	nvmem_reg_write_t	reg_write;
--	nvmem_cell_post_process_t cell_post_process;
- 	struct gpio_desc	*wp_gpio;
- 	struct nvmem_layout	*layout;
- 	void *priv;
-@@ -903,7 +902,6 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
- 	nvmem->type = config->type;
- 	nvmem->reg_read = config->reg_read;
- 	nvmem->reg_write = config->reg_write;
--	nvmem->cell_post_process = config->cell_post_process;
- 	nvmem->keepout = config->keepout;
- 	nvmem->nkeepout = config->nkeepout;
- 	if (config->of_node)
-@@ -1576,13 +1574,6 @@ static int __nvmem_cell_read(struct nvmem_device *nvmem,
+@@ -54,6 +54,7 @@ struct nvmem_cell_entry {
+ 	int			bit_offset;
+ 	int			nbits;
+ 	nvmem_cell_post_process_t read_post_process;
++	void			*priv;
+ 	struct device_node	*np;
+ 	struct nvmem_device	*nvmem;
+ 	struct list_head	node;
+@@ -471,6 +472,7 @@ static int nvmem_cell_info_to_nvmem_cell_entry_nodup(struct nvmem_device *nvmem,
+ 	cell->bytes = info->bytes;
+ 	cell->name = info->name;
+ 	cell->read_post_process = info->read_post_process;
++	cell->priv = info->priv;
+ 
+ 	cell->bit_offset = info->bit_offset;
+ 	cell->nbits = info->nbits;
+@@ -1568,7 +1570,7 @@ static int __nvmem_cell_read(struct nvmem_device *nvmem,
+ 		nvmem_shift_read_buffer_in_place(cell, buf);
+ 
+ 	if (cell->read_post_process) {
+-		rc = cell->read_post_process(nvmem->priv, id, index,
++		rc = cell->read_post_process(cell->priv, id, index,
+ 					     cell->offset, buf, cell->bytes);
+ 		if (rc)
  			return rc;
- 	}
- 
--	if (nvmem->cell_post_process) {
--		rc = nvmem->cell_post_process(nvmem->priv, id, index,
--					      cell->offset, buf, cell->bytes);
--		if (rc)
--			return rc;
--	}
--
- 	if (len)
- 		*len = cell->bytes;
- 
 diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
-index be81cc88eabc..d3d7af86a283 100644
+index d3d7af86a283..0cf9f9490514 100644
 --- a/include/linux/nvmem-provider.h
 +++ b/include/linux/nvmem-provider.h
-@@ -85,7 +85,6 @@ struct nvmem_cell_info {
-  * @no_of_node:	Device should not use the parent's of_node even if it's !NULL.
-  * @reg_read:	Callback to read data.
-  * @reg_write:	Callback to write data.
-- * @cell_post_process:	Callback for vendor specific post processing of cell data
-  * @size:	Device size.
-  * @word_size:	Minimum read/write access granularity.
-  * @stride:	Minimum read/write access stride.
-@@ -118,7 +117,6 @@ struct nvmem_config {
- 	bool			no_of_node;
- 	nvmem_reg_read_t	reg_read;
- 	nvmem_reg_write_t	reg_write;
--	nvmem_cell_post_process_t cell_post_process;
- 	int	size;
- 	int	word_size;
- 	int	stride;
+@@ -20,7 +20,8 @@ typedef int (*nvmem_reg_write_t)(void *priv, unsigned int offset,
+ 				 void *val, size_t bytes);
+ /* used for vendor specific post processing of cell data */
+ typedef int (*nvmem_cell_post_process_t)(void *priv, const char *id, int index,
+-					 unsigned int offset, void *buf, size_t bytes);
++					 unsigned int offset, void *buf,
++					 size_t bytes);
+ 
+ enum nvmem_type {
+ 	NVMEM_TYPE_UNKNOWN = 0,
+@@ -56,6 +57,7 @@ struct nvmem_keepout {
+  * @np:		Optional device_node pointer.
+  * @read_post_process:	Callback for optional post processing of cell data
+  *			on reads.
++ * @priv:	Opaque data passed to the read_post_process hook.
+  */
+ struct nvmem_cell_info {
+ 	const char		*name;
+@@ -65,6 +67,7 @@ struct nvmem_cell_info {
+ 	unsigned int		nbits;
+ 	struct device_node	*np;
+ 	nvmem_cell_post_process_t read_post_process;
++	void			*priv;
+ };
+ 
+ /**
 -- 
 2.34.1
 
