@@ -2,120 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017CE6B0805
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE576B080F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjCHNKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:10:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
+        id S230289AbjCHNLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:11:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbjCHNKP (ORCPT
+        with ESMTP id S231416AbjCHNKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:10:15 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796FD93E25;
-        Wed,  8 Mar 2023 05:08:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678280907; x=1709816907;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=do/DGUv3CfzRbDhno/1swumIUePUV3RZP5mnHddaz90=;
-  b=T7pcaxBrrsB2KKXiff5YBFAU21dOGAjA/hQvNCGkyCmDNdWGoRWMQuCK
-   JArNOI0yrHLHUaC7uy6PxmJstyu3QTqHyc1Vddo6/HPQqKOfO+9jodlr4
-   v0bFRsmvrAAhIF8V2Hsy584NrVMn5i9VlvwSN4LaGEqexDUoO41uA0xqX
-   D9wKmAg1PAeUkKUe525JgrfriTmRlppj6fqbDNTCX78gH6VB9eDOo+Joj
-   tOAJZtH3xf/EOdj6BUGaMpqOL88GItV9JPJyt10JK3q+tKaN39nOog1eQ
-   iHtic+Uiz0U9QYbowjd2J1mb7O/MysXDdcb3ySdn+DE3UYO4zQRU2U/cC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="338472904"
-X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="338472904"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 05:06:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="626914660"
-X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="626914660"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2023 05:06:20 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pZtUo-00HR12-2E;
-        Wed, 08 Mar 2023 15:06:18 +0200
-Date:   Wed, 8 Mar 2023 15:06:18 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        broonie@kernel.org, techsupport@winsystems.com,
-        Paul Demetrotion <pdemetrotion@winsystems.com>
-Subject: Re: [PATCH v4 3/3] gpio: ws16c48: Migrate to the regmap API
-Message-ID: <ZAiISgAroSD3YOfk@smile.fi.intel.com>
-References: <cover.1678106722.git.william.gray@linaro.org>
- <4b6cd42426521808962d68a44952b95818fc5daf.1678106722.git.william.gray@linaro.org>
- <ZAX2k9gW1AA88T/P@smile.fi.intel.com>
- <ZAf4LudZkYLsWVWh@fedora>
+        Wed, 8 Mar 2023 08:10:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953B08C969
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 05:08:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678280842;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=uepvc5of9UN+iAXjqvR8mh3Kz3/cFenM5r6Yjs8S6hE=;
+        b=T7nQSSWfqVaHP6frStBC/gmpkBua620QR+kN9NXGrxyGIp4evQ186V90kDgfyRcr2Z+NfR
+        D2/GB6gZ2b5+J9xoMxRcKWiQH8Bu9QAZsajgVRU6PxsFy5Q7ivibjaqw60VoZQKgZqb4Tg
+        1z3vgQcV1BNAne8rOu/7EdjzzR9krPI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-554-UZNxw_osN4mkAJNTU4up3g-1; Wed, 08 Mar 2023 08:07:18 -0500
+X-MC-Unique: UZNxw_osN4mkAJNTU4up3g-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D503E3806702;
+        Wed,  8 Mar 2023 13:07:17 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-137.pek2.redhat.com [10.72.12.137])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A128B2166B26;
+        Wed,  8 Mar 2023 13:07:13 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
+        mpe@ellerman.id.au, geert@linux-m68k.org, mcgrof@kernel.org,
+        hch@infradead.org, Baoquan He <bhe@redhat.com>
+Subject: [PATCH v4 0/4] arch/*/io.h: remove ioremap_uc in some architectures
+Date:   Wed,  8 Mar 2023 21:07:06 +0800
+Message-Id: <20230308130710.368085-1-bhe@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAf4LudZkYLsWVWh@fedora>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 09:51:26PM -0500, William Breathitt Gray wrote:
-> On Mon, Mar 06, 2023 at 04:20:03PM +0200, Andy Shevchenko wrote:
-> > On Mon, Mar 06, 2023 at 07:59:53AM -0500, William Breathitt Gray wrote:
+This patchset tries to remove ioremap_uc() in the current architectures
+except of x86 and ia64. They will use the default ioremap_uc version
+in <asm-generic/io.h> which returns NULL. Anyone who wants to add new
+invocation of ioremap_uc(), please consider using ioremap() instead or
+adding a new ARCH specific ioremap_uc(), or refer to the callsite
+in drivers/video/fbdev/aty/atyfb_base.c.
 
-...
+This change won't cuase breakage to the current kernel because in the
+only ioremap_uc callsite, an adjustment is made to eliminate impact in
+patch 1 of this series. 
 
-> > > -	raw_spinlock_t lock;
-> > > +	spinlock_t lock;
-> > 
-> > This is a regression.
-> > That said, do we need a support of raw spin locks in the regmap IRQ?
-> 
-> So this code has a similar need as the gpio-pcie-idio-24 patch: guard
-> registers between handle_mask_sync() and set_type_config(); however, now
-> we also need to protect registers in regmap_irq_thread(). We can't use a
-> mutex here because regmap_irq_thread() is executed in an interrupt
-> context so we cannot sleep.
-> 
-> This might be a mistake in my understanding: I chose spinlock_t here
-> because I believed it to map out to a raw_spinlock_t anyway underneath,
-> whereas on RT kernels it would map out to whatever the equivalent is. I
-> suspect this is not actually the case. Would using raw_spinlock_t
-> explicitly be the correct way to go for this particular case?
+To get rid of all of them other than x86 and ia64, add asm-generic/io.h
+to asm/io.h of mips ARCH. With this adding, we can get rid of the
+ioremap_uc() in mips too. This is done in patch 2. And a followup patch
+4 is added to remove duplicated code according to Arnd's suggestion.
 
-You may read the commit message of the 27d9098cff6e ("pinctrl: intel:
-Use raw_spinlock for locking"). TL;DR: this is only affects IRQ chips,
-so if your GPIO controller is _not_ an IRQ chip, you are fine.
+v3->v4:
+  - Add patch 1 to adjust code in the only ioremap_uc() callsite so that
+    later removing ioremap_uc() won't cause breakage.
+  - Update log and document writing in patch 3.
+  - Add followup patch 4 to clean up duplicated code in asm/io.h of MIPS.
+v2->v3:
+  - In patch 1, move those macro definition of functio near its function
+    declaration according to Arnd's suggestion. And remove the unneeded
+    change in asm/mmiowb.h introduced in old version.
+  - In patch 2, clean up and rewrite the messy document related to
+    ioremap_uc() in Documentation/driver-api/device-io.rst.
+v1->v2:
+  - Update log of patch 2, and document related to ioremap_uc()
+    according to Geert's comment.
+  - Add Geert's Acked-by.
 
-WRT the other driver, can_sleep may reduce scope of the use of GPIOs
-and even make a regression if any consumer don't want that behaviour
-and currently works.
+Arnd Bergmann (1):
+  video: fbdev: atyfb: only use ioremap_uc() on i386 and ia64
 
-> > > +	u8 irq_mask[WS16C48_NUM_IRQS / WS16C48_NGPIO_PER_REG];
-> > 
-> > Can this be a bitmap? Or is it too over engineered with it?
-> 
-> I also considered a bitmap at first, but I believe it adds an
-> unnecessary abstraction in this particular case: irq_mask is just a
-> buffer to hold the previous mask_buf state to check if it's changed when
-> ws16c48_handle_mask_sync() is called. Since all we do with it is save
-> the mask_buf directly, using the bitmap API seems like overkill.
+Baoquan He (3):
+  mips: add <asm-generic/io.h> including
+  arch/*/io.h: remove ioremap_uc in some architectures
+  mips: io: remove duplicated codes
 
-Thanks for elaboration!
+ Documentation/driver-api/device-io.rst |   9 +-
+ arch/alpha/include/asm/io.h            |   1 -
+ arch/hexagon/include/asm/io.h          |   3 -
+ arch/m68k/include/asm/kmap.h           |   1 -
+ arch/mips/include/asm/io.h             | 112 +++++++++++++++----------
+ arch/parisc/include/asm/io.h           |   2 -
+ arch/powerpc/include/asm/io.h          |   1 -
+ arch/sh/include/asm/io.h               |   2 -
+ arch/sparc/include/asm/io_64.h         |   1 -
+ drivers/video/fbdev/aty/atyfb_base.c   |   4 +
+ 10 files changed, 78 insertions(+), 58 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
