@@ -2,68 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2166B1534
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A146B1558
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjCHWiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 17:38:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
+        id S229629AbjCHWj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 17:39:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCHWiN (ORCPT
+        with ESMTP id S229672AbjCHWjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 17:38:13 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64DF29410
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 14:38:10 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id ce8-20020a17090aff0800b0023a61cff2c6so4701724pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 14:38:10 -0800 (PST)
+        Wed, 8 Mar 2023 17:39:22 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9898B56C4
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 14:39:21 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id a25so72110721edb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 14:39:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678315090;
+        d=linux-foundation.org; s=google; t=1678315159;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MJdbC6w3SG4MYVN7j4d6HyU3EGtnN0pTLcXjZIeQBXQ=;
-        b=OPBNp/YttWUDsJFSSe6u6gfNGNjamRUW9J/pyRyChRJll/rzlE+0C4Hgds3FzyN+bo
-         fYiPQ8Bkl1Wlr9gIs812CcBLCF4z1asWyNml83uBJb3hrAXOl8eYBrrwzbO5S5CMNLBE
-         MKmv04+V3bqqPsHSkMTQR7in9mjpUwfTHDHn2GaX79XG4uHgoLomQETWFSQ8nKYo+B0W
-         wl3hgZwRAtBIVA0vEDyiILAvWICKCU5uINI8IGyZLuoPazXYilxQNZwQUgqYhMe+uZeJ
-         W1T+D4zyrB9lDHlCUQl84KmfbH4HhTnWeCjFGnnY9LkL/ii4NDDkoWcD65F3z834ZfR7
-         0Beg==
+        bh=RgHOh6/Mv9MfzuVql9i7aCQo+w921G9eVyn2ZtvpMeA=;
+        b=XQXaw6SveWahy2vB5VNPk9scfWmxZaNlQgREb/CuY/yZUytGHjqPn864hIBUArPFn1
+         y7zz67wMDKFhJFysg8iELT8s+Eqzks3zF0isZaefpIONj9oeZlPfqnQUX6N/ae7XMtK6
+         s4tbuPIabvLC4k3jI13hdl3b4BXHTK/yn6DKM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678315090;
+        d=1e100.net; s=20210112; t=1678315159;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MJdbC6w3SG4MYVN7j4d6HyU3EGtnN0pTLcXjZIeQBXQ=;
-        b=W+DZ/fAaPdadoDr1Ca1XNKiH73fu2slMLPVit3kjYWAahbcWabnk75zy+jbYn62ZTJ
-         VaS3Ms5brvIpZGSmFBPZW02X27wq5mz+nDtKWsfhRAyALFZfv9QEIqZp5i81AAe93B3+
-         WkE0WQdAD7OZkE/1flhMsel2v+Cil+Ln2ZDuz15/x3vouA4eKWzn023TlWX72oAvIWNA
-         i7LJQseiSy/juOPBRns5mZgLCFWmf+PFN5XUMvrgVNpPCCFO+Dkjet1odXBZxLP1rB6s
-         IiQKtvZpy7tVNlkLxliaMYWn0i4sXq3Namvz6aHU25pSkg+U/GdmgdP6pLo0vjt1sS+V
-         mMRA==
-X-Gm-Message-State: AO0yUKXy1f8gdYzTEogOz/b/bw8uVMO5JA6aDnmCLqmcCyEf8G1j9XyZ
-        II6KGSIhIVRTpfTIvpD8raFjT7jBt40XU3jBDXVfSA==
-X-Google-Smtp-Source: AK7set8/aQu37GV6TlGzEl1hGmKYEXe+8jMt96Eq9dvNK8lqb5Fev/lbf/mMmtT61CDOqg9Qxnegn9hFQivBUKI29p0=
-X-Received: by 2002:a17:903:449:b0:199:4830:5cc9 with SMTP id
- iw9-20020a170903044900b0019948305cc9mr7546879plb.10.1678315089908; Wed, 08
- Mar 2023 14:38:09 -0800 (PST)
+        bh=RgHOh6/Mv9MfzuVql9i7aCQo+w921G9eVyn2ZtvpMeA=;
+        b=o82wQkD1HxHnedPRzkX7HDXqK4MqlmFPtZ+fhRHcdh5cb0iYpTTZszPDL8I5JyKQZQ
+         R0i4XN3u3tF/XbQ+k/Mho3e91KKdpuVxbRt9WDTCYyu7YZMGqdYVUhsgfC9Q83b42PxA
+         zIPNOqDqpJULeXba6XjUCWmPKjao1XWO/6aKkj63ojVaZaGruWAlxs46L4PA0f3DW5Yy
+         IzZ4QmJdqQU96o8eKxXvRKi4HF8sSPJPLXpa+dc4zGhfj/9wpNllTE+XrVqGFwMxl99N
+         cibvOM0CVOFmWxCy6+YEZc5I2WUqnJSXPq7Etdik2oGlgd+ASMTyOsoffhM1Nsnq8cKc
+         BEEg==
+X-Gm-Message-State: AO0yUKUaQebVBBF3LmzA7OzbxbeWCIGXr3aCvqx/YG4bQpqjg0rSjk+E
+        fXqXq/eNZsa/gFP0vMC062LFAO3JELT+/ppmkX0XiA==
+X-Google-Smtp-Source: AK7set+TfeCx1SJImdYXmcWQwDxAZ9tbcKmrIEpMUQtHyE6DrZnEK27z1LDcr+lBYuZNduoKQvxBTw==
+X-Received: by 2002:a17:907:7f09:b0:8b1:7e21:f0e9 with SMTP id qf9-20020a1709077f0900b008b17e21f0e9mr24590739ejc.18.1678315159552;
+        Wed, 08 Mar 2023 14:39:19 -0800 (PST)
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
+        by smtp.gmail.com with ESMTPSA id l6-20020a50d6c6000000b004bdcc480c41sm8760499edj.96.2023.03.08.14.39.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 14:39:18 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id ay14so68150089edb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 14:39:18 -0800 (PST)
+X-Received: by 2002:a50:8750:0:b0:4c2:ed2:1196 with SMTP id
+ 16-20020a508750000000b004c20ed21196mr10973452edv.5.1678315158081; Wed, 08 Mar
+ 2023 14:39:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20230308-clk_of_declare-fix-v1-1-317b741e2532@kernel.org>
-In-Reply-To: <20230308-clk_of_declare-fix-v1-1-317b741e2532@kernel.org>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 8 Mar 2023 14:37:34 -0800
-Message-ID: <CAGETcx_YSKw56HBJmbhYEpHzatb3YQu_msf6Mq=rJUAY_zXp-g@mail.gmail.com>
-Subject: Re: [PATCH] clk: Avoid invalid function names in CLK_OF_DECLARE()
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        linus.walleij@linaro.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230308165251.2078898-1-dhowells@redhat.com> <20230308165251.2078898-4-dhowells@redhat.com>
+In-Reply-To: <20230308165251.2078898-4-dhowells@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 8 Mar 2023 14:39:00 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjYR3h5Q-_i3Q2Et=P8WsrjwNA20fYpEQf9nafHwBNALA@mail.gmail.com>
+Message-ID: <CAHk-=wjYR3h5Q-_i3Q2Et=P8WsrjwNA20fYpEQf9nafHwBNALA@mail.gmail.com>
+Subject: Re: [PATCH v17 03/14] shmem: Implement splice-read
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Daniel Golle <daniel@makrotopia.org>,
+        Guenter Roeck <groeck7@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Hugh Dickins <hughd@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,98 +88,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 12:47=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
+On Wed, Mar 8, 2023 at 8:53=E2=80=AFAM David Howells <dhowells@redhat.com> =
+wrote:
 >
-> After commit c28cd1f3433c ("clk: Mark a fwnode as initialized when using
-> CLK_OF_DECLARE() macro"), drivers/clk/mvebu/kirkwood.c fails to build:
->
->  drivers/clk/mvebu/kirkwood.c:358:1: error: expected identifier or '('
->  CLK_OF_DECLARE(98dx1135_clk, "marvell,mv98dx1135-core-clock",
->  ^
->  include/linux/clk-provider.h:1367:21: note: expanded from macro 'CLK_OF_=
-DECLARE'
->          static void __init name##_of_clk_init_declare(struct device_node=
- *np) \
->                             ^
->  <scratch space>:124:1: note: expanded from here
->  98dx1135_clk_of_clk_init_declare
->  ^
->  drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal =
-constant
->  include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_=
-DECLARE'
->          OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
->                                          ^
->  <scratch space>:125:3: note: expanded from here
->  98dx1135_clk_of_clk_init_declare
->    ^
->  drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal =
-constant
->  include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_=
-DECLARE'
->          OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
->                                          ^
->  <scratch space>:125:3: note: expanded from here
->  98dx1135_clk_of_clk_init_declare
->    ^
->  drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal =
-constant
->  include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_=
-DECLARE'
->          OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
->                                          ^
->  <scratch space>:125:3: note: expanded from here
->  98dx1135_clk_of_clk_init_declare
->    ^
->
-> C function names must start with either an alphabetic letter or an
-> underscore. To avoid generating invalid function names from clock names,
-> add two underscores to the beginning of the identifier.
->
-> Fixes: c28cd1f3433c ("clk: Mark a fwnode as initialized when using CLK_OF=
-_DECLARE() macro")
-> Suggested-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  include/linux/clk-provider.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-> index c9f5276006a0..6f3175f0678a 100644
-> --- a/include/linux/clk-provider.h
-> +++ b/include/linux/clk-provider.h
-> @@ -1364,12 +1364,12 @@ struct clk_hw_onecell_data {
->  };
->
->  #define CLK_OF_DECLARE(name, compat, fn) \
-> -       static void __init name##_of_clk_init_declare(struct device_node =
-*np) \
-> +       static void __init __##name##_of_clk_init_declare(struct device_n=
-ode *np) \
->         {                                                               \
->                 fn(np);                                                 \
->                 fwnode_dev_initialized(of_fwnode_handle(np), true);     \
->         }                                                               \
-> -       OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
-> +       OF_DECLARE_1(clk, name, compat, __##name##_of_clk_init_declare)
->
->  /*
->   * Use this macro when you have a driver that requires two initializatio=
-n
+> The new filemap_splice_read() has an implicit expectation via
+> filemap_get_pages() that ->read_folio() exists if ->readahead() doesn't
+> fully populate the pagecache of the file it is reading from[1], potential=
+ly
+> leading to a jump to NULL if this doesn't exist.  shmem, however, (and by
+> extension, tmpfs, ramfs and rootfs), doesn't have ->read_folio(),
 
-Thanks Nathan!
+This patch is the only one in your series that I went "Ugh, that's
+really ugly" for.
 
-Reviewed-by: Saravana Kannan <saravanak@google.com>
+Do we really want to basically duplicate all of filemap_splice_read()?
 
--Saravana
+I get the feeling that the zeropage case just isn't so important that
+we'd need to duplicate filemap_splice_read() just for that, and I
+think that the code should either
 
->
-> ---
-> base-commit: 89dc65a7cc8a119c395c0931b12d7a514f9d2bcc
-> change-id: 20230308-clk_of_declare-fix-4fb89765923e
->
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
->
+ (a) just make a silly "read_folio()" for shmfs that just clears the page.
+
+     Ugly but maybe simple and not horrid?
+
+or
+
+ (b) teach filemap_splice_read() that a NULL 'read_folio' function
+means "use the zero page"
+
+     That might not be splice() itself, but maybe in
+filemap_get_pages() or something.
+
+or
+
+ (c) go even further, and teach read_folio() in general about file
+holes, and allow *any* filesystem to read zeroes that way in general
+without creating a folio for it.
+
+in a perfect world, if done well I think shmem_file_read_iter() should
+go away, and it could use generic_file_read_iter too.
+
+I dunno. Maybe shm really is *so* special that this is the right way
+to do things, but I did react quite negatively to this patch. So not a
+complete NAK, but definitely a "do we _really_ have to do this?"
+
+                       Linus
