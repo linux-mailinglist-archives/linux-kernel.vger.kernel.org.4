@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2F06B0551
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2267D6B0553
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbjCHLDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:03:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
+        id S231384AbjCHLEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 06:04:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbjCHLDF (ORCPT
+        with ESMTP id S231403AbjCHLD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:03:05 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704D95C103
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 03:02:52 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id d36so17650088lfv.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 03:02:52 -0800 (PST)
+        Wed, 8 Mar 2023 06:03:28 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121403647E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 03:03:23 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id b10so16223104ljr.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 03:03:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678273371;
+        d=linaro.org; s=google; t=1678273401;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lMzCAsM0PhpCHmoe0EGDyegccw9zsrjHGG0hK/hbQG0=;
-        b=spKaCHdwBbNQMkrq9/qgK/20+UT4ELpaBrExg9eaxAwqGlWQ+sPhOS2F7HjOTilwOx
-         0arnR2z2YF/LwqjkGer1Qqv9Ixjc62V9O8CHd7pX8y32GvI7v+Xo9vEtx8ZLETMHgqxZ
-         Lk7tKp+xa6PVlZ1YEsEKk5GhcaZD0BAUgqlwoCwPinZeJmjl8lZgA+6KreoVjoB9RR4G
-         FYCcqyPwpk5ZdDd9a1QhybkM9aKRbRieAZMVanGQnI8/DDa4Fsb3l3Kj5VDklgEVPBEj
-         i1W4TIRD3XG0vmpAfGe3glyTQyU4lWqCWndxuLxj4q7/xG9iQphtdnkFYvyjTxiQ37pp
-         63lw==
+        bh=c0ktoYXDYataVjP7ajflebW7wQwIQSEUi8W+XgUX6Uc=;
+        b=p0SeZU485J/5Xp6XJ61Iox9/Wcq0Bt5vZZL75ahJLr2WZIeXcG0slSR1NpFgB5zIrr
+         TGtTyvlNjx0U5afGR6Z6p0bt3/opkY4hBK/2yoNNHQ/guwDkh5dXr+8rWcY8dfcUuXo/
+         tku7mC0+i3SVA9ZlwO4TZ2ZKjlmSYjFOlxs0cOfW2t0Rgdz1+zCbDWBTLVsFa5c1znK2
+         C2r+hJRu7g2AjLyLMXoHLW7U9zYmpZDI82kWN4TY0UtcvKbUKm+DOclB0W/Efbac60PX
+         o6AerUWByY88lpr6sN9/8WRuTUAIo87YQTfDctYGwzfAY44tjodV7tSFNMc3lU40/m1m
+         GRbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678273371;
+        d=1e100.net; s=20210112; t=1678273401;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lMzCAsM0PhpCHmoe0EGDyegccw9zsrjHGG0hK/hbQG0=;
-        b=1/wLxApUvl6c4QPdR0IlghdgGDzzmriLgWQrOjC5UmAnPNwovQAs6fhPQBLPZ5Cfie
-         oLsAQJR4MOBY/KonDaobKxpj2XA9ck1eVF0hea0MkTA/k6nhfphtJP+yqQCtgswTwsdw
-         u8C5riHAy9iTbJuR5iK2bj0BrQjWyhjNoKJwnQOzF9ZemCzKsLiWFf3OTBflAq81utLZ
-         O0plk1Y+7/CRJOKfCU3HyOFUrXKHv2Wg3RmP3zuxMq/3Q0LvkTlEV0g7lh/28hjNH5VL
-         VkO1bmWqqzlldn5YyXc91GL4Ka47PH2P3Csm9KxbAn3vHSTNjlsHej9rxLr9TFW1Z7a4
-         Dk9Q==
-X-Gm-Message-State: AO0yUKV87RVfvoiv9fzhJNm2W09X/xHGQUwFArtSVs5eEP4L2ddDY+O2
-        aDQ8AVgdIWlf78Zm6ha6hfQ6Vg==
-X-Google-Smtp-Source: AK7set+4lf+PExgrl5oucKm4T53qnUKKcSB06qXrcWKFni/6BNULX5raCpueUNIJBrk0aQF95+wLMw==
-X-Received: by 2002:ac2:5e8e:0:b0:4b5:b87a:3262 with SMTP id b14-20020ac25e8e000000b004b5b87a3262mr4911109lfq.28.1678273370725;
-        Wed, 08 Mar 2023 03:02:50 -0800 (PST)
+        bh=c0ktoYXDYataVjP7ajflebW7wQwIQSEUi8W+XgUX6Uc=;
+        b=uGBNNKcC8+/ksZOoCupi5Ab6r01gLSXSEwLbzY+4px/VfB+ptZ8i50WdKw/zx+bcfH
+         VylcAy57biDp5X7EGwD9RG/7p+PgBSHkjQcuu8PjSvAbk5ujdaYIAfg7Nk1r62+72RaE
+         K0pK2hOSAMsd1PZFAa/eICNJarbVDhW9hm/0vR/Xh04zaoTvc9ZBshXmYpj4+wLoiKcf
+         2Gm7TITNkOreyrY9LfUIMskWZJyWZ5H86JR4MFzuVJZ1jFnmpGGDcFg0PzJ5bNDkCNmQ
+         PtMs6DbodTdC3m3kRCvKa5NJ+AG3WBwE6/XywpfzLjug+0C7SBZGqFzlUuY/cmZfbV3K
+         ayiQ==
+X-Gm-Message-State: AO0yUKWEnPlNAX/jrrS9oK56KQQ4oQB14xOZKgFtLFkjDvGP26lOH6Pd
+        elqvxMcrzvCwinaw8LtnG7BVmqRfamWncA1UP9w=
+X-Google-Smtp-Source: AK7set9Z4ZGOP6Fsh7liszYtVH27S1FUcTMnqPjPIib1BGTpW/anBmkQ+ECe7xGhGTVowgP0g69g1g==
+X-Received: by 2002:a05:651c:221a:b0:295:b0c6:834c with SMTP id y26-20020a05651c221a00b00295b0c6834cmr6673532ljq.41.1678273401426;
+        Wed, 08 Mar 2023 03:03:21 -0800 (PST)
 Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id v10-20020a19740a000000b004db3e330dcesm2314791lfe.178.2023.03.08.03.02.49
+        by smtp.gmail.com with ESMTPSA id r10-20020a2e8e2a000000b002934d555783sm2528022ljk.6.2023.03.08.03.03.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 03:02:50 -0800 (PST)
-Message-ID: <aa963fa9-e2d6-a7e1-8396-745de5f996d4@linaro.org>
-Date:   Wed, 8 Mar 2023 12:02:48 +0100
+        Wed, 08 Mar 2023 03:03:21 -0800 (PST)
+Message-ID: <9dc9814e-22ae-7b89-80cc-dc1d92898a2f@linaro.org>
+Date:   Wed, 8 Mar 2023 12:03:19 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: display/panel: Add Lenovo NT36523W
- BOE panel
+Subject: Re: [PATCH v2 2/2] gpu/drm/panel: Add Lenovo NT36523W BOE panel
 Content-Language: en-US
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Jianhua Lu <lujianhua000@gmail.com>
@@ -70,10 +69,10 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         dri-devel@lists.freedesktop.org, phone-devel@vger.kernel.org
 References: <20230217-topic-lenovo-panel-v2-0-2e2c64729330@linaro.org>
- <20230217-topic-lenovo-panel-v2-1-2e2c64729330@linaro.org>
- <CACRpkda7=Y4ZRBDOhxE974qV-yXuFyZZs7m_aBwtF9qivV5WQg@mail.gmail.com>
+ <20230217-topic-lenovo-panel-v2-2-2e2c64729330@linaro.org>
+ <CACRpkdZ8RvFrieWXhx1WGO71M10H0-b3WbDXM7=xnngX7uWT6Q@mail.gmail.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CACRpkda7=Y4ZRBDOhxE974qV-yXuFyZZs7m_aBwtF9qivV5WQg@mail.gmail.com>
+In-Reply-To: <CACRpkdZ8RvFrieWXhx1WGO71M10H0-b3WbDXM7=xnngX7uWT6Q@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,64 +87,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 7.03.2023 23:08, Linus Walleij wrote:
+On 7.03.2023 23:18, Linus Walleij wrote:
 > On Tue, Mar 7, 2023 at 2:26 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
 > 
->> Add bindings for the 2000x1200px IPS panel found on Lenovo Tab P11/
->> XiaoXin Pad devices.
+>> Introduce support for the BOE panel with a NT36523W touch/driver IC
+>> found on some Lenovo Tab P11 devices. It's a 2000x1200, 24bit RGB
+>> MIPI DSI panel with integrated DCS-controlled backlight (that expects
+>> big-endian communication).
 >>
->> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
 >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > 
-> (...)
->> +$id: http://devicetree.org/schemas/display/panel/lenovo,nt36523w-boe-j606.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: NT36523W BOE panel found on Lenovo J606 devices
+> I will think this is some variant of the Novatek NT36523 display
+> controller packaged up with Lenovo electronics until proven how
+> wrong I am.
 > 
-> It's a Novatek NT36523 display controller-based device isn't it?
+> I will listen to reason if it can be demonstrated that NT36523 and
+> NT36523W are considerably different and need very different
+> drivers, but I seriously doubt it. (For reasons see below.)
 > 
-> I would reflect that in the title or at least the description.
+>>  drivers/gpu/drm/panel/panel-lenovo-nt36523w-boe.c | 747 ++++++++++++++++++++++
 > 
->> +
->> +maintainers:
->> +  - Konrad Dybcio <konrad.dybcio@linaro.org>
->> +
->> +allOf:
->> +  - $ref: panel-common.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    const: lenovo,nt36523w-boe-j606
->> +
->> +  reg:
->> +    maxItems: 1
->> +    description: DSI virtual channel
->> +
->> +  vddio-supply: true
->> +  reset-gpios: true
->> +  rotation: true
->> +  port: true
+> We usually share code with different displays using the
+> same display controller, so panel-novatek-nt36523.c should
+> be used as name.
 > 
-> This is clearly (as can be seen from the magic in the driver) a
-> Novatek NT36523 display controller, just configured differently.
+>> +config DRM_PANEL_LENOVO_NT36523W_BOE
+>> +       tristate "Lenovo NT36523W BOE panel"
+> 
+> Name it after the display controller like the other examples
+> in the Kconfig, DRM_PANEL_NOVATEK_NT36523
+> 
+>> +       mipi_dsi_dcs_write_seq(dsi, 0xff, 0x20);
+>> +       mipi_dsi_dcs_write_seq(dsi, 0xfb, 0x01);
+>> +       mipi_dsi_dcs_write_seq(dsi, 0x05, 0xd9);
+>> +       mipi_dsi_dcs_write_seq(dsi, 0x07, 0x78);
+>> +       mipi_dsi_dcs_write_seq(dsi, 0x08, 0x5a);
+>> +       mipi_dsi_dcs_write_seq(dsi, 0x0d, 0x63);
+>> +       mipi_dsi_dcs_write_seq(dsi, 0x0e, 0x91);
+>> +       mipi_dsi_dcs_write_seq(dsi, 0x0f, 0x73);
+>> +       mipi_dsi_dcs_write_seq(dsi, 0x95, 0xeb);
+>> +       mipi_dsi_dcs_write_seq(dsi, 0x96, 0xeb);
+>> +       mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PARTIAL_ROWS, 0x11);
+> 
+> I think it looks very similar to Jianhua:s driver:
 > https://lore.kernel.org/lkml/20230220121258.10727-1-lujianhua000@gmail.com/T/
 > 
-> Why can't you just modify the existing nt36523 binding from
-> Jianhua Lu by e.g. making these two non-required:
-> 
->  - vddpos-supply
->  - vddneg-supply
-> 
-> It would not be helpful for driver writers to have two different bindings
-> for similar hardware hand having to write code to handle different
-> properties depending on which binding is used, so please unify into
-> one binding by cooperating with Jianhua.
-I'll look into Jianhua's patchset and try to work atop that!
+> Can't you just add this special magic sequence into
+> that driver instead?
+Yeah I'll try doing that.
 
 > 
-> Would it help if we merged Jianhua's binding so you can build on topYes please, the less out-of-tree dependencies the better..
+> Would it help if we merge Jianhua's driver first so you can patch on
+> top of it?
+Definitely.
 
+Konrad
 > 
 > Yours,
 > Linus Walleij
