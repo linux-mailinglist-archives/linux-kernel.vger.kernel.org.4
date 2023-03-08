@@ -2,98 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845FC6B1118
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D90AF6B111E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjCHSeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 13:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
+        id S230180AbjCHSfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 13:35:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjCHSeJ (ORCPT
+        with ESMTP id S230143AbjCHSet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 13:34:09 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A702A5A919
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 10:34:02 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id bh20so12868183oib.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 10:34:02 -0800 (PST)
+        Wed, 8 Mar 2023 13:34:49 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DD95F524
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 10:34:48 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id x14so16211627vso.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 10:34:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google; t=1678300442;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B9LrpmC171HQRUblc06CI2KjW6cWk6Sb8yDZK03fraU=;
-        b=URn+G7KlJct4bRPej5fPlH2PT+eexQb021kzQ5CEj1Oxxt3p4p3+wWKqE7gkvYiWqj
-         nXaVW8EoaoSW05ln6+myN53qZkw5FvQtSd/NbYoDEJDL9GLJwY/yKKymQSQfdsgRdCBY
-         02NsHLGaUeDkyvmK+iUlES4b4axfGMASeWv4k=
+        d=chromium.org; s=google; t=1678300487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C9F1enZvKSGIFHS4e3aiA1VRNnNfG61Asy+3o9z9VzE=;
+        b=NvRD0HN9B8mPDstls48UkQEqfFQepTv7OuwyqlcYIXukeIQ3JJmoj3B+k3oi8AZMyH
+         dFpmakTIeIlJrPcIGPppO0Czi2givmZ7rX8DUBWdVzl3CSBKhTOKG3TgLVzokH9BDEMg
+         0Ae/tCc7M/scZ6mXoNEywGGKMyXuAp16lwA3s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678300442;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678300487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=B9LrpmC171HQRUblc06CI2KjW6cWk6Sb8yDZK03fraU=;
-        b=nKUzlGR6jBxfd2wzPtMZ6rGqXns0YYSLWk9tmJiBJgj8z7ZgxQlgNNOVZ+9TnedIS6
-         Ey/VcOGSNBrKazR1ohBgItmtfuJK+NbO938cv/eO17ZItGlmnzrk+ezIoMVdKKmtFvlf
-         Aj3ySpf/3UfP0kMTrPBqRTV5Dz0vdslUzs3cN6uFYqxxkcpcHHNAAQmxt5+VacWG1Sb1
-         wKfEnRTRra2FsHyLi94uik/krM9rRWXU2OmQZ++ly701AQYHi8jdUrbdOEZxo6LblmNi
-         QKEqF4iO1WU+2GIM6ZgFlC1v6f+mzMTcrHLzKKOyFrsKZGLKz6ilZO5CS1MhVmskwQyj
-         FxPw==
-X-Gm-Message-State: AO0yUKUCk9knYIVwzusZvKRm185ad9IrH0tQg2Ok4uckj3wHNv2odoil
-        YbNZCjbBQxjqbIDgRZdND4UPug==
-X-Google-Smtp-Source: AK7set9s66ey7Pd2U7u3rc5QdVYbw054DPbXubGkP/DV1CegmaMVAFssVKw4/jQin94cL7bNtE7n9Q==
-X-Received: by 2002:a05:6808:274e:b0:384:23da:6e73 with SMTP id eh14-20020a056808274e00b0038423da6e73mr7567803oib.47.1678300441866;
-        Wed, 08 Mar 2023 10:34:01 -0800 (PST)
-Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id l7-20020a544507000000b0037d8c938d62sm6574214oil.50.2023.03.08.10.34.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 10:34:01 -0800 (PST)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Wed, 8 Mar 2023 12:33:59 -0600
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/887] 6.1.16-rc2 review
-Message-ID: <ZAjVF4i4rS5BTsaX@fedora64.linuxtx.org>
-References: <20230308091853.132772149@linuxfoundation.org>
+        bh=C9F1enZvKSGIFHS4e3aiA1VRNnNfG61Asy+3o9z9VzE=;
+        b=OjpXu8GPZGkL67UuUC6zMYA0awYzy8P3OwrVY8dk4cUzegxwDqkbOhyRyIXpdJWYA/
+         g4Rf8cCz4Z5cVtwl4IniDML9a5iInCB1DG9ddlFDtR2vM+V8S6YbacBoAx4ZQGweEj4I
+         5jsetxMqb5o99NFktfADxpY/qFEDsIgzxJasp8o9WfMcxumISFUpIGEOY7vsgALkcpt7
+         p94SNq9NEsCS6EwTplftfs9huSp0PefDtYeZbvIV84+vCnsiWUScUOBLGUre5L+F0YKq
+         ddhiC1wR79ERu2ifkXROWcJdL88IWs3JfKgimCswUl9VRJQ4/GaZ8sSwj95DewT0wlg3
+         bMBA==
+X-Gm-Message-State: AO0yUKUtje7grYD7qitFOIlUCVpbfIxDvyt09CjX/uPCneTmaW+5PZ03
+        fAdD5oXKjznLs6tIX7gklq9KLGwN9+QTdq26TTrvDw==
+X-Google-Smtp-Source: AK7set+8cPhuQAdLM3zB+PW2jfEvoEE/c3Gz044eevRZImhbZFwUCa9TW4KgyrSGIMQq31kIarVT1Pg4wy4Z5TqN2Rk=
+X-Received: by 2002:a67:f9d9:0:b0:420:10e:14e8 with SMTP id
+ c25-20020a67f9d9000000b00420010e14e8mr12386454vsq.1.1678300487055; Wed, 08
+ Mar 2023 10:34:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230308091853.132772149@linuxfoundation.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230307200502.2263655-1-grundler@chromium.org> <20230307164736.37ecb2f9@kernel.org>
+In-Reply-To: <20230307164736.37ecb2f9@kernel.org>
+From:   Grant Grundler <grundler@chromium.org>
+Date:   Wed, 8 Mar 2023 10:34:35 -0800
+Message-ID: <CANEJEGuMuA=Hvu4DO7Hj8kZLwEuNmuzesY3QbVDpECanaC4hpA@mail.gmail.com>
+Subject: Re: [PATCHv2 1/2] TEST:net: asix: fix modprobe "sysfs: cannot create
+ duplicate filename"
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Grant Grundler <grundler@chromium.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        netdev <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Anton Lundin <glance@acc.umu.se>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 10:29:31AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.16 release.
-> There are 887 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 10 Mar 2023 09:16:12 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.16-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Tue, Mar 7, 2023 at 4:47=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
+te:
+>
+> On Tue,  7 Mar 2023 12:05:01 -0800 Grant Grundler wrote:
+> > Subject: [PATCHv2 1/2] TEST:net: asix: fix modprobe "sysfs: cannot crea=
+te duplicate filename"
+>
+> Why the "TEST:" prefix?
 
-Tested rc2 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+Sorry - that's left over from how I mark the change for testing with
+chromeos-5.15 kernel branch:
+   https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel=
+/+/4313619
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+I should have removed that.  I upload the change to gerrit so partners
+can easily test the same code  (e.g. coworker Eizan who is in
+Australia).
+
+If you follow the link above, you can see I'm testing a bunch of
+additional backports as well and have additional fields in the commit
+message required by chromium.org.
+
+> The patch doesn't apply cleanly, it needs to go via this tree:
+> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/
+> so rebase it onto that, please, and put [PATCH net] in the subject
+> rather than just [PATCH].
+
+Ok - thanks! Wil repost v3 against netdev/net.git/ shortly. No problem.
+
+> Keep patch 2 locally for about a week (we merge fixes and cleanup
+> branches once a week around Thu, and the two patches depend on each
+> other).
+
+Awesome! Sounds good.
+
+> Please look thru at least the tl;dr of our doc:
+> https://www.kernel.org/doc/html/next/process/maintainer-netdev.html
+
+Thanks!
+
+Because I've been "randomly" contributing to netdev for 20+ years,
+I've not looked for documentation (beyond SubmittingPatches). But I am
+quite willing to read and follow it - makes life easier for everyone.
+
+cheers,
+grant
