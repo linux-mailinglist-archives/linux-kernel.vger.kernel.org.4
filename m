@@ -2,75 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECA06AFD77
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 04:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF756AFD79
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 04:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjCHDkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 22:40:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
+        id S229819AbjCHDkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 22:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjCHDkX (ORCPT
+        with ESMTP id S229825AbjCHDkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 22:40:23 -0500
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC4793E3F;
-        Tue,  7 Mar 2023 19:40:21 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pZkeo-001YNx-FH; Wed, 08 Mar 2023 11:40:03 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 08 Mar 2023 11:40:02 +0800
-Date:   Wed, 8 Mar 2023 11:40:02 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
-        Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
-Subject: Re: [v5 PATCH 7/7] crypto: stm32 - Save and restore between each
- request
-Message-ID: <ZAgDku9htWcetafb@gondor.apana.org.au>
-References: <ZAVu/XHbL9IR5D3h@gondor.apana.org.au>
- <E1pZ2fs-000e27-4H@formenos.hmeau.com>
- <CACRpkdY8iN_ga0VuQ-z=8KUWaJ6=5rh2vZEwcp+oNgcBuPFk=g@mail.gmail.com>
- <ZAcNhtm/+mik1N2m@gondor.apana.org.au>
- <CACRpkdbcrCa9v82xVWtixWdDPvCu6E6Rkw-3Vg3APisdvYGwqQ@mail.gmail.com>
- <ZAf/rAbc3bMIwBcr@gondor.apana.org.au>
+        Tue, 7 Mar 2023 22:40:45 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE0B9547A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 19:40:41 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id fr5-20020a17090ae2c500b0023af8a036d2so170380pjb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 19:40:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678246840;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QLUpNRb1Q5SbO5b6ljTZoN5cFP88001T4PHHJDtnPIY=;
+        b=hvgQDq9Hx7UZ+T+wnEN/YAB03nl+H2YawT6rsZIgLQWs/jTvHj7wOlBe+kV/zOxTLL
+         jftAH82U93x6DI+yV8EgM3dVqSXPKAGh1/9x69jebUA0lWdAnViH05CqLjCm6e8jI9ul
+         1B08YMiyJD8CvQUNYYX8zwFzs1KEv+llJ4nK/MUMXD/uTmb7+aFpaklcGWHFjtu3ziNM
+         mi2c3+ctKR2GWRPPW5dfzdAUxBQRRrndJ323cI0NoodTewkP3wPyq2jbrQPkQlMUsxha
+         1cSROQvN3Od1hHzlhzQCvAJbsfgCvPuxMal2DfwqxAEhfXGkMNuqXGv/+hsxkFQWAUOS
+         GuhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678246840;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QLUpNRb1Q5SbO5b6ljTZoN5cFP88001T4PHHJDtnPIY=;
+        b=expmvj9h+35XH3iYH5Lcb04p80WpUWPRvStV7L/cGW7B662867DJoah8YetbJB59Dp
+         +NZYnl0sGhMqdQAzGy0aR/zCzYrm6ornLTVfc3P78qUNVQ32dQjAI4mFvqOGDLGtnrmu
+         4mezML1SnJ1/n+d3mB0GJ7q7+F0FwiTSTdaGYDB56tPRqAJ3oCLKmpXFbk1LANcCZNMA
+         +4cELD32VeT3VBG+BbNoig4cw7WCjc2WLvltGfLXwX6tbw0eSiK9jz0vFXM0mw/FpYdb
+         CaEld3d/9E23F183sn5qoYXcjg8RDeJ8YyYYBihYLd/dEkoCBx0F8Iv6rKpM5skCAWMU
+         QzRg==
+X-Gm-Message-State: AO0yUKU4ueFQbtA8YG6d3K6JabqRgHy1eHuA0QRH/BuRO7vBwxf/b1gb
+        t09lqpFcIqgzqjWVVt9EkYFFCP4e2TclvmhWteStig==
+X-Google-Smtp-Source: AK7set951PHcH/hh6Gt6p7PVv5UViZaBErCzXeuETNU4JXbZ9TJrRbhpRClK0T35JNChyp0zlzlZSL+kUVqQoNAFMXA=
+X-Received: by 2002:a17:90a:f10b:b0:23a:6ed6:7817 with SMTP id
+ cc11-20020a17090af10b00b0023a6ed67817mr6298116pjb.5.1678246840511; Tue, 07
+ Mar 2023 19:40:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAf/rAbc3bMIwBcr@gondor.apana.org.au>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+References: <20230215010717.3612794-1-rananta@google.com> <20230215010717.3612794-15-rananta@google.com>
+In-Reply-To: <20230215010717.3612794-15-rananta@google.com>
+From:   Reiji Watanabe <reijiw@google.com>
+Date:   Tue, 7 Mar 2023 19:40:24 -0800
+Message-ID: <CAAeT=Fyu6eoYX=1U1aXr5qrXSPmQdswcrE+Dz12SLK7R-1XDAQ@mail.gmail.com>
+Subject: Re: [REPOST PATCH 14/16] selftests: KVM: aarch64: Add PMU test to
+ chain all the counters
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 11:23:24AM +0800, Herbert Xu wrote:
+Hi Raghu,
+
+On Tue, Feb 14, 2023 at 5:07=E2=80=AFPM Raghavendra Rao Ananta
+<rananta@google.com> wrote:
 >
-> Nevermind, I know why it doesn't work.  It's specific to ux500
-> where you're polling the DCAL bit.  But the DCAL bit only works
-> for the final hash, it doesn't work for the intermediate state.
-> 
-> Let me check how the old ux500 handled this case.
+> Extend the vCPU migration test to occupy all the vPMU counters,
+> by configuring chained events on alternate counter-ids and chaining
+> them with its corresponding predecessor counter, and verify against
+> the extended behavior.
+>
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>  .../testing/selftests/kvm/aarch64/vpmu_test.c | 60 +++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>
+> diff --git a/tools/testing/selftests/kvm/aarch64/vpmu_test.c b/tools/test=
+ing/selftests/kvm/aarch64/vpmu_test.c
+> index de725f4339ad5..fd00acb9391c8 100644
+> --- a/tools/testing/selftests/kvm/aarch64/vpmu_test.c
+> +++ b/tools/testing/selftests/kvm/aarch64/vpmu_test.c
+> @@ -710,6 +710,63 @@ static void test_chained_count(int pmc_idx)
+>         pmu_irq_exit(chained_pmc_idx);
+>  }
+>
+> +static void test_chain_all_counters(void)
+> +{
+> +       int i;
+> +       uint64_t cnt, pmcr_n =3D get_pmcr_n();
+> +       struct pmc_accessor *acc =3D &pmc_accessors[0];
 
-Hmm, it seems to use the same bit.  I guess the meaning must be
-different with ux500.
+How do you decide whether to test with all accessors ?
+Perhaps, it might be simpler and more consistent if we implement each
+test case with one specified accessor as an argument, and run those
+test with each accessors?
 
-Could you check for me which wait_busy() call is actually failing?
-Is it the one I added right before we save the state, or is it
-something else?
 
-If it's something perhaps we aren't restoring the state in the
-right way, because the stm32 state restoring code is quite different
-compared to the ux500 code.
+> +
+> +       /*
+> +        * Test the occupancy of all the event counters, by chaining the
+> +        * alternate counters. The test assumes that the host hasn't
+> +        * occupied any counters. Hence, if the test fails, it could be
+> +        * because all the counters weren't available to the guest or
+> +        * there's actually a bug in KVM.
+> +        */
+> +
+> +       /*
+> +        * Configure even numbered counters to count cpu-cycles, and chai=
+n
+> +        * each of them with its odd numbered counter.
+> +        */
 
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+You might want to use the cycle counter as well ?
+
+Thank you,
+Reiji
+
+> +       for (i =3D 0; i < pmcr_n; i++) {
+> +               if (i % 2) {
+> +                       acc->write_typer(i, ARMV8_PMUV3_PERFCTR_CHAIN);
+> +                       acc->write_cntr(i, 1);
+> +               } else {
+> +                       pmu_irq_init(i);
+> +                       acc->write_cntr(i, PRE_OVERFLOW_32);
+> +                       acc->write_typer(i, ARMV8_PMUV3_PERFCTR_CPU_CYCLE=
+S);
+> +               }
+> +               enable_counter(i);
+> +       }
+> +
+> +       /* Introduce some cycles */
+> +       execute_precise_instrs(500, ARMV8_PMU_PMCR_E);
+> +
+> +       /*
+> +        * An overflow interrupt should've arrived for all the even numbe=
+red
+> +        * counters but none for the odd numbered ones. The odd numbered =
+ones
+> +        * should've incremented exactly by 1.
+> +        */
+> +       for (i =3D 0; i < pmcr_n; i++) {
+> +               if (i % 2) {
+> +                       GUEST_ASSERT_1(!pmu_irq_received(i), i);
+> +
+> +                       cnt =3D acc->read_cntr(i);
+> +                       GUEST_ASSERT_2(cnt =3D=3D 2, i, cnt);
+> +               } else {
+> +                       GUEST_ASSERT_1(pmu_irq_received(i), i);
+> +               }
+> +       }
+> +
+> +       /* Cleanup the states */
+> +       for (i =3D 0; i < pmcr_n; i++) {
+> +               if (i % 2 =3D=3D 0)
+> +                       pmu_irq_exit(i);
+> +               disable_counter(i);
+> +       }
+> +}
+> +
+>  static void test_event_count(uint64_t event, int pmc_idx, bool expect_co=
+unt)
+>  {
+>         switch (event) {
+> @@ -739,6 +796,9 @@ static void test_basic_pmu_functionality(void)
+>
+>         /* Test chained events */
+>         test_chained_count(0);
+> +
+> +       /* Test running chained events on all the implemented counters */
+> +       test_chain_all_counters();
+>  }
+>
+>  /*
+> --
+> 2.39.1.581.gbfd45094c4-goog
+>
