@@ -2,104 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CACD6B029F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6176B029E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:15:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbjCHJPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 04:15:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
+        id S230211AbjCHJPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 04:15:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbjCHJOu (ORCPT
+        with ESMTP id S230413AbjCHJOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 04:14:50 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5ED998849
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 01:14:25 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id ay14so59173914edb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 01:14:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678266863;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WVlbKIsIKONcencGIlCVz/zMUTdvcvIEPXx7D+3nAjE=;
-        b=LdA5rx163AC+HgqVyIy+sy0Gl2nZwk1NtVqeLbyS5v9JeajHfWzDBa611KYlhHeaDi
-         ouXMK6QlKT4MdFQgjITg2J1sILL900Aotrlzbi01m1MOeSiDZWxCDKVWMVSTISylWC2j
-         vMCOQdHCAF/3wxvSvMqdfjqZzaY6JEG05DNHC0+4ya97xSpTA42hEBVqk5alDM92V2/F
-         EEVFlGMFMGn4FJ9wFPmNkvujBM6TWZxBRKW5wvDqwzg60t9TSEGjGnY+LtAbAPDrzIos
-         pOLLFa0cfOUXLsOeWhVetUN10kUdFHIlhKVJ1p9sfy2dDuhaTQy6WchgcNxtXK3HP+GT
-         Y/ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678266863;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WVlbKIsIKONcencGIlCVz/zMUTdvcvIEPXx7D+3nAjE=;
-        b=R5PKRMnFsUzNpHq1HfJ+18En3+WUbJDh0jTBcBkKalALkJrhPHg7ewIPUeiF0vAv0p
-         BRS6KBBJNBRwIWGZILWBAZFU9aJrypsnEr6UVNVG61O6CfyRVWRMKVqs49s6qqle5Fq/
-         oOXVUl2olZhj9UTyDIaE++vzuZjV0bFm+U1DIDbBBX4uVsqXDOMfYBxacIQBR4QOHbRQ
-         Otei9dXQ/9XNtw7lOhvKCeBQ6tBwshEGJIjJVTj/s1HF9onwvo3pCMjQVHJ6LFQEZauz
-         xmPcgE53N3ZvtW1PnrFsWXBPh7cxdzsFJ/IegLzwyxZARJzbec7B3fOU7o7Yqq7e7knv
-         YgTg==
-X-Gm-Message-State: AO0yUKXOS1SkNjTAycMPXlsNrfJt24vUs5ZZYBUrLNuP990dctpN3UlH
-        VRrdlZUo9yurqoX3f7qptqUWPg==
-X-Google-Smtp-Source: AK7set/5cil+g/8SOVvjrP1ln2Nvql2jHsS3WiDe7I+EHmOgynZqYeKxSssaFWa66dlwAxdmjzlPSA==
-X-Received: by 2002:a05:6402:1291:b0:4ad:66b:84a5 with SMTP id w17-20020a056402129100b004ad066b84a5mr16082411edv.22.1678266863518;
-        Wed, 08 Mar 2023 01:14:23 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:bba:fbfa:8aec:a133? ([2a02:810d:15c0:828:bba:fbfa:8aec:a133])
-        by smtp.gmail.com with ESMTPSA id e21-20020a50d4d5000000b004d47ce55e57sm6241720edj.10.2023.03.08.01.14.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 01:14:23 -0800 (PST)
-Message-ID: <06f8eec8-94f3-0fed-b496-831c77baf368@linaro.org>
-Date:   Wed, 8 Mar 2023 10:14:22 +0100
+        Wed, 8 Mar 2023 04:14:53 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD20A83E9;
+        Wed,  8 Mar 2023 01:14:33 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 879CE6602FE7;
+        Wed,  8 Mar 2023 09:14:31 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678266872;
+        bh=ufIfZplrAvq48akm0xlpo2QYks+rqP+EvBycvF6XRtk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cklbuY+l4wzRVIpVXTp8xZiMU7kAjX1f9fpMxpT3cS57EQJeBPKoWAX91KN8vp+SA
+         iOjH7h4aqrChuf4SKSreZyDS78D9C4i8o5fXQR2H9dVybuoc4j6NvOJGDXeVrRUPaV
+         ouiT70nOQl3eIzqgBHFfs7itFgk2nmK54UiEzAhv7YPAViU0P4Rzcpc0f1tY/2xxLs
+         5newQa2tPOhOZ7QaZetgN4gg2BvFZxr4XPMUV28Mr001QYkvTgNJYb9vqyVHsnUdg3
+         gJxbslPV4T4IJ8NnIlnCWgXOIAFaWAa8CDA6XZCZMBvEOAZdk95rZh5InkkR1/1rZE
+         whXKqg72fPwwQ==
+Message-ID: <1031de17-d9fe-49c0-40f7-172a4448f1d8@collabora.com>
+Date:   Wed, 8 Mar 2023 10:14:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v1] max77663-rtc: pass rtc address from device tree node
- if exists
+Subject: Re: [PATCH 1/4] dt-bindings: thermal: mediatek: Add AP domain to LVTS
+ thermal controllers for mt8195
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20230308083759.11692-1-clamor95@gmail.com>
- <f1df5968-4322-3f67-3da8-c10ea50386a8@linaro.org>
- <CAPVz0n24odz4bxt8nRe08-UJFoaDSTGMAPfj2b2RBG+ZbwntfQ@mail.gmail.com>
- <190897d3-39b6-fb7c-dc18-dac580fadea6@linaro.org>
-In-Reply-To: <190897d3-39b6-fb7c-dc18-dac580fadea6@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     bchihi@baylibre.com, daniel.lezcano@linaro.org, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230307154524.118541-1-bchihi@baylibre.com>
+ <20230307154524.118541-2-bchihi@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230307154524.118541-2-bchihi@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 10:11, Krzysztof Kozlowski wrote:
-> On 08/03/2023 09:58, Svyatoslav Ryhel wrote:
->> I would love to, but max77663 uses max77686 rtc
->> https://github.com/torvalds/linux/blob/master/drivers/mfd/max77620.c#L123
->> how to handle this?
+Il 07/03/23 16:45, bchihi@baylibre.com ha scritto:
+> From: Balsam CHIHI <bchihi@baylibre.com>
 > 
-> Don't top post.
+> Add AP Domain to LVTS thermal controllers dt-binding definition for mt8195.
 > 
-> Hm, so it seems max7763 is already documented via max77620. I missed
-> that. Add the new property to max77620, not to max77686 RTC. It does not
-> look like RTC's property, but the PMIC's.
+> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
 
-To clarify - the I2C address selection for regmap is in max77686 RTC,
-but I meant DT property.
-
-Different thing is that we do not pass addresses as property fields.
-These should be devices on the I2C bus rather... unless you are aware of
-existing property like this?
-
-Best regards,
-Krzysztof
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
