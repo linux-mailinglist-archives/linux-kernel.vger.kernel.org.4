@@ -2,237 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F916B03A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C016B03B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:05:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbjCHKED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:04:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
+        id S230315AbjCHKFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:05:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjCHKDv (ORCPT
+        with ESMTP id S230389AbjCHKFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:03:51 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2070.outbound.protection.outlook.com [40.107.237.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661F731E15;
-        Wed,  8 Mar 2023 02:03:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NT5Kj2rcwakiF+ocNm4x72JNFZrVMZ8xtATuRldKlRMfVzlq7lSDZTb4TeJY1hbnA0MR76Wn8qHxbnq7O39L48Uum7q5JEg8mO01iKHB0hw9huUdLX/GYqZWMqEqjnXeB/PkWfn9+YtQ3JK8uWRpq180AtUJdzFBZtPhA/bSeW5lgEykv2yE5z27RVwgr74tPNeGjK186yubHp+cl4BO0vgSKXtSjbUFPLUObdEi/DhPb08MM3fTyzuzYg/7g33Y8K2e3YR/1Q70/LXqW9rGUXNlLW0QbAc539fLJlg8S46UQdBV0Cg3y1vpXiSw6SzoDSUrsESCWyYoPSiPx41asQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FtGQQioFZY3WnVYG8MwM/oAfTmRdHiEFvZGhESpeido=;
- b=isLlGpYX+KZmCFn2yeK3hVNdhDj+ilho+VMuKnC5Ws+bHTMzkAW3ayfi0PE90lxii26AZJkIvz9A5GSGRgAykK/A1OvpWSqjoDpU6L2O5Dd5x4oOoBtrGy/UKWImRS1f5eHIxyg4pjKDZBpkJOvshPjzznDvbmlWTROGo0XhDE7a4bHC7VmKnnl3xzXyoUACLN83jPOWRVKmWPSO3JCVsDW5A8vAYZcPGE8tJ2ysqnWY2BhLATuP+ZhOjxaS1R9WNFzayxH6CxwE/yzOBadvIPeGbopzl4cQSytjK4lhF198elI6JGjB2H0VExbQ2Dp1PAY9A3FAol5xLq/pgfRzcA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FtGQQioFZY3WnVYG8MwM/oAfTmRdHiEFvZGhESpeido=;
- b=HFsLbOnaTIaBUy28zW+seFiXcyYuGkzyE+/fCWiTi8FWuVA7/oZYYd4wp/ODu2QNZYZHFtXBXFSyN2vWJGGU42b/DoGR2MU5UHBAL2sKw8ZMg58HvuHP2D+g6qsRTIGfuKRAOuVnOrVJyRoTl3DI/WcOVTnQDsKPQEENVFKdEko=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by CO6PR12MB5428.namprd12.prod.outlook.com (2603:10b6:5:35c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Wed, 8 Mar
- 2023 10:03:43 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d23f:bb1:df95:3918]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d23f:bb1:df95:3918%4]) with mapi id 15.20.6178.017; Wed, 8 Mar 2023
- 10:03:43 +0000
-Message-ID: <585fa052-4eff-940e-b307-2415c315686a@amd.com>
-Date:   Wed, 8 Mar 2023 11:03:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH RFC 11/18] drm/scheduler: Clean up jobs when the scheduler
- is torn down
-Content-Language: en-US
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Asahi Lina <lina@asahilina.net>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-11-917ff5bc80a8@asahilina.net>
- <bbd7c5ee-c2f0-3e19-757d-a9aff1a26d3d@linux.intel.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <bbd7c5ee-c2f0-3e19-757d-a9aff1a26d3d@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0148.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:96::9) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Wed, 8 Mar 2023 05:05:03 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC1B7B491
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:04:35 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so1724538pjg.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:04:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1678269875;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=A9REEP/8ROAureHI/NaNojTlrwNXg/sHpmQLban0nLw=;
+        b=WtEwAN7f4WNf0+O0RFrUJtgdnKhz/yXbAl6pZL5Wt/FqUavJhtBGmKdouF9wkb6qSZ
+         Tv/OS0t5v4YgN85io+R6Wg7xnjFlVz/jraPxVHmKY7ifTBfV0e0uxNidMxberE6eL1N3
+         QXaGLYbdLCfKdNKYeGaDsgUUYEvx9FBbbOUvqP8edKr2akEBShSaPVQzNyrW+jPpBGu8
+         Vh2pNQ8csPMEWYGYThJP6zvxg/U1K86sCpPLUEELmc/GFmfVfwzwpBUU5w77ZGGMPhFQ
+         RkDnsWvII4XbHvEJNL0Tb2SvgFq5sGVEUIi6+4cysiKElUa0PqNdvvuUdpm6iNTR6GBu
+         1E0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678269875;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A9REEP/8ROAureHI/NaNojTlrwNXg/sHpmQLban0nLw=;
+        b=NdzZv/mMh1hEmINg5w0ec5g5WTcl/al6V3HIJHNpNFlUd5Y5gdoi13i4pxw1papiX6
+         Q+zWxqCZmeqOBlFK4OIouunw8G2aOSuEvoN/QV+66iC4GyjP7Fzb/PnvkWqVni0tLjpe
+         c0q61Pv96TjgW9riRBlLmm2E9bGgku8iLFRHK21/gwqgr9U3Z1w1Ns146S6crHiIwSQl
+         GKbuobhNn+jmxpTGGVNAFHJDWOEFQrEXs9Q5iJSfZCf07y9ewoM99iY94yIYrFvT9AHg
+         MsJtMML8EuUBfy2wXHVDZzPefHEUoEhijsUtykcrykjjHJg3FSX7dZ313DvZD9Y9Emzz
+         w/QQ==
+X-Gm-Message-State: AO0yUKVx7qeAWmX+sf50D048OuJUgWJ5tqskHqrjfALSOVn2bPgUpFur
+        nXHqjpagtJy9QkqCfMVvCtGcJw==
+X-Google-Smtp-Source: AK7set8804YjQtp1/hGBWudP/34T/upP0AAPNFVt4rZB3Lrqp9wYRfcmFeYYZMOCHP9DPZUFVteG6g==
+X-Received: by 2002:a05:6a20:4fa4:b0:cb:af96:9687 with SMTP id gh36-20020a056a204fa400b000cbaf969687mr13462057pzb.15.1678269875253;
+        Wed, 08 Mar 2023 02:04:35 -0800 (PST)
+Received: from C02G87K0MD6R.bytedance.net ([139.177.225.244])
+        by smtp.gmail.com with ESMTPSA id bm2-20020a056a00320200b005813f365afcsm9171874pfb.189.2023.03.08.02.04.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 02:04:34 -0800 (PST)
+From:   Hao Jia <jiahao.os@bytedance.com>
+To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        mgorman@techsingularity.net
+Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
+Subject: [PATCH] sched/core: Minor optimize pick_next_task() when core-sched enable
+Date:   Wed,  8 Mar 2023 18:04:13 +0800
+Message-Id: <20230308100414.37114-1-jiahao.os@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|CO6PR12MB5428:EE_
-X-MS-Office365-Filtering-Correlation-Id: ae63679b-9ba6-4deb-425e-08db1fbc6620
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XJc1G3LZMO8nOZ673xXspa1p6jg1at0s5UDnG1sf0cVsVqAEkid0Eq5ZY90tj0l1jZLvcoBAgsxOtLbatmCermB1vwPyZzAh2ZPYm2Xw+B4T60vYkBmHCuqdk/IiqT1MQWiH0KUlSuZSHWRWnaw3MjnCk8JYEugHra+h8xQlCUjstInPS1DoPb16HarED23hP24Hw1lkbTxnyjYGZX17Mftg9Yn6YPRDGnbRE1lL3ZPoXp5YqmkfTlDppV5VW9KX6COHUweSzgyBBK/2EoFzsTyA1TZ3/p/jlKXQUG6t4/mxFYf/bc6zW2u5M2j2FgkBCxU9Tx5xca1qDVixLIscnGWIRyUqN+ZDNoADNT6MmSTsUteHwgjOp4lxrR5s0EaFGRIW3Nxo347YHOOXAkAmn2gSd9rgdq+ieGYeLu9j0y6kDthDO25wDH6+o8J6DEJUhEHpgWj/Xs27ruUxWiMt6FgYhyelTf/F4aoj9zaiZeonbYfOvDwd/GoDTo2X6+pnzq8XG4S4gXFxD8IEp5iojq8h850EwDxbUWJRf283JBuNGUsp7k3kjuz1MC5u11QSo3eqzMMaTOvcYLbR1m6BeQDLTPkQFG12oVtpbYRp89PuKgPn4Azsr56NBegxwOvGDo7RQOnT5dDNR+xuFFf9LWVdvQzL6QYHnK5+Z0towUjZdVM97xjK1KwyvQNXXKVaPMO3l8+3zVJQChDl2QetBX18pswXxDVePAirAyoqr9XicBMqdIXQFLUgTG/n/w0P
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(39860400002)(396003)(376002)(346002)(451199018)(6666004)(110136005)(31696002)(54906003)(41300700001)(8676002)(86362001)(83380400001)(4326008)(36756003)(316002)(8936002)(66946007)(66476007)(478600001)(66556008)(7416002)(6486002)(5660300002)(186003)(921005)(2906002)(38100700002)(2616005)(31686004)(6512007)(53546011)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YlU2VlViYnZ5SWF2Zk1ZU0QyZFBndjEvbGNaTDJhOGU1VVNGUWZ0N2gzNU5M?=
- =?utf-8?B?dDhleHZRcC9GZm1hZlFnaVpFckllN250Z3VRYW9IRmljLzIrLzdJL3g5ckYz?=
- =?utf-8?B?V0NhNXh0d3RXQ2JSTVlza09XY1dOVGpuL1BHUmZCamFDa2J5YVptL0tSV05p?=
- =?utf-8?B?Ym8yYmd1cGhmY3o4RDRnSHlaZDRvTFhnRVZjUU1zVG1QNXJNd3V4dldxM0d2?=
- =?utf-8?B?RndNVnE5TWVCL0tDaE5EenF6dnh1ZHhqaFNMSW1WSkVXVFJDckdLVE4xTVpa?=
- =?utf-8?B?YW5xaDEybE8rT0FMeDJ0eFArb1BuVVdEYkFUUVpaSVpub09rM2kwdTVCc0g3?=
- =?utf-8?B?NDdqZ1hMZ1lkdGhsZzRFQlNXUlNRRmNkNW80dkFYYUo2NXBkUUE2Znl6ZkVS?=
- =?utf-8?B?Y1kwaUNhM3VqU1lyWjdzdUNqdlRIS3BlU1h2cGowMFRMUys2dWxxNEhlYUgr?=
- =?utf-8?B?VWdpNTVKbVpEOFN2STFUNExZNnZ1dzNzcmNoeHBXd1N1ODlhNnlpNklESGF4?=
- =?utf-8?B?VU92ZVRzaXZET1FwVUJOeWl4cmZIMFBkQ0hHSUNhQU9qK3NEbVJneFlyc1pF?=
- =?utf-8?B?YXZnUm1NamhrdU9yL0kwKzRDb1dVbUVnMGZESDFjNlVBQ1NJS3lRUW4zaUxY?=
- =?utf-8?B?aERkdE11RWpoTlNBQ0lZcGY3MFZIaHZPMmxlek1DV0IyQS9zN245SEJad2du?=
- =?utf-8?B?VzZ5d1lKWW1jZ0tuNHJLRWF4MHdmWUR2OENGU2ExTjl4ZDJjUG9FRDZwd0FO?=
- =?utf-8?B?ZmtiYXJGc2k1YUpCcEpnYTVzOVhxUlJxUmxnRXEyekRtRTJrdTdmaVczNGlX?=
- =?utf-8?B?bUtobkZlbEFMS2xCa1NRRTB5SXYyWlVuTE1vSGJpeXFXV1l6WExWSFRhRm80?=
- =?utf-8?B?d2h4SnNvVjNLQkt5SnViMXdxdEdyTXlkdCtjeWRQRGNuallPK2VmK2o4UW9F?=
- =?utf-8?B?dnN5UVZrYVVpVk1YTjVSV3BrVkFCVUxKNThPMlpucVdPV1BVRzh5bnFNZml5?=
- =?utf-8?B?azM2dm5SWSthdjh3bDR4T1JsTXZrREFKTU5SQk03eU5JcHI1VERnMW4wT2NO?=
- =?utf-8?B?RXpTQTRpeE5BVVZJc0dYQnkrQ3ZSNWlGOVI3ZXczMTU0a3E5WUJpQUVyT0Fq?=
- =?utf-8?B?Zmpzc3ZhRTVINEZlenp0ejhnK2t4ZURCY0xJTktSQlgwWUJQVUwxS3Q5QXJI?=
- =?utf-8?B?c20xVTJ4Yk4wL0JDVGQ2a0hjaXZQS2p0R24vODVVOGQxbmM3RU5MQkQ3VkhX?=
- =?utf-8?B?QzNaamJCcUFIbnYyeXgrYkd3aXhXNHhHcmR6NUdrS2thZmxCa2RnNGxWRmdO?=
- =?utf-8?B?UXZoTVpNWkh6RFNyUXVyYVpHMVUwU0dCNXRWZDhoU1orTmxja251Yzg0MWJL?=
- =?utf-8?B?NmRuaytPOVFhVDU4OTN0M1AxWGRuSnJubHFNMk1naW9oN3doNUlRR3JVaGcv?=
- =?utf-8?B?VWhNYTdPM2hYcTJ2NlNZa3NqUW1qYkRSbGgvRjhWeFR3VnIrS2tsc2Q0QTRt?=
- =?utf-8?B?a2ZtdXZKdTlrV2hIb3hkdjFKVVVpaWxDc1NCaGYzOWtTUGJsUDRhWEgxQ3Nt?=
- =?utf-8?B?bVhRSlhJdHR6MjF4bUFPMnlKWmp3eFlrU3g5M0tUZTh2b1VNcUNkKzNvOTE1?=
- =?utf-8?B?VlZ5RWVoK25RelcxRjB4ZDFEVDlrY2daN2pTcXR6OEdSaXZMVEIrSm1NZjZD?=
- =?utf-8?B?WGd5VzcrdW51SDVIWTczUlBmM1pFUTYzeGg0djlSbWxXUGQrcWtqeTYvQVFn?=
- =?utf-8?B?UmUzT3hJRE5acU5LaXU2ajNUdTNlamQ4M0pBS0orcjkvVDgzSnhtNFlhVXZs?=
- =?utf-8?B?RTJwdTY0WFZNSHFwd1lDM2pmeHNBUWE1Zi9aL2FSZzRuNlQybVhaK3VWdzVK?=
- =?utf-8?B?djgrTHhOWXhqSjhpQzNaaG9pZ1ljU0IxV1RkaURxL3dyNmo1YjIzS2Y5dWdM?=
- =?utf-8?B?SE05YldhdGZjU0hhU01xcTVkOUVCd2VKZFZoQnlTK2h4UzdyVDBGc25iWkdu?=
- =?utf-8?B?Y3M5UjJkQXl5ZFNhSXpub21qaVNLbjduMC9VcmR1RzFiLzlzL25FclpxSXB2?=
- =?utf-8?B?WExZUjlvK2FNdVJ3NGk4UFZjcmF5MHV3dkRBdEtrdDdNTzVDNHZMQXI1UTd4?=
- =?utf-8?B?TUhXNllDb1RCSCtscjRuSnVJVUtXVXJBUzQyVVpDaG9SNTVMdjBTU1ZzNFg3?=
- =?utf-8?Q?mk9RBqtfTLcv+PJl3LnYPqL1zWMSt4HpbfvCLLbJID7l?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae63679b-9ba6-4deb-425e-08db1fbc6620
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 10:03:43.3416
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KbG/BPxCVsUuU+KCrLKjYUjqpvXH1ocAgT9JtQosCvJtf0z3vsgpB3QjJZwVk2NI
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5428
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 08.03.23 um 10:57 schrieb Maarten Lankhorst:
->
-> On 2023-03-07 15:25, Asahi Lina wrote:
->> drm_sched_fini() currently leaves any pending jobs dangling, which
->> causes segfaults and other badness when job completion fences are
->> signaled after the scheduler is torn down.
->>
->> Explicitly detach all jobs from their completion callbacks and free
->> them. This makes it possible to write a sensible safe abstraction for
->> drm_sched, without having to externally duplicate the tracking of
->> in-flight jobs.
->>
->> This shouldn't regress any existing drivers, since calling
->> drm_sched_fini() with any pending jobs is broken and this change should
->> be a no-op if there are no pending jobs.
->>
->> Signed-off-by: Asahi Lina <lina@asahilina.net>
->> ---
->>   drivers/gpu/drm/scheduler/sched_main.c | 27 
->> +++++++++++++++++++++++++--
->>   1 file changed, 25 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/scheduler/sched_main.c 
->> b/drivers/gpu/drm/scheduler/sched_main.c
->> index 5c0add2c7546..0aab1e0aebdd 100644
->> --- a/drivers/gpu/drm/scheduler/sched_main.c
->> +++ b/drivers/gpu/drm/scheduler/sched_main.c
->> @@ -1119,10 +1119,33 @@ EXPORT_SYMBOL(drm_sched_init);
->>   void drm_sched_fini(struct drm_gpu_scheduler *sched)
->>   {
->>       struct drm_sched_entity *s_entity;
->> +    struct drm_sched_job *s_job, *tmp;
->>       int i;
->>   -    if (sched->thread)
->> -        kthread_stop(sched->thread);
->> +    if (!sched->thread)
->> +        return;
->> +
->> +    /*
->> +     * Stop the scheduler, detaching all jobs from their hardware 
->> callbacks
->> +     * and cleaning up complete jobs.
->> +     */
->> +    drm_sched_stop(sched, NULL);
->> +
->> +    /*
->> +     * Iterate through the pending job list and free all jobs.
->> +     * This assumes the driver has either guaranteed jobs are 
->> already stopped, or that
->> +     * otherwise it is responsible for keeping any necessary data 
->> structures for
->> +     * in-progress jobs alive even when the free_job() callback is 
->> called early (e.g. by
->> +     * putting them in its own queue or doing its own refcounting).
->> +     */
->> +    list_for_each_entry_safe(s_job, tmp, &sched->pending_list, list) {
->> +        spin_lock(&sched->job_list_lock);
->> +        list_del_init(&s_job->list);
->> +        spin_unlock(&sched->job_list_lock);
->> +        sched->ops->free_job(s_job);
->> +    }
->
-> I would stop the kthread first, then delete all jobs without spinlock 
-> since nothing else can race against sched_fini?
->
-> If you do need the spinlock, It would need to guard 
-> list_for_each_entry too.
+If core-sched is enabled, sometimes we will traverse each CPU on the core
+to find the highest priority task 'max' on the entire core, and then try
+and find a runnable task that matches @max.
+But in the following case, we choose the runnable task is not the best.
 
-Well this case here actually should not happen in the first place.
+core max: task2 (cookie 0)
 
-Jobs depend on their device, so as long as there are jobs there should 
-also be a reference to the scheduler.
+	rq0				rq1
+task0(cookie non-zero)		task2(cookie 0)
+task1(cookie 0)
+task3(cookie 0)
+...
 
-What could be is that you have allocated a scheduler instance 
-dynamically, but even then you should first tear down all entities and 
-then the scheduler.
+pick-task: idle			pick-task: task2
 
-Regards,
-Christian.
+CPU0 and CPU1 are two CPUs on the same core, task0 and task2 are the
+highest priority tasks on rq0 and rq1 respectively, task2 is @max
+on the entire core.
 
->
->> +
->> +    kthread_stop(sched->thread);
->>         for (i = DRM_SCHED_PRIORITY_COUNT - 1; i >= 
->> DRM_SCHED_PRIORITY_MIN; i--) {
->>           struct drm_sched_rq *rq = &sched->sched_rq[i];
->>
+In the case that 'max' has a zero cookie, instead of continuing to
+search for a runnable task on rq0 that matches @max's cookie, we
+choose idle for rq0 directly.
+At this time, it is obviously better to choose task1 to run for rq0,
+which will increase the CPU utilization.
+Therefore, we queue tasks with zero cookies in core_tree, and record
+the number of non-zero cookie tasks of each rq to detect the status
+of the sched-core.
+
+Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
+---
+ kernel/sched/core.c       | 29 +++++++++++++++--------------
+ kernel/sched/core_sched.c |  9 ++++-----
+ kernel/sched/sched.h      |  1 +
+ 3 files changed, 20 insertions(+), 19 deletions(-)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index af017e038b48..765cd14c52e1 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -236,8 +236,8 @@ void sched_core_enqueue(struct rq *rq, struct task_struct *p)
+ {
+ 	rq->core->core_task_seq++;
+ 
+-	if (!p->core_cookie)
+-		return;
++	if (p->core_cookie)
++		rq->cookied_count++;
+ 
+ 	rb_add(&p->core_node, &rq->core_tree, rb_sched_core_less);
+ }
+@@ -246,11 +246,16 @@ void sched_core_dequeue(struct rq *rq, struct task_struct *p, int flags)
+ {
+ 	rq->core->core_task_seq++;
+ 
++	if (p->core_cookie)
++		rq->cookied_count--;
++
+ 	if (sched_core_enqueued(p)) {
+ 		rb_erase(&p->core_node, &rq->core_tree);
+ 		RB_CLEAR_NODE(&p->core_node);
+ 	}
+ 
++	if (!sched_core_enabled(rq))
++		return;
+ 	/*
+ 	 * Migrating the last task off the cpu, with the cpu in forced idle
+ 	 * state. Reschedule to create an accounting edge for forced idle,
+@@ -370,7 +375,7 @@ static void sched_core_assert_empty(void)
+ 	int cpu;
+ 
+ 	for_each_possible_cpu(cpu)
+-		WARN_ON_ONCE(!RB_EMPTY_ROOT(&cpu_rq(cpu)->core_tree));
++		WARN_ON_ONCE(cpu_rq(cpu)->cookied_count);
+ }
+ 
+ static void __sched_core_enable(void)
+@@ -2061,14 +2066,12 @@ static inline void enqueue_task(struct rq *rq, struct task_struct *p, int flags)
+ 	uclamp_rq_inc(rq, p);
+ 	p->sched_class->enqueue_task(rq, p, flags);
+ 
+-	if (sched_core_enabled(rq))
+-		sched_core_enqueue(rq, p);
++	sched_core_enqueue(rq, p);
+ }
+ 
+ static inline void dequeue_task(struct rq *rq, struct task_struct *p, int flags)
+ {
+-	if (sched_core_enabled(rq))
+-		sched_core_dequeue(rq, p, flags);
++	sched_core_dequeue(rq, p, flags);
+ 
+ 	if (!(flags & DEQUEUE_NOCLOCK))
+ 		update_rq_clock(rq);
+@@ -6126,13 +6129,8 @@ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
+ 		rq_i = cpu_rq(i);
+ 		p = rq_i->core_pick;
+ 
+-		if (!cookie_equals(p, cookie)) {
+-			p = NULL;
+-			if (cookie)
+-				p = sched_core_find(rq_i, cookie);
+-			if (!p)
+-				p = idle_sched_class.pick_task(rq_i);
+-		}
++		if (!cookie_equals(p, cookie))
++			p = sched_core_find(rq_i, cookie);
+ 
+ 		rq_i->core_pick = p;
+ 
+@@ -6333,6 +6331,7 @@ static void sched_core_cpu_starting(unsigned int cpu)
+ 	sched_core_lock(cpu, &flags);
+ 
+ 	WARN_ON_ONCE(rq->core != rq);
++	WARN_ON_ONCE(rq->cookied_count);
+ 
+ 	/* if we're the first, we'll be our own leader */
+ 	if (cpumask_weight(smt_mask) == 1)
+@@ -6425,6 +6424,7 @@ static inline void sched_core_cpu_dying(unsigned int cpu)
+ {
+ 	struct rq *rq = cpu_rq(cpu);
+ 
++	WARN_ON_ONCE(rq->cookied_count);
+ 	if (rq->core != rq)
+ 		rq->core = rq;
+ }
+@@ -9917,6 +9917,7 @@ void __init sched_init(void)
+ 		rq->core = rq;
+ 		rq->core_pick = NULL;
+ 		rq->core_enabled = 0;
++		rq->cookied_count = 0;
+ 		rq->core_tree = RB_ROOT;
+ 		rq->core_forceidle_count = 0;
+ 		rq->core_forceidle_occupation = 0;
+diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
+index a57fd8f27498..70f424abcc2b 100644
+--- a/kernel/sched/core_sched.c
++++ b/kernel/sched/core_sched.c
+@@ -56,6 +56,7 @@ static unsigned long sched_core_update_cookie(struct task_struct *p,
+ 	unsigned long old_cookie;
+ 	struct rq_flags rf;
+ 	struct rq *rq;
++	bool enqueued;
+ 
+ 	rq = task_rq_lock(p, &rf);
+ 
+@@ -67,16 +68,14 @@ static unsigned long sched_core_update_cookie(struct task_struct *p,
+ 	 */
+ 	SCHED_WARN_ON((p->core_cookie || cookie) && !sched_core_enabled(rq));
+ 
+-	if (sched_core_enqueued(p))
++	enqueued = task_on_rq_queued(p);
++	if (enqueued)
+ 		sched_core_dequeue(rq, p, DEQUEUE_SAVE);
+ 
+ 	old_cookie = p->core_cookie;
+ 	p->core_cookie = cookie;
+ 
+-	/*
+-	 * Consider the cases: !prev_cookie and !cookie.
+-	 */
+-	if (cookie && task_on_rq_queued(p))
++	if (enqueued)
+ 		sched_core_enqueue(rq, p);
+ 
+ 	/*
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 3e8df6d31c1e..f5a0ee7fccae 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1148,6 +1148,7 @@ struct rq {
+ 	unsigned int		core_task_seq;
+ 	unsigned int		core_pick_seq;
+ 	unsigned long		core_cookie;
++	unsigned int		cookied_count;
+ 	unsigned int		core_forceidle_count;
+ 	unsigned int		core_forceidle_seq;
+ 	unsigned int		core_forceidle_occupation;
+-- 
+2.11.0
 
