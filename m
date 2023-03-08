@@ -2,142 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2CDC6B02DB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA8D6B02DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjCHJZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 04:25:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57466 "EHLO
+        id S229720AbjCHJ1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 04:27:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjCHJZI (ORCPT
+        with ESMTP id S229468AbjCHJ1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 04:25:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDE7AF2A2;
-        Wed,  8 Mar 2023 01:24:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B455CB81C0B;
-        Wed,  8 Mar 2023 09:24:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78991C433A8;
-        Wed,  8 Mar 2023 09:24:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678267480;
-        bh=i1sJ8zVY63SmSs6HOnkgI05wl57CXOVsfeHlIdvQIBc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NrT5GmpCzsvy102yzX43IVPfE4if+ku299wG6Ehq/DJUxN2oto+BHubGa8FnKBj7x
-         EYUHLAxWRH/aH8MmKp2WnbmfeNxAhh2Z9WNoZSyUY8McNA4aiCOCF3pLVNf+HPtB8b
-         v4j/sdkeoRPmORxaUKLFUL7SptwC60pUxC3rsH/E9/LT0Je5hUV2vuHM+Ty7f/AlOO
-         rDrChrzXq+phj1auyuRZQtKyxQUDOdQDu7HPLRYf7MdePbjrqPZFaqr4nKN9WQrzD9
-         pNOstc7+t4IWHb4JM8a8ORFxeG2rotVEFYORlm1laoXDVaRlM741Ga3zzycEbA01Ij
-         yxz2L1gSvtBsQ==
-Received: by mail-lf1-f45.google.com with SMTP id bi9so20511856lfb.2;
-        Wed, 08 Mar 2023 01:24:40 -0800 (PST)
-X-Gm-Message-State: AO0yUKXXEOo+sTdr6na+l+0w+1weqAj9wwSNKqtu19ZL3j0TG9fj+NNT
-        xnldbPpkyekatAj4+xLf7KS6i4A/BOf9eE7p/ak=
-X-Google-Smtp-Source: AK7set/TDAJY8aPr63jhFnX80GRWQqOYpNKie97V2chZtU4ly8olN5Fb9gqHDWWBVsJJJkmQ1EXRFDQ3mdHYXY4ZWCQ=
-X-Received: by 2002:ac2:5de1:0:b0:4dd:af74:fe17 with SMTP id
- z1-20020ac25de1000000b004ddaf74fe17mr5356537lfq.7.1678267478431; Wed, 08 Mar
- 2023 01:24:38 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1671098103.git.baskov@ispras.ru> <71444a474b94ed69dbc4bc6b1592b10fad4e42a5.1671098103.git.baskov@ispras.ru>
-In-Reply-To: <71444a474b94ed69dbc4bc6b1592b10fad4e42a5.1671098103.git.baskov@ispras.ru>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 8 Mar 2023 10:24:27 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXE9CcDRVt6U7xXeVozuj9Fjc00xN+ne0aYMMS-wxYPgxQ@mail.gmail.com>
-Message-ID: <CAMj1kXE9CcDRVt6U7xXeVozuj9Fjc00xN+ne0aYMMS-wxYPgxQ@mail.gmail.com>
-Subject: Re: [PATCH v4 04/26] x86/boot: Increase boot page table size
-To:     Evgeniy Baskov <baskov@ispras.ru>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+        Wed, 8 Mar 2023 04:27:35 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307A09E674
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 01:27:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1678267616; i=efault@gmx.de;
+        bh=ER4Eu0fA4q/SXb7pU+eeyUMVP9sVrB4pRnJFKxo7ZHQ=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=HM2pMZQZOnbaWnFUiYLOZTpTEpJOUdkexQqFKvMvlKoOK+4Dmwr2YiN/iPM21AqRD
+         F3ZyC+p0L6BVOfbZynvsHODgcWsp/2GPVd//ixmmFiYmsA+pR/9Q/FaNWsdnehpGWZ
+         J9LKoS77dvcAYE50Im392ozPml0BfD4f3wIKAotZadSRDiJvlbbECBv5wnbLo/yf5u
+         vTMmSBt7bDBLcdLJLYlZHcJSKTWWAjBHhAllEynb4mlP+Rp7N5ESKKCaCDmY3X7y+O
+         zD0hSC/MSNT1H234MJ9gNhETBiYSr8JlHOzoBgMI32AhSskjIXnShCDx2mV1LypOhn
+         sHQWM5KewEsAg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from homer.fritz.box ([185.146.50.250]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MNswE-1ptYmu0GwC-00OIT2; Wed, 08
+ Mar 2023 10:26:56 +0100
+Message-ID: <704b858792e48dbf4b45c9bf8f0529080acbe246.camel@gmx.de>
+Subject: Re: [PATCH 10/10] sched/fair: Implement an EEVDF like policy
+From:   Mike Galbraith <efault@gmx.de>
+To:     Peter Zijlstra <peterz@infradead.org>, mingo@kernel.org,
+        vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
+        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, joel@joelfernandes.org
+Date:   Wed, 08 Mar 2023 10:26:52 +0100
+In-Reply-To: <bfbfbf041854e2cd1a8ed14e64081062e5d632d3.camel@gmx.de>
+References: <20230306132521.968182689@infradead.org>
+         <20230306141502.810909205@infradead.org>
+         <bfbfbf041854e2cd1a8ed14e64081062e5d632d3.camel@gmx.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:6rEQfGIHEF+LoIYC6dD4tHwExo6INP83NeVE5vdSHXcOmfp7zmg
+ dcGFf5NJLwExmNvcAzU5+3AHYJRUCbCa3cG+2ALLAPdhNsAeU2CO/r8WzQx9dgJm5EzEoyF
+ 7XW04trkD+xflX+Cfovo5enM2JjVcKzwVo7Zz+S4ZW1JliYuCsAc7VRuOINOb6hjxyTH7ze
+ cLxtC6XHkTtrIOsjfN5ew==
+UI-OutboundReport: notjunk:1;M01:P0:n+2/amTIse4=;++m1kbZjMoiX+GOkrHW2H6XWUSD
+ DtdkGldLi/ab5B7dAJj8rxeeQNkcIJYHdeFb424pRGeCxRQd/Pho0/K1L3gGJ0bkjyIjldZaS
+ odu4FMwWefKis0Qf7QIluSRtiwJYl9SdgcaBdg86hMSHqGWNpeo/WKVQaMwHSJktYb+W2ZM6U
+ LnaidMbdMzkxLcuIOtAS9RhqBvH+nAFR70SzTa1jHaHscH+7xK5FCdMFyiSVqyhLBgAg+Rb1l
+ 0Baqcyx3wNlKTA7VRsRy2FLCdKrl53EqIXVNlEXq/WgF4aUgVoqIbAOUkGQ41TS04hRbHan6+
+ b06FZyrtQDDCf/yzXLyAg4QPUnEmuD8p/Rx3JDLY2+Zdi2IabkvYiJ5f+nx70ec1nCzXnlUfe
+ q046VnrX442z05Z+VuYaz5X/8xNzJfRkLVorU8yRK2YpXIJorpl+gnWC4V61rgfX4vuN6QWh/
+ qqnGAuOrSgO1Fel9CCQbOYnP8LnqZbaxp0D2MvX+7Cla7XNyJ/RTezXFAf/eRvyhwyJvpMoqD
+ B+uKVUg5zs992fwluMiPGM/I7Axf7jLgNO6a3VVTuWSmzXm0Y2e97aIPl8hLHrp3WuivSCj7f
+ e8knsVJmCmtrNN2RDK3JvJ8cCy/1IJ2rCDmybxW30gl9bgzRxSeZHrB+TutUeinhdSin1SRkK
+ Wmw4FqJHtFN2p85jegP63SaFyN+hE61e/dXO9ePVxw7LqDaQMQCEH6p4xrsTBTomGesbfqFPh
+ A0hpZ5JcgyVm3wY0gS9Hk0Ddff6HsaObnrvmeHebyNuWWzOQcV06dEv+J9Xr43EC1V8jciug9
+ ikJlYAJK1kM3rRvqS0EJ/aGNDECLVJuf5e+NmRZUwgYfxOmrIWfiAOyHx2ibqfdrF1fXZzaBN
+ wyPzV9l+0UvucjlAg/Qk9RBpeswxSOcUzILpcDKNyUKCTw6CZlxydqNY2FPypiuW0zEs21QZW
+ QegejWrxSTfe4XirhocE8rtkdyw=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 at 13:38, Evgeniy Baskov <baskov@ispras.ru> wrote:
->
-> Previous upper limit ignored pages implicitly mapped from #PF handler
-> by code accessing ACPI tables (boot/compressed/{acpi.c,efi.c}),
-> so theoretical upper limit is higher than it was set.
->
-> Using 4KB pages is desirable for better memory protection granularity.
-> Approximately twice as much memory is required for those.
->
-> Increase initial page table size to 64 4KB page tables.
->
-> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
-> Tested-by: Peter Jones <pjones@redhat.com>
-> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
-> ---
->  arch/x86/include/asm/boot.h | 26 ++++++++++++++------------
->  1 file changed, 14 insertions(+), 12 deletions(-)
->
-> diff --git a/arch/x86/include/asm/boot.h b/arch/x86/include/asm/boot.h
-> index 9191280d9ea3..024d972c248e 100644
-> --- a/arch/x86/include/asm/boot.h
-> +++ b/arch/x86/include/asm/boot.h
-> @@ -41,22 +41,24 @@
->  # define BOOT_STACK_SIZE       0x4000
->
->  # define BOOT_INIT_PGT_SIZE    (6*4096)
-> -# ifdef CONFIG_RANDOMIZE_BASE
->  /*
->   * Assuming all cross the 512GB boundary:
->   * 1 page for level4
-> - * (2+2)*4 pages for kernel, param, cmd_line, and randomized kernel
-> - * 2 pages for first 2M (video RAM: CONFIG_X86_VERBOSE_BOOTUP).
-> - * Total is 19 pages.
-> + * (3+3)*2 pages for param and cmd_line
-> + * (2+2+S)*2 pages for kernel and randomized kernel, where S is total number
-> + *     of sections of kernel. Explanation: 2+2 are upper level page tables.
-> + *     We can have only S unaligned parts of section: 1 at the end of the kernel
-> + *     and (S-1) at the section borders. The start address of the kernel is
-> + *     aligned, so an extra page table. There are at most S=6 sections in
-> + *     vmlinux ELF image.
-> + * 3 pages for first 2M (video RAM: CONFIG_X86_VERBOSE_BOOTUP).
-> + * Total is 36 pages.
-> + *
-> + * Some pages are also required for UEFI memory map and
-> + * ACPI table mappings, so we need to add extra space.
-> + * FIXME: Figure out exact amount of pages.
-
-So you are rounding up 36 to 64 to account for these pages, right?
-
-So we should either drop the FIXME and explain that this is fine, or
-fix it - we cannot merge it like this.
-
-Thanks,
-Ard.
-
->   */
-> -#  ifdef CONFIG_X86_VERBOSE_BOOTUP
-> -#   define BOOT_PGT_SIZE       (19*4096)
-> -#  else /* !CONFIG_X86_VERBOSE_BOOTUP */
-> -#   define BOOT_PGT_SIZE       (17*4096)
-> -#  endif
-> -# else /* !CONFIG_RANDOMIZE_BASE */
-> -#  define BOOT_PGT_SIZE                BOOT_INIT_PGT_SIZE
-> -# endif
-> +# define BOOT_PGT_SIZE         (64*4096)
->
->  #else /* !CONFIG_X86_64 */
->  # define BOOT_STACK_SIZE       0x1000
-> --
-> 2.37.4
->
+T24gV2VkLCAyMDIzLTAzLTA4IGF0IDA5OjM5ICswMTAwLCBNaWtlIEdhbGJyYWl0aCB3cm90ZToN
+Cj4gDQo+IG5ldHBlcmbCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY2ZzICtl
+ZXZkZsKgIHZzIGNmcw0KPiBUQ1BfU0VOREZJTEUtMcKgwqDCoCBBdmc6wqAgODkyNTjCoCA5MjA4
+MMKgwqAgMS4wMzENCj4gVENQX1NFTkRGSUxFLTLCoMKgwqAgQXZnOsKgIDgzMjcxwqAgODMzNzHC
+oMKgIDEuMDAxDQo+IFRDUF9TRU5ERklMRS00wqDCoMKgIEF2ZzrCoCA1NjM5NcKgIDUzMDExwqDC
+oMKgIC45MzkNCj4gVENQX1NFTkRGSUxFLTjCoMKgwqAgQXZnOsKgIDI2Mzg5wqAgMzk0NzDCoMKg
+IDEuNDk1DQo+IFRDUF9TRU5ERklMRS0xNsKgwqAgQXZnOsKgIDEwMjUxwqAgMTk1OTDCoMKgIDEu
+OTExDQoNCkZvcmdvdCB0byByZWNoZWNrIHRoaXMgbm90IHNvIG1vZGVzdCBjbGllbnRzID49IENQ
+VVMgd2luLCBpdCdzIGFsc28NCnJlcGVhdGFibGUuDQoNCgktTWlrZQ0K
