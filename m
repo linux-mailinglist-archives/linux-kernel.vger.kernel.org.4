@@ -2,122 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59086B0769
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED83B6B07C0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbjCHMrY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Mar 2023 07:47:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50302 "EHLO
+        id S231506AbjCHNB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:01:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjCHMrV (ORCPT
+        with ESMTP id S231421AbjCHNAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:47:21 -0500
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6487F9BA5D;
-        Wed,  8 Mar 2023 04:47:20 -0800 (PST)
-Received: by mail-qv1-f51.google.com with SMTP id o3so11004291qvr.1;
-        Wed, 08 Mar 2023 04:47:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678279639;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8QoG6lFQOa6DcT5o3dgKUDLc2SadqzJqm0y9eSB0xFU=;
-        b=nG+j4YOD2JVhSl4hcyKpdvmK1un8v0edt9ZYfajsDJF2EPXTDHpUIq7sV7Xs7TkAaX
-         24+DKRctJyQx2iKDSorirYl7q+2jfcVOvokkQlVSs18pTj3qfjxer6a3U6R+utcvhqvk
-         vL7Le6zYCtQ5OKiLRPTGXxVuSyXjclh36pBtmv4m7C8DgyE1ZQ6hlYIWLsz1niSK2OX/
-         jz3Uv2NfU1biXphD3jNoojZMJf7sqa3oBXbnB6F+5fvy3uR76IB7js3NKucLsuIYRfJU
-         IOYiHleFexcL8bif22kpgg/omwKhMUL4b9IrbMKYT/Wdi5A+/AwHg4jsWppyYPss2dt9
-         eFag==
-X-Gm-Message-State: AO0yUKXtLdCWEy+p+kNzme47KNM+cyccNS/FTOsF3lBgx3SSU3stfjng
-        by6bWuNa8T+c1HQlY1JJ9Q6WNEDTU4tP+RT1
-X-Google-Smtp-Source: AK7set9JBOfDxCQq+YtBlsQQAhBu+VBVXlH+b5fhIVEb2NsojjgW7dZ+Kr0ZfdnI4RUt4vx59S+5AQ==
-X-Received: by 2002:ad4:5749:0:b0:56e:9551:196b with SMTP id q9-20020ad45749000000b0056e9551196bmr33500719qvx.3.1678279639330;
-        Wed, 08 Mar 2023 04:47:19 -0800 (PST)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id n132-20020a37408a000000b007425dade624sm11436821qka.41.2023.03.08.04.47.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 04:47:18 -0800 (PST)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-536cb25982eso301993487b3.13;
-        Wed, 08 Mar 2023 04:47:18 -0800 (PST)
-X-Received: by 2002:a81:ae18:0:b0:52e:b22b:f99 with SMTP id
- m24-20020a81ae18000000b0052eb22b0f99mr11588158ywh.4.1678279638260; Wed, 08
- Mar 2023 04:47:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20230216175347.99778-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230216175347.99778-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdXNrBCdLvMKK6kPbMLhSmuxXtd5A+Lt4J0ddVorODqCvw@mail.gmail.com> <CA+V-a8up5tnNt==6nUcpK44o+eN0VVMLdtLD5NyZzd37Rx=GgA@mail.gmail.com>
-In-Reply-To: <CA+V-a8up5tnNt==6nUcpK44o+eN0VVMLdtLD5NyZzd37Rx=GgA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 8 Mar 2023 13:47:06 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXz-giK7M-Z0EeBwJrgvStEk_U+ocBmUrkK0DkDFMSZxQ@mail.gmail.com>
-Message-ID: <CAMuHMdXz-giK7M-Z0EeBwJrgvStEk_U+ocBmUrkK0DkDFMSZxQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] arm64: dts: renesas: rzg2l-smarc: Add OV5645 node
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rob Herring <robh+dt@kernel.org>,
+        Wed, 8 Mar 2023 08:00:34 -0500
+Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [IPv6:2001:1600:4:17::190e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8E2746D6
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:59:56 -0800 (PST)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4PWsg61R8QzMrSk2;
+        Wed,  8 Mar 2023 13:53:06 +0100 (CET)
+Received: from unknown by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4PWsg50dkvzMsl22;
+        Wed,  8 Mar 2023 13:53:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
+        s=20220412; t=1678279986;
+        bh=te5TMz4DoFHZhASGAdG8ocer26P4Wf1i1+Oxh4ASymE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LkpvJcUWT3LaDVQKv33YvqLJHUAMld1xeLAOr/2j1Jf9YoZbZCAk4tjHHs0gb9EZX
+         0KzB5iyrikYRvmVptiIdvPi3ohbXuRbAmmc3qjE00nQ9ABHZkS4mvL2cSc5+LsEa+I
+         2D8zQn+LDpf1KBIWEgMjiOm/aEhizbGCkyHDHn9U=
+From:   Philippe Schenker <dev@pschenker.ch>
+To:     devicetree@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     NXP Linux Team <linux-imx@nxp.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Fabio Estevam <festevam@gmail.com>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Denys Drozdov <denys.drozdov@toradex.com>,
+        Fabio Estevam <festevam@denx.de>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Li Yang <leoyang.li@nxp.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Marek Vasut <marex@denx.de>,
+        Matthias Schiffer <matthias.schiffer@tq-group.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 00/25] Update Colibri iMX8X Devicetrees
+Date:   Wed,  8 Mar 2023 13:52:34 +0100
+Message-Id: <20230308125300.58244-1-dev@pschenker.ch>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+From: Philippe Schenker <philippe.schenker@toradex.com>
 
-On Wed, Mar 8, 2023 at 12:08 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Mon, Mar 6, 2023 at 7:27 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Thu, Feb 16, 2023 at 6:57 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > >
-> > > OV5645 sensor can be connected to the CN1 connector on the
-> > > carrier board. This patch adds the ov5645 node under i2c0 node.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Thanks for your patch!
-> >
-> > > --- a/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts
-> > > +++ b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts
-> > > @@ -6,6 +6,10 @@
-> > >   */
-> > >
-> > >  /dts-v1/;
-> > > +
-> > > +/* comment the #define statement if OV5645 is not connected to CN1  */
-> > > +#define CAM_INTERFACE_OV5645   1
-> >
-> > I believe the camera is optional ("can be connector" above).
-> > So shouldn't this be commented out by default?
-> >
-> Yep, that makes sense.
->
-> Shall I send this change or will you be generous to do this while applying ;)
+This patch series does update the device-trees for Colibri iMX8X to the
+latest state of development.
 
-As this has an unresolved dependency on "[PATCH v2 0/2] Share RZ/G2L
-SoC DTSI with RZ/V2L SoC", I cannot do that yet...
+Adds the Carrier Board device-trees for:
 
-Gr{oetje,eeting}s,
+- Aster
+- Iris
+- Iris v2
 
-                        Geert
+It as well changes ordering to be alphabetically and changes the
+pinmuxing bracket format together with some minor fixes.
+
+
+Philippe Schenker (25):
+  arm64: dts: colibri-imx8x: Prepare for qxp and dx variants
+  arm64: dts: colibri-imx8x: Update spdx license
+  arm64: dts: colibri-imx8x: Sort properties
+  arm64: dts: colibri-imx8x: Use new bracket format
+  arm64: dts: colibri-imx8x: Add atmel pinctrl groups
+  arm64: dts: colibri-imx8x: Add pinctrl group for csi_mclk
+  arm64: dts: colibri-imx8x: Split pinctrl_hog1
+  arm64: dts: colibri-imx8x: Correct pull on lcdif
+  arm64: dts: colibri-imx8x: Add separate pinctrl group for cs2
+  arm64: dts: colibri-imx8x: Add pinctrl group for hdmi hpd
+  arm64: dts: colibri-imx8x: Sort fec1 node alphabetically
+  arm64: dts: colibri-imx8x: Add SPI
+  arm64: dts: colibri-imx8x: Add gpio-line-names
+  arm64: dts: colibri-imx8x: Disable touchscreen by default
+  arm64: dts: colibri-imx8x: Add jpegenc/dec
+  arm64: dts: colibri-imx8x: Add colibri pwm b, c, d
+  arm64: dts: colibri-imx8x: eval: Add spi-to-can
+  arm64: dts: colibri-imx8x: Add no-1-8-v to sd-card
+  arm64: dts: colibri-imx8x: Set thermal thresholds
+  arm64: dts: colibri-imx8x: Move gpio-keys to som level
+  arm64: dts: colibri-imx8x: Add todo comments
+  dt-bindings: arm: fsl: Add colibri-imx8x carrier boards
+  arm64: dts: colibri-imx8x: Add aster carrier board
+  arm64: dts: colibri-imx8x: Add iris carrier board
+  arm64: dts: colibri-imx8x: Add iris v2 carrier board
+
+ .../devicetree/bindings/arm/fsl.yaml          |   5 +-
+ arch/arm64/boot/dts/freescale/Makefile        |   3 +
+ .../dts/freescale/imx8qxp-colibri-aster.dts   |  16 +
+ .../dts/freescale/imx8qxp-colibri-eval-v3.dts |   6 +-
+ .../freescale/imx8qxp-colibri-eval-v3.dtsi    |  62 --
+ .../dts/freescale/imx8qxp-colibri-iris-v2.dts |  16 +
+ .../dts/freescale/imx8qxp-colibri-iris.dts    |  16 +
+ .../boot/dts/freescale/imx8qxp-colibri.dtsi   | 592 +------------
+ .../dts/freescale/imx8x-colibri-aster.dtsi    |  44 +
+ .../dts/freescale/imx8x-colibri-eval-v3.dtsi  |  91 ++
+ .../dts/freescale/imx8x-colibri-iris-v2.dtsi  |  45 +
+ .../dts/freescale/imx8x-colibri-iris.dtsi     | 115 +++
+ .../boot/dts/freescale/imx8x-colibri.dtsi     | 776 ++++++++++++++++++
+ 13 files changed, 1132 insertions(+), 655 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qxp-colibri-aster.dts
+ delete mode 100644 arch/arm64/boot/dts/freescale/imx8qxp-colibri-eval-v3.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qxp-colibri-iris-v2.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qxp-colibri-iris.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8x-colibri-aster.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8x-colibri-eval-v3.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8x-colibri-iris-v2.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8x-colibri-iris.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.39.2
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
