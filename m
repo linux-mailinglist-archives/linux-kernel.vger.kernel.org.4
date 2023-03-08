@@ -2,133 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E09B6B0207
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CA96B020E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjCHIuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
+        id S230172AbjCHIux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:50:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjCHIt6 (ORCPT
+        with ESMTP id S230237AbjCHIup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:49:58 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F339CFF8
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:49:56 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id k10so38751093edk.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:49:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678265395;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wVVtVtZgRNBBIQVdh518Hd5cjsnCYjRPbk6bHT1f5tE=;
-        b=CVV1/oJBGmp/+zLg1dEyKjzLFSesM3iV5M8okw1unWvTZPJOPfmdhbbJFcYNBukwsG
-         ZqdN1aoQE9Ot6KV7mBS1LuubNgzwXr1BV/9MtkgOm+Q0k4kbIREoCHwN0/QP8iRwYwkD
-         EaqQFKx3wRAzKLyAP2btK7ThdEHxV1MSO8qayQVzUV9PFP6EhP17L+XQVWLIQPrVrEOW
-         5EGjP5Vp2TcSO+3diEPIL2GNFakmCmwgfWYw3wSgfuf9xZppb0s/eILWzzQ1kuku/7dj
-         99odahCZnwnTVt2pYxoJonwBjSPNIMgf9lyVBJT8zQiJcN8DlfzZaFsIRlAyAeubtIm4
-         G94A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678265395;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wVVtVtZgRNBBIQVdh518Hd5cjsnCYjRPbk6bHT1f5tE=;
-        b=zxr1jp3ZfV49x9E49XJIJRvnq8oawRYPaedexy60+IIaZLTZOf5Wh+wFyzrIxjIYeY
-         FPtcwQM1OP0C6J5AhLhDtSSyQ435hEMupB4W0uZb2nY4yPwMtknVP9ZiBps0eI3RXJ26
-         +51fXPOaTFS1VGDR2/AvFLtw6EQGPju3Ug5DwpCMsOC2vnffNSAKjfU68MB+EBhCwNZH
-         mBwtyDmGnUV9WmaJiMc/EFMMUWOmwC8EhxC0fx98/ZQ7wSggO/ThO3C5an+hz1mqw7kE
-         rSC6esnZHI3NdHKlSoLlAOKSyF7/FYGw4ZNk/DGHiN7eUDQKTAgcRJjyCdT3Ysqjski1
-         lJ6g==
-X-Gm-Message-State: AO0yUKVqVKEZYBi2ZWJXiLTgWg61YUof8dl4IKNzWRZ++r4TWAEidM8f
-        GQSj72E/ggk66NNLzSSjdFp/kA==
-X-Google-Smtp-Source: AK7set/36krXeuSeDnySLKEZyx6orba1aKs7BuVbr+Qp+QTRSVU8CzdechgO6Gul0nSA4S2Uw4FXUg==
-X-Received: by 2002:a17:907:787:b0:8b1:7de3:cfb0 with SMTP id xd7-20020a170907078700b008b17de3cfb0mr22025175ejb.2.1678265395145;
-        Wed, 08 Mar 2023 00:49:55 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:bba:fbfa:8aec:a133? ([2a02:810d:15c0:828:bba:fbfa:8aec:a133])
-        by smtp.gmail.com with ESMTPSA id op20-20020a170906bcf400b008ca52f7fbcbsm7144792ejb.1.2023.03.08.00.49.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 00:49:54 -0800 (PST)
-Message-ID: <df35ed19-74d3-5eea-8efb-588417a417f2@linaro.org>
-Date:   Wed, 8 Mar 2023 09:49:53 +0100
+        Wed, 8 Mar 2023 03:50:45 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3C3B0B90;
+        Wed,  8 Mar 2023 00:50:32 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3285ZZbf020714;
+        Wed, 8 Mar 2023 08:50:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=+QZf7jsqZCz/mjUR8sKf9eOaujlmzzUJO/yJGxi9XBY=;
+ b=ojN6dUALKEyWJx+ed10wpYxRNad8rpfxY21M0xIjaoAxMaQm7KpHeDHBnCABrBxdfHs0
+ S0MtyqcmDnOw2SBdst+MLXIqh9BTj+uNJWydsJ9lZiS219q092FQtYMuUKvGg05oKLI2
+ scWt09XLInYdfwc8AWcg8C718BA3JRUiuTwx6l6dX3B8MRq1HZPZm4KEcLS61ThemiTp
+ v7wKNAKMD4CJ/ywxUHNJ7Otd+nGEqwDSDqN3nB5T3TKXut+i4xnT0bPP20zDdwEVN8ap
+ iyf5FgDleQemxiFxdVmwVuYYXIKSvmmBC8WNJLYba97OgG7vaajEfxEiNsBMAObPiGgQ tw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p6fets179-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Mar 2023 08:50:17 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3288oGdY014924
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 8 Mar 2023 08:50:16 GMT
+Received: from [10.216.47.125] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 8 Mar 2023
+ 00:50:07 -0800
+Message-ID: <dd48782f-e5ff-2bbe-93d0-cfdd491d5292@quicinc.com>
+Date:   Wed, 8 Mar 2023 14:19:58 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1] max77663-rtc: pass rtc address from device tree node
- if exists
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/7] dt-bindings: PCI: qcom: Add IPQ9574 specific
+ compatible
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Manivannan Sadhasivam <mani@kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <lpieralisi@kernel.org>, <kw@linux.com>, <robh@kernel.org>,
+        <bhelgaas@google.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <vkoul@kernel.org>, <kishon@kernel.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>
+References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
+ <20230214164135.17039-2-quic_devipriy@quicinc.com>
+ <20230224082332.GA5443@thinkpad>
+ <bd153038-4427-1f11-1941-5f13fec01cf7@quicinc.com>
+ <20230228063358.GA4839@thinkpad>
+ <9BD62D8E-4E14-4269-B72D-C83EF4D43040@linaro.org>
+ <20230303174036.GB6782@thinkpad>
+ <30cf9717-dcca-e984-c506-c71b7f8e32cd@quicinc.com>
+ <20230307125655.GC5599@thinkpad>
+ <2afe8c7e-7e54-460f-7206-64a290beccfb@quicinc.com>
+ <CAA8EJpo-_PXhBnKWD-TWEqY8+uAEjbRsrhJ7XO1PTcYV-MHV9Q@mail.gmail.com>
 Content-Language: en-US
-To:     Svyatoslav Ryhel <clamor95@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20230308083759.11692-1-clamor95@gmail.com>
- <202303080844360ced8b82@mail.local>
- <CAPVz0n2XErDOCERV+XO3ek4_15hiwTasy4agLZLijqx2z67UnA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAPVz0n2XErDOCERV+XO3ek4_15hiwTasy4agLZLijqx2z67UnA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <CAA8EJpo-_PXhBnKWD-TWEqY8+uAEjbRsrhJ7XO1PTcYV-MHV9Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 3FS99f6BK8LW-UQxleOQcX1kBEicXoD_
+X-Proofpoint-ORIG-GUID: 3FS99f6BK8LW-UQxleOQcX1kBEicXoD_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-08_04,2023-03-08_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ impostorscore=0 phishscore=0 malwarescore=0 mlxscore=0 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 suspectscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303080076
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 09:46, Svyatoslav Ryhel wrote:
-> ср, 8 бер. 2023 р. о 10:44 Alexandre Belloni
-> <alexandre.belloni@bootlin.com> пише:
+
+
+On 3/7/2023 8:26 PM, Dmitry Baryshkov wrote:
+> On Tue, 7 Mar 2023 at 16:40, Devi Priya <quic_devipriy@quicinc.com> wrote:
 >>
->> Hello,
 >>
->> the subject is not correct, please use the subsystem style
 >>
->> On 08/03/2023 10:37:59+0200, Svyatoslav Ryhel wrote:
->>> MAX77663 PMIC can have RTC on both 0x63 i2c address (like grouper)
->>> which is main address but on some devices RTC is located on 0x48
->>> i2c address (like p880 and p895 from LG). Lets add property to be
->>> able to use alternative address if needed without breaking existing
->>> bindings.
+>> On 3/7/2023 6:26 PM, Manivannan Sadhasivam wrote:
+>>> On Tue, Mar 07, 2023 at 03:15:08PM +0530, Devi Priya wrote:
+>>>>
+>>>>
+>>>> On 3/3/2023 11:10 PM, Manivannan Sadhasivam wrote:
+>>>>> On Fri, Mar 03, 2023 at 05:16:58PM +0200, Dmitry Baryshkov wrote:
+>>>>>> 28 февраля 2023 г. 08:33:58 GMT+02:00, Manivannan Sadhasivam <mani@kernel.org> пишет:
+>>>>>>> On Tue, Feb 28, 2023 at 10:56:53AM +0530, Devi Priya wrote:
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> On 2/24/2023 1:53 PM, Manivannan Sadhasivam wrote:
+>>>>>>>>> On Tue, Feb 14, 2023 at 10:11:29PM +0530, Devi Priya wrote:
+>>>>>>>>>> Document the compatible for IPQ9574
+>>>>>>>>>>
+>>>>>>>> Hi Mani, Thanks for taking time to review the patch.
+>>>>>>>>>
+>>>>>>>>> You didn't mention about the "msi-parent" property that is being added
+>>>>>>>>> by this patch
+>>>>>>>> Sure, will update the commit message in the next spin
+>>>>>>>>>
+>>>>>>>>>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+>>>>>>>>>> ---
+>>>>>>>>>>      .../devicetree/bindings/pci/qcom,pcie.yaml    | 72 ++++++++++++++++++-
+>>>>>>>>>>      1 file changed, 70 insertions(+), 2 deletions(-)
+>>>>>>>>>>
+>>>>>>>>>> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+>>>>>>>>>> index 872817d6d2bd..dabdf2684e2d 100644
+>>>>>>>>>> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+>>>>>>>>>> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+>>>>>>>>>> @@ -26,6 +26,7 @@ properties:
+>>>>>>>>>>                - qcom,pcie-ipq8064-v2
+>>>>>>>>>>                - qcom,pcie-ipq8074
+>>>>>>>>>>                - qcom,pcie-ipq8074-gen3
+>>>>>>>>>> +          - qcom,pcie-ipq9574
+>>>>>>>>>>                - qcom,pcie-msm8996
+>>>>>>>>>>                - qcom,pcie-qcs404
+>>>>>>>>>>                - qcom,pcie-sa8540p
+>>>>>>>>>> @@ -44,11 +45,11 @@ properties:
+>>>>>>>>>>        reg:
+>>>>>>>>>>          minItems: 4
+>>>>>>>>>> -    maxItems: 5
+>>>>>>>>>> +    maxItems: 6
+>>>>>>>>>>        reg-names:
+>>>>>>>>>>          minItems: 4
+>>>>>>>>>> -    maxItems: 5
+>>>>>>>>>> +    maxItems: 6
+>>>>>>>>>>        interrupts:
+>>>>>>>>>>          minItems: 1
+>>>>>>>>>> @@ -105,6 +106,8 @@ properties:
+>>>>>>>>>>          items:
+>>>>>>>>>>            - const: pciephy
+>>>>>>>>>> +  msi-parent: true
+>>>>>>>>>> +
+>>>>>>>>>>        power-domains:
+>>>>>>>>>>          maxItems: 1
+>>>>>>>>>> @@ -173,6 +176,27 @@ allOf:
+>>>>>>>>>>                  - const: parf # Qualcomm specific registers
+>>>>>>>>>>                  - const: config # PCIe configuration space
+>>>>>>>>>> +  - if:
+>>>>>>>>>> +      properties:
+>>>>>>>>>> +        compatible:
+>>>>>>>>>> +          contains:
+>>>>>>>>>> +            enum:
+>>>>>>>>>> +              - qcom,pcie-ipq9574
+>>>>>>>>>> +    then:
+>>>>>>>>>> +      properties:
+>>>>>>>>>> +        reg:
+>>>>>>>>>> +          minItems: 5
+>>>>>>>>>> +          maxItems: 6
+>>>>>>>>>> +        reg-names:
+>>>>>>>>>> +          minItems: 5
+>>>>>>>>>> +          items:
+>>>>>>>>>> +            - const: dbi # DesignWare PCIe registers
+>>>>>>>>>> +            - const: elbi # External local bus interface registers
+>>>>>>>>>> +            - const: atu # ATU address space
+>>>>>>>>>> +            - const: parf # Qualcomm specific registers
+>>>>>>>>>> +            - const: config # PCIe configuration space
+>>>>>>>>>> +            - const: aggr_noc #PCIe aggr_noc
+>>>>>>>>>
+>>>>>>>>> Why do you need this region unlike other SoCs? Is the driver making use of it?
+>>>>>>>> We have the aggr_noc region in ipq9574 to achieve higher throughput & to
+>>>>>>>> handle multiple PCIe instances. The driver uses it to rate adapt 1-lane PCIe
+>>>>>>>> clocks. My bad, missed it. Will add the driver changes in V2.
+>>>>>>>
+>>>>>>> Hmm, this is something new. How can you achieve higher throughput with this
+>>>>>>> region? Can you explain more on how it is used?
+>>>>>>
+>>>>>> Based on the name of the region, it looks like it is an interconnect region.
+>>>>>>
+>>>>>
+>>>>> Well, we only have BCM based interconnects so far. That's why I was curious
+>>>>> about this region and its purpose.
+>>>> For connected PCIe slave devices that are running at frequency lesser
+>>>> than the ANOC frequency (342MHz), the rate adapter of ANOC needs to be
+>>>> configured
+>>>>>
+>>>>>> Devi, if this is the case, then you have to handle it through the interconnect driver, rather than poking directly into these registers.
+>>>>>
+>>>>> If that so, it doesn't need to be added in this series itself. I believe that
+>>>>> without aggr_noc region, the PCIe controller can still function properly with
+>>>>> reduced performance. But you can add the interconnect support later as a
+>>>>> separate series.
+>>>> Sure, okay. The ANOC runs at a fixed frequency of 342MHz and the
+>>>> interconnect clocks are not scaled. The aggr_noc register is just a magic
+>>>> register for configuring it's rate adapter to ensure no wait cycles are
+>>>> inserted.
+>>>>
 >>>
->>> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
->>> ---
->>>  drivers/rtc/rtc-max77686.c | 8 +++++++-
->>>  1 file changed, 7 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
->>> index b0250d91fb00..218177375531 100644
->>> --- a/drivers/rtc/rtc-max77686.c
->>> +++ b/drivers/rtc/rtc-max77686.c
->>> @@ -691,6 +691,7 @@ static int max77686_init_rtc_regmap(struct max77686_rtc_info *info)
->>>  {
->>>       struct device *parent = info->dev->parent;
->>>       struct i2c_client *parent_i2c = to_i2c_client(parent);
->>> +     int rtc_i2c_addr;
->>>       int ret;
->>>
->>>       if (info->drv_data->rtc_irq_from_platform) {
->>> @@ -714,8 +715,13 @@ static int max77686_init_rtc_regmap(struct max77686_rtc_info *info)
->>>               goto add_rtc_irq;
->>>       }
->>>
->>> +     ret = device_property_read_u32(parent, "maxim,rtc-i2c-address",
->>> +                                    &rtc_i2c_addr);
->>
->> This property needs to be documented
->>
+>>> If the purpose of the aggr_noc region is to configure the interconnect clock,
+>>> then it should be modeled as an interconnect driver.
+>> Can we use 'syscon' here, as we are not scaling the interconnect
+>> frequency and this is just a single register write for setting
+>> the rate adapter?
 > 
-> max776xx pmic has no yaml to document
+> It should be done outside of the PCIe driver.
+> It is not "just a single register". It is also setting the anoc/snoc
+> clocks for USB. And maybe something else, which we haven't seen at
+> this moment. You are still setting up the NoC, even if the icc
+> frequency is not scaled.
+> 
+Sure Dmitry, Got it
 
-Of course it has, otherwise on what did I work?
-
-git grep max77686
-
-
-Best regards,
-Krzysztof
-
+Regards,
+Devi Priya
