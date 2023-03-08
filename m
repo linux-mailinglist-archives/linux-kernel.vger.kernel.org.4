@@ -2,111 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418E36B0169
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FDE6B0178
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjCHIaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
+        id S230377AbjCHIbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:31:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbjCHI3x (ORCPT
+        with ESMTP id S229508AbjCHIap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:29:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CE8B32B8;
-        Wed,  8 Mar 2023 00:29:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A3DDB81BFC;
-        Wed,  8 Mar 2023 08:28:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C758C433D2;
-        Wed,  8 Mar 2023 08:28:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678264085;
-        bh=hHAJ1zXtYZn9AD+oMdKn2rsolKX4a1QC16QjAldjP9E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=C1RZzVymTrF2+zLGhfB2byPuJKAsUHR907RRBJtq8WwaTJPipeLBF7jGzqsNwSjsg
-         W3HpF0PHJMF7AfXyNe+YwUbrU3GGm4F7XLS+WgANAFtSoj5iMq/xetFEsK0Ea/e62h
-         r5MsxpfJsirJUzTVbA9gGDmlosiNn0jvX7BNHpSstrH4FmcSAGMNMS8lTxoPt8fkyG
-         JBhbSKxulvpPbqJbslLZOdEZ6mR2kkfrs3Y5Azkp2eYe1A6YK/3SJe11z34hmBDgc6
-         6t1o6vUe2Z78IFW4Akna6FEdnXOVmY6mm3NdruQKjvVZNf5KDY0t1AbFkPbO1eM1cF
-         DkGakNZWXxJCQ==
-Message-ID: <7076208d-7dca-6980-5399-498e55648740@kernel.org>
-Date:   Wed, 8 Mar 2023 10:27:58 +0200
+        Wed, 8 Mar 2023 03:30:45 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33E1B3713;
+        Wed,  8 Mar 2023 00:30:17 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 01B1024E33E;
+        Wed,  8 Mar 2023 16:28:04 +0800 (CST)
+Received: from EXMBX071.cuchost.com (172.16.6.81) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Mar
+ 2023 16:28:04 +0800
+Received: from ubuntu.localdomain (183.27.97.46) by EXMBX071.cuchost.com
+ (172.16.6.81) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Mar
+ 2023 16:28:02 +0800
+From:   Minda Chen <minda.chen@starfivetech.com>
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Minda Chen <minda.chen@starfivetech.com>
+Subject: [PATCH v2 1/3] dt-bindings: phy: Add StarFive JH7110 USB dt-binding
+Date:   Wed, 8 Mar 2023 16:27:58 +0800
+Message-ID: <20230308082800.3008-2-minda.chen@starfivetech.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230308082800.3008-1-minda.chen@starfivetech.com>
+References: <20230308082800.3008-1-minda.chen@starfivetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 3/6] soc: ti: pruss: Add pruss_cfg_read()/update() API
-Content-Language: en-US
-To:     MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <t-kristo@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-Cc:     linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20230306110934.2736465-1-danishanwar@ti.com>
- <20230306110934.2736465-4-danishanwar@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230306110934.2736465-4-danishanwar@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [183.27.97.46]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX071.cuchost.com
+ (172.16.6.81)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Add StarFive JH7110 SoC USB 3.0 phy dt-binding.
+USB controller is cadence USB 3.0 IP.
 
-On 06/03/2023 13:09, MD Danish Anwar wrote:
-> From: Suman Anna <s-anna@ti.com>
-> 
-> Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
-> the PRUSS platform driver to allow other drivers to read and program
-> respectively a register within the PRUSS CFG sub-module represented
-> by a syscon driver. This interface provides a simple way for client
+Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+---
+ .../bindings/phy/starfive,jh7110-usb-phy.yaml | 158 ++++++++++++++++++
+ 1 file changed, 158 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
 
-Do you really need these 2 functions to be public?
-I see that later patches (4-6) add APIs for doing specific things
-and that should be sufficient than exposing entire CFG space via
-pruss_cfg_read/update().
+diff --git a/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
+new file mode 100644
+index 000000000000..daa88d065deb
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
+@@ -0,0 +1,158 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/starfive,jh7110-usb-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: StarFive USB 2.0 and 3.0 PHY
++
++maintainers:
++  - Minda Chen<minda.chen@starfivetech.com>
++
++properties:
++  compatible:
++    items:
++      - const: starfive,jh7110-usb
++
++  reg:
++    maxItems: 2
++
++  reg-names:
++    items:
++      - const: usb3
++      - const: usb2
++
++  clocks:
++    items:
++      - description: usb 125m clock
++      - description: app 125m clock
++      - description: lpm clock
++      - description: stb clock
++      - description: apb clock
++      - description: axi clock
++      - description: utmi apb clock
++
++  clock-names:
++    items:
++      - const: usb_125m
++      - const: usb0_app_125
++      - const: usb0_lpm
++      - const: usb0_stb
++      - const: usb0_apb
++      - const: usb0_axi
++      - const: usb0_utmi_apb
++
++  resets:
++    items:
++      - description: USB0_PWRUP reset
++      - description: USB0_APB reset
++      - description: USB0_AXI reset
++      - description: USB0_UTMI_APB reset
++
++  starfive,sys-syscon:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      items:
++        - description: phandle to System Register Controller sys_syscon node.
++        - description: offset of SYS_SYSCONSAIF__SYSCFG register for USB.
++    description:
++      The phandle to System Register Controller syscon node and the offset
++      of SYS_SYSCONSAIF__SYSCFG register for USB.
++
++  starfive,stg-syscon:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      items:
++        - description: phandle to System Register Controller stg_syscon node.
++        - description: register0 offset of STG_SYSCONSAIF__SYSCFG register for USB.
++        - description: register1 offset of STG_SYSCONSAIF__SYSCFG register for USB.
++        - description: register2 offset of STG_SYSCONSAIF__SYSCFG register for USB.
++        - description: register3 offset of STG_SYSCONSAIF__SYSCFG register for USB.
++    description:
++      The phandle to System Register Controller syscon node and the offset
++      of STG_SYSCONSAIF__SYSCFG register for USB. Total 4 regsisters offset
++      for USB.
++
++  dr_mode:
++    description: PHY mode.
++    enum:
++      - host
++      - peripheral
++      - otg
++
++  "#address-cells":
++    maximum: 2
++
++  "#size-cells":
++    maximum: 2
++
++  ranges: true
++
++  starfive,usb2-only:
++    type: boolean
++    description: Set USB using usb 2.0 phy. Supprt USB 2.0 only
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - clock-names
++  - resets
++  - starfive,sys-syscon
++  - starfive,stg-syscon
++  - dr_mode
++  - "#address-cells"
++  - "#size-cells"
++  - ranges
++
++patternProperties:
++  "^usb@[0-9a-f]+$":
++    type: object
++    description: |
++      usbphy node should have '1' usb controller subnode.
++      It could be Cadence USB3 DRD controller.
++      Cadence USB3 should follow the bindings specified in
++      Documentation/devicetree/bindings/usb/cdns,usb3.yaml
++
++additionalProperties: false
++
++examples:
++  - |
++    usbphy@10200000 {
++      compatible = "starfive,jh7110-usb";
++      reg = <0x10210000 0x1000>,
++            <0x10200000 0x1000>;
++      reg-names = "usb3", "usb2";
++      clocks = <&syscrg 95>,
++               <&stgcrg 6>,
++               <&stgcrg 4>,
++               <&stgcrg 5>,
++               <&stgcrg 1>,
++               <&stgcrg 3>,
++               <&stgcrg 2>;
++      clock-names = "usb_125m", "usb0_app_125", "usb0_lpm",
++                    "usb0_stb", "usb0_apb", "usb0_axi", "usb0_utmi_apb";
++      resets = <&stgcrg 10>,
++               <&stgcrg 8>,
++               <&stgcrg 7>,
++               <&stgcrg 9>;
++      starfive,stg-syscon = <&stg_syscon 0x4 0xc4 0x148 0x1f4>;
++      starfive,sys-syscon = <&sys_syscon 0x18>;
++      dr_mode = "host";
++      #address-cells = <1>;
++      #size-cells = <1>;
++      ranges;
++
++      usb@10100000 {
++        compatible = "cdns,usb3";
++        reg = <0x10100000 0x10000>,
++              <0x10110000 0x10000>,
++              <0x10120000 0x10000>;
++        reg-names = "otg", "xhci", "dev";
++        interrupts = <100>, <108>, <110>;
++        interrupt-names = "host", "peripheral", "otg";
++        phy-names = "cdns3,usb3-phy", "cnds3,usb2-phy";
++        maximum-speed = "super-speed";
++      };
++    };
+-- 
+2.17.1
 
-
-> drivers without having them to include and parse the CFG syscon node
-> within their respective device nodes. Various useful registers and
-> macros for certain register bit-fields and their values have also
-> been added.
-> 
-> It is the responsibility of the client drivers to reconfigure or
-> reset a particular register upon any failures.
-> 
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-> ---
->  drivers/soc/ti/pruss.c           |  41 +++++++++++++
->  include/linux/remoteproc/pruss.h | 102 +++++++++++++++++++++++++++++++
->  2 files changed, 143 insertions(+)
-> 
-> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
-> index c8053c0d735f..537a3910ffd8 100644
-> --- a/drivers/soc/ti/pruss.c
-> +++ b/drivers/soc/ti/pruss.c
-> @@ -164,6 +164,47 @@ int pruss_release_mem_region(struct pruss *pruss,
->  }
->  EXPORT_SYMBOL_GPL(pruss_release_mem_region);
-
-cheers,
--roger
