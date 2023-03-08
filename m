@@ -2,80 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F32F6AFB5F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 196F76AFB61
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:39:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbjCHAiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 19:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
+        id S229952AbjCHAjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 19:39:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjCHAiU (ORCPT
+        with ESMTP id S230037AbjCHAjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 19:38:20 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B024AFDD;
-        Tue,  7 Mar 2023 16:38:02 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id p20so16057962plw.13;
-        Tue, 07 Mar 2023 16:38:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678235855;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SR/547FI3dqnvDn6OGe6fd1eQrMxuzZlhfxHSEijotM=;
-        b=jSHi7HiOYmICS2einqkRKlS3BB6yDS8GWRRqvlKgJ83cDSAEFpchQlYT65HgZatLld
-         xo5dCXUzEAaOlz8q+Z99Ky/55G4zU8SwJ6y2a1z+AusQZz2c23pDbbTsEuxo7dyonXQw
-         6Y8Zk/7/WCynhK9sC+VZSDKTd8Nz+ruO6cred+KXkgv1VnoPvOLySw/kuSASgnos9UeZ
-         jkJiGxUO8KDwyPEb3RiTFEBWDKnAWlAF1BbJqWcnc9T+iRIMTHRhOChF5oW9g2qV6ydD
-         iKCLgt7VbgdmV1OwOOdr6lCYOUqLb5yO0Gj7NtOjm90Q5pLXDjnDyArhXihmY2AF4QFM
-         DOlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678235855;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SR/547FI3dqnvDn6OGe6fd1eQrMxuzZlhfxHSEijotM=;
-        b=vTxsRwVoAJ13AVIKf2rKSV9DVelO9qGZq7V/nGppZixvBnjjddgiXuL8YLnjdia397
-         T8KvL3V96fbGG1R8hurp/GoZVRZ/YInsdn/cDY19r1eUe5WiW6dICDrIwTMS2PFeJtf8
-         qDANKhP8fFhmBWQdUgo920haqv85wgLKxE9LzxPfRhELRsLyhkBRCz+A6D7hJoL3Wt8i
-         D74OINixA2nA95rBijUv5E38/33RgBzhMML/MZMXpvA93C+f9tdYWJy4dLpdlMIBRRz8
-         so+veP1Xi9i/fd6cF7CusW4LoO1DtRFyafbvMXu/6/WMwtixpBU/teWWPmdKRp5UvCOr
-         H4cg==
-X-Gm-Message-State: AO0yUKVzZdBmas0fggkHumBidYMZh/2u+BlLrir2l3d+WslHK05P0sKq
-        F4fBYMs5qPzn1D52wbd2jmA=
-X-Google-Smtp-Source: AK7set/se6v/Sndm89S1Z/vrVsycl4pwMfQjcUCTQghs6L4+WuIXgEpNbcCUDIjHdCHeCV/t/+JKLQ==
-X-Received: by 2002:a17:90a:1946:b0:233:c9e7:c885 with SMTP id 6-20020a17090a194600b00233c9e7c885mr16960269pjh.36.1678235855549;
-        Tue, 07 Mar 2023 16:37:35 -0800 (PST)
-Received: from Gentoo (n220246252084.netvigator.com. [220.246.252.84])
-        by smtp.gmail.com with ESMTPSA id y20-20020a17090aca9400b0023317104415sm9767834pjt.17.2023.03.07.16.37.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 16:37:35 -0800 (PST)
-Date:   Wed, 8 Mar 2023 08:37:27 +0800
-From:   Jianhua Lu <lujianhua000@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] drm/panel: Add driver for Novatek NT36523
-Message-ID: <ZAfYx9Im0j5LMuMn@Gentoo>
-References: <20230220121258.10727-1-lujianhua000@gmail.com>
- <20230220121258.10727-2-lujianhua000@gmail.com>
- <CACRpkdbZCZiMM_qeqMd9=txVvPVHEzM4szOnPR-gCYdiXW_9eA@mail.gmail.com>
+        Tue, 7 Mar 2023 19:39:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BFE9CBE1
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 16:38:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678235869;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+naXqPK+BNnrnoMbMYJmt5mQqn+jrV3xlv29zF2BaDc=;
+        b=c548sGUnYVuSG/ZegRhJp5Rw3fxMzSu1rzGzENZwR5cqZGGEN3T3FpCJ+l99vDMvbvn+8w
+        JEYtQB5E7gzi7wkkfdI6LfzjHEKzkwPeBVeIDChQDPWnlaySaM4xI33xDAkUFTvxq81ynv
+        VH7IB09du1+ymY7eIW8+oYH645Tdg/Y=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-638-IHxFFcYPNxiGgwSh0CszzQ-1; Tue, 07 Mar 2023 19:37:46 -0500
+X-MC-Unique: IHxFFcYPNxiGgwSh0CszzQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8B45E2A5954D;
+        Wed,  8 Mar 2023 00:37:45 +0000 (UTC)
+Received: from localhost (ovpn-12-137.pek2.redhat.com [10.72.12.137])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 818D3492C14;
+        Wed,  8 Mar 2023 00:37:44 +0000 (UTC)
+Date:   Wed, 8 Mar 2023 08:37:40 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 0/2] kexec: Remove unnecessary arch hook
+Message-ID: <ZAfY1OxDBzX7cnw4@MiWiFi-R3L-srv>
+References: <20230307224416.907040-1-helgaas@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdbZCZiMM_qeqMd9=txVvPVHEzM4szOnPR-gCYdiXW_9eA@mail.gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20230307224416.907040-1-helgaas@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,73 +66,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 11:34:55PM +0100, Linus Walleij wrote:
-> Hi Jianhua,
+On 03/07/23 at 04:44pm, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> thanks for your patch!
+> There are no arch-specific things in arch_kexec_kernel_image_load(), so
+> remove it and just use the generic version.
 > 
-> It appears Konrad is working on a very similar driver, so I suggest merging
-> them into one Novatek NT36523 driver.
+> v1 is at:
+> https://lore.kernel.org/all/20221215182339.129803-1-helgaas@kernel.org/
 > 
-> Possibly we can fix this up first and then add Konrads Lenovo-panel with
-> a patch on top.
+> This v2 is trivially rebased to v6.3-rc1 and the commit log expanded
+> slightly.
+
+Acked-by: Baoquan He <bhe@redhat.com>
+
 > 
-> On Mon, Feb 20, 2023 at 1:13 PM Jianhua Lu <lujianhua000@gmail.com> wrote:
 > 
-> > Add a driver for panels using the Novatek NT36523 display driver IC.
-> >
-> > Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+> Bjorn Helgaas (2):
+>   x86/kexec: Remove unnecessary arch_kexec_kernel_image_load()
+>   kexec: Remove unnecessary arch_kexec_kernel_image_load()
 > 
-> (...)
+>  arch/x86/include/asm/kexec.h       |  3 ---
+>  arch/x86/kernel/machine_kexec_64.c | 11 -----------
+>  include/linux/kexec.h              |  8 --------
+>  kernel/kexec_file.c                |  6 +++---
+>  4 files changed, 3 insertions(+), 25 deletions(-)
 > 
-> I like how you abstract the panel with init commands in the panel info.
+> -- 
+> 2.25.1
 > 
-> > +enum dsi_cmd_type {
-> > +       INIT_DCS_CMD,
-> > +       DELAY_CMD,
-> > +};
-> > +
-> > +struct panel_init_cmd {
-> > +       enum dsi_cmd_type type;
-> > +       size_t len;
-> > +       const char *data;
-> > +};
-> > +
-> > +#define _INIT_DCS_CMD(...) { \
-> > +       .type = INIT_DCS_CMD, \
-> > +       .len = sizeof((char[]){__VA_ARGS__}), \
-> > +       .data = (char[]){__VA_ARGS__} }
-> > +
-> > +#define _INIT_DELAY_CMD(...) { \
-> > +       .type = DELAY_CMD,\
-> > +       .len = sizeof((char[]){__VA_ARGS__}), \
-> > +       .data = (char[]){__VA_ARGS__} }
-> 
-> I have seen this type of reinvented wheels a few times now. Don't do this.
-> 
-> Look into other recently merged drivers and look how they do it, for example
-> drivers/gpu/drm/panel/panel-himax-hx8394.c
-> 
-> For example:
-> 
-> - Use mipi_dsi_dcs_write_seq()
-> 
-> - If the delay is just used at one point in the sequence, do not invent
->   a command language like above for it, open code the delay instead
-> 
-> - Try to decode as much magic as possible, if you look in Konrads
->   driver you clearly see some standard MIPI commands, I bet you have
->   some too.
-> 
-> - Maybe use callbacks to send sequences instead of tables, like in
->   the himax driver?
-I use init cmd tables in order to send init sequences to dsi0 and dsi1 at the
-same time (sync dual dsi mode). I don't found a convenient way to use
-mipi_dsi_dcs_write_seq() for sync dual dsi mode.
-> 
-> Other than that it seems like something that could also handle the Lenovo
-> display, or the other way around, I don't know which driver is the best
-> starting point, but this one has the right Novatek name at least.
-> 
-> Yours,
-> Linus Walleij
+
