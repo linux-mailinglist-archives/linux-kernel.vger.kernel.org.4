@@ -2,54 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7936B0A1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE306B0A29
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:57:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbjCHNzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:55:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
+        id S231951AbjCHN45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:56:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbjCHNym (ORCPT
+        with ESMTP id S231789AbjCHN4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:54:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB837C080C;
-        Wed,  8 Mar 2023 05:53:30 -0800 (PST)
+        Wed, 8 Mar 2023 08:56:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A445BC7AF;
+        Wed,  8 Mar 2023 05:55:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 012ECB81CE5;
-        Wed,  8 Mar 2023 13:53:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA0F7C433D2;
-        Wed,  8 Mar 2023 13:53:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7F3461831;
+        Wed,  8 Mar 2023 13:54:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66D6FC433D2;
+        Wed,  8 Mar 2023 13:54:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678283605;
-        bh=MU5EXANTWSsAxrH9VDoE9T6jLGfx/q/yU3e3ldMitrc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=i/3wkZl5nmVgMvW2S8rVgbbpo8g8Q1+JH8S0zsVOqiIdkSeqVqmZyl6udhULFfY+Z
-         1rgW5Irn1evUONLDFWHjHwo6paZYmoQKKLcuyNoIgY/2GJMdayxiFOt8E5AD3r54Tn
-         XoH08ESj8KXSbfZkLiCR2or6d4xeJBBUkbVSqobPVbMMJu1VkPZ9RBsFYTQgs9uHrk
-         gsbs8fzHh5ZGjUouI9uEauvue2hD/3OddFah8EccdSaugXhwaxuTgfE5WBCdbJCU4P
-         n59m/kw75Kx0RRhyoS+KRLeAUs010/hEBwMgwRvIMyEYF/MQlvf4nDfFUiT3z6BDku
-         AHAayjBxY86KQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Paul Elder <paul.elder@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Jai Luthra <j-luthra@ti.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, slongerbeam@gmail.com,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14] media: ov5640: Fix analogue gain control
-Date:   Wed,  8 Mar 2023 08:53:22 -0500
-Message-Id: <20230308135322.2927564-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        s=k20201202; t=1678283679;
+        bh=LgJmuPh62bzIRF56GeEnleYs9mQgD2X4Stitbg8Wl8Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hA61oRG3xKfbMJL3tc3kmoQ4ZglzlLfkN3tTw4z5mKtKKTgHKmczk0xRb3nlkrdnj
+         B5l9xf0FbnvMvntjpaXx2eamIVEHDU2lxg6q3vRtfhDdDDz3azrGNc9nMzC3QgR7Kj
+         dHe7wwTkW2Gd8qCjBheuU5YHSfeQSM+pD8EUiABs4YNNh/2TovcFFJGHSG5rA8Apko
+         XT1KspJrlRIsFiePDrLPwMo+ucOZ6lpEG7MilbQ4oDtFM/0u3rrwsg0t+7mY2eF5nU
+         m7IdR33AbdfCZK5YADp+fqNTLxbiessPjeMcz8dHw3BSD0Znul1VBfvSu1h6F4ckQ+
+         bPPu3QZofv/tg==
+Date:   Wed, 8 Mar 2023 13:54:33 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     ChiYuan Huang <cy_huang@richtek.com>
+Cc:     ChiaEn Wu <chiaen_wu@richtek.com>, corbet@lwn.net, pavel@ucw.cz,
+        matthias.bgg@gmail.com, andriy.shevchenko@linux.intel.com,
+        jacek.anaszewski@gmail.com,
+        angelogioacchino.delregno@collabora.com, linux-doc@vger.kernel.org,
+        peterwu.pub@gmail.com, linux-leds@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        szunichen@gmail.com
+Subject: Re: [PATCH v17 RESEND 2/3] leds: flash: mt6370: Add MediaTek MT6370
+ flashlight support
+Message-ID: <20230308135433.GL9667@google.com>
+References: <cover.1677150607.git.chiaen_wu@richtek.com>
+ <dc467984ebfc443685af62310aadb45389e804d6.1677150607.git.chiaen_wu@richtek.com>
+ <20230305100608.GD2574592@google.com>
+ <20230307034433.GA10739@linuxcarl2.richtek.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230307034433.GA10739@linuxcarl2.richtek.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,91 +64,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Elder <paul.elder@ideasonboard.com>
+On Tue, 07 Mar 2023, ChiYuan Huang wrote:
 
-[ Upstream commit afa4805799c1d332980ad23339fdb07b5e0cf7e0 ]
+> Hi, Lee:
+>    Reply below the comments.
+>
+> On Sun, Mar 05, 2023 at 10:06:08AM +0000, Lee Jones wrote:
+> > On Thu, 23 Feb 2023, ChiaEn Wu wrote:
+> >
+> > > From: ChiYuan Huang <cy_huang@richtek.com>
+> > >
+> > > The MediaTek MT6370 is a highly-integrated smart power management IC,
+> > > which includes a single cell Li-Ion/Li-Polymer switching battery
+> > > charger, a USB Type-C & Power Delivery (PD) controller, dual Flash
+> > > LED current sources, a RGB LED driver, a backlight WLED driver,
+> > > a display bias driver and a general LDO for portable devices.
+> > >
+> > > Add support for the MT6370 Flash LED driver. Flash LED in MT6370
+> > > has 2 channels and support torch/strobe mode.
+> > >
+> > > Acked-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+> > > Co-developed-by: Alice Chen <alice_chen@richtek.com>
+> > > Signed-off-by: Alice Chen <alice_chen@richtek.com>
+> > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> > > ---
+> > > v17
+> > > - Update the year of Copyright from 2022 to 2023
+> > >
+> > > ---
+> > >  drivers/leds/flash/Kconfig             |  13 +
+> > >  drivers/leds/flash/Makefile            |   1 +
+> > >  drivers/leds/flash/leds-mt6370-flash.c | 596 +++++++++++++++++++++++++++++++++
+> > >  3 files changed, 610 insertions(+)
+> > >  create mode 100644 drivers/leds/flash/leds-mt6370-flash.c
 
-Gain control is badly documented in publicly available (including
-leaked) documentation.
+[...]
 
-There is an AGC pre-gain in register 0x3a13, expressed as a 6-bit value
-(plus an enable bit in bit 6). The driver hardcodes it to 0x43, which
-one application note states is equal to x1.047. The documentation also
-states that 0x40 is equel to x1.000. The pre-gain thus seems to be
-expressed as in 1/64 increments, and thus ranges from x1.00 to x1.984.
-What the pre-gain does is however unspecified.
+> > > +static int _mt6370_flash_brightness_set(struct led_classdev_flash *fl_cdev,
+> > > +					u32 brightness)
+> > > +{
+> > > +	struct mt6370_led *led = to_mt6370_led(fl_cdev, flash);
+> > > +	struct mt6370_priv *priv = led->priv;
+> > > +	struct led_flash_setting *setting = &fl_cdev->brightness;
+> > > +	u32 val = (brightness - setting->min) / setting->step;
+> > > +	int ret, i;
+> > > +
+> > > +	if (led->led_no == MT6370_LED_JOINT) {
+> >
+> > What is a "JOINT"?
+> >
+> Since MT6370 has two flash led channels. Per channel can drive the current up to 1.5A.
+> 'JOINT' case is used if 1.5A driving current is not enough, like as flash current 2A.
+> They can use two channels to drive 'one' flash led by the HW application.
+> This will make the driving current larger than the capability of one channel.
 
-There is then an AGC gain limit, in registers 0x3a18 and 0x3a19,
-expressed as a 10-bit "real gain format" value. One application note
-sets it to 0x00f8 and states it is equal to x15.5, so it appears to be
-expressed in 1/16 increments, up to x63.9375.
+Is "joint" the term used in the datasheet?
 
-The manual gain is stored in registers 0x350a and 0x350b, also as a
-10-bit "real gain format" value. It is documented in the application
-note as a Q6.4 values, up to x63.9375.
+Please make this definition clear in the code.
 
-One version of the datasheet indicates that the sensor supports a
-digital gain:
+If I'm asking, others are likely to too.
 
-  The OV5640 supports 1/2/4 digital gain. Normally, the gain is
-  controlled automatically by the automatic gain control (AGC) block.
+[...]
 
-It isn't clear how that would be controlled manually.
+> > > +static int mt6370_init_flash_properties(struct device *dev,
+> > > +					struct mt6370_led *led,
+> > > +					struct fwnode_handle *fwnode)
+> > > +{
+> > > +	struct led_classdev_flash *flash = &led->flash;
+> > > +	struct led_classdev *lcdev = &flash->led_cdev;
+> > > +	struct mt6370_priv *priv = led->priv;
+> > > +	struct led_flash_setting *s;
+> > > +	u32 sources[MT6370_MAX_LEDS];
+> > > +	u32 max_ua, val;
+> > > +	int i, ret, num;
+> > > +
+> > > +	num = fwnode_property_count_u32(fwnode, "led-sources");
+> > > +	if (num < 1)
+> > > +		return dev_err_probe(dev, -EINVAL,
+> > > +				     "Not specified or wrong number of led-sources\n");
+> > > +
+> > > +	ret = fwnode_property_read_u32_array(fwnode, "led-sources", sources, num);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	for (i = 0; i < num; i++) {
+> > > +		if (sources[i] >= MT6370_MAX_LEDS)
+> > > +			return -EINVAL;
+> > > +		if (priv->leds_active & BIT(sources[i]))
+> > > +			return -EINVAL;
+> > > +		priv->leds_active |= BIT(sources[i]);
+> > > +	}
+> > > +
+> > > +	led->led_no = num == 2 ? MT6370_LED_JOINT : sources[0];
+> > > +
+> > > +	max_ua = num == 2 ? MT6370_ITORCH_DOUBLE_MAX_uA : MT6370_ITORCH_MAX_uA;
+> > > +	val = MT6370_ITORCH_MIN_uA;
+> >
+> > In what scenario does this not get overwritten?
+> >
+> Only if the property is missing. This will make the value keep in minimum.
 
-There appears to be no indication regarding whether the gain controlled
-through registers 0x350a and 0x350b is an analogue gain only or also
-includes digital gain. The words "real gain" don't necessarily mean
-"combined analogue and digital gains". Some OmniVision sensors (such as
-the OV8858) are documented as supoprting different formats for the gain
-values, selectable through a register bit, and they are called "real
-gain format" and "sensor gain format". For that sensor, we have (one of)
-the gain registers documented as
+If the property is missing, fwnode_property_read_u32() returns an errno, no?
 
-  0x3503[2]=0, gain[7:0] is real gain format, where low 4 bits are
-  fraction bits, for example, 0x10 is 1x gain, 0x28 is 2.5x gain
+If that's the case, val will be over-written in the if() clause?
 
-  If 0x3503[2]=1, gain[7:0] is sensor gain format, gain[7:4] is coarse
-  gain, 00000: 1x, 00001: 2x, 00011: 4x, 00111: 8x, gain[7] is 1,
-  gain[3:0] is fine gain. For example, 0x10 is 1x gain, 0x30 is 2x gain,
-  0x70 is 4x gain
-
-(The second part of the text makes little sense)
-
-"Real gain" may thus refer to the combination of the coarse and fine
-analogue gains as a single value.
-
-The OV5640 0x350a and 0x350b registers thus appear to control analogue
-gain. The driver incorrectly uses V4L2_CID_GAIN as V4L2 has a specific
-control for analogue gain, V4L2_CID_ANALOGUE_GAIN. Use it.
-
-If registers 0x350a and 0x350b are later found to control digital gain
-as well, the driver could then restrict the range of the analogue gain
-control value to lower than x64 and add a separate digital gain control.
-
-Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Reviewed-by: Jai Luthra <j-luthra@ti.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/i2c/ov5640.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index eb0331b8a5833..b78e35425d14f 100644
---- a/drivers/media/i2c/ov5640.c
-+++ b/drivers/media/i2c/ov5640.c
-@@ -2002,7 +2002,7 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
- 	/* Auto/manual gain */
- 	ctrls->auto_gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_AUTOGAIN,
- 					     0, 1, 1, 1);
--	ctrls->gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_GAIN,
-+	ctrls->gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_ANALOGUE_GAIN,
- 					0, 1023, 1, 0);
- 
- 	ctrls->saturation = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_SATURATION,
--- 
-2.39.2
-
+--
+Lee Jones [李琼斯]
