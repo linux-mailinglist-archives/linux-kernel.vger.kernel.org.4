@@ -2,725 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FABF6B007A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D02C6B0085
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjCHIGy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Mar 2023 03:06:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
+        id S229886AbjCHIHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:07:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjCHIGt (ORCPT
+        with ESMTP id S230019AbjCHIHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:06:49 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CACCABADD
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:06:40 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 19D5424E1F3;
-        Wed,  8 Mar 2023 16:06:39 +0800 (CST)
-Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Mar
- 2023 16:06:39 +0800
-Received: from jsia-virtual-machine.localdomain (202.188.176.82) by
- EXMBX066.cuchost.com (172.16.6.66) with Microsoft SMTP Server (TLS) id
- 15.0.1497.42; Wed, 8 Mar 2023 16:06:36 +0800
-From:   Sia Jee Heng <jeeheng.sia@starfivetech.com>
-To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>
-CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <jeeheng.sia@starfivetech.com>, <leyfoon.tan@starfivetech.com>,
-        <mason.huo@starfivetech.com>
-Subject: [PATCH v5 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-Date:   Wed, 8 Mar 2023 16:06:12 +0800
-Message-ID: <20230308080612.122398-5-jeeheng.sia@starfivetech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230308080612.122398-1-jeeheng.sia@starfivetech.com>
-References: <20230308080612.122398-1-jeeheng.sia@starfivetech.com>
+        Wed, 8 Mar 2023 03:07:39 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7E89DE29;
+        Wed,  8 Mar 2023 00:07:13 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PWl6y2Ntbz9xqcC;
+        Wed,  8 Mar 2023 15:58:18 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAX41kGQghkLu58AQ--.21290S2;
+        Wed, 08 Mar 2023 09:06:42 +0100 (CET)
+Message-ID: <8c7034e74c55e9c4eb6424aa472f5c66b389b34f.camel@huaweicloud.com>
+Subject: Re: [PATCH 23/28] security: Introduce LSM_ORDER_LAST
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>, viro@zeniv.linux.org.uk,
+        chuck.lever@oracle.com, jlayton@kernel.org, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 08 Mar 2023 09:06:28 +0100
+In-Reply-To: <4b158d7e-a96d-58ae-cc34-0ad6abc1cea9@linux.ibm.com>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+         <20230303182602.1088032-1-roberto.sassu@huaweicloud.com>
+         <4b158d7e-a96d-58ae-cc34-0ad6abc1cea9@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [202.188.176.82]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX066.cuchost.com
- (172.16.6.66)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwAX41kGQghkLu58AQ--.21290S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFy8AF15Ar45KrW7ur47twb_yoW8KF1Upa
+        yktFWfGr4FyFy8W3WDX3ZxK3W8t39YkFWUC39rWr1UXa92qrySkr43Cr1S9FyDXF9rCFyI
+        vrWav34akwn0yaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4pQsgAAsW
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Low level Arch functions were created to support hibernation.
-swsusp_arch_suspend() relies code from __cpu_suspend_enter() to write
-cpu state onto the stack, then calling swsusp_save() to save the memory
-image.
+On Tue, 2023-03-07 at 13:04 -0500, Stefan Berger wrote:
+> 
+> On 3/3/23 13:25, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs willing to be
+> > the last, e.g. the 'integrity' LSM, without changing the kernel command
+> > line or configuration.
+> > 
+> > As for LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled and put
+> > at the end of the LSM list in no particular order.
+> > 
+> 
+> I think you should describe the reason for the change for LSM_ORDER_MUTABLE as well.
 
-Arch specific hibernation header is implemented and is utilized by the
-arch_hibernation_header_restore() and arch_hibernation_header_save()
-functions. The arch specific hibernation header consists of satp, hartid,
-and the cpu_resume address. The kernel built version is also need to be
-saved into the hibernation image header to making sure only the same
-kernel is restore when resume.
+Right.
 
-swsusp_arch_resume() creates a temporary page table that covering only
-the linear map. It copies the restore code to a 'safe' page, then start
-to restore the memory image. Once completed, it restores the original
-kernel's page table. It then calls into __hibernate_cpu_resume()
-to restore the CPU context. Finally, it follows the normal hibernation
-path back to the hibernation core.
+Thanks
 
-To enable hibernation/suspend to disk into RISCV, the below config
-need to be enabled:
-- CONFIG_ARCH_HIBERNATION_HEADER
-- CONFIG_ARCH_HIBERNATION_POSSIBLE
+Roberto
 
-Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
-Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-Reviewed-by: Mason Huo <mason.huo@starfivetech.com>
----
- arch/riscv/Kconfig                 |   6 +
- arch/riscv/include/asm/assembler.h |  20 ++
- arch/riscv/include/asm/suspend.h   |  19 ++
- arch/riscv/kernel/Makefile         |   1 +
- arch/riscv/kernel/asm-offsets.c    |   5 +
- arch/riscv/kernel/hibernate-asm.S  |  77 ++++++
- arch/riscv/kernel/hibernate.c      | 424 +++++++++++++++++++++++++++++
- 7 files changed, 552 insertions(+)
- create mode 100644 arch/riscv/kernel/hibernate-asm.S
- create mode 100644 arch/riscv/kernel/hibernate.c
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index c5e42cc37604..473c2a1a6884 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -707,6 +707,12 @@ menu "Power management options"
- 
- source "kernel/power/Kconfig"
- 
-+config ARCH_HIBERNATION_POSSIBLE
-+	def_bool y
-+
-+config ARCH_HIBERNATION_HEADER
-+	def_bool HIBERNATION
-+
- endmenu # "Power management options"
- 
- menu "CPU Power Management"
-diff --git a/arch/riscv/include/asm/assembler.h b/arch/riscv/include/asm/assembler.h
-index ba59d38f8937..44b1457d3e95 100644
---- a/arch/riscv/include/asm/assembler.h
-+++ b/arch/riscv/include/asm/assembler.h
-@@ -59,4 +59,24 @@
- 		REG_L	s11, (SUSPEND_CONTEXT_REGS + PT_S11)(a0)
- 	.endm
- 
-+/*
-+ * copy_page - copy 1 page (4KB) of data from source to destination
-+ * @a0 - destination
-+ * @a1 - source
-+ */
-+	.macro	copy_page a0, a1
-+		lui	a2, 0x1
-+		add	a2, a2, a0
-+1 :
-+		REG_L	t0, 0(a1)
-+		REG_L	t1, SZREG(a1)
-+
-+		REG_S	t0, 0(a0)
-+		REG_S	t1, SZREG(a0)
-+
-+		addi	a0, a0, 2 * SZREG
-+		addi	a1, a1, 2 * SZREG
-+		bne	a2, a0, 1b
-+	.endm
-+
- #endif	/* __ASM_ASSEMBLER_H */
-diff --git a/arch/riscv/include/asm/suspend.h b/arch/riscv/include/asm/suspend.h
-index 67e047445662..02f87867389a 100644
---- a/arch/riscv/include/asm/suspend.h
-+++ b/arch/riscv/include/asm/suspend.h
-@@ -21,6 +21,11 @@ struct suspend_context {
- #endif
- };
- 
-+/*
-+ * Used by hibernation core and cleared during resume sequence
-+ */
-+extern int in_suspend;
-+
- /* Low-level CPU suspend entry function */
- int __cpu_suspend_enter(struct suspend_context *context);
- 
-@@ -36,4 +41,18 @@ int __cpu_resume_enter(unsigned long hartid, unsigned long context);
- /* Used to save and restore the CSRs */
- void suspend_save_csrs(struct suspend_context *context);
- void suspend_restore_csrs(struct suspend_context *context);
-+
-+/* Low-level API to support hibernation */
-+int swsusp_arch_suspend(void);
-+int swsusp_arch_resume(void);
-+int arch_hibernation_header_save(void *addr, unsigned int max_size);
-+int arch_hibernation_header_restore(void *addr);
-+int __hibernate_cpu_resume(void);
-+
-+/* Used to resume on the CPU we hibernated on */
-+int hibernate_resume_nonboot_cpu_disable(void);
-+
-+asmlinkage void hibernate_restore_image(unsigned long resume_satp, unsigned long satp_temp,
-+					unsigned long cpu_resume);
-+asmlinkage int hibernate_core_restore_code(void);
- #endif
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 4cf303a779ab..daab341d55e4 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -64,6 +64,7 @@ obj-$(CONFIG_MODULES)		+= module.o
- obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
- 
- obj-$(CONFIG_CPU_PM)		+= suspend_entry.o suspend.o
-+obj-$(CONFIG_HIBERNATION)	+= hibernate.o hibernate-asm.o
- 
- obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
- obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
-diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-index df9444397908..d6a75aac1d27 100644
---- a/arch/riscv/kernel/asm-offsets.c
-+++ b/arch/riscv/kernel/asm-offsets.c
-@@ -9,6 +9,7 @@
- #include <linux/kbuild.h>
- #include <linux/mm.h>
- #include <linux/sched.h>
-+#include <linux/suspend.h>
- #include <asm/kvm_host.h>
- #include <asm/thread_info.h>
- #include <asm/ptrace.h>
-@@ -116,6 +117,10 @@ void asm_offsets(void)
- 
- 	OFFSET(SUSPEND_CONTEXT_REGS, suspend_context, regs);
- 
-+	OFFSET(HIBERN_PBE_ADDR, pbe, address);
-+	OFFSET(HIBERN_PBE_ORIG, pbe, orig_address);
-+	OFFSET(HIBERN_PBE_NEXT, pbe, next);
-+
- 	OFFSET(KVM_ARCH_GUEST_ZERO, kvm_vcpu_arch, guest_context.zero);
- 	OFFSET(KVM_ARCH_GUEST_RA, kvm_vcpu_arch, guest_context.ra);
- 	OFFSET(KVM_ARCH_GUEST_SP, kvm_vcpu_arch, guest_context.sp);
-diff --git a/arch/riscv/kernel/hibernate-asm.S b/arch/riscv/kernel/hibernate-asm.S
-new file mode 100644
-index 000000000000..effaf5ca5da0
---- /dev/null
-+++ b/arch/riscv/kernel/hibernate-asm.S
-@@ -0,0 +1,77 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Hibernation low level support for RISCV.
-+ *
-+ * Copyright (C) 2023 StarFive Technology Co., Ltd.
-+ *
-+ * Author: Jee Heng Sia <jeeheng.sia@starfivetech.com>
-+ */
-+
-+#include <asm/asm.h>
-+#include <asm/asm-offsets.h>
-+#include <asm/assembler.h>
-+#include <asm/csr.h>
-+
-+#include <linux/linkage.h>
-+
-+/*
-+ * int __hibernate_cpu_resume(void)
-+ * Switch back to the hibernated image's page table prior to restoring the CPU
-+ * context.
-+ *
-+ * Always returns 0
-+ */
-+ENTRY(__hibernate_cpu_resume)
-+	/* switch to hibernated image's page table. */
-+	csrw CSR_SATP, s0
-+	sfence.vma
-+
-+	REG_L	a0, hibernate_cpu_context
-+
-+	suspend_restore_csrs
-+	suspend_restore_regs
-+
-+	/* Return zero value. */
-+	mv	a0, zero
-+
-+	ret
-+END(__hibernate_cpu_resume)
-+
-+/*
-+ * Prepare to restore the image.
-+ * a0: satp of saved page tables.
-+ * a1: satp of temporary page tables.
-+ * a2: cpu_resume.
-+ */
-+ENTRY(hibernate_restore_image)
-+	mv	s0, a0
-+	mv	s1, a1
-+	mv	s2, a2
-+	REG_L	s4, restore_pblist
-+	REG_L	a1, relocated_restore_code
-+
-+	jalr	a1
-+END(hibernate_restore_image)
-+
-+/*
-+ * The below code will be executed from a 'safe' page.
-+ * It first switches to the temporary page table, then starts to copy the pages
-+ * back to the original memory location. Finally, it jumps to __hibernate_cpu_resume()
-+ * to restore the CPU context.
-+ */
-+ENTRY(hibernate_core_restore_code)
-+	/* switch to temp page table. */
-+	csrw satp, s1
-+	sfence.vma
-+.Lcopy:
-+	/* The below code will restore the hibernated image. */
-+	REG_L	a1, HIBERN_PBE_ADDR(s4)
-+	REG_L	a0, HIBERN_PBE_ORIG(s4)
-+
-+	copy_page a0, a1
-+
-+	REG_L	s4, HIBERN_PBE_NEXT(s4)
-+	bnez	s4, .Lcopy
-+
-+	jalr	s2
-+END(hibernate_core_restore_code)
-diff --git a/arch/riscv/kernel/hibernate.c b/arch/riscv/kernel/hibernate.c
-new file mode 100644
-index 000000000000..8fab50122e54
---- /dev/null
-+++ b/arch/riscv/kernel/hibernate.c
-@@ -0,0 +1,424 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Hibernation support for RISCV
-+ *
-+ * Copyright (C) 2023 StarFive Technology Co., Ltd.
-+ *
-+ * Author: Jee Heng Sia <jeeheng.sia@starfivetech.com>
-+ */
-+
-+#include <asm/barrier.h>
-+#include <asm/cacheflush.h>
-+#include <asm/mmu_context.h>
-+#include <asm/page.h>
-+#include <asm/pgalloc.h>
-+#include <asm/pgtable.h>
-+#include <asm/sections.h>
-+#include <asm/set_memory.h>
-+#include <asm/smp.h>
-+#include <asm/suspend.h>
-+
-+#include <linux/cpu.h>
-+#include <linux/memblock.h>
-+#include <linux/pm.h>
-+#include <linux/sched.h>
-+#include <linux/suspend.h>
-+#include <linux/utsname.h>
-+
-+/* The logical cpu number we should resume on, initialised to a non-cpu number. */
-+static int sleep_cpu = -EINVAL;
-+
-+/* Pointer to the temporary resume page table. */
-+static pgd_t *resume_pg_dir;
-+
-+/* CPU context to be saved. */
-+struct suspend_context *hibernate_cpu_context;
-+EXPORT_SYMBOL_GPL(hibernate_cpu_context);
-+
-+unsigned long relocated_restore_code;
-+EXPORT_SYMBOL_GPL(relocated_restore_code);
-+
-+/**
-+ * struct arch_hibernate_hdr_invariants - container to store kernel build version.
-+ * @uts_version: to save the build number and date so that the we do not resume with
-+ *		a different kernel.
-+ */
-+struct arch_hibernate_hdr_invariants {
-+	char		uts_version[__NEW_UTS_LEN + 1];
-+};
-+
-+/**
-+ * struct arch_hibernate_hdr - helper parameters that help us to restore the image.
-+ * @invariants: container to store kernel build version.
-+ * @hartid: to make sure same boot_cpu executes the hibernate/restore code.
-+ * @saved_satp: original page table used by the hibernated image.
-+ * @restore_cpu_addr: the kernel's image address to restore the CPU context.
-+ */
-+static struct arch_hibernate_hdr {
-+	struct arch_hibernate_hdr_invariants invariants;
-+	unsigned long	hartid;
-+	unsigned long	saved_satp;
-+	unsigned long	restore_cpu_addr;
-+} resume_hdr;
-+
-+static void arch_hdr_invariants(struct arch_hibernate_hdr_invariants *i)
-+{
-+	memset(i, 0, sizeof(*i));
-+	memcpy(i->uts_version, init_utsname()->version, sizeof(i->uts_version));
-+}
-+
-+/*
-+ * Check if the given pfn is in the 'nosave' section.
-+ */
-+int pfn_is_nosave(unsigned long pfn)
-+{
-+	unsigned long nosave_begin_pfn = sym_to_pfn(&__nosave_begin);
-+	unsigned long nosave_end_pfn = sym_to_pfn(&__nosave_end - 1);
-+
-+	return ((pfn >= nosave_begin_pfn) && (pfn <= nosave_end_pfn));
-+}
-+
-+void notrace save_processor_state(void)
-+{
-+	WARN_ON(num_online_cpus() != 1);
-+}
-+
-+void notrace restore_processor_state(void)
-+{
-+}
-+
-+/*
-+ * Helper parameters need to be saved to the hibernation image header.
-+ */
-+int arch_hibernation_header_save(void *addr, unsigned int max_size)
-+{
-+	struct arch_hibernate_hdr *hdr = addr;
-+
-+	if (max_size < sizeof(*hdr))
-+		return -EOVERFLOW;
-+
-+	arch_hdr_invariants(&hdr->invariants);
-+
-+	hdr->hartid = cpuid_to_hartid_map(sleep_cpu);
-+	hdr->saved_satp = csr_read(CSR_SATP);
-+	hdr->restore_cpu_addr = (unsigned long)__hibernate_cpu_resume;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(arch_hibernation_header_save);
-+
-+/*
-+ * Retrieve the helper parameters from the hibernation image header.
-+ */
-+int arch_hibernation_header_restore(void *addr)
-+{
-+	struct arch_hibernate_hdr_invariants invariants;
-+	struct arch_hibernate_hdr *hdr = addr;
-+	int ret = 0;
-+
-+	arch_hdr_invariants(&invariants);
-+
-+	if (memcmp(&hdr->invariants, &invariants, sizeof(invariants))) {
-+		pr_crit("Hibernate image not generated by this kernel!\n");
-+		return -EINVAL;
-+	}
-+
-+	sleep_cpu = riscv_hartid_to_cpuid(hdr->hartid);
-+	if (sleep_cpu < 0) {
-+		pr_crit("Hibernated on a CPU not known to this kernel!\n");
-+		sleep_cpu = -EINVAL;
-+		return -EINVAL;
-+	}
-+
-+#ifdef CONFIG_SMP
-+	ret = bringup_hibernate_cpu(sleep_cpu);
-+	if (ret) {
-+		sleep_cpu = -EINVAL;
-+		return ret;
-+	}
-+#endif
-+	resume_hdr = *hdr;
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(arch_hibernation_header_restore);
-+
-+int swsusp_arch_suspend(void)
-+{
-+	int ret = 0;
-+
-+	if (__cpu_suspend_enter(hibernate_cpu_context)) {
-+		sleep_cpu = smp_processor_id();
-+		suspend_save_csrs(hibernate_cpu_context);
-+		ret = swsusp_save();
-+	} else {
-+		suspend_restore_csrs(hibernate_cpu_context);
-+		flush_tlb_all();
-+		flush_icache_all();
-+
-+		/*
-+		 * Tell the hibernation core that we've just restored the memory.
-+		 */
-+		in_suspend = 0;
-+		sleep_cpu = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static int temp_pgtable_map_pte(pmd_t *dst_pmdp, pmd_t *src_pmdp, unsigned long start,
-+				unsigned long end, pgprot_t prot)
-+{
-+	pte_t *src_ptep;
-+	pte_t *dst_ptep;
-+
-+	if (pmd_none(READ_ONCE(*dst_pmdp))) {
-+		dst_ptep = (pte_t *)get_safe_page(GFP_ATOMIC);
-+		if (!dst_ptep)
-+			return -ENOMEM;
-+
-+		pmd_populate_kernel(NULL, dst_pmdp, dst_ptep);
-+	}
-+
-+	dst_ptep = pte_offset_kernel(dst_pmdp, start);
-+	src_ptep = pte_offset_kernel(src_pmdp, start);
-+
-+	do {
-+		pte_t pte = READ_ONCE(*src_ptep);
-+
-+		if (pte_present(pte))
-+			set_pte(dst_ptep, __pte(pte_val(pte) | pgprot_val(prot)));
-+	} while (dst_ptep++, src_ptep++, start += PAGE_SIZE, start < end);
-+
-+	return 0;
-+}
-+
-+static int temp_pgtable_map_pmd(pud_t *dst_pudp, pud_t *src_pudp, unsigned long start,
-+				unsigned long end, pgprot_t prot)
-+{
-+	unsigned long next;
-+	unsigned long ret;
-+	pmd_t *src_pmdp;
-+	pmd_t *dst_pmdp;
-+
-+	if (pud_none(READ_ONCE(*dst_pudp))) {
-+		dst_pmdp = (pmd_t *)get_safe_page(GFP_ATOMIC);
-+		if (!dst_pmdp)
-+			return -ENOMEM;
-+
-+		pud_populate(NULL, dst_pudp, dst_pmdp);
-+	}
-+
-+	dst_pmdp = pmd_offset(dst_pudp, start);
-+	src_pmdp = pmd_offset(src_pudp, start);
-+
-+	do {
-+		pmd_t pmd = READ_ONCE(*src_pmdp);
-+
-+		next = pmd_addr_end(start, end);
-+
-+		if (pmd_none(pmd))
-+			continue;
-+
-+		if (pmd_leaf(pmd)) {
-+			set_pmd(dst_pmdp, __pmd(pmd_val(pmd) | pgprot_val(prot)));
-+		} else {
-+			ret = temp_pgtable_map_pte(dst_pmdp, src_pmdp, start, next, prot);
-+			if (ret)
-+				return -ENOMEM;
-+		}
-+	} while (dst_pmdp++, src_pmdp++, start = next, start != end);
-+
-+	return 0;
-+}
-+
-+static int temp_pgtable_map_pud(p4d_t *dst_p4dp, p4d_t *src_p4dp, unsigned long start,
-+				unsigned long end, pgprot_t prot)
-+{
-+	unsigned long next;
-+	unsigned long ret;
-+	pud_t *dst_pudp;
-+	pud_t *src_pudp;
-+
-+	if (p4d_none(READ_ONCE(*dst_p4dp))) {
-+		dst_pudp = (pud_t *)get_safe_page(GFP_ATOMIC);
-+		if (!dst_pudp)
-+			return -ENOMEM;
-+
-+		p4d_populate(NULL, dst_p4dp, dst_pudp);
-+	}
-+
-+	dst_pudp = pud_offset(dst_p4dp, start);
-+	src_pudp = pud_offset(src_p4dp, start);
-+
-+	do {
-+		pud_t pud = READ_ONCE(*src_pudp);
-+
-+		next = pud_addr_end(start, end);
-+
-+		if (pud_none(pud))
-+			continue;
-+
-+		if (pud_leaf(pud)) {
-+			set_pud(dst_pudp, __pud(pud_val(pud) | pgprot_val(prot)));
-+		} else {
-+			ret = temp_pgtable_map_pmd(dst_pudp, src_pudp, start, next, prot);
-+			if (ret)
-+				return -ENOMEM;
-+		}
-+	} while (dst_pudp++, src_pudp++, start = next, start != end);
-+
-+	return 0;
-+}
-+
-+static int temp_pgtable_map_p4d(pgd_t *dst_pgdp, pgd_t *src_pgdp, unsigned long start,
-+				unsigned long end, pgprot_t prot)
-+{
-+	unsigned long next;
-+	unsigned long ret;
-+	p4d_t *dst_p4dp;
-+	p4d_t *src_p4dp;
-+
-+	if (pgd_none(READ_ONCE(*dst_pgdp))) {
-+		dst_p4dp = (p4d_t *)get_safe_page(GFP_ATOMIC);
-+		if (!dst_p4dp)
-+			return -ENOMEM;
-+
-+		pgd_populate(NULL, dst_pgdp, dst_p4dp);
-+	}
-+
-+	dst_p4dp = p4d_offset(dst_pgdp, start);
-+	src_p4dp = p4d_offset(src_pgdp, start);
-+
-+	do {
-+		p4d_t p4d = READ_ONCE(*src_p4dp);
-+
-+		next = p4d_addr_end(start, end);
-+
-+		if (p4d_none(p4d))
-+			continue;
-+
-+		if (p4d_leaf(p4d)) {
-+			set_p4d(dst_p4dp, __p4d(p4d_val(p4d) | pgprot_val(prot)));
-+		} else {
-+			ret = temp_pgtable_map_pud(dst_p4dp, src_p4dp, start, next, prot);
-+			if (ret)
-+				return -ENOMEM;
-+		}
-+	} while (dst_p4dp++, src_p4dp++, start = next, start != end);
-+
-+	return 0;
-+}
-+
-+static int temp_pgtable_mapping(pgd_t *pgdp, unsigned long start, unsigned long end, pgprot_t prot)
-+{
-+	pgd_t *dst_pgdp = pgd_offset_pgd(pgdp, start);
-+	pgd_t *src_pgdp = pgd_offset_k(start);
-+	unsigned long next;
-+	unsigned long ret;
-+
-+	do {
-+		pgd_t pgd = READ_ONCE(*src_pgdp);
-+
-+		next = pgd_addr_end(start, end);
-+
-+		if (pgd_none(pgd))
-+			continue;
-+
-+		if (pgd_leaf(pgd)) {
-+			set_pgd(dst_pgdp, __pgd(pgd_val(pgd) | pgprot_val(prot)));
-+		} else {
-+			ret = temp_pgtable_map_p4d(dst_pgdp, src_pgdp, start, next, prot);
-+			if (ret)
-+				return -ENOMEM;
-+		}
-+	} while (dst_pgdp++, src_pgdp++, start = next, start != end);
-+
-+	return 0;
-+}
-+
-+static unsigned long relocate_restore_code(void)
-+{
-+	void *page = (void *)get_safe_page(GFP_ATOMIC);
-+
-+	if (!page)
-+		return -ENOMEM;
-+
-+	copy_page(page, hibernate_core_restore_code);
-+
-+	/* Make the page containing the relocated code executable. */
-+	set_memory_x((unsigned long)page, 1);
-+
-+	return (unsigned long)page;
-+}
-+
-+int swsusp_arch_resume(void)
-+{
-+	unsigned long end = (unsigned long)pfn_to_virt(max_low_pfn);
-+	unsigned long start = PAGE_OFFSET;
-+	int ret;
-+
-+	/*
-+	 * Memory allocated by get_safe_page() will be dealt with by the hibernation core,
-+	 * we don't need to free it here.
-+	 */
-+	resume_pg_dir = (pgd_t *)get_safe_page(GFP_ATOMIC);
-+	if (!resume_pg_dir)
-+		return -ENOMEM;
-+
-+	/*
-+	 * Create a temporary page table and map the whole linear region as executable and
-+	 * writable.
-+	 */
-+	ret = temp_pgtable_mapping(resume_pg_dir, start, end, __pgprot(_PAGE_WRITE | _PAGE_EXEC));
-+	if (ret)
-+		return ret;
-+
-+	/* Move the restore code to a new page so that it doesn't get overwritten by itself. */
-+	relocated_restore_code = relocate_restore_code();
-+	if (relocated_restore_code == -ENOMEM)
-+		return -ENOMEM;
-+
-+	/*
-+	 * Map the __hibernate_cpu_resume() address to the temporary page table so that the
-+	 * restore code can jumps to it after finished restore the image. The next execution
-+	 * code doesn't find itself in a different address space after switching over to the
-+	 * original page table used by the hibernated image.
-+	 *
-+	 */
-+	start = (unsigned long)resume_hdr.restore_cpu_addr;
-+	end = start + PAGE_SIZE;
-+
-+	ret = temp_pgtable_mapping(resume_pg_dir, start, end, __pgprot(_PAGE_WRITE | _PAGE_EXEC));
-+	if (ret)
-+		return ret;
-+
-+	hibernate_restore_image(resume_hdr.saved_satp, (PFN_DOWN(__pa(resume_pg_dir)) | satp_mode),
-+				resume_hdr.restore_cpu_addr);
-+
-+	return 0;
-+}
-+
-+#ifdef CONFIG_PM_SLEEP_SMP
-+int hibernate_resume_nonboot_cpu_disable(void)
-+{
-+	if (sleep_cpu < 0) {
-+		pr_err("Failing to resume from hibernate on an unknown CPU\n");
-+		return -ENODEV;
-+	}
-+
-+	return freeze_secondary_cpus(sleep_cpu);
-+}
-+#endif
-+
-+static int __init riscv_hibernate_init(void)
-+{
-+	hibernate_cpu_context = kzalloc(sizeof(*hibernate_cpu_context), GFP_KERNEL);
-+
-+	if (WARN_ON(!hibernate_cpu_context))
-+		return -ENOMEM;
-+
-+	return 0;
-+}
-+
-+early_initcall(riscv_hibernate_init);
--- 
-2.34.1
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >   include/linux/lsm_hooks.h |  1 +
+> >   security/security.c       | 12 +++++++++---
+> >   2 files changed, 10 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> > index 21a8ce23108..05c4b831d99 100644
+> > --- a/include/linux/lsm_hooks.h
+> > +++ b/include/linux/lsm_hooks.h
+> > @@ -93,6 +93,7 @@ extern void security_add_hooks(struct security_hook_list *hooks, int count,
+> >   enum lsm_order {
+> >   	LSM_ORDER_FIRST = -1,	/* This is only for capabilities. */
+> >   	LSM_ORDER_MUTABLE = 0,
+> > +	LSM_ORDER_LAST = 1,
+> >   };
+> >   
+> >   struct lsm_info {
+> > diff --git a/security/security.c b/security/security.c
+> > index 322090a50cd..24f52ba3218 100644
+> > --- a/security/security.c
+> > +++ b/security/security.c
+> > @@ -284,9 +284,9 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+> >   		bool found = false;
+> >   
+> >   		for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+> > -			if (lsm->order == LSM_ORDER_MUTABLE &&
+> > -			    strcmp(lsm->name, name) == 0) {
+> > -				append_ordered_lsm(lsm, origin);
+> > +			if (strcmp(lsm->name, name) == 0) {
+> > +				if (lsm->order == LSM_ORDER_MUTABLE)
+> > +					append_ordered_lsm(lsm, origin);
+> >   				found = true;
+> >   			}
+> >   		}
+> > @@ -306,6 +306,12 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+> >   		}
+> >   	}
+> >   
+> > +	/* LSM_ORDER_LAST is always last. */
+> > +	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+> > +		if (lsm->order == LSM_ORDER_LAST)
+> > +			append_ordered_lsm(lsm, "   last");
+> > +	}
+> > +
+> >   	/* Disable all LSMs not in the ordered list. */
+> >   	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+> >   		if (exists_ordered_lsm(lsm))
 
