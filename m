@@ -2,132 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E477F6B0EB4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A12066B0EBE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:28:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbjCHQ1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
+        id S230189AbjCHQ2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:28:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbjCHQ0m (ORCPT
+        with ESMTP id S230427AbjCHQ1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:26:42 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68238C78F0;
-        Wed,  8 Mar 2023 08:26:34 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id ay14so64297533edb.11;
-        Wed, 08 Mar 2023 08:26:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678292793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kgeq78gxLIL21D+IlAHaFMTP9xI3MPSeyQyoWJK0zfA=;
-        b=GFX5HX0K7Tx2uIr251PpqSuZ8wwtoOoiqB1FQIQTABwC3UKfOcLbXUPi2viqlFfvbZ
-         utvcZCyW8ORX+t2nO79ztUr/QzfPDzSSyNdkiLuDN6+9nGSGVKFZfVpoEkd2H7meGdcb
-         z3jGtbPkxVgCeTd4HUHDyoAR84+BK+d7UPdgfMitw8N5/qP3wwhFWRijFN799GFqiSOJ
-         CZuyxFuwJK+Jl/4C0/aeIxR/U1kqL9L9Sfl8vejqNgRagcY3z6oCg1M9l6kj+iS7qnzQ
-         YXvtE6K50caEAHEBk8FZtxTacYnDVJiUNwUfO/h2wz0lQjaIGnxTSBapr0Z/pkyONXlL
-         1kZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678292793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kgeq78gxLIL21D+IlAHaFMTP9xI3MPSeyQyoWJK0zfA=;
-        b=OzhkEYRIs6DkH/6ZIPFIMJiyLtDA1y9mqcRjmxASvsQYXIlU4sizt8Cr1+WZVSTwla
-         RcLTIP92yQg5sLCf8GQyOwVa94Zl3LAjHyVgdEgrZ2nMETD27LL45OyZQ0DisAhKBBnF
-         CQT4oFxYIEQtnjerlAZGmclhk1/UsJWMYJLJ680z34iYFwmPubXHFYV2kJBwcZB4vtik
-         kobvF2AWtQwltAg42DYPzXMx+0774TF58IgBkITjTcEydrW8bA8opBwNmmqY4zsv4xBG
-         IovRW2G0Woa0SK+NvxNqFkKpJACD3Ztbbn+KsOIUQIYhMBpJyGcfjJYxLohNXpw1He6M
-         HMqA==
-X-Gm-Message-State: AO0yUKVI4KoqgGc7pYJxTO7m6WN0+cZdHIQCxQc4JoPahsnSvbuqzHXU
-        j7wdSQ4XQhS1IkJc4KSHYtUlNPTMIw9zAewjbJE=
-X-Google-Smtp-Source: AK7set/GaI7SD2azpTIvM79a+TR5Z7cOLnZiQ9WZQ9Nhtda1MjFzID3oaJfGnh3IEVk3XUW6+PmZMzp5v6bZmTsLvJg=
-X-Received: by 2002:a17:906:5811:b0:877:747d:4a90 with SMTP id
- m17-20020a170906581100b00877747d4a90mr9518767ejq.14.1678292792688; Wed, 08
- Mar 2023 08:26:32 -0800 (PST)
+        Wed, 8 Mar 2023 11:27:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6464BD2388;
+        Wed,  8 Mar 2023 08:27:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9CFC0B81DA4;
+        Wed,  8 Mar 2023 16:27:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43349C43322;
+        Wed,  8 Mar 2023 16:27:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678292833;
+        bh=JbxCyI0huIIANoxirPXgBTBH1si+npk+dR+RaZC1gzg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YBZP76Ad87hnY4xkxLVRdMFSnnkcSazWx7ctmmBO3jZVceNLqFo7l/o98Wy2QDQu8
+         KCm5hO2UoC4cgZ2At1VLFNv3t20NJCitR1wMZmwV6/Ijn6HFGydmu/pFkZA1hSQNaj
+         2IoTojH/fyvBOxze9JfDeWsadU+aHiRwP58joHNRgUBdsiX77E3Ma64odWj+Pzxy2W
+         pIKWg0AGt+xk1eakynuaU0yiixiUatM6EY+Enbosfw7gJ8C4PGlZRf8z9mkoDrZn9b
+         OnX2dP6smKxPO9ltvuAks+krZ/DgL4wVuOT1A2Ni0y9iNvezRHmB1fAWkKR+Uwt5tp
+         HipwG++0kQTKw==
+Received: by mail-ed1-f46.google.com with SMTP id s11so68017420edy.8;
+        Wed, 08 Mar 2023 08:27:13 -0800 (PST)
+X-Gm-Message-State: AO0yUKU0JnYsfKLvI7blA3gH0Q3YrCLyiUt4NiGybm6C8ca59uDTg7hL
+        pQrsWAh2lYdDJx3KUd5NVGP7PHukAruNxNMOvwQ=
+X-Google-Smtp-Source: AK7set8tv9oj0Cs64+dvjPmRThogjRBhvrPYlr0s1Jxp6xg8NhIzAjly/ShQhG8oQbSbN3jKigayPafGtW24VNutDRs=
+X-Received: by 2002:a17:906:9143:b0:8ad:d366:54c4 with SMTP id
+ y3-20020a170906914300b008add36654c4mr12974560ejw.4.1678292831332; Wed, 08 Mar
+ 2023 08:27:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20221209142615.33574-1-jandryuk@gmail.com> <87359gkc1d.fsf@baylibre.com>
-In-Reply-To: <87359gkc1d.fsf@baylibre.com>
-From:   Jason Andryuk <jandryuk@gmail.com>
-Date:   Wed, 8 Mar 2023 11:26:20 -0500
-Message-ID: <CAKf6xpsGy7rjK3Rkosevr3dD+64-WqCEzAecBbHEHpBMeAHh7A@mail.gmail.com>
-Subject: Re: [PATCH v2] Input: xen-kbdfront - drop keys to shrink modalias
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        Phillip Susi <phill@thesusis.net>, stable@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
+References: <20230306160016.4459-1-tzimmermann@suse.de> <20230306160016.4459-23-tzimmermann@suse.de>
+ <CAOZdJXUtkyg5Gv3HYCK-U1pQpY0_QBk99wtqUvz5RVy2W3Ak9w@mail.gmail.com> <aac88d8e-52e8-e2d5-2f41-bed7886bb3dc@suse.de>
+In-Reply-To: <aac88d8e-52e8-e2d5-2f41-bed7886bb3dc@suse.de>
+From:   Timur Tabi <timur@kernel.org>
+Date:   Wed, 8 Mar 2023 10:26:34 -0600
+X-Gmail-Original-Message-ID: <CAOZdJXWGNBHMPRmkBYeVL31=Q0Y=fLa8RG0KS668xQ9ozD+Xtg@mail.gmail.com>
+Message-ID: <CAOZdJXWGNBHMPRmkBYeVL31=Q0Y=fLa8RG0KS668xQ9ozD+Xtg@mail.gmail.com>
+Subject: Re: [PATCH 22/99] fbdev/fsl-diu-fb: Duplicate video-mode option string
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     deller@gmx.de, paulus@samba.org, benh@kernel.crashing.org,
+        linux@armlinux.org.uk, pjones@redhat.com, adaplas@gmail.com,
+        s.hauer@pengutronix.de, shawnguo@kernel.org, mbroemme@libmpq.org,
+        thomas@winischhofer.net, James.Bottomley@hansenpartnership.com,
+        spock@gentoo.org, sudipm.mukherjee@gmail.com,
+        teddy.wang@siliconmotion.com, geert+renesas@glider.be,
+        corbet@lwn.net, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 8:54=E2=80=AFAM Mattijs Korpershoek
-<mkorpershoek@baylibre.com> wrote:
+On Tue, Mar 7, 2023 at 2:28=E2=80=AFAM Thomas Zimmermann <tzimmermann@suse.=
+de> wrote:
+> > So after module_init is finished, mode_option_buf[] no longer exists?
 >
-> On Fri, Dec 09, 2022 at 09:26, Jason Andryuk <jandryuk@gmail.com> wrote:
->
-> > xen kbdfront registers itself as being able to deliver *any* key since
-> > it doesn't know what keys the backend may produce.
-> >
-> > Unfortunately, the generated modalias gets too large and uevent creatio=
-n
-> > fails with -ENOMEM.
-> >
-> > This can lead to gdm not using the keyboard since there is no seat
-> > associated [1] and the debian installer crashing [2].
-> >
-> > Trim the ranges of key capabilities by removing some BTN_* ranges.
-> > While doing this, some neighboring undefined ranges are removed to trim
-> > it further.
-> >
-> > An upper limit of KEY_KBD_LCD_MENU5 is still too large.  Use an upper
-> > limit of KEY_BRIGHTNESS_MENU.
-> >
-> > This removes:
-> > BTN_DPAD_UP(0x220)..BTN_DPAD_RIGHT(0x223)
-> > Empty space 0x224..0x229
-> >
-> > Empty space 0x28a..0x28f
-> > KEY_MACRO1(0x290)..KEY_MACRO30(0x2ad)
-> > KEY_MACRO_RECORD_START          0x2b0
-> > KEY_MACRO_RECORD_STOP           0x2b1
-> > KEY_MACRO_PRESET_CYCLE          0x2b2
-> > KEY_MACRO_PRESET1(0x2b3)..KEY_MACRO_PRESET3(0xb5)
-> > Empty space 0x2b6..0x2b7
-> > KEY_KBD_LCD_MENU1(0x2b8)..KEY_KBD_LCD_MENU5(0x2bc)
-> > Empty space 0x2bd..0x2bf
-> > BTN_TRIGGER_HAPPY(0x2c0)..BTN_TRIGGER_HAPPY40(0x2e7)
-> > Empty space 0x2e8..0x2ff
-> >
-> > The modalias shrinks from 2082 to 1550 bytes.
-> >
-> > A chunk of keys need to be removed to allow the keyboard to be used.
-> > This may break some functionality, but the hope is these macro keys are
-> > uncommon and don't affect any users.
-> >
-> > [1] https://github.com/systemd/systemd/issues/22944
-> > [2] https://lore.kernel.org/xen-devel/87o8dw52jc.fsf@vps.thesusis.net/T=
-/
-> >
-> > Cc: Phillip Susi <phill@thesusis.net>
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
->
-> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+> Does the __init attribute on a function affect the static variables in
+> that function?
 
-Thank you, Mattjis.
+That is an excellent question.
 
-Any other thoughts?  Can this patch be applied?
+https://stackoverflow.com/questions/64558614/what-happens-to-local-static-i=
+dentifiers-in-init-function
 
-Thanks,
-Jason
+I don't think the compiler is naturally aware of whatever section a
+variable or function is placed in, so it can't really know that
+mode_option_buf[] is suppose to have a limited lifetime.
+
+Either way, the code seems wrong.  If mode_option_buf[] is marked as
+__initdata, then it will disappear before the probe() function is
+called.
+
+If mode_option_buf[] remains resident, then we are wasting 256 bytes.
