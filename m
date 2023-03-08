@@ -2,69 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B716AFE81
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 06:37:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1916AFE82
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 06:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjCHFhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 00:37:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
+        id S229732AbjCHFik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 00:38:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjCHFhs (ORCPT
+        with ESMTP id S229475AbjCHFih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 00:37:48 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8F536462
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 21:37:47 -0800 (PST)
+        Wed, 8 Mar 2023 00:38:37 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD89B92F24
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 21:38:36 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 51C311FE35;
-        Wed,  8 Mar 2023 05:37:46 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 85B5D219CE;
+        Wed,  8 Mar 2023 05:38:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678253866; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1678253915; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=+4mADqzRgcNHha7IYdcUGCc/Xk3z+j76in0Qa/XW5QA=;
-        b=G8Y21Mxjblvfi3uOaz0LhKuQHrzN1gThUiscg3u8g/l1QCqRROiVftsnMI7QE+iC6d2jka
-        HxP+XfFpQB4PoNYX0mJQSGe5IVgmRjAipWJJV+YBk4F7k+gB8Owz9e2zER/2hdwVHnysnT
-        rW68/Gkoz/EN8q+3N/r4Gm1ho1po5cU=
+        bh=Ube8GcqjKGLuvipMPbT99w7IezkCRhfrWpkYxrn2r5I=;
+        b=dUDz2YqAa5lPOM62M+Hdr4MqHc0u8Ag4msG7tzNubmockswfwo9aXH+9m8nNefX9rsO1cD
+        AJTytMlq76y3n6kyuIALeD0rCML9kQfsQfmRwjZCGTUzGWLlVdKMHl7/OeBq25JMQBoUVa
+        os9YOi6QRygjAz+cd4Gc+pBfOcRRQNI=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678253866;
+        s=susede2_ed25519; t=1678253915;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=+4mADqzRgcNHha7IYdcUGCc/Xk3z+j76in0Qa/XW5QA=;
-        b=s2VmkRZcEzYN2WE3z7pQU+MwBvHGl9npJEsYBTNvAhy64TjigP4pzNrrB5MymLn9Clgb/n
-        bq8Xifp5sV0aGsAQ==
+        bh=Ube8GcqjKGLuvipMPbT99w7IezkCRhfrWpkYxrn2r5I=;
+        b=k3+5wtlQwtDD029dz0wiVO/WliHWewIaZIKP09A/rBA17SsvKmZZBb9uWzxkEi5mCiBeOo
+        NPykOtTYJrWyqYAQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 02C0513596;
-        Wed,  8 Mar 2023 05:37:45 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6508513596;
+        Wed,  8 Mar 2023 05:38:35 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id hJNrOykfCGRYPwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 08 Mar 2023 05:37:45 +0000
-Date:   Wed, 08 Mar 2023 06:37:45 +0100
-Message-ID: <87jzzriz12.wl-tiwai@suse.de>
+        id MKTjF1sfCGS4PwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 08 Mar 2023 05:38:35 +0000
+Date:   Wed, 08 Mar 2023 06:38:34 +0100
+Message-ID: <87ilfbiyzp.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     Jeremy Szu <jeremy.szu@canonical.com>
-Cc:     tiwai@suse.com, Jaroslav Kysela <perex@perex.cz>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Tim Crawford <tcrawford@system76.com>,
-        Andy Chi <andy.chi@canonical.com>,
-        Meng Tang <tangmeng@uniontech.com>,
-        Philipp Jungkamp <p.jungkamp@gmx.net>,
-        Kacper =?ISO-8859-2?Q?Michaj=B3ow?= <kasper93@gmail.com>,
-        Gabriele Mazzotta <gabriele.mzt@gmail.com>,
-        Yuchi Yang <yangyuchi66@gmail.com>,
-        alsa-devel@alsa-project.org (moderated list:SOUND),
-        linux-kernel@vger.kernel.org (open list)
-Subject: Re: [PATCH] ALSA: hda/realtek: fix speaker, mute/micmute LEDs not work on a HP platform
-In-Reply-To: <20230307135317.37621-1-jeremy.szu@canonical.com>
-References: <20230307135317.37621-1-jeremy.szu@canonical.com>
+To:     "Hamidreza H. Fard" <nitocris@posteo.net>
+Cc:     tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/realtek: Fix the speaker output on Samsung Galaxy Book2 Pro
+In-Reply-To: <20230307163741.3878-1-nitocris@posteo.net>
+References: <20230307163741.3878-1-nitocris@posteo.net>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -77,15 +68,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 07 Mar 2023 14:53:16 +0100,
-Jeremy Szu wrote:
+On Tue, 07 Mar 2023 17:37:41 +0100,
+Hamidreza H. Fard wrote:
 > 
-> There is a HP platform needs ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED quirk to
-> make mic-mute/audio-mute/speaker working.
+> Samsung Galaxy Book2 Pro (13" 2022 NP930XED-KA1DE) with codec SSID
+> 144d:c868 requires the same workaround for enabling the speaker amp
+> like other Samsung models with ALC298 code.
 > 
-> Signed-off-by: Jeremy Szu <jeremy.szu@canonical.com>
+> Signed-off-by: Hamidreza H. Fard <nitocris@posteo.net>
 
-Applied now.  Thanks.
+Thanks, applied now.
 
 
 Takashi
