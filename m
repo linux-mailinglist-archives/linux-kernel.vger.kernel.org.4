@@ -2,135 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66856AFDDB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 05:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D816AFDDD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 05:32:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjCHE3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 23:29:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
+        id S229680AbjCHEcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 23:32:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjCHE3r (ORCPT
+        with ESMTP id S229590AbjCHEcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 23:29:47 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA0592F02
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 20:29:45 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-17671fb717cso16040691fac.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 20:29:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678249784;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jhAOE71Ompgdm0ng6gusjFFxPb/vUHlh3eJ25cLU//w=;
-        b=IOviJkpeBA6AfHMftrqOMYww5gkDtKQ4vL6tCHkCi6DblrdgUjvd+wQi0O+wsCYLlB
-         m9yOwTPmqn88KqybOsSC+MrpyemRI7MFKZP4hk01GSj7g0ZJvqP1HcndlzNe7EZN3SIA
-         Uf4HGSX8spu4vPsDOiM9WixhWcEXyOR2MmMhl2b2n48hPF9shCSJHMwJ0fmm5lxJgaZX
-         9Fjfsv9NIKU1WWErD9sJiWAAs8ST3sCV+KtrWVLXOqlrZxRUiUSoFWp81tbhW2nYBu6O
-         mN0S1vQeR6XZ6Z2AlLSSwaobXCfltLHEcHTuiAo4823nYB7S7RToLvOwuu2Vd4vYgLYS
-         Y5Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678249784;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jhAOE71Ompgdm0ng6gusjFFxPb/vUHlh3eJ25cLU//w=;
-        b=5oyN8TRy6WqOBQ15rVkp3IkYHVDatnnxkVFEeMPd8nUo/ZU4qB2O41LwQCVyKonHst
-         esswyVA2EIXvq7u5MVxuZv5fOMftf73dqm6gLPd3z3sUOojjO1fuMu15RrpQch+XTSHp
-         AczCV7cmSOw+DPlSQamfRTKchoykOr60zYGwqmvnJsWSZADc04Tmddz0jQ/BOaibbth/
-         WQiXvGBm5VObhPWaWPUUMFEZcpAKkd9xHhVPyO62/2dYcwc/tcMexdtP9M/MesvtvuT9
-         bhUFwe3JOrEGK3jDzkhpVJLjaTQqNCgJST0utMRzicH4w/9JYuv3uwHP+Fy7Y7NUeVFD
-         y+sw==
-X-Gm-Message-State: AO0yUKX+MSUoCd7QSeCJ/uCiSavRqBrRvDPKiAlaHk4XKWsJwpkMzqsV
-        o6WzgYiAKzDPCLaUgwcrbqcRUA==
-X-Google-Smtp-Source: AK7set9NNer1Dg+UCMTqbXRORLV+qQo1RfmIm2Hp52ZDRwRVj6VXTGsUCo8OhXInLU5tl4OuOwl+DA==
-X-Received: by 2002:a05:6871:810:b0:16e:8b9f:93e1 with SMTP id q16-20020a056871081000b0016e8b9f93e1mr10643789oap.5.1678249784362;
-        Tue, 07 Mar 2023 20:29:44 -0800 (PST)
-Received: from [192.168.17.16] ([189.219.75.19])
-        by smtp.gmail.com with ESMTPSA id j2-20020a056870a48200b001723d62f997sm5844734oal.32.2023.03.07.20.29.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 20:29:43 -0800 (PST)
-Message-ID: <29636c67-aab7-1235-27af-469bcec7ae66@linaro.org>
-Date:   Tue, 7 Mar 2023 22:29:42 -0600
+        Tue, 7 Mar 2023 23:32:12 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2BE9FBD5
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 20:32:11 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 3284Vd5a020749
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 7 Mar 2023 23:31:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1678249901; bh=RGWp900Vv8zD7g2BiMd0+FWzx27JFxBB6jqBFBVJLeE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=FTRNm+ZYfbag/9ldQ59g9vFRiXuub5iM47i+J+fpxISzdAdvJnGyriUG/tmsY2fNF
+         fK4vvRhokMU/Koh+papQg3HLp7kN9MTRNYjwlBMTweEbWvD4BDx+v3OR94FM5BNf8D
+         kjKI8RvEp7QBtXCBJCYxVnn0rZuIQmWIdW2Pr0mf1RrNBkmi13/ZnT361EdwFMmZLc
+         xi4PuQHYV2LW1a+rnoZXbZonsyUnzxM/ldXwQq5YWiQxeGjn7xT04V2Yx0f1aB5g93
+         CHN+7hNg0ECe6wFgoSP+adSqTl/fDxujZH4u6wqmxMMtp41Le64wcxThkxBhyZ8cCW
+         sSGRJhRCF9ktg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 1616915C3441; Tue,  7 Mar 2023 23:31:39 -0500 (EST)
+Date:   Tue, 7 Mar 2023 23:31:39 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Zhihao Cheng <chengzhihao1@huawei.com>
+Cc:     jack@suse.com, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH] ext4: Fix WANRON caused by unconsistent boot loader
+ inode's i_size and i_disksize
+Message-ID: <20230308043139.GD860405@mit.edu>
+References: <20230308032643.641113-1-chengzhihao1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 6.1 000/885] 6.1.16-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, pali@kernel.org,
-        christophe.leroy@csgroup.eu, mpe@ellerman.id.au
-References: <20230307170001.594919529@linuxfoundation.org>
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-In-Reply-To: <20230307170001.594919529@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308032643.641113-1-chengzhihao1@huawei.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
-
-On 07/03/23 10:48, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.16 release.
-> There are 885 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, Mar 08, 2023 at 11:26:43AM +0800, Zhihao Cheng wrote:
+> Using corrupted ext4 image(non-zero i_size for boot loader inode) could
+> trigger WARNON 'i_size_read(inode) < EXT4_I(inode)->i_disksize' in
+> ext4_handle_inode_extension():
 > 
-> Responses should be made by Thu, 09 Mar 2023 16:57:34 +0000.
-> Anything received after that time might be too late.
+>  WARNING: CPU: 0 PID: 2580 at fs/ext4/file.c:319
+>  CPU: 0 PID: 2580 Comm: bb Not tainted 6.3.0-rc1-00004-g703695902cfa
+>  RIP: 0010:ext4_file_write_iter+0xbc7/0xd10
+>  Call Trace:
+>   vfs_write+0x3b1/0x5c0
+>   ksys_write+0x77/0x160
+>   __x64_sys_write+0x22/0x30
+>   do_syscall_64+0x39/0x80
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.16-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
+> Reproducer (See Link):
+>  1. mount corrupted ext4 image with non-zero i_size for boot loader inode
+>  2. ioctl(fd, EXT4_IOC_SWAP_BOOT)
+>  3. write(fd)  // O_DIRECT
 > 
-> thanks,
-> 
-> greg k-h
+> Fix it by setting i_disksize while first loading boot loader inode.
 
-Same regression with PowerPC's ppc64e_defconfig, using GCC 8 and GCC 12, as reported with 6.2
------8<-----
-powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
-powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
-make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:237: arch/powerpc/boot/crt0.o] Error 1
-make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:237: arch/powerpc/boot/crtsavres.o] Error 1
-powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
-make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:235: arch/powerpc/boot/cuboot.o] Error 1
-[...]
-make[2]: Target 'arch/powerpc/boot/zImage' not remade because of errors.
-make[1]: *** [/builds/linux/arch/powerpc/Makefile:247: zImage] Error 2
-make[1]: Target '__all' not remade because of errors.
-make: *** [Makefile:242: __sub-make] Error 2
-make: Target '__all' not remade because of errors.
------>8-----
+Thanks for reporting the bug, but this is not the correct fix.
 
-Bisection points to "powerpc/boot: Don't always pass -mcpu=powerpc when building 32-bit uImage" (upstream ff7c76f66d8bad4e694c264c789249e1d3a8205d).
+We need to swap i_disksize when we swap i_size in swap_inode_data().
+Otherwise, if we fail later in the swap_inode_boot_loader() function,
+the change to i_datasize won't get undone, which will lead to further
+problems.
 
-Reproducer:
-   tuxmake \
-     --runtime podman \
-     --target-arch powerpc \
-     --toolchain gcc-8 \
-     --kconfig ppc64e_defconfig \
-     config debugkernel dtbs kernel modules xipkernel
+The correct fix is here:
 
-Greetings!
+	https://lore.kernel.org/all/20230308041252.GC860405@mit.edu/
 
-Daniel Díaz
-daniel.diaz@linaro.org
+						- Ted
+
+P.S.  Chrome refused to download the b.c attachment, claiming it was
+"dangerous".  Perhaps it was because of the commands involving
+system(3) which among other things, uses dd to overwrite /dev/sda with
+the image file.
+
+It's best if the reproducer program doesn't doesn't make assumption
+about whether it's safe to randomly dd files to /dev/sda.  Of course,
+I'm a paranoid s.o.b. so I'm not about to download, compile and
+blindly run a random program that I get from the 'net.  :-)
+
+But it's actually not all that convenient.  So I just deleted all of
+the system(3) calls from your b.c program, and then used a simple
+shell script:
+
+     cp /vtmp/disk /vtmp/foo.img
+     mount -o loop /vtmp/foo.img /mnt
+     cd /mnt
+     /vtmp/b
+
+... where /vtmp in the guest VM is automatically setup if you are
+using kvm-xfstests[1] to be a 9p file system passthrough of
+/tmp/kvm-xfstests-$USER on the host.
+
+[1] https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-xfstests.md
 
 
