@@ -2,95 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2EA66B099B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B95BB6B099E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjCHNoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
+        id S230266AbjCHNoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:44:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbjCHNnr (ORCPT
+        with ESMTP id S230322AbjCHNnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:43:47 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E85ED00AF
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 05:42:11 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 36767FEC;
-        Wed,  8 Mar 2023 05:42:54 -0800 (PST)
-Received: from bogus (unknown [10.57.16.230])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 64EB33F67D;
-        Wed,  8 Mar 2023 05:42:09 -0800 (PST)
-Date:   Wed, 8 Mar 2023 13:42:02 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Rakesh Babu Saladi <rsaladi2@marvell.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        George Cherian <gcherian@marvell.com>,
-        Naveen Mamindlapalli <naveenm@marvell.com>
-Subject: Re: [EXT] Re: [PATCH] arm64: smccc: Add trace events to SMC calls.
-Message-ID: <20230308134202.smd7bfhtu27saaay@bogus>
-References: <20230304125850.32687-1-rsaladi2@marvell.com>
- <ZAX9G5mqGqzTZZ5N@FVFF77S0Q05N>
- <CY4PR1801MB1880A1E3C8EE68B5484536238AB49@CY4PR1801MB1880.namprd18.prod.outlook.com>
+        Wed, 8 Mar 2023 08:43:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC69898CC;
+        Wed,  8 Mar 2023 05:42:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7002DB81CC0;
+        Wed,  8 Mar 2023 13:42:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B87FC4339B;
+        Wed,  8 Mar 2023 13:42:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678282935;
+        bh=YW+SZDRVXklCngw+7708VvFnfwV2mw5HHBrr6iHIZtA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C3yvoyvi4uAYB5K4AyE6S1fEmLVPM0XKZHidQLpGT2LYPEqQ2JZmpYAE8eDUshAlQ
+         bcud82pWGNVDAhcLzqsA4m+LpktawJycbe6sYG2TV6gbx75gfyhEiGn1QBaouIzt0k
+         SScNezEWmdsMjQrruWSEts4A7TV5qa0lV6sQN2tkDwcdZx+t48ZsQaUtrz2qPoJfVm
+         GPLg/oyqbSnQ2YTZok9YY2gMsp07ncHPrLpc2A+AAKv9HIezA6m9ZaX+jm+JJDPys3
+         AGGkOZ8dYrv4l0Cnkxvfk7Wr3hrcWWrUi4BAvjuZUzDedQyiLTiT9tJPKQcBmGxVcm
+         surebN+LfQ1dQ==
+Date:   Wed, 8 Mar 2023 13:42:08 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     ChiYuan Huang <cy_huang@richtek.com>
+Cc:     ChiaEn Wu <chiaen_wu@richtek.com>, corbet@lwn.net, pavel@ucw.cz,
+        matthias.bgg@gmail.com, andriy.shevchenko@linux.intel.com,
+        jacek.anaszewski@gmail.com,
+        angelogioacchino.delregno@collabora.com, linux-doc@vger.kernel.org,
+        peterwu.pub@gmail.com, linux-leds@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        szunichen@gmail.com
+Subject: Re: [PATCH v17 RESEND 3/3] docs: leds: Add MT6370 RGB LED pattern
+ document
+Message-ID: <20230308134208.GK9667@google.com>
+References: <cover.1677150607.git.chiaen_wu@richtek.com>
+ <c6487954daff5e514023056ad7de1d0ddee674a8.1677150607.git.chiaen_wu@richtek.com>
+ <20230305101824.GE2574592@google.com>
+ <20230307040804.GA15766@linuxcarl2.richtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CY4PR1801MB1880A1E3C8EE68B5484536238AB49@CY4PR1801MB1880.namprd18.prod.outlook.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230307040804.GA15766@linuxcarl2.richtek.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 12:25:15PM +0000, Rakesh Babu Saladi wrote:
-> Hi Mark, 
-> 
-> 
->   https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_lkml_20210923112058.GA14893-40C02TD0UTHF1T.local_&d=DwIBAg&c=nKjWec2b6R0mOyPaz7xtfQ&r=OrNjoyjPmqlDfiSr6RMDtAJU4gxiGfgzEtgbqDmoQPA&m=fj6aQCqc0xOYgRMw7BGCVRrOEabi2taRuKl63gCdHras-JfpWCGhjp6HqaLZYj9I&s=1_EJt65j5EoyHhcroJxJFMIkTqQY6jKtWypPIzmgYK8&e= 
+On Tue, 07 Mar 2023, ChiYuan Huang wrote:
+
+> Hi, Lee:
 >
+>     Some question about the comment.
+> On Sun, Mar 05, 2023 at 10:18:24AM +0000, Lee Jones wrote:
+> > On Thu, 23 Feb 2023, ChiaEn Wu wrote:
+> >
+> > > From: ChiYuan Huang <cy_huang@richtek.com>
+> > >
+> > > Document the MT6370 RGB LED pattern trigger.
+> > >
+> > > This simply describe how the pattern works, each timing period, and the
+> > > pattern diagram for MT6370 RGB LED.
+> > >
+> > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> > > ---
+> > >  Documentation/leds/leds-mt6370-rgb.rst | 64 ++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 64 insertions(+)
+> > >  create mode 100644 Documentation/leds/leds-mt6370-rgb.rst
+> > >
+> > > diff --git a/Documentation/leds/leds-mt6370-rgb.rst b/Documentation/leds/leds-mt6370-rgb.rst
+> > > new file mode 100644
+> > > index 00000000..d1b2e4f
+> > > --- /dev/null
+> > > +++ b/Documentation/leds/leds-mt6370-rgb.rst
+> > > @@ -0,0 +1,64 @@
+> > > +.. SPDX-License-Identifier: GPL-2.0
+> > > +
+> > > +=========================================
+> > > +Kernel driver for Mediatek MT6370 RGB LED
+> >
+> > Are you describing the device or the kernel driver?
+> >
+> But referring to others, it seems each one also write this as 'Kernel driver'.
+> Sorry, I cannot catch the point. Did you mean to modify this description as
+> 'The device for MT6370 RGB LED'?
 
-(Nit: You need to fix your email setup, it is spoiling the links and also
-flow for reading in general)
+Just because it's been done before, doesn't make it right.
 
+IMHO, this document should describe the device, not the driver.
 
-> I don't think anything has changed, and this has all the same problems as
-> before, so I do not think we should do this.
->
-> Rakesh >> Can you please be more specific why the changes are not getting accepted?
->
-
-Have you gone through the link Mark pointed at ?
-For starters, you have new v1.2 specific calls that has x0-x17 as the
-input and output registers which neither this patch or the earlier one
-addressed if we agree to allow tracing SMCCC calls this way.
-
-> Which SMC calls do you want to trace, and why?
-> Rakesh >> These traces we would like to have for debugging purposes while calling any SMC call.
->
-
-The main point was why would you want to enable universal tracing of all SMCCC
-calls. Remember that means you would trace the most common and fundamental
-for boot PSCI calls which cover CPU_SUSPEND and it gets called a *lot* for
-obvious reasons. So it is not a good idea to do so.
-
-So, what are you using this trace for ? Is that a specific driver using
-SMCCC ? Can't the trace be added in that driver as you could add specifics
-there ?
-
-Taking v1.2 SMCCC as example, though the spec and the API itself allows
-18 registers to be input and output, it may not be used in most of the
-cases and adding them to the trace is just useless. Hence the suggestion
-of making it specific to your use-case.
-
--- 
-Regards,
-Sudeep
+--
+Lee Jones [李琼斯]
