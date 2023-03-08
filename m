@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F546B05C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 393756B05CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbjCHLXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:23:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
+        id S231389AbjCHLXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 06:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjCHLXB (ORCPT
+        with ESMTP id S230358AbjCHLXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:23:01 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F122004B;
+        Wed, 8 Mar 2023 06:23:03 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33E0168B8;
         Wed,  8 Mar 2023 03:23:00 -0800 (PST)
 Received: from jupiter.universe (dyndsl-091-248-211-125.ewe-ip-backbone.de [91.248.211.125])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 544DB6602FEE;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 54A666602FEF;
         Wed,  8 Mar 2023 11:22:58 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1678274578;
-        bh=NhlIeCsCb+Aqj/Z0GvEUknpPeB8K45sszWBuWJ+vpjM=;
+        bh=zBbVvDeuWMNfmUh52W1XZgduf0xZ4UgsGRTcx/DthA8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WeP3q1qmT4HRCK83tiKSa2n9AUmabYwutlhR0iC8X9H7Yy6blpXxXapxgy88Wp3x3
-         OnHyzWAaS5WNRDKwc7waVTzdHEF2KkIdujisb1kM+/PdJkqqgXkjPX6ZylYWcg+fO/
-         kY/IHcv5IYSRre5e3aORPMz1jn4bUJ7JoBCPymp5YnbQvH9snaXpfKswH/B37yR4Vp
-         WAeq9a3HTuE/kQ73LGWG8nV0woVdUtLPqIbFAy54LozZzkiJOyMeDR85l3UB/Rk9AH
-         utBUsyXiKDPWvWNIxotRuorNa4MkW2lpX74GjL+sW7JIsCNzbAqYLvKt6RJuwalfEG
-         5btnK5KotPBmQ==
+        b=ZWQXMK4fD5rz7S1SLeS7mPWnuKPUIf/m/+XtfPvn7/5lU4QKPnAdv3sRHnlwUhlio
+         aqUjUQzxat5OU5Bua/a46TEzV8fF0vx1kOaDcHJf+zhl7sNOJUNa1AT9aEPUsUVJJH
+         5ttKoLPbJGI/hLKLqejgGI8zClNmQFV1enXpXEjtmJSyQ6UoCiU1tE1JH/SW31/wqr
+         smvZ8y50RaQAjCq4TcepCETVTS7ky2hbMGel2X3N7LlDxY7Bt49q1/sLpGAmcUQFG5
+         XamejIer7gNy/Xa9qmpJKzABJ1KT6OQ9155GbbTFoSbwGJ/VZO5x3M0WOj61NbPU8N
+         lxxFR4plqhBWg==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 6CC3B480116; Wed,  8 Mar 2023 12:22:55 +0100 (CET)
+        id 6F161480117; Wed,  8 Mar 2023 12:22:55 +0100 (CET)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Heiko Stuebner <heiko@sntech.de>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -46,9 +46,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         kernel@collabora.com
-Subject: [RESEND] [PATCHv3 1/7] thermal: rockchip: Simplify getting match data
-Date:   Wed,  8 Mar 2023 12:22:47 +0100
-Message-Id: <20230308112253.15659-2-sebastian.reichel@collabora.com>
+Subject: [RESEND] [PATCHv3 2/7] thermal: rockchip: Simplify clock logic
+Date:   Wed,  8 Mar 2023 12:22:48 +0100
+Message-Id: <20230308112253.15659-3-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230308112253.15659-1-sebastian.reichel@collabora.com>
 References: <20230308112253.15659-1-sebastian.reichel@collabora.com>
@@ -63,43 +63,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's possible to directly get the match data in a generic
-way nowadays.
+By using devm_clk_get_enabled() the clock acquisition and
+enabling can be done in one step with automatic error
+handling.
 
 Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/thermal/rockchip_thermal.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/thermal/rockchip_thermal.c | 33 +++++-------------------------
+ 1 file changed, 5 insertions(+), 28 deletions(-)
 
 diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-index 4b7c43f34d1a..7e88525fe8d0 100644
+index 7e88525fe8d0..6235c033995b 100644
 --- a/drivers/thermal/rockchip_thermal.c
 +++ b/drivers/thermal/rockchip_thermal.c
-@@ -1353,15 +1353,10 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node;
- 	struct rockchip_thermal_data *thermal;
--	const struct of_device_id *match;
- 	int irq;
- 	int i;
- 	int error;
+@@ -1383,14 +1383,14 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
+ 		return error;
+ 	}
  
--	match = of_match_node(of_rockchip_thermal_match, np);
--	if (!match)
--		return -ENXIO;
+-	thermal->clk = devm_clk_get(&pdev->dev, "tsadc");
++	thermal->clk = devm_clk_get_enabled(&pdev->dev, "tsadc");
+ 	if (IS_ERR(thermal->clk)) {
+ 		error = PTR_ERR(thermal->clk);
+ 		dev_err(&pdev->dev, "failed to get tsadc clock: %d\n", error);
+ 		return error;
+ 	}
+ 
+-	thermal->pclk = devm_clk_get(&pdev->dev, "apb_pclk");
++	thermal->pclk = devm_clk_get_enabled(&pdev->dev, "apb_pclk");
+ 	if (IS_ERR(thermal->pclk)) {
+ 		error = PTR_ERR(thermal->pclk);
+ 		dev_err(&pdev->dev, "failed to get apb_pclk clock: %d\n",
+@@ -1398,26 +1398,13 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
+ 		return error;
+ 	}
+ 
+-	error = clk_prepare_enable(thermal->clk);
+-	if (error) {
+-		dev_err(&pdev->dev, "failed to enable converter clock: %d\n",
+-			error);
+-		return error;
+-	}
 -
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
- 		return -EINVAL;
-@@ -1373,7 +1368,7 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
+-	error = clk_prepare_enable(thermal->pclk);
+-	if (error) {
+-		dev_err(&pdev->dev, "failed to enable pclk: %d\n", error);
+-		goto err_disable_clk;
+-	}
+-
+ 	rockchip_thermal_reset_controller(thermal->reset);
  
- 	thermal->pdev = pdev;
+ 	error = rockchip_configure_from_dt(&pdev->dev, np, thermal);
+ 	if (error) {
+ 		dev_err(&pdev->dev, "failed to parse device tree data: %d\n",
+ 			error);
+-		goto err_disable_pclk;
++		return error;
+ 	}
  
--	thermal->chip = (const struct rockchip_tsadc_chip *)match->data;
-+	thermal->chip = device_get_match_data(&pdev->dev);
- 	if (!thermal->chip)
- 		return -EINVAL;
+ 	thermal->chip->initialize(thermal->grf, thermal->regs,
+@@ -1431,7 +1418,7 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
+ 			dev_err(&pdev->dev,
+ 				"failed to register sensor[%d] : error = %d\n",
+ 				i, error);
+-			goto err_disable_pclk;
++			return error;
+ 		}
+ 	}
+ 
+@@ -1442,7 +1429,7 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
+ 	if (error) {
+ 		dev_err(&pdev->dev,
+ 			"failed to request tsadc irq: %d\n", error);
+-		goto err_disable_pclk;
++		return error;
+ 	}
+ 
+ 	thermal->chip->control(thermal->regs, true);
+@@ -1460,13 +1447,6 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, thermal);
+ 
+ 	return 0;
+-
+-err_disable_pclk:
+-	clk_disable_unprepare(thermal->pclk);
+-err_disable_clk:
+-	clk_disable_unprepare(thermal->clk);
+-
+-	return error;
+ }
+ 
+ static int rockchip_thermal_remove(struct platform_device *pdev)
+@@ -1483,9 +1463,6 @@ static int rockchip_thermal_remove(struct platform_device *pdev)
+ 
+ 	thermal->chip->control(thermal->regs, false);
+ 
+-	clk_disable_unprepare(thermal->pclk);
+-	clk_disable_unprepare(thermal->clk);
+-
+ 	return 0;
+ }
  
 -- 
 2.39.2
