@@ -2,66 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 630D56AFD0E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7A06AFD11
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjCHCvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 21:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
+        id S229794AbjCHCvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 21:51:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjCHCvJ (ORCPT
+        with ESMTP id S229799AbjCHCvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 21:51:09 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94310A1FF6;
-        Tue,  7 Mar 2023 18:51:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=zz8XIrqQ9KHvA5O0CyBi6qT6Uf9Kop0CvFk8d/hlRvM=; b=JdN7q0ht+aYt/Z+kGlLvyjn5mx
-        19KMsWKQz5gIiuzNJg/O78aoHpMWdHJcU7XVbRZzYVYMsfYVgjPinnBq2Cn6T+R5XDkk9/94ZnI0T
-        7X50wBh8+kWZt/dIDkfBJyaFGJ1UYvLk55RemiobYDWLfWfvyssk/HVPyUtkr/GRmmCNH8hEKMl4C
-        C1pKwlglgGCyUgjkwjN9nZdNYExZpkUZzEwldhqgjmA1DjqVB2qeZQsmvpVg1dI573qk7Y3wFdtPf
-        CERcF4GzWT5qlITS57cWz8oC+9ShvJ1Y50fVTpIHvgJWGsyBs4d9/RiBs3RFFHsrEsn3CpH5MOKNI
-        1GN1/JkA==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pZjtO-003EQx-74; Wed, 08 Mar 2023 02:51:02 +0000
-Message-ID: <db3b3412-9616-d13c-3374-48647325e057@infradead.org>
-Date:   Tue, 7 Mar 2023 18:51:01 -0800
+        Tue, 7 Mar 2023 21:51:35 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8940BAA260
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 18:51:29 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id d7so16809727qtr.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 18:51:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678243888;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mBTA60cZTqBtyoITaMc+SEMUbPVKoktbGsvzyY/a5wM=;
+        b=NY3kdFK7QkdkNKWh86qCYTK9vfy3kWbbtMKSHYnaciD6E0uEx7PPj325j++QD8Hs2+
+         GRa1BuQohNmdhJLM0fwxA9g3bzrchyRBuNXWMLcwQYMNNjFFeMA1tXFC48Jwe7q7yOAw
+         8omiQWLFqa5zUlyEPe+bb3MQcTwQIx9cR1wbZN8xbp5GBNvL9WVSCJsAwtbrrz/Vkww4
+         NXdQHipXj9ZPxznRhpIEgUl52BYwCrrHIxkG8N3mQTb5Ozgo6abLCkxwdi86NjjkW4el
+         viZi0CS/VBJVW3uE+t/p+N0WZKvsOM+H9Rk0RW+O2XKHiKum3Jd7g0V/z61GV2ADcbn+
+         Mx5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678243888;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mBTA60cZTqBtyoITaMc+SEMUbPVKoktbGsvzyY/a5wM=;
+        b=fWABImKChi2yDX45ecNOnqryOngYPW/OsMJ0vZLlo7SVYU47VM5XwoQAdujkmsOeCO
+         /6T45M8/i2lGxcgDuj5ejpb3cfsdiC1IRyMne3t1d4B+RHUtLkA52gSCLNKGruCsi9aq
+         Vkrzq+hzsTWPcvn2ersqTF7I9quOMx+VIrcFnzDwRtTvFG9APlSsC+uczmUcVjQDMhse
+         5pzSPSK8Ku5mhGLqv9H5NnwdtWVW3yQTLcBwrjyNnFGtrhm+zJD7Pxqf9picV1+PLyPr
+         TJHpyesoyiBjuz/5kxUuQhzZ++xjaxeoSTBY7etfO+DW6wrxu7evVlixMFziguAw1Snk
+         /xrA==
+X-Gm-Message-State: AO0yUKWW/CTB4CxJnoIGkPvEP+DKD8HGa3F+vgCc0bfLFEOfFE9dZDMV
+        QAjaxuF4XHzDo03EyswSgsfSZw==
+X-Google-Smtp-Source: AK7set8aR0gyxqI97lIeS6tVAboTuImsID4lv+BvmEQEvfVLjMdwKuNvfLGJ/1alx2KwhzvRMazvSA==
+X-Received: by 2002:a05:622a:1a2a:b0:3bf:b8ae:6ece with SMTP id f42-20020a05622a1a2a00b003bfb8ae6ecemr29496646qtb.10.1678243888643;
+        Tue, 07 Mar 2023 18:51:28 -0800 (PST)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id r13-20020a05622a034d00b0039cc0fbdb61sm11244768qtw.53.2023.03.07.18.51.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 18:51:28 -0800 (PST)
+Date:   Tue, 7 Mar 2023 21:51:26 -0500
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        broonie@kernel.org, techsupport@winsystems.com,
+        Paul Demetrotion <pdemetrotion@winsystems.com>
+Subject: Re: [PATCH v4 3/3] gpio: ws16c48: Migrate to the regmap API
+Message-ID: <ZAf4LudZkYLsWVWh@fedora>
+References: <cover.1678106722.git.william.gray@linaro.org>
+ <4b6cd42426521808962d68a44952b95818fc5daf.1678106722.git.william.gray@linaro.org>
+ <ZAX2k9gW1AA88T/P@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 0/3] Add RISC-V 32 NOMMU support
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Jesse Taube <mr.bossman075@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-riscv@lists.infradead.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yimin Gu <ustcymgu@gmail.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Waldemar Brodkorb <wbx@openadk.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-References: <20230301002657.352637-1-Mr.Bossman075@gmail.com>
- <42446784-a88b-df09-41e9-5f685b4df6ee@infradead.org>
- <556ce787-80eb-dc48-f8d6-83e415538e36@opensource.wdc.com>
- <f8f291d9-2723-4ab8-3020-49018757d470@gmail.com>
- <62852ee1-3763-3323-c3a8-f1e84f70204a@infradead.org>
- <c7941231-8ebd-dea5-81f8-3180cfc3f286@gmail.com>
- <1d858dbb-ae85-95a0-3e46-b67017733c04@infradead.org>
-In-Reply-To: <1d858dbb-ae85-95a0-3e46-b67017733c04@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Mi/wX9MNCaaYw2/s"
+Content-Disposition: inline
+In-Reply-To: <ZAX2k9gW1AA88T/P@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,123 +77,55 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--Mi/wX9MNCaaYw2/s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 3/7/23 18:33, Randy Dunlap wrote:
-> 
-> 
-> On 3/7/23 18:30, Jesse Taube wrote:
->>
->>
->> On 3/7/23 21:16, Randy Dunlap wrote:
->>> Hi--
->>>
->>> On 3/7/23 17:26, Jesse Taube wrote:
->>>>
->>>>
->>>> On 2/28/23 23:42, Damien Le Moal wrote:
->>>>> On 3/1/23 13:07, Randy Dunlap wrote:
->>>>>> Hi--
->>>>>>
->>>>>> On 2/28/23 16:26, Jesse Taube wrote:
->>>>>>> This patch-set aims to add NOMMU support to RV32.
->>>>>>> Many people want to build simple emulators or HDL
->>>>>>> models of RISC-V this patch makes it possible to
->>>>>>> run linux on them.
->>>>>>>
->>>>>>> Yimin Gu is the original author of this set.
->>>>>>> Submitted here:
->>>>>>> https://lists.buildroot.org/pipermail/buildroot/2022-November/656134.html
->>>>>>>
->>>>>>> Though Jesse T rewrote the Dconf.
->>>>>>
->>>>>> Dconf?
->>>>>>
->>>>>>>
->>>>>>> The new set:
->>>>>>> https://lists.buildroot.org/pipermail/buildroot/2022-December/658258.html
->>>>>>> ---
->>>>>>> V1->V2:
->>>>>>>    - Add Conor's clock patch for implicit div64
->>>>>>>    - Fix typo in commit title 3/3
->>>>>>>    - Fix typo in commit description 2/3
->>>>>>> V2->V3
->>>>>>>    - Change from defconfig file to a PHONY config
->>>>>>> ---
->>>>>>
->>>>>> Is this 'rv32_nommu_virt_defconfig' target the only build target
->>>>>> that is supported?
->>>>>>
->>>>>> I ask because I applied the 3 patches and did 25 randconfig builds.
->>>>>> 5 of them failed the same way:
->>>>>>
->>>>>> riscv32-linux-ld: drivers/soc/canaan/k210-sysctl.o: in function `k210_soc_early_init':
->>>>>> k210-sysctl.c:(.init.text+0x78): undefined reference to `k210_clk_early_init'
->>>> I can not recreate this error.
->>>> can you send me the .config you used.
->>>>
->>>> Thanks,
->>>> Jesse Taube
->>>
->>> Sure, it's attached.
->>
->> Hmmm, it links fine for me.
->>
->> objdump -x vmlinux | grep k210_clk_early_init
->> 81e40124 g     F .init.text     00000088 k210_clk_early_init
->>
->> gcc version 11.3.0 (Buildroot 2022.11-361-g1be0d438f7)
->> GNU assembler version 2.38 (riscv32-buildroot-linux-uclibc)
->> GNU ld (GNU Binutils) 2.38
->>
->> what gcc version are you using?
-> 
-> 
-> gcc (SUSE Linux) 12.2.1 20230124 [revision 193f7e62815b4089dfaed4c2bd34fd4f10209e27]
-> from opensuse Tumbleweed.
-> 
-> I'll try it on a current tree...
+On Mon, Mar 06, 2023 at 04:20:03PM +0200, Andy Shevchenko wrote:
+> On Mon, Mar 06, 2023 at 07:59:53AM -0500, William Breathitt Gray wrote:
+>=20
+> ...
+>=20
+> > -	raw_spinlock_t lock;
+> > +	spinlock_t lock;
+>=20
+> This is a regression.
+> That said, do we need a support of raw spin locks in the regmap IRQ?
 
-OK, I don't know how it happened. I cannot reproduce it now.
-The failing .config files has CONFIG_MMU is not set (for RV32I), which
-appears to be impossible.
+So this code has a similar need as the gpio-pcie-idio-24 patch: guard
+registers between handle_mask_sync() and set_type_config(); however, now
+we also need to protect registers in regmap_irq_thread(). We can't use a
+mutex here because regmap_irq_thread() is executed in an interrupt
+context so we cannot sleep.
 
-Sorry to bother you.
+This might be a mistake in my understanding: I chose spinlock_t here
+because I believed it to map out to a raw_spinlock_t anyway underneath,
+whereas on RT kernels it would map out to whatever the equivalent is. I
+suspect this is not actually the case. Would using raw_spinlock_t
+explicitly be the correct way to go for this particular case?
 
-Thanks.
+> > +	u8 irq_mask[WS16C48_NUM_IRQS / WS16C48_NGPIO_PER_REG];
+>=20
+> Can this be a bitmap? Or is it too over engineered with it?
 
->>>
->>>>> Arg. Forgot about that. k210 is rv64 only and while the clk driver could still
->>>>> compile test with rv32 (or any arch), that driver provides the
->>>>> k210_clk_early_init() function which is called very early in the boot process
->>>>> from k210_soc_early_init(), which is an SOC_EARLY_INIT_DECLARE() call. The
->>>>> problem may be there. Probably should be disabled for rv32 if no SoC need that
->>>>> sort of early init call.
->>>>>
->>>>>>
->>>>>> because
->>>>>> # CONFIG_COMMON_CLK_K210 is not set
->>>>>>
->>>>>>
->>>>>> Maybe SOC_CANAAN needs some more selects for required code?
->>>>>>
->>>>>>> Conor Dooley (1):
->>>>>>>     clk: k210: remove an implicit 64-bit division
->>>>>>>
->>>>>>> Jesse Taube (1):
->>>>>>>     riscv: configs: Add nommu PHONY defconfig for RV32
->>>>>>>
->>>>>>> Yimin Gu (1):
->>>>>>>     riscv: Kconfig: Allow RV32 to build with no MMU
->>>>>>>
->>>>>>>    arch/riscv/Kconfig     | 5 ++---
->>>>>>>    arch/riscv/Makefile    | 4 ++++
->>>>>>>    drivers/clk/clk-k210.c | 2 +-
->>>>>>>    3 files changed, 7 insertions(+), 4 deletions(-)
->>>>>>>
->>>>>>
->>>>>
->>>
-> 
+I also considered a bitmap at first, but I believe it adds an
+unnecessary abstraction in this particular case: irq_mask is just a
+buffer to hold the previous mask_buf state to check if it's changed when
+ws16c48_handle_mask_sync() is called. Since all we do with it is save
+the mask_buf directly, using the bitmap API seems like overkill.
 
--- 
-~Randy
+William Breathitt Gray
+
+--Mi/wX9MNCaaYw2/s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZAf4LgAKCRC1SFbKvhIj
+K1BpAP9hFKmskIE63OocEoCF07/hFHcHLdTOgP38UFv3hsndRgD/WPrfTJ+zn4gQ
+vWqp5iK5vJbkyAfUBmKpHHsaXIRTBQo=
+=KG62
+-----END PGP SIGNATURE-----
+
+--Mi/wX9MNCaaYw2/s--
