@@ -2,158 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EF06B072C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F9B6B0730
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjCHMed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 07:34:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S230257AbjCHMfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 07:35:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjCHMea (ORCPT
+        with ESMTP id S230123AbjCHMfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:34:30 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2ED2A98C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:34:28 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id o12so65032757edb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 04:34:28 -0800 (PST)
+        Wed, 8 Mar 2023 07:35:03 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444EEBC6F8
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:34:59 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id i28so21216094lfv.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 04:34:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678278867;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1678278897;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lHnWVWK4WJysT8nTvpm+ezeTdv9yWzInP/ANaSJalnE=;
-        b=VguaXxgdrVNJ6ewt6Lcu2U5zfjODDwprmRErFl1yVDEs6YJM6ae5ih+FlbGaI6vpOg
-         BvVdY9I+OBJuGy9IppdW00Ayq1m5JTUzCv5yqvAw5WOCkgYMNFQRN3lenLMSzl2YV7nq
-         gx9pncpbeAaOTImFfOQlXekji0AzH/w0ofn/cXAeinaQk0f2Ska3rM4S0fiyQrkshql2
-         yumZb3jzUA2bRxUFUPgrjXDa3bFHkYjfSpup//WaDLB+zlIeFWTFqniUNYldCxdZ77Iu
-         ZgWwkqECd7cPdXLgugOSNZTtwPtLuaqASBNfS0bcFrr7JXzIPFwgtc06gODGjsh1PO/a
-         ZaJQ==
+        bh=Bm/wFhbM4wm/xhFq134yVQd8tiMNGqmrnN+0G9WMMBo=;
+        b=jezxfYXi0ZzQdUXQiclKaruTD3zvxoLksYnruQsiQqBwDKaH8n36RCyM0npUBwOV6B
+         IVB3hwX529vMxqRUMOV0nhehAYbEXB8hfbTzA3qSk73gbtbwKKqA53GdPCmfT3T7y0fS
+         hFj5UQfd+b7fcCBDZfTMr8xiTIFr2Pzs994o4QMmE3c8HMzhLwYvq3/G/7Qxk6QTmr8I
+         qlf7Be6eyMUYYZp64djVLq6oIVjeDNfLyyOEN157cMVX0Wk4NF6w+AhiqC0al66fVeCb
+         ztz3wVSQ84P1wU0tYnnrFTrhc05EIcPWriUd8J8Q6NyVGUZ0HtZfRYKkM/iPut5uLggo
+         8EMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678278867;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20210112; t=1678278897;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lHnWVWK4WJysT8nTvpm+ezeTdv9yWzInP/ANaSJalnE=;
-        b=g40VtuoNkfpAsYZUPsrN0wwbv7bhRJ6q4yRjHfdhDgC4kp3e7EBgzaQM+hl37hCmDS
-         gW1tG10pzPuNxvv+CaBGEuO5CTYZoT3NUH/h0G95eHD46whaJ3l7XP8RQ+ug9pkvEHmz
-         cP6lIAhCBa2v8WR6fQnE4lWrtsGJCIAs3ppfWfu5sUvZGNm4gU5WruBoQKvLtabbWSqE
-         sqYmvR6q7KXZ95suQuvkYUVE2eKJqj+iu1BgRVqavekCLCMFHXRBmXryepGWfq6D0hdG
-         yVcaOS0YY2wTuHbq3S4nY7g+CB+ybGUOpeVzB6/41zLPeiMkREzvwUDzWcmrUE70RfgU
-         Dx6Q==
-X-Gm-Message-State: AO0yUKWiM8C/97AtLGhwkusFg5cBDChJYOPzgpxbbwdMVRxaCcsUi87d
-        iq+lW7bo3q+cgQ53QpWd/u+m7Q==
-X-Google-Smtp-Source: AK7set+OkhR9+9zDqw1AYMDA4XeRaaNxz/Gcl9uZU/AQnE6yeWfL8seN9zhdzyFWr7q3YqFl/tr7ng==
-X-Received: by 2002:aa7:c14e:0:b0:4ac:d2cd:81c7 with SMTP id r14-20020aa7c14e000000b004acd2cd81c7mr18034215edp.5.1678278867282;
-        Wed, 08 Mar 2023 04:34:27 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:ff33:9b14:bdd2:a3da? ([2a02:810d:15c0:828:ff33:9b14:bdd2:a3da])
-        by smtp.gmail.com with ESMTPSA id u25-20020a50a419000000b004bd6e3ed196sm8107904edb.86.2023.03.08.04.34.25
+        bh=Bm/wFhbM4wm/xhFq134yVQd8tiMNGqmrnN+0G9WMMBo=;
+        b=MROhKMmq8mmvo9YHV5QsN+b4jUBX9+pZVxV/RstdWq8C3QxxVxjsqGKbFbwjRWmHYB
+         0/LJm9FxCuOAuluw/TJLIbTLy98QWaY2t364d0UBz4/YgqK9GuD9TnLhTWYPPKzeHBBE
+         HH6OZ9ESsm5s+tdn7bAaspqUS8bi26VMWx9MzEBXzeyvuVrXQwYHFgzA5xFZ3VlsQo1u
+         N4JdX6DiIc9vm2IstIahH7mrvGhGSOCGRWgGpgObZJibGbwWssJcAUjmhu9wzRC7/NYt
+         fNFlNvcpiGF2dOE1ZAZEJLvRqOVZLpy3WvUVl9SswZO9cLeYXa4lUN3fe5IPoWTQLhc6
+         8iNw==
+X-Gm-Message-State: AO0yUKWtRUedw/c2dh+IyiX9xNuRIji7QOz8pFeX6SdRU/0mip4/HyhQ
+        NS8ITzlHzpbM9EBfEuH/DwWQz+4OTSlTPdTxue8=
+X-Google-Smtp-Source: AK7set9Fwpz4ucWoyfrUg0MFawQVc4nuIyYWmuOSFKkGSlG8En1qe8k2LLAB82bku8RZnPRIt+xXgQ==
+X-Received: by 2002:ac2:5613:0:b0:4cb:13d7:77e2 with SMTP id v19-20020ac25613000000b004cb13d777e2mr5109380lfd.26.1678278897568;
+        Wed, 08 Mar 2023 04:34:57 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id d2-20020a2e96c2000000b00295a2d07558sm2569871ljj.112.2023.03.08.04.34.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 04:34:26 -0800 (PST)
-Message-ID: <dbbe3cd2-3329-d267-338b-8e513209ddcd@linaro.org>
-Date:   Wed, 8 Mar 2023 13:34:25 +0100
+        Wed, 08 Mar 2023 04:34:57 -0800 (PST)
+Message-ID: <2fbf7a1c-fa1a-8834-63b0-0796b2993293@linaro.org>
+Date:   Wed, 8 Mar 2023 13:34:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH net-next v2] dt-bindings: net: ti: k3-am654-cpsw-nuss:
- Document Serdes PHY
+Subject: Re: [PATCH] arm64: dts: qcom: sm8450: correct WSA2 assigned clocks
 Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux@armlinux.org.uk, pabeni@redhat.com, robh+dt@kernel.org,
-        nsekhar@ti.com, rogerq@kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srk@ti.com
-References: <20230308051835.276552-1-s-vadapalli@ti.com>
- <1ffed720-322c-fa73-1160-5fd73ce3c7c2@linaro.org>
- <7b6e8131-8e5b-88bc-69f7-b737c0c35bb6@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <7b6e8131-8e5b-88bc-69f7-b737c0c35bb6@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230308123129.232642-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230308123129.232642-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 09:38, Siddharth Vadapalli wrote:
-> Hello Krzysztof,
+
+
+On 8.03.2023 13:31, Krzysztof Kozlowski wrote:
+> The WSA2 assigned-clocks were copied from WSA, but the WSA2 uses its
+> own.
 > 
-> On 08/03/23 14:04, Krzysztof Kozlowski wrote:
->> On 08/03/2023 06:18, Siddharth Vadapalli wrote:
->>> Update bindings to include Serdes PHY as an optional PHY, in addition to
->>> the existing CPSW MAC's PHY. The CPSW MAC's PHY is required while the
->>> Serdes PHY is optional. The Serdes PHY handle has to be provided only
->>> when the Serdes is being configured in a Single-Link protocol. Using the
->>> name "serdes-phy" to represent the Serdes PHY handle, the am65-cpsw-nuss
->>> driver can obtain the Serdes PHY and request the Serdes to be
->>> configured.
->>>
->>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->>> ---
->>>
->>> Hello,
->>>
->>> This patch corresponds to the Serdes PHY bindings that were missed out in
->>> the series at:
->>> https://lore.kernel.org/r/20230104103432.1126403-1-s-vadapalli@ti.com/
->>> This was pointed out at:
->>> https://lore.kernel.org/r/CAMuHMdW5atq-FuLEL3htuE3t2uO86anLL3zeY7n1RqqMP_rH1g@mail.gmail.com/
->>>
->>> Changes from v1:
->>> 1. Describe phys property with minItems, items and description.
->>> 2. Use minItems and items in phy-names.
->>> 3. Remove the description in phy-names.
->>>
->>> v1:
->>> https://lore.kernel.org/r/20230306094750.159657-1-s-vadapalli@ti.com/
->>>
->>>  .../bindings/net/ti,k3-am654-cpsw-nuss.yaml        | 14 ++++++++++++--
->>>  1 file changed, 12 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
->>> index 900063411a20..0fb48bb6a041 100644
->>> --- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
->>> +++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
->>> @@ -126,8 +126,18 @@ properties:
->>>              description: CPSW port number
->>>  
->>>            phys:
->>> -            maxItems: 1
->>> -            description: phandle on phy-gmii-sel PHY
->>> +            minItems: 1
->>> +            items:
->>> +              - description: CPSW MAC's PHY.
->>> +              - description: Serdes PHY. Serdes PHY is required only if
->>> +                             the Serdes has to be configured in the
->>> +                             Single-Link configuration.
->>> +
->>> +          phy-names:
->>> +            minItems: 1
->>> +            items:
->>> +              - const: mac-phy
->>> +              - const: serdes-phy
->>
->> Drop "phy" suffixes.
+> Fixes: 14341e76dbc7 ("arm64: dts: qcom: sm8450: add Soundwire and LPASS")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  arch/arm64/boot/dts/qcom/sm8450.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> The am65-cpsw driver fetches the Serdes PHY by looking for the string
-> "serdes-phy". Therefore, modifying the string will require changing the driver's
-> code as well. Please let me know if it is absolutely necessary to drop the phy
-> suffix. If so, I will post a new series with the changes involving dt-bindings
-> changes and the driver changes.
-
-Why the driver uses some properties before adding them to the binding?
-
-And is it correct method of adding ABI? You add incorrect properties
-without documentation and then use this as an argument "driver already
-does it"?
-
-Best regards,
-Krzysztof
-
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> index 42833188a257..a315c0a61c5f 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> @@ -2142,8 +2142,8 @@ wsa2macro: codec@31e0000 {
+>  				 <&q6prmcc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
+>  				 <&vamacro>;
+>  			clock-names = "mclk", "npl", "macro", "dcodec", "fsgen";
+> -			assigned-clocks = <&q6prmcc LPASS_CLK_ID_WSA_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
+> -					  <&q6prmcc LPASS_CLK_ID_WSA_CORE_TX_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
+> +			assigned-clocks = <&q6prmcc LPASS_CLK_ID_WSA2_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
+> +					  <&q6prmcc LPASS_CLK_ID_WSA2_CORE_TX_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
+>  			assigned-clock-rates = <19200000>, <19200000>;
+>  
+>  			#clock-cells = <0>;
