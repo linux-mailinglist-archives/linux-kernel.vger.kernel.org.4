@@ -2,146 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332456B0D27
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1A46B0D28
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbjCHPnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44716 "EHLO
+        id S231972AbjCHPn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:43:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbjCHPn1 (ORCPT
+        with ESMTP id S230161AbjCHPne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:43:27 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A379F92723;
-        Wed,  8 Mar 2023 07:42:25 -0800 (PST)
-Received: from [192.168.2.24] (77-166-152-30.fixed.kpn.net [77.166.152.30])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0157520BBF92;
-        Wed,  8 Mar 2023 07:42:04 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0157520BBF92
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1678290126;
-        bh=zFYFwWuo+Y9TAr6dR2+IlULhrthw608V/1+z0YyYpdU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NDsDPBY6Xgj+5a6Lg6mE1Gz5DnyeO49hu+svsM4CkiX5/NFRXKUXhiq8Z0zfnW+pm
-         MmKpNJT0ZsmoDh3z6D+8SZXt1LnGAeHVurJ7RHPyXwNQ6vr5GAm/svD7mKmwNEf/EX
-         PnjCNIsBtOpmjMv/hnpUibqpV9Ejc7QrJSlFK3yk=
-Message-ID: <ef5f6c79-3c75-1bda-80d3-bb6d84cc27b2@linux.microsoft.com>
-Date:   Wed, 8 Mar 2023 16:42:03 +0100
+        Wed, 8 Mar 2023 10:43:34 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D32ACB079
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 07:42:33 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 21D5621A08;
+        Wed,  8 Mar 2023 15:42:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1678290132; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=D8WxbyyO7u7WlwK3Tkf3hyugox0XtO5Ax82nB45NCXY=;
+        b=MJKaCwXB+yWdUWhuvNgryG50DFmtXND/cJoW8xqPZPnuASLnruaWUO+fLj+yTNFv4QTBf+
+        3bH5FdlVfC0Ajn3k+vaudJdeKgSFh2AO/Hd1d169yEdjghuHMlBT59Jrr41FltRBrZPY4x
+        udnDseijvKAzLFGF6NIQvdugtQKOpE0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BE9C91348D;
+        Wed,  8 Mar 2023 15:42:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id wjkaLdOsCGTOGgAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 08 Mar 2023 15:42:11 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        virtualization@lists.linux-foundation.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH] x86/paravirt: convert simple paravirt functions to asm
+Date:   Wed,  8 Mar 2023 16:42:10 +0100
+Message-Id: <20230308154210.18454-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
-Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     kvm@vger.kernel.org, Tianyu Lan <ltykernel@gmail.com>,
-        Michael Kelley <mikelley@microsoft.com>
-References: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
- <87lek9zs05.fsf@redhat.com>
- <c6bb4b57-f134-d992-7f30-be80151fb67e@linux.microsoft.com>
- <87a60ozxga.fsf@redhat.com>
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-In-Reply-To: <87a60ozxga.fsf@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2023 11:07, Vitaly Kuznetsov wrote:
-> Jeremi Piotrowski <jpiotrowski@linux.microsoft.com> writes:
-> 
->> On 06/03/2023 18:52, Vitaly Kuznetsov wrote:
->>> Jeremi Piotrowski <jpiotrowski@linux.microsoft.com> writes:
->>>
->>>> TDP MMU has been broken on AMD CPUs when running on Hyper-V since v5.17.
->>>> The issue was first introduced by two commmits:
->>>>
->>>> - bb95dfb9e2dfbe6b3f5eb5e8a20e0259dadbe906 "KVM: x86/mmu: Defer TLB
->>>>   flush to caller when freeing TDP MMU shadow pages"
->>>> - efd995dae5eba57c5d28d6886a85298b390a4f07 "KVM: x86/mmu: Zap defunct
->>>>   roots via asynchronous worker"
->>>>
->>>> The root cause is that since then there are missing TLB flushes which
->>>> are required by HV_X64_NESTED_ENLIGHTENED_TLB.
->>>
->>> Please share more details on what's actually missing as you get them,
->>> I'd like to understand which flushes can be legally avoided on bare
->>> hardware and Hyper-V/VMX but not on Hyper-V/SVM.
->>>
->>
->> See the linked thread here
->> https://lore.kernel.org/lkml/20d189fc-8d20-8083-b448-460cc0420151@linux.microsoft.com/#t
->> for all the details/analyses but the summary was that either of these 2
->> options would work, with a) having less flushes (footnote: less flushes is not necessarily
->> better):
->>
->> a) adding a hyperv_flush_guest_mapping(__pa(root->spt) after kvm_tdp_mmu_get_vcpu_root_hpa's call to tdp_mmu_alloc_sp()
->> b) adding a hyperv_flush_guest_mapping(vcpu->arch.mmu->root.hpa) to svm_flush_tlb_current()
->>
->> These are only needed on Hyper-V/SVM because of how the enlightenment works (needs an explicit
->> flush to rebuild L0 shadow page tables). Hyper-V/VMX does not need any changes and currently
->> works. Let me know if you need more information on something here, I'll try to get it.
->>
-> 
-> Ah, I missed the whole party! Thanks for the pointers!
-> 
->>>>  The failure manifests
->>>> as L2 guest VMs being unable to complete boot due to memory
->>>> inconsistencies between L1 and L2 guests which lead to various
->>>> assertion/emulation failures.
-> 
-> Which levels are we talking about here, *real* L1 and L2 or L1 and L2
-> from KVM's perspective (real L2 and L3)?
+All functions referenced via __PV_IS_CALLEE_SAVE() need to be assembler
+functions, as those functions calls are hidden from gcc. In case the
+kernel is compiled with "-fzero-call-used-regs" the compiler will
+clobber caller-saved registers at the end of C functions, which will
+result in unexpectedly zeroed registers at the call site of the
+related paravirt functions.
 
-Real L1 and L2. In this whole discussion L0 is Hyper-V, L1 is KVM and L2 is a Linux VM.
+Replace the C functions with DEFINE_PARAVIRT_ASM() constructs using
+the same instructions as the related paravirt calls in the
+PVOP_ALT_[V]CALLEE*() macros.
 
-> 
->>>>
->>>> The HV_X64_NESTED_ENLIGHTENED_TLB enlightenment is always exposed by
->>>> Hyper-V on AMD and is always used by Linux. The TLB flush required by
->>>> HV_X64_NESTED_ENLIGHTENED_TLB is much stricter than the local TLB flush
->>>> that TDP MMU wants to issue. We have also found that with TDP MMU L2 guest
->>>> boot performance on AMD is reproducibly slower compared to when TDP MMU is
->>>> disabled.
->>>>
->>>> Disable TDP MMU when using SVM Hyper-V for the time being while we
->>>> search for a better fix.
->>>
->>> I'd suggest we go the other way around: disable
->>> HV_X64_NESTED_ENLIGHTENED_TLB on SVM:
->>
->> Paolo suggested disabling TDP_MMU when HV_X64_NESTED_ENLIGHTENED_TLB is used, and
->> I prefer that option too. The enlighenment does offer a nice performance advantage
->> with non-TDP_MMU, and I did not see TDP_MMU perform any better compared to that.
->> Afaik the code to use the enlightenment on Hyper-V/SVM was written/tested before
->> TDP_MMU became the default.
->>
->> If you have a specific scenario in mind, we could test and see what the implications
->> are there.
-> 
-> I don't have a strong opinion here, I've suggested a smaller change so
-> it's easier to backport it to stable kernels and easier to revert when a
-> proper fix comes to mainline.
+Signed-off-by: Juergen Gross <jgross@suse.com>
+---
+ arch/x86/include/asm/paravirt_types.h |  8 +++++++-
+ arch/x86/kernel/paravirt.c            | 27 ++++++---------------------
+ 2 files changed, 13 insertions(+), 22 deletions(-)
 
-Noted. My concern here is about changing a default in a way that lowers performance,
-because the proper fix that comes later might end up not being suitable for stable.
+diff --git a/arch/x86/include/asm/paravirt_types.h b/arch/x86/include/asm/paravirt_types.h
+index 8c1da419260f..49f5c6955229 100644
+--- a/arch/x86/include/asm/paravirt_types.h
++++ b/arch/x86/include/asm/paravirt_types.h
+@@ -562,8 +562,14 @@ void paravirt_flush_lazy_mmu(void);
+ 
+ void _paravirt_nop(void);
+ void paravirt_BUG(void);
+-u64 _paravirt_ident_64(u64);
+ unsigned long paravirt_ret0(void);
++#ifdef CONFIG_PARAVIRT_XXL
++u64 _paravirt_ident_64(u64);
++unsigned long pv_native_save_fl(void);
++void pv_native_irq_disable(void);
++void pv_native_irq_enable(void);
++unsigned long pv_native_read_cr2(void);
++#endif
+ 
+ #define paravirt_nop	((void *)_paravirt_nop)
+ 
+diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+index 42e182868873..d25ac4b08c41 100644
+--- a/arch/x86/kernel/paravirt.c
++++ b/arch/x86/kernel/paravirt.c
+@@ -64,11 +64,11 @@ static unsigned paravirt_patch_call(void *insn_buff, const void *target,
+ }
+ 
+ #ifdef CONFIG_PARAVIRT_XXL
+-/* identity function, which can be inlined */
+-u64 notrace _paravirt_ident_64(u64 x)
+-{
+-	return x;
+-}
++DEFINE_PARAVIRT_ASM(_paravirt_ident_64, "mov %rdi, %rax", .text);
++DEFINE_PARAVIRT_ASM(pv_native_save_fl, "pushf; pop %rax", .text);
++DEFINE_PARAVIRT_ASM(pv_native_irq_disable, "cli", .text);
++DEFINE_PARAVIRT_ASM(pv_native_irq_enable, "sti", .text);
++DEFINE_PARAVIRT_ASM(pv_native_read_cr2, "mov %cr2, %rax", .text);
+ #endif
+ 
+ DEFINE_STATIC_KEY_TRUE(virt_spin_lock_key);
+@@ -197,11 +197,6 @@ void paravirt_end_context_switch(struct task_struct *next)
+ 		arch_enter_lazy_mmu_mode();
+ }
+ 
+-static noinstr unsigned long pv_native_read_cr2(void)
+-{
+-	return native_read_cr2();
+-}
+-
+ static noinstr void pv_native_write_cr2(unsigned long val)
+ {
+ 	native_write_cr2(val);
+@@ -222,16 +217,6 @@ noinstr void pv_native_wbinvd(void)
+ 	native_wbinvd();
+ }
+ 
+-static noinstr void pv_native_irq_enable(void)
+-{
+-	native_irq_enable();
+-}
+-
+-static noinstr void pv_native_irq_disable(void)
+-{
+-	native_irq_disable();
+-}
+-
+ static noinstr void pv_native_safe_halt(void)
+ {
+ 	native_safe_halt();
+@@ -298,7 +283,7 @@ struct paravirt_patch_template pv_ops = {
+ 	.cpu.end_context_switch		= paravirt_nop,
+ 
+ 	/* Irq ops. */
+-	.irq.save_fl		= __PV_IS_CALLEE_SAVE(native_save_fl),
++	.irq.save_fl		= __PV_IS_CALLEE_SAVE(pv_native_save_fl),
+ 	.irq.irq_disable	= __PV_IS_CALLEE_SAVE(pv_native_irq_disable),
+ 	.irq.irq_enable		= __PV_IS_CALLEE_SAVE(pv_native_irq_enable),
+ 	.irq.safe_halt		= pv_native_safe_halt,
+-- 
+2.35.3
 
-> For performance implication, I'd only
-> consider non-nested scenarios from KVM's perspective (i.e. real L2 from
-> Hyper-V's PoV), as running L3 is unlikely a common use-case and, if I
-> understood correctly, is broken anyway.
-
-I agree with that. Right now L2 is broken, I've never even attempted L3 to
-see if it would work.
-
-Jeremi
