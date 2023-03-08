@@ -2,194 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF756AFD79
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 04:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F9C6AFD7F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 04:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjCHDkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 22:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
+        id S229542AbjCHDlC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Mar 2023 22:41:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjCHDkp (ORCPT
+        with ESMTP id S229896AbjCHDkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 22:40:45 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE0B9547A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 19:40:41 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id fr5-20020a17090ae2c500b0023af8a036d2so170380pjb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 19:40:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678246840;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QLUpNRb1Q5SbO5b6ljTZoN5cFP88001T4PHHJDtnPIY=;
-        b=hvgQDq9Hx7UZ+T+wnEN/YAB03nl+H2YawT6rsZIgLQWs/jTvHj7wOlBe+kV/zOxTLL
-         jftAH82U93x6DI+yV8EgM3dVqSXPKAGh1/9x69jebUA0lWdAnViH05CqLjCm6e8jI9ul
-         1B08YMiyJD8CvQUNYYX8zwFzs1KEv+llJ4nK/MUMXD/uTmb7+aFpaklcGWHFjtu3ziNM
-         mi2c3+ctKR2GWRPPW5dfzdAUxBQRRrndJ323cI0NoodTewkP3wPyq2jbrQPkQlMUsxha
-         1cSROQvN3Od1hHzlhzQCvAJbsfgCvPuxMal2DfwqxAEhfXGkMNuqXGv/+hsxkFQWAUOS
-         GuhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678246840;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QLUpNRb1Q5SbO5b6ljTZoN5cFP88001T4PHHJDtnPIY=;
-        b=expmvj9h+35XH3iYH5Lcb04p80WpUWPRvStV7L/cGW7B662867DJoah8YetbJB59Dp
-         +NZYnl0sGhMqdQAzGy0aR/zCzYrm6ornLTVfc3P78qUNVQ32dQjAI4mFvqOGDLGtnrmu
-         4mezML1SnJ1/n+d3mB0GJ7q7+F0FwiTSTdaGYDB56tPRqAJ3oCLKmpXFbk1LANcCZNMA
-         +4cELD32VeT3VBG+BbNoig4cw7WCjc2WLvltGfLXwX6tbw0eSiK9jz0vFXM0mw/FpYdb
-         CaEld3d/9E23F183sn5qoYXcjg8RDeJ8YyYYBihYLd/dEkoCBx0F8Iv6rKpM5skCAWMU
-         QzRg==
-X-Gm-Message-State: AO0yUKU4ueFQbtA8YG6d3K6JabqRgHy1eHuA0QRH/BuRO7vBwxf/b1gb
-        t09lqpFcIqgzqjWVVt9EkYFFCP4e2TclvmhWteStig==
-X-Google-Smtp-Source: AK7set951PHcH/hh6Gt6p7PVv5UViZaBErCzXeuETNU4JXbZ9TJrRbhpRClK0T35JNChyp0zlzlZSL+kUVqQoNAFMXA=
-X-Received: by 2002:a17:90a:f10b:b0:23a:6ed6:7817 with SMTP id
- cc11-20020a17090af10b00b0023a6ed67817mr6298116pjb.5.1678246840511; Tue, 07
- Mar 2023 19:40:40 -0800 (PST)
+        Tue, 7 Mar 2023 22:40:49 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD769943B2;
+        Tue,  7 Mar 2023 19:40:44 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id C372724E1C9;
+        Wed,  8 Mar 2023 11:40:37 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Mar
+ 2023 11:40:37 +0800
+Received: from localhost.localdomain (183.27.97.46) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Mar
+ 2023 11:40:36 +0800
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/3] Add watchdog driver for StarFive JH7100/JH7110 RISC-V SoCs
+Date:   Wed, 8 Mar 2023 11:40:33 +0800
+Message-ID: <20230308034036.99213-1-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230215010717.3612794-1-rananta@google.com> <20230215010717.3612794-15-rananta@google.com>
-In-Reply-To: <20230215010717.3612794-15-rananta@google.com>
-From:   Reiji Watanabe <reijiw@google.com>
-Date:   Tue, 7 Mar 2023 19:40:24 -0800
-Message-ID: <CAAeT=Fyu6eoYX=1U1aXr5qrXSPmQdswcrE+Dz12SLK7R-1XDAQ@mail.gmail.com>
-Subject: Re: [REPOST PATCH 14/16] selftests: KVM: aarch64: Add PMU test to
- chain all the counters
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
-        Ricardo Koller <ricarkol@google.com>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [183.27.97.46]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Raghu,
+This patch serises are to add watchdog driver for the StarFive
+JH7100 and JH7110 RISC-V SoCs. The first patch adds docunmentation to
+describe device tree bindings. The subsequent patch adds watchdog driver
+and support JH7100/JH7110 SoCs. And the last patch adds watchdog node in
+the JH7100 dts. And the addition of JH7110 device tree node will be
+submitted after the JH7110 dts merge. This patchset is based on 6.3-rc1.
 
-On Tue, Feb 14, 2023 at 5:07=E2=80=AFPM Raghavendra Rao Ananta
-<rananta@google.com> wrote:
->
-> Extend the vCPU migration test to occupy all the vPMU counters,
-> by configuring chained events on alternate counter-ids and chaining
-> them with its corresponding predecessor counter, and verify against
-> the extended behavior.
->
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> ---
->  .../testing/selftests/kvm/aarch64/vpmu_test.c | 60 +++++++++++++++++++
->  1 file changed, 60 insertions(+)
->
-> diff --git a/tools/testing/selftests/kvm/aarch64/vpmu_test.c b/tools/test=
-ing/selftests/kvm/aarch64/vpmu_test.c
-> index de725f4339ad5..fd00acb9391c8 100644
-> --- a/tools/testing/selftests/kvm/aarch64/vpmu_test.c
-> +++ b/tools/testing/selftests/kvm/aarch64/vpmu_test.c
-> @@ -710,6 +710,63 @@ static void test_chained_count(int pmc_idx)
->         pmu_irq_exit(chained_pmc_idx);
->  }
->
-> +static void test_chain_all_counters(void)
-> +{
-> +       int i;
-> +       uint64_t cnt, pmcr_n =3D get_pmcr_n();
-> +       struct pmc_accessor *acc =3D &pmc_accessors[0];
+The watchdog driver has been tested on the VisionFive 1 and VisionFive 2
+boards which equip with JH7100 and JH7110 SoCs respectively and both
+works normally.
 
-How do you decide whether to test with all accessors ?
-Perhaps, it might be simpler and more consistent if we implement each
-test case with one specified accessor as an argument, and run those
-test with each accessors?
+Changes since v3: 
+- Modified the dt-binding, driver and dts to support JH7100 watchdog.
+- Modified the register comments.
+- Changed the return value and order when getting clock rate.
+- Used dev_err_probe() when getting clocks and resets.
+- Improved the codes of setting default timeout.
+- Moved the watchdog_register_device() after setting WDOG_HW_RUNNING.
+- Changed 'SOC_STARFIVE' to 'ARCH_STARFIVE' in Kconfig file.
+- Dropped the struct of platform_device_id.
+- Used new functions to enable or disable clock.
+
+Changes since v2:
+- Added watchdog.yaml and unevaluatedProperties in the dt-binding.
+- Removed some unnecessary include files.
+- Changed the 'module_param' name and dropped 'soft_noboot'.
+- Rrmoved 'CONFIG_OF'.
+- Added a check if clock rate is 0.
+- Modified the max_timeout calculation formula.
+- Removed restart function.
+- Removed duplicate checks on the upper and lower bounds of 'count'.
+- Removed 'started' variable.
+- Added pm_runtime_get_sync() and pm_runtime_put_sync().
+- Removed 'firmware_version = 0' variable.
+- Drop the device tree node commit.
+
+Changes since v1:
+- Renamed the dt-binding 'starfive,wdt.yaml' to 'starfive,jh7110-wdt.yaml'.
+- Dropped the '_clk' and 'rst_' about the 'clock-names' and 'reset-names'
+  in the dt-binding.
+- Updated the example context in the dt-binding 'starfive,jh7110-wdt.yaml'
+  to be independent of other patchset.
+- Deleted unused macros like 'JH7110_WDOG_INT_EN'.
+- Changed the type of 'freq' in the struct from u64 to u32.
+- Used 'devm_clk_get_enabled()' instead of 'devm_clk_get()' and
+  'clk_prepare_enable()'.
+- Removed the operation to get the frequency from the device tree.
+- Added watchdog_stop_on_unregister() and watchdog_stop_on_reboot().
+- Removed any operations about interrupt.
+
+v3:
+--- https://lore.kernel.org/all/20230220081926.267695-1-xingyu.wu@starfivetech.com/
+v2:
+--- https://lore.kernel.org/all/20221219094233.179153-1-xingyu.wu@starfivetech.com/
+v1:
+--- https://lore.kernel.org/all/20221202093943.149674-1-xingyu.wu@starfivetech.com/
+
+Xingyu Wu (3):
+  dt-bindings: watchdog: Add watchdog for StarFive JH7100 and JH7110
+  drivers: watchdog: Add StarFive Watchdog driver
+  riscv: dts: starfive: jh7100: Add watchdog node
+
+ .../watchdog/starfive,jh7100-wdt.yaml         |  71 ++
+ MAINTAINERS                                   |   7 +
+ arch/riscv/boot/dts/starfive/jh7100.dtsi      |  10 +
+ drivers/watchdog/Kconfig                      |   9 +
+ drivers/watchdog/Makefile                     |   2 +
+ drivers/watchdog/starfive-wdt.c               | 675 ++++++++++++++++++
+ 6 files changed, 774 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml
+ create mode 100644 drivers/watchdog/starfive-wdt.c
 
 
-> +
-> +       /*
-> +        * Test the occupancy of all the event counters, by chaining the
-> +        * alternate counters. The test assumes that the host hasn't
-> +        * occupied any counters. Hence, if the test fails, it could be
-> +        * because all the counters weren't available to the guest or
-> +        * there's actually a bug in KVM.
-> +        */
-> +
-> +       /*
-> +        * Configure even numbered counters to count cpu-cycles, and chai=
-n
-> +        * each of them with its odd numbered counter.
-> +        */
+base-commit: 8ca09d5fa3549d142c2080a72a4c70ce389163cd
+prerequisite-patch-id: 558a5b43260d13a6f5229b139ccd45f737a4f686
+-- 
+2.25.1
 
-You might want to use the cycle counter as well ?
-
-Thank you,
-Reiji
-
-> +       for (i =3D 0; i < pmcr_n; i++) {
-> +               if (i % 2) {
-> +                       acc->write_typer(i, ARMV8_PMUV3_PERFCTR_CHAIN);
-> +                       acc->write_cntr(i, 1);
-> +               } else {
-> +                       pmu_irq_init(i);
-> +                       acc->write_cntr(i, PRE_OVERFLOW_32);
-> +                       acc->write_typer(i, ARMV8_PMUV3_PERFCTR_CPU_CYCLE=
-S);
-> +               }
-> +               enable_counter(i);
-> +       }
-> +
-> +       /* Introduce some cycles */
-> +       execute_precise_instrs(500, ARMV8_PMU_PMCR_E);
-> +
-> +       /*
-> +        * An overflow interrupt should've arrived for all the even numbe=
-red
-> +        * counters but none for the odd numbered ones. The odd numbered =
-ones
-> +        * should've incremented exactly by 1.
-> +        */
-> +       for (i =3D 0; i < pmcr_n; i++) {
-> +               if (i % 2) {
-> +                       GUEST_ASSERT_1(!pmu_irq_received(i), i);
-> +
-> +                       cnt =3D acc->read_cntr(i);
-> +                       GUEST_ASSERT_2(cnt =3D=3D 2, i, cnt);
-> +               } else {
-> +                       GUEST_ASSERT_1(pmu_irq_received(i), i);
-> +               }
-> +       }
-> +
-> +       /* Cleanup the states */
-> +       for (i =3D 0; i < pmcr_n; i++) {
-> +               if (i % 2 =3D=3D 0)
-> +                       pmu_irq_exit(i);
-> +               disable_counter(i);
-> +       }
-> +}
-> +
->  static void test_event_count(uint64_t event, int pmc_idx, bool expect_co=
-unt)
->  {
->         switch (event) {
-> @@ -739,6 +796,9 @@ static void test_basic_pmu_functionality(void)
->
->         /* Test chained events */
->         test_chained_count(0);
-> +
-> +       /* Test running chained events on all the implemented counters */
-> +       test_chain_all_counters();
->  }
->
->  /*
-> --
-> 2.39.1.581.gbfd45094c4-goog
->
