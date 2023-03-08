@@ -2,105 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0326B063B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6EA6B064C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjCHLnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:43:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
+        id S230235AbjCHLq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 06:46:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjCHLm4 (ORCPT
+        with ESMTP id S229778AbjCHLqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:42:56 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7535CBD7B7
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 03:42:42 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id j11so45006783edq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 03:42:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1678275761;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=EDKdC+6hyofhr4T6hi4EtGoiKJnWevsXeOWcKWN7al0=;
-        b=nFRaw4lRKgq21mLnujYmx7aDGXo5bh4wBopYEpo93z1WAKMfKlsOTX5UtBEAlFj4MK
-         NCQPbZe2kI80OUzdMDRmaye8z4jLpSLUpNCnK0oY5eq+Y5EKN78F11gcPvMcIPRfUu7y
-         pWqD3EErABEaYqSL3mw5BPC3CLoRQYQ72UxW4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678275761;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EDKdC+6hyofhr4T6hi4EtGoiKJnWevsXeOWcKWN7al0=;
-        b=BMzM+mUB71qsMfUzOXpCSa/tnawu/HvasaLIVi1Sw2OTBIflL7/QJf1IYRHhgxnK9l
-         wLncpk1booUGh2u2KpCt2lvWrTBCvT4PW6QbWaK19KH4PRoeKLlt4FVWkroSxaT4NUWW
-         +eZzOQRmQI5SBu//GITqZGS8tT/FVv2l39IxZHGhg8lKdzbHN05AWgwwRy/dZ+ipJJSo
-         ho5f5Bs/tVWntjsHEpsCP0uY/NwohIMjtnZbrDBRwSTm3xFxdonVUP83As03TncLDKhy
-         mYeZDnE3yZ96CgZuF8YH/0EiKN9V/lEuDBDLJPNEoN0hdC66GPPJZhE9SOJ8XPBXth0h
-         nZHA==
-X-Gm-Message-State: AO0yUKVS+z9sGtj9wX7PgfoDoO51bTzcCTmSPojGshCocXOTwKuhSgrJ
-        cUWTZhudEO1mQ5UVl/vCc6VNq1K3/toU38tsCwPDmw==
-X-Google-Smtp-Source: AK7set8BaGh8OjHnxwN0qIs+csLDTXeeXp0Bl3oKcw0Y8sphZ/mVUWo81LJtE30LCSVi+GXGDfxr3OOPoprwBJif+v4=
-X-Received: by 2002:a50:f619:0:b0:4c0:616:5fc3 with SMTP id
- c25-20020a50f619000000b004c006165fc3mr9926513edn.0.1678275760869; Wed, 08 Mar
- 2023 03:42:40 -0800 (PST)
+        Wed, 8 Mar 2023 06:46:24 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CB2B9BDB;
+        Wed,  8 Mar 2023 03:46:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1678275933; i=frank-w@public-files.de;
+        bh=qEavMN1oNHIzuD8noKMIhhy5yWfLaY/kuANm9Ge6KwI=;
+        h=X-UI-Sender-Class:Date:From:To:CC:Subject:Reply-to:In-Reply-To:
+         References;
+        b=t1KogGT4MmYx30vi7OO4cMg5ghrLEDijOcIqpiHppwseqSAqal+mwJlAqAGESpYBB
+         93L1GVDpYZMR01axjyhbuZV5RzxH5pt3xyLejd6TdPbiJCwyAeo/K1ykEI4GDpzenM
+         GHvu9TQ/iVhXCWuU9K0aPJ4KMfjfituiDM2Bn8v9lG69LQ0VdQKfWBZomzXBPkKwnu
+         wXSNHC6t9bDtnSIcwxUQwj1pwT2ISMVcZ8wkf3+2QgobbV5qy8GKSeO6pfI8UAfo2m
+         xVVqGQ47Vy08jVSbc81dbFKwlw/iLu0CdkS1HwybrTXv+Bt1XpA/4t8ZOMBEsUlkdj
+         KeZfZuzhzJFGA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [127.0.0.1] ([80.245.79.148]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MLzFx-1prg4K0sE5-00HzeR; Wed, 08
+ Mar 2023 12:45:33 +0100
+Date:   Wed, 08 Mar 2023 12:44:57 +0100
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Daniel Golle <daniel@makrotopia.org>
+CC:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?ISO-8859-1?Q?Bj=F8rn_Mork?= <bjorn@mork.no>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_net-next_v12_09/18=5D_net=3A_ethernet=3A_m?= =?US-ASCII?Q?tk=5Feth=5Fsoc=3A_Fix_link_status_for_none-SGMII_modes?=
+User-Agent: K-9 Mail for Android
+Reply-to: frank-w@public-files.de
+In-Reply-To: <ZAhzt5eIZiJUyVm7@shell.armlinux.org.uk>
+References: <cover.1678201958.git.daniel@makrotopia.org> <1590fb0e69f6243ac6a961b16bf7ae7534f46949.1678201958.git.daniel@makrotopia.org> <ZAhzt5eIZiJUyVm7@shell.armlinux.org.uk>
+Message-ID: <B69026D7-E770-4168-B1CA-54E34D52C961@public-files.de>
 MIME-Version: 1.0
-From:   Daniel Dao <dqminh@cloudflare.com>
-Date:   Wed, 8 Mar 2023 11:42:29 +0000
-Message-ID: <CA+wXwBQwgxB3_UphSny-yAP5b26meeOu1W4TwYVcD_+5gOhvPw@mail.gmail.com>
-Subject: Unexpected EINVAL when enabling cpuset in subtree_control when
- io_uring threads are running
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     io-uring@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        cgroups@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:U0PP32xta1RnFR2flRmcenHYZpYoj2Ef4IAW6ruNMl10pX7i6w4
+ A9yAcQ8VNRT6NZUG6Sc7Po5hzbBIItxfLe4Iag/EqYpmLi6/C6ZTSpa9jiwCoNvyOxTEr1b
+ EXbFqzSXnz2iUcTNHmZowsxn7gWIMy3JJHEws1wO+wKAmArVusQapJFqbHaHe1RUwURbibB
+ mCp8O6NrjhklOfBgj5EYQ==
+UI-OutboundReport: notjunk:1;M01:P0:S4xCqvkT+XQ=;5qo8wFaspq4RNU/Odi3ftREhRlO
+ s5slcf7rPRArkT7DkDOi27wcNLSc2JZS5l3Nee09r9ccaivKfMfl3WpOFSKF2R5g2zO8aTG36
+ Q04x8FsDvR5ybFqwYvxrCEXjNt4Hw7KG+cxPeLwFs9XpJluN17EuR7R+IPXKpjka645fUHNH5
+ rpd/Kk09gO8Pu4JwBt8bJ5vbjneQ1rJxnAQloskEUIYPl2q3B3Hfl8ARmusWpI3sWETR+NX+4
+ 4Lg/41FAaKcNv9+HRa1NjjgzSW3NQl72rdapFjeybAY8YmZSIEHa7KQKYG+x0jkbpfRjWDIi1
+ lHePhwzbBoDvWRvhOXCGE9hBNKXZ6tsOEWh4eYGrJrMp8gUJXZYav2faGWiuEVPiINffQjp/1
+ W5toW5pIIY0c8XIMufkXNUCNJSS/ME/6n6dSSDS6CB6FdQFu6tNdBRRfkNUaiqJa+KSkzloB5
+ jlQCyxhKw1DAGTEYOqg+L06PF/Gepew07g+XbLY9ZUl5nA+owA3wq6N05Vvz1WbZ2zEwchzFS
+ xVYMRIadoqzcPbgXmBcDSsqWxGBxdkLiOrwE2fX9wJsQuUJrU9ZnDzZ2YS+kv4Fo35d+T0aMx
+ LlIn5ewx7FHLyVRgisXlWET4XXEVPJZ/pjK7pXw6FhWp7D0uIkI0d8i8IyJ0H0jdxNhZHtR95
+ 5RUOwwS+Bi2KRjIp/liYU+vlT0BgFE3piI8/jW+xkliHlHK/wrzVIvLXmDDOtQy0SYa2muE6W
+ BAknH01lDSYCp2zdnmA6PzN5yT8DHTS88qEIqmNJtC2ou1fMZkQRcaZfRs508SbwVi0qLGruA
+ kJMIrA9AZjynzxxFQDZM4ALENa/nUTC7XJvJw3MwL/9daWEoc0C6Bgek0phmqSzIB++K36DNy
+ GMJPIYZPhqMIc44ZbBPDDHyVCN0z+0IhHjrqM101lgreG+rFu1tUl4IS/EnPB6NrNLH2IK2DV
+ HrncH2mNFX6+A3XXATKfxm3Wl5s=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Am 8=2E M=C3=A4rz 2023 12:38:31 MEZ schrieb "Russell King (Oracle)" <linux@=
+armlinux=2Eorg=2Euk>:
+>On Tue, Mar 07, 2023 at 03:54:11PM +0000, Daniel Golle wrote:
+>> Link partner advertised link modes are not reported by the SerDes
+>> hardware if not operating in SGMII mode=2E Hence we cannot use
+>> phylink_mii_c22_pcs_decode_state() in this case=2E
+>> Implement reporting link and an_complete only and use speed according t=
+o
+>> the interface mode=2E
+>>=20
+>> Fixes: 14a44ab0330d ("net: mtk_eth_soc: partially convert to phylink_pc=
+s")
+>> Signed-off-by: Daniel Golle <daniel@makrotopia=2Eorg>
+>
+>This has been proven to work by Frank Wunderlich last October, so by
+>making this change, you will be regressing his setup=2E
 
-We encountered EINVAL when enabling cpuset in cgroupv2 when io_uring
-worker threads are running. Here are the steps to reproduce the failure
-on kernel 6.1.14:
+Hi
 
-1. Remove cpuset from subtree_control
+My tests were done with 1 kind of 1g fibre sfp as i only have these atm=2E=
+=2E=2Ehave ordered some 2g5 rj54 ones,but don't have them yet=2E I'm not su=
+re if they are working with/without sgmii (1000base-X) and if they have bui=
+ltin phy=2E
 
-  > for d in $(find /sys/fs/cgroup/ -maxdepth 1 -type d); do echo
-'-cpuset' | sudo tee -a $d/cgroup.subtree_control; done
-  > cat /sys/fs/cgroup/cgroup.subtree_control
-  cpu io memory pids
+Daniel have a lot more of different SFPs and some (especially 2g5) were no=
+t working after our pcs change=2E
 
-2. Run any applications that utilize the uring worker thread pool. I used
-   https://github.com/cloudflare/cloudflare-blog/tree/master/2022-02-io_uring-worker-pool
+>What are you testing against? Have you proven independently that the
+>link partner is indeed sending a valid advertisement for the LPA
+>register to be filled in?
+>
 
-  > cargo run -- -a -w 2 -t 2
 
-3. Enabling cpuset will return EINVAL
-
-  > echo '+cpuset' | sudo tee -a /sys/fs/cgroup/cgroup.subtree_control
-  +cpuset
-  tee: /sys/fs/cgroup/cgroup.subtree_control: Invalid argument
-
-We traced this down to task_can_attach that will return EINVAL when it
-encounters
-kthreads with PF_NO_SETAFFINITY, which io_uring worker threads have.
-
-This seems like an unexpected interaction when enabling cpuset for the subtrees
-that contain kthreads. We are currently considering a workaround to try to
-enable cpuset in root subtree_control before any io_uring applications
-can start,
-hence failure to enable cpuset is localized to only cgroup with
-io_uring kthreads.
-But this is cumbersome.
-
-Any suggestions would be very much appreciated.
-
-Thanks,
-Daniel.
+regards Frank
