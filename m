@@ -2,99 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CF06B0451
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB3C6B0454
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbjCHK3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:29:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
+        id S230410AbjCHKaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbjCHK3X (ORCPT
+        with ESMTP id S231276AbjCHK3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:29:23 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD054B9BCE
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:28:54 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id cw28so63706909edb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:28:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678271333;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OEVT942PD83nNqCk0fNzH4LSM/KqPfrdg614FVBtfgs=;
-        b=dUqx6XtGJet+8XKcnZ6IXhrXPe3uoJixdjDaLA57ZCaUxtTSbc9dggJVclzkYa/yLz
-         7Fpr8juVvIOJcqEXjI0P41xFK3OryKqVv/YNvkLgPyfHxELJSG9e41Iy9YamVeVpm2Ef
-         0RsIdSKx8AgYV3GdFal41HeMHUH6ssgBpPeDNB6RyS9sidt1kmnXgwQfUqtD4oN2gDVG
-         DxowWsy/JIuQrH9L+NvO13sDQ8qXWOLc863SXv+2inOWCci1FUkVvKIE0T/jGjaqzQks
-         36tY9zpjr4m+Yz/wh7j9FX8178UctgJehvx3tsuHnts1SBRRfdc2ljN8+DnJj5C4WMaA
-         KWFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678271333;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OEVT942PD83nNqCk0fNzH4LSM/KqPfrdg614FVBtfgs=;
-        b=Wv7AhKxoZYO3k0+ejhkmJlCUE11ripm/NNJmzwrLv+3KMU5ZZh3ro5gD0H5YvObdvL
-         OWZ+f9puuMUsFe7DzLyR/27zJ3muT65Xzz1PAQPVimqG/is6LG0PIBzbNMwBr9t/tOf1
-         JPh+Ixja2JdpSUVeziJ+AgSrTLw/MBUs/qY0ZziZQZJaiwzaBEjiU4QKnCLUUn/EI014
-         1vt/xPvp7A76eZcJe/5t21QVIYQw3fr8j6seD6rJXZxp5Vwu1AFgGLgxRIedkejPQuoI
-         UY3u/aGhT3fKhtyYwmOoeCkHgLZGwtA4fDaF+7iGvT+EGkrUb0wJVNDOEW8NlSmVmSgp
-         9iGA==
-X-Gm-Message-State: AO0yUKUvSfW9PtgvQQ2JrX+92HkToe43JQyKtMsyU1+jmJRlKj1LGooD
-        dSmYLplPqdUaRpIs/xI/nq1fRQ==
-X-Google-Smtp-Source: AK7set+gCza7j9S3L/+TZBxxpTBrNe35gEezkD4tREgS5s5TNPkdZSpOa/heYH5kT6vk3tOWQqUmHg==
-X-Received: by 2002:aa7:c44e:0:b0:4b8:9a32:ec07 with SMTP id n14-20020aa7c44e000000b004b89a32ec07mr14534597edr.39.1678271333127;
-        Wed, 08 Mar 2023 02:28:53 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:ff33:9b14:bdd2:a3da? ([2a02:810d:15c0:828:ff33:9b14:bdd2:a3da])
-        by smtp.gmail.com with ESMTPSA id s23-20020a50d497000000b004c8948162e8sm7573417edi.67.2023.03.08.02.28.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 02:28:52 -0800 (PST)
-Message-ID: <1731df36-edf7-8c36-ec11-8c943c08e548@linaro.org>
-Date:   Wed, 8 Mar 2023 11:28:51 +0100
+        Wed, 8 Mar 2023 05:29:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B21867F8;
+        Wed,  8 Mar 2023 02:29:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 585CA61726;
+        Wed,  8 Mar 2023 10:29:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0A8CC433D2;
+        Wed,  8 Mar 2023 10:29:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678271348;
+        bh=b4wPxZcXc5NvC0huy+pK8EHSXW3crKOJLq3RK/jZufM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jnIhJ+W5VUKhDbN7yhZEQcEon2TvYytNV7UsUpg3+TYk1DkI0pwnVZD7f6AteKiZW
+         nt+XBsI6W4xNehu85Y6qlRzSBkTnSbcWr7L2Ryhd9m6c4DC27pygS3t93qq3XsEZ7p
+         rJcR/QW8yqEldXBJbX8zEqHmZWyv7ckw/ikLvvGdTQvdhJN8paiype+JkKsb44Qo3j
+         i0/IiiiTtZbPtBDR0ObJXe3GJD3Jt1RjxQu5oe5cQ7P/yG2VBG8XN9OflWpNZWPpeb
+         kKghw26S38wPcUJg5dkFhoR0nyz8kuttEaIxU7VyvY3DdUn508tVXpMtB1CDKk622A
+         YXVd1uSsRoqLQ==
+Received: by mail-lf1-f53.google.com with SMTP id g17so20706755lfv.4;
+        Wed, 08 Mar 2023 02:29:08 -0800 (PST)
+X-Gm-Message-State: AO0yUKWSWRbgA+jb2Wb2e5Xb45vyGVKBkfE1IL6OabtZ4WsAVFc5msH9
+        pXkE6XZp9Swqu0V7W+29D79OEj7u8U0SluFigXI=
+X-Google-Smtp-Source: AK7set8C+Iab5z1DBdOhjcn6roaZUfnP830gj7PUcu9E35S/hzNa3WZDjTkxVQaAsOyo8xaz4yEn9kKOim/Pe9ukIfw=
+X-Received: by 2002:ac2:54b9:0:b0:4d8:62e5:4f66 with SMTP id
+ w25-20020ac254b9000000b004d862e54f66mr5421189lfk.7.1678271346796; Wed, 08 Mar
+ 2023 02:29:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] dt-bindings: interrupt-controller: Allow
- #power-domain-cells
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
+References: <cover.1671098103.git.baskov@ispras.ru> <760c19466ac26c09edb76e64d8c4812ff4aa7365.1671098103.git.baskov@ispras.ru>
+ <CAMj1kXFtEZtso0Gcuj-PhGiK1QRhp9SDFLwouX3qdgSha=ACjA@mail.gmail.com>
+In-Reply-To: <CAMj1kXFtEZtso0Gcuj-PhGiK1QRhp9SDFLwouX3qdgSha=ACjA@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 8 Mar 2023 11:28:55 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGP1k-FoG6GQ2u9ZRiGnxogO=3bLWPfcyOEUOfZG3TRJw@mail.gmail.com>
+Message-ID: <CAMj1kXGP1k-FoG6GQ2u9ZRiGnxogO=3bLWPfcyOEUOfZG3TRJw@mail.gmail.com>
+Subject: Re: [PATCH v4 08/26] x86/boot: Map memory explicitly
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawn.guo@linaro.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230308011705.291337-1-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230308011705.291337-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 02:17, Konrad Dybcio wrote:
-> MPM provides a single genpd. Allow #power-domain-cells = <0>.
-> 
-> Fixes: 54fc9851c0e0 ("dt-bindings: interrupt-controller: Add Qualcomm MPM support")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../devicetree/bindings/interrupt-controller/qcom,mpm.yaml     | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+On Wed, 8 Mar 2023 at 10:38, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Thu, 15 Dec 2022 at 13:38, Evgeniy Baskov <baskov@ispras.ru> wrote:
+> >
+> > Implicit mappings hide possible memory errors, e.g. allocations for
+> > ACPI tables were not included in boot page table size.
+> >
+> > Replace all implicit mappings from page fault handler with
+> > explicit mappings.
+> >
+>
+> I agree with the motivation but this patch seems to break the boot
+> under SeaBIOS/QEMU, and I imagine other legacy BIOS boot scenarios as
+> well.
+>
+> Naively, I would assume that there is simply a legacy BIOS region that
+> we fail to map here, but I am fairly clueless when it comes to non-EFI
+> x86 boot so take this with a grain of salt.
+>
 
-BTW, this can be also added to the example. Always useful to validate it.
+The below seems to help - not sure why exactly, but apparently legacy
+BIOS needs the bootparams struct to be mapped writable?
 
-Best regards,
-Krzysztof
+--- a/arch/x86/boot/compressed/kaslr.c
++++ b/arch/x86/boot/compressed/kaslr.c
+@@ -31,6 +31,7 @@
+ #include <linux/ctype.h>
+ #include <generated/utsversion.h>
+ #include <generated/utsrelease.h>
++#include <asm/shared/pgtable.h>
 
+ #define _SETUP
+ #include <asm/setup.h> /* For COMMAND_LINE_SIZE */
+@@ -688,7 +689,7 @@ process_efi_entries(unsigned long minimum,
+unsigned long image_size)
+        u32 nr_desc;
+        int i;
+
+-       kernel_add_identity_map((unsigned long)e, (unsigned long)(e + 1), 0);
++       kernel_add_identity_map((unsigned long)e, (unsigned long)(e +
+1), MAP_WRITE);
+
+        signature = (char *)&e->efi_loader_signature;
+        if (strncmp(signature, EFI32_LOADER_SIGNATURE, 4) &&
