@@ -2,128 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535366B149A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4496A6B149D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbjCHV5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 16:57:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
+        id S230173AbjCHV5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 16:57:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjCHV5E (ORCPT
+        with ESMTP id S230063AbjCHV5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 16:57:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3472FD13EE
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:56:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678312573;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wsgsdwLQ2sHKnCaynlDgL1yX7eYq5aKUeQbZiXK8wdw=;
-        b=fpLgPdL+eL4bSnu8GGqqsmHX7cc8DcvBwXCUkfrkS2J7MV2xEEP9dHCs64NzGpkuZV6OpI
-        4RhokkZE6wq35r8HsrEFClCrMBK8bx6AF4zWRU7rw7VV35MbJKVfhDloQAlFZDlJo2d9y9
-        cUGX3rkZ7bLNAwuSWUG1vm199H03/20=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-592-F-5-BBNrO0C3S4V-CTG0bw-1; Wed, 08 Mar 2023 16:56:12 -0500
-X-MC-Unique: F-5-BBNrO0C3S4V-CTG0bw-1
-Received: by mail-qk1-f199.google.com with SMTP id 19-20020a370c13000000b007428253bb55so30667qkm.23
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 13:56:12 -0800 (PST)
+        Wed, 8 Mar 2023 16:57:15 -0500
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66536D4612;
+        Wed,  8 Mar 2023 13:57:12 -0800 (PST)
+Received: by mail-oi1-f177.google.com with SMTP id bi17so206562oib.3;
+        Wed, 08 Mar 2023 13:57:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678312572;
+        d=1e100.net; s=20210112; t=1678312631;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wsgsdwLQ2sHKnCaynlDgL1yX7eYq5aKUeQbZiXK8wdw=;
-        b=DOZvWDZZrnlH2aFej3+u89SbhCgicwwGW7Y80pcFgaS6XmdmazlpCk7ThohgO9awvJ
-         mLI9fW4Vzd8YtuOGV1CqNlG+s/dL0PE1qAzO7nJsxVAoQMtKXwJPCiqoU6z7sY4BTN7u
-         xt1zzYhbJj6hztryiWchp8+dwHVz6iu8/SfItbFP8GPs6wNeO8Yho6e0DXSIY7dUiHLV
-         iK+zRF1Zc8LbwNp3caCjnJ1vVQvI6oSyK4s+zndOV3YUgyHTd3P3O4GLWYNQaPqV7fO0
-         6zaH2nHYzHB0UHctYki7ZRqA8SuU8EQVP5VuXzN1PGEhQg0bvq3dDdRQ2WZBTVfcuD2I
-         oMWg==
-X-Gm-Message-State: AO0yUKUZdJrNFCUDRe089MEjb+5ICyMrfx4FZ2zRmM0vPbY6rMLKGAj0
-        d1HUrq5vJD/0FHTnu6JENOeYZj/R1mo9QSWHmIJTo6VrmO+jXyQQ/LznNJD9+HSNlRcsPzc0VBO
-        GUOXANaCysVHraP2V0W3oUrbu
-X-Received: by 2002:a05:622a:10e:b0:3b9:a4d4:7f37 with SMTP id u14-20020a05622a010e00b003b9a4d47f37mr1860715qtw.3.1678312571807;
-        Wed, 08 Mar 2023 13:56:11 -0800 (PST)
-X-Google-Smtp-Source: AK7set/f14mHWNw8mLgQFLAbBUa6nIqkOXtRuE+h2nLt7y+/nJ5xYiOJlQbJcpDFrAqQE7qxJvURSg==
-X-Received: by 2002:a05:622a:10e:b0:3b9:a4d4:7f37 with SMTP id u14-20020a05622a010e00b003b9a4d47f37mr1860690qtw.3.1678312571536;
-        Wed, 08 Mar 2023 13:56:11 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id fu22-20020a05622a5d9600b003be56bdd3b1sm12114385qtb.92.2023.03.08.13.56.10
+        bh=YAS1xYRXj3cdPKcvjDZ+t7RtqFJmt8ftiUP9NIi5BhI=;
+        b=P1HTNeHRUBXI1ZVgptGhOCNrE5ICnLbKPDvi9SrOPBXkgMgbofmmOWvVwW2wWJtwq/
+         XPw770xZ//6IFtwwZgUAiF2aaS6+iJP0P7nErzZny4bjZIKDWaiLF/7paJusUnySX+i3
+         GBBN6GupsC2h4KqxEtqtU970YqvMX3H3cikZyuTtWjQEn/pQk+LismnDHH7o0rgj7JT/
+         1nsJU24Pr3NfCYo5nAALE0c5SNYEJjBSfyDis8qVCzhnbZRmDsdQD+ogqR9+XM41IptB
+         kVR6psewl7yJiGxcb41Dk063dTYtVmBTDCehI7MojL9jdyO2rKQwMKDVYHtgbmdQ+iIg
+         Ldpw==
+X-Gm-Message-State: AO0yUKVuPxLZm4uOJpTEwmrwOd08URfc9B5X2+lC6z4QayUBsvqgx85w
+        zL9B6vY1d+jBWLPry9Uvzg==
+X-Google-Smtp-Source: AK7set/wO6Hud4S7hIzFW35ljRId+eCmpPInzcvs2Ch8cPaIh2UOWciajGcHOgTRjHsb09N5i4I6pQ==
+X-Received: by 2002:aca:1c03:0:b0:378:3a54:4418 with SMTP id c3-20020aca1c03000000b003783a544418mr7812947oic.49.1678312631513;
+        Wed, 08 Mar 2023 13:57:11 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y64-20020aca3243000000b00383eaea5e88sm6820737oiy.38.2023.03.08.13.57.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 13:56:10 -0800 (PST)
-Date:   Wed, 8 Mar 2023 16:56:09 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Hugh Dickins <hughd@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm: rmap: make hugetlb pages participate in
- _nr_pages_mapped
-Message-ID: <ZAkEecMShUAGwZ62@x1n>
-References: <20230306230004.1387007-1-jthoughton@google.com>
- <20230306230004.1387007-2-jthoughton@google.com>
- <20230307215420.GA59222@monkey>
- <CADrL8HVa3vzmrfFJD5hx_GuXVnsWhSo9hzJFb4TTzzjMhWG+sQ@mail.gmail.com>
+        Wed, 08 Mar 2023 13:57:10 -0800 (PST)
+Received: (nullmailer pid 3911485 invoked by uid 1000);
+        Wed, 08 Mar 2023 21:57:09 -0000
+Date:   Wed, 8 Mar 2023 15:57:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Samin Guo <samin.guo@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Subject: Re: [PATCH v5 03/12] dt-bindings: net: snps,dwmac: Add an optional
+ resets single 'ahb'
+Message-ID: <20230308215709.GA3904341-robh@kernel.org>
+References: <20230303085928.4535-1-samin.guo@starfivetech.com>
+ <20230303085928.4535-4-samin.guo@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CADrL8HVa3vzmrfFJD5hx_GuXVnsWhSo9hzJFb4TTzzjMhWG+sQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230303085928.4535-4-samin.guo@starfivetech.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 04:36:51PM -0800, James Houghton wrote:
-> > >       if (likely(!compound)) {
-> > > +             if (unlikely(folio_test_hugetlb(folio)))
-> > > +                     VM_BUG_ON_PAGE(HPageVmemmapOptimized(&folio->page),
-> > > +                                    page);
+On Fri, Mar 03, 2023 at 04:59:19PM +0800, Samin Guo wrote:
+> According to:
+> stmmac_platform.c: stmmac_probe_config_dt
+> stmmac_main.c: stmmac_dvr_probe
 
-How about moving folio_test_hugetlb() into the BUG_ON()?
+That's not really a reason on its own. Maybe the driver is wrong. Do we 
+know what hardware needs this?
 
-                VM_BUG_ON_PAGE(folio_test_hugetlb(folio) &&
-                               HPageVmemmapOptimized(&folio->page),
-                               page);
-
-Note that BUG_ON() already contains an "unlikely".
-
-> > >               first = atomic_inc_and_test(&page->_mapcount);
-> > >               nr = first;
-> > >               if (first && folio_test_large(folio)) {
-> > >                       nr = atomic_inc_return_relaxed(mapped);
-> > >                       nr = (nr < COMPOUND_MAPPED);
-> > >               }
-> > > -     } else if (folio_test_pmd_mappable(folio)) {
-> > > -             /* That test is redundant: it's for safety or to optimize out */
-> >
-> > I 'think' removing this check is OK.  It would seem that the caller
-> > knows if the folio is mappable.  If we want a similar test, we might be
-> > able to use something like:
-> >
-> >         arch_hugetlb_valid_size(folio_size(folio))
-> >
+> dwmac controller may require one (stmmaceth) or two (stmmaceth+ahb)
+> reset signals, and the maxItems of resets/reset-names is going to be 2.
 > 
-> Ack. I think leaving the check(s) removed is fine.
+> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+> ---
+>  .../devicetree/bindings/net/snps,dwmac.yaml        | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> index b4135d5297b4..89099a888f0b 100644
+> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> @@ -133,12 +133,18 @@ properties:
+>          - ptp_ref
+>  
+>    resets:
+> -    maxItems: 1
+> -    description:
+> -      MAC Reset signal.
+> +    minItems: 1
+> +    items:
+> +      - description: GMAC stmmaceth reset
+> +      - description: AHB reset
+>  
+>    reset-names:
+> -    const: stmmaceth
+> +    minItems: 1
+> +    maxItems: 2
+> +    contains:
 
-Would it still be good to keep that as another BUG_ON()?
+This means 'reset-names = "foo", "ahb";' is valid. You want 'items' 
+instead. However, that still allows the below string in any order. Do we 
+really need that? If not, then you want:
 
--- 
-Peter Xu
+items:
+  - const: stmmaceth
+  - const: ahb
 
+> +      enum:
+> +        - stmmaceth
+> +        - ahb
+>  
+>    power-domains:
+>      maxItems: 1
+> -- 
+> 2.17.1
+> 
