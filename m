@@ -2,87 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DD46B0AE9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C01D6B0AF4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjCHOUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
+        id S231286AbjCHOXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjCHOUh (ORCPT
+        with ESMTP id S230206AbjCHOXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:20:37 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DCB95E1B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:20:35 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id p26so9897841wmc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 06:20:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678285234;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zKSsMdFaAlUDx+zY5Z+CZDKUgJ7yUPRW8UQJ4GIn6oc=;
-        b=GOh1H2Ul2EM04M4OmgUNtbXzo31UwLSGT/HYmOb55duvYpKr9GLgJd7/c6SICy58qg
-         cXSAi5Pw0zxuSRINFh+IYCDziQ9aiQTzf7fgCGlYJ5G1qttavXYDdLODNDO0lD4F1uJG
-         xMpZtedQhAmx4u1gYBwWdNTJnWdY2zTkDXZWV6SSbtAezQTjA9XFCRKyaDIQwzxAOLBM
-         657zNPGJC9mhUM7Y09c+ZGayHNZugJBpn7BeYPPn/Y0fe9r2sEJQKfZ5PrnDA4mpjRGF
-         1qAwtuQ+tptfYkeeMk/Hk173u/GZWFv4wyuYNQCCaPxU03pNf7ohUIosQhRYV18iijJm
-         CZIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678285234;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zKSsMdFaAlUDx+zY5Z+CZDKUgJ7yUPRW8UQJ4GIn6oc=;
-        b=G+z1v/kjG/J2K8lVHJg1XDr1fq8NLnRgSRDSZ/2bHR8u25Fr5C7YcfebeDVg8s4+O6
-         5SH95gq8ggZYgEtnA2p/PE6Tg8EZizOAgicWLIyrLfZlbDDbKKSE3JVGfY0mjIJZW50U
-         o6pZzmprDcQmsbnGe5DxGNyY6S7C4ysPY3jnOirATdUmW+wZ1UwdpEu5rhkgu6R+oPXA
-         T8yXISrX0l2iXLKG79uUjl/jw/Y+pq+PJCCYeXt5teji+tZMeAP4AUiy0jIta/eJiQoR
-         +4QdDwm59ot8IWC83+NoGBSKgIFaD7zKeqUzjQJt3ewyDomBmBJEkrhn2dh9+IoU4qIp
-         7Cnw==
-X-Gm-Message-State: AO0yUKWV6XzrIXnCg3wlyeDzNTe8MCNthus9G85+RlxP/FLhqZyI5U3Q
-        r09ZI2zoKgk6wRVI2iq7V+Du7YzLfIDDV0SmbDo=
-X-Google-Smtp-Source: AK7set847MWs25JAS21TnNMiPelm0Lf2lT226PRQJsD/0FegfmuWWqFIA3/fNqBrwLdJMbLefRfD/A==
-X-Received: by 2002:a05:600c:1d9b:b0:3e2:201a:5bce with SMTP id p27-20020a05600c1d9b00b003e2201a5bcemr16278309wms.40.1678285234388;
-        Wed, 08 Mar 2023 06:20:34 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id bg12-20020a05600c3c8c00b003e8dc7a03basm21303379wmb.41.2023.03.08.06.20.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 06:20:33 -0800 (PST)
-Message-ID: <afee5468-6c73-d088-e3ab-e9314492e49b@linaro.org>
-Date:   Wed, 8 Mar 2023 14:20:32 +0000
+        Wed, 8 Mar 2023 09:23:35 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9532BB3E20
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:23:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678285413; x=1709821413;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Xwerx2xXUaxAefu4ArBHqTpEi/j/Yfjg8iwscA9h5+0=;
+  b=Mc3TSdHgtEdspjWZS3ZdgrBDmUAxX0OEi2cBSYSxxsgMlYw4poeL5LQ5
+   DiIcepNSW2pEHHjFarGBjbuzM+mCbGBoFqRYItjmZ9Cg+zUdPAyyu5VCb
+   F7cQu1+TlcDHA4RBe0N5NyA+6dNR0bJInppa0mOJK1zsrrtmZStKfSVw5
+   /s+lX8UaMl/y7GMU/Ep9bdzJrNBKk3oA44ywy8lfdsK91RR7zqO5q/Olw
+   HC1lDhr8vHmeUOViUtYJ8E0UukINTSKqVW2z8abLmdguwbpOdh8DsWd3t
+   6W0onrLiweNKez1SZzx4DJEu4H4kMpZ+vBfjNadUVmleBPoIbHh5oF6xy
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="422432633"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="422432633"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 06:23:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="800768131"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="800768131"
+Received: from vkhatavx-mobl.amr.corp.intel.com (HELO [10.255.34.124]) ([10.255.34.124])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 06:23:28 -0800
+Message-ID: <dfb09d78-0620-e535-08b6-894554201ead@linux.intel.com>
+Date:   Wed, 8 Mar 2023 08:23:28 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 1/4] firmware: qcom_scm: Export SCM call functions
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH V6 8/8] soundwire: amd: add pm_prepare callback and pm ops
+ support
 Content-Language: en-US
-To:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Johan Hovold <johan@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230305022119.1331495-1-luzmaximilian@gmail.com>
- <20230305022119.1331495-2-luzmaximilian@gmail.com>
- <a2c97f09-3360-b2b1-184a-8e3b869a70ef@linaro.org>
- <615d907e-fd7c-f235-405b-d112f1373280@linaro.org>
- <81468734-d25e-ddda-7bd1-1498ca6fa6ae@gmail.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <81468734-d25e-ddda-7bd1-1498ca6fa6ae@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>, vkoul@kernel.org
+Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, Mario.Limonciello@amd.com,
+        amadeuszx.slawinski@linux.intel.com, Mastan.Katragadda@amd.com,
+        Arungopal.kondaveeti@amd.com, claudiu.beznea@microchip.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230307133135.545952-1-Vijendar.Mukunda@amd.com>
+ <20230307133135.545952-9-Vijendar.Mukunda@amd.com>
+ <4330af6a-ce97-53ed-f675-6d3d0ac8f32f@linux.intel.com>
+ <d5a75826-d762-27fc-5820-6826debdecd9@amd.com>
+ <9399110b-bbba-f96e-85ef-a317e8f4d518@linux.intel.com>
+ <4cbbff8a-c596-e9cc-a6cf-6f8b66607505@amd.com>
+ <85aba51e-1feb-5eb0-2e21-b714e217f9e4@linux.intel.com>
+ <2e629a29-093e-46e9-2329-0d5afc916ee4@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <2e629a29-093e-46e9-2329-0d5afc916ee4@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,64 +78,42 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 08/03/2023 13:48, Maximilian Luz wrote:
-> On 3/8/23 13:53, Srinivas Kandagatla wrote:
->>
->>
->> On 07/03/2023 15:23, Dmitry Baryshkov wrote:
+>>> device_for_each_child() will invoke amd_resume_child_device() function callback
+>>> for each device which will try to resume the child device in this case.
+>>> By definition, device_for_each_child() Iterate over @parent's child devices,
+>>> and invokes the callback for each. We check the return of amd_resume_child_device()
+>>> each time.
+>>> If it returns anything other than 0, we break out and return that value.
 >>>
->>>> Make qcom_scm_call, qcom_scm_call_atomic and associated types 
->>>> accessible
->>>> to other modules.
+>>> In current scenario, As AMP codec is not in runtime suspend state,
+>>> pm_request_resume() will return a value as 1. This will break the
+>>> sequence for resuming rest of the child devices(JACK codec in our case).
+>> Well, yes, now that makes sense, thanks for the details.
+>>
+>> I think the reason why we didn't see the problem with the Intel code is
+>> that both amplifiers are on the same dailink, so they are by
+>> construction either both suspended or both active. We never had
+>> different types of devices on the same link.
+>>
+>> I would however suggest this simpler alternative, where only negative
+>> return values are returned:
+>>
+>> ret = pm_request_resume(dev);
+>> if (ret < 0) {
+>> 	dev_err(dev, "pm_request_resume failed: %d\n", ret);
+>>         return ret;
+>> }
+>> return 0;
+>>
+>> this would work just fine, no?
+>> No, As explained, pm_request_resume() return value is 1 for active device.
+>>> As mentioned in an earlier thread, there are two possible solutions.
+>>> 1. check pm runtime suspend state and return 0 if it is not suspended
+>>> 2. simply always return 0 for amd_resume_child_device() function callback.
 >>>
->>> Generally all the qcom_scm calls are a part of qcom_scm.c. I think it 
->>> is better to make qseecom_scm_call a part qcom_scm.c (as we were 
->>> previously doing) rather than exporting the core function.
->>>
->>
->> Other big issue I see in exporting qcom_scm_call() is that there is 
->> danger of misuse of this api as this could lead to a path where new 
->> apis and its payloads can come directly from userspace via a 
->> rogue/hacking modules. This will bypass scm layer completely within 
->> kernel.
-> 
-> I'm not sure I follow your argument here. If you have the possibility to
-> load your own kernel modules, can you not always bypass the kernel and
-> just directly invoke the respective SCM calls manually? So this is
-> superficial security at best.
-qcom_scm_call() will expose a much bigger window where the user can add 
-new SCM APIs but with the current model of exporting symbols at SCM API 
-level will narrow that down to that API.
+>>> We opted first one as solution.
+>> My suggestion looks like your option 2. It's cleaner IMHO.
+> To use option 2, we need to respin the patch series.
+> Is it okay if we fix it as supplement patch?
 
-> 
-> I guess keeping it in qcom_scm could make it easier to spot new
-> in-kernel users of that function and with that better prevent potential
-> misuse in the kernel itself. But then again I'd hope that our review
-> system is good enough to catch such issues regardless and thoroughly
-> question calls to that function (especially ones involving user-space
-> APIs). 
-
-One problem I can immediately see here is the facility that will be 
-exploited and promote more development outside upstream.
-
-ex: vendor modules with GKI compliance.
-
-
---srini
-> 
-> Regards,
-> Max
-> 
->>
->> --srini
->>
->>> If you wish to limit the kernel bloat, you can split the qcom_scm 
->>> into per-driver backend and add Kconfig symbols to limit the impact. 
->>> However I think that these functions are pretty small to justify the 
->>> effort.
->>>
->>
->>
->>>>
->>>> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+I would vote for re-spinning a new version and ask others to review.
