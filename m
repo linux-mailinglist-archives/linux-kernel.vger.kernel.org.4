@@ -2,136 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0DC6B0681
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F0C6B0686
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjCHL7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:59:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
+        id S230449AbjCHMAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 07:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjCHL7M (ORCPT
+        with ESMTP id S230458AbjCHL7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:59:12 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2086.outbound.protection.outlook.com [40.107.93.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA00898E0;
-        Wed,  8 Mar 2023 03:59:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZjroJ+U8R46Nm+hpTz0pxaD92awejLGCq0QgKY737uPPS42J+Nl19Lrx8gzRE55LmDzJUtYd3Sq3MP1jNBauLlz9wuEPyt5seNE1TQyJ3tJ2OKo34eiWT03o+EvITyzvr2I3SGuUdFNaP21nNDw8ROcvGaLQsc1jak80I7JXKbaVsbXQE5s07RnfqDvmCW5t9QylAFaXc9QgK2vbdpq0BKdPTS/edb5q6b9NZSvuTM5hZj9P5H6bW9Epsb6UAhSRFRayD/BmglrU3HnyJU+Qha6+EQXGJWBEnD2fMTvI0OUzVVmtVvCK5FUUNaytL0LPjfCsaLRJniJlXVdy+v+bfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oPHYvm6jtFE3qhzm8ftdKUYDwK4MkL+b6afEoj24EKM=;
- b=QH94dikXzZUffU2B1ZBFD0EMWxeghOsMLyPdaZAIojhSGdHRE9hqVk08a3ifGuDFUbHNaCAOJYkt/wCLX6XptlkRAPhG1KidHfXwtedUHzlnMkLP+rA+hLhkK9w0BQgafDHGJu6esrbeUad6fbKrDMux/iHW2R+nqiAdsHAyEyGlm+WIPJsAKiupB7W6gTW63o38cO4/VrmOxGNDMGB7E0ps/SBVXAWXv9oNoirCpcSnStad9aYhsl8AS2T7nTv4eJAsZ7LN5M0oFiNKzxVa1H8f2QneNNZeeM0pulbw0Sb5oinMKNQf2/KzUdTzQajraJg2P9YAW1GVXzSDnU2OvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oPHYvm6jtFE3qhzm8ftdKUYDwK4MkL+b6afEoj24EKM=;
- b=qGFdRTzEhbPlu5Bnr10FEKvckV9agTSYU0yAua2oVzIuSyW8NN8686HN1lavsMNjzDTycXBKOyvGiKX0WV1C2C8vhWrex6x5J/eL3UKHGb4fYqrtqgttyhUK4tvrDR0PCHc14coOBgzY5+M6Cup9LEl6Ixcz+ALW5tvKeexZu4E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
- by MN0PR12MB6221.namprd12.prod.outlook.com (2603:10b6:208:3c3::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Wed, 8 Mar
- 2023 11:59:07 +0000
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::4d07:7f52:c833:9603]) by BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::4d07:7f52:c833:9603%5]) with mapi id 15.20.6178.017; Wed, 8 Mar 2023
- 11:59:06 +0000
-Message-ID: <a5bb0516-9a21-5d46-d557-f02893ac8bf4@amd.com>
-Date:   Wed, 8 Mar 2023 12:58:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 3/4] iio: adc: Use devm_krealloc_array
+        Wed, 8 Mar 2023 06:59:44 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC4A9BE24
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 03:59:34 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so2073655pjh.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 03:59:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1678276773;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iVQjKCHWrN1eYBET3mp20Di+hZdbe0lSR42xPROArtQ=;
+        b=EFma8WgumnWMBW5sY+8kyuxHAzk5tNDb3Us6ZXeEaqwsYNheJwUgm86SBytCi8fOCB
+         EuFC4LS+zO10RkMWEYMdQH7BqGybOto2clmwFOSkZk5XQpM3YadMZw1PI6DTYbRxT7wh
+         VI3Za0HSA3GwO+3Y3Nn65mp2EBuGrBWFSbxR0i9w+VbiLNNqJrhvfvEqfDolMJ7jcFn2
+         Bs3S2R8lFyZrT3OaRVOLcORIWC4W4J9NCfUL1izwSxRl4cE1pTC46ZLpSvNb4tmPUIq7
+         nMZxLsL+foPBi967TsVrF2kJBnVi8V9RMdM/aLuWwTO69guWPqnEUlc6kGwUZ6sziicL
+         CNeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678276773;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iVQjKCHWrN1eYBET3mp20Di+hZdbe0lSR42xPROArtQ=;
+        b=mj0vR8qJ0cLqwGXV4CzAQOH2XBQNoUDQEH8q5YOjYPjC26ENmjs0CMf5C7eF2h3Ytz
+         CwEEB8ETeItKM2wD4iiPvr0JAfMzUll7N/guvGia8/0h/hOHUMTSGLRZYTBWIteLeQkC
+         HeEhBN7Wuxf2DdKUMtwj7wcgst5i6lkDEga8upY7c87rAsMTgQlZsPfCg7KDxKOymRn7
+         9G5CvUxkbF87786xOd5v7m5Y4kwuKfenMa4n1HvZvSX0um0iZsxiASqcJUG22TQDtByB
+         hspPsi4ufTWHbOSdAJphuWBOxx9XLWgSsULIybHoCu0LY4qbUe8m39IeSR8/6L3r2VU/
+         M0jA==
+X-Gm-Message-State: AO0yUKWOpUxTZP3yPFjOhxT6BShBrAP9Fba2Ejq0loUO3pjB+0sbgxcW
+        /oUac5Sh4aDdCaIKEgyv/9EPzg==
+X-Google-Smtp-Source: AK7set/B2Iric4xq4dnnxMX1BGr/ZiRInaW9P9lKh/kW7S7m31/ABfaXCj0SKF+7cclRwHMN6tjwbA==
+X-Received: by 2002:a05:6a20:3caa:b0:cc:ce6f:849d with SMTP id b42-20020a056a203caa00b000ccce6f849dmr19896528pzj.2.1678276773530;
+        Wed, 08 Mar 2023 03:59:33 -0800 (PST)
+Received: from [10.70.252.135] ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id 196-20020a6306cd000000b0050336b0b08csm9135022pgg.19.2023.03.08.03.59.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 03:59:32 -0800 (PST)
+Message-ID: <6e926e0c-e971-7f0c-70f0-e224abb6740e@bytedance.com>
+Date:   Wed, 8 Mar 2023 19:59:24 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v4 0/8] make slab shrink lockless
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     tkhai@ya.ru, hannes@cmpxchg.org, shakeelb@google.com,
+        mhocko@kernel.org, roman.gushchin@linux.dev, muchun.song@linux.dev,
+        david@redhat.com, shy828301@gmail.com, rppt@kernel.org,
+        sultan@kerneltoast.com, dave@stgolabs.net,
+        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230307065605.58209-1-zhengqi.arch@bytedance.com>
+ <20230307142026.31c964475fd3c9554a4f62cb@linux-foundation.org>
 Content-Language: en-US
-To:     James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20230306152723.3090195-1-james.clark@arm.com>
- <20230306152723.3090195-4-james.clark@arm.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <20230306152723.3090195-4-james.clark@arm.com>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <20230307142026.31c964475fd3c9554a4f62cb@linux-foundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1P195CA0043.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:802:5a::32) To BYAPR12MB4758.namprd12.prod.outlook.com
- (2603:10b6:a03:a5::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|MN0PR12MB6221:EE_
-X-MS-Office365-Filtering-Correlation-Id: 01d08e9a-2a26-446f-94d7-08db1fcc84d6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DHphTyGSM0vxbfKHAxYsmuOxyw9+JdenO+ZZA48qrVOAx/MD8iPLR9eODVr+GafLE5fXc8Tj8kLSRM/aVdPnAZChAbyADutVlJAzaDsStVfWHrvl+VTpERX2iFvt0fEfctMidq7ShDi7oJn6Yacwf1ocefciRjipkQ/YJ3QTReuCSQqImkFzba1mrTgvqq+HW9wRF/CWdh+M1sSI2HsfbN3aSS7kKhEFw1A3milppzKCV3ht5ocEW8vHO9sRrO+nTN0S0AbQG3shk7K6qu3aMT8QgyH+Bmcb466YKAq/G4rCeYmmM0Rq6vUENGUoJ19F/1Ess6OW1UtUFZSdclLX+2Zc1fT67zYsAdnZuWKKzgwKC8gUSXqBtqkvS9fYKV6zEwuJ6CNemJhKzMOgQP1iKo+kBpQ2mlPZydPAvRSB0qrdv6JEIVvAQKbOzIMWmU/6dBTDJAZ/ueXt12SJ6F4OphXz3I5avtmna3Vwu/0+WSdKBo77D2wK48vaELvZxz2VkNpLY+uYIuqDIQCQuBAG89RWZ4MtSn1uHJIksDfR8ODXXqwjw7egn5zN9GK0Fx30eeZMjlOcJfA7RSTuBIzPV3S7bOoGfI3jIIOEEXP1MMaEciQmvvPqQvLPiw6vpBAVR74xOuAr5k9+sLrybGjutXx2ykwpw8ntqyJw9QOg8Fcm2amTvIKn0M7ObR3EK7wBpci0bRpOUego7Upw6IcXiArJkcpayRXsqTC8jfhYMHQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(376002)(136003)(366004)(396003)(451199018)(38100700002)(478600001)(316002)(31696002)(83380400001)(5660300002)(54906003)(7416002)(2906002)(36756003)(41300700001)(8676002)(6512007)(53546011)(6506007)(8936002)(4326008)(26005)(186003)(66476007)(6666004)(44832011)(31686004)(66556008)(66946007)(6486002)(2616005)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U0Y4bXdIR1JEVEU5NEZSdGpkUkh1TmJnT0JsbWh0OUdhOHVoeWJnSVdQS1hK?=
- =?utf-8?B?RVBEQjZzK2k5M1NYSktxLzNNY3V5WUpNVUd3NW1aZ0ZKcGplNVRlekIxbE94?=
- =?utf-8?B?c253ZnRYYzFtM2lEQjA0R1ZFZjMzRkxVKytTNURCZkJDSkw4SkpyRUNrR2dO?=
- =?utf-8?B?SVJQaWUzZWN2U3h3ZVNac0NmdTNwckZyWkQ5RVFxYkJrYVZ5UE51L0pVQ2xj?=
- =?utf-8?B?RFFidW1xaW9hbFNicG14b05HcnZlRm5kL3BGZ1ZKdExRZ1o4em5sc093NjI1?=
- =?utf-8?B?alBOYnBWbXpVbEZwL2VlbXlGRnNlcDRmUGhRZVZKNURqSkl0YUNlVlBtUWxS?=
- =?utf-8?B?cjNQRnQ0REQ1SU01R0pzcXhDVjYvbDVnTEh0Skh3TjdFSnBESk9raU9iejky?=
- =?utf-8?B?Zk5YVlVLTEZLcDNNai8ybVA5UjRTQ1l0WnlFd3d6SFg0VXJ1eHFkOCt2OG5H?=
- =?utf-8?B?MDhVY3QxRDB3aHRlZVpLMFIzb0VIdk10RjRiY0k2RmFidll6THVSM1YyQnFE?=
- =?utf-8?B?RTIzOTdPTnJMT1VJTmJQVmJXNyt6N1ZxRkM4RmtZMGZ5TmlqQ29KS084S0lG?=
- =?utf-8?B?eTcxS1dFQlJ1OHhycU1uVDhnOTNGZ0JGdW9JVmd0dEdSSklHWHdvQW5OSGxW?=
- =?utf-8?B?Y3FwWGJMcFhvR2VQT2o0Zk95N3lxbXltOG53NjV4THBhU3JYTTFEbkozbHFB?=
- =?utf-8?B?aCszWE5QWHdZenN6MWNMblRSMHowcXBlZ3F2VDNjTTFGRXNLSDVhWGd3SjVF?=
- =?utf-8?B?b3VrajZPditTY2g2QTFHcG5QYnRnOEYyMUgzQ0FDVGRFK0s2VFM0ZVRHRFVL?=
- =?utf-8?B?Slc4ZkVVMjdmVkE1R25HMkdBU1pVTjVrMzhnMDQ5SnpGYmE4ZjdUdkFGVkxr?=
- =?utf-8?B?Ui9HUHJkZDRKSVdIUGZRZ1VLVjNWVDVUS0JqKy9qUVR5RUNJQWVTZjdBcDhr?=
- =?utf-8?B?YXNwd3J6WkFodmU0OFc2anZlYW1iWVQrNCtQemMyWWgyVVlRV1h6ZlJUeFU1?=
- =?utf-8?B?MEpNaDlOSEkyZFVZb09mQjZ1ZlNyYmNJU0cxVC85NzhHTFdKa01WcE4rS2Fi?=
- =?utf-8?B?NDhmWUJmWmtJbmIxOW8vUlR4TEJ2YisrT0hmdGlxSjgxZ0t4RDRIYVhkT1Jm?=
- =?utf-8?B?cXBxRkViTVlsemtpN1ZzODBldml2dnFtUlNSRGhRZ2JwN1J3b3NXZmdjUzlN?=
- =?utf-8?B?ekx4Ym9NZUdyK3VncHFaZ1hPYjMwMENqZGxDRXZFNEpwYWZmbHNCeFlMTmhj?=
- =?utf-8?B?cERBcCtXbDl0YVFtOHUyYXlIZnFJTkFBVFFwa1ZXRW9aVzhUSWRpTlFxU2tK?=
- =?utf-8?B?MUppL0NSOE43bDF2eWxlVHVsYVFadkV5dW4zOFpidDNpOHYwS2lqQjJoYWU1?=
- =?utf-8?B?R3JMT2tnNTV2aUhzY2FtRjhBb3VWV1VRZXg1cGs1bHJrSnNuek1BZTdIRkNQ?=
- =?utf-8?B?NnZhMEtkQWQ0Z2dPeldJWDFDY1oyNUV1aEh3cFVoRllhUW5JT3pka1FYV2Fp?=
- =?utf-8?B?aHl6QVN3cTRZTjZQWUJLZXduTHRsM0gzbHYxNXZaRHpQWDFJeEtIUit0MVk3?=
- =?utf-8?B?Y2tra3VxM0dobVhSQVErVEVNMGFJelJWNTNMYVdJM3Z2c2ZGbGp4bThLUDl3?=
- =?utf-8?B?cis2MmNCVkk4V3FEOThGdUk2OEpzV0Vicy9XcURMZXdzWTZSbmdZUW8xaktM?=
- =?utf-8?B?aC9tRktoRkVuRGdOWW0wQUE4cjNpV3M2d1FraHloZ1NxMjNtOStHa0svL0M0?=
- =?utf-8?B?di9aMlBUQmF5SWlkK2EvYW5ldFdJcEdDNWlwNy9hZDdLTEd2T1FJSFJ6VkR2?=
- =?utf-8?B?VCtERXhIbVRSUW93dFF2NUJWV21lVDNJcEJxRjhZL2E3OXBUZ1VJVWhTdVZa?=
- =?utf-8?B?Tll1UUxwZXZYaHZqRlJmbWZaQXNxdU5EL1l5dXNWUkdlMlVSTXJsZlc1ajBP?=
- =?utf-8?B?dWJlVWpLVEJhYWxCWkFpZkZMVjkrSTg0dkd2bFIrZVpnYkJBeGs0TzF6Vks3?=
- =?utf-8?B?cnJuTjkvdUxJbmx5dG4rVE9peHBqSHNsVm80UklBY1JMZE9EeFVFSUtqbnc0?=
- =?utf-8?B?RUpXbEJiNFVQdkEyK3hLWVBiaVJXZmVnaXJMcjRqMzkxK0lZU0Vma1VCSVJw?=
- =?utf-8?Q?AkfjUVPb42TK9zM4/Qu02yNCp?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 01d08e9a-2a26-446f-94d7-08db1fcc84d6
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 11:59:06.7220
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V2lz9kkwDIlmUua0SocllbgHfq4WmS/M1IAYI/h4UEfloKwEKhO7gntcq/Sw1k5L
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6221
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -139,72 +81,109 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+Hi Andrew,
 
-On 3/6/23 16:27, James Clark wrote:
+On 2023/3/8 06:20, Andrew Morton wrote:
+> On Tue,  7 Mar 2023 14:55:57 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
 > 
-> Now that it exists, use it instead of doing the multiplication and
-> checking for overflow manually.
+>> Hi all,
+>>
+>> This patch series aims to make slab shrink lockless.
 > 
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->   drivers/iio/adc/xilinx-ams.c       |  9 +++------
->   drivers/iio/adc/xilinx-xadc-core.c | 17 +++++++----------
->   2 files changed, 10 insertions(+), 16 deletions(-)
+> The v3 discussion did contain requests for some sort of measurements of
+> real-world workloads.  And Kirill did suggest a workload which could be
+> used for this measurement.
 > 
-> diff --git a/drivers/iio/adc/xilinx-ams.c b/drivers/iio/adc/xilinx-ams.c
-> index 34cf336b3490..f0b71a1220e0 100644
-> --- a/drivers/iio/adc/xilinx-ams.c
-> +++ b/drivers/iio/adc/xilinx-ams.c
-> @@ -1263,7 +1263,7 @@ static int ams_parse_firmware(struct iio_dev *indio_dev)
->          struct device *dev = indio_dev->dev.parent;
->          struct fwnode_handle *child = NULL;
->          struct fwnode_handle *fwnode = dev_fwnode(dev);
-> -       size_t ams_size, dev_size;
-> +       size_t ams_size;
->          int ret, ch_cnt = 0, i, rising_off, falling_off;
->          unsigned int num_channels = 0;
-> 
-> @@ -1320,11 +1320,8 @@ static int ams_parse_firmware(struct iio_dev *indio_dev)
->                  }
->          }
-> 
-> -       dev_size = array_size(sizeof(*dev_channels), num_channels);
-> -       if (dev_size == SIZE_MAX)
-> -               return -ENOMEM;
-> -
-> -       dev_channels = devm_krealloc(dev, ams_channels, dev_size, GFP_KERNEL);
-> +       dev_channels = devm_krealloc_array(dev, ams_channels, num_channels,
-> +                                          sizeof(*dev_channels), GFP_KERNEL);
->          if (!dev_channels)
->                  return -ENOMEM;
-> 
-> diff --git a/drivers/iio/adc/xilinx-xadc-core.c b/drivers/iio/adc/xilinx-xadc-core.c
-> index 292f2892d223..287df3bb951e 100644
-> --- a/drivers/iio/adc/xilinx-xadc-core.c
-> +++ b/drivers/iio/adc/xilinx-xadc-core.c
-> @@ -613,20 +613,17 @@ static int xadc_update_scan_mode(struct iio_dev *indio_dev,
->          const unsigned long *mask)
->   {
->          struct xadc *xadc = iio_priv(indio_dev);
-> -       size_t new_size, n;
-> +       size_t n;
->          void *data;
-> 
->          n = bitmap_weight(mask, indio_dev->masklength);
-> 
-> -       if (check_mul_overflow(n, sizeof(*xadc->data), &new_size))
-> -               return -ENOMEM;
-> -
-> -       data = devm_krealloc(indio_dev->dev.parent, xadc->data,
-> -                            new_size, GFP_KERNEL);
-> +       data = devm_krealloc_array(indio_dev->dev.parent, xadc->data,
-> +                                  n, sizeof(*xadc->data), GFP_KERNEL);
->          if (!data)
->                  return -ENOMEM;
-> 
-> -       memset(data, 0, new_size);
-> +       memset(data, 0, n*sizeof(*xadc->data));
+> It's quite important that we have this info, please.  I mean, speeding
+> up real-world workloads is the entire point of the patchset and without
+> measurements, we don't know if the patchset achieves its primary
+> objective!
 
-this is not correct coding style.
+I agree with this.
 
-M
+For the down_read_trylock() hotspot problem I encountered, I
+posted a reproduction program in the cover letter, and measured the
+change of IPC before and after applying the patchset.
+
+For the case mentioned by Kirill, theoretically there is no competition
+between slab shrink and register_shrinker() after applying this
+patchset. But I haven't found a way to reproduce it yet, I will
+continue to try to do it.
+
+> 
+> 
+>> 3. Reproduction and testing
+>> ===========================
+>>
+>> We can reproduce the down_read_trylock() hotspot through the following script:
+>>
+>> ```
+>> #!/bin/bash
+>>
+>> DIR="/root/shrinker/memcg/mnt"
+>>
+>> do_create()
+>> {
+>>      mkdir -p /sys/fs/cgroup/memory/test
+>>      mkdir -p /sys/fs/cgroup/perf_event/test
+>>      echo 4G > /sys/fs/cgroup/memory/test/memory.limit_in_bytes
+>>      for i in `seq 0 $1`;
+>>      do
+>>          mkdir -p /sys/fs/cgroup/memory/test/$i;
+>>          echo $$ > /sys/fs/cgroup/memory/test/$i/cgroup.procs;
+>>          echo $$ > /sys/fs/cgroup/perf_event/test/cgroup.procs;
+>>          mkdir -p $DIR/$i;
+>>      done
+>> }
+>>
+>> do_mount()
+>> {
+>>      for i in `seq $1 $2`;
+>>      do
+>>          mount -t tmpfs $i $DIR/$i;
+>>      done
+>> }
+>>
+>> do_touch()
+>> {
+>>      for i in `seq $1 $2`;
+>>      do
+>>          echo $$ > /sys/fs/cgroup/memory/test/$i/cgroup.procs;
+>>          echo $$ > /sys/fs/cgroup/perf_event/test/cgroup.procs;
+>>              dd if=/dev/zero of=$DIR/$i/file$i bs=1M count=1 &
+>>      done
+>> }
+>>
+>> case "$1" in
+>>    touch)
+>>      do_touch $2 $3
+>>      ;;
+>>    test)
+>>        do_create 4000
+>>      do_mount 0 4000
+>>      do_touch 0 3000
+>>      ;;
+>>    *)
+>>      exit 1
+>>      ;;
+>> esac
+>> ```
+>>
+>> Save the above script, then run test and touch commands. Then we can use the
+>> following perf command to view hotspots:
+> 
+> Well.  Simply runnimg
+> 
+> 	time that-script
+
+I tried this, but the script process will be killed because of OOM, so
+the measured time is not accurate.
+
+I will continue to try to measure more data besides IPC.
+
+Thanks,
+Qi
+
+> 
+> before and after and including the info in the changelog would be a start?
+
