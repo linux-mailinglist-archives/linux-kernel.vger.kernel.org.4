@@ -2,163 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F41F16B069B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8FC6B06A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjCHMGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 07:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
+        id S231200AbjCHMHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 07:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjCHMGV (ORCPT
+        with ESMTP id S229603AbjCHMHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:06:21 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A431A962;
-        Wed,  8 Mar 2023 04:06:17 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PWrQK4jYZz9xFrP;
-        Wed,  8 Mar 2023 19:56:57 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwB39QAbeghkbvN_AQ--.22828S2;
-        Wed, 08 Mar 2023 13:05:58 +0100 (CET)
-Message-ID: <9f19f0ff41114f7c90cca681f438388a64807e92.camel@huaweicloud.com>
-Subject: Re: [PATCH] bpf: Fix IMA test
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Matt Bobrowski <mattbobrowski@google.com>
-Cc:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 08 Mar 2023 13:05:45 +0100
-In-Reply-To: <ZAhrl0rK9Yume1Ed@google.com>
-References: <20230308103713.1681200-1-roberto.sassu@huaweicloud.com>
-         <ZAhrl0rK9Yume1Ed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 8 Mar 2023 07:07:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F7A1A962
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:06:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678277183;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fPaX9pdabP6JQosCXDJl3Igxu4+FbhmhgJXUTxNfUvs=;
+        b=ey1xDOTLvHU/5OinXjd+fWpjFNfy1LT2yYKYwwsQLX6yHPx9sHMX8khRaAc0xFEbXmNHOu
+        Iilh6X1hImus/6ZtTwmvQemNIBMCh1ffpOEyX9FsHpKiaxN92ESWKONl44SteZMJ7MvDqj
+        9waXRwG2XSrRjYJHZF6MkPcOepqycto=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-194-yWrCNb-uMACKplTkWz-jvQ-1; Wed, 08 Mar 2023 07:06:22 -0500
+X-MC-Unique: yWrCNb-uMACKplTkWz-jvQ-1
+Received: by mail-io1-f70.google.com with SMTP id z6-20020a056602080600b007407df88db0so8723768iow.23
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 04:06:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678277181;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fPaX9pdabP6JQosCXDJl3Igxu4+FbhmhgJXUTxNfUvs=;
+        b=IUKZ65zF0KJWAwoQ8v+DS86oJgrlyBY2qt8CCdnjwixgBKD7A4byMnrzQbjrvkZ2B4
+         61Buh5WlmOlFY5QTa3YTPM+OVJyBVnna32vLBWUx2oPNV617g7ue378Gx1iLwkYGbtn2
+         GiCGGWs8wxhCMeAhA9xDBsbDyZDEreNaQ/1l/jEx8FjuNsKB7qaYmph4stiBLGkg7LLa
+         YA6m8kwvr5fkiPqFhInM/92T7zi2f30SOkaHCV6AeGH8JJAWZXz1ZUKZZv5pYTEkfH7J
+         OahkeSclqKK4DjbGZlIrl6P4B+Fb/Yp0IRLoGTmZNQ3/tOqnu+/CIWd0CEWL2Kj4cmnr
+         H6Cg==
+X-Gm-Message-State: AO0yUKW/BvjTftcTResB+fc8oxD0IGLyPbMh6ac+1aQs92JMGaGuSZrK
+        Au/cJXLYgUNhwr4d3vd3Jl29pDOVm7bElxFTSyO8S22JSHcULNAR7qwzUwSuQlRrIB2feAaPpAA
+        i/ezMIfp+B3p8vTmvs49rAHMa
+X-Received: by 2002:a05:6e02:1987:b0:316:b0b2:c2f2 with SMTP id g7-20020a056e02198700b00316b0b2c2f2mr16913179ilf.3.1678277181566;
+        Wed, 08 Mar 2023 04:06:21 -0800 (PST)
+X-Google-Smtp-Source: AK7set9uY+GlPLXK8LkX+GE1LtB5w/LJF1oVXckLfL3zNH8Xsv3v09degyuUCbAT1+n+cqB1ZJ1vCw==
+X-Received: by 2002:a05:6e02:1987:b0:316:b0b2:c2f2 with SMTP id g7-20020a056e02198700b00316b0b2c2f2mr16913166ilf.3.1678277181374;
+        Wed, 08 Mar 2023 04:06:21 -0800 (PST)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id u5-20020a02c045000000b003b1d7fbf810sm4971683jam.148.2023.03.08.04.06.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 04:06:20 -0800 (PST)
+Date:   Wed, 8 Mar 2023 07:06:19 -0500
+From:   Brian Masney <bmasney@redhat.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     andersson@kernel.org, quic_shazhuss@quicinc.com, agross@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: sa8540p-ride: correct name of
+ remoteproc_nsp0 firmware
+Message-ID: <ZAh6O9TbX/pnOnxp@x1>
+References: <20230307232340.2370476-1-bmasney@redhat.com>
+ <1a915c33-ef32-852c-a856-10c8d35be151@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwB39QAbeghkbvN_AQ--.22828S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAr4fXw4fZFW5uFy3CFy3Arb_yoW5Kw17p3
-        97Wr1jya1xtFy3trn2vFWUWFWSvFn7X3WUGrs5t34rA34UWr92qa4IvF18X3Z8CrWIya1x
-        Za1rGrZrGw10yaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Gr0_Zr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UdxhLUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBF1jj4ZWEAABs8
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1a915c33-ef32-852c-a856-10c8d35be151@linaro.org>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-08 at 11:03 +0000, Matt Bobrowski wrote:
-> Ha! I was literally in the midst of sending through a patch for
-> this. Thanks for also taking a look and beating me to it!
+On Wed, Mar 08, 2023 at 12:02:04PM +0100, Krzysztof Kozlowski wrote:
+> On 08/03/2023 00:23, Brian Masney wrote:
+> > The cdsp.mbn firmware that's referenced in sa8540p-ride.dts is actually
+> > named cdsp0.mbn in the deliverables from Qualcomm. Let's go ahead and
+> > correct the name to match what's in Qualcomm's deliverable.
 > 
-> This LGTM, feel free to add:
-> 
-> Reviewed-by: Matt Bobrowski <mattbobrowski@google.com>
+> I don't think vendor deliverables matter. linux-firmware is here more
+> important. The file will be cdsp.mbn in the firmware, won't it?
 
-Thanks.
+cdsp0.mbn and cdsp1.mbn for the sa8540p are not in linux-firmware and I
+far as I know there's no plan for someone to submit those since QC would
+need to approve that. I can ask though since the DTS for these two bits
+has been submitted upstream.
 
-I have only one remain question. Should we accept the old behavior, or
-simply reject it?
-
-Roberto
-
-> On Wed, Mar 08, 2023 at 11:37:13AM +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Commit 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED
-> > flag is set") caused bpf_ima_inode_hash() to refuse to give non-fresh
-> > digests. IMA test #3 assumed the old behavior, that bpf_ima_inode_hash()
-> > still returned also non-fresh digests.
-> > 
-> > Correct the test by accepting both cases. If the samples returned are 1,
-> > assume that the commit above is applied and that the returned digest is
-> > fresh. If the samples returned are 2, assume that the commit above is not
-> > applied, and check both the non-fresh and fresh digest.
-> > 
-> > Fixes: 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED flag is set")
-> > Reported by: David Vernet <void@manifault.com>
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  .../selftests/bpf/prog_tests/test_ima.c       | 29 ++++++++++++++-----
-> >  1 file changed, 21 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/test_ima.c b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> > index b13feceb38f..810b14981c2 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> > @@ -70,7 +70,7 @@ void test_test_ima(void)
-> >  	u64 bin_true_sample;
-> >  	char cmd[256];
-> >  
-> > -	int err, duration = 0;
-> > +	int err, duration = 0, fresh_digest_idx = 0;
-> >  	struct ima *skel = NULL;
-> >  
-> >  	skel = ima__open_and_load();
-> > @@ -129,7 +129,15 @@ void test_test_ima(void)
-> >  	/*
-> >  	 * Test #3
-> >  	 * - Goal: confirm that bpf_ima_inode_hash() returns a non-fresh digest
-> > -	 * - Expected result: 2 samples (/bin/true: non-fresh, fresh)
-> > +	 * - Expected result:
-> > +	 *   1 sample (/bin/true: fresh) if commit 62622dab0a28 applied
-> > +	 *   2 samples (/bin/true: non-fresh, fresh) if commit 62622dab0a28 is
-> > +	 *     not applied
-> > +	 *
-> > +	 * If commit 62622dab0a28 ("ima: return IMA digest value only when
-> > +	 * IMA_COLLECTED flag is set") is applied, bpf_ima_inode_hash() refuses
-> > +	 * to give a non-fresh digest, hence the correct result is 1 instead of
-> > +	 * 2.
-> >  	 */
-> >  	test_init(skel->bss);
-> >  
-> > @@ -144,13 +152,18 @@ void test_test_ima(void)
-> >  		goto close_clean;
-> >  
-> >  	err = ring_buffer__consume(ringbuf);
-> > -	ASSERT_EQ(err, 2, "num_samples_or_err");
-> > -	ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
-> > -	ASSERT_NEQ(ima_hash_from_bpf[1], 0, "ima_hash");
-> > -	ASSERT_EQ(ima_hash_from_bpf[0], bin_true_sample, "sample_equal_or_err");
-> > +	ASSERT_GE(err, 1, "num_samples_or_err");
-> > +	if (err == 2) {
-> > +		ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
-> > +		ASSERT_EQ(ima_hash_from_bpf[0], bin_true_sample,
-> > +			  "sample_equal_or_err");
-> > +		fresh_digest_idx = 1;
-> > +	}
-> > +
-> > +	ASSERT_NEQ(ima_hash_from_bpf[fresh_digest_idx], 0, "ima_hash");
-> >  	/* IMA refreshed the digest. */
-> > -	ASSERT_NEQ(ima_hash_from_bpf[1], bin_true_sample,
-> > -		   "sample_different_or_err");
-> > +	ASSERT_NEQ(ima_hash_from_bpf[fresh_digest_idx], bin_true_sample,
-> > +		   "sample_equal_or_err");
-> >  
-> >  	/*
-> >  	 * Test #4
-> > -- 
-> > 2.25.1
-> > 
-> /M
+Brian
 
