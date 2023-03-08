@@ -2,199 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F93C6AFD8E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 04:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 689C76AFD90
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 04:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjCHDn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 22:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
+        id S229768AbjCHDpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 22:45:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjCHDnu (ORCPT
+        with ESMTP id S229705AbjCHDpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 22:43:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD0DA1FF4
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 19:42:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678246952;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3CIFBPqlVsgi4mbIetMfKlJgaIVFbV+dfBNFlisMIHI=;
-        b=K1vOK/aaSG1dIZoUjhsIGBIXk32zyzewPkE4qWGKG1lFbbqb7b3Pa27aTRlD8hqH7bB1pt
-        LMPvdeqPzWxWCbIqUUBg33OTSyVVrkYkaDAZ8NFLpBSttauO8GOsze1s9ED5hgXBeXBNS4
-        lLF2bDroY2hEmvyq4PxUG3WNYlajhKc=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-658-bTFNsUQ-Ooyy_dRobR1niQ-1; Tue, 07 Mar 2023 22:42:31 -0500
-X-MC-Unique: bTFNsUQ-Ooyy_dRobR1niQ-1
-Received: by mail-pg1-f200.google.com with SMTP id 62-20020a630241000000b004fb3343142dso3513732pgc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 19:42:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678246950;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3CIFBPqlVsgi4mbIetMfKlJgaIVFbV+dfBNFlisMIHI=;
-        b=XND2nobXaXHRiCiIkMpNKrkZoQpYOUjXm0gNWU1iqtWA6tEaSorrT+gQfUT/o+u3F9
-         kSZbUv6z3F/UDlKR0svkDJrcUBdQ36P8XJVdY7w/0fZ4D83QHXlf/SDwqR9kijvdJ/YC
-         phX+8ApAL+l5fWhJXpTzAu/8155IZqJcCMwuNLpWMr1YAeoqc09kTK9EzurdJdM3G+GD
-         3OqOXOMkcl07zD7UXeNhWd/3MVZuXquT0wd2XqInyh7ODpbNdPoeFxKWoXTpWPg3lV0T
-         Qp0Nx52lw7tAimxEQfIcVE0JK+3zhnijrjIChlXYBUaSNxvCLkevhOtX9zTL+EaRK3vw
-         9S5A==
-X-Gm-Message-State: AO0yUKXUNhWu2kSI19LsjruuO/FoLNUAhq+36DrZQuvefwe4MOIv6vFP
-        eWbUTZc2RiAha8o0loCSfeRltcJKugBbEa5OXLYxmpdboM4u8eBfENA1XR5J88Y38qLiHZfwfms
-        2DnI4vd3Pc3lpJjsMCoFicrqv
-X-Received: by 2002:a17:90a:e7c6:b0:234:8950:6d1f with SMTP id kb6-20020a17090ae7c600b0023489506d1fmr17707807pjb.11.1678246950029;
-        Tue, 07 Mar 2023 19:42:30 -0800 (PST)
-X-Google-Smtp-Source: AK7set8UPZv2ZLhfkS7n1EfbO2gitcf4in2vPM0ixlWMSTOQuUAZcsMtdcRJGanwFD1L7yFrBUKJ2w==
-X-Received: by 2002:a17:90a:e7c6:b0:234:8950:6d1f with SMTP id kb6-20020a17090ae7c600b0023489506d1fmr17707795pjb.11.1678246949681;
-        Tue, 07 Mar 2023 19:42:29 -0800 (PST)
-Received: from [10.72.12.78] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id n3-20020a17090ade8300b00233864f21a7sm9868514pjv.51.2023.03.07.19.42.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 19:42:29 -0800 (PST)
-Message-ID: <c2f9e0d3-0242-1304-26ea-04f25c3cdee4@redhat.com>
-Date:   Wed, 8 Mar 2023 11:42:22 +0800
+        Tue, 7 Mar 2023 22:45:08 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D3C1164C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 19:45:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=cAGQQH4wQyWDGC6FY8VeQxL7CF0wk1r7pps8zKct/lQ=; b=Js7x8WulqOLxQ+pRSWSdy/vrLn
+        jgRM0AK53k9TYypy3IWJokVkTZoAtqSGkqlZiQ0jRb8SbyF4heuf2bEww6xrcPa+qhI5Hg2HdLiVv
+        PlR7Ig00ZehMokI161qJdrMbETaTLpCc5L2ccLRMIB+9GyvQVX2+OfqUAuDKp9I+g39NRNLHACYDJ
+        DwwJFfsCuQU31sE727eMfZZdQPwTjwjD22E/+U897cV9xliJKn21KVB3vCYqlDVaBPIjZXV+B4y1B
+        AsbMP4EL8UM309QHKlm1GsEO578u3FcAvGLkmYPZeNK4/YG6sj2CibT4PknoOCzxAhlN3ic5XN8pP
+        Pco2HA4g==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pZkjh-003MaC-AI; Wed, 08 Mar 2023 03:45:05 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Aditya Srivastava <yashsri421@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        Timur Tabi <timur@tabi.org>,
+        Varun Sethi <Varun.Sethi@freescale.com>,
+        Emil Medve <Emilian.Medve@Freescale.com>
+Subject: [PATCH] iommu/fsl: fix all kernel-doc warnings in fsl_pamu.c
+Date:   Tue,  7 Mar 2023 19:45:04 -0800
+Message-Id: <20230308034504.9985-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] fs/ceph/mds_client: ignore responses for waiting requests
-Content-Language: en-US
-To:     Max Kellermann <max.kellermann@ionos.com>, idryomov@gmail.com,
-        jlayton@kernel.org, ceph-devel@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20230302130650.2209938-1-max.kellermann@ionos.com>
-From:   Xiubo Li <xiubli@redhat.com>
-In-Reply-To: <20230302130650.2209938-1-max.kellermann@ionos.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
+Fix kernel-doc warnings as reported by the kernel test robot:
 
-Sorry for late.
+fsl_pamu.c:192: warning: expecting prototype for pamu_config_paace(). Prototype was for pamu_config_ppaace() instead
+fsl_pamu.c:239: warning: Function parameter or member 'omi_index' not described in 'get_ome_index'
+fsl_pamu.c:239: warning: Function parameter or member 'dev' not described in 'get_ome_index'
+fsl_pamu.c:332: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Setup operation mapping and stash destinations for QMAN and QMAN portal.
+fsl_pamu.c:361: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Setup the operation mapping table for various devices. This is a static
 
-On 02/03/2023 21:06, Max Kellermann wrote:
-> If a request is put on the waiting list, its submission is postponed
-> until the session becomes ready (e.g. via `mdsc->waiting_for_map` or
-> `session->s_waiting`).  If a `CEPH_MSG_CLIENT_REPLY` happens to be
-> received before `CEPH_MSG_MDS_MAP`, the request gets freed, and then
-> this assertion fails:
+Fixes: 695093e38c3e ("iommu/fsl: Freescale PAMU driver and iommu implementation.")
+Fixes: cd70d4659ff3 ("iommu/fsl: Various cleanups")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: lore.kernel.org/r/202302281151.B1WtZvSC-lkp@intel.com
+Cc: Aditya Srivastava <yashsri421@gmail.com>
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: iommu@lists.linux.dev
+Cc: Timur Tabi <timur@tabi.org>
+Cc: Varun Sethi <Varun.Sethi@freescale.com>
+Cc: Emil Medve <Emilian.Medve@Freescale.com>
+---
+ drivers/iommu/fsl_pamu.c |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-How could this happen ?
-
-Since the req hasn't been submitted yet, how could it receive a reply 
-normally ?
-
->   WARN_ON_ONCE(!list_empty(&req->r_wait));
->
-> This occurred on a server after the Ceph MDS connection failed, and a
-> corrupt reply packet was received for a waiting request:
->
->   libceph: mds1 (1)10.0.0.10:6801 socket error on write
->   libceph: mds1 (1)10.0.0.10:6801 session reset
->   ceph: mds1 closed our session
->   ceph: mds1 reconnect start
->   ceph: mds1 reconnect success
->   ceph: problem parsing mds trace -5
->   ceph: mds parse_reply err -5
->   ceph: mdsc_handle_reply got corrupt reply mds1(tid:5530222)
-
-It should be a corrupted reply and it lead us to get a incorrect req, 
-which hasn't been submitted yet.
-
-BTW, do you have the dump of the corrupted msg by 'ceph_msg_dump(msg)' ?
-
-We can check what have corrupted exactly.
-
-Thanks
-
-- Xiubo
-
->   [...]
->   ------------[ cut here ]------------
->   WARNING: CPU: 9 PID: 229180 at fs/ceph/mds_client.c:966 ceph_mdsc_release_request+0x17a/0x180
->   Modules linked in:
->   CPU: 9 PID: 229180 Comm: kworker/9:3 Not tainted 6.1.8-cm4all1 #45
->   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
->   Workqueue: ceph-msgr ceph_con_workfn
->   RIP: 0010:ceph_mdsc_release_request+0x17a/0x180
->   Code: 39 d8 75 26 5b 48 89 ee 48 8b 3d f9 2d 04 02 5d e9 fb 01 c9 ff e8 56 85 ab ff eb 9c 48 8b 7f 58 e8 db 4d ff ff e9 a4 fe ff ff <0f> 0b eb d6 66 90 0f 1f 44 00 00 41 54 48 8d 86 b8 03 00 00 55 4c
->   RSP: 0018:ffffa6f2c0e2bd20 EFLAGS: 00010287
->   RAX: ffff8f58b93687f8 RBX: ffff8f592f6374a8 RCX: 0000000000000aed
->   RDX: 0000000000000ac0 RSI: 0000000000000000 RDI: 0000000000000000
->   RBP: ffff8f592f637148 R08: 0000000000000001 R09: ffffffffa901de00
->   R10: 0000000000000001 R11: ffffd630ad09dfc8 R12: ffff8f58b9368000
->   R13: ffff8f5806b33800 R14: ffff8f58894f6780 R15: 000000000054626e
->   FS:  0000000000000000(0000) GS:ffff8f630f040000(0000) knlGS:0000000000000000
->   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->   CR2: 00007ffc2926df68 CR3: 0000000218dce002 CR4: 00000000001706e0
->   DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->   DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->   Call Trace:
->    <TASK>
->    mds_dispatch+0xec5/0x1460
->    ? inet_recvmsg+0x4d/0xf0
->    ceph_con_process_message+0x6b/0x80
->    ceph_con_v1_try_read+0xb92/0x1400
->    ceph_con_workfn+0x383/0x4e0
->    process_one_work+0x1da/0x370
->    ? process_one_work+0x370/0x370
->    worker_thread+0x4d/0x3c0
->    ? process_one_work+0x370/0x370
->    kthread+0xbb/0xe0
->    ? kthread_complete_and_exit+0x20/0x20
->    ret_from_fork+0x22/0x30
->    </TASK>
->   ---[ end trace 0000000000000000 ]---
->   ceph: mds1 caps renewed
->
-> If we know that a request has not yet been submitted, we should ignore
-> all responses for it, just like we ignore responses for unknown TIDs.
->
-> To: ceph-devel@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Max Kellermann <max.kellermann@ionos.com>
-> ---
->   fs/ceph/mds_client.c | 7 +++++++
->   1 file changed, 7 insertions(+)
->
-> diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
-> index 27a245d959c0..fa74fdb2cbfb 100644
-> --- a/fs/ceph/mds_client.c
-> +++ b/fs/ceph/mds_client.c
-> @@ -3275,6 +3275,13 @@ static void handle_reply(struct ceph_mds_session *session, struct ceph_msg *msg)
->   	}
->   	dout("handle_reply %p\n", req);
->   
-> +	/* waiting, not yet submitted? */
-> +	if (!list_empty(&req->r_wait)) {
-> +		pr_err("mdsc_handle_reply on waiting request tid %llu\n", tid);
-> +		mutex_unlock(&mdsc->mutex);
-> +		goto out;
-> +	}
-> +
->   	/* correct session? */
->   	if (req->r_session != session) {
->   		pr_err("mdsc_handle_reply got %llu on session mds%d"
-
--- 
-Best Regards,
-
-Xiubo Li (李秀波)
-
-Email: xiubli@redhat.com/xiubli@ibm.com
-Slack: @Xiubo Li
-
+diff -- a/drivers/iommu/fsl_pamu.c b/drivers/iommu/fsl_pamu.c
+--- a/drivers/iommu/fsl_pamu.c
++++ b/drivers/iommu/fsl_pamu.c
+@@ -178,7 +178,7 @@ int pamu_update_paace_stash(int liodn, u
+ }
+ 
+ /**
+- * pamu_config_paace() - Sets up PPAACE entry for specified liodn
++ * pamu_config_ppaace() - Sets up PPAACE entry for specified liodn
+  *
+  * @liodn: Logical IO device number
+  * @omi: Operation mapping index -- if ~omi == 0 then omi not defined
+@@ -232,7 +232,8 @@ int pamu_config_ppaace(int liodn, u32 om
+ /**
+  * get_ome_index() - Returns the index in the operation mapping table
+  *                   for device.
+- * @*omi_index: pointer for storing the index value
++ * @omi_index: pointer for storing the index value
++ * @dev: target device
+  *
+  */
+ void get_ome_index(u32 *omi_index, struct device *dev)
+@@ -328,7 +329,7 @@ found_cpu_node:
+ #define QMAN_PORTAL_PAACE 2
+ #define BMAN_PAACE 3
+ 
+-/**
++/*
+  * Setup operation mapping and stash destinations for QMAN and QMAN portal.
+  * Memory accesses to QMAN and BMAN private memory need not be coherent, so
+  * clear the PAACE entry coherency attribute for them.
+@@ -357,7 +358,7 @@ static void setup_qbman_paace(struct paa
+ 	}
+ }
+ 
+-/**
++/*
+  * Setup the operation mapping table for various devices. This is a static
+  * table where each table index corresponds to a particular device. PAMU uses
+  * this table to translate device transaction to appropriate corenet
