@@ -2,140 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BEAF6B0B15
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:27:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 643B86B0B1B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:28:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbjCHO1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:27:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55190 "EHLO
+        id S231391AbjCHO20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:28:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbjCHO1X (ORCPT
+        with ESMTP id S231858AbjCHO2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:27:23 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15109CD664
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:26:54 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id s18so9727765pgq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 06:26:54 -0800 (PST)
+        Wed, 8 Mar 2023 09:28:09 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADB0C3E2D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:27:40 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id cy23so66356026edb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 06:27:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678285613;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6DzypvQ9Ir4BceedTjh7GQOOsJgVNAfYu10w2CD9pqk=;
-        b=Pyf8V3e9hyJO+g4hHyoq1KA7bcPTty4SEJ3OnQ+9kxx1oE+MLTkxL8BS4TVXPGP+Jh
-         eSssiNkJcdGMAvHAXux9Z87TAAvJPn7jBSktnB+ZFuoV3b6gmKwv7Fa9M4ijdTc1wSwP
-         e3+dUriachwEZC5RKofoob0sqIqscgphpU/aOPwXpJWhfN4foCyLq37qQrxzPL9lyOEt
-         i/YsqAyJ7GsQY0UlLHuusw6mVCQ+FDm6jmxapNjrckmdfc2J1KVe+D2IlDMMY9SI3ITL
-         a4nwEHIphc6f0gK8rpsylMJpJrhaT4g0Ywy5J4KvLR+P5SRrQ8uz5royHE/q6pxnlbXJ
-         nCHQ==
+        d=linaro.org; s=google; t=1678285635;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6eWDufY7+zICzKzyI2+VEmOCWAqgAtsARp3qb0zhsY8=;
+        b=BbZ8k/NJjVEkIKWYoM90mY7gjrv4bUl1XdxfHAG6Pi0Su+OTW7idKqhV6e0Pjq8ufx
+         9KVQq7qXfucc2dvxlDhTg+J/VLx9VjFnNqNyssrrvsPawSv0MIrTlaGMnzgDwgRhFBzg
+         OTWG0hvelzCAcDgfVNwjMkQUJIs7GuM7SF6O6MqBB57PJJlBiVC4Uf+SY1q5WpyxOTQx
+         KjR3rfVTF/PI/hsKELbOKTB8BHLd5JZWLvycEo8iQmJvo07Ve+uB3FoP5p699G9XG6DK
+         s3VjIiTuj5ru68btyODXBVcXf88h64RPo2EY4VaBzGvy2nrYpxPOslpYufM5P0aAAZ15
+         gi4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678285613;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6DzypvQ9Ir4BceedTjh7GQOOsJgVNAfYu10w2CD9pqk=;
-        b=a7Dlyh06TnyVbQQOuqy6rlEmPUMx4q29CuZuoVW4qN+KH6yG1OLOGUFkBADRvVOTSW
-         VqtzeNUKCdTrM4C6XtYNK+aWJRlXwLc5PwADwzzeAacmGuATGDQiQfJd92zUkT0qBxbR
-         Q6dFwEn/+EQvuscotdplA0+WWTn4aIur4HVjCZJPvGiulweqs7iMsDAL1BsMLetL7KGY
-         STL8q7s+F7Nj33IrseIp3mRyJbUxxNETCTc5NKOA0Fzmlr73OYw27UhuX+6sWlgneC2M
-         1AI/j9IBAvm/y0yfOgBHIWaBhqXNYs7lhxopieIECkCrzVSKPrXAI5U3FWfBTz/KwWtr
-         JKgA==
-X-Gm-Message-State: AO0yUKUJsXu9fB8KBstzLUx8t20Bf9d42Jkmmi8ccu44xHnqPEXphkV6
-        datf93+DiQFIp2Ylkt5k0bx9+Q==
-X-Google-Smtp-Source: AK7set+rYJJTDBOWnCa/b2YmmrMnbgTu/hcqTSPkk3vFIpknj1dpE4/ong9tJr7MIuEdncnMxuFBbA==
-X-Received: by 2002:aa7:8804:0:b0:5d1:f76:d1d7 with SMTP id c4-20020aa78804000000b005d10f76d1d7mr2800868pfo.1.1678285612728;
-        Wed, 08 Mar 2023 06:26:52 -0800 (PST)
-Received: from [172.20.4.229] ([50.233.106.125])
-        by smtp.gmail.com with ESMTPSA id 6-20020aa79106000000b0059085684b54sm9851411pfh.140.2023.03.08.06.26.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 06:26:52 -0800 (PST)
-Message-ID: <074823f4-993c-8caf-bd93-70589c4aae42@kernel.dk>
-Date:   Wed, 8 Mar 2023 07:26:46 -0700
+        d=1e100.net; s=20210112; t=1678285635;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6eWDufY7+zICzKzyI2+VEmOCWAqgAtsARp3qb0zhsY8=;
+        b=r7pZwYwYHwKVqZPYy888VMtXUwUbGjstUiULSL1QRKIOp04DsmItwC8geF1LobPCZs
+         DrGTrvsElN3abgU2E3nb31MomqaJUJDIovr3ey9/EWnkoLyc7C2BWVvUcgZTDGLfyoPj
+         XvRklbObK+vcIh8I9ImmVpbpdTkc8PZdTWBJ7cnHaGhN1Q9TWGnz+/tqBlKf7otAloH/
+         tX3UQZgv7rbUMp2xS2Chdfsdk7AaEBD7ICHwiP6UGhacs0+utMphjVUHpYEZF3nfoDZ8
+         iYEhqXdpydcbMtegrZaaYoqoL2EzaoBA+DHbzX50v6NEdai9+4KL7H2iPdfb4uXqpHzO
+         01Kg==
+X-Gm-Message-State: AO0yUKWviEdgIUyprrYBr9UnblORv9kPgRV4x4VfTb4eb8+yR7U1gXWs
+        OREO5JMYvJpf4ogCihpHouwN/w==
+X-Google-Smtp-Source: AK7set/yMNClsydz5D6EJJmjLHRDwVO5AMyRxnNSFx4c+gK6vbvDUFLhJrXDLDEFGhR5pwi+GZcmkw==
+X-Received: by 2002:a17:907:c297:b0:8f6:88b7:73a7 with SMTP id tk23-20020a170907c29700b008f688b773a7mr15975693ejc.7.1678285635284;
+        Wed, 08 Mar 2023 06:27:15 -0800 (PST)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:ff33:9b14:bdd2:a3da])
+        by smtp.gmail.com with ESMTPSA id p14-20020a170906a00e00b008b1b644c9fbsm7543553ejy.103.2023.03.08.06.27.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 06:27:14 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: qcom: sm8450-hdk: use recommended drive strength for speaker SD_N
+Date:   Wed,  8 Mar 2023 15:27:12 +0100
+Message-Id: <20230308142712.277659-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: Unexpected EINVAL when enabling cpuset in subtree_control when
- io_uring threads are running
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>,
-        Daniel Dao <dqminh@cloudflare.com>
-Cc:     io-uring@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        cgroups@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>
-References: <CA+wXwBQwgxB3_UphSny-yAP5b26meeOu1W4TwYVcD_+5gOhvPw@mail.gmail.com>
- <c069bcff-8229-4284-b973-e427ccf20b64@redhat.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <c069bcff-8229-4284-b973-e427ccf20b64@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 7:20?AM, Waiman Long wrote:
-> On 3/8/23 06:42, Daniel Dao wrote:
->> Hi all,
->>
->> We encountered EINVAL when enabling cpuset in cgroupv2 when io_uring
->> worker threads are running. Here are the steps to reproduce the failure
->> on kernel 6.1.14:
->>
->> 1. Remove cpuset from subtree_control
->>
->>    > for d in $(find /sys/fs/cgroup/ -maxdepth 1 -type d); do echo
->> '-cpuset' | sudo tee -a $d/cgroup.subtree_control; done
->>    > cat /sys/fs/cgroup/cgroup.subtree_control
->>    cpu io memory pids
->>
->> 2. Run any applications that utilize the uring worker thread pool. I used
->>     https://github.com/cloudflare/cloudflare-blog/tree/master/2022-02-io_uring-worker-pool
->>
->>    > cargo run -- -a -w 2 -t 2
->>
->> 3. Enabling cpuset will return EINVAL
->>
->>    > echo '+cpuset' | sudo tee -a /sys/fs/cgroup/cgroup.subtree_control
->>    +cpuset
->>    tee: /sys/fs/cgroup/cgroup.subtree_control: Invalid argument
->>
->> We traced this down to task_can_attach that will return EINVAL when it
->> encounters
->> kthreads with PF_NO_SETAFFINITY, which io_uring worker threads have.
->>
->> This seems like an unexpected interaction when enabling cpuset for the subtrees
->> that contain kthreads. We are currently considering a workaround to try to
->> enable cpuset in root subtree_control before any io_uring applications
->> can start,
->> hence failure to enable cpuset is localized to only cgroup with
->> io_uring kthreads.
->> But this is cumbersome.
->>
->> Any suggestions would be very much appreciated.
-> 
-> Anytime you echo "+cpuset" to cgroup.subtree_control to enable cpuset,
-> the tasks within the child cgroups will do an implicit move from the
-> parent cpuset to the child cpusets. However, that move will fail if
-> any task has the PF_NO_SETAFFINITY flag set due to task_can_attach()
-> function which checks for this. One possible solution is for the
-> cpuset to ignore tasks with PF_NO_SETAFFINITY set for implicit move.
-> IOW, allowing the implicit move without touching it, but not explicit
-> one using cgroup.procs.
+Downstream DTS (and sc8280xp-lenovo-thinkpad-x13s with the same
+speakers) uses 16 mA drive strength for the WSA8835 speaker SD_N
+reset/shutdown pin.  Use the same for HDK8450, as it is seem the
+recommended value.
 
-I was pondering this too as I was typing my reply, but at least for
-io-wq, this report isn't the first to be puzzled or broken by the fact
-that task threads might have PF_NO_SETAFFINITY set. So while it might be
-worthwhile to for cpuset to ignore PF_NO_SETAFFINITY as a separate fix,
-I think it's better to fix io-wq in general. Not sure we have other
-cases where it's even possible to have PF_NO_SETAFFINITY set on
-userspace threads?
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+---
+
+Not adding Fixes tag because 4 mA seems to work, so this is just
+choosing safer value, based on downstream DTS.
+---
+ arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+index 9fa1a83d9554..e04de4bb7fae 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
++++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+@@ -754,7 +754,7 @@ &tlmm {
+ 	spkr_1_sd_n_active: spkr-1-sd-n-active-state {
+ 		pins = "gpio1";
+ 		function = "gpio";
+-		drive-strength = <4>;
++		drive-strength = <16>;
+ 		bias-disable;
+ 		output-low;
+ 	};
+@@ -762,7 +762,7 @@ spkr_1_sd_n_active: spkr-1-sd-n-active-state {
+ 	spkr_2_sd_n_active: spkr-2-sd-n-active-state {
+ 		pins = "gpio89";
+ 		function = "gpio";
+-		drive-strength = <4>;
++		drive-strength = <16>;
+ 		bias-disable;
+ 		output-low;
+ 	};
 -- 
-Jens Axboe
+2.34.1
 
