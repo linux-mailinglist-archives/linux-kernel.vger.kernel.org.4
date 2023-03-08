@@ -2,79 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806B86B0094
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:11:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BDF6B0095
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjCHIL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:11:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
+        id S229825AbjCHIMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:12:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjCHILg (ORCPT
+        with ESMTP id S230051AbjCHILy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:11:36 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749D0A21A0
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:11:30 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id e13so14465518wro.10
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:11:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678263089;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=A/GnPDgS88xNTx2XNIhiP45O7mjmL1plMVX41sUe2+8=;
-        b=MalOJjNVMtNPYOeLbH/dwcS/HBxF6IipOuqs9Y2h48HtACORCb0EXD1aV/S/vDLjSr
-         XynJgLAjTVpw2qdJVbhi5ex59lvkpOAbIe/NbeOjLF9Ffner30JqIS5Hnv7/3XvFT9uY
-         TtnpCTgyWXs/2MHKMIn3yNnTfvQNczEepDPE7d6DL4eFRZXEdXHHdqux/2ISe4nakMDZ
-         g4yu/G6sLLZ1IM4nG0SGvMl6maT6ZehhR580JizG3v9VVsdfBDQ6iNxY29S6ANGc9fNL
-         qTSnYqW99OPrCZH3d9fcJvQlswiujJg5iWFcNK1UYpS/EEikx9X7OEF2X7o156+dlGS/
-         xzfg==
+        Wed, 8 Mar 2023 03:11:54 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807D8A72AB
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:11:40 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id 9-20020a5ea509000000b0074ca36737d2so8217491iog.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:11:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678263089;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A/GnPDgS88xNTx2XNIhiP45O7mjmL1plMVX41sUe2+8=;
-        b=oHw362AVdMxIbHD0Jys55KMzCBmhYE1HAAr5V4Elmbd6Wy8m+bGy7owuGOSwegAhGl
-         gcA9E6yBcMuARFobt4eIERsqhwrkbdNgRmEG4kLEZUmaM+AkCJFpn75m0syl9paz+I/D
-         hO+2wiIfFw52Lvd6Ml8uRdBaPILix8/MuQZboW0tirFcyju0WWjWqvsd4DKjzqf98H6b
-         KaupGTOrVJ8cN6VxZZywQXWFcfQdTOZyYfv6fMhkAEvXNelzoJecaBsnS/1XoEvWbCI3
-         RgAtsfIm6+r8u+e0EJz3/BLRvrTFhEc1xXlNukt2+VwWlACegIqZVPrkmGsTfOnnJncn
-         P/XQ==
-X-Gm-Message-State: AO0yUKVAZ9t0J+4at16s0APbOa+x2/KsMY1ISR1RywkNCestOo+xlMvY
-        R/vXqUJYh1aR/nNe4feqOHzPyQ==
-X-Google-Smtp-Source: AK7set+e7flPaKlH3cg4u7NLx8NHyCMBeTiS2fqGvGrkYw3YFUr/ZyGizxHyQIupOhmU1WlGo87ZPw==
-X-Received: by 2002:adf:ee4c:0:b0:2cd:8237:345b with SMTP id w12-20020adfee4c000000b002cd8237345bmr12745021wro.9.1678263088907;
-        Wed, 08 Mar 2023 00:11:28 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:b029:83b9:1fb8:7c34? ([2a01:e0a:982:cbb0:b029:83b9:1fb8:7c34])
-        by smtp.gmail.com with ESMTPSA id g15-20020a5d554f000000b002c5526234d2sm14730053wrw.8.2023.03.08.00.11.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 00:11:27 -0800 (PST)
-Message-ID: <b2a8a0ca-02b1-f792-a6ee-51f98ea615b0@linaro.org>
-Date:   Wed, 8 Mar 2023 09:11:26 +0100
+        d=1e100.net; s=20210112; t=1678263099;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7RRpr/2enZpSN+Pqs5p0qwijporxRiSMR0agGaaar/U=;
+        b=MCxZMxNLTEfy77ufr7zWO64MKOSHEEUKgGqE1HmW/o3W8J5PSXD+Z4kp+HY2p+8gE/
+         YWKI2rk4EGlZCljKLuPbaLBcBnVIhPwMeR/ivUkv9O4t1sd5BuTaG+DUECtXdHUqPaJs
+         WcD4JV5cDuvh44Ig0Z695xwaZofJ8AhbEwV+q1sdAVjzh6YI2l3CLixjJQANPL0NHczu
+         Qa8BgWkOSUA4gz6UDU2KWNeEvuPzoqfTaCJpnoJEOrAIL2tKF17EJ0eWJ+b7+wCqWj/V
+         eiGFieVUCBpEfrs4ICjcQlZWdVqjjjypHpL8jja7f9FNNQlRzVd9cMhOSu/t+/ljGY6s
+         XuNQ==
+X-Gm-Message-State: AO0yUKXriDugwFpIfCeJ0HK5zLBqh1lpREeelky2b9ElGwqsahFneOuy
+        Bf+NNAcnwVg88c5G6NR7PgyG3++/a1bMqPL4tlAygUH6lY/N
+X-Google-Smtp-Source: AK7set8ohvqpuNRL/JIS3vEqOiqVUfpwiOin574uHv80eNG3CnFwykdH8snjl4FxakBYbcLg+wDx8C0yoczKJ+W5O7OoK+osDiqq
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sm8450: Mark UFS controller as
- cache coherent
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230307153201.180626-1-manivannan.sadhasivam@linaro.org>
- <20230307153201.180626-2-manivannan.sadhasivam@linaro.org>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230307153201.180626-2-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Received: by 2002:a05:6e02:13f4:b0:313:fa72:d9aa with SMTP id
+ w20-20020a056e0213f400b00313fa72d9aamr8342532ilj.0.1678263099703; Wed, 08 Mar
+ 2023 00:11:39 -0800 (PST)
+Date:   Wed, 08 Mar 2023 00:11:39 -0800
+In-Reply-To: <000000000000ea3c3105ef377a12@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e5c94a05f65f130d@google.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ntfs_listxattr
+From:   syzbot <syzbot+9fcea5ef6dc4dc72d334@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com, dvyukov@google.com,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com,
+        zengheng4@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,27 +58,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2023 16:32, Manivannan Sadhasivam wrote:
-> The UFS controller on SM8450 supports cache coherency, hence add the
-> "dma-coherent" property to mark it as such.
-> 
-> Fixes: 07fa917a335e ("arm64: dts: qcom: sm8450: add ufs nodes")
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8450.dtsi | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 1a744a33bcf4..3ef47b4e9af7 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -4003,6 +4003,7 @@ ufs_mem_hc: ufshc@1d84000 {
->   			power-domains = <&gcc UFS_PHY_GDSC>;
->   
->   			iommus = <&apps_smmu 0xe0 0x0>;
-> +			dma-coherent;
->   
->   			interconnects = <&aggre1_noc MASTER_UFS_MEM 0 &mc_virt SLAVE_EBI1 0>,
->   					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_UFS_MEM_CFG 0>;
+This bug is marked as fixed by commit:
+ntfs: fix panic about slab-out-of-bounds caused by ntfs_listxattr()
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
+
+#syz fix: exact-commit-title
+
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
+
+Kernel: Linux
+Dashboard link: https://syzkaller.appspot.com/bug?extid=9fcea5ef6dc4dc72d334
+
+---
+[1] I expect the commit to be present in:
+
+1. for-kernelci branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+
+2. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+
+3. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+4. main branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+
+The full list of 10 trees can be found at
+https://syzkaller.appspot.com/upstream/repos
