@@ -2,161 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05E16B0ECF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8726B0ED1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjCHQcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:32:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
+        id S229943AbjCHQdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:33:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjCHQcw (ORCPT
+        with ESMTP id S229873AbjCHQdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:32:52 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A42E2413D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:32:51 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id D483D5C0064;
-        Wed,  8 Mar 2023 11:32:50 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 08 Mar 2023 11:32:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1678293170; x=1678379570; bh=OL
-        dmqZ+wBaNxA7qddBghZ19djChtoa8PmE05C1OKz2w=; b=AN3+m1K6vcJD5ngzDz
-        sPRzBlWRUuoYQp7acyXautlrKA36TOkI3Ri9Sr41Vod5cy2L4XQhRTA6bF9uvxfB
-        +hyPUzuv153YBiF3IT4rUtuWYz/RF64dQHQRRx9CSE8b6VFu6Dq5VYn6SXC77cAP
-        VehqBnecW49F/eqYrKeWL8SfcOKg+aF9vJLdhgqtdyaD5uvIzF8ekxbmbavPuBdZ
-        0C+EH5VBK6z5+/Rd/G6Egrp7iR36RzId8KZV9j8Cux9RYiEfbkEM3rURJeVR3EMc
-        ORfkS1Vfllzww3l+XOwPyw8ELGuxFy5ECkafqyhFpWqlzydpQ/mh95Cu5vnsByB5
-        ubcw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1678293170; x=1678379570; bh=OLdmqZ+wBaNxA
-        7qddBghZ19djChtoa8PmE05C1OKz2w=; b=TpNdGgHV8DYRutGsEGRX3/aUTuucM
-        cuLFh5Tu/pdfy6Bp58ovSAmrQGYu7XnPr9zFNsxeZtyZBKap0zG+U/pZBmAABqNK
-        JUwVztZVt6ErBEoEpCyFwtEEovannerPinXJEXtiJY2nsvVthbZaYW2sALCJdHLg
-        colGb5PhLJIJqHMHEBUAD9jPdHGIewVxDW5S3Vw1W+LJMfM2MOziWG+BakY4J0Ci
-        c3F1rwI3TP5Bkh8fGRpSs8HCI6cbd2VLuuGBY6WF38ZriQjIVnUTDNLsFi90VtO8
-        HuU2ekZnYx/9QNrZvN49mD+NfhOBKxCJ/NVU7peWqRPozYKX1dlIRhUjQ==
-X-ME-Sender: <xms:srgIZPrLp5ZykcfZ3VflpPEnPcrnNXeu8P3MmgNom9-R6KcrcLeq0w>
-    <xme:srgIZJqRIgU89Q3khW7tB7G_koSbP-rb4hBhizS89uxIMUy0k9eXN4qH9e4aXDhqU
-    m4YjOlaykK7deqG-0E>
-X-ME-Received: <xmr:srgIZMOy4PtQIQEIvHWM--p5bwscf448FDzWeZJG6_AEVAU0MiSY0B-FqcOKghuyniPWrJp310AUAp5iERU1QCoUFZpn5U8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddufedggedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeejgeeiveevvdfgffeftdevuefhheduveejieefgeejveeuhfetkeelgfev
-    teefffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:srgIZC677knkE7y1Nr4XFTIwLVvKrL3lMk5106LWox4b8Lp1l8fCrA>
-    <xmx:srgIZO7KfKUs0y1mYm6aAZoOIMtvXgCXC4JY8GkfcPtw3cVoiAk92Q>
-    <xmx:srgIZKjXwoxbCXG8nqHUP-ZSpISKDxzLvvYiBrvYpiBKjizqmAR02Q>
-    <xmx:srgIZNSnFzGXXndzY7hgCilOVVJV2HMMYt_WvJqpF_umahqTQn_ILA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 8 Mar 2023 11:32:49 -0500 (EST)
-Date:   Wed, 8 Mar 2023 17:32:48 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     "Zhuo, Qingqing (Lillian)" <Qingqing.Zhuo@amd.com>
-Cc:     "Mahfooz, Hamza" <Hamza.Mahfooz@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] drm/vc4: Fix build error with undefined label
-Message-ID: <20230308163248.u7rvtadhlre3yua5@houat>
-References: <20230308093408.239331-1-qingqing.zhuo@amd.com>
- <ac8fed53-6f05-6ec7-9ef5-61110cd83c0b@amd.com>
- <20230308161945.svooztnablyvm75e@houat>
- <PH7PR12MB58315E9E7362E8A750393B6FFBB49@PH7PR12MB5831.namprd12.prod.outlook.com>
+        Wed, 8 Mar 2023 11:33:02 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CA348E11;
+        Wed,  8 Mar 2023 08:32:59 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="334911357"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="334911357"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 08:32:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="922847989"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="922847989"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 08 Mar 2023 08:32:57 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1pZwim-00HVqn-16;
+        Wed, 08 Mar 2023 18:32:56 +0200
+Date:   Wed, 8 Mar 2023 18:32:56 +0200
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Andrew Davis <afd@ti.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/6] gpio: sch311x: Use devm_gpiochip_add_data() to
+ simplify remove path
+Message-ID: <ZAi4uJdqlNfq0q2/@smile.fi.intel.com>
+References: <20230307165432.25484-1-afd@ti.com>
+ <20230307165432.25484-3-afd@ti.com>
+ <CAMRc=MeLM-S+HEuaDPp0UpbHJYmAXfLuFMU2TyvK5KEywSxtQA@mail.gmail.com>
+ <CAMRc=MfAqx5Wz2d5K1wWM0ZZ4WBu+Jhercw-z95zGvo_-v=OTg@mail.gmail.com>
+ <9c705260-c04c-da2e-db9a-df3ddfb69efc@ti.com>
+ <CAHp75Vf9oMUmr473PSjcbXjEA+BFNpSPrLd22X=B378qNasrqA@mail.gmail.com>
+ <f7561edb-be14-d78e-0f97-54ef6bd4eaea@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qkfsks6ei5ns2qea"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <PH7PR12MB58315E9E7362E8A750393B6FFBB49@PH7PR12MB5831.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f7561edb-be14-d78e-0f97-54ef6bd4eaea@ti.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 08, 2023 at 10:20:13AM -0600, Andrew Davis wrote:
+> On 3/8/23 9:53 AM, Andy Shevchenko wrote:
+> > On Wed, Mar 8, 2023 at 5:50 PM Andrew Davis <afd@ti.com> wrote:
+> > > On 3/8/23 4:32 AM, Bartosz Golaszewski wrote:
+> > > > On Wed, Mar 8, 2023 at 11:24 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 
---qkfsks6ei5ns2qea
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Wed, Mar 08, 2023 at 04:27:01PM +0000, Zhuo, Qingqing (Lillian) wrote:
-> [AMD Official Use Only - General]
->=20
-> > Hi,
->=20
-> On Wed, Mar 08, 2023 at 11:11:22AM -0500, Hamza Mahfooz wrote:
-> > + vc4 maintainers
-> >=20
-> > On 3/8/23 04:34, Qingqing Zhuo wrote:
-> > > [Why]
-> > > drivers/gpu/drm/vc4/vc4_hdmi.c: In function =E2=80=98vc4_hdmi_bind=E2=
-=80=99:
-> > > drivers/gpu/drm/vc4/vc4_hdmi.c:3448:17: error: label=20
-> > > =E2=80=98err_disable_runtime_pm=E2=80=99 used but not defined
-> > >=20
-> > > [How]
-> > > update err_disable_runtime_pm to err_put_runtime_pm.
-> > >=20
-> > > Signed-off-by: Qingqing Zhuo <qingqing.zhuo@amd.com>
-> > > ---
-> > >   drivers/gpu/drm/vc4/vc4_hdmi.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > >=20
-> > > diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c=20
-> > > b/drivers/gpu/drm/vc4/vc4_hdmi.c index 9e145690c480..edf882360d24=20
-> > > 100644
-> > > --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> > > +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> > > @@ -3445,7 +3445,7 @@ static int vc4_hdmi_bind(struct device *dev, st=
-ruct device *master, void *data)
-> > >   	 */
-> > >   	ret =3D pm_runtime_resume_and_get(dev);
-> > >   	if (ret)
-> > > -		goto err_disable_runtime_pm;
-> > > +		goto err_put_runtime_pm;
-> > >   	if ((of_device_is_compatible(dev->of_node, "brcm,bcm2711-hdmi0") ||
-> > >   	     of_device_is_compatible(dev->of_node, "brcm,bcm2711-hdmi1"))=
-=20
-> > > &&
->=20
-> > The current drm-misc-next branch doesn't have that context at all. What=
- tree is this based on?
->
-> This is for amd-staging-drm-next.
+> > > > I see there's v2 out, backing it out then.
+> > > 
+> > > Looks like I missed something that kernel test robot found, so there
+> > > will be a v3.
+> > 
+> > Just split your series on a per driver basis. This will help with
+> > understanding what's going on. Also use a cover letter to explain what
+> > your series is for.
+> 
+> There is one patch per driver, not sure what you mean by split per driver?
 
-I don't get it, why is there a vc4 patch in an AMD tree?
+In the future for similar cases it's better to split the series on the driver
+basis, so each patch is sent separately and handled individually. That way
+you won't need to resend the whole bunch over and over because of some subtle
+mistake made in the middle.
 
-Maxime
+-- 
+With Best Regards,
+Andy Shevchenko
 
---qkfsks6ei5ns2qea
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZAi4sAAKCRDj7w1vZxhR
-xd/AAPkB71ZVlsaXmgv3N3XxGXAM/abwFnF9JhIQpClvj3P3tQD+PAA8Fex7MXhD
-LEtOEcSBvngbEbYBl+1r0wpj7wBATA8=
-=zOVq
------END PGP SIGNATURE-----
-
---qkfsks6ei5ns2qea--
