@@ -2,130 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FEA86B13E3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDFF6B13F3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbjCHVcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 16:32:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
+        id S229910AbjCHVf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 16:35:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjCHVcO (ORCPT
+        with ESMTP id S229582AbjCHVfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 16:32:14 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F6DB7190
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:32:12 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id cy23so71177400edb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 13:32:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678311131;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9OhNm7hskoArX04v3EQdnCMnOrwCqQ4hcIfVS+5XDUY=;
-        b=YQF4b6dt4aLwWSuXkDgEvXikFlVV+90s3I+XXIMWStA2i4jcpOulmSAOGy9o01joWU
-         eL5GVdJG3seI5X51K6vv+G6AfAWp7XYsJr0NPP9UIB/JhzfpRVyS1joOlyUKZA9ua0CV
-         0AlwdGzA81Xmx4twweFoOeHWYIkUmS4Y/0DCxzaNjWAm4mPp1uM4ruAlBxbkDfxb7915
-         BVF7TCTAcPcYih2XWDnXE9gwH0C9Y/e2VXwl0sm6xLDChFUTZ6mE8zX34y2NKUF+0+2n
-         M3KWjt3lfciV48/K8q1G5gzqPKRNjToIYqyRjNGhrcCWKi8EMmg0cEd7pb1q4yHnkI7p
-         SGIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678311131;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9OhNm7hskoArX04v3EQdnCMnOrwCqQ4hcIfVS+5XDUY=;
-        b=EckDeRhwH0guDbxX9Oc7o8//EgAwMqMmVxUNBENKDQr/xxiY3Ztw/i0XoKTQVvP1Ed
-         sAaLrgAmeRbwGyeyHMnX43TcSf3M92BdkdXnkC+LzSbB1tnelX2g9FVNgyrK/xapSTqD
-         Xbr5azms5TpE3Nk65tXiSJ3XRIl11FtvoMxwQqDuzibc5I4iCRNI0gwT08cG7Yqxvyqh
-         TMBj0mno2ISGQ3lzztsXxeRodJ+esoMvs0dBkYUQfi79gJSeqtUeehXPrdlMTHVHkxza
-         +inldMce38GBWr7MHJ/fKK1mtRwMe7HdfZHsQUNhqcR4bXK5NaqSy+zty/wqSLIj7o9v
-         Kp3Q==
-X-Gm-Message-State: AO0yUKVsNuHfRaUZivRKzYgvJ+VKz/AKbRazXV/gbMXYAmZQ+12kX8se
-        xvnxjVumJCkH9yIzElB76qy4ZRNXAk0F0bdAmIakbA==
-X-Google-Smtp-Source: AK7set/PzfqhJ3GbqSiCxOuRaMNXqhDvbTag8Kp4p5tLkGOC6kLRGrUY5OGxaaNPJqqxdTrX1oWnqGTKOPNp73maa0k=
-X-Received: by 2002:a17:906:d7a6:b0:914:373:14de with SMTP id
- pk6-20020a170906d7a600b00914037314demr5329825ejb.10.1678311131118; Wed, 08
- Mar 2023 13:32:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20230228085002.2592473-1-yosryahmed@google.com>
- <20230308160056.GA414058@cmpxchg.org> <CAJD7tka=6b-U3m0FdMoP=9nC8sYuJ9thghb9muqN5hQ5ZMrDag@mail.gmail.com>
- <20230308201629.GB476158@cmpxchg.org> <CAJD7tkbDN2LUG_EZHV8VZd3M4-wtY9TCO5uS2c5qvqEWpoMvoA@mail.gmail.com>
- <20230308212529.GL360264@dread.disaster.area>
-In-Reply-To: <20230308212529.GL360264@dread.disaster.area>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 8 Mar 2023 13:31:34 -0800
-Message-ID: <CAJD7tkbu97JWOEvRJDYBKzy5qOJ8LYK6ZXBJSDhUw0+8br_Dqg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] Ignore non-LRU-based reclaim in memcg reclaim
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 8 Mar 2023 16:35:24 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D4192704;
+        Wed,  8 Mar 2023 13:35:22 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id E12FF3200893;
+        Wed,  8 Mar 2023 16:35:19 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 08 Mar 2023 16:35:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1678311319; x=1678397719; bh=3M
+        jqPl34s3Z0DxZ95SEFHFqhYpQWxX80N5mapvV1olM=; b=D774f+OS+fX5cAxotv
+        20JQC+4otb0th+n+4wcvY86S9jjTZNvssk8H7nRHmyjPe4Vjo0k3YaDiBMy+ENys
+        YGGJ3tZjpUPLC7PUUffVBNxV6x6MAxzPKKHnTR5S2t5aqmF4sNV4tz6hp1zRT+Yh
+        Q8it4dbcSs4+IlWVwQ9oGYRGAE97Sgfrf9z7PzbPUu9wy3PChkGK2jTsVBcxC7tk
+        XL2BhUX64Gx4UKBPeo6/nbq11cQiAt038aJrc3RzbhXKh99kLsVyGOBlxx3IfKEl
+        W+6QZ+6eIeZLMbbBPlqH0WbJ2DPsnLGmwdfkRZtF6l9dveKucmQaY1izxNhB2Ud6
+        n6EQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1678311319; x=1678397719; bh=3MjqPl34s3Z0D
+        xZ95SEFHFqhYpQWxX80N5mapvV1olM=; b=sU2i1B0PgZASHrK4oSqIjXMY3C6oJ
+        juI6YpQbT1VDN7wtHTd2UeNclaos9/UVOJ+0BwrYgAd53flvOSkx2BxBGcvdTC3L
+        c/oOK9/xCMowr2YbfJYsGiOX3G/6l8lSih09mIylvGaFNzQgXemVXDgPNrt2X1i5
+        7atX89gN4zeQr4dAIecquhLSWcZvhNCd9dl/L3ZwP54STLon5z7EJ98fd45SKjJm
+        BHNlvwY+c6LNw7eGA/p50N8j6WfI0Nf1eXM41Qd72dbnVywzFoCRUAZE/BUdHC8k
+        uXgODE2UuNX0yHH01KRVIQCRi9d4uwI8sU6NPNwWfFuvY4YbtzXu9Q8xg==
+X-ME-Sender: <xms:lv8IZA1tOXVUQtPtleY3hiQBxGCr9d_Rncr1hKFCXmzX9rkApbr5Gg>
+    <xme:lv8IZLE4X5dazOcpmAEjnWQQ12zoXkvla3hMKkD5D9_Sb8lhGF-lWgr1YmHj2eXbu
+    agfmBE7YlsKm_3VBXA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddufedguddtfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:lv8IZI6BBrkUHOLA1QEcbacVbVjAjvlIAsorK8j0FRdA247ZoPUOPQ>
+    <xmx:lv8IZJ0p9ndc4Nnaz6oY5NyU1R6evB7bhMb6sGhV-ib_sNHTxPwzPQ>
+    <xmx:lv8IZDGKMvxaB1nXpOGabWk-dlUyt4u00ekcK8gAZ23ub8bzyKq-rw>
+    <xmx:l_8IZL8KhPzeLvgFCsinpmEYV8ANhzIXWP7nmGrmqfONml54WtP77w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4524AB60086; Wed,  8 Mar 2023 16:35:18 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-206-g57c8fdedf8-fm-20230227.001-g57c8fded
+Mime-Version: 1.0
+Message-Id: <74915109-446a-4c1f-91bc-95dc6e3be200@app.fastmail.com>
+In-Reply-To: <ZAjphWYHDoDw9sQS@bombadil.infradead.org>
+References: <20230308130710.368085-1-bhe@redhat.com>
+ <20230308130710.368085-2-bhe@redhat.com>
+ <ZAjphWYHDoDw9sQS@bombadil.infradead.org>
+Date:   Wed, 08 Mar 2023 22:34:57 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Luis Chamberlain" <mcgrof@kernel.org>,
+        "Baoquan He" <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        "Helge Deller" <deller@gmx.de>,
+        "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v4 1/4] video: fbdev: atyfb: only use ioremap_uc() on i386 and ia64
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 1:25=E2=80=AFPM Dave Chinner <david@fromorbit.com> w=
-rote:
+0On Wed, Mar 8, 2023, at 21:01, Luis Chamberlain wrote:
+> On Wed, Mar 08, 2023 at 09:07:07PM +0800, Baoquan He wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> ioremap_uc() is only meaningful on old x86-32 systems with the PAT
+>> extension, and on ia64 with its slightly unconventional ioremap()
+>> behavior, everywhere else this is the same as ioremap() anyway.
+>> 
+>> Change the only driver that still references ioremap_uc() to only do so
+>> on x86-32/ia64 in order to allow removing that interface at some
+>> point in the future for the other architectures.
+>> 
+>> On some architectures, ioremap_uc() just returns NULL, changing
+>> the driver to call ioremap() means that they now have a chance
+>> of working correctly.
+>> 
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>> Signed-off-by: Baoquan He <bhe@redhat.com>
+>> Cc: Helge Deller <deller@gmx.de>
+>> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+>> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+>> Cc: linux-fbdev@vger.kernel.org
+>> Cc: dri-devel@lists.freedesktop.org
 >
-> On Wed, Mar 08, 2023 at 12:24:08PM -0800, Yosry Ahmed wrote:
-> > > I tried to come up with something better, but wasn't happy with any o=
-f
-> > > the options, either. So I defaulted to just leaving it alone :-)
-> > >
-> > > It's part of the shrinker API and the name hasn't changed since the
-> > > initial git import of the kernel tree. It should be fine, churn-wise.
-> >
-> > Last attempt, just update_reclaim_state() (corresponding to
-> > flush_reclaim_state() below). It doesn't tell a story, but neither
-> > does incrementing a counter in current->reclaim_state. If that doesn't
-> > make you happy I'll give up now and leave it as-is :)
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 >
-> This is used in different subsystem shrinkers outside mm/, so the
-> name needs to be correctly namespaced. Please prefix it with the
-> subsystem the function belongs to, at minimum.
->
-> mm_account_reclaimed_pages() is what is actually being done here.
-> It is self describing  and leaves behind no ambiguity as to what is
-> being accounted and why, nor which subsystem the accounting belongs
-> to.
->
-> It doesn't matter what the internal mm/vmscan structures are called,
-> all we care about is telling the mm infrastructure how many extra
-> pages were freed by the shrinker....
+> Is anyone using this driver these days? How often do fbdev drivers get
+> audited to see what can be nuked?
 
-mm_account_reclaimed_pages() sounds good to me. We can also do
-something more specific if Johannes has any ideas. I do not have a
-strong opinion here at all, I just prefer having a helper to leaving
-it open-coded.
+Geert already mentioned that this one is likely used on old
+powermac systems. I think my arm boardfile removal orphaned
+some other fbdev drivers though. I removed the ones that can
+no longer be enabled, but think a bunch of other ones
+are still selectable but have no platform_device definition
+or DT support: FB_PXA168, FB_DA8XX, FB_MX3, and MMP_FB.
 
-Thanks!
+These four platforms are all still supported with DT, but
+over time it gets less likely that anyone is still interested
+in adding DT support to the fbdev drivers.
 
->
-> -Dave.
-> --
-> Dave Chinner
-> david@fromorbit.com
+    Arnd
