@@ -2,83 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0EB16B1300
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11CC36B1303
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjCHUYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 15:24:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
+        id S230252AbjCHUZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 15:25:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjCHUYt (ORCPT
+        with ESMTP id S229897AbjCHUZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:24:49 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446BB9AFD3
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 12:24:47 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id ay14so66910310edb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 12:24:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678307086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lJfFbUmgGUScXMrHUtC6nJ4LuBCrcr+wpYFFKWYzLa4=;
-        b=pCaJbe3DmW0dyXfacjDPlJY5/4U/ixkj3XablpiH1L6RdZms5pExSKySI+k3rFZ0W+
-         XlgY9bNlROzdIEj4gUOPml8wQHiAZv4RBcvlEls+/I48YmqhZzU4lVSQp1y/Xt/hVSvC
-         JCPoUk0K9747ZtqzB1JeG9f0KR1fBQH9Ik/SyRhoZD4RON4rAiIRSZLdVIwSgl9IGowk
-         Pa7zqoOz/+RndMfT9O3ofxye9Yi8yNIfSBKY/FE5arKW9G9FhxZk0gBqQvC3XaUmPM3D
-         VaFgmyCxkZNyYrJ1Gcfug6wHmKW64Win8yJ0deJXYmWzelnxKBid7hCZHMJP8F/xl8LD
-         utqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678307086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lJfFbUmgGUScXMrHUtC6nJ4LuBCrcr+wpYFFKWYzLa4=;
-        b=zo4JxWQPSfHRJjmm4+nHKRcKyr3YXUWjbNpexNMo5li3iRU9PMoppOMVq6dIuGiO/1
-         LiWVKptOBAysdxQznHp0hAfBpmpMcvfDbVVTfA+OqV1yNoHhdprykB6Lxqi/O7gsH5YT
-         ykewt+cTcgiFjSC7PrYSa8hdIm2u3tsxlcsImZK6KXlAO69ClBN8QZN7hVa44EGQ/N81
-         0A8qVjzoSwmf4djVD4RVWNcPCj1O6bJSZHJtIqgDy9ps1ipNexjPFxhdpc7YxS41z9s5
-         vlSVmfZ+ewjAfrZvsQR+1zCUH3cnbjQ8z6MBeoBTGRAUlGme7y97z71ijBsN20A3CyWh
-         3aAA==
-X-Gm-Message-State: AO0yUKVysiW2qq2DBxSF+WYv+lLdJOcik0I7T+VKk+8qSUPEAXskMCha
-        bJ4zmdxpLbOpwiXhdBkEk1u5QcLPtB3ClMhb+OXl/w==
-X-Google-Smtp-Source: AK7set+DV9RxenSdhDCOFgakZZcsnB5QX/El2Wvkj9fjCVlQsjhbhU0QFrcMSUEA/hLFDWBIFA8W0HOSXVt6Xx+KiFY=
-X-Received: by 2002:a17:906:b11a:b0:8f8:edfc:b68b with SMTP id
- u26-20020a170906b11a00b008f8edfcb68bmr9931531ejy.6.1678307085464; Wed, 08 Mar
- 2023 12:24:45 -0800 (PST)
+        Wed, 8 Mar 2023 15:25:03 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2100.outbound.protection.outlook.com [40.107.101.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D591BAD2E;
+        Wed,  8 Mar 2023 12:25:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=brlSPJvV1g0u1UAgEWNJVBCcV2e8RzSJN/DyOhiL79I9pHgrus9KsWSEr4NL1rbnI9uLk4KgS6tWaSiKfvmGr8wS7SRneevFBxvCtphBcu5pR9cFo5qNq+TkH78rj/ScZ0DIB1AlPkIYIttR3azTMFtHW79egPxUgxL8tP1s2NtDwBRlzq1N64undTKh9UwaHwjPyoymKBJovRvdmpQR7OznwqqXH0WjBbDht9LUfSSOn8pCb5+1uochzaId5JxwHyJaoZxKULALIpnp/L8nvN9rZ6ZkA3LDa5s9GX2BPq8W7T/XCK9baaQKMD9ewrEsUIt6QVE5qDlYSPIpk1a9hQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Pew5pUUtaTG6fl4NfwoCNIqOjTM+x/4G4fCPOC5498o=;
+ b=RJ4C0ziuAe73i8+BET04OPdjM48Ji8IpB2907QkByBafTfRYddVqpPwNSQyWJBtNcUIHgtF+2Ek1vvZqy29aQ8p9UKI8yLJ9Vj3dvQeKecotxvCq9wkLxcM2/ELTdNzYwBsBjN79AMgXfzHsJF0i5IEbH7CHlvpwlqcTtVnAvQH9S2Mo42xXXeqHeTsA8XlXDAJrBZpRwojio6x5N1qfjd2xoKCxfXS5mkO0PfprGZXVGGvWRnHzDKQM311ztM9oaaAGRrr8lHIUPjLb3MIyA1mF5x+n4XbgXkM30hF84dwIA+HlVvecCDrXZEYOObuYuepgNJhwzv/VGLUgUKuxMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cornelisnetworks.com; dmarc=pass action=none
+ header.from=cornelisnetworks.com; dkim=pass header.d=cornelisnetworks.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornelisnetworks.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pew5pUUtaTG6fl4NfwoCNIqOjTM+x/4G4fCPOC5498o=;
+ b=KGxKcAB74JOn8WrWysKY4fIDsWSf96gST0rjcLxwvVuD/01qviPyWwqjsVMDXl6H5DYv5vHU+M6Elm2N3X6G5GfTivPQzpQqGEyR8szoDQdB+XZh4BpiTcsiQUmMDJBwDp+E74HHS6KNU8IC+IV8JNaQcUYdUp8/mir7sN3JEpYZT4lbRpveNvr3uxVpWqgk7eLdYtEVbOqYA6yYhIznJWerLpeczBfaqc4dCaGUVuhRKZpk9YcGVvPT+fk/XSra8YP+bTCpqLJyBpOANzMDUa/JECNQbaolNaKENTytgCKdxvef8QGC+Qf/o573gZ7Yp3I3zcf5PF3CGqvLYztIYA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cornelisnetworks.com;
+Received: from BN6PR01MB2610.prod.exchangelabs.com (2603:10b6:404:d0::7) by
+ CY4PR01MB2535.prod.exchangelabs.com (2603:10b6:903:6a::9) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.17; Wed, 8 Mar 2023 20:24:57 +0000
+Received: from BN6PR01MB2610.prod.exchangelabs.com
+ ([fe80::5844:6112:4eb1:a8f8]) by BN6PR01MB2610.prod.exchangelabs.com
+ ([fe80::5844:6112:4eb1:a8f8%9]) with mapi id 15.20.6178.011; Wed, 8 Mar 2023
+ 20:24:57 +0000
+Message-ID: <110becd9-3511-b7ab-f34c-1a4fe7fc9e82@cornelisnetworks.com>
+Date:   Wed, 8 Mar 2023 15:24:55 -0500
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH] rdma/qib: Remove deprecated kmap() call
+Content-Language: en-US
+To:     Ira Weiny <ira.weiny@intel.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230217-kmap-qib-v1-1-e5a6fde167e0@intel.com>
+From:   Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+In-Reply-To: <20230217-kmap-qib-v1-1-e5a6fde167e0@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL0PR02CA0070.namprd02.prod.outlook.com
+ (2603:10b6:207:3d::47) To BN6PR01MB2610.prod.exchangelabs.com
+ (2603:10b6:404:d0::7)
 MIME-Version: 1.0
-References: <20230228085002.2592473-1-yosryahmed@google.com>
- <20230308160056.GA414058@cmpxchg.org> <CAJD7tka=6b-U3m0FdMoP=9nC8sYuJ9thghb9muqN5hQ5ZMrDag@mail.gmail.com>
- <20230308201629.GB476158@cmpxchg.org>
-In-Reply-To: <20230308201629.GB476158@cmpxchg.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 8 Mar 2023 12:24:08 -0800
-Message-ID: <CAJD7tkbDN2LUG_EZHV8VZd3M4-wtY9TCO5uS2c5qvqEWpoMvoA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] Ignore non-LRU-based reclaim in memcg reclaim
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN6PR01MB2610:EE_|CY4PR01MB2535:EE_
+X-MS-Office365-Filtering-Correlation-Id: b3a39f37-5856-47d7-1f2a-08db20132f63
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: saI6yiyPvrcKKnzoCn7ePnCk8l178wG22NvAQG11Pl+JRnHFmOE31FoWx8tR1xXkiapHiZClU9A6G+8P8AHxkIanUmfH83v2GTnRFGm1D14qgY5yvX+w1HCK2VdxX6VTW7yK+AZvGkc8ZeCgeXD+IlhpdLfSDI71oJAK1Jbfzj1k1CA+bcogtwjud73dwVWd7I9Bq4NwnMhNa15tapIretC4p0oy4QDNMZXRBIEH9f/AovxI/ocY6SF8cOUDTmblRVGyOPc/G3qMZ/gmq/cGW/Qxp+SP0ViV67DlVCvuqU6EREOVunxnyvqUF1I5EisRE0hXpNB74HrPUR+2B/z2VLTUsmg5ZDbO7XRtYRgEyeqhCNLf+XldtLxBd5nMDutS7PuvtxqJgWvDPbVMDw8H5qtcSad+9TS1xsTaRY/FC7UO1aBRg9r5ZExmvhiOy3i0K6Q7t6aO7tT0izNPvaiZFqIMfwd694rO12qaZ8SbbXjOoBA+nmQQK2lJR8ndLdt1nEn2HLuEJFWTvdHbYl/NeG+NkMAY/+wXSy0SWq2umO/xwuATZeZNHPmftWGGDQbI+FBW+K6BmiIIsUYbKNWBNRi5CcH+V9VJzjKD3eAASLz59s4t2UkD3yc25VMW9o15D5miZ2y3iaMu8mMfjk2InpQIi1C/nLFV/yWKt/wi9dm7Qg5wfezG1xazt/n2Tt/mbDonzy6L4kaHHX7C6Si005gabD89HQ1KOTxqXJZlOOc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR01MB2610.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39840400004)(136003)(346002)(366004)(376002)(451199018)(36756003)(316002)(110136005)(478600001)(6486002)(5660300002)(52116002)(8936002)(66476007)(66556008)(4326008)(66946007)(44832011)(8676002)(2906002)(41300700001)(4744005)(6512007)(38100700002)(26005)(86362001)(186003)(38350700002)(2616005)(53546011)(6506007)(31696002)(31686004)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UVI5OXlpREpNNWoxcUp5K0JxQnhKN1ZlV2JnYy9ibEhHUFRRQTBGUzRvSlRJ?=
+ =?utf-8?B?SFBWODg3eENOaVdCNURmbnRldkpYOW5jWGZudWdremdLdTAwWnBUbGVqV2VP?=
+ =?utf-8?B?RTBwenBOQy9qWTFoY2JHaEF6TnJadE41ZDc5azN2U1diTWR6MXhnYTBJZmJB?=
+ =?utf-8?B?cFlRUEo1ZzVmSTBuRlRpcXo3YWEycElPcHB3NitSbVZBQzhRb25uTmIyRTNy?=
+ =?utf-8?B?eEwveUdadkNsL2RRVzZOSDNteS9tVFRvRkpoYzFEaUtEeVRaMmFpTk1OYTlw?=
+ =?utf-8?B?eDRZMzJzdDhoQ0Z0VVFBbmJJUFBQaFVjOXFIVGU0WVhYbXh3b0lpMW1lV2xN?=
+ =?utf-8?B?RjhUU3I4aGhmTE1VNm41RmZyRXlrV0VKOTZ1TGhNY3Z4VXdUTXZuZVBscm9Y?=
+ =?utf-8?B?YkZ4WWFRRmlLVDQ0OGRhR1pBOXo5S3NOcUIvQldHVHRJK2xkMTVDS1VYNzdr?=
+ =?utf-8?B?STdJL3VGVjdvVGhheGtuT0xkTFJkRWlUL3FqOGxnaUZVS20rTE5HUXlrbG9C?=
+ =?utf-8?B?WUNFaWpYZFpWaWJDdG1FM09zVE1DQkhuSVVFS1B3a09yeEo2NWc5dURiZnVa?=
+ =?utf-8?B?bmVIRmRZdnFZMlRWVWhKRkVMQldjbG8rYkdkOXlISE1Mei96dVJiN3FSc2ow?=
+ =?utf-8?B?aExsQ3U5Y3RVcHRWczRaUWJVOGh3T2RQZE84NjlJT2wrRkV1S0NhWHlRMitn?=
+ =?utf-8?B?eXJnOTVmZ1YyaVJNaEhXZmVlK3JVOXFzZU14dyswblNFVG1sUTdUNkNWY3ZQ?=
+ =?utf-8?B?TSt4YXR5MXBkWjB3WndPZEVxMWQ0L3RnKzFXd0t1SWFsWStlaUlTRnB3dkhh?=
+ =?utf-8?B?d2psOWQ5cG1Cb1diWVhrL1l6bDZlN1dFTyttby9rZGJNLzlueVJ2MEpkcnZa?=
+ =?utf-8?B?TUhLQk52U25XbW9JQ3p6TnZLazdZRUdKcGZFN3VwZi82azBrZHRxUFJUQzJS?=
+ =?utf-8?B?VVVFMllHbUNJdUk5QjdKT1Z5QzNnSHB3M0RMUXZoTE9JNVJOQkd3MmRhemxW?=
+ =?utf-8?B?R0kvalRFbzBQTG9JNUR0Z25rUFB4ZTVyWXd3N1lBWFR3ODJIdis4bGN0S1Rv?=
+ =?utf-8?B?cU0xNk43eThEa2lqbWFJZzczYUcvREJMTGcyMDFSSFAzTHlKZXV4YW80YTdj?=
+ =?utf-8?B?dmMwdlV5VUVDTDZKaTh0V3AyaWlzT2FkWlpiZ1hZdzZVblVwTVFMZitmY1lC?=
+ =?utf-8?B?ZlIwRWVFQ2E2T2xHZ1d4a282dUpRRER3WGZCSXFJRmJGL0tSbWxyUkt2SURX?=
+ =?utf-8?B?MmxrT1VHQTlMVGlLb2NkTUdTNlpxeWUwZHpaUGo0WElyOVBERGJ5NHpLRDRQ?=
+ =?utf-8?B?eng2VjhKNlRrNjdtVkswL3RIdDlway8xRFQ5R1RncFROM0Y1bWlHY1N6N1FE?=
+ =?utf-8?B?WGptUnZIYUNuNkovUjlWUHQ4L0MyUFRFZVI4SWVFMHcyMCtsVVlZK05kZC9G?=
+ =?utf-8?B?eGsweGtBYVNtelcvbHkzYTVVejlZZllYazdqMXozclZCQWd6c3U2cE1xNVJ2?=
+ =?utf-8?B?bEY3RnkwME42ODBjTGE2RWpDV2JjcTVSdXV4aXpyOW5iYkpwZWppOGxuNUVC?=
+ =?utf-8?B?dE0zTnRhblMxYVBOMjVZT1ZISERyVXltZmRrNWJncW9tNHVWUVJ6aUk2VURl?=
+ =?utf-8?B?cHVqUU4xTnlPbEsyWGtTZ2V4cDRYeGMwaUhSWlFHOHp3bzgwazhUWjgyYVBS?=
+ =?utf-8?B?M01NWkgrb0FFcE5NSllCSGRjRC91U1E5bXlXK1FXNUcvOUJBUmVKS1lQbTFj?=
+ =?utf-8?B?aWhGUS9OMFFOS1l1QW9yb3hWOWNDdmZmQmxBbjFtTzBDajVFVjF0MDJRZmwx?=
+ =?utf-8?B?cDNRMTRUTllqR296Z1d0VlFIOC9TYVNJMHFQcVAzZjJpdllzQmEwVnI0OFht?=
+ =?utf-8?B?bTBXMkpOZzhkYWNJbngwQ0E4Y3FXWjMxNkRxV3pyckZtNmllM0NrUnRxaFdB?=
+ =?utf-8?B?ZVFwK1lOQmxMTEdrY0N3WTMyRjNBWVpJTmpFU2t6cFhEOUhHa0J5U1VwYjBH?=
+ =?utf-8?B?QWhiaDR0TndmZzJBTmJNdG91WDlndHUyMVhtTU05a0RXVVhkaFpFR2xJRmlJ?=
+ =?utf-8?B?R2JlVksxT3VWRzNzbVFOemlaVDltZlVEeHdLd2tqYkhzbTd0T1gzcEFTZjlk?=
+ =?utf-8?B?ZTRCaWp6enZEWXVtUVVrSCtSSjBnZkx5N2MxSHV1c2JtM3JWNUpKRjgwZTFT?=
+ =?utf-8?Q?3XiDPnTNhacW6GG+Ti8D03Y=3D?=
+X-OriginatorOrg: cornelisnetworks.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3a39f37-5856-47d7-1f2a-08db20132f63
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR01MB2610.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 20:24:57.6112
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4dbdb7da-74ee-4b45-8747-ef5ce5ebe68a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lezGPxgLJ4EZeT5Lyg6lquThISk57opxnLHSEmwV0DMYlkmBMy6lvYpnj2WSM8v5hUlRFQSb8Xka2eunDSq8Wa2LS0CqW+fPITFXf9wqUt+PUng2pOn/oXmHqBkogRBH
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR01MB2535
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,126 +126,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 12:16=E2=80=AFPM Johannes Weiner <hannes@cmpxchg.org=
-> wrote:
->
-> On Wed, Mar 08, 2023 at 10:01:24AM -0800, Yosry Ahmed wrote:
-> > On Wed, Mar 8, 2023 at 8:00=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.=
-org> wrote:
-> > >
-> > > Hello Yosry,
-> > >
-> > > On Tue, Feb 28, 2023 at 08:50:00AM +0000, Yosry Ahmed wrote:
-> > > > Reclaimed pages through other means than LRU-based reclaim are trac=
-ked
-> > > > through reclaim_state in struct scan_control, which is stashed in
-> > > > current task_struct. These pages are added to the number of reclaim=
-ed
-> > > > pages through LRUs. For memcg reclaim, these pages generally cannot=
- be
-> > > > linked to the memcg under reclaim and can cause an overestimated co=
-unt
-> > > > of reclaimed pages. This short series tries to address that.
-> > >
-> > > Could you please add more details on how this manifests as a problem
-> > > with real workloads?
-> >
-> > We haven't observed problems in production workloads, but we have
-> > observed problems in testing using memory.reclaim when sometimes a
-> > write to memory.reclaim would succeed when we didn't fully reclaim the
-> > requested amount. This leads to tests flaking sometimes, and we have
-> > to look into the failures to find out if there is a real problem or
-> > not.
->
-> Ah, that would be great to have in the cover letter. Thanks!
+On 3/7/23 12:15 PM, Ira Weiny wrote:
+> kmap() has been deprecated in favor of the kmap_local_page() call.
+> kmap_local_page() is thread local.
+> 
+> In the sdma coalesce case the page allocated is potentially free'ed in a
+> different context through qib_sdma_get_complete() ->
+> qib_user_sdma_make_progress().  The use of kmap_local_page() is
+> inappropriate in this call path.  However, the page is allocated using
+> GFP_KERNEL and will never be from highmem.
+> 
+> Remove the use of kmap calls and use page_address() in this case.
+> 
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-Will do in the next version.
-
->
-> Have you also tested this patch against prod without memory.reclaim?
-> Just to make sure there are no problems with cgroup OOMs or
-> similar. There shouldn't be, but, you know...
-
-Honestly, no. I was debugging a test flake and I spotted that this was
-the cause, came up with patches to address it, and sent it to the
-mailing list for feedback. We did not want to merge it internally if
-it's not going to land upstream -- with the rationale that making the
-test more tolerant might be better than maintaining the patch
-internally, although that is not ideal of course (as it can hide
-actual failures from different sources).
-
->
-> > > > Patch 1 is just refactoring updating reclaim_state into a helper
-> > > > function, and renames reclaimed_slab to just reclaimed, with a comm=
-ent
-> > > > describing its true purpose.
-> > >
-> > > Looking through the code again, I don't think these helpers add value=
-.
-> > >
-> > > report_freed_pages() is fairly vague. Report to who? It abstracts onl=
-y
-> > > two lines of code, and those two lines are more descriptive of what's
-> > > happening than the helper is. Just leave them open-coded.
-> >
-> > I agree the name is not great, I am usually bad at naming things and
-> > hope people would point that out (like you're doing now). The reason I
-> > added it is to contain the logic within mm/vmscan.c such that future
-> > changes do not have to add noisy diffs to a lot of unrelated files. If
-> > you have a better name that makes more sense to you please let me
-> > know, otherwise I'm fine dropping the helper as well, no strong
-> > opinions here.
->
-> I tried to come up with something better, but wasn't happy with any of
-> the options, either. So I defaulted to just leaving it alone :-)
->
-> It's part of the shrinker API and the name hasn't changed since the
-> initial git import of the kernel tree. It should be fine, churn-wise.
-
-Last attempt, just update_reclaim_state() (corresponding to
-flush_reclaim_state() below). It doesn't tell a story, but neither
-does incrementing a counter in current->reclaim_state. If that doesn't
-make you happy I'll give up now and leave it as-is :)
-
->
-> > > add_non_vmanscan_reclaimed() may or may not add anything. But let's
-> > > take a step back. It only has two callsites because lrugen duplicates
-> > > the entire reclaim implementation, including the call to shrink_slab(=
-)
-> > > and the transfer of reclaim_state to sc->nr_reclaimed.
-> > >
-> > > IMO the resulting code would overall be simpler, less duplicative and
-> > > easier to follow if you added a common shrink_slab_reclaim() that
-> > > takes sc, handles the transfer, and documents the memcg exception.
-> >
-> > IIUC you mean something like:
-> >
-> > void shrink_slab_reclaim(struct scan_control *sc, pg_data_t *pgdat,
-> > struct mem_cgroup *memcg)
-> > {
-> >     shrink_slab(sc->gfp_mask, pgdat->node_id, memcg, sc->priority);
-> >
-> >     /* very long comment */
-> >     if (current->reclaim_state && !cgroup_reclaim(sc)) {
-> >         sc->nr_reclaimed +=3D current->reclaim_state->reclaimed;
-> >         current->reclaim_state->reclaimed =3D 0;
-> >     }
-> > }
->
-> Sorry, I screwed up, that doesn't actually work.
->
-> reclaim_state is used by buffer heads freed in shrink_folio_list() ->
-> filemap_release_folio(). So flushing the count cannot be shrink_slab()
-> specific. Bummer. Your patch had it right by making a helper for just
-> flushing the reclaim state. But add_non_vmscan_reclaimed() is then
-> also not a great name because these frees are directly from vmscan.
->
-> Maybe simply flush_reclaim_state()?
-
-Sounds good and simple enough, I will use that for the next version.
-
->
-> As far as the name reclaimed_slab, I agree it's not optimal, although
-> 90% accurate ;-) I wouldn't mind a rename to just 'reclaimed'.
-
-Got it.
+Acked-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
