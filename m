@@ -2,96 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E436B0E29
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD0C6B0E23
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232500AbjCHQHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:07:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
+        id S231897AbjCHQGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:06:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232385AbjCHQG7 (ORCPT
+        with ESMTP id S232142AbjCHQGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:06:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4542B9BE32
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:04:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678291486;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2NWMkFGTVgULUDjAwqmBVEBtedj5eFLtnY35SqecmsU=;
-        b=ZSjLlMbbJVrDjSQiofl+uDPU7gTSw/bNAP7sKJS+tihf5A8XqjV+squeuEezvz7q+f7xF4
-        l5pUYUX0ZZjKtwdMPCZgmT++l/iVDCasYtcM049043KG/mtaWwVUbsDA5N5UHfE49ITjUg
-        d9KxzwV8ukqGCJOqTZmXqrwXRCeeggw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-512-sBNcmhvQO3ucJLvWDaxBBQ-1; Wed, 08 Mar 2023 11:04:43 -0500
-X-MC-Unique: sBNcmhvQO3ucJLvWDaxBBQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 8 Mar 2023 11:06:20 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B673D18ABF;
+        Wed,  8 Mar 2023 08:04:59 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 384B687B2A6;
-        Wed,  8 Mar 2023 16:04:42 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C38C42026D4B;
-        Wed,  8 Mar 2023 16:04:39 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230308155609.GA21508@lst.de>
-References: <20230308155609.GA21508@lst.de> <CAJfpeguGksS3sCigmRi9hJdUec8qtM9f+_9jC1rJhsXT+dV01w@mail.gmail.com> <20230308143754.1976726-1-dhowells@redhat.com> <20230308143754.1976726-4-dhowells@redhat.com> <2011735.1678290876@warthog.procyon.org.uk>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     dhowells@redhat.com, Miklos Szeredi <miklos@szeredi.hu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH v16 03/13] overlayfs: Implement splice-read
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 81B666602F90;
+        Wed,  8 Mar 2023 16:04:57 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678291498;
+        bh=Jq1iXrQ5K48PzpUJ+Ozq6nnp9fpYINc7ANTHXUKabgI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ikQ7INQ9E3qV8NGcrJIAzVQ1+GYksZyrJ9uSIQWgn7q8+Bkhy4IinjeXAL2nQ+wPX
+         wmNY2V51s9bKSmPsLTMli15W35AoascKYdpAoQnrDVFhdYmJAKXaqNzcwtXh6ZS2jt
+         LP5AANzo22TJZ0suK4r/YJUrGuXzBhU94Fg4DeHTZy3UV6MYg1UvaRRn4X4ior6mTN
+         MDSjmzilLF7QkdeM57sl4kqjU8yCqug/2rjTYyVbFurSuF5TkbS8e5gEzqV7PEaLGw
+         cpMGX6efwQCbiuIdM9rMg8TaGFI+GcCi8b7LTbt7ZO3EyK3/OjwH83G45iw8bjKYSe
+         7eWqDuR8zCjPA==
+Message-ID: <c3242775-9710-7a9f-75e4-f54fc67be0cb@collabora.com>
+Date:   Wed, 8 Mar 2023 17:04:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2012342.1678291479.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 08 Mar 2023 16:04:39 +0000
-Message-ID: <2012343.1678291479@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 0/2] pwm: mtk-disp: Fix backlight configuration at boot
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        matthias.bgg@gmail.com, weiqing.kong@mediatek.com,
+        jitao.shi@mediatek.com, linux-pwm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230123160615.375969-1-angelogioacchino.delregno@collabora.com>
+ <06918fde-64ea-37b2-da1a-1c8316457223@collabora.com>
+ <06909bd8-3da2-1cf0-82ac-3ed4f3e63def@collabora.com>
+ <ZAigsHAgqkLlBD1y@kroah.com>
+ <28142704-d82d-d533-d2a8-b1061182f1f6@collabora.com>
+ <ZAitHYRCUHsIvZMk@kroah.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <ZAitHYRCUHsIvZMk@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@lst.de> wrote:
+Il 08/03/23 16:43, Greg Kroah-Hartman ha scritto:
+> On Wed, Mar 08, 2023 at 03:55:59PM +0100, AngeloGioacchino Del Regno wrote:
+>> Il 08/03/23 15:50, Greg Kroah-Hartman ha scritto:
+>>> On Wed, Mar 08, 2023 at 12:46:07PM +0100, AngeloGioacchino Del Regno wrote:
+>>>> Il 23/02/23 15:16, AngeloGioacchino Del Regno ha scritto:
+>>>>> Il 23/01/23 17:06, AngeloGioacchino Del Regno ha scritto:
+>>>>>> Since the pwm-mtk-disp driver was fixed to get PWM_EN state from the
+>>>>>> right register, an old two-wrongs-make-one-right issue emerged: as a
+>>>>>> result, MT8192 Asurada Spherion got no backlight at boot unless a
+>>>>>> suspend/resume cycle was performed.
+>>>>>> Also, the backlight would sometimes not get updated with the requested
+>>>>>> value, requiring the user to change it back and forth until it worked.
+>>>>>>
+>>>>>> This series fixes both of the aforementioned issues found on MT8192.
+>>>>>>
+>>>>>> AngeloGioacchino Del Regno (2):
+>>>>>>      pwm: mtk-disp: Disable shadow registers before setting backlight
+>>>>>>        values
+>>>>>>      pwm: mtk-disp: Configure double buffering before reading in
+>>>>>>        .get_state()
+>>>>>>
+>>>>>>     drivers/pwm/pwm-mtk-disp.c | 34 +++++++++++++++++++++++-----------
+>>>>>>     1 file changed, 23 insertions(+), 11 deletions(-)
+>>>>>>
+>>>>>
+>>>>> Gentle ping for this one: this is fixing backlight issues on multiple MediaTek
+>>>>> SoCs and was well tested.
+>>>>>
+>>>>> Thanks,
+>>>>> Angelo
+>>>>
+>>>> Since this series was sent more than one month ago, and since this fixes broken
+>>>> backlight on a number of Chromebooks with MT8183 and MT8192 SoCs, and seen the
+>>>> urgency of getting these fixes in, I'm adding Greg to the loop.
+>>>
+>>> $ ./scripts/get_maintainer.pl drivers/pwm/pwm-mtk-disp.c
+>>> Thierry Reding <thierry.reding@gmail.com> (maintainer:PWM SUBSYSTEM)
+>>> "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de> (reviewer:PWM SUBSYSTEM)
+>>> Matthias Brugger <matthias.bgg@gmail.com> (maintainer:ARM/Mediatek SoC support)
+>>> AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> (reviewer:ARM/Mediatek SoC support)
+>>> linux-pwm@vger.kernel.org (open list:PWM SUBSYSTEM)
+>>> linux-kernel@vger.kernel.org (open list:ARM/Mediatek SoC support)
+>>> linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC support)
+>>> linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC support)
+>>>
+>>> I don't see my name in there, did I become the PWM maintainer somehow?
+>>>
+>>> What's wrong with Thierry taking this like normal?
+>>>
+>>
+>> Nothing wrong with that. I felt like this series got ignored as I've never
+>> received any reply from Thierry, even though it's a Fixes series that I deem
+>> to be moderately urgent; that's why I added you to the loop.
+> 
+> Then ask Thierry and Uwe, what would you want to have happen if you were
+> the maintainer of a subsystem?
+> 
+>> If that created unnecessary noise, I'm extremely sorry and won't happen again.
+> 
+> Not noise, just confusion on my part.  I'm glad to take patches that
+> have no obvious maintainers, or maintainers that have disappeared, but
+> that doesn't seem to be the case here.
+> 
+> Also remember that we had the merge window, which is 2 weeks of us not
+> being able to take any new code at all, even for fixes.
+> 
+> And finally, to make it easier for your code to be accepted, please take
+> the time to review other's code for the subsystems you care about to
+> make the maintainer's load easier.  If you do that, you will often find
+> your patches getting faster response just by virtue of there being less
+> work to do on the subsystem overall.  Why not do that right now to help
+> out with other PWM patches?
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-> On Wed, Mar 08, 2023 at 03:54:36PM +0000, David Howells wrote:
-> > Using do_splice_to() as a helper is probably a good idea, though both =
-Willy
-> > and Christoph seem to dislike it.
-> =
+That's right, I see the point. Will try to help as soon as I can find BW.
 
-> That's not true.  What I'm fundamentlly against is pointless wrappers
-> like the call_* that add no value.  do_splice_to adds useful checks,
-> so if properly named and documented, I'm absolutely in favour.
-
-Fair enough.  Rename to vfs_splice_read() okay with you?
-
-David
+Thanks and sorry again,
+Angelo
 
