@@ -2,84 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC816AFF7F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 08:11:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF4B6AFF83
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 08:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjCHHL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 02:11:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33402 "EHLO
+        id S229801AbjCHHNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 02:13:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjCHHL1 (ORCPT
+        with ESMTP id S229496AbjCHHN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 02:11:27 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DD3276B9;
-        Tue,  7 Mar 2023 23:11:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=g7Uil
-        lpbLCZ74a43HZQuNAEWDSBKIS8fFulvxLObbpw=; b=U5r5QkqCuh3PLO4YAeXMD
-        ug2NgASJocDaQ/htJcM699o6ztCNQSAWWFQfelhxGaJBZkHMjeyMV/RxTUOXvNtj
-        FdJS+y+DRRwQkjiHYa0qHOEEWDR4OkqNOVWCEAK4T3Xr3jdi1BWSNjdNllMLF5SE
-        rixkvRrIpo5QMQVscH8NL8=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wBXdloKNQhkHS8bCg--.35990S2;
-        Wed, 08 Mar 2023 15:11:07 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     stanimir.k.varbanov@gmail.com
-Cc:     quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] media: venus: fix use after free bug in venus_remove due to race condition
-Date:   Wed,  8 Mar 2023 15:11:05 +0800
-Message-Id: <20230308071105.2130297-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 8 Mar 2023 02:13:29 -0500
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E015506B;
+        Tue,  7 Mar 2023 23:13:27 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VdOP7rA_1678259598;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VdOP7rA_1678259598)
+          by smtp.aliyun-inc.com;
+          Wed, 08 Mar 2023 15:13:24 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     viro@zeniv.linux.org.uk
+Cc:     brauner@kernel.org, jlayton@kernel.org, chuck.lever@oracle.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] fs/locks: Remove redundant assignment to cmd
+Date:   Wed,  8 Mar 2023 15:13:16 +0800
+Message-Id: <20230308071316.16410-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBXdloKNQhkHS8bCg--.35990S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrury5ZFWkXrWxWw43WFy5XFb_yoWDCrX_Wa
-        4Ygan7ur48Ar1kKr4YkF1rZFy2vrW7Zrn5C3Waqa13u34UJryDArsrCrWxXw1UCw1jyFy7
-        WFWDJ347W3sxCjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRKBT5JUUUUU==
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzg4sU2I0XkTHXQAAsp
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-in venus_probe, core->work is bound with venus_sys_error_handler, which is
-used to handle error. The code use core->sys_err_done to make sync work.
-The core->work is started in venus_event_notify.
+Variable 'cmd' set but not used.
 
-If we call venus_remove, there might be a unfished work. The core->lock may
-be destroyed in venus_remove and used in venus_sys_error_handler.
+fs/locks.c:2428:3: warning: Value stored to 'cmd' is never read.
 
-Fix it by canceling the work first in venus_remove.
-
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4439
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/media/platform/qcom/venus/core.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/locks.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 990a1519f968..54ace8bf45e7 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -423,6 +423,7 @@ static int venus_remove(struct platform_device *pdev)
- 	struct device *dev = core->dev;
- 	int ret;
+diff --git a/fs/locks.c b/fs/locks.c
+index 66b4eef09db5..d82c4cacdfb9 100644
+--- a/fs/locks.c
++++ b/fs/locks.c
+@@ -2425,7 +2425,6 @@ int fcntl_getlk64(struct file *filp, unsigned int cmd, struct flock64 *flock)
+ 		if (flock->l_pid != 0)
+ 			goto out;
  
-+	cancel_delayed_work(&core->work);
- 	ret = pm_runtime_get_sync(dev);
- 	WARN_ON(ret < 0);
- 
+-		cmd = F_GETLK64;
+ 		fl->fl_flags |= FL_OFDLCK;
+ 		fl->fl_owner = filp;
+ 	}
 -- 
-2.25.1
+2.20.1.7.g153144c
 
