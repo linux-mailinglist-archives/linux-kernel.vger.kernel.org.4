@@ -2,103 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14096B05F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D8C6B05FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCHL1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:27:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
+        id S229965AbjCHL3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 06:29:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjCHL1N (ORCPT
+        with ESMTP id S229475AbjCHL3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:27:13 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73749911D9
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 03:27:08 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id e13so14993598wro.10
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 03:27:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1678274827;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xGsHd+caIhy+o/7MHpOCMmfE0nVqpXcNQURttklH9DM=;
-        b=RdY5GhIfWj5FnKL5h0MTeHpAe6DHoh9G2ogllkQklvM8m0Ms3Ya94kgKaQCBTZ5ztT
-         Qy8ur845Gc40OhTbruolPCMewKSZJv8gof64zQxvWRCufFcHhWVN5aPDZa3avFFr9UU5
-         ymhfh7/WAa0AmJiDOOK66GfCveI3Ls0vzJexzqC91VLEkYZlZDcRlVFOMhYpZZ3LtHNb
-         XJsHs0+IhZMPlPn8Y01WhDdhKwZ+hrMjQvm0ukh5RJcjMV/Wm37q3y2C0+gA/aEK2qoW
-         Vr/cUMbahEvbDhExHfZcFqMV8W064ehTtqPqF31c11MRMrDOoQXjvXWKYLJGtSpcFZG4
-         NECQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678274827;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xGsHd+caIhy+o/7MHpOCMmfE0nVqpXcNQURttklH9DM=;
-        b=Ue591M4zNZCkxXbgPxUa+rPgIzckfLqJigrFXeFH12AFZnu/omG1v8joU38/oQjO4B
-         1e3S6kFny1WCscbsK7lFbutk9WHdx3Xt0dOaDfIuiVnAJcJAH1FQV6vvhZ4YK08zs1za
-         lPCDWb4II+Zdto/e7LTsfQXtrNU2FQaVa/KohUO4tCE2ppUdZTjb7XoluSwzg5snYebi
-         rfoaH8vHhx+LN48LVUh2GVKzrATcW+cHER33IjKAGAaRD0k2rfWugPCkRpXEC/ZVdgAe
-         mrOttmi6mpo48wlCcsN7AKzIGOVc7uP/ZOZf28fNd3SqmJCLMdXJOATHF4bBPyf/qAkM
-         tZCw==
-X-Gm-Message-State: AO0yUKX5YvXPYD+SMKhtOHUsmGCgvwXeiP/jRxhPBVuIya8IsIZlL9Re
-        cbwWLwGYACFcz+RtoTg4DkI8vA==
-X-Google-Smtp-Source: AK7set/1oY+bIpBndW8g4VVVbLA8HSuIl6wHrl3WL1xEowqjGfgy/C2pPZzXN+BPAXQCqMjTlx0XLQ==
-X-Received: by 2002:a05:6000:1803:b0:2c5:4aea:d121 with SMTP id m3-20020a056000180300b002c54aead121mr13012246wrh.15.1678274826886;
-        Wed, 08 Mar 2023 03:27:06 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:52ca:aea8:eb67:a912? ([2a02:6b6a:b566:0:52ca:aea8:eb67:a912])
-        by smtp.gmail.com with ESMTPSA id u8-20020a5d4688000000b002c5544b3a69sm15197758wrq.89.2023.03.08.03.27.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 03:27:06 -0800 (PST)
-Message-ID: <a6eb52fe-6441-62b3-964c-d1e661fe37f0@bytedance.com>
-Date:   Wed, 8 Mar 2023 11:27:05 +0000
+        Wed, 8 Mar 2023 06:29:38 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A335943B2;
+        Wed,  8 Mar 2023 03:29:37 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 328BTQXp076832;
+        Wed, 8 Mar 2023 05:29:26 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678274966;
+        bh=2cMU5DM06+6udjmW7+IgRRTWk2cEtyidoeYZD/UWSDo=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=wNVDvZkAslGdhcGbxufQrtGgUqLqMMBl+bWHQuMidE9bJ7nXzw9aZfcpFk0XYWxz6
+         U+I9hTmyqdXV59NRhL25bXOrl6Q47U3q/wH92/9YqXmiEpMZa3YbJz4n6Uk8C3pWdB
+         2bFWwj35q4CKp6fOw9kmHizsBpEiiVp2FzGhKSsY=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 328BTQpa062350
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 8 Mar 2023 05:29:26 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 8
+ Mar 2023 05:29:25 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 8 Mar 2023 05:29:25 -0600
+Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 328BTKrU086606;
+        Wed, 8 Mar 2023 05:29:21 -0600
+Message-ID: <a24dd8ef-e720-7bb5-b8d6-f168afd96233@ti.com>
+Date:   Wed, 8 Mar 2023 16:59:20 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v13 00/11] Parallel CPU bringup for x86_64
+ Thunderbird/102.7.1
+Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v3 4/6] soc: ti: pruss: Add
+ helper functions to set GPI mode, MII_RT_event and XFR
 Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Phillips, Kim" <kim.phillips@amd.com>,
-        "brgerst@gmail.com" <brgerst@gmail.com>,
-        "Rapan, Sabin" <sabrapan@amazon.com>
-Cc:     "piotrgorski@cachyos.org" <piotrgorski@cachyos.org>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-        "arjan@linux.intel.com" <arjan@linux.intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "mimoja@mimoja.de" <mimoja@mimoja.de>,
-        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
-        "fam.zheng@bytedance.com" <fam.zheng@bytedance.com>,
-        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
-        "simon.evans@bytedance.com" <simon.evans@bytedance.com>,
-        "liangma@liangbit.com" <liangma@liangbit.com>
-References: <20230302111227.2102545-1-usama.arif@bytedance.com>
- <faa0eb3bb8ba0326d501516a057ab46eaf1f3c05.camel@infradead.org>
- <effbb6e2-c5a1-af7f-830d-8d7088f57477@amd.com>
- <269ed38b5eed9c3a259c183d59d4f1eb5128f132.camel@infradead.org>
- <0c56683a-c258-46f6-056e-e85da8a557db@amd.com>
- <3bfbbd92-b2ed-8189-7b57-0533f6c87ae7@amd.com>
- <1975308c952236895f2d8f0e56af9db288eaf330.camel@infradead.org>
- <39f23da7-1e77-4535-21a6-00f77a382ae5@amd.com>
- <ba8aae2eafdeb09ec1a41d45ab3c2e4cdaf7a28f.camel@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <ba8aae2eafdeb09ec1a41d45ab3c2e4cdaf7a28f.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+To:     Roger Quadros <rogerq@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        "Vignesh Raghavendra" <vigneshr@ti.com>,
+        Tero Kristo <t-kristo@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Santosh Shilimkar" <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <20230306110934.2736465-1-danishanwar@ti.com>
+ <20230306110934.2736465-5-danishanwar@ti.com>
+ <2f039534-dd21-7361-0fcd-b91da1636a3a@kernel.org>
+ <ed3dd4b6-658f-07d2-a055-4c38f2ec9db0@ti.com>
+ <93228d2f-0fc8-0c0e-f5ea-f55ed72da908@kernel.org>
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <93228d2f-0fc8-0c0e-f5ea-f55ed72da908@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,110 +85,135 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 08/03/2023 09:04, David Woodhouse wrote:
-> On Tue, 2023-03-07 at 16:55 -0600, Tom Lendacky wrote:
->> On 3/7/23 16:27, David Woodhouse wrote:
->>> On Tue, 2023-03-07 at 16:22 -0600, Tom Lendacky wrote:
->>>>
->>>> I did some Qemu/KVM testing. One thing I noticed is that on AMD, CPUID 0xB
->>>> EAX will be non-zero only if SMT is enabled. So just booting some guests
->>>> without CPU topology never did parallel booting ("smpboot: Disabling
->>>> parallel bringup because CPUID 0xb looks untrustworthy"). I would imagine
->>>> a bare-metal system that has diabled SMT will not do parallel booting, too
->>>> (but I haven't had time to test that).
+On 08/03/23 16:45, Roger Quadros wrote:
+> 
+> 
+> On 08/03/2023 11:23, Md Danish Anwar wrote:
+>> Hi Roger,
+>>
+>> On 08/03/23 14:04, Roger Quadros wrote:
+>>> Hi Danish,
 >>>
->>> Interesting, thanks. Should I change to checking for *both* EAX and EBX
->>> being zero? That's what I did first, after reading only the Intel SDM.
->>> But I changed to only EAX because the AMD doc only says that EAX will
->>> be zero for unsupported leaves.
+>>> On 06/03/2023 13:09, MD Danish Anwar wrote:
+>>>> From: Suman Anna <s-anna@ti.com>
+>>>>
+>>>> The PRUSS CFG module is represented as a syscon node and is currently
+>>>> managed by the PRUSS platform driver. Add easy accessor functions to set
+>>>> GPI mode, MII_RT event enable/disable and XFR (XIN XOUT) enable/disable
+>>>> to enable the PRUSS Ethernet usecase. These functions reuse the generic
+>>>> pruss_cfg_update() API function.
+>>>>
+>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>>>> ---
+>>>>  include/linux/remoteproc/pruss.h | 55 ++++++++++++++++++++++++++++++++
+>>>>  1 file changed, 55 insertions(+)
+>>>>
+>>>> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
+>>>> index d41bec448f06..7952f250301a 100644
+>>>> --- a/include/linux/remoteproc/pruss.h
+>>>> +++ b/include/linux/remoteproc/pruss.h
+>>>> @@ -240,4 +240,59 @@ static inline bool is_pru_rproc(struct device *dev)
+>>>>  	return true;
+>>>>  }
+>>>>  
+>>>> +/**
+>>>> + * pruss_cfg_gpimode() - set the GPI mode of the PRU
+>>>> + * @pruss: the pruss instance handle
+>>>> + * @pru_id: id of the PRU core within the PRUSS
+>>>> + * @mode: GPI mode to set
+>>>> + *
+>>>> + * Sets the GPI mode for a given PRU by programming the
+>>>> + * corresponding PRUSS_CFG_GPCFGx register
+>>>> + *
+>>>> + * Return: 0 on success, or an error code otherwise
+>>>> + */
+>>>> +static inline int pruss_cfg_gpimode(struct pruss *pruss,
+>>>> +				    enum pruss_pru_id pru_id,
+>>>> +				    enum pruss_gpi_mode mode)
+>>>> +{
+>>>> +	if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
+>>>> +		return -EINVAL;
+>>>> +
+>>>
+>>> Should we check for invalid gpi mode and error out if so?
+>>>
+>> Sure we can check for invalid gpi mode.
 >>
->>   From a baremetal perspective, I think that works. Rome was the first
->> generation to support x2apic, and the PPR for Rome states that 0's are
->> returned in all 4 registers for undefined function numbers.
+>> Does the below code snippet looks good to you?
 >>
->> For virtualization, at least Qemu/KVM, that also looks to be a safe test.
+>> 	if(mode < PRUSS_GPI_MODE_DIRECT || mode > PRUSS_GPI_MODE_MII)
 > 
-> At Sean's suggestion, I've switched it to use the existing
-> check_extended_topology_leaf() which checks for EBX being non-zero, and
-> CH being 1 (SMT_TYPE).
+> How about?
+> 	if (mode < 0 || mode > PRUSS_GPI_MODE_MAX)
 > 
-> I also made it work even if the kernel isn't using x2apic mode (is that
-> even possible, or does SEV-ES require the MSR-based access anyway?)
-> 
-> It just looked odd handling SEV-ES in the CPUID 0x0B path but not the
-> CPUID 0x01 case, and I certainly didn't want to implement the asm side
-> for handling CPUID 0x01 via the GHCB protocol. And this way I can pull
-> the check for CC_ATTR_GUEST_STATE_ENCRYPT up above. Which I've kept for
-> now for the reason described in the comment, but I won't die on that
-> hill.
-> 
-> https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/parallel-6.2-v14
-> 
-> Looks like this:
-> 
-> /*
->   * We can do 64-bit AP bringup in parallel if the CPU reports its APIC
->   * ID in CPUID (either leaf 0x0B if we need the full APIC ID in X2APIC
->   * mode, or leaf 0x01 if 8 bits are sufficient). Otherwise it's too
->   * hard.
->   */
-> static bool prepare_parallel_bringup(void)
-> {
-> 	bool has_sev_es = IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT) &&
-> 		static_branch_unlikely(&sev_es_enable_key);
-> 
-> 	if (IS_ENABLED(CONFIG_X86_32))
-> 		return false;
-> 
-> 	/*
-> 	 * Encrypted guests other than SEV-ES (in the future) will need to
-> 	 * implement an early way of finding the APIC ID, since they will
-> 	 * presumably block direct CPUID too. Be kind to our future selves
-> 	 * by warning here instead of just letting them break. Parallel
-> 	 * startup doesn't have to be in the first round of enabling patches
-> 	 * for any such technology.
-> 	 */
-> 	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT) || !has_sev_es) {
-> 		pr_info("Disabling parallel bringup due to guest memory encryption\n");
-> 		return false;
 
-I believe this is still going to enable parallel bringup for TDX? 
-Looking at include/linux/cc_platform.h, it looks like 
-CC_ATTR_GUEST_STATE_ENCRYPT is only set for SEV-ES and TDX guest with 
-x2apic will go on in this function and enable parallel bringup if leaf 
-0xB is ok. I guess if the apic ID is OK for the TDX guest, then its 
-fine, but just wanted to check if anyone has tested this on TDX guest?
+Sure that would be better. But we will have to introduce PRUSS_GPI_MODE_MAX in
+the enum definition.
 
+Also the if() should check for mode >= PRUSS_GPI_MODE_MAX so the if check will
+become,
 
-> 	}
+	if (mode < 0 || mode >= PRUSS_GPI_MODE_MAX)
+		return -EINVAL;
+
+enum definition,
+
+enum pruss_gpi_mode {
+	PRUSS_GPI_MODE_DIRECT = 0,
+	PRUSS_GPI_MODE_PARALLEL,
+	PRUSS_GPI_MODE_28BIT_SHIFT,
+	PRUSS_GPI_MODE_MII,
+	PRUSS_GPI_MODE_MAX,
+};
+
+>> 		return -EINVAL;
+>>
+>>>> +	return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
+>>>> +				PRUSS_GPCFG_PRU_GPI_MODE_MASK,
+>>>> +				mode << PRUSS_GPCFG_PRU_GPI_MODE_SHIFT);
+>>>> +}
+>>>> +
+>>>> +/**
+>>>> + * pruss_cfg_miirt_enable() - Enable/disable MII RT Events
+>>>> + * @pruss: the pruss instance
+>>>> + * @enable: enable/disable
+>>>> + *
+>>>> + * Enable/disable the MII RT Events for the PRUSS.
+>>>> + *
+>>>> + * Return: 0 on success, or an error code otherwise
+>>>> + */
+>>>> +static inline int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable)
+>>>> +{
+>>>> +	u32 set = enable ? PRUSS_MII_RT_EVENT_EN : 0;
+>>>> +
+>>>> +	return pruss_cfg_update(pruss, PRUSS_CFG_MII_RT,
+>>>> +				PRUSS_MII_RT_EVENT_EN, set);
+>>>> +}
+>>>> +
+>>>> +/**
+>>>> + * pruss_cfg_xfr_enable() - Enable/disable XIN XOUT shift functionality
+>>>> + * @pruss: the pruss instance
+>>>> + * @enable: enable/disable
+>>>> + *
+>>>> + * Return: 0 on success, or an error code otherwise
+>>>> + */
+>>>> +static inline int pruss_cfg_xfr_enable(struct pruss *pruss, bool enable)
+>>>> +{
+>>>> +	u32 set = enable ? PRUSS_SPP_XFER_SHIFT_EN : 0;
+>>>> +
+>>>> +	return pruss_cfg_update(pruss, PRUSS_CFG_SPP,
+>>>> +				PRUSS_SPP_XFER_SHIFT_EN, set);
+>>>> +}
+>>>> +
+>>>>  #endif /* __LINUX_PRUSS_H */
+>>>
 > 
-> 	if (x2apic_mode || has_sev_es) {
-> 		if (boot_cpu_data.cpuid_level < 0x0b)
-> 			return false;
-> 
-> 		if (check_extended_topology_leaf(0x0b) != 0) {
-> 			pr_info("Disabling parallel bringup because CPUID 0xb looks untrustworthy\n");
-> 			return false;
-> 		}
-> 
-> 		if (has_sev_es) {
-> 			pr_debug("Using SEV-ES CPUID 0xb for parallel CPU startup\n");
-> 			smpboot_control = STARTUP_APICID_SEV_ES;
-> 		} else {
-> 			pr_debug("Using CPUID 0xb for parallel CPU startup\n");
-> 			smpboot_control = STARTUP_APICID_CPUID_0B;
-> 		}
-> 	} else {
-> 		/* Without X2APIC, what's in CPUID 0x01 should suffice. */
-> 		if (boot_cpu_data.cpuid_level < 0x01)
-> 			return false;
-> 
-> 		pr_debug("Using CPUID 0x1 for parallel CPU startup\n");
-> 		smpboot_control = STARTUP_APICID_CPUID_01;
-> 	}
-> 
-> 	cpuhp_setup_state_nocalls(CPUHP_BP_PARALLEL_DYN, "x86/cpu:kick",
-> 				  native_cpu_kick, NULL);
-> 	return true;
-> }
-> 
+> cheers,
+> -roger
+
+-- 
+Thanks and Regards,
+Danish.
