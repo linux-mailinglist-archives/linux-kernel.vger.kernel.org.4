@@ -2,133 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BB56AFCB8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C29C6AFCF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjCHCJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 21:09:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
+        id S229818AbjCHCdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 21:33:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjCHCJF (ORCPT
+        with ESMTP id S229579AbjCHCdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 21:09:05 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02C49CFD1;
-        Tue,  7 Mar 2023 18:09:03 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PWbMt5fNPz4f3nTX;
-        Wed,  8 Mar 2023 10:08:58 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgDHcyE47gdkBs8gEg--.52407S4;
-        Wed, 08 Mar 2023 10:08:58 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     jack@suse.cz, shinichiro.kawasaki@wdc.com,
-        paolo.valente@linaro.org, axboe@kernel.dk, glusvardi@posteo.net,
-        damien.lemoal@opensource.wdc.com, felicigb@gmail.com,
-        inbox@emilianomaccaferri.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
-        yangerkun@huawei.com
-Subject: [PATCH] block, bfq: fix uaf for 'stable_merge_bfqq'
-Date:   Wed,  8 Mar 2023 10:32:08 +0800
-Message-Id: <20230308023208.379465-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <4e6e1606-1d9e-9903-8a44-ccac58a1fe06@kernel.dk>
-References: <4e6e1606-1d9e-9903-8a44-ccac58a1fe06@kernel.dk>
+        Tue, 7 Mar 2023 21:33:08 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78E646A4;
+        Tue,  7 Mar 2023 18:33:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=xRnvtwUkuUCsee7d/WhwIGBlWJMfWB3nmiI6pUE/ghY=; b=YubHI97fmWjeuTfuyGvjQy16I6
+        otNmmF2IUb8XzT84pTI9TJKt2qDg7ym3VCnO2iBHxPLMknTSoyUbKfCJq2iFtUCd8A62/M0Zck6ze
+        Xp1JnDyad4ObiZX84ywnzr7fDiGo+f7WuG6zIN13ZHacseluptuvO6ljD6dsaXBniD019YrN2iLy9
+        lhGdR9aHzgyFBAcvkGpk6Oquwj0uqMu8xZrRq53kEKHJJ7H9gZS/XCFnlybJ2k0XLcwu0owpojh7U
+        25qC31mT1ij45MZVLvof8ZtK+KCjSz7DfWdQy0IvfwTnuLBAB76f8IU5x+7jHenNaJJNP69F79Aye
+        /wyTHJuw==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pZjc0-003D3K-0A; Wed, 08 Mar 2023 02:33:04 +0000
+Message-ID: <1d858dbb-ae85-95a0-3e46-b67017733c04@infradead.org>
+Date:   Tue, 7 Mar 2023 18:33:03 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 0/3] Add RISC-V 32 NOMMU support
+Content-Language: en-US
+To:     Jesse Taube <mr.bossman075@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-riscv@lists.infradead.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yimin Gu <ustcymgu@gmail.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Waldemar Brodkorb <wbx@openadk.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+References: <20230301002657.352637-1-Mr.Bossman075@gmail.com>
+ <42446784-a88b-df09-41e9-5f685b4df6ee@infradead.org>
+ <556ce787-80eb-dc48-f8d6-83e415538e36@opensource.wdc.com>
+ <f8f291d9-2723-4ab8-3020-49018757d470@gmail.com>
+ <62852ee1-3763-3323-c3a8-f1e84f70204a@infradead.org>
+ <c7941231-8ebd-dea5-81f8-3180cfc3f286@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <c7941231-8ebd-dea5-81f8-3180cfc3f286@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDHcyE47gdkBs8gEg--.52407S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr45XryUWF4kKry7Jr48Crg_yoW5JrWkpa
-        1DKw4avr1rJrW5XrWxAw40vF98tr43Ar9FyryrW347uw1DJrySvFsF9ayI9Fn2vr48CFnx
-        Xw1qqas2kr48JrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
-        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
-        UdHUDUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
 
-Before commit fd571df0ac5b ("block, bfq: turn bfqq_data into an array
-in bfq_io_cq"), process reference is read before bfq_put_stable_ref(),
-and it's safe if bfq_put_stable_ref() put the last reference, because
-process reference will be 0 and 'stable_merge_bfqq' won't be accessed
-in this case. However, the commit changed the order and  will cause
-uaf for 'stable_merge_bfqq'.
 
-In order to emphasize that bfq_put_stable_ref() can drop the last
-reference, fix the problem by moving bfq_put_stable_ref() to the end of
-bfq_setup_stable_merge().
+On 3/7/23 18:30, Jesse Taube wrote:
+> 
+> 
+> On 3/7/23 21:16, Randy Dunlap wrote:
+>> Hi--
+>>
+>> On 3/7/23 17:26, Jesse Taube wrote:
+>>>
+>>>
+>>> On 2/28/23 23:42, Damien Le Moal wrote:
+>>>> On 3/1/23 13:07, Randy Dunlap wrote:
+>>>>> Hi--
+>>>>>
+>>>>> On 2/28/23 16:26, Jesse Taube wrote:
+>>>>>> This patch-set aims to add NOMMU support to RV32.
+>>>>>> Many people want to build simple emulators or HDL
+>>>>>> models of RISC-V this patch makes it possible to
+>>>>>> run linux on them.
+>>>>>>
+>>>>>> Yimin Gu is the original author of this set.
+>>>>>> Submitted here:
+>>>>>> https://lists.buildroot.org/pipermail/buildroot/2022-November/656134.html
+>>>>>>
+>>>>>> Though Jesse T rewrote the Dconf.
+>>>>>
+>>>>> Dconf?
+>>>>>
+>>>>>>
+>>>>>> The new set:
+>>>>>> https://lists.buildroot.org/pipermail/buildroot/2022-December/658258.html
+>>>>>> ---
+>>>>>> V1->V2:
+>>>>>>    - Add Conor's clock patch for implicit div64
+>>>>>>    - Fix typo in commit title 3/3
+>>>>>>    - Fix typo in commit description 2/3
+>>>>>> V2->V3
+>>>>>>    - Change from defconfig file to a PHONY config
+>>>>>> ---
+>>>>>
+>>>>> Is this 'rv32_nommu_virt_defconfig' target the only build target
+>>>>> that is supported?
+>>>>>
+>>>>> I ask because I applied the 3 patches and did 25 randconfig builds.
+>>>>> 5 of them failed the same way:
+>>>>>
+>>>>> riscv32-linux-ld: drivers/soc/canaan/k210-sysctl.o: in function `k210_soc_early_init':
+>>>>> k210-sysctl.c:(.init.text+0x78): undefined reference to `k210_clk_early_init'
+>>> I can not recreate this error.
+>>> can you send me the .config you used.
+>>>
+>>> Thanks,
+>>> Jesse Taube
+>>
+>> Sure, it's attached.
+> 
+> Hmmm, it links fine for me.
+> 
+> objdump -x vmlinux | grep k210_clk_early_init
+> 81e40124 g     F .init.text     00000088 k210_clk_early_init
+> 
+> gcc version 11.3.0 (Buildroot 2022.11-361-g1be0d438f7)
+> GNU assembler version 2.38 (riscv32-buildroot-linux-uclibc)
+> GNU ld (GNU Binutils) 2.38
+> 
+> what gcc version are you using?
 
-Fixes: fd571df0ac5b ("block, bfq: turn bfqq_data into an array in bfq_io_cq")
-Reported-and-tested-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Link: https://lore.kernel.org/linux-block/20230307071448.rzihxbm4jhbf5krj@shindev/
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/bfq-iosched.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 8a8d4441519c..d9ed3108c17a 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2854,11 +2854,11 @@ bfq_setup_stable_merge(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- {
- 	int proc_ref = min(bfqq_process_refs(bfqq),
- 			   bfqq_process_refs(stable_merge_bfqq));
--	struct bfq_queue *new_bfqq;
-+	struct bfq_queue *new_bfqq = NULL;
- 
--	if (idling_boosts_thr_without_issues(bfqd, bfqq) ||
--	    proc_ref == 0)
--		return NULL;
-+	bfqq_data->stable_merge_bfqq = NULL;
-+	if (idling_boosts_thr_without_issues(bfqd, bfqq) || proc_ref == 0)
-+		goto out;
- 
- 	/* next function will take at least one ref */
- 	new_bfqq = bfq_setup_merge(bfqq, stable_merge_bfqq);
-@@ -2873,6 +2873,11 @@ bfq_setup_stable_merge(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- 			new_bfqq_data->stably_merged = true;
- 		}
- 	}
-+
-+out:
-+	/* deschedule stable merge, because done or aborted here */
-+	bfq_put_stable_ref(stable_merge_bfqq);
-+
- 	return new_bfqq;
- }
- 
-@@ -2933,11 +2938,6 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- 			struct bfq_queue *stable_merge_bfqq =
- 				bfqq_data->stable_merge_bfqq;
- 
--			/* deschedule stable merge, because done or aborted here */
--			bfq_put_stable_ref(stable_merge_bfqq);
--
--			bfqq_data->stable_merge_bfqq = NULL;
--
- 			return bfq_setup_stable_merge(bfqd, bfqq,
- 						      stable_merge_bfqq,
- 						      bfqq_data);
+gcc (SUSE Linux) 12.2.1 20230124 [revision 193f7e62815b4089dfaed4c2bd34fd4f10209e27]
+from opensuse Tumbleweed.
+
+I'll try it on a current tree...
+
+>>
+>>>> Arg. Forgot about that. k210 is rv64 only and while the clk driver could still
+>>>> compile test with rv32 (or any arch), that driver provides the
+>>>> k210_clk_early_init() function which is called very early in the boot process
+>>>> from k210_soc_early_init(), which is an SOC_EARLY_INIT_DECLARE() call. The
+>>>> problem may be there. Probably should be disabled for rv32 if no SoC need that
+>>>> sort of early init call.
+>>>>
+>>>>>
+>>>>> because
+>>>>> # CONFIG_COMMON_CLK_K210 is not set
+>>>>>
+>>>>>
+>>>>> Maybe SOC_CANAAN needs some more selects for required code?
+>>>>>
+>>>>>> Conor Dooley (1):
+>>>>>>     clk: k210: remove an implicit 64-bit division
+>>>>>>
+>>>>>> Jesse Taube (1):
+>>>>>>     riscv: configs: Add nommu PHONY defconfig for RV32
+>>>>>>
+>>>>>> Yimin Gu (1):
+>>>>>>     riscv: Kconfig: Allow RV32 to build with no MMU
+>>>>>>
+>>>>>>    arch/riscv/Kconfig     | 5 ++---
+>>>>>>    arch/riscv/Makefile    | 4 ++++
+>>>>>>    drivers/clk/clk-k210.c | 2 +-
+>>>>>>    3 files changed, 7 insertions(+), 4 deletions(-)
+>>>>>>
+>>>>>
+>>>>
+>>
+
 -- 
-2.31.1
-
+~Randy
