@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A429F6AFACE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FAD6AFAD3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCGX4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 18:56:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
+        id S229497AbjCHABi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 19:01:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjCGX4u (ORCPT
+        with ESMTP id S229628AbjCHABf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 18:56:50 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F894DE23
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 15:56:48 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id v101so13155697ybi.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 15:56:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=skydio.com; s=google; t=1678233407;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NfsBSwCHMjd2D1yfsbv/LxSXTus51yaMyRMEi0ePSs4=;
-        b=SSdx+9t5qHYZ8OwZVOWk1/JBecjTsZigjWb/LpeJ+EwdW07bIt62rzIW6VhfKsgAfG
-         5Vs76dww4R++N1QmpR1OhTTvYN8MJCoaP8m0Htc52ohNjRELuNVXF37JZWYNzPPAEqJh
-         mMJs9mKS33k2J2E62+e4w25RdJDxuMRhdb1qI8JEWA426LhK+d31QIcXlAF5L4NSkXHc
-         ZwRngxMMxuyRK63IIfuDhmkNesF3P4d0OyIyZsjwoobpcGCh8JadJV7hDe90JidoOdfF
-         pK+1og6vYY9Yyxak9mp5nLxcGymqJL3EgAXyZTulQGNaaU6JCb76HjmysC0ruJQCGoz2
-         2K0g==
+        Tue, 7 Mar 2023 19:01:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1B9A9DF6
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 16:00:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678233646;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qW9gd4/b3QuCzS+63GHXuJKF5Pt62wGmuyBt/HuKDFU=;
+        b=iI6aUhUI5OZihRx/FCrTwUGJ1q5SZWcvrgQr8JgJF/WgL6bIc6mlcpZKDSjJ6EPn9KgwtY
+        z+DzcUFaKsrfZAAGUGOwkdU0jy8vKjyikwORbuRcbegJquAhHOH0/FeMBuxt5FgWC41plk
+        qU+Jf4ThPBX05w+luFyd6NvEzt9hBsY=
+Received: from mail-vs1-f69.google.com (mail-vs1-f69.google.com
+ [209.85.217.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-45-8LC5dZdCN_KrHmntS4FA2w-1; Tue, 07 Mar 2023 19:00:45 -0500
+X-MC-Unique: 8LC5dZdCN_KrHmntS4FA2w-1
+Received: by mail-vs1-f69.google.com with SMTP id y15-20020a67ebcf000000b0041ed82217a7so5258472vso.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 16:00:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678233407;
+        d=1e100.net; s=20210112; t=1678233645;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NfsBSwCHMjd2D1yfsbv/LxSXTus51yaMyRMEi0ePSs4=;
-        b=ya/U7iXLxld21hCxtA1YR2R9lswRTpAwh44Fn2T7skohzzokjRG/cOnoWEM6TEp8WV
-         zds/6HljWWp2hoY8i6y6IO+r5ZmDiJ8H/Ca0LTqr1XoVmMAytIr+04thnscCDFzKP+cv
-         cS9BzjR+Rm+tl98J7Hl0O1eccPg+kpHngiowi8YqO4nx1+HZ0qxrn9h7s+RDKshKWdWU
-         fh1MXt3LTHmyfLQ6LumK4ey5BAC9jk7qpbIgXF6mI/ZOZDFupaMFyDOevCEmCX9t0tZE
-         VdnbGsYe8UBxcYaQXDPIIsif72f7g5GoGaRhcEd4t3LpSXC/uNqCleixnU0zeYJNfcr7
-         CcVg==
-X-Gm-Message-State: AO0yUKVMb5JZRHp4lWw8op+KJggUPkzhYIHojWw6+8JVpUdM3ojyX+2g
-        Q2cQ0xqo0EEiW5Wwcrc6UfQO9UgoXrB3T3fNMpntMw==
-X-Google-Smtp-Source: AK7set8NqGueL2UTzSZtZCmHa2STOP7CneLLiBBAx6oCLwtJhXt6q9h2NUbjKwrrCZ4k/LyPGVsntEzWFz+HbzFCU3o=
-X-Received: by 2002:a5b:bc6:0:b0:a0d:8150:be04 with SMTP id
- c6-20020a5b0bc6000000b00a0d8150be04mr7922852ybr.13.1678233407457; Tue, 07 Mar
- 2023 15:56:47 -0800 (PST)
+        bh=qW9gd4/b3QuCzS+63GHXuJKF5Pt62wGmuyBt/HuKDFU=;
+        b=2VO3aEMnvIne0EOJaZ6IhNDKW6zQfO5TLhwv1zcmrPYRBOTqq/rElSaRuKe6Bghux7
+         qGHXihHh7MNlOeJwEbtwJAD7s3yk+y1imDeEFpVUl4OjNvXbSB0EknWwvwvGX8nhm3q8
+         MF58fSeJ7bHZK61MirtozR57stbxUGpMgTkhAHbHcb18FMyqYoGHKaV70oIRdG8A0C77
+         Fixl1cBkVCz4tgRCX91i8lsNVl3Wilkbq+zr/QH3cNjFPNM5v2dbeGNqV/dBj8be5eYQ
+         9UqyUud+5IKzARvU8yCKDT38aTGnBHlnP2ZdMaaQZAkseGNrdXWNmPesK4QTtHonFC1z
+         N7Dg==
+X-Gm-Message-State: AO0yUKXBjJ1ScPE+Kql2RXfIHF3ijf3NUY4EnoJeR6Q9tjqvYNYecxwf
+        izz1WxtFD3AKexW1p03HooLE9alsaeg7VFe/nMkzhfSE2BiAWB7w5ed4Qd3KEeaDrUmNUejiqN2
+        3T6bNDkobqZixLNtuQuGjmxpleEfk8v8EeWrMnp7S
+X-Received: by 2002:ab0:470b:0:b0:688:c23f:c22f with SMTP id h11-20020ab0470b000000b00688c23fc22fmr4697811uac.1.1678233645071;
+        Tue, 07 Mar 2023 16:00:45 -0800 (PST)
+X-Google-Smtp-Source: AK7set/BU97Goh2kzwmBa+eVG07B3PIYzqn1n+bNBvlA+gkL5SVTwJkgysq7PpnSna9C3/sBL0V2kPVygHjiyJI9mZk=
+X-Received: by 2002:ab0:470b:0:b0:688:c23f:c22f with SMTP id
+ h11-20020ab0470b000000b00688c23fc22fmr4697797uac.1.1678233644707; Tue, 07 Mar
+ 2023 16:00:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20230307220525.54895-1-Jerry@skydio.com> <167822825917.8008.11050193827453206272@noble.neil.brown.name>
- <CAMKO5Cv1Uh1rSFQ0cR1kfA88iXXHP5RMO-euU15Xrn2i93J5rg@mail.gmail.com> <167823124256.8008.4738010782615192469@noble.neil.brown.name>
-In-Reply-To: <167823124256.8008.4738010782615192469@noble.neil.brown.name>
-From:   Jerry Zhang <jerry@skydio.com>
-Date:   Tue, 7 Mar 2023 15:56:37 -0800
-Message-ID: <CAMKO5CvuWxrzshJrUJGwiMApN_L6yL-qck0fvizvBUs2Z7PU-g@mail.gmail.com>
-Subject: Re: [PATCH] sunrpc: Fix incorrect parsing of expiry time
-To:     NeilBrown <neilb@suse.de>
-Cc:     embedded@skydio.com, Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        "J. Bruce Fields" <bfields@redhat.com>, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com> <ZAd2MRNLw1JAXmOf@google.com>
+In-Reply-To: <ZAd2MRNLw1JAXmOf@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Date:   Wed, 8 Mar 2023 01:00:32 +0100
+Message-ID: <CABgObfa1578yKuw3sqnCeLXpyyKmMPgNaftP9HCdgHNM9Tztjw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Tianyu Lan <ltykernel@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SPF_PERMERROR,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,118 +78,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 3:20=E2=80=AFPM NeilBrown <neilb@suse.de> wrote:
+On Tue, Mar 7, 2023 at 6:36=E2=80=AFPM Sean Christopherson <seanjc@google.c=
+om> wrote:
+> Thinking about this more, I would rather revert commit 1e0c7d40758b ("KVM=
+: SVM:
+> hyper-v: Remote TLB flush for SVM") or fix the thing properly straitaway.=
+  KVM
+> doesn't magically handle the flushes correctly for the shadow/legacy MMU,=
+ KVM just
+> happens to get lucky and not run afoul of the underlying bugs.
+
+I don't think it's about luck---the legacy MMU's zapping/invalidation
+seems to invoke the flush hypercall correctly:
+
+Jeremi, did you ever track the call stack where
+hyperv_nested_flush_guest_mapping is triggered?
+
+Paolo
+
+> The revert appears
+> to be reasonably straightforward (see bottom).
 >
-> On Wed, 08 Mar 2023, Jerry Zhang wrote:
-> > On Tue, Mar 7, 2023 at 2:31=E2=80=AFPM NeilBrown <neilb@suse.de> wrote:
-> > >
-> > > On Wed, 08 Mar 2023, Jerry Zhang wrote:
-> > > > The expiry time field is mean to be expressed in seconds since boot=
-.
-> > >
-> > > Correct.
-> > >
-> > > > The get_expiry() function parses a relative time value in seconds.
-> > >
-> > > Incorrect.  It parses and absoulte wall-clock time.
-> > I'm not familiar with the source of truth for this info. Is there a
-> > specification of some sort?
-> >
-> > For reference, we were seeing writes to
-> > /proc/net/rpc/nfsd.export/channel randomly fail with EINVAL despite
-> > usually succeeding with the same invocation. Upon investigation this
-> > was the string that exportfs was writing "-test-client- /path/to/mount
-> >  3 0 65534 65534 0". "3" was the value for expiry in this message,
-> > which led me to conclude that this is a relative field. If it isn't,
-> > perhaps this is a bug in userspace nfs tools?
+> And _if_ we want to hack-a-fix it, then I would strongly prefer a very is=
+olated,
+> obviously hacky fix, e.g.
 >
-> The above information is very useful.  This sort of detail should always
-> be included with a bug report, or a patch proposing to fix a bug.
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 36e4561554ca..a9ba4ae14fda 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5779,8 +5779,13 @@ void kvm_configure_mmu(bool enable_tdp, int tdp_fo=
+rced_root_level,
+>         tdp_root_level =3D tdp_forced_root_level;
+>         max_tdp_level =3D tdp_max_root_level;
 >
-> The intent of that "3" is to be a time in the past.  We don't want the
-> -test-client- entry to be added to the cache, but we want a failure
-> message if the path cannot be exported.  So we set a time in the past as
-> the expiry time.
-> Using 0 is awkward as it often has special meaning, so I chose '3'.
+> +       /*
+> +        * FIXME: Remove the enlightened TLB restriction when KVM properl=
+y
+> +        * handles TLB flushes for said enlightenment.
+> +        */.
+>  #ifdef CONFIG_X86_64
+> -       tdp_mmu_enabled =3D tdp_mmu_allowed && tdp_enabled;
+> +       tdp_mmu_enabled =3D tdp_mmu_allowed && tdp_enabled &&
+> +                         !(ms_hyperv.nested_features & HV_X64_NESTED_ENL=
+IGHTENED_TLB);
+>  #endif
+>         /*
+>          * max_huge_page_level reflects KVM's MMU capabilities irrespecti=
+ve
 >
-> >
-> > The failure in this was if nfs-server starts exactly 3s after bootup,
-> > boot.tv_sec would be 3 and thus get_expiry() returns 0, causing a
-> > failure to be returned.
 >
-> I don't understand this. getboottime64() doesn't report time since boot.
-> It reports the time when the system booted.  It only changes when the
-> system time is deliberately changed.
-Ok I misinterpreted what this function does.
-> At boot, it presumably reports 0.  As soon as some tool (e.g. systemd or
-> ntpdate) determines what the current time it and calls settimeofday() or
-> a similar function, the system time is changed, and the boot-time is
-> changed by the same amount.  Typically this will make it well over 1
-> billion (for anything booted this century).
-> So for the boot time to report as '3', something would need to set the
-> current time to a moment early in January 1970.  I'd be surprised if
-> anything is doing that.
-I see the discrepency now -- our system is actually an embedded
-platform without an RTC. So it thinks that it is "1970" every time it
-boots up, at least until it connects to the internet or similar, which
-it may or may not ever do. We use NFS to share mountpoints between 2
-linux systems on our board connected via usb-ethernet. The fact that
-it allows simultaneous access gives it an advantage over other
-protocols like mass storage.
-
-Its likely that the code is working as intended then, it just didn't
-take our particular usecase into account.
-
 >
-> How much tracing have you done?  Have you printed out the value of
-> boot.tv_sec and confirmed that it is '3' or have you only deduced it
-> from other evidence.
-> Exactly what firm evidence do you have?
-Sure I've added this simple debug print with the necessary info
-
-diff --git a/fs/nfsd/export.c b/fs/nfsd/export.c
-index 15422c951fd1..5af49198b162 100644
---- a/fs/nfsd/export.c
-+++ b/fs/nfsd/export.c
-@@ -528,10 +528,12 @@ static int svc_export_parse(struct cache_detail
-*cd, char *mesg, int mlen)
-        int len;
-        int err;
-        struct auth_domain *dom =3D NULL;
-        struct svc_export exp =3D {}, *expp;
-        int an_int;
-+       struct timespec64 boot;
-+       char* orig_mesg =3D mesg;
-
-        if (mesg[mlen-1] !=3D '\n')
-                return -EINVAL;
-        mesg[mlen-1] =3D 0;
-
-@@ -564,10 +566,12 @@ static int svc_export_parse(struct cache_detail
-*cd, char *mesg, int mlen)
-        exp.ex_devid_map =3D NULL;
-
-        /* expiry */
-        err =3D -EINVAL;
-        exp.h.expiry_time =3D get_expiry(&mesg);
-+       getboottime64(&boot);
-+       printk("mesg is '%s' expiry is %lld and boot_s is %lld\n",
-orig_mesg, exp.h.expiry_time, boot.tv_sec);
-        if (exp.h.expiry_time =3D=3D 0)
-                goto out3;
-
-        /* flags */
-        err =3D get_int(&mesg, &an_int);
-
-and the output is
-
-[   14.093506] mesg is '-test-client- /path/to/mount  3 8192 65534
-65534 0' expiry is 0 and boot_s is 3
-
-which largely confirms the info above.
-
-Do you think we'd be able to handle this case cleanly?
 >
-> Thanks,
-> NeilBrown
+> The revert...
 >
+> ---
+>  arch/x86/kvm/svm/svm.c          |  3 ---
+>  arch/x86/kvm/svm/svm_onhyperv.h | 27 ---------------------------
+>  2 files changed, 30 deletions(-)
+>
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 11068e8eb969..292650dc85a0 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -1320,7 +1320,6 @@ static void init_vmcb(struct kvm_vcpu *vcpu)
+>         if (sev_guest(vcpu->kvm))
+>                 sev_init_vmcb(svm);
+>
+> -       svm_hv_init_vmcb(vmcb);
+>         init_vmcb_after_set_cpuid(vcpu);
+>
+>         vmcb_mark_all_dirty(vmcb);
+> @@ -4075,8 +4074,6 @@ static void svm_load_mmu_pgd(struct kvm_vcpu *vcpu,=
+ hpa_t root_hpa,
+>                 svm->vmcb->control.nested_cr3 =3D __sme_set(root_hpa);
+>                 vmcb_mark_dirty(svm->vmcb, VMCB_NPT);
+>
+> -               hv_track_root_tdp(vcpu, root_hpa);
+> -
+>                 cr3 =3D vcpu->arch.cr3;
+>         } else if (root_level >=3D PT64_ROOT_4LEVEL) {
+>                 cr3 =3D __sme_set(root_hpa) | kvm_get_active_pcid(vcpu);
+> diff --git a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyp=
+erv.h
+> index 6981c1e9a809..5118fd273e73 100644
+> --- a/arch/x86/kvm/svm/svm_onhyperv.h
+> +++ b/arch/x86/kvm/svm/svm_onhyperv.h
+> @@ -15,31 +15,8 @@ static struct kvm_x86_ops svm_x86_ops;
+>
+>  int svm_hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu);
+>
+> -static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
+> -{
+> -       struct hv_vmcb_enlightenments *hve =3D &vmcb->control.hv_enlighte=
+nments;
+> -
+> -       BUILD_BUG_ON(sizeof(vmcb->control.hv_enlightenments) !=3D
+> -                    sizeof(vmcb->control.reserved_sw));
+> -
+> -       if (npt_enabled &&
+> -           ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB)
+> -               hve->hv_enlightenments_control.enlightened_npt_tlb =3D 1;
+> -
+> -       if (ms_hyperv.nested_features & HV_X64_NESTED_MSR_BITMAP)
+> -               hve->hv_enlightenments_control.msr_bitmap =3D 1;
+> -}
+> -
+>  static inline void svm_hv_hardware_setup(void)
+>  {
+> -       if (npt_enabled &&
+> -           ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB) {
+> -               pr_info(KBUILD_MODNAME ": Hyper-V enlightened NPT TLB flu=
+sh enabled\n");
+> -               svm_x86_ops.tlb_remote_flush =3D hv_remote_flush_tlb;
+> -               svm_x86_ops.tlb_remote_flush_with_range =3D
+> -                               hv_remote_flush_tlb_with_range;
+> -       }
+> -
+>         if (ms_hyperv.nested_features & HV_X64_NESTED_DIRECT_FLUSH) {
+>                 int cpu;
+>
+> @@ -80,10 +57,6 @@ static inline void svm_hv_update_vp_id(struct vmcb *vm=
+cb, struct kvm_vcpu *vcpu)
+>  }
+>  #else
+>
+> -static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
+> -{
+> -}
+> -
+>  static inline void svm_hv_hardware_setup(void)
+>  {
+>  }
+>
+> base-commit: cb8748a781fe983e451f616ce4861a1c49ce79dd
+> --
+>
+
