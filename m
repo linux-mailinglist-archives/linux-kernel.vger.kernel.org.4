@@ -2,140 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 995C16B0EC5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B05E16B0ECF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbjCHQ3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:29:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
+        id S229845AbjCHQcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:32:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbjCHQ2l (ORCPT
+        with ESMTP id S229692AbjCHQcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:28:41 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4949E2069F;
-        Wed,  8 Mar 2023 08:28:04 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id ay14so64314611edb.11;
-        Wed, 08 Mar 2023 08:28:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678292882;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8qplyMQINe2W3LTK4CSzGPDowxH4S62V5RleKulPJLo=;
-        b=UtXXjB2Sb8uE0I4aQP+tKLypRWWg8k3euJKU2xyVGn64N6QNcvZeL21p+DOHBO63lz
-         gZkplvHD9ZzIaTXGvqSOp3gmPNC+rmIPzX3HMIBoW5fHIZcEjiFeovQTma48qQrCmtDL
-         B1n7s5Kaggh90Z/RXSXXfnypGsOT5SMrjcerMVXz4qTgDlSgqm0NxX7BB/3AdeGXXZ+Q
-         7nxPhpFKOI7n3b4fa3Rfu+wwB+ceq7APuXgJGE2pJmXLlio7Kl7JaylaKPSgrXsqDSIi
-         usqxI8ZBZe+BR0o2rb40Zm4iTall99XMKe1a/ho6rCaRJLd+kfsXWLLWYnaz/mvAV/je
-         wqeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678292882;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8qplyMQINe2W3LTK4CSzGPDowxH4S62V5RleKulPJLo=;
-        b=5kTokw50Fkvvdm15kCEZOHTWXC6SPqhaVz5seZ9Z8Eh3Whyr6YbYkINmATEVehC5Rm
-         KRXlXwn/YlIVWeb1uSFj4m7y0Lah3wG9nn+l1GU74zst4Qg2miIa7Uvw8NY/Iw4xsOTa
-         BmWZDPdlD/OB2WfDiqIxCdYPxtSjGT2vVVQXUJqhTF9k01OEFoLkp9wFEdhs2WvTo4gP
-         VLsAWYCgICy8kIWmhGSwrSuW26ZI1FxWVzKQR78rWw88O3d+IkAs8dctTEJEbFGlgEz/
-         W7ypsaitvzAkgHqpm2jAIEqe41FXIvK8tW36r9V+ccB7PhdfKbZP8rPnWWsPT93d6aBc
-         DYAw==
-X-Gm-Message-State: AO0yUKVDUkUtNyhIfMR7yIRyHXw8v5pPTeSXU93l3d91qYjqGIAQjRUO
-        NbYJS+XycW5FFH1pe6mwmXTNaMraZ+14uGdjtiM=
-X-Google-Smtp-Source: AK7set+hOtnRk+qv+mClFvaRL1/R3Qml7puc5AuPLJ04zytXRlCcUdQoy38YoFwXbCxX06FIf9stExK/tK3Naq6QgOM=
-X-Received: by 2002:a17:906:6b83:b0:878:790b:b7fd with SMTP id
- l3-20020a1709066b8300b00878790bb7fdmr8941949ejr.14.1678292882589; Wed, 08 Mar
- 2023 08:28:02 -0800 (PST)
+        Wed, 8 Mar 2023 11:32:52 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A42E2413D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:32:51 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id D483D5C0064;
+        Wed,  8 Mar 2023 11:32:50 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 08 Mar 2023 11:32:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1678293170; x=1678379570; bh=OL
+        dmqZ+wBaNxA7qddBghZ19djChtoa8PmE05C1OKz2w=; b=AN3+m1K6vcJD5ngzDz
+        sPRzBlWRUuoYQp7acyXautlrKA36TOkI3Ri9Sr41Vod5cy2L4XQhRTA6bF9uvxfB
+        +hyPUzuv153YBiF3IT4rUtuWYz/RF64dQHQRRx9CSE8b6VFu6Dq5VYn6SXC77cAP
+        VehqBnecW49F/eqYrKeWL8SfcOKg+aF9vJLdhgqtdyaD5uvIzF8ekxbmbavPuBdZ
+        0C+EH5VBK6z5+/Rd/G6Egrp7iR36RzId8KZV9j8Cux9RYiEfbkEM3rURJeVR3EMc
+        ORfkS1Vfllzww3l+XOwPyw8ELGuxFy5ECkafqyhFpWqlzydpQ/mh95Cu5vnsByB5
+        ubcw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1678293170; x=1678379570; bh=OLdmqZ+wBaNxA
+        7qddBghZ19djChtoa8PmE05C1OKz2w=; b=TpNdGgHV8DYRutGsEGRX3/aUTuucM
+        cuLFh5Tu/pdfy6Bp58ovSAmrQGYu7XnPr9zFNsxeZtyZBKap0zG+U/pZBmAABqNK
+        JUwVztZVt6ErBEoEpCyFwtEEovannerPinXJEXtiJY2nsvVthbZaYW2sALCJdHLg
+        colGb5PhLJIJqHMHEBUAD9jPdHGIewVxDW5S3Vw1W+LJMfM2MOziWG+BakY4J0Ci
+        c3F1rwI3TP5Bkh8fGRpSs8HCI6cbd2VLuuGBY6WF38ZriQjIVnUTDNLsFi90VtO8
+        HuU2ekZnYx/9QNrZvN49mD+NfhOBKxCJ/NVU7peWqRPozYKX1dlIRhUjQ==
+X-ME-Sender: <xms:srgIZPrLp5ZykcfZ3VflpPEnPcrnNXeu8P3MmgNom9-R6KcrcLeq0w>
+    <xme:srgIZJqRIgU89Q3khW7tB7G_koSbP-rb4hBhizS89uxIMUy0k9eXN4qH9e4aXDhqU
+    m4YjOlaykK7deqG-0E>
+X-ME-Received: <xmr:srgIZMOy4PtQIQEIvHWM--p5bwscf448FDzWeZJG6_AEVAU0MiSY0B-FqcOKghuyniPWrJp310AUAp5iERU1QCoUFZpn5U8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddufedggedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeejgeeiveevvdfgffeftdevuefhheduveejieefgeejveeuhfetkeelgfev
+    teefffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:srgIZC677knkE7y1Nr4XFTIwLVvKrL3lMk5106LWox4b8Lp1l8fCrA>
+    <xmx:srgIZO7KfKUs0y1mYm6aAZoOIMtvXgCXC4JY8GkfcPtw3cVoiAk92Q>
+    <xmx:srgIZKjXwoxbCXG8nqHUP-ZSpISKDxzLvvYiBrvYpiBKjizqmAR02Q>
+    <xmx:srgIZNSnFzGXXndzY7hgCilOVVJV2HMMYt_WvJqpF_umahqTQn_ILA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 8 Mar 2023 11:32:49 -0500 (EST)
+Date:   Wed, 8 Mar 2023 17:32:48 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     "Zhuo, Qingqing (Lillian)" <Qingqing.Zhuo@amd.com>
+Cc:     "Mahfooz, Hamza" <Hamza.Mahfooz@amd.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] drm/vc4: Fix build error with undefined label
+Message-ID: <20230308163248.u7rvtadhlre3yua5@houat>
+References: <20230308093408.239331-1-qingqing.zhuo@amd.com>
+ <ac8fed53-6f05-6ec7-9ef5-61110cd83c0b@amd.com>
+ <20230308161945.svooztnablyvm75e@houat>
+ <PH7PR12MB58315E9E7362E8A750393B6FFBB49@PH7PR12MB5831.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-References: <20221209142615.33574-1-jandryuk@gmail.com> <87359gkc1d.fsf@baylibre.com>
- <CAKf6xpsGy7rjK3Rkosevr3dD+64-WqCEzAecBbHEHpBMeAHh7A@mail.gmail.com>
-In-Reply-To: <CAKf6xpsGy7rjK3Rkosevr3dD+64-WqCEzAecBbHEHpBMeAHh7A@mail.gmail.com>
-From:   Jason Andryuk <jandryuk@gmail.com>
-Date:   Wed, 8 Mar 2023 11:27:50 -0500
-Message-ID: <CAKf6xpsXjZ11cB05q3iKUcY3k2i0MXnpC-8anRe8YAwwxrhh7A@mail.gmail.com>
-Subject: Re: [PATCH v2] Input: xen-kbdfront - drop keys to shrink modalias
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        Phillip Susi <phill@thesusis.net>, stable@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qkfsks6ei5ns2qea"
+Content-Disposition: inline
+In-Reply-To: <PH7PR12MB58315E9E7362E8A750393B6FFBB49@PH7PR12MB5831.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 11:26=E2=80=AFAM Jason Andryuk <jandryuk@gmail.com> =
-wrote:
->
-> On Thu, Dec 15, 2022 at 8:54=E2=80=AFAM Mattijs Korpershoek
-> <mkorpershoek@baylibre.com> wrote:
-> >
-> > On Fri, Dec 09, 2022 at 09:26, Jason Andryuk <jandryuk@gmail.com> wrote=
-:
-> >
-> > > xen kbdfront registers itself as being able to deliver *any* key sinc=
-e
-> > > it doesn't know what keys the backend may produce.
-> > >
-> > > Unfortunately, the generated modalias gets too large and uevent creat=
-ion
-> > > fails with -ENOMEM.
-> > >
-> > > This can lead to gdm not using the keyboard since there is no seat
-> > > associated [1] and the debian installer crashing [2].
-> > >
-> > > Trim the ranges of key capabilities by removing some BTN_* ranges.
-> > > While doing this, some neighboring undefined ranges are removed to tr=
-im
-> > > it further.
-> > >
-> > > An upper limit of KEY_KBD_LCD_MENU5 is still too large.  Use an upper
-> > > limit of KEY_BRIGHTNESS_MENU.
-> > >
-> > > This removes:
-> > > BTN_DPAD_UP(0x220)..BTN_DPAD_RIGHT(0x223)
-> > > Empty space 0x224..0x229
-> > >
-> > > Empty space 0x28a..0x28f
-> > > KEY_MACRO1(0x290)..KEY_MACRO30(0x2ad)
-> > > KEY_MACRO_RECORD_START          0x2b0
-> > > KEY_MACRO_RECORD_STOP           0x2b1
-> > > KEY_MACRO_PRESET_CYCLE          0x2b2
-> > > KEY_MACRO_PRESET1(0x2b3)..KEY_MACRO_PRESET3(0xb5)
-> > > Empty space 0x2b6..0x2b7
-> > > KEY_KBD_LCD_MENU1(0x2b8)..KEY_KBD_LCD_MENU5(0x2bc)
-> > > Empty space 0x2bd..0x2bf
-> > > BTN_TRIGGER_HAPPY(0x2c0)..BTN_TRIGGER_HAPPY40(0x2e7)
-> > > Empty space 0x2e8..0x2ff
-> > >
-> > > The modalias shrinks from 2082 to 1550 bytes.
-> > >
-> > > A chunk of keys need to be removed to allow the keyboard to be used.
-> > > This may break some functionality, but the hope is these macro keys a=
-re
-> > > uncommon and don't affect any users.
-> > >
-> > > [1] https://github.com/systemd/systemd/issues/22944
-> > > [2] https://lore.kernel.org/xen-devel/87o8dw52jc.fsf@vps.thesusis.net=
-/T/
-> > >
-> > > Cc: Phillip Susi <phill@thesusis.net>
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
-> >
-> > Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
->
-> Thank you, Mattjis.
 
-Thank you, Mattijs.  My apologies.
+--qkfsks6ei5ns2qea
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Regards,
-Jason
+On Wed, Mar 08, 2023 at 04:27:01PM +0000, Zhuo, Qingqing (Lillian) wrote:
+> [AMD Official Use Only - General]
+>=20
+> > Hi,
+>=20
+> On Wed, Mar 08, 2023 at 11:11:22AM -0500, Hamza Mahfooz wrote:
+> > + vc4 maintainers
+> >=20
+> > On 3/8/23 04:34, Qingqing Zhuo wrote:
+> > > [Why]
+> > > drivers/gpu/drm/vc4/vc4_hdmi.c: In function =E2=80=98vc4_hdmi_bind=E2=
+=80=99:
+> > > drivers/gpu/drm/vc4/vc4_hdmi.c:3448:17: error: label=20
+> > > =E2=80=98err_disable_runtime_pm=E2=80=99 used but not defined
+> > >=20
+> > > [How]
+> > > update err_disable_runtime_pm to err_put_runtime_pm.
+> > >=20
+> > > Signed-off-by: Qingqing Zhuo <qingqing.zhuo@amd.com>
+> > > ---
+> > >   drivers/gpu/drm/vc4/vc4_hdmi.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > >=20
+> > > diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c=20
+> > > b/drivers/gpu/drm/vc4/vc4_hdmi.c index 9e145690c480..edf882360d24=20
+> > > 100644
+> > > --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > > +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > > @@ -3445,7 +3445,7 @@ static int vc4_hdmi_bind(struct device *dev, st=
+ruct device *master, void *data)
+> > >   	 */
+> > >   	ret =3D pm_runtime_resume_and_get(dev);
+> > >   	if (ret)
+> > > -		goto err_disable_runtime_pm;
+> > > +		goto err_put_runtime_pm;
+> > >   	if ((of_device_is_compatible(dev->of_node, "brcm,bcm2711-hdmi0") ||
+> > >   	     of_device_is_compatible(dev->of_node, "brcm,bcm2711-hdmi1"))=
+=20
+> > > &&
+>=20
+> > The current drm-misc-next branch doesn't have that context at all. What=
+ tree is this based on?
+>
+> This is for amd-staging-drm-next.
+
+I don't get it, why is there a vc4 patch in an AMD tree?
+
+Maxime
+
+--qkfsks6ei5ns2qea
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZAi4sAAKCRDj7w1vZxhR
+xd/AAPkB71ZVlsaXmgv3N3XxGXAM/abwFnF9JhIQpClvj3P3tQD+PAA8Fex7MXhD
+LEtOEcSBvngbEbYBl+1r0wpj7wBATA8=
+=zOVq
+-----END PGP SIGNATURE-----
+
+--qkfsks6ei5ns2qea--
