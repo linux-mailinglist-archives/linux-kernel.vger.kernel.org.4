@@ -2,85 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9530F6B00C2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE88D6B00CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjCHIUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:20:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
+        id S229627AbjCHIVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:21:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbjCHIT0 (ORCPT
+        with ESMTP id S229621AbjCHIUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:19:26 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6801FAFB94
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:19:11 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536a5a0b6e3so164558287b3.10
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:19:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678263550;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=x5MPo35xGT8I5no97e54JFoAV8IlgxfgBAbMEiQkE8U=;
-        b=e4ESgZ8ToAIyqrq8dv/6NSbnKuVRTmohRuk7EygZNRLdy/dMiSTxYdYKvas6dsWze6
-         VHQFO/oAV/sZUgNJ5NatjUIu83tNhajiPfaMjzY5PIhlw5Xiggq3Q3EQ66K1A2OhNbw5
-         8ABZpeAslQ4uHqXddYwS4vN7+wuw0b+/z1CcZPIUMxTEdtBsnm3jePax3mkUtUkAZOu3
-         wd3p4dq70Nj/oCZ5hKY1OdBRb2SbtFjwwDpLq6WSfTrs5qWr7u8OJ9zmgY+hi56E+Lvy
-         FQ7lj0RT0C10phT40hj3IrHy4vfRqK6ArEgQVEUXjPhGra33pfdasIoaYRfseS5roSzp
-         5P4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678263550;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x5MPo35xGT8I5no97e54JFoAV8IlgxfgBAbMEiQkE8U=;
-        b=6v1JZiZ1Zeet9jA95L2Xdvz6yfnQVNc6LPDU1ZlL+7bBfLvH72O+sFYfgDem0FmmyO
-         VWl9Xo3Bql2DodD2kL78QY6XBoCDyFunqmHdiqge+vU97JYJjL1YQGQ0AtvNm/FXzXtl
-         GbhWHuuehHHgvS4XauLfd5HuZN8PiGYsguaRl7MCWZhHIwoBU0oUQMA2LuOAPGyBuBIj
-         TBr92KdVMnDZfhER/WgNEmB1/OMMujsdHymV7t06bS1AwK2mkX6V/qFiSwDiQmrqwosJ
-         X7WhwaA9OTnLwx4s7IkYErBgcGTizYFqTVvjEURYO0fcYi51jw9ezX6FoplhpWNnM5Is
-         xHpg==
-X-Gm-Message-State: AO0yUKXXbp0nB5+rinHGAND3CVZlkzBTVHMgD5FfRGtLG/dSSy2mPAAn
-        OmSTKnrRThjGbIFgwsF7H0zGtNOHYiaW
-X-Google-Smtp-Source: AK7set8wR0JRCbOxXeyoYk1i7vpLK4VrAcyGzkcxx5TBYPyVU6eUjGqAbiFS0FlYYP2ABj6uyumbw0Ed0HOH
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:9a99:fbc4:7488:8b5f])
- (user=irogers job=sendgmr) by 2002:a5b:c4e:0:b0:9f2:a1ba:6908 with SMTP id
- d14-20020a5b0c4e000000b009f2a1ba6908mr8377911ybr.12.1678263550648; Wed, 08
- Mar 2023 00:19:10 -0800 (PST)
-Date:   Wed,  8 Mar 2023 00:17:31 -0800
-In-Reply-To: <20230308081731.1887278-1-irogers@google.com>
-Message-Id: <20230308081731.1887278-12-irogers@google.com>
-Mime-Version: 1.0
-References: <20230308081731.1887278-1-irogers@google.com>
-X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
-Subject: [PATCH v3 11/11] perf parse-events: Warn when events are regrouped
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        "Steinar H. Gunderson" <sesse@google.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Wed, 8 Mar 2023 03:20:49 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629BEB0BAA;
+        Wed,  8 Mar 2023 00:20:08 -0800 (PST)
+X-UUID: 05efe958bd8a11eda06fc9ecc4dadd91-20230308
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=S9xYd6IewSn037NHiVYBNHeHRAz2qBk0Fs8rI36Iu4o=;
+        b=ptvdF+WUTUZribgNZikI1Bw6Syy8G3yGE5EfI0to0VJhu9soTUxclyZMwSyvcVCt9AcZ80cXaILdv1CV/te9iovLXptHA9/xpagCmVZCD5wuQYkze503+HvzNViNwT/wFBG1pmV/bRFLxLBej92RlPasScZxkiCC2NmDBcTgqEY=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.20,REQID:d68ec08e-4fd2-43a9-9093-eb20ac578242,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.20,REQID:d68ec08e-4fd2-43a9-9093-eb20ac578242,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:25b5999,CLOUDID:0c7495b2-beed-4dfc-bd9c-e1b22fa6ccc4,B
+        ulkID:2303081620025NWMJRDD,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-UUID: 05efe958bd8a11eda06fc9ecc4dadd91-20230308
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <haozhe.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 615465098; Wed, 08 Mar 2023 16:20:02 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Wed, 8 Mar 2023 16:20:00 +0800
+Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Wed, 8 Mar 2023 16:19:59 +0800
+From:   <haozhe.chang@mediatek.com>
+To:     M Chetan Kumar <m.chetan.kumar@intel.com>,
+        Intel Corporation <linuxwwan@intel.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@linux.intel.com>,
+        Liu Haijun <haijun.liu@mediatek.com>,
+        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        haozhe chang <haozhe.chang@mediatek.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        "open list:INTEL WWAN IOSM DRIVER" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR MESSAGING (RPMSG) WWAN CONTROL..." 
+        <linux-remoteproc@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+CC:     <lambert.wang@mediatek.com>, <xiayu.zhang@mediatek.com>,
+        <hua.yang@mediatek.com>
+Subject: [PATCH RESEND net-next v7] wwan: core: Support slicing in port TX flow of WWAN subsystem
+Date:   Wed, 8 Mar 2023 16:19:35 +0800
+Message-ID: <20230308081939.5512-1-haozhe.chang@mediatek.com>
+X-Mailer: git-send-email 2.17.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,177 +93,340 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use if an event is reordered or the number of groups increases to
-signal that regrouping has happened and warn about it. Disable the
-warning in the case wild card PMU names are used and for metrics.
+From: haozhe chang <haozhe.chang@mediatek.com>
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+wwan_port_fops_write inputs the SKB parameter to the TX callback of
+the WWAN device driver. However, the WWAN device (e.g., t7xx) may
+have an MTU less than the size of SKB, causing the TX buffer to be
+sliced and copied once more in the WWAN device driver.
+
+This patch implements the slicing in the WWAN subsystem and gives
+the WWAN devices driver the option to slice(by frag_len) or not. By
+doing so, the additional memory copy is reduced.
+
+Meanwhile, this patch gives WWAN devices driver the option to reserve
+headroom in fragments for the device-specific metadata.
+
+Signed-off-by: haozhe chang <haozhe.chang@mediatek.com>
+Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
+
 ---
- tools/perf/tests/parse-events.c |  2 +-
- tools/perf/tests/pmu-events.c   |  2 +-
- tools/perf/util/metricgroup.c   |  3 ++-
- tools/perf/util/parse-events.c  | 28 ++++++++++++++++++++--------
- tools/perf/util/parse-events.h  |  7 ++++---
- tools/perf/util/parse-events.y  |  1 +
- 6 files changed, 29 insertions(+), 14 deletions(-)
+Changes in v2
+  -send fragments to device driver by skb frag_list.
 
-diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
-index ffa6f0a90741..b1c2f0a20306 100644
---- a/tools/perf/tests/parse-events.c
-+++ b/tools/perf/tests/parse-events.c
-@@ -2103,7 +2103,7 @@ static int test_event_fake_pmu(const char *str)
+Changes in v3
+  -move frag_len and headroom_len setting to wwan_create_port.
+
+Changes in v4
+  -change unreadable parameters to macro definition.
+
+Changes in v5
+  -optimize comments for WWAN_NO_HEADROOM, WWAN_NO_FRAGMENT.
+
+Changes in v6
+  -add reviewer to patch commit.
+
+Changes in v7
+  -rebase and resend
+---
+ drivers/net/wwan/iosm/iosm_ipc_port.c  |  3 +-
+ drivers/net/wwan/mhi_wwan_ctrl.c       |  3 +-
+ drivers/net/wwan/rpmsg_wwan_ctrl.c     |  3 +-
+ drivers/net/wwan/t7xx/t7xx_port_wwan.c | 34 +++++++--------
+ drivers/net/wwan/wwan_core.c           | 59 ++++++++++++++++++++------
+ drivers/net/wwan/wwan_hwsim.c          |  1 +
+ drivers/usb/class/cdc-wdm.c            |  3 +-
+ include/linux/wwan.h                   | 16 +++++++
+ 8 files changed, 87 insertions(+), 35 deletions(-)
+
+diff --git a/drivers/net/wwan/iosm/iosm_ipc_port.c b/drivers/net/wwan/iosm/iosm_ipc_port.c
+index b6d81c627277..7798348f61d0 100644
+--- a/drivers/net/wwan/iosm/iosm_ipc_port.c
++++ b/drivers/net/wwan/iosm/iosm_ipc_port.c
+@@ -63,7 +63,8 @@ struct iosm_cdev *ipc_port_init(struct iosm_imem *ipc_imem,
+ 	ipc_port->ipc_imem = ipc_imem;
  
- 	parse_events_error__init(&err);
- 	perf_pmu__test_parse_init();
--	ret = __parse_events(evlist, str, &err, &perf_pmu__fake);
-+	ret = __parse_events(evlist, str, &err, &perf_pmu__fake, /*warn_if_reordered=*/true);
- 	if (ret) {
- 		pr_debug("failed to parse event '%s', err %d, str '%s'\n",
- 			 str, ret, err.str);
-diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
-index 6ccd413b5983..7f8e86452527 100644
---- a/tools/perf/tests/pmu-events.c
-+++ b/tools/perf/tests/pmu-events.c
-@@ -785,7 +785,7 @@ static int check_parse_id(const char *id, struct parse_events_error *error,
- 		 */
- 		perf_pmu__test_parse_init();
- 	}
--	ret = __parse_events(evlist, dup, error, fake_pmu);
-+	ret = __parse_events(evlist, dup, error, fake_pmu, /*warn_if_reordered=*/true);
- 	free(dup);
+ 	ipc_port->iosm_port = wwan_create_port(ipc_port->dev, port_type,
+-					       &ipc_wwan_ctrl_ops, ipc_port);
++					       &ipc_wwan_ctrl_ops, WWAN_NO_FRAGMENT,
++					       WWAN_NO_HEADROOM, ipc_port);
  
- 	evlist__delete(evlist);
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index de6dd527a2ba..5783f4c2d1ef 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -1441,7 +1441,8 @@ static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
- 	}
- 	pr_debug("Parsing metric events '%s'\n", events.buf);
- 	parse_events_error__init(&parse_error);
--	ret = __parse_events(parsed_evlist, events.buf, &parse_error, fake_pmu);
-+	ret = __parse_events(parsed_evlist, events.buf, &parse_error, fake_pmu,
-+			     /*warn_if_reordered=*/false);
- 	if (ret) {
- 		parse_events_error__print(&parse_error, events.buf);
- 		goto err_out;
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index 9ec3c1dc81e0..4bb28c32b511 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -2157,11 +2157,13 @@ static int evlist__cmp(void *state, const struct list_head *l, const struct list
- 	return arch_evlist__cmp(lhs, rhs);
+ 	return ipc_port;
  }
+diff --git a/drivers/net/wwan/mhi_wwan_ctrl.c b/drivers/net/wwan/mhi_wwan_ctrl.c
+index f7ca52353f40..c397aa53db5d 100644
+--- a/drivers/net/wwan/mhi_wwan_ctrl.c
++++ b/drivers/net/wwan/mhi_wwan_ctrl.c
+@@ -237,7 +237,8 @@ static int mhi_wwan_ctrl_probe(struct mhi_device *mhi_dev,
  
--static void parse_events__sort_events_and_fix_groups(struct list_head *list)
-+static bool parse_events__sort_events_and_fix_groups(struct list_head *list)
+ 	/* Register as a wwan port, id->driver_data contains wwan port type */
+ 	port = wwan_create_port(&cntrl->mhi_dev->dev, id->driver_data,
+-				&wwan_pops, mhiwwan);
++				&wwan_pops, WWAN_NO_FRAGMENT, WWAN_NO_HEADROOM,
++				mhiwwan);
+ 	if (IS_ERR(port)) {
+ 		kfree(mhiwwan);
+ 		return PTR_ERR(port);
+diff --git a/drivers/net/wwan/rpmsg_wwan_ctrl.c b/drivers/net/wwan/rpmsg_wwan_ctrl.c
+index 31c24420ab2e..fc6c228b7e1c 100644
+--- a/drivers/net/wwan/rpmsg_wwan_ctrl.c
++++ b/drivers/net/wwan/rpmsg_wwan_ctrl.c
+@@ -129,7 +129,8 @@ static int rpmsg_wwan_ctrl_probe(struct rpmsg_device *rpdev)
+ 
+ 	/* Register as a wwan port, id.driver_data contains wwan port type */
+ 	port = wwan_create_port(parent, rpdev->id.driver_data,
+-				&rpmsg_wwan_pops, rpwwan);
++				&rpmsg_wwan_pops, WWAN_NO_FRAGMENT,
++				WWAN_NO_HEADROOM, rpwwan);
+ 	if (IS_ERR(port))
+ 		return PTR_ERR(port);
+ 
+diff --git a/drivers/net/wwan/t7xx/t7xx_port_wwan.c b/drivers/net/wwan/t7xx/t7xx_port_wwan.c
+index 24bd21942403..59926fd0a6bb 100644
+--- a/drivers/net/wwan/t7xx/t7xx_port_wwan.c
++++ b/drivers/net/wwan/t7xx/t7xx_port_wwan.c
+@@ -54,13 +54,13 @@ static void t7xx_port_ctrl_stop(struct wwan_port *port)
+ static int t7xx_port_ctrl_tx(struct wwan_port *port, struct sk_buff *skb)
  {
- 	int idx = -1;
- 	struct evsel *pos, *cur_leader = NULL;
- 	struct perf_evsel *cur_leaders_grp = NULL;
-+	bool idx_changed = false;
-+	int orig_num_leaders = 0, num_leaders = 0;
+ 	struct t7xx_port *port_private = wwan_port_get_drvdata(port);
+-	size_t len, offset, chunk_len = 0, txq_mtu = CLDMA_MTU;
+ 	const struct t7xx_port_conf *port_conf;
++	struct sk_buff *cur = skb, *cloned;
+ 	struct t7xx_fsm_ctl *ctl;
+ 	enum md_state md_state;
++	int cnt = 0, ret;
  
- 	/*
- 	 * Compute index to insert ungrouped events at. Place them where the
-@@ -2170,11 +2172,11 @@ static void parse_events__sort_events_and_fix_groups(struct list_head *list)
- 	list_for_each_entry(pos, list, core.node) {
- 		const struct evsel *pos_leader = evsel__leader(pos);
+-	len = skb->len;
+-	if (!len || !port_private->chan_enable)
++	if (!port_private->chan_enable)
+ 		return -EINVAL;
  
--		if (pos != pos_leader || pos->core.nr_members > 1)
--			continue;
-+		if (pos == pos_leader)
-+			orig_num_leaders++;
- 
--		idx = pos->core.idx;
--		break;
-+		if (idx == -1 && pos == pos_leader && pos->core.nr_members < 2)
-+			idx = pos->core.idx;
+ 	port_conf = port_private->port_conf;
+@@ -72,23 +72,21 @@ static int t7xx_port_ctrl_tx(struct wwan_port *port, struct sk_buff *skb)
+ 		return -ENODEV;
  	}
  
- 	/* Sort events. */
-@@ -2192,6 +2194,8 @@ static void parse_events__sort_events_and_fix_groups(struct list_head *list)
- 		bool force_grouped = arch_evsel__must_be_in_group(pos);
- 
- 		/* Reset index and nr_members. */
-+		if (pos->core.idx != idx)
-+			idx_changed = true;
- 		pos->core.idx = idx++;
- 		pos->core.nr_members = 0;
- 
-@@ -2225,12 +2229,18 @@ static void parse_events__sort_events_and_fix_groups(struct list_head *list)
+-	for (offset = 0; offset < len; offset += chunk_len) {
+-		struct sk_buff *skb_ccci;
+-		int ret;
+-
+-		chunk_len = min(len - offset, txq_mtu - sizeof(struct ccci_header));
+-		skb_ccci = t7xx_port_alloc_skb(chunk_len);
+-		if (!skb_ccci)
+-			return -ENOMEM;
+-
+-		skb_put_data(skb_ccci, skb->data + offset, chunk_len);
+-		ret = t7xx_port_send_skb(port_private, skb_ccci, 0, 0);
++	while (cur) {
++		cloned = skb_clone(cur, GFP_KERNEL);
++		cloned->len = skb_headlen(cur);
++		ret = t7xx_port_send_skb(port_private, cloned, 0, 0);
+ 		if (ret) {
+-			dev_kfree_skb_any(skb_ccci);
++			dev_kfree_skb(cloned);
+ 			dev_err(port_private->dev, "Write error on %s port, %d\n",
+ 				port_conf->name, ret);
+-			return ret;
++			return cnt ? cnt + ret : ret;
  		}
++		cnt += cur->len;
++		if (cur == skb)
++			cur = skb_shinfo(skb)->frag_list;
++		else
++			cur = cur->next;
  	}
- 	list_for_each_entry(pos, list, core.node) {
--		pos->core.leader->nr_members++;
-+		struct evsel *pos_leader = evsel__leader(pos);
+ 
+ 	dev_kfree_skb(skb);
+@@ -154,13 +152,15 @@ static int t7xx_port_wwan_disable_chl(struct t7xx_port *port)
+ static void t7xx_port_wwan_md_state_notify(struct t7xx_port *port, unsigned int state)
+ {
+ 	const struct t7xx_port_conf *port_conf = port->port_conf;
++	unsigned int header_len = sizeof(struct ccci_header);
+ 
+ 	if (state != MD_STATE_READY)
+ 		return;
+ 
+ 	if (!port->wwan.wwan_port) {
+ 		port->wwan.wwan_port = wwan_create_port(port->dev, port_conf->port_type,
+-							&wwan_ops, port);
++						   &wwan_ops, CLDMA_MTU - header_len,
++						   header_len, port);
+ 		if (IS_ERR(port->wwan.wwan_port))
+ 			dev_err(port->dev, "Unable to create WWWAN port %s", port_conf->name);
+ 	}
+diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
+index 966d0ccd2276..a2c07d07195b 100644
+--- a/drivers/net/wwan/wwan_core.c
++++ b/drivers/net/wwan/wwan_core.c
+@@ -67,6 +67,8 @@ struct wwan_device {
+  * @rxq: Buffer inbound queue
+  * @waitqueue: The waitqueue for port fops (read/write/poll)
+  * @data_lock: Port specific data access serialization
++ * @headroom_len: SKB reserved headroom size
++ * @frag_len: Length to fragment packet
+  * @at_data: AT port specific data
+  */
+ struct wwan_port {
+@@ -79,6 +81,8 @@ struct wwan_port {
+ 	struct sk_buff_head rxq;
+ 	wait_queue_head_t waitqueue;
+ 	struct mutex data_lock;	/* Port specific data access serialization */
++	size_t headroom_len;
++	size_t frag_len;
+ 	union {
+ 		struct {
+ 			struct ktermios termios;
+@@ -426,6 +430,8 @@ static int __wwan_port_dev_assign_name(struct wwan_port *port, const char *fmt)
+ struct wwan_port *wwan_create_port(struct device *parent,
+ 				   enum wwan_port_type type,
+ 				   const struct wwan_port_ops *ops,
++				   size_t frag_len,
++				   unsigned int headroom_len,
+ 				   void *drvdata)
+ {
+ 	struct wwan_device *wwandev;
+@@ -459,6 +465,8 @@ struct wwan_port *wwan_create_port(struct device *parent,
+ 
+ 	port->type = type;
+ 	port->ops = ops;
++	port->frag_len = frag_len ? frag_len : SIZE_MAX;
++	port->headroom_len = headroom_len;
+ 	mutex_init(&port->ops_lock);
+ 	skb_queue_head_init(&port->rxq);
+ 	init_waitqueue_head(&port->waitqueue);
+@@ -702,30 +710,53 @@ static ssize_t wwan_port_fops_read(struct file *filp, char __user *buf,
+ static ssize_t wwan_port_fops_write(struct file *filp, const char __user *buf,
+ 				    size_t count, loff_t *offp)
+ {
++	struct sk_buff *skb, *head = NULL, *tail = NULL;
+ 	struct wwan_port *port = filp->private_data;
+-	struct sk_buff *skb;
++	size_t frag_len, remain = count;
+ 	int ret;
+ 
+ 	ret = wwan_wait_tx(port, !!(filp->f_flags & O_NONBLOCK));
+ 	if (ret)
+ 		return ret;
+ 
+-	skb = alloc_skb(count, GFP_KERNEL);
+-	if (!skb)
+-		return -ENOMEM;
++	do {
++		frag_len = min(remain, port->frag_len);
++		skb = alloc_skb(frag_len + port->headroom_len, GFP_KERNEL);
++		if (!skb) {
++			ret = -ENOMEM;
++			goto freeskb;
++		}
++		skb_reserve(skb, port->headroom_len);
 +
-+		if (pos == pos_leader)
-+			num_leaders++;
-+		pos_leader->core.nr_members++;
- 	}
-+	return idx_changed || num_leaders != orig_num_leaders;
++		if (!head) {
++			head = skb;
++		} else if (!tail) {
++			skb_shinfo(head)->frag_list = skb;
++			tail = skb;
++		} else {
++			tail->next = skb;
++			tail = skb;
++		}
+ 
+-	if (copy_from_user(skb_put(skb, count), buf, count)) {
+-		kfree_skb(skb);
+-		return -EFAULT;
+-	}
++		if (copy_from_user(skb_put(skb, frag_len), buf + count - remain, frag_len)) {
++			ret = -EFAULT;
++			goto freeskb;
++		}
+ 
+-	ret = wwan_port_op_tx(port, skb, !!(filp->f_flags & O_NONBLOCK));
+-	if (ret) {
+-		kfree_skb(skb);
+-		return ret;
+-	}
++		if (skb != head) {
++			head->data_len += skb->len;
++			head->len += skb->len;
++			head->truesize += skb->truesize;
++		}
++	} while (remain -= frag_len);
++
++	ret = wwan_port_op_tx(port, head, !!(filp->f_flags & O_NONBLOCK));
++	if (!ret)
++		return count;
+ 
+-	return count;
++freeskb:
++	kfree_skb(head);
++	return ret;
  }
  
- int __parse_events(struct evlist *evlist, const char *str,
--		   struct parse_events_error *err, struct perf_pmu *fake_pmu)
-+		   struct parse_events_error *err, struct perf_pmu *fake_pmu,
-+		   bool warn_if_reordered)
- {
- 	struct parse_events_state parse_state = {
- 		.list	  = LIST_HEAD_INIT(parse_state.list),
-@@ -2250,7 +2260,9 @@ int __parse_events(struct evlist *evlist, const char *str,
- 		return -1;
+ static __poll_t wwan_port_fops_poll(struct file *filp, poll_table *wait)
+diff --git a/drivers/net/wwan/wwan_hwsim.c b/drivers/net/wwan/wwan_hwsim.c
+index 2397a903d8f5..b4cc51833ed2 100644
+--- a/drivers/net/wwan/wwan_hwsim.c
++++ b/drivers/net/wwan/wwan_hwsim.c
+@@ -205,6 +205,7 @@ static struct wwan_hwsim_port *wwan_hwsim_port_new(struct wwan_hwsim_dev *dev)
+ 
+ 	port->wwan = wwan_create_port(&dev->dev, WWAN_PORT_AT,
+ 				      &wwan_hwsim_port_ops,
++				      WWAN_NO_FRAGMENT, WWAN_NO_HEADROOM,
+ 				      port);
+ 	if (IS_ERR(port->wwan)) {
+ 		err = PTR_ERR(port->wwan);
+diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+index 1f0951be15ab..e0f0bc878bbd 100644
+--- a/drivers/usb/class/cdc-wdm.c
++++ b/drivers/usb/class/cdc-wdm.c
+@@ -929,7 +929,8 @@ static void wdm_wwan_init(struct wdm_device *desc)
+ 		return;
  	}
  
--	parse_events__sort_events_and_fix_groups(&parse_state.list);
-+	if (parse_events__sort_events_and_fix_groups(&parse_state.list) &&
-+	    warn_if_reordered && !parse_state.wild_card_pmus)
-+		pr_warning("WARNING: events were regrouped to match PMUs\n");
- 
- 	/*
- 	 * Add list to the evlist even with errors to allow callers to clean up.
-diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
-index 767ad1729228..46204c1a7916 100644
---- a/tools/perf/util/parse-events.h
-+++ b/tools/perf/util/parse-events.h
-@@ -26,13 +26,13 @@ int parse_events_option(const struct option *opt, const char *str, int unset);
- int parse_events_option_new_evlist(const struct option *opt, const char *str, int unset);
- __attribute__((nonnull(1, 2, 3)))
- int __parse_events(struct evlist *evlist, const char *str, struct parse_events_error *error,
--		   struct perf_pmu *fake_pmu);
-+		   struct perf_pmu *fake_pmu, bool warn_if_reordered);
- 
--__attribute__((nonnull))
-+__attribute__((nonnull(1, 2, 3)))
- static inline int parse_events(struct evlist *evlist, const char *str,
- 			       struct parse_events_error *err)
- {
--	return __parse_events(evlist, str, err, NULL);
-+	return __parse_events(evlist, str, err, /*fake_pmu=*/NULL, /*warn_if_reordered=*/true);
- }
- 
- int parse_event(struct evlist *evlist, const char *str);
-@@ -128,6 +128,7 @@ struct parse_events_state {
- 	int			   stoken;
- 	struct perf_pmu		  *fake_pmu;
- 	char			  *hybrid_pmu_name;
-+	bool			   wild_card_pmus;
+-	port = wwan_create_port(&intf->dev, desc->wwanp_type, &wdm_wwan_port_ops, desc);
++	port = wwan_create_port(&intf->dev, desc->wwanp_type, &wdm_wwan_port_ops,
++				WWAN_NO_FRAGMENT, WWAN_NO_HEADROOM, desc);
+ 	if (IS_ERR(port)) {
+ 		dev_err(&intf->dev, "%s: Unable to create WWAN port\n",
+ 			dev_name(intf->usb_dev));
+diff --git a/include/linux/wwan.h b/include/linux/wwan.h
+index 24d76500b1cc..f5aaa36ea742 100644
+--- a/include/linux/wwan.h
++++ b/include/linux/wwan.h
+@@ -64,11 +64,25 @@ struct wwan_port_ops {
+ 			    poll_table *wait);
  };
  
- void parse_events__shrink_config_terms(void);
-diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
-index 3a04602d2982..4488443e506e 100644
---- a/tools/perf/util/parse-events.y
-+++ b/tools/perf/util/parse-events.y
-@@ -323,6 +323,7 @@ event_pmu_name opt_pmu_config
- 				if (!parse_events_add_pmu(_parse_state, list, pmu->name, terms,
- 							  /*auto_merge_stats=*/true)) {
- 					ok++;
-+					parse_state->wild_card_pmus = true;
- 				}
- 				parse_events_terms__delete(terms);
- 			}
++/*
++ * Used to indicate that the WWAN core should not fragment control packages.
++ */
++#define WWAN_NO_FRAGMENT	0
++
++/*
++ * Used to indicate that the WWAN core should not reserve headroom in control packages.
++ */
++#define WWAN_NO_HEADROOM	0
++
+ /**
+  * wwan_create_port - Add a new WWAN port
+  * @parent: Device to use as parent and shared by all WWAN ports
+  * @type: WWAN port type
+  * @ops: WWAN port operations
++ * @frag_len: WWAN port TX fragments length, if WWAN_NO_FRAGMENT is set,
++ *            the WWAN core don't fragment control packages.
++ * @headroom_len: WWAN port TX fragments reserved headroom length, if WWAN_NO_HEADROOM
++ *                is set, the WWAN core don't reserve headroom in control packages.
+  * @drvdata: Pointer to caller driver data
+  *
+  * Allocate and register a new WWAN port. The port will be automatically exposed
+@@ -86,6 +100,8 @@ struct wwan_port_ops {
+ struct wwan_port *wwan_create_port(struct device *parent,
+ 				   enum wwan_port_type type,
+ 				   const struct wwan_port_ops *ops,
++				   size_t frag_len,
++				   unsigned int headroom_len,
+ 				   void *drvdata);
+ 
+ /**
 -- 
-2.40.0.rc0.216.gc4246ad0f0-goog
+2.17.0
 
