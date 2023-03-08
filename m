@@ -2,313 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263E66B16C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 00:50:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1FD6B16D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 00:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbjCHXuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 18:50:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
+        id S229876AbjCHXvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 18:51:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCHXuB (ORCPT
+        with ESMTP id S229522AbjCHXvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 18:50:01 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA339270D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 15:49:59 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so4205013pjg.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 15:49:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678319398;
-        h=content-transfer-encoding:cc:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FZg/gAI2YkU9FD4CSdeeX0b3kn41MdaxrRtQfcjPVIE=;
-        b=ruoBIGTNhtTkPNcy92eXsRhDULtoR/At/DDjHPc7VWFFGPSeNKoAnitkEhyRheprBX
-         Wp966bgDWAZxYDRC3XRCFNlTHrDX/mNWKCNb5RcUfvWSzdNCoPVPs/OFYkYe8S2Vta0Z
-         3nKQsKK6NvvMihtonmrQFMF5vNRuIaaONMc6PG098Da7ifle+V2IdBQDfUxvl4nNjo/Z
-         c+9D0GA2wi95nZhN3a/uaNUxQW6+UpsV1dd3uX5UY4ZCCh5b0NMhwq5mnYYKekDRjY2f
-         +zDEpgK1tkZjWicZmnngm3N72XHXGCVImJRaCPRehUEg+RiTyp2sEENprabJlfObey9U
-         G1lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678319398;
-        h=content-transfer-encoding:cc:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FZg/gAI2YkU9FD4CSdeeX0b3kn41MdaxrRtQfcjPVIE=;
-        b=r2YpkzvrEtiQzaDzt2Pgt3wR2X9yqs5CegME6ki3Q+PKVWWSalFC/KoynbkuY3A9h8
-         +Br7PU4ghNLG9/DWcwCWSkVtXZia3b1cnA1nE4hylsFAnQ+ovdlLlJFT9pLg6UrZgAE6
-         kXukDQIXoIkrtHQCaiXxy0gR7GI2qKoTrUZZdvVLclsqokV6hDES9yJwnzZzJioHmva6
-         V6mmlVLqHQLlXRKyb64EDIYoDYRup6zKzEP3kBRzmucwu7KdjqbzIB61Hb9oLOti6YGp
-         uSxNItE4pVKBWH5W9IpDpMea2Y8sttxTQBr0hEDibZ6uayn+dUBb05VfunnZYb8n/Zkt
-         Z9NA==
-X-Gm-Message-State: AO0yUKVjOlbq37p/8ZTiqHg2oOExCC55oMasreHiPcN5Cc7sE9kZDhYr
-        KDbAJjWw96lrUr+aZbsr8eTCUG7po0NoQ5zZKIwbjnTouRTFQUtLYsltDuG9
-X-Received: by 2002:a17:90a:5d89:b0:230:8d09:962b with SMTP id
- t9-20020a17090a5d8900b002308d09962bmt9732352pji.7.1678319398182; Wed, 08 Mar
- 2023 15:49:58 -0800 (PST)
+        Wed, 8 Mar 2023 18:51:18 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD6E62324;
+        Wed,  8 Mar 2023 15:51:17 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328NM30C027821;
+        Wed, 8 Mar 2023 23:51:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=uImggc5D4ypwE9/xwrZDnSkkgADBMwIpMnndNwAQ8pQ=;
+ b=RFLSlMmAiiBuv8gaRL8K6oqXi6mGvo1jKKteAMNf4q32OGB/aIW7j8GDAiN3zS5jLCIA
+ J6FkBtZPvy35bngTy20F5s6RtRLreL8CYAAvuxn9TkbD0hIqqQTPEoPfeHYafJQwoVCy
+ Ppb2eIo3APQlvSEcvi6eOIJ94STHs3LuWJAm2gJnZPwThOYU/Li7D1zYeZd/c0LAa5eU
+ x6XPrgho6hkOkcdoYFIKuDIkPO/Qjv2vumEbuaOS6qeXgW5Tzo8wcAhxm8M7WP4wsfQ1
+ DwBZEXAq2v4ZrAGayH3sZm+s/xQE9e4OatP167i/AXAlhZX6N2scxPWeOtFGnd+GGARp 0g== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p6fej350w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Mar 2023 23:51:00 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 328NoxNg021429
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 8 Mar 2023 23:50:59 GMT
+Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 8 Mar 2023
+ 15:50:58 -0800
+Message-ID: <37276093-4565-03e1-b3cc-7db4bdabc0b3@quicinc.com>
+Date:   Wed, 8 Mar 2023 15:50:55 -0800
 MIME-Version: 1.0
-References: <20230308234332.3355689-1-eranian@google.com>
-In-Reply-To: <20230308234332.3355689-1-eranian@google.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 8 Mar 2023 15:49:46 -0800
-Message-ID: <CAKwvOd=aJvQEAovKuhB4aGhQiaBYpBj1_WH8Opp-mAiDWNUFsA@mail.gmail.com>
-Subject: Re: [PATCH V2] x86/resctrl: robustify __resctrl_sched_in
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        peterz@infradead.org, tony.luck@intel.com,
-        reinette.chatre@intel.com, fenghua.yu@intel.com,
-        peternewman@google.com, morbo@google.com, jakub@redhat.com,
-        james.morse@arm.com, babu.moger@amd.com, ananth.narayan@amd.com,
-        vschneid@redhat.com, Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-16.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 06/11] arm64: dts: qcom: sm8350: Add &tlmm
+ gpio-line-names
+Content-Language: en-US
+To:     Robert Foss <robert.foss@linaro.org>, <robdclark@gmail.com>,
+        <quic_abhinavk@quicinc.com>, <dmitry.baryshkov@linaro.org>,
+        <sean@poorly.run>, <airlied@gmail.com>, <daniel@ffwll.ch>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@somainline.org>,
+        <angelogioacchino.delregno@somainline.org>,
+        <loic.poulain@linaro.org>, <vkoul@kernel.org>, <a39.skl@gmail.com>,
+        <quic_khsieh@quicinc.com>, <quic_vpolimer@quicinc.com>,
+        <swboyd@chromium.org>, <dianders@chromium.org>,
+        <liushixin2@huawei.com>, <linux-arm-msm@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Jonathan Marek <jonathan@marek.ca>,
+        <vinod.koul@linaro.org>
+References: <20221230153554.105856-1-robert.foss@linaro.org>
+ <20221230153554.105856-7-robert.foss@linaro.org>
+From:   Jessica Zhang <quic_jesszhan@quicinc.com>
+In-Reply-To: <20221230153554.105856-7-robert.foss@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ETk2DUqjOOmYfre7yVPMgUeKv20b77T1
+X-Proofpoint-ORIG-GUID: ETk2DUqjOOmYfre7yVPMgUeKv20b77T1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-08_15,2023-03-08_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0
+ mlxlogscore=999 impostorscore=0 clxscore=1011 phishscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303080200
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just in case the Cc list differs from the original thread, Linus merged:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
-id=3D7fef099702527c3b2c5234a2ea6a24411485a13a
-(So nothing to see here). EOM
 
-On Wed, Mar 8, 2023 at 3:44=E2=80=AFPM Stephane Eranian <eranian@google.com=
-> wrote:
->
-> When compiling the kernel with clang, there is a problem with the code
-> in __rescrtl_sched_in() because of the way the inline function is optimiz=
-ed
-> when called from __switch_to(). The effect of the problem is that the
-> bandwidth restriction driven by the CLOSID is not enforced. The problem i=
-s
-> easy to reproduce on Intel or AMD x86 systems:
->
-> 1. If resctrl filesystem is not mounted:
->   $ mount -t resctrl none /sys/fs/resctrl
->
-> 2. Create resctrl group:
->   $ mkdir /sys/fs/resctrl/test
->
-> 3. move shell into resctrl group
->   $ echo $$ > /sys/fs/resctrl/test/tasks
->
-> 4. Run bandwidth consuming test in background on CPU0
->   $ taskset -c 0 triad &
->
-> 5. Monitor bandwidth consumption
->    Using perf to measure bandwidth on your processor
->
-> 6. Restrict bandwidth
->   - Intel: $ echo MB:0=3D10 > /sys/fs/resctrl/test/schemata
->   - AMD: $ echo MB:0=3D240 > /sys/fs/resctrl/tests/schemata
->
->  7. Monitor bandwidth again
->
-> At 7, you will see that the restriction is not enforced.
->
-> The problem is located in the __resctrl_sched_in() routine which rewrites
-> the active closid via the PQR_ASSOC register. Because this is an expensiv=
-e
-> operation, the kernel only does it when the context switch involves tasks
-> with different CLOSIDs. And to check that, it needs to access the task be=
-ing
-> scheduled in. And for that it is using the current task pointer to access
-> the task's closid field using current->closid. current is actually a macr=
-o
-> that reads the per-cpu variable pcpu_hot.current_task.
->
-> After an investigation by compiler experts, the problem has been tracked =
-down
-> to the usage of the get_current() macro in the __resctrl_sched_in() code =
-and
-> in particular the per-cpu macro:
->
-> static __always_inline struct task_struct *get_current(void)
-> {
->         return this_cpu_read_stable(pcpu_hot.current_task);
-> }
->
-> And as per percpu.h:
->
-> /*
->  * this_cpu_read() makes gcc load the percpu variable every time it is
->  * accessed while this_cpu_read_stable() allows the value to be cached.
->  * this_cpu_read_stable() is more efficient and can be used if its value
->  * is guaranteed to be valid across cpus.  The current users include
->  * get_current() and get_thread_info() both of which are actually
->  * per-thread variables implemented as per-cpu variables and thus
->  * stable for the duration of the respective task.
->  */
->
-> The _stable version of the macro allows the value to be cached, i.e.,
-> not forcing a reload.
->
-> However in the __switch_to() routine, the current pointer is changed.  If=
- the
-> compiler optimizes away the reload, then the resctrl_sched_in will look
-> at the previous task instead of the new current task. This explains why w=
-e
-> are not seeing the bandwidth limit enforced on the benchmark.
->
-> Note that the problem was detected when compiling the kernel with clang (=
-v14)
-> but it could also happen with gcc.
->
-> To fix the problem, there are a few solutions.
->
-> In V1, we modified the resctrl_sched_in() function to use the this_cpu_re=
-ad()
-> form of the macro. Given this is specific to the __switch_to routine, we =
-do
-> not change get_current() but instead invoke the lower level macro directl=
-y
-> from __resched_sched_in(). This has no impact on any other calls of
-> get_current().
->
-> In V2, after further discussions with kernel maintainers and LLVM develop=
-ers,
-> the conclusion that it was the problem is caused by the compiler but that=
- the
-> function is not written in a proper manner and that the compiler is just
-> exposing the problem. So it is best to change the __resctrl_sched_in()
-> function to:
->   (1) be a proper static inline function
->   (2) pass the task pointer of the task scheduled in instead of retrievin=
-g
->       it from the current pointer. It makes more sense and follows other
->       sched_in type functions. If you are scheduling something in, then y=
-ou
->       need to name what it is, you should not rely on the current pointer=
-.
->       This solution was proposed by Linus.
->
-> Patch was tested on AMD Zen3 + MBA and I verified that the bandwidth limi=
-t
-> was now enforced.
->
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Tested-by: Stephane Eranian <eranian@google.com>
-> Tested-by: Babu Moger <babu.moger@amd.com>
+
+On 12/30/2022 7:35 AM, Robert Foss wrote:
+> Add GPIO line names as described by the sm8350-hdk schematic.
+> 
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+
+Reviewed-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+Tested-by: Jessica Zhang <quic_jesszhan@quicinc.com> #SM8350 (HDK)
+
 > ---
->  arch/x86/include/asm/resctrl.h         | 12 ++++++------
->  arch/x86/kernel/cpu/resctrl/rdtgroup.c |  4 ++--
->  arch/x86/kernel/process_32.c           |  2 +-
->  arch/x86/kernel/process_64.c           |  2 +-
->  4 files changed, 10 insertions(+), 10 deletions(-)
->
-> diff --git a/arch/x86/include/asm/resctrl.h b/arch/x86/include/asm/resctr=
-l.h
-> index 52788f79786f..255a78d9d906 100644
-> --- a/arch/x86/include/asm/resctrl.h
-> +++ b/arch/x86/include/asm/resctrl.h
-> @@ -49,7 +49,7 @@ DECLARE_STATIC_KEY_FALSE(rdt_mon_enable_key);
->   *   simple as possible.
->   * Must be called with preemption disabled.
->   */
-> -static void __resctrl_sched_in(void)
-> +static inline void __resctrl_sched_in(struct task_struct *tsk)
->  {
->         struct resctrl_pqr_state *state =3D this_cpu_ptr(&pqr_state);
->         u32 closid =3D state->default_closid;
-> @@ -61,13 +61,13 @@ static void __resctrl_sched_in(void)
->          * Else use the closid/rmid assigned to this cpu.
->          */
->         if (static_branch_likely(&rdt_alloc_enable_key)) {
-> -               tmp =3D READ_ONCE(current->closid);
-> +               tmp =3D READ_ONCE(tsk->closid);
->                 if (tmp)
->                         closid =3D tmp;
->         }
->
->         if (static_branch_likely(&rdt_mon_enable_key)) {
-> -               tmp =3D READ_ONCE(current->rmid);
-> +               tmp =3D READ_ONCE(tsk->rmid);
->                 if (tmp)
->                         rmid =3D tmp;
->         }
-> @@ -88,17 +88,17 @@ static inline unsigned int resctrl_arch_round_mon_val=
-(unsigned int val)
->         return val * scale;
->  }
->
-> -static inline void resctrl_sched_in(void)
-> +static inline void resctrl_sched_in(struct task_struct *tsk)
->  {
->         if (static_branch_likely(&rdt_enable_key))
-> -               __resctrl_sched_in();
-> +               __resctrl_sched_in(tsk);
->  }
->
->  void resctrl_cpu_detect(struct cpuinfo_x86 *c);
->
->  #else
->
-> -static inline void resctrl_sched_in(void) {}
-> +static inline void resctrl_sched_in(struct task_struct *tsk) {}
->  static inline void resctrl_cpu_detect(struct cpuinfo_x86 *c) {}
->
->  #endif /* CONFIG_X86_CPU_RESCTRL */
-> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu=
-/resctrl/rdtgroup.c
-> index e2c1599d1b37..884b6e9a7e31 100644
-> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> @@ -314,7 +314,7 @@ static void update_cpu_closid_rmid(void *info)
->          * executing task might have its own closid selected. Just reuse
->          * the context switch code.
->          */
-> -       resctrl_sched_in();
-> +       resctrl_sched_in(current);
->  }
->
->  /*
-> @@ -530,7 +530,7 @@ static void _update_task_closid_rmid(void *task)
->          * Otherwise, the MSR is updated when the task is scheduled in.
->          */
->         if (task =3D=3D current)
-> -               resctrl_sched_in();
-> +               resctrl_sched_in(task);
->  }
->
->  static void update_task_closid_rmid(struct task_struct *t)
-> diff --git a/arch/x86/kernel/process_32.c b/arch/x86/kernel/process_32.c
-> index 470c128759ea..708c87b88cc1 100644
-> --- a/arch/x86/kernel/process_32.c
-> +++ b/arch/x86/kernel/process_32.c
-> @@ -212,7 +212,7 @@ __switch_to(struct task_struct *prev_p, struct task_s=
-truct *next_p)
->         switch_fpu_finish();
->
->         /* Load the Intel cache allocation PQR MSR. */
-> -       resctrl_sched_in();
-> +       resctrl_sched_in(next_p);
->
->         return prev_p;
->  }
-> diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-> index 4e34b3b68ebd..bb65a68b4b49 100644
-> --- a/arch/x86/kernel/process_64.c
-> +++ b/arch/x86/kernel/process_64.c
-> @@ -656,7 +656,7 @@ __switch_to(struct task_struct *prev_p, struct task_s=
-truct *next_p)
->         }
->
->         /* Load the Intel cache allocation PQR MSR. */
-> -       resctrl_sched_in();
-> +       resctrl_sched_in(next_p);
->
->         return prev_p;
->  }
-> --
-
-
-
---=20
-Thanks,
-~Nick Desaulniers
+>   arch/arm64/boot/dts/qcom/sm8350-hdk.dts | 205 ++++++++++++++++++++++++
+>   1 file changed, 205 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+> index 0fcf5bd88fc7..e6deb08c6da0 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+> @@ -233,6 +233,211 @@ &slpi {
+>   
+>   &tlmm {
+>   	gpio-reserved-ranges = <52 8>;
+> +
+> +	gpio-line-names =
+> +		"APPS_I2C_SDA", /* GPIO_0 */
+> +		"APPS_I2C_SCL",
+> +		"FSA_INT_N",
+> +		"USER_LED3_EN",
+> +		"SMBUS_SDA_1P8",
+> +		"SMBUS_SCL_1P8",
+> +		"2M2_3P3_EN",
+> +		"ALERT_DUAL_M2_N",
+> +		"EXP_UART_CTS",
+> +		"EXP_UART_RFR",
+> +		"EXP_UART_TX", /* GPIO_10 */
+> +		"EXP_UART_RX",
+> +		"NC",
+> +		"NC",
+> +		"RCM_MARKER1",
+> +		"WSA0_EN",
+> +		"CAM1_RESET_N",
+> +		"CAM0_RESET_N",
+> +		"DEBUG_UART_TX",
+> +		"DEBUG_UART_RX",
+> +		"TS_I2C_SDA", /* GPIO_20 */
+> +		"TS_I2C_SCL",
+> +		"TS_RESET_N",
+> +		"TS_INT_N",
+> +		"DISP0_RESET_N",
+> +		"DISP1_RESET_N",
+> +		"ETH_RESET",
+> +		"RCM_MARKER2",
+> +		"CAM_DC_MIPI_MUX_EN",
+> +		"CAM_DC_MIPI_MUX_SEL",
+> +		"AFC_PHY_TA_D_PLUS", /* GPIO_30 */
+> +		"AFC_PHY_TA_D_MINUS",
+> +		"PM8008_1_IRQ",
+> +		"PM8008_1_RESET_N",
+> +		"PM8008_2_IRQ",
+> +		"PM8008_2_RESET_N",
+> +		"CAM_DC_I3C_SDA",
+> +		"CAM_DC_I3C_SCL",
+> +		"FP_INT_N",
+> +		"FP_WUHB_INT_N",
+> +		"SMB_SPMI_DATA", /* GPIO_40 */
+> +		"SMB_SPMI_CLK",
+> +		"USB_HUB_RESET",
+> +		"FORCE_USB_BOOT",
+> +		"LRF_IRQ",
+> +		"NC",
+> +		"IMU2_INT",
+> +		"HDMI_3P3_EN",
+> +		"HDMI_RSTN",
+> +		"HDMI_1P2_EN",
+> +		"HDMI_INT", /* GPIO_50 */
+> +		"USB1_ID",
+> +		"FP_SPI_MISO",
+> +		"FP_SPI_MOSI",
+> +		"FP_SPI_CLK",
+> +		"FP_SPI_CS_N",
+> +		"NFC_ESE_SPI_MISO",
+> +		"NFC_ESE_SPI_MOSI",
+> +		"NFC_ESE_SPI_CLK",
+> +		"NFC_ESE_SPI_CS",
+> +		"NFC_I2C_SDA", /* GPIO_60 */
+> +		"NFC_I2C_SCLC",
+> +		"NFC_EN",
+> +		"NFC_CLK_REQ",
+> +		"HST_WLAN_EN",
+> +		"HST_BT_EN",
+> +		"HST_SW_CTRL",
+> +		"NC",
+> +		"HST_BT_UART_CTS",
+> +		"HST_BT_UART_RFR",
+> +		"HST_BT_UART_TX", /* GPIO_70 */
+> +		"HST_BT_UART_RX",
+> +		"CAM_DC_SPI0_MISO",
+> +		"CAM_DC_SPI0_MOSI",
+> +		"CAM_DC_SPI0_CLK",
+> +		"CAM_DC_SPI0_CS_N",
+> +		"CAM_DC_SPI1_MISO",
+> +		"CAM_DC_SPI1_MOSI",
+> +		"CAM_DC_SPI1_CLK",
+> +		"CAM_DC_SPI1_CS_N",
+> +		"HALL_INT_N", /* GPIO_80 */
+> +		"USB_PHY_PS",
+> +		"MDP_VSYNC_P",
+> +		"MDP_VSYNC_S",
+> +		"ETH_3P3_EN",
+> +		"RADAR_INT",
+> +		"NFC_DWL_REQ",
+> +		"SM_GPIO_87",
+> +		"WCD_RESET_N",
+> +		"ALSP_INT_N",
+> +		"PRESS_INT", /* GPIO_90 */
+> +		"SAR_INT_N",
+> +		"SD_CARD_DET_N",
+> +		"NC",
+> +		"PCIE0_RESET_N",
+> +		"PCIE0_CLK_REQ_N",
+> +		"PCIE0_WAKE_N",
+> +		"PCIE1_RESET_N",
+> +		"PCIE1_CLK_REQ_N",
+> +		"PCIE1_WAKE_N",
+> +		"CAM_MCLK0", /* GPIO_100 */
+> +		"CAM_MCLK1",
+> +		"CAM_MCLK2",
+> +		"CAM_MCLK3",
+> +		"CAM_MCLK4",
+> +		"CAM_MCLK5",
+> +		"CAM2_RESET_N",
+> +		"CCI_I2C0_SDA",
+> +		"CCI_I2C0_SCL",
+> +		"CCI_I2C1_SDA",
+> +		"CCI_I2C1_SCL", /* GPIO_110 */
+> +		"CCI_I2C2_SDA",
+> +		"CCI_I2C2_SCL",
+> +		"CCI_I2C3_SDA",
+> +		"CCI_I2C3_SCL",
+> +		"CAM5_RESET_N",
+> +		"CAM4_RESET_N",
+> +		"CAM3_RESET_N",
+> +		"IMU1_INT",
+> +		"MAG_INT_N",
+> +		"MI2S2_I2S_SCK", /* GPIO_120 */
+> +		"MI2S2_I2S_DAT0",
+> +		"MI2S2_I2S_WS",
+> +		"HIFI_DAC_I2S_MCLK",
+> +		"MI2S2_I2S_DAT1",
+> +		"HIFI_DAC_I2S_SCK",
+> +		"HIFI_DAC_I2S_DAT0",
+> +		"NC",
+> +		"HIFI_DAC_I2S_WS",
+> +		"HST_BT_WLAN_SLIMBUS_CLK",
+> +		"HST_BT_WLAN_SLIMBUS_DAT0", /* GPIO_130 */
+> +		"BT_LED_EN",
+> +		"WLAN_LED_EN",
+> +		"NC",
+> +		"NC",
+> +		"NC",
+> +		"UIM2_PRESENT",
+> +		"NC",
+> +		"NC",
+> +		"NC",
+> +		"UIM1_PRESENT", /* GPIO_140 */
+> +		"NC",
+> +		"SM_RFFE0_DATA",
+> +		"NC",
+> +		"SM_RFFE1_DATA",
+> +		"SM_MSS_GRFC4",
+> +		"SM_MSS_GRFC5",
+> +		"SM_MSS_GRFC6",
+> +		"SM_MSS_GRFC7",
+> +		"SM_RFFE4_CLK",
+> +		"SM_RFFE4_DATA", /* GPIO_150 */
+> +		"WLAN_COEX_UART1_RX",
+> +		"WLAN_COEX_UART1_TX",
+> +		"HST_SW_CTRL",
+> +		"DSI0_STATUS",
+> +		"DSI1_STATUS",
+> +		"APPS_PBL_BOOT_SPEED_1",
+> +		"APPS_BOOT_FROM_ROM",
+> +		"APPS_PBL_BOOT_SPEED_0",
+> +		"QLINK0_REQ",
+> +		"QLINK0_EN", /* GPIO_160 */
+> +		"QLINK0_WMSS_RESET_N",
+> +		"NC",
+> +		"NC",
+> +		"NC",
+> +		"NC",
+> +		"NC",
+> +		"NC",
+> +		"WCD_SWR_TX_CLK",
+> +		"WCD_SWR_TX_DATA0",
+> +		"WCD_SWR_TX_DATA1", /* GPIO_170 */
+> +		"WCD_SWR_RX_CLK",
+> +		"WCD_SWR_RX_DATA0",
+> +		"WCD_SWR_RX_DATA1",
+> +		"DMIC01_CLK",
+> +		"DMIC01_DATA",
+> +		"DMIC23_CLK",
+> +		"DMIC23_DATA",
+> +		"WSA_SWR_CLK",
+> +		"WSA_SWR_DATA",
+> +		"DMIC45_CLK", /* GPIO_180 */
+> +		"DMIC45_DATA",
+> +		"WCD_SWR_TX_DATA2",
+> +		"SENSOR_I3C_SDA",
+> +		"SENSOR_I3C_SCL",
+> +		"CAM_OIS0_I3C_SDA",
+> +		"CAM_OIS0_I3C_SCL",
+> +		"IMU_SPI_MISO",
+> +		"IMU_SPI_MOSI",
+> +		"IMU_SPI_CLK",
+> +		"IMU_SPI_CS_N", /* GPIO_190 */
+> +		"MAG_I2C_SDA",
+> +		"MAG_I2C_SCL",
+> +		"SENSOR_I2C_SDA",
+> +		"SENSOR_I2C_SCL",
+> +		"RADAR_SPI_MISO",
+> +		"RADAR_SPI_MOSI",
+> +		"RADAR_SPI_CLK",
+> +		"RADAR_SPI_CS_N",
+> +		"HST_BLE_UART_TX",
+> +		"HST_BLE_UART_RX", /* GPIO_200 */
+> +		"HST_WLAN_UART_TX",
+> +		"HST_WLAN_UART_RX";
+>   };
+>   
+>   &uart2 {
+> -- 
+> 2.34.1
+> 
