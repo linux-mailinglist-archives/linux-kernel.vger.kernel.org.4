@@ -2,144 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01FE6B02D9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CDC6B02DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:25:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbjCHJZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 04:25:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
+        id S230476AbjCHJZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 04:25:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjCHJYv (ORCPT
+        with ESMTP id S230456AbjCHJZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 04:24:51 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 384D79DE33;
-        Wed,  8 Mar 2023 01:24:30 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8BxMI9NVAhk1c8JAA--.12949S3;
-        Wed, 08 Mar 2023 17:24:29 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax+71KVAhkbDlPAA--.6030S3;
-        Wed, 08 Mar 2023 17:24:28 +0800 (CST)
-Subject: Re: [PATCH v13 1/2] dt-bindings: clock: add loongson-2 boot clock
- index
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, zhuyinbo@loongson.cn,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
-        loongson-kernel@lists.loongnix.cn
-References: <20230307115022.12846-1-zhuyinbo@loongson.cn>
- <692a62da-a9a1-fa23-6e24-723d73c3a423@linaro.org>
- <5e9b3bd5-d885-6237-5e14-2becb3c956cc@loongson.cn>
- <31e2a67a-c046-9501-80de-e754ed450195@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <ace5159b-ebbd-7805-518c-ed3d39e4793e@loongson.cn>
-Date:   Wed, 8 Mar 2023 17:24:26 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 8 Mar 2023 04:25:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDE7AF2A2;
+        Wed,  8 Mar 2023 01:24:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B455CB81C0B;
+        Wed,  8 Mar 2023 09:24:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78991C433A8;
+        Wed,  8 Mar 2023 09:24:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678267480;
+        bh=i1sJ8zVY63SmSs6HOnkgI05wl57CXOVsfeHlIdvQIBc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NrT5GmpCzsvy102yzX43IVPfE4if+ku299wG6Ehq/DJUxN2oto+BHubGa8FnKBj7x
+         EYUHLAxWRH/aH8MmKp2WnbmfeNxAhh2Z9WNoZSyUY8McNA4aiCOCF3pLVNf+HPtB8b
+         v4j/sdkeoRPmORxaUKLFUL7SptwC60pUxC3rsH/E9/LT0Je5hUV2vuHM+Ty7f/AlOO
+         rDrChrzXq+phj1auyuRZQtKyxQUDOdQDu7HPLRYf7MdePbjrqPZFaqr4nKN9WQrzD9
+         pNOstc7+t4IWHb4JM8a8ORFxeG2rotVEFYORlm1laoXDVaRlM741Ga3zzycEbA01Ij
+         yxz2L1gSvtBsQ==
+Received: by mail-lf1-f45.google.com with SMTP id bi9so20511856lfb.2;
+        Wed, 08 Mar 2023 01:24:40 -0800 (PST)
+X-Gm-Message-State: AO0yUKXXEOo+sTdr6na+l+0w+1weqAj9wwSNKqtu19ZL3j0TG9fj+NNT
+        xnldbPpkyekatAj4+xLf7KS6i4A/BOf9eE7p/ak=
+X-Google-Smtp-Source: AK7set/TDAJY8aPr63jhFnX80GRWQqOYpNKie97V2chZtU4ly8olN5Fb9gqHDWWBVsJJJkmQ1EXRFDQ3mdHYXY4ZWCQ=
+X-Received: by 2002:ac2:5de1:0:b0:4dd:af74:fe17 with SMTP id
+ z1-20020ac25de1000000b004ddaf74fe17mr5356537lfq.7.1678267478431; Wed, 08 Mar
+ 2023 01:24:38 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <31e2a67a-c046-9501-80de-e754ed450195@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8Ax+71KVAhkbDlPAA--.6030S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxAw48ArW7CFy7WF4kGr43trb_yoW5Gry8pr
-        4vgFsxKFW2yF4xKw4IqwnxKr1Y9w4xJr1UAF4Uur1UXr17Xwn5tFs7JF4fur90grWxJFyx
-        ZFWq9w4Fva1DZwUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7V
-        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
-        67AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
-        8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWU
-        CwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
-        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-        daVFxhVjvjDU0xZFpf9x07j5HUDUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1671098103.git.baskov@ispras.ru> <71444a474b94ed69dbc4bc6b1592b10fad4e42a5.1671098103.git.baskov@ispras.ru>
+In-Reply-To: <71444a474b94ed69dbc4bc6b1592b10fad4e42a5.1671098103.git.baskov@ispras.ru>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 8 Mar 2023 10:24:27 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXE9CcDRVt6U7xXeVozuj9Fjc00xN+ne0aYMMS-wxYPgxQ@mail.gmail.com>
+Message-ID: <CAMj1kXE9CcDRVt6U7xXeVozuj9Fjc00xN+ne0aYMMS-wxYPgxQ@mail.gmail.com>
+Subject: Re: [PATCH v4 04/26] x86/boot: Increase boot page table size
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2023/3/8 下午4:37, Krzysztof Kozlowski 写道:
-> On 08/03/2023 02:35, zhuyinbo wrote:
->> 在 2023/3/7 下午8:47, Krzysztof Kozlowski 写道:
->>> On 07/03/2023 12:50, Yinbo Zhu wrote:
->>>> The Loongson-2 boot clock was used to spi and lio peripheral and
->>>> this patch was to add boot clock index number.
->>>>
->>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>> ---
->>> This is v13? Where is the changelog then?
->> in fact, this is a new patch(v1),   but another clock driver patch in
->> this series had send as v13 and need depend on
->>
->> this patch so set current patch as v13.
-> This should be explained in changelog.
-
-okay I got it , and I whether need resend a v14 patch that in order to  
-add this explain in changelog ?
-
+On Thu, 15 Dec 2022 at 13:38, Evgeniy Baskov <baskov@ispras.ru> wrote:
 >
->>>
->>>>    include/dt-bindings/clock/loongson,ls2k-clk.h | 25 ++++++++++---------
->>>>    1 file changed, 13 insertions(+), 12 deletions(-)
->>>>
->>>> diff --git a/include/dt-bindings/clock/loongson,ls2k-clk.h b/include/dt-bindings/clock/loongson,ls2k-clk.h
->>>> index db1e27e792ff1..e86804365e506 100644
->>>> --- a/include/dt-bindings/clock/loongson,ls2k-clk.h
->>>> +++ b/include/dt-bindings/clock/loongson,ls2k-clk.h
->>>> @@ -13,17 +13,18 @@
->>>>    #define LOONGSON2_DC_PLL				3
->>>>    #define LOONGSON2_PIX0_PLL				4
->>>>    #define LOONGSON2_PIX1_PLL				5
->>>> -#define LOONGSON2_NODE_CLK				6
->>>> -#define LOONGSON2_HDA_CLK				7
->>>> -#define LOONGSON2_GPU_CLK				8
->>>> -#define LOONGSON2_DDR_CLK				9
->>>> -#define LOONGSON2_GMAC_CLK				10
->>>> -#define LOONGSON2_DC_CLK				11
->>>> -#define LOONGSON2_APB_CLK				12
->>>> -#define LOONGSON2_USB_CLK				13
->>>> -#define LOONGSON2_SATA_CLK				14
->>>> -#define LOONGSON2_PIX0_CLK				15
->>>> -#define LOONGSON2_PIX1_CLK				16
->>>> -#define LOONGSON2_CLK_END				17
->>>> +#define LOONGSON2_BOOT_CLK				6
->>> That's an ABI break and commit msg does not explain it.
->> you meaning is that need add a explanation in commit msg that why
-> You need good explanation to break the ABI. I don't understand the
-> commit msg, but anyway I could not find there justification for ABI
-> break. If you do not have good justification, don't break the ABI,
-
-The commit msg is the patch commit  log,  and I maybe not got it about 
-break the ABI.  You said about "break the ABI"
-
-is whether is location issue about "LOONGSON2_BOOT_CLK"?   if yes,   the 
-LOONGSON2_BOOT_CLK was placed
-
-after LOONGSON2_PIX1_PLL that is due to their clock parent is same.     
-and I whether need add this explanation
-
-in patch commit log description?
-
+> Previous upper limit ignored pages implicitly mapped from #PF handler
+> by code accessing ACPI tables (boot/compressed/{acpi.c,efi.c}),
+> so theoretical upper limit is higher than it was set.
 >
+> Using 4KB pages is desirable for better memory protection granularity.
+> Approximately twice as much memory is required for those.
 >
+> Increase initial page table size to 64 4KB page tables.
 >
-> Best regards,
-> Krzysztof
+> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+> Tested-by: Peter Jones <pjones@redhat.com>
+> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+> ---
+>  arch/x86/include/asm/boot.h | 26 ++++++++++++++------------
+>  1 file changed, 14 insertions(+), 12 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/boot.h b/arch/x86/include/asm/boot.h
+> index 9191280d9ea3..024d972c248e 100644
+> --- a/arch/x86/include/asm/boot.h
+> +++ b/arch/x86/include/asm/boot.h
+> @@ -41,22 +41,24 @@
+>  # define BOOT_STACK_SIZE       0x4000
+>
+>  # define BOOT_INIT_PGT_SIZE    (6*4096)
+> -# ifdef CONFIG_RANDOMIZE_BASE
+>  /*
+>   * Assuming all cross the 512GB boundary:
+>   * 1 page for level4
+> - * (2+2)*4 pages for kernel, param, cmd_line, and randomized kernel
+> - * 2 pages for first 2M (video RAM: CONFIG_X86_VERBOSE_BOOTUP).
+> - * Total is 19 pages.
+> + * (3+3)*2 pages for param and cmd_line
+> + * (2+2+S)*2 pages for kernel and randomized kernel, where S is total number
+> + *     of sections of kernel. Explanation: 2+2 are upper level page tables.
+> + *     We can have only S unaligned parts of section: 1 at the end of the kernel
+> + *     and (S-1) at the section borders. The start address of the kernel is
+> + *     aligned, so an extra page table. There are at most S=6 sections in
+> + *     vmlinux ELF image.
+> + * 3 pages for first 2M (video RAM: CONFIG_X86_VERBOSE_BOOTUP).
+> + * Total is 36 pages.
+> + *
+> + * Some pages are also required for UEFI memory map and
+> + * ACPI table mappings, so we need to add extra space.
+> + * FIXME: Figure out exact amount of pages.
 
+So you are rounding up 36 to 64 to account for these pages, right?
+
+So we should either drop the FIXME and explain that this is fine, or
+fix it - we cannot merge it like this.
+
+Thanks,
+Ard.
+
+>   */
+> -#  ifdef CONFIG_X86_VERBOSE_BOOTUP
+> -#   define BOOT_PGT_SIZE       (19*4096)
+> -#  else /* !CONFIG_X86_VERBOSE_BOOTUP */
+> -#   define BOOT_PGT_SIZE       (17*4096)
+> -#  endif
+> -# else /* !CONFIG_RANDOMIZE_BASE */
+> -#  define BOOT_PGT_SIZE                BOOT_INIT_PGT_SIZE
+> -# endif
+> +# define BOOT_PGT_SIZE         (64*4096)
+>
+>  #else /* !CONFIG_X86_64 */
+>  # define BOOT_STACK_SIZE       0x1000
+> --
+> 2.37.4
+>
