@@ -2,513 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0126AFB83
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E7C6AFB80
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjCHAtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 19:49:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52370 "EHLO
+        id S229809AbjCHAtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 19:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjCHAti (ORCPT
+        with ESMTP id S229574AbjCHAtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 19:49:38 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748BA59E58
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 16:49:31 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3280n0Ja063406;
-        Tue, 7 Mar 2023 18:49:00 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678236540;
-        bh=X+tNoh0oC+nG72BSEFRagxkGxwdTIvVUNukCFitZJ1c=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=T37CCMfHLsjthIa4zC8Z7kGvFHen5bxChSft1oGfGbi4iVD3wEEMwxs8cFRiPf7wZ
-         BPXrFTa99tiLomqAvfDuYsTQSKnRDn0CwgnYntWGRrO2Y+xLYS1dVd3FFc1GY4tPma
-         EdIiHoYAtBJx1uQpNAfTyqDfAzJ1gGzIeTrY3wAU=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3280n0oV072971
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 7 Mar 2023 18:49:00 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 7
- Mar 2023 18:49:00 -0600
-Received: from DLEE101.ent.ti.com ([fe80::91ee:60bc:bfb7:851c]) by
- DLEE101.ent.ti.com ([fe80::91ee:60bc:bfb7:851c%18]) with mapi id
- 15.01.2507.016; Tue, 7 Mar 2023 18:49:00 -0600
-From:   "Ding, Shenghao" <shenghao-ding@ti.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "tiwai@suse.com" <tiwai@suse.com>, "Lu, Kevin" <kevin-lu@ti.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kevin Lu <luminlong@139.com>
-Subject: RE: [EXTERNAL] Re: [PATCH v3] ASoC: tas2781: Add tas2781 driver
-Thread-Topic: [EXTERNAL] Re: [PATCH v3] ASoC: tas2781: Add tas2781 driver
-Thread-Index: AQHZUTYuc/GK7xUd5EWhN/UMALSpRK7v7R+Q
-Date:   Wed, 8 Mar 2023 00:48:59 +0000
-Message-ID: <633e33992256406c8f72f46fc0128a3a@ti.com>
-References: <20230227153811.2395-1-luminlong@139.com>
- <5c1969de-eecc-47c6-9d66-4214a94c7841@sirena.org.uk>
-In-Reply-To: <5c1969de-eecc-47c6-9d66-4214a94c7841@sirena.org.uk>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.250.160.107]
-x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 7 Mar 2023 19:49:09 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9CAA6743
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 16:49:07 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id cf14so16583862qtb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 16:49:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1678236546;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=193Fp9FaW4Lx5XQ0M4vShmp2sHScOJBheVmqpM9NMSA=;
+        b=eYBe1fk8I8tUDS5f4dhjU2SfDtLcPQOfqdpymibJRJij8DSqX8lVk0BHPXDjWbJRen
+         tzcjVCY23GZT1ie1YkU1oOWSkQuljZy0Z5BUP7YQ1fVQVjhqLIIS3OhieVRvbQCv8dOn
+         ryLGgbu72uriu+0ouB28ZEpTuTLbNcowM8BbM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678236546;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=193Fp9FaW4Lx5XQ0M4vShmp2sHScOJBheVmqpM9NMSA=;
+        b=Pv3wRDmyQV9outcIPfzjoUDISz1Z+4/Lgk+O4nLx2RQhnIlxCI91KiF2FKXVGJZncL
+         1vHdhGo7LBAKM6fMq30vHVNMK5M5HGMQw792Gc9C9z9qhtym1VlBEclR0pz6tBSJcKQ+
+         mBUIPRuZ/2WXxujnFFK4oZ1yl0tgymtMo9lbupL3fvPBDBVyIPBXpraxGX111bJROCIV
+         Onfp6DUZ2EOLv/y7AP4jKnV4jIwpguWdhEYT2WKhFOe6ywSFRBS7rUb9HuhMwnEZ+hws
+         guh01cg0ZpHwIDvLSEsp19L2yeVWHjosSm4xeW4nJY9Ri/iU6YTW8nxjqTUoB+XOaJDa
+         NfZg==
+X-Gm-Message-State: AO0yUKXL4cLgIO+OcYLicviCzdmtZeMSiF/pqx2uv4iSmhUWDV1tOwNy
+        FmMCiMCWWR67javtZpBc5KYSC0Tx55TYJyY+AtA3zhQVHEQZ2KTkR7wepSD/Q5y1PHvD5MF3tXw
+        0ujjNp8i74fgxG4oKGh4dslOOk8Z5+/aHp/0GANaE/Ly49dJVhQ0agIEYbKbpHdbnqtcUAomOYA
+        CZC2HRe2aZjbFIKQ==
+X-Google-Smtp-Source: AK7set9AUK3NbkrkZMPnng80DrpD87lrzsTOuY9dqS6zFxckblGLzcfNj4qqiYp2KAh6BSF2fwKxCw==
+X-Received: by 2002:a05:622a:118b:b0:3bf:c266:fa6f with SMTP id m11-20020a05622a118b00b003bfc266fa6fmr25810625qtk.46.1678236546336;
+        Tue, 07 Mar 2023 16:49:06 -0800 (PST)
+Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id l5-20020ac87245000000b003b9a426d626sm10494400qtp.22.2023.03.07.16.49.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 Mar 2023 16:49:06 -0800 (PST)
+Subject: Re: [PATCH] leds: bcm63138: refer to ARCH_BCMBCA instead of
+ ARCH_BCM4908
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-leds@vger.kernel.org
+Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230307082936.16631-1-lukas.bulwahn@gmail.com>
+From:   William Zhang <william.zhang@broadcom.com>
+Message-ID: <326dd0c4-06a1-7dfb-db6e-05e87d37dabc@broadcom.com>
+Date:   Tue, 7 Mar 2023 16:49:04 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.4.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230307082936.16631-1-lukas.bulwahn@gmail.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000377d5d05f658e52c"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Brown
-Thanks for your comments. You will rework and upstream immediately.
-DT document has been already prepared, once the code has been upstream succ=
-essfully, DT document will be done soon.
+--000000000000377d5d05f658e52c
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-As to the comment on global mode, the mode is used for downloading the dsp =
-firmware in multiple devices cases, all the=20
-devices can share the same generic i2c address in order to download the fir=
-mware simultaneously to save downloading firmware time consumption.
-I will add the comment for this part in the code.
 
-As to the comment on page changing, this code only handles book changing, n=
-o extra code for page changing,=20
-all the page changings are handled automatically by the kernel system.
 
------Original Message-----
-From: Mark Brown <broonie@kernel.org>=20
-Sent: Wednesday, March 8, 2023 4:48 AM
-To: Kevin Lu <luminlong@139.com>
-Cc: lgirdwood@gmail.com; perex@perex.cz; pierre-louis.bossart@linux.intel.c=
-om; tiwai@suse.com; Lu, Kevin <kevin-lu@ti.com>; Ding, Shenghao <shenghao-d=
-ing@ti.com>; alsa-devel@alsa-project.org; linux-kernel@vger.kernel.org
-Subject: [EXTERNAL] Re: [PATCH v3] ASoC: tas2781: Add tas2781 driver
-
-On Mon, Feb 27, 2023 at 11:38:11PM +0800, Kevin Lu wrote:
-> Create tas2781 driver.
-
-Quite a few comments below, a lot of them are fairly simple stylistic ones =
-rather than substantial things but there are a few bigger things.
-A lot of the bigger comments are essentially that the driver is doing more =
-work than it needs to be and could either stop doing things that seem redun=
-dant or use generic functionality.
-
-The bulk of the code looks good though.
-
->=20
+On 03/07/2023 12:29 AM, Lukas Bulwahn wrote:
+> Commit dd5c672d7ca9 ("arm64: bcmbca: Merge ARCH_BCM4908 to ARCH_BCMBCA")
+> removes config ARCH_BCM4908 as config ARCH_BCMBCA has the same intent.
+> 
+> Probably due to concurrent development, commit a0ba692072d8 ("leds:
+> bcm63138: add support for BCM63138 controller") introduces 'LED Support
+> for Broadcom BCM63138 SoC' that depends on ARCH_BCM4908, but this use was
+> not visible during the config refactoring from the commit above. Hence,
+> these two changes create a reference to a non-existing config symbol.
+> 
+> Adjust the LEDS_BCM63138 definition to refer to ARCH_BCMBCA instead of
+> ARCH_BCM4908 to remove the reference to the non-existing config symbol
+> ARCH_BCM4908.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 > ---
-> Changes in v3:
->  - fixed issues reported-by: kernel test robot <lkp@intel.com>
->  - correct all the inconsistent indenting warnings
->  - correct uninitialized symbol 'pwr_state'
->  - correct unsigned 'val' is never less than zero
->  - correct 'tas_dev' could be null
->=20
-> Signed-off-by: Kevin Lu <luminlong@139.com>
-
-Your signoff needs to go before the ---, tooling will remove anything after=
- the --- but your signoff needs to stay.
-
->  snd-soc-tas2562-objs :=3D tas2562.o
->  snd-soc-tas2764-objs :=3D tas2764.o
->  snd-soc-tas2780-objs :=3D tas2780.o
-> +snd-soc-tas2781-objs :=3D	tas2781-i2c.o tas2781-dsp.o
->  # Mux
-
-Please keep the blank line in the file.
-
-> --- /dev/null
-> +++ b/sound/soc/codecs/tas2781-dsp.c
-> @@ -0,0 +1,2261 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * ALSA SoC Texas Instruments TAS2781 Audio Smart Amplifier
-> + *
-
-Please make the entire comment block a C++ one so things look more intentio=
-nal.
-
-> +static const unsigned char crc8_lookup_table[CRC8_TABLE_SIZE] =3D {
-> +	0x00, 0x4D, 0x9A, 0xD7, 0x79, 0x34, 0xE3, 0xAE,
-> +	0xF2, 0xBF, 0x68, 0x25, 0x8B, 0xC6, 0x11, 0x5C,
-
-Should the driver be using one of the crc8_populate_() functions here?
-
-> +	ret =3D check_yram(&crc_data, book, page, reg, len);
-> +	dev_info(tasdevice->dev,
-> +		"isYRAM: Bk 0x%02x, Pg 0x%02x, Rg 0x%02x\n",
-> +		book, page, reg);
-> +	dev_info(tasdevice->dev,
-> +		"isYRAM: crc_data.mnLen 0x%x, len 0x%x, nResult %d\n",
-> +		crc_data.len, len, ret);
-
-There's a lot of logging in this firmware load code which should at least b=
-e reduced to dbg level if not vdbg, it's pretty loud and it looks like at l=
-east some of it can be triggered after initial boot.
-
-> +/* max. length of the alsa mixer control name */
-> +#define MAX_CONTROL_NAME		(48)
-
-This should be coming from the ALSA headers.
-
-
-> +{
-> +	struct tasdevice_priv *tas_dev =3D
-> +		(struct tasdevice_priv *)pContext;
-
-The kernel doesn't gennerally use hungarian notation (I see a bunch of it i=
-n the driver, n_result and p_tasdevice for example), and if there's a need =
-to cast away from void that usually means something's gone wrong
-- it looks unneeded here so you can just remove the cast.
-
-> +	if (config_offset + 4 > (int)config_size) {
-> +		dev_err(tas_dev->dev,
-> +			"add config: Out of memory\n");
-
-This isn't OOM though?
-
-> +	cfg_info->blk_data =3D kcalloc(
-> +		cfg_info->nblocks, sizeof(struct tasdev_blk_data *),
-> +		GFP_KERNEL);
-> +	if (!cfg_info->blk_data) {
-> +		dev_err(tas_dev->dev,
-> +			"add config: blk_data alloc failed!\n");
-
-No need to log failures to allocate, the kernel is already pretty loud when=
- it runs out of memory.
-
-> +static int tas2781_digital_getvol(struct snd_kcontrol *kcontrol,
-> +       struct snd_ctl_elem_value *ucontrol)
-
-> +	/* Read the primary device as the whole */
-> +	ret =3D tasdevice_dev_read(tas_dev, 0, mc->reg, &val);
-> +	if (ret) {
-> +		dev_err(tas_dev->dev,
-> +		"%s, get digital vol error\n",
-> +		__func__);
-> +		goto out;
-
-Your regmap looked like it already had paging support so I'm not clear why =
-this is a custom control - can't you just use the standard ASoC helpers, th=
-e regmap paging support will work for paged register maps?
-
-> +	}
-> +	val =3D (val > mc->max) ? mc->max : val;
-> +	val =3D mc->invert ? mc->max - val : val;
-
-Please write normal conditional statements, they're easier to read than the=
- ternery opreator.
-
-> +static int tas2781_digital_putvol(struct snd_kcontrol *kcontrol,
-> +	struct snd_ctl_elem_value *ucontrol) {
-> +	struct snd_soc_component *codec
-> +		=3D snd_soc_kcontrol_component(kcontrol);
-> +	struct tasdevice_priv *tas_dev =3D
-> +		snd_soc_component_get_drvdata(codec);
-> +	struct soc_mixer_control *mc =3D
-> +		(struct soc_mixer_control *)kcontrol->private_value;
-> +	int val;
-> +	int i, ret =3D 0;
-
-Please run the mixer-test selftest on a card with this device, it'll tell y=
-ou that this function doesn't return 1 on value changes so doesn't generate=
- events for changes.  Similar issues with a lot of other custom controls.
-
-> +static const struct snd_kcontrol_new tas2781_snd_controls[] =3D {
-> +	SOC_SINGLE_RANGE_EXT_TLV("Amp Gain Volume", TAS2781_AMP_LEVEL,
-> +		1, 0, 20, 0, tas2781_amp_getvol,
-> +		tas2781_amp_putvol, amp_vol_tlv),
-> +	SOC_SINGLE_RANGE_EXT_TLV("Digital Volume Control", TAS2781_DVC_LVL,
-> +		0, 0, 200, 1, tas2781_digital_getvol,
-> +		tas2781_digital_putvol, dvc_tlv),
-
-Control names for volumes should end with Volume, see control-names.rst.
-
-> +static int tasdevice_info_programs(struct snd_kcontrol *kcontrol,
-> +			struct snd_ctl_elem_info *uinfo)
-> +{
-> +	struct snd_soc_component *codec
-> +		=3D snd_soc_kcontrol_component(kcontrol);
-> +	struct tasdevice_priv *p_tasdevice =3D
-> +		snd_soc_component_get_drvdata(codec);
-> +	struct tasdevice_fw *tas_fw =3D p_tasdevice->fmw;
-> +
-> +	uinfo->type =3D SNDRV_CTL_ELEM_TYPE_INTEGER;
-> +	/* Codec Lock Hold*/
-> +	mutex_lock(&p_tasdevice->codec_lock);
-> +	uinfo->count =3D 1;
-> +	uinfo->value.integer.min =3D 0;
-> +	uinfo->value.integer.max =3D (int)tas_fw->n_programs;
-> +	/* Codec Lock Release*/
-> +	mutex_unlock(&p_tasdevice->codec_lock);
-
-Why does this need a lock - what might be changing?  The casting is suspici=
-ous too.
-
-> +static void tasdevice_rca_ready(const struct firmware *fmw,
-> +	void *context)
-> +{
-
-> +	mutex_lock(&tas_dev->codec_lock);
-> +	rca =3D &(tas_dev->rcabin);
-> +	fw_hdr =3D &(rca->fw_hdr);
-> +	if (unlikely(!fmw) || unlikely(!fmw->data)) {
-
-If you're not in a *very* hot path it's seldom useful to annotate with
-likely() or unlikely().
-
-> +static void tasdevice_enable_irq(
-> +	struct tasdevice_priv *tas_dev, bool enable) {
-> +	if (enable) {
-> +		if (tas_dev->irq_info.is_irq_enable)
-> +			return;
-> +		if (gpio_is_valid(tas_dev->irq_info.irq_gpio))
-> +			enable_irq(tas_dev->irq_info.irq);
-> +		tas_dev->irq_info.is_irq_enable =3D true;
-
-The driver shouldn't need to care if the interrupt is implemented with some=
-thing that can also be a GPIO, and indeed I can't see anything that actuall=
-y looks at the GPIO other than these checks.  The check for double enalbes =
-also seems suspicious, I don't think it's needed but...
-
-> +	} else {
-> +		if (gpio_is_valid(tas_dev->irq_info.irq_gpio))
-> +			disable_irq_nosync(tas_dev->irq_info.irq);
-
-...it's certainly not matched in the disable path.  In general it looks lik=
-e this function is just redundant and could be replaced by
-enable_irq()/disable_irq() calls in the callers, though I'm not sure it's n=
-eeded at all.
-
-> +static void tasdevice_set_power_state(
-> +	struct tasdevice_priv *tas_dev, int state) {
-> +	switch (state) {
-> +	case 0:
-> +		schedule_delayed_work(&tas_dev->tuning_switch_wrk,
-> +			msecs_to_jiffies(20));
-> +		break;
-> +	default:
-> +		if (!(tas_dev->pstream || tas_dev->cstream)) {
-> +			if (tas_dev->irq_work_func)
-> +				tasdevice_enable_irq(tas_dev, false);
-> +			tasdevice_select_cfg_blk(tas_dev,
-> +				tas_dev->rcabin.profile_cfg_id,
-> +				TASDEVICE_BIN_BLK_PRE_SHUTDOWN);
-> +		}
-> +		break;
-> +	}
-
-It's really not clear what thisis supposed to do - what are the two power s=
-tates here?
-
-> +static int tasdevice_dapm_event(struct snd_soc_dapm_widget *w,
-> +			struct snd_kcontrol *kcontrol, int event) {
-> +	struct snd_soc_component *codec =3D snd_soc_dapm_to_component(w->dapm);
-> +	struct tasdevice_priv *tas_dev =3D snd_soc_component_get_drvdata(codec)=
-;
-> +	int stream;
-> +
-> +	/* Codec Lock Hold */
-> +	mutex_lock(&tas_dev->codec_lock);
-> +	stream =3D strcmp(w->name, "SPK") ? SNDRV_PCM_STREAM_PLAYBACK :
-> +		SNDRV_PCM_STREAM_CAPTURE;
-> +
-> +	switch (event) {
-> +	case SND_SOC_DAPM_POST_PMU:
-> +		dev_info(tas_dev->dev, "SND_SOC_DAPM_POST_PMU\n");
-
-dev_info() on DAPM events is going to be way too noisy, there's a lot of lo=
-gging in the core so you can probably just remove this.
-
-> +	case SND_SOC_DAPM_PRE_PMD:
-> +		dev_info(tas_dev->dev, "SND_SOC_DAPM_PRE_PMD\n");
-> +		/* stop DSP only when both playback and capture streams
-> +		 * are deactivated
-> +		 */
-> +		if (stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK)
-> +			tas_dev->pstream =3D 0;
-> +		else
-> +			tas_dev->cstream =3D 0;
-> +		if (tas_dev->pstream !=3D 0 || tas_dev->cstream !=3D 0)
-> +			goto out;
-
-It would probably be easier to have a supply widget that feeds both the ASI=
- and speaker widgets, that way DAPM will reference count for you and the dr=
-iver can just handle the event without these checks.
-
-> +static int tasdevice_hw_params(struct snd_pcm_substream *substream,
-> +	struct snd_pcm_hw_params *params, struct snd_soc_dai *dai) {
-> +	struct tasdevice_priv *tas_dev =3D snd_soc_dai_get_drvdata(dai);
-> +	unsigned int fsrate;
-> +	unsigned int slot_width;
-> +	int bclk_rate;
-> +	int rc =3D 0;
-> +
-> +	dev_info(tas_dev->dev, "%s: %s\n",
-> +		__func__, substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK ?
-> +		"Playback":"Capture");
-
-Again, too much logging.  The driver should be silent during normal operati=
-on - some logging on boot or error is fine but userspace shouldn't be able =
-to spam the logs and hide other information.
-
-> +static int tasdevice_set_dai_sysclk(struct snd_soc_dai *codec_dai,
-> +	int clk_id, unsigned int freq, int dir) {
-> +	struct tasdevice_priv *tas_dev =3D snd_soc_dai_get_drvdata(codec_dai);
-> +
-> +	dev_info(tas_dev->dev,
-> +		"%s: clk_id =3D %d, freq =3D %u, CLK direction %s\n",
-> +		__func__, clk_id, freq,
-> +		dir =3D=3D TASDEVICE_CLK_DIR_OUT ? "OUT":"IN");
-> +
-> +	return 0;
-> +}
-
-You can just remove this, it doesn't do anything except log.
-
-> +static void tasdevice_codec_remove(
-> +	struct snd_soc_component *codec)
-> +{
-
-Weird indentation here.
-
-> +static void irq_work_routine(struct work_struct *pWork) {
-> +	struct tasdevice_priv *tas_dev =3D
-> +		container_of(pWork, struct tasdevice_priv,
-> +		irq_info.irq_work.work);
-> +
-> +	mutex_lock(&tas_dev->codec_lock);
-> +	if (tas_dev->runtime_suspend) {
-> +		dev_info(tas_dev->dev, "%s, Runtime Suspended\n", __func__);
-> +		goto end;
-> +	}
-> +	/*Logical Layer IRQ function, return is ignored*/
-> +	if (tas_dev->irq_work_func)
-> +		tas_dev->irq_work_func(tas_dev);
-> +	else
-> +		dev_info(tas_dev->dev,
-> +			"%s, irq_work_func is NULL\n", __func__);
-> +end:
-> +	mutex_unlock(&tas_dev->codec_lock);
-> +}
-
-There is only one function that's ever assigned for the irq_work_func, just=
- inline it and don't bother with the pointer in the driver structure - that=
- should be a lot simpler.
-
-> +static void tas2781_irq_work_func(struct tasdevice_priv *tas_dev) {
-> +	int rc =3D 0;
-> +	unsigned int reg_val =3D 0, array_size =3D 0, i =3D 0, ndev =3D 0;
-> +	unsigned int int_reg_array[] =3D {
-> +		TAS2781_REG_INT_LTCH0,
-> +		TAS2781_REG_INT_LTCH1,
-> +		TAS2781_REG_INT_LTCH1_0,
-> +		TAS2781_REG_INT_LTCH2,
-> +		TAS2781_REG_INT_LTCH3,
-> +		TAS2781_REG_INT_LTCH4};
-> +
-> +	tasdevice_enable_irq(tas_dev, false);
-
-It needs to be a lot clearer what will reenable the interrupt - some commen=
-ts would help, I see there's some interlock with tuning_switch_routine() bu=
-t I'm not clear what that does...
-
-> +	array_size =3D ARRAY_SIZE(int_reg_array);
-> +
-> +	for (ndev =3D 0; ndev < tas_dev->ndev; ndev++) {
-> +		for (i =3D 0; i < array_size; i++) {
-> +			rc =3D tasdevice_dev_read(tas_dev,
-> +				ndev, int_reg_array[i], &reg_val);
-> +			if (!rc)
-> +				dev_info(tas_dev->dev,
-> +					"INT STATUS REG 0x%04x=3D0x%02x\n",
-> +					int_reg_array[i], reg_val);
-> +			else
-> +				dev_err(tas_dev->dev,
-> +					"Read Reg 0x%04x error(rc=3D%d)\n",
-> +					int_reg_array[i], rc);
-> +		}
-> +	}
-> +}
-
-...and this seems to just read the interrupt status registers and log the r=
-esults so do we even need to enable the interrupt?
-
-> +static int tasdevice_parse_dt(struct tasdevice_priv *tas_dev) {
-> +	struct device_node *np =3D tas_dev->dev->of_node;
-> +	int rc =3D 0, i =3D 0, ndev =3D 0;
-> +	unsigned int dev_addrs[max_chn];
-> +	struct i2c_client *client =3D (struct i2c_client *)tas_dev->client;
-
-If you're adding DT bindings you need to send a DT bindings document.
-
-> +static int tasdevice_change_chn_book(struct tasdevice_priv *tas_dev,
-> +	enum channel chn, int book)
-> +{
-
-As I said earlier the regmap uses ranges so I'm not clear why there's open =
-coding of page changing?
-
-> +static void tas2781_set_global_mode(struct tasdevice_priv *tas_dev) {
-> +	int i =3D 0;
-> +	int ret =3D 0;
-
-What's all this global mode stuff about?  It's not clear from the code.
-
-> +	mutex_init(&tas_dev->codec_lock);
-> +	ret =3D devm_snd_soc_register_component(tas_dev->dev,
-> +		&soc_codec_driver_tasdevice,
-> +		tasdevice_dai_driver, ARRAY_SIZE(tasdevice_dai_driver));
-> +	if (ret)
-> +		dev_err(tas_dev->dev, "%s: codec register error:0x%08x\n",
-> +			__func__, ret);
-> +
-> +	INIT_DELAYED_WORK(&tas_dev->irq_info.irq_work, irq_work_routine);
-> +	tas_dev->irq_info.is_irq_enable =3D false;
-
-Shouldn't this happen before we register with the core?
-
-> +static int tasdevice_pm_suspend(struct device *dev) {
-> +	struct tasdevice_priv *tas_dev =3D dev_get_drvdata(dev);
-> +
-> +	mutex_lock(&tas_dev->codec_lock);
-> +	tas_dev->runtime_suspend =3D true;
-> +
-> +	if (tas_dev->irq_work_func) {
-> +		if (delayed_work_pending(&tas_dev->irq_info.irq_work)) {
-> +			dev_dbg(tas_dev->dev, "cancel IRQ work\n");
-> +			cancel_delayed_work_sync(&tas_dev->irq_info.irq_work);
-> +		}
-> +	}
-
-Just cancelling the work unconditionally should do the right thing, though =
-given that there's no configuration done for the device it's unclear why we=
-'re implementing runtime suspend at all?
-
-> +static int tasdevice_i2c_probe(struct i2c_client *i2c,
-> +	const struct i2c_device_id *id)
-> +{
-> +	struct tasdevice_priv *tas_dev =3D NULL;
-> +	int ret =3D 0;
-> +
-> +	if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C)) {
-> +		dev_err(&i2c->dev,
-> +			"%s: I2C check failed\n", __func__);
-> +		ret =3D -ENODEV;
-> +		goto out;
-> +	}
-
-Why the functionality check?
+>   drivers/leds/blink/Kconfig | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/leds/blink/Kconfig b/drivers/leds/blink/Kconfig
+> index 945c84286a4e..bdcb7377cd4e 100644
+> --- a/drivers/leds/blink/Kconfig
+> +++ b/drivers/leds/blink/Kconfig
+> @@ -1,10 +1,10 @@
+>   config LEDS_BCM63138
+>   	tristate "LED Support for Broadcom BCM63138 SoC"
+>   	depends on LEDS_CLASS
+> -	depends on ARCH_BCM4908 || ARCH_BCM_5301X || BCM63XX || COMPILE_TEST
+> +	depends on ARCH_BCMBCA || ARCH_BCM_5301X || BCM63XX || COMPILE_TEST
+>   	depends on HAS_IOMEM
+>   	depends on OF
+> -	default ARCH_BCM4908
+> +	default ARCH_BCMBCA
+>   	help
+>   	  This option enables support for LED controller that is part of
+>   	  BCM63138 SoC. The same hardware block is known to be also used
+> 
+Acked-by: William Zhang <william.zhang@broadcom.com>
+
+--000000000000377d5d05f658e52c
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
+6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
+xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
+VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
+/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
+0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
+urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOjmaoGToXQP6fo1oPkyEBBLHamL
+AdaQU/AGaUZiNR99MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDMwODAwNDkwNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQCvCvh95gIHOOEVJlUoU2AoWGdyTdF2bPgkCx3aNE2OhxPT
+ZmVqQPQRKa/rHR5uPO5n676DWBop3NA71B2SQg7UNzxjumHUi/+5zMWesfeIlx466RAMV/VBCwRb
+GdQ6kXVnJFO2EmjPPmpOxpOP+MztR5fltXX3FtMg4ehm9Mtpu0V00EBytwx5Dus+V8XEzsP8xXku
+VpSAvIJPLN+I6HeDox4QqyjzfNnowaj/ZtaswlNd3xEPuWsjs0AROXO8Sq9sakXSp1KKG9SVWcuX
+6hct8zKprYufw5KlT2LmUr0BfL6iiL5oLHFxVZ0H+mBld3QtMKCovzRz6vC5QSBvPTlj
+--000000000000377d5d05f658e52c--
