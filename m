@@ -2,241 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE326B0B49
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D606B0B4F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:34:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbjCHOdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:33:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
+        id S231942AbjCHOeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:34:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231861AbjCHOdG (ORCPT
+        with ESMTP id S231483AbjCHOeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:33:06 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADC914200;
-        Wed,  8 Mar 2023 06:32:58 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pZuqX-0003Nq-2f;
-        Wed, 08 Mar 2023 15:32:50 +0100
-Date:   Wed, 8 Mar 2023 14:32:40 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Alexander Couzens <lynxis@fe80.eu>
-Subject: Re: [PATCH net-next v12 08/18] net: ethernet: mtk_eth_soc: fix
- 1000Base-X and 2500Base-X modes
-Message-ID: <ZAiciK5fElvLXYQ9@makrotopia.org>
-References: <cover.1678201958.git.daniel@makrotopia.org>
- <fd5c7ea79a7f84caac7d0b64b39fe5c4043edfa8.1678201958.git.daniel@makrotopia.org>
- <ZAhzDDjZ8+gxyo3V@shell.armlinux.org.uk>
- <ZAh7hA4JuJm1b2M6@makrotopia.org>
- <ZAiCh8wkdTBT+6Id@shell.armlinux.org.uk>
- <ZAiFOTRQI36nGo+w@makrotopia.org>
- <ZAiJqvzcUob2Aafq@shell.armlinux.org.uk>
- <20230308134642.cdxqw4lxtlgfsl4g@skbuf>
- <ZAiXvNT8EzHTmFPh@shell.armlinux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Wed, 8 Mar 2023 09:34:03 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C357302E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:34:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678286042; x=1709822042;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=J6UT+4U6p6Ko7Vs/oDsY22PQcBVmlx1BtyZSZFXQOko=;
+  b=SWY0F7tJ34w5lj7EEGxldlXHuWiTS4Eoktduuzb96+Dt9BCVi/iuWNtU
+   7wvvSYUkQEb+yt4GHUD3DdJrJD/iNBmBvYzmdKAtRnDJcB1OUqdOxMOTt
+   EJep2rRhqDD4F64c71I9nlOSKCGrZfNNfkws0AQ2YP/IzbXvUmMjgdyxb
+   xxs+YFO0aXEJZrCCDCIqeAuGfKyePmkjJB07jqD6dBP5uvpxLfa7S0yzq
+   vJFusGphsA00VYH7EwFnu8QxslL5clTqifpRBbcwTTeWks+6d5XSq44YG
+   A/EL2R8ZRWODXZ1lhCd/LmxxkElRCV3czhu2yRTNChrTSjLwECV7gm/r8
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="422434945"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="422434945"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 06:34:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="851108465"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="851108465"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2023 06:33:59 -0800
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 8 Mar 2023 06:33:58 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 8 Mar 2023 06:33:58 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.176)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Wed, 8 Mar 2023 06:33:58 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TTySfqeiUkBd45Wuz2gAHszzor8HGkgODGeUsFE8yRe+Bbt5jmo7NISiDnMNYSDxX5uposC7dobIb4/zqdkcakhDI9IkvaLmiB2FpTRGcZKrM94x5vgmaSkiAJBpR/IsCSCGMTFOy0aRoLImm9sREUDSWrDEHZxKcVNduqSaxUAmiB4ktGADZ37radFgQ1E+BvMMTiR3gKEYs55u0+Sf8X+Mh8tBVNtPtXB1TSonjX7UkDN2uPRxAVKAufY4behhVuvX4xc+Nc3DyrEQ11U/a7rcmwP8C7z0sEkk87+vWs6ClG7GqdjL8jPBE+P5VMvkhUghC7ADSGu3Yb+WRCz+rw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kay067V+lh/8glzxbpdOM/+9Dk/DyiHdkAy+lpHJjWc=;
+ b=gQJZs38A9ZkmL+rERixjWSiwunG4utDARyRDDcElUl01tyGeqRzbxE0e3ZUmKoXPQ8+Wq7wNlSeFQQKNUkuL+Um5NC86whx0MzoEB40gOj4MM/xFess6NJFijR7FDq5FRWQEEe5+vvs7fkchAD3SsS/8WMqq9Hejzs0T+r7BNerDBPpXWt8mBkl7nkz4yOznNP7F2PKqxMPY7Hjj+NBpZO5LJlHcfK15W5s4sltNhk2oT/acSTuR4HDdKnbYNT2mv9mpQCqk6njcnoMvHdW7lTOSWQkFpBH8/61TkEecUcQsOiZwXOeoNyliWV7T8MZa8ABHxi4h+i1azlYnDHkeHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com (2603:10b6:208:3c6::8)
+ by PH7PR11MB6977.namprd11.prod.outlook.com (2603:10b6:510:205::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Wed, 8 Mar
+ 2023 14:33:56 +0000
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::9bf2:9ab9:c6e0:1b2f]) by MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::9bf2:9ab9:c6e0:1b2f%4]) with mapi id 15.20.6156.023; Wed, 8 Mar 2023
+ 14:33:56 +0000
+Date:   Wed, 8 Mar 2023 22:33:36 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Zhang Qiao <zhangqiao22@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>, <mingo@redhat.com>,
+        <peterz@infradead.org>, <juri.lelli@redhat.com>,
+        <vincent.guittot@linaro.org>, <dietmar.eggemann@arm.com>,
+        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
+        <bristot@redhat.com>, <vschneid@redhat.com>, <rkagan@amazon.de>
+Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
+Message-ID: <ZAicwDeZ9/cxU8Eo@chenyu5-mobl1>
+References: <20230306132418.50389-1-zhangqiao22@huawei.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <ZAiXvNT8EzHTmFPh@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230306132418.50389-1-zhangqiao22@huawei.com>
+X-ClientProxiedBy: SG2PR04CA0157.apcprd04.prod.outlook.com (2603:1096:4::19)
+ To MN0PR11MB6206.namprd11.prod.outlook.com (2603:10b6:208:3c6::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6206:EE_|PH7PR11MB6977:EE_
+X-MS-Office365-Filtering-Correlation-Id: 216f701d-08a6-485f-f7d0-08db1fe225de
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vAX/a1DaJ/7+RX7a1I/KquulSC42tXssTFrEwd5EQKWanYfAM/I34oHWtqpkuCWhU892wkcI+6zNyRwixQokmKTgcumuRZCvZhWhGgh/c+vIciQmPpOGvr/r4DBGDjVyYh0iX+JWsJzhPA0onKpZLxa+zgt3FZvnqvYAc4jBH+gL6q952FPoJuHNT7zvQv4BT5TcOvqQeY6RpYqsjLz/JxJWGyqUucnwf0ObhJ1aPydZ2Rkpa65Sc7TTo1CYFrYMTuuza1rooSSyN5LkbaOpQriYDBstAM2//Qm/BVy03B8RKRNT33cOfWquXhBRtI9QpvmNN8sERQl8EzBh/WsKyOZTRzVflh+FxH8d1bOTtFYW20w0x4tjzFKLaiM42/X7TXI3oq5DnVWd1keHgJdWwzI2epORlUV5Su9SnyyOFj9R+D+ld2v+osomZhfkd+i8oXbLkINSwvQkcqSot2eWKBOR0edAldszUCTFl9p6N5zJW0iHAjHf0uLIPN8VV+CKjtbc6tQ4X9egfFpZkJpONUokelD8KvYrKLZsaJZ5cexH29LDJRo3f7AG/8uY+vUKha0UzVJ7joDBwd5wnLFHHDEVcxbhamZtKdJb5H9hMADxkWnG45yHy9orivn4UKabxTh3SXpgaF3ftP7xHkZYyA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6206.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(136003)(396003)(39860400002)(376002)(366004)(346002)(451199018)(9686003)(316002)(38100700002)(86362001)(6512007)(6506007)(82960400001)(53546011)(83380400001)(33716001)(186003)(26005)(5660300002)(8936002)(6486002)(4326008)(478600001)(6666004)(7416002)(41300700001)(66476007)(2906002)(66556008)(66946007)(6916009)(8676002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hGiOEIhHN/WixhhgSs29kU6yIH0NEMRWQuXJKrYPiioFrdF9OgsOp1f6SPwl?=
+ =?us-ascii?Q?t+XPydSeEW1lNHxo8QvQK9lf4UwEkWMyEZE4BBUgcyMPbX3xifu7ULMeOJ2j?=
+ =?us-ascii?Q?XosJPQ99rVApG7Fo5AtmEa/cFSNfEJzrufu6ocxBaIP1NB1ggpsvtSBpHilU?=
+ =?us-ascii?Q?ajUe3faZVMAKmeGniWUqOo/9734rA2iLj1GnpWH/SnXVA8W1gnT/Z1kLQLhw?=
+ =?us-ascii?Q?YrSFxS953nTyBk0KExRuE9vIfMQdhl55iNs9ISO4rQhC40VIzPeBUl5t4KMK?=
+ =?us-ascii?Q?xPTYbmai1i4kN8l3ONJdW5iKdI2wmqxqdp9wt5aDCnSlTRoEqC0IV1G/xRSR?=
+ =?us-ascii?Q?bF+Q18HGQad2fCMlQ/IKJbahSQ89EUhQjZHjbu0EwIVDdRK+FBSOCQaPD3Gh?=
+ =?us-ascii?Q?wPyoKK89BMTLakTlC8zqry7hAQ7NC3913+RrNAw2utx+vaqbI4EIxtKbn4vy?=
+ =?us-ascii?Q?b3hVxi1TEUjq/rAVBTfS6d3x63lCnIse0VIwPcCCzse1KalWBpH91MWvazhc?=
+ =?us-ascii?Q?DS8oJDHjLGyLB4VoFRIdKkWIWDYB8Nlm840bePdMdG7w/+auJbyVIOZyzLZ0?=
+ =?us-ascii?Q?l59j3voBAzeODDgNu2TnSCOymVpQKs+1Dkc99GThvJSJkLes3NpD7Tiz1o/H?=
+ =?us-ascii?Q?SlbaGsug7wjc6QUZc8DhG5nNZR4RWZafKr6hIsqQHrOFBpfX6bRzQbkLLOSD?=
+ =?us-ascii?Q?ZZL5HdZ6ecyjO2/ZIpB48/ol2heIed9rS83k8hRib7xVjS2AOefhBOv2tZsr?=
+ =?us-ascii?Q?gdOPPFjp4AAhsln3TcsPTJ7L1eYhj9h67R8jmYmpDGlOTUWGmyZ+fWcd54va?=
+ =?us-ascii?Q?vjmkEm1wF5Dr8y87+Zhy5VVz/x2if3KhE4CAqKgzUDr9vIH6B/NcfWq7cuBF?=
+ =?us-ascii?Q?XNjSGoH1xRFjqC8ZIymMsuvPPhZg1xdrMI7uD+yg6uPmj9az7PsEeTzNtzsb?=
+ =?us-ascii?Q?PKC+IjWnN51GEhxZpQPoLesCnzx8RrWhGXH13HN16uAKehUTsfzduLC6T4fR?=
+ =?us-ascii?Q?7CjT5b0be7FNEO13apyWFmbB8jzBQrJLjgG3MmC7Vs25H6LIBvSHX3AB4oOd?=
+ =?us-ascii?Q?z5Z2fzZs+xTO2fPhznxkDzKwcc2SUKXhodhNVjdrD2GNwyrIEgPOcgjnoTcF?=
+ =?us-ascii?Q?OjlpkMUsOECVq3Pmzst3Cn7zi56qbKX89qilIqX+nSomKi7Ys2Ljkl+dH0L7?=
+ =?us-ascii?Q?Y83uo25PB8zejd9boIIP5h3w522ZzWYQlqJuiGLSBu/1gWjLJyfoMsif9XGK?=
+ =?us-ascii?Q?fAZuThx/bXQvBZyqf1JG3idPeF3Roo/mJroU/fK6CLxYE4POn//rqL/T+4/G?=
+ =?us-ascii?Q?YbYRvSaZOu7ARQ3q/HG2Tgwq+fGqgXPlJBvIKOXg8sOW/0O8CEB2pjBwRSbB?=
+ =?us-ascii?Q?zJudJ5S7vHoIMa63VtQJsq9DeSP8mQPjzVjxdd6Dl2dF0EDVhGU1XbmTTmIq?=
+ =?us-ascii?Q?77TldVr0xZuQ0pAPAxav2Ju98iwjPmvULo2TTYppOCT6jxdc0D1nlJGMquhX?=
+ =?us-ascii?Q?7DcTesSROR8y8SbdYGPHTVqTrnv64DCu1sanvc7/VHjBcmdYDq+BvN0i0URh?=
+ =?us-ascii?Q?0zMW6cDV2PfBXn2Uqp882T2qTs3Tj7UWNwQ13OMD?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 216f701d-08a6-485f-f7d0-08db1fe225de
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6206.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 14:33:56.5402
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ussmvGuugxj8Bn3UkH4HVJMiL3o6AMEIaim7e/6tg8S4Q0PrS0vlx/bSB/EOPn4aKxFmKYXIj84zMlFSLCjI3A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6977
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 01:12:10PM +0000, Russell King (Oracle) wrote:
-> On Wed, Mar 08, 2023 at 12:53:13PM +0000, Daniel Golle wrote:
-> > On Wed, Mar 08, 2023 at 12:41:43PM +0000, Russell King (Oracle) wrote:
-> > > On Wed, Mar 08, 2023 at 12:11:48PM +0000, Daniel Golle wrote:
-> > > > On Wed, Mar 08, 2023 at 11:35:40AM +0000, Russell King (Oracle) wrote:
-> > > > > On Tue, Mar 07, 2023 at 03:53:58PM +0000, Daniel Golle wrote:
-> > > > > > After conversion to phylink_pcs the 1000Base-X and 2500Base-X modes
-> > > > > > would work only after `ethtool -s eth1 autoneg off`.
-> > > > > > As ethtool autoneg and the ETHTOOL_LINK_MODE_Autoneg_BIT is supposed
-> > > > > > to control auto-negotiation on the external interface it doesn't make
-> > > > > > much sense to use it to control on-board SGMII auto-negotiation between
-> > > > > > MAC and PHY.
-> > > > > > Set correct values to really only enable SGMII auto-negotiation when
-> > > > > > actually operating in SGMII mode. For 1000Base-X and 2500Base-X mode,
-> > > > > > enable remote-fault detection only if in-band-status is enabled.
-> > > > > > This fixes using 1000Base-X and 2500Base-X SFPs on the BananaPi R3
-> > > > > > board and also makes it possible to use interface-mode-switching PHYs
-> > > > > > operating in either SGMII mode for 10M/100M/1000M or in 2500Base-X for
-> > > > > > 2500M mode on other boards.
-> > > > > > 
-> > > > > > Fixes: 14a44ab0330d ("net: mtk_eth_soc: partially convert to phylink_pcs")
-> > > > > > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> > > > > 
-> > > > > NAK.
-> > > > > 
-> > > > > There are PHYs out there which operate in SGMII mode but do not
-> > > > > exchange the SGMII 16-bit configuration word. The code implemented
-> > > > > here by me was explicitly to allow such a configuration to work,
-> > > > > which is defined as:
-> > > > > 
-> > > > > 	SGMII *without* mode == inband
-> > > > > 
-> > > > > An example of this is the Broadcom 84881 PHY which can be found on
-> > > > > SFP modules.
-> > > > 
-> > > > I also have multiple such 1000Base-T SFP modules here (finisar, AJYA),
-> > > > and this change doesn't touch the codepaths relevant for those. They
-> > > > are operating in SGMII mode, they have always been working fine.
-> > > > 
-> > > > What I'm trying to fix here is 1000Base-X and 2500Base-X mode which
-> > > > has been broken by introducing ETHTOOL_LINK_MODE_Autoneg_BIT as the
-> > > > deciding factor for in-band AN here.
-> > > 
-> > > ... which is correct.
-> > > 
-> > > > Can you explain why ETHTOOL_LINK_MODE_Autoneg_BIT was used there in
-> > > > first place? Is my understanding of this bit controlling autoneg on the
-> > > > *external* interface rather than on the *system-side* interface wrong?
-> > > 
-> > > Think about what 1000BASE-X is for. It's not really for internal links,
-> > > it's intended by IEEE 802.3 to be the 1G *media* side protocol for
-> > > 1000BASE-SX, 1000BASE-LX, 1000BASE-CX etc links.
-> > > 
-> > > Therefore, when being used in that case, one may wish to disable
-> > > autoneg over the fibre link. Hence, turning off autoneg via ethtool
-> > > *should* turn off autoneg over the fibre link. So, using
-> > > ETHTOOL_LINK_MODE_Autoneg_BIT to gate 802.3z autonegotiation the
-> > > correct thing to do.
-> > > 
-> > > If we have a PHY using 1000BASE-X, then it is at odds with the
-> > > primary purpose of this protocol, especially with it comes to AN.
-> > > This is why phylink used to refuse to accept PHYs when using 802.3z
-> > > mode, but Marek wanted this to work, so relaxed the checks
-> > > preventing such a setup working.
-> > 
-> > Sadly 2500Base-X is very commonly used to connect 2500Base-T-capable
-> > PHYs or SFP modules. I also got an ATS branded 1000M/100M/10M copper
-> > SFP module which uses 1000Base-X as system-side interface, independently
-> > of the speed of the link partner on the TP interface.
-> > All of them do not work with inband-AN enabled and a link only comes
-> > up after `ethtool -s eth1 autoneg off` in the current implementation,
-> > while previously they were working just fine.
-> > 
-> > I understand that there isn't really a good solution for 1000Base-X as
-> > thanks to you I now understand that SerDes autoneg just transparently
-> > ends up being autoneg on a fiber link.
-> > 
-> > 2500Base-X, however, is hardly used for fiber links, but rather mostly
-> > for 2500Base-T PHYs and SFP module as well as xPON SFPs. Maybe we could
-> > at least have in-band AN disabled by default for those to get them
-> > working without requiring the user to carry out ethtool settings?
+On 2023-03-06 at 21:24:18 +0800, Zhang Qiao wrote:
+> Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of
+> entity being placed") fix an overflowing bug, but ignore
+> a case that se->exec_start is reset after a migration.
 > 
-> We could _possibly_ make 2500base-X ignore the autoneg bit, but in
-> order to do that I would want to make other changes, because this
-> is getting absolutely stupid to have these decisions being made in
-> each and every PCS - and have each PCS author implementing different
-> decision making in their PCS driver.
+> For fixing this case, we reset the vruntime of a long
+> sleeping task in migrate_task_rq_fair().
 > 
-> The problem that gives is it makes phylink maintenance in hard,
-> because it becomes impossible to predict what the effect of any
-> change is.
+> Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
+> Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
+> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
+> ---
 > 
-> It also means that plugging the same SFP module into different
-> hardware will give different results (maybe it works, maybe it
-> doesn't.)
+> v1 -> v2:
+> - fix some typos and update comments
+> - reformat the patch
 > 
-> So, what I would want to do is to move the decision about whether
-> the PCS should enable in-band into the phylink core code instead
-> of these random decisions being made in each PCS.
+> ---
+>  kernel/sched/fair.c | 76 ++++++++++++++++++++++++++++++++-------------
+>  1 file changed, 55 insertions(+), 21 deletions(-)
 > 
-> At that point, we can then make the decision about whether the
-> ethtool autoneg bit should affect whether the PCS uses inband
-> depending on whether the PCS is effectively the media facing
-> entity, or whether there is a PHY attached - and if there is a PHY
-> attached, ask the PHY whether it will be using in-band or not.
-> 
-> This also would give a way to ensure that all PCS adopt the same
-> behaviour.
-> 
-> Does that sound a reasonable approach?
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 7a1b1f855b96..74c9918ffe76 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4648,11 +4648,45 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
+>  #endif
+>  }
+>  
+> +static inline bool entity_is_long_sleep(struct sched_entity *se)
+> +{
+> +	struct cfs_rq *cfs_rq;
+> +	u64 sleep_time;
+> +
+> +	if (se->exec_start == 0)
+> +		return false;
+> +
+Just 2 cents, can we add some comments for above to
+mention that, because the se is a migrated one, and we
+have taken care of its vruntime during migration,
+so no need to further massage the vruntime to cfs_rq->min_vruntime.
 
-In general it sound reasonable. We may need more SFP qurik bits to
-indicate presence of a PHY on SFP modules which do not expose that
-PHY via i2c-mdio or otherwise let the host know about it's presence.
-For my TP-LINK TL-SM410U 2500Base-T SFP this unfortunately seems to
-be the case, and I assume it's actually like that for most
-2500Base-T as well as xPON SFPs... (xPON SFPs are usually managed
-via high-level protocols, even Web-UI is common there. They don't
-tell you much about them via I2C, I suppose to get them to work in
-as many SFP host devices as possible without any software changes).
-
-FYI:
-TP-LINK TL-SM410U 2500Base-T module:
-
-sfp EE: 00000000: 03 04 07 00 00 00 00 00 00 40 00 01 1f 00 00 00  .........@......
-sfp EE: 00000010: 00 00 00 00 54 50 2d 4c 49 4e 4b 20 20 20 20 20  ....TP-LINK     
-sfp EE: 00000020: 20 20 20 20 00 30 b5 c2 54 4c 2d 53 4d 34 31 30      .0..TL-SM410
-sfp EE: 00000030: 55 20 20 20 20 20 20 20 32 2e 30 20 00 00 00 1b  U       2.0 ....
-sfp EE: 00000040: 00 08 01 00 80 ff ff ff 40 3d f0 0d c0 ff ff ff  ........@=......
-sfp EE: 00000050: c8 39 7a 08 c0 ff ff ff 50 3d f0 0d c0 ff ff ff  .9z.....P=......
-sfp sfp2: module TP-LINK          TL-SM410U        rev 2.0  sn 12260M4001782    dc 220622  
-
-
-And this is the ATS SFP-GE-T 10/100/1000M copper module doing
-rate-adaptation to 1000Base-X:
-
-sfp sfp1: EEPROM extended structure checksum failure: 0xb0 != 0xaf
-sfp EE: 00000000: 03 04 07 00 00 00 02 12 00 01 01 01 0c 00 03 00  ................
-sfp EE: 00000010: 00 00 00 00 4f 45 4d 20 20 20 20 20 20 20 20 20  ....OEM         
-sfp EE: 00000020: 20 20 20 20 00 00 90 65 53 46 50 2d 47 45 2d 54      ...eSFP-GE-T
-sfp EE: 00000030: 20 20 20 20 00 00 00 00 43 20 20 20 00 00 00 f0      ....C   ....
-sfp EE: 00000040: 00 12 00 00 32 31 30 37 31 30 41 30 30 31 32 37  ....210710A00127
-sfp EE: 00000050: 33 39 00 00 32 31 30 37 31 30 20 20 60 00 01 af  39..210710  `...
-sfp sfp1: module OEM              SFP-GE-T     rev C    sn  dc 
-
-That one already needs quirks to even work at all as TX-FAULT is not
-reported properly by the module, see
-
-https://github.com/dangowrt/linux/commit/2c694bd494583f08858fabca97cfdc79de8ba089
-
-> 
-> Strangely, I already have some patches along those lines in my
-> net-queue branch. See:
-> 
-> net: phylink: add helpers for decoding mode
-> net: use phylink_mode_*() helpers
-> net: phylink: split PCS in-band from inband mode
-> 
-> It's nowhere near finished though, it was just an idea back in
-> 2021 when the problem of getting rid of differing PCS behaviours
-> was on my mind.
-
-I'll take a look and let you know.
-
-For this series, I will post v13 without the two patches fixing
-????Base-X modes tomorrow, waiting for other comments on the current
-post of the series up to then.
-
+thanks,
+Chenyu
