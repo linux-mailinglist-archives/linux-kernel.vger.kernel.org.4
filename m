@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7A06AFD11
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9500D6AFD16
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjCHCvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 21:51:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
+        id S229827AbjCHCyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 21:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjCHCvf (ORCPT
+        with ESMTP id S229579AbjCHCyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 21:51:35 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8940BAA260
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 18:51:29 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id d7so16809727qtr.12
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 18:51:29 -0800 (PST)
+        Tue, 7 Mar 2023 21:54:10 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0665C24491;
+        Tue,  7 Mar 2023 18:54:09 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id x3so60265413edb.10;
+        Tue, 07 Mar 2023 18:54:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678243888;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mBTA60cZTqBtyoITaMc+SEMUbPVKoktbGsvzyY/a5wM=;
-        b=NY3kdFK7QkdkNKWh86qCYTK9vfy3kWbbtMKSHYnaciD6E0uEx7PPj325j++QD8Hs2+
-         GRa1BuQohNmdhJLM0fwxA9g3bzrchyRBuNXWMLcwQYMNNjFFeMA1tXFC48Jwe7q7yOAw
-         8omiQWLFqa5zUlyEPe+bb3MQcTwQIx9cR1wbZN8xbp5GBNvL9WVSCJsAwtbrrz/Vkww4
-         NXdQHipXj9ZPxznRhpIEgUl52BYwCrrHIxkG8N3mQTb5Ozgo6abLCkxwdi86NjjkW4el
-         viZi0CS/VBJVW3uE+t/p+N0WZKvsOM+H9Rk0RW+O2XKHiKum3Jd7g0V/z61GV2ADcbn+
-         Mx5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678243888;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1678244047;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mBTA60cZTqBtyoITaMc+SEMUbPVKoktbGsvzyY/a5wM=;
-        b=fWABImKChi2yDX45ecNOnqryOngYPW/OsMJ0vZLlo7SVYU47VM5XwoQAdujkmsOeCO
-         /6T45M8/i2lGxcgDuj5ejpb3cfsdiC1IRyMne3t1d4B+RHUtLkA52gSCLNKGruCsi9aq
-         Vkrzq+hzsTWPcvn2ersqTF7I9quOMx+VIrcFnzDwRtTvFG9APlSsC+uczmUcVjQDMhse
-         5pzSPSK8Ku5mhGLqv9H5NnwdtWVW3yQTLcBwrjyNnFGtrhm+zJD7Pxqf9picV1+PLyPr
-         TJHpyesoyiBjuz/5kxUuQhzZ++xjaxeoSTBY7etfO+DW6wrxu7evVlixMFziguAw1Snk
-         /xrA==
-X-Gm-Message-State: AO0yUKWW/CTB4CxJnoIGkPvEP+DKD8HGa3F+vgCc0bfLFEOfFE9dZDMV
-        QAjaxuF4XHzDo03EyswSgsfSZw==
-X-Google-Smtp-Source: AK7set8aR0gyxqI97lIeS6tVAboTuImsID4lv+BvmEQEvfVLjMdwKuNvfLGJ/1alx2KwhzvRMazvSA==
-X-Received: by 2002:a05:622a:1a2a:b0:3bf:b8ae:6ece with SMTP id f42-20020a05622a1a2a00b003bfb8ae6ecemr29496646qtb.10.1678243888643;
-        Tue, 07 Mar 2023 18:51:28 -0800 (PST)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id r13-20020a05622a034d00b0039cc0fbdb61sm11244768qtw.53.2023.03.07.18.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 18:51:28 -0800 (PST)
-Date:   Tue, 7 Mar 2023 21:51:26 -0500
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        broonie@kernel.org, techsupport@winsystems.com,
-        Paul Demetrotion <pdemetrotion@winsystems.com>
-Subject: Re: [PATCH v4 3/3] gpio: ws16c48: Migrate to the regmap API
-Message-ID: <ZAf4LudZkYLsWVWh@fedora>
-References: <cover.1678106722.git.william.gray@linaro.org>
- <4b6cd42426521808962d68a44952b95818fc5daf.1678106722.git.william.gray@linaro.org>
- <ZAX2k9gW1AA88T/P@smile.fi.intel.com>
+        bh=BiXxl4yublkr4NofbHFzE7KSc7LE/+7BUAxLqu/b6HI=;
+        b=SPCuiHS3/Cul4e+pzd0NFK5eBb2FYG0wBr+VS7XcHRFkTO/vVwlrrjV2oMJYSvb9l7
+         zr4TIdp8Ne3A11VLT0cvgADcNaCOw5zvwG2xIEt7glmtRTFUnSOP9sNJ/pNw2yD9KxYZ
+         64IVBObFGcwtiaBHcQjkF4HY4Z9CJq0NQC9kqD+iicJc8EOKCLElUWY1pBKw0R5TLAQe
+         oUl18Ce0Vxg1ZRYuqBAeDpNYyboIh5xXexqAjAhAEQaCwgUQdau32bW9Z3sI1LhsAYQy
+         GH43rBnwKeYLFlEdZwPCSIeyo7UpN1uNfFR7sruaKCWqBdbwPJSHc7QNkRr3Q+45uT91
+         1cEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678244047;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BiXxl4yublkr4NofbHFzE7KSc7LE/+7BUAxLqu/b6HI=;
+        b=2Ij1dN7828XAEjmhrUKkbSOb408MYP+kUxNirWxgmlh8p5CvoOlfvBv/pgOrltFvVi
+         mrBr2cSwGLkCvR7R5Zkn/iyWVGCoaZexpe/XX/GaJ9IwGPUd/+mN0AoR29SPcCh8sv9U
+         P3xS9vJ6m5oOCGB3HkmdnhtIa+1b6E/Snwr5zrf0HCdv1WuLIqc0pMcbUJZm89kUy+op
+         K1ziXUpUp3VQqqxTaTkMXp1FeRn+xb1C13ueZHDpOjmjaiu2hHzfZX9kj1uwv8ewzCNR
+         /cRkbBlXGG3j5+sYI3zUCcSeO95MhV02aou0MVN1ntaM6ya9Hu+Vw8MLFZ5TQBSucauL
+         gJfw==
+X-Gm-Message-State: AO0yUKU56TKtPMaabYZl3xmDR+Mf2389RPOmHY9Gpe1rxh7gJGmAGAiv
+        rpHBop59namxl1kILuS80LXtiM5UMZHNcxyD63U=
+X-Google-Smtp-Source: AK7set+EaCmlBw9yTmg007/wl/oizsGLSx3NxukJsTKz417BW8rt7+ijWCCigRN2ZGOwhcIjTS9lK7t5j3DiuUok61Y=
+X-Received: by 2002:a17:906:498e:b0:901:e556:6e23 with SMTP id
+ p14-20020a170906498e00b00901e5566e23mr8318026eju.0.1678244047392; Tue, 07 Mar
+ 2023 18:54:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Mi/wX9MNCaaYw2/s"
-Content-Disposition: inline
-In-Reply-To: <ZAX2k9gW1AA88T/P@smile.fi.intel.com>
+References: <20230302125215.214014-1-keguang.zhang@gmail.com>
+ <20230302125215.214014-2-keguang.zhang@gmail.com> <CAMRc=Me=Yrr5BuRaMd4r91URzmdYHWUvVGvLL9YFuZPaV0WYFA@mail.gmail.com>
+ <CAJhJPsVf8EvFc9N8eMtc8Qu2BhODv7PzZm9C5ePR+GdTFiAY1w@mail.gmail.com> <CAMRc=Me3Lnf0W=Y0oMkUGJ59rVCRb+qGq2Eb3vqRZm5gQUwOxQ@mail.gmail.com>
+In-Reply-To: <CAMRc=Me3Lnf0W=Y0oMkUGJ59rVCRb+qGq2Eb3vqRZm5gQUwOxQ@mail.gmail.com>
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+Date:   Wed, 8 Mar 2023 10:53:50 +0800
+Message-ID: <CAJhJPsX1PRN_KKVMXNaEbPKfAc+PKbyir07pmkvLFVVUBcK=Mg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] gpio: loongson1: Convert to SPDX identifier
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,56 +74,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 8, 2023 at 12:49=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl>=
+ wrote:
+>
+> On Tue, Mar 7, 2023 at 3:25=E2=80=AFAM Keguang Zhang <keguang.zhang@gmail=
+.com> wrote:
+> >
+> > On Mon, Mar 6, 2023 at 5:29=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.=
+pl> wrote:
+> > >
+> > > On Thu, Mar 2, 2023 at 1:52=E2=80=AFPM Keguang Zhang <keguang.zhang@g=
+mail.com> wrote:
+> > > >
+> > > > Use SPDX-License-Identifier instead of the license text and
+> > > > update the author information.
+> > > >
+> > > > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > > > ---
+> > > > V1 -> V2: Keep GPLv2, just convert to SPDX identifier
+> > > > ---
+> > > >  drivers/gpio/gpio-loongson1.c | 9 +++------
+> > > >  1 file changed, 3 insertions(+), 6 deletions(-)
+> > > >
+> > > > diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loon=
+gson1.c
+> > > > index 5d90b3bc5a25..8862c9ea0d41 100644
+> > > > --- a/drivers/gpio/gpio-loongson1.c
+> > > > +++ b/drivers/gpio/gpio-loongson1.c
+> > > > @@ -1,11 +1,8 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > >  /*
+> > > >   * GPIO Driver for Loongson 1 SoC
+> > > >   *
+> > > > - * Copyright (C) 2015-2016 Zhang, Keguang <keguang.zhang@gmail.com=
+>
+> > > > - *
+> > > > - * This file is licensed under the terms of the GNU General Public
+> > > > - * License version 2. This program is licensed "as is" without any
+> > > > - * warranty of any kind, whether express or implied.
+> > > > + * Copyright (C) 2015-2023 Keguang Zhang <keguang.zhang@gmail.com>
+> > > >   */
+> > > >
+> > > >  #include <linux/module.h>
+> > > > @@ -90,6 +87,6 @@ static struct platform_driver ls1x_gpio_driver =
+=3D {
+> > > >
+> > > >  module_platform_driver(ls1x_gpio_driver);
+> > > >
+> > > > -MODULE_AUTHOR("Kelvin Cheung <keguang.zhang@gmail.com>");
+> > >
+> > > Why are you removing credits of the old author?
+> > Kelvin Cheung and Keguang Zhang are the same person.
+> > This change is to keep pace with the related entry of MAINTAINERS.
+> >
+>
+> Even so - how could I have possibly known this? Please put it into the
+> commit message, it's crucial information for this change.
+>
+Sure. I will amend the commit message.
+In addition, should I update this patch only? Or the whole patch series?
 
---Mi/wX9MNCaaYw2/s
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Bart
 
-On Mon, Mar 06, 2023 at 04:20:03PM +0200, Andy Shevchenko wrote:
-> On Mon, Mar 06, 2023 at 07:59:53AM -0500, William Breathitt Gray wrote:
->=20
-> ...
->=20
-> > -	raw_spinlock_t lock;
-> > +	spinlock_t lock;
->=20
-> This is a regression.
-> That said, do we need a support of raw spin locks in the regmap IRQ?
 
-So this code has a similar need as the gpio-pcie-idio-24 patch: guard
-registers between handle_mask_sync() and set_type_config(); however, now
-we also need to protect registers in regmap_irq_thread(). We can't use a
-mutex here because regmap_irq_thread() is executed in an interrupt
-context so we cannot sleep.
 
-This might be a mistake in my understanding: I chose spinlock_t here
-because I believed it to map out to a raw_spinlock_t anyway underneath,
-whereas on RT kernels it would map out to whatever the equivalent is. I
-suspect this is not actually the case. Would using raw_spinlock_t
-explicitly be the correct way to go for this particular case?
+--=20
+Best regards,
 
-> > +	u8 irq_mask[WS16C48_NUM_IRQS / WS16C48_NGPIO_PER_REG];
->=20
-> Can this be a bitmap? Or is it too over engineered with it?
-
-I also considered a bitmap at first, but I believe it adds an
-unnecessary abstraction in this particular case: irq_mask is just a
-buffer to hold the previous mask_buf state to check if it's changed when
-ws16c48_handle_mask_sync() is called. Since all we do with it is save
-the mask_buf directly, using the bitmap API seems like overkill.
-
-William Breathitt Gray
-
---Mi/wX9MNCaaYw2/s
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZAf4LgAKCRC1SFbKvhIj
-K1BpAP9hFKmskIE63OocEoCF07/hFHcHLdTOgP38UFv3hsndRgD/WPrfTJ+zn4gQ
-vWqp5iK5vJbkyAfUBmKpHHsaXIRTBQo=
-=KG62
------END PGP SIGNATURE-----
-
---Mi/wX9MNCaaYw2/s--
+Kelvin Cheung
