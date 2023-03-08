@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7516B023F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A02E6B0245
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbjCHJCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 04:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
+        id S229971AbjCHJEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 04:04:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbjCHJCe (ORCPT
+        with ESMTP id S230051AbjCHJEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 04:02:34 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094B596630;
-        Wed,  8 Mar 2023 01:02:33 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id ay14so59058960edb.11;
-        Wed, 08 Mar 2023 01:02:32 -0800 (PST)
+        Wed, 8 Mar 2023 04:04:23 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22813585;
+        Wed,  8 Mar 2023 01:03:39 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id ce8-20020a17090aff0800b0023a61cff2c6so3400779pjb.0;
+        Wed, 08 Mar 2023 01:03:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678266151;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TEBnaA7Pocw3dv+NsTA6Pe6Z7NrAaUzWWBCKZZ7bpik=;
-        b=XUIxg1o+QTWEt4lY8LFNcNA6q9TOsxPd5LnR7Al1Ho74+ONybkBrE9xoh0LoUg3pue
-         QZTkcVjfNlU+XvVeKKuEHo61q2rU1XAxZXUi24Bh56XarWx8SHuvMp0DTVrl0//u3WnY
-         0GbOqKZdiFEXG0KM2lBru/BD9MOW8abOT0PyEPP/am15BvinLSiVbGhElLK6x2sOsJvH
-         Jqu0xsCKuy+J+HIcdmibFJjOpXM+uAPCGrcxY39B8DmagFo/NvB9UN3WKgWHLonF7o7f
-         nbyhCEeoPKGCUbYTLAzoOtQAc04uE09bGcjkFT6XG4/a5WPJBVZQLqmLf6a9Gnk7vnhI
-         a7zQ==
+        d=gmail.com; s=20210112; t=1678266219;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=J7rT0YVbd83CrVSWcRxoFWFor/uPS8qdQdsIn5lctSQ=;
+        b=J+n8BcGDjEsRoJ9OUv1LkI2mUe6cYkmz7x/vWhDCbjKHUBvaE7GbKy8l5frTdQxnmp
+         7kW0tWbz0UCmB8bDyJXROUa6mnZsNmWjzorLfixDtWwTWeieLKL/r9p1/JnLf1QvHMRn
+         AtQr8M+GnBkKSi/KMMdkFTUYpa7XtMQq8Kx8Tskg8gWl4E9Dder5vX51hP8k/O0i+04Q
+         wv5aQd7YG61f2sdUuXCja7FHYuNOVB3yKgzSmBAjaSxp8pWY9ue0+S9kvod+Lcx4fR7n
+         ckZzh4s/v5sg9v6DITseLQPOryAYFrukiorFpOSqREhoV3Vat/6PV+zrY+G3Ti9C89sy
+         T7HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678266151;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TEBnaA7Pocw3dv+NsTA6Pe6Z7NrAaUzWWBCKZZ7bpik=;
-        b=Ff0vfCpCm+hLFh+sUVom/HqGvqZUJW0rhoalIFq+ws9/FHVhV0DjqfPf7d6JkIlfEm
-         P89J05lEWXg+uNObamn9TSTimHjM2jaJPBS/9QhINIRd7sn9ljUIirvZHU/74QZWE6rR
-         8JZOuHVh+HiPJSIp3pkxqpCoTREknoKAdZ3rO6h4k+9CZEbYAjzpBaTvAk+Of3nk4juq
-         1GwIFxHjz1aigozqNfob4N8KnX15VdV9J1vmk3UvDQv0XSmp9UyChooyG8XYxZOoDy7L
-         OtulX7nTDet+rtmTit1aftCal594d2hFehjqaIqTSxAf2UW0ggYsLqm9V5F+zyisyRja
-         j3tw==
-X-Gm-Message-State: AO0yUKV4S7kJWjigO7sBzjzgPPZOQQFv2V/aSfVNvMUxUyn0r5n13jWQ
-        Ckujy6pTp7chz3mJZ6yxU/E=
-X-Google-Smtp-Source: AK7set+gK3tu0aYc3/9HyceNCeSVYp/6QHEDkpiqGlrrd+bpN+n/S46i82CZx6AQzELESatZ8dWn9g==
-X-Received: by 2002:a17:906:718d:b0:8b1:81eb:158f with SMTP id h13-20020a170906718d00b008b181eb158fmr17410801ejk.62.1678266151580;
-        Wed, 08 Mar 2023 01:02:31 -0800 (PST)
-Received: from xeon.. ([188.163.112.76])
-        by smtp.gmail.com with ESMTPSA id j7-20020a17090643c700b008caaae1f1e1sm7153709ejn.110.2023.03.08.01.02.30
+        d=1e100.net; s=20210112; t=1678266219;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J7rT0YVbd83CrVSWcRxoFWFor/uPS8qdQdsIn5lctSQ=;
+        b=ZOlKVqenV/5fDqni15Dwb3lGITH+PZOtSGquZ2EUIMqjmxOtgoiwSLQPW9DRfUzaXv
+         Yc/7Dg9ApwGMVPzWKI8s/KohKMBGMLhDYPzKlYMhwVDJ1c/D5YuY7lZDRs+tleM9FGM1
+         g+P5719ULeQscxznUUlJrhzuA3L1+INGo6x6JJcnSLP+Lonb26OewAodrhe779a9bOWv
+         Aa5MBw6YA/bhDnNni5ylhmD3TLh/kQ39SecVjioXbOlHjHqMsYnY8+YsPiYhZr8N66tF
+         EVIqQDa5QX9LukxxnEogc4bnc3c3NLBZ6jbRTgAOF2d0FvvxiT2w5C1kyH8Lud1tG2iv
+         jk7A==
+X-Gm-Message-State: AO0yUKUQWidwblIts6GTQJNHbqHiE4PFsS+9ZbG8m03HzTKwQmY0Mx4a
+        esYbWb3Q+ag/2AnOGoYE8Mw=
+X-Google-Smtp-Source: AK7set8/37WQTisw6yJ/SwIohvmHOjGRZqEZqd6Ya3St2U/DvkCTsRPo+J/kl2UHH6UYBxT0IrzxAQ==
+X-Received: by 2002:a05:6a20:69a8:b0:c7:7d45:50fb with SMTP id t40-20020a056a2069a800b000c77d4550fbmr16362644pzk.28.1678266219091;
+        Wed, 08 Mar 2023 01:03:39 -0800 (PST)
+Received: from debian.me (subs03-180-214-233-16.three.co.id. [180.214.233.16])
+        by smtp.gmail.com with ESMTPSA id p21-20020aa78615000000b005a8c16fcb78sm9028264pfn.56.2023.03.08.01.03.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 01:02:31 -0800 (PST)
-From:   Svyatoslav Ryhel <clamor95@gmail.com>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 4/4] iio: light: move apds990x into proper place
-Date:   Wed,  8 Mar 2023 11:02:19 +0200
-Message-Id: <20230308090219.12710-5-clamor95@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230308090219.12710-1-clamor95@gmail.com>
-References: <20230308090219.12710-1-clamor95@gmail.com>
+        Wed, 08 Mar 2023 01:03:38 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 58A1A1064E6; Wed,  8 Mar 2023 16:03:34 +0700 (WIB)
+Date:   Wed, 8 Mar 2023 16:03:33 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 0000/1001] 6.2.3-rc1 review
+Message-ID: <ZAhPZYfb/dZEUEfz@debian.me>
+References: <20230307170022.094103862@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xTpkWPY/u/T2Ll4a"
+Content-Disposition: inline
+In-Reply-To: <20230307170022.094103862@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,89 +79,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since now apds990x supports IIO, it should be moved here from
-misc folder.
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
----
- drivers/iio/light/Kconfig              | 10 ++++++++++
- drivers/iio/light/Makefile             |  1 +
- drivers/{misc => iio/light}/apds990x.c |  0
- drivers/misc/Kconfig                   | 10 ----------
- drivers/misc/Makefile                  |  1 -
- 5 files changed, 11 insertions(+), 11 deletions(-)
- rename drivers/{misc => iio/light}/apds990x.c (100%)
+--xTpkWPY/u/T2Ll4a
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/iio/light/Kconfig b/drivers/iio/light/Kconfig
-index 0d4447df7200..49c17eb72c73 100644
---- a/drivers/iio/light/Kconfig
-+++ b/drivers/iio/light/Kconfig
-@@ -73,6 +73,16 @@ config APDS9300
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called apds9300.
- 
-+config APDS990X
-+	tristate "APDS990X combined als and proximity sensors"
-+	depends on I2C
-+	help
-+	   Say Y here if you want to build a driver for Avago APDS990x
-+	   combined ambient light and proximity sensor chip.
-+
-+	   To compile this driver as a module, choose M here: the
-+	   module will be called apds990x. If unsure, say N here.
-+
- config APDS9960
- 	tristate "Avago APDS9960 gesture/RGB/ALS/proximity sensor"
- 	select REGMAP_I2C
-diff --git a/drivers/iio/light/Makefile b/drivers/iio/light/Makefile
-index 6f23817fae6f..f1ff7934318b 100644
---- a/drivers/iio/light/Makefile
-+++ b/drivers/iio/light/Makefile
-@@ -10,6 +10,7 @@ obj-$(CONFIG_ADUX1020)		+= adux1020.o
- obj-$(CONFIG_AL3010)		+= al3010.o
- obj-$(CONFIG_AL3320A)		+= al3320a.o
- obj-$(CONFIG_APDS9300)		+= apds9300.o
-+obj-$(CONFIG_APDS990X)		+= apds990x.o
- obj-$(CONFIG_APDS9960)		+= apds9960.o
- obj-$(CONFIG_AS73211)		+= as73211.o
- obj-$(CONFIG_BH1750)		+= bh1750.o
-diff --git a/drivers/misc/apds990x.c b/drivers/iio/light/apds990x.c
-similarity index 100%
-rename from drivers/misc/apds990x.c
-rename to drivers/iio/light/apds990x.c
-diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index 9947b7892bd5..2856b6c57ca0 100644
---- a/drivers/misc/Kconfig
-+++ b/drivers/misc/Kconfig
-@@ -359,16 +359,6 @@ config SENSORS_BH1770
- 	   To compile this driver as a module, choose M here: the
- 	   module will be called bh1770glc. If unsure, say N here.
- 
--config SENSORS_APDS990X
--	 tristate "APDS990X combined als and proximity sensors"
--	 depends on I2C
--	help
--	   Say Y here if you want to build a driver for Avago APDS990x
--	   combined ambient light and proximity sensor chip.
--
--	   To compile this driver as a module, choose M here: the
--	   module will be called apds990x. If unsure, say N here.
--
- config HMC6352
- 	tristate "Honeywell HMC6352 compass"
- 	depends on I2C
-diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index 87b54a4a4422..3e3e510cb315 100644
---- a/drivers/misc/Makefile
-+++ b/drivers/misc/Makefile
-@@ -18,7 +18,6 @@ obj-$(CONFIG_PHANTOM)		+= phantom.o
- obj-$(CONFIG_QCOM_COINCELL)	+= qcom-coincell.o
- obj-$(CONFIG_QCOM_FASTRPC)	+= fastrpc.o
- obj-$(CONFIG_SENSORS_BH1770)	+= bh1770glc.o
--obj-$(CONFIG_SENSORS_APDS990X)	+= apds990x.o
- obj-$(CONFIG_ENCLOSURE_SERVICES) += enclosure.o
- obj-$(CONFIG_KGDB_TESTS)	+= kgdbts.o
- obj-$(CONFIG_SGI_XP)		+= sgi-xp/
--- 
-2.37.2
+On Tue, Mar 07, 2023 at 05:46:12PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.3 release.
+> There are 1001 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--xTpkWPY/u/T2Ll4a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZAhPXQAKCRD2uYlJVVFO
+o5ZuAP9pIJnuY4oRsRFM8QzxdCqqbv7vl0il7VLcPHxx5uLFowEAl3OlparCA1Cy
+WmT/I1oZmHq7TpMaRPlVQB7zFDZjqwA=
+=+mvj
+-----END PGP SIGNATURE-----
+
+--xTpkWPY/u/T2Ll4a--
