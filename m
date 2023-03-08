@@ -2,138 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC42E6B11A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96EAD6B11A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjCHTDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 14:03:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41908 "EHLO
+        id S230190AbjCHTD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 14:03:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbjCHTDN (ORCPT
+        with ESMTP id S229708AbjCHTDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 14:03:13 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8A6CEF92;
-        Wed,  8 Mar 2023 11:02:22 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id k37so10471201wms.0;
-        Wed, 08 Mar 2023 11:02:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678302141;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=05QzLCa5h8/aBiXa5wFiBBm9rgGF1oYVgKluk4jSojQ=;
-        b=jRN+w1BizFV7AwJHwQ1qGQ7AE8UH2M0msGXp50Cyr7labckXet1D1eQ7IiYUKN+e/h
-         RF/oE1CWGx4Y9OjHJBc6fvXPK/E3NPjdZLI99Z548YUtMEHyxP69ZyJ19+LF7aMK0hXu
-         3C2COWA1wyrd9tmF7SYmUekJhYam9V+tcgS5kp58R49RM/hqPVOjLpWP/N/l9FqEcGAY
-         lLmGrBlvGp60bJ8H6uRIP0KrXIHliZqxQI86zJZ09vJQ5H7/I7dQkL9SQMFqf3FjN5R7
-         L23P16SUPomcoLK+msyy5ViCIAk+SvIaFjKECqL+6pY+CpNahGYSdvca5SN+QdFFbtS0
-         hhTg==
+        Wed, 8 Mar 2023 14:03:15 -0500
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC06E3B7;
+        Wed,  8 Mar 2023 11:02:59 -0800 (PST)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-176d93cd0daso10380028fac.4;
+        Wed, 08 Mar 2023 11:02:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678302141;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20210112; t=1678302178;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=05QzLCa5h8/aBiXa5wFiBBm9rgGF1oYVgKluk4jSojQ=;
-        b=aNYdOAR2xDObLzOGImD/b/eG5xgCHJEAb0VfKdnUK6r/77AWfku6TzRSn0azgt3Nrl
-         wqD9I6AQOb85ySPOYj/f6yc3AKcY4dkQscQGbQFyu1zQ6jUv6higRMRMm6HyOyTlAlgk
-         xGssfYEpQ9ubDwjWh7tdsMhOVbeNfJocu6POcvI050JxO9V53+oyrZbkFZweYMQnh3x9
-         Q30+j+UiQuGEXavZRgkEpTFmMBa8eRm5tFBXyJqVqnDoSy87eaUSbmG36EGlfApZD43u
-         2pV5uVm47qZoUYgQmhv0gqdlZf+9+rbpu2yVNyvoFqyWdEEL45O2JJ9nO03tmQ5y74s5
-         unlw==
-X-Gm-Message-State: AO0yUKXRVVoOQhLHaYYG0LB8zzMs9cEF8cM8wwUsGLUzCdCyFASCL0mr
-        R7LZwnl9O5U7bv+IhXXp/zA=
-X-Google-Smtp-Source: AK7set9hoVq9qbS24mVE0Dp6UKPSHIlBpzT3sWahFNF0J3P+44HP9t0tKqS27UMLF8wN68SNGI6VqQ==
-X-Received: by 2002:a05:600c:4fc5:b0:3ea:f0d6:5d37 with SMTP id o5-20020a05600c4fc500b003eaf0d65d37mr16838323wmq.8.1678302140499;
-        Wed, 08 Mar 2023 11:02:20 -0800 (PST)
-Received: from Ansuel-xps. (93-34-89-197.ip49.fastwebnet.it. [93.34.89.197])
-        by smtp.gmail.com with ESMTPSA id a14-20020a1cf00e000000b003e21f20b646sm278516wmb.21.2023.03.08.11.02.19
+        bh=5FrWOB0uVxHx56X9xrWxuDWJ/kb3JEYgMVQs34PVT2U=;
+        b=UJVqrktNNz/61tupoHz969u/W1ZNJoN+IDl5vQL3P3o+eXbU0zYF9XNzCGVPAbMvNV
+         +dLYpmzJZq+NGNR9KQcpdJM62BvaLqOfAOm6ACJE3Hp3XL7RWWAJMVwrma5ZofyyTmKm
+         C264gfo5sY/9NS4DpvO+opAA7qHXCx2GiZ8x6x9L38wsmrQ587GiqJOPo0GmCVHa1y9Z
+         YYpWm3bxXRT4RJqGp91d7GyQtkJM1T1/dK+SbBau+o0ckhekcuDRJwvCEzFY64qXk7yO
+         09Py5xJBET5vauW+Lc4KIGK+N5tPqYu+8h5mPVk2BVNaDVaiZ31IjEovhKM+qvynN8aq
+         Gw6A==
+X-Gm-Message-State: AO0yUKUyNVfPHoWKrnfH4KOgfm7EgY4bJuwi0KpzLkTe5K9JcCWMTM2i
+        OknLCw5RY/0lWuXbE0fU4g==
+X-Google-Smtp-Source: AK7set+DvjoWc1KWq2h3sKBZx+8CoWicRMFGWsEt1KRrNByZmsCl9/pHwHZRNzh/c5BtXW6lqvK2cw==
+X-Received: by 2002:a05:6870:b14d:b0:172:80f9:a545 with SMTP id a13-20020a056870b14d00b0017280f9a545mr13141161oal.25.1678302178217;
+        Wed, 08 Mar 2023 11:02:58 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id d199-20020a4a52d0000000b005264a1472adsm1543777oob.15.2023.03.08.11.02.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 11:02:19 -0800 (PST)
-Message-ID: <6408dbbb.1c0a0220.a28ce.1b32@mx.google.com>
-X-Google-Original-Message-ID: <ZAjbuWRiHVEGVFX+@Ansuel-xps.>
-Date:   Wed, 8 Mar 2023 20:02:17 +0100
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Lee Jones <lee@kernel.org>,
-        linux-leds@vger.kernel.org
-Subject: Re: [net-next PATCH 09/11] dt-bindings: net: dsa: qca8k: add LEDs
- definition example
-References: <20230307170046.28917-1-ansuelsmth@gmail.com>
- <20230307170046.28917-10-ansuelsmth@gmail.com>
- <ad43a809-b9fd-bd24-ee1a-9e509939023b@linaro.org>
- <df6264de-36c5-41f2-a2a0-08b61d692c75@lunn.ch>
- <5992cb0a-50a0-a19c-3ad1-03dd347a630b@linaro.org>
+        Wed, 08 Mar 2023 11:02:57 -0800 (PST)
+Received: (nullmailer pid 3604331 invoked by uid 1000);
+        Wed, 08 Mar 2023 19:02:57 -0000
+Date:   Wed, 8 Mar 2023 13:02:57 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch,
+        krzysztof.kozlowski+dt@linaro.org, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, matthias.bgg@gmail.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, wenst@chromium.org
+Subject: Re: [PATCH v4 03/12] dt-bindings: gpu: mali-bifrost: Fix
+ power-domain-names validation
+Message-ID: <20230308190257.GA3601415-robh@kernel.org>
+References: <20230228102704.708150-1-angelogioacchino.delregno@collabora.com>
+ <20230228102704.708150-3-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5992cb0a-50a0-a19c-3ad1-03dd347a630b@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230228102704.708150-3-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 07:49:26PM +0100, Krzysztof Kozlowski wrote:
-> On 08/03/2023 14:57, Andrew Lunn wrote:
-> > On Wed, Mar 08, 2023 at 11:58:33AM +0100, Krzysztof Kozlowski wrote:
-> >> On 07/03/2023 18:00, Christian Marangi wrote:
-> >>> Add LEDs definition example for qca8k Switch Family to describe how they
-> >>> should be defined for a correct usage.
-> >>>
-> >>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> >>
-> >> Where is the changelog? This was v8 already! What happened with all
-> >> review, changes?
-> > 
-> > Did you read patch 0?
-> > 
-> > We have decided to start again, starting small and working up. This
-> > patchset just adds plain, boring LEDs. No acceleration, on hardware
-> > offload. Just on/off, and fixed blink.
+On Tue, Feb 28, 2023 at 11:26:55AM +0100, AngeloGioacchino Del Regno wrote:
+> Commit ("dt-bindings: gpu: mali-bifrost: Add Mediatek MT8183")
+> incorrectly introduced power domain names for MT8183, causing
+> validation issues.
 > 
-> Sure, but the patch is carried over. So what happened with all its
-> feedback? Was there or was not? How can we know?
->
-
-The history of the old series is a bit sad, not enough review, another
-dev asking for a different implementation and me doing an hybrid to
-reach a common point (and then disappear intro oblivion)...
-
-Short story is that this current series have nothing related to the HW
-offload feature and only in v7 it was asked to put the LED nodes in
-ethernet-phy.yaml
-
-I can put in the cover letter of v2 of this series the changelog of the
-previous series but they would only be related to other part that are
-not related to this.
-
-Just to give you some context and explain why the changelog was dropped.
-
-> > 
-> > What do you think makes the patchset is not bisectable? We are happy
-> > to address such issues, but i did not notice anything.
+> Add power-domain-names to the base schema, allowing a maximum of
+> five elements; since platforms having a single power domain don't
+> need any actual domain name, disallow that for each sub-schema.
 > 
-> I didn't write anything like that here...
+> Fixes: a7a596cd3115 ("dt-bindings: gpu: mali-bifrost: Add Mediatek MT8183")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../devicetree/bindings/gpu/arm,mali-bifrost.yaml          | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+> index 5b7f1c9d2b30..bf0f7f1f71e0 100644
+> --- a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+> +++ b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+> @@ -65,6 +65,10 @@ properties:
+>      minItems: 1
+>      maxItems: 5
+>  
+> +  power-domain-names:
+> +    minItems: 1
 
--- 
-	Ansuel
+If you are disallowing for a single domain, then this could be 2...
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+> +    maxItems: 5
+> +
+>    resets:
+>      minItems: 1
+>      maxItems: 3
+> @@ -112,6 +116,7 @@ allOf:
+>        properties:
+>          power-domains:
+>            maxItems: 1
+> +        power-domain-names: false
+>        required:
+>          - resets
+>    - if:
+> @@ -136,6 +141,7 @@ allOf:
+>              - const: bus_ace
+>          power-domains:
+>            maxItems: 1
+> +        power-domain-names: false
+>          resets:
+>            minItems: 3
+>          reset-names:
+> @@ -186,6 +192,7 @@ allOf:
+>              - const: bus
+>          power-domains:
+>            maxItems: 1
+> +        power-domain-names: false
+>        required:
+>          - clock-names
+>  
+> -- 
+> 2.39.2
+> 
