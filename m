@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4536AFC87
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C07C16AFCB1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjCHBx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 20:53:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
+        id S229591AbjCHB7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 20:59:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCHBxZ (ORCPT
+        with ESMTP id S229477AbjCHB7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 20:53:25 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909764ECFA
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 17:53:22 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-536bbe5f888so279463847b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 17:53:22 -0800 (PST)
+        Tue, 7 Mar 2023 20:59:49 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE389B985
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 17:59:48 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id g5-20020a25a485000000b009419f64f6afso16142511ybi.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 17:59:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=skydio.com; s=google; t=1678240402;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+qFrmiHlcBltRx32gRsdKIC60QfzJLumQM2u8W/mS2E=;
-        b=PJI14GWVAW9w2blao5MXCLIWrzO0hNNTM3mdm+dcLZFjp64XCJEAmx+J0GojfvBtTQ
-         sP1BtI4xznRx1QUSSnIn5QVfionRUFoFjOIahL3HQbJKwbKZfACz4QRQ5bBdeOz6/kwY
-         KA4MHby2RVkE5k9MSnaCudnUOi5lovoRhLsEk4uEttzprVco0TGjVe/1vpFl9LpQIqk7
-         kHS1cPTyCnVcv0BQCUewu8STcqtcaAsRdX6RONZR98XVUetFKKvYqbF25aGCXgeJ5o6V
-         g9vLyJ+5I4wwShvQkQK0+uTvRmAJ2J5XfJmWrAz38RTfuTT4WC4PKyUERVUAo5znPNkY
-         WSCQ==
+        d=google.com; s=20210112; t=1678240787;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WMnkKJBSeJLIJWJ63dxJ2l/pcjlqG3hWFQL9cnDzY4k=;
+        b=UYWeE57l4lIGpWifAsQVo5d4uLP7r1X7sI2k/QIXPtpXHWrBkeh86kl8tJubGv0ngo
+         IlngOFBEcq4XZCUWvy5J2OFgykjp9rggBEBhpUgmv6JOl5yd6pTfo1gtTF6JcIO8JoJv
+         CLm1u+9+ePTKgtLkd2pH2gJEwGFejqBxzpicjaRDp/tmEjgVw/awy4mjGJty879zeb7L
+         Ojj+7Fhvf48yYY7IMaM6T3iRDmIVUikq7smmJClANesZrp+iEcUwRwIF7H47IT++LYsF
+         Pd9IdtFFH0f502mumYnDSoUVrWT/yXEd8faAYJZ+f8f/WVu42UnADf3swEElAG8nTx50
+         SSMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678240402;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+qFrmiHlcBltRx32gRsdKIC60QfzJLumQM2u8W/mS2E=;
-        b=1Wr1GEyPNN5BzhU+hO9mWTbbwrfyXrTec2PiPOjQk8CeC+I2c2VI3Bic1ywtZDLdB8
-         O4Lb29aWKVgT4YXXh3ieJ1g7m+LkN9BN5iA4WvpHAwJBTmYBXjkqdMT2nSJO/MyHF+Bh
-         rdCFPIT/rqbxlz0tusl7oeksKNyDhhHdKVba/kgMmW5rv7FZA/33GEEJ8G5tVL3mG5t6
-         gQpJIbt2rYb7JnDoansaFG1EB23tndDmYOvNjqtJ5fLwUaaacBzQsdXbdpKjQfJ6J+vd
-         524nNEG8JrfZ30eRI/7Jxczdb50qO7kWhYWtdIcdUFxRNvVTFWfwum0N0jyXLOUXr786
-         ljLA==
-X-Gm-Message-State: AO0yUKVPZt7m//AV4lTrxeeh8GGKLi1NhlCPAPVNOyw4fwZanewBJS8/
-        9OsHi7kQ5sTVVVtIQFKxM5ucDnTw9Ioxrg7zRcfAseZzZSKpn3Hr1/4=
-X-Google-Smtp-Source: AK7set+w0T1E150enr5vAKBTiCuLUM8nes5VPPImzbdWQ3HTbfxhJzJJPwol+MzRHrNBDguEa0lGGfbLUmjvlN0KbDw=
-X-Received: by 2002:a81:ae26:0:b0:52f:1c40:b1f9 with SMTP id
- m38-20020a81ae26000000b0052f1c40b1f9mr10587028ywh.7.1678240401562; Tue, 07
- Mar 2023 17:53:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20230307220525.54895-1-Jerry@skydio.com> <167822825917.8008.11050193827453206272@noble.neil.brown.name>
- <CAMKO5Cv1Uh1rSFQ0cR1kfA88iXXHP5RMO-euU15Xrn2i93J5rg@mail.gmail.com>
- <167823124256.8008.4738010782615192469@noble.neil.brown.name>
- <CAMKO5CvuWxrzshJrUJGwiMApN_L6yL-qck0fvizvBUs2Z7PU-g@mail.gmail.com> <167823526640.8008.3772702242442581073@noble.neil.brown.name>
-In-Reply-To: <167823526640.8008.3772702242442581073@noble.neil.brown.name>
-From:   Jerry Zhang <jerry@skydio.com>
-Date:   Tue, 7 Mar 2023 17:53:11 -0800
-Message-ID: <CAMKO5Cs5co7uLSMj+ugFBhUu1x30sy2mrdK5yKw-92oR9RK3YQ@mail.gmail.com>
-Subject: Re: [PATCH] sunrpc: Fix incorrect parsing of expiry time
-To:     NeilBrown <neilb@suse.de>
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SPF_PERMERROR,URIBL_BLOCKED autolearn=ham
+        d=1e100.net; s=20210112; t=1678240787;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WMnkKJBSeJLIJWJ63dxJ2l/pcjlqG3hWFQL9cnDzY4k=;
+        b=EMQRXwPe2l6qhfYL6lnxKcMIuTsoFyw3gPYkq3MZhF9VVihDE2uAMtAOT8tr6gCBUP
+         r7rkz/fR2xcO8ocjlgsJsZHpG2DSRg929h4Hl9CkKXObGIG06sWInFEe3FgQQPM8PHZO
+         rEvk6yyp3py+0x2Y1/Ojwze0JW4PhMnvDim6XQjbFJfsD8XmBxjKpjnjaximOm/kdaUZ
+         7UJC+5Tv7kRizfKXeeHHpmHEd93TJ6eZ6gfWT8S2/D1kMlGjzdMqyWjnOXuw9Xpn10IH
+         ycR/OlndAs6mncEDaFz9KQKsU6H99HyqUPTHWMaNN27LVjyl9TdYLKI0YFokmURNDDMk
+         YPBw==
+X-Gm-Message-State: AO0yUKU0dkimDgDIQfUp8xJSAguoJySTQYzTP1sgrCgUQLd9zttK0C6/
+        sOhJeRIqfNc6Rk1JZiISuQ+f10Qv7rq/yGQwdA==
+X-Google-Smtp-Source: AK7set/EIDJEOoLPfCQrOfHA40erUROtaCAKW+YJw9riwDSqJtHig8reP7/n1hpcpiTk1c2LVzoimPxr4reSCiEgLQ==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a05:6902:524:b0:a4e:4575:f3f0 with
+ SMTP id y4-20020a056902052400b00a4e4575f3f0mr7886927ybs.11.1678240787650;
+ Tue, 07 Mar 2023 17:59:47 -0800 (PST)
+Date:   Wed, 08 Mar 2023 01:59:46 +0000
+In-Reply-To: <20230307021809.GA2143916@chaop.bj.intel.com> (message from Chao
+ Peng on Tue, 7 Mar 2023 10:18:09 +0800)
+Mime-Version: 1.0
+Message-ID: <diqz356guhnx.fsf@ackerleytng-cloudtop.c.googlers.com>
+Subject: Re: [V2 PATCH 0/6] KVM: selftests: selftests for fd-based private memory
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     vannapurve@google.com, seanjc@google.com, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, yu.c.zhang@linux.intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com,
+        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
+        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
+        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
+        pgonda@google.com, nikunj@amd.com, diviness@google.com,
+        maz@kernel.org, dmatlack@google.com, axelrasmussen@google.com,
+        maciej.szmigiero@oracle.com, mizhang@google.com, bgardon@google.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,349 +83,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 4:27=E2=80=AFPM NeilBrown <neilb@suse.de> wrote:
->
->
-> (I've removed some bouncing email addresses, and also removed
->  Trond and Anna who are responsible for the NFS client and so
->  not directly interested in the server.  They will likely find
->  this on the list if they are interested).
->
-> On Wed, 08 Mar 2023, Jerry Zhang wrote:
-> > On Tue, Mar 7, 2023 at 3:20=E2=80=AFPM NeilBrown <neilb@suse.de> wrote:
-> > >
-> > > On Wed, 08 Mar 2023, Jerry Zhang wrote:
-> > > > On Tue, Mar 7, 2023 at 2:31=E2=80=AFPM NeilBrown <neilb@suse.de> wr=
-ote:
-> > > > >
-> > > > > On Wed, 08 Mar 2023, Jerry Zhang wrote:
-> > > > > > The expiry time field is mean to be expressed in seconds since =
-boot.
-> > > > >
-> > > > > Correct.
-> > > > >
-> > > > > > The get_expiry() function parses a relative time value in secon=
-ds.
-> > > > >
-> > > > > Incorrect.  It parses and absoulte wall-clock time.
-> > > > I'm not familiar with the source of truth for this info. Is there a
-> > > > specification of some sort?
-> > > >
-> > > > For reference, we were seeing writes to
-> > > > /proc/net/rpc/nfsd.export/channel randomly fail with EINVAL despite
-> > > > usually succeeding with the same invocation. Upon investigation thi=
-s
-> > > > was the string that exportfs was writing "-test-client- /path/to/mo=
-unt
-> > > >  3 0 65534 65534 0". "3" was the value for expiry in this message,
-> > > > which led me to conclude that this is a relative field. If it isn't=
-,
-> > > > perhaps this is a bug in userspace nfs tools?
-> > >
-> > > The above information is very useful.  This sort of detail should alw=
-ays
-> > > be included with a bug report, or a patch proposing to fix a bug.
-> > >
-> > > The intent of that "3" is to be a time in the past.  We don't want th=
-e
-> > > -test-client- entry to be added to the cache, but we want a failure
-> > > message if the path cannot be exported.  So we set a time in the past=
- as
-> > > the expiry time.
-> > > Using 0 is awkward as it often has special meaning, so I chose '3'.
-> > >
-> > > >
-> > > > The failure in this was if nfs-server starts exactly 3s after bootu=
-p,
-> > > > boot.tv_sec would be 3 and thus get_expiry() returns 0, causing a
-> > > > failure to be returned.
-> > >
-> > > I don't understand this. getboottime64() doesn't report time since bo=
-ot.
-> > > It reports the time when the system booted.  It only changes when the
-> > > system time is deliberately changed.
-> > Ok I misinterpreted what this function does.
-> > > At boot, it presumably reports 0.  As soon as some tool (e.g. systemd=
- or
-> > > ntpdate) determines what the current time it and calls settimeofday()=
- or
-> > > a similar function, the system time is changed, and the boot-time is
-> > > changed by the same amount.  Typically this will make it well over 1
-> > > billion (for anything booted this century).
-> > > So for the boot time to report as '3', something would need to set th=
-e
-> > > current time to a moment early in January 1970.  I'd be surprised if
-> > > anything is doing that.
-> > I see the discrepency now -- our system is actually an embedded
-> > platform without an RTC. So it thinks that it is "1970" every time it
-> > boots up, at least until it connects to the internet or similar, which
-> > it may or may not ever do. We use NFS to share mountpoints between 2
-> > linux systems on our board connected via usb-ethernet. The fact that
-> > it allows simultaneous access gives it an advantage over other
-> > protocols like mass storage.
-> >
-> > Its likely that the code is working as intended then, it just didn't
-> > take our particular usecase into account.
-> >
-> > >
-> > > How much tracing have you done?  Have you printed out the value of
-> > > boot.tv_sec and confirmed that it is '3' or have you only deduced it
-> > > from other evidence.
-> > > Exactly what firm evidence do you have?
-> > Sure I've added this simple debug print with the necessary info
-> >
-> > diff --git a/fs/nfsd/export.c b/fs/nfsd/export.c
-> > index 15422c951fd1..5af49198b162 100644
-> > --- a/fs/nfsd/export.c
-> > +++ b/fs/nfsd/export.c
-> > @@ -528,10 +528,12 @@ static int svc_export_parse(struct cache_detail
-> > *cd, char *mesg, int mlen)
-> >         int len;
-> >         int err;
-> >         struct auth_domain *dom =3D NULL;
-> >         struct svc_export exp =3D {}, *expp;
-> >         int an_int;
-> > +       struct timespec64 boot;
-> > +       char* orig_mesg =3D mesg;
-> >
-> >         if (mesg[mlen-1] !=3D '\n')
-> >                 return -EINVAL;
-> >         mesg[mlen-1] =3D 0;
-> >
-> > @@ -564,10 +566,12 @@ static int svc_export_parse(struct cache_detail
-> > *cd, char *mesg, int mlen)
-> >         exp.ex_devid_map =3D NULL;
-> >
-> >         /* expiry */
-> >         err =3D -EINVAL;
-> >         exp.h.expiry_time =3D get_expiry(&mesg);
-> > +       getboottime64(&boot);
-> > +       printk("mesg is '%s' expiry is %lld and boot_s is %lld\n",
-> > orig_mesg, exp.h.expiry_time, boot.tv_sec);
-> >         if (exp.h.expiry_time =3D=3D 0)
-> >                 goto out3;
-> >
-> >         /* flags */
-> >         err =3D get_int(&mesg, &an_int);
-> >
-> > and the output is
-> >
-> > [   14.093506] mesg is '-test-client- /path/to/mount  3 8192 65534
-> > 65534 0' expiry is 0 and boot_s is 3
-> >
-> > which largely confirms the info above.
-> >
-> > Do you think we'd be able to handle this case cleanly?
->
-> Thanks for all the details.  Yes I think we can and should handle this
-> case cleanly.  I think the core problem is that get_expiry() mixes the
-> error code into the expiry time.  If we separate those out the problem
-> should disappear.
->
-> Please try this patch.
-That worked, thanks for the quick fix!
->
-> From: NeilBrown <neilb@suse.de>
-> Date: Wed, 8 Mar 2023 11:19:01 +1100
-> Subject: [PATCH] SUNRPC: return proper error from get_expiry()
->
-> The get_expiry() function currently returns a timestamp, and uses the
-> special return value of 0 to indicate an error.
->
-> Unfortunately this causes a problem when 0 is the correct return value.
->
-> On a system with no RTC it is possible that the boot time will be seen
-> to be "3".  When exportfs probes to see if a particular filesystem
-> supports NFS export it tries to cache information with an expiry time of
-> "3".  The intention is for this to be "long in the past".  Even with not
-> RTC it will not be far in the future (at most a second or two) so this
-> is harmless.
-> But if the boot time happens to have been calculated to be "3", then
-> get_expiry will fail incorrectly as it converts the number to "seconds
-> since bootime".
->
-> To avoid this problem we change get_expiry() to report the error quite
-> separately from the expiry time.  The error is now the return value.
-> The expiry time is reported through a by-reference parameter.
->
-> Reported-by: Jerry Zhang <jerry@skydio.com>
-Tested-by: Jerry Zhang <jerry@skydio.com>
-> Signed-off-by: NeilBrown <neilb@suse.de>
-> ---
->  fs/nfsd/export.c                  | 13 ++++++-------
->  fs/nfsd/nfs4idmap.c               |  8 ++++----
->  include/linux/sunrpc/cache.h      | 15 ++++++++-------
->  net/sunrpc/auth_gss/svcauth_gss.c | 12 ++++++------
->  net/sunrpc/svcauth_unix.c         | 12 ++++++------
->  5 files changed, 30 insertions(+), 30 deletions(-)
->
-> diff --git a/fs/nfsd/export.c b/fs/nfsd/export.c
-> index 668c7527b17e..6da74aebe1fb 100644
-> --- a/fs/nfsd/export.c
-> +++ b/fs/nfsd/export.c
-> @@ -123,11 +123,11 @@ static int expkey_parse(struct cache_detail *cd, ch=
-ar *mesg, int mlen)
->
->         /* OK, we seem to have a valid key */
->         key.h.flags =3D 0;
-> -       key.h.expiry_time =3D get_expiry(&mesg);
-> -       if (key.h.expiry_time =3D=3D 0)
-> +       err =3D get_expiry(&mesg, &key.h.expiry_time);
-> +       if (err)
->                 goto out;
->
-> -       key.ek_client =3D dom;
-> +       key.ek_client =3D dom;
->         key.ek_fsidtype =3D fsidtype;
->         memcpy(key.ek_fsid, buf, len);
->
-> @@ -610,9 +610,8 @@ static int svc_export_parse(struct cache_detail *cd, =
-char *mesg, int mlen)
->         exp.ex_devid_map =3D NULL;
->
->         /* expiry */
-> -       err =3D -EINVAL;
-> -       exp.h.expiry_time =3D get_expiry(&mesg);
-> -       if (exp.h.expiry_time =3D=3D 0)
-> +       err =3D get_expiry(&mesg, &exp.h.expiry_time);
-> +       if (err)
->                 goto out3;
->
->         /* flags */
-> @@ -624,7 +623,7 @@ static int svc_export_parse(struct cache_detail *cd, =
-char *mesg, int mlen)
->                 if (err || an_int < 0)
->                         goto out3;
->                 exp.ex_flags=3D an_int;
-> -
-> +
->                 /* anon uid */
->                 err =3D get_int(&mesg, &an_int);
->                 if (err)
-> diff --git a/fs/nfsd/nfs4idmap.c b/fs/nfsd/nfs4idmap.c
-> index 5e9809aff37e..7a806ac13e31 100644
-> --- a/fs/nfsd/nfs4idmap.c
-> +++ b/fs/nfsd/nfs4idmap.c
-> @@ -240,8 +240,8 @@ idtoname_parse(struct cache_detail *cd, char *buf, in=
-t buflen)
->                 goto out;
->
->         /* expiry */
-> -       ent.h.expiry_time =3D get_expiry(&buf);
-> -       if (ent.h.expiry_time =3D=3D 0)
-> +       error =3D get_expiry(&buf, &ent.h.expiry_time);
-> +       if (error)
->                 goto out;
->
->         error =3D -ENOMEM;
-> @@ -408,8 +408,8 @@ nametoid_parse(struct cache_detail *cd, char *buf, in=
-t buflen)
->         memcpy(ent.name, buf1, sizeof(ent.name));
->
->         /* expiry */
-> -       ent.h.expiry_time =3D get_expiry(&buf);
-> -       if (ent.h.expiry_time =3D=3D 0)
-> +       error =3D get_expiry(&buf, &ent.h.expiry_time);
-> +       if (error)
->                 goto out;
->
->         /* ID */
-> diff --git a/include/linux/sunrpc/cache.h b/include/linux/sunrpc/cache.h
-> index ec5a555df96f..518bd28f5ab8 100644
-> --- a/include/linux/sunrpc/cache.h
-> +++ b/include/linux/sunrpc/cache.h
-> @@ -300,17 +300,18 @@ static inline int get_time(char **bpp, time64_t *ti=
-me)
->         return 0;
->  }
->
-> -static inline time64_t get_expiry(char **bpp)
-> +static inline int get_expiry(char **bpp, time64_t *rvp)
->  {
-> -       time64_t rv;
-> +       int error;
->         struct timespec64 boot;
->
-> -       if (get_time(bpp, &rv))
-> -               return 0;
-> -       if (rv < 0)
-> -               return 0;
-> +       error =3D get_time(bpp, rvp);
-> +       if (error)
-> +               return error;
-> +
->         getboottime64(&boot);
-> -       return rv - boot.tv_sec;
-> +       (*rvp) -=3D boot.tv_sec;
-> +       return 0;
->  }
->
->  #endif /*  _LINUX_SUNRPC_CACHE_H_ */
-> diff --git a/net/sunrpc/auth_gss/svcauth_gss.c b/net/sunrpc/auth_gss/svca=
-uth_gss.c
-> index acb822b23af1..bfaf584d296a 100644
-> --- a/net/sunrpc/auth_gss/svcauth_gss.c
-> +++ b/net/sunrpc/auth_gss/svcauth_gss.c
-> @@ -258,11 +258,11 @@ static int rsi_parse(struct cache_detail *cd,
->
->         rsii.h.flags =3D 0;
->         /* expiry */
-> -       expiry =3D get_expiry(&mesg);
-> -       status =3D -EINVAL;
-> -       if (expiry =3D=3D 0)
-> +       status =3D get_expiry(&mesg, &expiry);
-> +       if (status)
->                 goto out;
->
-> +       status =3D -EINVAL;
->         /* major/minor */
->         len =3D qword_get(&mesg, buf, mlen);
->         if (len <=3D 0)
-> @@ -484,11 +484,11 @@ static int rsc_parse(struct cache_detail *cd,
->
->         rsci.h.flags =3D 0;
->         /* expiry */
-> -       expiry =3D get_expiry(&mesg);
-> -       status =3D -EINVAL;
-> -       if (expiry =3D=3D 0)
-> +       status =3D get_expiry(&mesg, &expiry);
-> +       if (status)
->                 goto out;
->
-> +       status =3D -EINVAL;
->         rscp =3D rsc_lookup(cd, &rsci);
->         if (!rscp)
->                 goto out;
-> diff --git a/net/sunrpc/svcauth_unix.c b/net/sunrpc/svcauth_unix.c
-> index b1efc34db6ed..9e7798a69051 100644
-> --- a/net/sunrpc/svcauth_unix.c
-> +++ b/net/sunrpc/svcauth_unix.c
-> @@ -225,9 +225,9 @@ static int ip_map_parse(struct cache_detail *cd,
->                 return -EINVAL;
->         }
->
-> -       expiry =3D get_expiry(&mesg);
-> -       if (expiry =3D=3D0)
-> -               return -EINVAL;
-> +       err =3D get_expiry(&mesg, &expiry);
-> +       if (err)
-> +               return err;
->
->         /* domainname, or empty for NEGATIVE */
->         len =3D qword_get(&mesg, buf, mlen);
-> @@ -497,9 +497,9 @@ static int unix_gid_parse(struct cache_detail *cd,
->         uid =3D make_kuid(current_user_ns(), id);
->         ug.uid =3D uid;
->
-> -       expiry =3D get_expiry(&mesg);
-> -       if (expiry =3D=3D 0)
-> -               return -EINVAL;
-> +       err =3D get_expiry(&mesg, &expiry);
-> +       if (err)
-> +               return err;
->
->         rv =3D get_int(&mesg, &gids);
->         if (rv || gids < 0 || gids > 8192)
-> --
-> 2.39.2
->
+Chao Peng <chao.p.peng@linux.intel.com> writes:
+
+>> [...]
+
+>> Chao, I'll work on
+
+>> + Running conversion tests for non-overlapping GPA ranges of
+>>    same/different memslots from multiple vcpus
+>> + Deleting memslots with restricted memfd while guests are being
+>>    executed
+>> + Installing multiple memslots with ranges within the same restricted
+>>    mem files
+
+>> this week.
+
+> Thanks Ackerley. Looks good to me.
+
+> BTW, for whom may have interest, below are the testcases I added:
+> https://github.com/chao-p/linux/commit/24dd1257d5c93acb8c8cc6c76c51cf6869970f8a
+> https://github.com/chao-p/linux/commit/39a872ef09d539ce0c953451152eb05276b87018
+> https://github.com/chao-p/linux/commit/ddd2c92b268a2fdc6158f82a6169ad1a57f2a01d
+
+> Chao
+
+Hi Chao,
+
+While I was working on the selftests I noticed that this could perhaps
+be improved:
+
+https://github.com/chao-p/linux/blob/ddd2c92b268a2fdc6158f82a6169ad1a57f2a01d/virt/kvm/kvm_main.c#L1035
+
+We should use a temporary variable to hold the result of fget(fd).
+
+As it is now, if the user provides any invalide fd, like -1,
+slot->restrictedmem.file would be overwritten and lost.
+
+We cannot update slot->restrictedmem.file until after the
+file_is_restrictedmem() check.
+
+For now there isn't a big problem because kvm_restrictedmem_bind() is
+only called on a new struct kvm_memory_slot, but I think this should be
+changed in case the function is used elsewhere in future.
+
+Ackerley
