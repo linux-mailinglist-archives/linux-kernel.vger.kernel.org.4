@@ -2,343 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A926B1152
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 817236B1154
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjCHSsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 13:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
+        id S230196AbjCHSt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 13:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbjCHSsw (ORCPT
+        with ESMTP id S229893AbjCHStZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 13:48:52 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB76CB9CA8
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 10:48:49 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id z5so17594657ljc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 10:48:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678301328;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bv1akr0dZXtnui0AYhF/JTPAEZAhJzReOkFX7K2EQXI=;
-        b=bI0aX4HcMMrcRBC/bfaC9yUDlvK7mWA/9x10juYKdxQHmvafOcldF6qHv38hhBvrxd
-         4GO1Hff5ZHy4/lJFvPvRCUcXShF77kux8dYMbazkGTpy5Kx0D5Vt3gcnfac1KLfHXqFA
-         jy+qPpGPPF6IPX5/gagGXrvDGWe8zrQNVTM7f3mfVd6vZGOStmsYUtE3mh7gjCz0eI9Q
-         WjS/swu5Z82D81cE2R0uxuh3yjKjiok448C8Juam+UXcCKfjAzTKs+EJFuTw0O0rjp4Q
-         8tM+FBYTKdBd5X5LHLF86AuQiZVqoLdrYWdtxlHXFtn7xlKesWRHkF/yxHciGxMNATh2
-         Cc6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678301328;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bv1akr0dZXtnui0AYhF/JTPAEZAhJzReOkFX7K2EQXI=;
-        b=Tx66aXsGtjZ9YcxcukivQs1/x2mVGHkli8/uhzmuMKgd7EvlESA46lXdRCsgt5zpNL
-         6p3rAJZ7K8h/XaysFvhI1LRKuV/iEXwlGFYDppKzoa3msiTnvZdIY4gCPjjLW7uNUEsQ
-         t1myxMZM6QYWB3oKswiBkzosaS8DJrKPUBfHRk79N3cH1NfHcfNoRwiXi3uvTgpRoLn2
-         le7zibKeav0LX8FRhaWcAnb9nN0+DAcWR039GjrZb7SMz1ySvWTbuAFndrOPkXLAgftL
-         EU0lS/WUrTt5yuoChcKtLe9uXHMJiYLN5pwB28151+5Z5vVhRdtjBLPFOCwJ4uerU57j
-         UfJg==
-X-Gm-Message-State: AO0yUKV27udXCCKDKn9muYDSPReq/80toIhi+WDYYJCAfZvwUKp02gVM
-        +vCgd9FkrKBctUfvO9xCvItova6q4MZl806iJLq9dQ==
-X-Google-Smtp-Source: AK7set8PLn02wnWoSUWxQIWomi2iCtDNFADbqKGcA05FOKTzYMA7/Qhpj7WLdjLjE3q+UKaTpvUPM2Jznr4RY5wfm84=
-X-Received: by 2002:a2e:b8d2:0:b0:295:b0cd:522 with SMTP id
- s18-20020a2eb8d2000000b00295b0cd0522mr6167764ljp.2.1678301327684; Wed, 08 Mar
- 2023 10:48:47 -0800 (PST)
+        Wed, 8 Mar 2023 13:49:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97B1B7D9F;
+        Wed,  8 Mar 2023 10:49:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 749396190F;
+        Wed,  8 Mar 2023 18:49:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 999C3C433D2;
+        Wed,  8 Mar 2023 18:49:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678301363;
+        bh=hjqn5JVWJwWwnk2YIxMMq8dT+5sWwomaupQDfPrK2R4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=tQRMEAoBGTJJH0VOZd7LunGNwgg1NH/ZDCaZvTDRvRUfhDaFu7SW1LAd5BC1tDzrJ
+         m/oCYcNn2ny4evrU2DK1pJqKxX25/pSp4+mcLVBFOmNv2QeUTlZkP6sTi52Xx/9ftU
+         DM9mPVuz6B7TAUNR+I0fv4Sl2bJYnAoxFw15MWli2IfwuIEO7V3O9rC0CGwJDqQpe1
+         LuzkQSfJjsKgq/098vkeFpOlORZPTldzi2A5sgDWOiV5rdm4uxeBvf1si56NcUk2gc
+         /FImIfHa2Ys5wCkXCrjcIqfINSM/oRPDnoAZRHLxeqKs6SLKESFeBqj3kC8sWSyXYD
+         fqx9WA9WLWv6w==
+Date:   Wed, 8 Mar 2023 12:49:22 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Richard Zhu <hongxing.zhu@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com
+Subject: Re: [PATCH] PCI: imx6: install the fault handler only if we are
+ really running on a compatible device
+Message-ID: <20230308184922.GA1029723@bhelgaas>
 MIME-Version: 1.0
-References: <20230306225024.264858-5-axelrasmussen@google.com> <202303081703.nwxAgIVH-lkp@intel.com>
-In-Reply-To: <202303081703.nwxAgIVH-lkp@intel.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Wed, 8 Mar 2023 10:48:11 -0800
-Message-ID: <CAJHvVciSP9QyF33GFveESFW3o7vyxbydq2vR4t7tnunJLJNjWg@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] mm: userfaultfd: don't separate addr + len arguments
-To:     kernel test robot <lkp@intel.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <skhan@linuxfoundation.org>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        James Houghton <jthoughton@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aa1c18c70bea1d6f99c88027dc72c700e8c309a2.1677573834.git.hns@goldelico.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 1:52=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
-ote:
->
-> Hi Axel,
->
-> Thank you for the patch! Yet something to improve:
->
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on v6.3-rc1]
-> [cannot apply to akpm-mm/mm-everything next-20230308]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Axel-Rasmussen/mm-=
-userfaultfd-rename-functions-for-clarity-consistency/20230307-065203
-> patch link:    https://lore.kernel.org/r/20230306225024.264858-5-axelrasm=
-ussen%40google.com
-> patch subject: [PATCH v3 4/5] mm: userfaultfd: don't separate addr + len =
-arguments
-> config: x86_64-randconfig-a011-20230306 (https://download.01.org/0day-ci/=
-archive/20230308/202303081703.nwxAgIVH-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c=
-006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/cee642b93be3ae01c=
-7cc737c0176cbc16074a25a
->         git remote add linux-review https://github.com/intel-lab-lkp/linu=
-x
->         git fetch --no-tags linux-review Axel-Rasmussen/mm-userfaultfd-re=
-name-functions-for-clarity-consistency/20230307-065203
->         git checkout cee642b93be3ae01c7cc737c0176cbc16074a25a
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Dx86_64 olddefconfig
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Dx86_64 SHELL=3D/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303081703.nwxAgIVH-lkp@i=
-ntel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> mm/userfaultfd.c:577:52: error: passing 'const struct uffdio_range *' =
-to parameter of incompatible type 'struct uffdio_range'
->                    return  mfill_atomic_hugetlb(dst_vma, src_start, dst, =
-flags);
->                                                                     ^~~
->    mm/userfaultfd.c:463:29: note: passing argument to parameter 'dst' her=
-e
->                                        struct uffdio_range dst,
->                                                            ^
->    1 error generated.
+On Tue, Feb 28, 2023 at 09:43:54AM +0100, H. Nikolaus Schaller wrote:
+> commit bb38919ec56e ("PCI: imx6: Add support for i.MX6 PCIe controller")
+> added a fault hook to this driver in the probe function. So it was only
+> installed if needed.
+> 
+> commit bde4a5a00e76 ("PCI: imx6: Allow probe deferral by reset GPIO")
+> moved it from probe to driver init which installs the hook unconditionally
+> as soon as the driver is compiled into a kernel.
+> 
+> When this driver is compiled as a module, the hook is not registered
+> until after the driver has been matched with a .compatible and
+> loaded.
+> 
+> commit 415b6185c541 ("PCI: imx6: Fix config read timeout handling")
+> extended the fault handling code.
+> 
+> commit 2d8ed461dbc9 ("PCI: imx6: Add support for i.MX8MQ")
+> added some protection for non-ARM architectures, but this does not
+> protect non-i.MX ARM architectures.
 
-Whoops. :) I admittedly didn't test with !CONFIG_HUGETLB_PAGE.
+Are *all* these commits relevant?  Question also applies to Fixes:
+below.
 
-The next version of this series will drop this patch as per discussion
-though, so the issue is moot.
+> Since fault handlers can be triggered on any architecture for different
+> reasons, there is no guarantee that they will be triggered only for the
+> assumed situation, leading to improper error handling (i.MX6-specific
+> imx6q_pcie_abort_handler) on foreign systems.
+> 
+> I had seen strange L3 imprecise external abort messages several times on
+> OMAP4 and OMAP5 devices and couldn't make sense of them until I realized
+> they were related to this unused imx6q driver because I had
+> CONFIG_PCI_IMX6=y.
 
->
->
-> vim +577 mm/userfaultfd.c
->
->    508
->    509  static __always_inline ssize_t mfill_atomic(struct mm_struct *dst=
-_mm,
->    510                                              unsigned long src_sta=
-rt,
->    511                                              const struct uffdio_r=
-ange *dst,
->    512                                              atomic_t *mmap_changi=
-ng,
->    513                                              uffd_flags_t flags)
->    514  {
->    515          struct vm_area_struct *dst_vma;
->    516          ssize_t err;
->    517          pmd_t *dst_pmd;
->    518          unsigned long src_addr, dst_addr;
->    519          long copied;
->    520          struct page *page;
->    521
->    522          /*
->    523           * Sanitize the command parameters:
->    524           */
->    525          BUG_ON(dst->start & ~PAGE_MASK);
->    526          BUG_ON(dst->len & ~PAGE_MASK);
->    527
->    528          /* Does the address range wrap, or is the span zero-sized=
-? */
->    529          BUG_ON(src_start + dst->len <=3D src_start);
->    530          BUG_ON(dst->start + dst->len <=3D dst->start);
->    531
->    532          src_addr =3D src_start;
->    533          dst_addr =3D dst->start;
->    534          copied =3D 0;
->    535          page =3D NULL;
->    536  retry:
->    537          mmap_read_lock(dst_mm);
->    538
->    539          /*
->    540           * If memory mappings are changing because of non-coopera=
-tive
->    541           * operation (e.g. mremap) running in parallel, bail out =
-and
->    542           * request the user to retry later
->    543           */
->    544          err =3D -EAGAIN;
->    545          if (mmap_changing && atomic_read(mmap_changing))
->    546                  goto out_unlock;
->    547
->    548          /*
->    549           * Make sure the vma is not shared, that the dst range is
->    550           * both valid and fully within a single existing vma.
->    551           */
->    552          err =3D -ENOENT;
->    553          dst_vma =3D find_dst_vma(dst_mm, dst);
->    554          if (!dst_vma)
->    555                  goto out_unlock;
->    556
->    557          err =3D -EINVAL;
->    558          /*
->    559           * shmem_zero_setup is invoked in mmap for MAP_ANONYMOUS|=
-MAP_SHARED but
->    560           * it will overwrite vm_ops, so vma_is_anonymous must ret=
-urn false.
->    561           */
->    562          if (WARN_ON_ONCE(vma_is_anonymous(dst_vma) &&
->    563              dst_vma->vm_flags & VM_SHARED))
->    564                  goto out_unlock;
->    565
->    566          /*
->    567           * validate 'mode' now that we know the dst_vma: don't al=
-low
->    568           * a wrprotect copy if the userfaultfd didn't register as=
- WP.
->    569           */
->    570          if ((flags & MFILL_ATOMIC_WP) && !(dst_vma->vm_flags & VM=
-_UFFD_WP))
->    571                  goto out_unlock;
->    572
->    573          /*
->    574           * If this is a HUGETLB vma, pass off to appropriate rout=
-ine
->    575           */
->    576          if (is_vm_hugetlb_page(dst_vma))
->  > 577                  return  mfill_atomic_hugetlb(dst_vma, src_start, =
-dst, flags);
->    578
->    579          if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
->    580                  goto out_unlock;
->    581          if (!vma_is_shmem(dst_vma) &&
->    582              (flags & MFILL_ATOMIC_MODE_MASK) =3D=3D MFILL_ATOMIC_=
-CONTINUE)
->    583                  goto out_unlock;
->    584
->    585          /*
->    586           * Ensure the dst_vma has a anon_vma or this page
->    587           * would get a NULL anon_vma when moved in the
->    588           * dst_vma.
->    589           */
->    590          err =3D -ENOMEM;
->    591          if (!(dst_vma->vm_flags & VM_SHARED) &&
->    592              unlikely(anon_vma_prepare(dst_vma)))
->    593                  goto out_unlock;
->    594
->    595          while (src_addr < src_start + dst->len) {
->    596                  pmd_t dst_pmdval;
->    597
->    598                  BUG_ON(dst_addr >=3D dst->start + dst->len);
->    599
->    600                  dst_pmd =3D mm_alloc_pmd(dst_mm, dst_addr);
->    601                  if (unlikely(!dst_pmd)) {
->    602                          err =3D -ENOMEM;
->    603                          break;
->    604                  }
->    605
->    606                  dst_pmdval =3D pmdp_get_lockless(dst_pmd);
->    607                  /*
->    608                   * If the dst_pmd is mapped as THP don't
->    609                   * override it and just be strict.
->    610                   */
->    611                  if (unlikely(pmd_trans_huge(dst_pmdval))) {
->    612                          err =3D -EEXIST;
->    613                          break;
->    614                  }
->    615                  if (unlikely(pmd_none(dst_pmdval)) &&
->    616                      unlikely(__pte_alloc(dst_mm, dst_pmd))) {
->    617                          err =3D -ENOMEM;
->    618                          break;
->    619                  }
->    620                  /* If an huge pmd materialized from under us fail=
- */
->    621                  if (unlikely(pmd_trans_huge(*dst_pmd))) {
->    622                          err =3D -EFAULT;
->    623                          break;
->    624                  }
->    625
->    626                  BUG_ON(pmd_none(*dst_pmd));
->    627                  BUG_ON(pmd_trans_huge(*dst_pmd));
->    628
->    629                  err =3D mfill_atomic_pte(dst_pmd, dst_vma, dst_ad=
-dr,
->    630                                         src_addr, &page, flags);
->    631                  cond_resched();
->    632
->    633                  if (unlikely(err =3D=3D -ENOENT)) {
->    634                          void *page_kaddr;
->    635
->    636                          mmap_read_unlock(dst_mm);
->    637                          BUG_ON(!page);
->    638
->    639                          page_kaddr =3D kmap_local_page(page);
->    640                          err =3D copy_from_user(page_kaddr,
->    641                                               (const void __user *=
-) src_addr,
->    642                                               PAGE_SIZE);
->    643                          kunmap_local(page_kaddr);
->    644                          if (unlikely(err)) {
->    645                                  err =3D -EFAULT;
->    646                                  goto out;
->    647                          }
->    648                          flush_dcache_page(page);
->    649                          goto retry;
->    650                  } else
->    651                          BUG_ON(page);
->    652
->    653                  if (!err) {
->    654                          dst_addr +=3D PAGE_SIZE;
->    655                          src_addr +=3D PAGE_SIZE;
->    656                          copied +=3D PAGE_SIZE;
->    657
->    658                          if (fatal_signal_pending(current))
->    659                                  err =3D -EINTR;
->    660                  }
->    661                  if (err)
->    662                          break;
->    663          }
->    664
->    665  out_unlock:
->    666          mmap_read_unlock(dst_mm);
->    667  out:
->    668          if (page)
->    669                  put_page(page);
->    670          BUG_ON(copied < 0);
->    671          BUG_ON(err > 0);
->    672          BUG_ON(!copied && !err);
->    673          return copied ? copied : err;
->    674  }
->    675
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+Apparently imx6q_pcie_abort_handler() assumes it is always called
+because of a PCI abort?  If so, that sounds problematic.
+
+If non-PCI imprecise aborts happen on OMAP4 and OMAP5 where imx6q is
+unused and imx6q_pcie_abort_handler() is not appropriate, I assume
+similar non-PCI aborts can also happen on systems where imx6q *is*
+used.
+
+So imx6q_pcie_abort_handler() may be trying to fixup non-PCI aborts
+when it shouldn't?
+
+> Note that CONFIG_PCI_IMX6=y is useful for kernel binaries that are designed
+> to run on different ARM SoC and be differentiated only by device tree
+> binaries. So turning off CONFIG_PCI_IMX6 is not a solution.
+> 
+> Therefore we check the compatible in the init function before registering
+> the fault handler.
+> 
+> Fixes: bde4a5a00e76 ("PCI: imx6: Allow probe deferral by reset GPIO")
+> Fixes: 415b6185c541 ("PCI: imx6: Fix config read timeout handling")
+> Fixes: 2d8ed461dbc9 ("PCI: imx6: Add support for i.MX8MQ")
+> 
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>  drivers/pci/controller/dwc/pci-imx6.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+> index 1dde5c579edc8..89774aa187ae8 100644
+> --- a/drivers/pci/controller/dwc/pci-imx6.c
+> +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> @@ -1402,6 +1402,15 @@ DECLARE_PCI_FIXUP_CLASS_HEADER(PCI_VENDOR_ID_SYNOPSYS, 0xabcd,
+>  static int __init imx6_pcie_init(void)
+>  {
+>  #ifdef CONFIG_ARM
+> +	const struct of_device_id *reboot_id;
+> +	struct device_node *np;
+> +
+> +	np = of_find_matching_node_and_match(NULL, imx6_pcie_of_match,
+> +					     &reboot_id);
+
+Since you don't need reboot_id, I think you should use
+of_find_matching_node() instead.
+
+> +	if (!np)
+> +		return -ENODEV;
+> +	of_node_put(np);
+> +
+>  	/*
+>  	 * Since probe() can be deferred we need to make sure that
+>  	 * hook_fault_code is not called after __init memory is freed
+> -- 
+> 2.38.1
+> 
