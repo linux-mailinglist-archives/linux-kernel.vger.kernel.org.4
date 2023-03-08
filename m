@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44ABF6B01CC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A626B01D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjCHIn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:43:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
+        id S229901AbjCHIok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:44:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjCHInZ (ORCPT
+        with ESMTP id S229735AbjCHIoh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:43:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDEA580DA;
-        Wed,  8 Mar 2023 00:43:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 888A0616F4;
-        Wed,  8 Mar 2023 08:43:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8575CC433D2;
-        Wed,  8 Mar 2023 08:43:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678265004;
-        bh=0j3HfSMJczICakUlTxj6g1PB6nR3AicSUGjv7aiaZGM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oMZCEH3ask/jhqKeTpLibWmHKGD5w7f2C8IV588FGSnUBTCZb/RF3MXN0yUCEWkAd
-         4AJutLrcRDF+z7SQ1M6NWXpijLh3oxNfZ4/45ZH7z6lGffwkCvYKa9tnlnCODme06Q
-         uScSAseArAxNs4tl0hlneTerHWVkAgHkFAgwBVxIzvzue8FdaY8OsluGH0izusXYfE
-         sEgq5+jFCvNHXQY8MaDFmUlgawtuuRjBtx5/cZiM7bry23Yw3V6DjdcjJf8JUZUJJB
-         PcITZnd1DKBDEE7iiX+9/bdgIS9n++vYj/MEuFKkNnEGvYYkvijNHtNizs/cyN+EYb
-         ewT2Fwm7Cq2Fw==
-Message-ID: <264f0489-726d-de7f-1182-09d4e12f2fbd@kernel.org>
-Date:   Wed, 8 Mar 2023 10:43:18 +0200
+        Wed, 8 Mar 2023 03:44:37 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00868FBDF;
+        Wed,  8 Mar 2023 00:44:35 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id u9so62713483edd.2;
+        Wed, 08 Mar 2023 00:44:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678265074;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RfRb5S56BPBA0+cLXTQV+70i2hjJgSw3qjK6yqkpQmA=;
+        b=T+uYE2LzhkooSS7rrRfLJM9pWFxZwabb26+AHUd6qrHyOnbgZYXgUc0ADMS8nCXfl9
+         3Bammt8siYoiuycqzAgrEiYPXiRjPIl/+YH/A9OoTfddJg5wklJXWXZ9j++45rtEiP6L
+         YyBgK5XelJ8yBvmTs8KxiEC9YN6GI/weGpfV2bio8eYv0pdi0bpHFaZnZP2oePi6pGHd
+         UXdBBbTyqU4sgR/CGvHODaYxkQJef+DuoH3d3laT/Vl8gZgygKlCWw3DxA2mQ30SICmD
+         58jJlTOYwOfV+Di32Jvx4v9S5Apci9Gq/AKMv1CxqOt0ko8gEtDt+r/hmifxQGFWOJmi
+         K7zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678265074;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RfRb5S56BPBA0+cLXTQV+70i2hjJgSw3qjK6yqkpQmA=;
+        b=1gbxHcOpRH5ZxbCiVKbvIGZa8FiVlbT+R17aFDgEk4oKM6yvULC6FJXjaWP9yyDclv
+         XW4pIMq1GPlsrGeUWaVO1c1KBmZ+7U8sSH2jWsS/ZEqHFkVXEhO02CubuW7u+1IOGjdo
+         EXXb42qy/w5CGUzuTLgTaAB8U0xm7b4RgkKMPrrdEYq2GBRstPPAaqaPUgRXJ8RoLxja
+         0gDzP7iMNiVccpZROg/EcU2SRMzVhH9cBpjk1Q21ItW3mQio3cAV9GChq9L1pDMnua1a
+         6sM+GtUnk1e/6Note6XkFHDlIL6QxjHC+TtEl6lWvoT/5lvY4D0XcaS+g9eikMYe6DF2
+         8IDQ==
+X-Gm-Message-State: AO0yUKXyBk5wseS3svFIgqSXRea0cO6kvECcZrizfIO+TPlAU4GV5aut
+        8/0ZUwzjvzCMuwdTGY+XxSs7PFuZCPs=
+X-Google-Smtp-Source: AK7set/s0xsnZw0bMDdW87f8QuGjZXhn+kDZ0PQ/l58nOv/yYpmY39+MpUlRUORbOu7xl8Q2KC3xmg==
+X-Received: by 2002:a17:906:4c8e:b0:8af:447a:ff8e with SMTP id q14-20020a1709064c8e00b008af447aff8emr15131068eju.20.1678265074178;
+        Wed, 08 Mar 2023 00:44:34 -0800 (PST)
+Received: from xeon.. ([188.163.112.76])
+        by smtp.gmail.com with ESMTPSA id p8-20020a170906838800b008ee95ccfe06sm7163891ejx.119.2023.03.08.00.44.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 00:44:33 -0800 (PST)
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+To:     Iskren Chernev <me@iskren.info>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/4] Add optional properties to MAX17040
+Date:   Wed,  8 Mar 2023 10:44:15 +0200
+Message-Id: <20230308084419.11934-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 6/6] soc: ti: pruss: Add helper functions to get/set
- PRUSS_CFG_GPMUX
-Content-Language: en-US
-To:     MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <t-kristo@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-Cc:     linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20230306110934.2736465-1-danishanwar@ti.com>
- <20230306110934.2736465-7-danishanwar@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230306110934.2736465-7-danishanwar@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,20 +75,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Extend properties supported by max17040 fuel gauge with static
+simple battery cell properties, some supplier properties (like
+health and status) and thermal data from external sensor.
 
+Svyatoslav Ryhel (4):
+  dt-bindings: power: supply: maxim,max17040: update properties
+  power: max17040: add simple battery cell support
+  power: max17040: add passing props from supplier
+  power: max17040: get thermal data from adc if available
 
-On 06/03/2023 13:09, MD Danish Anwar wrote:
-> From: Tero Kristo <t-kristo@ti.com>
-> 
-> Add two new helper functions pruss_cfg_get_gpmux() & pruss_cfg_set_gpmux()
-> to get and set the GP MUX mode for programming the PRUSS internal wrapper
-> mux functionality as needed by usecases.
-> 
-> Co-developed-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+ .../bindings/power/supply/maxim,max17040.yaml | 37 +++++++++++
+ drivers/power/supply/max17040_battery.c       | 66 +++++++++++++++++++
+ 2 files changed, 103 insertions(+)
 
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
+-- 
+2.37.2
+
