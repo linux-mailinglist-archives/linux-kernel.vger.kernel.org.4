@@ -2,154 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817236B1154
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55BB36B1158
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjCHSt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 13:49:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
+        id S230249AbjCHSto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 13:49:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjCHStZ (ORCPT
+        with ESMTP id S230199AbjCHStc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 13:49:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97B1B7D9F;
-        Wed,  8 Mar 2023 10:49:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 749396190F;
-        Wed,  8 Mar 2023 18:49:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 999C3C433D2;
-        Wed,  8 Mar 2023 18:49:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678301363;
-        bh=hjqn5JVWJwWwnk2YIxMMq8dT+5sWwomaupQDfPrK2R4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=tQRMEAoBGTJJH0VOZd7LunGNwgg1NH/ZDCaZvTDRvRUfhDaFu7SW1LAd5BC1tDzrJ
-         m/oCYcNn2ny4evrU2DK1pJqKxX25/pSp4+mcLVBFOmNv2QeUTlZkP6sTi52Xx/9ftU
-         DM9mPVuz6B7TAUNR+I0fv4Sl2bJYnAoxFw15MWli2IfwuIEO7V3O9rC0CGwJDqQpe1
-         LuzkQSfJjsKgq/098vkeFpOlORZPTldzi2A5sgDWOiV5rdm4uxeBvf1si56NcUk2gc
-         /FImIfHa2Ys5wCkXCrjcIqfINSM/oRPDnoAZRHLxeqKs6SLKESFeBqj3kC8sWSyXYD
-         fqx9WA9WLWv6w==
-Date:   Wed, 8 Mar 2023 12:49:22 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Richard Zhu <hongxing.zhu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        kernel@pyra-handheld.com
-Subject: Re: [PATCH] PCI: imx6: install the fault handler only if we are
- really running on a compatible device
-Message-ID: <20230308184922.GA1029723@bhelgaas>
+        Wed, 8 Mar 2023 13:49:32 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F59FBF8C8
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 10:49:30 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id o12so69585337edb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 10:49:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678301368;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=45PyBpg4cgEyf/MX2yYwknP8xso5JZQyHb1Ea24n/SM=;
+        b=GUsrD8kmEoyHpT+XzkjqnEi8F6LUSevbMawimRHX98R3VxxrNOIatu9O5eMeRPRmgn
+         Ic5jITwdRqJEFG9d5wns1kYEHPNZxidIa3v4lDnP4NYWEK/oLle6WBp4rzMoEYCpn6/R
+         UQzLmBG9Hrursy2xj01drRTuesVtSTpMuPK+PPBGjpPeLHWRtyuLoYXa8/3NvNlH+CwN
+         RR2fS9nleDJKsXrhF+SyL7/uTk0v8YYOzl9DrSJZJPuUvoqNldzG9bcvKrFz3wNhNBpz
+         ChD8MnYR2zoS11xtsxVMTkVIZtsIsc/wAlcyD0i2KsgQLKpjr/Apx1hiA0ggKrAeO7rw
+         iXyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678301368;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=45PyBpg4cgEyf/MX2yYwknP8xso5JZQyHb1Ea24n/SM=;
+        b=SOlzv/o0ir5s2IB1N5iYU+21J0+iMCcUQQ57vspUM5SNV6Lyd+bqkKqOO2Fy795OQ/
+         xfzuHibd21ydpc8xkylN/bfUg6yKuVhMoO9KV4Hrwp41xZrzZAC9gAK5vv4/4/cnK5mG
+         WldDbl9NeBgb2cDWK8cWa50Z7X9XAWTISV/m2a8bJHTuLEGE4PZkVUz2WT+rh4BetOSR
+         CvYhNyN0V8c+7JucZRm7dnmc5VLhiE9UFmjYEXQRMlfvPG82079auq+3NgFSUGLGtpmK
+         /4dCpIf0qb4RKF3zjXqd9yvo35N6iyzLdwuFO/GrQ+gfY0WQQWKWdmnY7NzsE7IXZ40d
+         I6Bg==
+X-Gm-Message-State: AO0yUKVzqNjDUYmNid8h3+W7Bqjm6YOaiH0rtQmR9mZqq2GSS83mHOj/
+        PoXKJ+j9FuHCOCkdADqV6oRTmQ==
+X-Google-Smtp-Source: AK7set8NTawZYI1kntQ056oja2n5V6VWQ9wLhrcmliI9bJyRdIUZgPo2/LZx19zW/3BefeCesKBhqQ==
+X-Received: by 2002:a17:906:6d53:b0:8b1:2614:edfe with SMTP id a19-20020a1709066d5300b008b12614edfemr20769244ejt.9.1678301368660;
+        Wed, 08 Mar 2023 10:49:28 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:ff33:9b14:bdd2:a3da? ([2a02:810d:15c0:828:ff33:9b14:bdd2:a3da])
+        by smtp.gmail.com with ESMTPSA id i6-20020a17090671c600b008b26f3d45fbsm7910217ejk.143.2023.03.08.10.49.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 10:49:28 -0800 (PST)
+Message-ID: <5992cb0a-50a0-a19c-3ad1-03dd347a630b@linaro.org>
+Date:   Wed, 8 Mar 2023 19:49:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aa1c18c70bea1d6f99c88027dc72c700e8c309a2.1677573834.git.hns@goldelico.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [net-next PATCH 09/11] dt-bindings: net: dsa: qca8k: add LEDs
+ definition example
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Lee Jones <lee@kernel.org>,
+        linux-leds@vger.kernel.org
+References: <20230307170046.28917-1-ansuelsmth@gmail.com>
+ <20230307170046.28917-10-ansuelsmth@gmail.com>
+ <ad43a809-b9fd-bd24-ee1a-9e509939023b@linaro.org>
+ <df6264de-36c5-41f2-a2a0-08b61d692c75@lunn.ch>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <df6264de-36c5-41f2-a2a0-08b61d692c75@lunn.ch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 09:43:54AM +0100, H. Nikolaus Schaller wrote:
-> commit bb38919ec56e ("PCI: imx6: Add support for i.MX6 PCIe controller")
-> added a fault hook to this driver in the probe function. So it was only
-> installed if needed.
+On 08/03/2023 14:57, Andrew Lunn wrote:
+> On Wed, Mar 08, 2023 at 11:58:33AM +0100, Krzysztof Kozlowski wrote:
+>> On 07/03/2023 18:00, Christian Marangi wrote:
+>>> Add LEDs definition example for qca8k Switch Family to describe how they
+>>> should be defined for a correct usage.
+>>>
+>>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+>>
+>> Where is the changelog? This was v8 already! What happened with all
+>> review, changes?
 > 
-> commit bde4a5a00e76 ("PCI: imx6: Allow probe deferral by reset GPIO")
-> moved it from probe to driver init which installs the hook unconditionally
-> as soon as the driver is compiled into a kernel.
+> Did you read patch 0?
 > 
-> When this driver is compiled as a module, the hook is not registered
-> until after the driver has been matched with a .compatible and
-> loaded.
-> 
-> commit 415b6185c541 ("PCI: imx6: Fix config read timeout handling")
-> extended the fault handling code.
-> 
-> commit 2d8ed461dbc9 ("PCI: imx6: Add support for i.MX8MQ")
-> added some protection for non-ARM architectures, but this does not
-> protect non-i.MX ARM architectures.
+> We have decided to start again, starting small and working up. This
+> patchset just adds plain, boring LEDs. No acceleration, on hardware
+> offload. Just on/off, and fixed blink.
 
-Are *all* these commits relevant?  Question also applies to Fixes:
-below.
+Sure, but the patch is carried over. So what happened with all its
+feedback? Was there or was not? How can we know?
 
-> Since fault handlers can be triggered on any architecture for different
-> reasons, there is no guarantee that they will be triggered only for the
-> assumed situation, leading to improper error handling (i.MX6-specific
-> imx6q_pcie_abort_handler) on foreign systems.
 > 
-> I had seen strange L3 imprecise external abort messages several times on
-> OMAP4 and OMAP5 devices and couldn't make sense of them until I realized
-> they were related to this unused imx6q driver because I had
-> CONFIG_PCI_IMX6=y.
+> What do you think makes the patchset is not bisectable? We are happy
+> to address such issues, but i did not notice anything.
 
-Apparently imx6q_pcie_abort_handler() assumes it is always called
-because of a PCI abort?  If so, that sounds problematic.
+I didn't write anything like that here...
 
-If non-PCI imprecise aborts happen on OMAP4 and OMAP5 where imx6q is
-unused and imx6q_pcie_abort_handler() is not appropriate, I assume
-similar non-PCI aborts can also happen on systems where imx6q *is*
-used.
+Best regards,
+Krzysztof
 
-So imx6q_pcie_abort_handler() may be trying to fixup non-PCI aborts
-when it shouldn't?
-
-> Note that CONFIG_PCI_IMX6=y is useful for kernel binaries that are designed
-> to run on different ARM SoC and be differentiated only by device tree
-> binaries. So turning off CONFIG_PCI_IMX6 is not a solution.
-> 
-> Therefore we check the compatible in the init function before registering
-> the fault handler.
-> 
-> Fixes: bde4a5a00e76 ("PCI: imx6: Allow probe deferral by reset GPIO")
-> Fixes: 415b6185c541 ("PCI: imx6: Fix config read timeout handling")
-> Fixes: 2d8ed461dbc9 ("PCI: imx6: Add support for i.MX8MQ")
-> 
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index 1dde5c579edc8..89774aa187ae8 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -1402,6 +1402,15 @@ DECLARE_PCI_FIXUP_CLASS_HEADER(PCI_VENDOR_ID_SYNOPSYS, 0xabcd,
->  static int __init imx6_pcie_init(void)
->  {
->  #ifdef CONFIG_ARM
-> +	const struct of_device_id *reboot_id;
-> +	struct device_node *np;
-> +
-> +	np = of_find_matching_node_and_match(NULL, imx6_pcie_of_match,
-> +					     &reboot_id);
-
-Since you don't need reboot_id, I think you should use
-of_find_matching_node() instead.
-
-> +	if (!np)
-> +		return -ENODEV;
-> +	of_node_put(np);
-> +
->  	/*
->  	 * Since probe() can be deferred we need to make sure that
->  	 * hook_fault_code is not called after __init memory is freed
-> -- 
-> 2.38.1
-> 
