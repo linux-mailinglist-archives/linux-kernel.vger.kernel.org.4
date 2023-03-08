@@ -2,226 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B4C6B10C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBCE16B10C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjCHSNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 13:13:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
+        id S230093AbjCHSM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 13:12:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjCHSMz (ORCPT
+        with ESMTP id S230063AbjCHSMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 13:12:55 -0500
-Received: from 16.mo561.mail-out.ovh.net (16.mo561.mail-out.ovh.net [188.165.56.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCD1CE96F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 10:12:40 -0800 (PST)
-Received: from director8.ghost.mail-out.ovh.net (unknown [10.108.4.98])
-        by mo561.mail-out.ovh.net (Postfix) with ESMTP id D1E83206F5
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 18:12:38 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-cqldr (unknown [10.110.115.240])
-        by director8.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 1EF4D1FDE9;
-        Wed,  8 Mar 2023 18:12:33 +0000 (UTC)
-Received: from RCM-web1.webmail.mail.ovh.net ([176.31.238.120])
-        by ghost-submission-6684bf9d7b-cqldr with ESMTPSA
-        id NAwlBhHQCGQKAhoAZIOUGg
-        (envelope-from <rafal@milecki.pl>); Wed, 08 Mar 2023 18:12:33 +0000
+        Wed, 8 Mar 2023 13:12:53 -0500
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC32CEFB6;
+        Wed,  8 Mar 2023 10:12:38 -0800 (PST)
+Received: by mail-ot1-f50.google.com with SMTP id l15-20020a9d7a8f000000b0069447f0db6fso9453395otn.4;
+        Wed, 08 Mar 2023 10:12:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678299158;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7v3Me2y7t7dCURwLEAGtEDEw0TqjC7V3ocAkq0mf58g=;
+        b=zh6UuwyK+gR/e7fEh5drwQJqfzxjJkpJwy/jvRYhZAlf8WiAf0ICGJe42IMCRVbY8t
+         8AtP9oz7qxhNjXGSVLjsRhikjtIS0OB5fk3egoBFzaD+14B0nrPdx019FUCZQKRXP6Br
+         n5YpqiOvw6IDQ+l0uxz2vP/yyPP8AK3yPWBRETPgVJZ7NYJyFDg8wAYTZEq97es5LgfA
+         CgttVQlEEweST+YmXD8WGZY8pO3tQqJHqMRnEJPgjNKly8nW6XtZpsbTEFOisqcwNZcQ
+         wvEh9DMgviJJqjXz2a4Q6X1Ck4cD75iM1VPEY6NEwWaED9hW85hoHGkJM4j/A5XkM+b8
+         MMUw==
+X-Gm-Message-State: AO0yUKVRvIqLscEZEkHCQFxL5E1bQPDdtjAmw0Rfi3OiENpMxpmLTsbg
+        joKnzqUHVXQp+ySSKlrD7A==
+X-Google-Smtp-Source: AK7set+9aSSHh9EYLXwvCVkULUEr9F1S3fp5AOhM216juwlOAQ55mt9toBGuxByRpZcKPLlBVPwBlQ==
+X-Received: by 2002:a05:6830:920:b0:68b:c60c:de58 with SMTP id v32-20020a056830092000b0068bc60cde58mr11918010ott.7.1678299157654;
+        Wed, 08 Mar 2023 10:12:37 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t20-20020a056830083400b0068bbf5f2e49sm6678351ots.37.2023.03.08.10.12.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 10:12:37 -0800 (PST)
+Received: (nullmailer pid 3527197 invoked by uid 1000);
+        Wed, 08 Mar 2023 18:12:36 -0000
+Date:   Wed, 8 Mar 2023 12:12:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Minda Chen <minda.chen@starfivetech.com>
+Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: phy: Add StarFive JH7110 USB
+ dt-binding
+Message-ID: <20230308181236.GA3512870-robh@kernel.org>
+References: <20230308082800.3008-1-minda.chen@starfivetech.com>
+ <20230308082800.3008-2-minda.chen@starfivetech.com>
 MIME-Version: 1.0
-Date:   Wed, 08 Mar 2023 19:12:32 +0100
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH V2] nvmem: add explicit config option to read OF fixed
- cells
-In-Reply-To: <20230308190636.7fabab9c@xps-13>
-References: <20230224072903.20945-1-zajec5@gmail.com>
- <20230308173256.3837b87b@xps-13>
- <91ff425b4c901648b1faf34c784f20ad@milecki.pl>
- <20230308190636.7fabab9c@xps-13>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <5974d28426057975e701c4a8454b5a13@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 14994172011305216839
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvddufedgieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtkehjtddtreejnecuhfhrohhmpeftrghfrghlucfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeejvdelgfeutdfhfeelheegfedtleduleeuvdfgfeefvefhvedtheetjeetfeehgeenucfkphepuddvjedrtddrtddruddpudelgedrudekjedrjeegrddvfeefpddujeeirdefuddrvdefkedruddvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehrrghfrghlsehmihhlvggtkhhirdhplheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedupdhmohguvgepshhmthhpohhuth
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308082800.3008-2-minda.chen@starfivetech.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-08 19:06, Miquel Raynal wrote:
-> Hi Rafał,
+On Wed, Mar 08, 2023 at 04:27:58PM +0800, Minda Chen wrote:
+> Add StarFive JH7110 SoC USB 3.0 phy dt-binding.
+> USB controller is cadence USB 3.0 IP.
 > 
-> rafal@milecki.pl wrote on Wed, 08 Mar 2023 17:55:46 +0100:
+> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+> ---
+>  .../bindings/phy/starfive,jh7110-usb-phy.yaml | 158 ++++++++++++++++++
+>  1 file changed, 158 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
 > 
->> On 2023-03-08 17:34, Miquel Raynal wrote:
->> > Hi Rafał,
->> >
->> > zajec5@gmail.com wrote on Fri, 24 Feb 2023 08:29:03 +0100:
->> >
->> >> From: Rafał Miłecki <rafal@milecki.pl>
->> >> >> NVMEM subsystem looks for fixed NVMEM cells (specified in DT) by
->> >> default. This behaviour made sense in early days before adding support
->> >> for dynamic cells.
->> >> >> With every new supported NVMEM device with dynamic cells current
->> >> behaviour becomes non-optimal. It results in unneeded iterating over >> DT
->> >> nodes and may result in false discovery of cells (depending on used DT
->> >> properties).
->> >> >> This behaviour has actually caused a problem already with the MTD
->> >> subsystem. MTD subpartitions were incorrectly treated as NVMEM cells.
->> >
->> > That's true, but I expect this to be really MTD specific.
->> >
->> > A concrete proposal below.
->> >
->> >> Also with upcoming support for NVMEM layouts no new binding or driver
->> >> should support fixed cells defined in device node.
->> >
->> > I'm not sure I agree with this statement. We are not preventing new
->> > binding/driver to use fixed cells, or...? We offer a new way to expose
->> > nvmem cells with another way than "fixed-offset" and "fixed-size" OF
->> > nodes.
->> 
->>  From what I understood all new NVMEM bindings should have cells 
->> defined
->> in the nvmem-layout { } node. That's what I mean by saying they should
->> not be defined in device node (but its "nvmem-layout" instead).
-> 
-> Layouts are just another possibility, either you user the nvmem-cells
-> compatible and produce nvmem cells with fixed OF nodes, or you use the
-> nvmem-layout container. I don't think all new bindings should have
-> cells in layouts. It depends if the content is static or not.
-> 
->> >> Solve this by modifying drivers for bindings that support specifying
->> >> fixed NVMEM cells in DT. Make them explicitly tell NVMEM subsystem to
->> >> read cells from DT.
->> >> >> It wasn't clear (to me) if rtc and w1 code actually uses fixed cells. >> I
->> >> enabled them to don't risk any breakage.
->> >> >> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
->> >> [for drivers/nvmem/meson-{efuse,mx-efuse}.c]
->> >> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
->> >> ---
->> >> V2: Fix stm32-romem.c typo breaking its compilation
->> >>     Pick Martin's Acked-by
->> >>     Add paragraph about layouts deprecating use_fixed_of_cells
->> >> ---
->> >>  drivers/mtd/mtdcore.c          | 2 ++
->> >>  drivers/nvmem/apple-efuses.c   | 1 +
->> >>  drivers/nvmem/core.c           | 8 +++++---
->> >>  drivers/nvmem/imx-ocotp-scu.c  | 1 +
->> >>  drivers/nvmem/imx-ocotp.c      | 1 +
->> >>  drivers/nvmem/meson-efuse.c    | 1 +
->> >>  drivers/nvmem/meson-mx-efuse.c | 1 +
->> >>  drivers/nvmem/microchip-otpc.c | 1 +
->> >>  drivers/nvmem/mtk-efuse.c      | 1 +
->> >>  drivers/nvmem/qcom-spmi-sdam.c | 1 +
->> >>  drivers/nvmem/qfprom.c         | 1 +
->> >>  drivers/nvmem/rave-sp-eeprom.c | 1 +
->> >>  drivers/nvmem/rockchip-efuse.c | 1 +
->> >>  drivers/nvmem/sc27xx-efuse.c   | 1 +
->> >>  drivers/nvmem/sprd-efuse.c     | 1 +
->> >>  drivers/nvmem/stm32-romem.c    | 1 +
->> >>  drivers/nvmem/sunplus-ocotp.c  | 1 +
->> >>  drivers/nvmem/sunxi_sid.c      | 1 +
->> >>  drivers/nvmem/uniphier-efuse.c | 1 +
->> >>  drivers/nvmem/zynqmp_nvmem.c   | 1 +
->> >>  drivers/rtc/nvmem.c            | 1 +
->> >>  drivers/w1/slaves/w1_ds250x.c  | 1 +
->> >>  include/linux/nvmem-provider.h | 2 ++
->> >>  23 files changed, 29 insertions(+), 3 deletions(-)
->> >> >> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
->> >> index 0feacb9fbdac..1bb479c0f758 100644
->> >> --- a/drivers/mtd/mtdcore.c
->> >> +++ b/drivers/mtd/mtdcore.c
->> >> @@ -523,6 +523,7 @@ static int mtd_nvmem_add(struct mtd_info *mtd)
->> >>  	config.dev = &mtd->dev;
->> >>  	config.name = dev_name(&mtd->dev);
->> >>  	config.owner = THIS_MODULE;
->> >> +	config.use_fixed_of_cells = of_device_is_compatible(node, >> "nvmem-cells");
->> >
->> > I am wondering how mtd specific this is? For me all OF nodes containing
->> > the nvmem-cells compatible should be treated as cells providers and
->> > populate nvmem cells as for each children.
->> >
->> > Why don't we just check for this compatible to be present? in
->> > nvmem_add_cells_from_of() ? And if not we just skip the operation.
->> >
->> > This way we still follow the bindings (even though using nvmem-cells in
->> > the compatible property to require cells population was a mistake in
->> > the first place, as discussed in the devlink thread recently) but there
->> > is no need for a per-driver config option?
->> 
->> This isn't mtd specific. Please check this patch for all occurrences 
->> of
->> the:
->> use_fixed_of_cells = true
->> 
->> The very first one: drivers/nvmem/apple-efuses.c driver for the
->> "apple,efuses" binding. That binding supports fixed OF cells, see:
->> Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
-> 
-> I'm saying: based on what has been enforced so far, I would expect all
-> fixed cell providers to come with nvmem-cells as compatible, no?
-> 
-> If that's the case we could use that as a common denominator?
+> diff --git a/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
+> new file mode 100644
+> index 000000000000..daa88d065deb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
 
-Sorry, I don't get it. Have you checked
-Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
-?
+Filename should match the compatible. The filename seems more correct 
+than the compatible...
 
-It's a NVMEM provied binding with fixed cells that doesn't use
-nvmem-cells as compatible. There are many more.
+> @@ -0,0 +1,158 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/starfive,jh7110-usb-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: StarFive USB 2.0 and 3.0 PHY
+> +
+> +maintainers:
+> +  - Minda Chen<minda.chen@starfivetech.com>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: starfive,jh7110-usb
+
+What's the USB controller called?
+
+> +
+> +  reg:
+> +    maxItems: 2
+> +
+> +  reg-names:
+> +    items:
+> +      - const: usb3
+> +      - const: usb2
+> +
+> +  clocks:
+> +    items:
+> +      - description: usb 125m clock
+> +      - description: app 125m clock
+> +      - description: lpm clock
+> +      - description: stb clock
+> +      - description: apb clock
+> +      - description: axi clock
+> +      - description: utmi apb clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: usb_125m
+> +      - const: usb0_app_125
+> +      - const: usb0_lpm
+> +      - const: usb0_stb
+> +      - const: usb0_apb
+> +      - const: usb0_axi
+> +      - const: usb0_utmi_apb
+
+usb_ and usb0_ is redundant, drop.
+
+> +
+> +  resets:
+> +    items:
+> +      - description: USB0_PWRUP reset
+> +      - description: USB0_APB reset
+> +      - description: USB0_AXI reset
+> +      - description: USB0_UTMI_APB reset
+> +
+> +  starfive,sys-syscon:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      items:
+
+Are there multiple entries of phandle+offset because this says there 
+are. You want '- items:' here to limit it to 1 phandle+offset.
+
+> +        - description: phandle to System Register Controller sys_syscon node.
+> +        - description: offset of SYS_SYSCONSAIF__SYSCFG register for USB.
+> +    description:
+> +      The phandle to System Register Controller syscon node and the offset
+> +      of SYS_SYSCONSAIF__SYSCFG register for USB.
+> +
+> +  starfive,stg-syscon:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      items:
+
+Same here.
+
+> +        - description: phandle to System Register Controller stg_syscon node.
+> +        - description: register0 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+> +        - description: register1 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+> +        - description: register2 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+> +        - description: register3 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+> +    description:
+> +      The phandle to System Register Controller syscon node and the offset
+> +      of STG_SYSCONSAIF__SYSCFG register for USB. Total 4 regsisters offset
+> +      for USB.
+> +
+> +  dr_mode:
+
+Usually this belongs in the controller node.
+
+> +    description: PHY mode.
+> +    enum:
+> +      - host
+> +      - peripheral
+> +      - otg
+> +
+> +  "#address-cells":
+> +    maximum: 2
+> +
+> +  "#size-cells":
+> +    maximum: 2
+> +
+> +  ranges: true
+> +
+> +  starfive,usb2-only:
+> +    type: boolean
+> +    description: Set USB using usb 2.0 phy. Supprt USB 2.0 only
+
+The 'maximum-speed' property in the controller should be enough. Why is 
+this needed.
+
+Being a PHY, you are missing #phy-cells.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - starfive,sys-syscon
+> +  - starfive,stg-syscon
+> +  - dr_mode
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - ranges
+> +
+> +patternProperties:
+> +  "^usb@[0-9a-f]+$":
+> +    type: object
+> +    description: |
+> +      usbphy node should have '1' usb controller subnode.
+> +      It could be Cadence USB3 DRD controller.
+> +      Cadence USB3 should follow the bindings specified in
+> +      Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+
+Why is the controller a child of the phy?
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    usbphy@10200000 {
+> +      compatible = "starfive,jh7110-usb";
+> +      reg = <0x10210000 0x1000>,
+> +            <0x10200000 0x1000>;
+> +      reg-names = "usb3", "usb2";
+> +      clocks = <&syscrg 95>,
+> +               <&stgcrg 6>,
+> +               <&stgcrg 4>,
+> +               <&stgcrg 5>,
+> +               <&stgcrg 1>,
+> +               <&stgcrg 3>,
+> +               <&stgcrg 2>;
+> +      clock-names = "usb_125m", "usb0_app_125", "usb0_lpm",
+> +                    "usb0_stb", "usb0_apb", "usb0_axi", "usb0_utmi_apb";
+> +      resets = <&stgcrg 10>,
+> +               <&stgcrg 8>,
+> +               <&stgcrg 7>,
+> +               <&stgcrg 9>;
+> +      starfive,stg-syscon = <&stg_syscon 0x4 0xc4 0x148 0x1f4>;
+> +      starfive,sys-syscon = <&sys_syscon 0x18>;
+> +      dr_mode = "host";
+> +      #address-cells = <1>;
+> +      #size-cells = <1>;
+> +      ranges;
+> +
+> +      usb@10100000 {
+> +        compatible = "cdns,usb3";
+
+This needs a platform specific compatible.
+
+> +        reg = <0x10100000 0x10000>,
+> +              <0x10110000 0x10000>,
+> +              <0x10120000 0x10000>;
+> +        reg-names = "otg", "xhci", "dev";
+> +        interrupts = <100>, <108>, <110>;
+> +        interrupt-names = "host", "peripheral", "otg";
+> +        phy-names = "cdns3,usb3-phy", "cnds3,usb2-phy";
+> +        maximum-speed = "super-speed";
+> +      };
+> +    };
+> -- 
+> 2.17.1
+> 
