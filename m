@@ -2,135 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071A46AFAD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F546AFADA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjCHAB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 19:01:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46908 "EHLO
+        id S229605AbjCHAJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 19:09:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjCHABv (ORCPT
+        with ESMTP id S229497AbjCHAI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 19:01:51 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A83ADC23
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 16:01:44 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id t22so10958037oiw.12
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 16:01:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678233704;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gp5ksp/tysG8+d5KykH4cu77+0Kh4J8KV752xYRk5No=;
-        b=c08INiNViJ8tYRuoNRc6bC2exreDd5cZQxqOTujemRAGZymzjp8mlmmfcj3w4/19k+
-         OqUNrM9U1TXrwZ3cLDOJqxTtYpWZmEzUtTregTOFVnkg2JVgR0cGknnAFuOSvuqK+CHL
-         bhH3nV4efgkLtzMu5NDir5GJcTWlMcNK7QzzsitPgjjBEhFCEGCCHg5bCY1uoXp/abmn
-         xz/u/fZbJAjLe6zrf6Z+dRmpF+mYKa2z9j1gJbFeHPWxmX6lR2+6r9XrNfiYbmgSZKTM
-         8UwzCa1n1fVgOcxfpXD/2NHRQRZcg+UFsSUPE5zRawKr8ZTMHgwpsWZtPGw1KY5G4y3x
-         fswQ==
+        Tue, 7 Mar 2023 19:08:58 -0500
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA299FBFA;
+        Tue,  7 Mar 2023 16:08:57 -0800 (PST)
+Received: by mail-oi1-f181.google.com with SMTP id bj30so11005601oib.6;
+        Tue, 07 Mar 2023 16:08:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678233704;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gp5ksp/tysG8+d5KykH4cu77+0Kh4J8KV752xYRk5No=;
-        b=Z1ifUhtn/IHgYGaXZcb28DZe5sDuif+qfSgjimGBT4nYhmots4d84p9fGgqmo97aGh
-         R4F6I/syyonc/C5dEabCGWOkNtsh6kDGsMj+RyxD37FcUIa+dTnrqbyaQ0lGGvnPRI7I
-         FuKV/w5lExff+2XxWOhJW2+rJsfhM9smHlJdIXxHLLkBGyib75hwbGv/N8+Z+0AqiWVj
-         nptw/waaTu2HOOTzsHOxRT9+pDRPhDL56TeAwgvY8VMNpW2vvfhU7h1hU/BiTJe3lODQ
-         /W+uLGJbiI78VOxdgSxHC6ZFR58HoNrWJPj1TMmrTbsXQ+ZjXbqxk2/HLYS3Wa/tfbT6
-         MEdQ==
-X-Gm-Message-State: AO0yUKWIQlsUAcLCjtfkKpF0+JQ1yDpqwtgASewYgZ7917HA5dK9JwbF
-        84LdkSZzgSuGnkFPOrm6tNCmQA==
-X-Google-Smtp-Source: AK7set86bb7gNMGeM3o1zRl3Vl4jsax9tlj4FdaQC216JIcwhuFq8FUYTFWGQvOSkvU/29O0HZRYMA==
-X-Received: by 2002:a05:6808:274e:b0:37f:acd5:20ff with SMTP id eh14-20020a056808274e00b0037facd520ffmr6409040oib.43.1678233703945;
-        Tue, 07 Mar 2023 16:01:43 -0800 (PST)
-Received: from [192.168.17.16] ([189.219.75.19])
-        by smtp.gmail.com with ESMTPSA id n4-20020acaef04000000b00383b8011881sm5763332oih.18.2023.03.07.16.01.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 16:01:43 -0800 (PST)
-Message-ID: <81cd2720-0414-1213-3826-31bd240d5c75@linaro.org>
-Date:   Tue, 7 Mar 2023 18:01:42 -0600
+        d=1e100.net; s=20210112; t=1678234136;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CXwIkZ1uxD0E4xCsEg4lApAyXIPzeC7f+IDqZY4PFjg=;
+        b=UfaE0B4jv6z2o7DPtmG7X6HCQiR9A+ikuEl3marzbZnEzeRxrTwA6+6/PY0qSGh8OV
+         vJRxnMDz9Co3V31IQ43nfHGmRJtejx44BwTbGRjfxJZYkWGCroMEffH9NPnC/44HiQ/n
+         Cw9fWAcCCKTGycDq/9L8JoQLfUXRYs9g9ua9qwOIDAtAHOJhuAnQE/Nne7ATU9lSj6tm
+         eRPdxVpLhLpEOXNmbMXA+pVSLCwaw7WRYydlYu2oM8NuKMoMyPxQi5D8V1Ni4Nrwzi0A
+         y0/gzseDCxz2TTfeVU2viwvoQMB5BUoqQrg8aiLDDJ8+2NJo5/P0RMfeUo80zKJXFYJx
+         bakg==
+X-Gm-Message-State: AO0yUKXZ63UdMyezeHaKrpDMkWWioW6WUbCXTuxxr3KfTHiHJjdbDygW
+        jAZKa5H6sgdF6WaRHCA/DidspP0iK/RL
+X-Google-Smtp-Source: AK7set+YyRrc0JXwe+563xRrImH2ceAMEhc5aQe20LUPq57XE+Vw/8+BzT6SqyIsSQXkZQmC6gVBUw==
+X-Received: by 2002:a05:6808:153:b0:384:bc3a:a73f with SMTP id h19-20020a056808015300b00384bc3aa73fmr4011885oie.26.1678234135160;
+        Tue, 07 Mar 2023 16:08:55 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h19-20020a056808015300b00384926684b8sm5627699oie.13.2023.03.07.16.08.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 16:08:54 -0800 (PST)
+Received: (nullmailer pid 513069 invoked by uid 1000);
+        Wed, 08 Mar 2023 00:08:54 -0000
+Date:   Tue, 7 Mar 2023 18:08:54 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Colin Ian King <colin.i.king@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH v2 08/21] dt-bindings: nvmem: Fix spelling mistake
+ "platforn" -> "platform"
+Message-ID: <167823407854.511949.8644806672046927604.robh@kernel.org>
+References: <20230307165359.225361-1-miquel.raynal@bootlin.com>
+ <20230307165359.225361-9-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 6.2 0000/1001] 6.2.3-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, pali@kernel.org,
-        christophe.leroy@csgroup.eu, mpe@ellerman.id.au
-References: <20230307170022.094103862@linuxfoundation.org>
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-In-Reply-To: <20230307170022.094103862@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230307165359.225361-9-miquel.raynal@bootlin.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
 
-On 07/03/23 10:46, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.3 release.
-> There are 1001 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, 07 Mar 2023 17:53:46 +0100, Miquel Raynal wrote:
+> From: Colin Ian King <colin.i.king@gmail.com>
 > 
-> Responses should be made by Thu, 09 Mar 2023 16:57:34 +0000.
-> Anything received after that time might be too late.
+> There is a spelling mistake in platforn-name. Fix it.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.3-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> ---
+>  .../devicetree/bindings/nvmem/layouts/onie,tlv-layout.yaml      | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> thanks,
-> 
-> greg k-h
 
-We see a regression with PowerPC's ppc64e_defconfig, using GCC 8 and GCC 12:
------8<-----
-powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
-powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
-make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:237: arch/powerpc/boot/crt0.o] Error 1
-make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:237: arch/powerpc/boot/crtsavres.o] Error 1
-powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
-make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:235: arch/powerpc/boot/cuboot.o] Error 1
-[...]
-make[2]: Target 'arch/powerpc/boot/zImage' not remade because of errors.
-make[1]: *** [/builds/linux/arch/powerpc/Makefile:247: zImage] Error 2
-make[1]: Target '__all' not remade because of errors.
-make: *** [Makefile:242: __sub-make] Error 2
-make: Target '__all' not remade because of errors.
------>8-----
 
-Bisection points to "powerpc/boot: Don't always pass -mcpu=powerpc when building 32-bit uImage" (upstream ff7c76f66d8bad4e694c264c789249e1d3a8205d).
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-Reproducer:
-   tuxmake \
-     --runtime podman \
-     --target-arch powerpc \
-     --toolchain gcc-8 \
-     --kconfig ppc64e_defconfig \
-     config debugkernel dtbs kernel modules xipkernel
+If a tag was not added on purpose, please state why and what changed.
 
-Greetings!
+Missing tags:
 
-Daniel Díaz
-daniel.diaz@linaro.org
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
 
