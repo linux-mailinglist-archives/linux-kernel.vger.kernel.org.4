@@ -2,133 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5EA86B050C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B6C6B0501
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjCHKxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:53:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
+        id S230389AbjCHKwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:52:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjCHKxR (ORCPT
+        with ESMTP id S229680AbjCHKwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:53:17 -0500
-Received: from mail-wm1-x362.google.com (mail-wm1-x362.google.com [IPv6:2a00:1450:4864:20::362])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79FC5F23D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:53:14 -0800 (PST)
-Received: by mail-wm1-x362.google.com with SMTP id p16so9514922wmq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:53:14 -0800 (PST)
+        Wed, 8 Mar 2023 05:52:00 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C599D193E9;
+        Wed,  8 Mar 2023 02:51:58 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id cy23so63815158edb.12;
+        Wed, 08 Mar 2023 02:51:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1678272793;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1678272717;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MFnIaNLO1jYcGQ/rd76lvHww9TyGOc8wkDjH2xbQ2vY=;
-        b=cnhxBf5cTTpw1N9mDdNPt84ISNLvvjn801q368baQ2Qu3+yzPGVdIGdEPXvepil4V8
-         UHmhsTR1+SAVaXMEjPHENYMCPKGgm8U19Uj/ohgFmguOdJWr+KlHZu7MpVigjCy2tAjN
-         iDY7ixtO0z104mcy60yjjfoALQqgr5suSr338=
+        bh=NIGXUdTyGYEAvfYauZes4mGKDsBm8GNHDJGq3IqAjjk=;
+        b=Tj7F0uK3t9woK4ZprxGcmcrwOw1Lu/3uG0XuhEMc36FgsN+ZZLYXce9N3UrX5utBrF
+         +DtMr9i42hjb86LZxqeOcQ23qpx6qzkbNyPJTFG9ovQPs/8YgcV45yawSjMNvO+IqpAM
+         fnVeIhp8woIXjY+5w8eivTzMhjS/nkAWZFcRR5p3MlZ5QtBk/sNu9jLuO5BFAXA8HnbH
+         yYicdKplEXVgnlDC7/QaFl6rjW6YEg5r/ehxHt8fkxHIhuDJpfigHsIMMZyJBicruP6H
+         qSnJr6i6t4FE6Gs2kDByNyZOxYgk8yhRkmh1VRNF7dpsGxdvRQii19Y5sMCc0/9cD+y2
+         A2gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678272793;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678272717;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MFnIaNLO1jYcGQ/rd76lvHww9TyGOc8wkDjH2xbQ2vY=;
-        b=lstAwbMJAM8ChOLLhO3twMsHkyTbM5l0s/KOqWDcDliwEu1i3oRUiigYhEWUKN9HpK
-         iqsMArmYSfSJ+i/ArsE5y8BljndGKRyNqHf28qZCNTHFFsGXfkB3RfcyP9MxjY0+EMns
-         jFWkHMloC7wVEtOWi8gr5sMyxRHHowf5+TMb/nNkBQKDeVbSbEaopUIFrOLCM38kPs1j
-         8owGLKCXcADZMxgN1mrSkDlftiddMdV49rHkw1qRrRrv8sBcdGSBiYFHMUEQjAf0yy7/
-         jfV5Xh9JXp0E26pIwnS/PgnG22QaCvA3G4lTJp53mmULEI7/hACIouVzeeYbCow6SYAy
-         9BXw==
-X-Gm-Message-State: AO0yUKVovnQUrDsfOiQYtw9utuyxHh21xyT4/i35t/EaNXXsCIoAAK4O
-        cw0DckPJJQRXsxo+TwnSxUTnUfVqp8pOIp4vPsAn3QZ6ElnI
-X-Google-Smtp-Source: AK7set/Kr0OA0KJtw2a+BX2EdMHPKeyQkkYCTFTEZBgEbbs/r0pMvzWLlEx+48YsTajHW/JgospqlxFfBIdq
-X-Received: by 2002:a05:600c:450f:b0:3e2:19b0:887d with SMTP id t15-20020a05600c450f00b003e219b0887dmr15666002wmo.25.1678272793197;
-        Wed, 08 Mar 2023 02:53:13 -0800 (PST)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id f11-20020adff8cb000000b002c5a302d158sm2125188wrq.51.2023.03.08.02.53.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 02:53:13 -0800 (PST)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] xsk: Add missing overflow check in xdp_umem_reg
-Date:   Wed,  8 Mar 2023 11:51:30 +0100
-Message-Id: <20230308105130.1113833-1-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230307172306.786657-1-kal.conley@dectris.com>
-References: <20230307172306.786657-1-kal.conley@dectris.com>
+        bh=NIGXUdTyGYEAvfYauZes4mGKDsBm8GNHDJGq3IqAjjk=;
+        b=zFPHQxYtkZOOJ6tFPEsM84Qbl1Kn2zJgxEwd0Wp5KOJgOyOfCB1bO+CsgY4OkfsnP3
+         LSWPulEOBzzzBnM0FOhDoubFTz0RqWLNTY4eniFvrJuPXajgAwGNPLxnDcmp84CfeEkm
+         udy+0y4zIlNmtwfJTamJHntGq3cEvIGu9INUA9oz/I46wcY0cUUQvyrO3Wt48iqO2Exb
+         QBPEPRpDiKSNsGVJL0OAMzUEgMKJlkbg2KI46egc/Q8ieZXG5RLLGAi0+sp0GQ+IkFwM
+         wHpguw3oz9djLD4nwwzn10k2p8VXpGfhp9gemjLgOP2qJD8OBNW5KUh7QES+/tBckJ72
+         iCmw==
+X-Gm-Message-State: AO0yUKW+6YVAe7GyleWHHzBVdNrhN7+59sQdRxUHZMV/Xx/vIPe7fAwC
+        yfy59BLiUWjZ/u8W1i6+dJQxB2J80IlnRwWP5W0=
+X-Google-Smtp-Source: AK7set8LlXbfdxrATbhRJ12ZcNTUwoucTiN7KCHe7QE54jyOQI8UBMhkGFL/PitBXtsvvj8lVKXr/MzPAGAT4XRNzSc=
+X-Received: by 2002:a50:d4c5:0:b0:4c0:71e6:9dc5 with SMTP id
+ e5-20020a50d4c5000000b004c071e69dc5mr2678714edj.1.1678272717356; Wed, 08 Mar
+ 2023 02:51:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230308084419.11934-1-clamor95@gmail.com> <20230308084419.11934-2-clamor95@gmail.com>
+ <95fa5f0f-cf53-7a37-2170-98b81c0982f1@linaro.org> <CAPVz0n1QDFyHiGAa7UOuuwPiSH+ELiYNeO9-fxPWrOWkWqEuHg@mail.gmail.com>
+ <bbc7c183-3f98-9ea4-d5e5-0d58dd65d416@linaro.org>
+In-Reply-To: <bbc7c183-3f98-9ea4-d5e5-0d58dd65d416@linaro.org>
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+Date:   Wed, 8 Mar 2023 12:51:46 +0200
+Message-ID: <CAPVz0n3sKH_7x=aNVLaHVN0F1FWLVRW+MGoj9qBO9V=TDuv_jQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/4] dt-bindings: power: supply: maxim,max17040: update properties
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Iskren Chernev <me@iskren.info>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The number of chunks can overflow u32. Make sure to return -EINVAL on
-overflow.
+=D1=81=D1=80, 8 =D0=B1=D0=B5=D1=80. 2023=E2=80=AF=D1=80. =D0=BE 12:44 Krzys=
+ztof Kozlowski
+<krzysztof.kozlowski@linaro.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On 08/03/2023 10:15, Svyatoslav Ryhel wrote:
+>
+> >> max17040 does not have ADC temperature input... so is it system
+> >> configuration?
+> >>
+> >
+> > yes, I own a device (LG Optimus Vu P895) which uses max17043
+> > coupled with ADC thermal sensor
+> >
+> >>> +
+> >>> +  io-channel-names:
+> >>> +    items:
+> >>> +      - const: temp
+> >>
+> >> Drop the names property, not needed for one item.
+> >>
+> >
+> > Alright, but driver patch expects temp name. I will look if this
+> > is adjustable.
+>
+> I think I saw cases without names.
+>
 
-Fixes: bbff2f321a86 ("xsk: new descriptor addressing scheme")
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
----
- net/xdp/xdp_umem.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+There is no io-channel without a name. And io-channels are mostly used
+by power supply devices.
 
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index 4681e8e8ad94..02207e852d79 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -150,10 +150,11 @@ static int xdp_umem_account_pages(struct xdp_umem *umem)
- 
- static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- {
--	u32 npgs_rem, chunk_size = mr->chunk_size, headroom = mr->headroom;
- 	bool unaligned_chunks = mr->flags & XDP_UMEM_UNALIGNED_CHUNK_FLAG;
--	u64 npgs, addr = mr->addr, size = mr->len;
--	unsigned int chunks, chunks_rem;
-+	u32 chunk_size = mr->chunk_size, headroom = mr->headroom;
-+	u64 addr = mr->addr, size = mr->len;
-+	u32 chunks_rem, npgs_rem;
-+	u64 chunks, npgs;
- 	int err;
- 
- 	if (chunk_size < XDP_UMEM_MIN_CHUNK_SIZE || chunk_size > PAGE_SIZE) {
-@@ -188,8 +189,8 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- 	if (npgs > U32_MAX)
- 		return -EINVAL;
- 
--	chunks = (unsigned int)div_u64_rem(size, chunk_size, &chunks_rem);
--	if (chunks == 0)
-+	chunks = div_u64_rem(size, chunk_size, &chunks_rem);
-+	if (!chunks || chunks > U32_MAX)
- 		return -EINVAL;
- 
- 	if (!unaligned_chunks && chunks_rem)
-@@ -202,7 +203,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- 	umem->headroom = headroom;
- 	umem->chunk_size = chunk_size;
- 	umem->chunks = chunks;
--	umem->npgs = (u32)npgs;
-+	umem->npgs = npgs;
- 	umem->pgs = NULL;
- 	umem->user = NULL;
- 	umem->flags = mr->flags;
--- 
-2.39.2
+> >
+> >>> +
+> >>>    wakeup-source:
+> >>>      type: boolean
+> >>>      description: |
+> >>> @@ -95,3 +109,26 @@ examples:
+> >>>          wakeup-source;
+> >>>        };
+> >>>      };
+> >>> +  - |
+> >>> +    #include <dt-bindings/interrupt-controller/irq.h>
+> >>> +    i2c0 {
+> >>> +      #address-cells =3D <1>;
+> >>> +      #size-cells =3D <0>;
+> >>> +
+> >>> +      fuel-gauge@36 {
+> >>> +        compatible =3D "maxim,max17043";
+> >>> +        reg =3D <0x36>;
+> >>> +
+> >>> +        interrupt-parent =3D <&gpio>;
+> >>> +        interrupts =3D <144 IRQ_TYPE_EDGE_FALLING>;
+> >>> +
+> >>> +        monitored-battery =3D <&battery>;
+> >>> +        power-supplies =3D <&charger>;
+> >>
+> >> But here you suggests something else than VDD... The hardware does not
+> >> take charger as input. It takes power supply - vdd.
+> >>
+> >
+> > Power system allows passing properties from other power devices.
+> > In this case battery health and status are passed from charger.
+>
+> So this is not an input to device? Then it does not really look like
+> property of this hardware. Fuel gauge does not control the charger, also
+> from system configuration point of view.
+>
 
+It is not controlling charger, the charger provides the status and
+health of the battery to the fuel gauge. This option is also used in
+other fuel gauges.
+
+> Best regards,
+> Krzysztof
+>
