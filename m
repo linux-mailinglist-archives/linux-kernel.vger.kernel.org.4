@@ -2,107 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD0F6B1231
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0B26B1236
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjCHTlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 14:41:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37844 "EHLO
+        id S229803AbjCHTnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 14:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCHTlE (ORCPT
+        with ESMTP id S229475AbjCHTnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 14:41:04 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B19984C0;
-        Wed,  8 Mar 2023 11:41:03 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id y15-20020a17090aa40f00b00237ad8ee3a0so2712516pjp.2;
-        Wed, 08 Mar 2023 11:41:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678304463;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QfzISs/vHmZOX9zS91QPhlLPhKdnC+8JM33FXEkiNg0=;
-        b=PwpagZ/XHSlsNjw0GSi48RlFC9z4Pju14ELV9qQnyZYTQc98KhnuoCis1WNMWJS+Ki
-         wEiCLLFyPiHZxsA/simJm9Bu8v9Sw9ZVKJlToGCe4UP7JMkKS/C6szwlZPHK/I8aRYqp
-         io6vrHHGCRHD4siKliBhgU/cxucJCow+G8LDWqLCICPicJ/SHdwFufGsED0L2ef5NbmX
-         LubinGIsJvdMhQCYPFVpnSo2NOuthEYQX9JpLIchqLAKQ19YYcFyWF9w2ZI0Lm5EOvRG
-         4Gww/JqSHEr0k3Q1C2gNKYN1sxkcXzoI5cRfLgTa6ERnZcL+XU0S2Pirdv2f9fOb6FkZ
-         hoTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678304463;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QfzISs/vHmZOX9zS91QPhlLPhKdnC+8JM33FXEkiNg0=;
-        b=WAyV2p5JtxBNdmaSePCZ6wc9qvg45IbvWILWwmPA3jJ39mbaNFb87nKW1L8UMxsOXk
-         LIsgxYa69qkHnPmdqKVW4RvCMm9q9ylvQxgFs75Qx4PDp8BCP1i7az8tfIq+UA1X/u4I
-         qcbVGPYTVOU0qQdtMd0gL+O/ozwDP5J1FVqno45r2esOO3I+7Yrc5hF444mPDSSHdXU5
-         ieiT/aShJe9ExBTmgmIQI7lXcMRuxZX53yKeIhxYCEq3PZGTa3sOnwaHYY4AVOmcpY7S
-         M0qXHoaEWDEN7re70lPKFWTuBtPOv0X4ncTYIwKLrEiNMN00qaQ4jbSDk/GyfnziIInG
-         xETg==
-X-Gm-Message-State: AO0yUKVL1GmY84zdDlM022qpK/oJH23fM05TnH0upG7UhZJqX3IJztzW
-        UsTeuhZrgVQ5sUPVH5Bimfs=
-X-Google-Smtp-Source: AK7set/XYS3T6e44xp6eVz+HRnlyus+f1bAzW0d7/CXlIzR/wADIv29/dP+KrJht1AU8lKnIUAtIVg==
-X-Received: by 2002:a05:6a20:3d92:b0:cc:8266:9951 with SMTP id s18-20020a056a203d9200b000cc82669951mr20436349pzi.56.1678304462948;
-        Wed, 08 Mar 2023 11:41:02 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id w28-20020a63161c000000b00502ecc282e2sm9422159pgl.5.2023.03.08.11.41.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 11:41:01 -0800 (PST)
-Message-ID: <f9d68c20-52ad-a264-0988-c8ff29624f15@gmail.com>
-Date:   Wed, 8 Mar 2023 11:40:59 -0800
+        Wed, 8 Mar 2023 14:43:00 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902B77D91;
+        Wed,  8 Mar 2023 11:42:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=pX+qLH4wZi2kk0khohH8ObR+vUSuGHXt42QlUYy3QcQ=; b=hHetgYAB0aa86xkyqbyhQhNKk2
+        XOHNoGXw/dK+MWyce+bI9kNdBGxbna1mJhAbSLmwCTLkT2LRi0wiEeSVYgBKfADz77oa5H9dsqcP+
+        SoqE8P3DSwWhtOekEZJ41yBBH6a78mQuUtp6lx8R7oQ+zOZbg0jT7/GQiikKit3xk6b4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pZzgM-006oOn-Sz; Wed, 08 Mar 2023 20:42:38 +0100
+Date:   Wed, 8 Mar 2023 20:42:38 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Lee Jones <lee@kernel.org>,
+        linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH 09/11] dt-bindings: net: dsa: qca8k: add LEDs
+ definition example
+Message-ID: <18371de0-0752-4f5c-908e-4cee8954080d@lunn.ch>
+References: <20230307170046.28917-1-ansuelsmth@gmail.com>
+ <20230307170046.28917-10-ansuelsmth@gmail.com>
+ <ad43a809-b9fd-bd24-ee1a-9e509939023b@linaro.org>
+ <df6264de-36c5-41f2-a2a0-08b61d692c75@lunn.ch>
+ <5992cb0a-50a0-a19c-3ad1-03dd347a630b@linaro.org>
+ <6408dbbb.1c0a0220.a28ce.1b32@mx.google.com>
+ <36169a8a-d418-6d7e-b64c-a7c346b9a218@linaro.org>
+ <6408e09b.050a0220.e7ce5.1e98@mx.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 6.1 000/887] 6.1.16-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230308091853.132772149@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230308091853.132772149@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6408e09b.050a0220.e7ce5.1e98@mx.google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 01:29, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.16 release.
-> There are 887 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 10 Mar 2023 09:16:12 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.16-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> Then we decided to "reboot" the series and:
+> In v1:
+> - The default-trigger is dropped (will be introduced later when the work
+>   for the netdev trigger will be done)
+> - We use the default state to "keep"
 
+There is one more change. The leds {} property moved from the PHY nodes
+into the port nodes, because these are MAC LEDs, not PHY LEDs.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
-
+     Andrew
