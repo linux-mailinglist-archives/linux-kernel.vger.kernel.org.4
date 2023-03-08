@@ -2,217 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2A66AFEE3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 07:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 816106AFEE7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 07:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjCHG0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 01:26:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
+        id S229844AbjCHG1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 01:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjCHG0B (ORCPT
+        with ESMTP id S229483AbjCHG1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 01:26:01 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B994BA8393
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 22:25:59 -0800 (PST)
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E7B1F3F592
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:25:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678256757;
-        bh=ay6ZKa7Tg72PuDk32HxgWNWnSno0ChydUsA4JwYm9Lk=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=bR69JWJ/RSEyw8Ig0BEe5qc1zv6VQ9Ej0xPoEIA8nDbtjuyzdrohb15AGwLtJeYyV
-         x260iyUIFRFbB7wOSXbylrYtOoYYwZRPjouTCletySFLzWizf6ISP7mReaCKDRtdN3
-         y50E8ACkbKijOK2L8fA8L2gb7OPKOBFbyOSD4tdU0Uk77a4hMHAjOpsfsK1r5bNF9l
-         iDha/hNZVuzbNlmnIQzycX3BiMJYABMwdJ/RMlCjUmYXLodhVY5CQGzKtH78Rm8oNn
-         I5Pjs52ltScmfxZoJjSWJMXD4y9JU2KraqkXMHYd6qoQXaEzmA5FeEcnLa9jtgeeLp
-         /pcGZqpkQSqlA==
-Received: by mail-pl1-f198.google.com with SMTP id s15-20020a170902ea0f00b0019d0c7a83dfso8949279plg.14
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 22:25:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678256756;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ay6ZKa7Tg72PuDk32HxgWNWnSno0ChydUsA4JwYm9Lk=;
-        b=tY0crLYIfSzKyexwVzeHdFp4Xu5JusGhxox8EYUB0hh//ZKROaBuk5RReypwxJuv0O
-         dKJYZzm5hz/b3wS/a/lWGCHEUu0z9vOUuuxAjpbzQc77QHuKla4NcTtW+t1yqmDEqfcQ
-         UPMYRYoGTzjsmS7WwPS6m87SzGn+PPZKTlTAM9NisYLTOBkjVVJuA+R9Y1f8Rout1aT6
-         Hcf9aIXA1v6NeKpzyPznBQ7DbnmdXesL6oOk+IocDThzsGENlT2XXBopvGhNwm4CzVIL
-         nrauKrh8LMKsgNjzPhwVcDEYEMWxwqqZnNW/ilBFS1EzrVJ5n2D/ePL/IXxh9zZjMkKw
-         /irA==
-X-Gm-Message-State: AO0yUKVpMXXH739LIZs66ia2Gk1KSs2xFh7KolRzJJdrXBWqvVR8kKi3
-        4vLvP/lbnzjfDqDCjltLARW6LjDMLssuer92d6ovFVEcrJ16ANS3k244S0IpqXKS6EEON1q+UBQ
-        R5JLHP0MJd/T3MBgJXQRUpdyhVnT8b3FNBUnqDfSy3jetc5+4Q64EPS1YWA==
-X-Received: by 2002:a17:90a:ec14:b0:231:1da0:dfce with SMTP id l20-20020a17090aec1400b002311da0dfcemr6011213pjy.3.1678256756313;
-        Tue, 07 Mar 2023 22:25:56 -0800 (PST)
-X-Google-Smtp-Source: AK7set9J/bss+n+FmfnvRWBEazewQBhSsabCnB8JBItXmoxS20MAETu1QTDyhFvR4xmeSPpw2pPROEwS82nh86dFnHY=
-X-Received: by 2002:a17:90a:ec14:b0:231:1da0:dfce with SMTP id
- l20-20020a17090aec1400b002311da0dfcemr6011210pjy.3.1678256755883; Tue, 07 Mar
- 2023 22:25:55 -0800 (PST)
+        Wed, 8 Mar 2023 01:27:18 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AC9A8393;
+        Tue,  7 Mar 2023 22:27:16 -0800 (PST)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PWj2d2hCkznWW4;
+        Wed,  8 Mar 2023 14:24:25 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 8 Mar
+ 2023 14:27:13 +0800
+Subject: Re: [PATCH bpf-next v1 1/2] xdp: recycle Page Pool backed skbs built
+ from XDP frames
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Song Liu <song@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230301160315.1022488-1-aleksander.lobakin@intel.com>
+ <20230301160315.1022488-2-aleksander.lobakin@intel.com>
+ <36d42e20-b33f-5442-0db7-e9f5ef9d0941@huawei.com>
+ <dd811304-44ed-0372-8fe7-00c425a453dd@intel.com>
+ <7ffbcac4-f4f2-5579-fd55-35813fbd792c@huawei.com>
+ <9b5b88da-0d2d-d3f3-6ee1-7e4afc2e329a@intel.com>
+ <98aa093a-e772-8882-b0e3-5895fd747e59@huawei.com>
+ <0bc28bea-78f5-bcce-2d45-e6f6d1a7ed40@intel.com>
+ <605cad27-2bf3-7913-877e-d2870892ecd5@huawei.com>
+ <9e8a9346-37f4-7c5d-f1d0-cbba3de805db@intel.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <1cea3621-8f5d-ba95-1b0b-e245ce770abf@huawei.com>
+Date:   Wed, 8 Mar 2023 14:27:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-References: <20230306142454.722020-1-koba.ko@canonical.com> <a83d9acd-a2c5-85ce-36dc-c6a8f0e11a66@redhat.com>
-In-Reply-To: <a83d9acd-a2c5-85ce-36dc-c6a8f0e11a66@redhat.com>
-From:   Koba Ko <koba.ko@canonical.com>
-Date:   Wed, 8 Mar 2023 14:25:44 +0800
-Message-ID: <CAJB-X+X83dLFsOyYON9zLQxOVukg7bcrikRohn4sRR6UiSUbOQ@mail.gmail.com>
-Subject: Re: [PATCH] platform/x86: dell-laptop: Register ctl-led for speaker-mute
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <9e8a9346-37f4-7c5d-f1d0-cbba3de805db@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 8:10=E2=80=AFPM Hans de Goede <hdegoede@redhat.com> =
-wrote:
->
-> Hi,
->
-> On 3/6/23 15:24, Koba Ko wrote:
-> > Some platforms have the speaker-mute led and
-> > current driver doesn't control it.
-> >
-> > If the platform support the control of speaker-mute led, register it
-> >
-> > Signed-off-by: Koba Ko <koba.ko@canonical.com>
->
-> Thank you for your patch, one small remark below.
->
-> > ---
-> >  drivers/platform/x86/dell/dell-laptop.c | 43 +++++++++++++++++++++++++
-> >  drivers/platform/x86/dell/dell-smbios.h |  2 ++
-> >  2 files changed, 45 insertions(+)
-> >
-> > diff --git a/drivers/platform/x86/dell/dell-laptop.c b/drivers/platform=
-/x86/dell/dell-laptop.c
-> > index 1321687d923ed..38d95bae8e3ab 100644
-> > --- a/drivers/platform/x86/dell/dell-laptop.c
-> > +++ b/drivers/platform/x86/dell/dell-laptop.c
-> > @@ -97,6 +97,7 @@ static struct rfkill *bluetooth_rfkill;
-> >  static struct rfkill *wwan_rfkill;
-> >  static bool force_rfkill;
-> >  static bool micmute_led_registered;
-> > +static bool mute_led_registered;
-> >
-> >  module_param(force_rfkill, bool, 0444);
-> >  MODULE_PARM_DESC(force_rfkill, "enable rfkill on non whitelisted model=
-s");
-> > @@ -2177,6 +2178,34 @@ static struct led_classdev micmute_led_cdev =3D =
-{
-> >       .default_trigger =3D "audio-micmute",
-> >  };
-> >
-> > +static int mute_led_set(struct led_classdev *led_cdev,
-> > +                        enum led_brightness brightness)
-> > +{
-> > +     struct calling_interface_buffer buffer;
-> > +     struct calling_interface_token *token;
-> > +     int state =3D brightness !=3D LED_OFF;
-> > +
-> > +     if (state =3D=3D 0)
-> > +             token =3D dell_smbios_find_token(GLOBAL_MUTE_DISABLE);
-> > +     else
-> > +             token =3D dell_smbios_find_token(GLOBAL_MUTE_ENABLE);
-> > +
-> > +     if (!token)
-> > +             return -ENODEV;
-> > +
-> > +     dell_fill_request(&buffer, token->location, token->value, 0, 0);
-> > +     dell_send_request(&buffer, CLASS_TOKEN_WRITE, SELECT_TOKEN_STD);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static struct led_classdev mute_led_cdev =3D {
-> > +     .name =3D "platform::mute",
-> > +     .max_brightness =3D 1,
-> > +     .brightness_set_blocking =3D mute_led_set,
-> > +     .default_trigger =3D "audio-mute",
-> > +};
-> > +
-> >  static int __init dell_init(void)
-> >  {
-> >       struct calling_interface_token *token;
-> > @@ -2230,6 +2259,16 @@ static int __init dell_init(void)
-> >               micmute_led_registered =3D true;
-> >       }
-> >
-> > +     if (dell_smbios_find_token(GLOBAL_MUTE_DISABLE) &&
-> > +         dell_smbios_find_token(GLOBAL_MUTE_ENABLE) &&
-> > +         !dell_privacy_has_mic_mute()) {
->
-> Since this is a speaker mute LED and since the Dell hw privacy
-> stuff does not deal with the speaker at all, I believe that you
-> should drop the "&& !dell_privacy_has_mic_mute()" part of
-> the if condition here ?
->
-> Can you please send a new version with this dropped?
+On 2023/3/8 2:14, Alexander Lobakin wrote:
+> From: Yunsheng Lin <linyunsheng@huawei.com>
+> Date: Tue, 7 Mar 2023 10:50:34 +0800
+> 
+>> On 2023/3/6 19:58, Alexander Lobakin wrote:
+>>> From: Yunsheng Lin <linyunsheng@huawei.com>
+>>> Date: Mon, 6 Mar 2023 09:09:31 +0800
+> 
+> [...]
+> 
+>>> Ah, from that perspective. Yes, you're probably right, but would need to
+>>> be tested anyway. I don't see any open problems with the PP recycling
+>>> right now on the lists, but someone may try to change it one day.
+>>> Anyway, this flag is only to do a quick test. We do have
+>>> sk_buff::pfmemalloc, but this flag doesn't mean every page from this skb
+>>> was pfmemalloced.
+>>
+>> The point seems to be that sk_buff::pfmemalloc allow false positive, which
+>> means skb->pfmemalloc can be set to true while every page from this skb is
+>> not pfmemalloced as you mentioned.
+>>
+>> While skb->pp_recycle can't allow false positive, if that happens, reference
+>> counting of the page will not be handled properly if pp and non-pp skb shares
+>> the page as the wireless adapter does.
+> 
+> You mean false-positives in both directions? Because if ->pp_recycle is
+> set, the stack can still free non-PP pages. In the opposite case, I mean
+> when ->pp_recycle is false and an skb page belongs to a page_pool, yes,
+> there'll be issues.
 
-Sure, have sent v2 with dell_privacy_has_mic_mute dropped
-Thanks
+That may depends on what is a PP pages and what is a non-PP pages, it seems
+hard to answer now.
 
->
-> Regards,
->
-> Hans
->
->
-> > +             mute_led_cdev.brightness =3D ledtrig_audio_get(LED_AUDIO_=
-MUTE);
-> > +             ret =3D led_classdev_register(&platform_device->dev, &mut=
-e_led_cdev);
-> > +             if (ret < 0)
-> > +                     goto fail_led;
-> > +             mute_led_registered =3D true;
-> > +     }
-> > +
-> >       if (acpi_video_get_backlight_type() !=3D acpi_backlight_vendor)
-> >               return 0;
-> >
-> > @@ -2277,6 +2316,8 @@ static int __init dell_init(void)
-> >  fail_backlight:
-> >       if (micmute_led_registered)
-> >               led_classdev_unregister(&micmute_led_cdev);
-> > +     if (mute_led_registered)
-> > +             led_classdev_unregister(&mute_led_cdev);
-> >  fail_led:
-> >       dell_cleanup_rfkill();
-> >  fail_rfkill:
-> > @@ -2299,6 +2340,8 @@ static void __exit dell_exit(void)
-> >       backlight_device_unregister(dell_backlight_device);
-> >       if (micmute_led_registered)
-> >               led_classdev_unregister(&micmute_led_cdev);
-> > +     if (mute_led_registered)
-> > +             led_classdev_unregister(&mute_led_cdev);
-> >       dell_cleanup_rfkill();
-> >       if (platform_device) {
-> >               platform_device_unregister(platform_device);
-> > diff --git a/drivers/platform/x86/dell/dell-smbios.h b/drivers/platform=
-/x86/dell/dell-smbios.h
-> > index 75fa8ea0476dc..eb341bf000c67 100644
-> > --- a/drivers/platform/x86/dell/dell-smbios.h
-> > +++ b/drivers/platform/x86/dell/dell-smbios.h
-> > @@ -34,6 +34,8 @@
-> >  #define KBD_LED_AUTO_100_TOKEN       0x02F6
-> >  #define GLOBAL_MIC_MUTE_ENABLE       0x0364
-> >  #define GLOBAL_MIC_MUTE_DISABLE      0x0365
-> > +#define GLOBAL_MUTE_ENABLE   0x058C
-> > +#define GLOBAL_MUTE_DISABLE  0x058D
-> >
-> >  struct notifier_block;
-> >
->
+For a skb with ->pp_recycle being true and its frag page with page->pp_magic
+being PP_SIGNATURE, when calling skb_clone()/pskb_expand_head() or
+skb_try_coalesce(), we may call __skb_frag_ref() for the frag page, which
+mean a page with page->pp_magic being PP_SIGNATURE can be both PP page
+and non-PP page at the same time. So it is important to set the ->pp_recycle
+correctly, and it seems hard to get that right from past experience，that's
+why a per page marker is suggested.
+
+
+> But I think the deal is to propagate the flag when you want to attach a
+> PP-backed page to the skb? I mean, if someone decides to mix pages with
+> different memory models, it's his responsibility to make sure everything
+> is fine, because it's not a common/intended way. Isn't it?
+> 
+>>
+>>>
+>>>>
+>>>>>
+>>>>>>
+>>>>>> Anyway, I am not sure checking ::pp_magic is correct when a
+>>>>>> page will be passing between different subsystem and back to
+>>>>>> the network stack eventually, checking ::pp_magic may not be
+>>>>>> correct if this happens.
+>>>>>>
+>>>>>> Another way is to use the bottom two bits in bv_page, see:
+>>>>>> https://www.spinics.net/lists/netdev/msg874099.html
+> 
+> This one is interesting actually. We'd only need one bit -- which is
+> 100% free and available in case of page pointers.
+> 
+>>>>>>
+>>>>>>>
+>>>>>>>>
+>>>>>>>>>  
+>>>>>>>>>  	/* Allow SKB to reuse area used by xdp_frame */
+>>>>>>>>>  	xdp_scrub_frame(xdpf);
+> 
+> [...]
+> 
+> Thanks,
+> Olek
+> 
+> .
+> 
