@@ -2,208 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110CA6B14E2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9CA96B14E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjCHWTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 17:19:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S230240AbjCHWTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 17:19:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjCHWTH (ORCPT
+        with ESMTP id S229544AbjCHWTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 17:19:07 -0500
-Received: from forward501a.mail.yandex.net (forward501a.mail.yandex.net [178.154.239.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C90770423
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 14:19:05 -0800 (PST)
-Received: from vla3-fd3176e90be6.qloud-c.yandex.net (vla3-fd3176e90be6.qloud-c.yandex.net [IPv6:2a02:6b8:c15:2584:0:640:fd31:76e9])
-        by forward501a.mail.yandex.net (Yandex) with ESMTP id DF7285EF80;
-        Thu,  9 Mar 2023 01:19:00 +0300 (MSK)
-Received: by vla3-fd3176e90be6.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id vIlinqCbCOs1-PIRG8Uyy;
-        Thu, 09 Mar 2023 01:18:59 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1678313939;
-        bh=hY99/afLxsURtdLVxU9Hkmxvw2HCLwOpsC5xj/gX3VY=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=eBn4qYnAxKfGPFSTX0WfauAGTJQtkJby3kq2cBzTrDFbA3OQ+6NZ8eeDEuxtJ64SU
-         j9FSIaISHaI7pUo+cVLKmm86gul7G3rLVf7H/v4jwVvCPMMkt8EdY/pVr3aDCcmWK/
-         8zKJLIl3nsSNRcPuZOgfctBNRRvmSLz78E4AfaxE=
-Authentication-Results: vla3-fd3176e90be6.qloud-c.yandex.net; dkim=pass header.i=@ya.ru
-Message-ID: <37c59b18-b853-b299-88d0-c9222de39af9@ya.ru>
-Date:   Thu, 9 Mar 2023 01:18:57 +0300
+        Wed, 8 Mar 2023 17:19:36 -0500
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1003E95467;
+        Wed,  8 Mar 2023 14:19:26 -0800 (PST)
+Received: by mail-oi1-f177.google.com with SMTP id c11so251934oiw.2;
+        Wed, 08 Mar 2023 14:19:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678313966;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AM20CAq7ARPknGk2Dja16aPHXClqGhFO6N0YJRwPcEM=;
+        b=pMBQ6ZVSis5PnlqcUjjObV2iws2X99vCPPIzvI80Fl1oaBDF9I7eMSY64B1Va3ESuN
+         3vT/HJKgwjxGUb95Gzr7i9fzxW4D85a+7tI2kQPya7IRVyB5yf6+6BjytiWFv7Loxk5X
+         JUH+almFfGPHZ9CZPnarl0lvjhlRJvx3/yMR9W2kbowKux33ilOzuqoGGq3ZzOzSWmdO
+         hHpGG0HVBCBj9IB6SK/jAkjD20zK+9quKur+i/TzVboz4rXfHeI0bapRTJzBk9PXNMF/
+         ooplYfV69Cl/1tLvFo5QsLXIL8tEeGDenTpWpKq9P5beFPxiiTh44D5/RIPyvRISiqBC
+         DcVw==
+X-Gm-Message-State: AO0yUKVcewRgCsL+HSwVDK9Ly5QmEzOn5CLEHcuhMjRqe9lBIjwB1RHU
+        fFW3zo38zX3zq4+BaS2b/MJ/AwajUA==
+X-Google-Smtp-Source: AK7set9rMbr3UxVYnU9cuQy+4F93CfhxTFIuJDyb4tCFesMdTXG2yXEa+qzVtOpAoijDwmvD7lirkA==
+X-Received: by 2002:a54:4103:0:b0:378:2fb7:f6a6 with SMTP id l3-20020a544103000000b003782fb7f6a6mr8092737oic.45.1678313966243;
+        Wed, 08 Mar 2023 14:19:26 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q65-20020acaf244000000b00383e0bec93bsm6787375oih.49.2023.03.08.14.19.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 14:19:25 -0800 (PST)
+Received: (nullmailer pid 3947628 invoked by uid 1000);
+        Wed, 08 Mar 2023 22:19:25 -0000
+Date:   Wed, 8 Mar 2023 16:19:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Kathiravan T <kathirav@codeaurora.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: soc: qcom: smd-rpm: re-add missing
+ qcom,rpm-msm8994
+Message-ID: <167831396365.3947549.16567147910185285587.robh@kernel.org>
+References: <20230305122428.167580-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 2/8] mm: vmscan: make global slab shrink lockless
-Content-Language: en-US
-To:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, shakeelb@google.com, mhocko@kernel.org,
-        roman.gushchin@linux.dev, muchun.song@linux.dev, david@redhat.com,
-        shy828301@gmail.com, rppt@kernel.org
-Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
-        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230307065605.58209-1-zhengqi.arch@bytedance.com>
- <20230307065605.58209-3-zhengqi.arch@bytedance.com>
-From:   Kirill Tkhai <tkhai@ya.ru>
-In-Reply-To: <20230307065605.58209-3-zhengqi.arch@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230305122428.167580-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.03.2023 09:55, Qi Zheng wrote:
-> The shrinker_rwsem is a global read-write lock in
-> shrinkers subsystem, which protects most operations
-> such as slab shrink, registration and unregistration
-> of shrinkers, etc. This can easily cause problems in
-> the following cases.
+
+On Sun, 05 Mar 2023 13:24:28 +0100, Krzysztof Kozlowski wrote:
+> Re-add the qcom,rpm-msm8994 compatible, dropped during conversion from
+> TXT to DT schema:
 > 
-> 1) When the memory pressure is high and there are many
->    filesystems mounted or unmounted at the same time,
->    slab shrink will be affected (down_read_trylock()
->    failed).
+>   apq8094-sony-xperia-kitakami-karin_windy.dtb: smd: rpm:rpm-requests:compatible:0: 'qcom,rpm-msm8994' is not one of ['qcom,rpm-apq8084' ...]
 > 
->    Such as the real workload mentioned by Kirill Tkhai:
-> 
->    ```
->    One of the real workloads from my experience is start
->    of an overcommitted node containing many starting
->    containers after node crash (or many resuming containers
->    after reboot for kernel update). In these cases memory
->    pressure is huge, and the node goes round in long reclaim.
->    ```
-> 
-> 2) If a shrinker is blocked (such as the case mentioned
->    in [1]) and a writer comes in (such as mount a fs),
->    then this writer will be blocked and cause all
->    subsequent shrinker-related operations to be blocked.
-> 
-> Even if there is no competitor when shrinking slab, there
-> may still be a problem. If we have a long shrinker list
-> and we do not reclaim enough memory with each shrinker,
-> then the down_read_trylock() may be called with high
-> frequency. Because of the poor multicore scalability of
-> atomic operations, this can lead to a significant drop
-> in IPC (instructions per cycle).
-> 
-> So many times in history ([2],[3],[4],[5]), some people
-> wanted to replace shrinker_rwsem trylock with SRCU in
-> the slab shrink, but all these patches were abandoned
-> because SRCU was not unconditionally enabled.
-> 
-> But now, since commit 1cd0bd06093c ("rcu: Remove CONFIG_SRCU"),
-> the SRCU is unconditionally enabled. So it's time to use
-> SRCU to protect readers who previously held shrinker_rwsem.
-> 
-> This commit uses SRCU to make global slab shrink lockless,
-> the memcg slab shrink is handled in the subsequent patch.
-> 
-> [1]. https://lore.kernel.org/lkml/20191129214541.3110-1-ptikhomirov@virtuozzo.com/
-> [2]. https://lore.kernel.org/all/1437080113.3596.2.camel@stgolabs.net/
-> [3]. https://lore.kernel.org/lkml/1510609063-3327-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp/
-> [4]. https://lore.kernel.org/lkml/153365347929.19074.12509495712735843805.stgit@localhost.localdomain/
-> [5]. https://lore.kernel.org/lkml/20210927074823.5825-1-sultan@kerneltoast.com/
-> 
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-Acked-by: Kirill Tkhai <tkhai@ya.ru>
+> Fixes: f935a752f229 ("dt-bindings: soc: qcom: smd-rpm: Convert binding to YAML schema")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  mm/vmscan.c | 27 +++++++++++----------------
->  1 file changed, 11 insertions(+), 16 deletions(-)
+>  Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 2dcc01682026..8515ac40bcaf 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -202,6 +202,7 @@ static void set_task_reclaim_state(struct task_struct *task,
->  
->  LIST_HEAD(shrinker_list);
->  DECLARE_RWSEM(shrinker_rwsem);
-> +DEFINE_SRCU(shrinker_srcu);
->  
->  #ifdef CONFIG_MEMCG
->  static int shrinker_nr_max;
-> @@ -706,7 +707,7 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
->  void register_shrinker_prepared(struct shrinker *shrinker)
->  {
->  	down_write(&shrinker_rwsem);
-> -	list_add_tail(&shrinker->list, &shrinker_list);
-> +	list_add_tail_rcu(&shrinker->list, &shrinker_list);
->  	shrinker->flags |= SHRINKER_REGISTERED;
->  	shrinker_debugfs_add(shrinker);
->  	up_write(&shrinker_rwsem);
-> @@ -760,13 +761,15 @@ void unregister_shrinker(struct shrinker *shrinker)
->  		return;
->  
->  	down_write(&shrinker_rwsem);
-> -	list_del(&shrinker->list);
-> +	list_del_rcu(&shrinker->list);
->  	shrinker->flags &= ~SHRINKER_REGISTERED;
->  	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
->  		unregister_memcg_shrinker(shrinker);
->  	debugfs_entry = shrinker_debugfs_remove(shrinker);
->  	up_write(&shrinker_rwsem);
->  
-> +	synchronize_srcu(&shrinker_srcu);
-> +
->  	debugfs_remove_recursive(debugfs_entry);
->  
->  	kfree(shrinker->nr_deferred);
-> @@ -786,6 +789,7 @@ void synchronize_shrinkers(void)
->  {
->  	down_write(&shrinker_rwsem);
->  	up_write(&shrinker_rwsem);
-> +	synchronize_srcu(&shrinker_srcu);
->  }
->  EXPORT_SYMBOL(synchronize_shrinkers);
->  
-> @@ -996,6 +1000,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
->  {
->  	unsigned long ret, freed = 0;
->  	struct shrinker *shrinker;
-> +	int srcu_idx;
->  
->  	/*
->  	 * The root memcg might be allocated even though memcg is disabled
-> @@ -1007,10 +1012,10 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
->  	if (!mem_cgroup_disabled() && !mem_cgroup_is_root(memcg))
->  		return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
->  
-> -	if (!down_read_trylock(&shrinker_rwsem))
-> -		goto out;
-> +	srcu_idx = srcu_read_lock(&shrinker_srcu);
->  
-> -	list_for_each_entry(shrinker, &shrinker_list, list) {
-> +	list_for_each_entry_srcu(shrinker, &shrinker_list, list,
-> +				 srcu_read_lock_held(&shrinker_srcu)) {
->  		struct shrink_control sc = {
->  			.gfp_mask = gfp_mask,
->  			.nid = nid,
-> @@ -1021,19 +1026,9 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
->  		if (ret == SHRINK_EMPTY)
->  			ret = 0;
->  		freed += ret;
-> -		/*
-> -		 * Bail out if someone want to register a new shrinker to
-> -		 * prevent the registration from being stalled for long periods
-> -		 * by parallel ongoing shrinking.
-> -		 */
-> -		if (rwsem_is_contended(&shrinker_rwsem)) {
-> -			freed = freed ? : 1;
-> -			break;
-> -		}
->  	}
->  
-> -	up_read(&shrinker_rwsem);
-> -out:
-> +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
->  	cond_resched();
->  	return freed;
->  }
+
+Acked-by: Rob Herring <robh@kernel.org>
 
