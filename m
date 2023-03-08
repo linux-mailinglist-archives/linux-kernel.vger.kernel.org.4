@@ -2,135 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E106B0DE5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE376B0DEB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbjCHQAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
+        id S232318AbjCHQAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:00:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232348AbjCHP73 (ORCPT
+        with ESMTP id S232315AbjCHP7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:59:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33C85A91A
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 07:58:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678291079;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cAOaGkIwCA5ZS+Sgpcv1TA+3A1d64qpc9FdQuuvh2JU=;
-        b=jOyoEStYBhWwlDfyLdGQh7cgWbDany/iGT4BF2F/PISyfOvPoIVltOvNeAJqTyQxP/jY6x
-        evGN4lABx7AhaJkla/TN40U/tUo9hQC1oSuVQnJxMq9B2WMXKvvu0SBUY6f0oDlVAOatz6
-        a5X2Nk+ixHq6o1c2qN3pc63Gcxmr8pk=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-368-wfMQoFUoOY-I5rxAp2cIeQ-1; Wed, 08 Mar 2023 10:57:58 -0500
-X-MC-Unique: wfMQoFUoOY-I5rxAp2cIeQ-1
-Received: by mail-wm1-f72.google.com with SMTP id s18-20020a7bc392000000b003deaf780ab6so968492wmj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 07:57:58 -0800 (PST)
+        Wed, 8 Mar 2023 10:59:36 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5C68B33F
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 07:59:08 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id ay29-20020a05600c1e1d00b003e9f4c2b623so1649093wmb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 07:59:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678291147;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T5JFu944VlLvwqNSsdE85tDBaxtEQbqvWWGACaI1P34=;
+        b=Cs38mQ7Hzy6NxzN0rw7/y88YnnIDhIAuRTXJu6qG97obQbgcYrjupSnC4l7N+mQmF3
+         0Zp0FSEG4C5QNIllix0Pq/SC9NT7/CTPoTpFQd/o10bJB7yOCWAJKl6ujghc1QtX5t17
+         f59ued4d/wvE0bjnUGbBvSbaXrLOF4xGbS1ouemYCfePszZYi0XPs5XLvtZz1dkM298j
+         7g9zMkw6Clxh2Au5OoKnld95SrNuIINJ/KIagvdnmqUvn/Z+Sq2bakqGP5a5R5dirDgt
+         SP6tVIl/ktAXf+wy4cFn+dUmv82yeHN5uFPNnhOIoytgYXYNKbjAb/TccB21ER15ZRJ2
+         fK4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678291077;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678291147;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cAOaGkIwCA5ZS+Sgpcv1TA+3A1d64qpc9FdQuuvh2JU=;
-        b=udWV56+g6a+LwLtJZdx8Ul27NWfOEKvR9bH5FLaeepC/vNvLe1xdnqgvoJUfNRMIJY
-         VjZAT5KU69g5dPMJnQN5vV728ROoZ6fTWEOdtzmyOy4ZrDSxAJqiAIXbp3hJDLUeZIKN
-         kAk+mYedU4+Sa8LK3jYk9AvqkWRXUvwrm9kn40N4Rq5OXpMEsAePW1WXYSMqlnLHvbgl
-         t5ziBlQO8Ryn8vqiqSGOIyVmV+btC+vPi75bj4goBPzINaj97zo/LCK0zDs9+mYteX4F
-         s7dK0C04UyNZRKIX874Kljbkpf4E/UX5k10lERqQf4nCIbYKfnFgGJ+7eGdo4HvCcIFe
-         eQrQ==
-X-Gm-Message-State: AO0yUKVh1KebZGJTMm23XcH2NWOw2eW/+N49SplWdMPX8TWowyD4ve9U
-        lsIdxBBde0DNfTsNYilxp/rg0kZOlE1OmfBuoIqw4zPoSWkdZQTHxjXNbwsA4Tbdr+egqBeK5Ha
-        Mn4bAP0BSvmUBoW59tVMEjOEmYwpHtmtW
-X-Received: by 2002:a05:600c:524c:b0:3e2:24a0:ba26 with SMTP id fc12-20020a05600c524c00b003e224a0ba26mr17175629wmb.16.1678291077571;
-        Wed, 08 Mar 2023 07:57:57 -0800 (PST)
-X-Google-Smtp-Source: AK7set+0ZbDQv74474xESGT7KsCZ+Z0ADW8mAbBzIT3N2ds/q0PmHEKw5LdZFQNBVgWAbw2ieK8UIA==
-X-Received: by 2002:a05:600c:524c:b0:3e2:24a0:ba26 with SMTP id fc12-20020a05600c524c00b003e224a0ba26mr17175606wmb.16.1678291077285;
-        Wed, 08 Mar 2023 07:57:57 -0800 (PST)
-Received: from [192.168.3.108] (p4ff23d27.dip0.t-ipconnect.de. [79.242.61.39])
-        by smtp.gmail.com with ESMTPSA id q10-20020a7bce8a000000b003ea57808179sm20289317wmj.38.2023.03.08.07.57.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 07:57:56 -0800 (PST)
-Message-ID: <83b3f3ad-19a2-3737-77dd-3c3f9db82194@redhat.com>
-Date:   Wed, 8 Mar 2023 16:57:55 +0100
+        bh=T5JFu944VlLvwqNSsdE85tDBaxtEQbqvWWGACaI1P34=;
+        b=OdtZT7vobXUHk5hFPaQTlVAhKpcRJWg2ixgoZGztP/wpdmqevn0Kqj7RfnGRBhZujr
+         tjJnLbobNtS2vTBORA9+jQayuQPrkaLcdAoCjYeegN1zNR8Y55/5Ky/ArmAomtR11PzY
+         6SAunYMz1Pra+VUZfz0YfUvYy+3/Bf8C5jqBwWS8Sh+xgpzKM3YCzpfKUdJaSLAyoyOi
+         xbHV3+aN8Zh3daDU9YgouO4UnXNehwcEEGJcoSeBZnFJeiG1+OWFZwVykEbR2GXhXNUW
+         JbwDusoirr0Q8AeaIC7zdzOoeyqoai/BhlaH2iKZvgjrtZtMu8cMUXDzMeL5wldYb5dV
+         /lVQ==
+X-Gm-Message-State: AO0yUKXio/fx93fUwhxjx19ALmhIrjX0cwZkkP4moPwx5cnoV8Zju97m
+        dj4yHCLsqzA1o4pZDSNVKyg1UQ==
+X-Google-Smtp-Source: AK7set+2QJoEuHrRia3+vViyHXIXGUf3b+nF68EBSYlz06MF0ge8vYvciclvnuuVP7SQ/htNYqzgrw==
+X-Received: by 2002:a05:600c:4511:b0:3ea:e554:7808 with SMTP id t17-20020a05600c451100b003eae5547808mr16689893wmo.19.1678291146902;
+        Wed, 08 Mar 2023 07:59:06 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id 16-20020a05600c229000b003eb2e33f327sm2548430wmf.2.2023.03.08.07.59.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 07:59:06 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: [RFC PATCH v2 0/7] Add dedicated Qcom ICE driver
+Date:   Wed,  8 Mar 2023 17:58:31 +0200
+Message-Id: <20230308155838.1094920-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230306213925.617814-1-peterx@redhat.com>
- <20230306213925.617814-2-peterx@redhat.com>
- <94be7b9f-c33e-c6dc-4132-6cb78f7c0624@redhat.com> <ZAiqPU0RX3JfDFRP@x1n>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3 1/2] mm/uffd: UFFD_FEATURE_WP_UNPOPULATED
-In-Reply-To: <ZAiqPU0RX3JfDFRP@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>
->>> With WP_UNPOPUATED, application like QEMU can avoid pre-read faults all the
->>> memory before wr-protect during taking a live snapshot.  Quotting from
->>> Muhammad's test result here [3] based on a simple program [4]:
->>>
->>>     (1) With huge page disabled
->>>     echo madvise > /sys/kernel/mm/transparent_hugepage/enabled
->>>     ./uffd_wp_perf
->>>     Test DEFAULT: 4
->>>     Test PRE-READ: 1111453 (pre-fault 1101011)
->>>     Test MADVISE: 278276 (pre-fault 266378)
->>>     Test WP-UNPOPULATE: 11712
->>>
->>>     (2) With Huge page enabled
->>>     echo always > /sys/kernel/mm/transparent_hugepage/enabled
->>>     ./uffd_wp_perf
->>>     Test DEFAULT: 4
->>>     Test PRE-READ: 22521 (pre-fault 22348)
->>>     Test MADVISE: 4909 (pre-fault 4743)
->>>     Test WP-UNPOPULATE: 14448
->>>
->>> There'll be a great perf boost for no-thp case, while for thp enabled with
->>> extreme case of all-thp-zero WP_UNPOPULATED can be slower than MADVISE, but
->>> that's low possibility in reality, also the overhead was not reduced but
->>> postponed until a follow up write on any huge zero thp, so potentitially it
->>
->> s/potentitially/potentially/
->>
->>> is faster by making the follow up writes slower.
->>
->> What I realized, interrestingly not only the writes, but also the reads. In
-> 
-> Curious why reading a zeropage would be a problem?
+As both SDCC and UFS drivers use the ICE with duplicated implementation,
+while none of the currently supported platforms make use concomitantly
+of the same ICE IP block instance, the new SM8550 allows both UFS and
+SDCC to do so. In order to support such scenario, there is a need for
+a unified implementation and a devicetree node to be shared between
+both types of storage devices. So lets drop the duplicate implementation
+of the ICE from both SDCC and UFS and make it a dedicated (soc) driver.
+Also, switch all UFS and SDCC devicetree nodes to use the new ICE
+approach.
 
-Oh, my thinking was that with markers you postpone placing the shared 
-zeropage. So the next read access will require a pagefault to map the 
-shared zeropage. Your v1 would have performed best in that case I guess.
+See each individual patch for changelogs.
+
+The v1 is here:
+https://lore.kernel.org/all/20230214120253.1098426-1-abel.vesa@linaro.org/
+
+Abel Vesa (7):
+  dt-bindings: soc: qcom: Add schema for Inline Crypto Engine
+  dt-bindings: ufs: qcom: Add ICE phandle and drop core clock
+  dt-bindings: mmc: sdhci-msm: Add ICE phandle and drop core clock
+  soc: qcom: Make the Qualcomm UFS/SDCC ICE a dedicated driver
+  scsi: ufs: ufs-qcom: Switch to the new ICE API
+  mmc: sdhci-msm: Switch to the new ICE API
+  arm64: dts: qcom: Add the Inline Crypto Engine nodes
+
+ .../devicetree/bindings/mmc/sdhci-msm.yaml    |   9 +-
+ .../soc/qcom/qcom,inline-crypto-engine.yaml   |  42 +++
+ .../devicetree/bindings/ufs/qcom,ufs.yaml     |  14 +-
+ arch/arm64/boot/dts/qcom/sdm630.dtsi          |  18 +-
+ arch/arm64/boot/dts/qcom/sdm670.dtsi          |  15 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  21 +-
+ arch/arm64/boot/dts/qcom/sm6115.dtsi          |  37 ++-
+ arch/arm64/boot/dts/qcom/sm6350.dtsi          |  31 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          |  21 +-
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          |  22 +-
+ drivers/mmc/host/Kconfig                      |   2 +-
+ drivers/mmc/host/sdhci-msm.c                  | 257 ++-------------
+ drivers/soc/qcom/Kconfig                      |   6 +
+ drivers/soc/qcom/Makefile                     |   1 +
+ drivers/soc/qcom/ice.c                        | 301 ++++++++++++++++++
+ drivers/ufs/host/Kconfig                      |   2 +-
+ drivers/ufs/host/Makefile                     |   1 -
+ drivers/ufs/host/ufs-qcom-ice.c               | 244 --------------
+ drivers/ufs/host/ufs-qcom.c                   |  50 ++-
+ drivers/ufs/host/ufs-qcom.h                   |  30 +-
+ include/soc/qcom/ice.h                        |  65 ++++
+ 21 files changed, 608 insertions(+), 581 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,inline-crypto-engine.yaml
+ create mode 100644 drivers/soc/qcom/ice.c
+ delete mode 100644 drivers/ufs/host/ufs-qcom-ice.c
+ create mode 100644 include/soc/qcom/ice.h
 
 -- 
-Thanks,
-
-David / dhildenb
+2.34.1
 
