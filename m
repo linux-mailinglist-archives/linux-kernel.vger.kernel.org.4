@@ -2,170 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E296B0032
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 08:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 611376B0012
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 08:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjCHHsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 02:48:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
+        id S229938AbjCHHlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 02:41:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjCHHsS (ORCPT
+        with ESMTP id S229492AbjCHHlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 02:48:18 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449764ECD9;
-        Tue,  7 Mar 2023 23:48:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678261696; x=1709797696;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=MPjpMnF2pYRp601r/CV/4rcJZOvf9VGuPDqjdu0MkGE=;
-  b=laniImVi/D2OeyIXehqaJ1zzZgBwQv/O8iHVcJwyW9RnrGhjjeh5Iy06
-   v/3ZjqzAybk9UYcf+LicxxLSkK/v8/0566QBATg8EKngSTM4qbxaDIgKt
-   jrJ9v+tIdSTKVyt8CYxuU3dk3u84bx/6dlQ1jdYkTTqC17CYUes/7tpyl
-   lv0EJXHvXfE8QxlbpXt36kY3AnpkJ6sKiC0TWYRX2DtpGa2l6MHBdKVKA
-   ABEllsjxoS+0r4LeWFg47aYl6KFICzMzCW2SLHf9BDh2PnolOfzebFxPb
-   lKAoeYqSQe0OalzGEQLRmmxgk7hRmQJkLcTwAjKk/K6tfKUDyFgXLJ+E8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="363727024"
-X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="363727024"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 23:48:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="745821383"
-X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="745821383"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.105])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Mar 2023 23:48:04 -0800
-Date:   Wed, 8 Mar 2023 15:40:26 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     seanjc@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, pbonzini@redhat.com, corbet@lwn.net,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, arnd@arndb.de, naoya.horiguchi@nec.com,
-        linmiaohe@huawei.com, x86@kernel.org, hpa@zytor.com,
-        hughd@google.com, jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, shuah@kernel.org, rppt@kernel.org,
-        steven.price@arm.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
-        vannapurve@google.com, yu.c.zhang@linux.intel.com,
-        kirill.shutemov@linux.intel.com, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, qperret@google.com, tabba@google.com,
-        michael.roth@amd.com, mhocko@suse.com, wei.w.wang@intel.com
-Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
-Message-ID: <20230308074026.GA2183207@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20230128140030.GB700688@chaop.bj.intel.com>
- <diqz5ybc3xsr.fsf@ackerleytng-cloudtop.c.googlers.com>
+        Wed, 8 Mar 2023 02:41:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FB324485;
+        Tue,  7 Mar 2023 23:41:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE95DB81B72;
+        Wed,  8 Mar 2023 07:41:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E655C433EF;
+        Wed,  8 Mar 2023 07:41:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678261261;
+        bh=aCR9I3Z2NCLeljkYNaOiZc+/Zdv5OTStgUR3AMzITfk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q4DTLcz1oQL49YelKS5JnXxRqz4rSAIVzR+/neEru8DhdvpGSiS8y9dUIAa6uv7IW
+         mYCjvsd0OJM05eQXl3xmmoiKBuQ7CfbCo4UtYk6FdTmICKDxDHJaxMjisFacfajr+7
+         pA9Mf4cSQnf6RfkveUFEzg2T3RgOFX49BCaPHWPwzRemUlvgXz99sdaMGd+P67NAXv
+         CePpJ9CQvB/aP5UbcvLWiYAiHfgt4YSlPBJA4fCkdCdqslBT9SqFJjveEhXfULEqsI
+         wCSQyxZEYhr6dplWW4zjkTeQMqOik6ge4O7NIkNATO/K581fhHwDPtqmlqlTjm5N5V
+         USQrSKjhQMYeQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pZoQk-0007XJ-SZ; Wed, 08 Mar 2023 08:41:46 +0100
+Date:   Wed, 8 Mar 2023 08:41:46 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     johan+linaro@kernel.org, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, airlied@gmail.com, daniel@ffwll.ch,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/10] Revert "drm/msm: Add missing check and destroy for
+ alloc_ordered_workqueue"
+Message-ID: <ZAg8Okiumzg9gpHJ@hovoldconsulting.com>
+References: <20230308021024.13566-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <diqz5ybc3xsr.fsf@ackerleytng-cloudtop.c.googlers.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230308021024.13566-1-jiasheng@iscas.ac.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 12:13:24AM +0000, Ackerley Tng wrote:
-> Chao Peng <chao.p.peng@linux.intel.com> writes:
+On Wed, Mar 08, 2023 at 10:10:24AM +0800, Jiasheng Jiang wrote:
+> On Mon, 06 Mar 2023 18:07:13 +0800, Johan Hovold wrote:
+> > This reverts commit 643b7d0869cc7f1f7a5ac7ca6bd25d88f54e31d0.
 > 
-> > On Sat, Jan 14, 2023 at 12:01:01AM +0000, Sean Christopherson wrote:
-> > > On Fri, Dec 02, 2022, Chao Peng wrote:
-> > ...
-> > > Strongly prefer to use similar logic to existing code that detects wraps:
-> 
-> > > 		mem->restricted_offset + mem->memory_size < mem->restricted_offset
-> 
-> > > This is also where I'd like to add the "gfn is aligned to offset"
-> > > check, though
-> > > my brain is too fried to figure that out right now.
-> 
-> > Used count_trailing_zeros() for this TODO, unsure we have other better
-> > approach.
-> 
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index afc8c26fa652..fd34c5f7cd2f 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -56,6 +56,7 @@
-> >   #include <asm/processor.h>
-> >   #include <asm/ioctl.h>
-> >   #include <linux/uaccess.h>
-> > +#include <linux/count_zeros.h>
-> 
-> >   #include "coalesced_mmio.h"
-> >   #include "async_pf.h"
-> > @@ -2087,6 +2088,19 @@ static bool kvm_check_memslot_overlap(struct
-> > kvm_memslots *slots, int id,
-> >   	return false;
-> >   }
-> 
-> > +/*
-> > + * Return true when ALIGNMENT(offset) >= ALIGNMENT(gpa).
-> > + */
-> > +static bool kvm_check_rmem_offset_alignment(u64 offset, u64 gpa)
-> > +{
-> > +	if (!offset)
-> > +		return true;
-> > +	if (!gpa)
-> > +		return false;
-> > +
-> > +	return !!(count_trailing_zeros(offset) >= count_trailing_zeros(gpa));
-> 
-> Perhaps we could do something like
-> 
-> #define lowest_set_bit(val) (val & -val)
-> 
-> and use
-> 
-> return lowest_set_bit(offset) >= lowest_set_bit(gpa);
+> The commit not only adds the allocation sanity check, but also adds the
+> destroy_workqueue to release the allocated priv->wq.
+> Therefore, revert the commit will cause memory leak.
 
-I see kernel already has fls64(), that looks what we need ;)
+No, reverting this commit does not cause any memory leaks (look at at
+diff again).
 
+The original patch called msm_drm_uninit() in some early error paths,
+but that was just completely broken as that function must not be called
+before the subcomponents have been bound and also triggered a bunch of
+other NULL-pointer dereferences.
+
+That bit was however removed when the change was merged with a second
+branch that also touched these error paths. In the end, the leaked wq is
+still there and this commit only added broken error handling for the wq
+allocation failing (as it does not free the drm device).
+
+> > A recent patch that tried to fix up the msm_drm_init() paths with
+> > respect to the workqueue but only ended up making things worse:
+> > 
+> > First, the newly added calls to msm_drm_uninit() on early errors would
+> > trigger NULL-pointer dereferences, for example, as the kms pointer would
+> > not have been initialised. (Note that these paths were also modified by
+> > a second broken error handling patch which in effect cancelled out this
+> > part when merged.)
 > 
-> Please help me to understand: why must ALIGNMENT(offset) >=
-> ALIGNMENT(gpa)? Why is it not sufficient to have both gpa and offset be
-> aligned to PAGE_SIZE?
+> There is a check for the kms pointer to avoid NULL-pointer dereference in
+> the msm_drm_uninit().
 
-Yes, it's sufficient. Here we just want to be conservative on the uAPI
-as Sean explained this at [1]:
-
-  I would rather reject memslot if the gfn has lesser alignment than the
-  offset. I'm totally ok with this approach _if_ there's a use case. 
-  Until such a use case presents itself, I would rather be conservative
-  from a uAPI perspective.
-
-[1] https://lore.kernel.org/all/Y8HldeHBrw+OOZVm@google.com/
-
-Chao
+No, there were further places in msm_drm_uninit() which did not have any
+such checks when you submitted your patch. Some of the missing checks
+were added by a separate patch, but that would not in itself have been
+sufficient as with your patch you'd still end up trying to unbind the
+subcomponents before they are bound, which will lead to further crashes.
+ 
+> > Second, the newly added allocation sanity check would still leak the
+> > previously allocated drm device.
 > 
-> > +}
-> > +
-> >   /*
-> >    * Allocate some memory and give it an address in the guest physical
-> > address
-> >    * space.
-> > @@ -2128,7 +2142,8 @@ int __kvm_set_memory_region(struct kvm *kvm,
-> >   	if (mem->flags & KVM_MEM_PRIVATE &&
-> >   	    (mem->restrictedmem_offset & (PAGE_SIZE - 1) ||
-> >   	     mem->restrictedmem_offset + mem->memory_size <
-> > mem->restrictedmem_offset ||
-> > -	     0 /* TODO: require gfn be aligned with restricted offset */))
-> > +	     !kvm_check_rmem_offset_alignment(mem->restrictedmem_offset,
-> > +					      mem->guest_phys_addr)))
-> >   		return -EINVAL;
-> >   	if (as_id >= kvm_arch_nr_memslot_as_ids(kvm) || id >= KVM_MEM_SLOTS_NUM)
-> >   		return -EINVAL;
+> The ddev is allocated by drm_dev_alloc which support automatic cleanup.
+
+We don't have automatic garbage collection in the kernel. You still need
+to release the reference to the device for it to be freed.
+
+Johan
