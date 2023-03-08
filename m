@@ -2,159 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F12B6B0B11
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BEAF6B0B15
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbjCHO1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:27:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
+        id S231927AbjCHO1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:27:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbjCHO0o (ORCPT
+        with ESMTP id S231896AbjCHO1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:26:44 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2060.outbound.protection.outlook.com [40.107.92.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F85C3E27;
-        Wed,  8 Mar 2023 06:26:38 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BLS42hZ38uSCszISFzAVaFGuW6+L1Dmor9OOPzGwMZBnBtWhcOUuD+PeHvQHwYPzwqCkwinST6UgHElvVv1EbTJbQlSP8jDoRPqRzl/vJAzBHIgqRMk2hcmP2Yg5iQPGTEkvi4Kiil9IGrlBiNAaspWq2THnmPiG7lAI3c06//v5o/wtWY2GJqDSMepSyKBtNA3SF3NhA6KDgiYJX1pVPfANc83JOlm4Q1VDjFr2R8vfdTFFWh4Val0l/ge86g9hilBDtCWv/u+FdmDXlwrvJdcLFmBnbDUY58f5ydNlk+oE4hOIdr2VPqsKB/bipZC1Hedn2PshZEM7LPo4LnfNFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lEHEiva0AInWLMPGMorLpy6fr1b2GpNjaBysPbPcCOw=;
- b=fklRz0ibqsHhU+/guB5tHro+6CChQQlnkabJM+Xhq5hqjCZ+oMxt3jyy4zQAk43LQ4jEIrwN2nWl6QFQ4pB6/UQbTZ4F7B1NNW4S4HxI3j19FqlQxYAt3MXjl6mQlUYJt22irIefyz31Kn9+330DDyXDIHXkpRDPSOVs2GqiCYdITfdSj0hX0ZJAa2uF6H68ydTxyioxFihC4VBo6MALD2ugyX5E2VYOsHc5cAHY0/RrCmJY/nWLbi0uOvDK/Cz52iwbXmNrXUOVXyhs3IUqYLMzgVcyhNBTJgOExiTqyFRELJfxBnQckgDutDxZCAi3ULUn48bnRVGMPHeZBYK7Lw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lEHEiva0AInWLMPGMorLpy6fr1b2GpNjaBysPbPcCOw=;
- b=DIvSE+xLdvyru41ugUp6dqeRkL9D+9y4JixJYNZm5Xs4ODVrU9ENFGdB8/U8xpRhs0mWT5vPwV1KjT1LiSNzYrr/C/xtU2i18BrVgLivBLoRso7IziBvJXxQoaaho1OHCHKYEUBMj1v954606thj2nfaDnnTZSi8mBj8s/BIfKSUMjlLsK2zwNeVl6ud9cii50F3cMesxCVfmM0q3nll7HAlJy+w3LHbWbhMt0O2So6592C8kBTB5aJPbB8rKh9pl6dpQOQtBo6+kiN5uAQzGBVtfeDb2J9CUVABInJhY/WEcnVX+p8jNkYHw+zDJlza+R2WRZ1XgC7bKelri0nNBQ==
-Received: from BN9PR03CA0532.namprd03.prod.outlook.com (2603:10b6:408:131::27)
- by CY8PR12MB7611.namprd12.prod.outlook.com (2603:10b6:930:9b::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Wed, 8 Mar
- 2023 14:26:36 +0000
-Received: from BN8NAM11FT060.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:131:cafe::c4) by BN9PR03CA0532.outlook.office365.com
- (2603:10b6:408:131::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17 via Frontend
- Transport; Wed, 8 Mar 2023 14:26:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BN8NAM11FT060.mail.protection.outlook.com (10.13.177.211) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.18 via Frontend Transport; Wed, 8 Mar 2023 14:26:36 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 8 Mar 2023
- 06:26:24 -0800
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Wed, 8 Mar 2023 06:26:23 -0800
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.11) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.986.5 via Frontend
- Transport; Wed, 8 Mar 2023 06:26:23 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <joro@8bytes.org>,
-        <will@kernel.org>, <robin.murphy@arm.com>,
-        <alex.williamson@redhat.com>, <shuah@kernel.org>
-CC:     <yi.l.liu@intel.com>, <linux-kernel@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <mjrosato@linux.ibm.com>,
-        <farman@linux.ibm.com>
-Subject: [PATCH v4 5/5] vfio: Support IO page table replacement
-Date:   Wed, 8 Mar 2023 06:26:02 -0800
-Message-ID: <600343ffb282ff3bed5eb98a9255c0084d01a859.1678284812.git.nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1678284812.git.nicolinc@nvidia.com>
-References: <cover.1678284812.git.nicolinc@nvidia.com>
+        Wed, 8 Mar 2023 09:27:23 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15109CD664
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:26:54 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id s18so9727765pgq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 06:26:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678285613;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6DzypvQ9Ir4BceedTjh7GQOOsJgVNAfYu10w2CD9pqk=;
+        b=Pyf8V3e9hyJO+g4hHyoq1KA7bcPTty4SEJ3OnQ+9kxx1oE+MLTkxL8BS4TVXPGP+Jh
+         eSssiNkJcdGMAvHAXux9Z87TAAvJPn7jBSktnB+ZFuoV3b6gmKwv7Fa9M4ijdTc1wSwP
+         e3+dUriachwEZC5RKofoob0sqIqscgphpU/aOPwXpJWhfN4foCyLq37qQrxzPL9lyOEt
+         i/YsqAyJ7GsQY0UlLHuusw6mVCQ+FDm6jmxapNjrckmdfc2J1KVe+D2IlDMMY9SI3ITL
+         a4nwEHIphc6f0gK8rpsylMJpJrhaT4g0Ywy5J4KvLR+P5SRrQ8uz5royHE/q6pxnlbXJ
+         nCHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678285613;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6DzypvQ9Ir4BceedTjh7GQOOsJgVNAfYu10w2CD9pqk=;
+        b=a7Dlyh06TnyVbQQOuqy6rlEmPUMx4q29CuZuoVW4qN+KH6yG1OLOGUFkBADRvVOTSW
+         VqtzeNUKCdTrM4C6XtYNK+aWJRlXwLc5PwADwzzeAacmGuATGDQiQfJd92zUkT0qBxbR
+         Q6dFwEn/+EQvuscotdplA0+WWTn4aIur4HVjCZJPvGiulweqs7iMsDAL1BsMLetL7KGY
+         STL8q7s+F7Nj33IrseIp3mRyJbUxxNETCTc5NKOA0Fzmlr73OYw27UhuX+6sWlgneC2M
+         1AI/j9IBAvm/y0yfOgBHIWaBhqXNYs7lhxopieIECkCrzVSKPrXAI5U3FWfBTz/KwWtr
+         JKgA==
+X-Gm-Message-State: AO0yUKUJsXu9fB8KBstzLUx8t20Bf9d42Jkmmi8ccu44xHnqPEXphkV6
+        datf93+DiQFIp2Ylkt5k0bx9+Q==
+X-Google-Smtp-Source: AK7set+rYJJTDBOWnCa/b2YmmrMnbgTu/hcqTSPkk3vFIpknj1dpE4/ong9tJr7MIuEdncnMxuFBbA==
+X-Received: by 2002:aa7:8804:0:b0:5d1:f76:d1d7 with SMTP id c4-20020aa78804000000b005d10f76d1d7mr2800868pfo.1.1678285612728;
+        Wed, 08 Mar 2023 06:26:52 -0800 (PST)
+Received: from [172.20.4.229] ([50.233.106.125])
+        by smtp.gmail.com with ESMTPSA id 6-20020aa79106000000b0059085684b54sm9851411pfh.140.2023.03.08.06.26.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 06:26:52 -0800 (PST)
+Message-ID: <074823f4-993c-8caf-bd93-70589c4aae42@kernel.dk>
+Date:   Wed, 8 Mar 2023 07:26:46 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT060:EE_|CY8PR12MB7611:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7324f2f7-7edc-407e-802e-08db1fe11fc9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FRhummsE804Gc78CWoI49EcOI8MS97zKCxpieW8/j+2qLBz6ClZnNbz6bkP3iIoujrQb0p8uSDDUFEAb3svwlu6zZAjfeurseFfwzGboT8tjL1CC0ddSH6RlCPzxpDuaY7UUuSw2qpyu+BbIESD/wsCoYAlAfExjL+5LH0rl2vbPt64HMJ4VDryseDhvfFtKyg4IYF07i0dTZC30Qo0domzr47QdLvVog2j6DTMEXJwakvWKMNta1mOK/sHdlH8Qsy0Cin9yZRvoc2ZRN/YXQdJWwaYQ1g/r1zAZTuW79YMwJyXOih++zAe+QPZeM+om1bNw1sINstiazQvod5SXvt6LfR6Aph3ZoKgfE+qJFjuwDLYf4o5q4/gBeybnxz1FrNE3+RaeJNxQydBq6APzeZegz7YBF9LaRtd+ckcQXChUgyP+zjRxG1TO2DnE7ZDOf7CxU8A7sAa5voFhzTuoC/sCeFEMvE2FFNc8LWjMedlnr8mwqMthMvbLkB18jbnmK2Jrty4ukrxHuAJMcri66hG/4OIii2NPanGlANIdbJT1pQr2TXIGEU1XjGctgVVDDKndGf2b08BiAAS0BxMLRw1m9LKN3pAzMRCwIUqwDSzCyNyrzYGCeZdEr91BeJoW00LSrXuYjPOJbUnXaDRHuyEqplakdRTon8gdoZpjfPFsGHCjg3AgzO923JFIn5z2oL5vzywihA4Fxq3hiskOwg==
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(376002)(136003)(39860400002)(451199018)(36840700001)(40470700004)(46966006)(8676002)(36756003)(356005)(8936002)(41300700001)(4326008)(7416002)(70206006)(5660300002)(70586007)(7636003)(86362001)(82740400003)(36860700001)(7696005)(6666004)(478600001)(110136005)(54906003)(316002)(83380400001)(47076005)(40460700003)(82310400005)(2906002)(426003)(2616005)(186003)(336012)(26005)(40480700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 14:26:36.2584
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7324f2f7-7edc-407e-802e-08db1fe11fc9
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT060.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7611
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: Unexpected EINVAL when enabling cpuset in subtree_control when
+ io_uring threads are running
+Content-Language: en-US
+To:     Waiman Long <longman@redhat.com>,
+        Daniel Dao <dqminh@cloudflare.com>
+Cc:     io-uring@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        cgroups@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>
+References: <CA+wXwBQwgxB3_UphSny-yAP5b26meeOu1W4TwYVcD_+5gOhvPw@mail.gmail.com>
+ <c069bcff-8229-4284-b973-e427ccf20b64@redhat.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <c069bcff-8229-4284-b973-e427ccf20b64@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now both the physical path and the emulated path should support an IO page
-table replacement.
+On 3/8/23 7:20?AM, Waiman Long wrote:
+> On 3/8/23 06:42, Daniel Dao wrote:
+>> Hi all,
+>>
+>> We encountered EINVAL when enabling cpuset in cgroupv2 when io_uring
+>> worker threads are running. Here are the steps to reproduce the failure
+>> on kernel 6.1.14:
+>>
+>> 1. Remove cpuset from subtree_control
+>>
+>>    > for d in $(find /sys/fs/cgroup/ -maxdepth 1 -type d); do echo
+>> '-cpuset' | sudo tee -a $d/cgroup.subtree_control; done
+>>    > cat /sys/fs/cgroup/cgroup.subtree_control
+>>    cpu io memory pids
+>>
+>> 2. Run any applications that utilize the uring worker thread pool. I used
+>>     https://github.com/cloudflare/cloudflare-blog/tree/master/2022-02-io_uring-worker-pool
+>>
+>>    > cargo run -- -a -w 2 -t 2
+>>
+>> 3. Enabling cpuset will return EINVAL
+>>
+>>    > echo '+cpuset' | sudo tee -a /sys/fs/cgroup/cgroup.subtree_control
+>>    +cpuset
+>>    tee: /sys/fs/cgroup/cgroup.subtree_control: Invalid argument
+>>
+>> We traced this down to task_can_attach that will return EINVAL when it
+>> encounters
+>> kthreads with PF_NO_SETAFFINITY, which io_uring worker threads have.
+>>
+>> This seems like an unexpected interaction when enabling cpuset for the subtrees
+>> that contain kthreads. We are currently considering a workaround to try to
+>> enable cpuset in root subtree_control before any io_uring applications
+>> can start,
+>> hence failure to enable cpuset is localized to only cgroup with
+>> io_uring kthreads.
+>> But this is cumbersome.
+>>
+>> Any suggestions would be very much appreciated.
+> 
+> Anytime you echo "+cpuset" to cgroup.subtree_control to enable cpuset,
+> the tasks within the child cgroups will do an implicit move from the
+> parent cpuset to the child cpusets. However, that move will fail if
+> any task has the PF_NO_SETAFFINITY flag set due to task_can_attach()
+> function which checks for this. One possible solution is for the
+> cpuset to ignore tasks with PF_NO_SETAFFINITY set for implicit move.
+> IOW, allowing the implicit move without touching it, but not explicit
+> one using cgroup.procs.
 
-Call iommufd_device_replace() when vdev->iommufd_attached is true.
+I was pondering this too as I was typing my reply, but at least for
+io-wq, this report isn't the first to be puzzled or broken by the fact
+that task threads might have PF_NO_SETAFFINITY set. So while it might be
+worthwhile to for cpuset to ignore PF_NO_SETAFFINITY as a separate fix,
+I think it's better to fix io-wq in general. Not sure we have other
+cases where it's even possible to have PF_NO_SETAFFINITY set on
+userspace threads?
 
-Also update the VFIO_DEVICE_ATTACH_IOMMUFD_PT kdoc in the uAPI header.
-
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
----
- drivers/vfio/iommufd.c    | 6 +++---
- include/uapi/linux/vfio.h | 6 ++++++
- 2 files changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/vfio/iommufd.c b/drivers/vfio/iommufd.c
-index 8a9457d0a33c..a245a8e0c8ab 100644
---- a/drivers/vfio/iommufd.c
-+++ b/drivers/vfio/iommufd.c
-@@ -145,9 +145,9 @@ int vfio_iommufd_physical_attach_ioas(struct vfio_device *vdev, u32 *pt_id)
- 		return -EINVAL;
- 
- 	if (vdev->iommufd_attached)
--		return -EBUSY;
--
--	rc = iommufd_device_attach(vdev->iommufd_device, pt_id);
-+		rc = iommufd_device_replace(vdev->iommufd_device, pt_id);
-+	else
-+		rc = iommufd_device_attach(vdev->iommufd_device, pt_id);
- 	if (rc)
- 		return rc;
- 	vdev->iommufd_attached = true;
-diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
-index 692156a708bb..14375826a25b 100644
---- a/include/uapi/linux/vfio.h
-+++ b/include/uapi/linux/vfio.h
-@@ -243,6 +243,12 @@ struct vfio_device_bind_iommufd {
-  *
-  * Undo by VFIO_DEVICE_DETACH_IOMMUFD_PT or device fd close.
-  *
-+ * If a vfio device is currently attached to a valid hw_pagetable, without doing
-+ * a VFIO_DEVICE_DETACH_IOMMUFD_PT, a second VFIO_DEVICE_ATTACH_IOMMUFD_PT ioctl
-+ * passing in another hw_pagetable (hwpt) id is allowed. This action, also known
-+ * as a hw_pagetable replacement, will replace the device's currently attached
-+ * hw_pagetable with a new hw_pagetable corresponding to the given pt_id.
-+ *
-  * @argsz:	user filled size of this data.
-  * @flags:	must be 0.
-  * @pt_id:	Input the target id which can represent an ioas or a hwpt
 -- 
-2.39.2
+Jens Axboe
 
