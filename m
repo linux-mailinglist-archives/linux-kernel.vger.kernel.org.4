@@ -2,109 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5647C6AFC67
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 158096AFC69
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjCHBaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 20:30:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
+        id S230101AbjCHBb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 20:31:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbjCHB37 (ORCPT
+        with ESMTP id S230043AbjCHBbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 20:29:59 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7788587D87
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 17:29:19 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id j11so19424125lfg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 17:29:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678238940;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wcH6ChrdybSOEpD7JCkvJREKmTq11gzbfL1luIuLXkc=;
-        b=WmCAqaprgGN011ev+tuC6gu8/acpauS9IYp7lJcpFioq7F2/WLgU3NW9A5dF9AwsrF
-         R5H6XwXd1tHuiypD7DoIr6e1pSNoLm166oGUlJrE0/jZXzBvDA99YeOjSsxpHed9J3z9
-         nBHt/Zp0C71yln6yjUpOdMrPVK9keRog1l816ixjn1WtnT7bibSa8UIipjd69TBX39Z7
-         nF5m5c2vIIP1TdG/w10l1p+OJXBVPY4ipVrF0iktNQJHHiIyzqxe9PxD2Y8yPn7DFIIo
-         CrnYHlL5H2GbGKBjDRJQALiMN0oifRnPbuQ9qK04rjlz2vLCLQnhH3EmKJXaZpY+fi99
-         GVXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678238940;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wcH6ChrdybSOEpD7JCkvJREKmTq11gzbfL1luIuLXkc=;
-        b=2DJLzcISmf1hMYQgMKxhG5HfrtDCOJ/elY8nlZDn4+9+YDm9DzBOYcp6X3OB9t+1YH
-         n2cIDI0ei8bREM73TyvQq17Cjv9zFajT5KGBcBmUWAUejEGs4mcf6NMnQnjCMksGrV6H
-         ww/upcu8Q8d//rrIZDX6ufQBDKsiMksfhClVyJIvNh0nqmrzMySoEbXwIPnFL/6t4K+7
-         QKSqrQv2eIJ88JNkjmWemg+PlG/1mUJqlMLOzC5o1KTJikyXrRnj34hph2EudDIBgo/e
-         vOoYZp8ULVNNyieJTYJpizvRCIuppkJzLyj963w0cWJh2P+2UCzIC2DEQtgnxSSd5eIh
-         Ohaw==
-X-Gm-Message-State: AO0yUKUvHGUUA6OjSTmX4ad8NwWQaay347E0sIjxutu/5kye2CXOKANi
-        ts3BuN1j3LGjiFX7ydeOr7SKfA==
-X-Google-Smtp-Source: AK7set/O2zOF0Eaq703LtV0Eck2mcIfZt4f+MvTQ56hwhaKSJtxi6wC+KRR0lHtAlI17pP5pDT60Rw==
-X-Received: by 2002:ac2:4ac9:0:b0:4dc:84dd:eb91 with SMTP id m9-20020ac24ac9000000b004dc84ddeb91mr5202676lfp.22.1678238939731;
-        Tue, 07 Mar 2023 17:28:59 -0800 (PST)
-Received: from localhost.localdomain (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id u17-20020ac25191000000b004db3aa3c542sm2174173lfi.47.2023.03.07.17.28.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 17:28:59 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH] dt-bindings: timer: armv7: Don't sanction address/size-cells values
-Date:   Wed,  8 Mar 2023 02:28:53 +0100
-Message-Id: <20230308012854.294939-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.2
+        Tue, 7 Mar 2023 20:31:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640ED32CDC
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 17:31:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25F16B81B4F
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 01:31:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9BD5C433EF;
+        Wed,  8 Mar 2023 01:31:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678239078;
+        bh=I10H3LCRynxbID+LAh2eXQNF43+fQKoY+xvwLhKFR5c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jCpFjJZtSzM3h3ToioEEQGRsNEC4NWiKXflrV6Y49nzZzn8WGmoxZ//hXVssshpz2
+         9iCXUnVA8TPWU77K5VIGmZGbnllwlc0m2BeppetfkmyHWzV5s9zv5Dv/YEG7Mpq+Lw
+         JbT7xO+J2Z0z2toKR+/NHy9UYV9D1xRIs+DFLDAleXAaBn48cmRIYlsomH4yAPC00Z
+         voc5n3dNe3Ac2ndx2TW++F+PYyTBrx0rw+CUOOTlz6uNGvUNFm0YFkSmn9cYRQS6l3
+         gXtkjdgHPS+9TBCu//G5e8TsVDbslJKFuuVTginj+y9SEnUnEiGLOtICNWiHTqA4v8
+         HmviJLVjWhCgw==
+Message-ID: <db33ea53-c4e9-42f5-3101-88f806263f76@kernel.org>
+Date:   Wed, 8 Mar 2023 09:31:15 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] f2fs: fix unaligned field offset in 32-bits platform
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Zhiguo Niu <zhiguo.niu@unisoc.com>
+References: <20230307151408.58490-1-chao@kernel.org>
+ <ZAdzwt+DZ0emPd30@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <ZAdzwt+DZ0emPd30@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver itself does not read the -cells values (and frankly, it
-shouldn't), so there's little sense in only allowing [1, 2] x [1].
-Allow any values.
+On 2023/3/8 1:26, Jaegeuk Kim wrote:
+> Cc'ed stable. Thanks.
 
-Fixes: 4d2bb3e65035 ("dt-bindings: timer: Convert ARM timer bindings to json-schema")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- .../devicetree/bindings/timer/arm,arch_timer_mmio.yaml      | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Oh, thanks for adding the missed tag! Jaegeuk.
 
-diff --git a/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml b/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
-index f6efa48c4256..236e2a05c1ad 100644
---- a/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
-+++ b/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
-@@ -26,11 +26,9 @@ properties:
-     maxItems: 1
-     description: The control frame base address
- 
--  '#address-cells':
--    enum: [1, 2]
-+  '#address-cells': true
- 
--  '#size-cells':
--    const: 1
-+  '#size-cells': true
- 
-   ranges: true
- 
--- 
-2.39.2
+Thanks,
 
+> 
+> On 03/07, Chao Yu wrote:
+>> F2FS-fs (dm-x): inconsistent rbtree, cur(3470333575168) next(3320009719808)
+>> ------------[ cut here ]------------
+>> kernel BUG at fs/f2fs/gc.c:602!
+>> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
+>> PC is at get_victim_by_default+0x13c0/0x1498
+>> LR is at f2fs_check_rb_tree_consistence+0xc4/0xd4
+>> ....
+>> [<c04d98b0>] (get_victim_by_default) from [<c04d4f44>] (f2fs_gc+0x220/0x6cc)
+>> [<c04d4f44>] (f2fs_gc) from [<c04d4780>] (gc_thread_func+0x2ac/0x708)
+>> [<c04d4780>] (gc_thread_func) from [<c015c774>] (kthread+0x1a8/0x1b4)
+>> [<c015c774>] (kthread) from [<c01010b4>] (ret_from_fork+0x14/0x20)
+>>
+>> The reason is there is __packed attribute in struct rb_entry, but there
+>> is no __packed attribute in struct victim_entry, so wrong offset of key
+>> field will be parsed in struct rb_entry in f2fs_check_rb_tree_consistence,
+>> it describes memory layouts of struct rb_entry and struct victim_entry in
+>> 32-bits platform as below:
+>>
+>> struct rb_entry {
+>>     [0] struct rb_node rb_node;
+>>         union {
+>>             struct {...};
+>>    [12]     unsigned long long key;
+>>         } __packed;
+>> }
+>> size of struct rb_entry: 20
+>>
+>> struct victim_entry {
+>>     [0] struct rb_node rb_node;
+>>         union {
+>>             struct {...};
+>>    [16]     struct victim_info vi;
+>>         };
+>>    [32] struct list_head list;
+>> }
+>> size of struct victim_entry: 40
+>>
+>> This patch tries to add __packed attribute in below structure:
+>> - discard_info, discard_cmd
+>> - extent_info, extent_node
+>> - victim_info, victim_entry
+>> in order to fix this unaligned field offset issue in 32-bits platform.
+>>
+>> Fixes: 004b68621897 ("f2fs: use rb-tree to track pending discard commands")
+>> Fixes: 13054c548a1c ("f2fs: introduce infra macro and data structure of rb-tree extent cache")
+>> Fixes: 093749e296e2 ("f2fs: support age threshold based garbage collection")
+>> Signed-off-by: Zhiguo Niu <zhiguo.niu@unisoc.com>
+>> Signed-off-by: Chao Yu <chao@kernel.org>
+>> ---
+>>   fs/f2fs/f2fs.h | 6 +++---
+>>   fs/f2fs/gc.h   | 4 ++--
+>>   2 files changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>> index b0ab2062038a..17fa7572ceed 100644
+>> --- a/fs/f2fs/f2fs.h
+>> +++ b/fs/f2fs/f2fs.h
+>> @@ -349,7 +349,7 @@ struct discard_info {
+>>   	block_t lstart;			/* logical start address */
+>>   	block_t len;			/* length */
+>>   	block_t start;			/* actual start address in dev */
+>> -};
+>> +} __packed;
+>>   
+>>   struct discard_cmd {
+>>   	struct rb_node rb_node;		/* rb node located in rb-tree */
+>> @@ -361,7 +361,7 @@ struct discard_cmd {
+>>   		};
+>>   		struct discard_info di;	/* discard info */
+>>   
+>> -	};
+>> +	} __packed;
+>>   	struct list_head list;		/* command list */
+>>   	struct completion wait;		/* compleation */
+>>   	struct block_device *bdev;	/* bdev */
+>> @@ -660,7 +660,7 @@ struct extent_info {
+>>   			unsigned long long last_blocks;
+>>   		};
+>>   	};
+>> -};
+>> +} __packed;
+>>   
+>>   struct extent_node {
+>>   	struct rb_node rb_node;		/* rb node located in rb-tree */
+>> diff --git a/fs/f2fs/gc.h b/fs/f2fs/gc.h
+>> index 15bd1d680f67..304937d9a084 100644
+>> --- a/fs/f2fs/gc.h
+>> +++ b/fs/f2fs/gc.h
+>> @@ -58,7 +58,7 @@ struct gc_inode_list {
+>>   struct victim_info {
+>>   	unsigned long long mtime;	/* mtime of section */
+>>   	unsigned int segno;		/* section No. */
+>> -};
+>> +} __packed;
+>>   
+>>   struct victim_entry {
+>>   	struct rb_node rb_node;		/* rb node located in rb-tree */
+>> @@ -68,7 +68,7 @@ struct victim_entry {
+>>   			unsigned int segno;		/* segment No. */
+>>   		};
+>>   		struct victim_info vi;	/* victim info */
+>> -	};
+>> +	} __packed;
+>>   	struct list_head list;
+>>   };
+>>   
+>> -- 
+>> 2.36.1
