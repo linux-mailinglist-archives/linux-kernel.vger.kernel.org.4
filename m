@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D50A66B0614
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 450276B0610
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjCHLgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:36:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
+        id S229900AbjCHLgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 06:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjCHLgE (ORCPT
+        with ESMTP id S230312AbjCHLfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:36:04 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31684AF294;
-        Wed,  8 Mar 2023 03:36:03 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id a25so64692931edb.0;
-        Wed, 08 Mar 2023 03:36:03 -0800 (PST)
+        Wed, 8 Mar 2023 06:35:50 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC87B1A6C;
+        Wed,  8 Mar 2023 03:35:49 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id bh20so11889862oib.9;
+        Wed, 08 Mar 2023 03:35:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678275361;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pkqtkcAPDhHcKXHJJhzZGkadcuoCSlM8Je8c/sebOSk=;
-        b=Uxditw6bMjdlAa4tQirez9bPQT80pkxBdU0vkvdov83E7EJCKgtMgvvEzigUMmICqo
-         7r/28EKK/HXqXqGNu15VJbPT/3FwMttnWz4rKiQcNDFj1ZpavEgj7JulU+J/Q0vYFNQO
-         Dg4rQpFnQetRbBsl2TFx10mpdUpQ9XHuPuDagLxxMQ2VCgIYgBul67bTcSjTYfNmluYF
-         WJQvqrJRnlRhnNV10ouHOMtcuwSlTh5yQP9UcydhkTx16LtxJJcFrsk3f0MhooN+RwQ8
-         qHPdkuOKtekXLgETObHPMZqt4UJw/xk5X4tfcJYCHGQ7qCWSpoOspReezBbzdOt2ZpJA
-         lVxw==
+        d=gmail.com; s=20210112; t=1678275349;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x2ob5v9YUXQwfQj5y56Az67vh2N1Igtp/kRfAGxC6W8=;
+        b=PFMppGXgZqjqxfnoRZMzoGc7AmAaoDK5Ph913NRsb2LDL44jk7NI04RUhFp6/UUT/j
+         Q2axxYShfELDjUehuVeC5ih1n3RHxKRU2g9KnyZPfPxKdUdZqAmNf8kZaNhcuZ0UOcnf
+         f4B7/Z17q8TH6rjK2UsdOA5ov+EuxJMmsjj7e+q8SbNy8eQna6avbhnTswHIl1pQ+CgD
+         zGJgEv+2hn7SSeL2A8fTQQvhs0sbCm5TkhwBBiLfiYgRBwdIUTjlcaIVW7z44R3PMJmu
+         69nNIq6MxN+/Gm320Lf5KRJXScA5afQSP/+dFcg4PzbozMw4dn1zqXismwo0bwjb/KLE
+         x1qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678275361;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pkqtkcAPDhHcKXHJJhzZGkadcuoCSlM8Je8c/sebOSk=;
-        b=tXNX81rztjA3XYCJ97q0PVaAkPH6rZSWCGMkOMIiKt/qGc8fyF9WTQCn8HZpFs6fAR
-         uk/XCkHdIAqeoplov+ACdx0hsehAblQDgROlbk5MkuNNybDX/XGQ9Oq0io/kdkDaXfZc
-         fI0nPxhosgJN9wBWBaxK7q0J+VR2U6ezRhcCZoAFqMqL0e78F6zKO2SxtJ/0dt+ygopu
-         yfi6R1VeJmFbWU0X80gbRLv6kCS8+kIHHs+uLUdHdz51Vl2gIhbbEzGjydljfMUINCt2
-         5tRYfDDfOK46RtapZtSsLBHHruOiXCjJl69iVUVYujoPMaDpSV/aOG+E7R16F1Hck3JT
-         B+dg==
-X-Gm-Message-State: AO0yUKVzzeRIRrWAHVHtcTdo3PkypiBPJagSdDyzK6k6YxwI1Xjza1RJ
-        ICouQhVxifU4s41IndZcX42dxtBWqhCnSRAdsZ0=
-X-Google-Smtp-Source: AK7set+8IVqHUCP7lpW4Tu0PFR/uGhVXOh2XCgJ0nI8owJdMs3y7iNlYcasQPs28+hxxB5z53ejUH1b0gSyCIQYYEl4=
-X-Received: by 2002:a50:baa6:0:b0:4c1:6acc:ea5 with SMTP id
- x35-20020a50baa6000000b004c16acc0ea5mr9818706ede.4.1678275361500; Wed, 08 Mar
- 2023 03:36:01 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678275349;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x2ob5v9YUXQwfQj5y56Az67vh2N1Igtp/kRfAGxC6W8=;
+        b=M+QrCDEcWGNM5mBYKZ6a+h8MPnyg8FhvoWZDIK1iLnCrMKzUTPwKwKspfXo+LTbPpo
+         61i4mhw6TJUFQyOxbsK8X0erqcA4Xe6foKruEbdI8GV/GnCos28wYN3Mon5D8dtXmy8E
+         ExZw+yhbNn0GCXi1mQMeWxTpA9i1yh3eHjEV+Cn45Osbxef5b5T93gM+vex/hTpLbsLw
+         Cgk5FW1Jfj3Aph/5nU8LrNsm6g+1kE+Q0pSI5U5WCPs3Jj6ueHZ9q+Sp3Fjpir1o1fxX
+         0z3QVu5F1vQ0cMXjnLzg28U9jbwi0zXzB6tndD419CE1vs+ymI5dA6EMYqaw/rjss8Tw
+         Yjuw==
+X-Gm-Message-State: AO0yUKWcIPY+57xUBwTsRgt7ZkW3Rw86h7h9EIezyIx71p0g5wk77RXl
+        RVQQmrs4jbWq60IVXcg3ZFg=
+X-Google-Smtp-Source: AK7set8lb8jozZgQgsED0eGz5aHAWImsYZUwqtR268BCMeBhHc5n5dyO6NrjRKco9Z5SIybl0oOFxg==
+X-Received: by 2002:aca:1a09:0:b0:383:b2c0:4f61 with SMTP id a9-20020aca1a09000000b00383b2c04f61mr7395672oia.43.1678275349058;
+        Wed, 08 Mar 2023 03:35:49 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w133-20020acadf8b000000b00383b371f2a7sm3531418oig.42.2023.03.08.03.35.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 03:35:48 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2b012916-3955-6c4a-a74b-1e86eaa19485@roeck-us.net>
+Date:   Wed, 8 Mar 2023 03:35:46 -0800
 MIME-Version: 1.0
-References: <20230302125215.214014-1-keguang.zhang@gmail.com>
- <20230302125215.214014-3-keguang.zhang@gmail.com> <CAMRc=Me3yVwQm8=CmUVM2gyYnFxntW47-OOPdmq1TzXTJB5ETg@mail.gmail.com>
- <CAJhJPsX1q6PGSb+eoCSdCC2_vDtbaShLLzEbuNOqD_Jzd8Ozdw@mail.gmail.com> <2d5521ff21ea4b99be3dd2e449f53934@AcuMS.aculab.com>
-In-Reply-To: <2d5521ff21ea4b99be3dd2e449f53934@AcuMS.aculab.com>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Wed, 8 Mar 2023 19:35:45 +0800
-Message-ID: <CAJhJPsUy0U-SdP2Vk9B8qz=CGA=oDSxbaaqqS+HOiDnQoBAThA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] gpio: loongson1: Use readl() & writel()
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Svyatoslav Ryhel <clamor95@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230308094024.14115-1-clamor95@gmail.com>
+ <20230308094024.14115-2-clamor95@gmail.com>
+ <559c2588-e586-b4fb-97f8-5fe25bb79607@linaro.org>
+ <CAPVz0n38LtyAqBP4GfC003xzaW78FaZ91zjdTNe46ormL5RY=Q@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: ina2xx: add supply property
+In-Reply-To: <CAPVz0n38LtyAqBP4GfC003xzaW78FaZ91zjdTNe46ormL5RY=Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,107 +84,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 5:42=E2=80=AFPM David Laight <David.Laight@aculab.co=
-m> wrote:
->
-> From: Keguang Zhang
-> > Sent: 07 March 2023 03:46
-> >
-> > On Mon, Mar 6, 2023 at 5:30=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.=
-pl> wrote:
-> > >
-> > > On Thu, Mar 2, 2023 at 1:52=E2=80=AFPM Keguang Zhang <keguang.zhang@g=
-mail.com> wrote:
-> > > >
-> > > > This patch replace __raw_readl() & __raw_writel() with readl() & wr=
-itel().
-> > > >
-> > >
-> > > Please say WHY you're doing this.
-> > >
-> > readl & writel contain memory barriers which can guarantee access order=
-.
->
-> So what...
->
-> There is a data dependency between the read and write.
-> The read can't be scheduled before the lock is acquired.
-> The write can't be scheduled after the lock is released.
->
-> So any barriers in readl()/writel() aren't needed.
->
-> If they are only compile barriers they'll have no real effect.
-> OTOH if the cpu needs actual synchronising instructions (as some
-> ppc do) then they will slow things down.
->
-Thanks for the explanation.
-The intention of this change is to prevent possible order issues.
-At present, __raw_readl() & __raw_writel() do work fine.
-I will drop this patch in the next version.
+On 3/8/23 02:32, Svyatoslav Ryhel wrote:
+> ср, 8 бер. 2023 р. о 12:27 Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> пише:
+>>
+>> On 08/03/2023 10:40, Svyatoslav Ryhel wrote:
+>>> Add supply property.
+>>
+>> You have entire commit msg to explain and give background, but instead
+>> there is just sentence duplicating subject. And since you did not
+>> explain anything, we have questions... like: INA238 does not have VDD,
+>> so this does not look correct.
+>>
+> 
+> This is why a regulator is not mandatory. If ina238 does not have vdd
+> then one who needs ina238 may omit this prop. How about looking from
+> this perspective?
+> 
 
+If a chip does not have VDD, the driver should not even try to get it
+for that chip. INS238 is supported by a different driver, so that does
+not require special code, but it needs to be spelled out in the devicetree
+bindings. Devicetree has a means to specify if a property is valid for
+a given device.
 
->         David
->
-> >
-> > > Bart
-> > >
-> > > > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > > > ---
-> > > > V1 -> V2: Split this change to a separate patch
-> > > > ---
-> > > >  drivers/gpio/gpio-loongson1.c | 8 ++++----
-> > > >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loon=
-gson1.c
-> > > > index 8862c9ea0d41..b6c11caa3ade 100644
-> > > > --- a/drivers/gpio/gpio-loongson1.c
-> > > > +++ b/drivers/gpio/gpio-loongson1.c
-> > > > @@ -23,8 +23,8 @@ static int ls1x_gpio_request(struct gpio_chip *gc=
-, unsigned int offset)
-> > > >         unsigned long flags;
-> > > >
-> > > >         raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
-> > > > -       __raw_writel(__raw_readl(gpio_reg_base + GPIO_CFG) | BIT(of=
-fset),
-> > > > -                    gpio_reg_base + GPIO_CFG);
-> > > > +       writel(readl(gpio_reg_base + GPIO_CFG) | BIT(offset),
-> > > > +              gpio_reg_base + GPIO_CFG);
-> > > >         raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
-> > > >
-> > > >         return 0;
-> > > > @@ -35,8 +35,8 @@ static void ls1x_gpio_free(struct gpio_chip *gc, =
-unsigned int offset)
-> > > >         unsigned long flags;
-> > > >
-> > > >         raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
-> > > > -       __raw_writel(__raw_readl(gpio_reg_base + GPIO_CFG) & ~BIT(o=
-ffset),
-> > > > -                    gpio_reg_base + GPIO_CFG);
-> > > > +       writel(readl(gpio_reg_base + GPIO_CFG) & ~BIT(offset),
-> > > > +              gpio_reg_base + GPIO_CFG);
-> > > >         raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
-> > > >  }
-> > > >
-> > > > --
-> > > > 2.34.1
-> > > >
-> >
-> >
-> >
-> > --
-> > Best regards,
-> >
-> > Kelvin Cheung
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
- 1PT, UK
-> Registration No: 1397386 (Wales)
+Having said this, as it turns out, _none_ of the chips supported by
+the ina2xx and the ina238 drivers have VDD. All of them have Vs, and
+all but INA219 have Vbus. The bindings don't even explain which one
+of those is supposed to refer to "VDD".
 
+Also, regulator_get_optional() returns -ENODEV if CONFIG_REGULATOR
+is not enabled, so it isn't entirely optional. We can not suddenly fail
+to load the driver on systems with CONFIG_REGULATOR=n, so some conditional
+code will unfortunately be necessary.
 
+Guenter
 
---
-Best regards,
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
+> Best regards,
+> Svyatoslav R.
 
-Kelvin Cheung
