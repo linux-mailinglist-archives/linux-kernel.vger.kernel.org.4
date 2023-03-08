@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1CD36AFFBB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 08:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 032096AFFBC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 08:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjCHHch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 02:32:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
+        id S229835AbjCHHcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 02:32:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjCHHcX (ORCPT
+        with ESMTP id S229841AbjCHHce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 02:32:23 -0500
+        Wed, 8 Mar 2023 02:32:34 -0500
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B69AA242
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 23:32:19 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5376fa4106eso161313527b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 23:32:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36B0A7295
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 23:32:21 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536be78056eso160482717b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 23:32:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678260738;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N/zczmyojBS9P2rt92Hh+NQdVJTLpoFAFXyTJQmiZyg=;
-        b=s/G0ZGPiIu+LtCsClWoP3xJ4KF91NU9KO2/f3Oh5EMHV82JxNgVxUMHBhQuFe1RB/9
-         DmKSSpQH7/fOcJAsj+Wyfo2s/+jJuYmpBczyP1qMXTPlnvdWYEPGFJXBS4Bukyj6cuww
-         JWq41rlZsYcERqCNTo2ogmEp4xUy1qZ0qh55tryMjF5UnbIaJ8n/U4IuJs6kzivuOQr6
-         X5GYVGxDIKJ3fR3qnboPFaaEMzcDZrZEFxxvI9i+CPkVPs6i/lTZwqQd3T5x7I8iWjTj
-         XIWyjkqfCza7F0XOBQcHGgg7YqlL3vpzxijs1x4on9MXLAOovFhpXbl8tgNYLvgCkumF
-         xkUQ==
+        d=google.com; s=20210112; t=1678260741;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eiPiVq4qnV5b3yyOHukFyCYe6YsVtSEQ0lj3gSUnBVU=;
+        b=Nc5RYpMPMcJmlMk8UTyky0FVierCho4KPLKPoggzP9J288W8hSAzN7Nt/ILUPiMFol
+         7a3b7CX70eq/+Byb31yem1HSegPxIZqw1QD7EraC/qnTvl8KGW2P8tbqjWSqbFdUnxiO
+         QhoqxfYm8GTR8vJZwIhhtIjIwJ8OxnUcFhocWX4k6ZYfLlNxjBIKAYRTvYAenm6kCJ55
+         e2oqd0X5MvmYOv1Dhn8Z9ClBPU9VPd0uXVryuyYDO0BAFCKsAoeEM/gec8NvjRK8p69i
+         5Tg5FFypJJhpDSOMOuo9D7eFHl7f1lnIqU6W+nx+0SSnMapnyv6K/abDJwIG1p6ym3+4
+         EJHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678260738;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=N/zczmyojBS9P2rt92Hh+NQdVJTLpoFAFXyTJQmiZyg=;
-        b=6SLd3K55yncXuIqlsU6Nt65qlGKESGs72uiecg7crtPacDtX/ragsrnmtMp+W/KsGc
-         ov4S8F33Eu7SC8FwwKrQbihMbIQMsqjaFWY40osa9PXpNEBHequERcApn1JOq1372i1u
-         00ysBjVazqV5vyQFukVzHHozYRDpn3RTPkGQ93fr3KOzj8MSy9Y2haFXjDqE1/VPwsbe
-         2FqcbWuzBrRQsrP4pOpTQSXN14mGyFNkXrK6o97dltusT6zjTx4CFLjGWrpFmlvsu/ll
-         EOyzOki09/aGU+p1v7blUhI8syH6MhJQM+hnR/h/ueIRJvK9S9TVBMhfmqXMRyqZE2X0
-         jTKA==
-X-Gm-Message-State: AO0yUKUKLb+o9pWYmoBEEjjyJvP339XcDlGvQmp8k7DjmMWRaCsC3sd5
-        S036QpHASxPDDexsPguFLsgxdpyXjTA=
-X-Google-Smtp-Source: AK7set/Rgn2XNpF1h9Xp6zthH1vqCWX2SvKTkS0/og89DfLnEwI/k79nooHRWKBJ+JEi/gk2Z0/kL0IuCbo=
+        d=1e100.net; s=20210112; t=1678260741;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eiPiVq4qnV5b3yyOHukFyCYe6YsVtSEQ0lj3gSUnBVU=;
+        b=Kv9BdiBf7hs2gcew48vG5S0Wq583yT8W7NgQAFjkX/xK4QoLNb1Qj7o76s8TiLvYel
+         10prIVLJWjBFojnV3GbaLPgZd5Q+ds3dZgQEzXP4LqA4EBE0Eg6puIWIGVOV1+jl8KYA
+         CIhIYrebS/pFlqlcrExqZJuVucMpqbD+2rBFrlUemkHBaHujcLx+BTY1xNhQ+Nq1oi/i
+         pZtj7y1LHJLatUDz8BOLzLD8saY/MNS8rH7nvfx4tA7sQ3LP97s6yJKUZiXyqmHs5ZGI
+         AkrBe5k/uwtB1VhLNs8yGibcoXp1iEwVFdVulUFQHDv1zOjmcbtPKe0fPjfQrWYhwyHA
+         MaVg==
+X-Gm-Message-State: AO0yUKU4AdPePHR/b0aC+QrgQkbhIg/Vw/Vs4PuVvam0BaOXkAj88krU
+        qGYu9fS5Ua0WEG66sI4Iei6qcXtkI0c=
+X-Google-Smtp-Source: AK7set8qvEHThPBqFtM4csDHhQ7h5MWe3xxPdzBqrQ71ITAES3t7H95wYlw1p6MVlrSvgAPTabY7hme9UNg=
 X-Received: from avagin.kir.corp.google.com ([2620:0:1008:11:b53:99a6:b4fe:b30b])
- (user=avagin job=sendgmr) by 2002:a25:ae1c:0:b0:9f5:af6b:6f69 with SMTP id
- a28-20020a25ae1c000000b009f5af6b6f69mr13442474ybj.5.1678260738463; Tue, 07
- Mar 2023 23:32:18 -0800 (PST)
-Date:   Tue,  7 Mar 2023 23:31:59 -0800
+ (user=avagin job=sendgmr) by 2002:a0d:ea13:0:b0:533:54d1:9e40 with SMTP id
+ t19-20020a0dea13000000b0053354d19e40mr4ywe.21.1678260740739; Tue, 07 Mar 2023
+ 23:32:20 -0800 (PST)
+Date:   Tue,  7 Mar 2023 23:32:00 -0800
 In-Reply-To: <20230308073201.3102738-1-avagin@google.com>
 Mime-Version: 1.0
 References: <20230308073201.3102738-1-avagin@google.com>
 X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
-Message-ID: <20230308073201.3102738-5-avagin@google.com>
-Subject: [PATCH 4/6] seccomp: add the synchronous mode for seccomp_unotify
+Message-ID: <20230308073201.3102738-6-avagin@google.com>
+Subject: [PATCH 5/6] selftest/seccomp: add a new test for the sync mode of seccomp_user_notify
 From:   Andrei Vagin <avagin@google.com>
 To:     Kees Cook <keescook@chromium.org>,
         Peter Zijlstra <peterz@infradead.org>
@@ -71,10 +69,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Will Drewry <wad@chromium.org>,
         Vincent Guittot <vincent.guittot@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,130 +79,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-seccomp_unotify allows more privileged processes do actions on behalf
-of less privileged processes.
-
-In many cases, the workflow is fully synchronous. It means a target
-process triggers a system call and passes controls to a supervisor
-process that handles the system call and returns controls to the target
-process. In this context, "synchronous" means that only one process is
-running and another one is waiting.
-
-There is the WF_CURRENT_CPU flag that is used to advise the scheduler to
-move the wakee to the current CPU. For such synchronous workflows, it
-makes context switches a few times faster.
-
-Right now, each interaction takes 12=C2=B5s. With this patch, it takes abou=
-t
-3=C2=B5s.
-
-This change introduce the SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP flag that
-it used to enable the sync mode.
+Test output:
+ #  RUN           global.user_notification_sync ...
+ #            OK  global.user_notification_sync
+ ok 51 global.user_notification_sync
 
 Signed-off-by: Andrei Vagin <avagin@google.com>
 ---
- include/uapi/linux/seccomp.h |  4 ++++
- kernel/seccomp.c             | 31 +++++++++++++++++++++++++++++--
- 2 files changed, 33 insertions(+), 2 deletions(-)
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/include/uapi/linux/seccomp.h b/include/uapi/linux/seccomp.h
-index 0fdc6ef02b94..dbfc9b37fcae 100644
---- a/include/uapi/linux/seccomp.h
-+++ b/include/uapi/linux/seccomp.h
-@@ -115,6 +115,8 @@ struct seccomp_notif_resp {
- 	__u32 flags;
- };
-=20
-+#define SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP (1UL << 0)
-+
- /* valid flags for seccomp_notif_addfd */
- #define SECCOMP_ADDFD_FLAG_SETFD	(1UL << 0) /* Specify remote fd */
- #define SECCOMP_ADDFD_FLAG_SEND		(1UL << 1) /* Addfd and return it, atomic=
-ally */
-@@ -150,4 +152,6 @@ struct seccomp_notif_addfd {
- #define SECCOMP_IOCTL_NOTIF_ADDFD	SECCOMP_IOW(3, \
- 						struct seccomp_notif_addfd)
-=20
-+#define SECCOMP_IOCTL_NOTIF_SET_FLAGS	SECCOMP_IOW(4, __u64)
-+
- #endif /* _UAPI_LINUX_SECCOMP_H */
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index 9fca9345111c..d323edeae7da 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -143,9 +143,12 @@ struct seccomp_kaddfd {
-  *           filter->notify_lock.
-  * @next_id: The id of the next request.
-  * @notifications: A list of struct seccomp_knotif elements.
-+ * @flags: A set of SECCOMP_USER_NOTIF_FD_* flags.
-  */
-+
- struct notification {
- 	atomic_t requests;
-+	u32 flags;
- 	u64 next_id;
- 	struct list_head notifications;
- };
-@@ -1117,7 +1120,10 @@ static int seccomp_do_user_notification(int this_sys=
-call,
- 	INIT_LIST_HEAD(&n.addfd);
-=20
- 	atomic_inc(&match->notif->requests);
--	wake_up_poll(&match->wqh, EPOLLIN | EPOLLRDNORM);
-+	if (match->notif->flags & SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP)
-+		wake_up_poll_on_current_cpu(&match->wqh, EPOLLIN | EPOLLRDNORM);
-+	else
-+		wake_up_poll(&match->wqh, EPOLLIN | EPOLLRDNORM);
-=20
- 	/*
- 	 * This is where we wait for a reply from userspace.
-@@ -1593,7 +1599,10 @@ static long seccomp_notify_send(struct seccomp_filte=
-r *filter,
- 	knotif->error =3D resp.error;
- 	knotif->val =3D resp.val;
- 	knotif->flags =3D resp.flags;
--	complete(&knotif->ready);
-+	if (filter->notif->flags & SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP)
-+		complete_on_current_cpu(&knotif->ready);
-+	else
-+		complete(&knotif->ready);
- out:
- 	mutex_unlock(&filter->notify_lock);
- 	return ret;
-@@ -1623,6 +1632,22 @@ static long seccomp_notify_id_valid(struct seccomp_f=
-ilter *filter,
- 	return ret;
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 43ec36b179dc..f6a04d88e02f 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -4255,6 +4255,61 @@ TEST(user_notification_addfd_rlimit)
+ 	close(memfd);
  }
-=20
-+static long seccomp_notify_set_flags(struct seccomp_filter *filter,
-+				    unsigned long flags)
+ 
++#ifndef SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP
++#define SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP (1UL << 0)
++#define SECCOMP_IOCTL_NOTIF_SET_FLAGS  SECCOMP_IOW(4, __u64)
++#endif
++
++TEST(user_notification_sync)
 +{
++	struct seccomp_notif req = {};
++	struct seccomp_notif_resp resp = {};
++	int status, listener;
++	pid_t pid;
 +	long ret;
 +
-+	if (flags & ~SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP)
-+		return -EINVAL;
++	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
++	}
 +
-+	ret =3D mutex_lock_interruptible(&filter->notify_lock);
-+	if (ret < 0)
-+		return ret;
-+	filter->notif->flags =3D flags;
-+	mutex_unlock(&filter->notify_lock);
-+	return 0;
++	listener = user_notif_syscall(__NR_getppid,
++				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	ASSERT_GE(listener, 0);
++
++	/* Try to set invalid flags. */
++	EXPECT_SYSCALL_RETURN(-EINVAL,
++		ioctl(listener, SECCOMP_IOCTL_NOTIF_SET_FLAGS, 0xffffffff, 0));
++
++	ASSERT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SET_FLAGS,
++			SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP, 0), 0);
++
++	pid = fork();
++	ASSERT_GE(pid, 0);
++	if (pid == 0) {
++		ret = syscall(__NR_getppid);
++		ASSERT_EQ(ret, USER_NOTIF_MAGIC) {
++			_exit(1);
++		}
++		_exit(0);
++	}
++
++	req.pid = 0;
++	ASSERT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
++
++	ASSERT_EQ(req.data.nr,  __NR_getppid);
++
++	resp.id = req.id;
++	resp.error = 0;
++	resp.val = USER_NOTIF_MAGIC;
++	resp.flags = 0;
++	ASSERT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), 0);
++
++	ASSERT_EQ(waitpid(pid, &status, 0), pid);
++	ASSERT_EQ(status, 0);
 +}
 +
- static long seccomp_notify_addfd(struct seccomp_filter *filter,
- 				 struct seccomp_notif_addfd __user *uaddfd,
- 				 unsigned int size)
-@@ -1752,6 +1777,8 @@ static long seccomp_notify_ioctl(struct file *file, u=
-nsigned int cmd,
- 	case SECCOMP_IOCTL_NOTIF_ID_VALID_WRONG_DIR:
- 	case SECCOMP_IOCTL_NOTIF_ID_VALID:
- 		return seccomp_notify_id_valid(filter, buf);
-+	case SECCOMP_IOCTL_NOTIF_SET_FLAGS:
-+		return seccomp_notify_set_flags(filter, arg);
- 	}
-=20
- 	/* Extensible Argument ioctls */
---=20
++
+ /* Make sure PTRACE_O_SUSPEND_SECCOMP requires CAP_SYS_ADMIN. */
+ FIXTURE(O_SUSPEND_SECCOMP) {
+ 	pid_t pid;
+-- 
 2.40.0.rc0.216.gc4246ad0f0-goog
 
