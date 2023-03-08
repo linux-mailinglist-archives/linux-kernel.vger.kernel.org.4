@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B596B0CE6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21E16B0CE3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbjCHPeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:34:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
+        id S232196AbjCHPeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjCHPdQ (ORCPT
+        with ESMTP id S232088AbjCHPdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:33:16 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B615D27D;
-        Wed,  8 Mar 2023 07:32:34 -0800 (PST)
+        Wed, 8 Mar 2023 10:33:11 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9D85D268;
+        Wed,  8 Mar 2023 07:32:35 -0800 (PST)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D4EE5FF80B;
-        Wed,  8 Mar 2023 15:32:31 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9992DFF805;
+        Wed,  8 Mar 2023 15:32:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678289553;
+        t=1678289554;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uFRM4PTDCSOdcU0u0521ZO4/N4DtV8C7SzDo9oGW8ew=;
-        b=HDTqu1aO76W96QPeSlXC+xNulblaWqYJGKz2A1FQJ/yAMOkbNggJv3qP45UZC1HJbFj10o
-        Sxnno0CmOs0gZDGoNSbolBuCg1rrKw5YPFjb2reiyRqRcVQaeLxzh1D9nWqvMkuaKKXi7L
-        Q3otWR0Ifn1ithhEwko0vXObmNNs5gPAwF/5/mC4MADfcIcBBF+unRpgrp2TJIaqJy49ZZ
-        ykU6RP8MB8uoBuJqqAdTvG12BKSL4/Ny9hLKe5H5HdKYuhNBDzlPg9s1y4rw5XM0sDJxaB
-        WYAm+EFd4JpuSh8b895PDWBe29m+d4YbAXUUW2qLV/PP0xhGOkwx0U3sBGJ/ng==
+        bh=BNQ3sTpjQyMvjHFTjnQEONu0j45V03HRSLfLQ6vGys0=;
+        b=SVuA4pTkUs2qlK1ugOOMOi2u7xla/tp5W0FRCKFj09IicxtsSqRyH6yj/ZXMOvDGbFznWl
+        7SCqvHAeiQFm7z+sQYqswmWUP9pytj1ZeI32qfVwrxf9s91QF6kwdzwsW2MJlZzn9Naadj
+        uZ1sbhyQQXaGVQy1C0tgD/C3j7TBjTcQyuu614Uk9mLQPZnpNRiwJc+gKDKKNA6WIbf0ne
+        vRJeo2OaWcxOKbYG2CGD3ttJATvLzOTZXpmE2P4AfgFY1sPZqzF5nLbOufOpzzeR2cTFqG
+        wdPRXGat17PDZxkc3UH9JYT2Bwrk3iAUew7uPrSMQPecuEZbTW5oZvKd6ioSNw==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         <linux-kernel@vger.kernel.org>
@@ -43,17 +43,18 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Frank Rowand <frowand.list@gmail.com>,
         devicetree@vger.kernel.org,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v3 17/20] nvmem: layouts: sl28vpd: Add new layout driver
-Date:   Wed,  8 Mar 2023 16:31:57 +0100
-Message-Id: <20230308153200.682248-18-miquel.raynal@bootlin.com>
+Subject: [PATCH v3 18/20] MAINTAINERS: add myself as sl28vpd nvmem layout driver
+Date:   Wed,  8 Mar 2023 16:31:58 +0100
+Message-Id: <20230308153200.682248-19-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230308153200.682248-1-miquel.raynal@bootlin.com>
 References: <20230308153200.682248-1-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -62,220 +63,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Michael Walle <michael@walle.cc>
 
-This layout applies to the VPD of the Kontron sl28 boards. The VPD only
-contains a base MAC address. Therefore, we have to add an individual
-offset to it. This is done by taking the second argument of the nvmem
-phandle into account. Also this let us checking the VPD version and the
-checksum.
+Add myself as a maintainer for the new sl28vpd nvmem layout driver.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/nvmem/layouts/Kconfig   |   9 ++
- drivers/nvmem/layouts/Makefile  |   2 +
- drivers/nvmem/layouts/sl28vpd.c | 165 ++++++++++++++++++++++++++++++++
- 3 files changed, 176 insertions(+)
- create mode 100644 drivers/nvmem/layouts/sl28vpd.c
+ MAINTAINERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/nvmem/layouts/Kconfig b/drivers/nvmem/layouts/Kconfig
-index 9ad3911d1605..fd161347c129 100644
---- a/drivers/nvmem/layouts/Kconfig
-+++ b/drivers/nvmem/layouts/Kconfig
-@@ -2,4 +2,13 @@
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8d5bc223f305..60ed770b0212 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19184,6 +19184,12 @@ F:	drivers/irqchip/irq-sl28cpld.c
+ F:	drivers/pwm/pwm-sl28cpld.c
+ F:	drivers/watchdog/sl28cpld_wdt.c
  
- menu "Layout Types"
- 
-+config NVMEM_LAYOUT_SL28_VPD
-+	tristate "Kontron sl28 VPD layout support"
-+	select CRC8
-+	help
-+	  Say Y here if you want to support the VPD layout of the Kontron
-+	  SMARC-sAL28 boards.
++SL28 VPD NVMEM LAYOUT DRIVER
++M:	Michael Walle <michael@walle.cc>
++S:	Maintained
++F:	Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
++F:	drivers/nvmem/layouts/sl28vpd.c
 +
-+	  If unsure, say N.
-+
- endmenu
-diff --git a/drivers/nvmem/layouts/Makefile b/drivers/nvmem/layouts/Makefile
-index 6fdb3c60a4fa..fc617b9e87d0 100644
---- a/drivers/nvmem/layouts/Makefile
-+++ b/drivers/nvmem/layouts/Makefile
-@@ -2,3 +2,5 @@
- #
- # Makefile for nvmem layouts.
- #
-+
-+obj-$(CONFIG_NVMEM_LAYOUT_SL28_VPD) += sl28vpd.o
-diff --git a/drivers/nvmem/layouts/sl28vpd.c b/drivers/nvmem/layouts/sl28vpd.c
-new file mode 100644
-index 000000000000..9370e41bad73
---- /dev/null
-+++ b/drivers/nvmem/layouts/sl28vpd.c
-@@ -0,0 +1,165 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/crc8.h>
-+#include <linux/etherdevice.h>
-+#include <linux/nvmem-consumer.h>
-+#include <linux/nvmem-provider.h>
-+#include <linux/of.h>
-+#include <uapi/linux/if_ether.h>
-+
-+#define SL28VPD_MAGIC 'V'
-+
-+struct sl28vpd_header {
-+	u8 magic;
-+	u8 version;
-+} __packed;
-+
-+struct sl28vpd_v1 {
-+	struct sl28vpd_header header;
-+	char serial_number[15];
-+	u8 base_mac_address[ETH_ALEN];
-+	u8 crc8;
-+} __packed;
-+
-+static int sl28vpd_mac_address_pp(void *priv, const char *id, int index,
-+				  unsigned int offset, void *buf,
-+				  size_t bytes)
-+{
-+	if (bytes != ETH_ALEN)
-+		return -EINVAL;
-+
-+	if (index < 0)
-+		return -EINVAL;
-+
-+	if (!is_valid_ether_addr(buf))
-+		return -EINVAL;
-+
-+	eth_addr_add(buf, index);
-+
-+	return 0;
-+}
-+
-+static const struct nvmem_cell_info sl28vpd_v1_entries[] = {
-+	{
-+		.name = "serial-number",
-+		.offset = offsetof(struct sl28vpd_v1, serial_number),
-+		.bytes = sizeof_field(struct sl28vpd_v1, serial_number),
-+	},
-+	{
-+		.name = "base-mac-address",
-+		.offset = offsetof(struct sl28vpd_v1, base_mac_address),
-+		.bytes = sizeof_field(struct sl28vpd_v1, base_mac_address),
-+		.read_post_process = sl28vpd_mac_address_pp,
-+	},
-+};
-+
-+static int sl28vpd_v1_check_crc(struct device *dev, struct nvmem_device *nvmem)
-+{
-+	struct sl28vpd_v1 data_v1;
-+	u8 table[CRC8_TABLE_SIZE];
-+	int ret;
-+	u8 crc;
-+
-+	crc8_populate_msb(table, 0x07);
-+
-+	ret = nvmem_device_read(nvmem, 0, sizeof(data_v1), &data_v1);
-+	if (ret < 0)
-+		return ret;
-+	else if (ret != sizeof(data_v1))
-+		return -EIO;
-+
-+	crc = crc8(table, (void *)&data_v1, sizeof(data_v1) - 1, 0);
-+
-+	if (crc != data_v1.crc8) {
-+		dev_err(dev,
-+			"Checksum is invalid (got %02x, expected %02x).\n",
-+			crc, data_v1.crc8);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int sl28vpd_add_cells(struct device *dev, struct nvmem_device *nvmem,
-+			     struct nvmem_layout *layout)
-+{
-+	const struct nvmem_cell_info *pinfo;
-+	struct nvmem_cell_info info = {0};
-+	struct device_node *layout_np;
-+	struct sl28vpd_header hdr;
-+	int ret, i;
-+
-+	/* check header */
-+	ret = nvmem_device_read(nvmem, 0, sizeof(hdr), &hdr);
-+	if (ret < 0)
-+		return ret;
-+	else if (ret != sizeof(hdr))
-+		return -EIO;
-+
-+	if (hdr.magic != SL28VPD_MAGIC) {
-+		dev_err(dev, "Invalid magic value (%02x)\n", hdr.magic);
-+		return -EINVAL;
-+	}
-+
-+	if (hdr.version != 1) {
-+		dev_err(dev, "Version %d is unsupported.\n", hdr.version);
-+		return -EINVAL;
-+	}
-+
-+	ret = sl28vpd_v1_check_crc(dev, nvmem);
-+	if (ret)
-+		return ret;
-+
-+	layout_np = of_nvmem_layout_get_container(nvmem);
-+	if (!layout_np)
-+		return -ENOENT;
-+
-+	for (i = 0; i < ARRAY_SIZE(sl28vpd_v1_entries); i++) {
-+		pinfo = &sl28vpd_v1_entries[i];
-+
-+		info.name = pinfo->name;
-+		info.offset = pinfo->offset;
-+		info.bytes = pinfo->bytes;
-+		info.read_post_process = pinfo->read_post_process;
-+		info.np = of_get_child_by_name(layout_np, pinfo->name);
-+
-+		ret = nvmem_add_one_cell(nvmem, &info);
-+		if (ret) {
-+			of_node_put(layout_np);
-+			return ret;
-+		}
-+	}
-+
-+	of_node_put(layout_np);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id sl28vpd_of_match_table[] = {
-+	{ .compatible = "kontron,sl28-vpd" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, sl28vpd_of_match_table);
-+
-+struct nvmem_layout sl28vpd_layout = {
-+	.name = "sl28-vpd",
-+	.of_match_table = sl28vpd_of_match_table,
-+	.add_cells = sl28vpd_add_cells,
-+};
-+
-+static int __init sl28vpd_init(void)
-+{
-+	return nvmem_layout_register(&sl28vpd_layout);
-+}
-+
-+static void __exit sl28vpd_exit(void)
-+{
-+	nvmem_layout_unregister(&sl28vpd_layout);
-+}
-+
-+module_init(sl28vpd_init);
-+module_exit(sl28vpd_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
-+MODULE_DESCRIPTION("NVMEM layout driver for the VPD of Kontron sl28 boards");
+ SLAB ALLOCATOR
+ M:	Christoph Lameter <cl@linux.com>
+ M:	Pekka Enberg <penberg@kernel.org>
 -- 
 2.34.1
 
