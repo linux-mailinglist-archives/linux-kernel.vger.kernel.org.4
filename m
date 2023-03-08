@@ -2,127 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B3B6B0A95
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:08:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E84086B0A99
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjCHOIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:08:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        id S232149AbjCHOJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:09:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbjCHOIE (ORCPT
+        with ESMTP id S231950AbjCHOIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:08:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3065ADF5;
-        Wed,  8 Mar 2023 06:06:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9AD2AB81BEB;
-        Wed,  8 Mar 2023 14:06:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55EF7C433D2;
-        Wed,  8 Mar 2023 14:06:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678284411;
-        bh=c4godVAn6HjOWriTqbDfMbdcTlhXhbEHeIYFkgIhqE4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c3zW/ilEvzKm8sQ1YvCRc6PMjZ7hUSBRDaM+R6u5gVm2j/XlCYYzKs+Yj9sgoWfaK
-         xF4oQ4mfPeQ1DazAWbdh1Wd9v7QLs6GCRa8c1hzqxDR/ERqNNWwNusJ2Bwuk+y12zu
-         OssN1SK/Ow+Zvo9pn+pEDhuwXOr6V2DJlwEi6rC6PzOU34j8T8BTaXnhS+eVRwQRAL
-         YmikLUlLzN6gbzRa+rxcSullmPtvdq7B9lzvoFXmkGv3gIq3BJs/b6ZVHeVzoFYfUs
-         PRAYGunOslzfulvMunLELAY6zqPgEeg+YXmIwEuIKJnQ8FuXYBpiYWhqT8lyZ5OJg0
-         daD58umJZWimw==
-Date:   Wed, 8 Mar 2023 14:06:42 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Arun.Ramadoss@microchip.com
-Subject: Re: [PATCH v8 00/13] Adds support for PHY LEDs with offload triggers
-Message-ID: <20230308140642.GO9667@google.com>
-References: <20230216013230.22978-1-ansuelsmth@gmail.com>
- <Y++PdVq+DlzdotMq@lunn.ch>
- <Y/YubNUBvQ5fBjtG@google.com>
- <6406344a.050a0220.693b3.6689@mx.google.com>
+        Wed, 8 Mar 2023 09:08:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A065A18C
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:07:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678284447;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=V6cnINXPKnD2lG8vxbE8F7RlXvTWARojvYuwDfsphHk=;
+        b=RwthRRk/Zv6kxKewGrPfBq4BMiBNETeTohyjBsyh3XoHSeAsSrhj+L/KehNpVv90dp2GYr
+        bSjq42TDI+NsDMxZ3dhi3YAJQueT1GBrkZr7dNk7OWcD+3DBouQxtTsRbSfP1ypmXQyYTy
+        4aLCQeuRrSZEy8xybuyjAIgJ8B5jKdw=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-445-XKKV6SYuOimjzuukZKdWBw-1; Wed, 08 Mar 2023 09:07:17 -0500
+X-MC-Unique: XKKV6SYuOimjzuukZKdWBw-1
+Received: by mail-qk1-f197.google.com with SMTP id x14-20020ae9e90e000000b007429af46d5eso9336989qkf.12
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 06:07:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678284429;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V6cnINXPKnD2lG8vxbE8F7RlXvTWARojvYuwDfsphHk=;
+        b=NP4PAFijukUUvUXLlyoZa6EYDqdvEyFyvjYxZYa+vpFDW5nbODmVCXXDicIv+sTxth
+         jMJ2m3YSH7UzYL8VraHUMIARiIoP0+2FAKKPDac+8JRtkYbDKs7MuJOZzhvu2SZvGpZX
+         mPb0NSJusj+Ijrsm6Aq9smbG5biLzhsRvos0WqKOacJgKDOIMNAlHrTuCAyX/vY1sq0+
+         UDG/Cms1WUDoQVu3ouSReMfMq5afn2VEFBDfS93H44xn9/uR4GDkRMH4pRAlLRfi86Bf
+         r/lh2YxkjttjnjqVViRraBEXvB2F7qiSIW8YbulopZ0qQ0Zm15+C+W98Tb15GdkIpIdv
+         fsHg==
+X-Gm-Message-State: AO0yUKX9hKfmAmPzK5E3fkuA0pm7nQEECzFjEjFMdIlLlnW/rqY+NmuZ
+        pV1sC5fht19V423zJgtE/A5ifZxPV40MhYleocXUCVzKzr0xqlfhEVOHaph579p0REmnnO/0Y3g
+        63tusfuKCgxMjxBnY3KejVIA2
+X-Received: by 2002:a05:622a:514:b0:3b9:bc8c:c213 with SMTP id l20-20020a05622a051400b003b9bc8cc213mr38252432qtx.30.1678284429137;
+        Wed, 08 Mar 2023 06:07:09 -0800 (PST)
+X-Google-Smtp-Source: AK7set+bnIm7lfXZMPMGp+YTM6UrwsXhtqFanRzxTP/WHmpltxuwqtKd97gRjNlbA6Fwv+mkWztPJw==
+X-Received: by 2002:a05:622a:514:b0:3b9:bc8c:c213 with SMTP id l20-20020a05622a051400b003b9bc8cc213mr38252394qtx.30.1678284428852;
+        Wed, 08 Mar 2023 06:07:08 -0800 (PST)
+Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
+        by smtp.gmail.com with ESMTPSA id x185-20020a3763c2000000b0073baa5ec0besm11506824qkb.115.2023.03.08.06.07.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 06:07:08 -0800 (PST)
+Date:   Wed, 8 Mar 2023 15:07:04 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH] virtio: Reorder fields in 'struct virtqueue'
+Message-ID: <20230308140704.jsggcp4g3tz7vhxu@sgarzare-redhat>
+References: <8f3d2e49270a2158717e15008e7ed7228196ba02.1676707807.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6406344a.050a0220.693b3.6689@mx.google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <8f3d2e49270a2158717e15008e7ed7228196ba02.1676707807.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Mar 2023, Christian Marangi wrote:
-
-> On Wed, Feb 22, 2023 at 03:02:04PM +0000, Lee Jones wrote:
-> > On Fri, 17 Feb 2023, Andrew Lunn wrote:
-> >
-> > > On Thu, Feb 16, 2023 at 02:32:17AM +0100, Christian Marangi wrote:
-> > > > This is another attempt on adding this feature on LEDs, hoping this is
-> > > > the right time and someone finally notice this.
-> > >
-> > > Hi Christian
-> > >
-> > > Thanks for keeping working on this.
-> > >
-> > > I want to review it, and maybe implement LED support in a PHY
-> > > driver. But i'm busy with reworking EEE at the moment.
-> > >
-> > > The merge window is about to open, so patches are not going to be
-> > > accepted for the next two weeks. So i will take a look within that
-> > > time and give you feedback.
-> >
-> > Thanks Andrew.  If Pavel is still unavailable to conduct reviews, I'm
-> > going to need all the help I can get with complex submissions such as
-> > these.
-> >
+On Sat, Feb 18, 2023 at 09:10:31AM +0100, Christophe JAILLET wrote:
+>Group some variables based on their sizes to reduce hole and avoid padding.
+>On x86_64, this shrinks the size of 'struct virtqueue'
+>from 72 to 68 bytes.
 >
-> Hi Lee,
-> thanks for stepping in. Just wanted to tell you I got some message with
-> Andrew to make this thing less problematic and to dry/make it more
-> review friendly.
+>It saves a few bytes of memory.
 >
-> We decided on pushing this in 3 step:
-> 1. Propose most basic things for some switch and some PHY. (brightness
-> and blink_set support only, already supported by LED core)
-> 2. A small series that should be just a cleanup for the netdev trigger
-> 3. Support for hw_control in the most possible clean and way with small
-> patch to they are not hard to track and understand the concept of this
-> feature.
+>Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>---
+
+LGTM!
+
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+
+>Using pahole
 >
-> I'm starting with the step 1 and sending some of my patch and Andrew
-> patch to add basic support and I will add you and LED mailing list in
-> Cc.
+>Before:
+>======
+>struct virtqueue {
+>	struct list_head           list;                 /*     0    16 */
+>	void                       (*callback)(struct virtqueue *); /*    16     8 */
+>	const char  *              name;                 /*    24     8 */
+>	struct virtio_device *     vdev;                 /*    32     8 */
+>	unsigned int               index;                /*    40     4 */
+>	unsigned int               num_free;             /*    44     4 */
+>	unsigned int               num_max;              /*    48     4 */
+>
+>	/* XXX 4 bytes hole, try to pack */
+>
+>	void *                     priv;                 /*    56     8 */
+>	/* --- cacheline 1 boundary (64 bytes) --- */
+>	bool                       reset;                /*    64     1 */
+>
+>	/* size: 72, cachelines: 2, members: 9 */
+>	/* sum members: 61, holes: 1, sum holes: 4 */
+>	/* padding: 7 */
+>	/* last cacheline: 8 bytes */
+>};
+>
+>After:
+>=====
+>struct virtqueue {
+>	struct list_head           list;                 /*     0    16 */
+>	void                       (*callback)(struct virtqueue *); /*    16     8 */
+>	const char  *              name;                 /*    24     8 */
+>	struct virtio_device *     vdev;                 /*    32     8 */
+>	unsigned int               index;                /*    40     4 */
+>	unsigned int               num_free;             /*    44     4 */
+>	unsigned int               num_max;              /*    48     4 */
+>	bool                       reset;                /*    52     1 */
+>
+>	/* XXX 3 bytes hole, try to pack */
+>
+>	void *                     priv;                 /*    56     8 */
+>
+>	/* size: 64, cachelines: 1, members: 9 */
+>	/* sum members: 61, holes: 1, sum holes: 3 */
+>};
+>---
+> include/linux/virtio.h | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+>index 6ac2655500dc..9439ae898310 100644
+>--- a/include/linux/virtio.h
+>+++ b/include/linux/virtio.h
+>@@ -35,8 +35,8 @@ struct virtqueue {
+> 	unsigned int index;
+> 	unsigned int num_free;
+> 	unsigned int num_max;
+>-	void *priv;
+> 	bool reset;
+>+	void *priv;
+> };
+>
+> int virtqueue_add_outbuf(struct virtqueue *vq,
+>-- 
+>2.34.1
+>
 
-Sounds like a plan.  Thank you both.
-
-> Again thanks for starting checking this and feel free to ask any
-> question about this to me also privately, I'm very open to any help.
-
---
-Lee Jones [李琼斯]
