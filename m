@@ -2,147 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE0E6B09D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1FE6B09D9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:51:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbjCHNvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:51:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
+        id S231314AbjCHNvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:51:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbjCHNvE (ORCPT
+        with ESMTP id S231416AbjCHNvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:51:04 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600A68480F;
-        Wed,  8 Mar 2023 05:51:03 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D3av39NsaOf+7kvL7ukPEGCFCDyNlGoabkxMHCpF6D93ZxFrjE+hKLZvuvw1Kvkx11o7vSHTkIKUXpG8dREY8pNuOMtKeM0DBo0/5YxKOHAwytLl2vNBy5Ee11hrLWHV/mvc9apEZ0NUkN2jNPz0ygG6U5wI0sQe40zb45EFHu25zZsi9ds25Mkhhf4q1X6+Vn2KZzJv4pUDNE+wGCVjtS0c6flLuQaL2uRpHio6yCI0k+lBwUTCjT06/xMvYI69o+dJm9TltNdSU8JJepg7Of346rXdFbEsdH5emg0PY4pgIEGWhdNRHRJuUeCXqfqZ0YdLF8HgpWsVWFZC/XzFjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aRT78eCslYw2dN5ankU9xOeF9iU7popG5lrJCmqoZYI=;
- b=AunWvWB4ftIfe8F5EHIBW+E4UIqrssioG4qzVcYEkbUOiwW/HQgmWrlaA79GZ1b4zS82o3JP4N1CZueW6NC6z46dFbUyT5imuKP7PEKgMFXo6tPOGX7hcR18A92uUP2TGRWYGplImAL8L7qZXsyfHpPg1WLSPCg2iiND5NeeeXM1VgIk3Rw+f3kv5YdVMaFVJ6V60LCG148C7sdCiofyrlHObZU6rW2E+nF9QaZQ2DLgn0xBDkEPeWWGsdRY/jc1O24Qgi9m93bSz41odxRWFm345nJt9ZTG5OpWl3qLDQ7Ou+YPVOoBBB/Bsp8wI3+ed5/QtAKMbe/fpxJgeFdYgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aRT78eCslYw2dN5ankU9xOeF9iU7popG5lrJCmqoZYI=;
- b=hxtYNEgHf3cxdQLJ9wj89KssgB6VWZHIw04MJlx2E71YabFFGinZRXQ8bUKKUSX7z/Z+YRPMwsAfStpZ3hsxO34LeiAN4EoMHuToJJS3cKBi2viBLDA1YcoP5nbZWsaCb56ThHLM5ho5SXHzWC4n/0tEbRWMI04gtYU5I1+0PMHPGo+g1pAi9NYj000JsIYzmg61PTkhJAZJIouIyzCgQ96s0amYb7zg/XtJbDuSjUiJkGn5yNa0tMdp06wOFgeYFAtUjMkRoMfpcD25TnZrtOf5wa4lXPxnxxyQHvDZBsaS0iOC2lx092aGacvUC++RCICyEE75/WbwJnVgZCf5Lg==
-Received: from MW4PR03CA0168.namprd03.prod.outlook.com (2603:10b6:303:8d::23)
- by BY5PR12MB4903.namprd12.prod.outlook.com (2603:10b6:a03:1d6::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Wed, 8 Mar
- 2023 13:51:00 +0000
-Received: from CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8d:cafe::56) by MW4PR03CA0168.outlook.office365.com
- (2603:10b6:303:8d::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17 via Frontend
- Transport; Wed, 8 Mar 2023 13:51:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- CO1NAM11FT022.mail.protection.outlook.com (10.13.175.199) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.14 via Frontend Transport; Wed, 8 Mar 2023 13:51:00 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 8 Mar 2023
- 05:50:58 -0800
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Wed, 8 Mar 2023 05:50:57 -0800
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
- Transport; Wed, 8 Mar 2023 05:50:57 -0800
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5.15 000/570] 5.15.99-rc2 review
-In-Reply-To: <20230308091759.112425121@linuxfoundation.org>
-References: <20230308091759.112425121@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Wed, 8 Mar 2023 08:51:19 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E711B8F718;
+        Wed,  8 Mar 2023 05:51:13 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so1197839wmq.1;
+        Wed, 08 Mar 2023 05:51:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678283472;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2a7IZeMYO9n6PXhDENMf/0WN13+dEVs/avcgaXRcG/k=;
+        b=A4NTo7Z6YDgzCwMQESROwQaWS7+cg9Iy1ytO1f0y336fkSDEYoFEwSWHuMio2AeImv
+         bRKfQOPZS7v7R8U6HmQRtcOA2GmhZ7dXgMzYNjo0fDH0ScPWI0V6twP+EVgUmWmt9j+5
+         qJj4k5QZ/geasNr19348OmPQkRXOJpbvvsrRy0RL54mL+tySiJ+QoZRhhU9YG79PINK1
+         kERy8iZxpB6awyslCA7+Usb+u05LnxScq5SqVkyt6rluOcUlzOxOawVHn2MbjEq+Eqkh
+         QRUARSyxOX7fJCt4YFU0PBFlW9OGyW36+oQQ0TGau6MT7BLuiC5P4+0x+GaandeSVmXQ
+         OI9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678283472;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2a7IZeMYO9n6PXhDENMf/0WN13+dEVs/avcgaXRcG/k=;
+        b=P1davj40wEI+te7gOZQj/GzXqw2FigY2K1rSXsTFhMMKbjlL6jr9jv3vdeMvDY8R0x
+         97Y/3RGw7b16Kvm74qxZ1jn3UG9PFMAZS0ppbe/BWpbNY5tyZRrM+74KXD9zDh+5QDVl
+         S1wJUJw1qb/k6bpTCoICZ6E7G5rBGu8/lUqDlT6nfhMJ9LDQn5/zMRgV9pWgHMg6LY1c
+         ZJpFo77elh9gk56AKOZBLmPuzrzP7/XWvwYhop0cH0fjuMd4AJowF45DcDIY1vyjBUrF
+         LtEAzZSneFt85X+U43htP0BDyajGimoIewbaqDV75j2S3jPiRxlvdDM7ubvbNH50vkX5
+         QHdw==
+X-Gm-Message-State: AO0yUKWydeaOpa6SsoP8qkE2/L7ZoSEvuBfz9Lu1YdPhYDe56GHut2f/
+        z65hcYS8tdMtPsOhudKtwcQ=
+X-Google-Smtp-Source: AK7set/iI0f+bFuGX2KOYnRyVO55NVMzanwW/UZXPecNwIj6030n4Qu5dMtQwcP4F+mKYfu9HOXczw==
+X-Received: by 2002:a05:600c:3d14:b0:3df:9858:c033 with SMTP id bh20-20020a05600c3d1400b003df9858c033mr16288216wmb.8.1678283472235;
+        Wed, 08 Mar 2023 05:51:12 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id o14-20020a05600c510e00b003dc522dd25esm4731434wms.30.2023.03.08.05.51.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 05:51:11 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 8 Mar 2023 14:51:09 +0100
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>, bpf@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Namhyung Kim <namhyung@gmail.com>
+Subject: Re: [PATCH RFC v2 bpf-next 7/9] selftests/bpf: Replace
+ extract_build_id with read_build_id
+Message-ID: <ZAiSzVTaOuWw5qRU@krava>
+References: <20230228093206.821563-1-jolsa@kernel.org>
+ <20230228093206.821563-8-jolsa@kernel.org>
+ <CAEf4Bzb-ZuR6RwgGEw1Dyy+HtvyzdnCYXWXU86v=694rWcZpAA@mail.gmail.com>
 MIME-Version: 1.0
-Message-ID: <15b950df-3922-4c8f-aee4-fc1932c638a8@drhqmail201.nvidia.com>
-Date:   Wed, 8 Mar 2023 05:50:57 -0800
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT022:EE_|BY5PR12MB4903:EE_
-X-MS-Office365-Filtering-Correlation-Id: c503e66e-e36b-485a-79d3-08db1fdc26b5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wS478jhrlUCnqJeM2ywYNBuZvm7gKQV/4a6QlczRCnyg3R1lkSavzqXf17dCniZblMyIeK3eCjRWO61AMVKBndXQmaX6oC3UrjL5go1mFl7Tzc9Zahrnf63BFbVc9enhARsjwIN7cCrq5m1VJbsoFMlLbu/BuBtUywThqqlXty34K5TPK0ruqGrTIzZby0fzp+WTWUW7JHc5/m0+nbKGvsLEaimj3JjPn3MsZi85L6Sj/ZAVJ4H6BvSx0/MEawQOxnL8oAgxHEkYda2HmUotVfuv62/HUjoTMG4JjT3Ae49j5sYdX7DoW9mgkqWEBDSj0+9pP7ESWF5tEG6czfgS6KxwXYOzO96rpU7dn6inIYK+3lDqt+HVKUDufB7wfdPD+RF6xNCzN0jv+t+CpqQ8LgkKNNjkoC5fWRL4s89YWt3m0XrBLeIIlsjpjs4Vk9uPgvbsu2RQPt/3DvJvM+bdhmJZZ1S2dxUgIONS9VVbJvVzqdFARlKre7L8qBSKYO3L5U/jzRsGOqKnSZmbfG9NrVtHN4RcEkXTeQ88ZftFzCH20r1oDh73ZVEdIl50AhL+qVwHinWwPEZGQQ2b2s45ebT0p6pjKvyaDpPKsZBUO4AljF8ndLmzLYvZZF888tNFBoJq3lUur0QZeuzi3JvLwcuvXExmMpzhrlTu8bHRobXPxmjFFMiPuqYchX1tDenr9Mk2DFISdS590Of98eCaZw==
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(376002)(39860400002)(346002)(451199018)(46966006)(36840700001)(54906003)(4326008)(70206006)(6916009)(70586007)(8676002)(186003)(336012)(82310400005)(31696002)(40480700001)(86362001)(7636003)(356005)(36860700001)(26005)(47076005)(82740400003)(316002)(426003)(478600001)(966005)(2906002)(8936002)(7416002)(5660300002)(31686004)(41300700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 13:51:00.4969
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c503e66e-e36b-485a-79d3-08db1fdc26b5
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4903
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4Bzb-ZuR6RwgGEw1Dyy+HtvyzdnCYXWXU86v=694rWcZpAA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 08 Mar 2023 10:29:40 +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.99 release.
-> There are 570 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, Mar 07, 2023 at 05:26:32PM -0800, Andrii Nakryiko wrote:
+> On Tue, Feb 28, 2023 at 1:33 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > Replacing extract_build_id with read_build_id that parses out
+> > build id directly from elf without using readelf tool.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
 > 
-> Responses should be made by Fri, 10 Mar 2023 09:16:12 +0000.
-> Anything received after that time might be too late.
+> small nit below, but looks good. Thanks for clean up!
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.99-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
 > 
-> thanks,
+> >  .../bpf/prog_tests/stacktrace_build_id.c      | 19 ++++++--------
+> >  .../bpf/prog_tests/stacktrace_build_id_nmi.c  | 17 +++++--------
+> >  tools/testing/selftests/bpf/test_progs.c      | 25 -------------------
+> >  tools/testing/selftests/bpf/test_progs.h      |  1 -
+> >  4 files changed, 13 insertions(+), 49 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
+> > index 9ad09a6c538a..9e4b76ee356f 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
+> > @@ -7,13 +7,12 @@ void test_stacktrace_build_id(void)
+> >
+> >         int control_map_fd, stackid_hmap_fd, stackmap_fd, stack_amap_fd;
+> >         struct test_stacktrace_build_id *skel;
+> > -       int err, stack_trace_len;
+> > +       int err, stack_trace_len, build_id_size;
+> >         __u32 key, prev_key, val, duration = 0;
+> > -       char buf[256];
+> > -       int i, j;
+> > +       char buf[BPF_BUILD_ID_SIZE];
+> >         struct bpf_stack_build_id id_offs[PERF_MAX_STACK_DEPTH];
+> >         int build_id_matches = 0;
+> > -       int retry = 1;
+> > +       int i, retry = 1;
+> >
+> >  retry:
+> >         skel = test_stacktrace_build_id__open_and_load();
+> > @@ -52,9 +51,10 @@ void test_stacktrace_build_id(void)
+> >                   "err %d errno %d\n", err, errno))
+> >                 goto cleanup;
+> >
+> > -       err = extract_build_id(buf, 256);
+> > +       build_id_size = read_build_id("./urandom_read", buf);
 > 
-> greg k-h
+> nit: "urandom_read" vs "./urandom_read" matters only when executing
+> binary, not when opening a file. So all these "./" just creates
+> unnecessary confusion, IMO
 
-All tests passing for Tegra ...
+right, I'll remove it also in the other test
 
-Test results for stable-v5.15:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    114 tests:	114 pass, 0 fail
+thanks,
+jirka
 
-Linux version:	5.15.99-rc2-g455812798518
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
-
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-
-Jon
+> 
+> > +       err = build_id_size < 0 ? build_id_size : 0;
+> >
+> > -       if (CHECK(err, "get build_id with readelf",
+> > +       if (CHECK(err, "read_build_id",
+> >                   "err %d errno %d\n", err, errno))
+> >                 goto cleanup;
+> >
+> > @@ -64,8 +64,6 @@ void test_stacktrace_build_id(void)
+> >                 goto cleanup;
+> >
+> >         do {
+> > -               char build_id[64];
+> > -
+> >                 err = bpf_map_lookup_elem(stackmap_fd, &key, id_offs);
+> >                 if (CHECK(err, "lookup_elem from stackmap",
+> >                           "err %d, errno %d\n", err, errno))
+> > @@ -73,10 +71,7 @@ void test_stacktrace_build_id(void)
+> >                 for (i = 0; i < PERF_MAX_STACK_DEPTH; ++i)
+> >                         if (id_offs[i].status == BPF_STACK_BUILD_ID_VALID &&
+> >                             id_offs[i].offset != 0) {
+> > -                               for (j = 0; j < 20; ++j)
+> > -                                       sprintf(build_id + 2 * j, "%02x",
+> > -                                               id_offs[i].build_id[j] & 0xff);
+> > -                               if (strstr(buf, build_id) != NULL)
+> > +                               if (memcmp(buf, id_offs[i].build_id, build_id_size) == 0)
+> >                                         build_id_matches = 1;
+> >                         }
+> >                 prev_key = key;
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+> > index f4ea1a215ce4..8d84149ebcc7 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+> > @@ -28,11 +28,10 @@ void test_stacktrace_build_id_nmi(void)
+> >                 .config = PERF_COUNT_HW_CPU_CYCLES,
+> >         };
+> >         __u32 key, prev_key, val, duration = 0;
+> > -       char buf[256];
+> > -       int i, j;
+> > +       char buf[BPF_BUILD_ID_SIZE];
+> >         struct bpf_stack_build_id id_offs[PERF_MAX_STACK_DEPTH];
+> > -       int build_id_matches = 0;
+> > -       int retry = 1;
+> > +       int build_id_matches = 0, build_id_size;
+> > +       int i, retry = 1;
+> >
+> >         attr.sample_freq = read_perf_max_sample_freq();
+> >
+> > @@ -94,7 +93,8 @@ void test_stacktrace_build_id_nmi(void)
+> >                   "err %d errno %d\n", err, errno))
+> >                 goto cleanup;
+> >
+> > -       err = extract_build_id(buf, 256);
+> > +       build_id_size = read_build_id("./urandom_read", buf);
+> > +       err = build_id_size < 0 ? build_id_size : 0;
+> >
+> >         if (CHECK(err, "get build_id with readelf",
+> >                   "err %d errno %d\n", err, errno))
+> > @@ -106,8 +106,6 @@ void test_stacktrace_build_id_nmi(void)
+> >                 goto cleanup;
+> >
+> >         do {
+> > -               char build_id[64];
+> > -
+> >                 err = bpf_map__lookup_elem(skel->maps.stackmap, &key, sizeof(key),
+> >                                            id_offs, sizeof(id_offs), 0);
+> >                 if (CHECK(err, "lookup_elem from stackmap",
+> > @@ -116,10 +114,7 @@ void test_stacktrace_build_id_nmi(void)
+> >                 for (i = 0; i < PERF_MAX_STACK_DEPTH; ++i)
+> >                         if (id_offs[i].status == BPF_STACK_BUILD_ID_VALID &&
+> >                             id_offs[i].offset != 0) {
+> > -                               for (j = 0; j < 20; ++j)
+> > -                                       sprintf(build_id + 2 * j, "%02x",
+> > -                                               id_offs[i].build_id[j] & 0xff);
+> > -                               if (strstr(buf, build_id) != NULL)
+> > +                               if (memcmp(buf, id_offs[i].build_id, build_id_size) == 0)
+> >                                         build_id_matches = 1;
+> >                         }
+> >                 prev_key = key;
+> > diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+> > index 6d5e3022c75f..9813d53c4878 100644
+> > --- a/tools/testing/selftests/bpf/test_progs.c
+> > +++ b/tools/testing/selftests/bpf/test_progs.c
+> > @@ -591,31 +591,6 @@ int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len)
+> >         return err;
+> >  }
+> >
+> > -int extract_build_id(char *build_id, size_t size)
+> > -{
+> > -       FILE *fp;
+> > -       char *line = NULL;
+> > -       size_t len = 0;
+> > -
+> > -       fp = popen("readelf -n ./urandom_read | grep 'Build ID'", "r");
+> > -       if (fp == NULL)
+> > -               return -1;
+> > -
+> > -       if (getline(&line, &len, fp) == -1)
+> > -               goto err;
+> > -       pclose(fp);
+> > -
+> > -       if (len > size)
+> > -               len = size;
+> > -       memcpy(build_id, line, len);
+> > -       build_id[len] = '\0';
+> > -       free(line);
+> > -       return 0;
+> > -err:
+> > -       pclose(fp);
+> > -       return -1;
+> > -}
+> > -
+> >  static int finit_module(int fd, const char *param_values, int flags)
+> >  {
+> >         return syscall(__NR_finit_module, fd, param_values, flags);
+> > diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+> > index 9fbdc57c5b57..3825c2797a4b 100644
+> > --- a/tools/testing/selftests/bpf/test_progs.h
+> > +++ b/tools/testing/selftests/bpf/test_progs.h
+> > @@ -404,7 +404,6 @@ static inline void *u64_to_ptr(__u64 ptr)
+> >  int bpf_find_map(const char *test, struct bpf_object *obj, const char *name);
+> >  int compare_map_keys(int map1_fd, int map2_fd);
+> >  int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len);
+> > -int extract_build_id(char *build_id, size_t size);
+> >  int kern_sync_rcu(void);
+> >  int trigger_module_test_read(int read_sz);
+> >  int trigger_module_test_write(int write_sz);
+> > --
+> > 2.39.2
+> >
