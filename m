@@ -2,262 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B466B0CA0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 244A86B0CA9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbjCHP0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:26:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
+        id S231929AbjCHP27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:28:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbjCHP0L (ORCPT
+        with ESMTP id S231481AbjCHP2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:26:11 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AD95D893;
-        Wed,  8 Mar 2023 07:26:06 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E4F2B1EC053F;
-        Wed,  8 Mar 2023 16:26:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678289165;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=0YZFEJ4cAs1XpubhR+bVW6Ra4NdOXmwmbEoV5/5yyRc=;
-        b=dtU8MD7MnP6eQPuPrVOrLw3IOhDbONhvPWew+BaeOWqCec5Wv2fzyDEfHf4wjHzLBlYNYH
-        Z9maXvegSwDqzaejWBASPjzFR36tHjxJJ6jB9g4zq8roVzifvs06B6rFJJjnkgcS3kZlvd
-        zE6MuI7N30FA56Zls5hIliZDyjtUSm4=
-Date:   Wed, 8 Mar 2023 16:26:00 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Wed, 8 Mar 2023 10:28:55 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80FA73AD7;
+        Wed,  8 Mar 2023 07:28:53 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id m4so11313067qvq.3;
+        Wed, 08 Mar 2023 07:28:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678289333;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bd0EmI05pCHTfIlBbUfoXj5rvm0Lfpegcu0/RFX07E0=;
+        b=oi0vouDb9vTONHCz7DWqrFJLIaUvXJ6V7s2rQfvwtAiJ+Nc3gKa8Dq81cQumK0b0Yv
+         qTrTkrQavLsdFb1wAJAGtI5rdU980XCncLXOTcn8Vc5wW3iVt6D4V5hzTXcuwN7ZPAsp
+         7cFjREFMPdLhMrof4l9PAAgUiUlIlEeirBsHN9VoM2RZgSmHSrKadxm9LYZSHCzUR8+l
+         V2+EFPjDcHOFOouYNGL5Ch7Sl01pVi4+aKmwxOVOIg0ElZZ09VIp91EG0mEG9OtYh2dZ
+         6kJ67jcK+nfw8T8rKqsxP8TjqVrHkgWkezaZdfdP6Har3eN/7qlOjyY3Zt8//YiS90aR
+         V+eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678289333;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=bd0EmI05pCHTfIlBbUfoXj5rvm0Lfpegcu0/RFX07E0=;
+        b=N6AUWeOd0Cf2W3DsnqBm0tG/sUw9+HZDNkB4VN/mKwCcnhv4Az+P+r5dq8EQs8NofD
+         Jm1VGi1zefdHGdYRegiOodCVQOXH9KVny1GlJw2+lXtVlq8uAgY/vyxWphPZ9ijhqCBQ
+         lJkRMPNJouJG4BkGqJnfkQnNwGfwsCKdtTb5eBaoxyFH1no2XkIBuK5EP/hj14FbXOXk
+         uwik/mRE9HZ06Mhc8m2mvgsiGoDEelbC5ijpwqGNvPNPBXtoNCWN9Y4KiKdjtzTDk4rJ
+         CUfkRp9QmXLgx96YKHVTpMC8IWM91XuQlyCeWoWseuCAke9ozu/2O+Sskv4aLBldq7+1
+         EbaA==
+X-Gm-Message-State: AO0yUKUjVlSVVVBKTamkkS1oTIrw0+EgUN4XRgZ/LKlITQjVl2JjDpUh
+        3+DmQEINJT8Lic88nlKJptY=
+X-Google-Smtp-Source: AK7set/QwnmzvGEgctgtRzpXygzSgoQMuIMdEi7EGkwdBQ/fUr9GGZ7htQvDCPjxU3tNhW4OMkQOPg==
+X-Received: by 2002:a05:6214:238e:b0:56e:bb43:a07c with SMTP id fw14-20020a056214238e00b0056ebb43a07cmr30115921qvb.20.1678289332740;
+        Wed, 08 Mar 2023 07:28:52 -0800 (PST)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id t190-20020a3746c7000000b0074235745fdasm11481891qka.58.2023.03.08.07.28.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 07:28:52 -0800 (PST)
+Date:   Wed, 08 Mar 2023 10:28:51 -0500
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     =?UTF-8?B?S8O2cnkgTWFpbmNlbnQ=?= <kory.maincent@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-omap@vger.kernel.org
+Cc:     Michael Walle <michael@walle.cc>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Kory Maincent <kory.maincent@bootlin.com>,
+        thomas.petazzoni@bootlin.com, Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v7 30/41] x86/shstk: Handle thread shadow stack
-Message-ID: <ZAipCNBCtPA2bcck@zn.tnic>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-31-rick.p.edgecombe@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230227222957.24501-31-rick.p.edgecombe@intel.com>
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Jie Wang <wangjie125@huawei.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Marco Bonelli <marco@mebeim.net>
+Message-ID: <6408a9b3c7ae1_13061c2082a@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20230308135936.761794-4-kory.maincent@bootlin.com>
+References: <20230308135936.761794-1-kory.maincent@bootlin.com>
+ <20230308135936.761794-4-kory.maincent@bootlin.com>
+Subject: RE: [PATCH v3 3/5] net: Let the active time stamping layer be
+ selectable.
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:29:46PM -0800, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> 
-> When a process is duplicated, but the child shares the address space with
-> the parent, there is potential for the threads sharing a single stack to
-> cause conflicts for each other. In the normal non-cet case this is handled
+K=C3=B6ry Maincent wrote:
+> From: Richard Cochran <richardcochran@gmail.com>
+> =
 
-"non-CET"
+> Add the ETHTOOL_SET_PTP ethtool ioctl, and add checks in the ioctl and =
+time
+> stamping paths to respect the currently selected time stamping layer.
+> =
 
-> in two ways.
-> 
-> With regular CLONE_VM a new stack is provided by userspace such that the
-> parent and child have different stacks.
-> 
-> For vfork, the parent is suspended until the child exits. So as long as
-> the child doesn't return from the vfork()/CLONE_VFORK calling function and
-> sticks to a limited set of operations, the parent and child can share the
-> same stack.
-> 
-> For shadow stack, these scenarios present similar sharing problems. For the
-> CLONE_VM case, the child and the parent must have separate shadow stacks.
-> Instead of changing clone to take a shadow stack, have the kernel just
-> allocate one and switch to it.
-> 
-> Use stack_size passed from clone3() syscall for thread shadow stack size. A
-> compat-mode thread shadow stack size is further reduced to 1/4. This
-> allows more threads to run in a 32-bit address space. The clone() does not
-> pass stack_size, which was added to clone3(). In that case, use
-> RLIMIT_STACK size and cap to 4 GB.
-> 
-> For shadow stack enabled vfork(), the parent and child can share the same
-> shadow stack, like they can share a normal stack. Since the parent is
-> suspended until the child terminates, the child will not interfere with
-> the parent while executing as long as it doesn't return from the vfork()
-> and overwrite up the shadow stack. The child can safely overwrite down
-> the shadow stack, as the parent can just overwrite this later. So CET does
-> not add any additional limitations for vfork().
-> 
-> Userspace implementing posix vfork() can actually prevent the child from
+> Add a preferred-timestamp devicetree binding to select the preferred
+> hardware timestamp layer between PHY and MAC. The choice of using
+> devicetree binding has been made as the PTP precision and quality depen=
+ds
+> of external things, like adjustable clock, or the lack of a temperature=
 
-"POSIX"
+> compensated crystal or specific features. Even if the preferred timesta=
+mp
+> is a configuration it is hardly related to the design oh the board.
 
-...
+nit: oh -> of
 
-> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-> index f851558b673f..bc3de4aeb661 100644
-> --- a/arch/x86/kernel/fpu/core.c
-> +++ b/arch/x86/kernel/fpu/core.c
-> @@ -552,8 +552,41 @@ static inline void fpu_inherit_perms(struct fpu *dst_fpu)
->  	}
->  }
->  
-> +#ifdef CONFIG_X86_USER_SHADOW_STACK
-> +static int update_fpu_shstk(struct task_struct *dst, unsigned long ssp)
+> =
+
+> Signed-off-by: Richard Cochran <richardcochran@gmail.com>
+> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+> ---
+> =
+
+> Notes:
+>     Changes in v2:
+>     - Move selected_timestamping_layer introduction in this patch.
+>     - Replace strmcmp by sysfs_streq.
+>     - Use the PHY timestamp only if available.
+>     =
+
+>     Changes in v3:
+>     - Added a devicetree binding to select the preferred timestamp
+>     - Replace the way to select timestamp through ethtool instead of sy=
+sfs
+>     You can test it with the ethtool source on branch feature_ptp of:
+>     https://github.com/kmaincent/ethtool
+> =
+
+>  Documentation/networking/ethtool-netlink.rst |  1 +
+>  drivers/net/phy/phy_device.c                 | 34 ++++++++++++++++
+>  include/linux/netdevice.h                    |  6 +++
+>  include/uapi/linux/ethtool.h                 |  1 +
+>  net/core/dev_ioctl.c                         | 43 ++++++++++++++++++--=
+
+>  net/core/timestamping.c                      |  6 +++
+>  net/ethtool/common.c                         | 16 ++++++--
+>  net/ethtool/ioctl.c                          | 41 ++++++++++++++-----
+>  8 files changed, 131 insertions(+), 17 deletions(-)
+> =
+
+> +void of_set_timestamp(struct net_device *netdev, struct phy_device *ph=
+ydev)
 > +{
-> +	struct cet_user_state *xstate;
+> +	struct device_node *node =3D phydev->mdio.dev.of_node;
+> +	const struct ethtool_ops *ops =3D netdev->ethtool_ops;
+> +	const char *s;
+> +	enum timestamping_layer ts_layer =3D 0;
 > +
-> +	/* If ssp update is not needed. */
-> +	if (!ssp)
-> +		return 0;
+> +	if (phy_has_hwtstamp(phydev))
+> +		ts_layer =3D PHY_TIMESTAMPING;
+> +	else if (ops->get_ts_info)
+> +		ts_layer =3D MAC_TIMESTAMPING;
 > +
-> +	xstate = get_xsave_addr(&dst->thread.fpu.fpstate->regs.xsave,
-> +				XFEATURE_CET_USER);
+> +	if (of_property_read_string(node, "preferred-timestamp", &s))
+> +		goto out;
 > +
-> +	/*
-> +	 * If there is a non-zero ssp, then 'dst' must be configured with a shadow
-> +	 * stack and the fpu state should be up to date since it was just copied
-> +	 * from the parent in fpu_clone(). So there must be a valid non-init CET
-> +	 * state location in the buffer.
-> +	 */
-> +	if (WARN_ON_ONCE(!xstate))
-> +		return 1;
+> +	if (!s)
+> +		goto out;
 > +
-> +	xstate->user_ssp = (u64)ssp;
+> +	if (phy_has_hwtstamp(phydev) && !strcmp(s, "phy"))
+> +		ts_layer =3D PHY_TIMESTAMPING;
 > +
-> +	return 0;
+> +	if (ops->get_ts_info && !strcmp(s, "mac"))
+> +		ts_layer =3D MAC_TIMESTAMPING;
+> +
+> +out:
+> +	netdev->selected_timestamping_layer =3D ts_layer;
 > +}
-> +#else
-> +static int update_fpu_shstk(struct task_struct *dst, unsigned long shstk_addr)
-								      ^^^^^^^^^^^
-ssp, like above.
+> +
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index ba2bd604359d..d9a1c12fc43c 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -47,6 +47,7 @@
+>  #include <uapi/linux/netdevice.h>
+>  #include <uapi/linux/if_bonding.h>
+>  #include <uapi/linux/pkt_cls.h>
+> +#include <uapi/linux/net_tstamp.h>
+>  #include <linux/hashtable.h>
+>  #include <linux/rbtree.h>
+>  #include <net/net_trackers.h>
+> @@ -1981,6 +1982,9 @@ enum netdev_ml_priv_type {
+>   *
+>   *	@threaded:	napi threaded mode is enabled
+>   *
+> + *	@selected_timestamping_layer:	Tracks whether the MAC or the PHY
+> + *					performs packet time stamping.
+> + *
+>   *	@net_notifier_list:	List of per-net netdev notifier block
+>   *				that follow this device when it is moved
+>   *				to another network namespace.
+> @@ -2339,6 +2343,8 @@ struct net_device {
+>  	unsigned		wol_enabled:1;
+>  	unsigned		threaded:1;
+>  =
 
-Better yet:
+> +	enum timestamping_layer selected_timestamping_layer;
+> +
 
-static int update_fpu_shstk(struct task_struct *dst, unsigned long ssp)
-{
-#ifdef CONFIG_X86_USER_SHADOW_STACK
-	...
-#endif
-	return 0;
-}
+can perhaps be a single bit rather than an enum
 
-and less ifdeffery.
-
-
-
+> +static int dev_hwtstamp_ioctl(struct net_device *dev,
+> +			      struct ifreq *ifr, unsigned int cmd)
 > +{
-> +	return 0;
+> +	const struct net_device_ops *ops =3D dev->netdev_ops;
+> +	int err;
+> +
+> +	err =3D dsa_ndo_eth_ioctl(dev, ifr, cmd);
+> +	if (err =3D=3D 0 || err !=3D -EOPNOTSUPP)
+> +		return err;
+> +
+> +	if (!netif_device_present(dev))
+> +		return -ENODEV;
+> +
+> +	switch (dev->selected_timestamping_layer) {
+> +	case MAC_TIMESTAMPING:
+> +		if (ops->ndo_do_ioctl =3D=3D phy_do_ioctl) {
+> +			/* Some drivers set .ndo_do_ioctl to phy_do_ioctl. */
+> +			err =3D -EOPNOTSUPP;
+> +		} else {
+> +			err =3D ops->ndo_eth_ioctl(dev, ifr, cmd);
+> +		}
+> +		break;
+> +
+> +	case PHY_TIMESTAMPING:
+> +		if (phy_has_hwtstamp(dev->phydev)) {
+> +			err =3D phy_mii_ioctl(dev->phydev, ifr, cmd);
+> +		} else {
+> +			err =3D -ENODEV;
+> +			WARN_ON(1);
+
+Please no WARN_ON on error cases that are known to be reachable
+and can be handled safely and reported to userspace.
+
+> +		}
+> +		break;
+> +	}
+> +
+> +	return err;
 > +}
-> +#endif
 > +
->  /* Clone current's FPU state on fork */
-> -int fpu_clone(struct task_struct *dst, unsigned long clone_flags, bool minimal)
-> +int fpu_clone(struct task_struct *dst, unsigned long clone_flags, bool minimal,
-> +	      unsigned long ssp)
->  {
->  	struct fpu *src_fpu = &current->thread.fpu;
->  	struct fpu *dst_fpu = &dst->thread.fpu;
-> @@ -613,6 +646,12 @@ int fpu_clone(struct task_struct *dst, unsigned long clone_flags, bool minimal)
->  	if (use_xsave())
->  		dst_fpu->fpstate->regs.xsave.header.xfeatures &= ~XFEATURE_MASK_PASID;
->  
-> +	/*
-> +	 * Update shadow stack pointer, in case it changed during clone.
-> +	 */
-> +	if (update_fpu_shstk(dst, ssp))
-> +		return 1;
+> diff --git a/net/ethtool/common.c b/net/ethtool/common.c
+> index 64a7e05cf2c2..e55e70bdbb3c 100644
+> --- a/net/ethtool/common.c
+> +++ b/net/ethtool/common.c
+> @@ -548,10 +548,18 @@ int __ethtool_get_ts_info(struct net_device *dev,=
+ struct ethtool_ts_info *info)
+>  	memset(info, 0, sizeof(*info));
+>  	info->cmd =3D ETHTOOL_GET_TS_INFO;
+>  =
+
+> -	if (phy_has_tsinfo(phydev))
+> -		return phy_ts_info(phydev, info);
+> -	if (ops->get_ts_info)
+> -		return ops->get_ts_info(dev, info);
+> +	switch (dev->selected_timestamping_layer) {
+> +	case MAC_TIMESTAMPING:
+> +		if (ops->get_ts_info)
+> +			return ops->get_ts_info(dev, info);
+> +		break;
 > +
->  	trace_x86_fpu_copy_src(src_fpu);
->  	trace_x86_fpu_copy_dst(dst_fpu);
->  
-> diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-> index b650cde3f64d..bf703f53fa49 100644
-> --- a/arch/x86/kernel/process.c
-> +++ b/arch/x86/kernel/process.c
-> @@ -48,6 +48,7 @@
->  #include <asm/frame.h>
->  #include <asm/unwind.h>
->  #include <asm/tdx.h>
-> +#include <asm/shstk.h>
->  
->  #include "process.h"
->  
-> @@ -119,6 +120,7 @@ void exit_thread(struct task_struct *tsk)
->  
->  	free_vm86(t);
->  
-> +	shstk_free(tsk);
->  	fpu__drop(fpu);
->  }
->  
-> @@ -140,6 +142,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
->  	struct inactive_task_frame *frame;
->  	struct fork_frame *fork_frame;
->  	struct pt_regs *childregs;
-> +	unsigned long shstk_addr = 0;
->  	int ret = 0;
->  
->  	childregs = task_pt_regs(p);
-> @@ -174,7 +177,13 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
->  	frame->flags = X86_EFLAGS_FIXED;
->  #endif
->  
-> -	fpu_clone(p, clone_flags, args->fn);
-> +	/* Allocate a new shadow stack for pthread if needed */
-> +	ret = shstk_alloc_thread_stack(p, clone_flags, args->stack_size,
-> +				       &shstk_addr);
+> +	case PHY_TIMESTAMPING:
+> +		if (phy_has_tsinfo(phydev))
+> +			return phy_ts_info(phydev, info);
+> +		WARN_ON(1);
+> +		return -ENODEV;
 
-That function will return 0 even if shstk_addr hasn't been written in it
-and you will continue merrily and call
+same
 
-	fpu_clone(..., shstk_addr=0);
+> +	}
+>  =
 
-why don't you return the shadow stack address or negative on error
-instead of adding an I/O parameter which is pretty much always nasty to
-deal with.
-
-
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	fpu_clone(p, clone_flags, args->fn, shstk_addr);
->  
->  	/* Kernel thread ? */
->  	if (unlikely(p->flags & PF_KTHREAD)) {
-
-...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+>  	info->so_timestamping =3D SOF_TIMESTAMPING_RX_SOFTWARE |
+>  				SOF_TIMESTAMPING_SOFTWARE;=
