@@ -2,121 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8504A6B1244
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC4C6B1276
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjCHToe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 14:44:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42586 "EHLO
+        id S229976AbjCHTx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 14:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjCHToD (ORCPT
+        with ESMTP id S229483AbjCHTxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 14:44:03 -0500
-Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D62F9E311
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 11:43:54 -0800 (PST)
-Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
-        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id 4CE05801F69A
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 19:43:54 +0000 (UTC)
-Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 82F4F100403F2
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 19:43:43 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id ZzhPp1QYsbQKPZzhPpvrzi; Wed, 08 Mar 2023 19:43:43 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=Jd15EWGV c=1 sm=1 tr=0 ts=6408e56f
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=k__wU0fu6RkA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=NHNj9DJihJrZ9zNhZlllW5Gc176JqAfXQ0Zj8mPxPHk=; b=WVrvtQGMYomO8P2mGOGWXT/YU4
-        n3qdNgra+mO9Omv7U27Hwa81lxc3m18siwsjsM2lHunLHcWhKQr+g35KvMJerNC8U5UWescq7JR0f
-        oNIXUfu9Lf4C3QNhhohDq++wsZzMhs4dX6ZworX5VvyngBarW7bnq3t7QcMqUYkWj5SodAVA+2+sB
-        ySURG3XY9YjpQcgACLzD170u7ppxAvJVXMjVYCFXzSak8eCMSw1FYg7sPd0ZIxmI9GlYEhGHQwrpv
-        HrwHnWFc+TWYzTSp3T2M4v4SN2RW3fayHMXlR6jwZgfbsHWemZL+cLTjvmeuaznDaQHCkkBvEPnLH
-        d/nnQ+1Q==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:59604 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pZzhO-001E4m-FG;
-        Wed, 08 Mar 2023 12:43:42 -0700
-Subject: Re: [PATCH 6.2 0000/1000] 6.2.3-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230308091912.362228731@linuxfoundation.org>
-In-Reply-To: <20230308091912.362228731@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <8e9c4d95-25c9-d3a6-17a4-ceda8ec7e9ff@w6rz.net>
-Date:   Wed, 8 Mar 2023 11:43:37 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 8 Mar 2023 14:53:24 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352E8497CA;
+        Wed,  8 Mar 2023 11:53:22 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id C4A4842037;
+        Wed,  8 Mar 2023 19:45:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1678304766;
+        bh=371amrNIWdOrt1eX/rE/8QZd18kWMNJmNXDp2QdVSbs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=yGK2eXhVMDT3UcH3lltkf8vpz7BK33d21ZigE2QwncNn4koTKZf90jqyk41sFXyp/
+         hCVYoec52IPuKLTdg8ImtH/hjN/ym4zWtZt5fw9ikDSLCKIEi3jIsdirbn7zRpIYwI
+         sRiJ+y91O7fPhmVFFdjjSKo4af7KCCYZGexuOnmdFwyKkK5dcFL2tFdMT4pgAZpsUo
+         sUt7oqPOFJNSbrS1U4HsWxouSmgeKt9R9dRHvlxLiJ0/pnfBoBUFfNbVrAANhAlqxF
+         Kl7eIy+TonptlKOSkRhyAh9k4oVsIxOYVYCF56uABdqu2Tlpg4EAXwcIjXkxB8mkux
+         H9MLMH0cWml/Q==
+Message-ID: <9c3dc2ad-11e4-6004-7230-8ca752e3d9f7@asahilina.net>
+Date:   Thu, 9 Mar 2023 04:45:58 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pZzhO-001E4m-FG
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:59604
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
+ <cd788ccf-0cf1-85d5-1bf8-efc259bd7e11@amd.com>
+ <a075d886-0820-b6fb-fcd0-45bfdc75e37d@asahilina.net>
+ <2b1060e9-86ba-7e16-14f1-5b5fa63de719@amd.com>
+ <9f76bb68-b462-b138-d0ad-d27c972530d4@asahilina.net>
+ <a39c6b40-f190-002d-ae1c-8b58c6442df2@amd.com>
+ <4bbfc1a3-cfc3-87f4-897b-b6637bac3bd0@asahilina.net>
+ <b0aa78b2-b432-200a-8953-a80c462fa6ee@amd.com>
+ <c0624252-070e-bd44-2116-93a1d63a1359@asahilina.net>
+ <d1fccceb-ca77-f653-17fc-63168e0da884@amd.com>
+From:   Asahi Lina <lina@asahilina.net>
+In-Reply-To: <d1fccceb-ca77-f653-17fc-63168e0da884@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 1:29 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.3 release.
-> There are 1000 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 10 Mar 2023 09:16:12 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.3-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 09/03/2023 04.12, Christian König wrote:
+> Am 08.03.23 um 20:05 schrieb Asahi Lina:
+>> [SNIP]
+>>> Well it's not the better way, it's the only way that works.
+>>>
+>>> I have to admit that my bet on your intentions was wrong, but even that
+>>> use case doesn't work correctly.
+>>>
+>>> See when your callback returns false it is perfectly possible that all
+>>> hw fences are signaled between returning that information and processing it.
+>>>
+>>> The result would be that the scheduler goes to sleep and never wakes up
+>>> again.
+>> That can't happen, because it will just go into another iteration of the
+>> drm_sched main loop since there is an entity available still.
+>>
+>> Rather there is probably the opposite bug in this patch: the can_run_job
+>> logic should be moved into the wait_event_interruptible() condition
+>> check, otherwise I think it can end up busy-looping since the condition
+>> itself can be true even when the can_run_job check blocks it.
+>>
+>> But there is no risk of it going to sleep and never waking up because
+>> job completions will wake up the waitqueue by definition, and that
+>> happens after the driver-side queues are popped. If this problem could
+>> happen, then the existing hw_submission_limit logic would be broken in
+>> the same way. It is logically equivalent in how it works.
+>>
+>> Basically, if properly done in wait_event_interruptible, it is exactly
+>> the logic of that macro that prevents this race condition and makes
+>> everything work at all. Without it, drm_sched would be completely broken.
+>>
+>>> As I said we exercised those ideas before and yes this approach here
+>>> came up before as well and no it doesn't work.
+>> It can never deadlock with this patch as it stands (though it could busy
+>> loop), and if properly moved into the wait_event_interruptible(), it
+>> would also never busy loop and work entirely as intended. The actual API
+>> change is sound.
+>>
+>> I don't know why you're trying so hard to convince everyone that this
+>> approach is fundamentally broken... It might be a bad idea for other
+>> reasons, it might encourage incorrect usage, it might not be the best
+>> option, there are plenty of arguments you can make... but you just keep
+>> trying to make an argument that it just can't work at all for some
+>> reason. Why? I already said I'm happy dropping it in favor of the fences...
+> 
+> Well because it is broken.
+> 
+> When you move the check into the wait_event_interruptible condition then 
+> who is going to call wait_event_interruptible when the condition changes?
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+I think you mean wake_up_interruptible(). That would be
+drm_sched_job_done(), on the fence callback when a job completes, which
+as I keep saying is the same logic used for
+hw_rq_count/hw_submission_limit tracking.
 
-Tested-by: Ron Economos <re@w6rz.net>
+Please think about it for a second, it's really not that complicated to
+see why it works:
 
+- Driver pops off completed commands <-- can_run_job condition satisfied
+- Driver signals fence
+ - drm_sched_job_done_cb()
+  - drm_sched_job_done()
+   - atomic_dec(&sched->hw_rq_count); <-- hw_submission_limit satisfied
+   - ...
+   - wake_up_interruptible(&sched->wake_up_worker);
+      ^- happens after both conditions are potentially satisfied
+
+It really is completely equivalent to just making the hw_rq_count logic
+customizable by the driver. The actual flow is the same. As long as the
+driver guarantees it satisfies the can_run_job() condition before
+signaling the completion fence that triggered that change, it works fine.
+
+> As I said this idea came up before and was rejected multiple times.
+
+Maybe it was a different idea, or maybe it was rejected for other
+reasons, or maybe it was wrongly rejected for being broken when it isn't ^^
+
+~~ Lina
