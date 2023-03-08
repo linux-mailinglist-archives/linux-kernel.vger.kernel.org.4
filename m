@@ -2,78 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6EC6B1040
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526596B103E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:35:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjCHRf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 12:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
+        id S229676AbjCHRfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 12:35:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjCHRf5 (ORCPT
+        with ESMTP id S229545AbjCHRfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 12:35:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772C440C1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 09:35:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678296909;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=uJnoHmMiEQ50Bf/sgKD3h0FbrR1x8YjmBiKx8gh/fG0=;
-        b=T9IEcY1IGUZb6oM1IxdSfr4Wo7RhL28xi3jmESy3pBfCdi91nKP6hOBP8YFA3Qyabe5Dvu
-        1qsxg0yR5w6Z4mJluvH7u3bekKdx91T6i3akM6vY9UbWRNQnvu8DJ/Tk50po1sEBYB5XNM
-        GSuNCzauT2JqJQU936AcZlTPZahgzTw=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-470-H1O2NKkGNSGSNM91jyyYAA-1; Wed, 08 Mar 2023 12:35:08 -0500
-X-MC-Unique: H1O2NKkGNSGSNM91jyyYAA-1
-Received: by mail-ed1-f72.google.com with SMTP id h15-20020a056402280f00b004bf9e193c23so25222287ede.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 09:35:08 -0800 (PST)
+        Wed, 8 Mar 2023 12:35:33 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1E2BCBA0
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 09:35:30 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id l2so10825208ilg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 09:35:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678296928;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FSyUj9sOQAg1bto5phGO0kdMN7B410cjZoU9zGMstis=;
+        b=jq3SyMYYuTIgvU+sGELF+gqjQAmnVWzWaFRFgf7Hx3xedzgG2D4EFUTGJm5qp3TVfK
+         b4WD7CWaoOYbABuXo7RXPIcyYdX4SIZXGycuDjyR0FkPNuaxgIoJr/WqvV34oMLNj3FI
+         f6bIdf8HzZRTzOzXyQe+Rr/bi3bF0guyfDJU0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678296906;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uJnoHmMiEQ50Bf/sgKD3h0FbrR1x8YjmBiKx8gh/fG0=;
-        b=7KmvZjGqY3xw3Cqjr0DPaRzYi0QJpfU88dVA6P/HX+BgPtsy015tSgZr8u2LULO30e
-         zwLAd6N8Iy5mFK+Wrc1Kg7+yL1UbRdlkKprdgl3K38Uz9bekIn+umOSX3ZlmnlDsZ3Y3
-         BM2xDqmY0vAcrCDvXtZIyvUA6jSk2Zq7hAk5E8zDg1uVdoVNd3iO0TBaNp6DVrR5zbv5
-         Etsrm36zbpc61cAwSucdgzs96Mis7KZU/Siu4XxsLTYAVLBQqy1EADJO7UWPeJYeMjQ/
-         SKAfnks4s3V6B/nyAZifzrHXB+71mkVlyYgan+nSGgkpXK0YlR0dR+f3DHzlv9XusWRr
-         X7Jw==
-X-Gm-Message-State: AO0yUKWuK2XKxtP4eV+mgUU7aaTzitcR3uocKla38X9kapvyeIhcphFq
-        Be1iv7YdTHZZnQ8IrhMz6qmKRfmEwzb1yx1bAJ9V8+NZl60rdtL1x37b56i1FmkH7DHRHSAVLBh
-        TkGOmH9czTAEB6xDWmOfwBtPqVkHvgOS4LsrDbjMYhc8oOu0BOuolrmZXteazrasKVwEhrw6lDK
-        TmlA==
-X-Received: by 2002:a17:907:6d92:b0:8ed:e8d6:4e0e with SMTP id sb18-20020a1709076d9200b008ede8d64e0emr27091314ejc.36.1678296906818;
-        Wed, 08 Mar 2023 09:35:06 -0800 (PST)
-X-Google-Smtp-Source: AK7set9VtDhfK/2yAlK7243teywpjyochmwEoLfe+0nIkV2C59nDi8Jo981NCcIfNQNRXoEABf9fzw==
-X-Received: by 2002:a17:907:6d92:b0:8ed:e8d6:4e0e with SMTP id sb18-20020a1709076d9200b008ede8d64e0emr27091280ejc.36.1678296906475;
-        Wed, 08 Mar 2023 09:35:06 -0800 (PST)
-Received: from redhat.com ([2.52.138.216])
-        by smtp.gmail.com with ESMTPSA id g26-20020a17090613da00b008d044ede804sm7624887ejc.163.2023.03.08.09.35.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 09:35:06 -0800 (PST)
-Date:   Wed, 8 Mar 2023 12:35:03 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] container_of: add type safety
-Message-ID: <c3611f95862a7f30d67d1c3cc56aaf7bb93d3b59.1678296892.git.mst@redhat.com>
+        d=1e100.net; s=20210112; t=1678296928;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FSyUj9sOQAg1bto5phGO0kdMN7B410cjZoU9zGMstis=;
+        b=hWJeOh+BgttredZFMx9fJIWqFPbDH916nfGQdCQO2fICDqEJ5HbMnf2TDpr2hPBmK7
+         vcJdJDWMG4B1/QokK6PG1QI23PJmZNhGS+3mKyr9vY8zPxeuNoj61MpZgrXpUNtt8Om/
+         73dWyMtQx9D6Sjkmtm+CzGQWmnNhexPVOFvzZlSSuoCMdbuVmcqAAtnrxM/Kfh/v3n9Z
+         O+qv0uqvA+YkM7exO5pV0fENOIW2ZqLmEadMOXrgfVVUVJzTupnUGYp0m6BALpASl53/
+         mXgx3aduYd3dwnwPi8EAHf61PVQyIbWlzpZqAhBf74zquBkpQ6WzVn4sfMPnBdVRKffZ
+         mgwg==
+X-Gm-Message-State: AO0yUKUvTXHzhmFkoNr8kqtdCkY+ijaVY6MPX76HGaUyK1xxTPHF5m2t
+        91dEE1dSia7mqfwaPgOT6vu5Q6+HfoeUO4Wd+NM=
+X-Google-Smtp-Source: AK7set/vPzdJRH7nPYS29yUfNPWdHXL+tN3TpDbmvgPN9U/TBGTZf0lkwalVaKL4nl6iXFoZJq7WVg==
+X-Received: by 2002:a05:6e02:1c4d:b0:313:c32b:de26 with SMTP id d13-20020a056e021c4d00b00313c32bde26mr19822689ilg.9.1678296928570;
+        Wed, 08 Mar 2023 09:35:28 -0800 (PST)
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com. [209.85.166.170])
+        by smtp.gmail.com with ESMTPSA id b9-20020a05663801a900b003de9c6a73edsm5127175jaq.169.2023.03.08.09.35.27
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 09:35:27 -0800 (PST)
+Received: by mail-il1-f170.google.com with SMTP id j8so5987121ilf.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 09:35:27 -0800 (PST)
+X-Received: by 2002:a05:6e02:ca6:b0:315:4c21:a377 with SMTP id
+ 6-20020a056e020ca600b003154c21a377mr9109185ilg.6.1678296927307; Wed, 08 Mar
+ 2023 09:35:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
-X-Mutt-Fcc: =sent
+References: <20230224070506.4157738-1-saravanak@google.com>
+ <20230224070506.4157738-3-saravanak@google.com> <CAD=FV=WaWmHDX0FVH1KO7b_QDM9xxt86q60MGOtPVVvGZJ+t7A@mail.gmail.com>
+ <CAGETcx_2f4atf-bpvj3o5FVcWrsbJRuY_Kwu5_NU6ESbNM8MFQ@mail.gmail.com>
+In-Reply-To: <CAGETcx_2f4atf-bpvj3o5FVcWrsbJRuY_Kwu5_NU6ESbNM8MFQ@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 8 Mar 2023 09:35:14 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=Uv0JZDZ4adVkXN=Wkkv+N2EXnBsREx-bHyeeefYc4s6A@mail.gmail.com>
+Message-ID: <CAD=FV=Uv0JZDZ4adVkXN=Wkkv+N2EXnBsREx-bHyeeefYc4s6A@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] driver core: Make state_synced device attribute writeable
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,45 +84,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using a wrong member in container_of will result in an error.
-No so for container_of_const - it is just a cast so will
-happily give you a wrong pointer.
+Hi,
 
-Use logic from container_of to add safety.
+On Fri, Mar 3, 2023 at 4:53=E2=80=AFPM Saravana Kannan <saravanak@google.co=
+m> wrote:
+>
+> > > --- a/drivers/base/base.h
+> > > +++ b/drivers/base/base.h
+> > > @@ -164,6 +164,14 @@ static inline int driver_match_device(struct dev=
+ice_driver *drv,
+> > >         return drv->bus->match ? drv->bus->match(dev, drv) : 1;
+> > >  }
+> > >
+> > > +static inline void dev_sync_state(struct device *dev)
+> >
+> > IMO don't force inline. The compiler is probably smarter than you. I
+> > could even believe that it might be more optimal for this rarely
+> > called function to be _not_ inline if it kept the kernel smaller. I
+> > guess that means moving it out of the header...
+>
+> I'm following the style of every other function in the .h file.
 
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Link: https://lore.kernel.org/r/20221205121206.166576-1-gregkh@linuxfoundation.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- include/linux/container_of.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Right, that's why I suggested moving it out of the .h file. I see
+plenty of non-inline function definitions in the header file.
 
-diff --git a/include/linux/container_of.h b/include/linux/container_of.h
-index 1d898f9158b4..5d87faf72e0a 100644
---- a/include/linux/container_of.h
-+++ b/include/linux/container_of.h
-@@ -29,10 +29,13 @@
-  * @type:		the type of the container struct this is embedded in.
-  * @member:		the name of the member within the struct.
-  */
--#define container_of_const(ptr, type, member)				\
-+#define container_of_const(ptr, type, member) ({			\
-+	static_assert(__same_type(*(ptr), ((type *)0)->member) ||	\
-+		      __same_type(*(ptr), void),			\
-+		      "pointer type mismatch in container_of()");	\
- 	_Generic(ptr,							\
- 		const typeof(*(ptr)) *: ((const type *)container_of(ptr, type, member)),\
- 		default: ((type *)container_of(ptr, type, member))	\
--	)
-+	); })
- 
- #endif	/* _LINUX_CONTAINER_OF_H */
--- 
-MST
-
+-Doug
