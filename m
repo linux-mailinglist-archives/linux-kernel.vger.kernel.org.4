@@ -2,154 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5B76B038C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2426B0389
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjCHJ6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 04:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48916 "EHLO
+        id S230193AbjCHJ6R convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Mar 2023 04:58:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjCHJ6X (ORCPT
+        with ESMTP id S230044AbjCHJ6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 04:58:23 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0031A970;
-        Wed,  8 Mar 2023 01:58:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678269498; x=1709805498;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pZyVPEEWN847EU+VtMs2axVi8WRcs92TdSJoLK4IpVI=;
-  b=fRj1IzWttEPMeUfunFSeMQLnNDyy0H4WaKmtJAxybsWFSWgF0CkP+XXX
-   y7o0mir8IWFb2QbECVfaPg+2j7PahS9dP8oKjtumDshTMiB/ZuuIY4Vn3
-   V5DofzSIDiIqRF/MLhzDT/UyAbolynXPTKNJqyIHMp5VnfaWh72xlB6d/
-   i8G+zqv2QXba81wdQ02CsrWI/sTZaPgItKcooN79mtEBurA79K6KZn7bP
-   ky+ARgOAwGKFA5OLIh88ZWRJ7CU8lC+ku6jmOeG1LFp7aDoZ/7hhMSiL6
-   i9AXXHMum8W2plRtBqIuuTaSzfzY8WtbSefzuhtlee5al81d4iiS6xoTM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="398693153"
-X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="398693153"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 01:58:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="787059832"
-X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="787059832"
-Received: from lcojocar-mobl.ger.corp.intel.com (HELO [10.251.219.243]) ([10.251.219.243])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 01:57:49 -0800
-Message-ID: <bbd7c5ee-c2f0-3e19-757d-a9aff1a26d3d@linux.intel.com>
-Date:   Wed, 8 Mar 2023 10:57:47 +0100
+        Wed, 8 Mar 2023 04:58:10 -0500
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A352B60E;
+        Wed,  8 Mar 2023 01:58:08 -0800 (PST)
+Received: by mail-qv1-f44.google.com with SMTP id bo10so10715152qvb.12;
+        Wed, 08 Mar 2023 01:58:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678269487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tenmK7UqFMmxK8HdH+j4A3EbtAfm6VYOyD+pHnFrgGw=;
+        b=C2qDpPU+Vl/eeWLForek4eBtIYqqb5wxtGBEa6RvfCEmDOBlI6oiwkCrC6QbCGhZOI
+         MNr33fgm4jj+Lip7hV9rh9mzDSF2j2AkwOKyh1EeQJaW3ylO0BZmJSoTK6GT3OHE2PVB
+         UbPsfWBycIAzVr8Lqz8qKP5cacFr/T7bm+h7pES2dtpxPNbBDST2W2Y2JbzNEtu37uw+
+         KcFDVbZ/Y/R3UPEVLbCdql8jDQ1HkTHMyqlipVm2jub/Vcp7UUOJE9+2yXP6VvM8zEB1
+         9pbNj37FLr25/55StJnDxMR3FpFd1hv+/xlFHFwAEj5M1jBXbX8ZhyTPxeYVeerT2vc3
+         p+Tg==
+X-Gm-Message-State: AO0yUKUnC0gZ5j8JAQsJTzpkdjsRR08e4Nyf3V4ZSe/27s3k8E9b9+M1
+        MnPeuDYEF216u7mdA7TKKVISckKOniQLFmlt
+X-Google-Smtp-Source: AK7set+TGop96qBsqSx1Q4OmBCm5tQPL5VhdTLY5Of8ET3UupU6a5HT7RJrSNDzREdPBage867lFwg==
+X-Received: by 2002:a05:6214:21ee:b0:56e:af8a:a872 with SMTP id p14-20020a05621421ee00b0056eaf8aa872mr25798570qvj.11.1678269487250;
+        Wed, 08 Mar 2023 01:58:07 -0800 (PST)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id i23-20020a05620a145700b00739e7e10b71sm10962007qkl.114.2023.03.08.01.58.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 01:58:06 -0800 (PST)
+Received: by mail-yb1-f169.google.com with SMTP id 82so14042025ybn.6;
+        Wed, 08 Mar 2023 01:58:06 -0800 (PST)
+X-Received: by 2002:a5b:c4e:0:b0:9f2:a1ba:6908 with SMTP id
+ d14-20020a5b0c4e000000b009f2a1ba6908mr8495733ybr.12.1678269486343; Wed, 08
+ Mar 2023 01:58:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [PATCH RFC 11/18] drm/scheduler: Clean up jobs when the scheduler
- is torn down
-Content-Language: en-US
-To:     Asahi Lina <lina@asahilina.net>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-11-917ff5bc80a8@asahilina.net>
-From:   Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-In-Reply-To: <20230307-rust-drm-v1-11-917ff5bc80a8@asahilina.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230307105645.5285-1-wsa+renesas@sang-engineering.com> <20230307105645.5285-6-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230307105645.5285-6-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 8 Mar 2023 10:57:54 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXr=WGTEOnAhckPW4B1WUoRZUokkRjEZXjsU+Qr-y60iQ@mail.gmail.com>
+Message-ID: <CAMuHMdXr=WGTEOnAhckPW4B1WUoRZUokkRjEZXjsU+Qr-y60iQ@mail.gmail.com>
+Subject: Re: [PATCH 5/5] soc: renesas: remove r8a77950 arch
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Wolfram,
 
-On 2023-03-07 15:25, Asahi Lina wrote:
-> drm_sched_fini() currently leaves any pending jobs dangling, which
-> causes segfaults and other badness when job completion fences are
-> signaled after the scheduler is torn down.
+On Tue, Mar 7, 2023 at 11:57 AM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> R-Car H3 ES1.* was only available to an internal development group and
+> needed a lot of quirks and workarounds. These become a maintenance
+> burden now, so our development group decided to remove upstream support
+> and disable booting for this SoC. Public users only have ES2 onwards.
 >
-> Explicitly detach all jobs from their completion callbacks and free
-> them. This makes it possible to write a sensible safe abstraction for
-> drm_sched, without having to externally duplicate the tracking of
-> in-flight jobs.
+> Remove the architecture which describes H3 ES1.*.
 >
-> This shouldn't regress any existing drivers, since calling
-> drm_sched_fini() with any pending jobs is broken and this change should
-> be a no-op if there are no pending jobs.
->
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+Thanks for your patch!
+
 > ---
->   drivers/gpu/drm/scheduler/sched_main.c | 27 +++++++++++++++++++++++++--
->   1 file changed, 25 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-> index 5c0add2c7546..0aab1e0aebdd 100644
-> --- a/drivers/gpu/drm/scheduler/sched_main.c
-> +++ b/drivers/gpu/drm/scheduler/sched_main.c
-> @@ -1119,10 +1119,33 @@ EXPORT_SYMBOL(drm_sched_init);
->   void drm_sched_fini(struct drm_gpu_scheduler *sched)
->   {
->   	struct drm_sched_entity *s_entity;
-> +	struct drm_sched_job *s_job, *tmp;
->   	int i;
->   
-> -	if (sched->thread)
-> -		kthread_stop(sched->thread);
-> +	if (!sched->thread)
-> +		return;
-> +
-> +	/*
-> +	 * Stop the scheduler, detaching all jobs from their hardware callbacks
-> +	 * and cleaning up complete jobs.
-> +	 */
-> +	drm_sched_stop(sched, NULL);
-> +
-> +	/*
-> +	 * Iterate through the pending job list and free all jobs.
-> +	 * This assumes the driver has either guaranteed jobs are already stopped, or that
-> +	 * otherwise it is responsible for keeping any necessary data structures for
-> +	 * in-progress jobs alive even when the free_job() callback is called early (e.g. by
-> +	 * putting them in its own queue or doing its own refcounting).
-> +	 */
-> +	list_for_each_entry_safe(s_job, tmp, &sched->pending_list, list) {
-> +		spin_lock(&sched->job_list_lock);
-> +		list_del_init(&s_job->list);
-> +		spin_unlock(&sched->job_list_lock);
-> +		sched->ops->free_job(s_job);
-> +	}
+>  arch/arm64/configs/defconfig      | 1 -
+>  drivers/soc/renesas/Kconfig       | 7 -------
+>  drivers/soc/renesas/renesas-soc.c | 2 +-
 
-I would stop the kthread first, then delete all jobs without spinlock 
-since nothing else can race against sched_fini?
+I will split this in two patches (defconfig and drivers/soc)...
 
-If you do need the spinlock, It would need to guard list_for_each_entry too.
+> --- a/drivers/soc/renesas/renesas-soc.c
+> +++ b/drivers/soc/renesas/renesas-soc.c
+> @@ -330,7 +330,7 @@ static const struct of_device_id renesas_socs[] __initconst = {
+>  #ifdef CONFIG_ARCH_R8A7794
+>         { .compatible = "renesas,r8a7794",      .data = &soc_rcar_e2 },
+>  #endif
+> -#if defined(CONFIG_ARCH_R8A77950) || defined(CONFIG_ARCH_R8A77951)
+> +#if defined(CONFIG_ARCH_R8A77951)
+>         { .compatible = "renesas,r8a7795",      .data = &soc_rcar_h3 },
 
-> +
-> +	kthread_stop(sched->thread);
->   
->   	for (i = DRM_SCHED_PRIORITY_COUNT - 1; i >= DRM_SCHED_PRIORITY_MIN; i--) {
->   		struct drm_sched_rq *rq = &sched->sched_rq[i];
->
+... and merge this with the section below ...
+
+>  #endif
+>  #ifdef CONFIG_ARCH_R8A77951
+
+... while queuing in renesas-devel for v6.4.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
