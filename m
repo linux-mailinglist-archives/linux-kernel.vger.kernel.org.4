@@ -2,87 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DB76B062D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:41:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E616B0631
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjCHLlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:41:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S230060AbjCHLmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 06:42:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjCHLlf (ORCPT
+        with ESMTP id S230110AbjCHLmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:41:35 -0500
-Received: from ns2.wdyn.eu (ns2.wdyn.eu [IPv6:2a03:4000:40:5b2::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02AD6B9CBC;
-        Wed,  8 Mar 2023 03:41:30 -0800 (PST)
-Message-ID: <cfa5cc30-bf5a-bffd-4c2f-eec8a6522dd5@wetzel-home.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wetzel-home.de;
-        s=wetzel-home; t=1678275688;
-        bh=fBPyXjC2sm40FIorgDXaQx2GZRyrNRK6b9kMkcrZTjk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=eB5cKKkYq+81R/hQcdGmlRcnIjcgFAYDkjclS/5zsam76068g3KHQWbPXipkiGdae
-         cOdXGWcU48zsNFH1NK17P0qhUCnGnuWgJr2O5c7p3M0mDG5QNjX8S0tOMXseh2z7D/
-         FCeV+8oJgJehSy51KlENKcgjsGJ3b+dMZF9xF2mU=
-Date:   Wed, 8 Mar 2023 12:41:26 +0100
+        Wed, 8 Mar 2023 06:42:03 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC08CBD4C0
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 03:41:53 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id u9so64629991edd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 03:41:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112; t=1678275712;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Is/quSvT3TJIPDFEbm6RZXsFk8WJ06IX2kfE6yYnF3I=;
+        b=JoY9f/gwPqh8ulZsXsSOQ87r7ihrjL+906w9miXHgutvS5nyPCiFKX70IK/SUfoLAD
+         7AsGePMghdxXk/wRT85Ed0ildPaEq5dxDhiG467t0qbymo7y97hEIWkipeoGYaKZmTmj
+         iVZa6VHrf/1NS0zoKobiWAHPILBCjjXxE/rfkVpnYtGK1mPhfcFamEB0n1k05ekB/g76
+         65L7yatB5sUWUuU1iz+Yf4mDSVn9mBT5fRUSqQmgfKjMEmaZmW4PDhppk7jQGlOPj0bD
+         Ix2tPXz4k7s+tbki526dAWHYuvF74O3H2unqXz/RN5d9AF/UDS2IPqEweJve7ExeFNKg
+         3tFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678275712;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Is/quSvT3TJIPDFEbm6RZXsFk8WJ06IX2kfE6yYnF3I=;
+        b=5LNcfGm8pnrBHfI0BfC8T+IU81C68E2/j3Mwf8QybNKWhsEFg/2vNHl3FMltQtVi2O
+         3L4soVc2H/9sArNyKDSCsS/sMIBLykRZAKysNTHPCe0qfM9F2zkKNbT/x3e0DiMLhBvo
+         DKyiftg/47857Zm4bl5ptLeKYXHR26q4Xdq8qhYc8fBL5viCuJk2koACFBgU3Gfnep5H
+         0kWx1ZfGz7/BFFQpBmNbaSHbD3rXTtmfoYLQHetONrD4MURUGjqwwV5MRiE9VYTkpxi5
+         mDUkYjHpxCP74+SLLKxqjhd5zwA6sOYbXhpVuUPYiTGqia1LmivDpDjDod4NInL6X5G3
+         Yxjw==
+X-Gm-Message-State: AO0yUKUXA6eSv3eUHTpA6uYf3LVGDx/M0T4ovW3tOQ/OT+5KwkkBYJMs
+        kW1xHUFspDBMsbM0d0Vy/33uYg==
+X-Google-Smtp-Source: AK7set/1uwA+p1HHny45n37ykgfDDSeAWNPouc1UdQ7cJxYi4nqXIkMr1mgaN97QuJjYiLj4BlfjJw==
+X-Received: by 2002:a17:906:1c13:b0:896:427b:148 with SMTP id k19-20020a1709061c1300b00896427b0148mr16362789ejg.1.1678275712179;
+        Wed, 08 Mar 2023 03:41:52 -0800 (PST)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id y7-20020a170906470700b008ef13127b5fsm7380758ejq.29.2023.03.08.03.41.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 03:41:51 -0800 (PST)
+Date:   Wed, 8 Mar 2023 12:41:49 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, idosch@mellanox.com,
+        danieller@mellanox.com, petrm@mellanox.com, shuah@kernel.org,
+        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net
+Subject: Re: [PATCHv2] selftests: net: devlink_port_split.py: skip test if no
+ suitable device available
+Message-ID: <ZAh0fY4XoNcLTIOI@nanopsycho>
+References: <20230307150030.527726-1-po-hsu.lin@canonical.com>
+ <ZAhV8nKuLVAQHQGl@nanopsycho>
+ <CAMy_GT92sg4_JLPHvRpH542DPLbxOEYYoCMa2cnET1g8bz_R9Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [Regression] rt2800usb - Wifi performance issues and connection
- drops
-Content-Language: en-US
-To:     Felix Fietkau <nbd@nbd.name>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Mann <rauchwolke@gmx.net>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Helmut Schaa <helmut.schaa@googlemail.com>,
-        Johannes Berg <johannes.berg@intel.com>
-References: <b8efebc6-4399-d0b8-b2a0-66843314616b@leemhuis.info>
- <5a7cd098-1d83-6297-e802-ce998c8ec116@leemhuis.info>
- <6025e17e-4c29-6d36-6b9c-2fec543b21c4@wetzel-home.de>
- <debc7fe9-204d-63a7-aa61-91b20a46f385@wetzel-home.de>
- <4a02173f-3a60-0a7e-8962-3778e6c55bf3@nbd.name>
-From:   Alexander Wetzel <alexander@wetzel-home.de>
-In-Reply-To: <4a02173f-3a60-0a7e-8962-3778e6c55bf3@nbd.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMy_GT92sg4_JLPHvRpH542DPLbxOEYYoCMa2cnET1g8bz_R9Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.03.23 08:52, Felix Fietkau wrote:
+Wed, Mar 08, 2023 at 11:21:57AM CET, po-hsu.lin@canonical.com wrote:
+>On Wed, Mar 8, 2023 at 5:31 PM Jiri Pirko <jiri@resnulli.us> wrote:
+>>
+>> Tue, Mar 07, 2023 at 04:00:30PM CET, po-hsu.lin@canonical.com wrote:
+>> >The `devlink -j port show` command output may not contain the "flavour"
+>> >key, an example from s390x LPAR with Ubuntu 22.10 (5.19.0-37-generic),
+>> >iproute2-5.15.0:
+>> >  {"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},
+>> >           "pci/0001:00:00.0/2":{"type":"eth","netdev":"ens301d1"},
+>> >           "pci/0002:00:00.0/1":{"type":"eth","netdev":"ens317"},
+>> >           "pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d1"}}}
+>>
+>> As Jakub wrote, this is odd. Could you debug if kernel sends the flavour
+>> attr and if not why? Also, could you try with most recent kernel?
+>
+>I did a quick check on another s390x LPAR instance which is running
+>with Ubuntu 23.04 (6.1.0-16-generic) iproute2-6.1.0, there is still no
+>"flavour" attribute.
+>$ devlink port show
+>pci/0001:00:00.0/1: type eth netdev ens301
+>pci/0001:00:00.0/2: type eth netdev ens301d1
+>pci/0002:00:00.0/1: type eth netdev ens317
+>pci/0002:00:00.0/2: type eth netdev ens317d1
+>
+>The behaviour didn't change with iproute2 built from source [1]
 
->> I'm also planning to provide some more debug patches, to figuring out
->> which part of commit 4444bc2116ae ("wifi: mac80211: Proper mark iTXQs
->> for resumption") fixes the issue for you. Assuming my understanding
->> above is correct the patch should not really fix/break anything for
->> you...With the findings above I would have expected your git bisec to
->> identify commit a790cc3a4fad ("wifi: mac80211: add wake_tx_queue
->> callback to drivers") as the first broken commit...
-> I can't point to any specific series of events where it would go wrong, 
-> but I suspect that the problem might be the fact that you're doing tx 
-> scheduling from within ieee80211_handle_wake_tx_queue. I don't see how 
-> it's properly protected from potentially being called on different CPUs 
-> concurrently.
-> 
-> Back when I was debugging some iTXQ issues in mt76, I also had problems 
-> when tx scheduling could happen from multiple places. My solution was to 
-> have a single worker thread that handles tx, which is scheduled from the 
-> wake_tx_queue op.
-> Maybe you could do something similar in mac80211 for non-iTXQ drivers.
-> 
-
-I think it's already doing all of that:
-ieee80211_handle_wake_tx_queue() is the mac80211 implementation for the 
-wake_tx_queue op. The drivers without native iTXQ support simply link it 
-to this handler.
-
-Alexander
+Could you paste output of "devlink dev info"?
+Looks like something might be wrong in the kernel devlink/driver code.
 
 
