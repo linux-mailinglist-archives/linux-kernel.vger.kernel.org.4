@@ -2,84 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFA76B1474
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A05D06B1477
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjCHVsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 16:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S230057AbjCHVsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 16:48:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjCHVsK (ORCPT
+        with ESMTP id S229930AbjCHVse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 16:48:10 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E1324118;
-        Wed,  8 Mar 2023 13:48:06 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PX5XK6GZCz4xD5;
-        Thu,  9 Mar 2023 08:48:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678312082;
-        bh=96oXFZtdv5Ea+7TMA2QhUHPOMdIA3XHD6bbDCtrW9wk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KzgoLwoaA4X/ezQ7hKHtNQAbqvNYC2o7j/ik905GJUolZRmBAvY6ozzS1OJMsCqie
-         qGkV0UdeMZSMaI+MQH1UEJN9tJZw2zMYRtsT4C0MwnfIMvGyJDaiO9tU3HIxkxFty2
-         Wua87O1n2ACZ7mJ5nW1eCzIVZryx4hhrXxqI2rliQDgqtenvIcAZRAGZTU8Fd/2eC/
-         S2CF2u2YE2wN5FVv/CiAUaYkpT0KthSjumoH1lowLzWmNqEpx+Z8OUdmyPeqNU1aM3
-         OBgZJ9IeNSSKNaP9aJQosZZjjJqpHpz/kZrmWagD9TqHIvWRsdHYaxgoylsElnB8q9
-         +HWiKulDgirPA==
-Date:   Thu, 9 Mar 2023 08:48:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the file-locks tree
-Message-ID: <20230309084800.58ec0343@canb.auug.org.au>
+        Wed, 8 Mar 2023 16:48:34 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8C9509A1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:48:29 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-53916ab0c6bso329561817b3.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 13:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678312108;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r1Ycd9MmkZ2o31hnxqTTUh8Ie49xD0xPTPsqNUPpbcE=;
+        b=Xv/o7k0Va9ra9mE73WP4AO/knHRACFl8S/3UJgsNtwkCJf4p/6EnG7TSDqfWb5S2ET
+         QPTgv1Ack5u+Ior3itotdTnvjFht+PrMP/DvL3wcr087JMTqNVE+O9WDOFucCb4XyM7Q
+         hptF+lMH7sS86/kenHZFjyYaXBphhsMtH7rrRI6v/F5opojCYr5tDerr+FJtlnZOqXri
+         71LOH+W/uXXYopEz3FmDqnk2nZTqWkv79lesqYnr+vK0TNNYawdqW+pT8vp2Gx43Pyfi
+         k3ueFZmbEacvw365C7gte1UCMA5m58UdlGLKHJ10PNw7Lg4k6eM21e3WQlSTv3fiSQSc
+         e+vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678312108;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r1Ycd9MmkZ2o31hnxqTTUh8Ie49xD0xPTPsqNUPpbcE=;
+        b=vBuVF3+ymxgzshYPBo0G3AdV+64KXdgkxRKkwFPttvxDN8KeYGu1itm26cBMkfzwWi
+         h4eHWorNf6w87Ib8koTzNWsTHBK7/jBeyF4N/CR7/HAouQ7poJkaQJA/IOumEch0YODz
+         dOa9oa55DYfr8LreqnTfwkD5f+qfiBWiYmyNUwLS6xjiQ7bgPVOVMLwoM2QSsDsn6Tuo
+         PKAXBnJltAlK4ArSYaa1NvFhWxEUdZ1h6z+OFQmeLm+e8DHNQ3Jp4uMmIlPXVtMMMyDn
+         hcjD75S680XEtiGinMs14VbHENZLt+RA8krYYSCmjTLyEy0+GZzGs57StzjlgH88FUTw
+         Mb1A==
+X-Gm-Message-State: AO0yUKVyhFASrtfLy9HTR+K5bgxS3gzq92RxQKJpQ6xWmbfFPUrhQSq1
+        HX5fmX57Q8HUCYaD6w9f19TDrt857Me2Dxyj6l/C1w==
+X-Google-Smtp-Source: AK7set/wE7ucXTrmTPRWG6Tw0KsQfg4nawWkRLd5ehVt2euhHktMPD4UxK14To9kK895Sfm4gvFpqlYTabtJ0vdBjOM=
+X-Received: by 2002:a81:af1f:0:b0:536:4ad1:f71 with SMTP id
+ n31-20020a81af1f000000b005364ad10f71mr11945676ywh.9.1678312108521; Wed, 08
+ Mar 2023 13:48:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OXDO3ixPnH/OUu0MpCCc/FU";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230215-immutable-chips-v2-0-d6b0e3f2d991@linaro.org>
+ <20230215-immutable-chips-v2-3-d6b0e3f2d991@linaro.org> <CACPK8Xc7ekzM9oeR7+fYuK8RfZ4jA8gpH=nUJ-OTp0XZoKwzHQ@mail.gmail.com>
+ <861qlzz89j.wl-maz@kernel.org>
+In-Reply-To: <861qlzz89j.wl-maz@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 8 Mar 2023 22:48:16 +0100
+Message-ID: <CACRpkdZ_jEd5hZDGaTd+4Ns7o+oMiAh=pED==WemVCnC-csNqg@mail.gmail.com>
+Subject: Re: [PATCH v2 03/16] gpio: aspeed: Convert to immutable irq_chip
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Joel Stanley <joel@jms.id.au>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andrew Jeffery <andrew@aj.id.au>, Alban Bedel <albeu@free.fr>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Jay Fang <f.fangjian@huawei.com>,
+        Daniel Palmer <daniel@thingy.jp>,
+        Romain Perier <romain.perier@gmail.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-omap@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/OXDO3ixPnH/OUu0MpCCc/FU
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Mar 8, 2023 at 2:23=E2=80=AFPM Marc Zyngier <maz@kernel.org> wrote:
 
-Hi all,
+> > >                 girq->chip->name =3D dev_name(&pdev->dev);
+>
+> And this assignment will probably explode if, as expected, 'chip' is
+> const and cannot be written to.
+>
+> I obviously didn't spot this when I first looked at these patches.
 
-Commit
+Dang, I'll fix, then I will go over the rest of the patches
+and make sure I didn't miss any other of these name assignments.
 
-  4cbb75d0fdc9 ("fs/locks: Remove redundant assignment to cmd")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/OXDO3ixPnH/OUu0MpCCc/FU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQJApAACgkQAVBC80lX
-0GwBnAf/Qzj3OBRGpWjnSAi91wjIh28FUF5BnvJRpie0p2K2YQrfF/feCLwxHgPs
-LNUFV5gXhfhV2vH+0JAOEIK8HlZ7GphU93OgD37mYs1Jxab/mQ2HSIs1jOsVlPTB
-Oz6TD+mMLbK9yfo3Dzn7LNvnbzhI8ua5HWsSHSed3OuHVVoRZFy6Gi1KFQqjquq3
-lfF7XIJQqo2jiBdGjRW1ZO1BJFGy9Lkmpat+nB2qfOk+AqEdkPFvu2GESRR+5FFb
-kDzgSFRWqBSXESTEpM0/Ev2bPJhJvtUT28TQv2qj45tlfJ89ObFvkhdnOu0ueRc5
-0cAEYMP2H24jTecAH+cynIYsbhVWgg==
-=xnp3
------END PGP SIGNATURE-----
-
---Sig_/OXDO3ixPnH/OUu0MpCCc/FU--
+Thanks,
+Linus Walleij
