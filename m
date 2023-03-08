@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6186B0B38
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A26DC6B0B3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbjCHObE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:31:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
+        id S231646AbjCHObe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:31:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232059AbjCHOam (ORCPT
+        with ESMTP id S231997AbjCHObQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:30:42 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F30F46155;
-        Wed,  8 Mar 2023 06:30:16 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id da10so66603742edb.3;
-        Wed, 08 Mar 2023 06:30:16 -0800 (PST)
+        Wed, 8 Mar 2023 09:31:16 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C515C8090
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:31:05 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id x3so66439658edb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 06:31:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678285812;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iAN9+ZOptTrJHDc9J/pvGJu6tT88Otl4KlrOdjgdjxk=;
-        b=hoUMihzIGkavLUfhJznY22uHPF4Tmn2x6jn1DZ4t2jCt5kPNMFZ4w/NWBvzVNNYpI4
-         axxFXa6Jo99KT9a2FY0/ce1qWsH3hGkunyyhZBaIdhI4MYxkCezFw74L++oc8Enu7qti
-         ExRQmHICUggumz0LfWomrQq3NYcd5mM870qhI4IG/RKSOOnok7fxfar2MrWyJLe04AOd
-         aT1VxvYd6y7Q1hNdKfI7LYk/cWs/F+hgLC++KpbNUfFkS7797mVj2XtGH0FvFbGu2J6r
-         BHkic0KgQoF3UEEEuhFMyCsxKsRsuX7K7Y7ghNMdA260bAagUF0b1B7znZpQAYf2Iij0
-         JKPw==
+        d=gmail.com; s=20210112; t=1678285863;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1GASPKoO+e28mJsssh+sY4z5RAj0iPshrV7WaXjS/o0=;
+        b=aoHbvW52RSVqzZQGOWRZtqYgG2FUtfYW+2htUSTTUCSv/V3ESPj+X5QHFGJ2mI4eE2
+         yAGC8MvskQdnoMBKMHO/7hwkV/1VeXuJHEzwnFB5EZs2aPlhjIXMtI197LtKi+vAZHmG
+         kfIDMbZx/tpbNlghynKLKBE3zZ0yANiW3YhPBHOJ5v81EhmVyQIRqyj/UngmaDOUWNmP
+         U8md3vNC7paxN70GU1Jd+9MEDTXOkjv/I0Tsq1/vG7oeaEBF7TSSkH9IUEb1yXutftEU
+         WgaRty8BBIetyj5L70ODOOM8I61VeOtOP469PaDpCXqXu9qO6Y7wEkZa6x6kueLc7s7o
+         HaPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678285812;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iAN9+ZOptTrJHDc9J/pvGJu6tT88Otl4KlrOdjgdjxk=;
-        b=ZL/aAjHlJJfDLOu4UE1c+r5C56UvHdXohwcf1RoHxhVToLTN/q3BtAEuscy8psfzRj
-         fK0vdbCzEB25hLYdjLNle9T8bSUPpa/7oq6//SNabnTQEBlnayyOya5OCwUKCcw5LnT2
-         Wjto6FZC6zNn9foe4RDekn67y5cpzbghk6u4+scN1vjBgtDLbITpLNtka9TLZutsL2qv
-         63M+BYwDyYxwf6zco1MLAN2DEVW0eh5bji5KOb+AIzjeQS909QwOPoi/kzbl9rCqTaV/
-         1n/4dR1hChSEiak5cIUkTalhKgvAOwCGIjYwc7dpqlAEUMvsgnSIGbQA9RLOzuP7hHlT
-         gADw==
-X-Gm-Message-State: AO0yUKUOdz2grhsSydcJIZRjeMbL5X4Bs86Hlr5eVkQpKQBHImkwnXzH
-        vD86mDqnKpBvQkkiL8T7K+lZGxdLCvF/NA==
-X-Google-Smtp-Source: AK7set8JUDC6Op30t1qpJ524iWF7urf8TzvMEmLBYMe7KUjZDDwSBVZ/x3DhwnQ7CK28oP7ZxktvzQ==
-X-Received: by 2002:a17:906:a882:b0:8aa:a802:adcd with SMTP id ha2-20020a170906a88200b008aaa802adcdmr16525524ejb.30.1678285812312;
-        Wed, 08 Mar 2023 06:30:12 -0800 (PST)
-Received: from felia.fritz.box ([2a02:810d:2a40:1104:c4be:f7db:77fd:b9e5])
-        by smtp.gmail.com with ESMTPSA id o22-20020a509b16000000b004c4eed3fe20sm8289678edi.5.2023.03.08.06.30.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 06:30:12 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     John Johansen <john.johansen@canonical.com>,
-        John Johansen <john@apparmor.net>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: repair a malformed T: entry in APPARMOR SECURITY MODULE
-Date:   Wed,  8 Mar 2023 15:30:09 +0100
-Message-Id: <20230308143009.4039-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1678285863;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1GASPKoO+e28mJsssh+sY4z5RAj0iPshrV7WaXjS/o0=;
+        b=AA/Qlw9/FnMpXd5aqg4ty/xjMZ27VSJ7JawezwOhYQjNJdRhSxGV/x2ysJa+tIGO9Q
+         mz1H96HgWv7sbdDrzEKOq6b1NSbmgPI2z7VHa7Xd+YR+atmfb9pMD0cPnKXTv/5anTDj
+         UZl09wec73+6Quexm7VPGcwf/SwF9kMxXyDm2xhSHPs7MTxtPgWCsYenSfhfTJN4wXwI
+         CAk05UEsmLkrG8NGmQvjuk3B6aI6zBkdyxOu3Gkr3Auodj1xYCAzp1JU1IVAysKnH9OG
+         wIWEqzt+GGy4rqDJ7/hW6iP2mq8+PppmrgqRBwtce0toqoVThhYpSLcb3TbGKLM5pq3T
+         Blyw==
+X-Gm-Message-State: AO0yUKUnn+RTIjH2DgdBMWHUEjp9/MvalC2+/lf5qymBPNeAtxT8BYbL
+        5cRc42IWYB5IBOakt99l9fWqNgV2t0z74NOUmpA=
+X-Google-Smtp-Source: AK7set8+ZMtCvOtpVjTQ74cyDX4LxBNUb6xx0q5HojwWg9bvF2wvim1AuYfZXfBZI486UbxeGcPrHCIap+0QmhsNyeo=
+X-Received: by 2002:a50:d60d:0:b0:4bc:edde:14ff with SMTP id
+ x13-20020a50d60d000000b004bcedde14ffmr9766773edi.0.1678285863314; Wed, 08 Mar
+ 2023 06:31:03 -0800 (PST)
+MIME-Version: 1.0
+Sender: robsonplazabf@gmail.com
+Received: by 2002:a05:6402:d5e:b0:4ec:747:92c1 with HTTP; Wed, 8 Mar 2023
+ 06:31:02 -0800 (PST)
+From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
+Date:   Wed, 8 Mar 2023 15:31:02 +0100
+X-Google-Sender-Auth: z9Mg4rFZ56GRxHFG67r8us5HpP0
+Message-ID: <CAHO9RK_0RW8xnxy3dtkCFKq2k16skY=iMWpfqnvP2mLJQ6gm=g@mail.gmail.com>
+Subject: =?UTF-8?B?5rOo5oSP77ya5Y+X55uK5Lq644CC?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The T: entries shall be composed of a SCM tree type (git, hg, quilt, stgit
-or topgit) and location.
-
-Add the SCM tree type to the T: entry.
-
-Fixes: 7b4bd1274d35 ("apparmor: Update MAINTAINERS file with the lastest information")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4c293074040b..2091b15ae695 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1490,7 +1490,7 @@ W:	apparmor.net
- B:	https://gitlab.com/apparmor/apparmor-kernel
- C:	irc://irc.oftc.net/apparmor
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor
--T:	https://gitlab.com/apparmor/apparmor-kernel.git
-+T:	git https://gitlab.com/apparmor/apparmor-kernel.git
- F:	Documentation/admin-guide/LSM/apparmor.rst
- F:	security/apparmor/
- 
--- 
-2.17.1
-
+5bCK5pWs55qE5YWI55SfL+Wls+Wjq++8jA0KDQrlm57lpI3vvJrogZTlkIjlm73oib7mu4vnl4Xl
+kozmhI/or4borqHliJLjgIIg6KKr6aqX55qE5Y+X5a6z6ICF5pSv5LuYIDIsNTAwLDAwMC4wMCDn
+vo7lhYPnmoTotZTlgb/ph5HvvIjlj4LogIPlj7fvvJrku6PnoIHvvJo2MzYzODM277yJDQoNCuiw
+qOaPkOivt+aCqOazqOaEj++8jOmatuWxnuS6juWkluWbvei1hOS6p+aOp+WItuWKnuWFrOWupCAo
+T0ZBQykNCueahOS4lueVjOmTtuihjOW3suWvueacieWFs+WbveWutueahOaUv+W6nOWunuaWveWI
+tuijge+8jOS7pei1lOWBv+iviOmql+WPl+Wus+iAhe+8jOWMheaLrOmCo+S6m+WcqOasp+a0suWb
+oOS4jeaIkOWKn+eahOWQiOWQjOWSjOS6pOaYk+iAjOiSmeWPl+aNn+WkseeahOS6uu+8jCDpnZ7m
+tLLlkozkuprmtLLlm73lrrbjgIINCuavj+WQjeWPl+Wus+iAheWwhuiOt+W+lyAyNTAg5LiH576O
+5YWD55qE6LWU5YG/77yM5Lul56Gu5L+d5q2j5LmJ5b6X5Yiw5Ly45byg44CCDQoNCuS4gOS6m+as
+p+a0suOAgemdnua0suWSjOS6mua0suWbveWutuS7peWPiuS4lueVjOWQhOWcsOaMgee7reWtmOWc
+qOeahOWkp+mHj+iviOmql+aKpeWRiuacieW/heimgei/meagt+WBmuOAgiDmnInmiqXpgZPnp7Dv
+vIzlj5flrrPogIXlt7LlkJHor4jpqpfogIXmjZ/lpLHkuobmlbDljYHkur/nvo7lhYPjgIINCg0K
+5L2G5piv77yM5oKo55qE6K+m57uG5L+h5oGv5piv5LuO5pyA6L+R6KKr5Zu96ZmF5YiR6K2m57uE
+57uH44CB6IGU6YKm6LCD5p+l5bGA5ZKM5b2T5Zyw5a6J5YWo6YOo6Zeo57uE5oiQ55qE6IGU5ZCI
+5a6J5YWo5Lq65ZGY6YCu5o2V55qE5LiA5ZCN6aqX5a2Q6YKj6YeM6I635b6X55qE44CCDQrogofk
+uovogIXmib/orqTov5jmnInlhbbku5blkIzkvJnkvZzmoYjvvIzlronlhajkurrlkZjmraPlnKjo
+v73ouKrku5bku6zvvIzlj6/og73kvJrpgK7mjZXku5bku6zjgIIg5Zug5q2k77yM5Zyo5q2k5bu6
+6K6u5oKo5a+56L+Z5Lqb5L+h5oGv5L+d5a+G77yM55u05Yiw5bCG5omA5pyJ6aqX5a2Q6YO96YCu
+5o2V44CCDQoNCuWwhuaCqOeahOS7mOasvuWPt+eggei9rOWPkeWIsOS4i+mdoueahOmTtuihjOeU
+teWtkOmCruS7tuW4kOaItw0KDQrmgqjnmoTku5jmrL7lj4LogIPlj7cgLSA2MzYzODM277yMDQrl
+r4bnoIHlj7fvvJowMDY3ODbvvIwNCuS4quS6uuWvhuegge+8mjE3ODcNCuaCqOeahOWllueKtuS7
+mOasvue8luWPt++8mjA1ODcy77yMDQrlj5HooYznvJblj7fvvJoxMTM077ybDQrmmpflj7fvvJpU
+QktUQTI4DQoNCumHjeaWsOehruiupO+8mw0K5L2g55qE5ZCN5a2X77yaIHwNCuWcsOWdgO+8miB8
+DQrmiYvmnLrvvJogfA0K5Lyg55yf77yaIHwNCuaVsOmHj++8miB8DQoNCumcgOimgeaCqOeahOWN
+s+aXtuWbnuWkjSBVQkEg6ZO26KGMDQrogZTns7vkurrvvJpNcnMgUkFQQUVMIEdPRFdJTiDlm73p
+mYXpg6jkuLvku7sNCuWuoeiuoeWNleS9jUFUTeaUr+S7mOS4reW/g++8jA0K55S15a2Q6YKu5Lu2
+77yadW5pdGVkYmFua29mLWFtZXJpY2FAZmluYW5jaWVyLmNvbQ0K55S16K+d77yaKzEoNTE4KTQx
+NDgwMDQNCg0K6Zeu5YCZ44CCDQrlpaXlkInlsJTCt+W3tOeJueWkq+S6ug0K
