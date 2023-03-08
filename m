@@ -2,231 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E6B6B0729
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:33:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63EF06B072C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjCHMdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 07:33:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
+        id S229984AbjCHMed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 07:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjCHMdq (ORCPT
+        with ESMTP id S230123AbjCHMea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:33:46 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD075B4827
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:33:43 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id f18so21142809lfa.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 04:33:43 -0800 (PST)
+        Wed, 8 Mar 2023 07:34:30 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2ED2A98C
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:34:28 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id o12so65032757edb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 04:34:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678278822;
+        d=linaro.org; s=google; t=1678278867;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vhaVVI8Pk6jsBYMTTZwOYmA0OkqSfPfRqSJgsvlWR0A=;
-        b=uaLLOe+LSkgl3SEz4u/FHqZtFMo4rWuPMdrHzYTd1fSJjRlIRdjrVXVMMd5DhI4bfn
-         MNUrAulMgaGghPavb9xJHYh4XP5Sl2xEXaIkrxET2OinzH4xrifP0V/zwmmh5g5mhxRz
-         XHpLPDYGArYU8v4h2aZYX6L14h0MHZVXzUv8R97xLPKV+e4K/7Y/k1cYDOHOHhhinXG3
-         N9O0XPycgqrZqD0xSlrFi+nrt2ZNkegwGCaHH50VBL4iM3UTbAp4FBxnW70Eh7e54X3g
-         Th56Ua2oaeiWghC3fnFXtF/XLP+s+VYRFN02l6rizYhTj5/ULEB9o6af9c0thvd9v9Ru
-         S6Mw==
+        bh=lHnWVWK4WJysT8nTvpm+ezeTdv9yWzInP/ANaSJalnE=;
+        b=VguaXxgdrVNJ6ewt6Lcu2U5zfjODDwprmRErFl1yVDEs6YJM6ae5ih+FlbGaI6vpOg
+         BvVdY9I+OBJuGy9IppdW00Ayq1m5JTUzCv5yqvAw5WOCkgYMNFQRN3lenLMSzl2YV7nq
+         gx9pncpbeAaOTImFfOQlXekji0AzH/w0ofn/cXAeinaQk0f2Ska3rM4S0fiyQrkshql2
+         yumZb3jzUA2bRxUFUPgrjXDa3bFHkYjfSpup//WaDLB+zlIeFWTFqniUNYldCxdZ77Iu
+         ZgWwkqECd7cPdXLgugOSNZTtwPtLuaqASBNfS0bcFrr7JXzIPFwgtc06gODGjsh1PO/a
+         ZaJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678278822;
+        d=1e100.net; s=20210112; t=1678278867;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vhaVVI8Pk6jsBYMTTZwOYmA0OkqSfPfRqSJgsvlWR0A=;
-        b=yzTpmD1hlI6POVUDIjlSi8bmRsmwqqRTGKhlAKBojWckJx88SW5JoO1eWw4T14Gbnl
-         +ref9+pSs7DUvggiaa9mV6XYPoh9ohA0DurgTB5rdm3fLB4YY93rUYVIeuPiinU94bt3
-         jZnh+nfNpwwGfST/byEXAN3hjoLKrjyCCgMuDNw5GspiIA84JPb0vute3IFneHdlFYyV
-         fRUho3U1ngw+q0bQvd4zXUhll7PLlrCUEmdKjmcUih5KDfNT571JSRzX5EK+/tWG3zcQ
-         nkRklm2slelhUYzzCx51CZ/0d47oggk8D8csN+3OmZnFp8cyrziKVAocvwB5xJIUB5N5
-         OO7w==
-X-Gm-Message-State: AO0yUKUQVSEwD2KmhC8D5ndq5qntrOYSmn7xF5NI12y803TXF0U8g20K
-        GncSqhUwLdkhF/gBXF6XPRcPlw==
-X-Google-Smtp-Source: AK7set9ZKLPMf6pQVimofwO7qW0KFvn3tzJdxJ0trKBorpusBuJT3MCj3un+UlZDWKJyVhG5QUlPcQ==
-X-Received: by 2002:ac2:44d7:0:b0:4d8:68f5:747b with SMTP id d23-20020ac244d7000000b004d868f5747bmr4745902lfm.37.1678278821996;
-        Wed, 08 Mar 2023 04:33:41 -0800 (PST)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id l7-20020ac24a87000000b004b5ab5e904esm2349754lfp.306.2023.03.08.04.33.40
+        bh=lHnWVWK4WJysT8nTvpm+ezeTdv9yWzInP/ANaSJalnE=;
+        b=g40VtuoNkfpAsYZUPsrN0wwbv7bhRJ6q4yRjHfdhDgC4kp3e7EBgzaQM+hl37hCmDS
+         gW1tG10pzPuNxvv+CaBGEuO5CTYZoT3NUH/h0G95eHD46whaJ3l7XP8RQ+ug9pkvEHmz
+         cP6lIAhCBa2v8WR6fQnE4lWrtsGJCIAs3ppfWfu5sUvZGNm4gU5WruBoQKvLtabbWSqE
+         sqYmvR6q7KXZ95suQuvkYUVE2eKJqj+iu1BgRVqavekCLCMFHXRBmXryepGWfq6D0hdG
+         yVcaOS0YY2wTuHbq3S4nY7g+CB+ybGUOpeVzB6/41zLPeiMkREzvwUDzWcmrUE70RfgU
+         Dx6Q==
+X-Gm-Message-State: AO0yUKWiM8C/97AtLGhwkusFg5cBDChJYOPzgpxbbwdMVRxaCcsUi87d
+        iq+lW7bo3q+cgQ53QpWd/u+m7Q==
+X-Google-Smtp-Source: AK7set+OkhR9+9zDqw1AYMDA4XeRaaNxz/Gcl9uZU/AQnE6yeWfL8seN9zhdzyFWr7q3YqFl/tr7ng==
+X-Received: by 2002:aa7:c14e:0:b0:4ac:d2cd:81c7 with SMTP id r14-20020aa7c14e000000b004acd2cd81c7mr18034215edp.5.1678278867282;
+        Wed, 08 Mar 2023 04:34:27 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:ff33:9b14:bdd2:a3da? ([2a02:810d:15c0:828:ff33:9b14:bdd2:a3da])
+        by smtp.gmail.com with ESMTPSA id u25-20020a50a419000000b004bd6e3ed196sm8107904edb.86.2023.03.08.04.34.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 04:33:41 -0800 (PST)
-Message-ID: <1cbe9e29-13a4-574e-6d8c-b2506e7a36b3@linaro.org>
-Date:   Wed, 8 Mar 2023 13:33:39 +0100
+        Wed, 08 Mar 2023 04:34:26 -0800 (PST)
+Message-ID: <dbbe3cd2-3329-d267-338b-8e513209ddcd@linaro.org>
+Date:   Wed, 8 Mar 2023 13:34:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v3 2/2] drm/panel: Add driver for Novatek NT36523
+Subject: Re: [PATCH net-next v2] dt-bindings: net: ti: k3-am654-cpsw-nuss:
+ Document Serdes PHY
 Content-Language: en-US
-To:     Jianhua Lu <lujianhua000@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230308043706.16318-1-lujianhua000@gmail.com>
- <20230308043706.16318-2-lujianhua000@gmail.com>
- <66d293a8-f850-cb80-0c83-2ebf7e29d0c2@linaro.org> <ZAh3MSpQ30YyPAVe@Gentoo>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZAh3MSpQ30YyPAVe@Gentoo>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux@armlinux.org.uk, pabeni@redhat.com, robh+dt@kernel.org,
+        nsekhar@ti.com, rogerq@kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srk@ti.com
+References: <20230308051835.276552-1-s-vadapalli@ti.com>
+ <1ffed720-322c-fa73-1160-5fd73ce3c7c2@linaro.org>
+ <7b6e8131-8e5b-88bc-69f7-b737c0c35bb6@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7b6e8131-8e5b-88bc-69f7-b737c0c35bb6@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8.03.2023 12:53, Jianhua Lu wrote:
-> On Wed, Mar 08, 2023 at 12:13:53PM +0100, Konrad Dybcio wrote:
->>
->>
->> On 8.03.2023 05:37, Jianhua Lu wrote:
->>> Add a driver for panels using the Novatek NT36523 display driver IC.
->>>
->>> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
->>> ---
->>> Changes in v3:
->>>   - Refactor source code
->>>
->>> Changes in v2:
->>>   - Refactor and clean up source code
->> This is a veeery vague changelog, akin to "change patch", please
->> be more specific the next time around.
->>
-> Acked, thanks
->>
->> [...]
->>
->>> +#define DSI_NUM_MIN 1
->>> +
->>> +/* Macro modified from mipi_dual_dsi_dcs_write_seq */
->>> +#define mipi_dual_dsi_dcs_write_seq(dsi, cmd, seq...)           	   \
->>> +	do {                                                               \
->>> +		static const u8 d[] = { cmd, seq };                        \
->>> +		int i, ret;                                                \
->>> +		for (i = 0; i < ARRAY_SIZE(dsi); i++) {                    \
->>> +			ret = mipi_dsi_dcs_write_buffer(dsi[i], d, ARRAY_SIZE(d));    \
->>> +			if (ret < 0) {                                             \
->>> +				dev_err_ratelimited(                               \
->>> +					&dsi[i]->dev, "sending command %#02x failed: %d\n", \
->>> +					cmd, ret);                                 \
->>> +				return ret;                                        \
->>> +			}                                                          \
->>> +		}                                                                  \
->>> +	} while (0)
->>> +
->> This should definitely be put in a common file..
-> Acked.
->>
->>
->>> +static const struct drm_display_mode elish_boe_mode = {
->>> +	/* Current max freqency is 104HZ, TODO 120HZ */
->> Is it a DPU issue, or does the panel not work correctly when you
->> jack up the clocks? Did you use the correct init sequence and porches
->> for the 120Hz mode, including the mode switch command set?
->>
-> panel will turn into bluescreen when freqency overs 104HZ, downstream
-> seems use a dsi-cphy enhance feature to make it working. Init sequence
-> and porches are right
-Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml
-
-phy-type:
-    description: D-PHY (default) or C-PHY mode
-    enum: [ 10, 11 ]
-    default: 10
-
-try setting that to 11 under your DSI PHYs (or one? not sure).
-
-Konrad
+On 08/03/2023 09:38, Siddharth Vadapalli wrote:
+> Hello Krzysztof,
 > 
->> Could you also implement a 60 (or whatever other value is also
->> implemented downstream) Hz mode?
-> I will try to implement it.
->>
->>> +	.clock = (1600 + 60 + 8 + 60) * (2560 + 26 + 4 + 168) * 104 / 1000,
->>> +	.hdisplay = 1600,
->>> +	.hsync_start = 1600 + 60,
->>> +	.hsync_end = 1600 + 60 + 8,
->>> +	.htotal = 1600 + 60 + 8 + 60,
->>> +	.vdisplay = 2560,
->>> +	.vsync_start = 2560 + 26,
->>> +	.vsync_end = 2560 + 26 + 4,
->>> +	.vtotal = 2560 + 26 + 4 + 168,
->>> +};
+> On 08/03/23 14:04, Krzysztof Kozlowski wrote:
+>> On 08/03/2023 06:18, Siddharth Vadapalli wrote:
+>>> Update bindings to include Serdes PHY as an optional PHY, in addition to
+>>> the existing CPSW MAC's PHY. The CPSW MAC's PHY is required while the
+>>> Serdes PHY is optional. The Serdes PHY handle has to be provided only
+>>> when the Serdes is being configured in a Single-Link protocol. Using the
+>>> name "serdes-phy" to represent the Serdes PHY handle, the am65-cpsw-nuss
+>>> driver can obtain the Serdes PHY and request the Serdes to be
+>>> configured.
+>>>
+>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>>> ---
+>>>
+>>> Hello,
+>>>
+>>> This patch corresponds to the Serdes PHY bindings that were missed out in
+>>> the series at:
+>>> https://lore.kernel.org/r/20230104103432.1126403-1-s-vadapalli@ti.com/
+>>> This was pointed out at:
+>>> https://lore.kernel.org/r/CAMuHMdW5atq-FuLEL3htuE3t2uO86anLL3zeY7n1RqqMP_rH1g@mail.gmail.com/
+>>>
+>>> Changes from v1:
+>>> 1. Describe phys property with minItems, items and description.
+>>> 2. Use minItems and items in phy-names.
+>>> 3. Remove the description in phy-names.
+>>>
+>>> v1:
+>>> https://lore.kernel.org/r/20230306094750.159657-1-s-vadapalli@ti.com/
+>>>
+>>>  .../bindings/net/ti,k3-am654-cpsw-nuss.yaml        | 14 ++++++++++++--
+>>>  1 file changed, 12 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>>> index 900063411a20..0fb48bb6a041 100644
+>>> --- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>>> +++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>>> @@ -126,8 +126,18 @@ properties:
+>>>              description: CPSW port number
+>>>  
+>>>            phys:
+>>> -            maxItems: 1
+>>> -            description: phandle on phy-gmii-sel PHY
+>>> +            minItems: 1
+>>> +            items:
+>>> +              - description: CPSW MAC's PHY.
+>>> +              - description: Serdes PHY. Serdes PHY is required only if
+>>> +                             the Serdes has to be configured in the
+>>> +                             Single-Link configuration.
 >>> +
->>> +static const struct drm_display_mode elish_csot_mode = {
->>> +	/* Current max freqency is 104HZ, TODO 120HZ */
->>> +	.clock = (1600 + 200 + 40 + 52) * (2560 + 26 + 4 + 168) * 104 / 1000,
->>> +	.hdisplay = 1600,
->>> +	.hsync_start = 1600 + 200,
->>> +	.hsync_end = 1600 + 200 + 40,
->>> +	.htotal = 1600 + 200 + 40 + 52,
->>> +	.vdisplay = 2560,
->>> +	.vsync_start = 2560 + 26,
->>> +	.vsync_end = 2560 + 26 + 4,
->>> +	.vtotal = 2560 + 26 + 4 + 168,
->>> +};
->>> +
->>> +static const struct panel_desc elish_boe_desc = {
->>> +	.modes = &elish_boe_mode,
->>> +	.dsi_info = {
->>> +		.type = "NT36523",
->> That's a bit vague, the driver IC is not very telling about the
->> panel itself. Since we're not able to determine much more information,
->> this could contain the panel manufacturer and the device name.
-> Acked.
+>>> +          phy-names:
+>>> +            minItems: 1
+>>> +            items:
+>>> +              - const: mac-phy
+>>> +              - const: serdes-phy
 >>
->>> +		.channel = 0,
->>> +		.node = NULL,
->>> +	},
->>> +	.width_mm = 127,
->>> +	.height_mm = 203,
->>> +	.bpc = 8,
->>> +	.lanes = 3,
->>> +	.format = MIPI_DSI_FMT_RGB888,
->>> +	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_CLOCK_NON_CONTINUOUS | MIPI_DSI_MODE_LPM,
->>> +	.init_sequence = elish_boe_init_sequence,
->>> +	.is_dual_dsi = true,
->>> +};
->>> +
->> [...]
->>
->>> +static int nt36523_probe(struct mipi_dsi_device *dsi)
->>> +{
->> [...]
->>
->>> +	/* If the panel is dual dsi, register DSI1 */
->>> +	if (pinfo->desc->is_dual_dsi) {
->>> +		info = &pinfo->desc->dsi_info;
->>> +
->>> +		dsi1 = of_graph_get_remote_node(dsi->dev.of_node, 1, -1);
->>> +		if (!dsi1) {
->>> +			dev_err(dev, "cannot get secondary DSI node.\n");
->>> +			return -ENODEV;
->>> +		}
->>> +
->>> +		dsi1_host = of_find_mipi_dsi_host_by_node(dsi1);
->>> +		of_node_put(dsi1);
->> Shouldn't you put the reference only if it's found?
-> thanks for spot it.
->>
->>> +		if (!dsi1_host) {
->>> +			dev_err(dev, "cannot get secondary DSI host\n");
->>> +			return -EPROBE_DEFER;
->> dev_err_probe, here and in neighbouring exit return paths?
-> Acked.
->>
->>
->> Konrad
+>> Drop "phy" suffixes.
+> 
+> The am65-cpsw driver fetches the Serdes PHY by looking for the string
+> "serdes-phy". Therefore, modifying the string will require changing the driver's
+> code as well. Please let me know if it is absolutely necessary to drop the phy
+> suffix. If so, I will post a new series with the changes involving dt-bindings
+> changes and the driver changes.
+
+Why the driver uses some properties before adding them to the binding?
+
+And is it correct method of adding ABI? You add incorrect properties
+without documentation and then use this as an argument "driver already
+does it"?
+
+Best regards,
+Krzysztof
+
