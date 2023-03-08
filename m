@@ -2,106 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7948C6B105F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:45:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 071096B1060
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:45:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjCHRo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 12:44:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
+        id S229800AbjCHRpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 12:45:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCHRox (ORCPT
+        with ESMTP id S229522AbjCHRpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 12:44:53 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701C7498BC;
-        Wed,  8 Mar 2023 09:44:52 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id DAE6041DF4;
-        Wed,  8 Mar 2023 17:44:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1678297490;
-        bh=fhXB/EYYX9j8qxFHx1ZRx8caCPXojBAtmHMmCPfk7/c=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=D8uQBUHl406auUb4dgJPw/yDLp3vQCmgE9+0F5HY1bdli22kwGEGbT4SkxZaMNooS
-         ZpLzFCm5pCeALq5rxsxhI4v/XdIR1ZIGHaoDM2on86t0B9wBOopKdlyvAKXzprhS1Q
-         HodEPkB7neoFcykRt8Qd+kTERz10lzWtJSVHUoZlnUMVdhM2VjGNIUyhjs+QJEeUlD
-         82GrtZJ1mTeafPZkk97TBy0XztQZgjtu7wJdGgymG56KQpHZaU3s8kttKkfv2r/3tu
-         fklvJcKvD3EPQlvr9EIXkAT2GCYbGzlBHVw+mNPPPjTXLJMtoNWs2qVp2wEluvsT+a
-         5dBzDRJfxskDQ==
-Message-ID: <c82660f4-e2d0-35ca-304a-57d1abcf814d@asahilina.net>
-Date:   Thu, 9 Mar 2023 02:44:42 +0900
+        Wed, 8 Mar 2023 12:45:43 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CD3830CD
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 09:45:41 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 930B71063;
+        Wed,  8 Mar 2023 09:46:24 -0800 (PST)
+Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 12EBA3F67D;
+        Wed,  8 Mar 2023 09:45:37 -0800 (PST)
+Message-ID: <c8d85eae-e291-99a6-509c-94c41514ac16@arm.com>
+Date:   Wed, 8 Mar 2023 17:45:35 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH RFC 11/18] drm/scheduler: Clean up jobs when the scheduler
- is torn down
-Content-Language: en-US
-To:     alyssa@rosenzweig.io,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <0f14c1ae-0c39-106c-9563-7c1c672154c0@asahilina.net>
- <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-11-917ff5bc80a8@asahilina.net>
- <bbd7c5ee-c2f0-3e19-757d-a9aff1a26d3d@linux.intel.com>
- <585fa052-4eff-940e-b307-2415c315686a@amd.com>
- <3320e497-09c0-6eb6-84c5-bab2e63f28ec@asahilina.net>
- <7b39ef96-3ec5-c492-6e1b-bf065b7c90a2@amd.com>
- <8e93126cfaf47ebad0dc70e038ccc92f@rosenzweig.io>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <8e93126cfaf47ebad0dc70e038ccc92f@rosenzweig.io>
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 09/18] x86/resctrl: Allow resctrl_arch_rmid_read() to
+ sleep
+Content-Language: en-GB
+To:     Peter Newman <peternewman@google.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>,
+        Stephane Eranian <eranian@google.com>
+References: <20230113175459.14825-1-james.morse@arm.com>
+ <20230113175459.14825-10-james.morse@arm.com>
+ <CALPaoCg4T52ju5XJC-BVX-EuZUtc67LruWbgyH5s8CoiEwOUPw@mail.gmail.com>
+ <c3ca6d66-e58c-8ace-e88e-45ded5de836f@arm.com>
+ <CALPaoCik0j7ATCv-He5HWVqbL+3njpqO1fhF5FQJO7qqT1zR3w@mail.gmail.com>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <CALPaoCik0j7ATCv-He5HWVqbL+3njpqO1fhF5FQJO7qqT1zR3w@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2023 02.39, alyssa@rosenzweig.io wrote:
->> You can't ask me for a list
->> of pending jobs (the scheduler knows this, it doesn't make any sense to
->> duplicate that outside)
+Hi Peter,
+
+On 06/03/2023 13:14, Peter Newman wrote:
+> On Mon, Mar 6, 2023 at 12:34 PM James Morse <james.morse@arm.com> wrote:
+>> On 23/01/2023 15:33, Peter Newman wrote:
+>>> On Fri, Jan 13, 2023 at 6:56 PM James Morse <james.morse@arm.com> wrote:
+>>>> MPAM's cache occupancy counters can take a little while to settle once
+>>>> the monitor has been configured. The maximum settling time is described
+>>>> to the driver via a firmware table. The value could be large enough
+>>>> that it makes sense to sleep.
+>>>
+>>> Would it be easier to return an error when reading the occupancy count
+>>> too soon after configuration? On Intel it is already normal for counter
+>>> reads to fail on newly-allocated RMIDs.
+>>
+>> For x86, you have as many counters as there are RMIDs, so there is no issue just accessing
+>> the counter.
 > 
-> Silly question: could you add a new exported function to drm_sched to get the list of pending jobs, to be used by the Rust abstraction internally? IDK if that makes any sense.
+> I should have said AMD instead of Intel, because their implementations
+> have far fewer counters than RMIDs.
 
-The drm_sched struct is public, we could just go in there and do it
-anyway... but then I need to figure out how to do
-`list_for_each_entry_safe` in Rust and this all makes very little sense
-when it's clearly the scheduler's job to provide some form of cleanup
-function users can use to do it...
+Right, I assume Intel and AMD behaved in the same way here.
 
-I mean, I guess I can do that if Christian is adamantly against
-providing a safe C API, but it's clearly not the right solution and I
-hope this is not the approach maintainers take with Rust abstractions,
-because that's going to make our lives a lot harder for no good reason,
-and it also means C users don't get any of the benefits of Rust
-abstraction work if the APIs can't be improved at all along with it.
 
-~~ Lina
+>> With MPAM there may be as few as 1 monitor for the CSU (cache storage utilisation)
+>> counter, which needs to be multiplexed between different PARTID to find the cache
+>> occupancy (This works for CSU because its a stable count, it doesn't work for the
+>> bandwidth monitors)
+>> On such a platform the monitor needs to be allocated and programmed before it reads a
+>> value for a particular PARTID/CLOSID. If you had two threads trying to read the same
+>> counter, they could interleave perfectly to prevent either thread managing to read a value.
+>> The 'not ready' time is advertised in a firmware table, and the driver will wait at most
+>> that long before giving up and returning an error.
+
+> Likewise, on AMD, a repeating sequence of tasks which are LRU in terms
+> of counter -> RMID allocation could prevent RMID event reads from ever
+> returning a value.
+
+Isn't that a terrible user-space interface? "If someone else is reading a similar file,
+neither of you make progress".
+
+
+> The main difference I see with MPAM is that software allocates the
+> counters instead of hardware, but the overall behavior sounds the same.
+> 
+> The part I object to is introducing the wait to the counter read because
+> existing software already expects an immediate error when reading a
+> counter too soon. To produce accurate data, these readings are usually
+> read at intervals of multiple seconds.
+
+
+> Instead, when configuring a counter, could you use the firmware table
+> value to compute the time when the counter will next be valid and return
+> errors on read requests received before that?
+
+The monitor might get re-allocated, re-programmed and become valid for a different
+PARTID+PMG in the mean time. I don't think these things should remain allocated over a
+return to user-space. Without doing that I don't see how we can return-early and make
+progress.
+
+How long should a CSU monitor remain allocated to a PARTID+PMG? Currently its only for the
+duration of the read() syscall on the file.
+
+
+The problem with MPAM is too much of it is optional. This particular behaviour is only
+valid for CSU monitors, (llc_occupancy), and then, only if your hardware designers didn't
+have a value to hand when the monitor is programmed, and need to do a scan of the cache to
+come up with a result. The retry is only triggered if the hardware sets NRDY.
+This is also only necessary if there aren't enough monitors for every RMID/(PARTID*PMG) to
+have its own. If there were enough, the monitors could be allocated and programmed at
+startup, and the whole thing becomes cheaper to access.
+
+If a hardware platform needs time to do this, it has to come from somewhere. I don't think
+maintaining an epoch based list of which monitor secretly belongs to a PARTID+PMG in the
+hope user-space reads the file again 'quickly enough' is going to be maintainable.
+
+If returning errors early is an important use-case, I can suggest ensuring the MPAM driver
+allocates CSU monitors up-front if there are enough (today it only does this for MBWU
+monitors). We then have to hope that folk who care about this also build hardware
+platforms with enough monitors.
+
+
+Thanks,
+
+James
