@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1156B1055
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FD96B1053
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjCHRl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 12:41:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
+        id S229891AbjCHRl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 12:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjCHRlo (ORCPT
+        with ESMTP id S229809AbjCHRlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 12:41:44 -0500
-Received: from mail-ed1-x563.google.com (mail-ed1-x563.google.com [IPv6:2a00:1450:4864:20::563])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B927CC314
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 09:41:17 -0800 (PST)
-Received: by mail-ed1-x563.google.com with SMTP id o12so68836849edb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 09:41:17 -0800 (PST)
+        Wed, 8 Mar 2023 12:41:19 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F82CE945;
+        Wed,  8 Mar 2023 09:40:50 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so1647575wmq.1;
+        Wed, 08 Mar 2023 09:40:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1678297273;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=U5/HqLOR/DLW8wSfO9JppHulM9FF7/EygUD+stIJLE8=;
-        b=MOiGV0qwjhJ7Bw2XXcFG7k+LMJjfDviPUuA1DntfhipLGle3D9zfpVJ838P8pSB2qu
-         B0Us2hqYIKIVDO1P2VWVFCG33hEvM3KQ0+2zxQBfSwzBetNbEb6OysyBQiIg6m9QtCod
-         I6nmeGSTHw54kbIGstm+hEuGdugQ3N0MdC8zw=
+        d=gmail.com; s=20210112; t=1678297247;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kR3HSJnXJlKBMH2twJ0meIAq1tnGzT/pRVEELqnSXdE=;
+        b=j1+QfU1sf7ZdgQn5B8Z9fjU2E0gQyebw7tWPsuT05QIxGJuEoVzoemUXTDQR8EUEdV
+         8QQ4gK0sYB2gP9pI9lvm/GhrRK/DZn0VbmlMOxq+uapwUfEUGCSINB+426HdSjZUjBo5
+         DEdAJ8iyd+E+YKjzmYLvdtTvWj7RzOrI29uKeSOkGWv45wU0HrH9xxJRpbrBZP+EgrVu
+         Q7bPFHRouq2daFW/EyuSzYMYcDNG0K+vF1UVlU8V2EznBNI3QIWk2gBInS10ZG7WZNds
+         ke/NFxPcaEw99HYPThkwZ56pip+9sZhUi8ICby0StkIzVGVyy917x9K6ex4dTqDHU9Ze
+         JJQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678297273;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U5/HqLOR/DLW8wSfO9JppHulM9FF7/EygUD+stIJLE8=;
-        b=LWDSAlVp5ot3wZFP2AA6c+PIlcJQh+hLWxQ+x/ucGAGBHbRQjDuiEebZuEGwAJZoni
-         lXO7tNwYaVZXPtl6nVoR7GRJhraYQOdCfr+E83S5srsb6sztuuGz8m3px0F8et3GDAsi
-         79E05W8qCTTDoancZSvLC4/kXJrcWQ+w5ck4drJpNAacodRb6eMMVD1ppsAKjJqJNEbB
-         pfx5qFjTXG+J/XeaPR0p3UroFZ+B7qeJBrrfQu4Q/gveeb8Ie8ugmkwiusWzYp2aiL15
-         9pJpgJb3pAgO2704vfjuV48YBWN7JIIYCPbNKYK4M2+cpxS2JTGl87mMGaQFRuEwgwdY
-         6Krg==
-X-Gm-Message-State: AO0yUKVYXGM6KAuNl5aNgLKI/9BQTC/zB6rED/ZSprEkP7tCePVpDVRn
-        JJcBLd3Mns6nks3RfHapeGHvMrFIYIamdz0ribwK/El+Mp/Q
-X-Google-Smtp-Source: AK7set8dmLaJMlUEk2OeA5ELu+EcbvmG6cqbP6NCMljre70jn78Fyy6U2jzGJrRLf6vgaQFzNxUXiYaFlMPP
-X-Received: by 2002:a17:907:a406:b0:909:385:da4a with SMTP id sg6-20020a170907a40600b009090385da4amr22359539ejc.54.1678297273099;
-        Wed, 08 Mar 2023 09:41:13 -0800 (PST)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id h18-20020a1709063c1200b008c60f160f54sm3451896ejg.62.2023.03.08.09.41.12
+        d=1e100.net; s=20210112; t=1678297247;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kR3HSJnXJlKBMH2twJ0meIAq1tnGzT/pRVEELqnSXdE=;
+        b=4cRVi6lPZmsaGi9OjdoLgN5DyNuT6x0nVJB96o8Mj78aF3juOZJKapbKcCpEnqmK3k
+         N9OQH8nQIPbtSJwRcyBVJ4vVBHUfyq8j/1ytptQJ6hWnXsHYxVpl65Vx3yGR5p+N1320
+         Y30CPKxMitm+0E/Pjfkzb9RR/eKbeNKuKvbjRpcpZGC6ZZmCU14UdSLTOXXiyXP5uYc8
+         UeGAiSGNuGuAEB3O2EUZo0AtMVN+g7y1TdwFwq6UYonvRMRqLr6Px5rBU9jYNvH9o3aH
+         dTOiY5xLcrBdR8N+wqg1xxUZ6onq9do7WTm+GFgcRI3lnt65mq3L2JQGdHNA2HTtqLsn
+         WU0w==
+X-Gm-Message-State: AO0yUKV7STvTAzTgp2xcgoYfKPEvC0hbU8SzlT+TQZdmyMmGdGDbMfOB
+        eDQGQr7vE7szpvv1c5g7peAj0WmvgGGrOg==
+X-Google-Smtp-Source: AK7set+yyzh9SmAOmND6n6Cal1TF/6QsgwxSsi+MC9WxoGVpY8HnuQ67N3pejnM/KFc5KIVwAMuSoA==
+X-Received: by 2002:a05:600c:1c96:b0:3ea:f6c4:5f3d with SMTP id k22-20020a05600c1c9600b003eaf6c45f3dmr16603330wms.2.1678297246781;
+        Wed, 08 Mar 2023 09:40:46 -0800 (PST)
+Received: from suse.localnet (host-95-252-162-80.retail.telecomitalia.it. [95.252.162.80])
+        by smtp.gmail.com with ESMTPSA id s18-20020a05600c45d200b003e8dcc67bdesm86901wmo.30.2023.03.08.09.40.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 09:41:13 -0800 (PST)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v3] xsk: Add missing overflow check in xdp_umem_reg
-Date:   Wed,  8 Mar 2023 18:40:13 +0100
-Message-Id: <20230308174013.1114745-1-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
+        Wed, 08 Mar 2023 09:40:46 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Jan Kara <jack@suse.cz>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [git pull] vfs.git sysv pile
+Date:   Wed, 08 Mar 2023 18:40:44 +0100
+Message-ID: <2907412.VdNmn5OnKV@suse>
+In-Reply-To: <ZAD6n+mH/P8LDcOw@ZenIV>
+References: <Y/gugbqq858QXJBY@ZenIV> <9074146.CDJkKcVGEf@suse> <ZAD6n+mH/P8LDcOw@ZenIV>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,56 +73,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The number of chunks can overflow u32. Make sure to return -EINVAL on
-overflow.
+On gioved=EC 2 marzo 2023 20:35:59 CET Al Viro wrote:
 
-Also remove a redundant u32 cast assigning umem->npgs.
+[...]
 
-Fixes: bbff2f321a86 ("xsk: new descriptor addressing scheme")
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
----
- net/xdp/xdp_umem.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+> Frankly, ext2 patchset had been more along the lines of "here's what
+> untangling the calling conventions in ext2 would probably look like" than
+> anything else. If you are willing to test (and review) that sucker and it
+> turns out to be OK, I'll be happy to slap your tested-by on those during
+> rebase and feed them to Jan...
 
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index 4681e8e8ad94..02207e852d79 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -150,10 +150,11 @@ static int xdp_umem_account_pages(struct xdp_umem *umem)
- 
- static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- {
--	u32 npgs_rem, chunk_size = mr->chunk_size, headroom = mr->headroom;
- 	bool unaligned_chunks = mr->flags & XDP_UMEM_UNALIGNED_CHUNK_FLAG;
--	u64 npgs, addr = mr->addr, size = mr->len;
--	unsigned int chunks, chunks_rem;
-+	u32 chunk_size = mr->chunk_size, headroom = mr->headroom;
-+	u64 addr = mr->addr, size = mr->len;
-+	u32 chunks_rem, npgs_rem;
-+	u64 chunks, npgs;
- 	int err;
- 
- 	if (chunk_size < XDP_UMEM_MIN_CHUNK_SIZE || chunk_size > PAGE_SIZE) {
-@@ -188,8 +189,8 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- 	if (npgs > U32_MAX)
- 		return -EINVAL;
- 
--	chunks = (unsigned int)div_u64_rem(size, chunk_size, &chunks_rem);
--	if (chunks == 0)
-+	chunks = div_u64_rem(size, chunk_size, &chunks_rem);
-+	if (!chunks || chunks > U32_MAX)
- 		return -EINVAL;
- 
- 	if (!unaligned_chunks && chunks_rem)
-@@ -202,7 +203,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- 	umem->headroom = headroom;
- 	umem->chunk_size = chunk_size;
- 	umem->chunks = chunks;
--	umem->npgs = (u32)npgs;
-+	umem->npgs = npgs;
- 	umem->pgs = NULL;
- 	umem->user = NULL;
- 	umem->flags = mr->flags;
--- 
-2.39.2
+I git-clone(d) and built your "vfs" tree, branch #work.ext2, without and wi=
+th=20
+the following commits:
+
+f5b399373756 ("ext2: use offset_in_page() instead of open-coding it as=20
+subtraction")
+
+c7248e221fb5 ("ext2_get_page(): saner type")
+
+470e54a09898 ("ext2_put_page(): accept any pointer within the page")
+
+15abcc147cf7 ("ext2_{set_link,delete_entry}(): don't bother with page_addr")
+
+16a5ee2027b7 ("ext2_find_entry()/ext2_dotdot(): callers don't need page_add=
+r=20
+anymore")
+
+Then I read the code and FWIW the five patches look good to me. I think the=
+y=20
+can work properly.=20
+
+Therefore, if you want to, please feel free to add my "Reviewed-by" tag (OK=
+, I=20
+know that you don't need my reviews, since you are the one who taught me ho=
+w=20
+to write patches like yours for sysv and ufs :-)).
+
+As a personal preference, in ext2_get_page() I'd move the two lines of code=
+=20
+from the "fail" label to the same 'if' block where you have the "goto fail;=
+",=20
+mainly because that label is only reachable from there. However, it does no=
+t=20
+matter at all because I'm only expressing my personal preference.
+
+I ran `./check -g quick` without your patches in a QEMU/KVM x86_32 VM, 6GB=
+=20
+RAM, running a Kernel with HIGHMEM64GB enabled. I ran it three or four time=
+s=20
+because it kept on hanging at random tests' numbers.
+
+I'm noticing the same pattern due to the oom killer kicking in several time=
+s=20
+to kill processes until xfstests its is dead.
+
+[ 1171.795551] Out of memory: Killed process 1669 (xdg-desktop-por) total-v=
+m:
+105068kB, anon-rss:9792kB, file-rss:10972kB, shmem-rss:0kB, UID:1000 pgtabl=
+es:
+136kB oom_score_adj:200
+[ 1172.339920] systemd invoked oom-killer: gfp_mask=3D0xcc0(GFP_KERNEL),=20
+order=3D0, oom_score_adj=3D100
+[ 1172.339927] CPU: 3 PID: 1413 Comm: systemd Tainted: G S      W   E     =
+=20
+6.3.0-rc1-x86-32-debug+ #1
+[ 1172.339929] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS=20
+rel-1.16.0-0-gd239552-rebuilt.opensuse.org 04/01/2014
+[ 1172.339931] Call Trace:
+[ 1172.339934]  dump_stack_lvl+0x92/0xd4
+[ 1172.339939]  dump_stack+0xd/0x10
+[ 1172.339941]  dump_header+0x42/0x454
+[ 1172.339945]  ? ___ratelimit+0x6f/0x140
+[ 1172.339948]  oom_kill_process+0xe9/0x244
+[ 1172.339950]  out_of_memory+0xf6/0x424=20
+
+I have not enough experience to understand why we get to that out-of-memory=
+=20
+condition, so that several processes get killed. I can send the whole decod=
+ed=20
+stack trace and other information to whoever can look at this issue to figu=
+re=20
+out how to fix this big issue. I can try to bisect this issue too, but I ne=
+ed=20
+time because of other commitments and a slow system for building the necess=
+ary=20
+kernels.
+
+I want to stress that it does not depend on the above-mentioned patches. Ye=
+s,=20
+I'm running Al's "vfs" tree, #work.ext2 branch, but with one only patch bey=
+ond=20
+the merge with Linus' tree:
+
+522dad1 ext2_rename(): set_link and delete_entry may fail=20
+
+I have no means to test this tree. However, I think that I'd have the same=
+=20
+issue with Linus' tree too, unless this issue is due to the only commit not=
+=20
+yet there (I strongly doubt about this possibility).
+
+Thanks,
+
+=46abio
+
+
+
+
 
