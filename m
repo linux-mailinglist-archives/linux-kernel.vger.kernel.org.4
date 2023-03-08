@@ -2,297 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1726B0776
+	by mail.lfdr.de (Postfix) with ESMTP id 467226B0775
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbjCHMx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 07:53:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
+        id S229793AbjCHMyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 07:54:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbjCHMxm (ORCPT
+        with ESMTP id S230478AbjCHMxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:53:42 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F7FB4820;
-        Wed,  8 Mar 2023 04:53:40 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328BCH2J017371;
-        Wed, 8 Mar 2023 12:53:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=BaOHCIvZggeecOWNBSlSSkIxgYUdRP4iC0BWfBmoQF0=;
- b=rTXwCOdguD3cwN7uQGHGMSKS+U0t3RDUzlfRCj2QtDTqM7EQEV+2q91+eLi6xr+JQnaw
- yby7qU8UxRfDkBAX1lrFA+bwPQHrwh4/OZJPA2ZjgFe9ig2emzfja2Y30kTK0fdh/6A3
- eru6DOY4ZEzlOwKka1spEqKTlTRJQC5Nk1WSVlPiAn5DgchZYuyQG6Kuwr6RZvMdmGt5
- +9gf7HDmRfUzrls+x2wAWItaz+nZupRuCCVzTblLWcz0VOsMT6TOlP8p/zAWxwSDMdGZ
- k98cD85812GGFXxhp87L7wnfEvi3AlyE32VQiJB/FZIwyZYfioc8cobIwxp3/B2ZWSz6 8A== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6s9a26d8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 12:53:37 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3280dl7e003274;
-        Wed, 8 Mar 2023 12:53:35 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3p6g0pgk2b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 12:53:35 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 328CrVcf35717584
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Mar 2023 12:53:31 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A8C4220043;
-        Wed,  8 Mar 2023 12:53:31 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6DF4620040;
-        Wed,  8 Mar 2023 12:53:31 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Mar 2023 12:53:31 +0000 (GMT)
-From:   Thomas Richter <tmricht@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
-Subject: [PATCH] perf list: Add PMU pai_ext event description for IBM z16
-Date:   Wed,  8 Mar 2023 13:53:26 +0100
-Message-Id: <20230308125326.2195613-1-tmricht@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
+        Wed, 8 Mar 2023 07:53:55 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0138CB8609
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:53:45 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id a25so65523375edb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 04:53:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678280024;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=66PBEHLuoBHi5dP79a5TGRn1C5ICF0qRu69ManVqQR0=;
+        b=K1HkAKtDVpeQ4XArvfQu0D+mZCmjmHYnXtRR/EdZtvb2noWLzodKeDhezQHx+K5gcK
+         3jSaa2wQy2yWpGZgCrusY2K//W0qBy085ndtPdCcfsT06/f+BdX03OepLmgvzC4nZJtX
+         LU8cbfKOy/IM0LKmrFqe4GO7JQbtQNNYJCNGdfUHM8rX+8UOvMDBAJ72QTo0R00ae40M
+         ATgEXTlf7yIe6EyrIELaZ82xXqprCsatJV/FhMTTYiinbsFkTp+eGrFPUG4NLfVXNg85
+         Ays+BVBKm/RpPbEO3ZArk0C3p/MoFJH8Vjp6dElbv9n/TK18HwFs1ZUwO+bbswzlur5B
+         O0bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678280024;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=66PBEHLuoBHi5dP79a5TGRn1C5ICF0qRu69ManVqQR0=;
+        b=XBnygrnGqhuBKnh1UqaNAs4QFTE1+rd2skiogC/uFeuye0YeCoZ+bK7FuoPljX04RL
+         n5s4Uqpw18EoyvnFN3PyxsmRi356foaGyAW99rVh8QdZYm8E/PsVpz2qH7vdJs2j+gRn
+         N/cfdKesyPME1WGSY/CP/TpF01J9uPrxNhrFhKBa/znDP5oYcERCDa8idj199VeP1ybt
+         fFspHG7hvQgx8y1huQq+OoTo1BOEIp6X9jMBpu2oDytRfJhv+gqZNt5bo5CLPugUD383
+         DiYgWTPLFvyIBja6jjrRwq6e2lELZE3XiwlVbC1b4+9XjV7ei0hPb4LVS4q5Ne6VeUH3
+         qBNQ==
+X-Gm-Message-State: AO0yUKU67LflAOEDdMASHt1toTsJgTpB3nmOcwF+8SERwRq4A7VW5L6A
+        m2MiuwqKpB+MOI4wOu/dbnLhKw==
+X-Google-Smtp-Source: AK7set+E35x60NTcteiH0pNOUZAw9vG7PdnXC0LoxRe3x7P7UWNCvpb2BGmoA3MNv+KLUHytkEGxww==
+X-Received: by 2002:a17:907:72c9:b0:889:b38b:4bb2 with SMTP id du9-20020a17090772c900b00889b38b4bb2mr21140310ejc.49.1678280024347;
+        Wed, 08 Mar 2023 04:53:44 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id uk19-20020a170907ca1300b008cecb8f374asm7427112ejc.0.2023.03.08.04.53.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 04:53:43 -0800 (PST)
+Message-ID: <615d907e-fd7c-f235-405b-d112f1373280@linaro.org>
+Date:   Wed, 8 Mar 2023 12:53:42 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RpeAmozW15tdJB27fTMt0yE2cwFs2tVB
-X-Proofpoint-GUID: RpeAmozW15tdJB27fTMt0yE2cwFs2tVB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-08_08,2023-03-08_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 phishscore=0 clxscore=1011 impostorscore=0 mlxlogscore=853
- priorityscore=1501 suspectscore=0 mlxscore=0 spamscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303080108
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 1/4] firmware: qcom_scm: Export SCM call functions
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230305022119.1331495-1-luzmaximilian@gmail.com>
+ <20230305022119.1331495-2-luzmaximilian@gmail.com>
+ <a2c97f09-3360-b2b1-184a-8e3b869a70ef@linaro.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <a2c97f09-3360-b2b1-184a-8e3b869a70ef@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the event description for the IBM z16 pai_ext PMU released with
-commit c432fefe8e62 ("s390/pai: Add support for PAI Extension 1 NNPA counters")
 
-The document SA22-7832-13 "z/Architecture Principles of Operation",
-published May, 2022, contains the description of the
-Processor Activity Instrumentation Facility and the NNPA counter
-set., See Pages 5-113 to 5-116 and chapter 26 for details.
 
-Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-Acked-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
----
- .../pmu-events/arch/s390/cf_z16/pai_ext.json  | 178 ++++++++++++++++++
- tools/perf/pmu-events/jevents.py              |   1 +
- 2 files changed, 179 insertions(+)
- create mode 100644 tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json
+On 07/03/2023 15:23, Dmitry Baryshkov wrote:
+> 
+>> Make qcom_scm_call, qcom_scm_call_atomic and associated types accessible
+>> to other modules.
+> 
+> Generally all the qcom_scm calls are a part of qcom_scm.c. I think it is 
+> better to make qseecom_scm_call a part qcom_scm.c (as we were previously 
+> doing) rather than exporting the core function.
+>
 
-diff --git a/tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json b/tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json
-new file mode 100644
-index 000000000000..7ccbded95dc9
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json
-@@ -0,0 +1,178 @@
-+[
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6144",
-+		"EventName": "NNPA_ALL",
-+		"BriefDescription": "NNPA ALL Sum of all non zero counters",
-+		"PublicDescription": "Sum of all non zero NNPA (Neural Networks Processing Assist) counters"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6145",
-+		"EventName": "NNPA_ADD",
-+		"BriefDescription": "NNPA ADD function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6146",
-+		"EventName": "NNPA_SUB",
-+		"BriefDescription": "NNPA SUB function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6147",
-+		"EventName": "NNPA_MUL",
-+		"BriefDescription": "NNPA MUL function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6148",
-+		"EventName": "NNPA_DIV",
-+		"BriefDescription": "NNPA DIV function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6149",
-+		"EventName": "NNPA_MIN",
-+		"BriefDescription": "NNPA MIN function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6150",
-+		"EventName": "NNPA_MAX",
-+		"BriefDescription": "NNPA MAX function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6151",
-+		"EventName": "NNPA_LOG",
-+		"BriefDescription": "NNPA LOG function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6152",
-+		"EventName": "NNPA_EXP",
-+		"BriefDescription": "NNPA EXP function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6153",
-+		"EventName": "NNPA_IBM_RESERVED_9",
-+		"BriefDescription": "Reserved for IBM use",
-+		"PublicDescription": "Reserved for IBM use"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6154",
-+		"EventName": "NNPA_RELU",
-+		"BriefDescription": "NNPA RELU function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6155",
-+		"EventName": "NNPA_TANH",
-+		"BriefDescription": "NNPA TANH function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6156",
-+		"EventName": "NNPA_SIGMOID",
-+		"BriefDescription": "NNPA SIGMOID function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6157",
-+		"EventName": "NNPA_SOFTMAX",
-+		"BriefDescription": "NNPA SOFTMAX function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6158",
-+		"EventName": "NNPA_BATCHNORM",
-+		"BriefDescription": "NNPA BATCHNORM function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6159",
-+		"EventName": "NNPA_MAXPOOL2D",
-+		"BriefDescription": "NNPA MAXPOOL2D function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6160",
-+		"EventName": "NNPA_AVGPOOL2D",
-+		"BriefDescription": "NNPA AVGPOOL2D function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6161",
-+		"EventName": "NNPA_LSTMACT",
-+		"BriefDescription": "NNPA LSTMACT function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6162",
-+		"EventName": "NNPA_GRUACT",
-+		"BriefDescription": "NNPA GRUACT function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6163",
-+		"EventName": "NNPA_CONVOLUTION",
-+		"BriefDescription": "NNPA CONVOLUTION function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6164",
-+		"EventName": "NNPA_MATMUL_OP",
-+		"BriefDescription": "NNPA MATMUL OP function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6165",
-+		"EventName": "NNPA_MATMUL_OP_BCAST23",
-+		"BriefDescription": "NNPA NNPA MATMUL OP BCAST23 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6166",
-+		"EventName": "NNPA_SMALLBATCH",
-+		"BriefDescription": "NNPA SMALLBATCH OP function ending with CC=0",
-+		"PublicDescription": "NNPA function with conditions as described in Common Operation"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6167",
-+		"EventName": "NNPA_LARGEDIM",
-+		"BriefDescription": "NNPA LARGEDIM OP function ending with CC=0",
-+		"PublicDescription": "NNPA function with conditions as described in Common Operation"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6168",
-+		"EventName": "NNPA_SMALLTENSOR",
-+		"BriefDescription": "NNPA SMALLTENSOR OP function ending with CC=0",
-+		"PublicDescription": "NNPA function with conditions as described in Common Operation"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6169",
-+		"EventName": "NNPA_1MFRAME",
-+		"BriefDescription": "NNPA 1MFRAME OP function ending with CC=0",
-+		"PublicDescription": "NNPA function with conditions as described in Common Operation"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6170",
-+		"EventName": "NNPA_2GFRAME",
-+		"BriefDescription": "NNPA 2GFRAME OP function ending with CC=0",
-+		"PublicDescription": "NNPA function with conditions as described in Common Operation"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6171",
-+		"EventName": "NNPA_ACCESSEXCEPT",
-+		"BriefDescription": "NNPA ACCESSEXCEPT OP function ending with CC=0",
-+		"PublicDescription": "NNPA function with conditions as described in Common Operation"
-+	}
-+]
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index 2bcd07ce609f..b20d06fcc358 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -246,6 +246,7 @@ class JsonEvent:
-           'CPU-M-CF': 'cpum_cf',
-           'CPU-M-SF': 'cpum_sf',
-           'PAI-CRYPTO' : 'pai_crypto',
-+          'PAI-EXT' : 'pai_ext',
-           'UPI LL': 'uncore_upi',
-           'hisi_sicl,cpa': 'hisi_sicl,cpa',
-           'hisi_sccl,ddrc': 'hisi_sccl,ddrc',
--- 
-2.39.1
+Other big issue I see in exporting qcom_scm_call() is that there is 
+danger of misuse of this api as this could lead to a path where new apis 
+and its payloads can come directly from userspace via a rogue/hacking 
+modules. This will bypass scm layer completely within kernel.
 
+--srini
+
+> If you wish to limit the kernel bloat, you can split the qcom_scm into 
+> per-driver backend and add Kconfig symbols to limit the impact. However 
+> I think that these functions are pretty small to justify the effort.
+> 
+
+
+>>
+>> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
