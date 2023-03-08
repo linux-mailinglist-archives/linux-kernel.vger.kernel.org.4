@@ -2,118 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49B26B0E3C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 647956B0E41
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbjCHQKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:10:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
+        id S232349AbjCHQKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:10:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbjCHQKJ (ORCPT
+        with ESMTP id S232180AbjCHQKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:10:09 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9EF55FA55;
-        Wed,  8 Mar 2023 08:09:36 -0800 (PST)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 0C94940737A9;
-        Wed,  8 Mar 2023 16:09:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 0C94940737A9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1678291775;
-        bh=fjEJAf1XjRz8zobb5nJ/fvnnpKMaijcYYspk3G4Wetk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=sGLN+QFfw08MteEgTzzMbCrRlS/Qx6jrhSRyGUgxeb4AuIwpzLDrhjttwEeujji9T
-         pdvffLLsD2kahh/gxu4DoHZoSiq8RXP/2QgdlDa7n58vlEpgsZPmtjC8Jp3kY1rscH
-         HTfV3J6Pnfro8TgCLs+gtqwg5fy60OpC8YQtzn8g=
+        Wed, 8 Mar 2023 11:10:17 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3DB265B0
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:09:51 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 925011063;
+        Wed,  8 Mar 2023 08:10:34 -0800 (PST)
+Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BFC0B3F71A;
+        Wed,  8 Mar 2023 08:09:47 -0800 (PST)
+Message-ID: <8d05bce5-b145-3df3-7445-02aa31ca877c@arm.com>
+Date:   Wed, 8 Mar 2023 16:09:46 +0000
 MIME-Version: 1.0
-Date:   Wed, 08 Mar 2023 19:09:34 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 08/18] x86/resctrl: Queue mon_event_read() instead of
+ sending an IPI
+Content-Language: en-GB
+From:   James Morse <james.morse@arm.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 08/26] x86/boot: Map memory explicitly
-In-Reply-To: <CAMj1kXGP1k-FoG6GQ2u9ZRiGnxogO=3bLWPfcyOEUOfZG3TRJw@mail.gmail.com>
-References: <cover.1671098103.git.baskov@ispras.ru>
- <760c19466ac26c09edb76e64d8c4812ff4aa7365.1671098103.git.baskov@ispras.ru>
- <CAMj1kXFtEZtso0Gcuj-PhGiK1QRhp9SDFLwouX3qdgSha=ACjA@mail.gmail.com>
- <CAMj1kXGP1k-FoG6GQ2u9ZRiGnxogO=3bLWPfcyOEUOfZG3TRJw@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <6811318e7ea207a1037f337184dc19a6@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
+References: <20230113175459.14825-1-james.morse@arm.com>
+ <20230113175459.14825-9-james.morse@arm.com>
+ <b85cc905-3ea2-9f73-a592-0ebdc4240c37@intel.com>
+ <4a9e4fed-c969-490c-d602-d00bcdcb5096@arm.com>
+In-Reply-To: <4a9e4fed-c969-490c-d602-d00bcdcb5096@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-08 13:28, Ard Biesheuvel wrote:
-> On Wed, 8 Mar 2023 at 10:38, Ard Biesheuvel <ardb@kernel.org> wrote:
->> 
->> On Thu, 15 Dec 2022 at 13:38, Evgeniy Baskov <baskov@ispras.ru> wrote:
->> >
->> > Implicit mappings hide possible memory errors, e.g. allocations for
->> > ACPI tables were not included in boot page table size.
->> >
->> > Replace all implicit mappings from page fault handler with
->> > explicit mappings.
->> >
->> 
->> I agree with the motivation but this patch seems to break the boot
->> under SeaBIOS/QEMU, and I imagine other legacy BIOS boot scenarios as
->> well.
->> 
->> Naively, I would assume that there is simply a legacy BIOS region that
->> we fail to map here, but I am fairly clueless when it comes to non-EFI
->> x86 boot so take this with a grain of salt.
->> 
-> 
-> The below seems to help - not sure why exactly, but apparently legacy
-> BIOS needs the bootparams struct to be mapped writable?
+Hi Reinette,
 
-I think I got too eager adding mappings to everything.
-In the process_efi_entries() bootparams should already be mapped, so
-I will just remove the call. And AFAIK bootparams is indeed gets
-written to.
+On 06/03/2023 11:33, James Morse wrote:
+> On 02/02/2023 23:47, Reinette Chatre wrote:
+>> On 1/13/2023 9:54 AM, James Morse wrote:
+>>> x86 is blessed with an abundance of monitors, one per RMID, that can be
+>>> read from any CPU in the domain. MPAMs monitors reside in the MMIO MSC,
+>>> the number implemented is up to the manufacturer. This means when there are
+>>> fewer monitors than needed, they need to be allocated and freed.
+>>>
+>>> Worse, the domain may be broken up into slices, and the MMIO accesses
+>>> for each slice may need performing from different CPUs.
+>>>
+>>> These two details mean MPAMs monitor code needs to be able to sleep, and
+>>> IPI another CPU in the domain to read from a resource that has been sliced.
+>>>
+>>> mon_event_read() already invokes mon_event_count() via IPI, which means
+>>> this isn't possible.
+>>>
+>>> Change mon_event_read() to schedule mon_event_count() on a remote CPU and
+>>> wait, instead of sending an IPI. This function is only used in response to
+>>> a user-space filesystem request (not the timing sensitive overflow code).
+>>>
+>>> This allows MPAM to hide the slice behaviour from resctrl, and to keep
+>>> the monitor-allocation in monitor.c.
 
+>>> diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+>>> index 1df0e3262bca..4ee3da6dced7 100644
+>>> --- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+>>> +++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+>>> @@ -542,7 +545,7 @@ void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
+>>>  	rr->val = 0;
+>>>  	rr->first = first;
+>>>  
+>>> -	smp_call_function_any(&d->cpu_mask, mon_event_count, rr, 1);
+>>> +	smp_call_on_cpu(cpumask_any(&d->cpu_mask), mon_event_count, rr, false);
 > 
-> --- a/arch/x86/boot/compressed/kaslr.c
-> +++ b/arch/x86/boot/compressed/kaslr.c
-> @@ -31,6 +31,7 @@
->  #include <linux/ctype.h>
->  #include <generated/utsversion.h>
->  #include <generated/utsrelease.h>
-> +#include <asm/shared/pgtable.h>
+>> This would be problematic for the use cases where single tasks are run on
+>> adaptive-tick CPUs. If an adaptive-tick CPU is chosen to run the function then
+>> it may never run. Real-time environments are target usage of resctrl (with examples
+>> in the documentation).
 > 
->  #define _SETUP
->  #include <asm/setup.h> /* For COMMAND_LINE_SIZE */
-> @@ -688,7 +689,7 @@ process_efi_entries(unsigned long minimum,
-> unsigned long image_size)
->         u32 nr_desc;
->         int i;
+> Interesting. I can't find an IPI wakeup under smp_call_on_cpu() ... I wonder what else
+> this breaks!
 > 
-> -       kernel_add_identity_map((unsigned long)e, (unsigned long)(e + 
-> 1), 0);
-> +       kernel_add_identity_map((unsigned long)e, (unsigned long)(e +
-> 1), MAP_WRITE);
+> Resctrl doesn't consider the nohz-cpus when doing any of this work, or when setting up the
+> limbo or overflow timer work.
 > 
->         signature = (char *)&e->efi_loader_signature;
->         if (strncmp(signature, EFI32_LOADER_SIGNATURE, 4) &&
+> I think the right thing to do here is add some cpumask_any_housekeeping() helper to avoid
+> nohz-full CPUs where possible, and fall back to an IPI if all the CPUs in a domain are
+> nohz-full.
+> 
+> Ideally cpumask_any() would do this but it isn't possible without allocating memory.
+> If I can reproduce this problem,  ...
+
+... I haven't been able to reproduce this.
+
+With "nohz_full=1 isolcpus=nohz,domain,1" on the command-line I can still
+smp_call_on_cpu() on cpu-1 even when its running a SCHED_FIFO task that spins in
+user-space as much as possible.
+
+This looks to be down to "sched: RT throttling activated", which seems to be to prevent RT
+CPU hogs from blocking kernel work. From Peter's comments at [0], it looks like running
+tasks 100% in user-space isn't a realistic use-case.
+
+Given that, I think resctrl should use smp_call_on_cpu() to avoid interrupting a nohz_full
+CPUs, and the limbo/overflow code should equally avoid these CPUs. If work does get
+scheduled on those CPUs, it is expected to run eventually.
+
 
 Thanks,
-Evgeniy Baskov
+
+James
+
+[0] https://lore.kernel.org/all/20130823110254.GU31370@twins.programming.kicks-ass.net/
