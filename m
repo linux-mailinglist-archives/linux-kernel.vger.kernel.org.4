@@ -2,172 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955566B0EBB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:28:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 995C16B0EC5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbjCHQ16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:27:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
+        id S231259AbjCHQ3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:29:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjCHQ1Z (ORCPT
+        with ESMTP id S230360AbjCHQ2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:27:25 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2087.outbound.protection.outlook.com [40.107.94.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7158CD00AC
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:27:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cuo+nn4WZuCEkZlLGbbe9MsBa0Iqh7gD+vOrxK/ZBPrNTI8wp9+mhJSbVSNm7QtWCzofnSoQGelE0Uqgwdzck3cvog1CWN9Lrz7JAr7SoX8gg0XAnafOljFnevNT6EfDIQrfniETAQI7Qt1Q2k1HjnG/Z+3cq2PF0TnL3hqAjm6J/iclOwk2LYr3hfdG04bi9ufgkKm3oIEKkeXnylQksV3voi2Pi1ATKmvz1AHsAQDV0SAgXTbyD3IWJsupX+IM1WB2CyieWvYErmYqiy4KdHuzQPWy0aTovGWrbIoqbkT+c5tCnz1gINjPCdOQf+5ceXsLzpe8j4ePF7AcFMjMmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=coOj4PMJMGfb2ipeUebqVxo7ulLBeL7/pKKEXhQTTjs=;
- b=kEAclY6SNlN+WGCYPVTCWy7ztvNzLoGOYOdEHaDS21EOQCdLcs+QMjQY/5L6sG9J5UXzpRMfzAuzwM11BmmSphYXTkUObbCedyJB43NsP6HGgiVsY6edE0Z7j84jwLA0Fnf5EQtVPwaaKSIYMbTCq0OSCztuSrfTwg6acylx76V0gAU5UoQoziQ5Qi9PCtCAY3mTCztdSrgIaxuazxo9C9fJCuT4a02rKAluteYD0eiSs+nL192r1jip/Dq99B+c7yY7TjvsF5e/Uxaa8Q3m30bky8N95/FrFR1I/eHM2EMZ/ZRCGdc397Z3D+GrNNLLDEIOQZEz6UGrH//5Ik03DA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=coOj4PMJMGfb2ipeUebqVxo7ulLBeL7/pKKEXhQTTjs=;
- b=lAqobjjYJIHPCXeQ/LtImaYa95UDk3EZRjBJT3i+UXdd7/Dlbkgh1pWXHNQY0J2qghPjFphhZxlT38cl6fhVb27+biybEOPqgIetQFrggW5E5TBO+wnhK8rYYSs7Y1NKwgiWFKoC3yd1mlx9QagJkbSKEfFKCcSt6I36LPd/pzk=
-Received: from PH7PR12MB5831.namprd12.prod.outlook.com (2603:10b6:510:1d6::13)
- by IA1PR12MB6411.namprd12.prod.outlook.com (2603:10b6:208:388::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Wed, 8 Mar
- 2023 16:27:01 +0000
-Received: from PH7PR12MB5831.namprd12.prod.outlook.com
- ([fe80::3bb0:da9a:5a44:8e32]) by PH7PR12MB5831.namprd12.prod.outlook.com
- ([fe80::3bb0:da9a:5a44:8e32%4]) with mapi id 15.20.6156.029; Wed, 8 Mar 2023
- 16:27:01 +0000
-From:   "Zhuo, Qingqing (Lillian)" <Qingqing.Zhuo@amd.com>
-To:     Maxime Ripard <maxime@cerno.tech>,
-        "Mahfooz, Hamza" <Hamza.Mahfooz@amd.com>
-CC:     "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/2] drm/vc4: Fix build error with undefined label
-Thread-Topic: [PATCH 1/2] drm/vc4: Fix build error with undefined label
-Thread-Index: AQHZUaEy/DMbuWA+vUWS5MTAKPyPlK7xDf0AgAACV4CAAAHGEA==
-Date:   Wed, 8 Mar 2023 16:27:01 +0000
-Message-ID: <PH7PR12MB58315E9E7362E8A750393B6FFBB49@PH7PR12MB5831.namprd12.prod.outlook.com>
-References: <20230308093408.239331-1-qingqing.zhuo@amd.com>
- <ac8fed53-6f05-6ec7-9ef5-61110cd83c0b@amd.com>
- <20230308161945.svooztnablyvm75e@houat>
-In-Reply-To: <20230308161945.svooztnablyvm75e@houat>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-03-08T16:26:59Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=cd8331b4-1e21-47ff-951d-f4a333d38137;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2023-03-08T16:26:59Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: c88622a8-9b5a-4ae8-bb46-b3e5c3eca7df
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR12MB5831:EE_|IA1PR12MB6411:EE_
-x-ms-office365-filtering-correlation-id: 9182fe2c-6e0a-467e-929b-08db1ff1f243
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YLh8xz+hIyhul4fz1eoIT939/2IC9a/IVglprG79B+oDpQA6Qn79V9uimjz3kNMmkRQQLHxrbX8AAQ01ExusqUIbWRIYJWYN9bfK/IHZSdE1LQ2nkv3p09TNSYS4fwMYZJYDixfcyxbgi7SdSq+E4u/YGXj7Js0x3UQhYdCmN9LzKLG+WAUZVb5p6wy8P3X1kn/qbmYhETx75NisEKZTpJcKYXEsOx1AsJEo5HWN5+4rRrIkN+NPflu9WumwIh9twdVOUTyK4NminteybBrSKjqV3lYq16gHpemuiVEPozyZCaucf8U0Y7wZUb6BHQcYtcgHMItX6eSrQ+/g/LliPouRhUdmq/reSrTbIZvijNz6VZp/loHT3rBjNAHwcIcI1gxAw7xCpLq5pUYVjRGml3cFAvFKTAIrrL6Kl+vsBP2hAWMc/DVpd7lpUtp+RVa1eHHEUFM0FUOtOENl+aIfW6yRDwgIsiWwaA8h+/Jd0k9RIUNdgrLn7EppOokBpn2DKwO97k8uo6ogqxpttTIX9lG27z7BD9iL95BFvdQFXwLnD+SfUW78HIwSQvN4XnraoqtgVohdegbTdq2/9lLwlcvFcwhlfbVvbTBNPkPJQA+M9SlBvKOCsVwW83My5cBmDdqfhJa+gq7mxbiyMmWLqNYxKN1DIqBNHWt1ThzgMHFUpJSzO9HoTFf3QtyjAHPnPXJrHek6rV3Mmu40L0BjSw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5831.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(136003)(376002)(396003)(366004)(451199018)(316002)(6636002)(110136005)(54906003)(83380400001)(86362001)(33656002)(55016003)(64756008)(9686003)(186003)(41300700001)(26005)(5660300002)(53546011)(66556008)(4326008)(66476007)(478600001)(2906002)(7696005)(6506007)(66446008)(8936002)(8676002)(66946007)(71200400001)(76116006)(122000001)(38100700002)(52536014)(38070700005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OCt3d29iVzc5OTAvWGtTeGJUSmlVeDA4RkRkbjllaFdGY0ZKcE9RUUUyMVJu?=
- =?utf-8?B?ZmY5ZFQwUVFubVk2VnhyTUp1T2NBY3Z2d1BnS0VLT1RmN3FiTndxelpydklR?=
- =?utf-8?B?bGdCbUJDNXZiUWl5ejNnc0l5R2ZyKzJ2SXRQT2orWDJESVJDdS96QjRhdlM1?=
- =?utf-8?B?L092c2tmUjUxMmpFYUZRY0I0dFJkZis1bnZBa3FQTm0xZE9mYWZyNG91MnFL?=
- =?utf-8?B?SkJOalpLTDd4SlVZazFQWFhyb2l4Y3lIb0Z5ck5uK0g5WDhTRGtmWEJTMmtL?=
- =?utf-8?B?NlVBRkE5K2tUM3UrYlROY001aDBEaWJRTDdMNlNEOXVKMzRqWkZJUEszWlhz?=
- =?utf-8?B?RUtwVncyeXNwUWZTTTdVWFJSWDF1K0VFRnpETk1DUG1rTXF1VnhyaFBCVk5l?=
- =?utf-8?B?OFdNaVp6T1lQTjJrZXh5eEY5RGcyQmJycDNON2hYc1ZXRW9ZRExyVG9ER2V0?=
- =?utf-8?B?b0RZTHMzbFordG5PK2RXM1ovYU04VndKOGxxa0J0bHVMc3ZtQmhORDZwZHN3?=
- =?utf-8?B?dEgxek9uS2lkeXZzN2hVVm5mNDlVU3llTURPY2xYb2hBNHl2VVR0ZlFCbWxP?=
- =?utf-8?B?eHM0c2FSL2p3UFIvMW5qQ0VlU2dCckYzZy9GUzI2L1ZXVE55SHhpUy9QSU1D?=
- =?utf-8?B?VkNNbzJQb21zWWsrSUh2TU1wMEZxaHBlRHdNSnhMZVR1cmQ5TGxsTDdOS0lI?=
- =?utf-8?B?QmRsNHRWSHVRK0J6TWR6YXlxZUdJU21RM3MveDZ6ZVIzczlJRmRZNHlYUDFr?=
- =?utf-8?B?L0EwWVRROVdSWFR6Kzl6SVQ1cEFpVFI1RXBwWjhXNFgrdy9SS0FmQmJWUHBL?=
- =?utf-8?B?WXpSeFMrRE1ORWVwV2NhMDRWYm5kNVNKb2RhZXdhYXA3QmxCam51ZHh2WVBz?=
- =?utf-8?B?c2VsbXVBRVowRGRMOENQMUYxd28rS21oN3prK3o0Y2c0V2liYkU5N3FJWG1v?=
- =?utf-8?B?bjlLWHhUeDREaFZqVDVpRnJIYUgzTDNsSWowTEUyVFhyS3dqZDZlZWFFSm5E?=
- =?utf-8?B?dVRMMmVpMFduaWRuV3lmVnNrcVI0em1oSTc2ZEZOQ282MUl6aGhibXVsZmxl?=
- =?utf-8?B?eVRpc0llQWRESWpDRHpITE5EaTV4dE1xNGg0ZEE0V3MzR3pPaFFUSW94MDFO?=
- =?utf-8?B?ZmJUemkxem51NEtyZWpQT3BBQkJ5UVMxZWZUWTBUV3JLTVA5eDN5RUo5OGtB?=
- =?utf-8?B?R2pna21uNUFVTTJxNldoNlBXVTRxbHl2c3VJQ2NCKzRCR05Mak45S2NuNm1a?=
- =?utf-8?B?RWNyRFJSVDZqZ3VsQzR6eTBUSVMrRFRLVlZ4MHBLNDJhRVNDdVRrczRzMzgz?=
- =?utf-8?B?K3F1TFhsa0tKY0JLc1drcWJRK1YrTGN3bm9TMUV5R3Y4YWQzTndQakIwcm0v?=
- =?utf-8?B?Z1VzdW9YRE1hZk1zUUJvaS84bGttQUsxNCs1SnU0bU44U0pRbEFWV2F3RmlL?=
- =?utf-8?B?VXZDM0JrTFgrVHYxOUZ1QTdVS3U1dFczUUlzSmFWNDcxVHZ3QWRMU1AxWGdl?=
- =?utf-8?B?eXRYMFRmTDN1ZEJobUw1SEpmeFRwc1BncXZjeE4rNWhMNjljSU1nNGVydFNH?=
- =?utf-8?B?QjlReFBDa3ZpUVNHenRFbU43S2FCVUNEdER3Y1VNbUtVUStTZmFFblBPNEMw?=
- =?utf-8?B?a2lOSk5LMFpPWUo3a2E0djkrQzBpUk5lY0d6cytUemVqbnBhNUFpb3JhTzU3?=
- =?utf-8?B?OXI3UDN5eG82R1JoU1lwNGxyNFF5ZDFtak5QU0RRWkwrMmlnOFpISmppSHNY?=
- =?utf-8?B?Q2FxYjdXWFdJT1NiZlpsbUVuRHRsRit5ZDB6T1YralpZZDBnS3NUR3hmSjNU?=
- =?utf-8?B?cUhlRTZjcVhDRlpGTVQwSG5qUmV0UmNFdyt1ZUlyNVI4OTU3TkpqT0U4Tncv?=
- =?utf-8?B?Z2F4MmRLRVRldnB5S0k2U2ZiZVU4YXF4WjNLb2JoSHI4VHBRVCtaMFVsaDQ1?=
- =?utf-8?B?NG5MVjVodk1ocng5Z0lyZlBRbnJ3cHRPSEdhVHduQzBFUmJzbkdmRWpGdnZV?=
- =?utf-8?B?eWtYcnJnUEw2QXVhMmZTM01oVnRkLzFXaUhkUWxYNjlreWJ3N1hzWjhUUjkz?=
- =?utf-8?B?VHhlUGFzY1BzZ3RqRG9kQjBYdGhBUktGOFg5QkNRdFMxNUtEMmtwZkxOZXd6?=
- =?utf-8?Q?WWds=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 8 Mar 2023 11:28:41 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4949E2069F;
+        Wed,  8 Mar 2023 08:28:04 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id ay14so64314611edb.11;
+        Wed, 08 Mar 2023 08:28:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678292882;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8qplyMQINe2W3LTK4CSzGPDowxH4S62V5RleKulPJLo=;
+        b=UtXXjB2Sb8uE0I4aQP+tKLypRWWg8k3euJKU2xyVGn64N6QNcvZeL21p+DOHBO63lz
+         gZkplvHD9ZzIaTXGvqSOp3gmPNC+rmIPzX3HMIBoW5fHIZcEjiFeovQTma48qQrCmtDL
+         B1n7s5Kaggh90Z/RXSXXfnypGsOT5SMrjcerMVXz4qTgDlSgqm0NxX7BB/3AdeGXXZ+Q
+         7nxPhpFKOI7n3b4fa3Rfu+wwB+ceq7APuXgJGE2pJmXLlio7Kl7JaylaKPSgrXsqDSIi
+         usqxI8ZBZe+BR0o2rb40Zm4iTall99XMKe1a/ho6rCaRJLd+kfsXWLLWYnaz/mvAV/je
+         wqeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678292882;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8qplyMQINe2W3LTK4CSzGPDowxH4S62V5RleKulPJLo=;
+        b=5kTokw50Fkvvdm15kCEZOHTWXC6SPqhaVz5seZ9Z8Eh3Whyr6YbYkINmATEVehC5Rm
+         KRXlXwn/YlIVWeb1uSFj4m7y0Lah3wG9nn+l1GU74zst4Qg2miIa7Uvw8NY/Iw4xsOTa
+         BmWZDPdlD/OB2WfDiqIxCdYPxtSjGT2vVVQXUJqhTF9k01OEFoLkp9wFEdhs2WvTo4gP
+         VLsAWYCgICy8kIWmhGSwrSuW26ZI1FxWVzKQR78rWw88O3d+IkAs8dctTEJEbFGlgEz/
+         W7ypsaitvzAkgHqpm2jAIEqe41FXIvK8tW36r9V+ccB7PhdfKbZP8rPnWWsPT93d6aBc
+         DYAw==
+X-Gm-Message-State: AO0yUKVDUkUtNyhIfMR7yIRyHXw8v5pPTeSXU93l3d91qYjqGIAQjRUO
+        NbYJS+XycW5FFH1pe6mwmXTNaMraZ+14uGdjtiM=
+X-Google-Smtp-Source: AK7set+hOtnRk+qv+mClFvaRL1/R3Qml7puc5AuPLJ04zytXRlCcUdQoy38YoFwXbCxX06FIf9stExK/tK3Naq6QgOM=
+X-Received: by 2002:a17:906:6b83:b0:878:790b:b7fd with SMTP id
+ l3-20020a1709066b8300b00878790bb7fdmr8941949ejr.14.1678292882589; Wed, 08 Mar
+ 2023 08:28:02 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5831.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9182fe2c-6e0a-467e-929b-08db1ff1f243
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Mar 2023 16:27:01.4682
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0AXjme510Aq5vrZUqDFMBiUz7tw4KdDMH4eZdSAF2n/kygIMci4W+jiw4CvNphtE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6411
+References: <20221209142615.33574-1-jandryuk@gmail.com> <87359gkc1d.fsf@baylibre.com>
+ <CAKf6xpsGy7rjK3Rkosevr3dD+64-WqCEzAecBbHEHpBMeAHh7A@mail.gmail.com>
+In-Reply-To: <CAKf6xpsGy7rjK3Rkosevr3dD+64-WqCEzAecBbHEHpBMeAHh7A@mail.gmail.com>
+From:   Jason Andryuk <jandryuk@gmail.com>
+Date:   Wed, 8 Mar 2023 11:27:50 -0500
+Message-ID: <CAKf6xpsXjZ11cB05q3iKUcY3k2i0MXnpC-8anRe8YAwwxrhh7A@mail.gmail.com>
+Subject: Re: [PATCH v2] Input: xen-kbdfront - drop keys to shrink modalias
+To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        Phillip Susi <phill@thesusis.net>, stable@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCj4gSGksDQoNCk9uIFdlZCwgTWFy
-IDA4LCAyMDIzIGF0IDExOjExOjIyQU0gLTA1MDAsIEhhbXphIE1haGZvb3ogd3JvdGU6DQo+ICsg
-dmM0IG1haW50YWluZXJzDQo+IA0KPiBPbiAzLzgvMjMgMDQ6MzQsIFFpbmdxaW5nIFpodW8gd3Jv
-dGU6DQo+ID4gW1doeV0NCj4gPiBkcml2ZXJzL2dwdS9kcm0vdmM0L3ZjNF9oZG1pLmM6IEluIGZ1
-bmN0aW9uIOKAmHZjNF9oZG1pX2JpbmTigJk6DQo+ID4gZHJpdmVycy9ncHUvZHJtL3ZjNC92YzRf
-aGRtaS5jOjM0NDg6MTc6IGVycm9yOiBsYWJlbCANCj4gPiDigJhlcnJfZGlzYWJsZV9ydW50aW1l
-X3Bt4oCZIHVzZWQgYnV0IG5vdCBkZWZpbmVkDQo+ID4gDQo+ID4gW0hvd10NCj4gPiB1cGRhdGUg
-ZXJyX2Rpc2FibGVfcnVudGltZV9wbSB0byBlcnJfcHV0X3J1bnRpbWVfcG0uDQo+ID4gDQo+ID4g
-U2lnbmVkLW9mZi1ieTogUWluZ3FpbmcgWmh1byA8cWluZ3Fpbmcuemh1b0BhbWQuY29tPg0KPiA+
-IC0tLQ0KPiA+ICAgZHJpdmVycy9ncHUvZHJtL3ZjNC92YzRfaGRtaS5jIHwgMiArLQ0KPiA+ICAg
-MSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+ID4gDQo+ID4g
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS92YzQvdmM0X2hkbWkuYyANCj4gPiBiL2RyaXZl
-cnMvZ3B1L2RybS92YzQvdmM0X2hkbWkuYyBpbmRleCA5ZTE0NTY5MGM0ODAuLmVkZjg4MjM2MGQy
-NCANCj4gPiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vdmM0L3ZjNF9oZG1pLmMN
-Cj4gPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vdmM0L3ZjNF9oZG1pLmMNCj4gPiBAQCAtMzQ0NSw3
-ICszNDQ1LDcgQEAgc3RhdGljIGludCB2YzRfaGRtaV9iaW5kKHN0cnVjdCBkZXZpY2UgKmRldiwg
-c3RydWN0IGRldmljZSAqbWFzdGVyLCB2b2lkICpkYXRhKQ0KPiA+ICAgCSAqLw0KPiA+ICAgCXJl
-dCA9IHBtX3J1bnRpbWVfcmVzdW1lX2FuZF9nZXQoZGV2KTsNCj4gPiAgIAlpZiAocmV0KQ0KPiA+
-IC0JCWdvdG8gZXJyX2Rpc2FibGVfcnVudGltZV9wbTsNCj4gPiArCQlnb3RvIGVycl9wdXRfcnVu
-dGltZV9wbTsNCj4gPiAgIAlpZiAoKG9mX2RldmljZV9pc19jb21wYXRpYmxlKGRldi0+b2Zfbm9k
-ZSwgImJyY20sYmNtMjcxMS1oZG1pMCIpIHx8DQo+ID4gICAJICAgICBvZl9kZXZpY2VfaXNfY29t
-cGF0aWJsZShkZXYtPm9mX25vZGUsICJicmNtLGJjbTI3MTEtaGRtaTEiKSkgDQo+ID4gJiYNCg0K
-PiBUaGUgY3VycmVudCBkcm0tbWlzYy1uZXh0IGJyYW5jaCBkb2Vzbid0IGhhdmUgdGhhdCBjb250
-ZXh0IGF0IGFsbC4gV2hhdCB0cmVlIGlzIHRoaXMgYmFzZWQgb24/DQoNCj4gTWF4aW1lDQoNCkhp
-IE1heGltZSwNCg0KVGhpcyBpcyBmb3IgYW1kLXN0YWdpbmctZHJtLW5leHQuDQoNClRoYW5rcywN
-CkxpbGxpYW4NCg==
+On Wed, Mar 8, 2023 at 11:26=E2=80=AFAM Jason Andryuk <jandryuk@gmail.com> =
+wrote:
+>
+> On Thu, Dec 15, 2022 at 8:54=E2=80=AFAM Mattijs Korpershoek
+> <mkorpershoek@baylibre.com> wrote:
+> >
+> > On Fri, Dec 09, 2022 at 09:26, Jason Andryuk <jandryuk@gmail.com> wrote=
+:
+> >
+> > > xen kbdfront registers itself as being able to deliver *any* key sinc=
+e
+> > > it doesn't know what keys the backend may produce.
+> > >
+> > > Unfortunately, the generated modalias gets too large and uevent creat=
+ion
+> > > fails with -ENOMEM.
+> > >
+> > > This can lead to gdm not using the keyboard since there is no seat
+> > > associated [1] and the debian installer crashing [2].
+> > >
+> > > Trim the ranges of key capabilities by removing some BTN_* ranges.
+> > > While doing this, some neighboring undefined ranges are removed to tr=
+im
+> > > it further.
+> > >
+> > > An upper limit of KEY_KBD_LCD_MENU5 is still too large.  Use an upper
+> > > limit of KEY_BRIGHTNESS_MENU.
+> > >
+> > > This removes:
+> > > BTN_DPAD_UP(0x220)..BTN_DPAD_RIGHT(0x223)
+> > > Empty space 0x224..0x229
+> > >
+> > > Empty space 0x28a..0x28f
+> > > KEY_MACRO1(0x290)..KEY_MACRO30(0x2ad)
+> > > KEY_MACRO_RECORD_START          0x2b0
+> > > KEY_MACRO_RECORD_STOP           0x2b1
+> > > KEY_MACRO_PRESET_CYCLE          0x2b2
+> > > KEY_MACRO_PRESET1(0x2b3)..KEY_MACRO_PRESET3(0xb5)
+> > > Empty space 0x2b6..0x2b7
+> > > KEY_KBD_LCD_MENU1(0x2b8)..KEY_KBD_LCD_MENU5(0x2bc)
+> > > Empty space 0x2bd..0x2bf
+> > > BTN_TRIGGER_HAPPY(0x2c0)..BTN_TRIGGER_HAPPY40(0x2e7)
+> > > Empty space 0x2e8..0x2ff
+> > >
+> > > The modalias shrinks from 2082 to 1550 bytes.
+> > >
+> > > A chunk of keys need to be removed to allow the keyboard to be used.
+> > > This may break some functionality, but the hope is these macro keys a=
+re
+> > > uncommon and don't affect any users.
+> > >
+> > > [1] https://github.com/systemd/systemd/issues/22944
+> > > [2] https://lore.kernel.org/xen-devel/87o8dw52jc.fsf@vps.thesusis.net=
+/T/
+> > >
+> > > Cc: Phillip Susi <phill@thesusis.net>
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
+> >
+> > Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+>
+> Thank you, Mattjis.
+
+Thank you, Mattijs.  My apologies.
+
+Regards,
+Jason
