@@ -2,88 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE1B6B120D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 810456B1214
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjCHTbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 14:31:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
+        id S229695AbjCHTdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 14:33:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjCHTba (ORCPT
+        with ESMTP id S229629AbjCHTdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 14:31:30 -0500
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A09CF98B;
-        Wed,  8 Mar 2023 11:31:13 -0800 (PST)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1755e639b65so19919463fac.3;
-        Wed, 08 Mar 2023 11:31:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678303872;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Wed, 8 Mar 2023 14:33:50 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB754867CA
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 11:33:48 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id d7so16419577vsj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 11:33:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678304028;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OVRxkbAcOH49LnvQjybsYaSoW319krR81ouXEhY/1GA=;
-        b=sFL1+pNwdivSCzLPG6bR0NrnGjrADVKuwe7j2cq4OiPv3x0U6wG+6Mdkfxa8q6CCX6
-         ljwSBev3DGQgkH+VcqAliJDnoMVEyf5HUP3NH6QHLr6DkUHkOEcWICiFrKn18whFIzFx
-         2pGpRTOO7vHbhdTULH0xkBQDWI9Or2C7ZKYRtKcr128nux91vb9ZFGByN3+bxy1Itf3a
-         nJzW/ze3F1DF1zdtcQLF/28CJJ4K4thPIJjWo6/b0z7yxkkUedNXlJ8sWlFrRd9DnKBN
-         C7ryG5lGssuRpA/0Ie0Hdu3kVfuKq5IWsCXthKUR+eCnKpPZx1E+jFak8ixXSIIiz8YH
-         HnpA==
-X-Gm-Message-State: AO0yUKVaUStzzm/RIBME71p39DHbwo+rkSHjsGzP8RmB4MnRd4Kk0P6j
-        EzvKxNg7iemQ6nyVHmpPew==
-X-Google-Smtp-Source: AK7set+2G35ce6l0KBUah5lmSczkOPP8Rxk/KKrKFG3bwudwFBrKiHsr0HW+2VEzTaZfCdFpWT0Dvg==
-X-Received: by 2002:a05:6870:c69b:b0:16a:a965:87e0 with SMTP id cv27-20020a056870c69b00b0016aa96587e0mr12331912oab.54.1678303871060;
-        Wed, 08 Mar 2023 11:31:11 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p13-20020a9d4e0d000000b0068bbc9e7cc9sm6745998otf.53.2023.03.08.11.31.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 11:31:10 -0800 (PST)
-Received: (nullmailer pid 3642800 invoked by uid 1000);
-        Wed, 08 Mar 2023 19:31:09 -0000
-Date:   Wed, 8 Mar 2023 13:31:09 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-kernel@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, devicetree@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: Re: [PATCH v2 1/4] dt-bindings: iommu: dart: Add t8103-usb4-dart
- compatible
-Message-ID: <167830386930.3642740.3268632059091796734.robh@kernel.org>
-References: <20230228202132.4919-1-sven@svenpeter.dev>
- <20230228202132.4919-2-sven@svenpeter.dev>
+        bh=elaSW8jK4c19wV80MgoUgZ3YhWwQARYHu+N4OavZYdI=;
+        b=ZT7fEl+nYdAmg9IvsK09c/PS7bt1DvEk5pFH+d6EEBhGoTZvpc1KA7FFuDrDjTsc8a
+         fAA2ZrH4gbwIrF+co/Stl8dTn4GhKT+0FBNAo88O+aWv1TYipAaJ5YLMq2igiwmto7W9
+         XWG7+ERZqapGkOs21b1AWRBw4kcJ1aZuvmvNj8tfZuxqbk0YbDjMDMDEX92ewIUzYTSh
+         e1t3ZIyyly8r237SQDQJRfxVPu3h61N7SBpIbmX7ZrfnFYAF/0F/WWBp6VFcU3ORaCM3
+         4oK1SmkHjQeXY6VXDFuwsFOrmdG+I2VR6d1B3Mt+TNGKvFBRZ9yauHdY3E9IzZLsWSx/
+         vgfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678304028;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=elaSW8jK4c19wV80MgoUgZ3YhWwQARYHu+N4OavZYdI=;
+        b=ZmcrUakImmPZnV8RY/SauCBHZUQCiXJMyRUPmE2TWfK0sog4qegSznKEQ9lC7GTRg8
+         /JUPG8r6+5YjlOYdkb1TJkkpDPjwRaVJfjKg/nxx4kbG4AkbSi1fcK9sa/HFmWPZk0mE
+         eYYMRMHoRgAzhTnVQCBeXTClOQz8722GH7c7nl5FEkMu2KI2d5J5Aqx0CHCEJMXPamMC
+         fozEYslxWk5EozfjeKL9miVRPm5Sxs/3rCMg9y98xqKPxFHX794n1rCWech8iybnjS8U
+         c5CFlDq4mi1Snlxm8Olo2hRh/PNXQoJXSlr18uAVfhfzHObtwtA0HiCcxBmkgUdXbzjk
+         BXSg==
+X-Gm-Message-State: AO0yUKU1yRFOdKCGYm18JuJN88QoEu+hZu73vvgxeboP8t0UF8RVJcG5
+        uCaaA9ax7Krw5tymRkgxOduA5eXqifrxVoiJ0VOwKw==
+X-Google-Smtp-Source: AK7set//ZSmUJFzt7Xok9V0kaTPUAwP+t2ISSQ76Tcf33SidVGnU7PJ9KopuOK39cqAnuwfnhNU07V2i5mPO1ddZW5A=
+X-Received: by 2002:a67:f406:0:b0:414:48a5:473f with SMTP id
+ p6-20020a67f406000000b0041448a5473fmr12895848vsn.0.1678304027775; Wed, 08 Mar
+ 2023 11:33:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228202132.4919-2-sven@svenpeter.dev>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221229160045.535778-1-brgl@bgdev.pl> <20221229160045.535778-2-brgl@bgdev.pl>
+ <CAMuHMdWBQaB2caVB9vKQoqE0r6jAqOidMRmsCXxyixEm+HWPdw@mail.gmail.com>
+In-Reply-To: <CAMuHMdWBQaB2caVB9vKQoqE0r6jAqOidMRmsCXxyixEm+HWPdw@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 8 Mar 2023 20:33:36 +0100
+Message-ID: <CAMRc=McHiMXHzeg_B3zEw74yzNcw48jWEDcZRcvPNZ51XiS0kg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] i2c: dev: fix notifier return values
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 8, 2023 at 5:58=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68k=
+.org> wrote:
+>
+> Hi Bartosz,
+>
+> On Thu, Dec 29, 2022 at 5:12=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.p=
+l> wrote:
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > We have a set of return values that notifier callbacks can return. They
+> > should not return 0, error codes or anything other than those predefine=
+d
+> > values. Make the i2c character device's callback return NOTIFY_DONE or
+> > NOTIFY_OK depending on the situation.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+> Thanks for your patch, which is now commit cddf70d0bce71c2a ("i2c:
+> dev: fix notifier return values") in v6.3-rc1.
+>
+> On SH/R-Mobile platforms, this leads to missing /dev/i2c-* entries.
+> On R-Car Gen4, they are still present, as all I2C adapters are
+> initialized after i2cdev.
+>
+> > --- a/drivers/i2c/i2c-dev.c
+> > +++ b/drivers/i2c/i2c-dev.c
+> > @@ -653,12 +653,12 @@ static int i2cdev_attach_adapter(struct device *d=
+ev, void *dummy)
+> >         int res;
+> >
+> >         if (dev->type !=3D &i2c_adapter_type)
+> > -               return 0;
+> > +               return NOTIFY_DONE;
+> >         adap =3D to_i2c_adapter(dev);
+> >
+> >         i2c_dev =3D get_free_i2c_dev(adap);
+> >         if (IS_ERR(i2c_dev))
+> > -               return PTR_ERR(i2c_dev);
+> > +               return NOTIFY_DONE;
+> >
+> >         cdev_init(&i2c_dev->cdev, &i2cdev_fops);
+> >         i2c_dev->cdev.owner =3D THIS_MODULE;
+> > @@ -678,11 +678,11 @@ static int i2cdev_attach_adapter(struct device *d=
+ev, void *dummy)
+> >                 goto err_put_i2c_dev;
+> >
+> >         pr_debug("adapter [%s] registered as minor %d\n", adap->name, a=
+dap->nr);
+> > -       return 0;
+> > +       return NOTIFY_OK;
+>
+> Unfortunately i2cdev_{at,de}tach_adapter() are not only used as
+> notifiers (called from i2cdev_notifier_call()), but also called from
+> i2c_dev_init():
+>
+>         /* Bind to already existing adapters right away */
+>         i2c_for_each_dev(NULL, i2cdev_attach_adapter);
+>
+> and i2c_dev_exit():
+>
+>         i2c_for_each_dev(NULL, i2cdev_detach_adapter);
+>
+> As soon i2c_dev_{at,de}tach_adapter() returns a non-zero
+> value (e.g. NOTIFY_OK), {i2c,bus}_for_each_dev() aborts
+> processing.
+>
+> In i2c_dev_init(), this leads to a failure in registering any
+> already existing i2c adapters after the first one, causing missing
+> /dev/i2c-* entries.
+>
+> In i2c_dev_exit(), this leads to a failure unregistering any but the
+> first i2c adapter.
+>
+> As there is no one-to-one mapping from error codes to notify codes,
+> I think this cannot just be handled inside i2cdev_notifier_call() :-(
+>
 
-On Tue, 28 Feb 2023 21:21:29 +0100, Sven Peter wrote:
-> This DART variant is found in the t8103 (M1) SoCs and used for the
-> USB4/Thunderbolt PCIe ports. Unlike the regular t8103 DART these support
-> up to 64 SIDs and require a slightly different MMIO layout. This variant
-> is only found on the M1 SoCs.
-> 
-> Acked-by: Hector Martin <marcan@marcan.st>
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> ---
->  Documentation/devicetree/bindings/iommu/apple,dart.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Would wrapping i2c_a/detach_adapter() in a notifier callback work? So
+that SH can call it directly while notifiers would call it indirectly
+through the wrapper?
 
-Acked-by: Rob Herring <robh@kernel.org>
-
+Bart
