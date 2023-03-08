@@ -2,119 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1416B0697
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F41F16B069B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:06:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbjCHMFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 07:05:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
+        id S231183AbjCHMGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 07:06:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjCHMFj (ORCPT
+        with ESMTP id S229603AbjCHMGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:05:39 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CECB862A;
-        Wed,  8 Mar 2023 04:05:32 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pZsXr-00028P-0Q;
-        Wed, 08 Mar 2023 13:05:23 +0100
-Date:   Wed, 8 Mar 2023 12:05:19 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        Alexander Couzens <lynxis@fe80.eu>
-Subject: Re: [PATCH net-next v12 09/18] net: ethernet: mtk_eth_soc: Fix link
- status for none-SGMII modes
-Message-ID: <ZAh5/+erE6yYYl7B@makrotopia.org>
-References: <cover.1678201958.git.daniel@makrotopia.org>
- <1590fb0e69f6243ac6a961b16bf7ae7534f46949.1678201958.git.daniel@makrotopia.org>
- <ZAhzt5eIZiJUyVm7@shell.armlinux.org.uk>
- <B69026D7-E770-4168-B1CA-54E34D52C961@public-files.de>
+        Wed, 8 Mar 2023 07:06:21 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A431A962;
+        Wed,  8 Mar 2023 04:06:17 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PWrQK4jYZz9xFrP;
+        Wed,  8 Mar 2023 19:56:57 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwB39QAbeghkbvN_AQ--.22828S2;
+        Wed, 08 Mar 2023 13:05:58 +0100 (CET)
+Message-ID: <9f19f0ff41114f7c90cca681f438388a64807e92.camel@huaweicloud.com>
+Subject: Re: [PATCH] bpf: Fix IMA test
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Matt Bobrowski <mattbobrowski@google.com>
+Cc:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        shuah@kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 08 Mar 2023 13:05:45 +0100
+In-Reply-To: <ZAhrl0rK9Yume1Ed@google.com>
+References: <20230308103713.1681200-1-roberto.sassu@huaweicloud.com>
+         <ZAhrl0rK9Yume1Ed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <B69026D7-E770-4168-B1CA-54E34D52C961@public-files.de>
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwB39QAbeghkbvN_AQ--.22828S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAr4fXw4fZFW5uFy3CFy3Arb_yoW5Kw17p3
+        97Wr1jya1xtFy3trn2vFWUWFWSvFn7X3WUGrs5t34rA34UWr92qa4IvF18X3Z8CrWIya1x
+        Za1rGrZrGw10yaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_Gr0_Zr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UdxhLUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBF1jj4ZWEAABs8
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 12:44:57PM +0100, Frank Wunderlich wrote:
-> Am 8. März 2023 12:38:31 MEZ schrieb "Russell King (Oracle)" <linux@armlinux.org.uk>:
-> >On Tue, Mar 07, 2023 at 03:54:11PM +0000, Daniel Golle wrote:
-> >> Link partner advertised link modes are not reported by the SerDes
-> >> hardware if not operating in SGMII mode. Hence we cannot use
-> >> phylink_mii_c22_pcs_decode_state() in this case.
-> >> Implement reporting link and an_complete only and use speed according to
-> >> the interface mode.
-> >> 
-> >> Fixes: 14a44ab0330d ("net: mtk_eth_soc: partially convert to phylink_pcs")
-> >> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> >
-> >This has been proven to work by Frank Wunderlich last October, so by
-> >making this change, you will be regressing his setup.
+On Wed, 2023-03-08 at 11:03 +0000, Matt Bobrowski wrote:
+> Ha! I was literally in the midst of sending through a patch for
+> this. Thanks for also taking a look and beating me to it!
 > 
-> Hi
+> This LGTM, feel free to add:
 > 
-> My tests were done with 1 kind of 1g fibre sfp as i only have these atm...have ordered some 2g5 rj54 ones,but don't have them yet. I'm not sure if they are working with/without sgmii (1000base-X) and if they have builtin phy.
-> 
-> Daniel have a lot more of different SFPs and some (especially 2g5) were not working after our pcs change.
+> Reviewed-by: Matt Bobrowski <mattbobrowski@google.com>
 
-Exactly. 1 GBit/s SFPs with built-in PHY and using SGMII are working
-fine before and after conversion to phylink_pcs. 1000Base-X and
-2500Base-X PHYs and SFPs were broken after this.
+Thanks.
 
-The patch about (and the other one you already NACK'ed) fixes those
-codepaths which were simply not used in Frank's setup.
+I have only one remain question. Should we accept the old behavior, or
+simply reject it?
 
-> 
-> >What are you testing against? Have you proven independently that the
-> >link partner is indeed sending a valid advertisement for the LPA
-> >register to be filled in?
-> >
+Roberto
 
-I have a ballpark of different SFPs and MediaTek boards with different
-PHYs here and tried all of them.
+> On Wed, Mar 08, 2023 at 11:37:13AM +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Commit 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED
+> > flag is set") caused bpf_ima_inode_hash() to refuse to give non-fresh
+> > digests. IMA test #3 assumed the old behavior, that bpf_ima_inode_hash()
+> > still returned also non-fresh digests.
+> > 
+> > Correct the test by accepting both cases. If the samples returned are 1,
+> > assume that the commit above is applied and that the returned digest is
+> > fresh. If the samples returned are 2, assume that the commit above is not
+> > applied, and check both the non-fresh and fresh digest.
+> > 
+> > Fixes: 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED flag is set")
+> > Reported by: David Vernet <void@manifault.com>
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  .../selftests/bpf/prog_tests/test_ima.c       | 29 ++++++++++++++-----
+> >  1 file changed, 21 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/test_ima.c b/tools/testing/selftests/bpf/prog_tests/test_ima.c
+> > index b13feceb38f..810b14981c2 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/test_ima.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/test_ima.c
+> > @@ -70,7 +70,7 @@ void test_test_ima(void)
+> >  	u64 bin_true_sample;
+> >  	char cmd[256];
+> >  
+> > -	int err, duration = 0;
+> > +	int err, duration = 0, fresh_digest_idx = 0;
+> >  	struct ima *skel = NULL;
+> >  
+> >  	skel = ima__open_and_load();
+> > @@ -129,7 +129,15 @@ void test_test_ima(void)
+> >  	/*
+> >  	 * Test #3
+> >  	 * - Goal: confirm that bpf_ima_inode_hash() returns a non-fresh digest
+> > -	 * - Expected result: 2 samples (/bin/true: non-fresh, fresh)
+> > +	 * - Expected result:
+> > +	 *   1 sample (/bin/true: fresh) if commit 62622dab0a28 applied
+> > +	 *   2 samples (/bin/true: non-fresh, fresh) if commit 62622dab0a28 is
+> > +	 *     not applied
+> > +	 *
+> > +	 * If commit 62622dab0a28 ("ima: return IMA digest value only when
+> > +	 * IMA_COLLECTED flag is set") is applied, bpf_ima_inode_hash() refuses
+> > +	 * to give a non-fresh digest, hence the correct result is 1 instead of
+> > +	 * 2.
+> >  	 */
+> >  	test_init(skel->bss);
+> >  
+> > @@ -144,13 +152,18 @@ void test_test_ima(void)
+> >  		goto close_clean;
+> >  
+> >  	err = ring_buffer__consume(ringbuf);
+> > -	ASSERT_EQ(err, 2, "num_samples_or_err");
+> > -	ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
+> > -	ASSERT_NEQ(ima_hash_from_bpf[1], 0, "ima_hash");
+> > -	ASSERT_EQ(ima_hash_from_bpf[0], bin_true_sample, "sample_equal_or_err");
+> > +	ASSERT_GE(err, 1, "num_samples_or_err");
+> > +	if (err == 2) {
+> > +		ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
+> > +		ASSERT_EQ(ima_hash_from_bpf[0], bin_true_sample,
+> > +			  "sample_equal_or_err");
+> > +		fresh_digest_idx = 1;
+> > +	}
+> > +
+> > +	ASSERT_NEQ(ima_hash_from_bpf[fresh_digest_idx], 0, "ima_hash");
+> >  	/* IMA refreshed the digest. */
+> > -	ASSERT_NEQ(ima_hash_from_bpf[1], bin_true_sample,
+> > -		   "sample_different_or_err");
+> > +	ASSERT_NEQ(ima_hash_from_bpf[fresh_digest_idx], bin_true_sample,
+> > +		   "sample_equal_or_err");
+> >  
+> >  	/*
+> >  	 * Test #4
+> > -- 
+> > 2.25.1
+> > 
+> /M
 
-I have no way to tell if the SFPs and PHYs which stopped working after
-the phylink_pcs conversion are sending valid advertisement. The only
-other boards with SFP slots I got here are RealTek-based switches, and
-all I can say is that on an RTL8380 based 1G switch both, the SFP
-modules containing a PHY and operating in SGMII mode as well as the
-ones without a PHY exposed via i2c-mdio and operating in 1000Base-X
-mode are working fine with that switch, with both, stock firmware and
-OpenWrt running on it.
-
-However, even should they not send valid advertisement, they are very
-common parts and they were working before and not after the change to
-phylink_pcs, for the reasons mentioned in the description of this
-patch.
