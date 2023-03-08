@@ -2,117 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314466B0AB0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 795246B0AA1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjCHOMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:12:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
+        id S232211AbjCHOLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbjCHOLy (ORCPT
+        with ESMTP id S231620AbjCHOL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:11:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638668F52E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:10:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678284597;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=mXndFig5MxMz39oru/IvohSxV+rytJfkgOQsYDdo+fQ=;
-        b=LOBGK1Dh8UmBVToSwzAy80BbcGExuuNZSavuqNWtZVEpyk645Ifxg1BLJzE9KL7j1LV4pt
-        UA4z7cTRRF/Sc2vNkjPHEqxaypLqbWa/CiKXFvFAN8ax6CR+D3Ubi2Xdm92JYpDTbSX8yc
-        k5GvVIoIkohQlVvVPqs6B6EFWajP+TY=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-196-KHFF2M-fPqi48-0Mhji4YA-1; Wed, 08 Mar 2023 09:09:54 -0500
-X-MC-Unique: KHFF2M-fPqi48-0Mhji4YA-1
-Received: by mail-qt1-f199.google.com with SMTP id i24-20020ac84f58000000b003bfe3358691so9090558qtw.21
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 06:09:54 -0800 (PST)
+        Wed, 8 Mar 2023 09:11:26 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD7182360
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:10:10 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id bx12so15476146wrb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 06:10:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1678284607;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jwuTURK4pgdaZOSjBm4ykIJHPiI6ZMc4y7U8yqvAA8E=;
+        b=NxOQX0losj6KUjW09AqI8TallxXyzA+67KC1SEgp5kdAmzbG3S4/HUaTEGpBt3NUOr
+         RHSUf+M77rNNQ0yqTjZemL7w9dmOTJee81l+pDDJG2MinGPI8ZRofYU2MclMNz/BemM3
+         /n9jvPmXzsIkdGyNpIwkLobcprw/oWVKCKX/VBetSFHw3132J1qu0g0Bwhx2U5HWNGDV
+         XBn5qVa1t1g8WXO5j5MrJfYSbeCLA+XEiSPaDDg0jDD3L3Ms6lHUuWuuu2ef742x6ntt
+         utuPNEU19qiu0+mNpg1DvB73RhRVwZYg5IrhvFacFD2Tzl3rQigC62uF2OcjQHtI4XaV
+         u+Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678284593;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mXndFig5MxMz39oru/IvohSxV+rytJfkgOQsYDdo+fQ=;
-        b=fzzwouMTteWoqSm36vBME2rjcPnWe/DFdlXC+4r663kZOt8gW6b5J1mUPHd9v5qXFP
-         pIDU835TMlisKfptcFIpV3VWWBJbU/7cYT4EVFzp0KxPRLCTPjBJFYZ7f++e/1iuHXwN
-         xKJd5zZUlI6Ss8UA5NttxHQ48faRWZpx6ewVHaVJLAVaQZB+ioJa17iAbMQHKkRTi31s
-         ZOQ39oo4aFHQnEk8D4VtkDCBtZNppDayYAtT9PoAd0OZikTE7qiUeRjqyp1Oy83uuTdQ
-         o1KiVv6PwQGc3wGcNl25fPyvlAFluAnNJvCXyNJiuYRBzmT6zXBkXmc4YFwJG5HtTXx7
-         HN/Q==
-X-Gm-Message-State: AO0yUKVQeGhIskoJV76id8GJaPHcNGLmK69HhXyn5ar0pMEjamvWjhSQ
-        XsWOulj1ojyNYIptrwPZpHIKP4qSREL9hToOITrjmZ5J4QcRQdhV7pY7z9mTWBvo9pd30vWnWfq
-        oKQgyG+cbY6Hw6Zbr3/FRc/c9bSwQ3Vxc
-X-Received: by 2002:a05:622a:1443:b0:3bf:d4c3:365d with SMTP id v3-20020a05622a144300b003bfd4c3365dmr4212470qtx.14.1678284593677;
-        Wed, 08 Mar 2023 06:09:53 -0800 (PST)
-X-Google-Smtp-Source: AK7set/OjUR2DEyaB2HDQqosX6A/GPRFh2BbK8gtM7CV145ROLD4Op15ZKZMuAH5bQJg0F1d3/souw==
-X-Received: by 2002:a05:622a:1443:b0:3bf:d4c3:365d with SMTP id v3-20020a05622a144300b003bfd4c3365dmr4212441qtx.14.1678284593432;
-        Wed, 08 Mar 2023 06:09:53 -0800 (PST)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id b1-20020ac812c1000000b003bfa932525dsm11523571qtj.51.2023.03.08.06.09.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 06:09:53 -0800 (PST)
-From:   Tom Rix <trix@redhat.com>
-To:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, lyude@redhat.com, Wayne.Lin@amd.com,
-        hersenxs.wu@amd.com, hamza.mahfooz@amd.com, Jerry.Zuo@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/amd/display: remove unused variable res_pool
-Date:   Wed,  8 Mar 2023 09:09:43 -0500
-Message-Id: <20230308140943.2009970-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        d=1e100.net; s=20210112; t=1678284607;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jwuTURK4pgdaZOSjBm4ykIJHPiI6ZMc4y7U8yqvAA8E=;
+        b=leQoAWHzxrM3lcNsZs6AP8JeVAc8cgUrqQh7jmq+CNbIDEPSvc/A1nF3lvSUix76bf
+         v9Cpkq3lGTnVm7TtMqYIBuoAoLpBCHeP1/Aoznt8jQShWOh9f9IA2yzVFniwUMQS5jsz
+         bDF36svlSN6XNjqBch9PXFTAlFb8k91WzuG70WOySAdcKPJcSX2pc40/H1qJdHHPFAIW
+         px8sxR1sJdN7aLTzzjsPUC90D4/iCVCnElb6I18WzkuD+f0pvOZfZgS8VwOw4OuHJVL9
+         YUr4AgiJTRn6v49NXOEaEm6KQoWkPsChga/6Fb2cjk6JzoyRoZDlDG+Ei753lsij/+FV
+         jk5A==
+X-Gm-Message-State: AO0yUKU17xi6M9pw/kqCtzV3K4tmgiGhdbrX9HUofVlaMYro23k2nldD
+        w0hYOrJAU/CD3eLwaYOnpkqNYg==
+X-Google-Smtp-Source: AK7set/OkWWaPqXZ/GgjkOaIwX0t9gxjOEHVNFuu2kgYmqldgwXq2yccYCG6fFviJObZxipEmkpzrg==
+X-Received: by 2002:adf:f5c9:0:b0:2c7:1210:fe42 with SMTP id k9-20020adff5c9000000b002c71210fe42mr11736229wrp.47.1678284607105;
+        Wed, 08 Mar 2023 06:10:07 -0800 (PST)
+Received: from ?IPV6:2a02:6b6a:b566:0:52ca:aea8:eb67:a912? ([2a02:6b6a:b566:0:52ca:aea8:eb67:a912])
+        by smtp.gmail.com with ESMTPSA id m14-20020adffe4e000000b002c54c8e70b1sm15571371wrs.9.2023.03.08.06.10.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 06:10:06 -0800 (PST)
+Message-ID: <a6090023-29d7-a190-d118-56b8e7acffc6@bytedance.com>
+Date:   Wed, 8 Mar 2023 14:10:05 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [External] Re: [PATCH v13 00/11] Parallel CPU bringup for x86_64
+Content-Language: en-US
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Phillips, Kim" <kim.phillips@amd.com>,
+        "brgerst@gmail.com" <brgerst@gmail.com>,
+        "Rapan, Sabin" <sabrapan@amazon.com>
+Cc:     "piotrgorski@cachyos.org" <piotrgorski@cachyos.org>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
+        "arjan@linux.intel.com" <arjan@linux.intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "mimoja@mimoja.de" <mimoja@mimoja.de>,
+        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
+        "fam.zheng@bytedance.com" <fam.zheng@bytedance.com>,
+        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
+        "simon.evans@bytedance.com" <simon.evans@bytedance.com>,
+        "liangma@liangbit.com" <liangma@liangbit.com>
+References: <20230302111227.2102545-1-usama.arif@bytedance.com>
+ <faa0eb3bb8ba0326d501516a057ab46eaf1f3c05.camel@infradead.org>
+ <effbb6e2-c5a1-af7f-830d-8d7088f57477@amd.com>
+ <269ed38b5eed9c3a259c183d59d4f1eb5128f132.camel@infradead.org>
+ <0c56683a-c258-46f6-056e-e85da8a557db@amd.com>
+ <3bfbbd92-b2ed-8189-7b57-0533f6c87ae7@amd.com>
+ <1975308c952236895f2d8f0e56af9db288eaf330.camel@infradead.org>
+ <39f23da7-1e77-4535-21a6-00f77a382ae5@amd.com>
+ <ba8aae2eafdeb09ec1a41d45ab3c2e4cdaf7a28f.camel@infradead.org>
+From:   Usama Arif <usama.arif@bytedance.com>
+In-Reply-To: <ba8aae2eafdeb09ec1a41d45ab3c2e4cdaf7a28f.camel@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With gcc and W=1, there is this error
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_mst_types.c:1214:31:
-  error: variable ‘res_pool’ set but not used [-Werror=unused-but-set-variable]
- 1214 |         struct resource_pool *res_pool;
-      |                               ^~~~~~~~
 
-Since res_pool is unused, remove it.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c | 2 --
- 1 file changed, 2 deletions(-)
+> static bool prepare_parallel_bringup(void)
+> {
+> 	bool has_sev_es = IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT) &&
+> 		static_branch_unlikely(&sev_es_enable_key);
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-index 2739bef9b90c..4b9b5e4050fc 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-@@ -1211,7 +1211,6 @@ static int pre_compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
- 	bool computed_streams[MAX_PIPES];
- 	struct amdgpu_dm_connector *aconnector;
- 	struct drm_dp_mst_topology_mgr *mst_mgr;
--	struct resource_pool *res_pool;
- 	int link_vars_start_index = 0;
- 	int ret = 0;
- 
-@@ -1220,7 +1219,6 @@ static int pre_compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
- 
- 	for (i = 0; i < dc_state->stream_count; i++) {
- 		stream = dc_state->streams[i];
--		res_pool = stream->ctx->dc->res_pool;
- 
- 		if (stream->signal != SIGNAL_TYPE_DISPLAY_PORT_MST)
- 			continue;
--- 
-2.27.0
+sev_es_enable_key is only defined when CONFIG_AMD_MEM_ENCRYPT is 
+enabled, so it gives a build error when AMD_MEM_ENCRYPT is disabled. 
+maybe below is better?
 
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 282cca020777..e7df41436cfe 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1519,8 +1519,12 @@ void __init smp_prepare_cpus_common(void)
+   */
+  static bool prepare_parallel_bringup(void)
+  {
+-       bool has_sev_es = IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT) &&
+-               static_branch_unlikely(&sev_es_enable_key);
++       bool has_sev_es;
++#ifdef CONFIG_AMD_MEM_ENCRYPT
++       has_sev_es = static_branch_unlikely(&sev_es_enable_key);
++#else
++       has_sev_es = 0;
++#endif
+
+         if (IS_ENABLED(CONFIG_X86_32))
+                 return false;
