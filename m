@@ -2,97 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF3B6B0C77
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6446B0C7B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbjCHPUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:20:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
+        id S232002AbjCHPVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:21:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbjCHPTk (ORCPT
+        with ESMTP id S231929AbjCHPUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:19:40 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7495AF6A3;
-        Wed,  8 Mar 2023 07:19:36 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328Eof4v028629;
-        Wed, 8 Mar 2023 15:19:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=4CtqSlTtRa2zDBj0noBeDCXB//5VJ5JU8QEKZuC7gks=;
- b=maCDxhsr97CfgXrXkOWCS5pYGdjfzE1yWoQuguY61Jt6S7ZQiYe0UYFP/TdPtn1422WW
- CND34myf7HeHSqY+LmVQ1MC2oTwfBzlBjITUujAVX6UM0osO19J7Xgp7hTOTmDc61OJb
- q2Ke0SxwTq7NWv1SQuJyln968M83E0wgnzKSV8K8ZP7XGicO3xZeiOTycfuwsaeD+e55
- hk63okT/kTznU83BoeCeUs4eMDltoPCytPOlbsehZXBwtvLfBhNQDO0qynAxshKjRR9m
- s3FUx04OCRm+EgPcvugAjZcBQ4fGgolE7N6VzJEHHSSv6jGDIO2jLfsiFAy7f4l9r+X+ OQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6pmxa0s4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 15:19:10 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 328EvbHe012765;
-        Wed, 8 Mar 2023 15:19:09 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6pmxa0r8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 15:19:09 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 328E0Jsu016684;
-        Wed, 8 Mar 2023 15:19:07 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3p6fhk3va4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 15:19:07 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 328FJ7gW53608940
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Mar 2023 15:19:07 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E09D458068;
-        Wed,  8 Mar 2023 15:19:06 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 831A858052;
-        Wed,  8 Mar 2023 15:19:05 +0000 (GMT)
-Received: from sig-9-77-134-135.ibm.com (unknown [9.77.134.135])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Mar 2023 15:19:05 +0000 (GMT)
-Message-ID: <1221e9c0192d8a6c55dd10471d7259549d87f0b2.camel@linux.ibm.com>
-Subject: Re: [PATCH 14/28] security: Introduce inode_post_setattr hook
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
-        jlayton@kernel.org, dmitry.kasatkin@gmail.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, dhowells@redhat.com,
-        jarkko@kernel.org, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com, brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 08 Mar 2023 10:19:05 -0500
-In-Reply-To: <20230303181842.1087717-15-roberto.sassu@huaweicloud.com>
-References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
-         <20230303181842.1087717-15-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: loRp11pt8bKz3W85sk6ovHzNEIL7iZqZ
-X-Proofpoint-ORIG-GUID: rOvpUuENJFdUZHal6Vhi53pHGu5LFb3F
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-08_08,2023-03-08_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- phishscore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=999
- impostorscore=0 spamscore=0 mlxscore=0 priorityscore=1501 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303080129
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 8 Mar 2023 10:20:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF9FCD669
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 07:19:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678288776;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZgwktT8M+kuZL3ds+rvp4biP/Gs8JikDQD7POfmJAag=;
+        b=GE9eMPDRSHcHTPazoeplCgn7BIlUAkUlOaMRButkidIDZvAoO91eAnQK/rp3ohGen+Oqyt
+        NtCIcqrSnJeNZWhADg+RJlY35UxPBlrDtwyg/ebmDsLxDHSNU4Aj0rD4yUvc6nKJlhF55F
+        BM3vy0bNEDEtJNvKAGeWBnRt5mkhG+o=
+Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com
+ [209.85.222.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-133-x1hKsP3EMRyRijA42hl9hA-1; Wed, 08 Mar 2023 10:19:35 -0500
+X-MC-Unique: x1hKsP3EMRyRijA42hl9hA-1
+Received: by mail-ua1-f69.google.com with SMTP id g34-20020ab059a5000000b0068fb77b4fccso8174455uad.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 07:19:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678288770;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZgwktT8M+kuZL3ds+rvp4biP/Gs8JikDQD7POfmJAag=;
+        b=jb2cDp+UA/l7yqxQru3zx3xsFaxSA3dx75spVg+llOLSI99os0GPUlL/c3KlLXgr5c
+         eTyqB1xY+mNSq0iAbtRnDmd9/afKcMfw2Swucs1vTyGJmLkCUjp6Kl/qiVlo2vYnPUXt
+         UepjROBtg0Cx3TZ7t2srgrDeT/2yHNlAIzcwCG0mvXQKZyGLLOY1j/k90Tc4reoaEPWv
+         fAaC5OQIYpXYmHlTJje12H+JOYjC5q8yHJVOHw/xQHdhvpTeL4HTfKB4RDk0u6E2l9c/
+         zinfr13YJLSzJT6NYdh8iOLUtI7J7V6eVNSH8aEQgSin2NZkRT0ZtqHMVnLoiMhgsV/a
+         W52w==
+X-Gm-Message-State: AO0yUKW/ScvHKLksrZAl8l2HTD1DK6Zs1kd7ugk0h2cre22VhG5Oj8Ws
+        kwjGoewcEe4kbrEHl3CkshxJT7RXUEDlUfVYOWm1kwdcYgEG3EXluAyz+68tZhQkpnKN3J2E0Tv
+        /NzEyfOAE7QC1It7dMsaGNi8LZHS0fz8jTULYdcxSGrq4/DewlN8=
+X-Received: by 2002:a67:e94c:0:b0:421:c4a7:872b with SMTP id p12-20020a67e94c000000b00421c4a7872bmr9893522vso.6.1678288770287;
+        Wed, 08 Mar 2023 07:19:30 -0800 (PST)
+X-Google-Smtp-Source: AK7set+LFkvKeeVI3ttwm6kpFUQRkNGkfJ8qbDCG4jHcdwVIQ4SiuFcDQxKvoIfsyVYsxcEJcY4MnTcZLVjC63cvuTo=
+X-Received: by 2002:a67:e94c:0:b0:421:c4a7:872b with SMTP id
+ p12-20020a67e94c000000b00421c4a7872bmr9893505vso.6.1678288769989; Wed, 08 Mar
+ 2023 07:19:29 -0800 (PST)
+MIME-Version: 1.0
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net> <cd788ccf-0cf1-85d5-1bf8-efc259bd7e11@amd.com>
+ <CACO55tsnCMQt8UW5_UCY139kpZOdNXbMkBkFfUiB12jW5UgVmA@mail.gmail.com>
+ <0d6cd23b-8c9e-067d-97ff-aa35dbbcf9bf@amd.com> <CACO55tumNMYrcJ0LhnLfTK4DmGLHD-bt3xpXyoPe98V2wmgXQg@mail.gmail.com>
+ <269c4fb7-60f6-6778-444d-15703febea58@amd.com>
+In-Reply-To: <269c4fb7-60f6-6778-444d-15703febea58@amd.com>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Wed, 8 Mar 2023 16:19:17 +0100
+Message-ID: <CACO55tuVVnC-_iVmX=SGGVF=0t6kqqr0Cy0pGe3YoppBgUbiXw@mail.gmail.com>
+Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Asahi Lina <lina@asahilina.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,110 +99,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roberto,
+On Wed, Mar 8, 2023 at 4:09=E2=80=AFPM Christian K=C3=B6nig <christian.koen=
+ig@amd.com> wrote:
+>
+> Am 08.03.23 um 15:43 schrieb Karol Herbst:
+> > [SNIP]
+> > "further"? There was no discussion at all,
+>
+> Yeah, well that is exactly what I wanted to archive.
+>
+> >   you just started off like
+> > that. If you think somebody misses that connection, you can point out
+> > to documentation/videos whatever so the contributor can understand
+> > what's wrong with an approach. You did that, so that's fine. It's just
+> > starting off _any_ discussion with a "Well complete NAK" is terrible
+> > style. I'd feel uncomfortable if that happened to me and I'm sure
+> > there are enough people like that that we should be more reasonable
+> > with our replies. Just.. don't.
+> >
+> > We are all humans here and people react negatively to such things. And
+> > if people do it on purpose it just makes it worse.
+>
+> I completely see your point, I just don't know how to improve it.
+>
+> I don't stop people like this because I want to make them uncomfortable
+> but because I want to prevent further discussions on that topic.
+>
+> In other words how can I make people notice that this is something
+> fundamental while still being polite?
+>
 
-On Fri, 2023-03-03 at 19:18 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
-> the inode_post_setattr hook.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+I think a little improvement over this would be to at least wait a few
+replies before resorting to those strong statements. Just before it
+becomes a risk in just wasting time.
 
-Other than the one minor comment below,
-
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->  fs/attr.c                     |  1 +
->  include/linux/lsm_hook_defs.h |  2 ++
->  include/linux/security.h      |  7 +++++++
->  security/security.c           | 16 ++++++++++++++++
->  4 files changed, 26 insertions(+)
-> 
-> diff --git a/fs/attr.c b/fs/attr.c
-> index da45cf01be6..343d6d62435 100644
-> --- a/fs/attr.c
-> +++ b/fs/attr.c
-> @@ -485,6 +485,7 @@ int notify_change(struct mnt_idmap *idmap, struct dentry *dentry,
->  
->  	if (!error) {
->  		fsnotify_change(dentry, ia_valid);
-> +		security_inode_post_setattr(idmap, dentry, ia_valid);
->  		ima_inode_post_setattr(idmap, dentry, ia_valid);
->  		evm_inode_post_setattr(idmap, dentry, ia_valid);
->  	}
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index 4372a6b2632..eedefbcdde3 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -135,6 +135,8 @@ LSM_HOOK(int, 0, inode_follow_link, struct dentry *dentry, struct inode *inode,
->  LSM_HOOK(int, 0, inode_permission, struct inode *inode, int mask)
->  LSM_HOOK(int, 0, inode_setattr, struct mnt_idmap *idmap, struct dentry *dentry,
->  	 struct iattr *attr)
-> +LSM_HOOK(void, LSM_RET_VOID, inode_post_setattr, struct mnt_idmap *idmap,
-> +	 struct dentry *dentry, int ia_valid)
->  LSM_HOOK(int, 0, inode_getattr, const struct path *path)
->  LSM_HOOK(int, 0, inode_setxattr, struct mnt_idmap *idmap,
->  	 struct dentry *dentry, const char *name, const void *value,
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index cd23221ce9e..64224216f6c 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -354,6 +354,8 @@ int security_inode_follow_link(struct dentry *dentry, struct inode *inode,
->  int security_inode_permission(struct inode *inode, int mask);
->  int security_inode_setattr(struct mnt_idmap *idmap,
->  			   struct dentry *dentry, struct iattr *attr);
-> +void security_inode_post_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
-> +				 int ia_valid);
->  int security_inode_getattr(const struct path *path);
->  int security_inode_setxattr(struct mnt_idmap *idmap,
->  			    struct dentry *dentry, const char *name,
-> @@ -855,6 +857,11 @@ static inline int security_inode_setattr(struct mnt_idmap *idmap,
->  	return 0;
->  }
->  
-> +static inline void
-> +security_inode_post_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
-> +			    int ia_valid)
-> +{ }
-> +
->  static inline int security_inode_getattr(const struct path *path)
->  {
->  	return 0;
-> diff --git a/security/security.c b/security/security.c
-> index f7fe252e9d3..2dbf225f5d8 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -2190,6 +2190,22 @@ int security_inode_getattr(const struct path *path)
->  	return call_int_hook(inode_getattr, 0, path);
->  }
->  
-
-Like the definitions, move the security_inode_post_setattr() to after
-security_inode_setattr().
-
-> +/**
-> + * security_inode_post_setattr() - Update the inode after a setattr operation
-> + * @idmap: idmap of the mount
-> + * @dentry: file
-> + * @ia_valid: file attributes set
-> + *
-> + * Update inode security field after successful setting file attributes.
-> + */
-> +void security_inode_post_setattr(struct mnt_idmap *idmap, struct dentry *entry,
-> +				 int ia_valid)
-> +{
-> +	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
-> +		return;
-> +	call_void_hook(inode_post_setattr, idmap, dentry, ia_valid);
-> +}
-> +
->  /**
->   * security_inode_setxattr() - Check if setting file xattrs is allowed
->   * @idmap: idmap of the mounth
-
--- 
-thanks,
-
-Mimi
+> >>>> This is clearly going against the idea of having jobs only depend on
+> >>>> fences and nothing else which is mandatory for correct memory manage=
+ment.
+> >>>>
+> >>> I'm sure it's all documented and there is a design document on how
+> >>> things have to look like you can point out? Might help to get a bette=
+r
+> >>> understanding on how things should be.
+> >> Yeah, that's the problematic part. We have documented this very
+> >> extensively:
+> >> https://www.kernel.org/doc/html/v5.9/driver-api/dma-buf.html#indefinit=
+e-dma-fences
+> >>
+> >> And both Jason and Daniel gave talks about the underlying problem and
+> > fyi:
+> > s/Jason/Faith/g
+>
+> +1. I wasn't aware of that.
+>
+> >> try to come up with patches to raise warnings when that happens, but
+> >> people still keep coming up with the same idea over and over again.
+> >>
+> > Yes, and we'll have to tell them over and over again. Nothing wrong
+> > with that. That's just part of maintaining such a big subsystem. And
+> > that's definitely not a valid reason to phrase things like above.
+> >
+> >> It's just that the technical relationship between preventing jobs from
+> >> running and with that preventing dma_fences from signaling and the cor=
+e
+> >> memory management with page faults and shrinkers waiting for those
+> >> fences is absolutely not obvious.
+> >>
+> >> We had at least 10 different teams from different companies falling in=
+to
+> >> the same trap already and either the patches were rejected of hand or
+> >> had to painfully reverted or mitigated later on.
+> >>
+> > Sure, but that's just part of the job. And pointing out fundamental
+> > mistakes early on is important, but the situation won't get any better
+> > by being like that. Yes, we'll have to repeat the same words over and
+> > over again, and yes that might be annoying, but that's just how it is.
+>
+> Well I have no problem explaining people why a solution doesn't work.
+>
+> But what usually happens is that people don't realize that they need to
+> back of from a design and completely start over.
+>
+> Regards,
+> Christian.
+>
+> >
+> >> Regards,
+> >> Christian.
+> >>
+> >>>> If the hw is busy with something you need to return the fence for th=
+is
+> >>>> from the prepare_job callback so that the scheduler can be notified =
+when
+> >>>> the hw is available again.
+> >>>>
+> >>>> Regards,
+> >>>> Christian.
+> >>>>
+> >>>>> Signed-off-by: Asahi Lina <lina@asahilina.net>
+> >>>>> ---
+> >>>>>     drivers/gpu/drm/scheduler/sched_main.c | 10 ++++++++++
+> >>>>>     include/drm/gpu_scheduler.h            |  8 ++++++++
+> >>>>>     2 files changed, 18 insertions(+)
+> >>>>>
+> >>>>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/d=
+rm/scheduler/sched_main.c
+> >>>>> index 4e6ad6e122bc..5c0add2c7546 100644
+> >>>>> --- a/drivers/gpu/drm/scheduler/sched_main.c
+> >>>>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+> >>>>> @@ -1001,6 +1001,16 @@ static int drm_sched_main(void *param)
+> >>>>>                 if (!entity)
+> >>>>>                         continue;
+> >>>>>
+> >>>>> +             if (sched->ops->can_run_job) {
+> >>>>> +                     sched_job =3D to_drm_sched_job(spsc_queue_pee=
+k(&entity->job_queue));
+> >>>>> +                     if (!sched_job) {
+> >>>>> +                             complete_all(&entity->entity_idle);
+> >>>>> +                             continue;
+> >>>>> +                     }
+> >>>>> +                     if (!sched->ops->can_run_job(sched_job))
+> >>>>> +                             continue;
+> >>>>> +             }
+> >>>>> +
+> >>>>>                 sched_job =3D drm_sched_entity_pop_job(entity);
+> >>>>>
+> >>>>>                 if (!sched_job) {
+> >>>>> diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_schedule=
+r.h
+> >>>>> index 9db9e5e504ee..bd89ea9507b9 100644
+> >>>>> --- a/include/drm/gpu_scheduler.h
+> >>>>> +++ b/include/drm/gpu_scheduler.h
+> >>>>> @@ -396,6 +396,14 @@ struct drm_sched_backend_ops {
+> >>>>>         struct dma_fence *(*prepare_job)(struct drm_sched_job *sche=
+d_job,
+> >>>>>                                          struct drm_sched_entity *s=
+_entity);
+> >>>>>
+> >>>>> +     /**
+> >>>>> +      * @can_run_job: Called before job execution to check whether=
+ the
+> >>>>> +      * hardware is free enough to run the job.  This can be used =
+to
+> >>>>> +      * implement more complex hardware resource policies than the
+> >>>>> +      * hw_submission limit.
+> >>>>> +      */
+> >>>>> +     bool (*can_run_job)(struct drm_sched_job *sched_job);
+> >>>>> +
+> >>>>>         /**
+> >>>>>              * @run_job: Called to execute the job once all of the =
+dependencies
+> >>>>>              * have been resolved.  This may be called multiple tim=
+es, if
+> >>>>>
+>
 
