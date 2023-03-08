@@ -2,124 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622586B0E42
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6ECB6B0E46
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232434AbjCHQLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:11:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34522 "EHLO
+        id S232413AbjCHQMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:12:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbjCHQKZ (ORCPT
+        with ESMTP id S232240AbjCHQMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:10:25 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2066.outbound.protection.outlook.com [40.107.96.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B9320551
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:10:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YYj48BetZO3xfKRGcOmINdu+9RdtfOf5CI4KwZjwxhnUg37Y6C8qcQMSPWnkouajyTqa63lOgEH/1gI7GkGKbXIsXZ12RtJwBZlTc6NazFyEmWef7eB7rmyjKwy7EmDZgN/ylBP1iAHEEFMwFihzWvEjUc/3sDnxlzu0OTuyI9hOBwr+PtU5wvtr7oGrFb/jkNpWen2uPbdJz0iSzbu5yWSxhmbRR6zDw7IFSvN82t+onoT0B6un9uXCv9eU0nKCB6+DZZEMLn22fp5FoCoTqBgOferJoePvPmmTWzosAYqr14dBhglli/gvbnN8xNATBDjTsYDFlL1Otm9+PAa1aQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8u/UZ51vkoaXzmaw4zeTC9riWiQ3LbCTmO4HJzpBVBI=;
- b=FSG8supmBlr4byt4y4B/DHarEKirvCoqRTIsuxtK5DKUfPz5wXmbk/ch6CQQNOKwN0ArNlwqKkcnhFls9I/AOe1AnzCauxk6bTYT21P0HZSqhXBaGyThJUvjgaepB2tvCboTL3h4xBEIF/0UpG48ZZ8oPX+vpjgMAozut7jrPI0Sbs1CAi3kOU3JpW1GWD5aVkrFIXLllzfZPaiLb0S6z10I2zVh35XsqPofLUSFe7uxEu8S5ocuoJ86pXGbj04ulVu0xGS4VKCQ/5GLgEbPTNj+Tgk9TZSUb+FCBNNSitbUEjsLc8xHuoqy7NAIP14TIyLpGFDdcndbkXD6OVDIuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8u/UZ51vkoaXzmaw4zeTC9riWiQ3LbCTmO4HJzpBVBI=;
- b=iUDUM7V7/Z7n+h3uDuUvrepR3H3JQwDJW98wCNvPRlyiWd11QToCV/6u1io4HtkAMwMVBtO+WV2ouP5WWBkgh1EEyjgQCym7Lnru1QH1ilrlvxiBLmOsCbX8OoAh/Rs4BBJPUY4+6uMpCB5JM+nSSDp7T8wg2W29aoWEUH46Foo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- CH0PR12MB5315.namprd12.prod.outlook.com (2603:10b6:610:d6::24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.31; Wed, 8 Mar 2023 16:10:09 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::cdcb:a816:4bc3:a83f]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::cdcb:a816:4bc3:a83f%9]) with mapi id 15.20.6156.023; Wed, 8 Mar 2023
- 16:10:09 +0000
-Message-ID: <ac8fed53-6f05-6ec7-9ef5-61110cd83c0b@amd.com>
-Date:   Wed, 8 Mar 2023 11:11:22 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] drm/vc4: Fix build error with undefined label
-Content-Language: en-US
-To:     Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        amd-gfx@lists.freedesktop.org
-References: <20230308093408.239331-1-qingqing.zhuo@amd.com>
-Cc:     Emma Anholt <emma@anholt.net>, David Airlie <airlied@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <20230308093408.239331-1-qingqing.zhuo@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQXPR0101CA0022.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c00:15::35) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+        Wed, 8 Mar 2023 11:12:00 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA575981A;
+        Wed,  8 Mar 2023 08:11:29 -0800 (PST)
+Received: from mail.ispras.ru (unknown [83.149.199.84])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 313B640737B4;
+        Wed,  8 Mar 2023 16:11:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 313B640737B4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1678291887;
+        bh=mzFyyCviV+pT9bJAVxBTRsp51LrecpMoNvgv6Kz3ayQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AiI7JVDgUFYrbclsbip/1ODHckeUSUU9HbPU3W8Ud/mU2Ulgx8ixnbtnoGzGnCrov
+         FXhD/XM/HUYfhQigTJSvSeFVKIrcmXFLGhOS4Fy50w2nDVEVPLAnvuv2TSOFE0UnMi
+         TRuN1qTZd3np/C8VEl7GvfNjDPIPRELBDNuMES0s=
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|CH0PR12MB5315:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8985f453-0eb1-47c3-b023-08db1fef96d5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cMij7fRNPJ/E+dEx/TqC167gojTlVfLUMUi5ufa0ZVQI54xm8xHJuCb6qz/NM010BHTTPLo84sa1i5ff75WaIHWEGaMrXdww2YOjhePGU0XwrekDRmsUC4bP7OZ1H9y3gC7uX5igDYaRQQ+RJGpjtwpuPwZ2pF7quWE31H65WhLmjM6o6mIhPlCWgKUzDi3SDq19B9DA/vAv8K8VVPQSuy58KoFxQslGoMdmDHuNuuR4It21FB7DwLzEcl3jPVDGlBEewx1nn/zNbPQHDma3QTfCzQgSRvvValebtRNyI+i9CvFMTPin6AGjS+i83CHobHq5K7z4Bc7BwOa0MuhCiEIqOvriyL9B4z352whVEC4rmJ+oFn7vEzp9xpKeNSHPVv+yyLX4tZyELjR9KP4nSQPmJJAmhAc+hWFRF+VqVqxX7NByC4qs4O6/1E9VbT4PXGwx8JlsR06GdOJUORN7qByZIfGagabRGStX5bU7vXDr/BdJWJHbjkGL9G8X/meWc0w6cGcmBhqlEVKvAMXYIbHlGHkEfYxMCGxeuKwuEkD6fPoDs/uPqyVCz5ZXwHEzMwmGkHUwKx9CEfhS1Yhcd0oME09W53mIUGE405R/AD6Ogayv86X3dChNIUjAU5M0TeVDNoMnECskTBBDdVf2FB3B9H8IS6/RNm02JSTimtviM0gv3HIZHRDQmvaQU0aUlPctDJ7DLZMy7O19219zP0AXnh6/GbLt0N9hXZURZWQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(376002)(136003)(346002)(366004)(451199018)(36756003)(83380400001)(186003)(6666004)(6512007)(53546011)(6506007)(26005)(6486002)(8936002)(66556008)(66946007)(8676002)(86362001)(31696002)(4326008)(66476007)(2906002)(41300700001)(5660300002)(44832011)(2616005)(38100700002)(316002)(478600001)(54906003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UVphWmJFajc5UlBwNEtjWWwvUU5rR3MrKytnQXYvM1VDVUhlNmYvNFVOc1RL?=
- =?utf-8?B?OXplRmJPemdmK0huV253N0NKRWVTVCswN3VMd2gweDVmUlAxWVZzVEhtcENH?=
- =?utf-8?B?d3d0U3A3dXJrczg5bGRzOUdYUjBMY0FWNGFMNTJLcXZXOEZDZjlKTzJ2cEdC?=
- =?utf-8?B?NkJVSmk3aEQ3WUx2cFVXOEhyd1N4czlzeEd3WEFIemZSa3lONU1sa2pDMWJx?=
- =?utf-8?B?NVF1aER6QlVZT2ErNmZHNkg5RzhTUjlENWRRdWtncHQvc3cwL3JVRWNBdjNR?=
- =?utf-8?B?Uk9sNmhVNS8vWVAzT3R4Zitkd0NuTnJyOVpYSXR6OTd6YWx4Y1dxQUVLT1A3?=
- =?utf-8?B?aURtN2dDVnhnR2oyVVNnNEJzSTZZb3ZqSVdYTHpBL05rTkc4eFhxQ3lRM29v?=
- =?utf-8?B?dmdzY1JIZVpkOWRlMXhsMktwOXdsZ1ZKOGdTV05IRFgvV0pyK3lTRzRrVEZV?=
- =?utf-8?B?RzhmNTB3U0RrL21wSFhZQ0ZjUXpVN25pWXMvdjJFa1J3U3RQK3JNYlNsZ0F0?=
- =?utf-8?B?QXpvWW5hYTYwUnIzb2pNRVQ0WU9oeEk2ZmhPcVkzMWNwT0ZSampTc0tkVTI3?=
- =?utf-8?B?VjNsdWM0cjl2NWt6ZHdXR3c3QUl4NUNrbDlBRkdmd3padGluc2YrMVNlb2pC?=
- =?utf-8?B?WUdTU1hyRkxqaXJ4c21zZkduZEhOMjhXeU1YQ1lTUlVZVzJ4dVNVZlY2a2xv?=
- =?utf-8?B?QkpmYW9VdHhWOENKNVNGejFQeDNjKzFZaGxDNXlXYmpzRWxnZWdkL29RQjU0?=
- =?utf-8?B?TTIxNHg2b3A0bnZHVTB5NUN1WFR4d0tPaGFqNUJWSWF5Y0tlNkRIamFnVHc3?=
- =?utf-8?B?ZnNZNG9OOUJRWnpYenljNjNCUzZQQWZsa1pWblpUMmZnQlM1SUF0amJXd3Nm?=
- =?utf-8?B?YWlHbzIrb1hTTE5EbFV1OCt2TTVNWU9PZHdIN0I3eHR4ZVZFZFA5REZuQ1dj?=
- =?utf-8?B?SU5xRmx2SFVDL1NCclM0cGJzZG9wcERsM3p2bHRNelFkL1dlc2FFZWFFdyt4?=
- =?utf-8?B?aG9nbUVxVisrNkVabVI2V1JJUHU3NzNQTlp4NTRseDQ0c0hMZDc4ZVZQODRR?=
- =?utf-8?B?QVdaZFpvRjNtN0pZRjlJenhHclZuQ2lKWmMxSVdUWlVtb0YvMVgwVUdWbloy?=
- =?utf-8?B?dEpUMFFyWG9WNFQ4cjQzQzIzMXA4SjU0N3Zlc1F0N2gwbjV1TFJZNGZYU0g4?=
- =?utf-8?B?cVpoQ2pBY2RvQTNBbmZaUVdsT0hhZDgzeEdpcmw2YnhpSHl3Zy9hZ3VBS1R4?=
- =?utf-8?B?aCtDVTcrTC92Y0xDWkt3WHZWWGM0cXdMNFdRTTN5NHBpYVJ4RnBhM0tLNDdF?=
- =?utf-8?B?WEhOQkJlaHZsc2pkUENqQktPcWRkVVVtenc5S0I1cC9CRUUxT3hnRW9wVVpZ?=
- =?utf-8?B?Q20rZVJCZEtWallFL0NYa2NxMk14SzREcVY2dW84YWl4VFVVMnNUQlNEdDZF?=
- =?utf-8?B?ZFFYdDFuMllOd2szeDloZUR1SlFMdkRyblVFbWZDbTUyWE51RDBNaERnVUNO?=
- =?utf-8?B?S05TNjVCK2dTWnZwcUpDcGtmc3BsZHlMYm1zcEZHRXNBRzIvYnZ4ZFdJemdR?=
- =?utf-8?B?MmExckYrZEZlSTQ5cDlyWnBLeW9pYi81ZU1UZFk4dE1WQnB3SG0zKzZVYndN?=
- =?utf-8?B?VlFoV3ArQW1VYWZaVVpCTEtPTTFNK0tGVUYvaW5aWTVGMGpMRERFUFFpbFhX?=
- =?utf-8?B?SkJWeU9LS2xaRWJDNm5WVUZBbFhHNTRiWG9SM05iSmtTSnBCUTNuY0YyZ092?=
- =?utf-8?B?bWxQblhuUGo1bUUzSkRNUnd4ZDBxNUV6bmhQa2xBL3dwNUc5c1I5aFNKN1lk?=
- =?utf-8?B?YzIvcjBqLytBbmZGV3F6WFQxeldPRFlURHRHWUFvNUNVZ1BkRitOWkxlWGxm?=
- =?utf-8?B?T3cxLzJ0cDNGZy9zRG42YmYxeU9nay83OWF1SlVCcmZsOVY4MnRRclhDcENJ?=
- =?utf-8?B?ZWpsdHJGVHNabUNUR2lzYU1NRXZlKzFwaURTWnVEY1lkYVB6V0g2UEY4Qzkx?=
- =?utf-8?B?QncvYVQ4QzBidW5uSEQzVW00N3pQMTZNMHFvTWtSbVV5MmU4akVscnVXeEhE?=
- =?utf-8?B?TndNeVU4MjIvc0RPY0xodG51MUhBVldqV0o5ZjBDOWRDcEFlNHdiZk5rUHYv?=
- =?utf-8?Q?M4Yw67CmqruOiZU8LagBCgZRh?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8985f453-0eb1-47c3-b023-08db1fef96d5
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 16:10:09.3788
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PCju49JkSUFON+Mxqi6zWp0VZUpYWBmVGVnSLYHpmPVFhfZ1RcNZxOSPOEY/NcLbLn/wjmk37RXMhGATUc7Ayg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5315
+Date:   Wed, 08 Mar 2023 19:11:27 +0300
+From:   Evgeniy Baskov <baskov@ispras.ru>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v4 05/26] x86/boot: Support 4KB pages for identity mapping
+In-Reply-To: <CAMj1kXFtyuktQmbhoHctikwyH-eJfE8d2nzs1-2csYy4+and4Q@mail.gmail.com>
+References: <cover.1671098103.git.baskov@ispras.ru>
+ <9e8d2ad89c62016c6cae031a0b8a368e4c94073e.1671098103.git.baskov@ispras.ru>
+ <CAMj1kXFtyuktQmbhoHctikwyH-eJfE8d2nzs1-2csYy4+and4Q@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <14c0426b5d777964cbdbc9d289482a93@ispras.ru>
+X-Sender: baskov@ispras.ru
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,35 +61,357 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ vc4 maintainers
-
-On 3/8/23 04:34, Qingqing Zhuo wrote:
-> [Why]
-> drivers/gpu/drm/vc4/vc4_hdmi.c: In function ‘vc4_hdmi_bind’:
-> drivers/gpu/drm/vc4/vc4_hdmi.c:3448:17: error: label ‘err_disable_runtime_pm’ used but not defined
+On 2023-03-08 12:42, Ard Biesheuvel wrote:
+> On Thu, 15 Dec 2022 at 13:38, Evgeniy Baskov <baskov@ispras.ru> wrote:
+>> 
+>> Current identity mapping code only supports 2M and 1G pages.
+>> 4KB pages are desirable for better memory protection granularity
+>> in compressed kernel code.
+>> 
+>> Change identity mapping code to support 4KB pages and
+>> memory remapping with different attributes.
+>> 
+>> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+>> Tested-by: Peter Jones <pjones@redhat.com>
+>> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
 > 
-> [How]
-> update err_disable_runtime_pm to err_put_runtime_pm.
+> This patch triggers an error reported by the build bots:
 > 
-> Signed-off-by: Qingqing Zhuo <qingqing.zhuo@amd.com>
-> ---
->   drivers/gpu/drm/vc4/vc4_hdmi.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> arch/x86/mm/ident_map.c:19:8: warning: no previous prototype for
+> 'ident_split_large_pmd'
+
+Thanks! I'll fix them (and all of the others from the bot emails)
+
 > 
-> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> index 9e145690c480..edf882360d24 100644
-> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> @@ -3445,7 +3445,7 @@ static int vc4_hdmi_bind(struct device *dev, struct device *master, void *data)
->   	 */
->   	ret = pm_runtime_resume_and_get(dev);
->   	if (ret)
-> -		goto err_disable_runtime_pm;
-> +		goto err_put_runtime_pm;
->   
->   	if ((of_device_is_compatible(dev->of_node, "brcm,bcm2711-hdmi0") ||
->   	     of_device_is_compatible(dev->of_node, "brcm,bcm2711-hdmi1")) &&
-
--- 
-Hamza
-
+> 
+>> ---
+>>  arch/x86/include/asm/init.h |   1 +
+>>  arch/x86/mm/ident_map.c     | 185 
+>> +++++++++++++++++++++++++++++-------
+>>  2 files changed, 154 insertions(+), 32 deletions(-)
+>> 
+>> diff --git a/arch/x86/include/asm/init.h b/arch/x86/include/asm/init.h
+>> index 5f1d3c421f68..a8277ee82c51 100644
+>> --- a/arch/x86/include/asm/init.h
+>> +++ b/arch/x86/include/asm/init.h
+>> @@ -8,6 +8,7 @@ struct x86_mapping_info {
+>>         unsigned long page_flag;         /* page flag for PMD or PUD 
+>> entry */
+>>         unsigned long offset;            /* ident mapping offset */
+>>         bool direct_gbpages;             /* PUD level 1GB page support 
+>> */
+>> +       bool allow_4kpages;              /* Allow more granular 
+>> mappings with 4K pages */
+>>         unsigned long kernpg_flag;       /* kernel pagetable flag 
+>> override */
+>>  };
+>> 
+>> diff --git a/arch/x86/mm/ident_map.c b/arch/x86/mm/ident_map.c
+>> index 968d7005f4a7..662e794a325d 100644
+>> --- a/arch/x86/mm/ident_map.c
+>> +++ b/arch/x86/mm/ident_map.c
+>> @@ -4,24 +4,127 @@
+>>   * included by both the compressed kernel and the regular kernel.
+>>   */
+>> 
+>> -static void ident_pmd_init(struct x86_mapping_info *info, pmd_t 
+>> *pmd_page,
+>> -                          unsigned long addr, unsigned long end)
+>> +static void ident_pte_init(struct x86_mapping_info *info, pte_t 
+>> *pte_page,
+>> +                          unsigned long addr, unsigned long end,
+>> +                          unsigned long flags)
+>>  {
+>> -       addr &= PMD_MASK;
+>> -       for (; addr < end; addr += PMD_SIZE) {
+>> +       addr &= PAGE_MASK;
+>> +       for (; addr < end; addr += PAGE_SIZE) {
+>> +               pte_t *pte = pte_page + pte_index(addr);
+>> +
+>> +               set_pte(pte, __pte((addr - info->offset) | flags));
+>> +       }
+>> +}
+>> +
+>> +pte_t *ident_split_large_pmd(struct x86_mapping_info *info,
+>> +                            pmd_t *pmdp, unsigned long page_addr)
+>> +{
+>> +       unsigned long pmd_addr, page_flags;
+>> +       pte_t *pte;
+>> +
+>> +       pte = (pte_t *)info->alloc_pgt_page(info->context);
+>> +       if (!pte)
+>> +               return NULL;
+>> +
+>> +       pmd_addr = page_addr & PMD_MASK;
+>> +
+>> +       /* Not a large page - clear PSE flag */
+>> +       page_flags = pmd_flags(*pmdp) & ~_PSE;
+>> +       ident_pte_init(info, pte, pmd_addr, pmd_addr + PMD_SIZE, 
+>> page_flags);
+>> +
+>> +       return pte;
+>> +}
+>> +
+>> +static int ident_pmd_init(struct x86_mapping_info *info, pmd_t 
+>> *pmd_page,
+>> +                         unsigned long addr, unsigned long end,
+>> +                         unsigned long flags)
+>> +{
+>> +       unsigned long next;
+>> +       bool new_table = 0;
+>> +
+>> +       for (; addr < end; addr = next) {
+>>                 pmd_t *pmd = pmd_page + pmd_index(addr);
+>> +               pte_t *pte;
+>> 
+>> -               if (pmd_present(*pmd))
+>> +               next = (addr & PMD_MASK) + PMD_SIZE;
+>> +               if (next > end)
+>> +                       next = end;
+>> +
+>> +               /*
+>> +                * Use 2M pages if 4k pages are not allowed or
+>> +                * we are not mapping extra, i.e. address and size are 
+>> aligned.
+>> +                */
+>> +
+>> +               if (!info->allow_4kpages ||
+>> +                   (!(addr & ~PMD_MASK) && next == addr + PMD_SIZE)) 
+>> {
+>> +
+>> +                       pmd_t pmdval;
+>> +
+>> +                       addr &= PMD_MASK;
+>> +                       pmdval = __pmd((addr - info->offset) | flags | 
+>> _PSE);
+>> +                       set_pmd(pmd, pmdval);
+>>                         continue;
+>> +               }
+>> +
+>> +               /*
+>> +                * If currently mapped page is large, we need to split 
+>> it.
+>> +                * The case when we don't can remap 2M page to 2M page
+>> +                * with different flags is already covered above.
+>> +                *
+>> +                * If there's nothing mapped to desired address,
+>> +                * we need to allocate new page table.
+>> +                */
+>> 
+>> -               set_pmd(pmd, __pmd((addr - info->offset) | 
+>> info->page_flag));
+>> +               if (pmd_large(*pmd)) {
+>> +                       pte = ident_split_large_pmd(info, pmd, addr);
+>> +                       new_table = 1;
+>> +               } else if (!pmd_present(*pmd)) {
+>> +                       pte = (pte_t 
+>> *)info->alloc_pgt_page(info->context);
+>> +                       new_table = 1;
+>> +               } else {
+>> +                       pte = pte_offset_kernel(pmd, 0);
+>> +                       new_table = 0;
+>> +               }
+>> +
+>> +               if (!pte)
+>> +                       return -ENOMEM;
+>> +
+>> +               ident_pte_init(info, pte, addr, next, flags);
+>> +
+>> +               if (new_table)
+>> +                       set_pmd(pmd, __pmd(__pa(pte) | 
+>> info->kernpg_flag));
+>>         }
+>> +
+>> +       return 0;
+>>  }
+>> 
+>> +
+>> +pmd_t *ident_split_large_pud(struct x86_mapping_info *info,
+>> +                            pud_t *pudp, unsigned long page_addr)
+>> +{
+>> +       unsigned long pud_addr, page_flags;
+>> +       pmd_t *pmd;
+>> +
+>> +       pmd = (pmd_t *)info->alloc_pgt_page(info->context);
+>> +       if (!pmd)
+>> +               return NULL;
+>> +
+>> +       pud_addr = page_addr & PUD_MASK;
+>> +
+>> +       /* Not a large page - clear PSE flag */
+>> +       page_flags = pud_flags(*pudp) & ~_PSE;
+>> +       ident_pmd_init(info, pmd, pud_addr, pud_addr + PUD_SIZE, 
+>> page_flags);
+>> +
+>> +       return pmd;
+>> +}
+>> +
+>> +
+>>  static int ident_pud_init(struct x86_mapping_info *info, pud_t 
+>> *pud_page,
+>>                           unsigned long addr, unsigned long end)
+>>  {
+>>         unsigned long next;
+>> +       bool new_table = 0;
+>> +       int result;
+>> 
+>>         for (; addr < end; addr = next) {
+>>                 pud_t *pud = pud_page + pud_index(addr);
+>> @@ -31,28 +134,39 @@ static int ident_pud_init(struct x86_mapping_info 
+>> *info, pud_t *pud_page,
+>>                 if (next > end)
+>>                         next = end;
+>> 
+>> +               /* Use 1G pages only if forced, even if they are 
+>> supported. */
+>>                 if (info->direct_gbpages) {
+>>                         pud_t pudval;
+>> -
+>> -                       if (pud_present(*pud))
+>> -                               continue;
+>> +                       unsigned long flags;
+>> 
+>>                         addr &= PUD_MASK;
+>> -                       pudval = __pud((addr - info->offset) | 
+>> info->page_flag);
+>> +                       flags = info->page_flag | _PSE;
+>> +                       pudval = __pud((addr - info->offset) | flags);
+>> +
+>>                         set_pud(pud, pudval);
+>>                         continue;
+>>                 }
+>> 
+>> -               if (pud_present(*pud)) {
+>> +               if (pud_large(*pud)) {
+>> +                       pmd = ident_split_large_pud(info, pud, addr);
+>> +                       new_table = 1;
+>> +               } else if (!pud_present(*pud)) {
+>> +                       pmd = (pmd_t 
+>> *)info->alloc_pgt_page(info->context);
+>> +                       new_table = 1;
+>> +               } else {
+>>                         pmd = pmd_offset(pud, 0);
+>> -                       ident_pmd_init(info, pmd, addr, next);
+>> -                       continue;
+>> +                       new_table = 0;
+>>                 }
+>> -               pmd = (pmd_t *)info->alloc_pgt_page(info->context);
+>> +
+>>                 if (!pmd)
+>>                         return -ENOMEM;
+>> -               ident_pmd_init(info, pmd, addr, next);
+>> -               set_pud(pud, __pud(__pa(pmd) | info->kernpg_flag));
+>> +
+>> +               result = ident_pmd_init(info, pmd, addr, next, 
+>> info->page_flag);
+>> +               if (result)
+>> +                       return result;
+>> +
+>> +               if (new_table)
+>> +                       set_pud(pud, __pud(__pa(pmd) | 
+>> info->kernpg_flag));
+>>         }
+>> 
+>>         return 0;
+>> @@ -63,6 +177,7 @@ static int ident_p4d_init(struct x86_mapping_info 
+>> *info, p4d_t *p4d_page,
+>>  {
+>>         unsigned long next;
+>>         int result;
+>> +       bool new_table = 0;
+>> 
+>>         for (; addr < end; addr = next) {
+>>                 p4d_t *p4d = p4d_page + p4d_index(addr);
+>> @@ -72,15 +187,14 @@ static int ident_p4d_init(struct x86_mapping_info 
+>> *info, p4d_t *p4d_page,
+>>                 if (next > end)
+>>                         next = end;
+>> 
+>> -               if (p4d_present(*p4d)) {
+>> +               if (!p4d_present(*p4d)) {
+>> +                       pud = (pud_t 
+>> *)info->alloc_pgt_page(info->context);
+>> +                       new_table = 1;
+>> +               } else {
+>>                         pud = pud_offset(p4d, 0);
+>> -                       result = ident_pud_init(info, pud, addr, 
+>> next);
+>> -                       if (result)
+>> -                               return result;
+>> -
+>> -                       continue;
+>> +                       new_table = 0;
+>>                 }
+>> -               pud = (pud_t *)info->alloc_pgt_page(info->context);
+>> +
+>>                 if (!pud)
+>>                         return -ENOMEM;
+>> 
+>> @@ -88,19 +202,22 @@ static int ident_p4d_init(struct x86_mapping_info 
+>> *info, p4d_t *p4d_page,
+>>                 if (result)
+>>                         return result;
+>> 
+>> -               set_p4d(p4d, __p4d(__pa(pud) | info->kernpg_flag));
+>> +               if (new_table)
+>> +                       set_p4d(p4d, __p4d(__pa(pud) | 
+>> info->kernpg_flag));
+>>         }
+>> 
+>>         return 0;
+>>  }
+>> 
+>> -int kernel_ident_mapping_init(struct x86_mapping_info *info, pgd_t 
+>> *pgd_page,
+>> -                             unsigned long pstart, unsigned long 
+>> pend)
+>> +int kernel_ident_mapping_init(struct x86_mapping_info *info,
+>> +                             pgd_t *pgd_page, unsigned long pstart,
+>> +                             unsigned long pend)
+>>  {
+>>         unsigned long addr = pstart + info->offset;
+>>         unsigned long end = pend + info->offset;
+>>         unsigned long next;
+>>         int result;
+>> +       bool new_table;
+>> 
+>>         /* Set the default pagetable flags if not supplied */
+>>         if (!info->kernpg_flag)
+>> @@ -117,20 +234,24 @@ int kernel_ident_mapping_init(struct 
+>> x86_mapping_info *info, pgd_t *pgd_page,
+>>                 if (next > end)
+>>                         next = end;
+>> 
+>> -               if (pgd_present(*pgd)) {
+>> +               if (!pgd_present(*pgd)) {
+>> +                       p4d = (p4d_t 
+>> *)info->alloc_pgt_page(info->context);
+>> +                       new_table = 1;
+>> +               } else {
+>>                         p4d = p4d_offset(pgd, 0);
+>> -                       result = ident_p4d_init(info, p4d, addr, 
+>> next);
+>> -                       if (result)
+>> -                               return result;
+>> -                       continue;
+>> +                       new_table = 0;
+>>                 }
+>> 
+>> -               p4d = (p4d_t *)info->alloc_pgt_page(info->context);
+>>                 if (!p4d)
+>>                         return -ENOMEM;
+>> +
+>>                 result = ident_p4d_init(info, p4d, addr, next);
+>>                 if (result)
+>>                         return result;
+>> +
+>> +               if (!new_table)
+>> +                       continue;
+>> +
+>>                 if (pgtable_l5_enabled()) {
+>>                         set_pgd(pgd, __pgd(__pa(p4d) | 
+>> info->kernpg_flag));
+>>                 } else {
+>> --
+>> 2.37.4
+>> 
