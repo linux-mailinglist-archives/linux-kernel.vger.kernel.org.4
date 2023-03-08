@@ -2,83 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8968F6B039F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D0F6B03A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:03:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjCHKBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:01:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54992 "EHLO
+        id S230170AbjCHKDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:03:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbjCHKB2 (ORCPT
+        with ESMTP id S229814AbjCHKDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:01:28 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78019B53FF
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:01:21 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id ay29-20020a05600c1e1d00b003e9f4c2b623so853598wmb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:01:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678269679;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=8mVYfCy4h+ar44SO5DohBBcWvMpXi6+GmpLszBmt6kY=;
-        b=OQjii0yUgXByulhMWFwrXxQOX+wNoddH6dZGsFcafcOzdmMpOEIZD6IMXq4PsSB2Hm
-         rsvwANX8I09/q3pOUJBL+Cx1CibaG88qAlMOe+EherBOj+MypgYNA+oiQzzISQzFnU2M
-         ONZcbge9uQSJpSD1Ut1VuSuKY7leWuikYqZVk0FY8Qs1nLERH1uuyq9mc41EGkrjLiNn
-         xH5AUHVe3rRUhag5lS3W7jUWSXCuXsWRV2y71a4UrLTntnsQPGEzYRTVS42Uh/tZraT+
-         OSel95Nywx3P5l5OuQJuw9Fg7dQNDBRjVi7H80wCzh/cMQ3gnimMrJ1pXHtRJGXDpbgQ
-         IQew==
+        Wed, 8 Mar 2023 05:03:15 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325F31CF45
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:03:07 -0800 (PST)
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com [209.85.160.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 52E863F828
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 10:03:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678269786;
+        bh=TcoqL65GM7xxmY0Iiy4skPLD0tnvFATDCwzBl50q5+I=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=Detcu/W1H/u66gtLzFKJ3OwXxNZAYTNW5tTCYi+Xu6Jl+THS3kklSPPSfcTgx9HJE
+         n7u2FSC/IR58we9/yISPut0h5IIhI1oVwkTs8LFR6O+4mrmMv28iD7Dcr703lhJd1K
+         4D84Zmc9IYQ6RgGAiMaI85/LwadfvcF4K3/rWEtfBHGEOL5CU3CFqJ9nfco+7RIfk+
+         9U7MSwTKfAoVEYYSC0+mLVGfiKwvFMdUTTtf2GbRzkVW0PhY75dOGZbT4pV6+LXBzP
+         etPF1MGmKqqxPlLBLYQP0R8cnbJvSNjYG3fne3Hcy5e4RR4ht6qFZrxnr7r902rmq+
+         LcFrP5bZyFXvQ==
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-176347f3b28so9790204fac.23
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:03:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678269679;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8mVYfCy4h+ar44SO5DohBBcWvMpXi6+GmpLszBmt6kY=;
-        b=OZ6Y6FGSpNa8XAE/xhZNolU76ltpFLV5oQgExkeIuF3ceBDWLPY9qpRQKmgVtmouT2
-         J0+FksdkScpP4CEut774krMcoYeBegoUZJRKFVlcE1LZvu31wEcfgi09qP40UVN+kcCu
-         gjgMBvsOACU0nINSKZlxwY0/L2Lz3K+AlBEqtggcm3GIb9SmhLTxJ3Eez9UhDfE/RXY/
-         sH+3kzicyqUlrTSP+4FIrQ5cD26s4WfdaVW7d0lCo+kzUtg8dn0fLbrwdBLxOJlqa+ER
-         uNmD/ShYfFV8gP5vRXjNHHHvpJyUoKve8cU9bGrVVepIrGNKa58K1gxE0yiomb93SxsV
-         YDlw==
-X-Gm-Message-State: AO0yUKV3NaoqxEvaS2CLgUqbvQDwBFyyLXkicH+FrT0wmSGi2Jk3wUEo
-        VNeTbCW5nl/t10kAUwZjetgoMErVF3Rwk3N2XKkZYg==
-X-Google-Smtp-Source: AK7set+xpA3kkdUP3qiBPPiA0Zbfc64AMtu19o48Sss/SWrBE2Ohs7sJCfY2LonvczDS4LxC99qS4g==
-X-Received: by 2002:a05:600c:3153:b0:3ea:f73e:9d8c with SMTP id h19-20020a05600c315300b003eaf73e9d8cmr15944317wmo.16.1678269679566;
-        Wed, 08 Mar 2023 02:01:19 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:b029:83b9:1fb8:7c34? ([2a01:e0a:982:cbb0:b029:83b9:1fb8:7c34])
-        by smtp.gmail.com with ESMTPSA id h19-20020a05600c30d300b003db06224953sm14798819wmn.41.2023.03.08.02.01.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 02:01:19 -0800 (PST)
-Message-ID: <6d57008d-7343-2365-a167-690b710e8688@linaro.org>
-Date:   Wed, 8 Mar 2023 11:01:18 +0100
+        d=1e100.net; s=20210112; t=1678269785;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TcoqL65GM7xxmY0Iiy4skPLD0tnvFATDCwzBl50q5+I=;
+        b=7w4K3a1TGroA5N95DRilEO5HQv6G2SS88B895kVcxpFaVNpSJR5C3EHCiITLBw/3jS
+         5JPwlhIUltWrtqTd1zwqsFsqLMh1v32vjmG+KukvJhCbhyqJWHUOIcOJyA+m0DTSUTRX
+         3xrUCRDWy364gvtqZQx/hjM0ZwES5mcVCURTRvPrztLqPCP0pTGYCioyiyu6YAV8RZxm
+         kY2ihwHTUPgSyCpjF59xMrhDfKAdWPSR4c5gb/TjM4U2+ep1Ln5rE+atx4GpJtNsV3IG
+         tT7sexgq4rGyqcRN5c3e2hD8S9G5Iitz3zqJ0wTsa8zq45w127NjDiRPldd6ZDCFgh6H
+         AC1w==
+X-Gm-Message-State: AO0yUKV1t5/Ivf+Wp97m43n4urIbA8ppN7fep/KiaKi0ToXwMLaB2NWN
+        rPpIFaq1ew4z5U9gEv22sl9gmSJoLXNRjRgeJ8aDy0A9bdXaLLMkiF8PPMQbe2Hqi9UK6nCkZFc
+        sUcfDNT59iEgF00CI18GYUH3Qz6uXlTy4yN6Jig3ZkOuQbRzsWVsAUHiI
+X-Received: by 2002:a05:6870:d346:b0:176:42a5:a544 with SMTP id h6-20020a056870d34600b0017642a5a544mr5041318oag.2.1678269785263;
+        Wed, 08 Mar 2023 02:03:05 -0800 (PST)
+X-Google-Smtp-Source: AK7set/rrxkpYmldQbkjsH+aqtmbvnADinYJ3IA6vjRlLPTAKktc6w1MXBujxHZsR32pBxuvK3COpwN6xQq6zhKYfmk=
+X-Received: by 2002:a05:6870:d346:b0:176:42a5:a544 with SMTP id
+ h6-20020a056870d34600b0017642a5a544mr5041308oag.2.1678269784978; Wed, 08 Mar
+ 2023 02:03:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 1/3] arm64: dts: qcom: sm8550: replace 0x0 to 0
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230308-topic-sm8550-upstream-dt-fixups-v1-0-595b02067672@linaro.org>
- <20230308-topic-sm8550-upstream-dt-fixups-v1-1-595b02067672@linaro.org>
- <50cc134a-eb21-3b06-0c6e-41a4a5a5fd76@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <50cc134a-eb21-3b06-0c6e-41a4a5a5fd76@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230307150030.527726-1-po-hsu.lin@canonical.com> <20230307170219.4699af9b@kernel.org>
+In-Reply-To: <20230307170219.4699af9b@kernel.org>
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+Date:   Wed, 8 Mar 2023 18:02:26 +0800
+Message-ID: <CAMy_GT8fdX2uUAM1j9Lzje+K5BnLH82dmx3CE=mGV9UqSRBWAg@mail.gmail.com>
+Subject: Re: [PATCHv2] selftests: net: devlink_port_split.py: skip test if no
+ suitable device available
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, idosch@mellanox.com,
+        danieller@mellanox.com, petrm@mellanox.com, shuah@kernel.org,
+        pabeni@redhat.com, edumazet@google.com, davem@davemloft.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,262 +80,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 10:59, Konrad Dybcio wrote:
-> 
-> 
-> On 8.03.2023 09:32, Neil Armstrong wrote:
->> Unify the sm8550.dtsi style by replacing the 0x0 to 0 as it was
->> required in the initial file submission.
->>
->> Fixes: 377972ac743f ("arm64: dts: qcom: sm8550: add I2C Master Hub nodes")
->> Fixes: 433477c3bf0b ("arm64: dts: qcom: sm8550: add QCrypto nodes")
->> Fixes: 35cf1aaab169 ("arm64: dts: qcom: sm8550: Add UFS host controller and phy nodes")
->> Fixes: d0c061e366ed ("arm64: dts: qcom: sm8550: add adsp, cdsp & mdss nodes")
->> Fixes: 7d1158c984d3 ("arm64: dts: qcom: sm8550: Add PCIe PHYs and controllers nodes")
->> Fixes: 7f7e5c1b037f ("arm64: dts: qcom: sm8550: Add USB PHYs and controller nodes")
->> Fixes: 6de7f9c34358 ("arm64: dts: qcom: sm8550: add GPR and LPASS pin controller")
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
-> I think the sentiment is towards 0x0, as these are register addreses/
-> sizes, but nobody wants to send a big giant commit changing it everywhere
-> as - frankly - it's just a lot of work and noise..
+On Wed, Mar 8, 2023 at 9:02=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wro=
+te:
+>
+> On Tue,  7 Mar 2023 23:00:30 +0800 Po-Hsu Lin wrote:
+> > The `devlink -j port show` command output may not contain the "flavour"
+> > key, an example from s390x LPAR with Ubuntu 22.10 (5.19.0-37-generic),
+> > iproute2-5.15.0:
+> >   {"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},
+> >            "pci/0001:00:00.0/2":{"type":"eth","netdev":"ens301d1"},
+> >            "pci/0002:00:00.0/1":{"type":"eth","netdev":"ens317"},
+> >            "pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d1"}}}
+> >
+> > This will cause a KeyError exception.
+>
+> I looked closer and I don't understand why the key is not there.
+> Both 5.19 kernel should always put this argument out, and 5.15
+> iproute2 should always interpret it.
+>
+> Am I looking wrong? Do you see how we can get a dump with no flavor?
+>
+> I worry that this is some endianness problem, and we just misreport
+> stuff on big-endian.
+>
+> > Create a validate_devlink_output() to check for this "flavour" from
+> > devlink command output to avoid this KeyError exception. Also let
+> > it handle the check for `devlink -j dev show` output in main().
+> >
+> > Apart from this, if the test was not started because of any reason
+> > (e.g. "lanes" does not exist, max lanes is 0 or the flavour of the
+> > designated device is not "physical" and etc.) The script will still
+> > return 0 and thus causing a false-negative test result.
+> >
+> > Use a test_ran flag to determine if these tests were skipped and
+> > return KSFT_SKIP to make it more clear.
+> >
+> > V2: factor out the skip logic from main(), update commit message and
+> >     skip reasons accordingly.
+> > Link: https://bugs.launchpad.net/bugs/1937133
+> > Fixes: f3348a82e727 ("selftests: net: Add port split test")
+> > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+> > ---
+> >  tools/testing/selftests/net/devlink_port_split.py | 36 +++++++++++++++=
+++++----
+> >  1 file changed, 31 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/net/devlink_port_split.py b/tools/=
+testing/selftests/net/devlink_port_split.py
+> > index 2b5d6ff..749606c 100755
+> > --- a/tools/testing/selftests/net/devlink_port_split.py
+> > +++ b/tools/testing/selftests/net/devlink_port_split.py
+> > @@ -59,6 +59,8 @@ class devlink_ports(object):
+> >          assert stderr =3D=3D ""
+> >          ports =3D json.loads(stdout)['port']
+> >
+> > +        validate_devlink_output(ports, 'flavour')
+>
+> If it's just a matter of kernel/iproute2 version we shouldn't need to
+> check here again?
+>
+> >          for port in ports:
+> >              if dev in port:
+> >                  if ports[port]['flavour'] =3D=3D 'physical':
+> > @@ -220,6 +222,27 @@ def split_splittable_port(port, k, lanes, dev):
+> >      unsplit(port.bus_info)
+> >
+> >
+> > +def validate_devlink_output(devlink_data, target_property=3DNone):
+> > +    """
+> > +    Determine if test should be skipped by checking:
+> > +      1. devlink_data contains values
+> > +      2. The target_property exist in devlink_data
+> > +    """
+> > +    skip_reason =3D None
+> > +    if any(devlink_data.values()):
+> > +        if target_property:
+> > +            skip_reason =3D "{} not found in devlink output, test skip=
+ped".format(target_property)
+> > +            for key in devlink_data:
+> > +                if target_property in devlink_data[key]:
+> > +                    skip_reason =3D None
+> > +    else:
+> > +        skip_reason =3D 'devlink output is empty, test skipped'
+> > +
+> > +    if skip_reason:
+> > +        print(skip_reason)
+> > +        sys.exit(KSFT_SKIP)
+>
+> Looks good, so..
+>
+> >  def make_parser():
+> >      parser =3D argparse.ArgumentParser(description=3D'A test for port =
+splitting.')
+> >      parser.add_argument('--dev',
+> > @@ -231,6 +254,7 @@ def make_parser():
+> >
+> >
+> >  def main(cmdline=3DNone):
+> > +    test_ran =3D False
+>
+> I don't think we need the test_ran tracking any more?
+We still need this here to check if the test was actually started.
 
-Yep I understand, but let's unify it somehow, either 0x0 or 0... here the majority is 0
+Take the following output for example (ARM64 server with Mellanox
+Ethernet controller, running Ubuntu 22.10 5.19.0-35):
+$ devlink port show
+pci/0000:01:00.0/65535: type eth netdev enp1s0f0 flavour physical port
+0 splittable false
+pci/0000:01:00.1/131071: type eth netdev enp1s0f1 flavour physical
+port 1 splittable false
+There is no "lanes" attribute here, thus the max_lanes in main() will
+be 0. The test won't be started at all but returns 0.
 
-Neil
 
-> 
-> Konrad
->>   arch/arm64/boot/dts/qcom/sm8550.dtsi | 60 ++++++++++++++++++------------------
->>   1 file changed, 30 insertions(+), 30 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
->> index ff4d342c0725..fe8b92954550 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
->> @@ -547,7 +547,7 @@ adspslpi_mem: adspslpi-region@9ea00000 {
->>   
->>   		rmtfs_mem: rmtfs-region@d4a80000 {
->>   			compatible = "qcom,rmtfs-mem";
->> -			reg = <0x0 0xd4a80000 0x0 0x280000>;
->> +			reg = <0 0xd4a80000 0 0x280000>;
->>   			no-map;
->>   
->>   			qcom,client-id = <1>;
->> @@ -1078,7 +1078,7 @@ spi15: spi@89c000 {
->>   
->>   		i2c_master_hub_0: geniqup@9c0000 {
->>   			compatible = "qcom,geni-se-i2c-master-hub";
->> -			reg = <0x0 0x009c0000 0x0 0x2000>;
->> +			reg = <0 0x009c0000 0 0x2000>;
->>   			clock-names = "s-ahb";
->>   			clocks = <&gcc GCC_QUPV3_I2C_S_AHB_CLK>;
->>   			#address-cells = <2>;
->> @@ -1088,7 +1088,7 @@ i2c_master_hub_0: geniqup@9c0000 {
->>   
->>   			i2c_hub_0: i2c@980000 {
->>   				compatible = "qcom,geni-i2c-master-hub";
->> -				reg = <0x0 0x00980000 0x0 0x4000>;
->> +				reg = <0 0x00980000 0 0x4000>;
->>   				clock-names = "se", "core";
->>   				clocks = <&gcc GCC_QUPV3_I2C_S0_CLK>,
->>   					 <&gcc GCC_QUPV3_I2C_CORE_CLK>;
->> @@ -1105,7 +1105,7 @@ i2c_hub_0: i2c@980000 {
->>   
->>   			i2c_hub_1: i2c@984000 {
->>   				compatible = "qcom,geni-i2c-master-hub";
->> -				reg = <0x0 0x00984000 0x0 0x4000>;
->> +				reg = <0 0x00984000 0 0x4000>;
->>   				clock-names = "se", "core";
->>   				clocks = <&gcc GCC_QUPV3_I2C_S1_CLK>,
->>   					 <&gcc GCC_QUPV3_I2C_CORE_CLK>;
->> @@ -1122,7 +1122,7 @@ i2c_hub_1: i2c@984000 {
->>   
->>   			i2c_hub_2: i2c@988000 {
->>   				compatible = "qcom,geni-i2c-master-hub";
->> -				reg = <0x0 0x00988000 0x0 0x4000>;
->> +				reg = <0 0x00988000 0 0x4000>;
->>   				clock-names = "se", "core";
->>   				clocks = <&gcc GCC_QUPV3_I2C_S2_CLK>,
->>   					 <&gcc GCC_QUPV3_I2C_CORE_CLK>;
->> @@ -1139,7 +1139,7 @@ i2c_hub_2: i2c@988000 {
->>   
->>   			i2c_hub_3: i2c@98c000 {
->>   				compatible = "qcom,geni-i2c-master-hub";
->> -				reg = <0x0 0x0098c000 0x0 0x4000>;
->> +				reg = <0 0x0098c000 0 0x4000>;
->>   				clock-names = "se", "core";
->>   				clocks = <&gcc GCC_QUPV3_I2C_S3_CLK>,
->>   					 <&gcc GCC_QUPV3_I2C_CORE_CLK>;
->> @@ -1156,7 +1156,7 @@ i2c_hub_3: i2c@98c000 {
->>   
->>   			i2c_hub_4: i2c@990000 {
->>   				compatible = "qcom,geni-i2c-master-hub";
->> -				reg = <0x0 0x00990000 0x0 0x4000>;
->> +				reg = <0 0x00990000 0 0x4000>;
->>   				clock-names = "se", "core";
->>   				clocks = <&gcc GCC_QUPV3_I2C_S4_CLK>,
->>   					 <&gcc GCC_QUPV3_I2C_CORE_CLK>;
->> @@ -1653,8 +1653,8 @@ pcie0: pci@1c00000 {
->>   			reg-names = "parf", "dbi", "elbi", "atu", "config";
->>   			#address-cells = <3>;
->>   			#size-cells = <2>;
->> -			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
->> -				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
->> +			ranges = <0x01000000 0 0x60200000 0 0x60200000 0 0x100000>,
->> +				 <0x02000000 0 0x60300000 0 0x60300000 0 0x3d00000>;
->>   			bus-range = <0x00 0xff>;
->>   
->>   			dma-coherent;
->> @@ -1693,7 +1693,7 @@ pcie0: pci@1c00000 {
->>   			interconnects = <&pcie_noc MASTER_PCIE_0 0 &mc_virt SLAVE_EBI1 0>;
->>   
->>   			iommus = <&apps_smmu 0x1400 0x7f>;
->> -			iommu-map = <0x0   &apps_smmu 0x1400 0x1>,
->> +			iommu-map = <0     &apps_smmu 0x1400 0x1>,
->>   				    <0x100 &apps_smmu 0x1401 0x1>;
->>   
->>   			resets = <&gcc GCC_PCIE_0_BCR>;
->> @@ -1744,16 +1744,16 @@ pcie0_phy: phy@1c06000 {
->>   		pcie1: pci@1c08000 {
->>   			device_type = "pci";
->>   			compatible = "qcom,pcie-sm8550";
->> -			reg = <0x0 0x01c08000 0x0 0x3000>,
->> -			      <0x0 0x40000000 0x0 0xf1d>,
->> -			      <0x0 0x40000f20 0x0 0xa8>,
->> -			      <0x0 0x40001000 0x0 0x1000>,
->> -			      <0x0 0x40100000 0x0 0x100000>;
->> +			reg = <0 0x01c08000 0 0x3000>,
->> +			      <0 0x40000000 0 0xf1d>,
->> +			      <0 0x40000f20 0 0xa8>,
->> +			      <0 0x40001000 0 0x1000>,
->> +			      <0 0x40100000 0 0x100000>;
->>   			reg-names = "parf", "dbi", "elbi", "atu", "config";
->>   			#address-cells = <3>;
->>   			#size-cells = <2>;
->> -			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
->> -				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
->> +			ranges = <0x01000000 0 0x40200000 0 0x40200000 0 0x100000>,
->> +				 <0x02000000 0 0x40300000 0 0x40300000 0 0x1fd00000>;
->>   			bus-range = <0x00 0xff>;
->>   
->>   			dma-coherent;
->> @@ -1797,7 +1797,7 @@ pcie1: pci@1c08000 {
->>   			interconnects = <&pcie_noc MASTER_PCIE_1 0 &mc_virt SLAVE_EBI1 0>;
->>   
->>   			iommus = <&apps_smmu 0x1480 0x7f>;
->> -			iommu-map = <0x0   &apps_smmu 0x1480 0x1>,
->> +			iommu-map = <0     &apps_smmu 0x1480 0x1>,
->>   				    <0x100 &apps_smmu 0x1481 0x1>;
->>   
->>   			resets = <&gcc GCC_PCIE_1_BCR>,
->> @@ -1821,7 +1821,7 @@ pcie1: pci@1c08000 {
->>   
->>   		pcie1_phy: phy@1c0e000 {
->>   			compatible = "qcom,sm8550-qmp-gen4x2-pcie-phy";
->> -			reg = <0x0 0x01c0e000 0x0 0x2000>;
->> +			reg = <0 0x01c0e000 0 0x2000>;
->>   
->>   			clocks = <&gcc GCC_PCIE_1_AUX_CLK>,
->>   				 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
->> @@ -1851,7 +1851,7 @@ pcie1_phy: phy@1c0e000 {
->>   
->>   		cryptobam: dma-controller@1dc4000 {
->>   			compatible = "qcom,bam-v1.7.0";
->> -			reg = <0x0 0x01dc4000 0x0 0x28000>;
->> +			reg = <0 0x01dc4000 0 0x28000>;
->>   			interrupts = <GIC_SPI 272 IRQ_TYPE_LEVEL_HIGH>;
->>   			#dma-cells = <1>;
->>   			qcom,ee = <0>;
->> @@ -1862,7 +1862,7 @@ cryptobam: dma-controller@1dc4000 {
->>   
->>   		crypto: crypto@1de0000 {
->>   			compatible = "qcom,sm8550-qce";
->> -			reg = <0x0 0x01dfa000 0x0 0x6000>;
->> +			reg = <0 0x01dfa000 0 0x6000>;
->>   			dmas = <&cryptobam 4>, <&cryptobam 5>;
->>   			dma-names = "rx", "tx";
->>   			iommus = <&apps_smmu 0x480 0x0>,
->> @@ -1873,7 +1873,7 @@ crypto: crypto@1de0000 {
->>   
->>   		ufs_mem_phy: phy@1d80000 {
->>   			compatible = "qcom,sm8550-qmp-ufs-phy";
->> -			reg = <0x0 0x01d80000 0x0 0x2000>;
->> +			reg = <0 0x01d80000 0 0x2000>;
->>   			clocks = <&tcsr TCSR_UFS_CLKREF_EN>,
->>   				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
->>   			clock-names = "ref", "ref_aux";
->> @@ -1892,7 +1892,7 @@ ufs_mem_phy: phy@1d80000 {
->>   		ufs_mem_hc: ufs@1d84000 {
->>   			compatible = "qcom,sm8550-ufshc", "qcom,ufshc",
->>   				     "jedec,ufs-2.0";
->> -			reg = <0x0 0x01d84000 0x0 0x3000>;
->> +			reg = <0 0x01d84000 0 0x3000>;
->>   			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
->>   			phys = <&ufs_mem_phy>;
->>   			phy-names = "ufsphy";
->> @@ -1954,7 +1954,7 @@ tcsr: clock-controller@1fc0000 {
->>   
->>   		remoteproc_mpss: remoteproc@4080000 {
->>   			compatible = "qcom,sm8550-mpss-pas";
->> -			reg = <0x0 0x04080000 0x0 0x4040>;
->> +			reg = <0 0x04080000 0 0x4040>;
->>   
->>   			interrupts-extended = <&intc GIC_SPI 264 IRQ_TYPE_EDGE_RISING>,
->>   					      <&smp2p_modem_in 0 IRQ_TYPE_EDGE_RISING>,
->> @@ -2383,7 +2383,7 @@ dispcc: clock-controller@af00000 {
->>   
->>   		usb_1_hsphy: phy@88e3000 {
->>   			compatible = "qcom,sm8550-snps-eusb2-phy";
->> -			reg = <0x0 0x088e3000 0x0 0x154>;
->> +			reg = <0 0x088e3000 0 0x154>;
->>   			#phy-cells = <0>;
->>   
->>   			clocks = <&tcsr TCSR_USB2_CLKREF_EN>;
->> @@ -2396,7 +2396,7 @@ usb_1_hsphy: phy@88e3000 {
->>   
->>   		usb_dp_qmpphy: phy@88e8000 {
->>   			compatible = "qcom,sm8550-qmp-usb3-dp-phy";
->> -			reg = <0x0 0x088e8000 0x0 0x3000>;
->> +			reg = <0 0x088e8000 0 0x3000>;
->>   
->>   			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
->>   				 <&rpmhcc RPMH_CXO_CLK>,
->> @@ -2418,7 +2418,7 @@ usb_dp_qmpphy: phy@88e8000 {
->>   
->>   		usb_1: usb@a6f8800 {
->>   			compatible = "qcom,sm8550-dwc3", "qcom,dwc3";
->> -			reg = <0x0 0x0a6f8800 0x0 0x400>;
->> +			reg = <0 0x0a6f8800 0 0x400>;
->>   			#address-cells = <2>;
->>   			#size-cells = <2>;
->>   			ranges;
->> @@ -2458,7 +2458,7 @@ usb_1: usb@a6f8800 {
->>   
->>   			usb_1_dwc3: usb@a600000 {
->>   				compatible = "snps,dwc3";
->> -				reg = <0x0 0x0a600000 0x0 0xcd00>;
->> +				reg = <0 0x0a600000 0 0xcd00>;
->>   				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
->>   				iommus = <&apps_smmu 0x40 0x0>;
->>   				snps,dis_u2_susphy_quirk;
->> @@ -3444,7 +3444,7 @@ system-cache-controller@25000000 {
->>   
->>   		remoteproc_adsp: remoteproc@30000000 {
->>   			compatible = "qcom,sm8550-adsp-pas";
->> -			reg = <0x0 0x30000000 0x0 0x100>;
->> +			reg = <0 0x30000000 0 0x100>;
->>   
->>   			interrupts-extended = <&pdc 6 IRQ_TYPE_EDGE_RISING>,
->>   					      <&smp2p_adsp_in 0 IRQ_TYPE_EDGE_RISING>,
->> @@ -3576,7 +3576,7 @@ nsp_noc: interconnect@320c0000 {
->>   
->>   		remoteproc_cdsp: remoteproc@32300000 {
->>   			compatible = "qcom,sm8550-cdsp-pas";
->> -			reg = <0x0 0x32300000 0x0 0x1400000>;
->> +			reg = <0 0x32300000 0 0x1400000>;
->>   
->>   			interrupts-extended = <&intc GIC_SPI 578 IRQ_TYPE_EDGE_RISING>,
->>   					      <&smp2p_cdsp_in 0 IRQ_TYPE_EDGE_RISING>,
->>
-
+>
+> >      parser =3D make_parser()
+> >      args =3D parser.parse_args(cmdline)
+> >
+> > @@ -240,12 +264,9 @@ def main(cmdline=3DNone):
+> >          stdout, stderr =3D run_command(cmd)
+> >          assert stderr =3D=3D ""
+> >
+> > +        validate_devlink_output(json.loads(stdout))
+> >          devs =3D json.loads(stdout)['dev']
+> > -        if devs:
+> > -            dev =3D list(devs.keys())[0]
+> > -        else:
+> > -            print("no devlink device was found, test skipped")
+> > -            sys.exit(KSFT_SKIP)
+> > +        dev =3D list(devs.keys())[0]
+> >
+> >      cmd =3D "devlink dev show %s" % dev
+> >      stdout, stderr =3D run_command(cmd)
+> > @@ -277,6 +298,11 @@ def main(cmdline=3DNone):
+> >                  split_splittable_port(port, lane, max_lanes, dev)
+> >
+> >                  lane //=3D 2
+> > +        test_ran =3D True
+> > +
+> > +    if not test_ran:
+> > +        print("Test not started, no suitable device for the test")
+> > +        sys.exit(KSFT_SKIP)
+> >
+> >
+> >  if __name__ =3D=3D "__main__":
+>
