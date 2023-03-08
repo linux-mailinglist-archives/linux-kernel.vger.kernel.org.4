@@ -2,81 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8476B01C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E291B6B01C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbjCHImC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:42:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48244 "EHLO
+        id S230155AbjCHImV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:42:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjCHIlu (ORCPT
+        with ESMTP id S230133AbjCHImG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:41:50 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963C63A87D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:41:26 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id u9so62685909edd.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:41:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678264884;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tCs89pw+P8cjJtlM4LSB8KM5CQ8T7G/wA0iscV42Tco=;
-        b=SL7reMSUkGlsENR8kCgNcPCg7nHJpfnx9oMWVKmZ0pSUbgl26d80MUc+7jKfxRQlyo
-         bR9//nqwlB0Me/3eFfF7biVwAbihU/L06wx0Mx2sterw4D4Ie7kVGYsZm2yjgsVAEvFj
-         HYWNJfYdIU+gjS8YC8Ju1bkIWmEkkPhy2/BI4LptpqMkZ4p/c3Z760VaW4qKyjHG0PAB
-         Ci5kU+6HOXFBIdohJCHeH/ek9/KIBrXzw1/GPEn54Dc8X/FnO5LasEyccoTWuK2FKxWw
-         U3dolQ5QdzD6gnzddTkFgKQZl0Ac6iBILTHqYex9UlN4GV9xZt5uoT7bNDLjQCVk+lCX
-         kcEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678264884;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tCs89pw+P8cjJtlM4LSB8KM5CQ8T7G/wA0iscV42Tco=;
-        b=pJw0pe/Jjgs30fKnAuuaJdtHuAxkxDsk1bvDflfYXwOX+t/Hk0V7Lt30TQq0CFF4/M
-         iQj6g1mEJZnhLsWzOh2ZbR6BSu/9k4OuVbqbEiEUplamTQs9dunZxc2pDUv0pVZ8QDMN
-         h+Gl11y2LF+lBe1bnJiC0ghRm07j7ZAW5w7ww40ua/TcFspNoUTXHkHgHfF6PkXtVmmL
-         vcL8KKzh0x2tp/QkSLrK6OyD6GmFIGYLrt6GJFaOt+8PaXfN8QK54cgekGq3XS4WtVO8
-         8xEVj5jP+4oIIRDsEKWX+yRom3bN0ZrB0XSTfrFEUm7AF3I/3shzXADOdNmuZgmIirjb
-         i1rQ==
-X-Gm-Message-State: AO0yUKUs/KLsixVL352nPraIuPevtiwBtrSJPrk0ypM86firtMp/zsZn
-        VErYGdG9rGXUof2LbiM4SU1AsQ==
-X-Google-Smtp-Source: AK7set/3Dx0duu8l2Mp+JzTJRoeH9ueDFnjoOGADwh+ZziLDmOYI+MMkObsdQ2ouyppnyRRqhx/Onw==
-X-Received: by 2002:a17:906:7b8b:b0:885:8f79:d6d7 with SMTP id s11-20020a1709067b8b00b008858f79d6d7mr16265293ejo.61.1678264884549;
-        Wed, 08 Mar 2023 00:41:24 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:bba:fbfa:8aec:a133? ([2a02:810d:15c0:828:bba:fbfa:8aec:a133])
-        by smtp.gmail.com with ESMTPSA id bs13-20020a170906d1cd00b008e204a57e70sm7156164ejb.214.2023.03.08.00.41.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 00:41:24 -0800 (PST)
-Message-ID: <15374680-b9bc-a7a2-2723-570294456d24@linaro.org>
-Date:   Wed, 8 Mar 2023 09:41:23 +0100
+        Wed, 8 Mar 2023 03:42:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5987884819;
+        Wed,  8 Mar 2023 00:41:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE637616EF;
+        Wed,  8 Mar 2023 08:41:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D041EC433D2;
+        Wed,  8 Mar 2023 08:41:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678264914;
+        bh=faVHU/dbuLKTk9WcMpfYqJi90mJwb8srK+ZMIZ6kqTI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gS6wxgULAeV6Rb/oxK814OTJ7EpMeYB3vSwzzCKh+ljzZ5PDfWH5bJakoFj/rAPAD
+         YzxE8xDJ6K0q3qfHVQstzd1mo5QFS+f1xdxGSXeU2j5ikot4Rx5iHQG7fK49lotrQy
+         gm+mmv8gddwo7iS6nBQkM01HJ39cF2eg3nmRPccLDvAAr+l3ghJJ6X3Lg5d0KLkL5W
+         F9TXtr9bsaufW0zc4XV2CnB+YOVkbJIoyFEb1W1oUW47lsdtGyiRXIIAjOepbzf9oR
+         O7WPDxipanSpjLdAElT48LpqC7cQP/Oi0M5V0On8Reu8Homg5s7bFH1PqLhm//G3RC
+         /LJb0qtZHHJHQ==
+Message-ID: <39879d9f-041b-9156-95a5-a81702721739@kernel.org>
+Date:   Wed, 8 Mar 2023 10:41:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 1/3] dt-bindings: remoteproc: k3-m4f: Add bindings for
- K3 AM64x SoCs
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 5/6] soc: ti: pruss: Add helper function to enable OCP
+ master ports
 Content-Language: en-US
-To:     Martyn Welch <martyn.welch@collabora.com>,
-        Bjorn Andersson <andersson@kernel.org>,
+To:     MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <t-kristo@ti.com>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hari Nagalla <hnagalla@ti.com>
-Cc:     kernel@collabora.com, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230302171450.1598576-1-martyn.welch@collabora.com>
- <20230302171450.1598576-2-martyn.welch@collabora.com>
- <5c9130de-5092-9446-6e00-d86de7dcd6b4@linaro.org>
- <c2bebcbf9d463d656ae69d489e0e5a88f2540c2e.camel@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c2bebcbf9d463d656ae69d489e0e5a88f2540c2e.camel@collabora.com>
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+Cc:     linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230306110934.2736465-1-danishanwar@ti.com>
+ <20230306110934.2736465-6-danishanwar@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230306110934.2736465-6-danishanwar@ti.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,67 +68,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2023 19:26, Martyn Welch wrote:
-> On Fri, 2023-03-03 at 09:06 +0100, Krzysztof Kozlowski wrote:
->> On 02/03/2023 18:14, Martyn Welch wrote:
->>
->>> +
->>> +  mboxes:
->>> +    description: |
->>> +      OMAP Mailbox specifier denoting the sub-mailbox, to be used
->>> for
->>
->> OMAP?
->>
-> 
-> This device uses a mailbox compatible with the OMAP Mailbox, as defined
-> in Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml.
-> 
-> I note that documents title reads "TI OMAP2+ and K3 Mailbox devices".
-> I'll drop the "OMAP" here.
-> 
->>> +      communication with the remote processor. This property
->>> should match
->>> +      with the sub-mailbox node used in the firmware image.
->>> +    maxItems: 1
->>> +
->>> +  memory-region:
->>> +    description: |
->>> +      phandle to the reserved memory nodes to be associated with
->>> the
->>> +      remoteproc device. There should be at least two reserved
->>> memory nodes
->>> +      defined. 
->>
->> Don't repeat constraints in free form text.
->>
->>> The reserved memory nodes should be carveout nodes, and
->>> +      should be defined with a "no-map" property as per the
->>> bindings in
->>> +      Documentation/devicetree/bindings/reserved-memory/reserved-
->>> memory.yaml
->>> +    minItems: 2
->>> +    maxItems: 8
->>> +    items:
->>> +      - description: region used for dynamic DMA allocations like
->>> vrings and
->>> +                     vring buffers
->>> +      - description: region reserved for firmware image sections
->>> +    additionalItems: true
->>
->> And what is the purpose of the rest of reserved nodes?
->>
-> 
-> Up to 8 regions can be specified with their purpose determined by the
-> firmware running on the M4F core. The suggestion (and the
-> implementation in the example firmware) is to use the first 2 regions
-> as defined above for remoteproc with the others available to be used
-> for other purposes if necessary. The address translation module used
-> can cope with up to 8 regions.
 
-Then mention the rest is just dedicated to the firmware and it's purpose
-depends on the firmware.
 
-Best regards,
-Krzysztof
+On 06/03/2023 13:09, MD Danish Anwar wrote:
+> From: Suman Anna <s-anna@ti.com>
+> 
+> The PRU-ICSS subsystem on OMAP-architecture based SoCS (AM33xx, AM437x
+> and AM57xx SoCs) has a control bit STANDBY_INIT in the PRUSS_CFG register
+> to initiate a Standby sequence (when set) and trigger a MStandby request
+> to the SoC's PRCM module. This same bit is also used to enable the OCP
+> master ports (when cleared). The clearing of the STANDBY_INIT bit requires
+> an acknowledgment from PRCM and is done through the monitoring of the
+> PRUSS_SYSCFG.SUB_MWAIT bit.
+> 
+> Add a helper function pruss_cfg_ocp_master_ports() to allow the PRU
+> client drivers to control this bit and enable or disable the firmware
+> running on PRU cores access to any peripherals or memory to achieve
+> desired functionality. The access is disabled by default on power-up
+> and on any suspend (context is not maintained).
+> 
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> ---
+>  drivers/soc/ti/pruss.c           | 81 +++++++++++++++++++++++++++++++-
+>  include/linux/remoteproc/pruss.h |  6 +++
+>  2 files changed, 85 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+> index 537a3910ffd8..dc3abda0b8c2 100644
+> --- a/drivers/soc/ti/pruss.c
+> +++ b/drivers/soc/ti/pruss.c
+> @@ -22,14 +22,19 @@
+>  #include <linux/remoteproc.h>
+>  #include <linux/slab.h>
+>  
+> +#define SYSCFG_STANDBY_INIT	BIT(4)
+> +#define SYSCFG_SUB_MWAIT_READY	BIT(5)
+> +
+>  /**
+>   * struct pruss_private_data - PRUSS driver private data
+>   * @has_no_sharedram: flag to indicate the absence of PRUSS Shared Data RAM
+>   * @has_core_mux_clock: flag to indicate the presence of PRUSS core clock
+> + * @has_ocp_syscfg: flag to indicate if OCP SYSCFG is present
+>   */
+>  struct pruss_private_data {
+>  	bool has_no_sharedram;
+>  	bool has_core_mux_clock;
+> +	bool has_ocp_syscfg;
+>  };
+>  
+>  /**
+> @@ -205,6 +210,72 @@ int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+>  }
+>  EXPORT_SYMBOL_GPL(pruss_cfg_update);
+>  
+> +/**
+> + * pruss_cfg_ocp_master_ports() - configure PRUSS OCP master ports
+> + * @pruss: the pruss instance handle
+> + * @enable: set to true for enabling or false for disabling the OCP master ports
+> + *
+> + * This function programs the PRUSS_SYSCFG.STANDBY_INIT bit either to enable or
+> + * disable the OCP master ports (applicable only on SoCs using OCP interconnect
+> + * like the OMAP family). Clearing the bit achieves dual functionalities - one
+> + * is to deassert the MStandby signal to the device PRCM, and the other is to
+> + * enable OCP master ports to allow accesses outside of the PRU-ICSS. The
+> + * function has to wait for the PRCM to acknowledge through the monitoring of
+> + * the PRUSS_SYSCFG.SUB_MWAIT bit when enabling master ports. Setting the bit
+> + * disables the master access, and also signals the PRCM that the PRUSS is ready
+> + * for Standby.
+> + *
+> + * Return: 0 on success, or an error code otherwise. ETIMEDOUT is returned
+> + * when the ready-state fails.
+> + */
+> +int pruss_cfg_ocp_master_ports(struct pruss *pruss, bool enable)
+> +{
+> +	int ret;
+> +	u32 syscfg_val, i;
+> +	const struct pruss_private_data *data;
+> +
+> +	if (IS_ERR_OR_NULL(pruss))
+> +		return -EINVAL;
+> +
+> +	data = of_device_get_match_data(pruss->dev);
+> +
+> +	/* nothing to do on non OMAP-SoCs */
+> +	if (!data || !data->has_ocp_syscfg)
+> +		return 0;
+> +
+> +	/* assert the MStandby signal during disable path */
+> +	if (!enable)
+> +		return pruss_cfg_update(pruss, PRUSS_CFG_SYSCFG,
+> +					SYSCFG_STANDBY_INIT,
+> +					SYSCFG_STANDBY_INIT);
 
+You can omit the above if() if you just encapsulate the below in
+
+if (enable) {
+
+
+> +
+> +	/* enable the OCP master ports and disable MStandby */
+> +	ret = pruss_cfg_update(pruss, PRUSS_CFG_SYSCFG, SYSCFG_STANDBY_INIT, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* wait till we are ready for transactions - delay is arbitrary */
+> +	for (i = 0; i < 10; i++) {
+> +		ret = pruss_cfg_read(pruss, PRUSS_CFG_SYSCFG, &syscfg_val);
+> +		if (ret)
+> +			goto disable;
+> +
+> +		if (!(syscfg_val & SYSCFG_SUB_MWAIT_READY))
+> +			return 0;
+> +
+> +		udelay(5);
+> +	}
+> +
+> +	dev_err(pruss->dev, "timeout waiting for SUB_MWAIT_READY\n");
+> +	ret = -ETIMEDOUT;
+
+}
+
+> +
+> +disable:
+> +	pruss_cfg_update(pruss, PRUSS_CFG_SYSCFG, SYSCFG_STANDBY_INIT,
+> +			 SYSCFG_STANDBY_INIT);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(pruss_cfg_ocp_master_ports);
+> +
+>  static void pruss_of_free_clk_provider(void *data)
+>  {
+>  	struct device_node *clk_mux_np = data;
+> @@ -495,10 +566,16 @@ static int pruss_remove(struct platform_device *pdev)
+>  /* instance-specific driver private data */
+>  static const struct pruss_private_data am437x_pruss1_data = {
+>  	.has_no_sharedram = false,
+> +	.has_ocp_syscfg = true,
+>  };
+>  
+>  static const struct pruss_private_data am437x_pruss0_data = {
+>  	.has_no_sharedram = true,
+> +	.has_ocp_syscfg = false,
+> +};
+> +
+> +static const struct pruss_private_data am33xx_am57xx_data = {
+> +	.has_ocp_syscfg = true,
+>  };
+
+How about keeping platform data for different platforms separate?
+
+i.e. am33xx_pruss_data and am57xx_pruss_data
+
+>  
+>  static const struct pruss_private_data am65x_j721e_pruss_data = {
+> @@ -506,10 +583,10 @@ static const struct pruss_private_data am65x_j721e_pruss_data = {
+>  };
+>  
+>  static const struct of_device_id pruss_of_match[] = {
+> -	{ .compatible = "ti,am3356-pruss" },
+> +	{ .compatible = "ti,am3356-pruss", .data = &am33xx_am57xx_data },
+>  	{ .compatible = "ti,am4376-pruss0", .data = &am437x_pruss0_data, },
+>  	{ .compatible = "ti,am4376-pruss1", .data = &am437x_pruss1_data, },
+> -	{ .compatible = "ti,am5728-pruss" },
+> +	{ .compatible = "ti,am5728-pruss", .data = &am33xx_am57xx_data },
+>  	{ .compatible = "ti,k2g-pruss" },
+>  	{ .compatible = "ti,am654-icssg", .data = &am65x_j721e_pruss_data, },
+>  	{ .compatible = "ti,j721e-icssg", .data = &am65x_j721e_pruss_data, },
+> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
+> index 7952f250301a..8cb99d3cad0d 100644
+> --- a/include/linux/remoteproc/pruss.h
+> +++ b/include/linux/remoteproc/pruss.h
+> @@ -168,6 +168,7 @@ int pruss_release_mem_region(struct pruss *pruss,
+>  int pruss_cfg_read(struct pruss *pruss, unsigned int reg, unsigned int *val);
+>  int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+>  		     unsigned int mask, unsigned int val);
+> +int pruss_cfg_ocp_master_ports(struct pruss *pruss, bool enable);
+>  
+>  #else
+>  
+> @@ -203,6 +204,11 @@ static inline int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+>  	return -EOPNOTSUPP;
+>  }
+>  
+> +static inline int pruss_cfg_ocp_master_ports(struct pruss *pruss, bool enable)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+>  #endif /* CONFIG_TI_PRUSS */
+>  
+>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+
+cheers,
+-roger
