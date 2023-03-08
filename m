@@ -2,98 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66BD6B0D04
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D536B0D12
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbjCHPjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:39:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S230473AbjCHPjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:39:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232020AbjCHPi7 (ORCPT
+        with ESMTP id S231810AbjCHPjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:38:59 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59655F6E9;
-        Wed,  8 Mar 2023 07:38:24 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id r16so16835574qtx.9;
-        Wed, 08 Mar 2023 07:38:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678289901;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tX+7MbEYibXALYWKLog/YKG5IGsaDFYrMr3FbUtIfjI=;
-        b=XpsIdopyML+rt608V6S5JNMgg3Uy3EIsV5qrgd0Yn7T5Hbpwzjjly3li260RJC11zM
-         MVNn0ywzQjhW+pxiDDnNqcyTMlMPuvVdWdj9dSELLuAlOR2mnQl99q1hUb4LyHmAbe49
-         OBgo009sMT6EdYksICyDR9F+yY4tJ90azpDyGJxHCQD7SPhwiaGuh3alxNbpON/uIe6D
-         YVFvrNU5ZwVIFlqeSm4B6TTPh7PWrwqw4FL7NqBIyvR1/grUzYaYsfGbBnJNjCYexv+Q
-         SI+Dq3Nt9rW7kpdjY9NiEiEfBo2H3jW2km1f8pDZwFehmtIttqjXbv/tIvgniZoznMjA
-         1Vbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678289901;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=tX+7MbEYibXALYWKLog/YKG5IGsaDFYrMr3FbUtIfjI=;
-        b=ZMO7Kr6rbfBAPSQvuOxk9Qzm9D+1UG47Akl2rRNgxAkIpT3DxC+e/ZqJx5HZChCdmj
-         qAH+rnk9ivNKjL2gPmOy6t8OR0pBa1WeTq8aBNe1Tc5NEVsEXFQVJXV8J/qGYv+5ll7f
-         EZEWKFb9h55PVjA0JZPl602l7IYdRc174HvG9DbZT/lLLHztIxTpMNPiwNVtHm/jhwj1
-         GXRb4TLws4Z5wqqcMjAPi41qDIk+tw6pMOokvLouFnHU4lO7d11xsF7h7UWruoK87L+c
-         umfx4InMQzCPHJNAXQx5+fEAEzSOS1+OAG0WIJOWftrsO2OvPk1Wx6Tryw6TOc08PTl9
-         mCQA==
-X-Gm-Message-State: AO0yUKW3fSz7Ow7PDLIhAgr/wTxahm7bUz5R5Rh1BQjz+xDMEF4PJeoS
-        XrUZ2+8KnqoXwHMaZpdPcr0=
-X-Google-Smtp-Source: AK7set8W/8hK3c1694M+H/eFJPjJmF/7lSzJxw1Hu4P070/FzV3xSOFx31PPSLHZcLX0oUTdiytj1g==
-X-Received: by 2002:a05:622a:30a:b0:3bf:c665:20fe with SMTP id q10-20020a05622a030a00b003bfc66520femr31457324qtw.22.1678289901453;
-        Wed, 08 Mar 2023 07:38:21 -0800 (PST)
-Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
-        by smtp.gmail.com with ESMTPSA id f13-20020ac87f0d000000b003b9b48cdbe8sm8338716qtk.58.2023.03.08.07.38.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 07:38:21 -0800 (PST)
-Date:   Wed, 08 Mar 2023 10:38:20 -0500
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To:     Adnan Dizdarevic <adnan.dizdarevic@eks-intec.de>,
-        "willemdebruijn.kernel@gmail.com" <willemdebruijn.kernel@gmail.com>
-Cc:     "axboe@kernel.dk" <axboe@kernel.dk>,
-        "asml.silence@gmail.com" <asml.silence@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Message-ID: <6408abecce45d_1319ce208d2@willemb.c.googlers.com.notmuch>
-In-Reply-To: <BE1P281MB18589C91B10886A86B26EB6BA3B49@BE1P281MB1858.DEUP281.PROD.OUTLOOK.COM>
-References: <BE1P281MB18589C91B10886A86B26EB6BA3B49@BE1P281MB1858.DEUP281.PROD.OUTLOOK.COM>
-Subject: RE: [PATCH] net/packet: Allow MSG_NOSIGNAL flag in packet_recvmsg
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 8 Mar 2023 10:39:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05358C640F;
+        Wed,  8 Mar 2023 07:38:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 08560B81D4E;
+        Wed,  8 Mar 2023 15:38:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9851FC4339B;
+        Wed,  8 Mar 2023 15:38:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678289918;
+        bh=pOfVR7+MxMrqbi0+qUlLR9HciB6TD+Ey26pR8EmFIxQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GbauYbqNsnQIBfWU9R1+qOfY/R8dlGkI2adbqBs1ZPr0N06yB+ogkYwK4vWkPN9BK
+         EImfvrHOvM0NkmskIE+najkvW2c5k1hn0Ior+NuYdaBIG+PuWoXtuQdkE1JqOBC79z
+         IliDvcpcfg0jNJgauKarDaQqm3bhm/kSHgFKBOi9gOQ44cSSnOrh6aH4vxBN6ZCmLW
+         /YS9+DMsyFXnKZMPE04hd5LWFpVxZJvmS0CYg6sWHfS5M7BmHocieo11W7GaG8TNyS
+         2ehijWF+7IyR7CEFEaV/tmURDPMzoz8citvElyWH75JJx2+0F3fxc7+zJCIR0wH/PP
+         Dg6o56G87nvPg==
+Date:   Wed, 8 Mar 2023 15:38:31 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Walle <michael@walle.cc>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3 03/20] of: Rename of_modalias_node()
+Message-ID: <636296ae-299b-4bba-9e40-65ac538bac76@sirena.org.uk>
+References: <20230308153200.682248-1-miquel.raynal@bootlin.com>
+ <20230308153200.682248-4-miquel.raynal@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SYCyGWg4ADojR1Xd"
+Content-Disposition: inline
+In-Reply-To: <20230308153200.682248-4-miquel.raynal@bootlin.com>
+X-Cookie: Minnie Mouse is a slow maze learner.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adnan Dizdarevic wrote:
-> By adding MSG_NOSIGNAL flag to allowed flags in packet_recvmsg, this
-> patch fixes io_uring recvmsg operations returning -EINVAL when used with
-> packet socket file descriptors.
-> 
-> In io_uring, MSG_NOSIGNAL flag is added in:
-> io_uring/net.c/io_recvmsg_prep
-> 
-> Signed-off-by: Adnan Dizdarevic <adnan.dizdarevic@eks-intec.de>
 
-This was discussed two weeks ago and io_uring adapted to no longer
-require this change.
+--SYCyGWg4ADojR1Xd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-https://lore.kernel.org/netdev/Y%2Fja3Wi0tIyzXces@eidolon.nox.tf/T/
+On Wed, Mar 08, 2023 at 04:31:43PM +0100, Miquel Raynal wrote:
+> This helper does not produce a real modalias, but tries to get the
+> "product" compatible part of the "vendor,product" compatibles only. It
+> is far from creating a purely useful modalias string and does not seem
+> to be used like that directly anyway, so let's try to give this helper a
+> more meaningful name before moving there a real modalias helper (already
+> existing under of/device.c).
 
+Acked-by: Mark Brown <broonie@kernel.org>
 
+--SYCyGWg4ADojR1Xd
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQIq/YACgkQJNaLcl1U
+h9CoxAf+JDovQ0CruK6Kw1vn3Zom7AAcE8iCrp7bkKZriYYfpu4scbXWCmI3loo5
+DFyGVRBQnqN04kZZyFGVSvZ5IP6BMZQE63/NQlhlNJeiX5yVK9jBbek5OH1Mn1an
+fh5PkJ9k1cQvP/hZbSeBIgLKY95iQw5pGTn9SWKKJMvI42tKE6IgaArUYF4d3+2v
+Pwvv6uQFwBZXl4NFt3NDLZV94g01znlEtqwZkWsz3gjeBwRIKAHeK+iS1yNRRH0o
+SMHTo1qsZaCES0qFo8xtNjtsvjq1v2l2BGbBQN7KzCOAK2tnE9F1p3m0m+DrE+mL
+7Bt0JC9pmAjd9TnIMJlD/FtKhThGnQ==
+=V3F5
+-----END PGP SIGNATURE-----
+
+--SYCyGWg4ADojR1Xd--
