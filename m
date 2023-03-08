@@ -2,93 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 853E26B0BA1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 310A76B0BA4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:42:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231683AbjCHOlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
+        id S229513AbjCHOmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:42:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbjCHOlX (ORCPT
+        with ESMTP id S231442AbjCHOmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:41:23 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F80D008B;
-        Wed,  8 Mar 2023 06:39:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wwJqwTSg/nZUGQBDfBIfh8KJSRZGxt8BFXfaKwtU+Ak=; b=dopG2kxEYwqx3T1vODi+1MWtJU
-        nyRzT3DtGFdLQZxe690buTczy2NUUH4G7N/g7698ZkYpa/oxQ47QOmJtyRhbm1LTGmClLs+q+MOpj
-        7M76Zgsfkb7ZzbA0SHgrY3Em5iz7sW89Wa1qlX7c6FhUsh1Z+5+0KRN1/z6r1SEwJ1UFHuJpH54Km
-        /r4L4R4yyatEdpYTWSbYv5lRldjP8pdK+tkeNWNUtxmcFPNNUhXajqdQBBFttOlp2pGJKYQvf65xG
-        iiyE70iT57q3cXFQWw6Ez62/sWuepTCFE7fobZvIpvCEDxjgQBozJFeO6n2L/1RBkw+PCmeTHHEqS
-        9Ne66LqQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pZuwx-00HPC7-1X;
-        Wed, 08 Mar 2023 14:39:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E0C70300033;
-        Wed,  8 Mar 2023 15:39:25 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7EAAE20A28FE2; Wed,  8 Mar 2023 15:39:25 +0100 (CET)
-Date:   Wed, 8 Mar 2023 15:39:25 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Ross Zwisler <zwisler@google.com>
-Subject: Re: [PATCH] tracing, hardirq: Do not test lockdep on irq trace
- points when disabled
-Message-ID: <20230308143925.GJ2017917@hirez.programming.kicks-ass.net>
-References: <20230307184645.521db5c9@gandalf.local.home>
+        Wed, 8 Mar 2023 09:42:02 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0A15AB51
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:40:07 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 0256B21A52;
+        Wed,  8 Mar 2023 14:40:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1678286406; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9Nej/Xmw3KaCypC9ifrRCpOYBycrY2TTcetRXK8NFjA=;
+        b=udEwvW5YKzK+Efn7XqDsoag9gp93WC6AE0IW2BgxELZSIkl6Cb7kswhgM+T7RrHcGTNzGV
+        TUkw9ZLfTzfg8LlhRqNdEZ4bsJ984jxnn26eAFn9yPlwm7KkpPa64Noon+enpu6vgWLE+M
+        0uLJ4VdAhZ9iLNtKVXj0WhXGZN9Yrvg=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 950722C141;
+        Wed,  8 Mar 2023 14:40:05 +0000 (UTC)
+Date:   Wed, 8 Mar 2023 15:40:02 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v1 04/18] printk: Add per-console suspended state
+Message-ID: <ZAieQtcs7YEuCCDa@alley>
+References: <20230302195618.156940-1-john.ogness@linutronix.de>
+ <20230302195618.156940-5-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230307184645.521db5c9@gandalf.local.home>
+In-Reply-To: <20230302195618.156940-5-john.ogness@linutronix.de>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 06:46:45PM -0500, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Thu 2023-03-02 21:02:04, John Ogness wrote:
+> Currently the global @console_suspended is used to determine if
+> consoles are in a suspended state. Its primary purpose is to allow
+> usage of the console_lock when suspended without causing console
+> printing. It is synchronized by the console_lock.
 > 
-> When CONFIG_LOCKDEP is enabled, the trace points have:
+> Rather than relying on the console_lock to determine suspended
+> state, make it an official per-console state that is set within
+> console->flags. This allows the state to be queried via SRCU.
 > 
-> 	static inline void trace_##name(proto)				\
-> 	{								\
-> 		if (static_key_false(&__tracepoint_##name.key))		\
-> 			__DO_TRACE(name,				\
-> 				TP_ARGS(args),				\
-> 				TP_CONDITION(cond), 0);			\
-> 		if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {		\
-> 			rcu_read_lock_sched_notrace();			\
-> 			rcu_dereference_sched(__tracepoint_##name.funcs);\
-> 			rcu_read_unlock_sched_notrace();		\
-> 		}							\
-> 	}								\
+> @console_suspended will continue to exist, but now only to implement
+> the console_lock/console_unlock trickery and _not_ to represent
+> the suspend state of a particular console.
+> 
+> --- a/include/linux/console.h
+> +++ b/include/linux/console.h
+> @@ -153,6 +153,8 @@ static inline int con_debug_leave(void)
+>   *			receiving the printk spam for obvious reasons.
+>   * @CON_EXTENDED:	The console supports the extended output format of
+>   *			/dev/kmesg which requires a larger output buffer.
+> + * @CON_SUSPENDED:	Indicates if a console is suspended. If true, the
+> + *			printing callbacks must not be called.
+>   */
+>  enum cons_flags {
+>  	CON_PRINTBUFFER		= BIT(0),
+> @@ -162,6 +164,7 @@ enum cons_flags {
+>  	CON_ANYTIME		= BIT(4),
+>  	CON_BRL			= BIT(5),
+>  	CON_EXTENDED		= BIT(6),
+> +	CON_SUSPENDED		= BIT(7),
 
-> Where it will test lockdep for trace points even when they are not
-> enabled, to make sure they do not cause RCU issues, and lockdep will
-> trigger even when the trace points are not enabled.
+We have to show it in /proc/consoles, see fs/proc/consoles.c.
 
-I'm confused what that's actually trying to do..
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -2563,10 +2563,26 @@ MODULE_PARM_DESC(console_no_auto_verbose, "Disable console loglevel raise to hig
+>   */
+>  void suspend_console(void)
+>  {
+> +	struct console *con;
+> +
+>  	if (!console_suspend_enabled)
+>  		return;
+>  	pr_info("Suspending console(s) (use no_console_suspend to debug)\n");
+>  	pr_flush(1000, true);
+> +
+> +	console_list_lock();
+> +	for_each_console(con)
+> +		console_srcu_write_flags(con, con->flags | CON_SUSPENDED);
+> +	console_list_unlock();
+> +
+> +	/*
+> +	 * Ensure that all SRCU list walks have completed. All printing
+> +	 * contexts must be able to see that they are suspended so that it
+> +	 * is guaranteed that all printing has stopped when this function
+> +	 * completes.
+> +	 */
+> +	synchronize_srcu(&console_srcu);
+> +
+>  	console_lock();
+>  	console_suspended = 1;
+>  	up_console_sem();
+> @@ -2574,11 +2590,26 @@ void suspend_console(void)
+>  
+>  void resume_console(void)
+>  {
+> +	struct console *con;
+> +
+>  	if (!console_suspend_enabled)
+>  		return;
+>  	down_console_sem();
+>  	console_suspended = 0;
+>  	console_unlock();
+> +
+> +	console_list_lock();
+> +	for_each_console(con)
+> +		console_srcu_write_flags(con, con->flags & ~CON_SUSPENDED);
+> +	console_list_unlock();
+> +
+> +	/*
+> +	 * Ensure that all SRCU list walks have completed. All printing
+> +	 * contexts must be able to see they are no longer suspended so
+> +	 * that they are guaranteed to wake up and resume printing.
+> +	 */
+> +	synchronize_srcu(&console_srcu);
+> +
 
-You're not tickling the rcu_is_watching() check, because
-rcu_read_lock_sched_notrace() doesn't have that. You're not tickling
-RCU_LOCKDEP_WARN() because you did rcu_read_lock_sched_notrace().
+The setting of the global "console_suspended" and per-console
+CON_SUSPENDED flag is not synchronized. As a result, they might
+become inconsistent:
 
-So what?!?
+CPU0				CPU1
+
+suspend_console()
+  console_list_lock();
+  # set CON_SUSPENDED
+  console_list_unlock();
+
+				console_resume()
+				  down_console_sem();
+				  console_suspended = 0;
+				  console_unlock();
+
+				  console_list_lock()
+				  # clear CON_SUSPENDED
+				  console_list_unlock();
+
+  console_lock();
+  console_suspended = 1;
+  up_console_sem();
+
+I think that we could just remove the global "console_suspended" flag.
+
+IMHO, it used to be needed to avoid moving the global "console_seq" forward
+when the consoles were suspended. But it is not needed now with the
+per-console con->seq. console_flush_all() skips consoles when
+console_is_usable() fails and it bails out when there is no progress.
+
+It seems that both console_flush_all() and console_unlock() would
+handle this correctly.
+
+Hmm, it would change the behavior of console_lock() and console_trylock().
+They would set "console_locked" and "console_may_schedule" even when
+the consoles are suspended. But it should be OK:
+
+   + "console_may_schedule" actually should be set according
+     to the context where console_unlock() will be called.
+
+   + "console_locked" seems to be used only in WARN_CONSOLE_UNLOCKED().
+     I could imagine a corner case where, for example, "vt" code does
+     not print the warning because it works as it works. But it does
+     not make much sense. IMHO, such a code should get fixed. And it
+     is just a warning after all.
+
+>  	pr_flush(1000, true);
+>  }
+>  
+> @@ -3712,14 +3745,7 @@ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progre
+>  		}
+>  		console_srcu_read_unlock(cookie);
+>  
+> -		/*
+> -		 * If consoles are suspended, it cannot be expected that they
+> -		 * make forward progress, so timeout immediately. @diff is
+> -		 * still used to return a valid flush status.
+> -		 */
+> -		if (console_suspended)
+> -			remaining = 0;
+
+Heh, I though that this might cause regression, e.g. non-necessary
+delays during suspend.
+
+But it actually works because "diff" is counted only for usable
+consoles. It will stay "0" if there is no usable console.
+
+I wonder if it would make sense to add a comment somewhere,
+e.g. above the later check:
+
++		/* diff is zero also when there is no usable console. */
+		if (diff == 0 || remaining == 0)
+			break;
+
+Anyway, we should update the comment above pr_flush():
+
+-  * Return: true if all enabled printers are caught up.
++  * Return: true if all usable printers are caught up.
+
+> -		else if (diff != last_diff && reset_on_progress)
+> +		if (diff != last_diff && reset_on_progress)
+>  			remaining = timeout_ms;
+>  
+>  		console_unlock();
+
+Best Regards,
+Petr
