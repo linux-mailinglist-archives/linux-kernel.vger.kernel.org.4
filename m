@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 685606B0F7F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F646B0F7C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjCHQ7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:59:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
+        id S229687AbjCHQ7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:59:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjCHQ66 (ORCPT
+        with ESMTP id S229634AbjCHQ66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Mar 2023 11:58:58 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD15CC307;
-        Wed,  8 Mar 2023 08:57:31 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 328Gtvdw017368;
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF8BC78D8;
+        Wed,  8 Mar 2023 08:57:30 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 328Gtvvb046092;
         Wed, 8 Mar 2023 10:55:57 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1678294557;
-        bh=N8wZAUOz9p7nMkG96hQaSMPHIVuT06B8CLDSE+c1oFA=;
+        bh=ZzKVlyCPHyTxRj4e2SffrTyR2DUIDFnjXsjccSjcXd8=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=eCV6gMYJA4EPdDyOTdqzK/ZrPNEuz91e6pvz7ztkS0xYykh79Lgts5L9fUMyl58xt
-         VAhp4lNTOrnsxQMEThema3qVeoYIu4A5nkKpbtGH2ZhXZ8OKEiF4gCo7rAiAQ1wOdn
-         Mx+gKrFA/qEyE3kEJ+9fbyWrX4lSN1IsRnCBLGQQ=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 328Gtvfs018203
+        b=MszOK0s40jPI/Vw6oFZPyvZFMGSyPNW09NYOzb/ZVkFVt4pkTo63bg6JE0QXCymUN
+         jiI9pVobtz13wLSroANT2oQcq0ORIe5UpQr+f3U2rSl1VD1ZNc3Rz4RQ5nwOiPovqL
+         Ertho3O8wUHr4ia73cXcJ5ZPMKRntT7b2CJl1AAk=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 328GtvA2018511
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Wed, 8 Mar 2023 10:55:57 -0600
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 8
  Mar 2023 10:55:57 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
  Frontend Transport; Wed, 8 Mar 2023 10:55:57 -0600
 Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 328Gtvak014057;
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 328Gtval014057;
         Wed, 8 Mar 2023 10:55:57 -0600
 From:   Andrew Davis <afd@ti.com>
 To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
@@ -51,9 +51,9 @@ To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
 CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, Andrew Davis <afd@ti.com>
-Subject: [PATCH v6 2/9] ARM: dts: nspire: Use syscon-reboot to handle restart
-Date:   Wed, 8 Mar 2023 10:55:49 -0600
-Message-ID: <20230308165557.2242-3-afd@ti.com>
+Subject: [PATCH v6 3/9] ARM: dts: nspire: Fix cpu node to conform with DT binding
+Date:   Wed, 8 Mar 2023 10:55:50 -0600
+Message-ID: <20230308165557.2242-4-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230308165557.2242-1-afd@ti.com>
 References: <20230308165557.2242-1-afd@ti.com>
@@ -71,36 +71,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Writing this bit can be handled by the syscon-reboot driver.
-Add this node to DT.
+This node does not follow the DT binding schema, correct this.
+Should result in no functional change.
 
 Signed-off-by: Andrew Davis <afd@ti.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Tested-by: Fabian Vogt <fabian@ritter-vogt.de>
-Reviewed-by: Fabian Vogt <fabian@ritter-vogt.de>
 ---
- arch/arm/boot/dts/nspire.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/arm/boot/dts/nspire.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/arch/arm/boot/dts/nspire.dtsi b/arch/arm/boot/dts/nspire.dtsi
-index bb240e6a3a6f..48fbc9d533c3 100644
+index 48fbc9d533c3..cb7237051512 100644
 --- a/arch/arm/boot/dts/nspire.dtsi
 +++ b/arch/arm/boot/dts/nspire.dtsi
-@@ -172,7 +172,14 @@ rtc: rtc@90090000 {
- 			};
+@@ -11,8 +11,13 @@ / {
+ 	interrupt-parent = <&intc>;
  
- 			misc: misc@900a0000 {
-+				compatible = "ti,nspire-misc", "syscon", "simple-mfd";
- 				reg = <0x900a0000 0x1000>;
+ 	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
 +
-+				reboot {
-+					compatible = "syscon-reboot";
-+					offset = <0x08>;
-+					value = <0x02>;
-+				};
- 			};
+ 		cpu@0 {
+ 			compatible = "arm,arm926ej-s";
++			device_type = "cpu";
++			reg = <0>;
+ 		};
+ 	};
  
- 			pwr: pwr@900b0000 {
 -- 
 2.39.2
 
