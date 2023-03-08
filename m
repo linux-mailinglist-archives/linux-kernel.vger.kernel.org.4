@@ -2,92 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B586B021F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A150E6B0222
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjCHIzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:55:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
+        id S230019AbjCHI4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:56:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjCHIzl (ORCPT
+        with ESMTP id S229629AbjCHIz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:55:41 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FB5984F5
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:55:37 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id cy23so62559140edb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:55:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678265736;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3jQ1nOnikne88DPW0Xfw2WODiDln5gsGZDJ4DMVG7to=;
-        b=ayaBBZGw32k5/6PePoDorTTj4QnhDUZ2Id6iazXimpTQE30uSZooYEeT9JRgNjWDTC
-         dc+nzv4MChkbmeTpumOMk9ve9VlNfQXTgLmhI//ocnxxh3Id29UIdK95zU+zkeBFw6ZP
-         +KNs4dQNRcI9wd4wHNlbl4X40eYVIEWbhlDPm/Jxai1Wuw1fvK51aKwZCV84Q6qN1U5V
-         lBDRFhEz/u38yUUYjlderifFi9b9dYHUminH/u4rYaooeo8S3FCqgSIJhuudpWKFp/d6
-         xkI+yQuBYHC+vekXVxoRuy0HleoIsjAKPHJmH5rsMyPNDN7aJ4KnFkD1xzqARPwU+7P+
-         SNLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678265736;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3jQ1nOnikne88DPW0Xfw2WODiDln5gsGZDJ4DMVG7to=;
-        b=qkNIbev1ULR1B9L2z9JDjORS2S0G2Pk+t02ylQLUOS04kmzrfyjm2N63uw42KK0xNJ
-         TvHiR2gNTgWEco4XcdpUSTm/IcvCr8iRt0bbgULYaJY/Y9ri2GPPTXxSgUjQ9NbFxjpv
-         YW62MG7GmzFxMrEF5875lcAd3/gLNPUj3O4awcZRCuurhAjPNckA/M7grXBg4OaSrOur
-         M8Gj9YZjE8D6sYbuR810SVXn8dFMr52a0LrzsicR1PXjKZwPAx1RB1Raiv/9apI1KvL2
-         TwiY43fJBnplkjD/5F7V220IE+rHNyxLgBc9uXvGDqd+c/8P1xdnLBsAkLefucm94sM2
-         /xeg==
-X-Gm-Message-State: AO0yUKU4GGMy1d9Xo2Bxf88jEYqHkCjhWDachSPJUndZb/h0/r7NuH3r
-        OS3QBGE1YWZqaMssWnSG7qrFSQ==
-X-Google-Smtp-Source: AK7set9z/LLx8wdi8M9r0DeujF5+eK+nIkDWrjmN+DlO49GYQlsHQwXDe0gBIK/In+kvp6KkpubtOQ==
-X-Received: by 2002:a17:906:11c6:b0:8b1:3191:286f with SMTP id o6-20020a17090611c600b008b13191286fmr15995185eja.25.1678265735892;
-        Wed, 08 Mar 2023 00:55:35 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:bba:fbfa:8aec:a133? ([2a02:810d:15c0:828:bba:fbfa:8aec:a133])
-        by smtp.gmail.com with ESMTPSA id q18-20020a170906771200b008cc920469b5sm7304239ejm.18.2023.03.08.00.55.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 00:55:35 -0800 (PST)
-Message-ID: <fdedd6c0-ebe0-c2ff-b7fc-4ae4d8caafe3@linaro.org>
-Date:   Wed, 8 Mar 2023 09:55:34 +0100
+        Wed, 8 Mar 2023 03:55:57 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFDE98842;
+        Wed,  8 Mar 2023 00:55:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678265756; x=1709801756;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=v0FORj2NWSyCCoGql/X/Kg/LiWaknEsTJEy6ke6X/Fk=;
+  b=YqPsQfysKLW0HwBv4X8b+sMPh0NDH+7wzDNVO3MQA4x3l1fEAAAq+i/5
+   MRwA+q8dnZhGq0H0dYLsTSBGMtCddefvfEyFx2sEDrCInbue7q9v6jxEr
+   rvwt40Ud7DdtMdmnPZ8pNLj17Nd500WhyxB9wam6GLe4XDVUpHngvQ4GV
+   BmE12EKPlInD2haCzuIRwsPTPpt8HnxYMwaWJMc+vvY2E72JmBv4D9kcz
+   pmolITqAvOsR+yif/iDDi6uctlCyaqJfK1huumcP/dJNAzxiauegSnoXa
+   8c3rwtDpbFOClV0qhjOMFgi+4hM9ZDycmcDatx7RPEd4ricwS7VtWqmtd
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="400930509"
+X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
+   d="scan'208";a="400930509"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 00:55:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="670246262"
+X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
+   d="scan'208";a="670246262"
+Received: from mtkaczyk-mobl.ger.corp.intel.com (HELO localhost) ([10.252.59.114])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 00:55:47 -0800
+Date:   Wed, 8 Mar 2023 09:55:42 +0100
+From:   Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
+To:     "NeilBrown" <neilb@suse.de>
+Cc:     "Song Liu" <song@kernel.org>,
+        "Linux regressions mailing list" <regressions@lists.linux.dev>,
+        Jes.Sorensen@gmail.com, "linux-raid" <linux-raid@vger.kernel.org>,
+        "LKML" <linux-kernel@vger.kernel.org>,
+        "Nikolay Kichukov" <hijacker@oldum.net>
+Subject: Re: [regression] Bug 217074 - upgrading to kernel 6.1.12 from
+ 5.15.x can no longer assemble software raid0
+Message-ID: <20230308095542.00001bba@linux.intel.com>
+In-Reply-To: <167822843274.8008.1142380266687607670@noble.neil.brown.name>
+References: <a13cd3b5-cc41-bf2f-c8ac-e031ad0d5dd7@leemhuis.info>
+        <CAPhsuW7ZWthh0PZt71hQh1_51C0yMSpOqWYJKc_+VzzTmW_r5A@mail.gmail.com>
+        <167805126796.8008.3635368722810568057@noble.neil.brown.name>
+        <20230307095258.00001cb3@linux.intel.com>
+        <167822843274.8008.1142380266687607670@noble.neil.brown.name>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1] max77663-rtc: pass rtc address from device tree node
- if exists
-Content-Language: en-US
-To:     Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20230308083759.11692-1-clamor95@gmail.com>
- <202303080844360ced8b82@mail.local>
- <CAPVz0n2XErDOCERV+XO3ek4_15hiwTasy4agLZLijqx2z67UnA@mail.gmail.com>
- <df35ed19-74d3-5eea-8efb-588417a417f2@linaro.org>
- <CAPVz0n0N=ChOatodt_W-cAne6Tqwa-1crUjWLuHf1HugpNLXuA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAPVz0n0N=ChOatodt_W-cAne6Tqwa-1crUjWLuHf1HugpNLXuA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 09:51, Svyatoslav Ryhel wrote:
-> Ooof, my bad. I will resend v2 with fix asap.
+On Wed, 08 Mar 2023 09:33:52 +1100
+"NeilBrown" <neilb@suse.de> wrote:
 
-This was for max77686. Other PMICs have their own. None of them is
-max77663, but that's another topic.
+> On Tue, 07 Mar 2023, Mariusz Tkaczyk wrote:
+> > On Mon, 06 Mar 2023 08:21:07 +1100
+> > "NeilBrown" <neilb@suse.de> wrote:
+> >   
+> > > On Sat, 04 Mar 2023, Song Liu wrote:  
+> > > > + Jes.
+> > > > 
+> > > > It appeared to me that we can assemble the array if we have any of the
+> > > > following:
+> > > > 1. Enable CONFIG_BLOCK_LEGACY_AUTOLOAD;
+> > > > 2. Have a valid /etc/mdadm.conf;
+> > > > 3. Update mdadm to handle this case. (I tried some ugly hacks, which
+> > > > worked but weren't clean).
+> > > > 
+> > > > Since we eventually would like to get rid of
+> > > > CONFIG_BLOCK_LEGACY_AUTOLOAD, I think we need mdadm to handle this
+> > > > properly. But the logistics might be complicated, as
+> > > > mdadm are shipped separately.
+> > > > 
+> > > > Jes, what do you think about this? AFAICT, we need to update the logic
+> > > > in mdopen.c:create_mddev().    
+> > > 
+> > > mdadm already handles this, but only if 
+> > >    CREATE names=yes
+> > > is present in /etc/mdadm.conf  
+> > 
+> > Hi,
+> > 
+> > "CREATE names=yes" enforces creation of /dev/md_name arrays instead of
+> > /dev/mdXXX. It is a large change for users, too aggressive IMO. It will
+> > destroy many setups.
+> > 
+> > To resolve it, we need is to use create_named_array() but respect old naming
+> > convention. We already have find_free_devnm(), and we are able to keep
+> > consistency because we can create 'mdXXX':
+> > 
+> > /sys/module/md_mod/parameters # echo md125 > new_array
+> > 
+> > /sys/module/md_mod/parameters # ll /sys/block/md125
+> > lrwxrwxrwx 1 root root 0 Mar  7 10:54 /sys/block/md125 ->
+> > ../devices/virtual/block/md125
+> > 
+> > That will require adjustments in mdadm, but I think that we can keep
+> > names the same way. I created the test for verification of base creation
+> > flows, we can use it to avoid regression:
+> > https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git/tree/tests/00createnames
+> > 
+> > Thoughts?  
+> 
+> Yes, that is probably sensible.
+> 
+> It would be nice to have a way to expose the "names=yes" functionality
+> more obviously.  I think people would generally prefer it (/proc/mdstat
+> becomes more meaningful) but I agree that forcing it on people is the
+> the best approach.
+> 
+> Maybe a super-block flag that enables it for that array, and we start
+> setting that flag when creating new arrays?
+> 
 
-Best regards,
-Krzysztof
+That is controversial. I don't feel that using metadata to resolve Linux issue
+is as a good way. It will work for native for sure but for IMSM it is not such
+simple.
 
+I think that we can handle it by config file.
+When we set "ARRAY /dev/mdXXX" then it is honored. I'm familiar with such
+cases, that works. In such case link may or may not be generated so far I
+remember but... nobody cares if array name is meaningful and we can fix that
+too. It seems to not be a big deal.
+
+I would like to propose doing same for 'names'.
+If there is no config or name is set to "/dev/md/name" it should work as now.
+So, if someone would need backward compatibility we can add flag to --detail
+and --examine breifs forces that, let say --use-link-as-name. By default
+"ARRAY /dev/md_name" entry will be generated.
+
+My PoV is based on IMSM, there may be small differences between IMSM and native
+but I think that it applies everywhere.
+
+Thanks,
+Mariusz
