@@ -2,83 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB856AFB0F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 168536AFB10
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjCHA0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 19:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
+        id S229812AbjCHA1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 19:27:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjCHA0v (ORCPT
+        with ESMTP id S229684AbjCHA1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 19:26:51 -0500
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC6EA102B;
-        Tue,  7 Mar 2023 16:26:50 -0800 (PST)
-Received: by mail-oi1-f172.google.com with SMTP id c11so11045043oiw.2;
-        Tue, 07 Mar 2023 16:26:50 -0800 (PST)
+        Tue, 7 Mar 2023 19:27:35 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC77BA1FD2
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 16:27:33 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id n196-20020a2540cd000000b00889c54916f2so15961198yba.14
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 16:27:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678235253;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=mWYo+xMJNjNNqpgF4TGynZqpAOyeMeI+jcBtHhYSVHg=;
+        b=C67RkmTNFLNA5Ch6vBhB0wpdWJqLfcFfPsxbzrVhPo3nAPTNH2h4YVolTieBJYsV/k
+         PSyWbuH4HmNNDNfQpVVYxzaW3Y50KGhaIRWiIK0lAYgcAdSx4JxuvpgPS9cHqJ2Gmy/m
+         0pEYlk9ovA7NsB4eOqJEVYGOqKK5P/IMaNX1vU44PnQEAmV0VgOROo75Vt4CxLfuMXro
+         Bb0P5/YRKNYpKaGwCRZUZfEmWkqESKqoISietCpJowZnEJhVONMLvOcR52YCEuVNAsXK
+         mrcYV9UuTZoN5uYQdWOTwXW29ub28zxB8V9T7Jr6crsU9x+BBVQEeYmGCZIWpLfcAeCX
+         fE0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678235210;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6Hkby2vlQx0f1o01FlGJdqmioVTYUXHKkOhCJhmTdGw=;
-        b=lU3/ui7ugzmJX91DigSgyQGBDbGhocmtHGT+5BcmusG3yYctARVwri4gN5OoJ8K5GB
-         FSZs8zJ0LNICuzgZWd/a7g7GE/bW70WkssOtyAkm7nXmQBet0d0VMReJFRmIy4C+6jAw
-         a91B5AdZSu0n71k9Z9Y6c2l4eTlwFScvNX4NEbUNXQkYpIdyteiXEKAVmMc195OJgAyd
-         xs+iecV4lG31is/gWn5iVGKui/J0SkEWBTjvXBpGXCq9GwLbcLUvEoI8VaU2S84UUjQd
-         wSabjoSuOWCmZk3AIs9a45HwBYxJ6bJVAhDQoyvP0Gcp30MsOAlS1ymJXcOrU0nj0H65
-         /PRA==
-X-Gm-Message-State: AO0yUKVYAYiME3JXLtaUJ19vhRgeR2o05I5qLZZS0jy3TFiNYDdfAefL
-        sT6U2GrkoBx+J8itj8rZhkwVZjHOcDhM
-X-Google-Smtp-Source: AK7set98lOyt6Rzk2C+QJuBTx2FmZYIWP2K1cMounTBTvx1y0p0Ul2EbnET+gyz322U/l0LCBjLtnA==
-X-Received: by 2002:aca:2809:0:b0:35e:4192:5da8 with SMTP id 9-20020aca2809000000b0035e41925da8mr7308376oix.52.1678235209857;
-        Tue, 07 Mar 2023 16:26:49 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e129-20020acab587000000b003847ca255fasm5818742oif.30.2023.03.07.16.26.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 16:26:49 -0800 (PST)
-Received: (nullmailer pid 532613 invoked by uid 1000);
-        Wed, 08 Mar 2023 00:26:48 -0000
-Date:   Tue, 7 Mar 2023 18:26:48 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Walle <michael@walle.cc>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 07/21] of: device: Kill of_device_request_module()
-Message-ID: <20230308002648.GA532107-robh@kernel.org>
-References: <20230307165359.225361-1-miquel.raynal@bootlin.com>
- <20230307165359.225361-8-miquel.raynal@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307165359.225361-8-miquel.raynal@bootlin.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1678235253;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mWYo+xMJNjNNqpgF4TGynZqpAOyeMeI+jcBtHhYSVHg=;
+        b=Q8kpG1CU1+Y8iS2bSYKMMTpzUMM7bRtC8H2JlbLL2D1uCAmDth3LgvD39niQ8XecA7
+         IQTdR/agY4E+sDuxOkUygXNBcFXhK0MgA+21SB6KI1+UQc/rXLP/y/GVwc/jWro7th3S
+         Xy6UhmGNtRC7YCVI2Tx8+tLcrZs6y6rCQ9Lh89f+6TxOXPlfZHmZoa1YAQTDrU9TW7Rx
+         0SU2cHCwomUxjJXruyqM09hilzCuLLP2hUwnjd+TEoOVIsFq5GJHE8vPRF3aBOFKr4wy
+         Q9XbpKAna6w8BdMjZ3cXoRKj2oXW8UVSGg+LldtsiPV/DnVuJ1sG7Qsy2C/+hNfa5hCv
+         ZCzQ==
+X-Gm-Message-State: AO0yUKVFKDmQjlG48WFrD0tl6kwbjelodRaDK2XllC5iijO7hSc9+Kr7
+        d4jMs8Altr1bv44tD8naDVuVHSRwo6Ro
+X-Google-Smtp-Source: AK7set9NhJf3r2M4roAs5BFf6UZftEpio2ChPi04lrVXkyOIyYZd58Hy1EhrQV9/ydUKPZ4+qrzxwJR5S95p
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:9a99:fbc4:7488:8b5f])
+ (user=irogers job=sendgmr) by 2002:a81:a783:0:b0:533:9b80:a30e with SMTP id
+ e125-20020a81a783000000b005339b80a30emr10019722ywh.10.1678235253159; Tue, 07
+ Mar 2023 16:27:33 -0800 (PST)
+Date:   Tue,  7 Mar 2023 16:27:14 -0800
+Message-Id: <20230308002714.1755698-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
+Subject: [PATCH v1] perf test: Fix "PMU event table sanity" for NO_JEVENTS=1
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 05:53:45PM +0100, Miquel Raynal wrote:
-> A new helper has been introduced, of_request_module(). Users have been
-> converted, this helper can now be deleted.
-> 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  drivers/of/device.c       | 9 ---------
->  include/linux/of_device.h | 6 ------
->  2 files changed, 15 deletions(-)
+A table was renamed and needed to be renamed in the empty case.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Fixes: 62774db2a05d ("perf jevents: Generate metrics and events as separate tables")
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/pmu-events/empty-pmu-events.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tools/perf/pmu-events/empty-pmu-events.c b/tools/perf/pmu-events/empty-pmu-events.c
+index a938b74cf487..e74defb5284f 100644
+--- a/tools/perf/pmu-events/empty-pmu-events.c
++++ b/tools/perf/pmu-events/empty-pmu-events.c
+@@ -227,7 +227,7 @@ static const struct pmu_events_map pmu_events_map[] = {
+ 	},
+ };
+ 
+-static const struct pmu_event pme_test_soc_sys[] = {
++static const struct pmu_event pmu_events__test_soc_sys[] = {
+ 	{
+ 		.name = "sys_ddr_pmu.write_cycles",
+ 		.event = "event=0x2b",
+@@ -258,8 +258,8 @@ struct pmu_sys_events {
+ 
+ static const struct pmu_sys_events pmu_sys_event_tables[] = {
+ 	{
+-		.table = { pme_test_soc_sys },
+-		.name = "pme_test_soc_sys",
++		.table = { pmu_events__test_soc_sys },
++		.name = "pmu_events__test_soc_sys",
+ 	},
+ 	{
+ 		.table = { 0 }
+-- 
+2.40.0.rc0.216.gc4246ad0f0-goog
+
