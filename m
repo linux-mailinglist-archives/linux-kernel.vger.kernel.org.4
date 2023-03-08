@@ -2,296 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B485E6B0A40
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C106B0A41
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:01:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbjCHOAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:00:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
+        id S232002AbjCHOBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:01:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232241AbjCHOAW (ORCPT
+        with ESMTP id S232276AbjCHOA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:00:22 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 947848734F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 05:58:39 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9B5C21063;
-        Wed,  8 Mar 2023 05:59:20 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.52.94])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE46F3F67D;
-        Wed,  8 Mar 2023 05:58:35 -0800 (PST)
-Date:   Wed, 8 Mar 2023 13:58:28 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Rakesh Babu Saladi <rsaladi2@marvell.com>
-Cc:     "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        George Cherian <gcherian@marvell.com>,
-        Naveen Mamindlapalli <naveenm@marvell.com>
-Subject: Re: [EXT] Re: [PATCH] arm64: smccc: Add trace events to SMC calls.
-Message-ID: <ZAiUhOfb6XAE2aPy@FVFF77S0Q05N>
-References: <20230304125850.32687-1-rsaladi2@marvell.com>
- <ZAX9G5mqGqzTZZ5N@FVFF77S0Q05N>
- <CY4PR1801MB1880A1E3C8EE68B5484536238AB49@CY4PR1801MB1880.namprd18.prod.outlook.com>
+        Wed, 8 Mar 2023 09:00:28 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5545891B48
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 05:58:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678283926; x=1709819926;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fDkj2qqI5Hd3gyncELfzGm9AhlqswmOIQl8Kz6+UxNw=;
+  b=JdRHEvlw+oZNBtK8LlCw4ZAuyLF6AX/LO1fuL/1Pp8Y+SjYxBB8DTPUm
+   H5s1+kxDUw3ZpgaU0PB7gnBfmhjA0YsdZiwk6tyx+0jfageSRP6rCT5ai
+   AXobrhwHFMkUHW1siJCZWsTjXWJJygMhImEJp/uosbmDns3+NJyRXDm+R
+   TfGxeOz5BCUbQdRXIfbBH0qMMIcUHWTz34JOZdrP4wuGnTMKaPUKfWplY
+   zhUTqDJOwhWqeRNJwkvJWD5zqKlAQLAI15YvN81ALDNpv7i1B/p/GZFcn
+   6wKM6i3sYNkC5CcuVXpGuT5LrW+CsSlTSujArva/tNVm4xQI5PRwDQx8S
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="336170527"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="336170527"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 05:58:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="709429695"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="709429695"
+Received: from vkhatavx-mobl.amr.corp.intel.com (HELO [10.255.34.124]) ([10.255.34.124])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 05:58:44 -0800
+Message-ID: <85aba51e-1feb-5eb0-2e21-b714e217f9e4@linux.intel.com>
+Date:   Wed, 8 Mar 2023 07:58:43 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CY4PR1801MB1880A1E3C8EE68B5484536238AB49@CY4PR1801MB1880.namprd18.prod.outlook.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH V6 8/8] soundwire: amd: add pm_prepare callback and pm ops
+ support
+Content-Language: en-US
+To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>, vkoul@kernel.org
+Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, Mario.Limonciello@amd.com,
+        amadeuszx.slawinski@linux.intel.com, Mastan.Katragadda@amd.com,
+        Arungopal.kondaveeti@amd.com, claudiu.beznea@microchip.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230307133135.545952-1-Vijendar.Mukunda@amd.com>
+ <20230307133135.545952-9-Vijendar.Mukunda@amd.com>
+ <4330af6a-ce97-53ed-f675-6d3d0ac8f32f@linux.intel.com>
+ <d5a75826-d762-27fc-5820-6826debdecd9@amd.com>
+ <9399110b-bbba-f96e-85ef-a317e8f4d518@linux.intel.com>
+ <4cbbff8a-c596-e9cc-a6cf-6f8b66607505@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <4cbbff8a-c596-e9cc-a6cf-6f8b66607505@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 12:25:15PM +0000, Rakesh Babu Saladi wrote:
-> Hi Mark, 
 
-Hi Rakesh,
 
-As a general thing, your mail setup isn't being helpful here. It has corrupted
-links below, and this style of quoting without leading '>' characters is
-incredibly painful to read.
+On 3/7/23 22:32, Mukunda,Vijendar wrote:
+> On 08/03/23 02:38, Pierre-Louis Bossart wrote:
+>>
+>> On 3/7/23 14:25, Mukunda,Vijendar wrote:
+>>> On 07/03/23 20:58, Pierre-Louis Bossart wrote:
+>>>>> +static int amd_resume_child_device(struct device *dev, void *data)
+>>>>> +{
+>>>>> +	struct sdw_slave *slave = dev_to_sdw_dev(dev);
+>>>>> +	int ret;
+>>>>> +
+>>>>> +	if (!slave->probed) {
+>>>>> +		dev_dbg(dev, "skipping device, no probed driver\n");
+>>>>> +		return 0;
+>>>>> +	}
+>>>>> +	if (!slave->dev_num_sticky) {
+>>>>> +		dev_dbg(dev, "skipping device, never detected on bus\n");
+>>>>> +		return 0;
+>>>>> +	}
+>>>>> +	if (!pm_runtime_suspended(dev))
+>>>>> +		return 0;
+>>>>> +	ret = pm_request_resume(dev);
+>>>> I still don't get why the test above was needed. It's racy and brings
+>>>> limited benefits.
+>>> As explained below thread,
+>>>
+>>> https://lore.kernel.org/lkml/acd3a560-1218-9f1d-06ec-19e4d3d4e2c9@amd.com
+>>>
+>>> Our scenario is multiple peripheral devices are connected
+>>> over the same link.
+>>>
+>>> In our implementation, device_for_each_child() function invokes
+>>> amd_resume_child_device callback for each child.
+>>> When any one of the child device is active, It will break the
+>>> iteration, which results in failure resuming all child devices.
+>> Can you clarify the 'it will break the iteration' statement?
+>>
+>> Are you saying pm_request_resume() will return a negative error code if
+>> the device is already active?
+>>
+>> We've used an unconditional pm_request_resume() in the Intel code for
+>> quite some time, including with multiple amplifiers per link, and have
+>> never observed the issue you report, so I'd like to get to the root
+>> cause pretty please. You took the Intel code and added a test for AMD
+>> platforms, and I'd really like to understand if the Intel code was wrong
+>> in the first place, or if the test is not needed. Something does not add
+>> up here.
+> AMP Codec (In aggregate mode) + Jack Codec connected over the same
+> link on our platform.
+> Consider below, scenario.
+> Active stream is running on AMP codec and Jack codec is already in runtime
+> suspend state.
+> If system level suspend is invoked, in prepare callback, we need to resume
+> both the codec devices.
+> 
+> device_for_each_child() will invoke amd_resume_child_device() function callback
+> for each device which will try to resume the child device in this case.
+> By definition, device_for_each_child() Iterate over @parent's child devices,
+> and invokes the callback for each. We check the return of amd_resume_child_device()
+> each time.
+> If it returns anything other than 0, we break out and return that value.
+> 
+> In current scenario, As AMP codec is not in runtime suspend state,
+> pm_request_resume() will return a value as 1. This will break the
+> sequence for resuming rest of the child devices(JACK codec in our case).
 
-The inline comment style you've used heere is also painful to read, but I
-understand that's working around the mail client being unhelpful.
+Well, yes, now that makes sense, thanks for the details.
 
-There's some guidance on how to configure mail clients at:
+I think the reason why we didn't see the problem with the Intel code is
+that both amplifiers are on the same dailink, so they are by
+construction either both suspended or both active. We never had
+different types of devices on the same link.
 
-  https://docs.kernel.org/process/email-clients.html
+I would however suggest this simpler alternative, where only negative
+return values are returned:
+
+ret = pm_request_resume(dev);
+if (ret < 0) {
+	dev_err(dev, "pm_request_resume failed: %d\n", ret);
+        return ret;
+}
+return 0;
+
+this would work just fine, no?
+
 
 > 
-> Please see comments in line.
+> As mentioned in an earlier thread, there are two possible solutions.
+> 1. check pm runtime suspend state and return 0 if it is not suspended
+> 2. simply always return 0 for amd_resume_child_device() function callback.
 > 
-> Thanks,
-> Rakesh.
-> 
-> -----Original Message-----
-> From: Mark Rutland <mark.rutland@arm.com> 
-> Sent: Monday, March 6, 2023 8:18 PM
-> To: Rakesh Babu Saladi <rsaladi2@marvell.com>
-> Cc: lpieralisi@kernel.org; sudeep.holla@arm.com; linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Sunil Kovvuri Goutham <sgoutham@marvell.com>; George Cherian <gcherian@marvell.com>; Naveen Mamindlapalli <naveenm@marvell.com>
-> Subject: [EXT] Re: [PATCH] arm64: smccc: Add trace events to SMC calls.
-> 
-> External Email
-> 
-> ----------------------------------------------------------------------
-> On Sat, Mar 04, 2023 at 06:28:50PM +0530, Rakesh Babu Saladi wrote:
-> > This patch adds start and end trace events to an SMC call sent from 
-> > kernel to ATF. The start trace event prints the smc_id and the end 
-> > trace event prints the smc_id and the time taken to process the SMC 
-> > call.
-> > 
-> > Signed-off-by: Rakesh Babu Saladi <rsaladi2@marvell.com>
-> 
-> We've said no to this in the past:
-> 
+> We opted first one as solution.
 
-  [...
-    garbled link, was: 
-    https://lore.kernel.org/lkml/20210923112058.GA14893@C02TD0UTHF1T.local/
-  ...]
-
-> I don't think anything has changed, and this has all the same problems as
-> before, so I do not think we should do this.
-> Rakesh >> Can you please be more specific why the changes are not getting accepted?
-
-I was very specific in the reply I linked to at:
-
-  https://lore.kernel.org/lkml/20210923112058.GA14893@C02TD0UTHF1T.local/
-
-The gist being:
-
-* There are a tonne of SMCCC invocations that this doesn't capture.
-
-* This doesn't handle SMCCC variants which can pass x0-17
-
-* This is very low level, and so not good for consumers (e.g. most of the
-  arguments may be meadningless UNKNOWN values).
-
-* This is very low level, and so painful for things which must avoid
-  instrumentation (e.g. noinstr code for ARCH_WORKAROUND_*).
-
-* SMCCC may change again in future, and I don't want to get stuck in an ABI we
-  cannot maintain.
-
-Which all remain the same here, so NAK to this patch as it stands.
-
-As before, I'd suggest placing tracepoints at a higher level in the specific
-SMCCC callers you're interested in.
-
-> Which SMC calls do you want to trace, and why?
-> Rakesh >> These traces we would like to have for debugging purposes while calling any SMC call.
-
-That's not a lot of information to go on. Consider the following:
-
-* Are you trying to solve a particular problem, for which this would help?
-
-* Are you trying to debug kernel code, or the firmware?
-
-* Are you trying to debug a functional issue, or get some statistics for
-  optimization?
-
-I'll also note that if you really want to, you can place a kprobe or kretprobe
-around the invocation and trace this without any kernel changes. So if you just
-need some data right now, that should be sufficient.
-
-Thanks,
-Mark.
-
-> Thanks,
-> Mark.
-> 
-> > ---
-> >  drivers/firmware/smccc/Makefile      |  3 +-
-> >  drivers/firmware/smccc/smccc.c       | 14 ++++++++++
-> >  drivers/firmware/smccc/smccc_trace.c |  7 +++++  
-> > drivers/firmware/smccc/smccc_trace.h | 41 ++++++++++++++++++++++++++++
-> >  include/linux/arm-smccc.h            |  4 ++-
-> >  kernel/time/timekeeping.c            |  7 +++++
-> >  6 files changed, 74 insertions(+), 2 deletions(-)  create mode 100644 
-> > drivers/firmware/smccc/smccc_trace.c
-> >  create mode 100644 drivers/firmware/smccc/smccc_trace.h
-> > 
-> > diff --git a/drivers/firmware/smccc/Makefile 
-> > b/drivers/firmware/smccc/Makefile index 40d19144a860..e74c35191b49 
-> > 100644
-> > --- a/drivers/firmware/smccc/Makefile
-> > +++ b/drivers/firmware/smccc/Makefile
-> > @@ -1,4 +1,5 @@
-> >  # SPDX-License-Identifier: GPL-2.0
-> >  #
-> > -obj-$(CONFIG_HAVE_ARM_SMCCC_DISCOVERY)	+= smccc.o kvm_guest.o
-> > +ccflags-y += -I$(src)
-> > +obj-$(CONFIG_HAVE_ARM_SMCCC_DISCOVERY)	+= smccc_trace.o smccc.o kvm_guest.o
-> >  obj-$(CONFIG_ARM_SMCCC_SOC_ID)	+= soc_id.o
-> > diff --git a/drivers/firmware/smccc/smccc.c 
-> > b/drivers/firmware/smccc/smccc.c index 60ccf3e90d7d..7631a16479e9 
-> > 100644
-> > --- a/drivers/firmware/smccc/smccc.c
-> > +++ b/drivers/firmware/smccc/smccc.c
-> > @@ -11,6 +11,7 @@
-> >  #include <linux/kernel.h>
-> >  #include <linux/platform_device.h>
-> >  #include <asm/archrandom.h>
-> > +#include "smccc_trace.h"
-> >  
-> >  static u32 smccc_version = ARM_SMCCC_VERSION_1_0;  static enum 
-> > arm_smccc_conduit smccc_conduit = SMCCC_CONDUIT_NONE; @@ -59,3 +60,16 
-> > @@ static int __init smccc_devices_init(void)
-> >  	return 0;
-> >  }
-> >  device_initcall(smccc_devices_init);
-> > +
-> > +void arm_smccc_smc(unsigned long a0, unsigned long a1, unsigned long a2, unsigned long a3,
-> > +		   unsigned long a4, unsigned long a5, unsigned long a6, unsigned long a7,
-> > +		   struct arm_smccc_res *res)
-> > +{
-> > +	u64 start, elapsed;
-> > +
-> > +	trace_arm_smccc_smc_start(a0);
-> > +	start = ktime_get_ns();
-> > +	__arm_smccc_smc(a0, a1, a2, a3, a4, a5, a6, a7, res, NULL);
-> > +	elapsed = ktime_get_ns() - start;
-> > +	trace_arm_smccc_smc_end(a0, elapsed); }
-> > diff --git a/drivers/firmware/smccc/smccc_trace.c 
-> > b/drivers/firmware/smccc/smccc_trace.c
-> > new file mode 100644
-> > index 000000000000..6b94d5d9c0f4
-> > --- /dev/null
-> > +++ b/drivers/firmware/smccc/smccc_trace.c
-> > @@ -0,0 +1,7 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +#define CREATE_TRACE_POINTS
-> > +#include "smccc_trace.h"
-> > +
-> > +EXPORT_TRACEPOINT_SYMBOL(arm_smccc_smc_start);
-> > +EXPORT_TRACEPOINT_SYMBOL(arm_smccc_smc_end);
-> > diff --git a/drivers/firmware/smccc/smccc_trace.h 
-> > b/drivers/firmware/smccc/smccc_trace.h
-> > new file mode 100644
-> > index 000000000000..c0ef836bc093
-> > --- /dev/null
-> > +++ b/drivers/firmware/smccc/smccc_trace.h
-> > @@ -0,0 +1,41 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +
-> > +#undef TRACE_SYSTEM
-> > +#define TRACE_SYSTEM smccc
-> > +
-> > +#if !defined(__SMCCC_TRACE_H) || defined(TRACE_HEADER_MULTI_READ) 
-> > +#define __SMCCC_TRACE_H
-> > +
-> > +#include <linux/types.h>
-> > +#include <linux/tracepoint.h>
-> > +
-> > +TRACE_EVENT(arm_smccc_smc_start,
-> > +	    TP_PROTO(unsigned long smc_id),
-> > +	    TP_ARGS(smc_id),
-> > +	    TP_STRUCT__entry(__field(unsigned long, smc_id)),
-> > +	    TP_fast_assign(__entry->smc_id = smc_id;),
-> > +	    TP_printk("SMC ID: 0x%lx", __entry->smc_id) );
-> > +
-> > +TRACE_EVENT(arm_smccc_smc_end,
-> > +	    TP_PROTO(unsigned long smc_id, u64 elapsed_time),
-> > +	    TP_ARGS(smc_id, elapsed_time),
-> > +	    TP_STRUCT__entry(__field(unsigned long, smc_id)
-> > +			     __field(u64, elapsed_time)
-> > +	    ),
-> > +	    TP_fast_assign(__entry->smc_id = smc_id;
-> > +			   __entry->elapsed_time = elapsed_time;
-> > +	    ),
-> > +	    TP_printk("SMC ID: 0x%lx time taken to process : %llu ns",
-> > +		      __entry->smc_id, __entry->elapsed_time) );
-> > +
-> > +#endif /* __SMCCC_TRACE_H */
-> > +
-> > +#undef TRACE_INCLUDE_PATH
-> > +#define TRACE_INCLUDE_PATH .
-> > +
-> > +#undef TRACE_INCLUDE_FILE
-> > +#define TRACE_INCLUDE_FILE smccc_trace
-> > +
-> > +#include <trace/define_trace.h>
-> > diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h 
-> > index 220c8c60e021..39588c3db486 100644
-> > --- a/include/linux/arm-smccc.h
-> > +++ b/include/linux/arm-smccc.h
-> > @@ -358,7 +358,9 @@ asmlinkage void __arm_smccc_hvc(unsigned long a0, unsigned long a1,
-> >  			unsigned long a5, unsigned long a6, unsigned long a7,
-> >  			struct arm_smccc_res *res, struct arm_smccc_quirk *quirk);
-> >  
-> > -#define arm_smccc_smc(...) __arm_smccc_smc(__VA_ARGS__, NULL)
-> > +void arm_smccc_smc(unsigned long a0, unsigned long a1, unsigned long a2,
-> > +		   unsigned long a3, unsigned long a4, unsigned long a5,
-> > +		   unsigned long a6, unsigned long a7, struct arm_smccc_res *res);
-> >  
-> >  #define arm_smccc_smc_quirk(...) __arm_smccc_smc(__VA_ARGS__)
-> >  
-> > diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c 
-> > index 5579ead449f2..3a3bf2d674a3 100644
-> > --- a/kernel/time/timekeeping.c
-> > +++ b/kernel/time/timekeeping.c
-> > @@ -192,6 +192,13 @@ static inline u64 tk_clock_read(const struct 
-> > tk_read_base *tkr)  {
-> >  	struct clocksource *clock = READ_ONCE(tkr->clock);
-> >  
-> > +	/* At the time of kernel booting some SMC calls are called before the
-> > +	 * clock is initialized, in such cases it would lead to kernel crash.
-> > +	 * To prevent kernel crash in such cases this check is included.
-> > +	 */
-> > +	if (unlikely(!clock))
-> > +		return 0;
-> > +
-> >  	return clock->read(clock);
-> >  }
-> >  
-> > --
-> > 2.17.1
-> > 
+My suggestion looks like your option 2. It's cleaner IMHO.
