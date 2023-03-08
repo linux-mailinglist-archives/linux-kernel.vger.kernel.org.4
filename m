@@ -2,90 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3790A6B04FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EA86B050C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjCHKvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:51:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47042 "EHLO
+        id S231192AbjCHKxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:53:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjCHKvC (ORCPT
+        with ESMTP id S230494AbjCHKxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:51:02 -0500
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D06AAF29F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:51:01 -0800 (PST)
-Received: by mail-ua1-x92d.google.com with SMTP id x1so10898189uav.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:51:01 -0800 (PST)
+        Wed, 8 Mar 2023 05:53:17 -0500
+Received: from mail-wm1-x362.google.com (mail-wm1-x362.google.com [IPv6:2a00:1450:4864:20::362])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79FC5F23D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:53:14 -0800 (PST)
+Received: by mail-wm1-x362.google.com with SMTP id p16so9514922wmq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:53:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678272660;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=dectris.com; s=google; t=1678272793;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ef983/AOehfuTrHSl44XX8UHyvuKulox9O+KoFv9jPk=;
-        b=Pze2C7lWpylDMzWq13sr1zuXSp3kgnKKJi30EgbeD0ZztiM3gdQwN0nbNJycnbOizo
-         z7jRUgMo4PL4aReugZH8uTNZofdnScyvQFaYBX4TS0k2agdcGOmbVGFRCp6qgHltQ8HT
-         ck5D0+pGkba/gQlEoGK63lb8dwEs04t8sLs8+LOxDudx3Hst9kypdEt+YhPMppFbstlt
-         zG0yfCbxZgLSFaEdn2s6/9jGhCSOWGiBzNd33y5N/TLtSQ8aDkm0z1lONrITDXfjVJ4y
-         AFQLSNzEkH9yPhYB7PofiLrz8vo9wSW1GmeMx6fo0REYpsgIloxi7SPjR8RwQG3Y5KDj
-         7g5w==
+        bh=MFnIaNLO1jYcGQ/rd76lvHww9TyGOc8wkDjH2xbQ2vY=;
+        b=cnhxBf5cTTpw1N9mDdNPt84ISNLvvjn801q368baQ2Qu3+yzPGVdIGdEPXvepil4V8
+         UHmhsTR1+SAVaXMEjPHENYMCPKGgm8U19Uj/ohgFmguOdJWr+KlHZu7MpVigjCy2tAjN
+         iDY7ixtO0z104mcy60yjjfoALQqgr5suSr338=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678272660;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678272793;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ef983/AOehfuTrHSl44XX8UHyvuKulox9O+KoFv9jPk=;
-        b=EpwtPrJyocW8NtP49Zrsw6iWf4Y4NCJwaK3ewu0aJaFXaP6ooJAdAdSA2kje6mdWpM
-         7BOtn+VEu8IdSy7nPegz95lWqr/PQiHvKAsVs33hQi1uLh22dfcMK2G2JovDHA+qkAQB
-         n6frDoQHn33zyEDmEra8RYQWxptyEC5T0zva0KyHLEWJ4zE1Aar2xRWBTRTEBOiCeMB/
-         tWVKOsU8alVLJlM+g1PgB5UW20/ha73T2hvzxmQQLYgXT9UFB7jZ7NPC8nJVhTIjqDtM
-         PhucdSH+98U4D2tSVBt9+Nf3BxRooTc6UBlERW2lDxoMExOZK5EagSO8mVwaKRXAiJor
-         2W+A==
-X-Gm-Message-State: AO0yUKUiCNbi/R4qxgCHdhJPieWGmrNEevzr408iDM+/WeyJFGf3nKRY
-        nLsZbFjuibhCnI74hNwPCXSPgo5aoTLyRYz3Y2XPGn09mMO5316s
-X-Google-Smtp-Source: AK7set/hautO/JuZVqVcpIjSQd/R1iuEi4e77QWPdm9ouCbUx2LGGQvzoei0RpLdyQQLnXwObBCEN0KebrcWJ4BSZ5Y=
-X-Received: by 2002:a9f:37ab:0:b0:67a:2833:5ceb with SMTP id
- q40-20020a9f37ab000000b0067a28335cebmr13370413uaq.0.1678272660417; Wed, 08
- Mar 2023 02:51:00 -0800 (PST)
+        bh=MFnIaNLO1jYcGQ/rd76lvHww9TyGOc8wkDjH2xbQ2vY=;
+        b=lstAwbMJAM8ChOLLhO3twMsHkyTbM5l0s/KOqWDcDliwEu1i3oRUiigYhEWUKN9HpK
+         iqsMArmYSfSJ+i/ArsE5y8BljndGKRyNqHf28qZCNTHFFsGXfkB3RfcyP9MxjY0+EMns
+         jFWkHMloC7wVEtOWi8gr5sMyxRHHowf5+TMb/nNkBQKDeVbSbEaopUIFrOLCM38kPs1j
+         8owGLKCXcADZMxgN1mrSkDlftiddMdV49rHkw1qRrRrv8sBcdGSBiYFHMUEQjAf0yy7/
+         jfV5Xh9JXp0E26pIwnS/PgnG22QaCvA3G4lTJp53mmULEI7/hACIouVzeeYbCow6SYAy
+         9BXw==
+X-Gm-Message-State: AO0yUKVovnQUrDsfOiQYtw9utuyxHh21xyT4/i35t/EaNXXsCIoAAK4O
+        cw0DckPJJQRXsxo+TwnSxUTnUfVqp8pOIp4vPsAn3QZ6ElnI
+X-Google-Smtp-Source: AK7set/Kr0OA0KJtw2a+BX2EdMHPKeyQkkYCTFTEZBgEbbs/r0pMvzWLlEx+48YsTajHW/JgospqlxFfBIdq
+X-Received: by 2002:a05:600c:450f:b0:3e2:19b0:887d with SMTP id t15-20020a05600c450f00b003e219b0887dmr15666002wmo.25.1678272793197;
+        Wed, 08 Mar 2023 02:53:13 -0800 (PST)
+Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
+        by smtp-relay.gmail.com with ESMTPS id f11-20020adff8cb000000b002c5a302d158sm2125188wrq.51.2023.03.08.02.53.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 02:53:13 -0800 (PST)
+X-Relaying-Domain: dectris.com
+From:   Kal Conley <kal.conley@dectris.com>
+To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] xsk: Add missing overflow check in xdp_umem_reg
+Date:   Wed,  8 Mar 2023 11:51:30 +0100
+Message-Id: <20230308105130.1113833-1-kal.conley@dectris.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230307172306.786657-1-kal.conley@dectris.com>
+References: <20230307172306.786657-1-kal.conley@dectris.com>
 MIME-Version: 1.0
-References: <20230307182557.42215-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230307182557.42215-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 8 Mar 2023 11:50:49 +0100
-Message-ID: <CAMRc=MetDO+mr6F8oKSkW3G8vv3nV+K-8QHM+Eov0s_3eCG2HA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] gpiolib: cleanups WRT GPIO device handling
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 7:25=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> A few cleanups to GPIO device handling in the library code.
->
-> Andy Shevchenko (3):
->   gpiolib: Access device's fwnode via dev_fwnode()
->   gpiolib: Get rid of gpio_bus_match() forward declaration
->   gpiolib: Move gpiodevice_*() to gpiodev namespace
->
->  drivers/gpio/gpiolib.c | 38 +++++++++++++++++++-------------------
->  1 file changed, 19 insertions(+), 19 deletions(-)
->
-> --
-> 2.39.1
->
+The number of chunks can overflow u32. Make sure to return -EINVAL on
+overflow.
 
-I applied the first two patches, for the third I have a comment.
+Fixes: bbff2f321a86 ("xsk: new descriptor addressing scheme")
+Signed-off-by: Kal Conley <kal.conley@dectris.com>
+---
+ net/xdp/xdp_umem.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-Bart
+diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+index 4681e8e8ad94..02207e852d79 100644
+--- a/net/xdp/xdp_umem.c
++++ b/net/xdp/xdp_umem.c
+@@ -150,10 +150,11 @@ static int xdp_umem_account_pages(struct xdp_umem *umem)
+ 
+ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ {
+-	u32 npgs_rem, chunk_size = mr->chunk_size, headroom = mr->headroom;
+ 	bool unaligned_chunks = mr->flags & XDP_UMEM_UNALIGNED_CHUNK_FLAG;
+-	u64 npgs, addr = mr->addr, size = mr->len;
+-	unsigned int chunks, chunks_rem;
++	u32 chunk_size = mr->chunk_size, headroom = mr->headroom;
++	u64 addr = mr->addr, size = mr->len;
++	u32 chunks_rem, npgs_rem;
++	u64 chunks, npgs;
+ 	int err;
+ 
+ 	if (chunk_size < XDP_UMEM_MIN_CHUNK_SIZE || chunk_size > PAGE_SIZE) {
+@@ -188,8 +189,8 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ 	if (npgs > U32_MAX)
+ 		return -EINVAL;
+ 
+-	chunks = (unsigned int)div_u64_rem(size, chunk_size, &chunks_rem);
+-	if (chunks == 0)
++	chunks = div_u64_rem(size, chunk_size, &chunks_rem);
++	if (!chunks || chunks > U32_MAX)
+ 		return -EINVAL;
+ 
+ 	if (!unaligned_chunks && chunks_rem)
+@@ -202,7 +203,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ 	umem->headroom = headroom;
+ 	umem->chunk_size = chunk_size;
+ 	umem->chunks = chunks;
+-	umem->npgs = (u32)npgs;
++	umem->npgs = npgs;
+ 	umem->pgs = NULL;
+ 	umem->user = NULL;
+ 	umem->flags = mr->flags;
+-- 
+2.39.2
+
