@@ -2,99 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBBC6B0434
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 596686B0438
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjCHK2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:28:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
+        id S230434AbjCHK23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:28:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbjCHK2N (ORCPT
+        with ESMTP id S230457AbjCHK2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:28:13 -0500
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD7518B17
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:28:02 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id s13so10836103uac.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:28:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678271282;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w2H34LSs9luC8X2nYjKB2UbV+PWLUKH/eRRQbVVLaZs=;
-        b=kDnaNqwoDaoMIJq3D2LxVEKc+snL+50VUTXKeaqTOIoXTMSqFVMMse0I39ZhPIcDzc
-         mB0IqYj4ysI443lmVx7rR64JJ5rWNRumOb1Sy8mBZvASWwDvE2wQvJsL7/W6WvVcDpT8
-         P6WBVn6WUZ1FdJriCf/Hq2b9uT9Lqcd2yDp4hlSlIDM9Ho+fm5JU8rjdghmMVAhvCNr4
-         o+tiNgHAikFSpP3LgW49DRlSmd1fULUJwPPDt9Dt72365WYd/9EekAjQ0lpMWrxI/2pB
-         PfY4YnS5q+Vzo3mN4nhpsA2ScTSG/keooALILajMvXpPMtEkDBr7DsXijqP5OG/s8zKN
-         VmKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678271282;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w2H34LSs9luC8X2nYjKB2UbV+PWLUKH/eRRQbVVLaZs=;
-        b=N9AGMQ+ZXv66v8UQWE119qd+chn5YQDmKqziR3mBUeYWLWa9hv06PPucm2q6sigDEX
-         QAnq+sjezBhZ4JwjFYzzUmqypMjE+X6aK+p/cOlknSXT9Q7f7QuLDGPfcug5XRCqnZ9A
-         693J/kXPEohWnVnl0ahLZ+hQnhIuSxIhpuF1yjZkUn3gyWDYqGtKvLhfxFrudEtBAbKy
-         5zA8cUfQYmwIzTw/PeLZpFEILlMB7TUwdBLPdMszaqzrU7jGZh6HaARWjEgrGH/vY0ma
-         zVuBtyhEEHyelEf+654BxBr9ugZvPdDzTsBi/c7C1sEvtEMO3DHhMlVVDKZcgLTP6bYi
-         dBbQ==
-X-Gm-Message-State: AO0yUKXVE17ilknZY4+eEuW4vLpDg97S2hz+3Rflep0WIvOF9uUcd3Xe
-        HCTQ+9BDZZjh1xF97Dj9eNFddBy70ukTJ/HRJT4zew==
-X-Google-Smtp-Source: AK7set93pHJp55WrjJJbOce1lxNN/L0Rpv+yTU3C/ZyXzLBWI8m14MDoTvphEluEd4D59Xbb+8bjpDcFj1/QMFplqlM=
-X-Received: by 2002:ab0:5402:0:b0:688:d612:2024 with SMTP id
- n2-20020ab05402000000b00688d6122024mr11684729uaa.2.1678271281802; Wed, 08 Mar
- 2023 02:28:01 -0800 (PST)
+        Wed, 8 Mar 2023 05:28:17 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1869ECC;
+        Wed,  8 Mar 2023 02:28:11 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A29E81EC0104;
+        Wed,  8 Mar 2023 11:28:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1678271289;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=QUSal8yLRZqvOQ34incj8gT6TWJsFqJ8/OvBTCTsShk=;
+        b=qKM1WjO9F9dXO6k5BZ17YhP7pKauIgrnWTcEAhizPLCqjIUDtUBoqz9Vv7RlAmfM7ENNcX
+        Np7CELn8CU+Qrg3p56Rww0dIFPR7Hx8s81XMMztPWSMC3ak4lXSGrlcQPEiXxVGph6KZkV
+        fp3eA1tDCcaGYqrcE+cPk4ynDNL4gOU=
+Date:   Wed, 8 Mar 2023 11:27:56 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com
+Subject: Re: [PATCH v7 28/41] x86: Introduce userspace API for shadow stack
+Message-ID: <ZAhjLAIm91rJ2Lpr@zn.tnic>
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-29-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-References: <20230307165432.25484-1-afd@ti.com> <20230307165432.25484-4-afd@ti.com>
- <ZAd35D4C96MP5Qrm@smile.fi.intel.com> <b6e4ae3f-a3ff-b118-43ce-a45d007ae2e9@ti.com>
-In-Reply-To: <b6e4ae3f-a3ff-b118-43ce-a45d007ae2e9@ti.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 8 Mar 2023 11:27:50 +0100
-Message-ID: <CAMRc=McBp6DQvYTQXwC8hNjpcuOe_TAnj4S__Q79b6wjgYkK8g@mail.gmail.com>
-Subject: Re: [PATCH 4/6] gpio: pisosr: Use devm_gpiochip_add_data() to
- simplify remove path
-To:     Andrew Davis <afd@ti.com>
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230227222957.24501-29-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 6:55=E2=80=AFPM Andrew Davis <afd@ti.com> wrote:
->
-> On 3/7/23 11:44 AM, Andy Shevchenko wrote:
-> > On Tue, Mar 07, 2023 at 10:54:30AM -0600, Andrew Davis wrote:
-> >> Use devm version of gpiochip add function to handle removal for us.
-> >>
-> >> While here update copyright and module author.
-> >
-> > ...
-> >
-> >> -    mutex_destroy(&gpio->lock);
-> >
-> > You need to wrap this into devm.
-> >
->
-> I was thinking that but it seems there is no such thing. Most drivers
-> just ignore unwinding mutex_init() since it doesn't allocate anything.
->
-> mutex_destroy() is a NOP unless you are doing DEBUG builds were
-> it sets a magic value to check for use-after-free issues.
->
-> Andrew
+On Mon, Feb 27, 2023 at 02:29:44PM -0800, Rick Edgecombe wrote:
+> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> 
+> Add three new arch_prctl() handles:
+> 
+>  - ARCH_SHSTK_ENABLE/DISABLE enables or disables the specified
+>    feature. Returns 0 on success or an error.
 
-And this is precisely why it's useful to destroy it. :)
+"... or a negative value on error."
 
-Bart
+>  - ARCH_SHSTK_LOCK prevents future disabling or enabling of the
+>    specified feature. Returns 0 on success or an error
+
+ditto.
+
+What is the use case of the feature locking?
+
+I'm under the simple assumption that once shstk is enabled for an app,
+it remains so. I guess my question is rather, what's the use case for
+enabling shadow stack and then disabling it later for an app...?
+
+> The features are handled per-thread and inherited over fork(2)/clone(2),
+> but reset on exec().
+> 
+> This is preparation patch. It does not implement any features.
+
+That belongs under the "---" line I guess.
+
+> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+> Tested-by: John Allen <john.allen@amd.com>
+> Tested-by: Kees Cook <keescook@chromium.org>
+> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> [tweaked with feedback from tglx]
+> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> 
+> ---
+> v4:
+>  - Remove references to CET and replace with shadow stack (Peterz)
+> 
+> v3:
+>  - Move shstk.c Makefile changes earlier (Kees)
+>  - Add #ifdef around features_locked and features (Kees)
+>  - Encapsulate features reset earlier in reset_thread_features() so
+>    features and features_locked are not referenced in code that would be
+>    compiled !CONFIG_X86_USER_SHADOW_STACK. (Kees)
+>  - Fix typo in commit log (Kees)
+>  - Switch arch_prctl() numbers to avoid conflict with LAM
+> 
+> v2:
+>  - Only allow one enable/disable per call (tglx)
+>  - Return error code like a normal arch_prctl() (Alexander Potapenko)
+>  - Make CET only (tglx)
+> ---
+>  arch/x86/include/asm/processor.h  |  6 +++++
+>  arch/x86/include/asm/shstk.h      | 21 +++++++++++++++
+>  arch/x86/include/uapi/asm/prctl.h |  6 +++++
+>  arch/x86/kernel/Makefile          |  2 ++
+>  arch/x86/kernel/process_64.c      |  7 ++++-
+>  arch/x86/kernel/shstk.c           | 44 +++++++++++++++++++++++++++++++
+>  6 files changed, 85 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/x86/include/asm/shstk.h
+>  create mode 100644 arch/x86/kernel/shstk.c
+
+...
+
+> +long shstk_prctl(struct task_struct *task, int option, unsigned long features)
+> +{
+> +	if (option == ARCH_SHSTK_LOCK) {
+> +		task->thread.features_locked |= features;
+> +		return 0;
+> +	}
+> +
+> +	/* Don't allow via ptrace */
+> +	if (task != current)
+> +		return -EINVAL;
+> +
+> +	/* Do not allow to change locked features */
+> +	if (features & task->thread.features_locked)
+> +		return -EPERM;
+> +
+> +	/* Only support enabling/disabling one feature at a time. */
+> +	if (hweight_long(features) > 1)
+> +		return -EINVAL;
+> +
+> +	if (option == ARCH_SHSTK_DISABLE) {
+> +		return -EINVAL;
+> +	}
+
+{} braces left over from some previous version. Can go now.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
