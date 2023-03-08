@@ -2,126 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06D26AFD4C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 04:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7726AFD4F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 04:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjCHDPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 22:15:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S229911AbjCHDPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 22:15:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjCHDPM (ORCPT
+        with ESMTP id S229918AbjCHDPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 22:15:12 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B705F93E26
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 19:15:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678245311; x=1709781311;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=IFN6xHY9SbzCu233JrTYyNu0t0LxvmuaSBt9LRp9bvY=;
-  b=I5foEhg3DeKPZ/FN3+deaeMG+UhG4RRLZ1IYo6b6aiMBOALlWEx6mvlh
-   F1qunVD0dBg4wSJK6wiqgFa2nJGd8qlTsWQQ4jsfl7YSH0t5Su3MGs4mK
-   KrLvRWRIateb6/HWPeXsKW6vFts1V8UeYdDWQXW2XhuEXqGNNunBEWtwH
-   x53gnGy+1qrAmXA3WJ6oZwcj+TVIQZgpYPULdQOqpJouA7nGsy63R5p5q
-   QrHZaJONzT5JzSVk45f1g+2eywFkHzl5pNv6y5jr8P5J0Xz/A81DXGd9f
-   F67RrOS++VgVZzwyuCDcAcXbAf/GDSX1weYHc2Na1Gc473CrtXMSpDhik
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="363678587"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="363678587"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 19:15:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="740956061"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="740956061"
-Received: from qingwan2-mobl.ccr.corp.intel.com (HELO zwan2-desk1.ccr.corp.intel.com) ([10.254.209.37])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 19:15:09 -0800
-From:   Zhenyu Wang <zhenyuw@linux.intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH] perf/x86/intel: use hexidecimal value for cpuid
-Date:   Wed,  8 Mar 2023 11:15:01 +0800
-Message-Id: <20230308031501.4688-1-zhenyuw@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 7 Mar 2023 22:15:44 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3374C95E3C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 19:15:40 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id i5so16456957pla.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 19:15:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678245339;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8KLtOtqIOku6+uBljLyZ+IqwdfXOpvVBsa3QjdNH7SI=;
+        b=tgihNc5yOKSPh0ZzINtG7H0j9M/j1GVyE7wa3RYbV/FwmMo7YWI2XQx2lveRIo0G0+
+         G8wF1DwEkZvHjGc6fz8GuQ33mwbC95BoOE9HlXkYBQp7aOCCu39q6qKJjrSIR1G/gZT9
+         7jDY6ZZPKeeO/54gBJrfHZWVu0xlTUe8vPJwlngrWxZgYS8ubElrpjX/1/hAte42k9Ei
+         O1Gr5J4GTa7qcLZYxA9t+gtbGyEpkOQg9lnWQqD5gIOFieJgREtU+m8pEPnN5CLU1GmL
+         8j8zFgzXAJ7pbGsyxgsEOp3zciTFw2SoUXV2iEEljKJfkArhOiPveZEUqGqPTXyxOMko
+         HUPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678245339;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8KLtOtqIOku6+uBljLyZ+IqwdfXOpvVBsa3QjdNH7SI=;
+        b=BwqxQ7mBjwZmFC24AoVMzV3kXGP0AzwLaaGvV8FGdjk9YdDjVmqnitjhIK0DRcHS5g
+         niiQNxIghCZ/VHrToAYjAXs6SW6iSmG/cvap/X91E3ql+31Tgdq1J/JCZ0eT/buZ85qt
+         wwctL2oDrYxoLfpJJxhPSySLDbvgA1lOEl5azPnfmOo7snsz3yAV9tmwm499Y6E6T49C
+         xeCfttqKRYbILmCl9DAUcoqZYBqLmUtqwLfw+UhcsZyn1cG3MvwVhGF21HNLerig5xVI
+         yV8b4cWUryYaZjQTcCqeT8b350py6dAOvqyAZ48FPHcWTe6jyGo2/7rFz3rAOJJHBAWL
+         Vlgw==
+X-Gm-Message-State: AO0yUKVHdIY6bjxP40hCwFbPaBgqB2iOTekFupKNY57YbsDPz/+HVJcV
+        WDzeQT7HHAoe3i8otKre6QXeTZXSUyn1fxHHbSiRiA==
+X-Google-Smtp-Source: AK7set87QoRQVLy6vDriYzYfoiOmWlVTVUGUN2kXf1H2zM/7/OLmxw44WQa80T6nXG0RwsaZBlmfoqVDPLlBJedT33g=
+X-Received: by 2002:a17:902:6846:b0:19c:9999:e922 with SMTP id
+ f6-20020a170902684600b0019c9999e922mr6471879pln.5.1678245339412; Tue, 07 Mar
+ 2023 19:15:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230215010717.3612794-1-rananta@google.com> <20230215010717.3612794-14-rananta@google.com>
+In-Reply-To: <20230215010717.3612794-14-rananta@google.com>
+From:   Reiji Watanabe <reijiw@google.com>
+Date:   Tue, 7 Mar 2023 19:15:23 -0800
+Message-ID: <CAAeT=Fw5Y3yqh4gfYH+1G0a11Uced-HV15fcWq=q7n0x-j9FQQ@mail.gmail.com>
+Subject: Re: [REPOST PATCH 13/16] selftests: KVM: aarch64: Test chained events
+ for PMU
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's easier to use hexidecimal value instead of decimal for reading
-and following with SDM doc, also align with other cpuid calls.
+HI Raghu,
 
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Zhenyu Wang <zhenyuw@linux.intel.com>
----
- arch/x86/events/intel/core.c | 2 +-
- arch/x86/events/intel/lbr.c  | 2 +-
- arch/x86/events/intel/pt.c   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index 14f0a746257d..5af084198c8f 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -5903,7 +5903,7 @@ __init int intel_pmu_init(void)
- 	 * Check whether the Architectural PerfMon supports
- 	 * Branch Misses Retired hw_event or not.
- 	 */
--	cpuid(10, &eax.full, &ebx.full, &fixed_mask, &edx.full);
-+	cpuid(0xA, &eax.full, &ebx.full, &fixed_mask, &edx.full);
- 	if (eax.split.mask_length < ARCH_PERFMON_EVENTS_COUNT)
- 		return -ENODEV;
- 
-diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-index c3b0d15a9841..27048b7f23a0 100644
---- a/arch/x86/events/intel/lbr.c
-+++ b/arch/x86/events/intel/lbr.c
-@@ -1506,7 +1506,7 @@ void __init intel_pmu_arch_lbr_init(void)
- 	u64 lbr_nr;
- 
- 	/* Arch LBR Capabilities */
--	cpuid(28, &eax.full, &ebx.full, &ecx.full, &unused_edx);
-+	cpuid(0x1C, &eax.full, &ebx.full, &ecx.full, &unused_edx);
- 
- 	lbr_nr = fls(eax.split.lbr_depth_mask) * 8;
- 	if (!lbr_nr)
-diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
-index 42a55794004a..da3c5d748365 100644
---- a/arch/x86/events/intel/pt.c
-+++ b/arch/x86/events/intel/pt.c
-@@ -235,7 +235,7 @@ static int __init pt_pmu_hw_init(void)
- 	}
- 
- 	for (i = 0; i < PT_CPUID_LEAVES; i++) {
--		cpuid_count(20, i,
-+		cpuid_count(0x14, i,
- 			    &pt_pmu.caps[CPUID_EAX + i*PT_CPUID_REGS_NUM],
- 			    &pt_pmu.caps[CPUID_EBX + i*PT_CPUID_REGS_NUM],
- 			    &pt_pmu.caps[CPUID_ECX + i*PT_CPUID_REGS_NUM],
--- 
-2.39.2
+On Tue, Feb 14, 2023 at 5:07=E2=80=AFPM Raghavendra Rao Ananta
+<rananta@google.com> wrote:
+>
+> Extend the vPMU's vCPU migration test to validate
+> chained events, and their overflow conditions.
+>
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>  .../testing/selftests/kvm/aarch64/vpmu_test.c | 76 ++++++++++++++++++-
+>  1 file changed, 75 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/kvm/aarch64/vpmu_test.c b/tools/test=
+ing/selftests/kvm/aarch64/vpmu_test.c
+> index 066dc17fa3906..de725f4339ad5 100644
+> --- a/tools/testing/selftests/kvm/aarch64/vpmu_test.c
+> +++ b/tools/testing/selftests/kvm/aarch64/vpmu_test.c
+> @@ -23,7 +23,7 @@
+>   * migrating the guest vCPU to random pCPUs in the system, and check
+>   * if the vPMU is still behaving as expected. The sub-tests include
+>   * testing basic functionalities such as basic counters behavior,
+> - * overflow, and overflow interrupts.
+> + * overflow, overflow interrupts, and chained events.
+>   *
+>   * Copyright (c) 2022 Google LLC.
+>   *
+> @@ -61,6 +61,8 @@
+>  #define PRE_OVERFLOW_32                (GENMASK(31, 0) - COUNT_TO_OVERFL=
+OW + 1)
+>  #define PRE_OVERFLOW_64                (GENMASK(63, 0) - COUNT_TO_OVERFL=
+OW + 1)
+>
+> +#define ALL_SET_64             GENMASK(63, 0)
+> +
+>  #define GICD_BASE_GPA  0x8000000ULL
+>  #define GICR_BASE_GPA  0x80A0000ULL
+>
+> @@ -639,6 +641,75 @@ static void test_cycles_count(bool expect_count, boo=
+l test_overflow)
+>         pmu_disable_reset();
+>  }
+>
+> +static void test_chained_count(int pmc_idx)
+> +{
+> +       int i, chained_pmc_idx;
+> +       struct pmc_accessor *acc;
+> +       uint64_t pmcr_n, cnt, cntr_val;
+> +
+> +       /* The test needs at least two PMCs */
+> +       pmcr_n =3D get_pmcr_n();
+> +       GUEST_ASSERT_1(pmcr_n >=3D 2, pmcr_n);
 
+Nit: As the architecture doesn't require this, rather than causing the
+test failure, I would suggest gracefully skipping this test case or
+make this the requirement of the test.
+
+Thanks,
+Reiji
+
+
+> +
+> +       /*
+> +        * The chained counter's idx is always chained with (pmc_idx + 1)=
+.
+> +        * pmc_idx should be even as the chained event doesn't count on
+> +        * odd numbered counters.
+> +        */
+> +       GUEST_ASSERT_1(pmc_idx % 2 =3D=3D 0, pmc_idx);
+> +
+> +       /*
+> +        * The max counter idx that the chained counter can occupy is
+> +        * (pmcr_n - 1), while the actual event sits on (pmcr_n - 2).
+> +        */
+> +       chained_pmc_idx =3D pmc_idx + 1;
+> +       GUEST_ASSERT(chained_pmc_idx < pmcr_n);
+> +
+> +       enable_counter(chained_pmc_idx);
+> +       pmu_irq_init(chained_pmc_idx);
+> +
+> +       /* Configure the chained event using all the possible ways*/
+> +       for (i =3D 0; i < ARRAY_SIZE(pmc_accessors); i++) {
+> +               acc =3D &pmc_accessors[i];
+> +
+> +               /* Test if the chained counter increments when the base e=
+vent overflows */
+> +
+> +               cntr_val =3D 1;
+> +               acc->write_cntr(chained_pmc_idx, cntr_val);
+> +               acc->write_typer(chained_pmc_idx, ARMV8_PMUV3_PERFCTR_CHA=
+IN);
+> +
+> +               /* Chain the counter with pmc_idx that's configured for a=
+n overflow */
+> +               test_instructions_count(pmc_idx, true, true);
+> +
+> +               /*
+> +                * pmc_idx is also configured to run for all the ARRAY_SI=
+ZE(pmc_accessors)
+> +                * combinations. Hence, the chained chained_pmc_idx is ex=
+pected to be
+> +                * cntr_val + ARRAY_SIZE(pmc_accessors).
+> +                */
+> +               cnt =3D acc->read_cntr(chained_pmc_idx);
+> +               GUEST_ASSERT_4(cnt =3D=3D cntr_val + ARRAY_SIZE(pmc_acces=
+sors),
+> +                               pmc_idx, i, cnt, cntr_val + ARRAY_SIZE(pm=
+c_accessors));
+> +
+> +               /* Test for the overflow of the chained counter itself */
+> +
+> +               cntr_val =3D ALL_SET_64;
+> +               acc->write_cntr(chained_pmc_idx, cntr_val);
+> +
+> +               test_instructions_count(pmc_idx, true, true);
+> +
+> +               /*
+> +                * At this point, an interrupt should've been fired for t=
+he chained
+> +                * counter (which validates the overflow bit), and the co=
+unter should've
+> +                * wrapped around to ARRAY_SIZE(pmc_accessors) - 1.
+> +                */
+> +               cnt =3D acc->read_cntr(chained_pmc_idx);
+> +               GUEST_ASSERT_4(cnt =3D=3D ARRAY_SIZE(pmc_accessors) - 1,
+> +                               pmc_idx, i, cnt, ARRAY_SIZE(pmc_accessors=
+));
+> +       }
+> +
+> +       pmu_irq_exit(chained_pmc_idx);
+> +}
+> +
+>  static void test_event_count(uint64_t event, int pmc_idx, bool expect_co=
+unt)
+>  {
+>         switch (event) {
+> @@ -665,6 +736,9 @@ static void test_basic_pmu_functionality(void)
+>         /* Test overflow with interrupts on generic and cycle counters */
+>         test_instructions_count(0, true, true);
+>         test_cycles_count(true, true);
+> +
+> +       /* Test chained events */
+> +       test_chained_count(0);
+>  }
+>
+>  /*
+> --
+> 2.39.1.581.gbfd45094c4-goog
+>
