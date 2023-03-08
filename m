@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7255A6B00BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:19:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E60516B00BC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjCHITL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:19:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
+        id S229587AbjCHIT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:19:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjCHISr (ORCPT
+        with ESMTP id S229955AbjCHITA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:18:47 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D39A3348
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:18:34 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536af109f9aso163948007b3.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:18:34 -0800 (PST)
+        Wed, 8 Mar 2023 03:19:00 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF6A4AFFE
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:18:41 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id a137-20020a25ca8f000000b0091b90b20cd9so16931975ybg.6
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:18:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678263513;
+        d=google.com; s=20210112; t=1678263521;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NBVnqvPJIWvW8Q6RkCDyc/WyuejWqbt8BpFQxOyzWTY=;
-        b=Dd5AtqIxiqrKsdgITUYGy2qdvIWIn7hXGg3AystvVuMH0hMFS4fltx0yn1PeTZ765O
-         qs2MIFkZAd7KlrTcReMU0ShQYFbUF/72oakyl5cRJCKwpE1Q0ZuQVghBUkNPooxs6O91
-         UciQ8fl+tMAT5weLM5rKPkrqZSm59V7ag5o19Oa8TxqwYmDQ+1dTciodHMlEd9f0EoTW
-         rG7IpJNhJGzZzMM4GzyCLE/h7vh3m6ASkjAM+Q/YUJdSg6osNREONSmSZROS+0Fe9B2h
-         Iy+OjU/WgANSB0TVouA8ZGbON99vA4ny+yRgRvV5xsYfHZr9j/ZRpCpSC94pIKJebPah
-         8mJg==
+        bh=dcvWMdLTJ1iuXhAaTLlBF3OqMzr4/MuwhIZh3sQrcPM=;
+        b=FWNtGJtYxUG//wEXtm6p8eRyzLunuHYYz3q8R61LClpUjKQP8mKwPSZjyu4xTFWlN5
+         +T+8WTP2KH1fWLe6MSLjq8ZU1839uwN7XJljbSNFGfhpdtKde9GWyT4NmmS8xh+IEgJ1
+         rZtr9N2R/FZZN/Md/pn1amM/6cPH1/Ktgx+nkl0encQuduucTBghVLBozAtXfpEkmrGd
+         1c/QrmMiYwZ8WHhaPaqvNWyJ00GPdlvL+iUOH5smcPq2t2sH3O1QNUBH/0/2+1RsmNxY
+         mJFLhPJRGhRK8DGOQM5m8kjiHyIoMZd7ipXJzXJ8RfA6ihWtkBiaCwQFNc2mIAKPZs35
+         UXPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678263513;
+        d=1e100.net; s=20210112; t=1678263521;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NBVnqvPJIWvW8Q6RkCDyc/WyuejWqbt8BpFQxOyzWTY=;
-        b=vShaJYjwDhb73zlKLi14/66ehtDX6U6efa5zdm2jN0e7eyPVyQ5Bjr/WN/Z0xoNIbH
-         H68EjQBo4h+E7Omk5DunJcD8vB3/qCBTCTzUiGokXAnTAW10/naPQKD5qzI3NZMAXGI4
-         tRXEey6/bS+FwopE+NN0WPuN5xn0f61J1jAT5/QyCxZ+xxdfzGVqFvl3fsSL7GRR6p+F
-         E0Q93aI4EMklikQl9wXb1za8bC1JG/hhxLdWdqnKn68WDFbaEbyJ49by78+W7bzX9fW/
-         WkG99xWvdbeAWe+Z5kBXuwl21kj1Vui7hFAUicyjsceFVM7nQN+iKJvffhqLeMLWRW8b
-         bzsg==
-X-Gm-Message-State: AO0yUKWhaCeTGNYOooChcdFWaCPpAJC/abrecI6oIl5GhcWgzY6xRX8h
-        +ZxcEIZaurl+FRRgQbxd64svhXT6KC9N
-X-Google-Smtp-Source: AK7set9yRy04IKzIcosRVW9Zn3vDebQNB9h1NT13rTmOw/BVNpWGDlEwr26BwCGuN+axvpjYbeROetb+KceI
+        bh=dcvWMdLTJ1iuXhAaTLlBF3OqMzr4/MuwhIZh3sQrcPM=;
+        b=UsRvmIuDN5lsWm7t+kJyXiogSVtuwNMfyHIa4mFeF7ZOpmMttkvAvvw96Rjtbw2CVT
+         GmpZG1M1f0juzju7JU3++7V8O/AcIAfo/pUWMC7OFA/M2HP1JrZDW7K9+Ec301jUdu0e
+         HjsPQQKgDGxEgN11vY/HhI9ZlQrKE2JJa29cXdds6968hwMvRY/JP3bOgya/qrhIYjc3
+         BfHFXS8ZykclPFN9AkXQ6FvLPgfNePnA0jBRDdrk9MlMd81AFAmc+8MMWF1e75ExC1Rf
+         rQIsxJlXdUl+sA1qZuoTkJb85KLlvNXjlB4q5EXUIJG5omBQ+88j0DXEld1zNJpgxqjM
+         qGYg==
+X-Gm-Message-State: AO0yUKVy/7TVEpvxuuj4HJpw9M7JrFDVI+e1shPN9UJEiC40kYD3fZNo
+        ZRHQqJq2KEzY5R+xxbhXPFd6tDyWNcQG
+X-Google-Smtp-Source: AK7set+TIyKgKbB/riuRBP5LOZDBYsXH0JHi23Ny36X3MvlOQC+v1WdsfIm72GMBlqh4k28gZBKZR0ZdbLnG
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:9a99:fbc4:7488:8b5f])
- (user=irogers job=sendgmr) by 2002:a05:6902:10e:b0:98e:6280:74ca with SMTP id
- o14-20020a056902010e00b0098e628074camr8504481ybh.1.1678263513764; Wed, 08 Mar
- 2023 00:18:33 -0800 (PST)
-Date:   Wed,  8 Mar 2023 00:17:26 -0800
+ (user=irogers job=sendgmr) by 2002:a81:b243:0:b0:52e:d380:ab14 with SMTP id
+ q64-20020a81b243000000b0052ed380ab14mr9684584ywh.3.1678263521140; Wed, 08 Mar
+ 2023 00:18:41 -0800 (PST)
+Date:   Wed,  8 Mar 2023 00:17:27 -0800
 In-Reply-To: <20230308081731.1887278-1-irogers@google.com>
-Message-Id: <20230308081731.1887278-7-irogers@google.com>
+Message-Id: <20230308081731.1887278-8-irogers@google.com>
 Mime-Version: 1.0
 References: <20230308081731.1887278-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
-Subject: [PATCH v3 06/11] perf evsel: Add function to compute group PMU name
+Subject: [PATCH v3 07/11] perf parse-events: Pass ownership of the group name
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -88,64 +88,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The computed name respects software events and aux event groups, such
-that the pmu_name is changed to be that of the aux event leader or
-group leader for software events. This is done as a later change will
-split events that are in different PMUs into different groups.
+Pass ownership of the group name rather than copying and freeing the
+original. This saves a memory allocation and copy.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/evsel.c | 24 ++++++++++++++++++++++++
- tools/perf/util/evsel.h |  1 +
- 2 files changed, 25 insertions(+)
+ tools/perf/util/parse-events.c | 3 ++-
+ tools/perf/util/parse-events.y | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 2dc2c24252bb..51d9650267d0 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -821,6 +821,30 @@ const char *evsel__name(struct evsel *evsel)
- 	return "unknown";
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index 0336ff27c15f..1be454697d57 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -1761,6 +1761,7 @@ parse_events__set_leader_for_uncore_aliase(char *name, struct list_head *list,
+ 
+ handled:
+ 	ret = 1;
++	free(name);
+ out:
+ 	free(leaders);
+ 	return ret;
+@@ -1786,7 +1787,7 @@ void parse_events__set_leader(char *name, struct list_head *list,
+ 
+ 	leader = arch_evlist__leader(list);
+ 	__perf_evlist__set_leader(list, &leader->core);
+-	leader->group_name = name ? strdup(name) : NULL;
++	leader->group_name = name;
+ 	list_move(&leader->core.node, list);
  }
  
-+const char *evsel__group_pmu_name(const struct evsel *evsel)
-+{
-+	const struct evsel *leader;
-+
-+	/* If the pmu_name is set use it. pmu_name isn't set for CPU and software events. */
-+	if (evsel->pmu_name)
-+		return evsel->pmu_name;
-+	/*
-+	 * Software events may be in a group with other uncore PMU events. Use
-+	 * the pmu_name of the group leader to avoid breaking the software event
-+	 * out of the group.
-+	 *
-+	 * Aux event leaders, like intel_pt, expect a group with events from
-+	 * other PMUs, so substitute the AUX event's PMU in this case.
-+	 */
-+	leader  = evsel__leader(evsel);
-+	if ((evsel->core.attr.type == PERF_TYPE_SOFTWARE || evsel__is_aux_event(leader)) &&
-+	    leader->pmu_name) {
-+		return leader->pmu_name;
-+	}
-+
-+	return "cpu";
-+}
-+
- const char *evsel__metric_id(const struct evsel *evsel)
- {
- 	if (evsel->metric_id)
-diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-index 676c499323e9..d26745ca6147 100644
---- a/tools/perf/util/evsel.h
-+++ b/tools/perf/util/evsel.h
-@@ -280,6 +280,7 @@ int arch_evsel__hw_name(struct evsel *evsel, char *bf, size_t size);
+diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+index be8c51770051..541b8dde2063 100644
+--- a/tools/perf/util/parse-events.y
++++ b/tools/perf/util/parse-events.y
+@@ -202,8 +202,8 @@ PE_NAME '{' events '}'
+ 	struct list_head *list = $3;
  
- int __evsel__hw_cache_type_op_res_name(u8 type, u8 op, u8 result, char *bf, size_t size);
- const char *evsel__name(struct evsel *evsel);
-+const char *evsel__group_pmu_name(const struct evsel *evsel);
- const char *evsel__metric_id(const struct evsel *evsel);
- 
- static inline bool evsel__is_tool(const struct evsel *evsel)
+ 	inc_group_count(list, _parse_state);
++	/* Takes ownership of $1. */
+ 	parse_events__set_leader($1, list, _parse_state);
+-	free($1);
+ 	$$ = list;
+ }
+ |
 -- 
 2.40.0.rc0.216.gc4246ad0f0-goog
 
