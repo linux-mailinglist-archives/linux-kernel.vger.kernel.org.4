@@ -2,83 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E906B0590
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9BB6B0595
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbjCHLOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:14:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
+        id S231195AbjCHLOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 06:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbjCHLN7 (ORCPT
+        with ESMTP id S230326AbjCHLOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:13:59 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1297E3A845
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 03:13:57 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id f18so20873595lfa.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 03:13:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678274035;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Dx9TBjiLxyBlYa7HZNp/7XOFpGVuez2eBR6EoiqkqNg=;
-        b=CxJGXXdy0aSdXxZ4cXR9mdGpRrFm1IcJqQ5mnUI9LWGS8U81XeOrdqdSpDzzKoxw9l
-         aMUK1DGTto7iQmbRnZLx/jbPgJZTTawgLGxMf59ROOC3VpfXr+k89cO3hiow+OW6uyvo
-         HGqq1HQP5sy6+WJHA+YyfNYt95Jni1K5/wjazbpBMncqWpzU6elk+DAnfpQ2BWlbkZgD
-         vRgKRc/bO3H9/eFQ+ojVkz+navST+xglkEvsQzJHWXVsM1lvEenF+CYEHPBn772V8eCq
-         jKbOhpZjVWx264rZteXSmh4oDKNHjzODMI27t4NFY8P8DAePJon7gddXJPHBq4hC7ctT
-         7pYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678274035;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dx9TBjiLxyBlYa7HZNp/7XOFpGVuez2eBR6EoiqkqNg=;
-        b=KgCyLZZ6yrCI8o9t6xWeZ/8XSmICIe3vvC2ofXyJv8J3qZUoX9eJ1QNZFgqI61de9Y
-         pENtxVH/tilR8DP7kkANiXAS4tq5xsHXdx6rnBddRlbBLtM8HIUtTgXwvMLinrTEcXT/
-         wcN9URjvNNnEYJbO+tvF7qPvVVnujwHV4C74h1gvNRodJWU9WYszgVw02x0kz1ev/eQy
-         48JPXUANw6t/5G4KC0JEtzy+jl0ssT5Gs8Pfux2GYGXgEJ5kaVEw26DKB3ftTlGC/t3l
-         p6CGeJhZnbwarE1X67cVxl1EKwFKLirSjShZDIsD3pUxPY3IqyNxIoaMyOE+PLJuulaU
-         /x5Q==
-X-Gm-Message-State: AO0yUKV0ES3jMFuUUCwvQ3aSxQoQ4rDFsE/Y8va9mP81MRvMFRVQj67V
-        Adf43irLzlST0UEOOwad1mb8IQ==
-X-Google-Smtp-Source: AK7set/qQ7inT93HAhK/w8G+hyRVpqzgpS5oDwb81oacAUEi86ChHNK67BNCyMaMY6vOPagNP5Kqbw==
-X-Received: by 2002:a05:6512:25b:b0:4dd:ab39:86e0 with SMTP id b27-20020a056512025b00b004ddab3986e0mr5702092lfo.27.1678274035340;
-        Wed, 08 Mar 2023 03:13:55 -0800 (PST)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id u16-20020a056512041000b004cafe65883dsm2298293lfk.122.2023.03.08.03.13.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 03:13:54 -0800 (PST)
-Message-ID: <66d293a8-f850-cb80-0c83-2ebf7e29d0c2@linaro.org>
-Date:   Wed, 8 Mar 2023 12:13:53 +0100
+        Wed, 8 Mar 2023 06:14:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F243C96F31;
+        Wed,  8 Mar 2023 03:14:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96B9BB81B29;
+        Wed,  8 Mar 2023 11:14:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A75C6C433D2;
+        Wed,  8 Mar 2023 11:14:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678274076;
+        bh=ccMiXcux3iDGpJ9zg6DwkZ7guZhASt7RFzYQJF/9t+s=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=imuRQSGxW8fc16+YkypSdiDiRiwwiUq5kQ1XaM6LT0ZwSbARikUWRWFPQdnPSCuNg
+         QWwU4Yi86lUjw967W6VdYGt8DvbL0L8BytEwD7+jCzvJ/jNW47f/hxMNrPjnpWt1aV
+         GUxXZ6pnS1tOyuMDyiDihZSDBnEv+vbRkxWrcEJIRm1IjjlVC30jybvqo52Vhy41PG
+         8EjyJqWWr44SBNYUmaD2UDgl8ctT3KE11V7JGYRtSQ4B3o52KwTVby4sh3LwPIRGzK
+         2IczxarO5oAIqtvnydOVlb13YNWMtmx6kBae18CV4hAkXQthb545QONkSIPP6au+Rm
+         kdb3ukvzrJxxQ==
+Message-ID: <4b8d8b8e-9062-e4e6-770b-86bd40cc3683@kernel.org>
+Date:   Wed, 8 Mar 2023 13:14:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 2/2] drm/panel: Add driver for Novatek NT36523
+ Thunderbird/102.7.1
+Subject: Re: [EXTERNAL] Re: [PATCH v3 5/6] soc: ti: pruss: Add helper function
+ to enable OCP master ports
 Content-Language: en-US
-To:     Jianhua Lu <lujianhua000@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230308043706.16318-1-lujianhua000@gmail.com>
- <20230308043706.16318-2-lujianhua000@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230308043706.16318-2-lujianhua000@gmail.com>
+To:     Md Danish Anwar <a0501179@ti.com>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+Cc:     linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230306110934.2736465-1-danishanwar@ti.com>
+ <20230306110934.2736465-6-danishanwar@ti.com>
+ <39879d9f-041b-9156-95a5-a81702721739@kernel.org>
+ <c5c2fbcc-0955-0325-ef05-289b7a339110@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <c5c2fbcc-0955-0325-ef05-289b7a339110@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,202 +72,242 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 8.03.2023 05:37, Jianhua Lu wrote:
-> Add a driver for panels using the Novatek NT36523 display driver IC.
+On 08/03/2023 13:09, Md Danish Anwar wrote:
+> Hi Roger,
 > 
-> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
-> ---
-> Changes in v3:
->   - Refactor source code
+> On 08/03/23 14:11, Roger Quadros wrote:
+>>
+>>
+>> On 06/03/2023 13:09, MD Danish Anwar wrote:
+>>> From: Suman Anna <s-anna@ti.com>
+>>>
+>>> The PRU-ICSS subsystem on OMAP-architecture based SoCS (AM33xx, AM437x
+>>> and AM57xx SoCs) has a control bit STANDBY_INIT in the PRUSS_CFG register
+>>> to initiate a Standby sequence (when set) and trigger a MStandby request
+>>> to the SoC's PRCM module. This same bit is also used to enable the OCP
+>>> master ports (when cleared). The clearing of the STANDBY_INIT bit requires
+>>> an acknowledgment from PRCM and is done through the monitoring of the
+>>> PRUSS_SYSCFG.SUB_MWAIT bit.
+>>>
+>>> Add a helper function pruss_cfg_ocp_master_ports() to allow the PRU
+>>> client drivers to control this bit and enable or disable the firmware
+>>> running on PRU cores access to any peripherals or memory to achieve
+>>> desired functionality. The access is disabled by default on power-up
+>>> and on any suspend (context is not maintained).
+>>>
+>>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>>> ---
+>>>  drivers/soc/ti/pruss.c           | 81 +++++++++++++++++++++++++++++++-
+>>>  include/linux/remoteproc/pruss.h |  6 +++
+>>>  2 files changed, 85 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+>>> index 537a3910ffd8..dc3abda0b8c2 100644
+>>> --- a/drivers/soc/ti/pruss.c
+>>> +++ b/drivers/soc/ti/pruss.c
+>>> @@ -22,14 +22,19 @@
+>>>  #include <linux/remoteproc.h>
+>>>  #include <linux/slab.h>
+>>>  
+>>> +#define SYSCFG_STANDBY_INIT	BIT(4)
+>>> +#define SYSCFG_SUB_MWAIT_READY	BIT(5)
+>>> +
+>>>  /**
+>>>   * struct pruss_private_data - PRUSS driver private data
+>>>   * @has_no_sharedram: flag to indicate the absence of PRUSS Shared Data RAM
+>>>   * @has_core_mux_clock: flag to indicate the presence of PRUSS core clock
+>>> + * @has_ocp_syscfg: flag to indicate if OCP SYSCFG is present
+>>>   */
+>>>  struct pruss_private_data {
+>>>  	bool has_no_sharedram;
+>>>  	bool has_core_mux_clock;
+>>> +	bool has_ocp_syscfg;
+>>>  };
+>>>  
+>>>  /**
+>>> @@ -205,6 +210,72 @@ int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(pruss_cfg_update);
+>>>  
+>>> +/**
+>>> + * pruss_cfg_ocp_master_ports() - configure PRUSS OCP master ports
+>>> + * @pruss: the pruss instance handle
+>>> + * @enable: set to true for enabling or false for disabling the OCP master ports
+>>> + *
+>>> + * This function programs the PRUSS_SYSCFG.STANDBY_INIT bit either to enable or
+>>> + * disable the OCP master ports (applicable only on SoCs using OCP interconnect
+>>> + * like the OMAP family). Clearing the bit achieves dual functionalities - one
+>>> + * is to deassert the MStandby signal to the device PRCM, and the other is to
+>>> + * enable OCP master ports to allow accesses outside of the PRU-ICSS. The
+>>> + * function has to wait for the PRCM to acknowledge through the monitoring of
+>>> + * the PRUSS_SYSCFG.SUB_MWAIT bit when enabling master ports. Setting the bit
+>>> + * disables the master access, and also signals the PRCM that the PRUSS is ready
+>>> + * for Standby.
+>>> + *
+>>> + * Return: 0 on success, or an error code otherwise. ETIMEDOUT is returned
+>>> + * when the ready-state fails.
+>>> + */
+>>> +int pruss_cfg_ocp_master_ports(struct pruss *pruss, bool enable)
+>>> +{
+>>> +	int ret;
+>>> +	u32 syscfg_val, i;
+>>> +	const struct pruss_private_data *data;
+>>> +
+>>> +	if (IS_ERR_OR_NULL(pruss))
+>>> +		return -EINVAL;
+>>> +
+>>> +	data = of_device_get_match_data(pruss->dev);
+>>> +
+>>> +	/* nothing to do on non OMAP-SoCs */
+>>> +	if (!data || !data->has_ocp_syscfg)
+>>> +		return 0;
+>>> +
+>>> +	/* assert the MStandby signal during disable path */
+>>> +	if (!enable)
+>>> +		return pruss_cfg_update(pruss, PRUSS_CFG_SYSCFG,
+>>> +					SYSCFG_STANDBY_INIT,
+>>> +					SYSCFG_STANDBY_INIT);
+>>
+>> You can omit the above if() if you just encapsulate the below in
+>>
+>> if (enable) {
+>>
+>>
+> Sure, I can omit the above if() and put the below block inside if (enable) {}.
 > 
-> Changes in v2:
->   - Refactor and clean up source code
-This is a veeery vague changelog, akin to "change patch", please
-be more specific the next time around.
+> Currently when API pruss_cfg_ocp_master_ports()is called with enable as false
+> i.e. disabling PRUSS OCP master ports is requested, we directly return
+> pruss_cfg_update() where as if we remove the above if() section and encapsulate
+> below block in if (enable) {}, then in disable scenario, call flow will
+> directly reach the label disable. In the label disable, we are updating cfg and
+> then returning "ret", but at this point the variable ret is not assigned.
+> 
+> To counter this should I change the label disable to below?
+> 
+> disable:
+> 	return pruss_cfg_update(pruss, PRUSS_CFG_SYSCFG, SYSCFG_STANDBY_INIT,
+> 			 SYSCFG_STANDBY_INIT);
 
+But you will loose the error code if we came here due to failure in pruss_cfg_read().
 
-[...]
+It's ok, don't make the change I suggested and leave it as it is.
 
-> --- /dev/null
-> +++ b/drivers/gpu/drm/panel/panel-novatek-nt36523.c
-> @@ -0,0 +1,770 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Novatek NT36523 DriverIC panels driver
-> + *
-> + * Copyright (c) 2022, 2023 Jianhua Lu <lujianhua000@gmail.com>
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of_graph.h>
-> +#include <linux/regulator/consumer.h>
-> +
-> +#include <drm/drm_connector.h>
-> +#include <drm/drm_crtc.h>
-> +#include <drm/drm_mipi_dsi.h>
-> +#include <drm/drm_modes.h>
-> +#include <drm/drm_panel.h>
-> +
-> +#define DSI_NUM_MIN 1
-> +
-> +/* Macro modified from mipi_dual_dsi_dcs_write_seq */
-> +#define mipi_dual_dsi_dcs_write_seq(dsi, cmd, seq...)           	   \
-> +	do {                                                               \
-> +		static const u8 d[] = { cmd, seq };                        \
-> +		int i, ret;                                                \
-> +		for (i = 0; i < ARRAY_SIZE(dsi); i++) {                    \
-> +			ret = mipi_dsi_dcs_write_buffer(dsi[i], d, ARRAY_SIZE(d));    \
-> +			if (ret < 0) {                                             \
-> +				dev_err_ratelimited(                               \
-> +					&dsi[i]->dev, "sending command %#02x failed: %d\n", \
-> +					cmd, ret);                                 \
-> +				return ret;                                        \
-> +			}                                                          \
-> +		}                                                                  \
-> +	} while (0)
-> +
-This should definitely be put in a common file..
+> 
+>>> +
+>>> +	/* enable the OCP master ports and disable MStandby */
+>>> +	ret = pruss_cfg_update(pruss, PRUSS_CFG_SYSCFG, SYSCFG_STANDBY_INIT, 0);
+>>> +	if (ret)
+>>> +		return ret;
+>>> +
+>>> +	/* wait till we are ready for transactions - delay is arbitrary */
+>>> +	for (i = 0; i < 10; i++) {
+>>> +		ret = pruss_cfg_read(pruss, PRUSS_CFG_SYSCFG, &syscfg_val);
+>>> +		if (ret)
+>>> +			goto disable;
+>>> +
+> 
+> Changing the disable label will also result in losing the return value of
+> pruss_cfg_read() API call here.
+> 
+>>> +		if (!(syscfg_val & SYSCFG_SUB_MWAIT_READY))
+>>> +			return 0;
+>>> +
+>>> +		udelay(5);
+>>> +	}
+>>> +
+>>> +	dev_err(pruss->dev, "timeout waiting for SUB_MWAIT_READY\n");
+>>> +	ret = -ETIMEDOUT;
+> 
+> Changing the disable label will also result in losing ret = -ETIMEDOUT here.
+> 
+>>
+>> }
+>>
+>>> +
+>>> +disable:
+>>> +	pruss_cfg_update(pruss, PRUSS_CFG_SYSCFG, SYSCFG_STANDBY_INIT,
+>>> +			 SYSCFG_STANDBY_INIT);
+>>> +	return ret;
+>>> +}
+> 
+> So should I do this modification or keep it as it is?
+> 
+>>> +EXPORT_SYMBOL_GPL(pruss_cfg_ocp_master_ports);
+>>> +
+>>>  static void pruss_of_free_clk_provider(void *data)
+>>>  {
+>>>  	struct device_node *clk_mux_np = data;
+>>> @@ -495,10 +566,16 @@ static int pruss_remove(struct platform_device *pdev)
+>>>  /* instance-specific driver private data */
+>>>  static const struct pruss_private_data am437x_pruss1_data = {
+>>>  	.has_no_sharedram = false,
+>>> +	.has_ocp_syscfg = true,
+>>>  };
+>>>  
+>>>  static const struct pruss_private_data am437x_pruss0_data = {
+>>>  	.has_no_sharedram = true,
+>>> +	.has_ocp_syscfg = false,
+>>> +};
+>>> +
+>>> +static const struct pruss_private_data am33xx_am57xx_data = {
+>>> +	.has_ocp_syscfg = true,
+>>>  };
+>>
+>> How about keeping platform data for different platforms separate?
+>>
+>> i.e. am33xx_pruss_data and am57xx_pruss_data
+>>
+> 
+> Sure. I'll split am33xx_am57xx_data into am33xx_pruss_data and
+> am57xx_pruss_data as well as am65x_j721e_pruss_data into am65x_pruss_data and
+> j721e_pruss_data.
+> 
+>>>  
+>>>  static const struct pruss_private_data am65x_j721e_pruss_data = {
+>>> @@ -506,10 +583,10 @@ static const struct pruss_private_data am65x_j721e_pruss_data = {
+>>>  };
+>>>  
+>>>  static const struct of_device_id pruss_of_match[] = {
+>>> -	{ .compatible = "ti,am3356-pruss" },
+>>> +	{ .compatible = "ti,am3356-pruss", .data = &am33xx_am57xx_data },
+>>>  	{ .compatible = "ti,am4376-pruss0", .data = &am437x_pruss0_data, },
+>>>  	{ .compatible = "ti,am4376-pruss1", .data = &am437x_pruss1_data, },
+>>> -	{ .compatible = "ti,am5728-pruss" },
+>>> +	{ .compatible = "ti,am5728-pruss", .data = &am33xx_am57xx_data },
+>>>  	{ .compatible = "ti,k2g-pruss" },
+>>>  	{ .compatible = "ti,am654-icssg", .data = &am65x_j721e_pruss_data, },
+>>>  	{ .compatible = "ti,j721e-icssg", .data = &am65x_j721e_pruss_data, },
+>>> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
+>>> index 7952f250301a..8cb99d3cad0d 100644
+>>> --- a/include/linux/remoteproc/pruss.h
+>>> +++ b/include/linux/remoteproc/pruss.h
+>>> @@ -168,6 +168,7 @@ int pruss_release_mem_region(struct pruss *pruss,
+>>>  int pruss_cfg_read(struct pruss *pruss, unsigned int reg, unsigned int *val);
+>>>  int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+>>>  		     unsigned int mask, unsigned int val);
+>>> +int pruss_cfg_ocp_master_ports(struct pruss *pruss, bool enable);
+>>>  
+>>>  #else
+>>>  
+>>> @@ -203,6 +204,11 @@ static inline int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+>>>  	return -EOPNOTSUPP;
+>>>  }
+>>>  
+>>> +static inline int pruss_cfg_ocp_master_ports(struct pruss *pruss, bool enable)
+>>> +{
+>>> +	return -EOPNOTSUPP;
+>>> +}
+>>> +
+>>>  #endif /* CONFIG_TI_PRUSS */
+>>>  
+>>>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+>>
+>> cheers,
+>> -roger
+> 
 
-
-> +static const struct drm_display_mode elish_boe_mode = {
-> +	/* Current max freqency is 104HZ, TODO 120HZ */
-Is it a DPU issue, or does the panel not work correctly when you
-jack up the clocks? Did you use the correct init sequence and porches
-for the 120Hz mode, including the mode switch command set?
-
-Could you also implement a 60 (or whatever other value is also
-implemented downstream) Hz mode?
-
-> +	.clock = (1600 + 60 + 8 + 60) * (2560 + 26 + 4 + 168) * 104 / 1000,
-> +	.hdisplay = 1600,
-> +	.hsync_start = 1600 + 60,
-> +	.hsync_end = 1600 + 60 + 8,
-> +	.htotal = 1600 + 60 + 8 + 60,
-> +	.vdisplay = 2560,
-> +	.vsync_start = 2560 + 26,
-> +	.vsync_end = 2560 + 26 + 4,
-> +	.vtotal = 2560 + 26 + 4 + 168,
-> +};
-> +
-> +static const struct drm_display_mode elish_csot_mode = {
-> +	/* Current max freqency is 104HZ, TODO 120HZ */
-> +	.clock = (1600 + 200 + 40 + 52) * (2560 + 26 + 4 + 168) * 104 / 1000,
-> +	.hdisplay = 1600,
-> +	.hsync_start = 1600 + 200,
-> +	.hsync_end = 1600 + 200 + 40,
-> +	.htotal = 1600 + 200 + 40 + 52,
-> +	.vdisplay = 2560,
-> +	.vsync_start = 2560 + 26,
-> +	.vsync_end = 2560 + 26 + 4,
-> +	.vtotal = 2560 + 26 + 4 + 168,
-> +};
-> +
-> +static const struct panel_desc elish_boe_desc = {
-> +	.modes = &elish_boe_mode,
-> +	.dsi_info = {
-> +		.type = "NT36523",
-That's a bit vague, the driver IC is not very telling about the
-panel itself. Since we're not able to determine much more information,
-this could contain the panel manufacturer and the device name.
-
-> +		.channel = 0,
-> +		.node = NULL,
-> +	},
-> +	.width_mm = 127,
-> +	.height_mm = 203,
-> +	.bpc = 8,
-> +	.lanes = 3,
-> +	.format = MIPI_DSI_FMT_RGB888,
-> +	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_CLOCK_NON_CONTINUOUS | MIPI_DSI_MODE_LPM,
-> +	.init_sequence = elish_boe_init_sequence,
-> +	.is_dual_dsi = true,
-> +};
-> +
-[...]
-
-> +static int nt36523_probe(struct mipi_dsi_device *dsi)
-> +{
-[...]
-
-> +	/* If the panel is dual dsi, register DSI1 */
-> +	if (pinfo->desc->is_dual_dsi) {
-> +		info = &pinfo->desc->dsi_info;
-> +
-> +		dsi1 = of_graph_get_remote_node(dsi->dev.of_node, 1, -1);
-> +		if (!dsi1) {
-> +			dev_err(dev, "cannot get secondary DSI node.\n");
-> +			return -ENODEV;
-> +		}
-> +
-> +		dsi1_host = of_find_mipi_dsi_host_by_node(dsi1);
-> +		of_node_put(dsi1);
-Shouldn't you put the reference only if it's found?
-
-> +		if (!dsi1_host) {
-> +			dev_err(dev, "cannot get secondary DSI host\n");
-> +			return -EPROBE_DEFER;
-dev_err_probe, here and in neighbouring exit return paths?
-
-
-Konrad
-> +		}
-> +
-> +		pinfo->dsi[1] = mipi_dsi_device_register_full(dsi1_host, info);
-> +		if (!pinfo->dsi[1]) {
-> +			dev_err(dev, "cannot get secondary DSI device\n");
-> +			return -ENODEV;
-> +		}
-> +	}
-> +
-> +	pinfo->dsi[0] = dsi;
-> +	mipi_dsi_set_drvdata(dsi, pinfo);
-> +	drm_panel_init(&pinfo->panel, dev, &nt36523_panel_funcs, DRM_MODE_CONNECTOR_DSI);
-> +
-> +	ret = drm_panel_of_backlight(&pinfo->panel);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "failed to get backlight\n");
-> +
-> +	drm_panel_add(&pinfo->panel);
-> +
-> +	for (i = 0; i < DSI_NUM_MIN + pinfo->desc->is_dual_dsi; i++) {
-> +		pinfo->dsi[i]->lanes = pinfo->desc->lanes;
-> +		pinfo->dsi[i]->format = pinfo->desc->format;
-> +		pinfo->dsi[i]->mode_flags = pinfo->desc->mode_flags;
-> +
-> +		ret = mipi_dsi_attach(pinfo->dsi[i]);
-> +		if (ret < 0)
-> +			return dev_err_probe(dev, ret, "cannot attach to DSI%d host.\n", i);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id nt36523_of_match[] = {
-> +	{
-> +		.compatible = "xiaomi,elish-boe-nt36523",
-> +		.data = &elish_boe_desc,
-> +	},
-> +	{
-> +		.compatible = "xiaomi,elish-csot-nt36523",
-> +		.data = &elish_csot_desc,
-> +	},
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, nt36523_of_match);
-> +
-> +static struct mipi_dsi_driver nt36523_driver = {
-> +	.probe = nt36523_probe,
-> +	.remove = nt36523_remove,
-> +	.driver = {
-> +		.name = "panel-novatek-nt36523",
-> +		.of_match_table = nt36523_of_match,
-> +	},
-> +};
-> +module_mipi_dsi_driver(nt36523_driver);
-> +
-> +MODULE_AUTHOR("Jianhua Lu <lujianhua000@gmail.com>");
-> +MODULE_DESCRIPTION("DRM driver for Novatek NT36523 based MIPI DSI panels");
-> +MODULE_LICENSE("GPL");
+cheers,
+-roger
