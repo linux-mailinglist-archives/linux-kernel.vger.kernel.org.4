@@ -2,159 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25B66B130B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3497A6B1310
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjCHU2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 15:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
+        id S230016AbjCHUaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 15:30:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCHU2J (ORCPT
+        with ESMTP id S230143AbjCHU34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:28:09 -0500
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEF111EAE
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 12:27:26 -0800 (PST)
-Received: by mail-qt1-f171.google.com with SMTP id l13so19537254qtv.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 12:27:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678307245;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/20KFgVaCbhWkWSenGGB1/+L4QwyO4onHWnKBRgUBYg=;
-        b=LRqiPUonVIiG55nr5+wuxyYuFb4E8m3C9M4bT8Mrw5iPy14EMwc6EDfdn6XfH9rvdK
-         AbajKUcX+EqbpJ0jYjUL10gtUd010UAMXOyvUa4dGQuUnpVy/UpYU2+t4ZB0H2Ey3vhA
-         jnm4yWTYa+bdNclF0FkA+XI3ZYxPIn/0A5efKJBFoyI17wSch8U40g/SuMGP5owGA1C6
-         qaY2WWX690JfogTTitXfyaSOkxkvlmd5SKEhun53hsro1mFjmLKgB/cf3sd69EFq6VzM
-         KiTYwFKn790ICkZSUaIlFXWwU+wzTePGRoUNRo1ih9OcLLGHChC1WB3Rw3tdQnpZw3rv
-         Kbzg==
-X-Gm-Message-State: AO0yUKXtg09/w/axWzhSERZ2OuFMGMyd0tIIvQuZQed8YP3qPT+fe7P+
-        tHCKa/jXtZmztGMs0tEC28oa
-X-Google-Smtp-Source: AK7set8dvB/4qMr6vHsWzlPUWYLio3NToqIGBeL1emVliBR6VVv4EP/mehECjD/DgA1nrifWFI+ZZA==
-X-Received: by 2002:ac8:57cd:0:b0:3bf:be20:544c with SMTP id w13-20020ac857cd000000b003bfbe20544cmr32142596qta.39.1678307245376;
-        Wed, 08 Mar 2023 12:27:25 -0800 (PST)
-Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
-        by smtp.gmail.com with ESMTPSA id b6-20020ac801c6000000b003bd1a798f76sm12123795qtg.37.2023.03.08.12.27.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 12:27:24 -0800 (PST)
-Date:   Wed, 8 Mar 2023 15:27:23 -0500
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Ignat Korchagin <ignat@cloudflare.com>,
-        Hou Tao <houtao@huaweicloud.com>
-Cc:     linux-kernel@vger.kernel.org, dm-devel@redhat.com,
-        mpatocka@redhat.com, houtao1@huawei.com,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: dm crypt: initialize tasklet in crypt_io_init()
-Message-ID: <ZAjvqz5pWf8aSkJ7@redhat.com>
-References: <20230306134930.2878660-1-houtao@huaweicloud.com>
- <ZAY/o9ew9AtrCLE5@redhat.com>
- <e9b61952-98a8-6e3b-2d85-6aaf07208a7b@huaweicloud.com>
- <ZAdOgUdqwLpUyPlc@redhat.com>
- <6c2d07bf-828e-3aeb-3c02-6cdfd6e36ff3@huaweicloud.com>
- <CALrw=nFrbWF2ZhQtK9gx5ZFHK4Cd9outwEQqByJgmb7ryOoCgA@mail.gmail.com>
- <ZAjfu0R7rv45J3Dr@redhat.com>
+        Wed, 8 Mar 2023 15:29:56 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3A1C7098;
+        Wed,  8 Mar 2023 12:29:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dvCkjjYwO17HVXXGgXGIfvRQwtfB+tdv9ar+/qRdD60=; b=mbYG4wipENwBxUMDMPCi6fD1OS
+        NXf7fDtDwsknzveTVzfIIOu68tlpxAoRUth8S8IUxso0P4BRdhbYsjzdfV2B27j2R1scEtv067fZM
+        l3yNdfSZ4YEDvoHjNqgR+k2Oe64i7DosZbzt6kgJm3ZvEz4G1IuWeDA+8XPr6OT3NXh7p5mabpozu
+        XE2UJqSvjN0/tkBjfmEa+GOZE1L0jiRwQr91cAIQECf74yxrA4Gk/pPUf+VqX+ooVYYqEAGCNmpyz
+        iZKpgc2Q4WMlMi4NjKn+VOQHdlVcFdIy3JWsjzBjBZej6D+8ECzwrjaSAcDXxXh9UAaODzEsfZoM9
+        BpNwGBNQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pa0Q4-006g1H-Tg; Wed, 08 Mar 2023 20:29:52 +0000
+Date:   Wed, 8 Mar 2023 12:29:52 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
+        russell.h.weight@intel.com, keescook@chromium.org,
+        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>
+Subject: Re: [PATCH 1/2] selftests/kmod: increase the kmod timeout from 45 to
+ 165
+Message-ID: <ZAjwQKwZgT+UcZHq@bombadil.infradead.org>
+References: <20230206234344.2433950-1-mcgrof@kernel.org>
+ <20230206234344.2433950-2-mcgrof@kernel.org>
+ <b094dc23-a96d-93c4-a350-8fb92476f431@linuxfoundation.org>
+ <Y/0xx0cedxlRMKpH@bombadil.infradead.org>
+ <537d3d3d-9ecc-bdd9-f703-708f6826d1f2@linuxfoundation.org>
+ <ZAJrFvIDj98C9SkD@bombadil.infradead.org>
+ <9a0e7062-2d16-3743-ffb6-a6b56bfbbd20@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZAjfu0R7rv45J3Dr@redhat.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <9a0e7062-2d16-3743-ffb6-a6b56bfbbd20@linuxfoundation.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08 2023 at  2:19P -0500,
-Mike Snitzer <snitzer@kernel.org> wrote:
-
-> On Wed, Mar 08 2023 at  8:55P -0500,
-> Ignat Korchagin <ignat@cloudflare.com> wrote:
+On Mon, Mar 06, 2023 at 09:06:41AM -0700, Shuah Khan wrote:
+> On 3/3/23 14:48, Luis Chamberlain wrote:
+> > On Fri, Mar 03, 2023 at 01:35:10PM -0700, Shuah Khan wrote:
+> > > On 2/27/23 15:42, Luis Chamberlain wrote:
+> > > > On Mon, Feb 27, 2023 at 03:32:50PM -0700, Shuah Khan wrote:
+> > > > > On 2/6/23 16:43, Luis Chamberlain wrote:
+> > > > > > The default sefltests timeout is 45 seconds. If you run the kmod
+> > > > > > selftests on your own with say:
+> > > > > > 
+> > > > > > ./tools/testings/selftests/kmod.sh
+> > > > > > 
+> > > > > > Then the default timeout won't be in effect.
+> > > > > > 
+> > > > > > I've never ran kmod selftests using the generic make wrapper
+> > > > > > (./tools/testing/selftests/run_kselftest.sh -s) util now
+> > > > > > that I have support for it on kdevops [0]. And with that the
+> > > > > > test is limitted to the default timeout which we quickly run
+> > > > > > into. Bump this up to what I see is required on 8GiB / 8 vcpu
+> > > > > > libvirt q35 guest as can be easily created now with kdevops.
+> > > > > > 
+> > > > > > To run selftests with kdevops:
+> > > > > > 
+> > > > > > make menuconfig # enable dedicated selftests and kmod test
+> > > > > > make
+> > > > > > make bringup
+> > > > > > make linux
+> > > > > > make selftests-kmod
+> > > > > > 
+> > > > > > This ends up taking about 280 seconds now, give or take add
+> > > > > > 50 seconds more more and we end up with 350. Document the
+> > > > > > rationale.
+> > > > > > 
+> > > > > > [0] https://github.com/linux-kdevops/kdevops
+> > > > > > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> > > > > > ---
+> > > > > >     tools/testing/selftests/kmod/settings | 4 ++++
+> > > > > >     1 file changed, 4 insertions(+)
+> > > > > >     create mode 100644 tools/testing/selftests/kmod/settings
+> > > > > > 
+> > > > > > diff --git a/tools/testing/selftests/kmod/settings b/tools/testing/selftests/kmod/settings
+> > > > > > new file mode 100644
+> > > > > > index 000000000000..6fca0f1a4594
+> > > > > > --- /dev/null
+> > > > > > +++ b/tools/testing/selftests/kmod/settings
+> > > > > > @@ -0,0 +1,4 @@
+> > > > > > +# measured from a manual run:
+> > > > > > +# time ./tools/testing/selftests/kmod/kmod.sh
+> > > > > > +# Then add ~50 seconds more gracetime.
+> > > > > > +timeout=350
+> > > > > 
+> > > > > Adding timeouts like this for individual tests increases the overall kselftest
+> > > > > run-time. I am not in favor of adding timeouts.
+> > > > > 
+> > > > > We have to find a better way to do this.
+> > > > 
+> > > > Well if folks don't have this the test will fail, and so a false
+> > > > positive. If the goal is to have a low time timeout for "do not run
+> > > > tests past this time and do not fail if we stopped the test" then
+> > > > that seems to be likely one way to go and each test may need to be
+> > > > modified to not fail fatally in case of a special signal.
+> > > > 
+> > > 
+> > > We are finding more and more that timeout values are requiring
+> > > tweaks. I am in favor of coming up a way to exit the test with
+> > > a timeout condition.
+> > 
+> > OK so do we use the existing timeout as a "optional, I don't want my
+> > test to take longer than this" or "if this test takes longer than
+> > this amount this is a fatal issue"?
 > 
-> > Perhaps instead we can just pass an additional flag from
-> > tasklet_schedule to indicate to the function that we're running in a
-> > tasklet. I originally have chosen the tasklet_trylock/unlock hack to
-> > avoid passing an extra flag. But unitialized memory makes sense as
-> > well as the desire to avoid calling tasklet_init unconditionally. So
-> > an extra member in dm_crypt_io might be the most straightforward here.
+> It isn't a fatal issue. So I wouldn't call it one. I would add a
+> message saying test timed out.
 > 
-> ... I think we should certainly evaluate the use of an extra flag.
+> One way to handle this is:
+> - Add a test run-time option and have user tune it as needed.
 > 
-> Ignat: I'll have a look at implementing it but if you have a patch
-> already developed please do share.
+> Make the timeout an option so users can set it based on their
+> environments.
+> 
+> > 
+> > I ask because right now we can't override it even with an environment
+> > variable. If we had such support we can let test runners (like kdevops)
+> > use selftests with its own set of qualified / verified timeouts for the
+> > VMs it uses.
+> > 
+> > For instance, Iw ant to soon start asking 0day to enable my kdevops
+> > 0-day tests for the subsystems I maintain, but I can't do that yet as
+> > the timeout is not correct.
+> 
+> This test isn't part of the default run, so day has to run this as a
+> special case and it would make prefect sense to provide a tunable
+> timeout option.
 
-I've staged the following in linux-next for 6.3 via the linux-dm.git,
-but if you see anything wrong with it I can obviously fix:
+That's the thing, I *want* it to be part of *my runs* for my git trees
+on git.kernel.org for modules-testing and modules-next. That allows me
+to have 0day run whatever things I need. Long term it will be through
+kdevops with just:
 
-From: Mike Snitzer <snitzer@kernel.org>
-Date: Wed, 8 Mar 2023 14:39:54 -0500
-Subject: [PATCH] dm crypt: avoid accessing uninitialized tasklet
+make linux
+make selftests-kmod
+make kmod
+make kmod-check
 
-When neither "no_read_workqueue" nor "no_write_workqueue" are enabled,
-tasklet_trylock() in crypt_dec_pending() may still return false due to
-an uninitialized state, and dm-crypt will unnecessarily do io completion
-in io_queue workqueue instead of current context.
+Vincenzo expressed interest to help, I think he may be interested in
+helping with this configurable timeout for selftests as some initial
+low hanging fruit.
 
-Fix this by adding an 'in_tasklet' flag to dm_crypt_io struct and
-initialize it to false in crypt_io_init(). Set this flag to true in
-kcryptd_queue_crypt() before calling tasklet_schedule(). If set
-crypt_dec_pending() will punt io completion to a workqueue.
+Then on the kdevops front we'd set what we know is right for a typical
+libvirt use case for our current default VM target.
 
-This also nicely avoids the tasklet_trylock/unlock hack when tasklets
-aren't in use.
-
-Fixes: 8e14f610159d ("dm crypt: do not call bio_endio() from the dm-crypt tasklet")
-Cc: stable@vger.kernel.org
-Reported-by: Hou Tao <houtao1@huawei.com>
-Suggested-by: Ignat Korchagin <ignat@cloudflare.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
----
- drivers/md/dm-crypt.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
-index faba1be572f9..de08ff4f7c98 100644
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -72,7 +72,9 @@ struct dm_crypt_io {
- 	struct crypt_config *cc;
- 	struct bio *base_bio;
- 	u8 *integrity_metadata;
--	bool integrity_metadata_from_pool;
-+	bool integrity_metadata_from_pool:1;
-+	bool in_tasklet:1;
-+
- 	struct work_struct work;
- 	struct tasklet_struct tasklet;
- 
-@@ -1731,6 +1733,7 @@ static void crypt_io_init(struct dm_crypt_io *io, struct crypt_config *cc,
- 	io->ctx.r.req = NULL;
- 	io->integrity_metadata = NULL;
- 	io->integrity_metadata_from_pool = false;
-+	io->in_tasklet = false;
- 	atomic_set(&io->io_pending, 0);
- }
- 
-@@ -1777,8 +1780,7 @@ static void crypt_dec_pending(struct dm_crypt_io *io)
- 	 * our tasklet. In this case we need to delay bio_endio()
- 	 * execution to after the tasklet is done and dequeued.
- 	 */
--	if (tasklet_trylock(&io->tasklet)) {
--		tasklet_unlock(&io->tasklet);
-+	if (!io->in_tasklet) {
- 		bio_endio(base_bio);
- 		return;
- 	}
-@@ -2233,6 +2235,7 @@ static void kcryptd_queue_crypt(struct dm_crypt_io *io)
- 		 * it is being executed with irqs disabled.
- 		 */
- 		if (in_hardirq() || irqs_disabled()) {
-+			io->in_tasklet = true;
- 			tasklet_init(&io->tasklet, kcryptd_crypt_tasklet, (unsigned long)&io->work);
- 			tasklet_schedule(&io->tasklet);
- 			return;
--- 
-2.37.1 (Apple Git-137.1)
-
+  Luis
