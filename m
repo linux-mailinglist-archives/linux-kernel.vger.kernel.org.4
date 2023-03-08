@@ -2,56 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F366B06FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 373B26B06F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbjCHMXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 07:23:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        id S231307AbjCHMWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 07:22:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjCHMXM (ORCPT
+        with ESMTP id S231377AbjCHMWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:23:12 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA26D97FF1;
-        Wed,  8 Mar 2023 04:22:37 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pZsnK-0004qN-E3; Wed, 08 Mar 2023 13:21:22 +0100
-Message-ID: <2246a9d5-789d-08c9-f6a7-fb9db2edfe9f@leemhuis.info>
-Date:   Wed, 8 Mar 2023 13:21:21 +0100
+        Wed, 8 Mar 2023 07:22:44 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AFEBF3A5
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:22:04 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id g3so65077432eda.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 04:22:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678278105;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q1+QoiB0k7uK9HwVoaPFB3R0wsTQ3wETZ1dYhPGfX2I=;
+        b=uNbCAtDRe7cRmmmBtkPCr0ZzwY6e6K7KsgA2K6mCUj33OWW6/+RKq16XEes4f6E0C5
+         ZH6zitE0olyk59gTq/3/USR67zm3uf8aORzkwKFvvsl5yqMlDDs48kHn5UmlSADlXpeN
+         hN7+uvMGBjvwUFutWz/KFmVmgT3ZDcTexetCRpj10DximvboLm2kRiqFgyvy6EnZEZ0L
+         wEE2h6bDoDSl5PsYSv2GAEyS5os9L/+CyXC6x+nfj4+vm+CzCSot3fYYlpxOx1YFX7kc
+         c2FNdrEQrP6FnzWG9Ww9iVHm8AUno2xhoqJw8uftgYwqBaJErvi9kf/QDD5MLwUhnCcr
+         8Muw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678278105;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q1+QoiB0k7uK9HwVoaPFB3R0wsTQ3wETZ1dYhPGfX2I=;
+        b=qgd4UlkajzauOkCFbNlsIJpYXFBK9CHAgY98pAY2EWsE7R+PfNpploIcWJzF+aMf6n
+         +bdcMudvtMLov7wbo0nQC+dkYrFrr6VgOdCtbdjIMjed0eEaL6LjSpQ3sT+bOUkaQRUa
+         e1hUwYCJo5Sy7DOEOj0Xxe2JUX4q2uNQxNZ/RIBr7QgQyhxRpgEZ3oniwF625uHp83pB
+         2EY1FukCr6MjYYVthbgpyJzttk+5w0VwVMEIbm8Vfy2SufQJxkOIsqRo1H5ALbpURdxQ
+         MnJG5nFAHjTlfA3xLYann8+tfVSRwP0n+LnDwNRVp2c+ixS1yd1HdZ2si2COBOtthjKs
+         OBlQ==
+X-Gm-Message-State: AO0yUKUDGkwYysiWlkkG78ORl+x0O1FaStugN6P+bQQxlE95s1EELRg2
+        hgezdstKpKPBtvTHGO+wM0XYbA==
+X-Google-Smtp-Source: AK7set//pnG/hUfU9dnpKwgyOtGLLsGngkBOwgX0mXHkioCCsnLFf9+5fdRAS06P4j5ui/g+tHOHEA==
+X-Received: by 2002:a17:907:a0d5:b0:88e:e498:109b with SMTP id hw21-20020a170907a0d500b0088ee498109bmr23363670ejc.5.1678278105564;
+        Wed, 08 Mar 2023 04:21:45 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:ff33:9b14:bdd2:a3da? ([2a02:810d:15c0:828:ff33:9b14:bdd2:a3da])
+        by smtp.gmail.com with ESMTPSA id e19-20020a50a693000000b004ad61135698sm8062309edc.13.2023.03.08.04.21.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 04:21:45 -0800 (PST)
+Message-ID: <c4d53e9c-dac0-8ccc-dc86-faada324beba@linaro.org>
+Date:   Wed, 8 Mar 2023 13:21:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [Regression] rt2800usb - Wifi performance issues and connection
- drops
-Content-Language: en-US, de-DE
-To:     Felix Fietkau <nbd@nbd.name>,
-        Alexander Wetzel <alexander@wetzel-home.de>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Mann <rauchwolke@gmx.net>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Helmut Schaa <helmut.schaa@googlemail.com>,
-        Johannes Berg <johannes.berg@intel.com>
-References: <b8efebc6-4399-d0b8-b2a0-66843314616b@leemhuis.info>
- <5a7cd098-1d83-6297-e802-ce998c8ec116@leemhuis.info>
- <6025e17e-4c29-6d36-6b9c-2fec543b21c4@wetzel-home.de>
- <debc7fe9-204d-63a7-aa61-91b20a46f385@wetzel-home.de>
- <4a02173f-3a60-0a7e-8962-3778e6c55bf3@nbd.name>
- <cfa5cc30-bf5a-bffd-4c2f-eec8a6522dd5@wetzel-home.de>
- <42185fa2-4191-fcf5-9c0f-fd7098bb856b@nbd.name>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <42185fa2-4191-fcf5-9c0f-fd7098bb856b@nbd.name>
+Subject: Re: [PATCH] dt-bindings: pinctrl: k3: Introduce debounce select mux
+ macros
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+References: <20230308084309.396192-1-nm@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230308084309.396192-1-nm@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678278158;2212533a;
-X-HE-SMSGID: 1pZsnK-0004qN-E3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,48 +81,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.03.23 12:57, Felix Fietkau wrote:
-> On 08.03.23 12:41, Alexander Wetzel wrote:
->> On 08.03.23 08:52, Felix Fietkau wrote:
->>>> I'm also planning to provide some more debug patches, to figuring out
->>>> which part of commit 4444bc2116ae ("wifi: mac80211: Proper mark iTXQs
->>>> for resumption") fixes the issue for you. Assuming my understanding
->>>> above is correct the patch should not really fix/break anything for
->>>> you...With the findings above I would have expected your git bisec to
->>>> identify commit a790cc3a4fad ("wifi: mac80211: add wake_tx_queue
->>>> callback to drivers") as the first broken commit...
->>> I can't point to any specific series of events where it would go
->>> wrong, but I suspect that the problem might be the fact that you're
->>> doing tx scheduling from within ieee80211_handle_wake_tx_queue. I
->>> don't see how it's properly protected from potentially being called
->>> on different CPUs concurrently.
->>> Back when I was debugging some iTXQ issues in mt76, I also had
->>> problems when tx scheduling could happen from multiple places. My
->>> solution was to have a single worker thread that handles tx, which is
->>> scheduled from the wake_tx_queue op.
->>> Maybe you could do something similar in mac80211 for non-iTXQ drivers.
->> I think it's already doing all of that:
->> ieee80211_handle_wake_tx_queue() is the mac80211 implementation for the
->> wake_tx_queue op. The drivers without native iTXQ support simply link it
->> to this handler.
-> I know. The problem I see is that I can't find anything that guarantees
-> that .wake_tx_queue_op is not being called concurrently from multiple
-> different places. ieee80211_handle_wake_tx_queue is doing the scheduling
-> directly, instead of deferring it to a single workqueue/tasklet/thread,
-> and multiple concurrent calls to it could potentially cause issues.
+On 08/03/2023 09:43, Nishanth Menon wrote:
+> Introduce the debounce select mux macros to allow folks to setup
+> debounce configuration for pins. Each configuration selected maps
+> to a specific timing register as documented in appropriate Technical
+> Reference Manual (example:[1]).
+> 
+> [1] AM625x TRM (section 6.1.2.2): https://www.ti.com/lit/pdf/spruiv7
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+>  include/dt-bindings/pinctrl/k3.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
 
-Alexander, Felix, many thx for looking into this.
+So these are register values? You should consider moving them out of
+bindings, like we do for some other platforms.
 
-This more and more sounds like something that might take a while to get
-fixed, which makes it harder to get this fixed within those time-frames
-Documentation/process/handling-regressions.rst outlines. So please allow
-me to ask:
 
-Is reverting the culprit (and reapplying it later once the real cause is
-found and fixed) an option, or would that cause other regressions?
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+Best regards,
+Krzysztof
+
