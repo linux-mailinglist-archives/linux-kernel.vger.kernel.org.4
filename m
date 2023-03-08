@@ -2,122 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA40F6B1496
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF296B1498
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjCHVz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 16:55:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
+        id S229483AbjCHV41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 16:56:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjCHVzV (ORCPT
+        with ESMTP id S230059AbjCHV4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 16:55:21 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9BBD49FA
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:55:04 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id l25so49210wrb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 13:55:04 -0800 (PST)
+        Wed, 8 Mar 2023 16:56:15 -0500
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377DBD23BC
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:56:14 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-53916ab0c6bso329890277b3.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 13:56:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678312503;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PNobrJtyVxKais+5xCBZIp/sku4QQfBasurHEecIWAE=;
-        b=Xx0Z7goD6qsCry/gPmvS47RqLg7qVg1rsqP0/ivv6dVLBUn5MS10EP/EdHwYpbDGEU
-         amc1TtUHaLR9QISTSc4s13jqYliAxZotYqA5v7ma1xa+nruXOjRgMn4SyBj9LF172nlI
-         3fEfyk1sCkU4sqemUmyXLsZGL+g8BQpqebMUMA8JFX9RDGsUbWTlFLEzacTlewE643L2
-         wpcwC/tuVbqFrGu44C0xcZkIvml71vXIU76g5z+CreInh1uzWrMmwRrdhqNJLnuAf9gP
-         rXTuvAevUDQi1yyT0CRPjN2A+odDaicPcBsSP3ZUKufVU118R2TdNE2okzHMM37ZLwaL
-         wnXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678312503;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1678312573;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PNobrJtyVxKais+5xCBZIp/sku4QQfBasurHEecIWAE=;
-        b=IkOhfCE/PW1lLMwT33dLKtF86q47l2gaC0hWNA5CrvuMhh9Yt+vrnR3z9pz0jkrooN
-         QZudbJKJrsRxe8uBPC+BKB7VttD481CP41x7M93WTCKkuGtZI2pNVX9++oNDFNKeFqRZ
-         N0JEeH2qUxyR7fwRtwysWFl00Xj90eMEyTfoAHWsaBWzw6gh9ddUOC2fqvf15dzX87C8
-         lmgzsguB1k562A5gXKRZgjJj7exGBV/JcHCjokg3DuGBHZ8OLHcVvUuxS8tDu6tqYCZb
-         cih+02C4np0v1ztk3aKbes+FspNX8imNJg/5ZdLfi9q8Yux9J1EkNrrwMowb95ypUBiZ
-         p8eA==
-X-Gm-Message-State: AO0yUKUA/MyEBej0jREeYTHLOsHHJCnHOGwOdF88jCchpyJSV91qNJtw
-        Yfmpci8Xw7y+adcrLKFbc6iRpg==
-X-Google-Smtp-Source: AK7set8/BDV1TRoYFJRl+Ho21B1yvco18zhN9eA6Vxb9VJyRxA2mql6ty9uvzWGEDOdDdPzgRii47w==
-X-Received: by 2002:adf:f44a:0:b0:2c9:ee50:b295 with SMTP id f10-20020adff44a000000b002c9ee50b295mr13070782wrp.28.1678312503333;
-        Wed, 08 Mar 2023 13:55:03 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id w2-20020a5d6802000000b002c7163660a9sm16132508wru.105.2023.03.08.13.55.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 13:55:02 -0800 (PST)
-Date:   Wed, 8 Mar 2023 23:55:01 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH v2 0/7] Add dedicated Qcom ICE driver
-Message-ID: <ZAkENY2DWTqIr86m@linaro.org>
-References: <20230308155838.1094920-1-abel.vesa@linaro.org>
- <ZAjqBemusfSKEWgF@sol.localdomain>
+        bh=5SNpxUvoL3wJxQvDMk4hmZFaxXnNEcCgcZlciVtsvXc=;
+        b=CDQcTCIVb/Mbv0ESOZ6tgosr11PuDIjK/sne0DVXVcMGwsaSV0+NmVsnd2HG1WfuNG
+         Y4KzJFuCJ6sorGtK20lC8/nM/kecNTJdJRJs1wMs9axjzcPpn8LjzNn6YEPUQ1N6heOI
+         y72YJ7p4DvB3ei8QC1Mlj8qEvqjtXS+pIgguSFuCWqR98j4MYIvP7capwe2QYoMpUqwC
+         bK5Q7HAEQRGCFdGZjcGNLx/BRRPYpN4TtN1wFSygnsKwCj4Y1hQ83NVZTM9a2MOWIcWu
+         mdR0TryaP9O58xQ5iYRXdRa/LnUMjrdF1so+7ag4xgSMK5SR10JQJq2Wl1FAnHx/2zNu
+         cPaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678312573;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5SNpxUvoL3wJxQvDMk4hmZFaxXnNEcCgcZlciVtsvXc=;
+        b=fzidUKQ5o7obixEM7i8YDNDy53uwP3RQ5Jh7nqDJJWeGRHBkzeewkhTq31wMsrab2W
+         gzj1DfWv3v+PdqrsDxw5KrjQm4W7yWtFt0bVpmulwPFEcbpSs76JYL6iji/X1o8LyUCf
+         aV8vSoccvK5UdVTBtvohLCbWM2cgpVB+uCIFs0nfk1BH09AflGSDz2Wora4wK8s0a+iJ
+         yorZpjAxamJkNvtkIVqYn1gYC9IhcxtpSypiseU46j/gkbvA/SWeWbAtysQ+CA3M9onl
+         15lVgf+yWxGp6ExorfEyyBDdsv7VAaJQd7tWv2GQ+5RuWzBFRTXFqBVrpCKYOYj406I5
+         zbSA==
+X-Gm-Message-State: AO0yUKVy+bs10YlP6YoIXKgIfFxU1ohNG40AWQmCJZZaBVbdwJz6u5fX
+        hgXLDKfDa3u/eALxJL0oFe/FWmGp0wUggztcBI6Mlg==
+X-Google-Smtp-Source: AK7set8yauEv2vcx8SVSOeBSvIcZLRFAawEdiiK3vsGVmvLq0nGKK1nv0pzzTynl2uX93OymJM1VQT+KwzqxmI6CYtw=
+X-Received: by 2002:a81:b149:0:b0:530:b21f:d604 with SMTP id
+ p70-20020a81b149000000b00530b21fd604mr4893153ywh.9.1678312573418; Wed, 08 Mar
+ 2023 13:56:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAjqBemusfSKEWgF@sol.localdomain>
+References: <20230308145303.826942-1-arnd@kernel.org>
+In-Reply-To: <20230308145303.826942-1-arnd@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 8 Mar 2023 22:56:02 +0100
+Message-ID: <CACRpkdZAJJr5+f8wiEhnAAV8mLjzYCBMDC9GXwQOAmsQLfShoA@mail.gmail.com>
+Subject: Re: [PATCH] mips: ar71: include linux/gpio/driver.h
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-03-08 12:03:17, Eric Biggers wrote:
-> Hi Abel,
-> 
-> On Wed, Mar 08, 2023 at 05:58:31PM +0200, Abel Vesa wrote:
-> > As both SDCC and UFS drivers use the ICE with duplicated implementation,
-> > while none of the currently supported platforms make use concomitantly
-> > of the same ICE IP block instance, the new SM8550 allows both UFS and
-> > SDCC to do so. In order to support such scenario, there is a need for
-> > a unified implementation and a devicetree node to be shared between
-> > both types of storage devices. So lets drop the duplicate implementation
-> > of the ICE from both SDCC and UFS and make it a dedicated (soc) driver.
-> > Also, switch all UFS and SDCC devicetree nodes to use the new ICE
-> > approach.
-> > 
-> > See each individual patch for changelogs.
-> > 
-> > The v1 is here:
-> > https://lore.kernel.org/all/20230214120253.1098426-1-abel.vesa@linaro.org/
-> > 
-> > Abel Vesa (7):
-> >   dt-bindings: soc: qcom: Add schema for Inline Crypto Engine
-> >   dt-bindings: ufs: qcom: Add ICE phandle and drop core clock
-> >   dt-bindings: mmc: sdhci-msm: Add ICE phandle and drop core clock
-> >   soc: qcom: Make the Qualcomm UFS/SDCC ICE a dedicated driver
-> >   scsi: ufs: ufs-qcom: Switch to the new ICE API
-> >   mmc: sdhci-msm: Switch to the new ICE API
-> >   arm64: dts: qcom: Add the Inline Crypto Engine nodes
-> 
-> Does this address all the comments on v1?  I had also asked some questions on
-> v1.  It would be helpful if you would respond.
+On Wed, Mar 8, 2023 at 3:53=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wrot=
+e:
 
-Sorry about not doing that earlier. Did that now.
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The change to remove the implicit gpio/driver.h include was done
+> after fixing all the other users, but the ar7 file still needs
+> the same change.
+>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Fixes: 21d9526d13b5 ("gpiolib: Make the legacy <linux/gpio.h> consumer-on=
+ly")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-> 
-> - Eric
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+If this is the only problem merging this set was amazingly painless.
+
+Yours,
+Linus Walleij
