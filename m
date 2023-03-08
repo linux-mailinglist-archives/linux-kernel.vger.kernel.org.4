@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC356B08DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CE26B08FC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbjCHN30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:29:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
+        id S231748AbjCHN3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbjCHN2u (ORCPT
+        with ESMTP id S231720AbjCHN2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:28:50 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A736F59E48
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 05:27:39 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id p16so9792204wmq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 05:27:39 -0800 (PST)
+        Wed, 8 Mar 2023 08:28:51 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D456F5ADEA
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 05:27:40 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso1309472wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 05:27:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678282058;
+        d=linaro.org; s=google; t=1678282059;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RRiMwFjCYTBiVehS5Zjzxk4QhzySk5Q8XvQ2DTwvGYo=;
-        b=M13CIKtbt6NdnMF3xUVK+U+fIwa5lvxX7UMTgBXkq9LltkKeHAyVwTCDF/go/LFD8U
-         6bug2hBb9pxq16K9n/VVCT/PKd3mY+caJksEYqlWyTlUA6l55FmWHpX/nfPNAXGjeIFB
-         Fhd7eUiXeSdq+HfeAFF36WX7dEdR3NydVV3LDdKmukSbQGKapP3NVvfhwnh3i/Opkt/x
-         hqmL+tZiIIdW8tA1EzdlHziQ/coCtLM13Lbe4DVPZH0f6gZNWXZzmuAaZyxDJ6ebtngS
-         cENJUlpWFd85+3HKL7nLdnxp8GvpH3CJtA++mRQHthCLRUQEO7jFPMraW+1V2rkZU9l3
-         x8aA==
+        bh=/pQr6KmTdUgnaHE8iXfJ0bvx2pGOLcHh3rodgiE7+Kk=;
+        b=mzuVYxo1IvHxz+PDOTRQzHmSEPVCuAzHaarvBZtqx/b6RCUBM03s+6D/bJbEtX8RBS
+         GMHxwXRXj/e0plcItRiNo9qtrBhVfEHJGhSoOoHI5kN0gEraILEBRCgyB7H1hZGUZVdp
+         H3NZCjYMJQ77q1rfZtnw/t0gUUBcOOujflGwAO7spKxh/fClm+dHtPDqgv3BdR5zA5nv
+         M/HUNRGrRB1f5/wSfpyY4r28hhB9gYo9Pxh+RErcf4TU7BpKekvITIFemlLtXuCEvVCP
+         N0esRn6MamONGC3XlZ1SrNMxFOudh0nCyeOOotz/Ldvd1p1onTIdia9aEot3QpCzOkDR
+         2XyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678282058;
+        d=1e100.net; s=20210112; t=1678282059;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RRiMwFjCYTBiVehS5Zjzxk4QhzySk5Q8XvQ2DTwvGYo=;
-        b=i/R9ZCQqL4kCS7h8KXFNb122y2QIJaeFYyn3ZnCaCvBspj6KusnC2s16YIqx7nwHey
-         BQM2xQe7rto/i5Qc5JuYdSEtWWp4kl1EJQD2KSVL/BMe9bNlEDwDw1kGQxrdCpdjJ/gQ
-         8TdnO6/xembbADqBcICtiypYuPckG1VqUOwy6Tlv1rOtMmRdOFR1nppWtRz/zI23MEal
-         XOQi8NcWhTxUS/jl8DTaaE76U6kcdZTqrKhiRMw1mR4crps27gmNdDMltdqq1LU3ZR3H
-         XBl8KdKAJKj7EBxvQ9BWucpjBaAbTEFwjVCRLyKIoIa7c/LEg/9rlGjaMeKhEfdjhiYz
-         VO7w==
-X-Gm-Message-State: AO0yUKUJ6jKYKsqRRX3pJ8GbqpJz/kWB9+nW8C4p8dnscBZFuvKIDhjP
-        gsCDtDRNpSL+IriafchEkRPArw==
-X-Google-Smtp-Source: AK7set951sS/BhgEGaC8nI1yOV82Lm95r8nqh+ea9T47x6/Z1PG+rb2KYuae4aHocOJmhElbdw+z8w==
-X-Received: by 2002:a05:600c:a09:b0:3ea:c100:e974 with SMTP id z9-20020a05600c0a0900b003eac100e974mr17176799wmp.26.1678282058156;
-        Wed, 08 Mar 2023 05:27:38 -0800 (PST)
+        bh=/pQr6KmTdUgnaHE8iXfJ0bvx2pGOLcHh3rodgiE7+Kk=;
+        b=2WOyUWKNH8HENtMxCGyymL/Jw6bIhTiFyS4h8wKh9OU9o2BDvSdiZ68V6c6e35p6JE
+         O1zLCZcFyPumcZeOqFatOcTHSKq1qBoD6fuBIUhuyspVUGncc3norHW2utL92kgKobhD
+         0bEL0cbxKDrNcHrOBnak8F8MSmOexEl6W8AMLYwiijDXt0LVpovBVxEF7ldbkCIwEhqg
+         OZK1EZuFZQd5+JEsePRDfwuXfsO1TwY7rDtQNuFOInaqnKqp7MF0BFLlF3cmZIDfgDld
+         NPZ0eY11K4Q4TlaPHdYnx29CqEOUjvkozPWkO1oyJ/IdTBlLRriHOzyRVPxMY7xrqm7j
+         FwhA==
+X-Gm-Message-State: AO0yUKXo0TN6visgKKqlDsTtUvBQ8WFVU9yNTsbR2Ce5OIVLOgkYgpLT
+        5ujWOoyo2F/dDYUq4jTJAruaBQ==
+X-Google-Smtp-Source: AK7set8O6HXLMHit1wwemxOlJ3exl5Ep1+SM9Zo/jpqR0zkz4C2reJ9ENi0sLw+wBQacTe5+lH7WKA==
+X-Received: by 2002:a05:600c:3591:b0:3eb:3998:8c05 with SMTP id p17-20020a05600c359100b003eb39988c05mr13181442wmq.6.1678282059224;
+        Wed, 08 Mar 2023 05:27:39 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b003daffc2ecdesm20631491wmo.13.2023.03.08.05.27.37
+        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b003daffc2ecdesm20631491wmo.13.2023.03.08.05.27.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 05:27:37 -0800 (PST)
+        Wed, 08 Mar 2023 05:27:38 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 08 Mar 2023 14:27:32 +0100
-Subject: [PATCH v4 4/5] dt-bindings: timer: convert
- timer/amlogic,meson6-timer.txt to dt-schema
+Date:   Wed, 08 Mar 2023 14:27:33 +0100
+Subject: [PATCH v4 5/5] dt-bindings: PCI: convert amlogic,meson-pcie.txt to
+ dt-schema
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221117-b4-amlogic-bindings-convert-v4-4-34e623dbf789@linaro.org>
+Message-Id: <20221117-b4-amlogic-bindings-convert-v4-5-34e623dbf789@linaro.org>
 References: <20221117-b4-amlogic-bindings-convert-v4-0-34e623dbf789@linaro.org>
 In-Reply-To: <20221117-b4-amlogic-bindings-convert-v4-0-34e623dbf789@linaro.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
@@ -81,112 +81,240 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 X-Mailer: b4 0.12.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Amlogic Meson6 SoCs Timer Controller bindings to dt-schema.
+Convert the Amlogic Meson AXG DWC PCIe SoC controller bindings to
+dt-schema.
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../bindings/timer/amlogic,meson6-timer.txt        | 22 ---------
- .../bindings/timer/amlogic,meson6-timer.yaml       | 54 ++++++++++++++++++++++
- 2 files changed, 54 insertions(+), 22 deletions(-)
+ .../devicetree/bindings/pci/amlogic,axg-pcie.yaml  | 134 +++++++++++++++++++++
+ .../devicetree/bindings/pci/amlogic,meson-pcie.txt |  70 -----------
+ 2 files changed, 134 insertions(+), 70 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.txt b/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.txt
-deleted file mode 100644
-index a9da22bda912..000000000000
---- a/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.txt
-+++ /dev/null
-@@ -1,22 +0,0 @@
--Amlogic Meson6 SoCs Timer Controller
--
--Required properties:
--
--- compatible : should be "amlogic,meson6-timer"
--- reg : Specifies base physical address and size of the registers.
--- interrupts : The four interrupts, one for each timer event
--- clocks : phandles to the pclk (system clock) and XTAL clocks
--- clock-names : must contain "pclk" and "xtal"
--
--Example:
--
--timer@c1109940 {
--	compatible = "amlogic,meson6-timer";
--	reg = <0xc1109940 0x14>;
--	interrupts = <GIC_SPI 10 IRQ_TYPE_EDGE_RISING>,
--		     <GIC_SPI 11 IRQ_TYPE_EDGE_RISING>,
--		     <GIC_SPI 6 IRQ_TYPE_EDGE_RISING>,
--		     <GIC_SPI 29 IRQ_TYPE_EDGE_RISING>;
--	clocks = <&xtal>, <&clk81>;
--	clock-names = "xtal", "pclk";
--};
-diff --git a/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.yaml b/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.yaml
+diff --git a/Documentation/devicetree/bindings/pci/amlogic,axg-pcie.yaml b/Documentation/devicetree/bindings/pci/amlogic,axg-pcie.yaml
 new file mode 100644
-index 000000000000..8381a5404ef7
+index 000000000000..a5bd90bc0712
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.yaml
-@@ -0,0 +1,54 @@
++++ b/Documentation/devicetree/bindings/pci/amlogic,axg-pcie.yaml
+@@ -0,0 +1,134 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/timer/amlogic,meson6-timer.yaml#
++$id: http://devicetree.org/schemas/pci/amlogic,axg-pcie.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Amlogic Meson6 SoCs Timer Controller
++title: Amlogic Meson AXG DWC PCIe SoC controller
 +
 +maintainers:
 +  - Neil Armstrong <neil.armstrong@linaro.org>
-+  - Martin Blumenstingl <martin.blumenstingl@googlemail.com>
++
++description:
++  Amlogic Meson PCIe host controller is based on the Synopsys DesignWare PCI core.
++
++allOf:
++  - $ref: /schemas/pci/pci-bus.yaml#
++  - $ref: /schemas/pci/snps,dw-pcie-common.yaml#
++
++# We need a select here so we don't match all nodes with 'snps,dw-pcie'
++select:
++  properties:
++    compatible:
++      enum:
++        - amlogic,axg-pcie
++        - amlogic,g12a-pcie
++  required:
++    - compatible
 +
 +properties:
 +  compatible:
-+    const: amlogic,meson6-timer
++    items:
++      - enum:
++          - amlogic,axg-pcie
++          - amlogic,g12a-pcie
++      - const: snps,dw-pcie
 +
 +  reg:
-+    maxItems: 1
++    items:
++      - description: External local bus interface registers
++      - description: Meson designed configuration registers
++      - description: PCIe configuration space
++
++  reg-names:
++    items:
++      - const: elbi
++      - const: cfg
++      - const: config
 +
 +  interrupts:
-+    maxItems: 4
-+    description: per-timer event interrupts
++    maxItems: 1
 +
 +  clocks:
-+    maxItems: 2
++    items:
++      - description: PCIe GEN 100M PLL clock
++      - description: PCIe RC clock gate
++      - description: PCIe PHY clock
 +
 +  clock-names:
 +    items:
-+      - const: xtal
 +      - const: pclk
++      - const: port
++      - const: general
++
++  phys:
++    maxItems: 1
++
++  phy-names:
++    const: pcie
++
++  resets:
++    items:
++      - description: Port Reset
++      - description: Shared APB reset
++
++  reset-names:
++    items:
++      - const: port
++      - const: apb
++
++  num-lanes:
++    const: 1
++
++  power-domains:
++    maxItems: 1
 +
 +required:
 +  - compatible
 +  - reg
++  - reg-names
 +  - interrupts
-+  - clocks
++  - clock
 +  - clock-names
++  - "#address-cells"
++  - "#size-cells"
++  - "#interrupt-cells"
++  - interrupt-map
++  - interrupt-map-mask
++  - ranges
++  - bus-range
++  - device_type
++  - num-lanes
++  - phys
++  - phy-names
++  - resets
++  - reset-names
 +
-+additionalProperties: false
++unevaluatedProperties: false
 +
 +examples:
 +  - |
 +    #include <dt-bindings/interrupt-controller/irq.h>
 +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    timer@c1109940 {
-+        compatible = "amlogic,meson6-timer";
-+        reg = <0xc1109940 0x14>;
-+        interrupts = <GIC_SPI 10 IRQ_TYPE_EDGE_RISING>,
-+                     <GIC_SPI 11 IRQ_TYPE_EDGE_RISING>,
-+                     <GIC_SPI 6 IRQ_TYPE_EDGE_RISING>,
-+                     <GIC_SPI 29 IRQ_TYPE_EDGE_RISING>;
-+        clocks = <&xtal>, <&clk81>;
-+        clock-names = "xtal", "pclk";
++    pcie: pcie@f9800000 {
++        compatible = "amlogic,axg-pcie", "snps,dw-pcie";
++        reg = <0xf9800000 0x400000>, <0xff646000 0x2000>, <0xf9f00000 0x100000>;
++        reg-names = "elbi", "cfg", "config";
++        interrupts = <GIC_SPI 177 IRQ_TYPE_EDGE_RISING>;
++        clocks = <&pclk>, <&clk_port>, <&clk_phy>;
++        clock-names = "pclk", "port", "general";
++        resets = <&reset_pcie_port>, <&reset_pcie_apb>;
++        reset-names = "port", "apb";
++        phys = <&pcie_phy>;
++        phy-names = "pcie";
++        #interrupt-cells = <1>;
++        interrupt-map-mask = <0 0 0 0>;
++        interrupt-map = <0 0 0 0 &gic GIC_SPI 179 IRQ_TYPE_EDGE_RISING>;
++        bus-range = <0x0 0xff>;
++        #address-cells = <3>;
++        #size-cells = <2>;
++        device_type = "pci";
++        num-lanes = <1>;
++        ranges = <0x82000000 0 0 0xf9c00000 0 0x00300000>;
 +    };
++...
+diff --git a/Documentation/devicetree/bindings/pci/amlogic,meson-pcie.txt b/Documentation/devicetree/bindings/pci/amlogic,meson-pcie.txt
+deleted file mode 100644
+index c3a75ac6e59d..000000000000
+--- a/Documentation/devicetree/bindings/pci/amlogic,meson-pcie.txt
++++ /dev/null
+@@ -1,70 +0,0 @@
+-Amlogic Meson AXG DWC PCIE SoC controller
+-
+-Amlogic Meson PCIe host controller is based on the Synopsys DesignWare PCI core.
+-It shares common functions with the PCIe DesignWare core driver and
+-inherits common properties defined in
+-Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml.
+-
+-Additional properties are described here:
+-
+-Required properties:
+-- compatible:
+-	should contain :
+-	- "amlogic,axg-pcie" for AXG SoC Family
+-	- "amlogic,g12a-pcie" for G12A SoC Family
+-	to identify the core.
+-- reg:
+-	should contain the configuration address space.
+-- reg-names: Must be
+-	- "elbi"	External local bus interface registers
+-	- "cfg"		Meson specific registers
+-	- "config"	PCIe configuration space
+-- reset-gpios: The GPIO to generate PCIe PERST# assert and deassert signal.
+-- clocks: Must contain an entry for each entry in clock-names.
+-- clock-names: Must include the following entries:
+-	- "pclk"       PCIe GEN 100M PLL clock
+-	- "port"       PCIe_x(A or B) RC clock gate
+-	- "general"    PCIe Phy clock
+-- resets: phandle to the reset lines.
+-- reset-names: must contain "port" and "apb"
+-       - "port"        Port A or B reset
+-       - "apb"         Share APB reset
+-- phys: should contain a phandle to the PCIE phy
+-- phy-names: must contain "pcie"
+-
+-- device_type:
+-	should be "pci". As specified in snps,dw-pcie.yaml
+-
+-
+-Example configuration:
+-
+-	pcie: pcie@f9800000 {
+-			compatible = "amlogic,axg-pcie", "snps,dw-pcie";
+-			reg = <0x0 0xf9800000 0x0 0x400000
+-					0x0 0xff646000 0x0 0x2000
+-					0x0 0xf9f00000 0x0 0x100000>;
+-			reg-names = "elbi", "cfg", "config";
+-			reset-gpios = <&gpio GPIOX_19 GPIO_ACTIVE_HIGH>;
+-			interrupts = <GIC_SPI 177 IRQ_TYPE_EDGE_RISING>;
+-			#interrupt-cells = <1>;
+-			interrupt-map-mask = <0 0 0 0>;
+-			interrupt-map = <0 0 0 0 &gic GIC_SPI 179 IRQ_TYPE_EDGE_RISING>;
+-			bus-range = <0x0 0xff>;
+-			#address-cells = <3>;
+-			#size-cells = <2>;
+-			device_type = "pci";
+-			ranges = <0x82000000 0 0 0x0 0xf9c00000 0 0x00300000>;
+-
+-			clocks = <&clkc CLKID_USB
+-					&clkc CLKID_PCIE_A
+-					&clkc CLKID_PCIE_CML_EN0>;
+-			clock-names = "general",
+-					"pclk",
+-					"port";
+-			resets = <&reset RESET_PCIE_A>,
+-				<&reset RESET_PCIE_APB>;
+-			reset-names = "port",
+-					"apb";
+-			phys = <&pcie_phy>;
+-			phy-names = "pcie";
+-	};
 
 -- 
 2.34.1
