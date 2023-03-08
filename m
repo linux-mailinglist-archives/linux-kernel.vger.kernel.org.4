@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEC56B03F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6C76B03F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjCHKVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:21:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
+        id S230199AbjCHKV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:21:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjCHKVP (ORCPT
+        with ESMTP id S229580AbjCHKVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:21:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2D060AAF;
-        Wed,  8 Mar 2023 02:21:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 8 Mar 2023 05:21:19 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B73B6D36;
+        Wed,  8 Mar 2023 02:21:18 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 86148B81B29;
-        Wed,  8 Mar 2023 10:21:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7C23C433D2;
-        Wed,  8 Mar 2023 10:21:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678270871;
-        bh=4KQBiX+zBplgwRl6rTGlLz+7p9lJaG6/YAbBfam9ax8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b3OAOeSrAu1FcFxJNz/WU3Ux4YtOS5a3Fx2RygOGxk+DJzfs8TFol4Sg6TYBVuT1I
-         qnC+XjChuawvxf6EWUZF/3TNWZaVP4E1H+g1QsFXE9gwqeCzClVt4dJl977eoVcP4d
-         fZyhsGFpYIyDNH/EcAykYFi2zt/YUJ/HetK4QvZLGG4u6lBhfpruY5BeuXwwWbOaUQ
-         l0Yxm8UD78gawFw9DwkKRQxx66E6q0fpA/N8UrGZrgFun+KpTN+cn0A7q16uJ0u4T+
-         9zFTZdEM3dF5KzelHUYY7KtjGW9X3fzTVtl0m6q3TIBONW5XthXSQ1uwzx3Xjx5Mv/
-         HwHpr7QJw8rzQ==
-Date:   Wed, 8 Mar 2023 10:21:05 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        'Conor Dooley ' <conor.dooley@microchip.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH V3 18/20] RISC-V: Add ACPI initialization in setup_arch()
-Message-ID: <e1cf9976-17a1-4096-b497-08985c1f8e0f@spud>
-References: <20230303133647.845095-1-sunilvl@ventanamicro.com>
- <20230303133647.845095-19-sunilvl@ventanamicro.com>
- <b38179fe-f1b8-4146-ae22-11e8bbbd500e@spud>
- <ZAhYeuCmdYAnanNv@sunil-laptop>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 291861FE35;
+        Wed,  8 Mar 2023 10:21:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1678270877; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JZa0zpAJCeh9dzklwAiQIDL273b6n4qNFXa7CBwrKNI=;
+        b=P089fFIeokxOaKc2AugIP592HPZ9E/nYJdJaAkitiG8p5Ny8rI79+EnhcDQCGz3R80NA4u
+        4p8N9UiD2Nh70cxcV9TGbYAbKGjOaZWjw5frB5ihLE6ZSznFoOb9m8XqiXebpCeXd2Q7Vv
+        LiNy0WDoavyfWfCdREY9NwlnuS0csCc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1678270877;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JZa0zpAJCeh9dzklwAiQIDL273b6n4qNFXa7CBwrKNI=;
+        b=iFNnLRikDeqTC1JTbHAm9Z0Vf4a2PwibCfkX9pPQ49UiGyZR/4OD43yKaCgRxz2JlglRCI
+        DNjm22/74WXOySDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E834F1391B;
+        Wed,  8 Mar 2023 10:21:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1LqXN5xhCGSFWQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 08 Mar 2023 10:21:16 +0000
+Message-ID: <83344b3d-1de1-f3c2-913c-a8c54ce7a99f@suse.cz>
+Date:   Wed, 8 Mar 2023 11:21:36 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="63+IG2qcJZyEQHTv"
-Content-Disposition: inline
-In-Reply-To: <ZAhYeuCmdYAnanNv@sunil-laptop>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V2 1/2] sysctl: Limit the value of interface
+ compact_memory
+Content-Language: en-US
+To:     ye.xingchen@zte.com.cn, mcgrof@kernel.org
+Cc:     keescook@chromium.org, yzaikin@google.com,
+        akpm@linux-foundation.org, linmiaohe@huawei.com,
+        chi.minghao@zte.com.cn, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
+References: <202303061407332798543@zte.com.cn>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <202303061407332798543@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,80 +78,61 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---63+IG2qcJZyEQHTv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 08, 2023 at 03:12:18PM +0530, Sunil V L wrote:
-> On Mon, Mar 06, 2023 at 09:17:34PM +0000, Conor Dooley wrote:
-> > On Fri, Mar 03, 2023 at 07:06:45PM +0530, Sunil V L wrote:
-> > > Initialize the ACPI core for RISC-V during boot.
-> > >=20
-> > > ACPI tables and interpreter are initialized based on
-> > > the information passed from the firmware and the value of
-> > > the kernel parameter 'acpi'.
-> > >=20
-> > > With ACPI support added for RISC-V, the kernel parameter 'acpi'
-> > > is also supported on RISC-V. Hence, update the documentation.
-> > >=20
-> > > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > > ---
-> >=20
-> > > +static int __init acpi_fadt_sanity_check(void)
-> > > +{
-> > > +	struct acpi_table_header *table;
-> > > +	struct acpi_table_fadt *fadt;
-> > > +	acpi_status status;
-> > > +	int ret =3D 0;
-> > > +
-> > > +	/*
-> > > +	 * FADT is required on riscv; retrieve it to check its presence
-> > > +	 * and carry out revision and ACPI HW reduced compliancy tests
-> > > +	 */
-> > > +	status =3D acpi_get_table(ACPI_SIG_FADT, 0, &table);
-> > > +	if (ACPI_FAILURE(status)) {
-> > > +		const char *msg =3D acpi_format_exception(status);
-> > > +
-> > > +		pr_err("Failed to get FADT table, %s\n", msg);
-> > > +		return -ENODEV;
-> > > +	}
-> > > +
-> > > +	fadt =3D (struct acpi_table_fadt *)table;
-> > > +
-> > > +	/*
-> > > +	 * Revision in table header is the FADT Major revision, and there
-> > > +	 * is a minor revision of FADT.
-> >=20
-> > What is the point of this part of the comment? Isn't it obvious from the
-> > below code that you expect a major and minor revision?
-> > If feel like you're trying to make a point in it, but the point has been
-> > lost :/
-> >=20
-> It just highlights that major and minor revision fields are in two
-> different places.=20
+On 3/6/23 07:07, ye.xingchen@zte.com.cn wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> In Documentation/admin-guide/sysctl/vm.rst:109 say: when 1 is written
+> to the file, all zones are compacted such that free memory is available
+> in contiguous blocks where possible.
+> So limit the value of interface compact_memory to 1.
+> 
+> Link: https://lore.kernel.org/all/ZAJwoXJCzfk1WIBx@bombadil.infradead.org/
 
-I thought that that was what you meant, but only because the code does
-it. The comment doesn't actually say so!
+I don't think the split to two patches you did, achieves Luis' request.
 
-Instead of deleting it, something like the following?
-/*
- * The revision in the table header is the FADT's Major revision. The
- * FADT also has a minor revision, which is stored in the FADT itself.
- * <snip>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+> 
+> ---
+>  include/linux/compaction.h | 1 +
+>  kernel/sysctl.c            | 4 +++-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/compaction.h b/include/linux/compaction.h
+> index 52a9ff65faee..caa24e33eeb1 100644
+> --- a/include/linux/compaction.h
+> +++ b/include/linux/compaction.h
+> @@ -81,6 +81,7 @@ static inline unsigned long compact_gap(unsigned int order)
+>  }
+> 
+>  #ifdef CONFIG_COMPACTION
+> +extern int sysctl_compact_memory;
+>  extern unsigned int sysctl_compaction_proactiveness;
+>  extern int sysctl_compaction_handler(struct ctl_table *table, int write,
+>  			void *buffer, size_t *length, loff_t *ppos);
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index c14552a662ae..67f70952f71a 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@ -2192,10 +2192,12 @@ static struct ctl_table vm_table[] = {
+>  #ifdef CONFIG_COMPACTION
+>  	{
+>  		.procname	= "compact_memory",
+> -		.data		= NULL,
+> +		.data		= &sysctl_compact_memory,
 
+I doubt this compiles/links without patch 2, as there's no definition
+until patch 2.
 
---63+IG2qcJZyEQHTv
-Content-Type: application/pgp-signature; name="signature.asc"
+>  		.maxlen		= sizeof(int),
+>  		.mode		= 0200,
+>  		.proc_handler	= sysctl_compaction_handler,
+> +		.extra1		= SYSCTL_ONE,
+> +		.extra2		= SYSCTL_ONE,
+>  	},
+>  	{
+>  		.procname	= "compaction_proactiveness",
 
------BEGIN PGP SIGNATURE-----
+IIUC his request was to move the compaction entries out of sysctl.c?
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAhhkQAKCRB4tDGHoIJi
-0krvAP0eBw+cdEVFy8lgx9EsKqFkr7cLWq8k9aDC+5LghJ2RuQD/ZnzN20QyBPC1
-imyxaNv7BcEyf8CQlBw+HH7hKVgtYQ4=
-=2b/3
------END PGP SIGNATURE-----
-
---63+IG2qcJZyEQHTv--
