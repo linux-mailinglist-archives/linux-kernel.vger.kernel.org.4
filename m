@@ -2,79 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B636B0422
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EA76B0427
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbjCHK0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:26:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
+        id S230122AbjCHK0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:26:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbjCHKZm (ORCPT
+        with ESMTP id S230115AbjCHK01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:25:42 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42C0B79EF
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:25:37 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id u9so63754796edd.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:25:37 -0800 (PST)
+        Wed, 8 Mar 2023 05:26:27 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2D4B4829
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:26:26 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id a3so14991727vsi.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:26:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678271136;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=naE0AMEKJ5IdS0Ovxmj4rx2/QwnramEvAuCqlBIumMM=;
-        b=dVDL5zUG4JGyuWAHDz+UPheNWi5fB+AUPJUeNsSYz8UBQyU+UPr07Oy87rHoM57KqG
-         SiYm09nouXAOu1xy20isJg9rflIeHpgQLcyzVEuBtph/mbXyyYxktRtMSVvFvrRcmg80
-         0j7T1UlWHyAxXmVb2lFSAP5bCYAtwzIIKt88+f+6e0Ji/APZh3H+nUVvF4tLW49zF2xS
-         dZijPFAn2TARv1H6RyZ9mW+mTXtx8+3GxekBQYq2nVNcNBs7DN8qJANRSUDkvV1RZ11C
-         Q2PE4bGIT749q4HTRjLbQSo9+D7XAqV+syPq9tHOyNnIP/8Ns6mju78vrp3LwbyAxGth
-         oaMA==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678271185;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AGmotPoG2120yB70tKLvm/NcUMvlY8fYIwzXAE2sT5E=;
+        b=ikmN3FQLY36alaZWM7yikv6mQnHmAO0CBsIMnVSL0SKNv8lQ6Jgck86pX0+z/SNheX
+         fCJpcMd2Vri0U8uNDvBhlt5K6RP4f5Vnwp9pQT2iv6C8jSHQUMxtQL9muBb/2qclAi5N
+         0lNXLlkl5sisMB6TrhuNIjxJTyj2kvySbMn3Uz9wbex7OfKBYn7WSpF+BwkzjZgH8oQM
+         NldSecCcEDlHOQeZEqoaRbIogSqOeSnMLcANZ2iDNUX1f1f2nX5F9YL5bQk/i3yn9NUj
+         0z3V6I6y0HT02asXaBJam4cjb768Whr+HEQXJ9BJZZv6MeFI/uP8qoVkA7uxVch2JQnB
+         0V7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678271136;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=naE0AMEKJ5IdS0Ovxmj4rx2/QwnramEvAuCqlBIumMM=;
-        b=Z27+8Wyr3gmDn0LWpAIzNer1GvJ5pGAbulBi1mDrKqTdHxX0x/szWPKNfkWi2yLJd6
-         DlHKQVA6AsewugM5GqDOjx2GlbWEcaTY8/+kkyjwX56X25+EljlmbpoZlmrClYL6t5CQ
-         VnRmlmdHF5NJA/iGV0xpAhZAROpyEWcfP6Wn3p9OIXXpaZUa5iy/O2gsXOzE/Bz8XBWe
-         heo7u33wDUUEXW727sfe0RkWVY/qe5q9bcIUUjtIz0XO++F/QPV/tVR+NpPRNg4jAR00
-         buSdPNl9yEmjmHRtKiNxLcrP8vkvir12UC98acErUAqIcsJqtyA/kXMzA/2OBqC7840T
-         ewqg==
-X-Gm-Message-State: AO0yUKWLmx3DvglLU8PtnQcpu3BRhEauEwNKCxa65/TMic5ZtTNzF0zU
-        SRy2zOl5x4Gw9jhWrQPIJNE1vA==
-X-Google-Smtp-Source: AK7set8Fyw8TIFE80cIdQQaNSL2L+M3bCLUt7FEH9FghDHD/wj4KnH/NSk2TBZENzRYuKxK5d6OVnA==
-X-Received: by 2002:a17:907:94c6:b0:8b1:2c37:ae97 with SMTP id dn6-20020a17090794c600b008b12c37ae97mr20440340ejc.43.1678271136253;
-        Wed, 08 Mar 2023 02:25:36 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:ff33:9b14:bdd2:a3da? ([2a02:810d:15c0:828:ff33:9b14:bdd2:a3da])
-        by smtp.gmail.com with ESMTPSA id v9-20020a17090651c900b008b2e4f88ed7sm7335405ejk.111.2023.03.08.02.25.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 02:25:35 -0800 (PST)
-Message-ID: <378db0d7-4d5a-a445-3e1a-ee6d8da5a9e2@linaro.org>
-Date:   Wed, 8 Mar 2023 11:25:34 +0100
+        d=1e100.net; s=20210112; t=1678271185;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AGmotPoG2120yB70tKLvm/NcUMvlY8fYIwzXAE2sT5E=;
+        b=y+3ZeUiUI1v+9FyaVDvqybYhp4ic75dt0i8Enmpr4Icsvso6d0cPMXy6JZFa22er58
+         2fVWlfzEQ5+PqSU9mMjK2lkoGVTkdSdZX3KywZ/D4+13dWjATZCTAxYceNz1jwLt0cpT
+         Dx894vgGQPL48TPSQr2+Md8pZCPOmF7V37sVEST910SsQHBUcvNxRIANVROq6/iEw1Z7
+         1nn4wsTBpBU+n6f0/CB5oNC+ExpjVVONyBs2VFZH0DDRrRV6tJ6mjFwhnQt/nXfsqBI2
+         NrhrA23jh9U3szXLbKyLuBt5d3RJ0viPwJSOCbccOhvWrIUuQValm5g50sguTQojRvLZ
+         KFeA==
+X-Gm-Message-State: AO0yUKUlb25Epxw0Z/vPgf1KbrWacFiHukfw7BnZjf9tD1a7QTHncorj
+        3h7y2blC5/lvqBne++qFYaNtIuMZ7/zpwyz1xmMMIA==
+X-Google-Smtp-Source: AK7set+nfFCDXVga6XlswqORZjNQ+XvGO2KUTaYGALjfouQWJGkZeidT1GEBY8YrejCjCD/g0wbdlikML4iY6myTQWA=
+X-Received: by 2002:a67:ea49:0:b0:411:a740:c3ea with SMTP id
+ r9-20020a67ea49000000b00411a740c3eamr11948516vso.0.1678271185398; Wed, 08 Mar
+ 2023 02:26:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 2/2] hwmon: ina2xx: add optional regulator support
-Content-Language: en-US
-To:     Svyatoslav Ryhel <clamor95@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230308094024.14115-1-clamor95@gmail.com>
- <20230308094024.14115-3-clamor95@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230308094024.14115-3-clamor95@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+References: <20230306151532.23246-1-sensor1010@163.com> <ZAZvH6CFtH4I1BOm@surfacebook>
+In-Reply-To: <ZAZvH6CFtH4I1BOm@surfacebook>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 8 Mar 2023 11:26:14 +0100
+Message-ID: <CAMRc=MemEXVcqL0axaduTrAZhT1Zx6APCY_qo2TM2E-aD=Seqw@mail.gmail.com>
+Subject: Re: [PATCH v1] drivers/gpio: remove redundant platform_set_drvdata()
+To:     andy.shevchenko@gmail.com
+Cc:     Lizhe <sensor1010@163.com>, linus.walleij@linaro.org,
+        geert+renesas@glider.be, info@metux.net, shc_work@mail.ru,
+        j-keerthy@ti.com, hoan@os.amperecomputing.com,
+        fancer.lancer@gmail.com, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        kaloz@openwrt.org, khalasa@piap.pl, keguang.zhang@gmail.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,43 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 10:40, Svyatoslav Ryhel wrote:
-> Some devices may need a specific supply provided
-> for this sensor to work properly, like p895 does.
-> 
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> ---
->  drivers/hwmon/ina2xx.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-> index 00fc70305a89..4a3e2b1bbe8b 100644
-> --- a/drivers/hwmon/ina2xx.c
-> +++ b/drivers/hwmon/ina2xx.c
-> @@ -119,6 +119,7 @@ struct ina2xx_data {
->  	long power_lsb_uW;
->  	struct mutex config_lock;
->  	struct regmap *regmap;
-> +	struct regulator *vdd_supply;
->  
->  	const struct attribute_group *groups[INA2XX_MAX_ATTRIBUTE_GROUPS];
->  };
-> @@ -656,6 +657,17 @@ static int ina2xx_probe(struct i2c_client *client)
->  		return PTR_ERR(data->regmap);
->  	}
->  
-> +	data->vdd_supply = devm_regulator_get_optional(dev, "vdd");
-> +	if (IS_ERR(data->vdd_supply))
-> +		return dev_err_probe(dev, PTR_ERR(data->vdd_supply),
-> +				     "failed to get vdd regulator\n");
-> +
-> +	ret = regulator_enable(data->vdd_supply);
-> +	if (ret < 0) {
-> +		dev_err(dev, "failed to enable vdd power supply\n");
-> +		return ret;
+On Mon, Mar 6, 2023 at 11:54=E2=80=AFPM <andy.shevchenko@gmail.com> wrote:
+>
+> Mon, Mar 06, 2023 at 11:15:32PM +0800, Lizhe kirjoitti:
+> > remove redundant platform_set_drvdata(),
+> > Because there is no place to use the platform_get_drvdata
+>
+> The commit message has to be improved:
+> - English grammar and punctuation
+> - style of func()
+> - clearer wording on what it all means
+>
+> Note, to get driver data the dev_get_drvdata() can be used. Do you aware =
+about
+> this? And hHow did you check these drivers?
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
-And where is disable? On each error path, removal etc.
+I would also add to that: you need to use your full first and family
+name in SoB because I assume you don't just go by "Lizhe".
 
-Best regards,
-Krzysztof
-
+Bartosz
