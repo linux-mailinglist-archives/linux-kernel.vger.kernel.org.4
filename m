@@ -2,61 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B72E66B0BB9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F6C6B0BC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbjCHOqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:46:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S231135AbjCHOrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232460AbjCHOpd (ORCPT
+        with ESMTP id S231239AbjCHOqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:45:33 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4C5BC7AB
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:44:03 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 8740367373; Wed,  8 Mar 2023 15:43:43 +0100 (CET)
-Date:   Wed, 8 Mar 2023 15:43:43 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Danilo Krummrich <dakr@redhat.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH] maple_tree: export symbol mas_preallocate()
-Message-ID: <20230308144343.GA16259@lst.de>
-References: <20230302011035.4928-1-dakr@redhat.com> <20230302015242.xi3y53okc4skmonn@revolver> <9abef101-3a9b-0bdd-7139-ced7d5e28ebe@suse.cz> <da65d59e-f918-d7d5-644b-33cc51c2ba6c@redhat.com>
+        Wed, 8 Mar 2023 09:46:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12312C66B;
+        Wed,  8 Mar 2023 06:44:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EC2A6185C;
+        Wed,  8 Mar 2023 14:44:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 506A6C433D2;
+        Wed,  8 Mar 2023 14:44:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678286675;
+        bh=x7K563D1bIPVbxvD9d60t5KyNe2ANsTBa7TdsK1Ilp4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DNPAEiW0QndoNYuOw3x1ioiPS/T4IXPPHRn2fXqkMUSPPq+srjASJOidgqQ2xznt5
+         yruCKQY+EkPuy7DryxJxvSbyzOrVTldp0Ptzg53glTSjffsYpxXi6B7T15W/8+fDFe
+         GYv3pSGOS7IqnA9ciVEA2jSncLT80neJnnz77fGw=
+Date:   Wed, 8 Mar 2023 15:44:32 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     stable@vger.kernel.org, Thierry Reding <treding@nvidia.com>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 0000/1000] 6.2.3-rc2 review
+Message-ID: <ZAifUN1XpQ/ojXz8@kroah.com>
+References: <20230308091912.362228731@linuxfoundation.org>
+ <6883f095-cf2b-2c45-5786-a46ba1c13dd7@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <da65d59e-f918-d7d5-644b-33cc51c2ba6c@redhat.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <6883f095-cf2b-2c45-5786-a46ba1c13dd7@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 03:34:29PM +0100, Danilo Krummrich wrote:
-> On 3/8/23 11:59, Vlastimil Babka wrote:
->> On 3/2/23 02:52, Liam R. Howlett wrote:
->>> Thanks for the patch.  This should indeed be exported.
->>>
->>> Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
->>
->> What uses it? Don't we export only things used by in-kernel modules?
->
-> mas_preallocate() is part of the maple tree's 'Advanced API'. All other 
-> functions of this API are exported already.
->
-> More specifically, e.g. mas_store_prealloc() is exported which doesn't make 
-> a lot of sense without mas_preallocate() being available too.
->
-> I don't think it is used outside of mm yet, but as a generic tree 
-> implementation maple tree is pretty likely to be used in code built as 
-> module, e.g. drivers.
+On Wed, Mar 08, 2023 at 01:49:30PM +0000, Jon Hunter wrote:
+> Hi Greg,
+> 
+> On 08/03/2023 09:29, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 6.2.3 release.
+> > There are 1000 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Fri, 10 Mar 2023 09:16:12 +0000.
+> > Anything received after that time might be too late.
+> > 
+> > The whole patch series can be found in one patch at:
+> > 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.3-rc2.gz
+> > or in the git tree and branch at:
+> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> > and the diffstat can be found below.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > 
+> > -------------
+> > Pseudo-Shortlog of commits:
+> 
+> ...
+> 
+> > Thierry Reding <treding@nvidia.com>
+> >      arm64: tegra: Bump #address-cells and #size-cells
+> 
+> 
+> The above change introduced a regression for Tegra, which Thierry has since
+> fixed [0]. Please can you drop this for now?
 
-If anyone wants to use they can add the export as needed. 
+Now dropped, and the patch after this in the series as well.
+
+thanks,
+
+greg k-h
