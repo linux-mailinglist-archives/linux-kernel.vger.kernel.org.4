@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F300C6AFEDB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 07:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1546AFEDD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 07:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjCHGYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 01:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
+        id S229718AbjCHGYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 01:24:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjCHGYO (ORCPT
+        with ESMTP id S229795AbjCHGYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 01:24:14 -0500
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4F2911CB
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 22:24:12 -0800 (PST)
-Received: by mail-ua1-x92c.google.com with SMTP id g19so10534325ual.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 22:24:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678256651;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7iEsdmzySCAHETYroYPIVFn331WafPxHl+LoZueYXCE=;
-        b=s1pfimS8PsuNvnwnbXrIwD1a6+s8Q8xVAtoVmzs39BvDvmjChb3lvA8g9f4p6kzUQN
-         PYa0TrMi6CF5P4CF+NSjR3mzqEMvjkCgg7gaetmDcTBCNAj1telj4/4UWhDB6wKa0CPV
-         yFvvSyEFZU3QwGZoq3ukY9Y0lF07bG7GVf3YfSHY+w2c6XKb4pt+Figa0n6CQyLdycry
-         Z7e2rUYcQh+Pt7FLIDF2/k2uJSV3/qhZxZh8Q4xX4cJ+TWlLcvW4sp8P7luwmxinj8c4
-         LYGRsmaH6yVHlccV7wr+KozpXdxtZprNqhPkj4BicJgXz+8kutShpOtccavpZ4Fv7hzf
-         GRMA==
+        Wed, 8 Mar 2023 01:24:22 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6434893E27
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 22:24:21 -0800 (PST)
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A2E6E3F592
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:24:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678256659;
+        bh=wzfVYu1lc6GVwDKq6EPUswqzMBTxU3gzvumtlNc5knw=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=mZa84yCfQYdZfgdlsWMnM2zMm2snRgOMhTgOyvYRBHMdLeAlNymM7rf0pT3skOPod
+         SUSF28UDdiN1dC+NfUyS0oiqgGqSF0NKlsKzFlkyxpTY02vKl2LAWdUp2bfoDQ7Qfg
+         kWT8pSOHToMZ4eFIDVXTFE9AV30Xph1LLN+wBuD035oiioNs/8PrNAS9tYFt6jEDqY
+         ZJCyOmu7GffHDSP47Jt0zDOTzaYJjDcfg77+8lT5f3k2QJCDLaPdYpB8ATmggYTGxS
+         WKCrAG+vBBm8VL9XOAe30eyFZOnIQh1k/lvSTdGtxsSlgknKEA/SL9hIqIJKLrmnIy
+         gCR6E+aJNhjFg==
+Received: by mail-pg1-f198.google.com with SMTP id 10-20020a63030a000000b004fb64e929f2so3614256pgd.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 22:24:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678256651;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7iEsdmzySCAHETYroYPIVFn331WafPxHl+LoZueYXCE=;
-        b=tHa2zJaO/jFjQbU5AqWrRmxVv/lmo+rBq8laudVlB9jXBcs/J/JNBdG4JeReWNGDZ6
-         2RYWk5G3ALoSg/ScyKU9CtOZRG8inTwl8OCzUPZ7C9ViPvkK7Zvf+ypo3NuZT/Imutnj
-         ULYWN+pBcKMrmsCq/OSh0ABMuvqg1/ZVuxalkbo5VxO0TqaFbstCbWwmF760U4fOZvCK
-         K0kv8DiuuH/ocFFL4wMnl4jlnsLhOdJCsNBSqIBFREXqUZ6c6eyJla8yxMWlGWZlPbzd
-         hnGRkgnZTTzobBy2/vptyuntrW0S4XGw0BMU/2ULvFO2USNBSZjAwp1hzTtVOt2Z7re0
-         M+eA==
-X-Gm-Message-State: AO0yUKUuJ7WbSIie0GnSH8uZaJvOTk6ZL8M9SczK8MUqLdWQwz421jDw
-        QKcg3sKhVgEl5m+T8GErMW1PqMBDWjiUJJJ+Wo3T1YGSrQdtsRaerbI=
-X-Google-Smtp-Source: AK7set8A7ktAm+MaUEFVkop8QSnVHXif7b1sfffl7ZZNI3unrHh0vcS4Y4foM5hA5gVpoOaGfpTAB7xd6JrSDkGv7f0=
-X-Received: by 2002:ab0:4a12:0:b0:68b:b624:7b86 with SMTP id
- q18-20020ab04a12000000b0068bb6247b86mr11470456uae.2.1678256651091; Tue, 07
- Mar 2023 22:24:11 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678256658;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wzfVYu1lc6GVwDKq6EPUswqzMBTxU3gzvumtlNc5knw=;
+        b=XFoFqXDePVpeSLMaMx/kMPQyFGF/3U6aAjrCIwNVCpWi+j4Uwa93kf1wyzLF69Mq/e
+         eSf2VIIFv6srbNH8Y++beZKxIKRCpUF1uO5SqBxiYScbKrfYdZwhxHFD6bY1XCHW3i0/
+         cEF0GbGdPaMNen+g9JHOtC4cs3MOZfm5O0kR44JLm1nkexHWzaEMEKhpmfVM3pQHE9pa
+         mbazSO0OJvCRn6Ii5xk8kXmPjGuvaqGyJJVUdWbpJ7DyzgoEqhW7CGPihAS7sWrHiGxy
+         RC6vYPUxvIp8ajaCxPvRcV+5E8oS6lmKE+X2ZAasw8381u5fnBwSxzTlgWFWBT/9ahIX
+         q8Sg==
+X-Gm-Message-State: AO0yUKWLMNgt50rAYBr0TDA1RjGKl59ElUctiBl1WquOlEcJaBZXAWmf
+        4ixlk4ra27B6yTDnl03dZwDbcEEvf+LuDmlUXdCYmqVvtXwjcYon54KSF9o8sSOQxARfGj7DL0R
+        r7G2p7O3c+EzoesChE/OXtkcqhopaVzn5TJPG8x/o2w==
+X-Received: by 2002:a05:6a20:43a2:b0:cc:491e:1a1d with SMTP id i34-20020a056a2043a200b000cc491e1a1dmr19598046pzl.22.1678256658058;
+        Tue, 07 Mar 2023 22:24:18 -0800 (PST)
+X-Google-Smtp-Source: AK7set/DOL38H9AJGkzT4lB9JqZv9w9kRHSG13Kd5d2wqX17J9dmFKh4a6k4ZQTLCkXcYQd5DBr75A==
+X-Received: by 2002:a05:6a20:43a2:b0:cc:491e:1a1d with SMTP id i34-20020a056a2043a200b000cc491e1a1dmr19598030pzl.22.1678256657704;
+        Tue, 07 Mar 2023 22:24:17 -0800 (PST)
+Received: from canonical.com (2001-b011-3007-39ac-575c-b8c5-b4ff-8627.dynamic-ip6.hinet.net. [2001:b011:3007:39ac:575c:b8c5:b4ff:8627])
+        by smtp.gmail.com with ESMTPSA id y8-20020a655a08000000b00502e48db9aesm8562588pgs.53.2023.03.07.22.24.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 22:24:17 -0800 (PST)
+From:   Koba Ko <koba.ko@canonical.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V2] platform/x86: dell-laptop: Register ctl-led for speaker-mute
+Date:   Wed,  8 Mar 2023 14:24:14 +0800
+Message-Id: <20230308062414.1048913-1-koba.ko@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 8 Mar 2023 11:53:59 +0530
-Message-ID: <CA+G9fYvi5VHtAidNJMvXuAyutC+ByA9UL9uNnUYqtgKn8mPUiQ@mail.gmail.com>
-Subject: next: arm: multi_v5_defconfig : drivers/clk/mvebu/kirkwood.c:358:1:
- error: expected identifier or '('
-To:     linux-clk <linux-clk@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,93 +76,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Results from Linaro=E2=80=99s test farm.
-The arm multi_v5_defconfig builds failed on Linux next-20230308 with
-gcc-12, gcc-8 and clang-16.
+Some platforms have the speaker-mute led and
+current driver doesn't control it.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+If the platform support the control of speaker-mute led, register it
 
-Regressions found on arm:
-  - arm-clang-16-multi_v5_defconfig
-  - arm-gcc-8-multi_v5_defconfig
-  - arm-clang-16-multi_v5_defconfig-65236a87
-  - arm-gcc-10-lkftconfig-perf
-  - arm-clang-nightly-multi_v5_defconfig
-  - arm-clang-nightly-multi_v5_defconfig-65236a87
-  - arm-gcc-12-multi_v5_defconfig
-  - arm-gcc-12-multi_v5_defconfig-65236a87
+Signed-off-by: Koba Ko <koba.ko@canonical.com>
 
+V2: Remove the dell-privacy rule for speaker-mute.
+---
+ drivers/platform/x86/dell/dell-laptop.c | 42 +++++++++++++++++++++++++
+ drivers/platform/x86/dell/dell-smbios.h |  2 ++
+ 2 files changed, 44 insertions(+)
 
-drivers/clk/mvebu/kirkwood.c:358:1: error: expected identifier or '('
-CLK_OF_DECLARE(98dx1135_clk, "marvell,mv98dx1135-core-clock",
-^
-include/linux/clk-provider.h:1367:21: note: expanded from macro 'CLK_OF_DEC=
-LARE'
-        static void __init name##_of_clk_init_declare(struct device_node *n=
-p) \
-                           ^
-<scratch space>:134:1: note: expanded from here
-98dx1135_clk_of_clk_init_declare
-^
-drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal con=
-stant
-include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_DEC=
-LARE'
-        OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
-                                        ^
-<scratch space>:135:3: note: expanded from here
-98dx1135_clk_of_clk_init_declare
-  ^
-drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal con=
-stant
-include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_DEC=
-LARE'
-        OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
-                                        ^
-<scratch space>:135:3: note: expanded from here
-98dx1135_clk_of_clk_init_declare
-  ^
-drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal con=
-stant
-include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_DEC=
-LARE'
-        OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
-                                        ^
-<scratch space>:135:3: note: expanded from here
-98dx1135_clk_of_clk_init_declare
-  ^
-4 errors generated.
-make[5]: *** [scripts/Makefile.build:252: drivers/clk/mvebu/kirkwood.o] Err=
-or 1
+diff --git a/drivers/platform/x86/dell/dell-laptop.c b/drivers/platform/x86/dell/dell-laptop.c
+index e92c3ad06d696..5ed628617f63c 100644
+--- a/drivers/platform/x86/dell/dell-laptop.c
++++ b/drivers/platform/x86/dell/dell-laptop.c
+@@ -97,6 +97,7 @@ static struct rfkill *bluetooth_rfkill;
+ static struct rfkill *wwan_rfkill;
+ static bool force_rfkill;
+ static bool micmute_led_registered;
++static bool mute_led_registered;
+ 
+ module_param(force_rfkill, bool, 0444);
+ MODULE_PARM_DESC(force_rfkill, "enable rfkill on non whitelisted models");
+@@ -2177,6 +2178,34 @@ static struct led_classdev micmute_led_cdev = {
+ 	.default_trigger = "audio-micmute",
+ };
+ 
++static int mute_led_set(struct led_classdev *led_cdev,
++			   enum led_brightness brightness)
++{
++	struct calling_interface_buffer buffer;
++	struct calling_interface_token *token;
++	int state = brightness != LED_OFF;
++
++	if (state == 0)
++		token = dell_smbios_find_token(GLOBAL_MUTE_DISABLE);
++	else
++		token = dell_smbios_find_token(GLOBAL_MUTE_ENABLE);
++
++	if (!token)
++		return -ENODEV;
++
++	dell_fill_request(&buffer, token->location, token->value, 0, 0);
++	dell_send_request(&buffer, CLASS_TOKEN_WRITE, SELECT_TOKEN_STD);
++
++	return 0;
++}
++
++static struct led_classdev mute_led_cdev = {
++	.name = "platform::mute",
++	.max_brightness = 1,
++	.brightness_set_blocking = mute_led_set,
++	.default_trigger = "audio-mute",
++};
++
+ static int __init dell_init(void)
+ {
+ 	struct calling_interface_token *token;
+@@ -2230,6 +2259,15 @@ static int __init dell_init(void)
+ 		micmute_led_registered = true;
+ 	}
+ 
++	if (dell_smbios_find_token(GLOBAL_MUTE_DISABLE) &&
++	    dell_smbios_find_token(GLOBAL_MUTE_ENABLE)) {
++		mute_led_cdev.brightness = ledtrig_audio_get(LED_AUDIO_MUTE);
++		ret = led_classdev_register(&platform_device->dev, &mute_led_cdev);
++		if (ret < 0)
++			goto fail_led;
++		mute_led_registered = true;
++	}
++
+ 	if (acpi_video_get_backlight_type() != acpi_backlight_vendor)
+ 		return 0;
+ 
+@@ -2277,6 +2315,8 @@ static int __init dell_init(void)
+ fail_backlight:
+ 	if (micmute_led_registered)
+ 		led_classdev_unregister(&micmute_led_cdev);
++	if (mute_led_registered)
++		led_classdev_unregister(&mute_led_cdev);
+ fail_led:
+ 	dell_cleanup_rfkill();
+ fail_rfkill:
+@@ -2299,6 +2339,8 @@ static void __exit dell_exit(void)
+ 	backlight_device_unregister(dell_backlight_device);
+ 	if (micmute_led_registered)
+ 		led_classdev_unregister(&micmute_led_cdev);
++	if (mute_led_registered)
++		led_classdev_unregister(&mute_led_cdev);
+ 	dell_cleanup_rfkill();
+ 	if (platform_device) {
+ 		platform_device_unregister(platform_device);
+diff --git a/drivers/platform/x86/dell/dell-smbios.h b/drivers/platform/x86/dell/dell-smbios.h
+index 75fa8ea0476dc..eb341bf000c67 100644
+--- a/drivers/platform/x86/dell/dell-smbios.h
++++ b/drivers/platform/x86/dell/dell-smbios.h
+@@ -34,6 +34,8 @@
+ #define KBD_LED_AUTO_100_TOKEN	0x02F6
+ #define GLOBAL_MIC_MUTE_ENABLE	0x0364
+ #define GLOBAL_MIC_MUTE_DISABLE	0x0365
++#define GLOBAL_MUTE_ENABLE	0x058C
++#define GLOBAL_MUTE_DISABLE	0x058D
+ 
+ struct notifier_block;
+ 
+-- 
+2.34.1
 
-Build details,
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230308/te=
-strun/15340690/suite/build/test/gcc-12-multi_v5_defconfig/history/
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230308/te=
-strun/15340737/suite/build/test/clang-16-multi_v5_defconfig/history/
-
-Build details:
------------
-  build_name: gcc-12-multi_v5_defconfig
-  git_describe: next-20230308
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: fc31900c948610e7b5c2f15fb7795832c8325327
-  git_short_log: fc31900c9486 ("Add linux-next specific files for 20230308"=
-)
-  config: https://storage.tuxsuite.com/public/linaro/lkft/builds/2MiJgpcJnp=
-b5pXUw3zA2ZxRByOb/config
-
-Steps to reproduce:
-------------------
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-
-tuxmake --runtime podman --target-arch arm --toolchain gcc-12
---kconfig multi_v5_defconfig
-
---
-Linaro LKFT
-https://lkft.linaro.org
