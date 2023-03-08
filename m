@@ -2,131 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088E46B0EAA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:26:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECA86B0EAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjCHQ0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:26:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
+        id S231210AbjCHQ1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbjCHQ0f (ORCPT
+        with ESMTP id S230333AbjCHQ0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:26:35 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88676CB65C;
-        Wed,  8 Mar 2023 08:26:29 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id s12so18598820qtq.11;
-        Wed, 08 Mar 2023 08:26:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678292788;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=z+4uYXTHdSZJGlTQ4yJuaUKIcEogMIg606wt+PsHQ10=;
-        b=kswqtEU7Xj6n7CisW2qiImBeQaeJAQosHCyMQLF85hJ3RIz6SE9Rt2WZbQXfYtQarS
-         w1QOwuboYFZVWg3MH8bUqqwclcgHc3MmuZZUsydleg5jg4zMt4wgbQMRkOBzw3Zucdt8
-         bDfH1puKOJ2+Jws7pHS692luihVb02mlaXjFcfe/mkc0SVVtNkvvaMGjhmgRWz60Hrhj
-         hsoZyvjuIAA64kBJePxrgKD3g/6sRoG8j42SBuX/XEEqcwDNrw4HvoAAvVN3G64Ld9aT
-         Efv9BEBWmzR2cSAbKApAMZDiqB5AIM5zyFGrDWK2hfiWrdLkaCvW3wS224bS2oq9JkyC
-         BQvA==
+        Wed, 8 Mar 2023 11:26:38 -0500
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C31C9A7A;
+        Wed,  8 Mar 2023 08:26:32 -0800 (PST)
+Received: by mail-pj1-f54.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so2977143pjh.0;
+        Wed, 08 Mar 2023 08:26:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678292788;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z+4uYXTHdSZJGlTQ4yJuaUKIcEogMIg606wt+PsHQ10=;
-        b=nAar0eay/qUiVhrG6/siwQ138i+Btlf7NSquoM8pTduoDhdDLt81WOuYpU5Tnquuiy
-         WLQGEu4JUAhwf8338yGQ4tHRHpdHtOBUT74OvMdgUjRNVyNg3SW2z82/nlpGNmpf+luh
-         j2GGxn5OxMBCuzSmpHrbZtZt+kmOnF9RAC2Eb6A147uKkUmty+pjqLaYeUtbRITCf2Ns
-         rKtVgSadH0OB2jXdHPMCdWjWJnH0mxmX2MtGNCaShO9Sq/Ty6ei4BMPNJ3KTtpAXGv7B
-         cjgpTOpx3pOC2p1Q7td2B2vrvGcQuPhf5ch80KTV6mMkHk5hwDgyQ7+HHdjB2LDnGOwa
-         R9Hw==
-X-Gm-Message-State: AO0yUKVHtcWzUSVgvIflb4j8y2nCVapEmaSSMEXtUIsBpgKV41DZSIgE
-        zYWGkkco291ieAQgEVou4jM=
-X-Google-Smtp-Source: AK7set+0qHmJ/1GfUszz/r9Eo2DlcBq2rsqeob7MHbP84HYNS4R6ufmoVsorbLyoGDsjhwgPzL4ESw==
-X-Received: by 2002:a05:622a:4c6:b0:3bf:cd7a:dd14 with SMTP id q6-20020a05622a04c600b003bfcd7add14mr30017906qtx.12.1678292788636;
-        Wed, 08 Mar 2023 08:26:28 -0800 (PST)
-Received: from MSI-FindNS.localdomain ([107.191.40.138])
-        by smtp.gmail.com with ESMTPSA id w20-20020a05620a0e9400b0073b8459d221sm11619813qkm.31.2023.03.08.08.26.24
+        d=1e100.net; s=20210112; t=1678292791;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LQUZMW3ATClSf/r8H/ZNppEXmMdqJP2TRdMQdlzdBEU=;
+        b=mFReNd43myvP8sDRapVG/f0Mh5fq+amruVFC0XBXIDWMXg4hfE390EbOCvAmdWYC2z
+         JChEMlSFX83AY8Q14XMcuyjQM/FJ4Bxp3kDZFHTK35PmmLvz5C72wEv0MrDRS9KCoNKR
+         fGlevMH9T2ai8edqwEocZ1S09RZRH7jhPQ2f94kq2PVA9ZA9KHXXF8VO3ekaRnhDT4YA
+         DCCzvlEy5ZuOEYUf6tfQFV8Ds7Ca0iFN38k02EAcQ/th33+GsGMi2Gzqtu7ARGitpVSW
+         l2VKMVSWP7ZTjb3aOjY5zTlzJX7+V4y1WutlEZo1EbPI5EzZ4Y8oqfE3WbiF7aoE6Rdw
+         xYlg==
+X-Gm-Message-State: AO0yUKXdwuoEJmorcKBwL3po6hFJihJMgXB7V0Mo03h09dcoNeic2veG
+        yyF3eqV4ZyL33BKd25JvmeQ=
+X-Google-Smtp-Source: AK7set/ljF2NSlK5iXBS5nOBvYwYALtBT6qGPN3NaOl9NmTJAqQftRWcEmjCkHVWk/x0lRsa1htRvA==
+X-Received: by 2002:a17:90b:1b0f:b0:237:c18d:c459 with SMTP id nu15-20020a17090b1b0f00b00237c18dc459mr19250067pjb.31.1678292791395;
+        Wed, 08 Mar 2023 08:26:31 -0800 (PST)
+Received: from localhost.localdomain ([14.4.134.166])
+        by smtp.gmail.com with ESMTPSA id mv15-20020a17090b198f00b0023087e8adf8sm9363818pjb.21.2023.03.08.08.26.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 08:26:28 -0800 (PST)
-From:   Yue Zhao <findns94@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     roman.gushchin@linux.dev, hannes@cmpxchg.org, mhocko@kernel.org,
-        shakeelb@google.com, muchun.song@linux.dev, willy@infradead.org,
-        linux-mm@kvack.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tangyeechou@gmail.com,
-        Yue Zhao <findns94@gmail.com>
-Subject: [PATCH v3, 4/4] mm, memcg: Prevent memory.soft_limit_in_bytes load/store tearing
-Date:   Thu,  9 Mar 2023 00:25:55 +0800
-Message-Id: <20230308162555.14195-5-findns94@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230308162555.14195-1-findns94@gmail.com>
-References: <20230308162555.14195-1-findns94@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 08 Mar 2023 08:26:31 -0800 (PST)
+From:   Leesoo Ahn <lsahn@ooseel.net>
+To:     lsahn@ooseel.net
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH net-next] net: stmmac: call stmmac_finalize_xdp_rx() on a condition
+Date:   Thu,  9 Mar 2023 01:26:18 +0900
+Message-Id: <20230308162619.329372-1-lsahn@ooseel.net>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The knob for cgroup v1 memory controller: memory.soft_limit_in_bytes
-is not protected by any locking so it can be modified while it is used.
-This is not an actual problem because races are unlikely.
-But it is better to use [READ|WRITE]_ONCE to prevent compiler from
-doing anything funky.
+The current codebase calls the function no matter net device has XDP
+programs or not. So the finalize function is being called everytime when RX
+bottom-half in progress. It needs a few machine instructions for nothing
+in the case that XDP programs are not attached at all.
 
-The access of memcg->soft_limit is lockless,
-so it can be concurrently set at the same time as we are
-trying to read it. All occurrences of memcg->soft_limit
-are updated with [READ|WRITE]_ONCE.
+Lets it call the function on a condition that if xdp_status variable has
+not zero value. That means XDP programs are attached to the net device
+and it should be finalized based on the variable.
 
-Signed-off-by: Yue Zhao <findns94@gmail.com>
+The following instructions show that it's better than calling the function
+unconditionally.
+
+  0.31 │6b8:   ldr     w0, [sp, #196]
+       │    ┌──cbz     w0, 6cc
+       │    │  mov     x1, x0
+       │    │  mov     x0, x27
+       │    │→ bl     stmmac_finalize_xdp_rx
+       │6cc:└─→ldr    x1, [sp, #176]
+
+with 'if (xdp_status)' statement, jump to '6cc' label if xdp_status has
+zero value.
+
+Signed-off-by: Leesoo Ahn <lsahn@ooseel.net>
 ---
- mm/memcontrol.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 5b7062d0f5e0..13ec89c45389 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -3728,7 +3728,7 @@ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
- 	case RES_FAILCNT:
- 		return counter->failcnt;
- 	case RES_SOFT_LIMIT:
--		return (u64)memcg->soft_limit * PAGE_SIZE;
-+		return (u64)READ_ONCE(memcg->soft_limit) * PAGE_SIZE;
- 	default:
- 		BUG();
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index e4902a7bb61e..53c6e9b3a0c2 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -5145,7 +5145,8 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
+ 		rx_q->state.len = len;
  	}
-@@ -3870,7 +3870,7 @@ static ssize_t mem_cgroup_write(struct kernfs_open_file *of,
- 		if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
- 			ret = -EOPNOTSUPP;
- 		} else {
--			memcg->soft_limit = nr_pages;
-+			WRITE_ONCE(memcg->soft_limit, nr_pages);
- 			ret = 0;
- 		}
- 		break;
-@@ -5347,7 +5347,7 @@ mem_cgroup_css_alloc(struct cgroup_subsys_state *parent_css)
- 		return ERR_CAST(memcg);
  
- 	page_counter_set_high(&memcg->memory, PAGE_COUNTER_MAX);
--	memcg->soft_limit = PAGE_COUNTER_MAX;
-+	WRITE_ONCE(memcg->soft_limit, PAGE_COUNTER_MAX);
- #if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
- 	memcg->zswap_max = PAGE_COUNTER_MAX;
- #endif
-@@ -5502,7 +5502,7 @@ static void mem_cgroup_css_reset(struct cgroup_subsys_state *css)
- 	page_counter_set_min(&memcg->memory, 0);
- 	page_counter_set_low(&memcg->memory, 0);
- 	page_counter_set_high(&memcg->memory, PAGE_COUNTER_MAX);
--	memcg->soft_limit = PAGE_COUNTER_MAX;
-+	WRITE_ONCE(memcg->soft_limit, PAGE_COUNTER_MAX);
- 	page_counter_set_high(&memcg->swap, PAGE_COUNTER_MAX);
- 	memcg_wb_domain_size_changed(memcg);
- }
+-	stmmac_finalize_xdp_rx(priv, xdp_status);
++	if (xdp_status)
++		stmmac_finalize_xdp_rx(priv, xdp_status);
+ 
+ 	priv->xstats.rx_pkt_n += count;
+ 	priv->xstats.rxq_stats[queue].rx_pkt_n += count;
+@@ -5425,7 +5426,8 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+ 		rx_q->state.len = len;
+ 	}
+ 
+-	stmmac_finalize_xdp_rx(priv, xdp_status);
++	if (xdp_status)
++		stmmac_finalize_xdp_rx(priv, xdp_status);
+ 
+ 	stmmac_rx_refill(priv, queue);
+ 
 -- 
-2.17.1
+2.34.1
 
