@@ -2,76 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D626B134F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:43:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE046B1356
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbjCHUnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 15:43:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
+        id S230395AbjCHUr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 15:47:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbjCHUn3 (ORCPT
+        with ESMTP id S230369AbjCHUrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:43:29 -0500
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8719F5AB6F;
-        Wed,  8 Mar 2023 12:43:27 -0800 (PST)
-Received: from [192.168.1.103] (178.176.73.253) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 8 Mar 2023
- 23:43:25 +0300
-Subject: Re: [PATCH 07/32] pata_parport-bpck6: remove org_* from struct
- ppc_storage
-To:     Ondrej Zary <linux@zary.sk>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
-        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230307224627.28011-1-linux@zary.sk>
- <20230307224627.28011-8-linux@zary.sk>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <bf18e70f-9260-feff-ace2-db0df20073b8@omp.ru>
-Date:   Wed, 8 Mar 2023 23:43:24 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 8 Mar 2023 15:47:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D576F234EF;
+        Wed,  8 Mar 2023 12:47:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FF25618C4;
+        Wed,  8 Mar 2023 20:47:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66F7EC433D2;
+        Wed,  8 Mar 2023 20:47:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678308442;
+        bh=6E1H2Z/E8dY9nZuxGrA6Q8VG9UE5a8kZIkR58SCgZT8=;
+        h=From:Date:Subject:To:Cc:From;
+        b=lHO2gpSSg/evJCiJhdwipU4Xzs14heHT0s+FrOC/gnGSAQP1/8pIcWAn/ICVHH8cH
+         O9nAZD88jK9xnqtE6oGBlfqrlzbjIgFGqfMWQjRTRPXg8uoSyUNAeVbvaVFfXwb9lF
+         hVGNlywVke0QNxKdIoWSvbYG+aJsqqFlB9lAgNVaoxeXsZ0iInvklpOA2hMjrKlGuR
+         1+M3vEDziMz9L7bVxrSfzlxsnZS0ddwslZPTDK+03dRwm3JTxLLqdTdcKMpFUxMGk5
+         H4x+0BK5jtzTQQAyF8qxt7VgkKfvrvICYOE2Y3JOtnrl5eQVFo5qUMTdLBRg0q9x6d
+         QjzlwUcZR+FoA==
+From:   Nathan Chancellor <nathan@kernel.org>
+Date:   Wed, 08 Mar 2023 13:47:11 -0700
+Subject: [PATCH] clk: Avoid invalid function names in CLK_OF_DECLARE()
 MIME-Version: 1.0
-In-Reply-To: <20230307224627.28011-8-linux@zary.sk>
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.73.253]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 03/08/2023 20:18:45
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 175961 [Mar 08 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 507 507 08d345461d9bcca7095738422a5279ab257bb65a
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.253
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 03/08/2023 20:21:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 3/8/2023 5:25:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Message-Id: <20230308-clk_of_declare-fix-v1-1-317b741e2532@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAE70CGQC/x2N3QrCMAxGX2Xk2kBt/dl8FZGRdqkLzk4SEWHs3
+ e28PJzv8C1grMIGl2YB5Y+YzKXCftdAGqncGWWoDN754IJrMU2Pfs79wGkiZczyxUOObXc+HTs
+ fGGoYyRijUknjlj7J3qybeCnX/f/telvXHwkqWOd9AAAA
+To:     mturquette@baylibre.com, sboyd@kernel.org
+Cc:     linus.walleij@linaro.org, saravanak@google.com,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3131; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=6E1H2Z/E8dY9nZuxGrA6Q8VG9UE5a8kZIkR58SCgZT8=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCkcX6JurS44elNhesQF177P12buWz7pzS4f2UlRdYWME
+ 8zd2mTfdZSyMIhxMMiKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJcL5lZDjRzvvp0KELkotc
+ 583n/241ofjNzYbvLRKqlgtffP51rW4/w/+Y1YG2fW8irLLsz9cdWjlvRsVH9mv2p7at5988b9H
+ eJVf4AA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,17 +64,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 1:46 AM, Ondrej Zary wrote:
+After commit c28cd1f3433c ("clk: Mark a fwnode as initialized when using
+CLK_OF_DECLARE() macro"), drivers/clk/mvebu/kirkwood.c fails to build:
 
-> org_data duplicates saved_r0 and org_ctrl duplicates saved_r2 in
-> pi->unit. Remove them.
-> 
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
+ drivers/clk/mvebu/kirkwood.c:358:1: error: expected identifier or '('
+ CLK_OF_DECLARE(98dx1135_clk, "marvell,mv98dx1135-core-clock",
+ ^
+ include/linux/clk-provider.h:1367:21: note: expanded from macro 'CLK_OF_DECLARE'
+         static void __init name##_of_clk_init_declare(struct device_node *np) \
+                            ^
+ <scratch space>:124:1: note: expanded from here
+ 98dx1135_clk_of_clk_init_declare
+ ^
+ drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal constant
+ include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_DECLARE'
+         OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
+                                         ^
+ <scratch space>:125:3: note: expanded from here
+ 98dx1135_clk_of_clk_init_declare
+   ^
+ drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal constant
+ include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_DECLARE'
+         OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
+                                         ^
+ <scratch space>:125:3: note: expanded from here
+ 98dx1135_clk_of_clk_init_declare
+   ^
+ drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal constant
+ include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_DECLARE'
+         OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
+                                         ^
+ <scratch space>:125:3: note: expanded from here
+ 98dx1135_clk_of_clk_init_declare
+   ^
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+C function names must start with either an alphabetic letter or an
+underscore. To avoid generating invalid function names from clock names,
+add two underscores to the beginning of the identifier.
 
-[...]
+Fixes: c28cd1f3433c ("clk: Mark a fwnode as initialized when using CLK_OF_DECLARE() macro")
+Suggested-by: Saravana Kannan <saravanak@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ include/linux/clk-provider.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-MBR, Sergey
+diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+index c9f5276006a0..6f3175f0678a 100644
+--- a/include/linux/clk-provider.h
++++ b/include/linux/clk-provider.h
+@@ -1364,12 +1364,12 @@ struct clk_hw_onecell_data {
+ };
+ 
+ #define CLK_OF_DECLARE(name, compat, fn) \
+-	static void __init name##_of_clk_init_declare(struct device_node *np) \
++	static void __init __##name##_of_clk_init_declare(struct device_node *np) \
+ 	{								\
+ 		fn(np);							\
+ 		fwnode_dev_initialized(of_fwnode_handle(np), true);	\
+ 	}								\
+-	OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
++	OF_DECLARE_1(clk, name, compat, __##name##_of_clk_init_declare)
+ 
+ /*
+  * Use this macro when you have a driver that requires two initialization
 
+---
+base-commit: 89dc65a7cc8a119c395c0931b12d7a514f9d2bcc
+change-id: 20230308-clk_of_declare-fix-4fb89765923e
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
