@@ -2,182 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575E26B0056
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 08:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 043E66B0055
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 08:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjCHH5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 02:57:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
+        id S229923AbjCHH5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 02:57:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjCHH51 (ORCPT
+        with ESMTP id S229708AbjCHH46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 02:57:27 -0500
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78299BA69;
-        Tue,  7 Mar 2023 23:57:25 -0800 (PST)
-Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32870bOR000488;
-        Tue, 7 Mar 2023 23:56:56 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=to : cc : from :
- subject : message-id : date : content-type : content-transfer-encoding :
- mime-version; s=PPS06212021;
- bh=2C7rLQGIKMxRpxTgBcz+nIxW2bd2ZyzFgcwNo4O78Ug=;
- b=PNnC6RMGxY2qKtv4C6Vwh9s1+tF7AGMTyWlhoErslFYJ0gO7s5WIj+j7w+wM6Fjqgqou
- /SygniAXF29y0lC8nyS3UfLslDo5n3qwhtAktjudaK9Is36qbfD+4iCsY5bv6ehMYntB
- quTujB8R827l9EhfGKwoC8croVIIIco9O2Hs0KX/C1QP7I3NdGAfgT3jWJ0W+ghKa/Sf
- uKzY90IrXd3g8ALjr18yc/io+KfqMraeZhyaBe6uNfgrvYQzenwoc88m+0Bv/B1exhbs
- 7Dt82FYc+XFNk29wT6yh0Ba2ybzZ8nn4I3QB/SBoFOWYAuPeBFWzc6XQZrVAObXUjjnJ wg== 
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2045.outbound.protection.outlook.com [104.47.51.45])
-        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3p6ffd09c2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 23:56:56 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PzR5J3UNAIMTJcSSSTgN/nO62sxvOAYSSIq+mo1sMz/J9p++h4CdPPn0ti1wqM5proxlnzrXOteOiVzrO7e9h06UA2n212azNYgNyeEiLVh6WD2frlu55qgyeIgt1B6C4c97cxd51wk3IA2OOBovcMsZZeBQ8nioUvPuZ0KSKoomTbqy/WvsOUKbqZVTvNHfpocGhCu1ZClDnc+rh2wgxu9mk9v/+dlwALGq78fPF24ZzaEKAJA6QoEq7KBxCEwY6zKqvrMIxxkUKKvp4Nth6LPsW7u5NaBSZ7q8t9n9s/dbpv0k1hLxxf7Kax79t7fFMZfrFfst+lL1rVvjZHANww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2C7rLQGIKMxRpxTgBcz+nIxW2bd2ZyzFgcwNo4O78Ug=;
- b=bGEQBGUwz2A+D5kPK7tr15QSBsyMzM985lg1eeBAsl2yU7TgBMtJi1nyLTaztAJfNvlE/axJaWUVCQ+AdXvbwQxqkYR/PdSZ2CC1YvNydSwackmycjf8o13xS7BbKzHcmB1Q25u78x8KVVnhCj72AClhOF3l7k9xiSmurSsSgvxLYapUFyjHtAGZMnAZ/D54syX+ywpI0xFpaxsMY/OP+Vpt5dAELF3PB8K+l6RkrI9O8fuXq03Sxl1Huk4tDLXcM9ixlf8eoQAZS7UiO4VZpZ6mXS2QZglwYRSa8ObeHS6IGp7dXLBEPUs/jawL0itWkDLqXBnRWT1vBxdyfQV37A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-Received: from MW5PR11MB5764.namprd11.prod.outlook.com (2603:10b6:303:197::8)
- by MW4PR11MB6984.namprd11.prod.outlook.com (2603:10b6:303:22e::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Wed, 8 Mar
- 2023 07:56:51 +0000
-Received: from MW5PR11MB5764.namprd11.prod.outlook.com
- ([fe80::7709:2bed:5653:b4d1]) by MW5PR11MB5764.namprd11.prod.outlook.com
- ([fe80::7709:2bed:5653:b4d1%4]) with mapi id 15.20.6156.028; Wed, 8 Mar 2023
- 07:56:51 +0000
-To:     will@kernel.org, mark.rutland@arm.com, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, linux@armlinux.org.uk
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   wangxiaolei <xiaolei.wang@windriver.com>
-Subject: perf record -e branch-misses ls > /dev/null
-Message-ID: <08994540-d132-6e49-f6a0-82d8dfd1f3f0@windriver.com>
-Date:   Wed, 8 Mar 2023 15:56:41 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-ClientProxiedBy: SI2PR04CA0006.apcprd04.prod.outlook.com
- (2603:1096:4:197::13) To MW5PR11MB5764.namprd11.prod.outlook.com
- (2603:10b6:303:197::8)
+        Wed, 8 Mar 2023 02:56:58 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1229BA77
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 23:56:56 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id ce7so9646569pfb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 23:56:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678262215;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FrwgidfL5ATDTcKj1WN5LLsg6LHsipfNpzW/NMIXfVc=;
+        b=k5P+q19svLG4J5CRTWrL14HGCAT+jvabDyWSyJ0VzPMzaW1jIr5T07EampCioeKdcg
+         OxvHwvsGQ0fwVyyWOAp3x0x/Q4QA9dfA7VSIdTD0jUhHOQmr01pgk5f+sqJUGNea4nks
+         3hhFMYV5jSe8VoTu9z3g05Ju37RCf/MDn8ujgwvjSOCxgYNkJeafbvhcMS7KTQTZbMVM
+         nLCTedoYF+Of/7XcKm7aQ6dTpeuITtd4UZ7X3ihoQCrWii9HK7LjfrB+XkUCBwok4U6m
+         0f94vF69JFYpKTzY/8BXtFqB7u9Jt9+e+5imuzRB+SQ0xXT4KUqLYnjM14LaZrpjBimA
+         HlsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678262215;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FrwgidfL5ATDTcKj1WN5LLsg6LHsipfNpzW/NMIXfVc=;
+        b=GnF3f8jpumNXgwtnemqz344KqrHzwEKNQs6NY1ndwxkppXDHIMGm/xnQvORWgJp5Dw
+         P7lAL0iJe5pHSem8lu+eETa0ClnGT+Z2HkHfKJlVaPQXdhhUERbgohuYlZyfP9htpIj6
+         HnvN36KWAWymhDv0Yu9lTgCAHQrwRrUsY24RqYnVeaeNJsfy4OhT+KgWEPY68efOhdVN
+         PcYKoRz4Iryv8j/UUk4LKnIvycoXeBtyu3wL8m+1ag7ZcxTaLWj/5DSv7kIMm2YIh0CR
+         U6bvs0iNAkemAK7jAajMdhwaoUKY0BbNdbo3OR9KkekUzOybzAxPiaGP/N8RWLWlSItF
+         A4NA==
+X-Gm-Message-State: AO0yUKWnsSLEdRWK6DFPunsqbnO2HMR88PeqKl+tpJfz+wNvYeZ7Z1eK
+        NBK7erpH1fBHAPTPF9n1MZOp
+X-Google-Smtp-Source: AK7set/szOUrKmNv9NhOizS3XUAjlmltJB2runIynxxL2Sww6s6HwR5K5QuVwmHQXrSEFRJZbSdL9g==
+X-Received: by 2002:a62:4ecb:0:b0:593:f191:966 with SMTP id c194-20020a624ecb000000b00593f1910966mr13799358pfb.1.1678262215533;
+        Tue, 07 Mar 2023 23:56:55 -0800 (PST)
+Received: from localhost.localdomain ([59.97.52.140])
+        by smtp.gmail.com with ESMTPSA id c17-20020a631c51000000b004facf728b19sm8631840pgm.4.2023.03.07.23.56.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 23:56:55 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH] arm64: dts: qcom: Remove "iommus" property from PCIe nodes
+Date:   Wed,  8 Mar 2023 13:26:48 +0530
+Message-Id: <20230308075648.134119-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW5PR11MB5764:EE_|MW4PR11MB6984:EE_
-X-MS-Office365-Filtering-Correlation-Id: b042ed92-91fa-4613-1c8e-08db1faaad42
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pO57rFPQmrL96kJiI7H+GgSb2cjHet+5Nyhzhn19mdv+knaTzzwc/tqipwnoDvFKMztrshhjAE3cuHUcu5VaOtspyaae+tyisQ3Z/JeiSnNxzVX7NXCHJQUep8RNvIpojJp2IytYQiabAv7Li90bSYexRV92iiHs4UIlXL9TTzT/u7+kWnfNMWwfmXngLIaT/VNyc0qHPUqnPtYwYVxOx34KuvzgE0RhW9Ax5XdVkAFMe+24Tta+qPvYhphxm0nOFGlEgrnEoBYt0gYLDpOUBLgeIDhTaxSwlVZGhH1UVsp6QZGdKbAOOy1+VY8K07/1ADgftqKcZeZ+rvQIOPQ6iMYQkGkhM6TeCtiwvYnJtTG8gVzY/Ai/kbu9iAx3+X+OedXxPHiNSVBQhhjA01I6atO6TUhwz/0hJADFaI7/ijsCM/Me2TzJgGqW1tW/Ec/Tyc5CyLTz+9uuOMY2ddZhmv1QBNk8LAJVvBFDmHT764f7CdLMA98izNLiUaOyMEJ3xaa3z+5H6dkifKmLPz8ntYGqyW+q3zkGjfP0vLlElJo0KcEJbfexO+QX4reeEl9OADJjvObBaLMfE6PdqeYb7FJzqwCiVX7fBzoVPyS8WphHPzOZPrBVauIB4CXnkaA6HywNO3PMzdcWtkidARJoxXFfhwgc3EVZqxbHMLNehMk6wA8vwkK124PgFR/ZVLK2kMi6+rTpxtLmA5nSU/0ow0twlQTKnqUcbvgxFIpz/BDcyOBs7synL58G/XHY1iYild9YDgN+ZK3mavhJ9CP5fyonnLEclJdHkcakwbUSYghU8xGFnONwDHE3umunDBmi
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5764.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(376002)(396003)(366004)(39850400004)(451199018)(36756003)(316002)(31696002)(86362001)(31686004)(2906002)(6486002)(186003)(41300700001)(26005)(5660300002)(66556008)(8676002)(66946007)(66476007)(4326008)(478600001)(6666004)(6506007)(2616005)(7416002)(6512007)(8936002)(921005)(38100700002)(43062005)(43740500002)(45980500001)(159843002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?THg1UjdIL2lZelJBUXcvcjdWNkdVVHN6Qk1lcWx5UmNzOEp0WjBUVC9jYWhG?=
- =?utf-8?B?bjFaU2RGUjl4dXB6N2lNSVVvVEFQUEp3dzc1K3ZNcnVIYWdVSHhjQ0l2WSt4?=
- =?utf-8?B?Ymw4S0JnSkJSeEVTZlRrejNxVHVIQW1lRmY3Z0VkNlhXUFJDVTJQNzQ0ZkFX?=
- =?utf-8?B?NzhLajd0MXREU1dCWDZIRWloV0lMS1FOYXlPbWN6b2grNWRjRmFzNk52dkow?=
- =?utf-8?B?ajZpbFcxZmtsU25oTWI2Um9UQkZWL3EwM2pYaW9KanFUUEl5OE9HbEJDdnQv?=
- =?utf-8?B?T1F1U2Y2OGh0b1BENjE3KzltRFI2RkxYb0ZTR0N2cnZIQ2lKUnp1VnpFYzBw?=
- =?utf-8?B?eXAzc05uUDV4cENuQUxPeUVITEhnVUx2UXpYV3ZXek1UWmd4eFcvTWFVTk9K?=
- =?utf-8?B?LzFUMHFXbmtPWGtTU0JVYXBxQm1QczVzQ05pTFFSMzVSWDVIS2VJZDNueFhY?=
- =?utf-8?B?K1BCMGR4eWFOYnNyZWtxRFVCN2p2dk1XTVd2aG15ZEs2V1ZZYzVpcVVwS0JX?=
- =?utf-8?B?V3Y4QWxmZUVkbHZVampsbVA3R1ZiUStIalBHNzh1MzUveVh6NjQzYmhPVWZN?=
- =?utf-8?B?T3AyRnF2MmF6VU5UQWlGbjVpbGp4YmZDNXRkajVkei9FY1Y3cnE1UEtsM2xN?=
- =?utf-8?B?Q2lXQkNZMlorZGU5WGNwNllyT2VOeGlZT3pyWDFlK3RwdnZRN1hNUzJmcVJZ?=
- =?utf-8?B?MUMvODhiZTFxcXUyZHVRSE95eWp4NGJ6Vmo5b2RrejB5WUdQN3FUbzI1MW9O?=
- =?utf-8?B?Q05wdGZzUlluUkZwV2xzM0prc0hLeWxTTVZqUENUVWx0TnNXeFI1UnhwWS9m?=
- =?utf-8?B?TnpwS1QzRVdodmI1UFJJWHBzVjhNbmZ2WHE4cVJPZ2VzOFBLdnB0UzJxSkNa?=
- =?utf-8?B?OXk4QmNHdCtiK1JpSTVhck1DLzFyOW02OWdIN00yYjh3WG5wazlXWXpaWFFp?=
- =?utf-8?B?ZktEVy8ydmVtVE83WGV5SVhxcVlJVmN5bEdVME9BQ040UVVuQ0RrTU5VdE80?=
- =?utf-8?B?anQ3b1p5OGg1Q0lnN0NIZmdGVldkNmVVWFZMemdzRWduZlgvbCtaSEdwZ043?=
- =?utf-8?B?WnU1cnR2ZFFyOEs1czNDT0FDNUNqUFhyV3g1SDlmb1NiNDNlY2VZejRKbURQ?=
- =?utf-8?B?QVhqTWphQ092VUZyQWNIQ0lTMjZUQjJxY0xwNW0vYTJ1aDlnWGtYU2Z1M0x5?=
- =?utf-8?B?V2V5K1JpUmk4alhZTFhjbDFQZERZbVhtaENnM3dpUm9Pb0tWNkMrMGdjb3hR?=
- =?utf-8?B?aklFMDFlUlZGMHIzNHNkZnhiZnJva0pIQUg3eTBPVjZUME8wTnJWTUhDSFZD?=
- =?utf-8?B?b0c4M2J3UE5DWTBTNFp4M3FDWE1tbDY3UFlyY1ROQWRBbnUvbGVXc29JcDNC?=
- =?utf-8?B?UWFPMzQ5VXF4YU8xL0ZKQUoyM1dmR0JpSFFLelA4dy9aaSt2ODZwSXl6Vy93?=
- =?utf-8?B?c09aUGJmRjYvekRheDN2VVAvU2x0WUdvY2t1c29nZXBWdmt0WmRyRnpNZDZp?=
- =?utf-8?B?TjYxQ21LaWsyQVcwNFNTdnNDOWQxTFdoUWZNeHcrdDEvZXArL1NsbGJJZjVX?=
- =?utf-8?B?WTJlNWdMMStmQmhVWFQybTRmMnJjcURUUHBXbHFMd1N5VFYvcUZvNjE3aS9z?=
- =?utf-8?B?Y3BaVW9NWmJtbGhWMmhLUW5IbVVuL3JjRTF3MUJLOFlNY0tNYmxKSjRYSHJh?=
- =?utf-8?B?ZWZzeTBmejFJamdySXQ3QjlDcmNIZTBDU0JYQmh5bUpmeEtXd1V1NU1hVGRS?=
- =?utf-8?B?RXB2NkJjZE5qVDFsamJqU1BYRElERGovTVFaR0daaFBENVhxWm8wSld3Rktv?=
- =?utf-8?B?WTZhRlhaaEExejVKYTFVUGlsc2FUVW1NOXZMSDhOUWpzSWxDZWgvMEFteW9Y?=
- =?utf-8?B?VFgxeWtTOGdNT2o4d0haSllSSmw5MHArcWdJRzdybm5aNXpreGJOSHhIeFdX?=
- =?utf-8?B?ZzN1ZXppcGVXamQ5Z3NZajhRZnBQVHJOcys3MzVkV3R0bk9ob3hscVFGaFZm?=
- =?utf-8?B?TnlPdmtrY3Y1VllOQk54enlaY0YzZTZ6Y09mcnNPcE5qN0ZIc1R0alhQOUtk?=
- =?utf-8?B?ZTdYTkZYNmlsWmFWOFl4ZGdLY08yOHBEUDdDZmU4bWhEamVqWWdrdUxEcmN2?=
- =?utf-8?B?bTdUalNrYUYvaDk4b0VoRlc5NkRQWFowUlZRME9vUU1LNFZTMGpjQ1FOMWh4?=
- =?utf-8?B?Qmc9PQ==?=
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b042ed92-91fa-4613-1c8e-08db1faaad42
-X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5764.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 07:56:51.5530
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zywcSBVaQ/o0tQxUbuxv2kW+JG9Vx6yRWZlw5MVPPVZQ53gSD8LOy6oayMd2aV0DzQhkVqQBtApW0/eleeGN1YMPkmdHP6VL2APg4j1mPDM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6984
-X-Proofpoint-GUID: SFZLtreg4Au7eSki4rHLEFZYxwvHgGJn
-X-Proofpoint-ORIG-GUID: SFZLtreg4Au7eSki4rHLEFZYxwvHgGJn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-08_03,2023-03-07_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 suspectscore=0 adultscore=0 malwarescore=0
- clxscore=1011 phishscore=0 priorityscore=1501 spamscore=0 mlxlogscore=643
- mlxscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303080068
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi
+Currently, most of the Qualcomm SoCs specify both "iommus" and "iommu-map"
+properties for the PCIe nodes. First one passes the SMR mask to the iommu
+driver and the latter specifies the SID for each PCIe device.
 
-When I use the perf tool on nxp-imx6sx, the CPU is armv7 cortex-A9 to 
-test, I execute the perf record -e branch-misses ls > /dev/null command, 
-but the perf report result is indeed:
-perf report
-Error:
-The perf.data data has no samples!
-# To display the perf.data header info, please use 
---header/--header-only options.
+But with "iommus" property, the PCIe controller will be added to the
+iommu group along with the devices. This makes no sense because the
+controller will not initiate any DMA transaction on its own. And moreover,
+it is not strictly required to pass the SMR mask to the iommu driver. If
+the "iommus" property is not present, then the default mask of "0" would be
+used which should work for all PCIe devices.
 
-root@nxp-imx6:~# perf list hardware
+On the other side, if the SMR mask specified doesn't match the one expected
+by the hypervisor, then all the PCIe transactions will end up triggering
+"Unidentified Stream Fault" by the SMMU.
 
-List of pre-defined events (to be used in -e):
+So to get rid of these hassles and also prohibit PCIe controllers from
+adding to the iommu group, let's remove the "iommus" property from PCIe
+nodes.
 
-    branch-instructions OR branches [Hardware event]
-    branch-misses [Hardware event]
-    bus-cycles [Hardware event]
-    cache-misses [Hardware event]
-    cache-references [Hardware event]
-    cpu-cycles OR cycles [Hardware event]
-    instructions [Hardware event]
+Reported-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/linux-arm-msm/20230227195535.GA749409-robh@kernel.org
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 --
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 --
+ arch/arm64/boot/dts/qcom/sm8150.dtsi | 2 --
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 3 ---
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 2 --
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 2 --
+ arch/arm64/boot/dts/qcom/sm8550.dtsi | 2 --
+ 7 files changed, 15 deletions(-)
 
-And not only this one hardware event, only cycles are working normally 
-in the following supported hardware time, other hardware events are not 
-interrupted and reported, and the value in the read PMXEVCNTR register 
-is always -1, and the PMCR register E, bit[0 ] it will be written to 0 
-before reading the PMXEVCNTR register. I don’t know if the value in the 
-PMXEVCNTR register is always -1 for this reason. Does anyone have any 
-good suggestions for debugging this problem?
-
-
-thanks
-
-xiaolei
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index 8f4ab6bd2886..9f7269029a02 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -2133,8 +2133,6 @@ pcie1: pci@1c08000 {
+ 
+ 			dma-coherent;
+ 
+-			iommus = <&apps_smmu 0x1c80 0x1>;
+-
+ 			iommu-map = <0x0 &apps_smmu 0x1c80 0x1>,
+ 				    <0x100 &apps_smmu 0x1c81 0x1>;
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index 479859bd8ab3..5f110b0062d9 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -2319,7 +2319,6 @@ pcie0: pci@1c00000 {
+ 				      "slave_q2a",
+ 				      "tbu";
+ 
+-			iommus = <&apps_smmu 0x1c10 0xf>;
+ 			iommu-map = <0x0   &apps_smmu 0x1c10 0x1>,
+ 				    <0x100 &apps_smmu 0x1c11 0x1>,
+ 				    <0x200 &apps_smmu 0x1c12 0x1>,
+@@ -2429,7 +2428,6 @@ pcie1: pci@1c08000 {
+ 			assigned-clocks = <&gcc GCC_PCIE_1_AUX_CLK>;
+ 			assigned-clock-rates = <19200000>;
+ 
+-			iommus = <&apps_smmu 0x1c00 0xf>;
+ 			iommu-map = <0x0   &apps_smmu 0x1c00 0x1>,
+ 				    <0x100 &apps_smmu 0x1c01 0x1>,
+ 				    <0x200 &apps_smmu 0x1c02 0x1>,
+diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+index 13e0ce828606..6a383e918329 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+@@ -1826,7 +1826,6 @@ pcie0: pci@1c00000 {
+ 				      "slave_q2a",
+ 				      "tbu";
+ 
+-			iommus = <&apps_smmu 0x1d80 0x3f>;
+ 			iommu-map = <0x0   &apps_smmu 0x1d80 0x1>,
+ 				    <0x100 &apps_smmu 0x1d81 0x1>;
+ 
+@@ -1925,7 +1924,6 @@ pcie1: pci@1c08000 {
+ 			assigned-clocks = <&gcc GCC_PCIE_1_AUX_CLK>;
+ 			assigned-clock-rates = <19200000>;
+ 
+-			iommus = <&apps_smmu 0x1e00 0x3f>;
+ 			iommu-map = <0x0   &apps_smmu 0x1e00 0x1>,
+ 				    <0x100 &apps_smmu 0x1e01 0x1>;
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index 2f0e460acccd..c7682fda9d8c 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -1871,7 +1871,6 @@ pcie0: pci@1c00000 {
+ 				      "tbu",
+ 				      "ddrss_sf_tbu";
+ 
+-			iommus = <&apps_smmu 0x1c00 0x7f>;
+ 			iommu-map = <0x0   &apps_smmu 0x1c00 0x1>,
+ 				    <0x100 &apps_smmu 0x1c01 0x1>;
+ 
+@@ -1977,7 +1976,6 @@ pcie1: pci@1c08000 {
+ 			assigned-clocks = <&gcc GCC_PCIE_1_AUX_CLK>;
+ 			assigned-clock-rates = <19200000>;
+ 
+-			iommus = <&apps_smmu 0x1c80 0x7f>;
+ 			iommu-map = <0x0   &apps_smmu 0x1c80 0x1>,
+ 				    <0x100 &apps_smmu 0x1c81 0x1>;
+ 
+@@ -2085,7 +2083,6 @@ pcie2: pci@1c10000 {
+ 			assigned-clocks = <&gcc GCC_PCIE_2_AUX_CLK>;
+ 			assigned-clock-rates = <19200000>;
+ 
+-			iommus = <&apps_smmu 0x1d00 0x7f>;
+ 			iommu-map = <0x0   &apps_smmu 0x1d00 0x1>,
+ 				    <0x100 &apps_smmu 0x1d01 0x1>;
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index 1c97e28da6ad..365b9d773b5c 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -1526,7 +1526,6 @@ pcie0: pci@1c00000 {
+ 				      "aggre1",
+ 				      "aggre0";
+ 
+-			iommus = <&apps_smmu 0x1c00 0x7f>;
+ 			iommu-map = <0x0   &apps_smmu 0x1c00 0x1>,
+ 				    <0x100 &apps_smmu 0x1c01 0x1>;
+ 
+@@ -1610,7 +1609,6 @@ pcie1: pci@1c08000 {
+ 				      "ddrss_sf_tbu",
+ 				      "aggre1";
+ 
+-			iommus = <&apps_smmu 0x1c80 0x7f>;
+ 			iommu-map = <0x0   &apps_smmu 0x1c80 0x1>,
+ 				    <0x100 &apps_smmu 0x1c81 0x1>;
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index 1a744a33bcf4..e3201b1b07a5 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -1790,7 +1790,6 @@ pcie0: pci@1c00000 {
+ 				      "aggre0",
+ 				      "aggre1";
+ 
+-			iommus = <&apps_smmu 0x1c00 0x7f>;
+ 			iommu-map = <0x0   &apps_smmu 0x1c00 0x1>,
+ 				    <0x100 &apps_smmu 0x1c01 0x1>;
+ 
+@@ -1904,7 +1903,6 @@ pcie1: pci@1c08000 {
+ 				      "ddrss_sf_tbu",
+ 				      "aggre1";
+ 
+-			iommus = <&apps_smmu 0x1c80 0x7f>;
+ 			iommu-map = <0x0   &apps_smmu 0x1c80 0x1>,
+ 				    <0x100 &apps_smmu 0x1c81 0x1>;
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+index 25f51245fe9b..6edb3acb91ef 100644
+--- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+@@ -1692,7 +1692,6 @@ pcie0: pci@1c00000 {
+ 			interconnect-names = "pcie-mem";
+ 			interconnects = <&pcie_noc MASTER_PCIE_0 0 &mc_virt SLAVE_EBI1 0>;
+ 
+-			iommus = <&apps_smmu 0x1400 0x7f>;
+ 			iommu-map = <0x0   &apps_smmu 0x1400 0x1>,
+ 				    <0x100 &apps_smmu 0x1401 0x1>;
+ 
+@@ -1796,7 +1795,6 @@ pcie1: pci@1c08000 {
+ 			interconnect-names = "pcie-mem";
+ 			interconnects = <&pcie_noc MASTER_PCIE_1 0 &mc_virt SLAVE_EBI1 0>;
+ 
+-			iommus = <&apps_smmu 0x1480 0x7f>;
+ 			iommu-map = <0x0   &apps_smmu 0x1480 0x1>,
+ 				    <0x100 &apps_smmu 0x1481 0x1>;
+ 
+-- 
+2.25.1
 
