@@ -2,200 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B74F6AFD88
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 04:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F93C6AFD8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 04:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjCHDnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 22:43:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
+        id S229819AbjCHDn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 22:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjCHDm5 (ORCPT
+        with ESMTP id S229799AbjCHDnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 22:42:57 -0500
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DA2A6BC0
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 19:42:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1678246938; x=1709782938;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oFa7Gcyn9Ul+mH142Yn1yviiCF+dyhpwwZBiVvmgMPY=;
-  b=fgW/5b9YwXpbdERp/dFb2ePivyK6JcVoKQ5kJ+vpz3TD2MPJLeXwDmef
-   EXJfnqXOM9TzcFO3k+cOJ706zeom5x5rOo9ygGaFIjFL+yBgWQyPHxyNv
-   2Cc9/xLKvly0EASlr3MD4BRAsiz2Kw5r10IsGDW/HtC8os3QBAOjuDLzQ
-   6JmU7LNZr2UgferKus1BHIACXaHXvGFutQiWglvM8slayhrTpveGvILm2
-   pS/+TGjciGaZNapKoT/8XeFuYF5Ipxjk9hPfIrSKQbHKEgfanklWjUfY9
-   WkHTtOxOUt8k9EslQgoTNoKuZGWDsYzQ1DursDORkVoeNVKL1fmtmPSx8
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,242,1673884800"; 
-   d="scan'208";a="329421734"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 08 Mar 2023 11:42:11 +0800
-IronPort-SDR: cQhgOEdeYFSyBpa0P95NXLMpcr5NJIr+DmVztPoVNVpcXqC3Bt3FVwWXkYcGWtjPSXDjUOgSdj
- vG77+kLalmQHxO9tRqH/rz5+Pb/M4yJHS0pNbg0RtHjBuAJ0NAiBzYHNBgyjNtki7DdnHKm/05
- IoVpdSXG6olX/P75kD6phvjnhzUodoKEBsppYKoV8VjFv2+STj1NXP6KdStvbEGwSj3kd1Gt7/
- o+IOF/QaylOxTAiXfS6vRLiBGQDqV13FHdiAneCW2OLyW+sTGNvYRBxNkPara5KXp5I3ZpBWzd
- Tuk=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Mar 2023 18:53:08 -0800
-IronPort-SDR: 9fg5yW4DYOy6l1NEwiVW+vw4/UYXBjmQkQEXU1R6F2lEdGczJvxVUNS8xBGiFmhCMga+GmBtzB
- j4PteHca+xSVlXaXBQFAdnA+DIrN/ZCdS3qvIujP5YwSbyHEaWNsV/HDP8+Z0koTmLuXBeYTpz
- sdwEMTxEFHdJkvcmrt6kpSrV99aUD0f9mFybaBmf73iHjIZHjNMLQ5+G4lv27X5IL8vYdQGvQZ
- cMVc2GLG92MB5qP5kBUnUDce8zT46HtpSVtm/h7mN02GgShd9dwsQQR1tZIY7WDz9EmVXGz+cH
- 6wc=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Mar 2023 19:42:12 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PWdRQ5cy7z1RvTp
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 19:42:10 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1678246929; x=1680838930; bh=oFa7Gcyn9Ul+mH142Yn1yviiCF+dyhpwwZB
-        iVvmgMPY=; b=cek3KLifGixZZTZrx1ddYUvHS4/hW2is8iEUeEVtCi6y4tIk5pw
-        t8yxPu1VtKTdJ7ThRCpYBaw0cVEERK2SwGE9PcSJxM1G3IbQZC+KQj2JE9OuX9Qq
-        EJg4XL2COUGHo/p03oEv2recb8TRmvLV+/NHlLjT6G/40iCdNP/1c5lJpR0WYB/v
-        RBRNdvXhvbG42V/VzebZCaLtQtar2QNZTeYDPe4dsa0wy3ufYnKHf1SbsDziIHwL
-        8cFHUDf37o1D7+o0IsS792rVmKEzLH2KUeoMUqWiaqGuIszV64aRw6IG54kEWie3
-        W8zN9xlQbG23dcTCbOveevg4IscNv517rPw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id n9BWxahDynAB for <linux-kernel@vger.kernel.org>;
-        Tue,  7 Mar 2023 19:42:09 -0800 (PST)
-Received: from [10.225.163.63] (unknown [10.225.163.63])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PWdRM4js0z1RvLy;
-        Tue,  7 Mar 2023 19:42:07 -0800 (PST)
-Message-ID: <d3fb242e-646e-50b5-7dba-17b228bb32aa@opensource.wdc.com>
-Date:   Wed, 8 Mar 2023 12:42:06 +0900
+        Tue, 7 Mar 2023 22:43:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD0DA1FF4
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 19:42:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678246952;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3CIFBPqlVsgi4mbIetMfKlJgaIVFbV+dfBNFlisMIHI=;
+        b=K1vOK/aaSG1dIZoUjhsIGBIXk32zyzewPkE4qWGKG1lFbbqb7b3Pa27aTRlD8hqH7bB1pt
+        LMPvdeqPzWxWCbIqUUBg33OTSyVVrkYkaDAZ8NFLpBSttauO8GOsze1s9ED5hgXBeXBNS4
+        lLF2bDroY2hEmvyq4PxUG3WNYlajhKc=
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
+ [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-658-bTFNsUQ-Ooyy_dRobR1niQ-1; Tue, 07 Mar 2023 22:42:31 -0500
+X-MC-Unique: bTFNsUQ-Ooyy_dRobR1niQ-1
+Received: by mail-pg1-f200.google.com with SMTP id 62-20020a630241000000b004fb3343142dso3513732pgc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 19:42:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678246950;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3CIFBPqlVsgi4mbIetMfKlJgaIVFbV+dfBNFlisMIHI=;
+        b=XND2nobXaXHRiCiIkMpNKrkZoQpYOUjXm0gNWU1iqtWA6tEaSorrT+gQfUT/o+u3F9
+         kSZbUv6z3F/UDlKR0svkDJrcUBdQ36P8XJVdY7w/0fZ4D83QHXlf/SDwqR9kijvdJ/YC
+         phX+8ApAL+l5fWhJXpTzAu/8155IZqJcCMwuNLpWMr1YAeoqc09kTK9EzurdJdM3G+GD
+         3OqOXOMkcl07zD7UXeNhWd/3MVZuXquT0wd2XqInyh7ODpbNdPoeFxKWoXTpWPg3lV0T
+         Qp0Nx52lw7tAimxEQfIcVE0JK+3zhnijrjIChlXYBUaSNxvCLkevhOtX9zTL+EaRK3vw
+         9S5A==
+X-Gm-Message-State: AO0yUKXUNhWu2kSI19LsjruuO/FoLNUAhq+36DrZQuvefwe4MOIv6vFP
+        eWbUTZc2RiAha8o0loCSfeRltcJKugBbEa5OXLYxmpdboM4u8eBfENA1XR5J88Y38qLiHZfwfms
+        2DnI4vd3Pc3lpJjsMCoFicrqv
+X-Received: by 2002:a17:90a:e7c6:b0:234:8950:6d1f with SMTP id kb6-20020a17090ae7c600b0023489506d1fmr17707807pjb.11.1678246950029;
+        Tue, 07 Mar 2023 19:42:30 -0800 (PST)
+X-Google-Smtp-Source: AK7set8UPZv2ZLhfkS7n1EfbO2gitcf4in2vPM0ixlWMSTOQuUAZcsMtdcRJGanwFD1L7yFrBUKJ2w==
+X-Received: by 2002:a17:90a:e7c6:b0:234:8950:6d1f with SMTP id kb6-20020a17090ae7c600b0023489506d1fmr17707795pjb.11.1678246949681;
+        Tue, 07 Mar 2023 19:42:29 -0800 (PST)
+Received: from [10.72.12.78] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id n3-20020a17090ade8300b00233864f21a7sm9868514pjv.51.2023.03.07.19.42.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 19:42:29 -0800 (PST)
+Message-ID: <c2f9e0d3-0242-1304-26ea-04f25c3cdee4@redhat.com>
+Date:   Wed, 8 Mar 2023 11:42:22 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 0/3] Add RISC-V 32 NOMMU support
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] fs/ceph/mds_client: ignore responses for waiting requests
 Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Jesse Taube <mr.bossman075@gmail.com>,
-        linux-riscv@lists.infradead.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yimin Gu <ustcymgu@gmail.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Waldemar Brodkorb <wbx@openadk.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-References: <20230301002657.352637-1-Mr.Bossman075@gmail.com>
- <42446784-a88b-df09-41e9-5f685b4df6ee@infradead.org>
- <556ce787-80eb-dc48-f8d6-83e415538e36@opensource.wdc.com>
- <f8f291d9-2723-4ab8-3020-49018757d470@gmail.com>
- <62852ee1-3763-3323-c3a8-f1e84f70204a@infradead.org>
- <c7941231-8ebd-dea5-81f8-3180cfc3f286@gmail.com>
- <1d858dbb-ae85-95a0-3e46-b67017733c04@infradead.org>
- <db3b3412-9616-d13c-3374-48647325e057@infradead.org>
- <7280914e-59e3-ba6d-4324-a29c1c0b4ce8@gmail.com>
- <2ebe4bc5-c11c-89b1-2644-358dc12bdfa5@infradead.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <2ebe4bc5-c11c-89b1-2644-358dc12bdfa5@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Max Kellermann <max.kellermann@ionos.com>, idryomov@gmail.com,
+        jlayton@kernel.org, ceph-devel@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20230302130650.2209938-1-max.kellermann@ionos.com>
+From:   Xiubo Li <xiubli@redhat.com>
+In-Reply-To: <20230302130650.2209938-1-max.kellermann@ionos.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 12:23, Randy Dunlap wrote:
->>> OK, I don't know how it happened. I cannot reproduce it now.
->>> The failing .config files has CONFIG_MMU is not set (for RV32I), whic=
-h
->>> appears to be impossible.
->> These patches add `CONFIG_MMU is not set` (for RV32I).
->> But no worries it seems to be a non issue=C2=A0 now.
->>
->> Your thoughts Damien?
->>
->=20
-> Thanks for reminding me.
->=20
-> With these 3 patches applied to linux-next-20230307,
-> I still get this build error.
+Hi Max,
 
-Does this help ?
+Sorry for late.
 
-diff --git a/drivers/soc/canaan/Kconfig b/drivers/soc/canaan/Kconfig
-index 2527cf5757ec..7796c5f1d109 100644
---- a/drivers/soc/canaan/Kconfig
-+++ b/drivers/soc/canaan/Kconfig
-@@ -4,7 +4,8 @@ config SOC_K210_SYSCTL
-        bool "Canaan Kendryte K210 SoC system controller"
-        depends on RISCV && SOC_CANAAN && OF
-        default SOC_CANAAN
--        select PM
--        select MFD_SYSCON
-+       select COMMON_CLK_K210
-+       select PM
-+       select MFD_SYSCON
-        help
-          Canaan Kendryte K210 SoC system controller driver.
+On 02/03/2023 21:06, Max Kellermann wrote:
+> If a request is put on the waiting list, its submission is postponed
+> until the session becomes ready (e.g. via `mdsc->waiting_for_map` or
+> `session->s_waiting`).  If a `CEPH_MSG_CLIENT_REPLY` happens to be
+> received before `CEPH_MSG_MDS_MAP`, the request gets freed, and then
+> this assertion fails:
 
-(just noticed that there are whitespace errors here...)
+How could this happen ?
 
-Note that both the sysctl and clk driver depend on RISCV. I think these s=
-hould
-probably also depend on 64BIT, and eventually add a "|| COMPILE_TEST" as =
-well.
-So something like this:
+Since the req hasn't been submitted yet, how could it receive a reply 
+normally ?
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index b6c5bf69a2b2..657a36d2640d 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -431,7 +431,7 @@ config COMMON_CLK_FIXED_MMIO
+>   WARN_ON_ONCE(!list_empty(&req->r_wait));
+>
+> This occurred on a server after the Ceph MDS connection failed, and a
+> corrupt reply packet was received for a waiting request:
+>
+>   libceph: mds1 (1)10.0.0.10:6801 socket error on write
+>   libceph: mds1 (1)10.0.0.10:6801 session reset
+>   ceph: mds1 closed our session
+>   ceph: mds1 reconnect start
+>   ceph: mds1 reconnect success
+>   ceph: problem parsing mds trace -5
+>   ceph: mds parse_reply err -5
+>   ceph: mdsc_handle_reply got corrupt reply mds1(tid:5530222)
 
- config COMMON_CLK_K210
-        bool "Clock driver for the Canaan Kendryte K210 SoC"
--       depends on OF && RISCV && SOC_CANAAN
-+       depends on OF && RISCV && SOC_CANAAN && (64BIT || COMPILE_TEST)
-        default SOC_CANAAN
-        help
-          Support for the Canaan Kendryte K210 RISC-V SoC clocks.
-diff --git a/drivers/soc/canaan/Kconfig b/drivers/soc/canaan/Kconfig
-index 2527cf5757ec..1745a614d2a7 100644
---- a/drivers/soc/canaan/Kconfig
-+++ b/drivers/soc/canaan/Kconfig
-@@ -2,9 +2,10 @@
+It should be a corrupted reply and it lead us to get a incorrect req, 
+which hasn't been submitted yet.
 
- config SOC_K210_SYSCTL
-        bool "Canaan Kendryte K210 SoC system controller"
--       depends on RISCV && SOC_CANAAN && OF
-+       depends on RISCV && SOC_CANAAN && OF && (64BIT || COMPILE_TEST)
-        default SOC_CANAAN
--        select PM
--        select MFD_SYSCON
-+       select COMMON_CLK_K210
-+       select PM
-+       select MFD_SYSCON
-        help
-          Canaan Kendryte K210 SoC system controller driver.
+BTW, do you have the dump of the corrupted msg by 'ceph_msg_dump(msg)' ?
 
-COMPILE_TEST is optional though, but I do not see any reason why not even=
-though
-in practice these drivers will likely never end up in 32-bits SoC.
+We can check what have corrupted exactly.
 
+Thanks
 
---=20
-Damien Le Moal
-Western Digital Research
+- Xiubo
+
+>   [...]
+>   ------------[ cut here ]------------
+>   WARNING: CPU: 9 PID: 229180 at fs/ceph/mds_client.c:966 ceph_mdsc_release_request+0x17a/0x180
+>   Modules linked in:
+>   CPU: 9 PID: 229180 Comm: kworker/9:3 Not tainted 6.1.8-cm4all1 #45
+>   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+>   Workqueue: ceph-msgr ceph_con_workfn
+>   RIP: 0010:ceph_mdsc_release_request+0x17a/0x180
+>   Code: 39 d8 75 26 5b 48 89 ee 48 8b 3d f9 2d 04 02 5d e9 fb 01 c9 ff e8 56 85 ab ff eb 9c 48 8b 7f 58 e8 db 4d ff ff e9 a4 fe ff ff <0f> 0b eb d6 66 90 0f 1f 44 00 00 41 54 48 8d 86 b8 03 00 00 55 4c
+>   RSP: 0018:ffffa6f2c0e2bd20 EFLAGS: 00010287
+>   RAX: ffff8f58b93687f8 RBX: ffff8f592f6374a8 RCX: 0000000000000aed
+>   RDX: 0000000000000ac0 RSI: 0000000000000000 RDI: 0000000000000000
+>   RBP: ffff8f592f637148 R08: 0000000000000001 R09: ffffffffa901de00
+>   R10: 0000000000000001 R11: ffffd630ad09dfc8 R12: ffff8f58b9368000
+>   R13: ffff8f5806b33800 R14: ffff8f58894f6780 R15: 000000000054626e
+>   FS:  0000000000000000(0000) GS:ffff8f630f040000(0000) knlGS:0000000000000000
+>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>   CR2: 00007ffc2926df68 CR3: 0000000218dce002 CR4: 00000000001706e0
+>   DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>   DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>   Call Trace:
+>    <TASK>
+>    mds_dispatch+0xec5/0x1460
+>    ? inet_recvmsg+0x4d/0xf0
+>    ceph_con_process_message+0x6b/0x80
+>    ceph_con_v1_try_read+0xb92/0x1400
+>    ceph_con_workfn+0x383/0x4e0
+>    process_one_work+0x1da/0x370
+>    ? process_one_work+0x370/0x370
+>    worker_thread+0x4d/0x3c0
+>    ? process_one_work+0x370/0x370
+>    kthread+0xbb/0xe0
+>    ? kthread_complete_and_exit+0x20/0x20
+>    ret_from_fork+0x22/0x30
+>    </TASK>
+>   ---[ end trace 0000000000000000 ]---
+>   ceph: mds1 caps renewed
+>
+> If we know that a request has not yet been submitted, we should ignore
+> all responses for it, just like we ignore responses for unknown TIDs.
+>
+> To: ceph-devel@vger.kernel.org
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Max Kellermann <max.kellermann@ionos.com>
+> ---
+>   fs/ceph/mds_client.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+>
+> diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
+> index 27a245d959c0..fa74fdb2cbfb 100644
+> --- a/fs/ceph/mds_client.c
+> +++ b/fs/ceph/mds_client.c
+> @@ -3275,6 +3275,13 @@ static void handle_reply(struct ceph_mds_session *session, struct ceph_msg *msg)
+>   	}
+>   	dout("handle_reply %p\n", req);
+>   
+> +	/* waiting, not yet submitted? */
+> +	if (!list_empty(&req->r_wait)) {
+> +		pr_err("mdsc_handle_reply on waiting request tid %llu\n", tid);
+> +		mutex_unlock(&mdsc->mutex);
+> +		goto out;
+> +	}
+> +
+>   	/* correct session? */
+>   	if (req->r_session != session) {
+>   		pr_err("mdsc_handle_reply got %llu on session mds%d"
+
+-- 
+Best Regards,
+
+Xiubo Li (李秀波)
+
+Email: xiubli@redhat.com/xiubli@ibm.com
+Slack: @Xiubo Li
 
