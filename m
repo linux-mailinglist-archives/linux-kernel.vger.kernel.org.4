@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45486B0E11
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2214B6B0E18
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbjCHQDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
+        id S232427AbjCHQER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231922AbjCHQCv (ORCPT
+        with ESMTP id S232424AbjCHQDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:02:51 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899B65F21C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:01:05 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id c3so18521536qtc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 08:01:05 -0800 (PST)
+        Wed, 8 Mar 2023 11:03:52 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6324F13D6D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:02:01 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id s11so67702550edy.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 08:02:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1678291257;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h3hZwpKMg+vlHtotr98nmh9kQ0sI9K4sYDzfoR8/Nkw=;
-        b=VKR9kxxOdfwLKRX+OUxi0CqO3qdzQviWy2G5KfY1OlbX5P2Zjs7o+pnTrBmcgdPn/3
-         3mcJ510vjumwGzDhiWCOfmNnwbgE1xGHD/3UPa5tx6sWp0j1xRGvNagDAeIJvEyJqMmY
-         E2nu6YPt8YzGd84SVtsL7clnfqTYJf9TROwXIfd1yPVrGs7P4BS3ZZRyCNAU28hjP7I0
-         iglsK76350p0U/4VE1Mvd237L0HvzuoKM+uyEaqw58KBNXFQ+xVXxJHJV4vSiuA0zCYF
-         ooBfwRMknXntUcS7NSqpef0p62PactO8oozTc50D7gqWgBk6/NceCWvU3Q7eLccrbNBa
-         VWuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678291257;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678291317;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h3hZwpKMg+vlHtotr98nmh9kQ0sI9K4sYDzfoR8/Nkw=;
-        b=uUeQkfCjrpiLYmel/kUEgwcrEPor/L9c1QoPdQNSTOvVaKCcRVwyNbh4ek9S/D4ThI
-         Ad5sA+eEPbuzZa2wqvsQVATT5LbKzNVQhC7lrv+V45tokd7+vvrzjkK6sIpLtksgt7IX
-         HEecObMTWRU9h6Ca7/15YMbPDxFnaW9Lx/GYpGn3/vcfKytEcvmzJkDo+PGyYRNj/Uxp
-         2cA+Lu2l35uGmFq6ElvqC8kIEdKnfLby5NFpg1Hm0sWEPnwNGZjV6JiRWFIEUgftFuox
-         iSMCfrMeNYA7Y20x4hSHqXPe+lQRbDNhFs5PSCOm02uOjQ67hSlvHjQOXRkX3O3SGwwB
-         NrUQ==
-X-Gm-Message-State: AO0yUKWmBtUVQyMcZZ9hkyRweN5nIBPXdMEXz+uuBfSl/Aufq2b9/zs+
-        5jecbZUfn/LnOl0VSJIrQYEa0A==
-X-Google-Smtp-Source: AK7set8VHTOzJ1mGxBCJIKeE5Y/M6Q5A34bQK9WHzEHfDvqAd4z/Xd8BRHp+AwjZqV34Y2Q19xl+tQ==
-X-Received: by 2002:a05:622a:303:b0:3bf:a08d:b265 with SMTP id q3-20020a05622a030300b003bfa08db265mr37829235qtw.24.1678291257174;
-        Wed, 08 Mar 2023 08:00:57 -0800 (PST)
-Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
-        by smtp.gmail.com with ESMTPSA id a191-20020ae9e8c8000000b00742743dba2asm11578051qkg.39.2023.03.08.08.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 08:00:56 -0800 (PST)
-Date:   Wed, 8 Mar 2023 11:00:56 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v1 0/2] Ignore non-LRU-based reclaim in memcg reclaim
-Message-ID: <20230308160056.GA414058@cmpxchg.org>
-References: <20230228085002.2592473-1-yosryahmed@google.com>
+        bh=HvghSm+izAzoZfMW7sPseegOBllvRQAJZKazD98Q5ek=;
+        b=f3GHy9XwNtZAVyNU/gw7bH0xY9mv5hj6I/KXK5IsVgFchFE6xqpHD4ttjk/YveOWnD
+         +niOXVxlamUfbWhNqCuIUQb9+leO9ykdzXnWpaL0OCN6Ak36qveLZhTO/ECbbqwg6qws
+         9v7AhZLaWcht3nvCscEKcAKmu00AGiDlj35POr9ssy8/AnRm9g3+YWR1eAVnH4CqFBr0
+         5hgH2QDyBv9q4LVqM4Hje6dmSgFi0BbrPmRD3gymEF3VbbWqIJPwaCfQMw/G51O+9XIi
+         /UUQ8UgxBME4CQXoTcZG+GCWSUrUacmppusRzIpdtDqbPxgYWMf93RgN8EbgZ7WPAMv4
+         DHDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678291317;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HvghSm+izAzoZfMW7sPseegOBllvRQAJZKazD98Q5ek=;
+        b=zNgciVn3Uu0PgJliIbXBU05ba37oLWvDh2SMVY4AuBhnj8StI7lu5d27//f4WmUOvY
+         QH3e3MOzBA5F7E5GrTBLSLEqqH/7ON3jUChdgjnClXqfWUeepi9+gX5VdnLcE2KAV6My
+         mh25w/R4Z6UG3w9nFULFIBWU2iD9a5/ruH0s2TRiLIApasoAp1w544F8Bho92FrYCOuC
+         16R7ySxHNIWl3eI5/ilO0SC6epvlgL2kmdG2umwlaAPF4n5yn85asOLSGttbNwT5niGy
+         BmDBuA+rN1f/1wXWSzW4O2AAUBL7zS7GFsSR9saluGIAEAWmu2lFtNPOkV0dnxa0xl3f
+         PdeQ==
+X-Gm-Message-State: AO0yUKUNWu68oE6YQkwGxyBynXVo9AytPqWjSXHh9gAHRq7Kw8pmvosJ
+        R6wBhc9SnUef4jUna0iLWspnAlqOvkSwUZAk0JbQVQ==
+X-Google-Smtp-Source: AK7set9czStAcUNQ29jUhnUVYnTaY/lCYjixN6pRCnxEte8YUnfIYJlN08SvDepMIhgpwQmcnVtlX42y0dTAE4mfCYM=
+X-Received: by 2002:a17:906:a0d8:b0:88d:f759:15b1 with SMTP id
+ bh24-20020a170906a0d800b0088df75915b1mr9362342ejb.13.1678291316969; Wed, 08
+ Mar 2023 08:01:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228085002.2592473-1-yosryahmed@google.com>
+References: <20230307154524.118541-1-bchihi@baylibre.com> <20230307154524.118541-5-bchihi@baylibre.com>
+ <5f980c7d-1bc4-cfdf-9392-70626317ca54@collabora.com>
+In-Reply-To: <5f980c7d-1bc4-cfdf-9392-70626317ca54@collabora.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Wed, 8 Mar 2023 17:01:21 +0100
+Message-ID: <CAGuA+oqEG-grekf=x6c7XwvbaAjgDDF1FJ=E+6zYLx8J2B+QJw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] arm64: dts: mediatek: mt8195: Add AP domain
+ temperature thresholds
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com, matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yosry,
+On Wed, Mar 8, 2023 at 10:17=E2=80=AFAM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 07/03/23 16:45, bchihi@baylibre.com ha scritto:
+> > From: Balsam CHIHI <bchihi@baylibre.com>
+> >
+> > Specify the targeted temperature thresholds.
+>
+> You're introducing the thermal zones and *then* fixing them in this commi=
+t.
+> To be honest, this doesn't make a lot of sense...
+>
+> Please squash this commit with
+> arm64: dts: mediatek: mt8195: Add AP domain thermal zones
+>
+> P.S.: After squashing.. looks good.
 
-On Tue, Feb 28, 2023 at 08:50:00AM +0000, Yosry Ahmed wrote:
-> Reclaimed pages through other means than LRU-based reclaim are tracked
-> through reclaim_state in struct scan_control, which is stashed in
-> current task_struct. These pages are added to the number of reclaimed
-> pages through LRUs. For memcg reclaim, these pages generally cannot be
-> linked to the memcg under reclaim and can cause an overestimated count
-> of reclaimed pages. This short series tries to address that.
+Hi Angelo,
 
-Could you please add more details on how this manifests as a problem
-with real workloads?
+Thanks again for the review.
+OK, I will squash them in the new series.
 
-> Patch 1 is just refactoring updating reclaim_state into a helper
-> function, and renames reclaimed_slab to just reclaimed, with a comment
-> describing its true purpose.
+Best regards,
+Balsam
 
-Looking through the code again, I don't think these helpers add value.
-
-report_freed_pages() is fairly vague. Report to who? It abstracts only
-two lines of code, and those two lines are more descriptive of what's
-happening than the helper is. Just leave them open-coded.
-
-add_non_vmanscan_reclaimed() may or may not add anything. But let's
-take a step back. It only has two callsites because lrugen duplicates
-the entire reclaim implementation, including the call to shrink_slab()
-and the transfer of reclaim_state to sc->nr_reclaimed.
-
-IMO the resulting code would overall be simpler, less duplicative and
-easier to follow if you added a common shrink_slab_reclaim() that
-takes sc, handles the transfer, and documents the memcg exception.
+>
+> Thanks,
+> Angelo
+>
