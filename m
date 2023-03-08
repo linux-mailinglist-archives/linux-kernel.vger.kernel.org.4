@@ -2,111 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3EA46B06A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88EC86B06A9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjCHMKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 07:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51578 "EHLO
+        id S229691AbjCHMMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 07:12:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjCHMKR (ORCPT
+        with ESMTP id S229603AbjCHML6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:10:17 -0500
-Received: from ns2.wdyn.eu (ns2.wdyn.eu [IPv6:2a03:4000:40:5b2::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA5D26B5C8;
-        Wed,  8 Mar 2023 04:10:15 -0800 (PST)
-Message-ID: <97ad368e-7379-37db-8103-3b4ecc2342fd@wetzel-home.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wetzel-home.de;
-        s=wetzel-home; t=1678277415;
-        bh=7BWXGLzpcMKFQqb+ZMueLngLx1rrCtrD3QworHvQMag=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=DuuqzImJlm/gNNlFLOXPiEKSJYt3mbEVMd2sdPyA11ZgU2g4MNFBylijhlNaq7x8X
-         gKii25T8Mm5M1RxZ6r9A1IIcMy/j/jGxMIydZLsEfX6qTyAgtUy2ydQfisPk/TwAEZ
-         78O06xNI5EiWeGhIRhPJ1YEAOJRjeTW5iTZV+H90=
-Date:   Wed, 8 Mar 2023 13:10:13 +0100
+        Wed, 8 Mar 2023 07:11:58 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41005A42F5;
+        Wed,  8 Mar 2023 04:11:57 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pZse8-0002CF-0s;
+        Wed, 08 Mar 2023 13:11:52 +0100
+Date:   Wed, 8 Mar 2023 12:11:48 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Re: [PATCH net-next v12 08/18] net: ethernet: mtk_eth_soc: fix
+ 1000Base-X and 2500Base-X modes
+Message-ID: <ZAh7hA4JuJm1b2M6@makrotopia.org>
+References: <cover.1678201958.git.daniel@makrotopia.org>
+ <fd5c7ea79a7f84caac7d0b64b39fe5c4043edfa8.1678201958.git.daniel@makrotopia.org>
+ <ZAhzDDjZ8+gxyo3V@shell.armlinux.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [Regression] rt2800usb - Wifi performance issues and connection
- drops
-Content-Language: en-US
-To:     Thomas Mann <rauchwolke@gmx.net>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Helmut Schaa <helmut.schaa@googlemail.com>,
-        Johannes Berg <johannes.berg@intel.com>
-References: <b8efebc6-4399-d0b8-b2a0-66843314616b@leemhuis.info>
- <5a7cd098-1d83-6297-e802-ce998c8ec116@leemhuis.info>
- <6025e17e-4c29-6d36-6b9c-2fec543b21c4@wetzel-home.de>
- <debc7fe9-204d-63a7-aa61-91b20a46f385@wetzel-home.de>
- <20230307233123.14a411ee@polar.lan>
- <4171c994-6b02-95d1-30c7-8f6f72af7893@wetzel-home.de>
- <20230308112650.3c72d6f2@polar.lan>
-From:   Alexander Wetzel <alexander@wetzel-home.de>
-In-Reply-To: <20230308112650.3c72d6f2@polar.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAhzDDjZ8+gxyo3V@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>> @Thomas:
->>>> I've also uploaded you my binary kernel I'm running at the moment
->>>> here: https://www.awhome.eu/s/5FjqMS73rtCtSBM
->>>>
->>>> That kernel should also be able to boot and operate your system.
->>>> Can you try that and tell me, if that makes any difference?
->>
->>   >
->>   > i can't boot the binary kernel here, as the initramfs is included
->>   > in my kernel, if you send me a patch, i can apply it and test it.
->>
->> That was an unpatched kernel. Idea was to verify that it's not a
->> compiler issue. (You seem to be using a hardened Gentoo profile.)
->>
->> Can you share your initrd, so I can include it? (Mail it to me
->> directly, upload it to bug in buguilla or send a link to some cloud
->> storage.)
->>
-> I can't share this config, as it's a production system, and i'm not
-> allowed to run abitrary binary code on the system. As 6.1.x works
-> without a problem, i don't think it's a compiler problem. I will try to
-> get a none hardened compiler and recompile the kernel.
+On Wed, Mar 08, 2023 at 11:35:40AM +0000, Russell King (Oracle) wrote:
+> On Tue, Mar 07, 2023 at 03:53:58PM +0000, Daniel Golle wrote:
+> > After conversion to phylink_pcs the 1000Base-X and 2500Base-X modes
+> > would work only after `ethtool -s eth1 autoneg off`.
+> > As ethtool autoneg and the ETHTOOL_LINK_MODE_Autoneg_BIT is supposed
+> > to control auto-negotiation on the external interface it doesn't make
+> > much sense to use it to control on-board SGMII auto-negotiation between
+> > MAC and PHY.
+> > Set correct values to really only enable SGMII auto-negotiation when
+> > actually operating in SGMII mode. For 1000Base-X and 2500Base-X mode,
+> > enable remote-fault detection only if in-band-status is enabled.
+> > This fixes using 1000Base-X and 2500Base-X SFPs on the BananaPi R3
+> > board and also makes it possible to use interface-mode-switching PHYs
+> > operating in either SGMII mode for 10M/100M/1000M or in 2500Base-X for
+> > 2500M mode on other boards.
+> > 
+> > Fixes: 14a44ab0330d ("net: mtk_eth_soc: partially convert to phylink_pcs")
+> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 > 
-
-I was suspecting something like that. I may try the same in reverse. But 
-it's so far quite some way down on the list. There are more promising 
-ways to spend the debug time I have for so far.
-
-But one remark:
-As far as TX is concerned 6.1 and 6.2 kernels are handling TX in 
-drastically different ways for many - including yours - cards.
-
-The patch you identified as culprit is well after the move to the new TX 
-mode of operation and only fixes a comparable minor issue.
-
-Your setup seems to require both, the move to iTXQ AND this minor fix.
-
->>
->>>>
->>>> I'm also planning to provide some more debug patches, to figuring
->>>> out which part of commit 4444bc2116ae ("wifi: mac80211: Proper
->>>> mark iTXQs for resumption") fixes the issue for you. Assuming my
->>>> understanding above is correct the patch should not really
->>>> fix/break anything for you...With the findings above I would have
->>>> expected your git bisec to identify commit a790cc3a4fad ("wifi:
->>>> mac80211: add wake_tx_queue callback to drivers") as the first
->>>> broken commit...
->>>>
->>>> Alexander
->>>
->>
+> NAK.
 > 
+> There are PHYs out there which operate in SGMII mode but do not
+> exchange the SGMII 16-bit configuration word. The code implemented
+> here by me was explicitly to allow such a configuration to work,
+> which is defined as:
+> 
+> 	SGMII *without* mode == inband
+> 
+> An example of this is the Broadcom 84881 PHY which can be found on
+> SFP modules.
 
+I also have multiple such 1000Base-T SFP modules here (finisar, AJYA),
+and this change doesn't touch the codepaths relevant for those. They
+are operating in SGMII mode, they have always been working fine.
+
+What I'm trying to fix here is 1000Base-X and 2500Base-X mode which
+has been broken by introducing ETHTOOL_LINK_MODE_Autoneg_BIT as the
+deciding factor for in-band AN here.
+
+Can you explain why ETHTOOL_LINK_MODE_Autoneg_BIT was used there in
+first place? Is my understanding of this bit controlling autoneg on the
+*external* interface rather than on the *system-side* interface wrong?
