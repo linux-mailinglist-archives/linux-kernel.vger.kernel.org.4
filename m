@@ -2,114 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0262F6B049E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAE06B04A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:36:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjCHKgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:36:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
+        id S229984AbjCHKgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:36:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231166AbjCHKgN (ORCPT
+        with ESMTP id S231154AbjCHKg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:36:13 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F9A9AA2C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:35:44 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id g3so63896569eda.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:35:44 -0800 (PST)
+        Wed, 8 Mar 2023 05:36:27 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348F6A1FFB;
+        Wed,  8 Mar 2023 02:36:08 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id a25so64005375edb.0;
+        Wed, 08 Mar 2023 02:36:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1678271739;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1678271765;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BrutnpDgoT44BR3lMhCn+9UB/OdwfGTeStqsfMqeXBc=;
-        b=wh3aa4lZBBJtpgaY9rceKyAkYE7TNfdj9IILQRAEG63UOotDpqzzeIjX0+oghko353
-         12TPwM49sUAasb8C+OiT5h8IjBs+3ED13XvJzbZkIQQf1e8gQE4fYt+JX4Cfw0Gs+xR7
-         E0XTzunurV0Cl1fN48YKRz0DfReC+OxNIcdfkq73ZEqaA7HODJ6LqXUrJRRy8/Owvd2V
-         GAMrik6NsiDYrN8UX79l5kChpJLYfo3pc9sRY/1mlr4WgWm/VBY9M7aj7QlV7Vsk3AT9
-         Bzburrunc0RoA3PMrd8hEiyvX32xDk9T0sCoeY4ubHqNEX26fYfWP88rsdrZz8tpb8w3
-         WnuQ==
+        bh=AeODk5Q7NYOS/imm9Czy4q+bgK1nDPxP4eydX/OIrvg=;
+        b=pPdmiBlX/sumOapYYZO0+01cOQzl7zjnLzxN4rm4L09iMOW+Zm9xhqYj9Kue8UDL2Q
+         XXtjnODtS9Yik++o1x1MW7fxYbFgivspcMMkew38mSrxciJYsdmZWHUsPnyvQX75Ehgd
+         5U4fztm38RfaQyuEY8vmKSb+byJNUAfDOafxVoOK+H/PHMJWH6e8X2eyXXTrzYtJUcF6
+         +4pneT/JxFNVYyEeDWkipm05OXxRr/9w2XVmKX2Vdq2zNt18fIzSjdqUf2jtVeerZ5N+
+         OhMo9AgCNdRxtvJDV3hQX0m0TEiQt4dheKCMnwAsbLS+UguOSBPwGyC409epjmHe9Igg
+         QeaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678271739;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=BrutnpDgoT44BR3lMhCn+9UB/OdwfGTeStqsfMqeXBc=;
-        b=UEv8l5q0E+WRxhjsFfpqj57Okn3H4BV0czOVMV0g01e7l4CNmmS9HyX2oBNUki91Dv
-         qilfcbLsCtaV+BPlXT3nZjVe7OfRiZl82A2w3kQEO+nAdXXUxzm2aMyOg7qRNcUST+Mb
-         YOnNlITyGKw7dYjNcZibBIzTx9i0bv9GL3BMMakjpe8aoZdG5LtyYi9+7GAr/xiKklVT
-         ON+LacVx8gxMBMMT1f+791xI2DIP726cVZk3wemBDFKyT+w9GoM6+TYx158kSl+pZc/W
-         xSNXUkRR1MGIKqsXQYqhsMuVDPrtyU05uSM/AD0ULx4odWJh7oLsGu4nTrSLqbwy6Tt5
-         o28Q==
-X-Gm-Message-State: AO0yUKWnWGsX0l7EBxpzWzNnNVN34+OG6lF3Z/OFnGX+nZfrNQlbqW+A
-        Vd4HL6wWqs6FsXqFkUFwdhtR2A==
-X-Google-Smtp-Source: AK7set/jCxIzhmK+dO4U0mZ85q9JkzsPf8DcUXlnfpQw8XFXkf4U/5eh2MRcLy98P595UMQQVMAN1A==
-X-Received: by 2002:a17:906:db05:b0:8ec:4334:fe with SMTP id xj5-20020a170906db0500b008ec433400femr22619565ejb.26.1678271739617;
-        Wed, 08 Mar 2023 02:35:39 -0800 (PST)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id de19-20020a1709069bd300b008ec4333fd65sm7288413ejc.188.2023.03.08.02.35.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 02:35:39 -0800 (PST)
-Mime-Version: 1.0
+        d=1e100.net; s=20210112; t=1678271765;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AeODk5Q7NYOS/imm9Czy4q+bgK1nDPxP4eydX/OIrvg=;
+        b=noFIQ5yeXmriH5FCrbiXabY/sUmyJtPcoq1xCWCSf+rKQRqqeAav4mqquLqpM3frMf
+         hAtflGTDY2DNllyBmIcYd0MYQaFKvXKHeC6Ek97/Y4LtCHIzEXPJsXb0YotlcDP0JEPS
+         fzuxBEdJbRS8ymFUm+3UP4VGhn/WkkwRERMdN/SXvSuAZnk7mhjYnCQBDfUdxwPwUVP6
+         zfYyWeQoIuhLAGcCWb3G1CnmhuNFRAqNTZHqDI5nQffQ7lvPFQZ+6O3nbKj2QDBMPJGh
+         wnMnujR7WN7qCpUXqmaQM3KGepczpvb6tCeI/TuOXIChjLVblU4dSat8Md0LEydVnBEt
+         Kofg==
+X-Gm-Message-State: AO0yUKUuFn8StLtrpithw+dU2f8RaSWtq4sGV3IsQUzwCylMjJSM+Vmf
+        x+A65fRSUsXnFj0PbMdK5Z0OOyz55hwJN4+Qv2Q=
+X-Google-Smtp-Source: AK7set8blTEg594OggQ+WxRJmvfiI3jG1BOskTjflPBcHHxz3kdHd9YSejZ8uxPVjf7U628nkWD1DimQc9rx6fxi7ig=
+X-Received: by 2002:a17:906:60f:b0:8dd:70a:3a76 with SMTP id
+ s15-20020a170906060f00b008dd070a3a76mr8949463ejb.11.1678271765265; Wed, 08
+ Mar 2023 02:36:05 -0800 (PST)
+MIME-Version: 1.0
+References: <20230308094024.14115-1-clamor95@gmail.com> <20230308094024.14115-3-clamor95@gmail.com>
+ <378db0d7-4d5a-a445-3e1a-ee6d8da5a9e2@linaro.org>
+In-Reply-To: <378db0d7-4d5a-a445-3e1a-ee6d8da5a9e2@linaro.org>
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+Date:   Wed, 8 Mar 2023 12:35:54 +0200
+Message-ID: <CAPVz0n2KgUKi-m+kjvbxq8fA_G0+KNHtkNe4T0UGpmasMjWK2A@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] hwmon: ina2xx: add optional regulator support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 08 Mar 2023 11:35:38 +0100
-Message-Id: <CR0XOHAGQL77.17W7Q78MY85JL@otso>
-Cc:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH 7/8] arm64: dts: qcom: sm6350: Add SoC-specific
- compatible to cpufreq_hw
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Viresh Kumar" <viresh.kumar@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Manivannan Sadhasivam" <mani@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>
-X-Mailer: aerc 0.14.0
-References: <20230308-topic-cpufreq_bindings-v1-0-3368473ec52d@linaro.org>
- <20230308-topic-cpufreq_bindings-v1-7-3368473ec52d@linaro.org>
-In-Reply-To: <20230308-topic-cpufreq_bindings-v1-7-3368473ec52d@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Konrad,
-
-On Wed Mar 8, 2023 at 2:27 AM CET, Konrad Dybcio wrote:
-> Add a SoC-specific compatbile to cpufreq_hw for compliancy with bindings.
+=D1=81=D1=80, 8 =D0=B1=D0=B5=D1=80. 2023=E2=80=AF=D1=80. =D0=BE 12:25 Krzys=
+ztof Kozlowski
+<krzysztof.kozlowski@linaro.org> =D0=BF=D0=B8=D1=88=D0=B5:
 >
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Reviewed-by: Luca Weiss <luca.weiss@fairphone.com>
-
-> ---
->  arch/arm64/boot/dts/qcom/sm6350.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On 08/03/2023 10:40, Svyatoslav Ryhel wrote:
+> > Some devices may need a specific supply provided
+> > for this sensor to work properly, like p895 does.
+> >
+> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> > ---
+> >  drivers/hwmon/ina2xx.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+> > index 00fc70305a89..4a3e2b1bbe8b 100644
+> > --- a/drivers/hwmon/ina2xx.c
+> > +++ b/drivers/hwmon/ina2xx.c
+> > @@ -119,6 +119,7 @@ struct ina2xx_data {
+> >       long power_lsb_uW;
+> >       struct mutex config_lock;
+> >       struct regmap *regmap;
+> > +     struct regulator *vdd_supply;
+> >
+> >       const struct attribute_group *groups[INA2XX_MAX_ATTRIBUTE_GROUPS]=
+;
+> >  };
+> > @@ -656,6 +657,17 @@ static int ina2xx_probe(struct i2c_client *client)
+> >               return PTR_ERR(data->regmap);
+> >       }
+> >
+> > +     data->vdd_supply =3D devm_regulator_get_optional(dev, "vdd");
+> > +     if (IS_ERR(data->vdd_supply))
+> > +             return dev_err_probe(dev, PTR_ERR(data->vdd_supply),
+> > +                                  "failed to get vdd regulator\n");
+> > +
+> > +     ret =3D regulator_enable(data->vdd_supply);
+> > +     if (ret < 0) {
+> > +             dev_err(dev, "failed to enable vdd power supply\n");
+> > +             return ret;
 >
-> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/q=
-com/sm6350.dtsi
-> index 1e1d366c92c1..c18ca947618e 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> @@ -1995,7 +1995,7 @@ osm_l3: interconnect@18321000 {
->  		};
-> =20
->  		cpufreq_hw: cpufreq@18323000 {
-> -			compatible =3D "qcom,cpufreq-hw";
-> +			compatible =3D "qcom,sm6350-cpufreq-hw", "qcom,cpufreq-hw";
->  			reg =3D <0 0x18323000 0 0x1000>, <0 0x18325800 0 0x1000>;
->  			reg-names =3D "freq-domain0", "freq-domain1";
->  			clocks =3D <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
+> And where is disable? On each error path, removal etc.
 >
-> --=20
-> 2.39.2
 
+error path ok, should I create a remove function just to disable the regula=
+tor?
+
+> Best regards,
+> Krzysztof
+>
