@@ -2,211 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5966F6B0555
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D92A6B0559
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjCHLEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
+        id S231341AbjCHLFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 06:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbjCHLEA (ORCPT
+        with ESMTP id S230509AbjCHLEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:04:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B6295E22
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 03:03:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D18F061761
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 11:03:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6970DC433EF;
-        Wed,  8 Mar 2023 11:03:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678273419;
-        bh=Zbl3Foqh2H5WwIwrRZv3Jx/V1nZZ5DSGmtKn0Ssa7Ac=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jCPp/xktaaV2xYVkQ6nb3+wmXdq29v6wIVE4TfWp+30FZ5oVstNnL9J8aQsf2jks/
-         yB016+p8iFGrBMYjSETJcRSzNqmUj+02ZPVzYN82ZfJLEKnQolJxaopisEBhifU+9G
-         sXEq9mZZpuYgHtILY9JDHrg45+gCXfR6abVO9+SfyJQKqcVgTevQIUEbsP0PKZlYva
-         His5DUYZc3rVxBVkwfEb6fcNuKm6veFDndk6Iv0Z4+DPWv4hTmglznKvWy4leSLozH
-         3+tx4G+GqWLmcHQR4nVsm42jsm8Vsx2cDKHFeLiLvOCWNc6Axa1OujS4Csar2fmJ63
-         2pcurg2AWuJrQ==
-Date:   Wed, 8 Mar 2023 11:03:35 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Song Shuai <suagrfillet@gmail.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
-        pierre.gondois@arm.com, conor.dooley@microchip.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Revert "riscv: Set more data to cacheinfo"
-Message-ID: <511b57ce-476a-4801-8b14-e2a9c180c400@spud>
-References: <20230308064734.512457-1-suagrfillet@gmail.com>
+        Wed, 8 Mar 2023 06:04:40 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6169AFE4
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 03:03:58 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id ay14so60392178edb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 03:03:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678273437;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2mOeVIjm8xAMi1XdiTZIXvjNCduRkLKc7AUq9KH5xfM=;
+        b=iAx8gn/CiR1bBZDJ6o8a1ljzFGvp8YzI2fVG2BsIA7s7BDe+pizvRqtU9sz2Gd8JSu
+         g85rYIghkuxknjrQyKvOgZopVJiMFsL+TqjWhDVYEl9dejVBaPksboBOb6MliPvsLK8i
+         zca9g8lyM8r1QiH3FlrGH7captEnW7SaHw8N28jJSN/2h1+Ndl+0GFQQsMiw+vOjOqHi
+         xW340FhEZGlOhqKDPyeHH0i/+1asGoelt5aolUVU6L9hLRbJq+n9GC8Jx15D5j0gdD1k
+         +i7N57OLo3kTSTgw7MEaF4dSrNEzOC3C96XeILtqxP4s2X1EQYdSGoeIPEU28zpj21y1
+         95UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678273437;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2mOeVIjm8xAMi1XdiTZIXvjNCduRkLKc7AUq9KH5xfM=;
+        b=oFlOpzLEPiuUy0mrOPELfVSGE7dN5ylFJP0u8fZNitzQZrnj80wOet9mrwJL5NbWZr
+         rdXuCYmGBgD0bfrH8kxnb8S1D4zmaa6Rp70F/pn4Co4uqD96BNdumuc0qvC8pUkXsrZf
+         ZceRVKgRe4cBdDbqK14W5JxlCizGdG3PF2YGKRV3cBVPmzULErUZXBpQsm5tD8NCqV/v
+         3l1HSUgqoZYopTl3fMQRHiGDZtK35RVkyxjdQ59H6iUSY/4y8LxUQq4NtchDTUB/oc9r
+         XCufi+iXEakxdG0TfYNqMEMoqFGlIhTJzk/UvCg+zCrFXSTk37ItE2Q5NtKJOsRRW5q1
+         3klA==
+X-Gm-Message-State: AO0yUKXuKtmwM1+VzTZT/UWABFsK3fEmerGIfXjkbXf1fe9z0ZMubvHw
+        OWmXR6CkMi+j7K8oo1jzfKpM6A==
+X-Google-Smtp-Source: AK7set+uYd9BWN+DxCTsFT3RC2Npkxt1wr2xAp2qBurGjWBjqeX355SU3BlD4wSUfJ0rgZioGEugQQ==
+X-Received: by 2002:aa7:c0da:0:b0:4c0:9bd7:54cc with SMTP id j26-20020aa7c0da000000b004c09bd754ccmr13681933edp.11.1678273436865;
+        Wed, 08 Mar 2023 03:03:56 -0800 (PST)
+Received: from google.com (94.189.141.34.bc.googleusercontent.com. [34.141.189.94])
+        by smtp.gmail.com with ESMTPSA id d6-20020a1709064c4600b008eb5b085075sm7233492ejw.122.2023.03.08.03.03.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 03:03:56 -0800 (PST)
+Date:   Wed, 8 Mar 2023 11:03:51 +0000
+From:   Matt Bobrowski <mattbobrowski@google.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        shuah@kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH] bpf: Fix IMA test
+Message-ID: <ZAhrl0rK9Yume1Ed@google.com>
+References: <20230308103713.1681200-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="bwR3dAb+Pcs15DVY"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230308064734.512457-1-suagrfillet@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230308103713.1681200-1-roberto.sassu@huaweicloud.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Ha! I was literally in the midst of sending through a patch for
+this. Thanks for also taking a look and beating me to it!
 
---bwR3dAb+Pcs15DVY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This LGTM, feel free to add:
 
-On Wed, Mar 08, 2023 at 02:47:34PM +0800, Song Shuai wrote:
-> This reverts commit baf7cbd94b5688f167443a2cc3dcea3300132099.
->=20
-> There are some duplicate cache attributes populations executed
-> in both ci_leaf_init() and later cache_setup_properties().
->=20
-> Revert the commit baf7cbd94b56 ("riscv: Set more data to cacheinfo")
-> to setup only the level and type attributes at this early place.
->
+Reviewed-by: Matt Bobrowski <mattbobrowski@google.com>
 
-I've attempted to do a little bit of history diving to figure out what
-commit to "blame" in a fixes tag for this.
-My initial thought was to blame 03f11f03dbfe ("RISC-V: Parse cpu topology
-during boot."), but baf7cbd94b56 ("riscv: Set more data to cacheinfo")
-looks like it came along some months later.
-I assume you double checked that the stuff in the aux vector is the same
-before/after this revert? Looking on lore, that seems to be why Zong did
-it this way in the first place:
-https://lore.kernel.org/linux-riscv/b6fed9b4c2a3eacb2a9c353c2570d9dc1d0c1c8=
-8.1598859038.git.zong.li@sifive.com/
-
-Cheers,
-Conor.
-
-> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+On Wed, Mar 08, 2023 at 11:37:13AM +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Commit 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED
+> flag is set") caused bpf_ima_inode_hash() to refuse to give non-fresh
+> digests. IMA test #3 assumed the old behavior, that bpf_ima_inode_hash()
+> still returned also non-fresh digests.
+> 
+> Correct the test by accepting both cases. If the samples returned are 1,
+> assume that the commit above is applied and that the returned digest is
+> fresh. If the samples returned are 2, assume that the commit above is not
+> applied, and check both the non-fresh and fresh digest.
+> 
+> Fixes: 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED flag is set")
+> Reported by: David Vernet <void@manifault.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
->  arch/riscv/kernel/cacheinfo.c | 66 ++++++++---------------------------
->  1 file changed, 15 insertions(+), 51 deletions(-)
->=20
-> diff --git a/arch/riscv/kernel/cacheinfo.c b/arch/riscv/kernel/cacheinfo.c
-> index 3a13113f1b29..305ebbdc780d 100644
-> --- a/arch/riscv/kernel/cacheinfo.c
-> +++ b/arch/riscv/kernel/cacheinfo.c
-> @@ -64,53 +64,12 @@ uintptr_t get_cache_geometry(u32 level, enum cache_ty=
-pe type)
->  			   0;
->  }
-> =20
-> -static void ci_leaf_init(struct cacheinfo *this_leaf, enum cache_type ty=
-pe,
-> -			 unsigned int level, unsigned int size,
-> -			 unsigned int sets, unsigned int line_size)
-> +static void ci_leaf_init(struct cacheinfo *this_leaf,
-> +			 struct device_node *node,
-> +			 enum cache_type type, unsigned int level)
->  {
->  	this_leaf->level =3D level;
->  	this_leaf->type =3D type;
-> -	this_leaf->size =3D size;
-> -	this_leaf->number_of_sets =3D sets;
-> -	this_leaf->coherency_line_size =3D line_size;
-> -
-> -	/*
-> -	 * If the cache is fully associative, there is no need to
-> -	 * check the other properties.
-> -	 */
-> -	if (sets =3D=3D 1)
-> -		return;
-> -
-> -	/*
-> -	 * Set the ways number for n-ways associative, make sure
-> -	 * all properties are big than zero.
-> -	 */
-> -	if (sets > 0 && size > 0 && line_size > 0)
-> -		this_leaf->ways_of_associativity =3D (size / sets) / line_size;
-> -}
-> -
-> -static void fill_cacheinfo(struct cacheinfo **this_leaf,
-> -			   struct device_node *node, unsigned int level)
-> -{
-> -	unsigned int size, sets, line_size;
-> -
-> -	if (!of_property_read_u32(node, "cache-size", &size) &&
-> -	    !of_property_read_u32(node, "cache-block-size", &line_size) &&
-> -	    !of_property_read_u32(node, "cache-sets", &sets)) {
-> -		ci_leaf_init((*this_leaf)++, CACHE_TYPE_UNIFIED, level, size, sets, li=
-ne_size);
-> -	}
-> -
-> -	if (!of_property_read_u32(node, "i-cache-size", &size) &&
-> -	    !of_property_read_u32(node, "i-cache-sets", &sets) &&
-> -	    !of_property_read_u32(node, "i-cache-block-size", &line_size)) {
-> -		ci_leaf_init((*this_leaf)++, CACHE_TYPE_INST, level, size, sets, line_=
-size);
-> -	}
-> -
-> -	if (!of_property_read_u32(node, "d-cache-size", &size) &&
-> -	    !of_property_read_u32(node, "d-cache-sets", &sets) &&
-> -	    !of_property_read_u32(node, "d-cache-block-size", &line_size)) {
-> -		ci_leaf_init((*this_leaf)++, CACHE_TYPE_DATA, level, size, sets, line_=
-size);
-> -	}
->  }
-> =20
->  int populate_cache_leaves(unsigned int cpu)
-> @@ -121,24 +80,29 @@ int populate_cache_leaves(unsigned int cpu)
->  	struct device_node *prev =3D NULL;
->  	int levels =3D 1, level =3D 1;
-> =20
-> -	/* Level 1 caches in cpu node */
-> -	fill_cacheinfo(&this_leaf, np, level);
-> +	if (of_property_read_bool(np, "cache-size"))
-> +		ci_leaf_init(this_leaf++, np, CACHE_TYPE_UNIFIED, level);
-> +	if (of_property_read_bool(np, "i-cache-size"))
-> +		ci_leaf_init(this_leaf++, np, CACHE_TYPE_INST, level);
-> +	if (of_property_read_bool(np, "d-cache-size"))
-> +		ci_leaf_init(this_leaf++, np, CACHE_TYPE_DATA, level);
-> =20
-> -	/* Next level caches in cache nodes */
->  	prev =3D np;
->  	while ((np =3D of_find_next_cache_node(np))) {
->  		of_node_put(prev);
->  		prev =3D np;
-> -
->  		if (!of_device_is_compatible(np, "cache"))
->  			break;
->  		if (of_property_read_u32(np, "cache-level", &level))
->  			break;
->  		if (level <=3D levels)
->  			break;
-> -
-> -		fill_cacheinfo(&this_leaf, np, level);
-> -
-> +		if (of_property_read_bool(np, "cache-size"))
-> +			ci_leaf_init(this_leaf++, np, CACHE_TYPE_UNIFIED, level);
-> +		if (of_property_read_bool(np, "i-cache-size"))
-> +			ci_leaf_init(this_leaf++, np, CACHE_TYPE_INST, level);
-> +		if (of_property_read_bool(np, "d-cache-size"))
-> +			ci_leaf_init(this_leaf++, np, CACHE_TYPE_DATA, level);
->  		levels =3D level;
->  	}
->  	of_node_put(np);
-> --=20
-> 2.20.1
->=20
-
---bwR3dAb+Pcs15DVY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAhrhgAKCRB4tDGHoIJi
-0vSXAQCvURMcp1bHLxBYLosA+i+WCSNau6J+dyYcyi9vWcVoKwEAySl9aT/Omtzg
-gIYgjttNSKJ1istKGeQ2H9TRaomc/A4=
-=bvL+
------END PGP SIGNATURE-----
-
---bwR3dAb+Pcs15DVY--
+>  .../selftests/bpf/prog_tests/test_ima.c       | 29 ++++++++++++++-----
+>  1 file changed, 21 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_ima.c b/tools/testing/selftests/bpf/prog_tests/test_ima.c
+> index b13feceb38f..810b14981c2 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_ima.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_ima.c
+> @@ -70,7 +70,7 @@ void test_test_ima(void)
+>  	u64 bin_true_sample;
+>  	char cmd[256];
+>  
+> -	int err, duration = 0;
+> +	int err, duration = 0, fresh_digest_idx = 0;
+>  	struct ima *skel = NULL;
+>  
+>  	skel = ima__open_and_load();
+> @@ -129,7 +129,15 @@ void test_test_ima(void)
+>  	/*
+>  	 * Test #3
+>  	 * - Goal: confirm that bpf_ima_inode_hash() returns a non-fresh digest
+> -	 * - Expected result: 2 samples (/bin/true: non-fresh, fresh)
+> +	 * - Expected result:
+> +	 *   1 sample (/bin/true: fresh) if commit 62622dab0a28 applied
+> +	 *   2 samples (/bin/true: non-fresh, fresh) if commit 62622dab0a28 is
+> +	 *     not applied
+> +	 *
+> +	 * If commit 62622dab0a28 ("ima: return IMA digest value only when
+> +	 * IMA_COLLECTED flag is set") is applied, bpf_ima_inode_hash() refuses
+> +	 * to give a non-fresh digest, hence the correct result is 1 instead of
+> +	 * 2.
+>  	 */
+>  	test_init(skel->bss);
+>  
+> @@ -144,13 +152,18 @@ void test_test_ima(void)
+>  		goto close_clean;
+>  
+>  	err = ring_buffer__consume(ringbuf);
+> -	ASSERT_EQ(err, 2, "num_samples_or_err");
+> -	ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
+> -	ASSERT_NEQ(ima_hash_from_bpf[1], 0, "ima_hash");
+> -	ASSERT_EQ(ima_hash_from_bpf[0], bin_true_sample, "sample_equal_or_err");
+> +	ASSERT_GE(err, 1, "num_samples_or_err");
+> +	if (err == 2) {
+> +		ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
+> +		ASSERT_EQ(ima_hash_from_bpf[0], bin_true_sample,
+> +			  "sample_equal_or_err");
+> +		fresh_digest_idx = 1;
+> +	}
+> +
+> +	ASSERT_NEQ(ima_hash_from_bpf[fresh_digest_idx], 0, "ima_hash");
+>  	/* IMA refreshed the digest. */
+> -	ASSERT_NEQ(ima_hash_from_bpf[1], bin_true_sample,
+> -		   "sample_different_or_err");
+> +	ASSERT_NEQ(ima_hash_from_bpf[fresh_digest_idx], bin_true_sample,
+> +		   "sample_equal_or_err");
+>  
+>  	/*
+>  	 * Test #4
+> -- 
+> 2.25.1
+> 
+/M
