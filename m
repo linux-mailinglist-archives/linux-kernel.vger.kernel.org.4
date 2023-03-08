@@ -2,220 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A0A6AFF85
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 08:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017096AFF88
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 08:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjCHHNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 02:13:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        id S229573AbjCHHQ5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Mar 2023 02:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjCHHNl (ORCPT
+        with ESMTP id S229492AbjCHHQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 02:13:41 -0500
-Received: from ns2.wdyn.eu (ns2.wdyn.eu [IPv6:2a03:4000:40:5b2::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF95057D28;
-        Tue,  7 Mar 2023 23:13:37 -0800 (PST)
-Message-ID: <4171c994-6b02-95d1-30c7-8f6f72af7893@wetzel-home.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wetzel-home.de;
-        s=wetzel-home; t=1678259614;
-        bh=29Jr78eaN2Bj1R4CabSc7hP3uCfcbMgRF4ahe/p26AY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=ZXNL6QbZUTp6NWcPfDfaFd88ULUE0WmmLinKd61qEAhiCrKVn/1zUUz6MoHdO1nuW
-         o3bOHn9bp6kLwdH354K0jCXB6qwzD2Cio07BsLiQyrVYcJoBo+rcUNoB+6G4sfiQVJ
-         /nq0jQr+neu/NCoccouMcOb3RpJM9F2mq7MeC0LE=
-Date:   Wed, 8 Mar 2023 08:13:32 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [Regression] rt2800usb - Wifi performance issues and connection
- drops
+        Wed, 8 Mar 2023 02:16:54 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6D6498A6
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 23:16:52 -0800 (PST)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PWkBD1XXCzrSWD;
+        Wed,  8 Mar 2023 15:16:04 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 8 Mar 2023 15:16:50 +0800
+Received: from dggpemm500006.china.huawei.com ([7.185.36.236]) by
+ dggpemm500006.china.huawei.com ([7.185.36.236]) with mapi id 15.01.2507.021;
+ Wed, 8 Mar 2023 15:16:49 +0800
+From:   "chenjun (AM)" <chenjun102@huawei.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cl@linux.com" <cl@linux.com>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "xuqiang (M)" <xuqiang36@huawei.com>
+Subject: Re: [RFC] mm/slub: Reduce memory consumption in extreme scenarios
+Thread-Topic: [RFC] mm/slub: Reduce memory consumption in extreme scenarios
+Thread-Index: AQHZUM8n8Cz2r/0+O0WpGZE+2ntUXw==
+Date:   Wed, 8 Mar 2023 07:16:49 +0000
+Message-ID: <4ad448c565134d76bea0ac8afffe4f37@huawei.com>
+References: <20230307082811.120774-1-chenjun102@huawei.com>
+ <ZAdIJKkT8VHdbPs9@localhost>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
-To:     Thomas Mann <rauchwolke@gmx.net>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Helmut Schaa <helmut.schaa@googlemail.com>,
-        Johannes Berg <johannes.berg@intel.com>
-References: <b8efebc6-4399-d0b8-b2a0-66843314616b@leemhuis.info>
- <5a7cd098-1d83-6297-e802-ce998c8ec116@leemhuis.info>
- <6025e17e-4c29-6d36-6b9c-2fec543b21c4@wetzel-home.de>
- <debc7fe9-204d-63a7-aa61-91b20a46f385@wetzel-home.de>
- <20230307233123.14a411ee@polar.lan>
-From:   Alexander Wetzel <alexander@wetzel-home.de>
-In-Reply-To: <20230307233123.14a411ee@polar.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.178.43]
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.03.23 23:31, Thomas Mann wrote:
-> Hi Alexander,
+Hi,
 
-Since I suspect we'll exchange quite some mails here:
-Top posting is being frowned on the mailing lists on copy.
-Details here: https://www.infradead.org/~dwmw2/email.html
+Thanks for reply.
 
-I've moved your post to the correct position and replied there.
-
+在 2023/3/7 22:20, Hyeonggon Yoo 写道:
+> On Tue, Mar 07, 2023 at 08:28:11AM +0000, Chen Jun wrote:
+>> If call kmalloc_node with NO __GFP_THISNODE and node[A] with no memory.
+>> Slub will alloc a slub page which is not belong to A, and put the page
+>> to kmem_cache_node[page_to_nid(page)]. The page can not be reused
+>> at next calling, because NULL will be get from get_partical().
+>> That make kmalloc_node consume more memory.
 > 
->>>>
->>>
->>> I just uploaded a test patch to bugzilla.
->>> Please have a look if that fixes the issue.
->>>
->>> If not I would be interested in the output of your iTXQ status.
->>> Enable CONFIG_MAC80211_DEBUGFS and run this command when the
->>> connection is bad and send/share/upload to bugzilla the resulting
->>> debug.out:
->>>
->>> k=1; while [ $k -lt 10 ]; do \
->>> cat /sys/kernel/debug/ieee80211/phy?/netdev:*/stations/*/aqm; \
->>> k=$(($k+1)); done >> debug.out
->>
->> Thomas and I continued with some debugging in
->> https://bugzilla.kernel.org/show_bug.cgi?id=217119
->>
->> But the results so far are unexpected and we decided to continue the
->> debugging with the round here. Hoping someone sees something I miss.
->>
->> A very summary where we are:
->> I can't reproduce the bug with a very similar card and kernel config
->> so far. Thomas card stops the iTXQs for intervalls >30s. Mine
->> operates normally.
->>
->> A more useful but longer summary:
->>
->> Thomas updated to a 6.2 kernel and reported "connection drops and
->> bandwidth problems" with his rt2800usb wlan card. (6.1 is ok.) Asked
->> for some more details he reported:
->> "...slow bandwidth stuff works better, but the main problem/test case
->> is to start a 8-16 mbit video stream, which sometimes runs for a few
->> seconds and then stops or it doesn't start at all"
->>
->> He bisected the issue and identified my commit 4444bc2116ae ("wifi:
->> mac80211: Proper mark iTXQs for resumption") as culprit.
->>
->> Checking the internal iTXQ status when the issue is ongoing shows,
->> that TID zero is flagged as dirty and thus is not transmitting queued
->> packets. Interesting line from
->> /sys/kernel/debug/ieee80211/phy?/netdev:*/stations/*/aqm:
->> tid ac backlog-bytes backlog-packets new-flows drops marks overlimit
->> collisions tx-bytes tx-packets flags
->> 0 2 619736 404 1681 0 0 0 1 4513965 3019 0xe(RUN AMPDU NO-AMSDU DIRTY)
->>
->> --> The "normal" iTXQ handling IEEE80211_AC_BE has queued packets and
->> is flagged as DIRTY. There even is a potential race setting the DIRTY
->> flag, but the fix for that is not helping.
->>
->> Thus Thomas applied two debug patches, to better understand why the
->> DIRTY flag is not cleared.
->>
->> And looking at the output from those we see that the driver stops Tx
->> by calling ieee80211_stop_queue(). When ieee80211_wake_queue()
->> mac80211 correctly resumes TX but is getting stopped by the driver
->> after a single packet again. (The start of the relevant log is
->> missing, so that may be initially more).
->> I assume TX is still ok at that stage. But after some singe Tx
->> operations the driver stops the queues again. Here the relevant part
->> of the log:
->> [  179.584997] XXXX __ieee80211_wake_txqs: waking TID 0
->> [  179.585022] XXXX drv_tx: TX
->> [  179.585027] XXXX ieee80211_stop_queue: called
->> [  179.585028] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
->> [  179.585030] XXXX __ieee80211_wake_txqs: TID 3 NOT dirty
->> [  179.585031] XXXX __ieee80211_wake_txqs: TID 8 NOT dirty
->> [  179.585033] XXXX __ieee80211_wake_txqs: TID 11 NOT dirty
->> [  179.585034] XXXX __ieee80211_wake_txqs: EXIT
->> [  179.585035] XXXX __ieee80211_wake_txqs: ENTRY
->> [  179.585036] XXXX __ieee80211_wake_txqs: TID 1 NOT dirty
->> [  179.585037] XXXX __ieee80211_wake_txqs: TID 2 NOT dirty
->> [  179.585038] XXXX __ieee80211_wake_txqs: TID 9 NOT dirty
->> [  179.585040] XXXX __ieee80211_wake_txqs: TID 10 NOT dirty
->> [  179.585041] XXXX __ieee80211_wake_txqs: EXIT
->> [  179.585047] XXXX drv_tx: TX
->> [  179.585056] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
->> [  179.585271] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
->> [  179.585868] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
->> [  179.586120] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
->> [  179.586544] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
->> [  179.586792] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
->> [  179.587317] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
->> [  179.587591] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
->> [  179.588569] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
->> ....
->> [  214.307617] XXXX ieee80211_wake_queue: called
->>
->>
->> --> So the driver blocked TX for more than 30s. Which is a good
->> explanation of what Thomas observes.
->>
->> But there is nothing mac80211 can do differently here. Whatever is
->> the real reason for the issue, it's nothing obvious I see.
->>
->> Luckily I found a card using the same driver and nearly the same card:
->> Thomas systems:Linux version 6.2.2-gentoo (root@foo) (gcc (Gentoo
->> Hardened 12.2.1_p20230121-r1 p10) 12.2.1 20230121, GNU ld (Gentoo
->> 2.39 p5) 2.39.0) #2 SMP Fri Mar  3 16:59:02 CET 2023ieee80211 phy0:
->> rt2x00_set_rt: Info - RT chipset 3070, rev 0201 detected
->> ieee80211 phy0: rt2x00_set_rf: Info - RF chipset 0005 detected
->> ieee80211 phy0: Selected rate control algorithm 'minstrel_ht'
->>
->> My system, using the kernel config from Thomas with only minor
->> modifications (different filesystems and initramfs settings and
->> enabled mac80211 debug and developer options):
->> Linux version 6.2.2-gentoo (root@Perry.mordor) (gcc (Gentoo
->> 12.2.1_p20230121-r1 p10) 12.2.1 20230121, GNU ld (Gentoo 2.40 p2)
->> 2.40.0) #2 SMP Tue Mar  7 18:18:47 CET 2023ieee80211 phy0:
->> rt2x00_set_rt: Info - RT chipset 3070, rev 0200 detected
->> ieee80211 phy0: rt2x00_set_rf: Info - RF chipset 0005 detected
->> ieee80211 phy0: Selected rate control algorithm 'minstrel_ht'
->> ieee80211 phy0: rt2x00lib_request_firmware: Info - Loading firmware
->> file 'rt2870.bin'
->> ieee80211 phy0: rt2x00lib_request_firmware: Info - Firmware detected
->> - version: 0.36
->>
->> But there is one big difference on my system: I can't reproduce the
->> bug so far. It's working as it should... (I did not apply the debug
->> patches myself so far)
->>
->> I'm now planning to look a bit more into the rt2800usb driver and
->> provide another debug patch for interesting looking code pieces in it.
->>
->> @Thomas:
->> I've also uploaded you my binary kernel I'm running at the moment
->> here: https://www.awhome.eu/s/5FjqMS73rtCtSBM
->>
->> That kernel should also be able to boot and operate your system. Can
->> you try that and tell me, if that makes any difference?
-
- >
- > i can't boot the binary kernel here, as the initramfs is included in
- > my kernel, if you send me a patch, i can apply it and test it.
-
-That was an unpatched kernel. Idea was to verify that it's not a 
-compiler issue. (You seem to be using a hardened Gentoo profile.)
-
-Can you share your initrd, so I can include it? (Mail it to me directly, 
-upload it to bug in buguilla or send a link to some cloud storage.)
-
-
-
->>
->> I'm also planning to provide some more debug patches, to figuring out
->> which part of commit 4444bc2116ae ("wifi: mac80211: Proper mark iTXQs
->> for resumption") fixes the issue for you. Assuming my understanding
->> above is correct the patch should not really fix/break anything for
->> you...With the findings above I would have expected your git bisec to
->> identify commit a790cc3a4fad ("wifi: mac80211: add wake_tx_queue
->> callback to drivers") as the first broken commit...
->>
->> Alexander
+> Hello,
+> 
+> elaborating a little bit:
+> 
+> "When kmalloc_node() is called without __GFP_THISNODE and the target node
+> lacks sufficient memory, SLUB allocates a folio from a different node other
+> than the requested node, instead of taking a partial slab from it.
+> 
+> However, since the allocated folio does not belong to the requested node,
+> it is deactivated and added to the partial slab list of the node it
+> belongs to.
+> 
+> This behavior can result in excessive memory usage when the requested
+> node has insufficient memory, as SLUB will repeatedly allocate folios from
+> other nodes without reusing the previously allocated ones.
+> 
+> To prevent memory wastage, take a partial slab from a different node when
+> the requested node has no partial slab and __GFP_THISNODE is not explicitly
+> specified."
 > 
 
+Thanks, This is more clear than what I described.
+
+>> On qemu with 4 numas and each numa has 1G memory, Write a test ko
+>> to call kmalloc_node(196, 0xd20c0, 3) for 5 * 1024 * 1024 times.
+>>
+>> cat /proc/slabinfo shows:
+>> kmalloc-256       4302317 15151808    256   32    2 : tunables..
+>>
+>> the total objects is much more then active objects.
+>>
+>> After this patch, cat /prac/slubinfo shows:
+>> kmalloc-256       5244950 5245088    256   32    2 : tunables..
+>>
+>> Signed-off-by: Chen Jun <chenjun102@huawei.com>
+>> ---
+>>   mm/slub.c | 17 ++++++++++++++---
+>>   1 file changed, 14 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/mm/slub.c b/mm/slub.c
+>> index 39327e98fce3..c0090a5de54e 100644
+>> --- a/mm/slub.c
+>> +++ b/mm/slub.c
+>> @@ -2384,7 +2384,7 @@ static void *get_partial(struct kmem_cache *s, int node, struct partial_context
+>>   		searchnode = numa_mem_id();
+>>   
+>>   	object = get_partial_node(s, get_node(s, searchnode), pc);
+>> -	if (object || node != NUMA_NO_NODE)
+>> +	if (object || (node != NUMA_NO_NODE && (pc->flags & __GFP_THISNODE)))
+>>   		return object;
+> 
+> I think the problem here is to avoid taking a partial slab from
+> different node than the requested node even if __GFP_THISNODE is not set.
+> (and then allocating new slab instead)
+> 
+> Thus this hunk makes sense to me,
+> even if SLUB currently do not implement __GFP_THISNODE semantics.
+> 
+>>   	return get_any_partial(s, pc);
+>> @@ -3069,6 +3069,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+>>   	struct slab *slab;
+>>   	unsigned long flags;
+>>   	struct partial_context pc;
+>> +	int try_thisndoe = 0;
+>>
+>>   
+>>   	stat(s, ALLOC_SLOWPATH);
+>>   
+>> @@ -3181,8 +3182,12 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+>>   	}
+>>   
+>>   new_objects:
+>> -
+>>   	pc.flags = gfpflags;
+>> +
+>> +	/* Try to get page from specific node even if __GFP_THISNODE is not set */
+>> +	if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode)
+>> +			pc.flags |= __GFP_THISNODE;
+>> +
+>>   	pc.slab = &slab;
+>>   	pc.orig_size = orig_size;
+>>   	freelist = get_partial(s, node, &pc);
+>> @@ -3190,10 +3195,16 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+>>   		goto check_new_slab;
+>>   
+>>   	slub_put_cpu_ptr(s->cpu_slab);
+>> -	slab = new_slab(s, gfpflags, node);
+>> +	slab = new_slab(s, pc.flags, node);
+>>   	c = slub_get_cpu_ptr(s->cpu_slab);
+>>   
+>>   	if (unlikely(!slab)) {
+>> +		/* Try to get page from any other node */
+>> +		if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode) {
+>> +			try_thisnode = 0;
+>> +			goto new_objects;
+>> +		}
+>> +
+>>   		slab_out_of_memory(s, gfpflags, node);
+>>   		return NULL;
+> 
+> But these hunks do not make sense to me.
+> Why force __GFP_THISNODE even when the caller did not specify it?
+> 
+> (Apart from the fact that try_thisnode is defined as try_thisndoe,
+>   and try_thisnode is never set to nonzero value.)
+
+My mistake， It should be:
+int try_thisnode = 0;
+
+> 
+> IMHO the first hunk is enough to solve the problem.
+
+I think, we should try to alloc a page on the target node before getting 
+one from other nodes' partial.
+
+If the caller does not specify __GFP_THISNODE, we add __GFP_THISNODE to 
+try to get the slab only on the target node. If it fails, use the 
+original GFP FLAG to allow fallback.
+
+> 
+> Thanks,
+> Hyeonggon
+> 
+>>   	}
+>> -- 
+>> 2.17.1
+>>
+>>
+> 
+
+Thanks,
+Chen Jun
