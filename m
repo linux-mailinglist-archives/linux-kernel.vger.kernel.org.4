@@ -2,235 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186626AFB06
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABAC66AFB08
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjCHAXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 19:23:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
+        id S229757AbjCHAXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 19:23:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjCHAXW (ORCPT
+        with ESMTP id S229865AbjCHAXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 19:23:22 -0500
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA0152F49;
-        Tue,  7 Mar 2023 16:23:08 -0800 (PST)
-Received: by mail-oi1-f170.google.com with SMTP id e21so11042718oie.1;
-        Tue, 07 Mar 2023 16:23:08 -0800 (PST)
+        Tue, 7 Mar 2023 19:23:42 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DF793129
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 16:23:36 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id x3so59304041edb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 16:23:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1678235015;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zgWWi32IJYE+536Qst0aP9zpXgIamdrxOVoMZAXFmIg=;
+        b=bwchEAi0EUYeLB/6aDBEKNMa3kWrbUuRRRDqpB2unc0ti08ngBBU+syVJ4l6+Lclar
+         NWmzvjwgs1psuT8mJF601gvwO1musj9HK+pd0UVlLqFXgUt2zkNcGRhKqVXo6IRYZA/Y
+         HIEMClGTxKLKhQs5cZY2duRhnSnTxYCUpJU1M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678234988;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HhZTPcT1ZLPmPnwbbNMGANfRu/qeCcdG2pV9Oue9Cpw=;
-        b=hFtPaDxJfDasSDgUNglBfdD8rA+R2vedFJ9S0P25rGcpp1WJFkGO880Q7Rw8nPUh6h
-         Zvuhi4+r+c44oai0KcER9n4E35+26uKe3/I3Nnwb3BFLZXT3R6wIMYjiwXNrIlQ0NihG
-         53yUM27Ibl+GZFCR5XUgq681FUecsk9ftvXzAnxbqQr04piC4/x7xPU4K0+9HaiHJj48
-         0VsamHGc2TyXo+k1eOVSUhm0xNUYQDhoxVrIya0LaYjYO1MzYOL8rsKwvLhwAsQw4Wvj
-         7EiYmDhZECwyRgqf3G4sOYSn6KgDON8WPCT/H+2KrZCC0V7czJa8LKNJE42qLC7WABUa
-         UQ7w==
-X-Gm-Message-State: AO0yUKWM9v8oqnSZStULpYVPfaC5i5Vbp+IcgzaGaWpTTwu51+0wb1j+
-        vHEhUgYIIRc6ncCyxUd0/Q==
-X-Google-Smtp-Source: AK7set9V9VdEeZYGpbEeDGQdr9TVJX1PtfXopLn0mwWKfaxcu+x/xijWMjWRMXNueLrorPEO1B48nA==
-X-Received: by 2002:aca:110f:0:b0:37e:aa97:4660 with SMTP id 15-20020aca110f000000b0037eaa974660mr7833692oir.16.1678234987950;
-        Tue, 07 Mar 2023 16:23:07 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o188-20020acaf0c5000000b00383ef58c15bsm5812516oih.28.2023.03.07.16.23.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 16:23:07 -0800 (PST)
-Received: (nullmailer pid 528287 invoked by uid 1000);
-        Wed, 08 Mar 2023 00:23:06 -0000
-Date:   Tue, 7 Mar 2023 18:23:06 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Walle <michael@walle.cc>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 04/21] of: Move of_modalias() to module.c
-Message-ID: <20230308002306.GB513330-robh@kernel.org>
-References: <20230307165359.225361-1-miquel.raynal@bootlin.com>
- <20230307165359.225361-5-miquel.raynal@bootlin.com>
+        d=1e100.net; s=20210112; t=1678235015;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zgWWi32IJYE+536Qst0aP9zpXgIamdrxOVoMZAXFmIg=;
+        b=uQ6SoYyWwTFledw6qAHp4DZelG7jgC9oWriBatHJ7Vr5MBWbxkm4+UwbhifsaRzhNf
+         fmTz2sJLrupNNIg26z6SevKs+J9o9WscgyBnOVmivc+LxQ3/b/EN4CxP4uBxBSASEod/
+         4ylj+F82BBuNZj5IcGAlWL8f2BoayX2QadtDQ9FMe6ZFc0y1ysyX+sCDlG71ahOvxWNH
+         wETix3eEIU+lwXAgVOKAfHMbZyIGD8JOL5Wa+mjFTQvmY/T2PlbtkU895LjtRf8OGwYo
+         Xzsbxbs/9rwbrNot4A0N2xK9/0qAY6cc6scU+C/FiCkym8Egezdl2RpKo6aDCLKTu/NL
+         Z0vA==
+X-Gm-Message-State: AO0yUKXH18fuuUIsuPEvksUAaWpEGqsCy2J9V/yb7hjJZ3FFxPwTOEYp
+        VLkztY29PO00wb8clxehP4hRawSRH1gHIxWqtWEWeA==
+X-Google-Smtp-Source: AK7set/Q/Ll51K2gMTIMgmG4j0wRR7sk0xgcPbUH6OCJ5Oj2vf7Nn7vMfIMbb0JKvWkgdq4zkXp02N6NbNL4b+Q55U0=
+X-Received: by 2002:a17:906:d041:b0:877:747d:4a82 with SMTP id
+ bo1-20020a170906d04100b00877747d4a82mr8178254ejb.0.1678235014660; Tue, 07 Mar
+ 2023 16:23:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307165359.225361-5-miquel.raynal@bootlin.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230307181940.868828-1-helgaas@kernel.org> <20230307181940.868828-6-helgaas@kernel.org>
+In-Reply-To: <20230307181940.868828-6-helgaas@kernel.org>
+From:   Michael Chan <michael.chan@broadcom.com>
+Date:   Tue, 7 Mar 2023 16:23:23 -0800
+Message-ID: <CACKFLi=_LygKq_RMKrL-UR18UNK=YB2e0v4jRU7sA=UMud7DSA@mail.gmail.com>
+Subject: Re: [PATCH 05/28] bnxt: Drop redundant pci_enable_pcie_error_reporting()
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000f0d4d405f65889eb"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 05:53:42PM +0100, Miquel Raynal wrote:
-> Create a specific .c file for of related module handling.
-> Move of_modalias() inside as a first step.
+--000000000000f0d4d405f65889eb
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Perhaps a comment as to why it needs to be public? Or is it just shared 
-within the DT core? If so, we have of_private.h for that.
+On Tue, Mar 7, 2023 at 10:20=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> =
+wrote:
+>
+> From: Bjorn Helgaas <bhelgaas@google.com>
+>
+> pci_enable_pcie_error_reporting() enables the device to send ERR_*
+> Messages.  Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER =
+is
+> native"), the PCI core does this for all devices during enumeration.
+>
+> Remove the redundant pci_enable_pcie_error_reporting() call from the
+> driver.  Also remove the corresponding pci_disable_pcie_error_reporting()
+> from the driver .remove() path.
+>
+> Note that this only controls ERR_* Messages from the device.  An ERR_*
+> Message may cause the Root Port to generate an interrupt, depending on th=
+e
+> AER Root Error Command register managed by the AER service driver.
+>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Michael Chan <michael.chan@broadcom.com>
 
-> 
-> Suggested-by: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  drivers/of/Makefile |  2 +-
->  drivers/of/device.c | 37 -------------------------------------
->  drivers/of/module.c | 43 +++++++++++++++++++++++++++++++++++++++++++
->  include/linux/of.h  |  8 ++++++++
->  4 files changed, 52 insertions(+), 38 deletions(-)
->  create mode 100644 drivers/of/module.c
-> 
-> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
-> index e0360a44306e..ae9923fd2940 100644
-> --- a/drivers/of/Makefile
-> +++ b/drivers/of/Makefile
-> @@ -1,5 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -obj-y = base.o device.o platform.o property.o
-> +obj-y = base.o device.o module.o platform.o property.o
->  obj-$(CONFIG_OF_KOBJ) += kobj.o
->  obj-$(CONFIG_OF_DYNAMIC) += dynamic.o
->  obj-$(CONFIG_OF_FLATTREE) += fdt.o
-> diff --git a/drivers/of/device.c b/drivers/of/device.c
-> index 2bbb67798916..44f1f2ef12b7 100644
-> --- a/drivers/of/device.c
-> +++ b/drivers/of/device.c
-> @@ -1,5 +1,4 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -#include <linux/string.h>
->  #include <linux/kernel.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
-> @@ -248,42 +247,6 @@ const void *of_device_get_match_data(const struct device *dev)
->  }
->  EXPORT_SYMBOL(of_device_get_match_data);
->  
-> -static ssize_t of_modalias(struct device_node *np, char *str, ssize_t len)
-> -{
-> -	const char *compat;
-> -	char *c;
-> -	struct property *p;
-> -	ssize_t csize;
-> -	ssize_t tsize;
-> -
-> -	/* Name & Type */
-> -	/* %p eats all alphanum characters, so %c must be used here */
-> -	csize = snprintf(str, len, "of:N%pOFn%c%s", np, 'T',
-> -			 of_node_get_device_type(np));
-> -	tsize = csize;
-> -	len -= csize;
-> -	if (str)
-> -		str += csize;
-> -
-> -	of_property_for_each_string(np, "compatible", p, compat) {
-> -		csize = strlen(compat) + 1;
-> -		tsize += csize;
-> -		if (csize > len)
-> -			continue;
-> -
-> -		csize = snprintf(str, len, "C%s", compat);
-> -		for (c = str; c; ) {
-> -			c = strchr(c, ' ');
-> -			if (c)
-> -				*c++ = '_';
-> -		}
-> -		len -= csize;
-> -		str += csize;
-> -	}
-> -
-> -	return tsize;
-> -}
-> -
->  int of_device_request_module(struct device *dev)
->  {
->  	char *str;
-> diff --git a/drivers/of/module.c b/drivers/of/module.c
-> new file mode 100644
-> index 000000000000..9c6a53f32c0f
-> --- /dev/null
-> +++ b/drivers/of/module.c
-> @@ -0,0 +1,43 @@
-> +// SPDX-License-Identifier: GPL-2.0+
+Reviewed-by: Michael Chan <michael.chan@broadcom.com>
+Thanks.
 
-Existing license was GPL-2.0 (-only).
+--000000000000f0d4d405f65889eb
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> +/*
-> + * Linux kernel module helpers.
-> + */
-> +
-> +#include <linux/of.h>
-> +#include <linux/string.h>
-> +
-> +ssize_t of_modalias(struct device_node *np, char *str, ssize_t len)
-> +{
-> +	const char *compat;
-> +	char *c;
-> +	struct property *p;
-> +	ssize_t csize;
-> +	ssize_t tsize;
-> +
-> +	/* Name & Type */
-> +	/* %p eats all alphanum characters, so %c must be used here */
-> +	csize = snprintf(str, len, "of:N%pOFn%c%s", np, 'T',
-> +			 of_node_get_device_type(np));
-> +	tsize = csize;
-> +	len -= csize;
-> +	if (str)
-> +		str += csize;
-> +
-> +	of_property_for_each_string(np, "compatible", p, compat) {
-> +		csize = strlen(compat) + 1;
-> +		tsize += csize;
-> +		if (csize > len)
-> +			continue;
-> +
-> +		csize = snprintf(str, len, "C%s", compat);
-> +		for (c = str; c; ) {
-> +			c = strchr(c, ' ');
-> +			if (c)
-> +				*c++ = '_';
-> +		}
-> +		len -= csize;
-> +		str += csize;
-> +	}
-> +
-> +	return tsize;
-> +}
-> diff --git a/include/linux/of.h b/include/linux/of.h
-> index fc7ada57df33..1372f8647272 100644
-> --- a/include/linux/of.h
-> +++ b/include/linux/of.h
-> @@ -373,6 +373,9 @@ extern int of_parse_phandle_with_args_map(const struct device_node *np,
->  extern int of_count_phandle_with_args(const struct device_node *np,
->  	const char *list_name, const char *cells_name);
->  
-> +/* module functions */
-> +extern ssize_t of_modalias(struct device_node *np, char *str, ssize_t len);
-> +
->  /* phandle iterator functions */
->  extern int of_phandle_iterator_init(struct of_phandle_iterator *it,
->  				    const struct device_node *np,
-> @@ -730,6 +733,11 @@ static inline int of_count_phandle_with_args(const struct device_node *np,
->  	return -ENOSYS;
->  }
->  
-> +static inline ssize_t of_modalias(struct device_node *np, char *str, ssize_t len)
-> +{
-> +	return -ENODEV;
-> +}
-> +
->  static inline int of_phandle_iterator_init(struct of_phandle_iterator *it,
->  					   const struct device_node *np,
->  					   const char *list_name,
-> -- 
-> 2.34.1
-> 
+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
+OnaLEot1MoQO7BIe5S9H4AcCEXXcrJJiAtMCl47ARpyHmvQFQFFTrHgUYEd9V+9bOzY7MBIGSV1N
+/JfsT1sZw6HT0lJkSQefhPGpBniAob62DJP3qr11tu8CAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
+BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
+HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU31rAyTdZweIF0tJTFYwfOv2w
+L4QwDQYJKoZIhvcNAQELBQADggEBACcuyaGmk0NSZ7Kio7O7WSZ0j0f9xXcBnLbJvQXFYM7JI5uS
+kw5ozATEN5gfmNIe0AHzqwoYjAf3x8Dv2w7HgyrxWdpjTKQFv5jojxa3A5LVuM8mhPGZfR/L5jSk
+5xc3llsKqrWI4ov4JyW79p0E99gfPA6Waixoavxvv1CZBQ4Stu7N660kTu9sJrACf20E+hdKLoiU
+hd5wiQXo9B2ncm5P3jFLYLBmPltIn/uzdiYpFj+E9kS9XYDd+boBZhN1Vh0296zLQZobLfKFzClo
+E6IFyTTANonrXvCRgodKS+QJEH8Syu2jSKe023aVemkuZjzvPK7o9iU7BKkPG2pzLPgxggJtMIIC
+aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
+EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxeQGjDntHGb2iaQkIw
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDHvWj7S0WF8dcxMcS1e0uZ8vV60RVe/
+MeY7U33D2kiYMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDMw
+ODAwMjMzNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
+ATANBgkqhkiG9w0BAQEFAASCAQAK4GhP5dkPCI/iyZoY3yde3cDk5n08q0HMbB+cHl6QYVGY63r8
+7KFeaLd/CbYzQEh0kj1s+iwFOkGyvC/d8qQSvs62psY7xbyey0SphDvWoOykergYUP3HSRj1v/WV
+F20NLFFdQeuwQCXamw1OtfXCA7n7vwAiKbdlrSFtpqoihGzeaIcvVof+CE2jAiN776YbfPWvLDEV
+r7Fzpr8kuDBU29zf81in6NP03FlRuavftwUyOMp23bBu/FOlLGbtfcjdmRwOC6ldyKdcfyAEbSQ3
+DHwO3Rl/X5NgszRJQDxl7i4wwPgagfMXXE2igVmTnbzzVhhPzq40B4I+u0YbM1+s
+--000000000000f0d4d405f65889eb--
