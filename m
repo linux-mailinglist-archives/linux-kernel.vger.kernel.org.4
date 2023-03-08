@@ -2,51 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7496B0A0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0DD6B0A18
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:55:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231845AbjCHNyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
+        id S231793AbjCHNzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:55:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231597AbjCHNxf (ORCPT
+        with ESMTP id S231773AbjCHNyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:53:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AD17FD5E;
-        Wed,  8 Mar 2023 05:53:13 -0800 (PST)
+        Wed, 8 Mar 2023 08:54:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB0F5ADCA;
+        Wed,  8 Mar 2023 05:53:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79A09B81CD1;
-        Wed,  8 Mar 2023 13:53:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53A85C433EF;
-        Wed,  8 Mar 2023 13:53:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5625361840;
+        Wed,  8 Mar 2023 13:53:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA8FDC433AA;
+        Wed,  8 Mar 2023 13:53:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678283591;
-        bh=iLlFVOoDIQjiaILiJHm0ULqCparcbp/ihxWOpbFu1sc=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=jtc+Uz2XdCMX1sfOw1xSMdKhFhqK2jTbUiesH11psFB434aicpdPBGwpSbkDoXZU/
-         deviAHfJ2CQQYlrquQpCXu2PoP5V1/mupB8SloUWTO2Zla3ekuuCJr1uItb8vQ3WwR
-         0WWJhxo+V9konAhTrl/2Z+G+MSoBc/mSgkKhL0E/QMQ3dC35y6Ieofm583Am+05mNL
-         ANLtJ+TqzMy4dwrVEeXk/EFKmRwXb/S85idJuBIGlVZ74gH/xlq7O1kEsyl4l2Ssdd
-         ISYnJphhFMCJ7y1QJ8szxtU9bMmVHEXqZlhG0CkCaYd3fmvhGWBY06XrvG4tVfmy4U
-         EDh1quZyYVLFQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Rob Herring <robh@kernel.org>
-In-Reply-To: <20230306183115.87314-1-andriy.shevchenko@linux.intel.com>
-References: <20230306183115.87314-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 0/5] spi: mpc5xxx-psc: Clean up even more and fix
-Message-Id: <167828359003.32144.38378478063789166.b4-ty@kernel.org>
-Date:   Wed, 08 Mar 2023 13:53:10 +0000
+        s=k20201202; t=1678283598;
+        bh=lCKDASUtGE1lwVMwOB/R2i9NQDU7sIYKiTJYeBvFxsk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sUtvvfV/YuMtca6H9kNLI51WGadlYFxdlyFYUZcTl75eq+jVsOL1gY03PGdfsowkq
+         GpzAzLdRHhzlaeeLCZH+QgzhecGLanFPjGp8ki0tLgEUgw1/7o9SqLmZtQEOPHmXwF
+         vqL+qlwZIWTSzpq5rlYWvg3nILdqDf9EvbWtAO03nEBYnm+Yo/5rLPMIiLAq5NMMJD
+         jlYKfdo4ErSNtc7X196W+3X6PnUbDX+78SQiOSwfozgORR6jQEnpdGp3bmlzRLsJxk
+         uXqmlVSPQ5lSJsZR9Fqu4zMb4ImyQZgbHPAu/1ymYSPuKlPKtgksutpeDAVTfyq5Zk
+         53Gt+5wfJU4hw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Paul Elder <paul.elder@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, slongerbeam@gmail.com,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4] media: ov5640: Fix analogue gain control
+Date:   Wed,  8 Mar 2023 08:53:15 -0500
+Message-Id: <20230308135315.2927513-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,53 +59,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Mar 2023 20:31:10 +0200, Andy Shevchenko wrote:
-> The recent cleanup series broke the error path in the drivers.
-> So fix it and do even more cleanups.
-> 
-> Andy Shevchenko (5):
->   spi: mpc5xxx-psc: Correct error check for
->     devm_platform_get_and_ioremap_resource()
->   spi: mpc5xxx-psc: Return immediately if IRQ resource is unavailable
->   spi: mpc5xxx-psc: use devm_clk_get_enabled() for core clock
->   spi: mpc5xxx-psc: Propagate firmware node
->   spi: mpc5xxx-psc: Consistently use device property APIs
-> 
-> [...]
+From: Paul Elder <paul.elder@ideasonboard.com>
 
-Applied to
+[ Upstream commit afa4805799c1d332980ad23339fdb07b5e0cf7e0 ]
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Gain control is badly documented in publicly available (including
+leaked) documentation.
 
-Thanks!
+There is an AGC pre-gain in register 0x3a13, expressed as a 6-bit value
+(plus an enable bit in bit 6). The driver hardcodes it to 0x43, which
+one application note states is equal to x1.047. The documentation also
+states that 0x40 is equel to x1.000. The pre-gain thus seems to be
+expressed as in 1/64 increments, and thus ranges from x1.00 to x1.984.
+What the pre-gain does is however unspecified.
 
-[1/5] spi: mpc5xxx-psc: Correct error check for devm_platform_get_and_ioremap_resource()
-      commit: ee493fa5d91dec02402239a072820b18beb36265
-[2/5] spi: mpc5xxx-psc: Return immediately if IRQ resource is unavailable
-      commit: 208ee586f86237969a91ac60ea10f48db9135143
-[3/5] spi: mpc5xxx-psc: use devm_clk_get_enabled() for core clock
-      commit: 9e21720a49589304aef9e37e8b6c6a4196daf156
-[4/5] spi: mpc5xxx-psc: Propagate firmware node
-      commit: 289c084ddc1317e6ed911911f95371679c10af1e
-[5/5] spi: mpc5xxx-psc: Consistently use device property APIs
-      commit: 3169c5816a55ba671e9c8a671c6c75818d30c657
+There is then an AGC gain limit, in registers 0x3a18 and 0x3a19,
+expressed as a 10-bit "real gain format" value. One application note
+sets it to 0x00f8 and states it is equal to x15.5, so it appears to be
+expressed in 1/16 increments, up to x63.9375.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+The manual gain is stored in registers 0x350a and 0x350b, also as a
+10-bit "real gain format" value. It is documented in the application
+note as a Q6.4 values, up to x63.9375.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+One version of the datasheet indicates that the sensor supports a
+digital gain:
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+  The OV5640 supports 1/2/4 digital gain. Normally, the gain is
+  controlled automatically by the automatic gain control (AGC) block.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+It isn't clear how that would be controlled manually.
 
-Thanks,
-Mark
+There appears to be no indication regarding whether the gain controlled
+through registers 0x350a and 0x350b is an analogue gain only or also
+includes digital gain. The words "real gain" don't necessarily mean
+"combined analogue and digital gains". Some OmniVision sensors (such as
+the OV8858) are documented as supoprting different formats for the gain
+values, selectable through a register bit, and they are called "real
+gain format" and "sensor gain format". For that sensor, we have (one of)
+the gain registers documented as
+
+  0x3503[2]=0, gain[7:0] is real gain format, where low 4 bits are
+  fraction bits, for example, 0x10 is 1x gain, 0x28 is 2.5x gain
+
+  If 0x3503[2]=1, gain[7:0] is sensor gain format, gain[7:4] is coarse
+  gain, 00000: 1x, 00001: 2x, 00011: 4x, 00111: 8x, gain[7] is 1,
+  gain[3:0] is fine gain. For example, 0x10 is 1x gain, 0x30 is 2x gain,
+  0x70 is 4x gain
+
+(The second part of the text makes little sense)
+
+"Real gain" may thus refer to the combination of the coarse and fine
+analogue gains as a single value.
+
+The OV5640 0x350a and 0x350b registers thus appear to control analogue
+gain. The driver incorrectly uses V4L2_CID_GAIN as V4L2 has a specific
+control for analogue gain, V4L2_CID_ANALOGUE_GAIN. Use it.
+
+If registers 0x350a and 0x350b are later found to control digital gain
+as well, the driver could then restrict the range of the analogue gain
+control value to lower than x64 and add a separate digital gain control.
+
+Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Reviewed-by: Jai Luthra <j-luthra@ti.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/media/i2c/ov5640.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index be6c882dd1d54..087fb464ffc12 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -2704,7 +2704,7 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+ 	/* Auto/manual gain */
+ 	ctrls->auto_gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_AUTOGAIN,
+ 					     0, 1, 1, 1);
+-	ctrls->gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_GAIN,
++	ctrls->gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_ANALOGUE_GAIN,
+ 					0, 1023, 1, 0);
+ 
+ 	ctrls->saturation = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_SATURATION,
+-- 
+2.39.2
 
