@@ -2,130 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9D86B12B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:13:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB346B12C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjCHUNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 15:13:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
+        id S230237AbjCHUPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 15:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbjCHUNs (ORCPT
+        with ESMTP id S230256AbjCHUPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:13:48 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2101.outbound.protection.outlook.com [40.107.243.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE7461A9F;
-        Wed,  8 Mar 2023 12:13:42 -0800 (PST)
+        Wed, 8 Mar 2023 15:15:18 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2088.outbound.protection.outlook.com [40.107.243.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE86ED516E;
+        Wed,  8 Mar 2023 12:14:45 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HtCuqPAPCA7tvQmqZzzUvqxRzJIyheki7hjzEVstX5yukOaN1ELY3o4Bt7W8FTU+fgPykaGF62Z4iBdOAlJW2FfF3aNMVUt1vES6AnV7cQXqVz4X1k0ttnb5B7rE5yCgP2W+EAm2l/jMMa1N/YmB9tYsVB8cf1be33fWefYWef4bUweU2E+wOFtiARu/ImE22e/3eoi8OO2ywSX4qi7s/1b6mMuU8XfCs2eLZt1wFZcQbt8MGbl01gAQnJUj85wzUdXA+/SPHEd/OZTE8UiLrZkzht6G7GJy16Mq27DdjNfqzHfm2NYaBC82bLzj1//7j9ZhiW0my9hJ2/YjOEOvCQ==
+ b=esIjJmtQdYpCPE44oWJkw7qZmfzzO3CAB4I7oR7x3XTsO7iT7BF+AogpkcwHDUzmlR8iJmH7BwYvnXUYKMkN8LqfjvCE2ctJNIgERM/eH0U7m+5sjwY3NUAlemcN4XM5JqdMT1nHigMvDqG0rgiIXJZZe+6lmRu0BE0HeTcT1UyjB4FqEVpx2re6FBRY3255lum8Cy/G2z0mW2DjmPoneyAUUaZhgp/i/7p0IeIMQLGJ0kZ6BO85Ua6HGxCtPz235yo/kOT/bl7AuOld9OQzIFGOfiqO9WcLt8x7YQPLzIdHa2NpmI9CVOnK6FLddcd5rCyiqjknSucg1E+eL+oVVA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=woIBgvcqwKFlqVqMtvl1T53IJgFRrb4fL6j5LgmnmUw=;
- b=i+HrZOmxpredW7Sgv7FinEke2Ja3BCdmrICw/hQnckHNIBMlq7HjdVBvjG1ONBFcz7vUb1xEdIjIH7hzWkM9nUFReYn/x66pbVGJVoHEuYgs8PtSYw9dC9I6NBf1ae3bB0inqJSdeD64ZjXqLhQPfhnsV4yOlTnfWGMaWHC6obR5FTM9T1B0eyc8Xc1FKiwsDGpy7d8tjd7UCV3bnqFCKpufAqrw6y3JBunRSaAvoAXaE4FHX1jrfCbtn2K6vBOWWXnDvQ0my+YpUAw/vt3SlkSHX5ir3T/LjeI9z1Q4xaTWNtWPKrs20oiXavjoKwMA6F7Ry87D7TlCeJnQ5in5sA==
+ bh=lpA7O7fIP3RA1upVpzgmgS6JZclbBj33qtdxmgRvRUI=;
+ b=IQ8QOU405ek5UelhvCa/6G/wrUfRSK+3g8duz4i6PyjxUKGKw6VWHYLMvYVeUYhkBykQ70O+EYP8JCcV6Vh/deFmlhfK4nxUcx+hM8hRnuUCx/Z2/A7bu7DXSImcOiGAcQwdkT37mGyAoWxHPKssQ7Mpawa9bozkvBS5XzBWtvi43z6uW+Px24TkG8L05HnHRhrHT5iwAacxjzA5rr/t0PobBEv8XzDWUQ0mx1BByM3I417BJnYaSYl80f0L8fW6pBHeaftj+81IF2qQftFfpIiTeaBJc8VrgT1JWVDsMbXUJ6dFqXbP9flNkiWcqmCqCSXknryL4EHSWmMBw+Lfmg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=woIBgvcqwKFlqVqMtvl1T53IJgFRrb4fL6j5LgmnmUw=;
- b=ouMONSnqNo3rEFOejV+odZpkZuZotojjhyr0nF6nmzO87uTn0Smx5+9qy6qnlMV/NsseNL/r5QPFrACo30x9/Px7PWureZ5rRar6C1ayyH/N/+sh928SBOgAoaakOXb3ZrG9XdzXDA3EhAcEBkxnlj3D/l8VYIhAtwrtGTrCDMY=
+ bh=lpA7O7fIP3RA1upVpzgmgS6JZclbBj33qtdxmgRvRUI=;
+ b=rIfnn+Bdb1LfHSQXaMlDL0XriYEb+R34KHWw21BE7ECDColi1OahANYCERtEMw3xW5Fw0pHHPpKF0Fs4r5tpY5YFOvmtWU3c/ZIcHrs8KmmblYHZnDJ81eXV9dxWkVScEzOjyRSoNSDXRs2NL9Hoo0bVZA8dUqJLPFcafx/osNk=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SA3PR13MB6282.namprd13.prod.outlook.com (2603:10b6:806:302::21) with
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by MW4PR12MB6825.namprd12.prod.outlook.com (2603:10b6:303:20d::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Wed, 8 Mar
- 2023 20:13:39 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6156.029; Wed, 8 Mar 2023
- 20:13:39 +0000
-Date:   Wed, 8 Mar 2023 21:13:31 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     Gavin Li <gavinl@nvidia.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        roopa@nvidia.com, eng.alaamohamedsoliman.am@gmail.com,
-        bigeasy@linutronix.de, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gavi@nvidia.com, roid@nvidia.com,
-        maord@nvidia.com, saeedm@nvidia.com
-Subject: Re: [PATCH RESEND net-next v4 0/4] net/mlx5e: Add GBP VxLAN HW
- offload support
-Message-ID: <ZAjsa538mpnEQ/QI@corigine.com>
-References: <20230306030302.224414-1-gavinl@nvidia.com>
- <d086da44-5027-4b43-bd04-29e030e7eac7@intel.com>
- <1abaf06a-83fb-8865-4a6e-c6a806cce421@nvidia.com>
- <7612377e-1dd0-1350-feb3-3a737710c261@intel.com>
- <3ed82f97-3f92-8f61-d297-8162aaf823c6@nvidia.com>
- <531bac44-23ba-d4f3-f350-8146b6fb063a@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Wed, 8 Mar
+ 2023 20:14:42 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d23f:bb1:df95:3918]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d23f:bb1:df95:3918%4]) with mapi id 15.20.6178.017; Wed, 8 Mar 2023
+ 20:14:42 +0000
+Message-ID: <d544748c-8a2b-7c08-f199-182a56af22be@amd.com>
+Date:   Wed, 8 Mar 2023 21:14:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
+Content-Language: en-US
+To:     Asahi Lina <lina@asahilina.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
+ <cd788ccf-0cf1-85d5-1bf8-efc259bd7e11@amd.com>
+ <a075d886-0820-b6fb-fcd0-45bfdc75e37d@asahilina.net>
+ <2b1060e9-86ba-7e16-14f1-5b5fa63de719@amd.com>
+ <9f76bb68-b462-b138-d0ad-d27c972530d4@asahilina.net>
+ <a39c6b40-f190-002d-ae1c-8b58c6442df2@amd.com>
+ <4bbfc1a3-cfc3-87f4-897b-b6637bac3bd0@asahilina.net>
+ <b0aa78b2-b432-200a-8953-a80c462fa6ee@amd.com>
+ <c0624252-070e-bd44-2116-93a1d63a1359@asahilina.net>
+ <d1fccceb-ca77-f653-17fc-63168e0da884@amd.com>
+ <9c3dc2ad-11e4-6004-7230-8ca752e3d9f7@asahilina.net>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <9c3dc2ad-11e4-6004-7230-8ca752e3d9f7@asahilina.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <531bac44-23ba-d4f3-f350-8146b6fb063a@intel.com>
-X-ClientProxiedBy: AM0PR03CA0038.eurprd03.prod.outlook.com (2603:10a6:208::15)
- To PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+X-ClientProxiedBy: FR2P281CA0045.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:92::17) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA3PR13MB6282:EE_
-X-MS-Office365-Filtering-Correlation-Id: 00193acd-6857-439c-6cf7-08db20119ab0
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|MW4PR12MB6825:EE_
+X-MS-Office365-Filtering-Correlation-Id: fbcf49ec-2237-4335-b8a7-08db2011c0b9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: clXbwE21w3iHTnnC+93h+ViPdMI00YHPw5Xxc6xR6S6iJrke7cF6KAVT3Pmx9GHuFvP9Usgmjk7MSwln4wrxNhBifM2lGSOxN4xzrwkXgSdf70FPwzZZPXrKUeuhQkPP3JwNMxQvypELTlBOrzJiIxayEAtx6R8DBLVc8eGtE+JB8jKnQWRuOpcMWrN62mUuAqRZmL8Ao71iskHWlkNRkFuBP67i3ZZuphin01lVm4gLVgAyGniy5TS1695VWzoTawr92u1N3MyoOpyW9H9lgfnt4diCzG+UQLaNuwTZ+J3HXhMhfpY0AZcNWqlPWscNIau8Wk9UF3BpOaPsg95LDUes4z2QLy3LlOAVO0LB2CvdOaUHgx6xQZX0ZTReAkQD83hf1JNYgaCr+Xr70+WtkH8tps3v0SGiKwEA3MvsyfGlEr531Agx3qkGU9I7HFnXBn+6Rib1ee2qljgXtVUgRfmtX/IlKjjRtayqfCefY0EchA8z/DG++oSHUWWBolxRFnccxDlldYTacWi3wMCEXF1h1TDRwX1a0NaGgaQNSxtjX5VP6sfxnMyqxSC9CEJOiGT5T4ugp3gDJ4Bk/vzkETHB3MN6x0bWq0C9NYUY9dL7zBb62tPDU+QoYPyYPJp5
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(39830400003)(396003)(346002)(136003)(451199018)(8936002)(5660300002)(44832011)(7416002)(6916009)(66476007)(66556008)(4326008)(8676002)(478600001)(316002)(2906002)(66946007)(6666004)(36756003)(53546011)(6506007)(966005)(6486002)(6512007)(41300700001)(2616005)(86362001)(83380400001)(38100700002)(186003);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: IYV+CQJC/iGsBfyKnpAitTKZzvYY52tgHe3NLKSIAg6usnQOWjEAZB39BVPyELuTmKfMLX7F7RlG/n0agVikY+fNOTIEQ2gOwg/zjkoF3B7+855PEQBzE2QhBIgg1t3vZEAK7be9NUxJ4uFbl/Nudf9cr9sBrlwo5JmRnlgbadhooL9RKBh0Qbat8uuxPiD3qCdUcPW96qobIN7HBhplAYNz1OxNE1RbROu9D3b19bybIFDyah3uU+dWlEkOdKrQqXCeqjrPHqTu53a82IDfkx7Cu1s0cXxfD03LdEb1fZS5Xm/gnzrGLN6qd2timJABm7Ds+GrDasDEVCOAO2AiAWvSEkzx/MCj5QBX4TFg44JHxidmISM6OgZnADj2NAQqtZ5qH9dSdnxMbmQlTpRdxVvI9jbI3D1W8fRBV6BguSZPEWIoCIKtdoe7r+KgPFc66OACMBofPx1QX5mHnDdTJvT3IKFR4RCvAJDOQMkUNK4OtPf3vT5XgwsqkWS1hyKUnCPrMoq50vyQ413ke0wtilM2e39mhz4hCjOFuZxYMXlr02nmfRdrj6fa4KTZOOo88I9QqI68c6a1bZ85MPljgYWl0PXNvsGyaBgKbEXuPtrGkmuJGtO+9MLD4Ik5UkhHJ0zlDIltBFVgdhxVWiE/XRGCldgzVxM2zADDzXueixZuaq04u1gePSU06OXNSe6ChdIz1U6WvGf95hW+YtAhdVM/2EG24xlRPgCOOR48V9gzXd2+6dGO2Gg7J6OooijE
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(366004)(376002)(39860400002)(136003)(451199018)(478600001)(5660300002)(7416002)(186003)(83380400001)(6666004)(6506007)(6512007)(31696002)(66574015)(86362001)(2616005)(36756003)(6486002)(921005)(2906002)(316002)(41300700001)(8676002)(4326008)(66946007)(66476007)(66556008)(31686004)(38100700002)(54906003)(8936002)(110136005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OE9yVi9iUW9wRlRoNmNZUjk2WkZHT1MwemhNQm1pdjdqd2NqUzNuZW9RejNk?=
- =?utf-8?B?WHB0dUEwcGpxL3QvbmREZ2dwNmFmWExWdlQwL1lKejFMWkpNdG1mQlg2Qml3?=
- =?utf-8?B?aWVmZ2tlK2E1eU9QaHFuVVBUaEJTUnhmTngrdGF6M0VQMjRZT3ROa0h6STY4?=
- =?utf-8?B?VTJaN1VKT2Zma2pjMHFvTkcxK1EzaTE2SDZ6bCtzaVlvUFNvUzBvUUl3eXB1?=
- =?utf-8?B?Qy9ucFNPVzRWakZZMkV5Q1dqUzJtWGF4eGczSFlrTDFJQkk2L0hjL2R1aDR2?=
- =?utf-8?B?dGlEaWJXWEVIR3FqbEo2eVVMd3ZpNSswNklhd0R6blFRbHNkaWxFZGNucThs?=
- =?utf-8?B?M2c1NDdIdVZsZHZVR1Q3RzV3eURGRFNicCtUeVZIY2NJblpPUlVJVm8zSHBm?=
- =?utf-8?B?bUUrWWpIbUxZcHQzRGx2bGtFanZZRVp1UERKZlNkOENrMG5VaWkzMFNaQ3pl?=
- =?utf-8?B?cFhpNXBkalZralJYeEs2b1piTGRxMW9hVlR4VHl1RWN2eXIvOFM5MURMN0NP?=
- =?utf-8?B?eFpQcmJhOERmUTZEYWw5ZzNvaG1nWGI0MUM2ODlSOWpOUlI4RWFyb3pwUWIw?=
- =?utf-8?B?SzJla1NjS1N1bW1ac2R1U3p2L0JVQWhwcyt4dmZCd21oTHEyNU1qaEQyZXZp?=
- =?utf-8?B?Ym5CT0V3S3RiYmVuZnVYNVFyeXhJbjVSOVVnVTEwSUJyNFUyK3IreEJXczRx?=
- =?utf-8?B?UFIyTVB1Z0RZaDNZSjNTclc4R3ZOVnZ4MEtZOFU1aURMSTJuU090c25wWXFz?=
- =?utf-8?B?Q2JBZHhSUHpqZ3oxNVUrb2N0TUxLS2ttdVp3akg1bkpVL0JHZHh3bTJ3bDdD?=
- =?utf-8?B?Y1RWYlBMSFJWQ2xrV3BmMnA0aDBFRlFPOEtmMEZrL1BlMnBwdUk5Zm1Qa1Ir?=
- =?utf-8?B?cG9wMWpadkNRQklpV2RxRUw0d1l0S2Y3VlZscDU2REZrUHBwNCtyYkhKbDZB?=
- =?utf-8?B?VHNNSE5oV2NnbzJUMXVpeGtIMW5tbkhKeHIzUmtWSFkvWGpZNk1RS1RrRlRj?=
- =?utf-8?B?SmdhVHhUeitialBxdUM3OFpkN3JwUXZQRkVObFNxa0VWZFA2Z2NEZlV4eU9S?=
- =?utf-8?B?WTRxclRFNWV5dzVvcGJzRU5HaCs1bjdxdk9ZazB4VjQyU0pnOG5COHp3a0M3?=
- =?utf-8?B?VWxUYWRjSEIwc1JjVWRNSHVnZk9jejBMTU11dUZBamVIK0orem1NWXdGd0p1?=
- =?utf-8?B?ZGJaa0MxWERFS0JpTDFXUXBNbzhWWjBNaG1vdzRBNElpaUFhUlN5RVcyaWJk?=
- =?utf-8?B?ZFY1WE4zWXNxaHlZQzFCdm1mNHhmUEhXZlNiMXM4VEVNZkVaYTRSNmRtcW5l?=
- =?utf-8?B?WWxjRnF3Z1ZFalIxb2R6Q1FRcVRUZ2RHY295M052Ym1qTnBtVXNqZmZScWNR?=
- =?utf-8?B?N0hiQXUvQTJRU1JuUGwwaGxLWlkyNTFqQ2kyc1Q4N0FnQlNOQ2lCT2dTM0RS?=
- =?utf-8?B?cGxEMEtBRElGRGtPY3NGVXJWbjBRNUpNZE1jaFJOYWxLZzlINjNEeU4vaDNS?=
- =?utf-8?B?UkRwUWMvQXRDMTFKVWo1bWR6c0RLZ05DZ1dycGFKMlFQdHl4UUlWdVdJbFJD?=
- =?utf-8?B?Ukk4eitkb09ybzV4MVRpK0FuZHNmeTNML0Q0WFVsbEIzYWZ4aVRsbytmbXR1?=
- =?utf-8?B?YktuUlNYZ2tWUlFlRVN0Skg4TTJyNGcwU1NkM090dlk0SlNwTThsWUNXN2Ux?=
- =?utf-8?B?QXE2NzZFVzdGMEM1bTI0TDFEdnh1K3V2aDNEYkJTWWc0SERCeEo0TGFlNjBZ?=
- =?utf-8?B?R3grTVhpMy9nK01SdTVyNnUxTUlTMmhjdCtkaVlQbCtwTXdkbUFxdmxCU2Ri?=
- =?utf-8?B?K2dBRFZiaUcySFJLR1RXUU12S1c3WXJkazlSMWU4OWZ2cDE3amdYYXlNWmVl?=
- =?utf-8?B?OFNRTXJwYy92eVI5RVoybXIrOU1MZmhPU2phY1Fhb01iaUxITTkrM0J3NmdJ?=
- =?utf-8?B?aGE4b0NSR2NFSSs3endUVUNZeFlrRFhDZlFLZU9tMjJGelpUVnNtR3dHaTho?=
- =?utf-8?B?R1pjM28zejVWTFFMVDEvQ1dyM1lVYkhEcS9rRXNBK1pQdzFYaldyVWdvTFFz?=
- =?utf-8?B?ajVxNmNEaGJ0dkJPTWt4cWgwSVpLMkVRbHR3YUhCQkt6S3J5NlkxaTlpSU16?=
- =?utf-8?B?T2NJODAwandET1l1Zlo0NTVVY3FEZlJYQVYwcTZaUUtyWVdKM1lXeUpTRVAz?=
- =?utf-8?B?d1FoNnZLeS9OSG83cnpaODZZQnAxbmgrT0FlT1Z1T05DM2F1aTloaU9IdDNP?=
- =?utf-8?B?blFvZkJjSHdzUm41UDVxU1FRR0h3PT0=?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00193acd-6857-439c-6cf7-08db20119ab0
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RTBvQ3YwY294RTkwWWdSVno0aEl6R1FFblJXMWRyNGVwY2VDKzZyL0k1TjJ2?=
+ =?utf-8?B?dFFNcGdxZm93cU5sMHdtQXZyWURpR3RKVTVFUXpCQ2JLKzBMbitGRno1cnBx?=
+ =?utf-8?B?N0VtOXcrUmRGTTduMXA1Y1FXdUh4LzdOT21NK1ltSERjREd6WnVxSnBCelc5?=
+ =?utf-8?B?WGZ6dGhDY0VCRVV6RHBlcGMwWGN3SFdwWkZOTXhFWWtURmxMWUd2OUU2Vi90?=
+ =?utf-8?B?cTlnSEVZNGxWM2E5M2I3eStLWjFiYVYwZnFObkZ0Ry9tV0t0LzVaQzBpdWpL?=
+ =?utf-8?B?VTBTc3Y4aitkbUIwVE45a3ExZmVVRjFNbmRKQXZBMWpja25OMjhWRStTdzA3?=
+ =?utf-8?B?L0ttWUdNWTZZbTdOVXdndy9HaHB6TnlxWlhydVE5QmRlR3BpSVROVDgxRVZr?=
+ =?utf-8?B?RmRJcVZpb0J1N0NCbVBoZmFKNHFya0s1bjJsYjh2UHFIeTJqb1BhSTB0T3ZW?=
+ =?utf-8?B?Z0NMbXI1NnVjZWVncUZWYzRSb3oydDY4c2ZQQ28zMDE4VjkzcWFac1lDUmo1?=
+ =?utf-8?B?QmcrWXJzU3o2U0pRNS9CWmQ5TTJZbVlwai85TUpJbUhKSWQ5MXZrcDh6dFBR?=
+ =?utf-8?B?RDZwbWFxbm43bExqalpaVmlweHNHTzR6WjRqNlZiQ2dRSUJmeXVXZm11bDJD?=
+ =?utf-8?B?K0dxSkJqTnFtSmQxQlQ2MGJxbkZWdktlS2xWWTJWeGFvdjVoejhwWFVFWmFk?=
+ =?utf-8?B?aWxIK3B1NjBsZkZVbDdEUW5VUkNtS1U0a2JvMnhCL201ZVp6VkFKWnJXUnVG?=
+ =?utf-8?B?ek9keC9KdDdBTDVWeVJpc0dtaGdWZWlKY3RCbWdDalhnSG0vN3JZZDlTOFpa?=
+ =?utf-8?B?NEM0YjR3M0VySC9GU3ZwUEFzV3J6Z2xJV3l0TkpaVS85RXNpUVNaVmlZb0tK?=
+ =?utf-8?B?aHVXNzRiN1JYeU1MRUZSaU1wMU85Tnc3a252KzhBR29VbkhPMmhrS1FSbC9w?=
+ =?utf-8?B?eStJYmd6bW8ya1BvdmhBMVZtZTVCUlZmM1RlUVNZWWZxMXI4UWZCSHZ0TVZJ?=
+ =?utf-8?B?TEhJcTRjUmR4ME1Saml0N2t5ajRSRDNZUWVaT2RMM0RlTFRzM1dmMDg5MzQ4?=
+ =?utf-8?B?NnVpc0l3eDd4Z3prUnVIMjc5VytQT0lYUThQNjJGVXhaUXczQXF1TTJLYlZY?=
+ =?utf-8?B?M3hlYmJ6VVNwK3UydVF1SVVYWkwvcUZNUUt0NisyWGxHb2RMbVFrek5FOEpr?=
+ =?utf-8?B?WTB2OTkybXB2ZDNpaHJwdm1Qd1JBY3VzY00xdE1qUjJIMW1qaUtFS01iazFs?=
+ =?utf-8?B?WTNzV1BMUHJMM3ovQ2hjWVVEN3hGRmh4MWVhZGd5T2ZWR3BMMENXVjJ4Z2xT?=
+ =?utf-8?B?QnVnODl1d2dRRHZJbW5nZUFIQk5iSFhmZFhiQysxN09mQUZmQVRhOGRYalIw?=
+ =?utf-8?B?YjIyMlNHNTI2SFFJT2xyUkN1SUFmNnh6dmR4RW1aRzNsWGxGeTdRa3N6bWFW?=
+ =?utf-8?B?YTJhY2phRkhtcXM3bnVjWDhrUFpkY3RLSzJYS052TzBvV3FCUWhSZFFDV3VD?=
+ =?utf-8?B?V3RyVmZFUVFpTHFQL3A4WXdIaXZpWHNvQW4wZnZwL2tWdGMvanpTckJlRVls?=
+ =?utf-8?B?bnd3ZU5wL3RZTkxGYUVScEhhVjBHRVB2N3pqZ1M3VzlLa3I0VjVLbDJILzZq?=
+ =?utf-8?B?ZFhlV3RiMEd1bU5YM1haNmVYanNFSmtuQmJjcnJyQmVySU5WT1E2TFlTeGtN?=
+ =?utf-8?B?aU5vTXNRZWU5RW5oaGNuZUZnN2EwS2NpbXJCZkJwVWp1ZUFVR1NhMDBYSjQy?=
+ =?utf-8?B?N243aEF0cHIrYjBaWXFuQW15SHByNlc0UVV6UHNxeVlPK0RBV3B4UkljbU5R?=
+ =?utf-8?B?MlR6SFdFZlhQLzF2bWtCb201TlZIOTNtdHlYQ1hWTldXWkdXTjlxbzVIVFkr?=
+ =?utf-8?B?UkZ4eVhVOTJnZ2FMT0NpQmRJTGdMKzU0UjlkckJMVXlMNGdEMDhvU3laeEtS?=
+ =?utf-8?B?bUpUeURLRkM0Sm9rRmU5dG4zUG53SXNkbTRrSmpsYThnVE1pMUo3cGN2M1RE?=
+ =?utf-8?B?Q3hIeWpVQnBJZHdnYmU3M1dLTE8zVGk1UnUyWFUrVWxoNUk1NWk1V08vcE5D?=
+ =?utf-8?B?eTBEUStBdzdHdnE4ZFlBT1lubUgyOEZCNnROTEIvbnVVTFlPSDUzNHhPdTU2?=
+ =?utf-8?B?UHEwTzZrOXJiT1c3bTREZ3RBSzd2Q3lZK1lQbHlPbEllNGwzQ2phZXYyUTBs?=
+ =?utf-8?Q?OJfr959AYem0/txJLRM8T/IUW0Eh3TprdgueUf/zdvq4?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fbcf49ec-2237-4335-b8a7-08db2011c0b9
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 20:13:38.8592
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 20:14:42.5799
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fTVRDIOeCJ9bXDs9mZlTrrwygJf7bQO1BQvRyBlKIX/vp8yUn3Expre3TkTPSYGROyergPhQwMZmDymvWY1T+MVbTnc3vjyFBbfAlZ4CcNo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR13MB6282
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+X-MS-Exchange-CrossTenant-UserPrincipalName: Xs368j1z5Zs285u7IWMwIuZXbvo0gqecIVDI7W45fBRHwN0Vyi5NxSPooy8EGoUo
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6825
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,151 +156,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 02:34:28PM +0100, Alexander Lobakin wrote:
-> From: Gavin Li <gavinl@nvidia.com>
-> Date: Wed, 8 Mar 2023 10:22:36 +0800
-> 
-> > 
-> > On 3/8/2023 12:58 AM, Alexander Lobakin wrote:
-> >> External email: Use caution opening links or attachments
-> >>
-> >>
-> >> From: Gavin Li <gavinl@nvidia.com>
-> >> Date: Tue, 7 Mar 2023 17:19:35 +0800
-> >>
-> >>> On 3/6/2023 10:47 PM, Alexander Lobakin wrote:
-> >>>> External email: Use caution opening links or attachments
-> >>>>
-> >>>>
-> >>>> From: Gavin Li <gavinl@nvidia.com>
-> >>>> Date: Mon, 6 Mar 2023 05:02:58 +0200
-> >>>>
-> >>>>> Patch-1: Remove unused argument from functions.
-> >>>>> Patch-2: Expose helper function vxlan_build_gbp_hdr.
-> >>>>> Patch-3: Add helper function for encap_info_equal for tunnels with
-> >>>>> options.
-> >>>>> Patch-4: Add HW offloading support for TC flows with VxLAN GBP
-> >>>>> encap/decap
-> >>>>>           in mlx ethernet driver.
-> >>>>>
-> >>>>> Gavin Li (4):
-> >>>>>     vxlan: Remove unused argument from vxlan_build_gbp_hdr( ) and
-> >>>>>       vxlan_build_gpe_hdr( )
-> >>>>> ---
-> >>>>> changelog:
-> >>>>> v2->v3
-> >>>>> - Addressed comments from Paolo Abeni
-> >>>>> - Add new patch
-> >>>>> ---
-> >>>>>     vxlan: Expose helper vxlan_build_gbp_hdr
-> >>>>> ---
-> >>>>> changelog:
-> >>>>> v1->v2
-> >>>>> - Addressed comments from Alexander Lobakin
-> >>>>> - Use const to annotate read-only the pointer parameter
-> >>>>> ---
-> >>>>>     net/mlx5e: Add helper for encap_info_equal for tunnels with
-> >>>>> options
-> >>>>> ---
-> >>>>> changelog:
-> >>>>> v3->v4
-> >>>>> - Addressed comments from Alexander Lobakin
-> >>>>> - Fix vertical alignment issue
-> >>>>> v1->v2
-> >>>>> - Addressed comments from Alexander Lobakin
-> >>>>> - Replace confusing pointer arithmetic with function call
-> >>>>> - Use boolean operator NOT to check if the function return value is
-> >>>>> not zero
-> >>>>> ---
-> >>>>>     net/mlx5e: TC, Add support for VxLAN GBP encap/decap flows offload
-> >>>>> ---
-> >>>>> changelog:
-> >>>>> v3->v4
-> >>>>> - Addressed comments from Simon Horman
-> >>>>> - Using cast in place instead of changing API
-> >>>> I don't remember me acking this. The last thing I said is that in order
-> >>>> to avoid cast-aways you need to use _Generic(). 2 times. IIRC you said
-> >>>> "Ack" and that was the last message in that thread.
-> >>>> Now this. Without me in CCs, so I noticed it accidentally.
-> >>>> ???
-> >>> Not asked by you but you said you were OK if I used cast-aways. So I did
-> >>> the
-> >>>
-> >>> change in V3 and reverted back to using cast-away in V4.
-> >> My last reply was[0]:
-> >>
-> >> "
-> >> You wouldn't need to W/A it each time in each driver, just do it once in
-> >> the inline itself.
-> >> I did it once in __skb_header_pointer()[0] to be able to pass data
-> >> pointer as const to optimize code a bit and point out explicitly that
-> >> the function doesn't modify the packet anyhow, don't see any reason to
-> >> not do the same here.
-> >> Or, as I said, you can use macros + __builtin_choose_expr() or _Generic.
-> >> container_of_const() uses the latter[1]. A __builtin_choose_expr()
-> >> variant could rely on the __same_type() macro to check whether the
-> >> pointer passed from the driver const or not.
-> >>
-> >> [...]
-> >>
-> >> [0]
-> >> https://elixir.bootlin.com/linux/v6.2-rc8/source/include/linux/skbuff.h#L3992
-> >> [1]
-> >> https://elixir.bootlin.com/linux/v6.2-rc8/source/include/linux/container_of.h#L33
-> >> "
-> >>
-> >> Where did I say here I'm fine with W/As in the drivers? I mentioned two
-> >> options: cast-away in THE GENERIC INLINE, not the driver, or, more
-> >> preferred, following the way of container_of_const().
-> >> Then your reply[1]:
-> >>
-> >> "ACK"
-> >>
-> >> What did you ack then if you picked neither of those 2 options?
-> > 
-> > I had fixed it with "cast-away in THE GENERIC INLINE" in V3 and got
-> > comments and concern
-> > 
-> > from Simon Horman. So, it was reverted.
-> > 
-> > "But I really do wonder if this patch masks rather than fixes the
-> > problem."----From Simon.
-> > 
-> > I thought you were OK to revert the changes based on the reply.
-> 
-> No I wasn't.
-> Yes, it masks, because you need to return either const or non-const
-> depending on the input pointer qualifier. container_of_const(), telling
-> this 4th time.
-> 
-> > 
-> > From my understanding, the function always return a non-const pointer
-> > regardless the type of the
-> > 
-> >  input one, which is slightly different from your examples.
-> 
-> See above.
-> 
-> > 
-> > Any comments, Simon?
-> > 
-> > If both or you are OK with option #1, I'll follow.
+Am 08.03.23 um 20:45 schrieb Asahi Lina:
+> On 09/03/2023 04.12, Christian König wrote:
+>> Am 08.03.23 um 20:05 schrieb Asahi Lina:
+>>> [SNIP]
+>>>> Well it's not the better way, it's the only way that works.
+>>>>
+>>>> I have to admit that my bet on your intentions was wrong, but even that
+>>>> use case doesn't work correctly.
+>>>>
+>>>> See when your callback returns false it is perfectly possible that all
+>>>> hw fences are signaled between returning that information and processing it.
+>>>>
+>>>> The result would be that the scheduler goes to sleep and never wakes up
+>>>> again.
+>>> That can't happen, because it will just go into another iteration of the
+>>> drm_sched main loop since there is an entity available still.
+>>>
+>>> Rather there is probably the opposite bug in this patch: the can_run_job
+>>> logic should be moved into the wait_event_interruptible() condition
+>>> check, otherwise I think it can end up busy-looping since the condition
+>>> itself can be true even when the can_run_job check blocks it.
+>>>
+>>> But there is no risk of it going to sleep and never waking up because
+>>> job completions will wake up the waitqueue by definition, and that
+>>> happens after the driver-side queues are popped. If this problem could
+>>> happen, then the existing hw_submission_limit logic would be broken in
+>>> the same way. It is logically equivalent in how it works.
+>>>
+>>> Basically, if properly done in wait_event_interruptible, it is exactly
+>>> the logic of that macro that prevents this race condition and makes
+>>> everything work at all. Without it, drm_sched would be completely broken.
+>>>
+>>>> As I said we exercised those ideas before and yes this approach here
+>>>> came up before as well and no it doesn't work.
+>>> It can never deadlock with this patch as it stands (though it could busy
+>>> loop), and if properly moved into the wait_event_interruptible(), it
+>>> would also never busy loop and work entirely as intended. The actual API
+>>> change is sound.
+>>>
+>>> I don't know why you're trying so hard to convince everyone that this
+>>> approach is fundamentally broken... It might be a bad idea for other
+>>> reasons, it might encourage incorrect usage, it might not be the best
+>>> option, there are plenty of arguments you can make... but you just keep
+>>> trying to make an argument that it just can't work at all for some
+>>> reason. Why? I already said I'm happy dropping it in favor of the fences...
+>> Well because it is broken.
+>>
+>> When you move the check into the wait_event_interruptible condition then
+>> who is going to call wait_event_interruptible when the condition changes?
+> I think you mean wake_up_interruptible(). That would be
+> drm_sched_job_done(), on the fence callback when a job completes, which
+> as I keep saying is the same logic used for
+> hw_rq_count/hw_submission_limit tracking.
 
-I'd like suggest moving on from the who said what aspect of this conversation.
-Clearly there has been some misunderstanding. Let's move on.
+As the documentation to wait_event says:
 
-Regarding the more technical topic of constness.
-Unless I am mistaken function in question looks like this:
+  * wake_up() has to be called after changing any variable that could
+  * change the result of the wait condition.
 
-static inline void *ip_tunnel_info_opts(const struct ip_tunnel_info *info)
-{
-     return info + 1;
-}
+So what you essentially try to do here is to skip that and say 
+drm_sched_job_done() would call that anyway, but when you read any 
+variable to determine that state then as far as I can see nothing is 
+guarantying that order.
 
-My view is that if the input is const, the output should be const;
-conversely, if the output is non-const then the input should be non-const.
+The only other possibility how you could use the callback correctly 
+would be to call drm_fence_is_signaled() to query the state of your hw 
+submission from the same fence which is then signaled. But then the 
+question is once more why you don't give that fence directly to the 
+scheduler?
 
-It does seem to me that container_of_const has this property.
-And from that perspective may be the basis of a good solution.
+> Please think about it for a second,
 
-This is my opinion. I do understand that others may have different opinions.
+Yeah, I'm trying to really follow your intentions here. But that doesn't 
+really makes sense.
+
+Either you are trying to do something invalid or you are trying to 
+circumvent the object model somehow and add a shortcut for the signaling 
+API. Both would be more than fishy.
+
+Regards,
+Christian.
+
+>   it's really not that complicated to
+> see why it works:
+>
+> - Driver pops off completed commands <-- can_run_job condition satisfied
+> - Driver signals fence
+>   - drm_sched_job_done_cb()
+>    - drm_sched_job_done()
+>     - atomic_dec(&sched->hw_rq_count); <-- hw_submission_limit satisfied
+>     - ...
+>     - wake_up_interruptible(&sched->wake_up_worker);
+>        ^- happens after both conditions are potentially satisfied
+>
+> It really is completely equivalent to just making the hw_rq_count logic
+> customizable by the driver. The actual flow is the same. As long as the
+> driver guarantees it satisfies the can_run_job() condition before
+> signaling the completion fence that triggered that change, it works fine.
+>
+>> As I said this idea came up before and was rejected multiple times.
+> Maybe it was a different idea, or maybe it was rejected for other
+> reasons, or maybe it was wrongly rejected for being broken when it isn't ^^
+>
+> ~~ Lina
+
