@@ -2,183 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F4B6AFCF3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EEF6AFCED
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbjCHCd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 21:33:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57114 "EHLO
+        id S229878AbjCHCaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 21:30:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjCHCdX (ORCPT
+        with ESMTP id S229866AbjCHCat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 21:33:23 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4294024106
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 18:33:20 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id op8so10284654qvb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 18:33:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678242799;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=T7d4avNQ4qTzn+SuqYWgHiW32J80h86PyMsPPQdN+eA=;
-        b=o2Ttwa2SQB0HbezDy4bUDsIFHngLelMxlPtxY0hbYJxSQ00Fqnn6jHLq9SSnQaoNfg
-         FaptAfJkhfmfmk7mrD7PrqA6iNABi3vpVfwdR4KB5YIglS/aL7f9XHCrUgtKC0Ma0E8P
-         sk/jAZt7TQ8K64lGX8/gFgsh2F8Lm5GmwmfRQZ3nmu1YwBh9KqCwDNwpHItK8rQSzBfM
-         uXLb8UwQNDJ7qU6QqeLenjB8S7nl9oaGQkp4WoJI/rurXRvv7t+/0pI2H/JzMSFDEi9l
-         h7m0eEvWQlLmbKqnPFdq5cs9I3iXNhhH+Ve3ePyzJncZYAXqDG2X0tNS6+zVKKITywb3
-         Hd+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678242799;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T7d4avNQ4qTzn+SuqYWgHiW32J80h86PyMsPPQdN+eA=;
-        b=vF/X2Uwr1XWGC+rcToyEP6imm5C40QURb+gGlM09/yX6cQiwW5CvprXzZ6R8/dUtKg
-         Z6zodoSj16YIB37xdgvopJovIhtZQxpwsGKBSHd97SxoEk4MzsOl72xDKwYlE6tdWVRG
-         evRFwbOCzMVXkH7/BuGzUnVcHvi+9/1C6+E8P4ZYQupy64s7U2OS5AIVTwqvlxIG0kPu
-         p58RqNSVuHOZ3jFWd9uf4UVy7m0bY+bk6PA29IfuAWJnbrtl6KBSgVLdnDsHSWg8of1a
-         n/wnpWT9aPlbsAEmzetv2eV22XN45H7knR1Hh5yUyyRu0i8rDP1ZNmuhdcjHqP81K0EC
-         QEaQ==
-X-Gm-Message-State: AO0yUKU0ved7Ql7YGsiMSutXj/STJsw1Qpr4IH66m7jNUetaSRbk61uo
-        5cyQ3zq83Mg634YNFy713hxRyQ==
-X-Google-Smtp-Source: AK7set+HTgcm7gFO+MYwMi2DWxf2VD4MLB/Hsx2K1yh+WaQ7Jadi/1bD6PFJZFDaMNxfBo+aTi0XZQ==
-X-Received: by 2002:ad4:4eed:0:b0:56e:a7d1:4d65 with SMTP id dv13-20020ad44eed000000b0056ea7d14d65mr29986708qvb.52.1678242799311;
-        Tue, 07 Mar 2023 18:33:19 -0800 (PST)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id w29-20020a05620a0e9d00b0072396cb73cdsm10756583qkm.13.2023.03.07.18.33.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 18:33:18 -0800 (PST)
-Date:   Tue, 7 Mar 2023 21:29:34 -0500
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        broonie@kernel.org, Arnaud de Turckheim <quarium@gmail.com>,
-        John Hentges <jhentges@accesio.com>,
-        Jay Dolan <jay.dolan@accesio.com>
-Subject: Re: [PATCH v4 2/3] gpio: pcie-idio-24: Migrate to the regmap API
-Message-ID: <ZAfzDig+UzgH3QqO@fedora>
-References: <cover.1678106722.git.william.gray@linaro.org>
- <b96429c66e7caca05d9fb93805e11650fdbad312.1678106722.git.william.gray@linaro.org>
- <ZAX3ntGgO4PjIkxx@smile.fi.intel.com>
+        Tue, 7 Mar 2023 21:30:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9106968D2
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 18:30:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678242603;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jbv/Z0+2e9KA+90ir0NQlNBV1OxH+DFm151G8CV2Alw=;
+        b=JsaAXjGsqfI9JwHovsaGHDa4mI89N8/ULuBTvX7MhaLLIQqQCr8H1GxjReYW/cR9xm7+Ff
+        kSBMPZduNAa3l5J8D0PB5zvm5xEVeZxgdGDSCvxDsTImi0x14MZcFjnNi499QLRRWdCGjM
+        N9mKx+2Gu+lnjC2nGvpqngpYeSF7Zu4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-70-am9zw9ylPyipzbiIEH2k0g-1; Tue, 07 Mar 2023 21:29:59 -0500
+X-MC-Unique: am9zw9ylPyipzbiIEH2k0g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 88FCF811E6E;
+        Wed,  8 Mar 2023 02:29:58 +0000 (UTC)
+Received: from [10.22.16.64] (unknown [10.22.16.64])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 02DEB492C3E;
+        Wed,  8 Mar 2023 02:29:56 +0000 (UTC)
+Message-ID: <315efe55-abaf-c199-673b-95ef76a1e442@redhat.com>
+Date:   Tue, 7 Mar 2023 21:29:56 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="quWG8+aBeWgbNXre"
-Content-Disposition: inline
-In-Reply-To: <ZAX3ntGgO4PjIkxx@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3] sched: cpuset: Don't rebuild root domains on
+ suspend-resume
+Content-Language: en-US
+To:     Hao Luo <haoluo@google.com>
+Cc:     Qais Yousef <qyousef@layalina.io>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Zefan Li <lizefan.x@bytedance.com>, linux-s390@vger.kernel.org,
+        x86@kernel.org
+References: <20230206221428.2125324-1-qyousef@layalina.io>
+ <CA+khW7i_Sc0M4FXzojmQ5PSfkPwk6AdcbN9j0gDXZ9FsOMQAwA@mail.gmail.com>
+ <f3a99500-e51c-032f-a0c6-01763f0a5be6@redhat.com>
+ <CA+khW7iWAn6bbXdkJX1Lt4dWUsN6o4KqVQ8OFTs0B+VTtVjBkw@mail.gmail.com>
+ <1f2cf8ea-a9d7-5245-0f69-eb8be9f64afc@redhat.com>
+ <CA+khW7jQg6x_j70eARVF0eemP0txU_K9Lc=5kfBmU_KxsfbK2w@mail.gmail.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <CA+khW7jQg6x_j70eARVF0eemP0txU_K9Lc=5kfBmU_KxsfbK2w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/7/23 17:17, Hao Luo wrote:
+> On Tue, Mar 7, 2023 at 1:13 PM Waiman Long <longman@redhat.com> wrote:
+>> On 3/7/23 16:06, Hao Luo wrote:
+>>> On Tue, Mar 7, 2023 at 12:09 PM Waiman Long <longman@redhat.com> wrote:
+>>>> On 3/7/23 14:56, Hao Luo wrote:
+>>>>> On Mon, Feb 6, 2023 at 2:15 PM Qais Yousef <qyousef@layalina.io> wrote:
+>>>>>> Commit f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting information")
+>>>>>> enabled rebuilding root domain on cpuset and hotplug operations to
+>>>>>> correct deadline accounting.
+>>>>>>
+>>>>>> Rebuilding root domain is a slow operation and we see 10+ of ms delays
+>>>>>> on suspend-resume because of that (worst case captures 20ms which
+>>>>>> happens often).
+>>>>>>
+>>>>>> Since nothing is expected to change on suspend-resume operation; skip
+>>>>>> rebuilding the root domains to regain the some of the time lost.
+>>>>>>
+>>>>>> Achieve this by refactoring the code to pass whether dl accoutning needs
+>>>>>> an update to rebuild_sched_domains(). And while at it, rename
+>>>>>> rebuild_root_domains() to update_dl_rd_accounting() which I believe is
+>>>>>> a more representative name since we are not really rebuilding the root
+>>>>>> domains, but rather updating dl accounting at the root domain.
+>>>>>>
+>>>>>> Some users of rebuild_sched_domains() will skip dl accounting update
+>>>>>> now:
+>>>>>>
+>>>>>>            * Update sched domains when relaxing the domain level in cpuset
+>>>>>>              which only impacts searching level in load balance
+>>>>>>            * update sched domains when cpufreq governor changes and we need
+>>>>>>              to create the perf domains
+>>>>>>
+>>>>>> Users in arch/x86 and arch/s390 are left with the old behavior.
+>>>>>>
+>>>>>> Debugged-by: Rick Yiu <rickyiu@google.com>
+>>>>>> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+>>>>>> ---
+>>>>> Hi Qais,
+>>>>>
+>>>>> Thank you for reporting this. We observed the same issue in our
+>>>>> production environment. Rebuild_root_domains() is also called under
+>>>>> cpuset_write_resmask, which handles writing to cpuset.cpus. Under
+>>>>> production workloads, on a 4.15 kernel, we observed the median latency
+>>>>> of writing cpuset.cpus at 3ms, p99 at 7ms. Now the median becomes
+>>>>> 60ms, p99 at >100ms. Writing cpuset.cpus is a fairly frequent and
+>>>>> critical path in production, but blindly traversing every task in the
+>>>>> system is not scalable. And its cost is really unnecessary for users
+>>>>> who don't use deadline tasks at all.
+>>>> The rebuild_root_domains() function shouldn't be called when updating
+>>>> cpuset.cpus unless it is a partition root. Is it?
+>>>>
+>>> I think it's because we were using the legacy hierarchy. I'm not
+>>> familiar with cpuset partition though.
+>> In legacy hierarchy, changing cpuset.cpus shouldn't lead to the calling
+>> of rebuild_root_domains() unless you play with cpuset.sched_load_balance
+>> file by changing it to 0 in the right cpusets. If you are touching
+>> cpuset.sched_load_balance, you shouldn't change cpuset.cpus that often.
+>>
+> Actually, I think it's the opposite. If I understand the code
+> correctly[1], it looks like rebuild_root_domains is called when
+> LOAD_BALANCE _is_ set and sched_load_balance is 1 by default. Is that
+> condition a bug?
+>
+> I don't think we updated cpuset.sched_load_balance.
+>
+> [1] https://github.com/torvalds/linux/blob/master/kernel/cgroup/cpuset.c#L1677
 
---quWG8+aBeWgbNXre
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The only reason rebuild_root_domains() is called is because the the 
+scheduling domains were changed. The cpuset.sched_load_balance control 
+file is 1 by default. If no one touch it, there is just one global 
+scheduling domain that covers all the active CPUs. However, by setting 
+cpuset.sched_load_balance to 0 in the right cpusets, you can create 
+multiple scheduling domains or disabling load balancing on some CPUs. 
+With that setup, changing cpuset.cpus in the right place can cause 
+rebuild_root_domains() to be called because the set of scheduling 
+domains are changed.
 
-On Mon, Mar 06, 2023 at 04:24:30PM +0200, Andy Shevchenko wrote:
-> On Mon, Mar 06, 2023 at 07:59:52AM -0500, William Breathitt Gray wrote:
-> > The regmap API supports IO port accessors so we can take advantage of
-> > regmap abstractions rather than handling access to the device registers
-> > directly in the driver.
-> >=20
-> > For the PCIe-IDIO-24 series of devices, the following BARs are
-> > available:
-> >=20
-> >     BAR[0]: memory mapped PEX8311
-> >     BAR[1]: I/O mapped PEX8311
-> >     BAR[2]: I/O mapped card registers
-> >=20
-> > There are 24 FET Output lines, 24 Isolated Input lines, and 8 TTL/CMOS
-> > lines (which may be configured for either output or input). The GPIO
-> > lines are exposed by the following card registers:
-> >=20
-> >     Base +0x0-0x2 (Read/Write): FET Outputs
-> >     Base +0xB (Read/Write): TTL/CMOS
-> >     Base +0x4-0x6 (Read): Isolated Inputs
-> >     Base +0x7 (Read): TTL/CMOS
-> >=20
-> > In order for the device to support interrupts, the PLX PEX8311 internal
-> > PCI wire interrupt and local interrupt input must first be enabled.
-> >=20
-> > The following card registers for Change-Of-State may be used:
-> >=20
-> >     Base +0x8-0xA (Read): COS Status Inputs
-> >     Base +0x8-0xA (Write): COS Clear Inputs
-> >     Base +0xB (Read): COS Status TTL/CMOS
-> >     Base +0xB (Write): COS Clear TTL/CMOS
-> >     Base +0xE (Read/Write): COS Enable
-> >=20
-> > The COS Enable register is used to enable/disable interrupts and
-> > configure the interrupt levels; each bit maps to a group of eight inputs
-> > as described below:
-> >=20
-> >     Bit 0: IRQ EN Rising Edge IN0-7
-> >     Bit 1: IRQ EN Rising Edge IN8-15
-> >     Bit 2: IRQ EN Rising Edge IN16-23
-> >     Bit 3: IRQ EN Rising Edge TTL0-7
-> >     Bit 4: IRQ EN Falling Edge IN0-7
-> >     Bit 5: IRQ EN Falling Edge IN8-15
-> >     Bit 6: IRQ EN Falling Edge IN16-23
-> >     Bit 7: IRQ EN Falling Edge TTL0-7
-> >=20
-> > An interrupt is asserted when a change-of-state matching the interrupt
-> > level configuration respective for a particular group of eight inputs
-> > with enabled COS is detected.
-> >=20
-> > The COS Status registers may be read to determine which inputs have
-> > changed; if interrupts were enabled, an IRQ will be generated for the
-> > set bits in these registers. Writing the value read from the COS Status
-> > register back to the respective COS Clear register will clear just those
-> > interrupts.
->=20
-> ...
->=20
-> >  - Add mutex to prevent clobbering the COS_ENABLE register when masking
-> >    IRQ and setting their type configuration
->=20
-> But this doesn't explain killing the raw spin lock.
->=20
-> I don't understand how is it suppose to work then.
->=20
-> What is this lock for and how IRQ related registers can be updated
-> with RT type of kernel?
->=20
-> If mutex is okay, doesn't mean we have to add 'can_sleep =3D true'?
+Cheers,
+Longman
 
-I admit that RT locking is an area I often have trouble understanding,
-so perhaps you can help me make sure whether this lock type change makes
-sense here.
-
-My reasoning for why we need a lock is that the COS Enable register is
-modified in both the idio_24_set_type_config() function and the
-idio_24_handle_mask_sync() function. These respectively are called by
-regmap_irq_set_type() and regmap_irq_sync_unlock(), which are callbacks
-for a struct irq_chip irq_set_type() and irq_bus_sync_unlock() members.
-
-I think these callbacks could be executed in parrallel, but are allowed
-to sleep, so that is why I selected mutex as the lock type here (I
-probably do need to add 'can_sleep =3D true'). Is this reasoning correct,
-or have I made a mistake here?
-
-William Breathitt Gray
-
---quWG8+aBeWgbNXre
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZAfzDgAKCRC1SFbKvhIj
-K6X6AQCb8V8G87zN4J8+wxzOx7owtXfV4gShJQXpdJzhhHNcNAD9ECtLyove5EKa
-NApOWn2NjlkbJxgx/t7eGKvFk5ViEgo=
-=vvBh
------END PGP SIGNATURE-----
-
---quWG8+aBeWgbNXre--
