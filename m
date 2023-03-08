@@ -2,118 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C01D6B0AF4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B12886B0B0C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:26:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbjCHOXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
+        id S231629AbjCHO0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbjCHOXf (ORCPT
+        with ESMTP id S231453AbjCHO0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:23:35 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9532BB3E20
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:23:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678285413; x=1709821413;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Xwerx2xXUaxAefu4ArBHqTpEi/j/Yfjg8iwscA9h5+0=;
-  b=Mc3TSdHgtEdspjWZS3ZdgrBDmUAxX0OEi2cBSYSxxsgMlYw4poeL5LQ5
-   DiIcepNSW2pEHHjFarGBjbuzM+mCbGBoFqRYItjmZ9Cg+zUdPAyyu5VCb
-   F7cQu1+TlcDHA4RBe0N5NyA+6dNR0bJInppa0mOJK1zsrrtmZStKfSVw5
-   /s+lX8UaMl/y7GMU/Ep9bdzJrNBKk3oA44ywy8lfdsK91RR7zqO5q/Olw
-   HC1lDhr8vHmeUOViUtYJ8E0UukINTSKqVW2z8abLmdguwbpOdh8DsWd3t
-   6W0onrLiweNKez1SZzx4DJEu4H4kMpZ+vBfjNadUVmleBPoIbHh5oF6xy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="422432633"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="422432633"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 06:23:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="800768131"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="800768131"
-Received: from vkhatavx-mobl.amr.corp.intel.com (HELO [10.255.34.124]) ([10.255.34.124])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 06:23:28 -0800
-Message-ID: <dfb09d78-0620-e535-08b6-894554201ead@linux.intel.com>
-Date:   Wed, 8 Mar 2023 08:23:28 -0600
+        Wed, 8 Mar 2023 09:26:38 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2063.outbound.protection.outlook.com [40.107.93.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EB5C3E2D;
+        Wed,  8 Mar 2023 06:26:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Mxqe1Xyy8+AVyZh7Brbvm0Is0oZ45sxDx4PCAaGoM5ejqpvTYjchop67T5dyILGuo1cNWA7/V9VGtQ3v+rX4JdgyW4UwBju81a5bJiOCrJp8YnAtIiNLnq7YhzKjLamdPCtOG470LkiaOGuVielO+shhq373Z1FizbATqMANIuWP2OFFgGCd1Ks7mGmql9ldtowsMQOc/a3X/6iNb6da7/M47klbpYlcpZcPe32d+Kwrb4mHvG5rn79ZTtwf6zz3tN+NZBfEDoeM8upzR/gnL0g5GfYEhgZcilrSlIrf8PKLgXT00Qz5DdmxQfDs8GtMkafjqrZ6zxh6KI8Vrg7Lyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4yq8Y6l1P6yD+HtvSBLOpCUGsVxb2mrpgxrw99FR8p8=;
+ b=GnwbAJTb+N8RbwLmEnrPOudeior2YX2uxomCKRbR3x6l2ucAy35DPlRCZu3Nl8XvUdt0F1CzinRgNhTr6Jhhs51SXGGNh6HvEJytiEY1Q/xSGSYZtrvABLEXdUyaM1ZfI7AhjSdTETlNch6k3qalvf0n3eWS4lcQQVJcpAXE57AySsZHQu4PZaQGxgIerecZmzEel2Yki6fSv8ZgRWKAgSXnfepF9XQB4R4ZMaWyZFWFqURLwh9LOSaTIzdM758gt9w1MbXiyQp0wZq3SY53ecyrbs+IuNrV22hzfHSuXxVLLQrmOE6DcQE151RlIiOj+HW7WA52VJ1HoGKbpoQRdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4yq8Y6l1P6yD+HtvSBLOpCUGsVxb2mrpgxrw99FR8p8=;
+ b=Ziq4NlPPNwcL5Jn94yewHo+Cf3kv5PD6JhVeykbo93H8M/9H7AFL0Ms+1wz5Y8w3dDxYWbWcnmLLyfBWMk9x2TYx2OOW5ZiHmMC7T+UvDz7rjNWCP/ydk0bUB6sa1MyfiWZ9v0LtUBJOatA+Uw5dKbdOuCYD/5LmMoP67WRi0oRTxXz2udv9q53e5Htclum77LkpvSMSiKfMzjuKgk29sf5/hb5YQk1nf/Fo86XE7IDY3mYz5O82OyhI+NNcn9YM4tMb+SJVDbBXYg5XVc/pIsAXycTmdFusCCdiIMlTusNhiH/USVJebXGYFq3bgScQRGh9GIL1Vipsi5pvmgwCRw==
+Received: from BN9PR03CA0389.namprd03.prod.outlook.com (2603:10b6:408:f7::34)
+ by CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Wed, 8 Mar
+ 2023 14:26:30 +0000
+Received: from BN8NAM11FT019.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f7:cafe::45) by BN9PR03CA0389.outlook.office365.com
+ (2603:10b6:408:f7::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17 via Frontend
+ Transport; Wed, 8 Mar 2023 14:26:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ BN8NAM11FT019.mail.protection.outlook.com (10.13.176.158) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.19 via Frontend Transport; Wed, 8 Mar 2023 14:26:30 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 8 Mar 2023
+ 06:26:19 -0800
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Wed, 8 Mar 2023 06:26:18 -0800
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.11) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.986.5 via Frontend
+ Transport; Wed, 8 Mar 2023 06:26:18 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <joro@8bytes.org>,
+        <will@kernel.org>, <robin.murphy@arm.com>,
+        <alex.williamson@redhat.com>, <shuah@kernel.org>
+CC:     <yi.l.liu@intel.com>, <linux-kernel@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <mjrosato@linux.ibm.com>,
+        <farman@linux.ibm.com>
+Subject: [PATCH v4 0/5] Add IO page table replacement support
+Date:   Wed, 8 Mar 2023 06:25:57 -0800
+Message-ID: <cover.1678284812.git.nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH V6 8/8] soundwire: amd: add pm_prepare callback and pm ops
- support
-Content-Language: en-US
-To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>, vkoul@kernel.org
-Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, Mario.Limonciello@amd.com,
-        amadeuszx.slawinski@linux.intel.com, Mastan.Katragadda@amd.com,
-        Arungopal.kondaveeti@amd.com, claudiu.beznea@microchip.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230307133135.545952-1-Vijendar.Mukunda@amd.com>
- <20230307133135.545952-9-Vijendar.Mukunda@amd.com>
- <4330af6a-ce97-53ed-f675-6d3d0ac8f32f@linux.intel.com>
- <d5a75826-d762-27fc-5820-6826debdecd9@amd.com>
- <9399110b-bbba-f96e-85ef-a317e8f4d518@linux.intel.com>
- <4cbbff8a-c596-e9cc-a6cf-6f8b66607505@amd.com>
- <85aba51e-1feb-5eb0-2e21-b714e217f9e4@linux.intel.com>
- <2e629a29-093e-46e9-2329-0d5afc916ee4@amd.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <2e629a29-093e-46e9-2329-0d5afc916ee4@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT019:EE_|CY5PR12MB6179:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3ea3cfd4-c6a6-4815-c061-08db1fe11c27
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2fn/BXMbTWp32HMj6ySk5JBULocCGpWmgCV2bRD7z+8KymDL3AF20tAp1os4KUut9r6EI3yJs8CmrlVcVXqY7ttG4vrYEFy3nYzSUmi/is68AbYzuto83HqIzf5MyyZ2p7H6gykxF2TWnoZkldcxNi+MRE2/f3+mFM9JF3We3Bt4nW7iKxPsuCiUOER6LBfkgXdHtZI3NdCr9f3V02O5Iu/NSXN/JhCSg+h224YZQ42FBu1Eca8PZBiPShGspDO/DLU+TTcQ0Gvk812GzeT+IFE6vedg/Fg0BIiYHFC8QnE9N3kIWXi1Edxe2LcDJrPycfkeUoq992v/wp0mHl2j1LaYqfIBTd67R2OqqS8nh6eYipcd9BigbIbooQVpYAeQgJCuu6saPDa3AmWyJyTDjL8SQmUfV88ELKXHs16wGDhnWjC12kFQzCHwE8/cAXTIOND8QHQYOIKm1rd98vBxTy0zdBROdu7OadY7KdyZU+bbgRl7sYRcwDxmlfFQW/jRxIu4MJFcuIXuSz5yOs3rSTuCn29bLB8pRcEY29RYlaHlQVQ2fyeIoDPvQ3BHRFLXzuMAFAs4NMJbu2wh4crpoomujO4RmVWFddlGX8Js5w8Cs3Zp2k5zLH7VGbsjHbCpB77krxzdxW2Sjfr1uQnWWpJhpo/lGlP7hrSZgOd+cPTkzobwSIOclRh08z1SGTlteUoC6rh/s9dWoUNchAzAAmWxcr1BsVwMTzN0AUvNRjFTt14u/HpULPWvAeQCmugn/skmHNsGh0mc9weMy1zN16ZVW8GhRoGq1lH3CPGhDe4=
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(346002)(136003)(396003)(451199018)(36840700001)(40470700004)(46966006)(426003)(336012)(47076005)(6666004)(54906003)(36756003)(40460700003)(110136005)(86362001)(40480700001)(7636003)(356005)(36860700001)(26005)(83380400001)(82310400005)(82740400003)(186003)(2616005)(7696005)(316002)(5660300002)(8936002)(7416002)(966005)(478600001)(4326008)(41300700001)(2906002)(70586007)(70206006)(8676002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 14:26:30.1495
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ea3cfd4-c6a6-4815-c061-08db1fe11c27
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT019.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6179
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changelog
+v4:
+ * Rebased on top of Jason's series adding replace() and hwpt_alloc()
+ https://lore.kernel.org/linux-iommu/0-v2-51b9896e7862+8a8c-iommufd_alloc_jgg@nvidia.com/
+ * Rebased on top of cdev series v6
+ https://lore.kernel.org/kvm/20230308132903.465159-1-yi.l.liu@intel.com/
+ * Dropped the patch that's moved to cdev series.
+ * Added unmap function pointer sanity before calling it.
+ * Added "Reviewed-by" from Kevin and Yi.
+ * Added back the VFIO change updating the ATTACH uAPI.
+v3:
+ https://lore.kernel.org/linux-iommu/cover.1677288789.git.nicolinc@nvidia.com/
+ * Rebased on top of Jason's iommufd_hwpt branch:
+ https://lore.kernel.org/linux-iommu/0-v2-406f7ac07936+6a-iommufd_hwpt_jgg@nvidia.com/
+ * Dropped patches from this series accordingly. There were a couple of
+   VFIO patches that will be submitted after the VFIO cdev series. Also,
+   renamed the series to be "emulated".
+ * Moved dma_unmap sanity patch to the first in the series.
+ * Moved dma_unmap sanity to cover both VFIO and IOMMUFD pathways.
+ * Added Kevin's "Reviewed-by" to two of the patches.
+ * Fixed a NULL pointer bug in vfio_iommufd_emulated_bind().
+ * Moved unmap() call to the common place in iommufd_access_set_ioas().
+v2:
+ https://lore.kernel.org/linux-iommu/cover.1675802050.git.nicolinc@nvidia.com/
+ * Rebased on top of vfio_device cdev v2 series.
+ * Update the kdoc and commit message of iommu_group_replace_domain().
+ * Dropped revert-to-core-domain part in iommu_group_replace_domain().
+ * Dropped !ops->dma_unmap check in vfio_iommufd_emulated_attach_ioas().
+ * Added missing rc value in vfio_iommufd_emulated_attach_ioas() from the
+   iommufd_access_set_ioas() call.
+ * Added a new patch in vfio_main to deny vfio_pin/unpin_pages() calls if
+   vdev->ops->dma_unmap is not implemented.
+ * Added a __iommmufd_device_detach helper and let the replace routine do
+   a partial detach().
+ * Added restriction on auto_domains to use the replace feature.
+ * Added the patch "iommufd/device: Make hwpt_list list_add/del symmetric"
+   from the has_group removal series.
+v1:
+ https://lore.kernel.org/linux-iommu/cover.1675320212.git.nicolinc@nvidia.com/
 
->>> device_for_each_child() will invoke amd_resume_child_device() function callback
->>> for each device which will try to resume the child device in this case.
->>> By definition, device_for_each_child() Iterate over @parent's child devices,
->>> and invokes the callback for each. We check the return of amd_resume_child_device()
->>> each time.
->>> If it returns anything other than 0, we break out and return that value.
->>>
->>> In current scenario, As AMP codec is not in runtime suspend state,
->>> pm_request_resume() will return a value as 1. This will break the
->>> sequence for resuming rest of the child devices(JACK codec in our case).
->> Well, yes, now that makes sense, thanks for the details.
->>
->> I think the reason why we didn't see the problem with the Intel code is
->> that both amplifiers are on the same dailink, so they are by
->> construction either both suspended or both active. We never had
->> different types of devices on the same link.
->>
->> I would however suggest this simpler alternative, where only negative
->> return values are returned:
->>
->> ret = pm_request_resume(dev);
->> if (ret < 0) {
->> 	dev_err(dev, "pm_request_resume failed: %d\n", ret);
->>         return ret;
->> }
->> return 0;
->>
->> this would work just fine, no?
->> No, As explained, pm_request_resume() return value is 1 for active device.
->>> As mentioned in an earlier thread, there are two possible solutions.
->>> 1. check pm runtime suspend state and return 0 if it is not suspended
->>> 2. simply always return 0 for amd_resume_child_device() function callback.
->>>
->>> We opted first one as solution.
->> My suggestion looks like your option 2. It's cleaner IMHO.
-> To use option 2, we need to respin the patch series.
-> Is it okay if we fix it as supplement patch?
+Hi all,
 
-I would vote for re-spinning a new version and ask others to review.
+The existing IOMMU APIs provide a pair of functions: iommu_attach_group()
+for callers to attach a device from the default_domain (NULL if not being
+supported) to a given iommu domain, and iommu_detach_group() for callers
+to detach a device from a given domain to the default_domain. Internally,
+the detach_dev op is deprecated for the newer drivers with default_domain.
+This means that those drivers likely can switch an attaching domain to
+another one, without stagging the device at a blocking or default domain,
+for use cases such as:
+1) vPASID mode, when a guest wants to replace a single pasid (PASID=0)
+   table with a larger table (PASID=N)
+2) Nesting mode, when switching the attaching device from an S2 domain
+   to an S1 domain, or when switching between relevant S1 domains.
+
+This series is rebased on top of Jason Gunthorpe's series that introduces
+iommu_group_replace_domain API and IOMMUFD infrastructure for the IOMMUFD
+"physical" devices. The IOMMUFD "emulated" deivces will need some extra
+steps to replace the access->ioas object and its iopt pointer.
+
+You can also find this series on Github:
+https://github.com/nicolinc/iommufd/commits/iommu_group_replace_domain-v4
+
+Thank you
+Nicolin Chen
+
+Nicolin Chen (5):
+  vfio: Do not allow !ops->dma_unmap in vfio_pin/unpin_pages()
+  iommufd/selftest: Add IOMMU_TEST_OP_ACCESS_SET_IOAS coverage
+  iommufd: Add replace support in iommufd_access_set_ioas()
+  iommufd/selftest: Add coverage for access->ioas replacement
+  vfio: Support IO page table replacement
+
+ drivers/iommu/iommufd/device.c                | 17 +++++++++--
+ drivers/iommu/iommufd/iommufd_private.h       |  1 +
+ drivers/iommu/iommufd/iommufd_test.h          |  4 +++
+ drivers/iommu/iommufd/selftest.c              | 26 +++++++++++++----
+ drivers/vfio/iommufd.c                        |  6 ++--
+ drivers/vfio/vfio_main.c                      |  4 +++
+ include/uapi/linux/vfio.h                     |  6 ++++
+ tools/testing/selftests/iommu/iommufd.c       | 29 +++++++++++++++++--
+ tools/testing/selftests/iommu/iommufd_utils.h | 22 ++++++++++++--
+ 9 files changed, 101 insertions(+), 14 deletions(-)
+
+-- 
+2.39.2
+
