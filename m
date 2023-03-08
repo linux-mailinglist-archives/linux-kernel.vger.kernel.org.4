@@ -2,467 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8A96B006B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497B76B006E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjCHIA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S230000AbjCHIBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:01:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjCHIAy (ORCPT
+        with ESMTP id S229755AbjCHIBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:00:54 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE599CBE1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:00:49 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id 132so9095332pgh.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:00:49 -0800 (PST)
+        Wed, 8 Mar 2023 03:01:35 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CCBA8816
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:01:18 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id bn17so9101756pgb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:01:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678262449;
+        d=linaro.org; s=google; t=1678262477;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=INXIpexMETeafnDIcUi9VTKEVIrpKAH4KxZYhZFOGbc=;
-        b=N+U1iCB4ugVB3+FOGGjuK/HI+eAHcmu+6DchmccYMla82IUSC+/TNbgV1YIkKM+Toa
-         6KHTRj+lEj09nQzr9nFjfzS+S5g8kxzUdmA+6T3T89gFFsq24sNOxJXHzoW/AHwL/S5M
-         BInMDFYhr6qSxg7W8AbV6mRI076wJFXgOgqGAOiMHqglLregtjAMpPBuGYMu5l5m4jwa
-         Rqf0GkMXWzr806Osnfg1agEiHjWVeUgeiTj7ewt4Mng8kAWPbYpJ9ZXWvKeqOFDarD50
-         yCUb6IIbArqZoR+nyXVNFOAP4kvyXf3DiFl8euKzsbJHt7dqxmsbvmLqm30c7ZluUx+/
-         8+1w==
+        bh=CDCjQdRoF6A1zhDfujzOV2lR68X4W8Elimj1cx25yU4=;
+        b=RFHYaEbk6DSYiAz1lTZoih8vQNFrAMNEkE+XlewBarCH6k2LAcfM45zl8kmwsGf+pa
+         Sno0I2FW/IuAIfghyHI0y91rtIj7cP1Rladw2lqaxttpc/Py6ZlXhC8BIGfeDlRBEn8E
+         XN961D8BJQ184gOzrMa1zG7rj+XtUtAx2w3nxPKCwfGqxmDeKgrLYJiL4PshuL83niGr
+         fzswSigrSW2b+JVX05Zp+qw567GF/XjJgXKa0ll1IIpMUkmyUivaJ9i8LALi76Rw0M3o
+         Gh6NAoRntcLGXJudMmaxOixDMXHDipxw5mNda28POlO89EE/up7rbQ60hbRmkKuwvVGI
+         7CJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678262449;
+        d=1e100.net; s=20210112; t=1678262477;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=INXIpexMETeafnDIcUi9VTKEVIrpKAH4KxZYhZFOGbc=;
-        b=x3MOOUZuWh1KE5uyISef/nshKAF1REkTTFUFnEvUD5xa3vcqegXR6OGp/pmuQGLuo0
-         /xiTOHstD0zvkanRgj0FcQMYETdsWkhY8655SBjY/fKvaxwsBxPXnRKLPkHfTQaEhmhI
-         ojikHbWzxdf6Guas2Ei7d6BIDEuGPfGPN3mL4em3vVoWqjg/7cLDe3A+T0oxag5IWBGb
-         e8oSaCm1pHpC8a0YXMbqZi6025sWbtirP9wR5Iy6cG8w/Mrldf4rurh4veMEoQ2CppMC
-         /K6RVCdFSkUZhoyy3ldqno01YLLUMKnLBopKc6FpF9ywB+JT5eMlgf30JycN2spdd/kE
-         JYHQ==
-X-Gm-Message-State: AO0yUKW9PIXYNJ03J3A0ZktjKWegFX9IK2Tx/eaKsYBSHPMkUMRAEY9l
-        YUB/3iImsUsHxJjRZWtw47mdU4AZfxhnYufvmRsJFQ==
-X-Google-Smtp-Source: AK7set9lLHw8JRfWihHjX8ib+SHE8Y7+zBuH3dQcE6ijb4EjH2IsA6xYiiiu8edM3FLCxRCwyzaFIjPy3jYRCI8BsEM=
-X-Received: by 2002:a62:a512:0:b0:593:fcfb:208b with SMTP id
- v18-20020a62a512000000b00593fcfb208bmr7249803pfm.3.1678262449109; Wed, 08 Mar
- 2023 00:00:49 -0800 (PST)
+        bh=CDCjQdRoF6A1zhDfujzOV2lR68X4W8Elimj1cx25yU4=;
+        b=k/gLHpnDLR0P4jq9HFyzEaX3n/axNFCHnSV6XbyfTng13F7PR5PTnKWEmxNbfESbHG
+         EhpNs7AnQ8Ia6XZV//oq9Z+1VCPWTGJjc1ySG9tE210hM222YR2TsOtpYr7ATciaSKuX
+         tMf9iAn3f1iKFEeRtHPcoX84sQ8gIoTjYgnUAb7KvA2zzTq46ptS/wVuOrEVnGTxJUnC
+         BL/FGppOUwUban6oVqJ0AyluJ+UBFTp3xcEfEK7oIpzBF1Cel1I9XEaq8w3iD06+sYQk
+         Se4v8+ClSCM/LykUpZvKjc9dPbg3j0lyIv6kUwVh74LA87tklMTuMjz4MptYuWThpg+C
+         9VoQ==
+X-Gm-Message-State: AO0yUKV1eXA8dWZuVRNUZdvfzDnrLXjfmComfr1T9O/ikA3IJl5XDGIX
+        JDi2S7Z7lGv+1Qgnf2KQVoOgXEGkahD06EkPD0VMHg==
+X-Google-Smtp-Source: AK7set/iDU5Vu20LLrxF5Rc8c5+JIbDs4GtTogpTn0zH7aKFI8T4Fi0wzw4zjfpv0K+BdW3GyqGzGUzId9wJmXrofQg=
+X-Received: by 2002:a62:86c5:0:b0:5e9:57b1:5bda with SMTP id
+ x188-20020a6286c5000000b005e957b15bdamr7043669pfd.3.1678262477425; Wed, 08
+ Mar 2023 00:01:17 -0800 (PST)
 MIME-Version: 1.0
-References: <913b0491-cef6-87ac-bf7e-d6d6c8fc380a@linux.vnet.ibm.com>
- <CAKfTPtA5wqBb1hAQa=qd6CicJbHsRi+q=s2tT0n6XspGOEA2Xg@mail.gmail.com>
- <7dd8fa7e-3cbc-6d3f-5748-74ffdeb056a7@linux.vnet.ibm.com> <2226e488-390d-ed64-832e-ca8e6a3a1731@linux.vnet.ibm.com>
- <ZAIg5de3EkHtHqLM@vingu-book> <48b8f849-fa81-d968-8fb6-b25c5fe94edb@linux.vnet.ibm.com>
- <CAKfTPtA9=03eeXemrVDFHCviqS4NOBLedkbcG_FwGd2SfAd+wQ@mail.gmail.com>
- <0f19b215-5841-bea4-20a5-beda39d8dad7@linux.vnet.ibm.com> <ZAX/OOm4IP41NcHY@vingu-book>
- <ed4a5323-44e8-590e-1050-4b7b948c5688@linux.vnet.ibm.com> <ZAcPzgCJliKwAArU@vingu-book>
- <69e18715-f868-132b-8898-0787a60e6840@linux.vnet.ibm.com>
-In-Reply-To: <69e18715-f868-132b-8898-0787a60e6840@linux.vnet.ibm.com>
+References: <20230306132418.50389-1-zhangqiao22@huawei.com>
+ <CAKfTPtAYpkQVDBR0mcymVgu7aYY5rN1svW713mGJxbewHGJRqQ@mail.gmail.com>
+ <CAKfTPtAOFthDtQj=EGbTzwG6ZE7GPpp_3Xg9wVr_8epO+fiFjw@mail.gmail.com> <d4d849e3-ea4b-1f84-b287-513fb7bff415@huawei.com>
+In-Reply-To: <d4d849e3-ea4b-1f84-b287-513fb7bff415@huawei.com>
 From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 8 Mar 2023 09:00:37 +0100
-Message-ID: <CAKfTPtDLptU9j9iCRtOokYzRE0SMqXZHBH0xPjqhaB=NPOes4w@mail.gmail.com>
-Subject: Re: [PATCH v12 8/8] sched/fair: Add latency list
-To:     Shrikanth Hegde <sshegde@linux.vnet.ibm.com>
-Cc:     qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org,
-        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+Date:   Wed, 8 Mar 2023 09:01:05 +0100
+Message-ID: <CAKfTPtAVrmPCwuJ55e6TLrVjQnsgDAdg2rGY_0DXcJGzBft15Q@mail.gmail.com>
+Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
+To:     Zhang Qiao <zhangqiao22@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
         mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com, tj@kernel.org,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org
+        rkagan@amazon.de
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Mar 2023 at 11:52, Shrikanth Hegde <sshegde@linux.vnet.ibm.com> w=
-rote:
+On Tue, 7 Mar 2023 at 14:41, Zhang Qiao <zhangqiao22@huawei.com> wrote:
 >
 >
-> On 3/7/23 3:49 PM, Vincent Guittot wrote:
-> > Le mardi 07 mars 2023 =C3=A0 00:34:49 (+0530), Shrikanth Hegde a =C3=A9=
-crit :
-> >>> Le lundi 06 mars 2023 =C3=A0 17:03:30 (+0530), Shrikanth Hegde a =C3=
-=A9crit :
-> >>>> On 3/5/23 6:33 PM, Vincent Guittot wrote:
-> >>>>> On Sat, 4 Mar 2023 at 16:13, Shrikanth Hegde <sshegde@linux.vnet.ib=
-m.com> wrote:
-> >>>>>> On 3/3/23 10:01 PM, Vincent Guittot wrote:
-> >>>>>>> Le jeudi 02 mars 2023 =C3=A0 23:37:52 (+0530), Shrikanth Hegde a =
-=C3=A9crit :
-> >>>>>>>> On 3/2/23 8:30 PM, Shrikanth Hegde wrote:
-> >>>>>>>>> On 3/2/23 6:47 PM, Vincent Guittot wrote:
-> >>>>>>>>>> On Thu, 2 Mar 2023 at 12:00, Shrikanth Hegde <sshegde@linux.vn=
-et.ibm.com> wrote:
-> >>>>>>>>>>> On 3/2/23 1:20 PM, Vincent Guittot wrote:
-> >>>>>>>>>>>> On Wed, 1 Mar 2023 at 19:48, shrikanth hegde <sshegde@linux.=
-vnet.ibm.com> wrote:
-> >>>>>>>>>>>>> On 2/24/23 3:04 PM, Vincent Guittot wrote:
-> >>>>>>> [...]
-> >>>>>>>
-> >>>>>>>>>>>>> Ran the schbench and hackbench with this patch series. Here=
- comparison is
-> >>>>>>>>>>>>> between 6.2 stable tree, 6.2 + Patch and 6.2 + patch + abov=
-e re-arrange of
-> >>>>>>>>>>>>> latency_node. Ran two cgroups, in one cgroup running stress=
--ng at 50%(group1)
-> >>>>>>>>>>>>> and other is running these benchmarks (group2). Set the lat=
-ency nice
-> >>>>>>>>>>>>> of group2 to -20. These are run on Power system with 12 cor=
-es with SMT=3D8.
-> >>>>>>>>>>>>> Total of 96 CPU.
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> schbench gets lower latency compared to stabletree. Whereas=
- hackbench seems
-> >>>>>>>>>>>>> to regress under this case. Maybe i am doing something wron=
-g. I will re-run
-> >>>>>>>>>>>>> and attach the numbers to series.
-> >>>>>>>>>>>>> Please suggest if any variation in the test i need to try.
-> >>>>>>>>>>>> hackbench takes advanatge of a latency nice 19 as it mainly =
-wants to
-> >>>>>>>>>>>> run longer slice to move forward rather than preempting othe=
-rs all the
-> >>>>>>>>>>>> time
-> >>>>>>>>>>> hackbench still seems to regress in different latency nice va=
-lues compared to
-> >>>>>>>>>>> baseline of 6.2 in this case. up to 50% in some cases.
-> >>>>>>>>>>>
-> >>>>>>>>>>> 12 core powerpc system  with SMT=3D8 i.e 96 CPU
-> >>>>>>>>>>> running 2 CPU cgroups. No quota assigned.
-> >>>>>>>>>>> 1st cgroup is running stress-ng with 48 threads. Consuming 50=
-% of CPU.
-> >>>>>>>>>>> latency is not changed for this cgroup.
-> >>>>>>>>>>> 2nd cgroup is running hackbench. This cgroup is assigned the =
-different latency
-> >>>>>>>>>>> nice values of 0, -20 and 19.
-> >>>>>>>>>> According to your other emails, you are using the cgroup inter=
-face and
-> >>>>>>>>>> not the task's one. Do I get it right ?
-> >>>>>>>>> right. I create cgroup, attach bash command with echo $$,
-> >>>>>>>>> assign the latency nice to cgroup, and run hackbench from that =
-bash prompt.
-> >>>>>>>>>
-> >>>>>>>>>> I haven't run test such tests in a cgroup but at least the tes=
-t with
-> >>>>>>>>>> latency_nice =3D=3D 0 should not make any noticeable differenc=
-e. Does this
-> >>>>>>>>>> include the re-arrange patch that you have proposed previously=
- ?
-> >> Ran the test on a different system altogether. I don't see similar reg=
-ression there.
-> >> In fact latency nice is helping in reducing the latency as expected.
-> >> It is much bigger system with 60 cores. i.e total of 480 cpu.
+>
+> =E5=9C=A8 2023/3/7 18:26, Vincent Guittot =E5=86=99=E9=81=93:
+> > On Mon, 6 Mar 2023 at 14:53, Vincent Guittot <vincent.guittot@linaro.or=
+g> wrote:
 > >>
-> >> Tested in the same way. created two cgroups. one is running the micro =
-benchmarks
-> >> and other is running stress-ng at different utilization point.
-> >> This data is at 50% utilization point. Similar observations w.r.t late=
-ncy
-> >> is seen at 0%, 25%, 75% and 100% utilization as well.
-> >>
-> > Thanks for testing on a different system which seems to get results ali=
-gned with what
-> > Prateek and I have seen on our system.
-> >
-> >
-> >> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >> schbench
-> >> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>             6.2            6.2 + V12 + LN=3D0
-> >> Groups: 1
-> >> 50.0th:                 14.0             12.5
-> >> 75.0th:                 16.5             14.0
-> >> 90.0th:                 18.5             15.5
-> >> 95.0th:                 20.5             17.0
-> >> 99.0th:                 27.5             21.0
-> >> 99.5th:                 36.0             23.5
-> >> Groups: 2
-> >> 50.0th:                 14.0             16.0
-> >> 75.0th:                 17.0             18.0
-> >> 90.0th:                 20.0             21.0
-> >> 95.0th:                 23.0             23.0
-> >> 99.0th:                 71.0             34.0
-> >> 99.5th:               1170.0             96.0
-> >> 99.9th:               5088.0           3212.0
-> >> Groups: 4
-> >> 50.0th:                 20.5             19.5
-> >> 75.0th:                 24.5             22.5
-> >> 90.0th:                 31.0             26.0
-> >> 95.0th:                260.5             28.0
-> >> 99.0th:               3644.0             35.0
-> >> 99.5th:               5152.0             44.5
-> >> 99.9th:               8076.0            168.5
-> >> Groups: 8
-> >> 50.0th:                 26.0             25.5
-> >> 75.0th:                 32.5             31.5
-> >> 90.0th:                 41.5             36.5
-> >> 95.0th:                794.0             39.5
-> >> 99.0th:               5992.0             66.0
-> >> 99.5th:               7208.0            159.0
-> >> 99.9th:               9392.0           1604.0
-> >> Groups: 16
-> >> 50.0th:                 37.5             34.0
-> >> 75.0th:                 49.5             44.5
-> >> 90.0th:                 70.0             53.5
-> >> 95.0th:               1284.0             58.5
-> >> 99.0th:               5600.0            102.5
-> >> 99.5th:               7216.0            368.5
-> >> 99.9th:               9328.0           5192.0
-> >> Groups: 32
-> >> 50.0th:                 59.0             54.5
-> >> 75.0th:                 83.0             74.5
-> >> 90.0th:                118.5             91.0
-> >> 95.0th:               1921.0            100.5
-> >> 99.0th:               6672.0            317.0
-> >> 99.5th:               8252.0           2264.0
-> >> 99.9th:              10448.0           8388.0
-> >>
-> >>
-> >> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >> hackbench
-> >> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>
-> >> type                 Groups      6.2      | 6.2 + V12 + LN=3D0
-> >> Process               10         0.19     |  0.19
-> >> Process               20         0.34     |  0.34
-> >> Process               30         0.45     |  0.44
-> >> Process               40         0.58     |  0.57
-> >> Process               50         0.70     |  0.69
-> >> Process               60         0.82     |  0.80
-> >> thread                10         0.20     |  0.20
-> >> thread                20         0.36     |  0.36
-> >> Process(Pipe)         10         0.24     |  0.21
-> >> Process(Pipe)         20         0.46     |  0.40
-> >> Process(Pipe)         30         0.65     |  0.58
-> >> Process(Pipe)         40         0.90     |  0.68
-> >> Process(Pipe)         50         1.04     |  0.83
-> >> Process(Pipe)         60         1.16     |  0.86
-> >> thread(Pipe)          10         0.19     |  0.18
-> >> thread(Pipe)          20         0.46     |  0.37
-> >>
-> >>
-> > [...]
-> >
-> >>>>>>
-> >>>>>> Do you want me to try any other experiment on this further?
-> >>>>> Yes, would be good to know which of the 3 changes in the patch crea=
-te
-> >>>>> the regression
-> >>>>>
-> >>>>> I suspect the 1st change to be the root cause of your problem but I=
-t
-> >>>>> would be good if you can confirm my assumption with some tests
-> >>>>>
-> >>>>> Thanks
-> >>>> Applied each change individually. 3rd change seems to cause the regr=
-ession.
-> >>>> Kept only the 3rd change and numbers are same as stable 6.2 for late=
-ncy nice
-> >>>> value of 0.
-> >>> Ok, it's the patch 1 that aims to prevent some unfairness with low we=
-ight
-> >>> waking task. And your platform probably falls in the last part of the=
- commit:
+> >> On Mon, 6 Mar 2023 at 13:57, Zhang Qiao <zhangqiao22@huawei.com> wrote=
+:
 > >>>
-> >>> " Strictly speaking, we should use cfs->min_vruntime instead of
-> >>> curr->vruntime but it doesn't worth the additional overhead and compl=
-exity
-> >>> as the vruntime of current should be close to min_vruntime if not equ=
-al."
+> >>> Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of
+> >>> entity being placed") fix an overflowing bug, but ignore
+> >>> a case that se->exec_start is reset after a migration.
 > >>>
-> >>> Could you try the patch below on top of v12 ?
+> >>> For fixing this case, we reset the vruntime of a long
+> >>> sleeping task in migrate_task_rq_fair().
+> >>>
+> >>> Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being p=
+laced")
+> >>> Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
+> >>> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
+> >>
+> >> Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+> >>
+> >>> ---
+> >>>
+> >>> v1 -> v2:
+> >>> - fix some typos and update comments
+> >>> - reformat the patch
 > >>>
 > >>> ---
-> >>>  kernel/sched/fair.c | 21 +++++++++++----------
-> >>>  1 file changed, 11 insertions(+), 10 deletions(-)
+> >>>  kernel/sched/fair.c | 76 ++++++++++++++++++++++++++++++++-----------=
+--
+> >>>  1 file changed, 55 insertions(+), 21 deletions(-)
 > >>>
 > >>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> >>> index e2aeb4511686..77b03a280912 100644
+> >>> index 7a1b1f855b96..74c9918ffe76 100644
 > >>> --- a/kernel/sched/fair.c
 > >>> +++ b/kernel/sched/fair.c
-> >>> @@ -5049,7 +5049,7 @@ set_next_entity(struct cfs_rq *cfs_rq, struct s=
-ched_entity *se)
+> >>> @@ -4648,11 +4648,45 @@ static void check_spread(struct cfs_rq *cfs_r=
+q, struct sched_entity *se)
+> >>>  #endif
 > >>>  }
 > >>>
-> >>>  static int
-> >>> -wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity=
- *se);
-> >>> +wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity=
- *se, struct cfs_rq *cfs_rq);
-> >>>
-> >>>  /*
-> >>>   * Pick the next process, keeping these things in mind, in this orde=
-r:
-> >>> @@ -5088,16 +5088,16 @@ pick_next_entity(struct cfs_rq *cfs_rq, struc=
-t sched_entity *curr)
-> >>>                             second =3D curr;
-> >>>             }
-> >>>
-> >>> -           if (second && wakeup_preempt_entity(second, left) < 1)
-> >>> +           if (second && wakeup_preempt_entity(second, left, cfs_rq)=
- < 1)
-> >>>                     se =3D second;
-> >>>     }
-> >>>
-> >>> -   if (cfs_rq->next && wakeup_preempt_entity(cfs_rq->next, left) < 1=
-) {
-> >>> +   if (cfs_rq->next && wakeup_preempt_entity(cfs_rq->next, left, cfs=
-_rq) < 1) {
-> >>>             /*
-> >>>              * Someone really wants this to run. If it's not unfair, =
-run it.
-> >>>              */
-> >>>             se =3D cfs_rq->next;
-> >>> -   } else if (cfs_rq->last && wakeup_preempt_entity(cfs_rq->last, le=
-ft) < 1) {
-> >>> +   } else if (cfs_rq->last && wakeup_preempt_entity(cfs_rq->last, le=
-ft, cfs_rq) < 1) {
-> >>>             /*
-> >>>              * Prefer last buddy, try to return the CPU to a preempte=
-d task.
-> >>>              */
-> >>> @@ -5107,7 +5107,7 @@ pick_next_entity(struct cfs_rq *cfs_rq, struct =
-sched_entity *curr)
-> >>>     /* Check for latency sensitive entity waiting for running */
-> >>>     latency =3D __pick_first_latency(cfs_rq);
-> >>>     if (latency && (latency !=3D se) &&
-> >>> -       wakeup_preempt_entity(latency, se) < 1)
-> >>> +       wakeup_preempt_entity(latency, se, cfs_rq) < 1)
-> >>>             se =3D latency;
-> >>>
-> >>>     return se;
-> >>> @@ -7808,7 +7808,7 @@ static unsigned long wakeup_gran(struct sched_e=
-ntity *se)
-> >>>   *
-> >>>   */
-> >>>  static int
-> >>> -wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity=
- *se)
-> >>> +wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity=
- *se, struct cfs_rq *cfs_rq)
+> >>> +static inline bool entity_is_long_sleep(struct sched_entity *se)
+> >>> +{
+> >>> +       struct cfs_rq *cfs_rq;
+> >>> +       u64 sleep_time;
+> >>> +
+> >>> +       if (se->exec_start =3D=3D 0)
+> >>> +               return false;
+> >>> +
+> >>> +       cfs_rq =3D cfs_rq_of(se);
+> >>> +       sleep_time =3D rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+> >>> +       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
+> >>> +               return true;
+> >>> +
+> >>> +       return false;
+> >>> +}
+> >>> +
+> >>> +static inline u64 sched_sleeper_credit(struct sched_entity *se)
+> >>> +{
+> >>> +       unsigned long thresh;
+> >>> +
+> >>> +       if (se_is_idle(se))
+> >>> +               thresh =3D sysctl_sched_min_granularity;
+> >>> +       else
+> >>> +               thresh =3D sysctl_sched_latency;
+> >>> +
+> >>> +       /*
+> >>> +        * Halve their sleep time's effect, to allow
+> >>> +        * for a gentler effect of sleepers:
+> >>> +        */
+> >>> +       if (sched_feat(GENTLE_FAIR_SLEEPERS))
+> >>> +               thresh >>=3D 1;
+> >>> +
+> >>> +       return thresh;
+> >>> +}
+> >>> +
+> >>>  static void
+> >>>  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int ini=
+tial)
 > >>>  {
-> >>>     s64 gran, vdiff =3D curr->vruntime - se->vruntime;
-> >>>     s64 offset =3D wakeup_latency_gran(curr, se);
-> >>> @@ -7818,6 +7818,8 @@ wakeup_preempt_entity(struct sched_entity *curr=
-, struct sched_entity *se)
+> >>>         u64 vruntime =3D cfs_rq->min_vruntime;
+> >>> -       u64 sleep_time;
 > >>>
-> >>>     gran =3D offset + wakeup_gran(se);
+> >>>         /*
+> >>>          * The 'current' period is already promised to the current ta=
+sks,
+> >>> @@ -4664,23 +4698,8 @@ place_entity(struct cfs_rq *cfs_rq, struct sch=
+ed_entity *se, int initial)
+> >>>                 vruntime +=3D sched_vslice(cfs_rq, se);
 > >>>
-> >>> +   if (vdiff > gran)
-> >>> +           return 1;
-> >>>     /*
-> >>>      * At wake up, the vruntime of a task is capped to not be older t=
-han
-> >>>      * a sched_latency period compared to min_vruntime. This prevents=
- long
-> >>> @@ -7827,9 +7829,8 @@ wakeup_preempt_entity(struct sched_entity *curr=
-, struct sched_entity *se)
-> >>>      * for low priority task. Make sure that long sleeping task will =
-get a
-> >>>      * chance to preempt current.
-> >>>      */
-> >>> -   gran =3D min_t(s64, gran, get_latency_max());
+> >>>         /* sleeps up to a single latency don't count. */
+> >>> -       if (!initial) {
+> >>> -               unsigned long thresh;
 > >>> -
-> >>> -   if (vdiff > gran)
-> >>> +   vdiff =3D cfs_rq->min_vruntime - se->vruntime;
-> >>> +   if (vdiff > get_latency_max())
-> >>>             return 1;
+> >>> -               if (se_is_idle(se))
+> >>> -                       thresh =3D sysctl_sched_min_granularity;
+> >>> -               else
+> >>> -                       thresh =3D sysctl_sched_latency;
+> >>> -
+> >>> -               /*
+> >>> -                * Halve their sleep time's effect, to allow
+> >>> -                * for a gentler effect of sleepers:
+> >>> -                */
+> >>> -               if (sched_feat(GENTLE_FAIR_SLEEPERS))
+> >>> -                       thresh >>=3D 1;
+> >>> -
+> >>> -               vruntime -=3D thresh;
+> >>> -       }
+> >>> +       if (!initial)
+> >>> +               vruntime -=3D sched_sleeper_credit(se);
 > >>>
-> >>>     return 0;
-> >>> @@ -7933,7 +7934,7 @@ static void check_preempt_wakeup(struct rq *rq,=
- struct task_struct *p, int wake_
-> >>>             return;
+> >>>         /*
+> >>>          * Pull vruntime of the entity being placed to the base level=
+ of
+> >>> @@ -4689,8 +4708,7 @@ place_entity(struct cfs_rq *cfs_rq, struct sche=
+d_entity *se, int initial)
+> >>>          * the base as it may be too far off and the comparison may g=
+et
+> >>>          * inversed due to s64 overflow.
+> >>>          */
+> >>> -       sleep_time =3D rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+> >>> -       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
+> >>> +       if (entity_is_long_sleep(se))
+> >>>                 se->vruntime =3D vruntime;
+> >>>         else
+> >>>                 se->vruntime =3D max_vruntime(se->vruntime, vruntime)=
+;
+> >>> @@ -7635,7 +7653,23 @@ static void migrate_task_rq_fair(struct task_s=
+truct *p, int new_cpu)
+> >>>         if (READ_ONCE(p->__state) =3D=3D TASK_WAKING) {
+> >>>                 struct cfs_rq *cfs_rq =3D cfs_rq_of(se);
 > >>>
-> >>>     update_curr(cfs_rq_of(se));
-> >>> -   if (wakeup_preempt_entity(se, pse) =3D=3D 1) {
-> >>> +   if (wakeup_preempt_entity(se, pse, cfs_rq_of(se)) =3D=3D 1) {
-> >>>             /*
-> >>>              * Bias pick_next to pick the sched entity that is
-> >>>              * triggering this preemption.
-> >>> --
-> >>> 2.34.1
-> >> Tried above patch on top of V12. Numbers are worse than V12. We maybe =
-running into
-> >> a corner case on this system.
-> > Yes it can be a corner case.
+> >>> -               se->vruntime -=3D u64_u32_load(cfs_rq->min_vruntime);
+> >>> +               /*
+> >>> +                * We determine whether a task sleeps for long by che=
+cking
+> >>> +                * se->exec_start, and if it is, we sanitize its vrun=
+time at
+> >>> +                * place_entity(). However, after a migration, this d=
+etection
+> >>> +                * method fails due to se->exec_start being reset.
+> >>> +                *
+> >>> +                * For fixing this case, we add the same check here. =
+For a task
+> >>> +                * which has slept for a long time, its vruntime shou=
+ld be reset
+> >>> +                * to cfs_rq->min_vruntime with a sleep credit. Becau=
+se waking
+> >>> +                * task's vruntime will be added to cfs_rq->min_vrunt=
+ime when
+> >>> +                * enqueue, we only need to reset the se->vruntime of=
+ waking task
+> >>> +                * to a credit here.
+> >>> +                */
+> >>> +               if (entity_is_long_sleep(se))
 > >
-> > Nevertheless, the patch above has a problem and does an unsigned compar=
-ison instead of a signed
-> > one. I have forced the signed comparison in the patch below to be appli=
-ed on top  of
-> > previous one:
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 77b03a280912..22a497f92dbb 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -7830,7 +7830,7 @@ wakeup_preempt_entity(struct sched_entity *curr, =
-struct sched_entity *se, struct
-> >          * chance to preempt current.
-> >          */
-> >         vdiff =3D cfs_rq->min_vruntime - se->vruntime;
-> > -       if (vdiff > get_latency_max())
-> > +       if (vdiff > (s64)get_latency_max())
-> >                 return 1;
-> >
-> >         return 0;
+> > I completely overlooked that we can't use rq_clock_task here. Need to
+> > think a bit more on this
 >
-> Tested the above patch on top of previous patch + V12.
-> Numbers are still worse than V12. Same as V12+previous patch.
+> Hi,Vincent,
+>
+> How about using exec_start of the parent sched_entity instant of rq_clock=
+_task()?
 
-So It really looks like a corner case for this system and I'm not sure
-we can do anything as others don't face he problem
+How do we handle sched_entity without a parent sched_entity ?
+
+
+
 >
+> If during the waking sched_entity sleep, there are sibling sched_entity r=
+unning,
+> than `pse->exec_start` was up to date.
+> If the cfs_rq was idle, we don't have a problem of possible overflow.
+>
+> static inline bool vruntime_need_sanitized(struct sched_entity *se)
+> {
+>         struct sched_entity *pse =3D parent_entity(se);
+>         u64 diff ;
+>
+>         if (se->exec_start =3D=3D 0 || !pse)
+>                 return false;
+>
+>         diff =3D pse->exec_start - se->exec_start;
+>         if ((s64)diff > 60LL * NSEC_PER_SEC)
+>                 return true;
+>
+>         return false;
+> }
+>
+> Thanks.
+> ZhangQiao.
 >
 > >
+> >>> +                       se->vruntime =3D -sched_sleeper_credit(se);
+> >>> +               else
+> >>> +                       se->vruntime -=3D u64_u32_load(cfs_rq->min_vr=
+untime);
+> >>>         }
+> >>>
+> >>>         if (!task_on_rq_migrating(p)) {
+> >>> --
+> >>> 2.17.1
+> >>>
+> > .
 > >
-> >> Type                Groups       6.2     | 6.2+V12
-> >>
-> >>  Process              10        0.33     |  0.44
-> >>  Process              20        0.61     |  0.90
-> >>  Process              30        0.87     |  1.29
-> >>  Process              40        1.10     |  1.69
-> >>  Process              50        1.34     |  2.08
-> >>  Process              60        1.58     |  2.39
-> >>  thread               10        0.36     |  0.53
-> >>  thread               20        0.64     |  0.94
-> >>  Process(Pipe)        10        0.18     |  0.46
-> >>  Process(Pipe)        20        0.32     |  0.75
-> >>  Process(Pipe)        30        0.42     |  1.01
-> >>  Process(Pipe)        40        0.56     |  1.15
-> >>  Process(Pipe)        50        0.68     |  1.38
-> >>  Process(Pipe)        60        0.80     |  1.56
-> >>
-> >>
-> >>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> >>>> index cdcd991bbcf1..c89c201dd164 100644
-> >>>> --- a/kernel/sched/fair.c
-> >>>> +++ b/kernel/sched/fair.c
-> >>>> @@ -7827,7 +7827,6 @@ wakeup_preempt_entity(struct sched_entity *cur=
-r, struct sched_entity *se)
-> >>>>          * for low priority task. Make sure that long sleeping task =
-will get a
-> >>>>          * chance to preempt current.
-> >>>>          */
-> >>>> -       gran =3D min_t(s64, gran, get_latency_max());
-> >>>>
-> >>>>         if (vdiff > gran)
-> >>>>                 return 1;
-> >>>>
-> >>>>
-> >>>>
-> > [...]
-> >
-> >>
->
