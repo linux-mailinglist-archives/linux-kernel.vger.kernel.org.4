@@ -2,132 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6436AFE5C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 06:31:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B97F56AFE74
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 06:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjCHFbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 00:31:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        id S229709AbjCHFgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 00:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCHFa6 (ORCPT
+        with ESMTP id S229544AbjCHFgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 00:30:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45809884D;
-        Tue,  7 Mar 2023 21:30:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 8 Mar 2023 00:36:07 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FCDA17F7;
+        Tue,  7 Mar 2023 21:36:05 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24237B81A3C;
-        Wed,  8 Mar 2023 05:30:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD49C433EF;
-        Wed,  8 Mar 2023 05:30:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678253453;
-        bh=lGONHaeJ8GBUprLoz6RTtZDYCoOi74fna+rLPn2pNTU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r2PoY3PZnJMJJ0nk37fxg2eEwLfz8DPPBLrwAuFrZk6dwuUttjiwBmVODWMqSep8i
-         JrYmukTHaKr+ve46ca+t8YqKnsMpLCEknOifUi3IECfIv4ThQAwg6whU0dD6YDVym1
-         jHvSXvAta7LlLYzbqpPI91uHMvsgk8EXrnNHRDDfPswKnAlTLbExrWBhCNMD56omlI
-         gOdcfJUzn3mmnBXtansp6/JYx64BFpalwBdf6f9P3fvwvvj9kNjOOvSisv1yTW/QJI
-         +4SfLbhb/au2PTexxW4g8maE6Nua269917oKGK6fn9ym0YAWDd4Dx3+214AFBnv58l
-         nvCpuCkf7GfNg==
-Date:   Wed, 8 Mar 2023 11:00:47 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH] bus: mhi: host: pci_generic: Drop redundant
- pci_enable_pcie_error_reporting()
-Message-ID: <20230308053047.GC5124@thinkpad>
-References: <20230307201625.879567-1-helgaas@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230307201625.879567-1-helgaas@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AE8371FE3A;
+        Wed,  8 Mar 2023 05:36:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1678253763; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ohAN1Erof5lOdhUTSrhApdCEJ9yxa3YEOxqwWJ57vjQ=;
+        b=X/zJEKEW6iIGAU9EuXu8gvO/ihM2u1pIG1DrFO3pQP8tSl0fMOFpJF0rnA9Kv9194Moy0h
+        1QL95OQnf/D+f3oAnjl6qZdCcXxUv+f3K15Nul7QhC95Px2RWpYROPldiWxBT9tIArPejT
+        LWnSdAwpcePiWHBdVRo1L/5edwPbNwc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1678253763;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ohAN1Erof5lOdhUTSrhApdCEJ9yxa3YEOxqwWJ57vjQ=;
+        b=Zh3tkEfZUJzIYnUqFw/Qa/d8XsXK9Wf0TOe+obhAFnRRGPstXmNoSk0RZRrp64JUaO+t+A
+        R/mRm/vZKBdUNKDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 85FB013596;
+        Wed,  8 Mar 2023 05:36:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xUsWIMMeCGSaPgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 08 Mar 2023 05:36:03 +0000
+Date:   Wed, 08 Mar 2023 06:36:02 +0100
+Message-ID: <87lek7iz3x.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] kselftest/alsa: Log card and control information during startup
+In-Reply-To: <20230223-alsa-log-ctl-name-v1-0-ac0f10cc4db2@kernel.org>
+References: <20230223-alsa-log-ctl-name-v1-0-ac0f10cc4db2@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 02:16:25PM -0600, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
+On Mon, 06 Mar 2023 16:33:27 +0100,
+Mark Brown wrote:
 > 
-> pci_enable_pcie_error_reporting() enables the device to send ERR_*
-> Messages.  Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is
-> native"), the PCI core does this for all devices during enumeration, so the
-> driver doesn't need to do it itself.
+> These patches help make the logs a bit more friendly to work with by
+> adding human readable names for cards and controls alongside the numbers
+> assigned to them even when things are working well.
 > 
-> Remove the redundant pci_enable_pcie_error_reporting() call from the
-> driver.  Also remove the corresponding pci_disable_pcie_error_reporting()
-> from the driver .remove() path.
-> 
-> Note that this only controls ERR_* Messages from the device.  An ERR_*
-> Message may cause the Root Port to generate an interrupt, depending on the
-> AER Root Error Command register managed by the AER service driver.
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-
-Amended the commit message to fix a checkpatch warning and applied to
-mhi-next!
-
-Thanks,
-Mani
-
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->  drivers/bus/mhi/host/pci_generic.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-> index f39657f71483..6e13c43a84d1 100644
-> --- a/drivers/bus/mhi/host/pci_generic.c
-> +++ b/drivers/bus/mhi/host/pci_generic.c
-> @@ -8,7 +8,6 @@
->   * Copyright (C) 2020 Linaro Ltd <loic.poulain@linaro.org>
->   */
->  
-> -#include <linux/aer.h>
->  #include <linux/delay.h>
->  #include <linux/device.h>
->  #include <linux/mhi.h>
-> @@ -903,11 +902,9 @@ static int mhi_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	mhi_pdev->pci_state = pci_store_saved_state(pdev);
->  	pci_load_saved_state(pdev, NULL);
->  
-> -	pci_enable_pcie_error_reporting(pdev);
-> -
->  	err = mhi_register_controller(mhi_cntrl, mhi_cntrl_config);
->  	if (err)
-> -		goto err_disable_reporting;
-> +		return err;
->  
->  	/* MHI bus does not power up the controller by default */
->  	err = mhi_prepare_for_power_up(mhi_cntrl);
-> @@ -941,8 +938,6 @@ static int mhi_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	mhi_unprepare_after_power_down(mhi_cntrl);
->  err_unregister:
->  	mhi_unregister_controller(mhi_cntrl);
-> -err_disable_reporting:
-> -	pci_disable_pcie_error_reporting(pdev);
->  
->  	return err;
->  }
-> @@ -965,7 +960,6 @@ static void mhi_pci_remove(struct pci_dev *pdev)
->  		pm_runtime_get_noresume(&pdev->dev);
->  
->  	mhi_unregister_controller(mhi_cntrl);
-> -	pci_disable_pcie_error_reporting(pdev);
->  }
->  
->  static void mhi_pci_shutdown(struct pci_dev *pdev)
-> -- 
-> 2.25.1
-> 
+> Mark Brown (2):
+>       kselftest/alsa - mixer: Always log control names
+>       kselftest/alsa: Log card names during startup
 
--- 
-மணிவண்ணன் சதாசிவம்
+Applied both to for-next branch now.  Thanks.
+
+
+Takashi
