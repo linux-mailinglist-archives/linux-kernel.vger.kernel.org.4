@@ -2,140 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C169C6B019B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD5C6B01A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbjCHIgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:36:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
+        id S230209AbjCHIia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbjCHIfm (ORCPT
+        with ESMTP id S230360AbjCHIiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:35:42 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A659EB5FEC
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:34:43 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id da10so62598361edb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:34:43 -0800 (PST)
+        Wed, 8 Mar 2023 03:38:09 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A1B5BA0
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:37:43 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id k10so38640618edk.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:37:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678264478;
+        d=linaro.org; s=google; t=1678264662;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VJrJNkTOc+mkotSTD6YyDbRROmB4n6O1HCCuVmryjIQ=;
-        b=e8lY5MT3Ocre1fYL5y+xUAp28l2odmzzLy3cMcIyT5mboQmUWsaonS1YsVk3PqB8vi
-         mt8ny4ldduvOYW8KkZTkoUvxFaMocal+g/o7IBzF5l9I8DwlNcZxc20E0d84QRkeE5EZ
-         m6WBViqERZyaVsizfkbolcMsJRiNh9cHFgreVZrV7WMuo0v1u/6xnPv46SAjrQZKzV5q
-         rvtBBFs5D93Q7St7qPikfLZgHzhoLVLytkndeSuaLX83iGNhyYkNb1fGoha/JBjYfFK3
-         +QtwhYDPf9WfDP/7oSTXdYAXJeL5abhcO9101tv9llrucbCa80ly4/yf9O2MUBaivkh8
-         DQRw==
+        bh=E/WzsZEhRWqesaA/VgihYCVlcuAuHDDmWjDn5s627q8=;
+        b=hkLM635i6PbEzvxaklVMhvnoyMxzoamNwWrBl9HRjPD1ixywfwQssDR/Fq0d56W/J5
+         ysP6gO+qTrOiwQltIacANsamOhN3sRFf3w8GIODKbgkNCQl/Aeok84B2diwhk00a+7bN
+         4vMszuLBYpz/SHYSsU9Ej3PLkKVv/nBZ2eBO15DxYaqo85ExNyFLZ9gpq3si3LieIXNt
+         7u2EeAKi52aDAte2DNGjPxVVSfWl4pj110+AbjWI9LDbgpi3mqKDeNDU2FK5778CaOIq
+         eCSRiw+F+hUfqJ06K8iSV9YyZHnkuQoGpmpPe5+sqJWuKyf0Fe3uXb2Dv7yCKud7duQL
+         bdFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678264478;
+        d=1e100.net; s=20210112; t=1678264662;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VJrJNkTOc+mkotSTD6YyDbRROmB4n6O1HCCuVmryjIQ=;
-        b=tMtxIO1FkbMKBDNCEeMOdC2+ycLIcln+Dr8q6QqWGdk85Mfd3LwZ4Wor8D1UnwZ+kW
-         eKGZ0xByUVQaSv7AFBIgGa2kH0PBIm7zeNQ8Dn+Kr8W+pRpDCW/GD3+Wb2s6pHRABDby
-         FMA48BVKdpJ/Mjc6uLof5CbiaqxKnDGNAH5JFC0q5d7wHD2yPerV8QD3xxnS2kYZSnOe
-         Uf6zj/jzDYqikVCn+Rr5PfNJTRzL/bcwm5KwS41xc22rTW1YZgY/NJqn+UdbTmPCMHGf
-         cPJtP5aR2wr8B5Y8+gO4KpMLqQp3xg4aWWetix6SPlb7QSesxAqeTA2LbiUhXPyEyV76
-         6USw==
-X-Gm-Message-State: AO0yUKWfmfUkzOIn8L4s/7dmgZLJBXAGDsrBsBslrchx0yhq+T1XTOed
-        e7ZTIq2AV1okX6YcJOUD0X949g==
-X-Google-Smtp-Source: AK7set/eLi+dMlWxA1ga4i1GZ9tTXNLHEDrLYw+hmlbyUTYWR+HGHCzcb4kMHPNnTV1+HTS0kssySw==
-X-Received: by 2002:a17:907:6d89:b0:8b1:3f5b:af5f with SMTP id sb9-20020a1709076d8900b008b13f5baf5fmr21837835ejc.73.1678264478232;
-        Wed, 08 Mar 2023 00:34:38 -0800 (PST)
+        bh=E/WzsZEhRWqesaA/VgihYCVlcuAuHDDmWjDn5s627q8=;
+        b=MSIWbvgvpF63m/jJ8bnyT20EIz/bKbqSl8rzbh/vTX3/ObMsTZkk3ePpMcXXzG7CYH
+         NvBwAW+7PcrDynZqBiJgqKf/CH5wcqbP+VPW1roA00WNRK2lu9+ysFDIy0VfmEd0ZieQ
+         8s8UuAa5hJNF1I//93bF2+MC/0CMasQ/bpdA68S11E+wn3ol4wv6MwTjynMquNjXlCh8
+         PzNuZ2boyW+ImV/QwH/BuiAhcXD4LT8KlJ2QKGGlwoPdAZdQFp2BTH8wWsWsnhLMaLjR
+         MKMWCtQGGbWQqe4Hyz7Gm7t98eLJSuFM45TQXeQGk/glsa2f83LY3b6PXKMy985XvC+l
+         Z5vQ==
+X-Gm-Message-State: AO0yUKUIjMR023Wvy5bz3Ifp2QddNKScC7emX0gN8MmB0KbSnFITpPZj
+        k1Ph7i67lk4W0tXyENOUjykOeQ==
+X-Google-Smtp-Source: AK7set8FU50SUCDPOEAD3jF8EdZXMqpxg583cG8nktaaEmYKPV8Cb4xBm2pZXn2RjynHCuDiBRcqiQ==
+X-Received: by 2002:aa7:cfc2:0:b0:4bf:f9f4:9b1e with SMTP id r2-20020aa7cfc2000000b004bff9f49b1emr15578064edy.4.1678264662068;
+        Wed, 08 Mar 2023 00:37:42 -0800 (PST)
 Received: from ?IPV6:2a02:810d:15c0:828:bba:fbfa:8aec:a133? ([2a02:810d:15c0:828:bba:fbfa:8aec:a133])
-        by smtp.gmail.com with ESMTPSA id h24-20020a1709063b5800b008cda6560404sm7142659ejf.193.2023.03.08.00.34.37
+        by smtp.gmail.com with ESMTPSA id 20-20020a508e54000000b004d8d2735251sm5795219edx.43.2023.03.08.00.37.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 00:34:37 -0800 (PST)
-Message-ID: <1ffed720-322c-fa73-1160-5fd73ce3c7c2@linaro.org>
-Date:   Wed, 8 Mar 2023 09:34:36 +0100
+        Wed, 08 Mar 2023 00:37:41 -0800 (PST)
+Message-ID: <31e2a67a-c046-9501-80de-e754ed450195@linaro.org>
+Date:   Wed, 8 Mar 2023 09:37:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH net-next v2] dt-bindings: net: ti: k3-am654-cpsw-nuss:
- Document Serdes PHY
+Subject: Re: [PATCH v13 1/2] dt-bindings: clock: add loongson-2 boot clock
+ index
 Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, linux@armlinux.org.uk,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, nsekhar@ti.com,
-        rogerq@kernel.org
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srk@ti.com
-References: <20230308051835.276552-1-s-vadapalli@ti.com>
+To:     zhuyinbo <zhuyinbo@loongson.cn>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
+        loongson-kernel@lists.loongnix.cn
+References: <20230307115022.12846-1-zhuyinbo@loongson.cn>
+ <692a62da-a9a1-fa23-6e24-723d73c3a423@linaro.org>
+ <5e9b3bd5-d885-6237-5e14-2becb3c956cc@loongson.cn>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230308051835.276552-1-s-vadapalli@ti.com>
+In-Reply-To: <5e9b3bd5-d885-6237-5e14-2becb3c956cc@loongson.cn>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 06:18, Siddharth Vadapalli wrote:
-> Update bindings to include Serdes PHY as an optional PHY, in addition to
-> the existing CPSW MAC's PHY. The CPSW MAC's PHY is required while the
-> Serdes PHY is optional. The Serdes PHY handle has to be provided only
-> when the Serdes is being configured in a Single-Link protocol. Using the
-> name "serdes-phy" to represent the Serdes PHY handle, the am65-cpsw-nuss
-> driver can obtain the Serdes PHY and request the Serdes to be
-> configured.
+On 08/03/2023 02:35, zhuyinbo wrote:
 > 
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> ---
+> 在 2023/3/7 下午8:47, Krzysztof Kozlowski 写道:
+>> On 07/03/2023 12:50, Yinbo Zhu wrote:
+>>> The Loongson-2 boot clock was used to spi and lio peripheral and
+>>> this patch was to add boot clock index number.
+>>>
+>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>> ---
+>> This is v13? Where is the changelog then?
 > 
-> Hello,
+> in fact, this is a new patch(v1),   but another clock driver patch in 
+> this series had send as v13 and need depend on
 > 
-> This patch corresponds to the Serdes PHY bindings that were missed out in
-> the series at:
-> https://lore.kernel.org/r/20230104103432.1126403-1-s-vadapalli@ti.com/
-> This was pointed out at:
-> https://lore.kernel.org/r/CAMuHMdW5atq-FuLEL3htuE3t2uO86anLL3zeY7n1RqqMP_rH1g@mail.gmail.com/
-> 
-> Changes from v1:
-> 1. Describe phys property with minItems, items and description.
-> 2. Use minItems and items in phy-names.
-> 3. Remove the description in phy-names.
-> 
-> v1:
-> https://lore.kernel.org/r/20230306094750.159657-1-s-vadapalli@ti.com/
-> 
->  .../bindings/net/ti,k3-am654-cpsw-nuss.yaml        | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-> index 900063411a20..0fb48bb6a041 100644
-> --- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-> +++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-> @@ -126,8 +126,18 @@ properties:
->              description: CPSW port number
->  
->            phys:
-> -            maxItems: 1
-> -            description: phandle on phy-gmii-sel PHY
-> +            minItems: 1
-> +            items:
-> +              - description: CPSW MAC's PHY.
-> +              - description: Serdes PHY. Serdes PHY is required only if
-> +                             the Serdes has to be configured in the
-> +                             Single-Link configuration.
-> +
-> +          phy-names:
-> +            minItems: 1
-> +            items:
-> +              - const: mac-phy
-> +              - const: serdes-phy
+> this patch so set current patch as v13.
 
-Drop "phy" suffixes.
+This should be explained in changelog.
+
+> 
+>>
+>>
+>>>   include/dt-bindings/clock/loongson,ls2k-clk.h | 25 ++++++++++---------
+>>>   1 file changed, 13 insertions(+), 12 deletions(-)
+>>>
+>>> diff --git a/include/dt-bindings/clock/loongson,ls2k-clk.h b/include/dt-bindings/clock/loongson,ls2k-clk.h
+>>> index db1e27e792ff1..e86804365e506 100644
+>>> --- a/include/dt-bindings/clock/loongson,ls2k-clk.h
+>>> +++ b/include/dt-bindings/clock/loongson,ls2k-clk.h
+>>> @@ -13,17 +13,18 @@
+>>>   #define LOONGSON2_DC_PLL				3
+>>>   #define LOONGSON2_PIX0_PLL				4
+>>>   #define LOONGSON2_PIX1_PLL				5
+>>> -#define LOONGSON2_NODE_CLK				6
+>>> -#define LOONGSON2_HDA_CLK				7
+>>> -#define LOONGSON2_GPU_CLK				8
+>>> -#define LOONGSON2_DDR_CLK				9
+>>> -#define LOONGSON2_GMAC_CLK				10
+>>> -#define LOONGSON2_DC_CLK				11
+>>> -#define LOONGSON2_APB_CLK				12
+>>> -#define LOONGSON2_USB_CLK				13
+>>> -#define LOONGSON2_SATA_CLK				14
+>>> -#define LOONGSON2_PIX0_CLK				15
+>>> -#define LOONGSON2_PIX1_CLK				16
+>>> -#define LOONGSON2_CLK_END				17
+>>> +#define LOONGSON2_BOOT_CLK				6
+>> That's an ABI break and commit msg does not explain it.
+> you meaning is that need add a explanation in commit msg that why
+
+You need good explanation to break the ABI. I don't understand the
+commit msg, but anyway I could not find there justification for ABI
+break. If you do not have good justification, don't break the ABI,
+
+
 
 Best regards,
 Krzysztof
