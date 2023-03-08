@@ -2,156 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546CF6B0459
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF756B045F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:31:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjCHKa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:30:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
+        id S231184AbjCHKbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:31:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbjCHKag (ORCPT
+        with ESMTP id S230514AbjCHKbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:30:36 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BB2B9BFC
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:29:59 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id m10so14936069vso.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:29:58 -0800 (PST)
+        Wed, 8 Mar 2023 05:31:12 -0500
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E269B95F5
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:30:35 -0800 (PST)
+Received: by mail-qv1-xf2e.google.com with SMTP id ff4so10796526qvb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:30:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678271398;
+        d=google.com; s=20210112; t=1678271432;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zs6kG7SxJlX0Yk0MstxBWczLimozPECORl9CWMpgGIE=;
-        b=09XXxUisY/HQYXwwxtyhC7SBMwEiIOErSiKN8eKWW87IQlEg8OyXmx1ITZP1UrAhdw
-         78fZ0z+X3gPORRermXoXW7AUucJKgdWV+MBLqRHXM1sFeE0pzZvJUencYjw4+uZVsp3V
-         V/JN0qlgaYCJslTpjwLgjybJsMXvyoCWYsizTehd3T5f0cmaCQtDBpicIGppfCQiRpB4
-         10GD4s4RpMmZhmIuH0QXpRuYbdHo41m6eMuf7WyQS9tkUEHghQ42yOpZ7s1lWX3he33w
-         S0IILgoLcDvJ0Ep6Wpjm4hVRH5kxKi4GWpCapoLdkkrLuaf5HgX7arIAlGyi/hoNH62F
-         MOug==
+        bh=JIIXmoaoZ2cbg5syPX+iagmSH5eLIxghMqLgfdresrM=;
+        b=GkdzxzBuvM11CVaZf+28wtzXhwqDTZMtiU+AQxw8EGHiKa5frXUqsvzL0Cmy7NzC9s
+         VylIWDwYtJpFWKxIJxXqpC02AWb4cKC6q6Mlh4lEujJ+IjSlzkSmCVySG/qbO3mpXrS5
+         PhUPio0xQpbmJXWNNvK42EaWF06TvZersDk2HXoJVzOfWF8F9sJff9PJbbfKF0RPUvgk
+         rSZifiQOomQJTmJ0lyZmU2ZI5jt+cjUBPXhiKOxYyzRxAP5IbM/GdGIYqWlXWfELh7bx
+         pK0coGjFj+FQWvVd+yZzUh8IcsMGIXZrIUMYlpxRoBoj0JahqqHCRg8/jqZ3JgYSbG7F
+         5gUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678271398;
+        d=1e100.net; s=20210112; t=1678271432;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zs6kG7SxJlX0Yk0MstxBWczLimozPECORl9CWMpgGIE=;
-        b=2rDVaFtKiv+r2JvHr5j4ofOjVfNDuVCEI4I2hJlnsWWAO4XtGmEGX5zrie0iW12faS
-         KXPsH3VGAIL7hmDxF6PetlR+W/6/DK0txne7emYYdKRUAUL2dKikk8WWDJgBAiuvx8lZ
-         3OstrV6tzBdC63uTn0Lo20gF6u2W7mimLGj7sFC/Y5E7QZHgPzA2vybkzu9DtnEsItpi
-         zZtC8H39iTVccol2RXviXJhW1cYB9oMxqoi0MNnL9fYgrKANqXoxE1skXh2fex2rTDT8
-         9qtLDyPZPLfLkM1vLFZSCxtge94sxSfgoOGSPJmmlZ07dBMu8cEhuyTnnHUrXEf15s0S
-         /KQw==
-X-Gm-Message-State: AO0yUKVsI/1v2W7cLji48SMZwvttL6N0F5B5pQMXc5vp0UIuNaNZGLpW
-        ukYeQFBxPfkbg+ECHAu+rp2xVUTszoKuQrsz0XjFmQ==
-X-Google-Smtp-Source: AK7set/KeAajv23VPgHouLH4U6B4lFCG5Lg3uXjZmL8R9yoeDuIDjWXQeRxkg4Ktp5A2k597WDKVIEY7FkOJiuQ49IU=
-X-Received: by 2002:a67:f406:0:b0:414:48a5:473f with SMTP id
- p6-20020a67f406000000b0041448a5473fmr11779308vsn.0.1678271398011; Wed, 08 Mar
- 2023 02:29:58 -0800 (PST)
+        bh=JIIXmoaoZ2cbg5syPX+iagmSH5eLIxghMqLgfdresrM=;
+        b=BDLKGHzb4wUZkUn+d9niHi+4UOw8qOu9vNVuqWHKhrU0KRfZKzaYnhf5FKtv4W112R
+         fToqjazou5+nU2SuCuOG22JZJPrlWhEyzqTaqcz4ZExFz46Dd4VrxPDL072UUiNtB4V5
+         bFp9leDXzuFiMQ+GA/g8ScqQXEcJTyz6Qa/lDiAgRjnKAwfH7LMzQ5tJnwM1S8IF7rZL
+         SuyzK6nxrC466Xp/P1zZ95oUE4DzfNdal2E5Ec5YAi898xAl5uvSc9zI20kZZPvL/pdK
+         Tme2om2wJdnusfliOvMp0PMiqJjf7QufnxIUEKVegErGamBvUJrOwd0ZqoIUPLZMUH8g
+         wtNw==
+X-Gm-Message-State: AO0yUKXHeSQcYNLPiSbIvndWBUdir6RBlmXm3U35lIBAO69/rXPMo6tq
+        Erg1XmbeqVL0vfexrnuTsDIHbismD2P7dmosfH5OnA==
+X-Google-Smtp-Source: AK7set/TsUg9QUZT5R1x5V3XpvnjRnxQEc0Dg8JHiwwFzQtnB4XsQdffeMF2xgS19+5dFw1vAJw0BNGhuu/L9TZIVdw=
+X-Received: by 2002:ad4:58c1:0:b0:56e:a066:5016 with SMTP id
+ dh1-20020ad458c1000000b0056ea0665016mr4476607qvb.5.1678271431834; Wed, 08 Mar
+ 2023 02:30:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20230307165432.25484-1-afd@ti.com> <20230307165432.25484-6-afd@ti.com>
-In-Reply-To: <20230307165432.25484-6-afd@ti.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 8 Mar 2023 11:29:47 +0100
-Message-ID: <CAMRc=Mcr_yM8Z4bg3EqvxBrRsEqNjigfNoxZAd-5zNeXzG8yeQ@mail.gmail.com>
-Subject: Re: [PATCH 6/6] gpio: tps65086: Use devm_gpiochip_add_data() to
- simplify remove path
-To:     Andrew Davis <afd@ti.com>
-Cc:     Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230113175459.14825-1-james.morse@arm.com> <20230113175459.14825-8-james.morse@arm.com>
+ <678c5d45-eb91-c000-76d6-7ed9341e52c3@intel.com> <4002faaa-d93a-0d9b-0234-05bfae3d7b93@arm.com>
+In-Reply-To: <4002faaa-d93a-0d9b-0234-05bfae3d7b93@arm.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Wed, 8 Mar 2023 11:30:21 +0100
+Message-ID: <CALPaoCjP4Zx9-QUOJwZEQ_5acFhgkr+9TND3mqUvefQmgkbqCw@mail.gmail.com>
+Subject: Re: [PATCH v2 07/18] x86/resctrl: Move CLOSID/RMID matching and
+ setting to use helpers
+To:     James Morse <james.morse@arm.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 5:54=E2=80=AFPM Andrew Davis <afd@ti.com> wrote:
->
-> Use devm version of gpiochip add function to handle removal for us.
->
-> While here update copyright and module author.
->
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
->  drivers/gpio/gpio-tps65086.c | 20 ++++----------------
->  1 file changed, 4 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-tps65086.c b/drivers/gpio/gpio-tps65086.c
-> index 1e9d8262d0ff..0b8b631441ae 100644
-> --- a/drivers/gpio/gpio-tps65086.c
-> +++ b/drivers/gpio/gpio-tps65086.c
-> @@ -1,7 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
-> - * Copyright (C) 2015 Texas Instruments Incorporated - http://www.ti.com=
-/
-> - *     Andrew F. Davis <afd@ti.com>
-> + * Copyright (C) 2015-2023 Texas Instruments Incorporated - https://www.=
-ti.com/
-> + *     Andrew Davis <afd@ti.com>
->   *
->   * Based on the TPS65912 driver
->   */
-> @@ -86,13 +86,11 @@ static int tps65086_gpio_probe(struct platform_device=
- *pdev)
->         if (!gpio)
->                 return -ENOMEM;
->
-> -       platform_set_drvdata(pdev, gpio);
-> -
->         gpio->tps =3D dev_get_drvdata(pdev->dev.parent);
->         gpio->chip =3D template_chip;
->         gpio->chip.parent =3D gpio->tps->dev;
->
-> -       ret =3D gpiochip_add_data(&gpio->chip, gpio);
-> +       ret =3D devm_gpiochip_add_data(&pdev->dev, &gpio->chip, gpio);
->         if (ret < 0) {
->                 dev_err(&pdev->dev, "Could not register gpiochip, %d\n", =
-ret);
+Hi James,
 
-Drop this log and just return directly the result of
-devm_gpiochip_add_data() to save a couple more lines.
+On Mon, Mar 6, 2023 at 12:32=E2=80=AFPM James Morse <james.morse@arm.com> w=
+rote:
+> On 02/02/2023 23:47, Reinette Chatre wrote:
+> > On 1/13/2023 9:54 AM, James Morse wrote:
+> >> +    resctrl_arch_set_closid_rmid(tsk, rdtgrp->closid, rdtgrp->mon.rmi=
+d);
+> >
+> > This does not use the intended closid when rdtgrp->type =3D=3D RDTMON_G=
+ROUP.
+>
+> Yes, it should be rdtgrp->mon.parent->closid.
+>
+> rdtgroup_mkdir_mon() initialises them to be the same, I guess its Peter's=
+ monitor-group
+> rename that means this could get the wrong value?
 
-Bart
+I noticed this earlier. The next revision of my MON group rename patch
+series updates rdtgrp->closid to that of the new parent so that for
+MON groups, rdtgrp->closid =3D=3D rdtgrp->mon.parent->closid continues to
+hold.
 
->                 return ret;
-> @@ -101,15 +99,6 @@ static int tps65086_gpio_probe(struct platform_device=
- *pdev)
->         return 0;
->  }
->
-> -static int tps65086_gpio_remove(struct platform_device *pdev)
-> -{
-> -       struct tps65086_gpio *gpio =3D platform_get_drvdata(pdev);
-> -
-> -       gpiochip_remove(&gpio->chip);
-> -
-> -       return 0;
-> -}
-> -
->  static const struct platform_device_id tps65086_gpio_id_table[] =3D {
->         { "tps65086-gpio", },
->         { /* sentinel */ }
-> @@ -121,11 +110,10 @@ static struct platform_driver tps65086_gpio_driver =
-=3D {
->                 .name =3D "tps65086-gpio",
->         },
->         .probe =3D tps65086_gpio_probe,
-> -       .remove =3D tps65086_gpio_remove,
->         .id_table =3D tps65086_gpio_id_table,
->  };
->  module_platform_driver(tps65086_gpio_driver);
->
-> -MODULE_AUTHOR("Andrew F. Davis <afd@ti.com>");
-> +MODULE_AUTHOR("Andrew Davis <afd@ti.com>");
->  MODULE_DESCRIPTION("TPS65086 GPIO driver");
->  MODULE_LICENSE("GPL v2");
-> --
-> 2.39.2
->
+It looks like rdt_move_group_tasks() assumes this, as it always sets
+t->closid to rdtgrp->closid.
+
+-Peter
