@@ -2,167 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E4D6B0A79
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A2D06B0A8D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbjCHOH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:07:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
+        id S229482AbjCHOIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:08:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbjCHOHF (ORCPT
+        with ESMTP id S232124AbjCHOHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:07:05 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B481B2E5;
-        Wed,  8 Mar 2023 06:05:17 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328DJEc2027895;
-        Wed, 8 Mar 2023 14:04:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=zBXIcnb+DEc0lzd5ge6FUHpadrkeZ99ddpqiHCj3T1I=;
- b=jeTXmgcNtRqFX51cPfkyv9lWYxW1WhNiiFkdsmZLU9GIt7VGP9mP0TZHbVzyXrSAhXbu
- KQUQMR+Wuze8XMiFceWdW3NKe2S5P2h4KZ/RU/+uKFT1d2XuLjFStK9f27g2gYzbDwfv
- oFWQ7jKlSbOxCr2WxZTmhrI387846DDMURJiYOuROWYFpbqQwgP4mQO/9Ccwhh64klmv
- OzGsKQlfkc1ALylRfyybCHNBQzbjlzkBo2zyg1yicc+5kEIwYUxdRZcdi4xD85/GXXEU
- nWVGnhASYO1tRhTu1fxOY0hz3d6fBljbjClrFxSewq7EahrRTF6dxLQjZt2GH4JVZ+SL VQ== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6k0bvm7v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 14:04:00 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 328134ef015019;
-        Wed, 8 Mar 2023 14:03:58 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3p6gbw8n10-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 14:03:58 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 328E3u6762587284
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Mar 2023 14:03:56 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EB39920043;
-        Wed,  8 Mar 2023 14:03:55 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C1EE20040;
-        Wed,  8 Mar 2023 14:03:55 +0000 (GMT)
-Received: from [9.179.30.6] (unknown [9.179.30.6])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Mar 2023 14:03:55 +0000 (GMT)
-Message-ID: <772a05f5f3c1b35864b80bf78429b843bdf14ee9.camel@linux.ibm.com>
-Subject: Re: [niks:has_ioport_v3] [tty] aa0652d7f1:
- BUG:kernel_NULL_pointer_dereference,address
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        kernel test robot <yujie.liu@intel.com>
-Cc:     oe-lkp@lists.linux.dev, kernel test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>
-Date:   Wed, 08 Mar 2023 15:03:55 +0100
-In-Reply-To: <c85f0735-6c85-4a6e-ad07-66493783c58e@app.fastmail.com>
-References: <202301051008.a8468257-yujie.liu@intel.com>
-         <e211f932-77c3-427a-859a-d846598524ed@app.fastmail.com>
-         <2e79ebb0ef62e550231c3daf46c62cd60d78acbc.camel@linux.ibm.com>
-         <c85f0735-6c85-4a6e-ad07-66493783c58e@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 8 Mar 2023 09:07:50 -0500
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39ADD34F48;
+        Wed,  8 Mar 2023 06:06:28 -0800 (PST)
+Received: by mail-ot1-f51.google.com with SMTP id g6-20020a056830308600b0068d4b30536aso9008486ots.9;
+        Wed, 08 Mar 2023 06:06:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678284387;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=W3V1JTSU4mAasV6Yy4rBnCyWxykGtCx/CwR52o/KvEc=;
+        b=nnP+miKgKM/KR2c1KRRD4udbdSculU2TMaEuxACq1Uhxy8fwllFzYOZZBklvcu6qlT
+         jHQK0ZQlfTY6ZW3iRQau9dMhm/ek6eiR4xJN5n/5JWBroSdlxEkYFPfJLMkQm/WcM83o
+         pqae3rk7hQmPCAEAUllStD/i5HJYfBV0kh/Gs9jMDWak2FcxujhXEFKlcDU/3+5Fu3m0
+         YnVa8bZES4BFfLyUstl8FPHYI8Sqc1E77i7VNdyuJ7aYI9Llaqd2arq1extz/R0uxXQ4
+         t4tfrLQGCGP/yIqpAZSl1srAKInyKDHQHlWdjy9nEGip+DHW8Y8z5tKcbxLb9xC4fmre
+         V0wA==
+X-Gm-Message-State: AO0yUKV8CNdMxNbng2t8+iRPjScThNEtvSCIqLqic6fRyWKi7dXxniXR
+        ftZatoSZkTjwQgWkmlkkHA==
+X-Google-Smtp-Source: AK7set+6pXcrDnyjZYZJ0PqF6YB97KGKOLOLPb2e+N3hu1Ms1rlAgf+tDK3agSRy0jFFRDTN4/rVRQ==
+X-Received: by 2002:a9d:18f:0:b0:690:e7f9:bb61 with SMTP id e15-20020a9d018f000000b00690e7f9bb61mr8863276ote.26.1678284387420;
+        Wed, 08 Mar 2023 06:06:27 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y22-20020a056830071600b0068d4dda3d61sm6434064ots.39.2023.03.08.06.06.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 06:06:26 -0800 (PST)
+Received: (nullmailer pid 2666451 invoked by uid 1000);
+        Wed, 08 Mar 2023 14:06:21 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: A7twQW98j1zIbStxavky8neuXRkHbDHw
-X-Proofpoint-GUID: A7twQW98j1zIbStxavky8neuXRkHbDHw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-08_08,2023-03-08_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- impostorscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- suspectscore=0 clxscore=1015 bulkscore=0 spamscore=0 phishscore=0
- adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2303080120
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Minda Chen <minda.chen@starfivetech.com>
+Cc:     Pawel Laszczak <pawell@cadence.com>, Vinod Koul <vkoul@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-phy@lists.infradead.org,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+In-Reply-To: <20230308082800.3008-2-minda.chen@starfivetech.com>
+References: <20230308082800.3008-1-minda.chen@starfivetech.com>
+ <20230308082800.3008-2-minda.chen@starfivetech.com>
+Message-Id: <167828360080.2613078.14112010625330944896.robh@kernel.org>
+Subject: Re: [PATCH v2 1/3] dt-bindings: phy: Add StarFive JH7110 USB
+ dt-binding
+Date:   Wed, 08 Mar 2023 08:06:21 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-08 at 13:21 +0100, Arnd Bergmann wrote:
-> On Wed, Mar 8, 2023, at 12:24, Niklas Schnelle wrote:
-> > On Thu, 2023-01-05 at 09:03 +0100, Arnd Bergmann wrote:
-> >=20
-> > Yes that makes sense, it's clearly not correct to put the default case
-> > inside CONFIG_SERIAL_8250_RT288X. What do you think about going with
-> > something like:
-> >=20
-> > @@ -519,9 +534,14 @@ static void set_io_from_upio(struct uart_port *p)
-> >  #endif
-> >=20
-> >         default:
-> > +#ifdef CONFIG_HAS_IOPORT
-> >                 p->serial_in =3D io_serial_in;
-> >                 p->serial_out =3D io_serial_out;
-> >                 break;
-> > +#else
-> > +               WARN(1, "Unsupported UART type \"io\"\n");
-> > +               return;
-> > +#endif
-> >         }
->=20
-> I think we have to ensure that ->serial_in() always points
-> to some function that doesn't immediately panic, though that
-> could be an empty dummy like
->=20
->        default:
->                p->serial_in =3D IS_ENABLED(CONFIG_HAS_IOPORT) ?
->                       io_serial_in : no_serial_in;
->                p->serial_out =3D IS_ENABLED(CONFIG_HAS_IOPORT) ?
->                       io_serial_out : no_serial_out;
 
-Sadly the IS_ENABLED() plus ternary still gives me an undeclared
-identifier error for io_serial_in(). So I think we need the more ugly
-#ifdef. With that I hope it would then not crash even if one might be
-left without any console at all.
+On Wed, 08 Mar 2023 16:27:58 +0800, Minda Chen wrote:
+> Add StarFive JH7110 SoC USB 3.0 phy dt-binding.
+> USB controller is cadence USB 3.0 IP.
+> 
+> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+> ---
+>  .../bindings/phy/starfive,jh7110-usb-phy.yaml | 158 ++++++++++++++++++
+>  1 file changed, 158 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
+> 
 
->=20
-> Ideally we'd make mem_serial_in() the default function
-> and only use io_serial_in() when UPIO_PORT is selected,
-> but that still causes a NULL pointer dereference when
-> a platform initializes a 8250 like
->=20
-> static struct plat_serial8250_port serial_platform_data[] =3D {
->         {
->                 .iobase         =3D 0x3f8, /* NULL pointer */
->                 .irq            =3D IRQ_ISA_UART,
->                 .uartclk        =3D 1843200,
->         /* default   .iotype         =3D UPIO_PORT, */
->         },
->=20
-> so I think an empty function plus a warning is best here.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-So in the above case .iotype is implicitly set to 0 which is UPIO_PORT
-so I think one could argue it is selected, no? Not sure how picking
-UPIO_MEM as default would look like then. One thing we could do though
-is make the switch/case more regular like so:
+yamllint warnings/errors:
 
-...
-#ifdef CONFIG_HAS_IOPORT
-	case UPIO_PORT:
-		p->serial_in =3D io_serial_in;
-		p->serial_out =3D io_serial_out;
-		break;
-#endif
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.example.dtb: usb@10100000: phy-names:1: 'anyOf' conditional failed, one must be fixed:
+	'cdns3,usb2-phy' was expected
+	'cdns3,usb3-phy' was expected
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.example.dtb: usb@10100000: 'phys' is a dependency of 'phy-names'
+	From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/phy/phy-consumer.yaml
 
-	default:
-		WARN(1, "Unsupported UART type %x\n", p->iotype);
-		p->serial_in =3D no_serial_in;
-		p->serial_out =3D no_serial_out;
-	}
-...
+doc reference errors (make refcheckdocs):
 
-That way we would have to always define no_serial_in() /
-no_serial_out() but would also gracefully handle when p->iotype is set
-to some other value and it looks relatively clean.
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230308082800.3008-2-minda.chen@starfivetech.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
