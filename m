@@ -2,200 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1186B0376
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E99526B0380
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjCHJxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 04:53:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43148 "EHLO
+        id S229536AbjCHJ6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 04:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjCHJxU (ORCPT
+        with ESMTP id S229933AbjCHJ6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 04:53:20 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDB9559E0;
-        Wed,  8 Mar 2023 01:53:17 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3288d2LG022442;
-        Wed, 8 Mar 2023 09:52:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=8oebTeTKDyeaBIwyVQzKAe4CPmsTzGBPARq3wHx9ILY=;
- b=U34dQPN/dCBvNBkesEbkglDTzuxIBFVQ5XQzfGtvKAyGDmbBnbVcbUspfblHrD9njYpy
- haLpYqRoMnVRuTAzyJnrbiN+rTkuyclHNJss4RxXDYY+851FB+xLomGHO7xM/HuMhljl
- gq+3Tuy7kuVeOEklKBLv6CtzV7v3jxAYxBbrbsyNIEWNEpq7Abdf14nJ6Wxko8pOH7rF
- 8IafBtjRwPPxwL1tBDcsIEYw8qozJHa/3z8eOOJcGsuSF5ZpfR4EEcZ0OSxuajWNXVaE
- AGVmoQVIEuHvln9cF8xMGay4ClEvrC4bMSqca6rkybwSn4FlB6iKpKDFb4b3VOEACGNe jg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p6fga168y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 09:52:45 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3289qiWj025606
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Mar 2023 09:52:44 GMT
-Received: from [10.216.47.125] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 8 Mar 2023
- 01:52:33 -0800
-Message-ID: <15d270ca-1068-b926-efc9-a14ddfc90a54@quicinc.com>
-Date:   Wed, 8 Mar 2023 15:22:30 +0530
+        Wed, 8 Mar 2023 04:58:02 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C197D59E7
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 01:57:55 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id l1so16035173pjt.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 01:57:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678269475;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=szwudWjVCqo4cXsa2hswtbiIZUYiHlCdLL/iW8bEO1U=;
+        b=WG/vcp/z8JCrNYARIQWbnJKgXCe6jPX3ROGsNRDLqCrY+q+mNYVRwOh93r4NysSCur
+         /i+yf9ksMbImlbkysEN61FGLUHU7RGy6o2u34kaCY8EIMqiS5WzywSiQIeIzJv7CfQbM
+         h8TVdpOZLxx8HHMtXNelXJr2sIs9WefCMrZZpjTmis29dTmmNlpZ05ChnJXWmuV0p9SO
+         OpWQmb9cMzaLb3SWAUDSevU4CaBQZ3/OeQJXZKyx5scQZhYrIR5SglKORy4vHvbeBBMB
+         /uL8TfPp2c55ga+2tV3uymzU28OGNb642Y/23NCmaTS1zPUCpTKwZMEwGu1SVCPiClif
+         kP4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678269475;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=szwudWjVCqo4cXsa2hswtbiIZUYiHlCdLL/iW8bEO1U=;
+        b=sJFzAi+3le5RXz+KFwFR1srw6Kd2Y/WQj5Pt2Jq/EGG1WlfkdmRC6j2rBvOJVdWg+f
+         yBlzQapqp4AmaII6iN1BvNNq5Z0Vt4Ym9l90/7stCmimusu8idGs+4R29DKVyH6UIzTO
+         L+AmTFJ7g4x8FWY517EAi7lSogEUHlh+O9BwkHXXBKNejylhmzEkxhCUYwADapro8aZJ
+         Px5n6Hssj0k3yNwWOr4FLKzqgdkIQnWYVE/7CFFKqIAVQdTetllcu2VfZnnQPMig+DqV
+         UNHfBXv7oKJd6lAjYbY1cCEt+8uH5yqUvZDH3mlDt4waIoO1AXyxajVdpSerzH1c9qm3
+         QYeA==
+X-Gm-Message-State: AO0yUKWbHzipp3Hs8ANcvwS2j4TYWnyKq4fsZl6MiSUhVlZpurOMPppH
+        uRZwRMtgeVM9tTEoSfMosJgltOgBejj06HAMpeI/wA==
+X-Google-Smtp-Source: AK7set9iLU2oX6cC5DQYkh/uXudtH93SfREwiK9iB3b07Pi9mxKR2D/1nKL3giDRGz4X8ROvT9TUtfpXGSenG+wXMpM=
+X-Received: by 2002:a17:902:efcf:b0:19c:3296:ecdc with SMTP id
+ ja15-20020a170902efcf00b0019c3296ecdcmr6813306plb.1.1678269475249; Wed, 08
+ Mar 2023 01:57:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V8 4/7] pinctrl: qcom: Add IPQ9574 pinctrl driver
-Content-Language: en-US
-To:     <andy.shevchenko@gmail.com>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <20230214163116.9924-1-quic_devipriy@quicinc.com>
- <20230214163116.9924-5-quic_devipriy@quicinc.com>
- <ZAZ+GeGu8mW1XqpG@surfacebook>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <ZAZ+GeGu8mW1XqpG@surfacebook>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: H6DlS9AVU91hcb93wXAT9V4qIem80vOV
-X-Proofpoint-ORIG-GUID: H6DlS9AVU91hcb93wXAT9V4qIem80vOV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-08_04,2023-03-08_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 suspectscore=0
- spamscore=0 mlxscore=0 clxscore=1011 mlxlogscore=999 impostorscore=0
- bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303080085
+References: <20230308011705.291337-1-konrad.dybcio@linaro.org>
+In-Reply-To: <20230308011705.291337-1-konrad.dybcio@linaro.org>
+From:   Shawn Guo <shawn.guo@linaro.org>
+Date:   Wed, 8 Mar 2023 17:57:43 +0800
+Message-ID: <CAAQ0ZWQDfZBcQuuVOjUWd1s=uTwXyj6qvQCw6=1qbywd2XcnVQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: interrupt-controller: Allow #power-domain-cells
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, marijn.suijten@somainline.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 8, 2023 at 9:17=E2=80=AFAM Konrad Dybcio <konrad.dybcio@linaro.=
+org> wrote:
+>
+> MPM provides a single genpd. Allow #power-domain-cells =3D <0>.
+>
+> Fixes: 54fc9851c0e0 ("dt-bindings: interrupt-controller: Add Qualcomm MPM=
+ support")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-
-On 3/7/2023 5:28 AM, andy.shevchenko@gmail.com wrote:
-> Tue, Feb 14, 2023 at 10:01:13PM +0530, Devi Priya kirjoitti:
->> Add pinctrl definitions for the TLMM of IPQ9574
-> 
-> ...
-> 
->> +	depends on OF
-> 
-> No compile test on non-OF configurations?
-Hi Andy,
-As per the generic convention followed in other
-SoCs, we do not have compile test on non-OF configurations
-> 
->> +	depends on ARM64 || COMPILE_TEST
-> 
-> ...
-> 
->> +#define FUNCTION(fname)			                \
-> 
-> PINCTRL_PINFUNCTION() ?
-I see that there are quite a bunch of files that has to
-be modified for using the generic data type and
-macro for the pin function definition
-We shall post a separate series to accommodate the changes
-> 
->> +	[msm_mux_##fname] = {		                \
->> +		.name = #fname,				\
->> +		.groups = fname##_groups,               \
->> +		.ngroups = ARRAY_SIZE(fname##_groups),	\
->> +	}
-> 
-> ...
-> 
->> +#define REG_SIZE 0x1000
->> +#define PINGROUP(id, f1, f2, f3, f4, f5, f6, f7, f8, f9)	\
->> +	{					        \
->> +		.name = "gpio" #id,			\
->> +		.pins = gpio##id##_pins,		\
->> +		.npins = (unsigned int)ARRAY_SIZE(gpio##id##_pins),	\
-> 
-> Can you embed struct pingroup?
-Will take care of this in a separate series
-> 
->> +		.funcs = (int[]){			\
->> +			msm_mux_gpio, /* gpio mode */	\
->> +			msm_mux_##f1,			\
->> +			msm_mux_##f2,			\
->> +			msm_mux_##f3,			\
->> +			msm_mux_##f4,			\
->> +			msm_mux_##f5,			\
->> +			msm_mux_##f6,			\
->> +			msm_mux_##f7,			\
->> +			msm_mux_##f8,			\
->> +			msm_mux_##f9			\
->> +		},				        \
->> +		.nfuncs = 10,				\
->> +		.ctl_reg = REG_SIZE * id,			\
->> +		.io_reg = 0x4 + REG_SIZE * id,		\
->> +		.intr_cfg_reg = 0x8 + REG_SIZE * id,		\
->> +		.intr_status_reg = 0xc + REG_SIZE * id,	\
->> +		.intr_target_reg = 0x8 + REG_SIZE * id,	\
->> +		.mux_bit = 2,			\
->> +		.pull_bit = 0,			\
->> +		.drv_bit = 6,			\
->> +		.oe_bit = 9,			\
->> +		.in_bit = 0,			\
->> +		.out_bit = 1,			\
->> +		.intr_enable_bit = 0,		\
->> +		.intr_status_bit = 0,		\
->> +		.intr_target_bit = 5,		\
->> +		.intr_target_kpss_val = 3,	\
->> +		.intr_raw_status_bit = 4,	\
->> +		.intr_polarity_bit = 1,		\
->> +		.intr_detection_bit = 2,	\
->> +		.intr_detection_width = 2,	\
->> +	}
-> 
-> ...
-> 
->> +	PINGROUP(62, blsp1_spi, audio_sec, audio_pdm1, audio_sec, pta, prng_rosc2, gcc_plltest,
->> +		 _, _),
-> 
-> Can be one line.
-Okay
-> 
-> ...
-> 
->> +static const struct of_device_id ipq9574_pinctrl_of_match[] = {
->> +	{ .compatible = "qcom,ipq9574-tlmm", },
-> 
->> +	{ },
-> 
-> No comma for terminator line.
-Okay
-> 
->> +};
-> 
-> No MODULE_DEVICE_TABLE()?
-The MODULE_DEVICE_TABLE(of, ipq9574_pinctrl_of_match) entry has
-been added at the end of the file
-> 
-Best Regards,
-Devi Priya
+Acked-by: Shawn Guo <shawn.guo@linaro.org>
