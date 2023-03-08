@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 669B86B06C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 366C26B06CC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:19:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjCHMRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 07:17:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33312 "EHLO
+        id S230522AbjCHMTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 07:19:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjCHMRt (ORCPT
+        with ESMTP id S229970AbjCHMTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:17:49 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38E999D7A;
-        Wed,  8 Mar 2023 04:17:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678277868; x=1709813868;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Vgbsx8r3QuxIB3RjFJxSxX9wWfwdsEyw2KJep8+k8dw=;
-  b=IBppv/DL66oC5r6EAyAPJOlsdiTw0KXW/2ZExZs2+qr83eq4zTHrprkf
-   gyh3gQt355+j86zDjnwDTAlMBgJANkPC4zObVHnTnwmw2SEzb4mgIc9Bt
-   SrhDIQGMQFQengY+BpTrNYoRwWcgt9CoXjIhQF0OYW42avoo21W8Ysnqh
-   XCW8YEs1TQ9W/v+YWV2spjMQ5j/89k+4Ex0GA0ou3iOSkV2hT4gV3yRF4
-   ZpNNl62GvbLnEpXo3brOVQfyDJB9Gipyq8NeLEn6uc53Ku3VPdPhnrIEH
-   HciMKSlsEUPO2fdFvMN6/r2EkTb7N8lom4cQTw/ZYnARJgeS2N6B7JwaE
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="398717354"
-X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="398717354"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 04:17:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="851063973"
-X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="851063973"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2023 04:17:45 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pZsjo-00027f-1Q;
-        Wed, 08 Mar 2023 12:17:44 +0000
-Date:   Wed, 8 Mar 2023 20:16:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
-        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: Re: [PATCH v13 2/2] clk: clk-loongson2: add clock controller driver
- support
-Message-ID: <202303082037.QPfBP64A-lkp@intel.com>
-References: <20230307115022.12846-2-zhuyinbo@loongson.cn>
+        Wed, 8 Mar 2023 07:19:40 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C6923131
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:19:39 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id bw19so15139115wrb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 04:19:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678277978;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=rXvALgLNXOwSxkTFpGdegQSuj49S1SEGCZhhXhGW1Qo=;
+        b=SQjZi8e1Y8wjXcVmWAFiXFMxgkXzRUA08zefLSOzhq+ANL7UXTp9S74Ab3MergeMql
+         k9CSw1NTqCoFTQ7FHBVu4zBG1jtLGJc1EzkkyitJt1iu8UQ3fg/Qpji8P+8EER4p8b+L
+         oniAiIxhQnp2b7nrr/x59Wh3xXQSC/9fFzeY29sUYSgMLRxrbkFLH8nuHQWXIAaF9XIw
+         GnO7sm/MuiMXOQ14XB8aHVscMHqc9jAEmswIDFHR5874IjX4O+vWtYGMckDcolHhD+IJ
+         PAjkEspvJc/z5mlh/R+NpbPQWQlRaCkeZSOe8x6sCjR7KOEfw2DcUO7KY+9mM/ybfRyL
+         bNPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678277978;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rXvALgLNXOwSxkTFpGdegQSuj49S1SEGCZhhXhGW1Qo=;
+        b=mTBu6USOugvU0x5qwfG+JeZXtr5F74/zSlQBA+L1u5yprhoDxsqcGROKWbIzEwp2MG
+         6OTAKfRg5hnE7TBAiFYWMe0gZRheYiGivgPRuF5wT2cKtmOO0P97iK13sZ42wo9jeWzu
+         /RIXxrSeF7A7Xw4tisILiQUOPX3bZi9zGHK7hX1YastHNZfFTCXHhHZyVkSlRMBAlVO2
+         u7MJTmOMC8w76LFP53Y3kKK7GWeTg5RM7vNe3cBGLRzEqf0c09gqZFD0TQbvGyEgiSzY
+         gLEXruWqISDxrAIuw649dh2l5gGyOokcLwYNzF8QyV0mDPo6a4xiCyhzZlF4VsqC4KIm
+         yOhA==
+X-Gm-Message-State: AO0yUKVCU81wGxbF7vVM+IbW7OYq8K31L/u/SNBeym4BahDyzCG7qgnB
+        YvF/UXgl9T/BpE9aTon6UbwtQg==
+X-Google-Smtp-Source: AK7set95ELz8qiTpkF9TOq+N1ZvxqR9tCnjqO9/rzyHVM2ACM5iIX94fw1GxAHp6N4NHvTFJKrA+5g==
+X-Received: by 2002:a5d:4ec4:0:b0:2c7:f56:2892 with SMTP id s4-20020a5d4ec4000000b002c70f562892mr11952190wrv.40.1678277977823;
+        Wed, 08 Mar 2023 04:19:37 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:b029:83b9:1fb8:7c34? ([2a01:e0a:982:cbb0:b029:83b9:1fb8:7c34])
+        by smtp.gmail.com with ESMTPSA id x21-20020a05600c189500b003e71a6be279sm15373743wmp.37.2023.03.08.04.19.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 04:19:37 -0800 (PST)
+Message-ID: <db540297-2f9b-e420-be33-0a1f1a838862@linaro.org>
+Date:   Wed, 8 Mar 2023 13:19:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307115022.12846-2-zhuyinbo@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v3 2/3] tty: serial: meson: Add a new compatible string
+ for the G12A SoC
+Content-Language: en-US
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jirislaby@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, gregkh@linuxfoundation.org,
+        Christian Hewitt <christianshewitt@gmail.com>
+References: <20230307222651.2106615-1-martin.blumenstingl@googlemail.com>
+ <20230307222651.2106615-3-martin.blumenstingl@googlemail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230307222651.2106615-3-martin.blumenstingl@googlemail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,67 +83,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yinbo,
+On 07/03/2023 23:26, Martin Blumenstingl wrote:
+> Amlogic Meson G12A (and later) SoCs also have the "divide XTAL by 2" bit
+> as the S4 UART controllers. Add a new compatible string for these SoCs
+> and enable the has_xtal_div2 flag for them.
+> 
+> Tested-by: Christian Hewitt <christianshewitt@gmail.com>
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+> Changes from v1 -> v2:
+> - none
+> 
+> Changes from v2 -> v3:
+> - none
+> 
+> 
+>   drivers/tty/serial/meson_uart.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+> index 74110017988a..2501db5a7aaf 100644
+> --- a/drivers/tty/serial/meson_uart.c
+> +++ b/drivers/tty/serial/meson_uart.c
+> @@ -779,7 +779,7 @@ static int meson_uart_remove(struct platform_device *pdev)
+>   	return 0;
+>   }
+>   
+> -static struct meson_uart_data s4_uart_data = {
+> +static struct meson_uart_data meson_g12a_uart_data = {
+>   	.has_xtal_div2 = true,
+>   };
+>   
+> @@ -788,9 +788,13 @@ static const struct of_device_id meson_uart_dt_match[] = {
+>   	{ .compatible = "amlogic,meson8-uart" },
+>   	{ .compatible = "amlogic,meson8b-uart" },
+>   	{ .compatible = "amlogic,meson-gx-uart" },
+> +	{
+> +		.compatible = "amlogic,meson-g12a-uart",
+> +		.data = (void *)&meson_g12a_uart_data,
+> +	},
+>   	{
+>   		.compatible = "amlogic,meson-s4-uart",
+> -		.data = (void *)&s4_uart_data,
+> +		.data = (void *)&meson_g12a_uart_data,
+>   	},
+>   	{ /* sentinel */ },
+>   };
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on clk/clk-next]
-[also build test ERROR on robh/for-next linus/master v6.3-rc1 next-20230308]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/clk-clk-loongson2-add-clock-controller-driver-support/20230307-195252
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/20230307115022.12846-2-zhuyinbo%40loongson.cn
-patch subject: [PATCH v13 2/2] clk: clk-loongson2: add clock controller driver support
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230308/202303082037.QPfBP64A-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/391d6fc63ac65f5456e4755c9dd85232a6296285
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yinbo-Zhu/clk-clk-loongson2-add-clock-controller-driver-support/20230307-195252
-        git checkout 391d6fc63ac65f5456e4755c9dd85232a6296285
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303082037.QPfBP64A-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/clk/clk-loongson2.c: In function 'loongson2_calc_pll_rate':
->> drivers/clk/clk-loongson2.c:79:15: error: implicit declaration of function 'readq'; did you mean 'readl'? [-Werror=implicit-function-declaration]
-      79 |         val = readq(loongson2_pll_base + offset);
-         |               ^~~~~
-         |               readl
-   cc1: some warnings being treated as errors
-
-
-vim +79 drivers/clk/clk-loongson2.c
-
-    73	
-    74	static unsigned long loongson2_calc_pll_rate(int offset, unsigned long rate)
-    75	{
-    76		u64 val;
-    77		u32 mult = 1, div = 1;
-    78	
-  > 79		val = readq(loongson2_pll_base + offset);
-    80	
-    81		mult = (val >> LOONGSON2_PLL_MULT_SHIFT) &
-    82				clk_div_mask(LOONGSON2_PLL_MULT_WIDTH);
-    83		div = (val >> LOONGSON2_PLL_DIV_SHIFT) &
-    84				clk_div_mask(LOONGSON2_PLL_DIV_WIDTH);
-    85	
-    86		return div_u64((u64)rate * mult, div);
-    87	}
-    88	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
