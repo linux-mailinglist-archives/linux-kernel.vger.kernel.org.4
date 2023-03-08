@@ -2,138 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE046B1356
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:47:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CBB6B135C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjCHUr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 15:47:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
+        id S230404AbjCHUu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 15:50:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjCHUrY (ORCPT
+        with ESMTP id S230367AbjCHUu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:47:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D576F234EF;
-        Wed,  8 Mar 2023 12:47:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FF25618C4;
-        Wed,  8 Mar 2023 20:47:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66F7EC433D2;
-        Wed,  8 Mar 2023 20:47:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678308442;
-        bh=6E1H2Z/E8dY9nZuxGrA6Q8VG9UE5a8kZIkR58SCgZT8=;
-        h=From:Date:Subject:To:Cc:From;
-        b=lHO2gpSSg/evJCiJhdwipU4Xzs14heHT0s+FrOC/gnGSAQP1/8pIcWAn/ICVHH8cH
-         O9nAZD88jK9xnqtE6oGBlfqrlzbjIgFGqfMWQjRTRPXg8uoSyUNAeVbvaVFfXwb9lF
-         hVGNlywVke0QNxKdIoWSvbYG+aJsqqFlB9lAgNVaoxeXsZ0iInvklpOA2hMjrKlGuR
-         1+M3vEDziMz9L7bVxrSfzlxsnZS0ddwslZPTDK+03dRwm3JTxLLqdTdcKMpFUxMGk5
-         H4x+0BK5jtzTQQAyF8qxt7VgkKfvrvICYOE2Y3JOtnrl5eQVFo5qUMTdLBRg0q9x6d
-         QjzlwUcZR+FoA==
-From:   Nathan Chancellor <nathan@kernel.org>
-Date:   Wed, 08 Mar 2023 13:47:11 -0700
-Subject: [PATCH] clk: Avoid invalid function names in CLK_OF_DECLARE()
+        Wed, 8 Mar 2023 15:50:27 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570CC898E5
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 12:50:25 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id d36so19819919lfv.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 12:50:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678308623;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nYwLVEVSE2EPrgo1n3Ngcv+XtjRTRaLWqRbbxXSD/xk=;
+        b=mF3UAgvW9FF5NIOI22wReRQfggzTMJgofFBBwKGOrmg5LAczUktEc2NObfd9ME/gd8
+         76H2hBMj8VllegtTHYxUFxA3HNICN4w0HWvFBarUbPx9jihnOlT5jdq5a3bmmC5FefAj
+         RhYSrkwmqjQJuThodWT/tgeQqD048TLpdu7HWCbuyWMHNA09CVrc6yl++BSIZ6K6FqZO
+         88hd9tUo8kBN0tsNPorNeLdqOY9p7XAXTlZEYU3xDjBQjwtucgmbqt5GNwQZy4wo8nud
+         VtOSgdaWV/qPvXDZ03R+FPoFNyDQzWCS2phJJMf8TEqZwhUzeQSeVxdBwEx+kZUhzuM2
+         Tzvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678308623;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nYwLVEVSE2EPrgo1n3Ngcv+XtjRTRaLWqRbbxXSD/xk=;
+        b=etqkm+pbWgWscXaJeJE5OqSNsh8lx5HZwM5I/w8o7pdHb5+O8p1sO7sH4OxxdOo66e
+         HSnZHyn4eLFMi6IjkxwDRkRtJoyd9e5KDnapx83if8RshxNDyPLDmh6p1bcdsYXjlzVo
+         lOeVoUJmh42VPg8Q1+w1bbt//LElFvZmDpo2nJzxAzaO0+fnYB/GiF4opn1nIA9f+97F
+         XHPqM0raT4MG80gp53uLpn8DiROHZnreNCgHG2vN2VeakA143u8eQcMxjHKocZpIrrtU
+         m8L8IZfGWK1tMd2YVHW/3ZbmI0MurdRVUTk7hHZ0uJbPuoMQEV7l9xq+/OXJtFBMHHki
+         54Sw==
+X-Gm-Message-State: AO0yUKVnGZrbM6tD3OLKTODV25QgjBdy4bHUk3grSzBlSJkKXAR3QCQg
+        y4dminluN0gm5JtybNkWNEVdoQ==
+X-Google-Smtp-Source: AK7set9UKMCiINw0hFDIUgHmTG4rK1PxVHXXhak5Qc5uybqo3hZizJSkZ9eh9Krp8wzZcpbaW6cxtQ==
+X-Received: by 2002:ac2:5630:0:b0:4db:384c:bb8 with SMTP id b16-20020ac25630000000b004db384c0bb8mr4868721lff.69.1678308623589;
+        Wed, 08 Mar 2023 12:50:23 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id h3-20020ac25963000000b004cc8698c3f4sm2423472lfp.156.2023.03.08.12.50.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 12:50:23 -0800 (PST)
+Message-ID: <88bd0152-8b53-5ae2-bb16-5060419ca580@linaro.org>
+Date:   Wed, 8 Mar 2023 21:50:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230308-clk_of_declare-fix-v1-1-317b741e2532@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAE70CGQC/x2N3QrCMAxGX2Xk2kBt/dl8FZGRdqkLzk4SEWHs3
- e28PJzv8C1grMIGl2YB5Y+YzKXCftdAGqncGWWoDN754IJrMU2Pfs79wGkiZczyxUOObXc+HTs
- fGGoYyRijUknjlj7J3qybeCnX/f/telvXHwkqWOd9AAAA
-To:     mturquette@baylibre.com, sboyd@kernel.org
-Cc:     linus.walleij@linaro.org, saravanak@google.com,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3131; i=nathan@kernel.org;
- h=from:subject:message-id; bh=6E1H2Z/E8dY9nZuxGrA6Q8VG9UE5a8kZIkR58SCgZT8=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCkcX6JurS44elNhesQF177P12buWz7pzS4f2UlRdYWME
- 8zd2mTfdZSyMIhxMMiKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJcL5lZDjRzvvp0KELkotc
- 583n/241ofjNzYbvLRKqlgtffP51rW4/w/+Y1YG2fW8irLLsz9cdWjlvRsVH9mv2p7at5988b9H
- eJVf4AA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH 3/6] soc: qcom: Add Qualcomm minidump kernel driver
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, keescook@chromium.org, tony.luck@intel.com,
+        gpiccoli@igalia.com, catalin.marinas@arm.com, will@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <1676978713-7394-1-git-send-email-quic_mojha@quicinc.com>
+ <1676978713-7394-4-git-send-email-quic_mojha@quicinc.com>
+ <00b37174-f19e-ce59-b520-304891f6e2ef@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <00b37174-f19e-ce59-b520-304891f6e2ef@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit c28cd1f3433c ("clk: Mark a fwnode as initialized when using
-CLK_OF_DECLARE() macro"), drivers/clk/mvebu/kirkwood.c fails to build:
 
- drivers/clk/mvebu/kirkwood.c:358:1: error: expected identifier or '('
- CLK_OF_DECLARE(98dx1135_clk, "marvell,mv98dx1135-core-clock",
- ^
- include/linux/clk-provider.h:1367:21: note: expanded from macro 'CLK_OF_DECLARE'
-         static void __init name##_of_clk_init_declare(struct device_node *np) \
-                            ^
- <scratch space>:124:1: note: expanded from here
- 98dx1135_clk_of_clk_init_declare
- ^
- drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal constant
- include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_DECLARE'
-         OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
-                                         ^
- <scratch space>:125:3: note: expanded from here
- 98dx1135_clk_of_clk_init_declare
-   ^
- drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal constant
- include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_DECLARE'
-         OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
-                                         ^
- <scratch space>:125:3: note: expanded from here
- 98dx1135_clk_of_clk_init_declare
-   ^
- drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal constant
- include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_DECLARE'
-         OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
-                                         ^
- <scratch space>:125:3: note: expanded from here
- 98dx1135_clk_of_clk_init_declare
-   ^
 
-C function names must start with either an alphabetic letter or an
-underscore. To avoid generating invalid function names from clock names,
-add two underscores to the beginning of the identifier.
+On 8.03.2023 21:22, Srinivas Kandagatla wrote:
+> 
+> 
+> On 21/02/2023 11:25, Mukesh Ojha wrote:
+>> Minidump is a best effort mechanism to collect useful and predefined
+>> data for first level of debugging on end user devices running on
+>> Qualcomm SoCs. It is built on the premise that System on Chip (SoC)
+>> or subsystem part of SoC crashes, due to a range of hardware and
+>> software bugs. Hence, the ability to collect accurate data is only
+>> a best-effort. The data collected could be invalid or corrupted,
+>> data collection itself could fail, and so on.
+>>
+>> Qualcomm devices in engineering mode provides a mechanism for
+>> generating full system ramdumps for post mortem debugging. But in some
+>> cases it's however not feasible to capture the entire content of RAM.
+>> The minidump mechanism provides the means for selecting region should
+>> be included in the ramdump. The solution supports extracting the
+>> ramdump/minidump produced either over USB or stored to an attached
+>> storage device.
+>>
+>> The core of minidump feature is part of Qualcomm's boot firmware code.
+>> It initializes shared memory(SMEM), which is a part of DDR and
+>> allocates a small section of it to minidump table i.e also called
+>> global table of content (G-ToC). Each subsystem (APSS, ADSP, ...) has
+>> their own table of segments to be included in the minidump, all
+>> references from a descriptor in SMEM (G-ToC). Each segment/region has
+>> some details like name, physical address and it's size etc. and it
+>> could be anywhere scattered in the DDR.
+>>
+>> Minidump kernel driver adds the capability to add linux region to be
+>> dumped as part of ram dump collection. It provides appropriate symbol
+>> to check its enablement and register client regions.
+>>
+>> To simplify post mortem debugging, it creates and maintain an ELF
+>> header as first region that gets updated with upon registration
+>> of a new region.
+>>
+>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+>> ---
+[...]
 
-Fixes: c28cd1f3433c ("clk: Mark a fwnode as initialized when using CLK_OF_DECLARE() macro")
-Suggested-by: Saravana Kannan <saravanak@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- include/linux/clk-provider.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>> +int qcom_minidump_ready(void)
+>> +{
+>> +    void *ptr;
+>> +    struct device_node *np;
+>> +    static bool is_smem_available = true;
+>> +
+>> +    if (!is_smem_available || !(np = of_find_compatible_node(NULL, NULL, "qcom,smem"))) {
+> 
+> just check for dt node here does not mean that smem device is available, you should probably check if the device is avaliable aswell using of_device_is_available()
+> 
+> 
+> We should proabably return -EPROBEDEFER incase the node is present and device is not present.
+qcom_smem_get() seems to handle -EPROBE_DEFER internally, so this check
+may be entirely redundant.
 
-diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index c9f5276006a0..6f3175f0678a 100644
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@ -1364,12 +1364,12 @@ struct clk_hw_onecell_data {
- };
- 
- #define CLK_OF_DECLARE(name, compat, fn) \
--	static void __init name##_of_clk_init_declare(struct device_node *np) \
-+	static void __init __##name##_of_clk_init_declare(struct device_node *np) \
- 	{								\
- 		fn(np);							\
- 		fwnode_dev_initialized(of_fwnode_handle(np), true);	\
- 	}								\
--	OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
-+	OF_DECLARE_1(clk, name, compat, __##name##_of_clk_init_declare)
- 
- /*
-  * Use this macro when you have a driver that requires two initialization
-
----
-base-commit: 89dc65a7cc8a119c395c0931b12d7a514f9d2bcc
-change-id: 20230308-clk_of_declare-fix-4fb89765923e
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+Konrad
