@@ -2,189 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF3D6AFCEB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BB56AFCB8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjCHCa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 21:30:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
+        id S229586AbjCHCJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 21:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCHCaY (ORCPT
+        with ESMTP id S229582AbjCHCJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 21:30:24 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DB39662F;
-        Tue,  7 Mar 2023 18:30:23 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id r16so15199709qtx.9;
-        Tue, 07 Mar 2023 18:30:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678242622;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vwm1K4ols2eiQIRxOttu3y7Xz4azJwmHdDxzSRJ6x94=;
-        b=fm6c2F6neK6PHR42UlUD9L4qBI5U6gfj8j2gNX0YJzRcR7njORuBrRvl7vURZ8fbqS
-         rCtgJw/x9OQHumm48Vr6OA64s7RfjTvrDJKlm0NSP+EwQ+bgfU3tSxRSZLggJsClqZnT
-         BsS0QzjjjHkEbWWhRmZ2haaHVaHWVWQv1bF9s1M1qDULrCbimMkzOziKIIK2CUmbhdc3
-         L2eEUftSYDo3gQXgnD2q4d8bGtaz3VyuzwcXh413L4lB2iowAplsjiR/RoJKni/ZJA09
-         8xq+OcOkjpLvhv5ok+ULaoCtmpXWcLUx9gsa7aZQPB1/tjdDdBXNMkluQ3iGbOauBEaz
-         zJRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678242622;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vwm1K4ols2eiQIRxOttu3y7Xz4azJwmHdDxzSRJ6x94=;
-        b=74VZgZVi93l6xwjPy4c5+lPlMoKYqpZ5SyviLx+/xPiUaOD3L03f7Hx6KbaEeNUj/2
-         XZeby5bVxo1BIYlchBn/MRBXqqNpWCqJ2JAUXF5cHDbfKqi7iEpJgtOwnXYZgN/yqjK2
-         +yzIrjf9nXhx9ZnLRA0wtCXiAoJZfZyNikJwYq3tJuZ5JRhSkfyQTSYXm8Br0+woluPK
-         NKxuMZm0rInSbdgRLrPnkZOPidVB0bnLXYK+Vy4KGU95xo4Bc6+WUQfZ7Q9Lbt0qq8jK
-         VbvYlLI6nO5UdAKk8jQ4rLMdixCdV+1ay2zTqgfDIGXe6l0b7AswGObJrrfaHQjbOkKh
-         ow/Q==
-X-Gm-Message-State: AO0yUKXqE67pz9yuhpXkg2qMj8hhnGeHk5F3AW7Jd3YHwVZULC/kumIO
-        dcQ66uC63XQWYvcnsPI75R8=
-X-Google-Smtp-Source: AK7set/ztpYCMMWq+qAXTagXXx6tlvdbYERArp/gIov2QhPzggq89VtCbEToC1JcjXZWkBKMNXllkw==
-X-Received: by 2002:ac8:7fd5:0:b0:3bf:b75a:d7a7 with SMTP id b21-20020ac87fd5000000b003bfb75ad7a7mr38122459qtk.7.1678242622031;
-        Tue, 07 Mar 2023 18:30:22 -0800 (PST)
-Received: from [10.4.10.38] (pool-108-26-182-112.bstnma.fios.verizon.net. [108.26.182.112])
-        by smtp.gmail.com with ESMTPSA id y16-20020a37f610000000b0074308a0124asm10534627qkj.50.2023.03.07.18.30.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 18:30:21 -0800 (PST)
-Message-ID: <c7941231-8ebd-dea5-81f8-3180cfc3f286@gmail.com>
-Date:   Tue, 7 Mar 2023 21:30:20 -0500
+        Tue, 7 Mar 2023 21:09:05 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02C49CFD1;
+        Tue,  7 Mar 2023 18:09:03 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PWbMt5fNPz4f3nTX;
+        Wed,  8 Mar 2023 10:08:58 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgDHcyE47gdkBs8gEg--.52407S4;
+        Wed, 08 Mar 2023 10:08:58 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     jack@suse.cz, shinichiro.kawasaki@wdc.com,
+        paolo.valente@linaro.org, axboe@kernel.dk, glusvardi@posteo.net,
+        damien.lemoal@opensource.wdc.com, felicigb@gmail.com,
+        inbox@emilianomaccaferri.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
+        yangerkun@huawei.com
+Subject: [PATCH] block, bfq: fix uaf for 'stable_merge_bfqq'
+Date:   Wed,  8 Mar 2023 10:32:08 +0800
+Message-Id: <20230308023208.379465-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <4e6e1606-1d9e-9903-8a44-ccac58a1fe06@kernel.dk>
+References: <4e6e1606-1d9e-9903-8a44-ccac58a1fe06@kernel.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3 0/3] Add RISC-V 32 NOMMU support
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-riscv@lists.infradead.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yimin Gu <ustcymgu@gmail.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Waldemar Brodkorb <wbx@openadk.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-References: <20230301002657.352637-1-Mr.Bossman075@gmail.com>
- <42446784-a88b-df09-41e9-5f685b4df6ee@infradead.org>
- <556ce787-80eb-dc48-f8d6-83e415538e36@opensource.wdc.com>
- <f8f291d9-2723-4ab8-3020-49018757d470@gmail.com>
- <62852ee1-3763-3323-c3a8-f1e84f70204a@infradead.org>
-From:   Jesse Taube <mr.bossman075@gmail.com>
-In-Reply-To: <62852ee1-3763-3323-c3a8-f1e84f70204a@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _Ch0CgDHcyE47gdkBs8gEg--.52407S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kr45XryUWF4kKry7Jr48Crg_yoW5JrWkpa
+        1DKw4avr1rJrW5XrWxAw40vF98tr43Ar9FyryrW347uw1DJrySvFsF9ayI9Fn2vr48CFnx
+        Xw1qqas2kr48JrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
+        UdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Yu Kuai <yukuai3@huawei.com>
 
+Before commit fd571df0ac5b ("block, bfq: turn bfqq_data into an array
+in bfq_io_cq"), process reference is read before bfq_put_stable_ref(),
+and it's safe if bfq_put_stable_ref() put the last reference, because
+process reference will be 0 and 'stable_merge_bfqq' won't be accessed
+in this case. However, the commit changed the order and  will cause
+uaf for 'stable_merge_bfqq'.
 
-On 3/7/23 21:16, Randy Dunlap wrote:
-> Hi--
-> 
-> On 3/7/23 17:26, Jesse Taube wrote:
->>
->>
->> On 2/28/23 23:42, Damien Le Moal wrote:
->>> On 3/1/23 13:07, Randy Dunlap wrote:
->>>> Hi--
->>>>
->>>> On 2/28/23 16:26, Jesse Taube wrote:
->>>>> This patch-set aims to add NOMMU support to RV32.
->>>>> Many people want to build simple emulators or HDL
->>>>> models of RISC-V this patch makes it possible to
->>>>> run linux on them.
->>>>>
->>>>> Yimin Gu is the original author of this set.
->>>>> Submitted here:
->>>>> https://lists.buildroot.org/pipermail/buildroot/2022-November/656134.html
->>>>>
->>>>> Though Jesse T rewrote the Dconf.
->>>>
->>>> Dconf?
->>>>
->>>>>
->>>>> The new set:
->>>>> https://lists.buildroot.org/pipermail/buildroot/2022-December/658258.html
->>>>> ---
->>>>> V1->V2:
->>>>>    - Add Conor's clock patch for implicit div64
->>>>>    - Fix typo in commit title 3/3
->>>>>    - Fix typo in commit description 2/3
->>>>> V2->V3
->>>>>    - Change from defconfig file to a PHONY config
->>>>> ---
->>>>
->>>> Is this 'rv32_nommu_virt_defconfig' target the only build target
->>>> that is supported?
->>>>
->>>> I ask because I applied the 3 patches and did 25 randconfig builds.
->>>> 5 of them failed the same way:
->>>>
->>>> riscv32-linux-ld: drivers/soc/canaan/k210-sysctl.o: in function `k210_soc_early_init':
->>>> k210-sysctl.c:(.init.text+0x78): undefined reference to `k210_clk_early_init'
->> I can not recreate this error.
->> can you send me the .config you used.
->>
->> Thanks,
->> Jesse Taube
-> 
-> Sure, it's attached.
+In order to emphasize that bfq_put_stable_ref() can drop the last
+reference, fix the problem by moving bfq_put_stable_ref() to the end of
+bfq_setup_stable_merge().
 
-Hmmm, it links fine for me.
+Fixes: fd571df0ac5b ("block, bfq: turn bfqq_data into an array in bfq_io_cq")
+Reported-and-tested-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Link: https://lore.kernel.org/linux-block/20230307071448.rzihxbm4jhbf5krj@shindev/
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ block/bfq-iosched.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-objdump -x vmlinux | grep k210_clk_early_init
-81e40124 g     F .init.text     00000088 k210_clk_early_init
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index 8a8d4441519c..d9ed3108c17a 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -2854,11 +2854,11 @@ bfq_setup_stable_merge(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+ {
+ 	int proc_ref = min(bfqq_process_refs(bfqq),
+ 			   bfqq_process_refs(stable_merge_bfqq));
+-	struct bfq_queue *new_bfqq;
++	struct bfq_queue *new_bfqq = NULL;
+ 
+-	if (idling_boosts_thr_without_issues(bfqd, bfqq) ||
+-	    proc_ref == 0)
+-		return NULL;
++	bfqq_data->stable_merge_bfqq = NULL;
++	if (idling_boosts_thr_without_issues(bfqd, bfqq) || proc_ref == 0)
++		goto out;
+ 
+ 	/* next function will take at least one ref */
+ 	new_bfqq = bfq_setup_merge(bfqq, stable_merge_bfqq);
+@@ -2873,6 +2873,11 @@ bfq_setup_stable_merge(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+ 			new_bfqq_data->stably_merged = true;
+ 		}
+ 	}
++
++out:
++	/* deschedule stable merge, because done or aborted here */
++	bfq_put_stable_ref(stable_merge_bfqq);
++
+ 	return new_bfqq;
+ }
+ 
+@@ -2933,11 +2938,6 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+ 			struct bfq_queue *stable_merge_bfqq =
+ 				bfqq_data->stable_merge_bfqq;
+ 
+-			/* deschedule stable merge, because done or aborted here */
+-			bfq_put_stable_ref(stable_merge_bfqq);
+-
+-			bfqq_data->stable_merge_bfqq = NULL;
+-
+ 			return bfq_setup_stable_merge(bfqd, bfqq,
+ 						      stable_merge_bfqq,
+ 						      bfqq_data);
+-- 
+2.31.1
 
-gcc version 11.3.0 (Buildroot 2022.11-361-g1be0d438f7)
-GNU assembler version 2.38 (riscv32-buildroot-linux-uclibc)
-GNU ld (GNU Binutils) 2.38
-
-what gcc version are you using?
-
-Thanks,
-Jesse Taube
-
-> 
->>> Arg. Forgot about that. k210 is rv64 only and while the clk driver could still
->>> compile test with rv32 (or any arch), that driver provides the
->>> k210_clk_early_init() function which is called very early in the boot process
->>> from k210_soc_early_init(), which is an SOC_EARLY_INIT_DECLARE() call. The
->>> problem may be there. Probably should be disabled for rv32 if no SoC need that
->>> sort of early init call.
->>>
->>>>
->>>> because
->>>> # CONFIG_COMMON_CLK_K210 is not set
->>>>
->>>>
->>>> Maybe SOC_CANAAN needs some more selects for required code?
->>>>
->>>>> Conor Dooley (1):
->>>>>     clk: k210: remove an implicit 64-bit division
->>>>>
->>>>> Jesse Taube (1):
->>>>>     riscv: configs: Add nommu PHONY defconfig for RV32
->>>>>
->>>>> Yimin Gu (1):
->>>>>     riscv: Kconfig: Allow RV32 to build with no MMU
->>>>>
->>>>>    arch/riscv/Kconfig     | 5 ++---
->>>>>    arch/riscv/Makefile    | 4 ++++
->>>>>    drivers/clk/clk-k210.c | 2 +-
->>>>>    3 files changed, 7 insertions(+), 4 deletions(-)
->>>>>
->>>>
->>>
-> 
