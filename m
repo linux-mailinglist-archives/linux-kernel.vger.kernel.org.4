@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A3C6B023D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F338C6B023E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjCHJCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 04:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47506 "EHLO
+        id S230128AbjCHJCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 04:02:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjCHJCc (ORCPT
+        with ESMTP id S229809AbjCHJCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 04:02:32 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFAC9609B;
-        Wed,  8 Mar 2023 01:02:29 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id s11so62761658edy.8;
-        Wed, 08 Mar 2023 01:02:29 -0800 (PST)
+        Wed, 8 Mar 2023 04:02:33 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A8995E2E;
+        Wed,  8 Mar 2023 01:02:31 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id o12so62712222edb.9;
+        Wed, 08 Mar 2023 01:02:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678266148;
+        d=gmail.com; s=20210112; t=1678266149;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0Lzu9bzEGqcu2KmMdZnQFwDXwVJpSW2jAVAy1BeLRyY=;
-        b=oeXzRPdGt3zyzDQNXPT58ahdDhTnpdodkZqd2euRE/JqRnO6nI/tJGwG9l9ywshUxF
-         Dt40RzzWSWmXyjpSzpPo4Wew+2j0baFjasmMaYRMGAeUCq0/wcYC/Jjz3L/jdqFdj6Qr
-         XMVaWk8rIdsQr6Qm+terGnqznbaxgdTfdDLabXOI8lLdElv0vRATTL/vcieH8Y3lNEFe
-         qAHpP2h07WFzjjH81BTP/nORscSehU1S1uwCk4nRNZ/BSSdYAjCgaFnzz/wOcaQKaZNw
-         F9/hlRwDGw8oC20bmkBo85YCfPXd3Q1+vLippv9+gMPo3yYlRkyp5SSMKmGkwVK2DN/j
-         RgAw==
+        bh=pEL5i+l5uJgUeWQVuHHqsyYYkfIaU6CMwZkdIb7+3Eo=;
+        b=HcERTqYKjrUqYLYOThQfCLeydPrBYa/Wj5A1D8Q2PYj/5MMPtCnDCYIB5Y7AndyFHG
+         T9jRhZ159tegwOhWRZXJ5FGj12/B6Iwr0zU5AE+eIUY1kf6QyHsm7OcAWiDOa1kk+f8l
+         kKkjebrwIhay65THKbPPIHUFYDl0bXYGNytWGLbnIvYvadUNgccu1sk1TijyORw/JVtC
+         k3/GQnhYEnhWgbGRfwSTcDLuk0uOQhHwQxZtHX6kNCC6PfPszAj6wYR6fsBdwPNnKYqU
+         gJxxhK2IxQp3c1kezVY9SGFbFlnZ6a7N8lvtzJGW0adkc21jo0LVJj/Gr9Qq9WZQVdCX
+         uGog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678266148;
+        d=1e100.net; s=20210112; t=1678266149;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0Lzu9bzEGqcu2KmMdZnQFwDXwVJpSW2jAVAy1BeLRyY=;
-        b=Uk0LZaVFlRYv/2UThrwh2L1TlQg98G28f+aVtLeNek3pd15V1aa0iFr9eNe+iz059E
-         twjaVfELuepjoSwXObnLwNOcXszwR2WibN9S3EpOocieFEczJivAYHXH9rFsA9pBUSEy
-         3mdRp1y7M8YlP+9fN5cl6m4b2eLT0zzrvM03ueqd5STPw7zdj90zQIhUGoVamhwP7oMn
-         zhFSm/iN2JUQ2/wqL2St1BPQtECUn5dHV3LVTM36lJzUVk0Zwp2bamreKp1dXFkyx1+3
-         NloTt8Gd2TpktfLWcdv+WvZYHZ+xXVl3lFQWMCK5DpIZw7JEw7BTWQvDn75obnd14c8P
-         3CcA==
-X-Gm-Message-State: AO0yUKV5V4aqxOYefMfEjLFvN+c+qURsOA/pg4vRovj+krJuFyDr2gKh
-        DlEUBBGgfmsPib0HxEEip+I=
-X-Google-Smtp-Source: AK7set/Her90RNscwTP5bNel7eLNCnOT9PBBZUAptMF40yGu56VSiRix3MVUs1gfbm4s3Glk6JwKtg==
-X-Received: by 2002:a17:906:fca8:b0:8ae:707:e129 with SMTP id qw8-20020a170906fca800b008ae0707e129mr16319860ejb.19.1678266148422;
-        Wed, 08 Mar 2023 01:02:28 -0800 (PST)
+        bh=pEL5i+l5uJgUeWQVuHHqsyYYkfIaU6CMwZkdIb7+3Eo=;
+        b=LQXY5wW3MYMCkWEZbO4rF2JYfjZwunZu0v8GeVq1iF2NDaeIgVySE5GAKDOBBW2JQH
+         4IhXlOvy/XHa5PsEFMQbIXcoXgqTKzQdnGn04mHJAtly+44etFUsTCU7lHTAWxsRnUXz
+         P/67VRonWK2HYysdZtC1bF4iYH+NsLGFlc46rV9tTWubmiPvgfCLUZS911eBi1Vg4xCl
+         nk44+AdKH9Z8388eFUvFNZm5lkyMcHdHhBtZAcELRURRuF5clgQHHXtPLGWwKKOFW0iW
+         UhZmA5AAyoElyF2hy9xfKb7/MBVgETbRWSfDYeHC0ZW1EZYdyF36zZk6RTelbpg2Z/NP
+         /8Qg==
+X-Gm-Message-State: AO0yUKX9AE90ETXSXb4b3MtJcXmMp4Jnkx91WOrNHNTY9wpSrrEsX8Wf
+        Ap1H6wLDJXxeu1wvj6qupu8=
+X-Google-Smtp-Source: AK7set/SYcFJiRyBlvkO2tEjGpZR+UBfQahL6euCMfuLhnXzkzel4FuxUkMdtFuvt+63xrutBqNiNA==
+X-Received: by 2002:a17:906:ca5a:b0:8b2:abc7:1ef9 with SMTP id jx26-20020a170906ca5a00b008b2abc71ef9mr17204205ejb.68.1678266149422;
+        Wed, 08 Mar 2023 01:02:29 -0800 (PST)
 Received: from xeon.. ([188.163.112.76])
-        by smtp.gmail.com with ESMTPSA id j7-20020a17090643c700b008caaae1f1e1sm7153709ejn.110.2023.03.08.01.02.27
+        by smtp.gmail.com with ESMTPSA id j7-20020a17090643c700b008caaae1f1e1sm7153709ejn.110.2023.03.08.01.02.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 01:02:28 -0800 (PST)
+        Wed, 08 Mar 2023 01:02:29 -0800 (PST)
 From:   Svyatoslav Ryhel <clamor95@gmail.com>
 To:     Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
@@ -63,9 +63,9 @@ To:     Jonathan Cameron <jic23@kernel.org>,
         Dmitry Osipenko <dmitry.osipenko@collabora.com>
 Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/4] dt-bindings: iio: light: add apds990x binding
-Date:   Wed,  8 Mar 2023 11:02:16 +0200
-Message-Id: <20230308090219.12710-2-clamor95@gmail.com>
+Subject: [PATCH v1 2/4] misc: adps990x: convert to OF
+Date:   Wed,  8 Mar 2023 11:02:17 +0200
+Message-Id: <20230308090219.12710-3-clamor95@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230308090219.12710-1-clamor95@gmail.com>
 References: <20230308090219.12710-1-clamor95@gmail.com>
@@ -81,96 +81,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add dt-binding for apds990x ALS/proximity sensor.
+Add ability to get essential values from device tree.
 
 Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 ---
- .../bindings/iio/light/avago,apds990x.yaml    | 76 +++++++++++++++++++
- 1 file changed, 76 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/light/avago,apds990x.yaml
+ drivers/misc/apds990x.c | 56 +++++++++++++++++++++++++++++++----------
+ 1 file changed, 43 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/light/avago,apds990x.yaml b/Documentation/devicetree/bindings/iio/light/avago,apds990x.yaml
-new file mode 100644
-index 000000000000..9b47e13f88e3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/light/avago,apds990x.yaml
-@@ -0,0 +1,76 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iio/light/avago,apds990x.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/misc/apds990x.c b/drivers/misc/apds990x.c
+index 0024503ea6db..c53ead5a575d 100644
+--- a/drivers/misc/apds990x.c
++++ b/drivers/misc/apds990x.c
+@@ -180,8 +180,8 @@ static const u16 arates_hz[] = {10, 5, 2, 1};
+ static const u8 apersis[] = {1, 2, 4, 5};
+ 
+ /* Regulators */
+-static const char reg_vcc[] = "Vdd";
+-static const char reg_vled[] = "Vled";
++static const char reg_vcc[] = "vdd";
++static const char reg_vled[] = "vled";
+ 
+ static int apds990x_read_byte(struct apds990x_chip *chip, u8 reg, u8 *data)
+ {
+@@ -1048,9 +1048,38 @@ static struct attribute *sysfs_attrs_ctrl[] = {
+ };
+ 
+ static const struct attribute_group apds990x_attribute_group[] = {
+-	{.attrs = sysfs_attrs_ctrl },
++	{ .attrs = sysfs_attrs_ctrl },
+ };
+ 
++static int apds990x_of_probe(struct i2c_client *client,
++			     struct apds990x_chip *chip)
++{
++	struct apds990x_platform_data *pdata;
++	u32 ret, val;
 +
-+title: Avago APDS990x ALS and proximity sensor
++	pdata = devm_kzalloc(&client->dev, sizeof(*pdata), GFP_KERNEL);
++	if (!pdata)
++		return -ENOMEM;
 +
-+maintainers:
-+  - Samu Onkalo <samu.p.onkalo@nokia.com>
++	ret = device_property_read_u32(&client->dev, "avago,pdrive", &val);
++	if (ret) {
++		dev_info(&client->dev, "pdrive property is missing: ret %d\n", ret);
++		return ret;
++	}
++	pdata->pdrive = val;
 +
-+description: |
-+  APDS990x is a combined ambient light and proximity sensor. ALS and
-+  proximity functionality are highly connected. ALS measurement path
-+  must be running while the proximity functionality is enabled.
++	ret = device_property_read_u32(&client->dev, "avago,ppcount", &val);
++	if (ret) {
++		dev_info(&client->dev, "ppcount property is missing: ret %d\n", ret);
++		return ret;
++	}
++	pdata->ppcount = val;
 +
-+properties:
-+  compatible:
-+    const: avago,apds990x
++	chip->pdata = pdata;
 +
-+  reg:
-+    maxItems: 1
++	return 0;
++}
 +
-+  interrupts:
-+    maxItems: 1
+ static int apds990x_probe(struct i2c_client *client)
+ {
+ 	struct apds990x_chip *chip;
+@@ -1065,13 +1094,10 @@ static int apds990x_probe(struct i2c_client *client)
+ 
+ 	init_waitqueue_head(&chip->wait);
+ 	mutex_init(&chip->mutex);
+-	chip->pdata	= client->dev.platform_data;
+ 
+-	if (chip->pdata == NULL) {
+-		dev_err(&client->dev, "platform data is mandatory\n");
+-		err = -EINVAL;
+-		goto fail1;
+-	}
++	chip->pdata = client->dev.platform_data;
++	if (!chip->pdata)
++		apds990x_of_probe(client, chip);
+ 
+ 	if (chip->pdata->cf.ga == 0) {
+ 		/* set uncovered sensor default parameters */
+@@ -1160,8 +1186,7 @@ static int apds990x_probe(struct i2c_client *client)
+ 
+ 	err = request_threaded_irq(client->irq, NULL,
+ 				apds990x_irq,
+-				IRQF_TRIGGER_FALLING | IRQF_TRIGGER_LOW |
+-				IRQF_ONESHOT,
++				IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+ 				"apds990x", chip);
+ 	if (err) {
+ 		dev_err(&client->dev, "could not get IRQ %d\n",
+@@ -1252,11 +1277,16 @@ static int apds990x_runtime_resume(struct device *dev)
+ 
+ #endif
+ 
++static const struct of_device_id apds990x_match_table[] = {
++	{ .compatible = "avago,apds990x" },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, apds990x_match_table);
 +
-+  vdd-supply: true
-+  vled-supply: true
-+
-+  avago,pdrive:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 0
-+    maximum: 32
-+    description: |
-+      Drive value used in configuring control register.
-+
-+  avago,ppcount:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 0
-+    maximum: 32
-+    description: |
-+      Number of pulses used for proximity sensor calibration.
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupt
-+  - vdd-supply
-+  - vled-supply
-+  - avago,pdrive
-+  - avago,ppcount
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        light-sensor@39 {
-+            compatible = "avago,apds990x";
-+            reg = <0x39>;
-+
-+            interrupt-parent = <&gpio>;
-+            interrupts = <82 IRQ_TYPE_EDGE_RISING>;
-+
-+            vdd-supply = <&vdd_3v0_proxi>;
-+            vled-supply = <&vdd_1v8_sen>;
-+
-+            avago,pdrive = <0x00>;
-+            avago,ppcount = <0x03>;
-+        };
-+    };
-+...
+ static const struct i2c_device_id apds990x_id[] = {
+ 	{"apds990x", 0 },
+ 	{}
+ };
+-
+ MODULE_DEVICE_TABLE(i2c, apds990x_id);
+ 
+ static const struct dev_pm_ops apds990x_pm_ops = {
+@@ -1270,12 +1300,12 @@ static struct i2c_driver apds990x_driver = {
+ 	.driver	 = {
+ 		.name	= "apds990x",
+ 		.pm	= &apds990x_pm_ops,
++		.of_match_table = apds990x_match_table,
+ 	},
+ 	.probe_new = apds990x_probe,
+ 	.remove	  = apds990x_remove,
+ 	.id_table = apds990x_id,
+ };
+-
+ module_i2c_driver(apds990x_driver);
+ 
+ MODULE_DESCRIPTION("APDS990X combined ALS and proximity sensor");
 -- 
 2.37.2
 
