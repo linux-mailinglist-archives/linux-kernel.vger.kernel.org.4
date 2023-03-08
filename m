@@ -2,104 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994F46B0316
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3066B0319
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjCHJkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 04:40:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
+        id S229893AbjCHJkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 04:40:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjCHJkD (ORCPT
+        with ESMTP id S229462AbjCHJkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 04:40:03 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B834CAF761;
-        Wed,  8 Mar 2023 01:40:02 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id s20so20508657lfb.11;
-        Wed, 08 Mar 2023 01:40:02 -0800 (PST)
+        Wed, 8 Mar 2023 04:40:39 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689FEB1B15;
+        Wed,  8 Mar 2023 01:40:38 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id x3so63092211edb.10;
+        Wed, 08 Mar 2023 01:40:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678268400;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NoHhRDqxhWq5dkj9fVOfw1WvkPwkneaT/si7dtFMPME=;
-        b=cZoxPmC83DhtmjAP5Aveqw/y9OSrO/czmNAdUC3If883SJoDiKUY9h3IkB9EeVeRMA
-         uq+fmMxEyULqkmocgUWKlHrCFYlikpeZc3zh9Jq5NTnS9fcHCYMUntYcA4yLdWTxLk+X
-         Xu6OFBSQzsZ2XyWHva5EbMQkPeNK+nFN7jZh4JhSKEAxzb7Vm+yw1IZj5sgVO1kevmSU
-         pavm3icbhonniV2oybkpE+30s7sbadObmEEM0fpDE3hGpLvJqpfxU6ckg6GWJ/nVgmKl
-         /xsN8/9a84fzSXeFvjpzHyfO1t0tiW5akm+HhZm9IdLUR6ITb5eiAfBUXhC0YfcnZaQH
-         yxAw==
+        d=gmail.com; s=20210112; t=1678268437;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dQFy8moETWaGWRs6VMCXrP047rwgR8C0UzBrVmV4s5c=;
+        b=Np6f56ZB51bzHklHHvqyZ5rOrtgivYFKXUPd2+W414UIoa38DmZsbA5R4/UtDamPfc
+         va/fdWwq/MH+e55+0bf6X6rXNZpvfHozMbbk5D7m+0hmkG6LObquTKAdm7thbP/DyVb2
+         sqI3ecVaIknJWVVezjTcY5wyGVQ2x6YU5y+1zrxDW1bcZ/OCpnzhhQtj+gUpYgPyYPou
+         PXFe/CwJ7uOkHTUzB0FTXO74XG9O8xlzwmaYyFgKxJDuviEUXFWi4erLVHzal1gFwwKU
+         HVxbEykcV1Y2lFV9LXQZA9sMZRPIfSuUpgTRPGUFpYMCHGAmKNCnOf2wv6gtohDMRxE3
+         +7dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678268400;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NoHhRDqxhWq5dkj9fVOfw1WvkPwkneaT/si7dtFMPME=;
-        b=kZA4v1XPUr+PBl4uZ9sEkoa/CuLCNraqybD8sBLjIeGv+o4yh2fLpd4HL/FUhhzzFx
-         IMQSE9cwE2a+UjQOx5zHIrbAtmRiqiMUgifygkkqZITEEAK7NIrK7aMzfoN23vA7IpWY
-         vT15l3VadPIRnRiBdSFvbCD6fwNrkvN7Rsc+2j2yzUCYlyVDqLHeaapsvBXQJ/3X1jUr
-         5gbwYGd0PtJ+iRJfG/r8FS4nfa4JMNJFkxA4wRlOLhfsW0QWwqnkdJIlL7K4QVWPP254
-         jr4XdgI15TYV3qLJjgntPiJCVP8OmRAbuIx0akYG9e0ijKpor2q4LUrNf4r6uQ+W9xHa
-         lggw==
-X-Gm-Message-State: AO0yUKUEtxIHkhFjH2rGNfsDE6n6zofZNynmJptdtgHIk2o6A6ph7ztH
-        d4noLYRbIVnbKDXmc0+SV7f0OnZPyUY=
-X-Google-Smtp-Source: AK7set9JF4WMLeQFvQUWIDYLr0H22AsmKbkTA4wDUDuLBz4g/8jnNaQOa3u48YW2L58+TH9d6gZPZw==
-X-Received: by 2002:ac2:489a:0:b0:4dc:807b:9040 with SMTP id x26-20020ac2489a000000b004dc807b9040mr5085438lfc.5.1678268400573;
-        Wed, 08 Mar 2023 01:40:00 -0800 (PST)
-Received: from [192.168.1.103] ([31.173.83.210])
-        by smtp.gmail.com with ESMTPSA id l3-20020a2e9083000000b00295a7f35206sm2505458ljg.48.2023.03.08.01.39.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 01:40:00 -0800 (PST)
-Subject: Re: [PATCH 07/11] ravb: remove R-Car H3 ES1.* handling
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        d=1e100.net; s=20210112; t=1678268437;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dQFy8moETWaGWRs6VMCXrP047rwgR8C0UzBrVmV4s5c=;
+        b=1ztXZ6MIQKXYfp50qQN0F5ZG2RrWg1EGLlq9g+XOGfNjl3g4FSr2JKrOfy3hp9ggq+
+         s+UGzxkjvYCR2zl24C3u2RxBHTEPkFdF1grSEEozHgFhfZ7WA1JEcj8xnneFXFPdG7Qf
+         focfEaj5b+yiTOf9trkEbWgpZkdCVRBbv8mNMnt+AeLADNm4xUgZI5XmtJugoiSaH4CO
+         yAIkiVcmHd2ecM8oHou09dizMTFiX7+nnrNuUb2El9rNmGRPBTxFuFBMQ8fjnJ3mFiMs
+         7IEPdlRoE6+ykIJ/K5nDo+XGWdikX8Vrrvyx96g3oDtPaFNk8FbBswtXLti03RXkWlqz
+         HhQw==
+X-Gm-Message-State: AO0yUKV72JRdxjU4SFtRAGXgBGHNAcScp8Wy9RkDENF+3iKTiECdcd16
+        hxAVVfGZFXREFpDMhNiBN5U=
+X-Google-Smtp-Source: AK7set9kc6kvqVavdx3aKJpG4dnxoIzPrX/ZPIxe/gQv+Ds0+KLAHLyizuhg3o+l/pb386dw77lMbw==
+X-Received: by 2002:a17:907:9702:b0:82e:a57b:cc9b with SMTP id jg2-20020a170907970200b0082ea57bcc9bmr18094701ejc.24.1678268436813;
+        Wed, 08 Mar 2023 01:40:36 -0800 (PST)
+Received: from xeon.. ([188.163.112.76])
+        by smtp.gmail.com with ESMTPSA id h17-20020a17090634d100b008ee5356801dsm7240014ejb.187.2023.03.08.01.40.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 01:40:36 -0800 (PST)
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
- <20230307163041.3815-8-wsa+renesas@sang-engineering.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <20567076-5347-4385-db93-850b4200dfa7@gmail.com>
-Date:   Wed, 8 Mar 2023 12:39:58 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+Subject: [PATCH v1 0/2] Add optional power supply for INA2XX
+Date:   Wed,  8 Mar 2023 11:40:22 +0200
+Message-Id: <20230308094024.14115-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-In-Reply-To: <20230307163041.3815-8-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On some devices (like LG Optimus Vu) ina2xx hwmon may require
+power supply for correct work, hance add one.
 
-  (Sending via Gmail account, as the OMP SMTP server rejects...) 
+Svyatoslav Ryhel (2):
+  dt-bindings: hwmon: ina2xx: add supply property
+  hwmon: ina2xx: add optional regulator support
 
-On 3/7/23 7:30 PM, Wolfram Sang wrote:
+ .../devicetree/bindings/hwmon/ti,ina2xx.yaml         |  4 ++++
+ drivers/hwmon/ina2xx.c                               | 12 ++++++++++++
+ 2 files changed, 16 insertions(+)
 
-> R-Car H3 ES1.* was only available to an internal development group and
-> needed a lot of quirks and workarounds. These become a maintenance
-> burden now, so our development group decided to remove upstream support
-> and disable booting for this SoC. Public users only have ES2 onwards.
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+-- 
+2.37.2
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-
-[...]
-
-MBR, Sergey
