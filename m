@@ -2,241 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DFD6B0990
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:39:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EED26B0992
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:40:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbjCHNjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:39:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
+        id S231757AbjCHNk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbjCHNjL (ORCPT
+        with ESMTP id S231868AbjCHNkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:39:11 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF155D47A
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 05:37:19 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id x34so16556824pjj.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 05:37:19 -0800 (PST)
+        Wed, 8 Mar 2023 08:40:05 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7314824C94;
+        Wed,  8 Mar 2023 05:38:08 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id ce8-20020a17090aff0800b0023a61cff2c6so3820745pjb.0;
+        Wed, 08 Mar 2023 05:38:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678282639;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=skOevrBH/VdT5SIidruNWf0l96ZcVNpPBjmQkY/d2IQ=;
-        b=Wz1rqGM9u7pa/IXS179+od4C1bHsMAYPmBwY2249MGxdGEOlnIzanmdT9MWEM2pJK7
-         GeEQ9+tRUCMX6IOssznZjpGwp+frC2DMjcVs3Qcc5JLsHPB91G+ADEp9yBjRHhKBG6ve
-         +ZjMl4yk4+UCqat0DYNZlavasSXdTIl3pU+LEKHy2/o9TSWNockQkqd3nW/KEVNrJM+4
-         6TkyrL+A1nr5Z4MjmkkoRpaCY59kCF9JBio+OBHLUvTj+VebTvTTFjU7WkpR3qBSiAF9
-         d/h/kNXMVZrEPXDUyQkw5EHjF+dwuWhZh95BLqTBJ9jqBtjyD9E8R+HkUhWDKxhZUVQm
-         YlOA==
+        d=gmail.com; s=20210112; t=1678282687;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GEoW7Edk44DGWc4GB3PWBqttLOpuxjyKXvitXj1SBNA=;
+        b=WPZmR06RJjaBgYuthIiHCOGVm22ZUKax0GCCS1OoDD2LO7Fr+b4Dpmsm71txU4PjFu
+         vByAePacf8e2mGFRSXX4EvVo/iQcO57+8R+s3m9Cz+iaNSxWgy6YoRfpquPChgobmlUS
+         uiuT/CyD/8W8VUFLNBSZ6hFhuLBUs5+7OINgeMzAPW4vsF4Oaz7ZzDvyxsM3DWP2Dn6P
+         f6AfMQ3c02pZkLXQ6hi429wOf0UQtAoqGztMVeD8zMjSqOujbM4cCk4oXlHOiDnjQhD2
+         aAi83zB60CKa9AiKLWkY6Tl7Lq8QTARs2ft5Fwv/EL10Mv9eqMECfAAAyoJVFctZq9z6
+         WapQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678282639;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=skOevrBH/VdT5SIidruNWf0l96ZcVNpPBjmQkY/d2IQ=;
-        b=NvnDsSGuMNUkcf+cirzpktCwsZkhjVJEH8pTH8EF4rQEU/T/pfYPrvEmpLXkD0AvGv
-         zHRIshuFH/ua29KR+BHIkrGv2/bLEpz8OBp89LxpbPJ+FMiuOJ8OfZIXhDTiG1EQe68q
-         8ZlkfCetQPqGX911vKpcNY+EX2vXAj5omvACaAW1SnR/9j5rsyGqipH1J+jDLEMAnwPQ
-         HkBHhlN76iWMHIlebTOz0Ihh+Mpo16w4ISEYmRAld1tifpql/CpijfmspuXQ/N1j5E7l
-         4Zz2gP97vE9jKpoUHLxh7Uq4gnYNY41Wn9sLFkHYugZB9xl6TguBJscgfPuZfOANIpdD
-         iJOQ==
-X-Gm-Message-State: AO0yUKWgBLGoBGxBapH6tmPVy3W+kbbr+/vBhmrGCW5GM+AMUtTj15MM
-        JUDe0lut/mgKp+aaz9AZtf0=
-X-Google-Smtp-Source: AK7set+3i5xscnsi+WC/xa2PTuvdUZN2C+YhvLhpH4GA681dwhDxy1HAYOY3w+6YxEgZJpRBEfsI9g==
-X-Received: by 2002:a05:6a20:e688:b0:c7:6cb7:cfbf with SMTP id mz8-20020a056a20e68800b000c76cb7cfbfmr16095556pzb.10.1678282639263;
-        Wed, 08 Mar 2023 05:37:19 -0800 (PST)
-Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
-        by smtp.gmail.com with ESMTPSA id b13-20020aa7870d000000b0058dbd7a5e0esm9372589pfo.89.2023.03.08.05.37.16
+        d=1e100.net; s=20210112; t=1678282687;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GEoW7Edk44DGWc4GB3PWBqttLOpuxjyKXvitXj1SBNA=;
+        b=v0ZrEyI+f/xVaGZXoJYfaROWw69VdRGfUufL7K/y+FNzJVLClxw1qK0eu11S4xVplQ
+         99OoSFxjN/cWQzgB6WKym7Jhrp/5bv3Y9kWAyXou+hXt6/ZprdnCFJrBZPLLYxq/3mmo
+         A941cWlJHsyXG9hQMyEWwcIW+j4ccSk84uEM5U+2DoOw1PhbIy+uN/1t6/Prb6rk6xVp
+         vvz1x2UcC4Eqd5PVypQlkmvoOkCVwyrPJg7did4kUCSp/tsNE3frddgu0Uay+gIl1OgT
+         5puLJdCPDfzpvn2TrjllcNKiG3neDIg+ET/p9gSuV3Zz+rXZZI6V+URzAn+XSdJzj7ke
+         QZ9w==
+X-Gm-Message-State: AO0yUKU7saONjPnHGCrjQuuvVuILPoeI7T/WZz9dA4tRe4jdimCYxDRq
+        h3HYJk43tlV7vfOZ1olN2Uo=
+X-Google-Smtp-Source: AK7set/0r12xxZn37DfmlBs5S3EQxFWTEtKllSI2HMgFh3/2TjUn5CNF8v1MNVCn8BMZo2S3AXSw2Q==
+X-Received: by 2002:a17:90b:1a8b:b0:234:2007:1ff6 with SMTP id ng11-20020a17090b1a8b00b0023420071ff6mr22771976pjb.14.1678282687514;
+        Wed, 08 Mar 2023 05:38:07 -0800 (PST)
+Received: from Gentoo (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id j24-20020a17090a589800b002369e16b276sm10709273pji.32.2023.03.08.05.38.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 05:37:18 -0800 (PST)
-Date:   Wed, 8 Mar 2023 13:37:10 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     "chenjun (AM)" <chenjun102@huawei.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "cl@linux.com" <cl@linux.com>,
-        "penberg@kernel.org" <penberg@kernel.org>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "xuqiang (M)" <xuqiang36@huawei.com>
-Subject: Re: [RFC] mm/slub: Reduce memory consumption in extreme scenarios
-Message-ID: <ZAiPhtexI0ebJCkV@localhost>
-References: <20230307082811.120774-1-chenjun102@huawei.com>
- <ZAdIJKkT8VHdbPs9@localhost>
- <4ad448c565134d76bea0ac8afffe4f37@huawei.com>
+        Wed, 08 Mar 2023 05:38:07 -0800 (PST)
+Date:   Wed, 8 Mar 2023 21:37:59 +0800
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] drm/panel: Add driver for Novatek NT36523
+Message-ID: <ZAiPTat/kmLyaJmA@Gentoo>
+References: <20230308043706.16318-1-lujianhua000@gmail.com>
+ <20230308043706.16318-2-lujianhua000@gmail.com>
+ <66d293a8-f850-cb80-0c83-2ebf7e29d0c2@linaro.org>
+ <ZAh3MSpQ30YyPAVe@Gentoo>
+ <1cbe9e29-13a4-574e-6d8c-b2506e7a36b3@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4ad448c565134d76bea0ac8afffe4f37@huawei.com>
-X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+In-Reply-To: <1cbe9e29-13a4-574e-6d8c-b2506e7a36b3@linaro.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 07:16:49AM +0000, chenjun (AM) wrote:
-> Hi,
+On Wed, Mar 08, 2023 at 01:33:39PM +0100, Konrad Dybcio wrote:
 > 
-> Thanks for reply.
+> phy-type:
+>     description: D-PHY (default) or C-PHY mode
+>     enum: [ 10, 11 ]
+>     default: 10
 > 
-> 在 2023/3/7 22:20, Hyeonggon Yoo 写道:
-> > On Tue, Mar 07, 2023 at 08:28:11AM +0000, Chen Jun wrote:
-> >> If call kmalloc_node with NO __GFP_THISNODE and node[A] with no memory.
-> >> Slub will alloc a slub page which is not belong to A, and put the page
-> >> to kmem_cache_node[page_to_nid(page)]. The page can not be reused
-> >> at next calling, because NULL will be get from get_partical().
-> >> That make kmalloc_node consume more memory.
+> try setting that to 11 under your DSI PHYs (or one? not sure).
+I already used phy-type = <PHY_TYPE_CPHY> before, this equate to qcom,panel-cphy-mode in
+downstream panel device tree, but there is qcom,mdss-dsi-cphy-strength isn't
+implemented.
+> Konrad
 > > 
-> > Hello,
-> > 
-> > elaborating a little bit:
-> > 
-> > "When kmalloc_node() is called without __GFP_THISNODE and the target node
-> > lacks sufficient memory, SLUB allocates a folio from a different node other
-> > than the requested node, instead of taking a partial slab from it.
-> > 
-> > However, since the allocated folio does not belong to the requested node,
-> > it is deactivated and added to the partial slab list of the node it
-> > belongs to.
-> > 
-> > This behavior can result in excessive memory usage when the requested
-> > node has insufficient memory, as SLUB will repeatedly allocate folios from
-> > other nodes without reusing the previously allocated ones.
-> > 
-> > To prevent memory wastage, take a partial slab from a different node when
-> > the requested node has no partial slab and __GFP_THISNODE is not explicitly
-> > specified."
-> > 
-> 
-> Thanks, This is more clear than what I described.
-> 
-> >> On qemu with 4 numas and each numa has 1G memory, Write a test ko
-> >> to call kmalloc_node(196, 0xd20c0, 3) for 5 * 1024 * 1024 times.
+> >> Could you also implement a 60 (or whatever other value is also
+> >> implemented downstream) Hz mode?
+> > I will try to implement it.
 > >>
-> >> cat /proc/slabinfo shows:
-> >> kmalloc-256       4302317 15151808    256   32    2 : tunables..
+> >>> +	.clock = (1600 + 60 + 8 + 60) * (2560 + 26 + 4 + 168) * 104 / 1000,
+> >>> +	.hdisplay = 1600,
+> >>> +	.hsync_start = 1600 + 60,
+> >>> +	.hsync_end = 1600 + 60 + 8,
+> >>> +	.htotal = 1600 + 60 + 8 + 60,
+> >>> +	.vdisplay = 2560,
+> >>> +	.vsync_start = 2560 + 26,
+> >>> +	.vsync_end = 2560 + 26 + 4,
+> >>> +	.vtotal = 2560 + 26 + 4 + 168,
+> >>> +};
+> >>> +
+> >>> +static const struct drm_display_mode elish_csot_mode = {
+> >>> +	/* Current max freqency is 104HZ, TODO 120HZ */
+> >>> +	.clock = (1600 + 200 + 40 + 52) * (2560 + 26 + 4 + 168) * 104 / 1000,
+> >>> +	.hdisplay = 1600,
+> >>> +	.hsync_start = 1600 + 200,
+> >>> +	.hsync_end = 1600 + 200 + 40,
+> >>> +	.htotal = 1600 + 200 + 40 + 52,
+> >>> +	.vdisplay = 2560,
+> >>> +	.vsync_start = 2560 + 26,
+> >>> +	.vsync_end = 2560 + 26 + 4,
+> >>> +	.vtotal = 2560 + 26 + 4 + 168,
+> >>> +};
+> >>> +
+> >>> +static const struct panel_desc elish_boe_desc = {
+> >>> +	.modes = &elish_boe_mode,
+> >>> +	.dsi_info = {
+> >>> +		.type = "NT36523",
+> >> That's a bit vague, the driver IC is not very telling about the
+> >> panel itself. Since we're not able to determine much more information,
+> >> this could contain the panel manufacturer and the device name.
+> > Acked.
 > >>
-> >> the total objects is much more then active objects.
+> >>> +		.channel = 0,
+> >>> +		.node = NULL,
+> >>> +	},
+> >>> +	.width_mm = 127,
+> >>> +	.height_mm = 203,
+> >>> +	.bpc = 8,
+> >>> +	.lanes = 3,
+> >>> +	.format = MIPI_DSI_FMT_RGB888,
+> >>> +	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_CLOCK_NON_CONTINUOUS | MIPI_DSI_MODE_LPM,
+> >>> +	.init_sequence = elish_boe_init_sequence,
+> >>> +	.is_dual_dsi = true,
+> >>> +};
+> >>> +
+> >> [...]
 > >>
-> >> After this patch, cat /prac/slubinfo shows:
-> >> kmalloc-256       5244950 5245088    256   32    2 : tunables..
+> >>> +static int nt36523_probe(struct mipi_dsi_device *dsi)
+> >>> +{
+> >> [...]
 > >>
-> >> Signed-off-by: Chen Jun <chenjun102@huawei.com>
-> >> ---
-> >>   mm/slub.c | 17 ++++++++++++++---
-> >>   1 file changed, 14 insertions(+), 3 deletions(-)
+> >>> +	/* If the panel is dual dsi, register DSI1 */
+> >>> +	if (pinfo->desc->is_dual_dsi) {
+> >>> +		info = &pinfo->desc->dsi_info;
+> >>> +
+> >>> +		dsi1 = of_graph_get_remote_node(dsi->dev.of_node, 1, -1);
+> >>> +		if (!dsi1) {
+> >>> +			dev_err(dev, "cannot get secondary DSI node.\n");
+> >>> +			return -ENODEV;
+> >>> +		}
+> >>> +
+> >>> +		dsi1_host = of_find_mipi_dsi_host_by_node(dsi1);
+> >>> +		of_node_put(dsi1);
+> >> Shouldn't you put the reference only if it's found?
+> > thanks for spot it.
 > >>
-> >> diff --git a/mm/slub.c b/mm/slub.c
-> >> index 39327e98fce3..c0090a5de54e 100644
-> >> --- a/mm/slub.c
-> >> +++ b/mm/slub.c
-> >> @@ -2384,7 +2384,7 @@ static void *get_partial(struct kmem_cache *s, int node, struct partial_context
-> >>   		searchnode = numa_mem_id();
-> >>   
-> >>   	object = get_partial_node(s, get_node(s, searchnode), pc);
-> >> -	if (object || node != NUMA_NO_NODE)
-> >> +	if (object || (node != NUMA_NO_NODE && (pc->flags & __GFP_THISNODE)))
-> >>   		return object;
-> > 
-> > I think the problem here is to avoid taking a partial slab from
-> > different node than the requested node even if __GFP_THISNODE is not set.
-> > (and then allocating new slab instead)
-> > 
-> > Thus this hunk makes sense to me,
-> > even if SLUB currently do not implement __GFP_THISNODE semantics.
-> > 
-> >>   	return get_any_partial(s, pc);
-> >> @@ -3069,6 +3069,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
-> >>   	struct slab *slab;
-> >>   	unsigned long flags;
-> >>   	struct partial_context pc;
-> >> +	int try_thisndoe = 0;
+> >>> +		if (!dsi1_host) {
+> >>> +			dev_err(dev, "cannot get secondary DSI host\n");
+> >>> +			return -EPROBE_DEFER;
+> >> dev_err_probe, here and in neighbouring exit return paths?
+> > Acked.
 > >>
-> >>   
-> >>   	stat(s, ALLOC_SLOWPATH);
-> >>   
-> >> @@ -3181,8 +3182,12 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
-> >>   	}
-> >>   
-> >>   new_objects:
-> >> -
-> >>   	pc.flags = gfpflags;
-> >> +
-> >> +	/* Try to get page from specific node even if __GFP_THISNODE is not set */
-> >> +	if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode)
-> >> +			pc.flags |= __GFP_THISNODE;
-> >> +
-> >>   	pc.slab = &slab;
-> >>   	pc.orig_size = orig_size;
-> >>   	freelist = get_partial(s, node, &pc);
-> >> @@ -3190,10 +3195,16 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
-> >>   		goto check_new_slab;
-> >>   
-> >>   	slub_put_cpu_ptr(s->cpu_slab);
-> >> -	slab = new_slab(s, gfpflags, node);
-> >> +	slab = new_slab(s, pc.flags, node);
-> >>   	c = slub_get_cpu_ptr(s->cpu_slab);
-> >>   
-> >>   	if (unlikely(!slab)) {
-> >> +		/* Try to get page from any other node */
-> >> +		if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode) {
-> >> +			try_thisnode = 0;
-> >> +			goto new_objects;
-> >> +		}
-> >> +
-> >>   		slab_out_of_memory(s, gfpflags, node);
-> >>   		return NULL;
-> > 
-> > But these hunks do not make sense to me.
-> > Why force __GFP_THISNODE even when the caller did not specify it?
-> > 
-> > (Apart from the fact that try_thisnode is defined as try_thisndoe,
-> >   and try_thisnode is never set to nonzero value.)
-> 
-> My mistake， It should be:
-> int try_thisnode = 0;
-
-I think it should be try_thisnode = 1?
-Otherwise it won't be executed at all.
-Also bool type will be more readable than int.
-
-> 
-> > 
-> > IMHO the first hunk is enough to solve the problem.
-> 
-> I think, we should try to alloc a page on the target node before getting 
-> one from other nodes' partial.
-
-You are right.
-
-Hmm then the new behavior when 
-(node != NUMA_NO_NODE) && (gfpflags & __GFP_THISNODE) is:
-
-1) try to get a partial slab from target node with __GFP_THISNODE
-2) if 1) failed, try to allocate a new slab from target node with __GFP_THISNODE
-3) if 2) failed, retry 1) and 2) without __GFP_THISNODE constraint
-
-when node != NUMA_NO_NODE || (gfpflags & __GFP_THISNODE), the behavior
-remains unchanged.
-
-It does not look that crazy to me, although it complicates the code
-a little bit. (Vlastimil may have some opinions?)
-
-Now that I understand your intention, I think this behavior change also
-need to be added to the commit log.
-
-Thanks,
-Hyeonggon
-
-> If the caller does not specify __GFP_THISNODE, we add __GFP_THISNODE to 
-> try to get the slab only on the target node. If it fails, use the 
-> original GFP FLAG to allow fallback.
+> >>
+> >> Konrad
