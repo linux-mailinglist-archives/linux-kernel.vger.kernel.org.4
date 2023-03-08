@@ -2,166 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B956E6AFD00
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 630D56AFD0E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:51:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjCHCrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 21:47:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
+        id S229716AbjCHCvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 21:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjCHCrH (ORCPT
+        with ESMTP id S229546AbjCHCvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 21:47:07 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51850A4B36
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 18:47:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678243623; x=1709779623;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=GQHeck4LHhPsGInCdaF6EmmW0OA4c4xCW3y8CyK3+7Q=;
-  b=XKJdTRA8eyA8QT+1un9dY86v57Yad0U1SbtFAdQP6M20WOQW9MmsAxPK
-   2uzOpSSttCIY5d1zpQ9SBgmte+en7dBfJfFmZJQG2VznhRMn+pc4r/Kje
-   lvv0AqZOD22XVswrKX8yhGvgVkZfb82ClufHf1boJjXizcNRf+G0Pg8zs
-   N+TwuhYPimxUj8fabKgCXGztolq2aYgli6+X5lzjfFB+wUhGTm8f7aMju
-   gY3y91L6lXy1h8NuGj8S6d8c+SRqRxytM/rq8SqN8KujJWvRucq9iRyU9
-   BPXENyhSMJtxRv40G9WkDXmQAnGcQcFmfOsaUPBss5HQdqebgLVZegY4/
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="334752408"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="334752408"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 18:47:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="679172091"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="679172091"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Mar 2023 18:47:01 -0800
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 7 Mar 2023 18:47:01 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Tue, 7 Mar 2023 18:47:01 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Tue, 7 Mar 2023 18:47:01 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k32eGGTeOJDLrAqeOu5pT1ZCTEA6mvxh+ZqeqrcozxfcS9Wpn2cu7o1iLEeuap/QFkb90adDty/aKycFydrH2BIPgooqxB6Y9xlJj6fKFLpLsWEy9NnXRrDvItxbLnG1cRtu8/NIPtckJqz38t9fQJdETvUWq9dUy5llpSIdXzg2x1GA5JDag9+sjgNRK1v9Fh2J40OFQGC6WzWMSwDYkRdas6OxrSngJTa8IlptWmsd4LYZyfNldEdeKdX4AGccdBTApxjbW0QcQJK6j7JrlJhIGeK66FRVLnRQ2QBLlYb1DtI8iLlXm98/YrsBNg572T27/3esB9XIJeMZFE6qag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GQHeck4LHhPsGInCdaF6EmmW0OA4c4xCW3y8CyK3+7Q=;
- b=guCQv7/OvoVG27K4Q5IEoM+qtNE38vPlcYrff+kmYV72QZOhZCF4/Ag7QyOmRllZZ0wWZve0dCXCto2hF/6c37BT6+339N1dbTWXhsOPxBD6Rvv4PJcr0yR78+8TKphN5KQkTj/HhGxqxsQCmigjSSDpRB+UT+1YrRpgxnkKcjakH4P5RZwIgfpS8FsjadvCq/ESjiG5niEMJEGpfM+pY5IBE4x2D8vVb7ATUPwJ0qJhF3lHluOncLbP6a3dzgtS7+4vtGUm23acNZ+UhGk18GXWI8pZCKQxokpGinqwsrJO3IElrwE6w0H47s71ke9q1OicI/JEgHf7GahA72UDHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MN0PR11MB6010.namprd11.prod.outlook.com (2603:10b6:208:371::11)
- by SJ0PR11MB6576.namprd11.prod.outlook.com (2603:10b6:a03:478::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.23; Wed, 8 Mar
- 2023 02:46:59 +0000
-Received: from MN0PR11MB6010.namprd11.prod.outlook.com
- ([fe80::afb7:6502:7833:5a81]) by MN0PR11MB6010.namprd11.prod.outlook.com
- ([fe80::afb7:6502:7833:5a81%7]) with mapi id 15.20.6156.028; Wed, 8 Mar 2023
- 02:46:59 +0000
-From:   "Brown, Len" <len.brown@intel.com>
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "peterz@infradead.org" <peterz@infradead.org>
-CC:     "zhang.jia@linux.alibaba.com" <zhang.jia@linux.alibaba.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: RE: [RFC PATCH V2 0/1] x86: cpu topology fix and question on
- x86_max_cores
-Thread-Topic: [RFC PATCH V2 0/1] x86: cpu topology fix and question on
- x86_max_cores
-Thread-Index: AQHZRNuCVMfcs7TxIUq/ygktez0G3a7XrYkAgAA5QYCAAIq/gIAAoQmAgBaCUACAAK6S8A==
-Date:   Wed, 8 Mar 2023 02:46:59 +0000
-Message-ID: <MN0PR11MB6010F6B9B3C68902E5675367E0B49@MN0PR11MB6010.namprd11.prod.outlook.com>
-References: <20230220032856.661884-1-rui.zhang@intel.com>
-         <Y/NUni00nDuURT1H@hirez.programming.kicks-ass.net>
-         <fe5059317c4f3cabeb86c388d547504b9b6ea581.camel@intel.com>
-         <87edqkosty.ffs@tglx>
-         <65bb51627b7384190f6aa1c549548a2497a926c3.camel@intel.com>
- <3bc616e8a513d4bfef2fb2d824f7ca8e8815bc77.camel@intel.com>
-In-Reply-To: <3bc616e8a513d4bfef2fb2d824f7ca8e8815bc77.camel@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR11MB6010:EE_|SJ0PR11MB6576:EE_
-x-ms-office365-filtering-correlation-id: 30ca0735-c4cc-4bac-41b5-08db1f7f6391
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WH+Ck7suz6Ldwd7lZA2pt5eiVOaK2k2NZZkryri6R5NJ661I50ch8tkCSyexmHyl1CGaNRUf4G9b2DqrdF3O8uJxWY/507JbjgMp9jdPfo05nbw7PWpuCLxtkUI5RGLN8Jt5mwF2KU7fGrlxAo7bxcFn9ToVJ8pJXbNmfaXzvqNrXjqodYr2UaH8hTEd+NdST3xsjpVTs07OgSk8qvEEnLmw5vNv1tt84CPTDykpwPOULUXyidAM7qOzmqB06c1vyI1uz23IYC3yTzgNxb9eiLv6w+rR/Y2KW0TQpEUE0QelaaLbvY+JXrxhffRxObpk95AbM0zFnPhwbqEOaVILvuWfovsVKP36DBf473VHcg1Bhfpi8Lx4fK9t7M449vnJ5CV/S4gkXc1giFPrfym8mgJUg7bbqppi8IdOkpyILEsGAPCjY4JKU5EKdHzrbxP2mGyvHJs/azdBRRGImVGgVzX9SHC3zUoL4OFizy9UkYW5XvNsSr3Uw2GotblpNz9VtGNbfEqP/yVc76mj60y4v0caMLVi6iro+61A4dTuwhfKTPScvneEhXR/WSM4gBuWJ3Kc7eyC+Y3rVJnEXUauCcEevoyllVihCa4aXgcftvxcle6lM0jqjN+5a6vhRqfEwbPWVgOzzFDgP4Lbqhqjcs4GQewavkHHb1BBLfw2WxqphKw4ua5PBgK+By5M+6GcNW6XLTiDM9DmS3Tddpe2zA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6010.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(346002)(366004)(136003)(376002)(39860400002)(451199018)(33656002)(86362001)(5660300002)(186003)(71200400001)(9686003)(4326008)(41300700001)(52536014)(6506007)(26005)(8936002)(66476007)(478600001)(66446008)(110136005)(66556008)(54906003)(82960400001)(64756008)(7696005)(66946007)(122000001)(316002)(76116006)(38070700005)(38100700002)(8676002)(4744005)(55016003)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Mm4rOS9wZ0p6YXNvZVdETGplU3BJaGhQRjVabWxzakg3WlBUcUt0Y3pibTlQ?=
- =?utf-8?B?Sk1LcUdoMjVCNFJTbWIvcDlqdUM0cytuS0RiT0p3Vlp5NDBKTkF2angzcVJX?=
- =?utf-8?B?R2QyNkVIT0VWKzdlWVZiWEdZT3VtK0Z4akJGUEdudlJ1SUdKS3NFeEdVeHd6?=
- =?utf-8?B?a2lqUXBFYTVyUy9xZ05acS92eXRKQ20rY2NGSHZRTnYrMHNoNkNkc2JRS3E0?=
- =?utf-8?B?RGdVLy9LUjFTRGFjaUdQdHRHMzNBQ0lKYXJ0MzFTMnBpNHM0QTFNTHQ0R1pZ?=
- =?utf-8?B?UlRYekIyWVc1NEI3eUZoM0pTK1FqdzRpTkNjQkM5VjZzdU1OcTNMaWhPVC9Q?=
- =?utf-8?B?cVlLWjhIMUE0VElKNWhtSXRmZTlEUFpuMU54MTYvWXhraEhvWDU3Sm93VHhi?=
- =?utf-8?B?V3hnanZlSDY2MWVDRmN3SDRUT1g0RWkvTUpYVVpKUWJ0akNqMERoMFhZOGF2?=
- =?utf-8?B?TE1zK0dKdEZOUkR5ZUJUL0RjcFB2SEtYdG13MHZ4VTQ0TGFjalozQXR3aWcw?=
- =?utf-8?B?QjZKZHVkSlVuY0pTOTVjK1M2RGxRNDlnRjRaQU9mZnJXb0pNMWkvWEY0blpT?=
- =?utf-8?B?YzRrRHdOSG9SeHFUNGVTQ2FqZkJFbmt4ZHJxdlM4ZkxmaUladWRHYmE2MDlO?=
- =?utf-8?B?M3A5T1NwTXZGZEdkUldxbjRKY0VDdVViTHR5RUJBandUUXFzamtGN3dzVW5B?=
- =?utf-8?B?bno5L2wvU3VVTE5CQkJNRmxlZVNEdks1UVVoWXFUZDRDNmpzcmI4c3pXVkFv?=
- =?utf-8?B?L09DY3RkS2hkelJIS1dGbjNRdEZtRW9JZ0FMd05DOGRLWHVoUS83WFJ5QjE1?=
- =?utf-8?B?YmpWVXpMY3NXRHlveHZPU1h1YTFBMEVieEtkNjZZRjN6VmtBVmIrRXMxbkUr?=
- =?utf-8?B?YTBvTVpibHJvQXNCZXlReklQbFlOdUJjNlV2eitFamZldnZzRlluelpSL0dK?=
- =?utf-8?B?S1BPdmpJSlczM2NEYXV3OTZhOUpsbkhZMHBvMlo1Nk5PTEc0ckdvNzRxVWVS?=
- =?utf-8?B?YmFxM21ldUQ3NklaYiszTGJ1SFVXNFBaemZXZ0VjeVd2WUpVWXEvOGxEVU1G?=
- =?utf-8?B?YU1CZjlXNVZjVnhyclBoeWg5QVJ4R1h5OHdHbFNYQ3RlS21rMEROM3I2SUYx?=
- =?utf-8?B?NFBuVE9ORC9iRTZnZTEyRHIwLytXSUpjSVBrY3RKMHhwKzhxckd1VWhOaFEw?=
- =?utf-8?B?SURKK3ZhOVpZeEtTSEFnOUZmRUhNRzBHak1qazBpa004dUxGTG1sVnNkQWNq?=
- =?utf-8?B?UVpWN01URjNHU3NFeWZwKy8rcmRFZnBHN0s2cDFNU1k2aGdLOGoxcm5qZ0or?=
- =?utf-8?B?L1NsS1MyWGhVRytIU0VSNjdrV3FGVHI1WWJ0QlpyMG9XbWtFWnlKMmFrWlZl?=
- =?utf-8?B?R0JFUzNnS2s4ZjVZRTdPYlhXTU1iWkZGcmxxa3lNM0tyNVBOYjhxVDdHTkk3?=
- =?utf-8?B?VTlFbzU0REM3cHVxT3VxTlF1YXJuSVJkVFhOa2hPblpXSnNzYzZaR1NiY0V1?=
- =?utf-8?B?cUttdmw0VTFyUnVrWmVSZ2gwOGN3RzN5WFUvV0RDTHEyeXVZbzYxVGVuTmkr?=
- =?utf-8?B?dmxYZm5uUXlUMHFzb3FybGVIM1FPM3NqR2hIUnZZMjMvVFU4SDQ0MCt6VjVR?=
- =?utf-8?B?N29WNEhIY2twakErWCttN05OYndFclF0REVaVGtabGtFWXlEcExQdEZrdTFU?=
- =?utf-8?B?ZjdQbWFTcVh2dkhta2hMRk9qc0Y1dWRQT1J0SVBneS9QaWdtZ1VwcTk1Uyta?=
- =?utf-8?B?QUY3YzZDQkVEaU1HWXFaL3NqUlpoWDBQV1JXbHVTREtta0d3NWRISmNNOWVn?=
- =?utf-8?B?ZnpBVlk5RzNmMmplTGp6VzYyQ1FrdnRyYWd3Z1M2SjlmLzRGVGkzanYxeDBI?=
- =?utf-8?B?S2dXL0xBUWFlaGNmY2Evc0hLb2prU1RITnNRT1FrUk9lY0JkL0c2em83NUh2?=
- =?utf-8?B?UjdCblMvVTYwajlqVUFUL1dJdXlza3JWNEFSQUtQK3ovVGk4K0NaNFhwVDJN?=
- =?utf-8?B?N0FyS1FmVWFLYlZnbnZ3YkQxeXUvaFNFVXpHSlJiQXVTSXVnbWdaWFFWaDkx?=
- =?utf-8?B?SnVRMys0TFNnb3Vud3AyeGdZMkZnL1lOcVpmNW1PaURXNjg3azNWL2RzeGpX?=
- =?utf-8?Q?mecUoW1a58rNN/+PqICYD5ccx?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 7 Mar 2023 21:51:09 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94310A1FF6;
+        Tue,  7 Mar 2023 18:51:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=zz8XIrqQ9KHvA5O0CyBi6qT6Uf9Kop0CvFk8d/hlRvM=; b=JdN7q0ht+aYt/Z+kGlLvyjn5mx
+        19KMsWKQz5gIiuzNJg/O78aoHpMWdHJcU7XVbRZzYVYMsfYVgjPinnBq2Cn6T+R5XDkk9/94ZnI0T
+        7X50wBh8+kWZt/dIDkfBJyaFGJ1UYvLk55RemiobYDWLfWfvyssk/HVPyUtkr/GRmmCNH8hEKMl4C
+        C1pKwlglgGCyUgjkwjN9nZdNYExZpkUZzEwldhqgjmA1DjqVB2qeZQsmvpVg1dI573qk7Y3wFdtPf
+        CERcF4GzWT5qlITS57cWz8oC+9ShvJ1Y50fVTpIHvgJWGsyBs4d9/RiBs3RFFHsrEsn3CpH5MOKNI
+        1GN1/JkA==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pZjtO-003EQx-74; Wed, 08 Mar 2023 02:51:02 +0000
+Message-ID: <db3b3412-9616-d13c-3374-48647325e057@infradead.org>
+Date:   Tue, 7 Mar 2023 18:51:01 -0800
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6010.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30ca0735-c4cc-4bac-41b5-08db1f7f6391
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Mar 2023 02:46:59.4672
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lkYHyZdZvkRB3a1BCKhGZeCYO0nX78Gcr1pD00WAiy4hOIt6W3Ie/zl3Q6azZGpPOt8yU6Js97EEhe12dcotIg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB6576
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 0/3] Add RISC-V 32 NOMMU support
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     Jesse Taube <mr.bossman075@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-riscv@lists.infradead.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yimin Gu <ustcymgu@gmail.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Waldemar Brodkorb <wbx@openadk.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+References: <20230301002657.352637-1-Mr.Bossman075@gmail.com>
+ <42446784-a88b-df09-41e9-5f685b4df6ee@infradead.org>
+ <556ce787-80eb-dc48-f8d6-83e415538e36@opensource.wdc.com>
+ <f8f291d9-2723-4ab8-3020-49018757d470@gmail.com>
+ <62852ee1-3763-3323-c3a8-f1e84f70204a@infradead.org>
+ <c7941231-8ebd-dea5-81f8-3180cfc3f286@gmail.com>
+ <1d858dbb-ae85-95a0-3e46-b67017733c04@infradead.org>
+In-Reply-To: <1d858dbb-ae85-95a0-3e46-b67017733c04@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -170,19 +68,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WWVzLCBPbiBJbnRlbCwgTGludXggc2hvdWxkIGJlIGFibGUgYXNzZXJ0IHRoYXQgQ1BVSUQuMUYg
-aGFzIGV4YWN0bHkgdGhlIHNhbWUgImxldmVsIiBkZWZpbml0aW9ucyBvbiBhbGwgQ1BVcyBpbiB0
-aGUgc3lzdGVtIC0tIG5vIG1hdHRlciBTTVAgb3IgSHlicmlkIHByb2Nlc3Nvci4NCg0KVGhpcyBp
-cyB3aGF0IFRob21hcyBpcyBhc2tpbmcgZm9yIC0tIGFuIGFyY2hpdGVjdHVyYWwgQVBJQy1JRCBk
-ZWNvZGVyIC0tIG5vdCBhIGZ1dHVyZSBmZWF0dXJlLCBidXQgb25lIHRoYXQgaXMgYWxyZWFkeSBz
-aGlwcGluZy4NCg0KV2l0aCB0aGlzIGRlY29kZXIsIHdlIGNhbiBwYXJzZSB0aGUgQUNQSSBCSU9T
-IEFQSUMvTUFEVC4NCkFzIFBldGVyIGFzc2VydHMsIHRoZSBsaXN0IG9mIHByb2Nlc3NvcnMgaW4g
-dGhlIE1BRFQgaGFzIHRvIHdvcmssIGVsc2Ugc21wYm9vdCB3b3VsZCBub3QgYmUgd29ya2luZy4N
-Cg0KSWYgd2UgZG9uJ3QgYWxyZWFkeSBoYXZlIGEgY2hlY2sgdGhhdCB0aGUgSU5JVCB0byBBUElD
-LUlEIE4gcmVhbGx5IHdha2VzIHVwIE4sIGFuZCBub3Qgc29tZSBvdGhlciBpZCwNCkl0IHNob3Vs
-ZG4ndCBiZSBoYXJkIHRvIGFkZCB0aGF0IHNhbml0eSBjaGVjay4uLg0KDQpBbnl3YXksIHRydXN0
-aW5nIHRoZSBNQURULCBhbmQgQ1BVSUQuMUYsIHdlIGNhbiBkZXRlcm1pbmUgZnJvbSBjcHUwIGlm
-IHdlIGFyZSBnb2luZyB0byBib290IGFueSBTTVQgc2libGluZ3Mgb3Igbm90Lg0KSW5kZWVkLCB3
-ZSBrbm93IGFoZWFkIG9mIHRpbWUgYWxsIG9mIHRoZSBDUFVJRC4xRiBsZXZlbHMsIGluY2x1ZGlu
-ZyB0aGUgaW1wbGljaXQgd2hpY2ggIGxldmVsIC0tIHdoaWNoIENQVXMgYXJlIGluIHdoaWNoIHBh
-Y2thZ2VzLA0KQW5kIHRodXMgaG93IG1hbnkgcGFja2FnZXMuDQoNCi1MZW4NCiANCg==
+
+
+On 3/7/23 18:33, Randy Dunlap wrote:
+> 
+> 
+> On 3/7/23 18:30, Jesse Taube wrote:
+>>
+>>
+>> On 3/7/23 21:16, Randy Dunlap wrote:
+>>> Hi--
+>>>
+>>> On 3/7/23 17:26, Jesse Taube wrote:
+>>>>
+>>>>
+>>>> On 2/28/23 23:42, Damien Le Moal wrote:
+>>>>> On 3/1/23 13:07, Randy Dunlap wrote:
+>>>>>> Hi--
+>>>>>>
+>>>>>> On 2/28/23 16:26, Jesse Taube wrote:
+>>>>>>> This patch-set aims to add NOMMU support to RV32.
+>>>>>>> Many people want to build simple emulators or HDL
+>>>>>>> models of RISC-V this patch makes it possible to
+>>>>>>> run linux on them.
+>>>>>>>
+>>>>>>> Yimin Gu is the original author of this set.
+>>>>>>> Submitted here:
+>>>>>>> https://lists.buildroot.org/pipermail/buildroot/2022-November/656134.html
+>>>>>>>
+>>>>>>> Though Jesse T rewrote the Dconf.
+>>>>>>
+>>>>>> Dconf?
+>>>>>>
+>>>>>>>
+>>>>>>> The new set:
+>>>>>>> https://lists.buildroot.org/pipermail/buildroot/2022-December/658258.html
+>>>>>>> ---
+>>>>>>> V1->V2:
+>>>>>>>    - Add Conor's clock patch for implicit div64
+>>>>>>>    - Fix typo in commit title 3/3
+>>>>>>>    - Fix typo in commit description 2/3
+>>>>>>> V2->V3
+>>>>>>>    - Change from defconfig file to a PHONY config
+>>>>>>> ---
+>>>>>>
+>>>>>> Is this 'rv32_nommu_virt_defconfig' target the only build target
+>>>>>> that is supported?
+>>>>>>
+>>>>>> I ask because I applied the 3 patches and did 25 randconfig builds.
+>>>>>> 5 of them failed the same way:
+>>>>>>
+>>>>>> riscv32-linux-ld: drivers/soc/canaan/k210-sysctl.o: in function `k210_soc_early_init':
+>>>>>> k210-sysctl.c:(.init.text+0x78): undefined reference to `k210_clk_early_init'
+>>>> I can not recreate this error.
+>>>> can you send me the .config you used.
+>>>>
+>>>> Thanks,
+>>>> Jesse Taube
+>>>
+>>> Sure, it's attached.
+>>
+>> Hmmm, it links fine for me.
+>>
+>> objdump -x vmlinux | grep k210_clk_early_init
+>> 81e40124 g     F .init.text     00000088 k210_clk_early_init
+>>
+>> gcc version 11.3.0 (Buildroot 2022.11-361-g1be0d438f7)
+>> GNU assembler version 2.38 (riscv32-buildroot-linux-uclibc)
+>> GNU ld (GNU Binutils) 2.38
+>>
+>> what gcc version are you using?
+> 
+> 
+> gcc (SUSE Linux) 12.2.1 20230124 [revision 193f7e62815b4089dfaed4c2bd34fd4f10209e27]
+> from opensuse Tumbleweed.
+> 
+> I'll try it on a current tree...
+
+OK, I don't know how it happened. I cannot reproduce it now.
+The failing .config files has CONFIG_MMU is not set (for RV32I), which
+appears to be impossible.
+
+Sorry to bother you.
+
+Thanks.
+
+>>>
+>>>>> Arg. Forgot about that. k210 is rv64 only and while the clk driver could still
+>>>>> compile test with rv32 (or any arch), that driver provides the
+>>>>> k210_clk_early_init() function which is called very early in the boot process
+>>>>> from k210_soc_early_init(), which is an SOC_EARLY_INIT_DECLARE() call. The
+>>>>> problem may be there. Probably should be disabled for rv32 if no SoC need that
+>>>>> sort of early init call.
+>>>>>
+>>>>>>
+>>>>>> because
+>>>>>> # CONFIG_COMMON_CLK_K210 is not set
+>>>>>>
+>>>>>>
+>>>>>> Maybe SOC_CANAAN needs some more selects for required code?
+>>>>>>
+>>>>>>> Conor Dooley (1):
+>>>>>>>     clk: k210: remove an implicit 64-bit division
+>>>>>>>
+>>>>>>> Jesse Taube (1):
+>>>>>>>     riscv: configs: Add nommu PHONY defconfig for RV32
+>>>>>>>
+>>>>>>> Yimin Gu (1):
+>>>>>>>     riscv: Kconfig: Allow RV32 to build with no MMU
+>>>>>>>
+>>>>>>>    arch/riscv/Kconfig     | 5 ++---
+>>>>>>>    arch/riscv/Makefile    | 4 ++++
+>>>>>>>    drivers/clk/clk-k210.c | 2 +-
+>>>>>>>    3 files changed, 7 insertions(+), 4 deletions(-)
+>>>>>>>
+>>>>>>
+>>>>>
+>>>
+> 
+
+-- 
+~Randy
