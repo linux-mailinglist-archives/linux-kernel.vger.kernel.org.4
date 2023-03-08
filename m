@@ -2,225 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099D76B09A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:45:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EBC6B09B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbjCHNpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:45:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
+        id S231594AbjCHNqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:46:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231929AbjCHNpZ (ORCPT
+        with ESMTP id S231391AbjCHNps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:45:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2D14E5FB
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 05:44:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B746B81CB5
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:44:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0A51C433EF;
-        Wed,  8 Mar 2023 13:44:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678283072;
-        bh=T3BhXhqPw1Ry5pwlB5UiFGpWEf72+tgetxv/kX5mlgg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FcNZcVXEAaLi4NRN1qlE+ZupXqhjP6RES1lwgbBgCydVaOPY4o4W+riai+/EIL/i3
-         y3KTI42/0CVIgnPCXjWndoVR1YRAxLIwOzEieAt0OiHMzGNDoXrk8KsqbHiZLb3r+i
-         w+W7+2nOZM9ZWFg2axT41JJpClFtvRwrI0VWyk0w=
-Date:   Wed, 8 Mar 2023 14:44:29 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Martin Kaiser <martin@kaiser.cx>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>
-Subject: Re: [PATCH] staging: r8188eu: delete driver
-Message-ID: <ZAiRPbXff1f27HUz@kroah.com>
-References: <20230308131934.380395-1-gregkh@linuxfoundation.org>
- <92a9442a-cece-4179-fbdc-3c9188da073e@redhat.com>
+        Wed, 8 Mar 2023 08:45:48 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051D52386E;
+        Wed,  8 Mar 2023 05:45:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=8TKxRu++VFoSSVqlF4KgFVHHMcvl3WVVlzCkMfcoDbI=; b=cFBFBuPrdh5yUSCs7IuOyMl4U5
+        Q9eFGeNXzXRR7h18kSyMjE3cduR06XKQqDNYTNB1+BRuM1GBcCK9AFqd6CZlsqbYO3sjAwm9Zju5A
+        +0CiepYzRGtAHMtEMtQxOwUxwogqYqsTyzfk42mdM+m0aj3lcm1zp1DWjqCN/R2VLu0FGb8tivrBY
+        CXzA1K2YNEV30WOxRnqBvnnGSlPnVdlYsfuxsKw3bUKgOS7PWDIf9VBbqHYMnky2Sy9bNn5rB+Z2B
+        hY4bc1pqvV+j8CFBMtXXu71xHeEuWmKuBSgfO7WrzRe6Z4ELQTQDf9AkXXri/LPj6yvRdTvLC2H6a
+        MLxSkwQQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:50882)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pZu6F-0002e9-DT; Wed, 08 Mar 2023 13:44:59 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pZu6A-0002dH-CK; Wed, 08 Mar 2023 13:44:54 +0000
+Date:   Wed, 8 Mar 2023 13:44:54 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Richard van Schagen <richard@routerhints.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] Fix Flooding: Disable by default on User ports and
+ Enable on CPU ports
+Message-ID: <ZAiRVnqMtqYQ7IGP@shell.armlinux.org.uk>
+References: <20230212214027.672501-1-richard@routerhints.com>
+ <6da6d5bf-be12-ec7a-58ac-a1a1cef23fd0@arinc9.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="VY891N1Axxtm6cyk"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <92a9442a-cece-4179-fbdc-3c9188da073e@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6da6d5bf-be12-ec7a-58ac-a1a1cef23fd0@arinc9.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 08, 2023 at 04:34:11PM +0300, Arınç ÜNAL wrote:
+> Richard, will you send a new patch series for this and your other two
+> patches? They are essential for the port5 <-> gmac1 link to work properly.
+> Without them, port5 as a CPU port won't work properly.
 
---VY891N1Axxtm6cyk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+... and maybe detail exactly what the effect of this is.
 
-On Wed, Mar 08, 2023 at 02:26:39PM +0100, Hans de Goede wrote:
-> Hi All,
-> 
-> > Now that the same hardware that the r8188eu driver supported is
-> > supported by the real wireless driver rtl8xxxu, the r8188eu driver can
-> > be deleted.
-> >
-> > Also the rtl8xxxu driver supports way more devices, and is a fraction of
-> > the overall size, making this a much better overall solution.
-> >
-> > Thanks to the r8188eu developers and maintainers and reviewers over the
-> > years, your work allowed Linux users to use their hardware before the
-> > real driver was implemented properly.
-> >
-> > Reported-by: Hans de Goede <hdegoede@redhat.com>
-> > Cc: Martin Kaiser <martin@kaiser.cx>
-> > Cc: Larry Finger <Larry.Finger@lwfinger.net>
-> > Cc: Phillip Potter <phil@philpotter.co.uk>
-> > Cc: Pavel Skripkin <paskripkin@gmail.com>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> Thank you for doing this, I agree that this is the best solution
-> moving forward:
-> 
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
+For example, does it affect multicast frames received on user ports
+being multicast to other user ports when they are part of the same
+bridge device (which is essential for IPv6 to function.)
 
-Great!
+Thanks.
 
-Also, to verify the "these devices are supported", I compared the list
-of module aliases exported by both drivers.  The r8188eu is a tiny
-subset of the rtl8xxxu driver, with no devices listed in the r8188eu
-that are not in the rtl8xxxu driver.
-
-Attached are the lists of the vendor/product USB ids for each driver as
-proof.
-
-thanks,
-
-greg k-h
-
---VY891N1Axxtm6cyk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="r8188eu.devices"
-
-v056Ep4008
-v07B8p8179
-v0B05p18F0
-v0BDAp0179
-v0BDAp8179
-v0BDApFFEF
-v0DF6p0076
-v2001p330F
-v2001p3310
-v2001p3311
-v2001p331B
-v2357p010C
-v2357p0111
-v2C4Ep0102
-v7392pB811
-
---VY891N1Axxtm6cyk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="rtl8xxxu.devices"
-
-v04BBp094C
-v04BBp0950
-v04F2pAFF7
-v04F2pAFF8
-v04F2pAFF9
-v04F2pAFFA
-v04F2pAFFB
-v04F2pAFFC
-v050Dp1004
-v050Dp1102
-v050Dp2102
-v050Dp2103
-v056Ep4008
-v0586p341F
-v06F8pE033
-v06F8pE035
-v0789p016D
-v07AAp0056
-v07B8p8178
-v07B8p8179
-v07B8p8189
-v0846p9021
-v0846p9041
-v0846pF001
-v0B05p17AB
-v0B05p17BA
-v0B05p18F0
-v0BDAp0179
-v0BDAp018A
-v0BDAp0724
-v0BDAp1724
-v0BDAp1E1E
-v0BDAp2E2E
-v0BDAp317F
-v0BDAp5088
-v0BDAp8170
-v0BDAp8176
-v0BDAp8177
-v0BDAp8178
-v0BDAp8179
-v0BDAp817A
-v0BDAp817B
-v0BDAp817D
-v0BDAp817E
-v0BDAp817F
-v0BDAp818A
-v0BDAp818B
-v0BDAp818C
-v0BDAp8191
-v0BDAp8724
-v0BDApB720
-v0BDApF179
-v0BDApFFEF
-v0DF6p0052
-v0DF6p005C
-v0DF6p0061
-v0DF6p0070
-v0DF6p0076
-v0E66p0019
-v0E66p0020
-v0EB0p9071
-v103Cp1629
-v1058p0631
-v13D3p3357
-v2001p3307
-v2001p3308
-v2001p3309
-v2001p330A
-v2001p330B
-v2001p330F
-v2001p3310
-v2001p3311
-v2001p3319
-v2001p331B
-v2019p1201
-v2019p4902
-v2019pAB2A
-v2019pAB2B
-v2019pAB2E
-v2019pAB33
-v2019pED17
-v20F4p624D
-v20F4p648B
-v2357p0100
-v2357p0107
-v2357p0108
-v2357p0109
-v2357p010C
-v2357p0111
-v2C4Ep0102
-v4855p0090
-v4855p0091
-v4856p0091
-v7392p7811
-v7392p7822
-v7392pA611
-v7392pB811
-vCDABp8010
-
---VY891N1Axxtm6cyk--
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
