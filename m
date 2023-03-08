@@ -2,106 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B206B03E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B29A6B03EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbjCHKUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
+        id S229772AbjCHKUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:20:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjCHKUE (ORCPT
+        with ESMTP id S230423AbjCHKUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:20:04 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F8CB6904
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:19:52 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id p16so9455082wmq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:19:52 -0800 (PST)
+        Wed, 8 Mar 2023 05:20:36 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77CAB5FD0
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:20:25 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id b5so6605909iow.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:20:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678270791;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=G4UJgGFQCS60gORPfb5jvTB3Shrb24okB1uJeflKS5k=;
-        b=rDJ4byQT3witJT9ZpPhCyHyo9ZLtMksrdgop8eMSuszhsVm9l4uBcMPeHlvF9/GZec
-         zuwCcXbOmWnq/4+QzWU5APE09TpRla/gNSwzIhAOrw5Thp5gqDJSRorBRpf3WWk4246B
-         SXAnwtDCbdhEpNZ8is/EC9hoUL5k/JycTWvxWq6AFdkNajaD550LUs7+ZD4mm7lc7S32
-         haydniXzm79mTP2Q6g22ZYPywTaEXkI0r3L8fJPI2fhxvUMW3vHww676+h/KknFglLNA
-         0/+kx9OH6Zn98xi4Doj5lDLEh79XM8hExjE7kYVtDTl1G6QdzQeJVLfNK7EjqEr++WXu
-         QsdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678270791;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1678270825;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G4UJgGFQCS60gORPfb5jvTB3Shrb24okB1uJeflKS5k=;
-        b=gNWqpyru54I5T0AkPiHWpBoykihNCVnC1yXYY1CGD4k6dPwpgd1TxpNf9cOKyNTV1V
-         YK/KUn+WZh4/fDxM4sbrKkPxPz42Sv/aZF0/5ka3iKqzZtayR/Hmc3Ze/xQpnEt6qtVa
-         bSZ6EW2YhcGSY6Pwm2ZY4bAhOhxvwCuWdqrZCCvZqHwDBzmVfqHy+CCO2suAk4yCBV+N
-         WjvH8qcwT5sgvVF5ja/ooPztBRRN3IO3UoHftZxB385TABYeyF2AlKiQMm+Gn6Gmus2a
-         XwhVGkijZUs8wsjscHCeeufkYHcWGOMMIIZhOqkdM2E91ZFN2sKJmctPXkxpPEp8Ci6f
-         0UFw==
-X-Gm-Message-State: AO0yUKVwXyjegNUTHuSt1E+zcCeP6yHXUQjRi4s7M/QlXdov6iQC1BIH
-        LYQbhFTt7DjQhihJZzgOSfvYl7l/DAsMybM1OrWmQg==
-X-Google-Smtp-Source: AK7set/7Sj5FknQ9VK7WSO6K4KMSl0TwOhDpSOJnz+PtLu/v4CeRNTRrTwqrgnKmiP0c/I5P2+cV+Q==
-X-Received: by 2002:a05:600c:a04:b0:3e0:1a9:b1d7 with SMTP id z4-20020a05600c0a0400b003e001a9b1d7mr16026746wmp.19.1678270791153;
-        Wed, 08 Mar 2023 02:19:51 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:b029:83b9:1fb8:7c34? ([2a01:e0a:982:cbb0:b029:83b9:1fb8:7c34])
-        by smtp.gmail.com with ESMTPSA id h6-20020a1ccc06000000b003e118684d56sm19780278wmb.45.2023.03.08.02.19.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 02:19:50 -0800 (PST)
-Message-ID: <811092b8-a83c-cd00-c965-1f7552d423eb@linaro.org>
-Date:   Wed, 8 Mar 2023 11:19:50 +0100
+        bh=MdSzeNIXMw8vmjUPC/E7bBOx6FxLxfwio06gT5xhe28=;
+        b=jQ4jJaOiICqMicJiBXhI5oM9sUTb8IINUcqEvhN/8M+cKUK0JFV9UtHbA/p27b+rQz
+         /rJs32ad1N0HnlpzPknEpjE1d5e2iz8ebGsaveUiDxGpSxFhqvr6hNTJNPjUQk1q6YJ6
+         uH61wIlAh1Qh/0ONQp43Gl1w4PoJCcm7aTtKc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678270825;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MdSzeNIXMw8vmjUPC/E7bBOx6FxLxfwio06gT5xhe28=;
+        b=SgRqQxWqRL+S9LxyQ/ahwhd1VE5W3Da8d9ND4aJ9y/OkcIOpspeQDtZM/yTzQlZtl0
+         7NDUUILMWE9oryuwgK69Oya3Rz9srEOL+tFSDdtSbvRMJVl+X0fGiNQP5CgaZeTy0WjK
+         9+eFWRNuVn9LX7zPG0HHLwGXYyvt+RirLZlLP6DaDCgxotzTaOVlmjwlGou5hdn1VSvk
+         Z/3T3/7Dbc7QI5kNzJr8ksj/NHeuEV74d+2FxhLJ1c0Ro03K1YdbgBQZMGrfPLRDrPH2
+         bxtPDiYtv07XFYx0TAvRy84yRcqOdi4JL+owXiMGVNMLL9CU4buwAV6i5KlYC76wbvf9
+         KJIA==
+X-Gm-Message-State: AO0yUKXQViB+2tv2Te2isjvEQbRv4WKXCdbuA4M5HOaSGA2TxhjORBTu
+        5QJdgxodGVmR7eq+I85yUOQSSFjpwC6pfEuGSVBqcA==
+X-Google-Smtp-Source: AK7set+wtPxm/KF3XOtr2thou1wVTrVhlmiYRK/vO3RW2gqzmVrHuxLZsTxaCjvY+jvT/MTnCMZjjYobOos9Nu3v0YM=
+X-Received: by 2002:a02:7310:0:b0:3ca:61cc:4bbc with SMTP id
+ y16-20020a027310000000b003ca61cc4bbcmr8866771jab.2.1678270824932; Wed, 08 Mar
+ 2023 02:20:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] arm64: dts: qcom: sm8550: Mark UFS controller as cache
- coherent
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230308054630.7202-1-manivannan.sadhasivam@linaro.org>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230308054630.7202-1-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230303143350.815623-1-treapking@chromium.org>
+ <20230303143350.815623-4-treapking@chromium.org> <ZAXTVCAQpHvSj+6C@smile.fi.intel.com>
+In-Reply-To: <ZAXTVCAQpHvSj+6C@smile.fi.intel.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Wed, 8 Mar 2023 18:20:14 +0800
+Message-ID: <CAEXTbpf4zM+70BCef6rdfz35TQnQ+ozaXAvOaEZVnqqe6MDOOg@mail.gmail.com>
+Subject: Re: [PATCH v13 03/10] drm/display: Add Type-C switch helpers
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        chrome-platform@lists.linux.dev,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Marek Vasut <marex@denx.de>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, devicetree@vger.kernel.org,
+        Allen Chen <allen.chen@ite.com.tw>,
+        dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Stephen Boyd <swboyd@chromium.org>, linux-acpi@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 06:46, Manivannan Sadhasivam wrote:
-> The UFS controller on SM8550 supports cache coherency, hence add the
-> "dma-coherent" property to mark it as such.
-> 
-> Fixes: 35cf1aaab169 ("arm64: dts: qcom: sm8550: Add UFS host controller and phy nodes")
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8550.dtsi | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> index ff4d342c0725..5315e24fa525 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> @@ -1905,6 +1905,7 @@ ufs_mem_hc: ufs@1d84000 {
->   			required-opps = <&rpmhpd_opp_nom>;
->   
->   			iommus = <&apps_smmu 0x60 0x0>;
-> +			dma-coherent;
->   
->   			interconnects = <&aggre1_noc MASTER_UFS_MEM 0 &mc_virt SLAVE_EBI1 0>,
->   					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_UFS_MEM_CFG 0>;
+Hi Andy,
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Thanks for the review.
+
+On Mon, Mar 6, 2023 at 7:49=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Fri, Mar 03, 2023 at 10:33:43PM +0800, Pin-yen Lin wrote:
+> > Add helpers to register and unregister Type-C "switches" for bridges
+> > capable of switching their output between two downstream devices.
+> >
+> > The helper registers USB Type-C mode switches when the "mode-switch"
+> > and the "reg" properties are available in Device Tree.
+>
+> ...
+>
+> > +     port_data->typec_mux =3D typec_mux_register(dev, &mux_desc);
+> > +     if (IS_ERR(port_data->typec_mux)) {
+> > +             ret =3D PTR_ERR(port_data->typec_mux);
+> > +             dev_err(dev, "Mode switch register for port %d failed: %d=
+\n",
+> > +                     port_num, ret);
+>
+> > +             return ret;
+> > +     }
+> > +
+> > +     return 0;
+>
+> Can be simply
+>
+>         port_data->typec_mux =3D typec_mux_register(dev, &mux_desc);
+>         ret =3D PTR_ERR_OR_ZERO(port_data->typec_mux);
+>         if (ret)
+>                 dev_err(dev, "Mode switch register for port %d failed: %d=
+\n",
+>                         port_num, ret);
+>
+>         return ret;
+>
+This was suggested by Angelo in [1], but you are not the first
+reviewer that finds this weird... I'll update this in the next
+version.
+
+[1]: https://lore.kernel.org/all/023519eb-0adb-3b08-71b9-afb92a6cceaf@colla=
+bora.com/
+
+> ...
+>
+> > +     switch_desc->typec_ports =3D devm_kcalloc(dev, switch_desc->num_t=
+ypec_switches,
+> > +                                             sizeof(struct drm_dp_type=
+c_port_data),
+> > +                                             GFP_KERNEL);
+> > +     if (!switch_desc->typec_ports)
+> > +             return -ENOMEM;
+>
+> How often this function _can_ be called during the runtime?
+> If it's _possible_ to call it infinite times, consider *not* using devm.
+
+I would expect this function to be only called during driver probing,
+and this is the case for the current users in this series. So I think
+this is only called once if EPROBDE_DEFER doesn't count.
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
+Best regards,
+Pin-yen
