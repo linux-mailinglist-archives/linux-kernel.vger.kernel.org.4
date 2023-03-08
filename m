@@ -2,280 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1FE6B09D9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B14E16B09DE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbjCHNvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:51:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
+        id S231489AbjCHNvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:51:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbjCHNvT (ORCPT
+        with ESMTP id S231517AbjCHNvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:51:19 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E711B8F718;
-        Wed,  8 Mar 2023 05:51:13 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so1197839wmq.1;
-        Wed, 08 Mar 2023 05:51:13 -0800 (PST)
+        Wed, 8 Mar 2023 08:51:39 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00971BDD1D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 05:51:30 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id f14so6787809iow.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 05:51:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678283472;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=2a7IZeMYO9n6PXhDENMf/0WN13+dEVs/avcgaXRcG/k=;
-        b=A4NTo7Z6YDgzCwMQESROwQaWS7+cg9Iy1ytO1f0y336fkSDEYoFEwSWHuMio2AeImv
-         bRKfQOPZS7v7R8U6HmQRtcOA2GmhZ7dXgMzYNjo0fDH0ScPWI0V6twP+EVgUmWmt9j+5
-         qJj4k5QZ/geasNr19348OmPQkRXOJpbvvsrRy0RL54mL+tySiJ+QoZRhhU9YG79PINK1
-         kERy8iZxpB6awyslCA7+Usb+u05LnxScq5SqVkyt6rluOcUlzOxOawVHn2MbjEq+Eqkh
-         QRUARSyxOX7fJCt4YFU0PBFlW9OGyW36+oQQ0TGau6MT7BLuiC5P4+0x+GaandeSVmXQ
-         OI9g==
+        d=chromium.org; s=google; t=1678283490;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O2ScB8i7PrG39DRTErC7kF+bBBVGcw9XNhNSA0VqouI=;
+        b=imkqhCCosUh66ifIsRQPbANxZXdmJpEwCj2rF7iSVxboMb7R9EE2AFrdMjLL16Y/Kw
+         ooGlAR2bIPsm2FI/6N4VeIN+MSDg7j79K5/3wNTcuCOl8Gx8dM0twquGzlpwCcPl1klq
+         NicNIX+rKLK1R+g/ECbCTeA/17uvvBo5G2SJU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678283472;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2a7IZeMYO9n6PXhDENMf/0WN13+dEVs/avcgaXRcG/k=;
-        b=P1davj40wEI+te7gOZQj/GzXqw2FigY2K1rSXsTFhMMKbjlL6jr9jv3vdeMvDY8R0x
-         97Y/3RGw7b16Kvm74qxZ1jn3UG9PFMAZS0ppbe/BWpbNY5tyZRrM+74KXD9zDh+5QDVl
-         S1wJUJw1qb/k6bpTCoICZ6E7G5rBGu8/lUqDlT6nfhMJ9LDQn5/zMRgV9pWgHMg6LY1c
-         ZJpFo77elh9gk56AKOZBLmPuzrzP7/XWvwYhop0cH0fjuMd4AJowF45DcDIY1vyjBUrF
-         LtEAzZSneFt85X+U43htP0BDyajGimoIewbaqDV75j2S3jPiRxlvdDM7ubvbNH50vkX5
-         QHdw==
-X-Gm-Message-State: AO0yUKWydeaOpa6SsoP8qkE2/L7ZoSEvuBfz9Lu1YdPhYDe56GHut2f/
-        z65hcYS8tdMtPsOhudKtwcQ=
-X-Google-Smtp-Source: AK7set/iI0f+bFuGX2KOYnRyVO55NVMzanwW/UZXPecNwIj6030n4Qu5dMtQwcP4F+mKYfu9HOXczw==
-X-Received: by 2002:a05:600c:3d14:b0:3df:9858:c033 with SMTP id bh20-20020a05600c3d1400b003df9858c033mr16288216wmb.8.1678283472235;
-        Wed, 08 Mar 2023 05:51:12 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id o14-20020a05600c510e00b003dc522dd25esm4731434wms.30.2023.03.08.05.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 05:51:11 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 8 Mar 2023 14:51:09 +0100
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, bpf@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Namhyung Kim <namhyung@gmail.com>
-Subject: Re: [PATCH RFC v2 bpf-next 7/9] selftests/bpf: Replace
- extract_build_id with read_build_id
-Message-ID: <ZAiSzVTaOuWw5qRU@krava>
-References: <20230228093206.821563-1-jolsa@kernel.org>
- <20230228093206.821563-8-jolsa@kernel.org>
- <CAEf4Bzb-ZuR6RwgGEw1Dyy+HtvyzdnCYXWXU86v=694rWcZpAA@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1678283490;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O2ScB8i7PrG39DRTErC7kF+bBBVGcw9XNhNSA0VqouI=;
+        b=WDEMH0cIDWqU0NxOQVp9qEzjbsm297q/drFMHftDC7FaY9rCqjE7Jxclv5J0JnXRZF
+         BoDTJu0q+fKHsS99shBwcV+kp6KVRypmNGFwKNPn4lOUeqZgrYXYANbD/LgwgiOhsdbL
+         lGS5HuB5doLjMz9VzUco4M+XNRf/k7iidiNrGTBZnxsOPdsMYKVMZJD6S7DycJsbx1Pb
+         dJO2BGVofmwHW3Gwq7sKg9TtRefQMcYsXBqYuqNq+Jf6xLDcBi24KPYe4oEbEkB21Xt7
+         E5ZLUvSVAEKdoFhOnLL8k7iIGH6RUmj+vixuBdnpzusY6h1kwBak0bNOzX7gO75nmtmq
+         tXeQ==
+X-Gm-Message-State: AO0yUKW55r7PFKFYgT/BDN8UeMsC8liUmvYTzgvWGL7r39A6oq2MqaGI
+        onAWemXZho3IgwzBivgytZMiBsftiju4e3/e04SRQw==
+X-Google-Smtp-Source: AK7set8VM1H7ES454XkYoww9M66+Aop3lkGBIArzYN2bvLHb4IHDHyckUz3PiQcAOs/tKbPekPyLMzsgcHMc8Vkk8wo=
+X-Received: by 2002:a6b:dc0c:0:b0:743:5fb0:2ca8 with SMTP id
+ s12-20020a6bdc0c000000b007435fb02ca8mr8414193ioc.4.1678283490142; Wed, 08 Mar
+ 2023 05:51:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4Bzb-ZuR6RwgGEw1Dyy+HtvyzdnCYXWXU86v=694rWcZpAA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230303143350.815623-1-treapking@chromium.org>
+ <20230303143350.815623-11-treapking@chromium.org> <ZAXWbkq4oLfrWUR7@smile.fi.intel.com>
+In-Reply-To: <ZAXWbkq4oLfrWUR7@smile.fi.intel.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Wed, 8 Mar 2023 21:51:19 +0800
+Message-ID: <CAEXTbpe=e1iA7cnzuTtcsyFxpG37YCWSK_SqZb2A8hxcyCnJBg@mail.gmail.com>
+Subject: Re: [PATCH v13 10/10] drm/bridge: it6505: Register Type C mode switches
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        chrome-platform@lists.linux.dev,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Marek Vasut <marex@denx.de>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, devicetree@vger.kernel.org,
+        Allen Chen <allen.chen@ite.com.tw>,
+        dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Stephen Boyd <swboyd@chromium.org>, linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 05:26:32PM -0800, Andrii Nakryiko wrote:
-> On Tue, Feb 28, 2023 at 1:33 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > Replacing extract_build_id with read_build_id that parses out
-> > build id directly from elf without using readelf tool.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> 
-> small nit below, but looks good. Thanks for clean up!
-> 
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> 
-> >  .../bpf/prog_tests/stacktrace_build_id.c      | 19 ++++++--------
-> >  .../bpf/prog_tests/stacktrace_build_id_nmi.c  | 17 +++++--------
-> >  tools/testing/selftests/bpf/test_progs.c      | 25 -------------------
-> >  tools/testing/selftests/bpf/test_progs.h      |  1 -
-> >  4 files changed, 13 insertions(+), 49 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
-> > index 9ad09a6c538a..9e4b76ee356f 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
-> > @@ -7,13 +7,12 @@ void test_stacktrace_build_id(void)
-> >
-> >         int control_map_fd, stackid_hmap_fd, stackmap_fd, stack_amap_fd;
-> >         struct test_stacktrace_build_id *skel;
-> > -       int err, stack_trace_len;
-> > +       int err, stack_trace_len, build_id_size;
-> >         __u32 key, prev_key, val, duration = 0;
-> > -       char buf[256];
-> > -       int i, j;
-> > +       char buf[BPF_BUILD_ID_SIZE];
-> >         struct bpf_stack_build_id id_offs[PERF_MAX_STACK_DEPTH];
-> >         int build_id_matches = 0;
-> > -       int retry = 1;
-> > +       int i, retry = 1;
-> >
-> >  retry:
-> >         skel = test_stacktrace_build_id__open_and_load();
-> > @@ -52,9 +51,10 @@ void test_stacktrace_build_id(void)
-> >                   "err %d errno %d\n", err, errno))
-> >                 goto cleanup;
-> >
-> > -       err = extract_build_id(buf, 256);
-> > +       build_id_size = read_build_id("./urandom_read", buf);
-> 
-> nit: "urandom_read" vs "./urandom_read" matters only when executing
-> binary, not when opening a file. So all these "./" just creates
-> unnecessary confusion, IMO
+Hi Andy,
 
-right, I'll remove it also in the other test
+Thanks for the review.
 
-thanks,
-jirka
+On Mon, Mar 6, 2023 at 8:03=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Fri, Mar 03, 2023 at 10:33:50PM +0800, Pin-yen Lin wrote:
+> > Register USB Type-C mode switches when the "mode-switch" property and
+> > relevant port are available in Device Tree. Configure the "lane_swap"
+> > state based on the entered alternate mode for a specific Type-C
+> > connector, which ends up updating the lane swap registers of the it6505
+> > chip.
+>
+> ...
+>
+> > +     it6505->port_data =3D devm_kcalloc(dev, switch_desc->num_typec_sw=
+itches,
+> > +                                      sizeof(struct it6505_typec_port_=
+data),
+> > +                                      GFP_KERNEL);
+>
+> > +
+>
+> Same, no need for a blank line here.
+>
+I'll fix this in the next version.
+> > +     if (!it6505->port_data) {
+> > +             ret =3D -ENOMEM;
+> > +             goto unregister_mux;
+> > +     }
+>
+> ...
+>
+> > +             it6505->port_data[i].lane_swap =3D (dp_lanes[0] / 2 =3D=
+=3D 1);
+>
+> ' % 2 =3D=3D 0' ?
+>
+Per another patch, I'll update this into `< 2`
+> ...
+>
+> Wouldn't be better to have
+>
+>         ret =3D PTR_ERR_OR_ZERO(extcon);
+>
+> here and amend the following accordingly?
+>
+> >       if (PTR_ERR(extcon) =3D=3D -EPROBE_DEFER)
+> >               return -EPROBE_DEFER;
+> >       if (IS_ERR(extcon)) {
+> > -             dev_err(dev, "can not get extcon device!");
+> > -             return PTR_ERR(extcon);
+> > +             if (PTR_ERR(extcon) !=3D -ENODEV)
+> > +                     dev_warn(dev, "Cannot get extcon device: %ld\n",
+> > +                              PTR_ERR(extcon));
+> > +             it6505->extcon =3D NULL;
+> > +     } else {
+> > +             it6505->extcon =3D extcon;
+> >       }
+> >
+> > -     it6505->extcon =3D extcon;
+> > +     init_completion(&it6505->mux_register);
+> > +     ret =3D it6505_register_typec_switches(dev, it6505);
+> > +     if (ret) {
+> > +             if (ret !=3D -ENODEV)
+> > +                     dev_warn(dev, "Didn't register Type-C switches, e=
+rr: %d\n",
+> > +                              ret);
+> > +             if (!it6505->extcon) {
+> > +                     dev_err(dev, "Both extcon and typec-switch are no=
+t registered.\n");
+> > +                     return -EINVAL;
+> > +             }
+> > +     }
+>
+>
+> Perhaps
+>
+>         if (ret !=3D -ENODEV)
+>                 dev_warn(dev, "Didn't register Type-C switches, err: %d\n=
+", ret);
+>
+>         if (ret && !it6505->extcon) {
+>                 dev_err(dev, "Both extcon and typec-switch are not regist=
+ered.\n");
+>                 return ret;
+>         }
+>
+> ?
 
-> 
-> > +       err = build_id_size < 0 ? build_id_size : 0;
-> >
-> > -       if (CHECK(err, "get build_id with readelf",
-> > +       if (CHECK(err, "read_build_id",
-> >                   "err %d errno %d\n", err, errno))
-> >                 goto cleanup;
-> >
-> > @@ -64,8 +64,6 @@ void test_stacktrace_build_id(void)
-> >                 goto cleanup;
-> >
-> >         do {
-> > -               char build_id[64];
-> > -
-> >                 err = bpf_map_lookup_elem(stackmap_fd, &key, id_offs);
-> >                 if (CHECK(err, "lookup_elem from stackmap",
-> >                           "err %d, errno %d\n", err, errno))
-> > @@ -73,10 +71,7 @@ void test_stacktrace_build_id(void)
-> >                 for (i = 0; i < PERF_MAX_STACK_DEPTH; ++i)
-> >                         if (id_offs[i].status == BPF_STACK_BUILD_ID_VALID &&
-> >                             id_offs[i].offset != 0) {
-> > -                               for (j = 0; j < 20; ++j)
-> > -                                       sprintf(build_id + 2 * j, "%02x",
-> > -                                               id_offs[i].build_id[j] & 0xff);
-> > -                               if (strstr(buf, build_id) != NULL)
-> > +                               if (memcmp(buf, id_offs[i].build_id, build_id_size) == 0)
-> >                                         build_id_matches = 1;
-> >                         }
-> >                 prev_key = key;
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
-> > index f4ea1a215ce4..8d84149ebcc7 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
-> > @@ -28,11 +28,10 @@ void test_stacktrace_build_id_nmi(void)
-> >                 .config = PERF_COUNT_HW_CPU_CYCLES,
-> >         };
-> >         __u32 key, prev_key, val, duration = 0;
-> > -       char buf[256];
-> > -       int i, j;
-> > +       char buf[BPF_BUILD_ID_SIZE];
-> >         struct bpf_stack_build_id id_offs[PERF_MAX_STACK_DEPTH];
-> > -       int build_id_matches = 0;
-> > -       int retry = 1;
-> > +       int build_id_matches = 0, build_id_size;
-> > +       int i, retry = 1;
-> >
-> >         attr.sample_freq = read_perf_max_sample_freq();
-> >
-> > @@ -94,7 +93,8 @@ void test_stacktrace_build_id_nmi(void)
-> >                   "err %d errno %d\n", err, errno))
-> >                 goto cleanup;
-> >
-> > -       err = extract_build_id(buf, 256);
-> > +       build_id_size = read_build_id("./urandom_read", buf);
-> > +       err = build_id_size < 0 ? build_id_size : 0;
-> >
-> >         if (CHECK(err, "get build_id with readelf",
-> >                   "err %d errno %d\n", err, errno))
-> > @@ -106,8 +106,6 @@ void test_stacktrace_build_id_nmi(void)
-> >                 goto cleanup;
-> >
-> >         do {
-> > -               char build_id[64];
-> > -
-> >                 err = bpf_map__lookup_elem(skel->maps.stackmap, &key, sizeof(key),
-> >                                            id_offs, sizeof(id_offs), 0);
-> >                 if (CHECK(err, "lookup_elem from stackmap",
-> > @@ -116,10 +114,7 @@ void test_stacktrace_build_id_nmi(void)
-> >                 for (i = 0; i < PERF_MAX_STACK_DEPTH; ++i)
-> >                         if (id_offs[i].status == BPF_STACK_BUILD_ID_VALID &&
-> >                             id_offs[i].offset != 0) {
-> > -                               for (j = 0; j < 20; ++j)
-> > -                                       sprintf(build_id + 2 * j, "%02x",
-> > -                                               id_offs[i].build_id[j] & 0xff);
-> > -                               if (strstr(buf, build_id) != NULL)
-> > +                               if (memcmp(buf, id_offs[i].build_id, build_id_size) == 0)
-> >                                         build_id_matches = 1;
-> >                         }
-> >                 prev_key = key;
-> > diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-> > index 6d5e3022c75f..9813d53c4878 100644
-> > --- a/tools/testing/selftests/bpf/test_progs.c
-> > +++ b/tools/testing/selftests/bpf/test_progs.c
-> > @@ -591,31 +591,6 @@ int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len)
-> >         return err;
-> >  }
-> >
-> > -int extract_build_id(char *build_id, size_t size)
-> > -{
-> > -       FILE *fp;
-> > -       char *line = NULL;
-> > -       size_t len = 0;
-> > -
-> > -       fp = popen("readelf -n ./urandom_read | grep 'Build ID'", "r");
-> > -       if (fp == NULL)
-> > -               return -1;
-> > -
-> > -       if (getline(&line, &len, fp) == -1)
-> > -               goto err;
-> > -       pclose(fp);
-> > -
-> > -       if (len > size)
-> > -               len = size;
-> > -       memcpy(build_id, line, len);
-> > -       build_id[len] = '\0';
-> > -       free(line);
-> > -       return 0;
-> > -err:
-> > -       pclose(fp);
-> > -       return -1;
-> > -}
-> > -
-> >  static int finit_module(int fd, const char *param_values, int flags)
-> >  {
-> >         return syscall(__NR_finit_module, fd, param_values, flags);
-> > diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-> > index 9fbdc57c5b57..3825c2797a4b 100644
-> > --- a/tools/testing/selftests/bpf/test_progs.h
-> > +++ b/tools/testing/selftests/bpf/test_progs.h
-> > @@ -404,7 +404,6 @@ static inline void *u64_to_ptr(__u64 ptr)
-> >  int bpf_find_map(const char *test, struct bpf_object *obj, const char *name);
-> >  int compare_map_keys(int map1_fd, int map2_fd);
-> >  int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len);
-> > -int extract_build_id(char *build_id, size_t size);
-> >  int kern_sync_rcu(void);
-> >  int trigger_module_test_read(int read_sz);
-> >  int trigger_module_test_write(int write_sz);
-> > --
-> > 2.39.2
-> >
+
+Thanks for the suggestion! I'll update this in v14.
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
+Best regards,
+Pin-yen
