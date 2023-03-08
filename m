@@ -2,251 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37FA36B0C61
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D73F6B0C69
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjCHPSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
+        id S229611AbjCHPTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:19:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjCHPSC (ORCPT
+        with ESMTP id S232102AbjCHPSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:18:02 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616E8B7D9F;
-        Wed,  8 Mar 2023 07:17:50 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id g73-20020a9d12cf000000b006943a7df072so9146802otg.11;
-        Wed, 08 Mar 2023 07:17:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678288669;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rCEf+NQ+Pc1ncYD3djIGD+iYastMQpss3chPBnkt7Ig=;
-        b=AOvv9WB4IQmxykMtzq2277on7e0CPR51Ry/Rl6JUraFHKAEczYdKlV3ZDAkpMwV7pX
-         kqJzDKu/EiuahfwOKicycBXDJMcZYSXAj7wh6JHiliFpDRLaqaWuVx/pFOGnMGTWIdpi
-         rxkHnmI9vyyUbqmUIY3Ya+7VRZhZSoKYOCGwO1uD/BhvekSjGkMANNNneYDAODXQ8VcQ
-         FCCO8oovrLlGGM49MUqzEp29tc3p2d11z6Vo1HFCcBNu6fdOFRnrDY6ScHn9RB4HJONj
-         mOzhAVITUapgFfjUO/TZDv1Hb9nMNiUJB9DNr26LiMcUk+A0K3xFmzg0m40cljLJBoCt
-         2nqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678288669;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rCEf+NQ+Pc1ncYD3djIGD+iYastMQpss3chPBnkt7Ig=;
-        b=fuSy4Ztl6TatpigMBjh4gDXi3Cd4fTVV+nJFMn76+0NZFZvw0hi/xHCSiA1Uyf6f8a
-         iHRhDBQoS4zeSiO33ml4DxWbVdbacGXmmbdkoaJhkm/YRRLPm30EUnCpHHZgwtgXT3ph
-         uvxuP36q4XVmIyAgqvC2VAZsWdlruiAuJdu1RGsdYlCrm+I17usJZoFoV2VkVCFRCInY
-         e2hTQzNyMZNPOZyYm5pbbYtR0tDTKhyqG9XPN7TU4zSo3kUgkditt99gLlWW6+bHaFPj
-         VBZtM5q4iZJtm7G3VRlLyr4EHJNByherjeX+jgkz56I1XpMjGAPzPZl7846aj2Iqk7p2
-         dWtw==
-X-Gm-Message-State: AO0yUKXRpRfcEruXqEfEQgJ8zVFQxib0/yulC9+hR25hhuw4sRRu/Olu
-        JdzX/8rVnV1mAzYepLJ2Ax4=
-X-Google-Smtp-Source: AK7set9aolhusX/PmFaEseHKB8tfkbfJcx/8fA5YeZ0OaHKrPcRid0K89cnxM2/CLstuGYynD1rjhA==
-X-Received: by 2002:a9d:5f9d:0:b0:694:2f51:129b with SMTP id g29-20020a9d5f9d000000b006942f51129bmr7769218oti.24.1678288669514;
-        Wed, 08 Mar 2023 07:17:49 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a16-20020a9d3e10000000b0068d752f1870sm6539288otd.5.2023.03.08.07.17.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 07:17:48 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0b467896-17d4-c355-da86-437b45f089d4@roeck-us.net>
-Date:   Wed, 8 Mar 2023 07:17:45 -0800
+        Wed, 8 Mar 2023 10:18:33 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FC24108E;
+        Wed,  8 Mar 2023 07:18:30 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 622BA41F78;
+        Wed,  8 Mar 2023 15:18:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1678288709;
+        bh=LmsELnvNppKSIw1uomPRrZaTWF5g2NJzpFeIFnsgn7U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=uVC2jkrfjynzQsvbHySQcGCPBDD9vbROb59eRCFeeK0zHteVuDaP6C66Myomr6ebM
+         wcZNCfcUMgFYTj0A+Z/rIZPCJgq7MnRspLTSC9sVCRbHfu63XvS5MSTtYd/lS4JjcH
+         iJGKN6nAAkyQSWzR3MohpsI6j8burzsd1HZWV/Y/52Su2g4eg6NoP1j5yDSTSHwOhf
+         Zu8b4F4wXYXhav8jDRjTja4TUIjRa3HyCFtSB0H4ickQZf+MKApr55owkDRzWJlQq1
+         XNw5xC+L3KtOCfrhU0ISWaAFU277dHEDb4MeYA/KeWwgZEyFu+ZD64oyltslT1BMKA
+         qCvhRk7brj5Qw==
+Message-ID: <3320e497-09c0-6eb6-84c5-bab2e63f28ec@asahilina.net>
+Date:   Thu, 9 Mar 2023 00:18:20 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 2/3] drivers: watchdog: Add StarFive Watchdog driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH RFC 11/18] drm/scheduler: Clean up jobs when the scheduler
+ is torn down
 Content-Language: en-US
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org
-References: <20230308034036.99213-1-xingyu.wu@starfivetech.com>
- <20230308034036.99213-3-xingyu.wu@starfivetech.com>
- <CAJM55Z9LvQZjeEY92bZETBYhp9sSavTNkKT4T-gpsHPTQ2_LAA@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAJM55Z9LvQZjeEY92bZETBYhp9sSavTNkKT4T-gpsHPTQ2_LAA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-11-917ff5bc80a8@asahilina.net>
+ <bbd7c5ee-c2f0-3e19-757d-a9aff1a26d3d@linux.intel.com>
+ <585fa052-4eff-940e-b307-2415c315686a@amd.com>
+From:   Asahi Lina <lina@asahilina.net>
+In-Reply-To: <585fa052-4eff-940e-b307-2415c315686a@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 07:07, Emil Renner Berthing wrote:
-> On Wed, 8 Mar 2023 at 04:43, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
+On 08/03/2023 19.03, Christian König wrote:
+> Am 08.03.23 um 10:57 schrieb Maarten Lankhorst:
 >>
->> Add watchdog driver for the StarFive JH7100 and JH7110 SoC.
+>> On 2023-03-07 15:25, Asahi Lina wrote:
+>>> drm_sched_fini() currently leaves any pending jobs dangling, which
+>>> causes segfaults and other badness when job completion fences are
+>>> signaled after the scheduler is torn down.
+>>>
+>>> Explicitly detach all jobs from their completion callbacks and free
+>>> them. This makes it possible to write a sensible safe abstraction for
+>>> drm_sched, without having to externally duplicate the tracking of
+>>> in-flight jobs.
+>>>
+>>> This shouldn't regress any existing drivers, since calling
+>>> drm_sched_fini() with any pending jobs is broken and this change should
+>>> be a no-op if there are no pending jobs.
+>>>
+>>> Signed-off-by: Asahi Lina <lina@asahilina.net>
+>>> ---
+>>>   drivers/gpu/drm/scheduler/sched_main.c | 27 
+>>> +++++++++++++++++++++++++--
+>>>   1 file changed, 25 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c 
+>>> b/drivers/gpu/drm/scheduler/sched_main.c
+>>> index 5c0add2c7546..0aab1e0aebdd 100644
+>>> --- a/drivers/gpu/drm/scheduler/sched_main.c
+>>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+>>> @@ -1119,10 +1119,33 @@ EXPORT_SYMBOL(drm_sched_init);
+>>>   void drm_sched_fini(struct drm_gpu_scheduler *sched)
+>>>   {
+>>>       struct drm_sched_entity *s_entity;
+>>> +    struct drm_sched_job *s_job, *tmp;
+>>>       int i;
+>>>   -    if (sched->thread)
+>>> -        kthread_stop(sched->thread);
+>>> +    if (!sched->thread)
+>>> +        return;
+>>> +
+>>> +    /*
+>>> +     * Stop the scheduler, detaching all jobs from their hardware 
+>>> callbacks
+>>> +     * and cleaning up complete jobs.
+>>> +     */
+>>> +    drm_sched_stop(sched, NULL);
+>>> +
+>>> +    /*
+>>> +     * Iterate through the pending job list and free all jobs.
+>>> +     * This assumes the driver has either guaranteed jobs are 
+>>> already stopped, or that
+>>> +     * otherwise it is responsible for keeping any necessary data 
+>>> structures for
+>>> +     * in-progress jobs alive even when the free_job() callback is 
+>>> called early (e.g. by
+>>> +     * putting them in its own queue or doing its own refcounting).
+>>> +     */
+>>> +    list_for_each_entry_safe(s_job, tmp, &sched->pending_list, list) {
+>>> +        spin_lock(&sched->job_list_lock);
+>>> +        list_del_init(&s_job->list);
+>>> +        spin_unlock(&sched->job_list_lock);
+>>> +        sched->ops->free_job(s_job);
+>>> +    }
 >>
->> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+>> I would stop the kthread first, then delete all jobs without spinlock 
+>> since nothing else can race against sched_fini?
+>>
+>> If you do need the spinlock, It would need to guard 
+>> list_for_each_entry too.
 > 
-> Hi Xingyu,
-> 
-> Thanks for adding the JH7100 support. I tried it on my Starlight board
-> and it seems to work fine except systemd complains about not being
-> able to set a 10min timeout on reboot:
-> systemd-shutdown[1]: Using hardware watchdog 'StarFive Watchdog',
-> version 0, device /dev/watchdog0
-> systemd-shutdown[1]: Failed to set timeout to 10min: Invalid argument
-> systemd-shutdown[1]: Syncing filesystems and block devices.
-> systemd-shutdown[1]: Sending SIGTERM to remaining processes...
-> 
-> The systemd runtime watchdog seems to work, so I guess this is just
-> because 10min is too long a timeout for the StarFive watchdog.
-> 
+> Well this case here actually should not happen in the first place.
 
-Correct, the driver would have to be implemented slightly differently
-for the watchdog subsystem to accept larger timeout values.
+"This should not happen in the first place" is how you end up with C
+APIs that have corner cases that lead to kernel oopses...
 
-> More comments below.
-> 
->> ---
->>   MAINTAINERS                     |   7 +
->>   drivers/watchdog/Kconfig        |   9 +
->>   drivers/watchdog/Makefile       |   2 +
->>   drivers/watchdog/starfive-wdt.c | 675 ++++++++++++++++++++++++++++++++
->>   4 files changed, 693 insertions(+)
->>   create mode 100644 drivers/watchdog/starfive-wdt.c
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 8d5bc223f305..721d0e4e8a0d 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19962,6 +19962,13 @@ S:     Supported
->>   F:     Documentation/devicetree/bindings/rng/starfive*
->>   F:     drivers/char/hw_random/jh7110-trng.c
->>
->> +STARFIVE WATCHDOG DRIVER
->> +M:     Xingyu Wu <xingyu.wu@starfivetech.com>
->> +M:     Samin Guo <samin.guo@starfivetech.com>
->> +S:     Supported
->> +F:     Documentation/devicetree/bindings/watchdog/starfive*
->> +F:     drivers/watchdog/starfive-wdt.c
->> +
->>   STATIC BRANCH/CALL
->>   M:     Peter Zijlstra <peterz@infradead.org>
->>   M:     Josh Poimboeuf <jpoimboe@kernel.org>
->> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
->> index f0872970daf9..9d825ffaf292 100644
->> --- a/drivers/watchdog/Kconfig
->> +++ b/drivers/watchdog/Kconfig
->> @@ -2090,6 +2090,15 @@ config UML_WATCHDOG
->>          tristate "UML watchdog"
->>          depends on UML || COMPILE_TEST
->>
->> +config STARFIVE_WATCHDOG
->> +       tristate "StarFive Watchdog support"
->> +       depends on ARCH_STARFIVE || COMPILE_TEST
->> +       select WATCHDOG_CORE
->> +       default ARCH_STARFIVE
->> +       help
->> +         Say Y here to support the watchdog of StarFive JH7100 and JH7110
->> +         SoC. This driver can also be built as a module if choose M.
-> 
-> This file seems to be sorted by architecture, so you probably want to
-> add something like this at the appropriate place
-> 
-> # RISC-V Architecture
-> 
-> config STARFIVE_WATCHDOG
-> ...
-> 
-> 
->>   #
->>   # ISA-based Watchdog Cards
->>   #
->> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
->> index 9cbf6580f16c..4c0bd377e92a 100644
->> --- a/drivers/watchdog/Makefile
->> +++ b/drivers/watchdog/Makefile
->> @@ -211,6 +211,8 @@ obj-$(CONFIG_WATCHDOG_SUN4V)                += sun4v_wdt.o
->>   # Xen
->>   obj-$(CONFIG_XEN_WDT) += xen_wdt.o
->>
->> +obj-$(CONFIG_STARFIVE_WATCHDOG) += starfive-wdt.o
-> 
-> Again please follow the layout of the file. Eg. something like this at
-> the appropriate place
-> 
-> # RISC-V Architecture
-> obj-$(CONFIG_STARFIVE_WATCHDOG) += starfive-wdt.o
-> 
->>   # Architecture Independent
->>   obj-$(CONFIG_BD957XMUF_WATCHDOG) += bd9576_wdt.o
->>   obj-$(CONFIG_DA9052_WATCHDOG) += da9052_wdt.o
->> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
->> new file mode 100644
->> index 000000000000..8ce9f985f068
->> --- /dev/null
->> +++ b/drivers/watchdog/starfive-wdt.c
->> @@ -0,0 +1,675 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Starfive Watchdog driver
->> + *
->> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
->> + */
->> +
->> +#include <linux/clk.h>
->> +#include <linux/iopoll.h>
->> +#include <linux/module.h>
->> +#include <linux/of_device.h>
->> +#include <linux/pm_runtime.h>
->> +#include <linux/reset.h>
->> +#include <linux/watchdog.h>
->> +
->> +/* JH7100 Watchdog register define */
->> +#define STARFIVE_WDT_JH7100_INTSTAUS   0x000   /* RO: [4]: Watchdog Interrupt status */
->> +#define STARFIVE_WDT_JH7100_CONTROL    0x104   /* RW: reset enable */
->> +#define STARFIVE_WDT_JH7100_LOAD       0x108   /* RW: Watchdog Load register */
->> +#define STARFIVE_WDT_JH7100_EN         0x110   /* RW: Watchdog Enable Register */
->> +#define STARFIVE_WDT_JH7100_RELOAD     0x114   /* RW: Write 0 or 1 to reload preset value */
->> +#define STARFIVE_WDT_JH7100_VALUE      0x118   /* RO: The current value for watchdog counter */
->> +#define STARFIVE_WDT_JH7100_INTCLR     0x120   /*
->> +                                                * RW: Watchdog Clear Interrupt Register
->> +                                                * [0]: Write 1 to clear interrupt
->> +                                                * [1]: 1 mean clearing and 0 mean complete
->> +                                                */
->> +#define STARFIVE_WDT_JH7100_LOCK       0x13c   /* RW: Lock Register, write 0x378f0765 to unlock */
->> +
->> +/* JH7110 Watchdog register define */
->> +#define STARFIVE_WDT_JH7110_LOAD       0x000   /* RW: Watchdog Load register */
->> +#define STARFIVE_WDT_JH7110_VALUE      0x004   /* RO: The current value for watchdog counter */
->> +#define STARFIVE_WDT_JH7110_CONTROL    0x008   /*
->> +                                                * RW:
->> +                                                * [0]: reset enable;
->> +                                                * [1]: int enable/wdt enable/reload counter;
->> +                                                * [31:2]: reserved.
->> +                                                */
->> +#define STARFIVE_WDT_JH7110_INTCLR     0x00c   /* WO: clear intterupt && reload the counter */
->> +#define STARFIVE_WDT_JH7110_IMS                0x014   /* RO: Enabled interrupt status from the counter */
->> +#define STARFIVE_WDT_JH7110_LOCK       0xc00   /* RW: Lock Register, write 0x1ACCE551 to unlock */
-> 
-> Since these register offsets are only used to fill in the
-> starfive_wdt_variant structures, consider just adding them directly
-> there with the comments.
-> 
+The idea with Rust abstractions is that it needs to be actually
+impossible to create memory safety problems for the user of the
+abstraction, you can't impose arbitrary constraints like "you must wait
+for all jobs to finish before destroying the scheduler"... it needs to
+be intrinsically safe.
 
-As maintainer, I prefer defines, even if only used oonce.
+> Jobs depend on their device, so as long as there are jobs there should 
+> also be a reference to the scheduler.
 
-Guenter
+These schedulers are created dynamically per userspace queue. The memory
+management and reference counting involved make it safe to destroy the
+scheduler even when behind the scenes hardware jobs are still running,
+as long as drm_sched itself doesn't crash on fences firing without a
+scheduler (which is what this patch fixes).
 
+This is the power of Rust: it forces you to architect your code in a way
+that you don't have complex high-level dependencies that span the entire
+driver and are difficult to prove hold. In my driver, you can kill a
+process and that destroys the drm_sched, closes all GEM objects,
+everything, even if the GPU is still running jobs from that process. The
+worst that can happen is that the GPU faults as in-use userspace buffers
+are unmapped out from under the running user job, but that's fine (GPU
+faults are recoverable). The actual firmware resources, queues, etc. in
+use are all kept alive until the commands finish executing (or fault,
+which is just an abnormal completion), even if the userspace process
+that owned them is long gone. I've tested this extensively by doing
+things like large-resolution glmark runs in a loop that get `kill -9`'d
+repeatedly, and it works very well! Tons of GPU faults but no firmware
+crashes, no oopses, nothing. And the firmware *will* crash irrecoverably
+if anything goes wrong with its shared memory structures, so that it
+doesn't is pretty good evidence that all this works!
+
+> What could be is that you have allocated a scheduler instance 
+> dynamically, but even then you should first tear down all entities and 
+> then the scheduler.
+
+This is about creating a safe Rust abstraction, so we can't impose
+requirements on users like that, the abstraction has to take care of it.
+Unfortunately, the jobs cannot depend on the scheduler at the
+abstraction level. I tried that (putting a reference counted reference
+to the scheduler in the job abstraction), but it doesn't work because a
+job completing can end up dropping the last reference to the scheduler,
+and then you end up trying to stop and clean up the scheduler from a
+callback called from the scheduler kthread itself, which deadlocks. We
+could throw those cleanups into a workqueue or something, but that's
+just adding bandages around the problem that the drm_sched interface
+today is just not safe without this patch...
+
+Right now, it is not possible to create a safe Rust abstraction for
+drm_sched without doing something like duplicating all job tracking in
+the abstraction, or the above backreference + deferred cleanup mess, or
+something equally silly. So let's just fix the C side please ^^
+
+So far, drm_sched is the only DRM API that has had such a fundamental
+API safety issue that I had to make a change like this to the C to make
+the Rust abstraction possible/reasonable... drm_sched has also been by
+far the hardest DRM component API to understand from a safety point of
+view, with the most inconsistent documentation about what the
+ownership/freeing rules are, and what objects need to outlive what other
+objects (I had to just read the code to figure most of this out). That's
+also one nice outcome of writing Rust abstractions: it forces us to make
+all these rules and invariants explicit, instead of leaving them as
+unwritten assumptions (almost nobody consistently documents this in C
+APIs...).
+
+If I got it right, anyone using the Rust drm_sched abstraction doesn't
+have to worry about this any more because if they do something that
+would oops with it, their code won't compile. But I need this patch to
+be able to make that guarantee...
+
+~~ Lina
