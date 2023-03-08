@@ -2,117 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EAB46AFCE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4126AFCE7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjCHCYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 21:24:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
+        id S229819AbjCHC0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 21:26:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjCHCYv (ORCPT
+        with ESMTP id S229574AbjCHC0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 21:24:51 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB64AA336C;
-        Tue,  7 Mar 2023 18:24:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678242289; x=1709778289;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=T/tjOgbeN2d/sg5f4egU/DU2gu++1HrMEaAOm2wBhdA=;
-  b=W7vdxRryzxuVThwNTLok4hAYJPfm/XK4oQk9xtmIO2wSV4DckGE0CuQL
-   dla6yhjzK6E8Zxap2F864qqlgzjNs+SKKjB+1NrK/CY0bge2VukBh3jFW
-   PiwajPj0CO/iLFloxLNLBdCZMNtLhHUUX5tbAVNaLYMOgpodwOR7/Iz5L
-   AgWMFqZXM9efQSJ7SrZxvUZMk6NF5iOnckJa8YFt4EztGhXFZqwhMjfiv
-   cGyKA6nWJp/ufBt0zNGsJj+NB4IL9BnUwH5Za4NZKiMH5FAIO6p/77w0j
-   Kc3WdwToE8srCCvGVQBbA0wth6UiYiLeV2nBAScHGxwF0LPhVppHxe2kA
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="337554171"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="337554171"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 18:24:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="676804666"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="676804666"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by orsmga002.jf.intel.com with ESMTP; 07 Mar 2023 18:24:46 -0800
-Message-ID: <e37f4226-b4ee-9a80-187c-ac13733d353c@linux.intel.com>
-Date:   Wed, 8 Mar 2023 10:23:48 +0800
+        Tue, 7 Mar 2023 21:26:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A967521D7;
+        Tue,  7 Mar 2023 18:26:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D80CB6153D;
+        Wed,  8 Mar 2023 02:26:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60965C433D2;
+        Wed,  8 Mar 2023 02:26:17 +0000 (UTC)
+Date:   Tue, 7 Mar 2023 21:26:15 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-media@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>
+Subject: Re: [BUG 6.3-rc1] Bad lock in ttm_bo_delayed_delete()
+Message-ID: <20230307212615.7a099103@gandalf.local.home>
+In-Reply-To: <20230307212223.7e49384a@gandalf.local.home>
+References: <20230307212223.7e49384a@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     baolu.lu@linux.intel.com, dmaengine@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>, iommu@lists.linux.dev
-Subject: Re: [PATCH v2 08/16] iommu: define and export
- iommu_access_remote_vm()
-Content-Language: en-US
-To:     Fenghua Yu <fenghua.yu@intel.com>, Vinod Koul <vkoul@kernel.org>,
-        Dave Jiang <dave.jiang@intel.com>
-References: <20230306163138.587484-1-fenghua.yu@intel.com>
- <20230306163138.587484-9-fenghua.yu@intel.com>
- <f7b0cbef-3d7d-e5aa-1971-fe230d0c80e1@linux.intel.com>
- <932aebd3-c655-3266-1acb-e41e8cbfb771@intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <932aebd3-c655-3266-1acb-e41e8cbfb771@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 1:55 AM, Fenghua Yu wrote:
-> Hi, Baolu,
-> 
-> On 3/6/23 17:41, Baolu Lu wrote:
->> On 3/7/23 12:31 AM, Fenghua Yu wrote:
->>> Define and export iommu_access_remote_vm() to allow IOMMU related
->>> drivers to access user address space by PASID.
->>>
->>> The IDXD driver would like to use it to write the user's completion
->>> record that the hardware device is not able to write to due to user
->>> page fault.
->>
->> I don't quite follow here. Isn't I/O page fault already supported?
-> 
-> The following patch 9 in this series explains in details why IDXD device 
-> cannot use page fault to write to user memory: 
-> https://lore.kernel.org/dmaengine/20230306163138.587484-10-fenghua.yu@intel.com/
-> 
-> "DSA supports page fault handling through PRS. However, the DMA engine
-> that's processing the descriptor is blocked until the PRS response is
-> received. Other workqueues sharing the engine are also blocked.
-> Page fault handing by the driver with PRS disabled can be used to
-> mitigate the stalling.
+On Tue, 7 Mar 2023 21:22:23 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Ah! Get your point now. Thanks for the explanation.
+> Looks like there was a lock possibly used after free. But as commit
+> 9bff18d13473a9fdf81d5158248472a9d8ecf2bd ("drm/ttm: use per BO cleanup
+> workers") changed a lot of this code, I figured it may be the culprit.
 
-> 
-> With PRS disabled while ATS remain enabled, DSA handles page faults on
-> a completion record by reporting an event in the event log. In this
-> instance, the descriptor is completed and the event log contains the
-> completion record address and the contents of the completion record."
-> 
-> That's why IDXD driver needs this IOMMU's helper 
-> iommu_access_remote_vm() to copy the completion record from event log 
-> buffer to user space.
-> 
-> Thanks.
-> 
-> -Fenghua
+If I bothered to look at the second warning after this one (I usually stop
+after the first), it appears to state there was a use after free issue.
 
-Best regards,
-baolu
+[  206.692285] ------------[ cut here ]------------
+[  206.706333] refcount_t: underflow; use-after-free.
+[  206.720577] WARNING: CPU: 0 PID: 332 at lib/refcount.c:28 refcount_warn_saturate+0xb6/0xfc
+[  206.735810] Modules linked in:
+[  206.749493] CPU: 0 PID: 332 Comm: kworker/0:13H Tainted: G        W          6.3.0-rc1-test-00001-ga98bd42762ed-dirty #965
+[  206.765833] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
+[  206.781767] Workqueue: ttm ttm_bo_delayed_delete
+[  206.796500] EIP: refcount_warn_saturate+0xb6/0xfc
+[  206.811121] Code: 68 50 1c 0d cf e8 66 b3 a9 ff 0f 0b 58 c9 c3 90 80 3d 57 c6 38 cf 00 75 8a c6 05 57 c6 38 cf 01 68 7c 1c 0d cf e8 46 b3 a9 ff <0f> 0b 59 c9 c3 80 3d 55 c6 38 cf 00 0f 85 67 ff ff ff c6 05 55 c6
+[  206.844560] EAX: 00000026 EBX: c2d5f150 ECX: c3ae5e40 EDX: 00000002
+[  206.862109] ESI: c2d5f0bc EDI: f6f91200 EBP: c3ae5f18 ESP: c3ae5f14
+[  206.878773] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010246
+[  206.895665] CR0: 80050033 CR2: ff9ff000 CR3: 0f512000 CR4: 00150ef0
+[  206.912303] Call Trace:
+[  206.927940]  ttm_bo_delayed_delete+0x8c/0x94
+[  206.944179]  process_one_work+0x21a/0x538
+[  206.960605]  worker_thread+0x146/0x398
+[  206.976839]  kthread+0xea/0x10c
+[  206.992696]  ? process_one_work+0x538/0x538
+[  207.008827]  ? kthread_complete_and_exit+0x1c/0x1c
+[  207.025150]  ret_from_fork+0x1c/0x28
+[  207.041307] irq event stamp: 4219
+[  207.056883] hardirqs last  enabled at (4219): [<ced2a039>] _raw_spin_unlock_irqrestore+0x2d/0x58
+[  207.074298] hardirqs last disabled at (4218): [<ce1d3a65>] kvfree_call_rcu+0x155/0x2ec
+[  207.091461] softirqs last  enabled at (3570): [<ced2b113>] __do_softirq+0x2f3/0x48b
+[  207.107979] softirqs last disabled at (3565): [<ce0c84e9>] call_on_stack+0x45/0x4c
+[  207.123827] ---[ end trace 0000000000000000 ]---
+
+
+-- Steve
