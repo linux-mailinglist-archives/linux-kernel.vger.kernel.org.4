@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BB16B0853
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2EA96B0854
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjCHNTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:19:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
+        id S230522AbjCHNTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:19:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231435AbjCHNS2 (ORCPT
+        with ESMTP id S231491AbjCHNSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:18:28 -0500
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9558160A81
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 05:15:07 -0800 (PST)
-Received: by mail-wm1-x34a.google.com with SMTP id m31-20020a05600c3b1f00b003e9de8c95easo5861816wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 05:15:07 -0800 (PST)
+        Wed, 8 Mar 2023 08:18:31 -0500
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3F1CDA28
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 05:15:10 -0800 (PST)
+Received: by mail-wm1-x349.google.com with SMTP id l31-20020a05600c1d1f00b003e8626cdd42so5858372wms.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 05:15:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678281305;
+        d=google.com; s=20210112; t=1678281308;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=geKZ0b9prEjt0Vyx6WHp2kYThqOYNTypo8c4MCHr/Ug=;
-        b=htYNEPtk6BdX8z3OZd8E1kcZH+GqH/PCqaiMJMhmag7qj17psAkY2Q4aOOaLwjtnKA
-         ICKCRsPwtxEk2RNuOTIBzhMA1Mt+gL91pBWSMnnb/hZhK5eR+5irRQ394J1SuHaRRivX
-         2RniGgFV5szp0oEbB1EmyNEweQaK2vHlHyMQi6pVlQP0lBxP53m0WvQheg9e6AIIyv7g
-         9ZrVgv/xplCIwomQ2sIwvZW3P6V8VMF0JxHIMBX4cJjdMi4mtmY+z3fdEn1+9Oyn1kcz
-         X4HAN3S6l/Y85mtD4ZMZic7/xgPPDaIN58ioUIRx5QMh3VK14D+BufUr1a0h5R2Otf/2
-         31sg==
+        bh=IWv04zwKPneNYxLs1BbPEMCnf2deIeuFiHgPUvk4fKo=;
+        b=ncgPRVcobR0NbnPhgiLgKATtFzK1Pwszpc66U8K4etCXhJRBDORnkwokA8SHqOPvpp
+         R6wmTfiSI5L8MeNQxGP4csKkyoUJB42k3+SFCx4CC7n4AG/8Uv/9V6+NvIgciVVz2xjZ
+         QBoaRNYoNF4vj4yq9vOhI9vcspOEOw3utNKB9hKAfrMxApTVGdUVJQ2CWvw5AbicENuR
+         wqigJLtZqufisVbuPvB3yhEeIN71AZrj1By87XjShYV6sVaXFYx7xI+bOrDyT50aPIMe
+         gJXb4llltVotqkXjEEcozWwRj4C1oUOFJdz4MVjdsHPgOgTmO7SnGmZ4zhsJfudpgLPC
+         g2Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678281305;
+        d=1e100.net; s=20210112; t=1678281308;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=geKZ0b9prEjt0Vyx6WHp2kYThqOYNTypo8c4MCHr/Ug=;
-        b=38X34LkOqMktEvrzfnicyJ0vwLaqDgO4CGb3/QhzWOZmlOqB8lAksx687/w/XEtUTy
-         yvTTksGWcA+LVJuXTNpLCmKLQuqxOl6BqajatfTs7TM9j5Tu6+CaX3Sjbacv6vW9dL2Y
-         RXUqOh3JGwf3PXdPjfr5UAr++dUKOVMpxwMhgFL14cieBTGYgqvGytdn4yr9PmfTgGiL
-         /oPEZ2HiDih8gcV6wasscqB/SX5AXse4kQYYNizNRf/FczDH1HHAqKgFLM4Kz7vArKb/
-         n+fWgvPB9xOm+FGGrhRenrxLqsAoJQnSb8Nw1y5LvyMBhEt9rPsaBUk1Y6J20jtwEr5u
-         X1zQ==
-X-Gm-Message-State: AO0yUKWzyzyoJfZVQMVQZOJJg8LRkjTgc5u2h69D7dT2SVkxExLWseyW
-        QaFLJUKHtrGSWZb71mJ998Ms9d7YYtGB6F0JfQ==
-X-Google-Smtp-Source: AK7set/d3HjzTgsMqD9lr8qdZINBXsOe+YOvLtFpbnHdwJj+9iGVz8gC4oUpjeqi7T8S/Lx4gTwbMfv8Y/THdYqPZw==
+        bh=IWv04zwKPneNYxLs1BbPEMCnf2deIeuFiHgPUvk4fKo=;
+        b=cvdPTp9deYfdGxtM9Y7A/VMgWULzPt1yvO8j6r7pMpk7MorUaYk1Bksb+suv8FeO96
+         a7/bVKa1RqiHm/c3WXcfVFKbIgEG6k4tFCPYyrR+ZOY6YiMBtEfra5kFkWMwDQceKyQw
+         JbaAOzovLct7D8T2DA2AF11WYF+X1IlZ8ZSmqkPFagrdRqdo6X7ctmf0+bQcDb8PGWvu
+         WtvCHkiYiTQOO1MNDDyS4DzNZh4x/AbHeRsU0j36Z3CfT7nN0isyp0oFKfYiZS5Azwhf
+         nuB1hIjKZXv9A6WtxPf4kewwbCxZZGh1SWKTECYvMsy0812eBKGUtZpFiL6Psb56haN6
+         OOkw==
+X-Gm-Message-State: AO0yUKVjPUorjEzmLBQQh1M7xtP0agLh29P1rYvJu2HdAia6MT3S/y5c
+        mLpLGnPFw0odh8e5Zh7nhp/u1LtWegPRfZOx2A==
+X-Google-Smtp-Source: AK7set9QjCf1dVDHaqZayVk6eOkGMNkTLTm1LzJGi+y5o7tzPQsmRplexqsVlYqaXv6zbGcUQGhpw6GJf2SM8kpEtQ==
 X-Received: from peternewman-vh.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:30cc])
- (user=peternewman job=sendgmr) by 2002:a5d:608a:0:b0:2c8:2cbc:7a2e with SMTP
- id w10-20020a5d608a000000b002c82cbc7a2emr3545133wrt.4.1678281305672; Wed, 08
- Mar 2023 05:15:05 -0800 (PST)
-Date:   Wed,  8 Mar 2023 14:14:50 +0100
+ (user=peternewman job=sendgmr) by 2002:a05:600c:54ce:b0:3df:97a1:75e0 with
+ SMTP id iw14-20020a05600c54ce00b003df97a175e0mr3872239wmb.2.1678281308150;
+ Wed, 08 Mar 2023 05:15:08 -0800 (PST)
+Date:   Wed,  8 Mar 2023 14:14:51 +0100
 In-Reply-To: <20230308131452.383914-1-peternewman@google.com>
 Mime-Version: 1.0
 References: <20230308131452.383914-1-peternewman@google.com>
 X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
-Message-ID: <20230308131452.383914-2-peternewman@google.com>
-Subject: [PATCH v4 1/3] x86/resctrl: Factor rdtgroup lock for multi-file ops
+Message-ID: <20230308131452.383914-3-peternewman@google.com>
+Subject: [PATCH v4 2/3] x86/resctrl: Parameterize rdt_move_group_tasks() task matching
 From:   Peter Newman <peternewman@google.com>
 To:     reinette.chatre@intel.com, fenghua.yu@intel.com
 Cc:     Babu.Moger@amd.com, bp@alien8.de, dave.hansen@linux.intel.com,
@@ -72,80 +72,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rdtgroup_kn_lock_live() can only release a kernfs reference for a single
-file before waiting on the rdtgroup_mutex, limiting its usefulness for
-operations on multiple files, such as rename.
+Allow rdt_move_group_tasks() to be used for new group-scope operations.
+This function is currently only used to implement rmdir on a group or
+unmounting resctrlfs.
 
-Factor the work needed to respectively break and unbreak active
-protection on an individual file into rdtgroup_kn_{get,put}().
+Callers now provide a filtering function to indicate which tasks should
+be moved.
 
 No functional change.
 
 Signed-off-by: Peter Newman <peternewman@google.com>
 ---
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 35 ++++++++++++++++----------
- 1 file changed, 22 insertions(+), 13 deletions(-)
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 34 +++++++++++++++++++-------
+ 1 file changed, 25 insertions(+), 9 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index 5993da21d822..c3fb525d52e9 100644
+index c3fb525d52e9..84af23a29612 100644
 --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
 +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -2028,6 +2028,26 @@ static struct rdtgroup *kernfs_to_rdtgroup(struct kernfs_node *kn)
+@@ -2393,22 +2393,29 @@ static int reset_all_ctrls(struct rdt_resource *r)
+ }
+ 
+ /*
+- * Move tasks from one to the other group. If @from is NULL, then all tasks
+- * in the systems are moved unconditionally (used for teardown).
++ * Move tasks from one to the other group.
++ *
++ * @from:		passed unmodified to task_match_fn() for each task
++ * @to:			group providing new config values for matching tasks
++ * @task_match_fn:	callback returning true when a task requires update
++ * @mask:		output-parameter indicating set of CPUs impacted by this
++ *			operation
+  *
+  * If @mask is not NULL the cpus on which moved tasks are running are set
+  * in that mask so the update smp function call is restricted to affected
+  * cpus.
+  */
+-static void rdt_move_group_tasks(struct rdtgroup *from, struct rdtgroup *to,
+-				 struct cpumask *mask)
++static void rdt_move_group_tasks(struct rdtgroup *from,
++				 struct rdtgroup *to,
++				 struct cpumask *mask,
++				 bool task_match_fn(struct task_struct *,
++						    struct rdtgroup *))
+ {
+ 	struct task_struct *p, *t;
+ 
+ 	read_lock(&tasklist_lock);
+ 	for_each_process_thread(p, t) {
+-		if (!from || is_closid_match(t, from) ||
+-		    is_rmid_match(t, from)) {
++		if (task_match_fn(t, from)) {
+ 			WRITE_ONCE(t->closid, to->closid);
+ 			WRITE_ONCE(t->rmid, to->mon.rmid);
+ 
+@@ -2451,6 +2458,15 @@ static void free_all_child_rdtgrp(struct rdtgroup *rdtgrp)
  	}
  }
  
-+static void rdtgroup_kn_get(struct rdtgroup *rdtgrp, struct kernfs_node *kn)
++/*
++ * If @from is NULL, then all tasks in the systems are moved unconditionally
++ * (used for teardown).
++ */
++static bool rmdir_match(struct task_struct *t, struct rdtgroup *from)
 +{
-+	atomic_inc(&rdtgrp->waitcount);
-+	kernfs_break_active_protection(kn);
++	return !from || is_closid_match(t, from) || is_rmid_match(t, from);
 +}
 +
-+static void rdtgroup_kn_put(struct rdtgroup *rdtgrp, struct kernfs_node *kn)
-+{
-+	if (atomic_dec_and_test(&rdtgrp->waitcount) &&
-+	    (rdtgrp->flags & RDT_DELETED)) {
-+		if (rdtgrp->mode == RDT_MODE_PSEUDO_LOCKSETUP ||
-+		    rdtgrp->mode == RDT_MODE_PSEUDO_LOCKED)
-+			rdtgroup_pseudo_lock_remove(rdtgrp);
-+		kernfs_unbreak_active_protection(kn);
-+		rdtgroup_remove(rdtgrp);
-+	} else {
-+		kernfs_unbreak_active_protection(kn);
-+	}
-+}
-+
- struct rdtgroup *rdtgroup_kn_lock_live(struct kernfs_node *kn)
- {
- 	struct rdtgroup *rdtgrp = kernfs_to_rdtgroup(kn);
-@@ -2035,8 +2055,7 @@ struct rdtgroup *rdtgroup_kn_lock_live(struct kernfs_node *kn)
- 	if (!rdtgrp)
- 		return NULL;
+ /*
+  * Forcibly remove all of subdirectories under root.
+  */
+@@ -2459,7 +2475,7 @@ static void rmdir_all_sub(void)
+ 	struct rdtgroup *rdtgrp, *tmp;
  
--	atomic_inc(&rdtgrp->waitcount);
--	kernfs_break_active_protection(kn);
-+	rdtgroup_kn_get(rdtgrp, kn);
+ 	/* Move all tasks to the default resource group */
+-	rdt_move_group_tasks(NULL, &rdtgroup_default, NULL);
++	rdt_move_group_tasks(NULL, &rdtgroup_default, NULL, rmdir_match);
  
- 	mutex_lock(&rdtgroup_mutex);
+ 	list_for_each_entry_safe(rdtgrp, tmp, &rdt_all_groups, rdtgroup_list) {
+ 		/* Free any child rmids */
+@@ -3124,7 +3140,7 @@ static int rdtgroup_rmdir_mon(struct rdtgroup *rdtgrp, cpumask_var_t tmpmask)
+ 	int cpu;
  
-@@ -2055,17 +2074,7 @@ void rdtgroup_kn_unlock(struct kernfs_node *kn)
- 		return;
+ 	/* Give any tasks back to the parent group */
+-	rdt_move_group_tasks(rdtgrp, prdtgrp, tmpmask);
++	rdt_move_group_tasks(rdtgrp, prdtgrp, tmpmask, rmdir_match);
  
- 	mutex_unlock(&rdtgroup_mutex);
--
--	if (atomic_dec_and_test(&rdtgrp->waitcount) &&
--	    (rdtgrp->flags & RDT_DELETED)) {
--		if (rdtgrp->mode == RDT_MODE_PSEUDO_LOCKSETUP ||
--		    rdtgrp->mode == RDT_MODE_PSEUDO_LOCKED)
--			rdtgroup_pseudo_lock_remove(rdtgrp);
--		kernfs_unbreak_active_protection(kn);
--		rdtgroup_remove(rdtgrp);
--	} else {
--		kernfs_unbreak_active_protection(kn);
--	}
-+	rdtgroup_kn_put(rdtgrp, kn);
- }
+ 	/* Update per cpu rmid of the moved CPUs first */
+ 	for_each_cpu(cpu, &rdtgrp->cpu_mask)
+@@ -3164,7 +3180,7 @@ static int rdtgroup_rmdir_ctrl(struct rdtgroup *rdtgrp, cpumask_var_t tmpmask)
+ 	int cpu;
  
- static int mkdir_mondata_all(struct kernfs_node *parent_kn,
+ 	/* Give any tasks back to the default group */
+-	rdt_move_group_tasks(rdtgrp, &rdtgroup_default, tmpmask);
++	rdt_move_group_tasks(rdtgrp, &rdtgroup_default, tmpmask, rmdir_match);
+ 
+ 	/* Give any CPUs back to the default group */
+ 	cpumask_or(&rdtgroup_default.cpu_mask,
 -- 
 2.40.0.rc0.216.gc4246ad0f0-goog
 
