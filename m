@@ -2,166 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4406B0BFC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DC46B0C09
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjCHO5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:57:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
+        id S231281AbjCHPBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:01:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbjCHO5J (ORCPT
+        with ESMTP id S231366AbjCHPB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:57:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935348C95F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:56:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678287383;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/vOaxlqRdn+odbXW5oy3q9pXbqCmxAheTjAjGTcvnQk=;
-        b=g0MogK459pe+hLVoY1Tb3xfcO19sn0gvNTHpDSSo1E8ubdAY9EEmj4RWzTF71+XiPWFHQ4
-        /waDRbE5iM129VI4ZDexe/A+Jyriw0AiWKU4eyxTSrWk9LBUvky49bHh7KTeUauah5RR8Q
-        B2w1iRoWkZwKUjVlpgmHOKAKGEagtEk=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-391-ERaPYjPmNiS_XkJeC4WCsA-1; Wed, 08 Mar 2023 09:56:22 -0500
-X-MC-Unique: ERaPYjPmNiS_XkJeC4WCsA-1
-Received: by mail-ed1-f70.google.com with SMTP id z14-20020a05640235ce00b004e07ddbc2f8so15497660edc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 06:56:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678287381;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/vOaxlqRdn+odbXW5oy3q9pXbqCmxAheTjAjGTcvnQk=;
-        b=2jidwxKGpBxXfDPT6HstkR5uTSP/hfqqjFqlbsWpVhtp7+RI7rwO8O8swIm7lAFfZ6
-         0WzMpVQNrI9Wq8xEsn/sfkGdI7muVrwWa3VL9WluuDQmU8N8z+0UEfn6rVNUXdnBRUKg
-         ++6UNeKcmmsFt0XV7600HmkYhQ5ZmF2d63gPnNFny+AFVqaT5ENGb8fYPIR7m4CqqZbC
-         SU6ZjJR+gxYMKmnNoP32iLcae9Y5tKNnRdSaZrHG9jfAsrOjnnKYUEpBLRI70EYGp7oS
-         09pTw0bBDc0ovaKKD6LpqJCgo+jhVKWehQVBT6WmaOfDIyQQ8bmlG7nM3Uxjmt5xw3J1
-         Se0Q==
-X-Gm-Message-State: AO0yUKW0Og3DLOujEZNhKsIdP0wi9zigg6F2IJem+38EUvtIQ6pKwkO9
-        KdJ99jzWPrQUOoP+ho0ZhLHktpXdf317PuSLK73qRbDGw65426/Lz5Fme7dlo+hIT3l5na/cE4K
-        2ealI7XGxRF/reADp3KwYfBZt+JTGr0GP
-X-Received: by 2002:a17:907:868c:b0:8f4:1d98:af83 with SMTP id qa12-20020a170907868c00b008f41d98af83mr22729553ejc.74.1678287381436;
-        Wed, 08 Mar 2023 06:56:21 -0800 (PST)
-X-Google-Smtp-Source: AK7set/HQeEE03XhfoK45BPdCtFnKikYSWuVuBem2QH++7XdPiSQ3aOZxmpLPP/KnFknvx8Vc4AJ5Q==
-X-Received: by 2002:a17:907:868c:b0:8f4:1d98:af83 with SMTP id qa12-20020a170907868c00b008f41d98af83mr22729537ejc.74.1678287381202;
-        Wed, 08 Mar 2023 06:56:21 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id rk9-20020a170907214900b008d2d2d617ccsm7720188ejb.17.2023.03.08.06.56.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 06:56:20 -0800 (PST)
-Message-ID: <7cbefa41-8c79-8280-3d87-3b0b13857aba@redhat.com>
-Date:   Wed, 8 Mar 2023 15:56:19 +0100
+        Wed, 8 Mar 2023 10:01:27 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851FD8F700;
+        Wed,  8 Mar 2023 07:01:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ZcqLiNI8tsMD9rkL3+uHujSNC9x0I9GPgnZn62DqTVw=; b=LtSDT2NWrnCRGZnmm3NrC7ewy/
+        nxE0ZpLvmZBuO0IMBSr82XdqANQ31xATgitSpj0ki0LaSc9kM7VXDh1v2tpm+D+ITV8I1A2kc9BPY
+        JmPRPHE0GaBgyrOCqdA44TvfoF9FAp93+zFwg6UQLdzEDSQQlRvgkZ90W+fOKbniNgzAbpXepliZh
+        9nAY3sNftTUclPe/AGDLKJdoxYvn/1vQVpxohqVhCbyI2DT3KI/2RvaPMFo+igTxlrC1x3NFpI5qr
+        4duvklmrQEPk3Nc42qDFWMrDn1+AKsWNVqxKMiMOmwh+746l7PagiKiOTdFPtK8W7sbLFn0P3eB/l
+        6fReCJZw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:47096)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pZvI3-0002np-Gx; Wed, 08 Mar 2023 15:01:15 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pZvHv-0002fx-Gu; Wed, 08 Mar 2023 15:01:07 +0000
+Date:   Wed, 8 Mar 2023 15:01:07 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Re: [PATCH net-next v12 08/18] net: ethernet: mtk_eth_soc: fix
+ 1000Base-X and 2500Base-X modes
+Message-ID: <ZAijM91F18lWC80+@shell.armlinux.org.uk>
+References: <cover.1678201958.git.daniel@makrotopia.org>
+ <fd5c7ea79a7f84caac7d0b64b39fe5c4043edfa8.1678201958.git.daniel@makrotopia.org>
+ <ZAhzDDjZ8+gxyo3V@shell.armlinux.org.uk>
+ <ZAh7hA4JuJm1b2M6@makrotopia.org>
+ <ZAiCh8wkdTBT+6Id@shell.armlinux.org.uk>
+ <ZAiFOTRQI36nGo+w@makrotopia.org>
+ <ZAiJqvzcUob2Aafq@shell.armlinux.org.uk>
+ <20230308134642.cdxqw4lxtlgfsl4g@skbuf>
+ <ZAiXvNT8EzHTmFPh@shell.armlinux.org.uk>
+ <ZAiciK5fElvLXYQ9@makrotopia.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: [GIT PULL] platform-drivers-x86 for 6.3-2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Gross <mgross@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org
-Content-Language: en-US, nl
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAiciK5fElvLXYQ9@makrotopia.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Wed, Mar 08, 2023 at 02:32:40PM +0000, Daniel Golle wrote:
+> In general it sound reasonable. We may need more SFP qurik bits to
+> indicate presence of a PHY on SFP modules which do not expose that
+> PHY via i2c-mdio or otherwise let the host know about it's presence.
 
-Here is the first round of fixes for platform-drivers-x86 for 6.3.
+That's a whole load of fun - some modules where the PHY is inaccessible
+will be using 1000base-X, others will be using SGMII. So yes, its
+likely that we may need quirks for these. We don't have quirks yet
+because you're the first to suggest there's a problem.
 
-Nothing special to report just various small fixes.
+> For my TP-LINK TL-SM410U 2500Base-T SFP this unfortunately seems to
+> be the case, and I assume it's actually like that for most
+> 2500Base-T as well as xPON SFPs... (xPON SFPs are usually managed
+> via high-level protocols, even Web-UI is common there. They don't
+> tell you much about them via I2C, I suppose to get them to work in
+> as many SFP host devices as possible without any software changes).
 
-Regards,
+xPON SFPs are a whole different ball game. For some, they auto-detect
+while booting and try 2500base-X or 1000base-X to see which will sync
+and if not they try the other. Other xPON SFPs run their host interface
+at a speed determined by the configuration set by the remote end. Other
+xPON SFPs may do something entirely different.
 
-Hans
+In many cases, their EEPROM is a full of errors - such as advertising
+that they're 1.2 or 1.3 Gbd while operating in 2500base-X mode.
 
+They do weird stuff with their status pins as well, for example, some
+use the RX_LOS pin as a uart - which is a problem if it's e.g. tied
+from the cage to a switch that uses the pin to gate the link-up
+indication without any software control of that!
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+With xPON SFPs, it's just a total minefield, which lots of SFF MSA
+violations all over the place. They're essentially a law to themselves
+(this is exactly why we have the quirks infrastructure.)
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+> FYI:
+> TP-LINK TL-SM410U 2500Base-T module:
+> 
+> sfp EE: 00000000: 03 04 07 00 00 00 00 00 00 40 00 01 1f 00 00 00  .........@......
+> sfp EE: 00000010: 00 00 00 00 54 50 2d 4c 49 4e 4b 20 20 20 20 20  ....TP-LINK     
+> sfp EE: 00000020: 20 20 20 20 00 30 b5 c2 54 4c 2d 53 4d 34 31 30      .0..TL-SM410
+> sfp EE: 00000030: 55 20 20 20 20 20 20 20 32 2e 30 20 00 00 00 1b  U       2.0 ....
+> sfp EE: 00000040: 00 08 01 00 80 ff ff ff 40 3d f0 0d c0 ff ff ff  ........@=......
+> sfp EE: 00000050: c8 39 7a 08 c0 ff ff ff 50 3d f0 0d c0 ff ff ff  .9z.....P=......
+> sfp sfp2: module TP-LINK          TL-SM410U        rev 2.0  sn 12260M4001782    dc 220622  
 
-are available in the Git repository at:
+I'm guessing this is a module with a checksum problem...
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.3-2
+> And this is the ATS SFP-GE-T 10/100/1000M copper module doing
+> rate-adaptation to 1000Base-X:
+> 
+> sfp sfp1: EEPROM extended structure checksum failure: 0xb0 != 0xaf
 
-for you to fetch changes up to 1a0009abfa7893b9cfcd3884658af1cbee6b26ce:
+Given how close that is, it looks like they used the wrong algorithm.
 
-  platform: mellanox: mlx-platform: Initialize shift variable to 0 (2023-03-07 12:08:30 +0100)
+> sfp EE: 00000000: 03 04 07 00 00 00 02 12 00 01 01 01 0c 00 03 00  ................
+> sfp EE: 00000010: 00 00 00 00 4f 45 4d 20 20 20 20 20 20 20 20 20  ....OEM         
+> sfp EE: 00000020: 20 20 20 20 00 00 90 65 53 46 50 2d 47 45 2d 54      ...eSFP-GE-T
+> sfp EE: 00000030: 20 20 20 20 00 00 00 00 43 20 20 20 00 00 00 f0      ....C   ....
+> sfp EE: 00000040: 00 12 00 00 32 31 30 37 31 30 41 30 30 31 32 37  ....210710A00127
+> sfp EE: 00000050: 33 39 00 00 32 31 30 37 31 30 20 20 60 00 01 af  39..210710  `...
+> sfp sfp1: module OEM              SFP-GE-T     rev C    sn  dc 
 
-----------------------------------------------------------------
-platform-drivers-x86 for v6.3-2
+Welcome to the wonderful world of horribly broken SFPs.
 
-A small set of assorted bug and build/warning fixes for 6.3.
+Do we know what form of rate adaption this module needs on the
+transmit path? Does it require the host to pace itself to the media
+speed (which I suspect will be unreadable if the PHY isn't accessible)
+or will it send pause frames?
 
-The following is an automated git shortlog grouped by driver:
+It would be nice to add these to my database - please send me the
+output of ethtool -m $iface raw on > foo.bin for each module.
 
-ISST:
- -  Fix kernel documentation warnings
- -  Increase range of valid mail box commands
+> That one already needs quirks to even work at all as TX-FAULT is not
+> reported properly by the module, see
+> 
+> https://github.com/dangowrt/linux/commit/2c694bd494583f08858fabca97cfdc79de8ba089
 
-dell-ddv:
- -  Fix temperature scaling
- -  Fix cache invalidation on resume
+I'm guessing that's not on a kernel version that has:
 
-int3472:
- -  Add GPIOs to Surface Go 3 Board data
+73472c830eae net: sfp: add support for HALNy GPON SFP
+5029be761161 net: sfp: move Huawei MA5671A fixup
+275416754e9a net: sfp: move Alcatel Lucent 3FE46541AA fixup
+23571c7b9643 net: sfp: move quirk handling into sfp.c
+8475c4b70b04 net: sfp: re-implement soft state polling setup
 
-platform:
- -  mellanox: mlx-platform: Initialize shift variable to 0
- -  x86: MLX_PLATFORM: select REGMAP instead of depending on it
- -  mellanox: select REGMAP instead of depending on it
+which reworks how we deal with the soft/hard state signals.
 
-platform/x86/amd:
- -  pmc: remove CONFIG_SUSPEND checks
+I think the problem space is growing, and I fear that if we try to
+address all these issues in one go, we're going to end up with way
+too much to deal with in one go (which means poor reviews etc.)
 
-platform/x86/intel/tpmi:
- -  Fix double free reported by Smatch
+Can we try to concentrate on fixing one problem at a time, rather
+than throwing a whole load of problems into the mix?
 
-----------------------------------------------------------------
-Armin Wolf (2):
-      platform/x86: dell-ddv: Fix cache invalidation on resume
-      platform/x86: dell-ddv: Fix temperature scaling
+Thanks.
 
-Arnd Bergmann (1):
-      platform/x86/amd: pmc: remove CONFIG_SUSPEND checks
-
-Daniel Scally (1):
-      platform/x86: int3472: Add GPIOs to Surface Go 3 Board data
-
-Hans de Goede (1):
-      platform: mellanox: mlx-platform: Initialize shift variable to 0
-
-Randy Dunlap (2):
-      platform: mellanox: select REGMAP instead of depending on it
-      platform: x86: MLX_PLATFORM: select REGMAP instead of depending on it
-
-Srinivas Pandruvada (3):
-      platform/x86: ISST: Increase range of valid mail box commands
-      platform/x86/intel/tpmi: Fix double free reported by Smatch
-      platform/x86: ISST: Fix kernel documentation warnings
-
- drivers/platform/mellanox/Kconfig                  |  9 +++----
- drivers/platform/x86/Kconfig                       |  3 ++-
- drivers/platform/x86/amd/pmc.c                     | 30 +++++++---------------
- drivers/platform/x86/dell/dell-wmi-ddv.c           | 12 ++++++---
- .../x86/intel/int3472/tps68470_board_data.c        |  5 ++--
- .../x86/intel/speed_select_if/isst_if_common.c     |  5 ++--
- .../x86/intel/speed_select_if/isst_if_common.h     |  1 +
- drivers/platform/x86/intel/tpmi.c                  | 14 +++++-----
- drivers/platform/x86/mlx-platform.c                |  2 +-
- 9 files changed, 39 insertions(+), 42 deletions(-)
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
