@@ -2,246 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7906B0309
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EB16B030D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjCHJi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 04:38:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
+        id S230057AbjCHJim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 04:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjCHJiW (ORCPT
+        with ESMTP id S230030AbjCHJij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 04:38:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C6C5C138;
-        Wed,  8 Mar 2023 01:38:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 8 Mar 2023 04:38:39 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5E981CE5;
+        Wed,  8 Mar 2023 01:38:35 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 260CE61714;
-        Wed,  8 Mar 2023 09:38:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BEA1C4339B;
-        Wed,  8 Mar 2023 09:38:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678268300;
-        bh=ejHpkDT2inDJQSoJM6Sjz5eQ33tTqYdoLD5h1ZsU9iA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hylhuCjbIh3L4I/rCThYp4XIIWzTmmdyMbrIgNRRuTfmmK3f+SNtlYfhlstvAgVzn
-         yfDAlbE0RCpQDvs7VGf2gkTte6bOYIs4YUExRyTg/8+U0OsMhSeMWx2agi06/E2aou
-         S0f0aJyg463f9ErozEMBE9i8geaoeMHokpYXxSK/NmtJEnaiP1FPMvjBh5SF6IPOKU
-         YLepAVB9wbN6MuZpxrVd7Ypt9nTAacY53jNDd0wGow+O5Qiv4Ay7WuHq3SHrthGDI2
-         9MdIV4z4rEXA1TeohRE2XjpAvdsIs0BWMn7nq/j8XUO0uQmbCku3Txt+Jp6MEovipg
-         a4c2N3GEf27mA==
-Received: by mail-lj1-f172.google.com with SMTP id a32so15921021ljr.9;
-        Wed, 08 Mar 2023 01:38:20 -0800 (PST)
-X-Gm-Message-State: AO0yUKWl1a/RlzmmnFeJmBumRXXhn8jPM/tz8nQBHRDl+X91QSPZbyVB
-        8csYMCvmcfRSdDj184RcGyajm4xNgeGsC2NV4w0=
-X-Google-Smtp-Source: AK7set9Wbo2nCta5ECrJ+N/eh5JFMLCTlz5GO8sy8tkd35vILrIAEvVxOvAAD3TghKlsMXoVsQzgsA4gL8c6ev0vDF4=
-X-Received: by 2002:a2e:b8d2:0:b0:295:b0cd:522 with SMTP id
- s18-20020a2eb8d2000000b00295b0cd0522mr5604517ljp.2.1678268298549; Wed, 08 Mar
- 2023 01:38:18 -0800 (PST)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 041E521A01;
+        Wed,  8 Mar 2023 09:38:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1678268314; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MFjwcD4Vp6zee18l/hOx+s0LnKajCjdYROBFnAJWXn8=;
+        b=06nbHXetL2+U8ybThhgCxE9ADDEQxGB6srtfy+202zHewUt8bM8MU5VEHPnXZ4smi9oT1S
+        iYej2uLtwQJCxgR88k1yaZzudj6hNLi07Z+UgDhAjlUvR7L/k15+3ZstMeUDHXYa5FcUGP
+        wbCZ8Mriw3df69T874Cpvw9HxMFC/DY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1678268314;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MFjwcD4Vp6zee18l/hOx+s0LnKajCjdYROBFnAJWXn8=;
+        b=kxDkmpn61fYNatyGv6yEFn5yAb0Rg/+7q7eImlcAJFmcc6VukSeH/EFIdG/DC9vdH3VHqq
+        pjbJeTCaTJfs1WBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D28331391B;
+        Wed,  8 Mar 2023 09:38:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SItDMplXCGQnQAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 08 Mar 2023 09:38:33 +0000
+Message-ID: <cf8135bc-a255-1f02-28df-dec42342fb71@suse.de>
+Date:   Wed, 8 Mar 2023 10:38:33 +0100
 MIME-Version: 1.0
-References: <cover.1671098103.git.baskov@ispras.ru> <760c19466ac26c09edb76e64d8c4812ff4aa7365.1671098103.git.baskov@ispras.ru>
-In-Reply-To: <760c19466ac26c09edb76e64d8c4812ff4aa7365.1671098103.git.baskov@ispras.ru>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 8 Mar 2023 10:38:07 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFtEZtso0Gcuj-PhGiK1QRhp9SDFLwouX3qdgSha=ACjA@mail.gmail.com>
-Message-ID: <CAMj1kXFtEZtso0Gcuj-PhGiK1QRhp9SDFLwouX3qdgSha=ACjA@mail.gmail.com>
-Subject: Re: [PATCH v4 08/26] x86/boot: Map memory explicitly
-To:     Evgeniy Baskov <baskov@ispras.ru>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] MAINTAINERS: orphan SIS FRAMEBUFFER DRIVER
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Thomas Winischhofer <thomas@winischhofer.net>,
+        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230308071921.10963-1-lukas.bulwahn@gmail.com>
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230308071921.10963-1-lukas.bulwahn@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------Fn5fYfi1pyf0sw01AuM9f1QD"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 at 13:38, Evgeniy Baskov <baskov@ispras.ru> wrote:
->
-> Implicit mappings hide possible memory errors, e.g. allocations for
-> ACPI tables were not included in boot page table size.
->
-> Replace all implicit mappings from page fault handler with
-> explicit mappings.
->
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------Fn5fYfi1pyf0sw01AuM9f1QD
+Content-Type: multipart/mixed; boundary="------------DpXEUfGRdJxUN3aO8OlXX3ln";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+ Thomas Winischhofer <thomas@winischhofer.net>, Helge Deller <deller@gmx.de>,
+ linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <cf8135bc-a255-1f02-28df-dec42342fb71@suse.de>
+Subject: Re: [PATCH] MAINTAINERS: orphan SIS FRAMEBUFFER DRIVER
+References: <20230308071921.10963-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20230308071921.10963-1-lukas.bulwahn@gmail.com>
 
-I agree with the motivation but this patch seems to break the boot
-under SeaBIOS/QEMU, and I imagine other legacy BIOS boot scenarios as
-well.
+--------------DpXEUfGRdJxUN3aO8OlXX3ln
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Naively, I would assume that there is simply a legacy BIOS region that
-we fail to map here, but I am fairly clueless when it comes to non-EFI
-x86 boot so take this with a grain of salt.
+DQoNCkFtIDA4LjAzLjIzIHVtIDA4OjE5IHNjaHJpZWIgTHVrYXMgQnVsd2FobjoNCj4gVGhp
+cyB3YXMgdHJpZ2dlcmVkIGJ5IHRoZSBmYWN0IHRoYXQgdGhlIHdlYnBhZ2U6DQo+IA0KPiAg
+ICBodHRwOi8vd3d3LndpbmlzY2hob2Zlci5uZXQvbGludXhzaXN2Z2Euc2h0bWwNCj4gDQo+
+IGNhbm5vdCBiZSByZWFjaGVkIGFueW1vcmUuDQo+IA0KPiBUaG9tYXMgV2luaXNjaGhvZmVy
+IGlzIHN0aWxsIHJlYWNoYWJsZSBhdCB0aGUgZ2l2ZW4gZW1haWwgYWRkcmVzcywgYnV0IGhl
+DQo+IGhhcyBub3QgYmVlbiBhY3RpdmUgc2luY2UgMjAwNS4NCj4gDQo+IE1hcmsgdGhlIFNJ
+UyBGUkFNRUJVRkZFUiBEUklWRVIgYXMgb3JwaGFuIHRvIHJlZmxlY3QgdGhlIGN1cnJlbnQg
+c3RhdGUuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBMdWthcyBCdWx3YWhuIDxsdWthcy5idWx3
+YWhuQGdtYWlsLmNvbT4NCg0KQWNrZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVy
+bWFubkBzdXNlLmRlPg0KDQo+IC0tLQ0KPiAgIE1BSU5UQUlORVJTIHwgNCArLS0tDQo+ICAg
+MSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAzIGRlbGV0aW9ucygtKQ0KPiANCj4g
+ZGlmZiAtLWdpdCBhL01BSU5UQUlORVJTIGIvTUFJTlRBSU5FUlMNCj4gaW5kZXggNWQ4ZjQ2
+ZjM1YWE0Li4zNTQ1Nzc1MzRhZWYgMTAwNjQ0DQo+IC0tLSBhL01BSU5UQUlORVJTDQo+ICsr
+KyBiL01BSU5UQUlORVJTDQo+IEBAIC0xOTE5MSw5ICsxOTE5MSw3IEBAIFc6CWh0dHA6Ly93
+d3cuYnJvd25oYXQub3JnL3NpczkwMC5odG1sDQo+ICAgRjoJZHJpdmVycy9uZXQvZXRoZXJu
+ZXQvc2lzL3NpczkwMC4qDQo+ICAgDQo+ICAgU0lTIEZSQU1FQlVGRkVSIERSSVZFUg0KPiAt
+TToJVGhvbWFzIFdpbmlzY2hob2ZlciA8dGhvbWFzQHdpbmlzY2hob2Zlci5uZXQ+DQo+IC1T
+OglNYWludGFpbmVkDQo+IC1XOglodHRwOi8vd3d3LndpbmlzY2hob2Zlci5uZXQvbGludXhz
+aXN2Z2Euc2h0bWwNCj4gK1M6CU9ycGhhbg0KPiAgIEY6CURvY3VtZW50YXRpb24vZmIvc2lz
+ZmIucnN0DQo+ICAgRjoJZHJpdmVycy92aWRlby9mYmRldi9zaXMvDQo+ICAgRjoJaW5jbHVk
+ZS92aWRlby9zaXNmYi5oDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERy
+aXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0K
+TWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBB
+RyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
+--------------DpXEUfGRdJxUN3aO8OlXX3ln--
 
-> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
-> Tested-by: Peter Jones <pjones@redhat.com>
-> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
-> ---
->  arch/x86/boot/compressed/acpi.c  | 25 ++++++++++++++++++++++++-
->  arch/x86/boot/compressed/efi.c   | 19 ++++++++++++++++++-
->  arch/x86/boot/compressed/kaslr.c |  4 ++++
->  3 files changed, 46 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/boot/compressed/acpi.c b/arch/x86/boot/compressed/acpi.c
-> index 9caf89063e77..c775e01fc7db 100644
-> --- a/arch/x86/boot/compressed/acpi.c
-> +++ b/arch/x86/boot/compressed/acpi.c
-> @@ -93,6 +93,8 @@ static u8 *scan_mem_for_rsdp(u8 *start, u32 length)
->
->         end = start + length;
->
-> +       kernel_add_identity_map((unsigned long)start, (unsigned long)end, 0);
-> +
->         /* Search from given start address for the requested length */
->         for (address = start; address < end; address += ACPI_RSDP_SCAN_STEP) {
->                 /*
-> @@ -128,6 +130,9 @@ static acpi_physical_address bios_get_rsdp_addr(void)
->         unsigned long address;
->         u8 *rsdp;
->
-> +       kernel_add_identity_map((unsigned long)ACPI_EBDA_PTR_LOCATION,
-> +                               (unsigned long)ACPI_EBDA_PTR_LOCATION + 2, 0);
-> +
->         /* Get the location of the Extended BIOS Data Area (EBDA) */
->         address = *(u16 *)ACPI_EBDA_PTR_LOCATION;
->         address <<= 4;
-> @@ -215,6 +220,9 @@ static unsigned long get_acpi_srat_table(void)
->         if (!rsdp)
->                 return 0;
->
-> +       kernel_add_identity_map((unsigned long)rsdp,
-> +                               (unsigned long)(rsdp + 1), 0);
-> +
->         /* Get ACPI root table from RSDP.*/
->         if (!(cmdline_find_option("acpi", arg, sizeof(arg)) == 4 &&
->             !strncmp(arg, "rsdt", 4)) &&
-> @@ -231,10 +239,17 @@ static unsigned long get_acpi_srat_table(void)
->                 return 0;
->
->         header = (struct acpi_table_header *)root_table;
-> +
-> +       kernel_add_identity_map((unsigned long)header,
-> +                               (unsigned long)(header + 1), 0);
-> +
->         len = header->length;
->         if (len < sizeof(struct acpi_table_header) + size)
->                 return 0;
->
-> +       kernel_add_identity_map((unsigned long)header,
-> +                               (unsigned long)header + len, 0);
-> +
->         num_entries = (len - sizeof(struct acpi_table_header)) / size;
->         entry = (u8 *)(root_table + sizeof(struct acpi_table_header));
->
-> @@ -247,8 +262,16 @@ static unsigned long get_acpi_srat_table(void)
->                 if (acpi_table) {
->                         header = (struct acpi_table_header *)acpi_table;
->
-> -                       if (ACPI_COMPARE_NAMESEG(header->signature, ACPI_SIG_SRAT))
-> +                       kernel_add_identity_map(acpi_table,
-> +                                               acpi_table + sizeof(*header),
-> +                                               0);
-> +
-> +                       if (ACPI_COMPARE_NAMESEG(header->signature, ACPI_SIG_SRAT)) {
-> +                               kernel_add_identity_map(acpi_table,
-> +                                                       acpi_table + header->length,
-> +                                                       0);
->                                 return acpi_table;
-> +                       }
->                 }
->                 entry += size;
->         }
-> diff --git a/arch/x86/boot/compressed/efi.c b/arch/x86/boot/compressed/efi.c
-> index 6edd034b0b30..ce70103fbbc0 100644
-> --- a/arch/x86/boot/compressed/efi.c
-> +++ b/arch/x86/boot/compressed/efi.c
-> @@ -57,10 +57,14 @@ enum efi_type efi_get_type(struct boot_params *bp)
->   */
->  unsigned long efi_get_system_table(struct boot_params *bp)
->  {
-> -       unsigned long sys_tbl_pa;
-> +       static unsigned long sys_tbl_pa __section(".data");
->         struct efi_info *ei;
-> +       unsigned long sys_tbl_size;
->         enum efi_type et;
->
-> +       if (sys_tbl_pa)
-> +               return sys_tbl_pa;
-> +
->         /* Get systab from boot params. */
->         ei = &bp->efi_info;
->  #ifdef CONFIG_X86_64
-> @@ -73,6 +77,13 @@ unsigned long efi_get_system_table(struct boot_params *bp)
->                 return 0;
->         }
->
-> +       if (efi_get_type(bp) == EFI_TYPE_64)
-> +               sys_tbl_size = sizeof(efi_system_table_64_t);
-> +       else
-> +               sys_tbl_size = sizeof(efi_system_table_32_t);
-> +
-> +       kernel_add_identity_map(sys_tbl_pa, sys_tbl_pa + sys_tbl_size, 0);
-> +
->         return sys_tbl_pa;
->  }
->
-> @@ -92,6 +103,10 @@ static struct efi_setup_data *get_kexec_setup_data(struct boot_params *bp,
->
->         pa_data = bp->hdr.setup_data;
->         while (pa_data) {
-> +               unsigned long pa_data_end = pa_data + sizeof(struct setup_data)
-> +                                         + sizeof(struct efi_setup_data);
-> +               kernel_add_identity_map(pa_data, pa_data_end, 0);
-> +
->                 data = (struct setup_data *)pa_data;
->                 if (data->type == SETUP_EFI) {
->                         esd = (struct efi_setup_data *)(pa_data + sizeof(struct setup_data));
-> @@ -160,6 +175,8 @@ int efi_get_conf_table(struct boot_params *bp, unsigned long *cfg_tbl_pa,
->                 return -EINVAL;
->         }
->
-> +       kernel_add_identity_map(*cfg_tbl_pa, *cfg_tbl_pa + *cfg_tbl_len, 0);
-> +
->         return 0;
->  }
->
-> diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
-> index 454757fbdfe5..c0ee116c4fa2 100644
-> --- a/arch/x86/boot/compressed/kaslr.c
-> +++ b/arch/x86/boot/compressed/kaslr.c
-> @@ -688,6 +688,8 @@ process_efi_entries(unsigned long minimum, unsigned long image_size)
->         u32 nr_desc;
->         int i;
->
-> +       kernel_add_identity_map((unsigned long)e, (unsigned long)(e + 1), 0);
-> +
->         signature = (char *)&e->efi_loader_signature;
->         if (strncmp(signature, EFI32_LOADER_SIGNATURE, 4) &&
->             strncmp(signature, EFI64_LOADER_SIGNATURE, 4))
-> @@ -704,6 +706,8 @@ process_efi_entries(unsigned long minimum, unsigned long image_size)
->         pmap = (e->efi_memmap | ((__u64)e->efi_memmap_hi << 32));
->  #endif
->
-> +       kernel_add_identity_map(pmap, pmap + e->efi_memmap_size, 0);
-> +
->         nr_desc = e->efi_memmap_size / e->efi_memdesc_size;
->         for (i = 0; i < nr_desc; i++) {
->                 md = efi_early_memdesc_ptr(pmap, e->efi_memdesc_size, i);
-> --
-> 2.37.4
->
+--------------Fn5fYfi1pyf0sw01AuM9f1QD
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQIV5kFAwAAAAAACgkQlh/E3EQov+Ct
+ZBAAyvCPSk+foGIpM75INZQNCaVicv9az/FZKN/zoESZFGvr5YKRR/G82Iu8EWUKnKGjJnsd5+v5
+0fV+AOpFUONNFPq9mPt4VYUtmvv4iZHF+u38uoxbDKCGAU5YWaJ6vE0fbN43Gj87DJ+8iSwMG1Pp
+Sjs37Z6atV2YhnLKPnoznXB5zoWuzqQPVCbwBJePGAUFNjTBWDKMVlJkEfuK6Abg2qGo04eXhNkp
+1dMure1a87vF1M0Xp5Xnq7cD0xJDOLmueXgrwhqp5+pJHG0z9x98RMiEd38tCln6ONhB3GIpfZ5/
+x2xBSMbofXaRcb2FwDOgbodvR55zGHnEENgwBENGfuk0E37wG1BOCipiCQjzGvW+RFAVwMqunMpu
+iYnup//IFSXdr6EEZu5dWEWqUxD/5eJOqpF0z2bXO1zfzoBV3icSz6LfPrlKBX4JbbqqmmcwyxaZ
+2SbvzLujU/oeOdQewwpklX+z8qt5p+cJ54ME53HE7GVuzlahhSAv4nK37kaVJJkibWLNuWk6xAL8
+IR0NWHqJfzFAlGZZ4gsYa8qa/Koil4SGGzsKB5whcVYUrPEIyRONhGAxoOTt4S+Gp0a6ZPUNrTfb
+1QrJ/oEh0/DBPnB8du8r951t025yIvPQgmRhf5h13ADR6U0h9ugA6aCWu2xt785bhXMrAwr3eAin
+bT0=
+=3WCc
+-----END PGP SIGNATURE-----
+
+--------------Fn5fYfi1pyf0sw01AuM9f1QD--
