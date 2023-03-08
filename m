@@ -2,80 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D946B04F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEE56B04F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:50:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbjCHKtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:49:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
+        id S229634AbjCHKuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:50:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjCHKtk (ORCPT
+        with ESMTP id S231339AbjCHKuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:49:40 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB0493E37
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:49:38 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id ay14so60218899edb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:49:38 -0800 (PST)
+        Wed, 8 Mar 2023 05:50:05 -0500
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B214D96C0B
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:50:04 -0800 (PST)
+Received: by mail-ua1-x929.google.com with SMTP id s23so10920290uae.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:50:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678272577;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eIVX6Q+wuDbqZ/cwjngt/vxJSb/KTYgiM7a99i9TgCg=;
-        b=fzRXtOeNzLF+uBzCxSrxIsc9ahjghGspm081T3BGJpuPbc+Pbf8jrXo02SqM8sEmSk
-         BR+QzoQqJfQHSVvA/KujB6kGi03ZeqTrTl+zg1p4NaJGGm9YFcRlueEtUhQIADs8Ww5b
-         i/ndHgl5WuZmJDKjIWA2DbrmhgQC2MiBOFgsiUBxVmRQx3MXW91KGSW/X0vHUWGyX2to
-         EMRl7GlZSPpPB7yWUXFiMR8T7gwDW1fL4rvErn/KMfiszT5wDTuJ0snF+IKheW8XrmhZ
-         DGXNd/FFS4tHfI43CihC33EMOjus/8JDz8TlP/f6VBRTLoRouODFFF3GGQBpyWUgAz8n
-         Y0uQ==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678272604;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XrGIwfDssNWvgzWTQQZESgCFLHmI+nsI3umT2NNZtyo=;
+        b=gmU8TnnwcMy/VmNMFKyoUSE6E5hYFH6W9+NwHx3mxV8Y8Q6a2C4SBnV/YWerk064Bc
+         ShqJDSFRWB8S4gXwj/aLASxo+hZqHI41sJ9pZBjmOSr5wUHg6Nds37wbCCvbLfoqdZI+
+         bv0E1NNUOej+DMPCiECAKHGpHIsrQDYK6mI/SabqB7MLxOprW+wbJQ6sS7CctO4WFLVa
+         ueFxnOsP2MBcnRfcDjCWQa8HIT5nt2DQjxFfvAvNCTOa6xscTtEmDFi/oEXuGxu+ZwIn
+         /rtzOK7g7mSRX7a0FuC4zxn/CNko6XwcTHu+RXBO90AlZmHuPxCYx94XsXvyFsxVLcrx
+         dCmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678272577;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eIVX6Q+wuDbqZ/cwjngt/vxJSb/KTYgiM7a99i9TgCg=;
-        b=jVqOON8mi1wwpbKHU2mrh3e68rU9AVNuHn0NSoAq0k+03bwzOHCgZigIhC2MTVGYmL
-         9YmZ0V37pc/cUTtWaQOcPjnA8iI7MRubZX7cpDUKEFyVbeRDA6t+dzC/jMGlotkW1R3o
-         sTfcKAhH2TfKICZZVfZHlaRzJ3Z+qWHCdY6Sgvg2T5jX3av9cwEJ8CYfsADobW5XZQrD
-         l5Cv6wChA0+lyfAi5Yu1EhMOrw90TRHmxcIYg0gSQSkCR5dkkNdgpSS+DSLXMTXYG/Jk
-         0x4XOxf3loRuWGy1WFQo/7leovSdaPvF2atlnSZiRckUACXXoQqUA3roSvNXYlyypv6z
-         6gsg==
-X-Gm-Message-State: AO0yUKW1KsjjlwKowCxK2xrY1wLjSgsnceuMcYZCHUs+c+hB79lyybWn
-        2o9mH1omiIPi1UY4vgfOo6yyGg==
-X-Google-Smtp-Source: AK7set+8p1PgQPRzlFznQupET+FkEQpoQ+wy5R2mWpUIbzv4Vx31T7YpL4AX0ZjC3vd4C1H+buV5sQ==
-X-Received: by 2002:a17:907:7748:b0:8e8:6b69:2093 with SMTP id kx8-20020a170907774800b008e86b692093mr20248395ejc.25.1678272577191;
-        Wed, 08 Mar 2023 02:49:37 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:ff33:9b14:bdd2:a3da? ([2a02:810d:15c0:828:ff33:9b14:bdd2:a3da])
-        by smtp.gmail.com with ESMTPSA id h21-20020a170906261500b008b23b22b062sm7271824ejc.114.2023.03.08.02.49.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 02:49:36 -0800 (PST)
-Message-ID: <18450b30-7781-0315-2d08-e536a0e94815@linaro.org>
-Date:   Wed, 8 Mar 2023 11:49:35 +0100
+        d=1e100.net; s=20210112; t=1678272604;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XrGIwfDssNWvgzWTQQZESgCFLHmI+nsI3umT2NNZtyo=;
+        b=shaD1Y9kcryP741MyBuz9YTs578gU7dgkWj6RowqwbzUAzJAIzcVLAjhiCGzPdFPgT
+         GaOrb9GFUtnGxQOMByPWzwyxS5VQQBsV/VTHm6yVUj71bZyIxofL8NHkEJLAI2PrkWDd
+         d2K/O0ZJwMnRSvzhjFCy093hMBc/wMhdagik4mFPVW3yJJzzQWobP354+r5b2/W4qzl1
+         25xTFSGlQetd5+hxiy8wwOZWNffeIh6sQSMhHOavaGm8uGVF79Y5W2x1svlPkBlUpVSa
+         4YbZ51CLB/vSAdr9+UPqmHC2NJrtknOgHZHSNZAj6aUZFcI7a0WRogaUGOlTTGpWia5o
+         4ptQ==
+X-Gm-Message-State: AO0yUKX0l9trhpYwOwx3pEbMhNPx6mcm92+USsWu+3FyfI49wsm12/yV
+        vYbEjDywXFE5h1vAPvTdJgo2iYhSL8GYrJpS3OfkpQ==
+X-Google-Smtp-Source: AK7set+ifNLECN4OlPKqnL8mM/CEXMyPvqKG5gN0dT9ZYnEn2OCiuShZimfQYKMhIwtKr1ZFaE6blzpMWPy78Zc/dl0=
+X-Received: by 2002:a9f:3104:0:b0:687:afc8:ffb9 with SMTP id
+ m4-20020a9f3104000000b00687afc8ffb9mr11804487uab.2.1678272603770; Wed, 08 Mar
+ 2023 02:50:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1] max77663-rtc: pass rtc address from device tree node
- if exists
-Content-Language: en-US
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Svyatoslav Ryhel <clamor95@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20230308083759.11692-1-clamor95@gmail.com>
- <f1df5968-4322-3f67-3da8-c10ea50386a8@linaro.org>
- <CAPVz0n24odz4bxt8nRe08-UJFoaDSTGMAPfj2b2RBG+ZbwntfQ@mail.gmail.com>
- <190897d3-39b6-fb7c-dc18-dac580fadea6@linaro.org>
- <06f8eec8-94f3-0fed-b496-831c77baf368@linaro.org>
- <202303080942204be1ceeb@mail.local>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <202303080942204be1ceeb@mail.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+References: <20230307182557.42215-1-andriy.shevchenko@linux.intel.com> <20230307182557.42215-4-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230307182557.42215-4-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 8 Mar 2023 11:49:53 +0100
+Message-ID: <CAMRc=MdW7JjWvJUtvwJDwWLB5ygPiCRWLNM8E0iyRoD=HbzfVw@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] gpiolib: Move gpiodevice_*() to gpiodev namespace
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,36 +69,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 10:42, Alexandre Belloni wrote:
-> On 08/03/2023 10:14:22+0100, Krzysztof Kozlowski wrote:
->> On 08/03/2023 10:11, Krzysztof Kozlowski wrote:
->>> On 08/03/2023 09:58, Svyatoslav Ryhel wrote:
->>>> I would love to, but max77663 uses max77686 rtc
->>>> https://github.com/torvalds/linux/blob/master/drivers/mfd/max77620.c#L123
->>>> how to handle this?
->>>
->>> Don't top post.
->>>
->>> Hm, so it seems max7763 is already documented via max77620. I missed
->>> that. Add the new property to max77620, not to max77686 RTC. It does not
->>> look like RTC's property, but the PMIC's.
->>
->> To clarify - the I2C address selection for regmap is in max77686 RTC,
->> but I meant DT property.
->>
->> Different thing is that we do not pass addresses as property fields.
->> These should be devices on the I2C bus rather... unless you are aware of
->> existing property like this?
->>
-> 
-> I'd say that the RTC should have been modeled as a discrete component
-> from the beginning instead of using an i2c dummy device
+On Tue, Mar 7, 2023 at 7:25=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> The functions that operates on the same device object would
+> have the same namespace for better code understanding and
+> maintenance.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/gpio/gpiolib.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index a44a1b0f2766..45f79aee451a 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -573,7 +573,7 @@ bool gpiochip_line_is_valid(const struct gpio_chip *g=
+c,
+>  }
+>  EXPORT_SYMBOL_GPL(gpiochip_line_is_valid);
+>
+> -static void gpiodevice_release(struct device *dev)
+> +static void gpiodev_release(struct device *dev)
+>  {
+>         struct gpio_device *gdev =3D to_gpio_device(dev);
+>         unsigned long flags;
+> @@ -617,7 +617,7 @@ static int gpiochip_setup_dev(struct gpio_device *gde=
+v)
+>                 return ret;
+>
+>         /* From this point, the .release() function cleans up gpio_device=
+ */
+> -       gdev->dev.release =3D gpiodevice_release;
+> +       gdev->dev.release =3D gpiodev_release;
+>
+>         ret =3D gpiochip_sysfs_register(gdev);
+>         if (ret)
+> --
+> 2.39.1
+>
 
-Yeah, exactly. Current design was working for existing use
-cases/devices, but has limits, thus RTC should be reworked. Actually
-even for oldest PMIC max77686, the RTC was a separate device on I2C bus.
-We just made it for simplicity part of PMIC.
+But the only other function that's in the gpiodev_ namespace operates
+on struct gpio_device so that change doesn't make much sense to me.
 
-Best regards,
-Krzysztof
-
+Bart
