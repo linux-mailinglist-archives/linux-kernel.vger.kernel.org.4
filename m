@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4496AFCBF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37EA76AFCC7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 03:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjCHCLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 21:11:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
+        id S229757AbjCHCNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 21:13:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCHCLj (ORCPT
+        with ESMTP id S229483AbjCHCNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 21:11:39 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B29A54F7
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 18:11:16 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id cf14so16752983qtb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 18:11:16 -0800 (PST)
+        Tue, 7 Mar 2023 21:13:18 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CEF84F46;
+        Tue,  7 Mar 2023 18:13:17 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id h8so16283959plf.10;
+        Tue, 07 Mar 2023 18:13:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678241475;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MhukmpQlx1anGpfCWgT8lkusinTBpaubpbPr6hscTSE=;
-        b=j0nfXSXtMG6SDDtPy8jQOhpJVbk/89NLzashNbHWMTpRXtaYsB/h8hd/0Wa1btmQcn
-         6Azmb6srZCKitw7RMEFili9Xjv1Kj/Z30gZB0l/XnCWJpvoFjvZrFK99F+A2bKL1QqHb
-         Pd+eG+ws0dKIznpLQxxkqYPo/15lCxN6ekyzCjDRkSLizFmY5PYGHf/JHWg1QBqW51kG
-         793SJ5IWw0jY/UXAKUKOMttDyJumY0ul9KiUZzWWh+wJQDwlJedwYOHnj4QhW9q/xXwG
-         YBl5EbxHQwCjpksKCr6DPiNCegSoaBWXWOQ69qTGEtGOI8Jzd3cYG4+Tcz3agROE1wLu
-         gRSA==
+        d=gmail.com; s=20210112; t=1678241596;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WUi/jbYtXBOmmnZErU5v1Etksb+Orfwsi2v3q122Dds=;
+        b=antxJzNYxwpmrrIofTxl7WnzRWnd3JangQVBLAbjPacqvRH8OoDyVIfMQ1KmzKlu3Y
+         TI3or5HSTobP9+Xiw4M/FaypOtbX6Vtpd1ed1VsAZLZ8wMRx4cTyjcwpXFfZ8i+qg2M7
+         72FUTHh+RT0lkV5IurRLWBdNSGTGcu0aX2lKNNZKnAvwXf8sZuX6yHH7GfLxdhlYjxqU
+         wDB9Zdx5mKbPMzhKYFzgl995WHSWrMlvZtO5Sh3DmiEO4TaQeQPa8f9UTjDFEIWj5aWM
+         AUM21aP1HJkaVBxyWDUKGwMaREbijqWC+OtIvsFT0k9PBRQ8fbUWXuD9D4u8ite9ww8b
+         DQJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678241475;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MhukmpQlx1anGpfCWgT8lkusinTBpaubpbPr6hscTSE=;
-        b=587suTYm2XTCnQWJmrFpPRHn90+YdylXzkFYcmisMP0y5STkEpcAHK8Aub8EVQk2vY
-         M9FsykzMKgenTVjosPxF3cOSy4rCXbuB+NUJwpPvUwFBUeJHLBGerPSV0BbZw7EO1Tk5
-         3U4CnM2u9EoEQvVSQSrfXWOVdXl7a3m1Y3PGQucs01yu5GpFIMTEeZwjEQwiMyckR6fy
-         V6XfkidG8q1iZZmAh6t5oxfPc+vZ6Enk6CJci40tWs0ybDgbVoRavmjoB1q0n4dKyEXg
-         wYfpOLghhV9lfRvSMos5nZOOE0NouljZs6tP0mb0Ed7+VdH71hNqN9of/dQyokOlk6kJ
-         mZUw==
-X-Gm-Message-State: AO0yUKVrCQwfQT7YEu+rvCA3clIPMcH45jOc37T9jpI2Kf4chROoZYzW
-        tRf5HSJ14OyrtKzfjv2tv2IkVw==
-X-Google-Smtp-Source: AK7set/Igl2IV3ZCxE+XwTjTMNoJXFOMQWaLicowXYYQqbF3sd/378Hp+Yav2Yg9gSAUYpmtIr02NA==
-X-Received: by 2002:a05:622a:40f:b0:3b3:7d5:a752 with SMTP id n15-20020a05622a040f00b003b307d5a752mr27805640qtx.50.1678241474985;
-        Tue, 07 Mar 2023 18:11:14 -0800 (PST)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id r2-20020ac83b42000000b003c034837d8fsm3384513qtf.33.2023.03.07.18.11.13
+        d=1e100.net; s=20210112; t=1678241596;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WUi/jbYtXBOmmnZErU5v1Etksb+Orfwsi2v3q122Dds=;
+        b=tOnhchhYJqBfZOQDjV8I4QykHQfiBFqQTH+ZfV8SuaT70oO13Ch2Yrh9RxDXNMeDKJ
+         /YRx20MI9ryAm6XsYHmTDTwu5uoMlvnxw6bXu4j/CEcx4HGsBgDNJfIfQezPbp7w85mS
+         qyAdUQlXrM19xLnIAzdKLtYWltXVDjs6L68qrrQD2Xg1nyfjt8iFMtiNy4/UfLh7WWB5
+         G4baqNZUU2KJ3FBavZVW1RvfWhqCHdieGZXMgJTntJ/Pg+BPC2cBa3IM4AGNj4W0+9Of
+         /DR8C0OT30w+87klrJMa0u3d6m29NViEfxHRiXS0/LEsc2ZTrR3V7hxhd6uPLA5ywPWF
+         +szw==
+X-Gm-Message-State: AO0yUKUfit+hWwNHWnhSinN0z9ubrsJWQ6GkjlMzY2HLk4yIiXaw0L52
+        RIjLvzE+jpzOoJ7uRbaR6wM=
+X-Google-Smtp-Source: AK7set/OQB7Yy/JOEV6yCQmOoRVo9Usg/OnzO5tpYPfLJSgAk4oISQSImkLWH87e/7+k3sjYSY2gFA==
+X-Received: by 2002:a05:6a20:8407:b0:cc:eb3b:56e9 with SMTP id c7-20020a056a20840700b000cceb3b56e9mr22961764pzd.1.1678241596431;
+        Tue, 07 Mar 2023 18:13:16 -0800 (PST)
+Received: from KERNELXING-MB0.tencent.com ([103.7.29.31])
+        by smtp.gmail.com with ESMTPSA id a22-20020a62bd16000000b00592eb6f239fsm8337785pff.40.2023.03.07.18.13.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 18:11:13 -0800 (PST)
-Date:   Tue, 7 Mar 2023 21:11:11 -0500
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        broonie@kernel.org, techsupport@winsystems.com,
-        pdemetrotion@winsystems.com, quarium@gmail.com,
-        jhentges@accesio.com, jay.dolan@accesio.com
-Subject: Re: [PATCH v4 0/3] Migrate the PCIe-IDIO-24 and WS16C48 GPIO drivers
- to the regmap API
-Message-ID: <ZAfuv9RQn9eoXKPX@fedora>
-References: <cover.1678106722.git.william.gray@linaro.org>
- <ZAX3243e4mejPEsS@smile.fi.intel.com>
+        Tue, 07 Mar 2023 18:13:16 -0800 (PST)
+From:   Jason Xing <kerneljasonxing@gmail.com>
+To:     simon.horman@corigine.com, willemdebruijn.kernel@gmail.com,
+        davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kerneljasonxing@gmail.com,
+        Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH v4 net-next] udp: introduce __sk_mem_schedule() usage
+Date:   Wed,  8 Mar 2023 10:11:53 +0800
+Message-Id: <20230308021153.99777-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Exj+qic2iP6fmxVn"
-Content-Disposition: inline
-In-Reply-To: <ZAX3243e4mejPEsS@smile.fi.intel.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,63 +72,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Jason Xing <kernelxing@tencent.com>
 
---Exj+qic2iP6fmxVn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Keep the accounting schema consistent across different protocols
+with __sk_mem_schedule(). Besides, it adjusts a little bit on how
+to calculate forward allocated memory compared to before. After
+applied this patch, we could avoid receive path scheduling extra
+amount of memory.
 
-On Mon, Mar 06, 2023 at 04:25:31PM +0200, Andy Shevchenko wrote:
-> On Mon, Mar 06, 2023 at 07:59:50AM -0500, William Breathitt Gray wrote:
-> > Changes in v4:
-> >  - Allocate idio24gpio before using it in idio_24_probe()
-> > Changes in v3:
-> >  - Drop map from set_type_config() parameter list; regmap can be passed
-> >    by irq_drv_data instead
-> >  - Adjust idio_24_set_type_config() for parameter list
-> >  - Add mutex to prevent clobbering the COS_ENABLE register when masking
-> >    IRQ and setting their type configuration
-> > Changes in v2:
-> >  - Simplify PCIe-IDIO-24 register offset defines to remove superfluous
-> >    arithmetic
-> >  - Check for NULL pointer after chip->irq_drv_data allocation
-> >  - Set gpio_regmap drvdata and use gpio_regmap_get_drvdata() to get the
-> >    regmap in idio_24_reg_map_xlate()
-> >=20
-> > The regmap API supports IO port accessors so we can take advantage of
-> > regmap abstractions rather than handling access to the device registers
-> > directly in the driver.
-> >=20
-> > A patch to pass irq_drv_data as a parameter for struct regmap_irq_chip
-> > set_type_config() is included. This is needed by the
-> > idio_24_set_type_config() and ws16c48_set_type_config() callbacks in
-> > order to update the type configuration on their respective devices.
-> >=20
-> > A patch to migrate the WS16C48 GPIO driver to the regmap API is included
-> > in this series due to its dependence on the struct regmap_irq_chip
-> > set_type_config() change.
->=20
-> I have found nothing WRT lock type changes.
-> Can you shed a light on what's going on here?
+Link: https://lore.kernel.org/lkml/20230221110344.82818-1-kerneljasonxing@gmail.com/
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+---
+v4:
+1) Move one statement outside of the helper suggested by Paolo Abeni
 
-Previous versions of this patchset had removed the locks entirely.
-Later, I realized that some locking would be required to prevent
-clobbering registers when updating IRQ masks and type configurations, so
-I added in these new locks with types that seemed appropriate for the
-way they are being used now in the code. I'll explain further in my
-replies to each patch why I chose these particular types.
+v3:
+1) get rid of inline suggested by Simon Horman
 
-William Breathitt Gray
+v2:
+1) change the title and body message
+2) use __sk_mem_schedule() instead suggested by Paolo Abeni
+---
+ net/ipv4/udp.c | 27 ++++++++++++++++-----------
+ 1 file changed, 16 insertions(+), 11 deletions(-)
 
---Exj+qic2iP6fmxVn
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index c605d171eb2d..dc8feb54d835 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -1531,10 +1531,21 @@ static void busylock_release(spinlock_t *busy)
+ 		spin_unlock(busy);
+ }
+ 
++static int udp_rmem_schedule(struct sock *sk, int size)
++{
++	int delta;
++
++	delta = size - sk->sk_forward_alloc;
++	if (delta > 0 && !__sk_mem_schedule(sk, delta, SK_MEM_RECV))
++		return -ENOBUFS;
++
++	return 0;
++}
++
+ int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb)
+ {
+ 	struct sk_buff_head *list = &sk->sk_receive_queue;
+-	int rmem, delta, amt, err = -ENOMEM;
++	int rmem, err = -ENOMEM;
+ 	spinlock_t *busy = NULL;
+ 	int size;
+ 
+@@ -1567,16 +1578,10 @@ int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb)
+ 		goto uncharge_drop;
+ 
+ 	spin_lock(&list->lock);
+-	if (size >= sk->sk_forward_alloc) {
+-		amt = sk_mem_pages(size);
+-		delta = amt << PAGE_SHIFT;
+-		if (!__sk_mem_raise_allocated(sk, delta, amt, SK_MEM_RECV)) {
+-			err = -ENOBUFS;
+-			spin_unlock(&list->lock);
+-			goto uncharge_drop;
+-		}
+-
+-		sk->sk_forward_alloc += delta;
++	err = udp_rmem_schedule(sk, size);
++	if (err) {
++		spin_unlock(&list->lock);
++		goto uncharge_drop;
+ 	}
+ 
+ 	sk->sk_forward_alloc -= size;
+-- 
+2.37.3
 
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZAfuvwAKCRC1SFbKvhIj
-K45HAQD7dYrMWAEpvnoorSEWniz+P2SaeI+3v0XjdrY2dIcvDQD/c15u7LPpRTR6
-IKBVIPQowdupymgDr3XjUh2OudYHmgM=
-=lXsO
------END PGP SIGNATURE-----
-
---Exj+qic2iP6fmxVn--
