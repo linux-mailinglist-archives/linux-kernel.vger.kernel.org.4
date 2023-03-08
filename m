@@ -2,66 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60706B081D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 973EB6B0800
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbjCHNNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:13:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
+        id S231727AbjCHNJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjCHNMw (ORCPT
+        with ESMTP id S231605AbjCHNI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:12:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A95C6E58
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 05:09:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678280876;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gLq762oeic7hM/krtcOf8E8H5QTsFuEhCmd4UZ/jjZs=;
-        b=YKZuO6GAmx+C3S0ugh0LkZAtQolpu6HUJrqDOydSVIIMy00UnCnxJBQMm7gotfA4/8P2uU
-        7JfgIak0EyviPtRnlmVXz22g2jiNR/r2OkMR98CW+MNTlHCtrsxLPRiS2FHZZxzcRmyw3t
-        zdt3orM37aDBn2pUlCU2d9l3wESlNt4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-637-uSFGI7sxPSKXvm-FACyRDg-1; Wed, 08 Mar 2023 08:07:51 -0500
-X-MC-Unique: uSFGI7sxPSKXvm-FACyRDg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 505EC2932493;
-        Wed,  8 Mar 2023 13:07:50 +0000 (UTC)
-Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-137.pek2.redhat.com [10.72.12.137])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0CAD02166B26;
-        Wed,  8 Mar 2023 13:07:42 +0000 (UTC)
-From:   Baoquan He <bhe@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        mpe@ellerman.id.au, geert@linux-m68k.org, mcgrof@kernel.org,
-        hch@infradead.org, Baoquan He <bhe@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
+        Wed, 8 Mar 2023 08:08:59 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D2C3E0B7;
+        Wed,  8 Mar 2023 05:07:34 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id q16so15319578wrw.2;
+        Wed, 08 Mar 2023 05:07:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678280844;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JuDmDmY4IV0QLoJ1ArzJ4ijcazQ7ZD0u2S2wBUytaV4=;
+        b=Dkuy4VDXieLUfg8wLyjcvVyTG3cxdXmVVcyqAjQzY2ESFnznZGMWvTKoAogOrf1tZO
+         7xFIAbyFOk3M03a449PZz9nPzsMnohAks1WHPKOutMHa6yvON9XXqpZkhtj4mhjSDvHT
+         qGr9G2v6GtndN9sStm89LaOEeRN8glr2KZYlqUVRc8DjKLZa1zJ5g0dZtwMq4vZ3aHaV
+         tNSz8ouiBbvLnReajtgAptfEXBDdlO3tj46vruxT+vCOb/mu5wwLW29zEdvmVRTdd3kZ
+         MGBHUv0ZH1sPVkbN+1wH0xCoPsT7v52aAFl9QHEMPSUWsnAq1Ooz0/j7KlSuLQucpvjM
+         EWow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678280844;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JuDmDmY4IV0QLoJ1ArzJ4ijcazQ7ZD0u2S2wBUytaV4=;
+        b=SiQkTSsoPib01Ie0zR43kSMNBXvehNZfLHfrRKfwZ6piRXqhZwgN6rVtRWbjNVdiRh
+         KtrYQpDfoRMWi98bGOhwXg5cGZ7nlIvKx5rbeBgYBOXqysbkDotxNNQfksgBACJtIMUG
+         Mltg3u9vCAexP+FH+IgZtkiHSjF/2LUyC41fhnzpJKAvGeZEBZUhhqiWJ1BQDxWLHhLG
+         e0JZjdJPpvmgiJJfm70t7R825fa7p8ebXsBqzX7/R/ChB4VofVJG/zMreScZ0ernlH6v
+         nsNv9BrFHnlerICcFn3G3Gt58ZL0vtkejCyd+Fg6vR04U2RTijZgmmyBPDnyvNlDPOT5
+         btZg==
+X-Gm-Message-State: AO0yUKW6p5EAhoQXPO+uBnqEmC7H3BFnuzZgxg5r1IQIRfliSfTbyC16
+        W2ra5ouo4Nlzik5OYE900EM=
+X-Google-Smtp-Source: AK7set/96yytF4lJdh5dq0MUq0uqJPsADOci+FXLCWrgSJ+F8EsYh8DcDuDj9WyArHHVFVjqlneYOA==
+X-Received: by 2002:adf:eac7:0:b0:2c7:161e:702f with SMTP id o7-20020adfeac7000000b002c7161e702fmr12307060wrn.47.1678280843674;
+        Wed, 08 Mar 2023 05:07:23 -0800 (PST)
+Received: from arinc9-PC.lan ([212.68.60.226])
+        by smtp.gmail.com with ESMTPSA id b3-20020a5d40c3000000b002ce37d2464csm11461328wrq.83.2023.03.08.05.07.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 05:07:23 -0800 (PST)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v4 4/4] mips: io: remove duplicated codes
-Date:   Wed,  8 Mar 2023 21:07:10 +0800
-Message-Id: <20230308130710.368085-5-bhe@redhat.com>
-In-Reply-To: <20230308130710.368085-1-bhe@redhat.com>
-References: <20230308130710.368085-1-bhe@redhat.com>
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
+Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 net 1/2] net: dsa: mt7530: remove now incorrect comment regarding port 5
+Date:   Wed,  8 Mar 2023 16:07:14 +0300
+Message-Id: <20230308130714.77397-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,101 +86,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By adding asm-generic/io.h support, there are some duplicated function
-implementation, like phys_to_virt, memset_io, memcpy_(from|to)io.
-Let's remove them to use the default version in asm-neneric/io.h.
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-Meanwhile move isa_bus_to_virt() down below <asm-generic/io.h> including
-line to fix the compiling error of missing phys_to_virt definition.
+Remove now incorrect comment regarding port 5 as GMAC5. This is supposed to
+be supported since commit 38f790a80560 ("net: dsa: mt7530: Add support for
+port 5") under mt7530_setup_port5().
 
-Signed-off-by: Baoquan He <bhe@redhat.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Helge Deller <deller@gmx.de>
-Cc: Serge Semin <fancer.lancer@gmail.com>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Huacai Chen <chenhuacai@kernel.org>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: linux-mips@vger.kernel.org
+Fixes: 38f790a80560 ("net: dsa: mt7530: Add support for port 5")
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 ---
- arch/mips/include/asm/io.h | 45 +++++---------------------------------
- 1 file changed, 5 insertions(+), 40 deletions(-)
+ drivers/net/dsa/mt7530.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-index da0a625c3c6d..1b38f02bc608 100644
---- a/arch/mips/include/asm/io.h
-+++ b/arch/mips/include/asm/io.h
-@@ -114,24 +114,6 @@ static inline phys_addr_t virt_to_phys(const volatile void *x)
- 	return __virt_to_phys(x);
- }
+diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+index a508402c4ecb..b1a79460df0e 100644
+--- a/drivers/net/dsa/mt7530.c
++++ b/drivers/net/dsa/mt7530.c
+@@ -2201,7 +2201,7 @@ mt7530_setup(struct dsa_switch *ds)
  
--/*
-- *     phys_to_virt    -       map physical address to virtual
-- *     @address: address to remap
-- *
-- *     The returned virtual address is a current CPU mapping for
-- *     the memory address given. It is only valid to use this function on
-- *     addresses that have a kernel mapping
-- *
-- *     This function does not handle bus mappings for DMA transfers. In
-- *     almost all conceivable cases a device driver should not be using
-- *     this function
-- */
--#define phys_to_virt phys_to_virt
--static inline void * phys_to_virt(unsigned long address)
--{
--	return __va(address);
--}
--
- /*
-  * ISA I/O bus memory addresses are 1:1 with the physical address.
-  */
-@@ -140,11 +122,6 @@ static inline unsigned long isa_virt_to_bus(volatile void *address)
- 	return virt_to_phys(address);
- }
+ 	mt7530_pll_setup(priv);
  
--static inline void *isa_bus_to_virt(unsigned long address)
--{
--	return phys_to_virt(address);
--}
--
- /*
-  * Change "struct page" to physical address.
-  */
-@@ -535,23 +512,6 @@ BUILDSTRING(q, u64)
- #define writesq writesq
- #endif
- 
--
--#define memset_io memset_io
--static inline void memset_io(volatile void __iomem *addr, unsigned char val, int count)
--{
--	memset((void __force *) addr, val, count);
--}
--#define memcpy_fromio memcpy_fromio
--static inline void memcpy_fromio(void *dst, const volatile void __iomem *src, int count)
--{
--	memcpy(dst, (void __force *) src, count);
--}
--#define memcpy_toio memcpy_toio
--static inline void memcpy_toio(volatile void __iomem *dst, const void *src, int count)
--{
--	memcpy((void __force *) dst, src, count);
--}
--
- /*
-  * The caches on some architectures aren't dma-coherent and have need to
-  * handle this in software.  There are three types of operations that
-@@ -617,4 +577,9 @@ void __ioread64_copy(void *to, const void __iomem *from, size_t count);
- 
- #include <asm-generic/io.h>
- 
-+static inline void *isa_bus_to_virt(unsigned long address)
-+{
-+	return phys_to_virt(address);
-+}
-+
- #endif /* _ASM_IO_H */
+-	/* Enable Port 6 only; P5 as GMAC5 which currently is not supported */
++	/* Enable port 6 */
+ 	val = mt7530_read(priv, MT7530_MHWTRAP);
+ 	val &= ~MHWTRAP_P6_DIS & ~MHWTRAP_PHY_ACCESS;
+ 	val |= MHWTRAP_MANUAL;
 -- 
-2.34.1
+2.37.2
 
