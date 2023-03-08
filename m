@@ -2,112 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108EA6B06B3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC9C6B06BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjCHMNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 07:13:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
+        id S229943AbjCHMQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 07:16:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbjCHMNj (ORCPT
+        with ESMTP id S231231AbjCHMQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:13:39 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB93900B0
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:13:38 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id v101so14395997ybi.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 04:13:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678277617;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oca9dY8hWUO5/h8xtr438Tcso20TDnzGLmg2ddoHe4M=;
-        b=mG+VNc7/+ZVH4peD5IzNTeOjeDEtz2/QDLrQseyt1w5jR60Vf3vwhV/UiECtfojG1d
-         placMWBg9SZ3uNn9KmQCqQyQKL+3dbLOvATLA2d7k4wzQeMx7iD1t8Ej0dykdODGuchw
-         ZIC5gVhPTsdlc+vgfY7DP/ICTAy1rHAyN0BtycPUV2Td9bWfnWKPQAR41CdVEPVcLgjE
-         +amCcxZzViJs5TgPv/+zaeIZbAkHw0Gr3djUm2UlDD9P1vRU2cWC0xMDVSvcDMuZv6Ij
-         EZN20pCM7mLDwQNRN/EbnHrQycWZHZ6Zqd7umnQU+0SOlaK2Kpr6Cuz2EZN4okjiyEw/
-         ID7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678277617;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Oca9dY8hWUO5/h8xtr438Tcso20TDnzGLmg2ddoHe4M=;
-        b=mI6KuuOy5kV+HbVs6phYNX4EbAdTWxLUeH2IgLLEhWrzChQBNJPfAfrY+yzTxqGEu2
-         3C92xtROYtVlq5z615gVfVmpLL3gaEQKFWehKs/1asLEhC75SN2e46vGoxFcQOuVAt+p
-         yA5MHvikHi8Sosdez6EsmKYiZOkVLtPLlkhw4SX3Oyov1mDcwmJL+seJgFP0yBYDnSPH
-         SoHwnY1alXho4qKsLDXYYTPByuc/FbT19XgqVf8myoWzX4qkU0QIJuh23OSqpSOlWTGy
-         /GWkjKKa+lxXBzRfrv+06EbjS3VO3DDRouuQU6gQSCNxF2XjWtT/DvfcDBCnLuWfxeHQ
-         YS+g==
-X-Gm-Message-State: AO0yUKXNG83HOdnttB4IwHIVJGnmjfOVufyP44OWlPHL8PRtKttovSXs
-        oJT9zh+DOEB8r2saXwwS+wRdjm+r2Nbg/oOLmCKbFA==
-X-Google-Smtp-Source: AK7set+ggNypJdI+7ULj7vVNY+A7k42rbSaDWPMWE5mmu2065wVDPTzRD/vMNWcCbvtu842b/ja6rElDW3gnsY5CIcg=
-X-Received: by 2002:a5b:209:0:b0:aa9:bd2e:3746 with SMTP id
- z9-20020a5b0209000000b00aa9bd2e3746mr6164422ybl.4.1678277617418; Wed, 08 Mar
- 2023 04:13:37 -0800 (PST)
+        Wed, 8 Mar 2023 07:16:11 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47499BA63
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:16:07 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-27-ZwokEwwKO2-vd15XSZuFEA-1; Wed, 08 Mar 2023 12:16:04 +0000
+X-MC-Unique: ZwokEwwKO2-vd15XSZuFEA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Wed, 8 Mar
+ 2023 12:15:56 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.047; Wed, 8 Mar 2023 12:15:56 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'David Woodhouse' <dwmw2@infradead.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Phillips, Kim" <kim.phillips@amd.com>,
+        "brgerst@gmail.com" <brgerst@gmail.com>,
+        "Rapan, Sabin" <sabrapan@amazon.com>
+CC:     "piotrgorski@cachyos.org" <piotrgorski@cachyos.org>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
+        "arjan@linux.intel.com" <arjan@linux.intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "mimoja@mimoja.de" <mimoja@mimoja.de>,
+        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
+        "fam.zheng@bytedance.com" <fam.zheng@bytedance.com>,
+        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
+        "simon.evans@bytedance.com" <simon.evans@bytedance.com>,
+        "liangma@liangbit.com" <liangma@liangbit.com>
+Subject: RE: [PATCH v13 00/11] Parallel CPU bringup for x86_64
+Thread-Topic: [PATCH v13 00/11] Parallel CPU bringup for x86_64
+Thread-Index: AQHZUZ1JrrsGLfc9/UqVDEYgWl/q367wy8Sw
+Date:   Wed, 8 Mar 2023 12:15:56 +0000
+Message-ID: <5aef7e908e1d492386d568ef36b75493@AcuMS.aculab.com>
+References: <20230302111227.2102545-1-usama.arif@bytedance.com>
+         <faa0eb3bb8ba0326d501516a057ab46eaf1f3c05.camel@infradead.org>
+         <effbb6e2-c5a1-af7f-830d-8d7088f57477@amd.com>
+         <269ed38b5eed9c3a259c183d59d4f1eb5128f132.camel@infradead.org>
+         <0c56683a-c258-46f6-056e-e85da8a557db@amd.com>
+         <3bfbbd92-b2ed-8189-7b57-0533f6c87ae7@amd.com>
+         <1975308c952236895f2d8f0e56af9db288eaf330.camel@infradead.org>
+         <39f23da7-1e77-4535-21a6-00f77a382ae5@amd.com>
+ <ba8aae2eafdeb09ec1a41d45ab3c2e4cdaf7a28f.camel@infradead.org>
+In-Reply-To: <ba8aae2eafdeb09ec1a41d45ab3c2e4cdaf7a28f.camel@infradead.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20230215-immutable-chips-v2-0-d6b0e3f2d991@linaro.org>
- <20230215-immutable-chips-v2-3-d6b0e3f2d991@linaro.org> <CACPK8Xc7ekzM9oeR7+fYuK8RfZ4jA8gpH=nUJ-OTp0XZoKwzHQ@mail.gmail.com>
-In-Reply-To: <CACPK8Xc7ekzM9oeR7+fYuK8RfZ4jA8gpH=nUJ-OTp0XZoKwzHQ@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 8 Mar 2023 13:13:25 +0100
-Message-ID: <CACRpkdZmemtVHkdo7f8G4wTHEayk1moHSMHEyvomebPV_h8AHA@mail.gmail.com>
-Subject: Re: [PATCH v2 03/16] gpio: aspeed: Convert to immutable irq_chip
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Mun Yew Tham <mun.yew.tham@intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andrew Jeffery <andrew@aj.id.au>, Alban Bedel <albeu@free.fr>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Jay Fang <f.fangjian@huawei.com>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-omap@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 2:22 AM Joel Stanley <joel@jms.id.au> wrote:
-> On Tue, 7 Mar 2023 at 13:04, Linus Walleij <linus.walleij@linaro.org> wrote:
+RnJvbTogRGF2aWQgV29vZGhvdXNlDQo+IFNlbnQ6IDA4IE1hcmNoIDIwMjMgMDk6MDUNCi4uLg0K
+PiBodHRwczovL2dpdC5pbmZyYWRlYWQub3JnL3VzZXJzL2R3bXcyL2xpbnV4LmdpdC9zaG9ydGxv
+Zy9yZWZzL2hlYWRzL3BhcmFsbGVsLTYuMi12MTQNCj4gDQo+IExvb2tzIGxpa2UgdGhpczoNCj4g
+DQo+IC8qDQo+ICAqIFdlIGNhbiBkbyA2NC1iaXQgQVAgYnJpbmd1cCBpbiBwYXJhbGxlbCBpZiB0
+aGUgQ1BVIHJlcG9ydHMgaXRzIEFQSUMNCj4gICogSUQgaW4gQ1BVSUQgKGVpdGhlciBsZWFmIDB4
+MEIgaWYgd2UgbmVlZCB0aGUgZnVsbCBBUElDIElEIGluIFgyQVBJQw0KPiAgKiBtb2RlLCBvciBs
+ZWFmIDB4MDEgaWYgOCBiaXRzIGFyZSBzdWZmaWNpZW50KS4gT3RoZXJ3aXNlIGl0J3MgdG9vDQo+
+ICAqIGhhcmQuDQo+ICAqLw0KPiBzdGF0aWMgYm9vbCBwcmVwYXJlX3BhcmFsbGVsX2JyaW5ndXAo
+dm9pZCkNCj4gew0KPiAJYm9vbCBoYXNfc2V2X2VzID0gSVNfRU5BQkxFRChDT05GSUdfQU1EX01F
+TV9FTkNSWVBUKSAmJg0KPiAJCXN0YXRpY19icmFuY2hfdW5saWtlbHkoJnNldl9lc19lbmFibGVf
+a2V5KTsNCj4gDQo+IAlpZiAoSVNfRU5BQkxFRChDT05GSUdfWDg2XzMyKSkNCj4gCQlyZXR1cm4g
+ZmFsc2U7DQo+IA0KPiAJLyoNCj4gCSAqIEVuY3J5cHRlZCBndWVzdHMgb3RoZXIgdGhhbiBTRVYt
+RVMgKGluIHRoZSBmdXR1cmUpIHdpbGwgbmVlZCB0bw0KPiAJICogaW1wbGVtZW50IGFuIGVhcmx5
+IHdheSBvZiBmaW5kaW5nIHRoZSBBUElDIElELCBzaW5jZSB0aGV5IHdpbGwNCj4gCSAqIHByZXN1
+bWFibHkgYmxvY2sgZGlyZWN0IENQVUlEIHRvby4gQmUga2luZCB0byBvdXIgZnV0dXJlIHNlbHZl
+cw0KPiAJICogYnkgd2FybmluZyBoZXJlIGluc3RlYWQgb2YganVzdCBsZXR0aW5nIHRoZW0gYnJl
+YWsuIFBhcmFsbGVsDQo+IAkgKiBzdGFydHVwIGRvZXNuJ3QgaGF2ZSB0byBiZSBpbiB0aGUgZmly
+c3Qgcm91bmQgb2YgZW5hYmxpbmcgcGF0Y2hlcw0KPiAJICogZm9yIGFueSBzdWNoIHRlY2hub2xv
+Z3kuDQo+IAkgKi8NCj4gCWlmIChjY19wbGF0Zm9ybV9oYXMoQ0NfQVRUUl9HVUVTVF9TVEFURV9F
+TkNSWVBUKSB8fCAhaGFzX3Nldl9lcykgew0KPiAJCXByX2luZm8oIkRpc2FibGluZyBwYXJhbGxl
+bCBicmluZ3VwIGR1ZSB0byBndWVzdCBtZW1vcnkgZW5jcnlwdGlvblxuIik7DQo+IAkJcmV0dXJu
+IGZhbHNlOw0KPiAJfQ0KDQpUaGF0IGxvb2tzIHdyb25nLCB3b24ndCBoYXNfc2V2X2VzIGFsbW9z
+dCBhbHdheXMgYmUgZmFsc2UNCnNvIGl0IHByaW50cyB0aGUgbWVzc2FnZSBhbmQgcmV0dXJucz8N
+Ck1heWJlIHMvfHwvJiYvID8NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtl
+c2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBV
+Sw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-> > +static void aspeed_gpio_irq_print_chip(struct irq_data *d, struct seq_file *p)
-> > +{
-> > +       const struct aspeed_gpio_bank *bank;
-> > +       struct aspeed_gpio *gpio;
-> > +       u32 bit;
-> > +       int rc, offset;
-> > +
-> > +       rc = irqd_to_aspeed_gpio_data(d, &gpio, &bank, &bit, &offset);
->
-> Why do we call this instead of using irq_data_get_irq_chip_data?
-
-Because this is what the other irqchip callbacks do and I do not
-dare to do anything inventive or different as I can't really test
-the patches.
-
-> Actually, the callback appears to do the same as the default
-> implementation, so we could just drop it?
-
-So is chip->name always set to dev_name(dev) if we don't define
-it? I had no idea.
-
-I can respon with this change, the optional IRQ should be a separate
-patch I think?
-
-Yours,
-Linus Walleij
