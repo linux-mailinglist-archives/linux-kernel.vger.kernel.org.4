@@ -2,53 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CE26B028A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C18D96B028B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 10:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbjCHJNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 04:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
+        id S230440AbjCHJNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 04:13:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjCHJMz (ORCPT
+        with ESMTP id S230389AbjCHJNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 04:12:55 -0500
+        Wed, 8 Mar 2023 04:13:10 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BBBFF23
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 01:12:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290B432514
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 01:13:04 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pZpqj-0005dM-JW; Wed, 08 Mar 2023 10:12:41 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZpr4-0005oM-Cg; Wed, 08 Mar 2023 10:13:02 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pZpqh-002gNc-CX; Wed, 08 Mar 2023 10:12:39 +0100
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pZpqg-00EcL9-OX; Wed, 08 Mar 2023 10:12:38 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        UNGLinuxDriver@microchip.com
-Subject: [PATCH net-next v2 2/2] net: dsa: microchip: add ETS Qdisc support for KSZ9477 series
-Date:   Wed,  8 Mar 2023 10:12:37 +0100
-Message-Id: <20230308091237.3483895-3-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230308091237.3483895-1-o.rempel@pengutronix.de>
-References: <20230308091237.3483895-1-o.rempel@pengutronix.de>
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZpr3-002gNp-8N; Wed, 08 Mar 2023 10:13:01 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZpr2-003FWt-A4; Wed, 08 Mar 2023 10:13:00 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH RESEND] mfd: Remove .enable() and .disable() callbacks
+Date:   Wed,  8 Mar 2023 10:12:57 +0100
+Message-Id: <20230308091257.2404932-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3138; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=GUzxnTWsIXWW7Ki2l9BW5VirY/a2SUtcfWPyToSsUOY=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkCFGV95AaBgJK4+4UaRi0abquVBWD1AJMlE/yO IfuAsdqC4qJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAhRlQAKCRDB/BR4rcrs CRwXB/9RqaAnWZo58atUMOIvJjM/L3vGJyxS01W/W8Q48QEY5YJO3SegE9Ht9HMKuEvS26NPpWY LTnrUzrwiOc98JXQguObVhIC6LNNC0qRUJ9R/Rpn1JrgWBGi/eK6bHW7IUoEm5fBgnOmBpCxWBZ D2nJEkBGx50WOpXOilMaN17DFPPKv2LPJ97l7EMTCffXnGnYCWyYlcjrX6vEfD3vwak1+mysiXg ttikg1RSbV6K0XW0/4iBMMt91eTgD/KruNs9NdbZyqrK3nQpOg6ijiJ5xs3B2mzZSq/1pbTZv18 i4Qs+cidrMK+IT9yKg64gkEARtI2b4oAgS3GpZ4tEeLe3pmh
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -59,257 +53,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add ETS Qdisc support for KSZ9477 of switches. Current implementation is
-limited to strict priority mode.
+With commit dd77f5fa97d3 ("mfd: Remove toshiba tmio drivers") the last
+mfd driver that implements these callbacks is gone and since commit
+652719b1003a ("w1: remove ds1wm driver") the last user is gone. The
+corresponding functions mfd_cell_enable() and mfd_cell_disable() are
+also unused (since commit 0ca222c81977 ("leds: Remove asic3 driver")).
 
-Tested on KSZ8563R with following configuration:
-tc qdisc replace dev lan2 root handle 1: ets strict 4 \
-  priomap 3 3 2 2 1 1 0 0
-ip link add link lan2 name v1 type vlan id 1 \
-  egress-qos-map 0:0 1:1 2:2 3:3 4:4 5:5 6:6 7:7
-
-and patched iperf3 version:
-https://github.com/esnet/iperf/pull/1476
-iperf3 -c 172.17.0.1 -b100M  -l1472 -t100 -u -R --sock-prio 2
-
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/net/dsa/microchip/ksz_common.c | 185 +++++++++++++++++++++++++
- drivers/net/dsa/microchip/ksz_common.h |  12 ++
- 2 files changed, 197 insertions(+)
+ drivers/mfd/mfd-core.c   | 26 --------------------------
+ include/linux/mfd/core.h | 12 ------------
+ 2 files changed, 38 deletions(-)
 
-diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-index ae05fe0b0a81..2f9230d3c357 100644
---- a/drivers/net/dsa/microchip/ksz_common.c
-+++ b/drivers/net/dsa/microchip/ksz_common.c
-@@ -3172,12 +3172,197 @@ static int ksz_setup_tc_cbs(struct dsa_switch *ds, int port,
- 				 MTI_SHAPING_SRP);
- }
+Hello,
+
+this patch was already sent in January. Back then however there were
+still a few drivers making use of the enable and disable calls. In
+v6.3-rc1 these are gone now and so it should be safe to apply this
+patch.
+
+The comment "Refcounting happens automatically, with the cell's
+enable/disable callbacks being called only when a device is first being
+enabled or no other clients are making use of it." is wrong. Should we
+consider this patch a fix then? :-)
+
+Best regards
+Uwe
+
+diff --git a/drivers/mfd/mfd-core.c b/drivers/mfd/mfd-core.c
+index 16d1861e9682..695d50b3bac6 100644
+--- a/drivers/mfd/mfd-core.c
++++ b/drivers/mfd/mfd-core.c
+@@ -33,32 +33,6 @@ static struct device_type mfd_dev_type = {
+ 	.name	= "mfd_device",
+ };
  
-+static int ksz_disable_egress_rate_limit(struct ksz_device *dev, int port)
-+{
-+	int queue, ret;
-+
-+	/* Configuration will not take effect until the last Port Queue X
-+	 * Egress Limit Control Register is written.
-+	 */
-+	for (queue = 0; queue < dev->info->num_tx_queues; queue++) {
-+		ret = ksz_pwrite8(dev, port, KSZ9477_REG_PORT_OUT_RATE_0 + queue,
-+				  KSZ9477_OUT_RATE_NO_LIMIT);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ksz_ets_band_to_queue(struct tc_ets_qopt_offload_replace_params *p,
-+				 int band)
-+{
-+	/* Compared to queues, bands prioritize packets differently. In strict
-+	 * priority mode, the lowest priority is assigned to Queue 0 while the
-+	 * highest priority is given to Band 0.
-+	 */
-+	return p->bands - 1 - band;
-+}
-+
-+static int ksz_queue_set_strict(struct ksz_device *dev, int port, int queue)
-+{
-+	int ret;
-+
-+	ret = ksz_pwrite32(dev, port, REG_PORT_MTI_QUEUE_INDEX__4, queue);
-+	if (ret)
-+		return ret;
-+
-+	return ksz_setup_tc_mode(dev, port, MTI_SCHEDULE_STRICT_PRIO,
-+				 MTI_SHAPING_OFF);
-+}
-+
-+static int ksz_queue_set_wrr(struct ksz_device *dev, int port, int queue,
-+			     int weight)
-+{
-+	int ret;
-+
-+	ret = ksz_pwrite32(dev, port, REG_PORT_MTI_QUEUE_INDEX__4, queue);
-+	if (ret)
-+		return ret;
-+
-+	ret = ksz_setup_tc_mode(dev, port, MTI_SCHEDULE_WRR,
-+				MTI_SHAPING_OFF);
-+	if (ret)
-+		return ret;
-+
-+	return ksz_pwrite8(dev, port, KSZ9477_PORT_MTI_QUEUE_CTRL_1, weight);
-+}
-+
-+static int ksz_tc_ets_add(struct ksz_device *dev, int port,
-+			  struct tc_ets_qopt_offload_replace_params *p)
-+{
-+	int ret, band, tc_prio;
-+	u32 queue_map = 0;
-+
-+	/* In order to ensure proper prioritization, it is necessary to set the
-+	 * rate limit for the related queue to zero. Otherwise strict priority
-+	 * or WRR mode will not work. This is a hardware limitation.
-+	 */
-+	ret = ksz_disable_egress_rate_limit(dev, port);
-+	if (ret)
-+		return ret;
-+
-+	/* Configure queue scheduling mode for all bands. Currently only strict
-+	 * prio mode is supported.
-+	 */
-+	for (band = 0; band < p->bands; band++) {
-+		int queue = ksz_ets_band_to_queue(p, band);
-+
-+		ret = ksz_queue_set_strict(dev, port, queue);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/* Configure the mapping between traffic classes and queues. Note:
-+	 * priomap variable support 16 traffic classes, but the chip can handle
-+	 * only 8 classes.
-+	 */
-+	for (tc_prio = 0; tc_prio < ARRAY_SIZE(p->priomap); tc_prio++) {
-+		int queue;
-+
-+		if (tc_prio > KSZ9477_MAX_TC_PRIO)
-+			break;
-+
-+		queue = ksz_ets_band_to_queue(p, p->priomap[tc_prio]);
-+		queue_map |= queue << (tc_prio * KSZ9477_PORT_TC_MAP_S);
-+	}
-+
-+	return ksz_pwrite32(dev, port, KSZ9477_PORT_MRI_TC_MAP__4, queue_map);
-+}
-+
-+static int ksz_tc_ets_del(struct ksz_device *dev, int port)
-+{
-+	int ret, queue;
-+
-+	/* To restore the default chip configuration, set all queues to use the
-+	 * WRR scheduler with a weight of 1.
-+	 */
-+	for (queue = 0; queue < dev->info->num_tx_queues; queue++) {
-+		ret = ksz_queue_set_wrr(dev, port, queue,
-+					KSZ9477_DEFAULT_WRR_WEIGHT);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/* Revert the queue mapping for TC-priority to its default setting on
-+	 * the chip.
-+	 */
-+	return ksz_pwrite32(dev, port, KSZ9477_PORT_MRI_TC_MAP__4,
-+			    KSZ9477_DEFAULT_TC_MAP);
-+}
-+
-+static int ksz_tc_ets_validate(struct ksz_device *dev, int port,
-+			       struct tc_ets_qopt_offload_replace_params *p)
-+{
-+	int band;
-+
-+	/* Since it is not feasible to share one port among multiple qdisc,
-+	 * the user must configure all available queues appropriately.
-+	 */
-+	if (p->bands != dev->info->num_tx_queues) {
-+		dev_err(dev->dev, "Not supported amount of bands. It should be %d\n",
-+			dev->info->num_tx_queues);
-+		return -EOPNOTSUPP;
-+	}
-+
-+	for (band = 0; band < p->bands; ++band) {
-+		/* The KSZ switches utilize a weighted round robin configuration
-+		 * where a certain number of packets can be transmitted from a
-+		 * queue before the next queue is serviced. For more information
-+		 * on this, refer to section 5.2.8.4 of the KSZ8565R
-+		 * documentation on the Port Transmit Queue Control 1 Register.
-+		 * However, the current ETS Qdisc implementation (as of February
-+		 * 2023) assigns a weight to each queue based on the number of
-+		 * bytes or extrapolated bandwidth in percentages. Since this
-+		 * differs from the KSZ switches' method and we don't want to
-+		 * fake support by converting bytes to packets, it is better to
-+		 * return an error instead.
-+		 */
-+		if (p->quanta[band]) {
-+			dev_err(dev->dev, "Quanta/weights configuration is not supported.\n");
-+			return -EOPNOTSUPP;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int ksz_tc_setup_qdisc_ets(struct dsa_switch *ds, int port,
-+				  struct tc_ets_qopt_offload *qopt)
-+{
-+	struct ksz_device *dev = ds->priv;
-+	int ret;
-+
-+	if (qopt->parent != TC_H_ROOT) {
-+		dev_err(dev->dev, "Parent should be \"root\"\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	switch (qopt->command) {
-+	case TC_ETS_REPLACE:
-+		ret = ksz_tc_ets_validate(dev, port, &qopt->replace_params);
-+		if (ret)
-+			return ret;
-+
-+		return ksz_tc_ets_add(dev, port, &qopt->replace_params);
-+	case TC_ETS_DESTROY:
-+		return ksz_tc_ets_del(dev, port);
-+	case TC_ETS_STATS:
-+	case TC_ETS_GRAFT:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
- static int ksz_setup_tc(struct dsa_switch *ds, int port,
- 			enum tc_setup_type type, void *type_data)
- {
- 	switch (type) {
- 	case TC_SETUP_QDISC_CBS:
- 		return ksz_setup_tc_cbs(ds, port, type_data);
-+	case TC_SETUP_QDISC_ETS:
-+		return ksz_tc_setup_qdisc_ets(ds, port, type_data);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index f53834bbe896..7618a4714e06 100644
---- a/drivers/net/dsa/microchip/ksz_common.h
-+++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -657,6 +657,15 @@ static inline int is_lan937x(struct ksz_device *dev)
- #define KSZ8_LEGAL_PACKET_SIZE		1518
- #define KSZ9477_MAX_FRAME_SIZE		9000
+-int mfd_cell_enable(struct platform_device *pdev)
+-{
+-	const struct mfd_cell *cell = mfd_get_cell(pdev);
+-
+-	if (!cell->enable) {
+-		dev_dbg(&pdev->dev, "No .enable() call-back registered\n");
+-		return 0;
+-	}
+-
+-	return cell->enable(pdev);
+-}
+-EXPORT_SYMBOL(mfd_cell_enable);
+-
+-int mfd_cell_disable(struct platform_device *pdev)
+-{
+-	const struct mfd_cell *cell = mfd_get_cell(pdev);
+-
+-	if (!cell->disable) {
+-		dev_dbg(&pdev->dev, "No .disable() call-back registered\n");
+-		return 0;
+-	}
+-
+-	return cell->disable(pdev);
+-}
+-EXPORT_SYMBOL(mfd_cell_disable);
+-
+ #if IS_ENABLED(CONFIG_ACPI)
+ struct match_ids_walk_data {
+ 	struct acpi_device_id *ids;
+diff --git a/include/linux/mfd/core.h b/include/linux/mfd/core.h
+index 14ca7b471576..dac04793e194 100644
+--- a/include/linux/mfd/core.h
++++ b/include/linux/mfd/core.h
+@@ -68,9 +68,6 @@ struct mfd_cell {
+ 	int			id;
+ 	int			level;
  
-+#define KSZ9477_REG_PORT_OUT_RATE_0	0x0420
-+#define KSZ9477_OUT_RATE_NO_LIMIT	0
-+
-+#define KSZ9477_PORT_MRI_TC_MAP__4	0x0808
-+#define KSZ9477_DEFAULT_TC_MAP		0x33221100
-+
-+#define KSZ9477_PORT_TC_MAP_S		4
-+#define KSZ9477_MAX_TC_PRIO		7
-+
- /* CBS related registers */
- #define REG_PORT_MTI_QUEUE_INDEX__4	0x0900
+-	int			(*enable)(struct platform_device *dev);
+-	int			(*disable)(struct platform_device *dev);
+-
+ 	int			(*suspend)(struct platform_device *dev);
+ 	int			(*resume)(struct platform_device *dev);
  
-@@ -670,6 +679,9 @@ static inline int is_lan937x(struct ksz_device *dev)
- #define MTI_SHAPING_SRP			1
- #define MTI_SHAPING_TIME_AWARE		2
+@@ -123,15 +120,6 @@ struct mfd_cell {
+ 	int			num_parent_supplies;
+ };
  
-+#define KSZ9477_PORT_MTI_QUEUE_CTRL_1	0x0915
-+#define KSZ9477_DEFAULT_WRR_WEIGHT	1
-+
- #define REG_PORT_MTI_HI_WATER_MARK	0x0916
- #define REG_PORT_MTI_LO_WATER_MARK	0x0918
- 
+-/*
+- * Convenience functions for clients using shared cells.  Refcounting
+- * happens automatically, with the cell's enable/disable callbacks
+- * being called only when a device is first being enabled or no other
+- * clients are making use of it.
+- */
+-extern int mfd_cell_enable(struct platform_device *pdev);
+-extern int mfd_cell_disable(struct platform_device *pdev);
+-
+ /*
+  * Given a platform device that's been created by mfd_add_devices(), fetch
+  * the mfd_cell that created it.
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
 -- 
-2.30.2
+2.39.1
 
