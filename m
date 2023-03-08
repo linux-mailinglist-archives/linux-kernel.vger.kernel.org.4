@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BE66B117D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 816C76B1183
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:57:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjCHS4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 13:56:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
+        id S229737AbjCHS5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 13:57:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjCHS4O (ORCPT
+        with ESMTP id S229718AbjCHS5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 13:56:14 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15899B718B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 10:56:12 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id s11so69702764edy.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 10:56:12 -0800 (PST)
+        Wed, 8 Mar 2023 13:57:02 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F630B1B02
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 10:57:01 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id o12so69663032edb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 10:57:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678301770;
-        h=content-transfer-encoding:in-reply-to:references:to:from
+        d=linaro.org; s=google; t=1678301820;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=X/pHlMGghffPWTZZPUgza6lKCQ6cEG1zaO4dHYrIAbo=;
-        b=H7TNnzTKWYf1adG3/aIcNa1VrLnzlFv2oTLg5QS0FuXNoWCB2m9ewse7lX7PcyyqCx
-         a1cL5Rqs/Avn9xxw0DU9xl8vjZbt+R8EXgM+5N9ABBrK6s1OGDLl1HwzXKI8DW4AvjnP
-         V0YrYW72AyMZY2Rsq8Rf5XDYw1m+EAoUaoSYh7IE5Gw/zs0fl7HOHJlM4axAxmOcb1CW
-         jdeVtHSNuCr/AfA4r+ljr45mixmDDR2r5D7LnYkmva1xW07lWTawhJTr0T/QGNglPTDh
-         fb1A5Wjlkdq9XIoY4ozJJzx2hwi+tg2atnVlsvQAyx+MzMkD3FyUuKAowp7zAH5oqTQ2
-         9dMQ==
+        bh=5UN4FXZh9obV93C6xCot0TbkN0Vab2XDWkrefnJoiU4=;
+        b=OsBg3IELTXJR9KbMHD+CW92mtVS2p3Iw8D2yJuwccrL+uvO0CzxhEa4I28viBDi/kB
+         OCcRF2pYOJA6VGy13SjHzZC/eZ/3mkXZDveXIyPZnCmcwRADFE5hhBOWSQZn/vDBgQCx
+         DGyVPpY9wDHQ6+wk5oVGfPUTrFJ/E1bx8omhk6s2HmbXAgQffo22EYlL/f2wwiWYW4uk
+         ScxtLikIexiL7kyh8j2dJrQ3HAFydWxSqdTsCz05XmdqM0Zq4Rqq/UjM6g6t+jtoZwFB
+         8AlA8/qdaHyCkD29RmirjtYXE0IV/iCmEYFmNzhyl1T203S+gE35rxmQ6bgpRf+p5nrB
+         GOPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678301770;
-        h=content-transfer-encoding:in-reply-to:references:to:from
+        d=1e100.net; s=20210112; t=1678301820;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X/pHlMGghffPWTZZPUgza6lKCQ6cEG1zaO4dHYrIAbo=;
-        b=ehfv+PfiH9cZo0wRVvf7R9OhCeXdfoHC2wlylnfRWEy80tDcvbLm1801P57atDgh9/
-         dPuY5RjF8e4NKBgeAjHybGF7gPWvcCw8K8l8NqSwwGtIgGC/AMiiQi42t4TpZ+jVKFBq
-         ygX4CHp0YRnPM6/GNgVh7h7r6k1wriUQ+gD+1P/XGspPTkPbQUA3m/7Nu6Jm78x/c8DZ
-         CSNj63zjGiyCGXpjMkYFyYFB2aRvyOffk5J+ryFdTqVaEMEpCVDx2mxh0D6VcH4gNfrd
-         7s6XwJiAeQb8RN4lg3I83dzJqmUMa56JIhmQoo5DK963QJYpiZo/x5VWoFxxm/DnUYku
-         ASww==
-X-Gm-Message-State: AO0yUKV4W7f0vDkadQBRZxUoxfh2FuloUdA/zQCVP1HZEIr9mva+wb9p
-        fy8JE9so+uyZflLyS2Tj9kontQ==
-X-Google-Smtp-Source: AK7set+m5ainCqvQfufkkpeH5ZSkqkcrqnnnSrmKdUTwbff1KsY5QqXKN6aaUnP+5lFUAeSIWUxmBg==
-X-Received: by 2002:aa7:d782:0:b0:4ad:8fc5:3d2a with SMTP id s2-20020aa7d782000000b004ad8fc53d2amr16660801edq.11.1678301770571;
-        Wed, 08 Mar 2023 10:56:10 -0800 (PST)
+        bh=5UN4FXZh9obV93C6xCot0TbkN0Vab2XDWkrefnJoiU4=;
+        b=OWuHFHvX0OpZpgHA2aL3ioWB+rW4l5rdT6SkNunQmK4xqMVckAJq/eTjSM1RrIWRpM
+         RZTME2Ak8h8dgQX+vtgOJVCRExysMSGY944jZmzIE1OLn07LHUEeBXQ5V+aoranFjR4U
+         d9q4Rgtt0+7dzZDoaJcnjzjFiSmPTmt947cagWXF7QTK2Y6t4lv9fgTphKrzGUUrDbie
+         U+6I0T3EhYg4NfBkZHRj/Rh0q7QQ8PfHmf4DTv6varN2aOUwIkkb3icFUDUqltUQd7+P
+         OSpFFdvJ8B4DGUpk5t4SrjzNRhOQpJxnq0Si2s4LcSm1M3xUB/4K70tEsQXGz9BAs4P/
+         PSPQ==
+X-Gm-Message-State: AO0yUKW+0a5ijOpJOkanO30dHLkYWcjnFa5NzIukvLA3yr5paRJkLm7l
+        2pDBJH5EJd420lhRt188c/zxaw==
+X-Google-Smtp-Source: AK7set9OaszX5xG/ljtpzabnCZNFiVVjnu96q6Mk5l6tqfbc0Obpl5Z63/ymt/n2yWMdbJtocJWM4A==
+X-Received: by 2002:a05:6402:1345:b0:4af:6e95:85ec with SMTP id y5-20020a056402134500b004af6e9585ecmr17161882edw.4.1678301819820;
+        Wed, 08 Mar 2023 10:56:59 -0800 (PST)
 Received: from ?IPV6:2a02:810d:15c0:828:ff33:9b14:bdd2:a3da? ([2a02:810d:15c0:828:ff33:9b14:bdd2:a3da])
-        by smtp.gmail.com with ESMTPSA id c65-20020a509fc7000000b004bf76fdfdb3sm8544250edf.26.2023.03.08.10.56.09
+        by smtp.gmail.com with ESMTPSA id ib21-20020a1709072c7500b008cdb0628991sm7880226ejc.57.2023.03.08.10.56.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 10:56:10 -0800 (PST)
-Message-ID: <f51dc491-d151-6e8e-1ed7-70ecf0a8b2aa@linaro.org>
-Date:   Wed, 8 Mar 2023 19:56:08 +0100
+        Wed, 08 Mar 2023 10:56:59 -0800 (PST)
+Message-ID: <7c6a70d1-fd64-66cc-688b-3e04634066bb@linaro.org>
+Date:   Wed, 8 Mar 2023 19:56:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
 Subject: Re: [net-next PATCH 10/11] dt-bindings: net: phy: Document support
  for LEDs node
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Christian Marangi <ansuelsmth@gmail.com>,
         Andrew Lunn <andrew@lunn.ch>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -79,36 +78,51 @@ To:     Christian Marangi <ansuelsmth@gmail.com>,
         linux-leds@vger.kernel.org
 References: <20230307170046.28917-1-ansuelsmth@gmail.com>
  <20230307170046.28917-11-ansuelsmth@gmail.com>
- <ffb11c8b-be03-4ae3-6970-cf4bb21587e7@linaro.org>
-In-Reply-To: <ffb11c8b-be03-4ae3-6970-cf4bb21587e7@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230307170046.28917-11-ansuelsmth@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 12:00, Krzysztof Kozlowski wrote:
-> On 07/03/2023 18:00, Christian Marangi wrote:
->> Document support for LEDs node in phy and add an example for it.
->> PHY LED will have to match led pattern and should be treated as a
->> generic led.
->>
->> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
->> ---
+On 07/03/2023 18:00, Christian Marangi wrote:
+> Document support for LEDs node in phy and add an example for it.
+> PHY LED will have to match led pattern and should be treated as a
+> generic led.
 > 
-> Also missing changelog, history, tags, anything. This was already v8.
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  .../devicetree/bindings/net/ethernet-phy.yaml | 22 +++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 > 
-> Also, I have doubts that your patchset is fully bisectable. Are you sure
-> of this?
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-phy.yaml b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> index 1327b81f15a2..0ec8ef6b0d8a 100644
+> --- a/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> +++ b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> @@ -197,6 +197,13 @@ properties:
+>        PHY's that have configurable TX internal delays. If this property is
+>        present then the PHY applies the TX delay.
+>  
+> +  leds:
+> +    type: object
 
-OK, so the leds in previous patch are not for phy but for port, so it is
-properly bisectable.
+additionalProperties: false
+
+although maybe this was already said in one of previous ten reviews...
+
+> +
+> +    patternProperties:
+> +      '^led(@[a-f0-9]+)?$':
+> +        $ref: /schemas/leds/common.yaml#
+> +
+
 
 Best regards,
 Krzysztof
