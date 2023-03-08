@@ -2,78 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BD96B129C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 306996B12A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjCHUEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 15:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
+        id S229645AbjCHUHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 15:07:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjCHUEg (ORCPT
+        with ESMTP id S229652AbjCHUHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:04:36 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F55A7301E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 12:04:35 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id n18so15799642ybm.10
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 12:04:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678305874;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BgiAiljnut4x4KojkZEYCBr9lUbzxmiy/Wpveu0hTeU=;
-        b=q39LOavP0PxjMVkc7KSrE1R3B/rGZc61GxiGlhUUyKrPaRjqE3M0EfGqGy9nx7txmM
-         fAP/MbFEIeUXpvV1dkxIRwwOmArrn/QQGDC5yradFVvWXeNcms1/EJb5U+JN+Eqz02iz
-         fcm/h6pvAsYIQ9l6eK/bE3vFCzQW9ugAWkloc535AW2+BFfVfDSuKfSINWN/drF56eb3
-         Cz+IzigTAvVVSQKVuUtMzAVAzd8AYHL8O5iZaiseAdA7Qz577JruKtT+Y8OaAUvHmDN+
-         lQTgQb2SntiiMSvhxmh3RWiMadSiyD1NjTxDm+hAU9etlHudH85HKnuvSzdlrBNUS2Dy
-         6GaQ==
+        Wed, 8 Mar 2023 15:07:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6AA9BE5F3
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 12:06:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678305984;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EqzFSckHueM0aXNSANb++ihcLYh6l4SG1YDTHgu98eA=;
+        b=gVpPACcmreh0ygeg+t8+5pahHvjJBWus9pgFAbSGWvEKVjBQJbyXFMLaAZUvu767C6LKFd
+        flBpJWsj3HmEXmAfdfbUgfxyEpCzDwZJnb6cVN2HXQdP+O8TV5PaA3a6pKVhzpNDidPzjY
+        Ybp4Vkd3nL6mD5ESWQMDaIl4p/Xa78g=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-9-sCUjCXjOOGquJBMfP2KmkA-1; Wed, 08 Mar 2023 15:06:23 -0500
+X-MC-Unique: sCUjCXjOOGquJBMfP2KmkA-1
+Received: by mail-il1-f198.google.com with SMTP id i7-20020a056e021b0700b0031dc4cdc47cso6958790ilv.23
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 12:06:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678305874;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678305982;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BgiAiljnut4x4KojkZEYCBr9lUbzxmiy/Wpveu0hTeU=;
-        b=wbWOZ2wh0APCVuE+rS/PjderFl7NvAtEtesimoOMS0GdOfME3Pzk9lnfQwW7kl/0OC
-         vlejaTMMy6Bu0Z2dqaFl+5s0mBr+Qz8C9GjVH9VQ5uh8/HdfIhd1pACF9Fu2EE1jUvU3
-         lvN1SSwr3RswXGzcvYjp+oA6QjGzJS3Jtou/VQ9OrcT78/0ZhzaOOQUoB/wuholD5l4c
-         DWN3faGwPjkEZuNWXu5kSwOLL8JRz88NZ8AEHzhwUk8qVWTGZxCKQHJhxVJzuuFmJFzA
-         XgeU3Xok7FjIFNMAHYNQ7L8tV5Tel2KHWuRg3n+4O0hEa+BpljFEATBm/mFogXVkszfT
-         saHQ==
-X-Gm-Message-State: AO0yUKV0xCP8V5pDw85T3kdRk0Uj5kErVLQM3WCGGyoSJUB7E7x5gYq4
-        yE4jkwUywGlrwWlVNLiCJiVLiiRqIaUP8RpRGGKI
-X-Google-Smtp-Source: AK7set+iOgd86MWzFDasyceCVC09JR/h4TmOPifJeXgAKy2mmskx7mOOIURVDn/9N1onw6AVXM5h+m4AMaRlv4/TEhg=
-X-Received: by 2002:a25:8c0c:0:b0:b27:4632:f651 with SMTP id
- k12-20020a258c0c000000b00b274632f651mr22268ybl.3.1678305874604; Wed, 08 Mar
- 2023 12:04:34 -0800 (PST)
+        bh=EqzFSckHueM0aXNSANb++ihcLYh6l4SG1YDTHgu98eA=;
+        b=57aWJ8JOvNGqsSrPZF5JNjRscphiqc4L/KNC8Qd0a5YYAs1b5zCuYmhBjVxrImNTrR
+         quWxVo6E+hROn0jiKF6BUX1DENVxyHONBSMmj/1aRhdyCEVkjW5fJghRguSfMlTvDNrc
+         sX/5JsKc16onUl0r8lJuUiNgh8KCUYMXPaYrzGT/zpxlN19vRFHFx0bF/o+uxUoTay7Q
+         peTsNNdU5CiA07tduvDM5/aBSVcrplhtorV9/IEvKNwzBvw2OYGlVjZDL2sHk4HHB1rx
+         Cgk9exLo1gRv6xSncRc1wAVxqUWHZ602YgqRFEQazbfDtu2QbK3oBRFhtTRH0B2gczF+
+         xzrw==
+X-Gm-Message-State: AO0yUKVyfPq2KBn3IS5j+AhvRsXu7SSLMfx943NRCG3IbGdEwnZGJ8VW
+        3Yn/GnFTjL1ols7CEdeVO/tamOX0kCKkepnz89JO0TPyE+zEZIg8epdiWiW48ynQKynXuzVZlkA
+        0qNm0Le0P9aO6HLulOGXTzLpmuJDb2wvn
+X-Received: by 2002:a5e:aa07:0:b0:6e9:d035:45df with SMTP id s7-20020a5eaa07000000b006e9d03545dfmr14333030ioe.6.1678305982307;
+        Wed, 08 Mar 2023 12:06:22 -0800 (PST)
+X-Google-Smtp-Source: AK7set+xdqja+v+gspmdhgaHJ3P7uV06zqPr158B/uCD7qDJiPCkpqyVNvR6AucSkRlenxDWrCw5Vw==
+X-Received: by 2002:a5e:aa07:0:b0:6e9:d035:45df with SMTP id s7-20020a5eaa07000000b006e9d03545dfmr14333006ioe.6.1678305982003;
+        Wed, 08 Mar 2023 12:06:22 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id z10-20020a92650a000000b00317f477b039sm1867927ilb.4.2023.03.08.12.06.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 12:06:21 -0800 (PST)
+Date:   Wed, 8 Mar 2023 13:06:19 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Dominik Behr <dbehr@chromium.org>
+Cc:     Grzegorz Jaszczyk <jaz@semihalf.com>, linux-kernel@vger.kernel.org,
+        dmy@semihalf.com, tn@semihalf.com, upstream@semihalf.com,
+        dtor@google.com, jgg@ziepe.ca, kevin.tian@intel.com,
+        cohuck@redhat.com, abhsahu@nvidia.com, yishaih@nvidia.com,
+        yi.l.liu@intel.com, kvm@vger.kernel.org, libvir-list@redhat.com
+Subject: Re: [PATCH] vfio/pci: Propagate ACPI notifications to the
+ user-space
+Message-ID: <20230308130619.3736cf18.alex.williamson@redhat.com>
+In-Reply-To: <CABUrSUD6hE=h3-Ho7L_J=OYeRUw_Bmg9o4fuw591iw9QyBQv9A@mail.gmail.com>
+References: <20230307220553.631069-1-jaz@semihalf.com>
+        <20230307164158.4b41e32f.alex.williamson@redhat.com>
+        <CAH76GKNapD8uB0B2+m70ZScDaOM8TmPNAii9TGqRSsgN4013+Q@mail.gmail.com>
+        <20230308104944.578d503c.alex.williamson@redhat.com>
+        <CABUrSUD6hE=h3-Ho7L_J=OYeRUw_Bmg9o4fuw591iw9QyBQv9A@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20230302062741.483079-1-jstultz@google.com> <20230302082414.77613351@gandalf.local.home>
- <CANDhNCo4ruC4pP+iDe49b3e1nAcWtYQj4bx82+oZhyLFYkdFJQ@mail.gmail.com>
- <20230302152103.2618f1b7@gandalf.local.home> <20230302163253.541ac3a8@gandalf.local.home>
- <20230302163603.223313ba@gandalf.local.home> <20230302165613.2dcc18ca@gandalf.local.home>
- <20230302200136.381468f0@gandalf.local.home> <20230307203122.14b077c4@gandalf.local.home>
-In-Reply-To: <20230307203122.14b077c4@gandalf.local.home>
-From:   John Stultz <jstultz@google.com>
-Date:   Wed, 8 Mar 2023 12:04:23 -0800
-Message-ID: <CANDhNCpw+M_bwLpxb-vdL__xZrQsAVCMBozVt3+v4ncUVKbfAA@mail.gmail.com>
-Subject: Re: [PATCH] pstore: Revert pmsg_lock back to a normal mutex
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Wei Wang <wvw@google.com>,
-        Midas Chien <midaschieh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Tony Luck <tony.luck@intel.com>, kernel-team@android.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,40 +87,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 5:31=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org>=
- wrote:
->
-> On Thu, 2 Mar 2023 20:01:36 -0500
-> Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> > @@ -1421,11 +1425,23 @@ static bool rtmutex_spin_on_owner(struct rt_mut=
-ex_base *lock,
-> >                *    for CONFIG_PREEMPT_RCU=3Dy)
-> >                *  - the VCPU on which owner runs is preempted
-> >                */
-> > -             if (!owner_on_cpu(owner) || need_resched() ||
-> > -                 !rt_mutex_waiter_is_top_waiter(lock, waiter)) {
-> > +             if (!owner_on_cpu(owner) || need_resched()) {
-> >                       res =3D false;
-> >                       break;
-> >               }
-> > +             top_waiter =3D rt_mutex_top_waiter(lock);
->
-> rt_mutex_top_waiter() can not be called outside the wait_lock, as it may
-> trigger that BUG_ON() you saw.
->
-> New patch below.
+On Wed, 8 Mar 2023 10:45:51 -0800
+Dominik Behr <dbehr@chromium.org> wrote:
 
-Hey Steven!
-  Thanks for the new version! It avoids the crash issue. However, with
-my sef-created reproducer, I was still seeing similar regression going
-between mutex to rtmutex.
+> On Wed, Mar 8, 2023 at 9:49=E2=80=AFAM Alex Williamson
+> <alex.williamson@redhat.com> wrote:
+>=20
+> > Adding libvirt folks.  This intentionally designs the interface in a
+> > way that requires a privileged intermediary to monitor netlink on the
+> > host, associate messages to VMs based on an attached device, and
+> > re-inject the event to the VMM.  Why wouldn't we use a channel
+> > associated with the device for such events, such that the VMM has
+> > direct access?  The netlink path seems like it has more moving pieces,
+> > possibly scalability issues, and maybe security issues? =20
+>=20
+> It is the same interface as other ACPI events like AC adapter LID etc
+> are forwarded to user-space.
+>  ACPI events are not particularly high frequency like interrupts.
 
-I'm interested in continuing to see if we can further tweak it, but
-I've got some other work I need to focus on, so I think I'm going to
-advocate for the revert in the short-term and look at finer grained
-locking (along with rtmutex to address the priority inversion issue)
-in the longer term.
+I'm not sure that's relevant, these interfaces don't proclaim to
+provide isolation among host processes which manage behavior relative
+to accessories.  These are effectively system level services.  It's only
+a very, very specialized use case that places a VMM as peers among these
+processes.  Generally we don't want to grant a VMM any privileges beyond
+what it absolutely needs, so letting a VMM managing an assigned NIC
+really ought not to be able to snoop host events related to anything
+other than the NIC.
 
-thanks
--john
+> > > > What sort of ACPI events are we expecting to see here and what does=
+ user space do with them? =20
+> The use we are looking at right now are D-notifier events about the
+> GPU power available to mobile discrete GPUs.
+> The firmware notifies the GPU driver and resource daemon to
+> dynamically adjust the amount of power that can be used by the GPU.
+>=20
+> > The proposed interface really has no introspection, how does the VMM
+> > know which devices need ACPI tables added "upfront"?  How do these
+> > events factor into hotplug device support, where we may not be able to
+> > dynamically inject ACPI code into the VM? =20
+>=20
+> The VMM can examine PCI IDs and the associated firmware node of the
+> PCI device to figure out what events to expect and what ACPI table to
+> generate to support it but that should not be necessary.
+
+I'm not entirely sure where your VMM is drawing the line between the VM
+and management tools, but I think this is another case where the
+hypervisor itself should not have privileges to examine the host
+firmware tables to build its own.  Something like libvirt would be
+responsible for that.
+
+> A generic GPE based ACPI event forwarder as Grzegorz proposed can be
+> injected at VM init time and handle any notification that comes later,
+> even from hotplug devices.
+
+It appears that forwarder is sending the notify to a specific ACPI
+device node, so it's unclear to me how that becomes boilerplate AML
+added to all VMs.  We'll need to notify different devices based on
+different events, right?
+=20
+> > The acpi_bus_generate_netlink_event() below really only seems to form a
+> > u8 event type from the u32 event.  Is this something that could be
+> > provided directly from the vfio device uAPI with an ioeventfd, thus
+> > providing introspection that a device supports ACPI event notifications
+> > and the ability for the VMM to exclusively monitor those events, and
+> > only those events for the device, without additional privileges? =20
+>=20
+> From what I can see these events are 8 bit as they come from ACPI.
+> They also do not carry any payload and it is up to the receiving
+> driver to query any additional context/state from the device.
+> This will work the same in the VM where driver can query the same
+> information from the passed through PCI device.
+> There are multiple other netflink based ACPI events forwarders which
+> do exactly the same thing for other devices like AC adapter, lid/power
+> button, ACPI thermal notifications, etc.
+> They all use the same mechanism and can be received by user-space
+> programs whether VMMs or others.
+
+But again, those other receivers are potentially system services, not
+an isolated VM instance operating in a limited privilege environment.
+IMO, it's very different if the host display server has access to lid
+or power events than it is to allow some arbitrary VM that happens to
+have an unrelated assigned device that same privilege.
+
+On my laptop, I see multiple _GPE scopes, each apparently very unique
+to the devices:
+
+    Scope (_GPE)
+    {
+        Method (_L0C, 0, Serialized)  // _Lxx: Level-Triggered GPE, xx=3D0x=
+00-0xFF
+        {
+            Notify (\_SB.PCI0.GPP0.PEGP, 0x81) // Information Change
+        }  =20
+
+        Method (_L0D, 0, Serialized)  // _Lxx: Level-Triggered GPE, xx=3D0x=
+00-0xFF
+        {
+            Notify (\_SB.PCI0.GPP0.PEGP, 0x81) // Information Change
+        }
+
+        Method (_L0F, 0, Serialized)  // _Lxx: Level-Triggered GPE, xx=3D0x=
+00-0xFF
+        {  =20
+            Notify (\_SB.PCI0.GPP0.PEGP, 0x81) // Information Change
+        }  =20
+    }=20
+
+    Scope (_GPE)
+    {
+        Method (_L19, 0, NotSerialized)  // _Lxx: Level-Triggered GPE, xx=
+=3D0x00-0xFF
+        {
+            Notify (\_SB.PCI0.GP17, 0x02) // Device Wake
+            Notify (\_SB.PCI0.GP17.XHC0, 0x02) // Device Wake
+            Notify (\_SB.PCI0.GP17.XHC1, 0x02) // Device Wake
+            Notify (\_SB.PWRB, 0x02) // Device Wake
+        }
+
+        Method (_L08, 0, NotSerialized)  // _Lxx: Level-Triggered GPE, xx=
+=3D0x00-0xFF
+        {
+            Notify (\_SB.PCI0.GP18, 0x02) // Device Wake
+            Notify (\_SB.PCI0.GPP0, 0x02) // Device Wake
+            Notify (\_SB.PCI0.GPP1, 0x02) // Device Wake
+            Notify (\_SB.PCI0.GPP5, 0x02) // Device Wake
+        }
+    }
+
+At least one more even significantly more extensive, calling methods
+that interact with OpRegions.  So how does a simple stub of a
+GPE block replicate this sort of behavior in the host AML?  Thanks,
+
+Alex
+
