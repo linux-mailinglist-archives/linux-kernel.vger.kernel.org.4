@@ -2,129 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA2C6B0F7A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 673536B0F93
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjCHQ7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:59:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
+        id S230031AbjCHRBd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Mar 2023 12:01:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbjCHQ6k (ORCPT
+        with ESMTP id S230290AbjCHRAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:58:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C63960A5;
-        Wed,  8 Mar 2023 08:57:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C18E61852;
-        Wed,  8 Mar 2023 16:56:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E1CC433D2;
-        Wed,  8 Mar 2023 16:56:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678294606;
-        bh=mSiziORV5JOTz/dmr0twQJK+pWs676MExklouuLQSu4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TJJX9gQkCIR0opXes4eHqs5uTOE9Y9L7OqpcXEXaCkzPlUyPcnFfIQgJlEiPCW3Lu
-         PpZscyFSSKIlryX5jP9682maJ20mVnI9p8SzClO438O2QWCnSX+BQgty2R0+Hyv5jY
-         /EoOdCdKUtQIB+W9lRqWjC4w/101WiLe9e57NLNbccfUz55fZBMS3avpuGodcfpkyi
-         hak+5qcsgwfnTSjFTUOgmfblvACWaI7ETIoIUG9bcNysnHoJbadxLcVndj82JLs9tu
-         0v1/keyeB2AvlGRn7HHU1CnXTRGLbSSmUv3lRIq2/JcCYc+17KJWsJiEBTmUQrC0v0
-         T93cFl2467BdQ==
-Date:   Wed, 8 Mar 2023 09:56:44 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Robin Murphy <robin.murphy@arm.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] gpu: host1x: fix uninitialized variable use
-Message-ID: <20230308165644.GA1181835@dev-arch.thelio-3990X>
-References: <20230127221418.2522612-1-arnd@kernel.org>
- <Y/eULFO4jbivQ679@dev-arch.thelio-3990X>
+        Wed, 8 Mar 2023 12:00:00 -0500
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC0361AA3;
+        Wed,  8 Mar 2023 08:58:43 -0800 (PST)
+Received: by mail-qt1-f170.google.com with SMTP id l18so18805356qtp.1;
+        Wed, 08 Mar 2023 08:58:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678294718;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AQsveLed2uZniCZtaVm8H3zBhAU22fyIRDp2q5iffd8=;
+        b=6aLTXylBXyFht9jsh0uavCijXIq9bwPnofsTdMlEoBOOrlbaaq/Ic/xeMSilLjzEg7
+         it7BXr8utCMAPb1EnHcX6v9S4bmBZkKW/dCtDR0PPD7cmAs376UwUiCqZuHeGeDJ6U36
+         38TfFjSralp/a/Z40Z+lhXxAPO6i52xJUPyP1n0tEmbMKrYBT7xB2Cs5R/18qkGUanYP
+         zZNzG3aBpZA1OyvErG/N2YAsfYxNlI3y1tWbVn+/lyMlBl+fycciSMUg9sluqMHCY+hl
+         H4Q8XOhIEDlEMJoHTP35VVn29AI+EX84agnos90mrp9xwBkzodcB+MLQoRyT4sOEqRK/
+         NYWg==
+X-Gm-Message-State: AO0yUKUKmdnsFjDtf4TdkL/E6zmPVjKIO/wnnUaS2pIoDUk0fcsXloMK
+        CvA4jhiw+txtOw9jpUYLbNj6MPQFH/mtUEdA
+X-Google-Smtp-Source: AK7set/20lW9SnZOz06nVVAQ9zNkyyWySB8FgT8/zkyow7pInko7jEIFi1R61ADW/PUEjUUn17aNxw==
+X-Received: by 2002:a05:622a:14e:b0:3bc:ff12:e5e5 with SMTP id v14-20020a05622a014e00b003bcff12e5e5mr30896198qtw.17.1678294717852;
+        Wed, 08 Mar 2023 08:58:37 -0800 (PST)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id b1-20020ac84f01000000b003bb8c60cdf1sm11862343qte.78.2023.03.08.08.58.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 08:58:37 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-536c2a1cc07so315666977b3.5;
+        Wed, 08 Mar 2023 08:58:36 -0800 (PST)
+X-Received: by 2002:a81:4428:0:b0:533:8b3a:d732 with SMTP id
+ r40-20020a814428000000b005338b3ad732mr11495878ywa.4.1678294716640; Wed, 08
+ Mar 2023 08:58:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/eULFO4jbivQ679@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221229160045.535778-1-brgl@bgdev.pl> <20221229160045.535778-2-brgl@bgdev.pl>
+In-Reply-To: <20221229160045.535778-2-brgl@bgdev.pl>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 8 Mar 2023 17:58:25 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWBQaB2caVB9vKQoqE0r6jAqOidMRmsCXxyixEm+HWPdw@mail.gmail.com>
+Message-ID: <CAMuHMdWBQaB2caVB9vKQoqE0r6jAqOidMRmsCXxyixEm+HWPdw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] i2c: dev: fix notifier return values
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping? This warning is now in 6.3-rc1.
+Hi Bartosz,
 
-On Thu, Feb 23, 2023 at 09:28:28AM -0700, Nathan Chancellor wrote:
-> Hi Thierry, Daniel, and David,
-> 
-> On Fri, Jan 27, 2023 at 11:14:00PM +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > The error handling for platform_get_irq() failing no longer
-> > works after a recent change, clang now points this out with
-> > a warning:
-> > 
-> > drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
-> >         if (syncpt_irq < 0)
-> >             ^~~~~~~~~~
-> > 
-> > Fix this by removing the variable and checking the correct
-> > error status.
-> > 
-> > Fixes: 625d4ffb438c ("gpu: host1x: Rewrite syncpoint interrupt handling")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  drivers/gpu/host1x/dev.c | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
-> > index 4872d183d860..aae2efeef503 100644
-> > --- a/drivers/gpu/host1x/dev.c
-> > +++ b/drivers/gpu/host1x/dev.c
-> > @@ -487,7 +487,6 @@ static int host1x_get_resets(struct host1x *host)
-> >  static int host1x_probe(struct platform_device *pdev)
-> >  {
-> >  	struct host1x *host;
-> > -	int syncpt_irq;
-> >  	int err;
-> >  
-> >  	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
-> > @@ -517,8 +516,8 @@ static int host1x_probe(struct platform_device *pdev)
-> >  	}
-> >  
-> >  	host->syncpt_irq = platform_get_irq(pdev, 0);
-> > -	if (syncpt_irq < 0)
-> > -		return syncpt_irq;
-> > +	if (host->syncpt_irq < 0)
-> > +		return host->syncpt_irq;
-> >  
-> >  	mutex_init(&host->devices_lock);
-> >  	INIT_LIST_HEAD(&host->devices);
-> > -- 
-> > 2.39.0
-> > 
-> 
-> Apologies if this has been reported already or has a solution in
-> progress but mainline is now broken because this change got separated
-> from the change it is fixing:
-> 
-> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/4249931209/jobs/7391912774
-> https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2M7y9HpiXB13qiC2mkHMyeZOcLW/build.log
-> 
-> I see this change sitting in the drm-tegra tree [1], which is getting
-> merged into -next, so it is fixed there, which is why we did not notice
-> any issues until the drm-next tree was merged into mainline. Can this be
-> fast tracked to Linus to unbreak clang builds with -Werror?
-> 
-> [1]: https://gitlab.freedesktop.org/drm/tegra/-/commit/b9930311641cf2ed905a84aabe27e8f3868aee4a
+On Thu, Dec 29, 2022 at 5:12 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+> We have a set of return values that notifier callbacks can return. They
+> should not return 0, error codes or anything other than those predefined
+> values. Make the i2c character device's callback return NOTIFY_DONE or
+> NOTIFY_OK depending on the situation.
+>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+
+Thanks for your patch, which is now commit cddf70d0bce71c2a ("i2c:
+dev: fix notifier return values") in v6.3-rc1.
+
+On SH/R-Mobile platforms, this leads to missing /dev/i2c-* entries.
+On R-Car Gen4, they are still present, as all I2C adapters are
+initialized after i2cdev.
+
+> --- a/drivers/i2c/i2c-dev.c
+> +++ b/drivers/i2c/i2c-dev.c
+> @@ -653,12 +653,12 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
+>         int res;
+>
+>         if (dev->type != &i2c_adapter_type)
+> -               return 0;
+> +               return NOTIFY_DONE;
+>         adap = to_i2c_adapter(dev);
+>
+>         i2c_dev = get_free_i2c_dev(adap);
+>         if (IS_ERR(i2c_dev))
+> -               return PTR_ERR(i2c_dev);
+> +               return NOTIFY_DONE;
+>
+>         cdev_init(&i2c_dev->cdev, &i2cdev_fops);
+>         i2c_dev->cdev.owner = THIS_MODULE;
+> @@ -678,11 +678,11 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
+>                 goto err_put_i2c_dev;
+>
+>         pr_debug("adapter [%s] registered as minor %d\n", adap->name, adap->nr);
+> -       return 0;
+> +       return NOTIFY_OK;
+
+Unfortunately i2cdev_{at,de}tach_adapter() are not only used as
+notifiers (called from i2cdev_notifier_call()), but also called from
+i2c_dev_init():
+
+        /* Bind to already existing adapters right away */
+        i2c_for_each_dev(NULL, i2cdev_attach_adapter);
+
+and i2c_dev_exit():
+
+        i2c_for_each_dev(NULL, i2cdev_detach_adapter);
+
+As soon i2c_dev_{at,de}tach_adapter() returns a non-zero
+value (e.g. NOTIFY_OK), {i2c,bus}_for_each_dev() aborts
+processing.
+
+In i2c_dev_init(), this leads to a failure in registering any
+already existing i2c adapters after the first one, causing missing
+/dev/i2c-* entries.
+
+In i2c_dev_exit(), this leads to a failure unregistering any but the
+first i2c adapter.
+
+As there is no one-to-one mapping from error codes to notify codes,
+I think this cannot just be handled inside i2cdev_notifier_call() :-(
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
