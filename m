@@ -2,81 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764B56B0941
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F166B0962
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231723AbjCHNdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:33:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
+        id S231404AbjCHNg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjCHNdK (ORCPT
+        with ESMTP id S231518AbjCHNf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:33:10 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217EC93865
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 05:31:51 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id g3so15363826wri.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 05:31:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678282275;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tcs+oZ8Ti0MefEj+f00/ORib4j1MEGcYHaRo1YTx8vQ=;
-        b=uMORQYJTqb7eF+TS+OXUnvGZtemx2Gmei0dGIW+WS7sSdQNWx6CYu2YSur7gZ7UUZe
-         dgjVvgHIe9wrTxtDLDc87XXjrUs1sTFvERIYaF4dSP7NUP4E97AHGTBwAzcrfmyLR28x
-         2DUIcUYsYAc6Aj+QB3hsJtzAbv0Ex92QNRvv/HF3jbZEmjyFb0TarmYJmU7Aha/zIgK9
-         NJBVEM9oCehdwPcTzxCQTxWJPUDv3ULDAwf+YcJMh54Z+ZWVteE+lD7Ccrp+J+aORgkE
-         HlKq/dJBsiNxkFXfbCay2W2Et5VX6jHi0G0DlFT2cfabz5kg8G0PEApfuqh9ggVtunB3
-         hrIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678282275;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tcs+oZ8Ti0MefEj+f00/ORib4j1MEGcYHaRo1YTx8vQ=;
-        b=KLbYcifE0j1h7Tk57g+DbmhkYngKil1TmewuW64Gou5E49/P39xSiyOKYCvgXvTpv7
-         t3AbOnY49AcX9tM54JKhnOIw8SWoBY95CO1J4loNguYzvkb3JLRlOreRorVMtfnf4oEX
-         AajbnOBCYEihk4H3tuli0MxMRQW0ozIiRkCaFN+iPDYQADDgBBfqrmlZEBHNjQVYX/tE
-         3J32S8Q3Pt2hGm4kyoHVV17o+QL4inah9aZZ9o4mFFNJ7pdHdZGHqdWbda3NwCdUfpvF
-         7AFwXXwAGv3aBLcPkfV/Te38P0tFN6R36RrdUA6CsJsHaI8Tr8JqhvL7UConrzTVmb3T
-         n58g==
-X-Gm-Message-State: AO0yUKUw+jPPs0PpSpalJRP85JmHYcv4qHZcOHdt0nOHRiXU5dQFb4/L
-        1fVhVaKbccQTvknxLdHd2XBCTg==
-X-Google-Smtp-Source: AK7set/NX5HlxdOngMNTFnb0EPlr+0JwIwMOaiZ9ppB69TodBmpVecSoCUT3wDixITtN85Dj4zLXfg==
-X-Received: by 2002:a5d:6b10:0:b0:2cc:4e58:f6d0 with SMTP id v16-20020a5d6b10000000b002cc4e58f6d0mr10220801wrw.54.1678282275334;
-        Wed, 08 Mar 2023 05:31:15 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id m16-20020a056000009000b002be099f78c0sm15313823wrx.69.2023.03.08.05.31.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 05:31:14 -0800 (PST)
-Message-ID: <7853ff04-02cf-9430-d84a-c8fe8b1d6725@linaro.org>
-Date:   Wed, 8 Mar 2023 13:31:13 +0000
-MIME-Version: 1.0
+        Wed, 8 Mar 2023 08:35:57 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A7E22033;
+        Wed,  8 Mar 2023 05:34:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678282465; x=1709818465;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=HatTWrrHt3K/oWCByU3gjtazbJHVWQK712JIU9vPotg=;
+  b=hLtf3ZZ37GE3YdYMXbORm6Mc67mc1YWVKvYCwAxsEVX6TL+kpKeBFGQ4
+   rjU/k2HpkEZSFNWdA+KuCZDVca7ArdheJQV6UebJL4QigGvvDzfqFk8tt
+   KK9hbeGZidiRVSwnfd1+0m+gsqnTC9pFPKyb5W99sdVwbK21ZfmCVIry0
+   H150Nv858vVAl3ndXaT4ge8N4eT6BlfCkMoMx+jjs8YLYq/uc8+k5H/X7
+   uZqj/060EJta/vTCR7ianmTTz44BJFSYTTRp+3ey2MmiJWzI7w3zS6Zxf
+   UMVNnOQikhyXblflQsB1/pa0QhnImyjfAcBmbJzBnspBeRAouZT7B2y5p
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="334863385"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="334863385"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 05:33:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="676971421"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="676971421"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga002.jf.intel.com with ESMTP; 08 Mar 2023 05:33:44 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 8 Mar 2023 05:33:43 -0800
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 8 Mar 2023 05:33:43 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 8 Mar 2023 05:33:43 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.175)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Wed, 8 Mar 2023 05:33:40 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nATo8OwRlz2gLZIQxRTdcmq22OnnGrQTmXjTYtMnT7MTK7t7xglkL5k/txETm9UzltAnJH9dIm1CODQG0FXc0wrD7CXLlY9n321aW+muVImL52QPucZvQw4YqcC8iX2QL+FUJSLdpu88nzjchtn+W7hPyulSu34972TiHHrmKRWGqsE5YnYMYr/4ebiHjoOAmdbJxdDVxA4Eju3faZ+EbE8FZucJ7TCNZ4/uQtkqoxrO2Ade3Nti5AUeXTaJiKTq2ypDg/SHYQSe40fpo3rr07pEFZ1YLICmVsJcwrPmPdRomJLwCgIResoBEYgP38Pmxa4VcmqqK6b4IsFctxXW5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=950xfyB59QUFi32n+3+j9Mv4VADM6c8fCe8ujO7TTtk=;
+ b=S5kbtjUTYvnxhakHHtTjdC4jUYDlI1v52OjBA5a0TuAhl0rzzBe3JBFvx+pa80GT5HL+jtEWbHusTswhuZ8TRPcGf4CituKyCyyxVhNO0xUVDNus0U9H2YDgPqZnlk6NcZVxpQBKdCoEKAjYNWeHh/jQ1bBtEQZ7veGvVyymOGuC6jVvCEOcqUgXK47DO2ZSs9og6fQuGn5RBbOarjGmmBJJ4Zf6fKETIaP3khXVaKf5h56IF2hnN2Xn1XicVlIJ4zhR4YaS0/Vv7PGv2E1Vlxv+hRXb2cB5wp5ZG1pqKIm5Wa/1bDbs+9irrR3Z3WF/IrIpzJ4cNVg1fYupRV0uBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by PH7PR11MB7097.namprd11.prod.outlook.com (2603:10b6:510:20c::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Wed, 8 Mar
+ 2023 13:33:38 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::7911:de29:ded:224]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::7911:de29:ded:224%5]) with mapi id 15.20.6178.017; Wed, 8 Mar 2023
+ 13:33:38 +0000
+Message-ID: <968526f7-d262-b69e-ca72-f56078158000@intel.com>
+Date:   Wed, 8 Mar 2023 14:32:40 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V4 2/2] nvmem: add generic driver for devices with MMIO
- access
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] xsk: Add missing overflow check in xdp_umem_reg
+To:     Kal Cutter Conley <kal.conley@dectris.com>
+CC:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230307172306.786657-1-kal.conley@dectris.com>
+ <ee0aa756-4a9c-1d7a-4179-78024e41d37e@intel.com>
+ <CAHApi-kcvc2qB0D6dV7OG99FsnzAEa-rchOMfySkZ-E=EOh_4w@mail.gmail.com>
 Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20230228072936.1108-1-zajec5@gmail.com>
- <20230228072936.1108-3-zajec5@gmail.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230228072936.1108-3-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <CAHApi-kcvc2qB0D6dV7OG99FsnzAEa-rchOMfySkZ-E=EOh_4w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0061.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:4b::9) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|PH7PR11MB7097:EE_
+X-MS-Office365-Filtering-Correlation-Id: 46e36df1-a0b4-46d2-bd63-08db1fd9b96f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xyNAhr5uj2nPgpjkRLLqBalz/2eqM4gu+0UhPCBCXZYHJ/rFe/WST+E/Tul4rv6vwJlSOM9kZ8OubehsfKnDSnT+NT42n8UBqeoM4drNhCu3EhV7BdxGagEE7bMlcwne2NAXefkquTKLe80lNdIpEtlDtR67AcQipdDtLLKCC8XOJkD6HHPWX/ZlklHg11sC8GPBjjQujQ0ZC5nYYs6osWHP/rLjpJCOEE3YuJpphyYZUKaBqY3pqKksBmGzSe+qLUPYNAyVROI5iq7gqfN3GpR852104b8JbCiDz4/YL3CL15rw/HUCC4Vp5HLKQgbnCxNlRC5CJGeo2pOpUrGDt1M/jpo4+nBEGXEcE49+E9dbrGVaZft4wfHd2W2d2IEGAANAhg0IAeJjevkGaKo7/yzt9mFeP3CrtLqyz5uA4NGlVGHumlvX5OW/7TI+3EPzLG3eapBHutGwoOXK5g+sD2Mulf/Pr6YcjnuYgkUM3+FnGdbPvdWd0hfldCunZ+D+oq3h0w+9A9fuYONQlFLlVPLMI25dNlneJcNAfVkKvrlDqoGeTVA2RXPU0rbGkE28rDkjOt0ZZZHOJVViD+QijudgLEdAQkbhZmj7lvldyJVRogBG6rcZapntS4vWtuBV7EWcb4l/z6Vk3pafZ6SwoZjDnTwD+jFCA6gwHrCFLi/tuCsinSZmyNrNrMm2JmEczbcR5ROAfnVmi2LmQo44RF54qswwWvkTWlF76INi6Hw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(346002)(366004)(396003)(136003)(39860400002)(451199018)(36756003)(6666004)(6486002)(38100700002)(82960400001)(26005)(2616005)(6506007)(83380400001)(186003)(41300700001)(66556008)(8676002)(4326008)(66476007)(6916009)(2906002)(66946007)(8936002)(5660300002)(7416002)(54906003)(316002)(478600001)(86362001)(31696002)(6512007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WE9mYUJrZFE0bm9Fd0NRSU42Sm1mcXBSRHYyUzBNL0RZL2J6VTRxQ281RVBh?=
+ =?utf-8?B?aEdpQUhzWkNnZ2ppeDZ4OUwxc05URm1ibk5LNUYvZ2c1QkFDRkFGNDMzNzFq?=
+ =?utf-8?B?eU9LYVJYS2N5ODNKZ2FGd3VJeHQ4dXpOMllrOXo2VHZJcE11WFB5ZitQbFZG?=
+ =?utf-8?B?OEFFWWRaNFZVS3RVdTFyZCtVbkpXQjU4ckx0YWF0TjlkQXZvOWl0WjR4K25v?=
+ =?utf-8?B?T3BidnNkcTJUSVdZZ3pJWXJmQjFlaDNJQjhaZG9Va0o2YTN0SWs1cmpLcWtk?=
+ =?utf-8?B?ZnlDWVVpNWgwakFOUW1ENVhUM3RVaTdOUHNiM3RhekIxZ3hKdlBzNGJtdjcz?=
+ =?utf-8?B?UHVvRm5mRW5yaW5kY2lyTEZmMVVxNGp5L1BBZDNYTXJZNmkwUmpoeVBMNE9p?=
+ =?utf-8?B?N2dmMWF4aThyelBhQTdhd0ZpTEtsR2QxL1BnQndqaEhDZTNoRDRWYlRqNDhr?=
+ =?utf-8?B?TUhLU1R1NWdFcjFiQWxsTkdxcHJFZUN6T2hBb1JSenVQaC9TbmpCdFNVMW82?=
+ =?utf-8?B?VHJya2ZtVVBTZ3ZKb1BxeU4vNUxWSmtHdlpkS3Z1Smo3SHlYWmZZQkdhSW44?=
+ =?utf-8?B?VnM4SWtuSUY2OWxzd1k0c2wxYWJxUmFYUldNMnlVRlFRdnJ6TWpzejJoOWpJ?=
+ =?utf-8?B?bmhubC93bjZOQjVBQlZVaXlmUHJuak5KTTBXQURaMUU1Qk9iYktqcys5MVlV?=
+ =?utf-8?B?Z3dOaGlzcEVyYVlXVVpDdFVYM0FFZ3B1M0p5a2tCbUszK2RLTGdHY0VQV251?=
+ =?utf-8?B?aGp6eUgyNDhGNDJBZUp1bGNORXFkdGFiQ25UK3d6K3JUelJvVDBhZ3NoYkpw?=
+ =?utf-8?B?cDRQZjNCanBPTjJ4TzZhb0MzK1dqQmk1SlBiZmt6aEU5aGsvVGd6cUNrTW5m?=
+ =?utf-8?B?TThSbkZra0JmTDlsOU53aWJDMmExWWlYNlZRenM0K1R2NldWaXFySEhPa1Fa?=
+ =?utf-8?B?cUZHek45TStBaDdLMFpRclJDSlE1MHpJTkdzWDVtby8wRndIeEtia2tIeTlO?=
+ =?utf-8?B?dElvdUI0bytnWXpRZDFZMXE5VTBJZU5MdFZMRTJNekJhaVIwcm9sWllvcVB5?=
+ =?utf-8?B?RW9TNU5GaWRzNW85QWZYeU90dWJIZTlLNGRaUUlIWGtsZnY2S3FkbEhuNzkw?=
+ =?utf-8?B?TENzb3B5QjY5ZTFEa2VJVG9pTG5zNnl3V1ZVYnE0NVBTb3l4aE9EcmlTNTFh?=
+ =?utf-8?B?Y3NVNkFkanRkb2Ewek91cnN5S2x3M2txS293U2hqckZ2M2U4VXA1YzNJWllQ?=
+ =?utf-8?B?NXJDUk1SRDA4VUZEbE1SeWdmZkd2c09YNWJKSnM5TENaUEZwR3kxNUt6UUlD?=
+ =?utf-8?B?YzZ4UmlJdlJEa0FseWZlSmRQNnU2ZDlnNjNmRmNJL2I5OXJQYm96UXFxUCtV?=
+ =?utf-8?B?R0ZBcmU3TElWQnhkM2dLenA4aFdNM1Vwc2JYcUZKTGtEUzRjOWhZRWR6RDhD?=
+ =?utf-8?B?VUJZZHVxNzlaYzJwSkpmbGFUdlFucFFxWm5xbWRLRWRMS1FxVEFWVUdCbTQz?=
+ =?utf-8?B?MEo2UGVaZ0plUnpub0FtME9JUUdkOHN2ajJnZVFBSnZlUUZtOWhuSkZ4TmQ5?=
+ =?utf-8?B?Ui9TNlBJaDNYV215UEEwUVFoeS8rbjk3TXJCYkN2Uk5yMFdReWZxQ2ZMSkxV?=
+ =?utf-8?B?dDFkZ0o4M3ZmQUkwS2dHTTVnQ1JkaTJqZERmWlVFSElKd3NCZ0lRMWY3dUxC?=
+ =?utf-8?B?ek5aYThidmRTYXBtUDE2bW5RdzVZM3NOdUZlaEVNVXpkNmI2NGNlR3pSclA1?=
+ =?utf-8?B?R3hHaTNJSEJraFlONW1VN3VKSi95ZmxDQWJCQ1hpK0YvS29pdjQ4dVh0QnFh?=
+ =?utf-8?B?WGdzZXFlZ0dieThYYXYrb1VXRk1DMnFZaGh6N0VxK1ZXNzJML3pjdlJlUXU0?=
+ =?utf-8?B?WWErQUNpK2tXOFlyNnpPVFk3VU9VV1lrTUpJaUkwZXVSNUtNdjRaVU8rV0pJ?=
+ =?utf-8?B?a3VNZGZEYU42ZXFuTW9kM3NwS1NNNE9rRDdHZnBGZ3hDZlVodGs4ZkpWRjNu?=
+ =?utf-8?B?b3EyUDJkS3M5TVpNTEFuNm44bC81b3RybmNUZW5pWHdLcXFVZElQaEpBRHBk?=
+ =?utf-8?B?b2xUL3cwa3dnSWNKQjdlT1EzMUdFK2hwQ3I5STVmSHVPSllKQi9CUzZ1WERt?=
+ =?utf-8?B?T3JwemlaajNaSkZKaDYrQzBGbTBrYlVRU2dSV25RZHRIaHlSWUNYMWZYTkRD?=
+ =?utf-8?Q?ecjINnwdjNLMd918/q6FQt0=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46e36df1-a0b4-46d2-bd63-08db1fd9b96f
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 13:33:38.5341
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0E+35uxSa1X0R+Cl1dtSfy73kPURFihWc2GhZ5BT77OIg4nPcgXzc8BbokwaHrHhnMIGIfmlGljK/b6YthEETSEB7+MQh0fSG6LYo7i8DCA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7097
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,253 +175,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafał,
+From: Kal Conley <kal.conley@dectris.com>
+Date: Tue, 7 Mar 2023 19:58:51 +0100
 
-
-Thanks for doing this,
-
-On 28/02/2023 07:29, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
+>> The RCT declaration style is messed up in the whole block. Please move
+>> lines around, there's nothing wrong in that.
 > 
-> Some NVMEM devices can be accessed by simply mapping memory and reading
-> from / writing to it. This driver adds support for a generic
-> "mmio-nvmem" DT binding used by such devices.
+> I think I figured out what this is. Is this preference documented
+> somewhere? I will fix it.
+
+It's when you sort the declarations by the line length. I.e.
+
+short var a;
+longest var b;
+medium var c;
+
+=>
+
+longest var b;
+medium var c;
+short var a;
+
+I think it's documented somewhere in the kernel. You can try grepping by
+"Reverse Christmas Tree".
+
 > 
-> One of such devices is Broadcom's NVRAM. It's already supported (see
-> NVMEM_BRCM_NVRAM) but existing driver covers both:
-
-What will happen to the old "brcm,nvram" compatible and the dt firmware 
-that already have this node?
-
-
-If there is only one user for this then one would object that why do we 
-need this DT level of abstraction to start with?
-If this is not the case please consider adding those patches to this series.
-
-
-> 1. NVMEM device access
-> 2. NVMEM content parsing
+>>
+>>>       int err;
+>>>
+>>>       if (chunk_size < XDP_UMEM_MIN_CHUNK_SIZE || chunk_size > PAGE_SIZE) {
+>>> @@ -188,8 +189,8 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+>>>       if (npgs > U32_MAX)
+>>>               return -EINVAL;
+>>>
+>>> -     chunks = (unsigned int)div_u64_rem(size, chunk_size, &chunks_rem);
+>>> -     if (chunks == 0)
+>>> +     chunks = div_u64_rem(size, chunk_size, &chunks_rem);
+>>> +     if (chunks == 0 || chunks > U32_MAX)
+>>
+>> You can change the first cond to `!chunks` while at it, it's more
+>> preferred than `== 0`.
 > 
-> Once we get support for NVMEM layouts then existing NVRAM driver will
-> get converted into a layout and generic driver will take over
-> responsibility for data access.
->
+> If you want, I can change it. I generally like to keep unrelated
+> changes to a minimum.
 
-Even though this series is simple, but it is really confusing for two 
-reasons.
+You modify the line either way, so I don't see any reasons to keep the
+code as-is. It's clear that replacing `== 0` to `!chunks` won't change
+the logic anyhow.
 
-1> Generic mmio nvmem bindings are incomplete and potentially 
-change/evolve on every new user. Ex clks, regulators, endianess ... So 
-it looks really fragile and incomplete to me as a generic bindings.
-Is this want you are expecting?
-
-
-2> As you mentioned that this will replace broadcom NVMRAM, but this 
-patch does nothing in relation to updating that driver, so the code is 
-dead as it is. If you are considering to use it for Broadcom NVMRAM, 
-please add those patches to this series so that we could see the real 
-user for this code.
-
---srini
-
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
-> V3: Support "reg-io-width", basic writing & "brcm,nvram" string
-> V3: Don't duplicate core checks, add 64 b support, complete writing
->      support, don't add confusing conditional "brcm,nvram" support (it
->      will be handled with layouts migration)
-> ---
->   drivers/nvmem/Kconfig  |  10 +++
->   drivers/nvmem/Makefile |   2 +
->   drivers/nvmem/mmio.c   | 148 +++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 160 insertions(+)
->   create mode 100644 drivers/nvmem/mmio.c
 > 
-> diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-> index 6dec38805041..189ea85bd67d 100644
-> --- a/drivers/nvmem/Kconfig
-> +++ b/drivers/nvmem/Kconfig
-> @@ -166,6 +166,16 @@ config NVMEM_MICROCHIP_OTPC
->   	  This driver enable the OTP controller available on Microchip SAMA7G5
->   	  SoCs. It controls the access to the OTP memory connected to it.
->   
-> +config NVMEM_MMIO
-> +	tristate "MMIO access based NVMEM support"
-> +	depends on HAS_IOMEM
-> +	help
-> +	  This driver provides support for NVMEM devices that can be accessed
-> +	  using MMIO.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called nvmem-mmio.
-> +
->   config NVMEM_MTK_EFUSE
->   	tristate "Mediatek SoCs EFUSE support"
->   	depends on ARCH_MEDIATEK || COMPILE_TEST
-> diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-> index 6a1efffa88f0..767a9db2bfc1 100644
-> --- a/drivers/nvmem/Makefile
-> +++ b/drivers/nvmem/Makefile
-> @@ -35,6 +35,8 @@ obj-$(CONFIG_NVMEM_MESON_MX_EFUSE)	+= nvmem_meson_mx_efuse.o
->   nvmem_meson_mx_efuse-y			:= meson-mx-efuse.o
->   obj-$(CONFIG_NVMEM_MICROCHIP_OTPC)	+= nvmem-microchip-otpc.o
->   nvmem-microchip-otpc-y			:= microchip-otpc.o
-> +obj-$(CONFIG_NVMEM_MMIO)		+= nvmem-mmio.o
-> +nvmem-mmio-y				:= mmio.o
->   obj-$(CONFIG_NVMEM_MTK_EFUSE)		+= nvmem_mtk-efuse.o
->   nvmem_mtk-efuse-y			:= mtk-efuse.o
->   obj-$(CONFIG_NVMEM_MXS_OCOTP)		+= nvmem-mxs-ocotp.o
-> diff --git a/drivers/nvmem/mmio.c b/drivers/nvmem/mmio.c
-> new file mode 100644
-> index 000000000000..ce51648bb321
-> --- /dev/null
-> +++ b/drivers/nvmem/mmio.c
-> @@ -0,0 +1,148 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2023 Rafał Miłecki <rafal@milecki.pl>
-> + */
-> +
-> +#include <linux/io.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/nvmem-provider.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
-> +#include <linux/slab.h>
-> +
-> +struct mmio_nvmem {
-> +	void __iomem *base;
-> +	u32 io_width;
-> +};
-> +
-> +static int mmio_nvmem_read(void *context, unsigned int offset, void *val, size_t bytes)
-> +{
-> +	struct mmio_nvmem *priv = context;
-> +	u64 __maybe_unused *dst64;
-> +	u32 *dst32;
-> +	u16 *dst16;
-> +	u8 *dst8;
-> +
-> +	switch (priv->io_width) {
-> +	case 0:
-> +		memcpy_fromio(val, priv->base + offset, bytes);
-> +		break;
-> +	case 1:
-> +		for (dst8 = val; bytes; bytes -= 1, offset += 1)
-> +			*dst8++ = readb(priv->base + offset);
-> +		break;
-> +	case 2:
-> +		for (dst16 = val; bytes; bytes -= 2, offset += 2)
-> +			*dst16++ = readw(priv->base + offset);
-> +		break;
-> +	case 4:
-> +		for (dst32 = val; bytes; bytes -= 4, offset += 4)
-> +			*dst32++ = readl(priv->base + offset);
-> +		break;
-> +#ifdef CONFIG_64BIT
-> +	case 8:
-> +		for (dst64 = val; bytes; bytes -= 8, offset += 8)
-> +			*dst64++ = readq(priv->base + offset);
-> +		break;
-> +#endif
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int mmio_nvmem_write(void *context, unsigned int offset, void *val, size_t bytes)
-> +{
-> +	struct mmio_nvmem *priv = context;
-> +	u64 __maybe_unused *dst64;
-> +	u32 *dst32;
-> +	u16 *dst16;
-> +	u8 *dst8;
-> +
-> +	switch (priv->io_width) {
-> +	case 0:
-> +		memcpy_toio(priv->base + offset, val, bytes);
-> +		break;
-> +	case 1:
-> +		for (dst8 = val; bytes; bytes -= 1, offset += 1)
-> +			writeb(*dst8++, priv->base + offset);
-> +		break;
-> +	case 2:
-> +		for (dst16 = val; bytes; bytes -= 2, offset += 2)
-> +			writew(*dst16++, priv->base + offset);
-> +		break;
-> +	case 4:
-> +		for (dst32 = val; bytes; bytes -= 4, offset += 4)
-> +			writel(*dst32++, priv->base + offset);
-> +		break;
-> +#ifdef CONFIG_64BIT
-> +	case 8:
-> +		for (dst64 = val; bytes; bytes -= 8, offset += 8)
-> +			writeq(*dst64++, priv->base + offset);
-> +		break;
-> +#endif
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int mmio_nvmem_probe(struct platform_device *pdev)
-> +{
-> +	struct nvmem_config config = {
-> +		.name = "mmio-nvmem",
-> +		.id = NVMEM_DEVID_AUTO,
-> +		.read_only = true,
-> +		.reg_read = mmio_nvmem_read,
-> +		.reg_write = mmio_nvmem_write,
-> +	};
-> +	struct device *dev = &pdev->dev;
-> +	struct mmio_nvmem *priv;
-> +	struct resource *res;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-> +	if (IS_ERR(priv->base))
-> +		return PTR_ERR(priv->base);
-> +
-> +	of_property_read_u32(dev->of_node, "reg-io-width", &priv->io_width);
-> +
-> +	config.dev = dev;
-> +	config.size = resource_size(res);
-> +	config.word_size = priv->io_width;
-> +	config.stride = priv->io_width;
-> +	config.priv = priv;
-> +
-> +	return PTR_ERR_OR_ZERO(devm_nvmem_register(dev, &config));
-> +}
-> +
-> +static const struct of_device_id mmio_nvmem_of_match_table[] = {
-> +	{ .compatible = "mmio-nvmem", },
-> +	{},
-> +};
-> +
-> +static struct platform_driver mmio_nvmem_driver = {
-> +	.probe = mmio_nvmem_probe,
-> +	.driver = {
-> +		.name = "mmio_nvmem",
-> +		.of_match_table = mmio_nvmem_of_match_table,
-> +	},
-> +};
-> +
-> +static int __init mmio_nvmem_init(void)
-> +{
-> +	return platform_driver_register(&mmio_nvmem_driver);
-> +}
-> +
-> +subsys_initcall_sync(mmio_nvmem_init);
-> +
-> +MODULE_AUTHOR("Rafał Miłecki");
-> +MODULE_LICENSE("GPL");
-> +MODULE_DEVICE_TABLE(of, mmio_nvmem_of_match_table);
+>>
+>>>               return -EINVAL;
+>>
+>> Do you have any particular bugs that the current code leads to? Or it's
+>> just something that might hypothetically happen?
+> 
+> If the UMEM is large enough, the code is broke. Maybe it can be
+> exploited somehow? It should be checked for exactly the same reasons
+> as `npgs` right above it.
+> 
+>>
+>>>
+>>>       if (!unaligned_chunks && chunks_rem)
+>>> @@ -201,7 +202,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+>>>       umem->size = size;
+>>>       umem->headroom = headroom;
+>>>       umem->chunk_size = chunk_size;
+>>> -     umem->chunks = chunks;
+>>> +     umem->chunks = (u32)chunks;
+>>
+>> You already checked @chunks fits into 32 bits, so the cast can be
+>> omitted here, it's redundant.
+> 
+> I made it consistent with the line right below it. It seems like the
+> cast may improve readability since it makes it known the truncation is
+> on purpose. I don't see how that is redundant with the safety check.
+> Should I change both lines?
+
+I'd prefer to change both lines. You already check both @npgs and
+@chunks for being <= %U32_MAX and anyone can see it from the code, so
+the casts don't make anything more readable.
+
+> 
+>>
+>>>       umem->npgs = (u32)npgs;
+>>>       umem->pgs = NULL;
+>>>       umem->user = NULL;
+>>
+>> Thanks,
+>> Olek
+> 
+> Kal
+
+Thanks,
+Olek
