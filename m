@@ -2,108 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D564E6AFBB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5956AFBC0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjCHBEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 20:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
+        id S229843AbjCHBHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 20:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCHBEW (ORCPT
+        with ESMTP id S229524AbjCHBHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 20:04:22 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA07A224D;
-        Tue,  7 Mar 2023 17:04:20 -0800 (PST)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PWYt34p8Sz16Nxd;
-        Wed,  8 Mar 2023 09:01:31 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 8 Mar 2023 09:04:18 +0800
-Message-ID: <0f0ac9eb-1432-a61f-717f-88bd3d6fa7fc@huawei.com>
-Date:   Wed, 8 Mar 2023 09:04:18 +0800
+        Tue, 7 Mar 2023 20:07:18 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8418F59E4E;
+        Tue,  7 Mar 2023 17:07:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Pe/MXYc3tFjZ5nMyptOKaMSqaBuuKSvhU3RB/PwCPjs=; b=EdLaNLA+GDFFurmP3/PTkeqxxs
+        jCzIshQ6L6LlGxgEYcbF5jV/ait6PE948jmSQpuFotMaD0uniYV7+evmBbmF1sPcv/+vnAYxDSwTf
+        smvVEjZ/eWszg2ZIscJ6ZnLEneBYLpmOCtDywcSb3+bMLvRe+rTkihT//meR/VH2tgZs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pZiGo-006ix1-VA; Wed, 08 Mar 2023 02:07:06 +0100
+Date:   Wed, 8 Mar 2023 02:07:06 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Lee Jones <lee@kernel.org>,
+        linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH 01/11] net: dsa: qca8k: add LEDs basic support
+Message-ID: <443a5c04-4551-4a49-bc22-09a333ee82aa@lunn.ch>
+References: <20230307170046.28917-1-ansuelsmth@gmail.com>
+ <20230307170046.28917-2-ansuelsmth@gmail.com>
+ <b03334df-4389-44b5-ac85-8b0878c64512@lunn.ch>
+ <6407c6ea.050a0220.7c931.824f@mx.google.com>
+ <d1226e21-8150-4959-95b0-e9df2c460b81@lunn.ch>
+ <6407dd94.df0a0220.b4618.52e4@mx.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v5 1/2] ext4: commit super block if fs record error when
- journal record without error
-Content-Language: en-US
-To:     Ye Bin <yebin@huaweicloud.com>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <linux-ext4@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
-        Ye Bin <yebin10@huawei.com>
-References: <20230307061703.245965-1-yebin@huaweicloud.com>
- <20230307061703.245965-2-yebin@huaweicloud.com>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230307061703.245965-2-yebin@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6407dd94.df0a0220.b4618.52e4@mx.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/7 14:17, Ye Bin wrote:
-> From: Ye Bin <yebin10@huawei.com>
->
-> Now, 'es->s_state' maybe covered by recover journal. And journal errno
-> maybe not recorded in journal sb as IO error. ext4_update_super() only
-> update error information when 'sbi->s_add_error_count' large than zero.
-> Then 'EXT4_ERROR_FS' flag maybe lost.
-> To solve above issue just recover 'es->s_state' error flag after journal
-> replay like error info.
->
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> Just checked them, interesting concept, guess we can think of something
+> also for the interval setting. That would effectively make all the
+> setting of the trigger set. Just my concern is that they may be too much
+> specific to netdev trigger and may be problematic for other kind of hw
+> control. (one main argument that was made for this feature was that some
+> stuff were too much specific and actually not that generic)
 
+I deliberately made this API return a struct device, not a struct
+net_device. That should keep it generic. The LED could then be
+attached to an disk device, an mtd device, or a tty device, each of
+which have an ledtrig-*.c file.
 
-
-Looks good to me.
-
-Reviewed-by: Baokun Li <libaokun1@huawei.com>
-
-
-> ---
->   fs/ext4/super.c | 9 +++++++++
->   1 file changed, 9 insertions(+)
->
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index 88f7b8a88c76..dfa31eea1346 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -5920,6 +5920,7 @@ static int ext4_load_journal(struct super_block *sb,
->   		err = jbd2_journal_wipe(journal, !really_read_only);
->   	if (!err) {
->   		char *save = kmalloc(EXT4_S_ERR_LEN, GFP_KERNEL);
-> +
->   		if (save)
->   			memcpy(save, ((char *) es) +
->   			       EXT4_S_ERR_START, EXT4_S_ERR_LEN);
-> @@ -5928,6 +5929,14 @@ static int ext4_load_journal(struct super_block *sb,
->   			memcpy(((char *) es) + EXT4_S_ERR_START,
->   			       save, EXT4_S_ERR_LEN);
->   		kfree(save);
-> +		es->s_state |= cpu_to_le16(EXT4_SB(sb)->s_mount_state &
-> +					   EXT4_ERROR_FS);
-> +		/* Write out restored error information to the superblock */
-> +		if (!bdev_read_only(sb->s_bdev)) {
-> +			int err2;
-> +			err2 = ext4_commit_super(sb);
-> +			err = err ? : err2;
-> +		}
->   	}
->   
->   	if (err) {
--- 
-With Best Regards,
-Baokun Li
-.
+      Andrew
