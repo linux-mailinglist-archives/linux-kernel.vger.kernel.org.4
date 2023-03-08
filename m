@@ -2,219 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D8F6B0C23
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE246B0C24
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231517AbjCHPG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
+        id S231724AbjCHPGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:06:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbjCHPF6 (ORCPT
+        with ESMTP id S231547AbjCHPGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:05:58 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C377BA6483;
-        Wed,  8 Mar 2023 07:05:56 -0800 (PST)
-Received: from vm02.corp.microsoft.com (unknown [167.220.196.155])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 203922057632;
-        Wed,  8 Mar 2023 07:05:54 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 203922057632
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1678287956;
-        bh=QkPW0b4JKJYOY+ydGniGfxGyfybl9ASnRP6QMnV+APc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=h37ac6NzZ3rlhj1wvqYJSkPM/ZApxAC1yOO3gyj1JfwTQdCcA9+wFfXCCWyVIIxe6
-         0+AZTeTdhW4KFWsefedOrGZhrS1NxlRYTOtoHR1MPOGTSUBbGAAM+4HVICU/L1OIOV
-         cj0kql/9yQeSNL0SMqIjudTiCmE65n54vYqlml3U=
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        netdev@vger.kernel.org, Richard Cochran <richardcochran@gmail.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v2 RESEND] ptp: kvm: Use decrypted memory in confidential guest on x86
-Date:   Wed,  8 Mar 2023 15:05:31 +0000
-Message-Id: <20230308150531.477741-1-jpiotrowski@linux.microsoft.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 8 Mar 2023 10:06:19 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C948BC781
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 07:06:17 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so1516095wmb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 07:06:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678287976;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jlq6HsXBOX8/TTgRxtIwvmQ7gwNs0+Rlm9IvH1W6h4g=;
+        b=C+h6+J+TldxZYIgHVT56E88ivFauvQ9OmlMo+xSyqd7IUawl9ltT7QwrDRaJzajwdl
+         OVtYxvAdFWzuEAclRlYdv28i3of+wtuXxCQ4pD0n07iiAFIlk1/GNkn0c3I1IN1bRU+Z
+         yiBs+1FbCDUqtDTWwtkWXFaPk1Ink4YTVXIg2DyEUV5lQ6kjGR2htBycYPSpxpJp+srL
+         zC8GUrs0Np9ZCOAI2oLKbazECgqfjb57Z5bqvkWltouiFwsVhhomb8xdqGb+fkvn6470
+         DXO/b4C3xYGkVKIsLP8p0EYVshW9mVjSw3rSBWu/aMMFSSj6f6y9ztTj1mWNd37tSt59
+         ztBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678287976;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jlq6HsXBOX8/TTgRxtIwvmQ7gwNs0+Rlm9IvH1W6h4g=;
+        b=wIpXDYB4DNJCoaNwJK3xAhWcSC99htJ+5mmdlVzIuHyErEU1KlEoXUrMO6oLrDCfoi
+         gAg5+GwVXx6brKLPdWweUJw6gRa7DiPPlhVBkTU+VWDdjn0pClNVKDQpzKkbJg5dweI3
+         ZFj+pR5YPttAB1CRdKK7yw4wAfGDre9fWDe123JuYhQK9vYKoepuUI9t3VLqVPDV961i
+         /CnrGknt7LdROay5iKcFJwl8G+VqK2PK2Q/GZJM8WtV9S/5vjGt4v7tIKfsHbR0kMOUd
+         U8Vv74/kyZdssmfgOW65fRpynCsrxl7LwIAs5+YQRuBeEgukxV1jEHpq6s0ZEAZmEsuN
+         0JmQ==
+X-Gm-Message-State: AO0yUKXb2pgQA0CIGRTW695bL5lFtPM4xQU/ZjFvgULtrOTUvCkSzBo1
+        Spp3/V58vFnHs9Z+m7XFrV+a8w==
+X-Google-Smtp-Source: AK7set+iIivd7dT32ja+ph0vH+bmv75rrrZhi++cEMgzO8Ydqk36ufMLcdlqbh65RDKDVa7uRXE6gg==
+X-Received: by 2002:a05:600c:548b:b0:3eb:39e7:3607 with SMTP id iv11-20020a05600c548b00b003eb39e73607mr17343211wmb.4.1678287976049;
+        Wed, 08 Mar 2023 07:06:16 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id b5-20020a05600c150500b003e91b9a92c9sm15855461wmg.24.2023.03.08.07.06.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 07:06:15 -0800 (PST)
+Message-ID: <7908960d-da82-37d3-03af-8cab0c062221@linaro.org>
+Date:   Wed, 8 Mar 2023 15:06:14 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 1/4] firmware: qcom_scm: Clear download bit during
+ reboot
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1677664555-30191-1-git-send-email-quic_mojha@quicinc.com>
+ <1677664555-30191-2-git-send-email-quic_mojha@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <1677664555-30191-2-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KVM_HC_CLOCK_PAIRING currently fails inside SEV-SNP guests because the
-guest passes an address to static data to the host. In confidential
-computing the host can't access arbitrary guest memory so handling the
-hypercall runs into an "rmpfault". To make the hypercall work, the guest
-needs to explicitly mark the memory as decrypted. Do that in
-kvm_arch_ptp_init(), but retain the previous behavior for
-non-confidential guests to save us from having to allocate memory.
 
-Add a new arch-specific function (kvm_arch_ptp_exit()) to free the
-allocation and mark the memory as encrypted again.
 
-Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
----
-Hi,
+On 01/03/2023 09:55, Mukesh Ojha wrote:
+> During normal restart of a system download bit should
+> be cleared irrespective of whether download mode is
+> set or not.
+Looks like this is a fix, Fixes tag would help here.
 
-I would love to not allocate a whole page just for this driver, swiotlb is
-decrypted but I don't have access to a 'struct device' here. Does anyone have
-any suggestion?
 
-Jeremi
-
-Changes since v1:
-- forgot to commit include/linux/ptp_kvm.h
-
- drivers/ptp/ptp_kvm_arm.c    |  4 +++
- drivers/ptp/ptp_kvm_common.c |  1 +
- drivers/ptp/ptp_kvm_x86.c    | 59 +++++++++++++++++++++++++++++-------
- include/linux/ptp_kvm.h      |  1 +
- 4 files changed, 54 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/ptp/ptp_kvm_arm.c b/drivers/ptp/ptp_kvm_arm.c
-index b7d28c8dfb84..e68e6943167b 100644
---- a/drivers/ptp/ptp_kvm_arm.c
-+++ b/drivers/ptp/ptp_kvm_arm.c
-@@ -22,6 +22,10 @@ int kvm_arch_ptp_init(void)
- 	return 0;
- }
- 
-+void kvm_arch_ptp_exit(void)
-+{
-+}
-+
- int kvm_arch_ptp_get_clock(struct timespec64 *ts)
- {
- 	return kvm_arch_ptp_get_crosststamp(NULL, ts, NULL);
-diff --git a/drivers/ptp/ptp_kvm_common.c b/drivers/ptp/ptp_kvm_common.c
-index 9141162c4237..2418977989be 100644
---- a/drivers/ptp/ptp_kvm_common.c
-+++ b/drivers/ptp/ptp_kvm_common.c
-@@ -130,6 +130,7 @@ static struct kvm_ptp_clock kvm_ptp_clock;
- static void __exit ptp_kvm_exit(void)
- {
- 	ptp_clock_unregister(kvm_ptp_clock.ptp_clock);
-+	kvm_arch_ptp_exit();
- }
- 
- static int __init ptp_kvm_init(void)
-diff --git a/drivers/ptp/ptp_kvm_x86.c b/drivers/ptp/ptp_kvm_x86.c
-index 4991054a2135..902844cc1a17 100644
---- a/drivers/ptp/ptp_kvm_x86.c
-+++ b/drivers/ptp/ptp_kvm_x86.c
-@@ -14,27 +14,64 @@
- #include <uapi/linux/kvm_para.h>
- #include <linux/ptp_clock_kernel.h>
- #include <linux/ptp_kvm.h>
-+#include <linux/set_memory.h>
- 
- static phys_addr_t clock_pair_gpa;
--static struct kvm_clock_pairing clock_pair;
-+static struct kvm_clock_pairing clock_pair_glbl;
-+static struct kvm_clock_pairing *clock_pair;
- 
- int kvm_arch_ptp_init(void)
- {
-+	struct page *p;
- 	long ret;
- 
- 	if (!kvm_para_available())
- 		return -ENODEV;
- 
--	clock_pair_gpa = slow_virt_to_phys(&clock_pair);
--	if (!pvclock_get_pvti_cpu0_va())
--		return -ENODEV;
-+	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
-+		p = alloc_page(GFP_KERNEL | __GFP_ZERO);
-+		if (!p)
-+			return -ENOMEM;
-+
-+		clock_pair = page_address(p);
-+		ret = set_memory_decrypted((unsigned long)clock_pair, 1);
-+		if (ret) {
-+			__free_page(p);
-+			clock_pair = NULL;
-+			goto nofree;
-+		}
-+	} else {
-+		clock_pair = &clock_pair_glbl;
-+	}
-+
-+	clock_pair_gpa = slow_virt_to_phys(clock_pair);
-+	if (!pvclock_get_pvti_cpu0_va()) {
-+		ret = -ENODEV;
-+		goto err;
-+	}
- 
- 	ret = kvm_hypercall2(KVM_HC_CLOCK_PAIRING, clock_pair_gpa,
- 			     KVM_CLOCK_PAIRING_WALLCLOCK);
--	if (ret == -KVM_ENOSYS)
--		return -ENODEV;
-+	if (ret == -KVM_ENOSYS) {
-+		ret = -ENODEV;
-+		goto err;
-+	}
- 
- 	return ret;
-+
-+err:
-+	kvm_arch_ptp_exit();
-+nofree:
-+	return ret;
-+}
-+
-+void kvm_arch_ptp_exit(void)
-+{
-+	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
-+		WARN_ON(set_memory_encrypted((unsigned long)clock_pair, 1));
-+		free_page((unsigned long)clock_pair);
-+		clock_pair = NULL;
-+	}
- }
- 
- int kvm_arch_ptp_get_clock(struct timespec64 *ts)
-@@ -49,8 +86,8 @@ int kvm_arch_ptp_get_clock(struct timespec64 *ts)
- 		return -EOPNOTSUPP;
- 	}
- 
--	ts->tv_sec = clock_pair.sec;
--	ts->tv_nsec = clock_pair.nsec;
-+	ts->tv_sec = clock_pair->sec;
-+	ts->tv_nsec = clock_pair->nsec;
- 
- 	return 0;
- }
-@@ -81,9 +118,9 @@ int kvm_arch_ptp_get_crosststamp(u64 *cycle, struct timespec64 *tspec,
- 			pr_err_ratelimited("clock pairing hypercall ret %lu\n", ret);
- 			return -EOPNOTSUPP;
- 		}
--		tspec->tv_sec = clock_pair.sec;
--		tspec->tv_nsec = clock_pair.nsec;
--		*cycle = __pvclock_read_cycles(src, clock_pair.tsc);
-+		tspec->tv_sec = clock_pair->sec;
-+		tspec->tv_nsec = clock_pair->nsec;
-+		*cycle = __pvclock_read_cycles(src, clock_pair->tsc);
- 	} while (pvclock_read_retry(src, version));
- 
- 	*cs = &kvm_clock;
-diff --git a/include/linux/ptp_kvm.h b/include/linux/ptp_kvm.h
-index c2e28deef33a..746fd67c3480 100644
---- a/include/linux/ptp_kvm.h
-+++ b/include/linux/ptp_kvm.h
-@@ -14,6 +14,7 @@ struct timespec64;
- struct clocksource;
- 
- int kvm_arch_ptp_init(void);
-+void kvm_arch_ptp_exit(void);
- int kvm_arch_ptp_get_clock(struct timespec64 *ts);
- int kvm_arch_ptp_get_crosststamp(u64 *cycle,
- 		struct timespec64 *tspec, struct clocksource **cs);
--- 
-2.25.1
-
+--srini
+> 
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+> Changes in v2:
+>   - No change
+> 
+>   drivers/firmware/qcom_scm.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index cdbfe54..51eb853 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -1418,8 +1418,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
+>   static void qcom_scm_shutdown(struct platform_device *pdev)
+>   {
+>   	/* Clean shutdown, disable download mode to allow normal restart */
+> -	if (download_mode)
+> -		qcom_scm_set_download_mode(false);
+> +	qcom_scm_set_download_mode(false);
+>   }
+>   
+>   static const struct of_device_id qcom_scm_dt_match[] = {
