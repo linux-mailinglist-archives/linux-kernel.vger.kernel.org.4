@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027A66B137D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:03:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5A16B1384
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjCHVDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 16:03:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
+        id S230034AbjCHVFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 16:05:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjCHVD3 (ORCPT
+        with ESMTP id S229513AbjCHVFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 16:03:29 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D735709D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:03:27 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id t12-20020aa7938c000000b005ac41980708so47991pfe.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 13:03:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678309406;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Unb4mYU/ETLgbkphMr+iaF50zbN6Gp37Myvvi84/SoU=;
-        b=nN8bxL3sc4kaXPU6Wk4bXqG/L37ZioZfoHB4lwfdJOYJCVGgqz1Nukq7L+n1ulbc0U
-         rNdeBZ1Nt9BQDzp1bvzFGe36WE/SpGCC5ONdjEGVhAm+2WhGffwFX43oKsLoffYWPVUg
-         9RiDYhVGt8rATKbrq9UR2hRSfrSx63zLcGekvj9loq2wTC1ePJARvzDsBFS4YjH0xgxA
-         8vnRyMzz573QUOClIk/i58UL8Vy/4OFsJh3m5yoZfioQ1gn68J2g6IqOMMABENICPbgA
-         hHCZrxsduZ6LHtU5XkWyUzS6AMT+8Uo83jgmDyWRF4Ll/ZQYkK6z17XD9z0QYap9Gfod
-         pyWw==
+        Wed, 8 Mar 2023 16:05:18 -0500
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AAC99C10;
+        Wed,  8 Mar 2023 13:05:16 -0800 (PST)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-17638494edbso104597fac.10;
+        Wed, 08 Mar 2023 13:05:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678309406;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Unb4mYU/ETLgbkphMr+iaF50zbN6Gp37Myvvi84/SoU=;
-        b=rwRFmGNXi4LXzXESeVHccUA/MdLp4SlLbf1RQvpivZUrzHW5ZVI2oO87EbD1y+RYIR
-         p/wlPeu7rWYucBOLvJk2iFr92V07I/qVxfelRLZb8VlHzuX2stQ7M3jYZCirWTvkmrEo
-         dyqZYTkWQzpCmOb+tVwNSJRhzcm6lbg7YYviY7Z+wXAAl5O3FsUbrYibvHmIbm1xvSJc
-         ZPMirxOEQVh8zFJTjuiWWQXGKZe7p3xy3BCB4WMnsZqkK+6ctI8jbh6Yzzi7gVsHu8dO
-         8QMowgPrOBbEbdJO2VqliMeUXRcdehdKWsAWFNdB2JSGRdUS/m75J2SrWy5Cf7V2HlDj
-         FFsg==
-X-Gm-Message-State: AO0yUKUjwihRsggEo3J6KMHw+FWYdwRg0Em9lHmLLsgEwl4KNIj3FH6v
-        7IDjlRge6+tt/e96lIXF+QdcMRzYSBc=
-X-Google-Smtp-Source: AK7set/GEf63AR3hInsLioAl66aMvuPGc4y1bcRPkVco4xJN4LcyHq/zLs9MtWRlp9fyr1Wx88hyB62cILM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:1298:b0:234:87a7:f180 with SMTP id
- fw24-20020a17090b129800b0023487a7f180mr7303067pjb.0.1678309406733; Wed, 08
- Mar 2023 13:03:26 -0800 (PST)
-Date:   Wed, 8 Mar 2023 13:03:25 -0800
-In-Reply-To: <d1cdbb7aed99f325355a28dbed02346f4c4d7b16.camel@intel.com>
-Mime-Version: 1.0
-References: <20230301105438.599196-1-kai.huang@intel.com> <ZAA1+EMTIkBJvdZF@gao-cwp>
- <3aec157afb6727e603d80c2232b3718033295f13.camel@intel.com>
- <ZAdxNgv0M6P63odE@google.com> <d1cdbb7aed99f325355a28dbed02346f4c4d7b16.camel@intel.com>
-Message-ID: <ZAj2gZY2tkXjJF6C@google.com>
-Subject: Re: [PATCH] KVM: VMX: Make setup_vmcs_config() preemption disabled
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Chao Gao <chao.gao@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        d=1e100.net; s=20210112; t=1678309516;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RCrHtGbmJCKv3Di23qj+w9uSiDFBod+4MdcND44gbng=;
+        b=TmkUlhcy4hFL7myQMLUBmr7KC7R8Lss/XHnqe7oFKOBGEjaqiL3N/iV0XrJ0fe5Qq2
+         UpKsL9U4HjTOCKWCN3CvOuhDH1tWfrwfj1vfre2ptRwxCoE++NGO35w6ty29Bw2kxS+t
+         Ylyc14t13yYWtK24tv5XyoNs19wlh5dmu57LBFuSHixFUWtERRVqWVfh7JviHViki/zr
+         5nWwGNa3tZur6Rv9sZiA9LdJGNelwJxMNaFxH8DQRAHZ/K7/6RZWwIjpYtT6y+gB5vzv
+         MwIQLAV1DkQwV078/M0MFn9gi8tUUavyrA2ifIdukAmdQedPTuFA3qX1KfoMLFCAMds0
+         gMwA==
+X-Gm-Message-State: AO0yUKX0FFbp2xOwlVMUyFy6enBOBTY0x6y5dFJqFyBjh857eynPpB02
+        O/ZfDCRE3rE5xWWlH90kuQ==
+X-Google-Smtp-Source: AK7set9/Ps1tTPEfBQh/bjTrnc2rNh9JcYy+t7gr1R/PqVzEvdsMO3AYJF6+ULl5+lHY9pOzR7oudA==
+X-Received: by 2002:a05:6870:7011:b0:172:21eb:1c2d with SMTP id u17-20020a056870701100b0017221eb1c2dmr13152517oae.31.1678309516054;
+        Wed, 08 Mar 2023 13:05:16 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n15-20020a4a848f000000b004f9cd1e42d3sm6490077oog.26.2023.03.08.13.05.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 13:05:15 -0800 (PST)
+Received: (nullmailer pid 3796950 invoked by uid 1000);
+        Wed, 08 Mar 2023 21:05:14 -0000
+Date:   Wed, 8 Mar 2023 15:05:14 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     arinc9.unal@gmail.com
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+Subject: Re: [PATCH 09/20] dt-bindings: pinctrl: ralink: {mt7620,mt7621}:
+ rename to mediatek
+Message-ID: <20230308210514.GA3767521-robh@kernel.org>
+References: <20230303002850.51858-1-arinc.unal@arinc9.com>
+ <20230303002850.51858-10-arinc.unal@arinc9.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230303002850.51858-10-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,141 +81,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023, Huang, Kai wrote:
-> On Tue, 2023-03-07 at 09:17 -0800, Sean Christopherson wrote:
-> > On Thu, Mar 02, 2023, Huang, Kai wrote:
-> > > On Thu, 2023-03-02 at 13:36 +0800, Gao, Chao wrote:
-> > > > On Wed, Mar 01, 2023 at 11:54:38PM +1300, Kai Huang wrote:
-> > > > > Make setup_vmcs_config() preemption disabled so it always performs on
-> > > > > the same local cpu.
-> > > > > 
-> > > > > During module loading time, KVM intends to call setup_vmcs_config() to
-> > > > > set up the global VMCS configurations on _one_ cpu in hardware_setup(),
-> > 
-> > That may have been the very original intention, but I don't think it has been the
-> > true intention for a very long time.
+On Fri, Mar 03, 2023 at 03:28:38AM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 > 
-> Wondering what's the current intention?
+> This platform from Ralink was acquired by MediaTek in 2011. Then, MediaTek
+> introduced these SoCs which utilise this platform. Rename the schemas to
+> mediatek to address the incorrect naming.
 
-I don't think there's a deliberate "intention" beyond "does it work?".  Like many
-of the historical bits of KVM x86, I think this is a case of the original authors
-_wanting_ to provide certain behavior, but not actually ensuring that behavior in
-code.
+I said we don't do renames due to acquistions, you said that wasn't the 
+reason, but then that's your reasoning here.
 
-> > > > > Change the existing setup_vmcs_config() to __setup_vmcs_config() and
-> > > > > call the latter directly in the compatibility check code path.  Change
-> > > > > setup_vmcs_config() to call __setup_vmcs_config() with preemption
-> > > > > disabled so __setup_vmcs_config() is always done on the same cpu.
-> > > > 
-> > > > Maybe you can simply disable preemption in hardware_setup() although I
-> > > > don't have a strong preference.
-> > > > 
-> > > > nested_vmx_setup_ctls_msrs() also reads some MSRs and sets up part of
-> > > > vmcs_conf, should it be called on the same CPU as setup_vmcs_config()?
-> > > 
-> > > Yes I think so.  I missed this :)
-> > > 
-> > > Not sure whether there are other similar places too even outside of
-> > > hardware_setup().
-> > > 
-> > > But compatibility check only checks things calculated via setup_vmcs_config()
-> > > and nested_vmx_setup_ctls_msrs(), so I think it's fair to only put
-> > > hardware_setup() inside preemption disabled.
-> > 
-> > Disabling preemption across hardware_setup() isn't feasible as there are a number
-> > of allocations that might sleep.  But disabling preemption isn't necessary to
-> > ensure setup runs on one CPU, that only requires disabling _migration_.  So _if_
-> > we want to handle this in the kernel, we could simply do:
-> > 
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 541982de5762..9126fdf02649 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -9470,7 +9470,9 @@ int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
-> >         int r;
-> >  
-> >         mutex_lock(&vendor_module_lock);
-> > +       migrate_disable();
-> >         r = __kvm_x86_vendor_init(ops);
-> > +       migrate_enable();
-> >         mutex_unlock(&vendor_module_lock);
-> >  
-> >         return r;
-> > 
-> > 
-> > But I'm not convinced we should handle this in the kernel.  Many of the checks,
-> > especially in SVM, query boot_cpu_has(), not this_cpu_has(), i.e. to truly perform
-> > setup on a single CPU, all of those would need to be converted to this_cpu_has().
-> > 
-> > Some of those boot_cpu_has() calls should be changed regardless of whether or not
-> > migration is disabled, e.g. kvm_is_svm_supported() is arguably straight up buggy
-> > due to cpu_has_svm() checking the boot CPU (I'll fix that by adding a patch after
-> > open coding cpu_has_svm() into kvm_is_svm_supported()[*]).
-> > 
-> > But things like kvm_timer_init() should NOT be blindlgly converted to this_cpu_has(),
-> > because the teardown path needs to mirror the setup path, e.g. if KVM ended up
-> > running on frankenstein hardware where not all CPUs have a constant TSC, KVM could
-> > leave a callback dangling and hose the kernel.  Obviously such hardware wouldn't
-> > correctly run VMs, but crashing the kernel is a touch worse than KVM not working
-> > correctly.
-> > 
-> > I'm not totally against converting to this_cpu_has() for the setup, as it would be
-> > more intuitive in a lot of ways.  But, I don't think pinning the task actually
-> > hardens KVM in a meaningful way.  If there are any divergences between CPUs, then
-> > either KVM will notice before running VMs, e.g. the VMCS sanity checks, or KVM will
-> > never notice, e.g. the myriad runtime paths that check boot_cpu_has() (or variants
-> > thereof) without sanity checking across CPUs.  And if userspace _really_ wants to
-> > have guarantees about how setup is performed, e.g. for repeatable, deterministic
-> > behavior, then userspace should force loading of KVM to be done on CPU0.
-> 
-> My intention is never for userspace, but simply/purely from compatibility
-> check's point of view (see below).  Also, I don't think userspace wants to
-> guarantee anything  -- it just wants to load the KVM module.
+To give you another example, *new* i.MX things are still called 
+'fsl,imx...' and it has been how many years since merging with NXP?
 
-That very much depends on the use case.  For personal usage of KVM, it's extremely
-unlikely that userspace is doing anything remotely sophisticated.  But for a more
-"formal" deployment, userspace absolutely has its hands all over the system, e.g.
-scheduling VMs across systems, monitoring the health of the system, etc.  Whether
-or not userspaces actually do tightly control loading KVM is another matter...
-
-> It's even arguable that it may be an acceptable behaviour to fail to run any
-> VM even loading module was successful.
-> 
-> > 
-> > So my vote is to leave things as-is (modulo the cpu_has_svm() mess).  But maybe add
-> > documentation to explain the caveats about loading KVM, and how userspace can
-> > mitigate those caveats?
-> 
-> I made this patch because I have some other patches to move VMXON support out of
-> KVM in order to support TDX, but so far those patches are not included in that
-> series (and I'd like to leave it out if we really don't need it).
-
-Me too. :-)
-
-> In the patch to move VMXON out of KVM, I changed to use per-cpu variable to
-> cache the MSR_IA32_VMX_BASIC value and setup the VMXON region when one CPU is
-> becoming online.  And setup_vmcs_config() is changed to use __this_cpu_read() to
-> read the per-cpu MSR value instead of reading from hardware.  Obviously w/o
-> preempt_disable() or similar __this_cpu_read() can report kernel bug:
-> 
->         printk(KERN_ERR "BUG: using %s%s() in preemptible [%08x] code: %s/%d\n",
->                 what1, what2, preempt_count() - 1, current->comm, current->pid);
-> 
-> That being said, I am fine to keep existing code, even w/o documenting.  We can
-> discuss more how to handle when we really want to move VMXON out of KVM (i.e.
-> supporting TDX IO?).
-> 
-> Or we can just fix compatibility check part?  For instance, move
-> setup_vmcs_config() and nested_vmx_setup_ctls_msrs() together in
-> hardware_setup() and call preempt_disable() around them?
-
-Eh, the compatibility checks we really care about run in IRQ context, i.e. they're
-guaranteed to have a stable CPU.  Splitting the _setup_ for the compatibility
-checks across multiple CPUs isn't a problem because KVM will still get the right
-"answer", i.e. any divergence will be detected (barring _very_ flaky hardware that
-might get false negatives anyways).
-
-Don't get me wrong, I agree it's ugly, but I don't want to go halfway.  I either
-want to guard the whole thing, or nothing, and I can't convince myself that
-guarding everything is worthwhile since userspace can (and IMO should) do a better
-job.
+Rob
