@@ -2,113 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326BC6B0745
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 921186B0747
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbjCHMhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 07:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
+        id S231389AbjCHMhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 07:37:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjCHMhK (ORCPT
+        with ESMTP id S229611AbjCHMh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:37:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1C6BCB8C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:37:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 779D56174D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 12:37:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5E71C433D2;
-        Wed,  8 Mar 2023 12:37:02 +0000 (UTC)
-Date:   Wed, 8 Mar 2023 12:36:59 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Alexey Izbyshev <izbyshev@ispras.ru>
-Cc:     Joey Gouly <joey.gouly@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lennart Poettering <lennart@poettering.net>,
-        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Topi Miettinen <toiwoton@gmail.com>, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-abi-devel@lists.sourceforge.net, nd@arm.com, shuah@kernel.org
-Subject: Re: [PATCH v2 1/2] mm: Implement memory-deny-write-execute as a prctl
-Message-ID: <ZAiBazZQ0Yrwqpqw@arm.com>
-References: <20230119160344.54358-2-joey.gouly@arm.com>
- <8408d8901e9d7ee6b78db4c6cba04b78@ispras.ru>
+        Wed, 8 Mar 2023 07:37:26 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DC89C0827
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:37:22 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 520091063;
+        Wed,  8 Mar 2023 04:38:05 -0800 (PST)
+Received: from [10.57.90.59] (unknown [10.57.90.59])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7726C3F5A1;
+        Wed,  8 Mar 2023 04:37:20 -0800 (PST)
+Message-ID: <af90fea4-5fa1-de7b-b80e-02fa8753b0fb@arm.com>
+Date:   Wed, 8 Mar 2023 12:37:15 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8408d8901e9d7ee6b78db4c6cba04b78@ispras.ru>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V2] iommu: sprd: release dma buffer to avoid memory leak
+Content-Language: en-GB
+To:     Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
+Cc:     iommu@lists.linux.dev, Baolu Lu <baolu.lu@linux.intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230308034158.509458-1-chunyan.zhang@unisoc.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230308034158.509458-1-chunyan.zhang@unisoc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 04:01:56PM +0300, Alexey Izbyshev wrote:
-> On 2023-01-19 19:03, Joey Gouly wrote:
-> > diff --git a/mm/mmap.c b/mm/mmap.c
-> > index 87d929316d57..99a4d9e2b0d8 100644
-> > --- a/mm/mmap.c
-> > +++ b/mm/mmap.c
-> > @@ -2665,6 +2665,16 @@ unsigned long mmap_region(struct file *file,
-> > unsigned long addr,
-> >  		vma_set_anonymous(vma);
-> >  	}
-> > 
-> > +	if (map_deny_write_exec(vma, vma->vm_flags)) {
-> > +		error = -EACCES;
-> > +		if (file)
-> > +			goto close_and_free_vma;
-> > +		else if (vma->vm_file)
-> > +			goto unmap_and_free_vma;
-> > +		else
-> > +			goto free_vma;
-> > +	}
-> > +
+On 2023-03-08 03:41, Chunyan Zhang wrote:
+> Release page table DMA buffer when the IOMMU domain is not used:
 > 
-> Why is the cleanup dispatch logic duplicated here, instead of simply doing
-> "goto close_and_free_vma" (where basically the same dispatch is done)?
-
-Yes, though that's only possible after commit cc8d1b097de7 ("mmap: clean
-up mmap_region() unrolling") in 6.3-rc1. It's worth adding a separate
-patch to simplify this before final 6.3.
-
-> > diff --git a/mm/mprotect.c b/mm/mprotect.c
-> > index 908df12caa26..bc0587df042f 100644
-> > --- a/mm/mprotect.c
-> > +++ b/mm/mprotect.c
-> > @@ -762,6 +762,11 @@ static int do_mprotect_pkey(unsigned long start,
-> > size_t len,
-> >  			break;
-> >  		}
-> > 
-> > +		if (map_deny_write_exec(vma, newflags)) {
-> > +			error = -EACCES;
-> > +			goto out;
-> > +		}
-> > +
+> - Domain freed.
 > 
-> Why does this check use "goto out", thereby skipping post-loop cleanup,
-> instead of "break" like all other checks? This looks like a bug to me.
+> - IOMMU is attaching to a new domain.
+>    Since one sprd IOMMU servers only one client device, if the IOMMU has
+>    been attached to other domain, it has to be detached first, that's
+>    saying the DMA buffer should be released, otherwise that would
+>    cause memory leak issue.
 
-Ah, good point, thanks. I think that's a left-over from my early attempt
-at this series. The loop was changed in 5.19 with commit 4a18419f71cd
-("mm/mprotect: use mmu_gather") but the patch not updated.
+This is clearly wrong; domain resources should only be freed when the 
+domain is freed. Just because a caller has detached from a domain 
+doesn't mean that they can't reattach to it later and expect the 
+previous mappings to still be in place - it has nothing to do with how 
+many devices or domains can be active at once.
 
-So yeah, it needs fixing. Joey, could you please send fixes for both
-issues above?
+Thanks,
+Robin.
 
-Thanks.
-
--- 
-Catalin
+> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> ---
+> V2:
+> * Added some comment in sprd_iommu_attach_device() for the reason
+>    of calling sprd_iommu_cleanup().
+> 
+> V1: https://lkml.org/lkml/2023/2/10/198
+> ---
+>   drivers/iommu/sprd-iommu.c | 46 ++++++++++++++++++++++++++++++++------
+>   1 file changed, 39 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/iommu/sprd-iommu.c b/drivers/iommu/sprd-iommu.c
+> index ae94d74b73f4..fb2f96df3bca 100644
+> --- a/drivers/iommu/sprd-iommu.c
+> +++ b/drivers/iommu/sprd-iommu.c
+> @@ -62,6 +62,7 @@ enum sprd_iommu_version {
+>    * @eb: gate clock which controls IOMMU access
+>    */
+>   struct sprd_iommu_device {
+> +	struct sprd_iommu_domain	*dom;
+>   	enum sprd_iommu_version	ver;
+>   	u32			*prot_page_va;
+>   	dma_addr_t		prot_page_pa;
+> @@ -151,13 +152,6 @@ static struct iommu_domain *sprd_iommu_domain_alloc(unsigned int domain_type)
+>   	return &dom->domain;
+>   }
+>   
+> -static void sprd_iommu_domain_free(struct iommu_domain *domain)
+> -{
+> -	struct sprd_iommu_domain *dom = to_sprd_domain(domain);
+> -
+> -	kfree(dom);
+> -}
+> -
+>   static void sprd_iommu_first_vpn(struct sprd_iommu_domain *dom)
+>   {
+>   	struct sprd_iommu_device *sdev = dom->sdev;
+> @@ -230,6 +224,29 @@ static void sprd_iommu_hw_en(struct sprd_iommu_device *sdev, bool en)
+>   	sprd_iommu_update_bits(sdev, reg_cfg, mask, 0, val);
+>   }
+>   
+> +static void sprd_iommu_cleanup(struct sprd_iommu_device *sdev)
+> +{
+> +	struct sprd_iommu_domain *dom = sdev->dom;
+> +	size_t pgt_size = sprd_iommu_pgt_size(&dom->domain);
+> +
+> +	dma_free_coherent(sdev->dev, pgt_size, dom->pgt_va, dom->pgt_pa);
+> +	dom->sdev = NULL;
+> +	sdev->dom = NULL;
+> +	sprd_iommu_hw_en(sdev, false);
+> +}
+> +
+> +static void sprd_iommu_domain_free(struct iommu_domain *domain)
+> +{
+> +	struct sprd_iommu_domain *dom = to_sprd_domain(domain);
+> +	struct sprd_iommu_device *sdev = dom->sdev;
+> +
+> +	/* Free DMA buffer first if the domain has been attached */
+> +	if (sdev)
+> +		sprd_iommu_cleanup(sdev);
+> +
+> +	kfree(dom);
+> +}
+> +
+>   static int sprd_iommu_attach_device(struct iommu_domain *domain,
+>   				    struct device *dev)
+>   {
+> @@ -237,14 +254,29 @@ static int sprd_iommu_attach_device(struct iommu_domain *domain,
+>   	struct sprd_iommu_domain *dom = to_sprd_domain(domain);
+>   	size_t pgt_size = sprd_iommu_pgt_size(domain);
+>   
+> +	/* Return directly if the domain attached to IOMMU already */
+>   	if (dom->sdev)
+>   		return -EINVAL;
+>   
+> +	/* The IOMMU already attached to a domain */
+> +	if (sdev->dom) {
+> +		if (sdev->dom == dom)
+> +			return 0;
+> +
+> +		/*
+> +		 * Clean up the previous domain, one sprd IOMMU servers only
+> +		 * one client device, if the IOMMU has been attached to other
+> +		 * domain, it has to be detached first.
+> +		 */
+> +		sprd_iommu_cleanup(sdev);
+> +	}
+> +
+>   	dom->pgt_va = dma_alloc_coherent(sdev->dev, pgt_size, &dom->pgt_pa, GFP_KERNEL);
+>   	if (!dom->pgt_va)
+>   		return -ENOMEM;
+>   
+>   	dom->sdev = sdev;
+> +	sdev->dom = dom;
+>   
+>   	sprd_iommu_first_ppn(dom);
+>   	sprd_iommu_first_vpn(dom);
