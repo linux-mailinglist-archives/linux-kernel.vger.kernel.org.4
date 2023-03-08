@@ -2,275 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9621B6B09C2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 531396B09C8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjCHNrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:47:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
+        id S231270AbjCHNsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbjCHNrn (ORCPT
+        with ESMTP id S230044AbjCHNsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:47:43 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2043.outbound.protection.outlook.com [40.107.95.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474BFBBB28;
-        Wed,  8 Mar 2023 05:47:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J0AhT4H+w+BgshT+klAzHeN3aAr/EwRNdSX9eNxqyuNVHZW1D4ExOVRCLTWTuHVix0lPLDW0ahmOqa18GxAzoCdH3WSaDiNcaf3z/hA17RMhQpkN5xZpkmspOp5A0nrBiI8wkd+N+gvWMm20mKjM87tD5TUKqFsQTVKEInpEDprwWLxPNtDEHIw5dmFx6sp2RC9+SE8YyErk98a4mjE1Ndty5VtYTiGINq1ItQNInLZ4v7P9PyBzAbUq7oW/tMU/HHb7Oj8CXX+wP9i5Cap+jC+7dozj/HNcaMxHTYWlEaXYvVyuTnhW4mMtnSNIGF2+sntf/sIuOtJtxEqS+qSiUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D7HnP3j19VflBcljtKq4SYq0pwNZ1M370lfgQa6Twvw=;
- b=m6L6LL0KaWC8PjL9GfsvZ8vI6G7hAhRvN4fvRj4FnVf3P0kdNW+pAOSM0H9AfPG60g3tKV9ty27NamJr4VvaWFGvbEUxPaxOBl78xNPd/qjQ+FUCepMkrhTzLfSpfXJxiTetUXfCjMI8B08WhD/LtAZyq6YIro5n717c4TD3l0gKAw8HJUXBYKB+uOmt+TAVeJiwsGhvVLX1dzXUHU2pjUO4ygdFF6jZKhj42b3B8pTIUzsqSLqofyGCX7T6QfCb+5mPLbcuBxyHfi0zl52H2ZJ/MnrcmZEiyMbtGRcOCmoRNuxQ/JW/P+nLNUvE/kSqpgV9pTN0PlAzw5uw/TYk7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D7HnP3j19VflBcljtKq4SYq0pwNZ1M370lfgQa6Twvw=;
- b=AHJswzIyhcaLz54VYz0BR7AsQFs3h7MYV2F03J3x6WHTKB4DWNBzFnRFegre72qxKLyDCUhZs8lZpcHEm4/3LKNUD4wJauq+XkmHryMjR0Ohw+/BTd4gDiCYJ/WvPAOM4upXgENeTmWw01jznYbSlF0Y8+S0vSKgLlkkiydRqvw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by MN2PR12MB4583.namprd12.prod.outlook.com (2603:10b6:208:26e::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Wed, 8 Mar
- 2023 13:47:23 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d23f:bb1:df95:3918]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d23f:bb1:df95:3918%4]) with mapi id 15.20.6178.017; Wed, 8 Mar 2023
- 13:47:23 +0000
-Message-ID: <0d6cd23b-8c9e-067d-97ff-aa35dbbcf9bf@amd.com>
-Date:   Wed, 8 Mar 2023 14:47:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
-Content-Language: en-US
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
- <cd788ccf-0cf1-85d5-1bf8-efc259bd7e11@amd.com>
- <CACO55tsnCMQt8UW5_UCY139kpZOdNXbMkBkFfUiB12jW5UgVmA@mail.gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <CACO55tsnCMQt8UW5_UCY139kpZOdNXbMkBkFfUiB12jW5UgVmA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0177.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a0::14) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Wed, 8 Mar 2023 08:48:40 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6042F233D2;
+        Wed,  8 Mar 2023 05:48:19 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id d41-20020a05600c4c2900b003e9e066550fso1183582wmp.4;
+        Wed, 08 Mar 2023 05:48:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678283298;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Eeukihki09mFh5Tgwwz3g9D7DAvSgW843JlsCSZBqvk=;
+        b=N6PvQAEn37lp58tqEPw/ABQMH1wD1koV7wrbUPpnxRk+Sw04kEs6b9mcewq487BZvS
+         PPaEBWGf1G5xLhSxWV4/X7+HtFJcv13hPo/rYRpCjziAPtmnE3GZmFT8/xVmenaiK5mW
+         21ZxVtBXxlUENvU6CpfiuF7Hsp7mRtAlOLobIk5HQd0m+SC6ixIlYOLs7qMBR3cJccvd
+         AGyKhw3sRypwGqwqnUWHWa0ZOOeG5S/1dctzOpxoPqECmisHQq8Aj0Ro5WFmQZSC27iV
+         Rqxd0E7GQYwcanuyp3aHwk8SMieQT+rp3DFfcAIMebesejcH4X07a05WQLUX0rfTPzMk
+         nhHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678283298;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Eeukihki09mFh5Tgwwz3g9D7DAvSgW843JlsCSZBqvk=;
+        b=pLGlg9xxOQiCckTPYkMqpFiafl9UpJQlRX6TSiwwOf2GfNaAxu4UPnU5vo0fGy41JA
+         uXnKcbm3OUNDYapjpL+eix4Al3IEZ/WcZORcOI+Xe//Y9/6o57Tr8rrKq/ZJjQUFL3Lu
+         8NsHIBcqcR59ncl7R6debGA7L9MO1oiFR3+goLc5L7yyD5zbwMBkKFEmfj8LwYNmkDCc
+         PxLD8Z3X6w2F/WHnnqTGmERWkQBBsYmtDR+EjNcQX+yKNrUhNZCMt2Ib6R8hLWyqa/HO
+         jCVE2cAM3gEj52+tDE78jd9KpcFXshzIqRAdsDdCujMdgIMLrGx9+QEiUwn+ayw8Awjz
+         LoJQ==
+X-Gm-Message-State: AO0yUKUoMPGW0TPCOwaTRyQd1tfgqNAKfHa5j5XVUTCWTJsnoUrT48vX
+        Nfdt5++hgIpiMXxtB6KqjqQ=
+X-Google-Smtp-Source: AK7set/We+21S7n72POqTKt6ngyQSPmSgUn7r5KwmhLXABqmHks8nzQ0ne3JyfD77aWaHXBj99vHNA==
+X-Received: by 2002:a05:600c:1c96:b0:3ea:f6c4:5f3d with SMTP id k22-20020a05600c1c9600b003eaf6c45f3dmr15837479wms.2.1678283297706;
+        Wed, 08 Mar 2023 05:48:17 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id 16-20020a05600c229000b003eb2e33f327sm2220186wmf.2.2023.03.08.05.48.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 05:48:17 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 8 Mar 2023 14:48:14 +0100
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>, bpf@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Namhyung Kim <namhyung@gmail.com>
+Subject: Re: [PATCH RFC v2 bpf-next 4/9] libbpf: Allow to resolve binary path
+ in current directory
+Message-ID: <ZAiSHjVjdS76kSVN@krava>
+References: <20230228093206.821563-1-jolsa@kernel.org>
+ <20230228093206.821563-5-jolsa@kernel.org>
+ <CAEf4Bzar7H1OsjgqJ8H6R-f3DZPhhR0+KOamyt0MDNboept--A@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|MN2PR12MB4583:EE_
-X-MS-Office365-Filtering-Correlation-Id: 02cc1c89-1ec6-425e-2a81-08db1fdba4fa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JeG4sWDw/xT9TwPk9qvmvomUkVBLCk047JhT62n8p5i1SJ4uMpYp3kktXQGFAKOCxrbCzHOo/5XaVqmgVhLJI6ft7fenU7IAj6K5TlLC1ryeBnCzVUQSt/R2xcAbUcAQenqWgjVIdrYKV3mSCHNISDK4bX+Z6svVgf251qP5FlUwL7mIn+cLIdzcmMAI7hagV+e61wfJr88iJmBmtVyaX3UO48k8PD2NMIo6U3+3WC1cul4FwAUrZDFOvsfeD67PCPtjMFuctW0d25Gz4P3fHNZHstiLlgVi+HU/AsCNjioEtFbTEN0YsbW5GIEkKAtyFNOrf6dLN9HA6dWd8G8qQdcOwf0N73LFEaD6ui+3jq5ArpeOuX1d4GbuYLgWFmcUaA+vh0c6D618VKmrL0chYFIuM5SHV6GQg0xrCdUozZUpq20O7/dGPXHE2UWrFcYkKccdQbJqYtIWTlct6TSw+Zz15BaO1jc2S1YuVkNarZ4Q3JWepd6SVVLYNhT2I9+XTjImTmyK+bEMg6CbZtTKI3+Whi+fBQ6M0wsDZ1mv1anMYuOokHsh3LcaLrp8n2nhfNO905EvdZ9ZhjH0WQyaNkAdfyYJq2G588RuiLkDNTpPN5bCElx9cQWRAcQf30aGMa7NfqbtQNqgXivlUZrYTCONa+Im3RSinzOjzKWd8ELDyUQMHwZM52LlfxRPlNiFZiQ+XSayPafqHqphvp7hZTdAW3JCz5CnokYCyBLa4Lw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(396003)(39860400002)(136003)(346002)(451199018)(38100700002)(2906002)(186003)(6506007)(6512007)(53546011)(66899018)(2616005)(31686004)(6666004)(66476007)(966005)(8936002)(66946007)(478600001)(66556008)(6486002)(5660300002)(7416002)(41300700001)(31696002)(66574015)(54906003)(6916009)(4326008)(316002)(36756003)(8676002)(83380400001)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N0k5VHVyZXNia2E0emJ2M3BEdHU2U0JmVE9mQkx1VnAxSUFCVzBhYWlJOXRy?=
- =?utf-8?B?MmkwR09keStpcHUzUzdaeDhFRjNmQTF2ejdGL2pSVGl4a1lySmxHMXMzRmVp?=
- =?utf-8?B?MGV4TFgxanVFSVBwUWN6T3QyQkF4eHdRUVVhRWNGcHlWYTQ2aWZFN08xbm9J?=
- =?utf-8?B?ampGNm93QVM3M2lQSUtocXJqdEU5YjdseW5ET2RNMzl3VS80eEh3WmZjeWhj?=
- =?utf-8?B?SU1YaTRDaEVTSXI3aFAvak9SUHRsR0t4d1lsMTlBa1J1UkJVRHZYLzRhK0dC?=
- =?utf-8?B?ZTBzK21zK2JtdElBaUJ1T0E4NmtyZGlZQmY0SjdFcnRsbE9vSWFSR1RvVWs3?=
- =?utf-8?B?dDFaMlhJNGZBYjVMMVRabktuNVFIdk10SDNiV0lqWVRTYVFZN2ZnQXQ3OVda?=
- =?utf-8?B?V3VGRDlOVWFWeklqVUdkL2ZtYVhpRHowWEJLc2pLVVVYUWNwT3RLejFBQnh1?=
- =?utf-8?B?Wk9EekdBYzFabFFxeExhMEp0OGxvRlJZUzNnTEZRUENEcEN1U3NaaXpEWjEv?=
- =?utf-8?B?OFRXNng1R0laRHd3KzRTZ0NzTXVWZ0pJb25xdHFyR1UxUENLODRyaGZnNmhP?=
- =?utf-8?B?Z0Fvb0J2WXhNYjZyVzlOYllORFVmU1FYY1RtWDJUeFRmUkFybXVIT21MdXNX?=
- =?utf-8?B?R1haaUNXdThIRHdPQVg0VGVSTjRRMllKaGRTL29tMklXOU5zeWU3Nkg1NGJE?=
- =?utf-8?B?QW5vUXdnaVR3UVY5ck5JWUt4V0hZRnBTd1NESWQwZkdRKzNIYVJ1Qk1veCtL?=
- =?utf-8?B?WkdLdklLb0JwNnNhOHJydVpRd2dyaWRiN3lYSWp4enVjWGlMZVZNNUZuc3ph?=
- =?utf-8?B?dVNMc21KK05DRm8rNStUWVlzcW5SdXE3MkZka0NlaVpScnpka0VhUWZvUktN?=
- =?utf-8?B?bUFOT0hLUFFRM3ZKUVd1bWh4N0RGY1crbnRMODN4Q2lBYWc3MFJ2Tk56dDRn?=
- =?utf-8?B?WVhnemFMSzFxT0s1a3BZdmVRV3l4SGkra05jeHRheGVIU1lLRWRtOU9BOWlI?=
- =?utf-8?B?aVBiOG95MFgySUhpdnd0Vm5zSnB2Vk9uWVpLK3JkZmhra2lHYTU1ekxudlRO?=
- =?utf-8?B?eUhzSEd6SGR1OVgrRUpIcDFTMEk1cUpIUW93UndBYzJHSHVTb1ZXVEJIWHJV?=
- =?utf-8?B?RDIxTUxiaksrRUx5MHJhYzBoYnhoTTdkTkg4V2pxUHB2dENWaENIVXRBTndC?=
- =?utf-8?B?eU9lYTZCeUpUSTdOZ2tSY3hHYjdZRFlkMUJXSUVYWkpPOGRwQmdNNERFZWRP?=
- =?utf-8?B?a2ZEdU9FZXlYYXg4UlY4NzNCbzZRQVNyeDNaaytiVS9xNTVzbXhKR29sSVIw?=
- =?utf-8?B?YkJCY3hKR1k2c3lKblczYVpIVG1nM2xneW9MMDFSZ0RWN0dIVm1GU29rZUNB?=
- =?utf-8?B?cDZIWHF1Y0p3dldQbld3VWNsOGZlbWpyY01hL2p1cWljMy9MbXFJVTZSajNQ?=
- =?utf-8?B?TENrbFpyY285ZHNQcUkyZnBMaEIydFdKa0lLNUhzSFIrT1o4THpoOStNL21h?=
- =?utf-8?B?aVNCbmdsMjJMbEZnbTArSFpVZGx0YlFjeEZTc0tQb3YwZm0vUnh1U2tzdmZi?=
- =?utf-8?B?YlJPTFkydmt6elpaaEhETVl3NjVaWVpjOVVMblJhQTZBQjFwNzB3aHMySkFo?=
- =?utf-8?B?QzRyMVBnMFpmTlozMWx0aHhzRUNPc1k0ZlhSS3lKZlZWVGpmWWJ2cUU1dVpO?=
- =?utf-8?B?ZGI5Ti81dEFjbnR2bmdtQjU1NGNweVNGSkhOWjVGSTVFazdhRzZhRE1zb2lz?=
- =?utf-8?B?ZFZnemh1U3YxWDZUTFNaN2svdXJENTNIaHA1ZElReTdWa2RSM2VmbU8zUjg2?=
- =?utf-8?B?TTBaMmpNNWxLMEI1Y0Ztc0RIZ0dFd3p3dEJCRUlNUkZYMktBSkZ4UUtCNE03?=
- =?utf-8?B?U0oxR3hZM2ZFcTRCSWd6V1h2VmhFRE1SQ2ppMWhyOXc3TUxaY2QwMnoxUUpU?=
- =?utf-8?B?aHJiK1lXdWZCSXNEZElTVUJYRm9JTmMvenBrNlI0U1FkcFVjSlV4TTZ4S1lz?=
- =?utf-8?B?MCtoKy9USUwrY2JSNTFXcnN0UzdqcU5UWlprUkJRYlk1ZlNCWC9FYkZXVW55?=
- =?utf-8?B?Tk96TGNUdHdxNWV1NGsvZFhjV3ZFZndhOWJhdjdvc0lKQkZvMURBQXVUZ1Fm?=
- =?utf-8?B?ZWRUUVY1QXpHekdJZjZiNi8zQnZFOTRkWVh1TEQ4S1Z0T2s3c0dxeVF2TUJY?=
- =?utf-8?Q?zMY2lEDchfAMkHE70Clu4ZDXyyTWRSuxrrbqavpgDl7S?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02cc1c89-1ec6-425e-2a81-08db1fdba4fa
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 13:47:23.0932
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YFc6Cqb4mFzjj/x5RDMYMR6HdtQaqAglI07Nm9FHhLnJMSc6fy5+rzW7riysLk5G
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4583
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4Bzar7H1OsjgqJ8H6R-f3DZPhhR0+KOamyt0MDNboept--A@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 08.03.23 um 13:39 schrieb Karol Herbst:
-> On Wed, Mar 8, 2023 at 9:46 AM Christian König <christian.koenig@amd.com> wrote:
->> Am 07.03.23 um 15:25 schrieb Asahi Lina:
->>> Some hardware may require more complex resource utilization accounting
->>> than the simple job count supported by drm_sched internally. Add a
->>> can_run_job callback to allow drivers to implement more logic before
->>> deciding whether to run a GPU job.
->> Well complete NAK.
->>
-> There hasn't even been any kind of discussion yet you already come
-> around with a "Well complete NAK"
->
-> First, this can be seen as rude behavior and me being part of the drm
-> community I don't want to have to see this kind of thing.
->
-> Obviously, any kind of strong "technical" review point is a nak until
-> people settle with an agreement on what to land, there is no point in
-> pointing out a "NAK", especially if that's the first thing you say. If
-> you want to express your strong disagreement with the proposed
-> solution, then state what your pain points are directly.
->
-> If there is a long discussion and a maintainer feels it's going
-> nowhere and no conclusion will be reached it might be this kind of
-> "speaking with authority" point has to be made. But not as the starter
-> into a discussion. This is unnecessarily hostile towards the
-> contributor. And I wished we wouldn't have to see this kind of
-> behavior here.
->
-> Yes, some kernel maintainers do this a lot, but kernel maintainers
-> also have this kind of reputation and people don't want to have to
-> deal with this nonsense and decide to not contribute at all. So please
-> just drop this attitude.
+On Tue, Mar 07, 2023 at 05:19:00PM -0800, Andrii Nakryiko wrote:
+> On Tue, Feb 28, 2023 at 1:33 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > Try to resolve uprobe/usdt binary path also in current directory,
+> > it's used in the test code in following changes.
+> 
+> nope, that's not what shell is doing, so let's not invent new rules
+> here. If some tests need something like that, utilize LD_LIBRARY_PATH
+> or even better just specify './library.so'
 
-Yes, you are completely right with that, but getting this message to the 
-recipient is intentional on my side.
+ok, that fixed that:
 
-I give completely NAKs when the author of a patch has missed such a 
-fundamental technical connection that further discussion doesn't make sense.
+SEC("uprobe/./liburandom_read.so:urandlib_read_without_sema")
 
-It's not meant to be in any way rude or offending. I can put a smiley 
-behind it if it somehow helps, but we still need a way to raise this big 
-red stop sign.
+thanks,
+jirka
 
->> This is clearly going against the idea of having jobs only depend on
->> fences and nothing else which is mandatory for correct memory management.
->>
-> I'm sure it's all documented and there is a design document on how
-> things have to look like you can point out? Might help to get a better
-> understanding on how things should be.
-
-Yeah, that's the problematic part. We have documented this very 
-extensively: 
-https://www.kernel.org/doc/html/v5.9/driver-api/dma-buf.html#indefinite-dma-fences
-
-And both Jason and Daniel gave talks about the underlying problem and 
-try to come up with patches to raise warnings when that happens, but 
-people still keep coming up with the same idea over and over again.
-
-It's just that the technical relationship between preventing jobs from 
-running and with that preventing dma_fences from signaling and the core 
-memory management with page faults and shrinkers waiting for those 
-fences is absolutely not obvious.
-
-We had at least 10 different teams from different companies falling into 
-the same trap already and either the patches were rejected of hand or 
-had to painfully reverted or mitigated later on.
-
-Regards,
-Christian.
-
->
->> If the hw is busy with something you need to return the fence for this
->> from the prepare_job callback so that the scheduler can be notified when
->> the hw is available again.
->>
->> Regards,
->> Christian.
->>
->>> Signed-off-by: Asahi Lina <lina@asahilina.net>
->>> ---
->>>    drivers/gpu/drm/scheduler/sched_main.c | 10 ++++++++++
->>>    include/drm/gpu_scheduler.h            |  8 ++++++++
->>>    2 files changed, 18 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
->>> index 4e6ad6e122bc..5c0add2c7546 100644
->>> --- a/drivers/gpu/drm/scheduler/sched_main.c
->>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
->>> @@ -1001,6 +1001,16 @@ static int drm_sched_main(void *param)
->>>                if (!entity)
->>>                        continue;
->>>
->>> +             if (sched->ops->can_run_job) {
->>> +                     sched_job = to_drm_sched_job(spsc_queue_peek(&entity->job_queue));
->>> +                     if (!sched_job) {
->>> +                             complete_all(&entity->entity_idle);
->>> +                             continue;
->>> +                     }
->>> +                     if (!sched->ops->can_run_job(sched_job))
->>> +                             continue;
->>> +             }
->>> +
->>>                sched_job = drm_sched_entity_pop_job(entity);
->>>
->>>                if (!sched_job) {
->>> diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
->>> index 9db9e5e504ee..bd89ea9507b9 100644
->>> --- a/include/drm/gpu_scheduler.h
->>> +++ b/include/drm/gpu_scheduler.h
->>> @@ -396,6 +396,14 @@ struct drm_sched_backend_ops {
->>>        struct dma_fence *(*prepare_job)(struct drm_sched_job *sched_job,
->>>                                         struct drm_sched_entity *s_entity);
->>>
->>> +     /**
->>> +      * @can_run_job: Called before job execution to check whether the
->>> +      * hardware is free enough to run the job.  This can be used to
->>> +      * implement more complex hardware resource policies than the
->>> +      * hw_submission limit.
->>> +      */
->>> +     bool (*can_run_job)(struct drm_sched_job *sched_job);
->>> +
->>>        /**
->>>             * @run_job: Called to execute the job once all of the dependencies
->>>             * have been resolved.  This may be called multiple times, if
->>>
-
+> 
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  tools/lib/bpf/libbpf.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index 05c4db355f28..f72115e8b7f9 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -10727,17 +10727,19 @@ static const char *arch_specific_lib_paths(void)
+> >  /* Get full path to program/shared library. */
+> >  static int resolve_full_path(const char *file, char *result, size_t result_sz)
+> >  {
+> > -       const char *search_paths[3] = {};
+> > +       const char *search_paths[4] = {};
+> >         int i, perm;
+> >
+> >         if (str_has_sfx(file, ".so") || strstr(file, ".so.")) {
+> >                 search_paths[0] = getenv("LD_LIBRARY_PATH");
+> >                 search_paths[1] = "/usr/lib64:/usr/lib";
+> >                 search_paths[2] = arch_specific_lib_paths();
+> > +               search_paths[3] = ".";
+> >                 perm = R_OK;
+> >         } else {
+> >                 search_paths[0] = getenv("PATH");
+> >                 search_paths[1] = "/usr/bin:/usr/sbin";
+> > +               search_paths[2] = ".";
+> >                 perm = R_OK | X_OK;
+> >         }
+> >
+> > --
+> > 2.39.2
+> >
