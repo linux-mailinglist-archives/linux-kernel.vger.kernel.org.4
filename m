@@ -2,302 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDD46B136F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:58:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D6E6B1372
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjCHU6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 15:58:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
+        id S229676AbjCHU6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 15:58:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjCHU6k (ORCPT
+        with ESMTP id S230300AbjCHU6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:58:40 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4311562DA5
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 12:58:37 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id i10so18903560plr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 12:58:37 -0800 (PST)
+        Wed, 8 Mar 2023 15:58:47 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8D98C83D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 12:58:45 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id f18so23021131lfa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 12:58:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678309117;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ps+hmTG6OMOCtb1tap23TE+XuifD4F3tbznuF8ocoWM=;
-        b=LRjq6LVWzGzS/fuAjwwrVaGsTiyM9GmKtRpx5bWjMHMFUMqYD6lpHkspaiev88CSZE
-         AgSnaod6Aw6kUiL1EdlI1yxqIMsYSNYJmyrTI1pBWRT6KxqgL9awNJ9mmsaxwkepWbND
-         r1DCRBP5iTd9wcxNftp1ZxmdXg0diOUEJTid0n6gSjbkzm+vr0ajb8PUkE8gr07xv+G7
-         8bYNFmggxAJYQCUKgnEb/A9zya0GmdNb8XW76B8E/GasOIOo03peHeqr1KwsncITgtLL
-         qekI0q2Da2tgAGATjzqUpRUaugikMOAODhaK0imZXBN/QrGHt9BevL1F9xO5Co9eceVI
-         Bwng==
+        d=linaro.org; s=google; t=1678309124;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uNJiJRqzTIJmEZGIdAoWu3k4M01PZusme6WbXOwMXeU=;
+        b=s2qIda+Ogt9+xzbriwpMjHJZyITeYygTX8UZbSnQcMAvlzbnQE+F6r+98c9l0ATB9j
+         GATbrKf284ZP/7TYJbqjVKgChQwuiiEY82tNaUYBksKBzs+PxMcV1G/KlHWedTgDVKn/
+         nMcvfVFn2DIGBDYxxqRlAdN5cQ1pnjMwa5FrPwaWfppR1JUafs+X5J8b+GVBd4fv7BQm
+         veLJaJMzhTIYtJR+lEp3GtMDQXEw9Win8tvDv7dGnH9yooEhua3Jl1FIMD+2BVgjHNdo
+         qbjHmLxFTqTKfLf8lobJXPGFA9S2kNzqRh4O7iSijU3q0BYxOpSbeUskTvR5cjb7FwWv
+         wYRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678309117;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ps+hmTG6OMOCtb1tap23TE+XuifD4F3tbznuF8ocoWM=;
-        b=WMzgTJYwsquCltytkXF+GhpibcigBraNvRU1XcQixyNzGtdLvvcXhW0TYZyigal3yC
-         EYAZWt4WqsSgmQxe+BiqkzML2a/u8L7Aousys7T59fvziZarUIyFV5dUWko11ddcqGYn
-         fVnR/rt7zMGZ2g7bWQ1hBXUFI2Cqf0rBgQtnrzR41pGopv+zUIbCflXL8vqoL0KK22J5
-         gLv5fg7yvGRhu6PV1XLuYUB2HjB3gz62mM/8ru2pgL3enB6We14Olk188WWlF2+YC7RD
-         oCnJopJR0A36UVXvGJ1pOjn0iSlu6pUGEGWCePapraukiubaU77y8/4zDxFWvfWK43Rv
-         RrSg==
-X-Gm-Message-State: AO0yUKW3wtDftsdN8xWFVCAL7qix8LZvGN/kXkrGImrr7J/i4dkvDDTJ
-        vsF1aDNiu6R12EFdK2j9oL2SXw==
-X-Google-Smtp-Source: AK7set80PDtUv2FPsiuITZmUYlCpPTcXQMiFwpDnGWdPQD24YTSvqOfy3kyMuat0p9BhPbfviWb2uQ==
-X-Received: by 2002:a17:903:2344:b0:19b:64bb:d546 with SMTP id c4-20020a170903234400b0019b64bbd546mr4001171plh.18.1678309116674;
-        Wed, 08 Mar 2023 12:58:36 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:af4f:13d6:af4f:f078])
-        by smtp.gmail.com with ESMTPSA id w14-20020a170902e88e00b0019c91989a1csm10159444plg.300.2023.03.08.12.58.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 12:58:36 -0800 (PST)
-Date:   Wed, 8 Mar 2023 13:58:33 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Martyn Welch <martyn.welch@collabora.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
+        d=1e100.net; s=20210112; t=1678309124;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uNJiJRqzTIJmEZGIdAoWu3k4M01PZusme6WbXOwMXeU=;
+        b=G/xh0jqdrB4dslCz0hiZcDjmd5bPCmZtXggBTMQVUojlUEDlIh+S87UzxvmcEzkVWA
+         KEwXi06tLjgjA7zEOnR8U3UR7F1abC7A0bemTlpeZa62Ox+VO2lrwbdiD7r7VHERZsEA
+         0UgOk1gtKtSIe98KnV0fYk9AwRVl2G7G6fQtT6IexVISscAG/GaKfBZCkR8Uc45nu5R0
+         HQ+6xtzmqRhYRnwp/L5T3RbkRPDIZQc60qPYjoLKada0YVPSUVRhlSgf/SuYhOTaXlyB
+         4F7blMq4pvYtcgYLQ2kmDK/X8HR+OkjcBlEv7wG7T32Q5J4wewbeUQGMwV0KoMzk4wJQ
+         c1NQ==
+X-Gm-Message-State: AO0yUKVQ7CvLdreqsuWncYM5+oYun49k24fzMv9ge9UytNhS+ZjqkI22
+        hRSZ+WNEMyDa1sQeXVFnU+z5UQ==
+X-Google-Smtp-Source: AK7set801/CtXpPx1Z9upNz1VTWuexNLTuuutWkKmfXN/t0hFJPIRYY7dwhJWUFLtc2A04pLrzZOAg==
+X-Received: by 2002:ac2:46e5:0:b0:4db:3e31:20fa with SMTP id q5-20020ac246e5000000b004db3e3120famr5515822lfo.53.1678309124067;
+        Wed, 08 Mar 2023 12:58:44 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id t5-20020ac25485000000b004dc4b0a0543sm2441721lfk.58.2023.03.08.12.58.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 12:58:43 -0800 (PST)
+Message-ID: <2563238d-b480-1717-4afa-dba52159508b@linaro.org>
+Date:   Wed, 8 Mar 2023 21:58:42 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sm8450-hdk: align WCD9385 reset pin
+ with downstream config
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hari Nagalla <hnagalla@ti.com>, kernel@collabora.com,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: remoteproc: k3-m4f: Add bindings for
- K3 AM64x SoCs
-Message-ID: <20230308205833.GA1768401@p14s>
-References: <20230302171450.1598576-1-martyn.welch@collabora.com>
- <20230302171450.1598576-2-martyn.welch@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302171450.1598576-2-martyn.welch@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230308183317.559253-1-krzysztof.kozlowski@linaro.org>
+ <20230308183317.559253-2-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230308183317.559253-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martyn, 
-
-Due to the size of this patch my comments will likely span a few days.  I will
-clearly let you know when I am done reviewing your submission.
 
 
-On Thu, Mar 02, 2023 at 05:14:48PM +0000, Martyn Welch wrote:
-> From: Hari Nagalla <hnagalla@ti.com>
+On 8.03.2023 19:33, Krzysztof Kozlowski wrote:
+> Downstream DTS uses 16 mA drive strength for the WCD9385 audio codec
+> RESET_N reset pin.  It also pulls the pin down in shutdown mode, thus it
+> is more like a shutdown pin, not a reset.  Use the same settings here
+> for HDK8450 and keep the WCD9385 by default in powered off (so pin as
+> low).  Align the name of pin configuration node with other pins in the
+> DTS.
 > 
-> K3 AM64x SoC has a Cortex M4F subsystem in the MCU voltage domain.
-> The remote processor's life cycle management and IPC mechanisms are
-> similar across the R5F and M4F cores from remote processor driver
-> point of view. However, there are subtle differences in image loading
-> and starting the M4F subsystems.
-> 
-> The YAML binding document provides the various node properties to be
-> configured by the consumers of the M4F subsystem.
-> 
-> Signed-off-by: Hari Nagalla <hnagalla@ti.com>
-> [Martyn Welch: Amended as per review comments and to pass DT tests]
-
-This isn't needed.  Since you are taking over this patchset it is expected you
-will make modifications.
-
-> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
-> 
-> Changes since v1:
->  - Spelling corrections
->  - Corrected to pass DT checks
-> 
-> Changes since v2:
->  - Missed spelling correction to commit message
-> 
-> Note: The only review comment that I don't see directly addressed is the
->       lack of description of `ti,sci`, `ti,sci-dev-id` and
->       `ti,sci-proc-ids`. A reference has been added to
->       `/schemas/arm/keystone/ti,k3-sci-common.yaml#` where they are
->       described. I believe this is the correct approach, please advise if
->       that is not the case.
-> 
->  .../bindings/remoteproc/ti,k3-m4f-rproc.yaml  | 158 ++++++++++++++++++
->  1 file changed, 158 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.yaml
-> new file mode 100644
-> index 000000000000..1b38df0be2e6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.yaml
-> @@ -0,0 +1,158 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/remoteproc/ti,k3-m4f-rproc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: TI K3 M4F processor subsystems
-> +
-> +maintainers:
-> +  - Hari Nagalla <hnagalla@ti.com>
-> +
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Hari did not finish upstreaming this set.  As such I doubt he intents to
-maintain it and I suppose it is the same for you since you didn't add your name
-either.  You can add my name there.
-
-> +description: |
-> +  Some K3 family SoCs have Arm Cortex M4F cores. AM64x is a SoC in K3
-> +  family with a M4F core. Typically safety oriented applications may use
-> +  the M4F core in isolation without an IPC. Where as some industrial and
-> +  home automation applications, may use the M4F core as a remote processor
-> +  with IPC communications.
-> +
-> +$ref: /schemas/arm/keystone/ti,k3-sci-common.yaml#
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^m4fss(@.*)?"
-> +
-> +  compatible:
-> +    enum:
-> +      - ti,am64-m4fss
-> +
-> +  power-domains:
-> +    description: |
-> +      Should contain a phandle to a PM domain provider node and an args
-> +      specifier containing the M4FSS device id value.
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 2
-> +
-> +  "#size-cells":
-> +    const: 2
-> +
-> +  reg:
-> +    items:
-> +      - description: Address and Size of the IRAM internal memory region
-> +      - description: Address and Size of the DRAM internal memory region
-> +
-> +  reg-names:
-> +    items:
-> +      - const: iram
-> +      - const: dram
-> +
-> +  resets:
-> +    description: |
-> +      Should contain the phandle to the reset controller node managing the
-> +      local resets for this device, and a reset specifier.
-> +    maxItems: 1
-> +
-> +  firmware-name:
-> +    description: |
-> +      Should contain the name of the default firmware image
-> +      file located on the firmware search path
-> +
-> +  mboxes:
-> +    description: |
-> +      OMAP Mailbox specifier denoting the sub-mailbox, to be used for
-> +      communication with the remote processor. This property should match
-> +      with the sub-mailbox node used in the firmware image.
-> +    maxItems: 1
-> +
-> +  memory-region:
-> +    description: |
-> +      phandle to the reserved memory nodes to be associated with the
-> +      remoteproc device. There should be at least two reserved memory nodes
-> +      defined. The reserved memory nodes should be carveout nodes, and
-> +      should be defined with a "no-map" property as per the bindings in
-> +      Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml
-> +    minItems: 2
-> +    maxItems: 8
-> +    items:
-> +      - description: region used for dynamic DMA allocations like vrings and
-> +                     vring buffers
-> +      - description: region reserved for firmware image sections
-> +    additionalItems: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - ti,sci
-> +  - ti,sci-dev-id
-> +  - ti,sci-proc-ids
-> +  - resets
-> +  - firmware-name
-> +  - mboxes
-
-The 'mboxes' property is marked as required but the description section above
-clearly state the M4F can operate without IPC.
-
-> +  - memory-region
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    reserved-memory {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        mcu_m4fss_dma_memory_region: m4f-dma-memory@9cb00000 {
-> +            compatible = "shared-dma-pool";
-> +            reg = <0x00 0x9cb00000 0x00 0x100000>;
-> +            no-map;
-> +        };
-> +
-> +        mcu_m4fss_memory_region: m4f-memory@9cc00000 {
-> +            compatible = "shared-dma-pool";
-> +            reg = <0x00 0x9cc00000 0x00 0xe00000>;
-> +            no-map;
-> +        };
-> +    };
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        mailbox0_cluster0: mailbox-0 {
-> +            #mbox-cells = <1>;
-> +
-> +            mbox_m4_0: mbox-m4-0 {
-> +                ti,mbox-rx = <0 0 0>;
-> +                ti,mbox-tx = <1 0 0>;
-> +            };
-> +        };
-> +
-> +        bus@f0000 {
-> +            compatible = "simple-bus";
-> +            #address-cells = <2>;
-> +            #size-cells = <2>;
-> +            ranges = <0x00 0x04000000 0x00 0x04000000 0x00 0x01ff1400>;
-> +
-> +            bus@4000000 {
-> +                compatible = "simple-bus";
-> +                #address-cells = <2>;
-> +                #size-cells = <2>;
-> +                ranges = <0x00 0x04000000 0x00 0x04000000 0x00 0x01ff1400>;
-> +
-> +                mcu_m4fss: m4fss@5000000 {
-> +                    compatible = "ti,am64-m4fss";
-> +                    reg = <0x00 0x5000000 0x00 0x30000>,
-> +                          <0x00 0x5040000 0x00 0x10000>;
-> +                    reg-names = "iram", "dram";
-> +                    ti,sci = <&dmsc>;
-> +                    ti,sci-dev-id = <9>;
-> +                    ti,sci-proc-ids = <0x18 0xff>;
-> +                    resets = <&k3_reset 9 1>;
-> +                    firmware-name = "am62-mcu-m4f0_0-fw";
-> +                    mboxes = <&mailbox0_cluster0 &mbox_m4_0>;
-
-This doesn't look right since mbox_m4_0 is defined within mailbox0_cluster0.
-
-> +                    memory-region = <&mcu_m4fss_dma_memory_region>,
-> +                                    <&mcu_m4fss_memory_region>;
-> +                };
-> +            };
-> +        };
-> +    };
-> -- 
-> 2.39.1
+Konrad
+>  arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+> index 9cd1d1bd86cb..4020e54e16f5 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+> @@ -767,9 +767,11 @@ spkr_2_sd_n_active: spkr-2-sd-n-active-state {
+>  		output-low;
+>  	};
+>  
+> -	wcd_default: wcd-default-state {
+> +	wcd_default: wcd-reset-n-active-state {
+>  		pins = "gpio43";
+>  		function = "gpio";
+> +		drive-strength = <16>;
+>  		bias-disable;
+> +		output-low;
+>  	};
+>  };
