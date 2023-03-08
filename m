@@ -2,165 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3514E6B109A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:05:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A55DE6B10A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjCHSFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 13:05:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
+        id S230001AbjCHSGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 13:06:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjCHSFl (ORCPT
+        with ESMTP id S229551AbjCHSGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 13:05:41 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0ECC78F0
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 10:05:39 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id b4-20020a92c844000000b00317983ace21so9029786ilq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 10:05:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678298739;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=me7HYs213Ipoq6MCrC1Pr37gkDXXYcYAxV9Cnp8b0vE=;
-        b=GYKkpMSqbp47go+0KeA8imL6cTKfMZr/vJzth2h9qTGi3PRggiNYxPrmrkFsaBY0VQ
-         KXki5WK1BEN8G470KqbVu8VQ+Uqkj1pOuBQVbvW4TvTlUFvXEKZ24P+7jGfDOhTLgI+l
-         8w39YXxwHydqIjqTQ1f4ecSVrEnr9xFheRqMI1gCynyDK62UzEqv+WRpvtEFUHAueTvk
-         Ay1WvUswDv+PN6+GVLgSmrMYhd0Wne86harNcv8W7WLNuUFXLp2hitQx2G76diuwnWWF
-         kZfutTuFP9le5ldX+AxVl6X1XP/Xn7EuSCvGEOKPIeMCkH5DsIvD7Q9kscxKxpHymLsy
-         ccVA==
-X-Gm-Message-State: AO0yUKUO5QGgghQobbGZbK5HJDhWsQmjDY2R7cbDjXJmfYCMycBnL4NE
-        vStBmVj/aHDnn2C00jx//dgLPdKyG7aAPGemz8VfkofaAH9Q
-X-Google-Smtp-Source: AK7set97MX88ZCfhlBnjClo81L8cFIvrEkuIBQx1tin0r6hVRcuqpcNntqNUI4omoA79u4afh9geQB4wMbMxh7hbpfao9CoxeJ7v
+        Wed, 8 Mar 2023 13:06:51 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F139CB075;
+        Wed,  8 Mar 2023 10:06:48 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 90DC71BF204;
+        Wed,  8 Mar 2023 18:06:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678298807;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gv2fMnDV5YVDmU/WD/edhazTBSuJsXAYdZKsUr/gI7I=;
+        b=aXAA3XR0/uQbA8HlRLjTiu3XU0Pc5mGrUraV8jv7/arCpUR+on5iC2KvJN0Q6O0LU2SYAf
+        Lzyd5x27kyI+ZUVZVaTnMJPVp4yU9bWvz6TkzAE+2cnSLOj4KePxCrymP8boB9Cwr2WtT6
+        JYfarsN3HfmsWPZTfFhwY2e7i/PdDJVYDnJXoM/efwchiHzbJyaZnyKhRctHG02qEtgTjC
+        D4p/XYGN6lPwS6kcT5JII/Zp7XjHRajsxO03h7+cU2eNnD4CB0tHdXHpzIkJwjrgeinttK
+        4JnaqOVgbb4awMbADQRG67BKyIItMSKT/J4DBz0Y+Z5h2qmierrdi0K9Qsns7g==
+Date:   Wed, 8 Mar 2023 19:06:36 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH V2] nvmem: add explicit config option to read OF fixed
+ cells
+Message-ID: <20230308190636.7fabab9c@xps-13>
+In-Reply-To: <91ff425b4c901648b1faf34c784f20ad@milecki.pl>
+References: <20230224072903.20945-1-zajec5@gmail.com>
+        <20230308173256.3837b87b@xps-13>
+        <91ff425b4c901648b1faf34c784f20ad@milecki.pl>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Received: by 2002:a02:aa1c:0:b0:3b4:42bd:bec with SMTP id
- r28-20020a02aa1c000000b003b442bd0becmr9332976jam.4.1678298738930; Wed, 08 Mar
- 2023 10:05:38 -0800 (PST)
-Date:   Wed, 08 Mar 2023 10:05:38 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002940a505f66760b9@google.com>
-Subject: [syzbot] [reiserfs?] divide error in flush_journal_list
-From:   syzbot <syzbot+c559e4d7d61c16608cb1@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Rafa=C5=82,
 
-syzbot found the following issue on:
+rafal@milecki.pl wrote on Wed, 08 Mar 2023 17:55:46 +0100:
 
-HEAD commit:    0988a0ea7919 Merge tag 'for-v6.3-part2' of git://git.kerne..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10a0bee4c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f763d89e26d3d4c4
-dashboard link: https://syzkaller.appspot.com/bug?extid=c559e4d7d61c16608cb1
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> On 2023-03-08 17:34, Miquel Raynal wrote:
+> > Hi Rafa=C5=82,
+> >=20
+> > zajec5@gmail.com wrote on Fri, 24 Feb 2023 08:29:03 +0100:
+> >  =20
+> >> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl> =20
+> >> >> NVMEM subsystem looks for fixed NVMEM cells (specified in DT) by =20
+> >> default. This behaviour made sense in early days before adding support
+> >> for dynamic cells. =20
+> >> >> With every new supported NVMEM device with dynamic cells current =20
+> >> behaviour becomes non-optimal. It results in unneeded iterating over >=
+> DT
+> >> nodes and may result in false discovery of cells (depending on used DT
+> >> properties). =20
+> >> >> This behaviour has actually caused a problem already with the MTD =
+=20
+> >> subsystem. MTD subpartitions were incorrectly treated as NVMEM cells. =
+=20
+> >=20
+> > That's true, but I expect this to be really MTD specific.
+> >=20
+> > A concrete proposal below.
+> >  =20
+> >> Also with upcoming support for NVMEM layouts no new binding or driver
+> >> should support fixed cells defined in device node. =20
+> >=20
+> > I'm not sure I agree with this statement. We are not preventing new
+> > binding/driver to use fixed cells, or...? We offer a new way to expose
+> > nvmem cells with another way than "fixed-offset" and "fixed-size" OF
+> > nodes. =20
+>=20
+>  From what I understood all new NVMEM bindings should have cells defined
+> in the nvmem-layout { } node. That's what I mean by saying they should
+> not be defined in device node (but its "nvmem-layout" instead).
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Layouts are just another possibility, either you user the nvmem-cells
+compatible and produce nvmem cells with fixed OF nodes, or you use the
+nvmem-layout container. I don't think all new bindings should have
+cells in layouts. It depends if the content is static or not.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e0aa29e9ae74/disk-0988a0ea.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6f64db0b58ef/vmlinux-0988a0ea.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/db391408e15d/bzImage-0988a0ea.xz
+> >> Solve this by modifying drivers for bindings that support specifying
+> >> fixed NVMEM cells in DT. Make them explicitly tell NVMEM subsystem to
+> >> read cells from DT. =20
+> >> >> It wasn't clear (to me) if rtc and w1 code actually uses fixed cell=
+s. >> I =20
+> >> enabled them to don't risk any breakage. =20
+> >> >> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl> =20
+> >> [for drivers/nvmem/meson-{efuse,mx-efuse}.c]
+> >> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> >> ---
+> >> V2: Fix stm32-romem.c typo breaking its compilation
+> >>     Pick Martin's Acked-by
+> >>     Add paragraph about layouts deprecating use_fixed_of_cells
+> >> ---
+> >>  drivers/mtd/mtdcore.c          | 2 ++
+> >>  drivers/nvmem/apple-efuses.c   | 1 +
+> >>  drivers/nvmem/core.c           | 8 +++++---
+> >>  drivers/nvmem/imx-ocotp-scu.c  | 1 +
+> >>  drivers/nvmem/imx-ocotp.c      | 1 +
+> >>  drivers/nvmem/meson-efuse.c    | 1 +
+> >>  drivers/nvmem/meson-mx-efuse.c | 1 +
+> >>  drivers/nvmem/microchip-otpc.c | 1 +
+> >>  drivers/nvmem/mtk-efuse.c      | 1 +
+> >>  drivers/nvmem/qcom-spmi-sdam.c | 1 +
+> >>  drivers/nvmem/qfprom.c         | 1 +
+> >>  drivers/nvmem/rave-sp-eeprom.c | 1 +
+> >>  drivers/nvmem/rockchip-efuse.c | 1 +
+> >>  drivers/nvmem/sc27xx-efuse.c   | 1 +
+> >>  drivers/nvmem/sprd-efuse.c     | 1 +
+> >>  drivers/nvmem/stm32-romem.c    | 1 +
+> >>  drivers/nvmem/sunplus-ocotp.c  | 1 +
+> >>  drivers/nvmem/sunxi_sid.c      | 1 +
+> >>  drivers/nvmem/uniphier-efuse.c | 1 +
+> >>  drivers/nvmem/zynqmp_nvmem.c   | 1 +
+> >>  drivers/rtc/nvmem.c            | 1 +
+> >>  drivers/w1/slaves/w1_ds250x.c  | 1 +
+> >>  include/linux/nvmem-provider.h | 2 ++
+> >>  23 files changed, 29 insertions(+), 3 deletions(-) =20
+> >> >> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c =20
+> >> index 0feacb9fbdac..1bb479c0f758 100644
+> >> --- a/drivers/mtd/mtdcore.c
+> >> +++ b/drivers/mtd/mtdcore.c
+> >> @@ -523,6 +523,7 @@ static int mtd_nvmem_add(struct mtd_info *mtd)
+> >>  	config.dev =3D &mtd->dev;
+> >>  	config.name =3D dev_name(&mtd->dev);
+> >>  	config.owner =3D THIS_MODULE;
+> >> +	config.use_fixed_of_cells =3D of_device_is_compatible(node, >> "nvme=
+m-cells"); =20
+> >=20
+> > I am wondering how mtd specific this is? For me all OF nodes containing
+> > the nvmem-cells compatible should be treated as cells providers and
+> > populate nvmem cells as for each children.
+> >=20
+> > Why don't we just check for this compatible to be present? in
+> > nvmem_add_cells_from_of() ? And if not we just skip the operation.
+> >=20
+> > This way we still follow the bindings (even though using nvmem-cells in
+> > the compatible property to require cells population was a mistake in
+> > the first place, as discussed in the devlink thread recently) but there
+> > is no need for a per-driver config option? =20
+>=20
+> This isn't mtd specific. Please check this patch for all occurrences of
+> the:
+> use_fixed_of_cells =3D true
+>=20
+> The very first one: drivers/nvmem/apple-efuses.c driver for the
+> "apple,efuses" binding. That binding supports fixed OF cells, see:
+> Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c559e4d7d61c16608cb1@syzkaller.appspotmail.com
+I'm saying: based on what has been enforced so far, I would expect all
+fixed cell providers to come with nvmem-cells as compatible, no?
 
-divide error: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 9856 Comm: syz-executor.3 Not tainted 6.2.0-syzkaller-13467-g0988a0ea7919 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-RIP: 0010:flush_journal_list+0x1045/0x1c70 fs/reiserfs/journal.c:1592
-Code: c0 0f 85 eb 0a 00 00 4f 8d 7c 3e 02 48 89 e8 48 c1 e8 03 42 0f b6 04 20 84 c0 4d 89 e6 0f 85 ee 0a 00 00 8b 0b 4c 89 f8 31 d2 <48> f7 f1 48 89 d3 43 0f b6 44 35 00 84 c0 0f 85 f2 0a 00 00 48 8b
-RSP: 0018:ffffc900167a7558 EFLAGS: 00010246
-RAX: 00000000000001a4 RBX: ffff88802eb1c014 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffff88802eb1c017 R08: ffffffff8232797b R09: ffffed100f275e0d
-R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
-R13: 1ffff110045e5117 R14: dffffc0000000000 R15: 00000000000001a4
-FS:  00007f3a7e67f700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f4ac8868000 CR3: 0000000029317000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- flush_used_journal_lists+0x1256/0x15d0 fs/reiserfs/journal.c:1829
- do_journal_end+0x39f7/0x4770
- do_journal_begin_r+0x970/0x1020
- journal_begin+0x14c/0x360 fs/reiserfs/journal.c:3255
- __commit_trans_jl fs/reiserfs/journal.c:3866 [inline]
- reiserfs_commit_for_inode+0x736/0xbe0 fs/reiserfs/journal.c:3922
- reiserfs_dir_fsync+0xcb/0x100 fs/reiserfs/dir.c:43
- vfs_fsync_range fs/sync.c:188 [inline]
- vfs_fsync fs/sync.c:202 [inline]
- do_fsync fs/sync.c:212 [inline]
- __do_sys_fdatasync fs/sync.c:225 [inline]
- __se_sys_fdatasync fs/sync.c:223 [inline]
- __x64_sys_fdatasync+0xb5/0x110 fs/sync.c:223
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f3a7d88c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f3a7e67f168 EFLAGS: 00000246 ORIG_RAX: 000000000000004b
-RAX: ffffffffffffffda RBX: 00007f3a7d9abf80 RCX: 00007f3a7d88c0f9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
-RBP: 00007f3a7d8e7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffec0b306af R14: 00007f3a7e67f300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:flush_journal_list+0x1045/0x1c70 fs/reiserfs/journal.c:1592
-Code: c0 0f 85 eb 0a 00 00 4f 8d 7c 3e 02 48 89 e8 48 c1 e8 03 42 0f b6 04 20 84 c0 4d 89 e6 0f 85 ee 0a 00 00 8b 0b 4c 89 f8 31 d2 <48> f7 f1 48 89 d3 43 0f b6 44 35 00 84 c0 0f 85 f2 0a 00 00 48 8b
-RSP: 0018:ffffc900167a7558 EFLAGS: 00010246
-RAX: 00000000000001a4 RBX: ffff88802eb1c014 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffff88802eb1c017 R08: ffffffff8232797b R09: ffffed100f275e0d
-R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
-R13: 1ffff110045e5117 R14: dffffc0000000000 R15: 00000000000001a4
-FS:  00007f3a7e67f700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f82a9f80000 CR3: 0000000029317000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	c0 0f 85             	rorb   $0x85,(%rdi)
-   3:	eb 0a                	jmp    0xf
-   5:	00 00                	add    %al,(%rax)
-   7:	4f 8d 7c 3e 02       	lea    0x2(%r14,%r15,1),%r15
-   c:	48 89 e8             	mov    %rbp,%rax
-   f:	48 c1 e8 03          	shr    $0x3,%rax
-  13:	42 0f b6 04 20       	movzbl (%rax,%r12,1),%eax
-  18:	84 c0                	test   %al,%al
-  1a:	4d 89 e6             	mov    %r12,%r14
-  1d:	0f 85 ee 0a 00 00    	jne    0xb11
-  23:	8b 0b                	mov    (%rbx),%ecx
-  25:	4c 89 f8             	mov    %r15,%rax
-  28:	31 d2                	xor    %edx,%edx
-* 2a:	48 f7 f1             	div    %rcx <-- trapping instruction
-  2d:	48 89 d3             	mov    %rdx,%rbx
-  30:	43 0f b6 44 35 00    	movzbl 0x0(%r13,%r14,1),%eax
-  36:	84 c0                	test   %al,%al
-  38:	0f 85 f2 0a 00 00    	jne    0xb30
-  3e:	48                   	rex.W
-  3f:	8b                   	.byte 0x8b
+If that's the case we could use that as a common denominator?
+
+>=20
+>=20
+> >>  	config.reg_read =3D mtd_nvmem_reg_read;
+> >>  	config.size =3D mtd->size;
+> >>  	config.word_size =3D 1;
+> >> @@ -891,6 +892,7 @@ static struct nvmem_device >> *mtd_otp_nvmem_regis=
+ter(struct mtd_info *mtd,
+> >>  	config.name =3D kasprintf(GFP_KERNEL, "%s-%s", dev_name(&mtd->dev), =
+>> compatible);
+> >>  	config.id =3D NVMEM_DEVID_NONE;
+> >>  	config.owner =3D THIS_MODULE;
+> >> +	config.use_fixed_of_cells =3D true;
+> >>  	config.type =3D NVMEM_TYPE_OTP;
+> >>  	config.root_only =3D true;
+> >>  	config.ignore_wp =3D true;
+> >> diff --git a/drivers/nvmem/apple-efuses.c >> b/drivers/nvmem/apple-efu=
+ses.c
+> >> index 9b7c87102104..0119bac43b2c 100644
+> >> --- a/drivers/nvmem/apple-efuses.c
+> >> +++ b/drivers/nvmem/apple-efuses.c
+> >> @@ -36,6 +36,7 @@ static int apple_efuses_probe(struct platform_device=
+ >> *pdev)
+> >>  	struct resource *res;
+> >>  	struct nvmem_config config =3D {
+> >>  		.dev =3D &pdev->dev,
+> >> +		.use_fixed_of_cells =3D true,
+> >>  		.read_only =3D true,
+> >>  		.reg_read =3D apple_efuses_read,
+> >>  		.stride =3D sizeof(u32),
+> >> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> >> index 174ef3574e07..6783cd8478d7 100644
+> >> --- a/drivers/nvmem/core.c
+> >> +++ b/drivers/nvmem/core.c
+> >> @@ -844,9 +844,11 @@ struct nvmem_device *nvmem_register(const struct =
+>> nvmem_config *config)
+> >>  	if (rval)
+> >>  		goto err_remove_cells; =20
+> >> >> -	rval =3D nvmem_add_cells_from_of(nvmem); =20
+> >> -	if (rval)
+> >> -		goto err_remove_cells;
+> >> +	if (config->use_fixed_of_cells) {
+> >> +		rval =3D nvmem_add_cells_from_of(nvmem);
+> >> +		if (rval)
+> >> +			goto err_remove_cells;
+> >> +	} =20
+> >> >>  	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->nam=
+e);
+> >> > > Thanks, =20
+> > Miqu=C3=A8l =20
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Thanks,
+Miqu=C3=A8l
