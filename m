@@ -2,98 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DA16B0E77
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D15706B0E8A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbjCHQU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:20:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
+        id S229845AbjCHQXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:23:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjCHQUZ (ORCPT
+        with ESMTP id S229843AbjCHQXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:20:25 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EF4B6926;
-        Wed,  8 Mar 2023 08:20:23 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 328GKEPW078456;
-        Wed, 8 Mar 2023 10:20:14 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678292414;
-        bh=ZZWvuPuHCAyPcR/LCGAMM4pzjn50c6d9ZHF4PKiN8mw=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=LUCnQ8IkHlfSwFEr4X7eJSxZB61mja61EE7pRMM+YuA/IL9Ydk7TmDOVj1e/ptvwU
-         g5/QsAv2C/LxQRgxeX2g9KCbrtZPNwOe3WbU4Ke/TDfwZInRI8tabbJaGZAz2bfbHY
-         DKtIPI+0MWMM4KqKk7fq4HxPOiaQq77/V7MK56u0=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 328GKEev118313
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 8 Mar 2023 10:20:14 -0600
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 8
- Mar 2023 10:20:14 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 8 Mar 2023 10:20:14 -0600
-Received: from [128.247.81.39] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 328GKDIS046027;
-        Wed, 8 Mar 2023 10:20:14 -0600
-Message-ID: <f7561edb-be14-d78e-0f97-54ef6bd4eaea@ti.com>
-Date:   Wed, 8 Mar 2023 10:20:13 -0600
+        Wed, 8 Mar 2023 11:23:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03762193CE
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:23:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9076B6170C
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 16:23:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0E42C433EF
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 16:23:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678292591;
+        bh=wtbSZIjnuVouf3TNMqbx2fEORr7Wb2sFxFP0LJArqos=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HHMvccU6j87lRjL4E7fcoWtU43PEayhFPDixHhIYkN3HRzmGcR8WQR9+fxolKOQwX
+         5CV8zsiRjp0VEXE4Yr/1JYS8DRKHi2dYfQVcNUm6o8SdBinkt+25yecIcPLi7lSktI
+         CF997R8QMc4O4MDgOQ7F51vWFcF7sldDLCI85gsoa5jGkk5/6Jkjn69rXuVqrxB3PU
+         HZF4CUJHSAU+OFsSvaMtl+6rsMxgia5YHivnasNjttbI8fgv4+FsNSvV5owJdm7Qs5
+         kI5UfQ++ndCum/2do06Yiv0j0kBiVmGKWHqaKVGgL28P3H5B+Ftnlta+JgA9l0r7b3
+         HHRyaCigHRj9Q==
+Received: by mail-ed1-f52.google.com with SMTP id a25so68202892edb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 08:23:10 -0800 (PST)
+X-Gm-Message-State: AO0yUKX6NXMBgCSjvma6mMHld87WTa3HeUNLtOsr+rKtF0qJgP4TyNtT
+        zH2k+f5McFQvzCX15Gprkyt/3wa7ChXGMNM5dIM5Ig==
+X-Google-Smtp-Source: AK7set8xrdBJlgLKcZJ8Ls9Cykn3HUp+jJMyiUPKHEnnwDi6Pc1f0Gubr89vOkRYF6mpOiNQedaKihAX1ERLrU1kUOo=
+X-Received: by 2002:a17:906:b10d:b0:878:561c:6665 with SMTP id
+ u13-20020a170906b10d00b00878561c6665mr9467953ejy.0.1678292589161; Wed, 08 Mar
+ 2023 08:23:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 3/6] gpio: sch311x: Use devm_gpiochip_add_data() to
- simplify remove path
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230307165432.25484-1-afd@ti.com>
- <20230307165432.25484-3-afd@ti.com>
- <CAMRc=MeLM-S+HEuaDPp0UpbHJYmAXfLuFMU2TyvK5KEywSxtQA@mail.gmail.com>
- <CAMRc=MfAqx5Wz2d5K1wWM0ZZ4WBu+Jhercw-z95zGvo_-v=OTg@mail.gmail.com>
- <9c705260-c04c-da2e-db9a-df3ddfb69efc@ti.com>
- <CAHp75Vf9oMUmr473PSjcbXjEA+BFNpSPrLd22X=B378qNasrqA@mail.gmail.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <CAHp75Vf9oMUmr473PSjcbXjEA+BFNpSPrLd22X=B378qNasrqA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com>
+ <50a96bb9-113a-cb06-919c-f544f6b59493@intel.com> <CA+G9fYtDtUbKr-Kf_ZVF0z_xLsP3_2MVsMrvHmvV1UemXbfe3g@mail.gmail.com>
+In-Reply-To: <CA+G9fYtDtUbKr-Kf_ZVF0z_xLsP3_2MVsMrvHmvV1UemXbfe3g@mail.gmail.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Wed, 8 Mar 2023 08:22:57 -0800
+X-Gmail-Original-Message-ID: <CALCETrX56SGHMQFqKT2JWpkhnNDbmtB15-Kam5iYvZz3SD7ixg@mail.gmail.com>
+Message-ID: <CALCETrX56SGHMQFqKT2JWpkhnNDbmtB15-Kam5iYvZz3SD7ixg@mail.gmail.com>
+Subject: Re: selftests: sigaltstack: sas # exit=1 - # Bail out! SP is not on
+ sigaltstack - on clang build
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>, llvm@lists.linux.dev,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-api@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Len Brown <len.brown@intel.com>, Borislav Petkov <bp@suse.de>,
+        Stas Sergeev <stsp@list.ru>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 9:53 AM, Andy Shevchenko wrote:
-> On Wed, Mar 8, 2023 at 5:50 PM Andrew Davis <afd@ti.com> wrote:
->> On 3/8/23 4:32 AM, Bartosz Golaszewski wrote:
->>> On Wed, Mar 8, 2023 at 11:24 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> 
-> ...
-> 
->>> I see there's v2 out, backing it out then.
->>
->> Looks like I missed something that kernel test robot found, so there
->> will be a v3.
-> 
-> Just split your series on a per driver basis. This will help with
-> understanding what's going on. Also use a cover letter to explain what
-> your series is for.
-> 
+On Tue, Mar 7, 2023 at 7:14=E2=80=AFPM Naresh Kamboju <naresh.kamboju@linar=
+o.org> wrote:
+>
+> + LLVM
 
-There is one patch per driver, not sure what you mean by split per driver?
+The offending code seems to be:
 
-Will add a cover letter for v3 and drop the first patch that's in your tree already.
+#if __s390x__
+        register unsigned long sp asm("%15");
+#else
+        register unsigned long sp asm("sp");
+#endif
 
-Andrew
+        if (sp < (unsigned long)sstack ||
+                        sp >=3D (unsigned long)sstack + stack_size) {
+                ksft_exit_fail_msg("SP is not on sigaltstack\n");
+        }
+
+Is that actually expected to work?  asm("sp") is a horrible hack.  I
+would, maybe naively, expect a compiler to analyze this code, think
+"sp is unconditionally uninitialized", and treat the comparison as
+always-UB and thus generate whatever code seems convenient.
+
+--Andy
+
+>
+> On Wed, 8 Mar 2023 at 00:58, Chang S. Bae <chang.seok.bae@intel.com> wrot=
+e:
+> >
+> > On 3/6/2023 10:57 PM, Naresh Kamboju wrote:
+> > > kselftest: sigaltstack built with clang-16 getting failed but passed =
+with
+> > > gcc-12 build. Please find more details about test logs on clang-16 an=
+d
+> > > gcc-12 and steps to reproduce locally on your machine by using tuxrun=
+.
+> > >
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > >
+> > > Test log:
+> > > ----------
+> > >
+> > > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake) (Debian clang
+> > > version 16.0.0 (++20230228093516+60692a66ced6-1~exp1~20230228093525.4=
+1),
+> > > Debian LLD 16.0.0) #1 SMP PREEMPT @1678159722
+> > > ...
+> > > kselftest: Running tests in sigaltstack
+> > > TAP version 13
+> > > 1..1
+> > > # selftests: sigaltstack: sas
+> > > # # [NOTE] the stack size is 21104
+> > > # TAP version 13
+> > > # 1..3
+> > > # ok 1 Initial sigaltstack state was SS_DISABLE
+> > > # Bail out! SP is not on sigaltstack
+> > > # # Planned tests !=3D run tests (3 !=3D 1)
+> > > # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > > not ok 1 selftests: sigaltstack: sas # exit=3D1
+> > <snip>
+> >
+> > > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake)
+> > > (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutil=
+s
+> > > for Debian) 2.40) #1 SMP PREEMPT @1678159736
+> > > ...
+> > > kselftest: Running tests in sigaltstack
+> > > TAP version 13
+> > > 1..1
+> > > # selftests: sigaltstack: sas
+> > > # # [NOTE] the stack size is 50080
+> > > # TAP version 13
+> > > # 1..3
+> > > # ok 1 Initial sigaltstack state was SS_DISABLE
+> > > # # [RUN] signal USR1
+> > > # ok 2 sigaltstack is disabled in sighandler
+> > > # # [RUN] switched to user ctx
+> > > # # [RUN] signal USR2
+> > > # # [OK] Stack preserved
+> > > # ok 3 sigaltstack is still SS_AUTODISARM after signal
+> > > # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > > ok 1 selftests: sigaltstack: sas
+> >
+> > At glance, the log shows the altstack size difference between LLVM and =
+GCC.
+> >
+> > But, when I tried with the LLVM that I have,
+> >
+> >      $ clang --version
+> >      clang version 13.0.0 ...
+> >
+> > it failed only with this compiler:
+> >
+> >      $ rm sas;clang -o sas sas.c;./sas
+> >      # [NOTE]        the stack size is 8192
+> >      TAP version 13
+> >      1..3
+> >      ok 1 Initial sigaltstack state was SS_DISABLE
+> >      Bail out! SP is not on sigaltstack
+> >      # Planned tests !=3D run tests (3 !=3D 1)
+> >      # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> >
+> >      $ rm sas;gcc -o sas sas.c;./sas
+> >      # [NOTE]        the stack size is 8192
+> >      TAP version 13
+> >      1..3
+> >      ok 1 Initial sigaltstack state was SS_DISABLE
+> >      # [RUN] signal USR1
+> >      ok 2 sigaltstack is disabled in sighandler
+> >      # [RUN] switched to user ctx
+> >      # [RUN] signal USR2
+> >      # [OK]  Stack preserved
+> >      ok 3 sigaltstack is still SS_AUTODISARM after signal
+> >      # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+> >
+> > The same is true with some old versions -- e.g. the one that came with
+> > commit 0c49ad415512 ("tools/testing/selftests/sigaltstack/sas.c: improv=
+e
+> > output of sigaltstack testcase"):
+> >
+> >      $ rm sas;clang -o sas sas.c;./sas
+> >      [OK]    Initial sigaltstack state was SS_DISABLE
+> >      [FAIL]  SP is not on sigaltstack
+> >
+> >      $ rm sas;gcc -o sas sas.c;./sas
+> >      [OK]    Initial sigaltstack state was SS_DISABLE
+> >      [RUN]   signal USR1
+> >      [OK]    sigaltstack is disabled in sighandler
+> >      [RUN]   switched to user ctx
+> >      [RUN]   signal USR2
+> >      [OK]    Stack preserved
+> >      [OK]    sigaltstack is still SS_AUTODISARM after signal
+> >      [OK]    Test passed
+> >
+> > So, this test failure appears to have been there for a while. I think
+> > the LLVM folks need to take a look at it.
+> >
+> > Thanks,
+> > Chang
