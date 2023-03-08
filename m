@@ -2,194 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782606B126D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDEE6B1272
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjCHTtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 14:49:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
+        id S229809AbjCHTvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 14:51:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjCHTtA (ORCPT
+        with ESMTP id S229574AbjCHTv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 14:49:00 -0500
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0145AB4E;
-        Wed,  8 Mar 2023 11:48:17 -0800 (PST)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1763e201bb4so19981973fac.1;
-        Wed, 08 Mar 2023 11:48:17 -0800 (PST)
+        Wed, 8 Mar 2023 14:51:26 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FB991B43
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 11:51:25 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id t24-20020a1709028c9800b0019eaa064a51so7795500plo.10
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 11:51:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678305085;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BqRdGV496wguSjSBGNt8xtvrGLxfsCYn5R1NqvnxW3M=;
+        b=Av+obHS+/kmmkCKfGCw/rTZ/wndwL0zv9a1F2o/tINx1eC4Qaj8+9hNADGji3MlZYj
+         KtKVV1CeMHfkZWasVcHSAsSGJHjEQTEu8FhbCbrs06fRRo1r9lh7pLPrsBxUbXKC2TVJ
+         xAuHgf2sun79JijAKVKfwmkQrGVmfPgLE7tu9XFwPLmn9QDKKn8VgvzTSz+gqNUGI3sC
+         Se2Po5soEynhgJr+iqlexE/2wXrQxvabH5mLgEmVhmfABiBQ3u5vAIwFlqvmd7dR3mh8
+         9urw84RBuN/wpT8P20Rd1THMfjy/FxwsFX1nQ55zqZpkM1Kic+3+7xnuCL8Qq51vU59y
+         KH7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678304814;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yT0BopLRAw7O6/s7NS3/6EbNSMOzkcqRVPXIOE/BbPs=;
-        b=XpJs6TqzAZtKRJrENPxRX64lgzeOpP8XhZdk4oDV4VzUaSJg73bewQ0GX01Daywib3
-         kQh+kro7MAujIBO1UOgYrJ69eF6r1jArcMeI+zo26eCbnX3/QVA7DhgAIgJpfymQQyit
-         ufzmt/888m3AboKJYqfKwx7X28JeVwaQOTGwUg51VTBrt9dBUI7PBzylTTd+KWcPfgds
-         EN8CE/hiyoIEKTII3rFDyPsENHYuu9CeFo+WdJeDfYbfGJvXBERCpmEBPX/oqKQ1/8GL
-         bZESVbvE+8hK5ddRcLChxWHVWIlNwJnpaQmsQLEjm+uxVDv9X8oGP/E3SHR3CVhnU3W+
-         KYmg==
-X-Gm-Message-State: AO0yUKXg4FMAVC0PPpb5oRnPf+LgvBwo+1sO8v0JmjcysTNHZpwJ04+q
-        X0rGP1ILtjiSgYhcBY7Liw==
-X-Google-Smtp-Source: AK7set/j69mw8inZZ60owmutAs5i9vfN2brcSq4YY56sDxw/VEkhHwLkVFpgj9QDwqIthGRi/b/kpg==
-X-Received: by 2002:a05:6870:5490:b0:16e:84c5:7496 with SMTP id f16-20020a056870549000b0016e84c57496mr10085909oan.11.1678304814169;
-        Wed, 08 Mar 2023 11:46:54 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id zq41-20020a0568718ea900b0017703cd8ff6sm1904577oab.7.2023.03.08.11.46.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 11:46:53 -0800 (PST)
-Received: (nullmailer pid 3665063 invoked by uid 1000);
-        Wed, 08 Mar 2023 19:46:52 -0000
-Date:   Wed, 8 Mar 2023 13:46:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH 2/8] of: Enable DTB loading on UML for KUnit tests
-Message-ID: <20230308194652.GA3656473-robh@kernel.org>
-References: <20230302013822.1808711-1-sboyd@kernel.org>
- <20230302013822.1808711-3-sboyd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302013822.1808711-3-sboyd@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1678305085;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BqRdGV496wguSjSBGNt8xtvrGLxfsCYn5R1NqvnxW3M=;
+        b=uo156EHhWBz49Y177w0Etu4vt8U0AzjB1JVsOv8Sxayo9Y0i/I4glXyHL8FjRj5WiV
+         h2cvKgG+UWF2TiqEnBxf5OCgwmI77qoBLWYxcSd8wGKrB5X1zurbfWu8rh/d1UOGCBvc
+         38GTTOfJUW2aIyguBwGABM/jIlb4lRC4NuDJU9p+pdpbMbdFwRI8t3wKFKBIn5gjGDS5
+         guAcuwBGE1ofXnSOVWi7Oje4WdOzJzj/g80/CH+64aoPtG1xCDCL4ksMxWE2sfSwMRrb
+         JaLr3Tz8KkjI4bsfRfCHDhyzwrjh1wwyxv3p2ipi3nQ8oEBAJSj8bS+5Qr+6p43XWPlR
+         cIdQ==
+X-Gm-Message-State: AO0yUKWol0wwE06REGtXDxPLwJOv0ELkiommmKJU6tmjok4YWvtQYs85
+        eFedrGRxB0DoGpIUU+ApwfSPtKq8/fc=
+X-Google-Smtp-Source: AK7set+zXM2A/3jQ6mFWU40wgUXEVVXmwsnbkwyiVs3Z4LqZxA+s3gLC/gCi3VwThQP8OXkTwB8b7Cn7Kmk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:e113:0:b0:4f0:2691:a0ee with SMTP id
+ z19-20020a63e113000000b004f02691a0eemr7816685pgh.0.1678305085161; Wed, 08 Mar
+ 2023 11:51:25 -0800 (PST)
+Date:   Wed, 8 Mar 2023 11:51:23 -0800
+In-Reply-To: <20230308104707.27284-1-likexu@tencent.com>
+Mime-Version: 1.0
+References: <20230308104707.27284-1-likexu@tencent.com>
+Message-ID: <ZAjnO7NeGIYuCgMv@google.com>
+Subject: Re: [PATCH] KVM: x86/pmu/misc: Fix a typo on kvm_pmu_request_counter_reprogam()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 05:38:15PM -0800, Stephen Boyd wrote:
-> To fully exercise common clk framework code in KUnit we need to
-> associate 'struct device' pointers with 'struct device_node' pointers so
-> that things like clk_get() can parse DT nodes for 'clocks' and so that
-> clk providers can use DT to provide clks; the most common mode of
-> operation for clk providers.
+On Wed, Mar 08, 2023, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> Adding support to KUnit so that it loads a DTB is fairly simple after
-> commit b31297f04e86 ("um: Add devicetree support"). We can simply pass a
-> pre-compiled deviectree blob (DTB) on the kunit.py commandline and UML
-> will load it. The problem is that tests won't know that the commandline
-> has been modified, nor that a DTB has been loaded. Take a different
-> approach so that tests can skip if a DTB hasn't been loaded.
-> 
-> Reuse the Makefile logic from the OF unittests to build a DTB into the
-> kernel. This DTB will be for the mythical machine "linux,kunit", i.e.
-> the devicetree for the KUnit "board". In practice, it is a dtsi file
-> that will gather includes for kunit tests that rely in part on a
-> devicetree being loaded. The devicetree should only be loaded if
-> CONFIG_OF_KUNIT=y. Make that a choice config parallel to the existing
-> CONFIG_OF_UNITTEST so that only one devicetree can be loaded in the
-> system at a time. Similarly, the kernel commandline option to load a
-> DTB is ignored if CONFIG_OF_KUNIT is enabled so that only one DTB is
-> loaded at a time.
-> 
-> Add a simple unit test to confirm that the DTB loading worked. Future
-> tests will add to the kunit.dtsi file to include their specific test
-> nodes.
-> 
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-> Cc: Johannes Berg <johannes@sipsolutions.net>
-> Cc: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> ---
->  arch/um/kernel/dtb.c            | 29 +++++++++++++++--
->  drivers/of/Kconfig              | 26 ++++++++++++++++
->  drivers/of/Makefile             |  1 +
->  drivers/of/kunit/.kunitconfig   |  4 +++
->  drivers/of/kunit/Makefile       |  4 +++
->  drivers/of/kunit/kunit.dtsi     |  8 +++++
->  drivers/of/kunit/kunit.dtso     |  4 +++
->  drivers/of/kunit/uml_dtb_test.c | 55 +++++++++++++++++++++++++++++++++
->  8 files changed, 128 insertions(+), 3 deletions(-)
->  create mode 100644 drivers/of/kunit/.kunitconfig
->  create mode 100644 drivers/of/kunit/Makefile
->  create mode 100644 drivers/of/kunit/kunit.dtsi
->  create mode 100644 drivers/of/kunit/kunit.dtso
->  create mode 100644 drivers/of/kunit/uml_dtb_test.c
-> 
-> diff --git a/arch/um/kernel/dtb.c b/arch/um/kernel/dtb.c
-> index 484141b06938..ee63951b12df 100644
-> --- a/arch/um/kernel/dtb.c
-> +++ b/arch/um/kernel/dtb.c
-> @@ -15,9 +15,32 @@ void uml_dtb_init(void)
->  	long long size;
->  	void *area;
->  
-> -	area = uml_load_file(dtb, &size);
-> -	if (!area)
-> -		return;
-> +	if (IS_ENABLED(CONFIG_OF_KUNIT)) {
-> +		/*
-> +		 * __dtbo_kunit_begin[] and __dtbo_kunit_end[] are magically
-> +		 * created by cmd_dt_S_dtbo in scripts/Makefile.lib from the
-> +		 * drivers/of/kunit/kunit.dtsi file.
-> +		 */
-> +		extern uint8_t __dtbo_kunit_begin[];
-> +		extern uint8_t __dtbo_kunit_end[];
-> +
-> +		size = __dtbo_kunit_end - __dtbo_kunit_begin;
-> +		if (!size) {
-> +			pr_warn("%s: kunit testcases is empty\n", __func__);
-> +			return;
-> +		}
-> +
-> +		/* creating copy */
-> +		area = memblock_alloc(size, 8);
-> +		if (!area)
-> +			return;
-> +
-> +		memcpy(area, __dtbo_kunit_begin, size);
-> +	} else {
-> +		area = uml_load_file(dtb, &size);
-> +		if (!area)
-> +			return;
-> +	}
->  
->  	if (!early_init_dt_scan(area)) {
->  		pr_err("invalid DTB %s\n", dtb);
-> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-> index 80b5fd44ab1c..1f968b6a3dde 100644
-> --- a/drivers/of/Kconfig
-> +++ b/drivers/of/Kconfig
-> @@ -12,6 +12,20 @@ menuconfig OF
->  
->  if OF
->  
-> +choice
+> The typo first appeared in the comments [*], then smoothly escaped the
+> eyes of the developer and survived multiple iterations. Now we had to
+> regretfully append a minor follow-up fix, which pollutes our Git history.
 
-No. This needs to be reworked such that a kernel rebuild is not needed 
-to run different tests. I suspect that the overlay approach will do that 
-for you.
+This does not belong in the changelog.  Instead of writing an editorial, please
+provide a Fixes: tag, which is much more useful.
 
-> +	prompt "Devicetree Runtime Tests"
-> +	default OF_UNITTEST
-> +
-> +config OF_KUNIT
-> +	bool "Devicetree KUnit support" if KUNIT
-> +	depends on UML
+> [*] Yw5N+eGfOsCgtHpw@google.com
 
-This is not a great dependency either...
-
-Rob
+Not a valid link.
