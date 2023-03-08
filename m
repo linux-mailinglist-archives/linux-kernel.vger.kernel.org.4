@@ -2,75 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84BD86B11AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA286B11B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjCHTE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 14:04:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
+        id S229564AbjCHTFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 14:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjCHTED (ORCPT
+        with ESMTP id S230133AbjCHTEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 14:04:03 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6776DCF9BB;
-        Wed,  8 Mar 2023 11:03:33 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id 16so10219176pge.11;
-        Wed, 08 Mar 2023 11:03:33 -0800 (PST)
+        Wed, 8 Mar 2023 14:04:34 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7EC61892;
+        Wed,  8 Mar 2023 11:03:58 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id v16so16435568wrn.0;
+        Wed, 08 Mar 2023 11:03:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678302213;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bpVeJlxzr9a+pZzvYi0QKS84eR0eQKkGn5sJ0lCFKf4=;
-        b=CgPAjPUgs6c57H71wf5NngCtu8lwZ5XxSFP7kG/knf3c1DKG/8MWb4cSbBXRAVmQXp
-         99BRyQI5z5lIy+zElFWvjpIQGKQe8YY5XZFwYAftvJ9dVfEtS4IP/av8pXU2VtQNq5qn
-         FXxo/VKx0LdXRsXQMGsr8K8DfZixTgvg9RyJQVfRERvfiZVotCnzXLp9dVXUIEZUljtI
-         nA+IT5F+IeiKea0V+/IQLcjc/bkfHs5ORNi3cL3Bs+hYtFSqC/z/5GY2T0VmeKd71zRZ
-         8LzEFwlejzXdAtvyCWMy2X6EwyMGEJlOo+dx6PDwj4tbiVTwEzre+L43Nqxt3GiMHOOF
-         bRVg==
+        d=gmail.com; s=20210112; t=1678302230;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=GyEWSQ+G2MWKOlELKWDgQ+RU89YhI2uCRrCVz5D3irU=;
+        b=gPFP5RFz8fdqZUUyrGaqnfYAtrqd3NpQIq9pM1B5/5roMkDm+vAl1z7Jl/Li5gwSkS
+         uWR9XsAkodbakTFbuNqdic8XU2LOjW2imL4qGQrTOB7aeklok8jTtgub3ecVvcTzgR+z
+         SWSgB3TRSnn19P2F4T5SB8IGVRqDGfvAZ1vnP4Idz9QOupp1hyjkV+sobJJnPgJpSVvo
+         dTu3qcTdlgFuPPwlsAEgEPywj9fY7QiPKfwYw7f3aVUElP2rkDflTq6mnmfNlG33CPOK
+         EFxYI667fT5+6kI4JDUUJU0FTQRDVBkTbNoxFfvsGk6yYaHGBUDv7ediPHfY2j6CYuRi
+         p0vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678302213;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bpVeJlxzr9a+pZzvYi0QKS84eR0eQKkGn5sJ0lCFKf4=;
-        b=yZUmM4g0Bb/8MFEdlUwcgXdiHlcEEJVob5yzN0CkmBmlzO/d61Yl2eFCo29Ow2fhiD
-         BiZ6LkWiw8pAXBW3YYhmzdD6ub6rf4ouUlAjnGuOorzNvLp6RFdq3gcwVTNSZ61Uzghc
-         Vz0yIkkI2zjfKZ29UhCgOI/8ryG0qO3bX3cNCPVRVg2XrWM5AWCNJ6zLcU+9WCZERrpv
-         S6DKq08+y107Tz06rUl0v64PpOyukqK4nFJLENKXoK9cMRF8cpqN4NVDwx/3ZuOIz1AI
-         mwlu910nHUftiaU6tX7HNzk46XeFFa1C9qjsrEGcHPQI0R7GJSyct4pbm+uB8mGnITbX
-         fbwQ==
-X-Gm-Message-State: AO0yUKUzaB9sKRXMyFHYK/MLtv0FjMoXkLmX/glnu3EzCVsW3If9lr2d
-        Q3uHfs3zt9qhg3V8aqaUlW4W727BeHo=
-X-Google-Smtp-Source: AK7set/U0j1v/yI0bLmQYxFkDRAOdx2IIZqC3tp4CvTeNaOmgIpC8hFw2x1qAFDp5q7dRZH5JWYszg==
-X-Received: by 2002:aa7:9a50:0:b0:61d:e10f:4e70 with SMTP id x16-20020aa79a50000000b0061de10f4e70mr2118523pfj.0.1678302212713;
-        Wed, 08 Mar 2023 11:03:32 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id j14-20020a62e90e000000b005a8de0f4c76sm10045378pfh.17.2023.03.08.11.03.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 11:03:31 -0800 (PST)
-Message-ID: <fa38ef6e-034f-7232-1f06-dccd565aa7cd@gmail.com>
-Date:   Wed, 8 Mar 2023 11:03:29 -0800
+        d=1e100.net; s=20210112; t=1678302230;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GyEWSQ+G2MWKOlELKWDgQ+RU89YhI2uCRrCVz5D3irU=;
+        b=UhFTlaNXffhaGdR1ioivsbBJk+7NXrasNYg1Q7ixk2smqokSFyWKQXJZgNROZ6a2mi
+         ky3jrOQMNrWkmsKBbZfWqqlwxswAe2EAvApeJ3ik/ncm1v2ryMXaniCpw6H3kPuxniDJ
+         AD+nmnHoFXsSgnqM3iOr+0d/EfZ0FBmbbAC2goP+EdTKy+gzjmwiQfaNOdholVTWKGAt
+         kraQeDxKIpmA1WmIWSsNdtwL5zC7xubGqDA0bD8wZFughHRgUGWogh3Y3RBSJ34Tijz7
+         Erqo5HMVR7t9n//rxKIUyjKb9l87ML6cWnXpTOqlYwweg4pfYVFK3+d2Goikrt79yddi
+         CnSw==
+X-Gm-Message-State: AO0yUKXyWWsqcP+xMeXIEP1s0O4dD+zN+MokLQJETI65HK1KvwiP9bGZ
+        ZQ2dbbo3XhHJ3xELZK1cTJs=
+X-Google-Smtp-Source: AK7set9zWhFR+fhSCmw/by0OxIhyJDhKvuE8Ndxn+7KOiJv5qWAkVRPqq00/gtyaC1fGqc6JucygyQ==
+X-Received: by 2002:adf:fe47:0:b0:2c7:e26:97c2 with SMTP id m7-20020adffe47000000b002c70e2697c2mr12732792wrs.33.1678302230524;
+        Wed, 08 Mar 2023 11:03:50 -0800 (PST)
+Received: from Ansuel-xps. (93-34-89-197.ip49.fastwebnet.it. [93.34.89.197])
+        by smtp.gmail.com with ESMTPSA id w2-20020a5d6802000000b002c7163660a9sm15880471wru.105.2023.03.08.11.03.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 11:03:50 -0800 (PST)
+Message-ID: <6408dc16.5d0a0220.dc775.18e5@mx.google.com>
+X-Google-Original-Message-ID: <ZAjcEpmB1qBHEpdH@Ansuel-xps.>
+Date:   Wed, 8 Mar 2023 20:03:46 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Lee Jones <lee@kernel.org>,
+        linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH 10/11] dt-bindings: net: phy: Document support
+ for LEDs node
+References: <20230307170046.28917-1-ansuelsmth@gmail.com>
+ <20230307170046.28917-11-ansuelsmth@gmail.com>
+ <7c6a70d1-fd64-66cc-688b-3e04634066bb@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5.15 000/570] 5.15.99-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230308091759.112425121@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230308091759.112425121@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7c6a70d1-fd64-66cc-688b-3e04634066bb@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,29 +90,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 01:29, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.99 release.
-> There are 570 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, Mar 08, 2023 at 07:56:57PM +0100, Krzysztof Kozlowski wrote:
+> On 07/03/2023 18:00, Christian Marangi wrote:
+> > Document support for LEDs node in phy and add an example for it.
+> > PHY LED will have to match led pattern and should be treated as a
+> > generic led.
+> > 
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > ---
+> >  .../devicetree/bindings/net/ethernet-phy.yaml | 22 +++++++++++++++++++
+> >  1 file changed, 22 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/ethernet-phy.yaml b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> > index 1327b81f15a2..0ec8ef6b0d8a 100644
+> > --- a/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> > +++ b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> > @@ -197,6 +197,13 @@ properties:
+> >        PHY's that have configurable TX internal delays. If this property is
+> >        present then the PHY applies the TX delay.
+> >  
+> > +  leds:
+> > +    type: object
 > 
-> Responses should be made by Fri, 10 Mar 2023 09:16:12 +0000.
-> Anything received after that time might be too late.
+> additionalProperties: false
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.99-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> although maybe this was already said in one of previous ten reviews...
+>
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+Thanks for the review. (this is rather new from the old patch (appeared
+only in v7 so sorry if I didn't see that in the old series. Will fix in
+v2 of this!)
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+> > +
+> > +    patternProperties:
+> > +      '^led(@[a-f0-9]+)?$':
+> > +        $ref: /schemas/leds/common.yaml#
+> > +
+> 
+
 -- 
-Florian
-
+	Ansuel
