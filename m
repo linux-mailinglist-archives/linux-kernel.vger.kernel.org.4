@@ -2,175 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596686B0438
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC766B043E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjCHK23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:28:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
+        id S230481AbjCHK2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:28:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbjCHK2R (ORCPT
+        with ESMTP id S230487AbjCHK2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:28:17 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1869ECC;
-        Wed,  8 Mar 2023 02:28:11 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A29E81EC0104;
-        Wed,  8 Mar 2023 11:28:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678271289;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=QUSal8yLRZqvOQ34incj8gT6TWJsFqJ8/OvBTCTsShk=;
-        b=qKM1WjO9F9dXO6k5BZ17YhP7pKauIgrnWTcEAhizPLCqjIUDtUBoqz9Vv7RlAmfM7ENNcX
-        Np7CELn8CU+Qrg3p56Rww0dIFPR7Hx8s81XMMztPWSMC3ak4lXSGrlcQPEiXxVGph6KZkV
-        fp3eA1tDCcaGYqrcE+cPk4ynDNL4gOU=
-Date:   Wed, 8 Mar 2023 11:27:56 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com
-Subject: Re: [PATCH v7 28/41] x86: Introduce userspace API for shadow stack
-Message-ID: <ZAhjLAIm91rJ2Lpr@zn.tnic>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-29-rick.p.edgecombe@intel.com>
+        Wed, 8 Mar 2023 05:28:22 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9EF5A6CB;
+        Wed,  8 Mar 2023 02:28:20 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id f16so16040328ljq.10;
+        Wed, 08 Mar 2023 02:28:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678271298;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+PM2e55u2rWAuFlB5GNjH23zKw43jDtkXtVhBxiEPjU=;
+        b=g+Hr/wgHRNzChCV24AI87kc2NpZiOoXZNV8xwq4nZS5w56+FWkliUVb2RqVfDS4BZO
+         8x5l0Ne9KSE1YeSpAMXf/491XGTZahDnyW+OF5LSNzI5P98JJbrwTWwfYPkRUkJnNeYG
+         +Af4TOowwCL7ySTkuPfVFuQI9vE59oQX0amxznbGlObVhB3aflB05fCLlhpTh9pOPUYo
+         0S0n17rkTC5qj5uHyqfKtLzKQ/i6yu4fUE+qtMDqUU7wrL3re2zabAbBUYtG4f9jP4lA
+         +Id0Qo3BBgOChEz65poiurixsfaAMv26bybmGJgCbzh5Wl976+6C+RnfEkesg1CKRqI3
+         BgXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678271298;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+PM2e55u2rWAuFlB5GNjH23zKw43jDtkXtVhBxiEPjU=;
+        b=aDAtSaJA5VsJ6Hh8JRz4tDeuudSivcwUJNLQbOnrPyxhO/oadvfRiOtMJmzi/etjgy
+         XQo43S6kz6kPTtIWh6gnnOcvlldf95VUX6F4kFJfAcI7EJDNjT8o+KFj9a9PbePqTxLu
+         AIk+kVLBE+JdCHwc4addFBjLMQboavehqHn/da6a0h6XwK+aQytSx69QiajZAMYPmumU
+         scAylwRwxHjQK/lm1kLrmZGiOdxh72L3PA3yp9s8hjLZPIUYMT4ra10BSlIu2jFz1Bfw
+         S/ub0AjQoDLQrOyiqjLfXP9axQCCqSIYHvdXe/0XuYi11PiBaAdtUyvdQ5T++5LD8SsM
+         iPBQ==
+X-Gm-Message-State: AO0yUKUzcYHDzHKYJwfdzzUACyjB7V+w0tIEVMOIz/fwEsKMLh8maVwd
+        e0ie5sKqUf+pLjYTlFALKvuZ305mMNE=
+X-Google-Smtp-Source: AK7set8zAN1JLxIDiwx7Z116PrzNfWnAFx+agVATcvYLkaabN8CSjIG2PJjJvw3vurZMUwS7F9nxvA==
+X-Received: by 2002:a2e:7004:0:b0:295:b0f0:cc6d with SMTP id l4-20020a2e7004000000b00295b0f0cc6dmr4752590ljc.4.1678271298052;
+        Wed, 08 Mar 2023 02:28:18 -0800 (PST)
+Received: from [192.168.1.103] ([31.173.83.210])
+        by smtp.gmail.com with ESMTPSA id u14-20020a2e91ce000000b0029597ebacd0sm2450020ljg.64.2023.03.08.02.28.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 02:28:17 -0800 (PST)
+Subject: Re: [PATCH 01/32] pata_parport-bpck6: remove useless defines
+To:     Ondrej Zary <linux@zary.sk>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Tim Waugh <tim@cyberelk.net>, linux-block@vger.kernel.org,
+        linux-parport@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230307224627.28011-1-linux@zary.sk>
+ <20230307224627.28011-2-linux@zary.sk>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <da4e2244-30ae-a518-997f-726ea3222154@gmail.com>
+Date:   Wed, 8 Mar 2023 13:28:16 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <20230307224627.28011-2-linux@zary.sk>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230227222957.24501-29-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:29:44PM -0800, Rick Edgecombe wrote:
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Hello!
+
+  (Sending via my Gmail account, as the OMP SMTP server rejects mails...) 
+
+On 3/8/23 1:45 AM, Ondrej Zary wrote:
+
+> Almost all the ATAPI_ defines are unused. Remove them and use
+> ATA_REG_DATA instead of ATAPI_DATA.
 > 
-> Add three new arch_prctl() handles:
-> 
->  - ARCH_SHSTK_ENABLE/DISABLE enables or disables the specified
->    feature. Returns 0 on success or an error.
+> Signed-off-by: Ondrej Zary <linux@zary.sk>
 
-"... or a negative value on error."
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
->  - ARCH_SHSTK_LOCK prevents future disabling or enabling of the
->    specified feature. Returns 0 on success or an error
+[...]
 
-ditto.
-
-What is the use case of the feature locking?
-
-I'm under the simple assumption that once shstk is enabled for an app,
-it remains so. I guess my question is rather, what's the use case for
-enabling shadow stack and then disabling it later for an app...?
-
-> The features are handled per-thread and inherited over fork(2)/clone(2),
-> but reset on exec().
-> 
-> This is preparation patch. It does not implement any features.
-
-That belongs under the "---" line I guess.
-
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Tested-by: Kees Cook <keescook@chromium.org>
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> [tweaked with feedback from tglx]
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> 
-> ---
-> v4:
->  - Remove references to CET and replace with shadow stack (Peterz)
-> 
-> v3:
->  - Move shstk.c Makefile changes earlier (Kees)
->  - Add #ifdef around features_locked and features (Kees)
->  - Encapsulate features reset earlier in reset_thread_features() so
->    features and features_locked are not referenced in code that would be
->    compiled !CONFIG_X86_USER_SHADOW_STACK. (Kees)
->  - Fix typo in commit log (Kees)
->  - Switch arch_prctl() numbers to avoid conflict with LAM
-> 
-> v2:
->  - Only allow one enable/disable per call (tglx)
->  - Return error code like a normal arch_prctl() (Alexander Potapenko)
->  - Make CET only (tglx)
-> ---
->  arch/x86/include/asm/processor.h  |  6 +++++
->  arch/x86/include/asm/shstk.h      | 21 +++++++++++++++
->  arch/x86/include/uapi/asm/prctl.h |  6 +++++
->  arch/x86/kernel/Makefile          |  2 ++
->  arch/x86/kernel/process_64.c      |  7 ++++-
->  arch/x86/kernel/shstk.c           | 44 +++++++++++++++++++++++++++++++
->  6 files changed, 85 insertions(+), 1 deletion(-)
->  create mode 100644 arch/x86/include/asm/shstk.h
->  create mode 100644 arch/x86/kernel/shstk.c
-
-...
-
-> +long shstk_prctl(struct task_struct *task, int option, unsigned long features)
-> +{
-> +	if (option == ARCH_SHSTK_LOCK) {
-> +		task->thread.features_locked |= features;
-> +		return 0;
-> +	}
-> +
-> +	/* Don't allow via ptrace */
-> +	if (task != current)
-> +		return -EINVAL;
-> +
-> +	/* Do not allow to change locked features */
-> +	if (features & task->thread.features_locked)
-> +		return -EPERM;
-> +
-> +	/* Only support enabling/disabling one feature at a time. */
-> +	if (hweight_long(features) > 1)
-> +		return -EINVAL;
-> +
-> +	if (option == ARCH_SHSTK_DISABLE) {
-> +		return -EINVAL;
-> +	}
-
-{} braces left over from some previous version. Can go now.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+MBR, Sergey
