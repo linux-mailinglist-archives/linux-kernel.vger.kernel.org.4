@@ -2,167 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F576B0836
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 492B36B0838
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjCHNPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:15:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
+        id S231462AbjCHNPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:15:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbjCHNOb (ORCPT
+        with ESMTP id S230365AbjCHNPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:14:31 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400DED008C;
-        Wed,  8 Mar 2023 05:11:15 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328CnaIV032421;
-        Wed, 8 Mar 2023 13:10:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=aAsuReQiNd2jwcSVqHIhRcJu0mkLCAPpVs0DGN7TsXo=;
- b=CuD7mWoe6Ek5hdfPR+77cE0tOQ4DKlVVHPvhjNjqcvH6udnRWzc3l4OFBWDxMhbJxqkg
- VW0dxmHPpePfbkTB/xjKMLYTXF9Ka6aEJLdrLDixj0FlQPT77kPa7TX/atv2Rlzu63/u
- TTiTxY1hwryWc8DXftola243ngLOWvRrtwsy8RrXO+lj2zkAuHdI+DECfNLfk7qWlZYn
- klJ2WZaX2PqkiZV6eIoikUV5ddaqCc9mLETueAbNV/N+QyitOiUqyb1ba2QSlWEJ3Moj
- H6A9c1lHYMYw8TW+yIgbSvnJDhC3RK0N6XT1DZoLmPV60mxvDzOpwIuu9LbK2d97o52/ 4w== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p6femhmau-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 13:10:45 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 328DAiqI028779
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Mar 2023 13:10:44 GMT
-Received: from [10.216.42.241] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 8 Mar 2023
- 05:10:38 -0800
-Message-ID: <97a12bba-27e8-2cab-a211-5ed9b4ce49b6@quicinc.com>
-Date:   Wed, 8 Mar 2023 18:40:33 +0530
+        Wed, 8 Mar 2023 08:15:08 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07C6D162D;
+        Wed,  8 Mar 2023 05:11:52 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 1D117604F3;
+        Wed,  8 Mar 2023 14:11:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678281107; bh=9YOSH9fsyQWwKgc7rYyqDCSYLUM86K9yyDYVc5F0/Vc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=U7VOEF/wK5DEXiApc/3iVem4s5vxgIyWW+BNudaqs37JsDK/w/MCLj7mGBPK/LNEp
+         HGcoUchtNEX5SHW/EN1hGIHKjfyitbGR72Sq+/7Ah20s8VYBOVOY1zlz9kfPTmctO1
+         twQlKkSfiUoME6+17LxQBjEJNS7WCmBYjo+HnHJelUtU/PmSOAg+6X7WjpY/HFwGhq
+         00ETNKpDPjLlz60DnmetHlsDeKZwCxEOWIBQAaJ8Cd37rPhCqXdHN4+rZN3sEMdPFl
+         kl8jkU3bzj3x3w6khSNzeFQbwuzIYu+6qqiaz/qVbrV3o6NKMRjQ66UQTbtjiIy3O4
+         eC8dW3U/zaOQA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id SeE9Gx7tn6T1; Wed,  8 Mar 2023 14:11:44 +0100 (CET)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id C6F4D604F5;
+        Wed,  8 Mar 2023 14:11:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678281104; bh=9YOSH9fsyQWwKgc7rYyqDCSYLUM86K9yyDYVc5F0/Vc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=g3TkGpUQlkwUumtS5q6MmMBvvm9Qy4TdoDMIkg67yvd+dYj79RKFVWM5G1+jPMShW
+         f+ZgKBWBiXj2gtnAjacN5r8VD4EWoxxRHzeNGkJuYWhyae5OWHAbbT3HGEULRADsnW
+         HFe7OnpIZ0S3gNfEf1TTwfQnie7wq/wTq3GTnHHpBZ7f1Ff1BiXjw+Tf4UJMX+s5yS
+         lWwY423Gw0iqjrk3dlPiWHT9KfxDce/xKcP7z3cKv45KzZK2XzN4OK2VvmlIx1HXqU
+         HjyqeOmwa48wWFE686RY9gHpJD04ZqVZwQ9R/J5HgCdC7kwr1qOD9zuksaYasNXu7c
+         R1lELc85gDnlA==
+Message-ID: <93d606c4-fe48-757b-28fa-4786ed3302c3@alu.unizg.hr>
+Date:   Wed, 8 Mar 2023 14:11:39 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2 5/6] ARM: dts: qcom: sdx65-mtp: Enable PCIe PHY
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mani@kernel.org>,
-        <lpieralisi@kernel.org>, <kw@linux.com>, <bhelgaas@google.com>,
-        <manivannan.sadhasivam@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>
-References: <1678277993-18836-1-git-send-email-quic_rohiagar@quicinc.com>
- <1678277993-18836-6-git-send-email-quic_rohiagar@quicinc.com>
- <34e0dc8a-2879-b1c2-8567-8ac0cf0ced80@linaro.org>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <34e0dc8a-2879-b1c2-8567-8ac0cf0ced80@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 9XQ2-K-apGTIETDH427-2Y8lUJjykygK
-X-Proofpoint-ORIG-GUID: 9XQ2-K-apGTIETDH427-2Y8lUJjykygK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-08_08,2023-03-08_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- bulkscore=0 clxscore=1015 malwarescore=0 priorityscore=1501
- impostorscore=0 adultscore=0 mlxscore=0 suspectscore=0 lowpriorityscore=0
- mlxlogscore=568 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303080112
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: INFO: REPRODUCED: memory leak in gpio device in 6.2-rc6
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+References: <Y+y5nZJwZ6ykf0Fz@smile.fi.intel.com>
+ <3d96e50b-ed17-9bf5-149b-8a50c7b4cca2@alu.unizg.hr>
+ <CAMRc=Mcx=Ko5H_c1YGzA5Jfu3KJqx1pfL3RZuMrV6oTObnUrhQ@mail.gmail.com>
+ <4b001ce6-b35d-3ad1-b757-f5f6baca7b51@alu.unizg.hr>
+ <Y/N5Dt6G397rkfBd@smile.fi.intel.com>
+ <d7762f6f-5b58-cf71-3400-557799de43c0@alu.unizg.hr>
+ <Y/Tlq9aY3btfoVUN@smile.fi.intel.com>
+ <7856e5a8-d84e-4f41-721b-80b6fc413919@alu.unizg.hr>
+ <Y/j2ikfd/wvrDdws@smile.fi.intel.com>
+ <2373a9ab-1c38-35fd-e961-9a172f8ce622@alu.unizg.hr>
+ <Y/05Nizuc+VJ7GNU@smile.fi.intel.com>
+Content-Language: en-US, hr
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <Y/05Nizuc+VJ7GNU@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/28/23 00:13, Andy Shevchenko wrote:
 
-On 3/8/2023 6:08 PM, Konrad Dybcio wrote:
->
-> On 8.03.2023 13:19, Rohit Agarwal wrote:
->> Enable PCIe PHY on SDX65 MTP for PCIe EP. While at it,
->> updating status as last property for each node.
+Hi, Andy!
+
+>> The logs are extensive if you are willing to skim over them, but I believe the interesting
+>> part is this:
+> 
+> I'm not sure I understand where the problem is.
+> 
+>> [ 4830.764748] kobject: 'gpio-sim' (000000005b8d0726): kobject_release, parent 000000007425b13f (delayed 750)
+>> [ 4833.908238] kobject: 'gpio-sim' (000000005b8d0726): kobject_cleanup, parent 000000007425b13f
+>> [ 4833.908244] kobject: 'gpio-sim' (000000005b8d0726): auto cleanup kobject_del
+>> [ 4833.908245] kobject: 'gpio-sim' (000000005b8d0726): auto cleanup 'remove' event
+>> [ 4833.908247] kobject: 'gpio-sim' (000000005b8d0726): kobject_uevent_env
+>> [ 4833.908273] kobject: 'gpio-sim' (000000005b8d0726): fill_kobj_path: path = '/bus/platform/drivers/gpio-sim'
+>> [ 4833.908311] kobject: 'gpio-sim' (000000005b8d0726): calling ktype release
+>> [ 4833.908315] kobject: 'gpio-sim': free name
+>> [ 4834.932303] kobject: 'gpio_sim' (0000000096ea0bb1): kobject_release, parent 0000000093357d30 (delayed 250)
+>> [ 4835.952388] kobject: 'gpio_sim' (0000000096ea0bb1): kobject_cleanup, parent 0000000093357d30
+>> [ 4835.952413] kobject: 'gpio_sim' (0000000096ea0bb1): auto cleanup kobject_del
+>> [ 4835.952415] kobject: 'gpio_sim' (0000000096ea0bb1): auto cleanup 'remove' event
+>> [ 4835.952416] kobject: 'gpio_sim' (0000000096ea0bb1): kobject_uevent_env
+>> [ 4835.952424] kobject: 'gpio_sim' (0000000096ea0bb1): fill_kobj_path: path = '/module/gpio_sim'
+>> [ 4835.952445] kobject: 'gpio_sim' (0000000096ea0bb1): calling ktype release
+>> [ 4835.952448] kobject: 'gpio_sim': free name
 >>
->> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->> ---
->>   arch/arm/boot/dts/qcom-sdx65-mtp.dts | 20 +++++++++++++++-----
->>   1 file changed, 15 insertions(+), 5 deletions(-)
+>> Or, with CONFIG_DEBUG_DEVRES=y, it looks like this:
+> 
+> I don't see that been enabled (it requires to pass a command line option to the kernel).
+
+I don't think I have found this command line option to LK.
+
+So far it seems that the kobject_release() was called for both /bus/platform/drivers/gpio-sim
+and /module/gpio_sim . Is there soemthing I'm missing?
+
+However, I've found one relatively unrelated failure to call kobject_release().
+This happens during shutdown, after the syslog is shutdown, so I can only provide
+a screenshot as a proof and for diagnostics:
+
+https://domac.alu.hr/~mtodorov/linux/bugreports/integrity/20230308_123748.jpg
+
+https://domac.alu.hr/~mtodorov/linux/bugreports/integrity/20230308_123752.jpg
+
+I failed to locate the driver and responsible maintainers to the present moment.
+It is happening on shutdown and it isn't that critical IMHO, except if it shows
+some other problem in the code :-/
+
+>>>>>>> Or maybe the chip->gc.parent should be changed to something else (actual GPIO
+>>>>>>> device, but then it's unclear how to provide the attributes in non-racy way
+>>>>>> Really, dunno. I have to repeat that my learning curve cannot adapt so quickly.
+>>>>>>
+>>>>>> I merely gave the report of KMEMLEAK, otherwise I am not a Linux kernel
+>>>>>> device expert nor would be appropriate to try the craft not earned ;-)
 >>
->> diff --git a/arch/arm/boot/dts/qcom-sdx65-mtp.dts b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
->> index ed98c83..facb8e2 100644
->> --- a/arch/arm/boot/dts/qcom-sdx65-mtp.dts
->> +++ b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
->> @@ -245,13 +245,18 @@
->>   	status = "okay";
->>   };
->>   
->> -&qpic_bam {
->> +&pcie_phy {
->> +	vdda-phy-supply = <&vreg_l1b_1p2>;
->> +	vdda-pll-supply = <&vreg_l4b_0p88>;
->> +
->>   	status = "okay";
->>   };
->>   
->> -&qpic_nand {
->> +&qpic_bam {
->>   	status = "okay";
->> +};
->>   
->> +&qpic_nand {
->>   	nand@0 {
->>   		reg = <0>;
->>   
->> @@ -262,11 +267,14 @@
->>   		secure-regions = /bits/ 64 <0x500000 0x500000
->>   					    0xa00000 0xb00000>;
->>   	};
->> +
->> +	status = "okay";
-> Did you compiletest this?
+>> With all of these additional debugging, cat /sys/kernel/debug/kmemleak
+>> showed nothing new.
+>>
+>> I believe this is reasonably safe.
+>>
+>> However, I was unsuccessful in seeing gpio trace, even with
+>> echo 1 > /sys/kernel/tracing/events/gpio/enable ... :-/
+> 
+> It's available in the trace buffer (you need to read a documentation to
+> understand how it works).
 
-So Sorry, Missed some of the patches for compiletest.
-Will update immediately.
+Still working on that, had other tasks to do ... So far I got to this:
 
-Thanks,
-Rohit.
->
-> Konrad
->>   };
->>   
->>   &remoteproc_mpss {
->> -	status = "okay";
->>   	memory-region = <&mpss_adsp_mem>;
->> +
->> +	status = "okay";
->>   };
->>   
->>   &usb {
->> @@ -278,14 +286,16 @@
->>   };
->>   
->>   &usb_hsphy {
->> -	status = "okay";
->>   	vdda-pll-supply = <&vreg_l4b_0p88>;
->>   	vdda33-supply = <&vreg_l10b_3p08>;
->>   	vdda18-supply = <&vreg_l5b_1p8>;
->> +
->> +	status = "okay";
->>   };
->>   
->>   &usb_qmpphy {
->> -	status = "okay";
->>   	vdda-phy-supply = <&vreg_l4b_0p88>;
->>   	vdda-pll-supply = <&vreg_l1b_1p2>;
->> +
->> +	status = "okay";
->>   };
+  1020  echo "1" > /sys/kernel/tracing/events/gpio/enable
+  1021  more /sys/kernel/tracing/trace
+  1022  cd ~marvin/linux/kernel/linux_torvalds/tools/testing/selftests/gpio/
+  1023  ls
+  1024  ./gpio-sim.sh
+  1025  more /sys/kernel/tracing/trace
+# tracer: nop
+#
+# entries-in-buffer/entries-written: 9/9   #P:6
+#
+#                                _-----=> irqs-off/BH-disabled
+#                               / _----=> need-resched
+#                              | / _---=> hardirq/softirq
+#                              || / _--=> preempt-depth
+#                              ||| / _-=> migrate-disable
+#                              |||| /     delay
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+      gpio-sim.sh-21157   [000] .....  2705.538025: gpio_direction: 560  in (0)
+  gpio-mockup-cde-21471   [000] .....  2705.579730: gpio_direction: 564  in (0)
+  gpio-mockup-cde-21471   [000] .....  2705.579745: gpio_value: 564 get 1
+  gpio-mockup-cde-21478   [003] .....  2705.589475: gpio_direction: 565  in (0)
+  gpio-mockup-cde-21478   [003] .....  2705.589488: gpio_value: 565 get 0
+  gpio-mockup-cde-21561   [003] .....  2705.721427: gpio_value: 589 set 1
+  gpio-mockup-cde-21561   [003] .....  2705.721427: gpio_direction: 589 out (0)
+  gpio-mockup-cde-21595   [000] .....  2705.855861: gpio_direction: 597  in (0)
+  gpio-mockup-cde-21595   [000] .....  2705.855875: gpio_value: 597 get 1
+[root@pc-mtodorov gpio]#
+
+I hope I did this right. However, I have to play a bit with these results before
+I could make any interpretation.
+
+I just wanted to provide some feedback.
+
+Regards,
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
