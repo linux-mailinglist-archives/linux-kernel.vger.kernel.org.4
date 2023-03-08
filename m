@@ -2,111 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8012E6B04AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1486B04B2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjCHKij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:38:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
+        id S229910AbjCHKjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:39:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbjCHKia (ORCPT
+        with ESMTP id S229887AbjCHKjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:38:30 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E34E900A7
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:38:19 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id cy23so63660978edb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:38:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678271898;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WuML39FEMcZtLr2iCHmq6W7C/WxS3Q4N5Og9ZOvpQ9w=;
-        b=QTLDyVGR2tUx94St/HYDQZsBAsy5pBfrWfAkT3+8zgOdgpicyAq7pM4lTdjQZZUDJt
-         MKlRPnESLk/2iDuvyej3N34QsPoN6PePmFi6lJeoi4jlg5dtVntmLt3LcBdeRyDm7Hvz
-         75fMBvhf8v4rUMdomm1jAfGZpokvALm7RZGfadJd6sUa/+UXfZpYY/Ro7JIo+rMIpT1+
-         CTo7WATtSOGmX7iiqaRPDHtJVulvEkp/spDMUIsPyjSSJ/C8ACdt23X/3OzgwLcTdFwT
-         qY6lrsKnUasZmlwI6rZYsVofwKmQExorRiVnWgdjHUk8vdYjuJ9bZjHjaAHiYKYTwSh0
-         7srQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678271898;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WuML39FEMcZtLr2iCHmq6W7C/WxS3Q4N5Og9ZOvpQ9w=;
-        b=IYW2k4fmWJFbnPBhhVY0xhKz0V2NxNjHS327bJ2eX7izkigo5hePoXKewnnobUq9uw
-         DccUoZYf1UNNs9ATOngK1Lu3LMZIT5ouNmCANv1d/+UyVWYRevmjqdr61W0c/oGjntKI
-         1simo20slPosmeU9BT9ALbTEnxZGb68DyOJzJHvGM6kmL127kTzEqyqk3448wK00gXUf
-         l1/4RBFOU9k1RpbFC4owZPhT+lrAcrOB6qknOHOpan7TsH1WsK02xa9kPUlKbFu4XoIy
-         nzOvuFr/cVqX8fg28cP6gec84RF4glOlt/h1xQJgmIl45bdgF/v7RXeJUvZoLYsay3K8
-         kWpg==
-X-Gm-Message-State: AO0yUKVPN3B72GSVYj6D0Ze2qNt0kt5NJ30FhSmERPxGj41dM80Seu7j
-        7oIpscG8nX9uPyHq0FGWxr4BWA==
-X-Google-Smtp-Source: AK7set+6cIAV/Nnrqmu6ojlpiwai/PK6n04qpXW+CQbF5M+XmL9sTbzfdTPWQ7s/ZL+/Hyut/TkGPw==
-X-Received: by 2002:aa7:d9c2:0:b0:4aa:aaf6:e6be with SMTP id v2-20020aa7d9c2000000b004aaaaf6e6bemr15118755eds.7.1678271897806;
-        Wed, 08 Mar 2023 02:38:17 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:ff33:9b14:bdd2:a3da? ([2a02:810d:15c0:828:ff33:9b14:bdd2:a3da])
-        by smtp.gmail.com with ESMTPSA id 24-20020a170906301800b008f883765c9asm7303815ejz.136.2023.03.08.02.38.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 02:38:17 -0800 (PST)
-Message-ID: <b2f9cd15-b303-882a-d4e0-36d1f6d155a8@linaro.org>
-Date:   Wed, 8 Mar 2023 11:38:16 +0100
+        Wed, 8 Mar 2023 05:39:13 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D885168A2;
+        Wed,  8 Mar 2023 02:39:10 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C981F21A0C;
+        Wed,  8 Mar 2023 10:39:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1678271948; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KNZPDd1h+V7c8y4zbj3TUyGQ4AIRsQ8PJ9MlbnzDo+A=;
+        b=vkOnQ1gEmHEclBKwGNUyQvnWPcskuZJZjqA2ec8jNzh3vPISlrZYDAjOZTNfxLB6NsiGHa
+        1QjN5PPCzkQ1oLxoqv0zTVyGq4No6KKVEmvJRPmvbn0YL1p0WmG+GRPmOo1goxeGdZGPND
+        r+s25UhN+nrMPEWJCWEdSU26Qa7K9Yw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1678271948;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KNZPDd1h+V7c8y4zbj3TUyGQ4AIRsQ8PJ9MlbnzDo+A=;
+        b=NrmAxNRa9WBs1/vFXW7SeQXuv5AOB60b3HPiSqsC1utUFtBtVwgEW3hxyDt9l6YfXOFWvH
+        wZGz9xNc3sZK9yAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A2DD51391B;
+        Wed,  8 Mar 2023 10:39:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 24+SJsxlCGSeYwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 08 Mar 2023 10:39:08 +0000
+Message-ID: <43f35191-9147-0aec-cb57-0bc14d041039@suse.cz>
+Date:   Wed, 8 Mar 2023 11:39:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v13 1/2] dt-bindings: clock: add loongson-2 boot clock
- index
+Subject: Re: [GIT PULL] hotfixes for 6.3-rc1
 Content-Language: en-US
-To:     zhuyinbo <zhuyinbo@loongson.cn>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
-        loongson-kernel@lists.loongnix.cn
-References: <20230307115022.12846-1-zhuyinbo@loongson.cn>
- <692a62da-a9a1-fa23-6e24-723d73c3a423@linaro.org>
- <5e9b3bd5-d885-6237-5e14-2becb3c956cc@loongson.cn>
- <31e2a67a-c046-9501-80de-e754ed450195@linaro.org>
- <ace5159b-ebbd-7805-518c-ed3d39e4793e@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ace5159b-ebbd-7805-518c-ed3d39e4793e@loongson.cn>
+To:     "Huang, Ying" <ying.huang@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>
+References: <20230304131528.4645d19a2ab897fb7518159e@linux-foundation.org>
+ <CAHk-=wj9guryjifHyr26w73ta+kNeoHtGde682Z5N6OSjKu4UQ@mail.gmail.com>
+ <20230304152058.de91bf7abf424383ce31d500@linux-foundation.org>
+ <CAHk-=wiHX2NQiVH8uQZ_U8vB=qnzmQHauGAqAkC=4ZWp95ya8w@mail.gmail.com>
+ <87jzzu7jt9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <87jzzu7jt9.fsf@yhuang6-desk2.ccr.corp.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 10:24, zhuyinbo wrote:
->>>> That's an ABI break and commit msg does not explain it.
->>> you meaning is that need add a explanation in commit msg that why
->> You need good explanation to break the ABI. I don't understand the
->> commit msg, but anyway I could not find there justification for ABI
->> break. If you do not have good justification, don't break the ABI,
-> 
-> The commit msg is the patch commit  log,  and I maybe not got it about 
-> break the ABI.  You said about "break the ABI"
-> 
-> is whether is location issue about "LOONGSON2_BOOT_CLK"?   if yes,   the 
-> LOONGSON2_BOOT_CLK was placed
-> 
-> after LOONGSON2_PIX1_PLL that is due to their clock parent is same.     
-> and I whether need add this explanation
-> 
-> in patch commit log description?
 
-Unfortunately I do not understand single thing from this.
 
-Best regards,
-Krzysztof
+On 3/6/23 02:25, Huang, Ying wrote:
+> Hi, Linus,
+> 
+> Linus Torvalds <torvalds@linux-foundation.org> writes:
+> 
+>> On Sat, Mar 4, 2023 at 3:21 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>>>
+>>> Ah. Ying did it this way:
+>>
+>> Yeah, I saw that patch flying past, but I actually think that it only
+>> silences the warning almost by mistake. There's nothing fundamental in
+>> there that a compiler wouldn't just follow across two assignments, and
+>> it just happens to now not trigger any more.
+>>
+>> Assigning to a union entry is a more fundamental operation in that
+>> respect. Not that the compiler still doesn't see that it's assigning a
+>> value that in the end is not really type compatible, so a different
+>> version of gcc could still warn, but at that point I feel like it's
+>> more of an actual compiler bug than just "oh, the compiler didn't
+>> happen to follow the cast through a temporary".
+> 
+> Yes.  Your fix is much better.  This can be used for
+> __page_set_anon_rmap() family too to make the code look better?
 
+Those are trickier due to the PAGE_MAPPING_ANON tagging bit which your
+code doesn't need to handle because you can simply store an untagged
+anon_vma pointer. Otherwise we could have the union at the struct page
+level already (but probably not at this point as IIRC Matthew is
+planning to have completely separate types for anon and file folios).
+
+So right now we have e.g. folio_get_anon_vma() using unsigned long as
+the intermediate variable, page_move_anon_rmap() using a void *
+variable, __page_set_anon_rmap() casting through a (void *) ... Is there
+a single recommended way for "tagged pointers" that we could unify that to?
+
+> Best Regards,
+> Huang, Ying
+> 
