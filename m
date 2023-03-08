@@ -2,89 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EED86B108C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 365E76B1092
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjCHSBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 13:01:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
+        id S229994AbjCHSCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 13:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjCHSBZ (ORCPT
+        with ESMTP id S230021AbjCHSCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 13:01:25 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CBBC6428;
-        Wed,  8 Mar 2023 10:01:21 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id p16so10323943wmq.5;
-        Wed, 08 Mar 2023 10:01:21 -0800 (PST)
+        Wed, 8 Mar 2023 13:02:16 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B415BC6439
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 10:02:02 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id cw28so69140338edb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 10:02:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678298480;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xCXYyOVnsRK6qjjJH2JpdR1wPGIdSk7GM1vgJw4rXyo=;
-        b=O7uLwe9Qv4hO7gERxXUmU30UH6oV/Bl/G6vMsdYboTVj2nzbpYXnHmR/Lgp+RDplp5
-         XItMPr5/CjRMYA3uL31IcTwzpF2SHNJ29rKoLYfuRmTVWF/4Lb0+nP3EN6NUDkzIH4LE
-         lofRNYC6cT2xDvc9oamUGP6Uvnk3n0YPZ350B6H11z2QdaIzzmrKYdKob5Ejz+bVCD7l
-         eThdLtaugThtUfEok6i8rzfb1ZkQ3gqbAZxbe/aDeBMl2Pp92oLE3xGAPpBfjZst/nIY
-         huqWxaloiX1EGLcmj1hLahDfXHt9cprYDjF5Sg/90NyHqPvDM34YqnWiGo1VC4tZLbGD
-         cmMw==
+        d=google.com; s=20210112; t=1678298521;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S4ti/z/gy4KrrUZTxjXuzAZhonovpT4J/QPkichvLcg=;
+        b=OW1g/V0ZnHiKXAAuMa/g45YdvNwqsGqpiHla8THv1YDkaz9IQf8iPFIObghMKUFgBj
+         h8GtlHUimui34LY3Y3Yhe6QRBKAt/Dr6/Jd90I8NldNmylmZxWLj7uNbuuqlnijZ0P96
+         qtl80rYWk1BPt88b1z9CICrJySHOMZj0S3ut4xWVeXTnG4KJd/dsdexjxmkhE95SVhKf
+         G175FTaGfT9s6k/ogCXBil6pCss3RH49Zo23fV0QmslbdRaXkFb6m0lq7yOB92BPL0ox
+         +D+9dCp92uwM+0RLJP4aHz8vBs2sWYdEHW+2L1M6bMCifCyHZTacFulKwTtQcE87im6B
+         Ts+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678298480;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xCXYyOVnsRK6qjjJH2JpdR1wPGIdSk7GM1vgJw4rXyo=;
-        b=EZA3IWL4lyNr5P/SrtcKCmNsKzhSUX1AwAs0ap6GFvO8iA9Gcaf4h5hMqLB+E4QleN
-         ySEUQHmVsseyKiOUPOqay0rzp7RQMqDJP93nu5f16lce3zgrp6EceqQUB7PMC1V2uXZW
-         MaMQZF2ljxL/F11oMFPqbEFX+O1zo7KG2Sl57PNOdJBGjyd1Ii+HXfxPF9xgxEPl3sTE
-         IPL5WD9YgrH8Rqr6BtIyYnq1HlpHLi1S2BC6TCY47Uko5bfC2sIpTioGnFdDaHkRaHkV
-         a1VruwK3k7EhZ4kBa4jE8gST4r+s1ql3wD/Ci2x5ywhGyQSUBjgpn8uCKX4/65dC/sfo
-         laIg==
-X-Gm-Message-State: AO0yUKVvGACEhpfeYK9iaCdb4HpgPz1mJtcrV1oMd7KLiKgQSsR/OYdI
-        aneBVeeUE9uYFgBmtB31O1Y=
-X-Google-Smtp-Source: AK7set8pEE5d3DOulKS83ATbVd1lOVdw9nJrZYj5VGNloCZoRzCH2dMbkGMeReTg5H71XM4c8EpUzA==
-X-Received: by 2002:a05:600c:468e:b0:3eb:29fe:f922 with SMTP id p14-20020a05600c468e00b003eb29fef922mr17243149wmo.29.1678298479713;
-        Wed, 08 Mar 2023 10:01:19 -0800 (PST)
-Received: from gmail.com ([81.168.73.77])
-        by smtp.gmail.com with ESMTPSA id l14-20020a05600c4f0e00b003de2fc8214esm175128wmq.20.2023.03.08.10.01.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 10:01:19 -0800 (PST)
-Date:   Wed, 8 Mar 2023 18:01:17 +0000
-From:   Martin Habets <habetsm.xilinx@gmail.com>
-To:     Gautam Dawar <gautam.dawar@amd.com>
-Cc:     linux-net-drivers@amd.com, jasowang@redhat.com,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        eperezma@redhat.com, harpreet.anand@amd.com, tanuj.kamde@amd.com,
-        koushik.dutta@amd.com
-Subject: Re: [PATCH net-next v2 11/14] sfc: use PF's IOMMU domain for running
- VF's MCDI commands
-Message-ID: <ZAjNbSN38YY+vbwS@gmail.com>
-Mail-Followup-To: Gautam Dawar <gautam.dawar@amd.com>,
-        linux-net-drivers@amd.com, jasowang@redhat.com,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        eperezma@redhat.com, harpreet.anand@amd.com, tanuj.kamde@amd.com,
-        koushik.dutta@amd.com
-References: <20230307113621.64153-1-gautam.dawar@amd.com>
- <20230307113621.64153-12-gautam.dawar@amd.com>
+        d=1e100.net; s=20210112; t=1678298521;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S4ti/z/gy4KrrUZTxjXuzAZhonovpT4J/QPkichvLcg=;
+        b=lzv3oMHN7U9K4mUZlrTlrvvUY4XmpDELetEDgQl478UmCx6Qbxw1Dyic3rQCwE1jlQ
+         URiemL1ig6V68uMOJEvBptyToKhxiuiabDrkmxB94PIRuvzLHI4oHpeYee4KQMaRLSIU
+         ZS/QswZ8XvSNXd/sqigLNlNfJ3UirbSa/LzhBObK1/cYJaOpbZBQhmX9Pez7qxh3D4GF
+         rozFXZYjv1aKMmHgVxuBXs5j1UUW2zL6MhnLxxgsnvgpHwv3FqGMtq8qpiKZXadGp2CG
+         10+74COENffRBa+4Bwf5/UmfQZN808ED+haznLvabaZ9wAOOEQeOueSXCtwhXsn9KPYg
+         3GYw==
+X-Gm-Message-State: AO0yUKWRgO9NGmy1pGMf3Vlhmy1L6pjti4O6lSnBA3zQ9GftPOnL8+WQ
+        rLqrt7/ASTwvTeSwS5mFiAHWovUekGsf/1LcalvKFg==
+X-Google-Smtp-Source: AK7set8/jHpN5Gwo1YgmZIy+zhgP7w+9nthoGIsgE3sW+C9piQ9Y5z41ZNW8GzKbj+B/VAuIXkh35VxKjD5xkPj0xyg=
+X-Received: by 2002:a17:906:1618:b0:8b3:8147:6b6e with SMTP id
+ m24-20020a170906161800b008b381476b6emr8727807ejd.10.1678298520898; Wed, 08
+ Mar 2023 10:02:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307113621.64153-12-gautam.dawar@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230228085002.2592473-1-yosryahmed@google.com> <20230308160056.GA414058@cmpxchg.org>
+In-Reply-To: <20230308160056.GA414058@cmpxchg.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 8 Mar 2023 10:01:24 -0800
+Message-ID: <CAJD7tka=6b-U3m0FdMoP=9nC8sYuJ9thghb9muqN5hQ5ZMrDag@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] Ignore non-LRU-based reclaim in memcg reclaim
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,369 +84,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 05:06:13PM +0530, Gautam Dawar wrote:
-> This changeset uses MC_CMD_CLIENT_CMD to execute VF's MCDI
-> commands when running in vDPA mode (STATE_VDPA).
-> Also, use the PF's IOMMU domain for executing the encapsulated
-> VF's MCDI commands to isolate DMA of guest buffers in the VF's
-> IOMMU domain.
-> This patch also updates the PCIe FN's client id in the efx_nic
-> structure which is required while running MC_CMD_CLIENT_CMD.
-> 
-> Signed-off-by: Gautam Dawar <gautam.dawar@amd.com>
-> ---
->  drivers/net/ethernet/sfc/ef100.c      |   1 +
->  drivers/net/ethernet/sfc/ef100_nic.c  |  35 +++++++++
->  drivers/net/ethernet/sfc/mcdi.c       | 108 ++++++++++++++++++++++----
->  drivers/net/ethernet/sfc/mcdi.h       |   2 +-
->  drivers/net/ethernet/sfc/net_driver.h |   2 +
->  drivers/net/ethernet/sfc/ptp.c        |   4 +-
->  6 files changed, 132 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/sfc/ef100.c b/drivers/net/ethernet/sfc/ef100.c
-> index c1c69783db7b..8453c9ba0f41 100644
-> --- a/drivers/net/ethernet/sfc/ef100.c
-> +++ b/drivers/net/ethernet/sfc/ef100.c
-> @@ -465,6 +465,7 @@ static int ef100_pci_probe(struct pci_dev *pci_dev,
->  	efx->type = (const struct efx_nic_type *)entry->driver_data;
->  
->  	efx->pci_dev = pci_dev;
-> +	efx->client_id = MC_CMD_CLIENT_ID_SELF;
->  	pci_set_drvdata(pci_dev, efx);
->  	rc = efx_init_struct(efx, pci_dev);
->  	if (rc)
-> diff --git a/drivers/net/ethernet/sfc/ef100_nic.c b/drivers/net/ethernet/sfc/ef100_nic.c
-> index bda4fcbe1126..cd9f724a9e64 100644
-> --- a/drivers/net/ethernet/sfc/ef100_nic.c
-> +++ b/drivers/net/ethernet/sfc/ef100_nic.c
-> @@ -206,9 +206,11 @@ static int efx_ef100_init_datapath_caps(struct efx_nic *efx)
->  		  "firmware reports num_mac_stats = %u\n",
->  		  efx->num_mac_stats);
->  
-> +#ifdef CONFIG_SFC_VDPA
+On Wed, Mar 8, 2023 at 8:00=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.org>=
+ wrote:
+>
+> Hello Yosry,
+>
+> On Tue, Feb 28, 2023 at 08:50:00AM +0000, Yosry Ahmed wrote:
+> > Reclaimed pages through other means than LRU-based reclaim are tracked
+> > through reclaim_state in struct scan_control, which is stashed in
+> > current task_struct. These pages are added to the number of reclaimed
+> > pages through LRUs. For memcg reclaim, these pages generally cannot be
+> > linked to the memcg under reclaim and can cause an overestimated count
+> > of reclaimed pages. This short series tries to address that.
+>
+> Could you please add more details on how this manifests as a problem
+> with real workloads?
 
-More opportunities to use IS_ENABLED(CONFIG_SFC_VDPA) in this patch
-in stead of the #ifdef.
+We haven't observed problems in production workloads, but we have
+observed problems in testing using memory.reclaim when sometimes a
+write to memory.reclaim would succeed when we didn't fully reclaim the
+requested amount. This leads to tests flaking sometimes, and we have
+to look into the failures to find out if there is a real problem or
+not.
 
-Martin
+>
+> > Patch 1 is just refactoring updating reclaim_state into a helper
+> > function, and renames reclaimed_slab to just reclaimed, with a comment
+> > describing its true purpose.
+>
+> Looking through the code again, I don't think these helpers add value.
+>
+> report_freed_pages() is fairly vague. Report to who? It abstracts only
+> two lines of code, and those two lines are more descriptive of what's
+> happening than the helper is. Just leave them open-coded.
 
->  	nic_data->vdpa_supported = efx_ef100_has_cap(nic_data->datapath_caps3,
->  						     CLIENT_CMD_VF_PROXY) &&
->  				   efx->type->is_vf;
-> +#endif
->  	return 0;
->  }
->  
-> @@ -1086,6 +1088,35 @@ static int ef100_check_design_params(struct efx_nic *efx)
->  	return rc;
->  }
->  
-> +static int efx_ef100_update_client_id(struct efx_nic *efx)
-> +{
-> +	struct ef100_nic_data *nic_data = efx->nic_data;
-> +	unsigned int pf_index = PCIE_FUNCTION_PF_NULL;
-> +	unsigned int vf_index = PCIE_FUNCTION_VF_NULL;
-> +	efx_qword_t pciefn;
-> +	int rc;
-> +
-> +	if (efx->pci_dev->is_virtfn)
-> +		vf_index = nic_data->vf_index;
-> +	else
-> +		pf_index = nic_data->pf_index;
-> +
-> +	/* Construct PCIE_FUNCTION structure */
-> +	EFX_POPULATE_QWORD_3(pciefn,
-> +			     PCIE_FUNCTION_PF, pf_index,
-> +			     PCIE_FUNCTION_VF, vf_index,
-> +			     PCIE_FUNCTION_INTF, PCIE_INTERFACE_CALLER);
-> +	/* look up self client ID */
-> +	rc = efx_ef100_lookup_client_id(efx, pciefn, &efx->client_id);
-> +	if (rc) {
-> +		pci_warn(efx->pci_dev,
-> +			 "%s: Failed to get client ID, rc %d\n",
-> +			 __func__, rc);
-> +	}
-> +
-> +	return rc;
-> +}
-> +
->  /*	NIC probe and remove
->   */
->  static int ef100_probe_main(struct efx_nic *efx)
-> @@ -1173,6 +1204,10 @@ static int ef100_probe_main(struct efx_nic *efx)
->  		goto fail;
->  	efx->port_num = rc;
->  
-> +	rc = efx_ef100_update_client_id(efx);
-> +	if (rc)
-> +		goto fail;
-> +
->  	efx_mcdi_print_fwver(efx, fw_version, sizeof(fw_version));
->  	pci_dbg(efx->pci_dev, "Firmware version %s\n", fw_version);
->  
-> diff --git a/drivers/net/ethernet/sfc/mcdi.c b/drivers/net/ethernet/sfc/mcdi.c
-> index a7f2c31071e8..3bf1ebe05775 100644
-> --- a/drivers/net/ethernet/sfc/mcdi.c
-> +++ b/drivers/net/ethernet/sfc/mcdi.c
-> @@ -145,14 +145,15 @@ void efx_mcdi_fini(struct efx_nic *efx)
->  	kfree(efx->mcdi);
->  }
->  
-> -static void efx_mcdi_send_request(struct efx_nic *efx, unsigned cmd,
-> -				  const efx_dword_t *inbuf, size_t inlen)
-> +static void efx_mcdi_send_request(struct efx_nic *efx, u32 client_id,
-> +				  unsigned int cmd, const efx_dword_t *inbuf,
-> +				  size_t inlen)
->  {
->  	struct efx_mcdi_iface *mcdi = efx_mcdi(efx);
->  #ifdef CONFIG_SFC_MCDI_LOGGING
->  	char *buf = mcdi->logging_buffer; /* page-sized */
->  #endif
-> -	efx_dword_t hdr[2];
-> +	efx_dword_t hdr[5];
->  	size_t hdr_len;
->  	u32 xflags, seqno;
->  
-> @@ -179,7 +180,7 @@ static void efx_mcdi_send_request(struct efx_nic *efx, unsigned cmd,
->  				     MCDI_HEADER_XFLAGS, xflags,
->  				     MCDI_HEADER_NOT_EPOCH, !mcdi->new_epoch);
->  		hdr_len = 4;
-> -	} else {
-> +	} else if (client_id == efx->client_id) {
->  		/* MCDI v2 */
->  		BUG_ON(inlen > MCDI_CTL_SDU_LEN_MAX_V2);
->  		EFX_POPULATE_DWORD_7(hdr[0],
-> @@ -194,6 +195,35 @@ static void efx_mcdi_send_request(struct efx_nic *efx, unsigned cmd,
->  				     MC_CMD_V2_EXTN_IN_EXTENDED_CMD, cmd,
->  				     MC_CMD_V2_EXTN_IN_ACTUAL_LEN, inlen);
->  		hdr_len = 8;
-> +	} else {
-> +		/* MCDI v2 */
-> +		WARN_ON(inlen > MCDI_CTL_SDU_LEN_MAX_V2);
-> +		/* MCDI v2 with credentials of a different client */
-> +		BUILD_BUG_ON(MC_CMD_CLIENT_CMD_IN_LEN != 4);
-> +		/* Outer CLIENT_CMD wrapper command with client ID */
-> +		EFX_POPULATE_DWORD_7(hdr[0],
-> +				     MCDI_HEADER_RESPONSE, 0,
-> +				     MCDI_HEADER_RESYNC, 1,
-> +				     MCDI_HEADER_CODE, MC_CMD_V2_EXTN,
-> +				     MCDI_HEADER_DATALEN, 0,
-> +				     MCDI_HEADER_SEQ, seqno,
-> +				     MCDI_HEADER_XFLAGS, xflags,
-> +				     MCDI_HEADER_NOT_EPOCH, !mcdi->new_epoch);
-> +		EFX_POPULATE_DWORD_2(hdr[1],
-> +				     MC_CMD_V2_EXTN_IN_EXTENDED_CMD,
-> +				     MC_CMD_CLIENT_CMD,
-> +				     MC_CMD_V2_EXTN_IN_ACTUAL_LEN, inlen + 12);
-> +		MCDI_SET_DWORD(&hdr[2],
-> +			       CLIENT_CMD_IN_CLIENT_ID, client_id);
-> +
-> +		/* MCDIv2 header for inner command */
-> +		EFX_POPULATE_DWORD_2(hdr[3],
-> +				     MCDI_HEADER_CODE, MC_CMD_V2_EXTN,
-> +				     MCDI_HEADER_DATALEN, 0);
-> +		EFX_POPULATE_DWORD_2(hdr[4],
-> +				     MC_CMD_V2_EXTN_IN_EXTENDED_CMD, cmd,
-> +				     MC_CMD_V2_EXTN_IN_ACTUAL_LEN, inlen);
-> +		hdr_len = 20;
->  	}
->  
->  #ifdef CONFIG_SFC_MCDI_LOGGING
-> @@ -474,7 +504,8 @@ static void efx_mcdi_release(struct efx_mcdi_iface *mcdi)
->  			&mcdi->async_list, struct efx_mcdi_async_param, list);
->  		if (async) {
->  			mcdi->state = MCDI_STATE_RUNNING_ASYNC;
-> -			efx_mcdi_send_request(efx, async->cmd,
-> +			efx_mcdi_send_request(efx, efx->client_id,
-> +					      async->cmd,
->  					      (const efx_dword_t *)(async + 1),
->  					      async->inlen);
->  			mod_timer(&mcdi->async_timer,
-> @@ -797,7 +828,7 @@ static int efx_mcdi_proxy_wait(struct efx_nic *efx, u32 handle, bool quiet)
->  	return mcdi->proxy_rx_status;
->  }
->  
-> -static int _efx_mcdi_rpc(struct efx_nic *efx, unsigned int cmd,
-> +static int _efx_mcdi_rpc(struct efx_nic *efx, u32 client_id, unsigned int cmd,
->  			 const efx_dword_t *inbuf, size_t inlen,
->  			 efx_dword_t *outbuf, size_t outlen,
->  			 size_t *outlen_actual, bool quiet, int *raw_rc)
-> @@ -811,7 +842,7 @@ static int _efx_mcdi_rpc(struct efx_nic *efx, unsigned int cmd,
->  		return -EINVAL;
->  	}
->  
-> -	rc = efx_mcdi_rpc_start(efx, cmd, inbuf, inlen);
-> +	rc = efx_mcdi_rpc_start(efx, client_id, cmd, inbuf, inlen);
->  	if (rc)
->  		return rc;
->  
-> @@ -836,7 +867,8 @@ static int _efx_mcdi_rpc(struct efx_nic *efx, unsigned int cmd,
->  
->  			/* We now retry the original request. */
->  			mcdi->state = MCDI_STATE_RUNNING_SYNC;
-> -			efx_mcdi_send_request(efx, cmd, inbuf, inlen);
-> +			efx_mcdi_send_request(efx, efx->client_id, cmd,
-> +					      inbuf, inlen);
->  
->  			rc = _efx_mcdi_rpc_finish(efx, cmd, inlen,
->  						  outbuf, outlen, outlen_actual,
-> @@ -855,16 +887,44 @@ static int _efx_mcdi_rpc(struct efx_nic *efx, unsigned int cmd,
->  	return rc;
->  }
->  
-> +#ifdef CONFIG_SFC_VDPA
-> +static bool is_mode_vdpa(struct efx_nic *efx)
-> +{
-> +	if (efx->pci_dev->is_virtfn &&
-> +	    efx->pci_dev->physfn &&
-> +	    efx->state == STATE_VDPA &&
-> +	    efx->vdpa_nic)
-> +		return true;
-> +
-> +	return false;
-> +}
-> +#endif
-> +
->  static int _efx_mcdi_rpc_evb_retry(struct efx_nic *efx, unsigned cmd,
->  				   const efx_dword_t *inbuf, size_t inlen,
->  				   efx_dword_t *outbuf, size_t outlen,
->  				   size_t *outlen_actual, bool quiet)
->  {
-> +#ifdef CONFIG_SFC_VDPA
-> +	struct efx_nic *efx_pf;
-> +#endif
->  	int raw_rc = 0;
->  	int rc;
->  
-> -	rc = _efx_mcdi_rpc(efx, cmd, inbuf, inlen,
-> -			   outbuf, outlen, outlen_actual, true, &raw_rc);
-> +#ifdef CONFIG_SFC_VDPA
-> +	if (is_mode_vdpa(efx)) {
-> +		efx_pf = pci_get_drvdata(efx->pci_dev->physfn);
-> +		rc = _efx_mcdi_rpc(efx_pf, efx->client_id, cmd, inbuf,
-> +				   inlen, outbuf, outlen, outlen_actual,
-> +				   true, &raw_rc);
-> +	} else {
-> +#endif
-> +		rc = _efx_mcdi_rpc(efx, efx->client_id, cmd, inbuf,
-> +				   inlen, outbuf, outlen, outlen_actual, true,
-> +				   &raw_rc);
-> +#ifdef CONFIG_SFC_VDPA
-> +	}
-> +#endif
->  
->  	if ((rc == -EPROTO) && (raw_rc == MC_CMD_ERR_NO_EVB_PORT) &&
->  	    efx->type->is_vf) {
-> @@ -881,9 +941,22 @@ static int _efx_mcdi_rpc_evb_retry(struct efx_nic *efx, unsigned cmd,
->  
->  		do {
->  			usleep_range(delay_us, delay_us + 10000);
-> -			rc = _efx_mcdi_rpc(efx, cmd, inbuf, inlen,
-> -					   outbuf, outlen, outlen_actual,
-> -					   true, &raw_rc);
-> +#ifdef CONFIG_SFC_VDPA
-> +			if (is_mode_vdpa(efx)) {
-> +				efx_pf = pci_get_drvdata(efx->pci_dev->physfn);
-> +				rc = _efx_mcdi_rpc(efx_pf, efx->client_id, cmd,
-> +						   inbuf, inlen, outbuf, outlen,
-> +						   outlen_actual, true,
-> +						   &raw_rc);
-> +			} else {
-> +#endif
-> +				rc = _efx_mcdi_rpc(efx, efx->client_id,
-> +						   cmd, inbuf, inlen, outbuf,
-> +						   outlen, outlen_actual, true,
-> +						   &raw_rc);
-> +#ifdef CONFIG_SFC_VDPA
-> +			}
-> +#endif
->  			if (delay_us < 100000)
->  				delay_us <<= 1;
->  		} while ((rc == -EPROTO) &&
-> @@ -939,7 +1012,7 @@ int efx_mcdi_rpc(struct efx_nic *efx, unsigned cmd,
->   * function and is then responsible for calling efx_mcdi_display_error
->   * as needed.
->   */
-> -int efx_mcdi_rpc_quiet(struct efx_nic *efx, unsigned cmd,
-> +int efx_mcdi_rpc_quiet(struct efx_nic *efx, unsigned int cmd,
->  		       const efx_dword_t *inbuf, size_t inlen,
->  		       efx_dword_t *outbuf, size_t outlen,
->  		       size_t *outlen_actual)
-> @@ -948,7 +1021,7 @@ int efx_mcdi_rpc_quiet(struct efx_nic *efx, unsigned cmd,
->  				       outlen_actual, true);
->  }
->  
-> -int efx_mcdi_rpc_start(struct efx_nic *efx, unsigned cmd,
-> +int efx_mcdi_rpc_start(struct efx_nic *efx, u32 client_id, unsigned int cmd,
->  		       const efx_dword_t *inbuf, size_t inlen)
->  {
->  	struct efx_mcdi_iface *mcdi = efx_mcdi(efx);
-> @@ -965,7 +1038,7 @@ int efx_mcdi_rpc_start(struct efx_nic *efx, unsigned cmd,
->  		return -ENETDOWN;
->  
->  	efx_mcdi_acquire_sync(mcdi);
-> -	efx_mcdi_send_request(efx, cmd, inbuf, inlen);
-> +	efx_mcdi_send_request(efx, client_id, cmd, inbuf, inlen);
->  	return 0;
->  }
->  
-> @@ -1009,7 +1082,8 @@ static int _efx_mcdi_rpc_async(struct efx_nic *efx, unsigned int cmd,
->  		 */
->  		if (mcdi->async_list.next == &async->list &&
->  		    efx_mcdi_acquire_async(mcdi)) {
-> -			efx_mcdi_send_request(efx, cmd, inbuf, inlen);
-> +			efx_mcdi_send_request(efx, efx->client_id,
-> +					      cmd, inbuf, inlen);
->  			mod_timer(&mcdi->async_timer,
->  				  jiffies + MCDI_RPC_TIMEOUT);
->  		}
-> diff --git a/drivers/net/ethernet/sfc/mcdi.h b/drivers/net/ethernet/sfc/mcdi.h
-> index dafab52aaef7..2c526d2edeb6 100644
-> --- a/drivers/net/ethernet/sfc/mcdi.h
-> +++ b/drivers/net/ethernet/sfc/mcdi.h
-> @@ -150,7 +150,7 @@ int efx_mcdi_rpc_quiet(struct efx_nic *efx, unsigned cmd,
->  		       efx_dword_t *outbuf, size_t outlen,
->  		       size_t *outlen_actual);
->  
-> -int efx_mcdi_rpc_start(struct efx_nic *efx, unsigned cmd,
-> +int efx_mcdi_rpc_start(struct efx_nic *efx, u32 client_id, unsigned int cmd,
->  		       const efx_dword_t *inbuf, size_t inlen);
->  int efx_mcdi_rpc_finish(struct efx_nic *efx, unsigned cmd, size_t inlen,
->  			efx_dword_t *outbuf, size_t outlen,
-> diff --git a/drivers/net/ethernet/sfc/net_driver.h b/drivers/net/ethernet/sfc/net_driver.h
-> index 1da71deac71c..948c7a06403a 100644
-> --- a/drivers/net/ethernet/sfc/net_driver.h
-> +++ b/drivers/net/ethernet/sfc/net_driver.h
-> @@ -859,6 +859,7 @@ struct efx_mae;
->   * @secondary_list: List of &struct efx_nic instances for the secondary PCI
->   *	functions of the controller, if this is for the primary function.
->   *	Serialised by rtnl_lock.
-> + * @client_id: client ID of this PCIe function
->   * @type: Controller type attributes
->   * @legacy_irq: IRQ number
->   * @workqueue: Workqueue for port reconfigures and the HW monitor.
-> @@ -1022,6 +1023,7 @@ struct efx_nic {
->  	struct list_head secondary_list;
->  	struct pci_dev *pci_dev;
->  	unsigned int port_num;
-> +	u32 client_id;
->  	const struct efx_nic_type *type;
->  	int legacy_irq;
->  	bool eeh_disabled_legacy_irq;
-> diff --git a/drivers/net/ethernet/sfc/ptp.c b/drivers/net/ethernet/sfc/ptp.c
-> index 9f07e1ba7780..d90d4f6b3824 100644
-> --- a/drivers/net/ethernet/sfc/ptp.c
-> +++ b/drivers/net/ethernet/sfc/ptp.c
-> @@ -1052,8 +1052,8 @@ static int efx_ptp_synchronize(struct efx_nic *efx, unsigned int num_readings)
->  
->  	/* Clear flag that signals MC ready */
->  	WRITE_ONCE(*start, 0);
-> -	rc = efx_mcdi_rpc_start(efx, MC_CMD_PTP, synch_buf,
-> -				MC_CMD_PTP_IN_SYNCHRONIZE_LEN);
-> +	rc = efx_mcdi_rpc_start(efx, MC_CMD_CLIENT_ID_SELF, MC_CMD_PTP,
-> +				synch_buf, MC_CMD_PTP_IN_SYNCHRONIZE_LEN);
->  	EFX_WARN_ON_ONCE_PARANOID(rc);
->  
->  	/* Wait for start from MCDI (or timeout) */
-> -- 
-> 2.30.1
+I agree the name is not great, I am usually bad at naming things and
+hope people would point that out (like you're doing now). The reason I
+added it is to contain the logic within mm/vmscan.c such that future
+changes do not have to add noisy diffs to a lot of unrelated files. If
+you have a better name that makes more sense to you please let me
+know, otherwise I'm fine dropping the helper as well, no strong
+opinions here.
+
+>
+> add_non_vmanscan_reclaimed() may or may not add anything. But let's
+> take a step back. It only has two callsites because lrugen duplicates
+> the entire reclaim implementation, including the call to shrink_slab()
+> and the transfer of reclaim_state to sc->nr_reclaimed.
+>
+> IMO the resulting code would overall be simpler, less duplicative and
+> easier to follow if you added a common shrink_slab_reclaim() that
+> takes sc, handles the transfer, and documents the memcg exception.
+
+IIUC you mean something like:
+
+void shrink_slab_reclaim(struct scan_control *sc, pg_data_t *pgdat,
+struct mem_cgroup *memcg)
+{
+    shrink_slab(sc->gfp_mask, pgdat->node_id, memcg, sc->priority);
+
+    /* very long comment */
+    if (current->reclaim_state && !cgroup_reclaim(sc)) {
+        sc->nr_reclaimed +=3D current->reclaim_state->reclaimed;
+        current->reclaim_state->reclaimed =3D 0;
+    }
+}
+
+The difference would be that today we handle the transfer once after
+we scan all memcgs in classic lruvec, while we do the transfer once
+per-memcg in lrugen. With this change, we would be doing the transfer
+once per-memcg for both, but I guess that's not a big deal.
+
+What I don't like about this is that it doubles down on associating
+the counter in reclaim_state with slab, which is the opposite of what
+patch 1 does (renaming reclaimed_slab to just reclaimed). If we do
+this, maybe it's better from a consistency perspective to leave it as
+reclaimed_slab, with a comment announcing that this is mainly used for
+slab, but others are piggybacking on it. It seems like whatever we do
+is not going to be ideal in this case, but we should at least be
+consistent. Either add shrink_slab_reclaim(), leave it as
+reclaimed_slab and call out other users as piggybackers -- or make it
+generic and separate from slab completely, with a separate helper to
+do the transfer.
+
+I do not have a strong opinion here, so let me know what you prefer.
