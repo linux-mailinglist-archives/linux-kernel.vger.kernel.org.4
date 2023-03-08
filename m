@@ -2,90 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BDF6B0095
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA266B0096
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:12:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjCHIMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
+        id S229743AbjCHIMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:12:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbjCHILy (ORCPT
+        with ESMTP id S229709AbjCHIMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:11:54 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807D8A72AB
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:11:40 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id 9-20020a5ea509000000b0074ca36737d2so8217491iog.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:11:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678263099;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7RRpr/2enZpSN+Pqs5p0qwijporxRiSMR0agGaaar/U=;
-        b=MCxZMxNLTEfy77ufr7zWO64MKOSHEEUKgGqE1HmW/o3W8J5PSXD+Z4kp+HY2p+8gE/
-         YWKI2rk4EGlZCljKLuPbaLBcBnVIhPwMeR/ivUkv9O4t1sd5BuTaG+DUECtXdHUqPaJs
-         WcD4JV5cDuvh44Ig0Z695xwaZofJ8AhbEwV+q1sdAVjzh6YI2l3CLixjJQANPL0NHczu
-         Qa8BgWkOSUA4gz6UDU2KWNeEvuPzoqfTaCJpnoJEOrAIL2tKF17EJ0eWJ+b7+wCqWj/V
-         eiGFieVUCBpEfrs4ICjcQlZWdVqjjjypHpL8jja7f9FNNQlRzVd9cMhOSu/t+/ljGY6s
-         XuNQ==
-X-Gm-Message-State: AO0yUKXriDugwFpIfCeJ0HK5zLBqh1lpREeelky2b9ElGwqsahFneOuy
-        Bf+NNAcnwVg88c5G6NR7PgyG3++/a1bMqPL4tlAygUH6lY/N
-X-Google-Smtp-Source: AK7set8ohvqpuNRL/JIS3vEqOiqVUfpwiOin574uHv80eNG3CnFwykdH8snjl4FxakBYbcLg+wDx8C0yoczKJ+W5O7OoK+osDiqq
+        Wed, 8 Mar 2023 03:12:46 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F650A72B9
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:12:26 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3288CEMC106909;
+        Wed, 8 Mar 2023 02:12:14 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678263134;
+        bh=5YvPoxDtlLeFTE68Ce/dakxGSjGl/35caDdUQ33Fxhk=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=kR57E3SFdLAYxHJC9zgcqz6IFVWkPAMIw8HLtd6AWj1JuyeHaQLE5z42vi4qYIKiy
+         NDaqydiS0vXbyRpWszYjvUt7HKpE21Pn2W+Ldj47N5UPRMEcqgIz+3cM6Le6TUYPbF
+         yCIrteUpn1SFUCDE081jLpEwfXz4w/Dbu1QodO5s=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3288CDqm075409
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 8 Mar 2023 02:12:14 -0600
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 8
+ Mar 2023 02:12:13 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 8 Mar 2023 02:12:13 -0600
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3288CDQv013351;
+        Wed, 8 Mar 2023 02:12:13 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     <peter.ujfalusi@gmail.com>, <ssantosh@kernel.org>,
+        Nicolas Frayer <nfrayer@baylibre.com>
+CC:     Nishanth Menon <nm@ti.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <khilman@baylibre.com>,
+        <glaroque@baylibre.com>, <mkorpershoek@baylibre.com>
+Subject: Re: [PATCH v2] soc: ti: k3-ringacc: Add try_module_get() to k3_dmaring_request_dual_ring()
+Date:   Wed, 8 Mar 2023 02:12:12 -0600
+Message-ID: <167826310101.381619.1421590979379152790.b4-ty@ti.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20221230001404.10902-1-nfrayer@baylibre.com>
+References: <20221230001404.10902-1-nfrayer@baylibre.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:13f4:b0:313:fa72:d9aa with SMTP id
- w20-20020a056e0213f400b00313fa72d9aamr8342532ilj.0.1678263099703; Wed, 08 Mar
- 2023 00:11:39 -0800 (PST)
-Date:   Wed, 08 Mar 2023 00:11:39 -0800
-In-Reply-To: <000000000000ea3c3105ef377a12@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e5c94a05f65f130d@google.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ntfs_listxattr
-From:   syzbot <syzbot+9fcea5ef6dc4dc72d334@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com, dvyukov@google.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com,
-        zengheng4@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-ntfs: fix panic about slab-out-of-bounds caused by ntfs_listxattr()
+Hi Nicolas Frayer,
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+On Fri, 30 Dec 2022 01:14:04 +0100, Nicolas Frayer wrote:
+> When the k3 ring accelerator driver has been modified to add module build
+> support, try_module_get() and module_put() have been added to update the
+> module refcnt. One code path has not been updated and it has introduced
+> an issue where the refcnt is decremented by module_put() in
+> k3_ringacc_ring_free() without being incremented previously.
+> Adding try_module_get() to k3_dmaring_request_dual_ring() ensures the
+> refcnt is kept up to date.
+> 
+> [...]
 
-#syz fix: exact-commit-title
+I have applied the following to branch ti-drivers-soc-next on [1].
+Thank you!
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+[1/1] soc: ti: k3-ringacc: Add try_module_get() to k3_dmaring_request_dual_ring()
+      commit: 5f1732a8683c1da8faaa90d6ffc3bd6d33013a58
 
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=9fcea5ef6dc4dc72d334
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
----
-[1] I expect the commit to be present in:
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
 
-4. main branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 10 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
