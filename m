@@ -2,80 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DEB6B0B6C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C17846B0B74
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjCHOig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
+        id S232145AbjCHOjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbjCHOie (ORCPT
+        with ESMTP id S232031AbjCHOi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:38:34 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBAD3B3CF
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:38:22 -0800 (PST)
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 8 Mar 2023 09:38:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34CB3B221
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:38:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678286287;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dL8s47Tp1nK8GIg8PijNkCrDLEgPha2fkCIMRUXm1zk=;
+        b=PJFYhGr+q+O6KvYx1lMTId4oiZ6UGm4AktEMGHUylWsef89mhvEq2w5jHXEgkroJDmspKF
+        JPTvUN8JmHmVH0uYocAJcY6uq7vhDAD569LHSYSzlxFYwRFup7et4pe5hjzcqqLxSBJxmQ
+        5fhCYzqnBtPxumdFQFg9nwCmtwxBPEs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-20-WwOWsJk3MvajoYgGpEO4_w-1; Wed, 08 Mar 2023 09:38:02 -0500
+X-MC-Unique: WwOWsJk3MvajoYgGpEO4_w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6B2C041B68
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 14:38:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678286301;
-        bh=TLXbWgCSumBQHNJIEiKWgsAVxLokeDk3mverzNy4nO4=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=LcjVJL5Xu+c7VDQygsgAoMQXFFHQ7BCuiGxLBAKYpi7GkVDIM5yHDfyv02/46KQbe
-         tpUU9GTC33BlrQuPZlwzOnQ3puRTDtTh42fpf4d1e6cXKbNdeHitUiwB/HiBbxeXZd
-         Yq59/ZrmLaAPASL8fRTQHi5euYvpRg3D9F7udCdF6acHApaWhArWiBn0kWGWpGa6Cb
-         GJi3rFbakC181OmdDaGU6+RWE9g366/8zJ/BU88El0YefeLk6sn1ncmy4hctUqXWXq
-         suk3NJlXq7EGl/C5DOw21GDolzPHcic9suvca/UBiaYuSeLH7lLHlawccXlgCzR0EB
-         0ec8CQBOLS4yA==
-Received: by mail-oi1-f199.google.com with SMTP id bi38-20020a05680818a600b0037b36626937so6946699oib.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 06:38:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678286300;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TLXbWgCSumBQHNJIEiKWgsAVxLokeDk3mverzNy4nO4=;
-        b=1+4ighRpc2llmJvS49JpaOCL65Vu7FAEomeJcC0FpZ97xnebbG3ubDXYWuIt2hD/Le
-         6bHgGTNQS26x1IXz1IRJTb0ZC83o3YuHwc6VnwDIyd5PDJyqttVGWKcegawCORN46Doo
-         ejkZmKL8JoT7KQY+HXjh3vAnYCB0wCKxWzLRx9riqLU6LEfb64/PYGAGy7RWGzYXqb1o
-         xCn34iu9mC8zUc3cuCVr6ACrKaisQ85s9a08sKoIqxZ99wPNHQXhB7t4MbjqkTKvqFxk
-         J83EUb7MMEu8pWoVfcCeveA8zeJeOrn5xjj87XO2NPLAy0AMgWVlLlI+ra2CS9fi6rqk
-         vcNw==
-X-Gm-Message-State: AO0yUKWYMSkm5wrGqLNhcoYqsqdawdPktCChkUIwopuB+sFWsV1viPRb
-        Wm6C46XRYD3MgxOeqiKeEyVEDHrslkFqhnZqLkWqvJPWySiuns5Gmt/JrdoDGgRuveBgDn/TpIG
-        WKirTj7AlkmWtGkpS0EzEAQGaqztkedSUkQyGGTVNgZqTn6PxiuX1dmLQYkXzlJXOj1Vkfw==
-X-Received: by 2002:a05:6830:334c:b0:690:f4b3:2e30 with SMTP id l12-20020a056830334c00b00690f4b32e30mr6444454ott.1.1678286300214;
-        Wed, 08 Mar 2023 06:38:20 -0800 (PST)
-X-Google-Smtp-Source: AK7set8CbYqlLLaLD244VOn17v7HLJivmm7bmVIFY938Bnf4+RvnLS3VZ4SIkK1X3tytbIUaLC2Bkh8F169/l5atnKY=
-X-Received: by 2002:a05:6830:334c:b0:690:f4b3:2e30 with SMTP id
- l12-20020a056830334c00b00690f4b32e30mr6444442ott.1.1678286299931; Wed, 08 Mar
- 2023 06:38:19 -0800 (PST)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B1438857A84;
+        Wed,  8 Mar 2023 14:38:01 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id ACA4114171B6;
+        Wed,  8 Mar 2023 14:37:59 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v16 01/13] splice: Clean up direct_splice_read() a bit
+Date:   Wed,  8 Mar 2023 14:37:42 +0000
+Message-Id: <20230308143754.1976726-2-dhowells@redhat.com>
+In-Reply-To: <20230308143754.1976726-1-dhowells@redhat.com>
+References: <20230308143754.1976726-1-dhowells@redhat.com>
 MIME-Version: 1.0
-References: <20230307150030.527726-1-po-hsu.lin@canonical.com>
- <ZAhV8nKuLVAQHQGl@nanopsycho> <CAMy_GT92sg4_JLPHvRpH542DPLbxOEYYoCMa2cnET1g8bz_R9Q@mail.gmail.com>
- <ZAh0fY4XoNcLTIOI@nanopsycho>
-In-Reply-To: <ZAh0fY4XoNcLTIOI@nanopsycho>
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-Date:   Wed, 8 Mar 2023 22:37:41 +0800
-Message-ID: <CAMy_GT_mLedbejcyTYkhEbuneuEvWycVi2orB82kC9ymXx0rng@mail.gmail.com>
-Subject: Re: [PATCHv2] selftests: net: devlink_port_split.py: skip test if no
- suitable device available
-To:     Jiri Pirko <jiri@resnulli.us>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, idosch@mellanox.com,
-        danieller@mellanox.com, petrm@mellanox.com, shuah@kernel.org,
-        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,50 +71,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 7:41=E2=80=AFPM Jiri Pirko <jiri@resnulli.us> wrote:
->
-> Wed, Mar 08, 2023 at 11:21:57AM CET, po-hsu.lin@canonical.com wrote:
-> >On Wed, Mar 8, 2023 at 5:31=E2=80=AFPM Jiri Pirko <jiri@resnulli.us> wro=
-te:
-> >>
-> >> Tue, Mar 07, 2023 at 04:00:30PM CET, po-hsu.lin@canonical.com wrote:
-> >> >The `devlink -j port show` command output may not contain the "flavou=
-r"
-> >> >key, an example from s390x LPAR with Ubuntu 22.10 (5.19.0-37-generic)=
-,
-> >> >iproute2-5.15.0:
-> >> >  {"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},
-> >> >           "pci/0001:00:00.0/2":{"type":"eth","netdev":"ens301d1"},
-> >> >           "pci/0002:00:00.0/1":{"type":"eth","netdev":"ens317"},
-> >> >           "pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d1"}}}
-> >>
-> >> As Jakub wrote, this is odd. Could you debug if kernel sends the flavo=
-ur
-> >> attr and if not why? Also, could you try with most recent kernel?
-> >
-> >I did a quick check on another s390x LPAR instance which is running
-> >with Ubuntu 23.04 (6.1.0-16-generic) iproute2-6.1.0, there is still no
-> >"flavour" attribute.
-> >$ devlink port show
-> >pci/0001:00:00.0/1: type eth netdev ens301
-> >pci/0001:00:00.0/2: type eth netdev ens301d1
-> >pci/0002:00:00.0/1: type eth netdev ens317
-> >pci/0002:00:00.0/2: type eth netdev ens317d1
-> >
-> >The behaviour didn't change with iproute2 built from source [1]
->
-> Could you paste output of "devlink dev info"?
-> Looks like something might be wrong in the kernel devlink/driver code.
->
-The `devlink dev info` output is empty. The following output is from
-that Ubuntu 23.04 s390x LPAR, run as root:
-# devlink dev show
-pci/0001:00:00.0
-pci/0002:00:00.0
-# devlink dev show pci/0001:00:00.0
-pci/0001:00:00.0
-# devlink dev info
-# devlink dev info pci/0001:00:00.0
-kernel answers: Operation not supported
+Do a couple of cleanups to direct_splice_read():
 
->
+ (1) Cast to struct page **, not void *.
+
+ (2) Simplify the calculation of the number of pages to keep/reclaim in
+     direct_splice_read().
+
+Suggested-by: Christoph Hellwig <hch@infradead.org>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Christoph Hellwig <hch@lst.de>
+cc: Al Viro <viro@zeniv.linux.org.uk>
+cc: David Hildenbrand <david@redhat.com>
+cc: John Hubbard <jhubbard@nvidia.com>
+cc: linux-mm@kvack.org
+cc: linux-block@vger.kernel.org
+cc: linux-fsdevel@vger.kernel.org
+---
+ fs/splice.c | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
+
+diff --git a/fs/splice.c b/fs/splice.c
+index 2e76dbb81a8f..abd21a455a2b 100644
+--- a/fs/splice.c
++++ b/fs/splice.c
+@@ -295,7 +295,7 @@ ssize_t direct_splice_read(struct file *in, loff_t *ppos,
+ 	struct kiocb kiocb;
+ 	struct page **pages;
+ 	ssize_t ret;
+-	size_t used, npages, chunk, remain, reclaim;
++	size_t used, npages, chunk, remain, keep = 0;
+ 	int i;
+ 
+ 	/* Work out how much data we can actually add into the pipe */
+@@ -309,7 +309,7 @@ ssize_t direct_splice_read(struct file *in, loff_t *ppos,
+ 	if (!bv)
+ 		return -ENOMEM;
+ 
+-	pages = (void *)(bv + npages);
++	pages = (struct page **)(bv + npages);
+ 	npages = alloc_pages_bulk_array(GFP_USER, npages, pages);
+ 	if (!npages) {
+ 		kfree(bv);
+@@ -332,11 +332,8 @@ ssize_t direct_splice_read(struct file *in, loff_t *ppos,
+ 	kiocb.ki_pos = *ppos;
+ 	ret = call_read_iter(in, &kiocb, &to);
+ 
+-	reclaim = npages * PAGE_SIZE;
+-	remain = 0;
+ 	if (ret > 0) {
+-		reclaim -= ret;
+-		remain = ret;
++		keep = DIV_ROUND_UP(ret, PAGE_SIZE);
+ 		*ppos = kiocb.ki_pos;
+ 		file_accessed(in);
+ 	} else if (ret < 0) {
+@@ -349,14 +346,12 @@ ssize_t direct_splice_read(struct file *in, loff_t *ppos,
+ 	}
+ 
+ 	/* Free any pages that didn't get touched at all. */
+-	reclaim /= PAGE_SIZE;
+-	if (reclaim) {
+-		npages -= reclaim;
+-		release_pages(pages + npages, reclaim);
+-	}
++	if (keep < npages)
++		release_pages(pages + keep, npages - keep);
+ 
+ 	/* Push the remaining pages into the pipe. */
+-	for (i = 0; i < npages; i++) {
++	remain = ret;
++	for (i = 0; i < keep; i++) {
+ 		struct pipe_buffer *buf = pipe_head_buf(pipe);
+ 
+ 		chunk = min_t(size_t, remain, PAGE_SIZE);
+
