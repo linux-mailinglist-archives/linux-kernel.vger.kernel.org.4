@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BC66B144C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF726B1450
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjCHVlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 16:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
+        id S229605AbjCHVl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 16:41:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjCHVlR (ORCPT
+        with ESMTP id S229808AbjCHVlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 16:41:17 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880825941B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:40:47 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id g18so18062461ljl.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 13:40:47 -0800 (PST)
+        Wed, 8 Mar 2023 16:41:18 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3B659809
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:40:49 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id z42so17988257ljq.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 13:40:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678311612;
+        d=linaro.org; s=google; t=1678311613;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oxGQmrbmKZnzoGW/Ytl5lAqej/buXyMdlfBaOCC/0jg=;
-        b=jyVpLRSOYHYSJg5LcwjygKcYSq55/TMbyEOvrTMe23OT0NoPeVlzPTgrddgSOA9spC
-         s46eOU7dGqBgZJ56JA1uvEMzZP4Y2wXZj+FA6/fi2hKIveHwRR0LlYK+mdOVTWo/IJjk
-         KJCYNlzp4KB+jUa23io2VoYYpR6tadlC2cjlWizZiCKXgpYdHSxxyBUJUiNCvnldvYCV
-         4Vh1mRCU65gTlleSuam54Prk9L/jWs1jggmFgouUpRl/yOtdxYJdIQ73FvWBfZqg9++m
-         sfGZj81tTnSeNB4gDmgDjqSrF7CCRROTodg/QXBVUWVUEvBEpnk2wNRhHuI8Lq4di2Ir
-         Wj/w==
+        bh=ZWvxJATtCZZKMC5qHkete+t4P5fdMAJTPULnzyt/6uA=;
+        b=W9PP/8O9SYqsWLA6zBO6fbbCJiFwk6mzgCSowoIN17jpLCCBd+KKmvM8lF8EZVS2zJ
+         2oSBmB4NLqCh8D3cyfe0sc7Ei0oQZp88NajFo7m1BvPYdgu2FxOAIJtBhP+pGzH/wEoA
+         k+7ChYSIhPF71D2nx2V8RmuyX6Ji/5Q6t4I9RJqVC2wCtwREC1njlJFV/w/c9QKDMVgb
+         JtSWPSZEQeVia9h/hJYyVbQnIfVtwhjhfDrWRaS8LJhYSqIsOViSO0GDBzCjm/O0ZyXV
+         r5fqWmfdDnSZiSbPDRWt9S0+UyiH9ck2lJwZeevtJDiMUzCrAXCm9pJh8BCz2g2ONCSd
+         D1cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678311612;
+        d=1e100.net; s=20210112; t=1678311613;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oxGQmrbmKZnzoGW/Ytl5lAqej/buXyMdlfBaOCC/0jg=;
-        b=HpnLjAevGfKpjnJLV/jJRW8XKHzuzj6OZyebU7WvgqEFQ+3XBF05sInDWY0Ia4Ufpi
-         jRT6UVP9r1Q7CTl6EQioltadLaFjIChmNXzP/tR90GsVqfUfwbIelIR/jM1NE/KzPrKr
-         Ca4CLFhltW8hV/fuH5U7YKe5e65z5vDEpS1mcasVhDOfREY9914hu3BZ9ufGC4SWi0oG
-         Dzh0RPhcXK666H5BiIKR6XcSwFfha4QBkJ0J4aP1yAJAgf6D/6GEoWbrVM5Xt8e6HjEI
-         3TOqR2cqOy9ivaG6u4Bni3x90e1tNwWOhmRt9VpCK9EzOtjMhh6LseBJ/LfHdwMw7VfI
-         Ryng==
-X-Gm-Message-State: AO0yUKUPPmu/7pqB6jhNABw9QUfVmkli3rBdMxSXjXdpCYtX0S6eouK4
-        Lpggvt614kcDHJHPFB091y3LwVEA7dM5QF08WDk=
-X-Google-Smtp-Source: AK7set9FXHSxMQ857o6klpDSMN/vTFqmg7+O42zTmUOz/vHX4pkbjQiI51SJAJ+cV1245VdB3W49sQ==
-X-Received: by 2002:a2e:b5b8:0:b0:295:b1af:d269 with SMTP id f24-20020a2eb5b8000000b00295b1afd269mr5073057ljn.43.1678311612289;
-        Wed, 08 Mar 2023 13:40:12 -0800 (PST)
+        bh=ZWvxJATtCZZKMC5qHkete+t4P5fdMAJTPULnzyt/6uA=;
+        b=GGC6CZbLrmvh8sPxS4SlbpBfGzqRcOCuGVrQlWpyV+4BOUO5SAjljWMZgIQDC2w51T
+         r2UKO68tlcCrv0uBBzdVXcI3zbJZKodB54zHd0YK6payrLWQMXtz93M0duj/7zFKyDWl
+         AiXBK13D7H3OuEVFOhATZLfW84q4GYUCf3uq5mvvgloFsm5sGvQgjiuiK6vh18aC3qmX
+         caexAuxonkGuBV8ElwhdALhGpNcFnwASQsxwPGOUTKFQMGMEV9KWh0BmMYkYcj5cBxut
+         zES+jFSsodrvuPGBIUrUcWgub7KbxiO1gtTTP0eFnO7uN7MJUtV7bdradOJxiiYkjF68
+         zRsg==
+X-Gm-Message-State: AO0yUKUVr1GMpE3IC0BbMJRoFBmCGko+I060xN+k+KWq++zhy93Q7/YW
+        4ApcWVEa/VWVCSVIrL7LEryJX5slvuVctEElnr0=
+X-Google-Smtp-Source: AK7set/xtt3kHV/tvNHmhuo5ey16iaIcSx3JnWxjtw9uC/sB+v3Tw9K7YzAriSrIMepeyf9GFVC4/A==
+X-Received: by 2002:a05:651c:104a:b0:294:716d:8d5 with SMTP id x10-20020a05651c104a00b00294716d08d5mr6254374ljm.1.1678311613729;
+        Wed, 08 Mar 2023 13:40:13 -0800 (PST)
 Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id a6-20020a2e8606000000b00295a2a608e9sm2688844lji.111.2023.03.08.13.40.10
+        by smtp.gmail.com with ESMTPSA id a6-20020a2e8606000000b00295a2a608e9sm2688844lji.111.2023.03.08.13.40.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 13:40:11 -0800 (PST)
+        Wed, 08 Mar 2023 13:40:13 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 08 Mar 2023 22:40:07 +0100
-Subject: [PATCH v7 1/9] interconnect: qcom: rpm: make QoS INVALID default
+Date:   Wed, 08 Mar 2023 22:40:08 +0100
+Subject: [PATCH v7 2/9] interconnect: qcom: rpm: Add support for specifying
+ channel num
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230228-topic-qos-v7-1-815606092fff@linaro.org>
+Message-Id: <20230228-topic-qos-v7-2-815606092fff@linaro.org>
 References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
 In-Reply-To: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -68,11 +69,11 @@ Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678311609; l=3885;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678311609; l=2390;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=LVE+/4VEPlESfpraQPOmUutEh9JBL8Wa+LXrVkmoSRk=;
- b=gJMwz8piyTMvm2V36mHRd1dkdTSh+p4qkELYhIGdbDREHPK7I6YqfPxrqS/NhkZp/dmG8Wb4cqXM
- bZkKQiAPDqYbOwiy1yMXt4nmmqvHVaquYbkEmYNc/TMAk3w6d2LG
+ bh=mgGX39iPtIfm1zsmEzmtm3Z/menbT73VBLNzExJPqt4=;
+ b=lQrFaeMU78TFU1DAP//yDiIt4f1Jg5NB7EcRVWfLHFISeAPTGj7MD3IOj8B9GG7Fx/5Vn21g1NTm
+ D3VP+W1eATugu0NF9GHr9lF59gigQKAexO/bHDQyT8vS/P4MBSGv
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,107 +86,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently NOC_QOS_MODE_FIXED is defined as 0x0 which makes it the
-default option (partial struct initialization). The default option
-however should be NOC_QOS_MODE_INVALID.
+Some nodes, like EBI0 (DDR) or L3/LLCC, may be connected over more than
+one channel. This should be taken into account in bandwidth calcualtion,
+as we're supposed to feed msmbus with the per-channel bandwidth. Add
+support for specifying that and use it during bandwidth aggregation.
 
-That results in bogus QoS configurations being sent for port 0 (which
-is used for the DRAM endpoint on BIMC, for example) coming from all nodes
-with .qos.ap_owned = true and uninitialized .qos.qos_mode. It's also an
-issue for newer SoCs where all nodes are treated as if they were ap_owned,
-but not all of them have QoS configuration.
-
-The NOC_QOS_MODEs are defined as preprocessor constants and are not used
-anywhere outside qcom_icc_set_noc_qos(), which is easily worked around.
-Separate the desc->type values from the values sent to msmbus in the
-aforementioned function. Make the former an enum for better mainainability.
-
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/interconnect/qcom/icc-rpm.c | 24 +++++++++++++-----------
- drivers/interconnect/qcom/icc-rpm.h | 10 ++++++----
- 2 files changed, 19 insertions(+), 15 deletions(-)
+ drivers/interconnect/qcom/icc-rpm.c | 7 ++++++-
+ drivers/interconnect/qcom/icc-rpm.h | 2 ++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index 4d0997b210f7..35fd75ae70e3 100644
+index 35fd75ae70e3..27c4c6497994 100644
 --- a/drivers/interconnect/qcom/icc-rpm.c
 +++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -48,6 +48,9 @@
- #define NOC_QOS_MODEn_ADDR(n)		(0xc + (n * 0x1000))
- #define NOC_QOS_MODEn_MASK		0x3
- 
-+#define NOC_QOS_MODE_FIXED_VAL		0x0
-+#define NOC_QOS_MODE_BYPASS_VAL		0x2
-+
- static int qcom_icc_set_qnoc_qos(struct icc_node *src, u64 max_bw)
+@@ -317,6 +317,7 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
  {
- 	struct icc_provider *provider = src->provider;
-@@ -153,7 +156,7 @@ static int qcom_icc_set_noc_qos(struct icc_node *src, u64 max_bw)
- 	struct qcom_icc_provider *qp;
+ 	struct icc_node *node;
  	struct qcom_icc_node *qn;
- 	struct icc_provider *provider;
--	u32 mode = NOC_QOS_MODE_BYPASS;
-+	u32 mode = NOC_QOS_MODE_BYPASS_VAL;
- 	int rc = 0;
++	u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
+ 	int i;
  
- 	qn = src->data;
-@@ -167,18 +170,17 @@ static int qcom_icc_set_noc_qos(struct icc_node *src, u64 max_bw)
- 		return 0;
+ 	/* Initialise aggregate values */
+@@ -334,7 +335,11 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
+ 	list_for_each_entry(node, &provider->nodes, node_list) {
+ 		qn = node->data;
+ 		for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+-			agg_avg[i] += qn->sum_avg[i];
++			if (qn->channels)
++				sum_avg[i] = div_u64(qn->sum_avg[i], qn->channels);
++			else
++				sum_avg[i] = qn->sum_avg[i];
++			agg_avg[i] += sum_avg[i];
+ 			agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
+ 		}
  	}
- 
--	if (qn->qos.qos_mode != NOC_QOS_MODE_INVALID)
--		mode = qn->qos.qos_mode;
--
--	if (mode == NOC_QOS_MODE_FIXED) {
--		dev_dbg(src->provider->dev, "NoC QoS: %s: Set Fixed mode\n",
--			qn->name);
-+	if (qn->qos.qos_mode == NOC_QOS_MODE_FIXED) {
-+		dev_dbg(src->provider->dev, "NoC QoS: %s: Set Fixed mode\n", qn->name);
-+		mode = NOC_QOS_MODE_FIXED_VAL;
- 		rc = qcom_icc_noc_set_qos_priority(qp, &qn->qos);
- 		if (rc)
- 			return rc;
--	} else if (mode == NOC_QOS_MODE_BYPASS) {
--		dev_dbg(src->provider->dev, "NoC QoS: %s: Set Bypass mode\n",
--			qn->name);
-+	} else if (qn->qos.qos_mode == NOC_QOS_MODE_BYPASS) {
-+		dev_dbg(src->provider->dev, "NoC QoS: %s: Set Bypass mode\n", qn->name);
-+		mode = NOC_QOS_MODE_BYPASS_VAL;
-+	} else {
-+		/* How did we get here? */
- 	}
- 
- 	return regmap_update_bits(qp->regmap,
-@@ -244,7 +246,7 @@ static int __qcom_icc_set(struct icc_node *n, struct qcom_icc_node *qn,
- 		ret = qcom_icc_rpm_set(qn->mas_rpm_id, qn->slv_rpm_id, sum_bw);
- 		if (ret)
- 			return ret;
--	} else if (qn->qos.qos_mode != -1) {
-+	} else if (qn->qos.qos_mode != NOC_QOS_MODE_INVALID) {
- 		/* set bandwidth directly from the AP */
- 		ret = qcom_icc_qos_set(n, sum_bw);
- 		if (ret)
 diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
-index a49af844ab13..8ba1918d7997 100644
+index 8ba1918d7997..8aed5400afda 100644
 --- a/drivers/interconnect/qcom/icc-rpm.h
 +++ b/drivers/interconnect/qcom/icc-rpm.h
-@@ -97,10 +97,12 @@ struct qcom_icc_desc {
- 	unsigned int qos_offset;
- };
- 
--/* Valid for both NoC and BIMC */
--#define NOC_QOS_MODE_INVALID		-1
--#define NOC_QOS_MODE_FIXED		0x0
--#define NOC_QOS_MODE_BYPASS		0x2
-+/* Valid for all bus types */
-+enum qos_mode {
-+	NOC_QOS_MODE_INVALID = 0,
-+	NOC_QOS_MODE_FIXED,
-+	NOC_QOS_MODE_BYPASS,
-+};
- 
- int qnoc_probe(struct platform_device *pdev);
- int qnoc_remove(struct platform_device *pdev);
+@@ -66,6 +66,7 @@ struct qcom_icc_qos {
+  * @id: a unique node identifier
+  * @links: an array of nodes where we can go next while traversing
+  * @num_links: the total number of @links
++ * @channels: number of channels at this node (e.g. DDR channels)
+  * @buswidth: width of the interconnect between a node and the bus (bytes)
+  * @sum_avg: current sum aggregate value of all avg bw requests
+  * @max_peak: current max aggregate value of all peak bw requests
+@@ -78,6 +79,7 @@ struct qcom_icc_node {
+ 	u16 id;
+ 	const u16 *links;
+ 	u16 num_links;
++	u16 channels;
+ 	u16 buswidth;
+ 	u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
+ 	u64 max_peak[QCOM_ICC_NUM_BUCKETS];
 
 -- 
 2.39.2
