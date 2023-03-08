@@ -2,262 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB346B12C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E656B12C4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbjCHUPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 15:15:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
+        id S230281AbjCHUPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 15:15:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbjCHUPS (ORCPT
+        with ESMTP id S230193AbjCHUPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:15:18 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2088.outbound.protection.outlook.com [40.107.243.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE86ED516E;
-        Wed,  8 Mar 2023 12:14:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=esIjJmtQdYpCPE44oWJkw7qZmfzzO3CAB4I7oR7x3XTsO7iT7BF+AogpkcwHDUzmlR8iJmH7BwYvnXUYKMkN8LqfjvCE2ctJNIgERM/eH0U7m+5sjwY3NUAlemcN4XM5JqdMT1nHigMvDqG0rgiIXJZZe+6lmRu0BE0HeTcT1UyjB4FqEVpx2re6FBRY3255lum8Cy/G2z0mW2DjmPoneyAUUaZhgp/i/7p0IeIMQLGJ0kZ6BO85Ua6HGxCtPz235yo/kOT/bl7AuOld9OQzIFGOfiqO9WcLt8x7YQPLzIdHa2NpmI9CVOnK6FLddcd5rCyiqjknSucg1E+eL+oVVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lpA7O7fIP3RA1upVpzgmgS6JZclbBj33qtdxmgRvRUI=;
- b=IQ8QOU405ek5UelhvCa/6G/wrUfRSK+3g8duz4i6PyjxUKGKw6VWHYLMvYVeUYhkBykQ70O+EYP8JCcV6Vh/deFmlhfK4nxUcx+hM8hRnuUCx/Z2/A7bu7DXSImcOiGAcQwdkT37mGyAoWxHPKssQ7Mpawa9bozkvBS5XzBWtvi43z6uW+Px24TkG8L05HnHRhrHT5iwAacxjzA5rr/t0PobBEv8XzDWUQ0mx1BByM3I417BJnYaSYl80f0L8fW6pBHeaftj+81IF2qQftFfpIiTeaBJc8VrgT1JWVDsMbXUJ6dFqXbP9flNkiWcqmCqCSXknryL4EHSWmMBw+Lfmg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lpA7O7fIP3RA1upVpzgmgS6JZclbBj33qtdxmgRvRUI=;
- b=rIfnn+Bdb1LfHSQXaMlDL0XriYEb+R34KHWw21BE7ECDColi1OahANYCERtEMw3xW5Fw0pHHPpKF0Fs4r5tpY5YFOvmtWU3c/ZIcHrs8KmmblYHZnDJ81eXV9dxWkVScEzOjyRSoNSDXRs2NL9Hoo0bVZA8dUqJLPFcafx/osNk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by MW4PR12MB6825.namprd12.prod.outlook.com (2603:10b6:303:20d::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Wed, 8 Mar
- 2023 20:14:42 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d23f:bb1:df95:3918]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d23f:bb1:df95:3918%4]) with mapi id 15.20.6178.017; Wed, 8 Mar 2023
- 20:14:42 +0000
-Message-ID: <d544748c-8a2b-7c08-f199-182a56af22be@amd.com>
-Date:   Wed, 8 Mar 2023 21:14:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
-Content-Language: en-US
-To:     Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
- <cd788ccf-0cf1-85d5-1bf8-efc259bd7e11@amd.com>
- <a075d886-0820-b6fb-fcd0-45bfdc75e37d@asahilina.net>
- <2b1060e9-86ba-7e16-14f1-5b5fa63de719@amd.com>
- <9f76bb68-b462-b138-d0ad-d27c972530d4@asahilina.net>
- <a39c6b40-f190-002d-ae1c-8b58c6442df2@amd.com>
- <4bbfc1a3-cfc3-87f4-897b-b6637bac3bd0@asahilina.net>
- <b0aa78b2-b432-200a-8953-a80c462fa6ee@amd.com>
- <c0624252-070e-bd44-2116-93a1d63a1359@asahilina.net>
- <d1fccceb-ca77-f653-17fc-63168e0da884@amd.com>
- <9c3dc2ad-11e4-6004-7230-8ca752e3d9f7@asahilina.net>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <9c3dc2ad-11e4-6004-7230-8ca752e3d9f7@asahilina.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR2P281CA0045.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:92::17) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Wed, 8 Mar 2023 15:15:24 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FBE62865;
+        Wed,  8 Mar 2023 12:14:57 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id q16so16562959wrw.2;
+        Wed, 08 Mar 2023 12:14:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678306495;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f18ANY0TsdSX/8E9h2Omny/ch19FPWElNHD1AD0jqsM=;
+        b=kt7Kt6z7dNCg0V+0cRO8Eh6LQ5y0SaaZludgo3vtyRtAEUHPS70cMcezc0gSrDEXHW
+         QIKnL3aW2XDeUGZkNgL3kHa3jy5Dm2mUbhdzM4kEE0PL6D6hcZL+leE44hJyctBsPKWP
+         buVAE8WZJKdJCD4aHs6m1L5w2RXHi9ghuRLuyUlvDbz78ncATgMOVLS94xHuIkuq0D8e
+         qm2maaoJo8fPzdy1T7g8QL/rnh6LA0SzYcrbmvwSZqM6VCmZ2BvurktE0yAEY1441BGK
+         dzbRrwg/eNP0AKHduEGl2wf9DQFrMaYtSOTdE+XqSKxVoYNqmj4KnjAuDkTVhHaOEfGx
+         gc7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678306495;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f18ANY0TsdSX/8E9h2Omny/ch19FPWElNHD1AD0jqsM=;
+        b=K/CnVCL/xpNV7lI+7mHDze90dXCAQlgwQ0tE7zij+/1jJkuxcdh5lhJwAUf7p/Mqn8
+         cvQv/RvBwb9p3AY6cx9jAymwm0fDGaheEtlNdZncK7RnM6oEhoycIg3Vjrl7uO9oYGy2
+         gOT9/fJuON7cFxrb+u8WHhdQooTxnSRO9KnJUfnEhcPfAQBH0HIOcqveTtR7BOBaLFLF
+         zG0NEE3cy73H/TW2ECKUwzS4xD4mvvVzyVmPYoabVuZzbS6uMyFZpP0SL3IU+awc27iX
+         WZZDZWE4zKmDl8MlRetJyW6llD5OqwT8UysozQiF7ZuIkZRLbWTXxDVEm/O7n5cqenhc
+         dC6w==
+X-Gm-Message-State: AO0yUKV3uYXoclPJfOrW6Y4QrRVf4uhEiOaIA+g7whTOYSVHdS3W88OX
+        94n5qkn6ZKzcc8Xv0jYcYKo=
+X-Google-Smtp-Source: AK7set+MmOJoByX+oFWP8ct8it2tRbVM/EeVH6ttZOehUsOttjwWNmkVS79P+0sI5UDTy0+BVEhYjQ==
+X-Received: by 2002:a5d:45c9:0:b0:2c6:a953:850f with SMTP id b9-20020a5d45c9000000b002c6a953850fmr10715843wrs.19.1678306495623;
+        Wed, 08 Mar 2023 12:14:55 -0800 (PST)
+Received: from Beasty.Home ([2a02:c7f:a63c:de00:a170:c7f8:586:6319])
+        by smtp.gmail.com with ESMTPSA id g11-20020adffc8b000000b002c7b229b1basm16129796wrr.15.2023.03.08.12.14.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 12:14:55 -0800 (PST)
+From:   Bogdan Ionescu <bogdan.ionescu.work@gmail.com>
+To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-leds@vger.kernel.or, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bogdan Ionescu <bogdan.ionescu.work@gmail.com>
+Subject: [PATCH 1/2] dt-bindings: leds: Document rohm,bd65b60 bindings
+Date:   Wed,  8 Mar 2023 20:14:50 +0000
+Message-Id: <20230308201451.11629-1-bogdan.ionescu.work@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|MW4PR12MB6825:EE_
-X-MS-Office365-Filtering-Correlation-Id: fbcf49ec-2237-4335-b8a7-08db2011c0b9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IYV+CQJC/iGsBfyKnpAitTKZzvYY52tgHe3NLKSIAg6usnQOWjEAZB39BVPyELuTmKfMLX7F7RlG/n0agVikY+fNOTIEQ2gOwg/zjkoF3B7+855PEQBzE2QhBIgg1t3vZEAK7be9NUxJ4uFbl/Nudf9cr9sBrlwo5JmRnlgbadhooL9RKBh0Qbat8uuxPiD3qCdUcPW96qobIN7HBhplAYNz1OxNE1RbROu9D3b19bybIFDyah3uU+dWlEkOdKrQqXCeqjrPHqTu53a82IDfkx7Cu1s0cXxfD03LdEb1fZS5Xm/gnzrGLN6qd2timJABm7Ds+GrDasDEVCOAO2AiAWvSEkzx/MCj5QBX4TFg44JHxidmISM6OgZnADj2NAQqtZ5qH9dSdnxMbmQlTpRdxVvI9jbI3D1W8fRBV6BguSZPEWIoCIKtdoe7r+KgPFc66OACMBofPx1QX5mHnDdTJvT3IKFR4RCvAJDOQMkUNK4OtPf3vT5XgwsqkWS1hyKUnCPrMoq50vyQ413ke0wtilM2e39mhz4hCjOFuZxYMXlr02nmfRdrj6fa4KTZOOo88I9QqI68c6a1bZ85MPljgYWl0PXNvsGyaBgKbEXuPtrGkmuJGtO+9MLD4Ik5UkhHJ0zlDIltBFVgdhxVWiE/XRGCldgzVxM2zADDzXueixZuaq04u1gePSU06OXNSe6ChdIz1U6WvGf95hW+YtAhdVM/2EG24xlRPgCOOR48V9gzXd2+6dGO2Gg7J6OooijE
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(366004)(376002)(39860400002)(136003)(451199018)(478600001)(5660300002)(7416002)(186003)(83380400001)(6666004)(6506007)(6512007)(31696002)(66574015)(86362001)(2616005)(36756003)(6486002)(921005)(2906002)(316002)(41300700001)(8676002)(4326008)(66946007)(66476007)(66556008)(31686004)(38100700002)(54906003)(8936002)(110136005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RTBvQ3YwY294RTkwWWdSVno0aEl6R1FFblJXMWRyNGVwY2VDKzZyL0k1TjJ2?=
- =?utf-8?B?dFFNcGdxZm93cU5sMHdtQXZyWURpR3RKVTVFUXpCQ2JLKzBMbitGRno1cnBx?=
- =?utf-8?B?N0VtOXcrUmRGTTduMXA1Y1FXdUh4LzdOT21NK1ltSERjREd6WnVxSnBCelc5?=
- =?utf-8?B?WGZ6dGhDY0VCRVV6RHBlcGMwWGN3SFdwWkZOTXhFWWtURmxMWUd2OUU2Vi90?=
- =?utf-8?B?cTlnSEVZNGxWM2E5M2I3eStLWjFiYVYwZnFObkZ0Ry9tV0t0LzVaQzBpdWpL?=
- =?utf-8?B?VTBTc3Y4aitkbUIwVE45a3ExZmVVRjFNbmRKQXZBMWpja25OMjhWRStTdzA3?=
- =?utf-8?B?L0ttWUdNWTZZbTdOVXdndy9HaHB6TnlxWlhydVE5QmRlR3BpSVROVDgxRVZr?=
- =?utf-8?B?RmRJcVZpb0J1N0NCbVBoZmFKNHFya0s1bjJsYjh2UHFIeTJqb1BhSTB0T3ZW?=
- =?utf-8?B?Z0NMbXI1NnVjZWVncUZWYzRSb3oydDY4c2ZQQ28zMDE4VjkzcWFac1lDUmo1?=
- =?utf-8?B?QmcrWXJzU3o2U0pRNS9CWmQ5TTJZbVlwai85TUpJbUhKSWQ5MXZrcDh6dFBR?=
- =?utf-8?B?RDZwbWFxbm43bExqalpaVmlweHNHTzR6WjRqNlZiQ2dRSUJmeXVXZm11bDJD?=
- =?utf-8?B?K0dxSkJqTnFtSmQxQlQ2MGJxbkZWdktlS2xWWTJWeGFvdjVoejhwWFVFWmFk?=
- =?utf-8?B?aWxIK3B1NjBsZkZVbDdEUW5VUkNtS1U0a2JvMnhCL201ZVp6VkFKWnJXUnVG?=
- =?utf-8?B?ek9keC9KdDdBTDVWeVJpc0dtaGdWZWlKY3RCbWdDalhnSG0vN3JZZDlTOFpa?=
- =?utf-8?B?NEM0YjR3M0VySC9GU3ZwUEFzV3J6Z2xJV3l0TkpaVS85RXNpUVNaVmlZb0tK?=
- =?utf-8?B?aHVXNzRiN1JYeU1MRUZSaU1wMU85Tnc3a252KzhBR29VbkhPMmhrS1FSbC9w?=
- =?utf-8?B?eStJYmd6bW8ya1BvdmhBMVZtZTVCUlZmM1RlUVNZWWZxMXI4UWZCSHZ0TVZJ?=
- =?utf-8?B?TEhJcTRjUmR4ME1Saml0N2t5ajRSRDNZUWVaT2RMM0RlTFRzM1dmMDg5MzQ4?=
- =?utf-8?B?NnVpc0l3eDd4Z3prUnVIMjc5VytQT0lYUThQNjJGVXhaUXczQXF1TTJLYlZY?=
- =?utf-8?B?M3hlYmJ6VVNwK3UydVF1SVVYWkwvcUZNUUt0NisyWGxHb2RMbVFrek5FOEpr?=
- =?utf-8?B?WTB2OTkybXB2ZDNpaHJwdm1Qd1JBY3VzY00xdE1qUjJIMW1qaUtFS01iazFs?=
- =?utf-8?B?WTNzV1BMUHJMM3ovQ2hjWVVEN3hGRmh4MWVhZGd5T2ZWR3BMMENXVjJ4Z2xT?=
- =?utf-8?B?QnVnODl1d2dRRHZJbW5nZUFIQk5iSFhmZFhiQysxN09mQUZmQVRhOGRYalIw?=
- =?utf-8?B?YjIyMlNHNTI2SFFJT2xyUkN1SUFmNnh6dmR4RW1aRzNsWGxGeTdRa3N6bWFW?=
- =?utf-8?B?YTJhY2phRkhtcXM3bnVjWDhrUFpkY3RLSzJYS052TzBvV3FCUWhSZFFDV3VD?=
- =?utf-8?B?V3RyVmZFUVFpTHFQL3A4WXdIaXZpWHNvQW4wZnZwL2tWdGMvanpTckJlRVls?=
- =?utf-8?B?bnd3ZU5wL3RZTkxGYUVScEhhVjBHRVB2N3pqZ1M3VzlLa3I0VjVLbDJILzZq?=
- =?utf-8?B?ZFhlV3RiMEd1bU5YM1haNmVYanNFSmtuQmJjcnJyQmVySU5WT1E2TFlTeGtN?=
- =?utf-8?B?aU5vTXNRZWU5RW5oaGNuZUZnN2EwS2NpbXJCZkJwVWp1ZUFVR1NhMDBYSjQy?=
- =?utf-8?B?N243aEF0cHIrYjBaWXFuQW15SHByNlc0UVV6UHNxeVlPK0RBV3B4UkljbU5R?=
- =?utf-8?B?MlR6SFdFZlhQLzF2bWtCb201TlZIOTNtdHlYQ1hWTldXWkdXTjlxbzVIVFkr?=
- =?utf-8?B?UkZ4eVhVOTJnZ2FMT0NpQmRJTGdMKzU0UjlkckJMVXlMNGdEMDhvU3laeEtS?=
- =?utf-8?B?bUpUeURLRkM0Sm9rRmU5dG4zUG53SXNkbTRrSmpsYThnVE1pMUo3cGN2M1RE?=
- =?utf-8?B?Q3hIeWpVQnBJZHdnYmU3M1dLTE8zVGk1UnUyWFUrVWxoNUk1NWk1V08vcE5D?=
- =?utf-8?B?eTBEUStBdzdHdnE4ZFlBT1lubUgyOEZCNnROTEIvbnVVTFlPSDUzNHhPdTU2?=
- =?utf-8?B?UHEwTzZrOXJiT1c3bTREZ3RBSzd2Q3lZK1lQbHlPbEllNGwzQ2phZXYyUTBs?=
- =?utf-8?Q?OJfr959AYem0/txJLRM8T/IUW0Eh3TprdgueUf/zdvq4?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fbcf49ec-2237-4335-b8a7-08db2011c0b9
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 20:14:42.5799
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Xs368j1z5Zs285u7IWMwIuZXbvo0gqecIVDI7W45fBRHwN0Vyi5NxSPooy8EGoUo
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6825
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 08.03.23 um 20:45 schrieb Asahi Lina:
-> On 09/03/2023 04.12, Christian König wrote:
->> Am 08.03.23 um 20:05 schrieb Asahi Lina:
->>> [SNIP]
->>>> Well it's not the better way, it's the only way that works.
->>>>
->>>> I have to admit that my bet on your intentions was wrong, but even that
->>>> use case doesn't work correctly.
->>>>
->>>> See when your callback returns false it is perfectly possible that all
->>>> hw fences are signaled between returning that information and processing it.
->>>>
->>>> The result would be that the scheduler goes to sleep and never wakes up
->>>> again.
->>> That can't happen, because it will just go into another iteration of the
->>> drm_sched main loop since there is an entity available still.
->>>
->>> Rather there is probably the opposite bug in this patch: the can_run_job
->>> logic should be moved into the wait_event_interruptible() condition
->>> check, otherwise I think it can end up busy-looping since the condition
->>> itself can be true even when the can_run_job check blocks it.
->>>
->>> But there is no risk of it going to sleep and never waking up because
->>> job completions will wake up the waitqueue by definition, and that
->>> happens after the driver-side queues are popped. If this problem could
->>> happen, then the existing hw_submission_limit logic would be broken in
->>> the same way. It is logically equivalent in how it works.
->>>
->>> Basically, if properly done in wait_event_interruptible, it is exactly
->>> the logic of that macro that prevents this race condition and makes
->>> everything work at all. Without it, drm_sched would be completely broken.
->>>
->>>> As I said we exercised those ideas before and yes this approach here
->>>> came up before as well and no it doesn't work.
->>> It can never deadlock with this patch as it stands (though it could busy
->>> loop), and if properly moved into the wait_event_interruptible(), it
->>> would also never busy loop and work entirely as intended. The actual API
->>> change is sound.
->>>
->>> I don't know why you're trying so hard to convince everyone that this
->>> approach is fundamentally broken... It might be a bad idea for other
->>> reasons, it might encourage incorrect usage, it might not be the best
->>> option, there are plenty of arguments you can make... but you just keep
->>> trying to make an argument that it just can't work at all for some
->>> reason. Why? I already said I'm happy dropping it in favor of the fences...
->> Well because it is broken.
->>
->> When you move the check into the wait_event_interruptible condition then
->> who is going to call wait_event_interruptible when the condition changes?
-> I think you mean wake_up_interruptible(). That would be
-> drm_sched_job_done(), on the fence callback when a job completes, which
-> as I keep saying is the same logic used for
-> hw_rq_count/hw_submission_limit tracking.
+Hi all,
 
-As the documentation to wait_event says:
+This is my first patch to the kernel, so I expect to have made
+some mistakes. I did my best to follow the documentation and
+submitting patches guidelines, but if I missed something, please
+let me know.
 
-  * wake_up() has to be called after changing any variable that could
-  * change the result of the wait condition.
+I wasn't sure if I had to add myself to the MAINTAINERS file for such a
+small patch, so I didn't.
 
-So what you essentially try to do here is to skip that and say 
-drm_sched_job_done() would call that anyway, but when you read any 
-variable to determine that state then as far as I can see nothing is 
-guarantying that order.
+Patch begins here:
 
-The only other possibility how you could use the callback correctly 
-would be to call drm_fence_is_signaled() to query the state of your hw 
-submission from the same fence which is then signaled. But then the 
-question is once more why you don't give that fence directly to the 
-scheduler?
+Added devicetree bindings documentation for the rohm,bd65b60
+led driver.
 
-> Please think about it for a second,
+Signed-off-by: Bogdan Ionescu <bogdan.ionescu.work@gmail.com>
+---
+ .../bindings/leds/rohm,bd65b60-leds.yaml      | 77 +++++++++++++++++++
+ include/dt-bindings/leds/leds-bd65b60.h       | 20 +++++
+ 2 files changed, 97 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/leds/rohm,bd65b60-leds.yaml
+ create mode 100644 include/dt-bindings/leds/leds-bd65b60.h
 
-Yeah, I'm trying to really follow your intentions here. But that doesn't 
-really makes sense.
-
-Either you are trying to do something invalid or you are trying to 
-circumvent the object model somehow and add a shortcut for the signaling 
-API. Both would be more than fishy.
-
-Regards,
-Christian.
-
->   it's really not that complicated to
-> see why it works:
->
-> - Driver pops off completed commands <-- can_run_job condition satisfied
-> - Driver signals fence
->   - drm_sched_job_done_cb()
->    - drm_sched_job_done()
->     - atomic_dec(&sched->hw_rq_count); <-- hw_submission_limit satisfied
->     - ...
->     - wake_up_interruptible(&sched->wake_up_worker);
->        ^- happens after both conditions are potentially satisfied
->
-> It really is completely equivalent to just making the hw_rq_count logic
-> customizable by the driver. The actual flow is the same. As long as the
-> driver guarantees it satisfies the can_run_job() condition before
-> signaling the completion fence that triggered that change, it works fine.
->
->> As I said this idea came up before and was rejected multiple times.
-> Maybe it was a different idea, or maybe it was rejected for other
-> reasons, or maybe it was wrongly rejected for being broken when it isn't ^^
->
-> ~~ Lina
+diff --git a/Documentation/devicetree/bindings/leds/rohm,bd65b60-leds.yaml b/Documentation/devicetree/bindings/leds/rohm,bd65b60-leds.yaml
+new file mode 100644
+index 000000000000..f69d7acd39c8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/leds/rohm,bd65b60-leds.yaml
+@@ -0,0 +1,77 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/leds/rohm,bd65b60-leds.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ROHM BD65B60 device tree bindings
++
++maintainers:
++  - Bogdan Ionescu <bogdan.ionescu.work+kernel@gmail.com>
++
++description: |
++  BD65B60 is a white LED driver IC that integrates PWM
++  step-up DC/DC converter with boost-capability of up to
++  maximum 28.5V and current driver with drive capability of up
++  to 25mA(Typ.) maximum setting. Precise brightness can be
++  controlled at wide ranges through the external PWM pulse
++  input.
++
++properties:
++  compatible:
++    const: rohm,bd65b60
++
++  reg:
++    maxItems: 1
++
++  led:
++    type: object
++    $ref: common.yaml#
++    unevaluatedProperties: false
++
++    properties:
++      rohm,enable-outputs:
++        description:
++          Select which leds are being controlled.
++          Values defined in <dt-bindings/leds/leds-bd65b60.h>
++        $ref: "/schemas/types.yaml#/definitions/uint32"
++        enum: [ 0, 1, 4, 5 ]
++
++      rohm,ovp:
++        description:
++          Select Over-Voltage-Portection level.
++          Values defined in <dt-bindings/leds/leds-bd65b60.h>
++        $ref: "/schemas/types.yaml#/definitions/uint32"
++        enum: [ 0, 8, 16 ]
++        default: 16
++
++    required:
++      - rohm,enable-outputs
++
++required:
++  - compatible
++  - reg
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/leds/common.h>
++    #include <dt-bindings/leds/leds-bd65b60.h>
++
++    i2c {
++
++        led_controler@64 {
++            compatible = "rohm,bd65b60";
++            reg = <0x64>;
++
++            backlight_led: led {
++                function = LED_FUNCTION_BACKLIGHT;
++                color = <LED_COLOR_ID_WHITE>;
++                rohm,enable-outputs = <BD65B60_ENABLE_LED1>;
++                default-state = "keep";
++                linux,default-trigger = "backlight";
++            };
++        };
++    };
++
++...
+diff --git a/include/dt-bindings/leds/leds-bd65b60.h b/include/dt-bindings/leds/leds-bd65b60.h
+new file mode 100644
+index 000000000000..8634faae58f4
+--- /dev/null
++++ b/include/dt-bindings/leds/leds-bd65b60.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * This header provides macros for the ROHM BD65B60 device tree bindings.
++ *
++ * Copyright (C) 2023 Bogdan Ionescu <bogdan.ionescu.work+kernel@gmail.com>
++ */
++
++#ifndef _DT_BINDINGS_LEDS_BD65B60_H
++#define _DT_BINDINGS_LEDS_BD65B60_H
++
++#define BD65B60_ENABLE_NONE 0
++#define BD65B60_ENABLE_LED1 1
++#define BD65B60_ENABLE_LED2 4
++#define BD65B60_ENABLE_BOTH (BD65B60_ENABLE_LED1 | BD65B60_ENABLE_LED2)
++
++#define BD65B60_OVP_25V 0
++#define BD65B60_OVP_30V 0x08
++#define BD65B60_OVP_35V 0x10
++
++#endif /* _DT_BINDINGS_LEDS_BD65B60_H */
+-- 
+2.39.2
 
