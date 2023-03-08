@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AB96B0BE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9EC46B0BE1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjCHOwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:52:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        id S231538AbjCHOwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:52:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbjCHOwM (ORCPT
+        with ESMTP id S231876AbjCHOwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:52:12 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427B5CA23;
-        Wed,  8 Mar 2023 06:52:11 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id s18so9783676pgq.1;
-        Wed, 08 Mar 2023 06:52:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678287131;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X8ujCnIiLc25U33obQkBP96azILctHn33HsXwDllrlM=;
-        b=jGq4oQeB034ih7zR9Oq4NHEbQaUS4y3CrcWO9b1gcnXV4g0VesuI0xctNraDdUHl2E
-         3tOJwJZvOGSztbaLqfmESuiFNIUikm8Vcsx0ethzNmjJUPVJ2OrFpEGWqURGdeEKDRTo
-         rb+/aTGVAMdg0ZDEtw1UWFTtHK/rKctFpEPO9bozyv3PfJDJqaPgbqPjqrEvtxx/kHOU
-         GFrJrmE9hvUfkIoMDEJCYNRmOXbzo79Q+VBXToKup1ZrWc498ZVxAhiCe6X5lFIQhLsj
-         EKRBwbSBtH6D/R4xZOBdsbJ+UUFJeK23QizXKofEJ4rxBeNUF5QKyDeXTf0McMFTTb/T
-         ZJiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678287131;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X8ujCnIiLc25U33obQkBP96azILctHn33HsXwDllrlM=;
-        b=NtADJSRFU0PeAzdu192E+CrzeuTplVUCgKdgHHchh6K5fPYl6Hcl1qMuU9SBevH1qD
-         hgXU8o3oxDtVK7Smn0EsO4DS8OUdAfJEf64EjlQ7LrL+FaTXt+HJBYFrkUjv6t9vFOQ6
-         a58b++TLEVBzsX4WjkCFEQpjfUXbIu1fWgPwER09wbcQbfO/SrhNSHcrEHJXdOE4XxUM
-         p4VqZJfbFcRr/os0S9f63MiJ+9a/By0katuuhins/Uf7DrSHReVqbeZDYoT3U4k03Fna
-         bJSIVBhYb95bNkCr89fB7RNNNdXxXe9oWcB0gJrRMoSDPY9HAyjka/07pBT+NT0qIR6W
-         mC0g==
-X-Gm-Message-State: AO0yUKXAT2WKM2JnsbyFQj/JnRv3P9VLid1lnrHv4kR0D/aw25If+nxa
-        KSzg3eoN/vTqJGZvtWXmeHo/Ak5lHRhkQueiFbE=
-X-Google-Smtp-Source: AK7set/2zcPRMk297Tw2+bXG27vpei/sMRJkU/Okt4O/umS6oAGs4ZHQc59IPGu2GYm1SadbWqh/p/QQnmCH7wy3yqk=
-X-Received: by 2002:a63:5904:0:b0:503:a26a:2e7a with SMTP id
- n4-20020a635904000000b00503a26a2e7amr6359409pgb.6.1678287130569; Wed, 08 Mar
- 2023 06:52:10 -0800 (PST)
+        Wed, 8 Mar 2023 09:52:06 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A78358C;
+        Wed,  8 Mar 2023 06:52:02 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C9AE8FF80B;
+        Wed,  8 Mar 2023 14:51:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678287121;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QCzOOOnS+zYy1dphlSYdevee9Uf5FRZUlz22AyL3o4c=;
+        b=HwV4nNMfPCSVyjJbjzMU7LKkzSJ33ar8ScAHGwVLq5CuxQJdWV5j7F1mhfZPTsBtF+vkUB
+        rrB5aY1t0XriiNOnKIDT3okoqppx4fQiutIw7YFJV/LFjf4iAW4Q6J+XW47070lTrXzsSP
+        x28wtow8tK4ylSWOgsoVlz2niEZDCweKXOhW7lryqO35do/aFCpOK3ycDLkKE5ck5Vzks9
+        o2UbZ3+hZGAiTnZGQffoS70VooyHPNe2JyjqLhb/Aj8MSiqitSqDgIx1pBLRfWsUN9ovHv
+        OOY7/e9Y40cT6lb2fn74rYoblsZKHmcVaYUvMwMYiKu7gqwo1h6+jb/eKCES2Q==
+Date:   Wed, 8 Mar 2023 15:51:58 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Walle <michael@walle.cc>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 04/21] of: Move of_modalias() to module.c
+Message-ID: <20230308155158.4ceecc05@xps-13>
+In-Reply-To: <20230308002306.GB513330-robh@kernel.org>
+References: <20230307165359.225361-1-miquel.raynal@bootlin.com>
+        <20230307165359.225361-5-miquel.raynal@bootlin.com>
+        <20230308002306.GB513330-robh@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230306154138.3775-1-findns94@gmail.com> <20230306154138.3775-4-findns94@gmail.com>
- <ZAYoi8ZwwbXT9j7f@dhcp22.suse.cz>
-In-Reply-To: <ZAYoi8ZwwbXT9j7f@dhcp22.suse.cz>
-From:   Martin Zhao <findns94@gmail.com>
-Date:   Wed, 8 Mar 2023 22:51:54 +0800
-Message-ID: <CADfL_jA3fa6HrGLRp25avQm+yamxqUZhK6BLjnjANbaJF7tsBw@mail.gmail.com>
-Subject: Re: [PATCH v2, 3/4] mm, memcg: Prevent memory.oom_control load/store tearing
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, roman.gushchin@linux.dev,
-        hannes@cmpxchg.org, shakeelb@google.com, muchun.song@linux.dev,
-        willy@infradead.org, linux-mm@kvack.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tangyeechou@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,64 +64,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 1:53=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrote=
-:
->
-> On Mon 06-03-23 23:41:37, Yue Zhao wrote:
-> > The knob for cgroup v1 memory controller: memory.oom_control
-> > is not protected by any locking so it can be modified while it is used.
-> > This is not an actual problem because races are unlikely.
-> > But it is better to use READ_ONCE/WRITE_ONCE to prevent compiler from
-> > doing anything funky.
-> >
-> > The access of memcg->oom_kill_disable is lockless,
-> > so it can be concurrently set at the same time as we are
-> > trying to read it.
-> >
-> > Signed-off-by: Yue Zhao <findns94@gmail.com>
+Hi Rob,
+
+robh@kernel.org wrote on Tue, 7 Mar 2023 18:23:06 -0600:
+
+> On Tue, Mar 07, 2023 at 05:53:42PM +0100, Miquel Raynal wrote:
+> > Create a specific .c file for of related module handling.
+> > Move of_modalias() inside as a first step. =20
+>=20
+> Perhaps a comment as to why it needs to be public? Or is it just shared=20
+> within the DT core? If so, we have of_private.h for that.
+
+Good point. This helper is actually only used internally (was static
+before). At first I wanted to convert all users to use the "new" OF
+module-related helpers, but unfortunately, the "dev->of_node_reused"
+check makes this impossible. I thus need to keep a few users of
+of_modalias() in of_device.h in the coming patches. I could move
+of_modalias() to of_private.h but that would mean exposing all the
+internals and private definitions to the drivers including of_device.h,
+which seemed extremely unsatisfying to me.
+
+I've updated the commit log with:
+
+    The helper is exposed through of.h even though it is only used by core
+    files because the users from device.c will soon be split into an OF-only
+    helper in module.c as well as a device-oriented inline helper in
+    of_device.h. Putting this helper in of_private.h would require to
+    include of_private.h from of_device.h, which is not acceptable.
+
+>=20
+> >=20
+> > Suggested-by: Rob Herring <robh+dt@kernel.org>
+> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 > > ---
-> >  mm/memcontrol.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> > index dca895c66a9b..26605b2f51b1 100644
-> > --- a/mm/memcontrol.c
-> > +++ b/mm/memcontrol.c
-> > @@ -4515,7 +4515,7 @@ static int mem_cgroup_oom_control_read(struct seq=
-_file *sf, void *v)
-> >  {
-> >       struct mem_cgroup *memcg =3D mem_cgroup_from_seq(sf);
-> >
-> > -     seq_printf(sf, "oom_kill_disable %d\n", memcg->oom_kill_disable);
-> > +     seq_printf(sf, "oom_kill_disable %d\n", READ_ONCE(memcg->oom_kill=
-_disable));
-> >       seq_printf(sf, "under_oom %d\n", (bool)memcg->under_oom);
-> >       seq_printf(sf, "oom_kill %lu\n",
-> >                  atomic_long_read(&memcg->memory_events[MEMCG_OOM_KILL]=
-));
-> > @@ -4531,7 +4531,7 @@ static int mem_cgroup_oom_control_write(struct cg=
-roup_subsys_state *css,
-> >       if (mem_cgroup_is_root(memcg) || !((val =3D=3D 0) || (val =3D=3D =
-1)))
-> >               return -EINVAL;
-> >
-> > -     memcg->oom_kill_disable =3D val;
-> > +     WRITE_ONCE(memcg->oom_kill_disable, val);
-> >       if (!val)
-> >               memcg_oom_recover(memcg);
->
-> Any specific reasons you haven't covered other accesses
-> (mem_cgroup_css_alloc, mem_cgroup_oom, mem_cgroup_oom_synchronize)?
+> >  drivers/of/Makefile |  2 +-
+> >  drivers/of/device.c | 37 -------------------------------------
+> >  drivers/of/module.c | 43 +++++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/of.h  |  8 ++++++++
+> >  4 files changed, 52 insertions(+), 38 deletions(-)
+> >  create mode 100644 drivers/of/module.c
+> >=20
+> > diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+> > index e0360a44306e..ae9923fd2940 100644
+> > --- a/drivers/of/Makefile
+> > +++ b/drivers/of/Makefile
+> > @@ -1,5 +1,5 @@
+> >  # SPDX-License-Identifier: GPL-2.0
+> > -obj-y =3D base.o device.o platform.o property.o
+> > +obj-y =3D base.o device.o module.o platform.o property.o
+> >  obj-$(CONFIG_OF_KOBJ) +=3D kobj.o
+> >  obj-$(CONFIG_OF_DYNAMIC) +=3D dynamic.o
+> >  obj-$(CONFIG_OF_FLATTREE) +=3D fdt.o
+> > diff --git a/drivers/of/device.c b/drivers/of/device.c
+> > index 2bbb67798916..44f1f2ef12b7 100644
+> > --- a/drivers/of/device.c
+> > +++ b/drivers/of/device.c
 
-Thanks for point this out, you are right, we should add
-[READ|WRITE]_ONCE for all used places.
-Let me create PATCH v3 later.
-Also for the memcg->soft_limit, I will update as well.
+[...]
 
-> >
-> > --
-> > 2.17.1
->
-> --
-> Michal Hocko
-> SUSE Labs
+> > diff --git a/drivers/of/module.c b/drivers/of/module.c
+> > new file mode 100644
+> > index 000000000000..9c6a53f32c0f
+> > --- /dev/null
+> > +++ b/drivers/of/module.c
+> > @@ -0,0 +1,43 @@
+> > +// SPDX-License-Identifier: GPL-2.0+ =20
+>=20
+> Existing license was GPL-2.0 (-only).
+
+Oh right, I took the license from base.c, you're right I should have
+taken the one from device.c.
+
+Thanks,
+Miqu=C3=A8l
