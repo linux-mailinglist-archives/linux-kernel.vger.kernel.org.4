@@ -2,75 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D92A6B0559
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9276A6B055C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbjCHLFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:05:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
+        id S231363AbjCHLFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 06:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbjCHLEk (ORCPT
+        with ESMTP id S231319AbjCHLEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:04:40 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6169AFE4
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 03:03:58 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id ay14so60392178edb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 03:03:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678273437;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2mOeVIjm8xAMi1XdiTZIXvjNCduRkLKc7AUq9KH5xfM=;
-        b=iAx8gn/CiR1bBZDJ6o8a1ljzFGvp8YzI2fVG2BsIA7s7BDe+pizvRqtU9sz2Gd8JSu
-         g85rYIghkuxknjrQyKvOgZopVJiMFsL+TqjWhDVYEl9dejVBaPksboBOb6MliPvsLK8i
-         zca9g8lyM8r1QiH3FlrGH7captEnW7SaHw8N28jJSN/2h1+Ndl+0GFQQsMiw+vOjOqHi
-         xW340FhEZGlOhqKDPyeHH0i/+1asGoelt5aolUVU6L9hLRbJq+n9GC8Jx15D5j0gdD1k
-         +i7N57OLo3kTSTgw7MEaF4dSrNEzOC3C96XeILtqxP4s2X1EQYdSGoeIPEU28zpj21y1
-         95UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678273437;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2mOeVIjm8xAMi1XdiTZIXvjNCduRkLKc7AUq9KH5xfM=;
-        b=oFlOpzLEPiuUy0mrOPELfVSGE7dN5ylFJP0u8fZNitzQZrnj80wOet9mrwJL5NbWZr
-         rdXuCYmGBgD0bfrH8kxnb8S1D4zmaa6Rp70F/pn4Co4uqD96BNdumuc0qvC8pUkXsrZf
-         ZceRVKgRe4cBdDbqK14W5JxlCizGdG3PF2YGKRV3cBVPmzULErUZXBpQsm5tD8NCqV/v
-         3l1HSUgqoZYopTl3fMQRHiGDZtK35RVkyxjdQ59H6iUSY/4y8LxUQq4NtchDTUB/oc9r
-         XCufi+iXEakxdG0TfYNqMEMoqFGlIhTJzk/UvCg+zCrFXSTk37ItE2Q5NtKJOsRRW5q1
-         3klA==
-X-Gm-Message-State: AO0yUKXuKtmwM1+VzTZT/UWABFsK3fEmerGIfXjkbXf1fe9z0ZMubvHw
-        OWmXR6CkMi+j7K8oo1jzfKpM6A==
-X-Google-Smtp-Source: AK7set+uYd9BWN+DxCTsFT3RC2Npkxt1wr2xAp2qBurGjWBjqeX355SU3BlD4wSUfJ0rgZioGEugQQ==
-X-Received: by 2002:aa7:c0da:0:b0:4c0:9bd7:54cc with SMTP id j26-20020aa7c0da000000b004c09bd754ccmr13681933edp.11.1678273436865;
-        Wed, 08 Mar 2023 03:03:56 -0800 (PST)
-Received: from google.com (94.189.141.34.bc.googleusercontent.com. [34.141.189.94])
-        by smtp.gmail.com with ESMTPSA id d6-20020a1709064c4600b008eb5b085075sm7233492ejw.122.2023.03.08.03.03.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 03:03:56 -0800 (PST)
-Date:   Wed, 8 Mar 2023 11:03:51 +0000
-From:   Matt Bobrowski <mattbobrowski@google.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH] bpf: Fix IMA test
-Message-ID: <ZAhrl0rK9Yume1Ed@google.com>
-References: <20230308103713.1681200-1-roberto.sassu@huaweicloud.com>
+        Wed, 8 Mar 2023 06:04:43 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6EA9B2D7;
+        Wed,  8 Mar 2023 03:03:58 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2615C24E32C;
+        Wed,  8 Mar 2023 19:03:56 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Mar
+ 2023 19:03:56 +0800
+Received: from [192.168.60.130] (180.164.60.184) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Mar
+ 2023 19:03:55 +0800
+Message-ID: <05465184-5976-6cee-9925-e3712a1ea650@starfivetech.com>
+Date:   Wed, 8 Mar 2023 19:03:55 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230308103713.1681200-1-roberto.sassu@huaweicloud.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 11/11] media: starfive: enable building
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <changhuang.liang@starfivetech.com>
+References: <20230302091921.43309-1-jack.zhu@starfivetech.com>
+ <20230302091921.43309-12-jack.zhu@starfivetech.com>
+ <bd6c9135-e12c-a6ac-db46-416403850751@linaro.org>
+ <15b29a5b-29a1-8440-2b46-0c201c20defd@starfivetech.com>
+ <edf4febc-1629-45c6-ea48-ece8df12a4a5@linaro.org>
+From:   Jack Zhu <jack.zhu@starfivetech.com>
+In-Reply-To: <edf4febc-1629-45c6-ea48-ece8df12a4a5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,89 +65,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ha! I was literally in the midst of sending through a patch for
-this. Thanks for also taking a look and beating me to it!
 
-This LGTM, feel free to add:
 
-Reviewed-by: Matt Bobrowski <mattbobrowski@google.com>
+On 2023/3/8 18:33, Krzysztof Kozlowski wrote:
+> On 07/03/2023 10:46, Jack Zhu wrote:
+>> 
+>> 
+>> On 2023/3/3 16:43, Krzysztof Kozlowski wrote:
+>>> On 02/03/2023 10:19, jack.zhu wrote:
+>>>> Add Kconfig and Makefie, update platform/Kconfig and platform/Makefile
+>>>> to enable building of the Starfive Camera subsystem driver.
+>>>>
+>>>> Signed-off-by: jack.zhu <jack.zhu@starfivetech.com>
+>>>> ---
+>>>>  drivers/media/platform/Kconfig           |  1 +
+>>>>  drivers/media/platform/Makefile          |  1 +
+>>>>  drivers/media/platform/starfive/Kconfig  | 18 ++++++++++++++++++
+>>>>  drivers/media/platform/starfive/Makefile | 14 ++++++++++++++
+>>>
+>>> This is not a separate commit. If it were, it would mean you just added
+>>> dead code in previous commits, so why adding dead code in first place?
+>>>
+>> 
+>> The previous patches are made according to the module function.I think
+>> it is helpful to explain the composition of the code file. 
+>> 
+>> stf_camss[patch 9] as a platform device manages all resources including
+>> ISP and VIN. ISP/VIN [patch 7/8]as a sub-device needs to access other
+>> resources managed by stf_camss.There is mutual reference between them.
+>> Therefore, this patch is used for the overall compilation of the starfive
+>> directory.
+> 
+> So previous code is dead? Again, what is the reason for adding dead
+> code? Mutual reference is not the answer.
+> 
 
-On Wed, Mar 08, 2023 at 11:37:13AM +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+Maybe I need to merge the previous patches[6-11] into one patch to submit?
+
+> Best regards,
+> Krzysztof
 > 
-> Commit 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED
-> flag is set") caused bpf_ima_inode_hash() to refuse to give non-fresh
-> digests. IMA test #3 assumed the old behavior, that bpf_ima_inode_hash()
-> still returned also non-fresh digests.
-> 
-> Correct the test by accepting both cases. If the samples returned are 1,
-> assume that the commit above is applied and that the returned digest is
-> fresh. If the samples returned are 2, assume that the commit above is not
-> applied, and check both the non-fresh and fresh digest.
-> 
-> Fixes: 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED flag is set")
-> Reported by: David Vernet <void@manifault.com>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  .../selftests/bpf/prog_tests/test_ima.c       | 29 ++++++++++++++-----
->  1 file changed, 21 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_ima.c b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> index b13feceb38f..810b14981c2 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> @@ -70,7 +70,7 @@ void test_test_ima(void)
->  	u64 bin_true_sample;
->  	char cmd[256];
->  
-> -	int err, duration = 0;
-> +	int err, duration = 0, fresh_digest_idx = 0;
->  	struct ima *skel = NULL;
->  
->  	skel = ima__open_and_load();
-> @@ -129,7 +129,15 @@ void test_test_ima(void)
->  	/*
->  	 * Test #3
->  	 * - Goal: confirm that bpf_ima_inode_hash() returns a non-fresh digest
-> -	 * - Expected result: 2 samples (/bin/true: non-fresh, fresh)
-> +	 * - Expected result:
-> +	 *   1 sample (/bin/true: fresh) if commit 62622dab0a28 applied
-> +	 *   2 samples (/bin/true: non-fresh, fresh) if commit 62622dab0a28 is
-> +	 *     not applied
-> +	 *
-> +	 * If commit 62622dab0a28 ("ima: return IMA digest value only when
-> +	 * IMA_COLLECTED flag is set") is applied, bpf_ima_inode_hash() refuses
-> +	 * to give a non-fresh digest, hence the correct result is 1 instead of
-> +	 * 2.
->  	 */
->  	test_init(skel->bss);
->  
-> @@ -144,13 +152,18 @@ void test_test_ima(void)
->  		goto close_clean;
->  
->  	err = ring_buffer__consume(ringbuf);
-> -	ASSERT_EQ(err, 2, "num_samples_or_err");
-> -	ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
-> -	ASSERT_NEQ(ima_hash_from_bpf[1], 0, "ima_hash");
-> -	ASSERT_EQ(ima_hash_from_bpf[0], bin_true_sample, "sample_equal_or_err");
-> +	ASSERT_GE(err, 1, "num_samples_or_err");
-> +	if (err == 2) {
-> +		ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
-> +		ASSERT_EQ(ima_hash_from_bpf[0], bin_true_sample,
-> +			  "sample_equal_or_err");
-> +		fresh_digest_idx = 1;
-> +	}
-> +
-> +	ASSERT_NEQ(ima_hash_from_bpf[fresh_digest_idx], 0, "ima_hash");
->  	/* IMA refreshed the digest. */
-> -	ASSERT_NEQ(ima_hash_from_bpf[1], bin_true_sample,
-> -		   "sample_different_or_err");
-> +	ASSERT_NEQ(ima_hash_from_bpf[fresh_digest_idx], bin_true_sample,
-> +		   "sample_equal_or_err");
->  
->  	/*
->  	 * Test #4
-> -- 
-> 2.25.1
-> 
-/M
