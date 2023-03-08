@@ -2,108 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF596B138C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B87806B138D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjCHVHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 16:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        id S230137AbjCHVHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 16:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjCHVHW (ORCPT
+        with ESMTP id S229545AbjCHVHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 16:07:22 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6590CC78C7;
-        Wed,  8 Mar 2023 13:07:21 -0800 (PST)
-Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 269E9C3FE3;
-        Wed,  8 Mar 2023 21:06:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1678309609; bh=PMrX5xa0wF8TVVqsH1Pb5phtfnFDeFZawPyCqxh4toA=;
-        h=From:Date:Subject:To:Cc;
-        b=fAk8YoCYgnE/Ev2v3jup6D8PiSI11iWUDBVrmUek0/hylb+wOeMbFVXITu6Se61jg
-         7+1FxQXeUIXKUroC+b727uPoXux7umrx0/+3S4WfFFjkwCYd9TNp7839PA3Ot/v1vX
-         Q6sQ5n55kVbckFqft+C21K3OyIzuWhviR0632Ym8=
-From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Wed, 08 Mar 2023 22:06:03 +0100
-Subject: [PATCH] ARM: dts: qcom: apq8026-lg-lenok: add missing reserved
- memory
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        Wed, 8 Mar 2023 16:07:44 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBC5D514E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:07:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 51798CE1FBE
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 21:07:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2815FC433D2;
+        Wed,  8 Mar 2023 21:07:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1678309656;
+        bh=5sBw8YBMWuDsTbdbyhx6tx4mTGUCbOpZNEfsUaiN8/E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hE0xSCDWku5sQr6qlduKFf1GwZt4ZBDMUM3uyCf7WAbSYeYDfiycmTFVOtGYinABV
+         aXQeB0zoYOeqzrlJRs2QonBG1I70ayGpj86gpHo8vLSlYWg9yKdRMhY+gQ3e6nmvJt
+         6sYQhVCQucWgD8VeGFMYr7MkVPudVjXguKEFHt3c=
+Date:   Wed, 8 Mar 2023 13:07:35 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Marco Elver <elver@google.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>
+Subject: Re: ld.lld: error: undefined symbol: memcpy
+Message-Id: <20230308130735.bbc4b21a3aff977bced451fa@linux-foundation.org>
+In-Reply-To: <202303090422.ss2Hbm4f-lkp@intel.com>
+References: <202303090422.ss2Hbm4f-lkp@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230308-lenok-reserved-memory-v1-1-b8bf6ff01207@z3ntu.xyz>
-X-B4-Tracking: v=1; b=H4sIALr4CGQC/x3NQQrCMBCF4auUWTslTqAmXkVcJOnUBk2iEyiW0
- rubuvzhfbwNKkvkCtduA+El1lhyi/OpgzC7/GCMY2sgRVppZfDFuTxRuLmFR0yciqzorb7oyQZ
- jrYZmvauMXlwO86E/oSRMNRmiAYee+vUYvYWn+P2f3+77/gMAbL/ujAAAAA==
-To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1037; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=PMrX5xa0wF8TVVqsH1Pb5phtfnFDeFZawPyCqxh4toA=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkCPjd/i4LQcuKqckTs5eRrV8+OxildEvCxJBdz
- DKzdIcdlUqJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZAj43QAKCRBy2EO4nU3X
- Vq2lD/9+1I6fYor0IucI89r7Vz4yq8Wgi2Uvr2pp06CZiyMGAbu0KxAoIr6lhIN9ZhU8vj7m0DE
- 1qWGEKe3UsFBYmwA1cCjChkCSUd+Qzqau7r6fK/LuP0eZNs6STXsxdUPKwYIv6qQnUq4cYPF3Yp
- nCQN4vbjlQtLGIy5bWj3sDwX9mYGKInMI6egWwtDBlnHaPfgVrYAfmxPkNOybwknip1l31QAzqF
- Cue8ZOI6zoDweIm7V4wzW+3FQT/cx4UPeD4gzVqtKfh3hSLjlsskKgddXVKAnzExzrnLNWS257t
- eZG7//f14T7lizdVxQV5BKSIwpuzGjyNgRN2MR2Sw+TYAx3K50y+sVid5qnMLFF96V6av8cMNJK
- Tr3gziyoKvQhugVCpDGxz4IeP8obiWMb0vEfqvx7zOkQkYge9Y3vTaYGWYJGu4EIEZ+wbuao7++
- 1bu2fWmheKzcR8Cx6sqgh3kWDaXu4MVgyUrXSQ8HP3JKQs5mld7s8O36NO9TFjqSCXCwGb2LkrO
- CNuZlTvmTik3rLWqH4PUzZHt60ABqWbjgoHV1iaH2nek09Y7N30Gup/VXnc3btGHM5F1a4XtbT/
- TM2xuezwhaJP1IOMracMGWEurn0HpaDONUu0GiRrJ40pM9W5N+LJYcVeXDzlDHm8LRBbKUQyinp
- NTjeY6NhvzNEtzA==
-X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
- fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Turns out these two memory regions also need to be avoided, otherwise
-weird things will happen when Linux tries to use this memory.
+On Thu, 9 Mar 2023 05:01:04 +0800 kernel test robot <lkp@intel.com> wrote:
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   63355b9884b3d1677de6bd1517cd2b8a9bf53978
+> commit: 36be5cba99f6f9984a9a9f0454f95a38f4184d3e kasan: treat meminstrinsic as builtins in uninstrumented files
+> date:   6 days ago
+> config: powerpc-randconfig-r036-20230305 (https://download.01.org/0day-ci/archive/20230309/202303090422.ss2Hbm4f-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install powerpc cross compiling tool for clang build
+>         # apt-get install binutils-powerpc-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=36be5cba99f6f9984a9a9f0454f95a38f4184d3e
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 36be5cba99f6f9984a9a9f0454f95a38f4184d3e
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303090422.ss2Hbm4f-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> ld.lld: error: undefined symbol: memcpy
+>    >>> referenced by xmon.c:1896 (arch/powerpc/xmon/xmon.c:1896)
+>    >>>               arch/powerpc/xmon/xmon.o:(prregs) in archive vmlinux.a
+>    >>> referenced by zstd_compress.c:4814 (lib/zstd/compress/zstd_compress.c:4814)
+>    >>>               lib/zstd/compress/zstd_compress.o:(ZSTD_createCDict_advanced2) in archive vmlinux.a
+>    >>> referenced by zstd_compress.c:4910 (lib/zstd/compress/zstd_compress.c:4910)
+>    >>>               lib/zstd/compress/zstd_compress.o:(ZSTD_initStaticCDict) in archive vmlinux.a
+>    >>> referenced 5 more times
+> --
+> >> ld.lld: error: undefined symbol: memset
+>    >>> referenced by slab_common.c:579 (mm/slab_common.c:579)
+>    >>>               mm/slab_common.o:(kmem_dump_obj) in archive vmlinux.a
+>    >>> referenced by kasan_test.c:558 (mm/kasan/kasan_test.c:558)
+>    >>>               mm/kasan/kasan_test.o:(kmalloc_oob_in_memset) in archive vmlinux.a
+>    >>> referenced by kasan_test.c:505 (mm/kasan/kasan_test.c:505)
+>    >>>               mm/kasan/kasan_test.o:(kmalloc_oob_memset_2) in archive vmlinux.a
+>    >>> referenced 10 more times
+> 
+
+Will this fix?
+
+From: Alexander Potapenko <glider@google.com>
+Subject: x86: kmsan: don't rename memintrinsics in uninstrumented files
+Date: Fri, 3 Mar 2023 15:14:30 +0100
+
+clang -fsanitize=kernel-memory already replaces calls to
+memset/memcpy/memmove and their __builtin_ versions with
+__msan_memset/__msan_memcpy/__msan_memmove in instrumented files, so
+there is no need to override them.
+
+In non-instrumented versions we are now required to leave memset() and
+friends intact, so we cannot replace them with __msan_XXX() functions.
+
+Link: https://lkml.kernel.org/r/20230303141433.3422671-1-glider@google.com
+Signed-off-by: Alexander Potapenko <glider@google.com>
+Suggested-by: Marco Elver <elver@google.com>
+Reviewed-by: Marco Elver <elver@google.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 ---
- arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts | 10 ++++++++++
- 1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts b/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-index de2fb1c01b6e3..b82381229adf6 100644
---- a/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-+++ b/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-@@ -27,6 +27,16 @@ chosen {
- 	};
+
+--- a/arch/x86/include/asm/string_64.h~x86-kmsan-dont-rename-memintrinsics-in-uninstrumented-files
++++ a/arch/x86/include/asm/string_64.h
+@@ -15,22 +15,11 @@
+ #endif
  
- 	reserved-memory {
-+		sbl_region: sbl@2f00000 {
-+			reg = <0x02f00000 0x100000>;
-+			no-map;
-+		};
-+
-+		external_image_region: external-image@3100000 {
-+			reg = <0x03100000 0x200000>;
-+			no-map;
-+		};
-+
- 		adsp_region: adsp@3300000 {
- 			reg = <0x03300000 0x1400000>;
- 			no-map;
-
----
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-change-id: 20230308-lenok-reserved-memory-b9373f9c8993
-
-Best regards,
--- 
-Luca Weiss <luca@z3ntu.xyz>
+ #define __HAVE_ARCH_MEMCPY 1
+-#if defined(__SANITIZE_MEMORY__) && defined(__NO_FORTIFY)
+-#undef memcpy
+-#define memcpy __msan_memcpy
+-#else
+ extern void *memcpy(void *to, const void *from, size_t len);
+-#endif
+ extern void *__memcpy(void *to, const void *from, size_t len);
+ 
+ #define __HAVE_ARCH_MEMSET
+-#if defined(__SANITIZE_MEMORY__) && defined(__NO_FORTIFY)
+-extern void *__msan_memset(void *s, int c, size_t n);
+-#undef memset
+-#define memset __msan_memset
+-#else
+ void *memset(void *s, int c, size_t n);
+-#endif
+ void *__memset(void *s, int c, size_t n);
+ 
+ #define __HAVE_ARCH_MEMSET16
+@@ -70,13 +59,7 @@ static inline void *memset64(uint64_t *s
+ }
+ 
+ #define __HAVE_ARCH_MEMMOVE
+-#if defined(__SANITIZE_MEMORY__) && defined(__NO_FORTIFY)
+-#undef memmove
+-void *__msan_memmove(void *dest, const void *src, size_t len);
+-#define memmove __msan_memmove
+-#else
+ void *memmove(void *dest, const void *src, size_t count);
+-#endif
+ void *__memmove(void *dest, const void *src, size_t count);
+ 
+ int memcmp(const void *cs, const void *ct, size_t count);
+_
 
