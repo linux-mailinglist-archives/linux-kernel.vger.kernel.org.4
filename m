@@ -2,165 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC4C6B1276
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 782606B126D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 20:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjCHTx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 14:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
+        id S229910AbjCHTtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 14:49:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCHTxY (ORCPT
+        with ESMTP id S229994AbjCHTtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 14:53:24 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352E8497CA;
-        Wed,  8 Mar 2023 11:53:22 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id C4A4842037;
-        Wed,  8 Mar 2023 19:45:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1678304766;
-        bh=371amrNIWdOrt1eX/rE/8QZd18kWMNJmNXDp2QdVSbs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=yGK2eXhVMDT3UcH3lltkf8vpz7BK33d21ZigE2QwncNn4koTKZf90jqyk41sFXyp/
-         hCVYoec52IPuKLTdg8ImtH/hjN/ym4zWtZt5fw9ikDSLCKIEi3jIsdirbn7zRpIYwI
-         sRiJ+y91O7fPhmVFFdjjSKo4af7KCCYZGexuOnmdFwyKkK5dcFL2tFdMT4pgAZpsUo
-         sUt7oqPOFJNSbrS1U4HsWxouSmgeKt9R9dRHvlxLiJ0/pnfBoBUFfNbVrAANhAlqxF
-         Kl7eIy+TonptlKOSkRhyAh9k4oVsIxOYVYCF56uABdqu2Tlpg4EAXwcIjXkxB8mkux
-         H9MLMH0cWml/Q==
-Message-ID: <9c3dc2ad-11e4-6004-7230-8ca752e3d9f7@asahilina.net>
-Date:   Thu, 9 Mar 2023 04:45:58 +0900
+        Wed, 8 Mar 2023 14:49:00 -0500
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0145AB4E;
+        Wed,  8 Mar 2023 11:48:17 -0800 (PST)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1763e201bb4so19981973fac.1;
+        Wed, 08 Mar 2023 11:48:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678304814;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yT0BopLRAw7O6/s7NS3/6EbNSMOzkcqRVPXIOE/BbPs=;
+        b=XpJs6TqzAZtKRJrENPxRX64lgzeOpP8XhZdk4oDV4VzUaSJg73bewQ0GX01Daywib3
+         kQh+kro7MAujIBO1UOgYrJ69eF6r1jArcMeI+zo26eCbnX3/QVA7DhgAIgJpfymQQyit
+         ufzmt/888m3AboKJYqfKwx7X28JeVwaQOTGwUg51VTBrt9dBUI7PBzylTTd+KWcPfgds
+         EN8CE/hiyoIEKTII3rFDyPsENHYuu9CeFo+WdJeDfYbfGJvXBERCpmEBPX/oqKQ1/8GL
+         bZESVbvE+8hK5ddRcLChxWHVWIlNwJnpaQmsQLEjm+uxVDv9X8oGP/E3SHR3CVhnU3W+
+         KYmg==
+X-Gm-Message-State: AO0yUKXg4FMAVC0PPpb5oRnPf+LgvBwo+1sO8v0JmjcysTNHZpwJ04+q
+        X0rGP1ILtjiSgYhcBY7Liw==
+X-Google-Smtp-Source: AK7set/j69mw8inZZ60owmutAs5i9vfN2brcSq4YY56sDxw/VEkhHwLkVFpgj9QDwqIthGRi/b/kpg==
+X-Received: by 2002:a05:6870:5490:b0:16e:84c5:7496 with SMTP id f16-20020a056870549000b0016e84c57496mr10085909oan.11.1678304814169;
+        Wed, 08 Mar 2023 11:46:54 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id zq41-20020a0568718ea900b0017703cd8ff6sm1904577oab.7.2023.03.08.11.46.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 11:46:53 -0800 (PST)
+Received: (nullmailer pid 3665063 invoked by uid 1000);
+        Wed, 08 Mar 2023 19:46:52 -0000
+Date:   Wed, 8 Mar 2023 13:46:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH 2/8] of: Enable DTB loading on UML for KUnit tests
+Message-ID: <20230308194652.GA3656473-robh@kernel.org>
+References: <20230302013822.1808711-1-sboyd@kernel.org>
+ <20230302013822.1808711-3-sboyd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
- <cd788ccf-0cf1-85d5-1bf8-efc259bd7e11@amd.com>
- <a075d886-0820-b6fb-fcd0-45bfdc75e37d@asahilina.net>
- <2b1060e9-86ba-7e16-14f1-5b5fa63de719@amd.com>
- <9f76bb68-b462-b138-d0ad-d27c972530d4@asahilina.net>
- <a39c6b40-f190-002d-ae1c-8b58c6442df2@amd.com>
- <4bbfc1a3-cfc3-87f4-897b-b6637bac3bd0@asahilina.net>
- <b0aa78b2-b432-200a-8953-a80c462fa6ee@amd.com>
- <c0624252-070e-bd44-2116-93a1d63a1359@asahilina.net>
- <d1fccceb-ca77-f653-17fc-63168e0da884@amd.com>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <d1fccceb-ca77-f653-17fc-63168e0da884@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230302013822.1808711-3-sboyd@kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2023 04.12, Christian König wrote:
-> Am 08.03.23 um 20:05 schrieb Asahi Lina:
->> [SNIP]
->>> Well it's not the better way, it's the only way that works.
->>>
->>> I have to admit that my bet on your intentions was wrong, but even that
->>> use case doesn't work correctly.
->>>
->>> See when your callback returns false it is perfectly possible that all
->>> hw fences are signaled between returning that information and processing it.
->>>
->>> The result would be that the scheduler goes to sleep and never wakes up
->>> again.
->> That can't happen, because it will just go into another iteration of the
->> drm_sched main loop since there is an entity available still.
->>
->> Rather there is probably the opposite bug in this patch: the can_run_job
->> logic should be moved into the wait_event_interruptible() condition
->> check, otherwise I think it can end up busy-looping since the condition
->> itself can be true even when the can_run_job check blocks it.
->>
->> But there is no risk of it going to sleep and never waking up because
->> job completions will wake up the waitqueue by definition, and that
->> happens after the driver-side queues are popped. If this problem could
->> happen, then the existing hw_submission_limit logic would be broken in
->> the same way. It is logically equivalent in how it works.
->>
->> Basically, if properly done in wait_event_interruptible, it is exactly
->> the logic of that macro that prevents this race condition and makes
->> everything work at all. Without it, drm_sched would be completely broken.
->>
->>> As I said we exercised those ideas before and yes this approach here
->>> came up before as well and no it doesn't work.
->> It can never deadlock with this patch as it stands (though it could busy
->> loop), and if properly moved into the wait_event_interruptible(), it
->> would also never busy loop and work entirely as intended. The actual API
->> change is sound.
->>
->> I don't know why you're trying so hard to convince everyone that this
->> approach is fundamentally broken... It might be a bad idea for other
->> reasons, it might encourage incorrect usage, it might not be the best
->> option, there are plenty of arguments you can make... but you just keep
->> trying to make an argument that it just can't work at all for some
->> reason. Why? I already said I'm happy dropping it in favor of the fences...
+On Wed, Mar 01, 2023 at 05:38:15PM -0800, Stephen Boyd wrote:
+> To fully exercise common clk framework code in KUnit we need to
+> associate 'struct device' pointers with 'struct device_node' pointers so
+> that things like clk_get() can parse DT nodes for 'clocks' and so that
+> clk providers can use DT to provide clks; the most common mode of
+> operation for clk providers.
 > 
-> Well because it is broken.
+> Adding support to KUnit so that it loads a DTB is fairly simple after
+> commit b31297f04e86 ("um: Add devicetree support"). We can simply pass a
+> pre-compiled deviectree blob (DTB) on the kunit.py commandline and UML
+> will load it. The problem is that tests won't know that the commandline
+> has been modified, nor that a DTB has been loaded. Take a different
+> approach so that tests can skip if a DTB hasn't been loaded.
 > 
-> When you move the check into the wait_event_interruptible condition then 
-> who is going to call wait_event_interruptible when the condition changes?
+> Reuse the Makefile logic from the OF unittests to build a DTB into the
+> kernel. This DTB will be for the mythical machine "linux,kunit", i.e.
+> the devicetree for the KUnit "board". In practice, it is a dtsi file
+> that will gather includes for kunit tests that rely in part on a
+> devicetree being loaded. The devicetree should only be loaded if
+> CONFIG_OF_KUNIT=y. Make that a choice config parallel to the existing
+> CONFIG_OF_UNITTEST so that only one devicetree can be loaded in the
+> system at a time. Similarly, the kernel commandline option to load a
+> DTB is ignored if CONFIG_OF_KUNIT is enabled so that only one DTB is
+> loaded at a time.
+> 
+> Add a simple unit test to confirm that the DTB loading worked. Future
+> tests will add to the kunit.dtsi file to include their specific test
+> nodes.
+> 
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> Cc: Johannes Berg <johannes@sipsolutions.net>
+> Cc: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
+>  arch/um/kernel/dtb.c            | 29 +++++++++++++++--
+>  drivers/of/Kconfig              | 26 ++++++++++++++++
+>  drivers/of/Makefile             |  1 +
+>  drivers/of/kunit/.kunitconfig   |  4 +++
+>  drivers/of/kunit/Makefile       |  4 +++
+>  drivers/of/kunit/kunit.dtsi     |  8 +++++
+>  drivers/of/kunit/kunit.dtso     |  4 +++
+>  drivers/of/kunit/uml_dtb_test.c | 55 +++++++++++++++++++++++++++++++++
+>  8 files changed, 128 insertions(+), 3 deletions(-)
+>  create mode 100644 drivers/of/kunit/.kunitconfig
+>  create mode 100644 drivers/of/kunit/Makefile
+>  create mode 100644 drivers/of/kunit/kunit.dtsi
+>  create mode 100644 drivers/of/kunit/kunit.dtso
+>  create mode 100644 drivers/of/kunit/uml_dtb_test.c
+> 
+> diff --git a/arch/um/kernel/dtb.c b/arch/um/kernel/dtb.c
+> index 484141b06938..ee63951b12df 100644
+> --- a/arch/um/kernel/dtb.c
+> +++ b/arch/um/kernel/dtb.c
+> @@ -15,9 +15,32 @@ void uml_dtb_init(void)
+>  	long long size;
+>  	void *area;
+>  
+> -	area = uml_load_file(dtb, &size);
+> -	if (!area)
+> -		return;
+> +	if (IS_ENABLED(CONFIG_OF_KUNIT)) {
+> +		/*
+> +		 * __dtbo_kunit_begin[] and __dtbo_kunit_end[] are magically
+> +		 * created by cmd_dt_S_dtbo in scripts/Makefile.lib from the
+> +		 * drivers/of/kunit/kunit.dtsi file.
+> +		 */
+> +		extern uint8_t __dtbo_kunit_begin[];
+> +		extern uint8_t __dtbo_kunit_end[];
+> +
+> +		size = __dtbo_kunit_end - __dtbo_kunit_begin;
+> +		if (!size) {
+> +			pr_warn("%s: kunit testcases is empty\n", __func__);
+> +			return;
+> +		}
+> +
+> +		/* creating copy */
+> +		area = memblock_alloc(size, 8);
+> +		if (!area)
+> +			return;
+> +
+> +		memcpy(area, __dtbo_kunit_begin, size);
+> +	} else {
+> +		area = uml_load_file(dtb, &size);
+> +		if (!area)
+> +			return;
+> +	}
+>  
+>  	if (!early_init_dt_scan(area)) {
+>  		pr_err("invalid DTB %s\n", dtb);
+> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+> index 80b5fd44ab1c..1f968b6a3dde 100644
+> --- a/drivers/of/Kconfig
+> +++ b/drivers/of/Kconfig
+> @@ -12,6 +12,20 @@ menuconfig OF
+>  
+>  if OF
+>  
+> +choice
 
-I think you mean wake_up_interruptible(). That would be
-drm_sched_job_done(), on the fence callback when a job completes, which
-as I keep saying is the same logic used for
-hw_rq_count/hw_submission_limit tracking.
+No. This needs to be reworked such that a kernel rebuild is not needed 
+to run different tests. I suspect that the overlay approach will do that 
+for you.
 
-Please think about it for a second, it's really not that complicated to
-see why it works:
+> +	prompt "Devicetree Runtime Tests"
+> +	default OF_UNITTEST
+> +
+> +config OF_KUNIT
+> +	bool "Devicetree KUnit support" if KUNIT
+> +	depends on UML
 
-- Driver pops off completed commands <-- can_run_job condition satisfied
-- Driver signals fence
- - drm_sched_job_done_cb()
-  - drm_sched_job_done()
-   - atomic_dec(&sched->hw_rq_count); <-- hw_submission_limit satisfied
-   - ...
-   - wake_up_interruptible(&sched->wake_up_worker);
-      ^- happens after both conditions are potentially satisfied
+This is not a great dependency either...
 
-It really is completely equivalent to just making the hw_rq_count logic
-customizable by the driver. The actual flow is the same. As long as the
-driver guarantees it satisfies the can_run_job() condition before
-signaling the completion fence that triggered that change, it works fine.
-
-> As I said this idea came up before and was rejected multiple times.
-
-Maybe it was a different idea, or maybe it was rejected for other
-reasons, or maybe it was wrongly rejected for being broken when it isn't ^^
-
-~~ Lina
+Rob
