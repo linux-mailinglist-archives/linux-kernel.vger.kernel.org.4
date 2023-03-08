@@ -2,137 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 188C56B0BC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1336B0BC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbjCHOrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
+        id S231422AbjCHOre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:47:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbjCHOrQ (ORCPT
+        with ESMTP id S231316AbjCHOq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:47:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EC32799E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:45:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678286695;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rh/7jxsAjlNSCe5Vflj31Md50O7qavIBLm45Q9D7gLI=;
-        b=fozG9ggy7GUTndY17m5SV3hZQKmuB5uBESM7oD1KTme8mdo7oVwzc9aYb/Tf85zn0txAqr
-        deqcVWLzCJCa55Orcti/fi8WMD/T2RNL9nq+ILBjGn8hTPuV5ngD6AsuickDD1omhK/iOQ
-        6wy9Lyi610kt2xLZlCy0qNJl169m85E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-618-fmhWAUmHM26YuoL8bJAz0A-1; Wed, 08 Mar 2023 09:44:51 -0500
-X-MC-Unique: fmhWAUmHM26YuoL8bJAz0A-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 8 Mar 2023 09:46:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD34E7D0B1;
+        Wed,  8 Mar 2023 06:45:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7909E8021B6;
-        Wed,  8 Mar 2023 14:44:50 +0000 (UTC)
-Received: from [10.22.33.96] (unknown [10.22.33.96])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 30DC4112132D;
-        Wed,  8 Mar 2023 14:44:50 +0000 (UTC)
-Message-ID: <377ee062-c899-b0c2-969e-268c8cfce87c@redhat.com>
-Date:   Wed, 8 Mar 2023 09:44:50 -0500
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58E76B81D07;
+        Wed,  8 Mar 2023 14:45:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C264C433EF;
+        Wed,  8 Mar 2023 14:45:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678286730;
+        bh=T9rmEZSCstrpxbVIO9IfutlDiKqctKr2IUk/L/EZRy8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A0TwCcjIHISY7YEHL1oBFUkmv9xxkJsBzo4sI2g4wSeD1Giu6wg4MT9fVl74LEeO1
+         uQ6AzS5S0cyhWkyA0PnqKi4EqU7tqDekPlpy8Sc6gJ9SZCfVe3dWu0GC1lb65WzZfg
+         jRxtfa+QXkGmJEGl7vasp9bJrkyESAprLPYpm680=
+Date:   Wed, 8 Mar 2023 15:45:27 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v16 05/13] tty, proc, kernfs, random: Use
+ direct_splice_read()
+Message-ID: <ZAifhy2knWeM2btd@kroah.com>
+References: <20230308143754.1976726-1-dhowells@redhat.com>
+ <20230308143754.1976726-6-dhowells@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: Unexpected EINVAL when enabling cpuset in subtree_control when
- io_uring threads are running
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>, Daniel Dao <dqminh@cloudflare.com>
-Cc:     io-uring@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        cgroups@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>
-References: <CA+wXwBQwgxB3_UphSny-yAP5b26meeOu1W4TwYVcD_+5gOhvPw@mail.gmail.com>
- <c069bcff-8229-4284-b973-e427ccf20b64@redhat.com>
- <074823f4-993c-8caf-bd93-70589c4aae42@kernel.dk>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <074823f4-993c-8caf-bd93-70589c4aae42@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308143754.1976726-6-dhowells@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 09:26, Jens Axboe wrote:
-> On 3/8/23 7:20?AM, Waiman Long wrote:
->> On 3/8/23 06:42, Daniel Dao wrote:
->>> Hi all,
->>>
->>> We encountered EINVAL when enabling cpuset in cgroupv2 when io_uring
->>> worker threads are running. Here are the steps to reproduce the failure
->>> on kernel 6.1.14:
->>>
->>> 1. Remove cpuset from subtree_control
->>>
->>>     > for d in $(find /sys/fs/cgroup/ -maxdepth 1 -type d); do echo
->>> '-cpuset' | sudo tee -a $d/cgroup.subtree_control; done
->>>     > cat /sys/fs/cgroup/cgroup.subtree_control
->>>     cpu io memory pids
->>>
->>> 2. Run any applications that utilize the uring worker thread pool. I used
->>>      https://github.com/cloudflare/cloudflare-blog/tree/master/2022-02-io_uring-worker-pool
->>>
->>>     > cargo run -- -a -w 2 -t 2
->>>
->>> 3. Enabling cpuset will return EINVAL
->>>
->>>     > echo '+cpuset' | sudo tee -a /sys/fs/cgroup/cgroup.subtree_control
->>>     +cpuset
->>>     tee: /sys/fs/cgroup/cgroup.subtree_control: Invalid argument
->>>
->>> We traced this down to task_can_attach that will return EINVAL when it
->>> encounters
->>> kthreads with PF_NO_SETAFFINITY, which io_uring worker threads have.
->>>
->>> This seems like an unexpected interaction when enabling cpuset for the subtrees
->>> that contain kthreads. We are currently considering a workaround to try to
->>> enable cpuset in root subtree_control before any io_uring applications
->>> can start,
->>> hence failure to enable cpuset is localized to only cgroup with
->>> io_uring kthreads.
->>> But this is cumbersome.
->>>
->>> Any suggestions would be very much appreciated.
->> Anytime you echo "+cpuset" to cgroup.subtree_control to enable cpuset,
->> the tasks within the child cgroups will do an implicit move from the
->> parent cpuset to the child cpusets. However, that move will fail if
->> any task has the PF_NO_SETAFFINITY flag set due to task_can_attach()
->> function which checks for this. One possible solution is for the
->> cpuset to ignore tasks with PF_NO_SETAFFINITY set for implicit move.
->> IOW, allowing the implicit move without touching it, but not explicit
->> one using cgroup.procs.
-> I was pondering this too as I was typing my reply, but at least for
-> io-wq, this report isn't the first to be puzzled or broken by the fact
-> that task threads might have PF_NO_SETAFFINITY set. So while it might be
-> worthwhile to for cpuset to ignore PF_NO_SETAFFINITY as a separate fix,
-> I think it's better to fix io-wq in general. Not sure we have other
-> cases where it's even possible to have PF_NO_SETAFFINITY set on
-> userspace threads?
+On Wed, Mar 08, 2023 at 02:37:46PM +0000, David Howells wrote:
+> Use direct_splice_read() for tty, procfs, kernfs and random files rather
+> than going through generic_file_splice_read() as they just copy the file
+> into the output buffer and don't splice pages.  This avoids the need for
+> them to have a ->read_folio() to satisfy filemap_splice_read().
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Christoph Hellwig <hch@lst.de>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: John Hubbard <jhubbard@nvidia.com>
+> cc: David Hildenbrand <david@redhat.com>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: Miklos Szeredi <miklos@szeredi.hu>
+> cc: Arnd Bergmann <arnd@arndb.de>
+> cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> cc: linux-block@vger.kernel.org
+> cc: linux-fsdevel@vger.kernel.org
+> cc: linux-mm@kvack.org
 
-Changing current cpuset behavior is an alternative solution. It is a 
-problem anytime a task (user or kthread) has PF_NO_SETAFFINITY set but 
-not in the root cgroup. Besides io_uring, I have no idea if there is 
-other use cases out there. It is just a change we may need to do in the 
-future if there are other similar cases. Since you are fixing it on the 
-io-wq side, it is not an urgent issue that needs to be addressed from 
-the cpuset side.
-
-Thanks,
-Longman
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
