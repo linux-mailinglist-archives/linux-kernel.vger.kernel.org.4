@@ -2,307 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F4E6AFC35
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43E86AFC39
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbjCHBWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 20:22:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
+        id S230004AbjCHBXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 20:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjCHBWG (ORCPT
+        with ESMTP id S229653AbjCHBXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 20:22:06 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8B3A838D;
-        Tue,  7 Mar 2023 17:22:04 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id o12so59745960edb.9;
-        Tue, 07 Mar 2023 17:22:04 -0800 (PST)
+        Tue, 7 Mar 2023 20:23:07 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D99C1F5E1;
+        Tue,  7 Mar 2023 17:23:05 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id g3so59918309eda.1;
+        Tue, 07 Mar 2023 17:23:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google; t=1678238523;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kgCshYxZS/Jm2b+NgeZjnnNv6WQ+2nHoInOLBGQV6es=;
-        b=EBSM/OKBjqJulrz6TQNgJmChnhPr0q4Ih/pJ8qfs1lFfhYhl7MmNufwH7KyopSrkiM
-         /hYj//hqzBibHr71DguP6GZ8jz9ZuzXSPyIw+7TDHNCcOZCg/SAEP3LQVmc4pMlZf+ra
-         OVoGWdaPjkoIpHiwMugodeNzumVR4mfmhZcQU=
+        d=gmail.com; s=20210112; t=1678238584;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KskDoY551EmOHdJiRobDKDE+GFk+1yzE3Gg+RoSEyLY=;
+        b=JkQ0bhqC4Am3GcwuI0OROo84uG8MtJapLie7+68UMHC5Os+sArhf+fMXrkFCEwU6ih
+         z3CNo5ZBcJnEAEyOG50vquTJXubVuAGEqRAiR31KBRlocW8rqfEsPA4BnETM4Yh7xcAm
+         YcKY/PFP7waSJx5BEx6c3DL89+jR12G/ty2oqNEFShnLxgaNCdxXu0tZH5LLqyra+MCT
+         HJwIeOkqve/OxsgaKJwKzTCSC9eb6CRCnxh4jAJ/6l9LNpdjbC+gwWf0sVXvg2pW9aUk
+         ozl55DldiDnJFtOtvrzhwLtnTEeybIg8Xv/RGwgIJyjv8wyNtfFqeb7kjyerqQ2I9QSO
+         lycA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678238523;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kgCshYxZS/Jm2b+NgeZjnnNv6WQ+2nHoInOLBGQV6es=;
-        b=e/w7tpj3+Wt4eFJql03kKOHg5VNAsspHzlG+TzS7HF0yVJws4qufxy1EVUPbSa5c3y
-         bvqVZ8jFQ1gyApVwAxfUvQZ+OcEq/ibbY3wgWGPqvvTybYj/MSn12Ocqi50+a10JfR9S
-         XAmWy0ZZJdlkR0M0RjSVrcKdTK36wC0Ajv3r1/aSuh3i2GJ4+U66Hqwk2UuE/8aj97c+
-         TgYaO6bRim8EY5VUy+7Q86qaqK5tOdgUMn+AMyqO16Woye8Ud9CxsCX6pKPsyYmQnJl5
-         gN46duaGT8tZV4eKzl1J4CuM34CPxOIo9NtYQQsHEYIk8idM9FlQdHcgykxdfII2aCCb
-         6Z+g==
-X-Gm-Message-State: AO0yUKXSDEaMtNed/fIKUakDRZcj8lMbmYOUTJUA9T56Kjnl6Dg5+2U7
-        W7inoxWzKh7nv6bEoY6jy+ALGgKRUztx4Yy9OI4=
-X-Google-Smtp-Source: AK7set88tsv/WvfOjstIfDoVJMzUSUbMMHZrM4x7KZhGl281R5lLlHUX/2cFaTNKcE7r7eZzaz9BIYn25v2RRmY+iGU=
-X-Received: by 2002:a17:906:a01a:b0:8f5:2e0e:6dc5 with SMTP id
- p26-20020a170906a01a00b008f52e0e6dc5mr8445498ejy.0.1678238522506; Tue, 07 Mar
- 2023 17:22:02 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678238584;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KskDoY551EmOHdJiRobDKDE+GFk+1yzE3Gg+RoSEyLY=;
+        b=XurVw3H66Gb/y6VXWowUv8/exrs/A9+c/hbmyGwBbO0KCAZkfPRg2HiC6IYERBAcAE
+         AV127IHMCPu5+jNH2LPdTvMBz6bKat3xaqZ6xaZ952eNu6bcyQNv1gACrcTQeX+vhtu9
+         HRlMD6Esjsb4Koxn/UbzVuTyQ6GA3iXHcMWX59IqNd0KEgvfx9arLi/XzwB3coO2LEsU
+         4WTGRTr2AK+2HNcLN6fttBMJO1xjJFDC8k/dZ1lbZNnq76umcr7xcYdJFGro1VKNGJMN
+         vPDUD9bOx/Jsl6PVhAxFo9xCqG37VEjJ7fxKerq7u2KuLiBzA87bCOiPIqSrEisXAGgB
+         iMRQ==
+X-Gm-Message-State: AO0yUKXzOpEEeKCzOmFhGeKfM7fWis0zOemY47PH89shuzzA92UE3anW
+        0PE1qomW9EP0KLXIKcGEVz74jgqKIDmMGxvPErY=
+X-Google-Smtp-Source: AK7set8UF2ElgsF28TDecwVtSd8IHMfsKKXYJQppk+w1+yzC8tJQLsFc92Ik1julFeaWkn6KOgvNREeU2jUpuJ0aQbY=
+X-Received: by 2002:a17:907:33c1:b0:8b0:fbd5:2145 with SMTP id
+ zk1-20020a17090733c100b008b0fbd52145mr8286182ejb.15.1678238583714; Tue, 07
+ Mar 2023 17:23:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20230215-immutable-chips-v2-0-d6b0e3f2d991@linaro.org> <20230215-immutable-chips-v2-3-d6b0e3f2d991@linaro.org>
-In-Reply-To: <20230215-immutable-chips-v2-3-d6b0e3f2d991@linaro.org>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 8 Mar 2023 01:21:50 +0000
-Message-ID: <CACPK8Xc7ekzM9oeR7+fYuK8RfZ4jA8gpH=nUJ-OTp0XZoKwzHQ@mail.gmail.com>
-Subject: Re: [PATCH v2 03/16] gpio: aspeed: Convert to immutable irq_chip
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Mun Yew Tham <mun.yew.tham@intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andrew Jeffery <andrew@aj.id.au>, Alban Bedel <albeu@free.fr>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Jay Fang <f.fangjian@huawei.com>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-omap@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>
+References: <20230228093206.821563-1-jolsa@kernel.org> <20230228093206.821563-6-jolsa@kernel.org>
+In-Reply-To: <20230228093206.821563-6-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 7 Mar 2023 17:22:51 -0800
+Message-ID: <CAEf4BzZsOvvPJRt69vj+YCAJ1DAXgLSD0E3rfoMOLo3c6mSKiQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 bpf-next 5/9] selftests/bpf: Add read_buildid function
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>, bpf@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Namhyung Kim <namhyung@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED,URIBL_CSS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Mar 2023 at 13:04, Linus Walleij <linus.walleij@linaro.org> wrote:
+On Tue, Feb 28, 2023 at 1:33=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> Convert the driver to immutable irq-chip with a bit of
-> intuition.
+> Adding read_build_id function that parses out build id from
+> specified binary.
 >
-> Cc: Marc Zyngier <maz@kernel.org>
-> Tested-by: Joel Stanley <joel@jms.id.au>
-> Acked-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> It will replace extract_build_id and also be used in following
+> changes.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > ---
->  drivers/gpio/gpio-aspeed.c | 44 ++++++++++++++++++++++++++++++++++++++------
->  1 file changed, 38 insertions(+), 6 deletions(-)
+>  tools/testing/selftests/bpf/trace_helpers.c | 98 +++++++++++++++++++++
+>  tools/testing/selftests/bpf/trace_helpers.h |  5 ++
+>  2 files changed, 103 insertions(+)
 >
-> diff --git a/drivers/gpio/gpio-aspeed.c b/drivers/gpio/gpio-aspeed.c
-> index a94da80d3a95..9c4852de2733 100644
-> --- a/drivers/gpio/gpio-aspeed.c
-> +++ b/drivers/gpio/gpio-aspeed.c
-> @@ -15,6 +15,7 @@
->  #include <linux/module.h>
->  #include <linux/pinctrl/consumer.h>
->  #include <linux/platform_device.h>
-> +#include <linux/seq_file.h>
->  #include <linux/spinlock.h>
->  #include <linux/string.h>
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/=
+selftests/bpf/trace_helpers.c
+> index 09a16a77bae4..c10e16626cd3 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.c
+> +++ b/tools/testing/selftests/bpf/trace_helpers.c
+> @@ -11,6 +11,9 @@
+>  #include <linux/perf_event.h>
+>  #include <sys/mman.h>
+>  #include "trace_helpers.h"
+> +#include <linux/limits.h>
+> +#include <libelf.h>
+> +#include <gelf.h>
 >
-> @@ -53,7 +54,7 @@ struct aspeed_gpio_config {
->   */
->  struct aspeed_gpio {
->         struct gpio_chip chip;
-> -       struct irq_chip irqc;
-> +       struct device *dev;
->         raw_spinlock_t lock;
->         void __iomem *base;
->         int irq;
-> @@ -566,6 +567,10 @@ static void aspeed_gpio_irq_set_mask(struct irq_data *d, bool set)
+>  #define DEBUGFS "/sys/kernel/debug/tracing/"
 >
->         addr = bank_reg(gpio, bank, reg_irq_enable);
->
-> +       /* Unmasking the IRQ */
-> +       if (set)
-> +               gpiochip_enable_irq(&gpio->chip, irqd_to_hwirq(d));
-> +
->         raw_spin_lock_irqsave(&gpio->lock, flags);
->         copro = aspeed_gpio_copro_request(gpio, offset);
->
-> @@ -579,6 +584,10 @@ static void aspeed_gpio_irq_set_mask(struct irq_data *d, bool set)
->         if (copro)
->                 aspeed_gpio_copro_release(gpio, offset);
->         raw_spin_unlock_irqrestore(&gpio->lock, flags);
-> +
-> +       /* Masking the IRQ */
-> +       if (!set)
-> +               gpiochip_disable_irq(&gpio->chip, irqd_to_hwirq(d));
+> @@ -230,3 +233,98 @@ ssize_t get_rel_offset(uintptr_t addr)
+>         fclose(f);
+>         return -EINVAL;
 >  }
->
->  static void aspeed_gpio_irq_mask(struct irq_data *d)
-> @@ -1080,6 +1089,30 @@ int aspeed_gpio_copro_release_gpio(struct gpio_desc *desc)
->  }
->  EXPORT_SYMBOL_GPL(aspeed_gpio_copro_release_gpio);
->
-> +static void aspeed_gpio_irq_print_chip(struct irq_data *d, struct seq_file *p)
+> +
+> +static int
+> +parse_build_id_buf(const void *note_start, Elf32_Word note_size,
+> +                  char *build_id)
 > +{
-> +       const struct aspeed_gpio_bank *bank;
-> +       struct aspeed_gpio *gpio;
-> +       u32 bit;
-> +       int rc, offset;
+> +       Elf32_Word note_offs =3D 0, new_offs;
 > +
-> +       rc = irqd_to_aspeed_gpio_data(d, &gpio, &bank, &bit, &offset);
-
-Why do we call this instead of using irq_data_get_irq_chip_data?
-
-Actually, the callback appears to do the same as the default
-implementation, so we could just drop it?
-
-from kernel/irq/proc.c:
-
-        if (desc->irq_data.chip) {
-                if (desc->irq_data.chip->irq_print_chip)
-                        desc->irq_data.chip->irq_print_chip(&desc->irq_data, p);
-                else if (desc->irq_data.chip->name)
-                        seq_printf(p, " %8s", desc->irq_data.chip->name);
-
-A test on the rainier ast2600 bmc machine:
-
-# gpio-event-mon -n gpiochip0 -o 123 -r -f &
-# cat /proc/interrupts  |grep gpio-event-mon
- 60:          0          0  1e780800.gpio 123 Edge      gpio-event-mon
-
-
-
-
-> +       if (rc)
-> +               return;
+> +       while (note_offs + sizeof(Elf32_Nhdr) < note_size) {
+> +               Elf32_Nhdr *nhdr =3D (Elf32_Nhdr *)(note_start + note_off=
+s);
 > +
-> +       seq_printf(p, dev_name(gpio->dev));
+> +               if (nhdr->n_type =3D=3D 3 &&
+> +                   nhdr->n_namesz =3D=3D sizeof("GNU") &&
+> +                   !strcmp((char *)(nhdr + 1), "GNU") &&
+> +                   nhdr->n_descsz > 0 &&
+> +                   nhdr->n_descsz <=3D BPF_BUILD_ID_SIZE) {
+> +                       memcpy(build_id, note_start + note_offs +
+> +                              ALIGN(sizeof("GNU"), 4) + sizeof(Elf32_Nhd=
+r),
+> +                              nhdr->n_descsz);
+> +                       memset(build_id + nhdr->n_descsz, 0,
+> +                              BPF_BUILD_ID_SIZE - nhdr->n_descsz);
+
+I won't count :) but if something fits within 100 characters, please
+keep it on single line
+
+> +                       return (int) nhdr->n_descsz;
+> +               }
+> +
+> +               new_offs =3D note_offs + sizeof(Elf32_Nhdr) +
+> +                          ALIGN(nhdr->n_namesz, 4) + ALIGN(nhdr->n_descs=
+z, 4);
+> +
+> +               if (new_offs >=3D note_size)
+> +                       break;
+> +               note_offs =3D new_offs;
+> +       }
+> +
+> +       return -EINVAL;
 > +}
 > +
-> +static const struct irq_chip aspeed_gpio_irq_chip = {
-> +       .irq_ack = aspeed_gpio_irq_ack,
-> +       .irq_mask = aspeed_gpio_irq_mask,
-> +       .irq_unmask = aspeed_gpio_irq_unmask,
-> +       .irq_set_type = aspeed_gpio_set_type,
-> +       .irq_print_chip = aspeed_gpio_irq_print_chip,
-> +       .flags = IRQCHIP_IMMUTABLE,
-> +       GPIOCHIP_IRQ_RESOURCE_HELPERS,
-> +};
+> +/* Reads binary from *path* file and returns it in the *build_id*
+> + * which is expected to be at least BPF_BUILD_ID_SIZE bytes.
+> + * Returns size of build id on success. On error the error value
+> + * is returned.
+> + */
+> +int read_build_id(const char *path, char *build_id)
+> +{
+> +       int fd, err =3D -EINVAL;
+> +       Elf *elf =3D NULL;
+> +       GElf_Ehdr ehdr;
+> +       size_t max, i;
 > +
->  /*
->   * Any banks not specified in a struct aspeed_bank_props array are assumed to
->   * have the properties:
-> @@ -1149,6 +1182,8 @@ static int __init aspeed_gpio_probe(struct platform_device *pdev)
->         if (IS_ERR(gpio->base))
->                 return PTR_ERR(gpio->base);
->
-> +       gpio->dev = &pdev->dev;
+> +       fd =3D open(path, O_RDONLY | O_CLOEXEC);
+> +       if (fd < 0)
+> +               return -errno;
 > +
->         raw_spin_lock_init(&gpio->lock);
->
->         gpio_id = of_match_node(aspeed_gpio_of_table, pdev->dev.of_node);
-> @@ -1208,12 +1243,9 @@ static int __init aspeed_gpio_probe(struct platform_device *pdev)
->
->                 gpio->irq = rc;
->                 girq = &gpio->chip.irq;
-> -               girq->chip = &gpio->irqc;
-> +               gpio_irq_chip_set_chip(girq, &aspeed_gpio_irq_chip);
->                 girq->chip->name = dev_name(&pdev->dev);
-> -               girq->chip->irq_ack = aspeed_gpio_irq_ack;
-> -               girq->chip->irq_mask = aspeed_gpio_irq_mask;
-> -               girq->chip->irq_unmask = aspeed_gpio_irq_unmask;
-> -               girq->chip->irq_set_type = aspeed_gpio_set_type;
+> +       (void)elf_version(EV_CURRENT);
 > +
-
-I was thinking we could make the interrupt registration unconditional,
-as there's always an irq in the device tree. Happy to send a follow
-up, or for you to fold in a change along the lines of this:
-
---- a/drivers/gpio/gpio-aspeed.c
-+++ b/drivers/gpio/gpio-aspeed.c
-@@ -1091,14 +1091,7 @@ EXPORT_SYMBOL_GPL(aspeed_gpio_copro_release_gpio);
-
- static void aspeed_gpio_irq_print_chip(struct irq_data *d, struct seq_file *p)
- {
--       const struct aspeed_gpio_bank *bank;
--       struct aspeed_gpio *gpio;
--       u32 bit;
--       int rc, offset;
--
--       rc = irqd_to_aspeed_gpio_data(d, &gpio, &bank, &bit, &offset);
--       if (rc)
--               return;
-+       struct aspeed_gpio *gpio = irq_data_get_irq_chip_data(d);
-
-        seq_printf(p, dev_name(gpio->dev));
- }
-@@ -1108,7 +1101,7 @@ static const struct irq_chip aspeed_gpio_irq_chip = {
-        .irq_mask = aspeed_gpio_irq_mask,
-        .irq_unmask = aspeed_gpio_irq_unmask,
-        .irq_set_type = aspeed_gpio_set_type,
--       .irq_print_chip = aspeed_gpio_irq_print_chip,
-+//     .irq_print_chip = aspeed_gpio_irq_print_chip,
-        .flags = IRQCHIP_IMMUTABLE,
-        GPIOCHIP_IRQ_RESOURCE_HELPERS,
- };
-@@ -1170,6 +1163,7 @@ MODULE_DEVICE_TABLE(of, aspeed_gpio_of_table);
- static int __init aspeed_gpio_probe(struct platform_device *pdev)
- {
-        const struct of_device_id *gpio_id;
-+       struct gpio_irq_chip *girq;
-        struct aspeed_gpio *gpio;
-        int rc, i, banks, err;
-        u32 ngpio;
-@@ -1238,27 +1232,25 @@ static int __init aspeed_gpio_probe(struct
-platform_device *pdev)
-
-        /* Optionally set up an irqchip if there is an IRQ */
-        rc = platform_get_irq(pdev, 0);
--       if (rc > 0) {
--               struct gpio_irq_chip *girq;
--
--               gpio->irq = rc;
--               girq = &gpio->chip.irq;
--               gpio_irq_chip_set_chip(girq, &aspeed_gpio_irq_chip);
--               girq->chip->name = dev_name(&pdev->dev);
--
--               girq->parent_handler = aspeed_gpio_irq_handler;
--               girq->num_parents = 1;
--               girq->parents = devm_kcalloc(&pdev->dev, 1,
--                                            sizeof(*girq->parents),
--                                            GFP_KERNEL);
--               if (!girq->parents)
--                       return -ENOMEM;
--               girq->parents[0] = gpio->irq;
--               girq->default_type = IRQ_TYPE_NONE;
--               girq->handler = handle_bad_irq;
--               girq->init_valid_mask = aspeed_init_irq_valid_mask;
-+       if (rc < 0) {
-+               return rc;
-        }
-
-+       gpio->irq = rc;
-+       girq = &gpio->chip.irq;
-+       gpio_irq_chip_set_chip(girq, &aspeed_gpio_irq_chip);
-+       girq->chip->name = dev_name(&pdev->dev);
-+
-+       girq->parent_handler = aspeed_gpio_irq_handler;
-+       girq->num_parents = 1;
-+       girq->parents = devm_kcalloc(&pdev->dev, 1,
-sizeof(*girq->parents), GFP_KERNEL);
-+       if (!girq->parents)
-+               return -ENOMEM;
-+       girq->parents[0] = gpio->irq;
-+       girq->default_type = IRQ_TYPE_NONE;
-+       girq->handler = handle_bad_irq;
-+       girq->init_valid_mask = aspeed_init_irq_valid_mask;
-+
-        gpio->offset_timer =
-                devm_kzalloc(&pdev->dev, gpio->chip.ngpio, GFP_KERNEL);
-        if (!gpio->offset_timer)
-
-
->                 girq->parent_handler = aspeed_gpio_irq_handler;
->                 girq->num_parents = 1;
->                 girq->parents = devm_kcalloc(&pdev->dev, 1,
+> +       elf =3D elf_begin(fd, ELF_C_READ, NULL);
+> +       if (!elf)
+> +               goto out;
+> +
+> +       if (elf_kind(elf) !=3D ELF_K_ELF)
+> +               goto out;
+> +
+> +       if (gelf_getehdr(elf, &ehdr) =3D=3D NULL)
+> +               goto out;
+> +
+> +       if (ehdr.e_ident[EI_CLASS] !=3D ELFCLASS64)
+> +               goto out;
+> +
+> +       for (i =3D 0; i < ehdr.e_phnum; i++) {
+> +               GElf_Phdr mem, *phdr;
+> +               char *data;
+> +
+> +               phdr =3D gelf_getphdr(elf, i, &mem);
+> +               if (!phdr)
+> +                       goto out;
+> +
+> +               if (phdr->p_type !=3D PT_NOTE)
+> +                       continue;
+> +
+> +               data =3D elf_rawfile(elf, &max);
+> +               if (!data)
+> +                       goto out;
+> +
+> +               if (phdr->p_offset >=3D max ||
+> +                  (phdr->p_offset + phdr->p_memsz >=3D max))
+> +                       goto out;
+> +
+> +               err =3D parse_build_id_buf(data + phdr->p_offset, phdr->p=
+_memsz, build_id);
+> +               if (err > 0)
+> +                       goto out;
+> +       }
+> +
+> +out:
+> +       if (elf)
+> +               elf_end(elf);
+> +       close(fd);
+> +       return err;
+> +}
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/=
+selftests/bpf/trace_helpers.h
+> index 53efde0e2998..50b2cc498ba7 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.h
+> +++ b/tools/testing/selftests/bpf/trace_helpers.h
+> @@ -4,6 +4,9 @@
 >
+>  #include <bpf/libbpf.h>
+>
+> +#define ALIGN(x, a)            __ALIGN_MASK(x, (typeof(x))(a)-1)
+> +#define __ALIGN_MASK(x, mask)  (((x)+(mask))&~(mask))
+
+nit: I know these are macros, but why would you first use __ALIGN_MASK
+and then #define it? swap them?
+
+
+> +
+>  struct ksym {
+>         long addr;
+>         char *name;
+> @@ -23,4 +26,6 @@ void read_trace_pipe(void);
+>  ssize_t get_uprobe_offset(const void *addr);
+>  ssize_t get_rel_offset(uintptr_t addr);
+>
+> +int read_build_id(const char *path, char *build_id);
+> +
+>  #endif
 > --
-> 2.34.1
+> 2.39.2
 >
