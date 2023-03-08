@@ -2,220 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2133A6B0E34
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4E86B0E3A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232254AbjCHQJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:09:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S232470AbjCHQK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbjCHQIt (ORCPT
+        with ESMTP id S232628AbjCHQKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:08:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A8038EA6
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:08:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 8 Mar 2023 11:10:04 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB785D45B
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:09:29 -0800 (PST)
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72DA261467
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 16:08:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9EE6C433D2;
-        Wed,  8 Mar 2023 16:08:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678291691;
-        bh=e4NbZWKO/V45NaOYQf+6f1MNBCr8ETT1f5nT2bzQUUY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cslh1bZC3DrYN3zxF41wTCqITPLFLnWK+SCXXr3ggkRoHYw9FBMfvJVX7ctCPwc8H
-         qYBVOqJz8aBjk8s5twOOmKDxl7W6oGwLeE2p++E7arFd2GFr+ZfNX2oJMkEzLiUvXh
-         1HHTPdT90mfqhbUOsCdM+N8C1BVJlr6hCiRIzdCID0ZPZ0bw6DOTGW0TFlrZaBDcEm
-         /2rFok3ltl6u3xY8ZwNnh9gXUVIMfGcow7wgvT1FSPdwig5eYqTT0TVMux3hE+mpaL
-         CIWjALqfTTZ6nL+tILWZ7xQRWGyeuIQOrvCQC1m4rz7DU71Nn4jRjzkblrnUAS1CBN
-         ScDULCAMLCRaw==
-Date:   Wed, 8 Mar 2023 16:08:07 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>
-Subject: Re: kismet: WARNING: unmet direct dependencies detected for
- IOMMU_IO_PGTABLE_LPAE when selected by IPMMU_VMSA
-Message-ID: <9d44f863-8644-459a-9fd7-918f742d437e@spud>
-References: <202212221206.Lt61kYrt-lkp@intel.com>
- <e1680223-2819-172e-20ea-daea3282e9eb@infradead.org>
- <Y6tAgP7UoP3aYBjq@spud>
- <d5bd9e86-473e-7577-4472-33eb2acbe8fa@infradead.org>
- <Y/lUvq3TSXL6tJOk@spud>
- <ae2452d4-52cf-4e11-8248-05fb7be77dc8@infradead.org>
- <4F5BE5CB-1AB5-4725-860A-1231A72FCE1D@kernel.org>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3E8D43F828
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 16:09:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678291766;
+        bh=jxEkW8OFX3baFTB/CKLudkQuvhDNrRf95y5rQkRLsGE=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=eyW/8nofgUFcTirYPvjZNN5tzG13OiiHcNT/UjW3PibbRfEvyY0MQZpTKJBByca4C
+         7p6XHBEkoElNIrx+I1nh3Cno3KMWj9CQZ6H2BECi9cFb8H76avmUjRwfhhcVNYb4ri
+         J2TU0198xJsSzandzB0CsmzRmZCEXfkx7yT3s6b1+al61mE8gHYwamff2YAnJI/h0r
+         OOpDfcawt6xSstGWc2vYYEzxsbX55ES7FDcppikHnW/70RdiscCNPcRiH+KP6Rthd+
+         00sOGBWhyHcJjb1Bh9UFpzoPMVPxZ2AfnUYi8VVJ3UfiHrsJTcd23x8Lp+iPLrVdg8
+         1bXaphw6d8vJQ==
+Received: by mail-qv1-f71.google.com with SMTP id u18-20020a0cec92000000b0056ea549d728so9527990qvo.10
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 08:09:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678291765;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jxEkW8OFX3baFTB/CKLudkQuvhDNrRf95y5rQkRLsGE=;
+        b=llTdO+n9JMv9NQEXlYIyJ+MvcXaIaCeIJ9bwk/lZxdCJ9O9f6hje05ybqD4iaSpkM9
+         YYzIEpuPjETZ0TU7sZZLM2ipmretw7Jav5Tyh9GxJQKKqovLPBJWpWSHNaxKkkbP+YGY
+         P/cGQW9djFXfeWnr2hYV+YdyL9JLDrkaUlx5GXSxLUk0coV0exVCwk6uI/fWMKcuh+Xi
+         kxQ9MqJWD54bkS0iwuJe3lVV7iv+w55kIqKNib5xFkDKQqRFwxUOWqIZjZHcZP5NNMnb
+         XQiuk5MjdfSM8R49ycu7asqciGilzRG3+JGJ2aOaXiR0QJID66i1QyPUM1Y3798+yGpf
+         CS+Q==
+X-Gm-Message-State: AO0yUKWDjZQ9Tw7CM25BwMCNLWo4TKv7/yXd+YU2W4qtFKR8UQ/YnbFS
+        NPgiPccIZS7XpwLj03bXPeyxD3uFJC7w1a3DfEO7k60LvuP4uAZTmOjo6M0gV7QcQmFuQjDjj40
+        po1Yc0cIkvNeHmrpTAIgC1ln2PO+Y+ETRKKvgUk1BApn8cR8m6gv1xJrsQw==
+X-Received: by 2002:a05:620a:8416:b0:742:9899:98fb with SMTP id pc22-20020a05620a841600b00742989998fbmr4036591qkn.7.1678291765343;
+        Wed, 08 Mar 2023 08:09:25 -0800 (PST)
+X-Google-Smtp-Source: AK7set9rDdUme+19ci4Y+eeQIQ1S8Pps6PmhEkfVr/t2a1f+TOq5hvLfQHCft/Xi0WgN485LzYzwIKfwYQUqflfbMR8=
+X-Received: by 2002:a05:620a:8416:b0:742:9899:98fb with SMTP id
+ pc22-20020a05620a841600b00742989998fbmr4036581qkn.7.1678291765113; Wed, 08
+ Mar 2023 08:09:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="L8FKWPrPzRFHqD5a"
-Content-Disposition: inline
-In-Reply-To: <4F5BE5CB-1AB5-4725-860A-1231A72FCE1D@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230308034036.99213-1-xingyu.wu@starfivetech.com> <20230308034036.99213-4-xingyu.wu@starfivetech.com>
+In-Reply-To: <20230308034036.99213-4-xingyu.wu@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Wed, 8 Mar 2023 17:09:09 +0100
+Message-ID: <CAJM55Z9-BK1zPop_C9JX8qGLpzGXPzizUSyEtaevwbQ4NT2xaQ@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] riscv: dts: starfive: jh7100: Add watchdog node
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 8 Mar 2023 at 04:42, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
+>
+> Add watchdog node for the StarFive JH7100 RISC-V SoC.
+>
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> ---
+>  arch/riscv/boot/dts/starfive/jh7100.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/arch/riscv/boot/dts/starfive/jh7100.dtsi b/arch/riscv/boot/dts/starfive/jh7100.dtsi
+> index 000447482aca..1eb7c21a94fd 100644
+> --- a/arch/riscv/boot/dts/starfive/jh7100.dtsi
+> +++ b/arch/riscv/boot/dts/starfive/jh7100.dtsi
+> @@ -238,5 +238,15 @@ i2c3: i2c@12460000 {
+>                         #size-cells = <0>;
+>                         status = "disabled";
+>                 };
+> +
+> +               wdog: watchdog@12480000 {
 
---L8FKWPrPzRFHqD5a
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I don't see anything referencing this node, so the label can be dropped.
+With that fixed:
+Reviewed-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
 
-On Sat, Feb 25, 2023 at 01:43:44PM +0000, Conor Dooley wrote:
->=20
->=20
-> On 25 February 2023 00:28:36 GMT, Randy Dunlap <rdunlap@infradead.org> wr=
-ote:
-> >
-> >
-> >On 2/24/23 16:22, Conor Dooley wrote:
-> >> On Fri, Feb 24, 2023 at 04:12:49PM -0800, Randy Dunlap wrote:
-> >>> Hi Conor, Palmer,
-> >>>
-> >>> On 12/27/22 10:59, Conor Dooley wrote:
-> >>>> Hey Randy,
-> >>>>
-> >>>> On Thu, Dec 22, 2022 at 05:00:06PM -0800, Randy Dunlap wrote:
-> >>>>> On 12/21/22 20:49, kernel test robot wrote:
-> >>>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/l=
-inux.git master
-> >>>>>> head:   9d2f6060fe4c3b49d0cdc1dce1c99296f33379c8
-> >>>>>> commit: 8292493c22c8e28b6e67a01e0f5c6db1cf231eb1 riscv: Kconfig.so=
-cs: Add ARCH_RENESAS kconfig option
-> >>>>>> date:   6 weeks ago
-> >>>>>> config: riscv-kismet-CONFIG_IOMMU_IO_PGTABLE_LPAE-CONFIG_IPMMU_VMS=
-A-0-0
-> >>>>>> reproduce:
-> >>>>>>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds=
-/linux.git/commit/?id=3D8292493c22c8e28b6e67a01e0f5c6db1cf231eb1
-> >>>>>>         git remote add linus https://git.kernel.org/pub/scm/linux/=
-kernel/git/torvalds/linux.git
-> >>>>>>         git fetch --no-tags linus master
-> >>>>>>         git checkout 8292493c22c8e28b6e67a01e0f5c6db1cf231eb1
-> >>>>>>         # 1. reproduce by kismet
-> >>>>>>            # install kmax per https://github.com/paulgazz/kmax/blo=
-b/master/README.md
-> >>>>>>            kismet --linux-ksrc=3Dlinux --selectees CONFIG_IOMMU_IO=
-_PGTABLE_LPAE --selectors CONFIG_IPMMU_VMSA -a=3Driscv
-> >>>>>>         # 2. reproduce by make
-> >>>>>>            # save the config file to linux source tree
-> >>>>>>            cd linux
-> >>>>>>            make ARCH=3Driscv olddefconfig
-> >>>>>>
-> >>>>>> If you fix the issue, kindly add following tag where applicable
-> >>>>>> | Reported-by: kernel test robot <lkp@intel.com>
-> >>>>>>
-> >>>>>> kismet warnings: (new ones prefixed by >>)
-> >>>>>>>> kismet: WARNING: unmet direct dependencies detected for IOMMU_IO=
-_PGTABLE_LPAE when selected by IPMMU_VMSA
-> >>>>>>    .config:4814:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI=
-' invalid for ARCH_MMAP_RND_BITS
-> >>>>>>   =20
-> >>>>>>    WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABL=
-E_LPAE
-> >>>>>>      Depends on [n]: IOMMU_SUPPORT [=3Dy] && (ARM || ARM64 || COMP=
-ILE_TEST [=3Dy] && !GENERIC_ATOMIC64 [=3Dy])
-> >>>>>>      Selected by [y]:
-> >>>>>>      - IPMMU_VMSA [=3Dy] && IOMMU_SUPPORT [=3Dy] && (ARCH_RENESAS =
-[=3Dy] || COMPILE_TEST [=3Dy] && !GENERIC_ATOMIC64 [=3Dy])
-> >>>>>>
-> >>>>>
-> >>>>> Maybe this:
-> >>>>>
-> >>>>> ---
-> >>>>>  drivers/iommu/Kconfig |    3 ++-
-> >>>>>  1 file changed, 2 insertions(+), 1 deletion(-)
-> >>>>>
-> >>>>> diff -- a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-> >>>>> --- a/drivers/iommu/Kconfig
-> >>>>> +++ b/drivers/iommu/Kconfig
-> >>>>> @@ -32,7 +32,8 @@ config IOMMU_IO_PGTABLE
-> >>>>>  config IOMMU_IO_PGTABLE_LPAE
-> >>>>>  	bool "ARMv7/v8 Long Descriptor Format"
-> >>>>>  	select IOMMU_IO_PGTABLE
-> >>>>> -	depends on ARM || ARM64 || (COMPILE_TEST && !GENERIC_ATOMIC64)
-> >>>>> +	depends on ARM || ARM64 || ARCH_RENESAS || \
-> >>>>> +		(COMPILE_TEST && !GENERIC_ATOMIC64)
-> >>>>>  	help
-> >>>>>  	  Enable support for the ARM long descriptor pagetable format.
-> >>>>>  	  This allocator supports 4K/2M/1G, 16K/32M and 64K/512M page
-> >>>>>
-> >>>>>
-> >>>>> or is way off?
-> >>>>
-> >>>> Apologies for the radio silence here..
-> >>>>
-> >>>> Palmer initially sent a workaround and there was some discussion the=
-re:
-> >>>> https://lore.kernel.org/all/20221214180409.7354-1-palmer@rivosinc.co=
-m/
-> >>>> Guo sent a patch too:
-> >>>> https://lore.kernel.org/linux-riscv/20221215073212.1966823-1-guoren@=
-kernel.org/
-> >>>>
-> >>>> I suppose Christmas is doing Christmas things :)
-> >>>
-> >>> Has this been solved (merged) yet?
-> >>> I'm still seeing a warning on linux-next-20230224.
-> >>=20
-> >> I thought it was fixed in the iommu tree with this series:
-> >> https://lore.kernel.org/all/7a53ac6f-640b-436d-9bfa-3e49066b2460@arm.c=
-om/
-> >>=20
-> >> If it is not, I'll take a look tomorrow...
-> >
-> >I see this warning on today's linux-next-20230224:
-> >
-> >WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
-> >  Depends on [n]: IOMMU_SUPPORT [=3Dy] && (ARM || ARM64 || COMPILE_TEST =
-[=3Dn]) && !GENERIC_ATOMIC64 [=3Dn]
-> >  Selected by [y]:
-> >  - IPMMU_VMSA [=3Dy] && IOMMU_SUPPORT [=3Dy] && (ARCH_RENESAS [=3Dy] ||=
- COMPILE_TEST [=3Dn]) && !GENERIC_ATOMIC64 [=3Dn]
-> >
-> >with the attached config file. Please have a look.
->=20
-> My main hard drive in my dev machine died overnight, so I'll have to rena=
-ge on my tomorrow promise above.
-
-I finally got around to looking at this today. I tried Palmer's original
-reproducer (riscv32 allmodconfig) on top of v6.3-rc1 & this randconfig +
-olddefconfig on it, and couldn't get the selection to trigger.
-Maybe I misunderstand the randconfig process, but I had thought that
-olddefconfig was supposed to be (the equivalent of) idempotent for
-randconfigs.
-
-Robin did make some changes to the IOMMU Kconfig stuff that landed in
-v6.3, so perhaps that's what has eventually sorted this out.
-
-Please LMK if I've misunderstood & ruined the randconfig w/
-olddefconfig!
-
-Cheers,
-Conor.
-
-
---L8FKWPrPzRFHqD5a
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAiy5wAKCRB4tDGHoIJi
-0ntcAQCLjikAV45Qq4/uG+EzSVedxdIDV3svsRLUtvmkOy8QSgEA6L7W3j3Sx0U8
-RiTAkJnJ1t+OsTI4wzdUYH7o3h7xMwk=
-=i5s6
------END PGP SIGNATURE-----
-
---L8FKWPrPzRFHqD5a--
+> +                       compatible = "starfive,jh7100-wdt";
+> +                       reg = <0x0 0x12480000 0x0 0x10000>;
+> +                       clocks = <&clkgen JH7100_CLK_WDTIMER_APB>,
+> +                                <&clkgen JH7100_CLK_WDT_CORE>;
+> +                       clock-names = "apb", "core";
+> +                       resets = <&rstgen JH7100_RSTN_WDTIMER_APB>,
+> +                                <&rstgen JH7100_RSTN_WDT>;
+> +               };
+>         };
+>  };
+> --
+> 2.25.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
