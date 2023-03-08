@@ -2,237 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0E46B1351
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5477A6B1340
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:41:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbjCHUnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 15:43:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44732 "EHLO
+        id S230333AbjCHUlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 15:41:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjCHUnd (ORCPT
+        with ESMTP id S230296AbjCHUk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:43:33 -0500
-X-Greylist: delayed 154 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Mar 2023 12:43:31 PST
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813FC61A91;
-        Wed,  8 Mar 2023 12:43:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1678308027; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=YgowSXrom5WwV7B45gWdMJRXFWlYKNpYf+Hy/KzgLFIN83eVySlMI1WMzD0zQGu2XS
-    +1o/oNejqlsU1JD1zEkCJs0ht6YvADqTJCkHXoLGyoZbECxaMkM+kY4gsic4GKFycuKM
-    aBktSirMTrQVPDqS/Xkat5IuzLdWCnLyGkD6LPNcX6oymDDcGcwePbdF0GJEGAAkt8YJ
-    4gDRMANCqdOgRWIonR8ZCR2e4T4ZUZ7hDTaFw9pOfAhtNBhqo71ozpsq8n8VWselQdbI
-    zpA3wpGiQRxiid1zV7TvqENswUJMyubTtOzVenf/oALNEVVKoAj8jei9SLbv6kPZGLlF
-    8YxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1678308027;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=kjAQuB16QsfMqN5tZgipL/ufr1uTGkxUDACx/ckEBHU=;
-    b=drSlIX9q6GXTEvegqdo4cu9SpYrD8ijArRv5d4tvZpt7PrvRoLXUOQS/EURRqHHOKA
-    Zg2vuldP6D3ZL7TGZiw/4LYV+Yeyhz+H9n36GurZTAoje46chC62olz+/iMMkTOz82EN
-    F6zo+100cS+FitSOhC0S5Tl0/r7GJj/1llUI+EczTHJK3bj+zB5M4cw0Kh64/fpLoZN5
-    gZelke8H/9a2V3r/hxz+jdcSiB06zEVSumcgOMsYn9hVfOg+nxwNDZ7Mk1yvXwb1LS9I
-    yj3YMYyRv4dqgb35SbrHbD71ZmQyTKBLFVGcB9AVd88TCeG14r+PBEJf5jyft204eMDb
-    5nkw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1678308027;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=kjAQuB16QsfMqN5tZgipL/ufr1uTGkxUDACx/ckEBHU=;
-    b=RNTDsmVOQXAgSvAhPChT7lUFOnt6QtBgu3hVN2POlkpmzKYBpcNwBKU3CJrbFrBzeW
-    P8l5vhFUPoJPL4MXc17+w2iA1OAXNEJNRYsEzp3LZli1BIPDe0tITEt69nY2GVLsc2nh
-    2/J88R9P0JR21pkpn3ePkyy1c7iLxVy6fooxrRwM+1eZmNuEAhul9cvRfmHS40zeXDBs
-    4KIMr3XksobJsayxkhGZ9ue3MxLLcx5rxgJeNiY0sPRqwfbeRI6zN0OYsZbREjYkWQf1
-    ce7KIFhIXWRHm/ZhjvyhsBU1S4dAMvjrxoUYWaldW1CIDQh28mT7LQK4nSVeSp94Vxq6
-    /M0g==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBp5hRw/qviAxtjc3ymhuD5oSzMYuxMPoGwe4b9Z+4n4bTnzkNPvoI="
-Received: from [IPv6:2001:9e8:a5f3:7900:ecb2:2fbf:174b:7809]
-    by smtp.strato.de (RZmta 49.3.0 AUTH)
-    with ESMTPSA id 2faf7dz28KeQY4y
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Wed, 8 Mar 2023 21:40:26 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH] PCI: imx6: install the fault handler only if we are
- really running on a compatible device
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20230308184922.GA1029723@bhelgaas>
-Date:   Wed, 8 Mar 2023 21:40:25 +0100
-Cc:     Richard Zhu <hongxing.zhu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?utf-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        kernel@pyra-handheld.com
+        Wed, 8 Mar 2023 15:40:59 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD716A2C9
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 12:40:48 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id a10-20020a056a000c8a00b005fc6b117942so30406pfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 12:40:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678308048;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1lXNZUhLpOh6e+rINxcOot9fxcAhpOKtr/aU78Uw0nU=;
+        b=Gnh8nE+mOsQp771T8QfzpKbDCUZMn1El6aeX2Gjj/EBTULwl48Eq/bJXrndjQTqeN5
+         SEUJDm1Sj4hpjYkzlYRXUN7eNhXzeCRv2PqEj/NH75B8bqmyMsugSQoF8rn7hls2ti1y
+         xUY8TcQBvol9sjdD8alH5m4Rv31cupnlprFsT1mlOtQdtGjO0PR9DpKQVx6RgmsA1azy
+         iIwuBFIHWFJ2LFay8HxTQXOZbp0k+6GsfVrEGHTbNtZLqi5fLnPO9Iuid2HxmTPk6E9k
+         WMh17w0/drOBRddWeUn01zRfqD2nJk9C5ClaiUxSXt8Gg260j9c559Trd5+Pz90c9OOG
+         jjpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678308048;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1lXNZUhLpOh6e+rINxcOot9fxcAhpOKtr/aU78Uw0nU=;
+        b=fzwzzg8VVKRYOXoNxPzl/JPs7TR52R4R1gPGHqeO719yKVofBuZGetsxjnMFNLjOeU
+         c0EIfnYjZujDeOlJz/stcmDOEExRqrXqTlQZyqnqByyfDUo/U2Hr4Ckjfin9y/mcglUt
+         kSklAtnYvMk3bS9WkxF/tL7JIIDlD0ayosMiqYYfZ8AYVQTCNkCa6zi4f49f/p3c9Yyl
+         +O2n4tGU8aHy8i6Txj66s076Xaz5ArVzu9D1ED/Up4czTZpcskT3zEZa7Qn1UJY9P5Az
+         nmkvI8EgPjbiC3rS5u0vd3fC5ax/O8agip5cpb8qZvo8tW2fLA1ahkKClQVYVJhb/MRG
+         DMvA==
+X-Gm-Message-State: AO0yUKVGj6sR45EFO2GjKeQi5LuX1cZ5QW0w184CgDNoZE1Fk4HNa/1L
+        0UiEySAkt+x6kqTJOHwfF2R2ro9gOEwgqDfpZGrl8Ot+Py+iLq8nw/OYZRpe4djvRb7GIBLm5SP
+        TWe0kAhUJVzWWXVgpx8ZRT9dSuXtJ3M6GFF6gKe8uHnWLfNx0iQEYctBWZyLJrTjIz+rZalo=
+X-Google-Smtp-Source: AK7set/WKRC2bUjVE8m1yPnPm36IEU4SXV6lijramT+kTCUEE+ZHzvqx/X3+r6/UEZMbwu84aPlqBCIVw9B2
+X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
+ (user=jstultz job=sendgmr) by 2002:a62:8348:0:b0:5ef:95c9:6a88 with SMTP id
+ h69-20020a628348000000b005ef95c96a88mr8102134pfe.5.1678308048333; Wed, 08 Mar
+ 2023 12:40:48 -0800 (PST)
+Date:   Wed,  8 Mar 2023 20:40:43 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230308204043.2061631-1-jstultz@google.com>
+Subject: [PATCH v3] pstore: Revert pmsg_lock back to a normal mutex
+From:   John Stultz <jstultz@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <jstultz@google.com>, Wei Wang <wvw@google.com>,
+        Midas Chien <midaschieh@google.com>,
+        "=?UTF-8?q?Chunhui=20Li=20=28=E6=9D=8E=E6=98=A5=E8=BE=89=29?=" 
+        <chunhui.li@mediatek.com>, Steven Rostedt <rostedt@goodmis.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Tony Luck <tony.luck@intel.com>, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <C68A70F3-00C1-4F43-A7C4-8E0386410140@goldelico.com>
-References: <20230308184922.GA1029723@bhelgaas>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+This reverts commit 76d62f24db07f22ccf9bc18ca793c27d4ebef721.
 
-> Am 08.03.2023 um 19:49 schrieb Bjorn Helgaas <helgaas@kernel.org>:
->=20
-> On Tue, Feb 28, 2023 at 09:43:54AM +0100, H. Nikolaus Schaller wrote:
->> commit bb38919ec56e ("PCI: imx6: Add support for i.MX6 PCIe =
-controller")
->> added a fault hook to this driver in the probe function. So it was =
-only
->> installed if needed.
->>=20
->> commit bde4a5a00e76 ("PCI: imx6: Allow probe deferral by reset GPIO")
->> moved it from probe to driver init which installs the hook =
-unconditionally
->> as soon as the driver is compiled into a kernel.
->>=20
->> When this driver is compiled as a module, the hook is not registered
->> until after the driver has been matched with a .compatible and
->> loaded.
->>=20
->> commit 415b6185c541 ("PCI: imx6: Fix config read timeout handling")
->> extended the fault handling code.
->>=20
->> commit 2d8ed461dbc9 ("PCI: imx6: Add support for i.MX8MQ")
->> added some protection for non-ARM architectures, but this does not
->> protect non-i.MX ARM architectures.
->=20
-> Are *all* these commits relevant?
+So while priority inversion on the pmsg_lock is an occasional
+problem that an rt_mutex would help with, in uses where logging
+is writing to pmsg heavily from multiple threads, the pmsg_lock
+can be heavily contended.
 
-Yes, it was correct when introduced by commit bb38919ec56e for a goo =
-reason.
-And it was broken by bde4a5a00e76 an all attempts later made it worse.
+After this change landed, it was reported that cases where the
+mutex locking overhead was commonly adding on the order of 10s
+of usecs delay had suddenly jumped to ~msec delay with rtmutex.
 
->  Question also applies to Fixes:
-> below.
+It seems the slight differences in the locks under this level
+of contention causes the normal mutexes to utilize the spinning
+optimizations, while the rtmutexes end up in the sleeping
+slowpath (which allows additional threads to pile on trying
+to take the lock).
 
-It fixes all between bde4a5a00e76 and HEAD. Well, one can argue that
-commit bde4a5a00e76 could be sufficient for Fixes:
+In this case, it devolves to a worse case senerio where the lock
+acquisition and scheduling overhead dominates, and each thread
+is waiting on the order of ~ms to do ~us of work.
 
-I don't know if it is a problem because I have no overview over =
-side-effects.
+Obviously, having tons of threads all contending on a single
+lock for logging is non-optimal, so the proper fix is probably
+reworking pstore pmsg to have per-cpu buffers so we don't have
+contention.
 
->=20
->> Since fault handlers can be triggered on any architecture for =
-different
->> reasons, there is no guarantee that they will be triggered only for =
-the
->> assumed situation, leading to improper error handling (i.MX6-specific
->> imx6q_pcie_abort_handler) on foreign systems.
->>=20
->> I had seen strange L3 imprecise external abort messages several times =
-on
->> OMAP4 and OMAP5 devices and couldn't make sense of them until I =
-realized
->> they were related to this unused imx6q driver because I had
->> CONFIG_PCI_IMX6=3Dy.
->=20
-> Apparently imx6q_pcie_abort_handler() assumes it is always called
-> because of a PCI abort?  If so, that sounds problematic.
+Additionally, Steven Rostedt has provided some furhter
+optimizations for rtmutexes that improves the rtmutex spinning
+path, but at least in my testing, I still see the test tripping
+into the sleeping path on rtmutexes while utilizing the spinning
+path with mutexes.
 
->=20
-> If non-PCI imprecise aborts happen on OMAP4 and OMAP5 where imx6q is
-> unused and imx6q_pcie_abort_handler() is not appropriate, I assume
-> similar non-PCI aborts can also happen on systems where imx6q *is*
-> used.
+But in the short term, lets revert the change to the rt_mutex
+and go back to normal mutexes to avoid a potentially major
+performance regression. And we can work on optimizations to both
+rtmutexes and finer-grained locking for pstore pmsg in the
+future.
 
-As far as I know the reasons why imprecise aborts occur may be SoC =
-specific.
+Cc: Wei Wang <wvw@google.com>
+Cc: Midas Chien<midaschieh@google.com>
+Cc: "Chunhui Li (=E6=9D=8E=E6=98=A5=E8=BE=89)" <chunhui.li@mediatek.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Anton Vorontsov <anton@enomsg.org>
+Cc: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: kernel-team@android.com
+Fixes: 76d62f24db07 ("pstore: Switch pmsg_lock to an rt_mutex to avoid prio=
+rity inversion")
+Reported-by: "Chunhui Li (=E6=9D=8E=E6=98=A5=E8=BE=89)" <chunhui.li@mediate=
+k.com>
+Signed-off-by: John Stultz <jstultz@google.com>
+---
+v2:
+* Fix quoting around Chunhui Li's email name (so they are actually
+  cc'ed)
+* Added tested by tag
+v3:
+* Reworded commit message per Steven's feedback and provided more
+  context for reverting in the short term.
+---
+ fs/pstore/pmsg.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-So I have no experience with i.MX6 to judge this. My goal is to shield =
-other
-architectures from this fault handler may it be correct or wrong.
-
-> So imx6q_pcie_abort_handler() may be trying to fixup non-PCI aborts
-> when it shouldn't?
-
-Yes, at least if it is triggered on OMAP4/OMAP5 by accessing =
-non-existing
-registers in some subsystems (e.g. through devmem2).
-
->=20
->> Note that CONFIG_PCI_IMX6=3Dy is useful for kernel binaries that are =
-designed
->> to run on different ARM SoC and be differentiated only by device tree
->> binaries. So turning off CONFIG_PCI_IMX6 is not a solution.
->>=20
->> Therefore we check the compatible in the init function before =
-registering
->> the fault handler.
->>=20
->> Fixes: bde4a5a00e76 ("PCI: imx6: Allow probe deferral by reset GPIO")
->> Fixes: 415b6185c541 ("PCI: imx6: Fix config read timeout handling")
->> Fixes: 2d8ed461dbc9 ("PCI: imx6: Add support for i.MX8MQ")
->>=20
->> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->> ---
->> drivers/pci/controller/dwc/pci-imx6.c | 9 +++++++++
->> 1 file changed, 9 insertions(+)
->>=20
->> diff --git a/drivers/pci/controller/dwc/pci-imx6.c =
-b/drivers/pci/controller/dwc/pci-imx6.c
->> index 1dde5c579edc8..89774aa187ae8 100644
->> --- a/drivers/pci/controller/dwc/pci-imx6.c
->> +++ b/drivers/pci/controller/dwc/pci-imx6.c
->> @@ -1402,6 +1402,15 @@ =
-DECLARE_PCI_FIXUP_CLASS_HEADER(PCI_VENDOR_ID_SYNOPSYS, 0xabcd,
->> static int __init imx6_pcie_init(void)
->> {
->> #ifdef CONFIG_ARM
->> +	const struct of_device_id *reboot_id;
->> +	struct device_node *np;
->> +
->> +	np =3D of_find_matching_node_and_match(NULL, imx6_pcie_of_match,
->> +					     &reboot_id);
->=20
-> Since you don't need reboot_id, I think you should use
-> of_find_matching_node() instead.
-
-Well, I used it for debugging, but for production code it has indeed no =
-benefit.
-
-of_find_matching_node it is just a static inline wrapper for
-of_find_matching_node_and_match with NULL parameter, but we can save one =
-stack position.
-
-I'll send a v2 soon.
-
->=20
->> +	if (!np)
->> +		return -ENODEV;
->> +	of_node_put(np);
->> +
->> 	/*
->> 	 * Since probe() can be deferred we need to make sure that
->> 	 * hook_fault_code is not called after __init memory is freed
->> --=20
->> 2.38.1
->>=20
-
-BR and thanks,
-Nikolaus
+diff --git a/fs/pstore/pmsg.c b/fs/pstore/pmsg.c
+index ab82e5f05346..b31c9c72d90b 100644
+--- a/fs/pstore/pmsg.c
++++ b/fs/pstore/pmsg.c
+@@ -7,10 +7,9 @@
+ #include <linux/device.h>
+ #include <linux/fs.h>
+ #include <linux/uaccess.h>
+-#include <linux/rtmutex.h>
+ #include "internal.h"
+=20
+-static DEFINE_RT_MUTEX(pmsg_lock);
++static DEFINE_MUTEX(pmsg_lock);
+=20
+ static ssize_t write_pmsg(struct file *file, const char __user *buf,
+ 			  size_t count, loff_t *ppos)
+@@ -29,9 +28,9 @@ static ssize_t write_pmsg(struct file *file, const char _=
+_user *buf,
+ 	if (!access_ok(buf, count))
+ 		return -EFAULT;
+=20
+-	rt_mutex_lock(&pmsg_lock);
++	mutex_lock(&pmsg_lock);
+ 	ret =3D psinfo->write_user(&record, buf);
+-	rt_mutex_unlock(&pmsg_lock);
++	mutex_unlock(&pmsg_lock);
+ 	return ret ? ret : count;
+ }
+=20
+--=20
+2.40.0.rc1.284.g88254d51c5-goog
 
