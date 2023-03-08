@@ -2,100 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40AAE6B0A97
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A95D66B0A9D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:10:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbjCHOJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
+        id S231887AbjCHOKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:10:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232146AbjCHOIJ (ORCPT
+        with ESMTP id S231696AbjCHOJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:08:09 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314E01B2E5;
-        Wed,  8 Mar 2023 06:07:25 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CCD3720002;
-        Wed,  8 Mar 2023 14:07:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678284444;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=33EBWkqEWMsTEF83ZPwNzzm0AxSe+La9Qde3jKBW+ZQ=;
-        b=l3bc+md3Q6sI36R/w2cStuusZFECsF7l5/UpgaA0ZIboxFlTikDg3ZBG7J2VPCiiou9ob5
-        rErf5MpCDMq9d3LRfrm/n3SgFZ/SyI0hikw0oEZNDnZE0k+fsW+69dbxGcqdvk3C1NiKka
-        2aXVHAIWcagMio9MG6jHn7xEMpJjqTHhPjAvLzj6JwhM8OfhcGZSt+KEveAZa9jibMRg3S
-        f/iQN0i0qEZ9b2HHNR7wwT1/dsCuVfLNDmrnrFWaCaIMvWdJwlNI+G+QeCNsZGoBn9Vuv4
-        k+etjelvtMXxN4gMFwjUl2uOC0eLt5axMvPKN8Bv7DbnSmkYMNtjLSW0Kaxc6g==
-Date:   Wed, 8 Mar 2023 15:07:21 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Colin Ian King <colin.i.king@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH v2 08/21] dt-bindings: nvmem: Fix spelling mistake
- "platforn" -> "platform"
-Message-ID: <20230308150721.59ea37a7@xps-13>
-In-Reply-To: <167823407854.511949.8644806672046927604.robh@kernel.org>
-References: <20230307165359.225361-1-miquel.raynal@bootlin.com>
-        <20230307165359.225361-9-miquel.raynal@bootlin.com>
-        <167823407854.511949.8644806672046927604.robh@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 8 Mar 2023 09:09:33 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8979780914;
+        Wed,  8 Mar 2023 06:08:28 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 902AA604F7;
+        Wed,  8 Mar 2023 15:08:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678284506; bh=b2xoRH8uNDDGrJhbs5P0hRrhL431AvtCXSHN4BCG9iM=;
+        h=Date:To:Cc:From:Subject:From;
+        b=SjYWgelJmI+V54+dNftTuCQLspEDfJm/jFUgUMFJOjSPwm2poQIgE0UAdM7Rbvqac
+         YW/OwryV355G23WrMAWWEJP4O1nkcBc/s2g7bf9uCKsF8wd2kb+iViJXqwF4EHYGHY
+         ZNO9kqO45TVEjazCeQaCVk0L0aF7Pn/p3l7hoh6dDghZ9ZdI52RvR+3HqIf1wTJskp
+         uZdaiae4U6CbM5+f6PnXDZM6amOR4CkC7AbpOfJXpqqdAISBy6ry9CnHZhEQzaDnOG
+         YGI770sX24RqDbGWt2Uxt6AcV536hoDnocVZU2i23M5DgO7e7+F+5mrXDzM62EeLh7
+         P+yaERoM7NhwQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id PdUCo2nhzweR; Wed,  8 Mar 2023 15:08:24 +0100 (CET)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id 99FA6604F3;
+        Wed,  8 Mar 2023 15:08:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678284504; bh=b2xoRH8uNDDGrJhbs5P0hRrhL431AvtCXSHN4BCG9iM=;
+        h=Date:To:Cc:From:Subject:From;
+        b=XBz4R8ChK2fqGd1hXAtG54Brll2MmLQYgBXL6W3cqLLuXn3w04tssnwN5N9HsN1WC
+         NcS4/946Z5GqmPDE2NWjfz/RjM9kRQ1lrwqZ1BGCoHflp27YwZ/J0gFkKrXTQu5is9
+         lhNDbfVAuvF3bv8QvJnE5T4k2Xqwepid9Huc2R+3v4p1jc/J5UUS5SemOfq40Ir01O
+         yrjy848vWm0HZasOo14hGWlzY4IpE9tKZWH7fiNYT0gggmhrxbPBfidpukxwv0ToSl
+         TmJOFgMqmVjvVhDtih4c4oSRbR9j8hfkG0riAmY5kiFTE0CBw76VCOiYqhVNJzigea
+         o27A6e257eGjA==
+Message-ID: <60b2b66c-22c9-1d38-ed1c-7b7d95e32720@alu.unizg.hr>
+Date:   Wed, 8 Mar 2023 15:08:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, hr
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org,
+        James Morris <jmorris@namei.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: INFO: BUG: kobject: 'integrity' (000000005198bea8): does not have a
+ release() function, it is broken and must be fixed. See ...
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Hi, all!
 
-robh@kernel.org wrote on Tue, 7 Mar 2023 18:08:54 -0600:
+This one is said to be bug, if we trust the Linux kernel debug output.
 
-> On Tue, 07 Mar 2023 17:53:46 +0100, Miquel Raynal wrote:
-> > From: Colin Ian King <colin.i.king@gmail.com>
-> >=20
-> > There is a spelling mistake in platforn-name. Fix it.
-> >=20
-> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> > ---
-> >  .../devicetree/bindings/nvmem/layouts/onie,tlv-layout.yaml      | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >  =20
->=20
->=20
-> Please add Acked-by/Reviewed-by tags when posting new versions. However,
-> there's no need to repost patches *only* to add the tags. The upstream
-> maintainer will do that for acks received on the version they apply.
->=20
-> If a tag was not added on purpose, please state why and what changed.
->=20
-> Missing tags:
->=20
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Usually I wouldn't have noticed it, but we were debugging the other module under
+supervision from Andy of Intel. So it happened that I was accidentally monitoring
+how the kobject_release() was called for kernel objects at shutdown of the OS.
 
-I am absolutely sorry for dropping that tag, I took the patches from
-the mailing list directly after an e-mail listing a set of patches that
-have been dropped right before the merge window. I did not remember that
-Ack when I performed that painful cherry-pick.
+It is past the rsyslog lifetime, so the only way I could capture it was a photo
+from the smartphone.
 
-Thanks,
-Miqu=C3=A8l
+Please see the bug reports from the kernel log:
+
+https://domac.alu.hr/~mtodorov/linux/bugreports/integrity/20230308_123748.jpg
+
+https://domac.alu.hr/~mtodorov/linux/bugreports/integrity/20230308_123752.jpg
+
+The kernel is Linux 6.2.0-mg-andy-devres-12485-gf3a2439f20d9-dirty x86_64
+on a LENOVO_MT_10TX_BU_Lenovo_FM_V530S-07ICB running AlmaLinux 8.7.
+
+I was unable to reproduce on the other Lenovo laptop box, for the kernel
+refused to boot, unable to find root drive on NVMe (other kernels w/o
+CONFIG_DEBUG_KOBJECT=y run smoothly).
+
+Config used is:
+
+https://domac.alu.hr/~mtodorov/linux/bugreports/integrity/config-6.2.0-mg-andy-devres-12485-gf3a2439f20d9-dirty
+
+As I already said to Andy, this might not be a critical bug, for it happens
+only at shutdown AFAICS. However, it can be a sign of some more serious problem
+in the code. :-/
+
+Hope this helps.
+
+Regards,
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
