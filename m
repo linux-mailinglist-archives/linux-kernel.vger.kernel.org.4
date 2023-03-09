@@ -2,70 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0568A6B267D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3701D6B268C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbjCIOP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:15:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
+        id S230058AbjCIORB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:17:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231836AbjCIOOx (ORCPT
+        with ESMTP id S231389AbjCIOQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:14:53 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD62D6C89D;
-        Thu,  9 Mar 2023 06:14:24 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Thu, 9 Mar 2023 09:16:39 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4E92CC42;
+        Thu,  9 Mar 2023 06:16:36 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6B4B021AC1;
-        Thu,  9 Mar 2023 14:14:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1678371263; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MAeNio66Sy8fGsRbcBC3bQyJOx6KSakN7zbDA0MApCc=;
-        b=ertoE+G5cL/4KfEKoleEMhltazLAN0+pV0lN3uWcC6Kp4knwMdBh6PBKuMAmNm8Hd5le1L
-        Iyo6s9Yu04Tj3Uj6k8jzVQl9KoNsobFHZhICA7qIJkEzPJaiVQ+TIYd33JtAnvoTLQNJzs
-        ua5xA0PzOv5mnZlreEDZLcOXrpdY4l8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1678371263;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MAeNio66Sy8fGsRbcBC3bQyJOx6KSakN7zbDA0MApCc=;
-        b=AnGTrCHyRD/ptUPCQXcgavl1jK3VdYazbBw7TdaHOw5UbGzz+j/psz5O0QTHht/YoUbGDC
-        VXjkNKKmz3bMr1Dg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5D2741391B;
-        Thu,  9 Mar 2023 14:14:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FDOzFr/pCWQpMQAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 09 Mar 2023 14:14:23 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id D8E74A06FF; Thu,  9 Mar 2023 15:14:22 +0100 (CET)
-Date:   Thu, 9 Mar 2023 15:14:22 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>, Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [RFC 08/11] ext4: Don't skip prefetching BLOCK_UNINIT groups
-Message-ID: <20230309141422.b2nbl554ngna327k@quack3>
-References: <cover.1674822311.git.ojaswin@linux.ibm.com>
- <4881693a4f5ba1fed367310b27c793e4e78520d3.1674822311.git.ojaswin@linux.ibm.com>
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 8735242037;
+        Thu,  9 Mar 2023 14:16:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1678371395;
+        bh=tUUTZQN+QgD1rn1cHyCzhI7aFoqTUUMz0V4QKuTRQe4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=HjY8oRPlc2CKr20/2jvE1xNtj9x6nJjr9+b1EGdHtTJOh8GMnTUNULcz049Y2BCc7
+         zNix/c/l5q04IeQPfaE8EacKG/v3bkO1C4SDe4Jv7CEVNPvuAENth2GdoDWRBxvPpm
+         SjDtPv89trwUCLVxH/2a6sSJAcw36eKjpLq+W1zVWssd5HHEEbEesEeRj2qGgp5Fn2
+         XbHgR14z2/1bmxa1zbiQSjiiCh4OkRUc4zj6AHT3MvQv4VN384RsyrlOMLi9KEzZM5
+         oPddH7HwLjDPcE+kPmXoSXwheMydufOcxaKPxmTTHE6plTgfpKPVlVOSusvbcQcuSG
+         TsFvLK+TY0Uxg==
+Message-ID: <ac5a748a-bd1c-1076-a17f-42367494976c@asahilina.net>
+Date:   Thu, 9 Mar 2023 23:16:25 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4881693a4f5ba1fed367310b27c793e4e78520d3.1674822311.git.ojaswin@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH RFC 06/18] rust: drm: gem: shmem: Add DRM shmem helper
+ abstraction
+Content-Language: en-US
+To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     linaro-mm-sig@lists.linaro.org, rust-for-linux@vger.kernel.org,
+        Karol Herbst <kherbst@redhat.com>, asahi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Mary <mary@mary.zone>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-sgx@vger.kernel.org, Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        linux-media@vger.kernel.org
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-6-917ff5bc80a8@asahilina.net>
+ <ff51483e-2d72-3a7b-0632-58ea36cc3d8e@igalia.com>
+ <488728fc-ada2-20a3-79be-8109d891a8cb@asahilina.net>
+ <8e091158-7826-1215-e717-081b25f48108@igalia.com>
+From:   Asahi Lina <lina@asahilina.net>
+In-Reply-To: <8e091158-7826-1215-e717-081b25f48108@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,65 +81,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 27-01-23 18:07:35, Ojaswin Mujoo wrote:
-> Currently, ext4_mb_prefetch() and ext4_mb_prefetch_fini() skip
-> BLOCK_UNINIT groups since fetching their bitmaps doesn't need disk IO.
-> As a consequence, we end not initializing the buddy structures and CR0/1
-> lists for these BGs, even though it can be done without any disk IO
-> overhead. Hence, don't skip such BGs during prefetch and prefetch_fini.
+On 09/03/2023 20.47, Maíra Canal wrote:
+> On 3/9/23 02:25, Asahi Lina wrote:
+>> On 08/03/2023 22.38, Maíra Canal wrote:
+>>> On 3/7/23 11:25, Asahi Lina wrote:
+>>>> The DRM shmem helper includes common code useful for drivers which
+>>>> allocate GEM objects as anonymous shmem. Add a Rust abstraction for
+>>>> this. Drivers can choose the raw GEM implementation or the shmem layer,
+>>>> depending on their needs.
+>>>>
+>>>> Signed-off-by: Asahi Lina <lina@asahilina.net>
+>>>> ---
+>>>>    drivers/gpu/drm/Kconfig         |   5 +
+>>>>    rust/bindings/bindings_helper.h |   2 +
+>>>>    rust/helpers.c                  |  67 +++++++
+>>>>    rust/kernel/drm/gem/mod.rs      |   3 +
+>>>>    rust/kernel/drm/gem/shmem.rs    | 381 ++++++++++++++++++++++++++++++++++++++++
+>>>>    5 files changed, 458 insertions(+)
+>>>>
+>>>
+>>> [...]
+>>>
+>>>> +unsafe extern "C" fn gem_create_object<T: DriverObject>(
+>>>> +    raw_dev: *mut bindings::drm_device,
+>>>> +    size: usize,
+>>>> +) -> *mut bindings::drm_gem_object {
+>>>> +    // SAFETY: GEM ensures the device lives as long as its objects live,
+>>>> +    // so we can conjure up a reference from thin air and never drop it.
+>>>> +    let dev = ManuallyDrop::new(unsafe { device::Device::from_raw(raw_dev) });
+>>>> +
+>>>> +    let inner = match T::new(&*dev, size) {
+>>>> +        Ok(v) => v,
+>>>> +        Err(e) => return e.to_ptr(),
+>>>> +    };
+>>>> +
+>>>> +    let p = unsafe {
+>>>> +        bindings::krealloc(
+>>>> +            core::ptr::null(),
+>>>> +            Object::<T>::SIZE,
+>>>> +            bindings::GFP_KERNEL | bindings::__GFP_ZERO,
+>>>> +        ) as *mut Object<T>
+>>>> +    };
+>>>> +
+>>>> +    if p.is_null() {
+>>>> +        return ENOMEM.to_ptr();
+>>>> +    }
+>>>> +
+>>>> +    // SAFETY: p is valid as long as the alloc succeeded
+>>>> +    unsafe {
+>>>> +        addr_of_mut!((*p).dev).write(dev);
+>>>> +        addr_of_mut!((*p).inner).write(inner);
+>>>> +    }
+>>>> +
+>>>> +    // SAFETY: drm_gem_shmem_object is safe to zero-init, and
+>>>> +    // the rest of Object has been initialized
+>>>> +    let new: &mut Object<T> = unsafe { &mut *(p as *mut _) };
+>>>> +
+>>>> +    new.obj.base.funcs = &Object::<T>::VTABLE;
+>>>> +    &mut new.obj.base
+>>>> +}
+>>>
+>>> It would be nice to allow to set wc inside the gem_create_object callback,
+>>> as some drivers do it so, like v3d, vc4, panfrost, lima...
+>>
+>> This is actually a bit tricky to do safely, because we can't just have a
+>> callback that takes the drm_gem_shmem_object instance inside
+>> gem_create_object because it is not fully initialized yet from the point
+>> of view of the gem shmem API. Maybe we could have some sort of temporary
+>> proxy object that only lets you do safe things like set map_wc? Or maybe
+>> the new() callback could return something like a ShmemTemplate<T> type
+>> that contains both the inner data and some miscellaneous fields like the
+>> initial map_wc state?
 > 
-> This improves the accuracy of CR0/1 allocation as earlier, we could have
-> essentially empty BLOCK_UNINIT groups being ignored by CR0/1 due to their buddy
-> not being initialized, leading to slower CR2 allocations. With this patch CR0/1
-> will be able to discover these groups as well, thus improving performance.
+> I see that most drivers use this hook to set map_wc and set funcs. What
+> are your thoughts on something like this?
 > 
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-
-The patch looks good. I just somewhat wonder - this change may result in
-uninitialized groups being initialized and used earlier (previously we'd
-rather search in other already initialized groups) which may spread
-allocations more. But I suppose that's fine and uninit groups are not
-really a feature meant to limit fragmentation and as the filesystem ages
-the differences should be minimal. So feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+> Best Regards,
+> - Maíra Canal
+> 
+>  From 61f23f4a39028c9d34d3df58d7640bfcd64e9af9 Mon Sep 17 00:00:00 2001
+> From: =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
+> Date: Thu, 9 Mar 2023 08:24:09 -0300
+> Subject: [PATCH] rust: drm: gem: shmem: Set map_wc on gem_create_object
+>   callback
+> MIME-Version: 1.0
+> Content-Type: text/plain; charset=UTF-8
+> Content-Transfer-Encoding: 8bit
+> 
+> Some drivers use the gem_create_object callback to define the mapping of
+> the object write-combined (map_wc). Currently, the DRM Rust abstractions
+> doesn't allow such operation. So, add a method to the DriverObject trait
+> to allow drivers to set map_wc on the gem_create_object callback. By
+> default, the method returns false, which is the shmem default value.
+> 
+> Signed-off-by: Maíra Canal <mcanal@igalia.com>
 > ---
->  fs/ext4/mballoc.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
+>   rust/kernel/drm/gem/shmem.rs | 7 +++++++
+>   1 file changed, 7 insertions(+)
 > 
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index 14529d2fe65f..48726a831264 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -2557,9 +2557,7 @@ ext4_group_t ext4_mb_prefetch(struct super_block *sb, ext4_group_t group,
->  		 */
->  		if (!EXT4_MB_GRP_TEST_AND_SET_READ(grp) &&
->  		    EXT4_MB_GRP_NEED_INIT(grp) &&
-> -		    ext4_free_group_clusters(sb, gdp) > 0 &&
-> -		    !(ext4_has_group_desc_csum(sb) &&
-> -		      (gdp->bg_flags & cpu_to_le16(EXT4_BG_BLOCK_UNINIT)))) {
-> +		    ext4_free_group_clusters(sb, gdp) > 0 ) {
->  			bh = ext4_read_block_bitmap_nowait(sb, group, true);
->  			if (bh && !IS_ERR(bh)) {
->  				if (!buffer_uptodate(bh) && cnt)
-> @@ -2600,9 +2598,7 @@ void ext4_mb_prefetch_fini(struct super_block *sb, ext4_group_t group,
->  		grp = ext4_get_group_info(sb, group);
->  
->  		if (EXT4_MB_GRP_NEED_INIT(grp) &&
-> -		    ext4_free_group_clusters(sb, gdp) > 0 &&
-> -		    !(ext4_has_group_desc_csum(sb) &&
-> -		      (gdp->bg_flags & cpu_to_le16(EXT4_BG_BLOCK_UNINIT)))) {
-> +		    ext4_free_group_clusters(sb, gdp) > 0) {
->  			if (ext4_mb_init_group(sb, group, GFP_NOFS))
->  				break;
->  		}
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> diff --git a/rust/kernel/drm/gem/shmem.rs b/rust/kernel/drm/gem/shmem.rs
+> index 8f17eba0be99..a7f33b66f60a 100644
+> --- a/rust/kernel/drm/gem/shmem.rs
+> +++ b/rust/kernel/drm/gem/shmem.rs
+> @@ -24,6 +24,11 @@ use gem::BaseObject;
+>   pub trait DriverObject: gem::BaseDriverObject<Object<Self>> {
+>       /// Parent `Driver` for this object.
+>       type Driver: drv::Driver;
+> +
+> +    /// Define the map object write-combined
+> +    fn set_wc() -> bool {
+> +        false
+> +    }
+>   }
+
+I think if you're going to make it a static function like that, we might
+as well just make it an associated constant like `DEFAULT_WC`? After all
+there is no information gem_create_object gets other than the size so we
+can't really do anything more useful, and `set_wc()` can't do much other
+than return a constant ^^
+
+The only corner case I can think of is cases where the WC mode depends
+on the device (for example, if some devices want to enable it or not
+depending on whether the particular hardware variant is cache-coherent),
+but then it should probably just be part of the return value for T::new
+since that function already gets all available information (device and
+size). But I think a constant works for now, we can always extend it
+when a use case comes for doing more.
+
+~~ Lina
