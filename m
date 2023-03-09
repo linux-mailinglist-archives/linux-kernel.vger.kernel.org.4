@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1F86B2ABF
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E30856B2ABC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:30:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjCIQaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 11:30:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
+        id S230296AbjCIQaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 11:30:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbjCIQaA (ORCPT
+        with ESMTP id S230506AbjCIQ34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:30:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265BB1111CF
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 08:21:42 -0800 (PST)
+        Thu, 9 Mar 2023 11:29:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDFB1111C7
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 08:21:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 432D361BEA
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 16:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 712CFC433D2;
-        Thu,  9 Mar 2023 16:20:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79F42B81FB4
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 16:20:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1734EC4339B;
+        Thu,  9 Mar 2023 16:20:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678378827;
-        bh=eg6WprGy/Dr+cy0XaA/osio6oPYUKPIB9Ye7I0EE6ss=;
+        s=k20201202; t=1678378830;
+        bh=fLoSnXS+etWXQ8M6uD29MTHdVitlDJTq7PK6O24OBfo=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=rJzFZBsLaynOVkjfuV8D/Yn9ZDOux1qM+8Q0Zus7t3m8Nbzx/eJmhXjdvjjY4G7XO
-         4Sl/F218aYv2fZ1+0krp4ycAu9vnITQUtcBeQ/bP3iEHnqy067ntOvyo9uqjw5t4iK
-         QOMULkhkhopA4clZJkPQQbn+r4Lir6KcEyuBe8cH6ZxJVgte/d2xX8D9cT3+brcAs5
-         fNvj6Z2aUnr2GSz7HCYuOGpLH4RQ7o6TeV7YrD8pND1qtePFeIBm4tr2+fmeakRgfj
-         Q9vXT7B89ssnh/OqS2ibEm02E+vGlXx2xv/BQ9vc5iEwzb8PnP3wVc0ggEtXe+BAEh
-         3Y5bLLQG07OQw==
+        b=QaG3Kd9VVzOmhFoh/W4AmV37EkYL+vb+zzzjb1Acrv6qw6hjMmeOWF3e1h3CxG35c
+         f/WmbKBrgG7+mctEYMLubgdTBLw0Opu83hiG/g1IAKEXz0IfqRcPxnVd8pL/eVa9rx
+         dE/SSd5zfESGy11Bh0iQRJFUqCQfPuIp9cSDzO1MJSeTe/lnL3O3b8c76qphrnvBtG
+         IiInb5TUd3Klp59I4IzBFB8kRbDNE1rTDtY2fbZmAZQ5pGd78kiorKRUhX7y29joDE
+         iJY0bF/fOQKT0haAwQzgOysXfs5UGVbia39UdV290MjbSHyJpnrWH/Yq4N2zLOPTYU
+         lYy1Q9Cp9py3Q==
 From:   Mark Brown <broonie@kernel.org>
 To:     David Rhodes <david.rhodes@cirrus.com>,
         Charles Keepax <ckeepax@opensource.cirrus.com>,
@@ -43,12 +43,12 @@ To:     David Rhodes <david.rhodes@cirrus.com>,
         Lucas Tanure <lucas.tanure@collabora.com>
 Cc:     patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
         kernel@collabora.com
-In-Reply-To: <20230309104133.537056-1-lucas.tanure@collabora.com>
-References: <20230309104133.537056-1-lucas.tanure@collabora.com>
-Subject: Re: [PATCH v4] ASoC: cs35l41: Steam Deck Shared boost properties
+In-Reply-To: <20230309140051.945329-1-lucas.tanure@collabora.com>
+References: <20230309140051.945329-1-lucas.tanure@collabora.com>
+Subject: Re: [PATCH v5] ASoC: cs35l41: Steam Deck Shared boost properties
  quirk
-Message-Id: <167837882518.39474.5819778399084197705.b4-ty@kernel.org>
-Date:   Thu, 09 Mar 2023 16:20:25 +0000
+Message-Id: <167837882781.39474.4339514850949548082.b4-ty@kernel.org>
+Date:   Thu, 09 Mar 2023 16:20:27 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -62,7 +62,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Mar 2023 10:41:33 +0000, Lucas Tanure wrote:
+On Thu, 09 Mar 2023 14:00:51 +0000, Lucas Tanure wrote:
 > Add support for Steam Deck bios old properties. If a Steam deck didn't
 > upgrade the BIOS, the driver should be able to handle the previous
 > properties for shared boost types.
