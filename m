@@ -2,116 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B7E6B257F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DEB6B2583
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbjCINdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:33:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        id S229716AbjCINdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:33:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjCINdG (ORCPT
+        with ESMTP id S230297AbjCINdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:33:06 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2127.outbound.protection.outlook.com [40.107.244.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22817F2213;
-        Thu,  9 Mar 2023 05:32:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bthKYLBTyhcKb6sSp9tzvCrBIX/RhyHJiWvppD8h0kJmCCcQ5SoXBDLIRMQzAnmm0YsZXDsh6vDOxK6411dAkZbnnB7iEZ27JjL7jfjgCZh7gTvmUVCJO/Z546IFKj4Ml5oX+PQlWdgo0tPDet7KY5lb/ywRWLU0gQmc+ccE67Qdx8jqtrv+KyvNlIFbJtUHzfdWidkTDBNucKeg2g+OZFBfTE1OrbTi54NE+dzZfu3TJX22c5KtsUs825nmpjKbikYjkhLBfUW7WA1W6zV+PHHUZa467OYJOC+u24almDgZ/noztZfwnMg8UwyH00kdxp3vok4bqPHN6YyEZi34xA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rw+g7NyzQqdkDIgwRXzjwPEUcjTRLAKZVHfq3s1rEbk=;
- b=i9kPLGVqdpZgtS1c+sNp4sEuJxLU+guACEFfESZdyoWDzItADAqqzlXNtDFgLwRg+L86JapeP63QOENi+FddgO/nQvbDfKHilrMZ2BkRKVM1fdJ3lJl31o4sd0sI+yvgVAc1iA/ARxHTX92GNm5j6uUV0s+cH3hl8uxl2Os/reXuhiEqiawxvgQa+GsAFW9mxUAwmCxqAdl/KJ7CR9/o9gB6FvlgatOB6/ukpk25H1c1ZZo0mvbT+TcJVM1+nALQN6buBc+fpiVk4iZV9GrVw40VyVq9Iwa9bEVMxOuHmBebRr+DE/v1HnsBJCfe2XdcyRbSm0dfzetCvlaKbYAfMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rw+g7NyzQqdkDIgwRXzjwPEUcjTRLAKZVHfq3s1rEbk=;
- b=OD+43HLkoal0nSm37VQN1f5QAY0Mrl/OFvieehOvsgIiOhmo96NEob/QmlW09sB0GhyaKW88F8DGpF2eZpSBpkiao3gyLof4Ov+QL/c9DO8+QFAOmPzohcQcYSBB28Ku7aJjJfsBZQHZPEjnLi9nGHZZofplGzBQvup3trKfkcM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by MW5PR13MB5925.namprd13.prod.outlook.com (2603:10b6:303:1c8::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Thu, 9 Mar
- 2023 13:32:42 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.019; Thu, 9 Mar 2023
- 13:32:42 +0000
-Date:   Thu, 9 Mar 2023 14:32:36 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Siddharth Vadapalli <s-vadapalli@ti.com>
-Subject: Re: [PATCH v3] net: ethernet: ti: am65-cpsw: Convert to
- devm_of_phy_optional_get()
-Message-ID: <ZAnf9KUAU+Dj+WOw@corigine.com>
-References: <01605ea233ff7fc09bb0ea34fc8126af73db83f9.1678280599.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <01605ea233ff7fc09bb0ea34fc8126af73db83f9.1678280599.git.geert+renesas@glider.be>
-X-ClientProxiedBy: AM0PR04CA0070.eurprd04.prod.outlook.com
- (2603:10a6:208:1::47) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Thu, 9 Mar 2023 08:33:38 -0500
+X-Greylist: delayed 3478 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Mar 2023 05:33:36 PST
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1186F2C64D;
+        Thu,  9 Mar 2023 05:33:33 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 9F141D5A;
+        Thu,  9 Mar 2023 14:33:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1678368811;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I+iF8CPFFQ1v326vjmVw+Tv1dyEC7GRMOHK3YGspsDI=;
+        b=J0YrqMIzlBpt7uBiKWHyMEj0RjMeBRKisoF+bJtSbE+DgLHuVCG1JSmqjTO6UFnIBJnxSb
+        nQ01qq/LIwcI2Yoo5NTtY1oBi+yCfCNlKOWcKU8VUu8T4DqZTogWmbHO3szIadAxpNIzu+
+        8TmYey/UvirCzVVhtEkqZPpToxOFHhvxIgED6c7aYA0z1FCYSPf/MHPSrXUQNf9M9hJU8d
+        ON/4xkZBcabsZx0uj1mHNY0r2S5V0WqTneRJ/0nErU7CuYDJzsqgqdjKZlm4EqpferQXsl
+        fVioS0iDADxKBR+HU0OYTGbeYqVopkZuSzFEN5oPMmhXOwjZ6+SZdQavxKC0xg==
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MW5PR13MB5925:EE_
-X-MS-Office365-Filtering-Correlation-Id: 03689a93-1b1c-465c-7db2-08db20a2c22f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ATyQyUFpizoeLwB1HlM7xxkyc7bpewfwieTGTaxp/7ibjrbQD/EpEmAH+7MtKibWpOvzfckXC/ZO54TF2qqYdb8N0VxMqR6tOHj42uUt3j6ned05DXrsw8FZd1kmJbY4a5eVP8utEBdm892ar6AkUyrrcgA10SwvRTdjZiTSYqC0U55UAjUquB4dYPfQi6tibnSRljekLOcqcjLNng0fRS95OEIhaJ4gt24kWTIo86U6tRvyIRkuQaeTOEhVndgMIU/ZeDsm+5K3k7GXWLHAPttrARWoBPCUQh8DYDYcT22W0lS9ruKlZaf6vIikGSIpTVMGqysuCpQpqEZCCeo8sEKeHv/R7Y83ghmZQzdct+kP9BZrKVlgypKGkdui4b80l5ija7Gu1qo5iYKa1DoVIQQW/xj6WoNbb8vjBQoxQkLmRZf7TFWO6rpw5FUwFtXs46W3UTafbYSIvJpbA+XcWv4Zscbe1qGbInxLnzfsGcdMS37s5o765utFRsCJ/d+o0Dr8XzqOoWKzwp5TQLrD6tjvd+nn+A/hWiPSZgGB1yD3C1nGHvWM5fka/HpVyi5CHl+/1+VTX/zKLT3cJNh+D1vGhwctDcnMEapQHapdknF/lph1akpVa3fhr9ioAAWficxgAFi7IqiyAMIlxodYScns820WhayfWUfmuuj9f6C4ea3y7aep1nLLfs/qEyLa
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(136003)(376002)(39840400004)(366004)(451199018)(2906002)(44832011)(5660300002)(4744005)(8936002)(36756003)(41300700001)(66476007)(66556008)(66946007)(4326008)(8676002)(316002)(86362001)(54906003)(478600001)(6486002)(6666004)(38100700002)(6506007)(6512007)(186003)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2PhINqGvM03dXY5NiN2k82V4BgvirrUl952v3bY1wvwTca7A3MijuGIIuncZ?=
- =?us-ascii?Q?ybl8R2fEzPZ57053ARZhzPcJiF3Wm9PsLIs5gIPm0mAaC2JsR/kmvN7jzTFE?=
- =?us-ascii?Q?KLrQImIlcU/OtEuHcSmyIK3i+xL5hFQIaPVGiRcF8ctZ8NIIdFvYsXTrq/bP?=
- =?us-ascii?Q?jfAYuwBFIEBNi26bJ1sDfoWOPFBVKPliuUPjwx6AQQ+CjWl7sV18u1zcvtAv?=
- =?us-ascii?Q?jPnUOggfGM8LZ8gqwMPfch2ET8vSzx6QDTfYw8RyWefXXIZqx/pxVHSZtDmi?=
- =?us-ascii?Q?r+Lf7dsAwClDMDKUjeMVQ9hfhMN7cxkdqwnbrGbNCt8tQ3jdpNbfl4Cqv/c2?=
- =?us-ascii?Q?Qw5L1B7crtjgaLH7fhtNiNoVWhSJE9vQwJ78NXsYQQxkymV7/mvXdPVfpaKl?=
- =?us-ascii?Q?jMNiz1EPCqpY966o4cnwb2URi0/uy1SxPoFjzvpeRruLeupCPkqsgopmmobl?=
- =?us-ascii?Q?3iNZKWuCKsyMXkoajPHUurtzZgeMYBkXuhiFTRbBiHZdc7v9TPZnG/FcQkZ2?=
- =?us-ascii?Q?4ZJ4wlXcDsB5ghO3eR++csCEHL3Zt6J/DhAS0udWUUhAr6YNVySedJMPnSgW?=
- =?us-ascii?Q?6GOgQm47C6FkRygQhvrX5vhpdHK31pyjD233o0dvlRYX/e+wvdxJ12rHxSIQ?=
- =?us-ascii?Q?JYss7o0Ns3w6E+SINds0UENpbiT8TUyxdGQjp1FZAj7uH74mzBqpMnbH9vFl?=
- =?us-ascii?Q?8ZGE7T7Fv46vvZ1DCZ8udoDcRc1C0fCz7rGbcghHi3jfWOsDjSRnjWmq7rRf?=
- =?us-ascii?Q?zUCHJ9WTtlcmsmBimBvF/KDsRGvctssS86H3mQhaNHdlJkX2RrowlZGT0VR8?=
- =?us-ascii?Q?ovcbrghB3gNzkDnViqoZoi3PlkhE/OzmyozYO1SrG5AOV4KHv2Aj+73k3cGQ?=
- =?us-ascii?Q?KvwNRe9WphBQiWINgrx2m5HdSjxSywNYisbd+LimqPkROGGWZmny7MiUxqHt?=
- =?us-ascii?Q?5IugQtQsZoOMnuGRIl4G4/dHToM9G5bLEe5mFWJ7DXHAqI86TVv/BucHABZo?=
- =?us-ascii?Q?R3Fp0RHXkgMpS9zZtpQtvgTmRrVfjr0il0bPgDM09j0kM/vlRH56MuNmc6FE?=
- =?us-ascii?Q?sADwdBE6P/SSZ3ayDdCIGRBdl2IHil2aj7/N67lLE5ZbOIpyUwRL3KB258SA?=
- =?us-ascii?Q?IYtx7aG0SqHqs4gtpTMBs1bs1UVvWsyutjOuAIcIa/CAxpMJy/qVAtbTp8VU?=
- =?us-ascii?Q?Nk/BzCxdFZxgMjsJcuuh8v07XEs+znQz0K+Dg1ZwhHXFLR25EekGIaLxf3dX?=
- =?us-ascii?Q?9s2uIpCxDLNY/X7oSp52lJunIHL52HRgK0AnqORGIynArYDeO2RynWeyx5vi?=
- =?us-ascii?Q?sFqsDs7t3ZBpFZEa2lfdBW9w3k8e9igPljhoGgPm0oe9Qxscb2SA8KG+Qo9a?=
- =?us-ascii?Q?dv9B6FKBf3t71Mife6b+uluf+6PQLFNtC8usir/1cXd99Y6s0nGV1Vy9LMLj?=
- =?us-ascii?Q?5AymHA+komNaJOE4hUvGcUU1HmEwoEvuvafyg3DAcRKY5BLHjJog96v5ZiJD?=
- =?us-ascii?Q?Rny4YBEr5r1iXJhmcA2/pdyeLIvf6w2X0rDwUBQ4Nn9PkdknzSLnqFdM0zgY?=
- =?us-ascii?Q?GuYn6A8bZOQ+yEaNToIijrQczRiBu+DNJQojmR7z1GR1wtWDcA6oXuG6Imq7?=
- =?us-ascii?Q?XkYrSQkMuGFVBg4D7dHI30iY7EMnrmBfeJOiVVqTHQ5V1vK+v9T4/qWNo0Se?=
- =?us-ascii?Q?7ByAXw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03689a93-1b1c-465c-7db2-08db20a2c22f
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 13:32:41.9614
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8wwdhrINfmOFC0bKISkJXTiNadX+uHdx4eSS96rUdLeLjToPmUZxFjQljign7c/Ov5EkfYuQXQWb0DNDPbUZyx0jIIfDkA+h3mFxlTuYq1g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR13MB5925
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+Date:   Thu, 09 Mar 2023 14:33:31 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc:     Serge Semin <fancer.lancer@gmail.com>, Sergiu.Moga@microchip.com,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        Claudiu.Beznea@microchip.com, chin-ting_kuo@aspeedtech.com,
+        clg@kaod.org, joel@jms.id.au, andrew@aj.id.au,
+        kdasu.kdev@gmail.com, han.xu@nxp.com, john.garry@huawei.com,
+        matthias.bgg@gmail.com, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, haibo.chen@nxp.com,
+        yogeshgaur.83@gmail.com, heiko@sntech.de,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        michal.simek@xilinx.com, bcm-kernel-feedback-list@broadcom.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] spi: Replace `dummy.nbytes` with `dummy.ncycles`
+In-Reply-To: <6c2090bf-d102-a333-3a83-03abe81ff70e@linaro.org>
+References: <20220911174551.653599-1-sergiu.moga@microchip.com>
+ <20220925220304.buk3yuqoh6vszfci@mobilestation>
+ <18e6e8a8-6412-7e31-21e0-6becd4400ac1@microchip.com>
+ <20220926172454.kbpzck7med5bopre@mobilestation>
+ <1766f6ef-d9d8-04f7-a6bf-0ea6bc0b3d23@linaro.org>
+ <f647e713a65f5d3f0f2e3af95c4d0a89@walle.cc>
+ <1849e2c8-54f5-9e56-4ed8-8b0e4a826d04@linaro.org>
+ <302ecf0421fe4c99fca3eb0ca2f66127@walle.cc>
+ <5183a184-c72d-3acd-70cd-6aa1e31533f5@linaro.org>
+ <03a9f117316ab81f1b5a18100f771e65@walle.cc>
+ <6c2090bf-d102-a333-3a83-03abe81ff70e@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <460ef5ff3846b409b322ca53559e2476@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,12 +87,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 02:04:52PM +0100, Geert Uytterhoeven wrote:
-> Use the new devm_of_phy_optional_get() helper instead of open-coding the
-> same operation.
+>>> The controllers that can talk in dummy ncycles don't need the
+>>> dummy.{buswidth, dtr} fields.
+>>> 
+>>> The controllers that can't talk in dummy cycles, but only on a "byte"
+>>> boundary need both buswidth and dtr fields. Assume a flash needs 32
+>>> dummy cycles for an op on 8D-8D-8D mode. If the controller does not 
+>>> have
+>>> the buswidth and dtr info, it can't convert the dummy ncycles to 
+>>> nbytes.
+>>> If he knows only that buswidth is 8, it will convert ncycles to 4 
+>>> bytes.
+>>> If dtr is also specified it converts ncycles to 2 bytes.
+>> 
+>> No they don't need it. Lets take your semper flash and assume it needs
+>> 12 latency cycles. SPI-NOR will set ncycles to 12 *regardless of the 
+>> mode
+>> or dtr setting*. The controller then knows we need 12 clock cycles. It 
+>> has
+>> then to figure out how that can be achieved. E.g. if it can only do 
+>> the
+>> "old" byte programming and is in quad mode, good for it. It will send 
+>> 6
+>> dummy bytes, which will result in 12 dummy clock cycles, because 1 
+>> byte
+>> takes two clock cycles in quad SDR mode. If its in octal mode, send 12
+>> bytes. If its in dual mode, send 3 bytes. Obiously, it cannot be in
+>> single bit mode, because it cannot send 1.5 bytes..
+>> 
 > 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> You miss the fact that you can have 1-1-4. What buswidth do you use
+> for dummy, the address buswidth or the data buswidth?
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Doesn't matter, does it? The driver is free to chose, 1, 4, or anything
+else. You don't sample any data during the dummy phase.
+To answer your question: single for instruction, single for address,
+whatever you choose for dummy as long as there are ncycles space between
+address and data, and quad for data.
 
+Depending on the capabilites of the hardware it will likely be 1 or 4.
+
+> What happens if crazy protocols like 1S-1S-8D appear? What buswidth
+> and transfer mode are you going to use for dummy?
+
+Also doesn't matter. What matters is how many dummy clock cycles you
+do. Again, they don't depent on the mode. You just have to count
+the clock cycles between the address and the data phase (and that is
+what your ncycle parameter will tell the controller).
+
+> And please don't tell me that "we're going to assume that
+> dummy.buswidth = address.buswidth because that's what we currently do
+> in SPI NOR", because I'm not convinced that the assumption is correct.
+
+No, it doesn't matter :)
+
+-michael
