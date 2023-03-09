@@ -2,179 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7696F6B2FA5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:33:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E016B2FAA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjCIVc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 16:32:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S231192AbjCIVfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 16:35:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbjCIVcy (ORCPT
+        with ESMTP id S229939AbjCIVfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 16:32:54 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD695E3494
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 13:32:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678397563; x=1709933563;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tWLeBDuNulm9z0Q8XB9DwcJBi5dSqpRk4wd+GvymKUs=;
-  b=c/NCDBf8f3BmQa4jfu35+EtfjG1VjacJjhYA9ZfyECIiAQ2NRceoN6li
-   bu79GLNWql/v63nWkQGX+b/0GJ+sWfw5b3yICtTFSCTX7217DKu0g91+u
-   m3nO36QFzAhStfCSg2yaHI80+mXrgNmmWPoVmVGMCyqlTqQxmyDTkT6Qu
-   O/bQTCjmRqYi1QliLGH0RMpH7SPC+C5fmai5Dt/cvY7oH5M1tLm40kBIu
-   4wFtUshX5KRg0tSS6KTJ7UxHAk5z8QdGOj3/5hzFIoVnre7HNYtEeI23l
-   P5DCGs9sU3jhnJTlFfgDqyoz5qsMi50mhtnpbB8kkqlnRS7lsvlI76WDG
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="320430125"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="320430125"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 13:32:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="787759545"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="787759545"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 09 Mar 2023 13:32:40 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1paNsO-0003Ef-0T;
-        Thu, 09 Mar 2023 21:32:40 +0000
-Date:   Fri, 10 Mar 2023 05:31:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- c268f567e8b4cea64214c05099712886f64c2509
-Message-ID: <640a5049.6hhP1gUz1V546/gV%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 9 Mar 2023 16:35:07 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B60DABA6
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 13:35:04 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id j11so12696728edq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 13:35:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678397703;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KK2kVS/pDWxq/x5pUQs4W8hA5sU/CpHNUPW7RfmKdu0=;
+        b=oBBXq4iAeXbCsT2PF/6pqeDn93WEhifSbV1qlFa/7iop2+zWVFoeABEAekMO3CFjo8
+         XXFd5i2aeyKAoNCdnQEt/4uAjlOK6cjFdPbuGtqF/txObVlNkQwgyPHFXVzDNoHgTnRR
+         rbpW2nXtXY4BLA0DPrDKkKgmfaZVSLLq/BXxs6eYSYcWD5MNVmyFED/xQHLX4yhhxcWL
+         ru/lfliBr65TCIfvp6fTHZN9Jly/jxxB/fjLOL7OSb4u5/2I7a5UAAuTw/9EWTwf+GNM
+         1b+Xfi3rSFDIlGp/PJtFNMlsbCYUyB6GNpBEmGc55AAsMCj/rbV0o/F1u1pzCU6CFKQe
+         E7Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678397703;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KK2kVS/pDWxq/x5pUQs4W8hA5sU/CpHNUPW7RfmKdu0=;
+        b=kikKtH6dn9tMP/3OYTA3pva/yCYIULTHZsC4kODMgdFlPkEb6y4qYJFgP/6HfJL2UO
+         IsTKEWtkUOn933SG9S3VtAQy3SqM9QILIRNZUSJAfKBTy055VLBCRm9hbwXTOC+qkOuT
+         XchRnsgz2OA7pG+vuAZB8mWcjpcleX+JOCWci6siMCULhv67arUus58W/8UMJTSTO2c7
+         isiw5BrWRks/9ySajAruYzDsl15Rgw4nUOkFJA9bN8oj4+k3W9l2d8hz9uzBcvSVaVgE
+         qWA2rjC6c5O6jBpADGl5BOptXcVlaEn217uJFHy0HLoetQbP1X2X2J6USV7wUlTw59cE
+         qcMQ==
+X-Gm-Message-State: AO0yUKUKe6HRhmUACQ3iGSOBARZsZf4jYi/4T/NP6GU7+C9k6MGtNdCg
+        CPfpmdVJfYM/J2SSF8WkAyf2Dg==
+X-Google-Smtp-Source: AK7set/lpUBZ9Bne9GGWFN6gWynBHiCiKi1zXGKsV102g3fb0dLfD4PR0FwBl6fJxgTrdcDKS96V+A==
+X-Received: by 2002:aa7:d7c8:0:b0:4ac:c85c:fb8d with SMTP id e8-20020aa7d7c8000000b004acc85cfb8dmr24734520eds.10.1678397703225;
+        Thu, 09 Mar 2023 13:35:03 -0800 (PST)
+Received: from ryzen9.fritz.box ([81.221.122.240])
+        by smtp.gmail.com with ESMTPSA id 8-20020a508748000000b004af7191fe35sm211486edv.22.2023.03.09.13.35.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 13:35:02 -0800 (PST)
+From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+To:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        angelogioacchino.delregno@collabora.com, matthias.bgg@gmail.com,
+        gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, maz@kernel.org, tglx@linutronix.de
+Subject: [PATCH v11 0/3] Add minimal MT8365 and MT8365-EVK support
+Date:   Thu,  9 Mar 2023 22:34:58 +0100
+Message-Id: <20230309213501.794764-1-bero@baylibre.com>
+X-Mailer: git-send-email 2.40.0.rc2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: c268f567e8b4cea64214c05099712886f64c2509  Merge branch into tip/master: 'x86/paravirt'
+v11:
+  - Fix typo in systimer (Thanks Angelo)
 
-elapsed time: 720m
+v10:
+  - Fix systimer properties (Thanks Amjad)
+  - Drop components of the patchset that have already been merged
 
-configs tested: 99
-configs skipped: 7
+v9:
+  - Fix a regression in v8 that broke the USB port
+  - Remove superfluous include in mt8365.dtsi
+  - Fix some naming issues pointed out by dtbs_check
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+v8:
+  - Add binding descriptions for mediatek,mt8365-systimer and
+    mediatek,mt8365-uart
+  - Specify ranges with parameters for u3phy
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r003-20230308   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230308   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r003-20230309   gcc  
-arm                  randconfig-r046-20230308   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r001-20230309   clang
-arm64                randconfig-r004-20230309   clang
-arm64                randconfig-r015-20230308   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r036-20230308   gcc  
-hexagon              randconfig-r002-20230309   clang
-hexagon              randconfig-r011-20230308   clang
-hexagon              randconfig-r013-20230308   clang
-hexagon              randconfig-r041-20230308   clang
-hexagon              randconfig-r045-20230308   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r006-20230309   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r005-20230308   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r023-20230308   gcc  
-mips                 randconfig-r026-20230308   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r014-20230308   gcc  
-nios2                randconfig-r035-20230308   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r005-20230309   gcc  
-parisc               randconfig-r024-20230308   gcc  
-parisc               randconfig-r031-20230308   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r034-20230308   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230308   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r032-20230308   gcc  
-s390                 randconfig-r044-20230308   clang
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r004-20230308   gcc  
-sh                   randconfig-r021-20230308   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r022-20230308   gcc  
-sparc64      buildonly-randconfig-r002-20230308   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r025-20230308   gcc  
-xtensa               randconfig-r033-20230308   gcc  
+Tested-by: Kevin Hilman <khilman@baylibre.com>
+
+v7:
+  - Update GIC information in mt8365.dtsi (thanks to Marc Zyngier for
+    pointing out the problem)
+  - Adjust the timer to match the updated GIC information
+
+v6:
+  - Add systimer in mt8365.dtsi
+  - Add I/D caches and L2 cache details in mt8365.dtsi
+  - Move bl31_secmon_reserved from mt8365.dtsi to mt8365-evk.dts
+  - Fix inconsistent indentation in mt8365-pinctrl example
+  - Further mt8365.dtsi cleanups
+  - Submit to additional maintainers spotted by get_maintainer.pl
+
+v5:
+  - Reorder top-level entries in mediatek,mt8365-pinctrl.yaml to match
+    example-schema
+  - Use consistent quotes
+
+v4:
+  - Remove pins-are-numbered references that have been holding things up
+    now that the patches removing it from dt-bindings have landed in linux-next
+
+v3:
+  - Remove a number of components that are not yet supported (they will
+    come back alongside the corresponding drivers)
+  - Address issues found by dt_binding_check (mostly fixing pinctrl
+    bindings)
+  - Address issues pointed out in comments
+  - Reorder patches
+
+v2:
+  - Add missing dt-bindings documentation
+  - Small cleanups addressing issues in v1 pointed out by Krzysztof Kozlowski
+
+
+Bernhard Rosenkränzer (2):
+  dt-bindings: irq: mtk, sysirq: add support for mt8365
+  dt-bindings: serial: mediatek,uart: add MT8365
+
+Fabien Parent (1):
+  arm64: dts: mediatek: Initial mt8365-evk support
+
+ .../interrupt-controller/mediatek,sysirq.txt  |   1 +
+ .../bindings/serial/mediatek,uart.yaml        |   1 +
+ arch/arm64/boot/dts/mediatek/Makefile         |   1 +
+ arch/arm64/boot/dts/mediatek/mt8365-evk.dts   | 168 ++++++++
+ arch/arm64/boot/dts/mediatek/mt8365.dtsi      | 377 ++++++++++++++++++
+ 5 files changed, 548 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.40.0.rc2
+
