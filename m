@@ -2,232 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953426B23CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 13:14:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 177526B23CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 13:14:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjCIMO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 07:14:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S229923AbjCIMOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 07:14:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjCIMOV (ORCPT
+        with ESMTP id S229705AbjCIMOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 07:14:21 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40693E9CEB;
-        Thu,  9 Mar 2023 04:14:19 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id i20so1572484lja.11;
-        Thu, 09 Mar 2023 04:14:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678364057;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TRXggi04xWYcHaVC0FAY4i7eTSbEWaqGbUlV8GQrxI4=;
-        b=bxBUebwN1xXJ09HJTDv0z93xzMLucpoMFhXNI+YUQIVAP2r7PEpV1Xf5xzZLwmKQgB
-         d0XUPU7ok6Kokt5OEFLypMLwC0/aU7RIYfZ+Gux/weU9N9swKdkkUeC6IQgIXeGBsaSQ
-         vlt+QYyWhSPDp4E4O6odvBZ3BZ4AooMhCVA5LUn89zi3LhISB50/wQKHD95VVcn1C3vi
-         zriqcDD7xWeXQpb/UYVkj1RvsfGW/GFO9e3izMihHvE5m8u7Sze31uNwUqKb31xCxu2l
-         B6If0L18dmMroxcDmaANwfYijq9e8OgwTodXbsZ6THXf4ub8K3mL16pOqI50WdSxSmTV
-         0ahQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678364057;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TRXggi04xWYcHaVC0FAY4i7eTSbEWaqGbUlV8GQrxI4=;
-        b=MUrLH+EuI/LEWhY2xqB+3tZVVPTzBlfvO2I3PH1PcEbXEQJVYl+tq6FqhUtB/9+xxN
-         xF4Da8iTCej1tv8t8bfCzHDmv3X/E0z2ayGo4pKt/ju0eoT0mLooSIp6EMtbNk01Si2K
-         CZNb9/09O+NvG0nONjSnVea5zQfbFlbVSNWRQDiTfAty56MtJmDQBmgya8G5Xw9dyXWx
-         lbGPJIHF6uBTjl7Ov/j0Gju0ttyfNRdqEzFX5OGo18XceFLQUkvFKHmcMMxepBr8xPBB
-         zo0RtB8Lb1n3uwdIqBNFv9aCNc2e1XsBnsAvDn+TK76ULEdV4E8IMf2GzOUFkILDGIZP
-         DGFg==
-X-Gm-Message-State: AO0yUKWiBtflbNNE/s5zdlY8VYJnRK04ccYSQK+4yg6BUviCgxKf6wBg
-        uzwwf0Vmh+KiEBMPo236+6c=
-X-Google-Smtp-Source: AK7set+Wn2YaPYZxCfuLq20impmYZwOoNM9/3S/XAhSmjPQfeIyuFw/PnT2wNQerWfyd7hGv/3meMw==
-X-Received: by 2002:a05:651c:105c:b0:295:a3a0:ea95 with SMTP id x28-20020a05651c105c00b00295a3a0ea95mr5812836ljm.42.1678364057335;
-        Thu, 09 Mar 2023 04:14:17 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id z4-20020a2eb524000000b002934e1407desm2940222ljm.43.2023.03.09.04.14.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 04:14:16 -0800 (PST)
-Date:   Thu, 9 Mar 2023 15:14:14 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Brad Larson <blarson@amd.com>
-Cc:     adrian.hunter@intel.com, alcooperx@gmail.com,
-        andy.shevchenko@gmail.com, arnd@arndb.de,
-        brendan.higgins@linux.dev, briannorris@chromium.org,
-        brijeshkumar.singh@amd.com, broonie@kernel.org,
-        catalin.marinas@arm.com, davidgow@google.com,
-        devicetree@vger.kernel.org, gerg@linux-m68k.org, gsomlo@gmail.com,
-        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee.jones@linaro.org, lee@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        p.yadav@ti.com, p.zabel@pengutronix.de, piotrs@cadence.com,
-        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
-        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
-        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
-        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
-        yamada.masahiro@socionext.com
-Subject: Re: [PATCH v10 10/15] spi: dw: Add support for AMD Pensando Elba SoC
-Message-ID: <20230309121414.6ay47dn57f2p26nh@mobilestation>
-References: <20230306160017.ptd3ogundxvus5zm@mobilestation>
- <20230307022002.28874-1-blarson@amd.com>
+        Thu, 9 Mar 2023 07:14:22 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B747FE9CEE;
+        Thu,  9 Mar 2023 04:14:21 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E644A2007C;
+        Thu,  9 Mar 2023 12:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1678364059; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aBTpwRtSZwODcRZc+KS9FuZwWg+phVRoROCrcVOYgZ4=;
+        b=KAk5HYaGN0wgGxyGMR5Nes+9n7pfzAFObTgrbLUfwx8mrl564qinsjxjXrRuZzwmLamEer
+        wwjuzPKhywzavuKO39q1ctpWBcu5yjyWSlWWLgGc97Z90iKozuumMPnTfAC29kAls1GOth
+        j9X2iiX+TNTCKPH6WExZ/+dvRe3soCk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1678364059;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aBTpwRtSZwODcRZc+KS9FuZwWg+phVRoROCrcVOYgZ4=;
+        b=w8hwoGsOr/sm+JEJcTv5NeTLU88ifV/Esul3vGts/Xo8HsJrhUI5SL4kvRq5KYPmEadtLE
+        qCXiHM0JokzHPsDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D09EF13A10;
+        Thu,  9 Mar 2023 12:14:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NTzoMpvNCWQDagAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 09 Mar 2023 12:14:19 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 46003A06FF; Thu,  9 Mar 2023 13:14:19 +0100 (CET)
+Date:   Thu, 9 Mar 2023 13:14:19 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>, Ritesh Harjani <ritesh.list@gmail.com>
+Subject: Re: [RFC 05/11] ext4: Add per CR extent scanned counter
+Message-ID: <20230309121419.juuadfpa5ytzgnfl@quack3>
+References: <cover.1674822311.git.ojaswin@linux.ibm.com>
+ <e320e13e0f966b8878f923b3a700568064dbe634.1674822311.git.ojaswin@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230307022002.28874-1-blarson@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e320e13e0f966b8878f923b3a700568064dbe634.1674822311.git.ojaswin@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 06:20:02PM -0800, Brad Larson wrote:
-> On Mon, Mar 06, 2023 at 16:00, Serge Semin wrote:
-> > On Sun, Mar 05, 2023 at 08:07:34PM -0800, Brad Larson wrote:
-> >> The AMD Pensando Elba SoC includes a DW apb_ssi v4 controller
-> >> with device specific chip-select control.  The Elba SoC
-> >> provides four chip-selects where the native DW IP supports
-> >> two chip-selects.  The Elba DW_SPI instance has two native
-> >> CS signals that are always overridden.
-> >> 
-> >> Signed-off-by: Brad Larson <blarson@amd.com>
-> >> ---
-> >> 
-> >> v10 changes:
-> >> - Delete struct dw_spi_elba, use regmap directly in priv
-> >> 
-> >> v9 changes:
-> >> - Add use of macros GENMASK() and BIT()
-> >> - Change ELBA_SPICS_SHIFT() to ELBA_SPICS_OFFSET()
-> >> 
-> >> ---
-> >>  drivers/spi/spi-dw-mmio.c | 65 +++++++++++++++++++++++++++++++++++++++
-> >>  1 file changed, 65 insertions(+)
-> >> 
-> >> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-> >> index 26c40ea6dd12..2076cb83a11b 100644
-> >> --- a/drivers/spi/spi-dw-mmio.c
-> >> +++ b/drivers/spi/spi-dw-mmio.c
-> >> @@ -53,6 +53,20 @@ struct dw_spi_mscc {
-> >>  	void __iomem        *spi_mst; /* Not sparx5 */
-> >>  };
-> >>  
-> >> +/*
-> >> + * Elba SoC does not use ssi, pin override is used for cs 0,1 and
-> >> + * gpios for cs 2,3 as defined in the device tree.
-> >> + *
-> >> + * cs:  |       1               0
-> >> + * bit: |---3-------2-------1-------0
-> >> + *      |  cs1   cs1_ovr   cs0   cs0_ovr
-> >> + */
-> >> +#define ELBA_SPICS_REG			0x2468
-> >> +#define ELBA_SPICS_OFFSET(cs)		((cs) << 1)
-> >> +#define ELBA_SPICS_MASK(cs)		(GENMASK(1, 0) << ELBA_SPICS_OFFSET(cs))
-> >> +#define ELBA_SPICS_SET(cs, val)		\
-> >> +		((((val) << 1) | BIT(0)) << ELBA_SPICS_OFFSET(cs))
-> >> +
-> >>  /*
-> >>   * The Designware SPI controller (referred to as master in the documentation)
-> >>   * automatically deasserts chip select when the tx fifo is empty. The chip
-> >> @@ -237,6 +251,56 @@ static int dw_spi_canaan_k210_init(struct platform_device *pdev,
-> >>  	return 0;
-> >>  }
-> >>  
-> >> +static void dw_spi_elba_override_cs(struct regmap *syscon, int cs, int enable)
-> >> +{
-> >> +	regmap_update_bits(syscon, ELBA_SPICS_REG, ELBA_SPICS_MASK(cs),
-> >> +			   ELBA_SPICS_SET(cs, enable));
-> >> +}
-> >> +
-> >> +static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
-> >> +{
-> >> +	struct dw_spi *dws = spi_master_get_devdata(spi->master);
-> >> +	struct dw_spi_mmio *dwsmmio = container_of(dws, struct dw_spi_mmio, dws);
-> >> +	struct regmap *syscon = dwsmmio->priv;
-> >> +	u8 cs;
-> >> +
-> >> +	cs = spi->chip_select;
-> >> +	if (cs < 2)
-> >> +		dw_spi_elba_override_cs(syscon, spi->chip_select, enable);
-> >> +
-> >> +	/*
-> >> +	 * The DW SPI controller needs a native CS bit selected to start
-> >> +	 * the serial engine.
-> >> +	 */
-> >> +	spi->chip_select = 0;
-> >> +	dw_spi_set_cs(spi, enable);
-> >> +	spi->chip_select = cs;
-> >> +}
-> >> +
-> >> +static int dw_spi_elba_init(struct platform_device *pdev,
-> >> +			    struct dw_spi_mmio *dwsmmio)
-> >> +{
-> >> +	const char *syscon_name = "amd,pensando-elba-syscon";
-> >
-> >> +	struct device_node *np = pdev->dev.of_node;
-> >
-> > Drop this since it's used only once below. 
-> >
+On Fri 27-01-23 18:07:32, Ojaswin Mujoo wrote:
+> This gives better visibility into the number of extents scanned in each
+> particular CR. For example, this information can be used to see how out
+> block group scanning logic is performing when the BG is fragmented.
 > 
-> Removed
+> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+
+Looks good to me. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  fs/ext4/ext4.h    |  1 +
+>  fs/ext4/mballoc.c | 12 ++++++++++++
+>  fs/ext4/mballoc.h |  1 +
+>  3 files changed, 14 insertions(+)
 > 
-> >> +	struct device_node *node;                                         
-> 
-> Renamed *node to *np
-> 
-> >> +	struct regmap *syscon;                                            
-> >> +                                                                       
-> >> -	node = of_parse_phandle(np, syscon_name, 0);                      
-> >
-> >	node = of_parse_phandle(dev_of_node(pdev->dev), syscon_name, 0);
-> >
-> > +	if (!node)
-> >
-> >> +		return dev_err_probe(&pdev->dev, -ENODEV, "failed to find %s\n",
-> >> +				     syscon_name);
-> >
-> > Hm, using dev_err_probe() with known error value seems overkill.
-> 
-> Changed to: return -ENODEV
-> 
-> >> +
-> >
-> >> +	syscon = syscon_node_to_regmap(node);
-> >> +	if (IS_ERR(syscon))
-> >> +		return dev_err_probe(&pdev->dev, PTR_ERR(syscon),
-> >> +				     "syscon regmap lookup failed\n");
-> >
-> > of_node_put() is missing in the error and success paths.
-> 
-> Result of the above changes are:
-> 
-> +       const char *syscon_name = "amd,pensando-elba-syscon";
-> +       struct device_node *np;
-> +       struct regmap *syscon;
+> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> index 6037b8e0af86..4ba2c95915eb 100644
+> --- a/fs/ext4/ext4.h
+> +++ b/fs/ext4/ext4.h
+> @@ -1633,6 +1633,7 @@ struct ext4_sb_info {
+>  	atomic_t s_bal_success;	/* we found long enough chunks */
+>  	atomic_t s_bal_allocated;	/* in blocks */
+>  	atomic_t s_bal_ex_scanned;	/* total extents scanned */
+> +	atomic_t s_bal_cX_ex_scanned[EXT4_MB_NUM_CRS];	/* total extents scanned */
+>  	atomic_t s_bal_groups_scanned;	/* number of groups scanned */
+>  	atomic_t s_bal_goals;	/* goal hits */
+>  	atomic_t s_bal_breaks;	/* too long searches */
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 323604a2ff45..07a50a13751c 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -2077,6 +2077,7 @@ static void ext4_mb_measure_extent(struct ext4_allocation_context *ac,
+>  	BUG_ON(ac->ac_status != AC_STATUS_CONTINUE);
+>  
+>  	ac->ac_found++;
+> +	ac->ac_cX_found[ac->ac_criteria]++;
+>  
+>  	/*
+>  	 * The special case - take what you catch first
+> @@ -2249,6 +2250,7 @@ void ext4_mb_simple_scan_group(struct ext4_allocation_context *ac,
+>  			break;
+>  		}
+>  		ac->ac_found++;
+> +		ac->ac_cX_found[ac->ac_criteria]++;
+>  
+>  		ac->ac_b_ex.fe_len = 1 << i;
+>  		ac->ac_b_ex.fe_start = k << i;
+> @@ -2362,6 +2364,7 @@ void ext4_mb_scan_aligned(struct ext4_allocation_context *ac,
+>  			max = mb_find_extent(e4b, i, sbi->s_stripe, &ex);
+>  			if (max >= sbi->s_stripe) {
+>  				ac->ac_found++;
+> +				ac->ac_cX_found[ac->ac_criteria]++;
+>  				ex.fe_logical = 0xDEADF00D; /* debug value */
+>  				ac->ac_b_ex = ex;
+>  				ext4_mb_use_best_found(ac, e4b);
+> @@ -2894,6 +2897,7 @@ int ext4_seq_mb_stats_show(struct seq_file *seq, void *offset)
+>  	seq_printf(seq, "\t\thits: %llu\n", atomic64_read(&sbi->s_bal_cX_hits[CR0]));
+>  	seq_printf(seq, "\t\tgroups_considered: %llu\n",
+>  		   atomic64_read(&sbi->s_bal_cX_groups_considered[CR0]));
+> +	seq_printf(seq, "\t\textents_scanned: %u\n", atomic_read(&sbi->s_bal_cX_ex_scanned[CR0]));
+>  	seq_printf(seq, "\t\tuseless_loops: %llu\n",
+>  		   atomic64_read(&sbi->s_bal_cX_failed[CR0]));
+>  	seq_printf(seq, "\t\tbad_suggestions: %u\n",
+> @@ -2903,6 +2907,7 @@ int ext4_seq_mb_stats_show(struct seq_file *seq, void *offset)
+>  	seq_printf(seq, "\t\thits: %llu\n", atomic64_read(&sbi->s_bal_cX_hits[CR1]));
+>  	seq_printf(seq, "\t\tgroups_considered: %llu\n",
+>  		   atomic64_read(&sbi->s_bal_cX_groups_considered[CR1]));
+> +	seq_printf(seq, "\t\textents_scanned: %u\n", atomic_read(&sbi->s_bal_cX_ex_scanned[CR1]));
+>  	seq_printf(seq, "\t\tuseless_loops: %llu\n",
+>  		   atomic64_read(&sbi->s_bal_cX_failed[CR1]));
+>  	seq_printf(seq, "\t\tbad_suggestions: %u\n",
+> @@ -2912,6 +2917,7 @@ int ext4_seq_mb_stats_show(struct seq_file *seq, void *offset)
+>  	seq_printf(seq, "\t\thits: %llu\n", atomic64_read(&sbi->s_bal_cX_hits[CR2]));
+>  	seq_printf(seq, "\t\tgroups_considered: %llu\n",
+>  		   atomic64_read(&sbi->s_bal_cX_groups_considered[CR2]));
+> +	seq_printf(seq, "\t\textents_scanned: %u\n", atomic_read(&sbi->s_bal_cX_ex_scanned[CR2]));
+>  	seq_printf(seq, "\t\tuseless_loops: %llu\n",
+>  		   atomic64_read(&sbi->s_bal_cX_failed[CR2]));
+>  
+> @@ -2919,6 +2925,7 @@ int ext4_seq_mb_stats_show(struct seq_file *seq, void *offset)
+>  	seq_printf(seq, "\t\thits: %llu\n", atomic64_read(&sbi->s_bal_cX_hits[CR3]));
+>  	seq_printf(seq, "\t\tgroups_considered: %llu\n",
+>  		   atomic64_read(&sbi->s_bal_cX_groups_considered[CR3]));
+> +	seq_printf(seq, "\t\textents_scanned: %u\n", atomic_read(&sbi->s_bal_cX_ex_scanned[CR3]));
+>  	seq_printf(seq, "\t\tuseless_loops: %llu\n",
+>  		   atomic64_read(&sbi->s_bal_cX_failed[CR3]));
+>  	seq_printf(seq, "\textents_scanned: %u\n", atomic_read(&sbi->s_bal_ex_scanned));
+> @@ -4216,7 +4223,12 @@ static void ext4_mb_collect_stats(struct ext4_allocation_context *ac)
+>  		atomic_add(ac->ac_b_ex.fe_len, &sbi->s_bal_allocated);
+>  		if (ac->ac_b_ex.fe_len >= ac->ac_o_ex.fe_len)
+>  			atomic_inc(&sbi->s_bal_success);
 > +
-
-> +       np = of_parse_phandle(pdev->dev.of_node, syscon_name, 0);
-> +       if (!np)
-> +               return -ENODEV;
+>  		atomic_add(ac->ac_found, &sbi->s_bal_ex_scanned);
+> +		for (int i=0; i<EXT4_MB_NUM_CRS; i++) {
+> +			atomic_add(ac->ac_cX_found[i], &sbi->s_bal_cX_ex_scanned[i]);
+> +		}
 > +
-> +       syscon = syscon_node_to_regmap(np);
-> +       of_node_put(np);
-> +       if (IS_ERR(syscon))
-> +               return dev_err_probe(&pdev->dev, PTR_ERR(syscon),
-> +                                    "syscon regmap lookup failed\n");
-
-As Andy correctly noted this can be fully converted to just a single call:
-syscon_regmap_lookup_by_phandle().
-
-and replace pdev->dev.of_node with dev_of_node(pdev->dev).
-
--Serge(y)
-
+>  		atomic_add(ac->ac_groups_scanned, &sbi->s_bal_groups_scanned);
+>  		if (ac->ac_g_ex.fe_start == ac->ac_b_ex.fe_start &&
+>  				ac->ac_g_ex.fe_group == ac->ac_b_ex.fe_group)
+> diff --git a/fs/ext4/mballoc.h b/fs/ext4/mballoc.h
+> index f0087a85e366..004b8d163cc9 100644
+> --- a/fs/ext4/mballoc.h
+> +++ b/fs/ext4/mballoc.h
+> @@ -193,6 +193,7 @@ struct ext4_allocation_context {
+>  	__u16 ac_groups_scanned;
+>  	__u16 ac_groups_linear_remaining;
+>  	__u16 ac_found;
+> +	__u16 ac_cX_found[EXT4_MB_NUM_CRS];
+>  	__u16 ac_tail;
+>  	__u16 ac_buddy;
+>  	__u8 ac_status;
+> -- 
+> 2.31.1
 > 
-> Regards,
-> Brad
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
