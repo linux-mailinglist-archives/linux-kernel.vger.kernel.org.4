@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C556B2A78
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDA66B2A77
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbjCIQJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 11:09:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
+        id S232489AbjCIQKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 11:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231759AbjCIQCk (ORCPT
+        with ESMTP id S231764AbjCIQCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:02:40 -0500
+        Thu, 9 Mar 2023 11:02:41 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA4AF5AAA;
-        Thu,  9 Mar 2023 08:02:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3252EF63A3;
+        Thu,  9 Mar 2023 08:02:40 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7991422169;
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DAF912216A;
         Thu,  9 Mar 2023 16:02:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1678377758; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OEolRl7Gtp6eBSHcZORJIpDzJ5v2DCmOHbu1CyAwA3Y=;
-        b=AV+21/bVPDGAbr8VTqIZjqTw5fFW2X2dMnMFickwpWVWfsJ9W8Czdelk58P8hclKTQVsfr
-        nQtXNuzPZMcOVkff5HAhRAKW13TtjUx2gWAlEdFIJPNKlML5K3rUCf+JCm/WnntJNAnVsy
-        tXGGZbT+tlwCGTUDcrs5rPfR9acPHnc=
+        bh=vc3MhzDf1ytnsAQte0if7o8oovAVmX2ICQWxWSrkdIk=;
+        b=FiIMR8Ipp0/ClhsoBteb/TvJRP0rhUbP77FigucWxvGsSnBXDm5mji5cyXuX5Dgt1z54Aw
+        CEsrVTLMb3ftymT/7LOvI29Y/RpcTSYV+SULwqpDyPf+IoE82APXQYFfh8i9g0KstECaVl
+        OhkN5jXd7y617eM7cMxRmGHC6h+GUHE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1678377758;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OEolRl7Gtp6eBSHcZORJIpDzJ5v2DCmOHbu1CyAwA3Y=;
-        b=MyGRnIxwQ5h/MHRygWADLYZfzgeWe1uSumvb2FyfsdkD+JY8UL/Rx7c6nweT1Tq2/NcUh1
-        CqvYKFVmvLEjr9AA==
+        bh=vc3MhzDf1ytnsAQte0if7o8oovAVmX2ICQWxWSrkdIk=;
+        b=DpafcnkE6VWfFGcvZg5uAQpABZ6r8j3l67ZybvrYWYYSn5NnlszCl9POswvSGQpfn/LcKM
+        whxPMWE1BywtHAAQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1E5CB1391B;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7E75F13A73;
         Thu,  9 Mar 2023 16:02:38 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id gJZ0Bh4DCmQHbgAAMHmgww
+        id aBb6HR4DCmQHbgAAMHmgww
         (envelope-from <tzimmermann@suse.de>); Thu, 09 Mar 2023 16:02:38 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     deller@gmx.de, geert+renesas@glider.be, timur@kernel.org,
@@ -60,9 +60,9 @@ To:     deller@gmx.de, geert+renesas@glider.be, timur@kernel.org,
 Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v2 084/101] fbdev/tmiofb: Remove unused option string
-Date:   Thu,  9 Mar 2023 17:01:44 +0100
-Message-Id: <20230309160201.5163-85-tzimmermann@suse.de>
+Subject: [PATCH v2 085/101] fbdev/tridentfb: Duplicate video-mode option string
+Date:   Thu,  9 Mar 2023 17:01:45 +0100
+Message-Id: <20230309160201.5163-86-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230309160201.5163-1-tzimmermann@suse.de>
 References: <20230309160201.5163-1-tzimmermann@suse.de>
@@ -77,60 +77,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The option string is unused. Remove the variable and a related
-helper function. No functional change.
+Assume that the driver does not own the option string or its substrings
+and hence duplicate the option string for the video mode. Allocate the
+copy's memory with kstrdup() and free it in the module's exit function.
+
+Done in preparation of switching the driver to struct option_iter and
+constifying the option string.
+
+v2:
+	* replace static memory with kstrdup()/kfree() (Geert)
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 ---
- drivers/video/fbdev/tmiofb.c | 24 ++----------------------
- 1 file changed, 2 insertions(+), 22 deletions(-)
+ drivers/video/fbdev/tridentfb.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/video/fbdev/tmiofb.c b/drivers/video/fbdev/tmiofb.c
-index 50111966c981..8920cee52d7f 100644
---- a/drivers/video/fbdev/tmiofb.c
-+++ b/drivers/video/fbdev/tmiofb.c
-@@ -11,6 +11,7 @@
-  *	code written by Sharp/Lineo for 2.4 kernels
-  */
+diff --git a/drivers/video/fbdev/tridentfb.c b/drivers/video/fbdev/tridentfb.c
+index 6099b9768ba1..dbde64aef91f 100644
+--- a/drivers/video/fbdev/tridentfb.c
++++ b/drivers/video/fbdev/tridentfb.c
+@@ -61,6 +61,7 @@ static struct fb_fix_screeninfo tridentfb_fix = {
+ /* defaults which are normally overriden by user values */
  
-+#include <linux/cmdline.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-@@ -997,32 +998,11 @@ static struct platform_driver tmiofb_driver = {
+ /* video mode */
++static char *mode_option_buf;
+ static char *mode_option;
+ static int bpp = 8;
  
- /*--------------------------------------------------------------------------*/
- 
--#ifndef MODULE
--static void __init tmiofb_setup(char *options)
--{
--	char *this_opt;
--
--	if (!options || !*options)
--		return;
--
--	while ((this_opt = strsep(&options, ",")) != NULL) {
--		if (!*this_opt)
--			continue;
--		/*
--		 * FIXME
--		 */
--	}
--}
--#endif
--
- static int __init tmiofb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
--
--	if (fb_get_options("tmiofb", &option))
-+	if (fb_get_options("tmiofb", NULL))
- 		return -ENODEV;
--	tmiofb_setup(option);
- #endif
- 	return platform_driver_register(&tmiofb_driver);
+@@ -1800,8 +1801,11 @@ static int __init tridentfb_setup(char *options)
+ 			memdiff = simple_strtoul(opt + 8, NULL, 0);
+ 		else if (!strncmp(opt, "nativex=", 8))
+ 			nativex = simple_strtoul(opt + 8, NULL, 0);
+-		else
+-			mode_option = opt;
++		else {
++			kfree(mode_option_buf);
++			mode_option_buf = kstrdup(opt, GFP_KERNEL); // ignore errors
++			mode_option = mode_option_buf;
++		}
+ 	}
+ 	return 0;
  }
+@@ -1827,6 +1831,7 @@ static int __init tridentfb_init(void)
+ static void __exit tridentfb_exit(void)
+ {
+ 	pci_unregister_driver(&tridentfb_pci_driver);
++	kfree(mode_option_buf);
+ }
+ 
+ module_init(tridentfb_init);
 -- 
 2.39.2
 
