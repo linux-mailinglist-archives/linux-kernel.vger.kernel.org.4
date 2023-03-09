@@ -2,124 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3818C6B21C1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4206B21CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbjCIKoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:44:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        id S230094AbjCIKqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:46:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbjCIKnT (ORCPT
+        with ESMTP id S229746AbjCIKpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:43:19 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CF5E7ED5
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:42:46 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id ay14so5052173edb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 02:42:45 -0800 (PST)
+        Thu, 9 Mar 2023 05:45:39 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A184CB855A;
+        Thu,  9 Mar 2023 02:45:38 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id x11so1488511pln.12;
+        Thu, 09 Mar 2023 02:45:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678358564;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QIqPwZfACxuoFE0kVLDEX5KFTlxcxIkjr0ZrsCZpJfg=;
-        b=euVIL+2duTNYwRJtF+ol1oSzOAan84vhnx9zvHZpXS6JSx5MDgCre/TmAdkCXB7MK2
-         I4jb/gEFln7Tc55yGheXC6LCyasYkbRvGkjcfnH9JWP8vMj2oH+ua3kT4DUVvIpio5qm
-         8KAaN0aPH4fcLlLBGN+bCLfbIkTte9imoBhZqKTxGi0Pyl2K5hQUKFadjITLBDgC4tRe
-         9JvJtm/9nd5d+j3EHVcot8cppwPfqzX8j+IqL+KBQkxJBxYiQJ6OML3Z4VtrIDeOXQI5
-         R9C9ULlDParFe3IljpQOQ8H2YOnIJ2Y3EfKjt1gDpCvFDTVz9a1P8ilGCS6jjqBQHFGC
-         UNmw==
+        d=gmail.com; s=20210112; t=1678358738;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OW6/6lfgOl+/I/V8WVarC0MKHx8gy98nLE1im9EecrI=;
+        b=n4g/LLpWMmjOGaqXqJLiKPmyUceGYJcijlFBs6UUum3TZ880fU89PGkkQO15hhiKK8
+         hvUWq6JVJ0+X2VXifW8jU7xOrZo55HkmyuoEd3KNUdIh3jUo4B1bxCM+VWwaj51HlfvQ
+         JdHZ1At7NphCXnHxiMMQ8JU5YNhISI7ejAvLGQsmesbdXjFV/MiCgXScNVbVk3Fv2TzP
+         0DT8omUQ5yuSy/8hqKICp2dvdDVKtbhebw4gesnhFcTZ3SIOyHQfKkaHx+lVc8sAg7GC
+         /6EX/SlIhokq2LWF8+j+BQ2dqRqEJZ9EjKIm4XUMKF8T+pZ4bbobZn9TBf9ZteeJxf2w
+         EGZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678358564;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QIqPwZfACxuoFE0kVLDEX5KFTlxcxIkjr0ZrsCZpJfg=;
-        b=i19l8rvNpAZwmcQjKqrfHivVSCARjs3EOiDKS3XD4JUUdZ+cTLJTlDvt4drLcMg+oL
-         RJAMnS92pjCMhh4MnNrf65znmqOYt1DDxm+b+AXOPaQzMqSKpUmUKAQ7b5x7QbbWJlDl
-         BnrOMreGshq7qmQ8mEjayDwW1in2MnR6prJ1MTdPiRPnY71RjFdqugVb/Rz7YzhnLo3A
-         Pj6Lmi1j1YqgF2tAT8tZa1aAw4vfvVRD3+KHFypl9TmyHS++Yz/3wEMjVJatK0k9TJR2
-         kP+RHzPLWWyKhRhGa+iYvUOuzAKUxFMV73rh3IaaUEGgNNKb5KVk02GiSC3w3lsqH6E3
-         uh/w==
-X-Gm-Message-State: AO0yUKVgUcpdAjU3fIfwFLKghr5EDemHwtFdJy9iiHPZ3NE0qpjuQNSz
-        WYADO4RWb+AxtfGvujGH5hLxLQ==
-X-Google-Smtp-Source: AK7set8BzaVa4jd8dPDPAqB41K7DRKm9ax9xddxg4jIMPvb/7B3XF2VQMIRZi0xYFz1/FcAsN4zkZQ==
-X-Received: by 2002:a17:907:e8d:b0:8af:5752:691f with SMTP id ho13-20020a1709070e8d00b008af5752691fmr25759324ejc.76.1678358564466;
-        Thu, 09 Mar 2023 02:42:44 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
-        by smtp.gmail.com with ESMTPSA id se18-20020a170906ce5200b008d6e551e1bcsm8635884ejb.2.2023.03.09.02.42.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 02:42:44 -0800 (PST)
-Message-ID: <2881f527-1673-3496-85a2-84a13f074248@linaro.org>
-Date:   Thu, 9 Mar 2023 11:42:42 +0100
+        d=1e100.net; s=20210112; t=1678358738;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OW6/6lfgOl+/I/V8WVarC0MKHx8gy98nLE1im9EecrI=;
+        b=jp1TV142Mp1dDKrCepONfWnDIkkRsMBGeijpECpznJ15J32LJj6Alm2MXRQneHaRMo
+         g8od0Wbsy2+JUqxadyxf8qnlY/y+V9qWoGzhhMiJhoFehzg9ZHgmbwuq9rPgv7Wr5FXf
+         d/NNwKBAngeg3RsCaLMg3nFYwfZ93cAnmpPNbF72y2Aa3lIsizzvOtPLuq0GUF7iqOAW
+         skMRfeGF1CWRkr0sf+Y/E7fZZGicr0kMaX4eSmBpeiTmeLYGFBy/S0wksb1JGTOUlq2B
+         ttjGToINphbDpZX1kYFDsEGfxU6wJgzWxzT2WrSgosfrrn+36N5BOTuZdSOrKgSR3h7R
+         ulRA==
+X-Gm-Message-State: AO0yUKVcUL502KbEppCX2SubODk+ciytyXHW8OrIbr8677OREa249GN0
+        VVFBhwl5wxrrKa+nMJ1FllA=
+X-Google-Smtp-Source: AK7set8nj8WlbSQzjyZM4sX3CMM6HMy67cT4xHiKp9CsZwF0yG+ucYBuDC94DNrFwTKNQ3zgMTKR6g==
+X-Received: by 2002:a05:6a20:9390:b0:cc:a62f:1a9d with SMTP id x16-20020a056a20939000b000cca62f1a9dmr24966707pzh.23.1678358738150;
+        Thu, 09 Mar 2023 02:45:38 -0800 (PST)
+Received: from localhost.localdomain (124-148-239-17.tpgi.com.au. [124.148.239.17])
+        by smtp.gmail.com with ESMTPSA id y24-20020a62b518000000b005a7c892b435sm10949574pfe.25.2023.03.09.02.45.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 02:45:37 -0800 (PST)
+From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Orlando Chamberlain <orlandoch.dev@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH 1/1] apple-gmux: Update apple_gmux_detect documentation
+Date:   Thu,  9 Mar 2023 21:43:54 +1100
+Message-Id: <20230309104353.10905-1-orlandoch.dev@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4] ASoC: cs35l41: Steam Deck Shared boost properties
- quirk
-Content-Language: en-US
-To:     Lucas Tanure <lucas.tanure@collabora.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        "Takashi Iwai --cc=alsa-devel @ alsa-project . org" <tiwai@suse.com>
-Cc:     patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230309104133.537056-1-lucas.tanure@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230309104133.537056-1-lucas.tanure@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2023 11:41, Lucas Tanure wrote:
-> Add support for Steam Deck bios old properties. If a Steam deck didn't
-> upgrade the BIOS, the driver should be able to handle the previous
-> properties for shared boost types.
-> 
-> Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
-> Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-> ---
-> Changes since V3:
->  - Fixed missing space in if statement
->  - Fix the build issue, as dependency patches are already merged
-> 
-> Changes since V2:
->  - sent the wrong patch with missing fixed lines
-> Changes since V1:
->  - else in same line as {
-> ---
->  sound/soc/codecs/cs35l41.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
-> index 1624510d09c0..2803ff0f0003 100644
-> --- a/sound/soc/codecs/cs35l41.c
-> +++ b/sound/soc/codecs/cs35l41.c
-> @@ -1022,9 +1022,15 @@ static int cs35l41_handle_pdata(struct device *dev, struct cs35l41_hw_cfg *hw_cf
->  	unsigned int val;
->  	int ret;
->  
-> -	ret = device_property_read_u32(dev, "cirrus,boost-type", &val);
-> -	if (ret >= 0)
-> -		hw_cfg->bst_type = val;
-> +	if (device_property_read_bool(dev, "cirrus,shared-boost-active")) {
+Commit fc83fbc80e1a ("platform/x86: apple-gmux: refactor gmux types")
+neglected to update the documentation of apple_gmux_detect's arguments.
+Update the documentation to reflect that commit's changes.
 
-You are now changing ABI and adding undocumented properties.
+include/linux/apple-gmux.h:99: warning:
+	Function parameter or member 'type_ret' not described in 'apple_gmux_detect'
+include/linux/apple-gmux.h:99: warning:
+	Excess function parameter 'indexed_ret' description in 'apple_gmux_detect'
 
-NAK.
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Link: https://lore.kernel.org/lkml/20230309122822.77435e33@canb.auug.org.au/
+Fixes: fc83fbc80e1a ("platform/x86: apple-gmux: refactor gmux types")
+Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
+---
+ include/linux/apple-gmux.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/include/linux/apple-gmux.h b/include/linux/apple-gmux.h
+index 272f63f8fd7c..a7a7d430024b 100644
+--- a/include/linux/apple-gmux.h
++++ b/include/linux/apple-gmux.h
+@@ -86,7 +86,7 @@ static inline bool apple_gmux_is_mmio(unsigned long iostart)
+  * apple_gmux_detect() - detect if gmux is built into the machine
+  *
+  * @pnp_dev:     Device to probe or NULL to use the first matching device
+- * @indexed_ret: Returns (by reference) if the gmux is indexed or not
++ * @type_ret: Returns (by reference) the apple_gmux_type of the device
+  *
+  * Detect if a supported gmux device is present by actually probing it.
+  * This avoids the false positives returned on some models by
+-- 
+2.39.2
 
