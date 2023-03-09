@@ -2,185 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA396B1F8E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 165D16B1F96
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbjCIJL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:11:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
+        id S231147AbjCIJMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjCIJL3 (ORCPT
+        with ESMTP id S230267AbjCIJMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:11:29 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E871CBCB;
-        Thu,  9 Mar 2023 01:11:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678353065; x=1709889065;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=uzSwTzYmuirE2t1RVyqqLXco8jZUtWj6cD5l5IatId4=;
-  b=HRUu7iorM50LUK3QxuFcWBKh9lTgw12nak43rbSVAbAEFYYGSahWC7Zh
-   Ga7x50QLkWSw8d/44DUuoNkepCi9utCHQVmuCxv6Ck1YlYz75scQPrGaU
-   4dUNkp1pHSsi3zGkTaJJDCZFu6BKllrPGdnXGQpAZ0iVmenYe7Ll73qly
-   xzVxcW6QqQ8d3IBzt2E2hY3kXA7dDZzHsSbRr5A8aBJHHmmM9BYde6wt6
-   9SvuUjAW4BLNl0FVl+cxF1IMi6u7+xTX0EOjnRSVqWfwVW83wxwdCAlv6
-   AeLPYDRPX+NHAHPZV80tAvcUm7bBtpipo6Rz2Cye/S3C9IY4QnAKk6LyR
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="316055525"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="316055525"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 01:11:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="654687400"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="654687400"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga006.jf.intel.com with ESMTP; 09 Mar 2023 01:11:03 -0800
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 9 Mar 2023 01:11:03 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 9 Mar 2023 01:11:03 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 9 Mar 2023 01:11:03 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DmyEJKVHFhtklESqwpNQLW/SPkZnMWr6s0m5KTicmyf/NlBRqZeGuLQtbJQwD3U6A42xDe82LlOOhusYbwTbfTTD4Bt1uKowrrGshRaGC02DTgkJilW1Xp/DNo/pPMGGb+NRB2Ul/Co7DLdIyUJu03Ti7FMa9h69cyFboxOOtEfFkWlMIw7AwLuzFP6BqoCS2Xjq3CcYch8heXXkPLVxjTtkvniAsvw5nhUXZqAjlGFpmJYNhhKVZfcVwYtyG1wnzIjFCMRJ+w65SwD6soEaiu8l3VR9qX3fKeuhfkMQqGZr52CzNaA7YzlHWpSNfVBA58EggyWt8uhpnOw3DY52ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eBSPJxtZ9gMsGhVc80P/1K4G9O/GOIQGpLJDUOHkeG4=;
- b=LYPY0H0hVNStwtXCU9Tf9XTlBLyts8sL3Ocz0DIbhbyGGeN48pnHPgv6iWJuggE9YOdrf6IClFB9YB5XyE5JU0Cm12taNB1UoCskGyC82TZhqx1P6gwZfQcw3k9X+giBKuGPp6TmA0rLiId8ETK8qMP5Nt9vq2xCYd5HJnOyKDYCK6y9vOZjJClde7zTMA2ynZjkQbFlLEh80OVTX6oJLq3DQTSM+qQnnzmRL9qurOmshfVWj3pKmWOaJZS8zqLRtSsMAv09Aw1QoEP7HmPLHFxf+CQohm4ftVcxcEk63N+gaE3dXD4k+Ky0OHqWcAoJJ65Tf2Dr8MPIp07TfIOirA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM5PR11MB1418.namprd11.prod.outlook.com (2603:10b6:3:8::9) by
- DM4PR11MB5264.namprd11.prod.outlook.com (2603:10b6:5:38b::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.18; Thu, 9 Mar 2023 09:10:56 +0000
-Received: from DM5PR11MB1418.namprd11.prod.outlook.com
- ([fe80::7ef8:2573:5a1b:c9f1]) by DM5PR11MB1418.namprd11.prod.outlook.com
- ([fe80::7ef8:2573:5a1b:c9f1%6]) with mapi id 15.20.6178.017; Thu, 9 Mar 2023
- 09:10:56 +0000
-Date:   Thu, 9 Mar 2023 17:10:48 +0800
-From:   "Ye, Xiang" <xiang.ye@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Lee Jones" <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        <linux-usb@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <srinivas.pandruvada@intel.com>,
-        <heikki.krogerus@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <sakari.ailus@linux.intel.com>, <zhifeng.wang@intel.com>,
-        <wentong.wu@intel.com>, <lixu.zhang@intel.com>
-Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
-Message-ID: <ZAmimLMY49ktjagX@ye-NUC7i7DNHE>
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
- <20230309071100.2856899-2-xiang.ye@intel.com>
- <ZAmPjfH6rA0pbiUa@kroah.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZAmPjfH6rA0pbiUa@kroah.com>
-X-ClientProxiedBy: SG2PR03CA0094.apcprd03.prod.outlook.com
- (2603:1096:4:7c::22) To DM5PR11MB1418.namprd11.prod.outlook.com
- (2603:10b6:3:8::9)
+        Thu, 9 Mar 2023 04:12:35 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C7ADCA5F;
+        Thu,  9 Mar 2023 01:12:17 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4PXNWj1ywgz9xtnb;
+        Thu,  9 Mar 2023 17:03:29 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwB39QDLoglkaOCDAQ--.24643S2;
+        Thu, 09 Mar 2023 10:11:52 +0100 (CET)
+Message-ID: <3f3c321a870ff8eae8634bab42ea276d6e6a7ed5.camel@huaweicloud.com>
+Subject: Re: [PATCH 03/28] ima: Align ima_post_create_tmpfile() definition
+ with LSM infrastructure
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
+        chuck.lever@oracle.com, jlayton@kernel.org,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 09 Mar 2023 10:11:36 +0100
+In-Reply-To: <502bd55cdbe47df40542f957f29f201502d7218f.camel@linux.ibm.com>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+         <20230303181842.1087717-4-roberto.sassu@huaweicloud.com>
+         <502bd55cdbe47df40542f957f29f201502d7218f.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR11MB1418:EE_|DM4PR11MB5264:EE_
-X-MS-Office365-Filtering-Correlation-Id: bbdeb555-8485-4769-0916-08db207e30c7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N4xRrCs46xElKJJN9dMt7t2MW4inRZl6UPMzRdp9DAWCBb+eOeZ9lInD3KYOElu3rsvrHscxqLxT1yIfDRJDQWKPosdkDh/DGzu5Ao8WKWQ4nVC9CZL6XzlEm+kWhBLbwfY3Oj3Wkcpn8DXORq057R9eRsa/DQYMHVVJZ3RWHRs/0alNMRUIH7Cv1cvG/igCbzci2pgDch/JJrKN8Ov6SkMoSaJ5+i5UfbqC3v6q/KAlJRzNAMTgxtOTVo6+8RxmDbnPereYx6dbzA4O02HgO9ZUeITnW1ZgXpVUjz8U/QPRAYbeBP5VHTDRUKhGtpHXZEsDA/kCdHFVdLH30bYlrv0aI1UiN1w1qa+OdcGOkCpIwTwNC/PWuajSl+xMCdsLoTyu9X8KBst8iPukoDQaw01j8aamqAtuyVgNHu0rAnplKPQYUCpYIZX7BSaOwpBzJhKgYui4XEhVdQ1zDJq1lk4LLqMa3SCeRBWdxC+KTa42+c0XogXiqOdaJ9gQYf/84Xrry/B4aHNAJZIo66CGF0VeQ4qUgCv2XPsjEKvgDJ+XLj27x/dyXPCkqJ789MdfGKsMGKBwEC7ZjjouLkBLxsubiZXR9NoRu7F+fK7r8wXzblngL0zlrgUV3r7U3DNW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1418.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(346002)(136003)(376002)(366004)(39860400002)(396003)(451199018)(8676002)(41300700001)(66556008)(33716001)(66476007)(4326008)(66946007)(82960400001)(6916009)(2906002)(316002)(54906003)(8936002)(38100700002)(5660300002)(186003)(7416002)(9686003)(478600001)(4744005)(966005)(6486002)(6512007)(26005)(6506007)(83380400001)(6666004)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BHiXBC18yZLotk+qwcrA+s1d8NX73zummMhAP31pIgyrFdBdPtrMsth5D6wA?=
- =?us-ascii?Q?TgmdwGNUNiLoJ3MPNx/irXJ9k/rpx1J5g0d9gNxvi+GRaXuJDzsEiJR2+k7x?=
- =?us-ascii?Q?kJntakFSOhsYkvMSsYD4k/1A+WQSurJzQn5bOYHblG3EXpkA7gztXJeHu145?=
- =?us-ascii?Q?RutlI+LZdhE9Zmczr8+iDEbBVJR564VULrE5YUCTW9EXknskQSrGPgswVrls?=
- =?us-ascii?Q?wYM8rCCVJ1bMh4/SuGh8AXdDjGFK0gxsUgUARmz9l6PWSxdHyQDGgUfTzcPH?=
- =?us-ascii?Q?dp97RFFYFK6wPtwQcBbdy7TwLFuZD4USrxy1toeQ2xy5PwEe5bqyEuain8UL?=
- =?us-ascii?Q?ejZwBhqrPmD5ZYzdi+P03Knbe4ghkazmATdzNmaUDLsCeyF8VNuulMLCVO9L?=
- =?us-ascii?Q?A0xrGvQLclyucDFV1n/3bzg/oIIGsKKvrAcabUzzHh51OlgBPNVewKH6uqAy?=
- =?us-ascii?Q?OaOWbFM4vfE242ojBTx8Co2WIo9Kf1fxrQas71YEqJPdk5gS+KigO91x86qz?=
- =?us-ascii?Q?O1gv9fVGOZR7AHhsg+Xjr46MqazTX4sxVlxE98MnH0Vz5zvUXOeMyZDDE/3T?=
- =?us-ascii?Q?17KwjBsz/PDmcMbYSvNnH5iOz4qA/HSMqFQGh1hTuiEE/mroTqnED7G6RQn9?=
- =?us-ascii?Q?CgLnEIuX07AVd7N5H27x7NJ+H8SVl5igpCjaMgD7lGKFygikjqbcVF+X/O9I?=
- =?us-ascii?Q?MiEFMw4Lkiv1zLePaq7OQOvj89fb4XJfMJtWxZ28znXzZF1wIce39t8Azdtw?=
- =?us-ascii?Q?JNkbGL6zdF+WlByLeibUmdNGXAdkTAug3KeFFewWDW2bcYx8bVcZn9/8g0v9?=
- =?us-ascii?Q?3KbATDFwkW2F1J+GDHIYHkVDqF4476pz95vCRMZYLoe17rFTTPFdoUmKng32?=
- =?us-ascii?Q?0Wwmfi2h/BSw3Ui+eTPyw7Fn9iM5EG5vcwtZzKmrx34PEgmei7kUv5GPfMJ9?=
- =?us-ascii?Q?BFo1b3FRxwNB/gbx8qlwLVqjfCHFsyZzgRrNWQO9VfyIyD/8oM5t9BDst5vS?=
- =?us-ascii?Q?Zi1FtlWqg0R8Ta/4EfL+kt97gQ7Bk6zHvt8wh1qYoL7HtRpGrmP78mQluPb5?=
- =?us-ascii?Q?ohEdxdCd/HciS/4xjjBVptecp/+k5g0wT9t/QtjFyrZNbMcndUEs6Ull4a9o?=
- =?us-ascii?Q?C+HgAoKKdWLReYPecTpM8Brp6mifTAnw4XbstbPt2IrI1atdCkkLqUG28KcQ?=
- =?us-ascii?Q?Kmjro3nrtvmyXgYqdiFww9GLOoMZu0SlBK3yyhpDUbz0PhuHSajzmEsXY5EK?=
- =?us-ascii?Q?Jai1yB/KACD/kJp6BMAGa9OaT0BfsOoL8mS7Ed1104YZAtp4MLq+y9kfOgeb?=
- =?us-ascii?Q?482aHlcposQXVE5FfB0MLqL0rTalYfTqc4uvhBHOyZBoWWO44ZVnLjaxOEUN?=
- =?us-ascii?Q?Oif3VsG25ZNLZEVPkl/BiGDcOHKwBNuEYcjwh1Gfh8OrwLN3xX+UdiNuF7wU?=
- =?us-ascii?Q?ge39dW8QpFyVwumnITON+UfufapVa6dqwmQzaPEABHi5RNzs6yKFL/ljX9Fj?=
- =?us-ascii?Q?mEegxg5plPq8dVhiHFz9thFQk3/WGpVsFRMrDvkpSHVoK0o3Z2jsOFWwrCdQ?=
- =?us-ascii?Q?RrNE6fwBScLBhOu/3Fq4K2EOzm9Y0znzGWrcgOb9?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbdeb555-8485-4769-0916-08db207e30c7
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1418.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 09:10:56.3125
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eiOIrqnKd3p1XvEaG0KBCFt7SCiomyMvZp7iV3L0jX3URGTLC2QLS55qAqhsm/dyRFgfZI4M4dPYYnPi/FJRoA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5264
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwB39QDLoglkaOCDAQ--.24643S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWFWrXr4xJFy8CrWxKw1fXrb_yoW5uFyrpF
+        Z3K3WUGrs3Xry7ury0qa13ZrySg3yvqr1UZrWfWa4qyF1ktrnY9F1fCrn0kF45CrWrCr1j
+        q3W3KrZ8Ar1UtFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQALBF1jj4pcuAACsT
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Wed, 2023-03-08 at 10:15 -0500, Mimi Zohar wrote:
+> Hi Roberto,
+> 
+> On Fri, 2023-03-03 at 19:18 +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Change ima_post_create_tmpfile() definition, so that it can be registered
+> > as implementation of the post_create_tmpfile hook.
+> 
+> Since neither security_create_tmpfile() nor
+> security_post_create_tmpfile() already exist, why not pass a pointer to
+> the file to conform to the other file related security hooks?
 
-Thanks for the review.
-On Thu, Mar 09, 2023 at 08:49:33AM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Mar 09, 2023 at 03:10:56PM +0800, Ye Xiang wrote:
-> > This patch implements the USB part of Intel USB-I2C/GPIO/SPI adapter
-> > device named "La Jolla Cove Adapter" (LJCA).
-> 
-> Then why is this called "mfd" in the subject line?
-Sorry, it's a mistake. I forget to change mfd to usb in the commit message
-because I just move the ljca.c from driver/mfd to drivers/usb/misc according
-to previous review comments[1]. And I will address this on v5.
+Ok, will change the parameter.
 
-[1] https://www.spinics.net/lists/kernel/msg4708451.html
-> 
-> >  include/linux/mfd/ljca.h  |  95 ++++
-> 
-> Why is this .h file in the mfd directory?
-It's a mistake as well. Will address it by moving include/linux/mfd/ljca.h
-to include/linux/usb/ljca.h.
->
-> thanks,
-> 
-> greg k-h
-
---
 Thanks
-Ye Xiang
+
+Roberto
+
+> Mimi
+> 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  fs/namei.c                        | 2 +-
+> >  include/linux/ima.h               | 7 +++++--
+> >  security/integrity/ima/ima_main.c | 8 ++++++--
+> >  3 files changed, 12 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/fs/namei.c b/fs/namei.c
+> > index b5a1ec29193..57727a1ae38 100644
+> > --- a/fs/namei.c
+> > +++ b/fs/namei.c
+> > @@ -3622,7 +3622,7 @@ static int vfs_tmpfile(struct mnt_idmap *idmap,
+> >  		inode->i_state |= I_LINKABLE;
+> >  		spin_unlock(&inode->i_lock);
+> >  	}
+> > -	ima_post_create_tmpfile(idmap, inode);
+> > +	ima_post_create_tmpfile(idmap, dir, file_dentry(file), mode);
+> >  	return 0;
+> >  }
+> >  
+> > diff --git a/include/linux/ima.h b/include/linux/ima.h
+> > index 179ce52013b..7535686a403 100644
+> > --- a/include/linux/ima.h
+> > +++ b/include/linux/ima.h
+> > @@ -19,7 +19,8 @@ extern enum hash_algo ima_get_current_hash_algo(void);
+> >  extern int ima_bprm_check(struct linux_binprm *bprm);
+> >  extern int ima_file_check(struct file *file, int mask);
+> >  extern void ima_post_create_tmpfile(struct mnt_idmap *idmap,
+> > -				    struct inode *inode);
+> > +				    struct inode *dir, struct dentry *dentry,
+> > +				    umode_t mode);
+> >  extern void ima_file_free(struct file *file);
+> >  extern int ima_file_mmap(struct file *file, unsigned long reqprot,
+> >  			 unsigned long prot, unsigned long flags);
+> > @@ -69,7 +70,9 @@ static inline int ima_file_check(struct file *file, int mask)
+> >  }
+> >  
+> >  static inline void ima_post_create_tmpfile(struct mnt_idmap *idmap,
+> > -					   struct inode *inode)
+> > +					   struct inode *dir,
+> > +					   struct dentry *dentry,
+> > +					   umode_t mode)
+> >  {
+> >  }
+> >  
+> > diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> > index 8941305376b..4a3d0c8bcba 100644
+> > --- a/security/integrity/ima/ima_main.c
+> > +++ b/security/integrity/ima/ima_main.c
+> > @@ -659,16 +659,20 @@ EXPORT_SYMBOL_GPL(ima_inode_hash);
+> >  /**
+> >   * ima_post_create_tmpfile - mark newly created tmpfile as new
+> >   * @idmap: idmap of the mount the inode was found from
+> > - * @inode: inode of the newly created tmpfile
+> > + * @dir: inode structure of the parent of the new file
+> > + * @dentry: dentry structure of the new file
+> > + * @mode: mode of the new file
+> >   *
+> >   * No measuring, appraising or auditing of newly created tmpfiles is needed.
+> >   * Skip calling process_measurement(), but indicate which newly, created
+> >   * tmpfiles are in policy.
+> >   */
+> >  void ima_post_create_tmpfile(struct mnt_idmap *idmap,
+> > -			     struct inode *inode)
+> > +			     struct inode *dir, struct dentry *dentry,
+> > +			     umode_t mode)
+> >  {
+> >  	struct integrity_iint_cache *iint;
+> > +	struct inode *inode = dentry->d_inode;
+> >  	int must_appraise;
+> >  
+> >  	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
+
