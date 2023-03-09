@@ -2,200 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9C06B313C
+	by mail.lfdr.de (Postfix) with ESMTP id 7FAC76B313B
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbjCIWpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 17:45:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
+        id S230395AbjCIWqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 17:46:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbjCIWpD (ORCPT
+        with ESMTP id S229801AbjCIWqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:45:03 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3735CECC
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:44:27 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329KAXNU012333;
-        Thu, 9 Mar 2023 22:43:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=75uXFJtBYBbHk7SDm66SC83Kfd79NUBz5sBieEVhkfY=;
- b=DYUbx4VYUImmB/L0fbSuuCYqVF0X90fTRxZy3aeWAB9fm3utaXwf6dK2W+P+LnKjmrkJ
- qSM2hTX/uRtCnkmZNJbEWBDfjXzbo8CttO/BNW0h0mMs5qP92sFB5OkgFilwdPi0gc5a
- I9az9sWoqc2AcN4FFbG7uH+O1sHXIOJlE5mmE+EpH5oa0N0M2/GgavC18FR+a90+xcmt
- tMdQygsLIO5gRvDB2ESP8jgRX3DjnIIvvgMo2dpebtJn1LBKRzzFbnpNJcwbIT9PrwSV
- TaA3AX9petWwRgPVR5/SXsgm2cMpFZen0x2H8IWplDtmBWv0pXQID0Mft1+oZbuiI+7+ kg== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6t3c8k7b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 22:43:33 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 329KLxVB022254;
-        Thu, 9 Mar 2023 22:43:32 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3p6fhhxnp1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 22:43:32 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 329MhUnc26542772
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Mar 2023 22:43:30 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BD7465805C;
-        Thu,  9 Mar 2023 22:43:30 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BC0545805A;
-        Thu,  9 Mar 2023 22:43:29 +0000 (GMT)
-Received: from [9.65.194.48] (unknown [9.65.194.48])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Mar 2023 22:43:29 +0000 (GMT)
-Message-ID: <29a94bb3-10fe-0a85-cc09-ee4b784f6c43@linux.ibm.com>
-Date:   Thu, 9 Mar 2023 16:43:29 -0600
+        Thu, 9 Mar 2023 17:46:10 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C4012BE9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:45:42 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id a4-20020a056830008400b0069432af1380so1947076oto.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 14:45:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678401937;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y/1lFO4mbxWfaPl9ZL5nAdXcftJstA4UqCnt0Nk9lLg=;
+        b=NVRs1Cp5urCGTZd4WmxJFG6hRpVWYjX8JvN6u7gaPMk1eDbOtTOK3VV93KMaTp0ZeN
+         4blxbuxfqrFABR3twx5fL8WO5MdAwKxrOM+XNG6XjzCI9D4AaQ/DFiUoi6CsNms1cfVJ
+         Q0YQqCIt0iPZ6VZSiGaTyD674tS2DQ0x5jJC958SxmABPd/C1XEx5OhtWWNI4Ugf9Oo6
+         6y4d1KEQTH1OinDJmU0AYCtaIYflctRjwBNEe87w6m9WBKf8U13tphOgpb0d0Fkb4K8r
+         dJVnNM+K4SFhFxP1GKU+kr+cwvHFCTn+Q4emENChe2lP1r7y/61wnNnxclSeiofAK+xM
+         zZag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678401937;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y/1lFO4mbxWfaPl9ZL5nAdXcftJstA4UqCnt0Nk9lLg=;
+        b=f0gZpAsQ7u/3n65SIcRwYBcwvVI77RVBT30Y/XkKUUn+bAqQh2jOmjsdMqLQy0SKmY
+         4UKj40Qq5TwnYwn0bSNOQtHoR6cF8Q3BJROtzC8Y5xvRHW+02ZkvWBLKqFokt6ubmj6w
+         ciXFlPqG85hwXuEXFb5/SN2xJZy/Sgs40fshOWotTYxs4jNaETwMD8uHg68WWr/xiyP8
+         zxqJwmvrRqrR25/IQrgmdxlPzIYGaZjHXdW+gwqq/o2lyKemedv80vWgUH4Irh6GDame
+         AoSrFmYOxOYnlg7Rj2ruOsNRNbKVTM6ockH4NbI9jMaEER+PTe+R/i+FADcNHoJpMTpI
+         Jd9g==
+X-Gm-Message-State: AO0yUKW5PMMks3yfNnumcJ6wuCoRQW8lMNubzfL7fgRk6sB6JuGFh0yL
+        5kQGBtXo9/4Sr33qGugAeb3Fq+rZ9BDXBSJ+ZxhPlw==
+X-Google-Smtp-Source: AK7set/GZPbMdM6DZpU1ClFlYj29j6KEHZBL5xZpPahyqDKJmqRkCkYxtXaUk4eSBC46oCtvQ5BJUNcNUO3MbNrvDPw=
+X-Received: by 2002:a05:6830:3378:b0:68d:48f0:9bad with SMTP id
+ l56-20020a056830337800b0068d48f09badmr7984002ott.7.1678401937160; Thu, 09 Mar
+ 2023 14:45:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] fsi: aspeed: Reset master errors after CFAM reset
-To:     Joel Stanley <joel@jms.id.au>, Joachim Fenkes <FENKES@de.ibm.com>
-Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        andrew@aj.id.au, alistair@popple.id.au, jk@ozlabs.org
-References: <20230306225249.975495-1-eajames@linux.ibm.com>
- <CACPK8Xda32NL8hvFD0fMTKeQnoBOKCz63W=vMJ+X4p_TJ2LCjw@mail.gmail.com>
-Content-Language: en-US
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <CACPK8Xda32NL8hvFD0fMTKeQnoBOKCz63W=vMJ+X4p_TJ2LCjw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4JkCH63fdZKT84BFZsNgj-9KngIZ-Nc3
-X-Proofpoint-ORIG-GUID: 4JkCH63fdZKT84BFZsNgj-9KngIZ-Nc3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_12,2023-03-09_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1015 impostorscore=0 phishscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303090180
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230215010717.3612794-1-rananta@google.com> <20230215010717.3612794-9-rananta@google.com>
+ <CAAeT=Fzww3z1Y47gZjmeU0p+fK=gxiqNx5DHGcu4109B7DWi4A@mail.gmail.com>
+In-Reply-To: <CAAeT=Fzww3z1Y47gZjmeU0p+fK=gxiqNx5DHGcu4109B7DWi4A@mail.gmail.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Thu, 9 Mar 2023 14:45:25 -0800
+Message-ID: <CAJHc60yLOc55WQJQ1cDoQ+pcuv376xBBgmZGKBsvZ+7gshuyvw@mail.gmail.com>
+Subject: Re: [REPOST PATCH 08/16] selftests: KVM: aarch64: Consider PMU event
+ filters for VM creation
+To:     Reiji Watanabe <reijiw@google.com>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Reiji,
 
-On 3/8/23 23:38, Joel Stanley wrote:
-> On Mon, 6 Mar 2023 at 22:53, Eddie James <eajames@linux.ibm.com> wrote:
->> It has been observed that sometimes the FSI master will return all 0xffs
->> after a CFAM has been taken out of reset, without presenting any error.
->> Resetting the FSI master errors resolves the issue.
-> Eddie, you mentioned that Joachim was going to provide input on this
-> change. Did you hear from him?
-
-
-Yes, he mentioned it's possibly an addressing issue, with 
-absolute/relative/same-address-again type of access. The FSI master 
-doesn't know the slave is reset in this case so it needs to go back to 
-absolute addressing. Resetting the port on the master is a good solution 
-here, though Joachim was surprised that the BREAK command to the master 
-didn't clear out the addressing state.
-
-
-I collected some additional data that perhaps supports this theory: 
-After the CFAM reset, I actually get back the data at CFAM address 0x00 
-when I read the previously used address. All other addresses return 
-0xff. I dumped the master state but there's nothing interesting, and no 
-errors.
-
-# /tmp/fsimaster-aspeed cfam 0x9c
-CFAM09c: 00000000
-# /tmp/fsimaster-aspeed dump master
-MMODE[000]: 70080210
-MDLYR[004]: ffff0000
-MCRSP0[008]: 00000000
-MENP0[010]: 80000000
-MLEVP0[018]: 80000000
-MREFP0[020]: 00000000
-MHPMP0[028]: 00000000
-MSIEP0[030]: 00000000
-MAESP0[050]: 00000000
-MAEB[070]: 00000000
-MVER[074]: e0050101
-MBSYP0[078]: 00000000
-MSTAP0[0d0]: 00000000
-MSTAP1[0d4]: 00000000
-MSTAP2[0d8]: 00000000
-MSTAP3[0dc]: 00000000
-MSTAP4[0e0]: 00000000
-MSTAP5[0e4]: 00000000
-MSTAP6[0e8]: 00000000
-MSTAP7[0ec]: 00000000
-MESRB0[1d0]: 00000000
-MSCSB0[1d4]: 90000001
-MATRB0[1d8]: 0040013b
-MDTRB0[1dc]: 00000000
-MECTRL[2e0]: 0000c000
-# echo 1 > /sys/class/fsi-master/fsi0/device/cfam_reset
-# /tmp/fsimaster-aspeed cfam 0x9c
-CFAM09c: c0020da6
-# /tmp/fsimaster-aspeed cfam 0x0
-CFAM000: ffffffff
-# /tmp/fsimaster-aspeed dump master
-MMODE[000]: 70080210
-MDLYR[004]: ffff0000
-MCRSP0[008]: 00000000
-MENP0[010]: 80000000
-MLEVP0[018]: 80000000
-MREFP0[020]: 00000000
-MHPMP0[028]: 00000000
-MSIEP0[030]: 00000000
-MAESP0[050]: 00000000
-MAEB[070]: 00000000
-MVER[074]: e0050101
-MBSYP0[078]: 00000000
-MSTAP0[0d0]: 00000000
-MSTAP1[0d4]: 00000000
-MSTAP2[0d8]: 00000000
-MSTAP3[0dc]: 00000000
-MSTAP4[0e0]: 00000000
-MSTAP5[0e4]: 00000000
-MSTAP6[0e8]: 00000000
-MSTAP7[0ec]: 00000000
-MESRB0[1d0]: 00000000
-MSCSB0[1d4]: b0000001
-MATRB0[1d8]: 00400003
-MDTRB0[1dc]: ffffffff
-
-
+On Thu, Mar 2, 2023 at 8:31=E2=80=AFPM Reiji Watanabe <reijiw@google.com> w=
+rote:
 >
-> Cheers,
+> Hi Raghu,
 >
-> Joel
+> On Tue, Feb 14, 2023 at 5:07=E2=80=AFPM Raghavendra Rao Ananta
+> <rananta@google.com> wrote:
+> >
+> > Accept a list of KVM PMU event filters as an argument while creating
+> > a VM via create_vpmu_vm(). Upcoming patches would leverage this to
+> > test the event filters' functionality.
+> >
+> > No functional change intended.
+> >
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > ---
+> >  .../testing/selftests/kvm/aarch64/vpmu_test.c | 64 +++++++++++++++++--
+> >  1 file changed, 60 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/aarch64/vpmu_test.c b/tools/te=
+sting/selftests/kvm/aarch64/vpmu_test.c
+> > index 15aebc7d7dc94..2b3a4fa3afa9c 100644
+> > --- a/tools/testing/selftests/kvm/aarch64/vpmu_test.c
+> > +++ b/tools/testing/selftests/kvm/aarch64/vpmu_test.c
+> > @@ -15,10 +15,14 @@
+> >  #include <vgic.h>
+> >  #include <asm/perf_event.h>
+> >  #include <linux/bitfield.h>
+> > +#include <linux/bitmap.h>
+> >
+> >  /* The max number of the PMU event counters (excluding the cycle count=
+er) */
+> >  #define ARMV8_PMU_MAX_GENERAL_COUNTERS (ARMV8_PMU_MAX_COUNTERS - 1)
+> >
+> > +/* The max number of event numbers that's supported */
+> > +#define ARMV8_PMU_MAX_EVENTS           64
 >
->> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->> ---
->>   drivers/fsi/fsi-master-aspeed.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/fsi/fsi-master-aspeed.c b/drivers/fsi/fsi-master-aspeed.c
->> index 7cec1772820d..5eccab175e86 100644
->> --- a/drivers/fsi/fsi-master-aspeed.c
->> +++ b/drivers/fsi/fsi-master-aspeed.c
->> @@ -454,6 +454,8 @@ static ssize_t cfam_reset_store(struct device *dev, struct device_attribute *att
->>          gpiod_set_value(aspeed->cfam_reset_gpio, 1);
->>          usleep_range(900, 1000);
->>          gpiod_set_value(aspeed->cfam_reset_gpio, 0);
->> +       usleep_range(900, 1000);
-> Is the delay required? How did you arrive at this time?
+> The name and the comment would be a bit misleading.
+> (This sounds like a max number of events that are supported by ARMv8)
 >
->> +       opb_writel(aspeed, ctrl_base + FSI_MRESP0, cpu_to_be32(FSI_MRESP_RST_ALL_MASTER));
->>          mutex_unlock(&aspeed->lock);
->>          trace_fsi_master_aspeed_cfam_reset(false);
->>
->> --
->> 2.31.1
->>
+> Perhaps 'MAX_EVENT_FILTER_BITS' would be more clear ?
+>
+>
+You are right. It should actually represent the event filter bits.
+Even the value is incorrect. It should be 16 and would change the loop
+iteration logic in guest_event_filter_test(). Thanks for catching
+this!
+> > +
+> >  /*
+> >   * The macros and functions below for reading/writing PMEV{CNTR,TYPER}=
+<n>_EL0
+> >   * were basically copied from arch/arm64/kernel/perf_event.c.
+> > @@ -224,6 +228,8 @@ struct pmc_accessor pmc_accessors[] =3D {
+> >         { read_sel_evcntr, write_pmevcntrn, read_sel_evtyper, write_pme=
+vtypern },
+> >  };
+> >
+> > +#define MAX_EVENT_FILTERS_PER_VM 10
+>
+> (Looking at just this patch,) it appears 'PER_VM' in the name
+> might be rather misleading ?
+>
+Probably it's not clear. It should represent the max number of event
+filter configurations that can be applied to a VM. Would a comment
+help?
+
+> > +
+> >  #define INVALID_EC     (-1ul)
+> >  uint64_t expected_ec =3D INVALID_EC;
+> >  uint64_t op_end_addr;
+> > @@ -232,6 +238,7 @@ struct vpmu_vm {
+> >         struct kvm_vm *vm;
+> >         struct kvm_vcpu *vcpu;
+> >         int gic_fd;
+> > +       unsigned long *pmu_filter;
+> >  };
+> >
+> >  enum test_stage {
+> > @@ -541,8 +548,51 @@ static void guest_code(void)
+> >  #define GICD_BASE_GPA  0x8000000ULL
+> >  #define GICR_BASE_GPA  0x80A0000ULL
+> >
+> > +static unsigned long *
+> > +set_event_filters(struct kvm_vcpu *vcpu, struct kvm_pmu_event_filter *=
+pmu_event_filters)
+>
+> Can you add a comment that explains the function ?
+> (especially for @pmu_event_filters and the return value ?)
+>
+Yes, I'll add a comment
+> > +{
+> > +       int j;
+> > +       unsigned long *pmu_filter;
+> > +       struct kvm_device_attr filter_attr =3D {
+> > +               .group =3D KVM_ARM_VCPU_PMU_V3_CTRL,
+> > +               .attr =3D KVM_ARM_VCPU_PMU_V3_FILTER,
+> > +       };
+> > +
+> > +       /*
+> > +        * Setting up of the bitmap is similar to what KVM does.
+> > +        * If the first filter denys an event, default all the others t=
+o allow, and vice-versa.
+> > +        */
+> > +       pmu_filter =3D bitmap_zalloc(ARMV8_PMU_MAX_EVENTS);
+> > +       TEST_ASSERT(pmu_filter, "Failed to allocate the pmu_filter");
+> > +
+> > +       if (pmu_event_filters[0].action =3D=3D KVM_PMU_EVENT_DENY)
+> > +               bitmap_fill(pmu_filter, ARMV8_PMU_MAX_EVENTS);
+> > +
+> > +       for (j =3D 0; j < MAX_EVENT_FILTERS_PER_VM; j++) {
+> > +               struct kvm_pmu_event_filter *pmu_event_filter =3D &pmu_=
+event_filters[j];
+> > +
+> > +               if (!pmu_event_filter->nevents)
+>
+> What does this mean ? (the end of the valid entry in the array ?)
+>
+Yes, it should represent the end of an array. I can add a comment if
+it's unclear.
+>
+> > +                       break;
+> > +
+> > +               pr_debug("Applying event filter:: event: 0x%x; action: =
+%s\n",
+> > +                               pmu_event_filter->base_event,
+> > +                               pmu_event_filter->action =3D=3D KVM_PMU=
+_EVENT_ALLOW ? "ALLOW" : "DENY");
+> > +
+> > +               filter_attr.addr =3D (uint64_t) pmu_event_filter;
+> > +               vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &filter_attr);
+> > +
+> > +               if (pmu_event_filter->action =3D=3D KVM_PMU_EVENT_ALLOW=
+)
+> > +                       __set_bit(pmu_event_filter->base_event, pmu_fil=
+ter);
+> > +               else
+> > +                       __clear_bit(pmu_event_filter->base_event, pmu_f=
+ilter);
+> > +       }
+> > +
+> > +       return pmu_filter;
+> > +}
+> > +
+> >  /* Create a VM that has one vCPU with PMUv3 configured. */
+> > -static struct vpmu_vm *create_vpmu_vm(void *guest_code)
+> > +static struct vpmu_vm *
+> > +create_vpmu_vm(void *guest_code, struct kvm_pmu_event_filter *pmu_even=
+t_filters)
+> >  {
+> >         struct kvm_vm *vm;
+> >         struct kvm_vcpu *vcpu;
+> > @@ -586,6 +636,9 @@ static struct vpmu_vm *create_vpmu_vm(void *guest_c=
+ode)
+> >                     "Unexpected PMUVER (0x%x) on the vCPU with PMUv3", =
+pmuver);
+> >
+> >         /* Initialize vPMU */
+> > +       if (pmu_event_filters)
+> > +               vpmu_vm->pmu_filter =3D set_event_filters(vcpu, pmu_eve=
+nt_filters);
+> > +
+> >         vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &irq_attr);
+> >         vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &init_attr);
+> >
+> > @@ -594,6 +647,8 @@ static struct vpmu_vm *create_vpmu_vm(void *guest_c=
+ode)
+> >
+> >  static void destroy_vpmu_vm(struct vpmu_vm *vpmu_vm)
+> >  {
+> > +       if (vpmu_vm->pmu_filter)
+> > +               bitmap_free(vpmu_vm->pmu_filter);
+> >         close(vpmu_vm->gic_fd);
+> >         kvm_vm_free(vpmu_vm->vm);
+> >         free(vpmu_vm);
+> > @@ -631,7 +686,7 @@ static void run_counter_access_test(uint64_t pmcr_n=
+)
+> >         guest_data.expected_pmcr_n =3D pmcr_n;
+> >
+> >         pr_debug("Test with pmcr_n %lu\n", pmcr_n);
+> > -       vpmu_vm =3D create_vpmu_vm(guest_code);
+> > +       vpmu_vm =3D create_vpmu_vm(guest_code, NULL);
+> >         vcpu =3D vpmu_vm->vcpu;
+> >
+> >         /* Save the initial sp to restore them later to run the guest a=
+gain */
+> > @@ -676,7 +731,7 @@ static void run_counter_access_error_test(uint64_t =
+pmcr_n)
+> >         guest_data.expected_pmcr_n =3D pmcr_n;
+> >
+> >         pr_debug("Error test with pmcr_n %lu (larger than the host)\n",=
+ pmcr_n);
+> > -       vpmu_vm =3D create_vpmu_vm(guest_code);
+> > +       vpmu_vm =3D create_vpmu_vm(guest_code, NULL);
+> >         vcpu =3D vpmu_vm->vcpu;
+> >
+> >         /* Update the PMCR_EL0.N with @pmcr_n */
+> > @@ -719,9 +774,10 @@ static uint64_t get_pmcr_n_limit(void)
+> >         struct vpmu_vm *vpmu_vm;
+> >         uint64_t pmcr;
+> >
+> > -       vpmu_vm =3D create_vpmu_vm(guest_code);
+> > +       vpmu_vm =3D create_vpmu_vm(guest_code, NULL);
+> >         vcpu_get_reg(vpmu_vm->vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0), &p=
+mcr);
+> >         destroy_vpmu_vm(vpmu_vm);
+> > +
+> >         return FIELD_GET(ARMV8_PMU_PMCR_N, pmcr);
+> >  }
+>
+> Thank you,
+> Reiji
+>
+>
+> >
+> > --
+> > 2.39.1.581.gbfd45094c4-goog
+> >
