@@ -2,272 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9846B24DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21426B24DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:04:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjCINCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
+        id S230104AbjCINEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:04:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbjCINC3 (ORCPT
+        with ESMTP id S231214AbjCINDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:02:29 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAF4E6DB9;
-        Thu,  9 Mar 2023 05:01:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GdmYzzdYXqiQfqATchXktX5WQbFzBfed2pjASkC2ktg=; b=fpla+EajZ2b7b0aRGcnsdESTgQ
-        VDX60AgJ4ewqI2vws1uTyQ0gfeRHUT4ut//XAIcOjzWwg/ujK5wgDa5RGpdco5lUJoFkSdkkSK2ph
-        C2GLomnOtsTFxAjL7PzmEOARgu1qDPw/BWaxXXhqnXvjvCTlesRDKRtcJh7KerPjuGwC3qZZK8AnT
-        oz4EBqLUO4S5Ai/OBle1Dl+qwBFwkIN1hP5KMttXBEViSbAMCryVbS+sNWKp1imD3nqXvNglh8S2y
-        pzU3Knt8nFnUqP6tGGRxA/QNefqj4TExApd0ofY0/5LIEuj9J69NW2AbaghrP4K6tcjjNqQ+XsI0A
-        wOKAFzGg==;
-Received: from [2001:8b0:10b:5:e62f:87cb:46b1:1399] (helo=u3832b3a9db3152.ant.amazon.com)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1paFss-008QZg-MB; Thu, 09 Mar 2023 13:00:39 +0000
-Message-ID: <35bc1f658d1774ad2ea7a38b3874cebff58f7d49.camel@infradead.org>
-Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified
- range to map as encrypted
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Borislav Petkov <bp@alien8.de>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        =?ISO-8859-1?Q?J=F6rg_R=F6del?= <joro@8bytes.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Date:   Thu, 09 Mar 2023 13:00:36 +0000
-In-Reply-To: <20230309115937.GAZAnKKRef99EwOu/S@fat_crate.local>
-References: <Y/aTmL5Y8DtOJu9w@google.com> <Y/aYQlQzRSEH5II/@zn.tnic>
-         <Y/adN3GQJTdDPmS8@google.com> <Y/ammgkyo3QVon+A@zn.tnic>
-         <Y/a/lzOwqMjOUaYZ@google.com> <Y/dDvTMrCm4GFsvv@zn.tnic>
-         <BYAPR21MB1688F68888213E5395396DD9D7AB9@BYAPR21MB1688.namprd21.prod.outlook.com>
-         <255249f2-47af-07b7-d9d9-9edfdd108348@intel.com>
-         <20230306215104.GEZAZgSPa4qBBu9lRd@fat_crate.local>
-         <a23a36ccb8e1ad05e12a4c4192cdd98267591556.camel@infradead.org>
-         <20230309115937.GAZAnKKRef99EwOu/S@fat_crate.local>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-gKJpathxkcv3F4u4ZN3q"
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Thu, 9 Mar 2023 08:03:52 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3133E8EA2D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 05:03:49 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id m25-20020a7bcb99000000b003e7842b75f2so1168349wmi.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 05:03:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=malat-biz.20210112.gappssmtp.com; s=20210112; t=1678367027;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4wUL7zyrq+hkUe0QyztCHqciprnPN2J77YqA2w+p6uw=;
+        b=SVwzmJN/HHrLPQ5EBN3SoLeijhNj2FJD6moz68UaWxYmOp37tbhzRrmSmoEIvu6K7f
+         n++iGDGGYxy2M9e1ah6C7t446yugoMwj6k28LQeLCLYPPvTSmSYPTOEKpqSFhvM7gkSd
+         ypkXd8BgOjabM0PNzX7u6Sh+JLz4cf2Fr56BtqIwrS/akeQdEqskl7vJcOAe2ECEziax
+         rysEsTUxJiHgpHwGgLz3JmFaEQKjgrMxDspkMdSgurGZT9k0he7Pml9xrmnyS19FNiqT
+         x4+Ehg/XQ2nVl2fgcfA8FDAPDxKcjggyFeNSJGr1PDWZ82bfGF6tnpH0vjixjJeVZZA2
+         jO/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678367027;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4wUL7zyrq+hkUe0QyztCHqciprnPN2J77YqA2w+p6uw=;
+        b=PwqAQgK4B2DixScaB5lkYpGd72vTg5wXifX7a8fjp635q9XDd29bvJoYpWi1EwzHpB
+         YqGUS6MUf8FPUfYdBJ8ASONurxzLq00YEFI+wtdZsc9mqcki6QEe1bhpJwzx6x2XLo5I
+         5E6iloW1ow2rfgCuOeIvr17Nl+qQyxWBVr7Ud0VvU9zFEAH5n1/Vv7o5Mh3uRC/Kng88
+         qU2MvapWZ6J0ZK4Z94Cd5U3Yk43NKDkHgrG7YOzBWwOoetHYCamxamaFKlOceoq9RDx7
+         oyZWSAFdetkjH8L315QkucZJXANIxLZ5hqPwq6Kl0pJsaXnML31MiFIXPoqPusVrHvk/
+         vQUA==
+X-Gm-Message-State: AO0yUKVsrq12VWlq3PGIdkZlz8SEnxlBlXhvwnoIwbDHoigP+Pw8kAgT
+        2qejWJKBbSUO4OFnXaqYrwf/2A==
+X-Google-Smtp-Source: AK7set/T2Nl5NfjwhETcH5hvgrJSxiO8/bHnDp8+rxXHJ2aliq5GkpZ/pl5bn24aX3exP9DDD+SrXA==
+X-Received: by 2002:a05:600c:524d:b0:3eb:38a2:2bbc with SMTP id fc13-20020a05600c524d00b003eb38a22bbcmr18974852wmb.7.1678367027624;
+        Thu, 09 Mar 2023 05:03:47 -0800 (PST)
+Received: from ntb.petris.klfree.czf ([193.86.118.65])
+        by smtp.gmail.com with ESMTPSA id f2-20020a5d58e2000000b002c56af32e8csm17968839wrd.35.2023.03.09.05.03.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 05:03:47 -0800 (PST)
+Date:   Thu, 9 Mar 2023 14:03:38 +0100
+From:   Petr Malat <oss@malat.biz>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, paulmck@kernel.org,
+        tglx@linutronix.de, nsaenzju@redhat.com, frederic@kernel.org
+Subject: Re: [PATCH] softirq: Do not loop if running under a real-time task
+Message-ID: <ZAnZKoH38Telq1qG@ntb.petris.klfree.czf>
+References: <20230306154548.655799-1-oss@malat.biz>
+ <20230308091458.Q42uCjR2@linutronix.de>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308091458.Q42uCjR2@linutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 08, 2023 at 10:14:58AM +0100, Sebastian Andrzej Siewior wrote:
+> On 2023-03-06 16:45:48 [+0100], Petr Malat wrote:
+> > Softirq processing can be a source of a scheduling jitter if it executes
+> > in a real-time task as in that case need_resched() is false unless there
+> > is another runnable task with a higher priority. This is especially bad
+> > if the softirq processing runs in a migration thread, which has priority
+> > 99 and usually runs for a short time.
+> > 
+> > One option would be to not restart the softirq processing if there is
+> > another runnable task to allow the high prio task to finish and yield the
+> > CPU, the second one is to not restart if softirq executes in a real-time
+> > task. Usually, real-time tasks don't want to be interrupted, so implement
+> > the second option.
+> 
+> This affects only PEEMPT_RT, right?
+I have observed the issue on 5.15 CONFIG_PREEMPT=y arm32 kernel.
 
---=-gKJpathxkcv3F4u4ZN3q
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+> I have plans to redo parts of it. You shouldn't enter ksoftirqd to be
+> begin with. There is this ktimerd in v6.1 which mitigates this to some
+> point and I plan to extend it to also cover the sched-softirq.
+> Other than that, you are right in saying that the softirq must not
+> continue with a RT prio and that need_resched() is not visible here.
+> However ksoftirqd itself must be able to do loops unless the
+> need-resched flag is seen.
+> 
+> Since you mentioned migration thread, how ofter to you see this or how
+> does this trigger?
+I have seen only one occurrence, where I have a back trace available
+(from hundreds systems). I think that's because on my system it may occur
+only if it hits the migration thread, otherwise there are more runable
+threads of the same priority and need_resched() breaks the loop.
 
-On Thu, 2023-03-09 at 12:59 +0100, Borislav Petkov wrote:
->=20
-> So looking at sev_es_init_vc_handling() where we set that key, I'm
-> *thinking* that key can be removed now and the code should check
->=20
-> =C2=A0 cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)
->=20
-> instead.
->=20
-> Because if some of the checks in that function below fail, the guest
-> will terminate anyway.
->=20
-> J=C3=B6rg, Tom?
+I obtained the stack trace by making a debugging module which uses a
+periodic timer to monitor active tasks and it dumps stack when it finds
+something fishy. This is what I got:
+ [<bf84f559>] (hogger_handler [hogger]) from [<c04850ef>] (__hrtimer_run_queues+0x13f/0x2f4)
+ [<c04850ef>] (__hrtimer_run_queues) from [<c04858a5>] (hrtimer_interrupt+0xc9/0x1c4)
+ [<c04858a5>] (hrtimer_interrupt) from [<c0810533>] (arch_timer_handler_phys+0x27/0x2c)
+ [<c0810533>] (arch_timer_handler_phys) from [<c046de3b>] (handle_percpu_devid_irq+0x5b/0x1e4)
+ [<c046de3b>] (handle_percpu_devid_irq) from [<c0469a27>] (__handle_domain_irq+0x53/0x94)
+ [<c0469a27>] (__handle_domain_irq) from [<c041e501>] (axxia_gic_handle_irq+0x16d/0x1bc)
+ [<c041e501>] (axxia_gic_handle_irq) from [<c0400ad3>] (__irq_svc+0x53/0x94)
+ Exception stack(0xc1595ca8 to 0xc1595cf0)
+ [<c0400ad3>] (__irq_svc) from [<c098e404>] (_raw_spin_unlock_irqrestore+0x1c/0x3c)
+ [<c098e404>] (_raw_spin_unlock_irqrestore) from [<c0446b6d>] (try_to_wake_up+0x1d9/0x5d0)
+ [<c0446b6d>] (try_to_wake_up) from [<c0483d2d>] (call_timer_fn+0x31/0x16c)
+ [<c0483d2d>] (call_timer_fn) from [<c048406f>] (run_timer_softirq+0x207/0x2d4)
+ [<c048406f>] (run_timer_softirq) from [<c0401293>] (__do_softirq+0xd3/0x2f8)
+ [<c0401293>] (__do_softirq) from [<c042876b>] (irq_exit+0x57/0x78)
+ [<c042876b>] (irq_exit) from [<c0469a2b>] (__handle_domain_irq+0x57/0x94)
+ [<c0469a2b>] (__handle_domain_irq) from [<c041e501>] (axxia_gic_handle_irq+0x16d/0x1bc)
+ [<c041e501>] (axxia_gic_handle_irq) from [<c0400ad3>] (__irq_svc+0x53/0x94)
+ Exception stack(0xc1595e78 to 0xc1595ec0)
+ [<c0400ad3>] (__irq_svc) from [<c044d37c>] (active_load_balance_cpu_stop+0x1ec/0x234)
+ [<c044d37c>] (active_load_balance_cpu_stop) from [<c04ac099>] (cpu_stopper_thread+0x69/0xd8)
+ [<c04ac099>] (cpu_stopper_thread) from [<c0440b53>] (smpboot_thread_fn+0x9f/0x17c)
+ [<c0440b53>] (smpboot_thread_fn) from [<c043ccf9>] (kthread+0x129/0x12c)
+ [<c043ccf9>] (kthread) from [<c0400131>] (ret_from_fork+0x11/0x20)
 
-Hrm... the implication of that is that I should do something like this
-in my own code. Is this really your intent?
-
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index b4265c5b46da..7ac4ec6415de 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1519,24 +1519,17 @@ void __init smp_prepare_cpus_common(void)
-  */
- static bool prepare_parallel_bringup(void)
- {
--	bool has_sev_es =3D sev_es_active();
-+	/*
-+	 * The "generic" CC_ATTR_GUEST_STATE_ENCRYPT actually means specifically
-+	 * SEV-ES, and only SEV-ES, and always shall mean that. If it's present,
-+	 * that means the AP startup code should use the hard-coded SEV-ES GHCB
-+	 * call to find its APIC ID (STARTUP_APICID_SEV_ES).
-+	 */
-+	bool has_sev_es =3D cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT);
-=20
- 	if (IS_ENABLED(CONFIG_X86_32))
- 		return false;
-=20
--	/*
--	 * Encrypted guests other than SEV-ES (in the future) will need to
--	 * implement an early way of finding the APIC ID, since they will
--	 * presumably block direct CPUID too. Be kind to our future selves
--	 * by warning here instead of just letting them break. Parallel
--	 * startup doesn't have to be in the first round of enabling patches
--	 * for any such technology.
--	 */
--	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT) && !has_sev_es) {
--		pr_info("Disabling parallel bringup due to guest memory encryption\n");
--		return false;
--	}
--
- 	if (x2apic_mode || has_sev_es) {
- 		if (boot_cpu_data.cpuid_level < 0x0b)
- 			return false;
-
-
---=-gKJpathxkcv3F4u4ZN3q
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMzA5MTMwMDM2WjAvBgkqhkiG9w0BCQQxIgQgYMPOvb/p
-+Y/g+kTAHvsLUCdm87XXTkRWi8iIHJB4W6gwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgB2JRD2jiZM7LKvd0QxaFWhXmc6EQcpyz6w
-Pf9W4babPiPd71UNNMJ572lLcpYJAGYD/yJZWuYWMhhYcASW2BFwv2Sgrid9TMFndH8/Sojkp5kD
-8DK5mS62xUNEg14N6P9pCFze7DksGdAL4BSrf/kf2VhWdk1dGluTk1fz3RFiYSqHqHP1WHKOQF7V
-UTsjoGo/rdVIqAdDu2LKylvJd1GuMVowAb1t7RoZ+uEWNSQkgS6sRYs6jrzncofT0PVvdpJSNgxG
-RMGTf6ew6o0vOmuuTTflAB3xI0UV2FGqJoMJKMMgHbucwsMxR64W+6QWCZK7+viJIZubGwAtWlkV
-7etcOBwPrKbP6zSHJu9B4zUa2nv0JhRDUMynv93usemigkdUHnS9a4KsqpIjVK3kopn0aYexrsct
-ww70xDYx5eHrLbKxSF+44AXozucbKH5p+EQ738QlWBmaNXZI1EhfcxPwk8PZaFyzFrdXpgTW18Ke
-Ceu+KHOo0c8pUpbsrydzyHD2jhGnEYnnV4gEJbADdhrtWM867797usBCG/TEyj5odmG8TvdeEg8Y
-6Ghk7tjH4RmntJkpTpwWfgObw9A59o06RoFdo76CwqwShE0JGdr2mNx8RGbXA77DHYrgS3PtXlWa
-Z+kUiEAcij50JuWP5W8ahIrNK0/4ZtlqGtZZ1VAxFAAAAAAAAA==
-
-
---=-gKJpathxkcv3F4u4ZN3q--
+I was then looking into the code how it could happen softirqs were not
+offloaded to the thread and the only explanation I have is what I described
+in the original mail.
+BR,
+  Petr
