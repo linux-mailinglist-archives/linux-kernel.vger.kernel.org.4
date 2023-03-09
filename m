@@ -2,246 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFCE6B202E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2CE6B2030
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbjCIJeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
+        id S230190AbjCIJen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:34:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjCIJdi (ORCPT
+        with ESMTP id S229954AbjCIJeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:33:38 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0124F231F4
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:33:28 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id s23so694671uae.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 01:33:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678354408;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a6NJ8jZlGXDKqz4F6ViXwHF/cy0kv/iFG5qHu8dcTVk=;
-        b=OXyEusqXWGAEy8CnaYmZ30A720Fgy2SgZ3MHXomOY+4A+b34mJh94g8Nl0kYi5yvyS
-         MZm4/MREQjXd4gwIGWb1lIsZ7KZ+p6FneXLTvsUvx4lO34DDSf6uX0P2g/i9Ymelo5PS
-         J5PiRe7ZtQCUsXr+XN5/H9bXAd3w3R++hiJ1/zmvVG+EFVexFc0j/KXtOJS1N6+xst2y
-         0/NriDdtOz/51FkzwqBQWzE5HAwjSg3t4q1SiRG9ptCrAOjJfet9b+XAsRLZn/VGV/P4
-         89MBuwTz/fjmKlrLUXmIZxo67EFNK9TSum7JoyL24T8UcRf6DfWR+xt1qw6NlKt/TSL2
-         lNeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678354408;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a6NJ8jZlGXDKqz4F6ViXwHF/cy0kv/iFG5qHu8dcTVk=;
-        b=DEbJPjJMvu7FBpY+ahzZyXfLpJBggX8Zfl7eluMlx2DtJ/O4JRXTOCCeN3ScJkDHpk
-         wCKjb9PmjRC5zBU7vjhhZNamkTQbPaNU9jxWDs2wNWIQsCOosdtmm0tNHjHSBytfE/B1
-         jisxLlRSRZzuoNBi7YZ5RaXsjzxqgtq/ULFZ9YPjaK56YalsjkL1yMTtPkpW38EwkOig
-         +j+OvwKXaxqkES3h4qEP0ldO7yx3Esx9rlPvk7tSQhH2UIY8G0ygIJeE8mTtyO0Puk7w
-         PQVH+vO+tFWKCHGhQIbiyJywPic7XMXp16JqWCrlCxMmQ7BJPjMqcchT5tZ13a8Ju1Hb
-         /VFw==
-X-Gm-Message-State: AO0yUKUNw7UeuCr9kPPK04naWQ/XDBOnqPmlvAgDtwtjwnujRsvYTJPQ
-        Wvymqs7PRWq7XVFMMaWbi7fMLte87yrU2KdpBhV9rQ==
-X-Google-Smtp-Source: AK7set8hOPKU1eR50fOB1UEnr0CrQBJzTH2q+0AWMw9HkBWVoerFlxX1Qd2y62wHSmDovrcyPhK/cga+kGDSuUdHpRA=
-X-Received: by 2002:a9f:310b:0:b0:663:e17a:e5f6 with SMTP id
- m11-20020a9f310b000000b00663e17ae5f6mr15399979uab.2.1678354407846; Thu, 09
- Mar 2023 01:33:27 -0800 (PST)
+        Thu, 9 Mar 2023 04:34:23 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10652DABBA
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:34:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678354448; x=1709890448;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5HY9ycegtQ0l806aIDHq3NLhsAJnPiDDsr2di1E4VO4=;
+  b=LYSXDx+oXS5BlMtBZgVaI7HKj+YUGV3aHXJFDWoZK05XIO9rohTCU9vD
+   jWvFOaE3wHfY0jC9wFPg2ipsaKvhsd+urWTMkdoFCl7PEi4cqeUkMUevl
+   S9Yo8qk4DClgyArV+mC01T0YQMTJFmdJHpnKZ0b+iniH1q+F/oZxVqMFc
+   dmpDS4LrgWwN5eYukyUPaI78Ie6QlEuVCN/jGG2WfbBGR4MTkfU02KIrm
+   TWWXwA4HygBgNkO9TYhykRiHCyGOdI5IoGhMMBn+C1RKKhg9VGqDfz/1q
+   uU7LktFwymCKZpvHHwPsLNvgBoqz4pk9iwkdRe/Bl4aiU60c+xuUU1miA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="336414076"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="336414076"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 01:34:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="787497567"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="787497567"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.18.176]) ([10.213.18.176])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 01:34:05 -0800
+Message-ID: <1372db7c-7d65-cd28-43fc-1b04f57bef11@intel.com>
+Date:   Thu, 9 Mar 2023 10:34:03 +0100
 MIME-Version: 1.0
-References: <20230308091853.132772149@linuxfoundation.org>
-In-Reply-To: <20230308091853.132772149@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 9 Mar 2023 15:03:16 +0530
-Message-ID: <CA+G9fYt586nAUh7nOcpGre2ffxv8wXw7sQyUHztPTGh8ETyb6A@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/887] 6.1.16-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [PATCH v5 4/4] drm/i915: add guard page to ggtt->error_capture
+Content-Language: en-US
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Chris Wilson <chris.p.wilson@linux.intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>
+References: <20230308-guard_error_capture-v5-0-6d1410d13540@intel.com>
+ <20230308-guard_error_capture-v5-4-6d1410d13540@intel.com>
+ <93cbaa9f-6ec3-5843-7527-8e81b3ee091d@linux.intel.com>
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <93cbaa9f-6ec3-5843-7527-8e81b3ee091d@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Mar 2023 at 14:59, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+
+
+On 09.03.2023 10:08, Tvrtko Ursulin wrote:
 >
-> This is the start of the stable review cycle for the 6.1.16 release.
-> There are 887 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> On 08/03/2023 15:39, Andrzej Hajda wrote:
+>> Write-combining memory allows speculative reads by CPU.
+>> ggtt->error_capture is WC mapped to CPU, so CPU/MMU can try
+>> to prefetch memory beyond the error_capture, ie it tries
+>> to read memory pointed by next PTE in GGTT.
+>> If this PTE points to invalid address DMAR errors will occur.
+>> This behaviour was observed on ADL and RPL platforms.
+>> To avoid it, guard scratch page should be added after error_capture.
+>> The patch fixes the most annoying issue with error capture but
+>> since WC reads are used also in other places there is a risk similar
+>> problem can affect them as well.
+>>
+>> v2:
+>>    - modified commit message (I hope the diagnosis is correct),
+>>    - added bug checks to ensure scratch is initialized on gen3 
+>> platforms.
+>>      CI produces strange stacktrace for it suggesting scratch[0] is 
+>> NULL,
+>>      to be removed after resolving the issue with gen3 platforms.
+>> v3:
+>>    - removed bug checks, replaced with gen check.
+>> v4:
+>>    - change code for scratch page insertion to support all platforms,
+>>    - add info in commit message there could be more similar issues
+>> v5:
+>>    - check for nop_clear_range instead of gen8 (Tvrtko),
+>>    - re-insert scratch pages on resume (Tvrtko)
+>>
+>> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+>> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+>> ---
+>>   drivers/gpu/drm/i915/gt/intel_ggtt.c | 35 
+>> +++++++++++++++++++++++++++++++----
+>>   1 file changed, 31 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/i915/gt/intel_ggtt.c 
+>> b/drivers/gpu/drm/i915/gt/intel_ggtt.c
+>> index b925da42c7cfc4..8fb700fde85c8f 100644
+>> --- a/drivers/gpu/drm/i915/gt/intel_ggtt.c
+>> +++ b/drivers/gpu/drm/i915/gt/intel_ggtt.c
+>> @@ -502,6 +502,21 @@ static void cleanup_init_ggtt(struct i915_ggtt 
+>> *ggtt)
+>>       mutex_destroy(&ggtt->error_mutex);
+>>   }
+>>   +static void
+>> +ggtt_insert_scratch_pages(struct i915_ggtt *ggtt, u64 offset, u64 
+>> length)
+>> +{
+>> +    struct i915_address_space *vm = &ggtt->vm;
+>> +
+>> +    if (vm->clear_range != nop_clear_range)
 >
-> Responses should be made by Fri, 10 Mar 2023 09:16:12 +0000.
-> Anything received after that time might be too late.
+> Hm I thought usually we would add a prefix for exported stuff, like in 
+> this case i915_vm_nop_clear_range, however I see intel_gtt.h exports a 
+> bunch of stuff with no prefixes already so I guess you could continue 
+> like that by inertia. The conundrum also could have been avoided if 
+> you left it static (leaving out dpt and mock_gtt patches) but no 
+> strong opinion from me.
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.1.16-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.1.y
-> and the diffstat can be found below.
+>> +        return vm->clear_range(vm, offset, length);
+>> +
+>> +    while (length > 0) {
+>> +        vm->insert_page(vm, px_dma(vm->scratch[0]), offset, 
+>> I915_CACHE_NONE, 0);
+>> +        offset += I915_GTT_PAGE_SIZE;
+>> +        length -= I915_GTT_PAGE_SIZE;
+>> +    }
+>> +}
+>> +
+>>   static int init_ggtt(struct i915_ggtt *ggtt)
+>>   {
+>>       /*
+>> @@ -550,8 +565,12 @@ static int init_ggtt(struct i915_ggtt *ggtt)
+>>            * paths, and we trust that 0 will remain reserved. However,
+>>            * the only likely reason for failure to insert is a driver
+>>            * bug, which we expect to cause other failures...
+>> +         *
+>> +         * Since CPU can perform speculative reads on error capture
+>> +         * (write-combining allows it) add scratch page after error
+>> +         * capture to avoid DMAR errors.
+>>            */
+>> -        ggtt->error_capture.size = I915_GTT_PAGE_SIZE;
+>> +        ggtt->error_capture.size = 2 * I915_GTT_PAGE_SIZE;
+>>           ggtt->error_capture.color = I915_COLOR_UNEVICTABLE;
+>>           if (drm_mm_reserve_node(&ggtt->vm.mm, &ggtt->error_capture))
+>>               drm_mm_insert_node_in_range(&ggtt->vm.mm,
+>> @@ -561,11 +580,15 @@ static int init_ggtt(struct i915_ggtt *ggtt)
+>>                               0, ggtt->mappable_end,
+>>                               DRM_MM_INSERT_LOW);
+>>       }
+>> -    if (drm_mm_node_allocated(&ggtt->error_capture))
+>> +    if (drm_mm_node_allocated(&ggtt->error_capture)) {
+>> +        u64 start = ggtt->error_capture.start;
+>> +        u64 size = ggtt->error_capture.size;
+>> +
+>> +        ggtt_insert_scratch_pages(ggtt, start, size);
+>>           drm_dbg(&ggtt->vm.i915->drm,
+>>               "Reserved GGTT:[%llx, %llx] for use by error capture\n",
+>> -            ggtt->error_capture.start,
+>> -            ggtt->error_capture.start + ggtt->error_capture.size);
+>> +            start, start + size);
+>> +    }
+>>         /*
+>>        * The upper portion of the GuC address space has a sizeable hole
+>> @@ -1256,6 +1279,10 @@ void i915_ggtt_resume(struct i915_ggtt *ggtt)
+>>         flush = i915_ggtt_resume_vm(&ggtt->vm);
+>>   +    if (drm_mm_node_allocated(&ggtt->error_capture))
+>> +        ggtt_insert_scratch_pages(ggtt, ggtt->error_capture.start,
+>> +                      ggtt->error_capture.size);
 >
-> thanks,
+> Maybe it belongs in i915_ggtt_resume_vm since that one deals with 
+> PTEs? Looks like it to me, but ack either way.
+
+i915_ggtt_resume_vm is called for ggtt and dpt. Of course I could add 
+conditionals there checking if it is ggtt, but in such situation 
+i915_ggtt_resume seems more natural candidate.
+
+Regards
+Andrzej
+
 >
-> greg k-h
+> Regards,
+>
+> Tvrtko
+>
+>> +
+>>       ggtt->invalidate(ggtt);
+>>         if (flush)
+>>
 
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 6.1.16-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.1.y
-* git commit: bb4e875c8c41e8f41325722722e6a9cf02850f50
-* git describe: v6.1.15-889-gbb4e875c8c41
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.1=
-5-889-gbb4e875c8c41
-
-## Test Regressions (compared to v6.1.15)
-
-## Metric Regressions (compared to v6.1.15)
-
-## Test Fixes (compared to v6.1.15)
-
-## Metric Fixes (compared to v6.1.15)
-
-## Test result summary
-total: 163829, pass: 144385, fail: 4981, skip: 14421, xfail: 42
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 145 total, 144 passed, 1 failed
-* arm64: 47 total, 47 passed, 0 failed
-* i386: 35 total, 34 passed, 1 failed
-* mips: 26 total, 26 passed, 0 failed
-* parisc: 6 total, 6 passed, 0 failed
-* powerpc: 34 total, 34 passed, 0 failed
-* riscv: 12 total, 12 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 40 total, 40 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
