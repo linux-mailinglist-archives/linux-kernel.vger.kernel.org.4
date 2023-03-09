@@ -2,336 +2,447 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523606B2EAB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 21:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51E66B2EAA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 21:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjCIUZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 15:25:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
+        id S230056AbjCIUZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 15:25:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbjCIUZb (ORCPT
+        with ESMTP id S230435AbjCIUZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 15:25:31 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559BBFB27E;
-        Thu,  9 Mar 2023 12:25:13 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329JmnTF005575;
-        Thu, 9 Mar 2023 20:25:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=ti9Lszwa75Y+nzreucBhbmd1tWQsi4uD+FTacwhvEzo=;
- b=kjbdHTAHWUqpzUkoDslMRKhbuYKD+KEDCADjz89naY8zyYhydPbm/sEUmKNMBE2Rfs6E
- zlg6b8fAblYRcRsgQrnbAevmYTIRDiZhej7f+dBjtfBYXxTVHo9gbYrxmDjInNgB/As3
- WIA0D44n0dx4Jn61UyhTIQcHIcHDAIiJedgfNVoq+jQXnbIRiCl8EZLlGx3YaGf8eKe4
- YtzlhZHb4dFXJDW4jmBdKDMl7ItzduPPB56ZVHpfXidlb0bcR4E2ZmmhB2CCzoF7UeYC
- tKWMkAoFkvy+jpTC0Gdvl83c6xQ5lJjBMMijHP/BbWxuEE0bKL7m1JII//UU9jKdEUME eg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p75yqaseb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 20:25:02 +0000
-Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 329KP1cS002784;
-        Thu, 9 Mar 2023 20:25:01 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 3p4fewncpp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 09 Mar 2023 20:25:01 +0000
-Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 329KP0sQ002725;
-        Thu, 9 Mar 2023 20:25:00 GMT
-Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
-        by NALASPPMTA04.qualcomm.com (PPS) with ESMTP id 329KP0ih002724;
-        Thu, 09 Mar 2023 20:25:00 +0000
-Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
-        id ABE6220E4A; Thu,  9 Mar 2023 12:25:00 -0800 (PST)
-From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
-To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        balbi@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>
-Subject: [PATCH v7 2/5] usb: dwc3: Add remote wakeup handling
-Date:   Thu,  9 Mar 2023 12:24:56 -0800
-Message-Id: <1678393499-7366-3-git-send-email-quic_eserrao@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1678393499-7366-1-git-send-email-quic_eserrao@quicinc.com>
-References: <1678393499-7366-1-git-send-email-quic_eserrao@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: mZCUYou52PqJE7lr9xLUZg34avz7-hoz
-X-Proofpoint-ORIG-GUID: mZCUYou52PqJE7lr9xLUZg34avz7-hoz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_11,2023-03-09_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- adultscore=0 spamscore=0 priorityscore=1501 impostorscore=0 suspectscore=0
- lowpriorityscore=0 phishscore=0 malwarescore=0 mlxscore=0 mlxlogscore=922
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303090164
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 9 Mar 2023 15:25:12 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4E0F8656
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 12:25:10 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id k10so11838557edk.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 12:25:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kali.org; s=google; t=1678393508;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G+BklEzWVltOR1hJvkNkXfkrfxPiDjF0+O+EA7XHv/4=;
+        b=TpjTcTG89eVAWMsGE1cmuq97VbZqB66knbilw8sax5Cv+BzMBUv7Y0z3XYJnKUd2gA
+         73u8YU3OJxPBN9UgE3Edk/K1fBICUyIFRwv7xHy2JqtLRVV9gusQKnMCREzxVQHUisYb
+         RskiwQG/+LF3/fI4AaS4agkY6XcBoEQwr+Xn4iETmLTex/JWpeyvnJeIBfItukuillRz
+         pk+hyW7BHiz3tVQ1uxfXDiDj/8Rp4Ao+ThtHiV6OAhYyO041NZeENtqyHJBz9Ndi/0Wg
+         bO8Ks0u9ZBMr+DayjzQf/p3MdEBwM3kVWqWybjHi3rlz6zKqhegW98CDBfPJmHp/MCAg
+         Cazw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678393508;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G+BklEzWVltOR1hJvkNkXfkrfxPiDjF0+O+EA7XHv/4=;
+        b=MT6fEm6feoszBWrM1vfK+i2OOrp4LQlbsipYrvQmxu4qD7pQh5saxM8cb6TliK5SxV
+         Zafx5pJRai0cRZ4GRoeEa4Gn+RDQHuHRaSXcsh624ZIqVSNrf4YuctAZjiLGcNMxSInS
+         YGg2fDMNCngv3X+hg5ULMx6Muhs3SurLL3qrFQ/dlObCxBBqiVEJs0BBi/VLfXeTOtgC
+         jDzHaPs0TtVgbg9Xk+f06FkUGxeMSQIDNHLg26ZZ1TZJMCGEoTyXPUQZ76C4nYJ/WC+L
+         0c6bqPVyQeCnlBxFqX4YE4PS7DB95Sqyu2MSuF2/kLjuaYXPR5ZsJ8lg8OOomFoMy6wK
+         TgEA==
+X-Gm-Message-State: AO0yUKWsRyhMnGAXBL8pTUNnIGfNeHqozKXv7iux9lmnmd4w7tQLjoZo
+        vZzcFfZIE484VLC2W2uNwGj71Mx7OgRNJOr78yy+RQ==
+X-Google-Smtp-Source: AK7set9EN3dy7vGdMfeh3rglPNG/kYWEw6r8ijSWoyhGmr7zPcrla0Uj/AALoQlb/9C1PliGkSkkSJWouA4rgr00T24=
+X-Received: by 2002:a17:906:4997:b0:8ee:babc:d3f8 with SMTP id
+ p23-20020a170906499700b008eebabcd3f8mr11823640eju.3.1678393508590; Thu, 09
+ Mar 2023 12:25:08 -0800 (PST)
+MIME-Version: 1.0
+References: <20230209020916.6475-1-steev@kali.org> <20230209020916.6475-3-steev@kali.org>
+ <ZAoS1T9m1lI21Cvn@hovoldconsulting.com>
+In-Reply-To: <ZAoS1T9m1lI21Cvn@hovoldconsulting.com>
+From:   Steev Klimaszewski <steev@kali.org>
+Date:   Thu, 9 Mar 2023 14:24:57 -0600
+Message-ID: <CAKXuJqhEKB7cuVhEzObbFyYHyKj87M8iWVaoz7gkhS2OQ9tTBA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/4] Bluetooth: hci_qca: Add support for QTI Bluetooth
+ chip wcn6855
+To:     Johan Hovold <johan@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>,
+        Tim Jiang <quic_tjiang@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An usb device can initate a remote wakeup and bring the link out of
-suspend as dictated by the DEVICE_REMOTE_WAKEUP feature selector.
-Add support to handle this packet and set the remote wakeup capability.
+On Thu, Mar 9, 2023 at 11:08=E2=80=AFAM Johan Hovold <johan@kernel.org> wro=
+te:
+>
+> On Wed, Feb 08, 2023 at 08:09:14PM -0600, Steev Klimaszewski wrote:
+> > Added regulators,GPIOs and changes required to power on/off wcn6855.
+> > Added support for firmware download for wcn6855.
+> >
+> > Signed-off-by: Steev Klimaszewski <steev@kali.org>
+> > ---
+> > Changes since v4:
+> >  * Remove unused firmware check because we don't have mbn firmware.
+> >  * Set qcadev->init_speed if it hasn't been set.
+> >
+> > Changes since v3:
+> >  * drop unused regulators
+> >
+> > Changes since v2:
+> >  * drop unnecessary commit info
+> >
+> > Changes since v1:
+> >  * None
+> >
+> >  drivers/bluetooth/btqca.c   |  9 ++++++-
+> >  drivers/bluetooth/btqca.h   | 10 ++++++++
+> >  drivers/bluetooth/hci_qca.c | 50 ++++++++++++++++++++++++++++---------
+> >  3 files changed, 56 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
+> > index c9064d34d830..2f9d8bd27c38 100644
+> > --- a/drivers/bluetooth/btqca.c
+> > +++ b/drivers/bluetooth/btqca.c
+> > @@ -614,6 +614,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t ba=
+udrate,
+> >               config.type =3D ELF_TYPE_PATCH;
+> >               snprintf(config.fwname, sizeof(config.fwname),
+> >                        "qca/msbtfw%02x.mbn", rom_ver);
+> > +     } else if (soc_type =3D=3D QCA_WCN6855) {
+> > +             snprintf(config.fwname, sizeof(config.fwname),
+> > +                      "qca/hpbtfw%02x.tlv", rom_ver);
+> >       } else {
+> >               snprintf(config.fwname, sizeof(config.fwname),
+> >                        "qca/rampatch_%08x.bin", soc_ver);
+> > @@ -648,6 +651,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t ba=
+udrate,
+> >       else if (soc_type =3D=3D QCA_WCN6750)
+> >               snprintf(config.fwname, sizeof(config.fwname),
+> >                        "qca/msnv%02x.bin", rom_ver);
+> > +     else if (soc_type =3D=3D QCA_WCN6855)
+> > +             snprintf(config.fwname, sizeof(config.fwname),
+> > +                      "qca/hpnv%02x.bin", rom_ver);
+> >       else
+> >               snprintf(config.fwname, sizeof(config.fwname),
+> >                        "qca/nvm_%08x.bin", soc_ver);
+> > @@ -672,6 +678,7 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t ba=
+udrate,
+> >       case QCA_WCN3991:
+> >       case QCA_WCN3998:
+> >       case QCA_WCN6750:
+> > +     case QCA_WCN6855:
+>
+> Did you actually verify the microsoft extensions need this, or you are
+> assuming it works as 6750?
+>
+It was 100% an assumption that since the 6750 does it, the 6855 does
+too.  I should know better than to assume since I used to work at a
+device manufacturer but high hopes things have changed a bit in the
+past 12 years ;)
 
-Some hosts may take longer time to initiate the resume signaling after
-device triggers a remote wakeup. So add async support to the wakeup API
-by enabling link status change events.
+> >               hci_set_msft_opcode(hdev, 0xFD70);
+> >               break;
+> >       default:
+> > @@ -685,7 +692,7 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t ba=
+udrate,
+> >               return err;
+> >       }
+> >
+> > -     if (soc_type =3D=3D QCA_WCN3991 || soc_type =3D=3D QCA_WCN6750) {
+> > +     if (soc_type =3D=3D QCA_WCN3991 || soc_type =3D=3D QCA_WCN6750 ||=
+ soc_type =3D=3D QCA_WCN6855) {
+>
+> Line is now over 80 columns which is still the preferred limit.
+>
+> Perhaps this should now be a switch statement instead?
+>
+switch statement might work, I'll give it a shot here.
 
-Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
----
- drivers/usb/dwc3/core.h   |  2 ++
- drivers/usb/dwc3/ep0.c    |  5 ++++
- drivers/usb/dwc3/gadget.c | 76 +++++++++++++++++++++++++++++++++++++++++++----
- 3 files changed, 77 insertions(+), 6 deletions(-)
+> >               /* get fw build info */
+> >               err =3D qca_read_fw_build_info(hdev);
+> >               if (err < 0)
+> > diff --git a/drivers/bluetooth/btqca.h b/drivers/bluetooth/btqca.h
+> > index 61e9a50e66ae..b884095bcd9d 100644
+> > --- a/drivers/bluetooth/btqca.h
+> > +++ b/drivers/bluetooth/btqca.h
+> > @@ -147,6 +147,7 @@ enum qca_btsoc_type {
+> >       QCA_WCN3991,
+> >       QCA_QCA6390,
+> >       QCA_WCN6750,
+> > +     QCA_WCN6855,
+> >  };
+> >
+> >  #if IS_ENABLED(CONFIG_BT_QCA)
+> > @@ -168,6 +169,10 @@ static inline bool qca_is_wcn6750(enum qca_btsoc_t=
+ype soc_type)
+> >  {
+> >       return soc_type =3D=3D QCA_WCN6750;
+> >  }
+> > +static inline bool qca_is_wcn6855(enum qca_btsoc_type soc_type)
+> > +{
+> > +     return soc_type =3D=3D QCA_WCN6855;
+> > +}
+> >
+> >  #else
+> >
+> > @@ -206,6 +211,11 @@ static inline bool qca_is_wcn6750(enum qca_btsoc_t=
+ype soc_type)
+> >       return false;
+> >  }
+> >
+> > +static inline bool qca_is_wcn6855(enum qca_btsoc_type soc_type)
+> > +{
+> > +     return false;
+> > +}
+> > +
+> >  static inline int qca_send_pre_shutdown_cmd(struct hci_dev *hdev)
+> >  {
+> >       return -EOPNOTSUPP;
+> > diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+> > index 3df8c3606e93..efc1c0306b4e 100644
+> > --- a/drivers/bluetooth/hci_qca.c
+> > +++ b/drivers/bluetooth/hci_qca.c
+> > @@ -605,8 +605,7 @@ static int qca_open(struct hci_uart *hu)
+> >       if (hu->serdev) {
+> >               qcadev =3D serdev_device_get_drvdata(hu->serdev);
+> >
+> > -             if (qca_is_wcn399x(qcadev->btsoc_type) ||
+> > -                 qca_is_wcn6750(qcadev->btsoc_type))
+> > +             if (!(qcadev->init_speed))
+> >                       hu->init_speed =3D qcadev->init_speed;
+>
+> This change makes no sense.
+>
+> In fact, it seems the driver never sets init_speed anywhere.
+>
+> Either way, it should not be needed for wcn6855.
+>
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index b1bd631..416e0ef 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1113,6 +1113,7 @@ struct dwc3_scratchpad_array {
-  *	3	- Reserved
-  * @dis_metastability_quirk: set to disable metastability quirk.
-  * @dis_split_quirk: set to disable split boundary.
-+ * @wakeup_configured: set if the device is configured for remote wakeup.
-  * @imod_interval: set the interrupt moderation interval in 250ns
-  *			increments or 0 to disable.
-  * @max_cfg_eps: current max number of IN eps used across all USB configs.
-@@ -1331,6 +1332,7 @@ struct dwc3 {
- 
- 	unsigned		dis_split_quirk:1;
- 	unsigned		async_callbacks:1;
-+	unsigned		wakeup_configured:1;
- 
- 	u16			imod_interval;
- 
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index 61de693..442d8fe 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -356,6 +356,9 @@ static int dwc3_ep0_handle_status(struct dwc3 *dwc,
- 				usb_status |= 1 << USB_DEV_STAT_U1_ENABLED;
- 			if (reg & DWC3_DCTL_INITU2ENA)
- 				usb_status |= 1 << USB_DEV_STAT_U2_ENABLED;
-+		} else {
-+			usb_status |= dwc->gadget->wakeup_armed <<
-+					USB_DEVICE_REMOTE_WAKEUP;
- 		}
- 
- 		break;
-@@ -476,6 +479,8 @@ static int dwc3_ep0_handle_device(struct dwc3 *dwc,
- 
- 	switch (wValue) {
- 	case USB_DEVICE_REMOTE_WAKEUP:
-+		if (dwc->wakeup_configured)
-+			dwc->gadget->wakeup_armed = set;
- 		break;
- 	/*
- 	 * 9.4.1 says only for SS, in AddressState only for
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 07989c6..f37f949 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -258,7 +258,7 @@ int dwc3_send_gadget_generic_command(struct dwc3 *dwc, unsigned int cmd,
- 	return ret;
- }
- 
--static int __dwc3_gadget_wakeup(struct dwc3 *dwc);
-+static int __dwc3_gadget_wakeup(struct dwc3 *dwc, bool async);
- 
- /**
-  * dwc3_send_gadget_ep_cmd - issue an endpoint command
-@@ -325,7 +325,7 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
- 
- 			fallthrough;
- 		case DWC3_LINK_STATE_U3:
--			ret = __dwc3_gadget_wakeup(dwc);
-+			ret = __dwc3_gadget_wakeup(dwc, false);
- 			dev_WARN_ONCE(dwc->dev, ret, "wakeup failed --> %d\n",
- 					ret);
- 			break;
-@@ -2269,6 +2269,22 @@ static const struct usb_ep_ops dwc3_gadget_ep_ops = {
- 
- /* -------------------------------------------------------------------------- */
- 
-+static void dwc3_gadget_enable_linksts_evts(struct dwc3 *dwc, bool set)
-+{
-+	u32 reg;
-+
-+	if (DWC3_VER_IS_PRIOR(DWC3, 250A))
-+		return;
-+
-+	reg = dwc3_readl(dwc->regs, DWC3_DEVTEN);
-+	if (set)
-+		reg |= DWC3_DEVTEN_ULSTCNGEN;
-+	else
-+		reg &= ~DWC3_DEVTEN_ULSTCNGEN;
-+
-+	dwc3_writel(dwc->regs, DWC3_DEVTEN, reg);
-+}
-+
- static int dwc3_gadget_get_frame(struct usb_gadget *g)
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
-@@ -2276,7 +2292,7 @@ static int dwc3_gadget_get_frame(struct usb_gadget *g)
- 	return __dwc3_gadget_get_frame(dwc);
- }
- 
--static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
-+static int __dwc3_gadget_wakeup(struct dwc3 *dwc, bool async)
- {
- 	int			retries;
- 
-@@ -2307,9 +2323,13 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
- 		return -EINVAL;
- 	}
- 
-+	if (async)
-+		dwc3_gadget_enable_linksts_evts(dwc, true);
-+
- 	ret = dwc3_gadget_set_link_state(dwc, DWC3_LINK_STATE_RECOV);
- 	if (ret < 0) {
- 		dev_err(dwc->dev, "failed to put link in Recovery\n");
-+		dwc3_gadget_enable_linksts_evts(dwc, false);
- 		return ret;
- 	}
- 
-@@ -2321,6 +2341,13 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
- 		dwc3_writel(dwc->regs, DWC3_DCTL, reg);
- 	}
- 
-+	/*
-+	 * Since link status change events are enabled we will receive
-+	 * an U0 event when wakeup is successful. So bail out.
-+	 */
-+	if (async)
-+		return 0;
-+
- 	/* poll until Link State changes to ON */
- 	retries = 20000;
- 
-@@ -2346,13 +2373,36 @@ static int dwc3_gadget_wakeup(struct usb_gadget *g)
- 	unsigned long		flags;
- 	int			ret;
- 
-+	if (!dwc->wakeup_configured) {
-+		dev_err(dwc->dev, "remote wakeup not configured\n");
-+		return -EINVAL;
-+	}
-+
- 	spin_lock_irqsave(&dwc->lock, flags);
--	ret = __dwc3_gadget_wakeup(dwc);
-+	if (!dwc->gadget->wakeup_armed) {
-+		dev_err(dwc->dev, "not armed for remote wakeup\n");
-+		spin_unlock_irqrestore(&dwc->lock, flags);
-+		return -EINVAL;
-+	}
-+	ret = __dwc3_gadget_wakeup(dwc, true);
-+
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
- 	return ret;
- }
- 
-+static int dwc3_gadget_set_remote_wakeup(struct usb_gadget *g, int set)
-+{
-+	struct dwc3		*dwc = gadget_to_dwc(g);
-+	unsigned long		flags;
-+
-+	spin_lock_irqsave(&dwc->lock, flags);
-+	dwc->wakeup_configured = !!set;
-+	spin_unlock_irqrestore(&dwc->lock, flags);
-+
-+	return 0;
-+}
-+
- static int dwc3_gadget_set_selfpowered(struct usb_gadget *g,
- 		int is_selfpowered)
- {
-@@ -2978,6 +3028,7 @@ static void dwc3_gadget_async_callbacks(struct usb_gadget *g, bool enable)
- static const struct usb_gadget_ops dwc3_gadget_ops = {
- 	.get_frame		= dwc3_gadget_get_frame,
- 	.wakeup			= dwc3_gadget_wakeup,
-+	.set_remote_wakeup	= dwc3_gadget_set_remote_wakeup,
- 	.set_selfpowered	= dwc3_gadget_set_selfpowered,
- 	.pullup			= dwc3_gadget_pullup,
- 	.udc_start		= dwc3_gadget_start,
-@@ -3819,6 +3870,8 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
- 
- 	dwc->gadget->speed = USB_SPEED_UNKNOWN;
- 	dwc->setup_packet_pending = false;
-+	dwc->gadget->wakeup_armed = false;
-+	dwc3_gadget_enable_linksts_evts(dwc, false);
- 	usb_gadget_set_state(dwc->gadget, USB_STATE_NOTATTACHED);
- 
- 	if (dwc->ep0state != EP0_SETUP_PHASE) {
-@@ -3912,6 +3965,8 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
- 	reg &= ~DWC3_DCTL_TSTCTRL_MASK;
- 	dwc3_gadget_dctl_write_safe(dwc, reg);
- 	dwc->test_mode = false;
-+	dwc->gadget->wakeup_armed = false;
-+	dwc3_gadget_enable_linksts_evts(dwc, false);
- 	dwc3_clear_stall_all_ep(dwc);
- 
- 	/* Reset device address to zero */
-@@ -4064,7 +4119,7 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
- 	 */
- }
- 
--static void dwc3_gadget_wakeup_interrupt(struct dwc3 *dwc)
-+static void dwc3_gadget_wakeup_interrupt(struct dwc3 *dwc, unsigned int evtinfo)
- {
- 	/*
- 	 * TODO take core out of low power mode when that's
-@@ -4076,6 +4131,8 @@ static void dwc3_gadget_wakeup_interrupt(struct dwc3 *dwc)
- 		dwc->gadget_driver->resume(dwc->gadget);
- 		spin_lock(&dwc->lock);
- 	}
-+
-+	dwc->link_state = evtinfo & DWC3_LINK_STATE_MASK;
- }
- 
- static void dwc3_gadget_linksts_change_interrupt(struct dwc3 *dwc,
-@@ -4157,6 +4214,12 @@ static void dwc3_gadget_linksts_change_interrupt(struct dwc3 *dwc,
- 	}
- 
- 	switch (next) {
-+	case DWC3_LINK_STATE_U0:
-+		if (dwc->gadget->wakeup_armed) {
-+			dwc3_gadget_enable_linksts_evts(dwc, false);
-+			dwc3_resume_gadget(dwc);
-+		}
-+		break;
- 	case DWC3_LINK_STATE_U1:
- 		if (dwc->speed == USB_SPEED_SUPER)
- 			dwc3_suspend_gadget(dwc);
-@@ -4225,7 +4288,7 @@ static void dwc3_gadget_interrupt(struct dwc3 *dwc,
- 		dwc3_gadget_conndone_interrupt(dwc);
- 		break;
- 	case DWC3_DEVICE_EVENT_WAKEUP:
--		dwc3_gadget_wakeup_interrupt(dwc);
-+		dwc3_gadget_wakeup_interrupt(dwc, event->event_info);
- 		break;
- 	case DWC3_DEVICE_EVENT_HIBER_REQ:
- 		if (dev_WARN_ONCE(dwc->dev, !dwc->has_hibernation,
-@@ -4478,6 +4541,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
- 	dwc->gadget->sg_supported	= true;
- 	dwc->gadget->name		= "dwc3-gadget";
- 	dwc->gadget->lpm_capable	= !dwc->usb2_gadget_lpm_disable;
-+	dwc->gadget->wakeup_capable	= true;
- 
- 	/*
- 	 * FIXME We might be setting max_speed to <SUPER, however versions
--- 
-2.7.4
+So, that was a request from an earlier review, but if it's not needed
+for 6855, I'll just drop it, and then I don't need to do any of those
+changes :D
 
+> >
+> >               if (qcadev->oper_speed)
+> > @@ -1317,7 +1316,8 @@ static int qca_set_baudrate(struct hci_dev *hdev,=
+ uint8_t baudrate)
+> >
+> >       /* Give the controller time to process the request */
+> >       if (qca_is_wcn399x(qca_soc_type(hu)) ||
+> > -         qca_is_wcn6750(qca_soc_type(hu)))
+> > +         qca_is_wcn6750(qca_soc_type(hu)) ||
+> > +         qca_is_wcn6855(qca_soc_type(hu)))
+> >               usleep_range(1000, 10000);
+> >       else
+> >               msleep(300);
+> > @@ -1394,7 +1394,8 @@ static unsigned int qca_get_speed(struct hci_uart=
+ *hu,
+> >  static int qca_check_speeds(struct hci_uart *hu)
+> >  {
+> >       if (qca_is_wcn399x(qca_soc_type(hu)) ||
+> > -         qca_is_wcn6750(qca_soc_type(hu))) {
+> > +         qca_is_wcn6750(qca_soc_type(hu)) ||
+> > +         qca_is_wcn6855(qca_soc_type(hu))) {
+> >               if (!qca_get_speed(hu, QCA_INIT_SPEED) &&
+> >                   !qca_get_speed(hu, QCA_OPER_SPEED))
+> >                       return -EINVAL;
+> > @@ -1682,7 +1683,8 @@ static int qca_power_on(struct hci_dev *hdev)
+> >               return 0;
+> >
+> >       if (qca_is_wcn399x(soc_type) ||
+> > -         qca_is_wcn6750(soc_type)) {
+> > +         qca_is_wcn6750(soc_type) ||
+> > +         qca_is_wcn6855(soc_type)) {
+> >               ret =3D qca_regulator_init(hu);
+> >       } else {
+> >               qcadev =3D serdev_device_get_drvdata(hu->serdev);
+> > @@ -1723,7 +1725,8 @@ static int qca_setup(struct hci_uart *hu)
+> >
+> >       bt_dev_info(hdev, "setting up %s",
+> >               qca_is_wcn399x(soc_type) ? "wcn399x" :
+> > -             (soc_type =3D=3D QCA_WCN6750) ? "wcn6750" : "ROME/QCA6390=
+");
+> > +             (soc_type =3D=3D QCA_WCN6750) ? "wcn6750" :
+> > +             (soc_type =3D=3D QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390=
+");
+>
+> This is hideous, but not your fault...
+>
+It is, and, I'm not entirely sure we need it? I mean, it's nice to
+show that it's now starting to set up, but it isn't particularly
+helpful for end users or making sure things are working?
+
+> >
+> >       qca->memdump_state =3D QCA_MEMDUMP_IDLE;
+> >
+> > @@ -1735,7 +1738,8 @@ static int qca_setup(struct hci_uart *hu)
+> >       clear_bit(QCA_SSR_TRIGGERED, &qca->flags);
+> >
+> >       if (qca_is_wcn399x(soc_type) ||
+> > -         qca_is_wcn6750(soc_type)) {
+> > +         qca_is_wcn6750(soc_type) ||
+> > +         qca_is_wcn6855(soc_type)) {
+> >               set_bit(HCI_QUIRK_USE_BDADDR_PROPERTY, &hdev->quirks);
+> >               hci_set_aosp_capable(hdev);
+> >
+> > @@ -1757,7 +1761,8 @@ static int qca_setup(struct hci_uart *hu)
+> >       }
+> >
+> >       if (!(qca_is_wcn399x(soc_type) ||
+> > -          qca_is_wcn6750(soc_type))) {
+> > +          qca_is_wcn6750(soc_type) ||
+> > +          qca_is_wcn6855(soc_type))) {
+>
+> Perhaps you can add a leading space while changing this so that the
+> open-parenthesis alignment makes sense.
+>
+> >               /* Get QCA version information */
+> >               ret =3D qca_read_soc_version(hdev, &ver, soc_type);
+> >               if (ret)
+> > @@ -1883,6 +1888,20 @@ static const struct qca_device_data qca_soc_data=
+_wcn6750 =3D {
+> >       .capabilities =3D QCA_CAP_WIDEBAND_SPEECH | QCA_CAP_VALID_LE_STAT=
+ES,
+> >  };
+> >
+> > +static const struct qca_device_data qca_soc_data_wcn6855 =3D {
+> > +     .soc_type =3D QCA_WCN6855,
+> > +     .vregs =3D (struct qca_vreg []) {
+> > +             { "vddio", 5000 },
+> > +             { "vddbtcxmx", 126000 },
+> > +             { "vddrfacmn", 12500 },
+> > +             { "vddrfa0p8", 102000 },
+> > +             { "vddrfa1p7", 302000 },
+> > +             { "vddrfa1p2", 257000 },
+>
+> Hmm. More random regulator load values. I really think we should get rid
+> of this but that's a separate discussion.
+>
+Bjorn specifically requested that he wanted me to leave them in.  I'm
+not married to them, and don't care one way or the other, I just
+wanted working bluetooth since audio wasn't quite ready yet :)
+
+> > +     },
+> > +     .num_vregs =3D 6,
+> > +     .capabilities =3D QCA_CAP_WIDEBAND_SPEECH | QCA_CAP_VALID_LE_STAT=
+ES,
+> > +};
+> > +
+> >  static void qca_power_shutdown(struct hci_uart *hu)
+> >  {
+> >       struct qca_serdev *qcadev;
+>
+> As I mentioned elsewhere, you need to update also this function so that
+> wcn6855 can be powered down.
+
+Sorry, I do have that locally, I just haven't pushed a v6 as I was
+looking at Tim's v2 of the qca2066 and was wondering if I should or
+shouldn't continue working on my version of the driver?
+
+>
+> > @@ -2047,7 +2066,8 @@ static int qca_serdev_probe(struct serdev_device =
+*serdev)
+> >
+> >       if (data &&
+> >           (qca_is_wcn399x(data->soc_type) ||
+> > -         qca_is_wcn6750(data->soc_type))) {
+> > +         qca_is_wcn6750(data->soc_type) ||
+> > +         qca_is_wcn6855(data->soc_type))) {
+>
+> Perhaps you fix the alignment here too.
+>
+> >               qcadev->btsoc_type =3D data->soc_type;
+> >               qcadev->bt_power =3D devm_kzalloc(&serdev->dev,
+> >                                               sizeof(struct qca_power),
+> > @@ -2067,14 +2087,18 @@ static int qca_serdev_probe(struct serdev_devic=
+e *serdev)
+> >
+> >               qcadev->bt_en =3D devm_gpiod_get_optional(&serdev->dev, "=
+enable",
+> >                                              GPIOD_OUT_LOW);
+> > -             if (IS_ERR_OR_NULL(qcadev->bt_en) && data->soc_type =3D=
+=3D QCA_WCN6750) {
+> > +             if (IS_ERR_OR_NULL(qcadev->bt_en)
+> > +                 && (data->soc_type =3D=3D QCA_WCN6750 ||
+>
+> && operator should go on the previous line before the line break.
+>
+> > +                     data->soc_type =3D=3D QCA_WCN6855)) {
+> >                       dev_err(&serdev->dev, "failed to acquire BT_EN gp=
+io\n");
+> >                       power_ctrl_enabled =3D false;
+> >               }
+> >
+> >               qcadev->sw_ctrl =3D devm_gpiod_get_optional(&serdev->dev,=
+ "swctrl",
+> >                                              GPIOD_IN);
+> > -             if (IS_ERR_OR_NULL(qcadev->sw_ctrl) && data->soc_type =3D=
+=3D QCA_WCN6750)
+> > +             if (IS_ERR_OR_NULL(qcadev->sw_ctrl)
+> > +                 && (data->soc_type =3D=3D QCA_WCN6750 ||
+>
+> Same here.
+>
+> > +                     data->soc_type =3D=3D QCA_WCN6855))
+> >                       dev_warn(&serdev->dev, "failed to acquire SW_CTRL=
+ gpio\n");
+> >
+> >               qcadev->susclk =3D devm_clk_get_optional(&serdev->dev, NU=
+LL);
+> > @@ -2150,7 +2174,8 @@ static void qca_serdev_remove(struct serdev_devic=
+e *serdev)
+> >       struct qca_power *power =3D qcadev->bt_power;
+> >
+> >       if ((qca_is_wcn399x(qcadev->btsoc_type) ||
+> > -          qca_is_wcn6750(qcadev->btsoc_type)) &&
+> > +          qca_is_wcn6750(qcadev->btsoc_type) ||
+> > +          qca_is_wcn6855(qcadev->btsoc_type)) &&
+> >            power->vregs_on)
+> >               qca_power_shutdown(&qcadev->serdev_hu);
+> >       else if (qcadev->susclk)
+> > @@ -2335,6 +2360,7 @@ static const struct of_device_id qca_bluetooth_of=
+_match[] =3D {
+> >       { .compatible =3D "qcom,wcn3991-bt", .data =3D &qca_soc_data_wcn3=
+991},
+> >       { .compatible =3D "qcom,wcn3998-bt", .data =3D &qca_soc_data_wcn3=
+998},
+> >       { .compatible =3D "qcom,wcn6750-bt", .data =3D &qca_soc_data_wcn6=
+750},
+> > +     { .compatible =3D "qcom,wcn6855-bt", .data =3D &qca_soc_data_wcn6=
+855},
+> >       { /* sentinel */ }
+> >  };
+> >  MODULE_DEVICE_TABLE(of, qca_bluetooth_of_match);
+>
+> With power-off handling fixed, this seems to work as quite well on my
+> X13s with 6.3-rc1. Nice job!
+>
+> Btw, apart from the frame reassembly error, I'm also seeing:
+>
+>         Bluetooth: Received HCI_IBS_WAKE_ACK in tx state 0
+>
+> during probe.
+>
+I'm still not sure where the frame reassembly error comes from, and I
+don't know how to get more info to figure it out either, if anyone
+happens to have any guidance for that, I would love some.
+Additionally, it doesn't always happen.  It seems to happen on the
+first load of the module, however, running modprobe -r && modprobe in
+a loop (with the powerdown properly modified so the log isn't full of
+splats),  it doesn't seem to occur every time. Likewise for the
+WAKE_ACK.
+
+> Johan
