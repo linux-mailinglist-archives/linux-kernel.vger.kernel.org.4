@@ -2,101 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546846B1D2D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFE66B1D39
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbjCIH5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 02:57:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        id S229751AbjCIH73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 02:59:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjCIH4w (ORCPT
+        with ESMTP id S229983AbjCIH67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 02:56:52 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48172DDF1F;
-        Wed,  8 Mar 2023 23:55:59 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PXLq30TqLz9v7c5;
-        Thu,  9 Mar 2023 15:46:39 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBnNl32kAlk6WSBAQ--.23696S2;
-        Thu, 09 Mar 2023 08:55:40 +0100 (CET)
-Message-ID: <070d4006cd7d0ee1b2cf4e0dd7e4d5c7be2bcb65.camel@huaweicloud.com>
-Subject: Re: [PATCH v2] security: Introduce LSM_ORDER_LAST and set it for
- the integrity LSM
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 09 Mar 2023 08:55:33 +0100
-In-Reply-To: <b8ed9f24e051158580c561a8d8863622ba2f4c8e.camel@linux.ibm.com>
-References: <20230308171119.1784326-1-roberto.sassu@huaweicloud.com>
-         <b8ed9f24e051158580c561a8d8863622ba2f4c8e.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwBnNl32kAlk6WSBAQ--.23696S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jr18Gw47uw18tr47uw43trb_yoWkCFbE9r
-        409r48Gws5GrZ29a4Iy3sFvr4xKa18AFn5Gw43tw1ayrWfXFs7ta95Xa4fXr1rCws7Zr93
-        WryrZFW7tw1IgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbzAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-        k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF
-        7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOyCJDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgALBF1jj4Zd2wAAs8
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Mar 2023 02:58:59 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744065FC6;
+        Wed,  8 Mar 2023 23:57:51 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 5654932008FB;
+        Thu,  9 Mar 2023 02:56:26 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 09 Mar 2023 02:56:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1678348585; x=1678434985; bh=Vq
+        HIsQcXhmqCYt+w/wEu8RmoQ3k2P8+3OVZu3PbvqhE=; b=ZyKR18tm0jVHMTk0/g
+        fEr4c5is3Y+8DOnmfQ8koV4ykwXfF2K7sni1t0+ukEoym+NrGqUgiWLEu5rPTyJw
+        0YJM5pudrsxt8LzgOGh+hgE0OQ5jS2lY5cyw83Xhmlim0XjkCHM0H9qWimqmYycC
+        jMZr7PhbnKrR6YPo3NULp+hFYo0LXakcP6Us1x7ZZq3P1cuIkQ5MK9g9m5pMMWAY
+        94x0bpxOEonwuiBw+e9KS2EXFhKKOCu0kboq90Rb6LZ3pfmk6HoYl6K+vaxUSeNf
+        nSWyjC3LN8IoYkrpMPY6uqpJCeSqM2nXl/4KiGEn0IfSm3wYg6kix6tCmq0pn6/T
+        qj/w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1678348585; x=1678434985; bh=VqHIsQcXhmqCY
+        t+w/wEu8RmoQ3k2P8+3OVZu3PbvqhE=; b=kE2DfbWp52mBUvnYmds56m2l8GWvR
+        6GisiRWu8lAU75Rv5FAF4jJ2hFJ/LC5tGjDStSyTS1iItd7/vS5hVccX0w1KHn7j
+        AMAd1QJ/QpiUtF6G3AnzOa0Ot8irhJtBnd9UwowSATJtI/hGvpeXALZU/QOJ4gz+
+        7/9zyNxa2IRRZzB1RrJ5abxNyi75ZkOHbk4H9I49QuQWX+0iw+hwBUMdW0zq+Xky
+        8D/SGXUNP2rrlgZ2O8EETa7PFO/sGdFWZMdzbS37gl3JBjUb2v+8pFjj4lPa9zaC
+        SgjcXwKL7pnFnXfSvIRlNwygO01bJ6N0erbQFzsxkXIu5so12+ruTqsIA==
+X-ME-Sender: <xms:KZEJZEFzmjgvQ6uO2ftJj_-kxWGpZhRRGB_GkAVGwrxq9A03tly-5Q>
+    <xme:KZEJZNWUMcNTL0GWBNYkqDhVDri41fz3kdz7Wg3srSjJkkSjBHFiguZIcVwzUa8dt
+    nIKVTFu-g7oeAn0zIQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdduhedgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:KZEJZOIUkInEUKpGIXLCFnAVXmNNPG5T0akKB765VFpDrnh6IdT_BQ>
+    <xmx:KZEJZGFcV4YYZcEx5-_EJsWCtCjMAvUKr6pMJOHUc0Z-CYkZfsApXQ>
+    <xmx:KZEJZKU_4TOUeTPHHuDUuOUSlhaFpcLokYxbsKbSXFh2Rc3DGU39xg>
+    <xmx:KZEJZBNKmsfCZViwzTGZkeNK4ExQdsAcupMuQIxrtJLk2h7cBf53Qg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 777CBB60086; Thu,  9 Mar 2023 02:56:25 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-206-g57c8fdedf8-fm-20230227.001-g57c8fded
+Mime-Version: 1.0
+Message-Id: <dcb805e1-2b48-481d-8e72-1b515c9d43e6@app.fastmail.com>
+In-Reply-To: <20230309071100.2856899-2-xiang.ye@intel.com>
+References: <20230309071100.2856899-1-xiang.ye@intel.com>
+ <20230309071100.2856899-2-xiang.ye@intel.com>
+Date:   Thu, 09 Mar 2023 08:56:05 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Ye Xiang" <xiang.ye@intel.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        "Lee Jones" <lee@kernel.org>, "Wolfram Sang" <wsa@kernel.org>,
+        "Tyrone Ting" <kfting@nuvoton.com>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Sakari Ailus" <sakari.ailus@linux.intel.com>,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-08 at 19:23 -0500, Mimi Zohar wrote:
-> On Wed, 2023-03-08 at 18:11 +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs willing to be
-> > the last, e.g. the 'integrity' LSM, without changing the kernel command
-> > line or configuration.
-> 
-> ^needing to be last
+On Thu, Mar 9, 2023, at 08:10, Ye Xiang wrote:
 
-Ok.
+> The minimum code in ASL that covers this board is
+> Scope (\_SB.PCI0.DWC3.RHUB.HS01)
+>     {
+>         Device (GPIO)
+>         {
+>             Name (_ADR, Zero)
+>             Name (_STA, 0x0F)
+>         }
+>
+>         Device (I2C)
+>         {
+>             Name (_ADR, One)
+>             Name (_STA, 0x0F)
+>         }
+>
+>         Device (SPI)
+>         {
+>             Name (_ADR, 0x02)
+>             Name (_STA, 0x0F)
+>         }
+>     }
 
-> > Also, set this order for the 'integrity' LSM. While not enforced, this is
-> > the only LSM expected to use it.
-> > 
-> > Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled
-> > and put at the end of the LSM list.
-> > 
-> > Finally, for LSM_ORDER_MUTABLE LSMs, set the found variable to true if an
-> > LSM is found, regardless of its order. In this way, the kernel would not
-> > wrongly report that the LSM is not built-in in the kernel if its order is
-> > LSM_ORDER_LAST.
-> > 
-> > Fixes: 79f7865d844c ("LSM: Introduce "lsm=" for boottime LSM selection")
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Thanks, Roberto.  With this patch, 'integrity' can be safely removed
-> from CONFIG_LSM definitions.
+I'm a bit confused by this bit, does that mean this only works
+if the device is integrated on the mainboard and the BIOS is
+aware of it? This won't work if  you plug it into a random
+USB port, or have no ACPI firmware, right?
 
-Perfect, will add the new patch.
+> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  drivers/usb/misc/Kconfig  |  13 +
+>  drivers/usb/misc/Makefile |   1 +
+>  drivers/usb/misc/ljca.c   | 969 ++++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/ljca.h  |  95 ++++
 
-Thanks
+Why is this in driver/usb/misc? It looks like a normal
+mfd driver to me, and it evenhas the header in include/linux/mfd/
 
-Roberto
-
+     Arnd
