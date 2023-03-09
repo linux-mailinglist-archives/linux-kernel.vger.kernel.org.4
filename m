@@ -2,155 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1346B1C9C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 935356B1CA4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbjCIHqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 02:46:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
+        id S230130AbjCIHqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 02:46:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjCIHp5 (ORCPT
+        with ESMTP id S230037AbjCIHp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 02:45:57 -0500
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B12D309B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 23:45:50 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:614d:21b0:703:d0f9])
-        by laurent.telenet-ops.be with bizsmtp
-        id W7ln2900G3mNwr4017lnNV; Thu, 09 Mar 2023 08:45:48 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1paAxd-00BJiF-3S;
-        Thu, 09 Mar 2023 08:45:47 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1paAyB-00Fxln-Kt;
-        Thu, 09 Mar 2023 08:45:47 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] i2c: dev: Fix bus callback return values
-Date:   Thu,  9 Mar 2023 08:45:46 +0100
-Message-Id: <03a8cd13af352c4d990bc70b72df4915b9fa2874.1678347776.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+        Thu, 9 Mar 2023 02:45:58 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62BBD4634
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 23:45:56 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id r27so1134550lfe.10
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 23:45:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678347955;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=h7u9Q7fUnpppRJq2RShEjTYzc0gmpoEcEwMnKD4I77E=;
+        b=ZOGUmF5lPyvnwoaxcsnaV5kFREvx9c67R8Xt2D4aG2OqbpjoSIFIgfjqkeKd2S6usT
+         l8DXLzEVqebWIrKLzoDS9E38ZHi4X+ic8s+682m0ifDHn+tHimOpvXVudCZanN7m+C+H
+         vBk53hkGLAEoK0bLibgNAgem9FZPvK8njQ1BlmZ8qRGstSAB9t+Hyw/r4nQZlcRpAMjF
+         PXeWttVBiHP1Y35YAuxdi7JNtR0VBHVw3F1xrsIYJLgX49CQQGFroE+TpqvMnr+iF4Lz
+         i7YmgZn762YP4GfeUrARK5T1rbAouopqXXUl7MA9C9BOjxvIhXvKgBB84+ifrXOof8PX
+         XWnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678347955;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h7u9Q7fUnpppRJq2RShEjTYzc0gmpoEcEwMnKD4I77E=;
+        b=Z4KvLCLz8Xpbbo4eMHcSdaQGw5AKbYMhp4zT9F89xovJnIuBcimMS775tU5KsOUJ8D
+         a8x/V3umjh5Oc8bEgBPkrMeQpyvXVpRRSf4IanB3Kr6UrhBq0XYu5+8L9UnS/YEUteU4
+         4oqMjbQAwIwrSHrRnnZRIKnZoGD985KlZ0fyYwjoeBMLGfLt9y3Em5YngecG8veva25N
+         r1Vxjpkblo4CHfDcS1N0Jn7XpFkEoAZN+3RU0pktc8FgU9ViebyYuNQkWD6GFxPjJ71j
+         7opcVBouqFuZWuY/oGSkH+4wqwYGNsNPJAUPb3BXEDYwwu+kbtKIeHCjL7WKjkyjrlLg
+         FI3w==
+X-Gm-Message-State: AO0yUKW9sAJM3Ll6yGOUa402eabKJj/n9mLCZkJsfPf9Cavl/zHNdQk3
+        q9xvy26NiNwg/eK39H5DQJthJQ==
+X-Google-Smtp-Source: AK7set+vIUQ72mb6AEMJVO/fxbvWyj70zhw6JKYV9d4wNLZO7GH6w6kig86D2dIVDe9AxryQMSHQBQ==
+X-Received: by 2002:ac2:5dfa:0:b0:4b6:e405:1027 with SMTP id z26-20020ac25dfa000000b004b6e4051027mr6046573lfq.14.1678347955140;
+        Wed, 08 Mar 2023 23:45:55 -0800 (PST)
+Received: from [127.0.1.1] ([85.235.12.219])
+        by smtp.gmail.com with ESMTPSA id a6-20020a056512020600b004bb766e01a4sm2568972lfo.245.2023.03.08.23.45.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 23:45:54 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v3 00/17] Mass convert GPIO IRQ chips to be immutable
+Date:   Thu, 09 Mar 2023 08:45:48 +0100
+Message-Id: <20230215-immutable-chips-v3-0-972542092a77@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAK2OCWQC/4WOQQ6CMBBFr0K6tqYdBMSV9zAuCp3SSaAlLRIN4
+ e4WNsaFcfl/5r0/C4sYCCO7ZAsLOFMk71LIDxlrrXIdctIpMxCQC5AFp2F4TKrpkbeWxsirEmo
+ AqCojkSWqURF5E5Rr7cZ1I/kPsx2MAQ0998nbPWVLcfLhtX8wy639PTZLLngh1dkAnFShxbUnp
+ 4I/+tCxTTbDHwEkgS4bgbkBXdfyS7Cu6xs9SJNyEQEAAA==
+To:     Mun Yew Tham <mun.yew.tham@intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, Alban Bedel <albeu@free.fr>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Jay Fang <f.fangjian@huawei.com>,
+        Daniel Palmer <daniel@thingy.jp>,
+        Romain Perier <romain.perier@gmail.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        William Breathitt Gray <william.gray@linaro.org>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-omap@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>, Arnd Bergmann <arnd@arndb.de>
+X-Mailer: b4 0.12.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i2cdev_{at,de}tach_adapter() callbacks are used for two purposes:
-  1. As notifier callbacks, when (un)registering I2C adapters created or
-     destroyed after i2c_dev_init(),
-  2. As bus iterator callbacks, for registering already existing
-     adapters from i2c_dev_init(), and for cleanup.
+We are getting tired of these irq_chips not getting converted
+to be immutable, so I just take out the big hammer and fix
+some that I deem not too complex as best I can.
 
-Unfortunately both use cases expect different return values: the former
-expects NOTIFY_* return codes, while the latter expects zero or error
-codes, and aborts in case of error.
+I stopped after doing some, I will take another sweep at some
+point I guess.
 
-Hence in case 2, as soon as i2cdev_{at,de}tach_adapter() returns
-(non-zero) NOTIFY_OK, the bus iterator aborts.  This causes (a) only the
-first already existing adapter to be registered, leading to missing
-/dev/i2c-* entries, and (b) a failure to unregister all but the first
-I2C adapter during cleanup.
+This is v6.4 material.
 
-Fix this by introducing separate callbacks for the bus iterator,
-wrapping the notifier functions, and always returning succes.
-Any errors inside these callback functions are unlikely to happen, and
-are fatal anyway.
+The last two patches to pci-idio-* (patch 15 and 16) can be
+omitted if William's patches to convert this driver to
+regmap GPIO are merged first.
 
-Fixes: cddf70d0bce71c2a ("i2c: dev: fix notifier return values")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
-Seen on r8a7740/armadillo and r8a73a4/ape6evm, where the i2c-shmobile
-adapters are probed before i2c_dev_init().
-Not seen on r8a779g0/white-hawk, where all I2C adapters are probed after
-i2c_dev_init().
+Changes in v3:
+- Deleted the irq_chip->name assignment in the Aspeed driver
+- Fold in a patch from Joel to make aspeed IRQs compulsory
+- Link to v2: https://lore.kernel.org/r/20230215-immutable-chips-v2-0-d6b0e3f2d991@linaro.org
 
- drivers/i2c/i2c-dev.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+Changes in v2:
+- Rebased on v6.3-rc1
+- Collected some test and ACK tags
+- Link to v1: https://lore.kernel.org/r/20230215-immutable-chips-v1-0-51a8f224a5d0@linaro.org
 
-diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
-index 107623c4cc14aaf9..95a0b63ac560cf33 100644
---- a/drivers/i2c/i2c-dev.c
-+++ b/drivers/i2c/i2c-dev.c
-@@ -646,7 +646,7 @@ static void i2cdev_dev_release(struct device *dev)
- 	kfree(i2c_dev);
- }
- 
--static int i2cdev_attach_adapter(struct device *dev, void *dummy)
-+static int i2cdev_attach_adapter(struct device *dev)
- {
- 	struct i2c_adapter *adap;
- 	struct i2c_dev *i2c_dev;
-@@ -685,7 +685,7 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
- 	return NOTIFY_DONE;
- }
- 
--static int i2cdev_detach_adapter(struct device *dev, void *dummy)
-+static int i2cdev_detach_adapter(struct device *dev)
- {
- 	struct i2c_adapter *adap;
- 	struct i2c_dev *i2c_dev;
-@@ -711,9 +711,9 @@ static int i2cdev_notifier_call(struct notifier_block *nb, unsigned long action,
- 
- 	switch (action) {
- 	case BUS_NOTIFY_ADD_DEVICE:
--		return i2cdev_attach_adapter(dev, NULL);
-+		return i2cdev_attach_adapter(dev);
- 	case BUS_NOTIFY_DEL_DEVICE:
--		return i2cdev_detach_adapter(dev, NULL);
-+		return i2cdev_detach_adapter(dev);
- 	}
- 
- 	return NOTIFY_DONE;
-@@ -725,6 +725,18 @@ static struct notifier_block i2cdev_notifier = {
- 
- /* ------------------------------------------------------------------------- */
- 
-+static int __init i2c_dev_attach_adapter(struct device *dev, void *dummy)
-+{
-+	i2cdev_attach_adapter(dev);
-+	return 0;
-+}
-+
-+static int __exit i2c_dev_detach_adapter(struct device *dev, void *dummy)
-+{
-+	i2cdev_detach_adapter(dev);
-+	return 0;
-+}
-+
- /*
-  * module load/unload record keeping
-  */
-@@ -752,7 +764,7 @@ static int __init i2c_dev_init(void)
- 		goto out_unreg_class;
- 
- 	/* Bind to already existing adapters right away */
--	i2c_for_each_dev(NULL, i2cdev_attach_adapter);
-+	i2c_for_each_dev(NULL, i2c_dev_attach_adapter);
- 
- 	return 0;
- 
-@@ -768,7 +780,7 @@ static int __init i2c_dev_init(void)
- static void __exit i2c_dev_exit(void)
- {
- 	bus_unregister_notifier(&i2c_bus_type, &i2cdev_notifier);
--	i2c_for_each_dev(NULL, i2cdev_detach_adapter);
-+	i2c_for_each_dev(NULL, i2c_dev_detach_adapter);
- 	class_destroy(i2c_dev_class);
- 	unregister_chrdev_region(MKDEV(I2C_MAJOR, 0), I2C_MINORS);
- }
+---
+Joel Stanley (1):
+      gpio: aspeed: Always register the irqchip
+
+Linus Walleij (16):
+      gpio: altera: Convert to immutable irq_chip
+      gpio: adnp: Convert to immutable irq_chip
+      gpio: aspeed: Convert to immutable irq_chip
+      gpio: aspeed-sgpio: Convert to immutable irq_chip
+      gpio: ath79: Convert to immutable irq_chip
+      gpio: cadence: Convert to immutable irq_chip
+      gpio: hisi: Convert to immutable irq_chip
+      gpio: hlwd: Convert to immutable irq_chip
+      gpio: idt3243x: Convert to immutable irq_chip
+      gpio: msc313: Convert to immutable irq_chip
+      gpio: mlxbf2: Convert to immutable irq_chip
+      gpio: max732x: Convert to immutable irq_chip
+      gpio: omap: Drop irq_base
+      gpio: omap: Convert to immutable irq_chip
+      gpio: pci-idio-16: Convert to immutable irq_chip
+      gpio: pcie-idio-24: Convert to immutable irq_chip
+
+ drivers/gpio/gpio-adnp.c         |  9 ++++-
+ drivers/gpio/gpio-altera.c       | 25 +++++++-----
+ drivers/gpio/gpio-aspeed-sgpio.c | 44 +++++++++++++++++----
+ drivers/gpio/gpio-aspeed.c       | 82 ++++++++++++++++++++++++++-------------
+ drivers/gpio/gpio-ath79.c        |  8 +++-
+ drivers/gpio/gpio-cadence.c      | 10 +++--
+ drivers/gpio/gpio-hisi.c         | 25 +++++++-----
+ drivers/gpio/gpio-hlwd.c         | 33 ++++++++++++----
+ drivers/gpio/gpio-idt3243x.c     | 11 ++++--
+ drivers/gpio/gpio-max732x.c      |  8 +++-
+ drivers/gpio/gpio-mlxbf2.c       | 32 ++++++++++++----
+ drivers/gpio/gpio-msc313.c       | 26 +++++++++++--
+ drivers/gpio/gpio-omap.c         | 83 ++++++++++++++++++++++------------------
+ drivers/gpio/gpio-pci-idio-16.c  | 12 ++++--
+ drivers/gpio/gpio-pcie-idio-24.c | 12 ++++--
+ 15 files changed, 290 insertions(+), 130 deletions(-)
+---
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+change-id: 20230215-immutable-chips-762922277f1e
+
+Best regards,
 -- 
-2.34.1
+Linus Walleij <linus.walleij@linaro.org>
 
