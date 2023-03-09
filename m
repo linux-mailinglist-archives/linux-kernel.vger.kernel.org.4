@@ -2,101 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F306B1F10
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3716B6B1F03
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjCII5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 03:57:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
+        id S230427AbjCII5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 03:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbjCII5T (ORCPT
+        with ESMTP id S230500AbjCII4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:57:19 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76386E349E;
-        Thu,  9 Mar 2023 00:56:19 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4PXN8n1dKFz9xtn2;
-        Thu,  9 Mar 2023 16:47:05 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBHE1rqnglk6JWBAQ--.23851S5;
-        Thu, 09 Mar 2023 09:55:33 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        mic@digikod.net
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v3 3/3] security: Remove integrity from the LSM list in Kconfig
-Date:   Thu,  9 Mar 2023 09:54:33 +0100
-Message-Id: <20230309085433.1810314-4-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230309085433.1810314-1-roberto.sassu@huaweicloud.com>
-References: <20230309085433.1810314-1-roberto.sassu@huaweicloud.com>
+        Thu, 9 Mar 2023 03:56:50 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DAB2E1C80;
+        Thu,  9 Mar 2023 00:55:45 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so5375362pjh.0;
+        Thu, 09 Mar 2023 00:55:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678352136;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IRZaWnJB5vKW3N2Mua12lagbvIC7r/iyFdNI4IaoiuQ=;
+        b=BBZzoMQ3w9bQ3vLFHXfRS44zOBrJC/xI2AbmCSVJeOcBgGF5veYAHJRqPsQvRHy9/1
+         v2NdRp9sgy0+iBx9v7uy5VOpyvVw5rNldqmm+RRwoQ6XdsE+kPyZViKjTjOBiP3vmA9d
+         syQ/fv4OAFYRr3bCaMWoaLJxsjcIq8c8Asjoph3F/7GnFlXTU8OONk44FT3ywCmp0l0I
+         dEEDd0pdjLG1PrV70JdlDanlHYqU19Htb8QIY2XKu0C3doXVIc3BKsXeBT3ygSm+rwmu
+         JOw0jE84E9iYcjoM/oIaaPfIDilkSw6sEi1Nq92SFtmEhNEwFOQc+b0kBNcOaXlC6MQn
+         VGhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678352136;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IRZaWnJB5vKW3N2Mua12lagbvIC7r/iyFdNI4IaoiuQ=;
+        b=sh9RJT7bO6fSmDYF5kR0lysfBphKvwx4g946kZ/zMRztgJN+CpIQ1kp3N7G8BeMqwY
+         C+6L71upaQom4xy0CZz6RJGFB4iYT/OdYQ25VzsU4uz7R4lI3BPwMQ6CG8XFJUo6LgBB
+         pzonchVf8tQk98I34GSsqwchT0YL66b6Csx7KNtSMNJ1PAwD/p+twADrjb5TGnV2xgTq
+         mrWKAIZoOLhGh/fw5gPw8CjxyRmhjc/0rrAZgo1pC3wGsCjCD79C71Zjyhda0wKiHH6y
+         px+pRmDoYDReFz2fMcGNS0sCEJxpl5a/GdtnihRLsPzGWXBI6BmDU/O6lCZpaFDt1S08
+         qOgg==
+X-Gm-Message-State: AO0yUKXhuKhVAZ6YyhL/jYpNW7BdozMVTLDrCev1NpBaV/pFBVNrHnES
+        4tB9HwKAZtTcdGyg60gR+qc=
+X-Google-Smtp-Source: AK7set+tQ4jp7msyrp3ExUaTYg6lGPvNXwRx5LSIfV9xuodx01WnmUsSFo0ttefd3LpfP5SKXdpRDA==
+X-Received: by 2002:a17:90b:350f:b0:235:31e9:e793 with SMTP id ls15-20020a17090b350f00b0023531e9e793mr24965090pjb.13.1678352136064;
+        Thu, 09 Mar 2023 00:55:36 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-4.three.co.id. [180.214.232.4])
+        by smtp.gmail.com with ESMTPSA id o2-20020a17090aac0200b00234465cd2a7sm1080812pjq.56.2023.03.09.00.55.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 00:55:35 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 266FC106581; Thu,  9 Mar 2023 15:55:31 +0700 (WIB)
+Date:   Thu, 9 Mar 2023 15:55:31 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 0000/1000] 6.2.3-rc2 review
+Message-ID: <ZAmfA5jbm8jLsiOq@debian.me>
+References: <20230308091912.362228731@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwBHE1rqnglk6JWBAQ--.23851S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFW5XFW3Kw4UJF4xtF1rtFb_yoW8Cw45pF
-        nrKay7tr9rZFyF9r4DXrnxCFyxC395Wr98Cay3Wa1DK3W3A3Wqqr47Kr15CF15Grs7AFZ8
-        Cry5Kw4a93ZFga7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
-        Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
-        0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-        67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MI
-        IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-        14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-        W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU04x
-        RDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQALBF1jj4pcuAAAsR
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tHH3FCFqzz59BMt0"
+Content-Disposition: inline
+In-Reply-To: <20230308091912.362228731@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Remove 'integrity' from the list of LSMs in Kconfig, as it is no longer
-necessary. Since the recent change (set order to LSM_ORDER_LAST), the
-'integrity' LSM is always enabled.
+--tHH3FCFqzz59BMt0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/Kconfig | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+On Wed, Mar 08, 2023 at 10:29:21AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.3 release.
+> There are 1000 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-diff --git a/security/Kconfig b/security/Kconfig
-index e6db09a779b..e109b4d5616 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -246,11 +246,11 @@ endchoice
- 
- config LSM
- 	string "Ordered list of enabled LSMs"
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFAULT_SECURITY_DAC
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
-+	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
-+	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
-+	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
-+	default "landlock,lockdown,yama,loadpin,safesetid,bpf" if DEFAULT_SECURITY_DAC
-+	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf"
- 	help
- 	  A comma-separated list of LSMs, in initialization order.
- 	  Any LSMs left off this list will be ignored. This can be
--- 
-2.25.1
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--tHH3FCFqzz59BMt0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZAme/AAKCRD2uYlJVVFO
+oyEbAQCkIDTxCCWCEO7I2IiLpOWMjx/peDuICNJ2SDuAQxjBXwEApQH+G5Cet4TB
+rcPy0cGeVv9uHG+W+bq0WgCIq/JaUQw=
+=uYxE
+-----END PGP SIGNATURE-----
+
+--tHH3FCFqzz59BMt0--
