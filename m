@@ -2,125 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 412196B232E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4246B2330
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:38:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbjCILhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:37:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
+        id S231515AbjCILiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:38:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjCILhe (ORCPT
+        with ESMTP id S229572AbjCILiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:37:34 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CAE2C659;
-        Thu,  9 Mar 2023 03:37:33 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A238B21EC4;
-        Thu,  9 Mar 2023 11:37:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1678361852; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y3Kavnuvtu7F05R8cl+TpZ5HAF6KAZmeumBN1jWbLoQ=;
-        b=XUx4sJxKU3XO7MWeqdF7dviVgqo402OFnqiEdZHQ7sTosaobll7UT3n4E9Lzk1Rg+oelG7
-        zMa/ABkw3giE1EufXuvTqj9Ble7kkXJetNJNaE313nKPujfzlXx29on1ecd7rsZeGUWASA
-        EQEHyR9g/fyW3xJPhFqHrXvN9SkkMSg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1678361852;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y3Kavnuvtu7F05R8cl+TpZ5HAF6KAZmeumBN1jWbLoQ=;
-        b=+rHmDJy4x9riy/fEyBB10A1ZsYGESX6aLipvrcz0e3P5bHAcQAgR5PWgnDRstQRCSMCqWO
-        PReGCZDTZIQebcCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 94D511391B;
-        Thu,  9 Mar 2023 11:37:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id JD1QJPzECWQhVQAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 09 Mar 2023 11:37:32 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 2CE8FA06FF; Thu,  9 Mar 2023 12:37:32 +0100 (CET)
-Date:   Thu, 9 Mar 2023 12:37:32 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>, Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [RFC 02/11] ext4: Remove unused extern variables declaration
-Message-ID: <20230309113732.3l6opu5qe5teqn74@quack3>
-References: <cover.1674822311.git.ojaswin@linux.ibm.com>
- <a66618d6de35f373b50fbcb066e5c4dacdc91294.1674822311.git.ojaswin@linux.ibm.com>
+        Thu, 9 Mar 2023 06:38:04 -0500
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819441E29F;
+        Thu,  9 Mar 2023 03:38:03 -0800 (PST)
+Received: by mail-ed1-f49.google.com with SMTP id cy23so5600104edb.12;
+        Thu, 09 Mar 2023 03:38:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678361882;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mM1ayM67gmODluLDBPt8vqT0sHU0TAIuRWhypzrZ2jE=;
+        b=GDn5d38P4ioAZWv9s7FkPItbTnNOwgu9NxMm5EbotD4Nz7W2aVEcaPx5EX1DlLwOHX
+         02HVlsaCIhiYiJBXSZc4hf3KaCGn8EXA8pCmxThIzlQmNdJCLAiK7tyJTGrxLmI3t5Rd
+         /r/HRYMqUoyOOG744XnQEiTFsf85hKy4fGWWv1UdLBddquFtJhAW5j4eYjwQGs9jUPJO
+         2iqGGEUyFGcIYPpWucTAVQGA1U3JAvbqQuk7qtp5lleoIJLrcsRk2fI8MnfNn67lOyjI
+         7rHnJ8MNCrnTA4skueFAmrZrXybm3MxUcsbRsAYzSzvSe/c4TqJYAdwM8kBkw8HE2Qgl
+         jDlA==
+X-Gm-Message-State: AO0yUKVi3ypSfzWxfNBXqeBj14wcrIYL5smd3VNAoSyD/uK5SKIfWvbM
+        MLDv5aMx0AN/eoi75NmZH/s=
+X-Google-Smtp-Source: AK7set8uNJKJbmIY/B+3Dtne4qmPemh1ashddWF0pWqFULxC3ibgb+85qsWO9tv0GSp4cOeKaRkwqw==
+X-Received: by 2002:aa7:d404:0:b0:4aa:ca81:a528 with SMTP id z4-20020aa7d404000000b004aaca81a528mr17516820edq.40.1678361881859;
+        Thu, 09 Mar 2023 03:38:01 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id j7-20020a17090643c700b008caaae1f1e1sm8675728ejn.110.2023.03.09.03.38.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 03:38:01 -0800 (PST)
+Message-ID: <d02b87ce-3c76-f940-ed01-771a27e79022@kernel.org>
+Date:   Thu, 9 Mar 2023 12:37:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a66618d6de35f373b50fbcb066e5c4dacdc91294.1674822311.git.ojaswin@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 6.2 0000/1000] 6.2.3-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230308091912.362228731@linuxfoundation.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20230308091912.362228731@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 27-01-23 18:07:29, Ojaswin Mujoo wrote:
-> ext4_mb_stats & ext4_mb_max_to_scan are never used. We use
-> sbi->s_mb_stats and sbi->s_mb_max_to_scan instead.
-> Hence kill these extern declarations.
+On 08. 03. 23, 10:29, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.3 release.
+> There are 1000 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-
-Nice. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  fs/ext4/ext4.h    | 2 --
->  fs/ext4/mballoc.h | 2 +-
->  2 files changed, 1 insertion(+), 3 deletions(-)
+> Responses should be made by Fri, 10 Mar 2023 09:16:12 +0000.
+> Anything received after that time might be too late.
 > 
-> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> index 140e1eb300d1..b8b00457da8d 100644
-> --- a/fs/ext4/ext4.h
-> +++ b/fs/ext4/ext4.h
-> @@ -2903,8 +2903,6 @@ int ext4_fc_record_regions(struct super_block *sb, int ino,
->  /* mballoc.c */
->  extern const struct seq_operations ext4_mb_seq_groups_ops;
->  extern const struct seq_operations ext4_mb_seq_structs_summary_ops;
-> -extern long ext4_mb_stats;
-> -extern long ext4_mb_max_to_scan;
->  extern int ext4_seq_mb_stats_show(struct seq_file *seq, void *offset);
->  extern int ext4_mb_init(struct super_block *);
->  extern int ext4_mb_release(struct super_block *);
-> diff --git a/fs/ext4/mballoc.h b/fs/ext4/mballoc.h
-> index dcda2a943cee..165a17893c81 100644
-> --- a/fs/ext4/mballoc.h
-> +++ b/fs/ext4/mballoc.h
-> @@ -49,7 +49,7 @@
->  #define MB_DEFAULT_MIN_TO_SCAN		10
->  
->  /*
-> - * with 'ext4_mb_stats' allocator will collect stats that will be
-> + * with 's_mb_stats' allocator will collect stats that will be
->   * shown at umount. The collecting costs though!
->   */
->  #define MB_DEFAULT_STATS		0
-> -- 
-> 2.31.1
-> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.3-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> and the diffstat can be found below.
+
+openSUSE configs¹⁾ all green. x86_64 runs fine in qemu.
+
+Tested-by: Jiri Slaby <jirislaby@kernel.org>
+
+¹⁾ armv6hl armv7hl arm64 i386 ppc64 ppc64le riscv64 s390x x86_64
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+js
+suse labs
+
