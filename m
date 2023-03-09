@@ -2,126 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7B76B1A63
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 05:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 528C86B1A6B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 05:27:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjCIEYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 23:24:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
+        id S229947AbjCIE1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 23:27:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCIEYe (ORCPT
+        with ESMTP id S229522AbjCIE1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 23:24:34 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B30082367
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 20:24:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1678335817; i=efault@gmx.de;
-        bh=KfvLndxdTzmhoJRfLolpgNbL3nfQSK5TmGqgtH5dkts=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=milvhtugmHPH/rUMXitmpSiCc+u+dbJXyX2zoqs9mIHnLKXIfVHhrfHCTujMc8xxX
-         Fz8RxmvgHlNW1Po5Iqrbvfuje10s1905RzbiET2NT5J9HN9EcxmjCABCpppZZWfGvM
-         RQGkSLBmG5IuRCyePckAuejtcqHe6LrJBQywYfztr1Jag8j/4i3GWyCuj2FX4ykDYQ
-         1eKTrCtgUrwQClRaCcO136WZT2L6/U7w9MQWVK2kk11usdZYlNhhmtHyoXljjmrRkU
-         ckdOqAEZPQdzn8EPtpjlrJtGLTmWXxp9MajrfLtKF2MlPU1Lh9pAW53sO8s3OmZJLA
-         wRkOn6nVwlHIA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from homer.fritz.box ([185.221.148.100]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N6KUd-1qbiro0EFV-016jSQ; Thu, 09
- Mar 2023 05:23:37 +0100
-Message-ID: <5b567c5aecabf0a89d92593d99a73bef41bd65da.camel@gmx.de>
-Subject: Re: [PATCH 10/10] sched/fair: Implement an EEVDF like policy
-From:   Mike Galbraith <efault@gmx.de>
-To:     Peter Zijlstra <peterz@infradead.org>, mingo@kernel.org,
-        vincent.guittot@linaro.org
-Cc:     linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
-        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
-        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org
-Date:   Thu, 09 Mar 2023 05:23:33 +0100
-In-Reply-To: <9fd2c37a05713c206dcbd5866f67ce779f315e9e.camel@gmx.de>
-References: <20230306132521.968182689@infradead.org>
-         <20230306141502.810909205@infradead.org>
-         <bfbfbf041854e2cd1a8ed14e64081062e5d632d3.camel@gmx.de>
-         <9fd2c37a05713c206dcbd5866f67ce779f315e9e.camel@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Wed, 8 Mar 2023 23:27:12 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7C390B64
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 20:27:10 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id s13so318206uac.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 20:27:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678336029;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ieOsjAqyzpAajCGC1a5mZjRKapEj1/IVvZ5C1bjX/7o=;
+        b=SmHOlIfvlICUpOY6DbOtEod/qcZ4atqdL5fcjKjl7+LbbYwTZjl5ZED7Dq4SEk59ap
+         ankUrwYHpFYkcIDvrBYd6LSIYXprJmtmR1CmFWk+oK01IPAe5jvSAteb1V3ZThU85Udw
+         qmtUiHOlBORl27jOCtUK6kvLCmwL1IRiHgksc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678336029;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ieOsjAqyzpAajCGC1a5mZjRKapEj1/IVvZ5C1bjX/7o=;
+        b=iEO7IZYYHrTpTCW3vbUNsHIFoVmtsZmRpjM7rzbJS/Th6Wg16AjXO3+v50yL+qqlyD
+         9MWc+iwIipxM1t0L9e4CtPX/asJh8s2dF/ztoI7BatyrtWyLZkcRoN8S46fvhYi+ThpT
+         5SxMh/qLPzISPb8WzL5jhNK1WeAbqsOwJvpmRiUrOecdoEAVQ7tz0hO4a5Sx14pjezOm
+         reBDlK6utztZFRY+YrGcskXT8qysFcvnc6JwXxJ64b37Wb+tqvsFQRVS9uQLjF4iHuer
+         pYSY/ap0XOD1x7R2+CiM5acalY5bwHo5KS5p7DmWed26xaW/D1y9NBc3nzs4HBgBuoI1
+         5rpA==
+X-Gm-Message-State: AO0yUKVUzzi10Xy7HPfhSRsYC3vPsb1lV99xF57YoKEEbBKBqlaQnYxb
+        d8uSa58saBoIPshuHSkUTKDU09etgP6tQPNYGr6+/Q==
+X-Google-Smtp-Source: AK7set/gee51c9AlWy0aEk/2rrxCvuyAgRAg2qGcJMrG0xU2avrdZyZgYSTGxy1emfR/hwcrDnyE7ZFHD9JuLjx4uVg=
+X-Received: by 2002:ab0:470b:0:b0:688:c23f:c22f with SMTP id
+ h11-20020ab0470b000000b00688c23fc22fmr7754413uac.1.1678336029680; Wed, 08 Mar
+ 2023 20:27:09 -0800 (PST)
 MIME-Version: 1.0
+References: <20230206100105.861720-1-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230206100105.861720-1-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 9 Mar 2023 12:26:58 +0800
+Message-ID: <CAGXv+5H6jdWc0zKnW8LjsPYACoG1vRJHtTJUMHzY_8VYdX7g6g@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] MediaTek Frequency Hopping: MT6795/8173/92/95
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        edward-jw.yang@mediatek.com, johnson.wang@mediatek.com,
+        miles.chen@mediatek.com, chun-jie.chen@mediatek.com,
+        rex-bc.chen@mediatek.com, jose.exposito89@gmail.com,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:gyEVNLLsHh70EpY8nWEULGirPZSFS8ZDWHMYRuZtsZX2qgzTAmx
- bcsat0mo7pLoJNRR5/TVanemJJCjDaMhWxqzTQf6MoegZq5/xGUvhwjP/pBn8OfmbPtDIJO
- 5SCMrMaaXEQmj6sO1UziqJOFOsfaEv83qToLKebjKaUsGMtsYmxhfkeBUoikmRGrbYyQYJF
- R7jo4STPDoc5ARIQh/82A==
-UI-OutboundReport: notjunk:1;M01:P0:NdsbBeukE0A=;1rPHJLvjPT8sLS7sWDhN32NdEFV
- 2BK8weVwvDfJwhJV8IPkYMld5+i/Ushims4pRnpOTD/SmB/N6nada6ciVZz2Dyc99vWTHpkm2
- gIC/t1onVDlH/MIDjeqUpdoxNTUEtmynsOHGYUBLa/1+RfNssFUtKdta45iehFaCekxKOr6Bf
- rZQ1P/0sCsMW6pL54uLEcK45+UAsvf9WOZL0mPng3Ye1j8stPtrD76atZwnY8P043r0QLJBbV
- vhi5Wxgkt4s8cOa2uxwdDVQaNs74YW9rXBY7n1Odc6GS2b4u4CFSuOrqnxgiQviNe7l6YHzDR
- WOFYSEC3vhMDnuvS1WWTdzE8Ad0Xg2kiijjvH3FhymO2XHT1tAD3p9qq0Znik0qX8W+wkUq5m
- CGz0SAk9+wYJOFZTovjywlJbM+EQbRru8fo9Q4u1xyo2E0OYEqqz/TWGCR77AqqqEogb0AHlw
- lHIplzhcXu8ewJKPY8ZFCH4isD4Egs9WCpGEwdk/ZKF27f0GsGD03kv4buP/9PweW6N5sD9pD
- t2zjzGRrLEt2tgE1EtcGMGysBrDSiUI1oBX7Jy9aHPywb7S58Zwtw5qzGybgAi9oe04EjC+YY
- nBistoXdavFi5sRpOgfwuEO0sjzI0JZYBTACxgGs7iuJXFVdsrVro5ITQuRV1pr56tlBv3lxy
- JXkwpckhLj18haPm90AgSLxNLPI9pfu9LR+hzxwbvHkw+Ps5AfcO5SljTKX+oZ9BZloxcnYcZ
- 6gcRHV9Znp9IuLzhsUadaerX1ydyOB9nf6+gEnVjw3OkVX+B4t/N1hsc4KcMcIzXDM5lJ9tf+
- 17NiAUlSJppvdDBg3dG5Ama81l4oPP10YgN5fkfzPZaiBjRsf30Sk78nfUp07TC8dfCiT6xki
- sMpQZ3INSbLTeZbCd9CCdVgvfvZtNMYmQuGdGniEd5W3AGmEHWVIrWQx+C1akjfnQ/zyXG/F1
- i1GoQUaUPObsBdKxQzHqaiJah/c=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-08 at 14:36 +0100, Mike Galbraith wrote:
+On Mon, Feb 6, 2023 at 6:01=E2=80=AFPM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> Remember this little bugger, allegedly distilled from a real
-> application control thread starvation issue?
+> Changes in v3:
+>  - Added commit to export register/unregister/parse FHCTL functions
+>    to allow building clock drivers using FHCTL as modules
 >
-> 6.3.0.g8ca09d5-master
-> homer:/root # time taskset -c 3 starve=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0
-> expecting to receive 10000000 signals
+> Changes in v2:
+>  - Rebased over v4 of my clock drivers cleanups series [1]
 >
-> real=C2=A0=C2=A0=C2=A0 0m24.424s
-> user=C2=A0=C2=A0=C2=A0 0m4.468s
-> sys=C2=A0=C2=A0=C2=A0=C2=A0 0m18.957s
+> This series adds support for Frequency Hopping (FHCTL) on more MediaTek
+> SoCs, specifically, MT6795, MT8173, MT8192 and MT8195.
 >
-> 6.3.0.g8ca09d5-eevdf
-> homer:/root # time taskset -c 3 starve
-> expecting to receive 10000000 signals
-> zzzzzz
-> ^C
+> In order to support older platforms like MT6795 and MT8173 it was
+> necessary to add a new register layout that is ever-so-slightly
+> different from the one that was previously introduced for MT8186.
+>
+> Since the new layout refers to older SoCs, the one valid for MT8186
+> and newer SoCs was renamed to be a "v2" layout, while the new one
+> for older chips gets the "v1" name.
+>
+> Note: These commits won't change any behavior unless FHCTL gets
+>       explicitly enabled and configured in devicetrees.
+>
+> [1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=3D7=
+14059
+> AngeloGioacchino Del Regno (7):
+>   clk: mediatek: fhctl: Add support for older fhctl register layout
+>   clk: mediatek: clk-pllfh: Export register/unregister/parse functions
+>   dt-bindings: clock: mediatek,mt8186-fhctl: Support MT6795,
+>     MT8173/92/95
+>   clk: mediatek: mt6795: Add support for frequency hopping through FHCTL
+>   clk: mediatek: mt8173: Add support for frequency hopping through FHCTL
+>   clk: mediatek: mt8192: Add support for frequency hopping through FHCTL
+>   clk: mediatek: mt8195: Add support for frequency hopping through FHCTL
 
-Ok, seems there must be a math booboo lurking.
+The changes look good to me overall. I've asked MediaTek to take a look
+at the various parameters used is this series, as I don't have the register
+definitions for the old version, and from what I've been told, the slope
+and other parameters depend on the chip design as well as manufacturing
+process used.
 
-virgin source, 100% hog vs tbench buddy pair, all pinned.
+So, code wise this series is
 
-  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ P COM=
-MAND
- 5060 root      20   0    4420    680    680 R 96.01 0.004   0:41.40 3 cpu=
-hog
- 5058 root      20   0   25500   1920   1792 S 2.326 0.012   0:01.05 3 tbe=
-nch
- 5059 root      20   0    8796    896    768 R 1.661 0.006   0:00.78 3 tbe=
-nch_srv
-
-echo NO_PRESERVE_LAG > features
-
-  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ P COM=
-MAND
- 5060 root      20   0    4420    680    680 R 99.33 0.004   1:28.24 3 cpu=
-hog
- 5058 root      20   0   25500   1920   1792 R 0.333 0.012   0:01.75 3 tbe=
-nch
- 5059 root      20   0    8796    896    768 S 0.333 0.006   0:01.30 3 tbe=
-nch_srv
-
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
