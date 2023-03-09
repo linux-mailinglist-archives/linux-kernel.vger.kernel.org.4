@@ -2,218 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDC26B2CDC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A13C46B2CE3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:29:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjCIS1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 13:27:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
+        id S230366AbjCIS3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 13:29:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjCIS1C (ORCPT
+        with ESMTP id S230028AbjCIS3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 13:27:02 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C2BF5D03
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 10:27:00 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so4279174wmb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 10:27:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678386419;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tSo3SrRrwG+Alf2X+q3mr8n740CsX06ZYBUOpvJ7CdE=;
-        b=IPIedD0SQGSBZITeBMup2NQnh39sEGFGa1cZddW8kIbf6ppxVYKHf3s2QOKb7ZmKji
-         ugdaUI9z05k+r+Ddg7ZGjyAOcmNExiHSByAMHAH9lwbvRj/x4yHKFHFXU9jswiNI7qUr
-         2DqUrM0lQ9bJQZHP+x6HBQic2DPQMRpYuIijk5YmG+yVbd82sOARPBNEQ50KSgyki1gq
-         yFKHtA8+o0XzffHCbQm2mUq9tn0VGuU3xpsaLU1TE2OP1lVwg8eYhh2BN2mOCNAqmI5e
-         e5HBvgqrH1Q5+fQ25eubeCez4+V6K9hE4XzMXLR4U7wWF8FQlVmIXDOfCK6ZL8prMb7M
-         7ZwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678386419;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tSo3SrRrwG+Alf2X+q3mr8n740CsX06ZYBUOpvJ7CdE=;
-        b=a67xeQfk1qUEI2ywvCIFaUOU6dDeGEdEW8fVCiqdqwoslkPAfC9j6PWm+A5deOEpH7
-         cCPIOg8LTpPVXdkzErUDsYXOHaklJHKgVAtfoxh8BEqgSgb7rfNfJXQ6pKd6HHZfjpiO
-         zOX1qd1SL/ZsFtrKvBv3Z/vl2KxX4yCbBkBd8kL61BGITknKvvNCamYrC5F/HPvp2H01
-         uv5YaSf961XNvT8IxPbHas5MXLC+PaMXP/rlGZ1TWoWTx/2ZEHHLxfwm9qmnM8How/D/
-         lIaLY4EsHkCMxfAv2JGPnbK7r9RFzK6OE3ztW1d6ZEkGub0TePeDodvTlBQsdwBju+Yf
-         WPEg==
-X-Gm-Message-State: AO0yUKWFxMIDHaogXHOZffRXf6WdyvGVyVAF1+rQxxhK8pgcpiqEQiDy
-        /4CTfdqAkJ66z9PajmMaZNCl+A==
-X-Google-Smtp-Source: AK7set+z154uyP1Uipi6NNjIApt35+YbI32vUip5j8Zt23KIYEFqnQGAt+J8pFg8TzQ8QBBQG0qcwA==
-X-Received: by 2002:a05:600c:524b:b0:3ea:dc1b:90c with SMTP id fc11-20020a05600c524b00b003eadc1b090cmr184067wmb.20.1678386418874;
-        Thu, 09 Mar 2023 10:26:58 -0800 (PST)
-Received: from myrica (054592b0.skybroadband.com. [5.69.146.176])
-        by smtp.gmail.com with ESMTPSA id r7-20020a0560001b8700b002c7163660a9sm40251wru.105.2023.03.09.10.26.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 10:26:58 -0800 (PST)
-Date:   Thu, 9 Mar 2023 18:26:59 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Nicolin Chen <nicolinc@nvidia.com>, robin.murphy@arm.com,
-        will@kernel.org, eric.auger@redhat.com, kevin.tian@intel.com,
-        baolu.lu@linux.intel.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, yi.l.liu@intel.com
-Subject: Re: [PATCH v1 02/14] iommufd: Add nesting related data structures
- for ARM SMMUv3
-Message-ID: <20230309182659.GA1710571@myrica>
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <364cfbe5b228ab178093db2de13fa3accf7a6120.1678348754.git.nicolinc@nvidia.com>
- <20230309134217.GA1673607@myrica>
- <ZAnx0lUkw02cVTi+@nvidia.com>
+        Thu, 9 Mar 2023 13:29:04 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DECE9CEB;
+        Thu,  9 Mar 2023 10:29:01 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id D09415FD16;
+        Thu,  9 Mar 2023 21:28:58 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1678386538;
+        bh=CIRQg7hC6CEd/e41iLtiXwUhJirx9xJ3FGxic7KJOuI=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=OX97kEXlp0GYFIRkei7PlgtCLDhBwyCVlnu71ydo/9UiG6hr4ZV4VrB2EE8nHBOoz
+         4ntpOMH8pIH1WXwvNd1rhQAyI3o6u3j9YPnKPXHN9mjavEFdmgdNKHJcHfwRSskRha
+         0sTqau4cjSHEm83bL/EaSXv6cgjP0QgiiI6+NFqX2IAVZ8t/sp3uCsVRQdY4220crt
+         9zKka4KfdYWo2AjXe08FWiS+bfI5igJVLFWZlF2XCO1iWtwi2lcEwwTPNCyJKM3zDR
+         rAoS5pI+v1bVkBoXSFnOd2/a676aKlHt6ClQCar/5ywF+5qjy7i/tqIkDrVq2lpdgC
+         wtysz3BymV8mA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu,  9 Mar 2023 21:28:58 +0300 (MSK)
+Date:   Thu, 9 Mar 2023 21:28:57 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Jerome Brunet <jbrunet@baylibre.com>
+CC:     <neil.armstrong@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>, <jian.hu@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v9 2/5] clk: meson: a1: add Amlogic A1 PLL clock
+ controller driver
+Message-ID: <20230309182857.a2fzotcejueio23w@CAB-WSD-L081021>
+References: <20230301183759.16163-1-ddrokosov@sberdevices.ru>
+ <20230301183759.16163-3-ddrokosov@sberdevices.ru>
+ <1jr0u2azfi.fsf@starbuckisacylon.baylibre.com>
+ <20230306200549.7iuedbl27ejfhf6b@CAB-WSD-L081021>
+ <1jlek60zun.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <ZAnx0lUkw02cVTi+@nvidia.com>
+In-Reply-To: <1jlek60zun.fsf@starbuckisacylon.baylibre.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/09 14:25:00 #20928723
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 10:48:50AM -0400, Jason Gunthorpe wrote:
-> On Thu, Mar 09, 2023 at 01:42:17PM +0000, Jean-Philippe Brucker wrote:
+On Thu, Mar 09, 2023 at 03:20:23PM +0100, Jerome Brunet wrote:
 > 
-> > Although we can keep the alloc and hardware info separate for each IOMMU
-> > architecture, we should try to come up with common invalidation methods.
+> On Mon 06 Mar 2023 at 23:05, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
 > 
-> The invalidation language is tightly linked to the actual cache block
-> and cache tag in the IOMMU HW design.
+> > On Mon, Mar 06, 2023 at 12:17:23PM +0100, Jerome Brunet wrote:
+> >> 
+> >> On Wed 01 Mar 2023 at 21:37, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> >> 
+> >> > Introduce PLL clock controller for Amlogic A1 SoC family.
+> >> >
+> >> > Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+> >> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 
-Concretely though, what are the incompatibilities between the HW designs?
-They all need to remove a range of TLB entries, using some address space
-tag. But if there is an actual difference I do need to know.
+[...]
 
-> Generality will loose or
-> obfuscate the necessary specificity that is required for creating real
-> vIOMMUs.
+> >> > +	},
+> >> > +};
+> >> > +
+> >> > +static const struct pll_mult_range hifi_pll_mult_range = {
+> >> > +	.min = 32,
+> >> > +	.max = 64,
+> >> > +};
+> >> > +
+> >> > +static const struct reg_sequence hifi_init_regs[] = {
+> >> > +	{ .reg = ANACTRL_HIFIPLL_CTRL1, .def = 0x01800000 },
+> >> > +	{ .reg = ANACTRL_HIFIPLL_CTRL2, .def = 0x00001100 },
+> >> > +	{ .reg = ANACTRL_HIFIPLL_CTRL3, .def = 0x100a1100 },
+> >> > +	{ .reg = ANACTRL_HIFIPLL_CTRL4, .def = 0x00302000 },
+> >> > +	{ .reg = ANACTRL_HIFIPLL_CTRL0, .def = 0x01f18440 },
+> >> 
+> >> This last poke should not bits otherwise handled by parms.
+> >> This is a rate init in disguise.
+> >> 
+> >
+> > I believe, you are talking about hifi_pll clk_regmap conflicts with
+> > hifi_init_regs. The above init sequence shouldn't affect pll regmap setup,
+> > it doesn't touch them (we assume that default bit values are all zero):
+> >
+> >     .en = {
+> >         .reg_off = ANACTRL_HIFIPLL_CTRL0,
+> >         .shift   = 28,
+> >         .width   = 1,
+> >     },
+> >     // init_value = 0x01f18440
+> >     // en_mask    = 0x10000000
+> >
+> >     .m = {
+> >         .reg_off = ANACTRL_HIFIPLL_CTRL0,
+> >         .shift   = 0,
+> >         .width   = 8,
+> >     },
+> >     // init_value = 0x01f18440
+> >     // m_mask     = 0x0000000f
 > 
-> Further, invalidation is a fast path, it is crazy to take a vIOMMU of
-> a real HW receving a native invalidation request, mangle it to some
-> obfuscated kernel version and then de-mangle it again in the kernel
-> driver. IMHO ideally qemu will simply point the invalidation at the
-> WQE in the SW vIOMMU command queue and invoke the ioctl. (Nicolin, we
-> should check more into this)
-
-Avoiding copying a few bytes won't make up for the extra context switches
-to userspace. An emulated IOMMU can easily decode commands and translate
-them to generic kernel structures, in a handful of CPU cycles, just like
-they decode STEs. It's what they do, and it's the opposite of obfuscation.
-
+> mask is 0xff with width 8
 > 
-> The purpose of these interfaces is to support high performance full
-> functionality vIOMMUs of the real HW, we should not loose sight of
-> that goal.
+
+Ah, you're right. Anyway, I think this is just init value and it's okay
+to set it during initialization and rewrite after in parameter
+propagation stage.
+
+> >
+> >     .n = {
+> >         .reg_off = ANACTRL_HIFIPLL_CTRL0,
+> >         .shift   = 10,
+> >         .width   = 5,
+> >     },
+> >     // init_value = 0x01f18440
+> >     // n_mask     = 0x00007c00
+> >                            ^
+> >                     oops, one overlap
+> >                     but why we can't set init value for pre_sel?
+> >
+> >     .frac = {
+> >         .reg_off = ANACTRL_HIFIPLL_CTRL1,
+> >         .shift   = 0,
+> >         .width   = 19,
+> >     },
+> >     // init_value = 0x01800000
+> >     // frac_mask  = 0x0007ffff
+> >
+> >     .current_en = {
+> >         .reg_off = ANACTRL_HIFIPLL_CTRL0,
+> >         .shift   = 26,
+> >         .width   = 1,
+> >     },
+> >     // init_value      = 0x01f18440
+> >     // current_en_mask = 0x04000000
+> >
+> >     .l_detect = {
+> >         .reg_off = ANACTRL_HIFIPLL_CTRL2,
+> >         .shift   = 6,
+> >         .width   = 1,
+> >     },
+> >     // init_value    = 0x00001100
+> >     // l_detect_mask = 0x00000040
+> >
+> >> > +};
+> >> > +
+> >> > +static struct clk_regmap hifi_pll = {
+> >> > +	.data = &(struct meson_clk_pll_data){
+> >> > +		.en = {
+> >> > +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> >> > +			.shift   = 28,
+> >> > +			.width   = 1,
+> >> > +		},
+> >> > +		.m = {
+> >> > +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> >> > +			.shift   = 0,
+> >> > +			.width   = 8,
+> >> > +		},
+> >> > +		.n = {
+> >> > +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> >> > +			.shift   = 10,
+> >> > +			.width   = 5,
+> >> > +		},
+> >> > +		.frac = {
+> >> > +			.reg_off = ANACTRL_HIFIPLL_CTRL1,
+> >> > +			.shift   = 0,
+> >> > +			.width   = 19,
+> >> > +		},
+> >> > +		.l = {
+> >> > +			.reg_off = ANACTRL_HIFIPLL_STS,
+> >> > +			.shift   = 31,
+> >> > +			.width   = 1,
+> >> > +		},
+> >> > +		.current_en = {
+> >> > +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> >> > +			.shift   = 26,
+> >> > +			.width   = 1,
+> >> > +		},
+> >> > +		.l_detect = {
+> >> 
+> >> What is this ?
+> >> 
+> >
+> > Lock detection module.
+> >
+> > This is IP module included to new PLL power-on sequence. From clk-pll.c
+> > patchset:
+> >
+> > /*
+> >  * Compared with the previous SoCs, self-adaption current module
+> >  * is newly added for A1, keep the new power-on sequence to enable the
+> >  * PLL. The sequence is:
+> >  * 1. enable the pll, delay for 10us
+> >  * 2. enable the pll self-adaption current module, delay for 40us
+> >  * 3. enable the lock detect module
+> >  */
 > 
-> We are actually planning to go futher and expose direct invalidation
-> work queues complete with HW doorbells to userspace. This obviously
-> must be in native HW format.
-
-Doesn't seem relevant since direct access to command queue wouldn't use
-this struct.
-
+> Ok. I missed this is the PLL driver
 > 
-> Nicolin, I think we should tweak the uAPI here so that the
-> invalidation opaque data has a format tagged on its own, instead of
-> re-using the HWPT tag. Ie you can have a ARM SMMUv3 invalidate type
-> tag and also a virtio-viommu invalidate type tag.
-> 
-> This will allow Jean to put the invalidation decoding in the iommu
-> drivers if we think that is the right direction. virtio can
-> standardize it as a "HW format".
-> 
-> > Ideally I'd like something like this for vhost-iommu:
-> > 
-> > * slow path through userspace for complex requests like attach-table and
-> >   probe, where the VMM can decode arch-specific information and translate
-> >   them to iommufd and vhost-iommu ioctls to update the configuration.
-> > 
-> > * fast path within the kernel for performance-critical requests like
-> >   invalidate, page request and response. It would be absurd for the
-> >   vhost-iommu driver to translate generic invalidation requests from the
-> >   guest into arch-specific commands with special opcodes, when the next
-> >   step is calling the IOMMU driver which does that for free.
-> 
-> Someone has to do the conversion. If you don't think virito should do
-> it then I'd be OK to add a type tag for virtio format invalidation and
-> put it in the IOMMU driver.
 
-Implementing two invalidation formats in each IOMMU driver does not seem
-practical.
+No problem.
 
-> 
-> But given virtio overall already has to know *alot* about how the HW
-> it is wrapping works I don't think it is necessarily absurd for virtio
-> to do the conversion. I'd like to evaluate this in patches in context
-> with how much other unique HW code ends up in kernel-side vhost-iommu.
+[...]
 
-Ideally none. I'd rather leave those, attach and probe, in userspace and
-if possible compatible with iommufd to avoid register decoding. 
-
-> 
-> However, I don't know the rational for virtio-viommu, it seems like a
-> strange direction to me.
-
-A couple of reasons are relevant here: non-QEMU VMMs don't want to emulate
-all vendor IOMMUs, new architectures get vIOMMU mostly for free, and vhost
-provides a faster path. Also the ability to optimize paravirtual
-interfaces for things like combined invalidation (IOTLB+ATC) or, later,
-nested page requests.
-
-For a while the main vIOMMU use-case was assignment to guest userspace,
-mainly DPDK, which works great with a generic and slow map/unmap
-interface. Since vSVA is still a niche use-case, and nesting without page
-faults requires pinning the whole guest memory, map/unmap still seems more
-desirable to me. But there is some renewed interest in supporting page
-tables with virtio-iommu for the reasons above.
-
-> All the iommu drivers have native command
-> queues. ARM and AMD are both supporting native command queues directly
-> in the guest, complete with a direct guest MMIO doorbell ring.
-
-Arm SMMUv3 mandates a single global command queue (SMMUv2 uses registers).
-An SMMUv3 can optionally implement multiple command queues, though I don't
-know if they can be safely assigned to guests. For a lot of SMMUv3
-implementations that have a single queue and for other architectures, we
-can do better than hardware emulation.
-
-> 
-> If someone wants to optimize this I'd think the way to do it is to use
-> virtio like techniques to put SW command queue processing in the
-> kernel iommu driver and continue to use the HW native interface in the
-> VM.
-
-I didn't get which kernel this is.
-
-> 
-> What benifit comes from replacing the HW native interface with virtio?
-> Especially on ARM where the native interface is pretty clean?
-> 
-> > During previous discussions we came up with generic invalidations that
-> > could fit both Arm and x86 [1][2]. The only difference was the ASID
-> > (called archid/id in those proposals) which VT-d didn't need. Could we try
-> > to build on that?
-> 
-> IMHO this was just unioning all the different invalidation types
-> together. It makes sense for something like virtio but it is
-> illogical/obfuscated as a user/kernel interface since it still
-> requires a userspace HW driver to understand what subset of the
-> invalidations are used on the actual HW.
-
-As above, decoding arch-specific structures into generic ones is what an
-emulated IOMMU does, and it doesn't make a performance difference in which
-format it forwards that to the kernel. The host IOMMU driver checks the
-guest request and copies them into the command queue. Whether that request
-comes in the form of a structure binary-compatible with Arm SMMUvX.Y, or
-some generic structure, does not make a difference.
-
-Thanks,
-Jean
-
+-- 
+Thank you,
+Dmitry
