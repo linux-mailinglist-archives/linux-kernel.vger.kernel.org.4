@@ -2,281 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01796B20FD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B556B2100
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:13:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjCIKNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
+        id S229544AbjCIKNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:13:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbjCIKMv (ORCPT
+        with ESMTP id S230328AbjCIKNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:12:51 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2047.outbound.protection.outlook.com [40.107.8.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C1FE5028
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:12:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4ruLH8zSQZZsfGivo1K273yjfxWzlrugF7EZpk3NzY0=;
- b=BrWmehbvvdPFzwefJH7TnEIe/t4+gRcfBcTEIuxMoBWVrgtJO/hmAf7GgYLNB/EdKYHX4FniiUxjnHZcSMPkREgEUKeyoUN6fHuUSD0cNmNpwP2ihRgemiLjZ+OuoNANOGPH8OyX01CwYn2rSoa+EI9yceLBdYGaQGSV+SIkuv0=
-Received: from ZR0P278CA0023.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:1c::10)
- by DB9PR08MB8737.eurprd08.prod.outlook.com (2603:10a6:10:3d3::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Thu, 9 Mar
- 2023 10:12:37 +0000
-Received: from VI1EUR03FT046.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:910:1c:cafe::ed) by ZR0P278CA0023.outlook.office365.com
- (2603:10a6:910:1c::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19 via Frontend
- Transport; Thu, 9 Mar 2023 10:12:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- VI1EUR03FT046.mail.protection.outlook.com (100.127.144.113) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.19 via Frontend Transport; Thu, 9 Mar 2023 10:12:37 +0000
-Received: ("Tessian outbound b29c0599cbc9:v135"); Thu, 09 Mar 2023 10:12:36 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: 443fe380d5f3e66d
-X-CR-MTA-TID: 64aa7808
-Received: from 5c42e967e915.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id A00D02C6-2E2D-4BCD-8B19-D08D03D532A3.1;
-        Thu, 09 Mar 2023 10:12:29 +0000
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 5c42e967e915.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Thu, 09 Mar 2023 10:12:29 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RAGU1lr1UMe109gCd4V2Mn+eIGjL0nmQsDlSJ2DkTkT3vIFAdAtL17K8XMS61VxmiCIeMQ33v1fXfZDbnzZD7B1GuwcRmtxqkXwAgQ71yASP3TZDfmsNNR5KMmqALlJ6o0+rrQg6jVFdSw5J6zl78RpQTFmKOA7qIWz+0easzw05tbwdJsQv1EFER0CFbUe8HWh/3Q4w/H1NmIGwRQEDIuIF4c3wQJM6KbCQgxyU5Hhq3x/6/Kz0gUeqcbMm06Hjkbz2RlEekRBjUfU+2RT4ubXDr0oH9WDDgRX1oKacLBMy4rd6K9CEytjHmezWvN16oVt+O0EJpLG9LozghTGbAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4ruLH8zSQZZsfGivo1K273yjfxWzlrugF7EZpk3NzY0=;
- b=jg6EiYApRsIMYiulefR+a5daSLRdMAO3wxck6TVXOC8g7bAAxjzdjS0pu18W93l3QiRH7R865IfEsUTyK5WGw5yWEzS+9OzC9JpgbnhhT/PxVp7P3ux+OLyA2GmhRojwJPEx2f80mrRL6NiUPd8o8kv7CC0D22n5h+pZHAxN7Cp9vpPS8/rPsFFEXtrX3AJ0FXVZIc9oRa3QdnE4FYA2Dilp+n72kXgtxR3oxjZWYu8HCWquwec/PKutj7Kjzo4swmbXF/sLIt68MRItpM6BmgSDSus2kDr146j79fidlZmS/UbFpJh38V41uMj20IS+jo1Dc7m08VDDoeN61aEcgg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 40.67.248.234) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4ruLH8zSQZZsfGivo1K273yjfxWzlrugF7EZpk3NzY0=;
- b=BrWmehbvvdPFzwefJH7TnEIe/t4+gRcfBcTEIuxMoBWVrgtJO/hmAf7GgYLNB/EdKYHX4FniiUxjnHZcSMPkREgEUKeyoUN6fHuUSD0cNmNpwP2ihRgemiLjZ+OuoNANOGPH8OyX01CwYn2rSoa+EI9yceLBdYGaQGSV+SIkuv0=
-Received: from AM6PR04CA0045.eurprd04.prod.outlook.com (2603:10a6:20b:f0::22)
- by DB4PR08MB8031.eurprd08.prod.outlook.com (2603:10a6:10:389::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Thu, 9 Mar
- 2023 10:12:27 +0000
-Received: from VI1EUR03FT042.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:20b:f0:cafe::7a) by AM6PR04CA0045.outlook.office365.com
- (2603:10a6:20b:f0::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19 via Frontend
- Transport; Thu, 9 Mar 2023 10:12:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 40.67.248.234)
- smtp.mailfrom=arm.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 40.67.248.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=40.67.248.234; helo=nebula.arm.com; pr=C
-Received: from nebula.arm.com (40.67.248.234) by
- VI1EUR03FT042.mail.protection.outlook.com (100.127.144.197) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6178.19 via Frontend Transport; Thu, 9 Mar 2023 10:12:26 +0000
-Received: from AZ-NEU-EX03.Arm.com (10.251.24.31) by AZ-NEU-EX03.Arm.com
- (10.251.24.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Thu, 9 Mar
- 2023 10:12:25 +0000
-Received: from e124191.cambridge.arm.com (10.1.197.45) by mail.arm.com
- (10.251.24.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17 via Frontend
- Transport; Thu, 9 Mar 2023 10:12:25 +0000
-Date:   Thu, 9 Mar 2023 10:12:24 +0000
-From:   Joey Gouly <joey.gouly@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <nd@arm.com>
-Subject: Re: [PATCH v2] arm64/sysreg: Convert HFG[RW]TR_EL2 to automatic
- generation
-Message-ID: <20230309101224.GA54799@e124191.cambridge.arm.com>
-References: <20230306-arm64-fgt-reg-gen-v2-1-7e166c5b3b42@kernel.org>
+        Thu, 9 Mar 2023 05:13:00 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE450E63EF
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:12:43 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id j3so765084wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 02:12:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678356762;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gzmhJXXqsUPDGL1OfCiiuwjtuR41HcUClODCqGGbdEM=;
+        b=NVVDEda1/qMXLn8YSl+LtedOKO7jvbY7PxhboOczPwrk5BZp5OVPud+YXpbT9ChSZW
+         1L1W2di9cPXZnq2BHdbq1ei3BbXeQYgR9wJRI50pA/l1SbmHKubz4r3dXXBO2efJtstn
+         xPHHN/QwHa/eHb9OZgOahNDqlXcOmt4Gm8SqNqfFEIOqZTYcjQXvYDliFFu0xkLOorIs
+         EoSUseoSkXs7IS0calUwmZFxSMdHU2lwyLArYswvia0w/uk5SxO1ZmhjP9URYN8H5Pc5
+         crLA3Nt0f+sa5ps9ps1gO5e/OrCLcg1yBr7kkgUW9CjPscFJvlVpxheDv2U4MG6F9xxI
+         Clxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678356762;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gzmhJXXqsUPDGL1OfCiiuwjtuR41HcUClODCqGGbdEM=;
+        b=R3J6yB4nKdTHB3grbqpBBFVXHYKiEGX3huwqEOaIZrBAn0Y919QR8C3H6k4cB4oxwD
+         YOUQzykhkRzx1pHS1qj03nIWM7Wru8idJ8hhFH+sr7zyKwUzWGcysnhqKuxnZ7SN6WZ/
+         lEnHI5iHwHG+5xegPOQ+dBo8J/MQUFEkHnqz2M/VUhs17Cu465uvua3KlmWBx6FhTSmG
+         hpmFoZuGsRyn/ipjTxpuBkNDRLIJcH80f5pL8Yd8/EcjEF77RDsFj4Tdjst6iJEeCmAi
+         PmaZNcRqa7C5MKZMxJwUuoe7DDTjdeZQ7FW997l+Ty3VxtszOc/FD1w+Cbk+vSE1MiFz
+         If5w==
+X-Gm-Message-State: AO0yUKVP4DuduNKTEpx8isEz8tcC/Ph0vRyFbap7AA+Gkpqc44Uj0RGP
+        /v2NnFO//Zfekpzen7xZ04xZln3ntHJGbnzgGV0=
+X-Google-Smtp-Source: AK7set8eZ9De3LSiDswOXLUZ1DkYKJ+n+tIQmaOs/8atrNCbBD/yLCdPW/TPLy0hXBbVLnhYdzQNFNtQoYJ/hEjYSPM=
+X-Received: by 2002:a05:600c:a:b0:3e2:1fd8:887 with SMTP id
+ g10-20020a05600c000a00b003e21fd80887mr4890489wmc.2.1678356762233; Thu, 09 Mar
+ 2023 02:12:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230306-arm64-fgt-reg-gen-v2-1-7e166c5b3b42@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-EOPAttributedMessage: 1
-X-MS-TrafficTypeDiagnostic: VI1EUR03FT042:EE_|DB4PR08MB8031:EE_|VI1EUR03FT046:EE_|DB9PR08MB8737:EE_
-X-MS-Office365-Filtering-Correlation-Id: c5123a7c-03c1-4003-3e3a-08db2086cefe
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: l61anGm4rqmPnAeE66GBGVl2GDdlFj+ojiJ7JTIxRBkkCCGlZtGcbKCvIQNT+ZSuuB9vF1K68xACxMkS7QZsAfIz6ZXbEfsnmcl/WvqS4EPHad53sM4sGawxoRnWMPrph6NMb2FrY8n6U3LbEd0gK+JqgiG3V+NWhWlYNxfCjXegGGQluIEvh/scXDxWptevWnuJ1tqPmubS6EuxIu8yBPxPr4VCHb9IYouUtOcKI2Yx/8aueITRL5MjN3XSZIQw5JX3kaZaflyIRvNf66iBaHgjqdxr61os7EUARC2O9IpxPMc2Lug/PgJQJ+XDPX2KkROlLALLzelXD/auPwxcOSNlWRc/2FiwwYNY/JTk3I6ZMvrGe5lFoUTa0CWgN1h9M2jULv4YqJdMnMeBuIWZZ50uOQm2t5NzHv7CmSVxqbfWTsLp/1gtNNRMqzuRkHX+EldDKmSvUtVog673ZowcBqd/20dVHFWTZwwlvLHXKE0GHAUsqSuPSkFD+hXiQtY6UjRpRoRgniRO0Cc59fDNSBPUEXFNYy/xJ+i20IYxXIL85+mmTTGOzmUKG5UdhM07OiGUiUEfizUEIb3DCePGiQ/khRf1khlBPgMGz5RIS+EK3oCzvgsA7Vvp2QlQb3g7fU5uSwOS8Ck0ng82dkF/g9XefJblmqyPmnxdLupP31UhQBjNHVJVgNbK5TYPaC9T
-X-Forefront-Antispam-Report-Untrusted: CIP:40.67.248.234;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:nebula.arm.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(136003)(376002)(451199018)(36840700001)(46966006)(33656002)(54906003)(478600001)(966005)(7696005)(316002)(5660300002)(41300700001)(19627235002)(2906002)(8936002)(8676002)(70206006)(44832011)(70586007)(6916009)(4326008)(82740400003)(81166007)(36860700001)(55016003)(356005)(40480700001)(86362001)(1076003)(186003)(26005)(83380400001)(82310400005)(336012)(426003)(47076005)(36900700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR08MB8031
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VI1EUR03FT046.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 7e0a0f14-e88d-4070-7069-08db2086c8a8
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HN2gsypxSz2PmQiwWf0xXVfLyS9pEz6WhXnOJVYn4VFyKhz5Z7kL2PRFJo6iAybji3sMXs+06xOzLvcnE3Lsi3NnJKA1HDJyo8G4WMVDTwSNWwdtQxKFnpppkqak8aEbAmKfWCGRQL1RygivTZqzcVgrhcKdF13cz1afGOx6UdSoX3xRifwnUbWEJKyufkUr+JlLHlotO+03Q4NXtGVnuFIBjbSLl3GaTNdw35KL7G+lmobl4FsK4r9JyqP2afalO0xEuFh2XgXZwkQR7msWI4G/5N1tN9VwiwLmyYzZTPIwh0glmfTZQmfuIqf3HCqx+UOKq7dAsSP6c0Dz2nJ2DqmOq1aBvYt5gA4V1PERyXUvIiwBIDweiF4mcb8PnK0naeJc9IClC1tQkl2ERqfX7DxKmM064JbJonIe4EpwuUCAjxFIcJoJ8p4GONb5a7T+FQVnOMgjlJoj3sUy80sjoijUpB3Mvv2mOYSskW0lIIx/bpCoKEFPzz1SDDj0OCvO7abUQ2BPsHgSi3WqmXnN7MXwi+p693JaVCQNvIkRr6teyxYldNFO5R/CkLQEOHucn534Q7wSSU0LzJvc5woM9b6wtFik8+iXegXL3NfsLWM6nQkRLqbtYY2m951xIPhSRzNA1nijWHcXuPEsFVcAOlQ08IJ1vog3CJ6RR0hYgDHF5gPg5Bngpq50712GVf9S
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(396003)(346002)(39860400002)(451199018)(40470700004)(36840700001)(46966006)(40460700003)(33656002)(54906003)(7696005)(966005)(5660300002)(316002)(8936002)(70586007)(2906002)(19627235002)(8676002)(6862004)(70206006)(4326008)(41300700001)(44832011)(82740400003)(186003)(36860700001)(86362001)(81166007)(478600001)(55016003)(40480700001)(26005)(1076003)(83380400001)(82310400005)(336012)(47076005)(426003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 10:12:37.2438
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c5123a7c-03c1-4003-3e3a-08db2086cefe
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: VI1EUR03FT046.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB8737
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+References: <CAEzXK1oghXAB_KpKpm=-CviDQbNaH0qfgYTSSjZgvvyj4U78AA@mail.gmail.com>
+ <5e192700-c54a-04cf-a223-281af7af0457@amd.com>
+In-Reply-To: <5e192700-c54a-04cf-a223-281af7af0457@amd.com>
+From:   =?UTF-8?B?THXDrXMgTWVuZGVz?= <luis.p.mendes@gmail.com>
+Date:   Thu, 9 Mar 2023 10:12:30 +0000
+Message-ID: <CAEzXK1qPjYxDiRVTy8McXbagC8JKgtu+C0E+-VP3NHZvtYdZ+g@mail.gmail.com>
+Subject: Re: [PATCH] [RFC] drm/drm_buddy fails to initialize on 32-bit architectures
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     akpm@linux-foundation.org,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Paneer Selvam, Arunpravin" <Arunpravin.PaneerSelvam@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+Hi,
 
-On Tue, Mar 07, 2023 at 07:11:09PM +0000, Mark Brown wrote:
-> Convert the fine grained traps read and write control registers to
-> automatic generation as per DDI0601 2022-12. No functional changes.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
-> Changes in v2:
-> - Correct naming of nPIRE0_EL1.
-> - Link to v1: https://lore.kernel.org/r/20230306-arm64-fgt-reg-gen-v1-1-95bc0c97cfed@kernel.org
-> ---
->  arch/arm64/include/asm/sysreg.h |  8 -----
->  arch/arm64/tools/sysreg         | 75 +++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 75 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-> index 9e3ecba3c4e6..e5ca9ece1606 100644
-> --- a/arch/arm64/include/asm/sysreg.h
-> +++ b/arch/arm64/include/asm/sysreg.h
-> @@ -419,8 +419,6 @@
->  #define SYS_MDCR_EL2			sys_reg(3, 4, 1, 1, 1)
->  #define SYS_CPTR_EL2			sys_reg(3, 4, 1, 1, 2)
->  #define SYS_HSTR_EL2			sys_reg(3, 4, 1, 1, 3)
-> -#define SYS_HFGRTR_EL2			sys_reg(3, 4, 1, 1, 4)
-> -#define SYS_HFGWTR_EL2			sys_reg(3, 4, 1, 1, 5)
->  #define SYS_HFGITR_EL2			sys_reg(3, 4, 1, 1, 6)
->  #define SYS_HACR_EL2			sys_reg(3, 4, 1, 1, 7)
->  
-> @@ -758,12 +756,6 @@
->  #define ICH_VTR_TDS_SHIFT	19
->  #define ICH_VTR_TDS_MASK	(1 << ICH_VTR_TDS_SHIFT)
->  
-> -/* HFG[WR]TR_EL2 bit definitions */
-> -#define HFGxTR_EL2_nTPIDR2_EL0_SHIFT	55
-> -#define HFGxTR_EL2_nTPIDR2_EL0_MASK	BIT_MASK(HFGxTR_EL2_nTPIDR2_EL0_SHIFT)
-> -#define HFGxTR_EL2_nSMPRI_EL1_SHIFT	54
-> -#define HFGxTR_EL2_nSMPRI_EL1_MASK	BIT_MASK(HFGxTR_EL2_nSMPRI_EL1_SHIFT)
-> -
->  #define ARM64_FEATURE_FIELD_BITS	4
->  
->  /* Defined for compatibility only, do not add new users. */
-> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
-> index dd5a9c7e310f..60829a9409f0 100644
-> --- a/arch/arm64/tools/sysreg
-> +++ b/arch/arm64/tools/sysreg
-> @@ -1866,6 +1866,81 @@ Field	1	ZA
->  Field	0	SM
->  EndSysreg
->  
-> +SysregFields	HFGxTR_EL2
-> +Field	63	nAMIAIR2_EL1
-> +Field	62	nMAIR2_EL1
-> +Field	61	nS2POR_EL1
-> +Field	60	nPOR_EL1
-> +Field	59	nPOR_EL0
-> +Field	58	nPIR_EL1
-> +Field	57	nPIRE0_EL1
-> +Field	56	nRCWMASK_EL1
-> +Field	55	nTPIDR2_EL0
-> +Field	54	nSMPRI_EL1
-> +Field	53	nGCS_EL1
-> +Field	52	nGCS_EL0
-> +Res0	51
-> +Field	50	nACCDATA_EL1
-> +Field	49	ERXADDR_EL1
-> +Field	48	EXRPFGCDN_EL1
-> +Field	47	EXPFGCTL_EL1
-> +Field	46	EXPFGF_EL1
-> +Field	45	ERXMISCn_EL1
-> +Field	44	ERXSTATUS_EL1
-> +Field	43	ERXCTLR_EL1
-> +Field	42	ERXFR_EL1
-> +Field	41	ERRSELR_EL1
-> +Field	40	ERRIDR_EL1
-> +Field	39	ICC_IGRPENn_EL1
-> +Field	38	VBAR_EL1
-> +Field	37	TTBR1_EL1
-> +Field	36	TTBR0_EL1
-> +Field	35	TPIDR_EL0
-> +Field	34	TPIDRRO_EL0
-> +Field	33	TPIDR_EL1
-> +Field	32	TCR_EL1
-> +Field	31	SCTXNUM_EL0
-> +Field	30	SCTXNUM_EL1
-> +Field	29	SCTLR_EL1
-> +Field	28	REVIDR_EL1
-> +Field	27	PAR_EL1
-> +Field	26	MPIDR_EL1
-> +Field	25	MIDR_EL1
-> +Field	24	MAIR_EL1
-> +Field	23	LORSA_EL1
-> +Field	22	LORN_EL1
-> +Field	21	LORID_EL1
-> +Field	20	LOREA_EL1
-> +Field	19	LORC_EL1
-> +Field	18	ISR_EL1
-> +Field	17	FAR_EL1
-> +Field	16	ESR_EL1
-> +Field	15	DCZID_EL0
-> +Field	14	CTR_EL0
-> +Field	13	CSSELR_EL1
-> +Field	12	CPACR_EL1
-> +Field	11	CONTEXTIDR_EL1
-> +Field	10	CLIDR_EL1
-> +Field	9	CCSIDR_EL1
-> +Field	8	APIBKey
-> +Field	7	APIAKey
-> +Field	6	APGAKey
-> +Field	5	APDBKey
-> +Field	4	APDAKey
-> +Field	3	AMAIR_EL1
-> +Field	2	AIDR_EL1
-> +Field	1	AFSR1_EL1
-> +Field	0	AFSR0_EL1
-> +EndSysregFields
-> +
-> +Sysreg HFGRTR_EL2	3	4	1	1	4
-> +Fields	HFGxTR_EL2
-> +EndSysreg
-> +
-> +Sysreg HFGWTR_EL2	3	4	1	1	5
-> +Fields	HFGxTR_EL2
-> +EndSysreg
-> +
->  Sysreg	ZCR_EL2	3	4	1	2	0
->  Fields	ZCR_ELx
->  EndSysreg
-> 
+Ping? This is actually a regression.
+If there is no one available to work this, maybe I can have a look in
+my spare time, in accordance with your suggestion.
 
-Reviewed-by: Joey Gouly <joey.gouly@arm.com>
+Regards,
+Lu=C3=ADs
+
+On Tue, Jan 3, 2023 at 8:44=E2=80=AFAM Christian K=C3=B6nig <christian.koen=
+ig@amd.com> wrote:
+>
+> Am 25.12.22 um 20:39 schrieb Lu=C3=ADs Mendes:
+> > Re-sending with the correct  linux-kernel mailing list email address.
+> > Sorry for the inconvenience.
+> >
+> > The proposed patch fixes the issue and allows amdgpu to work again on
+> > armhf with a AMD RX 550 card, however it may not be the best solution
+> > for the issue, as detailed below.
+> >
+> > include/log2.h defined macros rounddown_pow_of_two(...) and
+> > roundup_pow_of_two(...) do not handle 64-bit values on 32-bit
+> > architectures (tested on armv9 armhf machine) causing
+> > drm_buddy_init(...) to fail on BUG_ON with an underflow on the order
+> > value, thus impeding amdgpu to load properly (no GUI).
+> >
+> > One option is to modify rounddown_pow_of_two(...) to detect if the
+> > variable takes 32 bits or less and call __rounddown_pow_of_two_u32(u32
+> > n) or if the variable takes more space than 32 bits, then call
+> > __rounddown_pow_of_two_u64(u64 n). This would imply renaming
+> > __rounddown_pow_of_two(unsigne
+> > d long n) to
+> > __rounddown_pow_of_two_u32(u32 n) and add a new function
+> > __rounddown_pow_of_two_u64(u64 n). This would be the most transparent
+> > solution, however there a few complications, and they are:
+> > - that the mm subsystem will fail to link on armhf with an undefined
+> > reference on __aeabi_uldivmod
+> > - there a few drivers that directly call __rounddown_pow_of_two(...)
+> > - that other drivers and subsystems generate warnings
+> >
+> > So this alternate solution was devised which avoids touching existing
+> > code paths, and just updates drm_buddy which seems to be the only
+> > driver that is failing, however I am not sure if this is the proper
+> > way to go. So I would like to get a second opinion on this, by those
+> > who know.
+> >
+> > /include/linux/log2.h
+> > /drivers/gpu/drm/drm_buddy.c
+> >
+> > Signed-off-by: Lu=C3=ADs Mendes <luis.p.mendes@gmail.com>
+> >> 8------------------------------------------------------8<
+> > diff -uprN linux-next/drivers/gpu/drm/drm_buddy.c
+> > linux-nextLM/drivers/gpu/drm/drm_buddy.c
+> > --- linux-next/drivers/gpu/drm/drm_buddy.c    2022-12-25
+> > 16:29:26.000000000 +0000
+> > +++ linux-nextLM/drivers/gpu/drm/drm_buddy.c    2022-12-25
+> > 17:04:32.136007116 +0000
+> > @@ -128,7 +128,7 @@ int drm_buddy_init(struct drm_buddy *mm,
+> >           unsigned int order;
+> >           u64 root_size;
+> >
+> > -        root_size =3D rounddown_pow_of_two(size);
+> > +        root_size =3D rounddown_pow_of_two_u64(size);
+> >           order =3D ilog2(root_size) - ilog2(chunk_size);
+>
+> I think this can be handled much easier if keep around the root_order
+> instead of the root_size in the first place.
+>
+> Cause ilog2() does the right thing even for non power of two values and
+> so we just need the order for the offset subtraction below.
+>
+> Arun can you take a closer look at this?
+>
+> Regards,
+> Christian.
+>
+> >
+> >           root =3D drm_block_alloc(mm, NULL, order, offset);
+> > diff -uprN linux-next/include/linux/log2.h linux-nextLM/include/linux/l=
+og2.h
+> > --- linux-next/include/linux/log2.h    2022-12-25 16:29:29.000000000 +0=
+000
+> > +++ linux-nextLM/include/linux/log2.h    2022-12-25 17:00:34.319901492 =
++0000
+> > @@ -58,6 +58,18 @@ unsigned long __roundup_pow_of_two(unsig
+> >   }
+> >
+> >   /**
+> > + * __roundup_pow_of_two_u64() - round up to nearest power of two
+> > + * (unsgined 64-bits precision version)
+> > + * @n: value to round up
+> > + */
+> > +static inline __attribute__((const))
+> > +u64 __roundup_pow_of_two_u64(u64 n)
+> > +{
+> > +    return 1ULL << fls64(n - 1);
+> > +}
+> > +
+> > +
+> > +/**
+> >    * __rounddown_pow_of_two() - round down to nearest power of two
+> >    * @n: value to round down
+> >    */
+> > @@ -68,6 +80,17 @@ unsigned long __rounddown_pow_of_two(uns
+> >   }
+> >
+> >   /**
+> > + * __rounddown_pow_of_two_u64() - round down to nearest power of two
+> > + * (unsgined 64-bits precision version)
+> > + * @n: value to round down
+> > + */
+> > +static inline __attribute__((const))
+> > +u64 __rounddown_pow_of_two_u64(u64 n)
+> > +{
+> > +    return 1ULL << (fls64(n) - 1);
+> > +}
+> > +
+> > +/**
+> >    * const_ilog2 - log base 2 of 32-bit or a 64-bit constant unsigned v=
+alue
+> >    * @n: parameter
+> >    *
+> > @@ -163,6 +186,7 @@ unsigned long __rounddown_pow_of_two(uns
+> >       __ilog2_u64(n)            \
+> >    )
+> >
+> > +
+> >   /**
+> >    * roundup_pow_of_two - round the given value up to nearest power of =
+two
+> >    * @n: parameter
+> > @@ -181,6 +205,25 @@ unsigned long __rounddown_pow_of_two(uns
+> >    )
+> >
+> >   /**
+> > + * roundup_pow_of_two_u64 - round the given value up to nearest power =
+of two
+> > + * (unsgined 64-bits precision version)
+> > + * @n: parameter
+> > + *
+> > + * round the given value up to the nearest power of two
+> > + * - the result is undefined when n =3D=3D 0
+> > + * - this can be used to initialise global variables from constant dat=
+a
+> > + */
+> > +#define roundup_pow_of_two_u64(n)            \
+> > +(                        \
+> > +    __builtin_constant_p(n) ? (        \
+> > +        ((n) =3D=3D 1) ? 1 :        \
+> > +        (1ULL << (ilog2((n) - 1) + 1))    \
+> > +                   ) :        \
+> > +    __roundup_pow_of_two_u64(n)            \
+> > + )
+> > +
+> > +
+> > +/**
+> >    * rounddown_pow_of_two - round the given value down to nearest power=
+ of two
+> >    * @n: parameter
+> >    *
+> > @@ -195,6 +238,22 @@ unsigned long __rounddown_pow_of_two(uns
+> >       __rounddown_pow_of_two(n)        \
+> >    )
+> >
+> > +/**
+> > + * rounddown_pow_of_two_u64 - round the given value down to nearest
+> > power of two
+> > + * (unsgined 64-bits precision version)
+> > + * @n: parameter
+> > + *
+> > + * round the given value down to the nearest power of two
+> > + * - the result is undefined when n =3D=3D 0
+> > + * - this can be used to initialise global variables from constant dat=
+a
+> > + */
+> > +#define rounddown_pow_of_two_u64(n)            \
+> > +(                        \
+> > +    __builtin_constant_p(n) ? (        \
+> > +        (1ULL << ilog2(n))) :        \
+> > +    __rounddown_pow_of_two_u64(n)        \
+> > + )
+> > +
+> >   static inline __attribute_const__
+> >   int __order_base_2(unsigned long n)
+> >   {
+>
