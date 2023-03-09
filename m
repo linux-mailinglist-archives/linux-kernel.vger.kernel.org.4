@@ -2,92 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C2C6B1911
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 03:09:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E63C6B1917
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 03:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjCICJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 21:09:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
+        id S229925AbjCICMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 21:12:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbjCICJQ (ORCPT
+        with ESMTP id S229870AbjCICMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 21:09:16 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830D1B788E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 18:09:14 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id ay18so608806pfb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 18:09:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1678327754;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gfu/KwFVzc/Mhm/dGygFGmdSj7EneRyv1RVogBuDfAE=;
-        b=dXMSkm5QFUg2hsGRa4whtQxI5kX2Yob0l1M6NHTCTBKyk2aDxjuGjsxDmsf/VsT3yt
-         +vBaQBn4wAy2wTV2IJXgtXZiBox6aLuDUBb9j9YM/MrO3dCXownD0aFUkxxlUjxI/QfN
-         N50mjt9fjA9WUydgKZQqk7JZYjVsm3bYr3KZOD+9pHN6rxqTA8pS5SfyLdfBN6XV0gQ2
-         C0K5A8ib0AycdBrxr+2pVK008q4e4+7oWZazp9mA8kTIjvGt/efb84Ic4T0njNXzIHqX
-         OH8bOX4H5UjfLBTC6pTO69QtOwIO/7N9nNPL9fcPBDBcIOzmk+Olb8oiKbghyJRZiLHQ
-         Tpjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678327754;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gfu/KwFVzc/Mhm/dGygFGmdSj7EneRyv1RVogBuDfAE=;
-        b=7qYzgMic1keimvGNN3cAIEKcigcBV+iV6c2EO+JQnIKJbosNNvfve8OWXYYR1njQWF
-         VfyyvTFf1+ISnQ9CTLcGX5nC+KTrHxCzhmmWEkaCL+1V8+gQH55nXTAFyt06NNw6cAGe
-         ayyI8TWRb6yJxMKqGBykcJA3OGkMdugia93annnXdAWkWrifERqyUa8+RhqgpPT0Czhm
-         vQP/a7H5ynjQIbTO4gCAoRUnyTleliHTWchrAqTk/OiZVg0xNTeXKVBSpwSmntsiEef8
-         MLQ1aDvk+DyIdBypK/OHHMZ3Aqa36jPsMKVymC6zEcPtW9brbvAt0oYbQhtMR+WQ2Jml
-         SAvg==
-X-Gm-Message-State: AO0yUKWuetkSnlY9LhUvbOjseHdVLGTdH+t6ZfYQwMw6j7QD4zW/BWj3
-        +n+sz9ku9VP/J1ozc2bCRVmnGw==
-X-Google-Smtp-Source: AK7set+ABtdw3r8PqslQtAfmOu77yAOxg1w+6Hbo5FZcHMgjcM9JtbFcCj6g9bdZOqW8uRINlX9Z4A==
-X-Received: by 2002:aa7:9ed1:0:b0:5e0:316a:1fef with SMTP id r17-20020aa79ed1000000b005e0316a1fefmr14444906pfq.15.1678327753983;
-        Wed, 08 Mar 2023 18:09:13 -0800 (PST)
-Received: from [10.200.11.19] ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id j19-20020a62e913000000b005ae02dc5b94sm9996356pfh.219.2023.03.08.18.09.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 18:09:13 -0800 (PST)
-Message-ID: <0db9e2b9-e5ed-e817-bd3f-9812fd914c97@bytedance.com>
-Date:   Thu, 9 Mar 2023 10:09:07 +0800
+        Wed, 8 Mar 2023 21:12:47 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1BFBA87B
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 18:12:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678327960; x=1709863960;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NuBmxgRDNL4Na0RMQuWBwVEo4HGT3XkCwSpqJn53O0w=;
+  b=jXE+WbVl53RkxtPbgLHjcvRKA376jeurzt5mzOiv3/7M1ccl/JIuUDpf
+   /pbPmqPj2FTHlCzluUFccLw0IsMTY6L9xsVwFPxWK9Lf24FH7fpfussyp
+   x0yeBI1yRYbu2S/GOPCmwKPXmaeGucnVsWjRkQICjO+vosxUu2T4ULQ9I
+   RTQ/lUS8+8zOnlf10UK4gh5M8YDM0/04Mtu7VMaIoGHn6Up89aDZlHtwf
+   cHs0C+AbRUvSGbGOXW2wgctBskhrR8qf7AvQMdwNcphBn5Bi9aPqsCrXa
+   bvy+tfW3JbVSBvzo5pnMeOQ7WTIEjHE02aB+WlETF2nL+w1kXqFewuE3U
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="320161057"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="320161057"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 18:11:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="766240739"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="766240739"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Mar 2023 18:11:26 -0800
+Message-ID: <efa3e59b-cb93-4519-0e3f-cf94b6788765@linux.intel.com>
+Date:   Thu, 9 Mar 2023 10:10:27 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH] maple_tree: Fix the error of mas->min/max in
- mas_skip_node()
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Liam.Howlett@oracle.com, snild@sony.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
-        Stable@vger.kernel.org
-References: <20230307160340.57074-1-zhangpeng.00@bytedance.com>
- <20230308175552.60b3f6a3efda2289dc6c5bc9@linux-foundation.org>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <20230308175552.60b3f6a3efda2289dc6c5bc9@linux-foundation.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, kernel test robot <lkp@intel.com>,
+        Aditya Srivastava <yashsri421@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        Timur Tabi <timur@tabi.org>,
+        Varun Sethi <Varun.Sethi@freescale.com>,
+        Emil Medve <Emilian.Medve@Freescale.com>
+Subject: Re: [PATCH] iommu/fsl: fix all kernel-doc warnings in fsl_pamu.c
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+References: <20230308034504.9985-1-rdunlap@infradead.org>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230308034504.9985-1-rdunlap@infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/8/23 11:45 AM, Randy Dunlap wrote:
+> Fix kernel-doc warnings as reported by the kernel test robot:
+> 
+> fsl_pamu.c:192: warning: expecting prototype for pamu_config_paace(). Prototype was for pamu_config_ppaace() instead
+> fsl_pamu.c:239: warning: Function parameter or member 'omi_index' not described in 'get_ome_index'
+> fsl_pamu.c:239: warning: Function parameter or member 'dev' not described in 'get_ome_index'
+> fsl_pamu.c:332: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>   * Setup operation mapping and stash destinations for QMAN and QMAN portal.
+> fsl_pamu.c:361: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>   * Setup the operation mapping table for various devices. This is a static
+> 
+> Fixes: 695093e38c3e ("iommu/fsl: Freescale PAMU driver and iommu implementation.")
+> Fixes: cd70d4659ff3 ("iommu/fsl: Various cleanups")
+> Signed-off-by: Randy Dunlap<rdunlap@infradead.org>
+> Reported-by: kernel test robot<lkp@intel.com>
+> Link:lore.kernel.org/r/202302281151.B1WtZvSC-lkp@intel.com
+> Cc: Aditya Srivastava<yashsri421@gmail.com>
+> Cc: Joerg Roedel<joro@8bytes.org>
+> Cc: Will Deacon<will@kernel.org>
+> Cc: Robin Murphy<robin.murphy@arm.com>
+> Cc:iommu@lists.linux.dev
+> Cc: Timur Tabi<timur@tabi.org>
+> Cc: Varun Sethi<Varun.Sethi@freescale.com>
+> Cc: Emil Medve<Emilian.Medve@Freescale.com>
 
-在 2023/3/9 09:55, Andrew Morton 写道:
-> On Wed,  8 Mar 2023 00:03:40 +0800 Peng Zhang <zhangpeng.00@bytedance.com> wrote:
->
->> The assignment of mas->min and mas->max is wrong. mas->min and mas->max
->> should represent the range of the current node. After mas_ascend()
->> returns, mas-min and mas->max already represent the range of the current
->> node, so we should delete these assignments of mas->min and mas->max.
->>
-> Please fully describe the user-visible effects of the flaw, especially
-> when proposing a -stable backport.
->
-The fixes made by this patch have been included in 
-https://lore.kernel.org/lkml/20230307180247.2220303-2-Liam.Howlett@oracle.com/, 
-so please don't pay attention.
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+
+Best regards,
+baolu
