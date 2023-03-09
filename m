@@ -2,168 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EAE6B17A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 01:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD3B6B17AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 01:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjCIAKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 19:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
+        id S229893AbjCIALZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 19:11:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjCIAJn (ORCPT
+        with ESMTP id S230132AbjCIALH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 19:09:43 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA1A43919
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 16:08:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678320535; x=1709856535;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YVtIQ06AZHtC50B3OWLEXk1lzofZ+v7lwfm82IIQK6I=;
-  b=h4Nz0GsYvu2Gmq17RvTRzWmeI6FmICv01OPKRbAj6HyY/2AxWPiS2o4x
-   JAUodzv3+/NRoc4SzeOTEMG3rH58WSevXfJ9l2jaNRXR1WWJX4GoejF50
-   gDhQKmTzBrGiE5+D24s4cEJ2t4OtsQDCGdc4XBP1s6v2v8fMWpMrGVNdf
-   3Vu0Fw5y7YErtBQere7jUM3cNfgdA9HZ4DFFLpY4HoRwSEdO2jJ1F1ulI
-   oVnR11cLkmkiD+xMRlpkyhGRNfiThGO+V6aSmh+rOUFfqCOz2Rqx7DQjn
-   QojtWn0vq+oVNGTw54jv2B2icGaFF3ZYodfsKeq9dDopHoU8tb2y+3Jlm
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="401142810"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="401142810"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 16:04:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="627154180"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="627154180"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2023 16:04:03 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pa3lL-0002VV-0i;
-        Thu, 09 Mar 2023 00:04:03 +0000
-Date:   Thu, 09 Mar 2023 08:03:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 9ff7fb2f2c41f89019a785407b2268e3df523131
-Message-ID: <64092261.w/eJbQ0PBAlZMMaB%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 8 Mar 2023 19:11:07 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A78464B26;
+        Wed,  8 Mar 2023 16:10:55 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328LF1ie016728;
+        Thu, 9 Mar 2023 00:10:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=rNLrrlMgSthYZSNQMxkyx8RMfeigfzLRn4ugAGBWPGk=;
+ b=NxHJW+wmo5itMpteqAUInQI8yFvrpYHarueGUghs9sNqf7y0YKWz5414W3ZBsxm/WNMz
+ 81+QvhoDMc3K0BejGAlz7Vvh4DlklKV68BdQZbypAZv5PdCyWcPI9VDbp2TxbzZLRuB5
+ eh4PPIQ0LuOjynH66onPbF74xE0+OiDeJtI5HOHv8ET5eO0T0zs3Ymz+wD16KyF5sCVu
+ EvuL5ylFhTIUk4FwWWt1XInseblhI+xRqBUQajW3/wC3HmoeCLKfG3LigvnBUjOBphgk
+ iYJV5Fi99R4YBVDcu8UQSt6KQvCIfg1AazQSYcYAD4n4/WDvXUw84GpLmG3Uafojq+23 MA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p6v2dsbqx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 00:10:49 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3290Amlj031952
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 9 Mar 2023 00:10:48 GMT
+Received: from hu-gokukris-sd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Wed, 8 Mar 2023 16:10:47 -0800
+From:   Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+To:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        "Elliot Berman" <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        "Gokul krishna Krishnakumar" <quic_gokukris@quicinc.com>
+Subject: [PATCH v1 1/1] remoteproc: qcom: pas: Coredump elf class to elf64
+Date:   Wed, 8 Mar 2023 16:10:35 -0800
+Message-ID: <20230309001035.24024-1-quic_gokukris@quicinc.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: hhi50YcROyrGqtOrx8PfDfvsLeVuk1mI
+X-Proofpoint-ORIG-GUID: hhi50YcROyrGqtOrx8PfDfvsLeVuk1mI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-08_15,2023-03-08_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ adultscore=0 spamscore=0 mlxscore=0 suspectscore=0 bulkscore=0
+ clxscore=1015 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2303090000
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 9ff7fb2f2c41f89019a785407b2268e3df523131  Merge branch into tip/master: 'x86/misc'
+This change adds a new initialization param which modifies the elf
+class accordingly. Some of the subsystem dump analysis tools need
+the elf class to be elf64.
 
-elapsed time: 724m
+Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+---
+ drivers/remoteproc/qcom_q6v5_pas.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-configs tested: 87
-configs skipped: 13
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r032-20230308   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r031-20230308   gcc  
-arc                  randconfig-r043-20230308   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230308   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r013-20230308   clang
-arm64                randconfig-r023-20230308   clang
-csky                                defconfig   gcc  
-hexagon              randconfig-r025-20230308   clang
-hexagon              randconfig-r035-20230308   clang
-hexagon              randconfig-r041-20230308   clang
-hexagon              randconfig-r045-20230308   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r005-20230308   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze   buildonly-randconfig-r002-20230308   gcc  
-microblaze           randconfig-r003-20230308   gcc  
-microblaze           randconfig-r024-20230308   gcc  
-microblaze           randconfig-r033-20230308   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc     buildonly-randconfig-r004-20230308   gcc  
-openrisc             randconfig-r011-20230308   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r001-20230308   gcc  
-parisc               randconfig-r022-20230308   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r002-20230308   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r012-20230308   clang
-riscv                randconfig-r021-20230308   clang
-riscv                randconfig-r042-20230308   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r026-20230308   clang
-s390                 randconfig-r044-20230308   clang
-sh                               allmodconfig   gcc  
-sparc                               defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r036-20230308   gcc  
-
+diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+index 0871108fb4dc..17ce3177be7b 100644
+--- a/drivers/remoteproc/qcom_q6v5_pas.c
++++ b/drivers/remoteproc/qcom_q6v5_pas.c
+@@ -39,6 +39,7 @@ struct adsp_data {
+ 	int pas_id;
+ 	int dtb_pas_id;
+ 	unsigned int minidump_id;
++	bool uses_elf64;
+ 	bool auto_boot;
+ 	bool decrypt_shutdown;
+ 
+@@ -681,7 +682,10 @@ static int adsp_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	rproc->auto_boot = desc->auto_boot;
+-	rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
++	if (desc->uses_elf64)
++		rproc_coredump_set_elf_info(rproc, ELFCLASS64, EM_NONE);
++	else
++		rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
+ 
+ 	adsp = (struct qcom_adsp *)rproc->priv;
+ 	adsp->dev = &pdev->dev;
+@@ -1126,6 +1130,7 @@ static const struct adsp_data sm8550_adsp_resource = {
+ 	.pas_id = 1,
+ 	.dtb_pas_id = 0x24,
+ 	.minidump_id = 5,
++	.uses_elf64 = true,
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"lcx",
+@@ -1145,6 +1150,7 @@ static const struct adsp_data sm8550_cdsp_resource = {
+ 	.pas_id = 18,
+ 	.dtb_pas_id = 0x25,
+ 	.minidump_id = 7,
++	.uses_elf64 = true,
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"cx",
+@@ -1165,6 +1171,7 @@ static const struct adsp_data sm8550_mpss_resource = {
+ 	.pas_id = 4,
+ 	.dtb_pas_id = 0x26,
+ 	.minidump_id = 3,
++	.uses_elf64 = true,
+ 	.auto_boot = false,
+ 	.decrypt_shutdown = true,
+ 	.proxy_pd_names = (char*[]){
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2
+
