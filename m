@@ -2,74 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C06F6B2C61
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 18:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1686B2C68
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 18:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjCIRxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 12:53:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
+        id S230281AbjCIRzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 12:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjCIRxC (ORCPT
+        with ESMTP id S230007AbjCIRzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 12:53:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E6712863;
-        Thu,  9 Mar 2023 09:52:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A992B8203F;
-        Thu,  9 Mar 2023 17:52:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4134DC433EF;
-        Thu,  9 Mar 2023 17:52:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678384376;
-        bh=tSnYD5TKu07sh4hOMBDMyiXJ+PlHpoDk7TYI6ItZI/E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pgc/USXonPVwpeSHvHbZrCSzEHEHzSjEmTPK+QJzU72d4gZ3kvE3xWy8OYAcyUhGD
-         NH0RFUtapIvISHlJFlZ4fqKQMzFSLfWdjGBcJKvIzQUkSFN7lrvKFhJTWVIMvZOUCi
-         KvrcSHIJh8Oy1qtXlQguNImHdOLU9edcPyDhb5cpRCUJgdJ4Bwtt+r5zJAStXkzG8E
-         DgOrXzhutO7M1Y/D5JYAquB2crngTr9x+fy21vMDuguJYPLeJnUrpAU0KDePWgaVhn
-         ZGbHTWUoa0gAh6HDGlOuMuQx9lOI2Vd3aywnK6yq4LDoGjWrL6RCi6Ri8tCjr8/3Oj
-         KwjhPFPMTqlYA==
-Date:   Thu, 9 Mar 2023 17:52:49 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     Hal Feng <hal.feng@starfivetech.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 00/19] Basic clock, reset & device tree support for
- StarFive JH7110 RISC-V SoC
-Message-ID: <09630acb-f1ae-4dbd-9c9c-9adb1743bfe4@spud>
-References: <20230221024645.127922-1-hal.feng@starfivetech.com>
- <3a605bc8-104e-0935-4fd8-2da16ab9053b@starfivetech.com>
- <ZAb7JVghuiwZF1Q5@wendy>
- <2f03dfb2-5cf8-e954-913c-f0c27db6bcf5@starfivetech.com>
- <ZAh/UeSlUeGoKxki@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
- <4c071642-e3c8-4716-a580-5b42e25efb1c@spud>
- <ZAoOLIERMYI8UVlA@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+        Thu, 9 Mar 2023 12:55:00 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3909FAEC8;
+        Thu,  9 Mar 2023 09:54:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678384496; x=1709920496;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6MXUOHdjb8jqVok5oVRdfSDjvQDcZ3pm1AVfycFxb3w=;
+  b=axHqojwoWwU0B8YtqPvJ+tXJZKyha4s0NofedDCKEBMJ0cej1SbeDgOx
+   tDYbzo0MDaGB8rI4d+68iSDtzzMSNLhN12ycHzon74SxUpOHD/ZoyU7r6
+   jrwNuJ0Fc3tgW4jL3Ls0o3jNUtAHTZeXlHEQnq8a0YS5vESjLt3I39+4Z
+   +eD3Mf7xgpp3aNYF8GRJGNs03R/HCjKNW+M34+zT4D7gZLgPtQM/9jCc3
+   8l1KgNevED5VWsH/l/vRFDyUthqJvuZKxGKMZxAeVFLfwArjuo5UyB5Dx
+   aVUTRH4jKWqf7U71UgoLxrV1zeNgStXN/TSCNay1GIFmkwe2JHJ/61/rm
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="316911791"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="316911791"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 09:54:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="851583472"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="851583472"
+Received: from hamannjo-mobl1.amr.corp.intel.com (HELO [10.255.34.234]) ([10.255.34.234])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 09:54:52 -0800
+Message-ID: <e4a49852-8753-d82e-ee86-866825a26844@linux.intel.com>
+Date:   Thu, 9 Mar 2023 11:54:36 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ftganqtRBXwbLJs2"
-Content-Disposition: inline
-In-Reply-To: <ZAoOLIERMYI8UVlA@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH v3 15/28] sound: usb: Introduce QC USB SND offloading
+ support
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-16-quic_wcheng@quicinc.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230308235751.495-16-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,134 +74,471 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---ftganqtRBXwbLJs2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> +config QC_USB_AUDIO_OFFLOAD
+> +	tristate "Qualcomm Audio Offload driver"
 
-On Thu, Mar 09, 2023 at 05:49:48PM +0100, Tommaso Merciai wrote:
-> On Wed, Mar 08, 2023 at 01:36:41PM +0000, Conor Dooley wrote:
-> > On Wed, Mar 08, 2023 at 01:28:01PM +0100, Tommaso Merciai wrote:
-> > > On Tue, Mar 07, 2023 at 06:08:53PM +0800, Hal Feng wrote:
-> >=20
-> > > > The above two methods can fix the problem. Here are my test results.
-> > > > The VisionFive board can boot up successfully if and only if all ab=
-ove
-> > > > two applied.
-> > > > The VisionFive 2 board can boot up successfully if I merge Linus's =
-new
-> > > > changes.
-> > >=20
-> > > Tested also on my side. Hope this can be helpfull.
-> > >=20
-> > > > Hope your fix will be merged in rc2. Thank you for your reply.
-> > >=20
-> > > Fully agree.
-> >=20
-> > If you only have a VisionFive 2, it shouldn't matter to you, as you
-> > don't need to fix up any SiFive errata (at the moment at least).
-> > Linus' fix is already in his tree, so should be in -rc2!
-> > The fix for the VisionFive was applied to Palmer's RISC-V fixes tree
-> > last night:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/=
-?h=3Dfixes&id=3Dbf89b7ee52af5a5944fa3539e86089f72475055b
-> >=20
-> > Thanks,
-> > Conor.
->=20
->=20
-> Hi Conor,
-> Thanks for the info.
-> Playing with this series I got the following error:
->=20
-> [    6.278182] BUG: spinlock bad magic on CPU#0, udevd/136
-> [    6.283414]  lock: 0xffffffd84135e6c0, .magic: ffffffff, .owner: <none=
->/-1, .owner_cpu: -1
-> [    6.291677] CPU: 0 PID: 136 Comm: udevd Not tainted 6.3.0-rc1-g9256990=
-1a7f9-dirty #14
-> [    6.299502] Hardware name: StarFive VisionFive 2 v1.3B (DT)
-> [    6.305069] Call Trace:
-> [    6.307517] [<ffffffff80005530>] dump_backtrace+0x1c/0x24
-> [    6.312921] [<ffffffff80844b4e>] show_stack+0x2c/0x38
-> [    6.317976] [<ffffffff8085032c>] dump_stack_lvl+0x3c/0x54
-> [    6.323377] [<ffffffff80850358>] dump_stack+0x14/0x1c
-> [    6.328429] [<ffffffff80845668>] spin_dump+0x64/0x70
-> [    6.333394] [<ffffffff80058f26>] do_raw_spin_lock+0xb4/0xf2
-> [    6.338970] [<ffffffff80857d04>] _raw_spin_lock+0x1a/0x22
-> [    6.344370] [<ffffffff8008153c>] add_timer_on+0x8a/0x132
-> [    6.349684] [<ffffffff8084b9fa>] try_to_generate_entropy+0x216/0x278
-> [    6.356037] [<ffffffff804ebfdc>] urandom_read_iter+0x40/0xb8
-> [    6.361697] [<ffffffff801a1216>] vfs_read+0x17e/0x1f8
-> [    6.366752] [<ffffffff801a1986>] ksys_read+0x5e/0xc8
-> [    6.371710] [<ffffffff801a19fe>] sys_read+0xe/0x16
-> [    6.376503] [<ffffffff8000357a>] ret_from_syscall+0x0/0x2
-> [    6.381905] Unable to handle kernel NULL pointer dereference at virtua=
-l address 0000000000000007
-> [    6.390683] Oops [#1]
-> [    6.392956] Modules linked in:
-> [    6.396011] CPU: 0 PID: 136 Comm: udevd Not tainted 6.3.0-rc1-g9256990=
-1a7f9-dirty #14
-> [    6.403835] Hardware name: StarFive VisionFive 2 v1.3B (DT)
-> [    6.409401] epc : enqueue_timer+0x1a/0x90
-> [    6.413414]  ra : add_timer_on+0xe2/0x132
-> [    6.417425] epc : ffffffff80080c60 ra : ffffffff80081594 sp : ffffffc8=
-044dbc60
-> [    6.424640]  gp : ffffffff814ffe50 tp : ffffffd8c171ad00 t0 : 66666666=
-66663c5b
-> [    6.431855]  t1 : 000000000000005b t2 : 666666666666663c s0 : ffffffc8=
-044dbcc0
-> [    6.439070]  s1 : ffffffc8044dbd08 a0 : ffffffd84135e6c0 a1 : ffffffc8=
-044dbd08
-> [    6.446284]  a2 : ffffffffffffffff a3 : 000000003e000000 a4 : 00000000=
-0000023e
-> [    6.453498]  a5 : 000000000000023e a6 : ffffffd84135f930 a7 : 00000000=
-00000038
-> [    6.460712]  s2 : ffffffd84135e6c0 s3 : 0000000000000040 s4 : ffffffff=
-81501080
-> [    6.467926]  s5 : ffffffd84135e6c0 s6 : ffffffff815011b8 s7 : ffffffff=
-ffffffff
-> [    6.475141]  s8 : ffffffff81502820 s9 : 0000000000000040 s10: 0000002a=
-b0a49320
-> [    6.482355]  s11: 0000000000000001 t3 : ffffffff81512e97 t4 : ffffffff=
-81512e97
-> [    6.489569]  t5 : ffffffff81512e98 t6 : ffffffc8044db948
-> [    6.494875] status: 0000000200000100 badaddr: 0000000000000007 cause: =
-000000000000000f
-> [    6.502783] [<ffffffff80080c60>] enqueue_timer+0x1a/0x90
-> [    6.508095] [<ffffffff8084b9fa>] try_to_generate_entropy+0x216/0x278
-> [    6.514448] [<ffffffff804ebfdc>] urandom_read_iter+0x40/0xb8
-> [    6.520107] [<ffffffff801a1216>] vfs_read+0x17e/0x1f8
-> [    6.525160] [<ffffffff801a1986>] ksys_read+0x5e/0xc8
-> [    6.530126] [<ffffffff801a19fe>] sys_read+0xe/0x16
-> [    6.534918] [<ffffffff8000357a>] ret_from_syscall+0x0/0x2
-> [    6.540322] Code: 87b2 0813 0805 1613 0037 9832 3603 0008 e190 c211 (e=
-60c) 5613
-> [    6.547711] ---[ end trace 0000000000000000 ]---
-> [    6.552325] note: udevd[136] exited with irqs disabled
-> [    6.557531] note: udevd[136] exited with preempt_count 2
->=20
->=20
-> I'm working on top of Linux version 6.3.0-rc1-g92569901a7f.
+"Qualcomm USB Audio Offload driver"
 
-Unfortunately, this g<sha> bit doesn't mean anything outside of your
-repo so it's hard to infer anything from that.
-This looks exactly like a bug is in v6.3-rc1, but Linus fixed in like
-the second commit *after* -rc1.
+> +	select SND_PCM
 
-What branch/commit/tag did you apply the series on top of?
+depends on SND_USB_AUDIO ?
 
-Cheers,
-Conor.
+> +	help
+> +	  Say Y here to enable the Qualcomm USB audio offloading feature
+> +
+> +	  This module sets up the required QMI stream enable/disable
+> +	  responses to requests generated by the audio DSP.  It passes the
+> +	  USB transfer resource references, so that the audio DSP can issue
+> +	  USB transfers to the host controller.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called qc-audio-offload.
 
---ftganqtRBXwbLJs2
-Content-Type: application/pgp-signature; name="signature.asc"
+> +#include <linux/ctype.h>
+> +#include <linux/moduleparam.h>
+> +#include <linux/module.h>
+> +#include <linux/usb.h>
+> +#include <linux/init.h>
 
------BEGIN PGP SIGNATURE-----
+alphabetical order?
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAoc7gAKCRB4tDGHoIJi
-0hqoAP9Q/Y807Ff1Ehl18kMUcI74l4ooj6GxDNovwBXX6FhNDgD/XAKgS/j7V8GF
-IRtvWI8/M3LWtKucwI2uVqt1YzTxwws=
-=YnEf
------END PGP SIGNATURE-----
+> +#include <linux/usb/hcd.h>
+> +#include <linux/usb/xhci-intr.h>
+> +#include <linux/usb/quirks.h>
+> +#include <linux/usb/audio.h>
+> +#include <linux/usb/audio-v2.h>
+> +#include <linux/usb/audio-v3.h>
+> +#include <linux/soc/qcom/qmi.h>
+> +#include <linux/iommu.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/dma-map-ops.h>
+> +#include <sound/q6usboffload.h>
+> +
+> +#include <sound/control.h>
+> +#include <sound/core.h>
+> +#include <sound/info.h>
+> +#include <sound/pcm.h>
+> +#include <sound/pcm_params.h>
+> +#include <sound/initval.h>
+> +
+> +#include <sound/soc.h>
+> +#include <sound/soc-usb.h>
+> +#include "../usbaudio.h"
+> +#include "../card.h"
+> +#include "../midi.h"
+> +#include "../mixer.h"
+> +#include "../proc.h"
+> +#include "../quirks.h"
+> +#include "../endpoint.h"
+> +#include "../helper.h"
+> +#include "../pcm.h"
+> +#include "../format.h"
+> +#include "../power.h"
+> +#include "../stream.h"
+> +#include "../media.h"
 
---ftganqtRBXwbLJs2--
+this looks weird, are all these needed?
+
+> +
+> +#define SND_PCM_CARD_NUM_MASK 0xffff0000
+> +#define SND_PCM_DEV_NUM_MASK 0xff00
+> +#define SND_PCM_STREAM_DIRECTION 0xff
+
+The prefix looks wrong, or it duplicates SND_PCM stuff?
+
+> +
+> +/* iommu resource parameters and management */
+> +#define PREPEND_SID_TO_IOVA(iova, sid) ((u64)(((u64)(iova)) | \
+> +					(((u64)sid) << 32)))
+> +#define IOVA_BASE 0x1000
+> +#define IOVA_XFER_RING_BASE (IOVA_BASE + PAGE_SIZE * (SNDRV_CARDS + 1))
+> +#define IOVA_XFER_BUF_BASE (IOVA_XFER_RING_BASE + PAGE_SIZE * SNDRV_CARDS * 32)
+> +#define IOVA_XFER_RING_MAX (IOVA_XFER_BUF_BASE - PAGE_SIZE)
+> +#define IOVA_XFER_BUF_MAX (0xfffff000 - PAGE_SIZE)
+> +
+> +#define MAX_XFER_BUFF_LEN (24 * PAGE_SIZE)
+> +
+> +struct iova_info {
+> +	struct list_head list;
+> +	unsigned long start_iova;
+> +	size_t size;
+> +	bool in_use;
+> +};
+> +
+> +struct intf_info {
+> +	unsigned long data_xfer_ring_va;
+> +	size_t data_xfer_ring_size;
+> +	unsigned long sync_xfer_ring_va;
+> +	size_t sync_xfer_ring_size;
+> +	unsigned long xfer_buf_va;
+> +	size_t xfer_buf_size;
+> +	phys_addr_t xfer_buf_pa;
+> +	unsigned int data_ep_pipe;
+> +	unsigned int sync_ep_pipe;
+> +	u8 *xfer_buf;
+> +	u8 intf_num;
+> +	u8 pcm_card_num;
+> +	u8 pcm_dev_num;
+> +	u8 direction;
+> +	bool in_use;
+> +};
+> +
+> +struct uaudio_qmi_dev {
+> +	struct device *dev;
+> +	u32 sid;
+> +	u32 intr_num;
+> +	struct xhci_interrupter *ir;
+> +	struct xhci_ring *sec_ring;
+> +	struct iommu_domain *domain;
+> +
+> +	/* list to keep track of available iova */
+> +	struct list_head xfer_ring_list;
+> +	size_t xfer_ring_iova_size;
+> +	unsigned long curr_xfer_ring_iova;
+> +	struct list_head xfer_buf_list;
+> +	size_t xfer_buf_iova_size;
+> +	unsigned long curr_xfer_buf_iova;
+> +
+> +	/* bit fields representing pcm card enabled */
+> +	unsigned long card_slot;
+> +	/* indicate event ring mapped or not */
+> +	bool er_mapped;
+> +	/* reference count to number of possible consumers */
+> +	atomic_t qdev_in_use;
+> +	/* idx to last udev card number plugged in */
+> +	unsigned int last_card_num;
+> +};
+> +
+> +struct uaudio_dev {
+> +	struct usb_device *udev;
+> +	/* audio control interface */
+> +	struct usb_host_interface *ctrl_intf;
+> +	unsigned int card_num;
+> +	unsigned int usb_core_id;
+> +	atomic_t in_use;
+> +	struct kref kref;
+> +	wait_queue_head_t disconnect_wq;
+> +
+> +	/* interface specific */
+> +	int num_intf;
+> +	struct intf_info *info;
+> +	struct snd_usb_audio *chip;
+> +};
+
+This looks too detailed, isnt' that a duplication of other structures
+that exist in the regular USB audio part?
+
+There's nothing that looks QCOM-specific anyways.
+
+> +
+> +static struct uaudio_dev uadev[SNDRV_CARDS];
+> +static struct uaudio_qmi_dev *uaudio_qdev;
+> +static struct uaudio_qmi_svc *uaudio_svc;
+> +static DEFINE_MUTEX(qdev_mutex);
+> +
+> +struct uaudio_qmi_svc {
+> +	struct qmi_handle *uaudio_svc_hdl;
+> +	struct work_struct qmi_disconnect_work;
+> +	struct workqueue_struct *uaudio_wq;
+> +	struct sockaddr_qrtr client_sq;
+> +	bool client_connected;
+> +};
+> +
+> +enum mem_type {
+> +	MEM_EVENT_RING,
+> +	MEM_XFER_RING,
+> +	MEM_XFER_BUF,
+> +};
+
+prefixes better than 'MEM'?
+
+> +
+> +/* Supported audio formats */
+> +enum usb_qmi_audio_format {
+> +	USB_QMI_PCM_FORMAT_S8 = 0,
+> +	USB_QMI_PCM_FORMAT_U8,
+> +	USB_QMI_PCM_FORMAT_S16_LE,
+> +	USB_QMI_PCM_FORMAT_S16_BE,
+> +	USB_QMI_PCM_FORMAT_U16_LE,
+> +	USB_QMI_PCM_FORMAT_U16_BE,
+> +	USB_QMI_PCM_FORMAT_S24_LE,
+> +	USB_QMI_PCM_FORMAT_S24_BE,
+> +	USB_QMI_PCM_FORMAT_U24_LE,
+> +	USB_QMI_PCM_FORMAT_U24_BE,
+> +	USB_QMI_PCM_FORMAT_S24_3LE,
+> +	USB_QMI_PCM_FORMAT_S24_3BE,
+> +	USB_QMI_PCM_FORMAT_U24_3LE,
+> +	USB_QMI_PCM_FORMAT_U24_3BE,
+> +	USB_QMI_PCM_FORMAT_S32_LE,
+> +	USB_QMI_PCM_FORMAT_S32_BE,
+> +	USB_QMI_PCM_FORMAT_U32_LE,
+> +	USB_QMI_PCM_FORMAT_U32_BE,
+> +};
+> +
+> +static enum usb_audio_device_speed_enum_v01
+> +get_speed_info(enum usb_device_speed udev_speed)
+> +{
+> +	switch (udev_speed) {
+> +	case USB_SPEED_LOW:
+> +		return USB_AUDIO_DEVICE_SPEED_LOW_V01;
+> +	case USB_SPEED_FULL:
+> +		return USB_AUDIO_DEVICE_SPEED_FULL_V01;
+> +	case USB_SPEED_HIGH:
+> +		return USB_AUDIO_DEVICE_SPEED_HIGH_V01;
+> +	case USB_SPEED_SUPER:
+> +		return USB_AUDIO_DEVICE_SPEED_SUPER_V01;
+> +	case USB_SPEED_SUPER_PLUS:
+> +		return USB_AUDIO_DEVICE_SPEED_SUPER_PLUS_V01;
+> +	default:
+> +		return USB_AUDIO_DEVICE_SPEED_INVALID_V01;
+> +	}
+> +}
+
+this doesn't look qcom-specific, why is this here?
+
+> +
+> +static struct snd_usb_substream *find_substream(unsigned int card_num,
+> +	unsigned int pcm_idx, unsigned int direction)
+> +{
+> +	struct snd_usb_stream *as;
+> +	struct snd_usb_substream *subs = NULL;
+> +	struct snd_usb_audio *chip;
+> +
+> +	chip = uadev[card_num].chip;
+> +	if (!chip || atomic_read(&chip->shutdown))
+> +		goto done;
+> +
+> +	if (pcm_idx >= chip->pcm_devs)
+> +		goto done;
+> +
+> +	if (direction > SNDRV_PCM_STREAM_CAPTURE)
+> +		goto done;
+> +
+> +	list_for_each_entry(as, &chip->pcm_list, list) {
+> +		if (as->pcm_index == pcm_idx) {
+> +			subs = &as->substream[direction];
+> +			goto done;
+> +		}
+> +	}
+> +
+> +done:
+> +	return subs;
+> +}
+> +
+> +static int info_idx_from_ifnum(int card_num, int intf_num, bool enable)
+> +{
+> +	int i;
+> +
+> +	/*
+> +	 * default index 0 is used when info is allocated upon
+> +	 * first enable audio stream req for a pcm device
+> +	 */
+> +	if (enable && !uadev[card_num].info)
+> +		return 0;
+> +
+> +	for (i = 0; i < uadev[card_num].num_intf; i++) {
+> +		if (enable && !uadev[card_num].info[i].in_use)
+> +			return i;
+> +		else if (!enable &&
+> +				uadev[card_num].info[i].intf_num == intf_num)
+> +			return i;
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +static int get_data_interval_from_si(struct snd_usb_substream *subs,
+> +	u32 service_interval)
+> +{
+> +	unsigned int bus_intval, bus_intval_mult, binterval;
+> +
+> +	if (subs->dev->speed >= USB_SPEED_HIGH)
+> +		bus_intval = BUS_INTERVAL_HIGHSPEED_AND_ABOVE;
+> +	else
+> +		bus_intval = BUS_INTERVAL_FULL_SPEED;
+> +
+> +	if (service_interval % bus_intval)
+> +		return -EINVAL;
+> +
+> +	bus_intval_mult = service_interval / bus_intval;
+> +	binterval = ffs(bus_intval_mult);
+> +	if (!binterval || binterval > MAX_BINTERVAL_ISOC_EP)
+> +		return -EINVAL;
+> +
+> +	/* check if another bit is set then bail out */
+> +	bus_intval_mult = bus_intval_mult >> binterval;
+> +	if (bus_intval_mult)
+> +		return -EINVAL;
+> +
+> +	return (binterval - 1);
+> +}
+
+this doesn't look qcom-specific either, is this a set of helpers that
+need to be moved somewhere else?
+
+
+> +/**
+> + * disable_audio_stream() - disable usb snd endpoints
+> + * @subs: usb substream
+> + *
+> + * Closes the USB SND endpoints associated with the current audio stream
+> + * used.  This will decrement the USB SND endpoint opened reference count.
+> + *
+> + */
+> +static void disable_audio_stream(struct snd_usb_substream *subs)
+> +{
+> +	struct snd_usb_audio *chip = subs->stream->chip;
+> +
+> +	if (subs->data_endpoint || subs->sync_endpoint) {
+> +		close_endpoints(chip, subs);
+> +
+> +		mutex_lock(&chip->mutex);
+> +		subs->cur_audiofmt = NULL;
+> +		mutex_unlock(&chip->mutex);
+> +	}
+> +
+> +	snd_usb_autosuspend(chip);
+> +}
+
+also not qcom-specific?
+
+> +/* kref release callback when all streams are disabled */
+
+what does "all streams disabled" mean, and when does this happen?
+
+> +static void uaudio_dev_release(struct kref *kref)
+> +{
+> +	struct uaudio_dev *dev = container_of(kref, struct uaudio_dev, kref);
+> +
+> +	uaudio_event_ring_cleanup_free(dev);
+> +	atomic_set(&dev->in_use, 0);
+> +	wake_up(&dev->disconnect_wq);
+> +}
+
+
+> +static int __init qc_usb_audio_offload_init(void)
+> +{
+> +	struct uaudio_qmi_svc *svc;
+> +	int ret;
+> +
+> +	ret = snd_usb_register_platform_ops(&offload_ops);
+> +	if (ret < 0)
+> +		return ret;
+
+so what happens if snd_usb is blacklisted or takes time to probe?
+
+This seems to assume a timing dependency when USB is initialized/probed
+first?
+
+> +
+> +	svc = kzalloc(sizeof(struct uaudio_qmi_svc), GFP_KERNEL);
+> +	if (!svc) {
+> +		ret = -ENOMEM;
+> +		goto unreg_ops;
+> +	}
+> +
+> +	svc->uaudio_wq = create_singlethread_workqueue("uaudio_svc");
+> +	if (!svc->uaudio_wq) {
+> +		ret = -ENOMEM;
+> +		goto free_svc;
+> +	}
+> +
+> +	svc->uaudio_svc_hdl = kzalloc(sizeof(struct qmi_handle), GFP_KERNEL);
+> +	if (!svc->uaudio_svc_hdl) {
+> +		ret = -ENOMEM;
+> +		goto free_wq;
+> +	}
+> +
+> +	ret = qmi_handle_init(svc->uaudio_svc_hdl,
+> +				QMI_UAUDIO_STREAM_REQ_MSG_V01_MAX_MSG_LEN,
+> +				&uaudio_svc_ops_options,
+> +				&uaudio_stream_req_handlers);
+> +	ret = qmi_add_server(svc->uaudio_svc_hdl, UAUDIO_STREAM_SERVICE_ID_V01,
+> +					UAUDIO_STREAM_SERVICE_VERS_V01, 0);
+> +
+> +	INIT_WORK(&svc->qmi_disconnect_work, qmi_disconnect_work);
+> +	uaudio_svc = svc;
+> +
+> +	return 0;
+> +
+> +free_wq:
+> +	destroy_workqueue(svc->uaudio_wq);
+> +free_svc:
+> +	kfree(svc);
+> +unreg_ops:
+> +	snd_usb_unregister_platform_ops();
+> +
+> +	return ret;
+> +}
+> +
+> +static void __exit qc_usb_audio_offload_exit(void)
+> +{
+> +	struct uaudio_qmi_svc *svc = uaudio_svc;
+> +
+> +	qmi_handle_release(svc->uaudio_svc_hdl);
+> +	flush_workqueue(svc->uaudio_wq);
+> +	destroy_workqueue(svc->uaudio_wq);
+> +	kfree(svc);
+> +	uaudio_svc = NULL;
+> +	snd_usb_unregister_platform_ops();
+> +}
+> +
+> +module_init(qc_usb_audio_offload_init);
+> +module_exit(qc_usb_audio_offload_exit);
+
+what causes this module to be loaded?
+
+> +
+> +MODULE_DESCRIPTION("QC USB Audio Offloading");
+> +MODULE_LICENSE("GPL");
+> diff --git a/sound/usb/qcom/usb_audio_qmi_v01.c b/sound/usb/qcom/usb_audio_qmi_v01.c
+> new file mode 100644
+> index 000000000000..1a0f2f579786
+> --- /dev/null
+> +++ b/sound/usb/qcom/usb_audio_qmi_v01.c
+> @@ -0,0 +1,892 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/soc/qcom/qmi.h>
+> +
+> +#include "usb_audio_qmi_v01.h"
+> +
+> +static struct qmi_elem_info mem_info_v01_ei[] = {
+> +	{
+> +		.data_type	= QMI_UNSIGNED_8_BYTE,
+> +		.elem_len	= 1,
+> +		.elem_size	= sizeof(u64),
+> +		.array_type	= NO_ARRAY,
+> +		.tlv_type	= 0,
+> +		.offset		= offsetof(struct mem_info_v01, va),
+> +	},
+
+maybe move these arrays to a different patch that we don't need to
+scroll-through or review...
+
+> +	{
+> +		.data_type	= QMI_UNSIGNED_8_BYTE,
+> +		.elem_len	= 1,
+> +		.elem_size	= sizeof(u64),
+> +		.array_type	= NO_ARRAY,
+> +		.tlv_type	= 0,
+> +		.offset		= offsetof(struct mem_info_v01, pa),
+> +	},
+> +	{
+> +		.data_type	= QMI_UNSIGNED_4_BYTE,
+> +		.elem_len	= 1,
+> +		.elem_size	= sizeof(u32),
+> +		.array_type	= NO_ARRAY,
+> +		.tlv_type	= 0,
+> +		.offset		= offsetof(struct mem_info_v01, size),
+> +	},
+> +	{
+> +		.data_type	= QMI_EOTI,
+> +		.array_type	= NO_ARRAY,
+> +		.tlv_type	= QMI_COMMON_TLV_TYPE,
+> +	},
+> +};
+
