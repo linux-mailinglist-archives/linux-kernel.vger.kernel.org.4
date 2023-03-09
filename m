@@ -2,150 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB4D6B2DC4
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8436B2DC5
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbjCITco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 14:32:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
+        id S231189AbjCITde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 14:33:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbjCITbv (ORCPT
+        with ESMTP id S231197AbjCITcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 14:31:51 -0500
-Received: from forward501c.mail.yandex.net (forward501c.mail.yandex.net [178.154.239.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB45F145F
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:30:55 -0800 (PST)
-Received: from myt6-1289f562e823.qloud-c.yandex.net (myt6-1289f562e823.qloud-c.yandex.net [IPv6:2a02:6b8:c12:259d:0:640:1289:f562])
-        by forward501c.mail.yandex.net (Yandex) with ESMTP id CB5205F160;
-        Thu,  9 Mar 2023 22:30:53 +0300 (MSK)
-Received: by myt6-1289f562e823.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id nUjIpn5cqqM1-QSnoMwXQ;
-        Thu, 09 Mar 2023 22:30:52 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1678390252;
-        bh=Rn8tghGHUTM9dandsa5usgJEtLmCOIcUjMwrL2X2BkA=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=nF0kJfIrIEr2X2nKPL6I7u4RhJzT7lZdLEjR8N28TPWLl2pz7+JBQC2l0MdvZ5fxk
-         SKj1hV09CPYtChHIiKzoU7YU057tAMK7W06o1rJLaigVrL7fCi9iOQqzEwd4bjMviJ
-         9xOqIYvzwboE7CaXrxQBLqsXB0QN0NpedzbjpYnQ=
-Authentication-Results: myt6-1289f562e823.qloud-c.yandex.net; dkim=pass header.i=@ya.ru
-Message-ID: <56ce6c8c-a7ab-29d3-c781-2efa57f10be7@ya.ru>
-Date:   Thu, 9 Mar 2023 22:30:48 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 5/8] mm: shrinkers: make count and scan in shrinker
- debugfs lockless
-Content-Language: en-US
-To:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, shakeelb@google.com, mhocko@kernel.org,
-        roman.gushchin@linux.dev, muchun.song@linux.dev, david@redhat.com,
-        shy828301@gmail.com, rppt@kernel.org
-Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
-        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230307065605.58209-1-zhengqi.arch@bytedance.com>
- <20230307065605.58209-6-zhengqi.arch@bytedance.com>
-From:   Kirill Tkhai <tkhai@ya.ru>
-In-Reply-To: <20230307065605.58209-6-zhengqi.arch@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 9 Mar 2023 14:32:54 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B47AFCF36
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:32:03 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id x11so3094089pln.12
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 11:32:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1678390323;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MlMbJ8RFUjqrNZ3nyQ3UxH3pIRl6kRtnRIdmgkJcEJU=;
+        b=dGwrQCXfmXHVpty9DfuY6vuVeC+fUW29D5SVOs5Qn2qZmiOZHtiqt2IbTfDZVgp8cR
+         24eVwxbOfjDMI36IcW+DwNypZChUZGOZwamdEAkqAzlYdz205bzwIUMTAegLK5N3SDF3
+         QNe42QKdIiByZvS9cEJEZgk/R2tVtnewn7Mk80K6ncmAdOE2xIlNqOD/Gti/187aYatH
+         XEYPd4dUDwdgl3ywvWf/gZv+9SAAT8iE5EYDzuubz+wjJwSdImHQPFj9LL87CxuMRiNg
+         s+1re28ikCD7xxABQRkjCBfILRXbFyIOxfH1ycRfatrkQtS1WXEcQ1dJcfGh7E6wpUMw
+         B9OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678390323;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MlMbJ8RFUjqrNZ3nyQ3UxH3pIRl6kRtnRIdmgkJcEJU=;
+        b=WimjnCV2swk64raJ1vmWIu8r0cmtCOXjopH/ATFFYMkxV+PzXXANl4NBxE3rdby+w0
+         Vj/zyg4u+/Fpo2RcvSlbVbGJX5Kfw1df36mpcaAU61TbmrCYJY+ZimecafqEccJ4xPP9
+         QrtMBeaZi3QTyIIhPlpJi4uSnXybCiffxu9risZwSNDFp6tFD9oyDnznm+imFSELF5Jm
+         xc+FQdOsns/YfLlW00/cxSj1Gs/f2LC9S+OXHxyWs/Yd8S+x6jGuAaZftZu8bu8rkNET
+         AEbAx3PJIb0aVozSUIEXk7SK6lXRFyRDygUr5p/x28dmBmjtmcSs7gDwTr12d05oVKBK
+         sn7g==
+X-Gm-Message-State: AO0yUKUx0ymAye2BNG4l/2kxm9hy8nnM0/9otmLVdnOJbkfUsQWM4Lo2
+        StFQWDnewr1ItquuBlbjF8zpVQ==
+X-Google-Smtp-Source: AK7set/Bw35pT/jjTQF3n73tY439qRrS10p0cjFW8L2W8KJUM41sEW/vQaXrR9/mwQZZvNmKbGEQFQ==
+X-Received: by 2002:a17:902:e752:b0:19e:748c:d419 with SMTP id p18-20020a170902e75200b0019e748cd419mr27236838plf.46.1678390322967;
+        Thu, 09 Mar 2023 11:32:02 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id lh6-20020a170903290600b0019b0b6a1d5bsm17185plb.273.2023.03.09.11.32.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 11:32:02 -0800 (PST)
+Date:   Thu, 09 Mar 2023 11:32:02 -0800 (PST)
+X-Google-Original-Date: Thu, 09 Mar 2023 11:31:13 PST (-0800)
+Subject:     Re: [PATCH v4 12/19] clk: starfive: Add StarFive JH7110 always-on clock driver
+In-Reply-To: <CAJM55Z_HGt3iu=trv0v_VzyO3NkVo+aiEaT9vxRURz-MvrbCOg@mail.gmail.com>
+CC:     Conor Dooley <conor@kernel.org>, hal.feng@starfivetech.com,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sboyd@kernel.org,
+        mturquette@baylibre.com, p.zabel@pengutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, ben.dooks@sifive.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     emil.renner.berthing@canonical.com
+Message-ID: <mhng-2dfa0262-dc88-4256-bce9-d7d9bfbd2ba9@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.03.2023 09:56, Qi Zheng wrote:
-> Like global and memcg slab shrink, also use SRCU to
-> make count and scan operations in memory shrinker
-> debugfs lockless.
-> 
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+On Thu, 09 Mar 2023 10:19:06 PST (-0800), emil.renner.berthing@canonical.com wrote:
+> On Thu, 9 Mar 2023 at 19:11, Conor Dooley <conor@kernel.org> wrote:
+>>
+>> On Thu, Mar 09, 2023 at 03:06:13PM +0100, Emil Renner Berthing wrote:
+>> >  On Thu, 9 Mar 2023 at 10:44, Hal Feng <hal.feng@starfivetech.com> wrote:
+>>
+>> > > The AON clock driver provides clocks for gmac0 which is used frequently.
+>> > > So I think it would be more convenient if we set "default y" here.
+>>
+>> > You're right that if we default y for the ethernet driver then the aon
+>> > clock/reset should also default y. Personally I don't think we should
+>> > default y for every ethernet driver that might be used on some
+>> > supported risc-v platform, but I see now that
+>> > arch/riscv/config/defconfig already contains CONFIG_MACB=y,
+>> > CONFIG_E1000E=y, CONFIG_R8169=y and CONFIG_MICROSEMI_PHY=y, so maybe
+>> > I'm wrong or just too late.
+>>
+>> The defconfig really needs a good bit of cleanup (one of the many things
+>> that I am telling myself I will do as part of kconfig.socs cleanup).
+>>
+>> w.r.t defconfig Palmer said it pretty well earlier on IRC: "defconfig
+>> should be useful for kernel devs, which means it should boot on the
+>> common dev boards".
+>>
+>> IMO, that means enough to boot an initramfs and poke the thing to see
+>> that it is alive, so: ethernet & serial, and the clocks/resets/pinctrl
+>> stuff required to get those going can all be set to y in defconfig.
+>>
+>> In the driver Kconfig entries, to me, it's more or less the same.
+>> I guess, answer the question "Will your customer's board get to the
+>> point where it can load a module ithout building this into the kernel?".
+>> If the answer to that question is yes, then don't make it default y.
+>>
+>> That's my €0.02!
+>
+> Cool. Defaulting to m in the Kconfig for anything that can be loaded
+> later is exactly what I was trying to say, except I mixed in the
+> defconfig for no good reason. That means both the aon clocks and
+> dwmac-starfive should default to m in Kconfig. The JH7110 (VisionFive
+> 2) boots just fine like that and brings up aon clocks and ethernet
+> after loading the modules.
 
-Acked-by: Kirill Tkhai <tkhai@ya.ru>
-
-> ---
->  mm/shrinker_debug.c | 24 +++++++-----------------
->  1 file changed, 7 insertions(+), 17 deletions(-)
-> 
-> diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
-> index 39c3491e28a3..6aa7a7ec69da 100644
-> --- a/mm/shrinker_debug.c
-> +++ b/mm/shrinker_debug.c
-> @@ -9,6 +9,7 @@
->  /* defined in vmscan.c */
->  extern struct rw_semaphore shrinker_rwsem;
->  extern struct list_head shrinker_list;
-> +extern struct srcu_struct shrinker_srcu;
->  
->  static DEFINE_IDA(shrinker_debugfs_ida);
->  static struct dentry *shrinker_debugfs_root;
-> @@ -49,18 +50,13 @@ static int shrinker_debugfs_count_show(struct seq_file *m, void *v)
->  	struct mem_cgroup *memcg;
->  	unsigned long total;
->  	bool memcg_aware;
-> -	int ret, nid;
-> +	int ret = 0, nid, srcu_idx;
->  
->  	count_per_node = kcalloc(nr_node_ids, sizeof(unsigned long), GFP_KERNEL);
->  	if (!count_per_node)
->  		return -ENOMEM;
->  
-> -	ret = down_read_killable(&shrinker_rwsem);
-> -	if (ret) {
-> -		kfree(count_per_node);
-> -		return ret;
-> -	}
-> -	rcu_read_lock();
-> +	srcu_idx = srcu_read_lock(&shrinker_srcu);
->  
->  	memcg_aware = shrinker->flags & SHRINKER_MEMCG_AWARE;
->  
-> @@ -91,8 +87,7 @@ static int shrinker_debugfs_count_show(struct seq_file *m, void *v)
->  		}
->  	} while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)) != NULL);
->  
-> -	rcu_read_unlock();
-> -	up_read(&shrinker_rwsem);
-> +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
->  
->  	kfree(count_per_node);
->  	return ret;
-> @@ -115,9 +110,8 @@ static ssize_t shrinker_debugfs_scan_write(struct file *file,
->  		.gfp_mask = GFP_KERNEL,
->  	};
->  	struct mem_cgroup *memcg = NULL;
-> -	int nid;
-> +	int nid, srcu_idx;
->  	char kbuf[72];
-> -	ssize_t ret;
->  
->  	read_len = size < (sizeof(kbuf) - 1) ? size : (sizeof(kbuf) - 1);
->  	if (copy_from_user(kbuf, buf, read_len))
-> @@ -146,11 +140,7 @@ static ssize_t shrinker_debugfs_scan_write(struct file *file,
->  		return -EINVAL;
->  	}
->  
-> -	ret = down_read_killable(&shrinker_rwsem);
-> -	if (ret) {
-> -		mem_cgroup_put(memcg);
-> -		return ret;
-> -	}
-> +	srcu_idx = srcu_read_lock(&shrinker_srcu);
->  
->  	sc.nid = nid;
->  	sc.memcg = memcg;
-> @@ -159,7 +149,7 @@ static ssize_t shrinker_debugfs_scan_write(struct file *file,
->  
->  	shrinker->scan_objects(shrinker, &sc);
->  
-> -	up_read(&shrinker_rwsem);
-> +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
->  	mem_cgroup_put(memcg);
->  
->  	return size;
-
+That seems pretty reasonable to me.  It's not like defconfig or Kconfig 
+defaults or whatever are the only things we're going to test, but it's 
+way easier for folks trying poke around with these dev boards if they 
+boot defconfig.
