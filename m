@@ -2,125 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D856B2876
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:12:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 089316B287C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjCIPM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:12:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
+        id S230018AbjCIPPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbjCIPMD (ORCPT
+        with ESMTP id S229981AbjCIPOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:12:03 -0500
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63A6F1873;
-        Thu,  9 Mar 2023 07:08:45 -0800 (PST)
-Received: by mail-pl1-f169.google.com with SMTP id u5so2279309plq.7;
-        Thu, 09 Mar 2023 07:08:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678374516;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fb2e+/LBhqy1qArJcc0LH6ryiWZIF1fF20/FD4HTb9E=;
-        b=Nzw+qYsoiLpcjx/iCN15I/JPFId5CEOwePPK//EI15ArTM21j4sdR0Cr4gYyis9I+S
-         mAlWK2Gtiz7HRAaAWQRo4xKViUzf7XPH/oNbdgqR6FosSkI4oq0Ku+T/lUOI+wOYkcaW
-         w8MkbuzdfkFtFmftxmquiUl+BUCApZDZ1eXvaRxJz8ob7EdgEEXDqM/erB6kjzG7MxeZ
-         a1+91cGY+EwJfAN5oJsJUMuEPZnkd5tFxg+KXFA42iCNi92X4MVqfJWd3wUIqfZvUH+6
-         YSYRdZK1uS8A6xtC4PLTF6v9Cq+816LT2AnKOvnMSN3xsbAXQF84ddmRz5GXHQauTssP
-         AN9g==
-X-Gm-Message-State: AO0yUKXgU+aiaPPkmlp6Va4xe/o8f/fly617EHgSsrpuZpwe8CrYRDnp
-        pL57rQNwxV53O8YGylsoj/La+Sz+Fan62ezn
-X-Google-Smtp-Source: AK7set9HIFqs2pqzNJARvvLaNtMgezBNiDy+vAdodjLCQk1oU8pDbz1QWsU6Humo4NY5SmTPXBpv+w==
-X-Received: by 2002:a17:902:bb8c:b0:19b:c498:fd01 with SMTP id m12-20020a170902bb8c00b0019bc498fd01mr17089443pls.11.1678374516260;
-        Thu, 09 Mar 2023 07:08:36 -0800 (PST)
-Received: from [192.168.219.102] ([14.4.134.166])
-        by smtp.gmail.com with ESMTPSA id x8-20020a1709027c0800b0019ce95b1319sm11675234pll.264.2023.03.09.07.08.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 07:08:35 -0800 (PST)
-Message-ID: <e75d2a42-4154-e469-bbd7-9409471ab724@ooseel.net>
-Date:   Fri, 10 Mar 2023 00:08:29 +0900
+        Thu, 9 Mar 2023 10:14:44 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5403144BC;
+        Thu,  9 Mar 2023 07:13:05 -0800 (PST)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5A86A240014;
+        Thu,  9 Mar 2023 15:12:57 +0000 (UTC)
+Message-ID: <de204b7c-7c1d-bd7b-0072-d128757258e2@ghiti.fr>
+Date:   Thu, 9 Mar 2023 16:12:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH net-next] net: stmmac: call stmmac_finalize_xdp_rx() on a
- condition
+ Thunderbird/102.7.1
+Subject: Re: RISC-V reserved memory problems
 Content-Language: en-US
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-References: <20230308162619.329372-1-lsahn@ooseel.net>
- <ZAnh0TGtDkVUl/1m@corigine.com>
-From:   Leesoo Ahn <lsahn@ooseel.net>
-In-Reply-To: <ZAnh0TGtDkVUl/1m@corigine.com>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, Conor Dooley <conor@kernel.org>,
+        palmer@dabbelt.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        frowand.list@gmail.com, robh+dt@kernel.org, mick@ics.forth.gr,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        Valentina.FernandezAlanis@microchip.com,
+        Daire.McNamara@microchip.com
+References: <8e10bf15-9fa9-fe90-1656-35bf3e87e7f8@microchip.com>
+ <f8e67f82-103d-156c-deb0-d6d6e2756f5e@microchip.com> <Y9wytv5KSt1ca+td@spud>
+ <ZAchb/DfbIh+qaE4@kernel.org> <8abfb680-e1dd-8d1f-dd10-0a8bf086f5c3@ghiti.fr>
+ <b797bd15-ef3d-4d28-9aad-ffe0a32aa0b0@spud>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <b797bd15-ef3d-4d28-9aad-ffe0a32aa0b0@spud>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/9/23 13:51, Conor Dooley wrote:
+> On Thu, Mar 09, 2023 at 01:45:05PM +0100, Alexandre Ghiti wrote:
+>> On 3/7/23 12:35, Mike Rapoport wrote:
+>>> Hi Conor,
+>>>
+>>> Sorry for the delay, somehow this slipped between the cracks.
+>>>
+>>> On Thu, Feb 02, 2023 at 10:01:26PM +0000, Conor Dooley wrote:
+>>>> Hullo Palmer, Mike & whoever else may read this,
+>>>>
+>>>> Just reviving this thread from a little while ago as I have been in the
+>>>> area again recently...
+>>> TBH, I didn't really dig deep into the issues, but the thought I had was
+>>> what if DT was mapped via fixmap until the setup_vm_final() and then it
+>>> would be possible to call DT methods early.
+>>>
+>>> Could be I'm shooting in the dark :)
+>>
+>> I think I understand the issue now, it's because In riscv, we establish 2
+>> different virtual mappings and we map the device tree at 2 different virtual
+>> addresses, which is the problem.
+>>
+>> So to me, the solution is:
+>>
+>> - to revert your previous fix, that is calling
+>> early_init_fdt_scan_reserved_mem() before any call to memblock_alloc()
+>> (which could result in an allocation in the area you want to reserve)
+>>
+>> - to map the device tree at the same virtual address, because
+>> early_init_fdt_scan_reserved_mem() initializes reserved_mem with the dtb
+>> mapping established in setup_vm() and uses reserved_mem with the new mapping
+>> from setup_vm_final (which is what Mike proposes, we should use the fixmap
+>> region to have the same virtual addresses)
+>>
+>> Hope that makes sense: I'll come up with something this afternoon for you to
+>> test!
+> Sounds good. Please give me some ELI5 commit messages if you can,
+> explanations for this stuff (which I found took a lot of archaeology to
+> understand) would be very welcome next time we need to go back looking
+> at this stuff.
 
 
-On 23. 3. 9. 22:40, Simon Horman wrote:
-> On Thu, Mar 09, 2023 at 01:26:18AM +0900, Leesoo Ahn wrote:
->> The current codebase calls the function no matter net device has XDP
->> programs or not. So the finalize function is being called everytime when RX
->> bottom-half in progress. It needs a few machine instructions for nothing
->> in the case that XDP programs are not attached at all.
->>
->> Lets it call the function on a condition that if xdp_status variable has
->> not zero value. That means XDP programs are attached to the net device
->> and it should be finalized based on the variable.
->>
->> The following instructions show that it's better than calling the function
->> unconditionally.
->>
->>    0.31 │6b8:   ldr     w0, [sp, #196]
->>         │    ┌──cbz     w0, 6cc
->>         │    │  mov     x1, x0
->>         │    │  mov     x0, x27
->>         │    │→ bl     stmmac_finalize_xdp_rx
->>         │6cc:└─→ldr    x1, [sp, #176]
->>
->> with 'if (xdp_status)' statement, jump to '6cc' label if xdp_status has
->> zero value.
->>
->> Signed-off-by: Leesoo Ahn <lsahn@ooseel.net>
-> Hi Leesoo,
+Can you give it a try here: 
+https://github.com/AlexGhiti/riscv-linux/commits/dev/alex/conor_dtb_fixmap_v1 
+?
+
+That works for me but I need to carefully explain and check that's 
+correct though, not upstreamable as is.
+
+Thanks,
+
+Alex
+
+
+> Thanks Alex!
+> Conor.
 >
-> I am curious to know if you considered going a step further and using
-> a static key.
->
-> Link: https://www.kernel.org/doc/html/latest/staging/static-keys.html
-
-Thank you for the review.
-
-The function must be called for only XDP_TX or XDP_REDIRECT cases.
-So using a static key doesn't look good and the commit message is not 
-clear for 'why' as well.
-I think that's why you suggested for using 'static key' by the latter 
-reason.
-
-I will edit the message and post v2 soon.
-
-Best regards,
-Leesoo
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
