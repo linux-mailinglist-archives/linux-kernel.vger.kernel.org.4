@@ -2,121 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304C86B2077
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8316B2078
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbjCIJod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:44:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
+        id S229606AbjCIJoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:44:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbjCIJn7 (ORCPT
+        with ESMTP id S230446AbjCIJoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:43:59 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827C9D7C0C;
-        Thu,  9 Mar 2023 01:43:45 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 20B8824E231;
-        Thu,  9 Mar 2023 17:43:44 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 9 Mar
- 2023 17:43:44 +0800
-Received: from [192.168.125.124] (183.27.96.115) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 9 Mar
- 2023 17:43:43 +0800
-Message-ID: <49ab1072-98ba-f364-9b66-68658566e732@starfivetech.com>
-Date:   Thu, 9 Mar 2023 17:43:42 +0800
+        Thu, 9 Mar 2023 04:44:03 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2524C78DD
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:43:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678355031; x=1709891031;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=96H9KuBIknaCYTm4fNeajFmjZcq9MMjWlUw5r44cAPI=;
+  b=OBWKW357tIuosw6KoW9p7cwvpD7Y0yARL3YhCDzthceSwy/Moh6PmC++
+   TzQcjqVI4qD/orlzy7I3LkxlAsD9ca/F5FBTBFuHhp59HOUyqmtG/HEWl
+   fKQUcDyjywGLjVmu0YoiIOYw1iBuaCIn+d7gBX513rm/WfNsOY2ens+rI
+   6TFfJiWG0SKlBtQHJfaoIYQNXNLqsquU5Ai3vr0xhRswSDL7en2NERDnV
+   lvngULZGUjRjzvsTRgTjR74S7Ir6mAA4DSAwuIPYNS6L/Sd0UT57ZrXtU
+   2q5tKA0s0dvIc7zkI4N5AMpiskD3/fe37t0MGrdvNTFJHJh0kQ7xL2n47
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="398980482"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="398980482"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 01:43:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="801121422"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="801121422"
+Received: from doylejix-mobl1.ger.corp.intel.com (HELO [10.213.221.148]) ([10.213.221.148])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 01:43:48 -0800
+Message-ID: <b90e8e31-1729-175c-2fdb-85fb51db4fdc@linux.intel.com>
+Date:   Thu, 9 Mar 2023 09:43:46 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v4 12/19] clk: starfive: Add StarFive JH7110 always-on
- clock driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5 4/4] drm/i915: add guard page to ggtt->error_capture
 Content-Language: en-US
-From:   Hal Feng <hal.feng@starfivetech.com>
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, Stephen Boyd <sboyd@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230221024645.127922-1-hal.feng@starfivetech.com>
- <20230221024645.127922-13-hal.feng@starfivetech.com>
- <CAJM55Z8H4qmy_BiD0SHW-w5ifzhzokdO-QxpUUz9aeUd+htrZg@mail.gmail.com>
- <8c30220a-abef-7518-cb44-abcea91408e2@starfivetech.com>
-In-Reply-To: <8c30220a-abef-7518-cb44-abcea91408e2@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.96.115]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Chris Wilson <chris.p.wilson@linux.intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>
+References: <20230308-guard_error_capture-v5-0-6d1410d13540@intel.com>
+ <20230308-guard_error_capture-v5-4-6d1410d13540@intel.com>
+ <93cbaa9f-6ec3-5843-7527-8e81b3ee091d@linux.intel.com>
+ <1372db7c-7d65-cd28-43fc-1b04f57bef11@intel.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <1372db7c-7d65-cd28-43fc-1b04f57bef11@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Feb 2023 10:42:35 +0800, Hal Feng wrote:
-> On Sun, 26 Feb 2023 18:34:52 +0100, Emil Renner Berthing wrote:
->> On Tue, 21 Feb 2023 at 03:47, Hal Feng <hal.feng@starfivetech.com> wrote:
->>> From: Emil Renner Berthing <kernel@esmil.dk>
->>>
->>> Add driver for the StarFive JH7110 always-on clock controller
->>> and register an auxiliary device for always-on reset controller
->>> which is named as "reset-aon".
->>>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->>> Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
->>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->>> ---
->>>  drivers/clk/starfive/Kconfig                  |  11 ++
->>>  drivers/clk/starfive/Makefile                 |   1 +
->>>  .../clk/starfive/clk-starfive-jh7110-aon.c    | 156 ++++++++++++++++++
->>>  3 files changed, 168 insertions(+)
->>>  create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-aon.c
->>>
->>> diff --git a/drivers/clk/starfive/Kconfig b/drivers/clk/starfive/Kconfig
->>> index 4640d0665d1c..2aa664f2cdee 100644
->>> --- a/drivers/clk/starfive/Kconfig
->>> +++ b/drivers/clk/starfive/Kconfig
->>> @@ -31,3 +31,14 @@ config CLK_STARFIVE_JH7110_SYS
->>>         help
->>>           Say yes here to support the system clock controller on the
->>>           StarFive JH7110 SoC.
->>> +
->>> +config CLK_STARFIVE_JH7110_AON
->>> +       tristate "StarFive JH7110 always-on clock support"
->>> +       depends on CLK_STARFIVE_JH7110_SYS
->>> +       select AUXILIARY_BUS
->>> +       select CLK_STARFIVE_JH71X0
->>> +       select RESET_STARFIVE_JH7110
->>> +       default CLK_STARFIVE_JH7110_SYS
->> 
->> As far as I can tell the JH7110 boots fine without this driver and it
->> already depends on the _SYS driver above, so please do
->> 
->> default m if SOC_STARFIVE
+
+On 09/03/2023 09:34, Andrzej Hajda wrote:
 > 
-> OK. Will fix it.
+> 
+> On 09.03.2023 10:08, Tvrtko Ursulin wrote:
+>>
+>> On 08/03/2023 15:39, Andrzej Hajda wrote:
+>>> Write-combining memory allows speculative reads by CPU.
+>>> ggtt->error_capture is WC mapped to CPU, so CPU/MMU can try
+>>> to prefetch memory beyond the error_capture, ie it tries
+>>> to read memory pointed by next PTE in GGTT.
+>>> If this PTE points to invalid address DMAR errors will occur.
+>>> This behaviour was observed on ADL and RPL platforms.
+>>> To avoid it, guard scratch page should be added after error_capture.
+>>> The patch fixes the most annoying issue with error capture but
+>>> since WC reads are used also in other places there is a risk similar
+>>> problem can affect them as well.
+>>>
+>>> v2:
+>>>    - modified commit message (I hope the diagnosis is correct),
+>>>    - added bug checks to ensure scratch is initialized on gen3 
+>>> platforms.
+>>>      CI produces strange stacktrace for it suggesting scratch[0] is 
+>>> NULL,
+>>>      to be removed after resolving the issue with gen3 platforms.
+>>> v3:
+>>>    - removed bug checks, replaced with gen check.
+>>> v4:
+>>>    - change code for scratch page insertion to support all platforms,
+>>>    - add info in commit message there could be more similar issues
+>>> v5:
+>>>    - check for nop_clear_range instead of gen8 (Tvrtko),
+>>>    - re-insert scratch pages on resume (Tvrtko)
+>>>
+>>> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+>>> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+>>> ---
+>>>   drivers/gpu/drm/i915/gt/intel_ggtt.c | 35 
+>>> +++++++++++++++++++++++++++++++----
+>>>   1 file changed, 31 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/i915/gt/intel_ggtt.c 
+>>> b/drivers/gpu/drm/i915/gt/intel_ggtt.c
+>>> index b925da42c7cfc4..8fb700fde85c8f 100644
+>>> --- a/drivers/gpu/drm/i915/gt/intel_ggtt.c
+>>> +++ b/drivers/gpu/drm/i915/gt/intel_ggtt.c
+>>> @@ -502,6 +502,21 @@ static void cleanup_init_ggtt(struct i915_ggtt 
+>>> *ggtt)
+>>>       mutex_destroy(&ggtt->error_mutex);
+>>>   }
+>>>   +static void
+>>> +ggtt_insert_scratch_pages(struct i915_ggtt *ggtt, u64 offset, u64 
+>>> length)
+>>> +{
+>>> +    struct i915_address_space *vm = &ggtt->vm;
+>>> +
+>>> +    if (vm->clear_range != nop_clear_range)
+>>
+>> Hm I thought usually we would add a prefix for exported stuff, like in 
+>> this case i915_vm_nop_clear_range, however I see intel_gtt.h exports a 
+>> bunch of stuff with no prefixes already so I guess you could continue 
+>> like that by inertia. The conundrum also could have been avoided if 
+>> you left it static (leaving out dpt and mock_gtt patches) but no 
+>> strong opinion from me.
+>>
+>>> +        return vm->clear_range(vm, offset, length);
+>>> +
+>>> +    while (length > 0) {
+>>> +        vm->insert_page(vm, px_dma(vm->scratch[0]), offset, 
+>>> I915_CACHE_NONE, 0);
+>>> +        offset += I915_GTT_PAGE_SIZE;
+>>> +        length -= I915_GTT_PAGE_SIZE;
+>>> +    }
+>>> +}
+>>> +
+>>>   static int init_ggtt(struct i915_ggtt *ggtt)
+>>>   {
+>>>       /*
+>>> @@ -550,8 +565,12 @@ static int init_ggtt(struct i915_ggtt *ggtt)
+>>>            * paths, and we trust that 0 will remain reserved. However,
+>>>            * the only likely reason for failure to insert is a driver
+>>>            * bug, which we expect to cause other failures...
+>>> +         *
+>>> +         * Since CPU can perform speculative reads on error capture
+>>> +         * (write-combining allows it) add scratch page after error
+>>> +         * capture to avoid DMAR errors.
+>>>            */
+>>> -        ggtt->error_capture.size = I915_GTT_PAGE_SIZE;
+>>> +        ggtt->error_capture.size = 2 * I915_GTT_PAGE_SIZE;
+>>>           ggtt->error_capture.color = I915_COLOR_UNEVICTABLE;
+>>>           if (drm_mm_reserve_node(&ggtt->vm.mm, &ggtt->error_capture))
+>>>               drm_mm_insert_node_in_range(&ggtt->vm.mm,
+>>> @@ -561,11 +580,15 @@ static int init_ggtt(struct i915_ggtt *ggtt)
+>>>                               0, ggtt->mappable_end,
+>>>                               DRM_MM_INSERT_LOW);
+>>>       }
+>>> -    if (drm_mm_node_allocated(&ggtt->error_capture))
+>>> +    if (drm_mm_node_allocated(&ggtt->error_capture)) {
+>>> +        u64 start = ggtt->error_capture.start;
+>>> +        u64 size = ggtt->error_capture.size;
+>>> +
+>>> +        ggtt_insert_scratch_pages(ggtt, start, size);
+>>>           drm_dbg(&ggtt->vm.i915->drm,
+>>>               "Reserved GGTT:[%llx, %llx] for use by error capture\n",
+>>> -            ggtt->error_capture.start,
+>>> -            ggtt->error_capture.start + ggtt->error_capture.size);
+>>> +            start, start + size);
+>>> +    }
+>>>         /*
+>>>        * The upper portion of the GuC address space has a sizeable hole
+>>> @@ -1256,6 +1279,10 @@ void i915_ggtt_resume(struct i915_ggtt *ggtt)
+>>>         flush = i915_ggtt_resume_vm(&ggtt->vm);
+>>>   +    if (drm_mm_node_allocated(&ggtt->error_capture))
+>>> +        ggtt_insert_scratch_pages(ggtt, ggtt->error_capture.start,
+>>> +                      ggtt->error_capture.size);
+>>
+>> Maybe it belongs in i915_ggtt_resume_vm since that one deals with 
+>> PTEs? Looks like it to me, but ack either way.
+> 
+> i915_ggtt_resume_vm is called for ggtt and dpt. Of course I could add 
+> conditionals there checking if it is ggtt, but in such situation 
+> i915_ggtt_resume seems more natural candidate.
 
-Hi, Emil,
+"if (drm_mm_node_allocated(&ggtt->error_capture))" check would handle 
+that automatically, no? i915_ggtt_resume has nothing about PTEs at the 
+moment..
 
-The AON clock driver provides clocks for gmac0 which is used frequently.
-So I think it would be more convenient if we set "default y" here.
+Regards,
 
-Best regards,
-Hal
+Tvrtko
