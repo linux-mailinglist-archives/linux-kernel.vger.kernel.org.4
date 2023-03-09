@@ -2,165 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3276C6B2AC9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:32:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 924606B2AD0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjCIQcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 11:32:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
+        id S229935AbjCIQcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 11:32:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjCIQbj (ORCPT
+        with ESMTP id S230123AbjCIQcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:31:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0A4F34DE
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 08:22:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678378919;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LEHbZXmqj5JG1Cxdlx+rAzJmqeOLu7jI6Qgs9itxkdM=;
-        b=DR/jyZOGsGe8asafJDVh2hAFZ3cx3M1+3r1pQ4OWEOiySpdDbuAdASCwlD8CGLUOFZFsdH
-        ezNcAH5takOqzm8JH71dhrNAPIafE+VpcTQhH/wkRXWcRj0BcpCyxhW1r2YQ4Q4cd41E8x
-        37lfvoiNCHZ6dffZGTdm2hQkSljTmMM=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-241-AqEVLnkIPpK-c1c-ePrZGQ-1; Thu, 09 Mar 2023 11:21:57 -0500
-X-MC-Unique: AqEVLnkIPpK-c1c-ePrZGQ-1
-Received: by mail-qk1-f200.google.com with SMTP id s21-20020a05620a0bd500b0074234f33f24so1481364qki.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 08:21:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678378916;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LEHbZXmqj5JG1Cxdlx+rAzJmqeOLu7jI6Qgs9itxkdM=;
-        b=RpUoTlAhfC/RqnYku8FSN3qMqU/YBmLebTn5TDTZZ/+L6N439XlhUSlW9iJD4wc/gH
-         DifvPKMfPL7wnX3CcyOpxUOH3pD8UJCGae5AV+UBduoZ9aRmImkvzR6EMYgYsn3J2HVi
-         SM64qqRZ3t43RO78x2CTH3gz8078lwaJlsXdr9EfbfmGsc6pzBK6+B6TmBBNx7yLC+fl
-         D05M0VpwQoW+ECCW91qdTCyFUkTi04jDAH18wWJlfvTMVO5k33OyWRwdrBXUzM3h5rtN
-         5VZUMJvkUj4P2bTs9dsL5ZKJVp2RzX2nfEjPiyDJ5NZeqxYsG3ysr1rAV1sr6zQEecKk
-         HIXQ==
-X-Gm-Message-State: AO0yUKW0/uoiNu4TaKQ0xrin/HfXvTxdSXXBJ3h58qgp+K2htXIw2+tv
-        ukiHuTgFsbXy411zxtQxp5AvOFqEtp9wWzQCIcIs/TaF4pGEPDEVvsoKThxF3da1Q2GkguortRw
-        mLK8EdYQzOF8Ia7IB0kWMvB6a
-X-Received: by 2002:a05:622a:1a1c:b0:3b8:6788:bf25 with SMTP id f28-20020a05622a1a1c00b003b86788bf25mr37444152qtb.23.1678378916660;
-        Thu, 09 Mar 2023 08:21:56 -0800 (PST)
-X-Google-Smtp-Source: AK7set+GI92GzioBeNCbqnB3nXBd7JnBKOAfAg1RXELqlvwy47gh802YuCBcQAaesacewK2BJ1ThFw==
-X-Received: by 2002:a05:622a:1a1c:b0:3b8:6788:bf25 with SMTP id f28-20020a05622a1a1c00b003b86788bf25mr37444121qtb.23.1678378916373;
-        Thu, 09 Mar 2023 08:21:56 -0800 (PST)
-Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id t197-20020a3746ce000000b007417e60f621sm13896467qka.126.2023.03.09.08.21.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 08:21:55 -0800 (PST)
-Date:   Thu, 9 Mar 2023 17:21:50 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v3 0/4] several updates to virtio/vsock
-Message-ID: <20230309162150.qqrlqmqghi5muucx@sgarzare-redhat>
-References: <0abeec42-a11d-3a51-453b-6acf76604f2e@sberdevices.ru>
+        Thu, 9 Mar 2023 11:32:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4337103BFC;
+        Thu,  9 Mar 2023 08:24:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC61D61AD7;
+        Thu,  9 Mar 2023 16:23:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9BA9C4339C;
+        Thu,  9 Mar 2023 16:23:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678379005;
+        bh=UmpnIPxcSpr2K6ja2UtmiZg3o4Ly0Tq5xmySsAkoy40=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gc02k8IiO3BDEndLHrwML6nTy2LdyqYhuzgk5EMbriplCDYPqPtyNdyyNg3zkXcRy
+         7KBx7MK4x4nAuLo6Xo6W7cfAUFfHcVweoTGo2CLQoYRMb6sHxtSuOl4tMQjA3zXBUR
+         /KmG/ncy9TqvDqCyM9OwMlkC0FRISdjwl8+4j1/w=
+Date:   Thu, 9 Mar 2023 17:23:22 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Rajnesh Kanwal <rkanwal@rivosinc.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Documentation/serial-console: Document the behavior when
+ the last console= parameter is not used
+Message-ID: <ZAoH+vb6LIqdCpDI@kroah.com>
+References: <20230308112433.24292-1-pmladek@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0abeec42-a11d-3a51-453b-6acf76604f2e@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230308112433.24292-1-pmladek@suse.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 01:10:36PM +0300, Arseniy Krasnov wrote:
->Hello,
->
->this patchset evolved from previous v2 version (see link below). It does
->several updates to virtio/vsock:
->1) Changes 'virtio_transport_inc/dec_rx_pkt()' interface. Now instead of
->   using skbuff state ('head' and 'data' pointers) to update 'fwd_cnt'
->   and 'rx_bytes', integer value is passed as an input argument. This
->   makes code more simple, because in this case we don't need to udpate
->   skbuff state before calling 'virtio_transport_inc/dec_rx_pkt()'. In
->   more common words - we don't need to change skbuff state to update
->   'rx_bytes' and 'fwd_cnt' correctly.
->2) For SOCK_STREAM, when copying data to user fails, current skbuff is
->   not dropped. Next read attempt will use same skbuff and last offset.
->   Instead of 'skb_dequeue()', 'skb_peek()' + '__skb_unlink()' are used.
->   This behaviour was implemented before skbuff support.
->3) For SOCK_SEQPACKET it removes unneeded 'skb_pull()' call, because for
->   this type of socket each skbuff is used only once: after removing it
->   from socket's queue, it will be freed anyway.
->
->Test for 2) also added:
->Test tries to 'recv()' data to NULL buffer, then does 'recv()' with valid
->buffer. For SOCK_STREAM second 'recv()' must return data, because skbuff
->must not be dropped, but for SOCK_SEQPACKET skbuff will be dropped by
->kernel, and 'recv()' will return EAGAIN.
->
->Link to v1 on lore:
->https://lore.kernel.org/netdev/c2d3e204-89d9-88e9-8a15-3fe027e56b4b@sberdevices.ru/
->
->Link to v2 on lore:
->https://lore.kernel.org/netdev/a7ab414b-5e41-c7b6-250b-e8401f335859@sberdevices.ru/
->
->Change log:
->
->v1 -> v2:
-> - For SOCK_SEQPACKET call 'skb_pull()' also in case of copy failure or
->   dropping skbuff (when we just waiting message end).
-> - Handle copy failure for SOCK_STREAM in the same manner (plus free
->   current skbuff).
-> - Replace bug repdroducer with new test in vsock_test.c
->
->v2 -> v3:
-> - Replace patch which removes 'skb->len' subtraction from function
->   'virtio_transport_dec_rx_pkt()' with patch which updates functions
->   'virtio_transport_inc/dec_rx_pkt()' by passing integer argument
->   instead of skbuff pointer.
-> - Replace patch which drops skbuff when copying to user fails with
->   patch which changes this behaviour by keeping skbuff in queue until
->   it has no data.
-> - Add patch for SOCK_SEQPACKET which removes redundant 'skb_pull()'
->   call on read.
-> - I remove "Fixes" tag from all patches, because all of them now change
->   code logic, not only fix something.
+On Wed, Mar 08, 2023 at 12:24:33PM +0100, Petr Mladek wrote:
+> The console= kernel command-line parameter defines where the kernel
+> messages appear. It can be used multiple times to make the kernel log
+> visible on more devices.
+> 
+> The ordering of the console= parameters is important. In particular,
+> the last one defines which device can be accessed also via /dev/console.
+> 
+> The behavior is more complicated when the last console= parameter is
+> ignored by kernel. It might be surprising because it was not intentional.
+> The kernel just works this way historically.
+> 
+> There were few attempts to change the behavior. Unfortunately, it can't
+> be done because it would break existing users. Document the historical
+> behavior at least.
 
-Yes, but they solve the problem, so we should use the tag (I think at
-least in patch 1 and 3).
+Thanks for documenting this, now queued up!
 
-We usually use the tag when we are fixing a problem introduced by a
-previous change. So we need to backport the patch to the stable branches
-as well, and we need the tag to figure out which branches have the patch
-or not.
-
-Thanks,
-Stefano
-
->
->Arseniy Krasnov (4):
->  virtio/vsock: don't use skbuff state to account credit
->  virtio/vsock: remove redundant 'skb_pull()' call
->  virtio/vsock: don't drop skbuff on copy failure
->  test/vsock: copy to user failure test
->
-> net/vmw_vsock/virtio_transport_common.c |  29 +++---
-> tools/testing/vsock/vsock_test.c        | 118 ++++++++++++++++++++++++
-> 2 files changed, 131 insertions(+), 16 deletions(-)
->
->-- 
->2.25.1
->
-
+greg k-h
