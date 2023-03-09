@@ -2,121 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5696B2528
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:21:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8436B2520
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbjCINVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
+        id S230428AbjCINUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjCINVJ (ORCPT
+        with ESMTP id S229549AbjCINUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:21:09 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A2AE6FFE;
-        Thu,  9 Mar 2023 05:21:06 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329D4eCA029648;
-        Thu, 9 Mar 2023 13:20:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=pNHCbqRQafX/ACjbDKS29OWZUQTgc8vIxhSBvT7xme0=;
- b=O8GRs4Es2Mmgk28NSbkjteFHV5l4cwoUOZselt2XH4yHzePswClyXxp3ncTvedAd6Nak
- 0+HSYUmdGPzqBYUrouOE7ASckr6rQliLQDObM7uyd2fiwf3M1UVPlbM7Noa9YZPdKTHS
- Ivtf1mBSI5O+db7EU08zvZAE3Z3+eagkFASETr6m/MnNmfG6X6ZZYiYjYQFDsm1ixVIf
- SnuCZjDWbQj9E1/BW3Hb1YnHj3naHSA2IM6U/HcKHzXR3ME6gdLZq95g1sh0p2WHM9uV
- 5mMHEPKhNsstpkkbGrpcN6W2m+bJUlMkAPL+qBKL3FZd/sJ6xUVJTJS+Re0MOXZKClk9 hg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6t3bsxyj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 13:20:38 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 329D5bNm012989;
-        Thu, 9 Mar 2023 13:20:38 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6t3bsxy4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 13:20:38 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 329CU4u4023573;
-        Thu, 9 Mar 2023 13:20:37 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3p6fnwkpg5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 13:20:37 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 329DKZGS19268266
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Mar 2023 13:20:36 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B82CF58061;
-        Thu,  9 Mar 2023 13:20:35 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EB4DA5805D;
-        Thu,  9 Mar 2023 13:20:34 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.90.179])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Mar 2023 13:20:34 +0000 (GMT)
-Message-ID: <397cb437bbd41e7eb223a07bc92a10bb57df696e.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 1/3] security: Introduce LSM_ORDER_LAST and set it
- for the integrity LSM
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, mic@digikod.net
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 09 Mar 2023 08:20:34 -0500
-In-Reply-To: <20230309085433.1810314-2-roberto.sassu@huaweicloud.com>
-References: <20230309085433.1810314-1-roberto.sassu@huaweicloud.com>
-         <20230309085433.1810314-2-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Thu, 9 Mar 2023 08:20:48 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C8E9E6FF3
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 05:20:46 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 66415C14;
+        Thu,  9 Mar 2023 05:21:29 -0800 (PST)
+Received: from [10.57.91.145] (unknown [10.57.91.145])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 23ABE3F67D;
+        Thu,  9 Mar 2023 05:20:44 -0800 (PST)
+Message-ID: <b8660bcf-7b12-fd49-7b5b-58909ac8746d@arm.com>
+Date:   Thu, 9 Mar 2023 13:20:39 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 12/14] iommu/arm-smmu-v3: Support IOMMU_DOMAIN_NESTED
+ type of allocations
+Content-Language: en-GB
+To:     Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com, will@kernel.org
+Cc:     eric.auger@redhat.com, kevin.tian@intel.com,
+        baolu.lu@linux.intel.com, joro@8bytes.org,
+        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <cover.1678348754.git.nicolinc@nvidia.com>
+ <b01b2bad6d0d34908812d964eba118a9cc1e89ab.1678348754.git.nicolinc@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <b01b2bad6d0d34908812d964eba118a9cc1e89ab.1678348754.git.nicolinc@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: klGFtrN_aONy7MWhWwYH4GEQF-YdaOII
-X-Proofpoint-ORIG-GUID: Tf2q3-RDKlL0JJXY9cIGOIypQYWVQ3r8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_06,2023-03-08_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=767 spamscore=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1011 impostorscore=0 phishscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303090105
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-03-09 at 09:54 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On 2023-03-09 10:53, Nicolin Chen wrote:
+> Add domain allocation support for IOMMU_DOMAIN_NESTED type. This includes
+> the "finalise" part to log in the user space Stream Table Entry info.
 > 
-> Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs needing to be
-> last, e.g. the 'integrity' LSM, without changing the kernel command line or
-> configuration.
+> Co-developed-by: Eric Auger <eric.auger@redhat.com>
+> Signed-off-by: Eric Auger <eric.auger@redhat.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 38 +++++++++++++++++++--
+>   1 file changed, 36 insertions(+), 2 deletions(-)
 > 
-> Also, set this order for the 'integrity' LSM. While not enforced, this is
-> the only LSM expected to use it.
-> 
-> Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled
-> and put at the end of the LSM list.
-> 
-> Finally, for LSM_ORDER_MUTABLE LSMs, set the found variable to true if an
-> LSM is found, regardless of its order. In this way, the kernel would not
-> wrongly report that the LSM is not built-in in the kernel if its order is
-> LSM_ORDER_LAST.
-> 
-> Fixes: 79f7865d844c ("LSM: Introduce "lsm=" for boottime LSM selection")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> index 5ff74edfbd68..1f318b5e0921 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> @@ -2214,6 +2214,19 @@ static int arm_smmu_domain_finalise(struct iommu_domain *domain,
+>   		return 0;
+>   	}
+>   
+> +	if (domain->type == IOMMU_DOMAIN_NESTED) {
+> +		if (!(smmu->features & ARM_SMMU_FEAT_TRANS_S1) ||
+> +		    !(smmu->features & ARM_SMMU_FEAT_TRANS_S2)) {
+> +			dev_dbg(smmu->dev, "does not implement two stages\n");
+> +			return -EINVAL;
+> +		}
+> +		smmu_domain->stage = ARM_SMMU_DOMAIN_S1;
+> +		smmu_domain->s1_cfg.s1fmt = user_cfg->s1fmt;
+> +		smmu_domain->s1_cfg.s1cdmax = user_cfg->s1cdmax;
+> +		smmu_domain->s1_cfg.cdcfg.cdtab_dma = user_cfg->s1ctxptr;
+> +		return 0;
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+How's that going to work? If the caller's asked for something we can't 
+provide, returning something else and hoping it fails later is not 
+sensible, we should just fail right here. It's even more worrying if 
+there's a chance it *won't* fail later, and a guest ends up with 
+"nested" translation giving it full access to host PA space :/
 
+Thanks,
+Robin.
+
+> +	}
+> +
+>   	if (user_cfg_s2 && !(smmu->features & ARM_SMMU_FEAT_TRANS_S2))
+>   		return -EINVAL;
+>   	if (user_cfg_s2)
+> @@ -2863,6 +2876,11 @@ static void arm_smmu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
+>   	arm_smmu_sva_remove_dev_pasid(domain, dev, pasid);
+>   }
+>   
+> +static const struct iommu_domain_ops arm_smmu_nested_domain_ops = {
+> +	.attach_dev		= arm_smmu_attach_dev,
+> +	.free			= arm_smmu_domain_free,
+> +};
+> +
+>   static struct iommu_domain *
+>   __arm_smmu_domain_alloc(unsigned type,
+>   			struct arm_smmu_domain *s2,
+> @@ -2877,11 +2895,15 @@ __arm_smmu_domain_alloc(unsigned type,
+>   		return arm_smmu_sva_domain_alloc();
+>   
+>   	if (type != IOMMU_DOMAIN_UNMANAGED &&
+> +	    type != IOMMU_DOMAIN_NESTED &&
+>   	    type != IOMMU_DOMAIN_DMA &&
+>   	    type != IOMMU_DOMAIN_DMA_FQ &&
+>   	    type != IOMMU_DOMAIN_IDENTITY)
+>   		return NULL;
+>   
+> +	if (s2 && s2->stage != ARM_SMMU_DOMAIN_S2)
+> +		return NULL;
+> +
+>   	/*
+>   	 * Allocate the domain and initialise some of its data structures.
+>   	 * We can't really finalise the domain unless a master is given.
+> @@ -2889,10 +2911,14 @@ __arm_smmu_domain_alloc(unsigned type,
+>   	smmu_domain = kzalloc(sizeof(*smmu_domain), GFP_KERNEL);
+>   	if (!smmu_domain)
+>   		return NULL;
+> +	smmu_domain->s2 = s2;
+>   	domain = &smmu_domain->domain;
+>   
+>   	domain->type = type;
+> -	domain->ops = arm_smmu_ops.default_domain_ops;
+> +	if (s2)
+> +		domain->ops = &arm_smmu_nested_domain_ops;
+> +	else
+> +		domain->ops = arm_smmu_ops.default_domain_ops;
+>   
+>   	mutex_init(&smmu_domain->init_mutex);
+>   	INIT_LIST_HEAD(&smmu_domain->devices);
+> @@ -2923,8 +2949,16 @@ arm_smmu_domain_alloc_user(struct device *dev, struct iommu_domain *parent,
+>   	const struct iommu_hwpt_arm_smmuv3 *user_cfg = user_data;
+>   	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
+>   	unsigned type = IOMMU_DOMAIN_UNMANAGED;
+> +	struct arm_smmu_domain *s2 = NULL;
+> +
+> +	if (parent) {
+> +		if (parent->ops != arm_smmu_ops.default_domain_ops)
+> +			return NULL;
+> +		type = IOMMU_DOMAIN_NESTED;
+> +		s2 = to_smmu_domain(parent);
+> +	}
+>   
+> -	return __arm_smmu_domain_alloc(type, NULL, master, user_cfg);
+> +	return __arm_smmu_domain_alloc(type, s2, master, user_cfg);
+>   }
+>   
+>   static struct iommu_ops arm_smmu_ops = {
