@@ -2,105 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5546B2250
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2A26B2252
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbjCILJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:09:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
+        id S231193AbjCILJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:09:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbjCILJG (ORCPT
+        with ESMTP id S231416AbjCILJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:09:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CDB2B2B6;
-        Thu,  9 Mar 2023 03:03:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F137CB81EE0;
-        Thu,  9 Mar 2023 11:03:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04666C433D2;
-        Thu,  9 Mar 2023 11:03:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678359795;
-        bh=EEI8XC3T4lIY5E4deVjQSw8EXc+PAG8USv+h2O3sz98=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bO9bpO/2rjQwsHgJGAbkVgmw+4LVVYZnk+9J54TZkrmlPqyXGTn056hP3r4uB2sBO
-         JvbQVezljC9eLOh1/k7g3UhAfSNcbIfEi+wcLK1e4q/L5+1Kbad/EJDStwKpAsWZpl
-         fRhrzMIVQQ/vX/K3k+U6+T1KpyJv+7KwHyCo7oBPvpHLQRzssgZ+Myy4+QA5/Qht05
-         rdFdzNn3EKecvAFxX4P/nz7ZKKURPfDYPTC7j87bouJ9zgK2KAeaYM3/gnDoNzKv0k
-         VVFeNO6+i1iYaWikFuORA34f6g187p0+ZjvY8gzYcOsyP/a1+i4y2B8rJYbbqM144u
-         MN+sF01RWnQJg==
-Date:   Thu, 9 Mar 2023 11:03:06 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Ye Xiang <xiang.ye@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
-Message-ID: <8e3c16a7-1155-419c-9bcb-cc3e3630fe5b@sirena.org.uk>
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
- <20230309071100.2856899-2-xiang.ye@intel.com>
- <dcb805e1-2b48-481d-8e72-1b515c9d43e6@app.fastmail.com>
+        Thu, 9 Mar 2023 06:09:12 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27FB15CEC3;
+        Thu,  9 Mar 2023 03:03:35 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F26F6C14;
+        Thu,  9 Mar 2023 03:03:55 -0800 (PST)
+Received: from [10.1.27.175] (C02CF1NRLVDN.cambridge.arm.com [10.1.27.175])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE5173F67D;
+        Thu,  9 Mar 2023 03:03:11 -0800 (PST)
+Message-ID: <af1a4992-bb4b-bd91-6ff9-0783ef7528ae@arm.com>
+Date:   Thu, 9 Mar 2023 11:03:10 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pg1YqT2fV9QTsCXN"
-Content-Disposition: inline
-In-Reply-To: <dcb805e1-2b48-481d-8e72-1b515c9d43e6@app.fastmail.com>
-X-Cookie: I will never lie to you.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v3 08/34] arm64: Implement the new page table range API
+Content-Language: en-US
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20230228213738.272178-1-willy@infradead.org>
+ <20230228213738.272178-9-willy@infradead.org>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230228213738.272178-9-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 28/02/2023 21:37, Matthew Wilcox (Oracle) wrote:
+> Add set_ptes(), update_mmu_cache_range() and flush_dcache_folio().
+> Change the PG_dcache_clean flag from being per-page to per-folio.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> ---
+>  arch/arm64/include/asm/cacheflush.h |  4 +++-
+>  arch/arm64/include/asm/pgtable.h    | 25 ++++++++++++++------
+>  arch/arm64/mm/flush.c               | 36 +++++++++++------------------
+>  3 files changed, 35 insertions(+), 30 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/cacheflush.h b/arch/arm64/include/asm/cacheflush.h
+> index 37185e978aeb..d115451ed263 100644
+> --- a/arch/arm64/include/asm/cacheflush.h
+> +++ b/arch/arm64/include/asm/cacheflush.h
+> @@ -114,7 +114,7 @@ extern void copy_to_user_page(struct vm_area_struct *, struct page *,
+>  #define copy_to_user_page copy_to_user_page
+>  
+>  /*
+> - * flush_dcache_page is used when the kernel has written to the page
+> + * flush_dcache_folio is used when the kernel has written to the page
+>   * cache page at virtual address page->virtual.
+>   *
+>   * If this page isn't mapped (ie, page_mapping == NULL), or it might
+> @@ -127,6 +127,8 @@ extern void copy_to_user_page(struct vm_area_struct *, struct page *,
+>   */
+>  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
+>  extern void flush_dcache_page(struct page *);
+> +void flush_dcache_folio(struct folio *);
+> +#define flush_dcache_folio flush_dcache_folio
+>  
+>  static __always_inline void icache_inval_all_pou(void)
+>  {
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index 69765dc697af..4d1b79dbff16 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -355,12 +355,21 @@ static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
+>  	set_pte(ptep, pte);
+>  }
+>  
+> -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+> -			      pte_t *ptep, pte_t pte)
+> -{
+> -	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
+> -	return __set_pte_at(mm, addr, ptep, pte);
+> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+> +			      pte_t *ptep, pte_t pte, unsigned int nr)
+> +{
+> +	page_table_check_ptes_set(mm, addr, ptep, pte, nr);
+> +
+> +	for (;;) {
+> +		__set_pte_at(mm, addr, ptep, pte);
+> +		if (--nr == 0)
+> +			break;
+> +		ptep++;
+> +		addr += PAGE_SIZE;
+> +		pte_val(pte) += PAGE_SIZE;
 
---pg1YqT2fV9QTsCXN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+For systems that support > 48-bit PA, arm64 places high bits [51:48] of the PA
+at a low position in the PTE. I think I've convinced myself that this is ok
+though, because set_ptes() promises that the range is always within a single PMD
+and therefore its guaranteed that we will not have ptes straddling both sides of
+the 48 bit boundary for a single call?
 
-On Thu, Mar 09, 2023 at 08:56:05AM +0100, Arnd Bergmann wrote:
-> On Thu, Mar 9, 2023, at 08:10, Ye Xiang wrote:
+Also, its not clear to me if set_ptes() could be called for a range of
+not-present ptes? (i.e. clearing the pte-range or swap entries, etc). If so,
+then I guess you would only want to increment the address if pte_present(pte)?
+I'm guessing that batch-clearing ptes might appear in the near future so might
+be sensible to support that now?
 
-> >  drivers/usb/misc/Kconfig  |  13 +
-> >  drivers/usb/misc/Makefile |   1 +
-> >  drivers/usb/misc/ljca.c   | 969 ++++++++++++++++++++++++++++++++++++++
-> >  include/linux/mfd/ljca.h  |  95 ++++
+Regardless, a comment to make these assumptions clear would be useful.
 
-> Why is this in driver/usb/misc? It looks like a normal
-> mfd driver to me, and it evenhas the header in include/linux/mfd/
+Thanks,
+Ryan
 
-It was a MFD in the original version, Lee asked for it to be moved to
-USB: https://lore.kernel.org/r/20230305103456.GF2574592@google.com
 
---pg1YqT2fV9QTsCXN
-Content-Type: application/pgp-signature; name="signature.asc"
+> +	}
+>  }
+> +#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
+>  
+>  /*
+>   * Huge pte definitions.
+> @@ -1059,8 +1068,8 @@ static inline void arch_swap_restore(swp_entry_t entry, struct folio *folio)
+>  /*
+>   * On AArch64, the cache coherency is handled via the set_pte_at() function.
+>   */
+> -static inline void update_mmu_cache(struct vm_area_struct *vma,
+> -				    unsigned long addr, pte_t *ptep)
+> +static inline void update_mmu_cache_range(struct vm_area_struct *vma,
+> +		unsigned long addr, pte_t *ptep, unsigned int nr)
+>  {
+>  	/*
+>  	 * We don't do anything here, so there's a very small chance of
+> @@ -1069,6 +1078,8 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
+>  	 */
+>  }
+>  
+> +#define update_mmu_cache(vma, addr, ptep) \
+> +	update_mmu_cache_range(vma, addr, ptep, 1)
+>  #define update_mmu_cache_pmd(vma, address, pmd) do { } while (0)
+>  
+>  #ifdef CONFIG_ARM64_PA_BITS_52
+> diff --git a/arch/arm64/mm/flush.c b/arch/arm64/mm/flush.c
+> index 5f9379b3c8c8..deb781af0a3a 100644
+> --- a/arch/arm64/mm/flush.c
+> +++ b/arch/arm64/mm/flush.c
+> @@ -50,20 +50,13 @@ void copy_to_user_page(struct vm_area_struct *vma, struct page *page,
+>  
+>  void __sync_icache_dcache(pte_t pte)
+>  {
+> -	struct page *page = pte_page(pte);
+> +	struct folio *folio = page_folio(pte_page(pte));
+>  
+> -	/*
+> -	 * HugeTLB pages are always fully mapped, so only setting head page's
+> -	 * PG_dcache_clean flag is enough.
+> -	 */
+> -	if (PageHuge(page))
+> -		page = compound_head(page);
+> -
+> -	if (!test_bit(PG_dcache_clean, &page->flags)) {
+> -		sync_icache_aliases((unsigned long)page_address(page),
+> -				    (unsigned long)page_address(page) +
+> -					    page_size(page));
+> -		set_bit(PG_dcache_clean, &page->flags);
+> +	if (!test_bit(PG_dcache_clean, &folio->flags)) {
+> +		sync_icache_aliases((unsigned long)folio_address(folio),
+> +				    (unsigned long)folio_address(folio) +
+> +					    folio_size(folio));
+> +		set_bit(PG_dcache_clean, &folio->flags);
+>  	}
+>  }
+>  EXPORT_SYMBOL_GPL(__sync_icache_dcache);
+> @@ -73,17 +66,16 @@ EXPORT_SYMBOL_GPL(__sync_icache_dcache);
+>   * it as dirty for later flushing when mapped in user space (if executable,
+>   * see __sync_icache_dcache).
+>   */
+> -void flush_dcache_page(struct page *page)
+> +void flush_dcache_folio(struct folio *folio)
+>  {
+> -	/*
+> -	 * HugeTLB pages are always fully mapped and only head page will be
+> -	 * set PG_dcache_clean (see comments in __sync_icache_dcache()).
+> -	 */
+> -	if (PageHuge(page))
+> -		page = compound_head(page);
+> +	if (test_bit(PG_dcache_clean, &folio->flags))
+> +		clear_bit(PG_dcache_clean, &folio->flags);
+> +}
+> +EXPORT_SYMBOL(flush_dcache_folio);
+>  
+> -	if (test_bit(PG_dcache_clean, &page->flags))
+> -		clear_bit(PG_dcache_clean, &page->flags);
+> +void flush_dcache_page(struct page *page)
+> +{
+> +	flush_dcache_folio(page_folio(page));
+>  }
+>  EXPORT_SYMBOL(flush_dcache_page);
+>  
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQJvOkACgkQJNaLcl1U
-h9DL1wf/a2dDu6Nvh1itaRXIIzM8bHS3I6CUAvjpZvHjkD70ApwQyIYkSYBLppC1
-E9nAPixro9tiOzGC9SAUY/Isq+xNytrdnyTy+Q0MItK4YtaloeUUCJRMKEfnp8zR
-1RK0E8IKRniyi/I2ouwnwirTZKlfdnVmnViLTj1AzYYVQGPs6A666kGafHSJA+zB
-v5U44i11KgCOTEbFK7FGwcPNNY/zVhT+FozdM+1DASvgGRKpCeZUGb/IW1IzHy7f
-VUm2yvO6TVYBD2j+fnKJSK2pyRJ/eI62QIYAnVXr0QHySliSKFXJozpJJaUjfUaH
-2NVjRNnn8ngaAKKz6u+LaEkzgmRi2A==
-=/1FC
------END PGP SIGNATURE-----
-
---pg1YqT2fV9QTsCXN--
