@@ -2,124 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B540D6B31D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E2A6B31F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjCIXBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 18:01:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
+        id S230265AbjCIXKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 18:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbjCIXBo (ORCPT
+        with ESMTP id S229893AbjCIXKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 18:01:44 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79286E3880
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 15:01:41 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PXl6q3NsJz4xD5;
-        Fri, 10 Mar 2023 10:01:39 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1678402899;
-        bh=BWSn0lLbqlLFTN2KrlWGAvIfOF/lG9xhXJ2PJ5SfzFc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=gNMhkjOP+ETg7IZNFsVHqUxECrDXTSgVlwo20E9+dCd+JmK1tQd7yKE3V6vpP/Sbp
-         XHePmFPBNHK9ki+nDOVGrdP7RP+eUnwOKDGMvB/9E7GOwRVTml+2RGI7BZfOlZSLVS
-         maX7iIUQv+9K+7RL71Tjg3DdYWHK+Ywl+9Td+8g9AkwCqHpGuUh13Rb1AOuvMq+6tX
-         LTjUG/YG6TrYHQxiiPOOjt6wghYV8qhfpC31LOn1xyg5JeDVbWLp9/Fr/lZZrGhD3r
-         3LE1/Pp4gZavklbthU8XuRh7dlU304ovNPh6f/sdqlcgfwiVS01Sdod8gN2iPxOI1R
-         DQTpHu2akFDcw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Roger Pau =?utf-8?Q?Monn=C3=A9?= <roger.pau@citrix.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Juergen Gross <jgross@suse.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2] hvc/xen: prevent concurrent accesses to the shared ring
-In-Reply-To: <ZAm8BDGTMaI0XmMI@Air-de-Roger>
-References: <20221130150919.13935-1-roger.pau@citrix.com>
- <alpine.DEB.2.22.394.2211301657200.4039@ubuntu-linux-20-04-desktop>
- <Y4nkFZal7oy+aICa@Air-de-Roger> <Y5cgYLNwtPbmP1JL@Air-de-Roger>
- <ZAm8BDGTMaI0XmMI@Air-de-Roger>
-Date:   Fri, 10 Mar 2023 10:01:39 +1100
-Message-ID: <87zg8lo7fw.fsf@mpe.ellerman.id.au>
+        Thu, 9 Mar 2023 18:10:14 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AB9F865A;
+        Thu,  9 Mar 2023 15:10:12 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 7DF6120364;
+        Thu,  9 Mar 2023 23:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1678403411; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=sWlU1jc6NW8wx2v5EprRzI5q1Vm8+Yyru19cRQx8k4g=;
+        b=WkgUUBP5VDiERQkK9LB6j7lwjOsHw5Oz8wUoU77H4ECEUBJNeWdLSk47yYV4Kl88ozxeFF
+        3kImExKJo1vzMNaD75z+1mE8ttexN0CuwQtfVZRUGwqqEQic5neNnxM8Z0PsFPd7LI4YLN
+        7lYtPrILws9aC4Op41cHYem8z70Vvtg=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 6BFED2C141;
+        Thu,  9 Mar 2023 23:10:11 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 6E257DA7A3; Fri, 10 Mar 2023 00:04:08 +0100 (CET)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 6.3-rc2
+Date:   Fri, 10 Mar 2023 00:04:07 +0100
+Message-Id: <cover.1678398321.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Roger Pau Monn=C3=A9 <roger.pau@citrix.com> writes:
-> On Mon, Dec 12, 2022 at 01:36:48PM +0100, Roger Pau Monn=C3=A9 wrote:
->> On Fri, Dec 02, 2022 at 12:40:05PM +0100, Roger Pau Monn=C3=A9 wrote:
->> > On Wed, Nov 30, 2022 at 05:08:06PM -0800, Stefano Stabellini wrote:
->> > > On Wed, 30 Nov 2022, Roger Pau Monne wrote:
->> > > > The hvc machinery registers both a console and a tty device based =
-on
->> > > > the hv ops provided by the specific implementation.  Those two
->> > > > interfaces however have different locks, and there's no single loc=
-ks
->> > > > that's shared between the tty and the console implementations, hen=
-ce
->> > > > the driver needs to protect itself against concurrent accesses.
->> > > > Otherwise concurrent calls using the split interfaces are likely to
->> > > > corrupt the ring indexes, leaving the console unusable.
->> > > >
->> > > > Introduce a lock to xencons_info to serialize accesses to the shar=
-ed
->> > > > ring.  This is only required when using the shared memory console,
->> > > > concurrent accesses to the hypercall based console implementation =
-are
->> > > > not an issue.
->> > > >
->> > > > Note the conditional logic in domU_read_console() is slightly modi=
-fied
->> > > > so the notify_daemon() call can be done outside of the locked regi=
-on:
->> > > > it's an hypercall and there's no need for it to be done with the l=
-ock
->> > > > held.
->> > >
->> > > For domU_read_console: I don't mean to block this patch but we need =
-to
->> > > be sure about the semantics of hv_ops.get_chars. Either it is expect=
-ed
->> > > to be already locked, then we definitely shouldn't add another lock =
-to
->> > > domU_read_console. Or it is not expected to be already locked, then =
-we
->> > > should add the lock.
->> > >
->> > > My impression is that it is expected to be already locked, but I thi=
-nk
->> > > we need Greg or Jiri to confirm one way or the other.
->> >
->> > Let me move both to the 'To:' field then.
->> >
->> > My main concern is the usage of hv_ops.get_chars hook in
->> > hvc_poll_get_char(), as it's not obvious to me that callers of
->> > tty->poll_get_char hook as returned by tty_find_polling_driver() will
->> > always do so with the tty lock held (in fact the only user right now
->> > doesn't seem to hold the tty lock).
->> >
->> > > Aside from that the rest looks fine.
->
-> I guess I could reluctantly remove the lock in the get_chars hook,
-> albeit I'm not convinced at all the lock is not needed there.
+Hi,
 
-I don't know the xen driver, but other HVC backends have a lock around
-their private state in their get_chars() implementations.
+first batch of fixes. Among them there are two updates to sysfs and
+ioctl which are not strictly fixes but are used for testing so there's
+no reason to delay them.
 
-See eg. hvterm_raw_get_chars().
+Please pull, thanks.
 
-cheers
+* fix block group item corruption after inserting new block group
+
+* fix extent map logging bit not cleared for split maps after dropping
+  range
+
+* fix calculation of unusable block group space reporting bogus values
+  due to 32/64b division
+
+* fix unnecessary increment of read error stat on write error
+
+* improve error handling in inode update
+
+* export per-device fsid in DEV_INFO ioctl to distinguish seeding
+  devices, needed for testing
+
+* allocator size classes
+  * fix potential dead lock in size class loading logic
+  * print sysfs stats for the allocation classes
+
+----------------------------------------------------------------
+The following changes since commit 964a54e5e1a0d70cd80bd5a0885a1938463625b1:
+
+  btrfs: make kobj_type structures constant (2023-02-15 19:38:55 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.3-rc1-tag
+
+for you to fetch changes up to 675dfe1223a69e270b3d52cb0211c8a501455cec:
+
+  btrfs: fix block group item corruption after inserting new block group (2023-03-08 01:14:01 +0100)
+
+----------------------------------------------------------------
+Boris Burkov (2):
+      btrfs: sysfs: add size class stats
+      btrfs: fix potential dead lock in size class loading logic
+
+Filipe Manana (2):
+      btrfs: fix extent map logging bit not cleared for split maps after dropping range
+      btrfs: fix block group item corruption after inserting new block group
+
+Johannes Thumshirn (1):
+      btrfs: fix percent calculation for bg reclaim message
+
+Naohiro Aota (1):
+      btrfs: fix unnecessary increment of read error stat on write error
+
+Qu Wenruo (1):
+      btrfs: ioctl: return device fsid from DEV_INFO ioctl
+
+void0red (1):
+      btrfs: handle btrfs_del_item errors in __btrfs_update_delayed_inode
+
+ fs/btrfs/bio.c             |  2 +-
+ fs/btrfs/block-group.c     | 58 ++++++++++++++++++++++++----------------------
+ fs/btrfs/delayed-inode.c   |  2 +-
+ fs/btrfs/extent_map.c      |  7 +++++-
+ fs/btrfs/ioctl.c           |  1 +
+ fs/btrfs/sysfs.c           | 42 +++++++++++++++++++++++++++++++++
+ include/uapi/linux/btrfs.h | 12 +++++++++-
+ 7 files changed, 92 insertions(+), 32 deletions(-)
