@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BADA26B25DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 942486B25DD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjCINua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:50:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S231481AbjCINvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:51:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbjCINtp (ORCPT
+        with ESMTP id S231467AbjCINvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:49:45 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01699DF739;
-        Thu,  9 Mar 2023 05:48:59 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id i20so1865254lja.11;
-        Thu, 09 Mar 2023 05:48:59 -0800 (PST)
+        Thu, 9 Mar 2023 08:51:08 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69EDDB6F7;
+        Thu,  9 Mar 2023 05:49:47 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id a32so1874099ljr.9;
+        Thu, 09 Mar 2023 05:49:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678369738;
+        d=gmail.com; s=20210112; t=1678369781;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3FudcHKQ9C/ngiFd0m6bXjPnSdZmZHDOaPcXEf1NoUY=;
-        b=QH1E80R931to/itzqCLl/92TGvWsT34/Xg1+SIoWE5K4mZMKhmrrZraQO9xOled4P/
-         cgTz6Yq7biSlbv1GgFP7UbzpUKodz6us+pOLxDwJpdn4YbnKzPvi6HK7JzlFiqD5SQM7
-         0GdmsvKVDLfiE4xbqs8S4zVo9SqH/j4MXFJr9YxTKifH1ZL5Nn1q2ysaJ7cWJ5KBOBbg
-         3gYTSs8rxRfTpPQDl+eHwnTViNaEm76g7ZTP8VwBOzaM+z0U/6TEdWK2A3b+lT3CHRMP
-         ZrhJlP0Co6nVoukUyE+2Aqi1d7f64T678ft8oqnWsofJECY3TkVW30s38cN1zf2dpvJY
-         VskQ==
+        bh=H87ub/+VWwfxayqJFMh8X8yTlGNaMEeVvnZCDbCbXiw=;
+        b=NN2C2tku3JvppywjX9WmE6WVvUuXbUlokf2RhduAJb2lCIz/HeoTNQbVq3rt2vuepC
+         RqZISBn5quAlZFl3apUWJ7fs8ZynyD+QsLgZa+/dJK7aJQC3D9wUgQrzwH+LzQpSWQ4z
+         qjiAK8ZR38qz0lx+XI+krMGuuuZY8GsI7k/yZCKDygXolUT3ENBgxYW57SmVx+LJ/cUo
+         A0k0Cc8/j6vqPx8MdYAlcrpOEJx1VgcdC/4txP8pDteHIstdw+WauT2EghX/HHe/xejk
+         q+zKyxYJ3RraGQvoBzaHG7DLDBQQyeFHmRIhVMbwNuRWLX+w7mS0+LJsakUHZCWz3NCA
+         qgkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678369738;
+        d=1e100.net; s=20210112; t=1678369781;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3FudcHKQ9C/ngiFd0m6bXjPnSdZmZHDOaPcXEf1NoUY=;
-        b=8HtFU5lf19PI50s52tHaizIXNB7wMNoPCTLcArh/xzaIu6XzPg4eDrLChSD2nhiZvf
-         maWMcAgruACs1/AzhJzGReXpbabTdasUbX7xNX0DrXlW7IEQVCStIfIUmV5lt7Tkf0o9
-         xF+kguBOaTUngFT4v4O0e0i6QN2cwGhvXNki2DPqRohDJv+q1xrOhwXKPnutqnyGGJd+
-         FfnQAHu3PGwbuEpn/3yDO/8QNXSXBKQ74lCn2sVc/5SSmkrl9CIcHZ5kDiTlwUL8mjZW
-         R71Yfk2rrurgO6ThlA4UyOCGTysH4bn5A2cK6a+Nb+LWuEmyJNDNEeS8beKndZzAQSn3
-         w/BQ==
-X-Gm-Message-State: AO0yUKWyiQlktYXx2EWd/JGNJx3fsehi/xOGQJ00e1r1THYRs59vgkCB
-        Ast9vWQkcEz1t7F2I3hb8kI=
-X-Google-Smtp-Source: AK7set+3y+9sIZ9bwERBoAgL/96ayOf2fLhRTH7d36V/q64JwvSZt5/eUSvcDDvcetwLKaCeYI3WGA==
-X-Received: by 2002:a2e:2ac3:0:b0:294:697a:d6af with SMTP id q186-20020a2e2ac3000000b00294697ad6afmr6295232ljq.39.1678369738066;
-        Thu, 09 Mar 2023 05:48:58 -0800 (PST)
+        bh=H87ub/+VWwfxayqJFMh8X8yTlGNaMEeVvnZCDbCbXiw=;
+        b=6PP67gcxK+Iw9BW6wf+I7nWg3EtOp3BVJSL/mNXNJr35XZ4YBUCbiYU0+ww5LU8W7b
+         Z52g0Dswxx25vs8sP82sL6hjmVBO3kqQpE2VwbI4qSaM3B0q2U+QmcIcIyYE15LiPyHf
+         MXTFAWRSyjqaBtQOFbjapgpsKjel4fRADWyUfqTIn/SGKPWAzk/3WAHbAlCOCRG+VAyc
+         3Eq1MymJH8Fv1JpNqBBKSkgpCnOJ3/Dg+9vKqXW8b6upNU3tMUMlSTuBpxZASZUQ4/Es
+         /km1hPUMI1K+KVwc1hPiTyNM1w71lg2EvTwcN+rnW6jLY4b+LgInU9t4xGdet8cwXnyC
+         WtZg==
+X-Gm-Message-State: AO0yUKUBXl+NVBF3el/qPzfhSvQ/npFwvqnu5+cRM9iVb34rNZflzatu
+        JKIZpP0rTzdgN8HcbCRMXBU=
+X-Google-Smtp-Source: AK7set9FKg99NdgLRDemEXBeo3W7bnPXBocthd8sCaFpFTXSlCjvgVntnioj3X4ua8yiFwHB4/GCCg==
+X-Received: by 2002:a05:651c:211:b0:295:c51e:18ab with SMTP id y17-20020a05651c021100b00295c51e18abmr6482122ljn.37.1678369781113;
+        Thu, 09 Mar 2023 05:49:41 -0800 (PST)
 Received: from pc636 (host-95-193-108-241.mobileonline.telia.com. [95.193.108.241])
-        by smtp.gmail.com with ESMTPSA id f9-20020ac24e49000000b004db48ae69cbsm2641622lfr.206.2023.03.09.05.48.56
+        by smtp.gmail.com with ESMTPSA id f6-20020a2ea0c6000000b002959d2cc975sm2959141ljm.37.2023.03.09.05.49.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 05:48:57 -0800 (PST)
+        Thu, 09 Mar 2023 05:49:40 -0800 (PST)
 From:   Uladzislau Rezki <urezki@gmail.com>
 X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Thu, 9 Mar 2023 14:48:54 +0100
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Date:   Thu, 9 Mar 2023 14:49:38 +0100
+To:     Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>
 Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
@@ -67,7 +68,7 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
         "David S . Miller" <davem@davemloft.net>
 Subject: Re: [PATCH 06/13] net/sysctl: Rename kvfree_rcu() to
  kvfree_rcu_mightsleep()
-Message-ID: <ZAnjxuXPR6j14W8u@pc636>
+Message-ID: <ZAnj8o38Pjjwez9j@pc636>
 References: <20230201150815.409582-1-urezki@gmail.com>
  <20230201150815.409582-7-urezki@gmail.com>
 MIME-Version: 1.0
@@ -84,7 +85,6 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 04:08:12PM +0100, Uladzislau Rezki (Sony) wrote:
 > The kvfree_rcu()'s single argument name is deprecated therefore
 > rename it to kvfree_rcu_mightsleep() variant. The goal is explicitly
 > underline that it is for sleepable contexts.
