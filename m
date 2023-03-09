@@ -2,106 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B886B2F8B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8726B2F9F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:32:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbjCIVaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 16:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
+        id S231461AbjCIVcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 16:32:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbjCIV36 (ORCPT
+        with ESMTP id S231424AbjCIVcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 16:29:58 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2061.outbound.protection.outlook.com [40.107.92.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F454E3491
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 13:29:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YwC1bM2ICr2DXScuJKZ1RveLlZDQHGEOq+5e2Bc4iQXgitI9AVlpopJECiyrlVZAB6qTg7ZNJjqx6RNhy4lD28vW9se8r5/UQLl05ydvCyaswys9WcgKUc+XmOuFbrFcimdI9IQ4X+MX1Zu2FlMzZ7sfEz0BEIDoGYGj4vLxo3ZeJuGrikAgHUtLp5ORmJC5RxpLP7gDz82/hufAF7mk+mDFLcSfF8SZZyyKDsCCnMg7rR7fkxx2324jWwJzdpL/R/tnR1ejA59y/Jr56voqAmRcL63KXPH3Dh+c4rInBjAuzhlSaoTr691gnIhF5UcjZ669hkkCmJByk886x3k4tg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5+YA4NjhSP3EDqRuFPt4c+rAlvXC1z+sChnRzk1C8uA=;
- b=UrfBBZnXQzgNoAFCFB6Gg0DjchvWJLP52XbXHRJJtRW0yNdKzDBEbAdJuThrPmw5sgReDde7qon5vqkneUci5WSaKGXzcQjinciScfoDmSDPqO6+oEkETcvLjYYaqhDX8Hrb7HI7GL8UBdHn57N1XQC6YQAdWmN/QtJjv4wxqdYriUIc8uHwI+2WYYrtFU983cbWJmujuwDt6FlmoLmE+80aQjpsmeMDUCPGt4LWvGEDEyak/YPA6uswO1seB9rd5TK9fjJ5mATooSKf9QtuNFvpbz8kulCQ9JAIF7alBaG0da9Dsu5FXIaaaPYVQuI9WP1hueUsb9Bx7E2l/whtKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5+YA4NjhSP3EDqRuFPt4c+rAlvXC1z+sChnRzk1C8uA=;
- b=RA8H+dgRBFyyIUwft8FQfyb0ZYeDh/dx2ky60svDzkuYAzajjFDPvfmuYiNywatDhmi48P8WbAVJ+CakLUXhDhEjzaHZwtVoAloJFp8bRJaqsnx8tXXeJEZZ26ptimaVzzTh1B25jLnu0F62EZvOKrVgghriwTU+GzFuQHScfRU=
-Received: from BN9P221CA0007.NAMP221.PROD.OUTLOOK.COM (2603:10b6:408:10a::26)
- by MW4PR12MB7431.namprd12.prod.outlook.com (2603:10b6:303:225::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Thu, 9 Mar
- 2023 21:29:53 +0000
-Received: from BN8NAM11FT032.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10a:cafe::24) by BN9P221CA0007.outlook.office365.com
- (2603:10b6:408:10a::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19 via Frontend
- Transport; Thu, 9 Mar 2023 21:29:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT032.mail.protection.outlook.com (10.13.177.88) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6178.19 via Frontend Transport; Thu, 9 Mar 2023 21:29:53 +0000
-Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 9 Mar
- 2023 15:29:51 -0600
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Wayne Lin <Wayne.Lin@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Ian Chen <ian.chen@amd.com>,
-        Sung Joon Kim <sungjoon.kim@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/amd/display: use a more accurate check in dm_helpers_dp_read_dpcd()
-Date:   Thu, 9 Mar 2023 16:30:27 -0500
-Message-ID: <20230309213027.256243-1-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.39.2
+        Thu, 9 Mar 2023 16:32:03 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713DBFAD75;
+        Thu,  9 Mar 2023 13:31:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678397509; x=1709933509;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xqEU/xpQmG3XBT8UvsTkfueNh2v0rzg7v9y9ON6CO28=;
+  b=jyLZCX8jxmOVukunuLTOfqfmVOEtoKMHqi3kavhAd8cn0RbFSZH0a0cu
+   fOC2cZZUwFk2O51B9Li/zjBQHgXEKnfXwBCN7YfkHZtlWH7490dpCDJUM
+   YyIuRFkYpgMf4mJc8o7mzdIb0TzW4uYtBoj3IsZso1BcivMO99F+07RLm
+   QVv26/4AETkBPHif24OeYx9qFaFsZAkB8zEGgIlhc2ll1fQl30ONnrjHA
+   09LCtM0uiKQWG9K7NVzvA1psAyGN3KTQJYMJjAN5yZU4EBlCSeCFb5D7Z
+   URk9iXjjk2LJj1dOypm5d6Ub4QCLVzqoDdyZWxq0ly28PURJWn8nV6cto
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="324924278"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="324924278"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 13:31:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="746474015"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="746474015"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 09 Mar 2023 13:31:41 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1paNrQ-0003ER-0D;
+        Thu, 09 Mar 2023 21:31:40 +0000
+Date:   Fri, 10 Mar 2023 05:31:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tony Lindgren <tony@atomide.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v6 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <202303100516.22vtkWv4-lkp@intel.com>
+References: <20230309085713.57700-1-tony@atomide.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT032:EE_|MW4PR12MB7431:EE_
-X-MS-Office365-Filtering-Correlation-Id: fb56bde7-5c1d-48bc-524d-08db20e56bcf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bKLD+DUrDEMEAKn4YlwHW/FEIsOxEfHJafvFW+ka6yeaEZ6WtRNcHK7iwF/9qzcU47/w0+THjff29qQVu6Qo7bHJRNBlmdS/5rYuqwvZVZ07Bp/ZRPs93d9ZZfxcvaeFLCY+8fucSE6VY8FpuvYTI6mW0RzAC0H5i8ptozGvFV26T1JxYix7/xPmr+MaKUGZME+5oWLj1IgghMLUyYHv/XMt9rIUGmC1ylnTJvqW1o1HujPYWZ+nr9NW8RBpWYUzfSlZGwnMnGrcTkr/Kp+DXdR+6GUcl23ymI0qc9UyQUR4KMdHvQ332UG6eh7RfryEcMOZzg3Be4R1LwVhiIFvQu5jsfDswtjaUPkM1Alsp2GhGYPThy/ohhKGhSh31NzZTJ0eQWw6PJVfelJMqZHCTO26kRfwPmAGi/EBTqpNCYEvoOcyjGiweE9cwZ5s6QjCgDTZbcM1JoN1QZ2tbItPYJwZCBTZZh+yit5ME0V8muzxtEcdxwK3NHk3BcvO3P0eaZ7ceyorPWpjEwAHhAuRej08gQgqULZEPWw4xifJX2QpspGGaLAUMNQSR3CqKAecANcX/vfqA0ylw2tg3pVZrYg4Mot+dn0vwKmOlt4zcV1vo1luZoE1XpUa+X8efG71ba1C2hY9MVVtEsJij9/WyRW/8V8PuvHbxmW+VC7GA5+kTe0XiL5Iw+WI3ruZ3UGK5oSw59J3+B0mJCpxUungeX2jyrVOSFwzcyYIcBR2e6j+t6aHLJE1dJ78hKWva3kkK81mWLUX9Q1NOvEU5fIqeg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199018)(40470700004)(36840700001)(46966006)(82310400005)(36860700001)(83380400001)(82740400003)(426003)(47076005)(36756003)(54906003)(478600001)(316002)(356005)(2616005)(40480700001)(40460700003)(16526019)(26005)(6666004)(336012)(81166007)(186003)(1076003)(5660300002)(44832011)(2906002)(70586007)(8936002)(41300700001)(70206006)(4326008)(6916009)(86362001)(8676002)(16060500005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 21:29:53.0937
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb56bde7-5c1d-48bc-524d-08db20e56bcf
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT032.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7431
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309085713.57700-1-tony@atomide.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,32 +76,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We should be checking if drm_dp_dpcd_read() returns the size that we are
-asking it to read instead of just checking if it is greater than zero.
-Also, we should WARN_ON() here since this condition is only ever met, if
-there is an issue worth investigating. So, compare the return value of
-drm_dp_dpcd_read() to size and WARN_ON() if they aren't equal.
+Hi Tony,
 
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I love your patch! Perhaps something to improve:
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-index 8d598b322e5b..ed2ed7b1d869 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-@@ -511,8 +511,8 @@ bool dm_helpers_dp_read_dpcd(
- 		return false;
- 	}
- 
--	return drm_dp_dpcd_read(&aconnector->dm_dp_aux.aux, address,
--			data, size) > 0;
-+	return !WARN_ON(drm_dp_dpcd_read(&aconnector->dm_dp_aux.aux, address,
-+					 data, size) != size);
- }
- 
- bool dm_helpers_dp_write_dpcd(
+[auto build test WARNING on tty/tty-testing]
+[also build test WARNING on tty/tty-next tty/tty-linus rafael-pm/linux-next usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.3-rc1 next-20230309]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tony-Lindgren/serial-core-Start-managing-serial-controllers-to-enable-runtime-PM/20230309-170149
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+patch link:    https://lore.kernel.org/r/20230309085713.57700-1-tony%40atomide.com
+patch subject: [PATCH v6 1/1] serial: core: Start managing serial controllers to enable runtime PM
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20230310/202303100516.22vtkWv4-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/08f76f28e32bcd3c093e4af349b0e1b60328395e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tony-Lindgren/serial-core-Start-managing-serial-controllers-to-enable-runtime-PM/20230309-170149
+        git checkout 08f76f28e32bcd3c093e4af349b0e1b60328395e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/tty/serial/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303100516.22vtkWv4-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/device.h:25,
+                    from include/linux/pm_runtime.h:11,
+                    from drivers/tty/serial/serial_ctrl.c:12:
+>> drivers/tty/serial/serial_ctrl.c:17:34: warning: 'serial_ctrl_pm' defined but not used [-Wunused-const-variable=]
+      17 | static DEFINE_RUNTIME_DEV_PM_OPS(serial_ctrl_pm, NULL, NULL, NULL);
+         |                                  ^~~~~~~~~~~~~~
+   include/linux/pm.h:372:25: note: in definition of macro '_DEFINE_DEV_PM_OPS'
+     372 | const struct dev_pm_ops name = { \
+         |                         ^~~~
+   drivers/tty/serial/serial_ctrl.c:17:8: note: in expansion of macro 'DEFINE_RUNTIME_DEV_PM_OPS'
+      17 | static DEFINE_RUNTIME_DEV_PM_OPS(serial_ctrl_pm, NULL, NULL, NULL);
+         |        ^~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/serial_ctrl_pm +17 drivers/tty/serial/serial_ctrl.c
+
+     2	
+     3	/*
+     4	 * Serial core controller driver
+     5	 *
+     6	 * This driver manages the serial core controller struct device instances.
+     7	 * The serial core controller devices are children of the physical serial
+     8	 * port device.
+     9	 */
+    10	
+    11	#include <linux/module.h>
+  > 12	#include <linux/pm_runtime.h>
+    13	#include <linux/serial_core.h>
+    14	
+    15	#include "serial_base.h"
+    16	
+  > 17	static DEFINE_RUNTIME_DEV_PM_OPS(serial_ctrl_pm, NULL, NULL, NULL);
+    18	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
