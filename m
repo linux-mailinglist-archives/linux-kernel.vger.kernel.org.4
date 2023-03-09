@@ -2,152 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244F06B1C95
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1346B1C9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjCIHpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 02:45:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
+        id S230129AbjCIHqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 02:46:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjCIHpd (ORCPT
+        with ESMTP id S229885AbjCIHp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 02:45:33 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840F0D23BF;
-        Wed,  8 Mar 2023 23:45:31 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PXLnd6LTTz4f41SK;
-        Thu,  9 Mar 2023 15:45:25 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgBH9CGVjglkITJqEg--.53163S3;
-        Thu, 09 Mar 2023 15:45:27 +0800 (CST)
-Subject: Re: [PATCH -next] raid10: fix leak of io accounting
-To:     Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230304070133.1134975-1-yukuai1@huaweicloud.com>
- <a2551c50-feea-bcbe-00ed-802456b5a19f@linux.dev>
- <76d32496-641e-c93a-df77-9ce9d9c1a1e1@huaweicloud.com>
- <fbbb46dc-ac07-9a99-dece-f0077a9fd491@linux.dev>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <66e481e6-ed2c-2ac2-bdd0-9e20a0ec9771@huaweicloud.com>
-Date:   Thu, 9 Mar 2023 15:45:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 9 Mar 2023 02:45:57 -0500
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B12D309B
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 23:45:50 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:614d:21b0:703:d0f9])
+        by laurent.telenet-ops.be with bizsmtp
+        id W7ln2900G3mNwr4017lnNV; Thu, 09 Mar 2023 08:45:48 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1paAxd-00BJiF-3S;
+        Thu, 09 Mar 2023 08:45:47 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1paAyB-00Fxln-Kt;
+        Thu, 09 Mar 2023 08:45:47 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] i2c: dev: Fix bus callback return values
+Date:   Thu,  9 Mar 2023 08:45:46 +0100
+Message-Id: <03a8cd13af352c4d990bc70b72df4915b9fa2874.1678347776.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <fbbb46dc-ac07-9a99-dece-f0077a9fd491@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgBH9CGVjglkITJqEg--.53163S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw1UArWrtr4DAr4Dtr4DCFg_yoW5Jw1kpw
-        4kJa90yrW5Jry8ur1Ut34UAasYywsrt3W7ZryrJ3WrXrnFvr9YqF1UXFZ09rn5XrZ3WF1j
-        qF1Ygr9rursFyFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
-        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
-        DUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The i2cdev_{at,de}tach_adapter() callbacks are used for two purposes:
+  1. As notifier callbacks, when (un)registering I2C adapters created or
+     destroyed after i2c_dev_init(),
+  2. As bus iterator callbacks, for registering already existing
+     adapters from i2c_dev_init(), and for cleanup.
 
-在 2023/03/09 15:27, Guoqing Jiang 写道:
-> 
-> 
-> On 3/9/23 14:56, Yu Kuai wrote:
->> Hi,
->>
->> 在 2023/03/09 14:36, Guoqing Jiang 写道:
->>> Hi,
->>>
->>> What do you mean 'leak' here?
->>
->> I try to mean that inflight counting is leaked, because it's increased
->> twice for one io.
-> 
-> How about change the subject to something like?
-> 
-> 'md/raid10: Don't call bio_start_io_acct twice for bio which experienced 
-> read error'
-> 
-Of course, I'll change that in v2.
+Unfortunately both use cases expect different return values: the former
+expects NOTIFY_* return codes, while the latter expects zero or error
+codes, and aborts in case of error.
 
->>
->>>
->>> On 3/4/23 15:01, Yu Kuai wrote:
->>>> From: Yu Kuai <yukuai3@huawei.com>
->>>>
->>>> handle_read_error() will resumit r10_bio by raid10_read_request(), 
->>>> which
->>>> will call bio_start_io_acct() again, while bio_end_io_acct() will only
->>>> be called once.
->>>>
->>>> Fix the problem by don't account io again from handle_read_error().
->>>
->>> My understanding is it caused inaccurate io stats for bio which had a 
->>> read
->>> error.
->>>
->>>> Fixes: 528bc2cf2fcc ("md/raid10: enable io accounting")
->>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->>>> ---
->>>>   drivers/md/raid10.c | 8 ++++----
->>>>   1 file changed, 4 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
->>>> index 6c66357f92f5..4f8edb6ea3e2 100644
->>>> --- a/drivers/md/raid10.c
->>>> +++ b/drivers/md/raid10.c
->>>> @@ -1173,7 +1173,7 @@ static bool regular_request_wait(struct mddev 
->>>> *mddev, struct r10conf *conf,
->>>>   }
->>>>   static void raid10_read_request(struct mddev *mddev, struct bio *bio,
->>>> -                struct r10bio *r10_bio)
->>>> +                struct r10bio *r10_bio, bool handle_error)
->>>>   {
->>>>       struct r10conf *conf = mddev->private;
->>>>       struct bio *read_bio;
->>>> @@ -1244,7 +1244,7 @@ static void raid10_read_request(struct mddev 
->>>> *mddev, struct bio *bio,
->>>>       }
->>>>       slot = r10_bio->read_slot;
->>>> -    if (blk_queue_io_stat(bio->bi_bdev->bd_disk->queue))
->>>> +    if (!handle_error && 
->>>> blk_queue_io_stat(bio->bi_bdev->bd_disk->queue))
->>>>           r10_bio->start_time = bio_start_io_acct(bio);
->>>
->>> I think a simpler way is just check R10BIO_ReadError here.
->>
->> No, I'm afraid this is incorrect because handle_read_error clears the
->> state before resubmiting the r10bio.
-> 
-> Right,
-> 
-> Acked-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+Hence in case 2, as soon as i2cdev_{at,de}tach_adapter() returns
+(non-zero) NOTIFY_OK, the bus iterator aborts.  This causes (a) only the
+first already existing adapter to be registered, leading to missing
+/dev/i2c-* entries, and (b) a failure to unregister all but the first
+I2C adapter during cleanup.
 
-Thanks for the review.
-Kuai
-> 
-> Thanks,
-> Guoqing
-> .
-> 
+Fix this by introducing separate callbacks for the bus iterator,
+wrapping the notifier functions, and always returning succes.
+Any errors inside these callback functions are unlikely to happen, and
+are fatal anyway.
+
+Fixes: cddf70d0bce71c2a ("i2c: dev: fix notifier return values")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+Seen on r8a7740/armadillo and r8a73a4/ape6evm, where the i2c-shmobile
+adapters are probed before i2c_dev_init().
+Not seen on r8a779g0/white-hawk, where all I2C adapters are probed after
+i2c_dev_init().
+
+ drivers/i2c/i2c-dev.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+index 107623c4cc14aaf9..95a0b63ac560cf33 100644
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -646,7 +646,7 @@ static void i2cdev_dev_release(struct device *dev)
+ 	kfree(i2c_dev);
+ }
+ 
+-static int i2cdev_attach_adapter(struct device *dev, void *dummy)
++static int i2cdev_attach_adapter(struct device *dev)
+ {
+ 	struct i2c_adapter *adap;
+ 	struct i2c_dev *i2c_dev;
+@@ -685,7 +685,7 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
+ 	return NOTIFY_DONE;
+ }
+ 
+-static int i2cdev_detach_adapter(struct device *dev, void *dummy)
++static int i2cdev_detach_adapter(struct device *dev)
+ {
+ 	struct i2c_adapter *adap;
+ 	struct i2c_dev *i2c_dev;
+@@ -711,9 +711,9 @@ static int i2cdev_notifier_call(struct notifier_block *nb, unsigned long action,
+ 
+ 	switch (action) {
+ 	case BUS_NOTIFY_ADD_DEVICE:
+-		return i2cdev_attach_adapter(dev, NULL);
++		return i2cdev_attach_adapter(dev);
+ 	case BUS_NOTIFY_DEL_DEVICE:
+-		return i2cdev_detach_adapter(dev, NULL);
++		return i2cdev_detach_adapter(dev);
+ 	}
+ 
+ 	return NOTIFY_DONE;
+@@ -725,6 +725,18 @@ static struct notifier_block i2cdev_notifier = {
+ 
+ /* ------------------------------------------------------------------------- */
+ 
++static int __init i2c_dev_attach_adapter(struct device *dev, void *dummy)
++{
++	i2cdev_attach_adapter(dev);
++	return 0;
++}
++
++static int __exit i2c_dev_detach_adapter(struct device *dev, void *dummy)
++{
++	i2cdev_detach_adapter(dev);
++	return 0;
++}
++
+ /*
+  * module load/unload record keeping
+  */
+@@ -752,7 +764,7 @@ static int __init i2c_dev_init(void)
+ 		goto out_unreg_class;
+ 
+ 	/* Bind to already existing adapters right away */
+-	i2c_for_each_dev(NULL, i2cdev_attach_adapter);
++	i2c_for_each_dev(NULL, i2c_dev_attach_adapter);
+ 
+ 	return 0;
+ 
+@@ -768,7 +780,7 @@ static int __init i2c_dev_init(void)
+ static void __exit i2c_dev_exit(void)
+ {
+ 	bus_unregister_notifier(&i2c_bus_type, &i2cdev_notifier);
+-	i2c_for_each_dev(NULL, i2cdev_detach_adapter);
++	i2c_for_each_dev(NULL, i2c_dev_detach_adapter);
+ 	class_destroy(i2c_dev_class);
+ 	unregister_chrdev_region(MKDEV(I2C_MAJOR, 0), I2C_MINORS);
+ }
+-- 
+2.34.1
 
