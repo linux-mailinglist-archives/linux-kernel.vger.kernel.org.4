@@ -2,113 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A49546B1A40
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 05:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD136B1A46
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 05:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjCIEAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 23:00:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
+        id S229955AbjCIEES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 23:04:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjCIEAG (ORCPT
+        with ESMTP id S229708AbjCIEEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 23:00:06 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0970F67031;
-        Wed,  8 Mar 2023 20:00:04 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so4694701pjg.4;
-        Wed, 08 Mar 2023 20:00:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678334403;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IO2HukOAG93wp8Ck/l5gtQzjgmqxHWZs4HqHAokMTKA=;
-        b=XrVkrppvNGPofaZJVDKW+UcWN4PGB7IFH9Mt8St75HAlYwY4J8HPbWp4qtLToingyL
-         3HPKVVKermidtivDYR64f+PZHBjiIgSvauctV/e56dP9sKoYBKKy+2I7vHTPo/GtNevA
-         FVn3DifuijKV5IxvCEmGTNKWMoHb6AErvEbs8//SF0UEYwGsmMG2SPUhGhPbW1bnsNgz
-         LKNPbTg2d9ieDJX7C914HxNbXHRHqurkcjypwU4B4/MPGBbyxbna5RbiLzw0h5lSAto+
-         iIPLVGLBDNHLcD1NuIhbkulaWqtCYQMjQj+cT7wYKhaBCXJw7hR2HoUyPQFcpz/LwDYz
-         hQMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678334403;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IO2HukOAG93wp8Ck/l5gtQzjgmqxHWZs4HqHAokMTKA=;
-        b=MnW0zTwk2F9d2xv7dFGilxtS4Dgyg4ivhqRg1BrjKmotbUK21J2pmN5VmbqNgg9kdP
-         72ZEmZujOBZRXiadABEb1Y40H6xC+V5c46L1Ib7hA9rmmtc+/Kf7vdEwMfU/eypnsx2r
-         ia/t2+AFD5Nuqycd3G//zRzKYnyWFgmpGj8MyQw7pEYoP6vLtNs7E8ENb4q5yEeNwijr
-         v1yGDO7OUu6SP9Jx8+eeAmN0jeuu5yQe2PW7Oz5aYDhZxIdtDTiI2npmgd8czShozZp5
-         Wj/fOSM7IBiDp5mAMkezEPhvtwzujxndlLIj0GTied2gzNIovp9sMGMV0iBN3/XIjsjz
-         SL0g==
-X-Gm-Message-State: AO0yUKX2L6TzpLUe/5UMkFfPABZaE5tQ11qoX5fVFAtCteJc7Ozy2rtB
-        pJ0mHqhRJEfcEv5Kp6c0utY=
-X-Google-Smtp-Source: AK7set/GXvNVsUXMfn40uSuXeO/48WlgjZkGxN/0XvUoJtna33EVZloRC19GjsBxtbQ5hHDn4//frA==
-X-Received: by 2002:a17:90b:180d:b0:22b:b375:ec3f with SMTP id lw13-20020a17090b180d00b0022bb375ec3fmr21656005pjb.21.1678334403424;
-        Wed, 08 Mar 2023 20:00:03 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-92.three.co.id. [180.214.232.92])
-        by smtp.gmail.com with ESMTPSA id hg23-20020a17090b301700b002371e290565sm515139pjb.12.2023.03.08.20.00.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 20:00:02 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 5DE391065B8; Thu,  9 Mar 2023 10:59:59 +0700 (WIB)
-Date:   Thu, 9 Mar 2023 10:59:59 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/887] 6.1.16-rc2 review
-Message-ID: <ZAlZvzlxbKJogWq7@debian.me>
-References: <20230308091853.132772149@linuxfoundation.org>
+        Wed, 8 Mar 2023 23:04:15 -0500
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED44169CD6
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 20:04:13 -0800 (PST)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 32943g7q028914-32943g7u028914
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 9 Mar 2023 12:03:54 +0800
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH linux-next v2 1/3] platform/x86/intel/tpmi: Fix double free in tpmi_create_device()
+Date:   Thu,  9 Mar 2023 12:01:05 +0800
+Message-Id: <20230309040107.534716-2-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230309040107.534716-1-dzm91@hust.edu.cn>
+References: <20230309040107.534716-1-dzm91@hust.edu.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PSKV5YBeP0Oo/tua"
-Content-Disposition: inline
-In-Reply-To: <20230308091853.132772149@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The previous commit 6a192c0cbf38 ("platform/x86/intel/tpmi: Fix
+double free reported by Smatch") incorrectly handle the deallocation of
+res variable. As shown in the comment, intel_vsec_add_aux handles all
+the deallocation of res and feature_vsec_dev. Therefore, kfree(res) can
+still cause double free if intel_vsec_add_aux returns error.
 
---PSKV5YBeP0Oo/tua
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fix this by adjusting the error handling part in tpmi_create_device,
+following the function intel_vsec_add_dev.
 
-On Wed, Mar 08, 2023 at 10:29:31AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.16 release.
-> There are 887 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+Fixes: 6a192c0cbf38 ("platform/x86/intel/tpmi: Fix double free reported by Smatch")
+Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+ drivers/platform/x86/intel/tpmi.c | 17 ++++-------------
+ 1 file changed, 4 insertions(+), 13 deletions(-)
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+diff --git a/drivers/platform/x86/intel/tpmi.c b/drivers/platform/x86/intel/tpmi.c
+index c999732b0f1e..882fe5e4763f 100644
+--- a/drivers/platform/x86/intel/tpmi.c
++++ b/drivers/platform/x86/intel/tpmi.c
+@@ -215,8 +215,8 @@ static int tpmi_create_device(struct intel_tpmi_info *tpmi_info,
+ 
+ 	feature_vsec_dev = kzalloc(sizeof(*feature_vsec_dev), GFP_KERNEL);
+ 	if (!feature_vsec_dev) {
+-		ret = -ENOMEM;
+-		goto free_res;
++		kfree(res);
++		return -ENOMEM;
+ 	}
+ 
+ 	snprintf(feature_id_name, sizeof(feature_id_name), "tpmi-%s", name);
+@@ -242,17 +242,8 @@ static int tpmi_create_device(struct intel_tpmi_info *tpmi_info,
+ 	 * feature_vsec_dev memory is also freed as part of device
+ 	 * delete.
+ 	 */
+-	ret = intel_vsec_add_aux(vsec_dev->pcidev, &vsec_dev->auxdev.dev,
+-				 feature_vsec_dev, feature_id_name);
+-	if (ret)
+-		goto free_res;
+-
+-	return 0;
+-
+-free_res:
+-	kfree(res);
+-
+-	return ret;
++	return intel_vsec_add_aux(vsec_dev->pcidev, &vsec_dev->auxdev.dev,
++				  feature_vsec_dev, feature_id_name);
+ }
+ 
+ static int tpmi_create_devices(struct intel_tpmi_info *tpmi_info)
+-- 
+2.39.2
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---PSKV5YBeP0Oo/tua
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZAlZuQAKCRD2uYlJVVFO
-o4SjAPwP/J9BipfSry1EAT7kRickV5Q2gbtX4F1PSR0mPORC7gEA/eXdjx2yHGPs
-3aX1XpNOnb8qcepsW8mGOHXAwfgcnQo=
-=eiKx
------END PGP SIGNATURE-----
-
---PSKV5YBeP0Oo/tua--
