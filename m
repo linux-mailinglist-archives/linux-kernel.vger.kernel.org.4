@@ -2,104 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E6A6B2C29
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 18:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A04346B2C2D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 18:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbjCIRii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 12:38:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
+        id S230517AbjCIRiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 12:38:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjCIRif (ORCPT
+        with ESMTP id S230434AbjCIRiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 12:38:35 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676592798E
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 09:38:10 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id ay14so10053627edb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 09:38:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678383489;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FCRUBSFWfUJdlaStN+qT+zl8FTW7qoCRSrif9+SCGaA=;
-        b=k/AtuVoiYZrV7ZU/C7viScRakJKZYrXmaWHi0xJhRwjc/tx9wiSKYhHTnCK+bOQ3vM
-         gBR81ZPTFaNu1sQYYUnLvgvmcr5hnN1tGCnA8pAQfbpTDzT7WfWYTcy2bzeIW1sLObD8
-         gD4o8rQgaxOTHtiEBDBiKDgF3Ihhj6k4NxXU/thIGWwPOKXdflDpd7wIPmIbGosvO7IS
-         T7laQeMqJ0cr9HID1hs+sfP+rk92ADXWrg1kC+s2F6KCuODCG2i9waXHxHmHJCmwrgHH
-         3OxYfrPUrySB9cZEmM8W3TenVx4DqJvnfK2bsmTU4E1HfbFFXCxfREjTxTowU42lva7Y
-         /GUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678383489;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FCRUBSFWfUJdlaStN+qT+zl8FTW7qoCRSrif9+SCGaA=;
-        b=nc8r2GE3tKY9LbQyJc7kAq1b/jzXz1GNWhSvL093ozWG6TwZQdM6f2WfkuKhM0eAbe
-         jh+/Eo+vLPdnDoVCBPIsSRkWRGcn3V6GZnBoO6Gp5+W6gJdrZ/i4hqSEdQ5hxd2GbCdl
-         TLy+EevKQ5bzwjE2pcYCCrDfGVLnCYPrPft3Fj73jpJINHFyGBl7V22rolSvjjosHgpr
-         LNKXAJeNPMPjM+/Avviw9Ss3yNomtZeTT49tmymfk0NI5rGW6UDIj7mFangpeP+WBk/R
-         HXKm/JyKivk29YUHmo+Ug5MtFWUZyyGpCJbJ6M01YdrpxbU3ByYFRIoGnZuFeR9i0prO
-         h/Jw==
-X-Gm-Message-State: AO0yUKUYZ1jRggClniUBrICH3gL7a6wnitRVRhFOg48VqMiok3m0RZz3
-        sH2hpOoHrHK6qXSEywlAsGU7kBmAYBEWQCkUrJc=
-X-Google-Smtp-Source: AK7set8JsKDvk5YYe/dVTkAz5f8Zz/ne4zx2i9zkWmIgW+IH9xu5K1JOUNqmx/fCFYhm0VAjGojyDjL32pz2P/aY1tI=
-X-Received: by 2002:a50:8711:0:b0:4bb:d098:2138 with SMTP id
- i17-20020a508711000000b004bbd0982138mr12463686edb.5.1678383488557; Thu, 09
- Mar 2023 09:38:08 -0800 (PST)
+        Thu, 9 Mar 2023 12:38:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EA9F31FB;
+        Thu,  9 Mar 2023 09:38:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88B0361CA5;
+        Thu,  9 Mar 2023 17:38:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A326BC433EF;
+        Thu,  9 Mar 2023 17:38:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678383518;
+        bh=iajjPMk40xiWGEaEZlqlsOqiEOpuHw6FDCZfmoz0Cv8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=pDuWk9tubZCqcPaxKqF6b8uZ97kOMw/Lj7YS0Mz468atWYwDN+pVQ21mFE7UyRH7q
+         0xMwnZjji/6LfjYtrMqLMiIEKt4iuyOkXZMBEChyzSzCU3FTxgKUPOHY4vGXUJML/P
+         0zxalYawcdsV9Bn+ekkIVTjJQ7Ih8jZxNPso87vm3sTnCivcQAoL+NUXRAd1hGbOSa
+         4k80nczkm8imqt0nP0BK6sLV9wTMx99xcGi/EwsjoAUp+4I0X8AYQ0aeC8mdGfKSU4
+         4E4xOpQ/ppbwIw6FY/gUyMzyB3jGOG9vxMJ5t85CDqNARtS5yEs3Q4M3VbEa8Gggtf
+         5hiJrJKwdV/HA==
+Date:   Thu, 9 Mar 2023 11:38:36 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: PCI: Add quirk for platforms running Windows
+Message-ID: <20230309173836.GA1148798@bhelgaas>
 MIME-Version: 1.0
-Received: by 2002:a17:907:7f22:b0:89c:e54b:27a5 with HTTP; Thu, 9 Mar 2023
- 09:38:07 -0800 (PST)
-Reply-To: lilywilliam989@gmail.com
-From:   Lily William <luben8213@gmail.com>
-Date:   Thu, 9 Mar 2023 09:38:07 -0800
-Message-ID: <CANyAdH_5DSTFRvWxGpZS_6X6K=AFZnBKcwN=575XkQB+S7e4bA@mail.gmail.com>
-Subject: Hi Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:52c listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.6214]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [luben8213[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [luben8213[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [lilywilliam989[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309025212.GB18319@T480>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dear,
+On Thu, Mar 09, 2023 at 10:52:13AM +0800, Shawn Guo wrote:
+> + linux-arm-msm and MSM maintainer Bjorn
+> 
+> On Wed, Mar 08, 2023 at 12:53:10PM -0600, Bjorn Helgaas wrote:
+> > On Mon, Feb 27, 2023 at 10:12:21AM +0800, Shawn Guo wrote:
+> > > Commit 8fd4391ee717 ("arm64: PCI: Exclude ACPI "consumer" resources from
+> > > host bridge windows") introduced a check to remove host bridge register
+> > > resources for all arm64 platforms, with the assumption that the PNP0A03
+> > > _CRS resources would always be host bridge registers and never as windows
+> > > on arm64.
+> > > 
+> > > The assumption stands true until Qualcomm Snapdragon Windows laptops
+> > > emerge.  These laptops describe host bridge windows in PNP0A03 _CRS
+> > > resources instead.  For example, the Microsoft Surface Pro X has host
+> > > bridges defined as
+> > > 
+> > >     Name (_HID, EisaId ("PNP0A08") /* PCI Express Bus */)  // _HID: Hardware ID
+> > >     Name (_CID, EisaId ("PNP0A03") /* PCI Bus */)  // _CID: Compatible ID
+> > > 
+> > >     Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+> > >     {
+> > >         Name (RBUF, ResourceTemplate ()
+> > >         {
+> > >             Memory32Fixed (ReadWrite,
+> > >                 0x60200000,         // Address Base
+> > >                 0x01DF0000,         // Address Length
+> > >                 )
+> > >             WordBusNumber (ResourceProducer, MinFixed, MaxFixed, PosDecode,
+> > >                 0x0000,             // Granularity
+> > >                 0x0000,             // Range Minimum
+> > >                 0x0001,             // Range Maximum
+> > >                 0x0000,             // Translation Offset
+> > >                 0x0002,             // Length
+> > >                 ,, )
+> > >         })
+> > >         Return (RBUF) /* \_SB_.PCI0._CRS.RBUF */
+> > >     }
+> > > 
+> > > The Memory32Fixed holds a host bridge window, but it's not properly
+> > > defined as a "producer" resource.  Consequently the resource gets
+> > > removed by kernel, and the BAR allocation fails later on:
+> > > 
+> > >     [ 0.150731] pci 0002:00:00.0: BAR 14: no space for [mem size 0x00100000]
+> > >     [ 0.150744] pci 0002:00:00.0: BAR 14: failed to assign [mem size 0x00100000]
+> > >     [ 0.150758] pci 0002:01:00.0: BAR 0: no space for [mem size 0x00004000 64bit]
+> > >     [ 0.150769] pci 0002:01:00.0: BAR 0: failed to assign [mem size 0x00004000 64bit]
+> > > 
+> > > This eventually prevents the PCIe NVME drive from being accessible.
+> > > 
+> > > Add a quirk for these platforms to avoid the resource being removed.
+> > > 
+> > > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> > > ---
+> > > We are running into the issue on more devices than just Surface Pro X
+> > > now, so trying to sort it out with a quirk as suggested by Lorenzo [1].
+> > 
+> > One thing I don't like about this application of quirks is that the
+> > list of affected platforms is likely to grow, which is an ongoing
+> > burden for users and developers.
+> 
+> It's a very reasonable concern.  I really hope that Qualcomm will start
+> thinking about Linux support on these machines in the future not too far
+> away, so that the list will not grow too long.
+> 
+> > Can we have a conversation with Qualcomm about how they *intend* this
+> > to work?  Linux is probably doing something wrong (interpreting
+> > something differently than Windows does), and if we could fix that, we
+> > have a better chance of future platforms working without quirks.
+> 
+> Today Qualcomm only ships and cares about Windows on these machines, but
+> I believe it will change sooner or later.
 
-My name is Dr Lily William from the United States presently living in the UK.
+I don't maintain arch/arm64/kernel/pci.c, but my opinion is that we
+should not pursue quirks like this until we've tried really hard to
+figure out a generic approach.
 
-I hope you consider my friend request. I will share some of my pics
-and more details about myself when I get your response.
-
-With love
-Lily
+Bjorn
