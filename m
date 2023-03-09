@@ -2,161 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5F66B2D32
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C576B2D39
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbjCISxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 13:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36058 "EHLO
+        id S230283AbjCISzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 13:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231166AbjCISxL (ORCPT
+        with ESMTP id S230009AbjCISzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 13:53:11 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FDC2B9D9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 10:53:08 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-536bbe5f888so52091027b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 10:53:08 -0800 (PST)
+        Thu, 9 Mar 2023 13:55:18 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD78E2C676
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 10:55:16 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id y10so2135005pfi.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 10:55:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678387987;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fc1im8WIXCLJ3aPuivNhaqWtiUsYGYkccGBgkVEOYUY=;
-        b=x6CDd5mP5J/JBVh4mnPCHLqh8hQWA28uorc+A/RWDI1ZVEFG7QIm6K4Zws1Mw6VljT
-         stcYK5OfjQiiNtVP9o1XRdTP+/ZpQPbX9cqfNXTN7iOP0tPZUSxj/t134hduT4pPjv9z
-         p8aSyMXlJ6lNMZm/5wH67RyBwMui0IZWN1ItqoakktmbR2Ly+ZtBBG4UdZOgogFaBr6C
-         cVpjCO6GdrxuThuBeeTqlOwc4draaD1eLj9pryQVPT831GYqmQt1yCupnjtopoBBy57h
-         bW4eMuWPQTYernzLmQxsC+rwkeHzznl+ljl2QmWejZo1R7EvrtEPTFWeVNWGDTg5iAK/
-         xRLA==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1678388116;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0KFB3WZvPj45QQFE1vG91JPQ7IHpeNLpOum3l/eyO9A=;
+        b=h59h3vE4/2ufFxQJ24xAYjQ7i6vDw3EWfYwoHOQUniZZgxYCC2dAvg7O9KNg4qB/+x
+         fNJ+NOnKKj1iQLTXTBqPzpcXhTK+/9SZ4MkSEIoIFNjGV0kCAr3BEIU2xsm3C7FEdj+A
+         T/XxUJI3yE96YUHGXzcl3NneJzDNKNf8d0TBlXmFWBCT0+wU0kagQR3JnRr+dN6ZvhYN
+         8ReN8Ny1kOTBj0tXalrMuP3uRpkMMjxpE0gkZDV/sAcpMYA3kPTsJ7iYuY5BqM2aCYS+
+         svz0XeMNtQEIWJet0C8FJZktTq3PE9u9q7hGuQL4WdFUgol4tP6+KITMRimE5edYQDc8
+         dhTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678387987;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fc1im8WIXCLJ3aPuivNhaqWtiUsYGYkccGBgkVEOYUY=;
-        b=oM6jlikg5P64jvDKSFRf7A8dq9EwTTUjLJlEJd76TexKdXhLJvtyECJxPhW3QR3MXJ
-         RMPbWe9hzTflbBSyda0YR0PUj2NGGjqayHxOC75DyUgQqyX79PHslt3MoYDfDMRapfjU
-         +P+V0Nzlri7IxkTSM9cjRvSz6kZ57AVT+DqKpmch1vZ6UHcy1AhapZovRMfEUZNqNAVr
-         abMyEYelmY9saaeXRUVZ1EXTnZ5qxk5syT/DbSTPldYMQgDLIj36J4DgwndnrD9lvs6j
-         ICXrxNECKbi6xQQIAm2rCMYfW9DLKw65DgA1g0lpCV57lGvjACebBMY9xnA/KRy6Srg9
-         fktg==
-X-Gm-Message-State: AO0yUKWPDoRM8BrCEmi3Kg6DG8sY5flMzUeb5I8Zz0bly0n7S3p2Snhw
-        CHu1LuRqqLrL3hCRgCaptCa+ElddA/Bq6buxsyGaDw==
-X-Google-Smtp-Source: AK7set8h6m/poIJaA1MSLpGytsT0tAbgxqFVpSfZhGBN7LyhbfaAFg6sbwjUUfvQLIAFIBRZ02I8DXPipcyzpkjgOXg=
-X-Received: by 2002:a81:af59:0:b0:535:5e8c:65ef with SMTP id
- x25-20020a81af59000000b005355e8c65efmr14048163ywj.6.1678387987553; Thu, 09
- Mar 2023 10:53:07 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678388116;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0KFB3WZvPj45QQFE1vG91JPQ7IHpeNLpOum3l/eyO9A=;
+        b=rpQJZMrvt5miFztMhok26etA+Rjwa8dD65uqXMr+RM333L2+ulNCAb0KwqRnrKMvrA
+         yJ0K6OSwMJixuBe9qw0jT6YBLL5rzSNqUohXHcVvLSYkoZIn9iVVTnScp2Gmb2IDqdv7
+         QO+FdDtXJzHTfbwGPcfp1tTvLMS8yr9Rl/oJWekiCIjS4aGQkAhG3o5wfbxgsRh1jMqx
+         3VeqVs0fekXZ5zN8Ao8UxjNfj/96+ekToJMBaswxYlhE0iRSV2FtVt0tTWS2Ohii+3HN
+         NEmDv48fNsbvkHnT1j5ZD8LT8nrSfBr6z0/5j/u0SFGe7rAcNhMVvm4K57tMqaw73ric
+         AwiA==
+X-Gm-Message-State: AO0yUKVZD0h28UtL6+90wqic/XV6uCu3gDT3MfKE+TePRZYeflIoiSML
+        u2bmWbukcePcXDXYnDNeH0h92w==
+X-Google-Smtp-Source: AK7set/1H5/0frCN8PzNRC2CTwJPM7bfZzkBZoC0SUtpBiwsmBbJNbV+PGyPeJ21Szf11t5mXLGWBQ==
+X-Received: by 2002:a62:7b0c:0:b0:61d:e8bb:1cb0 with SMTP id w12-20020a627b0c000000b0061de8bb1cb0mr4545332pfc.1.1678388115841;
+        Thu, 09 Mar 2023 10:55:15 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id i2-20020aa787c2000000b005b34d81b010sm11804401pfo.91.2023.03.09.10.55.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 10:55:15 -0800 (PST)
+Date:   Thu, 9 Mar 2023 10:55:11 -0800
+From:   Deepak Gupta <debug@rivosinc.com>
+To:     Szabolcs Nagy <szabolcs.nagy@arm.com>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, nd@arm.com, al.grant@arm.com
+Subject: Re: [PATCH v7 33/41] x86/shstk: Introduce map_shadow_stack syscall
+Message-ID: <20230309185511.GA1964069@debug.ba.rivosinc.com>
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-34-rick.p.edgecombe@intel.com>
+ <ZADbP7HvyPHuwUY9@arm.com>
 MIME-Version: 1.0
-References: <20230301214952.2190757-1-saravanak@google.com> <CAGETcx_DTHW4-WMK4qRhvhxiunUB2f79cpXSfQ1x-hifZQ+tgw@mail.gmail.com>
-In-Reply-To: <CAGETcx_DTHW4-WMK4qRhvhxiunUB2f79cpXSfQ1x-hifZQ+tgw@mail.gmail.com>
-From:   Yongqin Liu <yongqin.liu@linaro.org>
-Date:   Fri, 10 Mar 2023 02:52:56 +0800
-Message-ID: <CAMSo37XuNaV4Y3+ExrUjNzPDRD_BNSn1258Ve3We+qtbsO7qEw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <ZADbP7HvyPHuwUY9@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Saravana
-
-Sorry for the lateness, I was just aware of this today.
-
-I tested with the ACK android-mainline branch + the 12 commits ending
-with fb42378dcc7f
-+ the 4 commits of this series + hikey960 AOSP Master userspace.
-The hikey960 Android build could boot to the home screen, no stuck there,
-
-Here is the link of the logat in case you want to check some message here:
-https://gist.github.com/liuyq/6525af08c547cd2e494af5d1c8b181b5
-
-Thanks,
-Yongqin Liu
-On Fri, 10 Mar 2023 at 02:05, Saravana Kannan <saravanak@google.com> wrote:
+On Thu, Mar 02, 2023 at 05:22:07PM +0000, Szabolcs Nagy wrote:
+>The 02/27/2023 14:29, Rick Edgecombe wrote:
+>> Previously, a new PROT_SHADOW_STACK was attempted,
+>...
+>> So rather than repurpose two existing syscalls (mmap, madvise) that don't
+>> quite fit, just implement a new map_shadow_stack syscall to allow
+>> userspace to map and setup new shadow stacks in one step. While ucontext
+>> is the primary motivator, userspace may have other unforeseen reasons to
+>> setup it's own shadow stacks using the WRSS instruction. Towards this
+>> provide a flag so that stacks can be optionally setup securely for the
+>> common case of ucontext without enabling WRSS. Or potentially have the
+>> kernel set up the shadow stack in some new way.
+>...
+>> The following example demonstrates how to create a new shadow stack with
+>> map_shadow_stack:
+>> void *shstk = map_shadow_stack(addr, stack_size, SHADOW_STACK_SET_TOKEN);
 >
-> Greg,
+>i think
 >
-> Don't pull in this series please. It needs more testing from the folks
-> I cc'ed and it's already breaking things for Martin. This needs more
-> revisions.
+>mmap(addr, size, PROT_READ, MAP_ANON|MAP_SHADOW_STACK, -1, 0);
 >
-> -Saravana
->
-> On Wed, Mar 1, 2023 at 1:49=E2=80=AFPM Saravana Kannan <saravanak@google.=
-com> wrote:
-> >
-> > Yongqin, Martin, Amelie,
-> >
-> > We recent refactor of fw_devlink that ends with commit fb42378dcc7f
-> > ("mtd: mtdpart: Don't create platform device that'll never probe"),
-> > fw_devlink is smarter and doesn't depend on compatible property. So, I
-> > don't think these calls are needed anymore. But I don't have these
-> > devices to test on and be sure and the hardware I use to test changes
-> > doesn't have this issue either.
-> >
-> > Can you please test these changes on the hardware where you hit the
-> > issue to make sure things work as expected?
-> >
-> > Yongqin, If you didn't have the context, this affected hikey960.
-> >
-> > Greg,
-> >
-> > Let's wait for some tests before we land these.
-> >
-> > Thanks,
-> > Saravana
-> >
-> > Cc: Yongqin Liu <yongqin.liu@linaro.org>
-> > Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> > Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > Cc: Amelie Delaunay <amelie.delaunay@foss.st.com>
-> >
-> > Saravana Kannan (4):
-> >   usb: typec: stusb160x: Remove use of
-> >     fw_devlink_purge_absent_suppliers()
-> >   usb: typec: tipd: Remove use of fw_devlink_purge_absent_suppliers()
-> >   usb: typec: tcpm: Remove use of fw_devlink_purge_absent_suppliers()
-> >   driver core: Delete fw_devlink_purge_absent_suppliers()
-> >
-> >  drivers/base/core.c           | 16 ----------------
-> >  drivers/usb/typec/stusb160x.c |  9 ---------
-> >  drivers/usb/typec/tcpm/tcpm.c |  9 ---------
-> >  drivers/usb/typec/tipd/core.c |  9 ---------
-> >  include/linux/fwnode.h        |  1 -
-> >  5 files changed, 44 deletions(-)
-> >
-> > --
-> > 2.39.2.722.g9855ee24e9-goog
-> >
+>could do the same with less disruption to users (new syscalls
+>are harder to deal with than new flags). it would do the
+>guard page and initial token setup too (there is no flag for
+>it but could be squeezed in).
+
+Discussion on this topic in v6
+https://lore.kernel.org/all/20230223000340.GB945966@debug.ba.rivosinc.com/
+
+Again I know earlier CET patches had protection flag and somehow due to pushback
+on mailing list, it was adopted to go for special syscall because no one else
+had shadow stack.
+
+Seeing a response from Szabolcs, I am assuming arm4 would also want to follow
+using mmap to manufacture shadow stack. For reference RFC patches for risc-v shadow stack,
+use a new protection flag = PROT_SHADOWSTACK.
+https://lore.kernel.org/lkml/20230213045351.3945824-1-debug@rivosinc.com/
+
+I know earlier discussion had been that we let this go and do a re-factor later as other
+arch support trickle in. But as I thought more on this and I think it may just be
+messy from user mode point of view as well to have cognition of two different ways of
+creating shadow stack. One would be special syscall (in current libc) and another `mmap`
+(whenever future re-factor happens)
+
+If it's not too late, it would be more wise to take `mmap`
+approach rather than special `syscall` approach.
 
 
-
---=20
-Best Regards,
-Yongqin Liu
----------------------------------------------------------------
-#mailing list
-linaro-android@lists.linaro.org
-http://lists.linaro.org/mailman/listinfo/linaro-android
+>
+>most of the mmap features need not be available (EINVAL) when
+>MAP_SHADOW_STACK is specified.
+>
+>the main drawback is running out of mmap flags so extension
+>is limited. (but the new syscall has limitations too).
