@@ -2,177 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6372E6B26DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 765316B26E0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231800AbjCIOZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:25:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
+        id S231668AbjCIO2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:28:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjCIOZL (ORCPT
+        with ESMTP id S230018AbjCIO2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:25:11 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5381930EA8;
-        Thu,  9 Mar 2023 06:25:06 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0CE4C20104;
-        Thu,  9 Mar 2023 14:25:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1678371905; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9km87gWKPt/hR64G0P6iiRtDVIALQm6SUo8cyyoUdME=;
-        b=wIPcxg0ELD4kHYzuuZJwZDQZnP28eRn90SZVA9jIQvB9tfENPLXue0TuvoxTpzoNItcpnB
-        TAGjDoR3oQICRx3KlOCLi6p2rJzs2tkbruOZr+/X9sDT5vbC36tNSU4FkJzxgyMkc7ByXh
-        ETqfYYZDFyp/vEQXJvr29rHoSi4txiM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1678371905;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9km87gWKPt/hR64G0P6iiRtDVIALQm6SUo8cyyoUdME=;
-        b=lqxHrQpyiVPiCweBXDaXfj0qECyjgfCtBCWokqdRxNUYDYhjnVq3yrMhs16K59BUZF59GO
-        M5Z+mhKc1+C9EzCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EE4B213A10;
-        Thu,  9 Mar 2023 14:25:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UKgnOkDsCWQvNwAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 09 Mar 2023 14:25:04 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 6E27DA06FF; Thu,  9 Mar 2023 15:25:04 +0100 (CET)
-Date:   Thu, 9 Mar 2023 15:25:04 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>, Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [RFC 10/11] ext4: Abstract out logic to search average fragment
- list
-Message-ID: <20230309142504.5lodm4inrn7bnfmk@quack3>
-References: <cover.1674822311.git.ojaswin@linux.ibm.com>
- <3f0afae57eeaf47aa4b980eddc5e54efc78efa66.1674822311.git.ojaswin@linux.ibm.com>
+        Thu, 9 Mar 2023 09:28:21 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D8914DE13
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:28:18 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A492C14;
+        Thu,  9 Mar 2023 06:29:01 -0800 (PST)
+Received: from [10.57.91.145] (unknown [10.57.91.145])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53D5E3F5A1;
+        Thu,  9 Mar 2023 06:28:16 -0800 (PST)
+Message-ID: <20fb0697-fc0d-daab-2517-7bee7415e695@arm.com>
+Date:   Thu, 9 Mar 2023 14:28:09 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f0afae57eeaf47aa4b980eddc5e54efc78efa66.1674822311.git.ojaswin@linux.ibm.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 12/14] iommu/arm-smmu-v3: Support IOMMU_DOMAIN_NESTED
+ type of allocations
+Content-Language: en-GB
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com, will@kernel.org
+Cc:     eric.auger@redhat.com, kevin.tian@intel.com,
+        baolu.lu@linux.intel.com, joro@8bytes.org,
+        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <cover.1678348754.git.nicolinc@nvidia.com>
+ <b01b2bad6d0d34908812d964eba118a9cc1e89ab.1678348754.git.nicolinc@nvidia.com>
+ <b8660bcf-7b12-fd49-7b5b-58909ac8746d@arm.com>
+In-Reply-To: <b8660bcf-7b12-fd49-7b5b-58909ac8746d@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 27-01-23 18:07:37, Ojaswin Mujoo wrote:
-> Make the logic of searching average fragment list of a given order reusable
-> by abstracting it out to a differnet function. This will also avoid
-> code duplication in upcoming patches.
+On 2023-03-09 13:20, Robin Murphy wrote:
+> On 2023-03-09 10:53, Nicolin Chen wrote:
+>> Add domain allocation support for IOMMU_DOMAIN_NESTED type. This includes
+>> the "finalise" part to log in the user space Stream Table Entry info.
+>>
+>> Co-developed-by: Eric Auger <eric.auger@redhat.com>
+>> Signed-off-by: Eric Auger <eric.auger@redhat.com>
+>> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+>> ---
+>>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 38 +++++++++++++++++++--
+>>   1 file changed, 36 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c 
+>> b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>> index 5ff74edfbd68..1f318b5e0921 100644
+>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>> @@ -2214,6 +2214,19 @@ static int arm_smmu_domain_finalise(struct 
+>> iommu_domain *domain,
+>>           return 0;
+>>       }
+>> +    if (domain->type == IOMMU_DOMAIN_NESTED) {
+>> +        if (!(smmu->features & ARM_SMMU_FEAT_TRANS_S1) ||
+>> +            !(smmu->features & ARM_SMMU_FEAT_TRANS_S2)) {
+>> +            dev_dbg(smmu->dev, "does not implement two stages\n");
+>> +            return -EINVAL;
+>> +        }
+>> +        smmu_domain->stage = ARM_SMMU_DOMAIN_S1;
+>> +        smmu_domain->s1_cfg.s1fmt = user_cfg->s1fmt;
+>> +        smmu_domain->s1_cfg.s1cdmax = user_cfg->s1cdmax;
+>> +        smmu_domain->s1_cfg.cdcfg.cdtab_dma = user_cfg->s1ctxptr;
+>> +        return 0;
 > 
-> No functional changes.
+> How's that going to work? If the caller's asked for something we can't 
+> provide, returning something else and hoping it fails later is not 
+> sensible, we should just fail right here. It's even more worrying if 
+> there's a chance it *won't* fail later, and a guest ends up with 
+> "nested" translation giving it full access to host PA space :/
+
+Oops, apologies - in part thanks to the confusing indentation, I managed 
+to miss the early return and misread this all being under the if 
+condition for nesting not being supported. Sorry for the confusion :(
+
+Thanks,
+Robin.
+
+>> +    }
+>> +
+>>       if (user_cfg_s2 && !(smmu->features & ARM_SMMU_FEAT_TRANS_S2))
+>>           return -EINVAL;
+>>       if (user_cfg_s2)
+>> @@ -2863,6 +2876,11 @@ static void arm_smmu_remove_dev_pasid(struct 
+>> device *dev, ioasid_t pasid)
+>>       arm_smmu_sva_remove_dev_pasid(domain, dev, pasid);
+>>   }
+>> +static const struct iommu_domain_ops arm_smmu_nested_domain_ops = {
+>> +    .attach_dev        = arm_smmu_attach_dev,
+>> +    .free            = arm_smmu_domain_free,
+>> +};
+>> +
+>>   static struct iommu_domain *
+>>   __arm_smmu_domain_alloc(unsigned type,
+>>               struct arm_smmu_domain *s2,
+>> @@ -2877,11 +2895,15 @@ __arm_smmu_domain_alloc(unsigned type,
+>>           return arm_smmu_sva_domain_alloc();
+>>       if (type != IOMMU_DOMAIN_UNMANAGED &&
+>> +        type != IOMMU_DOMAIN_NESTED &&
+>>           type != IOMMU_DOMAIN_DMA &&
+>>           type != IOMMU_DOMAIN_DMA_FQ &&
+>>           type != IOMMU_DOMAIN_IDENTITY)
+>>           return NULL;
+>> +    if (s2 && s2->stage != ARM_SMMU_DOMAIN_S2)
+>> +        return NULL;
+>> +
+>>       /*
+>>        * Allocate the domain and initialise some of its data structures.
+>>        * We can't really finalise the domain unless a master is given.
+>> @@ -2889,10 +2911,14 @@ __arm_smmu_domain_alloc(unsigned type,
+>>       smmu_domain = kzalloc(sizeof(*smmu_domain), GFP_KERNEL);
+>>       if (!smmu_domain)
+>>           return NULL;
+>> +    smmu_domain->s2 = s2;
+>>       domain = &smmu_domain->domain;
+>>       domain->type = type;
+>> -    domain->ops = arm_smmu_ops.default_domain_ops;
+>> +    if (s2)
+>> +        domain->ops = &arm_smmu_nested_domain_ops;
+>> +    else
+>> +        domain->ops = arm_smmu_ops.default_domain_ops;
+>>       mutex_init(&smmu_domain->init_mutex);
+>>       INIT_LIST_HEAD(&smmu_domain->devices);
+>> @@ -2923,8 +2949,16 @@ arm_smmu_domain_alloc_user(struct device *dev, 
+>> struct iommu_domain *parent,
+>>       const struct iommu_hwpt_arm_smmuv3 *user_cfg = user_data;
+>>       struct arm_smmu_master *master = dev_iommu_priv_get(dev);
+>>       unsigned type = IOMMU_DOMAIN_UNMANAGED;
+>> +    struct arm_smmu_domain *s2 = NULL;
+>> +
+>> +    if (parent) {
+>> +        if (parent->ops != arm_smmu_ops.default_domain_ops)
+>> +            return NULL;
+>> +        type = IOMMU_DOMAIN_NESTED;
+>> +        s2 = to_smmu_domain(parent);
+>> +    }
+>> -    return __arm_smmu_domain_alloc(type, NULL, master, user_cfg);
+>> +    return __arm_smmu_domain_alloc(type, s2, master, user_cfg);
+>>   }
+>>   static struct iommu_ops arm_smmu_ops = {
 > 
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-
-Looks good. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  fs/ext4/mballoc.c | 51 ++++++++++++++++++++++++++++++-----------------
->  1 file changed, 33 insertions(+), 18 deletions(-)
-> 
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index 410c9636907b..1ce1174aea52 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -902,6 +902,37 @@ static void ext4_mb_choose_next_group_cr0(struct ext4_allocation_context *ac,
->  	}
->  }
->  
-> +/*
-> + * Find a suitable group of given order from the average fragments list.
-> + */
-> +static struct ext4_group_info *
-> +ext4_mb_find_good_group_avg_frag_lists(struct ext4_allocation_context *ac, int order)
-> +{
-> +	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
-> +	struct list_head *frag_list = &sbi->s_mb_avg_fragment_size[order];
-> +	rwlock_t *frag_list_lock = &sbi->s_mb_avg_fragment_size_locks[order];
-> +	struct ext4_group_info *grp = NULL, *iter;
-> +	enum criteria cr = ac->ac_criteria;
-> +
-> +	if (list_empty(frag_list))
-> +		return NULL;
-> +	read_lock(frag_list_lock);
-> +	if (list_empty(frag_list)) {
-> +		read_unlock(frag_list_lock);
-> +		return NULL;
-> +	}
-> +	list_for_each_entry(iter, frag_list, bb_avg_fragment_size_node) {
-> +		if (sbi->s_mb_stats)
-> +			atomic64_inc(&sbi->s_bal_cX_groups_considered[cr]);
-> +		if (likely(ext4_mb_good_group(ac, iter->bb_group, cr))) {
-> +			grp = iter;
-> +			break;
-> +		}
-> +	}
-> +	read_unlock(frag_list_lock);
-> +	return grp;
-> +}
-> +
->  /*
->   * Choose next group by traversing average fragment size list of suitable
->   * order. Updates *new_cr if cr level needs an update.
-> @@ -910,7 +941,7 @@ static void ext4_mb_choose_next_group_cr1(struct ext4_allocation_context *ac,
->  		enum criteria *new_cr, ext4_group_t *group, ext4_group_t ngroups)
->  {
->  	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
-> -	struct ext4_group_info *grp = NULL, *iter;
-> +	struct ext4_group_info *grp = NULL;
->  	int i;
->  
->  	if (unlikely(ac->ac_flags & EXT4_MB_CR1_OPTIMIZED)) {
-> @@ -920,23 +951,7 @@ static void ext4_mb_choose_next_group_cr1(struct ext4_allocation_context *ac,
->  
->  	for (i = mb_avg_fragment_size_order(ac->ac_sb, ac->ac_g_ex.fe_len);
->  	     i < MB_NUM_ORDERS(ac->ac_sb); i++) {
-> -		if (list_empty(&sbi->s_mb_avg_fragment_size[i]))
-> -			continue;
-> -		read_lock(&sbi->s_mb_avg_fragment_size_locks[i]);
-> -		if (list_empty(&sbi->s_mb_avg_fragment_size[i])) {
-> -			read_unlock(&sbi->s_mb_avg_fragment_size_locks[i]);
-> -			continue;
-> -		}
-> -		list_for_each_entry(iter, &sbi->s_mb_avg_fragment_size[i],
-> -				    bb_avg_fragment_size_node) {
-> -			if (sbi->s_mb_stats)
-> -				atomic64_inc(&sbi->s_bal_cX_groups_considered[CR1]);
-> -			if (likely(ext4_mb_good_group(ac, iter->bb_group, CR1))) {
-> -				grp = iter;
-> -				break;
-> -			}
-> -		}
-> -		read_unlock(&sbi->s_mb_avg_fragment_size_locks[i]);
-> +		grp = ext4_mb_find_good_group_avg_frag_lists(ac, i);
->  		if (grp)
->  			break;
->  	}
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
