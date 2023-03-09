@@ -2,48 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A53D6B22D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 351E46B22D4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbjCIL0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:26:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
+        id S229914AbjCIL0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbjCILZk (ORCPT
+        with ESMTP id S231931AbjCILZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:25:40 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 585791CBF8
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 03:23:07 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97315C14;
-        Thu,  9 Mar 2023 03:23:50 -0800 (PST)
-Received: from [10.57.91.145] (unknown [10.57.91.145])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B46D43F67D;
-        Thu,  9 Mar 2023 03:23:05 -0800 (PST)
-Message-ID: <9a88b12e-7169-7c7f-09a1-eef86f75891c@arm.com>
-Date:   Thu, 9 Mar 2023 11:23:00 +0000
+        Thu, 9 Mar 2023 06:25:42 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBDB5CC03;
+        Thu,  9 Mar 2023 03:23:28 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4641D10000E;
+        Thu,  9 Mar 2023 11:23:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678361007;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nFB/XzUgcCAZanhIP6AKbNu6CZh3ZVa2Xw1P9FE3XKU=;
+        b=i74aRkvD0oj/7IcNRKWPBzJhbEnD9BxREtMgeu2+Ic1ouSWkVmpx89UD2aEE+Ch2cUWsUV
+        yShn53mLBgk/zBu6/96vEQd51E/9hV4ukYDp3M99J8B+LUb1vtVxlyCnuW13tJoG+R39SG
+        Vl9S7zfHu4yoGfCur9XqUEzWYv42Mm2/CM+N6bWu+J0Wi4e8M9JxC5lO6vI3ex2fYf4tCk
+        YNieGatb2k1UY5KBFLvhwSd9JLfUExt27K8zwVG2IOeDFnWL622H9SQpR4OUO6XXSSwyho
+        omft0YbNKbPbqZbVxFE3WBn7hqpU2YzDhXYOHKZ0GNL9FOhrOQYXgz/vTIgVxg==
+Date:   Thu, 9 Mar 2023 12:23:24 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Michael Walle <michael@walle.cc>, gregkh@linuxfoundation.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, u-boot@lists.denx.de,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH 2/4] nvmem: core: allow nvmem_cell_post_process_t
+ callbacks to adjust buffer
+Message-ID: <20230309122324.4b012a58@xps-13>
+In-Reply-To: <2dc096f5-f5ce-f99b-42ac-0fb24682239a@linaro.org>
+References: <20230222172245.6313-1-zajec5@gmail.com>
+        <20230222172245.6313-3-zajec5@gmail.com>
+        <37f821b8-f681-08e4-d4f1-d37be191ff7f@linaro.org>
+        <20230309113211.6321ce3d@xps-13>
+        <2dc096f5-f5ce-f99b-42ac-0fb24682239a@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V2] iommu: sprd: release dma buffer to avoid memory leak
-Content-Language: en-GB
-To:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
-Cc:     iommu@lists.linux.dev, Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230308034158.509458-1-chunyan.zhang@unisoc.com>
- <af90fea4-5fa1-de7b-b80e-02fa8753b0fb@arm.com>
- <05fb17c7-397b-5b33-fbfa-df3bf48b0de8@linux.intel.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <05fb17c7-397b-5b33-fbfa-df3bf48b0de8@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,146 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-09 02:50, Baolu Lu wrote:
-> On 3/8/23 8:37 PM, Robin Murphy wrote:
->> On 2023-03-08 03:41, Chunyan Zhang wrote:
->>> Release page table DMA buffer when the IOMMU domain is not used:
->>>
->>> - Domain freed.
->>>
->>> - IOMMU is attaching to a new domain.
->>>    Since one sprd IOMMU servers only one client device, if the IOMMU has
->>>    been attached to other domain, it has to be detached first, that's
->>>    saying the DMA buffer should be released, otherwise that would
->>>    cause memory leak issue.
->>
->> This is clearly wrong; domain resources should only be freed when the 
->> domain is freed. 
-> 
-> Agreed. Perhaps, in the attach path:
-> 
->      if (!dom->pgt_va)
->          dom->pgt_va = dma_alloc_coherent(sdev->dev, pgt_size,
->                  &dom->pgt_pa, GFP_KERNEL);
-> ?
+Hi Srinivas,
 
-Why? dom->pgt_va will always be NULL if dom->sdev is NULL, and once 
-dom->sdev is set then that allocation is not reachable (of course this 
-means the driver also has a separate bug where reattaching to a 
-previously-used domain will erroneously fail, but that's not a memory 
-leak as such). The only thing to recognise here is that the allocation 
-is logically not part of the .attach_dev operation, but really a one-off 
-deferred part of .domain_alloc, and thus it should be balanced in .free, 
-not anywhere else.
+srinivas.kandagatla@linaro.org wrote on Thu, 9 Mar 2023 10:53:07 +0000:
+
+> On 09/03/2023 10:32, Miquel Raynal wrote:
+> > Hi Srinivas,
+> >=20
+> > srinivas.kandagatla@linaro.org wrote on Thu, 9 Mar 2023 10:12:24 +0000:
+> >  =20
+> >> On 22/02/2023 17:22, Rafa=C5=82 Mi=C5=82ecki wrote: =20
+> >>> @@ -1791,11 +1792,15 @@ ssize_t nvmem_device_cell_read(struct nvmem_d=
+evice *nvmem,
+> >>>    	if (!nvmem)
+> >>>    		return -EINVAL; =20
+> >>>    > +	/* Cells with read_post_process hook may realloc buffer we can=
+'t allow here */ =20
+> >>> +	if (info->read_post_process)
+> >>> +		return -EINVAL; =20
+> >> This should probably go in 1/4 patch. Other than that series looks goo=
+d to me. =20
+> >=20
+> > FYI patch 1/4 is also carried by the nvmem-layouts series, so it's
+> > probably best to keep these 2 patches separated to simplify the merging=
+. =20
+> that is intermediate thing, but Ideally this change belongs to 1/4 patch,=
+ so once I apply these patches then we can always rebase layout series on t=
+op of nvmem-next
+
+Well, I still don't see the need for this patch because we have no use
+for it *after* the introduction of layouts. Yes in some cases changing
+the size of a cell might maybe be needed, but right now the use case is
+to provide a MAC address, we know beforehand the size of the cell, so
+there is no need, currently, for this hack.
+
+Whatever. If you want it, just merge it. But *please*, I would like
+to see these layouts in, so what's the plan?
 
 Thanks,
-Robin.
-
-> 
-> Best regards,
-> baolu
-> 
->> Just because a caller has detached from a domain doesn't mean that 
->> they can't reattach to it later and expect the previous mappings to 
->> still be in place - it has nothing to do with how many devices or 
->> domains can be active at once.
->>
->> Thanks,
->> Robin.
->>
->>> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
->>> ---
->>> V2:
->>> * Added some comment in sprd_iommu_attach_device() for the reason
->>>    of calling sprd_iommu_cleanup().
->>>
->>> V1: https://lkml.org/lkml/2023/2/10/198
->>> ---
->>>   drivers/iommu/sprd-iommu.c | 46 ++++++++++++++++++++++++++++++++------
->>>   1 file changed, 39 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/drivers/iommu/sprd-iommu.c b/drivers/iommu/sprd-iommu.c
->>> index ae94d74b73f4..fb2f96df3bca 100644
->>> --- a/drivers/iommu/sprd-iommu.c
->>> +++ b/drivers/iommu/sprd-iommu.c
->>> @@ -62,6 +62,7 @@ enum sprd_iommu_version {
->>>    * @eb: gate clock which controls IOMMU access
->>>    */
->>>   struct sprd_iommu_device {
->>> +    struct sprd_iommu_domain    *dom;
->>>       enum sprd_iommu_version    ver;
->>>       u32            *prot_page_va;
->>>       dma_addr_t        prot_page_pa;
->>> @@ -151,13 +152,6 @@ static struct iommu_domain 
->>> *sprd_iommu_domain_alloc(unsigned int domain_type)
->>>       return &dom->domain;
->>>   }
->>> -static void sprd_iommu_domain_free(struct iommu_domain *domain)
->>> -{
->>> -    struct sprd_iommu_domain *dom = to_sprd_domain(domain);
->>> -
->>> -    kfree(dom);
->>> -}
->>> -
->>>   static void sprd_iommu_first_vpn(struct sprd_iommu_domain *dom)
->>>   {
->>>       struct sprd_iommu_device *sdev = dom->sdev;
->>> @@ -230,6 +224,29 @@ static void sprd_iommu_hw_en(struct 
->>> sprd_iommu_device *sdev, bool en)
->>>       sprd_iommu_update_bits(sdev, reg_cfg, mask, 0, val);
->>>   }
->>> +static void sprd_iommu_cleanup(struct sprd_iommu_device *sdev)
->>> +{
->>> +    struct sprd_iommu_domain *dom = sdev->dom;
->>> +    size_t pgt_size = sprd_iommu_pgt_size(&dom->domain);
->>> +
->>> +    dma_free_coherent(sdev->dev, pgt_size, dom->pgt_va, dom->pgt_pa);
->>> +    dom->sdev = NULL;
->>> +    sdev->dom = NULL;
->>> +    sprd_iommu_hw_en(sdev, false);
->>> +}
->>> +
->>> +static void sprd_iommu_domain_free(struct iommu_domain *domain)
->>> +{
->>> +    struct sprd_iommu_domain *dom = to_sprd_domain(domain);
->>> +    struct sprd_iommu_device *sdev = dom->sdev;
->>> +
->>> +    /* Free DMA buffer first if the domain has been attached */
->>> +    if (sdev)
->>> +        sprd_iommu_cleanup(sdev);
->>> +
->>> +    kfree(dom);
->>> +}
->>> +
->>>   static int sprd_iommu_attach_device(struct iommu_domain *domain,
->>>                       struct device *dev)
->>>   {
->>> @@ -237,14 +254,29 @@ static int sprd_iommu_attach_device(struct 
->>> iommu_domain *domain,
->>>       struct sprd_iommu_domain *dom = to_sprd_domain(domain);
->>>       size_t pgt_size = sprd_iommu_pgt_size(domain);
->>> +    /* Return directly if the domain attached to IOMMU already */
->>>       if (dom->sdev)
->>>           return -EINVAL;
->>> +    /* The IOMMU already attached to a domain */
->>> +    if (sdev->dom) {
->>> +        if (sdev->dom == dom)
->>> +            return 0;
->>> +
->>> +        /*
->>> +         * Clean up the previous domain, one sprd IOMMU servers only
->>> +         * one client device, if the IOMMU has been attached to other
->>> +         * domain, it has to be detached first.
->>> +         */
->>> +        sprd_iommu_cleanup(sdev);
->>> +    }
->>> +
->>>       dom->pgt_va = dma_alloc_coherent(sdev->dev, pgt_size, 
->>> &dom->pgt_pa, GFP_KERNEL);
->>>       if (!dom->pgt_va)
->>>           return -ENOMEM;
->>>       dom->sdev = sdev;
->>> +    sdev->dom = dom;
->>>       sprd_iommu_first_ppn(dom);
->>>       sprd_iommu_first_vpn(dom);
->>
+Miqu=C3=A8l
