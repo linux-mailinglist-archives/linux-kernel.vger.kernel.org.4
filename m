@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905226B1A5E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 05:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7B76B1A63
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 05:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjCIETQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 23:19:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
+        id S229900AbjCIEYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 23:24:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCIETL (ORCPT
+        with ESMTP id S229525AbjCIEYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 23:19:11 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C6872B3E;
-        Wed,  8 Mar 2023 20:19:10 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3294IkXM035148;
-        Wed, 8 Mar 2023 22:18:46 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678335526;
-        bh=0IbbDvAZb1mX7MDZ2lTVXUBvwZAqpL5G1lf4vpzvPlE=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=fo69kfaTxMdYkJIVJ3V4ea3AoDAvB07xxEELqE9iNxZ0KyimcbntD2jwUhzM6p/7G
-         ZOnhgq4PDE7mPd0nX0orY8N6U+LtIBCr2dejgplB0A5azEc4wjazkcCuaMATKdTrzB
-         0vAl8LU2JvjwYRYu04sdyVkNn+SXLTxeEZoOzHHc=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3294IjqN011723
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 8 Mar 2023 22:18:46 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 8
- Mar 2023 22:18:46 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 8 Mar 2023 22:18:45 -0600
-Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3294IeNo089859;
-        Wed, 8 Mar 2023 22:18:41 -0600
-Message-ID: <882cdb42-3f80-048a-88a5-836c479a421f@ti.com>
-Date:   Thu, 9 Mar 2023 09:48:40 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <linux@armlinux.org.uk>, <pabeni@redhat.com>, <robh+dt@kernel.org>,
-        <nsekhar@ti.com>, <rogerq@kernel.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH net-next v2] dt-bindings: net: ti: k3-am654-cpsw-nuss:
- Document Serdes PHY
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-References: <20230308051835.276552-1-s-vadapalli@ti.com>
- <1ffed720-322c-fa73-1160-5fd73ce3c7c2@linaro.org>
- <7b6e8131-8e5b-88bc-69f7-b737c0c35bb6@ti.com>
- <dbbe3cd2-3329-d267-338b-8e513209ddcd@linaro.org>
-Content-Language: en-US
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <dbbe3cd2-3329-d267-338b-8e513209ddcd@linaro.org>
+        Wed, 8 Mar 2023 23:24:34 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B30082367
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 20:24:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1678335817; i=efault@gmx.de;
+        bh=KfvLndxdTzmhoJRfLolpgNbL3nfQSK5TmGqgtH5dkts=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=milvhtugmHPH/rUMXitmpSiCc+u+dbJXyX2zoqs9mIHnLKXIfVHhrfHCTujMc8xxX
+         Fz8RxmvgHlNW1Po5Iqrbvfuje10s1905RzbiET2NT5J9HN9EcxmjCABCpppZZWfGvM
+         RQGkSLBmG5IuRCyePckAuejtcqHe6LrJBQywYfztr1Jag8j/4i3GWyCuj2FX4ykDYQ
+         1eKTrCtgUrwQClRaCcO136WZT2L6/U7w9MQWVK2kk11usdZYlNhhmtHyoXljjmrRkU
+         ckdOqAEZPQdzn8EPtpjlrJtGLTmWXxp9MajrfLtKF2MlPU1Lh9pAW53sO8s3OmZJLA
+         wRkOn6nVwlHIA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from homer.fritz.box ([185.221.148.100]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N6KUd-1qbiro0EFV-016jSQ; Thu, 09
+ Mar 2023 05:23:37 +0100
+Message-ID: <5b567c5aecabf0a89d92593d99a73bef41bd65da.camel@gmx.de>
+Subject: Re: [PATCH 10/10] sched/fair: Implement an EEVDF like policy
+From:   Mike Galbraith <efault@gmx.de>
+To:     Peter Zijlstra <peterz@infradead.org>, mingo@kernel.org,
+        vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
+        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, joel@joelfernandes.org
+Date:   Thu, 09 Mar 2023 05:23:33 +0100
+In-Reply-To: <9fd2c37a05713c206dcbd5866f67ce779f315e9e.camel@gmx.de>
+References: <20230306132521.968182689@infradead.org>
+         <20230306141502.810909205@infradead.org>
+         <bfbfbf041854e2cd1a8ed14e64081062e5d632d3.camel@gmx.de>
+         <9fd2c37a05713c206dcbd5866f67ce779f315e9e.camel@gmx.de>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:gyEVNLLsHh70EpY8nWEULGirPZSFS8ZDWHMYRuZtsZX2qgzTAmx
+ bcsat0mo7pLoJNRR5/TVanemJJCjDaMhWxqzTQf6MoegZq5/xGUvhwjP/pBn8OfmbPtDIJO
+ 5SCMrMaaXEQmj6sO1UziqJOFOsfaEv83qToLKebjKaUsGMtsYmxhfkeBUoikmRGrbYyQYJF
+ R7jo4STPDoc5ARIQh/82A==
+UI-OutboundReport: notjunk:1;M01:P0:NdsbBeukE0A=;1rPHJLvjPT8sLS7sWDhN32NdEFV
+ 2BK8weVwvDfJwhJV8IPkYMld5+i/Ushims4pRnpOTD/SmB/N6nada6ciVZz2Dyc99vWTHpkm2
+ gIC/t1onVDlH/MIDjeqUpdoxNTUEtmynsOHGYUBLa/1+RfNssFUtKdta45iehFaCekxKOr6Bf
+ rZQ1P/0sCsMW6pL54uLEcK45+UAsvf9WOZL0mPng3Ye1j8stPtrD76atZwnY8P043r0QLJBbV
+ vhi5Wxgkt4s8cOa2uxwdDVQaNs74YW9rXBY7n1Odc6GS2b4u4CFSuOrqnxgiQviNe7l6YHzDR
+ WOFYSEC3vhMDnuvS1WWTdzE8Ad0Xg2kiijjvH3FhymO2XHT1tAD3p9qq0Znik0qX8W+wkUq5m
+ CGz0SAk9+wYJOFZTovjywlJbM+EQbRru8fo9Q4u1xyo2E0OYEqqz/TWGCR77AqqqEogb0AHlw
+ lHIplzhcXu8ewJKPY8ZFCH4isD4Egs9WCpGEwdk/ZKF27f0GsGD03kv4buP/9PweW6N5sD9pD
+ t2zjzGRrLEt2tgE1EtcGMGysBrDSiUI1oBX7Jy9aHPywb7S58Zwtw5qzGybgAi9oe04EjC+YY
+ nBistoXdavFi5sRpOgfwuEO0sjzI0JZYBTACxgGs7iuJXFVdsrVro5ITQuRV1pr56tlBv3lxy
+ JXkwpckhLj18haPm90AgSLxNLPI9pfu9LR+hzxwbvHkw+Ps5AfcO5SljTKX+oZ9BZloxcnYcZ
+ 6gcRHV9Znp9IuLzhsUadaerX1ydyOB9nf6+gEnVjw3OkVX+B4t/N1hsc4KcMcIzXDM5lJ9tf+
+ 17NiAUlSJppvdDBg3dG5Ama81l4oPP10YgN5fkfzPZaiBjRsf30Sk78nfUp07TC8dfCiT6xki
+ sMpQZ3INSbLTeZbCd9CCdVgvfvZtNMYmQuGdGniEd5W3AGmEHWVIrWQx+C1akjfnQ/zyXG/F1
+ i1GoQUaUPObsBdKxQzHqaiJah/c=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,98 +81,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Krzysztof,
+On Wed, 2023-03-08 at 14:36 +0100, Mike Galbraith wrote:
+>
+> Remember this little bugger, allegedly distilled from a real
+> application control thread starvation issue?
+>
+> 6.3.0.g8ca09d5-master
+> homer:/root # time taskset -c 3 starve=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0
+> expecting to receive 10000000 signals
+>
+> real=C2=A0=C2=A0=C2=A0 0m24.424s
+> user=C2=A0=C2=A0=C2=A0 0m4.468s
+> sys=C2=A0=C2=A0=C2=A0=C2=A0 0m18.957s
+>
+> 6.3.0.g8ca09d5-eevdf
+> homer:/root # time taskset -c 3 starve
+> expecting to receive 10000000 signals
+> zzzzzz
+> ^C
 
-On 08/03/23 18:04, Krzysztof Kozlowski wrote:
-> On 08/03/2023 09:38, Siddharth Vadapalli wrote:
->> Hello Krzysztof,
->>
->> On 08/03/23 14:04, Krzysztof Kozlowski wrote:
->>> On 08/03/2023 06:18, Siddharth Vadapalli wrote:
->>>> Update bindings to include Serdes PHY as an optional PHY, in addition to
->>>> the existing CPSW MAC's PHY. The CPSW MAC's PHY is required while the
->>>> Serdes PHY is optional. The Serdes PHY handle has to be provided only
->>>> when the Serdes is being configured in a Single-Link protocol. Using the
->>>> name "serdes-phy" to represent the Serdes PHY handle, the am65-cpsw-nuss
->>>> driver can obtain the Serdes PHY and request the Serdes to be
->>>> configured.
->>>>
->>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->>>> ---
->>>>
->>>> Hello,
->>>>
->>>> This patch corresponds to the Serdes PHY bindings that were missed out in
->>>> the series at:
->>>> https://lore.kernel.org/r/20230104103432.1126403-1-s-vadapalli@ti.com/
->>>> This was pointed out at:
->>>> https://lore.kernel.org/r/CAMuHMdW5atq-FuLEL3htuE3t2uO86anLL3zeY7n1RqqMP_rH1g@mail.gmail.com/
->>>>
->>>> Changes from v1:
->>>> 1. Describe phys property with minItems, items and description.
->>>> 2. Use minItems and items in phy-names.
->>>> 3. Remove the description in phy-names.
->>>>
->>>> v1:
->>>> https://lore.kernel.org/r/20230306094750.159657-1-s-vadapalli@ti.com/
->>>>
->>>>  .../bindings/net/ti,k3-am654-cpsw-nuss.yaml        | 14 ++++++++++++--
->>>>  1 file changed, 12 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
->>>> index 900063411a20..0fb48bb6a041 100644
->>>> --- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
->>>> +++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
->>>> @@ -126,8 +126,18 @@ properties:
->>>>              description: CPSW port number
->>>>  
->>>>            phys:
->>>> -            maxItems: 1
->>>> -            description: phandle on phy-gmii-sel PHY
->>>> +            minItems: 1
->>>> +            items:
->>>> +              - description: CPSW MAC's PHY.
->>>> +              - description: Serdes PHY. Serdes PHY is required only if
->>>> +                             the Serdes has to be configured in the
->>>> +                             Single-Link configuration.
->>>> +
->>>> +          phy-names:
->>>> +            minItems: 1
->>>> +            items:
->>>> +              - const: mac-phy
->>>> +              - const: serdes-phy
->>>
->>> Drop "phy" suffixes.
->>
->> The am65-cpsw driver fetches the Serdes PHY by looking for the string
->> "serdes-phy". Therefore, modifying the string will require changing the driver's
->> code as well. Please let me know if it is absolutely necessary to drop the phy
->> suffix. If so, I will post a new series with the changes involving dt-bindings
->> changes and the driver changes.
-> 
-> Why the driver uses some properties before adding them to the binding?
+Ok, seems there must be a math booboo lurking.
 
-I missed adding the bindings for the Serdes PHY as a part of the series
-mentioned in the section below the tearline of the patch. With this patch, I am
-attempting to fix it.
+virgin source, 100% hog vs tbench buddy pair, all pinned.
 
-> 
-> And is it correct method of adding ABI? You add incorrect properties
-> without documentation and then use this as an argument "driver already
-> does it"?
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ P COM=
+MAND
+ 5060 root      20   0    4420    680    680 R 96.01 0.004   0:41.40 3 cpu=
+hog
+ 5058 root      20   0   25500   1920   1792 S 2.326 0.012   0:01.05 3 tbe=
+nch
+ 5059 root      20   0    8796    896    768 R 1.661 0.006   0:00.78 3 tbe=
+nch_srv
 
-I apologize if my earlier comment appeared to justify the usage of "serdes-phy"
-based on the driver already using it. I did not mean it in that sense. I simply
-meant to ask if dropping "phy" suffixes was a suggestion or a rule. In that
-context, I felt that if it was a suggestion, I would prefer retaining the names
-with the "phy" suffixes, since the driver is already using it. Additionally, I
-also mentioned in my earlier comment that if it is necessary to drop the "phy"
-suffix, then I will do so and add another patch to change the string the driver
-looks for as well.
+echo NO_PRESERVE_LAG > features
 
-I shall take it that dropping "phy" suffixes is a rule/necessity. With this, I
-will post the v3 series making this change, along with the patch to update the
-string the driver looks for.
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ P COM=
+MAND
+ 5060 root      20   0    4420    680    680 R 99.33 0.004   1:28.24 3 cpu=
+hog
+ 5058 root      20   0   25500   1920   1792 R 0.333 0.012   0:01.75 3 tbe=
+nch
+ 5059 root      20   0    8796    896    768 S 0.333 0.006   0:01.30 3 tbe=
+nch_srv
 
-Regards,
-Siddharth.
