@@ -2,157 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDA46B2106
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 533EE6B2126
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjCIKOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:14:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
+        id S231409AbjCIKSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:18:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbjCIKNu (ORCPT
+        with ESMTP id S230450AbjCIKRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:13:50 -0500
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2237C1CBE7
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:13:16 -0800 (PST)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230309101301euoutp016ad6bdaa67044a588202d47d77f8423d~KuJm8tdX11153111531euoutp01j
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 10:13:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230309101301euoutp016ad6bdaa67044a588202d47d77f8423d~KuJm8tdX11153111531euoutp01j
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1678356781;
-        bh=QJxMvptBr9R9zrBbrseJ94rw8nv0FTvkVZRlgeEl6xc=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=U6tPEuXiOL4DAsLfFQ6h8sLg8GHbo1LHFtdvAG+YkgeDPtcNb4Am/ooyPtX05Q0Ms
-         P3wTbtsnid/cm0Qatvf3mJ0dMaZhv7dxwinH3rP0e/XlOOdmIiJiaQOl0V0d7gvDpH
-         CiiK3culUGvgwTF7f0UfBCtUyKEK7bRxQ3QERZ3g=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230309101301eucas1p1b4830baa61bf2729e144dcee95eac0b0~KuJmd29OY0145501455eucas1p1U;
-        Thu,  9 Mar 2023 10:13:01 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id B9.90.10014.C21B9046; Thu,  9
-        Mar 2023 10:13:00 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230309101300eucas1p2db2eff24d7b1f4073c8a43f49b086d9d~KuJl4luec1056510565eucas1p2T;
-        Thu,  9 Mar 2023 10:13:00 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230309101300eusmtrp23ff57ebe6759770f2fbcb6d388253bca~KuJl389C63045430454eusmtrp2F;
-        Thu,  9 Mar 2023 10:13:00 +0000 (GMT)
-X-AuditID: cbfec7f5-ba1ff7000000271e-34-6409b12ca55a
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id A5.8C.09583.C21B9046; Thu,  9
-        Mar 2023 10:13:00 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230309101259eusmtip1e8505a458710796f05c2baf58f51d7c5~KuJlSa7811427714277eusmtip1N;
-        Thu,  9 Mar 2023 10:12:59 +0000 (GMT)
-Message-ID: <d1175c3e-301d-1cbc-607c-e94051780806@samsung.com>
-Date:   Thu, 9 Mar 2023 11:12:59 +0100
+        Thu, 9 Mar 2023 05:17:51 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AA5CEFB3;
+        Thu,  9 Mar 2023 02:17:00 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id A83955FD38;
+        Thu,  9 Mar 2023 13:16:51 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1678357011;
+        bh=twQ60nnpAyulvzxPcu0ha11knd8LOrgUyOb/wJN9jCA=;
+        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
+        b=g19SdJjkunhov7Cg/9Iavuv6kt0M12I0iYQkitkTwzR2VeGWDJqUOiH6e+8KPyb/c
+         rV9y1c8xRGF06lVYzXnSrLyWnSuJoznJG3aSfoIbEgcyR2geDcBZk9aywi2P8YTptu
+         ruxwcZ5hHCLkeXyU9JSbBi9phTCT1l+95rIXeZmrGTQdK2KSt2+tNyllTwnpikivc6
+         7vrIK9BhZIwJ06k2Su2cljEPeSux6nFoAXYJc90x3xf/dQARPCZGsKrTc6P2O8hT+n
+         U4NHFKrp6illpvUIvbYTkhvYFv8DyGc/6HuSZMRfB9z9BW7RozyIKcKEu3wl43jnG6
+         dxSJzG3Vfkueg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu,  9 Mar 2023 13:16:51 +0300 (MSK)
+Message-ID: <d140f8c3-d7d9-89b3-94ce-207c1f7990da@sberdevices.ru>
+Date:   Thu, 9 Mar 2023 13:13:51 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
-        Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH 0/6] soc: samsung: pm_domains: Add Exynos850 support
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
 Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20230308230931.27261-1-semen.protsenko@linaro.org>
+In-Reply-To: <0abeec42-a11d-3a51-453b-6acf76604f2e@sberdevices.ru>
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>
+CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
+        <avkrasnov@sberdevices.ru>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Subject: [RFC PATCH v3 3/4] virtio/vsock: don't drop skbuff on copy failure
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBKsWRmVeSWpSXmKPExsWy7djPc7o6GzlTDJbttrJ4MG8bm8Xl/doW
-        1788Z7WYf+Qcq8Xe11vZLTY9vsZqcXnXHDaLGef3MVm07j3CbvG8D8g6/v4xowO3x85Zd9k9
-        Nq3qZPO4c20Pm8fmJfUefVtWMXp83iQXwBbFZZOSmpNZllqkb5fAlbHyXTtrwWuuium/NzM1
-        MG7j6GLk5JAQMJE4vWcxUxcjF4eQwApGie9nTrNDOF8YJd7u/MYC4XxmlPjd+5gZpuXBum1Q
-        VcsZJXY0zYVyPjJKLHkxjxWkilfATuLZ1HfsIDaLgIrEm6e/GCHighInZz5hAbFFBVIkdpzf
-        DVYjLOAhcf73LzCbWUBc4taT+WBHiQh0MErs3vKQFcRhFljNJLFl0zqwbjYBQ4mut11sIDan
-        gINE68YFzBDd8hLb385hBmmQEGjmlNg/6RQLxOEuEpcO/WGFsIUlXh3fwg5hy0j83wmxTkKg
-        nVFiwe/7UM4ERomG57cYIaqsJe6c+wW0jgNohabE+l36EGFHiUuHH7ODhCUE+CRuvBWEOIJP
-        YtK26cwQYV6JjjYhiGo1iVnH18GtPXjhEvMERqVZSAEzCykAZiF5ZxbC3gWMLKsYxVNLi3PT
-        U4uN81LL9YoTc4tL89L1kvNzNzECE9fpf8e/7mBc8eqj3iFGJg7GQ4wSHMxKIrzfpThShHhT
-        EiurUovy44tKc1KLDzFKc7AoifNq255MFhJITyxJzU5NLUgtgskycXBKNTBx99wwz//QKafj
-        Yh4wIVxbIrxi8f/HBzfozzk3UdnGfFPW6vu2LpyyLgUqm04t/PalPisjTvicWmyfwZSYKq26
-        rg/J74L3XF71WNi+deakism/Js8/f/bABbW/dkH5Sw7e//TgC8uFVvFQ4Qv8FzZnXtc5sMr6
-        6xeH5nMnv8vX5x5d9p53bVdzfvDWyXeaWY7+jl86e6/zvoqVBdtuljU+MuZ50Z78RCdh1tSO
-        E79MOd7evcrJ0rFSNn7SNYtTGu8Oba29NX19y6nJkhp3pkw4blKU+OHVZNn1pdOSzvGdnrxw
-        grgwk+I1/wSRdTPfSeeufXp2xdlfs5x+rZv32vPNpokL5Y22NbA/+iv9i0ffMV+JpTgj0VCL
-        uag4EQANyXkdywMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJIsWRmVeSWpSXmKPExsVy+t/xu7o6GzlTDK7cEbF4MG8bm8Xl/doW
-        1788Z7WYf+Qcq8Xe11vZLTY9vsZqcXnXHDaLGef3MVm07j3CbvG8D8g6/v4xowO3x85Zd9k9
-        Nq3qZPO4c20Pm8fmJfUefVtWMXp83iQXwBalZ1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdkYqln
-        aGwea2VkqqRvZ5OSmpNZllqkb5egl7HyXTtrwWuuium/NzM1MG7j6GLk5JAQMJF4sG4bexcj
-        F4eQwFJGiQn/29ghEjISJ6c1sELYwhJ/rnWxQRS9Z5Q4dOMGWIJXwE7i2dR3YA0sAioSb57+
-        YoSIC0qcnPmEpYuRg0NUIEVidpcOSFhYwEPi/O9fYOXMAuISt57MZwKZKSLQxSgx+04jC4jD
-        LLCaCWjbA6iTJjNKNLy4zgzSwiZgKNH1FuQMTg5OAQeJ1o0LmCFGmUl0be1ihLDlJba/ncM8
-        gVFoFpJDZiHZOAtJyywkLQsYWVYxiqSWFuem5xYb6RUn5haX5qXrJefnbmIExum2Yz+37GBc
-        +eqj3iFGJg7GQ4wSHMxKIrzfpThShHhTEiurUovy44tKc1KLDzGaAkNjIrOUaHI+MFHklcQb
-        mhmYGpqYWRqYWpoZK4nzehZ0JAoJpCeWpGanphakFsH0MXFwSjUwbTytXWHewFRX8uXAXNej
-        SZpfGUJNv3DqyWZ8eF+wpLxALSZxW471Y5dMtkbHXtbgdTWHZ2uazOzQ/N14PfP7pS/OZXU9
-        h0qtXO5YcW78ceNpbFzPxvm7Na5GqRx/78z80N+x85VCbPGhzLBFjcv4lY6nxXk1N+2Zxemx
-        ++oTt55net6XJnUcuj77htJemSc31z8TUeiPVyn6mSYwKfjrAckWtVZRyckzNv/p7ojWTzx7
-        /OHET1+5/RY6SZ66pO958cGK7N++V7+dPTWpmC0t717xQg0XfeVtTJ5ZF27OlPv0J+ZlxZ/m
-        qOueGpaBtkK7Uvp3nexLS2F5xDPd50eFh96tj+IX3nF6RrLJLpypxFKckWioxVxUnAgAOT5Y
-        EVwDAAA=
-X-CMS-MailID: 20230309101300eucas1p2db2eff24d7b1f4073c8a43f49b086d9d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230308230935eucas1p1e919f4d4b020e3386ce0eac8b4c8d299
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230308230935eucas1p1e919f4d4b020e3386ce0eac8b4c8d299
-References: <CGME20230308230935eucas1p1e919f4d4b020e3386ce0eac8b4c8d299@eucas1p1.samsung.com>
-        <20230308230931.27261-1-semen.protsenko@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/09 05:43:00 #20927523
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sam,
+This returns behaviour of SOCK_STREAM read as before skbuff usage. When
+copying to user fails current skbuff won't be dropped, but returned to
+sockets's queue. Technically instead of 'skb_dequeue()', 'skb_peek()' is
+called and when skbuff becomes empty, it is removed from queue by
+'__skb_unlink()'.
 
-On 09.03.2023 00:09, Sam Protsenko wrote:
-> Power Domains in Exynos850 are not really different from other Exynos
-> platforms. Enabling Exynos850 support in the PD driver is really just a
-> matter of adding:
->
->      static const struct exynos_pm_domain_config exynos850_cfg = {
->          .local_pwr_cfg = 0x1,
->      };
->
-> to the driver. But in the face of recent developments, e.g. this patch:
->
->      arm64: dts: exynos: move MIPI phy to PMU node in Exynos5433
->
-> it looked logical to rework the PD driver a bit to support its nesting
-> under the PMU node, while adding Exynos850 support to it. Initially I
-> only wanted to add syscon regmap support via some dedicated property,
-> but pulling PD nodes under the PMU syscon looks like more correct way.
+Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+---
+ net/vmw_vsock/virtio_transport_common.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Frankly speaking if you are changing this, you can go even further. 
-Simply make PMU node a PM domain provider and specify the power domain 
-as a phandle parameter. This is how it should have been done from the 
-beginning, but for some unknown reasons wasn't. There is really no need 
-to have a separate node for each power domain. This will also move 
-implementation details to the PMU / power domain drivers and it will 
-make it much easier to extend/modify it in the future. IMHO same applies 
-for PHY nodes.
-
-
-Best regards
+diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+index 9a411475e201..6564192e7f20 100644
+--- a/net/vmw_vsock/virtio_transport_common.c
++++ b/net/vmw_vsock/virtio_transport_common.c
+@@ -364,7 +364,7 @@ virtio_transport_stream_do_dequeue(struct vsock_sock *vsk,
+ 
+ 	spin_lock_bh(&vvs->rx_lock);
+ 	while (total < len && !skb_queue_empty(&vvs->rx_queue)) {
+-		skb = __skb_dequeue(&vvs->rx_queue);
++		skb = skb_peek(&vvs->rx_queue);
+ 
+ 		bytes = len - total;
+ 		if (bytes > skb->len)
+@@ -388,9 +388,8 @@ virtio_transport_stream_do_dequeue(struct vsock_sock *vsk,
+ 			u32 pkt_len = le32_to_cpu(virtio_vsock_hdr(skb)->len);
+ 
+ 			virtio_transport_dec_rx_pkt(vvs, pkt_len);
++			__skb_unlink(skb, &vvs->rx_queue);
+ 			consume_skb(skb);
+-		} else {
+-			__skb_queue_head(&vvs->rx_queue, skb);
+ 		}
+ 	}
+ 
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+2.25.1
