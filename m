@@ -2,90 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8A66B1B98
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 164926B1B99
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjCIGfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 01:35:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
+        id S230057AbjCIGgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 01:36:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjCIGfb (ORCPT
+        with ESMTP id S230018AbjCIGgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 01:35:31 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74040DBB51
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 22:35:30 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3296ZPm8002258;
-        Thu, 9 Mar 2023 00:35:25 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678343725;
-        bh=jUgepbAgwMEep1trTsFsIDO3Ae9liZl7RbkHF9bB2mA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=MlNC6AFRs5E1aO1C1bGtVYea0C7ErcnkrwGsgWa3nP5zzFep4thOgik8Q/SSkXhQ3
-         c1ZzW92iQ40V0DNbvt+vZO1fHrQTl70K/LFxTZCz1bxViFhO6s/ZwxQgCL3eU7oMp9
-         sS8pahQTpeFneoK7oy89uCwpPfkXkf1n55Q/ruLw=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3296ZPKs012461
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 9 Mar 2023 00:35:25 -0600
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 9
- Mar 2023 00:35:25 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 9 Mar 2023 00:35:25 -0600
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3296ZEQq099087;
-        Thu, 9 Mar 2023 00:35:23 -0600
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <vkoul@kernel.org>, <kishon@kernel.org>, <rogerq@kernel.org>
-CC:     <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH v2 3/3] phy: ti: gmii-sel: Enable SGMII mode for J721E
-Date:   Thu, 9 Mar 2023 12:05:14 +0530
-Message-ID: <20230309063514.398705-4-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230309063514.398705-1-s-vadapalli@ti.com>
-References: <20230309063514.398705-1-s-vadapalli@ti.com>
+        Thu, 9 Mar 2023 01:36:49 -0500
+Received: from out-9.mta1.migadu.com (out-9.mta1.migadu.com [IPv6:2001:41d0:203:375::9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170542B9C8
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 22:36:44 -0800 (PST)
+Message-ID: <a2551c50-feea-bcbe-00ed-802456b5a19f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1678343803;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oflCArd3KsWDijJ2FL/2wrJj33OV+66NpTMchMFSx0I=;
+        b=rYuJ1a7okcyGLqyvNVBEaHxC7Sm9kdYqTKTop9wNMpGCpzjTB7CevmH6nMIdu30tDxzdft
+        TIBx63a/DB/6Ydak3v+yIj3QF8+XzPOcDHkMLBHndLEBpRCknw1J2ZgFUMnYImEBftG4/N
+        6SGxPD8BoG6OUL/4+nAXUmQEfxEsqbA=
+Date:   Thu, 9 Mar 2023 14:36:35 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH -next] raid10: fix leak of io accounting
+To:     Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
+References: <20230304070133.1134975-1-yukuai1@huaweicloud.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+In-Reply-To: <20230304070133.1134975-1-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TI's J721E SoC supports SGMII mode with the CPSW9G instance of the CPSW
-Ethernet Switch. Thus, enable it by adding SGMII mode to the list of the
-corresponding extra_modes member.
+Hi,
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- drivers/phy/ti/phy-gmii-sel.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+What do you mean 'leak' here?
 
-diff --git a/drivers/phy/ti/phy-gmii-sel.c b/drivers/phy/ti/phy-gmii-sel.c
-index f3da6b020247..c87118cb2af9 100644
---- a/drivers/phy/ti/phy-gmii-sel.c
-+++ b/drivers/phy/ti/phy-gmii-sel.c
-@@ -230,7 +230,7 @@ static const
- struct phy_gmii_sel_soc_data phy_gmii_sel_cpsw9g_soc_j721e = {
- 	.use_of_data = true,
- 	.regfields = phy_gmii_sel_fields_am654,
--	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII),
-+	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII) | BIT(PHY_INTERFACE_MODE_SGMII),
- 	.num_ports = 8,
- 	.num_qsgmii_main_ports = 2,
- };
--- 
-2.25.1
+On 3/4/23 15:01, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+>
+> handle_read_error() will resumit r10_bio by raid10_read_request(), which
+> will call bio_start_io_acct() again, while bio_end_io_acct() will only
+> be called once.
+>
+> Fix the problem by don't account io again from handle_read_error().
 
+My understanding is it caused inaccurate io stats for bio which had a read
+error.
+
+> Fixes: 528bc2cf2fcc ("md/raid10: enable io accounting")
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>   drivers/md/raid10.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> index 6c66357f92f5..4f8edb6ea3e2 100644
+> --- a/drivers/md/raid10.c
+> +++ b/drivers/md/raid10.c
+> @@ -1173,7 +1173,7 @@ static bool regular_request_wait(struct mddev *mddev, struct r10conf *conf,
+>   }
+>   
+>   static void raid10_read_request(struct mddev *mddev, struct bio *bio,
+> -				struct r10bio *r10_bio)
+> +				struct r10bio *r10_bio, bool handle_error)
+>   {
+>   	struct r10conf *conf = mddev->private;
+>   	struct bio *read_bio;
+> @@ -1244,7 +1244,7 @@ static void raid10_read_request(struct mddev *mddev, struct bio *bio,
+>   	}
+>   	slot = r10_bio->read_slot;
+>   
+> -	if (blk_queue_io_stat(bio->bi_bdev->bd_disk->queue))
+> +	if (!handle_error && blk_queue_io_stat(bio->bi_bdev->bd_disk->queue))
+>   		r10_bio->start_time = bio_start_io_acct(bio);
+
+I think a simpler way is just check R10BIO_ReadError here.
+
+Thanks,
+Guoqing
