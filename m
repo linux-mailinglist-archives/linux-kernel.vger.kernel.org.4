@@ -2,66 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9DB6B2FCD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F71D6B2FDF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:52:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjCIVuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 16:50:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
+        id S230467AbjCIVwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 16:52:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjCIVuH (ORCPT
+        with ESMTP id S230004AbjCIVws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 16:50:07 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AA2E7EC2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 13:50:04 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id k10so12716603edk.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 13:50:04 -0800 (PST)
+        Thu, 9 Mar 2023 16:52:48 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DDC103398
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 13:52:43 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id 132so1927686pgh.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 13:52:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678398603;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678398763;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KK2kVS/pDWxq/x5pUQs4W8hA5sU/CpHNUPW7RfmKdu0=;
-        b=Wbg1jSF872bITS/MV4oiOvXaEN6BjZnu2OMHT+QhKMUR+1d9M4iS55uzTP4Z0+LwZd
-         a18IH5Z/RxxE9sYRJ/XYdhWNNtiAwOP+OjjfeXsFAq/RsyuN+k3xFa/neoOzGGYsSwxc
-         1YM+bbd1fAkHbDvTHRhEhTyxvd5cRqDcFJ0EZUK+9+px0dwMKlFXzlA6FYjgrnBP4nF+
-         AEysNe5rnnOmTeSsAt1OXl50AoMYR6tlvKKoOt+aPEQoEJxOr2aDPp9MiNd1BL86+PPw
-         nTs6/RAyvgGuRCYrNmDPmah6/ySoAqfZ1cpBd9fXAk6qMFjNM5EpxPfQ3yUyGtup2iXj
-         2CZw==
+        bh=7nNOXbc+WHd5NABSbnw3+9ZkEtpuzcZoSp/LFLBByFA=;
+        b=kfiM9MxY8vR15n0P+Q9WMzoNqzsyX/K61E9+p64hTU3fdlTpBiuHXT+QL4MCiMCwsZ
+         /E0QrLsMb4Nut3KwGFTkPx82xRKD0Q6tg521BAsaxSjjgi0jp10LyKT4VcO3Ym5Nfp8j
+         K99lBPkT863bgMXn81mWM52Y3HAXsnbgQXC/cQhkIUADsx8eC8BCkaezk1jyf3KnMbxe
+         5cey5kg6qiEDTnH7o5tkCNFGPtIcoIWnQj/s/71D62MPVHbi+/Yi6G5hwJTKjNnOycuD
+         8thUDBETxoMKd3r5r6WznnZXgw5w/5YPtXbhqUPh2vkm0LV7k6n6vMb+6MRMEVomuEWI
+         oINw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678398603;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+        d=1e100.net; s=20210112; t=1678398763;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KK2kVS/pDWxq/x5pUQs4W8hA5sU/CpHNUPW7RfmKdu0=;
-        b=ZRrURvGoU6MKGYZ9GfjqTmkj59+IpogztxGSiys6I6eRc8DHoj/HgFbA3U83hUhDft
-         3KIbtbg9Ejzy8EKQiHz7GApMGYxq3rnHgHcqSViCUG14mUr7Mh0IRbhraVhjSVxCt57w
-         byPF1E+JB7ee91V3AVKBuQJghRqvCjQiEArpboPiodkXsbkd1OCHmGN/XBH1xs9cP9x1
-         IRL1+8zcQ3Xmg2oD8CfP5tfG/903dmYMuSxAOFMn3NiBGbbiWFjFma+2p4DYTLRqyXqf
-         lYEfyqhTNPN4Q3riwrwrs1+ofZQscY9FXzvf4BNZZm+fo7bZ36iQXFYQFC6xMJ2ytZxY
-         w8gA==
-X-Gm-Message-State: AO0yUKUd8YKdRxY/CizNkctit/YG8KFxxHO0XHZqdckxbTdpr/BPp5g5
-        rmGYYcjttLB99MeBRqWWxG5izw==
-X-Google-Smtp-Source: AK7set+5QCYisQjzh6bsce1zFynUkiZ/RTqVYScw9ZFdEDXjWr+TVTj/rn3OhSNxi4BNNZDQlfhwpQ==
-X-Received: by 2002:a50:ee18:0:b0:4a0:e31a:434 with SMTP id g24-20020a50ee18000000b004a0e31a0434mr20831551eds.27.1678398603119;
-        Thu, 09 Mar 2023 13:50:03 -0800 (PST)
-Received: from ryzen9.fritz.box ([81.221.122.240])
-        by smtp.gmail.com with ESMTPSA id r20-20020a50c014000000b004bc2d1c0fadsm218206edb.32.2023.03.09.13.50.02
+        bh=7nNOXbc+WHd5NABSbnw3+9ZkEtpuzcZoSp/LFLBByFA=;
+        b=Gg5Y12GKQRMz11Q4XhHpYlpWckAUUxbZp9xEInRCmr2X0/cIPooHNLTHTr/FEKOGoS
+         Tw6w6lFrflEbtj6ArlMov/tCIFz4JO9UOB4V4znK/lFIz6y120T6xSoxhAG1ZC3ybczR
+         KYf93FDJXTXT0rnhNBROAuUfKv7lxxSHZdAKrdQnVLLlGnUrxuG9ZChzTu2KETYpig0W
+         tZkJe8doaZOeEnw82J+fFeQysk700s5x019Tw9NF/Meucch2auKe5ZMIMBqNl6rfytc0
+         11zDLyun1RedcJ9jx+4xm8sbCDM71QSJRkvyVjdwt+ZzNgqpCGqzpTkRPAYt+tezIbNR
+         g1cQ==
+X-Gm-Message-State: AO0yUKW8A9yeArYFd+sU3QKs+Ju7UjTVfvernbn5YOcGf1hkXCgkB64T
+        v39ETk2nSi+V8em6YzL6yG3gUjAxkX0Z8E75NUM=
+X-Google-Smtp-Source: AK7set8Rgzrxi+ZGmbJxKNg4wUXFIFO8nTaU1MxHwhO6m2S5MjEM74yH44rUOwLH5ZFNysgyUIXqOg==
+X-Received: by 2002:aa7:980c:0:b0:5dc:2064:f7c4 with SMTP id e12-20020aa7980c000000b005dc2064f7c4mr22346879pfl.10.1678398762740;
+        Thu, 09 Mar 2023 13:52:42 -0800 (PST)
+Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
+        by smtp.gmail.com with ESMTPSA id 2-20020aa79142000000b00592543d7363sm69953pfi.1.2023.03.09.13.52.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 13:50:02 -0800 (PST)
-From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
-To:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        angelogioacchino.delregno@collabora.com, matthias.bgg@gmail.com,
-        gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, maz@kernel.org, tglx@linutronix.de
-Subject: [PATCH v11 0/3] Add minimal MT8365 and MT8365-EVK support
-Date:   Thu,  9 Mar 2023 22:50:01 +0100
-Message-Id: <20230309215001.881646-1-bero@baylibre.com>
-X-Mailer: git-send-email 2.40.0.rc2
+        Thu, 09 Mar 2023 13:52:42 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Alexey Romanov <avromanov@sberdevices.ru>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru
+Subject: Re: [PATCH v1 0/3] Meson A1 32-bit support
+In-Reply-To: <20230228084952.mgx3d3nw65yo5ebu@CAB-WSD-L081021>
+References: <20230222115020.55867-1-avromanov@sberdevices.ru>
+ <8e5f9bfa-d612-cd43-d722-d04c40938c62@linaro.org>
+ <20230227142809.kujmrraf3pcdhqyn@CAB-WSD-L081021>
+ <f3e42012-609c-4085-b4f4-bd32bfc34aff@app.fastmail.com>
+ <20230227155100.hhl4yvkyfqfyoa6h@CAB-WSD-L081021>
+ <a5fa8b23-4ec8-475f-be5e-538b53d6f82d@app.fastmail.com>
+ <33b58877-5167-c453-e686-1d10cdca66c0@linaro.org>
+ <20230227165049.4y7jx5nnnlibe6kg@CAB-WSD-L081021>
+ <7d29f3fd-b8c8-4687-b6a0-b8956dd39f0b@app.fastmail.com>
+ <20230228084952.mgx3d3nw65yo5ebu@CAB-WSD-L081021>
+Date:   Thu, 09 Mar 2023 13:52:41 -0800
+Message-ID: <7hedpxwq1i.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -71,76 +85,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v11:
-  - Fix typo in systimer (Thanks Angelo)
+Dmitry Rokosov <ddrokosov@sberdevices.ru> writes:
 
-v10:
-  - Fix systimer properties (Thanks Amjad)
-  - Drop components of the patchset that have already been merged
+> On Mon, Feb 27, 2023 at 07:19:38PM +0100, Arnd Bergmann wrote:
+>> On Mon, Feb 27, 2023, at 17:50, Dmitry Rokosov wrote:
+>> > On Mon, Feb 27, 2023 at 05:38:49PM +0100, Neil Armstrong wrote:
+>> >> On 27/02/2023 17:15, Arnd Bergmann wrote:
+>> >> > On Mon, Feb 27, 2023, at 16:51, Dmitry Rokosov wrote:
+>> >> > 
+>> >> > Most of these don't apply in userspace, so the incentive to
+>> >> > run smaller 32-bit userland on systems with less than 1GB of
+>> >> > RAM usually outweighs the benefits of 64-bit userspace.
+>> >> 
+>> >> Thanks for the details!
+>> >
+>> > Looks like Thomas has already prepared a basic patch series for buildroot,
+>> > but maintainers declined it.
+>> >
+>> > https://lore.kernel.org/all/20220730194331.GA2515056@scaer/
+>> 
+>> I see. I know very little about buildroot, but it sounds like
+>> there are other ways of doing the same thing here. In general,
+>> this is pretty much an Arm specific problem. While you clearly
+>> want compat mode for small userland on any architecture but don't
+>> want 32-bit kernels, arm is the only one that has a different
+>> kernel "ARCH=" value and needs a separate gcc toolchain.
+>> 
+>> If the problem is only the toolchain, an easy way out may
+>> be to use clang instead of gcc as your compiler, as a single
+>> clang binary can target both 32-bit userland and 64-bit kernel
+>> on all supported architectures.
+>
+> Agreed with you. We will try different local approaches to support
+> compat build configurations. For now, prebuilt toolchain (buildroot make
+> sdk goal) is best way from my point of view. Anyway, we will try to
+> solve this problem in the our sandbox and stay on the 64-bit kernel.
+> Thank you for all the helpful details you shared, appreciate it!
 
-v9:
-  - Fix a regression in v8 that broke the USB port
-  - Remove superfluous include in mt8365.dtsi
-  - Fix some naming issues pointed out by dtbs_check
+Just to clarify one thing...
 
-v8:
-  - Add binding descriptions for mediatek,mt8365-systimer and
-    mediatek,mt8365-uart
-  - Specify ranges with parameters for u3phy
+More specifically, this is a buildroot *build system* problem.  If you
+build the kernel separately from the rootfs, it works fine. 
 
-Tested-by: Kevin Hilman <khilman@baylibre.com>
+I use 32-bit buildroot (and debian) rootfs images all the time on
+Amlogic SoCs with 64-bit kernels and it works fine.  
 
-v7:
-  - Update GIC information in mt8365.dtsi (thanks to Marc Zyngier for
-    pointing out the problem)
-  - Adjust the timer to match the updated GIC information
-
-v6:
-  - Add systimer in mt8365.dtsi
-  - Add I/D caches and L2 cache details in mt8365.dtsi
-  - Move bl31_secmon_reserved from mt8365.dtsi to mt8365-evk.dts
-  - Fix inconsistent indentation in mt8365-pinctrl example
-  - Further mt8365.dtsi cleanups
-  - Submit to additional maintainers spotted by get_maintainer.pl
-
-v5:
-  - Reorder top-level entries in mediatek,mt8365-pinctrl.yaml to match
-    example-schema
-  - Use consistent quotes
-
-v4:
-  - Remove pins-are-numbered references that have been holding things up
-    now that the patches removing it from dt-bindings have landed in linux-next
-
-v3:
-  - Remove a number of components that are not yet supported (they will
-    come back alongside the corresponding drivers)
-  - Address issues found by dt_binding_check (mostly fixing pinctrl
-    bindings)
-  - Address issues pointed out in comments
-  - Reorder patches
-
-v2:
-  - Add missing dt-bindings documentation
-  - Small cleanups addressing issues in v1 pointed out by Krzysztof Kozlowski
-
-
-Bernhard Rosenkränzer (2):
-  dt-bindings: irq: mtk, sysirq: add support for mt8365
-  dt-bindings: serial: mediatek,uart: add MT8365
-
-Fabien Parent (1):
-  arm64: dts: mediatek: Initial mt8365-evk support
-
- .../interrupt-controller/mediatek,sysirq.txt  |   1 +
- .../bindings/serial/mediatek,uart.yaml        |   1 +
- arch/arm64/boot/dts/mediatek/Makefile         |   1 +
- arch/arm64/boot/dts/mediatek/mt8365-evk.dts   | 168 ++++++++
- arch/arm64/boot/dts/mediatek/mt8365.dtsi      | 377 ++++++++++++++++++
- 5 files changed, 548 insertions(+)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
-
--- 
-2.40.0.rc2
-
+Kevin
