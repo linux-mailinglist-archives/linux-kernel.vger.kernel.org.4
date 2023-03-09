@@ -2,135 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B4C6B1E3F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0BF6B1E43
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjCIIdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 03:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
+        id S230159AbjCIIec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 03:34:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjCIIdK (ORCPT
+        with ESMTP id S229761AbjCIIeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:33:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1990CCA2D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:31:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678350699;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G4DxzMWFw5jGE1+NNVtKuCD9/BZ7uSP6hGTNxIYyrI0=;
-        b=gGnIoi6hM6iBb9zeqGoHCc3GZNS73QsR1fmmJft9fbizgOqzNJg8elhmbZ3UXxJoTVoQK6
-        GDJjK3meeuCsf3MlLtFJM+nPxdBSqZ1YK5XawY/dv3swbrAmLNZN1ntVTjY99gBfTZZQF8
-        ch9DL5IrxQT2OFVJ1QZi6akmVZnFOFs=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-192-l8Nr7XpLNi6qxp2R22POHw-1; Thu, 09 Mar 2023 03:31:38 -0500
-X-MC-Unique: l8Nr7XpLNi6qxp2R22POHw-1
-Received: by mail-qt1-f199.google.com with SMTP id c5-20020ac85185000000b003bfae3b8051so754159qtn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 00:31:38 -0800 (PST)
+        Thu, 9 Mar 2023 03:34:12 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FEAE1CAD
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:32:14 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id y15-20020a17090aa40f00b00237ad8ee3a0so1406995pjp.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 00:32:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1678350733;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qnU/X2e95xsiSIu4tmW7SI2rnetIK140zKHdYOPsBoo=;
+        b=E9v9mwYBcKzIl7SSCZrLhtYawGp6dt2Fx4EWTVJU1a5gN4PUjVBUkIMAwEGXi/5qsA
+         roZHNoClMi7DB7BTo2PAbIJx7Qg2SvYjsIwmEF0OmcE/ZVcrPUclXPSJSix9kQ9jIpKq
+         7oKIpSlFXrW4VLRa6NwiNtKMyjjBv3AyF2o+xJtKdUjgOYMGdslAZxBPJhjvsL3m0Zui
+         LbLFg9axUYUS3YeEYQWZPuJNVbnXlgk1DVuTPovHqe7Ty1LFWTkm0CMmz1/6N/BDAn8o
+         NaT41EQaSDl9jCs2SUVPW271hMSmspWAqLqgYPq9//hhC88hF+yHoEbqpTVWru6/po9L
+         K2NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678350698;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G4DxzMWFw5jGE1+NNVtKuCD9/BZ7uSP6hGTNxIYyrI0=;
-        b=5K6mMXgLqUwWCNSmuJRsjOtzizCp2rGz0MiccXVobceY/2qZ2ag7J0/ZsYiTOELhqH
-         0vsfCp4hiI6Nz1X9zMHB7n5hMxNIeN1cfIMbFFWYpWG9feWQ9yZ70xulNvxxK6TmzQHq
-         0cHtWATKRrf7NBy0PWTzJirTiLFwJ7scIq3yHpL4s/2pbrCSRxjZYzcJtxG/A1XL0CUv
-         PvhQ4ttw8H1l8OMJ0PC1AjlcUR6DI8qRFu+vhp7IWAOK7cUEMxMvC1T7GLf52+4AbzTm
-         N7Ts7UwHCABW34YV1bYw4nIQhWDspbialNmXKqTUHb4wopTDGvgaqFnwKyIbG1ErcZQE
-         zWrA==
-X-Gm-Message-State: AO0yUKV8W/T2+r8qLqARlBq9z4mFGcpPU5WX7+fWh8mr5asUme1N0zMX
-        Ot4n1IE7wLAP3TD3s1cij4EsCVdKfysjZp4l0YOzqX6HsUfjTl/68rPBIj5UnzjaTXgmQHw9hq/
-        5gbM7mfTHH0JIWhrZnvP+7scy
-X-Received: by 2002:a05:622a:54c:b0:3bf:d9d2:484f with SMTP id m12-20020a05622a054c00b003bfd9d2484fmr35189153qtx.11.1678350698226;
-        Thu, 09 Mar 2023 00:31:38 -0800 (PST)
-X-Google-Smtp-Source: AK7set+lOQQ30IfqLTp3od+p+eKiTOPO28RD1XBMQ8cVo6/e0bR73jy7mpBYd6WWU+y5fBzb1/Ok4A==
-X-Received: by 2002:a05:622a:54c:b0:3bf:d9d2:484f with SMTP id m12-20020a05622a054c00b003bfd9d2484fmr35189140qtx.11.1678350697996;
-        Thu, 09 Mar 2023 00:31:37 -0800 (PST)
-Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id y9-20020ac87089000000b003bfaae103f6sm13229024qto.89.2023.03.09.00.31.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 00:31:37 -0800 (PST)
-Date:   Thu, 9 Mar 2023 09:31:33 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Rong Tao <rtoax@foxmail.com>
-Cc:     mst@redhat.com, Rong Tao <rongtao@cestc.cn>,
-        Jason Wang <jasowang@redhat.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tools/virtio: virtio_test -h,--help should return
- directly
-Message-ID: <20230309083133.zfebcl67k35b7rkt@sgarzare-redhat>
-References: <tencent_4B5122C4158323A1D1ACA04B3295F1579207@qq.com>
+        d=1e100.net; s=20210112; t=1678350733;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qnU/X2e95xsiSIu4tmW7SI2rnetIK140zKHdYOPsBoo=;
+        b=bc13Xq0eqEkb4mrUOG39TmU2baM3VUTXHD0chEruUaV7xVFlEAHke64DtZar/Am5QN
+         FR/9iDkTJ2sdLAGVyhzwLhAK+T/ruokYZnMDzIExL9xwha436UEWhwU6ByTTKYmm72Bb
+         o7OguvJ+/7Ld3jBUe1a66GCvm0P151xroXXWT7Du9OC3jqi2Cs9LJqw9yb1F6KHyi+1M
+         HVyc8pAIfRE5B3jIPsvimxBy6fuY4LtJV7NugqdsP8ERK+8lOzSAjis0DudCImBBjsIq
+         JizXxmMayqZQNM0ZJHZapStXklFg/WW0r/PbJ5cF9t8VgsUC5AIi6ozGujDPlR8ImIFP
+         /W2Q==
+X-Gm-Message-State: AO0yUKXqWaXl1k8D1hE/Ytjvgqfvrf68FDvTaMQHtVL5ka2WQfwFFf+W
+        BiZKJSu1QgKV46/qv8gbTfucVg==
+X-Google-Smtp-Source: AK7set8U5qMjIEdCVTmcRgFo+6Z+N52ZgShPBwPb/e4xh7nmvQ7lPwVM/tFDqThh5b+fHusqeekZdA==
+X-Received: by 2002:a17:903:33c3:b0:19e:4cda:513 with SMTP id kc3-20020a17090333c300b0019e4cda0513mr2332008plb.5.1678350733572;
+        Thu, 09 Mar 2023 00:32:13 -0800 (PST)
+Received: from [10.70.252.135] ([139.177.225.245])
+        by smtp.gmail.com with ESMTPSA id a14-20020a170902ecce00b0019906c4c9dcsm11036033plh.98.2023.03.09.00.32.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 00:32:12 -0800 (PST)
+Message-ID: <85f9e200-dabe-7340-b76d-6525988054aa@bytedance.com>
+Date:   Thu, 9 Mar 2023 16:32:03 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <tencent_4B5122C4158323A1D1ACA04B3295F1579207@qq.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v4 7/8] mm: vmscan: remove shrinker_rwsem from
+ synchronize_shrinkers()
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Kirill Tkhai <tkhai@ya.ru>, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, shakeelb@google.com, mhocko@kernel.org,
+        roman.gushchin@linux.dev, muchun.song@linux.dev, david@redhat.com,
+        shy828301@gmail.com, rppt@kernel.org
+Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
+        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230307065605.58209-1-zhengqi.arch@bytedance.com>
+ <20230307065605.58209-8-zhengqi.arch@bytedance.com>
+ <bc829246-4606-cc8d-4a4f-da285255f5a3@ya.ru>
+ <07078623-b7ef-ceb4-eccc-8872a4067273@bytedance.com>
+ <d527005e-5f55-a6f7-21ce-817076860e99@amd.com>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <d527005e-5f55-a6f7-21ce-817076860e99@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 02:13:13PM +0800, Rong Tao wrote:
->From: Rong Tao <rongtao@cestc.cn>
->
->When we get help information, we should return directly, and we should not
->execute test cases. Move the exit() directly into the help() function and
->remove it from case '?'.
->
->Signed-off-by: Rong Tao <rongtao@cestc.cn>
->---
-> tools/virtio/virtio_test.c | 4 ++--
-> 1 file changed, 2 insertions(+), 2 deletions(-)
->
->diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
->index 120062f94590..6e348fbdc5d8 100644
->--- a/tools/virtio/virtio_test.c
->+++ b/tools/virtio/virtio_test.c
->@@ -337,6 +337,8 @@ static void help(void)
-> 		" [--batch=random/N]"
-> 		" [--reset=N]"
-> 		"\n");
->+
->+	exit(0);
+Hi Christian,
 
-Please exit with a value different from 0 (e.g. 2).
+On 2023/3/9 16:11, Christian König wrote:
+> Am 09.03.23 um 08:06 schrieb Qi Zheng:
+>> Hi Kirill,
+>>
+>> On 2023/3/9 06:39, Kirill Tkhai wrote:
+>>> On 07.03.2023 09:56, Qi Zheng wrote:
+>>>> Now there are no readers of shrinker_rwsem, so
+>>>> synchronize_shrinkers() does not need to hold the
+>>>> writer of shrinker_rwsem to wait for all running
+>>>> shinkers to complete, synchronize_srcu() is enough.
+>>>>
+>>>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>>>> ---
+>>>>   mm/vmscan.c | 8 ++------
+>>>>   1 file changed, 2 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>>>> index 7aaf6f94ac1b..ac7ab4aa344f 100644
+>>>> --- a/mm/vmscan.c
+>>>> +++ b/mm/vmscan.c
+>>>> @@ -796,15 +796,11 @@ EXPORT_SYMBOL(unregister_shrinker);
+>>>>   /**
+>>>>    * synchronize_shrinkers - Wait for all running shrinkers to 
+>>>> complete.
+>>>>    *
+>>>> - * This is equivalent to calling unregister_shrink() and 
+>>>> register_shrinker(),
+>>>> - * but atomically and with less overhead. This is useful to 
+>>>> guarantee that all
+>>>> - * shrinker invocations have seen an update, before freeing memory, 
+>>>> similar to
+>>>> - * rcu.
+>>>> + * This is useful to guarantee that all shrinker invocations have 
+>>>> seen an
+>>>> + * update, before freeing memory.
+>>>>    */
+>>>>   void synchronize_shrinkers(void)
+>>>>   {
+>>>> -    down_write(&shrinker_rwsem);
+>>>> -    up_write(&shrinker_rwsem);
+>>>>       atomic_inc(&shrinker_srcu_generation);
+>>>>       synchronize_srcu(&shrinker_srcu);
+>>>>   }
+>>>
+>>> Just curious, callers of synchronize_shrinkers() don't want to have 
+>>> parallel register_shrinker() and unregister_shrink() are completed?
+>>> Here we only should wait for parallel shrink_slab(), correct?
+>>
+>> I think yes.
+>>
+>> The synchronize_shrinkers() is currently only used by TTM pool.
+>>
+>> In TTM pool, a shrinker named "drm-ttm_pool" is registered, and
+>> the scan_objects callback will pick an entry from its own shrinker_list:
+>>
+>> ttm_pool_shrink
+>> --> spin_lock(&shrinker_lock);
+>>     pt = list_first_entry(&shrinker_list, typeof(*pt), shrinker_list);
+>>     list_move_tail(&pt->shrinker_list, &shrinker_list);
+>>     spin_unlock(&shrinker_lock);
+>>
+>> These entries have been removed from shrinker_list before calling
+>> synchronize_shrinkers():
+>>
+>> ttm_pool_fini
+>> --> ttm_pool_type_fini
+>>     --> spin_lock(&shrinker_lock);
+>>     list_del(&pt->shrinker_list);
+>>     spin_unlock(&shrinker_lock);
+>>     synchronize_shrinkers
+>>
+>> So IIUC, we only need to wait for the parallel shrink_slab() here. Like
+>> its comment says:
+>>
+>> /* We removed the pool types from the LRU, but we need to also make sure
+>>  * that no shrinker is concurrently freeing pages from the pool.
+>>  */
+> 
+> Yes your analyses is completely correct.
+> 
+> I just didn't wanted to add another SRCU into the critical code paths of 
+> the TTM pool just for device hot plug when I have that functionality 
+> already.
+> 
+> We just make sure that no shrinker is running in parallel with 
+> destruction of the pool. Registering and unregistering is harmless.
 
-> }
->
-> int main(int argc, char **argv)
->@@ -354,14 +356,12 @@ int main(int argc, char **argv)
-> 		case -1:
-> 			goto done;
-> 		case '?':
->-			help();
-> 			exit(2);
-
-Sorry, I meant the opposite, remove exit(2) and leave help().
+That's great, thanks for confirming.
 
 Thanks,
-Stefano
+Qi
 
-> 		case 'e':
-> 			features &= ~(1ULL << VIRTIO_RING_F_EVENT_IDX);
-> 			break;
-> 		case 'h':
-> 			help();
->-			goto done;
-> 		case 'i':
-> 			features &= ~(1ULL << VIRTIO_RING_F_INDIRECT_DESC);
-> 			break;
->-- 
->2.39.1
->
-
+> 
+> Regards,
+> Christian.
+> 
+>>
+>> + CC: Christian König :)
+>>
+>> Thanks,
+>> Qi
+> 
+> 
