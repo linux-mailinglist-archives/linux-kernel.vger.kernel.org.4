@@ -2,111 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771906B28DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:30:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AE46B28DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbjCIPaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:30:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
+        id S230226AbjCIP3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:29:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbjCIP3y (ORCPT
+        with ESMTP id S229737AbjCIP3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:29:54 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5803591B43
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:29:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jIydvMFEm+7lUxjf68jHbz78gMxcoFPoZoHPIv8uiDk=; b=n49fNarJf8Ekn3Z46vL8XCvFuv
-        EB4wdCmAYIOBgZzKed13wnarF+3ER/ZDV9PcRvDfphofM07zrsWR7TSKVYZp0+YCsJR/dOtP42ehR
-        vP/eqyJNt+UGDNO5L+3jMVCj0VGikb6dZ4rNembigP64VhI8wwabGftB8u2FLaQAhcQfGmiTCajDz
-        PJxo+FLYSkBtctVhoI1vrSi8xfg4PV0CNJGbAuG2BXXBs9ek9W/7sqzgl/xLVfJj4462VCIUIzXwe
-        Z4bINgR4vFLGr0wfRjaCX1eCTzJsw8dINFD6WVyg1VDlVDDtHPMfjSjjrkeKewnnHEuMf7kzAeocF
-        820R+4bA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1paICa-008XFG-BN; Thu, 09 Mar 2023 15:29:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 52595300033;
-        Thu,  9 Mar 2023 16:29:04 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3792F2B706F33; Thu,  9 Mar 2023 16:29:04 +0100 (CET)
-Date:   Thu, 9 Mar 2023 16:29:04 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mike Galbraith <efault@gmx.de>
-Cc:     mingo@kernel.org, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
-        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
-        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org
-Subject: Re: [PATCH 10/10] sched/fair: Implement an EEVDF like policy
-Message-ID: <ZAn7QAjQvw5q6aI5@hirez.programming.kicks-ass.net>
-References: <20230306132521.968182689@infradead.org>
- <20230306141502.810909205@infradead.org>
- <bfbfbf041854e2cd1a8ed14e64081062e5d632d3.camel@gmx.de>
- <9fd2c37a05713c206dcbd5866f67ce779f315e9e.camel@gmx.de>
- <20230309090633.GK2017917@hirez.programming.kicks-ass.net>
- <ZAnUnSEJ92bKpim7@hirez.programming.kicks-ass.net>
+        Thu, 9 Mar 2023 10:29:21 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A1B8B330;
+        Thu,  9 Mar 2023 07:29:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678375758; x=1709911758;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UwZg0IQKRPgjN7Aw0YALaFZ5q4J2jP64sVuOU2UZIVg=;
+  b=Z24lQG+kHkiB0q7OV7hNjq4Y2ZjMOnp62UX+RoDwjnw6JvQ60+n3riHi
+   qlykCSiLj7nMDIhDeiI4Nk8D5fqwCwvJ2vWSwLvDJTMz1FB9XnREfhL84
+   XGqMZQ+uwqfBZWhRCfzBVesKmaFr1Fa67agnCnORI3ndVD4JKDL16H2hU
+   oy0j5aASsataaaohczjDkKW7RAoUWdrkJbCFJFWhoayvdxvZ63rf0Fjzz
+   DKHWtNP9rwkqHGgA0SAZxWn0FOzauzzX9By6y7qhKCSjFJ4aKfS4ebYb3
+   dAQdwXG8X5Mua4wnMaCshD3azr8xkcbhCo4Nw5kYnORO3TZqgMDvKQdss
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="333942929"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="333942929"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 07:29:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="851545489"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="851545489"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga005.jf.intel.com with ESMTP; 09 Mar 2023 07:29:16 -0800
+Received: from [10.209.59.135] (kliang2-mobl1.ccr.corp.intel.com [10.209.59.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 49206580BBE;
+        Thu,  9 Mar 2023 07:29:14 -0800 (PST)
+Message-ID: <306106d7-b411-eece-aa32-45683a69a289@linux.intel.com>
+Date:   Thu, 9 Mar 2023 10:29:12 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAnUnSEJ92bKpim7@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 00/11] Better fixes for grouping of events
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
+References: <20230308225912.1960990-1-irogers@google.com>
+Content-Language: en-US
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230308225912.1960990-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 01:44:13PM +0100, Peter Zijlstra wrote:
-> On Thu, Mar 09, 2023 at 10:06:33AM +0100, Peter Zijlstra wrote:
-> > Hi Mike!
-> > 
-> > On Wed, Mar 08, 2023 at 02:36:01PM +0100, Mike Galbraith wrote:
-> > > On Wed, 2023-03-08 at 09:39 +0100, Mike Galbraith wrote:
-> > > >
-> > > > Curiosity got the best of me...
-> > > 
-> > > Remember this little bugger, allegedly distilled from a real
-> > > application control thread starvation issue?
-> > 
-> > Oooh, yeah, I should still have that somewhere. I'll try and remember
-> > what exactly was needed to make it behave properly.
+
+
+On 2023-03-08 5:59 p.m., Ian Rogers wrote:
+> The rules for grouping events have grown more complex. Topdown events
+> must be grouped, but flags like --metric-no-group and flags on metrics
+> don't respect this. Uncore events may be expanded using wild cards for
+> PMU names, but then the events need reordering so the group members
+> are adjacent. Rather than fixing metrics, this change fixes the main
+> event parsing code to first sort and then regroup evsels.
 > 
-> That thing wants both wakeup preemption and sleeper bonus. Specifically,
-> it needs the signal to insta-preempt the 'pointless' kill loop.
+> As this is shared functionality changes to it should cause
+> concern. The change is done with the intent of simplifying and making
+> more robust the grouping logic, examples are given. If additional
+> changes are necessary, they are most likely necessary to the
+> evsel__group_pmu_name logic as the code avoids breaking groups that
+> are on the same "group" PMU. The group_pmu_name is a variant of the
+> pmu_name tweaked in the case of software and aux events, that use
+> groups in a slightly different manner to conventional events.
 > 
-> What happens is that while positive lag, we get this, when negative lag
-> happens wakeup-preemption is not achieved and we get delayed by a full
-> tick.
+> The code was manually tested as well as passing perf test on a Intel
+> tigerlake CPU with intel-pt.
 > 
-> This gets us very little actual runtime.
+> v4. Move the Intel pmu->auxtrace initialization to the existing
+>     perf_pmu__get_default_config as suggested by Adrian Hunter.
+> v3. Rename pmu_name to group_pmu_name and add patch to warn when
+>     events are regrouped as requested by Namhyung.
+> v2. Fix up the commit message on 4/10 (thanks Arnaldo). Drop
+>     unnecessary v1 5/10 (thanks Kan). evlist->core.nr_groups wasn't
+>     being correctly maintained after the sort/regrouping and so the
+>     new patch 10/10 removes that variable and computes it from the
+>     evlist when necessary, generally just tests.
 > 
-> Let me see what do do about that...
+> Ian Rogers (11):
+>   libperf evlist: Avoid a use of evsel idx
+>   perf stat: Don't remove all grouped events when CPU maps disagree
+>   perf pmu: Earlier PMU auxtrace initialization
+>   perf stat: Modify the group test
+>   perf evsel: Allow const evsel for certain accesses
+>   perf evsel: Add function to compute group PMU name
+>   perf parse-events: Pass ownership of the group name
+>   perf parse-events: Sort and group parsed events
+>   perf evsel: Remove use_uncore_alias
+>   perf evlist: Remove nr_groups
+>   perf parse-events: Warn when events are regrouped
+> 
 
-So if I add TICK_NSEC based sleeper bonus (/2 for gentle), then starve
-works -- this is the absolutely minimal amount required. It sucks a bit
-it's HZ dependent, but alas.
+Thanks Ian. The patch series looks good to me.
 
-Also, the whole sleeper bonus gets us back into needing to track the old
-vruntime and the overflow crap for super long sleeps and all that fugly
-:/ I was so hoping we could delete that code.
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 
-Oh well.
+Thanks,
+Kan
 
-(also, did you know that removing the debug cruft helps with running
-numbers? ;-)
-
-I think it adds a bit of variance to the numbers -- but I've not ran
-long enough to tell with certainty.
+>  tools/lib/perf/evlist.c                  |  31 ++-
+>  tools/lib/perf/include/internal/evlist.h |   1 -
+>  tools/lib/perf/include/perf/evlist.h     |   1 +
+>  tools/perf/arch/x86/util/auxtrace.c      |   4 -
+>  tools/perf/arch/x86/util/evlist.c        |  39 ++--
+>  tools/perf/arch/x86/util/pmu.c           |   8 +-
+>  tools/perf/builtin-record.c              |   2 +-
+>  tools/perf/builtin-report.c              |   2 +-
+>  tools/perf/builtin-stat.c                |  24 +-
+>  tools/perf/tests/bpf.c                   |   1 -
+>  tools/perf/tests/parse-events.c          |  24 +-
+>  tools/perf/tests/pfm.c                   |  12 +-
+>  tools/perf/tests/pmu-events.c            |   2 +-
+>  tools/perf/util/evlist.c                 |   2 +-
+>  tools/perf/util/evlist.h                 |   8 +-
+>  tools/perf/util/evsel.c                  |  27 ++-
+>  tools/perf/util/evsel.h                  |   8 +-
+>  tools/perf/util/header.c                 |   3 +-
+>  tools/perf/util/metricgroup.c            |   3 +-
+>  tools/perf/util/parse-events.c           | 268 +++++++++++------------
+>  tools/perf/util/parse-events.h           |  14 +-
+>  tools/perf/util/parse-events.y           |  28 +--
+>  tools/perf/util/pfm.c                    |   1 -
+>  tools/perf/util/pmu.c                    |   6 +-
+>  tools/perf/util/python.c                 |   2 +-
+>  tools/perf/util/stat-shadow.c            |   2 +-
+>  26 files changed, 277 insertions(+), 246 deletions(-)
+> 
