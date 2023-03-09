@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF836B2631
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1731F6B2633
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbjCIOC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:02:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
+        id S230510AbjCIODx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:03:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231608AbjCIOBT (ORCPT
+        with ESMTP id S231611AbjCIODa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:01:19 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DC2DFB61;
-        Thu,  9 Mar 2023 06:00:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678370404; x=1709906404;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=q6QptM2lZW/mxcCZq+pcmryzCogJvA7ubRMFrbpXJxU=;
-  b=cv7WB/aOA0fe++1MMGqoxRo0dVCMf3lyex8FdKnxqMDhwPfG7Nq1MTSY
-   1Q9+wr7kdHA541eolwzVPHGumulQGkEQBDkToWwTktOs5YJlune7VIsIu
-   uvjU4BTYE+upXBN2hjwCXd8Z3BGbToFQ6WjZyOWlot4KFHLHJPQsPkI/p
-   y6G471heb9C3r7O/ihYHGWvXK6h6g+ietlHzqWVUIIcitGeP+4Sk62sdc
-   /LM5OY0JHM5dNqw+abNjwJQV5eMe7gokoGKQjGJpufvVcXN6LuX0ot7lK
-   LJknz0uUE4UC2LM8K1n3XYfMJSw/k2RNZIMmpUJtPoERm6QcyYfld/ZgQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="337975544"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="337975544"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 06:00:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="677376938"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="677376938"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.mshome.net) ([10.237.66.35])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 06:00:01 -0800
-Date:   Thu, 9 Mar 2023 15:59:55 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jiri Slaby <jirislaby@kernel.org>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 7/8] n_tty: Reindent if condition
-In-Reply-To: <b7e72552-d4ec-46f2-4f45-d8baec914ff1@kernel.org>
-Message-ID: <ec97f7c5-b9fb-aefb-2249-9bfadc7eee7d@linux.intel.com>
-References: <20230309082035.14880-1-ilpo.jarvinen@linux.intel.com> <20230309082035.14880-8-ilpo.jarvinen@linux.intel.com> <b7e72552-d4ec-46f2-4f45-d8baec914ff1@kernel.org>
+        Thu, 9 Mar 2023 09:03:30 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D955CF4D92
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:00:56 -0800 (PST)
+Received: from cryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: tanureal)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 583C5660302F;
+        Thu,  9 Mar 2023 14:00:55 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678370455;
+        bh=aaF5sPIUMsU7hS70kIpLTU2rsDAJ9y3ZK3OUhGBnqmg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jffchyZvvvrIy6wNHhpwtuitMy/2qzMqbSX1ZOo7yKrclb/GSTg+W+0/+R392Q7wS
+         dwzvIrHiQ4mYx7xiHQSxKm6+Hnhn8EobCXIjTieuw4q4wx0O5l59KUoYBur0DVUVlB
+         eTUvy8viUeWrHGrY/8w8l2IfvLnXIo/FxZ4PnS2t/AIyDOaWw+aAYd61tTrKwCZWAN
+         oLqQTnZKCtcXETf7TuefhWMEnPntPa+XqPM2z4Zky5yfK5X9Rq9o5zDzXJbR1PDV+l
+         1vwLLRq+5StuAet6A/qOwvSeIlKlvXyl4d0F3wtBO4HKDScSuZ5B45dZezggObkOUC
+         wpiqGmCfc4qTg==
+From:   Lucas Tanure <lucas.tanure@collabora.com>
+To:     David Rhodes <david.rhodes@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "Takashi Iwai --cc=alsa-devel @ alsa-project . org" <tiwai@suse.com>
+Cc:     patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, Lucas Tanure <lucas.tanure@collabora.com>
+Subject: [PATCH v5] ASoC: cs35l41: Steam Deck Shared boost properties quirk
+Date:   Thu,  9 Mar 2023 14:00:51 +0000
+Message-Id: <20230309140051.945329-1-lucas.tanure@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1754519233-1678370403=:21633"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,50 +58,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Add support for Steam Deck bios old properties. If a Steam deck didn't
+upgrade the BIOS, the driver should be able to handle the previous
+properties for shared boost types.
 
---8323329-1754519233-1678370403=:21633
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
+Changes since V4:
+ - Add documentation about this quirk
 
-On Thu, 9 Mar 2023, Jiri Slaby wrote:
+Changes since V3:
+ - Fixed missing space in if statement
+ - Fix the build issue, as dependency patches are already merged
 
-> On 09. 03. 23, 9:20, Ilpo Järvinen wrote:
-> > Align if condition to make it easier to read.
-> > 
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >   drivers/tty/n_tty.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
-> > index 0481e57077f1..1c9e5d2ea7de 100644
-> > --- a/drivers/tty/n_tty.c
-> > +++ b/drivers/tty/n_tty.c
-> > @@ -1176,7 +1176,7 @@ static void n_tty_receive_overrun(struct tty_struct
-> > *tty)
-> >     	ldata->num_overrun++;
-> >   	if (time_after(jiffies, ldata->overrun_time + HZ) ||
-> > -			time_after(ldata->overrun_time, jiffies)) {
-> > +	    time_after(ldata->overrun_time, jiffies)) {
-> 
-> Staring at this, what the second time_after() does in the first place?
-> 
-> >   		tty_warn(tty, "%d input overrun(s)\n", ldata->num_overrun);
-> >   		ldata->overrun_time = jiffies;
-> >   		ldata->num_overrun = 0;
+Changes since V2:
+ - sent the wrong patch with missing fixed lines
+Changes since V1:
+ - else in same line as {
+---
+ sound/soc/codecs/cs35l41.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
-That's a very good question ... I first thought it was checking whether 
-the jiffies is between two times but obviously that was wrong intuition 
-now when taking a closer look.
-
-But then, looking more into it, this whole thing looks an opencoded 
-*_ratelimited print. So perhaps overrun_time could be removed 
-completely... ? I can see it kinda changes priority of which messages 
-would get filtered out but I don't know if that's a problem or not.
-
+diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
+index 1624510d09c0..9ec01a5f09ca 100644
+--- a/sound/soc/codecs/cs35l41.c
++++ b/sound/soc/codecs/cs35l41.c
+@@ -1022,9 +1022,21 @@ static int cs35l41_handle_pdata(struct device *dev, struct cs35l41_hw_cfg *hw_cf
+ 	unsigned int val;
+ 	int ret;
+ 
+-	ret = device_property_read_u32(dev, "cirrus,boost-type", &val);
+-	if (ret >= 0)
+-		hw_cfg->bst_type = val;
++	/* Some ACPI systems received the Shared Boost feature before the upstream driver,
++	 * leaving those systems with deprecated _DSD properties.
++	 * To correctly configure those systems add shared-boost-active and shared-boost-passive
++	 * properties mapped to the correct value in boost-type.
++	 * These two are not DT properties and should not be used in new systems designs.
++	 */
++	if (device_property_read_bool(dev, "cirrus,shared-boost-active")) {
++		hw_cfg->bst_type = CS35L41_SHD_BOOST_ACTV;
++	} else if (device_property_read_bool(dev, "cirrus,shared-boost-passive")) {
++		hw_cfg->bst_type = CS35L41_SHD_BOOST_PASS;
++	} else {
++		ret = device_property_read_u32(dev, "cirrus,boost-type", &val);
++		if (ret >= 0)
++			hw_cfg->bst_type = val;
++	}
+ 
+ 	ret = device_property_read_u32(dev, "cirrus,boost-peak-milliamp", &val);
+ 	if (ret >= 0)
 -- 
- i.
+2.39.2
 
---8323329-1754519233-1678370403=:21633--
