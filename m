@@ -2,131 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C556B288E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC556B2891
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbjCIPTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:19:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
+        id S230281AbjCIPUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:20:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjCIPTq (ORCPT
+        with ESMTP id S230219AbjCIPTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:19:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1464CA17FC
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:18:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678375137;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/9yFC6UG6Qb69zCObh92ltCysfwKAZhk1RaD2VUDs0U=;
-        b=dH8PZj1ac1/EgN/32jsjQRyEc0AS8hMJEkbrJWg8PI2ezdP6/4k8YsR3YVksLSoYIKUqWm
-        u+6OxWQjk3AiKINxkkLY0McOKpIQvUxXf+qVm/+G6YnWvjreI2Xd8XnOL/3xS1m4q82Fcm
-        dbdbKWozIjRWJeJt/TxI0rKgyuDp4HQ=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-385-gw5Z39ttNXmMRGLN0sytHA-1; Thu, 09 Mar 2023 10:18:56 -0500
-X-MC-Unique: gw5Z39ttNXmMRGLN0sytHA-1
-Received: by mail-wr1-f69.google.com with SMTP id m7-20020a056000008700b002c7047ea429so524961wrx.21
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 07:18:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678375135;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/9yFC6UG6Qb69zCObh92ltCysfwKAZhk1RaD2VUDs0U=;
-        b=tBsUvbibtS1kvg8CkZ36FuRC4aAAV89+D6b2/+Oe3qmbeqBALTqwSNO4JKIjsc61Xr
-         MziLocClulYHS1VaeyCZpai48SOJbtIRG2U0wA5klETp4kck6RkQolU23RN1VMZwnxXQ
-         DHm64Z4qq/gguneWsgfiFe726AUBdea2vT2poNX5ZDKeSTuly8grcin6gK2Te74GdJ1k
-         GnTZLCt2mtYOSTXpSQNAoclnZNTxBxyjya0Qe9SuKGaX62HU34JX+kLQPi8G+gpqIC9u
-         NECRFXFZMOYncO2D6dBwKZNmboIq8BuzyjFcNAw8+7pjfD+ZRmmA97wzo6U3FyiLcQTg
-         1PRQ==
-X-Gm-Message-State: AO0yUKURar44B3qtLwua3BXkv4o6Y6z3puF51KiyVe1VQ+fdzLzKkDrb
-        ooYzw5XoCSU9BHNy8usVYIE9aM4+Fo1c5+xRZkJPTb5Q19mlutDqxALq9BHc+i2ZcUdeKvodOri
-        lzLUUfW7PQGdWKaem4EZRk0Zf
-X-Received: by 2002:a05:600c:198e:b0:3eb:36fa:b78d with SMTP id t14-20020a05600c198e00b003eb36fab78dmr19471524wmq.23.1678375135004;
-        Thu, 09 Mar 2023 07:18:55 -0800 (PST)
-X-Google-Smtp-Source: AK7set/hSS1pZuG+MnQuREyxGPFkGYBqTYNoS6/zwRI22k5tqtoTJHGML2449NbBIDvfKh+VFM7Fmw==
-X-Received: by 2002:a05:600c:198e:b0:3eb:36fa:b78d with SMTP id t14-20020a05600c198e00b003eb36fab78dmr19471510wmq.23.1678375134671;
-        Thu, 09 Mar 2023 07:18:54 -0800 (PST)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id l13-20020adfe58d000000b002c569acab1esm18202922wrm.73.2023.03.09.07.18.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 07:18:54 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Jordan Crouse <jorcrous@amazon.com>,
-        Enric Balletbo i Serra <eballetb@redhat.com>
-Cc:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        linux-kernel@vger.kernel.org, Albert Esteve <aesteve@redhat.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Sergio Lopez <slp@redhat.com>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH] media: venus: dec: Fix capture formats enumeration order
-In-Reply-To: <20230308181245.nbnwkdtdnsldd65l@amazon.com>
-References: <20230210081835.2054482-1-javierm@redhat.com>
- <20230303220918.qr5ydbin3nye3qtz@amazon.com>
- <87h6uydwel.fsf@minerva.mail-host-address-is-not-set>
- <3d0315fa-14ca-dc34-81ae-467d9ed5133d@quicinc.com>
- <87sfeh0yjn.fsf@minerva.mail-host-address-is-not-set>
- <CALE0LRvR=DjUp2_DBuPQkEr9jvzGH4Mx4-7=rc6zOw1APQdyeQ@mail.gmail.com>
- <20230308181245.nbnwkdtdnsldd65l@amazon.com>
-Date:   Thu, 09 Mar 2023 16:18:53 +0100
-Message-ID: <87ttyu54wy.fsf@minerva.mail-host-address-is-not-set>
+        Thu, 9 Mar 2023 10:19:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DE71166B;
+        Thu,  9 Mar 2023 07:19:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03FA361BD2;
+        Thu,  9 Mar 2023 15:19:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59E72C4339B;
+        Thu,  9 Mar 2023 15:19:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678375185;
+        bh=uGQ4+6pHq7XtriJV3b//hs9AavpLTw/sTULP6Va7e14=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=p+Ywt9Ss7qo77YnK/L7v+Jc8782nMY/mf3L6b4i1BQBvzouagzMRVZX5lPqvhTmRa
+         2uuLn8oN7qSGPYgpTrWMsTz19j4UrY603wczoD+HqLQdafKaqTG2On9HS7uyOAB7mo
+         IfBsOOQBP+KrF8rEcHNbOKiwG062NtKYbJ5PfTbXI+GD0krxREj41wvQJOlyaC/c5W
+         dAeJChfEncvrzjmwNfDDzu8AtswL82RyF60M7AsV/eoDz+cAvGj5Rv3zPEWbqKQCNu
+         Ze9H664F5ooqfdgwpYi8y34AdKLKgiJp9DeE2PIW/rUlQLtuBOeKg4u73QvXzA/ELi
+         PDISn4XfgjoTQ==
+Received: by mail-vs1-f50.google.com with SMTP id o6so1910796vsq.10;
+        Thu, 09 Mar 2023 07:19:45 -0800 (PST)
+X-Gm-Message-State: AO0yUKWR4AsT4L2vxhkqSoGXZfq6BdvqQOFkigG2a6aIPvOY3YkLdfjk
+        e6VYqIk3MnN6bZh3lv0orfuoB0Dnrte6e0fTqg==
+X-Google-Smtp-Source: AK7set8RGQOVHa/iBNZKJxL7flt/46pZiHDOP14HDqww3nC9X82ZNMZiMhz/FKDiDPM1DFOTBkNd9yGlmJ8gwF5gT1w=
+X-Received: by 2002:a67:7302:0:b0:414:2d02:6c96 with SMTP id
+ o2-20020a677302000000b004142d026c96mr14391301vsc.7.1678375184277; Thu, 09 Mar
+ 2023 07:19:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230307-apple_pcie_disabled_ports-v2-1-c3bd1fd278a4@jannau.net>
+In-Reply-To: <20230307-apple_pcie_disabled_ports-v2-1-c3bd1fd278a4@jannau.net>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 9 Mar 2023 09:19:32 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLd4sR2LRgjLy7ON1qtpaOzMJQ9A_0YkYWG7TPxKtFOcQ@mail.gmail.com>
+Message-ID: <CAL_JsqLd4sR2LRgjLy7ON1qtpaOzMJQ9A_0YkYWG7TPxKtFOcQ@mail.gmail.com>
+Subject: Re: [PATCH v2] PCI: apple: Set only available ports up
+To:     Janne Grunau <j@jannau.net>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Marc Zyngier <maz@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jordan Crouse <jorcrous@amazon.com> writes:
-
-> On Tue, Mar 07, 2023 at 05:20:18PM +0100, Enric Balletbo i Serra wrote:
-
-[...]
-
->> >
->> > But regardless, I think that it would be better for a driver to
->> > not change the order of advertised VIDIOC_ENUM_FMT pixel formats.
->> >
->> > Because what happens now is that a decoding that was previously
->> > working by default is not working anymore due a combination of
->> > the default being changed and S_FMT not working as expected.
+On Thu, Mar 9, 2023 at 7:36=E2=80=AFAM Janne Grunau <j@jannau.net> wrote:
 >
-> For my part, I was using the gstreamer v4l2 decoder which for some reason tries
-> to verify it can support whatever format it gets with G_FMT *before*
-> trying a S_FMT. I can't confirm or deny if S_FMT currently works or not.
+> Fixes following warning inside of_irq_parse_raw() called from the common
+> PCI device probe path.
 >
-> That said, I entirely agree with Javier. While it might be more
-> bandwidth efficient, QC08C is a obscure format. It is far more likely that the
-> average open source user would rather use a well known output format and, as
-> has been mentioned, once S_FMT is fixed those in the know can use the other
-> formats if they are working with other Qualcomm hardware blocks.
+>   /soc/pcie@690000000/pci@1,0 interrupt-map failed, using interrupt-contr=
+oller
+>   WARNING: CPU: 4 PID: 252 at drivers/of/irq.c:279 of_irq_parse_raw+0x5fc=
+/0x724
+>   ...
+>   Call trace:
+>    of_irq_parse_raw+0x5fc/0x724
+>    of_irq_parse_and_map_pci+0x128/0x1d8
+>    pci_assign_irq+0xc8/0x140
+>    pci_device_probe+0x70/0x188
+>    really_probe+0x178/0x418
+>    __driver_probe_device+0x120/0x188
+>    driver_probe_device+0x48/0x22c
+>    __device_attach_driver+0x134/0x1d8
+>    bus_for_each_drv+0x8c/0xd8
+>    __device_attach+0xdc/0x1d0
+>    device_attach+0x20/0x2c
+>    pci_bus_add_device+0x5c/0xc0
+>    pci_bus_add_devices+0x58/0x88
+>    pci_host_probe+0x124/0x178
+>    pci_host_common_probe+0x124/0x198 [pci_host_common]
+>    apple_pcie_probe+0x108/0x16c [pcie_apple]
+>    platform_probe+0xb4/0xdc
 >
+> This became apparent after disabling unused PCIe ports in the Apple
+> silicon device trees instead of deleting them.
+>
+> Use for_each_available_child_of_node instead of for_each_child_of_node
+> which takes the "status" property into account.
+>
+> Link: https://lore.kernel.org/asahi/20230214-apple_dts_pcie_disable_unuse=
+d-v1-0-5ea0d3ddcde3@jannau.net/
+> Link: https://lore.kernel.org/asahi/1ea2107a-bb86-8c22-0bbc-82c453ab08ce@=
+linaro.org/
+> Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Janne Grunau <j@jannau.net>
+> ---
+> Changes in v2:
+> - rewritten commit message with more details and corrections
+> - collected Marc's "Reviewed-by:"
+> - Link to v1: https://lore.kernel.org/r/20230307-apple_pcie_disabled_port=
+s-v1-1-b32ef91faf19@jannau.net
+> ---
+>  drivers/pci/controller/pcie-apple.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Agreed. The rule is that the kernel shouldn't regress user-space and the
-patches that changed the default format certainly did that. So from that
-point of view I think that this patch should land.
+Unfortunately, this is a common issue...
 
-There's also Enric's point that NV12 is a more common format and supported
-by more user-space programs. That's why think that regardless of the S_FMT
-situation, makes sense to revert to the previous default behaviour.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Rob
