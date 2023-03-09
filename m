@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B95A6B2E9C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 21:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF1C6B2EB1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 21:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjCIUYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 15:24:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
+        id S229989AbjCIU2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 15:28:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjCIUYh (ORCPT
+        with ESMTP id S229910AbjCIU2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 15:24:37 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D62561A96;
-        Thu,  9 Mar 2023 12:24:36 -0800 (PST)
-Received: from 2603-8080-2102-63d7-c4a8-7e10-0391-f3ff.res6.spectrum.com (2603-8080-2102-63d7-c4a8-7e10-0391-f3ff.res6.spectrum.com [IPv6:2603:8080:2102:63d7:c4a8:7e10:391:f3ff])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: gfxstrand)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9E34F660301A;
-        Thu,  9 Mar 2023 20:24:29 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678393474;
-        bh=iHVcle3qz6S4204P78xSSiIZLX3fAIlrxoRx24QoWEc=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Rm6Rb5jgc4KgSZ8CIfxw997YRUUmkZyouZw0049no8/knLpJh1cwuNXsK/1sjbIlq
-         EV4GUg2aXqjzfFjkkvApU/rKcF1vgyQ1UmLeSCvTlrN1MkR79+4o+E1BMkgIGGCYLh
-         /K/hvQHYHoJm8xfVcnW4szl1obTlHP0QloefieBQQYyOFF/uKmLwXQqPYeHqT+44Vl
-         qRmbCLyJ7vApu05NcHSu020jX2svAQm3WaPzSQ34yW2qeyQsLNouNRX9l4f3zDxVlz
-         XzdOH8rIvgBs+CecGqmP1IQURW8IhD+uxtTOll9MFa+N9QvhSHHNtCeki9Mw7Kx40K
-         gVFSwyUGI5Y4g==
-Message-ID: <c9e0c6fdcd642192a59a2fea95941a773ea7b3e3.camel@collabora.com>
-Subject: Re: [PATCH RFC 01/18] rust: drm: ioctl: Add DRM ioctl abstraction
-From:   Faith Ekstrand <faith.ekstrand@collabora.com>
-To:     Asahi Lina <lina@asahilina.net>,
-        =?ISO-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>, Mary <mary@mary.zone>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        rust-for-linux@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-sgx@vger.kernel.org,
-        asahi@lists.linux.dev
-Date:   Thu, 09 Mar 2023 14:24:25 -0600
-In-Reply-To: <11ce9291-c17f-e73d-fb5d-13d5386fe6be@asahilina.net>
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
-         <20230307-rust-drm-v1-1-917ff5bc80a8@asahilina.net>
-         <D9Cyx-9kbjaeb8QVBFqapDyctoDdVyu5uXEJDR41sdXUDXM1VgdRicV5huJDwfC3-T2J-R_DYHH8JZ1_aRdgbeYZFT78J9QveeeYbiTq4yU=@protonmail.com>
-         <11ce9291-c17f-e73d-fb5d-13d5386fe6be@asahilina.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 9 Mar 2023 15:28:15 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E719FB27B;
+        Thu,  9 Mar 2023 12:27:50 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 6291C5FD1B;
+        Thu,  9 Mar 2023 23:27:47 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1678393667;
+        bh=uFGjRE3j4zXGby/VPz50ex9laPK7eGiO5HSk7DnBtqc=;
+        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
+        b=S+IWTg0K3yV1PAswja5K2KTn/lLdiLh6OT5XMtSIUAMk6729yecIJTRGwx02pHsdJ
+         CIZnY+XqUktXAIpx1CPXVoNcnOdS9dJ+Zlw9TS1afVPT84Nr0GBg7Dl3mWy4Dk+0fD
+         2EccLw68tNixnisjXc4YNjl7XknO36vDXSyMxaaefYPwMdKDtNaCSvQ3jsCmgk3LBw
+         1HRl0U1UwEcyOcHS/S6eYjcpu3fFwK8CWhn1TnvlBE2UW2NTOwFVdTDnJtzJvb67kT
+         nxaYtrKlinP6cMV9izsvGSuctwEnjy1jn8X0ZgB46sVau02+Q3h78lWX+XuAK+CO2v
+         C5Q+V+GmF8faA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu,  9 Mar 2023 23:27:43 +0300 (MSK)
+Message-ID: <1804d100-1652-d463-8627-da93cb61144e@sberdevices.ru>
+Date:   Thu, 9 Mar 2023 23:24:42 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>
+CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
+        <avkrasnov@sberdevices.ru>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Subject: [RFC PATCH v4 0/4] several updates to virtio/vsock
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/09 18:14:00 #20929517
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -77,38 +71,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-03-09 at 15:04 +0900, Asahi Lina wrote:
-> On 08/03/2023 02.34, Bj=C3=B6rn Roy Baron wrote:
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 // SAFETY: This is just the ioctl
-> > > argument, which hopefully has the right type
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 // (we've done our best checking the
-> > > size).
-> >=20
-> > In the rust tree there is the ReadableFromBytes [1] trait which
-> > indicates that it is safe to read arbitrary bytes into the type.
-> > Maybe you could add it as bound on the argument type when it lands
-> > in rust-next? This way you can't end up with for example a struct
-> > containing a bool with the byte value 2, which is UB.
->=20
-> There's actually a much bigger story here, because that trait isn't
-> really very useful without a way to auto-derive it. I need the same
-> kind
-> of guarantee for all the GPU firmware structs...
->=20
-> There's one using only declarative macros [1] and one using proc
-> macros
-> [2]. And then, since ioctl arguments are declared in C UAPI header
-> files, we need a way to be able to derive those traits for them...
-> which
-> I guess means bindgen changes?
+Hello,
 
-It'd be cool to be able to auto-verify that uAPI structs are all
-tightly packed and use the right subset of types.  Maybe not possible
-this iteration but it'd be cool to see in future.  I'd like to see it
-for C as well, ideally.
+this patchset evolved from previous v2 version (see link below). It does
+several updates to virtio/vsock:
+1) Changes 'virtio_transport_inc/dec_rx_pkt()' interface. Now instead of
+   using skbuff state ('head' and 'data' pointers) to update 'fwd_cnt'
+   and 'rx_bytes', integer value is passed as an input argument. This
+   makes code more simple, because in this case we don't need to update
+   skbuff state before calling 'virtio_transport_inc/dec_rx_pkt()'. In
+   more common words - we don't need to change skbuff state to update
+   'rx_bytes' and 'fwd_cnt' correctly.
+2) For SOCK_STREAM, when copying data to user fails, current skbuff is
+   not dropped. Next read attempt will use same skbuff and last offset.
+   Instead of 'skb_dequeue()', 'skb_peek()' + '__skb_unlink()' are used.
+   This behaviour was implemented before skbuff support.
+3) For SOCK_SEQPACKET it removes unneeded 'skb_pull()' call, because for
+   this type of socket each skbuff is used only once: after removing it
+   from socket's queue, it will be freed anyway.
 
-~Faith
+Test for 2) also added:
+Test tries to 'recv()' data to NULL buffer, then does 'recv()' with valid
+buffer. For SOCK_STREAM second 'recv()' must return data, because skbuff
+must not be dropped, but for SOCK_SEQPACKET skbuff will be dropped by
+kernel, and 'recv()' will return EAGAIN.
+
+Link to v1 on lore:
+https://lore.kernel.org/netdev/c2d3e204-89d9-88e9-8a15-3fe027e56b4b@sberdevices.ru/
+
+Link to v2 on lore:
+https://lore.kernel.org/netdev/a7ab414b-5e41-c7b6-250b-e8401f335859@sberdevices.ru/
+
+Link to v3 on lore:
+https://lore.kernel.org/netdev/0abeec42-a11d-3a51-453b-6acf76604f2e@sberdevices.ru/
+
+Change log:
+
+v1 -> v2:
+ - For SOCK_SEQPACKET call 'skb_pull()' also in case of copy failure or
+   dropping skbuff (when we just waiting message end).
+ - Handle copy failure for SOCK_STREAM in the same manner (plus free
+   current skbuff).
+ - Replace bug repdroducer with new test in vsock_test.c
+
+v2 -> v3:
+ - Replace patch which removes 'skb->len' subtraction from function
+   'virtio_transport_dec_rx_pkt()' with patch which updates functions
+   'virtio_transport_inc/dec_rx_pkt()' by passing integer argument
+   instead of skbuff pointer.
+ - Replace patch which drops skbuff when copying to user fails with
+   patch which changes this behaviour by keeping skbuff in queue until
+   it has no data.
+ - Add patch for SOCK_SEQPACKET which removes redundant 'skb_pull()'
+   call on read.
+ - I remove "Fixes" tag from all patches, because all of them now change
+   code logic, not only fix something.
+
+v3 -> v4:
+ - Update commit messages in all patches except test.
+ - Add "Fixes" tag to all patches except test.
+
+Arseniy Krasnov (4):
+  virtio/vsock: don't use skbuff state to account credit
+  virtio/vsock: remove redundant 'skb_pull()' call
+  virtio/vsock: don't drop skbuff on copy failure
+  test/vsock: copy to user failure test
+
+ net/vmw_vsock/virtio_transport_common.c |  29 +++---
+ tools/testing/vsock/vsock_test.c        | 118 ++++++++++++++++++++++++
+ 2 files changed, 131 insertions(+), 16 deletions(-)
+
+-- 
+2.25.1
