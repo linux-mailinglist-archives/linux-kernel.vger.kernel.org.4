@@ -2,150 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252126B20E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BABB6B20EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjCIKGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:06:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
+        id S230187AbjCIKHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCIKGd (ORCPT
+        with ESMTP id S230021AbjCIKHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:06:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD5CE484B;
-        Thu,  9 Mar 2023 02:06:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13ECCB81E96;
-        Thu,  9 Mar 2023 10:06:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36D7AC433EF;
-        Thu,  9 Mar 2023 10:06:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678356389;
-        bh=ligrysER57RAcFPf0WGf5No6WQpBg5r4d+YNFCXoq9w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bqfUGbj4ygde+9MLl/X/fkf2mK7lq+uWFeqw/9ylDJ/mYq9Y99D6AOQ+pcInkIaAU
-         Car4zoa3Y8KVWsEdYO6Zxgh7ZVwyRRwXNeuJ/ZLzYGMU/ezDo1KD6a0C6Jjjs/VYdp
-         jBPypYWaDNDBgBeo6mSnLZ2ZR2s3iNjywLhrwEilg+bKDEbfT1v0sKgMvYR3+K2zOM
-         XsitYgct6Ft1bRxONf7dyPArfizcm2ah8Fh8tQeM/LfuloReCQlLF8NxNuffoxLknE
-         9M2K5Rgz4/5vo2nmkPc1w7D6/8vHmEJ+R6xMo75y6gIkXVtjgbbYWP9ELmddQlgZSI
-         gvuKlzZoR9GOQ==
-Date:   Thu, 9 Mar 2023 11:06:25 +0100
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Ye, Xiang" <xiang.ye@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
-Message-ID: <ZAmvocpy68qurCvt@intel.intel>
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
- <20230309071100.2856899-2-xiang.ye@intel.com>
- <ZAmQOIh/71rY4Pa4@kroah.com>
- <ZAmngB84ty1flD9K@ye-NUC7i7DNHE>
- <ZAmpse14Evvrfa/f@kroah.com>
+        Thu, 9 Mar 2023 05:07:08 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC880E4C77
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:07:06 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id a25so4944673edb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 02:07:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678356425;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=O1rKZQWrvQdsaiUknj2gLx58N9hXAh/NcUMYH+8P2Io=;
+        b=NiDoNuNKomZlAKL/pzyIYZUo/9we1SdUtGyI3dm+QSAUoxdzMY/2nMis/n7ozTn75i
+         HSwbe8wbQkXHxOAs30NTUKURdBt9sThyysncB6m1Yo6aDJ2QzR6S4UBYIDhbPFiTBSC/
+         NihP53M2ZqKtlgm4yaGtqyG3HVJNt/CwqGCdK1ZKu/Hg0yf6pnT5gnzUTlaBP4rpoRES
+         uhG/BDxi+XD/M4qr0/qq3y04uC4Gr1kA6DxGhWxgYgjE/nmgwwsrRWf7mTcU58Thgez8
+         GM9JgCHjwZxLJG1YapfL1jM3GriBjqgbZ0qxTMbX+mbpUzM/5+857XK4DKHmVZdcU+ej
+         c9eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678356425;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O1rKZQWrvQdsaiUknj2gLx58N9hXAh/NcUMYH+8P2Io=;
+        b=K1zCnkWcZN+//ArRVjrWCV4IqadK+0mWiEjEnGgjTJyn6MwBKkVBzXNbeasrJTEWyr
+         6oU6FLz544eW1RgrhnZkZTcuKYhhrSuTGMhzRgvayy7eJ1PlF65hvUNT5zud2m7iWt1/
+         rnS7DjTykMMNQF02Gb176R/0JnIe1ZkLmPLX0/yl0PZxsR1QHDz1Kf14OHcTKRUvbOUN
+         V2MBwYULULQwIA7mtGBcZwf/LmCp48PuDotu3matOhiu1rucfHmOEv2AjWnXLq5CrX3Z
+         2+MDOhq2CgaxAJOfnAa/x0rRO9Hcpd/jy+GAjYF9vt7nnAvMHB4z7vBr88a+cSkgcBs3
+         4kTA==
+X-Gm-Message-State: AO0yUKXmNSZTeRMRTY6byroLnb1y86ZJ9D6fjtQbOEYSVkUWnpS8ZQML
+        D1Xglpx/Nj/5FwJo0Y8qyNdirw==
+X-Google-Smtp-Source: AK7set9dG7e71ZUsBA8QSEtjZmcxScdoi257cMlVacjcfvEL5jfaX1PVjAAYQWu+1xVUYACTvB0xpA==
+X-Received: by 2002:a17:907:8b16:b0:8b1:2e7c:df49 with SMTP id sz22-20020a1709078b1600b008b12e7cdf49mr23571182ejc.7.1678356425261;
+        Thu, 09 Mar 2023 02:07:05 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
+        by smtp.gmail.com with ESMTPSA id t25-20020a50c259000000b004efd65452a5sm3335676edf.70.2023.03.09.02.07.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 02:07:04 -0800 (PST)
+Message-ID: <8124eed7-b9ab-046d-4eb2-9b853ce2bcdd@linaro.org>
+Date:   Thu, 9 Mar 2023 11:07:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAmpse14Evvrfa/f@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: phy: Add StarFive JH7110 USB
+ dt-binding
+Content-Language: en-US
+To:     Minda Chen <minda.chen@starfivetech.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20230308082800.3008-1-minda.chen@starfivetech.com>
+ <20230308082800.3008-2-minda.chen@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230308082800.3008-2-minda.chen@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 10:41:05AM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Mar 09, 2023 at 05:31:44PM +0800, Ye, Xiang wrote:
-> > On Thu, Mar 09, 2023 at 08:52:24AM +0100, Greg Kroah-Hartman wrote:
-> > > On Thu, Mar 09, 2023 at 03:10:56PM +0800, Ye Xiang wrote:
-> > > > +static int ljca_mng_get_version(struct ljca_stub *stub, char *buf)
-> > > > +{
-> > > > +	struct fw_version version = {};
-> > > > +	unsigned int len = sizeof(version);
-> > > > +	int ret;
-> > > > +
-> > > > +	ret = ljca_stub_write(stub, LJCA_MNG_GET_VERSION, NULL, 0, &version, &len, true,
-> > > > +			      LJCA_USB_WRITE_ACK_TIMEOUT_MS);
-> > > > +	if (ret)
-> > > > +		return ret;
-> > > > +
-> > > > +	if (len != sizeof(version)) {
-> > > > +		dev_err(&stub->intf->dev, "get version failed, len:%d\n", len);
-> > > > +		return -EINVAL;
-> > > > +	}
-> > > > +
-> > > > +	return sysfs_emit(buf, "%d.%d.%d.%d\n", version.major, version.minor,
-> > > > +			  le16_to_cpu(version.patch), le16_to_cpu(version.build));
-> > > > +}
-> > > 
-> > > You have sysfs files, yet no Documentation/ABI/ entries?  That's not
-> > > allowed, you know this :(
-> > The Documentation/ABI/ entries is added for the sysfs on patch 5 of this series.
-> > https://patchwork.kernel.org/project/linux-usb/patch/20230309071100.2856899-6-xiang.ye@intel.com/
+On 08/03/2023 09:27, Minda Chen wrote:
+> Add StarFive JH7110 SoC USB 3.0 phy dt-binding.
+> USB controller is cadence USB 3.0 IP.
+
+Subject: drop second/last, redundant "binding". The "dt-bindings" prefix
+is already stating that these are bindings.
+
 > 
-> Ah, missed that, sorry.
+> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+> ---
+>  .../bindings/phy/starfive,jh7110-usb-phy.yaml | 158 ++++++++++++++++++
+>  1 file changed, 158 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
 > 
-> > > 
-> > > > +static ssize_t cmd_store(struct device *dev, struct device_attribute *attr, const char *buf,
-> > > > +			 size_t count)
-> > > > +{
-> > > > +	struct usb_interface *intf = to_usb_interface(dev);
-> > > > +	struct ljca_dev *ljca_dev = usb_get_intfdata(intf);
-> > > > +	struct ljca_stub *mng_stub = ljca_stub_find(ljca_dev, LJCA_MNG_STUB);
-> > > > +	struct ljca_stub *diag_stub = ljca_stub_find(ljca_dev, LJCA_DIAG_STUB);
-> > > > +
-> > > > +	if (sysfs_streq(buf, "dfu"))
-> > > > +		ljca_mng_set_dfu_mode(mng_stub);
-> > > > +	else if (sysfs_streq(buf, "debug"))
-> > > > +		ljca_diag_set_trace_level(diag_stub, 3);
-> > > 
-> > > Sorry, but no, you can't do this in a sysfs file.
-> > Do you mean that we can't use sysfs to send "debug" command to device?
-> 
-> That is correct, use the kernel-wide debugging facilities that we have
-> for this NEVER create your own custom interface just for one tiny
-> driver, that is not allowed.
-> 
-> > Could you provide some detail or hints?
-> 
-> dev_dbg().
+> diff --git a/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
+> new file mode 100644
+> index 000000000000..daa88d065deb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
+> @@ -0,0 +1,158 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/starfive,jh7110-usb-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: StarFive USB 2.0 and 3.0 PHY
+> +
+> +maintainers:
+> +  - Minda Chen<minda.chen@starfivetech.com>
 
-I'm not sure this is the same thing, though, as it's not a drvier
-to user debug message.
+Missing space
 
-Ye, can you please explain better what this command does? You are
-sending a LJCA_DIAG_SET_TRACE_LEVEL command to the device with a
-parameter "3" which has a meaining only for you :)
+> +
+> +properties:
+> +  compatible:
+> +    items:
 
-What is ugly here is the parsing of "dfu" and "debug", I would
-just make different boolean files, something like:
+Drop items, it's just one item.
 
- echo 1 > ljca_dfu
- echo 0 > ljca_dfu
 
-and
+> +      - const: starfive,jh7110-usb
+> +
+> +  reg:
+> +    maxItems: 2
+> +
+> +  reg-names:
+> +    items:
+> +      - const: usb3
+> +      - const: usb2
+> +
+> +  clocks:
+> +    items:
+> +      - description: usb 125m clock
+> +      - description: app 125m clock
+> +      - description: lpm clock
+> +      - description: stb clock
+> +      - description: apb clock
+> +      - description: axi clock
+> +      - description: utmi apb clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: usb_125m
+> +      - const: usb0_app_125
+> +      - const: usb0_lpm
+> +      - const: usb0_stb
+> +      - const: usb0_apb
+> +      - const: usb0_axi
+> +      - const: usb0_utmi_apb
+> +
+> +  resets:
+> +    items:
+> +      - description: USB0_PWRUP reset
+> +      - description: USB0_APB reset
+> +      - description: USB0_AXI reset
+> +      - description: USB0_UTMI_APB reset
+> +
+> +  starfive,sys-syscon:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      items:
+> +        - description: phandle to System Register Controller sys_syscon node.
+> +        - description: offset of SYS_SYSCONSAIF__SYSCFG register for USB.
+> +    description:
+> +      The phandle to System Register Controller syscon node and the offset
+> +      of SYS_SYSCONSAIF__SYSCFG register for USB.
+> +
+> +  starfive,stg-syscon:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      items:
+> +        - description: phandle to System Register Controller stg_syscon node.
+> +        - description: register0 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+> +        - description: register1 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+> +        - description: register2 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+> +        - description: register3 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+> +    description:
+> +      The phandle to System Register Controller syscon node and the offset
+> +      of STG_SYSCONSAIF__SYSCFG register for USB. Total 4 regsisters offset
+> +      for USB.
+> +
+> +  dr_mode:
+> +    description: PHY mode.
+> +    enum:
+> +      - host
+> +      - peripheral
+> +      - otg
+> +
+> +  "#address-cells":
+> +    maximum: 2
+> +
+> +  "#size-cells":
+> +    maximum: 2
+> +
+> +  ranges: true
+> +
+> +  starfive,usb2-only:
+> +    type: boolean
+> +    description: Set USB using usb 2.0 phy. Supprt USB 2.0 only
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - starfive,sys-syscon
+> +  - starfive,stg-syscon
+> +  - dr_mode
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - ranges
+> +
+> +patternProperties:
 
- echo N > ljca_trace_level
+This goes before required block
 
-with a proper documentation of the trace levels.
+> +  "^usb@[0-9a-f]+$":
+> +    type: object
+> +    description: |
+> +      usbphy node should have '1' usb controller subnode.
+> +      It could be Cadence USB3 DRD controller.
+> +      Cadence USB3 should follow the bindings specified in
+> +      Documentation/devicetree/bindings/usb/cdns,usb3.yaml
 
-The show counterparast can provide a feedback on how the
-interfaces are set rather than providing some help message, which
-is not what sysfs files are meant for.
+$ref instead of free form text
 
-Would this work?
 
-Andi
+Best regards,
+Krzysztof
+
