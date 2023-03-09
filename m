@@ -2,240 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F656B1FA8
+	by mail.lfdr.de (Postfix) with ESMTP id 004CA6B1FA9
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbjCIJPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
+        id S230186AbjCIJPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:15:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbjCIJPK (ORCPT
+        with ESMTP id S231292AbjCIJPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:15:10 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D74864265;
-        Thu,  9 Mar 2023 01:15:06 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 8699741F78;
-        Thu,  9 Mar 2023 09:14:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1678353304;
-        bh=5NvQExJBE/2u/mwalmBIy0G1FlF3VvdxJMh+roXHaLw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=KbySdjG9+l7bYziRG7wlG0Uny+k+kSCwHuz0PRkGZSuiH0e2GjLTVETfhUFxliLN9
-         0BgYaDMv6QGsz/z9oI3hs3XE9Us2YKlYl526TjYqlP6x4PcqpDoDN2n1ReOAXKQukZ
-         xgEWb3sefmBsFzJqIO9TYEt/8g6+Eo3SYTuk8tM1NCers6bdARbpAvPl+2VLDf1d+o
-         n1baBbYKEeRxORaDt87nOEUNCIH249QGBDwbawpQ1U3+QqD7lXMyAQpnUQbijSSujD
-         KNEYqNjWXpWm2bbFi8/ZJwNPg7g8x0IkK+FVPXZC5uzG74iwtS0jtnDVLTy9rjYM1N
-         XCJh32fO005nw==
-Message-ID: <d36046e6-acf5-89a3-46b4-1c813ca925c8@asahilina.net>
-Date:   Thu, 9 Mar 2023 18:14:55 +0900
+        Thu, 9 Mar 2023 04:15:22 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2118.outbound.protection.outlook.com [40.107.255.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F826A426;
+        Thu,  9 Mar 2023 01:15:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n90isLar3dFcirZbwZDiEST6rdbnWN+N6lSI2Tl97J3/6EU/7OozkKgWUPArvAEpUeOGZ7J8WauFAl0NbOWEGJumqK0WcHheE+Xqc+G+G/g/HiXufGJisIh9vNFMG38zwpzM6yrHI6wJT1TwFNEBDsk/UzgKsnSwQrvMt87WtFZgnR68nevL8llqX8WSXRVXxVLKuuGg5tGj6qLpFJuSUidCZaAbr6eXcjQLo6ERhuN1UbdVY3fxOYMjFf7wyXJr/4rhup9Zi/Y5/D74Mrt5FNwb+Zx2O3o8AIPwNusDCpQ7AGfHmPRdNsW2sAdvWMZd94iDbFl82spmLzja2NvQvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pSBIKYqCWzFiLEYmH/r8mKu7U5AhlgD2YCvarLDgHKA=;
+ b=aRZK4grKAwHNhsRgmecYSUnDw8H4Hb8CkvCK44nSI4cFDWGd9kyj2Xixp9g3tKX4IXyEn8koi/g8Agc8/0UiNTYku12fG+CMbEAzctv5ceAsQEGoTx2v69rwq1GcRQ2CI3FqGdZzmcp5DwqV2F5RH1LKMHrxyoqUHtWmzMEqhLwLdvBTyprM4QSgIL3pGVD/2BtrEQgbhv0LXk2RUvpBRrPx0c1J+ejiUBvh0geyx2Q3dkT1fpX2RmPDDNBVU6Tj/uh7mYJuSoJstyMh9vxhAUhLkOfugySv37WJZeYpi/vrAb7Uu2xb2V7bN9uVPkHbdaD0GTp+gyzZbJ7ro8eaig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pSBIKYqCWzFiLEYmH/r8mKu7U5AhlgD2YCvarLDgHKA=;
+ b=QorLUlHkO1GmyCjW5p8ceoeiEsrIFEomJwdULSD2/Xg90dxYm1Qc9cQWzNvz3ClZIJnELvOlQA2uWL317fL4NuETMsGQSc9cZKMxR4R/BUJwGqaRuFzTsSUGQprm11CZ+fY0daIDSLI2ndMNi3tazlFLke8xHCKJA4gsMIxXUc6/qxaJveh5Q0E4ji/wUaS1Mla3A1ckIng6AwzyVr6xHVw9mtNwY1T8x8B7tP9WOCAPEfN6jQt1LLfwmVF9q0CxCG39175MyYSWnwo9066boU9mnOATSPjTdXvZOUTnedJik1jiQ8j775QpduDsG74F3Xn1fd9ahzm8qos9XE/W5w==
+Received: from TYZPR06MB5274.apcprd06.prod.outlook.com (2603:1096:400:1ff::14)
+ by SEZPR06MB5319.apcprd06.prod.outlook.com (2603:1096:101:7e::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Thu, 9 Mar
+ 2023 09:15:10 +0000
+Received: from TYZPR06MB5274.apcprd06.prod.outlook.com
+ ([fe80::e7c2:8fd8:5892:6687]) by TYZPR06MB5274.apcprd06.prod.outlook.com
+ ([fe80::e7c2:8fd8:5892:6687%9]) with mapi id 15.20.6156.028; Thu, 9 Mar 2023
+ 09:15:10 +0000
+From:   Ryan Chen <ryan_chen@aspeedtech.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>
+CC:     Joel Stanley <joel@jms.id.au>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: RE: [PATCH v6 1/2] dt-bindings: i2c: aspeed: support for
+ AST2600-i2cv2
+Thread-Topic: [PATCH v6 1/2] dt-bindings: i2c: aspeed: support for
+ AST2600-i2cv2
+Thread-Index: AQHZSZBNCqcj9BIMLU6U/5WV2MINja7idvcAgALva/CAA1hsgIAAAQawgAAHfwCAAAAwwIAACb6AgAANnCCAAAdYAIAA+HuggAIdpoCAAPm8QIACD6wAgAAcw9CAAxMXgIAAAvUg
+Date:   Thu, 9 Mar 2023 09:15:10 +0000
+Message-ID: <TYZPR06MB52746773023B98DF000224BDF2B59@TYZPR06MB5274.apcprd06.prod.outlook.com>
+References: <20230226031321.3126756-1-ryan_chen@aspeedtech.com>
+ <53090449-58c9-bc03-56df-aa8ae93c0c26@linaro.org>
+ <SEZPR06MB52699DEB2255EB54F35C2A59F2AD9@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <fc20a2d1-e2f9-c22b-dcdf-153cb527eea8@linaro.org>
+ <SEZPR06MB526902637624A97D7DFB8523F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <c41ee6b5-ddb4-1253-de54-a295b3bab2cc@linaro.org>
+ <SEZPR06MB5269E7B8785B3CB56A63A916F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <a3615fe7-aa2a-53e9-2732-ba4512b9369d@linaro.org>
+ <SEZPR06MB5269E7B070B239F8E349C427F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <c5cf6e0a-05dc-dff7-6218-df0984d1ba47@linaro.org>
+ <SEZPR06MB5269CB53B51B89C3CA039442F2B09@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <e59fe30a-75d1-eb59-52a3-014fe3c961a6@linaro.org>
+ <SEZPR06MB5269B541150855BF0DABFACFF2B69@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <d33145c3-e985-4d3c-a08c-6a249a8dc463@linaro.org>
+ <SEZPR06MB5269CA376D572B6241FCAD4DF2B79@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <f17f09f9-ffd0-bd2b-7343-e468f83dd6e7@linaro.org>
+In-Reply-To: <f17f09f9-ffd0-bd2b-7343-e468f83dd6e7@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR06MB5274:EE_|SEZPR06MB5319:EE_
+x-ms-office365-filtering-correlation-id: ee4b8a43-ba3f-4d51-73c1-08db207ec867
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: EG1YD4TsPlOAHHFVJCO1v6ahuoCGWqp9MeRlVwPHf4/9SrY6uEdIgn++nvoSK0N223ibkcL+pPN1vtk7S3mjuVAhLOr09cugggOmuclhvWBbHumgK3Bb/RgfK168mQvTuevFn68OZheFfDvcPWPkEpPIeAAPB53N/tMTG5wc8EGRUCpNsz+ZnRaEdI6V0rgXrJGpyil/tsPtm0IkCs4sikCjh+YjBUWrLgrtG5AnqwpKKbdLGVcqZ/VPriF8KsiV5Wzt8Xht4b9ZpBg+GM3CRPNiLIH6WJNi/yvsjKwEQqXnzVfpoz6crL39lFb6Za6/cbPke1HTaNHqdOS9gEPWS6TxlTOwjYO8q+I2+30CCm+Vpb6GJFMjpKiskBlEum8yP2c05htX7Kff5MJyjQjBADJkJZ3tS2zTH7pqGDqkp5zLX2juuJG6bV4fOAdm1QVZuxK5aY2oZtgukMy8QWFcdQItsVZnqYwlOx9KqiaREwGGvxPCeqW6cb8MN1nEO8GFDVgMjO4KXXaBAreOecR2MjG7xvSD2CMoz3ZZm2MUbzZPXRymkiWj3k/OP31l1qp2/rhrJCPj5ulaIE+RuK5EG7TdQIgIyhGZ7x6SdKhDxiAagf3oZr/zsmag7zSnd8nOtzxsqm2bbjAYf5AJel1TKCNdiR2xftnlsQfZDxuhmGMTrvaF4HgtV1sEdoom5uqs/j3OTOef4lRab8r+gYMk6kgrvRp97qTHLWUA8yubjwM=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB5274.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(366004)(39850400004)(376002)(346002)(396003)(451199018)(33656002)(110136005)(316002)(9686003)(54906003)(966005)(76116006)(478600001)(8936002)(7696005)(7416002)(41300700001)(5660300002)(55016003)(8676002)(66556008)(2906002)(66446008)(64756008)(66476007)(66946007)(4326008)(71200400001)(26005)(122000001)(52536014)(86362001)(6506007)(38070700005)(186003)(53546011)(38100700002)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QjM2WG1Nd1FHaXhSakJNYkEreUw0c1UyekR0VkZzeDdYV3pTc3N2RXhvTDRG?=
+ =?utf-8?B?eXdjZDBLRlUyWXcyT1R2VDRubU5TaG5QMFp6dDNaVVlxNXRLYit6Qi9FRjd6?=
+ =?utf-8?B?dldRSnB3VXFGZnZSUXRWeWY0VHgrZDBvTUpZYWNsRXVSajNYS1pZaDVjcmFJ?=
+ =?utf-8?B?aGM5WGxxTlpnSVczdG1Nd3VHMmtXcjV5QVU0KzBDQ3QrRVZDQW9ZQmJqaCtj?=
+ =?utf-8?B?ZGdoQllVU3lVcXNFbWI3N0d5aUtxMWNVMFcwVTJ2ajhRZHRWRitKRUlWekND?=
+ =?utf-8?B?OEdTdGw1K3hzOHFnNk1yTlowYVpwRXY2Zmx5Vyt5MlZTUk5UQU1tQXJXTG53?=
+ =?utf-8?B?U3lXTnJXMm0vSy95UzRBeVhxSEhnejMzdG01eG9lU3hUTHl4bE9wVjJTKy90?=
+ =?utf-8?B?VmhkeGdPRHdCRmd5ZGw0NTIrUkdtbHQzM2pJMG1ZSWRaQjM2UTZyT1JGQ3JH?=
+ =?utf-8?B?THd2WnRzRmZIOG5hQkZ2WmlQbTJyK1FXTXFUNHNKMWtPMVErRXN6bjU0YlZV?=
+ =?utf-8?B?WnF4ck5EcjJqNmdHUXRTbm44SWhheURDOE5QL2NjWnMrdjE5ZTZnUXpQNHZt?=
+ =?utf-8?B?TGxRT2w2aWgrQ0lhK2RoUFd6dENTUDVPSXdJV0NmYUlmdm0veWtLME9BdHYw?=
+ =?utf-8?B?R3lJTE5rVTRyYUpuZUNsTWMxODFaVnVmS3dSalV5WDJVejJaNlJFOUZlR2Qz?=
+ =?utf-8?B?cVlCU0ViU2hpdHA4dDBEcUtjd2FnMnB1NTg0OEwrVVNWS2lqbnJTYTRyd1RV?=
+ =?utf-8?B?TFpNVnJLWEJyb0U3TW1FM3BWL0tCZlZNUlJ3Yk94UFVlUWdvZkQ0MUdGYlZB?=
+ =?utf-8?B?dnJ0Vk5BSFZ2VmpxazAwa0FSb0JKNUdrL2FoWUpOeUhvZG0vZnBqUHVUeWlQ?=
+ =?utf-8?B?d1ZvSVNEOXVqcXpuNDN4SkQvUlAySUd4N2RmbW5qUEpWTHVUMWN4NGN0TTZL?=
+ =?utf-8?B?OFNpODJRa3hhMTlodFJiM0Q4T3d4K1ZnY3pIcWljdHZsNDdNYjNHV1phVjdR?=
+ =?utf-8?B?RS9TVlRab1lUNkR6NjBkMzBNRUlBUzZJQzRQMWFhbVgrSmRpbG5TbWdvbkFW?=
+ =?utf-8?B?WUJrZzdzbnNEdjZBVEYvLzFqL2hZRDRkZ3pjYVM0NkZhTktKeFEvbStYZUwy?=
+ =?utf-8?B?UjVGTHF5VmNOZ0tnV1J2ek1rcU1jV3J0SmhJM3ZHSHZsVk9EUkxnSXZrZnVC?=
+ =?utf-8?B?aHQ1V3gremU4UXMxdXVOSFVOeUNsWG4yQnl4N1lPWVgvVlpMT0lUcnVUV0c0?=
+ =?utf-8?B?ZUZsK3dvbzVzOURNRXBDNlVuZGhHQk1ncUhWdDFDTm1NVnljdkFFUGRINllV?=
+ =?utf-8?B?bi9KN0YzRTVtbjZhcDQyc3pXNE9qYWw3OThBTHlaN1pWVGkvUkw5K0FxNWIr?=
+ =?utf-8?B?NUdBcmtmcnd0WFF4WFU3YTBvNkFUQ0ZvY1hUTTFuNTcvZW1TZ0szNHdTV2NS?=
+ =?utf-8?B?MStPMWdzdGp5aE8rNWRhbmNYU01XeFQyeFBDN2haUGQyQXk2TmgrRmtsUkRh?=
+ =?utf-8?B?ODdDQk5xdzJNcno0a1ZFVExtSWR3TndwTzNPVU9lanMrMTJkSHdDeEpBSUky?=
+ =?utf-8?B?NW9lVlIwQ1JKNXZuU1J5eXcrOU1hb2FpR1JwaDFtbkxFdjUzU1hCdkJnSXpQ?=
+ =?utf-8?B?MUFMd05aU25GaWljQWZoMVc5SWFBV0EwZFBDTHFjbGI1VExjcWUycVltdnNG?=
+ =?utf-8?B?U3BYcENIYm0rQXE0cGtNWXcxSms5RFRBRFExZ0xlSzM3WGJVZE9Zdm1QN0lO?=
+ =?utf-8?B?czhYenYwMzVKNkRsdjV3V2RkYkprWENhRHZuMVNDb2FuZ3FBbXMvS0xWWkdu?=
+ =?utf-8?B?SEJpRjAranZGaFN4dVB4MnRuVmFHZnNQSWJHZHkwb1lnZ255TGY2dnR4dXpB?=
+ =?utf-8?B?Tm9pcnJSekVuUm1LcWlxR1FaelUxUUw1VndjeGpMeW80Nzhvd01KcWxxcWIr?=
+ =?utf-8?B?VDF3MEo4OGJ6MTlONDJ0dTlIRE5Rckpldml2eUhhRlUrZUwzb0pFRWlqUC84?=
+ =?utf-8?B?NFNBclFsMmRtTFhYVDk0YndlY09qUm52U1pLbTJDelMyQUI4T29tUjhVVlZz?=
+ =?utf-8?B?Nnh3WFF0UUk1cGZZRVhCZTJ6TWU2YVp6Tk5hdjcrR3NUQ0t4SjkzOHluakEv?=
+ =?utf-8?B?cTFvbGRLUEFXWmp0UUFWNEIyWkxXRFFzY0dkS0FqczhvZnVYaE45Zk5sTWRm?=
+ =?utf-8?B?VlE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
- <cd788ccf-0cf1-85d5-1bf8-efc259bd7e11@amd.com>
- <a075d886-0820-b6fb-fcd0-45bfdc75e37d@asahilina.net>
- <2b1060e9-86ba-7e16-14f1-5b5fa63de719@amd.com>
- <9f76bb68-b462-b138-d0ad-d27c972530d4@asahilina.net>
- <a39c6b40-f190-002d-ae1c-8b58c6442df2@amd.com>
- <4bbfc1a3-cfc3-87f4-897b-b6637bac3bd0@asahilina.net>
- <b0aa78b2-b432-200a-8953-a80c462fa6ee@amd.com>
- <c0624252-070e-bd44-2116-93a1d63a1359@asahilina.net>
- <d1fccceb-ca77-f653-17fc-63168e0da884@amd.com>
- <9c3dc2ad-11e4-6004-7230-8ca752e3d9f7@asahilina.net>
- <d544748c-8a2b-7c08-f199-182a56af22be@amd.com>
- <3e5e0120-50fd-51c0-d817-5b1dc4c14e97@asahilina.net>
- <f93448e6-4133-8a49-a12e-7a7012cb5409@amd.com>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <f93448e6-4133-8a49-a12e-7a7012cb5409@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB5274.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee4b8a43-ba3f-4d51-73c1-08db207ec867
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2023 09:15:10.3092
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: M/eZHdhz2aXBGcF0J8yeUiaxu766tcFYTXzzAlJW2WGDfVuYCjEtspv0cynoHUKS/YBMAj/kfM3zkgifBBCI054tDRtDRE5obtKbxbdxgyU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5319
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2023 17.05, Christian König wrote:
-> Am 09.03.23 um 07:30 schrieb Asahi Lina:
->> On 09/03/2023 05.14, Christian König wrote:
->>>> I think you mean wake_up_interruptible(). That would be
->>>> drm_sched_job_done(), on the fence callback when a job completes, which
->>>> as I keep saying is the same logic used for
->>>> hw_rq_count/hw_submission_limit tracking.
->>> As the documentation to wait_event says:
->>>
->>>    * wake_up() has to be called after changing any variable that could
->>>    * change the result of the wait condition.
->>>
->>> So what you essentially try to do here is to skip that and say
->>> drm_sched_job_done() would call that anyway, but when you read any
->>> variable to determine that state then as far as I can see nothing is
->>> guarantying that order.
->> The driver needs to guarantee that any changes to that state precede a
->> job completion fence signal of course, that's the entire idea of the
->> API. It's supposed to represent a check for per-scheduler (or more
->> specific, but not more global) resources that are released on job
->> completion. Of course if you misuse the API you could cause a problem,
->> but what I'm trying to say is that the API as designed and when used as
->> intended does work properly.
->>
->> Put another way: job completions always need to cause the sched main
->> loop to run an iteration anyway (otherwise we wouldn't make forward
->> progress), and job completions are exactly the signal that the
->> can_run_job() condition may have changed.
->>
->>> The only other possibility how you could use the callback correctly
->>> would be to call drm_fence_is_signaled() to query the state of your hw
->>> submission from the same fence which is then signaled. But then the
->>> question is once more why you don't give that fence directly to the
->>> scheduler?
->> But the driver is supposed to guarantee that the ordering is always 1.
->> resources freed, 2. fence signaled. So you don't need to check for the
->> fence, you can just check for the resource state.
-> 
-> Yeah, but this is exactly what the dma_fence framework tried to prevent. 
-> We try very hard to avoid such side channel signaling :)
-
-Right, and it's fine, I can use the fences directly easily enough. I'm
-just trying to explain why my original idea works too, even if it's not
-the best solution for other reasons!
-
-Of course I don't have the context of what other drivers are doing or
-did historically and what the pitfalls are, so I can't know what the
-"right" solution for any of this is in that context. I did my best to
-understand the drm_sched code and come up with a solution that works
-(which it does) without any more info. When I saw the hw submission
-limit stuff, I thought "okay, I need the same thing but with slightly
-more complex logic, so let's add a callback so the driver can customize
-it and do its own inflight counting".
-
-After this discussion, I can see that this is equivalent to doing the
-same check in prepare_job() followed by returning the oldest running
-job's fence (as long as there's no race there... it should be fine if
-the fence reference is taken first, before the resource check, or if
-everything is done within the same critical section taking the firmware
-queue lock), so I'm happy to switch to that and drop this patch.
-
-But keep in mind none of this is documented, and there's no way for us
-driver authors to understand what we're supposed to do without
-documentation. As I said I spent a long time trying to understand
-drm_sched, and then my original attempt missed the drm_sched_fini()
-issue with dangling jobs and Alyssa managed to hit an oops on the test
-branch, I guessed what the problem was from her trace, figured out a way
-to reproduce it (the kill-loop glmark2 thing), and fixed it in the next
-patch in this series. So even trying my best to figure out how to do
-this, reading the code and what scarce docs there are, I managed to miss
-something that caused a potential oops on the first try. If I can't even
-get the API usage right after spending hours on it trying really hard
-not to (because it's not just about my driver, I need the Rust
-abstraction to be safe for any driver), there's no way I'm going to
-divine what approaches to resource/dependency signaling are
-problematic/easy to abuse... the most I can hope for is "I got the
-wrapper right and the API/driver interaction is correct and guarantees
-forward progress if the driver follows the rules".
-
-So when I submit something, and you reply with "Well complete NAK",
-that's just not nice. Honestly, I was kind of upset when I got that
-email. It sounded as if you were saying my solution was completely
-broken and couldn't work, but no matter how I looked at it I couldn't
-figure out how it's broken. And then it took several emails to even
-understand what you were suggesting with the prepare_job callback (and
-yes, that works too and is probably harder to abuse than a new
-callback). I'm trying really hard to make this all work and be correct,
-and of course I make mistakes too... but then I look at the code and no
-matter what I can come up with it seems to work and be correct, what am
-I supposed to do? I'm happy to learn and figure out better approaches
-for everything that lead to better drivers, but I need an actual
-explanation of the issues, not just a NAK...
-
-I also would appreciate it if people give me the benefit of the doubt
-and let me explain what I'm doing and how I'm doing it and how this
-hardware works, because the whole thing is subtle to the core and very
-different to other GPUs. Honestly, I don't think any reviewer that
-hasn't spent hours poring over the driver/abstraction code could
-confidently say that a certain subtle sync issue exists at a first pass
-(other than for really obvious bad code sequences). I'm happy to look
-into issues and I definitely want to know what cases to look at and what
-to check for and fix anything we find... but isn't it better if we work
-together instead of shouting "this is broken" at the first hint of
-possible trouble?
-
-> But putting that issue aside for a moment. What I don't get is when you 
-> have such intra queue dependencies, then why can't you check that at a 
-> much higher level?
-> 
-> In other words even userspace should be able to predict that for it's 
-> submissions X amount of resources are needed and when all of my 
-> submissions run in parallel that won't work.
-
-Technically yes, but we can't trust userspace to honor this, since
-overflowing the firmware queue breaks everything, so the kernel has to
-do the check... plus we're trying to insulate userspace from the details
-of how work is queued at the firmware. We need to support multiple
-firmware versions including future ones we can't predict yet without
-breaking UAPI, so the less the UAPI depends on firmware details, the
-better. That's why at the UAPI level, this is boiled down to a simpler
-"max commands per submission" limit that gets passed in the params
-struct, which is conservative, and then the kernel can deal with the
-actual in-flight count tracking and only submit things to the hardware
-when they fit.
-
-In the future we could even support job splitting on the kernel side and
-remove the max commands per submission limit altogether (though it
-probably still makes sense to have for other reasons, like bounding how
-much kernel/firmware memory a single queue can consume, so I'm not sure
-this is even worth doing at all).
-
-> Asking the firmware for a status is usually a magnitudes slower than 
-> just computing it before submission.
-
-I'm not asking the firmware for status, I'm just asking my own firmware
-queue code how many slots are currently free in each backing queue.
-That's just based on internal driver state, there is no firmware round trip!
-
-I could technically compute this before submission and figure out how
-much work has been queued and pre-populate fences that ensure we never
-exceed the max, but honestly that's a lot more code to track job sizes
-and I don't think it makes sense when I can just ask "Do we have space?
-No? Okay, return the oldest running job fence for now and try again when
-it completes" in prepare_job(). Maybe it's faster in pathological cases
-to do something fancier, but let's wait until Vulkan works and we can
-run real AAA games and see where the bottlenecks are before going down
-the optimization road ^^
-
-~~ Lina
+SGVsbG8gS3J6eXN6dG9mLA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206
+IEtyenlzenRvZiBLb3psb3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4NCj4g
+U2VudDogVGh1cnNkYXksIE1hcmNoIDksIDIwMjMgNDo1MiBQTQ0KPiBUbzogUnlhbiBDaGVuIDxy
+eWFuX2NoZW5AYXNwZWVkdGVjaC5jb20+OyBXb2xmcmFtIFNhbmcNCj4gPHdzYUBrZXJuZWwub3Jn
+Pg0KPiBDYzogSm9lbCBTdGFubGV5IDxqb2VsQGptcy5pZC5hdT47IEJyZW5kYW4gSGlnZ2lucw0K
+PiA8YnJlbmRhbi5oaWdnaW5zQGxpbnV4LmRldj47IEtyenlzenRvZiBLb3psb3dza2kNCj4gPGty
+enlzenRvZi5rb3psb3dza2krZHRAbGluYXJvLm9yZz47IEFuZHJldyBKZWZmZXJ5IDxhbmRyZXdA
+YWouaWQuYXU+Ow0KPiBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsgUGhpbGlwcCBaYWJlbCA8
+cC56YWJlbEBwZW5ndXRyb25peC5kZT47IFJvYg0KPiBIZXJyaW5nIDxyb2JoK2R0QGtlcm5lbC5v
+cmc+OyBCZW5qYW1pbiBIZXJyZW5zY2htaWR0DQo+IDxiZW5oQGtlcm5lbC5jcmFzaGluZy5vcmc+
+OyBsaW51eC1hc3BlZWRAbGlzdHMub3psYWJzLm9yZzsNCj4gbGludXgtYXJtLWtlcm5lbEBsaXN0
+cy5pbmZyYWRlYWQub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOw0KPiBvcGVuYm1j
+QGxpc3RzLm96bGFicy5vcmc7IGxpbnV4LWkyY0B2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDog
+UmU6IFtQQVRDSCB2NiAxLzJdIGR0LWJpbmRpbmdzOiBpMmM6IGFzcGVlZDogc3VwcG9ydCBmb3Ig
+QVNUMjYwMC1pMmN2Mg0KPiANCj4gT24gMDcvMDMvMjAyMyAxMTowOSwgUnlhbiBDaGVuIHdyb3Rl
+Og0KPiA+Pj4+IDIuIFdoeSB3ZSBkbyBub3QgaGF2ZSBpdCBmb3IgYWxsIGNvbnRyb2xsZXJzIHdp
+dGggU01CdXMgdjM/IFdoeQ0KPiA+Pj4+IHRoaXMgb25lIGlzIHNwZWNpYWw/DQo+ID4+Pg0KPiA+
+Pj4gTm90IGFsbCBidXMgaXMgY29ubmVjdGVkIHdpdGggc21idXMuIE1vc3QgYXJlIGkyYyBkZXZp
+Y2UgY29ubmVjdGVkIGluDQo+IGJvYXJkLg0KPiA+Pj4gVGhhdCB3aWxsIGJlIHNwZWNpZmljIHN0
+YXRlbWVudCBmb3IgZWFjaCBidXMuDQo+ID4+DQo+ID4+IFRoYXQncyBub3QgdGhlIGFuc3dlciB0
+byBteSBxdWVzdGlvbi4gV2h5IG90aGVyIGNvbnRyb2xsZXJzIHdoaWNoIGNhbg0KPiA+PiBiZSBj
+b25uZWN0ZWQgdG8gSTJDIG9yIFNNQnVzIGRldmljZXMgZG8gbm90IG5lZWQgdGhpcyBwcm9wZXJ0
+eT8NCj4gPg0KPiA+IEZvciBleGFtcGxlIGZvbGxvd2luZyBpcyB0aGUgYm9hcmQgc3BlY2lmaWMg
+Y29ubmVjdGlvbi4NCj4gPg0KPiA+IEJvYXJkIEEgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIEJvYXJkIEINCj4gPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tICAgICAg
+ICAgICAgICAgICAgICAgICAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gPiB8aTJjIGJ1cyMx
+KG1hc3Rlci9zbGF2ZSkgIDw9PT1maW5nZXJwcmludCA9PT0+IGkyYyBidXMjeCAobWFzdGVyL3Ns
+YXZlKXwNCj4gPiB8aTJjIGJ1cyMyKG1hc3RlciktPiB0bXAgaTJjIGRldmljZSB8ICAgICAgICAg
+IHwNCj4gfA0KPiA+IHxpMmMgYnVzIzMobWFzdGVyKS0+IGFkYyBpMmMgZGV2aWNlIHwgICAgICAg
+ICAgfA0KPiB8DQo+ID4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSAgICAgICAgICAgICAgICAg
+ICAgICAgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+ID4NCj4gPiBCdXMjMSBpcyBtY3RwIHRy
+YW5zZmVyIGZvciBlYWNoIEJvYXJkQS9CLiAoTm90IHNtYnVzIGNvbm5lY3RlZCkNCj4gPiBCdXMj
+MiBpcyBpMmMgZGV2aWNlIGNvbm5lY3RlZC4NCj4gPiBCdXMjMyBpcyBpMmMgZGV2aWNlIGNvbm5l
+Y3RlZC4NCj4gDQo+IFlvdSBhcmUgcmVwZWF0aW5nIHRoZSBzYW1lIHN0dWZmIGZvciBteSBxdWVz
+dGlvbi4gV2hlcmUgZG8geW91IHNlZSBvbiB0aGlzDQo+IGRpYWdyYW0gaGVyZSBvdGhlciBJMkMg
+Y29udHJvbGxlcj8gSG93IGRvZXMgaXQgYW5zd2VyIG15IHF1ZXN0aW9uPw0KPiBZb3Uga2VlcCBy
+ZXBlYXRpbmcgc2FtZSBhbmQgc2FtZSwgc28gaXQgd29uJ3Qgd29yay4NCj4gDQpTb3JyeSwgbXkg
+bWlzLXVuZGVyc3RhbmQuICANCkkgZG9uJ3Qgc2VlIG1hbnkgY29udHJvbGxlcnMgc3VwcG9ydCBm
+b3IgdGltZW91dCBmZWF0dXJlLg0KSSBkbyBzdHVkeSB3aXRoIG90aGVyIGNvbnRyb2xsZXJzIHRo
+YXQgaXMgaW1wbGVtZW50IGl0IGJ5IHN3IGltcGVsZW1lbnQuDQpodHRwczovL2dpdGh1Yi5jb20v
+dG9ydmFsZHMvbGludXgvYmxvYi9tYXN0ZXIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tbHhiZi5j
+I0wzMDItTDMwNw0KaHR0cHM6Ly9naXRodWIuY29tL3RvcnZhbGRzL2xpbnV4L2Jsb2IvbWFzdGVy
+L2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtaW1nLXNjYi5jI0w1Mi1MNTUNCmh0dHBzOi8vZ2l0aHVi
+LmNvbS90b3J2YWxkcy9saW51eC9ibG9iL21hc3Rlci9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW9t
+YXAuYyNMNTg4LUw1OTYNCg0KU28gSSBhc2tpbmcgZm9yIGFzcGVlZCx0aW1lb3V0IHByb3BlcnR5
+LCBJZiBpdCBub3QgYWNjZXB0YWJsZSwgSSB3aWxsIGRlZmF1bHQgZW5hYmxlIHRpbWVvdXQgaW4g
+ZHJpdmVyLg0KVGhhbmtzIHlvdXIgZ3VpZGFuY2UuDQoNCg0KDQpCZXN0IHJlZ2FyZHMsDQpSeWFu
+IENoZW4NCg==
