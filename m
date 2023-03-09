@@ -2,85 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E915A6B24D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C084A6B2447
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 13:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbjCINBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:01:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        id S230286AbjCIMhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 07:37:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbjCINAv (ORCPT
+        with ESMTP id S229846AbjCIMhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:00:51 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A19265A9;
-        Thu,  9 Mar 2023 04:59:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678366782; x=1709902782;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qezJ0m005MMtHINPCZFyjL2NOUVWMeICOxKg98NhuOs=;
-  b=kiDgkNHGcnVlzMjD6G6MOf+0K1f8x9n42yapmP+Ut2sexW3vBnWfiSbE
-   JMvZTIch9y5OqRenGqihhFzzSZrzxX2qPOh8YVuhTeUyNHeEVLf/T9wsn
-   sCb/eubhkRKUxo5CoDjarD5S/IvYBJIvl2jBr67JIdmNDCDPVlou4yB/a
-   icOJol/9fJQf5nYORsYw5zZ9US5CJfUXnFexqlXQzW0SRo+JkwP9AikbF
-   TyfOLP0xyw6OOdg1u6c202FwWuMkLOqY2eP/8hEEgn3kCqXNh+wLHfBJ1
-   1yJgsMc3DpKvqAFuabUQOcTR74jH36T4uxywcSqkGciurlg9/tm2dDjkA
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="401269048"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="401269048"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 04:58:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="746313122"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="746313122"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.210.74]) ([10.254.210.74])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 04:58:43 -0800
-Message-ID: <dbdbaf01-ab5d-b2a8-cafc-849ecd1bf738@linux.intel.com>
-Date:   Thu, 9 Mar 2023 20:58:40 +0800
+        Thu, 9 Mar 2023 07:37:14 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F671F93B;
+        Thu,  9 Mar 2023 04:37:13 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PXTGC1hNyz4f3jLX;
+        Thu,  9 Mar 2023 20:37:07 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgC3YiD00glknU12Eg--.40988S4;
+        Thu, 09 Mar 2023 20:37:08 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     song@kernel.org, guoqing.jiang@linux.dev, shli@fb.com,
+        neilb@suse.com
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
+        yangerkun@huawei.com
+Subject: [PATCH] md/raid10: fix memleak for 'conf->bio_split'
+Date:   Thu,  9 Mar 2023 21:00:18 +0800
+Message-Id: <20230309130018.4167300-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
-        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
-        peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] iommu: Move dev_iommu_ops() to private header
-To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
-        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
-        robin.murphy@arm.com
-References: <20230309075358.571567-1-yi.l.liu@intel.com>
- <20230309075358.571567-2-yi.l.liu@intel.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230309075358.571567-2-yi.l.liu@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgC3YiD00glknU12Eg--.40988S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7CrWxGw4UXF43tF48uw18Grg_yoW8Kr1fpa
+        nxK345Kr47Za9xJryDJFWDua4Yqr1xtayUCry7Aw4rXF4ftrZ2y3W0yrWxWryUuay2gry3
+        tFW5KFWruFn8Gr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1
+        a9aPUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/9 15:53, Yi Liu wrote:
-> dev_iommu_ops() is essentially only used in iommu subsystem, so
-> move to a private header to avoid being abused by other drivers.
-> 
-> Suggested-by: Jason Gunthorpe<jgg@nvidia.com>
-> Reviewed-by: Kevin Tian<kevin.tian@intel.com>
-> Signed-off-by: Yi Liu<yi.l.liu@intel.com>
+From: Yu Kuai <yukuai3@huawei.com>
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+In the error path of raid10_run(), 'conf' need be freed, however,
+'conf->bio_split' is missed and memory will be leaked.
 
-Best regards,
-baolu
+Since there are 3 places to free 'conf', factor out a helper to fix the
+problem.
+
+Fixes: fc9977dd069e ("md/raid10: simplify the splitting of requests.")
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ drivers/md/raid10.c | 37 +++++++++++++++++--------------------
+ 1 file changed, 17 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+index f7002a1aa9cf..bdfa02e8fe7e 100644
+--- a/drivers/md/raid10.c
++++ b/drivers/md/raid10.c
+@@ -4009,6 +4009,20 @@ static int setup_geo(struct geom *geo, struct mddev *mddev, enum geo_type new)
+ 	return nc*fc;
+ }
+ 
++static void raid10_free_conf(struct r10conf *conf)
++{
++	if (!conf)
++		return;
++
++	mempool_exit(&conf->r10bio_pool);
++	kfree(conf->mirrors);
++	kfree(conf->mirrors_old);
++	kfree(conf->mirrors_new);
++	safe_put_page(conf->tmppage);
++	bioset_exit(&conf->bio_split);
++	kfree(conf);
++}
++
+ static struct r10conf *setup_conf(struct mddev *mddev)
+ {
+ 	struct r10conf *conf = NULL;
+@@ -4091,13 +4105,7 @@ static struct r10conf *setup_conf(struct mddev *mddev)
+ 	return conf;
+ 
+  out:
+-	if (conf) {
+-		mempool_exit(&conf->r10bio_pool);
+-		kfree(conf->mirrors);
+-		safe_put_page(conf->tmppage);
+-		bioset_exit(&conf->bio_split);
+-		kfree(conf);
+-	}
++	raid10_free_conf(conf);
+ 	return ERR_PTR(err);
+ }
+ 
+@@ -4288,10 +4296,7 @@ static int raid10_run(struct mddev *mddev)
+ 
+ out_free_conf:
+ 	md_unregister_thread(&mddev->thread);
+-	mempool_exit(&conf->r10bio_pool);
+-	safe_put_page(conf->tmppage);
+-	kfree(conf->mirrors);
+-	kfree(conf);
++	raid10_free_conf(conf);
+ 	mddev->private = NULL;
+ out:
+ 	return -EIO;
+@@ -4299,15 +4304,7 @@ static int raid10_run(struct mddev *mddev)
+ 
+ static void raid10_free(struct mddev *mddev, void *priv)
+ {
+-	struct r10conf *conf = priv;
+-
+-	mempool_exit(&conf->r10bio_pool);
+-	safe_put_page(conf->tmppage);
+-	kfree(conf->mirrors);
+-	kfree(conf->mirrors_old);
+-	kfree(conf->mirrors_new);
+-	bioset_exit(&conf->bio_split);
+-	kfree(conf);
++	raid10_free_conf(priv);
+ }
+ 
+ static void raid10_quiesce(struct mddev *mddev, int quiesce)
+-- 
+2.31.1
+
