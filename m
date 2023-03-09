@@ -2,108 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179436B21C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCD56B21CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjCIKqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:46:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
+        id S230002AbjCIKrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:47:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjCIKp1 (ORCPT
+        with ESMTP id S230173AbjCIKqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:45:27 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A60956797;
-        Thu,  9 Mar 2023 02:45:26 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id a9so1490191plh.11;
-        Thu, 09 Mar 2023 02:45:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678358726;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=syVx+vjdf/ZCrQkBBKtgWw7KFf16AwGumErh0SNakMY=;
-        b=RMfuFP3mDNznKhLqGvBYhoijvFUiShtojQD9/XXBSWaozsV5lIm8ssQlgQIWfK1Xbh
-         z3WIPFZagV1zjPpyNKKXDcMm9Qk/NmrAKSBJYlSkfoAXDtbywjHxsJP/nS901YGO9BGc
-         QWw28wEikC1YqIM1e3TWHAYq8oxQLzVWpIPBS9LcttLzt6OZ7q2RiXOa4RBYxzpt2xfd
-         4NHm5SBgjgLy1UTfNk8u2puDOKuAOASqrZDSql3pTd1bAacuEHSKyTXvql5OEzqjmt/p
-         oqtrNWz3QKiLkAqHSkG3mcRGpUOxvbmi51i4cx4QaQo9WqyE3nEmSOvjPUzWsedqmV0r
-         IwDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678358726;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=syVx+vjdf/ZCrQkBBKtgWw7KFf16AwGumErh0SNakMY=;
-        b=NLzOHet7NsqWJDfGYprlBLigLTWXDR8oh3rY2VkKOPs8hqwDiYe4I6Df2Yj1kVHSwk
-         CKOMmTNJQ+MYmoCXxxfpzIcZdg+s7ybB7yi0Qty/aXh3q5hX9rmWVX/wnhkDDFQ79tZm
-         o8tU4+Zeoz9cPhBK/sZaWDUBTBlWwOm6B9WORY/+QWQ+hTwiAOwXZc8F+fjTmETzzcSX
-         s6eR0lU1OWb7Jtq6d0u5yCAwaq7g+nP7RnrQicY4XgAJm83GSExUL0kREUDc0mwBOrJI
-         FyJIPxku+iMnVPvG2l0HGbz+8ili65LOYkyAtg0xD9T1mx8X4TSf0fEi1i5O7hVFeidP
-         81yA==
-X-Gm-Message-State: AO0yUKWlPwUCb0eBLivf5kSj7ZnEupxbm6FTzHt2RXoU0EDB47LTlqXj
-        MRJQpmnDgL3vCd/94W2j1rxJUQZfIJ4Iub/k7/k+qFvqhl3jsw==
-X-Google-Smtp-Source: AK7set9wVn30YXm55DaP7zMI+PaHXqrCLIffmIm/qdvgb/14tq0QJwGlqbKlTk3VTYzmc5kMS1madgEGh/Lav7/SY8k=
-X-Received: by 2002:a17:902:ef92:b0:19b:636:b153 with SMTP id
- iz18-20020a170902ef9200b0019b0636b153mr8117005plb.6.1678358725826; Thu, 09
- Mar 2023 02:45:25 -0800 (PST)
+        Thu, 9 Mar 2023 05:46:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E41720A1F;
+        Thu,  9 Mar 2023 02:46:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D26EB81ED3;
+        Thu,  9 Mar 2023 10:46:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D56B6C433D2;
+        Thu,  9 Mar 2023 10:46:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678358804;
+        bh=Kx8JrIEBCDpyV5UPrP+4xnSL/3UnrQPCBmZ7NBusVHo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ituxghn+9yrt3mfPxAZTut59s4ozydCG8VFCWXXmvFX7p87kxZXX+hDP/k3zgW91D
+         hqpfXEKENysSemVs0CkHB+24lJQ/B338Wodty7aGyzHFIiAmiehnLynmb+FzT2Ja4v
+         PnDNL8fZLDzNkPznqeg1GXyIlk+MNCPEhXVBJtcKMHZcnBJf0xRhvDkyOdxmXZ9owe
+         TQ5GvaSpB/ebEtsCIx8nKfRJzpWD4t/D2QHGs5b9lfmH8P8OcGvHIxUpYBQnpjyx3y
+         2eYDpnA60cvSEB4Pq9bu8c+ElKYPYAjntrvna0swLA7ZqkBrhhNV9mHQkhxXtCeuOm
+         edenWjnr9TjKQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1paDo4-0005L9-Nt; Thu, 09 Mar 2023 11:47:33 +0100
+Date:   Thu, 9 Mar 2023 11:47:32 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_krichai@quicinc.com, johan+linaro@kernel.org, steev@kali.org,
+        mka@chromium.org, Dhruva Gole <d-gole@ti.com>
+Subject: Re: [PATCH v2 1/1] PCI: qcom: Add support for system suspend and
+ resume
+Message-ID: <ZAm5RPdn5PmaJzVO@hovoldconsulting.com>
+References: <20230302083625.188482-1-manivannan.sadhasivam@linaro.org>
+ <20230302083625.188482-2-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-References: <20230309092821.1590586-1-daniel.lezcano@linaro.org> <20230309092821.1590586-2-daniel.lezcano@linaro.org>
-In-Reply-To: <20230309092821.1590586-2-daniel.lezcano@linaro.org>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 9 Mar 2023 07:45:14 -0300
-Message-ID: <CAOMZO5CdLXMtBbdH1j1RLFL=t5ZGXVgi5=Aw5pde1QNcCAVKxQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] thermal/drivers/imx: Use the thermal framework for
- the trip point
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230302083625.188482-2-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 6:28=E2=80=AFAM Daniel Lezcano <daniel.lezcano@linar=
-o.org> wrote:
->
-> The thermal framework provides an API to get the trip related to a
-> trip point id. We want to consolidate the generic trip points code,
-> thus preventing the different drivers to deal with the trip points
-> after they registered them.
->
-> The set_trip_temp ops will be changed regarding the above changes but
-> first we need to rework a bit the different implementation in the
-> drivers.
->
-> The goal is to prevent using the trip id but use a trip point passed
-> as parameter which will contain all the needed information.
->
-> As we don't have the trip point passed as parameter yet, we get the
-> trip point using the generic trip thermal framewrok APIs and use it to
-> take exactly the same decisions.
->
-> The difference with this change and the previous code is from where we
-> get the thermal trip point (which is the same).
->
-> No functional change intended.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+On Thu, Mar 02, 2023 at 02:06:25PM +0530, Manivannan Sadhasivam wrote:
+> During the system suspend, vote for minimal interconnect bandwidth and
+> also turn OFF the resources like clock and PHY if there are no active
+> devices connected to the controller. For the controllers with active
+> devices, the resources are kept ON as removing the resources will
+> trigger access violation during the late end of suspend cycle as kernel
+> tries to access the config space of PCIe devices to mask the MSIs.
+> 
+> Also, it is not desirable to put the link into L2/L3 state as that
+> implies VDD supply will be removed and the devices may go into powerdown
+> state. This will affect the lifetime of storage devices like NVMe.
+> 
+> And finally, during resume, turn ON the resources if the controller was
+> truly suspended (resources OFF) and update the interconnect bandwidth
+> based on PCIe Gen speed.
+> 
+> Suggested-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> Acked-by: Dhruva Gole <d-gole@ti.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->   V2:
->     - Remove extra tab inserted in the previous version
+>  drivers/pci/controller/dwc/pcie-qcom.c | 53 ++++++++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index a232b04af048..7147f0103026 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -227,6 +227,7 @@ struct qcom_pcie {
+>  	struct gpio_desc *reset;
+>  	struct icc_path *icc_mem;
+>  	const struct qcom_pcie_cfg *cfg;
+> +	bool suspended;
+>  };
+>  
+>  #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
+> @@ -1820,6 +1821,53 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> +static int qcom_pcie_suspend_noirq(struct device *dev)
+> +{
+> +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	/* Set minimum bandwidth required to keep data path functional during suspend */
+> +	ret = icc_set_bw(pcie->icc_mem, 0, MBps_to_icc(250));
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+I can again confirm that this now passes basic smoke testing on my CRD
+(unlike v1 which set bw to 0) and X13s.
+
+> +	if (ret) {
+> +		dev_err(pcie->pci->dev, "Failed to set interconnect bandwidth: %d\n", ret);
+
+You already have a pointer to dev.
+
+> +		return ret;
+> +	}
+
+And please try to stay within 80 columns width unless breaking it
+improves readability (generally does not apply comments).
+
+> +
+> +	/*
+> +	 * Turn OFF the resources only for controllers without active PCIe devices. For controllers
+> +	 * with active devices, the resources are kept ON and the link is expected to be in L0/L1
+> +	 * (sub)states.
+> +	 *
+> +	 * Turning OFF the resources for controllers with active PCIe devices will trigger access
+> +	 * violation during the end of the suspend cycle, as kernel tries to access the PCIe devices
+> +	 * config space for masking MSIs.
+> +	 *
+> +	 * Also, it is not desirable to put the link into L2/L3 state as that implies VDD supply
+> +	 * will be removed and the devices may go into powerdown state. This will affect the
+> +	 * lifetime of the storage devices like NVMe.
+> +	 */
+
+Same here.
+
+> +	if (!dw_pcie_link_up(pcie->pci)) {
+> +		qcom_pcie_host_deinit(&pcie->pci->pp);
+> +		pcie->suspended = true;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int qcom_pcie_resume_noirq(struct device *dev)
+> +{
+> +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
+> +
+> +	if (pcie->suspended) {
+> +		qcom_pcie_host_init(&pcie->pci->pp);
+
+Looks like error handling is missing here.
+
+> +		pcie->suspended = false;
+> +	}
+> +
+> +	qcom_pcie_icc_update(pcie);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct of_device_id qcom_pcie_match[] = {
+>  	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
+>  	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
+> @@ -1856,12 +1904,17 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0302, qcom_fixup_class);
+>  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1000, qcom_fixup_class);
+>  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
+>  
+> +static const struct dev_pm_ops qcom_pcie_pm_ops = {
+> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_suspend_noirq, qcom_pcie_resume_noirq)
+> +};
+> +
+>  static struct platform_driver qcom_pcie_driver = {
+>  	.probe = qcom_pcie_probe,
+>  	.driver = {
+>  		.name = "qcom-pcie",
+>  		.suppress_bind_attrs = true,
+>  		.of_match_table = qcom_pcie_match,
+> +		.pm = &qcom_pcie_pm_ops,
+>  	},
+>  };
+>  builtin_platform_driver(qcom_pcie_driver);
+
+Johan
