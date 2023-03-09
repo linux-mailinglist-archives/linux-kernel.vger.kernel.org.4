@@ -2,109 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10D46B25C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3768F6B25CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbjCINrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:47:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        id S231236AbjCINs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbjCINrT (ORCPT
+        with ESMTP id S231189AbjCINsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:47:19 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567E65D479;
-        Thu,  9 Mar 2023 05:47:18 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id z5so1870190ljc.8;
-        Thu, 09 Mar 2023 05:47:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678369636;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zKYdyCghNYdoyBXOgpg5ofmE3QV+ajZ50HuS4IU19N8=;
-        b=gAMtP+LsJ1axe0618LDnbI7QcevWkknD9zrczOZzkHNCijB7J2DiusoIVp/JweHWdU
-         PqYCD58irQHYfvmtgkW07JqUtoyqaq46gqSPkfuOArqaLUNVex05jgEz2dGrIt6GETcz
-         rFNf4rDtY8oNHcd+KnB4S8JSLPwbnlD+82HveQJVXngA/yAK1EatdFe1c/sRarb80FPC
-         oZGDvTk5csgj52Obb+Om3m6Q5ULDFxVZ5iUgX9rkHJ5VvrJqIEp5Es/PyHiP++QmnUqz
-         p4dYr5WOB+6V9dM8h5zc974fC7YAob2z1A6TQEM9TmrgRPzwFnjozHpNWaMHOBGj2Rju
-         ylSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678369636;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zKYdyCghNYdoyBXOgpg5ofmE3QV+ajZ50HuS4IU19N8=;
-        b=lxdPn0MSPYgOpRhymtjXDKbD0zA5K4Bgo3Zl/+VL3wptel+bcQPoRJTKFavq623rFu
-         VcZk0rjDQtECtrOZwqH3dG9kRtbt2n+xyj76JOqw5OroFasS/Ke1iSFrsQ5fLYVKb3i/
-         WPilT2qR+J0ECzOZpPmnBS8vRGmgrTBjcaqqkmFlM1Zvdz3NakjIKMVmz2je/P0uG6I9
-         rYk6bFUTNXB+NF6JCTTJNOwVhQjyFVnMtCOycrFt4cxJCGDoXwVNUdW+eVjnPuvaIHtL
-         q2TBCyoSdKmm8AeC2GByywvOYAZPkUXOdWNAwo9wWOa2XwPvML6Wdqdeh+q1EQjAsRTq
-         ZStA==
-X-Gm-Message-State: AO0yUKXEvppeRhElY3G4BxI8LVDay/gRaWoJNXW8x/YdV+bit7oWYzy2
-        b8tDyg/0g4JibD0pUSunBy2vEy7md7T+9Whm
-X-Google-Smtp-Source: AK7set+O+XacSRTP1TuGlJYExW5QCBLCjGsNn+2uIVe8N+6v1PQoRqVTsf/P315mg1+FZQKZcHMoMQ==
-X-Received: by 2002:a05:651c:1047:b0:295:a8fc:6ba4 with SMTP id x7-20020a05651c104700b00295a8fc6ba4mr6515884ljm.38.1678369636650;
-        Thu, 09 Mar 2023 05:47:16 -0800 (PST)
-Received: from pc636 (host-95-193-108-241.mobileonline.telia.com. [95.193.108.241])
-        by smtp.gmail.com with ESMTPSA id f18-20020a2ea0d2000000b00295a21c7954sm2953380ljm.50.2023.03.09.05.47.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 05:47:16 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Thu, 9 Mar 2023 14:47:13 +0100
-To:     Ariel Levkovich <lariel@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Vlad Buslov <vladbu@nvidia.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Vlad Buslov <vladbu@nvidia.com>
-Subject: Re: [PATCH 08/13] net/mlx5: Rename kfree_rcu() to
- kfree_rcu_mightsleep()
-Message-ID: <ZAnjYc0u7rjdmqFt@pc636>
-References: <20230201150815.409582-1-urezki@gmail.com>
- <20230201150815.409582-9-urezki@gmail.com>
+        Thu, 9 Mar 2023 08:48:15 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2054.outbound.protection.outlook.com [40.107.223.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63906186;
+        Thu,  9 Mar 2023 05:48:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JC8dXWSX2ItWOZ6hskwhiQAFsBperp2WmlDZcqRJoLg09ywixQP4fhPqG/nBw9mIv8vNHXIyZhnDxJtETT2Eqh0rPUUNDpkNKz0Hr5Nyl+GNkMuWC1xF22xYIS3Ab1aXGIi+qYbSBcPhTswYRZdNnvwEwPaB7hKhfv6CEb3kONsyfqDbd3HKDw2nhAcCoxn7sXVHntHSap4IAv/cUgkx6tRptds1K0BneGusZMPq2M4InTJQ/XP1cYCPTo2mOxRXe6uL8uL6lVq0EPd8ZGkNxo82Th5zCSeQeArFF4HreZgXq99YsNVNlytgjI0g75P+0WfSTAbTQvpsviQRNb7Vug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ujul2KGrmfcoaS9XrNmTunJFhP8wR2gVoIlq74Lykb0=;
+ b=bSbm5z6vA9hf6Xfa0ZpNkZGXUJiXybT8l4mdWXK765QPpXxu31iGgwtfR2AGSCtGV9wqxYGg8eBvUadXW2uyHNI7CHGqnvi44+pVfno/p6zN8N5VaJjuvzbUmel7PWSZrvAVgmBIpWMh+PIuyRd4fKJfQLCHsBK3VGXfSofEEBjf7B0WMr98sMIEZh+EbC+NSoKII7jxt+c8TXSBfdTiZzELIXwBGeQmEX6yEFiJtmZZf0wuX+KJ1UhHgkDMvPTNq9MBjJ3F1abpVQvuIDPkPm2+BQo4Xg2zCpbPn0PWUrBfU3bHgpwRRnHI/fW+4wYFM9TzRFJ6cllW978OtBAq5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ujul2KGrmfcoaS9XrNmTunJFhP8wR2gVoIlq74Lykb0=;
+ b=pk0mQ8kju3pEUmGFkrTITzGKjTK/QlwRZDPL0UTcMMP7wkI288X9FjXryfOQXbUmGEhkBLb7mY13emKwFiRMeybMOIUz5sZVPxDaPhtTtHwYYk3SZSdLDtEHYuyI8YA1FitogAuKLvKrbiD+FSS48rlJ2Tvq7xpqh+b1/6JXFLL1hQL8PmVOKM0em1ruILc8rA+rgFv8H6NqLyFOkT5VTpkpRm4LOoTzVbtVIk3ZVKazNJT1HT5oTYHQhU6ZEtu673/PRaDOAH8EkMok9bczZDK2GLAFnz9KyFud9kPNfOZbvOg2EXlgB7N6t8EN0F043547SXZy4EiKAsqlXeMeHg==
+Received: from DS7PR03CA0282.namprd03.prod.outlook.com (2603:10b6:5:3ad::17)
+ by MN2PR12MB4343.namprd12.prod.outlook.com (2603:10b6:208:26f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Thu, 9 Mar
+ 2023 13:48:11 +0000
+Received: from DS1PEPF0000E645.namprd02.prod.outlook.com
+ (2603:10b6:5:3ad:cafe::9f) by DS7PR03CA0282.outlook.office365.com
+ (2603:10b6:5:3ad::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19 via Frontend
+ Transport; Thu, 9 Mar 2023 13:48:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DS1PEPF0000E645.mail.protection.outlook.com (10.167.17.203) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.13 via Frontend Transport; Thu, 9 Mar 2023 13:48:11 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 9 Mar 2023
+ 05:48:03 -0800
+Received: from nvidia.com (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 9 Mar 2023
+ 05:47:59 -0800
+From:   Gavin Li <gavinl@nvidia.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <roopa@nvidia.com>,
+        <eng.alaamohamedsoliman.am@gmail.com>, <bigeasy@linutronix.de>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <gavi@nvidia.com>, <roid@nvidia.com>, <maord@nvidia.com>,
+        <saeedm@nvidia.com>, Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH net-next v6 1/5] vxlan: Remove unused argument from vxlan_build_gbp_hdr( ) and vxlan_build_gpe_hdr( )
+Date:   Thu, 9 Mar 2023 15:47:14 +0200
+Message-ID: <20230309134718.306570-2-gavinl@nvidia.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230309134718.306570-1-gavinl@nvidia.com>
+References: <20230309134718.306570-1-gavinl@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201150815.409582-9-urezki@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E645:EE_|MN2PR12MB4343:EE_
+X-MS-Office365-Filtering-Correlation-Id: a0d7d830-3c9d-49ce-a806-08db20a4ec53
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TZL+ByCJp4LcSwuU1oEf7T6HBhriMCzzo1q7r/tLo4j7+I63LlxJLIPml49duU2TOv6auJ8obDOhBQbSXUlNbbQkGbK9RCUv3O6WagU/8zzU4VElulGrUJa2IQO2mCYxm97E0V76bdasgqbKi8mLHHXPozhXpXRFamE+3BiBFM+I5s91UelRcbFhGtlQokpFjsW+yRJ6MjrbPcXYifiptmVVmQB4mtSW3Q9q4HSTxA/cHjINP5K8+qzCeyWiwxdU0uxSMU1RpCnS3cuouL3aBE3m5+okFP8qrVp0RuO5uCKQlWwT040Fbd4yGOnUrxGNjjpXy4lwQz8vusdPqNxSVJ+I82mxVRCPLTt0Gx6ljUoAZPm9rzCUEG4xnLK2hie25OV/AUWs6m+OuiNcA2zMJ6D/VM745F9nNkNkpKN3bhJrUPKnMuVAPd8vYEZQ67Qu/uT49jK1Hl+9nAs3SeZLlDg8vbfSKvzG+1y6Tvm0Xd/xKxShinzndHvSILzOWaQgUJR40AYGD4X6dfRwD88gUy0svJZrtwQTsEOjDmSI8itYoTQ/0ftDFzT3xCoKl2mZcbQvy0kKNKrP8MFd7xQjRK4+94USpHQP55EeqJN5sISeXDn7lV9IFNkORLVN7HB+Rw7Ezf2MHHmfvil3By5thVgOBEd2vLhq5Gtd/wn/qCd+yiv/XmIuR4SghRXnpnDgUHO6Nu21P48/md+HCke5qB4eiZ2R0zxFEGY5iOi36Bm2tKAS/t02AtFCnc0/gn0s
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(376002)(396003)(346002)(451199018)(36840700001)(46966006)(40470700004)(336012)(47076005)(426003)(110136005)(54906003)(40460700003)(36756003)(55016003)(186003)(40480700001)(356005)(86362001)(7636003)(82740400003)(36860700001)(1076003)(26005)(82310400005)(83380400001)(6666004)(16526019)(6286002)(2616005)(7696005)(5660300002)(316002)(478600001)(4326008)(41300700001)(2906002)(8936002)(8676002)(70206006)(70586007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 13:48:11.3125
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0d7d830-3c9d-49ce-a806-08db20a4ec53
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E645.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4343
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 04:08:14PM +0100, Uladzislau Rezki (Sony) wrote:
-> The kfree_rcu()'s single argument name is deprecated therefore
-> rename it to kfree_rcu_mightsleep() variant. The goal is explicitly
-> underline that it is for sleepable contexts.
-> 
-> Cc: Ariel Levkovich <lariel@nvidia.com>
-> Cc: Saeed Mahameed <saeedm@nvidia.com>
-> Cc: Vlad Buslov <vladbu@nvidia.com>
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c  | 2 +-
->  drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-Could you please add you reviwed-by or Acked-by tags so we can bring
-our series with renaming for the next merge window?
+Remove unused argument (i.e. u32 vxflags) in vxlan_build_gbp_hdr( ) and
+vxlan_build_gpe_hdr( ) function arguments.
 
-Thanks!
+Signed-off-by: Gavin Li <gavinl@nvidia.com>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+---
+ drivers/net/vxlan/vxlan_core.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
---
-Uladzislau Rezki
+diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
+index b1b179effe2a..86967277ab97 100644
+--- a/drivers/net/vxlan/vxlan_core.c
++++ b/drivers/net/vxlan/vxlan_core.c
+@@ -2140,8 +2140,7 @@ static bool route_shortcircuit(struct net_device *dev, struct sk_buff *skb)
+ 	return false;
+ }
+ 
+-static void vxlan_build_gbp_hdr(struct vxlanhdr *vxh, u32 vxflags,
+-				struct vxlan_metadata *md)
++static void vxlan_build_gbp_hdr(struct vxlanhdr *vxh, struct vxlan_metadata *md)
+ {
+ 	struct vxlanhdr_gbp *gbp;
+ 
+@@ -2160,8 +2159,7 @@ static void vxlan_build_gbp_hdr(struct vxlanhdr *vxh, u32 vxflags,
+ 	gbp->policy_id = htons(md->gbp & VXLAN_GBP_ID_MASK);
+ }
+ 
+-static int vxlan_build_gpe_hdr(struct vxlanhdr *vxh, u32 vxflags,
+-			       __be16 protocol)
++static int vxlan_build_gpe_hdr(struct vxlanhdr *vxh, __be16 protocol)
+ {
+ 	struct vxlanhdr_gpe *gpe = (struct vxlanhdr_gpe *)vxh;
+ 
+@@ -2224,9 +2222,9 @@ static int vxlan_build_skb(struct sk_buff *skb, struct dst_entry *dst,
+ 	}
+ 
+ 	if (vxflags & VXLAN_F_GBP)
+-		vxlan_build_gbp_hdr(vxh, vxflags, md);
++		vxlan_build_gbp_hdr(vxh, md);
+ 	if (vxflags & VXLAN_F_GPE) {
+-		err = vxlan_build_gpe_hdr(vxh, vxflags, skb->protocol);
++		err = vxlan_build_gpe_hdr(vxh, skb->protocol);
+ 		if (err < 0)
+ 			return err;
+ 		inner_protocol = skb->protocol;
+-- 
+2.31.1
+
