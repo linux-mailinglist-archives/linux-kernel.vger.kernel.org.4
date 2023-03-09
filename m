@@ -2,151 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82DAE6B1C87
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 629856B1C8F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjCIHk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 02:40:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38682 "EHLO
+        id S229720AbjCIHmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 02:42:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjCIHk0 (ORCPT
+        with ESMTP id S229692AbjCIHml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 02:40:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D6785A5E;
-        Wed,  8 Mar 2023 23:40:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D0A561A38;
-        Thu,  9 Mar 2023 07:40:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C79A9C433D2;
-        Thu,  9 Mar 2023 07:40:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678347623;
-        bh=HHYt8aLbuz6IkOfI+LhZEtJr3IrwCVJJ/+VHPDerd9I=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=WWPk3rpjhXS8Pe/26VtnKCNwxZ0rHPPuWD/ExvR4vsiNIfCyq47kGQt/HgS9jZQql
-         objQ1HyVarLMAKrdj2L4TnugQwbme5vwr+waQUIRqmYUHIN4kdj8M8WPMi+8VWlQzB
-         2JCbyRJxw5+kuhCdB2Sy1tp2H9JnZXe8szA2YAyIWLQ6WgILO9tPNX0TE4GVeGOsWR
-         GEJQR+5zjik4LlZD5+HCLAV73OmHS1DoUkYkklgUCX4P/w1iwXDGdlHmnmlqExrm0a
-         aySBuZ5tueldk46sz1zykxQoUxKa70kcnK8zIhhV4DI/w/7SHbwrqr/qajPU1qODk+
-         jwCMhFaICRHqg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A1B08E61B6E;
-        Thu,  9 Mar 2023 07:40:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+        Thu, 9 Mar 2023 02:42:41 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2106.outbound.protection.outlook.com [40.107.255.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAB4CE960
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 23:42:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Med4FoJq3q8JwfJwLOJcDsvz80pKd/jmlDpYU4vbVFZgiZPld+SLcYb1JxDNFlCoRefY8a6Q4NruidbQj/6FUXrcMX6dPFbfm/cQfZRjVNBArJtaWQbxJ5j34humSvwfhf5LCsbAC+em34LUKJN8j2i1arEasHsEhMkSDsDEblBdqAC0Vf6uOm0G3XMeQx2t1eR5wRvOWkni//sv6DPjvGhBKwkESydwgQqHsKEkq/yBBlB2hhZPP3XTzm2A1DJF5RuAM5aCvDa2gZOTuiPmTKKXhi8mExQUh2GU8iplnvb9Filtv8F4ZIqZa8qbtQLwSj2l5Ac1XQEV1g1tQ9WCAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=f/56sFD/vWGFmfdCIhAYSYSsNowOEqqj/mAs26p9XlQ=;
+ b=cq4aBuGnAV81bAwzir2MM8nh4wL99xIR/09X/JvNmSu5LY4RNzKakttFkUal6JZeddQMUO4yv6Ke4cxhPx8TlhQEZU/nDvHlKtmCJgEtlgEITedsu0YQ302pUHp/xBRqpo6p+Ixq4l0+W0f3NLgao1y2tKtOdYOEVQSDBljc0D+kaVO4VVXH7D2iN3MxVRK9i5cAYIp3/o3GMKMekVwM73MkcC1UkbpUkPxd/Ztp5QDj9PyRmQd3/sbPxolOllez0Y2j0FSbCOMqChX+zENsh/U6O1xTkfPPHSv68i7IbUoSssS0tSYwIB975BA5QVOh2KQpwrr1wq/LzEIjAZQI4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=f/56sFD/vWGFmfdCIhAYSYSsNowOEqqj/mAs26p9XlQ=;
+ b=eBlMPfjO7mI6XlGOuEHIWarSacTgmWbwEzEVBpYm459TNNfVgdZJUpkjcqy79o9WQuNcBc+IFqAe0azuZTMMv01kEmDjg1cmW1cFjnQ/FstzLKlHSfLVAmqa8gkiZtzgMQ6pa0y3Rl4+5bK8b64AeGBvegAaWuFkPV+PCFhLWzmYfRurL6UfIgu+2nQAyK+OBDirYC5ajkweCTLfjIzDMrQw1wg7Z0xeM+mRQEqP0hJCr4lyfGCoB29S99KFANlYREQk+/ld216Iw9EIyyx2PCzTyjO+39HlIVphrLG9VvqG5WBVrnHMS4Jvh/YRGR7Vz7dR2/rk73QLNNZrnSfN7g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB5275.apcprd06.prod.outlook.com (2603:1096:400:1f5::6)
+ by PUZPR06MB6032.apcprd06.prod.outlook.com (2603:1096:301:116::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Thu, 9 Mar
+ 2023 07:42:34 +0000
+Received: from TYZPR06MB5275.apcprd06.prod.outlook.com
+ ([fe80::a2c6:4a08:7779:5190]) by TYZPR06MB5275.apcprd06.prod.outlook.com
+ ([fe80::a2c6:4a08:7779:5190%2]) with mapi id 15.20.6156.028; Thu, 9 Mar 2023
+ 07:42:34 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     zbestahu@gmail.com
+Cc:     chao@kernel.org, huyue2@coolpad.com, jefflexu@linux.alibaba.com,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        xiang@kernel.org, zhangwen@coolpad.com
+Subject: Re: erofs: use wrapper i_blocksize() in erofs_file_read_iter()
+Date:   Thu,  9 Mar 2023 15:42:25 +0800
+Message-Id: <20230309074225.29404-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <bee8eb33-ec23-de1c-0340-b2cc290f4d1c@linux.alibaba.com>
+References: <bee8eb33-ec23-de1c-0340-b2cc290f4d1c@linux.alibaba.com>
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 00/28] PCI/AER: Remove redundant Device Control Error
- Reporting Enable
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167834762365.29033.5915436899896564508.git-patchwork-notify@kernel.org>
-Date:   Thu, 09 Mar 2023 07:40:23 +0000
-References: <20230307181940.868828-1-helgaas@kernel.org>
-In-Reply-To: <20230307181940.868828-1-helgaas@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bhelgaas@google.com,
-        aayarekar@marvell.com, ajit.khaparde@broadcom.com,
-        aelior@marvell.com, chris.snook@gmail.com, dmichail@fungible.com,
-        ecree.xilinx@gmail.com, jesse.brandeburg@intel.com,
-        jiawenwu@trustnetic.com, manishc@marvell.com,
-        habetsm.xilinx@gmail.com, mengyuanlou@net-swift.com,
-        michael.chan@broadcom.com, rahulv@marvell.com, rajur@chelsio.com,
-        rmody@marvell.com, salil.mehta@huawei.com, shshaikh@marvell.com,
-        somnath.kotur@broadcom.com, sriharsha.basavapatna@broadcom.com,
-        skalluru@marvell.com, anthony.l.nguyen@intel.com,
-        vburru@marvell.com, yisen.zhuang@huawei.com,
-        GR-Linux-NIC-Dev@marvell.com, intel-wired-lan@lists.osuosl.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0050.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::19)
+ To TYZPR06MB5275.apcprd06.prod.outlook.com (2603:1096:400:1f5::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB5275:EE_|PUZPR06MB6032:EE_
+X-MS-Office365-Filtering-Correlation-Id: 91a14d34-aa09-4701-3b6e-08db2071d8b0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rjeOaf0aoCUh6YIzcz7U2ma8/Xxx7VAZ94I47xfKpQX1xLz1kvcl3+9Vhoz3MSbrjpCADjWJT+5r6ou0O81kVqAqyxXGdkH3OeTdJpdnYHRgvR8I/qSgyaJNxjjNqQo0wDHunHgqov5/owLm6/46JqagMzSaWwI9gX/QJPusptJ7mhfLIB5stkQStcsOyKAjphuJJDcK/knwigmObSMfNhUSZUCdnpRgfMdNXRTAkj/9t7qzw+4zI5NT9Emb3hXbEy0X5HneMWJz/4ahStrRGFJx9yVaAJ7DCHFJVXDn0H4saP29d9Z7FH7uoaUf3gI642YfJyABPsTW8cgYTZU7hPe0lfyS71OOxV++RrjfoZUtxeMeVg+MCFFTSPcY1wVVP0koh00sHDPotjKchJ3tcu2PGWPwBl7QQUnMx1xusNZ4cRM10XZUXmmPI/eetNVdSb5iCQxanm2cMvOLonQW8cXkUvWxPrMqf1iE01/x0CzLjOTfY+XVySKRXCW1/Cch9t6T7yIeurkVSm+vgzOPxP/Wf/l3+QaGuo26KjrZhj4jGB50+hER45P65MPzy0YL6X8ovgs8aNBBU2B484dZtEH4zRtGAbTs3OBVOJZik9U2uFFBnq6Z4oBOgFk00+6yyWuEtb5C+937zYs73da6TyXEfGlMVjHreBY4S342OsuLMW+T6+QvWCBPDYIzM1aI
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB5275.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(366004)(376002)(136003)(346002)(39860400002)(451199018)(8936002)(36756003)(26005)(5660300002)(1076003)(8676002)(6506007)(6512007)(38350700002)(38100700002)(6666004)(83380400001)(186003)(2616005)(86362001)(316002)(41300700001)(6916009)(4326008)(66556008)(66476007)(966005)(6486002)(52116002)(478600001)(66946007)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nnKqqnffAgg1HMvMQtlmwaf/3oFAbUWkI4v4U8Nh5mp+wk+hykA5ky51ZinW?=
+ =?us-ascii?Q?NmA3O+cHp5TTkjEuscTYKeRueSNkYTufJj5q7NGS3fPrpCK3fn8fLU8rhmV9?=
+ =?us-ascii?Q?uNOOImRnQ38oCs7rB8rV6OihdRbYI7B4MN2qL6K9BahSLue4i1tuHqtE11Vh?=
+ =?us-ascii?Q?LfcTblR3dGMESFntjW7/vImqxvrvWrk2T4UIGNq6tmTM8SPTRv+44vqkKxO6?=
+ =?us-ascii?Q?cTlQy7w7UtbEUcAXDtAVrSXu10fhNqGfG9SLcNxPVxZKgBrbdQYKZBwYWtkm?=
+ =?us-ascii?Q?dRVjiL8lW2mtUZNStR05wZ/PPjfMIH+PXqHWu00eLe6OHCIV7+3FOmqZaq2Q?=
+ =?us-ascii?Q?oupfxOVzcN8gIQwKrb7vjCfFAClWA79bqNUbO2QsPfYTMXmOYOOvYTVYY6cx?=
+ =?us-ascii?Q?zyA7M388chCXvZ0v9S62DFX+KIgSq0mvsf0q24IaBDNxgbklTSJjcJjwmLep?=
+ =?us-ascii?Q?M47rONXOjClIJqQBgSYqcd999rzcUf01exQqRgtgCwEMiiCU5sy1fN4IO1AQ?=
+ =?us-ascii?Q?wxmpEWoP2l/bJ85OEGS+BETT4qJu6OjO8Zt9V7LvRZP7HGrX/VrCN1zuEiGE?=
+ =?us-ascii?Q?S1AYmFAsNHvdpK2hmz+pH4QiP11NZRBFBkXJVMdjsYcx4N4BzJIBXXu0I5E7?=
+ =?us-ascii?Q?3xI1e5HEtVu8E/Mh+rTQQLExJDORgpbXnm2MGJpai/tww+7/6v2cEOWK2/Ox?=
+ =?us-ascii?Q?oPPvd+VTDyrDnMzn4OxKpeoWwQ6itnRKVdXLYulZZaHG0hoxiU/qARJU45cj?=
+ =?us-ascii?Q?06zw3b+k4lUMFMNEtdSCNuSd2UPbvrXwaNyOwf/wBLU0YD4Qjxo2fV3kdnW3?=
+ =?us-ascii?Q?3+IuTL+MIO3Z503exaPAB3ovR/Om9BuRH33Cxw4S5breaZbU0wTcm10eiGRa?=
+ =?us-ascii?Q?7xG95YvqVXBAFiCdoV4DhV4I++kh1zdooxw4XVhfEEdbm9LqH+lkpo2P6TNH?=
+ =?us-ascii?Q?WR09dw/t/rQzFrDVmxYDNFYv/HGUUrEnf/YvAHLqayNsGopb/nYYftNHA0BA?=
+ =?us-ascii?Q?UFH2dEWUQMMLUy9ndeoQDx7WQYeL0e2fT3PS03xJYGUsH8QdlkXHZhA0C5yI?=
+ =?us-ascii?Q?M+1QOhiSG639eFZdVpZlAbbTfLUPtCLRiNxoln7xtyL6pecsHCFHwsysoEY9?=
+ =?us-ascii?Q?KvUgmLf27F0dgfolqpdbwsLUU36Vfeyy8ZVzYAtbFrSIJVNEnHG3ftkzQAg5?=
+ =?us-ascii?Q?CF+CnK3CnYgZLPEgZVjNDaitQLNnk/3/ko2umfOzFx3Ti3UWeo9ZmMeKAyyz?=
+ =?us-ascii?Q?YgBJKS4VA6r8S5qfTbioUZ3Td1mOz56vvRkYT7IRipoBgJshV0tgrgxALX+R?=
+ =?us-ascii?Q?RWrCRin2ALnylnox95ShoKFZEuwS+8lFiF47qbXYCHnITh5clFC0YzIcR7nN?=
+ =?us-ascii?Q?Hd4LOzGWya5XLBpEjhlOFwd96OxFksuKQHWEHA+4x5wgiw9hJJ2btZ70+6vX?=
+ =?us-ascii?Q?rQbu9Nq4b2YRwhr+Cnk/Ssontgsil84FuJRlrwC8qGt/om+mTl865AlqlTFd?=
+ =?us-ascii?Q?Sq7wneERHfuK4+lz915cekLDxef6ObBZby7BPlG6HrLOoWBhRDsyaoxrNddq?=
+ =?us-ascii?Q?IRpqP1T1WeQ2R1odfpZeXqzo7uNX186aYxmNkIHI?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91a14d34-aa09-4701-3b6e-08db2071d8b0
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB5275.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 07:42:34.3128
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iu0RWUlloy69WZakEKQaGus/E3ut9BN7Akewz8KlwaZ+QMCgRrfINgKb17hMAqYNwm5x+Or4HCYYdbAUhVvLQA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR06MB6032
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+> FYI it seems that GENMASK macro is widely used in driver and arch code base, while it's rarely used in fs, except for f2fs.
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+I think the following usage can be changed to bitmap api, just like in f2fs?
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=c4ca1f7164734a1baf40d4ff1552172a07d4fc4d
 
-On Tue,  7 Mar 2023 12:19:11 -0600 you wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is native"),
-> which appeared in v6.0, the PCI core has enabled PCIe error reporting for
-> all devices during enumeration.
-> 
-> Remove driver code to do this and remove unnecessary includes of
-> <linux/aer.h> from several other drivers.
-> 
-> [...]
+fs/erofs/fscache.c:135:         unsigned long flags = 1 << NETFS_SREQ_ONDEMAND;
+fs/erofs/internal.h:250:#define SECTORS_PER_BLOCK       (1 << SECTORS_PER_BLOCK)
+fs/erofs/internal.h:252:#define EROFS_BLKSIZ            (1 << LOG_BLOCK_SIZE)
+fs/erofs/internal.h:354:        return (value >> bit) & ((1 << bits) - 1);
+fs/erofs/zmap.c:66:             ((1 << Z_EROFS_VLE_DI_CLUSTER_TYPE_BITS) - 1);
+fs/erofs/zmap.c:69:             m->clusterofs = 1 << vi->z_logical_clusterbits;
+fs/erofs/zmap.c:114:    const unsigned int lomask = (1 << lclusterbits) - 1;
+fs/erofs/zmap.c:141:    const unsigned int lomask = (1 << lclusterbits) - 1;
+fs/erofs/zmap.c:147:    if (1 << amortizedshift == 4)
+fs/erofs/zmap.c:149:    else if (1 << amortizedshift == 2 && lclusterbits == 12)
+fs/erofs/zmap.c:169:            m->clusterofs = 1 << lclusterbits;
+fs/erofs/zmap.c:291:    pos += lcn * (1 << amortizedshift);
+fs/erofs/zmap.c:409:            m->compressedblks = 1 << (lclusterbits - LOG_BLOCK_SIZE);
+fs/erofs/zmap.c:457:                              m->clusterofs != 1 << lclusterbits);
+fs/erofs/zmap.c:497:    endoff = ofs & ((1 << lclusterbits) - 1);
+fs/erofs/erofs_fs.h:120:        ((1 << (EROFS_I_DATALAYOUT_BIT + EROFS_I_DATALAYOUT_BITS)) - 1)
+fs/erofs/erofs_fs.h:279:#define Z_EROFS_ALL_COMPR_ALGS          ((1 << Z_EROFS_COMPRESSION_MAX) - 1)
+fs/erofs/erofs_fs.h:377:#define Z_EROFS_VLE_DI_PARTIAL_REF              (1 << 15)
+fs/erofs/erofs_fs.h:384:#define Z_EROFS_VLE_DI_D0_CBLKCNT               (1 << 11)
+fs/erofs/erofs_fs.h:427:                .h_clusterbits = 1 << Z_EROFS_FRAGMENT_INODE_BIT
+fs/erofs/data.c:379:                    blksize_mask = (1 << inode->i_blkbits) - 1;
+fs/erofs/zdata.c:133:#define Z_EROFS_PAGE_EIO                   (1 << 30)
 
-Here is the summary with links:
-  - [01/28] alx: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/1de2a84dd060
-  - [02/28] be2net: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/b4e24578b484
-  - [03/28] bnx2: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/5f00358b5e90
-  - [04/28] bnx2x: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/2fba753cc9b5
-  - [05/28] bnxt: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/5f29b73d4eba
-  - [06/28] cxgb4: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/ca7f175fc24e
-  - [07/28] net/fungible: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/49f79ac22f89
-  - [08/28] net: hns3: remove unnecessary aer.h include
-    https://git.kernel.org/netdev/net-next/c/c183033f631a
-  - [09/28] netxen_nic: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/2d0e0372069d
-  - [10/28] octeon_ep: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/fe3f4c292da1
-  - [11/28] qed: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/1263c7b78315
-  - [12/28] net: qede: Remove unnecessary aer.h include
-    https://git.kernel.org/netdev/net-next/c/5f1fbdc168f4
-  - [13/28] qlcnic: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/95e35f599407
-  - [14/28] qlcnic: Remove unnecessary aer.h include
-    https://git.kernel.org/netdev/net-next/c/e07ce5567194
-  - [15/28] sfc: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/bdedf705688c
-  - [16/28] sfc: falcon: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/4ac9272691a4
-  - [17/28] sfc/siena: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/ecded61ceb89
-  - [18/28] sfc_ef100: Drop redundant pci_disable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/c39abdd396bc
-  - [19/28] net: ngbe: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/a7edf8e5142f
-  - [20/28] net: txgbe: Drop redundant pci_enable_pcie_error_reporting()
-    https://git.kernel.org/netdev/net-next/c/1fccc781bf7e
-  - [21/28] e1000e: Remove unnecessary aer.h include
-    https://git.kernel.org/netdev/net-next/c/ab76f2bff0f3
-  - [22/28] fm10k: Remove unnecessary aer.h include
-    https://git.kernel.org/netdev/net-next/c/8be901a6715f
-  - [23/28] i40e: Remove unnecessary aer.h include
-    https://git.kernel.org/netdev/net-next/c/acd2bb015fae
-  - [24/28] iavf: Remove unnecessary aer.h include
-    https://git.kernel.org/netdev/net-next/c/495b72c79302
-  - [25/28] ice: Remove unnecessary aer.h include
-    https://git.kernel.org/netdev/net-next/c/ddd652ef30e3
-  - [26/28] igb: Remove unnecessary aer.h include
-    https://git.kernel.org/netdev/net-next/c/648a2020fdac
-  - [27/28] igc: Remove unnecessary aer.h include
-    https://git.kernel.org/netdev/net-next/c/1530522f101f
-  - [28/28] ixgbe: Remove unnecessary aer.h include
-    https://git.kernel.org/netdev/net-next/c/f3468e394439
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thx,
+Yangtao
