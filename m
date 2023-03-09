@@ -2,111 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE996B28D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 771906B28DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjCIP10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:27:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S230333AbjCIPaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjCIP1Y (ORCPT
+        with ESMTP id S231269AbjCIP3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:27:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4631BF8
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:27:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5588B81F7A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 15:27:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96BCAC433EF;
-        Thu,  9 Mar 2023 15:27:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678375640;
-        bh=jsK3tmby10Zy34nLJCJxkX/QS4loLNlyWVZ4G9+hhRU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LVulMktlIRbvD/FGHqyjw1/jbFDRkwJZgvCV11hU6NBtOVxLBeZDeqRKbet2/TFjS
-         hxphOdBXISNO1uf4TcGzLLMR9xQT6rbqLwybzqSdyxyItxup0LBS5G3n9MOQyIxwa2
-         jRRN5CZaVpK7L4JGc2hR/pwlQr9R8qmeX30rH7g135lFYd2twFV3unkEMwG12p7uSA
-         ZV9dExQJ1HMeyH7ePsuillYdxJQw+zuAPI+n5YPQ3S6D9r7zh9r5uGrAInnQ28ObUG
-         JhXWxxQhHGgVIl1+xx5m9pkNJoRjhniZPZPc+GQWeUmwzFnavDCxnsalrWIWUv6RW6
-         Du+wmFGEseflQ==
-Date:   Thu, 9 Mar 2023 17:27:06 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Song Liu <song@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
-Message-ID: <ZAn6yuP3d0JbhlBZ@kernel.org>
-References: <20230308094106.227365-1-rppt@kernel.org>
- <20230308094106.227365-2-rppt@kernel.org>
- <ZAl9PbMe1CRlvzva@localhost>
+        Thu, 9 Mar 2023 10:29:54 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5803591B43
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:29:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jIydvMFEm+7lUxjf68jHbz78gMxcoFPoZoHPIv8uiDk=; b=n49fNarJf8Ekn3Z46vL8XCvFuv
+        EB4wdCmAYIOBgZzKed13wnarF+3ER/ZDV9PcRvDfphofM07zrsWR7TSKVYZp0+YCsJR/dOtP42ehR
+        vP/eqyJNt+UGDNO5L+3jMVCj0VGikb6dZ4rNembigP64VhI8wwabGftB8u2FLaQAhcQfGmiTCajDz
+        PJxo+FLYSkBtctVhoI1vrSi8xfg4PV0CNJGbAuG2BXXBs9ek9W/7sqzgl/xLVfJj4462VCIUIzXwe
+        Z4bINgR4vFLGr0wfRjaCX1eCTzJsw8dINFD6WVyg1VDlVDDtHPMfjSjjrkeKewnnHEuMf7kzAeocF
+        820R+4bA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1paICa-008XFG-BN; Thu, 09 Mar 2023 15:29:08 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 52595300033;
+        Thu,  9 Mar 2023 16:29:04 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3792F2B706F33; Thu,  9 Mar 2023 16:29:04 +0100 (CET)
+Date:   Thu, 9 Mar 2023 16:29:04 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mike Galbraith <efault@gmx.de>
+Cc:     mingo@kernel.org, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
+        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, joel@joelfernandes.org
+Subject: Re: [PATCH 10/10] sched/fair: Implement an EEVDF like policy
+Message-ID: <ZAn7QAjQvw5q6aI5@hirez.programming.kicks-ass.net>
+References: <20230306132521.968182689@infradead.org>
+ <20230306141502.810909205@infradead.org>
+ <bfbfbf041854e2cd1a8ed14e64081062e5d632d3.camel@gmx.de>
+ <9fd2c37a05713c206dcbd5866f67ce779f315e9e.camel@gmx.de>
+ <20230309090633.GK2017917@hirez.programming.kicks-ass.net>
+ <ZAnUnSEJ92bKpim7@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZAl9PbMe1CRlvzva@localhost>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZAnUnSEJ92bKpim7@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 06:31:25AM +0000, Hyeonggon Yoo wrote:
-> On Wed, Mar 08, 2023 at 11:41:02AM +0200, Mike Rapoport wrote:
-> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On Thu, Mar 09, 2023 at 01:44:13PM +0100, Peter Zijlstra wrote:
+> On Thu, Mar 09, 2023 at 10:06:33AM +0100, Peter Zijlstra wrote:
+> > Hi Mike!
 > > 
-> > When set_memory or set_direct_map APIs used to change attribute or
-> > permissions for chunks of several pages, the large PMD that maps these
-> > pages in the direct map must be split. Fragmenting the direct map in such
-> > manner causes TLB pressure and, eventually, performance degradation.
+> > On Wed, Mar 08, 2023 at 02:36:01PM +0100, Mike Galbraith wrote:
+> > > On Wed, 2023-03-08 at 09:39 +0100, Mike Galbraith wrote:
+> > > >
+> > > > Curiosity got the best of me...
+> > > 
+> > > Remember this little bugger, allegedly distilled from a real
+> > > application control thread starvation issue?
 > > 
-> > To avoid excessive direct map fragmentation, add ability to allocate
-> > "unmapped" pages with __GFP_UNMAPPED flag that will cause removal of the
-> > allocated pages from the direct map and use a cache of the unmapped pages.
-> > 
-> > This cache is replenished with higher order pages with preference for
-> > PMD_SIZE pages when possible so that there will be fewer splits of large
-> > pages in the direct map.
-> > 
-> > The cache is implemented as a buddy allocator, so it can serve high order
-> > allocations of unmapped pages.
+> > Oooh, yeah, I should still have that somewhere. I'll try and remember
+> > what exactly was needed to make it behave properly.
 > 
-> Hello,
+> That thing wants both wakeup preemption and sleeper bonus. Specifically,
+> it needs the signal to insta-preempt the 'pointless' kill loop.
 > 
-> To me it seems unnecessary to increase pageblock bitmap size just to
-> distinguish if it is allocated with __GFP_UNMAPPED.
+> What happens is that while positive lag, we get this, when negative lag
+> happens wakeup-preemption is not achieved and we get delayed by a full
+> tick.
 > 
-> I think this can be implemented as an independent cache on top of
-> buddy allocator, and introducing new API for unmapped page
-> allocation and freeing?
+> This gets us very little actual runtime.
+> 
+> Let me see what do do about that...
 
-Yes, it could. But with such API we'd also need to take care of
-mapping/unmapping these pages for the modules use case which is not that
-difficult, but still more complex than a flag to vmalloc().
-As for secretmem, freeing of secretmem pages happens in the page cache, so
-changing that to use, say, unmapped_free() would be quite intrusive.
+So if I add TICK_NSEC based sleeper bonus (/2 for gentle), then starve
+works -- this is the absolutely minimal amount required. It sucks a bit
+it's HZ dependent, but alas.
 
-Another reason to mark the entire pageblock as unmapped is possibility to
-steal pages from that pageblock into the unmmaped cache when they become
-free. When we allocate pages to replenish the unmapped cache, we split the
-large mapping in the direct map, so even the pages in the same pageblock
-that do not get into the cache are still mapped at PTE level. When they are
-freed, they will be put in the cache and so fewer explicit cache refills
-that split the large mappings will be required.
- 
-> Thanks,
-> Hyeonggon
+Also, the whole sleeper bonus gets us back into needing to track the old
+vruntime and the overflow crap for super long sleeps and all that fugly
+:/ I was so hoping we could delete that code.
 
--- 
-Sincerely yours,
-Mike.
+Oh well.
+
+(also, did you know that removing the debug cruft helps with running
+numbers? ;-)
+
+I think it adds a bit of variance to the numbers -- but I've not ran
+long enough to tell with certainty.
