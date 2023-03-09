@@ -2,132 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F71D6B2FDF
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:52:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BADAF6B2FE1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjCIVwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 16:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
+        id S230206AbjCIVxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 16:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjCIVws (ORCPT
+        with ESMTP id S230004AbjCIVxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 16:52:48 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DDC103398
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 13:52:43 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id 132so1927686pgh.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 13:52:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678398763;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7nNOXbc+WHd5NABSbnw3+9ZkEtpuzcZoSp/LFLBByFA=;
-        b=kfiM9MxY8vR15n0P+Q9WMzoNqzsyX/K61E9+p64hTU3fdlTpBiuHXT+QL4MCiMCwsZ
-         /E0QrLsMb4Nut3KwGFTkPx82xRKD0Q6tg521BAsaxSjjgi0jp10LyKT4VcO3Ym5Nfp8j
-         K99lBPkT863bgMXn81mWM52Y3HAXsnbgQXC/cQhkIUADsx8eC8BCkaezk1jyf3KnMbxe
-         5cey5kg6qiEDTnH7o5tkCNFGPtIcoIWnQj/s/71D62MPVHbi+/Yi6G5hwJTKjNnOycuD
-         8thUDBETxoMKd3r5r6WznnZXgw5w/5YPtXbhqUPh2vkm0LV7k6n6vMb+6MRMEVomuEWI
-         oINw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678398763;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7nNOXbc+WHd5NABSbnw3+9ZkEtpuzcZoSp/LFLBByFA=;
-        b=Gg5Y12GKQRMz11Q4XhHpYlpWckAUUxbZp9xEInRCmr2X0/cIPooHNLTHTr/FEKOGoS
-         Tw6w6lFrflEbtj6ArlMov/tCIFz4JO9UOB4V4znK/lFIz6y120T6xSoxhAG1ZC3ybczR
-         KYf93FDJXTXT0rnhNBROAuUfKv7lxxSHZdAKrdQnVLLlGnUrxuG9ZChzTu2KETYpig0W
-         tZkJe8doaZOeEnw82J+fFeQysk700s5x019Tw9NF/Meucch2auKe5ZMIMBqNl6rfytc0
-         11zDLyun1RedcJ9jx+4xm8sbCDM71QSJRkvyVjdwt+ZzNgqpCGqzpTkRPAYt+tezIbNR
-         g1cQ==
-X-Gm-Message-State: AO0yUKW8A9yeArYFd+sU3QKs+Ju7UjTVfvernbn5YOcGf1hkXCgkB64T
-        v39ETk2nSi+V8em6YzL6yG3gUjAxkX0Z8E75NUM=
-X-Google-Smtp-Source: AK7set8Rgzrxi+ZGmbJxKNg4wUXFIFO8nTaU1MxHwhO6m2S5MjEM74yH44rUOwLH5ZFNysgyUIXqOg==
-X-Received: by 2002:aa7:980c:0:b0:5dc:2064:f7c4 with SMTP id e12-20020aa7980c000000b005dc2064f7c4mr22346879pfl.10.1678398762740;
-        Thu, 09 Mar 2023 13:52:42 -0800 (PST)
-Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
-        by smtp.gmail.com with ESMTPSA id 2-20020aa79142000000b00592543d7363sm69953pfi.1.2023.03.09.13.52.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 13:52:42 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Alexey Romanov <avromanov@sberdevices.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru
-Subject: Re: [PATCH v1 0/3] Meson A1 32-bit support
-In-Reply-To: <20230228084952.mgx3d3nw65yo5ebu@CAB-WSD-L081021>
-References: <20230222115020.55867-1-avromanov@sberdevices.ru>
- <8e5f9bfa-d612-cd43-d722-d04c40938c62@linaro.org>
- <20230227142809.kujmrraf3pcdhqyn@CAB-WSD-L081021>
- <f3e42012-609c-4085-b4f4-bd32bfc34aff@app.fastmail.com>
- <20230227155100.hhl4yvkyfqfyoa6h@CAB-WSD-L081021>
- <a5fa8b23-4ec8-475f-be5e-538b53d6f82d@app.fastmail.com>
- <33b58877-5167-c453-e686-1d10cdca66c0@linaro.org>
- <20230227165049.4y7jx5nnnlibe6kg@CAB-WSD-L081021>
- <7d29f3fd-b8c8-4687-b6a0-b8956dd39f0b@app.fastmail.com>
- <20230228084952.mgx3d3nw65yo5ebu@CAB-WSD-L081021>
-Date:   Thu, 09 Mar 2023 13:52:41 -0800
-Message-ID: <7hedpxwq1i.fsf@baylibre.com>
+        Thu, 9 Mar 2023 16:53:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C5EE9F3E;
+        Thu,  9 Mar 2023 13:53:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00486B82086;
+        Thu,  9 Mar 2023 21:53:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A36BBC433D2;
+        Thu,  9 Mar 2023 21:53:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678398819;
+        bh=gVe1cUDO+WBMiAC5mO7jr7DaRL2AjwTZFRI6YpgQqZ0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=p1iXQEvhXdm69RHcbiLRx/MV2wuTmn1H1YOs1H2JGBvtUDFHoC/guGthLp8ceaZa5
+         3G3U9zeyDTmfAdfyhwCpNP7N/YLUodc1uyef+xiS5+6KXL2tMvLeuUVLODb7Qmzwfh
+         5ACdq+KKj9OX27evXxBXqK8k086JFd52EIHQkuHQkPKRkB4F5jyXT/btsOTVVbzY+s
+         jmqbU9I2PnbVC1iNevBvHFDsqwFtW5FBT3yhGP9SseZA5IwrH1cDdntkF1dK61+fP9
+         SsOSvkSIe7KZUf8+QDKZb2Lo5ubdt0RtYizcQSCKKPq/xkQU4+t5gKgfbMC+OyZAEW
+         u34BxpLmyqdZQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 3C3381548D6B; Thu,  9 Mar 2023 13:53:39 -0800 (PST)
+Date:   Thu, 9 Mar 2023 13:53:39 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "urezki@gmail.com" <urezki@gmail.com>
+Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
+Message-ID: <1a4b1362-defb-4464-9217-32e6d3d4a8d2@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230303213851.2090365-1-joel@joelfernandes.org>
+ <20230304010251.GD1301832@paulmck-ThinkPad-P17-Gen-1>
+ <IA1PR11MB617141A98ADB1F301FCA07E589B69@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <20230306144950.GR1301832@paulmck-ThinkPad-P17-Gen-1>
+ <IA1PR11MB61710CDB2B6B47118832770E89B79@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <20230307152226.GG1301832@paulmck-ThinkPad-P17-Gen-1>
+ <IA1PR11MB61714CDAF82F337B0A384BAA89B59@IA1PR11MB6171.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <IA1PR11MB61714CDAF82F337B0A384BAA89B59@IA1PR11MB6171.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dmitry Rokosov <ddrokosov@sberdevices.ru> writes:
+On Thu, Mar 09, 2023 at 03:17:09PM +0000, Zhuo, Qiuxu wrote:
+> > From: Paul E. McKenney <paulmck@kernel.org>
+> > [...]
+> > >
+> > > a's standard deviation is ~0.4.
+> > > b's standard deviation is ~0.5.
+> > >
+> > > a's average 9.0 is at the upbound of the standard deviation of b's [8.0, 9].
+> > > So, the measurements should be statistically significant to some degree.
+> > 
+> > That single standard deviation means that you have 68% confidence that the
+> > difference is real.  This is not far above the 50% leval of random noise.
+> > 95% is the lowest level that is normally considered to be statistically
+> > significant.
+> 
+> 95% means there is no overlap between two standard deviations of a
+> and two standard deviations of b.
+> 
+> This relies on either much less noise during testing or a big enough 
+> difference between a and b. 
+> 
+> > > The calculated standard deviations are via:
+> > > https://www.gigacalculator.com/calculators/standard-deviation-calculat
+> > > or.php
+> > 
+> > Fair enough.  Formulas are readily available as well, and most spreadsheets
+> > support standard deviation.
+> > 
+> > [...]
+> >
+> > > > Why don't you try applying this approach to the new data?  You will
+> > > > need the general binomial formula.
+> > >
+> > >    Thank you Paul for the suggestion.
+> > >    I just tried it, but not sure whether my analysis was correct ...
+> > >
+> > >    Analysis 1:
+> > >    a's median is 8.9.
+> > 
+> > I get 8.95, which is the average of the 24th and 25th members of a in
+> > numerical order.
+> 
+> Yes, it should be 8.95. Thanks for correcting me. 
+> 
+> > >    35/48 b's data points are less than 0.1 less than a's median.
+> > >    For a's binomial distribution P(X >= 35) = 0.1%, where p=0.5.
+> > >    So, we have strong confidence that b is 100ms faster than a.
+> > 
+> > I of course get quite a bit stronger confidence, but your 99.9% is good
+> > enough.  And I get even stronger confidence going in the other direction.
+> > However, the fact that a's median varies from 8.7 in the old experiment to
+> > 8.95 in this experiment does give some pause.  These are after all supposedly
+> > drawn from the same distribution.  Or did you use a different machine or
+> > different OS version or some such in the two sets of measurements?
+> > Different time of day and thus different ambient temperature, thus different
+> > CPU clock frequency?
+> 
+> All the testing setups were identical except for the testing time. 
+> 
+>       Old a median   : 8.7
+>       New a median : 8.95
+> 
+>       Old b median   : 8.2
+>       New b median : 8.45
+> 
+> I'm a bit surprised that both new medians are exactly greater 0.25 more than 
+> the old medians.  Coincidence?
 
-> On Mon, Feb 27, 2023 at 07:19:38PM +0100, Arnd Bergmann wrote:
->> On Mon, Feb 27, 2023, at 17:50, Dmitry Rokosov wrote:
->> > On Mon, Feb 27, 2023 at 05:38:49PM +0100, Neil Armstrong wrote:
->> >> On 27/02/2023 17:15, Arnd Bergmann wrote:
->> >> > On Mon, Feb 27, 2023, at 16:51, Dmitry Rokosov wrote:
->> >> > 
->> >> > Most of these don't apply in userspace, so the incentive to
->> >> > run smaller 32-bit userland on systems with less than 1GB of
->> >> > RAM usually outweighs the benefits of 64-bit userspace.
->> >> 
->> >> Thanks for the details!
->> >
->> > Looks like Thomas has already prepared a basic patch series for buildroot,
->> > but maintainers declined it.
->> >
->> > https://lore.kernel.org/all/20220730194331.GA2515056@scaer/
->> 
->> I see. I know very little about buildroot, but it sounds like
->> there are other ways of doing the same thing here. In general,
->> this is pretty much an Arm specific problem. While you clearly
->> want compat mode for small userland on any architecture but don't
->> want 32-bit kernels, arm is the only one that has a different
->> kernel "ARCH=" value and needs a separate gcc toolchain.
->> 
->> If the problem is only the toolchain, an easy way out may
->> be to use clang instead of gcc as your compiler, as a single
->> clang binary can target both 32-bit userland and 64-bit kernel
->> on all supported architectures.
->
-> Agreed with you. We will try different local approaches to support
-> compat build configurations. For now, prebuilt toolchain (buildroot make
-> sdk goal) is best way from my point of view. Anyway, we will try to
-> solve this problem in the our sandbox and stay on the 64-bit kernel.
-> Thank you for all the helpful details you shared, appreciate it!
+Possibly some semi-rare race condition makes boot take longer, and 48
+boots has a higher probability of getting more of them?  But without
+analyzing the boot sequence, your guess is as good as mine.
 
-Just to clarify one thing...
+> > Assuming identical test setups, let's try the old value of 8.7 from old a to new
+> > b.  There are 14 elements in new b greater than 8.6, for a probability of
+> > 0.17%, or about 98.3% significance.  This is still OK.
+> > 
+> > In contrast, the median of the old b is 8.2, which gives extreme confidence.
+> > So let's be conservative and use the large-set median.
+> > 
+> > In real life, additional procedures would be needed to estimate the
+> > confidence in the median, which turns oout to be nontrivial.  When I apply
+> 
+> Luckily, I could just simply pick up the medians in numerical order in this case. ;-)
+> 
+> > this sort of technique, I usually have all data from each sample being on one
+> > side of the median of the other, which simplifies things.  ;-)
+> 
+> I like all data points are on one side of the median of the other ;-)
+> 
+> But this also relies on either much less noise during testing or a big enough 
+> difference between a and b, right?
 
-More specifically, this is a buildroot *build system* problem.  If you
-build the kernel separately from the rootfs, it works fine. 
+Yes, life is indeed *much* easier when there is less noise or larger
+differences.  ;-)
 
-I use 32-bit buildroot (and debian) rootfs images all the time on
-Amlogic SoCs with 64-bit kernels and it works fine.  
+> > The easiest way to estimate bounds on the median is to "bootstrap", but that
+> > works best if you have 1000 samples and can randomly draw 1000 sub-
+> > samples each of size 10 from the larger sample and compute the median of
+> > each.  You can sort these medians and obtain a cumulative distribution.
+> 
+> Good to know "bootstap".
+> 
+> > But you have to have an extremely good reason to collect data from 1000
+> > boots, and I don't believe we have that good of a reason.
+> >
+> 
+> 1000 boots, Oh my ...
+> No. No. I don't have a good reason for that ;-)
+> 
+> > >    Analysis 2:
+> > >    a's median - 0.4 = 8.9 - 0.4 = 8.5.
+> > >    24/48 b's data points are less than 0.4 less than a's median.
+> > >    The probability that a's data points are less than 8.5 is p = 7/48
+> > > = 0.1458
+> > This is only 85.4% significant, so...
+> > 
+> > >    For a's binomial distribution P(X >= 24) = 0.0%, where p=0.1458.
+> > >    So, looks like we have confidence that b is 400ms faster than a.
+> > 
+> > ...we really cannot say anything about 400ms faster.  Again, you need 95%
+> > and preferably 99% to really make any sort of claim.  You probably need
+> > quite a few more samples to say much about 200ms, let alone 400ms.
+> 
+> OK. Thanks for correcting me. 
+> 
+> > Plus, you really should select the speedup and only then take the
+> > measurements.  Otherwise, you end up fitting noise.
+> > 
+> > However, assuming identical tests setups, you really can calculate the median
+> > from the full data set.
+> > 
+> > >    The calculated cumulative binomial distributions P(X) is via:
+> > >
+> > > https://www.gigacalculator.com/calculators/binomial-probability-calcul
+> > > ator.php
+> > 
+> > The maxima program's binomial() function agrees with it, so good.  ;-)
+> > 
+> > >    I apologize if this analysis/discussion bored some of you. ;-)
+> > 
+> > Let's just say that it is a lot simpler when you are measuring larger
+> > differences in data with tighter distributions.  Me, I usually just say "no" to
+> > drawing any sort of conclusion from data sets that overlap this much.
+> > Instead, I might check to see if there is some random events adding noise to
+> > the boot duration, eliminate that, and hopefully get data that is easier to
+> > analyze.
+> 
+> Agree. 
+> 
+> > But I am good with the 98.3% confidence in a 100ms improvement.
+> > 
+> > So if Joel wishes to make this point, he should feel free to take both of your
+> > datasets and use the computation with the worse mean.
+> 
+> Thank you so much Paul for your patience and detailed 
 
-Kevin
+And thank you for bearing with me.
+
+							Thanx, Paul
