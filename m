@@ -2,70 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E956B6B2384
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E106B237C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbjCIL7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:59:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60380 "EHLO
+        id S231487AbjCIL5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjCIL65 (ORCPT
+        with ESMTP id S229998AbjCIL5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:58:57 -0500
-X-Greylist: delayed 374 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Mar 2023 03:58:55 PST
-Received: from 6.mo576.mail-out.ovh.net (6.mo576.mail-out.ovh.net [46.105.50.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDDC7F011
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 03:58:55 -0800 (PST)
-Received: from director4.ghost.mail-out.ovh.net (unknown [10.108.20.216])
-        by mo576.mail-out.ovh.net (Postfix) with ESMTP id F347E2742D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:52:39 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-ml9bn (unknown [10.108.1.233])
-        by director4.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 23E731FE55;
-        Thu,  9 Mar 2023 11:52:38 +0000 (UTC)
-Received: from RCM-web10.webmail.mail.ovh.net ([151.80.29.18])
-        by ghost-submission-6684bf9d7b-ml9bn with ESMTPSA
-        id Tff4BobICWQMaB4AKXspMQ
-        (envelope-from <rafal@milecki.pl>); Thu, 09 Mar 2023 11:52:38 +0000
+        Thu, 9 Mar 2023 06:57:19 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA57DD360
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 03:57:18 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id i8-20020a056e02054800b00318a7211804so772516ils.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 03:57:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678363037;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yX6TF+vn9/IHLiO2rdpruGDt6O5lqRy5gxKQUxEGJDo=;
+        b=CjUgkecVbxDkNI4i2liF1AmRE3I5kVFSfxa5xzDVL17Q5DqVxnaBQ1Qq1R5N5XlsJI
+         FoG2m7x6teQQ1+6Qj/RQ9rDRTmV1tgnhwcDx6h7XRz8+cuBUPnZbLGfKi3JquoT3o//k
+         eX+EZtZbFp9K6jrf83BB3WLUAPbOKBk0rvMVFdMJ0qiZ9rgW/9M8Hpqs0CE1fKTTDASc
+         T9merYMOd0VRUqTT0won3lja/t3cfS87ufyeeXOgkWHWC8nwUu7HlJzwaxi4y+JTIhv7
+         o52TfUxvasXCBblPQI6iWpaJTCAsizO3ePKDh0gxmkoJTeVZ6/3EFBfMXQUrYlUWxyJo
+         o9Ug==
+X-Gm-Message-State: AO0yUKVUFcU5g0N1Sin+DKZWPk1bdhyNHNQ8H9rsdXj0aMWXyVweG5NU
+        Rr9lMUPWi6ljAaRRUpdMTgLGmVjBakbiBMonPNAeM3zw6mZw
+X-Google-Smtp-Source: AK7set+l8Q/wcIAHiiaNGzoKIqYWGV1eypA0ZwqCwtYTqttblmrfVY7wkNJf3lfXJvgGGVFWxEPLrQ5Yl2IIoz5/eOqsmab5UWT0
 MIME-Version: 1.0
-Date:   Thu, 09 Mar 2023 12:52:37 +0100
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        =?UTF-8?Q?Rafa=C5=82_Mi?= =?UTF-8?Q?=C5=82ecki?= 
-        <zajec5@gmail.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Michael Walle <michael@walle.cc>, gregkh@linuxfoundation.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, u-boot@lists.denx.de
-Subject: Re: [PATCH 2/4] nvmem: core: allow nvmem_cell_post_process_t
- callbacks to adjust buffer
-In-Reply-To: <fb6d7c76-d3d3-b8a0-46f9-dc2eb76ae91a@linaro.org>
-References: <20230222172245.6313-1-zajec5@gmail.com>
- <20230222172245.6313-3-zajec5@gmail.com>
- <37f821b8-f681-08e4-d4f1-d37be191ff7f@linaro.org>
- <20230309113211.6321ce3d@xps-13>
- <2dc096f5-f5ce-f99b-42ac-0fb24682239a@linaro.org>
- <20230309122324.4b012a58@xps-13>
- <fb6d7c76-d3d3-b8a0-46f9-dc2eb76ae91a@linaro.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <fde09080fc420cca64e810a3c2ad9677@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 14449517931571489705
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdduiedgfedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtkehjtddtreejnecuhfhrohhmpeftrghfrghlucfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeejvdelgfeutdfhfeelheegfedtleduleeuvdfgfeefvefhvedtheetjeetfeehgeenucfkphepuddvjedrtddrtddruddpudelgedrudekjedrjeegrddvfeefpdduhedurdektddrvdelrddukeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehrrghfrghlsehmihhlvggtkhhirdhplheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehjeeipdhmohguvgepshhmthhpohhuth
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Received: by 2002:a05:6638:cd0:b0:3e5:4c9d:6e14 with SMTP id
+ e16-20020a0566380cd000b003e54c9d6e14mr10876861jak.4.1678363037341; Thu, 09
+ Mar 2023 03:57:17 -0800 (PST)
+Date:   Thu, 09 Mar 2023 03:57:17 -0800
+In-Reply-To: <0000000000004c06c405eb318db4@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a5202905f6765872@google.com>
+Subject: Re: [syzbot] [btrfs?] WARNING in btrfs_run_delayed_refs
+From:   syzbot <syzbot+ebdb2403435c4136db2b@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,66 +56,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-09 12:44, Srinivas Kandagatla wrote:
-> On 09/03/2023 11:23, Miquel Raynal wrote:
->> Hi Srinivas,
->> 
->> srinivas.kandagatla@linaro.org wrote on Thu, 9 Mar 2023 10:53:07 
->> +0000:
->> 
->>> On 09/03/2023 10:32, Miquel Raynal wrote:
->>>> Hi Srinivas,
->>>> 
->>>> srinivas.kandagatla@linaro.org wrote on Thu, 9 Mar 2023 10:12:24 
->>>> +0000:
->>>> 
->>>>> On 22/02/2023 17:22, Rafał Miłecki wrote:
->>>>>> @@ -1791,11 +1792,15 @@ ssize_t nvmem_device_cell_read(struct 
->>>>>> nvmem_device *nvmem,
->>>>>>     	if (!nvmem)
->>>>>>     		return -EINVAL;
->>>>>>     > +	/* Cells with read_post_process hook may realloc buffer we 
->>>>>> can't allow here */
->>>>>> +	if (info->read_post_process)
->>>>>> +		return -EINVAL;
->>>>> This should probably go in 1/4 patch. Other than that series looks 
->>>>> good to me.
->>>> 
->>>> FYI patch 1/4 is also carried by the nvmem-layouts series, so it's
->>>> probably best to keep these 2 patches separated to simplify the 
->>>> merging.
->>> that is intermediate thing, but Ideally this change belongs to 1/4 
->>> patch, so once I apply these patches then we can always rebase layout 
->>> series on top of nvmem-next
->> 
->> Well, I still don't see the need for this patch because we have no use
->> for it *after* the introduction of layouts. Yes in some cases changing
->> the size of a cell might maybe be needed, but right now the use case 
->> is
->> to provide a MAC address, we know beforehand the size of the cell, so
->> there is no need, currently, for this hack.
->> 
-> Am confused, should I ignore this series ?
+syzbot suspects this issue was fixed by commit:
 
-I'm confused no less.
+commit 8bb808c6ad91ec3d332f072ce8f8aa4b16e307e0
+Author: David Sterba <dsterba@suse.com>
+Date:   Thu Nov 3 13:39:01 2022 +0000
 
-I think we have 3 different opinions and no agreement on how to proceed.
+    btrfs: don't print stack trace when transaction is aborted due to ENOMEM
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1541ad14c80000
+start commit:   98555239e4c3 Merge tag 'arc-6.1-fixes' of git://git.kernel..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
+dashboard link: https://syzkaller.appspot.com/bug?extid=ebdb2403435c4136db2b
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11a4d8ea880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13172832880000
 
-Rafał (me):
-NVMEM cells should be registered as they are in the raw format. No size
-adjustments should happen while registering them. If NVMEM cell requires
-some read post-processing then its size should be adjusted *while*
-reading.
+If the result looks correct, please mark the issue as fixed by replying with:
 
+#syz fix: btrfs: don't print stack trace when transaction is aborted due to ENOMEM
 
-Michael:
-.read_post_process() should be realloc the buffer
-
-
-Miquel:
-While registering NVMEM cell its size should be already adjusted to
-match what .read_post_process() is about to return.
-
-
-I'm really sorry if I got anyone's view wrong.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
