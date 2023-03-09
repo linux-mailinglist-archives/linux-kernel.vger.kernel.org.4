@@ -2,138 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CA66B2CC4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D12376B2CD0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbjCISSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 13:18:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S230182AbjCISTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 13:19:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjCISSj (ORCPT
+        with ESMTP id S230293AbjCISTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 13:18:39 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF9B6420C;
-        Thu,  9 Mar 2023 10:18:36 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329IA6Dw029697;
-        Thu, 9 Mar 2023 18:18:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=KK+OAocPYk3r1h9tMZ9MdvYVbSyFkyqOtafvkb9zUak=;
- b=XbjyoCsNgQOynfeC8bC07EPqNt27fNURfLMq/Rdpbdl7baBFZSxKUUCadwBb56Wjs8Dw
- NZeRvnYmikI5v5oEpaHc0WFNyqfa0cPbHv68f34+gwB4bFZfguQjtGwp8obwvPzc6q9M
- sn5vsthms4/68YuHwAYVoAbKXnnGnQ40RIxz3TkZcbTgKgSHDCXt8dIo8Z5G7auurrEb
- kaf8rYwuJ9P/VpL7dZhTSpN3uMwoIXwB/EYK0WH9gIV4IxjXy7QiHkPKEJS5YM3ofu+P
- Hpt2hCD7cJZ51k3ZHHr0GEZ4JjqAheKqAFXOkkgfd6iCmxfK7z2zaJpxOpSKbZ3VDA5k KA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6qyqvfgc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 18:18:35 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 329I0gGv012054;
-        Thu, 9 Mar 2023 18:18:35 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6qyqvfg6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 18:18:35 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 329HkBQ3023629;
-        Thu, 9 Mar 2023 18:18:34 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3p6fnwna9w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 18:18:34 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 329IIXCE33227208
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Mar 2023 18:18:33 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F142C5805D;
-        Thu,  9 Mar 2023 18:18:32 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 141AE5805F;
-        Thu,  9 Mar 2023 18:18:32 +0000 (GMT)
-Received: from [9.160.169.251] (unknown [9.160.169.251])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Mar 2023 18:18:31 +0000 (GMT)
-Message-ID: <01c18e2b-8ec0-46c6-ba95-997b9d9d4ed6@linux.ibm.com>
-Date:   Thu, 9 Mar 2023 13:18:31 -0500
+        Thu, 9 Mar 2023 13:19:33 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1AEC6411
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 10:19:31 -0800 (PST)
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 0660B445B5
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 18:19:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678385968;
+        bh=SxKX8lAWQsQ9FTwiM9BPGc+zhxP/zhLFmNPZpha4eWo=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=I7EprDEuWnzyG1gL1WDHnsQlIz0LpOvut7EdYSfN3bwOYeH/KlFplOLAjI7KTczVu
+         hsQQ5ougtBOE4p01TcKnX+NdbZp/okxBJV6Vi4/ZDKYDL5f6psyqPEM5m0nOcIZLSh
+         pOGiDqQvURdtYkXQ32odNQNw37e/oc5LK6UWmHIxU5EZNIul2jeSXjcTzVHTEp1tCl
+         5GaQYq8PEX2pGfdeGNNT90zxdg41K7r0m90xsBWXMuEKS1DbPlXrFsikOw3N+3Oka3
+         Nn50V3pOfShz/JHOItlnrE3xrk+bopL2ULgpyCGDCqdKGiaEoC2iaBaackNG6u0v/F
+         qZUvisH5NK1ug==
+Received: by mail-qv1-f69.google.com with SMTP id z3-20020ad44143000000b005771ea56ab6so1655896qvp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 10:19:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678385963;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SxKX8lAWQsQ9FTwiM9BPGc+zhxP/zhLFmNPZpha4eWo=;
+        b=7Knm7N8JtZVx2i64VL38uDW58caLCGn5cKJq5OXGhjcQginVbJHJY8jo5eYDNmFLLc
+         oc0Y/DCyyzgk4idrDfpYwKBi0JKvK3+lmumHmqpdkRCQv7vNZsnGlcFsH4UlX32JMtUm
+         L80AVUmCDdpYDv6tnWZiqPT4TAp2+1OrtTh5kaOLmK3gJGcv03uHSDCXpTvy4dBUwFWc
+         +bWFTV3WlhmIA+NnXBYFVnftnp5C4hcpea0w40z1h+qZA9uE+kxcffOiALNfyiOnV/fN
+         gLIpWCjwIRwo6Zg89TCfKnz5DzYDVEw9+Zfnr9uI0b89gmQe27Qak/zo6+f5Y+V535jZ
+         uscw==
+X-Gm-Message-State: AO0yUKVhoaN2HhizXXCJ2kaUUhRZnsoCMZa4CkJ1c7QQIIvIJCHRut3K
+        deDtkcg5uFBKCcGrBtuTbjLxjtyzdSFM1qQ2WsuXbgar910mbgvmdhV6fKBDdcsixDY3IhEp0dK
+        vkK87puPfnOQjs6Mw+CDYp8BpTTK/0Um6f7ZgFjaI0Rga0tDhDyndvNz7bg==
+X-Received: by 2002:ac8:429a:0:b0:3bf:bba8:69b0 with SMTP id o26-20020ac8429a000000b003bfbba869b0mr6074835qtl.5.1678385963010;
+        Thu, 09 Mar 2023 10:19:23 -0800 (PST)
+X-Google-Smtp-Source: AK7set9OHYCSEuIKRx9FxuLcExe2yb6O6D1LT6790n4D4PIp0zTs0FgzUhcs4O8DexM+HqsfP/U+EGkFQOY6RIH4J0w=
+X-Received: by 2002:ac8:429a:0:b0:3bf:bba8:69b0 with SMTP id
+ o26-20020ac8429a000000b003bfbba869b0mr6074830qtl.5.1678385962760; Thu, 09 Mar
+ 2023 10:19:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/4] PCI: s390: Fix use-after-free of PCI resources
- with per-function hotplug
-Content-Language: en-US
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lukas Wunner <lukas@wunner.de>
-Cc:     Gerd Bayer <gbayer@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20230306151014.60913-1-schnelle@linux.ibm.com>
- <20230306151014.60913-2-schnelle@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <20230306151014.60913-2-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2JzMxtCeObLVpOvrbLmir_M9TRImWc6d
-X-Proofpoint-ORIG-GUID: qvPanSurlKKp9tK_NvLoDAZxIRBevMAF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_09,2023-03-09_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 clxscore=1011 phishscore=0 suspectscore=0 mlxlogscore=797
- adultscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303090145
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230221024645.127922-1-hal.feng@starfivetech.com>
+ <20230221024645.127922-13-hal.feng@starfivetech.com> <CAJM55Z8H4qmy_BiD0SHW-w5ifzhzokdO-QxpUUz9aeUd+htrZg@mail.gmail.com>
+ <8c30220a-abef-7518-cb44-abcea91408e2@starfivetech.com> <49ab1072-98ba-f364-9b66-68658566e732@starfivetech.com>
+ <CAJM55Z9YGjD+1haWcXEZNkHnWNRZckdBmTTykTt7QZV_LUohgQ@mail.gmail.com> <032f9254-482a-4b97-8e7e-4afb1f78eb21@spud>
+In-Reply-To: <032f9254-482a-4b97-8e7e-4afb1f78eb21@spud>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Thu, 9 Mar 2023 19:19:06 +0100
+Message-ID: <CAJM55Z_HGt3iu=trv0v_VzyO3NkVo+aiEaT9vxRURz-MvrbCOg@mail.gmail.com>
+Subject: Re: [PATCH v4 12/19] clk: starfive: Add StarFive JH7110 always-on
+ clock driver
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Hal Feng <hal.feng@starfivetech.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/6/23 10:10 AM, Niklas Schnelle wrote:
-> On s390 PCI functions may be hotplugged individually even when they
-> belong to a multi-function device. In particular on an SR-IOV device VFs
-> may be removed and later re-added.
-> 
-> In commit a50297cf8235 ("s390/pci: separate zbus creation from
-> scanning") it was missed however that struct pci_bus and struct
-> zpci_bus's resource list retained a reference to the PCI functions MMIO
-> resources even though those resources are released and freed on
-> hot-unplug. These stale resources may subsequently be claimed when the
-> PCI function re-appears resulting in use-after-free.
-> 
-> One idea of fixing this use-after-free in s390 specific code that was
-> investigated was to simply keep resources around from the moment a PCI
-> function first appeared until the whole virtual PCI bus created for
-> a multi-function device disappears. The problem with this however is
-> that due to the requirement of artificial MMIO addreesses (address
-> cookies) extra logic is then needed to keep the address cookies
-> compatible on re-plug. At the same time the MMIO resources semantically
-> belong to the PCI function so tying their lifecycle to the function
-> seems more logical.
-> 
-> Instead a simpler approach is to remove the resources of an individually
-> hot-unplugged PCI function from the PCI bus's resource list while
-> keeping the resources of other PCI functions on the PCI bus untouched.
-> 
-> This is done by introducing pci_bus_remove_resource() to remove an
-> individual resource. Similarly the resource also needs to be removed
-> from the struct zpci_bus's resource list. It turns out however, that
-> there is really no need to add the MMIO resources to the struct
-> zpci_bus's resource list at all and instead we can simply use the
-> zpci_bar_struct's resource pointer directly.
-> 
-> Fixes: a50297cf8235 ("s390/pci: separate zbus creation from scanning")
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+On Thu, 9 Mar 2023 at 19:11, Conor Dooley <conor@kernel.org> wrote:
+>
+> On Thu, Mar 09, 2023 at 03:06:13PM +0100, Emil Renner Berthing wrote:
+> >  On Thu, 9 Mar 2023 at 10:44, Hal Feng <hal.feng@starfivetech.com> wrot=
+e:
+>
+> > > The AON clock driver provides clocks for gmac0 which is used frequent=
+ly.
+> > > So I think it would be more convenient if we set "default y" here.
+>
+> > You're right that if we default y for the ethernet driver then the aon
+> > clock/reset should also default y. Personally I don't think we should
+> > default y for every ethernet driver that might be used on some
+> > supported risc-v platform, but I see now that
+> > arch/riscv/config/defconfig already contains CONFIG_MACB=3Dy,
+> > CONFIG_E1000E=3Dy, CONFIG_R8169=3Dy and CONFIG_MICROSEMI_PHY=3Dy, so ma=
+ybe
+> > I'm wrong or just too late.
+>
+> The defconfig really needs a good bit of cleanup (one of the many things
+> that I am telling myself I will do as part of kconfig.socs cleanup).
+>
+> w.r.t defconfig Palmer said it pretty well earlier on IRC: "defconfig
+> should be useful for kernel devs, which means it should boot on the
+> common dev boards".
+>
+> IMO, that means enough to boot an initramfs and poke the thing to see
+> that it is alive, so: ethernet & serial, and the clocks/resets/pinctrl
+> stuff required to get those going can all be set to y in defconfig.
+>
+> In the driver Kconfig entries, to me, it's more or less the same.
+> I guess, answer the question "Will your customer's board get to the
+> point where it can load a module ithout building this into the kernel?".
+> If the answer to that question is yes, then don't make it default y.
+>
+> That's my =E2=82=AC0.02!
 
-Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+Cool. Defaulting to m in the Kconfig for anything that can be loaded
+later is exactly what I was trying to say, except I mixed in the
+defconfig for no good reason. That means both the aon clocks and
+dwmac-starfive should default to m in Kconfig. The JH7110 (VisionFive
+2) boots just fine like that and brings up aon clocks and ethernet
+after loading the modules.
 
-
-
+/Emil
