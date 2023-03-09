@@ -2,201 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10F76B2AB6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7AEB6B2AA2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbjCIQ2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 11:28:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
+        id S230132AbjCIQY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 11:24:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjCIQ1u (ORCPT
+        with ESMTP id S229706AbjCIQYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:27:50 -0500
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70E9FD288
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 08:19:10 -0800 (PST)
-Received: by mail-ed1-f51.google.com with SMTP id ay14so9022607edb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 08:19:10 -0800 (PST)
+        Thu, 9 Mar 2023 11:24:07 -0500
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8421DF73B7;
+        Thu,  9 Mar 2023 08:15:28 -0800 (PST)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-176b90e14a9so2789930fac.9;
+        Thu, 09 Mar 2023 08:15:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678378357;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0NqvKKF1/5Sr9cSeBp3LG9BN8Pwq+v68J8bWTsI4jJg=;
-        b=MLcnni7se40/ic5ZK/anIY7eF0cIKNjR6yZt8iW3WYN5aS+rFfh2AlShQgoBWNhkLa
-         8wHovhPtNfD8ipQaXiCUK5aIJ+0HOF/pYbfuKqiEvc8A9PwfhNs8g3o6Jx8vjr2hGzVb
-         LUkGqVCRld1SqSfG0J+/iDDz97tHW2dBplnx6zcVTI5A+ijHz5gNesXLmEFXe+qcrxE9
-         hwbdmX2+7hDuC09uA2Owtvs3rIu5y6NC0oBaahSGsi6dRwM9cLJQUMV3Yots1jhu2RWy
-         KRoTBe1rh1EnX8/bgBkvpzjXa2FLQB6HvC/C80Ma8itMoYj5qCVEgp+OJLyyhRH1PSyg
-         QkGw==
+        d=gmail.com; s=20210112; t=1678378401;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dYOeUJJ89Hztfcvaky8Mr2gLJEdiaCb6nJHTudqVZvs=;
+        b=O2AJ3swIqJ9DTvxFmQEwTHlSVvUPVEj7ctsMdozKZiHm3NKvTN41YJybBpos+D/H1z
+         Jt6Xss7r3mPpxCcAXe2/cFBpZe4b4kDOu+Rp6Ac3wNianJJx6YJJDMzKJYupN1YpdTJC
+         SQ9rnqulBrhB+ZFyAxwD6gs9JN0ZePrVI0Z+AFt3Y3GJL0ma1AN+1KaQeLssBQD3UyI8
+         E/AXYaoKN8hhQbMOPXUipCxFuSa0BD14ffRJScv+1Rnbn8XWoV5vPVMiEqk+IlnMyP3w
+         /N26aitnnmf1b2mtNGX2gkg5Z03XQihlMV/qY0eoB9euX32BvAl9crkAIPJdy0ViqFkH
+         5MaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678378357;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0NqvKKF1/5Sr9cSeBp3LG9BN8Pwq+v68J8bWTsI4jJg=;
-        b=J4ySIOsr9MJ127uWQhOuI8pvmDxBbFwbjBZaVJtxtmnrqnxoJnth63AySnzVzK7f2c
-         F6GU/Cb1qtiTz7aYC1U2E6hzawA4eTBfpOx9TFip30wDMYaw+rFFCOWyY2b7atSCaZ5O
-         DGg66h5uIG9dT4h2qFaYP1dOmjMaKtT1tvgH5xBxyi1Fqxvb5jUW2MMGoJKhbQBPvInb
-         MFttuq/oyngy/sX6TZeJpDyX1d/bId2yIyM8opriy4lpUkrz1DX/Yjpy2gExJyzIZkxM
-         hhvnjyeIn3jxgsEvVZSCqM5o63zYiIWXjtobuTjm9VESuH4X89yspOc1oyc6dNjOY9hB
-         jDsg==
-X-Gm-Message-State: AO0yUKXj/cyhyvkilulHDN3R9yDO4ntgODGIXcKMviG3fsbJbBoqHFPZ
-        Zd6gRvhjyte/IuLEF81wRuMVkA==
-X-Google-Smtp-Source: AK7set+0+hVReHs+IHysu2AKb0lI2te4fkmcbvW9115rN+E3BwDClfzs0ltkvKRGX09g2B1KQkl3DA==
-X-Received: by 2002:a17:906:4e15:b0:883:3299:91c8 with SMTP id z21-20020a1709064e1500b00883329991c8mr22107497eju.55.1678378357376;
-        Thu, 09 Mar 2023 08:12:37 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
-        by smtp.gmail.com with ESMTPSA id g10-20020a50d0ca000000b004bc9d44478fsm9827584edf.51.2023.03.09.08.12.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 08:12:36 -0800 (PST)
-Message-ID: <38b0c1f2-fb0e-722b-19f5-c94796ce0185@linaro.org>
-Date:   Thu, 9 Mar 2023 17:12:35 +0100
+        d=1e100.net; s=20210112; t=1678378401;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dYOeUJJ89Hztfcvaky8Mr2gLJEdiaCb6nJHTudqVZvs=;
+        b=5QOp2VXLeMg5i4Vi3tNklxwVnyadRGDMHnlgk3Pn6IcyoIYiODk/24X6GuZORchJbE
+         pIMiHiVn1u/efmtbm3giZmXIA3aGIt6BTicfoBETHnLVtX7kUXZrPUcX76llvZFhKJnx
+         EvYzMrUwkeVexaISvDXk7FFwFuNEjgbNkUA+Iy6vyLnSMmL3i8IQbY/72TkLelhqVezl
+         nz7OWw2F+3mKCHTTdkhF6Y/DCjSvKcWHGkRIZRxlXLJracDffmCzm0+ydzxkETkleMFv
+         ZDrj7pObDVKJ57914qH8cDN9y+dtExO3xZVS2sgXiBBLMbxydjCPdx3Q55v6PK/3bLqg
+         xjMQ==
+X-Gm-Message-State: AO0yUKUYGwYCkXBHQhtopn5eo/a3Jr38i+SLuDo2MKJ4UmKCAmFI1U1Y
+        a7ICte7Dp/gMbi42G2BAxYvQaFVIc44=
+X-Google-Smtp-Source: AK7set8CTKtO8nszGkxqDdca/+76IH9WrUXt/+umVOrDyibD/nEBdQJ/Oi04TI4ZvCTIwescBrel1Q==
+X-Received: by 2002:a05:6871:806:b0:176:1fd8:d144 with SMTP id q6-20020a056871080600b001761fd8d144mr15629605oap.26.1678378400901;
+        Thu, 09 Mar 2023 08:13:20 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u27-20020a4a6c5b000000b00524f381f681sm7406546oof.27.2023.03.09.08.13.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 08:13:20 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 9 Mar 2023 08:13:18 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jani Nikula <jani.nikula@intel.com>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: constify struct hwmon_chip_info info member harder
+Message-ID: <2f0a6217-3747-4493-90e6-8fb129cb6a34@roeck-us.net>
+References: <20230309082841.400118-1-jani.nikula@intel.com>
+ <e0579cbe-cbd6-46cf-b425-234cfed4ff00@roeck-us.net>
+ <87h6uu9nxn.fsf@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v13 1/2] dt-bindings: clock: add loongson-2 boot clock
- index
-Content-Language: en-US
-To:     zhuyinbo <zhuyinbo@loongson.cn>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
-        loongson-kernel@lists.loongnix.cn
-References: <20230307115022.12846-1-zhuyinbo@loongson.cn>
- <692a62da-a9a1-fa23-6e24-723d73c3a423@linaro.org>
- <5e9b3bd5-d885-6237-5e14-2becb3c956cc@loongson.cn>
- <31e2a67a-c046-9501-80de-e754ed450195@linaro.org>
- <ace5159b-ebbd-7805-518c-ed3d39e4793e@loongson.cn>
- <b2f9cd15-b303-882a-d4e0-36d1f6d155a8@linaro.org>
- <eca81d44-2513-8002-980d-755af32f36c4@loongson.cn>
- <882bd054-9c3e-1b26-72a5-89ad92e21a79@linaro.org>
- <817a65e9-b605-4bc0-2ff5-fc7f5db8585c@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <817a65e9-b605-4bc0-2ff5-fc7f5db8585c@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87h6uu9nxn.fsf@intel.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2023 13:44, zhuyinbo wrote:
+On Thu, Mar 09, 2023 at 01:14:28PM +0200, Jani Nikula wrote:
+> On Thu, 09 Mar 2023, Guenter Roeck <linux@roeck-us.net> wrote:
+> > On Thu, Mar 09, 2023 at 10:28:41AM +0200, Jani Nikula wrote:
+> >> Let the struct hwmon_chip_info info member be a pointer to a const array
+> >> of const pointers, rather than mutable array of const pointers.
+> >> 
+> >> Cc: Jean Delvare <jdelvare@suse.com>
+> >> Cc: Guenter Roeck <linux@roeck-us.net>
+> >> Cc: linux-hwmon@vger.kernel.org
+> >> Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+> >> ---
+> >>  include/linux/hwmon.h | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >> 
+> >> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+> >> index c1b62384b6ee..492dd27a5dd8 100644
+> >> --- a/include/linux/hwmon.h
+> >> +++ b/include/linux/hwmon.h
+> >> @@ -430,7 +430,7 @@ struct hwmon_channel_info {
+> >>   */
+> >>  struct hwmon_chip_info {
+> >>  	const struct hwmon_ops *ops;
+> >> -	const struct hwmon_channel_info **info;
+> >> +	const struct hwmon_channel_info * const *info;
+> >
+> > As pointed out by 0-day, you's also have to change each
+> > instance where this is is assigned to another variable.
 > 
-> 在 2023/3/9 下午2:25, Krzysztof Kozlowski 写道:
->> On 09/03/2023 02:43, zhuyinbo wrote:
->>> 在 2023/3/8 下午6:38, Krzysztof Kozlowski 写道:
->>>> On 08/03/2023 10:24, zhuyinbo wrote:
->>>>>>>> That's an ABI break and commit msg does not explain it.
->>>>>>> you meaning is that need add a explanation in commit msg that why
->>>>>> You need good explanation to break the ABI. I don't understand the
->>>>>> commit msg, but anyway I could not find there justification for ABI
->>>>>> break. If you do not have good justification, don't break the ABI,
->>>>> The commit msg is the patch commit  log,  and I maybe not got it about
->>>>> break the ABI.  You said about "break the ABI"
->>>>>
->>>>> is whether is location issue about "LOONGSON2_BOOT_CLK"?   if yes,   the
->>>>> LOONGSON2_BOOT_CLK was placed
->>>>>
->>>>> after LOONGSON2_PIX1_PLL that is due to their clock parent is same.
->>>>> and I whether need add this explanation
->>>>>
->>>>> in patch commit log description?
->>>> Unfortunately I do not understand single thing from this.
->>>>
->>>> Best regards,
->>>> Krzysztof
->>> The patch commit log description is patch desription.  as follows:
->>>
->>>
->>> commit 592bc2b4106d787ea166ba16bfde6b3101ab1a8a
->>> Author: Yinbo Zhu <zhuyinbo@loongson.cn>
->>> Date:   Tue Mar 7 17:18:32 2023 +0800
->>>
->>>       dt-bindings: clock: add loongson-2 boot clock index
->>>
->>>       The Loongson-2 boot clock was used to spi and lio peripheral and
->>>       this patch was to add boot clock index number.
->> I cannot understand this either.
-> I will rework commit msg .
->>
->>>
->>> and your advice is "That's an ABI break and commit msg does not explain it."
->>>
->>> I got it  from your advice that was to add a explanation about
->>> LOONGSON2_BOOT_CLK's
->>>
->>> location issue in patch description, right?
->> ABI break needs justification, why do you think it is fine or who
->> is/isn't affected etc. Your commit msg does not explain why ABI break is
->> okay. It doesn't even explain to me why you need it.
->   #define LOONGSON2_DC_PLL                               3
->   #define LOONGSON2_PIX0_PLL                             4
->   #define LOONGSON2_PIX1_PLL                             5
-> -#define LOONGSON2_NODE_CLK                             6
-> -#define LOONGSON2_HDA_CLK                              7
-> -#define LOONGSON2_GPU_CLK                              8
-> -#define LOONGSON2_DDR_CLK                              9
-> -#define LOONGSON2_GMAC_CLK                             10
-> -#define LOONGSON2_DC_CLK                               11
-> -#define LOONGSON2_APB_CLK                              12
-> -#define LOONGSON2_USB_CLK                              13
-> -#define LOONGSON2_SATA_CLK                             14
-> -#define LOONGSON2_PIX0_CLK                             15
-> -#define LOONGSON2_PIX1_CLK                             16
-> -#define LOONGSON2_CLK_END                              17
-> +#define LOONGSON2_BOOT_CLK                             6
-> +#define LOONGSON2_NODE_CLK                             7
+> Ah, sorry, I had THERMAL_OF=n.
 > 
-> after add my patch, if dts still use above macro and not cause any 
-> issue. but
-> 
-> if dts not use macro rather than use original clk number index that will 
-> cause a uncorrect clk,
-> 
-> eg.
-> 
-> -#define LOONGSON2_NODE_CLK                             6
-> 
-> +#define LOONGSON2_NODE_CLK                             7
-> 
->   this issue is that what you said about  "ABI break",  isn't it ?
-> 
-> 
-> About your advice and question and I will use following description as 
-> patch  commit msg,  what do you think?
-> 
-> 
-> dt-bindings: clock: add loongson-2 boot clock index
-> 
-> The spi need to use boot clock and this patch is to add a boot clock 
-> index about  LOONGSON2_BOOT_CLK
-> 
-> and the LOONGSON2_BOOT_CLK was placed in after LOONGSON2_PIX1_PLL that 
-> due to
-> 
-> LOONGSON2_PIX1_PLL,  LOONGSON2_PIX0_PLL , LOONGSON2_DC_PLL and 
-> LOONGSON2_BOOT_CLK
-> 
-> has same parent clock.  In addition, the Loongson  code of the community 
-> is still in the development stage,
-> 
-> so this patch modification will  not cause uncorrect clk quote issue at 
-> present.
 
-So the reason is same parent clock...? That's not much. These are IDs
-and parent clock do not matter. Drop the ID change.
+You also didn't test compile drivers/hwmon/hwmon.c.
+I had wondered about that, and 0-day now confirmed it.
 
-Best regards,
-Krzysztof
+Guenter
 
+> BR,
+> Jani.
+> 
+> 
+> >
+> > Guenter
+> >
+> >>  };
+> >>  
+> >>  /* hwmon_device_register() is deprecated */
+> >> -- 
+> >> 2.39.1
+> >> 
+> 
+> -- 
+> Jani Nikula, Intel Open Source Graphics Center
