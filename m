@@ -2,145 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D1D6B18CB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 02:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BEB6B18CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 02:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjCIBdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 20:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        id S229841AbjCIBgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 20:36:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjCIBdK (ORCPT
+        with ESMTP id S229453AbjCIBgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 20:33:10 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05A7EB67
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 17:33:03 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id f18so385622lfa.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 17:33:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678325582;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6T7a+GoKNa0Y7d8xLGi142ICSO8XflBf9jWK/0+KgpY=;
-        b=usoICJVkduIvA2JiFTDjVhRsWR8wu3RepR96fqFKWGnSRi7BDF9X/oXlV98uwqWnlC
-         BiN1xiQ0xxGXzyizKuI086gA0Bz+5+hGot5zNSbTlL79UhRjNCg+A6JGQVGjg9FlpsRx
-         4sqB0DLnPOBlyLD83ypyqwvmKe/WxLWrmhZMqEfpA8NioOQ8UDXyWU5Nxnj064KPvqiw
-         JJqRFZ27g9s8d4SDjldLoQEhAsrw04Id2UOoWxwIkm8D5f2vEvVdBeFA5OnDC017U9Jv
-         R68gQZJw+eipKhiL2h+4V14y1e+oUL/t6FB3fqTZzXDNPpv64tNts3eLds169Vy2qu7O
-         o6xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678325582;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6T7a+GoKNa0Y7d8xLGi142ICSO8XflBf9jWK/0+KgpY=;
-        b=LBmls65jEToaobQw0jvUTHuIpMlOldkmF386to0mVvACAbrdddiTuIH00inNihLB/+
-         wzJ1jDTOisYI47kWASM2Ia2++W4HXavmHqud1nsQP3j7PMPd3PH3B2Ntf7wJgB04URAm
-         8Kd4+hxbhLC+jQpHqQB1sYVikIzfjNJJuDHIvLuMxBaLkQnrbm9L1HNvJKhPVR2AOm8w
-         IzeSVaI1LJBulzZaGbU1jnHqarprchdn6Ghv87kZj1+VMnJHGqhxW7PueJauiS6EBCje
-         QhyW3/FnbMCnRuFoSAr/X/FCzqAm+ljJPpeH1W+pwZXBhps8U8Vs5kXB2Kzzzs7zlxpY
-         xW4g==
-X-Gm-Message-State: AO0yUKUmQ8zCxSEuty9U3IEnuCqt06EfVDeMNBI3lEggjhekj2CsxtsJ
-        JTMPFBdduFe8s6lXrVIfQBuvuA==
-X-Google-Smtp-Source: AK7set8za/4SoEAXr6FrFPjG87XJm1SvKzTphQD0DOfViMEWfMMzZWa6i+jfnsrslszvdiEIa7ZBuQ==
-X-Received: by 2002:ac2:5dd6:0:b0:4dd:ad4c:74b6 with SMTP id x22-20020ac25dd6000000b004ddad4c74b6mr5999377lfq.1.1678325582201;
-        Wed, 08 Mar 2023 17:33:02 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id x5-20020ac24885000000b004db50b52c08sm2483080lfc.102.2023.03.08.17.33.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 17:33:01 -0800 (PST)
-Message-ID: <c92a44fe-7057-2d81-41fc-2e84ae60f881@linaro.org>
-Date:   Thu, 9 Mar 2023 03:33:00 +0200
+        Wed, 8 Mar 2023 20:36:12 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082F467031;
+        Wed,  8 Mar 2023 17:36:09 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328N2I9m004069;
+        Thu, 9 Mar 2023 01:35:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=A5uXqcdle5bLVI4w3P2z/u3mEUjmhCGZT40Ofkc5+WU=;
+ b=M5gi/8wzTlwE/K2/j6+x1uboXMWMWIlbnqUFqfLXMlvP+mU0RW31O19hNB6MFLyI4HbW
+ X3L622nkNhMNJ6IVn5weCgcBh8JLB2ShaVOStCreFxQ10UY9awW/AUA2EErvIOLObx9j
+ LbwW2fESW1V/G7iKKeqLR1dTj9CNjmidGVKjWs9XomCa/yti9Tc/UJiInWyNhCnn+UvL
+ +FQISt3HiYcxP3aU44fZgt3e3X5iqpFlo5RzDvXT/tXeK4B3e5VFk3igRj4PX7/iRinq
+ fqeXXgeYhVU32DNnCf+7mAio5bHfCsW0urB/lAN8UjoOHSK/949SZEIE4NokRIWtAMxd HA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p6fej3bd7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 01:35:55 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3291ZsUm007753
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 9 Mar 2023 01:35:54 GMT
+Received: from [192.168.143.77] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 8 Mar 2023
+ 17:35:54 -0800
+Message-ID: <690bbcfe-d6db-f6d1-acea-8ee5aa4ac606@quicinc.com>
+Date:   Wed, 8 Mar 2023 17:35:54 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 3/4] dt-bindings: firmware: Add Qualcomm QSEECOM
- interface
-Content-Language: en-GB
-To:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Johan Hovold <johan@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230305022119.1331495-1-luzmaximilian@gmail.com>
- <20230305022119.1331495-4-luzmaximilian@gmail.com>
- <20230308221657.GA3935330-robh@kernel.org>
- <93657561-d545-7ead-7f6c-dd2c62aab319@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <93657561-d545-7ead-7f6c-dd2c62aab319@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH v1 4/4] ufs: mcq: Added ufshcd_mcq_abort()
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>, <quic_asutoshd@quicinc.com>,
+        <quic_cang@quicinc.com>, <mani@kernel.org>,
+        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
+        <beanhuo@micron.com>, <avri.altman@wdc.com>,
+        <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1678247309.git.quic_nguyenb@quicinc.com>
+ <c7fcbb70f0e74d225c1a09f107ba1058270739be.1678247309.git.quic_nguyenb@quicinc.com>
+ <85994527-d09d-f381-3dda-7cfb9ce98d4b@acm.org>
+ <ec627f76-380b-bdfd-e736-1626d5bde0e4@quicinc.com>
+ <e354dece-5dc8-9cdc-b822-59a1e0f3a9c3@acm.org>
+From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+In-Reply-To: <e354dece-5dc8-9cdc-b822-59a1e0f3a9c3@acm.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: TLWj6MtvT77ZXkweNdiOWR_ZF8b4bJz-
+X-Proofpoint-ORIG-GUID: TLWj6MtvT77ZXkweNdiOWR_ZF8b4bJz-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-08_15,2023-03-08_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0
+ mlxlogscore=645 impostorscore=0 clxscore=1015 phishscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303090013
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2023 00:44, Maximilian Luz wrote:
-> On 3/8/23 23:16, Rob Herring wrote:
->> On Sun, Mar 05, 2023 at 03:21:18AM +0100, Maximilian Luz wrote:
->>> Add bindings for the Qualcomm Secure Execution Environment interface
->>> (QSEECOM).
+On 3/8/2023 3:25 PM, Bart Van Assche wrote:
+> On 3/8/23 14:37, Bao D. Nguyen wrote:
+>> On 3/8/2023 11:02 AM, Bart Van Assche wrote:
+>>> On 3/7/23 20:01, Bao D. Nguyen wrote:
+>>>> +    if (ufshcd_mcq_cqe_search(hba, hwq, tag)) {
+>>>> +        dev_err(hba->dev, "%s: cmd found in cq. hwq=%d, tag=%d\n",
+>>>> +                __func__, hwq->id, tag);
+>>>> +        /*
+>>>> +         * The command should not be 'stuck' in the CQ for such a 
+>>>> long time.
+>>>> +         * Is interrupt missing? Process the CQEs here. If the 
+>>>> interrupt is
+>>>> +         * invoked at a later time, the CQ will be empty because 
+>>>> the CQEs
+>>>> +         * are already processed here.
+>>>> +         */
+>>>> +        ufshcd_mcq_poll_cqe_lock(hba, hwq);
+>>>> +        err = SUCCESS;
+>>>> +        goto out;
+>>>> +    }
+>>>
+>>> Please remove the above code and also the definition of the 
+>>> ufshcd_mcq_cqe_search() function. The SCSI error handler submits an 
+>>> abort to deal with command processing timeouts. 
+>>> ufshcd_mcq_cqe_search() can only return true in case of a software 
+>>> bug at the host side. Addressing such bugs is out of scope for the 
+>>> SCSI error handler.
 >>
->> Pretty sure I already asked, but no answer in the commit message. Why do
->> we need this? You've already declared the platform supports SCM calls
->> with "qcom,scm". Why can't you probe whether you have QSEECOM or not? DT
->> is for non-discoverable h/w we are stuck with.
-> 
-> Yes, you've asked this before but I can only repeat what I've written in
-> my last response to your question: I am not aware of any way to properly
-> discover the interface at runtime from software.
-> 
-> If it makes you happy, I can put this in the commit message as well...
-> 
->> Why is software made non-discoverable too?
-> 
-> Please direct that question at the Qualcomm guys who actually designed
-> that interface. I can't give you an answer to that, and I'm not all that
-> happy about this either.
-> 
-> To reiterate: I've reverse engineered this based on the Windows driver.
-> The Windows driver loads on an ACPI HID and it doesn't use any function
-> to check/verify whether the interface is actually present. Adding a DT
-> entry is the straight-forward adaption to having a HID in ACPI.
-> 
->> Nodes with only a compatible string are usually just an abuse of DT to
->> instantiate some driver.
-> 
-> If you or anyone here has any idea on how to discover the presence of
-> this, please feel free to let me know and I'd be happy to implement
-> that. Until then, I unfortunately don't see any other way of dealing
-> with this.
-
-You can probably try requesting QSEECOM version. According to msm-3.18:
-
-         uint32_t feature = 10;
-
-         rc = qseecom_scm_call(6, 3, &feature, sizeof(feature),
-                 &resp, sizeof(resp));
-         pr_info("qseecom.qsee_version = 0x%x\n", resp.result);
-         if (rc) {
-                 pr_err("Failed to get QSEE version info %d\n", rc);
-                 goto exit_del_cdev;
-         }
-
-
--- 
-With best wishes
-Dmitry
+>> This is an attempt to handle the error case similar to SDB mode where 
+>> it prints "%s: cmd was completed, but without a notifying intr, tag = 
+>> %d" in the ufshcd_abort() function.
+>>
+>> In this case the command has been completed by the hardware, but some 
+>> reasons the software has not processed it. We have seen this print 
+>> happened during debug sessions, so the error case does happen in SBL 
+>> mode.
+>>
+>> Are you suggesting we should return error in this case without 
+>> calling ufshcd_mcq_poll_cqe_lock()?
+>
+> What I am asking is to remove ufshcd_mcq_poll_cqe_lock() and all code 
+> that depends on that function returning true. Although such code might 
+> be useful for SoC debugging, helping with SoC debugging is out of 
+> scope for Linux kernel drivers.
+I will remove it. In that case, we don't need the first patch of this 
+series, so I will remove the first patch as well. Thanks.
+>
+> Thanks,
+>
+> Bart.
+>
 
