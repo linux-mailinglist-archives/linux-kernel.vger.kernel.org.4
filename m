@@ -2,116 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4FB6B1D04
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A7C6B1D27
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjCIHyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 02:54:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
+        id S230110AbjCIH4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 02:56:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjCIHyN (ORCPT
+        with ESMTP id S230207AbjCIHyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 02:54:13 -0500
-X-Greylist: delayed 37824 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Mar 2023 23:53:54 PST
-Received: from sender3-op-o17.zoho.com (sender3-op-o17.zoho.com [136.143.184.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48EE6B957;
-        Wed,  8 Mar 2023 23:53:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1678348406; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=nzz/SZmrVGDdioH8gd2ceSR5S33TJJH1SOWXyGiilM4kIIYmJDlDBzMtTQ+VoPAiKa3na2dZEWt10SamAIAm3IPtth/hbtRgABWsXdeh9IeTC6iRNqa5Hux+9ShYkfPMJySSKZ9LNs6+nEOV6pkV734PZyM+f/b2WWup8sN71wU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1678348406; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=1fd7a9BQQqeefatGkptmpq6+Xp+BD4kDPIyZZcKeqWo=; 
-        b=PBivApT/Xh8cQ5OYjSTQ4L1H1J0tTBWlnsbY/K9fFNglEdtqU0KiZzIqwrSWCami65hEklncFHjgkGy/Qc4bC918kPplGxjcw0qkFYby4bh6jt8LIBJVdvGIePL+H8cqr8GS8kHC49i9+BTx+6P1WSHL6MBqdyeYAZdKMqt+6uU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1678348406;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=1fd7a9BQQqeefatGkptmpq6+Xp+BD4kDPIyZZcKeqWo=;
-        b=LCrfBHk2uzlnL8inI09VTobjR/W4aJWYPiPnu+/P5ig6K+WNHIsWVAL1LpengfMp
-        xulJpbe0jGodtkiggMHWyMmT8ZDaz/PLdOrFsk3hIL1/5qpiouFgb5iZKoNMSi6EeVd
-        kp28eEcce2u0hDMWNR4OU0pboJv2ub6Fai1hlLjk=
-Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
-        with SMTPS id 167834840432473.9346941163709; Wed, 8 Mar 2023 23:53:24 -0800 (PST)
-Message-ID: <ccdfd262-eaf3-dbbe-7a3c-a911a5ec0fc4@arinc9.com>
-Date:   Thu, 9 Mar 2023 10:53:17 +0300
+        Thu, 9 Mar 2023 02:54:38 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512311CBCD;
+        Wed,  8 Mar 2023 23:54:30 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PXLnx0YDyz9xHvy;
+        Thu,  9 Mar 2023 15:45:41 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwB3Rl2OkAlkp2OBAQ--.23244S2;
+        Thu, 09 Mar 2023 08:54:01 +0100 (CET)
+Message-ID: <250fe1947dd3fea27d8f4aa86fdb9980954b5425.camel@huaweicloud.com>
+Subject: Re: [PATCH v7 0/6] evm: Do HMAC of multiple per LSM xattrs for new
+ inodes
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 09 Mar 2023 08:53:48 +0100
+In-Reply-To: <CAHC9VhTRT=o9Rv+EhZ4aab1FDCyTNa7XEYuhuOiSEkWh0Cdrnw@mail.gmail.com>
+References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
+         <CAHC9VhTRT=o9Rv+EhZ4aab1FDCyTNa7XEYuhuOiSEkWh0Cdrnw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 09/20] dt-bindings: pinctrl: ralink: {mt7620,mt7621}:
- rename to mediatek
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230303002850.51858-1-arinc.unal@arinc9.com>
- <20230303002850.51858-10-arinc.unal@arinc9.com>
- <20230308210514.GA3767521-robh@kernel.org>
- <12be053e-b70a-faca-71c8-d8eef69a3b73@arinc9.com>
-Content-Language: en-US
-In-Reply-To: <12be053e-b70a-faca-71c8-d8eef69a3b73@arinc9.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwB3Rl2OkAlkp2OBAQ--.23244S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZw4kGFy8uryfCFWDJw47Jwb_yoWkZFg_u3
+        WUt3s7Gws8X3WkGa13tr1agry0g3ykZF1jvryqgr13Xw18JaykAFs7CFsavw15Jay7X3sI
+        kr9rZ342y3sIgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb78YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267
+        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+        kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
+        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQALBF1jj4pbjgACsi
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9.03.2023 00:19, Arınç ÜNAL wrote:
-> On 9.03.2023 00:05, Rob Herring wrote:
->> On Fri, Mar 03, 2023 at 03:28:38AM +0300, arinc9.unal@gmail.com wrote:
->>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>
->>> This platform from Ralink was acquired by MediaTek in 2011. Then, 
->>> MediaTek
->>> introduced these SoCs which utilise this platform. Rename the schemas to
->>> mediatek to address the incorrect naming.
->>
->> I said we don't do renames due to acquistions, you said that wasn't the
->> reason, but then that's your reasoning here.
+On Wed, 2023-03-08 at 17:16 -0500, Paul Moore wrote:
+> On Thu, Dec 1, 2022 at 5:42 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > One of the major goals of LSM stacking is to run multiple LSMs side by side
+> > without interfering with each other. The ultimate decision will depend on
+> > individual LSM decision.
+> > 
+> > Several changes need to be made to the LSM infrastructure to be able to
+> > support that. This patch set tackles one of them: gives to each LSM the
+> > ability to specify one or multiple xattrs to be set at inode creation
+> > time and, at the same time, gives to EVM the ability to access all those
+> > xattrs and calculate the HMAC on them.
 > 
-> It's not a marketing/acquistion rename as the name of these SoCs were 
-> wrong from the get go. The information on the first sentence is to give 
-> the idea of why these SoCs were wrongfully named as the base platform 
-> that these new MediaTek SoCs share code with was called Ralink.
+> Hi Roberto,
 > 
->>
->> To give you another example, *new* i.MX things are still called
->> 'fsl,imx...' and it has been how many years since merging with NXP?
-> 
-> Ok this is a point I see now. Though, I fail to see how this is called 
-> renaming when there's only new SoCs (from NXP in this case) to be added.
+> The v7 draft of this patchset had some good discussion, and based on a
+> quick read of the comments it looks like everyone was eventually
+> satisfied that the v7 draft was good and no further changes were
+> necessary, is that correct or do you have an updated draft of this
+> patchset?
 
-If I understand correctly, i.MX is a family from Freescale so the name 
-was kept the same on new SoC releases from NXP. I believe it's different 
-in this case here. There's no family name. The closest thing on the name 
-of the SoC model is, it's RT for Ralink, MT for MediaTek.
+Hi Paul
 
-On top of that, mediatek strings already exist for MT SoCs already, at 
-least for MT7621.
+I addressed few more concerns from Mimi and Casey. I think v8 should be
+good to send (unless you have more comments/suggestions).
 
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/Documentation/devicetree/bindings/mips/ralink.yaml?id=dd3cb467ebb5659d6552999d6f16a616653f9933#n83
+Thanks
 
-Arınç
+Roberto
+
