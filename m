@@ -2,202 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149946B1F40
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:03:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03F16B1F46
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbjCIJDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:03:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46268 "EHLO
+        id S230167AbjCIJEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbjCIJDP (ORCPT
+        with ESMTP id S229917AbjCIJED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:03:15 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80ED81B2CC
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:01:47 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id bw19so1078941wrb.13
+        Thu, 9 Mar 2023 04:04:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08134ECCF
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:01:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678352508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8A+t4iH9WlSNfmltyjcqRYIOosXtrPV0E9QSDjG+a08=;
+        b=EWbBtyw3setV4kjBZcTvQQyp1SoMLn+R4ZA0CG6vm+lqsS2/EQlnPPS7AkzbcS1cTF4WeD
+        3JAuqCy/H7wNu8/P2yTemzmpu9zoYBgz1rNdw0ce+BWM/0L7n6o1F4VQ4KpP9Jek08Tu2Z
+        KVKkMRXysrN1pUYsSo5HE9qGq2y/cFg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-576--98mPq4gM66M9cZroGTpyA-1; Thu, 09 Mar 2023 04:01:47 -0500
+X-MC-Unique: -98mPq4gM66M9cZroGTpyA-1
+Received: by mail-wm1-f69.google.com with SMTP id l20-20020a05600c1d1400b003e10d3e1c23so2121832wms.1
         for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 01:01:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678352506;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H8CQkC9OKwU3VsIa2nf3U05xE98iUfK4LW1TYxB/3tI=;
-        b=MYj5TE0jJc7l2vPVRyit2vIGEMAyUrDqLnBGepVOW1odiuc+k4ciras8kko/sozUUW
-         vi4R/JU5OQcpp735C9i684ITMDmtOPxqpep+RJ6zLkzywq660S33mm4weKMRRBPp/1yS
-         SMR+DyZ8YVKX0T3kTqhxO9GEQyeSzcaUWqJq2MWpM6wz5Cik8RdpzhTq0pcfxs/ncXVr
-         QszU84uR8jVMI64hbupjTnlVovYh1piAUWiOTUDkBww5PRmVKhnxcHwUuAwZIrfpW5PE
-         tOLzNt2AYSyhkjjwisAPTGC8VbmBsnVP85oQWugT+AxNkJD93mGqHE4webN/P6GoimDk
-         OBSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1678352506;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H8CQkC9OKwU3VsIa2nf3U05xE98iUfK4LW1TYxB/3tI=;
-        b=EHvXQ4O6Oy/264eUnLQ5Fqm1YDYh0tr15iCyZ0fZnEEikjUzM7ei3fnbH0fZzM9vKn
-         LQKzUGnyeV21cg2XpN5loRH/HnP3t75xqPKs47cwnZV6l8BnRKXMZYgMPKdif/u8PeNr
-         fkf7oYoVsrhIv9n7SiFh0oXvnkA+ICBpsQkvmvw0pkQ0TRqvf5O1OkNCnrnMpCxSQ6BW
-         e9vx7xJOJPmnow0/LMK1IEJkzNGY3DYObDrtuXbdBpT++N4YqNQurg7+y6LTxeuoLoAw
-         7dnBnpElZUlWZdt58IWNrki1hyWJ/SVQnBQotXPkBJEvXpkezbHdTQG3TulyGD3H4tUI
-         65tQ==
-X-Gm-Message-State: AO0yUKUEV864txC54Kpw7ZToXSwxyilSlKu1PVBr9vDA2Kq3OdStSU5Y
-        yYjwzac0JdBRZictIubvw/Al8A==
-X-Google-Smtp-Source: AK7set94/uBbxAP9k/mAaOEV4tcPv7xSDqz7no4qrbr0MZqgg4K44iNP8R+95z+Ew4poEF3lN85/Mg==
-X-Received: by 2002:a5d:5706:0:b0:2c7:b8a0:c42a with SMTP id a6-20020a5d5706000000b002c7b8a0c42amr11938511wrv.31.1678352506073;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8A+t4iH9WlSNfmltyjcqRYIOosXtrPV0E9QSDjG+a08=;
+        b=EsCI6aXjqiJZZdzw2da045P3a2csrEq2wPs1B+9ShOSIK88WxXK599vj6hSObgSvbb
+         oHb/KlEPIM4C4xVV+u1QRh+bTYJ+mjHWHTKSlhJmU02le2nYorEUiVGoVct2xrJcT70c
+         pK9bopErtFovU+MPt6G0yJGRDqdRa+YJUfhlmE0uy0bluyzc3LrBaIkrmBf3ZjWRARyH
+         MWcnaWRzIubJnKapxqMLQnEYbnnjdkhd/KdiH/R6wAOVDmmEI9NLZazFQOBeDyXrl4kF
+         Snbbi99R5MIkToy9TL9avu0OSBcpzXi7myAyOByKSQw3f6qZ81plfAzKBDc5xewkd232
+         J9xw==
+X-Gm-Message-State: AO0yUKV+yxgtc3AjWYAgn1ubcwS6jwi3RU/lGGz4HLCVejtvfc12buuG
+        QGbPwgjZ0POFxMrat46KkaYP3ZhnoEXzjdi99xt0Y/jBGbgH4Qx+PZPdLIngsdr9lfGU1UYb4Xu
+        763xuZYeCbW5oEWAEjfToViWF
+X-Received: by 2002:a05:600c:3594:b0:3eb:29fe:70de with SMTP id p20-20020a05600c359400b003eb29fe70demr19072907wmq.0.1678352506323;
         Thu, 09 Mar 2023 01:01:46 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id c2-20020a5d63c2000000b002c8ed82c56csm17689178wrw.116.2023.03.09.01.01.44
+X-Google-Smtp-Source: AK7set8Fh9BSQBvTbqw2Cv3HVuzDW2au8T0+XNGDBXrNXIxWDv2lZxDEjI9D+SJJm7qo28/cPtclWA==
+X-Received: by 2002:a05:600c:3594:b0:3eb:29fe:70de with SMTP id p20-20020a05600c359400b003eb29fe70demr19072880wmq.0.1678352505928;
+        Thu, 09 Mar 2023 01:01:45 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:5200:a73:3e7e:12c:b175? (p200300cbc70252000a733e7e012cb175.dip0.t-ipconnect.de. [2003:cb:c702:5200:a73:3e7e:12c:b175])
+        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003eb369abd92sm2143426wmo.2.2023.03.09.01.01.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Thu, 09 Mar 2023 01:01:45 -0800 (PST)
-Message-ID: <ae214ad1-3eb0-3a54-d0d2-ac9812aad186@linaro.org>
-Date:   Thu, 9 Mar 2023 09:01:44 +0000
+Message-ID: <fedd5372-2376-a354-b465-c6cbb930352e@redhat.com>
+Date:   Thu, 9 Mar 2023 10:01:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 22/28] ASoC: qcom: qdsp6: q6afe: Split USB AFE
- dev_token param into separate API
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mm: fix potential invalid pointer dereference in
+ kmemdup()
+To:     Xujun Leng <lengxujun2007@126.com>
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <4c223e9c-2d43-fb8f-7ac9-ad2121914170@redhat.com>
+ <20230309064633.3617-1-lengxujun2007@126.com>
 Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
-        andersson@kernel.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <20230308235751.495-23-quic_wcheng@quicinc.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230308235751.495-23-quic_wcheng@quicinc.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230309064633.3617-1-lengxujun2007@126.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 08/03/2023 23:57, Wesley Cheng wrote:
-> The Q6USB backend can carry information about the available USB SND cards
-> and PCM devices discovered on the USB bus.  The dev_token field is used by
-> the audio DSP to notify the USB offload driver of which card and PCM index
-> to enable playback on.  Separate this into a dedicated API, so the USB
-> backend can set the dev_token accordingly.  The audio DSP does not utilize
-> this information until the AFE port start command is sent, which is done
-> during the PCM prepare phase.
+On 09.03.23 07:46, Xujun Leng wrote:
+>> On 07.03.23 10:03, Xujun Leng wrote:
+>>> If kmemdup() was called with src == NULL, then memcpy() source address
+>>> is fatal, and if kmemdup() was called with len == 0, kmalloc_track_caller()
+>>> will return ZERO_SIZE_PTR to variable p, then memcpy() destination address
+>>> is fatal. Both 2 cases will cause an invalid pointer dereference.
+>>>
 > 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
->   sound/soc/qcom/qdsp6/q6afe.c | 49 +++++++++++++++++++++++++-----------
->   sound/soc/qcom/qdsp6/q6afe.h |  1 +
->   2 files changed, 36 insertions(+), 14 deletions(-)
+>> "fix" in subject implies that there is actually a case broken. Is there,
+>> or is this rather a "sanitize" ?
+> Yes, I agree that word "sanitize" is a better choice.
+> And no, I don't find an actually case but in my test code as follow:
 > 
-Looks like this could be part of [06/28] ASoC: qcom: qdsp6: Introduce 
-USB AFE port to q6dsp
+> #include <linux/module.h>
+> #include <linux/string.h>
+> #include <linux/slab.h>
+> #include <linux/printk.h>
+> #include <linux/err.h>
+> 
+> /*
+>   * Test cases for kmemdup() and memdup_user().
+>   */
+> enum {
+> 	TC_KMEMDUP_ARG0_NULL, /* i.e. kmemdup(NULL, 5, GFP_KERNEL) */
+> 	TC_KMEMDUP_ARG1_ZERO, /* i.e. kmemdup("12345", 0, GFP_KERNEL) */
+> 
+> 	TC_MEMDUP_USER_ARG0_NULL, /* i.e. memdup_user(NULL, 5) */
+> 	TC_MEMDUP_USER_ARG1_ZERO  /* i.e. memdup_user("12345", 0) */
+> };
+> 
+> static int test_case;
+> static const char *test_func_name[] = {"kmemdup", "memdup_user"};
+> static void *ptr;
+> 
+> module_param(test_case, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+> 
+> static void *kmemdup_arg0_null(void)
+> {
+> 	return kmemdup(NULL, 5, GFP_KERNEL);
+> }
+> 
+> static void *kmemdup_arg1_zero(void)
+> {
+> 	return kmemdup("12345", 0, GFP_KERNEL);
+> }
+> 
+> static void *memdup_user_arg0_null(void)
+> {
+> 	return memdup_user(NULL, 5);
+> }
+> 
+> static void *memdup_user_arg1_zero(void)
+> {
+> 	return memdup_user("12345", 0);
+> }
+> 
+> static int check_ptr(void)
+> {
+> 	if (ZERO_OR_NULL_PTR(ptr)) {
+> 		printk(KERN_ERR "test case %d: %s failed, PTR_ERR(ptr) = %ld\n",
+> 				test_case, test_func_name[test_case / 2], PTR_ERR(ptr));
+> 		return -EINVAL;
+> 	}
+> 	
+> 	if (IS_ERR(ptr)) {
+> 		printk(KERN_ERR "test case %d: %s failed, PTR_ERR(ptr) = %ld\n",
+> 				test_case, test_func_name[test_case / 2], PTR_ERR(ptr));
+> 		return PTR_ERR(ptr);
+> 	}
+> 
+> 	printk(KERN_INFO "mm-util test module loaded.\n");
+> 
+> 	return 0;
+> }
+> 
+> static int __init memdup_user_test_init(void)
+> {
+> 	if (test_case < 0 || test_case > TC_MEMDUP_USER_ARG1_ZERO) {
+> 		printk(KERN_INFO "invalid test case %d\n", test_case);
+> 		return -EINVAL;
+> 	}
+> 
+> 	printk(KERN_INFO "test case: %d\n", test_case);
+> 
+> 	switch (test_case) {
+> 	case TC_KMEMDUP_ARG0_NULL:
+> 		ptr = kmemdup_arg0_null();
+> 		break;
+> 	case TC_KMEMDUP_ARG1_ZERO:
+> 		ptr = kmemdup_arg1_zero();
+> 		break;
+> 
+> 	case TC_MEMDUP_USER_ARG0_NULL:
+> 		ptr = memdup_user_arg0_null();
+> 		break;
+> 
+> 	case TC_MEMDUP_USER_ARG1_ZERO:
+> 		ptr = memdup_user_arg1_zero();
+> 		break;
+> 	
+> 	default:
+> 		/* should be never happend */
+> 		ptr = NULL;
+> 		break;
+> 	}
+> 
+> 	return check_ptr();
+> }
+> 
+> static void __exit memdup_user_test_exit(void)
+> {
+> 	if (ptr) {
+> 		kfree(ptr);
+> 		ptr = NULL;
+> 	}
+> 
+> 	printk(KERN_INFO "mm-util test module exited.\n");
+> }
+> 
+> module_init(memdup_user_test_init);
+> module_exit(memdup_user_test_exit);
+> 
+> MODULE_LICENSE("GPL");
+> 
+> Build the code as module, and run the module in QEMU ARM64, with different
+> test case(pass 0,1,2,3 to moddule parameter "test_case"), get follow the
+> results:
+> 
+> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=0
+> [  142.979506] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+> [  142.983171] Mem abort info:
+> [  142.984049]   ESR = 0x0000000096000004
+> [  142.984556]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [  142.985327]   SET = 0, FnV = 0
+> [  142.986867]   EA = 0, S1PTW = 0
+> [  142.987198]   FSC = 0x04: level 0 translation fault
+> [  142.987555] Data abort info:
+> [  142.987819]   ISV = 0, ISS = 0x00000004
+> [  142.988132]   CM = 0, WnR = 0
+> [  142.988540] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000046168000
+> [  142.989715] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+> [  142.992158] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+> [  142.993012] Modules linked in: memdup_kernel_user_test(+) drm ip_tables x_tables ipv6
+> [  142.996663] CPU: 0 PID: 133 Comm: modprobe Not tainted 6.3.0-rc1-next-20230307-dirty #1
+> [  143.002024] Hardware name: linux,dummy-virt (DT)
+> [  143.003370] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [  143.005461] pc : __memcpy+0x54/0x230
+> [  143.006833] lr : kmemdup+0x50/0x68
+> [  143.007208] sp : ffff80000aa53ae0
+> [  143.011440] x29: ffff80000aa53ae0 x28: ffff8000010c0378 x27: ffff8000010c0058
+> [  143.012386] x26: ffff80000a216fd8 x25: ffff80000aa53d00 x24: ffff8000010c0040
+> [  143.014183] x23: 0000000000000000 x22: ffff0000037d6580 x21: 0000000000000000
+> [  143.018590] x20: 0000000000000005 x19: ffff0000039a9100 x18: 0000000000000001
+> [  143.020166] x17: ffff80000aa75000 x16: ffff0000047bed91 x15: ffff0000037d69f8
+> [  143.021158] x14: 0000000000000147 x13: ffff0000037d69f8 x12: 00000000ffffffea
+> [  143.024978] x11: 00000000ffffefff x10: 00000000ffffefff x9 : ffff80000a1fb518
+> [  143.025800] x8 : 00000000ffffffff x7 : 00000000ffffffff x6 : ffff800036288000
+> [  143.026667] x5 : ffff0000039a9105 x4 : 0000000000000005 x3 : 0000000080200020
+> [  143.027257] x2 : 0000000000000005 x1 : 0000000000000000 x0 : ffff0000039a9100
+> [  143.028177] Call trace:
+> [  143.028833]  __memcpy+0x54/0x230
+> [  143.029424]  memdup_user_test_init+0xd8/0x1000 [memdup_kernel_user_test]
+> [  143.032466]  do_one_initcall+0x70/0x1b4
+> [  143.038282]  do_init_module+0x58/0x1e8
+> [  143.039354]  load_module+0x181c/0x1920
+> [  143.040919]  __do_sys_finit_module+0xb8/0x10c
+> [  143.041558]  __arm64_sys_finit_module+0x20/0x2c
+> [  143.044052]  invoke_syscall+0x44/0x104
+> [  143.044663]  el0_svc_common.constprop.0+0x44/0xec
+> [  143.045562]  do_el0_svc+0x38/0x98
+> [  143.047935]  el0_svc+0x2c/0x84
+> [  143.048175]  el0t_64_sync_handler+0xb8/0xbc
+> [  143.048295]  el0t_64_sync+0x190/0x194
+> [  143.049274] Code: f9000006 f81f80a7 d65f03c0 361000c2 (b9400026)
+> [  143.050933] ---[ end trace 0000000000000000 ]---
+> Segmentation fault
+> 
+> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=1
+> [   87.896982] test case 1: kmemdup failed, PTR_ERR(ptr) = 16
+> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Invalid argument
+> 
+> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=2
+> [  124.032509] test case 2: memdup_user failed, PTR_ERR(ptr) = -14
+> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Bad address
+> 
+> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=3
+> [  155.496285] test case 3: memdup_user failed, PTR_ERR(ptr) = 16
+> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Invalid argument
+> 
+> To sum it up, it is:
+> 1) If call kmemdup() with the src == NULL, a NULL pointer dereference
+>     fault happened.
+> 2) If call kmemdup() with the len == 0, an invalid address value
+>     ZERO_SIZE_PTR returned, consider that many existing code check
+>     kmemdup() return value like this:
+>     ptr = kmemdup();
+>     if (!ptr) {
+>     	/* allocation failed */
+>     }
+>     this could be a problem, but no fault happended, memcpy() will do
+>     nothing if copy length is zero, my previous statement is wrong.
+> 3) If call memdup_user() with src == NULL, -EFAULT returned. Because
+>     copy_from_user() takes care of the NULL pointer case, there is no
+>     fault to happend.
+> 4) If call memdup_user() with len == 0, an invalid address value
+>     ZERO_SIZE_PTR returned. The existing code uses IS_ERR() to check
+>     memdup_user() return value, unfortunately, the check range of the
+>     macro function doesn't contain ZERO_SIZE_PTR value.
+> 
+> For 1), (2), we can add the following code to kmemdup() to eliminate:
+> if (!src || len == 0)
+> 	return NULL;
+> 
+> For 4), we can change the statement if (!p) of memdup_user() to
+> if (ZERO_OR_NULL_PTR(s)) to solve that.
+> 
+> BTW, the return values of kmemdup() and memdup_user() got a little
+> bit confused for now:
+> . kmemdup() can return ZERO_SIZE_PTR, NULL, and a valid memory allocation
+>    address, the caller should check those return values with ZERO_OR_NULL_PTR(),
+>    but many existing code don't follow this.
+> . memdup_user() can return ZERO_SIZE_PTR,-ENOMEM,-EFAULT,NULL, and a valid
+>    memory allocation address, the caller should check those return values with
+>    ZERO_OR_NULL_PTR() and IS_ERR() at the same time, but i can't find any code
+>    do things like this.
+> 
+>>> Signed-off-by: Xujun Leng <lengxujun2007@126.com>
+>>> ---
+>>>    mm/util.c | 3 +++
+>>>    1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/mm/util.c b/mm/util.c
+>>> index dd12b9531ac4..d1a3b3d2988e 100644
+>>> --- a/mm/util.c
+>>> +++ b/mm/util.c
+>>> @@ -128,6 +128,9 @@ void *kmemdup(const void *src, size_t len, gfp_t gfp)
+>>>    {
+>>>    	void *p;
+>>>    
+>>> +	if (!src || len == 0)
+>>> +		return NULL;
+>>> +
+>>>    	p = kmalloc_track_caller(len, gfp);
+>>>    	if (p)
+>>>    		memcpy(p, src, len);
+> 
+>> Why should we take care of kmemdup(), but not memdup_user() ? Shouldn't
+>> it suffer from similar problems?
+> By the foregoing, i think that both kmemdup() and memdup_user() need to
+> change.
 
-you are modifying the 06/28 patch in this patch.
+The issue is that you can call mostly any kernel function with 
+unsupported arguments and trigger crashes. It all depends on with which 
+parameters functions are expected to be called.
 
-other than that it looks fine to me.
+If kmemdup() is not expected to be called with !src or !len, all is 
+fine. And if there are no broken cases, existing code obeys these rules.
 
---srini
+Of course, we could improve the documentation or adjust the 
+implementations, if there is real need to.
 
-> diff --git a/sound/soc/qcom/qdsp6/q6afe.c b/sound/soc/qcom/qdsp6/q6afe.c
-> index e9d5fa6b6b0d..505371c96987 100644
-> --- a/sound/soc/qcom/qdsp6/q6afe.c
-> +++ b/sound/soc/qcom/qdsp6/q6afe.c
-> @@ -1394,10 +1394,42 @@ void q6afe_tdm_port_prepare(struct q6afe_port *port,
->   }
->   EXPORT_SYMBOL_GPL(q6afe_tdm_port_prepare);
->   
-> -static int afe_port_send_usb_dev_param(struct q6afe_port *port, struct q6afe_usb_cfg *cfg)
-> +/**
-> + * afe_port_send_usb_dev_param() - Send USB dev token
-> + *
-> + * @port: Instance of afe port
-> + * @cardidx: USB SND card index to reference
-> + * @pcmidx: USB SND PCM device index to reference
-> + *
-> + * The USB dev token carries information about which USB SND card instance and
-> + * PCM device to execute the offload on.  This information is carried through
-> + * to the stream enable QMI request, which is handled by the offload class
-> + * driver.  The information is parsed to determine which USB device to query
-> + * the required resources for.
-> + */
-> +int afe_port_send_usb_dev_param(struct q6afe_port *port, int cardidx, int pcmidx)
->   {
-> -	union afe_port_config *pcfg = &port->port_cfg;
->   	struct afe_param_id_usb_audio_dev_params usb_dev;
-> +	int ret;
-> +
-> +	memset(&usb_dev, 0, sizeof(usb_dev));
-> +
-> +	usb_dev.cfg_minor_version = AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
-> +	usb_dev.dev_token = (cardidx << 16) | (pcmidx << 8);
-> +	ret = q6afe_port_set_param_v2(port, &usb_dev,
-> +				AFE_PARAM_ID_USB_AUDIO_DEV_PARAMS,
-> +				AFE_MODULE_AUDIO_DEV_INTERFACE, sizeof(usb_dev));
-> +	if (ret)
-> +		dev_err(port->afe->dev, "%s: AFE device param cmd failed %d\n",
-> +			__func__, ret);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(afe_port_send_usb_dev_param);
-> +
-> +static int afe_port_send_usb_params(struct q6afe_port *port, struct q6afe_usb_cfg *cfg)
-> +{
-> +	union afe_port_config *pcfg = &port->port_cfg;
->   	struct afe_param_id_usb_audio_dev_lpcm_fmt lpcm_fmt;
->   	struct afe_param_id_usb_audio_svc_interval svc_int;
->   	int ret = 0;
-> @@ -1408,20 +1440,9 @@ static int afe_port_send_usb_dev_param(struct q6afe_port *port, struct q6afe_usb
->   		goto exit;
->   	}
->   
-> -	memset(&usb_dev, 0, sizeof(usb_dev));
->   	memset(&lpcm_fmt, 0, sizeof(lpcm_fmt));
->   	memset(&svc_int, 0, sizeof(svc_int));
->   
-> -	usb_dev.cfg_minor_version = AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
-> -	q6afe_port_set_param_v2(port, &usb_dev,
-> -				AFE_PARAM_ID_USB_AUDIO_DEV_PARAMS,
-> -				AFE_MODULE_AUDIO_DEV_INTERFACE, sizeof(usb_dev));
-> -	if (ret) {
-> -		dev_err(port->afe->dev, "%s: AFE device param cmd failed %d\n",
-> -			__func__, ret);
-> -		goto exit;
-> -	}
-> -
->   	lpcm_fmt.cfg_minor_version = AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
->   	lpcm_fmt.endian = pcfg->usb_cfg.endian;
->   	ret = q6afe_port_set_param_v2(port, &lpcm_fmt,
-> @@ -1465,7 +1486,7 @@ void q6afe_usb_port_prepare(struct q6afe_port *port,
->   	pcfg->usb_cfg.num_channels = cfg->num_channels;
->   	pcfg->usb_cfg.bit_width = cfg->bit_width;
->   
-> -	afe_port_send_usb_dev_param(port, cfg);
-> +	afe_port_send_usb_params(port, cfg);
->   }
->   EXPORT_SYMBOL_GPL(q6afe_usb_port_prepare);
->   
-> diff --git a/sound/soc/qcom/qdsp6/q6afe.h b/sound/soc/qcom/qdsp6/q6afe.h
-> index e098a3e15135..7980416275e9 100644
-> --- a/sound/soc/qcom/qdsp6/q6afe.h
-> +++ b/sound/soc/qcom/qdsp6/q6afe.h
-> @@ -274,6 +274,7 @@ void q6afe_tdm_port_prepare(struct q6afe_port *port, struct q6afe_tdm_cfg *cfg);
->   void q6afe_cdc_dma_port_prepare(struct q6afe_port *port,
->   				struct q6afe_cdc_dma_cfg *cfg);
->   
-> +int afe_port_send_usb_dev_param(struct q6afe_port *port, int cardidx, int pcmidx);
->   int q6afe_port_set_sysclk(struct q6afe_port *port, int clk_id,
->   			  int clk_src, int clk_root,
->   			  unsigned int freq, int dir);
+But adjusting individual functions here while others are left with he 
+same, theoretical (!) problems, is not a good approach IMHO.
+
+-- 
+Thanks,
+
+David / dhildenb
+
