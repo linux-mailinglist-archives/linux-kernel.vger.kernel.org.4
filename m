@@ -2,114 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45DB36B2CB8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 212E96B2CB9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbjCISNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 13:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
+        id S230398AbjCISNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 13:13:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjCISNR (ORCPT
+        with ESMTP id S230389AbjCISNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 13:13:17 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FE13755E;
-        Thu,  9 Mar 2023 10:13:15 -0800 (PST)
-Received: from fpc.intra.ispras.ru (unknown [10.10.165.5])
-        by mail.ispras.ru (Postfix) with ESMTPSA id A9A3B4077AEF;
-        Thu,  9 Mar 2023 18:13:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru A9A3B4077AEF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1678385593;
-        bh=Pt4ZvSVepTY4Qap6N4dhqvj205nwIIhb0xhp8AbBKag=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JjyX6FZGRXfAV1eJ7w2xkT1M7eVutjP0juq8E83h/RKgXRajAquMlxAE5WJaPuTZX
-         zrOWplieWwRHjjNBGi7akWI60MLLavNT7Q2lqzz4qZkKJlXInlwRZ5aFWbxIRlwrDk
-         owqavSuUHRgs6gN+quTzlCRgdIjVFtxQwvf5bOdo=
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Nguyen Dinh Phi <phind.uet@gmail.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org,
-        syzbot+4c4ffd1e1094dae61035@syzkaller.appspotmail.com
-Subject: [PATCH 4.14/4.19/5.4/5.10/5.15 1/1] Bluetooth: hci_sock: purge socket queues in the destruct() callback
-Date:   Thu,  9 Mar 2023 21:12:51 +0300
-Message-Id: <20230309181251.479447-2-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230309181251.479447-1-pchelkin@ispras.ru>
-References: <20230309181251.479447-1-pchelkin@ispras.ru>
+        Thu, 9 Mar 2023 13:13:37 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3ED55553F
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 10:13:30 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id s1-20020a6bd301000000b0073e7646594aso1251331iob.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 10:13:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678385609;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eRq3TMJJZHy95+Bnu1oE5VxJ/AJwds9+h0Qo4sc5MT8=;
+        b=vQO0hhU9afFpAGZyE4wmD/VbBPr/arPBdIFz+qTYKIDK+NtBFB8mhNxzqrYvzM22dk
+         xvc7sJRmMBGZVTmPnTJj7N9by2gm3VgblAYUeF542M8LYQNh9XeQK7tgWM4Gbt6mTnx4
+         Gmxkw0nt9ZrkCxY4LcWczvLQoH3q3tkdaVSI2zlX8ExgauMbTxamzi0apzcrbQsvlt2A
+         n12kp9NkEWUrPJI+RhiyWfzW/kVl6vNQEu3cuwJvZ4IVx6K8FkAW2jbqolRF21ECTPbd
+         gI6f22JTOXtvH9n23iD4tdO3ZtWwbLUlYP5N08jzYFOTkp0bT1eJyBZr/ZKVpuwRgO0I
+         1D7Q==
+X-Gm-Message-State: AO0yUKV8VkvezQBZLTIW75qVd1kooQEYqdRb2JuH5F0Tv6LsF6W/TBnI
+        J6gMJtBqjAwAlCSJKl3EEobSRe/zI33suah6FPIr7Ofw8nnm
+X-Google-Smtp-Source: AK7set/dw+lBFz3VuekguS1j6XrbI8OFHItFn11I7RCeq74vSHR2atkqy55CSQaU2RexX6vC3Nv/T4g09iEyOdu+45bOcLLDXeSz
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:85a1:0:b0:3a9:5ec2:ef41 with SMTP id
+ d30-20020a0285a1000000b003a95ec2ef41mr10941296jai.3.1678385609080; Thu, 09
+ Mar 2023 10:13:29 -0800 (PST)
+Date:   Thu, 09 Mar 2023 10:13:29 -0800
+In-Reply-To: <0000000000008fb52f05eb515c2d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000068c2505f67b9a8d@google.com>
+Subject: Re: [syzbot] WARNING: fbcon: Driver 'vkmclient_loop: send disconnect:
+ Broken pipe
+From:   syzbot <syzbot+8e67d6db6ac1d1b297f7@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, jiri@nvidia.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nguyen Dinh Phi <phind.uet@gmail.com>
+syzbot suspects this issue was fixed by commit:
 
-commit 709fca500067524381e28a5f481882930eebac88 upstream.
+commit ed539ba614a079ea696b92beef1eafec66f831a4
+Author: Jakub Kicinski <kuba@kernel.org>
+Date:   Fri Jan 6 06:33:57 2023 +0000
 
-The receive path may take the socket right before hci_sock_release(),
-but it may enqueue the packets to the socket queues after the call to
-skb_queue_purge(), therefore the socket can be destroyed without clear
-its queues completely.
+    devlink: always check if the devlink instance is registered
 
-Moving these skb_queue_purge() to the hci_sock_destruct() will fix this
-issue, because nothing is referencing the socket at this point.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13f213eac80000
+start commit:   55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c29b6436e994d72e
+dashboard link: https://syzkaller.appspot.com/bug?extid=8e67d6db6ac1d1b297f7
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=172e57a4880000
 
-Signed-off-by: Nguyen Dinh Phi <phind.uet@gmail.com>
-Reported-by: syzbot+4c4ffd1e1094dae61035@syzkaller.appspotmail.com
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
----
- net/bluetooth/hci_sock.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+If the result looks correct, please mark the issue as fixed by replying with:
 
-diff --git a/net/bluetooth/hci_sock.c b/net/bluetooth/hci_sock.c
-index f1128c2134f0..3f92a21cabe8 100644
---- a/net/bluetooth/hci_sock.c
-+++ b/net/bluetooth/hci_sock.c
-@@ -888,10 +888,6 @@ static int hci_sock_release(struct socket *sock)
- 	}
- 
- 	sock_orphan(sk);
--
--	skb_queue_purge(&sk->sk_receive_queue);
--	skb_queue_purge(&sk->sk_write_queue);
--
- 	release_sock(sk);
- 	sock_put(sk);
- 	return 0;
-@@ -2012,6 +2008,12 @@ static int hci_sock_getsockopt(struct socket *sock, int level, int optname,
- 	return err;
- }
- 
-+static void hci_sock_destruct(struct sock *sk)
-+{
-+	skb_queue_purge(&sk->sk_receive_queue);
-+	skb_queue_purge(&sk->sk_write_queue);
-+}
-+
- static const struct proto_ops hci_sock_ops = {
- 	.family		= PF_BLUETOOTH,
- 	.owner		= THIS_MODULE,
-@@ -2065,6 +2067,7 @@ static int hci_sock_create(struct net *net, struct socket *sock, int protocol,
- 
- 	sock->state = SS_UNCONNECTED;
- 	sk->sk_state = BT_OPEN;
-+	sk->sk_destruct = hci_sock_destruct;
- 
- 	bt_sock_link(&hci_sk_list, sk);
- 	return 0;
--- 
-2.34.1
+#syz fix: devlink: always check if the devlink instance is registered
 
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
