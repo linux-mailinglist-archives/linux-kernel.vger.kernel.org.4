@@ -2,146 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78AAB6B3136
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9C06B313C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbjCIWo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 17:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
+        id S231277AbjCIWpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 17:45:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbjCIWoI (ORCPT
+        with ESMTP id S231704AbjCIWpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:44:08 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A87365C56;
-        Thu,  9 Mar 2023 14:43:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678401830; x=1709937830;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fBE1n3VDHKOa0my/fpWQs/hh4OEzhEHXYLpvjY/5Y0Q=;
-  b=dPbm4nXmq99X2ep99J4vzLJ6u1gjzlzgjL0SNI9L55ZHTIy3HkySEhb3
-   WX4gr59wlATQowjxz+91nxZA2kWsXHUiJD5cJUuf8vQFT+2RAZzZL7rAT
-   Cp+DzHCkEmng1aafKzUQsQGpdV1rbQncRFnyvGbUZZpWVoPpf+ozZsjge
-   7P8jkyDNjpXcg3CWyCSgiv+KWPFzf612tFWFXOxYER7q2GgE1t2sTHxa2
-   bm8eCtHMaW2sOp1sN9Zdw+gWW6M/T5QUXKoR+esx8qWYu4DbKwIFXSUFD
-   P4o0UCOUa0EA1SVlShCoPnt+rSM26u1VmUWMcf5IlvDDy57XxCCXlE9KS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="335289373"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="335289373"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 14:42:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="654953046"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="654953046"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 09 Mar 2023 14:42:42 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1paOy9-0003H1-2U;
-        Thu, 09 Mar 2023 22:42:41 +0000
-Date:   Fri, 10 Mar 2023 06:42:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Danila Tikhonov <danila@jiaxyga.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davidwronek@gmail.com, Danila Tikhonov <danila@jiaxyga.com>
-Subject: Re: [PATCH 2/2] phy: qcom-qmp-ufs: Add SM7150 support
-Message-ID: <202303100615.2vRPxq4R-lkp@intel.com>
-References: <20230309185049.170878-3-danila@jiaxyga.com>
+        Thu, 9 Mar 2023 17:45:03 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3735CECC
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:44:27 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329KAXNU012333;
+        Thu, 9 Mar 2023 22:43:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=75uXFJtBYBbHk7SDm66SC83Kfd79NUBz5sBieEVhkfY=;
+ b=DYUbx4VYUImmB/L0fbSuuCYqVF0X90fTRxZy3aeWAB9fm3utaXwf6dK2W+P+LnKjmrkJ
+ qSM2hTX/uRtCnkmZNJbEWBDfjXzbo8CttO/BNW0h0mMs5qP92sFB5OkgFilwdPi0gc5a
+ I9az9sWoqc2AcN4FFbG7uH+O1sHXIOJlE5mmE+EpH5oa0N0M2/GgavC18FR+a90+xcmt
+ tMdQygsLIO5gRvDB2ESP8jgRX3DjnIIvvgMo2dpebtJn1LBKRzzFbnpNJcwbIT9PrwSV
+ TaA3AX9petWwRgPVR5/SXsgm2cMpFZen0x2H8IWplDtmBWv0pXQID0Mft1+oZbuiI+7+ kg== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6t3c8k7b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 22:43:33 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 329KLxVB022254;
+        Thu, 9 Mar 2023 22:43:32 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3p6fhhxnp1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 22:43:32 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 329MhUnc26542772
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Mar 2023 22:43:30 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BD7465805C;
+        Thu,  9 Mar 2023 22:43:30 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BC0545805A;
+        Thu,  9 Mar 2023 22:43:29 +0000 (GMT)
+Received: from [9.65.194.48] (unknown [9.65.194.48])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Mar 2023 22:43:29 +0000 (GMT)
+Message-ID: <29a94bb3-10fe-0a85-cc09-ee4b784f6c43@linux.ibm.com>
+Date:   Thu, 9 Mar 2023 16:43:29 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309185049.170878-3-danila@jiaxyga.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] fsi: aspeed: Reset master errors after CFAM reset
+To:     Joel Stanley <joel@jms.id.au>, Joachim Fenkes <FENKES@de.ibm.com>
+Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        andrew@aj.id.au, alistair@popple.id.au, jk@ozlabs.org
+References: <20230306225249.975495-1-eajames@linux.ibm.com>
+ <CACPK8Xda32NL8hvFD0fMTKeQnoBOKCz63W=vMJ+X4p_TJ2LCjw@mail.gmail.com>
+Content-Language: en-US
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <CACPK8Xda32NL8hvFD0fMTKeQnoBOKCz63W=vMJ+X4p_TJ2LCjw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 4JkCH63fdZKT84BFZsNgj-9KngIZ-Nc3
+X-Proofpoint-ORIG-GUID: 4JkCH63fdZKT84BFZsNgj-9KngIZ-Nc3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_12,2023-03-09_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303090180
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Danila,
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.3-rc1 next-20230309]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Danila-Tikhonov/dt-bindings-phy-Add-QMP-UFS-PHY-comptible-for-SM7150/20230310-025222
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230309185049.170878-3-danila%40jiaxyga.com
-patch subject: [PATCH 2/2] phy: qcom-qmp-ufs: Add SM7150 support
-config: arm64-randconfig-r023-20230308 (https://download.01.org/0day-ci/archive/20230310/202303100615.2vRPxq4R-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/95e826acacaf3b5ba79c06b481199a17abed44ba
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Danila-Tikhonov/dt-bindings-phy-Add-QMP-UFS-PHY-comptible-for-SM7150/20230310-025222
-        git checkout 95e826acacaf3b5ba79c06b481199a17abed44ba
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/phy/qualcomm/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303100615.2vRPxq4R-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:380:3: error: expected identifier or '('
-   };)
-     ^
->> drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:972:14: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
-                   .serdes         = sm8150_ufsphy_serdes,
-                                     ^
-   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:973:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
-                   .serdes_num     = ARRAY_SIZE(sm8150_ufsphy_serdes),
-                                                ^
-   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:973:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
-   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:973:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
-   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:1004:14: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
-                   .serdes         = sm8150_ufsphy_serdes,
-                                     ^
-   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:1005:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
-                   .serdes_num     = ARRAY_SIZE(sm8150_ufsphy_serdes),
-                                                ^
-   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:1005:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
-   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:1005:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
-   9 errors generated.
+On 3/8/23 23:38, Joel Stanley wrote:
+> On Mon, 6 Mar 2023 at 22:53, Eddie James <eajames@linux.ibm.com> wrote:
+>> It has been observed that sometimes the FSI master will return all 0xffs
+>> after a CFAM has been taken out of reset, without presenting any error.
+>> Resetting the FSI master errors resolves the issue.
+> Eddie, you mentioned that Joachim was going to provide input on this
+> change. Did you hear from him?
 
 
-vim +380 drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
+Yes, he mentioned it's possibly an addressing issue, with 
+absolute/relative/same-address-again type of access. The FSI master 
+doesn't know the slave is reset in this case so it needs to go back to 
+absolute addressing. Resetting the port on the master is a good solution 
+here, though Joachim was surprised that the BREAK command to the master 
+didn't clear out the addressing state.
 
-   370	
-   371	static const struct qmp_phy_init_tbl sm7150_ufsphy_pcs[] = {
-   372		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_RX_SIGDET_CTRL2, 0x6f),
-   373		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_TX_LARGE_AMP_DRV_LVL, 0x0f),
-   374		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_TX_SMALL_AMP_DRV_LVL, 0x02),
-   375		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_RX_SYM_RESYNC_CTRL, 0x03),
-   376		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_TX_MID_TERM_CTRL1, 0x43),
-   377		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_RX_SIGDET_CTRL1, 0x0f),
-   378		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_RX_MIN_HIBERN8_TIME, 0xFF),
-   379		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_MULTI_LANE_CTRL1, 0x02),
- > 380	};)
-   381	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I collected some additional data that perhaps supports this theory: 
+After the CFAM reset, I actually get back the data at CFAM address 0x00 
+when I read the previously used address. All other addresses return 
+0xff. I dumped the master state but there's nothing interesting, and no 
+errors.
+
+# /tmp/fsimaster-aspeed cfam 0x9c
+CFAM09c: 00000000
+# /tmp/fsimaster-aspeed dump master
+MMODE[000]: 70080210
+MDLYR[004]: ffff0000
+MCRSP0[008]: 00000000
+MENP0[010]: 80000000
+MLEVP0[018]: 80000000
+MREFP0[020]: 00000000
+MHPMP0[028]: 00000000
+MSIEP0[030]: 00000000
+MAESP0[050]: 00000000
+MAEB[070]: 00000000
+MVER[074]: e0050101
+MBSYP0[078]: 00000000
+MSTAP0[0d0]: 00000000
+MSTAP1[0d4]: 00000000
+MSTAP2[0d8]: 00000000
+MSTAP3[0dc]: 00000000
+MSTAP4[0e0]: 00000000
+MSTAP5[0e4]: 00000000
+MSTAP6[0e8]: 00000000
+MSTAP7[0ec]: 00000000
+MESRB0[1d0]: 00000000
+MSCSB0[1d4]: 90000001
+MATRB0[1d8]: 0040013b
+MDTRB0[1dc]: 00000000
+MECTRL[2e0]: 0000c000
+# echo 1 > /sys/class/fsi-master/fsi0/device/cfam_reset
+# /tmp/fsimaster-aspeed cfam 0x9c
+CFAM09c: c0020da6
+# /tmp/fsimaster-aspeed cfam 0x0
+CFAM000: ffffffff
+# /tmp/fsimaster-aspeed dump master
+MMODE[000]: 70080210
+MDLYR[004]: ffff0000
+MCRSP0[008]: 00000000
+MENP0[010]: 80000000
+MLEVP0[018]: 80000000
+MREFP0[020]: 00000000
+MHPMP0[028]: 00000000
+MSIEP0[030]: 00000000
+MAESP0[050]: 00000000
+MAEB[070]: 00000000
+MVER[074]: e0050101
+MBSYP0[078]: 00000000
+MSTAP0[0d0]: 00000000
+MSTAP1[0d4]: 00000000
+MSTAP2[0d8]: 00000000
+MSTAP3[0dc]: 00000000
+MSTAP4[0e0]: 00000000
+MSTAP5[0e4]: 00000000
+MSTAP6[0e8]: 00000000
+MSTAP7[0ec]: 00000000
+MESRB0[1d0]: 00000000
+MSCSB0[1d4]: b0000001
+MATRB0[1d8]: 00400003
+MDTRB0[1dc]: ffffffff
+
+
+>
+> Cheers,
+>
+> Joel
+>
+>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+>> ---
+>>   drivers/fsi/fsi-master-aspeed.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/fsi/fsi-master-aspeed.c b/drivers/fsi/fsi-master-aspeed.c
+>> index 7cec1772820d..5eccab175e86 100644
+>> --- a/drivers/fsi/fsi-master-aspeed.c
+>> +++ b/drivers/fsi/fsi-master-aspeed.c
+>> @@ -454,6 +454,8 @@ static ssize_t cfam_reset_store(struct device *dev, struct device_attribute *att
+>>          gpiod_set_value(aspeed->cfam_reset_gpio, 1);
+>>          usleep_range(900, 1000);
+>>          gpiod_set_value(aspeed->cfam_reset_gpio, 0);
+>> +       usleep_range(900, 1000);
+> Is the delay required? How did you arrive at this time?
+>
+>> +       opb_writel(aspeed, ctrl_base + FSI_MRESP0, cpu_to_be32(FSI_MRESP_RST_ALL_MASTER));
+>>          mutex_unlock(&aspeed->lock);
+>>          trace_fsi_master_aspeed_cfam_reset(false);
+>>
+>> --
+>> 2.31.1
+>>
