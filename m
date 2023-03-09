@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C776B21C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 179436B21C9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjCIKp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
+        id S230075AbjCIKqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:46:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231506AbjCIKpR (ORCPT
+        with ESMTP id S229606AbjCIKp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:45:17 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1561CCF0C5;
-        Thu,  9 Mar 2023 02:44:54 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id bd34so1190900pfb.3;
-        Thu, 09 Mar 2023 02:44:54 -0800 (PST)
+        Thu, 9 Mar 2023 05:45:27 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A60956797;
+        Thu,  9 Mar 2023 02:45:26 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id a9so1490191plh.11;
+        Thu, 09 Mar 2023 02:45:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678358694;
+        d=gmail.com; s=20210112; t=1678358726;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9bZRnwm6vJUX6c9PD0t0ElYNdThObW9NeTmHVWm+hKM=;
-        b=LhaQqrvDxgLejCELCVlgsYceVzoVl+hLRG5f6Jn4jqsO46hvqxYgNuYpSzRfMAGlIT
-         0QkwJU+Sdy1yzDW2cBlbI0i0/JzlTmbSsepAIWoizSylZX264Z81TbuRc7PftWFIMWnA
-         ETRZ75BONunjI0XFzFvt6RHgcweNHrdMUuctl09l5meaPFHjJGgfxw5H99i6LaG43pLe
-         EAyCd2OVIvQq1TvjRx2K5xq3nVd55uzs1ZFFWI10HBvbQHXJ61i9CzoRmqjqb60e/pIu
-         jil+DESNDlJUdLe7/0ozHjwsF1fy+y55LtAJrEHiuAObzAidtTIUiUsdc8EaGIOacLU4
-         UTdw==
+        bh=syVx+vjdf/ZCrQkBBKtgWw7KFf16AwGumErh0SNakMY=;
+        b=RMfuFP3mDNznKhLqGvBYhoijvFUiShtojQD9/XXBSWaozsV5lIm8ssQlgQIWfK1Xbh
+         z3WIPFZagV1zjPpyNKKXDcMm9Qk/NmrAKSBJYlSkfoAXDtbywjHxsJP/nS901YGO9BGc
+         QWw28wEikC1YqIM1e3TWHAYq8oxQLzVWpIPBS9LcttLzt6OZ7q2RiXOa4RBYxzpt2xfd
+         4NHm5SBgjgLy1UTfNk8u2puDOKuAOASqrZDSql3pTd1bAacuEHSKyTXvql5OEzqjmt/p
+         oqtrNWz3QKiLkAqHSkG3mcRGpUOxvbmi51i4cx4QaQo9WqyE3nEmSOvjPUzWsedqmV0r
+         IwDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678358694;
+        d=1e100.net; s=20210112; t=1678358726;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9bZRnwm6vJUX6c9PD0t0ElYNdThObW9NeTmHVWm+hKM=;
-        b=DDwIymnW6DDn7YAFoo/I9CbLTHl+O2AaXxcbXaR7IzSnmUg0unTMxkV2QLPqg1bUY/
-         lcx3G+uisSkOfVa3wgyjkJPlcXVniPHwEu696TXq7VhiKgnbRC88IGD5VqEhO6e4eXE/
-         /QkwK3+lumXSKrfqDib++BxOje6Yin+mb9iDviZDcBiW7E48O1M8Sy82p8oeS+k/JyiQ
-         d2qkTCdv0gb9iaHmaGrMzW0p3MV5hIDHY+9xddDpx8AcFc+NoYgNOmj2GAg5Du63Iebq
-         YVaONwjC7Wpko1C/xDZS6zt3c90oLhL0LoaWnLTqbLeH8DCHjNlrNV5wLFFQFvXcvfzn
-         t0Sg==
-X-Gm-Message-State: AO0yUKWb8OymJuCMSCmQDXzfdcIJlVFo0Gus/a60lxxh4Sk7v8zMIPIc
-        yo5M1y16vZ6/5lBU/78BDERPT6ZUBRfh1F18q4w=
-X-Google-Smtp-Source: AK7set8zqKyx3NtXT7Zlu8YshN1KXUzw3AGFAfe4sTl1fQmZVsdRUTXVG7zNYB5yySxeURoVUz82loo3xwJMo9qMR3g=
-X-Received: by 2002:a63:f350:0:b0:503:72c5:dd77 with SMTP id
- t16-20020a63f350000000b0050372c5dd77mr7739927pgj.6.1678358694349; Thu, 09 Mar
- 2023 02:44:54 -0800 (PST)
+        bh=syVx+vjdf/ZCrQkBBKtgWw7KFf16AwGumErh0SNakMY=;
+        b=NLzOHet7NsqWJDfGYprlBLigLTWXDR8oh3rY2VkKOPs8hqwDiYe4I6Df2Yj1kVHSwk
+         CKOMmTNJQ+MYmoCXxxfpzIcZdg+s7ybB7yi0Qty/aXh3q5hX9rmWVX/wnhkDDFQ79tZm
+         o8tU4+Zeoz9cPhBK/sZaWDUBTBlWwOm6B9WORY/+QWQ+hTwiAOwXZc8F+fjTmETzzcSX
+         s6eR0lU1OWb7Jtq6d0u5yCAwaq7g+nP7RnrQicY4XgAJm83GSExUL0kREUDc0mwBOrJI
+         FyJIPxku+iMnVPvG2l0HGbz+8ili65LOYkyAtg0xD9T1mx8X4TSf0fEi1i5O7hVFeidP
+         81yA==
+X-Gm-Message-State: AO0yUKWlPwUCb0eBLivf5kSj7ZnEupxbm6FTzHt2RXoU0EDB47LTlqXj
+        MRJQpmnDgL3vCd/94W2j1rxJUQZfIJ4Iub/k7/k+qFvqhl3jsw==
+X-Google-Smtp-Source: AK7set9wVn30YXm55DaP7zMI+PaHXqrCLIffmIm/qdvgb/14tq0QJwGlqbKlTk3VTYzmc5kMS1madgEGh/Lav7/SY8k=
+X-Received: by 2002:a17:902:ef92:b0:19b:636:b153 with SMTP id
+ iz18-20020a170902ef9200b0019b0636b153mr8117005plb.6.1678358725826; Thu, 09
+ Mar 2023 02:45:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20230309092821.1590586-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20230309092821.1590586-1-daniel.lezcano@linaro.org>
+References: <20230309092821.1590586-1-daniel.lezcano@linaro.org> <20230309092821.1590586-2-daniel.lezcano@linaro.org>
+In-Reply-To: <20230309092821.1590586-2-daniel.lezcano@linaro.org>
 From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 9 Mar 2023 07:44:42 -0300
-Message-ID: <CAOMZO5DE_Gk7K02pWgtmUtFd4d4dbzTg4H-ga5UqnkC5AK2y2Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] thermal/drivers/imx: Remove get_trip_temp ops
+Date:   Thu, 9 Mar 2023 07:45:14 -0300
+Message-ID: <CAOMZO5CdLXMtBbdH1j1RLFL=t5ZGXVgi5=Aw5pde1QNcCAVKxQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] thermal/drivers/imx: Use the thermal framework for
+ the trip point
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
@@ -79,11 +80,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Thu, Mar 9, 2023 at 6:28=E2=80=AFAM Daniel Lezcano <daniel.lezcano@linar=
 o.org> wrote:
 >
-> The i.MX thermal sensor uses the generic trip points. The thermal
-> framework can return the critical temperature directly.
+> The thermal framework provides an API to get the trip related to a
+> trip point id. We want to consolidate the generic trip points code,
+> thus preventing the different drivers to deal with the trip points
+> after they registered them.
 >
-> Remove the pointless get_trip_temp ops.
+> The set_trip_temp ops will be changed regarding the above changes but
+> first we need to rework a bit the different implementation in the
+> drivers.
+>
+> The goal is to prevent using the trip id but use a trip point passed
+> as parameter which will contain all the needed information.
+>
+> As we don't have the trip point passed as parameter yet, we get the
+> trip point using the generic trip thermal framewrok APIs and use it to
+> take exactly the same decisions.
+>
+> The difference with this change and the previous code is from where we
+> get the thermal trip point (which is the same).
+>
+> No functional change intended.
 >
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>   V2:
+>     - Remove extra tab inserted in the previous version
 
 Reviewed-by: Fabio Estevam <festevam@gmail.com>
