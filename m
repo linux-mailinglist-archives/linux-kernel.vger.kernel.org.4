@@ -2,108 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E0E6B22BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:23:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E01C6B22C2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbjCILXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:23:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
+        id S231560AbjCILYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:24:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjCILXM (ORCPT
+        with ESMTP id S231337AbjCILXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:23:12 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FC7DCF61
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 03:19:34 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id k10so5390306edk.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 03:19:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112; t=1678360773;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jWVpJa9jafiWR7ReoMFeoCuLxbY0yAV8qbCl/kR+OT0=;
-        b=xCCdR6eqOl+6/f9crf2vidUY5zc1EMelNM3VS9yVHDAUSVklvgnwmGiFx1g0rl2YWm
-         aoGzi2BF6Oq1noINisonCJEQ3XKLIpo2NZRaJuZDsRbalM6vCbEdr2z575eUJ0CrKS7F
-         ntyumgh12mp8juBAwk6RyQ12P1FY6DQnsNDqk/OVl92bLjlkKJN4kxRdTfWAEbBtFz2i
-         9ktFGRdlf4kfZ5GtjZyGiunHrjuH+WK7dMJHdbpNke3bnSqf9Koo3FYwWMNcHZyRp+Y5
-         9ya2c/fF/j1HhnMg1aWUGbV34HbNOohIYjQJ8vens0h6o77UglCgpgdIyjv6kLh/2GCw
-         SHSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678360773;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jWVpJa9jafiWR7ReoMFeoCuLxbY0yAV8qbCl/kR+OT0=;
-        b=8Jdqs1R1Np7uAkfJ/evSL3kQhLE3s0u8xEQrNbRN9FqMo7RVsuDr2u7hOyoRM4QtZ2
-         MtrElqmS7XITwJKqQmtbawaODh5j7aP3nbotDOAarkfW9rBE4YkpPovNF5fE2ZNQX003
-         xUeNNMRcrLn4oFzfbJpxcOe909oCfs3crnD4Nudl1NyT/3StNI2oarGDBy+eVluGqD+o
-         /yQ6sBhc0LHNS3N3kx2ShUcTDoKI1ITvqKOyaNipbMIskRVMLv5v0TeQNKiQuJcBXLEK
-         +m+/aSjxQYIDI/jntZRATUMrEOekr8wO6wcMonV67Oru3HYIhRP2NT6h8hJMKQvxYlwd
-         t/6A==
-X-Gm-Message-State: AO0yUKX/zq4H+f50iS/+LSrCBbmZsopQt1p/fj7rDQDm78CQVML7zlPA
-        nXAzRjmw1Ob47eEv6UECreZd0Q==
-X-Google-Smtp-Source: AK7set8k4fSEXWaELTNHKVeA7K8J+G9hhXyqnw7tcYQjDGeZ1yaogb8DKUf8YHlc11QJiwYSbaaE3w==
-X-Received: by 2002:a17:906:2da2:b0:8ae:f1cd:9551 with SMTP id g2-20020a1709062da200b008aef1cd9551mr21558887eji.76.1678360772840;
-        Thu, 09 Mar 2023 03:19:32 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id t16-20020a170906949000b008b30e2a450csm8806450ejx.144.2023.03.09.03.19.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 03:19:32 -0800 (PST)
-Date:   Thu, 9 Mar 2023 12:19:29 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Grant Grundler <grundler@chromium.org>
-Cc:     Oleksij Rempel <linux@rempel-privat.de>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Eizan Miyamoto <eizan@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Anton Lundin <glance@acc.umu.se>
-Subject: Re: [PATCHv3 net 1/2] net: asix: fix modprobe "sysfs: cannot create
- duplicate filename"
-Message-ID: <ZAnAwQ1LO81F6ssZ@nanopsycho>
-References: <20230308202159.2419227-1-grundler@chromium.org>
+        Thu, 9 Mar 2023 06:23:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659D6E34AC
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 03:20:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89C98B81EE4
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:19:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1859C433D2;
+        Thu,  9 Mar 2023 11:19:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678360782;
+        bh=PNxG3AA4xzGe1bfBUCNRM4m9chUBNm4UAouDnMQhGlc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MzBPN1jNjg+ZMZ7su8hPOlARAnWjAsmYQVb0iIf3/FnJ562ISHCI8yrUVEDHxmQEq
+         YBiICe7Xql9Z47D20UE0e8GEFZpQrLPoHFVgxNL917zB+fSqxL0HeneHKf5xVXaqDh
+         zOFXnETzoaOwqqFiTFEWN+pXd6RVD5SQFzUHh+H/b70IkVhNL9tdG0Ure8LGDSQwQe
+         9OnwAhFRrjnobNdQCEKJYxVVPK1lP0S4Zu/OxZRyoa94RXARYd5TC8HspBz1xozus6
+         ahZw7jpSYF4w3Yrf4fhqadx8KY/ZYmNYx//uzNrJmLplTt3BLqE/lmc7ywaCoHeUkW
+         FmKEVrfXkMsUQ==
+Date:   Thu, 9 Mar 2023 11:19:36 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lucas Tanure <lucas.tanure@collabora.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "Takashi Iwai --cc=alsa-devel @ alsa-project . org" <tiwai@suse.com>,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH v4] ASoC: cs35l41: Steam Deck Shared boost properties
+ quirk
+Message-ID: <d20cd40f-659c-4260-b47e-a0c5eee5437a@sirena.org.uk>
+References: <20230309104133.537056-1-lucas.tanure@collabora.com>
+ <2881f527-1673-3496-85a2-84a13f074248@linaro.org>
+ <af2de8df-b20e-4bbc-9f00-90b50546c4fb@sirena.org.uk>
+ <23cb7d3c-4cf8-8d9d-dbdb-4391384a5726@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GoCK2JkrBzZJxgcj"
 Content-Disposition: inline
-In-Reply-To: <20230308202159.2419227-1-grundler@chromium.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <23cb7d3c-4cf8-8d9d-dbdb-4391384a5726@linaro.org>
+X-Cookie: I will never lie to you.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, Mar 08, 2023 at 09:21:58PM CET, grundler@chromium.org wrote:
->"modprobe asix ; rmmod asix ; modprobe asix" fails with:
->   sysfs: cannot create duplicate filename \
->   	'/devices/virtual/mdio_bus/usb-003:004'
->
->Issue was originally reported by Anton Lundin on 2022-06-22 14:16 UTC:
->
->Chrome OS team hit the same issue in Feb, 2023 when trying to find
->work arounds for other issues with AX88172 devices.
->
->The use of devm_mdiobus_register() with usbnet devices results in the
->MDIO data being associated with the USB device. When the asix driver
->is unloaded, the USB device continues to exist and the corresponding
->"mdiobus_unregister()" is NOT called until the USB device is unplugged
->or unauthorized. So the next "modprobe asix" will fail because the MDIO
->phy sysfs attributes still exist.
->
->The 'easy' (from a design PoV) fix is to use the non-devm variants of
->mdiobus_* functions and explicitly manage this use in the asix_bind
->and asix_unbind function calls. I've not explored trying to fix usbnet
->initialization so devm_* stuff will work.
->
->Fixes: e532a096be0e ("net: usb: asix: ax88772: add phylib support")
->Reported-by: Anton Lundin <glance@acc.umu.se>
->Link: https://lore.kernel.org/netdev/20220623063649.GD23685@pengutronix.de/T/
->Tested-by: Eizan Miyamoto <eizan@chromium.org>
->Signed-off-by: Grant Grundler <grundler@chromium.org>
 
-Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+--GoCK2JkrBzZJxgcj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Thu, Mar 09, 2023 at 12:17:35PM +0100, Krzysztof Kozlowski wrote:
+> On 09/03/2023 12:04, Mark Brown wrote:
+> > On Thu, Mar 09, 2023 at 11:42:42AM +0100, Krzysztof Kozlowski wrote:
+
+> >> You are now changing ABI and adding undocumented properties.
+
+> > This is newly added code, changes are fine.
+
+> OK, for the ABI code, but not for the undocumented properties. Commit
+> does not explain that.
+
+It does, it says that it's adding support for the properties used in the
+firmware on existing Steam Decks.  Those aren't even DT systems.
+
+--GoCK2JkrBzZJxgcj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQJwMcACgkQJNaLcl1U
+h9AeAQf/WOFCBPr6mfWX361SQ3WlSUlSuoT5qW7XNKG5Y6qfACqzAsvcwU+bGAIf
+Y7CEjZotFYIPod7+I3TUce7b83anxb6HKlyP7gorGSq73CebhZuaGTJQKYfJFRa4
+rN2vROUGfDEERNTovNnsCSMm4Iwprg06u5m+gtOlDjb8/6CsTRx2Ia3dLagpnu2d
+gbdc+/PM0EpLRwH2+GQlBCKtEajpniWZkWnsDDwY3/TpNSQQPiqTTLUMzCUaDAHL
+jLujMxVTJpfeFUBEXqJeS7bXfMzvEQIn+4LaWK6oLBQnRhxBXeta285psHqp4DqE
+bVNg9YIhBWpgn7mSvgvPKT8vOSPL0A==
+=Yie/
+-----END PGP SIGNATURE-----
+
+--GoCK2JkrBzZJxgcj--
