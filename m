@@ -2,85 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852866B2CCC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CA66B2CC4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjCISTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 13:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
+        id S229453AbjCISSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 13:18:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjCISS4 (ORCPT
+        with ESMTP id S229574AbjCISSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 13:18:56 -0500
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9078BA3B4D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 10:18:45 -0800 (PST)
-Received: by mail-ed1-x544.google.com with SMTP id ec29so10604083edb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 10:18:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678385924;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3vtIQJgbAqYVFrKRDt53NZIcLU46fTuOZj8Pktv++Ns=;
-        b=CQpdqMeCkaA/z738+UU2fGaN5/xdqU2BEwjNW3UtdOo0fjGYRWL+8yQRIJrvSOSsAY
-         FE0fu04hYzhYHlRBePo7orOcrHQptX4fpyl/B+k6Ea7+qVO7CekGGV1XVIWW1C9RbFAV
-         AQLdewzdyWSJQ1LwbOPDkWE79Ea3CfHFvfv2TA2OH8SfdnZBvxZHVdnFPGJNa0IL7VYR
-         S2XW/RwFXi2x10DXo3bYFOKYjz8ddhwKSZyhYO5JOgFBEfTMcTO1eZBkao8pbXbPVuX3
-         fkhAt/dlcPaHdpz2NBR2/cEVD4KW6hpG9/2Ux2HDqjuRZDisBYPR43UE9hq7/GHFqPip
-         nnmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678385924;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3vtIQJgbAqYVFrKRDt53NZIcLU46fTuOZj8Pktv++Ns=;
-        b=EaSKnK0e1NonuaJMbXoBCxqYgID6IVV6vWtYRy3YfVC4Zkma3agqBM/hYf22ui8iqN
-         2I3x+6C3Rp+TEO+xjP0P0ulYKwlOx//7xKVA5C9EAMnIpSskqDXct2XkqBKNMz8vmQH9
-         ZFC22oddcz7chsn/TZc0KvXvK3HkxJZzFlCe2IByBzCLKpnBJQvKJLo5Ftqkx1iErSpO
-         o+Y1O+9QUl7TGcndglE/IPcdrmi28Tx58cFvLTu0yNf//lgDM3jg/7ZeOA9n/dPomu4L
-         eu+Zvnv+qOaZeX7vGSVKXHum2OBMCjwD30Lz2n0wB5HDWMREqv269O2N/uxmqsx1wJCS
-         Bdag==
-X-Gm-Message-State: AO0yUKUMxOMpoFbqCXwyOMOgdvyoD5WXLjFrVtW4hqNwP7p0UBoi1IGV
-        VXRMgUOyhJbQ/KL41RS+e5pOikGoR3sOSh/D8Ks=
-X-Google-Smtp-Source: AK7set8RsXIuhe+zqZlcmtgoO5ZNtkK2QN4WkgIrvcPHsX6Yw2MRHrie00YvsaWtcVMBMY11kWDdTDnMDlmrGjiv/x4=
-X-Received: by 2002:a17:906:5910:b0:8b1:78b8:4207 with SMTP id
- h16-20020a170906591000b008b178b84207mr11837569ejq.3.1678385924251; Thu, 09
- Mar 2023 10:18:44 -0800 (PST)
+        Thu, 9 Mar 2023 13:18:39 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF9B6420C;
+        Thu,  9 Mar 2023 10:18:36 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329IA6Dw029697;
+        Thu, 9 Mar 2023 18:18:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=KK+OAocPYk3r1h9tMZ9MdvYVbSyFkyqOtafvkb9zUak=;
+ b=XbjyoCsNgQOynfeC8bC07EPqNt27fNURfLMq/Rdpbdl7baBFZSxKUUCadwBb56Wjs8Dw
+ NZeRvnYmikI5v5oEpaHc0WFNyqfa0cPbHv68f34+gwB4bFZfguQjtGwp8obwvPzc6q9M
+ sn5vsthms4/68YuHwAYVoAbKXnnGnQ40RIxz3TkZcbTgKgSHDCXt8dIo8Z5G7auurrEb
+ kaf8rYwuJ9P/VpL7dZhTSpN3uMwoIXwB/EYK0WH9gIV4IxjXy7QiHkPKEJS5YM3ofu+P
+ Hpt2hCD7cJZ51k3ZHHr0GEZ4JjqAheKqAFXOkkgfd6iCmxfK7z2zaJpxOpSKbZ3VDA5k KA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6qyqvfgc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 18:18:35 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 329I0gGv012054;
+        Thu, 9 Mar 2023 18:18:35 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6qyqvfg6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 18:18:35 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 329HkBQ3023629;
+        Thu, 9 Mar 2023 18:18:34 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3p6fnwna9w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 18:18:34 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 329IIXCE33227208
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Mar 2023 18:18:33 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F142C5805D;
+        Thu,  9 Mar 2023 18:18:32 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 141AE5805F;
+        Thu,  9 Mar 2023 18:18:32 +0000 (GMT)
+Received: from [9.160.169.251] (unknown [9.160.169.251])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Mar 2023 18:18:31 +0000 (GMT)
+Message-ID: <01c18e2b-8ec0-46c6-ba95-997b9d9d4ed6@linux.ibm.com>
+Date:   Thu, 9 Mar 2023 13:18:31 -0500
 MIME-Version: 1.0
-From:   Lara Geni <larasecuredata@gmail.com>
-Date:   Thu, 9 Mar 2023 23:48:31 +0530
-Message-ID: <CAKDenP309B-vZN5AJRTRZ+PNDTwmOKhGEz9FnFPvw3C5E0GJBQ@mail.gmail.com>
-Subject: RE: NTI - American Association of Critical-Care Nurses Attendees
- Email List-2023
-To:     Lara Geni <larasecuredata@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
-        FILL_THIS_FORM_LONG,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 1/4] PCI: s390: Fix use-after-free of PCI resources
+ with per-function hotplug
+Content-Language: en-US
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lukas Wunner <lukas@wunner.de>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+References: <20230306151014.60913-1-schnelle@linux.ibm.com>
+ <20230306151014.60913-2-schnelle@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20230306151014.60913-2-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2JzMxtCeObLVpOvrbLmir_M9TRImWc6d
+X-Proofpoint-ORIG-GUID: qvPanSurlKKp9tK_NvLoDAZxIRBevMAF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_09,2023-03-09_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 clxscore=1011 phishscore=0 suspectscore=0 mlxlogscore=797
+ adultscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303090145
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 3/6/23 10:10 AM, Niklas Schnelle wrote:
+> On s390 PCI functions may be hotplugged individually even when they
+> belong to a multi-function device. In particular on an SR-IOV device VFs
+> may be removed and later re-added.
+> 
+> In commit a50297cf8235 ("s390/pci: separate zbus creation from
+> scanning") it was missed however that struct pci_bus and struct
+> zpci_bus's resource list retained a reference to the PCI functions MMIO
+> resources even though those resources are released and freed on
+> hot-unplug. These stale resources may subsequently be claimed when the
+> PCI function re-appears resulting in use-after-free.
+> 
+> One idea of fixing this use-after-free in s390 specific code that was
+> investigated was to simply keep resources around from the moment a PCI
+> function first appeared until the whole virtual PCI bus created for
+> a multi-function device disappears. The problem with this however is
+> that due to the requirement of artificial MMIO addreesses (address
+> cookies) extra logic is then needed to keep the address cookies
+> compatible on re-plug. At the same time the MMIO resources semantically
+> belong to the PCI function so tying their lifecycle to the function
+> seems more logical.
+> 
+> Instead a simpler approach is to remove the resources of an individually
+> hot-unplugged PCI function from the PCI bus's resource list while
+> keeping the resources of other PCI functions on the PCI bus untouched.
+> 
+> This is done by introducing pci_bus_remove_resource() to remove an
+> individual resource. Similarly the resource also needs to be removed
+> from the struct zpci_bus's resource list. It turns out however, that
+> there is really no need to add the MMIO resources to the struct
+> zpci_bus's resource list at all and instead we can simply use the
+> zpci_bar_struct's resource pointer directly.
+> 
+> Fixes: a50297cf8235 ("s390/pci: separate zbus creation from scanning")
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Would you be interested in acquiring the American Association of
-Critical-Care Nurses  Attendees Email List-2023?
+Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
 
-List Includes: Company Name, First Name, Last Name, Full Name, Contact
-Job Title, Verified Email Address, Website URL, Mailing address, Phone
- number, Industry and many more=E2=80=A6
 
-Number of Contacts: 12,639 Verified Contacts.
-Cost : $ 1,638
 
-If you=E2=80=99re interested please let me know I will assist you with furt=
-her details.
-
-Kind Regards,
-Lara Geni
-Marketing Coordinators
