@@ -2,70 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DEDA6B2DC1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB4D6B2DC4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjCITcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 14:32:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
+        id S230392AbjCITco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 14:32:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjCITcE (ORCPT
+        with ESMTP id S230371AbjCITbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 14:32:04 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB59F34D3;
-        Thu,  9 Mar 2023 11:31:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=9a8kbXtW3WnL+ytHTH3NCo7Jsx9PY0FsP0xSOA869Os=; b=dbLqmD/NwQMrLQ6nBpIH5fUFCf
-        6SOu58YSNfp1UvAAQPwRKeM8y6cj71j9vE07uRj0TJnFbNqIQJVnCQIHoTd7664u+FMZt3I4pYpFf
-        cPeGwiJcuzG3Yqd4Mo5JUCjtLUGgiSuXN7pWlihn8p4ZRgZLeDuLhCUgZm7lsBNUdu+Y=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1paLyM-006uEx-UZ; Thu, 09 Mar 2023 20:30:42 +0100
-Date:   Thu, 9 Mar 2023 20:30:42 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Grant Grundler <grundler@chromium.org>
-Cc:     Jiri Pirko <jiri@resnulli.us>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Eizan Miyamoto <eizan@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv3 net 2/2] net: asix: init mdiobus from one function
-Message-ID: <07dd1c76-68a1-4c2f-98fe-7c25118eaff9@lunn.ch>
-References: <20230308202159.2419227-1-grundler@chromium.org>
- <20230308202159.2419227-2-grundler@chromium.org>
- <ZAnBCQsv7tTBIUP1@nanopsycho>
- <CANEJEGuK-=tTBXG6FpC4aBb7KbsNZng2-Rmi0k6BJJ7An=Pyxw@mail.gmail.com>
+        Thu, 9 Mar 2023 14:31:51 -0500
+Received: from forward501c.mail.yandex.net (forward501c.mail.yandex.net [178.154.239.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB45F145F
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:30:55 -0800 (PST)
+Received: from myt6-1289f562e823.qloud-c.yandex.net (myt6-1289f562e823.qloud-c.yandex.net [IPv6:2a02:6b8:c12:259d:0:640:1289:f562])
+        by forward501c.mail.yandex.net (Yandex) with ESMTP id CB5205F160;
+        Thu,  9 Mar 2023 22:30:53 +0300 (MSK)
+Received: by myt6-1289f562e823.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id nUjIpn5cqqM1-QSnoMwXQ;
+        Thu, 09 Mar 2023 22:30:52 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1678390252;
+        bh=Rn8tghGHUTM9dandsa5usgJEtLmCOIcUjMwrL2X2BkA=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=nF0kJfIrIEr2X2nKPL6I7u4RhJzT7lZdLEjR8N28TPWLl2pz7+JBQC2l0MdvZ5fxk
+         SKj1hV09CPYtChHIiKzoU7YU057tAMK7W06o1rJLaigVrL7fCi9iOQqzEwd4bjMviJ
+         9xOqIYvzwboE7CaXrxQBLqsXB0QN0NpedzbjpYnQ=
+Authentication-Results: myt6-1289f562e823.qloud-c.yandex.net; dkim=pass header.i=@ya.ru
+Message-ID: <56ce6c8c-a7ab-29d3-c781-2efa57f10be7@ya.ru>
+Date:   Thu, 9 Mar 2023 22:30:48 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANEJEGuK-=tTBXG6FpC4aBb7KbsNZng2-Rmi0k6BJJ7An=Pyxw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 5/8] mm: shrinkers: make count and scan in shrinker
+ debugfs lockless
+Content-Language: en-US
+To:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, shakeelb@google.com, mhocko@kernel.org,
+        roman.gushchin@linux.dev, muchun.song@linux.dev, david@redhat.com,
+        shy828301@gmail.com, rppt@kernel.org
+Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
+        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230307065605.58209-1-zhengqi.arch@bytedance.com>
+ <20230307065605.58209-6-zhengqi.arch@bytedance.com>
+From:   Kirill Tkhai <tkhai@ya.ru>
+In-Reply-To: <20230307065605.58209-6-zhengqi.arch@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I hope the maintainers can apply both to net-next and only apply the
-> first to net branch.
+On 07.03.2023 09:56, Qi Zheng wrote:
+> Like global and memcg slab shrink, also use SRCU to
+> make count and scan operations in memory shrinker
+> debugfs lockless.
+> 
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 
-Hi Grant
+Acked-by: Kirill Tkhai <tkhai@ya.ru>
 
-Please take a look at
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+> ---
+>  mm/shrinker_debug.c | 24 +++++++-----------------
+>  1 file changed, 7 insertions(+), 17 deletions(-)
+> 
+> diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
+> index 39c3491e28a3..6aa7a7ec69da 100644
+> --- a/mm/shrinker_debug.c
+> +++ b/mm/shrinker_debug.c
+> @@ -9,6 +9,7 @@
+>  /* defined in vmscan.c */
+>  extern struct rw_semaphore shrinker_rwsem;
+>  extern struct list_head shrinker_list;
+> +extern struct srcu_struct shrinker_srcu;
+>  
+>  static DEFINE_IDA(shrinker_debugfs_ida);
+>  static struct dentry *shrinker_debugfs_root;
+> @@ -49,18 +50,13 @@ static int shrinker_debugfs_count_show(struct seq_file *m, void *v)
+>  	struct mem_cgroup *memcg;
+>  	unsigned long total;
+>  	bool memcg_aware;
+> -	int ret, nid;
+> +	int ret = 0, nid, srcu_idx;
+>  
+>  	count_per_node = kcalloc(nr_node_ids, sizeof(unsigned long), GFP_KERNEL);
+>  	if (!count_per_node)
+>  		return -ENOMEM;
+>  
+> -	ret = down_read_killable(&shrinker_rwsem);
+> -	if (ret) {
+> -		kfree(count_per_node);
+> -		return ret;
+> -	}
+> -	rcu_read_lock();
+> +	srcu_idx = srcu_read_lock(&shrinker_srcu);
+>  
+>  	memcg_aware = shrinker->flags & SHRINKER_MEMCG_AWARE;
+>  
+> @@ -91,8 +87,7 @@ static int shrinker_debugfs_count_show(struct seq_file *m, void *v)
+>  		}
+>  	} while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)) != NULL);
+>  
+> -	rcu_read_unlock();
+> -	up_read(&shrinker_rwsem);
+> +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>  
+>  	kfree(count_per_node);
+>  	return ret;
+> @@ -115,9 +110,8 @@ static ssize_t shrinker_debugfs_scan_write(struct file *file,
+>  		.gfp_mask = GFP_KERNEL,
+>  	};
+>  	struct mem_cgroup *memcg = NULL;
+> -	int nid;
+> +	int nid, srcu_idx;
+>  	char kbuf[72];
+> -	ssize_t ret;
+>  
+>  	read_len = size < (sizeof(kbuf) - 1) ? size : (sizeof(kbuf) - 1);
+>  	if (copy_from_user(kbuf, buf, read_len))
+> @@ -146,11 +140,7 @@ static ssize_t shrinker_debugfs_scan_write(struct file *file,
+>  		return -EINVAL;
+>  	}
+>  
+> -	ret = down_read_killable(&shrinker_rwsem);
+> -	if (ret) {
+> -		mem_cgroup_put(memcg);
+> -		return ret;
+> -	}
+> +	srcu_idx = srcu_read_lock(&shrinker_srcu);
+>  
+>  	sc.nid = nid;
+>  	sc.memcg = memcg;
+> @@ -159,7 +149,7 @@ static ssize_t shrinker_debugfs_scan_write(struct file *file,
+>  
+>  	shrinker->scan_objects(shrinker, &sc);
+>  
+> -	up_read(&shrinker_rwsem);
+> +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>  	mem_cgroup_put(memcg);
+>  
+>  	return size;
 
-Please submit the first patch to net. Then wait a week for net to be
-merged into net-next, and submit the second patch to net-next.
-
-       Andrew
