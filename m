@@ -2,153 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922146B1FDC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F366B1FDE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbjCIJUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:20:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S231321AbjCIJVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:21:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbjCIJUT (ORCPT
+        with ESMTP id S231204AbjCIJUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:20:19 -0500
-Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D2E6E9804;
-        Thu,  9 Mar 2023 01:19:54 -0800 (PST)
-Date:   Thu, 9 Mar 2023 10:19:43 +0100
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, Julian Anastasov <ja@ssi.bg>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, Jiri Wiesner <jwiesner@suse.de>
-Subject: Re: [PATCH 10/13] ipvs: Rename kfree_rcu() to kfree_rcu_mightsleep()
-Message-ID: <ZAmkrxguzzsqNFM+@salvia>
-References: <20230201150954.409693-1-urezki@gmail.com>
- <Y9qLB6Zyx5atcFUV@salvia>
- <7e87836a-c72-eefd-9c74-fc2637accd2@ssi.bg>
- <Y9qc+lgR1CgdszKs@salvia>
- <Y9qfNV0IX1tBsTxP@pc636>
- <20230309001101.GA155598@google.com>
+        Thu, 9 Mar 2023 04:20:41 -0500
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83057769DF;
+        Thu,  9 Mar 2023 01:20:36 -0800 (PST)
+Received: by mail-wm1-f44.google.com with SMTP id d41-20020a05600c4c2900b003e9e066550fso746303wmp.4;
+        Thu, 09 Mar 2023 01:20:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678353635;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q4DnOrK6eluIY3csFfRpB7iVzEAaVZe/zURRAiYA2H0=;
+        b=8Opm1xHwy1Us7W9hSVEoWUwJYspXpQ7AJYK3hNqoffpSRpF/+dGMV+HxwuNq3p+4xx
+         zhmENzl6K/M6OH6lpljPv1SQKU5Lp8OiZZYG32Y6SW5RokZpZiP/v2kWH7x2aFrDLGls
+         VaB48jiHWjbolCSchMi3uu8m0SGdgQCl8bEwNrwF3Had9MIo+LRt7zLLmzfpi54Tpu6L
+         gFfsVgznhGSgtrud1VWW4sW3KrhDfxyYMWqf8mcpDKPBgyTZIZ4oe2QhzPrEfQuPM0nw
+         J11rmGw3h8rUZrCCjvgqBEEYkbsnNpyr0K1GiY3pr+nFB3i063+cecCaPLwJQ42ITR2V
+         k5jA==
+X-Gm-Message-State: AO0yUKW3dSN7L6HAGqseTWAbfPZDmTCjrcyPiBh+pa2A8zW23Ng6y2zV
+        xmla65iT761v5lGBuxXqBDc=
+X-Google-Smtp-Source: AK7set8O87BBg+d2mUeI1CxhxmCi92kGzMzTqUzavkVL5P8z3TFNd0uw7xpCE22oHD/Ia+FYkGWwDQ==
+X-Received: by 2002:a05:600c:3ac5:b0:3e7:534a:694e with SMTP id d5-20020a05600c3ac500b003e7534a694emr1500950wms.3.1678353634959;
+        Thu, 09 Mar 2023 01:20:34 -0800 (PST)
+Received: from [192.168.64.80] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
+        by smtp.gmail.com with ESMTPSA id d20-20020a1c7314000000b003e11ad0750csm1874514wmb.47.2023.03.09.01.20.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 01:20:34 -0800 (PST)
+Message-ID: <538393e2-3435-7e93-d688-d77f45552286@grimberg.me>
+Date:   Thu, 9 Mar 2023 11:20:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230309001101.GA155598@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] MAINTAINERS: repair malformed T: entries in NVM EXPRESS
+ DRIVERS
+Content-Language: en-US
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230308144132.13368-1-lukas.bulwahn@gmail.com>
+From:   Sagi Grimberg <sagi@grimberg.me>
+In-Reply-To: <20230308144132.13368-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 12:11:01AM +0000, Joel Fernandes wrote:
-> Hello,
-> 
-> On Wed, Feb 01, 2023 at 06:19:49PM +0100, Uladzislau Rezki wrote:
-> > On Wed, Feb 01, 2023 at 06:10:18PM +0100, Pablo Neira Ayuso wrote:
-> > > On Wed, Feb 01, 2023 at 06:12:04PM +0200, Julian Anastasov wrote:
-> > > > 
-> > > > 	Hello,
-> > > > 
-> > > > On Wed, 1 Feb 2023, Pablo Neira Ayuso wrote:
-> > > > 
-> > > > > Hi,
-> > > > > 
-> > > > > On Wed, Feb 01, 2023 at 04:09:51PM +0100, Uladzislau Rezki (Sony) wrote:
-> > > > > > The kfree_rcu()'s single argument name is deprecated therefore
-> > > > > > rename it to kfree_rcu_mightsleep() variant. The goal is explicitly
-> > > > > > underline that it is for sleepable contexts.
-> > > > > > 
-> > > > > > Cc: Julian Anastasov <ja@ssi.bg>
-> > > > > > Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-> > > > > > Cc: Jiri Wiesner <jwiesner@suse.de>
-> > > > > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > > > > > ---
-> > > > > >  net/netfilter/ipvs/ip_vs_est.c | 2 +-
-> > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > > 
-> > > > > > diff --git a/net/netfilter/ipvs/ip_vs_est.c b/net/netfilter/ipvs/ip_vs_est.c
-> > > > > > index ce2a1549b304..a39baf6d1367 100644
-> > > > > > --- a/net/netfilter/ipvs/ip_vs_est.c
-> > > > > > +++ b/net/netfilter/ipvs/ip_vs_est.c
-> > > > > > @@ -549,7 +549,7 @@ void ip_vs_stop_estimator(struct netns_ipvs *ipvs, struct ip_vs_stats *stats)
-> > > > > >  	__set_bit(row, kd->avail);
-> > > > > >  	if (!kd->tick_len[row]) {
-> > > > > >  		RCU_INIT_POINTER(kd->ticks[row], NULL);
-> > > > > > -		kfree_rcu(td);
-> > > > > 
-> > > > > I also found this kfree_rcu() without rcu_head call a few weeks ago.
-> > > > > 
-> > > > > @Wiesner, @Julian: Any chance this can be turned into kfree_rcu(td, rcu_head); ?
-> > > > 
-> > > > 	Yes, as simple as this:
-> > > > 
-> > > > diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
-> > > > index c6c61100d244..6d71a5ff52df 100644
-> > > > --- a/include/net/ip_vs.h
-> > > > +++ b/include/net/ip_vs.h
-> > > > @@ -461,6 +461,7 @@ void ip_vs_stats_free(struct ip_vs_stats *stats);
-> > > >  
-> > > >  /* Multiple chains processed in same tick */
-> > > >  struct ip_vs_est_tick_data {
-> > > > +	struct rcu_head		rcu_head;
-> > > >  	struct hlist_head	chains[IPVS_EST_TICK_CHAINS];
-> > > >  	DECLARE_BITMAP(present, IPVS_EST_TICK_CHAINS);
-> > > >  	DECLARE_BITMAP(full, IPVS_EST_TICK_CHAINS);
-> > > > diff --git a/net/netfilter/ipvs/ip_vs_est.c b/net/netfilter/ipvs/ip_vs_est.c
-> > > > index df56073bb282..25c7118d9348 100644
-> > > > --- a/net/netfilter/ipvs/ip_vs_est.c
-> > > > +++ b/net/netfilter/ipvs/ip_vs_est.c
-> > > > @@ -549,7 +549,7 @@ void ip_vs_stop_estimator(struct netns_ipvs *ipvs, struct ip_vs_stats *stats)
-> > > >  	__set_bit(row, kd->avail);
-> > > >  	if (!kd->tick_len[row]) {
-> > > >  		RCU_INIT_POINTER(kd->ticks[row], NULL);
-> > > > -		kfree_rcu(td);
-> > > > +		kfree_rcu(td, rcu_head);
-> > > >  	}
-> > > >  	kd->est_count--;
-> > > >  	if (kd->est_count) {
-> > > > 
-> > > > 	I was about to reply to Uladzislau Rezki but his patchset
-> > > > looks more like a renaming, so I'm not sure how we are about
-> > > > to integrate this change, as separate patch or as part of his
-> > > > patchset. I don't have preference, just let me know how to
-> > > > handle it.
-> > > 
-> > > @Uladzislau Rezki: Are you fine with dropping this patch from your
-> > > series and Julian will send us a patch for inclusion into net-next to
-> > > use the kfree_rcu(x, rcu_head) variant?
-> > Absolutely. So i will drop it from my series.
-> 
-> Since this patch was dropped, it is the only case blocking the proper
-> integration of this series into linux-next. We want to drop the old API and
-> currently we are not able to, thus this revert [1] has to be unfortunately
-> carried in linux-next.
->
-> For that reason, there are 2 options:
-> 
-> 1. Can we get the new rcu_head approach for ipvs posted and reviewed with
-> suitable Acks?
-> 
-> 2. Can we carry Vlad's patch to use kfree_rcu_mightsleep() in ipvs and drop
-> it later if/when #1 is completed?
-> 
-> Option 2 has the unfortunate effect that it will conflict with your new
-> approach of using rcu_head so I'd rather you fix it that way and get it
-> Acked. And once acked, we can also take it via the RCU tree if the net
-> maintainers are Ok with that.
-> 
-> Please advise.
 
-JFYI, this patch is already in linux.git
+> The T: entries shall be composed of a SCM tree type (git, hg, quilt, stgit
+> or topgit) and location.
+> 
+> Add the SCM tree type to the T: entry, and reorder the file entries in
+> alphabetical order.
+> 
+> Fixes: b508fc354f6d ("nvme: update maintainers information")
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e4d0fe71f59dc5137a2793ff7560730d80d1e1f4
+Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
