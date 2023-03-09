@@ -2,127 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC556B2891
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F076B2897
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjCIPUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:20:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
+        id S231241AbjCIPUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:20:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjCIPTr (ORCPT
+        with ESMTP id S231191AbjCIPUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:19:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DE71166B;
-        Thu,  9 Mar 2023 07:19:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03FA361BD2;
-        Thu,  9 Mar 2023 15:19:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59E72C4339B;
-        Thu,  9 Mar 2023 15:19:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678375185;
-        bh=uGQ4+6pHq7XtriJV3b//hs9AavpLTw/sTULP6Va7e14=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=p+Ywt9Ss7qo77YnK/L7v+Jc8782nMY/mf3L6b4i1BQBvzouagzMRVZX5lPqvhTmRa
-         2uuLn8oN7qSGPYgpTrWMsTz19j4UrY603wczoD+HqLQdafKaqTG2On9HS7uyOAB7mo
-         IfBsOOQBP+KrF8rEcHNbOKiwG062NtKYbJ5PfTbXI+GD0krxREj41wvQJOlyaC/c5W
-         dAeJChfEncvrzjmwNfDDzu8AtswL82RyF60M7AsV/eoDz+cAvGj5Rv3zPEWbqKQCNu
-         Ze9H664F5ooqfdgwpYi8y34AdKLKgiJp9DeE2PIW/rUlQLtuBOeKg4u73QvXzA/ELi
-         PDISn4XfgjoTQ==
-Received: by mail-vs1-f50.google.com with SMTP id o6so1910796vsq.10;
-        Thu, 09 Mar 2023 07:19:45 -0800 (PST)
-X-Gm-Message-State: AO0yUKWR4AsT4L2vxhkqSoGXZfq6BdvqQOFkigG2a6aIPvOY3YkLdfjk
-        e6VYqIk3MnN6bZh3lv0orfuoB0Dnrte6e0fTqg==
-X-Google-Smtp-Source: AK7set8RGQOVHa/iBNZKJxL7flt/46pZiHDOP14HDqww3nC9X82ZNMZiMhz/FKDiDPM1DFOTBkNd9yGlmJ8gwF5gT1w=
-X-Received: by 2002:a67:7302:0:b0:414:2d02:6c96 with SMTP id
- o2-20020a677302000000b004142d026c96mr14391301vsc.7.1678375184277; Thu, 09 Mar
- 2023 07:19:44 -0800 (PST)
+        Thu, 9 Mar 2023 10:20:44 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B1BE6831
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:20:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678375241; x=1709911241;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=B//ffOIlaCZoqGWrl3k0tinZmKmcI4OPWjPvucgTJxY=;
+  b=ZiCCnHZwyKQG5yjYKt2dgyy9r7kXcC7aPKHi+lsow46XA7MMdZtvZuJb
+   49NiRtl4sikdWANaz3UwJJMKH/DaFTVO13zWv7qo/VcyDLbna5riVzCEB
+   yRWaNtEM8dwLVoY0NVvaQqN8V2Yhg4sEzjHf++/C04lFeAKuYSNR40tZW
+   M/i/kZs9YBLGC6uc/CPagRAk4rEcrJUAsq4IT+f3VPT35PHRxMbth7ilz
+   /V82IGuC9l4h39+BP5PoTFKVjt1oQR7g/ABDJjTdSyJWDJdTjvpIYs2MV
+   b2T5f3gIEJKBb5NOluhnl+RL8u4+4afE3RYBGCvUmJh5j0PR0BISZSJ2o
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="336478574"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="336478574"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 07:20:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="801217017"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="801217017"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 09 Mar 2023 07:20:28 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1paI4B-00032B-1q;
+        Thu, 09 Mar 2023 15:20:27 +0000
+Date:   Thu, 9 Mar 2023 23:20:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: sound/soc/qcom/qdsp6/q6apm.c:30:14: sparse: sparse: symbol 'g_apm'
+ was not declared. Should it be static?
+Message-ID: <202303092330.kPhyOd01-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230307-apple_pcie_disabled_ports-v2-1-c3bd1fd278a4@jannau.net>
-In-Reply-To: <20230307-apple_pcie_disabled_ports-v2-1-c3bd1fd278a4@jannau.net>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 9 Mar 2023 09:19:32 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLd4sR2LRgjLy7ON1qtpaOzMJQ9A_0YkYWG7TPxKtFOcQ@mail.gmail.com>
-Message-ID: <CAL_JsqLd4sR2LRgjLy7ON1qtpaOzMJQ9A_0YkYWG7TPxKtFOcQ@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: apple: Set only available ports up
-To:     Janne Grunau <j@jannau.net>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Marc Zyngier <maz@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 7:36=E2=80=AFAM Janne Grunau <j@jannau.net> wrote:
->
-> Fixes following warning inside of_irq_parse_raw() called from the common
-> PCI device probe path.
->
->   /soc/pcie@690000000/pci@1,0 interrupt-map failed, using interrupt-contr=
-oller
->   WARNING: CPU: 4 PID: 252 at drivers/of/irq.c:279 of_irq_parse_raw+0x5fc=
-/0x724
->   ...
->   Call trace:
->    of_irq_parse_raw+0x5fc/0x724
->    of_irq_parse_and_map_pci+0x128/0x1d8
->    pci_assign_irq+0xc8/0x140
->    pci_device_probe+0x70/0x188
->    really_probe+0x178/0x418
->    __driver_probe_device+0x120/0x188
->    driver_probe_device+0x48/0x22c
->    __device_attach_driver+0x134/0x1d8
->    bus_for_each_drv+0x8c/0xd8
->    __device_attach+0xdc/0x1d0
->    device_attach+0x20/0x2c
->    pci_bus_add_device+0x5c/0xc0
->    pci_bus_add_devices+0x58/0x88
->    pci_host_probe+0x124/0x178
->    pci_host_common_probe+0x124/0x198 [pci_host_common]
->    apple_pcie_probe+0x108/0x16c [pcie_apple]
->    platform_probe+0xb4/0xdc
->
-> This became apparent after disabling unused PCIe ports in the Apple
-> silicon device trees instead of deleting them.
->
-> Use for_each_available_child_of_node instead of for_each_child_of_node
-> which takes the "status" property into account.
->
-> Link: https://lore.kernel.org/asahi/20230214-apple_dts_pcie_disable_unuse=
-d-v1-0-5ea0d3ddcde3@jannau.net/
-> Link: https://lore.kernel.org/asahi/1ea2107a-bb86-8c22-0bbc-82c453ab08ce@=
-linaro.org/
-> Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Janne Grunau <j@jannau.net>
-> ---
-> Changes in v2:
-> - rewritten commit message with more details and corrections
-> - collected Marc's "Reviewed-by:"
-> - Link to v1: https://lore.kernel.org/r/20230307-apple_pcie_disabled_port=
-s-v1-1-b32ef91faf19@jannau.net
-> ---
->  drivers/pci/controller/pcie-apple.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6a98c9cae232800c319ed69e1063480d31430887
+commit: 47bc8cf60e926d1fb0c5d990bf6f5e01e9b3352e ASoC: qdsp6: audioreach: Add ADSP ready check
+date:   6 weeks ago
+config: riscv-randconfig-s043-20230309 (https://download.01.org/0day-ci/archive/20230309/202303092330.kPhyOd01-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=47bc8cf60e926d1fb0c5d990bf6f5e01e9b3352e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 47bc8cf60e926d1fb0c5d990bf6f5e01e9b3352e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/fsl/qe/ sound/soc/qcom/qdsp6/
 
-Unfortunately, this is a common issue...
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303092330.kPhyOd01-lkp@intel.com/
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+sparse warnings: (new ones prefixed by >>)
+   WARNING: invalid argument to '-march': '_zihintpause'
+>> sound/soc/qcom/qdsp6/q6apm.c:30:14: sparse: sparse: symbol 'g_apm' was not declared. Should it be static?
 
-Rob
+vim +/g_apm +30 sound/soc/qcom/qdsp6/q6apm.c
+
+    29	
+  > 30	struct q6apm *g_apm;
+    31	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
