@@ -2,289 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE46A6B1B54
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 519C06B1B57
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjCIGVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 01:21:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42822 "EHLO
+        id S229951AbjCIGV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 01:21:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjCIGV3 (ORCPT
+        with ESMTP id S229764AbjCIGV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 01:21:29 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E846A81CCC;
-        Wed,  8 Mar 2023 22:21:27 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id z5so745359ljc.8;
-        Wed, 08 Mar 2023 22:21:27 -0800 (PST)
+        Thu, 9 Mar 2023 01:21:56 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D65D6E9C
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 22:21:54 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id ec29so2826327edb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 22:21:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678342886;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H4NiT+WUwkl7ajY/2CHHk0PM8G8j4rSPMTj/BUb4FYs=;
-        b=CC7VGKdCHTjyeoXD2aywCbXr7+99pip+zKGusJ49g3slnJw+FVdLJGeZ1Qad/gDnvp
-         71ls+Ou77sosPHuQTR/uQJ9bCxv/NkLLTLaPsQakpijuYlil3EW16kTmK2SaDDUacBcv
-         7bEIUGkfRMXEhTf/3ROubtT5Z/ZDq/MPCRfm54mvnjitGFJOaCiSk+1c4va9NVQe3RQn
-         CJohRVyjmsco5q99fJJaVu8nBTIsb/3figFkqTH4sAdrHlfveelBXJZ2FMvDpDAScA12
-         d0MT6lkg0hU1FoaVIqXWIJLCaF+slP8yOWiigye73qQvXvbXNkDBNcuLPiq5O3iLxZBI
-         LSxA==
+        d=linaro.org; s=google; t=1678342913;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=629HUKu9ysTE8LoxfEMeOnsoL7Im0RfsyDKZUedE5Xk=;
+        b=GFx+5RxlDimXAhFVzROdjGt+iQwtj5yTq9kv1DBv6rSlkZtxT7zJvhAkoR9onnCFxp
+         OTQaGQKSFr4LJAX6ox9p28QjgVzdheHdXbZg51uB4pMcNdR3PKcjVXC3AnMndiFyLIOa
+         nxveWZ7EUIjwyN/9OipFP+wXaqLVRmF15zaWxoDWOqTlNXPoy2/Qux5xNHbIxWZOz5q5
+         RJXlI0ti+/SMVw/A7BAxrSHKeQ5wD7hNvZ+zPNVtU/q6RTC1NElCwRNhSs2aPwdCBxJU
+         vEGNEKpxGUUBCCrvfp3tjUs0gglE02qedQ9XmcLLomYSvgMIVBgjSpv+3zpC/uc1kLIl
+         Hfxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678342886;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H4NiT+WUwkl7ajY/2CHHk0PM8G8j4rSPMTj/BUb4FYs=;
-        b=Z5wTj3Ox41Z+peZtkWeZ5lmCR3pE9rLV+YY4asXQqaiSmN9HGPtpxYuEVcf/jo28uj
-         dQhl/6ofvq4VdnFx/sKMT+l6XnIDFPLWK64zK52HgxAp0tjHWXCSMq4U4HBU4wW62Cd5
-         barwA3tiYKdDyyz8M5OQ4MNKNVVz1KdCfHpNYF1Cke6GBVdRNttgsOWq7dCy+vbtxZV9
-         3tqdlk4fmnyyATqMnu8U1wC8Pf6LqRW2c7LEAXzx14AF5HlpFonkJKLlekBBZxejx9SQ
-         qcJRz01eCGLXTNvp43p8lsyBGecp8n6DF4sDijkLw7CVIjwlYVhJqzxkvgB7whHjMf2j
-         u/ZQ==
-X-Gm-Message-State: AO0yUKWswPd+/X35jXj0cCbma1XWksUAqU23nZbfdzoBNqPN8dwlB32m
-        1rWfY22/JTiWYx1wAbzFuhTmf7mwoeF/kogo0A==
-X-Google-Smtp-Source: AK7set+TEYjWSUmKRTNayox0YsPPffyXXRxjttlEpuX+gGMtiHJS6pL6/83NzTYn5mP2MHf0ffRtcGlpgG2TvdAIDfU=
-X-Received: by 2002:a2e:b8d2:0:b0:295:b0cd:522 with SMTP id
- s18-20020a2eb8d2000000b00295b0cd0522mr6696166ljp.2.1678342885782; Wed, 08 Mar
- 2023 22:21:25 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678342913;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=629HUKu9ysTE8LoxfEMeOnsoL7Im0RfsyDKZUedE5Xk=;
+        b=ktdyIgWePdpcOxZaRNCQ6v8U5BeIYoQVdB8sJttfrchKNrj8GMd1mViazBaxtJDYgv
+         CaFbojUPKDWduiKFN3/70jV60jwY9A1ONu/3xmwR3llGV86EYzbqnsaMJ/x8rniU9ybw
+         CX8DnVJypS73w/vUUpvwx74TSp7IsocBClqWajnhLOn8lpgyUXeWkjfWMFCQz3B7LtTW
+         YsFQzTQp5cupDJI4nJV1GbTK8LBGrKy+A1GvwSqAH2SArOB6oXfSaxZDU3bA8YuX+H5A
+         9+Y0z1cHGJvq1dAyiJxKezZgRxWOTC/N0MY+e0mZi9NYNNMTnTV8LjqV7pq3XRiuWZg9
+         eOJA==
+X-Gm-Message-State: AO0yUKWwtJB6zUrmzVJUlaJYoCubtc3/YAgIVp2jMOl5U1iwRf7N7jSZ
+        1V809m/zT0kvYMptcGRQ6YQ2lw==
+X-Google-Smtp-Source: AK7set/QLffEPle8Wh9gk5/86+LCNm7TyOrefjJkwRpgWvOBGuPd7HNwGDbfMIPT23raSrKfVuIJ8g==
+X-Received: by 2002:a17:906:7948:b0:8b2:37b5:cc4 with SMTP id l8-20020a170906794800b008b237b50cc4mr30024197ejo.7.1678342912726;
+        Wed, 08 Mar 2023 22:21:52 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
+        by smtp.gmail.com with ESMTPSA id d17-20020a50f691000000b004c0cc79f4aesm9080730edn.92.2023.03.08.22.21.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 22:21:52 -0800 (PST)
+Message-ID: <624f5dc8-0807-e799-d66e-213aadabfc84@linaro.org>
+Date:   Thu, 9 Mar 2023 07:21:50 +0100
 MIME-Version: 1.0
-References: <cover.1678247309.git.quic_nguyenb@quicinc.com>
- <c7fcbb70f0e74d225c1a09f107ba1058270739be.1678247309.git.quic_nguyenb@quicinc.com>
- <CAGaU9a_CkxHU-k519TL2hfLZSM6Hfoo6sAELmJ+6Vy2X2ZCOrw@mail.gmail.com> <86620bee-383c-b1e4-d4df-e4d8465a1d89@quicinc.com>
-In-Reply-To: <86620bee-383c-b1e4-d4df-e4d8465a1d89@quicinc.com>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Thu, 9 Mar 2023 14:21:13 +0800
-Message-ID: <CAGaU9a9QkCnN-1CvHGB78vXaARB0uWMZCeAYr7qRcUE9effGYQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 4/4] ufs: mcq: Added ufshcd_mcq_abort()
-To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
-Cc:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        bvanassche@acm.org, mani@kernel.org, stanley.chu@mediatek.com,
-        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH net-next v2] dt-bindings: net: ti: k3-am654-cpsw-nuss:
+ Document Serdes PHY
+Content-Language: en-US
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux@armlinux.org.uk, pabeni@redhat.com, robh+dt@kernel.org,
+        nsekhar@ti.com, rogerq@kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srk@ti.com
+References: <20230308051835.276552-1-s-vadapalli@ti.com>
+ <1ffed720-322c-fa73-1160-5fd73ce3c7c2@linaro.org>
+ <7b6e8131-8e5b-88bc-69f7-b737c0c35bb6@ti.com>
+ <dbbe3cd2-3329-d267-338b-8e513209ddcd@linaro.org>
+ <882cdb42-3f80-048a-88a5-836c479a421f@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <882cdb42-3f80-048a-88a5-836c479a421f@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bao,
+On 09/03/2023 05:18, Siddharth Vadapalli wrote:
+> Hello Krzysztof,
+> 
+> On 08/03/23 18:04, Krzysztof Kozlowski wrote:
+>> On 08/03/2023 09:38, Siddharth Vadapalli wrote:
+>>> Hello Krzysztof,
+>>>
+>>> On 08/03/23 14:04, Krzysztof Kozlowski wrote:
+>>>> On 08/03/2023 06:18, Siddharth Vadapalli wrote:
+>>>>> Update bindings to include Serdes PHY as an optional PHY, in addition to
+>>>>> the existing CPSW MAC's PHY. The CPSW MAC's PHY is required while the
+>>>>> Serdes PHY is optional. The Serdes PHY handle has to be provided only
+>>>>> when the Serdes is being configured in a Single-Link protocol. Using the
+>>>>> name "serdes-phy" to represent the Serdes PHY handle, the am65-cpsw-nuss
+>>>>> driver can obtain the Serdes PHY and request the Serdes to be
+>>>>> configured.
+>>>>>
+>>>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>>>>> ---
+>>>>>
+>>>>> Hello,
+>>>>>
+>>>>> This patch corresponds to the Serdes PHY bindings that were missed out in
+>>>>> the series at:
+>>>>> https://lore.kernel.org/r/20230104103432.1126403-1-s-vadapalli@ti.com/
+>>>>> This was pointed out at:
+>>>>> https://lore.kernel.org/r/CAMuHMdW5atq-FuLEL3htuE3t2uO86anLL3zeY7n1RqqMP_rH1g@mail.gmail.com/
+>>>>>
+>>>>> Changes from v1:
+>>>>> 1. Describe phys property with minItems, items and description.
+>>>>> 2. Use minItems and items in phy-names.
+>>>>> 3. Remove the description in phy-names.
+>>>>>
+>>>>> v1:
+>>>>> https://lore.kernel.org/r/20230306094750.159657-1-s-vadapalli@ti.com/
+>>>>>
+>>>>>  .../bindings/net/ti,k3-am654-cpsw-nuss.yaml        | 14 ++++++++++++--
+>>>>>  1 file changed, 12 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>>>>> index 900063411a20..0fb48bb6a041 100644
+>>>>> --- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>>>>> @@ -126,8 +126,18 @@ properties:
+>>>>>              description: CPSW port number
+>>>>>  
+>>>>>            phys:
+>>>>> -            maxItems: 1
+>>>>> -            description: phandle on phy-gmii-sel PHY
+>>>>> +            minItems: 1
+>>>>> +            items:
+>>>>> +              - description: CPSW MAC's PHY.
+>>>>> +              - description: Serdes PHY. Serdes PHY is required only if
+>>>>> +                             the Serdes has to be configured in the
+>>>>> +                             Single-Link configuration.
+>>>>> +
+>>>>> +          phy-names:
+>>>>> +            minItems: 1
+>>>>> +            items:
+>>>>> +              - const: mac-phy
+>>>>> +              - const: serdes-phy
+>>>>
+>>>> Drop "phy" suffixes.
+>>>
+>>> The am65-cpsw driver fetches the Serdes PHY by looking for the string
+>>> "serdes-phy". Therefore, modifying the string will require changing the driver's
+>>> code as well. Please let me know if it is absolutely necessary to drop the phy
+>>> suffix. If so, I will post a new series with the changes involving dt-bindings
+>>> changes and the driver changes.
+>>
+>> Why the driver uses some properties before adding them to the binding?
+> 
+> I missed adding the bindings for the Serdes PHY as a part of the series
+> mentioned in the section below the tearline of the patch. With this patch, I am
+> attempting to fix it.
+> 
+>>
+>> And is it correct method of adding ABI? You add incorrect properties
+>> without documentation and then use this as an argument "driver already
+>> does it"?
+> 
+> I apologize if my earlier comment appeared to justify the usage of "serdes-phy"
+> based on the driver already using it. I did not mean it in that sense. I simply
+> meant to ask if dropping "phy" suffixes was a suggestion or a rule. In that
+> context, I felt that if it was a suggestion, I would prefer retaining the names
+> with the "phy" suffixes, since the driver is already using it. Additionally, I
+> also mentioned in my earlier comment that if it is necessary to drop the "phy"
+> suffix, then I will do so and add another patch to change the string the driver
+> looks for as well.
+> 
+> I shall take it that dropping "phy" suffixes is a rule/necessity. With this, I
+> will post the v3 series making this change, along with the patch to update the
+> string the driver looks for.
 
-On Thu, Mar 9, 2023 at 1:31=E2=80=AFPM Bao D. Nguyen <quic_nguyenb@quicinc.=
-com> wrote:
->
-> On 3/8/2023 7:10 PM, Stanley Chu wrote:
-> > Hi Bao,
-> >
-> > On Wed, Mar 8, 2023 at 12:10=E2=80=AFPM Bao D. Nguyen <quic_nguyenb@qui=
-cinc.com> wrote:
-> >> Add ufshcd_mcq_abort() to support ufs abort in mcq mode.
-> >>
-> >> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
-> >> ---
-> >>   drivers/ufs/core/ufs-mcq.c     | 76 ++++++++++++++++++++++++++++++++=
-++++++++++
-> >>   drivers/ufs/core/ufshcd-priv.h |  5 ++-
-> >>   drivers/ufs/core/ufshcd.c      | 11 ++++--
-> >>   3 files changed, 88 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-> >> index e27d8eb..6c65cd5 100644
-> >> --- a/drivers/ufs/core/ufs-mcq.c
-> >> +++ b/drivers/ufs/core/ufs-mcq.c
-> >> @@ -646,3 +646,79 @@ static bool ufshcd_mcq_cqe_search(struct ufs_hba =
-*hba,
-> >>          spin_unlock(&hwq->cq_lock);
-> >>          return ret;
-> >>   }
-> >> +
-> >> +/**
-> >> + * ufshcd_mcq_abort - Abort the command in MCQ.
-> >> + * @cmd - The command to be aborted.
-> >> + *
-> >> + * Returns SUCCESS or FAILED error codes
-> >> + */
-> >> +int ufshcd_mcq_abort(struct scsi_cmnd *cmd)
-> >> +{
-> >> +       struct Scsi_Host *host =3D cmd->device->host;
-> >> +       struct ufs_hba *hba =3D shost_priv(host);
-> >> +       int tag =3D scsi_cmd_to_rq(cmd)->tag;
-> >> +       struct ufshcd_lrb *lrbp =3D &hba->lrb[tag];
-> >> +       struct ufs_hw_queue *hwq;
-> >> +       int err =3D FAILED;
-> >> +
-> >> +       if (!lrbp->cmd) {
-> >> +               dev_err(hba->dev,
-> >> +                       "%s: skip abort. cmd at tag %d already complet=
-ed.\n",
-> >> +                       __func__, tag);
-> >> +               goto out;
-> >> +       }
-> >> +
-> >> +       /* Skip task abort in case previous aborts failed and report f=
-ailure */
-> >> +       if (lrbp->req_abort_skip) {
-> >> +               dev_err(hba->dev, "%s: skip abort. tag %d failed earli=
-er\n",
-> >> +                       __func__, tag);
-> >> +               goto out;
-> >> +       }
-> >> +
-> >> +       hwq =3D ufshcd_mcq_req_to_hwq(hba, scsi_cmd_to_rq(cmd));
-> >> +
-> >> +       if (ufshcd_mcq_sqe_search(hba, hwq, tag)) {
-> >> +               /*
-> >> +                * Failure. The command should not be "stuck" in SQ fo=
-r
-> >> +                * a long time which resulted in command being aborted=
-.
-> >> +                */
-> >> +               dev_err(hba->dev, "%s: cmd found in sq. hwq=3D%d, tag=
-=3D%d\n",
-> >> +                               __func__, hwq->id, tag);
-> >> +               /* Set the Command Type to 0xF per the spec */
-> >> +               ufshcd_mcq_nullify_cmd(hba, hwq);
-> >> +               goto out;
-> >> +       }
-> >> +
-> >> +       if (ufshcd_mcq_cqe_search(hba, hwq, tag)) {
-> >> +               dev_err(hba->dev, "%s: cmd found in cq. hwq=3D%d, tag=
-=3D%d\n",
-> >> +                               __func__, hwq->id, tag);
-> >> +               /*
-> >> +                * The command should not be 'stuck' in the CQ for suc=
-h a long time.
-> >> +                * Is interrupt missing? Process the CQEs here. If the=
- interrupt is
-> >> +                * invoked at a later time, the CQ will be empty becau=
-se the CQEs
-> >> +                * are already processed here.
-> >> +                */
-> >> +               ufshcd_mcq_poll_cqe_lock(hba, hwq);
-> >> +               err =3D SUCCESS;
-> >> +               goto out;
-> >> +       }
-> >> +
-> >> +       /*
-> >> +        * The command is not in the Submission Queue, and it is not
-> >> +        * in the Completion Queue either. Query the device to see if
-> >> +        * the command is being processed in the device.
-> >> +        */
-> >> +       if (ufshcd_try_to_abort_task(hba, tag)) {
-> >> +               dev_err(hba->dev, "%s: device abort failed %d\n", __fu=
-nc__, err);
-> >> +               lrbp->req_abort_skip =3D true;
-> >> +               goto out;
-> >> +       }
-> >> +
-> >> +       err =3D SUCCESS;
-> >> +       if (lrbp->cmd)
-> >> +               ufshcd_release_scsi_cmd(hba, lrbp);
-> >> +
-> >> +out:
-> >> +       return err;
-> >> +}
-> >> diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-=
-priv.h
-> >> index 0527926..d883c03 100644
-> >> --- a/drivers/ufs/core/ufshcd-priv.h
-> >> +++ b/drivers/ufs/core/ufshcd-priv.h
-> >> @@ -77,7 +77,10 @@ unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_h=
-ba *hba,
-> >>                                         struct ufs_hw_queue *hwq);
-> >>
-> >>   int ufshcd_mcq_sq_cleanup(struct ufs_hba *hba, int task_tag, int *re=
-sult);
-> >> -
-> >> +int ufshcd_mcq_abort(struct scsi_cmnd *cmd);
-> >> +int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
-> >> +void ufshcd_release_scsi_cmd(struct ufs_hba *hba,
-> >> +                               struct ufshcd_lrb *lrbp);
-> >>   #define UFSHCD_MCQ_IO_QUEUE_OFFSET     1
-> >>   #define SD_ASCII_STD true
-> >>   #define SD_RAW false
-> >> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> >> index 408c16c..e06399e 100644
-> >> --- a/drivers/ufs/core/ufshcd.c
-> >> +++ b/drivers/ufs/core/ufshcd.c
-> >> @@ -302,7 +302,6 @@ static int ufshcd_setup_hba_vreg(struct ufs_hba *h=
-ba, bool on);
-> >>   static int ufshcd_setup_vreg(struct ufs_hba *hba, bool on);
-> >>   static inline int ufshcd_config_vreg_hpm(struct ufs_hba *hba,
-> >>                                           struct ufs_vreg *vreg);
-> >> -static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
-> >>   static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba=
-,
-> >>                                                   bool enable);
-> >>   static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
-> >> @@ -5414,7 +5413,7 @@ static irqreturn_t ufshcd_uic_cmd_compl(struct u=
-fs_hba *hba, u32 intr_status)
-> >>   }
-> >>
-> >>   /* Release the resources allocated for processing a SCSI command. */
-> >> -static void ufshcd_release_scsi_cmd(struct ufs_hba *hba,
-> >> +void ufshcd_release_scsi_cmd(struct ufs_hba *hba,
-> >>                                      struct ufshcd_lrb *lrbp)
-> >>   {
-> >>          struct scsi_cmnd *cmd =3D lrbp->cmd;
-> >> @@ -7340,7 +7339,7 @@ static void ufshcd_set_req_abort_skip(struct ufs=
-_hba *hba, unsigned long bitmap)
-> >>    *
-> >>    * Returns zero on success, non-zero on failure
-> >>    */
-> >> -static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag)
-> >> +int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag)
-> >>   {
-> >>          struct ufshcd_lrb *lrbp =3D &hba->lrb[tag];
-> >>          int err =3D 0;
-> >> @@ -7500,6 +7499,12 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
-> >>                  goto release;
-> >>          }
-> >>
-> >> +       if (is_mcq_enabled(hba)) {
-> >> +               /* MCQ mode. Branch off to handle abort for mcq mode *=
-/
-> >> +               err =3D ufshcd_mcq_abort(cmd);
-> >> +               goto release;
-> >> +       }
-> >> +
-> >>          /* Skip task abort in case previous aborts failed and report =
-failure */
-> >>          if (lrbp->req_abort_skip) {
-> >>                  dev_err(hba->dev, "%s: skipping abort\n", __func__);
-> >> --
-> >> 2.7.4
-> >>
-> > It seems that ufshcd_abort_all() also needs an error handling flow for =
-MCQ.
->
-> Hi Stanley, thank you for the reviews.
->
-> I am not able to find the function ufshcd_abort_all() in the drivers/ufs
-> directory. Can you please clarify where this function is located? Thanks.
+Drop the "phy" suffix.
 
-The function ufshcd_abort_all() was introduced in the following link:
-https://android.googlesource.com/kernel/common/+/b817e6ffbad7a1a0a5ca5bb7d4=
-020823c3f4d9d0
+It's a new binding. "phy" as suffix for "phy" is useless and for new
+bindings it should be dropped. If you submitted driver changes without
+bindings, which document the ABI, it's not good, but also not a reason
+for me for exceptions.
 
-Can you confirm if these patches are based on the latest kernel
-6.3-rc1 or the latest linux-next tree?
+Best regards,
+Krzysztof
 
-Thanks,
-Stanley
-
->
-> >
-> > Thanks,
-> > Stanley
->
->
