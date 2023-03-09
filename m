@@ -2,77 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C276B281A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D296B2859
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbjCIPCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:02:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
+        id S230510AbjCIPHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbjCIPCD (ORCPT
+        with ESMTP id S231751AbjCIPGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:02:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858F1ED6AF;
-        Thu,  9 Mar 2023 06:58:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A881DB81BF6;
-        Thu,  9 Mar 2023 14:58:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19AD1C4339B;
-        Thu,  9 Mar 2023 14:58:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678373926;
-        bh=Fy0PF86k2flygl/jQKs8YcT3wCcxTvDaDOd0+8NdcO8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GkWzvRMehyETFrkEcTAfT0uE2WbV9L213ExoUmXZQQ91gdUEpJ3gg/nYrV07IyA65
-         VKEcUkToUjEJs3VEaeMQAlAqLpecmigMbaBrAYwuUNoDxcKPyiuLuTnLck40w2C+fk
-         ij1/NUAXURRALcEOmYjejuxgLeV6yM0JAKZY7fcFsqU1f2n5XXr7QLQmN2GeGVq7pI
-         gpgdYGj5csLnBzSr85iWtWqt93nxtnPS2X9qxekurHfW7D1vVi6IkPOfG/oD+1JNt+
-         vJ/iIqn0PbsgN5WA+HE3caFzXrp7joz+12zp8dh/ZvZF/PgWyBZkmA+Fs7XwUIQ5Z+
-         cr7IRPS+GC0sg==
-Date:   Thu, 9 Mar 2023 15:58:38 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
-        jefflexu@linux.alibaba.com, tytso@mit.edu,
-        adilger.kernel@dilger.ca, rpeterso@redhat.com, agruenba@redhat.com,
-        mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        viro@zeniv.linux.org.uk, linux-erofs@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        cluster-devel@redhat.com, ocfs2-devel@oss.oracle.com,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] fs: add i_blockmask()
-Message-ID: <20230309145838.pgkkkhp4ahvqdkv5@wittgenstein>
-References: <20230309124035.15820-1-frank.li@vivo.com>
+        Thu, 9 Mar 2023 10:06:36 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5035062DB2;
+        Thu,  9 Mar 2023 07:04:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678374261; x=1709910261;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=tt3B9Fexw4wbXb5Yt6Q5BrpLm009eJmCrL/GUqJ/75k=;
+  b=gsepB0da1+RRgZvHAS4iCSHVisLfklDGzyglVTDTcHkMBFntEqH8sCbq
+   CxqKBRtF3GzsyTHVJgxmEiEGvbITJKXLIZHinddfbtAv7QihUNyo7Mty8
+   L/j2pEGBjsdfgugTQEdSCDQ947TFoiPmi69eAJBfWRfW6/VhKbfNmFiiF
+   8WM6fBSCuuSPQ825UlVcpwxd+vjmLshU1GpPw1P6hVTIc5b3KXrDZnCcW
+   XeQJz/6arTXFE8/pocGHZVmHDkzUAZzunXlcGlXHAXYGaW2R9PDTlmFYx
+   KvgvVK4ANXT9RP8YCZCezpK5/AqN68zdKwAm/tK3hfZplBWnB2qDUmBaz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="320309154"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="320309154"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 06:36:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="820618114"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="820618114"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Mar 2023 06:36:10 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1paHNI-000Mtx-2e;
+        Thu, 09 Mar 2023 16:36:08 +0200
+Date:   Thu, 9 Mar 2023 16:36:08 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-gpio@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+Subject: Re: [PATCH] sh: mach-x3proto: Add missing #include
+ <linux/gpio/driver.h>
+Message-ID: <ZAnu2LwZWm3wi2l5@smile.fi.intel.com>
+References: <20230309135255.3861308-1-geert+renesas@glider.be>
+ <CACRpkdant3mQJX0FM3q65mBaS0fXJ=7tag5dx-1Jp5xpc3EQJg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230309124035.15820-1-frank.li@vivo.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkdant3mQJX0FM3q65mBaS0fXJ=7tag5dx-1Jp5xpc3EQJg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 08:40:31PM +0800, Yangtao Li wrote:
-> Introduce i_blockmask() to simplify code, which replace
-> (i_blocksize(node) - 1). Like done in commit
-> 93407472a21b("fs: add i_blocksize()").
+On Thu, Mar 09, 2023 at 03:08:47PM +0100, Linus Walleij wrote:
+> On Thu, Mar 9, 2023 at 2:52 PM Geert Uytterhoeven
+> <geert+renesas@glider.be> wrote:
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
+> > shx3_defconfig:
+> >
+> >     arch/sh/boards/mach-x3proto/setup.c: In function ‘x3proto_devices_setup’:
+> >     arch/sh/boards/mach-x3proto/setup.c:246:62: error: invalid use of undefined type ‘struct gpio_chip’
+> >       246 |                 baseboard_buttons[i].gpio = x3proto_gpio_chip.base + i;
+> >           |                                                              ^
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > Link: https://lore.kernel.org/r/CA+G9fYs7suzGsEDK40G0pzxXyR1o2V4Pn-oy1owTsTWRVEVHog@mail.gmail.com
+> > Fixes: 21d9526d13b5467b ("gpiolib: Make the legacy <linux/gpio.h> consumer-only")
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> 
+> This is fallout from cleanups in Bartosz GPIO tree, so it will be applied there.
+> Make sure Bartosz gets the patch (now on To:)
+> 
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Looks good but did you forget to convert fs/remap_range.c by any chance?
+Thanks, as for previous patch on the same topic, I am collecting this one.
 
-static int generic_remap_check_len(struct inode *inode_in,
-                                   struct inode *inode_out,
-                                   loff_t pos_out,
-                                   loff_t *len,
-                                   unsigned int remap_flags)
-{
-        u64 blkmask = i_blocksize(inode_in) - 1;
+I will sent a new PR to Bart including all fixes, but I would wait one or a
+couple of weeks before doing that. Meanwhile these will be in Linux Next.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
