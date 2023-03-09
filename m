@@ -2,125 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185B46B2C4F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 18:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD31A6B2C5A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 18:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjCIRtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 12:49:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
+        id S230027AbjCIRur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 12:50:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjCIRth (ORCPT
+        with ESMTP id S230093AbjCIRuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 12:49:37 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2060.outbound.protection.outlook.com [40.107.94.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EC3EDB75
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 09:49:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TROoRjGsc2SEmvRZyLz21GfdxUc9Hexxd5yrzGazVw1VyrJbU+L01r7+nE1Cylx2fIXvI3UJbdUF6uIdZLFZqlkXW/U46oNA7ROHkw1fJS4fJHpgUY1GSbmwNxiUWevbi5Bgw0gNnmSder9IrA8UWVXo3ydlaYymkO2W/NXvLbNnsense1dy7wYWWXxx9NRpfGea0f5/c1+RLpkh1Z3eRp66ULcsp/b53GAJot0qm5z+/1BWEURSAzOY345coz2ZTzd3diytfcKuCV3YIQwvc5x79kBvAe8fTCoqq6lxzGm8W01WmI3t+6fqJWp22azUp2BiFjaZk7mEg6Ms2jeZBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M05B/sCAOl5u/sDJmSdiV6LYvmMwFOBvNZOaYQ2m6a0=;
- b=kzKJ5wybG04T0MXwaJop/sz+8hYEnx+VTpQTXCag/1O6U1CfdcmjB8qwvEsjiMoxg65Z7iyzsTQQDoSBUMGm3+d0zvVZSgS0NFXH377HF0BP/9MJj7d5B/LK4hLUF+FcXlE1m17kv6Z5LZbgGG0tG2aAk9wm6cje+kWFCYQIbLD4zS+e23BvjTM/WV6Pcyw5YgTQgiwEJZpjD0tbbVq9ocZuZUPz6Ka1Nrzueb/q/J0rZdGs4EoHc2DbbecUUIbajql97svMnMnjNCEyCv8jnIMSGjNI91wwP1mbQ2P/LSpmE33xosjDx64QDxARMtx3dbn8Akb4TpNm8d1kt8zxTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M05B/sCAOl5u/sDJmSdiV6LYvmMwFOBvNZOaYQ2m6a0=;
- b=CPaBe/prgFHzgL+CKfoBzRus1L6SB3BdXUwD9ST2eE8VwGYkCYO+vx9PujViZ7W7/CYtwfJKK4oeTmZcXpVzB+UEA2KU4nfRAzvX0N/iQ3tLU+6jsMHYA4NpFW02202ResP7OjDDENxCbwhMDQcGLswiJWzWQ1Y78uqsJpfICK8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by CY5PR12MB6203.namprd12.prod.outlook.com (2603:10b6:930:24::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Thu, 9 Mar
- 2023 17:49:34 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::23f:22c1:b49e:b77e]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::23f:22c1:b49e:b77e%4]) with mapi id 15.20.6178.017; Thu, 9 Mar 2023
- 17:49:33 +0000
-Message-ID: <64aef893-50d5-be6f-75c0-b9c8293fcbfe@amd.com>
-Date:   Thu, 9 Mar 2023 12:49:31 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] drm/amdkfd: fix potential kgd_mem UAFs
-Content-Language: en-US
-To:     Chia-I Wu <olvaffe@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230308213724.3396058-1-olvaffe@gmail.com>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-In-Reply-To: <20230308213724.3396058-1-olvaffe@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQBP288CA0018.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:c01:6a::21) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+        Thu, 9 Mar 2023 12:50:37 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4537F6B43;
+        Thu,  9 Mar 2023 09:50:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678384235; x=1709920235;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ogVypCdkPt8E5X9bDUGx7JSe5g2+nmoHHjkYAcaFWFg=;
+  b=nUHKITiAJVDNLlPabHZzAzGakVZaLNBYVATMvCMy/VQYQ5c556EjDgk5
+   kThnEpGQhS0KjVDgeMwN0Lp2UEvJelKHVcMA61FTMldUTcxYGt8M4vd2S
+   Osd0iTjrnJjTvCiy9iFzVZBxCtv0Kc6vNAk/+Hu2MVWr2Ie0qx4/d2dKe
+   hZA1/ck+HBlPt3DZOyJG1i0JtwFrrPkMGDTB76FZ91uVvoX6C70hYfz0z
+   cbgVhsIYumm2pMGQCl+t1FUETTcGW0NCCN9aJDSDdYjc6iWy3PV/zZ28z
+   r2n5HQusIrnh920a0s3Fcjrtqn343eoRxlOQMudp9GKDY/sn3kHc2qSaq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="324855414"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="324855414"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 09:50:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="677462919"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="677462919"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 09 Mar 2023 09:50:32 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1paKPO-000Sb6-0d;
+        Thu, 09 Mar 2023 19:50:30 +0200
+Date:   Thu, 9 Mar 2023 19:50:29 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: selftests: gpio: crash on arm64
+Message-ID: <ZAocZRZh4FQRH3lc@smile.fi.intel.com>
+References: <CA+G9fYv94gx8+-JMzbmQaue3q3y6QdBmsGUCdD-26X5XavL3Ag@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|CY5PR12MB6203:EE_
-X-MS-Office365-Filtering-Correlation-Id: 37ef6519-238b-46b3-7aa7-08db20c6a45c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Zd07nYRdke9tjzDezklaBaz6vevERhFBrd5Jupl8TJahoDetwohAKiWb13wKUKcNyl07a2hWXYIDP40xMvtCc3Bz8rFCfTc1Epg2XK+65TCJScJefc01tQqupV6gT65STUs3nPPpha9FPMlbHgjJHxIKcXu54u22hm42G+kLx5eJACSi/tonSck879X7g4p2ljC8v9fJFEFxgvRg4zoAgTPaTJEtzu58hhPBGp/nDq337hnf6XSD2uDCADJp8WCmqhKU/GFnV2sF36QfIx6VTehF/Txra4nd/yqEDdvsEAuL8nxYUodfA+XuAw4YJxmDviS8PF/gvtOADsy3rlIAoxt9LJxJaT1bMVkjOZqiGyIlz0N3q5FzrSjQjrDGT0MGEXOlSgaH+xd69jKzCiVK4nNuNNT0YW2N1dPL9xMQuDRCn5YGUrt5iV9QCK5sQv09eUaip+DwUTmMcDuG86LbPph8Wrq788STmdVqTfAWk0dNXrO5pcs+DiA+eUmIW3QZCrtnPMvRM5KMqTJMn1Jn5Z/hW2YHZ0yvBD3IF/mI7H+JZAcPwGQo/UoBuGZH3e3tKvPHJJfRyFcJrlZ7LQmYxhxomYeBjnB8ELrlb1zBFXXuC7p78INvStMKVsRT4IBTrlrHZm38vXVSgFsyq0vRaDCO/x7pQrtco9pE4rRy3PVEtrJxStjFegCE2FS5z2AnQL7hmbNWNfhuUbUf27wzvUqFdtUEmPeHFW5s8l6Aatk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(346002)(396003)(136003)(39860400002)(451199018)(31686004)(83380400001)(36756003)(38100700002)(54906003)(478600001)(316002)(2616005)(6486002)(6512007)(6506007)(186003)(5660300002)(26005)(44832011)(2906002)(41300700001)(4326008)(8936002)(66476007)(66556008)(66946007)(86362001)(31696002)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R0pKbHVFQytXUXFaTmpFNVhFZmZIdDVmUXZFYnA2bkowenMzWmJ3aTBra0Qz?=
- =?utf-8?B?U3R1QUxzOXpEbzFlbEY5N0dqY05FL2laMFhBVEFZcnp0c3p5RE9YR3lBRFpB?=
- =?utf-8?B?QTg3RXFkRG4yZ05ud1VzaEo5VkdxNGRHTGZXYnZmNlZ0Zm8va2NCZ0RjM0s3?=
- =?utf-8?B?U0l3NXo4MVdnWllObS8zOHVBempYejEyVTRDSk0vZmNIZWtmdVBJYSs3d3hi?=
- =?utf-8?B?YlJDaW44VHV2WWphWk04alBqT3RvM0JuNGFPYVd4WURqUzZCRmdVZTFhSUZk?=
- =?utf-8?B?VE1MdW82bjdndC83citvd2ZPemFLSDRtdURXTWVhb1NqQ1lkNTdZYlR3NzQy?=
- =?utf-8?B?UVgrNElPWW1KR3F3MVU2V00zclIvaWNlckl4UGx6Ly9vNnFTVVFxdGpNUklT?=
- =?utf-8?B?VXI3OVYzMFhvbWxQZEIyUzhBcWRZYXRhdGY3THNFb29HaGR6ejYrNHFGUWpQ?=
- =?utf-8?B?cXY2d3VmcnJ3RUVyUzlZZXVTdjVQSEtONUF0V3hRdUhuNU9Gb0Y0dytWUHFT?=
- =?utf-8?B?a09GNkZVNHhLemw1cnMyaW93NXk3dEREMEFEYmZVUmtZTE1WQzRMZHZlUE1p?=
- =?utf-8?B?UVo2dlNIQkgyM2w0NmQvSGcva3lHQTRHOHFJMnNMR2QyanFPUExnNVQwM2Zi?=
- =?utf-8?B?WHBJUm11OXV4ZGdFbnk1bVVUdWR6NUFSZ3NFdExCYVk0cWN5WS9teW5iR1R3?=
- =?utf-8?B?NExucms2L0prejc3My9EdTRjeXVCSmlMb0MyNThROXBxZENCVzFPdlJGTklX?=
- =?utf-8?B?cGFBcDNVaHBPMG4vYUJQOExZMWloOFBlRlYwMG5JNWtTenVyVU1uTitZR3Rh?=
- =?utf-8?B?UUhJbFluM3JnQzd3VlVXR29EZHVWanQ2ZGhiTVQ3TjVzMXBwZ2xhYXNTbmpV?=
- =?utf-8?B?VW1CN2liRmxFZkhNb0hZeitOcVk4L0tXRCs2dXRrc01LQ0puM3NDQmtJeHE4?=
- =?utf-8?B?c2w3QThaVWFZY1JHdWg1NFR1am1ZdmtwU3FUS3BxcWZuUWd3OCtKNnBPYjNU?=
- =?utf-8?B?ME1JNWJYa2V1SWtrMTNBalQ5L2EyVG4vYkFGcWtGVm8vSlVtaWd2d05pWTBI?=
- =?utf-8?B?U1RGK1N3WmFSaWxUancvb3d3djNubi9RdlN2N0ltS0x2ZGppSE9HYkM5elE0?=
- =?utf-8?B?ZUpWOXBMeWZuTkwrUE1DdVhEd3ppa3N4SjZpRGNvV3dxLzR3UzE4WWFnd3BD?=
- =?utf-8?B?amdIMWhYTDlWcTRlUTdNTTVkeGhoa29XS1RsL1A5ZWJjLzlMYnhiTFM1YURk?=
- =?utf-8?B?WDQ3aW84eUtXMEl1Y2hWa0dJUmc0bzc0djdLUlVMdVpLN3lySHFMLzlMZ3o5?=
- =?utf-8?B?aHU1OWhoOTB3WE5PUnNOUDViVlMvbmRHQWNSSGJWYVJWOElSQm5zTVZWa0to?=
- =?utf-8?B?bExzQzhrdDNFZ05JZUFIUTAxbSt6bCt5Q1dPRjZBOGc2Q0JGOHFTM2M3YUZx?=
- =?utf-8?B?SExOYkJvN09aZ0Q4UklZZ3ppd2EzT0dmaG12ay8zMHE2bTZLcVR4bzlBNmxS?=
- =?utf-8?B?Y0Q1NEVFbFRZTGJTcUhRTzJSUDg2aVcwZEdvVVJxYWhzUkFNeG8yNUswd01S?=
- =?utf-8?B?b25zSFFhMDNQSFNtTjhnOEhJYm1tRDdiN0VFZyszMXMwaDJmVW9ZRUVCZG1P?=
- =?utf-8?B?TUp6ekJUMjArM1ZwNDFDQm1FSm5pMnEzTWwzcm1IZXVkWEM0eWNmY081QlRa?=
- =?utf-8?B?ZUVRcHhQS0liQUdndG5xRmc2TkdOaDI1blpPRFN6L3VXa3dMM0orWHVEbGdN?=
- =?utf-8?B?WDZPSHRXQk4yTStZNXUyK3luVG9Ddk94c1NicHgzcFNucmtISFdueTJmaXBj?=
- =?utf-8?B?aVB0WFIxNHRVakpjU0NpS0FmSjVXQ3lxb0hZWWZyMDFDUUl0QkF6Vmo2MXgw?=
- =?utf-8?B?QmFoWkRkL1hNc0t3ajA4dVMrUmVPdDgxMTRzcFBITXdra3BWdUVXaGdvUE9F?=
- =?utf-8?B?MVlkVTJ1NGtOL09OaGJHVDYwNWpKblhLeFVpYS9wYUt6L1I0RHBjQmlRUHYz?=
- =?utf-8?B?NFhPa2RZYStGK1J4YzJiaVRnSy9lL2RtRXd5OXVVRU5yVXRFaEVpaCtZbG1h?=
- =?utf-8?B?d3NYbWlkRjRUUWhLWjRNS2hFU3lOYW9wbk5HRFhWL09YRU5pTVdneWt2THdR?=
- =?utf-8?Q?33yuVmdtqv0IJGAvABqBbNeyb?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37ef6519-238b-46b3-7aa7-08db20c6a45c
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 17:49:33.7756
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E+zTs4C5XS3jIbCB8y7U3blHAnghiSsubUJ1B9yCPl+QEBaqQ0RZuGASa/7fySUEW5h65e7jV8aiB19M0S3eGg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6203
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYv94gx8+-JMzbmQaue3q3y6QdBmsGUCdD-26X5XavL3Ag@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -128,103 +75,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-03-08 um 16:37 schrieb Chia-I Wu:
-> kgd_mem should be accessed with p->mutex locked, or it could have been
-> freed by kfd_ioctl_free_memory_of_gpu.
+On Thu, Mar 09, 2023 at 09:33:29PM +0530, Naresh Kamboju wrote:
+> Following kernel warnings and crash notices on arm64 Rpi4 device while
+> running selftests: gpio on Linux mainline 6.3.0-rc1 kernel and Linux next.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Thank you for the patch. It's not just about accessing kgd_mem with 
-p->mutex held. It's also about holding the mutex continuously. I'd 
-update the description to be more explicit about the invariant being 
-broken here:
+...
 
-kgd_mem pointers returned by kfd_process_device_translate_handle are 
-only guaranteed to be valid while p->mutex is held. As soon as the mutex 
-is unlocked, another thread can free the BO.
+> [   61.177432]  *** DEADLOCK ***
+> [   61.177432]
+> [   61.177434] 3 locks held by modprobe/510:
+> [   61.177436] #0: ffff000040000698 (&n->list_lock){-.-.}-{2:2}, at:
+> get_partial_node.part.0 (mm/slub.c:2271)
+> [   61.177448] #1: ffff80000b227f18 (console_lock){+.+.}-{0:0}, at:
+> vprintk_emit (kernel/printk/printk.c:1936 kernel/printk/printk.c:2315)
+> [   61.177460] #2: ffff80000b228388 (console_srcu){....}-{0:0}, at:
+> console_flush_all (include/linux/srcu.h:200 kernel/printk/printk.c:290
+> kernel/printk/printk.c:2934)
 
-I can update the description and submit the patch.
+How is it related to the GPIO?
+Can you bisect if it's a regression somewhere?
 
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Regards,
-   Felix
 
-
->
-> Signed-off-by: Chia-I Wu <olvaffe@gmail.com>
-> ---
->   drivers/gpu/drm/amd/amdkfd/kfd_chardev.c | 16 ++++++++++------
->   1 file changed, 10 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-> index 6d291aa6386bd..3c630114210d6 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-> @@ -1293,14 +1293,14 @@ static int kfd_ioctl_map_memory_to_gpu(struct file *filep,
->   		args->n_success = i+1;
->   	}
->   
-> -	mutex_unlock(&p->mutex);
-> -
->   	err = amdgpu_amdkfd_gpuvm_sync_memory(dev->adev, (struct kgd_mem *) mem, true);
->   	if (err) {
->   		pr_debug("Sync memory failed, wait interrupted by user signal\n");
->   		goto sync_memory_failed;
->   	}
->   
-> +	mutex_unlock(&p->mutex);
-> +
->   	/* Flush TLBs after waiting for the page table updates to complete */
->   	for (i = 0; i < args->n_devices; i++) {
->   		peer_pdd = kfd_process_device_data_by_id(p, devices_arr[i]);
-> @@ -1316,9 +1316,9 @@ static int kfd_ioctl_map_memory_to_gpu(struct file *filep,
->   bind_process_to_device_failed:
->   get_mem_obj_from_handle_failed:
->   map_memory_to_gpu_failed:
-> +sync_memory_failed:
->   	mutex_unlock(&p->mutex);
->   copy_from_user_failed:
-> -sync_memory_failed:
->   	kfree(devices_arr);
->   
->   	return err;
-> @@ -1332,6 +1332,7 @@ static int kfd_ioctl_unmap_memory_from_gpu(struct file *filep,
->   	void *mem;
->   	long err = 0;
->   	uint32_t *devices_arr = NULL, i;
-> +	bool flush_tlb;
->   
->   	if (!args->n_devices) {
->   		pr_debug("Device IDs array empty\n");
-> @@ -1384,16 +1385,19 @@ static int kfd_ioctl_unmap_memory_from_gpu(struct file *filep,
->   		}
->   		args->n_success = i+1;
->   	}
-> -	mutex_unlock(&p->mutex);
->   
-> -	if (kfd_flush_tlb_after_unmap(pdd->dev)) {
-> +	flush_tlb = kfd_flush_tlb_after_unmap(pdd->dev);
-> +	if (flush_tlb) {
->   		err = amdgpu_amdkfd_gpuvm_sync_memory(pdd->dev->adev,
->   				(struct kgd_mem *) mem, true);
->   		if (err) {
->   			pr_debug("Sync memory failed, wait interrupted by user signal\n");
->   			goto sync_memory_failed;
->   		}
-> +	}
-> +	mutex_unlock(&p->mutex);
->   
-> +	if (flush_tlb) {
->   		/* Flush TLBs after waiting for the page table updates to complete */
->   		for (i = 0; i < args->n_devices; i++) {
->   			peer_pdd = kfd_process_device_data_by_id(p, devices_arr[i]);
-> @@ -1409,9 +1413,9 @@ static int kfd_ioctl_unmap_memory_from_gpu(struct file *filep,
->   bind_process_to_device_failed:
->   get_mem_obj_from_handle_failed:
->   unmap_memory_from_gpu_failed:
-> +sync_memory_failed:
->   	mutex_unlock(&p->mutex);
->   copy_from_user_failed:
-> -sync_memory_failed:
->   	kfree(devices_arr);
->   	return err;
->   }
