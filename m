@@ -2,94 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA456B2C42
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 18:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807D56B2C4C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 18:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjCIRrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 12:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
+        id S230473AbjCIRsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 12:48:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjCIRrC (ORCPT
+        with ESMTP id S229983AbjCIRsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 12:47:02 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34650FB257;
-        Thu,  9 Mar 2023 09:47:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678384021; x=1709920021;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=I8UicG17Q/faH5uDUFSsbeEZfZYosSYwUWWJFsU2Qzo=;
-  b=SgSHIFSt86SSWe4jioQG5+qYiIDiRV5/XiaAuftm9VL20MyT+DZeqb3f
-   ptJEa6gIvJId/+m5TE7ezuc/4agjvDqHU6saCfpLVewGjIhR+sRx5UPTe
-   kv0I9ma2+JMmqyk0Aqk3GLz+0FDh7V/vQRJVX8uupWHtDqDpAMD917jOO
-   P21j+Gefz+nevjjJ8Q6gBhySmjAY0Ip7LxIJEKE4xHfafuoAyYvM36Xkz
-   FMQqkslEFieBRcMF8hwwdx6MEt20MuNE3AgWxIC7KClkuYgYXMZJrbIna
-   imaGDhmT3PuQUESQ/+ysuN0PpRADQ4l5y8XiCQE9CG2JeYvutFuzpeBP8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="338062370"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="338062370"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 09:47:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="627451541"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="627451541"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 09 Mar 2023 09:46:57 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1paKLv-000SVg-1X;
-        Thu, 09 Mar 2023 19:46:55 +0200
-Date:   Thu, 9 Mar 2023 19:46:55 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-gpio@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH v2] sh: mach-x3proto: Add missing #include
- <linux/gpio/driver.h>
-Message-ID: <ZAobj3hZuhQ2pLb6@smile.fi.intel.com>
-References: <20230309144113.3922386-1-geert+renesas@glider.be>
+        Thu, 9 Mar 2023 12:48:00 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5BF91FB242;
+        Thu,  9 Mar 2023 09:47:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=52mtL
+        hd0shVd0/pdU2xNkr+LALperEX6L2D16EJNEBM=; b=AzrVh8YyzCuflDZLcxGk2
+        pbykbwRaJyAKII3aTvCd9PXb3DKnnFVq7VqJjseevpnVSaT3+cRnH4146cPXwXtK
+        qX2qNmgCMCHfhDRyZTWx5vRSr7rKs12aN9mQFVkkcx7v6+hJ/9K3SV4SY/2Yz6+a
+        ByogpjwSmCwri7D5THPZTM=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g0-2 (Coremail) with SMTP id _____wDndZqyGwpkzfPcCg--.19913S2;
+        Fri, 10 Mar 2023 01:47:30 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
+        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] power: supply: bq24190: Fix use after free bug in bq24190_remove due to race condition
+Date:   Fri, 10 Mar 2023 01:47:28 +0800
+Message-Id: <20230309174728.233732-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230309144113.3922386-1-geert+renesas@glider.be>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wDndZqyGwpkzfPcCg--.19913S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uFy3CFW7AF4fKFWfWw45ZFb_yoW8XrWDpw
+        s3Gr90ka1Fqayj9a1Dta12vFy5Ga45GryrCrZ7Gw17ZwnxW39rt34DJF13Gry7Jrn3Xa1I
+        v3s3t3y7KF9xKrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziJ73PUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXRgtU1WBo2xwDQAAsd
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 03:41:13PM +0100, Geert Uytterhoeven wrote:
-> shx3_defconfig:
-> 
->     arch/sh/boards/mach-x3proto/setup.c: In function ‘x3proto_devices_setup’:
->     arch/sh/boards/mach-x3proto/setup.c:246:62: error: invalid use of undefined type ‘struct gpio_chip’
->       246 |                 baseboard_buttons[i].gpio = x3proto_gpio_chip.base + i;
-> 	  |                                                              ^
-> 
-> Fix this by replacing the include of the legacy <linux/gpio.h> by
-> <linux/gpio/driver.h>.
+In bq24190_probe, &bdi->input_current_limit_work is bound
+with bq24190_input_current_limit_work. When external power
+changed, it will call bq24190_charger_external_power_changed
+ to start the work.
 
-Pushed to my review and testing queue, thanks!
+If we remove the module which will call bq24190_remove to make
+cleanup, there may be a unfinished work. The possible
+sequence is as follows:
 
+CPU0                  CPUc1
+
+                    |bq24190_input_current_limit_work
+bq24190_remove      |
+power_supply_unregister  |
+device_unregister   |
+power_supply_dev_release|
+kfree(psy)          |
+                    |
+                    | power_supply_get_property_from_supplier
+                    |   //use
+
+Fix it by finishing the work before cleanup in the bq24190_remove
+
+Fixes: 97774672573a ("power_supply: Initialize changed_work before calling device_add")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+ drivers/power/supply/bq24190_charger.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
+index be34b9848450..de67b985f0a9 100644
+--- a/drivers/power/supply/bq24190_charger.c
++++ b/drivers/power/supply/bq24190_charger.c
+@@ -1906,6 +1906,7 @@ static void bq24190_remove(struct i2c_client *client)
+ 	struct bq24190_dev_info *bdi = i2c_get_clientdata(client);
+ 	int error;
+ 
++	cancel_delayed_work_sync(&bdi->input_current_limit_work);
+ 	error = pm_runtime_resume_and_get(bdi->dev);
+ 	if (error < 0)
+ 		dev_warn(bdi->dev, "pm_runtime_get failed: %i\n", error);
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
