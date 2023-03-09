@@ -2,123 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2976B6B2678
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCAB6B2679
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjCIOPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
+        id S231614AbjCIOPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:15:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbjCIOO0 (ORCPT
+        with ESMTP id S231792AbjCIOOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:14:26 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849D55B5DA;
-        Thu,  9 Mar 2023 06:13:17 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id h3so1943818lja.12;
-        Thu, 09 Mar 2023 06:13:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678371192;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0L3e2Gc1woVMAVlvcEHWXDzcW7MDDTkeZvDGMyuHmDM=;
-        b=ZiP8eNuayA+2CcmAR5fDLa1MnQvzgU7G68TvxH2IoGFLGtrWnjeJnXBLCh2l9HMstZ
-         ZcsR2pVrQZXCuPdIwYjs2PQGRO1NtijEFZni5RC8W4tlLosV8KpxEq7s0N6vV/gFEKf+
-         GbUCvkKR6j5GVeK/BomL0ZZ4n5k790VtN1eHSKO98Ly4i+jO7Qaxeo0ppAWkGEJ0A+0h
-         gqpz0jvCe0A/WpvvHDtZ+6bYE0X8wGzle6tbA5HWQW4iZIVpogJE73oHPZyOExHxF4e6
-         UJPH5y8H8psogpWsAxR/fziAK9q9SVCWYRO/u+278qkRguOSL1jH8yoNIkJpWZiVAcM7
-         OYmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678371192;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0L3e2Gc1woVMAVlvcEHWXDzcW7MDDTkeZvDGMyuHmDM=;
-        b=XnZI2WsVMJTjYrwqBBPIQwU2VHXlF4rHewRNpx/EY0JbqPBgtV/nXnhptMwVAIzX6M
-         s3INjqxFgc4yvgGK/CwmGJ7i7VX6KfRR6fMwiiFa2vw4MLXPtqBP9SQDF6jtRu9pRE3b
-         2C+t7sf9AA6LbnJ4DPg6l6l1w0qcJWcybnJVOyUcqNt0HUdjbWagYo93f2UNaSwaw/F2
-         68916GYzoHQdTwB/KdWA0pnJNSmwOP8HcP5ENWG3nesfTVI7UYk9dZNSEJXR+orOUpau
-         2C599D7xwmoNXZ4ZSKtRT7fEeKjAXqzteOiSOqVgVpbTeJ3oPKakr13gu36okoVPGRDF
-         Id6g==
-X-Gm-Message-State: AO0yUKXjcTNLzdVJ8GXkv0IrLa2vi3heJ+lUYSL2Mm7K4yH8XHx1otjr
-        /yEzAAou5yNjvvxyj59+jnU=
-X-Google-Smtp-Source: AK7set/wGRG6DZwH1goQYuwyWeVqUPotbXSii8soBGsA0hvgGcEXtX1zIA8XR5JqSVge5Z0JqI+ZpQ==
-X-Received: by 2002:a2e:6109:0:b0:294:7028:c66a with SMTP id v9-20020a2e6109000000b002947028c66amr5600373ljb.38.1678371192149;
-        Thu, 09 Mar 2023 06:13:12 -0800 (PST)
-Received: from pc636 (host-95-193-108-241.mobileonline.telia.com. [95.193.108.241])
-        by smtp.gmail.com with ESMTPSA id r19-20020a2e9953000000b00293534d9760sm2963887ljj.127.2023.03.09.06.13.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 06:13:11 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Thu, 9 Mar 2023 15:13:08 +0100
-To:     Zhu Yanjun <zyjzyj2000@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org
-Cc:     Bob Pearson <rpearsonhpe@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
-Subject: Re: [PATCH 07/13] RDMA/rxe: Rename kfree_rcu() to
- kfree_rcu_mightsleep()
-Message-ID: <ZAnpdKV/VvvX0TZz@pc636>
-References: <20230201150815.409582-1-urezki@gmail.com>
- <20230201150815.409582-8-urezki@gmail.com>
- <ZAnjnRC1wY3RIFhM@pc636>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAnjnRC1wY3RIFhM@pc636>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 9 Mar 2023 09:14:48 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2AF838A2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:14:13 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E6020200FE;
+        Thu,  9 Mar 2023 14:14:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1678371251; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=583fh4/67aw9lFG2dmSsBRbmMhbmyVQ7qNVPyr9gkl4=;
+        b=g5FRzG84r0L3jOgV6u5Zu6xHA4rR6Oaxt9adbSk/2SUWg2HN14wSBwedDXkuVG1eVqWUrZ
+        C3SpV4eBt73XwdqkWWnB0CCmRFeOC0eT1eyOoOD33e7ZqQTeGRAneX1KYT38vuWYxK/3mS
+        1z+735mDbaFIKlC3UEsqZO9bnNiuk/8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1678371251;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=583fh4/67aw9lFG2dmSsBRbmMhbmyVQ7qNVPyr9gkl4=;
+        b=Fa8Q8FBTw3xKyLX7SBdbHY7f2TNTvsb4DXCxbZWQWAwM3DZ/TIuJFKxciFcX/kqB4MgC5P
+        AqAWAbsmTRuFYRAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9B6C81391B;
+        Thu,  9 Mar 2023 14:14:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id oRAWJbPpCWT2MAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 09 Mar 2023 14:14:11 +0000
+Date:   Thu, 09 Mar 2023 15:14:10 +0100
+Message-ID: <87mt4mf1vx.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Cc:     linux-kernel@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, stefanr@s5r6.in-berlin.de,
+        tiwai@suse.de, broonie@kernel.org
+Subject: Re: [PATCH] MAINTAINERS: replace maintainer of FireWire subsystem
+In-Reply-To: <20230306035814.78455-1-o-takashi@sakamocchi.jp>
+References: <20230306035814.78455-1-o-takashi@sakamocchi.jp>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Wed, Feb 01, 2023 at 04:08:13PM +0100, Uladzislau Rezki (Sony) wrote:
-> > The kfree_rcu()'s single argument name is deprecated therefore
-> > rename it to kfree_rcu_mightsleep() variant. The goal is explicitly
-> > underline that it is for sleepable contexts.
-> > 
-> > Please check the RXE driver in a way that a single argument can
-> > be used. Briefly looking at it and rcu_head should be embed to
-> > free an obj over RCU-core. The context might be atomic.
-> > 
-> > Cc: Bob Pearson <rpearsonhpe@gmail.com>
-> > Cc: Jason Gunthorpe <jgg@nvidia.com>
-> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > ---
-> >  drivers/infiniband/sw/rxe/rxe_pool.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> Could you please add you reviwed-by or Acked-by tags so we can bring
-> our series with renaming for the next merge window?
+On Mon, 06 Mar 2023 04:58:14 +0100,
+Takashi Sakamoto wrote:
 > 
-> Thanks!
+> In the last few years, I have reviewed patches for FireWire subsystem and
+> requested sound subsystem maintainer to sent them to mainline, since
+> FireWire subsystem maintainer has been long absent. This situation is not
+> preferable since we have some user of sound hardware in IEEE 1394 bus.
 > 
-__rxe_cleanup() can be called in two contexts, sleepable and not.
-Therefore usage of a single argument of the kvfree_rcu() is not correct
-here.
+> I will stand for the maintainer, and work for FireWire core functions and
+> 1394 OHCI driver, as well as sound drivers. This commit replaces the
+> corresponding entry.
+> 
+> As you know, IEEE 1394 is enough legacy. I would like to schedule the end
+> of my work in the subsystem. My effort will last next 6 years. In 2026, I
+> will start strong announcement for users to migrate their work load from
+> IEEE 1394 bus (e.g. by purchasing alternative devices in USB and hardening
+> system for them), then in 2029 let me resign the maintainer and close
+> Linux 1394 project.
+> 
+> My current work focuses on real time data (sampling data) transmission
+> protocol in packet-oriented communication, thus I would provide less help
+> to implementations for the other type of protocol; i.e. IPv4/IPv6 over
+> IEEE 1394 bus (firewire-net), SCSI transport protocol over IEEE 1394 bus
+> (firewire-sbp2) and iSCSI target (sbp-target).
+> 
+> If receiving few objections from developers, I will start my work to send
+> fixes for v6.3 prepatch, and PR for future v6.4 or later. I'm pleased if
+> getting any help until the end.
+> 
+> Reference: commit b32744751e75 ("firewire: add to MAINTAINERS")
+> Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 
-Could you please fix and check your driver? If my above statement
-is not correct, please provide Acked-by or Reviwed-by tags to the
-path that is in question.
+Acked-by: Takashi Iwai <tiwai@suse.de>
 
-Otherwise please add an rcu_head in your data to free objects over
-kvfree_rcu() using double argument API.
 
-Could you please support?
+thanks,
 
---
-Uladzislau Rezki
+Takashi
