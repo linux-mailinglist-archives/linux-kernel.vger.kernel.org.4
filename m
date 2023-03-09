@@ -2,148 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C906B293F
+	by mail.lfdr.de (Postfix) with ESMTP id 213A16B293E
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjCIP65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
+        id S231582AbjCIP7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbjCIP6u (ORCPT
+        with ESMTP id S229935AbjCIP6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:58:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB692055C;
-        Thu,  9 Mar 2023 07:58:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0511761A15;
-        Thu,  9 Mar 2023 15:58:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2C7DC433D2;
-        Thu,  9 Mar 2023 15:58:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678377528;
-        bh=t69UDhoxhHrHpDpl6paYNWueK0bZtsVn6gfBnfrYROk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JO24IpEK0pSJ3dljpnV0AuGqz2G9JT40zHPjdfl8aYPJhDPNL5jKYkmrV5hnuhuJy
-         3nMB3Oqlv3QfOKiM4Nt4RDU30C0VCjd+c7mbsHN3mVrvL92DZyuwInOuYhg/5JH97g
-         8n5diV3ZsgV1JH6ge/YZw2BIRFq29cY7RmeGyGeQ=
-Date:   Thu, 9 Mar 2023 16:58:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Ye, Xiang" <xiang.ye@intel.com>
-Cc:     Andi Shyti <andi.shyti@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
-Message-ID: <ZAoCNR/iAv3IOJ6D@kroah.com>
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
- <20230309071100.2856899-2-xiang.ye@intel.com>
- <ZAmQOIh/71rY4Pa4@kroah.com>
- <ZAmngB84ty1flD9K@ye-NUC7i7DNHE>
- <ZAmpse14Evvrfa/f@kroah.com>
- <ZAmvocpy68qurCvt@intel.intel>
- <ZAn/L8Dg/Ehx9bMo@ye-NUC7i7DNHE>
+        Thu, 9 Mar 2023 10:58:54 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8587A90;
+        Thu,  9 Mar 2023 07:58:52 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id f16so2318514ljq.10;
+        Thu, 09 Mar 2023 07:58:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678377531;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WT1eDLrYPweHOSvfYO2xevZujy3gdlIkd4hrI5NuO68=;
+        b=M6HZJlcaOLYfhx8X00zRKtDJDCQ39kwVBPP3EdRYWxdZkVkVeTYFkarryLHkteejU7
+         Bz+1VcwM3jkfNWBJV07ZGB4bzpbrSrfxfdh9O+5T8RozELBOQNP6AsENp2PvVUaFCCIJ
+         EYh7lNQv6ZdwOpWmjQmXQZlt6NDLMVpjQmcXue3wRvGIxXRRKNO+ExpOkszIqMJVJvYt
+         XHvGqBHkxUOQdW2FM2qoZzzNNXRX9WuB1Tkqgrp7vgvH8FSH/Xg2gQriM3mTgGPnenZc
+         OTy7BN8YijbkCZU/RHM5DiDdXUuozsXt1XJAMqpEFKOBDISInCeBkX1HfgC+0rgZ2X+u
+         Rplw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678377531;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WT1eDLrYPweHOSvfYO2xevZujy3gdlIkd4hrI5NuO68=;
+        b=4e42k9HzOq/vtgR65auNLF3plZqWq8EzN1t5OOaqsiG+0pMER+T/dvdgbvf6n0l2V/
+         SNMmNErOxc5AciKJ7SmjVPdpxECI7I7rHXdQpqy7NmSDJhEJsVnyUR4YNvMq5M26lQSd
+         CkuLmv18GMqlaYnQN3nItKrUbSP7/l5q8C0tR+CAqPipoXrLg5rBYaJ7jZXfJzebzxlm
+         9CDz/Hi6dAV6hProfSoA1mDDaeFiaLxhXG7xlLLEJM9LdD7/V6ZxsaBTKXZf17H7v6tS
+         KhIwBNuBlYo/RZyQCAp1GpkOpQFyLBkAUbRp4Hz5ziDOuDH3wXknKB3YKVYt1jKX4y7p
+         S4Sg==
+X-Gm-Message-State: AO0yUKVNREOkePulc9/6LC9PP3JsRQOsnBlm8R+s0YX/OwtnWkhvxwuv
+        kYjXmpWB/uyXktqgAYNvIeMNAEcfcsAL5g==
+X-Google-Smtp-Source: AK7set8c7yjN90nXpNlY3N8l0RbdcrtAKnOXvRgtr28IJapZMi640zsmYzqg2oG3xwEn+7pTjOwcmA==
+X-Received: by 2002:a2e:a803:0:b0:298:700c:c8d with SMTP id l3-20020a2ea803000000b00298700c0c8dmr2041273ljq.5.1678377530693;
+        Thu, 09 Mar 2023 07:58:50 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id z10-20020a2e8e8a000000b002986d9bdecesm690461ljk.129.2023.03.09.07.58.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 07:58:50 -0800 (PST)
+Date:   Thu, 9 Mar 2023 17:58:49 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        dmatlack@google.com, jmattson@google.com, mizhang@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Patch v4 05/18] KVM: x86/mmu: Add split_shadow_page_cache
+ pages to global count of MMU cache pages
+Message-ID: <20230309175849.0000565e@gmail.com>
+In-Reply-To: <20230306224127.1689967-6-vipinsh@google.com>
+References: <20230306224127.1689967-1-vipinsh@google.com>
+        <20230306224127.1689967-6-vipinsh@google.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAn/L8Dg/Ehx9bMo@ye-NUC7i7DNHE>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 11:45:51PM +0800, Ye, Xiang wrote:
-> On Thu, Mar 09, 2023 at 11:06:25AM +0100, Andi Shyti wrote:
-> > On Thu, Mar 09, 2023 at 10:41:05AM +0100, Greg Kroah-Hartman wrote:
-> > > On Thu, Mar 09, 2023 at 05:31:44PM +0800, Ye, Xiang wrote:
-> > > > On Thu, Mar 09, 2023 at 08:52:24AM +0100, Greg Kroah-Hartman wrote:
-> > > > > On Thu, Mar 09, 2023 at 03:10:56PM +0800, Ye Xiang wrote:
-> > > > > > +static int ljca_mng_get_version(struct ljca_stub *stub, char *buf)
-> > > > > > +{
-> > > > > > +	struct fw_version version = {};
-> > > > > > +	unsigned int len = sizeof(version);
-> > > > > > +	int ret;
-> > > > > > +
-> > > > > > +	ret = ljca_stub_write(stub, LJCA_MNG_GET_VERSION, NULL, 0, &version, &len, true,
-> > > > > > +			      LJCA_USB_WRITE_ACK_TIMEOUT_MS);
-> > > > > > +	if (ret)
-> > > > > > +		return ret;
-> > > > > > +
-> > > > > > +	if (len != sizeof(version)) {
-> > > > > > +		dev_err(&stub->intf->dev, "get version failed, len:%d\n", len);
-> > > > > > +		return -EINVAL;
-> > > > > > +	}
-> > > > > > +
-> > > > > > +	return sysfs_emit(buf, "%d.%d.%d.%d\n", version.major, version.minor,
-> > > > > > +			  le16_to_cpu(version.patch), le16_to_cpu(version.build));
-> > > > > > +}
-> > > > > 
-> > > > > You have sysfs files, yet no Documentation/ABI/ entries?  That's not
-> > > > > allowed, you know this :(
-> > > > The Documentation/ABI/ entries is added for the sysfs on patch 5 of this series.
-> > > > https://patchwork.kernel.org/project/linux-usb/patch/20230309071100.2856899-6-xiang.ye@intel.com/
-> > > 
-> > > Ah, missed that, sorry.
-> > > 
-> > > > > 
-> > > > > > +static ssize_t cmd_store(struct device *dev, struct device_attribute *attr, const char *buf,
-> > > > > > +			 size_t count)
-> > > > > > +{
-> > > > > > +	struct usb_interface *intf = to_usb_interface(dev);
-> > > > > > +	struct ljca_dev *ljca_dev = usb_get_intfdata(intf);
-> > > > > > +	struct ljca_stub *mng_stub = ljca_stub_find(ljca_dev, LJCA_MNG_STUB);
-> > > > > > +	struct ljca_stub *diag_stub = ljca_stub_find(ljca_dev, LJCA_DIAG_STUB);
-> > > > > > +
-> > > > > > +	if (sysfs_streq(buf, "dfu"))
-> > > > > > +		ljca_mng_set_dfu_mode(mng_stub);
-> > > > > > +	else if (sysfs_streq(buf, "debug"))
-> > > > > > +		ljca_diag_set_trace_level(diag_stub, 3);
-> > > > > 
-> > > > > Sorry, but no, you can't do this in a sysfs file.
-> > > > Do you mean that we can't use sysfs to send "debug" command to device?
-> > > 
-> > > That is correct, use the kernel-wide debugging facilities that we have
-> > > for this NEVER create your own custom interface just for one tiny
-> > > driver, that is not allowed.
-> > > 
-> > > > Could you provide some detail or hints?
-> > > 
-> > > dev_dbg().
-> But, this command is sent to SET LJCA Firmware logging level.
+On Mon,  6 Mar 2023 14:41:14 -0800
+Vipin Sharma <vipinsh@google.com> wrote:
 
-What command?
+> Add pages in split_shadow_page_cache to the global counter
+> kvm_total_unused_cached_pages. These pages will be freed by MMU shrinker
+> in future commit.
+> 
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index df8dcb7e5de7..0ebb8a2eaf47 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -6149,7 +6149,9 @@ static void mmu_free_vm_memory_caches(struct kvm *kvm)
+>  {
+>  	kvm_mmu_free_memory_cache(&kvm->arch.split_desc_cache);
+>  	kvm_mmu_free_memory_cache(&kvm->arch.split_page_header_cache);
+> -	kvm_mmu_free_memory_cache(&kvm->arch.split_shadow_page_cache);
+> +	mutex_lock(&kvm->slots_lock);
+> +	mmu_free_sp_memory_cache(&kvm->arch.split_shadow_page_cache);
+> +	mutex_unlock(&kvm->slots_lock);
 
-This isn't documented at all, sorry, I don't understand what you are
-trying to do here.
+Taking the lock of the calling path in the layer of cache topping/free layer
+seems off.
 
-> > I'm not sure this is the same thing, though, as it's not a drvier
-> > to user debug message.
-> > 
-> > Ye, can you please explain better what this command does? You are
-> > sending a LJCA_DIAG_SET_TRACE_LEVEL command to the device with a
-> > parameter "3" which has a meaining only for you :)
-> Sure, the LJCA_DIAG_SET_TRACE_LEVEL command is used to set LJCA FW
-> logging level. 3 means debug level for FW. It is used for LJCA FW
-> debugging: when FW got some issue, we can send debug level to FW
-> to make FW print degging log for analysis.
+My vote goes to have a lock for each cache and take the lock of the cache when
+topping/free the cache. It is more self-contained and architecturally nice.
 
-And where is that printed?  In the kernel log?  Somewhere else?  What
-does the firmware have to do with any of this?
+>  }
+>  
+>  void kvm_mmu_uninit_vm(struct kvm *kvm)
+> @@ -6303,7 +6305,7 @@ static int topup_split_caches(struct kvm *kvm)
+>  	if (r)
+>  		return r;
+>  
+> -	return kvm_mmu_topup_memory_cache(&kvm->arch.split_shadow_page_cache, 1);
+> +	return mmu_topup_sp_memory_cache(&kvm->arch.split_shadow_page_cache, 1);
+>  }
+>  
+>  static struct kvm_mmu_page *shadow_mmu_get_sp_for_split(struct kvm *kvm, u64 *huge_sptep)
+> @@ -6328,6 +6330,7 @@ static struct kvm_mmu_page *shadow_mmu_get_sp_for_split(struct kvm *kvm, u64 *hu
+>  	/* Direct SPs do not require a shadowed_info_cache. */
+>  	caches.page_header_cache = &kvm->arch.split_page_header_cache;
+>  	caches.shadow_page_cache = &kvm->arch.split_shadow_page_cache;
+> +	caches.count_shadow_page_allocation = true;
+>  
+>  	/* Safe to pass NULL for vCPU since requesting a direct SP. */
+>  	return __kvm_mmu_get_shadow_page(kvm, NULL, &caches, gfn, role);
 
-thanks,
-
-greg k-h
