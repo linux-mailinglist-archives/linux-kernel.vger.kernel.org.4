@@ -2,69 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB876B1927
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 03:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B14C26B192A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 03:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbjCICWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 21:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S229757AbjCICXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 21:23:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjCICWD (ORCPT
+        with ESMTP id S229484AbjCICXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 21:22:03 -0500
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0CEC70BB;
-        Wed,  8 Mar 2023 18:22:02 -0800 (PST)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-17638494edbso874875fac.10;
-        Wed, 08 Mar 2023 18:22:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678328521;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sq9scOTrmtXuKVvVKQXEq5jBdB9obSnJgHrqb9SS0/0=;
-        b=642AsthpG45O7zmsBmMU+cimhdPUcXKACdDK3yeBSHdQrRPnoYVbrtoM6xxo+G8Ut8
-         uDf0efVeyVIwMP0QHi27JaievjhuzDXYkTzm+rMO7aihr4SZQW8XO+WmSlomaRdFpOvJ
-         GrnTCdHOkIqbNfgP3ocCzwInHdJkqsS4HCnkTQIeONmsHn5TlMpgtnAVpyOuHqiyHgKT
-         /ETwrPlf6H2T4kDOqNTT7jftd/AnkkAiQCVCysGhoenJK9oDk9IjsjA+Rrrmd6Z+Gbgk
-         UMZsVNFqLQSyGbfeMQisXtk4ilV2LZgGMvAUTvMjzrltJ18Ncw2vWkn+a0pFb9mglE/B
-         Pdew==
-X-Gm-Message-State: AO0yUKUFO4mlkvJU9pSLlD65jvmdWAY3BHOyklLn5wdNq1etMdEuG6+5
-        AMEZAjxLnR6NrAnfyJwY6w==
-X-Google-Smtp-Source: AK7set9dCQKcTwwBqDU9M+LgC8dK+M+MpCK4LfyF59mfETL4i8dpAsIyUdPCD61IZHvSUXMg+ZBFgQ==
-X-Received: by 2002:a05:6870:1602:b0:172:90cc:7756 with SMTP id b2-20020a056870160200b0017290cc7756mr12152479oae.25.1678328521314;
-        Wed, 08 Mar 2023 18:22:01 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v43-20020a4a976e000000b00517fc5fdf5bsm6823674ooi.17.2023.03.08.18.22.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 18:22:00 -0800 (PST)
-Received: (nullmailer pid 235368 invoked by uid 1000);
-        Thu, 09 Mar 2023 02:22:00 -0000
-Date:   Wed, 8 Mar 2023 20:22:00 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Walle <michael@walle.cc>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 04/20] of: Move of_modalias() to module.c
-Message-ID: <20230309022200.GA198379-robh@kernel.org>
-References: <20230308153200.682248-1-miquel.raynal@bootlin.com>
- <20230308153200.682248-5-miquel.raynal@bootlin.com>
+        Wed, 8 Mar 2023 21:23:01 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219C23595;
+        Wed,  8 Mar 2023 18:22:55 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E813724E2B2;
+        Thu,  9 Mar 2023 10:22:52 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 9 Mar
+ 2023 10:22:52 +0800
+Received: from [192.168.60.132] (180.164.60.184) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 9 Mar
+ 2023 10:22:49 +0800
+Message-ID: <738921f2-0ec6-9418-2b6a-8df2a2e95130@starfivetech.com>
+Date:   Thu, 9 Mar 2023 10:22:49 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230308153200.682248-5-miquel.raynal@bootlin.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 10/11] media: uapi: add user space interfaces
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <changhuang.liang@starfivetech.com>
+References: <20230302091921.43309-1-jack.zhu@starfivetech.com>
+ <20230302091921.43309-11-jack.zhu@starfivetech.com>
+ <58f7f327-5328-8c03-4a0f-783588705972@linaro.org>
+From:   Jack Zhu <jack.zhu@starfivetech.com>
+In-Reply-To: <58f7f327-5328-8c03-4a0f-783588705972@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,24 +63,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 04:31:44PM +0100, Miquel Raynal wrote:
-> Create a specific .c file for OF related module handling.
-> Move of_modalias() inside as a first step.
-> 
-> The helper is exposed through of.h even though it is only used by core
-> files because the users from device.c will soon be split into an OF-only
-> helper in module.c as well as a device-oriented inline helper in
-> of_device.h. Putting this helper in of_private.h would require to
-> include of_private.h from of_device.h, which is not acceptable.
-> 
-> Suggested-by: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  drivers/of/Makefile |  2 +-
->  drivers/of/device.c | 37 -------------------------------------
->  drivers/of/module.c | 44 ++++++++++++++++++++++++++++++++++++++++++++
->  include/linux/of.h  |  9 +++++++++
->  4 files changed, 54 insertions(+), 38 deletions(-)
->  create mode 100644 drivers/of/module.c
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+
+On 2023/3/3 16:44, Krzysztof Kozlowski wrote:
+> On 02/03/2023 10:19, jack.zhu wrote:
+>> This patch adds user space interfaces for ISP.
+> 
+> Do not use "This commit/patch".
+> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+> 
+
+OK, I will fix it.
+
+> 
+> Why this is a separate commit? User-space API is usually added with its
+> implementation. Otherwise how does your code even compile?
+> 
+
+OK, I will merge them.
+thank you for your comments.
+
+> Best regards,
+> Krzysztof
+> 
