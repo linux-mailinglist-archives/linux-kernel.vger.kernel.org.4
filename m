@@ -2,119 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECBA16B18E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 02:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B13536B18EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 02:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjCIBtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 20:49:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
+        id S229835AbjCIBuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 20:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjCIBtt (ORCPT
+        with ESMTP id S229692AbjCIBuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 20:49:49 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C0A8091A
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 17:49:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678326588; x=1709862588;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=ynyyLkU64gZ+fFduDlkYav+op+9blkNz8x4B87ST38c=;
-  b=jwEg8xWOryeRKqOequYH6klYacNK/nRb+NOMOGb8x+5H4OQB6dw9f+J+
-   oXPcgjUfzYyRvMWpd8waPtaEs8hKnRPo8DbTecC340QXz0pYruxt7wU5I
-   sZhr824Fdij8kpIK5EsCSST7NRRKRRLtximyEfbERnKRIpibjU/0t97gN
-   hd0K54ZEEDM8QWXJOwEn0nC1uijamTzKTcaI1dPCo5SqrJS2noS+x2gde
-   YVGSxPvua/DcjvM3hSl0e93hN7sy7LWL2JYjwEdpAODQHv17jxFDjdDoW
-   mKCAyMlVSKFevb3MX4DYa8LbQ3jD2eMrd7j8adBk4mlYX58a4sx+fengk
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="363964578"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="asc'?scan'208";a="363964578"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 17:49:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="679559150"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="asc'?scan'208";a="679559150"
-Received: from debian-skl.sh.intel.com (HELO debian-skl) ([10.239.159.40])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Mar 2023 17:49:46 -0800
-Date:   Thu, 9 Mar 2023 09:48:30 +0800
-From:   Zhenyu Wang <zhenyuw@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: Re: [PATCH] perf/x86/intel: use hexidecimal value for cpuid
-Message-ID: <ZAk67tyBMde8k1C5@debian-scheme>
-Reply-To: Zhenyu Wang <zhenyuw@linux.intel.com>
-References: <20230308031501.4688-1-zhenyuw@linux.intel.com>
- <20230308141619.GI2017917@hirez.programming.kicks-ass.net>
+        Wed, 8 Mar 2023 20:50:12 -0500
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6767D8537E;
+        Wed,  8 Mar 2023 17:50:03 -0800 (PST)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 192.168.10.46
+        by mg.richtek.com with MailGates ESMTP Server V5.0(20041:0:AUTH_RELAY)
+        (envelope-from <cy_huang@richtek.com>); Thu, 09 Mar 2023 09:49:28 +0800 (CST)
+Received: from ex3.rt.l (192.168.10.46) by ex3.rt.l (192.168.10.46) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Thu, 9 Mar
+ 2023 09:49:27 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex3.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Thu, 9 Mar 2023 09:49:27 +0800
+Date:   Thu, 9 Mar 2023 09:49:27 +0800
+From:   ChiYuan Huang <cy_huang@richtek.com>
+To:     Lee Jones <lee@kernel.org>
+CC:     ChiaEn Wu <chiaen_wu@richtek.com>, <corbet@lwn.net>,
+        <pavel@ucw.cz>, <matthias.bgg@gmail.com>,
+        <andriy.shevchenko@linux.intel.com>, <jacek.anaszewski@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-doc@vger.kernel.org>, <peterwu.pub@gmail.com>,
+        <linux-leds@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <szunichen@gmail.com>
+Subject: Re: [PATCH v17 RESEND 2/3] leds: flash: mt6370: Add MediaTek MT6370
+ flashlight support
+Message-ID: <20230309014927.GA12537@linuxcarl2.richtek.com>
+References: <cover.1677150607.git.chiaen_wu@richtek.com>
+ <dc467984ebfc443685af62310aadb45389e804d6.1677150607.git.chiaen_wu@richtek.com>
+ <20230305100608.GD2574592@google.com>
+ <20230307034433.GA10739@linuxcarl2.richtek.com>
+ <20230308135433.GL9667@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="kQDGHQ6bVW4X2LBn"
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20230308141619.GI2017917@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230308135433.GL9667@google.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 08, 2023 at 01:54:33PM +0000, Lee Jones wrote:
+Hi, Lee:
+> On Tue, 07 Mar 2023, ChiYuan Huang wrote:
+> 
+> > Hi, Lee:
+> >    Reply below the comments.
+> >
+> > On Sun, Mar 05, 2023 at 10:06:08AM +0000, Lee Jones wrote:
+> > > On Thu, 23 Feb 2023, ChiaEn Wu wrote:
+> > >
+> > > > From: ChiYuan Huang <cy_huang@richtek.com>
+> > > >
+> > > > The MediaTek MT6370 is a highly-integrated smart power management IC,
+> > > > which includes a single cell Li-Ion/Li-Polymer switching battery
+> > > > charger, a USB Type-C & Power Delivery (PD) controller, dual Flash
+> > > > LED current sources, a RGB LED driver, a backlight WLED driver,
+> > > > a display bias driver and a general LDO for portable devices.
+> > > >
+> > > > Add support for the MT6370 Flash LED driver. Flash LED in MT6370
+> > > > has 2 channels and support torch/strobe mode.
+> > > >
+> > > > Acked-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+> > > > Co-developed-by: Alice Chen <alice_chen@richtek.com>
+> > > > Signed-off-by: Alice Chen <alice_chen@richtek.com>
+> > > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > > > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> > > > ---
+> > > > v17
+> > > > - Update the year of Copyright from 2022 to 2023
+> > > >
+> > > > ---
+> > > >  drivers/leds/flash/Kconfig             |  13 +
+> > > >  drivers/leds/flash/Makefile            |   1 +
+> > > >  drivers/leds/flash/leds-mt6370-flash.c | 596 +++++++++++++++++++++++++++++++++
+> > > >  3 files changed, 610 insertions(+)
+> > > >  create mode 100644 drivers/leds/flash/leds-mt6370-flash.c
+> 
+> [...]
+> 
+> > > > +static int _mt6370_flash_brightness_set(struct led_classdev_flash *fl_cdev,
+> > > > +					u32 brightness)
+> > > > +{
+> > > > +	struct mt6370_led *led = to_mt6370_led(fl_cdev, flash);
+> > > > +	struct mt6370_priv *priv = led->priv;
+> > > > +	struct led_flash_setting *setting = &fl_cdev->brightness;
+> > > > +	u32 val = (brightness - setting->min) / setting->step;
+> > > > +	int ret, i;
+> > > > +
+> > > > +	if (led->led_no == MT6370_LED_JOINT) {
+> > >
+> > > What is a "JOINT"?
+> > >
+> > Since MT6370 has two flash led channels. Per channel can drive the current up to 1.5A.
+> > 'JOINT' case is used if 1.5A driving current is not enough, like as flash current 2A.
+> > They can use two channels to drive 'one' flash led by the HW application.
+> > This will make the driving current larger than the capability of one channel.
+> 
+> Is "joint" the term used in the datasheet?
+>
+Nope, this term is not clearly defined in the datasheet. but this kind of HW application is
+allowed. 
+> Please make this definition clear in the code.
+> 
+> If I'm asking, others are likely to too.
+> 
+Thanks, I'll add more comments to clearly describe what the 'JOINT' code did.
+> [...]
+> 
+> > > > +static int mt6370_init_flash_properties(struct device *dev,
+> > > > +					struct mt6370_led *led,
+> > > > +					struct fwnode_handle *fwnode)
+> > > > +{
+> > > > +	struct led_classdev_flash *flash = &led->flash;
+> > > > +	struct led_classdev *lcdev = &flash->led_cdev;
+> > > > +	struct mt6370_priv *priv = led->priv;
+> > > > +	struct led_flash_setting *s;
+> > > > +	u32 sources[MT6370_MAX_LEDS];
+> > > > +	u32 max_ua, val;
+> > > > +	int i, ret, num;
+> > > > +
+> > > > +	num = fwnode_property_count_u32(fwnode, "led-sources");
+> > > > +	if (num < 1)
+> > > > +		return dev_err_probe(dev, -EINVAL,
+> > > > +				     "Not specified or wrong number of led-sources\n");
+> > > > +
+> > > > +	ret = fwnode_property_read_u32_array(fwnode, "led-sources", sources, num);
+> > > > +	if (ret)
+> > > > +		return ret;
+> > > > +
+> > > > +	for (i = 0; i < num; i++) {
+> > > > +		if (sources[i] >= MT6370_MAX_LEDS)
+> > > > +			return -EINVAL;
+> > > > +		if (priv->leds_active & BIT(sources[i]))
+> > > > +			return -EINVAL;
+> > > > +		priv->leds_active |= BIT(sources[i]);
+> > > > +	}
+> > > > +
+> > > > +	led->led_no = num == 2 ? MT6370_LED_JOINT : sources[0];
+> > > > +
+> > > > +	max_ua = num == 2 ? MT6370_ITORCH_DOUBLE_MAX_uA : MT6370_ITORCH_MAX_uA;
+> > > > +	val = MT6370_ITORCH_MIN_uA;
+> > >
+> > > In what scenario does this not get overwritten?
+> > >
+> > Only if the property is missing. This will make the value keep in minimum.
+> 
+> If the property is missing, fwnode_property_read_u32() returns an errno, no?
+> 
+> If that's the case, val will be over-written in the if() clause?
+> 
+In this funciton, three properties needs to be paresed from DT. Each one need to clamp the value.
+There're two ways to write the code.
 
---kQDGHQ6bVW4X2LBn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[Option 1]
+ret = fwnode_property_read_u32(...)
+if (ret)
+    val = MIM_uA;
 
-On 2023.03.08 15:16:19 +0100, Peter Zijlstra wrote:
-> On Wed, Mar 08, 2023 at 11:15:01AM +0800, Zhenyu Wang wrote:
-> > It's easier to use hexidecimal value instead of decimal for reading
-> > and following with SDM doc, also align with other cpuid calls.
->=20
-> *shrug*..
->=20
-> > Signed-off-by: Zhenyu Wang <zhenyuw@linux.intel.com>
-> > ---
-> >  arch/x86/events/intel/core.c | 2 +-
-> >  arch/x86/events/intel/lbr.c  | 2 +-
-> >  arch/x86/events/intel/pt.c   | 2 +-
-> >  3 files changed, 3 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-> > index 14f0a746257d..5af084198c8f 100644
-> > --- a/arch/x86/events/intel/core.c
-> > +++ b/arch/x86/events/intel/core.c
-> > @@ -5903,7 +5903,7 @@ __init int intel_pmu_init(void)
-> >  	 * Check whether the Architectural PerfMon supports
-> >  	 * Branch Misses Retired hw_event or not.
-> >  	 */
-> > -	cpuid(10, &eax.full, &ebx.full, &fixed_mask, &edx.full);
-> > +	cpuid(0xA, &eax.full, &ebx.full, &fixed_mask, &edx.full);
-> >  	if (eax.split.mask_length < ARCH_PERFMON_EVENTS_COUNT)
-> >  		return -ENODEV;
->=20
-> But now the data type names and the cpuid calls are no longer related.
+val = mt6370_clamp(val, MIN, MAX);
 
-oh, right, missed that. How about we change those too e.g union cpuid_0xa_e=
-ax?
+[Option 2]
+val = MIN_uA;
+if (!ret)
+    val = mt6370_clamp(val, MIN, MAX);
 
---kQDGHQ6bVW4X2LBn
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iF0EARECAB0WIQTXuabgHDW6LPt9CICxBBozTXgYJwUCZAk66gAKCRCxBBozTXgY
-J4QVAKCNg0g+Y2/f8QRFEGaBrIpkUGZlTQCfYKWjU6RQJ+qpiSaMzkkaUJz9oUU=
-=BvZw
------END PGP SIGNATURE-----
-
---kQDGHQ6bVW4X2LBn--
+From the above, the sencond one can save more LOC, no?
+But it seems the first one is more preferable by you, right?
+> --
+> Lee Jones [李琼斯]
