@@ -2,181 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 481296B286C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFE16B2870
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbjCIPJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:09:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
+        id S230116AbjCIPLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbjCIPJU (ORCPT
+        with ESMTP id S231472AbjCIPLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:09:20 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6D8FA085;
-        Thu,  9 Mar 2023 07:06:52 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 9 Mar 2023 10:11:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DDFFC231
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:07:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678374457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=aSKPQLlT8s4GE5W+OX19xgVfR+OIkeMkbwlF9u85DuE=;
+        b=IgQRTaGWCxIP94l5l1T/LkDbtjA3tXwloXOefX38TOONYYuGkXYzcBBoW/40J6Oed8r1h0
+        zCLpYBUhBnzaJY9sn1yfg9MuQnO4zoxDAcUg4FVC0G+nTiICKDGaI0PhQKHHhGeBq3FDDq
+        hwd7eBsObDz9iEe70+XFs35kQqdlUZc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-126-0jRa6kuvMNWofKtdGjGHkg-1; Thu, 09 Mar 2023 10:07:35 -0500
+X-MC-Unique: 0jRa6kuvMNWofKtdGjGHkg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1E931220A0;
-        Thu,  9 Mar 2023 15:06:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1678374411; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R6g4kRDdU6Pzsf3osnmqtkBjat/AV+71HfLT7+Petq0=;
-        b=Ymap7u+kMyX4vLkfKiaEhZhokT4sx2z9jpEPbZSO9rQzt0kIJj+cqmoblpnjoV1k0SyEUj
-        cd7DAI8WoFdsOp/67o6qtC6SgujL+cLHeWozarmPZE1WPw568sbDtYTP9mwHYAJLwL6Qyq
-        IdcW9IUA7ZJ3B7p6KlToms8GZTboVQ0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1678374411;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R6g4kRDdU6Pzsf3osnmqtkBjat/AV+71HfLT7+Petq0=;
-        b=C+pFLS1Gyn+Z1rC/kHyViduGByHJeoMNBtoejeg/Mh44UksWeUecipeduzk9dSd7usn4v5
-        wp2k7mc+nu0mCUBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0F7A513A10;
-        Thu,  9 Mar 2023 15:06:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8fSxAwv2CWSmTgAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 09 Mar 2023 15:06:51 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id D1ADDA06FF; Thu,  9 Mar 2023 16:06:49 +0100 (CET)
-Date:   Thu, 9 Mar 2023 16:06:49 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>, Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [RFC 11/11] ext4: Add allocation criteria 1.5 (CR1_5)
-Message-ID: <20230309150649.5pnhqsf2khvffl6l@quack3>
-References: <cover.1674822311.git.ojaswin@linux.ibm.com>
- <08173ee255f70cdc8de9ac3aa2e851f9d74acb12.1674822312.git.ojaswin@linux.ibm.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 974D91C294E8;
+        Thu,  9 Mar 2023 15:07:35 +0000 (UTC)
+Received: from mail.corp.redhat.com (unknown [10.22.34.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F278540CF8ED;
+        Thu,  9 Mar 2023 15:07:34 +0000 (UTC)
+Date:   Thu, 9 Mar 2023 16:07:32 +0100
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jiri Kosina <jikos@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] HID fixes
+Message-ID: <20230309150636.sdg5ifko7waqr6rh@mail.corp.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <08173ee255f70cdc8de9ac3aa2e851f9d74acb12.1674822312.git.ojaswin@linux.ibm.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 27-01-23 18:07:38, Ojaswin Mujoo wrote:
-> CR1_5 aims to optimize allocations which can't be satisfied in CR1. The
-> fact that we couldn't find a group in CR1 suggests that it would be
-> difficult to find a continuous extent to compleltely satisfy our
-> allocations. So before falling to the slower CR2, in CR1.5 we
-> proactively trim the the preallocations so we can find a group with
-> (free / fragments) big enough.  This speeds up our allocation at the
-> cost of slightly reduced preallocation.
-> 
-> The patch also adds a new sysfs tunable:
-> 
-> * /sys/fs/ext4/<partition>/mb_cr1_5_max_trim_order
-> 
-> This controls how much CR1.5 can trim a request before falling to CR2.
-> For example, for a request of order 7 and max trim order 2, CR1.5 can
-> trim this upto order 5.
-> 
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Linus,
 
-The idea looks good. Couple of questions below...
+please pull from
 
-> +/*
-> + * We couldn't find a group in CR1 so try to find the highest free fragment
-> + * order we have and proactively trim the goal request length to that order to
-> + * find a suitable group faster.
-> + *
-> + * This optimizes allocation speed at the cost of slightly reduced
-> + * preallocations. However, we make sure that we don't trim the request too
-> + * much and fall to CR2 in that case.
-> + */
-> +static void ext4_mb_choose_next_group_cr1_5(struct ext4_allocation_context *ac,
-> +		enum criteria *new_cr, ext4_group_t *group, ext4_group_t ngroups)
-> +{
-> +	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
-> +	struct ext4_group_info *grp = NULL;
-> +	int i, order, min_order;
-> +
-> +	if (unlikely(ac->ac_flags & EXT4_MB_CR1_5_OPTIMIZED)) {
-> +		if (sbi->s_mb_stats)
-> +			atomic_inc(&sbi->s_bal_cr1_5_bad_suggestions);
-> +	}
-> +
-> +	/*
-> +	 * mb_avg_fragment_size_order() returns order in a way that makes
-> +	 * retrieving back the length using (1 << order) inaccurate. Hence, use
-> +	 * fls() instead since we need to know the actual length while modifying
-> +	 * goal length.
-> +	 */
-> +	order = fls(ac->ac_g_ex.fe_len);
-> +	min_order = order - sbi->s_mb_cr1_5_max_trim_order;
+  git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git tags/for-linus-2023030901
 
-Given we still require the allocation contains at least originally
-requested blocks, is it ever the case that goal size would be 8 times
-larger than original alloc size? Otherwise the
-sbi->s_mb_cr1_5_max_trim_order logic seems a bit pointless...
+to receive fixes for HID subsystem.
 
-> +	if (min_order < 0)
-> +		min_order = 0;
+=====
+- fix potential out of bound write of zeroes in HID core with a
+  specially crafted uhid device (Lee Jones)
+- fix potential use-after-free in work function in intel-ish-hid
+  (Reka Norman)
+- selftests config fixes (Benjamin Tissoires)
+- few device small fixes and support
+=====
 
-Perhaps add:
+Thanks.
 
-	if (1 << min_order < ac->ac_o_ex.fe_len)
-		min_order = fls(ac->ac_o_ex.fe_len) + 1;
+----------------------------------------------------------------
+Benjamin Tissoires (1):
+      selftest: hid: fix hid_bpf not set in config
 
-and then you can drop the condition from the loop below...
+Danny Kaehn (1):
+      HID: cp2112: Fix driver not registering GPIO IRQ chip as threaded
 
-> +
-> +	for (i = order; i >= min_order; i--) {
-> +		if (ac->ac_o_ex.fe_len <= (1 << i)) {
-> +			/*
-> +			 * Scale down goal len to make sure we find something
-> +			 * in the free fragments list. Basically, reduce
-> +			 * preallocations.
-> +			 */
-> +			ac->ac_g_ex.fe_len = 1 << i;
+Lee Jones (2):
+      HID: core: Provide new max_buffer_size attribute to over-ride the default
+      HID: uhid: Over-ride the default maximum data buffer value with our own
 
-When scaling down the size with sbi->s_stripe > 1, it would be better to
-choose multiple of sbi->s_stripe and not power of two. But our stripe
-support is fairly weak anyway (e.g. initial goal size does not reflect it
-at all AFAICT) so probably we don't care here either.
+Rafał Szalecki (1):
+      HID: logitech-hidpp: Add support for Logitech MX Master 3S mouse
 
-> +		} else {
-> +			break;
-> +		}
-> +
-> +		grp = ext4_mb_find_good_group_avg_frag_lists(ac,
-> +							     mb_avg_fragment_size_order(ac->ac_sb,
-> +							     ac->ac_g_ex.fe_len));
-> +		if (grp)
-> +			break;
-> +	}
-> +
-> +	if (grp) {
-> +		*group = grp->bb_group;
-> +		ac->ac_flags |= EXT4_MB_CR1_5_OPTIMIZED;
-> +	} else {
-> +		/* Reset goal length to original goal length before falling into CR2 */
-> +		ac->ac_g_ex.fe_len = ac->ac_orig_goal_len;
->  		*new_cr = CR2;
->  	}
->  }
+Reka Norman (1):
+      HID: intel-ish-hid: ipc: Fix potential use-after-free in work function
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+ drivers/hid/hid-core.c              | 32 +++++++++++++++++++++++++-------
+ drivers/hid/hid-cp2112.c            |  1 +
+ drivers/hid/hid-logitech-hidpp.c    |  2 ++
+ drivers/hid/intel-ish-hid/ipc/ipc.c |  9 ++++++++-
+ drivers/hid/uhid.c                  |  1 +
+ include/linux/hid.h                 |  3 +++
+ tools/testing/selftests/hid/config  |  1 +
+ 7 files changed, 41 insertions(+), 8 deletions(-)
+
