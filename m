@@ -2,117 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19AB6B1A7A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 05:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248E76B1A7E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 05:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjCIEkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 23:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
+        id S229742AbjCIEsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 23:48:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjCIEkq (ORCPT
+        with ESMTP id S229453AbjCIEr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 23:40:46 -0500
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4B2BF3B0
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 20:40:45 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id d20so536256vsf.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 20:40:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678336844;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1HfEhdsNHcbX3MgYanmt5oONyvC5m572GacJct3ywv8=;
-        b=OY4ZWjxAKzzEe17t+/omd8pzCo16GDs+lISGaBNc7ARvCqvIDcXrBWaMz3KPUKAFAx
-         MKYjJMlijA0oiag/o9ltWgAulpb5GN7ubgXmPwvO0JcS+CHLTYBkBOAm+jnAVTiSj+dP
-         C9gs1nBW8msTqbWyP83xeXc2dm8SJOQ5ZteXs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678336844;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1HfEhdsNHcbX3MgYanmt5oONyvC5m572GacJct3ywv8=;
-        b=oDm/3ViW5HP5oe9rNemHZ2zbuwaGsaAPvHrTbI3T2xececm0aGBoI6Cz5sLgQWIBG/
-         EQi2csEC7K1DdyLDfc0I3o0hAhx4YGzHuNrvKKIzqbz0nIQ6OU2EhxQYrHEVODdliiNM
-         Gj6l/VpQULLudHhlZBER8/7gcg15FO2nujscYZtH0RA0S9PDgbB6irNxHeWvHPfMTuQI
-         cMLwWPBEzegzcpUus0+c69K7a4tBHzNWVik3YPzjhttU2C2ryfHeg4It6/e4wyK2sldt
-         2MqJSi2aixIANJEko+vQe87b080huwMGpKXj8h2ETXpmzFb4j8o3FMGr7YsqkdQf3Xwc
-         jDfw==
-X-Gm-Message-State: AO0yUKVJQIP7aT/iBACNc0vC1h6EUyvjvFp3SMtihOZYTGzOgLmlmMPo
-        iHbHr2ZM81ORp/g7Dr/VOZiLOgznxqdbNuCQXmAM4g==
-X-Google-Smtp-Source: AK7set/qz7AXP379kXCwXSGP7qW4SxN2fHK9WOBBCqjE7wujg+HjwD4MbiqD6RrlzvCfV93hp0pdiEJhzThyfyxm1e0=
-X-Received: by 2002:a05:6102:21ae:b0:412:364c:68be with SMTP id
- i14-20020a05610221ae00b00412364c68bemr13182027vsb.7.1678336844113; Wed, 08
- Mar 2023 20:40:44 -0800 (PST)
+        Wed, 8 Mar 2023 23:47:57 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CCD1FC6;
+        Wed,  8 Mar 2023 20:47:54 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328NttiG018268;
+        Thu, 9 Mar 2023 04:47:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=2iD4qKrKVuTY9r+EQEmj3UNps1cWE5eVskoKOcWH9VI=;
+ b=Fq//dHoOyTJfoFZMUpjJN+Im6A4d8i8533j94YAhpcXmsY7inzogwGZ5l+jdeAoy1Qul
+ MyJFiRDppTjVJiFIXxv6vN3I4+shxKTsBqUM5fqS/cJQY4VAgCyqcqcy+TPi+GsZiGWq
+ MTz/bpla7x+A/wcW7K7mXoiIJshY6+2MlIGgyt/d8ptuNm6HP5r+ITwfmrPOk5PXnod+
+ o1sSuzMuNdV6iQRLSJCRvEV9H1ABOXnPRJHRbQgzkiSsNtrgInaMdxK+2rChLsJAAIdm
+ R/I43aD4juPoPTjJbC26pfG39t7hmfBv3YP0Chdt5KcDNKbzx+s/VmRPwrX+Ut9tu/83 Qg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p72qarsgf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 04:47:29 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3294lRLA032394
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 9 Mar 2023 04:47:27 GMT
+Received: from [10.201.2.96] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 8 Mar 2023
+ 20:47:21 -0800
+Message-ID: <bc2680cb-e81f-4afb-5a8c-ac0f5a9aed78@quicinc.com>
+Date:   Thu, 9 Mar 2023 10:17:17 +0530
 MIME-Version: 1.0
-References: <20230307154524.118541-1-bchihi@baylibre.com> <20230307154524.118541-2-bchihi@baylibre.com>
-In-Reply-To: <20230307154524.118541-2-bchihi@baylibre.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 9 Mar 2023 12:40:33 +0800
-Message-ID: <CAGXv+5FUrWEF4SZ6DKjoF8Oai--JGFffzQ3_DyzQrUrThVEQ7Q@mail.gmail.com>
-Subject: Re: [PATCH 1/4] dt-bindings: thermal: mediatek: Add AP domain to LVTS
- thermal controllers for mt8195
-To:     bchihi@baylibre.com
-Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH V6 7/9] dt-bindings: firmware: qcom,scm: document IPQ5332
+ SCM
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <arnd@arndb.de>, <dmitry.baryshkov@linaro.org>,
+        <geert+renesas@glider.be>, <nfraprado@collabora.com>,
+        <broonie@kernel.org>, <rafal@milecki.pl>, <robimarko@gmail.com>,
+        <quic_gurus@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+References: <20230307062232.4889-1-quic_kathirav@quicinc.com>
+ <20230307062232.4889-8-quic_kathirav@quicinc.com>
+ <754a2d38-dd7b-48b6-80e5-683ca193e0b1@linaro.org>
+ <ab803e21-76bf-308c-9df0-8b7b45b472b2@quicinc.com>
+ <2d1661fe-92bd-a117-27a5-cf1803ce363f@linaro.org>
+Content-Language: en-US
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+In-Reply-To: <2d1661fe-92bd-a117-27a5-cf1803ce363f@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: aDjSsLTmGoKWbN1wCRgxawY3sQscZdUM
+X-Proofpoint-ORIG-GUID: aDjSsLTmGoKWbN1wCRgxawY3sQscZdUM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_01,2023-03-08_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 impostorscore=0 suspectscore=0 clxscore=1015 bulkscore=0
+ mlxlogscore=912 spamscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303090036
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 12:46=E2=80=AFAM <bchihi@baylibre.com> wrote:
->
-> From: Balsam CHIHI <bchihi@baylibre.com>
->
-> Add AP Domain to LVTS thermal controllers dt-binding definition for mt819=
-5.
->
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> ---
->  include/dt-bindings/thermal/mediatek,lvts-thermal.h | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/includ=
-e/dt-bindings/thermal/mediatek,lvts-thermal.h
-> index c09398920468..8fa5a46675c4 100644
-> --- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-> +++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-> @@ -16,4 +16,14 @@
->  #define MT8195_MCU_LITTLE_CPU2  6
->  #define MT8195_MCU_LITTLE_CPU3  7
->
-> +#define MT8195_AP_VPU0  8
 
-Can't this start from 0? This is a different hardware block. The index
-namespace is separate. Same question for MT8192.
-
-ChenYu
-
-> +#define MT8195_AP_VPU1  9
-> +#define MT8195_AP_GPU0  10
-> +#define MT8195_AP_GPU1  11
-> +#define MT8195_AP_VDEC  12
-> +#define MT8195_AP_IMG   13
-> +#define MT8195_AP_INFRA 14
-> +#define MT8195_AP_CAM0  15
-> +#define MT8195_AP_CAM1  16
-> +
->  #endif /* __MEDIATEK_LVTS_DT_H */
-> --
-> 2.34.1
+On 3/8/2023 9:14 PM, Konrad Dybcio wrote:
 >
->
+> On 8.03.2023 16:39, Kathiravan T wrote:
+>> On 3/8/2023 4:31 PM, Konrad Dybcio wrote:
+>>> On 7.03.2023 07:22, Kathiravan T wrote:
+>>>> Document the compatible for IPQ5332 SCM.
+>>>>
+>>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+>>>> ---
+>>> Does this board not have a crypto engine / CE1 clock exposed via
+>>> RPMCC? It will be enabled by default, but Linux should be aware
+>>> of it, so that we don't gate it by accident.
+>>
+>> IPQ5332 doesn't have the crypto engine and also it doesn't have RPMCC. Sorry, could you please help to explain how it is related to SCM?
+> SCM usually requires certain clocks to be up and that often includes
+> the CE1 clock on fairly recent designs.
+
+
+Thanks for the explanation. I don't see such requirements for this SoC.
+
+
+> Konrad
+>> Thanks, Kathiravan T.
