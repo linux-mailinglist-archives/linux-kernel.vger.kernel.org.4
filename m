@@ -2,175 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7B86B221C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4B96B2205
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjCILBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:01:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
+        id S229994AbjCIK6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:58:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbjCIK76 (ORCPT
+        with ESMTP id S231225AbjCIK53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:59:58 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314FDEBAD7;
-        Thu,  9 Mar 2023 02:57:51 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1paDxH-0003Zi-2W;
-        Thu, 09 Mar 2023 11:57:03 +0100
-Date:   Thu, 9 Mar 2023 10:55:26 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Alexander Couzens <lynxis@fe80.eu>
-Subject: [PATCH net-next v13 03/16] dt-bindings: arm: mediatek: sgmiisys:
- Convert to DT schema
-Message-ID: <d4cbd610bda36b8aaeb8dae8386220265098aa09.1678357225.git.daniel@makrotopia.org>
-References: <cover.1678357225.git.daniel@makrotopia.org>
+        Thu, 9 Mar 2023 05:57:29 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43833EBD88
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:55:51 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id a25so5425023edb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 02:55:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678359343;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=d3WJfEb92xt22bfFrUgoL1/wj4gfJmjIX6QMBtki11E=;
+        b=TwTMzP6pzXfLRsTYKHz1AfNCtBnZG1xs35LMAeJpVLdRxg66JtnQoc8BgMlZl4AJ5u
+         5Fqv95xgP4iXrp2U3rLknE0hmRVWN8dxqsl+zAut0Af08QfMzLcikpS6rh6JtUN2ojIP
+         hXuIMCF5dwD3EjuRWEnr98FfedfF77XY7MMO046T4sEZr1+4Rw+TAYyFV4Cybr9Vm6QH
+         3rXD4MiDZMQfE1n339YIwvXzyBMy51+QIgXa+h0FYP3DM3WE47HlK3dWtktft7URXMAj
+         OIywN8sSp+3c1bWjpyyYHCva762GKeQcUTxZUi8+WgkW5cyoxMR4LwQinoLFIQ/iLcL3
+         P0kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678359343;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d3WJfEb92xt22bfFrUgoL1/wj4gfJmjIX6QMBtki11E=;
+        b=kPHMsgQf0jxaHFAhPEmFZ2hpEfkb7oAoefmrE9X9dgem6xLoz/lD7PyUxTbGdqtQ7B
+         9JxuK9hlEUewHceEE1kkroPNXU6zntG1Toc6BpDEoUQRzTES7ftwqkPTGlf3n3lB6SyA
+         imtrtwssFh+dLl+HDUV86qEOwsA9aPfkD26UEU/C8+YUpauHY6tbcESsVrUNX5tkEZZ+
+         7OMAmPKFDbFbvQFaiVwioRzoOwH/YTlLGqWz+0xm5BTB3+X/Jl2LRuqsl1SOjVtpJNFn
+         Rf4aGIvkRwCEBni1uhBznOcxOnkaMxXn17OfyPs2+JBgWgYI5NTS94OTdGphw3SoOe3D
+         2klw==
+X-Gm-Message-State: AO0yUKXIVDRMlIXTYKiW+ypMq7VqKYOgg1xxdH1vSjhnC2LiCViwTS9Z
+        aqUDZt3G76wrJj16nx1QIJ8VQA==
+X-Google-Smtp-Source: AK7set/eMw/OTCfWM+qcnpe0fvIZLj5VwP+nBvPdyhEHct4AV3vuQ1Gw+aPhqva031kCDvgYXDboyg==
+X-Received: by 2002:a17:906:9c86:b0:914:4277:f3e1 with SMTP id fj6-20020a1709069c8600b009144277f3e1mr11340126ejc.53.1678359342896;
+        Thu, 09 Mar 2023 02:55:42 -0800 (PST)
+Received: from aspen.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id hb15-20020a170906b88f00b008d09b900614sm8614241ejb.80.2023.03.09.02.55.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 02:55:42 -0800 (PST)
+Date:   Thu, 9 Mar 2023 10:55:39 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        David Gow <davidgow@google.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        tangmeng <tangmeng@uniontech.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org
+Subject: Re: [PATCH printk v1 00/18] threaded/atomic console support
+Message-ID: <20230309105539.GA83145@aspen.lan>
+References: <20230302195618.156940-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1678357225.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230302195618.156940-1-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert mediatek,sgmiiisys bindings to DT schema format.
-Add maintainer Matthias Brugger, no maintainers were listed in the
-original documentation.
-As this node is also referenced by the Ethernet controller and used
-as SGMII PCS add this fact to the description.
-Move the file to Documentation/devicetree/bindings/pcs/ which seems more
-appropriate given that the great majority of registers are related to
-SGMII PCS functionality and only one register represents clock bits.
+On Thu, Mar 02, 2023 at 09:02:00PM +0106, John Ogness wrote:
+> Hi,
+>
+> This is v1 of a series to bring in a new threaded/atomic console
+> infrastructure. The history, motivation, and various explanations and
+> examples are available in the cover letter of tglx's RFC series
+> [0]. From that series, patches 1-18 have been mainlined as of the 6.3
+> merge window. What remains, patches 19-29, is what this series
+> represents.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- .../arm/mediatek/mediatek,sgmiisys.txt        | 27 ----------
- .../bindings/net/pcs/mediatek,sgmiisys.yaml   | 49 +++++++++++++++++++
- 2 files changed, 49 insertions(+), 27 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
- create mode 100644 Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.yaml
+So I grabbed the whole series and pointed it at the kgdb test suite.
 
-diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
-deleted file mode 100644
-index d2c24c277514..000000000000
---- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
-+++ /dev/null
-@@ -1,27 +0,0 @@
--MediaTek SGMIISYS controller
--============================
--
--The MediaTek SGMIISYS controller provides various clocks to the system.
--
--Required Properties:
--
--- compatible: Should be:
--	- "mediatek,mt7622-sgmiisys", "syscon"
--	- "mediatek,mt7629-sgmiisys", "syscon"
--	- "mediatek,mt7981-sgmiisys_0", "syscon"
--	- "mediatek,mt7981-sgmiisys_1", "syscon"
--	- "mediatek,mt7986-sgmiisys_0", "syscon"
--	- "mediatek,mt7986-sgmiisys_1", "syscon"
--- #clock-cells: Must be 1
--
--The SGMIISYS controller uses the common clk binding from
--Documentation/devicetree/bindings/clock/clock-bindings.txt
--The available clocks are defined in dt-bindings/clock/mt*-clk.h.
--
--Example:
--
--sgmiisys: sgmiisys@1b128000 {
--	compatible = "mediatek,mt7622-sgmiisys", "syscon";
--	reg = <0 0x1b128000 0 0x1000>;
--	#clock-cells = <1>;
--};
-diff --git a/Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.yaml b/Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.yaml
-new file mode 100644
-index 000000000000..7ce597011a32
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/pcs/mediatek,sgmiisys.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek SGMIISYS Controller
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+
-+description:
-+  The MediaTek SGMIISYS controller provides a SGMII PCS and some clocks
-+  to the ethernet subsystem to which it is attached.
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - mediatek,mt7622-sgmiisys
-+          - mediatek,mt7629-sgmiisys
-+          - mediatek,mt7986-sgmiisys_0
-+          - mediatek,mt7986-sgmiisys_1
-+      - const: syscon
-+
-+  reg:
-+    maxItems: 1
-+
-+  '#clock-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    soc {
-+      #address-cells = <2>;
-+      #size-cells = <2>;
-+      sgmiisys: syscon@1b128000 {
-+        compatible = "mediatek,mt7622-sgmiisys", "syscon";
-+        reg = <0 0x1b128000 0 0x1000>;
-+        #clock-cells = <1>;
-+      };
-+    };
--- 
-2.39.2
+Don't get too excited about that (the test suite only exercises 8250
+and PL011... and IIUC little in the set should impact UART polling
+anyway) but FWIW:
+Tested-by: Daniel Thompson <daniel.thompson@linaro.org>
 
+
+Daniel.
