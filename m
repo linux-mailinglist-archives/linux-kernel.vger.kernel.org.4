@@ -2,119 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECF76B28E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD8D6B28E7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:32:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjCIPbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:31:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        id S230128AbjCIPcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:32:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbjCIPb1 (ORCPT
+        with ESMTP id S230433AbjCIPbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:31:27 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0094CF16B1;
-        Thu,  9 Mar 2023 07:31:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=FXHmm4YyFhrIg8ITBaU/1RtAqRIi4e/d/ru7jqAAjyo=; b=fxmsG0C7nOCCa+6VIiKC0u0dbd
-        iiGMMPMk1VIzFzSbX4HvjCrUudVGhFG8x/5H1GKcVKTjkdyitah4DGoE9CBOqf17z3sNkpz+BdGn2
-        0jiY6tWSlf0+Id4+CuFU4K7n2g4mnyp2dTRIveOSuwwHLfdZAIru4+inV/Xk8HktK8NlKxL411FAi
-        WBs8jEHIXQQkt052Ewfqiqn/lvHlmmDo7DGappQ0/NNlIlkG+GR+JfbYaLDmh95ZH0QGB4HwtP868
-        C4PYPuuYGdHj8Ok0VeD/1EhAWzAEozg8cFNYq7EdddPX8S69ueA+AV+jmyVoGoC62IzGJTe31FQsQ
-        fCrj6TIw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:43268)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1paIEb-0004va-GQ; Thu, 09 Mar 2023 15:31:13 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1paIEY-0003lf-J6; Thu, 09 Mar 2023 15:31:10 +0000
-Date:   Thu, 9 Mar 2023 15:31:10 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/7] dsa: marvell: Correct value of max_frame_size
- variable after validation
-Message-ID: <ZAn7vkjj0bYdZnhz@shell.armlinux.org.uk>
-References: <20230309125421.3900962-1-lukma@denx.de>
- <20230309125421.3900962-7-lukma@denx.de>
- <ZAnnk5MZc0w4VkDE@shell.armlinux.org.uk>
- <20230309154350.0bdc54c8@wsk>
+        Thu, 9 Mar 2023 10:31:55 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F08FF221D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:31:39 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id ec29so8585402edb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 07:31:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google; t=1678375898;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0DkXzgN0EHgf1dOpGSe3iIK1kwbBtYjaegg+rlUzVBc=;
+        b=rdHTwYBJwTAOH3ZoXGlY/Fp2X/QNDdM0A9louBiy2i2xKkjSp8XnVIFYOQFSgO9Jbo
+         8z013P4W0b9argImTH3e4qOX0yhxpK5Ek+WB91F7tRSQbJTQdDRo6BiJbOCQvZ3y9pDc
+         ioeOFqkSz9efsJ7Ls+hDktSxzsN5U4r2XK5S4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678375898;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0DkXzgN0EHgf1dOpGSe3iIK1kwbBtYjaegg+rlUzVBc=;
+        b=jRk7MV5GZpggvnlCYQq2VCu3WBX2VYG5CGEDqAYB9MFfvwgvN9wJeBRjuVrnp63sxy
+         +5OByrC0Cgg45yMAbSCrCY2xt1L4YEs7ePE5EcWk33PLh4CYtM0INUI04btPU1JI1JX8
+         O2+xJ5L30gyHBD0pXU5k7I0tLRPYhMHZgaon9XqhiUwyNVBcLdzON+7jP64hNnkHt+5v
+         tGfm9025wbuJEMZjJXlCzSdQaJ4ubSytlqLiTanF++Mowe49A0e3QSEgjlTTSNwRsd64
+         P2ZZ1RhK3Yw1BLvkjMJxbTGV7Jxn53wKE51UofGeL4pbY281zV4+0oNGECba0LoPkEmd
+         yK+Q==
+X-Gm-Message-State: AO0yUKW9k50fwUQsTSiQyunCEpOzQTmpuEYexC7NAyOO9ImytHlWxqOn
+        6ZSZioOLac9xi6D251V8YNha5qXaHz9ODrkYX7b29A==
+X-Google-Smtp-Source: AK7set93nfCrfqMRpk5wPUF0BPSDl1IyaSI2laXoRcIFWebZUNfI5Dc9nDdr7AGuCpFt8SmT8ftKkp/Q8PN8wE40nmg=
+X-Received: by 2002:a17:906:5811:b0:877:747d:4a90 with SMTP id
+ m17-20020a170906581100b00877747d4a90mr11456691ejq.14.1678375897972; Thu, 09
+ Mar 2023 07:31:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309154350.0bdc54c8@wsk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
+ <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
+ <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com> <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
+ <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com> <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
+ <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com> <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
+ <CAHk-=wjg+xyBwMpQwLx_QWPY7Qf8gUOVek8rXdQccukDyVmE+w@mail.gmail.com>
+ <EE5E5841-3561-4530-8813-95C16A36D94A@kohlschutter.com> <CAHk-=wh5V8tQScw9Bgc8OiD0r5XmfVSCPp2OHPEf0p5T3obuZg@mail.gmail.com>
+ <CAJfpeguXB9mAk=jwWQmk3rivYnaWoLrju_hq-LwtYyNXG4JOeg@mail.gmail.com>
+ <CAHk-=wg+bpP5cvcaBhnmJKzTmAtgx12UhR4qzFXXb52atn9gDw@mail.gmail.com>
+ <56E6CAAE-FF25-4898-8F9D-048164582E7B@kohlschutter.com> <490c5026-27bd-1126-65dd-2ec975aae94c@eitmlabs.org>
+ <CAJfpegt7CMMapxD0W41n2SdwiBn8+B08vsov-iOpD=eQEiPN1w@mail.gmail.com>
+ <CALKgVmeaPJj4e9sYP7g+v4hZ7XaHKAm6BUNz14gvaBd=sFCs9Q@mail.gmail.com>
+ <CALKgVmdqircMjn+iEuta5a7v5rROmYGXmQ0VJtzcCQnZYbJX6w@mail.gmail.com>
+ <CALKgVmfZdVnqMAW81T12sD5ZLTO0fp-oADp-WradW5O=PBjp1Q@mail.gmail.com>
+ <CAJfpeguKVzCyUraDQPGw6vdQFfPwTCuZv0JkMxNA69AiRib3kg@mail.gmail.com> <CALKgVmcC1VUV_gJVq70n--omMJZUb4HSh_FqvLTHgNBc+HCLFQ@mail.gmail.com>
+In-Reply-To: <CALKgVmcC1VUV_gJVq70n--omMJZUb4HSh_FqvLTHgNBc+HCLFQ@mail.gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Thu, 9 Mar 2023 16:31:27 +0100
+Message-ID: <CAJfpegt0rduBcSqSR=XmQ8bd_ws7Qy=4pxVF0_iysfc7wFagQQ@mail.gmail.com>
+Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
+ missing in lower/upper fs
+To:     jonathan@eitm.org
+Cc:     =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 03:43:50PM +0100, Lukasz Majewski wrote:
-> Hi Russell,
-> 
-> Please correct my understanding - I do see two approaches here:
-> 
-> A. In patch 1 I do set the max_frame_size values (deduced). Then I add
-> validation function (patch 2). This function shows "BUG:...." only when
-> we do have a mismatch. In patch 3 I do correct the max_frame_size
-> values (according to validation function) and remove the validation
-> function. This is how it is done in v5 and is going to be done in v6.
+On Tue, 7 Mar 2023 at 18:14, Jonathan Katz <jkatz@eitmlabs.org> wrote:
+>
+> On Tue, Mar 7, 2023 at 12:38=E2=80=AFAM Miklos Szeredi <miklos@szeredi.hu=
+> wrote:
+> >
+> > On Tue, 7 Mar 2023 at 02:12, Jonathan Katz <jkatz@eitmlabs.org> wrote:
+> > >
+> > > Hi all,
+> > >
+> > > In pursuing this issue, I downloaded the kernel source to see if I
+> > > could debug it further.  In so doing, it looks like Christian's patch
+> > > was never committed to the main source tree (sorry if my terminology
+> > > is wrong).  This is up to and including the 6.3-rc1.  I could also
+> > > find no mention of the fix in the log.
+> > >
+> > > I am trying to manually apply this patch now, but, I am wondering if
+> > > there was some reason that it was not applied (e.g. it introduces som=
+e
+> > > instability?)?
+> >
+> > It's fixing the bug in the wrong place, i.e. it's checking for an
+> > -ENOSYS return from vfs_fileattr_get(), but that return value is not
+> > valid at that point.
+> >
+> > The right way to fix this bug is to prevent -ENOSYS from being
+> > returned in the first place.
+> >
+> > Commit 02c0cab8e734 ("fuse: ioctl: translate ENOSYS") fixes one of
+> > those bugs, but of course it's possible that I missed something in
+> > that fix.
+> >
+> > Can you please first verify that an upstream kernel (>v6.0) can also
+> > reproduce this issue?
+>
+> Got ya.  that makes a lot of sense, thank you.
+>
+> I have confirmed that I continue to get the error with 6.2 .
+> quick summary of the lowerdir:
+>    server ---- NFS(ro) ---- > client "/nfs"
+>    client "/nfs" --- bindfs(uidmap) --- > client "/lower"
 
-I don't see much point in adding the validation, then correcting the
-values that were added in patch 1 that were identified by patch 2 in
-patch 3 - because that means patch 1's deduction was incorrect in
-some way.
+Can you please run bindfs in debugging mode (-d) and send the
+resulting log after reproducing the issue?
 
-If there is any correction to be done, then it should be:
-
-patch 1 - add the max_frame_size values
-patch 2 - add validation (which should not produce any errors)
-patch 3 - convert to use max_frame_size, and remove validation, stating
-  that the validation had no errors
-patch 4 (if necessary) - corrections to max_frame_size values if they
-  are actually incorrect (in other words, they were buggy before patch
-  1.)
-patch 5 onwards - the rest of the series.
-
-> B. Having showed the v5 in public, the validation function is known.
-> Then I do prepare v6 with only patch 1 having correct values (from the
-> outset) and provide in the commit message the code for validation
-> function. Then patch 2 and 3 (validation function and the corrected
-> values of max_frame_size) can be omitted in v6.
-> 
-> For me it would be better to choose approach B.
-
-I would suggest that is acceptable for the final round of patches, but
-I'm wary about saying "yes" to it because... what if something changes
-in that table between the time you've validated it, and when it
-eventually gets accepted. Keeping the validation code means that during
-the review of the series, and subsequent updates onto net-next (which
-should of course include re-running the validation code) we can be
-more certain that nothing has changed that would impact it.
-
-What I worry about is if something changes, the patch adding the
-values mis-patches (e.g. due to other changes - much of the context
-for each hunk is quite similar) then we will have quite a problem to
-sort it out.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Thanks,
+Miklos
