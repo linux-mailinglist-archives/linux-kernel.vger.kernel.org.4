@@ -2,166 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251CD6B2032
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD686B2038
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjCIJfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:35:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
+        id S230209AbjCIJgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:36:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231335AbjCIJef (ORCPT
+        with ESMTP id S229901AbjCIJgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:34:35 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7599438A;
-        Thu,  9 Mar 2023 01:34:22 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id s20so1439670lfb.11;
-        Thu, 09 Mar 2023 01:34:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678354460;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xvRq5Jv0mE0gBOFKvZj3ILwliwYZSlL8lUsvNU1SHTw=;
-        b=N6P4qY+ylVk38GewMnGLjzS479rkCWyNCexALrNfM/t83h+q3Ga+7rowXUvguSg5xK
-         MpptfQ1TlQI+CXK0lihd4kUSz45+1aQXn5uq6lxXGHAcvKs4BDCteE2s77gNKylS667O
-         zs8tnPLVe3rM+hHCoJev27WWVAiTc/+tzH3bSvm1aXtgNvgDIeicz2kME1Lfbmvv8GSo
-         f95uQDBmMACPXZdLVITYnlaApTERsHCtA6Et4oEFLcrP8H6bcZ1ufsHVBs2MmrQQ015e
-         rQV67M76fE06cWG+HL72ASXv0FtJ5KStWHteViPn+NaHZdJ/idVqTU9iGAV0tuuS7D9c
-         3q6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678354460;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xvRq5Jv0mE0gBOFKvZj3ILwliwYZSlL8lUsvNU1SHTw=;
-        b=y68aGq5+aLNzEmZ7p8LDnaeZrAFGdyC0zoQy2wlhEKvQI2qq3aAyI+VqmxnRXr5xwh
-         Y1whia8JrvK8gHWM4I0GMUXSH3FBYjfjiQE3NuljqFgugXj+pdDbqfK1wtVnOL9pfh0X
-         vUoG1wX5XPWrLrBa75FzgMP/gxRZwGa4TgOVaLZZgpDeo+Kmygg0zuCi6z2Wgium3xwJ
-         woMFY2p/KWpLDcYqnq5D2MuIdd4KBUXIoO2XLouC2Ri6FQ0M0EOpIJiabfH5Y2TbUSeL
-         2g3qYCh33hKdhdm2aE3s3mPf3Bfn4VNBFE0MgE9UoSAYun7Jue+LvV96OBmTsHdIzvlj
-         nKog==
-X-Gm-Message-State: AO0yUKWZCPNODoYJ5444trCBTmGn409gsOOLo2Sf4oJHsI2B4yITWX8x
-        Ejn7rPlmylSav3lOn+OU6Ao=
-X-Google-Smtp-Source: AK7set/WKNhApt4nM8wOG5pTfVTWwLPjWUXOfR3RP4xKZx1nR6gL5xyZWTrm4pa3U2OsTNXTyJ8uTA==
-X-Received: by 2002:a05:6512:398e:b0:4db:1e7d:5d49 with SMTP id j14-20020a056512398e00b004db1e7d5d49mr7141933lfu.21.1678354460474;
-        Thu, 09 Mar 2023 01:34:20 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id y9-20020ac24e69000000b004db1a7e6decsm2583034lfs.205.2023.03.09.01.34.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 01:34:19 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] dt-bindings: nvmem: layouts: add fixed-layout
-Date:   Thu,  9 Mar 2023 10:34:10 +0100
-Message-Id: <20230309093410.15214-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 9 Mar 2023 04:36:37 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F92C3E19
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:36:35 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8F7391F8B0;
+        Thu,  9 Mar 2023 09:36:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1678354594; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/UfrF/Vwc/LNYi2Rk9oLuWT5JiYHKO2T81orHmbB0Ww=;
+        b=r1EsnW50oD6DnaMBtnnfjqwosKY7Ll9UtsLN5ySTV+18xm98dix5+7u0DT1X5YjpABnWwL
+        HecmR1vIFbWQrlTYxGJAcKBuNRoD+ZpNHZk4WMb/cXh/OcpiapF/w8W2J60G1ueSUFNhEJ
+        yniPTuFjiBqCBvNXrtI+Sb6SX8EZNw0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1678354594;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/UfrF/Vwc/LNYi2Rk9oLuWT5JiYHKO2T81orHmbB0Ww=;
+        b=chsZFGv2Amfumh7LD54uoE1TAnrxkIvZCtlsQ9ghg68OY06O+EKSA+qE68tY1V/f9TyDoj
+        opcwtOXjkNYxwDBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4FCA01391B;
+        Thu,  9 Mar 2023 09:36:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SNrYEqKoCWQmEwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 09 Mar 2023 09:36:34 +0000
+Message-ID: <cf16ed18-00ea-c1e9-befc-16e28b61da66@suse.cz>
+Date:   Thu, 9 Mar 2023 10:36:34 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 5/8] mm: shrinkers: make count and scan in shrinker
+ debugfs lockless
+Content-Language: en-US
+To:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
+        tkhai@ya.ru, hannes@cmpxchg.org, shakeelb@google.com,
+        mhocko@kernel.org, roman.gushchin@linux.dev, muchun.song@linux.dev,
+        david@redhat.com, shy828301@gmail.com, rppt@kernel.org
+Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
+        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230307065605.58209-1-zhengqi.arch@bytedance.com>
+ <20230307065605.58209-6-zhengqi.arch@bytedance.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230307065605.58209-6-zhengqi.arch@bytedance.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On 3/7/23 07:56, Qi Zheng wrote:
+> Like global and memcg slab shrink, also use SRCU to
+> make count and scan operations in memory shrinker
+> debugfs lockless.
+> 
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 
-With the introduction of NVMEM layouts I believe we should prefer and
-support describing all NVMEM devices content in the "nvmem-layout" node.
-Inluding fixed NVMEM cells (those with hardcoded offset & size).
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-This seems to be cleaner design and more explicit.
-
-Introduce a binding allowing fixed NVMEM cells as a type of layout.
-
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- .../bindings/nvmem/layouts/fixed-layout.yaml  | 52 +++++++++++++++++++
- .../bindings/nvmem/layouts/nvmem-layout.yaml  |  1 +
- 2 files changed, 53 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
-
-diff --git a/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
-new file mode 100644
-index 000000000000..7eb86c999a5e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
-@@ -0,0 +1,52 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/nvmem/layouts/fixed-layout.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NVMEM layout for fixed NVMEM cells
-+
-+description:
-+  Many NVMEM devices have hardcoded cells layout (offset and size of specific
-+  NVMEM content doesn't change).
-+
-+  This binding allows defining such cells using NVMEM layout. It can be used on
-+  top of any NVMEM device.
-+
-+maintainers:
-+  - Rafał Miłecki <rafal@milecki.pl>
-+
-+properties:
-+  compatible:
-+    const: fixed-layout
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 1
-+
-+patternProperties:
-+  "@[a-f0-9]+$":
-+    type: object
-+    description: NVMEM cell
-+    properties:
-+      reg:
-+        maxItems: 1
-+
-+required:
-+  - compatible
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    nvmem-layout {
-+        compatible = "fixed-layout";
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+
-+        calibration@4000 {
-+            reg = <0x4000 0x100>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-index 8512ee538c4c..03da7848c713 100644
---- a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-@@ -18,6 +18,7 @@ description: |
-   perform their parsing. The nvmem-layout container is here to describe these.
- 
- oneOf:
-+  - $ref: fixed-layout.yaml
-   - $ref: kontron,sl28-vpd.yaml
-   - $ref: onie,tlv-layout.yaml
- 
--- 
-2.34.1
+> ---
+>  mm/shrinker_debug.c | 24 +++++++-----------------
+>  1 file changed, 7 insertions(+), 17 deletions(-)
+> 
+> diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
+> index 39c3491e28a3..6aa7a7ec69da 100644
+> --- a/mm/shrinker_debug.c
+> +++ b/mm/shrinker_debug.c
+> @@ -9,6 +9,7 @@
+>  /* defined in vmscan.c */
+>  extern struct rw_semaphore shrinker_rwsem;
+>  extern struct list_head shrinker_list;
+> +extern struct srcu_struct shrinker_srcu;
+>  
+>  static DEFINE_IDA(shrinker_debugfs_ida);
+>  static struct dentry *shrinker_debugfs_root;
+> @@ -49,18 +50,13 @@ static int shrinker_debugfs_count_show(struct seq_file *m, void *v)
+>  	struct mem_cgroup *memcg;
+>  	unsigned long total;
+>  	bool memcg_aware;
+> -	int ret, nid;
+> +	int ret = 0, nid, srcu_idx;
+>  
+>  	count_per_node = kcalloc(nr_node_ids, sizeof(unsigned long), GFP_KERNEL);
+>  	if (!count_per_node)
+>  		return -ENOMEM;
+>  
+> -	ret = down_read_killable(&shrinker_rwsem);
+> -	if (ret) {
+> -		kfree(count_per_node);
+> -		return ret;
+> -	}
+> -	rcu_read_lock();
+> +	srcu_idx = srcu_read_lock(&shrinker_srcu);
+>  
+>  	memcg_aware = shrinker->flags & SHRINKER_MEMCG_AWARE;
+>  
+> @@ -91,8 +87,7 @@ static int shrinker_debugfs_count_show(struct seq_file *m, void *v)
+>  		}
+>  	} while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)) != NULL);
+>  
+> -	rcu_read_unlock();
+> -	up_read(&shrinker_rwsem);
+> +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>  
+>  	kfree(count_per_node);
+>  	return ret;
+> @@ -115,9 +110,8 @@ static ssize_t shrinker_debugfs_scan_write(struct file *file,
+>  		.gfp_mask = GFP_KERNEL,
+>  	};
+>  	struct mem_cgroup *memcg = NULL;
+> -	int nid;
+> +	int nid, srcu_idx;
+>  	char kbuf[72];
+> -	ssize_t ret;
+>  
+>  	read_len = size < (sizeof(kbuf) - 1) ? size : (sizeof(kbuf) - 1);
+>  	if (copy_from_user(kbuf, buf, read_len))
+> @@ -146,11 +140,7 @@ static ssize_t shrinker_debugfs_scan_write(struct file *file,
+>  		return -EINVAL;
+>  	}
+>  
+> -	ret = down_read_killable(&shrinker_rwsem);
+> -	if (ret) {
+> -		mem_cgroup_put(memcg);
+> -		return ret;
+> -	}
+> +	srcu_idx = srcu_read_lock(&shrinker_srcu);
+>  
+>  	sc.nid = nid;
+>  	sc.memcg = memcg;
+> @@ -159,7 +149,7 @@ static ssize_t shrinker_debugfs_scan_write(struct file *file,
+>  
+>  	shrinker->scan_objects(shrinker, &sc);
+>  
+> -	up_read(&shrinker_rwsem);
+> +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>  	mem_cgroup_put(memcg);
+>  
+>  	return size;
 
