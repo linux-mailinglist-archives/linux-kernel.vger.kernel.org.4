@@ -2,111 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42566B2728
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78DC36B272B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbjCIOkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
+        id S230351AbjCIOlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:41:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231975AbjCIOkA (ORCPT
+        with ESMTP id S230261AbjCIOlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:40:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FCB5FEB2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:39:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4BC2B81F66
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:39:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED21C433EF;
-        Thu,  9 Mar 2023 14:39:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678372791;
-        bh=ntChJKalWPnMjCls5ag5q3azt2PJ3UUhYpF2y+sjJR8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ke6SxSZYDQMs+UK3Y8cXPvnRSlOpbkP2B2Y8c5zGh83FZEuy56dl0XCQIEzlm5KCE
-         8lFbv01f8kDxxHRtvh1DS/tGfdHJF7ADwZfbXSJVBjV0xFY/Ia0TW1HBnqmUY9ujLZ
-         URH35oxzWT84LvuOOam7Y8MKpGauqioQPV5Xu4afi4cuMZ3dFMgr6NgK9Int+8bG/v
-         CiJSHucSMYeUq7n4Nff5MPxjNDUHZKzu56v1yo/ww9B6wpZZ0yl0FDp7xr4D/rCvEQ
-         udbTwUAOaeQwLMc+J0WVtkCFA/o7BpXWLxXoQWoZnBkMVwx296374Ja+sYL/jMy0Bl
-         pjWeqmHp1r8vw==
-Date:   Thu, 9 Mar 2023 16:39:36 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "song@kernel.org" <song@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
-Message-ID: <ZAnvqKtZdaD7FsdT@kernel.org>
-References: <20230308094106.227365-1-rppt@kernel.org>
- <20230308094106.227365-2-rppt@kernel.org>
- <47b5156d814b88ec894f38d245d0a09061112f85.camel@intel.com>
+        Thu, 9 Mar 2023 09:41:21 -0500
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BF717CC3
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:41:18 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:3a77:63e:b168:ae06])
+        by albert.telenet-ops.be with bizsmtp
+        id WEhE2900554Hw2A06EhEPr; Thu, 09 Mar 2023 15:41:17 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1paHRf-00BKy0-Cr;
+        Thu, 09 Mar 2023 15:41:14 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1paHSD-00GSOV-UM;
+        Thu, 09 Mar 2023 15:41:13 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-gpio@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+Subject: [PATCH v2] sh: mach-x3proto: Add missing #include <linux/gpio/driver.h>
+Date:   Thu,  9 Mar 2023 15:41:13 +0100
+Message-Id: <20230309144113.3922386-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <47b5156d814b88ec894f38d245d0a09061112f85.camel@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 01:56:37AM +0000, Edgecombe, Rick P wrote:
-> On Wed, 2023-03-08 at 11:41 +0200, Mike Rapoport wrote:
-> > +
-> > +static inline void __free_one_page(struct page *page, unsigned int
-> > order,
-> > +                                  bool cache_refill)
-> > +{
-> > +       unsigned long pfn = page_to_pfn(page);
-> > +       unsigned long buddy_pfn;
-> > +       unsigned long combined_pfn;
-> > +       struct page *buddy;
-> > +       unsigned long flags;
-> > +
-> > +       spin_lock_irqsave(&free_area->lock, flags);
-> > +
-> > +       if (cache_refill) {
-> > +               set_pageblock_unmapped(page);
-> > +               free_area[order].nr_cached++;
-> > +       }
-> > +
-> > +       while (order < MAX_ORDER - 1) {
-> > +               buddy = find_unmapped_buddy_page_pfn(page, pfn,
-> > order,
-> > +                                                    &buddy_pfn);
-> > +               if (!buddy)
-> > +                       break;
-> > +
-> > +               del_page_from_free_list(buddy, order);
-> > +               combined_pfn = buddy_pfn & pfn;
-> > +               page = page + (combined_pfn - pfn);
-> > +               pfn = combined_pfn;
-> > +               order++;
-> > +       }
-> > +
-> > +       set_unmapped_order(page, order);
-> > +       add_to_free_list(page, order);
-> > +       spin_unlock_irqrestore(&free_area->lock, flags);
-> > +}
-> > +
-> 
-> The page has to be zeroed before it goes back on the list, right? I
-> didn't see it.
+shx3_defconfig:
 
-You are right, I missed it.
+    arch/sh/boards/mach-x3proto/setup.c: In function ‘x3proto_devices_setup’:
+    arch/sh/boards/mach-x3proto/setup.c:246:62: error: invalid use of undefined type ‘struct gpio_chip’
+      246 |                 baseboard_buttons[i].gpio = x3proto_gpio_chip.base + i;
+	  |                                                              ^
 
+Fix this by replacing the include of the legacy <linux/gpio.h> by
+<linux/gpio/driver.h>.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Link: https://lore.kernel.org/r/CA+G9fYs7suzGsEDK40G0pzxXyR1o2V4Pn-oy1owTsTWRVEVHog@mail.gmail.com
+Fixes: 21d9526d13b5467b ("gpiolib: Make the legacy <linux/gpio.h> consumer-only")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+---
+v2:
+  - Add Reviewed-by,
+  - Drop inclusion of <linux/gpio.h>.
+---
+ arch/sh/boards/mach-x3proto/setup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/sh/boards/mach-x3proto/setup.c b/arch/sh/boards/mach-x3proto/setup.c
+index 95b85f2e13dda75b..ca2802d3056503cb 100644
+--- a/arch/sh/boards/mach-x3proto/setup.c
++++ b/arch/sh/boards/mach-x3proto/setup.c
+@@ -16,7 +16,7 @@
+ #include <linux/input.h>
+ #include <linux/usb/r8a66597.h>
+ #include <linux/usb/m66592.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/driver.h>
+ #include <linux/gpio_keys.h>
+ #include <mach/ilsel.h>
+ #include <mach/hardware.h>
 -- 
-Sincerely yours,
-Mike.
+2.34.1
+
