@@ -2,174 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 426296B31E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A186B31E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjCIXFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 18:05:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
+        id S230171AbjCIXG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 18:06:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbjCIXFl (ORCPT
+        with ESMTP id S231277AbjCIXGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 18:05:41 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E53F4028
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 15:05:39 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id h9so3537637ljq.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 15:05:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678403138;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fImqtEk3Yd/BGvJUs6e3qMPUkkVywiIrFLK2xRO4mHk=;
-        b=SVF1YOWqlHcnG+98KHK6urC9FRxOMKlDBgSLVJgzU4H7ilC0w1HMRNzwiax+5TSVsz
-         qhH9PKA5g+Hvh7Y93QMH0aNLA/FQOSlsX9/Y65lgdV9Ko0k7TXyM5lPI4uukZZ/0Ml2B
-         tE4vBNNh+BWTfJlWcSOX2h2YPYStF2PxcnWAK+pKV1GvGBxX5DoZ8dRID6e/epDEUTO3
-         MC+K1sCUzIqXL1gFqH8c5BeOg7vmut1l3uwNSEAX7myOL3OoaWGOtxwmkj/D8hLSO4BL
-         5mi87l+TMjRcqqcIBaVvyIQA9q2Xw9EglvAfgSO9Bl1/sl/kilN2LcgCINZczoxURDuY
-         hlcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678403138;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fImqtEk3Yd/BGvJUs6e3qMPUkkVywiIrFLK2xRO4mHk=;
-        b=zeLdSgulVmCIHcp24NVxQpzSf8G5vNP3JpDeMO/HIUl5QU0U6J3uPklsJTI1Cb6iJ/
-         dIdhhtikE50g2m16drs9KtebO9Hrrr3GSBYJBdIqXCWlEH9fyNbEyl8w2E4IIPj8Epuw
-         mqo4mHTEQHkk4Kkmxk102ZXZobkGAHiyFBeC4jRAfdcbzFxX3+zoq0El9x0+DXotWko7
-         NnEKYcWmu5ZmK3yFas/O1ymKEPf480PNco4zsLxT0OxoJbcj+mUcHSqD5wIAkA4N4XyK
-         6A8YQ1qDEUkJR3yXj985caxMebM34q+i/CqVRnMMB0Gei6+rnMDaWQRMJII7kHO8jM9B
-         UvhA==
-X-Gm-Message-State: AO0yUKV9XYsI99lrLV2MatNsvhrryKZjjpbmpNv8B8ac1C2uRxMyvLas
-        EWmvATTGBq0vHoLo/Yv9Vb/qtw==
-X-Google-Smtp-Source: AK7set9AR4JFXKutmZJPBcVPweBBC2MWCPTYwTcbdhPO6Vxn8D1IcwdDLcYkLz7ISFyPNqhxDkfMgQ==
-X-Received: by 2002:a2e:8091:0:b0:293:2ef5:9434 with SMTP id i17-20020a2e8091000000b002932ef59434mr6499836ljg.2.1678403137854;
-        Thu, 09 Mar 2023 15:05:37 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id bi37-20020a05651c232500b00295b1b6e063sm48761ljb.34.2023.03.09.15.05.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 15:05:37 -0800 (PST)
-Message-ID: <e08cad22-09fe-1c65-a329-802b116e7503@linaro.org>
-Date:   Fri, 10 Mar 2023 01:05:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] drm/msm: Check for the GPU IOMMU during bind
-To:     Jordan Crouse <jorcrous@amazon.com>,
-        freedreno@lists.freedesktop.org
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Thu, 9 Mar 2023 18:06:11 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5129BF6C77
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 15:06:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=HRljb6Ys5Lzl4IACtcBUT03PpNYTz5wqznGQEKOrRfc=; b=scUUcJb5VQLufIBtkFg3uCT5Nh
+        DhsU+ZQlGLXsS2zbfZ5+K4ZV65r5RxByHCqR/b8EDjRJoQUM5pUdG6CsE63b9hMdLyV55MCVMhL0S
+        Kvw+JUBA7q3Hfu5Prr4Cj7mwoxTUXs4cTOrF/EDq3tid52JYugKjREsXulo+tCe3oW5dRZ0E5rqzY
+        lapxpVN35UHOfC4IPxTXdtoyp2kASS7gMqWEYeGX0QUUoukHxBGoeBI4wffiJ+pTh35TXU2kRQ8TQ
+        8S+R3G3uf0rH3SXjBJv0xM1pYcbo+5dB9mLnAbWSYeygnXa7IrOyaJaTj6hZWdnfGtcYw75Sqyhvh
+        XomNNAUQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1paPKW-00CIRK-19; Thu, 09 Mar 2023 23:05:48 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     hughd@google.com, akpm@linux-foundation.org, willy@infradead.org,
+        brauner@kernel.org
+Cc:     linux-mm@kvack.org, p.raghav@samsung.com, da.gomez@samsung.com,
+        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
+        keescook@chromium.org, mcgrof@kernel.org, patches@lists.linux.dev,
         linux-kernel@vger.kernel.org
-References: <20230309222049.4180579-1-jorcrous@amazon.com>
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230309222049.4180579-1-jorcrous@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v2 0/6] tmpfs: add the option to disable swap
+Date:   Thu,  9 Mar 2023 15:05:39 -0800
+Message-Id: <20230309230545.2930737-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/03/2023 00:20, Jordan Crouse wrote:
-> While booting with amd,imageon on a headless target the GPU probe was
-> failing with -ENOSPC in get_pages() from msm_gem.c.
-> 
-> Investigation showed that the driver was using the default 16MB VRAM
-> carveout because msm_use_mmu() was returning false since headless devices
-> use a dummy parent device. Avoid this by extending the existing is_a2xx
-> priv member to check the GPU IOMMU state on all platforms and use that
-> check in msm_use_mmu().
+Changes on this v2 PATCH series:
 
-I wonder if we can fix this by setting 'dummy_dev'->of_node to adreno's 
-of_node. Did you check that possibility?
+  o Added all respective tags for Reviewed-by, Acked-by's
+  o David Hildenbrand suggested on the update-docs patch to mention THP.
+    It turns out tmpfs.rst makes absolutely no mention to THP at all
+    so I added all the relevant options to the docs including the
+    system wide sysfs file. All that should hopefully demistify that
+    and make it clearer.
+  o Yosry Ahmed spell checked my patch "shmem: add support to ignore swap"
 
-> 
-> This works for memory allocations but it doesn't prevent the VRAM carveout
-> from being created because that happens before we have a chance to check
-> the GPU IOMMU state in adreno_bind.
-> 
-> There are a number of possible options to resolve this but none of them are
-> very clean. The easiest way is to likely specify vram=0 as module parameter
-> on headless devices so that the memory doesn't get wasted.
-> 
-> Signed-off-by: Jordan Crouse <jorcrous@amazon.com>
-> ---
-> 
->   drivers/gpu/drm/msm/adreno/adreno_device.c | 6 +++++-
->   drivers/gpu/drm/msm/msm_drv.c              | 7 +++----
->   drivers/gpu/drm/msm/msm_drv.h              | 2 +-
->   3 files changed, 9 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> index 36f062c7582f..4f19da28f80f 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> @@ -539,7 +539,11 @@ static int adreno_bind(struct device *dev, struct device *master, void *data)
->   	DBG("Found GPU: %u.%u.%u.%u", config.rev.core, config.rev.major,
->   		config.rev.minor, config.rev.patchid);
->   
-> -	priv->is_a2xx = config.rev.core == 2;
-> +	/*
-> +	 * A2xx has a built in IOMMU and all other IOMMU enabled targets will
-> +	 * have an ARM IOMMU attached
-> +	 */
-> +	priv->has_gpu_iommu = config.rev.core == 2 || device_iommu_mapped(dev);
->   	priv->has_cached_coherent = config.rev.core >= 6;
->   
->   	gpu = info->init(drm);
-> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-> index aca48c868c14..a125a351ec90 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.c
-> +++ b/drivers/gpu/drm/msm/msm_drv.c
-> @@ -318,11 +318,10 @@ bool msm_use_mmu(struct drm_device *dev)
->   	struct msm_drm_private *priv = dev->dev_private;
->   
->   	/*
-> -	 * a2xx comes with its own MMU
-> -	 * On other platforms IOMMU can be declared specified either for the
-> -	 * MDP/DPU device or for its parent, MDSS device.
-> +	 * Return true if the GPU or the MDP/DPU or parent MDSS device has an
-> +	 * IOMMU
->   	 */
-> -	return priv->is_a2xx ||
-> +	return priv->has_gpu_iommu ||
->   		device_iommu_mapped(dev->dev) ||
->   		device_iommu_mapped(dev->dev->parent);
+Changes since RFCv2 to the first real PATCH series:
 
-It is not a problem of you patch, of course, but this check now looks 
-strange to me. We mix the GPU check and MDP/DPU checks. Consider msm8x60 
-(a220, mdp4) and, for example, no system level MMU.
+  o Added Christian Brauner'd Acked-by for the noswap patch (the only
+    change in that patch is just the new shmem_show_options() change I
+    describe below).
+  o Embraced Yosry Ahmed's recommendation to use mapping_set_unevictable()
+    to at ensure the folios at least appear in the unevictable LRU.
+    Since that is the goal, this accomplishes what we want and the VM
+    takes care of things for us. The shem writepage() still uses a stop-gap
+    to ensure we don't get called for swap when its shmem uses
+    mapping_set_unevictable().
+  o I had evaluated using shmem_lock() instead of calling mapping_set_unevictable()
+    but upon my review this doesn't make much sense, as shmem_lock() was
+    designed to make use of the RLIMIT_MEMLOCK and this was designed for
+    files / IPC / unprivileged perf limits. If we were to use
+    shmem_lock() we'd bump the count on each new inode. Using
+    shmem_lock() would also complicate inode allocation on shmem as
+    we'd to unwind on failure from the user_shm_lock(). It would also
+    beg the question of when to capture a ucount for an inode, should we
+    just share one for the superblock at shmem_fill_super() or do we
+    really need to capture it at every single inode creation? In theory
+    we could end up with different limits. The simple solution is to
+    juse use mapping_set_unevictable() upon inode creation and be done
+    with it, as it cannot fail.
+  o Update the documentation for tmpfs before / after my patch to
+    reflect use cases a bit more clearly between ramfs, tmpfs and brd
+    ramdisks.
+  o I updated the shmem_show_options() to also reveal the noswap option
+    when its used.
+  o Address checkpatch style complaint with spaces before tabs on
+    shmem_fs.h.
 
->   }
-> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-> index 9f0c184b02a0..f33f94acd1b9 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.h
-> +++ b/drivers/gpu/drm/msm/msm_drv.h
-> @@ -126,7 +126,7 @@ struct msm_drm_private {
->   	struct msm_gpu *gpu;
->   
->   	/* gpu is only set on open(), but we need this info earlier */
-> -	bool is_a2xx;
-> +	bool has_gpu_iommu;
->   	bool has_cached_coherent;
->   
->   	struct drm_fb_helper *fbdev;
+Chances since first RFC:
+
+  o Matthew suggested BUG_ON(!folio_test_locked(folio)) is not needed
+    on writepage() callback for shmem so just remove that.
+  o Based on Matthew's feedback the inode is set up early as it is not
+    reset in case we split the folio. So now we move all the variables
+    we can set up really early.
+  o shmem writepage() should only be issued on reclaim, so just move
+    the WARN_ON_ONCE(!wbc->for_reclaim) early so that the code and
+    expectations are easier to read. This also avoid the folio splitting
+    in case of that odd case.
+  o There are a few cases where the shmem writepage() could possibly
+    hit, but in the total_swap_pages we just bail out. We shouldn't be
+    splitting the folio then. Likewise for VM_LOCKED case. But for
+    a writepage() on a VM_LOCKED case is not expected so we want to
+    learn about it so add a WARN_ON_ONCE() on that condition.
+  o Based on Yosry Ahmed's feedback the patch which allows tmpfs to
+    disable swap now just uses mapping_set_unevictable() on inode
+    creation. In that case writepage() should not be called so we
+    augment the WARN_ON_ONCE() for writepage() for that case to ensure
+    that never happens.
+
+To test I've used kdevops [0] 8 vpcu 4 GiB libvirt guest on linux-next.
+
+I'm doing this work as part of future experimentation with tmpfs and the
+page cache, but given a common complaint found about tmpfs is the
+innability to work without the page cache I figured this might be useful
+to others. It turns out it is -- at least Christian Brauner indicates
+systemd uses ramfs for a few use-cases because they don't want to use
+swap and so having this option would let them move over to using tmpfs
+for those small use cases, see systemd-creds(1).
+
+To see if you hit swap:
+
+mkswap /dev/nvme2n1
+swapon /dev/nvme2n1
+free -h
+
+With swap - what we see today
+=============================
+mount -t tmpfs            -o size=5G           tmpfs /data-tmpfs/
+dd if=/dev/urandom of=/data-tmpfs/5g-rand2 bs=1G count=5
+free -h
+               total        used        free      shared  buff/cache   available
+Mem:           3.7Gi       2.6Gi       1.2Gi       2.2Gi       2.2Gi       1.2Gi
+Swap:           99Gi       2.8Gi        97Gi
+
+
+Without swap
+=============
+
+free -h
+               total        used        free      shared  buff/cache   available
+Mem:           3.7Gi       387Mi       3.4Gi       2.1Mi        57Mi       3.3Gi
+Swap:           99Gi          0B        99Gi
+mount -t tmpfs            -o size=5G -o noswap tmpfs /data-tmpfs/
+dd if=/dev/urandom of=/data-tmpfs/5g-rand2 bs=1G count=5
+free -h
+               total        used        free      shared  buff/cache   available
+Mem:           3.7Gi       2.6Gi       1.2Gi       2.3Gi       2.3Gi       1.1Gi
+Swap:           99Gi        21Mi        99Gi
+
+The mix and match remount testing
+=================================
+
+# Cannot disable swap after it was first enabled:
+mount -t tmpfs            -o size=5G           tmpfs /data-tmpfs/
+mount -t tmpfs -o remount -o size=5G -o noswap tmpfs /data-tmpfs/
+mount: /data-tmpfs: mount point not mounted or bad option.
+       dmesg(1) may have more information after failed mount system call.
+dmesg -c
+tmpfs: Cannot disable swap on remount
+
+# Remount with the same noswap option is OK:
+mount -t tmpfs            -o size=5G -o noswap tmpfs /data-tmpfs/
+mount -t tmpfs -o remount -o size=5G -o noswap tmpfs /data-tmpfs/
+dmesg -c
+
+# Trying to enable swap with a remount after it first disabled:
+mount -t tmpfs            -o size=5G -o noswap tmpfs /data-tmpfs/
+mount -t tmpfs -o remount -o size=5G           tmpfs /data-tmpfs/
+mount: /data-tmpfs: mount point not mounted or bad option.
+       dmesg(1) may have more information after failed mount system call.
+dmesg -c
+tmpfs: Cannot enable swap on remount if it was disabled on first mount
+
+[0] https://github.com/linux-kdevops/kdevops
+
+Luis Chamberlain (6):
+  shmem: remove check for folio lock on writepage()
+  shmem: set shmem_writepage() variables early
+  shmem: move reclaim check early on writepages()
+  shmem: skip page split if we're not reclaiming
+  shmem: update documentation
+  shmem: add support to ignore swap
+
+ Documentation/filesystems/tmpfs.rst  | 66 ++++++++++++++++++++++-----
+ Documentation/mm/unevictable-lru.rst |  2 +
+ include/linux/shmem_fs.h             |  1 +
+ mm/shmem.c                           | 68 ++++++++++++++++++----------
+ 4 files changed, 103 insertions(+), 34 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.39.1
 
