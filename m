@@ -2,179 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578E56B1E37
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:32:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B4C6B1E3F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbjCIIce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 03:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
+        id S230078AbjCIIdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 03:33:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjCIIcC (ORCPT
+        with ESMTP id S229965AbjCIIdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:32:02 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53A8BDE7
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:30:40 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id v13so1186932ybu.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 00:30:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678350640;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6X01iIU0wnxPVN4mE7EbEfeiXJ0H/q86RXnLPkaXpNQ=;
-        b=sFFwDzyP/v/Gl+iJe8PCcylVUjYTJrmsMUblQNR9XkeUOZMY0fQ/Hc0T8Gwc/6uMq2
-         91LZ3Tz4iYasKiwJiIJeDzz+C3SkEpdJuEvZCa6Pe9UlGlmlajfZOiVEPA/8wGrYAKjA
-         LmGzDBMrO6/hVFU1kCe/8ncg01bk3tUxqDYtQe6qkBUYVmQfCW+WQliQlqbkx1d/J2N8
-         MdLjWXCRsGXSmVqjHwy+iHqigZedg08E7CePrj5752x+w70FD1ufJU6sATF8pxmFC85V
-         fE3T39j5W3O2Osjenh6sZ47hgip062gCMozpYQKpRfzSF1AK3nefZDMdRlfBlduVHZFP
-         XfsA==
+        Thu, 9 Mar 2023 03:33:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1990CCA2D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:31:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678350699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G4DxzMWFw5jGE1+NNVtKuCD9/BZ7uSP6hGTNxIYyrI0=;
+        b=gGnIoi6hM6iBb9zeqGoHCc3GZNS73QsR1fmmJft9fbizgOqzNJg8elhmbZ3UXxJoTVoQK6
+        GDJjK3meeuCsf3MlLtFJM+nPxdBSqZ1YK5XawY/dv3swbrAmLNZN1ntVTjY99gBfTZZQF8
+        ch9DL5IrxQT2OFVJ1QZi6akmVZnFOFs=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-192-l8Nr7XpLNi6qxp2R22POHw-1; Thu, 09 Mar 2023 03:31:38 -0500
+X-MC-Unique: l8Nr7XpLNi6qxp2R22POHw-1
+Received: by mail-qt1-f199.google.com with SMTP id c5-20020ac85185000000b003bfae3b8051so754159qtn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 00:31:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678350640;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6X01iIU0wnxPVN4mE7EbEfeiXJ0H/q86RXnLPkaXpNQ=;
-        b=CSCoI5U+dhy8r0MjiovRUkA2XQPBuDigLyqBfVVE13oSi54x5KGgRC5VZ1K03wS+PT
-         bwVBpS2v/Q4Hdz9LQ1lW2QLrLAqTxUkDOkzf5m46j5+BKmPDSa8SVGe81BHPakPUzRZU
-         l9nKqNoRzsbuiiQXUyGRMrcjYgyhThr0jvJ2adDMMORRDaNOaJNSwD2NRMpUpQhSw3+m
-         vhjd5c9KdQVeUdM2tuN02xtnsp9gK98oas6KxrsXzA7bfz2UO4p9712p2Ov5rNEPv7Bp
-         pYFFNMFQN/ybAeromYOeNhANNffjI4NYzZt5iXyiPjN5yKD1Elp1G2sEx3zE6WKmLSxv
-         eRow==
-X-Gm-Message-State: AO0yUKVxCh3ZlocHL9QztRvk4XGwWfCqj2ap4dJ2M4qFRzzuXLpEgBBZ
-        acj0xrG4P6IznRIpwIzqrRVB8ZPjJaTWKF5Wc2zmow==
-X-Google-Smtp-Source: AK7set+0Omu29SoUGI3ideA2ereu9ALg/F/QLm40StIVYVsoJ0c5ssjGhRiOVnxdmvi71H975er5diCiOZcF+UB5KCk=
-X-Received: by 2002:a25:cd0a:0:b0:b26:884:c35e with SMTP id
- d10-20020a25cd0a000000b00b260884c35emr1643582ybf.4.1678350640088; Thu, 09 Mar
- 2023 00:30:40 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678350698;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G4DxzMWFw5jGE1+NNVtKuCD9/BZ7uSP6hGTNxIYyrI0=;
+        b=5K6mMXgLqUwWCNSmuJRsjOtzizCp2rGz0MiccXVobceY/2qZ2ag7J0/ZsYiTOELhqH
+         0vsfCp4hiI6Nz1X9zMHB7n5hMxNIeN1cfIMbFFWYpWG9feWQ9yZ70xulNvxxK6TmzQHq
+         0cHtWATKRrf7NBy0PWTzJirTiLFwJ7scIq3yHpL4s/2pbrCSRxjZYzcJtxG/A1XL0CUv
+         PvhQ4ttw8H1l8OMJ0PC1AjlcUR6DI8qRFu+vhp7IWAOK7cUEMxMvC1T7GLf52+4AbzTm
+         N7Ts7UwHCABW34YV1bYw4nIQhWDspbialNmXKqTUHb4wopTDGvgaqFnwKyIbG1ErcZQE
+         zWrA==
+X-Gm-Message-State: AO0yUKV8W/T2+r8qLqARlBq9z4mFGcpPU5WX7+fWh8mr5asUme1N0zMX
+        Ot4n1IE7wLAP3TD3s1cij4EsCVdKfysjZp4l0YOzqX6HsUfjTl/68rPBIj5UnzjaTXgmQHw9hq/
+        5gbM7mfTHH0JIWhrZnvP+7scy
+X-Received: by 2002:a05:622a:54c:b0:3bf:d9d2:484f with SMTP id m12-20020a05622a054c00b003bfd9d2484fmr35189153qtx.11.1678350698226;
+        Thu, 09 Mar 2023 00:31:38 -0800 (PST)
+X-Google-Smtp-Source: AK7set+lOQQ30IfqLTp3od+p+eKiTOPO28RD1XBMQ8cVo6/e0bR73jy7mpBYd6WWU+y5fBzb1/Ok4A==
+X-Received: by 2002:a05:622a:54c:b0:3bf:d9d2:484f with SMTP id m12-20020a05622a054c00b003bfd9d2484fmr35189140qtx.11.1678350697996;
+        Thu, 09 Mar 2023 00:31:37 -0800 (PST)
+Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
+        by smtp.gmail.com with ESMTPSA id y9-20020ac87089000000b003bfaae103f6sm13229024qto.89.2023.03.09.00.31.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 00:31:37 -0800 (PST)
+Date:   Thu, 9 Mar 2023 09:31:33 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     mst@redhat.com, Rong Tao <rongtao@cestc.cn>,
+        Jason Wang <jasowang@redhat.com>,
+        "open list:VIRTIO CORE AND NET DRIVERS" 
+        <virtualization@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tools/virtio: virtio_test -h,--help should return
+ directly
+Message-ID: <20230309083133.zfebcl67k35b7rkt@sgarzare-redhat>
+References: <tencent_4B5122C4158323A1D1ACA04B3295F1579207@qq.com>
 MIME-Version: 1.0
-References: <03a8cd13af352c4d990bc70b72df4915b9fa2874.1678347776.git.geert+renesas@glider.be>
-In-Reply-To: <03a8cd13af352c4d990bc70b72df4915b9fa2874.1678347776.git.geert+renesas@glider.be>
-From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date:   Thu, 9 Mar 2023 09:30:29 +0100
-Message-ID: <CACMJSevqE8NC-=so7W_Xge-yw7w+La0dJTqx0z9u_AYt-7gtuQ@mail.gmail.com>
-Subject: Re: [PATCH] i2c: dev: Fix bus callback return values
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <tencent_4B5122C4158323A1D1ACA04B3295F1579207@qq.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Mar 2023 at 08:45, Geert Uytterhoeven <geert+renesas@glider.be> wrote:
+On Thu, Mar 09, 2023 at 02:13:13PM +0800, Rong Tao wrote:
+>From: Rong Tao <rongtao@cestc.cn>
 >
-> The i2cdev_{at,de}tach_adapter() callbacks are used for two purposes:
->   1. As notifier callbacks, when (un)registering I2C adapters created or
->      destroyed after i2c_dev_init(),
->   2. As bus iterator callbacks, for registering already existing
->      adapters from i2c_dev_init(), and for cleanup.
+>When we get help information, we should return directly, and we should not
+>execute test cases. Move the exit() directly into the help() function and
+>remove it from case '?'.
 >
-> Unfortunately both use cases expect different return values: the former
-> expects NOTIFY_* return codes, while the latter expects zero or error
-> codes, and aborts in case of error.
+>Signed-off-by: Rong Tao <rongtao@cestc.cn>
+>---
+> tools/virtio/virtio_test.c | 4 ++--
+> 1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> Hence in case 2, as soon as i2cdev_{at,de}tach_adapter() returns
-> (non-zero) NOTIFY_OK, the bus iterator aborts.  This causes (a) only the
-> first already existing adapter to be registered, leading to missing
-> /dev/i2c-* entries, and (b) a failure to unregister all but the first
-> I2C adapter during cleanup.
+>diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
+>index 120062f94590..6e348fbdc5d8 100644
+>--- a/tools/virtio/virtio_test.c
+>+++ b/tools/virtio/virtio_test.c
+>@@ -337,6 +337,8 @@ static void help(void)
+> 		" [--batch=random/N]"
+> 		" [--reset=N]"
+> 		"\n");
+>+
+>+	exit(0);
+
+Please exit with a value different from 0 (e.g. 2).
+
+> }
 >
-> Fix this by introducing separate callbacks for the bus iterator,
-> wrapping the notifier functions, and always returning succes.
-> Any errors inside these callback functions are unlikely to happen, and
-> are fatal anyway.
->
-> Fixes: cddf70d0bce71c2a ("i2c: dev: fix notifier return values")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> Seen on r8a7740/armadillo and r8a73a4/ape6evm, where the i2c-shmobile
-> adapters are probed before i2c_dev_init().
-> Not seen on r8a779g0/white-hawk, where all I2C adapters are probed after
-> i2c_dev_init().
->
->  drivers/i2c/i2c-dev.c | 24 ++++++++++++++++++------
->  1 file changed, 18 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
-> index 107623c4cc14aaf9..95a0b63ac560cf33 100644
-> --- a/drivers/i2c/i2c-dev.c
-> +++ b/drivers/i2c/i2c-dev.c
-> @@ -646,7 +646,7 @@ static void i2cdev_dev_release(struct device *dev)
->         kfree(i2c_dev);
->  }
->
-> -static int i2cdev_attach_adapter(struct device *dev, void *dummy)
-> +static int i2cdev_attach_adapter(struct device *dev)
->  {
->         struct i2c_adapter *adap;
->         struct i2c_dev *i2c_dev;
-> @@ -685,7 +685,7 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
->         return NOTIFY_DONE;
->  }
->
-> -static int i2cdev_detach_adapter(struct device *dev, void *dummy)
-> +static int i2cdev_detach_adapter(struct device *dev)
->  {
->         struct i2c_adapter *adap;
->         struct i2c_dev *i2c_dev;
-> @@ -711,9 +711,9 @@ static int i2cdev_notifier_call(struct notifier_block *nb, unsigned long action,
->
->         switch (action) {
->         case BUS_NOTIFY_ADD_DEVICE:
-> -               return i2cdev_attach_adapter(dev, NULL);
-> +               return i2cdev_attach_adapter(dev);
->         case BUS_NOTIFY_DEL_DEVICE:
-> -               return i2cdev_detach_adapter(dev, NULL);
-> +               return i2cdev_detach_adapter(dev);
->         }
->
->         return NOTIFY_DONE;
-> @@ -725,6 +725,18 @@ static struct notifier_block i2cdev_notifier = {
->
->  /* ------------------------------------------------------------------------- */
->
-> +static int __init i2c_dev_attach_adapter(struct device *dev, void *dummy)
-> +{
-> +       i2cdev_attach_adapter(dev);
-> +       return 0;
-> +}
-> +
-> +static int __exit i2c_dev_detach_adapter(struct device *dev, void *dummy)
-> +{
-> +       i2cdev_detach_adapter(dev);
-> +       return 0;
-> +}
-> +
->  /*
->   * module load/unload record keeping
->   */
-> @@ -752,7 +764,7 @@ static int __init i2c_dev_init(void)
->                 goto out_unreg_class;
->
->         /* Bind to already existing adapters right away */
-> -       i2c_for_each_dev(NULL, i2cdev_attach_adapter);
-> +       i2c_for_each_dev(NULL, i2c_dev_attach_adapter);
->
->         return 0;
->
-> @@ -768,7 +780,7 @@ static int __init i2c_dev_init(void)
->  static void __exit i2c_dev_exit(void)
->  {
->         bus_unregister_notifier(&i2c_bus_type, &i2cdev_notifier);
-> -       i2c_for_each_dev(NULL, i2cdev_detach_adapter);
-> +       i2c_for_each_dev(NULL, i2c_dev_detach_adapter);
->         class_destroy(i2c_dev_class);
->         unregister_chrdev_region(MKDEV(I2C_MAJOR, 0), I2C_MINORS);
->  }
-> --
-> 2.34.1
+> int main(int argc, char **argv)
+>@@ -354,14 +356,12 @@ int main(int argc, char **argv)
+> 		case -1:
+> 			goto done;
+> 		case '?':
+>-			help();
+> 			exit(2);
+
+Sorry, I meant the opposite, remove exit(2) and leave help().
+
+Thanks,
+Stefano
+
+> 		case 'e':
+> 			features &= ~(1ULL << VIRTIO_RING_F_EVENT_IDX);
+> 			break;
+> 		case 'h':
+> 			help();
+>-			goto done;
+> 		case 'i':
+> 			features &= ~(1ULL << VIRTIO_RING_F_INDIRECT_DESC);
+> 			break;
+>-- 
+>2.39.1
 >
 
-Thanks for addressing it.
-
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
