@@ -2,167 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927C06B26CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B46BA6B26D5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbjCIOXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:23:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42790 "EHLO
+        id S231638AbjCIOYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:24:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbjCIOXL (ORCPT
+        with ESMTP id S231796AbjCIOXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:23:11 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6536B4ECF2;
-        Thu,  9 Mar 2023 06:23:09 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C805520106;
-        Thu,  9 Mar 2023 14:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1678371787; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=500HkQAhd/wkc0kkHSkZ+RiwhS0XNpxSyFvvUSshsCY=;
-        b=2CUSoRi6g47lADdJMS8gpsKmcPazyKn1/EgYXJ36U0pXKFLnZ6DHvqdvy6E89q+qJvSjdH
-        DMx+GlgfXgq0i120TyYVCV/yMAG+7cutSQrT7BJ4KhyNexAoXw95rpKz7q5RagktxO1dwZ
-        twC49UmL7GsVc50LQkOPpxykwEHHSNs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1678371787;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=500HkQAhd/wkc0kkHSkZ+RiwhS0XNpxSyFvvUSshsCY=;
-        b=rOW6Dg/t9vPCTlzJsGtAsS7Hxk8BejZIB1PYzY7ZvMArrh3qb2+qfwuMd/LGdwo+w57wdF
-        mS2ER9z+g9SsJGCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B9E5D1391B;
-        Thu,  9 Mar 2023 14:23:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jwVZLcvrCWQxNgAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 09 Mar 2023 14:23:07 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 4C9E4A06FF; Thu,  9 Mar 2023 15:23:07 +0100 (CET)
-Date:   Thu, 9 Mar 2023 15:23:07 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>, Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [RFC 09/11] ext4: Ensure ext4_mb_prefetch_fini() is called for
- all prefetched BGs
-Message-ID: <20230309142307.zkjnspjyc6ymqgeh@quack3>
-References: <cover.1674822311.git.ojaswin@linux.ibm.com>
- <7540e4069b22fce42dbef34ee0796d5cf5d82fe3.1674822311.git.ojaswin@linux.ibm.com>
+        Thu, 9 Mar 2023 09:23:21 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070FF84836
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:23:17 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id cw28so7667765edb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 06:23:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678371796;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jh5aPM7+Dw6V3HOON0YvwJwGKWnyCSyvceZb9F+qd44=;
+        b=td3t1M6V5gDMd/hAACSOmU5P79sX4O5qe6W9Nd/LYQJRki6vOwrmKj5BFpQyYS3RAE
+         BTH3sb+HRbW2fkukzHdHMwN8Mr1sU8HC9R9fhF9M81B34jN/OGvmUqBwyhowPYBSlRiK
+         tZNh9BH96EzVjiTmoX3Osw6ASak54rgg8fZmviNMyH6Q5jdESAT0LV7ZCgOXsnwAPvjF
+         4FWS5CL1MxZAOLzk0J74jtHlTTm+CRqjFBEVTQdrkIBXGTOrht83H9TiMBfwYRyNviRL
+         qUnqXzIHaCzngA/ycg6Lhf7Fd6mG4J2Pk7dC7J1k6Vy5jQhYumWXa4c5SdMYLN0rjreg
+         21Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678371796;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jh5aPM7+Dw6V3HOON0YvwJwGKWnyCSyvceZb9F+qd44=;
+        b=4NdU2I1MQXKcZB/h7ktNL6hlS3DJrCcRrgvf4aPJlJpEGR9IRIN4WFdf6bc9WhQtwN
+         DCdFzr+tNFeCjoO43nQSnwM70d/iw4Mr8+Rm6tWAYgU7joQ0yaABpH5TtIQP9eqO2dWQ
+         gzX7NkPQaZNeG8inNqoMZYzZjj5QFIZQUOaIW3xH2E+EBlyLKJz+FOGpQ+uyhM3+wCZE
+         NSvJNDsVQnQWMPvxYMmKDlIEvIEn88Q0Uo+n3dakaHZqc+KU+KHOcO9jI75pBNZam3gQ
+         h+sKwwFAog/9rPt+2uxjRYASvfw2Z0kIkrbqVIG8FdgcFA5WW2s8IKgoLKBoCS3kH9qU
+         XR4g==
+X-Gm-Message-State: AO0yUKUjVvMZxMuuj6ZhLlu8SZe46KV7JN/Zccf1157YFDtHVQe8omCw
+        8v9T+yCCrNPygfHZjnh3vCJawg==
+X-Google-Smtp-Source: AK7set+icoju+UnfarONFjF/sNDObZvo0VNeXFlRTb4Bgubd0olVyinNrL/jEWKS4FhRJixO5j80nA==
+X-Received: by 2002:a17:907:9948:b0:8aa:a9fe:a3fc with SMTP id kl8-20020a170907994800b008aaa9fea3fcmr24302953ejc.8.1678371796294;
+        Thu, 09 Mar 2023 06:23:16 -0800 (PST)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
+        by smtp.gmail.com with ESMTPSA id u15-20020a1709064acf00b0090766deae98sm8795269ejt.166.2023.03.09.06.23.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 06:23:15 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     lee@kernel.org, Nick Alcock <nick.alcock@oracle.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        linux-tegra@vger.kernel.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-modules@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH 1/2] memory: tegra: remove MODULE_LICENSE in non-modules
+Date:   Thu,  9 Mar 2023 15:23:08 +0100
+Message-Id: <167837171022.467499.6836316604855383208.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230308202117.426808-1-nick.alcock@oracle.com>
+References: <20230308202117.426808-1-nick.alcock@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7540e4069b22fce42dbef34ee0796d5cf5d82fe3.1674822311.git.ojaswin@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 27-01-23 18:07:36, Ojaswin Mujoo wrote:
-> Before this patch, the call stack in ext4_run_li_request is as follows:
+On Wed, 8 Mar 2023 20:21:16 +0000, Nick Alcock wrote:
+> Since commit 8b41fc4454e3 ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
 > 
->   /*
->    * nr = no. of BGs we want to fetch (=s_mb_prefetch)
->    * prefetch_ios = no. of BGs not uptodate after
->    * 		    ext4_read_block_bitmap_nowait()
->    */
->   next_group = ext4_mb_prefetch(sb, group, nr, prefetch_ios);
->   ext4_mb_prefetch_fini(sb, next_group prefetch_ios);
-> 
-> ext4_mb_prefetch_fini() will only try to initialize buddies for BGs in
-> range [next_group - prefetch_ios, next_group). This is incorrect since
-> sometimes (prefetch_ios < nr), which causes ext4_mb_prefetch_fini() to
-> incorrectly ignore some of the BGs that might need initialization. This
-> issue is more notable now with the previous patch enabling "fetching" of
-> BLOCK_UNINIT BGs which are marked buffer_uptodate by default.
-> 
-> Fix this by passing nr to ext4_mb_prefetch_fini() instead of
-> prefetch_ios so that it considers the right range of groups.
-> 
-> Similarly, make sure we don't pass nr=0 to ext4_mb_prefetch_fini() in
-> ext4_mb_regular_allocator() since we might have prefetched BLOCK_UNINIT
-> groups that would need buddy initialization.
-> 
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+> [...]
 
-Looks good to me. Feel free to add:
+Applied, thanks!
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+[1/2] memory: tegra: remove MODULE_LICENSE in non-modules
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/e63b0663f0028b265201798d74de163140ac124e
+[2/2] memory: remove MODULE_LICENSE in non-modules
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/d2456ddb2e7e1b89ed637e8190fcbbeadc7ea8a7
 
-								Honza
-
-> ---
->  fs/ext4/mballoc.c |  4 ----
->  fs/ext4/super.c   | 11 ++++-------
->  2 files changed, 4 insertions(+), 11 deletions(-)
-> 
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index 48726a831264..410c9636907b 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -2702,8 +2702,6 @@ ext4_mb_regular_allocator(struct ext4_allocation_context *ac)
->  			if ((prefetch_grp == group) &&
->  			    (cr > CR1 ||
->  			     prefetch_ios < sbi->s_mb_prefetch_limit)) {
-> -				unsigned int curr_ios = prefetch_ios;
-> -
->  				nr = sbi->s_mb_prefetch;
->  				if (ext4_has_feature_flex_bg(sb)) {
->  					nr = 1 << sbi->s_log_groups_per_flex;
-> @@ -2712,8 +2710,6 @@ ext4_mb_regular_allocator(struct ext4_allocation_context *ac)
->  				}
->  				prefetch_grp = ext4_mb_prefetch(sb, group,
->  							nr, &prefetch_ios);
-> -				if (prefetch_ios == curr_ios)
-> -					nr = 0;
->  			}
->  
->  			/* This now checks without needing the buddy page */
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index 72ead3b56706..9dbb09cfc8f7 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -3636,16 +3636,13 @@ static int ext4_run_li_request(struct ext4_li_request *elr)
->  	ext4_group_t group = elr->lr_next_group;
->  	unsigned int prefetch_ios = 0;
->  	int ret = 0;
-> +	int nr = EXT4_SB(sb)->s_mb_prefetch;
->  	u64 start_time;
->  
->  	if (elr->lr_mode == EXT4_LI_MODE_PREFETCH_BBITMAP) {
-> -		elr->lr_next_group = ext4_mb_prefetch(sb, group,
-> -				EXT4_SB(sb)->s_mb_prefetch, &prefetch_ios);
-> -		if (prefetch_ios)
-> -			ext4_mb_prefetch_fini(sb, elr->lr_next_group,
-> -					      prefetch_ios);
-> -		trace_ext4_prefetch_bitmaps(sb, group, elr->lr_next_group,
-> -					    prefetch_ios);
-> +		elr->lr_next_group = ext4_mb_prefetch(sb, group, nr, &prefetch_ios);
-> +		ext4_mb_prefetch_fini(sb, elr->lr_next_group, nr);
-> +		trace_ext4_prefetch_bitmaps(sb, group, elr->lr_next_group, nr);
->  		if (group >= elr->lr_next_group) {
->  			ret = 1;
->  			if (elr->lr_first_not_zeroed != ngroups &&
-> -- 
-> 2.31.1
-> 
+Best regards,
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
