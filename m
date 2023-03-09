@@ -2,275 +2,538 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035196B2DDC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 319906B2DE0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbjCITj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 14:39:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
+        id S229645AbjCITn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 14:43:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjCITjt (ORCPT
+        with ESMTP id S229453AbjCITnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 14:39:49 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506CCE5015;
-        Thu,  9 Mar 2023 11:39:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678390788; x=1709926788;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=qVe9TuJZUeYZAup7l/xyFBR04a8qoYDg8PYX1TBQcR4=;
-  b=QV/bThkYLnMulHyJsRtrkjqVCnmdKLP5upPOtAJWF/Gil0PUvTVZXwfJ
-   2U3bXCEsnNN4nGVMdpMvOknxbbMRo0QUd2Dlo/ge/8HCFIu6wrC5Ibbek
-   pdlHTJqyiGqHFEZUc+EMniA4Ur/UUKmzmIWU3CyapYMJrb42q41s3yjTY
-   UMb+2tiRro5rFrj1UYl68SIoB38vIvMQJRBwh+0QVi4tDhC8OOWvh9Z51
-   lFIQLa1dht04bgzKZ6FT7AFWTVyRJb6aEk5T6HrGICCGUANmcvJLPsE8j
-   Uc6nkuZx6xSLtFI9VvIm0772LVbamVgD3vyPJyi5tfsa6E0/G40zHEbRA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="324899540"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="324899540"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 11:39:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="677521928"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="677521928"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga002.jf.intel.com with ESMTP; 09 Mar 2023 11:39:46 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 9 Mar 2023 11:39:45 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 9 Mar 2023 11:39:45 -0800
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.175)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 9 Mar 2023 11:39:45 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TjIFpCxx+oSmb4j6HNnWkNiaw19+cvJt0nB0rSKGaaI/OwtMta5bLqYDMO+ytX2xw8Ih//rfVC8lB+/Okl5370VhoMRRRRkLqkMVER1xOlbhJb1LFIsT8myA5WYJOb/z6DIgIqjet2WehfHEyU9YB2o4U9kCno1RcQ2tmx/RGNUC3svoYLxMUkP9ok51/ksh4hJKeL3K98z4S3u/JSmeA3gYLzZ0yExA96JOLUSDh9hoH7a35utDQWEimXt3MxqXWjUjWsxm8TKHHqTLfU5fPA8UCz3w4Z6TEcrQasorAQPNp2H8A+CBQi2062Mh5pBu8uld+nID9KSeQu55GVAJsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qVe9TuJZUeYZAup7l/xyFBR04a8qoYDg8PYX1TBQcR4=;
- b=Dw9kEycQbKt+N0x+rQBwqekuPP6Zmf8bufyXt4K8MGfok+E9puNO1oveDjltb//QTixDXo+5sla9qHSIz4rKA06WDMmmu07kc1VQ4IHsinhYO5givj964xUHfh9M8pL6uEmZ6vtwTpFdKrXgngZOi7vvER+BfDM1epvj/gMY3qjT75MPMF39Giz8BprX6FWCZ+dqVodYdmgPs0vMguJ4vw0QHobc0gbAjqFKiwqD9AqTrgStcTrPilDEvVMJEvW4JFgZ/CXZKSCtw+cUOsU0YGkCjvQMhk+NqX6UHKuVyeNdxokDVb/36LnJD92SEW6u6UmgkXov3FmYMtFR65+PYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by DM6PR11MB4738.namprd11.prod.outlook.com (2603:10b6:5:2a3::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Thu, 9 Mar
- 2023 19:39:43 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536%3]) with mapi id 15.20.6178.019; Thu, 9 Mar 2023
- 19:39:42 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "debug@rivosinc.com" <debug@rivosinc.com>,
-        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
-CC:     "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "al.grant@arm.com" <al.grant@arm.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>, "nd@arm.com" <nd@arm.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH v7 33/41] x86/shstk: Introduce map_shadow_stack syscall
-Thread-Topic: [PATCH v7 33/41] x86/shstk: Introduce map_shadow_stack syscall
-Thread-Index: AQHZSvtF2ujwSwjQQE2i7wvNH++zdK7nwRCAgAsaUoCAAAxuAA==
-Date:   Thu, 9 Mar 2023 19:39:41 +0000
-Message-ID: <aaf918de8585204fb0785ac1fc0f686a8fd88bb0.camel@intel.com>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
-         <20230227222957.24501-34-rick.p.edgecombe@intel.com>
-         <ZADbP7HvyPHuwUY9@arm.com> <20230309185511.GA1964069@debug.ba.rivosinc.com>
-In-Reply-To: <20230309185511.GA1964069@debug.ba.rivosinc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|DM6PR11MB4738:EE_
-x-ms-office365-filtering-correlation-id: ac9d6a15-2186-4378-3c14-08db20d60722
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: d4tW5O8/QMHMKMnJHeA0Ggw6zQJNmc60qPtkrQhsvlawlmTkcVh3WsE+tTAIyLXKjhKm83NeTnaqHU75+NACpP9uE5x/v+wYNVVONGxNJZtoxwiWy4TWNyUZMT5mmkLeJQc70HX7DWnqFRLc4axkPQjJs1kF/8KibRSa8kzVZSr22OhpxVv8GhrC19IuNjAVnypAF2qeXqGPgKCZCyHvEvxux1zwMW1q0odFW9myqVBDHnzP5LUDL0H2lMX9xrnVqx27CGROVET5b+UuxwHKn7olkRo4UXfNj9uiCV2o3vcupMNy8aJTq664d1cL2liuzBriZMToOAu7GGofox5wYqQAyRnjy1i2iR35sda0klFQoBAwmXIvRSe3Z5K2igCaNjq1R0Pwrd8FQXYC6+1OusGu8iT8VwTSki4zuxoZpYOHYc7Y3+ZwzE+B/r1hTvpVDZlChZuY62ekWRyPO72a52bg2qYp7h5eiBOJ4cb+D9QW33/yOzZeauI+HmnCH67Tb/iiywc9PnOaTWuGG5MrkMCZeA6GujLkcVGQ2QgZ8IAwPBhQ3fKbOhNCEy7IV65USbbq6SeW1OTcS2YGPsCtypB+SYUG5dSkN0+BeqSy8nyVs3/oaDFWPJW2FqgvH0QfBskxZSiPgnObaW1tz01dEYx2ouE05M96aOped+R8FhmEMa3I6EOY77NJ9sr38kPGKdOYDXE3ZN1+tiVEd3zIYDXxJeHP5vyhyB0gSVNHP4rR1ez2aBAYmZDuCw8kW0kd
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(39860400002)(136003)(376002)(366004)(396003)(451199018)(66899018)(82960400001)(186003)(966005)(6486002)(71200400001)(36756003)(54906003)(478600001)(38100700002)(38070700005)(86362001)(316002)(110136005)(122000001)(6512007)(83380400001)(26005)(41300700001)(2616005)(5660300002)(7406005)(7416002)(6506007)(64756008)(76116006)(91956017)(8936002)(66446008)(66556008)(66476007)(2906002)(8676002)(66946007)(4326008)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L0ZuWHhQN1FCS3V5aTVrZ2UxbHlsQ2JXVWtycWlaU2pXcVYyZFFvbituYUUr?=
- =?utf-8?B?dVFBK1d5Q3lGUWJhdDhZemxBTWcyanZWMEVIeU5lZ2tNQ0lTVkxaSWp5SVlG?=
- =?utf-8?B?d0FPU3laQjY3OHZERStFUkx0eXh4aWZiSmJrL0k2QkZ6YUU3enIzSmJUSmZm?=
- =?utf-8?B?TkFnSDhyTEMwNmNYRTRvWW5IWkdKY0d1aGNFQ3Zsa1g5aUxIMDJoYkhzT0Nl?=
- =?utf-8?B?TTZ3eEdnOTdacHRpbW41MVZ2Ujh4R3hMN2hKZmVmdUJpcHRVMEpKSTliLzdF?=
- =?utf-8?B?WWZSU09NelhWNVQ4OHduRmwwdjROcXJTMkVoT01xcVRZVE9wZG1HaXh1b3BW?=
- =?utf-8?B?N2RwYnRkZHFkblFYZlZOOFRVRWlXYnJSSEN6cW1JR011OEo0NmxxZmE4SEcy?=
- =?utf-8?B?ZnRjWm9QTXYxanVmSkpnc1c1SW5rRkVRbVcreEc4MHRHdnYvSDFlVWJPMkpV?=
- =?utf-8?B?WXlVYkNTT0lTZElXdFYwSXpiTnFyMU9YVFA1Zy9uVTljc1VCd2s0OUhyRVdW?=
- =?utf-8?B?YWY4YkpINmNESUdtUS81ZkxIdVE0UTEvelRia0JtTyt4cWpsYkZoUm1jN3hv?=
- =?utf-8?B?Tzg5RzBRMW11Wkd4bUU1NXFnWHcvV0t5aUdtN3FoTytwV2pQTnZ4VGNGUllM?=
- =?utf-8?B?WHBhQ0dlSHZvS1VLdUhpckp0ZFFOYjFZN25ySUU2YnVJRHBwZTNZaTl2Y2hY?=
- =?utf-8?B?RjNPYzNXK3VoZjVsTTBTQ2syaTRwWVlLK0g1aW1Ra09OUWJlNXdtNUZ2dWFv?=
- =?utf-8?B?d3JjbFd0bHBHV2FNS2lYeUdWVzBsam05dGI3N3JmSng3eE9JSUc2MmNMR1Zo?=
- =?utf-8?B?SnRsVVhlUEJ2Y0MyeWhoZ05idGdHTkJhNWVRV2p2elF0VXFHbUo1Znh1UkU2?=
- =?utf-8?B?ZlRaTkw0UlYwMHJwNDU2RVhqWTFOZHlYOURFMWJRUk5MOTN1QmtWRG5jT2hL?=
- =?utf-8?B?MGlWSFRmUm4rZGxQQVpjS1NNQ2pIeDFQUWxnRUtJRnlpVURqUllLR04wbUJr?=
- =?utf-8?B?aFlCckxkbU5YODZzK01lcnhCWVdBdDM5am9mRzYwWEV3SXJmenVTbWFEL3ln?=
- =?utf-8?B?dkNQVU5QVW9yZTNlajQwR1dFR1IyNUFWZDdtcW94RitLcDFSeVJCTVE1SUw2?=
- =?utf-8?B?UUZiWVNGeGFKNzJ2NjZKVWJrYi96MkkveUZ5RWxIZzgvNGlsdk12Rnl0RGxz?=
- =?utf-8?B?OHVvcHlHcDFhRUg2T2VVNkh0QXVCZVU2VnpkaVBnNmdWMGI2MTRxZEJjUHdL?=
- =?utf-8?B?cy9sK2NzTnp1SVBRVTFpeFNnN3lsU2xrM1VzMTJyb2ZMK3JJV05oVDc2QWtO?=
- =?utf-8?B?VTVXT3F2ckpjMGl0SG1PMlNRYVZ5SVE4TXlxb2x1ekVyazZuSm8rc2M2WWdJ?=
- =?utf-8?B?N01FZFpGSjlTRjU1R1YrV2Y3akV0WUhEdHRPM2pvd0xmYmNxRkdzTDVGVC9Y?=
- =?utf-8?B?a1lTY2VRYjQ1bzg2dEp6aithZDlkak1BcjJ2Snc1YTFjOHFYZW5DTU5vZkRk?=
- =?utf-8?B?MDVqMEI1S2Z4czI0YzlUTmExQTYyc2xDTWVzTzZ2YUd0N2hMd2xLQjduUEo2?=
- =?utf-8?B?VXlxeHVOU3BYc2lhLzBRZE5jVk4xVlQrZ0JvMXoxVU5lRXQ3MjNIVXc3QmI0?=
- =?utf-8?B?ZGZDMldheDhkN2FhbHBVQ0tybS9NTVNzU3pBV1NnMDdRYlI0WVpsMlk1VGl1?=
- =?utf-8?B?TUMzVjl0MWZlWGFVL2JSM3NZekVmR21CTThiMzJzdjFhMDZkRG9idU1US0dI?=
- =?utf-8?B?Tlp0L2thM1oyajNWM05weUs1SE5IdmNoeUltSkJhL2dtK1h3WlRRekFBM1Z0?=
- =?utf-8?B?am1OZWE5dEIrb25QR0Z3TXhKdm1MRThvUFUrdi9DV2xpakQzODBJR0lVVVdw?=
- =?utf-8?B?VDBsK0ZZOGxUVksrL0tyN2oxMlh3NUJpbE10MFBEaU4yaFRIeUowa1pJRFg0?=
- =?utf-8?B?WFArYzJ5c3lmTGJkd1ptdXBQWjEyRHlZWWZlV0V4NDVZeUd4VlBTUThESkdv?=
- =?utf-8?B?Sm5iV3NuOVV5TmJ6cEhZelFVdmc4UkdNaU1GMkV5YklJMWo5MWpnSUtlS3Zr?=
- =?utf-8?B?dEc2V2VYcUwrbE1IV3laVXdNd2RWRmU3K3RDS0VlTUptWVlDdkxmQldXKzZD?=
- =?utf-8?B?T3pSY0tIVXdxdjNxYjdiaUFqdzA3YkFnM2NRU2dSYXlyM1Ewblg0cFlYN1U1?=
- =?utf-8?Q?uIecyBYWioOjEYR/jhFGsIo=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3D7C1F10037F274B9116A78A6839BBEC@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 9 Mar 2023 14:43:23 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70244474D0
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:43:20 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id cw28so11522425edb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 11:43:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678390998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xNtx6R6rl7SLA2Sw0Xc/NcvtWXxM5jC3ZZ5F1GogymY=;
+        b=FuBYHFo+DCqFy711BqRQ3GHdfKl2uqpIFyo1N1qJyHCGJSPcwycdLQoLC6hCrUkrxu
+         h1IuQDJYnFf0fHpEk4tRTPIF+9jbhQnp5h3EO4+5gRyt0sbhGc9nF59hFJmocI3wTUNi
+         Tief5Yvps/UJsbzXlb8KPkt2U8h+s1YLUF2+w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678390998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xNtx6R6rl7SLA2Sw0Xc/NcvtWXxM5jC3ZZ5F1GogymY=;
+        b=s93eMcsTpcNCvo4lu6FG9jItVTm71vbrJtfQ8/EPq+xZZLAJZ+WzqKpBLiDTlx0X0F
+         kX+VS7vwMSSkC+ynZuN6XG6IY97N3LnAmNiH9qzs+UtmnI9yf786NIZ85oNX2AanZy/d
+         ri1+HMzg7cTJu7UFUZZ+VNRA7E1hP9pe6jxVD2Iiy6+KCWZG+kbYAyRI6WHL6kT+3adc
+         S7lvH22eO1GcD04P/EdEw0CeL0okwzT89TurGJhwe9Tf64s/D8gGtZCBxkrJJkD7jsVu
+         b1gZo2PhK4R8wHH0/dyiTPhDxkRvsR11n7P7b96YI+loqW1TrcRcMO6W2cBh9BQdNU+e
+         FmTw==
+X-Gm-Message-State: AO0yUKVIaJEersoxwmRksUn/NVEXRwDzttCJOgH2vrzGDoREpuVhOdaF
+        54ZeGj+zrjx6srtsLjxGZjINfx3WbcdJtHKJIvk=
+X-Google-Smtp-Source: AK7set+mFHa/PsX4+hhho2wvrn9u2mXV/w6VLlQoMfrO2JtV48S0xdWtNKRxpkaEkdonRbnh14qPQA==
+X-Received: by 2002:aa7:c585:0:b0:4bf:38dc:d78 with SMTP id g5-20020aa7c585000000b004bf38dc0d78mr22880372edq.21.1678390998460;
+        Thu, 09 Mar 2023 11:43:18 -0800 (PST)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id k20-20020a17090627d400b008b17ca37966sm9269302ejc.148.2023.03.09.11.43.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 11:43:17 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso4444018wmq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 11:43:17 -0800 (PST)
+X-Received: by 2002:a05:600c:54c8:b0:3eb:2e27:2cf4 with SMTP id
+ iw8-20020a05600c54c800b003eb2e272cf4mr33042wmb.0.1678390996697; Thu, 09 Mar
+ 2023 11:43:16 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac9d6a15-2186-4378-3c14-08db20d60722
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2023 19:39:41.7675
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3pYQmzp6USMqihHpXrh0H8K7VLh5n4bD8vcm6HUTmEdiTNL9g0ckjZJ+kYCHtIf1wm7u0vn81SZl3qjSMxg6BJ0ir8X0IB9f1tLZMwujJB0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4738
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302120648.v3.1.I8e7f9b01d9ac940507d78e15368e200a6a69bedb@changeid>
+ <CAFA6WYNuyy2kDpQzEap97dXQxPr+oKE4pvA5PKiow3Dqdx_G7w@mail.gmail.com>
+ <CA+ddPcNASYd_mD2ZPB-D=oxpAOZOChrQ+6f7+9yvneLKQm3rCA@mail.gmail.com>
+ <CAFA6WYMnpvTOTDFMfR7AnkT7FrWxxhcNf0uhndMjUwi5+WCQfQ@mail.gmail.com>
+ <CA+ddPcMvY-VYVy6O0XUdKBEVw6ncqfgzw9C1BCRkqg0_G3DSfQ@mail.gmail.com> <CAFA6WYNXWnSvM4gGu0vWuio+cBqZsaYXbvRNczbH6pKYP9DC2Q@mail.gmail.com>
+In-Reply-To: <CAFA6WYNXWnSvM4gGu0vWuio+cBqZsaYXbvRNczbH6pKYP9DC2Q@mail.gmail.com>
+From:   Jeffrey Kardatzke <jkardatzke@chromium.org>
+Date:   Thu, 9 Mar 2023 11:43:04 -0800
+X-Gmail-Original-Message-ID: <CA+ddPcPyMu5RX841tEQTNx1yJgeL88T_0AiWThjWmf=vv6_3fQ@mail.gmail.com>
+Message-ID: <CA+ddPcPyMu5RX841tEQTNx1yJgeL88T_0AiWThjWmf=vv6_3fQ@mail.gmail.com>
+Subject: Re: [PATCH v3] tee: optee: Add SMC for loading OP-TEE image
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     op-tee@lists.trustedfirmware.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTAzLTA5IGF0IDEwOjU1IC0wODAwLCBEZWVwYWsgR3VwdGEgd3JvdGU6DQo+
-IE9uIFRodSwgTWFyIDAyLCAyMDIzIGF0IDA1OjIyOjA3UE0gKzAwMDAsIFN6YWJvbGNzIE5hZ3kg
-d3JvdGU6DQo+ID4gVGhlIDAyLzI3LzIwMjMgMTQ6MjksIFJpY2sgRWRnZWNvbWJlIHdyb3RlOg0K
-PiA+ID4gUHJldmlvdXNseSwgYSBuZXcgUFJPVF9TSEFET1dfU1RBQ0sgd2FzIGF0dGVtcHRlZCwN
-Cj4gPiANCj4gPiAuLi4NCj4gPiA+IFNvIHJhdGhlciB0aGFuIHJlcHVycG9zZSB0d28gZXhpc3Rp
-bmcgc3lzY2FsbHMgKG1tYXAsIG1hZHZpc2UpDQo+ID4gPiB0aGF0IGRvbid0DQo+ID4gPiBxdWl0
-ZSBmaXQsIGp1c3QgaW1wbGVtZW50IGEgbmV3IG1hcF9zaGFkb3dfc3RhY2sgc3lzY2FsbCB0byBh
-bGxvdw0KPiA+ID4gdXNlcnNwYWNlIHRvIG1hcCBhbmQgc2V0dXAgbmV3IHNoYWRvdyBzdGFja3Mg
-aW4gb25lIHN0ZXAuIFdoaWxlDQo+ID4gPiB1Y29udGV4dA0KPiA+ID4gaXMgdGhlIHByaW1hcnkg
-bW90aXZhdG9yLCB1c2Vyc3BhY2UgbWF5IGhhdmUgb3RoZXIgdW5mb3Jlc2Vlbg0KPiA+ID4gcmVh
-c29ucyB0bw0KPiA+ID4gc2V0dXAgaXQncyBvd24gc2hhZG93IHN0YWNrcyB1c2luZyB0aGUgV1JT
-UyBpbnN0cnVjdGlvbi4gVG93YXJkcw0KPiA+ID4gdGhpcw0KPiA+ID4gcHJvdmlkZSBhIGZsYWcg
-c28gdGhhdCBzdGFja3MgY2FuIGJlIG9wdGlvbmFsbHkgc2V0dXAgc2VjdXJlbHkNCj4gPiA+IGZv
-ciB0aGUNCj4gPiA+IGNvbW1vbiBjYXNlIG9mIHVjb250ZXh0IHdpdGhvdXQgZW5hYmxpbmcgV1JT
-Uy4gT3IgcG90ZW50aWFsbHkNCj4gPiA+IGhhdmUgdGhlDQo+ID4gPiBrZXJuZWwgc2V0IHVwIHRo
-ZSBzaGFkb3cgc3RhY2sgaW4gc29tZSBuZXcgd2F5Lg0KPiA+IA0KPiA+IC4uLg0KPiA+ID4gVGhl
-IGZvbGxvd2luZyBleGFtcGxlIGRlbW9uc3RyYXRlcyBob3cgdG8gY3JlYXRlIGEgbmV3IHNoYWRv
-dw0KPiA+ID4gc3RhY2sgd2l0aA0KPiA+ID4gbWFwX3NoYWRvd19zdGFjazoNCj4gPiA+IHZvaWQg
-KnNoc3RrID0gbWFwX3NoYWRvd19zdGFjayhhZGRyLCBzdGFja19zaXplLA0KPiA+ID4gU0hBRE9X
-X1NUQUNLX1NFVF9UT0tFTik7DQo+ID4gDQo+ID4gaSB0aGluaw0KPiA+IA0KPiA+IG1tYXAoYWRk
-ciwgc2l6ZSwgUFJPVF9SRUFELCBNQVBfQU5PTnxNQVBfU0hBRE9XX1NUQUNLLCAtMSwgMCk7DQo+
-ID4gDQo+ID4gY291bGQgZG8gdGhlIHNhbWUgd2l0aCBsZXNzIGRpc3J1cHRpb24gdG8gdXNlcnMg
-KG5ldyBzeXNjYWxscw0KPiA+IGFyZSBoYXJkZXIgdG8gZGVhbCB3aXRoIHRoYW4gbmV3IGZsYWdz
-KS4gaXQgd291bGQgZG8gdGhlDQo+ID4gZ3VhcmQgcGFnZSBhbmQgaW5pdGlhbCB0b2tlbiBzZXR1
-cCB0b28gKHRoZXJlIGlzIG5vIGZsYWcgZm9yDQo+ID4gaXQgYnV0IGNvdWxkIGJlIHNxdWVlemVk
-IGluKS4NCj4gDQo+IERpc2N1c3Npb24gb24gdGhpcyB0b3BpYyBpbiB2Ng0KPiANCmh0dHBzOi8v
-bG9yZS5rZXJuZWwub3JnL2FsbC8yMDIzMDIyMzAwMDM0MC5HQjk0NTk2NkBkZWJ1Zy5iYS5yaXZv
-c2luYy5jb20vDQo+IA0KPiBBZ2FpbiBJIGtub3cgZWFybGllciBDRVQgcGF0Y2hlcyBoYWQgcHJv
-dGVjdGlvbiBmbGFnIGFuZCBzb21laG93IGR1ZQ0KPiB0byBwdXNoYmFjaw0KPiBvbiBtYWlsaW5n
-IGxpc3QsDQo+ICBpdCB3YXMgYWRvcHRlZCB0byBnbyBmb3Igc3BlY2lhbCBzeXNjYWxsIGJlY2F1
-c2Ugbm8gb25lIGVsc2UNCj4gaGFkIHNoYWRvdyBzdGFjay4NCj4gDQo+IFNlZWluZyBhIHJlc3Bv
-bnNlIGZyb20gU3phYm9sY3MsIEkgYW0gYXNzdW1pbmcgYXJtNCB3b3VsZCBhbHNvIHdhbnQNCj4g
-dG8gZm9sbG93DQo+IHVzaW5nIG1tYXAgdG8gbWFudWZhY3R1cmUgc2hhZG93IHN0YWNrLiBGb3Ig
-cmVmZXJlbmNlIFJGQyBwYXRjaGVzIGZvcg0KPiByaXNjLXYgc2hhZG93IHN0YWNrLA0KPiB1c2Ug
-YSBuZXcgcHJvdGVjdGlvbiBmbGFnID0gUFJPVF9TSEFET1dTVEFDSy4NCj4gDQpodHRwczovL2xv
-cmUua2VybmVsLm9yZy9sa21sLzIwMjMwMjEzMDQ1MzUxLjM5NDU4MjQtMS1kZWJ1Z0ByaXZvc2lu
-Yy5jb20vDQo+IA0KPiBJIGtub3cgZWFybGllciBkaXNjdXNzaW9uIGhhZCBiZWVuIHRoYXQgd2Ug
-bGV0IHRoaXMgZ28gYW5kIGRvIGEgcmUtDQo+IGZhY3RvciBsYXRlciBhcyBvdGhlcg0KPiBhcmNo
-IHN1cHBvcnQgdHJpY2tsZSBpbi4gQnV0IGFzIEkgdGhvdWdodCBtb3JlIG9uIHRoaXMgYW5kIEkg
-dGhpbmsgaXQNCj4gbWF5IGp1c3QgYmUNCj4gbWVzc3kgZnJvbSB1c2VyIG1vZGUgcG9pbnQgb2Yg
-dmlldyBhcyB3ZWxsIHRvIGhhdmUgY29nbml0aW9uIG9mIHR3bw0KPiBkaWZmZXJlbnQgd2F5cyBv
-Zg0KPiBjcmVhdGluZyBzaGFkb3cgc3RhY2suIE9uZSB3b3VsZCBiZSBzcGVjaWFsIHN5c2NhbGwg
-KGluIGN1cnJlbnQgbGliYykNCj4gYW5kIGFub3RoZXIgYG1tYXBgDQo+ICh3aGVuZXZlciBmdXR1
-cmUgcmUtZmFjdG9yIGhhcHBlbnMpDQo+IA0KPiBJZiBpdCdzIG5vdCB0b28gbGF0ZSwgaXQgd291
-bGQgYmUgbW9yZSB3aXNlIHRvIHRha2UgYG1tYXBgDQo+IGFwcHJvYWNoIHJhdGhlciB0aGFuIHNw
-ZWNpYWwgYHN5c2NhbGxgIGFwcHJvYWNoLg0KDQpUaGVyZSBpcyBzb3J0IG9mIHR3byB0aGluZ3Mg
-aW50ZXJtaXhlZCBoZXJlIHdoZW4gd2UgdGFsayBhYm91dCBhDQpQUk9UX1NIQURPV19TVEFDSy4N
-Cg0KT25lIGlzOiB3aGF0IGlzIHRoZSBpbnRlcmZhY2UgZm9yIHNwZWNpZnlpbmcgaG93IHRoZSBz
-aGFkb3cgc3RhY2sNCnNob3VsZCBiZSBwcm92aXNpb25lZCB3aXRoIGRhdGE/IFJpZ2h0IG5vdyB0
-aGVyZSBhcmUgdHdvIHdheXMNCnN1cHBvcnRlZCwgYWxsIHplcm8gb3Igd2l0aCBhbiBYODYgc2hh
-ZG93IHN0YWNrIHJlc3RvcmUgdG9rZW4gYXQgdGhlDQplbmQuIFRoZW4gdGhlcmUgd2FzIGFscmVh
-ZHkgc29tZSBjb252ZXJzYXRpb24gYWJvdXQgYSB0aGlyZCB0eXBlLiBJbg0Kd2hpY2ggY2FzZSB0
-aGUgcXVlc3Rpb24gd291bGQgYmUgaXMgdXNpbmcgbW1hcCBNQVBfIGZsYWdzIHRoZSByaWdodA0K
-cGxhY2UgZm9yIHRoaXM/IEhvdyBtYW55IHR5cGVzIG9mIGluaXRpYWxpemF0aW9uIHdpbGwgYmUg
-bmVlZGVkIGluIHRoZQ0KZW5kIGFuZCB3aGF0IGlzIHRoZSBvdmVybGFwIGJldHdlZW4gdGhlIGFy
-Y2hpdGVjdHVyZXM/DQoNClRoZSBvdGhlciB0aGluZyBpczogc2hvdWxkIHNoYWRvdyBzdGFjayBt
-ZW1vcnkgY3JlYXRpb24gYmUgdGlnaHRseQ0KY29udHJvbGxlZD8gRm9yIGV4YW1wbGUgaW4geDg2
-IHdlIGxpbWl0IHRoaXMgdG8gYW5vbnltb3VzIG1lbW9yeSwgZXRjLg0KU29tZSByZWFzb25zIGZv
-ciB0aGlzIGFyZSB4ODYgc3BlY2lmaWMsIGJ1dCBzb21lIGFyZSBub3QuIFNvIGlmIHdlDQpkaXNh
-bGxvdyBtb3N0IG9mIHRoZSBvcHRpb25zIHdoeSBhbGxvdyB0aGUgaW50ZXJmYWNlIHRvIHRha2Ug
-dGhlbT8gQW5kDQp0aGVuIHlvdSBhcmUgaW4gdGhlIHBvc2l0aW9uIG9mIGNhcmVmdWxseSBtYWlu
-dGFpbmluZyBhIGxpc3Qgb2Ygbm90LQ0KYWxsb3dlZCBvcHRpb25zIGluc3RlYWQgbGV0dGluZyBh
-IGxpc3Qgb2YgYWxsb3dlZCBvcHRpb25zIHNpdCB0aGVyZS4NCg0KVGhlIG9ubHkgYmVuZWZpdCBJ
-J3ZlIGhlYXJkIGlzIHRoYXQgaXQgc2F2ZXMgY3JlYXRpbmcgYSBuZXcgc3lzY2FsbCwNCmJ1dCBp
-dCBhbHNvIHNhdmVzIHNldmVyYWwgTUFQXyBmbGFncy4gVGhhdCwgYW5kIHRoYXQgdGhlIFJGQyBm
-b3IgcmlzY3YNCmRpZCBhIFBST1RfU0hBRE9XX1NUQUNLIHRvIHN0YXJ0LiBTbywgeWVzLCB0d28g
-cGVvcGxlIGFza2VkIHRoZSBzYW1lDQpxdWVzdGlvbiwgYnV0IEknbSBzdGlsbCBub3Qgc2VlaW5n
-IGFueSBiZW5lZml0cy4gQ2FuIHlvdSBnaXZlIHRoZSBwcm9zDQphbmQgY29ucyBwbGVhc2U/DQoN
-CkJUVywgaW4gZ2xpYmMgbWFwX3NoYWRvd19zdGFjayBpcyBjYWxsZWQgZnJvbSBhcmNoIGNvZGUu
-IFNvIEkgdGhpbmsNCnVzZXJzcGFjZSB3aXNlLCBmb3IgdGhpcyB0byBhZmZlY3Qgb3RoZXIgYXJj
-aGl0ZWN0dXJlcyB0aGVyZSB3b3VsZCBuZWVkDQp0byBiZSBzb21lIGNvZGUgdGhhdCBjb3VsZCBk
-byB0aGluZ3MgZ2VuZXJpY2FsbHksIHdpdGggc29tZWhvdyB0aGUNCnNoYWRvdyBzdGFjayBwaXZv
-dCBhYnN0cmFjdGVkIGJ1dCB0aGUgc2hhZG93IHN0YWNrIGFsbG9jYXRpb24gbm90Lg0K
+On Wed, Mar 8, 2023 at 11:54=E2=80=AFPM Sumit Garg <sumit.garg@linaro.org> =
+wrote:
+>
+> On Wed, 8 Mar 2023 at 01:09, Jeffrey Kardatzke <jkardatzke@chromium.org> =
+wrote:
+> >
+> > On Tue, Mar 7, 2023 at 6:04=E2=80=AFAM Sumit Garg <sumit.garg@linaro.or=
+g> wrote:
+> > >
+> > > On Tue, 7 Mar 2023 at 00:26, Jeffrey Kardatzke <jkardatzke@chromium.o=
+rg> wrote:
+> > > >
+> > > >
+> > > >
+> > > > On Mon, Mar 6, 2023 at 4:34=E2=80=AFAM Sumit Garg <sumit.garg@linar=
+o.org> wrote:
+> > > >>
+> > > >> On Fri, 3 Mar 2023 at 01:37, Jeffrey Kardatzke <jkardatzke@chromiu=
+m.org> wrote:
+> > > >> >
+> > > >> > Adds an SMC call that will pass an OP-TEE binary image to EL3 an=
+d
+> > > >> > instruct it to load it as the BL32 payload. This works in conjun=
+ction
+> > > >> > with a feature added to Trusted Firmware for ARM that supports t=
+his.
+> > > >>
+> > > >> s/Trusted Firmware for ARM/Trusted Firmware for Armv8 and above ar=
+chitectures/
+> > > >>
+> > > > Fixed in next patch.
+> > > >>
+> > > >> This commit description tells me what you have implemented but not
+> > > >> why? The motivation for this change should be included here along =
+with
+> > > >> security implications.
+> > > >>
+> > > > Fixed in next patch. I added another sentence on this and then link=
+ed to the TF-A documentation that explains the threat model and security im=
+plications. Enabling the kernel feature itself won't create any security co=
+ncerns; it's only if TF-A has the feature enabled is there a risk introduce=
+d.
+> > >
+> > > Do you have a scenario where this feature would be at all useful in
+> > > the kernel without it being enabled in TF-A?
+> >
+> > No
+> > >
+> > >
+> > > So once you enable this feature in TF-A, isn't the kernel included in
+> > > the trust boundary for the secure world to do the right thing? IOW,
+> > > mitigations for potential attack vectors have to be implemented in th=
+e
+> > > kernel such as (from top of my head):
+> > >
+> > > - The OP-TEE kernel module has to be signature checked.
+> > > - The OP-TEE firmware has to be loaded from a RO filesystem which has
+> > > been signature checked.
+> > > - How can we prevent other system entities like DMA capable devices
+> > > from mangling RAM where OP-TEE firmware is loaded during SMC call?
+> > > - How can we ensure that the OP-TEE firmware is loaded at the earlies=
+t
+> > > point before exposing it to the user-space attack vectors?
+> >
+> > This is covered in the TF-A documentation linked to by this statement
+> > in the mitigations section: "When enabling the option
+> > OPTEE_ALLOW_SMC_LOAD, the non-secure OS must be considered a closed
+> > platform up until the point the SMC can be invoked to load OP-TEE."
+> > It's also expanded on in the linked section here:
+> > https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/c=
+omponents/spd/optee-dispatcher.rst
+> >
+>
+> "A closed platform" is a very abstract and opaque term. The TF-A
+> threat model doesn't cover any Linux kernel attack vectors as I
+> mentioned above.
+>
+Ack
+> > For ChromeOS, the entire kernel/rootfs is signature checked. Other DMA
+> > devices could modify the memory where OP-TEE is loaded from...so the
+> > platform needs to ensure all firmware/drivers are signed (which we
+> > achieve by signing the entire rootfs). As for loading it early, it can
+> > be included rather than being a module to achieve that (or it can be a
+> > module and should be probed as early as possible after the kernel
+> > loads).
+>
+> These are the bits I am looking to be documented which mentions the
+> kernel attack vectors and corresponding mitigations for ChromeOS. It
+> would be helpful for other platform owners if the threat model sounds
+> fine to them and choose to enable this feature. Also, it would give
+> clarity regarding how this feature is being enabled for a real
+> platform use-case.
+>
+> > This is definitely not intended to be "here's a checklist, if
+> > you cover it then you're safe to use this option."
+>
+> The threat model for a particular platform component is essentially a
+> checklist which must be considered during system integration.
+>
+Ack
+> > Anybody using this
+> > needs to evaluate their overall platform security and be sure this
+> > fits with their model.
+>
+> That's true. In case there is platform security documentation
+> available for ChromeOS platform publicly which covers attack vectors
+> for every component, that would work for me.
+There isn't anything on this currently available publicly. I've
+updated the documentation in the Kconfig file now based on your above
+comments. Please review.
+>
+> -Sumit
+>
+> > >
+> > >
+> > > >>
+> > > >> >
+> > > >> > Signed-off-by: Jeffrey Kardatzke <jkardatzke@chromium.org>
+> > > >> > Signed-off-by: Jeffrey Kardatzke <jkardatzke@google.com>
+> > > >> > ---
+> > > >> >
+> > > >> > Changes in v3:
+> > > >> > - Removed state tracking for driver reload
+> > > >> > - Check UID of service to verify it needs image load
+> > > >> >
+> > > >> > Changes in v2:
+> > > >> > - Fixed compile issue when feature is disabled
+> > > >> > - Addressed minor comments
+> > > >> > - Added state tracking for driver reload
+> > > >> >
+> > > >> >  drivers/tee/optee/Kconfig     | 10 ++++
+> > > >> >  drivers/tee/optee/optee_msg.h | 12 +++++
+> > > >> >  drivers/tee/optee/optee_smc.h | 24 +++++++++
+> > > >> >  drivers/tee/optee/smc_abi.c   | 96 ++++++++++++++++++++++++++++=
++++++++
+> > > >> >  4 files changed, 142 insertions(+)
+> > > >> >
+> > > >> > diff --git a/drivers/tee/optee/Kconfig b/drivers/tee/optee/Kconf=
+ig
+> > > >> > index f121c224e682..f0f12b146add 100644
+> > > >> > --- a/drivers/tee/optee/Kconfig
+> > > >> > +++ b/drivers/tee/optee/Kconfig
+> > > >> > @@ -7,3 +7,13 @@ config OPTEE
+> > > >> >         help
+> > > >> >           This implements the OP-TEE Trusted Execution Environme=
+nt (TEE)
+> > > >> >           driver.
+> > > >> > +
+> > > >> > +config OPTEE_LOAD_IMAGE
+> > > >>
+> > > >> Given the warning text attached to this config option, this should=
+ be
+> > > >> renamed as OPTEE_INSECURE_LOAD_IMAGE. Also, the help text should b=
+e
+> > > >> updated to reflect the security implication of this.
+> > > >
+> > > > OK, I renamed this to OPTEE_NONSECURE_LOAD_IMAGE (to reflect that i=
+t's loading the secure image from the non-secure world).
+> > >
+> > > No this has to be an insecure OP-TEE module configuration which
+> > > currently only works for your platform threat model. I would also be
+> > > in favour of a runtime warning if this option is enabled.
+> >
+> > OK, renamed it to OPTEE_INSECURE_LOAD_IMAGE and added a runtime warning=
+.
+> > >
+> > >
+> > > > I also added more comments on the security implications and that fu=
+ll documentation is in TF-A.
+> > > >>
+> > > >>
+> > > >> I would also like to see documentation updates regarding how your
+> > > >> platform is mitigating potential threats in order to enable this
+> > > >> option. It would enable others to make a concious decision if thei=
+r
+> > > >> threat model allows this option.
+> > > >
+> > > > This is already covered in the TF-A documentation. Let me know if y=
+ou want me to link to that from here or not.
+> > >
+> > > I am looking for documentation regarding risk mitigations in the
+> > > kernel (see above), basically how one should configure their kernel.
+> > > Maybe I have overlooked it but I can't find that in the TF-A
+> > > documentation.
+> >
+> > It's not so much the kernel config...but the platform config overall.
+> > This section linked to from the TF-A thread model describes that even
+> > further:
+> > https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/c=
+omponents/spd/optee-dispatcher.rst
+> > >
+> > >
+> > > -Sumit
+> > >
+> > > >>
+> > > >>
+> > > >> > +       bool "Load OP-TEE image as firmware"
+> > > >> > +       default n
+> > > >> > +       depends on OPTEE
+> > > >>
+> > > >> IIRC, from earlier review threads you mentioned that this option i=
+s
+> > > >> enabled when OP-TEE driver is built-in rather than loadable. Shoul=
+dn't
+> > > >> we make that dependency explicit?
+> > > >
+> > > > That was an issue with a prior patch set, but has since been fixed.=
+ This can work as a built in driver or loadable module now.
+> > > >>
+> > > >>
+> > > >> Also, this option only makes sense for ARM64 as in case of ARM the
+> > > >> secure monitor is bundled into OP-TEE image and hence can't be loa=
+ded
+> > > >> dynamically. We should make that dependency explicit too.
+> > > >
+> > > > Fixed.
+> > > >>
+> > > >>
+> > > >> > +       help
+> > > >> > +         This loads the BL32 image for OP-TEE as firmware when =
+the driver is probed.
+> > > >> > +         This returns -EPROBE_DEFER until the firmware is loada=
+ble from the
+> > > >> > +         filesystem which is determined by checking the system_=
+state until it is in
+> > > >> > +         SYSTEM_RUNNING.
+> > > >> > diff --git a/drivers/tee/optee/optee_msg.h b/drivers/tee/optee/o=
+ptee_msg.h
+> > > >> > index 70e9cc2ee96b..237d6fa9a6e8 100644
+> > > >> > --- a/drivers/tee/optee/optee_msg.h
+> > > >> > +++ b/drivers/tee/optee/optee_msg.h
+> > > >> > @@ -241,11 +241,23 @@ struct optee_msg_arg {
+> > > >> >   * 384fb3e0-e7f8-11e3-af63-0002a5d5c51b.
+> > > >> >   * Represented in 4 32-bit words in OPTEE_MSG_UID_0, OPTEE_MSG_=
+UID_1,
+> > > >> >   * OPTEE_MSG_UID_2, OPTEE_MSG_UID_3.
+> > > >> > + *
+> > > >> > + * In the case where the OP-TEE image is loaded by the kernel, =
+this will
+> > > >> > + * initially return an alternate UID to reflect that we are com=
+municating with
+> > > >> > + * the TF-A image loading service at that time instead of OP-TE=
+E. That UID is:
+> > > >> > + * a3fbeab1-1246-315d-c7c4-06b9c03cbea4.
+> > > >> > + * Represetned in 4 32-bit words in OPTEE_MSG_IMAGE_LOAD_UID_0,
+> > > >>
+> > > >> s/Represetned/Represented/
+> > > >>
+> > > > Fixed.
+> > > >>
+> > > >> > + * OPTEE_MSG_IMAGE_LOAD_UID_1, OPTEE_MSG_IMAGE_LOAD_UID_2,
+> > > >> > + * OPTEE_MSG_IMAGE_LOAD_UID_3.
+> > > >> >   */
+> > > >> >  #define OPTEE_MSG_UID_0                        0x384fb3e0
+> > > >> >  #define OPTEE_MSG_UID_1                        0xe7f811e3
+> > > >> >  #define OPTEE_MSG_UID_2                        0xaf630002
+> > > >> >  #define OPTEE_MSG_UID_3                        0xa5d5c51b
+> > > >> > +#define OPTEE_MSG_IMAGE_LOAD_UID_0     0xa3fbeab1
+> > > >> > +#define OPTEE_MSG_IMAGE_LOAD_UID_1     0x1246315d
+> > > >> > +#define OPTEE_MSG_IMAGE_LOAD_UID_2     0xc7c406b9
+> > > >> > +#define OPTEE_MSG_IMAGE_LOAD_UID_3     0xc03cbea4
+> > > >> >  #define OPTEE_MSG_FUNCID_CALLS_UID     0xFF01
+> > > >> >
+> > > >> >  /*
+> > > >> > diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/o=
+ptee_smc.h
+> > > >> > index 73b5e7760d10..7d9fa426505b 100644
+> > > >> > --- a/drivers/tee/optee/optee_smc.h
+> > > >> > +++ b/drivers/tee/optee/optee_smc.h
+> > > >> > @@ -104,6 +104,30 @@ struct optee_smc_call_get_os_revision_resul=
+t {
+> > > >> >         unsigned long reserved1;
+> > > >> >  };
+> > > >> >
+> > > >> > +/*
+> > > >> > + * Load Trusted OS from optee/tee.bin in the Linux firmware.
+> > > >> > + *
+> > > >> > + * WARNING: Use this cautiously as it could lead to insecure lo=
+ading of the
+> > > >> > + * Trusted OS.
+> > > >> > + * This SMC instructs EL3 to load a binary and execute it as th=
+e Trusted OS.
+> > > >> > + *
+> > > >> > + * Call register usage:
+> > > >> > + * a0 SMC Function ID, OPTEE_SMC_CALL_LOAD_IMAGE
+> > > >> > + * a1 Upper 32bit of a 64bit size for the payload
+> > > >> > + * a2 Lower 32bit of a 64bit size for the payload
+> > > >> > + * a3 Upper 32bit of the physical address for the payload
+> > > >> > + * a4 Lower 32bit of the physical address for the payload
+> > > >> > + *
+> > > >> > + * The payload is in the OP-TEE image format.
+> > > >> > + *
+> > > >> > + * Returns result in a0, 0 on success and an error code otherwi=
+se.
+> > > >> > + */
+> > > >> > +#define OPTEE_SMC_FUNCID_LOAD_IMAGE 2
+> > > >> > +#define OPTEE_SMC_CALL_LOAD_IMAGE \
+> > > >> > +       ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, ARM_SMCCC_SMC_32=
+, \
+> > > >> > +                          ARM_SMCCC_OWNER_TRUSTED_OS_END, \
+> > > >> > +                          OPTEE_SMC_FUNCID_LOAD_IMAGE)
+> > > >> > +
+> > > >> >  /*
+> > > >> >   * Call with struct optee_msg_arg as argument
+> > > >> >   *
+> > > >> > diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc=
+_abi.c
+> > > >> > index a1c1fa1a9c28..14612edef8f2 100644
+> > > >> > --- a/drivers/tee/optee/smc_abi.c
+> > > >> > +++ b/drivers/tee/optee/smc_abi.c
+> > > >> > @@ -8,9 +8,11 @@
+> > > >> >
+> > > >> >  #include <linux/arm-smccc.h>
+> > > >> >  #include <linux/errno.h>
+> > > >> > +#include <linux/firmware.h>
+> > > >> >  #include <linux/interrupt.h>
+> > > >> >  #include <linux/io.h>
+> > > >> >  #include <linux/irqdomain.h>
+> > > >> > +#include <linux/kernel.h>
+> > > >> >  #include <linux/mm.h>
+> > > >> >  #include <linux/module.h>
+> > > >> >  #include <linux/of.h>
+> > > >> > @@ -1149,6 +1151,22 @@ static bool optee_msg_api_uid_is_optee_ap=
+i(optee_invoke_fn *invoke_fn)
+> > > >> >         return false;
+> > > >> >  }
+> > > >> >
+> > > >> > +#ifdef CONFIG_OPTEE_LOAD_IMAGE
+> > > >> > +static bool optee_msg_api_uid_is_optee_image_load(optee_invoke_=
+fn *invoke_fn)
+> > > >> > +{
+> > > >> > +       struct arm_smccc_res res;
+> > > >> > +
+> > > >> > +       invoke_fn(OPTEE_SMC_CALLS_UID, 0, 0, 0, 0, 0, 0, 0, &res=
+);
+> > > >> > +
+> > > >> > +       if (res.a0 =3D=3D OPTEE_MSG_IMAGE_LOAD_UID_0 &&
+> > > >> > +          res.a1 =3D=3D OPTEE_MSG_IMAGE_LOAD_UID_1 &&
+> > > >> > +          res.a2 =3D=3D OPTEE_MSG_IMAGE_LOAD_UID_2 &&
+> > > >> > +          res.a3 =3D=3D OPTEE_MSG_IMAGE_LOAD_UID_3)
+> > > >> > +               return true;
+> > > >> > +       return false;
+> > > >> > +}
+> > > >> > +#endif
+> > > >> > +
+> > > >> >  static void optee_msg_get_os_revision(optee_invoke_fn *invoke_f=
+n)
+> > > >> >  {
+> > > >> >         union {
+> > > >> > @@ -1354,6 +1372,80 @@ static void optee_shutdown(struct platfor=
+m_device *pdev)
+> > > >> >                 optee_disable_shm_cache(optee);
+> > > >> >  }
+> > > >> >
+> > > >> > +#ifdef CONFIG_OPTEE_LOAD_IMAGE
+> > > >> > +
+> > > >> > +#define OPTEE_FW_IMAGE "optee/tee.bin"
+> > > >> > +
+> > > >> > +static int optee_load_fw(struct platform_device *pdev,
+> > > >> > +                        optee_invoke_fn *invoke_fn)
+> > > >> > +{
+> > > >> > +       const struct firmware *fw =3D NULL;
+> > > >> > +       struct arm_smccc_res res;
+> > > >> > +       phys_addr_t data_pa;
+> > > >> > +       u8 *data_buf =3D NULL;
+> > > >> > +       u64 data_size;
+> > > >> > +       u32 data_pa_high, data_pa_low;
+> > > >> > +       u32 data_size_high, data_size_low;
+> > > >> > +       int rc;
+> > > >> > +
+> > > >> > +       if (!optee_msg_api_uid_is_optee_image_load(invoke_fn))
+> > > >> > +               return 0;
+> > > >> > +
+> > > >> > +       rc =3D request_firmware(&fw, OPTEE_FW_IMAGE, &pdev->dev)=
+;
+> > > >> > +       if (rc) {
+> > > >> > +               /*
+> > > >> > +                * The firmware in the rootfs will not be access=
+ible until we
+> > > >> > +                * are in the SYSTEM_RUNNING state, so return EP=
+ROBE_DEFER until
+> > > >> > +                * that point.
+> > > >> > +                */
+> > > >> > +               if (system_state < SYSTEM_RUNNING)
+> > > >> > +                       return -EPROBE_DEFER;
+> > > >> > +               goto fw_err;
+> > > >> > +       }
+> > > >> > +
+> > > >> > +       data_size =3D fw->size;
+> > > >> > +       /*
+> > > >> > +        * This uses the GFP_DMA flag to ensure we are allocated=
+ memory in the
+> > > >> > +        * 32-bit space since TF-A cannot map memory beyond the =
+32-bit boundary.
+> > > >> > +        */
+> > > >> > +       data_buf =3D kmalloc(fw->size, GFP_KERNEL | GFP_DMA);
+> > > >> > +       if (!data_buf) {
+> > > >> > +               rc =3D -ENOMEM;
+> > > >> > +               goto fw_err;
+> > > >> > +       }
+> > > >> > +       memcpy(data_buf, fw->data, fw->size);
+> > > >> > +       data_pa =3D virt_to_phys(data_buf);
+> > > >> > +       reg_pair_from_64(&data_pa_high, &data_pa_low, data_pa);
+> > > >> > +       reg_pair_from_64(&data_size_high, &data_size_low, data_s=
+ize);
+> > > >> > +       goto fw_load;
+> > > >> > +
+> > > >> > +fw_err:
+> > > >> > +       pr_warn("image loading failed\n");
+> > > >> > +       data_pa_high =3D data_pa_low =3D data_size_high =3D data=
+_size_low =3D 0;
+> > > >> > +
+> > > >> > +fw_load:
+> > > >> > +       /*
+> > > >> > +        * Always invoke the SMC, even if loading the image fail=
+s, to indicate
+> > > >> > +        * to EL3 that we have passed the point where it should =
+allow invoking
+> > > >> > +        * this SMC.
+> > > >> > +        */
+> > > >> > +       invoke_fn(OPTEE_SMC_CALL_LOAD_IMAGE, data_size_high, dat=
+a_size_low,
+> > > >> > +                 data_pa_high, data_pa_low, 0, 0, 0, &res);
+> > > >> > +       if (!rc)
+> > > >> > +               rc =3D res.a0;
+> > > >> > +       if (fw)
+> > > >> > +               release_firmware(fw);
+> > > >> > +       kfree(data_buf);
+> > > >> > +
+> > > >> > +       return rc;
+> > > >> > +}
+> > > >> > +#else
+> > > >> > +static inline int optee_load_fw(struct platform_device *__unuse=
+d1,
+> > > >> > +               optee_invoke_fn *__unused2) {
+> > > >> > +       return 0;
+> > > >> > +}
+> > > >> > +#endif
+> > > >> > +
+> > > >> >  static int optee_probe(struct platform_device *pdev)
+> > > >> >  {
+> > > >> >         optee_invoke_fn *invoke_fn;
+> > > >> > @@ -1372,6 +1464,10 @@ static int optee_probe(struct platform_de=
+vice *pdev)
+> > > >> >         if (IS_ERR(invoke_fn))
+> > > >> >                 return PTR_ERR(invoke_fn);
+> > > >> >
+> > > >> > +       rc =3D optee_load_fw(pdev, invoke_fn);
+> > > >> > +       if (rc)
+> > > >> > +               return rc;
+> > > >> > +
+> > > >> >         if (!optee_msg_api_uid_is_optee_api(invoke_fn)) {
+> > > >> >                 pr_warn("api uid mismatch\n");
+> > > >> >                 return -EINVAL;
+> > > >> > --
+> > > >> > 2.40.0.rc0.216.gc4246ad0f0-goog
+> > > >> >
