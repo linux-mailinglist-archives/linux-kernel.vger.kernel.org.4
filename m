@@ -2,144 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489F86B2324
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 686DD6B232B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:36:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbjCILfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:35:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
+        id S231468AbjCILgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:36:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231564AbjCILfa (ORCPT
+        with ESMTP id S229572AbjCILgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:35:30 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EDC7E7A5;
-        Thu,  9 Mar 2023 03:35:22 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0D53E1C000A;
-        Thu,  9 Mar 2023 11:35:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678361721;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 9 Mar 2023 06:36:46 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5AF2C659;
+        Thu,  9 Mar 2023 03:36:45 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BB2C121EC3;
+        Thu,  9 Mar 2023 11:36:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1678361803; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=YkCJYe4xTl1nq4LBH2Nzf6GB3+OQQsqPo2Fge4ocTUs=;
-        b=hiIMPBEnM9/0A6RUHYRZqxFHogmol9ukA6pSF9yyH7WStCrXbZROuFrMCgPWYlCuvRnkhD
-        gSVPsluMhNKX56RZrjnI61iTpBTA4waKAQ6JqeRqsvyo/IWOPAl/QL51nSDgAxSyu94yKy
-        PIn9wIRH2IZFlmKfSzqKCR71LaKiGkrD/HSgaRQb245/oFmYH13le2EXgsHsrIH75UqLz3
-        Z11W3tJOxR+vBh6gHjbD5FbyG6FnNCzR4oHH8uG2wNHJnoqWJ9ZmEH7DlYcnZLCUcl1gLD
-        mNnKh0EMvdHeQcM3phRrh+OldNLWfiXLDIRmHeLX33lUlMygrtc3mKklFPVC1A==
-Date:   Thu, 9 Mar 2023 12:35:13 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-rtc@vger.kernel.org,
-        Michael Walle <michael@walle.cc>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH V3] nvmem: add explicit config option to read OF fixed
- cells
-Message-ID: <20230309123513.43b7134f@xps-13>
-In-Reply-To: <20230309112028.19215-1-zajec5@gmail.com>
-References: <20230309112028.19215-1-zajec5@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        bh=UFLwk3CURL1yX53lyCf7/30PNixTYcC5gLluvRO2Img=;
+        b=p2/VRyn/3AW0vcDv3JZBSPjWLMgRmpwl31MVsV2NQcHtuQ1xRubKaXw0IXhaWuIzLsuJPc
+        0gFib0prec0r6ii+2mWwXzIRcFVvXrEWRCLFWudlaGXk62ts5UamOCM92ViwwKiJotIaSq
+        DnBZdRKiK4dLvwjgVkZGWN1+76mx76I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1678361803;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UFLwk3CURL1yX53lyCf7/30PNixTYcC5gLluvRO2Img=;
+        b=SB6VDibhrtWkblCbWpb+KRUmFmNx4nP3uctXBQGRJfpzBTJde795VXbhloQdNh81uuo6wm
+        HfbZzfDUQfJ+jcBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ACB481391B;
+        Thu,  9 Mar 2023 11:36:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3t7SKcvECWSwVAAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 09 Mar 2023 11:36:43 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 2A6D5A06FF; Thu,  9 Mar 2023 12:36:43 +0100 (CET)
+Date:   Thu, 9 Mar 2023 12:36:43 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>, Ritesh Harjani <ritesh.list@gmail.com>
+Subject: Re: [RFC 01/11] ext4: mballoc: Remove useless setting of ac_criteria
+Message-ID: <20230309113643.tlyyo3ssv7braw7a@quack3>
+References: <cover.1674822311.git.ojaswin@linux.ibm.com>
+ <08aadf4fd475d87020c60792d81276a28d7176c1.1674822311.git.ojaswin@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <08aadf4fd475d87020c60792d81276a28d7176c1.1674822311.git.ojaswin@linux.ibm.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafa=C5=82,
+On Fri 27-01-23 18:07:28, Ojaswin Mujoo wrote:
+> There will be changes coming in future patches which will introduce a new
+> criteria for block allocation. This removes the useless setting of ac_criteria.
+> AFAIU, this might be only used to differentiate between whether a preallocated
+> blocks was allocated or was regular allocator called for allocating blocks.
+> Hence this also adds the debug prints to identify what type of block allocation
+> was done in ext4_mb_show_ac().
+> 
+> Signed-off-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
 
-> diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provide=
-r.h
-> index 0262b86194eb..b3c14ce87a65 100644
-> --- a/include/linux/nvmem-provider.h
-> +++ b/include/linux/nvmem-provider.h
-> @@ -73,6 +73,7 @@ struct nvmem_cell_info {
->   * @owner:	Pointer to exporter module. Used for refcounting.
->   * @cells:	Optional array of pre-defined NVMEM cells.
->   * @ncells:	Number of elements in cells.
-> + * @use_fixed_of_cells:	Read fixed NVMEM cells from OF.
+Looks good. Feel free to add:
 
-I'm still unhappy with the naming, especially since you explained in
-more details the whole plan which involves using a container to put
-these fixed cells from now on. In both cases you extract cells from
-fixed OF nodes but this boolean needs to be set to true in one
-case, and false in the other, which would not make sense.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Also, regarding the bindings changes, I'm fairly happy with the idea,
-but if we go this way I would prefer a full series instead of
-individual changes with:
+								Honza
 
-- the boolean you introduce here (renamed, at the very least)
-- the new bindings
-- the update of the current provider bindings to take the new bindings
-  into account and deprecate the old ones officially
-- support for the new bindings in the core
-
->   * @keepout:	Optional array of keepout ranges (sorted ascending by start=
-).
->   * @nkeepout:	Number of elements in the keepout array.
->   * @type:	Type of the nvmem storage
-> @@ -103,6 +104,7 @@ struct nvmem_config {
->  	struct module		*owner;
->  	const struct nvmem_cell_info	*cells;
->  	int			ncells;
-> +	bool			use_fixed_of_cells;
->  	const struct nvmem_keepout *keepout;
->  	unsigned int		nkeepout;
->  	enum nvmem_type		type;
-
-Thanks,
-Miqu=C3=A8l
+> ---
+>  fs/ext4/mballoc.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 5b2ae37a8b80..572e79a698d4 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -4391,7 +4391,6 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
+>  			atomic_inc(&pa->pa_count);
+>  			ext4_mb_use_inode_pa(ac, pa);
+>  			spin_unlock(&pa->pa_lock);
+> -			ac->ac_criteria = 10;
+>  			rcu_read_unlock();
+>  			return true;
+>  		}
+> @@ -4434,7 +4433,6 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
+>  	}
+>  	if (cpa) {
+>  		ext4_mb_use_group_pa(ac, cpa);
+> -		ac->ac_criteria = 20;
+>  		return true;
+>  	}
+>  	return false;
+> @@ -5131,6 +5129,10 @@ static void ext4_mb_show_ac(struct ext4_allocation_context *ac)
+>  			(unsigned long)ac->ac_b_ex.fe_logical,
+>  			(int)ac->ac_criteria);
+>  	mb_debug(sb, "%u found", ac->ac_found);
+> +	mb_debug(sb, "used pa: %s, ", ac->ac_pa ? "yes" : "no");
+> +	if (ac->ac_pa)
+> +		mb_debug(sb, "pa_type %s\n", ac->ac_pa->pa_type == MB_GROUP_PA ?
+> +			 "group pa" : "inode pa");
+>  	ext4_mb_show_pa(sb);
+>  }
+>  #else
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
