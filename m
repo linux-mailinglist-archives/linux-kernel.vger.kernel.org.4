@@ -2,45 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD7C6B3211
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BE86B3214
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:33:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjCIXbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 18:31:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
+        id S231194AbjCIXda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 18:33:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjCIXbH (ORCPT
+        with ESMTP id S230373AbjCIXd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 18:31:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D08F98ED;
-        Thu,  9 Mar 2023 15:31:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D1FB61D1D;
-        Thu,  9 Mar 2023 23:31:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08D67C433D2;
-        Thu,  9 Mar 2023 23:31:01 +0000 (UTC)
-Date:   Thu, 9 Mar 2023 18:31:00 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Tero Kristo <tero.kristo@linux.intel.com>
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] trace/hwlat: Do not restart per-cpu threads if they are
- already running
-Message-ID: <20230309183100.624e200f@gandalf.local.home>
-In-Reply-To: <189d0e91-3216-edd0-b9b6-d2df3bb9618d@linux.intel.com>
-References: <20230302113654.2984709-1-tero.kristo@linux.intel.com>
-        <92700518-46e3-88af-9be1-db18767754f5@kernel.org>
-        <189d0e91-3216-edd0-b9b6-d2df3bb9618d@linux.intel.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Thu, 9 Mar 2023 18:33:26 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB555C116;
+        Thu,  9 Mar 2023 15:33:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678404804; x=1709940804;
+  h=message-id:subject:from:reply-to:to:cc:date:mime-version:
+   content-transfer-encoding;
+  bh=fURQFsvjsw/isrhS07s6cUz/AKobP94qJzaPR6T3Bdk=;
+  b=J4G5Mtz+5Psp3eN30ygCtmpBcSNmIfJF1YJKex9YxoJlf4eJccWY4OAt
+   Ca09QhxXOofEOzeInoCf7XstocXNy5CDGUw87ppeb0b2YjUB6N0hdcXxV
+   c4DAyUKco05kklWKgH+wNUl64KIzrZAWi8bgiDb3nvNGVuFBsAsUN0TnI
+   rDSfLaE8w9hX8NndBYeKNhzG4cSOKLc/d/xWSIBbBb/e4rHX6t0NVeOBr
+   dXPYfolSw2BN0wy6HB4B1/1u7PJUQDJqGoSRA+JAb4qWZRqSi/ipO3yih
+   fYgZ6xPyzioHzttjLmWDAuPqbApztOl+PHzjHTGlty7MnrE0LCXP1Mieq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="320454160"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="320454160"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 15:33:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="851704649"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="851704649"
+Received: from wopr.jf.intel.com ([10.54.75.136])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 15:33:23 -0800
+Message-ID: <592bcdcbb3603cf5dfefd09abdd6916db4efc691.camel@linux.intel.com>
+Subject: BUG: hid-sensor-ids code includes binary data in device name
+From:   Todd Brandt <todd.e.brandt@linux.intel.com>
+Reply-To: todd.e.brandt@linux.intel.com
+To:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     p.jungkamp@gmx.net, Jonathan.Cameron@huawei.com,
+        srinivas.pandruvada@linux.intel.com, jkosina@suse.cz,
+        todd.e.brandt@intel.com
+Date:   Thu, 09 Mar 2023 15:33:08 -0800
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,117 +61,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Mar 2023 14:02:37 +0200
-Tero Kristo <tero.kristo@linux.intel.com> wrote:
+Hi all, I've run into an issue in 6.3.0-rc1 that causes problems with
+ftrace and I've bisected it to this commit:
 
-> Hi,
-> 
-> On 02/03/2023 13:49, Daniel Bristot de Oliveira wrote:
-> > Hi Tero,
-> >
-> > On 3/2/23 08:36, Tero Kristo wrote:  
-> >> Check if the hwlatd thread for the cpu is already running, before
-> >> starting a new one. This avoids running multiple instances of the same
-> >> CPU thread on the system. Also, do not wipe the contents of the
-> >> per-cpu kthread data when starting the tracer, as this can completely
-> >> forget about already running instances and start new additional per-cpu
-> >> threads. Fixes issues where fiddling with either the mode of the hwlat
-> >> tracer or doing cpu-hotplugs messes up the internal book-keeping
-> >> resulting in stale hwlatd threads.  
-> > Thanks for your patch.
-> >
-> > Would you mind explaining how do you hit the problem? that is, how can
-> > I reproduce the same problem you faced.  
-> 
-> For example, this script snippet reproduces it for me every time:
-> 
-> #!/bin/sh
-> cd /sys/kernel/debug/tracing
-> echo 0 > tracing_on
-> echo hwlat > current_tracer
-> echo per-cpu > hwlat_detector/mode
-> echo 100000 > hwlat_detector/width
-> echo 200000 > hwlat_detector/window
-> echo 200 > tracing_thresh
-> echo 1 > tracing_on
+commit 98c062e8245199fa9121141a0bf1035dc45ae90e (HEAD, refs/bisect/bad)
+Author: Philipp Jungkamp p.jungkamp@gmx.net
+Date:   Fri Nov 25 00:38:38 2022 +0100
 
-I did the above and saw this:
+    HID: hid-sensor-custom: Allow more custom iio sensors
 
- # ps aux | grep hwlat
-root        1410 36.2  0.0      0     0 ?        R    18:10   0:22 [hwlatd/0]
-root        1411 36.7  0.0      0     0 ?        R    18:10   0:22 [hwlatd/1]
-root        1412 36.4  0.0      0     0 ?        R    18:10   0:22 [hwlatd/2]
-root        1413 36.7  0.0      0     0 ?        R    18:10   0:22 [hwlatd/3]
-root        1414 36.7  0.0      0     0 ?        R    18:10   0:22 [hwlatd/4]
-root        1415 36.5  0.0      0     0 ?        R    18:10   0:22 [hwlatd/5]
-root        1417 36.4  0.0      0     0 ?        R    18:10   0:22 [hwlatd/6]
-root        1418 36.6  0.0      0     0 ?        S    18:10   0:22 [hwlatd/7]
-root        1426 33.1  0.0      0     0 ?        R    18:10   0:11 [hwlatd/0]
-root        1427 33.1  0.0      0     0 ?        R    18:10   0:11 [hwlatd/1]
-root        1428 32.9  0.0      0     0 ?        R    18:10   0:11 [hwlatd/2]
-root        1429 32.9  0.0      0     0 ?        R    18:10   0:11 [hwlatd/3]
-root        1430 32.8  0.0      0     0 ?        R    18:10   0:11 [hwlatd/4]
-root        1431 33.2  0.0      0     0 ?        R    18:10   0:11 [hwlatd/5]
-root        1432 33.2  0.0      0     0 ?        R    18:10   0:11 [hwlatd/6]
-root        1433 33.2  0.0      0     0 ?        S    18:10   0:11 [hwlatd/7]
-root        1521  0.0  0.0   6332  2048 pts/0    S+   18:22   0:00 grep hwlat
+    The known LUID table for established/known custom HID sensors was
+    limited to sensors with "INTEL" as manufacturer. But some vendors
+such
+    as Lenovo also include fairly standard iio sensors (e.g. ambient
+light)
+    in their custom sensors.
 
-Which I'm guessing is bad (having two of each hwlatd/#).
+    Expand the known custom sensors table by a tag used for the
+platform
+    device name and match sensors based on the LUID as well as
+optionally
+    on model and manufacturer properties.
 
-> 
-> Another case where something wonky happens is if you offline/online a 
-> large number of CPUs (which takes a lot of time), and you start/disable 
-> the hwlat tracer at the same time.
-> 
+    Signed-off-by: Philipp Jungkamp p.jungkamp@gmx.net
+    Reviewed-by: Jonathan Cameron Jonathan.Cameron@huawei.com
+    Acked-by: Srinivas Pandruvada srinivas.pandruvada@linux.intel.com
+    Signed-off-by: Jiri Kosina jkosina@suse.cz
 
-After applying the patch and running the same commands,  I have this:
+You're using raw data as part of the devname in the "real_usage"
+string, but it includes chars other than ASCII, and those chars end
+up being printed out in the ftrace log which is meant to be ASCII only.
 
- # ps aux | grep hwlat
-root         768 40.7  0.0      0     0 ?        S    18:23   0:10 [hwlatd/0]
-root         769 39.7  0.0      0     0 ?        R    18:23   0:10 [hwlatd/1]
-root         770 39.8  0.0      0     0 ?        R    18:23   0:10 [hwlatd/2]
-root         771 39.4  0.0      0     0 ?        R    18:23   0:10 [hwlatd/3]
-root         772 40.5  0.0      0     0 ?        S    18:23   0:10 [hwlatd/4]
-root         773 40.5  0.0      0     0 ?        R    18:23   0:10 [hwlatd/5]
-root         775 41.0  0.0      0     0 ?        S    18:23   0:10 [hwlatd/6]
-root         776 41.3  0.0      0     0 ?        R    18:23   0:10 [hwlatd/7]
-root         781  0.0  0.0   6332  2048 pts/0    S+   18:25   0:00 grep hwlat
+-       /* HID-SENSOR-INT-REAL_USAGE_ID */
+-       dev_name = kasprintf(GFP_KERNEL, "HID-SENSOR-INT-%s",
+real_usage);
++       /* HID-SENSOR-TAG-REAL_USAGE_ID */
++       dev_name = kasprintf(GFP_KERNEL, "HID-SENSOR-%s-%s",
++                            match->tag, real_usage);
 
-Looks as if this does fix the issue.
+My sleepgraph tool started to crash because it read these lines from
+ftrace:
 
-> >> diff --git a/kernel/trace/trace_hwlat.c b/kernel/trace/trace_hwlat.c
-> >> index d440ddd5fd8b..c4945f8adc11 100644
-> >> --- a/kernel/trace/trace_hwlat.c
-> >> +++ b/kernel/trace/trace_hwlat.c
-> >> @@ -492,6 +492,10 @@ static int start_cpu_kthread(unsigned int cpu)
-> >>   {
-> >>   	struct task_struct *kthread;
-> >>   
-> >> +	/* Do not start a new hwlatd thread if it is already running */
-> >> +	if (per_cpu(hwlat_per_cpu_data, cpu).kthread)
-> >> +		return 0;
-> >> +
-> >>   	kthread = kthread_run_on_cpu(kthread_fn, NULL, cpu, "hwlatd/%u");
-> >>   	if (IS_ERR(kthread)) {
-> >>   		pr_err(BANNER "could not start sampling thread\n");
-> >> @@ -584,9 +588,6 @@ static int start_per_cpu_kthreads(struct trace_array *tr)
-> >>   	 */
-> >>   	cpumask_and(current_mask, cpu_online_mask, tr->tracing_cpumask);
-> >>   
-> >> -	for_each_online_cpu(cpu)
-> >> -		per_cpu(hwlat_per_cpu_data, cpu).kthread = NULL;
-> >> -
+device_pm_callback_start: platform HID-SENSOR-INT-020b?.39.auto,
+parent: 001F:8087:0AC2.0003, [suspend]
+device_pm_callback_end: platform HID-SENSOR-INT-020b?.39.auto, err=0
 
-I believe this is two different bugs (the two hunks). This should be two
-patches.
+The "HID-SENSOR-INT-020b?.39.auto" string includes a binary char that
+kills
+python3 code that loops through an ascii file as such:
 
-Please add the reproducer above to the commit log in a v2.
+  File "/usr/bin/sleepgraph", line 5579, in executeSuspend
+    for line in fp:
+  File "/usr/lib/python3.10/codecs.py", line 322, in decode
+    (result, consumed) = self._buffer_decode(data, self.errors, final)
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position
+1568: invalid start byte
 
-Thanks,
+I've updated sleepgraph to handle random non-ascii chars, but other
+tools
+may suffer the same fate. Can you rewrite this to ensure that no binary
+chars make it into the devname?
 
--- Steve
-
-
-> >>   	for_each_cpu(cpu, current_mask) {
-> >>   		retval = start_cpu_kthread(cpu);
-> >>   		if (retval)  
