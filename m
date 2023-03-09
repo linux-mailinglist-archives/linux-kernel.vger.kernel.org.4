@@ -2,97 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 824E86B1EFD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C9D6B1F0A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbjCIIzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 03:55:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
+        id S231187AbjCII5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 03:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjCIIyQ (ORCPT
+        with ESMTP id S230317AbjCII5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:54:16 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6174ECCF
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:53:34 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id cw28so4049942edb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 00:53:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678351987;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C/wZHW13/mQxhk8emF0uZdwKLstd4GE6HEzP/De9WH0=;
-        b=BG/dRpZ/NUnb1+JWPtygo8p1kSQMRnFW2N3kkWid/xyc/HkSTvmUk9LYLANpCKlu80
-         ijlTDK8PShVim5FqfPNEuvWWWlOQWrA5H8sQ8aIU48nfJcHbFNJf29KTMZuo+qQeW7bg
-         wBs8egBzAiYlDjlOXI+qwiNk9uASGbvRxSSXVujkHK+hc46k7l1Dev7tCEmh8dErpPaL
-         jr9rUJyU36yKdte7YsogC0NVMti0qtH9f5zTxw4vMzecpYwhRX5UA8j91xiswZBuZ23D
-         9uG3OR0bxFLXKVCXeyqf67frBAGwLSGKyYGl4TrQHd4vNDHPELSYELIQFaVQzOWMxrg6
-         lcOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678351987;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C/wZHW13/mQxhk8emF0uZdwKLstd4GE6HEzP/De9WH0=;
-        b=otSjrtGDwC+BxnsyvAO+74bkb9vW9Ab6hSSXl3+qwzQxWIqgtZXDUcO1PCcb9xvmYM
-         89Mv9LQ2thzgtlGWe2P158yjimV6G6i7VrruegjCTVmT2AMf5R/5hgIdnlTdzxkxo/zx
-         vVDB9xhUIfLnsUb+4xlupCk2gNv17Gj9dqymtEySy1vEm668KZUWBrdJCJK+M1rgkaBd
-         KSaNm9qprDPx2qNy3ek2OFzvvqQax4Ch2wY/Pfi/IcHOkoXTdLO7+q8eI0yGpqquDwk9
-         yfo4Ts4R6NDkdYM/7zyN1tl6KoBT87KP72jwZchnsdw55cfjFzBTIi/pS5WZt9G1/zMx
-         /Y9g==
-X-Gm-Message-State: AO0yUKUS+qVzS5S/Ydzb0AiLLlbtMZWYlC/KmJq5bCvvsYsIEDgrp+2i
-        j/Xob45fvfVjMwuTxqlFt5gD2Q==
-X-Google-Smtp-Source: AK7set/N0j1iC6/UdLiys36rU0s0N5NOAh+G6YeJK2n83X4YAfEBPymjnqnnbCLmls9KsXDe+7w+Gg==
-X-Received: by 2002:a17:906:eecb:b0:8f1:4bef:b0e7 with SMTP id wu11-20020a170906eecb00b008f14befb0e7mr32604866ejb.1.1678351987755;
-        Thu, 09 Mar 2023 00:53:07 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
-        by smtp.gmail.com with ESMTPSA id s26-20020a50ab1a000000b004bf999f8e57sm9194133edc.19.2023.03.09.00.53.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 00:53:07 -0800 (PST)
-Message-ID: <192a29e3-86d7-5592-f9b7-932e07e5f7bb@linaro.org>
-Date:   Thu, 9 Mar 2023 09:53:06 +0100
+        Thu, 9 Mar 2023 03:57:10 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5471725;
+        Thu,  9 Mar 2023 00:56:06 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PXN8N0W56z9xrss;
+        Thu,  9 Mar 2023 16:46:44 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBHE1rqnglk6JWBAQ--.23851S2;
+        Thu, 09 Mar 2023 09:55:14 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        mic@digikod.net
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v3 0/3] security: Always enable integrity LSM
+Date:   Thu,  9 Mar 2023 09:54:30 +0100
+Message-Id: <20230309085433.1810314-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: phy: qcom,qmp: Add SDX65 QMP PHY
- binding
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, manivannan.sadhasivam@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1678283688-4020-1-git-send-email-quic_rohiagar@quicinc.com>
- <1678283688-4020-2-git-send-email-quic_rohiagar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1678283688-4020-2-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwBHE1rqnglk6JWBAQ--.23851S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZryrtFW7Kw13tFykGw17Jrb_yoW8Jw4DpF
+        sFgay5Kr48AFWS9F93Aa1I9a4akFZaqryUWrZxGw18Xa4rury0qFWIyw18CryUJrsYy3WS
+        gF12vr1ruw1qyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvqb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+        n4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+        tVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280
+        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x07jxqXdUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQALBF1jj4pctgAAsf
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 14:54, Rohit Agarwal wrote:
-> Add devicetree YAML binding for Qualcomm QMP Super Speed (SS) PHY found
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Subject: drop second/last, redundant "binding". The "dt-bindings" prefix
-is already stating that these are bindings.
+Since the integrity (including IMA and EVM) functions are currently always
+called by the LSM infrastructure, and always after all LSMs, formalize
+these requirements by introducing a new LSM ordering called LSM_ORDER_LAST,
+and set it for the 'integrity' LSM (patch 1).
 
-> in SDX65.
-> 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+Consequently, revert commit 92063f3ca73a ("integrity: double check
+iint_cache was initialized"), as the double check becomes always verified
+(patch 2), and remove 'integrity' from the list of LSMs in
+security/Kconfig (patch 3).
 
-With above:
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Changelog:
 
-Best regards,
-Krzysztof
+v2:
+- Fix commit message in patch 1 (suggested by Mimi)
+- Bump version of patch 2 (v1 -> v3) to make one patch set
+- Add patch 3 (suggested by Mimi)
+
+v1:
+- Add comment for LSM_ORDER_LAST definition (suggested by Mimi)
+- Add Fixes tag (suggested by Mimi)
+- Do minor corrections in the commit messages (suggested by Mimi and
+  Stefan)
+
+Roberto Sassu (3):
+  security: Introduce LSM_ORDER_LAST and set it for the integrity LSM
+  Revert "integrity: double check iint_cache was initialized"
+  security: Remove integrity from the LSM list in Kconfig
+
+ include/linux/lsm_hooks.h |  1 +
+ security/Kconfig          | 10 +++++-----
+ security/integrity/iint.c |  9 +--------
+ security/security.c       | 12 +++++++++---
+ 4 files changed, 16 insertions(+), 16 deletions(-)
+
+-- 
+2.25.1
 
