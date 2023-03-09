@@ -2,71 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA96B6B2169
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08EC6B216C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjCIK30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:29:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
+        id S229757AbjCIKaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:30:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbjCIK3F (ORCPT
+        with ESMTP id S229680AbjCIKaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:29:05 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B0F73037
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:28:51 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 329ASQ01113378;
-        Thu, 9 Mar 2023 04:28:26 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678357706;
-        bh=LWksbxNVUZdTDLLVkJWNNHz0ol9JZf0Yx+KNCV4tZQs=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=YGhcQBHaW3NVMAITEB3KMa5dVCs8e3DJmLwsBhfGJoB6sGW9qVKbvswtH7wqb9eft
-         90i3xx5P3qn7yt6AwBSThy6BQ9+ohFTA7o7mBqCpQ3HIxaGcVPGQahns5Qk+OuMNvp
-         MHDnHnlnDsp5VkuPnG95d5S3dfTVT1sPvrGwXTu4=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 329ASQcf116599
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 9 Mar 2023 04:28:26 -0600
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 9
- Mar 2023 04:28:26 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 9 Mar 2023 04:28:26 -0600
-Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 329ASNOc046960;
-        Thu, 9 Mar 2023 04:28:24 -0600
-Message-ID: <07faa467-058b-7bd9-80e3-ac55c0dbb208@ti.com>
-Date:   Thu, 9 Mar 2023 15:58:22 +0530
+        Thu, 9 Mar 2023 05:30:17 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F99193E8;
+        Thu,  9 Mar 2023 02:30:14 -0800 (PST)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9DECC60009;
+        Thu,  9 Mar 2023 10:30:07 +0000 (UTC)
+Message-ID: <fadac048-c648-6493-3f1c-1877692180c8@ghiti.fr>
+Date:   Thu, 9 Mar 2023 11:30:07 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-CC:     "vkoul@kernel.org" <vkoul@kernel.org>,
-        "kishon@kernel.org" <kishon@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, "srk@ti.com" <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH] phy: cadence: Sierra: Add PCIe + SGMII PHY multilink
- configuration
+Subject: Re: RISC-V reserved memory problems
 Content-Language: en-US
-To:     Swapnil Kashinath Jakhade <sjakhade@cadence.com>
-References: <20230309100352.446917-1-s-vadapalli@ti.com>
- <DM6PR07MB61540CF1BF185DA9D7CE1078C5B59@DM6PR07MB6154.namprd07.prod.outlook.com>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <DM6PR07MB61540CF1BF185DA9D7CE1078C5B59@DM6PR07MB6154.namprd07.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+To:     Conor.Dooley@microchip.com, linux-riscv@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        frowand.list@gmail.com, robh+dt@kernel.org, mick@ics.forth.gr,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, Valentina.FernandezAlanis@microchip.com,
+        Daire.McNamara@microchip.com
+References: <8e10bf15-9fa9-fe90-1656-35bf3e87e7f8@microchip.com>
+ <f8e67f82-103d-156c-deb0-d6d6e2756f5e@microchip.com>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <f8e67f82-103d-156c-deb0-d6d6e2756f5e@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,373 +46,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Swapnil,
+Hi Conor,
 
-Thank you for letting me know. I wasn't aware of it.
+On 8/16/22 22:41, Conor.Dooley@microchip.com wrote:
+> Hey all,
+> We've run into a bit of a problem with reserved memory on PolarFire, or
+> more accurately a pair of problems that seem to have opposite fixes.
+>
+> The first of these problems is triggered when trying to implement a
+> remoteproc driver. To get the reserved memory buffer, remoteproc
+> does an of_reserved_mem_lookup(), something like:
+>
+> 	np = of_parse_phandle(pdev->of_node, "memory-region", 0);
+> 	if (!np)
+> 		return -EINVAL;
+>
+> 	rmem = of_reserved_mem_lookup(np);
+> 	if (!rmem)
+> 		return -EINVAL;
+>
+> of_reserved_mem_lookup() then uses reserved_mem[i].name to try and find
+> a match - but this was triggering kernel panics for us. We did some
+> debugging and found that the name string's pointer was pointing to an
+> address in the 0x4000_0000 range. The minimum reproduction for this
 
-Regards,
-Siddharth.
 
-On 09/03/23 15:42, Swapnil Kashinath Jakhade wrote:
-> Hi Siddharth,
-> 
->> -----Original Message-----
->> From: Siddharth Vadapalli <s-vadapalli@ti.com>
->> Sent: Thursday, March 9, 2023 3:34 PM
->> To: vkoul@kernel.org; kishon@kernel.org; lars@metafoo.de
->> Cc: linux-phy@lists.infradead.org; linux-kernel@vger.kernel.org; linux-arm-
->> kernel@lists.infradead.org; Swapnil Kashinath Jakhade
->> <sjakhade@cadence.com>; srk@ti.com; s-vadapalli@ti.com
->> Subject: [PATCH] phy: cadence: Sierra: Add PCIe + SGMII PHY multilink
->> configuration
->>
->> EXTERNAL MAIL
->>
->>
->> From: Swapnil Jakhade <sjakhade@cadence.com>
->>
->> Add register sequences for PCIe + SGMII PHY multilink configuration.
->>
->> Signed-off-by: Swapnil Jakhade <sjakhade@cadence.com>
->> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->> ---
-> 
-> I have already sent this patch for review.
-> https://patchwork.kernel.org/project/linux-phy/patch/20230220141216.25326-1-sjakhade@cadence.com/
-> 
-> Thanks & regards,
-> Swapnil
-> 
->>  drivers/phy/cadence/phy-cadence-sierra.c | 141 ++++++++++++++++++++++-
->>  1 file changed, 139 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/phy/cadence/phy-cadence-sierra.c
->> b/drivers/phy/cadence/phy-cadence-sierra.c
->> index 6e86a6517f37..7c0daf3e8880 100644
->> --- a/drivers/phy/cadence/phy-cadence-sierra.c
->> +++ b/drivers/phy/cadence/phy-cadence-sierra.c
->> @@ -24,7 +24,7 @@
->>  #include <dt-bindings/phy/phy-cadence.h>
->>
->>  #define NUM_SSC_MODE		3
->> -#define NUM_PHY_TYPE		4
->> +#define NUM_PHY_TYPE		5
->>
->>  /* PHY register offsets */
->>  #define SIERRA_COMMON_CDB_OFFSET			0x0
->> @@ -46,7 +46,9 @@
->>  #define SIERRA_CMN_REFRCV_PREG				0x98
->>  #define SIERRA_CMN_REFRCV1_PREG				0xB8
->>  #define SIERRA_CMN_PLLLC1_GEN_PREG			0xC2
->> +#define SIERRA_CMN_PLLLC1_FBDIV_INT_PREG		0xC3
->>  #define SIERRA_CMN_PLLLC1_LF_COEFF_MODE0_PREG		0xCA
->> +#define SIERRA_CMN_PLLLC1_CLK0_PREG			0xCE
->>  #define SIERRA_CMN_PLLLC1_BWCAL_MODE0_PREG		0xD0
->>  #define SIERRA_CMN_PLLLC1_SS_TIME_STEPSIZE_MODE_PREG	0xE2
->>
->> @@ -74,6 +76,7 @@
->>  #define SIERRA_PSC_RX_A1_PREG				0x031
->>  #define SIERRA_PSC_RX_A2_PREG				0x032
->>  #define SIERRA_PSC_RX_A3_PREG				0x033
->> +#define SIERRA_PLLCTRL_FBDIV_MODE01_PREG		0x039
->>  #define SIERRA_PLLCTRL_SUBRATE_PREG			0x03A
->>  #define SIERRA_PLLCTRL_GEN_A_PREG			0x03B
->>  #define SIERRA_PLLCTRL_GEN_D_PREG			0x03E
->> @@ -298,6 +301,7 @@ enum cdns_sierra_phy_type {
->>  	TYPE_NONE,
->>  	TYPE_PCIE,
->>  	TYPE_USB,
->> +	TYPE_SGMII,
->>  	TYPE_QSGMII
->>  };
->>
->> @@ -936,6 +940,9 @@ static int cdns_sierra_get_optional(struct
->> cdns_sierra_inst *inst,
->>  	case PHY_TYPE_USB3:
->>  		inst->phy_type = TYPE_USB;
->>  		break;
->> +	case PHY_TYPE_SGMII:
->> +		inst->phy_type = TYPE_SGMII;
->> +		break;
->>  	case PHY_TYPE_QSGMII:
->>  		inst->phy_type = TYPE_QSGMII;
->>  		break;
->> @@ -1339,7 +1346,7 @@ static int
->> cdns_sierra_phy_configure_multilink(struct cdns_sierra_phy *sp)
->>  			}
->>  		}
->>
->> -		if (phy_t1 == TYPE_QSGMII)
->> +		if (phy_t1 == TYPE_SGMII || phy_t1 == TYPE_QSGMII)
->>  			reset_control_deassert(sp->phys[node].lnk_rst);
->>  	}
->>
->> @@ -1537,6 +1544,71 @@ static int cdns_sierra_phy_remove(struct
->> platform_device *pdev)
->>  	return 0;
->>  }
->>
->> +/* SGMII PHY PMA lane configuration */
->> +static struct cdns_reg_pairs sgmii_phy_pma_ln_regs[] = {
->> +	{0x9010, SIERRA_PHY_PMA_XCVR_CTRL}
->> +};
->> +
->> +static struct cdns_sierra_vals sgmii_phy_pma_ln_vals = {
->> +	.reg_pairs = sgmii_phy_pma_ln_regs,
->> +	.num_regs = ARRAY_SIZE(sgmii_phy_pma_ln_regs),
->> +};
->> +
->> +/* SGMII refclk 100MHz, no ssc, opt3 and GE1 links using PLL LC1 */
->> +static const struct cdns_reg_pairs
->> sgmii_100_no_ssc_plllc1_opt3_cmn_regs[] = {
->> +	{0x002D, SIERRA_CMN_PLLLC1_FBDIV_INT_PREG},
->> +	{0x2085, SIERRA_CMN_PLLLC1_LF_COEFF_MODE0_PREG},
->> +	{0x1005, SIERRA_CMN_PLLLC1_CLK0_PREG},
->> +	{0x0000, SIERRA_CMN_PLLLC1_BWCAL_MODE0_PREG},
->> +	{0x0800, SIERRA_CMN_PLLLC1_SS_TIME_STEPSIZE_MODE_PREG}
->> +};
->> +
->> +static const struct cdns_reg_pairs sgmii_100_no_ssc_plllc1_opt3_ln_regs[] =
->> {
->> +	{0x688E, SIERRA_DET_STANDEC_D_PREG},
->> +	{0x0004, SIERRA_PSC_LN_IDLE_PREG},
->> +	{0x0FFE, SIERRA_PSC_RX_A0_PREG},
->> +	{0x0106, SIERRA_PLLCTRL_FBDIV_MODE01_PREG},
->> +	{0x0013, SIERRA_PLLCTRL_SUBRATE_PREG},
->> +	{0x0003, SIERRA_PLLCTRL_GEN_A_PREG},
->> +	{0x0106, SIERRA_PLLCTRL_GEN_D_PREG},
->> +	{0x5231, SIERRA_PLLCTRL_CPGAIN_MODE_PREG },
->> +	{0x0000, SIERRA_DRVCTRL_ATTEN_PREG},
->> +	{0x9702, SIERRA_DRVCTRL_BOOST_PREG},
->> +	{0x0051, SIERRA_RX_CREQ_FLTR_A_MODE0_PREG},
->> +	{0x3C0E, SIERRA_CREQ_CCLKDET_MODE01_PREG},
->> +	{0x3220, SIERRA_CREQ_FSMCLK_SEL_PREG},
->> +	{0x0000, SIERRA_CREQ_EQ_CTRL_PREG},
->> +	{0x0002, SIERRA_DEQ_PHALIGN_CTRL},
->> +	{0x0186, SIERRA_DEQ_GLUT0},
->> +	{0x0186, SIERRA_DEQ_GLUT1},
->> +	{0x0186, SIERRA_DEQ_GLUT2},
->> +	{0x0186, SIERRA_DEQ_GLUT3},
->> +	{0x0186, SIERRA_DEQ_GLUT4},
->> +	{0x0861, SIERRA_DEQ_ALUT0},
->> +	{0x07E0, SIERRA_DEQ_ALUT1},
->> +	{0x079E, SIERRA_DEQ_ALUT2},
->> +	{0x071D, SIERRA_DEQ_ALUT3},
->> +	{0x03F5, SIERRA_DEQ_DFETAP_CTRL_PREG},
->> +	{0x0C01, SIERRA_DEQ_TAU_CTRL1_FAST_MAINT_PREG},
->> +	{0x3C40, SIERRA_DEQ_TAU_CTRL1_SLOW_MAINT_PREG},
->> +	{0x1C04, SIERRA_DEQ_TAU_CTRL2_PREG},
->> +	{0x0033, SIERRA_DEQ_PICTRL_PREG},
->> +	{0x0000, SIERRA_CPI_OUTBUF_RATESEL_PREG},
->> +	{0x0B6D, SIERRA_CPI_RESBIAS_BIN_PREG},
->> +	{0x0102, SIERRA_RXBUFFER_CTLECTRL_PREG},
->> +	{0x0002, SIERRA_RXBUFFER_RCDFECTRL_PREG}
->> +};
->> +
->> +static struct cdns_sierra_vals sgmii_100_no_ssc_plllc1_opt3_cmn_vals = {
->> +	.reg_pairs = sgmii_100_no_ssc_plllc1_opt3_cmn_regs,
->> +	.num_regs = ARRAY_SIZE(sgmii_100_no_ssc_plllc1_opt3_cmn_regs),
->> +};
->> +
->> +static struct cdns_sierra_vals sgmii_100_no_ssc_plllc1_opt3_ln_vals = {
->> +	.reg_pairs = sgmii_100_no_ssc_plllc1_opt3_ln_regs,
->> +	.num_regs = ARRAY_SIZE(sgmii_100_no_ssc_plllc1_opt3_ln_regs),
->> +};
->> +
->>  /* QSGMII PHY PMA lane configuration */
->>  static struct cdns_reg_pairs qsgmii_phy_pma_ln_regs[] = {
->>  	{0x9010, SIERRA_PHY_PMA_XCVR_CTRL}
->> @@ -2363,6 +2435,11 @@ static const struct cdns_sierra_data
->> cdns_map_sierra = {
->>  				[EXTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
->>  				[INTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
->>  			},
->> +			[TYPE_SGMII] = {
->> +				[NO_SSC] = &pcie_phy_pcs_cmn_vals,
->> +				[EXTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
->> +				[INTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
->> +			},
->>  			[TYPE_QSGMII] = {
->>  				[NO_SSC] = &pcie_phy_pcs_cmn_vals,
->>  				[EXTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
->> @@ -2377,6 +2454,11 @@ static const struct cdns_sierra_data
->> cdns_map_sierra = {
->>  				[EXTERNAL_SSC] =
->> &pcie_100_ext_ssc_cmn_vals,
->>  				[INTERNAL_SSC] =
->> &pcie_100_int_ssc_cmn_vals,
->>  			},
->> +			[TYPE_SGMII] = {
->> +				[NO_SSC] =
->> &pcie_100_no_ssc_plllc_cmn_vals,
->> +				[EXTERNAL_SSC] =
->> &pcie_100_ext_ssc_plllc_cmn_vals,
->> +				[INTERNAL_SSC] =
->> &pcie_100_int_ssc_plllc_cmn_vals,
->> +			},
->>  			[TYPE_QSGMII] = {
->>  				[NO_SSC] =
->> &pcie_100_no_ssc_plllc_cmn_vals,
->>  				[EXTERNAL_SSC] =
->> &pcie_100_ext_ssc_plllc_cmn_vals,
->> @@ -2388,6 +2470,13 @@ static const struct cdns_sierra_data
->> cdns_map_sierra = {
->>  				[EXTERNAL_SSC] =
->> &usb_100_ext_ssc_cmn_vals,
->>  			},
->>  		},
->> +		[TYPE_SGMII] = {
->> +			[TYPE_PCIE] = {
->> +				[NO_SSC] =
->> &sgmii_100_no_ssc_plllc1_opt3_cmn_vals,
->> +				[EXTERNAL_SSC] =
->> &sgmii_100_no_ssc_plllc1_opt3_cmn_vals,
->> +				[INTERNAL_SSC] =
->> &sgmii_100_no_ssc_plllc1_opt3_cmn_vals,
->> +			},
->> +		},
->>  		[TYPE_QSGMII] = {
->>  			[TYPE_PCIE] = {
->>  				[NO_SSC] =
->> &qsgmii_100_no_ssc_plllc1_cmn_vals,
->> @@ -2403,6 +2492,11 @@ static const struct cdns_sierra_data
->> cdns_map_sierra = {
->>  				[EXTERNAL_SSC] = &pcie_100_ext_ssc_ln_vals,
->>  				[INTERNAL_SSC] = &pcie_100_int_ssc_ln_vals,
->>  			},
->> +			[TYPE_SGMII] = {
->> +				[NO_SSC] = &ml_pcie_100_no_ssc_ln_vals,
->> +				[EXTERNAL_SSC] =
->> &ml_pcie_100_ext_ssc_ln_vals,
->> +				[INTERNAL_SSC] =
->> &ml_pcie_100_int_ssc_ln_vals,
->> +			},
->>  			[TYPE_QSGMII] = {
->>  				[NO_SSC] = &ml_pcie_100_no_ssc_ln_vals,
->>  				[EXTERNAL_SSC] =
->> &ml_pcie_100_ext_ssc_ln_vals,
->> @@ -2414,6 +2508,13 @@ static const struct cdns_sierra_data
->> cdns_map_sierra = {
->>  				[EXTERNAL_SSC] = &usb_100_ext_ssc_ln_vals,
->>  			},
->>  		},
->> +		[TYPE_SGMII] = {
->> +			[TYPE_PCIE] = {
->> +				[NO_SSC] =
->> &sgmii_100_no_ssc_plllc1_opt3_ln_vals,
->> +				[EXTERNAL_SSC] =
->> &sgmii_100_no_ssc_plllc1_opt3_ln_vals,
->> +				[INTERNAL_SSC] =
->> &sgmii_100_no_ssc_plllc1_opt3_ln_vals,
->> +			},
->> +		},
->>  		[TYPE_QSGMII] = {
->>  			[TYPE_PCIE] = {
->>  				[NO_SSC] =
->> &qsgmii_100_no_ssc_plllc1_ln_vals,
->> @@ -2435,6 +2536,11 @@ static const struct cdns_sierra_data
->> cdns_ti_map_sierra = {
->>  				[EXTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
->>  				[INTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
->>  			},
->> +			[TYPE_SGMII] = {
->> +				[NO_SSC] = &pcie_phy_pcs_cmn_vals,
->> +				[EXTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
->> +				[INTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
->> +			},
->>  			[TYPE_QSGMII] = {
->>  				[NO_SSC] = &pcie_phy_pcs_cmn_vals,
->>  				[EXTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
->> @@ -2443,6 +2549,13 @@ static const struct cdns_sierra_data
->> cdns_ti_map_sierra = {
->>  		},
->>  	},
->>  	.phy_pma_ln_vals = {
->> +		[TYPE_SGMII] = {
->> +			[TYPE_PCIE] = {
->> +				[NO_SSC] = &sgmii_phy_pma_ln_vals,
->> +				[EXTERNAL_SSC] = &sgmii_phy_pma_ln_vals,
->> +				[INTERNAL_SSC] = &sgmii_phy_pma_ln_vals,
->> +			},
->> +		},
->>  		[TYPE_QSGMII] = {
->>  			[TYPE_PCIE] = {
->>  				[NO_SSC] = &qsgmii_phy_pma_ln_vals,
->> @@ -2458,6 +2571,11 @@ static const struct cdns_sierra_data
->> cdns_ti_map_sierra = {
->>  				[EXTERNAL_SSC] =
->> &pcie_100_ext_ssc_cmn_vals,
->>  				[INTERNAL_SSC] =
->> &pcie_100_int_ssc_cmn_vals,
->>  			},
->> +			[TYPE_SGMII] = {
->> +				[NO_SSC] =
->> &pcie_100_no_ssc_plllc_cmn_vals,
->> +				[EXTERNAL_SSC] =
->> &pcie_100_ext_ssc_plllc_cmn_vals,
->> +				[INTERNAL_SSC] =
->> &pcie_100_int_ssc_plllc_cmn_vals,
->> +			},
->>  			[TYPE_QSGMII] = {
->>  				[NO_SSC] =
->> &pcie_100_no_ssc_plllc_cmn_vals,
->>  				[EXTERNAL_SSC] =
->> &pcie_100_ext_ssc_plllc_cmn_vals,
->> @@ -2469,6 +2587,13 @@ static const struct cdns_sierra_data
->> cdns_ti_map_sierra = {
->>  				[EXTERNAL_SSC] =
->> &usb_100_ext_ssc_cmn_vals,
->>  			},
->>  		},
->> +		[TYPE_SGMII] = {
->> +			[TYPE_PCIE] = {
->> +				[NO_SSC] =
->> &sgmii_100_no_ssc_plllc1_opt3_cmn_vals,
->> +				[EXTERNAL_SSC] =
->> &sgmii_100_no_ssc_plllc1_opt3_cmn_vals,
->> +				[INTERNAL_SSC] =
->> &sgmii_100_no_ssc_plllc1_opt3_cmn_vals,
->> +			},
->> +		},
->>  		[TYPE_QSGMII] = {
->>  			[TYPE_PCIE] = {
->>  				[NO_SSC] =
->> &qsgmii_100_no_ssc_plllc1_cmn_vals,
->> @@ -2484,6 +2609,11 @@ static const struct cdns_sierra_data
->> cdns_ti_map_sierra = {
->>  				[EXTERNAL_SSC] = &pcie_100_ext_ssc_ln_vals,
->>  				[INTERNAL_SSC] = &pcie_100_int_ssc_ln_vals,
->>  			},
->> +			[TYPE_SGMII] = {
->> +				[NO_SSC] = &ti_ml_pcie_100_no_ssc_ln_vals,
->> +				[EXTERNAL_SSC] =
->> &ti_ml_pcie_100_ext_ssc_ln_vals,
->> +				[INTERNAL_SSC] =
->> &ti_ml_pcie_100_int_ssc_ln_vals,
->> +			},
->>  			[TYPE_QSGMII] = {
->>  				[NO_SSC] = &ti_ml_pcie_100_no_ssc_ln_vals,
->>  				[EXTERNAL_SSC] =
->> &ti_ml_pcie_100_ext_ssc_ln_vals,
->> @@ -2495,6 +2625,13 @@ static const struct cdns_sierra_data
->> cdns_ti_map_sierra = {
->>  				[EXTERNAL_SSC] = &usb_100_ext_ssc_ln_vals,
->>  			},
->>  		},
->> +		[TYPE_SGMII] = {
->> +			[TYPE_PCIE] = {
->> +				[NO_SSC] =
->> &sgmii_100_no_ssc_plllc1_opt3_ln_vals,
->> +				[EXTERNAL_SSC] =
->> &sgmii_100_no_ssc_plllc1_opt3_ln_vals,
->> +				[INTERNAL_SSC] =
->> &sgmii_100_no_ssc_plllc1_opt3_ln_vals,
->> +			},
->> +		},
->>  		[TYPE_QSGMII] = {
->>  			[TYPE_PCIE] = {
->>  				[NO_SSC] =
->> &qsgmii_100_no_ssc_plllc1_ln_vals,
->> --
->> 2.25.1
-> 
+0x4000_0000 corresponds to DTB_EARLY_BASE_VA: this is the address that 
+is used to map the dtb before we can access it using the linear mapping.
+
+
+> crash is attached - it hacks in some print_reserved_mem()s into
+> setup_vm_final() around a tlb flush so you can see the before/after.
+> (You'll need a reserved memory node in your dts to replicate)
+>
+> The output is like so, with the same crash as in the remoteproc driver:
+>
+> [    0.000000] Linux version 6.0.0-rc1-00001-g0d9d6953d834 (conor@wendy) (riscv64-unknown-linux-gnu-gcc (g5964b5cd727) 11.1.0, GNU ld (GNU Binutils) 2.37) #1 SMP Tue Aug 16 13:42:09 IST 2022
+> [    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
+> [    0.000000] Machine model: Microchip PolarFire-SoC Icicle Kit
+> [    0.000000] earlycon: ns16550a0 at MMIO32 0x0000000020100000 (options '115200n8')
+> [    0.000000] printk: bootconsole [ns16550a0] enabled
+> [    0.000000] printk: debug: skip boot console de-registration.
+> [    0.000000] efi: UEFI not found.
+> [    0.000000] before flush
+> [    0.000000] OF: reserved mem: debug name is fabricbuf@ae000000
+> [    0.000000] after flush
+> [    0.000000] Unable to handle kernel paging request at virtual address 00000000401c31ac
+
+
+You take the trap here because the mapping for the dtb does not exist in 
+swapper_pg_dir, but you don't need this mapping anymore as you can 
+access the device tree through the linear mapping now.
+
+I would say that: you build your kernel with CONFIG_BUILTIN_DTB and then 
+you don't call early_init_dt_verify which resets initial_boot_params to 
+the linear mapping address (it was initially set to 0x4000_0000 in 
+parse_dtb). If that's the case, does the following fix your issue?
+
+
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index 376d2827e736..2b09f0bd8432 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -276,6 +276,7 @@ void __init setup_arch(char **cmdline_p)
+         efi_init();
+         paging_init();
+  #if IS_ENABLED(CONFIG_BUILTIN_DTB)
++       initial_boot_params = __va(XIP_FIXUP(dtb_early_pa));
+         unflatten_and_copy_device_tree();
+  #else
+         if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa))))
+
+
+> [    0.000000] Oops [#1]
+> [    0.000000] Modules linked in:
+> [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 6.0.0-rc1-00001-g0d9d6953d834 #1
+> [    0.000000] Hardware name: Microchip PolarFire-SoC Icicle Kit (DT)
+> [    0.000000] epc : string+0x4a/0xea
+> [    0.000000]  ra : vsnprintf+0x1e4/0x336
+> [    0.000000] epc : ffffffff80335ea0 ra : ffffffff80338936 sp : ffffffff81203be0
+> [    0.000000]  gp : ffffffff812e0a98 tp : ffffffff8120de40 t0 : 0000000000000000
+> [    0.000000]  t1 : ffffffff81203e28 t2 : 7265736572203a46 s0 : ffffffff81203c20
+> [    0.000000]  s1 : ffffffff81203e28 a0 : ffffffff81203d22 a1 : 0000000000000000
+> [    0.000000]  a2 : ffffffff81203d08 a3 : 0000000081203d21 a4 : ffffffffffffffff
+> [    0.000000]  a5 : 00000000401c31ac a6 : ffff0a00ffffff04 a7 : ffffffffffffffff
+> [    0.000000]  s2 : ffffffff81203d08 s3 : ffffffff81203d00 s4 : 0000000000000008
+> [    0.000000]  s5 : ffffffff000000ff s6 : 0000000000ffffff s7 : 00000000ffffff00
+> [    0.000000]  s8 : ffffffff80d9821a s9 : ffffffff81203d22 s10: 0000000000000002
+> [    0.000000]  s11: ffffffff80d9821c t3 : ffffffff812f3617 t4 : ffffffff812f3617
+> [    0.000000]  t5 : ffffffff812f3618 t6 : ffffffff81203d08
+> [    0.000000] status: 0000000200000100 badaddr: 00000000401c31ac cause: 000000000000000d
+> [    0.000000] [<ffffffff80338936>] vsnprintf+0x1e4/0x336
+> [    0.000000] [<ffffffff80055ae2>] vprintk_store+0xf6/0x344
+> [    0.000000] [<ffffffff80055d86>] vprintk_emit+0x56/0x192
+> [    0.000000] [<ffffffff80055ed8>] vprintk_default+0x16/0x1e
+> [    0.000000] [<ffffffff800563d2>] vprintk+0x72/0x80
+> [    0.000000] [<ffffffff806813b2>] _printk+0x36/0x50
+> [    0.000000] [<ffffffff8068af48>] print_reserved_mem+0x1c/0x24
+> [    0.000000] [<ffffffff808057ec>] paging_init+0x528/0x5bc
+> [    0.000000] [<ffffffff808031ae>] setup_arch+0xd0/0x592
+> [    0.000000] [<ffffffff8080070e>] start_kernel+0x82/0x73c
+> [    0.000000] ---[ end trace 0000000000000000 ]---
+> [    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
+> [    0.000000] ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
+>
+> We traced this back to early_init_fdt_scan_reserved_mem() in
+> setup_bootmem() - moving it later back up the boot sequence to
+> after the dt has been remapped etc has fixed the problem for us.
+>
+> The least movement to get it working is attached, and also pushed
+> here: git.kernel.org/conor/c/1735589baefc
+>
+> The second problem is a bit more complicated to explain - but we
+> found the solution conflicted with the remoteproc fix as we had
+> to move early_init_fdt_scan_reserved_mem() _earlier_ in the boot
+> process to solve this one.
+>
+> We want to have a node in our devicetree that contains some memory
+> that is non-cached & marked as reserved-memory. Maybe we have just
+> missed something, but from what we've seen:
+> - the really early setup looks at the dtb, picks the highest bit
+>     of memory and puts the dtb etc there so it can start using it
+> - early_init_fdt_scan_reserved_mem() is then called, which figures
+>     out if memory is reserved or not.
+>
+> Unfortunately, the highest bit of memory is the non-cached bit so
+> everything falls over, but we can avoid this by moving the call to
+> early_init_fdt_scan_reserved_mem() above the dtb memblock alloc that
+> takes place right before it in setup_bootmem().
+
+
+And then I suppose the allocations you are mentioning happen in 
+unflatten_XXX, so parsing the device tree for reserved memory nodes 
+before this should do the trick. Does the following fix your second issue?
+
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index 2b09f0bd8432..94b3d049fe9d 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -277,14 +277,15 @@ void __init setup_arch(char **cmdline_p)
+         paging_init();
+  #if IS_ENABLED(CONFIG_BUILTIN_DTB)
+         initial_boot_params = __va(XIP_FIXUP(dtb_early_pa));
++       early_init_fdt_scan_reserved_mem();
+         unflatten_and_copy_device_tree();
+  #else
+-       if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa))))
++       if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa)))) {
++               early_init_fdt_scan_reserved_mem();
+                 unflatten_device_tree();
+-       else
++       } else
+                 pr_err("No DTB found in kernel mappings\n");
+  #endif
+-       early_init_fdt_scan_reserved_mem();
+         misc_mem_init();
+
+         init_resources();
+
+
+
+>
+> Obviously, both of these changes are moving the function call in
+> opposite directions and we can only really do one of them. We are not
+> sure if what we are doing with the non-cached reserved-memory section
+> is just not permitted & cannot work - or if this is something that
+> was overlooked for RISC-V specifically and works for other archs.
+>
+> It does seem like the first issue is a real bug, and I am happy to
+> submit the patch for that whenever - but having two problems with
+> opposite fixes seemed as if there was something else lurking that we
+> just don't have enough understanding to detect.
+>
+> Any help would be great!
+>
+> Thanks,
+> Conor.
+>
+
+Even if that does not fix your issue, the first patch is necessary as it 
+fixes initial_boot_params.
+
+
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
