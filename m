@@ -2,145 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6CF6B2873
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885A56B2824
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbjCIPLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:11:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51142 "EHLO
+        id S231462AbjCIPDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:03:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjCIPLU (ORCPT
+        with ESMTP id S231599AbjCIPDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:11:20 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE5F1CBC3;
-        Thu,  9 Mar 2023 07:08:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678374509; x=1709910509;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LmHMHjWsIEv+/bgOBchMG8SZINqNerskiXVC/GNNJKU=;
-  b=YF0AP8lHQkLa6/38DFcMN1mcpgSsMIi1kwuQL77Z7U1QayoUTNVRXrK9
-   PaTHqJGT2LCGiN59qKePfHSW38FecPXBBbKxHP19kfqTp0M7Msq/ROOch
-   No0YbDrhwIOyVglNMPGOjEs/KvEYtzj4i2Y1GmHshFi5pONxgMK5/McoF
-   jJILtrjUFRcI2+IYkcvL6hy3H4niaeJ2gMURY81AszTDua9QHYtwPdjY5
-   h0+domJNhpRFntdNyGiSsym+MyEByjIW2QRz9N4ZAacIF4pGnunyFZRkZ
-   wIImrkat6kPmyZMexLhfsBD5buVQ0DP2Q/AJXJCbw12fzn32yh6N2D10e
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="320311475"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="320311475"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 06:47:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="820619470"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="820619470"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Mar 2023 06:47:32 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1paHYI-000NDm-25;
-        Thu, 09 Mar 2023 16:47:30 +0200
-Date:   Thu, 9 Mar 2023 16:47:30 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Kaehn <kaehndan@gmail.com>, linux-gpio@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] gpiolib: acpi: use the fwnode in acpi_gpiochip_find()
-Message-ID: <ZAnxgooAixXAJvDn@smile.fi.intel.com>
-References: <20230309-fix-acpi-gpio-v1-1-b392d225efe8@redhat.com>
- <ZAnnJpdtlEOS4tiS@smile.fi.intel.com>
+        Thu, 9 Mar 2023 10:03:11 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DA2F4011
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:00:05 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id k37so1375214wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 07:00:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678374004;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GuhiEyg3TRhHUVkG+NKXf46bKixySUYoSTIqBrMpU+M=;
+        b=lX1PlFkAngKb7MFgPhVXevH8/WdulpngrDR+sczcPwIuo8+D3sbohyinmYLT+cI86F
+         4DWd99PrTP7htcM5EsY4XhiJZaSpu5wZwinvhebXGHlZCmogZziTchD8C/EK5C6Zjv2+
+         Gdo9rxnwwtsEYQCVAlFkBAutS+vKHjn8dxd3czJUvvcV9mz5ljBxRzbUm4PkmPqurjZm
+         yKrRnk7I2VANZMHH96OnRvMG8jFE1rOop5Hn6UswGgB5N+A6ExyAuxKgx67OXs/UggIF
+         aZcnD6H+ayT/2uiQKjIpm1xNN6gEr0LvARCpO+krOPhbXxHpdNOoZCke+Y5L2ubUtUBY
+         8NpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678374004;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GuhiEyg3TRhHUVkG+NKXf46bKixySUYoSTIqBrMpU+M=;
+        b=JOlQXFSNv06M7yYlrVlIkLsn7NfqrPmXA5BLuyJGo4Z67KP92nNCnKNQJmwuURNo5B
+         HpYpVFqVJw8rRKDSKMfZA2HQ+kunjRC6SSphkUu3R5BN6L6VrSDN2b2t0ybkk9hw7Udb
+         ugYQp+KBIH2hW0akQKfINOkKPdSnkW0l8Nsw09FguXnCcJ9sskCmzbt33nxrYXbmMu54
+         ahVEg3Q6zCBZyC+R3z/KaIkBWbzxF8bixjTv90QenHLiRhlZs1GBhftyV70qJn49uiRZ
+         4r7sM4KvFVeK/a0KKClJteLZMd6//mNrTwbr6RfdSEVTvc66Yaqz3ALalWiQp9zMKapQ
+         Vedw==
+X-Gm-Message-State: AO0yUKXuAC4PdZgBtwgrow8rK9bkKkFhUdht5CsxmzDnbrXl6c1HQcHy
+        xn4Xfzu42oFZfSeD41BIkT0QfGVUDxVelwsMaEQWhA==
+X-Google-Smtp-Source: AK7set+YsrtV4FrTEitgWrBNKT+JMiShWnzq7diqZJ4gTWES+NP51LT+UJhZ6HLLRBytcazxtIeiB0JIjWMOe3NtAwI=
+X-Received: by 2002:a05:600c:1:b0:3eb:5824:f0ec with SMTP id
+ g1-20020a05600c000100b003eb5824f0ecmr5183814wmc.2.1678374003898; Thu, 09 Mar
+ 2023 07:00:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAnnJpdtlEOS4tiS@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230309134718.306570-1-gavinl@nvidia.com> <20230309134718.306570-5-gavinl@nvidia.com>
+In-Reply-To: <20230309134718.306570-5-gavinl@nvidia.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 9 Mar 2023 15:59:51 +0100
+Message-ID: <CANn89i+k3fcSw58owpr70eM_uSM5QUqEb_4y5wpXOKEz30+vvg@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 4/5] ip_tunnel: Preserve pointer const in ip_tunnel_info_opts
+To:     Gavin Li <gavinl@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        roopa@nvidia.com, eng.alaamohamedsoliman.am@gmail.com,
+        bigeasy@linutronix.de, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gavi@nvidia.com, roid@nvidia.com,
+        maord@nvidia.com, saeedm@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 04:03:19PM +0200, Andy Shevchenko wrote:
-> On Thu, Mar 09, 2023 at 02:40:51PM +0100, Benjamin Tissoires wrote:
-> > While trying to set up an SSDT override for a USB-2-I2C chip [0],
-> > I realized that the function acpi_gpiochip_find() was using the parent
-> > of the gpio_chip to do the ACPI matching.
-> > 
-> > This works fine on my icelake laptop because AFAICT, the DSDT presents
-> 
-> Ice Lake
-> 
-> > the PCI device INT3455 as the "Device (GPI0)", but is in fact handled
-> > by the pinctrl driver in Linux.
-> > The pinctrl driver then creates a gpio_chip device. This means that the
-> > gc->parent device in that case is the GPI0 device from ACPI and everything
-> > works.
-> > 
-> > However, in the hid-cp2112 case, the parent is the USB device, and the
-> > gpio_chip is directly under that USB device. Which means that in this case
-> > gc->parent points at the USB device, and so we can not do an ACPI match
-> > towards the GPIO device.
-> > 
-> > I think it is safe to resolve the ACPI matching through the fwnode
-> > because when we call gpiochip_add_data(), the first thing it does is
-> > setting a proper gc->fwnode: if it is not there, it borrows the fwnode
-> > of the parent.
-> > 
-> > So in my icelake case, gc->fwnode is the one from the parent, meaning
-> 
-> Ice Lake
-> 
-> > that the ACPI handle we will get is the one from the GPI0 in the DSDT
-> > (the pincrtl one). And in the hid-cp2112 case, we get the actual
-> > fwnode from the gpiochip we created in the HID device, making it working.
-> 
-> Thinking more about it. In ACPI we have those nodes defined as devices, right?
-> So, strictly speaking the platform tells us that they _are_ devices.
-> 
-> The question here is what this device node in ACPI means:
-> 1) the physical device or subdevice of the physical device OR
-> 2) the physical device even if it's a part of combined (Multi-Functional)
->    device.
-> 
-> Second question is, does Device Tree specification allows something
-> that is not a device node, but can be enumerated as a subdevice of
-> a physical one?
-> 
-> P.S. I don't have objections against the patch, but I would like to
-> have a clear picture on what the semantics of the two specifications
-> WRT possibilities of device enumeration. It might be that we actually
-> abuse ACPI specification in cases of Diolan DLN-2 or other way around
-> trying to abuse it with this patch.
+On Thu, Mar 9, 2023 at 2:48=E2=80=AFPM Gavin Li <gavinl@nvidia.com> wrote:
+>
+> Change ip_tunnel_info_opts( ) from static function to macro to cast retur=
+n
+> value and preserve the const-ness of the pointer.
+>
+> Signed-off-by: Gavin Li <gavinl@nvidia.com>
+> ---
+>  include/net/ip_tunnels.h | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+>
+> diff --git a/include/net/ip_tunnels.h b/include/net/ip_tunnels.h
+> index fca357679816..3e5c102b841f 100644
+> --- a/include/net/ip_tunnels.h
+> +++ b/include/net/ip_tunnels.h
+> @@ -67,6 +67,12 @@ struct ip_tunnel_key {
+>         GENMASK((sizeof_field(struct ip_tunnel_info,            \
+>                               options_len) * BITS_PER_BYTE) - 1, 0)
+>
+> +#define ip_tunnel_info_opts(info)                              \
+> +       _Generic(info,                                          \
+> +               const typeof(*(info)) * : ((const void *)((info) + 1)),\
+> +               default : ((void *)((info) + 1))                \
+> +       )
+> +
 
-I have read the ACPI specification and it doesn't tell that Device is allowed
-to describe non-hardware entity. It means that in the Linux driver model,
-whenever we use Device() in the ACPI, we have an accompanying struct device.
+Hmm...
 
-For GPIO chip case, we have physical device (parent) and GPIO device, which
-is Linux internal representation. So, physical device should have a description
-in the ACPI table, or other way around: any Device() in ACPI has to be
-considered as physical. That said, I think that Daniel was right and we need
-to have parent properly assigned (to the Device(GPI0) node).
+This looks quite dangerous, we lost type safety with the 'default'
+case, with all these casts.
 
-Another way, is to drop children from the descripton and use a single device
-node for entire box.
+What about using something cleaner instead ?
 
-TL;DR: if Device() is present we must use it as a parent to Linux
-representation.
+(Not sure why we do not have an available generic helper for this kind
+of repetitive things)
 
-I would like also to hear Mika's opinion on this.
+diff --git a/include/net/ip_tunnels.h b/include/net/ip_tunnels.h
+index fca3576798166416982ee6a9100b003810c49830..7f26e07c5f3059d426b31529e4d=
+1c3adec23d70f
+100644
+--- a/include/net/ip_tunnels.h
++++ b/include/net/ip_tunnels.h
+@@ -485,10 +485,11 @@ static inline void iptunnel_xmit_stats(struct
+net_device *dev, int pkt_len)
+        }
+ }
 
--- 
-With Best Regards,
-Andy Shevchenko
+-static inline void *ip_tunnel_info_opts(struct ip_tunnel_info *info)
+-{
+-       return info + 1;
+-}
++#define ip_tunnel_info_opts(info)                              \
++       (_Generic(info,                                         \
++                const struct ip_tunnel_info * : ((info) + 1),  \
++                struct ip_tunnel_info * : ((info) + 1))        \
++       )
 
-
+ static inline void ip_tunnel_info_opts_get(void *to,
+                                           const struct ip_tunnel_info *inf=
+o)
