@@ -2,311 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5FF6B26D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6372E6B26DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:25:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjCIOZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:25:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        id S231800AbjCIOZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:25:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbjCIOY3 (ORCPT
+        with ESMTP id S230018AbjCIOZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:24:29 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38A51F5CE
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:24:01 -0800 (PST)
-Received: from dggpeml500018.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PXWdK6n1czKmY9;
-        Thu,  9 Mar 2023 22:23:49 +0800 (CST)
-Received: from [10.67.111.186] (10.67.111.186) by
- dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 9 Mar 2023 22:23:58 +0800
-Message-ID: <6b189026-f33b-6418-3144-5e82dfc712e6@huawei.com>
-Date:   Thu, 9 Mar 2023 22:23:58 +0800
+        Thu, 9 Mar 2023 09:25:11 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5381930EA8;
+        Thu,  9 Mar 2023 06:25:06 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0CE4C20104;
+        Thu,  9 Mar 2023 14:25:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1678371905; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9km87gWKPt/hR64G0P6iiRtDVIALQm6SUo8cyyoUdME=;
+        b=wIPcxg0ELD4kHYzuuZJwZDQZnP28eRn90SZVA9jIQvB9tfENPLXue0TuvoxTpzoNItcpnB
+        TAGjDoR3oQICRx3KlOCLi6p2rJzs2tkbruOZr+/X9sDT5vbC36tNSU4FkJzxgyMkc7ByXh
+        ETqfYYZDFyp/vEQXJvr29rHoSi4txiM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1678371905;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9km87gWKPt/hR64G0P6iiRtDVIALQm6SUo8cyyoUdME=;
+        b=lqxHrQpyiVPiCweBXDaXfj0qECyjgfCtBCWokqdRxNUYDYhjnVq3yrMhs16K59BUZF59GO
+        M5Z+mhKc1+C9EzCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EE4B213A10;
+        Thu,  9 Mar 2023 14:25:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id UKgnOkDsCWQvNwAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 09 Mar 2023 14:25:04 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 6E27DA06FF; Thu,  9 Mar 2023 15:25:04 +0100 (CET)
+Date:   Thu, 9 Mar 2023 15:25:04 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>, Ritesh Harjani <ritesh.list@gmail.com>
+Subject: Re: [RFC 10/11] ext4: Abstract out logic to search average fragment
+ list
+Message-ID: <20230309142504.5lodm4inrn7bnfmk@quack3>
+References: <cover.1674822311.git.ojaswin@linux.ibm.com>
+ <3f0afae57eeaf47aa4b980eddc5e54efc78efa66.1674822311.git.ojaswin@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <mingo@redhat.com>,
-        <peterz@infradead.org>, <juri.lelli@redhat.com>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <rkagan@amazon.de>
-References: <20230306132418.50389-1-zhangqiao22@huawei.com>
- <CAKfTPtAYpkQVDBR0mcymVgu7aYY5rN1svW713mGJxbewHGJRqQ@mail.gmail.com>
- <CAKfTPtAOFthDtQj=EGbTzwG6ZE7GPpp_3Xg9wVr_8epO+fiFjw@mail.gmail.com>
- <d4d849e3-ea4b-1f84-b287-513fb7bff415@huawei.com>
- <CAKfTPtAVrmPCwuJ55e6TLrVjQnsgDAdg2rGY_0DXcJGzBft15Q@mail.gmail.com>
- <ZAiFxWLSb9HDazSI@vingu-book>
- <07c692fd-fe59-1bd4-a6d0-e84bee6dbb3b@huawei.com>
- <CAKfTPtDQOjY9mnVELijktZtN5wLR66yU7gByc2G+-kMg3FsGAg@mail.gmail.com>
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-In-Reply-To: <CAKfTPtDQOjY9mnVELijktZtN5wLR66yU7gByc2G+-kMg3FsGAg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.186]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3f0afae57eeaf47aa4b980eddc5e54efc78efa66.1674822311.git.ojaswin@linux.ibm.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri 27-01-23 18:07:37, Ojaswin Mujoo wrote:
+> Make the logic of searching average fragment list of a given order reusable
+> by abstracting it out to a differnet function. This will also avoid
+> code duplication in upcoming patches.
+> 
+> No functional changes.
+> 
+> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
 
+Looks good. Feel free to add:
 
-在 2023/3/9 18:48, Vincent Guittot 写道:
-> On Thu, 9 Mar 2023 at 09:37, Zhang Qiao <zhangqiao22@huawei.com> wrote:
->>
->>
->>
->> 在 2023/3/8 20:55, Vincent Guittot 写道:
->>> Le mercredi 08 mars 2023 à 09:01:05 (+0100), Vincent Guittot a écrit :
->>>> On Tue, 7 Mar 2023 at 14:41, Zhang Qiao <zhangqiao22@huawei.com> wrote:
->>>>>
->>>>>
->>>>>
->>>>> 在 2023/3/7 18:26, Vincent Guittot 写道:
->>>>>> On Mon, 6 Mar 2023 at 14:53, Vincent Guittot <vincent.guittot@linaro.org> wrote:
->>>>>>>
->>>>>>> On Mon, 6 Mar 2023 at 13:57, Zhang Qiao <zhangqiao22@huawei.com> wrote:
->>>>>>>>
->>>>>>>> Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of
->>>>>>>> entity being placed") fix an overflowing bug, but ignore
->>>>>>>> a case that se->exec_start is reset after a migration.
->>>>>>>>
->>>>>>>> For fixing this case, we reset the vruntime of a long
->>>>>>>> sleeping task in migrate_task_rq_fair().
->>>>>>>>
->>>>>>>> Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
->>>>>>>> Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
->>>>>>>> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
->>>>>>>
->>>>>>> Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
->>>>>>>
->>>>>>>> ---
->>>>>>>>
->>>>>>>> v1 -> v2:
->>>>>>>> - fix some typos and update comments
->>>>>>>> - reformat the patch
->>>>>>>>
->>>>>>>> ---
->>>>>>>>  kernel/sched/fair.c | 76 ++++++++++++++++++++++++++++++++-------------
->>>>>>>>  1 file changed, 55 insertions(+), 21 deletions(-)
->>>>>>>>
->>>>>>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>>>>>>> index 7a1b1f855b96..74c9918ffe76 100644
->>>>>>>> --- a/kernel/sched/fair.c
->>>>>>>> +++ b/kernel/sched/fair.c
->>>>>>>> @@ -4648,11 +4648,45 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
->>>>>>>>  #endif
->>>>>>>>  }
->>>>>>>>
->>>>>>>> +static inline bool entity_is_long_sleep(struct sched_entity *se)
->>>>>>>> +{
->>>>>>>> +       struct cfs_rq *cfs_rq;
->>>>>>>> +       u64 sleep_time;
->>>>>>>> +
->>>>>>>> +       if (se->exec_start == 0)
->>>>>>>> +               return false;
->>>>>>>> +
->>>>>>>> +       cfs_rq = cfs_rq_of(se);
->>>>>>>> +       sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
->>>>>>>> +       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
->>>>>>>> +               return true;
->>>>>>>> +
->>>>>>>> +       return false;
->>>>>>>> +}
->>>>>>>> +
->>>>>>>> +static inline u64 sched_sleeper_credit(struct sched_entity *se)
->>>>>>>> +{
->>>>>>>> +       unsigned long thresh;
->>>>>>>> +
->>>>>>>> +       if (se_is_idle(se))
->>>>>>>> +               thresh = sysctl_sched_min_granularity;
->>>>>>>> +       else
->>>>>>>> +               thresh = sysctl_sched_latency;
->>>>>>>> +
->>>>>>>> +       /*
->>>>>>>> +        * Halve their sleep time's effect, to allow
->>>>>>>> +        * for a gentler effect of sleepers:
->>>>>>>> +        */
->>>>>>>> +       if (sched_feat(GENTLE_FAIR_SLEEPERS))
->>>>>>>> +               thresh >>= 1;
->>>>>>>> +
->>>>>>>> +       return thresh;
->>>>>>>> +}
->>>>>>>> +
->>>>>>>>  static void
->>>>>>>>  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->>>>>>>>  {
->>>>>>>>         u64 vruntime = cfs_rq->min_vruntime;
->>>>>>>> -       u64 sleep_time;
->>>>>>>>
->>>>>>>>         /*
->>>>>>>>          * The 'current' period is already promised to the current tasks,
->>>>>>>> @@ -4664,23 +4698,8 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->>>>>>>>                 vruntime += sched_vslice(cfs_rq, se);
->>>>>>>>
->>>>>>>>         /* sleeps up to a single latency don't count. */
->>>>>>>> -       if (!initial) {
->>>>>>>> -               unsigned long thresh;
->>>>>>>> -
->>>>>>>> -               if (se_is_idle(se))
->>>>>>>> -                       thresh = sysctl_sched_min_granularity;
->>>>>>>> -               else
->>>>>>>> -                       thresh = sysctl_sched_latency;
->>>>>>>> -
->>>>>>>> -               /*
->>>>>>>> -                * Halve their sleep time's effect, to allow
->>>>>>>> -                * for a gentler effect of sleepers:
->>>>>>>> -                */
->>>>>>>> -               if (sched_feat(GENTLE_FAIR_SLEEPERS))
->>>>>>>> -                       thresh >>= 1;
->>>>>>>> -
->>>>>>>> -               vruntime -= thresh;
->>>>>>>> -       }
->>>>>>>> +       if (!initial)
->>>>>>>> +               vruntime -= sched_sleeper_credit(se);
->>>>>>>>
->>>>>>>>         /*
->>>>>>>>          * Pull vruntime of the entity being placed to the base level of
->>>>>>>> @@ -4689,8 +4708,7 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->>>>>>>>          * the base as it may be too far off and the comparison may get
->>>>>>>>          * inversed due to s64 overflow.
->>>>>>>>          */
->>>>>>>> -       sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
->>>>>>>> -       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
->>>>>>>> +       if (entity_is_long_sleep(se))
->>>>>>>>                 se->vruntime = vruntime;
->>>>>>>>         else
->>>>>>>>                 se->vruntime = max_vruntime(se->vruntime, vruntime);
->>>>>>>> @@ -7635,7 +7653,23 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->>>>>>>>         if (READ_ONCE(p->__state) == TASK_WAKING) {
->>>>>>>>                 struct cfs_rq *cfs_rq = cfs_rq_of(se);
->>>>>>>>
->>>>>>>> -               se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
->>>>>>>> +               /*
->>>>>>>> +                * We determine whether a task sleeps for long by checking
->>>>>>>> +                * se->exec_start, and if it is, we sanitize its vruntime at
->>>>>>>> +                * place_entity(). However, after a migration, this detection
->>>>>>>> +                * method fails due to se->exec_start being reset.
->>>>>>>> +                *
->>>>>>>> +                * For fixing this case, we add the same check here. For a task
->>>>>>>> +                * which has slept for a long time, its vruntime should be reset
->>>>>>>> +                * to cfs_rq->min_vruntime with a sleep credit. Because waking
->>>>>>>> +                * task's vruntime will be added to cfs_rq->min_vruntime when
->>>>>>>> +                * enqueue, we only need to reset the se->vruntime of waking task
->>>>>>>> +                * to a credit here.
->>>>>>>> +                */
->>>>>>>> +               if (entity_is_long_sleep(se))
->>>>>>
->>>>>> I completely overlooked that we can't use rq_clock_task here. Need to
->>>>>> think a bit more on this
->>>>>
->>>>> Hi,Vincent,
->>>>>
->>>>> How about using exec_start of the parent sched_entity instant of rq_clock_task()?
->>>>
->>>> How do we handle sched_entity without a parent sched_entity ?
->>>
->>> The change below should do the stuff. Not that we can't use it in place entity because
->>> pelt is not enabled in UP.
->>>
->>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>> index 74c9918ffe76..b8b381b0ff20 100644
->>> --- a/kernel/sched/fair.c
->>> +++ b/kernel/sched/fair.c
->>> @@ -7635,6 +7635,32 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
->>>         return new_cpu;
->>>  }
->>>
->>> +static inline bool migrate_long_sleeper(struct sched_entity *se)
->>> +{
->>> +       struct cfs_rq *cfs_rq;
->>> +       u64 sleep_time;
->>> +
->>> +       if (se->exec_start == 0)
->>
->> How about use `se->avg.last_update_time == 0` here?
->>
->>> +               return false;
->>> +
->>> +       cfs_rq = cfs_rq_of(se);
->>> +       /*
->>> +        * If the entity slept for a long time, don't even try to normalize its
->>> +        * vruntime with the base as it may be too far off and might generate
->>> +        * wrong decision because of s64 overflow.
->>> +        * We estimate its sleep duration with the last update of se's pelt.
->>> +        * The last update happened before sleeping. The cfs' pelt is not
->>> +        * always updated when cfs is idle but this is not a problem because
->>> +        * its min_vruntime is not updated too, so the situation can't get
->>> +        * worse.
->>> +        */
->>> +       sleep_time = cfs_rq_last_update_time(cfs_rq) - se->avg.last_update_time;
->>> +       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
->>
->> I tested with this patch and found it make hackbench slower.
-> 
-> Compared to which version ?
-> - v6.2 + revert commit 829c1651e9c4 ?
-> - v6.2 ?
-> 
-> v6.2 has a bug because newly migrated task gets a runtime credit
-> whatever its previous vruntime and hackbench generates a lot of
-> migration
-> 
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Sorry, When I was testing, I forgot to add the check 'se->exec_start == 0' in place_entity().
-After i re-test, the hackbench result is ok.
+								Honza
 
-
+> ---
+>  fs/ext4/mballoc.c | 51 ++++++++++++++++++++++++++++++-----------------
+>  1 file changed, 33 insertions(+), 18 deletions(-)
 > 
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 410c9636907b..1ce1174aea52 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -902,6 +902,37 @@ static void ext4_mb_choose_next_group_cr0(struct ext4_allocation_context *ac,
+>  	}
+>  }
+>  
+> +/*
+> + * Find a suitable group of given order from the average fragments list.
+> + */
+> +static struct ext4_group_info *
+> +ext4_mb_find_good_group_avg_frag_lists(struct ext4_allocation_context *ac, int order)
+> +{
+> +	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
+> +	struct list_head *frag_list = &sbi->s_mb_avg_fragment_size[order];
+> +	rwlock_t *frag_list_lock = &sbi->s_mb_avg_fragment_size_locks[order];
+> +	struct ext4_group_info *grp = NULL, *iter;
+> +	enum criteria cr = ac->ac_criteria;
+> +
+> +	if (list_empty(frag_list))
+> +		return NULL;
+> +	read_lock(frag_list_lock);
+> +	if (list_empty(frag_list)) {
+> +		read_unlock(frag_list_lock);
+> +		return NULL;
+> +	}
+> +	list_for_each_entry(iter, frag_list, bb_avg_fragment_size_node) {
+> +		if (sbi->s_mb_stats)
+> +			atomic64_inc(&sbi->s_bal_cX_groups_considered[cr]);
+> +		if (likely(ext4_mb_good_group(ac, iter->bb_group, cr))) {
+> +			grp = iter;
+> +			break;
+> +		}
+> +	}
+> +	read_unlock(frag_list_lock);
+> +	return grp;
+> +}
+> +
+>  /*
+>   * Choose next group by traversing average fragment size list of suitable
+>   * order. Updates *new_cr if cr level needs an update.
+> @@ -910,7 +941,7 @@ static void ext4_mb_choose_next_group_cr1(struct ext4_allocation_context *ac,
+>  		enum criteria *new_cr, ext4_group_t *group, ext4_group_t ngroups)
+>  {
+>  	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
+> -	struct ext4_group_info *grp = NULL, *iter;
+> +	struct ext4_group_info *grp = NULL;
+>  	int i;
+>  
+>  	if (unlikely(ac->ac_flags & EXT4_MB_CR1_OPTIMIZED)) {
+> @@ -920,23 +951,7 @@ static void ext4_mb_choose_next_group_cr1(struct ext4_allocation_context *ac,
+>  
+>  	for (i = mb_avg_fragment_size_order(ac->ac_sb, ac->ac_g_ex.fe_len);
+>  	     i < MB_NUM_ORDERS(ac->ac_sb); i++) {
+> -		if (list_empty(&sbi->s_mb_avg_fragment_size[i]))
+> -			continue;
+> -		read_lock(&sbi->s_mb_avg_fragment_size_locks[i]);
+> -		if (list_empty(&sbi->s_mb_avg_fragment_size[i])) {
+> -			read_unlock(&sbi->s_mb_avg_fragment_size_locks[i]);
+> -			continue;
+> -		}
+> -		list_for_each_entry(iter, &sbi->s_mb_avg_fragment_size[i],
+> -				    bb_avg_fragment_size_node) {
+> -			if (sbi->s_mb_stats)
+> -				atomic64_inc(&sbi->s_bal_cX_groups_considered[CR1]);
+> -			if (likely(ext4_mb_good_group(ac, iter->bb_group, CR1))) {
+> -				grp = iter;
+> -				break;
+> -			}
+> -		}
+> -		read_unlock(&sbi->s_mb_avg_fragment_size_locks[i]);
+> +		grp = ext4_mb_find_good_group_avg_frag_lists(ac, i);
+>  		if (grp)
+>  			break;
+>  	}
+> -- 
+> 2.31.1
 > 
->>
->>
->>> +               return true;
->>> +
->>> +       return false;
->>> +}
->>> +
->>>  /*
->>>   * Called immediately before a task is migrated to a new CPU; task_cpu(p) and
->>>   * cfs_rq_of(p) references at time of call are still valid and identify the
->>> @@ -7666,7 +7692,7 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->>>                  * enqueue, we only need to reset the se->vruntime of waking task
->>>                  * to a credit here.
->>>                  */
->>> -               if (entity_is_long_sleep(se))
->>> +               if (migrate_long_sleeper(se))
->>>                         se->vruntime = -sched_sleeper_credit(se);
->>>                 else
->>>                         se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
->>>
->>>
->>>
->>>>
->>>>
->>>>
->>>>>>
->>>>>>>> +                       se->vruntime = -sched_sleeper_credit(se);
->>>>>>>> +               else
->>>>>>>> +                       se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
->>>>>>>>         }
->>>>>>>>
->>>>>>>>         if (!task_on_rq_migrating(p)) {
->>>>>>>> --
->>>>>>>> 2.17.1
->>>>>>>>
->>>>>> .
->>>>>>
->>> .
->>>
-> .
-> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
