@@ -2,111 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55806B1B78
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5066B1B8B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjCIG31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 01:29:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
+        id S229991AbjCIGad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 01:30:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjCIG3Y (ORCPT
+        with ESMTP id S229716AbjCIGaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 01:29:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A4784F46;
-        Wed,  8 Mar 2023 22:29:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 9 Mar 2023 01:30:30 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C7F8C0D5;
+        Wed,  8 Mar 2023 22:30:28 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CF7C616B3;
-        Thu,  9 Mar 2023 06:29:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5BA9C433D2;
-        Thu,  9 Mar 2023 06:29:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678343361;
-        bh=Tcpfab2JI0O5gEZfjlyY40W1mTdC6WtNopP6Eni/ckg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=v5FVmknkEuFfLZlBtpznXxjLEvesG63Cy7ilBoLMdtslhz32tEIiZraNRsf5/hJHr
-         eAVk1U3GmJcAeFnQvKZHOQEzjch6XzBIYPgh1TSOyl/10hkKRGnmFCLG3LU5ibyOfq
-         tNracjlV8quqiZc6FuZtWE8k7D+QvTOSksSJWTfU=
-Date:   Thu, 9 Mar 2023 07:29:18 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
-        andersson@kernel.org, robh+dt@kernel.org, tiwai@suse.com,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-Subject: Re: [PATCH v3 10/28] sound: usb: Export USB SND APIs for modules
-Message-ID: <ZAl8vtmoISvQYLJd@kroah.com>
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <20230308235751.495-11-quic_wcheng@quicinc.com>
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 346EA42037;
+        Thu,  9 Mar 2023 06:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1678343426;
+        bh=/hhFWpC+hto8GAX0pJh+P6OQkNm/8ab+JjGGIX4mhlg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=P6/7ZSEeWqAst+e/b9Q/j9CQZQ/8ZVEuqr7EW67BxjeMhzgYAVhb4Lqg2rGGw6mMN
+         K7gyGOyxcEa8LvgGCcfexFaGyA7NDqDRv5eqrCHYT0dosQP1+bQzr+vP++WmmQq/6A
+         3h70p1rPUjAoUog3DU7vldubJmJNBoMg16jPo3ft9xgaQ1DrcAiKF1gdnxpzmvafCw
+         BYr6a2c9/eo8t/Rj5u8+VJnAggjM4/RxHoRfhH9vTwfbYazvHAA+qEEPPh5fUmNuob
+         ul2RrpYuijhMUjrlwH6W44l0HYbiVNcAohS/tkdvPlupsDS10YITpFEENn0d2DFDk5
+         ZQ+n7HgLXEaEA==
+Message-ID: <3e5e0120-50fd-51c0-d817-5b1dc4c14e97@asahilina.net>
+Date:   Thu, 9 Mar 2023 15:30:17 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230308235751.495-11-quic_wcheng@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
+ <cd788ccf-0cf1-85d5-1bf8-efc259bd7e11@amd.com>
+ <a075d886-0820-b6fb-fcd0-45bfdc75e37d@asahilina.net>
+ <2b1060e9-86ba-7e16-14f1-5b5fa63de719@amd.com>
+ <9f76bb68-b462-b138-d0ad-d27c972530d4@asahilina.net>
+ <a39c6b40-f190-002d-ae1c-8b58c6442df2@amd.com>
+ <4bbfc1a3-cfc3-87f4-897b-b6637bac3bd0@asahilina.net>
+ <b0aa78b2-b432-200a-8953-a80c462fa6ee@amd.com>
+ <c0624252-070e-bd44-2116-93a1d63a1359@asahilina.net>
+ <d1fccceb-ca77-f653-17fc-63168e0da884@amd.com>
+ <9c3dc2ad-11e4-6004-7230-8ca752e3d9f7@asahilina.net>
+ <d544748c-8a2b-7c08-f199-182a56af22be@amd.com>
+From:   Asahi Lina <lina@asahilina.net>
+In-Reply-To: <d544748c-8a2b-7c08-f199-182a56af22be@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 03:57:33PM -0800, Wesley Cheng wrote:
-> -static const struct audioformat *
-> +const struct audioformat *
->  find_format(struct list_head *fmt_list_head, snd_pcm_format_t format,
->  	    unsigned int rate, unsigned int channels, bool strict_match,
->  	    struct snd_usb_substream *subs)
-> @@ -147,8 +147,9 @@ find_format(struct list_head *fmt_list_head, snd_pcm_format_t format,
->  	}
->  	return found;
->  }
-> +EXPORT_SYMBOL_GPL(find_format);
+On 09/03/2023 05.14, Christian König wrote:
+>> I think you mean wake_up_interruptible(). That would be
+>> drm_sched_job_done(), on the fence callback when a job completes, which
+>> as I keep saying is the same logic used for
+>> hw_rq_count/hw_submission_limit tracking.
+> 
+> As the documentation to wait_event says:
+> 
+>   * wake_up() has to be called after changing any variable that could
+>   * change the result of the wait condition.
+> 
+> So what you essentially try to do here is to skip that and say 
+> drm_sched_job_done() would call that anyway, but when you read any 
+> variable to determine that state then as far as I can see nothing is 
+> guarantying that order.
 
-This is a horrible name for the global symbol namespace, right?
-It needs a "snd_" prefix at the very least, maybe even more.
+The driver needs to guarantee that any changes to that state precede a
+job completion fence signal of course, that's the entire idea of the
+API. It's supposed to represent a check for per-scheduler (or more
+specific, but not more global) resources that are released on job
+completion. Of course if you misuse the API you could cause a problem,
+but what I'm trying to say is that the API as designed and when used as
+intended does work properly.
 
->  
-> -static const struct audioformat *
-> +const struct audioformat *
->  find_substream_format(struct snd_usb_substream *subs,
->  		      const struct snd_pcm_hw_params *params)
->  {
-> @@ -156,6 +157,7 @@ find_substream_format(struct snd_usb_substream *subs,
->  			   params_rate(params), params_channels(params),
->  			   true, subs);
->  }
-> +EXPORT_SYMBOL_GPL(find_substream_format);
+Put another way: job completions always need to cause the sched main
+loop to run an iteration anyway (otherwise we wouldn't make forward
+progress), and job completions are exactly the signal that the
+can_run_job() condition may have changed.
 
-Same here.
+> The only other possibility how you could use the callback correctly 
+> would be to call drm_fence_is_signaled() to query the state of your hw 
+> submission from the same fence which is then signaled. But then the 
+> question is once more why you don't give that fence directly to the 
+> scheduler?
 
->  
->  bool snd_usb_pcm_has_fixed_rate(struct snd_usb_substream *subs)
->  {
-> @@ -446,7 +448,7 @@ int snd_usb_pcm_resume(struct snd_usb_stream *as)
->  	return 0;
->  }
->  
-> -static void close_endpoints(struct snd_usb_audio *chip,
-> +void close_endpoints(struct snd_usb_audio *chip,
->  			    struct snd_usb_substream *subs)
->  {
->  	if (subs->data_endpoint) {
-> @@ -460,6 +462,7 @@ static void close_endpoints(struct snd_usb_audio *chip,
->  		subs->sync_endpoint = NULL;
->  	}
->  }
-> +EXPORT_SYMBOL(close_endpoints);
+But the driver is supposed to guarantee that the ordering is always 1.
+resources freed, 2. fence signaled. So you don't need to check for the
+fence, you can just check for the resource state. If the callback
+returns false then by definition the fence wasn't yet signaled at some
+point during its execution (because the resources weren't yet freed),
+and since it would be in the wait_event_interruptible() check path, by
+definition the fence signaling at any point during or after the check
+would cause the thread to wake up again and re-check.
 
-Same here.
+Thread 1                                          Thread 2
+1. wait_event_interruptible() arms wq             1. Free resources
+2. can_run_job() checks resources                 2. Signal fence
+3. wait_event_interruptible() sleeps on wq        3. Fence wakes up wq
+4. loop
 
-thanks,
+There is no possible interleaving of those sequences that leads to a
+lost event and the thread not waking up:
+- If T2.3 happens before T1.1, that means T2.1 happened earlier and T1.2
+must return true.
+- If T2.3 happens after T1.1 but before T1.3, the wq code will ensure
+the wq does not sleep (or immediately wakes up) at T1.3 since it was
+signaled during the condition check, after the wq was armed. At the next
+check loop, T1.2 will then return true, since T2.1 already happened
+before T2.3.
+- If T2.3 happens during T1.3, the wq wakes up normally and does another
+check, and at that point T1.2 returns true.
 
-greg k-h
+QED.
+
+~~ Lina
