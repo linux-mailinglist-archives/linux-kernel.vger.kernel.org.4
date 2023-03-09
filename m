@@ -2,152 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B57986B21EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCA96B21EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjCIKyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
+        id S230504AbjCIKzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:55:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjCIKy1 (ORCPT
+        with ESMTP id S230297AbjCIKyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:54:27 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A420467801;
-        Thu,  9 Mar 2023 02:54:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678359264; x=1709895264;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=alC5GEn1xgVLK41r3n5/kXue0z23To81HFJv5g+mKmk=;
-  b=ADizU7dukpiiXnyMPXlX9MiOxVpjMP8SIETbMrihW7L2mdgqQUZx2Byd
-   KxQNyZmlKuw4BlXRmnkuDlGrWsb2yZYB14cNXTd7uXA68LVWw4CMt/isZ
-   /DHdL7rzsHEjQoK0fZIoj7zqOFiBoJGzxfEHKwA6P0t3c6IUr2HE1jGdP
-   X8KOEbIy9rnyVYGQBHP6ftzmceTh1UmFODv/GSIscdlbZ8Ausk9NAMtcW
-   qdI8HJfTSxZUMBElzNLNuj8k4Zj2nJq3QMVuC0I/GQrZqce57oOGz+w5X
-   mIpq3cKfjaqLeKsM/lJ3dwcwhVRRHcWOno6GJEdUrzvvaygo3mguoC+E6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="336428304"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="336428304"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 02:54:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="679709610"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="679709610"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Mar 2023 02:54:22 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1paDuf-0002tf-29;
-        Thu, 09 Mar 2023 10:54:21 +0000
-Date:   Thu, 9 Mar 2023 18:53:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jani Nikula <jani.nikula@intel.com>, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Jani Nikula <jani.nikula@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: constify struct hwmon_chip_info info member harder
-Message-ID: <202303091814.jyOAXX4n-lkp@intel.com>
-References: <20230309082841.400118-1-jani.nikula@intel.com>
+        Thu, 9 Mar 2023 05:54:46 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2058.outbound.protection.outlook.com [40.107.223.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F325E8CD0
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:54:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QyEVzyegBGuoCz8RorXkZBJIoSH8baR1J/72YxFWNm2mX2NGedtxLMwkCmswl8wp2xG25wKFGzb0jAgYfuXF6QQl2yZzV7asSys6fGASvDKPXshP7f+FD8Zz7QbCuh4qz/Db58QjZtNwniB0yomJYZb1Jl38Oxjnm2MMTzJQ2N4Hd+BzTesFBiXhpjXC+zF0hsWoEoRrsOt/NObUgpwMeuunrPaj9RS0M3t40b80Iy71zBdAs8cEQugdCmgU+b+6uE9rcNzC0n8wWZHKhzxQMnrGHqON1Cyaicv/M5rLoRT9N530OFBVoELscPZ3n2EeeksNbSAVu9iKSvauhHYF0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zmoi4KBsEm3qJEPXGjA0t/NaPSxtMhS24o6WqAYI6cU=;
+ b=Frjjc1UK5f4fb8Ej38b2lVd/KmkNrLv+1cvf7IxbWLzVuHoORJnAwafJTgYDGm+Dmo3teoZb0ynkysrJ5aAag57pgJQoj7reunBWAJoQrAzUUGrv3vAy4s1A2JvufYyIVsE90yy+ZtR75GK7dkdbAHCAG7ujKvfAKTBPCkaSXiPsBKlX2WcEbGYRTjqcKxewmyavKUQLPTV8L+LyuMDYazweq9TomUKtOhg/oxnnj/eHILLZpLJ8buK/5YFQB2p/ixMFE1rbxpSvgchZ/6REyRVkhhyhpG8F9iA4lB/WIk321DG0iM/B0cgRo2n920WNLZrgSnTSGQ5lvw0g5TvACQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Zmoi4KBsEm3qJEPXGjA0t/NaPSxtMhS24o6WqAYI6cU=;
+ b=sOS5WwxqPSaKlWS9Wu3Lo7mOT1V19Cy5XZPefiTxW3OsmgNeNUX6oEsYiUb6e8wq0n0dWn1ifxDBLP29sWlI62JrGNKldmBd8H0F8cxf5ZYDrFInzPVVm8/hk1EakUSUeZc7MjSGGgr4M2dsuiHM/CXyxZXANyXuqaQLbKiJ6Q45i+LeAwq9XDqFNwItL8OEHso28+6yKeeN9ozooYaVN8F/iCIiMCCsYfQEANbGUdxEs/Y/Q5Fz62eo74iCcmQ0XDkEIqx4aGCFpuoA8TbesqNL9iWSxyH6NECcoIR5+o3neiDgibksDmv6AWRyWUcKp6M+URrNwXiYDOzEdHMk7A==
+Received: from MN2PR04CA0031.namprd04.prod.outlook.com (2603:10b6:208:d4::44)
+ by CY8PR12MB8297.namprd12.prod.outlook.com (2603:10b6:930:79::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Thu, 9 Mar
+ 2023 10:54:40 +0000
+Received: from BL02EPF000108E8.namprd05.prod.outlook.com
+ (2603:10b6:208:d4:cafe::65) by MN2PR04CA0031.outlook.office365.com
+ (2603:10b6:208:d4::44) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19 via Frontend
+ Transport; Thu, 9 Mar 2023 10:54:40 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BL02EPF000108E8.mail.protection.outlook.com (10.167.241.201) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.13 via Frontend Transport; Thu, 9 Mar 2023 10:54:39 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 9 Mar 2023
+ 02:54:33 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Thu, 9 Mar 2023 02:54:32 -0800
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.11) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Thu, 9 Mar 2023 02:54:32 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     <jgg@nvidia.com>, <robin.murphy@arm.com>, <will@kernel.org>
+CC:     <eric.auger@redhat.com>, <kevin.tian@intel.com>,
+        <baolu.lu@linux.intel.com>, <joro@8bytes.org>,
+        <shameerali.kolothum.thodi@huawei.com>, <jean-philippe@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 00/14] Add Nested Translation Support for SMMUv3
+Date:   Thu, 9 Mar 2023 02:53:36 -0800
+Message-ID: <cover.1678348754.git.nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309082841.400118-1-jani.nikula@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF000108E8:EE_|CY8PR12MB8297:EE_
+X-MS-Office365-Filtering-Correlation-Id: cb89da64-aadb-453f-e781-08db208cae8c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lo3IEhZlm+i1LLgRF79amTzo3Of0jJMzkO1harKAv1svd+qGb7+BvrU7K4FDg7p0Ztt1+QyexkpLK5XD4pV7q0GeYzDMrohzZ1cgt1NghUcFxHjordusQEO6JXBvw7EqvNsNrMO7qE2GHr2yPQyJUn+zgpLoLxi38L+RCfO9HXrfwVvYb/VUDVwQXNldNzPucGo0X+K3OwBbolk8OS0OIW08rNV5mUaJ/LLr99HrJKjqLtrydKUhdNewp7RDNoTq0mWu3ZD2MwMPraCFi5OVvWGfbY+InUidTajnVbaJLzI83IsW8KBPTKPYhAMk2GyGcdKQ2Aqz70fD3UMlVe7+f1gLB8drvzbj5eLJufNYyTOncku19vt0Q6S43A6NL3bKkLEYoVuroJh0k6ZnMp081j06HleHcPROwnKSKXQG1703p4xY4oa/z2eXTbkRl+JTNrKvaPZEpTDBTZ11DhQ9EeYsIe2j8JVZdqW9LVXRXzuT5K3hL0GZeTCEZgHx/e897CZvJeNMSju7T1XgWZ3BsXJDMIuDNFqVGdzwWfTzblkYJBNww8vhi1FSscikWrJHOb81dQkftSMo9mlne4jrnYl2odAbThAHtgP/AVcRMQqdWF0CfR9eynJ/gA6Xuby/utPvK1WXXNNdp8axIKVbe2B1SF79ivY+YbHgzBZj3pG7YS5blKYkPb7XVq7vEvmV6NWgExDA11lkw+weMKjAeIdw96KIuiiEVWjhZf7RuplIuznrsIanmtCJNZvCBxC78BXv2qGlNXb1PP6s631pBcwI40uXqcUHMdCicaXHlrTjAeb3DxHMEhZ3jznDDAupctZBRj5AwfI+YIOrSYh3fQ==
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(396003)(136003)(346002)(451199018)(40470700004)(46966006)(36840700001)(82740400003)(47076005)(426003)(36860700001)(26005)(36756003)(86362001)(478600001)(966005)(316002)(110136005)(54906003)(356005)(82310400005)(186003)(336012)(41300700001)(83380400001)(40460700003)(7636003)(2616005)(5660300002)(70586007)(40480700001)(7416002)(7696005)(8936002)(8676002)(2906002)(70206006)(4326008);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 10:54:39.7162
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb89da64-aadb-453f-e781-08db208cae8c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000108E8.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8297
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jani,
+Hi all,
 
-I love your patch! Yet something to improve:
+This series of patches add nested translation support for ARM SMMUv3.
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.3-rc1 next-20230309]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Eric Auger made a huge effort previously with the VFIO uAPIs, and sent
+his v16 a year ago. Now, the nested translation should follow the new
+IOMMUFD uAPIs design. So, most of the key features are ported from the
+privous VFIO solution, and then rebuilt on top of the IOMMUFD nesting
+infrastructure.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/hwmon-constify-struct-hwmon_chip_info-info-member-harder/20230309-163328
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230309082841.400118-1-jani.nikula%40intel.com
-patch subject: [PATCH] hwmon: constify struct hwmon_chip_info info member harder
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20230309/202303091814.jyOAXX4n-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1ec9eaf0281f0a40044492700b7cdfe99d35d35e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jani-Nikula/hwmon-constify-struct-hwmon_chip_info-info-member-harder/20230309-163328
-        git checkout 1ec9eaf0281f0a40044492700b7cdfe99d35d35e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hwmon/
+This series is rebased on top of the Intel VT-d nesting changes, so as
+to reduce merge conflicts at the uapi header updates.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303091814.jyOAXX4n-lkp@intel.com/
+The essential parts in the driver to support a nested translation are
+->hw_info, ->domain_alloc_user and ->invalidate_cache_user ops. So this
+series fundamentally adds these three functions in the SMMUv3 driver,
+along with several preparations and cleanups for them.
 
-All errors (new ones prefixed by >>):
+One unique requirement for SMMUv3 nested translation support is the MSI
+doorbell address translation, which is a 2-stage translation too. And,
+to working with the ITS driver, an msi_cookie needs to be setup on the
+kernel-managed domain, the stage-2 domain of the nesting setup. And the
+same msi_cookie will be fetched, via iommu_get_domain_for_dev(), in the
+iommu core to allocate and creates IOVA mappings for the MSI doorbell
+page(s). However, with the nesting design, the device is attached to a
+user-managed domain, the stage-1 domain. So both the setup and fetching
+of the msi_cookie would not work at the level of stage-2 domain. Thus,
+on both sides, the msi_cookie setup and fetching require a redirection
+of the domain pointer. It's easy to do so in iommufd core, but needs a
+new op in the iommu core and driver.
 
->> drivers/hwmon/hwmon.c:177:36: error: initializing 'const struct hwmon_channel_info **' with an expression of type 'const struct hwmon_channel_info *const *const' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           const struct hwmon_channel_info **info = chip->info;
-                                             ^      ~~~~~~~~~~
-   drivers/hwmon/hwmon.c:256:36: error: initializing 'const struct hwmon_channel_info **' with an expression of type 'const struct hwmon_channel_info *const *const' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           const struct hwmon_channel_info **info = chip->info;
-                                             ^      ~~~~~~~~~~
-   2 errors generated.
+You can also find this series on the Github:
+https://github.com/nicolinc/iommufd/commits/iommufd_nesting
 
+The kernel branch is tested with this QEMU branch:
+https://github.com/nicolinc/qemu/commits/wip/iommufd_rfcv3+nesting+smmuv3
 
-vim +177 drivers/hwmon/hwmon.c
+Thanks!
+Nicolin Chen
 
-d560168b5d0fb4 Guenter Roeck   2015-08-26  171  
-e5181331359d93 Daniel Lezcano  2022-08-05  172  static int hwmon_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  173  {
-e5181331359d93 Daniel Lezcano  2022-08-05  174  	struct hwmon_thermal_data *tdata = tz->devdata;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  175  	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  176  	const struct hwmon_chip_info *chip = hwdev->chip;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23 @177  	const struct hwmon_channel_info **info = chip->info;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  178  	unsigned int i;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  179  	int err;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  180  
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  181  	if (!chip->ops->write)
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  182  		return 0;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  183  
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  184  	for (i = 0; info[i] && info[i]->type != hwmon_temp; i++)
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  185  		continue;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  186  
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  187  	if (!info[i])
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  188  		return 0;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  189  
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  190  	if (info[i]->config[tdata->index] & HWMON_T_MIN) {
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  191  		err = chip->ops->write(tdata->dev, hwmon_temp,
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  192  				       hwmon_temp_min, tdata->index, low);
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  193  		if (err && err != -EOPNOTSUPP)
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  194  			return err;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  195  	}
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  196  
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  197  	if (info[i]->config[tdata->index] & HWMON_T_MAX) {
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  198  		err = chip->ops->write(tdata->dev, hwmon_temp,
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  199  				       hwmon_temp_max, tdata->index, high);
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  200  		if (err && err != -EOPNOTSUPP)
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  201  			return err;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  202  	}
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  203  
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  204  	return 0;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  205  }
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  206  
+Eric Auger (2):
+  iommu/arm-smmu-v3: Unset corresponding STE fields when s2_cfg is NULL
+  iommu/arm-smmu-v3: Add STRTAB_STE_0_CFG_NESTED for 2-stage translation
+
+Nicolin Chen (12):
+  iommu: Add iommu_get_unmanaged_domain helper
+  iommufd: Add nesting related data structures for ARM SMMUv3
+  iommufd/device: Setup MSI on kernel-managed domains
+  iommu/arm-smmu-v3: Add arm_smmu_hw_info
+  iommu/arm-smmu-v3: Remove ARM_SMMU_DOMAIN_NESTED
+  iommu/arm-smmu-v3: Prepare for nested domain support
+  iommu/arm-smmu-v3: Implement arm_smmu_get_unmanaged_domain
+  iommu/arm-smmu-v3: Pass in user_cfg to arm_smmu_domain_finalise
+  iommu/arm-smmu-v3: Add arm_smmu_domain_alloc_user
+  iommu/arm-smmu-v3: Support IOMMU_DOMAIN_NESTED type of allocations
+  iommu/arm-smmu-v3: Add CMDQ_OP_TLBI_NH_VAA and CMDQ_OP_TLBI_NH_ALL
+  iommu/arm-smmu-v3: Add arm_smmu_cache_invalidate_user
+
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 267 ++++++++++++++++----
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h |   7 +-
+ drivers/iommu/dma-iommu.c                   |   5 +-
+ drivers/iommu/iommu-priv.h                  |  15 ++
+ drivers/iommu/iommufd/device.c              |   5 +-
+ drivers/iommu/iommufd/hw_pagetable.c        |   4 +
+ drivers/iommu/iommufd/main.c                |   1 +
+ include/linux/iommu.h                       |   2 +
+ include/uapi/linux/iommufd.h                |  64 +++++
+ 9 files changed, 323 insertions(+), 47 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2
+
