@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157DE6B3072
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFA86B305A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjCIWWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 17:22:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
+        id S231219AbjCIWSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 17:18:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjCIWWU (ORCPT
+        with ESMTP id S230088AbjCIWSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:22:20 -0500
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E69F1009F6;
-        Thu,  9 Mar 2023 14:21:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1678400517; x=1709936517;
+        Thu, 9 Mar 2023 17:18:10 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A762914F;
+        Thu,  9 Mar 2023 14:18:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678400288; x=1709936288;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=yVuCSofNXc4xFq2MIhmOj+IftFzTz6jbp1BPLOvSYTc=;
-  b=bSj1u7ulRJ3rgD3z35BHM9dYZuW5gYvPHxFMDBWyE5fmsJEof2360M7L
-   lPj2fMlLes5VqvO7Ap8VvUsykvhXWnXDoIHJCtI4iBNFgfOnDpOhjby8q
-   pEE5G7WetMGmVRKF1ZJbObUoEHOnbAoo4aHnJuJHq1GIc40+0HEYoS/bd
-   I=;
-X-IronPort-AV: E=Sophos;i="5.98,247,1673913600"; 
-   d="scan'208";a="191702044"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-47cc8a4c.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 22:21:11 +0000
-Received: from EX13MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1a-m6i4x-47cc8a4c.us-east-1.amazon.com (Postfix) with ESMTPS id 01C01160DA9;
-        Thu,  9 Mar 2023 22:21:06 +0000 (UTC)
-Received: from EX19D047UWB002.ant.amazon.com (10.13.138.34) by
- EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Thu, 9 Mar 2023 22:21:05 +0000
-Received: from u0d599d08243c5b.ant.amazon.com (10.187.171.27) by
- EX19D047UWB002.ant.amazon.com (10.13.138.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.24; Thu, 9 Mar 2023 22:21:04 +0000
-From:   Jordan Crouse <jorcrous@amazon.com>
-To:     <freedreno@lists.freedesktop.org>
-CC:     Jordan Crouse <jorcrous@amazon.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/msm: Check for the GPU IOMMU during bind
-Date:   Thu, 9 Mar 2023 15:20:49 -0700
-Message-ID: <20230309222049.4180579-1-jorcrous@amazon.com>
-X-Mailer: git-send-email 2.34.1
+  bh=++gHGBV14UtCVgFfuEfnS3kCGAlJwlUHhQirNwHAb7U=;
+  b=k+ZUszPc67Liw1CwwKeHx9KpTQWnKx0wy5kfzcn+lG0F5iJNhiUbDh/o
+   HdNt/xvVlQDieYC8VAfPz9qtsQMEJLoZxyu1qnhV01mD/S3BhrRMpYVMr
+   prs5wv/HpX4BsLTyQF4jpgAT0FeIjdNVvOWC8SaMiUHhjgSraniIe1qOa
+   ghXQxcYvwHRwkWVznG3nizeO+S+Dm8ycZlB5tY2nrYMET1bKKxTe2boL0
+   1/YOa7QJj+LowNsW2SpVuDBz8V+6rA+bsbW0QnKHttN/Txgg1/FdEbIxL
+   6z0FfuZF/rUqhVeyzSzS6RLAIVaLd9xcrQ/nsPz1raMHI1UoTSqnTjtcS
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="364235169"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="364235169"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 14:18:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="707788820"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="707788820"
+Received: from srinivas-otcpl-7600.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.39.106])
+  by orsmga008.jf.intel.com with ESMTP; 09 Mar 2023 14:18:06 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Lu Baolu" <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        X86 Kernel <x86@kernel.org>, bp@alien8.de,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
+        vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     "Robin Murphy" <robin.murphy@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>
+Subject: [PATCH v5 0/7] Remove VT-d virtual command interface and IOASID
+Date:   Thu,  9 Mar 2023 14:21:51 -0800
+Message-Id: <20230309222159.487826-1-jacob.jun.pan@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.187.171.27]
-X-ClientProxiedBy: EX19D046UWB003.ant.amazon.com (10.13.139.174) To
- EX19D047UWB002.ant.amazon.com (10.13.138.34)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.8 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,80 +79,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While booting with amd,imageon on a headless target the GPU probe was
-failing with -ENOSPC in get_pages() from msm_gem.c.
+Hi all,
 
-Investigation showed that the driver was using the default 16MB VRAM
-carveout because msm_use_mmu() was returning false since headless devices
-use a dummy parent device. Avoid this by extending the existing is_a2xx
-priv member to check the GPU IOMMU state on all platforms and use that
-check in msm_use_mmu().
+This patch set removes unused VT-d virtual command interface followed by
+removal of the IOASID infrastructure.
 
-This works for memory allocations but it doesn't prevent the VRAM carveout
-from being created because that happens before we have a chance to check
-the GPU IOMMU state in adreno_bind.
+This has only been tested on x86 platforms, need help with testing on ARM
+SMMU and other architectures.
 
-There are a number of possible options to resolve this but none of them are
-very clean. The easiest way is to likely specify vram=0 as module parameter
-on headless devices so that the memory doesn't get wasted.
 
-Signed-off-by: Jordan Crouse <jorcrous@amazon.com>
----
+Thanks,
 
- drivers/gpu/drm/msm/adreno/adreno_device.c | 6 +++++-
- drivers/gpu/drm/msm/msm_drv.c              | 7 +++----
- drivers/gpu/drm/msm/msm_drv.h              | 2 +-
- 3 files changed, 9 insertions(+), 6 deletions(-)
+Jacob
 
-diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
-index 36f062c7582f..4f19da28f80f 100644
---- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-+++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-@@ -539,7 +539,11 @@ static int adreno_bind(struct device *dev, struct device *master, void *data)
- 	DBG("Found GPU: %u.%u.%u.%u", config.rev.core, config.rev.major,
- 		config.rev.minor, config.rev.patchid);
- 
--	priv->is_a2xx = config.rev.core == 2;
-+	/*
-+	 * A2xx has a built in IOMMU and all other IOMMU enabled targets will
-+	 * have an ARM IOMMU attached
-+	 */
-+	priv->has_gpu_iommu = config.rev.core == 2 || device_iommu_mapped(dev);
- 	priv->has_cached_coherent = config.rev.core >= 6;
- 
- 	gpu = info->init(drm);
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index aca48c868c14..a125a351ec90 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -318,11 +318,10 @@ bool msm_use_mmu(struct drm_device *dev)
- 	struct msm_drm_private *priv = dev->dev_private;
- 
- 	/*
--	 * a2xx comes with its own MMU
--	 * On other platforms IOMMU can be declared specified either for the
--	 * MDP/DPU device or for its parent, MDSS device.
-+	 * Return true if the GPU or the MDP/DPU or parent MDSS device has an
-+	 * IOMMU
- 	 */
--	return priv->is_a2xx ||
-+	return priv->has_gpu_iommu ||
- 		device_iommu_mapped(dev->dev) ||
- 		device_iommu_mapped(dev->dev->parent);
- }
-diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-index 9f0c184b02a0..f33f94acd1b9 100644
---- a/drivers/gpu/drm/msm/msm_drv.h
-+++ b/drivers/gpu/drm/msm/msm_drv.h
-@@ -126,7 +126,7 @@ struct msm_drm_private {
- 	struct msm_gpu *gpu;
- 
- 	/* gpu is only set on open(), but we need this info earlier */
--	bool is_a2xx;
-+	bool has_gpu_iommu;
- 	bool has_cached_coherent;
- 
- 	struct drm_fb_helper *fbdev;
+ChangeLog:
+v5:
+ - rebased on v6.3-rc1
+ - put removing iommu_sva_find() in a separate patch (Kevin)
+ - move definition of helpers to iommu code to be consistent with
+   declarations. (Kevin)
+ - misc fixes
+
+v4:
+ - keep mm_pasid helpers inline as much as we can for fork performance
+ - separate GFP_ATOMIC to GFP_KERNEL change for bisectability
+
+v3:
+ - moved helper functions for PASID under SVA code, avoided circular inclusion
+   between mm.h and iommu.h
+ - deleted makefiles
+ - put rename under a different patch
+
+Jacob Pan (5):
+  iommu/vt-d: Remove virtual command interface
+  iommu/sva: Move PASID helpers to sva code
+  iommu/sva: Remove PASID to mm lookup function
+  iommu/sva: Use GFP_KERNEL for pasid allocation
+  iommu/ioasid: Rename INVALID_IOASID
+
+Jason Gunthorpe (2):
+  iommu/sva: Stop using ioasid_set for SVA
+  iommu: Remove ioasid infrastructure
+
+ Documentation/x86/sva.rst       |   2 +-
+ arch/x86/kernel/traps.c         |   5 +-
+ drivers/dma/idxd/device.c       |   8 +-
+ drivers/dma/idxd/idxd.h         |   2 +-
+ drivers/dma/idxd/init.c         |   2 +-
+ drivers/dma/idxd/irq.c          |   2 +-
+ drivers/iommu/Kconfig           |   5 -
+ drivers/iommu/Makefile          |   1 -
+ drivers/iommu/intel/cap_audit.c |   2 -
+ drivers/iommu/intel/dmar.c      |   6 +-
+ drivers/iommu/intel/iommu.c     |  87 +------
+ drivers/iommu/intel/iommu.h     |   3 -
+ drivers/iommu/intel/svm.c       |   3 +-
+ drivers/iommu/ioasid.c          | 422 --------------------------------
+ drivers/iommu/iommu-sva.c       |  62 ++---
+ drivers/iommu/iommu-sva.h       |   4 -
+ include/linux/ioasid.h          |  83 -------
+ include/linux/iommu-helper.h    |  12 +
+ include/linux/iommu.h           |   8 +-
+ include/linux/sched/mm.h        |  27 +-
+ mm/init-mm.c                    |   4 +-
+ 21 files changed, 54 insertions(+), 696 deletions(-)
+ delete mode 100644 drivers/iommu/ioasid.c
+ delete mode 100644 include/linux/ioasid.h
+
 -- 
-2.34.1
+2.25.1
 
