@@ -2,86 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C2C6B1C57
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 907276B1C5F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbjCIHac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 02:30:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
+        id S230130AbjCIHcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 02:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjCIHaY (ORCPT
+        with ESMTP id S230132AbjCIHbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 02:30:24 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAA662FDE;
-        Wed,  8 Mar 2023 23:30:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CA2E2CE228E;
-        Thu,  9 Mar 2023 07:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DFAE8C433AA;
-        Thu,  9 Mar 2023 07:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678347019;
-        bh=pLu2EUjm0EUWWJ8Bq7EHf6FFQCmBn3/LFHoWP+HFOaM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TRQuKn87mlc14w2ao4dBhX1cwTkgy+XNoKUXHEVGLpkVkwA961dPU03wWDtoaRCoA
-         KyBg+99tIz4BIEUt4yRJjLm4kakaKOhBW2bABom535uQzWsAYQzIuv2b1wGgbxVv1I
-         h99HVGsJH5XnneOV/MClhLyGOSNsyynn8EROjm+3GxkFpvcDqjJgsJvhOCzKNNWsad
-         T7AURXwMYPT/hjEhGGqeiGj61NUZLPgN9CxIxpcYVno1yA6HaIr2DDe7b/W8+MxBYs
-         sw45PH57JbFR6WTsYZyqATB+g1nHYdBuBvdZyVhillv7JBDYRYVwybV3DK0ya5tBtz
-         fVjbtpLQp/f2A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CB1B0E61B60;
-        Thu,  9 Mar 2023 07:30:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 9 Mar 2023 02:31:51 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D04ADCA59
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 23:31:18 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id s22so1097839lfi.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 23:31:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google; t=1678347067;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ha/3mU3Llx0Wa0WUDy/uPl76sON4g9057OoIU9zRL5M=;
+        b=Qtcqr7ffdSk4foYwmHCYlCxkgdTb3gmp7/PVtv7leT7UJxqj1XYVgAKrSWxc+lFTS/
+         Rev8wfsj0fMgfNjI1T4d/s6gMi2grLLQfG9T/Ua4sxcfkwkcVAm/T5DEktpu5BnipoB7
+         v8L02Nd4TsqrsxZizzBjmEw6Cm3KhBYJLUM/kJc2Rz7Z3f2M/P31gM3ldwkw5dTon9B8
+         U2KyFcBKmOBVdLZJ7H6nzmUsXq9NQ92DFNXPautpgG/MFC3IL33JnVFR/0xRoQOygyHl
+         /XgnbCXOxdKSoaFLjCZWjnhdfLz9mZjrOeu13FI1RiCIZvLonWvp1AwKZO20/h6epr2e
+         GjRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678347067;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ha/3mU3Llx0Wa0WUDy/uPl76sON4g9057OoIU9zRL5M=;
+        b=cim3Y75xj4fzFpBN5ji++7GB8nbW+3tuGL/S4I+FHJrYRIXkesgZjijmgewajWPHBC
+         rJlgAWTSWaof4sqjLqSnWPWx6rAWlQwiKfZoJwvIl/HpMJA5MD9WNmvZWBbRv17wCTMP
+         DwgbE31AR3d+w4ArV61ZkkdpDVpmRSs0Ftz9wWapmdfbJRuqMPvhGSkpDviHeV2AYlJI
+         4idRelE4aWKG/2xA95OtKw6qYegcoywB/k1YuK8SBjoVw/YjU2I429f6l39/1drxCOgl
+         p8Sx0ho4QQz09yLSN4S+1FJJU/ovqyzxE24Y1xLXM2ry7P68hAP3+96JWro6HB1MRkQS
+         kfxA==
+X-Gm-Message-State: AO0yUKVtl6fGedcaPILWYN0ph4yqZa7JgcLQUGr5bVxKzy1aWD71tUVJ
+        1joV6rrHt1SIXygMicNEGUsEflqT6jD/7mCIjmGcXA==
+X-Google-Smtp-Source: AK7set/CzLKvBYZT7akl9keu/O524xE6wDtFMN64SvHQrgjOET2PcHeMncNYZT90K5hf1/HQwtE9Gcpwc6bJMuvu2OE=
+X-Received: by 2002:a19:7517:0:b0:4dd:805b:5b75 with SMTP id
+ y23-20020a197517000000b004dd805b5b75mr6471232lfe.7.1678347067247; Wed, 08 Mar
+ 2023 23:31:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 00/11] tree-wide: remove support for Renesas R-Car H3 ES1
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167834701982.22182.9521763384207545073.git-patchwork-notify@kernel.org>
-Date:   Thu, 09 Mar 2023 07:30:19 +0000
-References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302130650.2209938-1-max.kellermann@ionos.com>
+ <c2f9e0d3-0242-1304-26ea-04f25c3cdee4@redhat.com> <CAKPOu+_1ee8QDkuB4TxQBaUwnHi4bRKuszWzCb-BCY44cp1aJQ@mail.gmail.com>
+ <cf545923-e782-76a7-dd94-f8586530502b@redhat.com>
+In-Reply-To: <cf545923-e782-76a7-dd94-f8586530502b@redhat.com>
+From:   Max Kellermann <max.kellermann@ionos.com>
+Date:   Thu, 9 Mar 2023 08:30:56 +0100
+Message-ID: <CAKPOu+-jCt6NoVaR=z6c-D-PY1skdt6u-2sKkzd8GFDHbsQdxQ@mail.gmail.com>
+Subject: Re: [PATCH] fs/ceph/mds_client: ignore responses for waiting requests
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     idryomov@gmail.com, jlayton@kernel.org, ceph-devel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, Mar 9, 2023 at 6:31=E2=80=AFAM Xiubo Li <xiubli@redhat.com> wrote:
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+> I attached one testing patch based yours, just added more debug logs,
+> which won't be introduce perf issue since all the logs should be printed
+> in corner cases.
+>
+> Could you help test it ?
 
-On Tue,  7 Mar 2023 17:30:28 +0100 you wrote:
-> Because H3 ES1 becomes an increasing maintenance burden and was only available
-> to a development group, we decided to remove upstream support for it. Here are
-> the patches to remove driver changes. Review tags have been gathered before
-> during an internal discussion. Only change since the internal version is a
-> plain rebase to v6.3-rc1. A branch with all removals is here:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/h3es1-removal
-> 
-> [...]
-
-Here is the summary with links:
-  - [07/11] ravb: remove R-Car H3 ES1.* handling
-    https://git.kernel.org/netdev/net-next/c/6bf0ad7f2917
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+The patch now runs on one of our clusters, and I'll get back to you as
+soon as the problem occurs again. Thanks so far!
