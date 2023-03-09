@@ -2,108 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C569C6B2CBC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 852866B2CCC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjCISPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 13:15:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
+        id S229574AbjCISTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 13:19:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjCISP1 (ORCPT
+        with ESMTP id S230186AbjCISS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 13:15:27 -0500
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A435F519;
-        Thu,  9 Mar 2023 10:15:26 -0800 (PST)
-Received: by mail-pj1-f47.google.com with SMTP id kb15so2902731pjb.1;
-        Thu, 09 Mar 2023 10:15:26 -0800 (PST)
+        Thu, 9 Mar 2023 13:18:56 -0500
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9078BA3B4D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 10:18:45 -0800 (PST)
+Received: by mail-ed1-x544.google.com with SMTP id ec29so10604083edb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 10:18:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678385924;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3vtIQJgbAqYVFrKRDt53NZIcLU46fTuOZj8Pktv++Ns=;
+        b=CQpdqMeCkaA/z738+UU2fGaN5/xdqU2BEwjNW3UtdOo0fjGYRWL+8yQRIJrvSOSsAY
+         FE0fu04hYzhYHlRBePo7orOcrHQptX4fpyl/B+k6Ea7+qVO7CekGGV1XVIWW1C9RbFAV
+         AQLdewzdyWSJQ1LwbOPDkWE79Ea3CfHFvfv2TA2OH8SfdnZBvxZHVdnFPGJNa0IL7VYR
+         S2XW/RwFXi2x10DXo3bYFOKYjz8ddhwKSZyhYO5JOgFBEfTMcTO1eZBkao8pbXbPVuX3
+         fkhAt/dlcPaHdpz2NBR2/cEVD4KW6hpG9/2Ux2HDqjuRZDisBYPR43UE9hq7/GHFqPip
+         nnmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678385725;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1n3W7Mep7n+u6WTkNpOQ23YBe9QKdrpVK921z9QG0TQ=;
-        b=zXYeIFavPNXs0NSUY1vaTouA5F2poUYh82kKkaxUnIcAai5sw/s+Jm4lsNOGWMk9dj
-         I3H/3ItEw+H56JFnPN2+ifYoPAMsV+BFQdT0cFA+dzKh4t4byQaCRYD9BmNM4xegpFhd
-         2yDyca1H+gv6S4sks80zv9ZpRmEyXJP9jAxSIADEIvIlrSgQTFaZZMIpJ6yRHNerqmV0
-         q8Uwl9jEvjhq04Mz2HWKaqSFveeAMnoWB8iMh5+5Hhbply1QBLyfyDO3JYNb2IVEX5X8
-         wY9ayCqr6xs0wDiNQs4fPhb+1l5OLmfG+YBXVatx4U3pt7KVLPJCZDmyv1f9INYqescZ
-         F8xA==
-X-Gm-Message-State: AO0yUKXHvuQJYX/SYP9J5+f3OYJbSiq72f4/w/yjkL+BwFuWGfZHDZvt
-        6/nlx0Dm4xxhF/35beQZ+f8=
-X-Google-Smtp-Source: AK7set9GeDtPXB8h9zEYbgrrWoaLeCxwdQdVIz0UEBRPu3qTrNRUmyZBlWQmaCpnfCkVEMpxXLYVYQ==
-X-Received: by 2002:a05:6a20:8407:b0:cd:363d:b27c with SMTP id c7-20020a056a20840700b000cd363db27cmr32359263pzd.16.1678385725521;
-        Thu, 09 Mar 2023 10:15:25 -0800 (PST)
-Received: from [192.168.132.235] ([63.145.95.70])
-        by smtp.gmail.com with ESMTPSA id 1-20020a630301000000b004fb11a7f2d4sm11207080pgd.57.2023.03.09.10.15.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 10:15:24 -0800 (PST)
-Message-ID: <1ca7dbef-5747-29c2-a11c-086cf36d636f@acm.org>
-Date:   Thu, 9 Mar 2023 10:15:23 -0800
+        d=1e100.net; s=20210112; t=1678385924;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3vtIQJgbAqYVFrKRDt53NZIcLU46fTuOZj8Pktv++Ns=;
+        b=EaSKnK0e1NonuaJMbXoBCxqYgID6IVV6vWtYRy3YfVC4Zkma3agqBM/hYf22ui8iqN
+         2I3x+6C3Rp+TEO+xjP0P0ulYKwlOx//7xKVA5C9EAMnIpSskqDXct2XkqBKNMz8vmQH9
+         ZFC22oddcz7chsn/TZc0KvXvK3HkxJZzFlCe2IByBzCLKpnBJQvKJLo5Ftqkx1iErSpO
+         o+Y1O+9QUl7TGcndglE/IPcdrmi28Tx58cFvLTu0yNf//lgDM3jg/7ZeOA9n/dPomu4L
+         eu+Zvnv+qOaZeX7vGSVKXHum2OBMCjwD30Lz2n0wB5HDWMREqv269O2N/uxmqsx1wJCS
+         Bdag==
+X-Gm-Message-State: AO0yUKUMxOMpoFbqCXwyOMOgdvyoD5WXLjFrVtW4hqNwP7p0UBoi1IGV
+        VXRMgUOyhJbQ/KL41RS+e5pOikGoR3sOSh/D8Ks=
+X-Google-Smtp-Source: AK7set8RsXIuhe+zqZlcmtgoO5ZNtkK2QN4WkgIrvcPHsX6Yw2MRHrie00YvsaWtcVMBMY11kWDdTDnMDlmrGjiv/x4=
+X-Received: by 2002:a17:906:5910:b0:8b1:78b8:4207 with SMTP id
+ h16-20020a170906591000b008b178b84207mr11837569ejq.3.1678385924251; Thu, 09
+ Mar 2023 10:18:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v2 1/3] ufs: mcq: Add supporting functions for mcq
- abort
-Content-Language: en-US
-To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com, mani@kernel.org,
-        stanley.chu@mediatek.com, adrian.hunter@intel.com,
-        beanhuo@micron.com, avri.altman@wdc.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <cover.1678338926.git.quic_nguyenb@quicinc.com>
- <68b786f390dbd93218a482d18c513bc332e82da3.1678338926.git.quic_nguyenb@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <68b786f390dbd93218a482d18c513bc332e82da3.1678338926.git.quic_nguyenb@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+From:   Lara Geni <larasecuredata@gmail.com>
+Date:   Thu, 9 Mar 2023 23:48:31 +0530
+Message-ID: <CAKDenP309B-vZN5AJRTRZ+PNDTwmOKhGEz9FnFPvw3C5E0GJBQ@mail.gmail.com>
+Subject: RE: NTI - American Association of Critical-Care Nurses Attendees
+ Email List-2023
+To:     Lara Geni <larasecuredata@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
+        FILL_THIS_FORM_LONG,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 21:28, Bao D. Nguyen wrote:
-> +static bool ufshcd_mcq_sqe_search(struct ufs_hba *hba,
-> +		struct ufs_hw_queue *hwq, int task_tag)
-> +{
-> +	struct utp_transfer_req_desc *utrd;
-> +	u32 mask = hwq->max_entries - 1;
-> +	bool ret = false;
-> +	u64 addr, match;
-> +	u32 i;
+Hi,
 
-The variable name "i" is usually used for a loop index. In this case it 
-represents a slot in the submission queue. How about renaming "i" into 
-"slot"?
+Would you be interested in acquiring the American Association of
+Critical-Care Nurses  Attendees Email List-2023?
 
-> +static inline void ufshcd_mcq_update_sq_head_slot(struct ufs_hw_queue *q)
-> +{
-> +	u32 val = readl(q->mcq_sq_head);
-> +
-> +	q->sq_head_slot = val / sizeof(struct utp_transfer_req_desc);
-> +}
+List Includes: Company Name, First Name, Last Name, Full Name, Contact
+Job Title, Verified Email Address, Website URL, Mailing address, Phone
+ number, Industry and many more=E2=80=A6
 
-Please modify this function such that it returns the head slot value 
-instead of storing it in a member variable and remove the sq_head_slot 
-member variable. Storing the sq_head_slot value in a member variable 
-seems wrong to me since the value of that variable will be outdated as 
-soon as the submission queue is restarted.
+Number of Contacts: 12,639 Verified Contacts.
+Cost : $ 1,638
 
-> +static inline bool ufshcd_mcq_is_sq_empty(struct ufs_hw_queue *q)
-> +{
-> +	return q->sq_head_slot == q->sq_tail_slot;
-> +}
+If you=E2=80=99re interested please let me know I will assist you with furt=
+her details.
 
-Please remove this function and inline this function into its callers.
-
-Thanks,
-
-Bart.
+Kind Regards,
+Lara Geni
+Marketing Coordinators
