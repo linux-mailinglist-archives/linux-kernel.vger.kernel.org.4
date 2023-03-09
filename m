@@ -2,144 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF1C6B2EB1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 21:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 171016B2E9F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 21:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjCIU2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 15:28:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
+        id S230407AbjCIUZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 15:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjCIU2P (ORCPT
+        with ESMTP id S230108AbjCIUZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 15:28:15 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E719FB27B;
-        Thu,  9 Mar 2023 12:27:50 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 6291C5FD1B;
-        Thu,  9 Mar 2023 23:27:47 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1678393667;
-        bh=uFGjRE3j4zXGby/VPz50ex9laPK7eGiO5HSk7DnBtqc=;
-        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
-        b=S+IWTg0K3yV1PAswja5K2KTn/lLdiLh6OT5XMtSIUAMk6729yecIJTRGwx02pHsdJ
-         CIZnY+XqUktXAIpx1CPXVoNcnOdS9dJ+Zlw9TS1afVPT84Nr0GBg7Dl3mWy4Dk+0fD
-         2EccLw68tNixnisjXc4YNjl7XknO36vDXSyMxaaefYPwMdKDtNaCSvQ3jsCmgk3LBw
-         1HRl0U1UwEcyOcHS/S6eYjcpu3fFwK8CWhn1TnvlBE2UW2NTOwFVdTDnJtzJvb67kT
-         nxaYtrKlinP6cMV9izsvGSuctwEnjy1jn8X0ZgB46sVau02+Q3h78lWX+XuAK+CO2v
-         C5Q+V+GmF8faA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  9 Mar 2023 23:27:43 +0300 (MSK)
-Message-ID: <1804d100-1652-d463-8627-da93cb61144e@sberdevices.ru>
-Date:   Thu, 9 Mar 2023 23:24:42 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
-        <avkrasnov@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Subject: [RFC PATCH v4 0/4] several updates to virtio/vsock
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/09 18:14:00 #20929517
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Mar 2023 15:25:07 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A04B7187;
+        Thu,  9 Mar 2023 12:25:06 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329IXftY026300;
+        Thu, 9 Mar 2023 20:25:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=4lKlWqiYZ7v1qAIU9YYUgr8f1ongIY3a7WWT9aUM+G8=;
+ b=nK3WXt8gaDxHng1kqan58beoa2v0E4TtQsmNZ4ap+J5nhTzRcFpYu1dQW5MwxsaTmvYi
+ 4FYpxxhxACjrCxATWEnkhtEBoHZxIBHTPIpPBg2r1TyQ5YpMHOh4p+hyZ23mx9pwEqh9
+ saxgPzIbtdcf6Jk0IzOuxV1G0idh+dgfD7PgfaffW1jEhHc9o0Y1lKf92+stN7O3BR5l
+ RcMqc+R1+cIRn8RJRaDE6JpHt9jX4S64nU7i+P4MkFwNftfyCfYOU+IkOO69NeMi91/X
+ 19nwAmMBZouA252xeR/MwSg2YVkELgp6KworwaWqPrfewaP/TQ3bBdctdLQGHs+UC56r mw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p7egyhhk0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 20:25:02 +0000
+Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 329KP1H1002777;
+        Thu, 9 Mar 2023 20:25:01 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 3p4fewncpq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 09 Mar 2023 20:25:01 +0000
+Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 329KP0Ed002726;
+        Thu, 9 Mar 2023 20:25:00 GMT
+Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
+        by NALASPPMTA04.qualcomm.com (PPS) with ESMTP id 329KP0hc002722;
+        Thu, 09 Mar 2023 20:25:00 +0000
+Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
+        id A7F5020E44; Thu,  9 Mar 2023 12:25:00 -0800 (PST)
+From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
+To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        balbi@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>
+Subject: [PATCH v7 0/5] Add function suspend/resume and remote wakeup support
+Date:   Thu,  9 Mar 2023 12:24:54 -0800
+Message-Id: <1678393499-7366-1-git-send-email-quic_eserrao@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: FzysObyAnuQRWmboiZgZKyLgmZPbr-hz
+X-Proofpoint-ORIG-GUID: FzysObyAnuQRWmboiZgZKyLgmZPbr-hz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_12,2023-03-09_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 spamscore=0 phishscore=0 impostorscore=0 suspectscore=0
+ priorityscore=1501 malwarescore=0 mlxscore=0 clxscore=1015 mlxlogscore=776
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303090164
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Changes in v7
+ - Added a check to set device remote wakeup feature selector in ep0.c based on whether
+   the device is configured for remote wakeup.
+ - Commit message and usb_func_wakeup documentation changes.
 
-this patchset evolved from previous v2 version (see link below). It does
-several updates to virtio/vsock:
-1) Changes 'virtio_transport_inc/dec_rx_pkt()' interface. Now instead of
-   using skbuff state ('head' and 'data' pointers) to update 'fwd_cnt'
-   and 'rx_bytes', integer value is passed as an input argument. This
-   makes code more simple, because in this case we don't need to update
-   skbuff state before calling 'virtio_transport_inc/dec_rx_pkt()'. In
-   more common words - we don't need to change skbuff state to update
-   'rx_bytes' and 'fwd_cnt' correctly.
-2) For SOCK_STREAM, when copying data to user fails, current skbuff is
-   not dropped. Next read attempt will use same skbuff and last offset.
-   Instead of 'skb_dequeue()', 'skb_peek()' + '__skb_unlink()' are used.
-   This behaviour was implemented before skbuff support.
-3) For SOCK_SEQPACKET it removes unneeded 'skb_pull()' call, because for
-   this type of socket each skbuff is used only once: after removing it
-   from socket's queue, it will be freed anyway.
+Changes in v6
+ - Combined usb_gadget_func_wakeup API with usb_func_wakeup API in composite layer
+   so that there is only 1 API for triggering function remote wakeup for better error
+   handling. Since function suspend is something specific to usb functions, better to
+   keep the related APIs in composite layer and above. Also documented the usage and
+   applicability of the usb_func_wakeup API.
 
-Test for 2) also added:
-Test tries to 'recv()' data to NULL buffer, then does 'recv()' with valid
-buffer. For SOCK_STREAM second 'recv()' must return data, because skbuff
-must not be dropped, but for SOCK_SEQPACKET skbuff will be dropped by
-kernel, and 'recv()' will return EAGAIN.
+Changes in v5
+ - Add wakeup_armed check in patch2 in the link status change event handler
+   so that resume gets triggeed only in the remote wakeup context.
+ - Costmetic changes in patch3 and patch4
 
-Link to v1 on lore:
-https://lore.kernel.org/netdev/c2d3e204-89d9-88e9-8a15-3fe027e56b4b@sberdevices.ru/
+Changes in v4
+ - Moved the wakeup bit check to bind function for warning the user at an early
+   stage itself.
+ - Added the remote wakeup configured check to gadget_wakeup() and func_wakeup()
+   routines so that wakeup can be triggered only if user has configured it.
+ - Cosmetic changes with respect to renaming the variables to reflect the operation
+   better.
 
-Link to v2 on lore:
-https://lore.kernel.org/netdev/a7ab414b-5e41-c7b6-250b-e8401f335859@sberdevices.ru/
+Changes in v3
+ - Modified rw_capable flag to reflect the gadgets capability for wakeup
+   signalling.
+ - Added a check to configure wakeup bit in bmAttributes only if gadget
+   is capable of triggering wakeup.
+ - Implemented a gadget op for composite layer to inform UDC whether device
+   is configured for remote wakeup.
+ - Added a check in __usb_gadget_wakeup() API to trigger wakeup only if the
+   device is configured for it.
+ - Cosmetic changes in dwc3_gadget_func_wakeup() API.
 
-Link to v3 on lore:
-https://lore.kernel.org/netdev/0abeec42-a11d-3a51-453b-6acf76604f2e@sberdevices.ru/
+Changes in v2
+ - Added a flag to indicate whether the device is remote wakeup capable.
+ - Added an async parameter to _dwc3_gadget_wakeup() API and few cosmetic
+   changes.
+ - Added flags to reflect the state of  function suspend and function remote
+   wakeup to usb_function struct rather than function specific struct (f_ecm).
+ - Changed the dwc3_gadget_func__wakeup() API to run synchronously by first
+   checking the link state and then sending the device notification. Also
+   added debug log for DEVICE_NOTIFICATION generic cmd.
+ - Added changes to arm the device for remotewakeup/function remotewakeup
+   only if device is capable.
 
-Change log:
+An usb device can initate a remote wakeup and bring the link out of
+suspend as dictated by the DEVICE_REMOTE_WAKEUP feature selector.
+To achieve this an interface can invoke gadget_wakeup op and wait for the
+device to come out of LPM. But the current polling based implementation
+fails if the host takes a long time to drive the resume signaling specially
+in high speed capable devices. Switching to an interrupt based approach is
+more robust and efficient. This can be leveraged by enabling link status
+change events and triggering a gadget resume when the link comes to active
+state.
 
-v1 -> v2:
- - For SOCK_SEQPACKET call 'skb_pull()' also in case of copy failure or
-   dropping skbuff (when we just waiting message end).
- - Handle copy failure for SOCK_STREAM in the same manner (plus free
-   current skbuff).
- - Replace bug repdroducer with new test in vsock_test.c
+If the device is enhanced super-speed capable, individual interfaces can
+also be put into suspend state. An interface can be in function suspend
+state even when the device is not in suspend state. Function suspend state
+is retained throughout the device suspend entry and exit process.
+A function can be put to function suspend through FUNCTION_SUSPEND feature
+selector sent by the host. This setup packet also decides whether that
+function is capable of initiating a function remote wakeup. When the
+function sends a wakeup notification to the host the link must be first
+brought to a non-U0 state and then this notification is sent.
 
-v2 -> v3:
- - Replace patch which removes 'skb->len' subtraction from function
-   'virtio_transport_dec_rx_pkt()' with patch which updates functions
-   'virtio_transport_inc/dec_rx_pkt()' by passing integer argument
-   instead of skbuff pointer.
- - Replace patch which drops skbuff when copying to user fails with
-   patch which changes this behaviour by keeping skbuff in queue until
-   it has no data.
- - Add patch for SOCK_SEQPACKET which removes redundant 'skb_pull()'
-   call on read.
- - I remove "Fixes" tag from all patches, because all of them now change
-   code logic, not only fix something.
+This change adds the infrastructure needed to support the above
+functionalities.
 
-v3 -> v4:
- - Update commit messages in all patches except test.
- - Add "Fixes" tag to all patches except test.
+Elson Roy Serrao (5):
+  usb: gadget: Properly configure the device for remote wakeup
+  usb: dwc3: Add remote wakeup handling
+  usb: gadget: Add function wakeup support
+  usb: dwc3: Add function suspend and function wakeup support
+  usb: gadget: f_ecm: Add suspend/resume and remote wakeup support
 
-Arseniy Krasnov (4):
-  virtio/vsock: don't use skbuff state to account credit
-  virtio/vsock: remove redundant 'skb_pull()' call
-  virtio/vsock: don't drop skbuff on copy failure
-  test/vsock: copy to user failure test
-
- net/vmw_vsock/virtio_transport_common.c |  29 +++---
- tools/testing/vsock/vsock_test.c        | 118 ++++++++++++++++++++++++
- 2 files changed, 131 insertions(+), 16 deletions(-)
+ drivers/usb/dwc3/core.h               |   5 ++
+ drivers/usb/dwc3/debug.h              |   2 +
+ drivers/usb/dwc3/ep0.c                |  17 ++---
+ drivers/usb/dwc3/gadget.c             | 118 ++++++++++++++++++++++++++++++++--
+ drivers/usb/gadget/composite.c        |  58 +++++++++++++++++
+ drivers/usb/gadget/configfs.c         |   3 +
+ drivers/usb/gadget/function/f_ecm.c   |  68 ++++++++++++++++++++
+ drivers/usb/gadget/function/u_ether.c |  63 ++++++++++++++++++
+ drivers/usb/gadget/function/u_ether.h |   4 ++
+ drivers/usb/gadget/udc/core.c         |  27 ++++++++
+ drivers/usb/gadget/udc/trace.h        |   5 ++
+ include/linux/usb/composite.h         |   8 +++
+ include/linux/usb/gadget.h            |   9 +++
+ 13 files changed, 373 insertions(+), 14 deletions(-)
 
 -- 
-2.25.1
+2.7.4
+
