@@ -2,173 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 176DC6B3104
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98DC56B30D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbjCIWis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 17:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56694 "EHLO
+        id S230395AbjCIWhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 17:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbjCIWiL (ORCPT
+        with ESMTP id S229876AbjCIWhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:38:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C93710820E
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:37:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678401443;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dh3vnUO1CryjqGh5pf4N+hTFZfi7U8elDbn6yAru0xw=;
-        b=RF4a5CaVXPvFIrAI/MeH7OwCpAcBHbDXfH5p4R/Fjyu+5BTMhZ3U/YC722i/5F329hwUJb
-        ER6LeuLEl96bYxn4egjcsh1c44QXgSlAATCAF0I0JeauOc9N78Qaco1Z02+3yP/UTDf0Sx
-        SGJHuJJWkNQ5YLeJeqs2AaQWEClLZ2A=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-325-KQgV8WBaOa6OnX2zXIQe5w-1; Thu, 09 Mar 2023 17:37:19 -0500
-X-MC-Unique: KQgV8WBaOa6OnX2zXIQe5w-1
-Received: by mail-qt1-f197.google.com with SMTP id z1-20020ac87ca1000000b003ba2a2c50f9so1886972qtv.23
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 14:37:19 -0800 (PST)
+        Thu, 9 Mar 2023 17:37:23 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46957104617
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:37:22 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id k14so4256013lfj.7
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 14:37:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678401440;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vFWvVfxVAn0JYy2RvVNotdBgoXVzu6+UA0ROvn+lkig=;
+        b=gPKCt6kGrGzWI6Z5cmQ5vHx43shhCsJljJrTbLgeXdksKonaADCLSAKdrC4gArTmQx
+         IA6JqX5Y9IIJOtFcV9Th5ilQfOR6I7QPGxvbO43xgKVVrte/3fvf5gP4QaXLz9QJlt0g
+         9Yk0q6DzxvPFAjlIWnujD4SLdF4FGEKThIdvn9/zaQVv4Ceb0PTXwZt73TVCIxfPjFwg
+         2cVz99dHc93rjymJr9jCtdOGLeZKIeMqGqLa4pTZK73SyuztsFW9Uua3KCihyF2/70Sg
+         qE6ALe6EPjavtaUOYPzbYgy9aqXw1+Ec1Mwb+xf+MhmxrxNCxch7HW6WnAyw+G8s7j3d
+         hkHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678401438;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dh3vnUO1CryjqGh5pf4N+hTFZfi7U8elDbn6yAru0xw=;
-        b=63NLRVJuG7slCQwEcyvFemz0ci6QVYqF6RN6gzSyJHGlKycOcn19vcNiAmOyAPfkkt
-         0oOsTfA90JFX02BSv2NMS19V0OJYpiLWzIejkDG0+xoR53fD7yP3E9xdf5DJ2g649xUW
-         wdyvhUvYXoWflJgA+8omHUCT/Pg+AvX3IHzvj9VHAn+qklErHQ+xg5PVt20IXMXdnZQV
-         7Xj+OhkxQQf/TFb/0y14J/ZxtFpIWqtt+7fL/ay67+yRohVNa4U50sDDdXc7W7zCxW1x
-         F3qkE/xe7UYKTFF8N/zv6DCe7kfr0ounBZJQTE3+NUfE/oM1cbBfonLAG+CbC7uRWj0L
-         F7DQ==
-X-Gm-Message-State: AO0yUKXSaFx6cIk+fXNXX1oA4pz4IXuW8fiJzq7x010XHzckGK9Wv7Lb
-        dPygVEwXWH+imKZQ0r72DIPTtY0K+tXWsWNEgPdgJw89KkqP69d/ibSbgIrgmiqmzvPOxaPwMX/
-        5kiwsmKAofCR6KBOUG3KtnmzO
-X-Received: by 2002:a05:622a:1a09:b0:3bf:c458:5bac with SMTP id f9-20020a05622a1a0900b003bfc4585bacmr1271807qtb.0.1678401438467;
-        Thu, 09 Mar 2023 14:37:18 -0800 (PST)
-X-Google-Smtp-Source: AK7set/zs42/Izdu6QlfJ7NnX3Mn0ZoSSqNN1L96LiNcygyJm4jXsLB3B/nRmD9vB/SX58+KtB6MDA==
-X-Received: by 2002:a05:622a:1a09:b0:3bf:c458:5bac with SMTP id f9-20020a05622a1a0900b003bfc4585bacmr1271786qtb.0.1678401438212;
-        Thu, 09 Mar 2023 14:37:18 -0800 (PST)
-Received: from x1n.redhat.com (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id c26-20020ac84e1a000000b003b8484fdfccsm172215qtw.42.2023.03.09.14.37.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 14:37:16 -0800 (PST)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Nadav Amit <nadav.amit@gmail.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>, peterx@redhat.com,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v4 2/2] selftests/mm: Smoke test UFFD_FEATURE_WP_UNPOPULATED
-Date:   Thu,  9 Mar 2023 17:37:11 -0500
-Message-Id: <20230309223711.823547-3-peterx@redhat.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230309223711.823547-1-peterx@redhat.com>
-References: <20230309223711.823547-1-peterx@redhat.com>
+        d=1e100.net; s=20210112; t=1678401440;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vFWvVfxVAn0JYy2RvVNotdBgoXVzu6+UA0ROvn+lkig=;
+        b=2V3uw9xcqymNvCYUPqKnaC8y2NnSY5xLkU8pEZe1sSUNB1Vw9o6759zufAdiVN5vbF
+         0soA3XUGJ/T46fh5TiSeYW6EVKi9AygQIROUkIjBjmb7arxwj3okcUnFYgm3QIRZ8Zv1
+         833caBEE35YP3fXYJL7HI2fH+MeogzYPp+86AA3jC2nJdDEgt3Dqoa2g2qHThCrXsusX
+         IrMF04ytv/MFZDpvQ93QpWawKk1P6r7kslxVniTyx6XJo5bceKIjILdOfj6r+DDsJHBZ
+         XsNi3cHyw9M5Eqiiw3HD8yHS0ut/WFOSwPnVufbzC2kpVSXTxkyMJsaH7MwSOyKRY5CF
+         vuZw==
+X-Gm-Message-State: AO0yUKXiFtFCOdn7ND4GV9R5TQCV+IJCbidAhq2trPqkyHlrpPowvPvz
+        qwFPLomLjyw24y4BK57s4w0IJw==
+X-Google-Smtp-Source: AK7set9NFAA7v78zu5aKYNTQcuPQtA5qn6A3AwSO27Qt8087MIkK12e2UayAT0g7EVrmj6Jhuti/2w==
+X-Received: by 2002:ac2:4c09:0:b0:4b4:6490:cbf1 with SMTP id t9-20020ac24c09000000b004b46490cbf1mr7060611lfq.15.1678401440025;
+        Thu, 09 Mar 2023 14:37:20 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id a8-20020a2e9808000000b002934a7c04efsm42146ljj.98.2023.03.09.14.37.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 14:37:19 -0800 (PST)
+Message-ID: <aac6ba9c-4230-aff7-c93d-23eaf6895464@linaro.org>
+Date:   Thu, 9 Mar 2023 23:37:17 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 2/2] drm/panel: Add driver for Novatek NT36523
+Content-Language: en-US
+To:     Jianhua Lu <lujianhua000@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230308043706.16318-1-lujianhua000@gmail.com>
+ <20230308043706.16318-2-lujianhua000@gmail.com>
+ <66d293a8-f850-cb80-0c83-2ebf7e29d0c2@linaro.org> <ZAh3MSpQ30YyPAVe@Gentoo>
+ <1cbe9e29-13a4-574e-6d8c-b2506e7a36b3@linaro.org> <ZAiPTat/kmLyaJmA@Gentoo>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <ZAiPTat/kmLyaJmA@Gentoo>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable it by default on the stress test, and add some smoke tests for the
-pte markers on anonymous.
 
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- tools/testing/selftests/mm/userfaultfd.c | 45 ++++++++++++++++++++++--
- 1 file changed, 43 insertions(+), 2 deletions(-)
+[...]
+= of_graph_get_remote_node(dsi->dev.of_node, 1, -1);
+>>>>> +		if (!dsi1) {
+>>>>> +			dev_err(dev, "cannot get secondary DSI node.\n");
+>>>>> +			return -ENODEV;
+>>>>> +		}
+>>>>> +
+>>>>> +		dsi1_host = of_find_mipi_dsi_host_by_node(dsi1);
+>>>>> +		of_node_put(dsi1);
+>>>> Shouldn't you put the reference only if it's found?
+>>> thanks for spot it.
+Apparently not.. please don't change this
 
-diff --git a/tools/testing/selftests/mm/userfaultfd.c b/tools/testing/selftests/mm/userfaultfd.c
-index 7f22844ed704..e030d63c031a 100644
---- a/tools/testing/selftests/mm/userfaultfd.c
-+++ b/tools/testing/selftests/mm/userfaultfd.c
-@@ -1444,6 +1444,43 @@ static int pagemap_test_fork(bool present)
- 	return result;
- }
- 
-+static void userfaultfd_wp_unpopulated_test(int pagemap_fd)
-+{
-+	uint64_t value;
-+
-+	/* Test applying pte marker to anon unpopulated */
-+	wp_range(uffd, (uint64_t)area_dst, page_size, true);
-+	value = pagemap_read_vaddr(pagemap_fd, area_dst);
-+	pagemap_check_wp(value, true);
-+
-+	/* Test unprotect on anon pte marker */
-+	wp_range(uffd, (uint64_t)area_dst, page_size, false);
-+	value = pagemap_read_vaddr(pagemap_fd, area_dst);
-+	pagemap_check_wp(value, false);
-+
-+	/* Test zap on anon marker */
-+	wp_range(uffd, (uint64_t)area_dst, page_size, true);
-+	if (madvise(area_dst, page_size, MADV_DONTNEED))
-+		err("madvise(MADV_DONTNEED) failed");
-+	value = pagemap_read_vaddr(pagemap_fd, area_dst);
-+	pagemap_check_wp(value, false);
-+
-+	/* Test fault in after marker removed */
-+	*area_dst = 1;
-+	value = pagemap_read_vaddr(pagemap_fd, area_dst);
-+	pagemap_check_wp(value, false);
-+	/* Drop it to make pte none again */
-+	if (madvise(area_dst, page_size, MADV_DONTNEED))
-+		err("madvise(MADV_DONTNEED) failed");
-+
-+	/* Test read-zero-page upon pte marker */
-+	wp_range(uffd, (uint64_t)area_dst, page_size, true);
-+	*(volatile char *)area_dst;
-+	/* Drop it to make pte none again */
-+	if (madvise(area_dst, page_size, MADV_DONTNEED))
-+		err("madvise(MADV_DONTNEED) failed");
-+}
-+
- static void userfaultfd_pagemap_test(unsigned int test_pgsize)
- {
- 	struct uffdio_register uffdio_register;
-@@ -1462,7 +1499,7 @@ static void userfaultfd_pagemap_test(unsigned int test_pgsize)
- 	/* Flush so it doesn't flush twice in parent/child later */
- 	fflush(stdout);
- 
--	uffd_test_ctx_init(0);
-+	uffd_test_ctx_init(UFFD_FEATURE_WP_UNPOPULATED);
- 
- 	if (test_pgsize > page_size) {
- 		/* This is a thp test */
-@@ -1482,6 +1519,10 @@ static void userfaultfd_pagemap_test(unsigned int test_pgsize)
- 
- 	pagemap_fd = pagemap_open();
- 
-+	/* Smoke test WP_UNPOPULATED first when it's still empty */
-+	if (test_pgsize == page_size)
-+		userfaultfd_wp_unpopulated_test(pagemap_fd);
-+
- 	/* Touch the page */
- 	*area_dst = 1;
- 	wp_range(uffd, (uint64_t)area_dst, test_pgsize, true);
-@@ -1526,7 +1567,7 @@ static int userfaultfd_stress(void)
- 	struct uffdio_register uffdio_register;
- 	struct uffd_stats uffd_stats[nr_cpus];
- 
--	uffd_test_ctx_init(0);
-+	uffd_test_ctx_init(UFFD_FEATURE_WP_UNPOPULATED);
- 
- 	if (posix_memalign(&area, page_size, page_size))
- 		err("out of memory");
--- 
-2.39.1
-
+Konrad
+>>>>
+>>>>> +		if (!dsi1_host) {
+>>>>> +			dev_err(dev, "cannot get secondary DSI host\n");
+>>>>> +			return -EPROBE_DEFER;
+>>>> dev_err_probe, here and in neighbouring exit return paths?
+>>> Acked.
+>>>>
+>>>>
+>>>> Konrad
