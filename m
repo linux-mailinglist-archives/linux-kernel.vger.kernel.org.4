@@ -2,60 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA63A6B3055
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB5A6B3074
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:22:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbjCIWUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 17:20:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
+        id S231314AbjCIWUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 17:20:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjCIWUW (ORCPT
+        with ESMTP id S231321AbjCIWUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:20:22 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CCEF8F20;
-        Thu,  9 Mar 2023 14:19:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jK36Zpm8T2on+df54b6OGLN8ramQR+T+L8HPs8R5yHE=; b=MQBnApNDuji9teSFgOuyjM3C/p
-        Lgjgf584li4FUT3/bLPnV5yqTuo2UTXDrn/714v2Ip8g3XpbRRwZD7nJgpfEz6h2qyYzLRoVFAzS5
-        tMd/9xsj+xvHf9pg1aj6/tfQOstrhGZ+G1zt8z2KHggdwT/JzAOm9MQzVoQv6izhooEbpCzv0yw5r
-        tM+8qfELGYvw7DcEBgzyGxOP+nBEwfiCipPOReirB45OyXkLojYq6dLPJAZ2LdHzds1OUB+inU0LV
-        2hzU4mCm7TVY5QLhVwYJxgZVITHlU54t7YIlOR63U6xiYpBenGFdRnv1EDD5XMZzQjyOtadrDKozg
-        W7Wm31lw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1paOao-00C8rx-Vc; Thu, 09 Mar 2023 22:18:34 +0000
-Date:   Thu, 9 Mar 2023 14:18:34 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, minyard@acm.org,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, song@kernel.org, robinmholt@gmail.com,
-        steve.wahl@hpe.com, mike.travis@hpe.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org, jgross@suse.com,
-        sstabellini@kernel.org, oleksandr_tyshchenko@epam.com,
-        xen-devel@lists.xenproject.org
-Cc:     j.granados@samsung.com, zhangpeng362@huawei.com,
-        tangmeng@uniontech.com, willy@infradead.org, nixiaoming@huawei.com,
-        sujiaxun@uniontech.com, patches@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, apparmor@lists.ubuntu.com,
-        linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-hyperv@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/7] sysctl: slowly deprecate register_sysctl_table()
-Message-ID: <ZApbOilWsw9Sk/k4@bombadil.infradead.org>
-References: <20230302204612.782387-1-mcgrof@kernel.org>
+        Thu, 9 Mar 2023 17:20:45 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F7A8A3BE
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:20:06 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id e21so2872439oie.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 14:20:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678400358;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jym0nUiEEbOOCFzlnlOfW+LijEktB+G0Iqs6BtQtNZI=;
+        b=s+CvGVw1kC4Rp4CiFuDvNherDkdkqI71dca1eQMFFKnt/ztNDdolfJ3V/EFzX9CoGL
+         Zmq3uiPhG+DhMSodJ1+x/pYKXPB0TcR6piRswV/C6I7kOvMB6XwoZqw7DDrCIEVmLqzV
+         jhoWc1JhFiRfIowkQ3YowN/5iBUTsmvT8jLRN7ZBntHzDbRcNk//PIuhxaOwSB5IoAJX
+         ZXgoIlisxtV8sMd5bsquQc7mP1euMQy32d4gKV6OPnhst+oRTpfIx+BB/ATMzOVtB2T2
+         uPqSHkcOMPRvQwCC69BQ4qqfYios5ZgcNabJL4CGaGrNYoZfdRiPpe94s/+VKEb7Yaft
+         kNlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678400358;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jym0nUiEEbOOCFzlnlOfW+LijEktB+G0Iqs6BtQtNZI=;
+        b=fxfqebqwlNB1GKvKaNCuiWa7yvuL40ynh74ce73auH9oslB4QMZa+pbcYjx0fMWsTo
+         aWyMgY78A/jjpHFGwhYrWZteFj6dEX2Jch2UdYTTlwq4R7nk8lgh4vpDl889gTaLui7+
+         0YU0dV1CeeoWnhUzTWTtjiFZXgGY7FC65Wx83b7hFc1keiN2tve1i/4oK12xbubLIrTC
+         m77HCNIntnwT+vFgF/SQDRwPugihaVXSgukmhpMDbWHoYPN4LfphJnm4gkOnffQ/TAfL
+         1MI365dLgWRFrNA3PwgdjT0KRHfW6S9cla3V2PSnzM/BLeBXdKVCtCgkhShyiLaUHrrk
+         S71g==
+X-Gm-Message-State: AO0yUKUZSjW/Txj5ZXK8uLyiwFJzCKWj77eM6UqfjGsZN+01EZ4OHLip
+        xe2w2V2hRWOwxJsYiunNykDLRmX3V9U2I+iuB2bSgA==
+X-Google-Smtp-Source: AK7set+PZFyz/IkkqHj3/hze6nBpdrjOZL7Z92InN2k9JiBNkaLuMMQTPuvGBxTXFbyreldmu/TdVrCVAIl6lmnmJy4=
+X-Received: by 2002:a54:4102:0:b0:37f:ab56:ff42 with SMTP id
+ l2-20020a544102000000b0037fab56ff42mr8087904oic.9.1678400358006; Thu, 09 Mar
+ 2023 14:19:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302204612.782387-1-mcgrof@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230215010717.3612794-1-rananta@google.com> <20230215010717.3612794-8-rananta@google.com>
+ <CAAeT=FxVyHVRTj_78Jebz9nsc79yfYcbOu2c2hcekJTLgKFFaQ@mail.gmail.com>
+In-Reply-To: <CAAeT=FxVyHVRTj_78Jebz9nsc79yfYcbOu2c2hcekJTLgKFFaQ@mail.gmail.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Thu, 9 Mar 2023 14:19:07 -0800
+Message-ID: <CAJHc60w7gwUJ_rh6B3F_9SD_uxEDMRLFyahowGpCi54-84y3Hg@mail.gmail.com>
+Subject: Re: [REPOST PATCH 07/16] selftests: KVM: aarch64: Add PMU cycle
+ counter helpers
+To:     Reiji Watanabe <reijiw@google.com>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,29 +79,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 12:46:05PM -0800, Luis Chamberlain wrote:
-> I'm happy to take these via sysctl-next [0] but since
-> I don' think register_sysctl_table() will be nuked on v6.4 I think
-> it's fine for each of these to go into each respective tree. I can
-> pick up last stragglers on sysctl-next. If you want me to take this
-> via sysctl-next too, just let me know and I'm happy to do that. Either
-> way works.
+Hi Reiji,
 
-As I noted I've dropped the following already-picked-up patches from
-my queue:
+On Thu, Mar 2, 2023 at 7:06=E2=80=AFPM Reiji Watanabe <reijiw@google.com> w=
+rote:
+>
+> Hi Raghu,
+>
+> On Tue, Feb 14, 2023 at 5:07=E2=80=AFPM Raghavendra Rao Ananta
+> <rananta@google.com> wrote:
+> >
+> > Add basic helpers for the test to access the cycle counter
+> > registers. The helpers will be used in the upcoming patches
+> > to run the tests related to cycle counter.
+> >
+> > No functional change intended.
+> >
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > ---
+> >  .../testing/selftests/kvm/aarch64/vpmu_test.c | 40 +++++++++++++++++++
+> >  1 file changed, 40 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/kvm/aarch64/vpmu_test.c b/tools/te=
+sting/selftests/kvm/aarch64/vpmu_test.c
+> > index d72c3c9b9c39f..15aebc7d7dc94 100644
+> > --- a/tools/testing/selftests/kvm/aarch64/vpmu_test.c
+> > +++ b/tools/testing/selftests/kvm/aarch64/vpmu_test.c
+> > @@ -147,6 +147,46 @@ static inline void disable_counter(int idx)
+> >         isb();
+> >  }
+> >
+> > +static inline uint64_t read_cycle_counter(void)
+> > +{
+> > +       return read_sysreg(pmccntr_el0);
+> > +}
+> > +
+> > +static inline void reset_cycle_counter(void)
+> > +{
+> > +       uint64_t v =3D read_sysreg(pmcr_el0);
+> > +
+> > +       write_sysreg(ARMV8_PMU_PMCR_C | v, pmcr_el0);
+> > +       isb();
+> > +}
+> > +
+> > +static inline void enable_cycle_counter(void)
+> > +{
+> > +       uint64_t v =3D read_sysreg(pmcntenset_el0);
+> > +
+> > +       write_sysreg(ARMV8_PMU_CNTENSET_C | v, pmcntenset_el0);
+> > +       isb();
+> > +}
+>
+> You might want to use enable_counter() and disable_counter()
+> from enable_cycle_counter() and disable_cycle_counter() respectively?
+>
+Yes, that should work. I'll do that.
 
-ipmi: simplify sysctl registration
-sgi-xp: simplify sysctl registration
-tty: simplify sysctl registration
+Thank you.
+Raghavendra
 
-I've taken the rest now through sysctl-next:
-
-scsi: simplify sysctl registration with register_sysctl()
-hv: simplify sysctl registration
-md: simplify sysctl registration
-xen: simplify sysctl registration for balloon
-
-If a maintainer would prefer to take one on through their
-tree fine by me too, just let me know and I'll drop the patch.
-
-  Luis
+> Thank you,
+> Reiji
+>
+> > +
+> > +static inline void disable_cycle_counter(void)
+> > +{
+> > +       uint64_t v =3D read_sysreg(pmcntenset_el0);
+> > +
+> > +       write_sysreg(ARMV8_PMU_CNTENSET_C | v, pmcntenclr_el0);
+> > +       isb();
+> > +}
+> > +
+> > +static inline void write_pmccfiltr(unsigned long val)
+> > +{
+> > +       write_sysreg(val, pmccfiltr_el0);
+> > +       isb();
+> > +}
+> > +
+> > +static inline uint64_t read_pmccfiltr(void)
+> > +{
+> > +       return read_sysreg(pmccfiltr_el0);
+> > +}
+> > +
+> >  static inline uint64_t get_pmcr_n(void)
+> >  {
+> >         return FIELD_GET(ARMV8_PMU_PMCR_N, read_sysreg(pmcr_el0));
+> > --
+> > 2.39.1.581.gbfd45094c4-goog
+> >
