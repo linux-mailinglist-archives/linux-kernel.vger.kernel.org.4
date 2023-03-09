@@ -2,116 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DF46B2926
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7BB6B2929
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbjCIPuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:50:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58102 "EHLO
+        id S231436AbjCIPvt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Mar 2023 10:51:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbjCIPuG (ORCPT
+        with ESMTP id S230367AbjCIPvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:50:06 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0CCF28BB
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:50:04 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id x3so8748218edb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 07:50:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678377003;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SgRFCt619WmiOOy/KiaJocmKNsNdPTYaRqkITCznBlQ=;
-        b=VclA2Usv5TOQL2tjYEaywOVcbjTRbt5QTlUyua2Pq3vHwT0lIaQM/mNyIOV0TOQI52
-         IYZaDZIyxI6bfTtSPdkATbzV/vwSKO9WATOYBvvvdfBxINsdOu+9jhVMxgvRVNPKD0DU
-         pBh7wCzQvILtnKTs0D5k9mFn19e2w1H/RLRe+LCuwUq6sN2BP3U82PEETdzvkuDRBatn
-         VC+R8O5s2DjeFay6ztM3X3xLToPRkxTWqQ0+XJHTbOR7nzGi/HLb4CO5t5PSCVMdBptW
-         FJkBfzgxbwDDqL9/oGrik3qqY2WROaHcBKDMY35wBfluGRt2mtPv+Dsin4sC8lt2iHvQ
-         NOig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678377003;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SgRFCt619WmiOOy/KiaJocmKNsNdPTYaRqkITCznBlQ=;
-        b=YpJLNevHmOOO0wH5HCORRwBmYYqLK5I6xVcFnxkoigsA1qXjw9b1YP3XB1PTstEGy7
-         4LbxqSuPc4PZT2v6ZZtCMMciszyh2pScBKvlRPx/ng0ZAZ2pA2o8lsFuR4gkE1wXv0X2
-         CtgcGS1zUI8aK3OqFe6KDlRzEBS8kBQ5WgfiMGV0p1Xh1TEWttBiWmgB4poTv/voKHws
-         890/iiwLEkMUdqDR57p9SjdKISEy0TZQIu5HhBGAWG387UJ/ExkfVvu28E26c7l8UbNg
-         8Cy7X7umwVQDeNOHCCwhZDi+bHVOM0IwNBBCBk7nuCis/hMkjHQKQh9MfQSPQGm01lpo
-         wTrg==
-X-Gm-Message-State: AO0yUKUMRxD7TK98wCWf0sSTiHn3nWkM595eF5lyB4Yp0YLsa561OFpr
-        UWJd7QtF4s9vwml9mDYBfOB4sA==
-X-Google-Smtp-Source: AK7set9OUMyp7/zfcn1xB/Hxk4VIhd+uwK0b4bIxnhLcxo97/DDeed+1+0rKVoHM3A7Jm4MeebJXTg==
-X-Received: by 2002:a17:906:d28c:b0:8e5:88ca:ebac with SMTP id ay12-20020a170906d28c00b008e588caebacmr22319782ejb.40.1678377003285;
-        Thu, 09 Mar 2023 07:50:03 -0800 (PST)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
-        by smtp.gmail.com with ESMTPSA id h17-20020a17090634d100b008ee5356801dsm8981683ejb.187.2023.03.09.07.50.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 07:50:03 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 4/4] pinctrl: qcom: sm8550-lpass-lpi: allow GPIO function
-Date:   Thu,  9 Mar 2023 16:49:49 +0100
-Message-Id: <20230309154949.658380-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230309154949.658380-1-krzysztof.kozlowski@linaro.org>
-References: <20230309154949.658380-1-krzysztof.kozlowski@linaro.org>
+        Thu, 9 Mar 2023 10:51:46 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32FFFF2C24
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:51:45 -0800 (PST)
+Received: from lhrpeml100005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PXYWX5s9sz688wM;
+        Thu,  9 Mar 2023 23:48:56 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ lhrpeml100005.china.huawei.com (7.191.160.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 9 Mar 2023 15:51:42 +0000
+Received: from lhrpeml500005.china.huawei.com ([7.191.163.240]) by
+ lhrpeml500005.china.huawei.com ([7.191.163.240]) with mapi id 15.01.2507.021;
+ Thu, 9 Mar 2023 15:51:42 +0000
+From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "kevin.tian@intel.com" <kevin.tian@intel.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yi.l.liu@intel.com" <yi.l.liu@intel.com>
+Subject: RE: [PATCH v1 02/14] iommufd: Add nesting related data structures for
+ ARM SMMUv3
+Thread-Topic: [PATCH v1 02/14] iommufd: Add nesting related data structures
+ for ARM SMMUv3
+Thread-Index: AQHZUnWTVXhuXoh0OkWPSyQY1srSfq7ydQKAgAAVzLCAAAsqAIAAANyQ
+Date:   Thu, 9 Mar 2023 15:51:42 +0000
+Message-ID: <39979642ba8042ba9d4de651fecfeffb@huawei.com>
+References: <cover.1678348754.git.nicolinc@nvidia.com>
+ <364cfbe5b228ab178093db2de13fa3accf7a6120.1678348754.git.nicolinc@nvidia.com>
+ <20230309134217.GA1673607@myrica>
+ <213a05ef06944a55a148995053b187f8@huawei.com> <ZAn94BXkjiJKQ66O@nvidia.com>
+In-Reply-To: <ZAn94BXkjiJKQ66O@nvidia.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.202.227.178]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All LPASS pins have basic GPIO function and most of the code is ready
-for that.  Add missing glue pieces to allow LPASS pins to work as GPIO,
-which is going to be used on MTP8550 and QRD8550 boards.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c
-index c2bdd936d27f..db1a46fee9c6 100644
---- a/drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c
-+++ b/drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c
-@@ -102,6 +102,13 @@ static const struct pinctrl_pin_desc sm8550_lpi_pins[] = {
- 	PINCTRL_PIN(22, "gpio22"),
- };
+> -----Original Message-----
+> From: Jason Gunthorpe [mailto:jgg@nvidia.com]
+> Sent: 09 March 2023 15:40
+> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+> Cc: Jean-Philippe Brucker <jean-philippe@linaro.org>; Nicolin Chen
+> <nicolinc@nvidia.com>; robin.murphy@arm.com; will@kernel.org;
+> eric.auger@redhat.com; kevin.tian@intel.com; baolu.lu@linux.intel.com;
+> joro@8bytes.org; linux-arm-kernel@lists.infradead.org;
+> iommu@lists.linux.dev; linux-kernel@vger.kernel.org; yi.l.liu@intel.com
+> Subject: Re: [PATCH v1 02/14] iommufd: Add nesting related data structures
+> for ARM SMMUv3
+> 
+> On Thu, Mar 09, 2023 at 03:26:12PM +0000, Shameerali Kolothum Thodi
+> wrote:
+> 
+> > On platforms that supports BTM [1], we may need the VMID allocated by
+> KVM.
+> > But again getting that from user pace doesn't look safe. I have attempted
+> to revise
+> > the earlier RFC to pin and use the KVM VMID from SMMUv3 here[2].
+> 
+> Gurk
+> 
+> > " In the new design we can require from the start that creating a nesting
+> IOMMU
+> > container through /dev/iommu *must* come with a KVM context, that way
+> > we're sure to reuse the existing VMID. "
+> 
+> I've been dreading this but yes I execpt we will eventually need to
+> connect kvm and iommufd together. The iommu driver can receive a kvm
+> pointer as part of the alloc domain operation to do any setups like
+> this.
+
+That will make life easier :)
  
-+static const char * const gpio_groups[] = {
-+	"gpio0", "gpio1", "gpio2", "gpio3", "gpio4", "gpio5", "gpio6", "gpio7",
-+	"gpio8", "gpio9", "gpio10", "gpio11", "gpio12", "gpio13", "gpio14",
-+	"gpio15", "gpio16", "gpio17", "gpio18", "gpio19", "gpio20", "gpio21",
-+	"gpio22",
-+};
-+
- static const char * const dmic1_clk_groups[] = { "gpio6" };
- static const char * const dmic1_data_groups[] = { "gpio7" };
- static const char * const dmic2_clk_groups[] = { "gpio8" };
-@@ -168,6 +175,7 @@ static const struct lpi_pingroup sm8550_groups[] = {
- };
- 
- static const struct lpi_function sm8550_functions[] = {
-+	LPI_FUNCTION(gpio),
- 	LPI_FUNCTION(dmic1_clk),
- 	LPI_FUNCTION(dmic1_data),
- 	LPI_FUNCTION(dmic2_clk),
--- 
-2.34.1
+> If there is no KVM it should either fail to setup the domain or setup
+> a domain disconnected from KVM.
+> 
 
+If no KVM the SMMUv3 can fall back to its internal VMID allocation I guess.
+And my intention was to use KVM VMID only if the platform supports
+BTM.
+
+> If IOMMU HW and KVM HW are using the same ID number space then
+> arguably the two kernel drivers need to use a shared ID allocator in
+> the arch, regardless of what iommufd/etc does. Using KVM should not be
+> mandatory for iommufd.
+> 
+> For ARM cases where there is no shared VMID space with KVM, the ARM
+> VMID should be somehow assigned to the iommfd_ctx itself and the alloc
+> domain op should receive it from there.
+
+Is there any use of VMID outside SMMUv3? I was thinking if nested domain alloc
+doesn't provide the KVM instance, then SMMUv3 can use its internal VMID. 
+
+Thanks,
+Shameer
+
+> Nicolin, that seems to be missing in this series? I'm not entirely
+> sure how to elegantly code it :\
+> 
+> Jason
