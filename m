@@ -2,76 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC486B2B23
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E56C6B2B2A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjCIQsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 11:48:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
+        id S229937AbjCIQuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 11:50:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjCIQrv (ORCPT
+        with ESMTP id S230409AbjCIQtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:47:51 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A11F5D1E;
-        Thu,  9 Mar 2023 08:36:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=RwAwxYzMMu53HWwvcRiGxx/sOZSEI6ZJ+OulcB8tgBo=; b=HsRYZazVugOV86A6aoM3lAoldB
-        OB4bMUzq504ybOSkt9tamHp7pDrOrfZZ+9cSHPgolQT46CMDo3Mdmta9cLXTDMpvJMEJWa57nvS36
-        aHWrNasx50xlogWZ4IAFScsiptbtLnntWXz9NbhcB9t1jO+ZpdTXaIfN5tXvBqT3l4Yg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1paJFh-006tc4-Vf; Thu, 09 Mar 2023 17:36:25 +0100
-Date:   Thu, 9 Mar 2023 17:36:25 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Klaus Kudielka <klaus.kudielka@gmail.com>
-Cc:     Michael Walle <michael@walle.cc>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Felix Fietkau <nbd@nbd.name>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bryan Whitehead <bryan.whitehead@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-aspeed@lists.ozlabs.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>
-Subject: Re: [PATCH net-next v2 4/6] net: mdio: scan bus based on bus
- capabilities for C22 and C45
-Message-ID: <70f5bca0-322c-4bae-b880-742e56365abe@lunn.ch>
-References: <20230116-net-next-remove-probe-capabilities-v2-0-15513b05e1f4@walle.cc>
- <20230116-net-next-remove-probe-capabilities-v2-4-15513b05e1f4@walle.cc>
- <449bde236c08d5ab5e54abd73b645d8b29955894.camel@gmail.com>
- <100c439a-2a4d-4cb2-96f2-5bf273e2121a@lunn.ch>
- <712bc92ca6d576f33f63f1e9c2edf0030b10d3ae.camel@gmail.com>
- <db6b8a09-b680-4baa-8963-d355ad29eb09@lunn.ch>
- <0e10aa8492eadb587949d8744b56fccaabbd183b.camel@gmail.com>
- <72530e86-9ba9-4a01-9cd2-68835ecae7a0@lunn.ch>
- <09d65e1ee0679e1e74b4f3a5a4c55bd48332f043.camel@gmail.com>
+        Thu, 9 Mar 2023 11:49:51 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630DCFCBFB;
+        Thu,  9 Mar 2023 08:39:25 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329GWbFD029678;
+        Thu, 9 Mar 2023 16:39:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=WoKGktYRxUw42/yRhVznkwqsMWqSMkRMk0spzj7c6Vw=;
+ b=eiK67enU1ipFAdh7cT4eEzcvvpQs6wKu0SN9Lmfd8ihTBwI1RMQIuKeE0ROTu6njtmy5
+ aRhESm3zEd2LqKZRUgjwnDXvgdI33ofMBAPakDPOoWrNkxyajhgFL4qzWQcz5+pQfTS5
+ b148PO8fJFhGuUMKlKPMlbGmfTP3nGEuWWK+FzCv0UHB7YPRcEYzHXNlCzyt3s4uz7D2
+ h3PTo7EFSgiV4EEpfLoV4VEs9EAmD+r5LN/uwWoIBP/yK5mFQBw2fde7biVcA12NLOet
+ 56lWBiOo12vIPBflrhB90lurgMg8JZfpzS03KUHmZ4U7+S4QeCFtfZQaj47Xh5Y09z8G Tw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6t3bym40-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 16:39:21 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 329GZMjL005382;
+        Thu, 9 Mar 2023 16:39:20 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6t3bym3d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 16:39:20 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3294LVgL020036;
+        Thu, 9 Mar 2023 16:39:19 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3p6ftvjngh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 16:39:18 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 329GdEMw59048436
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Mar 2023 16:39:14 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AEE562004B;
+        Thu,  9 Mar 2023 16:39:14 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 28A292004D;
+        Thu,  9 Mar 2023 16:39:14 +0000 (GMT)
+Received: from [9.171.26.163] (unknown [9.171.26.163])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Mar 2023 16:39:14 +0000 (GMT)
+Message-ID: <4c0696c0f02cf5da747a88a40d3f29ba597482ea.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 1/4] PCI: s390: Fix use-after-free of PCI resources
+ with per-function hotplug
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Date:   Thu, 09 Mar 2023 17:39:13 +0100
+In-Reply-To: <20230308231449.GA1057317@bhelgaas>
+References: <20230308231449.GA1057317@bhelgaas>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <09d65e1ee0679e1e74b4f3a5a4c55bd48332f043.camel@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: mqf-Co36suubKcz5uAopTefjSOtTwt1k
+X-Proofpoint-ORIG-GUID: PHhJeJiTyC4c7s8uHMpqAjHTt4k_QlpM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_08,2023-03-09_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=453 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303090132
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,21 +96,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 07:34:40PM +0100, Klaus Kudielka wrote:
-> On Tue, 2023-03-07 at 21:35 +0100, Andrew Lunn wrote:
-> > > Summary: Still 4 calls to mdio_bus_scan_c22, but also *2* calls to mdio_bus_scan_c45, approx. 190*100 reads by the switch driver
+On Wed, 2023-03-08 at 17:14 -0600, Bjorn Helgaas wrote:
+> On Mon, Mar 06, 2023 at 04:10:11PM +0100, Niklas Schnelle wrote:
+> > On s390 PCI functions may be hotplugged individually even when they
+> > belong to a multi-function device. In particular on an SR-IOV device VF=
+s
+> > may be removed and later re-added.
+> >=20
+> > In commit a50297cf8235 ("s390/pci: separate zbus creation from
+> > scanning") it was missed however that struct pci_bus and struct
+> > zpci_bus's resource list retained a reference to the PCI functions MMIO
+> > resources even though those resources are released and freed on
+> > hot-unplug. These stale resources may subsequently be claimed when the
+> > PCI function re-appears resulting in use-after-free.
+> >=20
+> > One idea of fixing this use-after-free in s390 specific code that was
+> > investigated was to simply keep resources around from the moment a PCI
+> > function first appeared until the whole virtual PCI bus created for
+> > a multi-function device disappears. The problem with this however is
+> > that due to the requirement of artificial MMIO addreesses (address
+> > cookies) extra logic is then needed to keep the address cookies
+> > compatible on re-plug. At the same time the MMIO resources semantically
+> > belong to the PCI function so tying their lifecycle to the function
+> > seems more logical.
+> >=20
+> > Instead a simpler approach is to remove the resources of an individuall=
+y
+> > hot-unplugged PCI function from the PCI bus's resource list while
+> > keeping the resources of other PCI functions on the PCI bus untouched.
+> >=20
+> > This is done by introducing pci_bus_remove_resource() to remove an
+> > individual resource. Similarly the resource also needs to be removed
+> > from the struct zpci_bus's resource list. It turns out however, that
+> > there is really no need to add the MMIO resources to the struct
+> > zpci_bus's resource list at all and instead we can simply use the
+> > zpci_bar_struct's resource pointer directly.
+> >=20
+> > Fixes: a50297cf8235 ("s390/pci: separate zbus creation from scanning")
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+>=20
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+>=20
+> The meat of this is mostly in s390, so I think it makes more sense to
+> merge via that tree.  But let me know if you'd rather that I take it.
+>=20
+>=20
 
-I was wrong about something i said earlier. A C22 scan reads two
-registers for each of the 32 possible locations of a C22 PHY on the
-bus. A C45 scan is however much more expensive. It will read 30 time
-two registers for each of the 32 possible locations of a C45 PHY on
-the bus.
+Thanks for taking a look and the valuable suggestions. I'll coordinate
+with Vasily to take this via the s390 tree. As for the locking I agree
+it is out of scope for this series. Meant more that the resource
+handling might be a good place to start splitting up the
+pci_rescan_remove_lock and that I might take a look at that if I find
+the time which of course we're all lacking.
 
-One things that could help is moving some code around a bit. Currently
-mv88e6xxx_mdios_register() is called at the end of
-mv88e6xxx_probe(). Try moving it to the beginning of
-mv88e6xxx_setup(). The call to mv88e6xxx_mdios_unregister() then need
-to move into mv88e6xxx_teardown().
-
-	Andrew
-
+Regards,
+Niklas
