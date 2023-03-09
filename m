@@ -2,323 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6116B1941
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 03:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD6E6B193F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 03:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjCICiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 21:38:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S229845AbjCIChx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 21:37:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjCICh7 (ORCPT
+        with ESMTP id S229542AbjCIChu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 21:37:59 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2911A1A4A9
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 18:37:56 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id k37so239026wms.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 18:37:56 -0800 (PST)
+        Wed, 8 Mar 2023 21:37:50 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF77898FA;
+        Wed,  8 Mar 2023 18:37:49 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id ce8-20020a17090aff0800b0023a61cff2c6so5033192pjb.0;
+        Wed, 08 Mar 2023 18:37:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678329474;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TXL7RZERqmJzSobCVKRWDL9NAZQE0OJJ5vuFdJHuRnc=;
-        b=ZYU+Sb2tQjjifOx7Oqtj7ZDNib0alWBWvEgmvZ0qkrVD3lchav+vO+nVx5QbIq3XP7
-         mIW+zxWiNxuENT+uwoI/ndW7C+4u/I5mlwMXiox7puwclxcE7pu1nqdSuwsY43aIZxwy
-         8Awz0bjQlf3ZLlxZTukHSWp5DbKdWCXeH/zDO5B4DMuPRQNTi+uX1UGJSXyHza2pf4fM
-         9xnIxZbUFEvcADgMj3BgzFz/yYps5YWnBXwpx3MyS3AgXpBkpSQLyZG/UyCUgslzTewn
-         n8SV5ENCBL2ojwXGYil2eBK41oDVQxIgh1A5B5FvrEZWTd5Lb9I8qCrnW3xQ4Cpnlw1s
-         m+tQ==
+        d=gmail.com; s=20210112; t=1678329469;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XwvQHTUf/GUAbiJepj3MWRNjatym77APweYxMUICMk4=;
+        b=opWhz/J0dQN3N8iPg7FE97lxF7dJfJahgQlMgnH2Ee74MILqXGgsztaE6qo1dm7zpQ
+         heA5GN6FAkH9DyNbD2a97mPFxJEFCcijuqIvequ3CswtfGROoscWw3zxijcbuPPaHBGF
+         fzstuLc9I6P3hYxFo+IUPStMVlgh8B39aZKERRR/6zgjb78UWKMo0gjPxLXkrD8Gjd8E
+         mkBf85MMMHp+cSaw43k9gHYeump0F1MwXN6e/VXUvodXL6BYJzKB4Iodb26GQ37lZhAu
+         HFjeOlYiFK18QG/PNG2wOugUxZImUv+wkei3KC86jLUmmHPgsYMa9hFv2wraJEv5bPq8
+         qhiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678329474;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TXL7RZERqmJzSobCVKRWDL9NAZQE0OJJ5vuFdJHuRnc=;
-        b=2R8rnDtf2pVYFjtNgMqe8tYwiY8rEEqjxPAvGMS890MdgtGWdsdErjPnrh4jHE+/nt
-         6HL7K7fu7/Dcad7QI3jbHzMNEO/XYMz7R5rSOcLZkiqQMpuIDTfpOUTM9/qUr2Ojnlzf
-         W6LBNlGV1mTA590OSRimDIgvXb8G5KCseOP4d77o+1PI0fNQaAMpjiiMDoTgpXic25Nt
-         O3aTmxv0I8ePkZ6pUx1nARlKXG11nBTKRMceE8ddBiZ5fMkmO+m+S5QiU7ujNcN4k5i3
-         zZaspmnIZ3B5tnbjkvTDP+owz2g2JTDoQp1BZ2/NxjjPeVn8j0OppGDTMufmToYyEpRI
-         KlsA==
-X-Gm-Message-State: AO0yUKWGZUMBH9nBgCMfzfDTapaP1eVuCFDMmNiz/NsKH2nwpnoorJL+
-        E1nD9OlGziXWzfnAhkNnO6I5iSnEAwPYEZezY+6TDg==
-X-Google-Smtp-Source: AK7set/q1INFZHRH5R1oph46r7oD8URJVmpPe1C0vjxVg86ZYtihS6TiUen+iaaRNGpIbtK17gQYlhdZIe3WNnue1Wg=
-X-Received: by 2002:a05:600c:a39a:b0:3df:d852:ede2 with SMTP id
- hn26-20020a05600ca39a00b003dfd852ede2mr4078693wmb.0.1678329474477; Wed, 08
- Mar 2023 18:37:54 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678329469;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XwvQHTUf/GUAbiJepj3MWRNjatym77APweYxMUICMk4=;
+        b=SRyOVVYyn6RiZVkBEcYJTFy4/jxaB+Dpi6g0bvg2OB9vcoF4EZd22DHzeSr8hVy8BJ
+         PjVydJgVd6odjPWtGh6hBgMuJYiWU64kxQwRl2WET83fvvFjpD8J8mmvrgf7XoBf0qZ5
+         9NXsJROq19TNCaaiA+CF/3gP8fV6T30oCqKCIVCEdpNeLBz1bYlUD4OOI9I+E2OMnjls
+         bdQ6bej/uFuOLc4kXrg4MmO7pCxvqSiflIzw1vu3RZWCg8Fm8gpaMtVBz2cJwWgERCr/
+         RaGH7jW1bjeOhYkAAlQ/N0N98yUT6ZuQq11/Q/gwxKfBXURxnto/RmSC338MccGsvJpA
+         luhQ==
+X-Gm-Message-State: AO0yUKV0g6lW7DMmJCvD9eFCzLl2mmj7yc5Vy9rUvJkW9ShzOg1eiQB1
+        T1K7/tV+lSXkXkBq4lztgzQ=
+X-Google-Smtp-Source: AK7set9PZgLdGeH2TqljoOkNS0TwHST28x6OaHGTd8cpFi9+IQ8oxYy9Dmz5sta5QzZvMRyEGyAPJg==
+X-Received: by 2002:a17:90a:56:b0:230:bca9:2f7c with SMTP id 22-20020a17090a005600b00230bca92f7cmr24296263pjb.2.1678329468670;
+        Wed, 08 Mar 2023 18:37:48 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-87.three.co.id. [180.214.232.87])
+        by smtp.gmail.com with ESMTPSA id v7-20020a63f847000000b00502f20aa4desm9872282pgj.70.2023.03.08.18.37.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 18:37:48 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 5DD001065B9; Thu,  9 Mar 2023 09:37:45 +0700 (WIB)
+Date:   Thu, 9 Mar 2023 09:37:45 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sagi Shahar <sagis@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Peter Shier <pshier@google.com>,
+        Anish Ghulati <aghulati@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Anish Moorthy <amoorthy@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Guang Zeng <guang.zeng@intel.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Junaid Shahid <junaids@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Leonardo Bras <leobras@redhat.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Li RongQing <lirongqing@baidu.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Michal Luczaj <mhal@rbox.co>,
+        Mingwei Zhang <mizhang@google.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Paul Durrant <pdurrant@amazon.com>,
+        Peng Hao <flyingpenghao@gmail.com>,
+        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
+        Robert Hoo <robert.hu@linux.intel.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] Documentation/process: Add a maintainer handbook
+ for KVM x86
+Message-ID: <ZAlGeYAmvhPmVmGe@debian.me>
+References: <20230309010336.519123-1-seanjc@google.com>
+ <20230309010336.519123-3-seanjc@google.com>
 MIME-Version: 1.0
-References: <20230308203952.3060546-1-rmoar@google.com> <20230308203952.3060546-3-rmoar@google.com>
-In-Reply-To: <20230308203952.3060546-3-rmoar@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 9 Mar 2023 10:37:42 +0800
-Message-ID: <CABVgOSnhwDKRWsrLVHyoVWcozeMF=fu4_epUPGM-z7MkC7DQkw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] kunit: fix bug of extra newline characters in
- debugfs logs
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, dlatypov@google.com,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002b633905f66e88e9"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NDWV0Qdh3JqbrY46"
+Content-Disposition: inline
+In-Reply-To: <20230309010336.519123-3-seanjc@google.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000002b633905f66e88e9
-Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 9 Mar 2023 at 04:40, Rae Moar <rmoar@google.com> wrote:
->
-> Fix bug of the extra newline characters in debugfs logs. When a
-> line is added to debugfs with a newline character at the end,
-> an extra line appears in the debugfs log.
->
-> This is due to a discrepancy between how the lines are printed and how they
-> are added to the logs. Remove this discrepancy by checking if a newline
-> character is present before adding a newline character. This should closely
-> match the printk behavior.
->
-> Add kunit_log_newline_test to provide test coverage for this issue.  (Also,
-> move kunit_log_test above suite definition to remove the unnecessary
-> declaration prior to the suite definition)
->
-> As an example, say we add these two lines to the log:
->
-> kunit_log(..., "KTAP version 1\n");
-> kunit_log(..., "1..1");
->
-> The debugfs log before this fix:
->
->  KTAP version 1
->
->  1..1
->
-> The debugfs log after this fix:
->
->  KTAP version 1
->  1..1
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> ---
->
-> Changes from v3 -> v4:
-> - Slight formatting change in test.h regarding "\" placement.
->
+--NDWV0Qdh3JqbrY46
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks. This series looks good-to-go to me now!
+On Wed, Mar 08, 2023 at 05:03:36PM -0800, Sean Christopherson wrote:
+> +As a general guideline, use ``kvm-x86/next`` even if a patch/series touc=
+hes
+> +multiple architectures, i.e. isn't strictly scoped to x86.  Using any of=
+ the
+> +branches from the main KVM tree is usually a less good option as they li=
+kely
+> +won't have many, if any, changes for the next release, i.e. using the ma=
+in KVM
+> +tree as a base is more likely to yield conflicts.  And if there are non-=
+trivial
+> +conflicts with multiple architectures, coordination between maintainers =
+will be
+> +required no matter what base is used.  Note, this is far from a hard rul=
+e, i.e.
+> +use a different base for multi-arch series if that makes the most sense.
 
-Cheers,
--- David
+That means patches that primarily kvm ARM changes should be based on
+kvm-x86/next, right?
 
-> Changes from v2 -> v3:
-> - Changes to commit message.
->
-> Changes from v1 -> v2:
-> - Changed the way extra newlines are removed. Instead of removing extra
->   newline characters, add a newline if one is not present. This is a bit
->   cleaner.
-> - Note: I looked into using KERN_CONT to match the printk behavior to
->   vsnprintf but this could cause issues with KTAP printing on the same line
->   as interrupting kernel messages. I also looked at just adding KERN_CONT
->   functionality to kunit_log and I did get this to work but it was a bit
->   messy because it required a few calls to kunit_log_newline in
->   kunit_run_tests. If this is very desired functionality, happy to add this
->   to version 3.
->
->  include/kunit/test.h   |  2 +-
->  lib/kunit/kunit-test.c | 35 +++++++++++++++++++++++------------
->  lib/kunit/test.c       | 18 ++++++++++++++++++
->  3 files changed, 42 insertions(+), 13 deletions(-)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 0668d29f3453..9721584027d8 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -420,7 +420,7 @@ void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
->  #define kunit_log(lvl, test_or_suite, fmt, ...)                                \
->         do {                                                            \
->                 printk(lvl fmt, ##__VA_ARGS__);                         \
-> -               kunit_log_append((test_or_suite)->log,  fmt "\n",       \
-> +               kunit_log_append((test_or_suite)->log,  fmt,            \
->                                  ##__VA_ARGS__);                        \
->         } while (0)
->
-> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-> index 4df0335d0d06..b63595d3e241 100644
-> --- a/lib/kunit/kunit-test.c
-> +++ b/lib/kunit/kunit-test.c
-> @@ -443,18 +443,6 @@ static struct kunit_suite kunit_resource_test_suite = {
->         .test_cases = kunit_resource_test_cases,
->  };
->
-> -static void kunit_log_test(struct kunit *test);
-> -
-> -static struct kunit_case kunit_log_test_cases[] = {
-> -       KUNIT_CASE(kunit_log_test),
-> -       {}
-> -};
-> -
-> -static struct kunit_suite kunit_log_test_suite = {
-> -       .name = "kunit-log-test",
-> -       .test_cases = kunit_log_test_cases,
-> -};
-> -
->  static void kunit_log_test(struct kunit *test)
->  {
->         struct kunit_suite suite;
-> @@ -481,6 +469,29 @@ static void kunit_log_test(struct kunit *test)
->  #endif
->  }
->
-> +static void kunit_log_newline_test(struct kunit *test)
-> +{
-> +       kunit_info(test, "Add newline\n");
-> +       if (test->log) {
-> +               KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "Add newline\n"),
-> +                       "Missing log line, full log:\n%s", test->log);
-> +               KUNIT_EXPECT_NULL(test, strstr(test->log, "Add newline\n\n"));
-> +       } else {
-> +               kunit_skip(test, "only useful when debugfs is enabled");
-> +       }
-> +}
-> +
-> +static struct kunit_case kunit_log_test_cases[] = {
-> +       KUNIT_CASE(kunit_log_test),
-> +       KUNIT_CASE(kunit_log_newline_test),
-> +       {}
-> +};
-> +
-> +static struct kunit_suite kunit_log_test_suite = {
-> +       .name = "kunit-log-test",
-> +       .test_cases = kunit_log_test_cases,
-> +};
-> +
->  static void kunit_status_set_failure_test(struct kunit *test)
->  {
->         struct kunit fake;
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 811fcc376d2f..e2910b261112 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -108,6 +108,22 @@ static void kunit_print_test_stats(struct kunit *test,
->                   stats.total);
->  }
->
-> +/**
-> + * kunit_log_newline() - Add newline to the end of log if one is not
-> + * already present.
-> + * @log: The log to add the newline to.
-> + */
-> +static void kunit_log_newline(char *log)
-> +{
-> +       int log_len, len_left;
-> +
-> +       log_len = strlen(log);
-> +       len_left = KUNIT_LOG_SIZE - log_len - 1;
-> +
-> +       if (log_len > 0 && log[log_len - 1] != '\n')
-> +               strncat(log, "\n", len_left);
-> +}
-> +
->  /*
->   * Append formatted message to log, size of which is limited to
->   * KUNIT_LOG_SIZE bytes (including null terminating byte).
-> @@ -135,6 +151,8 @@ void kunit_log_append(char *log, const char *fmt, ...)
->         vsnprintf(log + log_len, min(len, len_left), fmt, args);
->         va_end(args);
->
-> +       /* Add newline to end of log if not already present. */
-> +       kunit_log_newline(log);
->  }
->  EXPORT_SYMBOL_GPL(kunit_log_append);
->
-> --
-> 2.40.0.rc0.216.gc4246ad0f0-goog
->
+> +If a patch touches multiple topics, traverse up the conceptual tree to f=
+ind the
+> +first common parent (which is often simply ``x86``).  When in doubt,
+> +``git log path/to/file`` should provide a reasonable hint.
 
---0000000000002b633905f66e88e9
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+What do you mean by conceptual tree? Is it Patch subject prefix?
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAO
-dQLL4R/++JnLPc94/MZUMa9HHndRNipX9dY7tNYHpTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAzMDkwMjM3NTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAcEOJFecNSbMawGzR+q4I
-5sdDCrCS42whQlgnK2u57UXR3rw9XkbHXnHObkcEaZnR3NJKLWXCe/xkinJsHpWsRFvTE+7Xr6Pf
-mJh+pLx5xhfkVWWrOXJGhnZlPTJ3o6lyKIQAO2ADEpdZAMlQ77zbaD2p6vzlyqkAz+qvhdgI7r38
-+knAeU8G7esXeU4ikX5R6455yi/J7JQ0jwNS393o9bfNNbwaNvax4Kax7S+k1b2HHialYqceDFOJ
-q8a7cU3ritw+e3QhFcwLspAe17A+BeS+XltoIgcgqbMTDoocqcNtDIT9eXB7rkdR/gvI9ZT6GSIr
-uN10MwCxoqtBmE9kSw==
---0000000000002b633905f66e88e9--
+> +KVM selftests that are associated with KVM changes, e.g. regression test=
+s for
+> +bug fixes, should be posted along with the KVM changes as a single serie=
+s.  The
+> +standard kernel rules for bisection apply, i.e. KVM changes that result =
+in test
+> +failures should be ordered after the selftests updates, and vice versa, =
+new
+> +tests that fail due to KVM bugs should be ordered after the KVM fixes.
+
+Did you mean that in a patch series, selftest patches are placed after
+their corresponding KVM changes?
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--NDWV0Qdh3JqbrY46
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZAlGdAAKCRD2uYlJVVFO
+o+TdAP9DJ67tjIQE98q87j5y5QSunga8EATx+tybmWc+J/G3VQD/S5M66oNorefy
+PI6e/pSeetKmqTEqlxuLlylfAHb0Vgo=
+=yhsP
+-----END PGP SIGNATURE-----
+
+--NDWV0Qdh3JqbrY46--
