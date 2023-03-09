@@ -2,90 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562966B303C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7726B303F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjCIWML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 17:12:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
+        id S230417AbjCIWNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 17:13:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjCIWMJ (ORCPT
+        with ESMTP id S229823AbjCIWNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:12:09 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C22F690D;
-        Thu,  9 Mar 2023 14:12:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=0Iy5i1KRt9BRu51UqkHEc8TWm2Sma1QI6oHERNxIFTE=; b=4avk2FIZAloQ6Je2ulx3/bhxiD
-        KZ0Rb78uqiP3BhAhEbXxg+9ZAm7d8f7Bk8zJDQw1jeCBK6hshVwpaUDpWh0wr1ubr+P6j656/rTo+
-        NEcAbZGe1ztYqtdFZVe9HZJaK8qentKzwQ34m3yiHt7K6h9fBlaaiqPOlw4bA1bdbdIcYwTLfFJMd
-        5RIH2wnpqdyASvO8vvmzKSS07e0mXlLEcGiWhoY30d7FBmgLBQrKZgHiaCKOLji1IhrrFivzc2Wqz
-        JrT9bLZ/l4Mw3pDNSibfSLYuQ6r9YLlB+uqSCswBw6H0KXPLAnWTGvDUHL4iOMEE+cDBPl+pKiy2I
-        JoQR9yDQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1paOTv-00C7rj-Sk; Thu, 09 Mar 2023 22:11:27 +0000
-Date:   Thu, 9 Mar 2023 14:11:27 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Jeff Xu <jeffxu@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
-        john.johansen@canonical.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, luto@amacapital.net,
-        wad@chromium.org, dverkamp@chromium.org, paulmck@kernel.org,
-        baihaowen@meizu.com, frederic@kernel.org, ebiggers@kernel.org,
-        tytso@mit.edu, guoren@kernel.org, j.granados@samsung.com,
-        zhangpeng362@huawei.com, tangmeng@uniontech.com,
-        willy@infradead.org, nixiaoming@huawei.com, sujiaxun@uniontech.com,
-        patches@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/11] kernel: pid_namespace: simplify sysctls with
- register_sysctl()
-Message-ID: <ZApZj9DmMYKuCQ3g@bombadil.infradead.org>
-References: <20230302202826.776286-1-mcgrof@kernel.org>
- <20230302202826.776286-9-mcgrof@kernel.org>
- <CALmYWFucv6-9yfS=gamwSsqjgxSKZS0nvVjj_QfBmsLmQD5XOQ@mail.gmail.com>
+        Thu, 9 Mar 2023 17:13:30 -0500
+Received: from ns2.wdyn.eu (ns2.wdyn.eu [5.252.227.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2351999C2F;
+        Thu,  9 Mar 2023 14:13:27 -0800 (PST)
+Message-ID: <b4427052-9e94-bce7-b745-2473be5686fa@wetzel-home.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wetzel-home.de;
+        s=wetzel-home; t=1678400003;
+        bh=jek5obCUz0PG/txARSS67XWDgInyk7/o7PGoSvmWT+g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=YUx5bulNZ3tgiJCaK11hT9J4fERH379GAxhPy+Mi1YY2bDwSQo/5vFWkVOOox1PyC
+         2HI1B3e8TJi12q0lqz1NasGzcD2tq5FM9z1GHpyaxEFCtHs4k04E97L8vPFX/vDW7Y
+         BsjO6P5wXqWq2JxSK31gGZK0a7PfcYl2rSMlup9o=
+Date:   Thu, 9 Mar 2023 23:13:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALmYWFucv6-9yfS=gamwSsqjgxSKZS0nvVjj_QfBmsLmQD5XOQ@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [Regression] rt2800usb - Wifi performance issues and connection
+ drops
+Content-Language: en-US
+To:     Felix Fietkau <nbd@nbd.name>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Mann <rauchwolke@gmx.net>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Helmut Schaa <helmut.schaa@googlemail.com>,
+        Johannes Berg <johannes.berg@intel.com>
+References: <b8efebc6-4399-d0b8-b2a0-66843314616b@leemhuis.info>
+ <5a7cd098-1d83-6297-e802-ce998c8ec116@leemhuis.info>
+ <6025e17e-4c29-6d36-6b9c-2fec543b21c4@wetzel-home.de>
+ <debc7fe9-204d-63a7-aa61-91b20a46f385@wetzel-home.de>
+ <4a02173f-3a60-0a7e-8962-3778e6c55bf3@nbd.name>
+ <cfa5cc30-bf5a-bffd-4c2f-eec8a6522dd5@wetzel-home.de>
+ <42185fa2-4191-fcf5-9c0f-fd7098bb856b@nbd.name>
+From:   Alexander Wetzel <alexander@wetzel-home.de>
+In-Reply-To: <42185fa2-4191-fcf5-9c0f-fd7098bb856b@nbd.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 03:13:54PM -0800, Jeff Xu wrote:
-> On Thu, Mar 2, 2023 at 12:28 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >  kernel/pid_sysctl.h    | 3 +--
-> >  2 files changed, 2 insertions(+), 4 deletions(-)
-> >
-> Acked-by: Jeff Xu <jeffxu@google.com>
+On 08.03.23 12:57, Felix Fietkau wrote:
+> On 08.03.23 12:41, Alexander Wetzel wrote:
+>> On 08.03.23 08:52, Felix Fietkau wrote:
+>>
+>>>> I'm also planning to provide some more debug patches, to figuring out
+>>>> which part of commit 4444bc2116ae ("wifi: mac80211: Proper mark iTXQs
+>>>> for resumption") fixes the issue for you. Assuming my understanding
+>>>> above is correct the patch should not really fix/break anything for
+>>>> you...With the findings above I would have expected your git bisec to
+>>>> identify commit a790cc3a4fad ("wifi: mac80211: add wake_tx_queue
+>>>> callback to drivers") as the first broken commit...
+>>> I can't point to any specific series of events where it would go 
+>>> wrong, but I suspect that the problem might be the fact that you're 
+>>> doing tx scheduling from within ieee80211_handle_wake_tx_queue. I 
+>>> don't see how it's properly protected from potentially being called 
+>>> on different CPUs concurrently.
+>>>
+>>> Back when I was debugging some iTXQ issues in mt76, I also had 
+>>> problems when tx scheduling could happen from multiple places. My 
+>>> solution was to have a single worker thread that handles tx, which is 
+>>> scheduled from the wake_tx_queue op.
+>>> Maybe you could do something similar in mac80211 for non-iTXQ drivers.
+>>>
+>>
+>> I think it's already doing all of that:
+>> ieee80211_handle_wake_tx_queue() is the mac80211 implementation for the
+>> wake_tx_queue op. The drivers without native iTXQ support simply link it
+>> to this handler.
+> I know. The problem I see is that I can't find anything that guarantees 
+> that .wake_tx_queue_op is not being called concurrently from multiple 
+> different places. ieee80211_handle_wake_tx_queue is doing the scheduling 
+> directly, instead of deferring it to a single workqueue/tasklet/thread, 
+> and multiple concurrent calls to it could potentially cause issues.
 
-Andrew, kernel/pid_sysctl.h is new, not on v6.3-rc1 and so I cannot
-carry this on sysctl-next. Can you carry this patch on your tree?
+Good hint, thanks.
+According to the latest debug log exactly that seems to be happening:
 
-I see Eric Biggers already took in the fs-verity patch, so I will drop
-that from my queue.
+ieee80211_wake_queue() is called by the driver and wake_txqs_tasklet 
+tasklet is started. But during execution of the drv_wake_tx_queue() from 
+the tasklet userspace queues a new skb and also calls into 
+drv_wake_tx_queue(), which is then run overlapping...
 
-I can take the rest in this series.
+Not sure yet how that could cause the problem. But this breaks the 
+assumption that drv_wake_tx_queue() are not overlapping. And TX fails 
+directly after such an overlapping TX...
 
-I will also hold off on the last patch which deprecates the routine
-register_sysctl_paths() until after say the first part of the merge
-window.
+I'll probably just serialize the calls and then we verify if that helps...
 
-This will allow all of our trees to work on linux-next without conflict.
-
-Let me know if this is OK with you and Eric!
-
-  Luis
+Alexander
