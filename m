@@ -2,84 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8FA6B27D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:52:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E46E26B27DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbjCIOws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:52:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
+        id S231795AbjCIOxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232149AbjCIOwH (ORCPT
+        with ESMTP id S232098AbjCIOw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:52:07 -0500
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F92BDDF32
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:50:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1678373423;
-        bh=q3h2JpVV9jvpnNd5XNlFvcxvCJfVVeO6QkeNJYdNwLg=;
-        h=Subject:From:To:Cc:Date:From;
-        b=TfvV3zsT0Po6dvLlQYHwawUQ66qz06Mzv+wMhiHJSaaihds62FfSxj66jKHJyupIH
-         aF4AJpmchzT/sYrnb7NG83zrQJbwBr5w4vBm7sj09Yudj+uig1xmdWOkZM8ShnvOs5
-         UmFBRl6Mt/9XyEOPN4gBjEkI+GXhDdCN8Uz7lBRw=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id E2F7266318;
-        Thu,  9 Mar 2023 09:50:22 -0500 (EST)
-Message-ID: <dbef7b89aa65887bda1a59dc37602385416828b5.camel@xry111.site>
-Subject: PAE + virtio = probe error?
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     virtualization@lists.linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org
-Date:   Thu, 09 Mar 2023 22:50:21 +0800
+        Thu, 9 Mar 2023 09:52:27 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D31CBE5E0
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:50:34 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id f23so1810183vsa.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 06:50:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678373433;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=va4kHwm1yumJqucCqfg3NWgJfevI9xFn3g90MmoOXUE=;
+        b=jN+LS77GkISgg0bT2TDfcuZufLtquRZZ6E0heLUyapVFP8zWM0By9MLTlROG5UKS9S
+         9JZGoZSSsbNWBbucYAHJpmzb0y+Z7x1dKBhYrXDzpc0RvbsuOHkr+OpLOj5FRZOREZRQ
+         zRZ4M3OqCPpLyBkrYjhwiMdPvbGQgUwvP1w6RkUx/RkaKmFn9TAMPSqKT1iYYSfXAbGg
+         V06qEsV1nSQNtXuwwPowICB1C1DJ9Bbl6TMkmWJFTWJydumaZ0D1NyqmzgQrq0hw/aVl
+         j/dxHXBtdFRc5N04h9g4oG9kbMHM4agWSnf4PXiHkIPbY6E+w5Ob3oIg1hO/aR7mF0HU
+         BbIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678373433;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=va4kHwm1yumJqucCqfg3NWgJfevI9xFn3g90MmoOXUE=;
+        b=lbQWpNyioTCJ2qltTbDcPyIyxbCOxLnklBjUr+cb34OT0XRkJ4QdRUx39KGC0LqNXm
+         uLMkDLjhljpzeXHXOIVremTsdnyrnhA/091vjs1iKSCa0S2qvZGE9X4dWv2CDu7Tm37t
+         x72jvI8ZlyF0Bap+bGRSPsvyk7m7INgimdk8XqmjrbuAEHTS25EWqmdJjpZfAFUm5aFm
+         UXH3rRn8JXQw0ZT584BL5m3jKpvu+p/omhHYe/IUr/EjlChAYwqzYKCoqlPDeeGDZTwZ
+         nbSpjttUCg+5COKkssaPP97LVGyP0TDsM7IvxcJE1R2XgE2lBFtUt5/pL8sDASC74WD+
+         KkJg==
+X-Gm-Message-State: AO0yUKWXqcrRHlV4DYKBo+2FpzgRuvna20+piq+y8ugwg7sSD811+RDr
+        uOS/2EuSkiXOi+qT9CgFSLku0zvLFQjoKWBHVxWkLQ==
+X-Google-Smtp-Source: AK7set/7qqcBeEpI34yOk+TcYT8hxytCgmorpWM+HhkEhl9D5airjCoK6u7AUA1qtePnSUt7BGPi+WpXIeESx53ct7I=
+X-Received: by 2002:a67:ff1a:0:b0:422:1687:f239 with SMTP id
+ v26-20020a67ff1a000000b004221687f239mr4217040vsp.2.1678373433453; Thu, 09 Mar
+ 2023 06:50:33 -0800 (PST)
+MIME-Version: 1.0
+References: <20230309111407.3398-1-zhuyinbo@loongson.cn>
+In-Reply-To: <20230309111407.3398-1-zhuyinbo@loongson.cn>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 9 Mar 2023 15:50:22 +0100
+Message-ID: <CAMRc=MeqLyPpqg9bO-EntdxWzUJ5aP5wzqna2bj_1F2aE8uDgw@mail.gmail.com>
+Subject: Re: [PATCH v1] gpio: loongson: fixup the warning about OF_GPIO direct dependencies
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Mar 9, 2023 at 12:14=E2=80=AFPM Yinbo Zhu <zhuyinbo@loongson.cn> wr=
+ote:
+>
+> WARNING: unmet direct dependencies detected for OF_GPIO
+>   Depends on [n]: GPIOLIB [=3Dy] && OF [=3Dn] && HAS_IOMEM [=3Dy]
+>   Selected by [y]:
+>   - GPIO_LOONGSON_64BIT [=3Dy] && GPIOLIB [=3Dy] && HAS_IOMEM [=3Dy] && (=
+LOONGARCH || COMPILE_TEST [=3Dy])
+>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202303091728.UUe6LWye-lkp@int=
+el.com
+> ---
+>  drivers/gpio/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index 94051fb59043d..c0d6254797800 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -384,7 +384,7 @@ config GPIO_LOONGSON
+>  config GPIO_LOONGSON_64BIT
+>         tristate "Loongson 64 bit GPIO support"
+>         depends on LOONGARCH || COMPILE_TEST
+> -       select OF_GPIO
+> +       depends on OF_GPIO
+>         select GPIO_GENERIC
+>         help
+>           Say yes here to support the GPIO functionality of a number of
+> --
+> 2.31.1
+>
 
-I'm using a QEMU VM for testing things on 32-bit x86.  Today I updated
-the VM to use Linux kernel 6.2.2, and a strange issue happened: both
-virtio block driver and virtio network driver fail to probe with errors
-like:
+Thanks for the quick fix, applied.
 
-[    0.950474] virtio_blk virtio1: virtio: device uses modern interface but=
- does not have VIRTIO_F_VERSION_1
-[    0.951669] virtio_blk: probe of virtio1 failed with error -22
-
-I spent some time debugging the issue, and it turned out if I disable
-CONFIG_X86_PAE, the virtio drivers would function normally.  But then I
-can only use 4GB RAM in the VM.
-
-Is this a bug or I'm doing something wrong?  The command to start the VM
-is:
-
-qemu -enable-kvm                     \
-     -smp 8                          \
-     -cpu host                       \
-     -m 16G                          \
-     -drive file=3Ddisk.img,if=3Dvirtio  \
-     -boot menu=3Don                   \
-     -net nic,netdev=3Dnet0,model=3Dvirtio-net-pci            \
-     -netdev user,id=3Dnet0            \
-     -device ac97                    \
-     -vga std                        \
-     -serial mon:stdio               \
-     -name "32_bit_x86"              \
-     -pflash /usr/share/qemu/edk2-x86_64-code.fd
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+Bart
