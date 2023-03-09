@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7536B29B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F3A6B29AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbjCIQD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 11:03:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
+        id S231874AbjCIQDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 11:03:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbjCIQCK (ORCPT
+        with ESMTP id S231269AbjCIQCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Mar 2023 11:02:10 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC633F4B43;
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D76F3670;
         Thu,  9 Mar 2023 08:02:09 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BFF1922148;
-        Thu,  9 Mar 2023 16:02:07 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3403B2017B;
+        Thu,  9 Mar 2023 16:02:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678377727; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1678377728; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+o0nKnK7DSPy1Ib3Bv1R1mVbwQPH782fXsSg9TrWayg=;
-        b=ds9BVXOXcsc0L1GpIOU5m5mEsLa2GZFmgjUEVW1kVdMlOc11Zz4N8EAov+7woqI7LF5+3C
-        sq74CAdP0eh2oIhJBY/S+ftDm3zDFektGWxf5t6SBO+dvPbVX0pDSj82wnHpRt0M224YBN
-        kJ9+VNHyI5Ewx5Dbkx2LfsAw983rHjA=
+        bh=AJxf0lFvTB2HQ0JfmzXfmeLR3kXSn2VgL48irVHdc4o=;
+        b=OfP4AUqE1G6wqcMwo+biFpyvRku0GsvDk2KcxTo82UkvW0KlMksgCFcaLvI42vcmAgHWvD
+        T7c84ECqUxcqCDCJ9yfERGuWnFJ0FYvaN5wnBKkgUwu7wsWjBK5BwfSh7FoQj/bqIRFiAM
+        fgmUGc47BupFlUJzKL+488arK+q9DK8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678377727;
+        s=susede2_ed25519; t=1678377728;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+o0nKnK7DSPy1Ib3Bv1R1mVbwQPH782fXsSg9TrWayg=;
-        b=cAXmDe1ZXcW9Oq/X5vQNlcBGtv2ULwaGXsQK4pBNgTlpeAJLp/70WKkMESVoPnTLdPQZtx
-        sQ55D/b67gXXUwDQ==
+        bh=AJxf0lFvTB2HQ0JfmzXfmeLR3kXSn2VgL48irVHdc4o=;
+        b=mooOxt9sv6gR3aoiuNS1J+h19T0EnHD1fByofsVZVu2Mq32B6Lujc/C6Li+smhWDqdvS1Q
+        G3R5S4Th8NrjBkDA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 611E013A73;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C47D51391B;
         Thu,  9 Mar 2023 16:02:07 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id UGDFFv8CCmQHbgAAMHmgww
+        id kIcEL/8CCmQHbgAAMHmgww
         (envelope-from <tzimmermann@suse.de>); Thu, 09 Mar 2023 16:02:07 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     deller@gmx.de, geert+renesas@glider.be, timur@kernel.org,
@@ -60,9 +60,9 @@ To:     deller@gmx.de, geert+renesas@glider.be, timur@kernel.org,
 Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v2 008/101] fbdev/arkfb: Duplicate video-mode option string
-Date:   Thu,  9 Mar 2023 17:00:28 +0100
-Message-Id: <20230309160201.5163-9-tzimmermann@suse.de>
+Subject: [PATCH v2 009/101] fbdev/atafb: Duplicate video-mode option string
+Date:   Thu,  9 Mar 2023 17:00:29 +0100
+Message-Id: <20230309160201.5163-10-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230309160201.5163-1-tzimmermann@suse.de>
 References: <20230309160201.5163-1-tzimmermann@suse.de>
@@ -79,52 +79,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Assume that the driver does not own the option string or its substrings
 and hence duplicate the option string for the video mode. Allocate the
-copy's memory with kstrdup() and free it in the module's exit function.
+copy's memory with devm_kstrdup(), as the driver parses the option string
+once per probed device. Linux will automatically free the memory upon
+releasing the device.
 
 Done in preparation of switching the driver to struct option_iter and
 constifying the option string.
 
-v2:
-	* replace static memory with kstrdup()/kfree() (Geert)
-
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 ---
- drivers/video/fbdev/arkfb.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/video/fbdev/atafb.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/video/fbdev/arkfb.c b/drivers/video/fbdev/arkfb.c
-index 60a96fdb5dd8..98c710cadaab 100644
---- a/drivers/video/fbdev/arkfb.c
-+++ b/drivers/video/fbdev/arkfb.c
-@@ -97,6 +97,7 @@ static const struct svga_timing_regs ark_timing_regs     = {
- 
- /* Module parameters */
- 
-+static char *mode_option_buf;
- static char *mode_option = "640x480-8@60";
- 
- MODULE_AUTHOR("(c) 2007 Ondrej Zajicek <santiago@crfreenet.org>");
-@@ -1178,6 +1179,7 @@ static void __exit arkfb_cleanup(void)
- {
- 	pr_debug("arkfb: cleaning up\n");
- 	pci_unregister_driver(&arkfb_pci_driver);
-+	kfree(mode_option_buf);
+diff --git a/drivers/video/fbdev/atafb.c b/drivers/video/fbdev/atafb.c
+index 2bc4089865e6..f0cc7c992c88 100644
+--- a/drivers/video/fbdev/atafb.c
++++ b/drivers/video/fbdev/atafb.c
+@@ -2934,7 +2934,7 @@ static void __init atafb_setup_user(char *spec)
+ 	}
  }
  
- /* Driver Initialisation */
-@@ -1196,8 +1198,10 @@ static int __init arkfb_init(void)
- 	if (fb_get_options("arkfb", &option))
+-static int __init atafb_setup(char *options)
++static int __init atafb_setup(char *options, struct platform_device *pdev)
+ {
+ 	char *this_opt;
+ 	int temp;
+@@ -2946,8 +2946,9 @@ static int __init atafb_setup(char *options)
+ 		if (!*this_opt)
+ 			continue;
+ 		if ((temp = get_video_mode(this_opt))) {
++			// ignore errors
++			mode_option = devm_kstrdup(&pdev->dev, this_opt, GFP_KERNEL);
+ 			default_par = temp;
+-			mode_option = this_opt;
+ 		} else if (!strcmp(this_opt, "inverse"))
+ 			fb_invert_cmaps();
+ 		else if (!strncmp(this_opt, "hwscroll_", 9)) {
+@@ -2992,7 +2993,7 @@ static int __init atafb_probe(struct platform_device *pdev)
+ 
+ 	if (fb_get_options("atafb", &option))
  		return -ENODEV;
+-	atafb_setup(option);
++	atafb_setup(option, pdev);
+ 	dev_dbg(&pdev->dev, "%s: start\n", __func__);
  
--	if (option && *option)
--		mode_option = option;
-+	if (option && *option) {
-+		mode_option_buf = kstrdup(option, GFP_KERNEL); // ignore errors
-+		mode_option = mode_option_buf;
-+	}
- #endif
- 
- 	pr_debug("arkfb: initializing\n");
+ 	do {
 -- 
 2.39.2
 
