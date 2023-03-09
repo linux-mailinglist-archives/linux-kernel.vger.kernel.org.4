@@ -2,226 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6E26B28EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 466046B28EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjCIPdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:33:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
+        id S231142AbjCIPdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:33:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbjCIPc7 (ORCPT
+        with ESMTP id S230285AbjCIPdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:32:59 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF5B44A4;
-        Thu,  9 Mar 2023 07:32:55 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id C713820157;
-        Thu,  9 Mar 2023 15:32:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1678375973; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=quA1wtVIFMTnXp+eZD0K7wbRNFsGXtBDlP7KMrESYkA=;
-        b=CfvWCEqTzpt7CElb+91qOk57anSKDNu9Ooj51pNUc1qvS3X2ojSoChPAr3jKNESlO76ctX
-        6SkehSo5gpGLRGZUwrPcWCo2FywrtlNZos75QhTHDuBDSjYZrgpzVhHTHu3q772feu1vZP
-        Lw0vFF2EPZh0dYwsyssFp/wxAOSH1yU=
-Received: from suse.cz (pmladek.tcp.ovpn2.prg.suse.de [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9B1092C141;
-        Thu,  9 Mar 2023 15:32:52 +0000 (UTC)
-Date:   Thu, 9 Mar 2023 16:32:48 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: naming: Re: [PATCH printk v1 05/18] printk: Add non-BKL console
- basic infrastructure
-Message-ID: <ZAn8IC+hj+y01vgs@alley>
-References: <20230302195618.156940-1-john.ogness@linutronix.de>
- <20230302195618.156940-6-john.ogness@linutronix.de>
+        Thu, 9 Mar 2023 10:33:45 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CBA60412
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:33:44 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id y184so1920079oiy.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 07:33:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678376024;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N3tQa/xAjjFjMbYTIPvabJVdNLC/DkLFMMTZCH3qWNU=;
+        b=QvvjaWIdAfx22b4gtDbxKJOEDuu0hJBZiTLRpbKqqokYRD875D9GSSYvzHE18div4d
+         gboZy1ImNAeNwLhx0ws/IpCNbHMvtCjJnAJ5yY+vCe/9gZeXIAU6tLkqKhXCSqEXeRNz
+         VDdGYf9QM+yP2wDA7sC/wWdDzK/Hy+7QJSnG8YVp8UvPN+cSnvtwvHy26ynSjWb1xNYK
+         JKrUBe0eJE1TUZvVgj1QXk45ZaiSCozQAqUEMJ3DtkJJ5AKfkU8bB8927bFgq+QswE8Y
+         v4y+0V/y0oRNdJgbwMk/He+44k1lvtDkqJVRpPfRLuDBp4coGXu8+c9gO3qrPdzDmu+l
+         5MKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678376024;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N3tQa/xAjjFjMbYTIPvabJVdNLC/DkLFMMTZCH3qWNU=;
+        b=DSH8pjifelk7laRm88ThsHiGB2BsyxPox5vkN87COFDw4te3urmtIOMOOQ5nGMgDbc
+         82yNeNayYGvuSl4Cw94EsA5XLjByH5AuEzSQCmu9LgkhcbwFICbin2bM0wAu0liEizYU
+         9d3UtJbaoaDFZErDpgJwnJWKeNx1hxmAOH/0HAizDl2zlAM5sr9AcPv1+0dVcYsmmVqR
+         dCmJbHUFcSmz6JGTsLuUc6YDw2UYMe3zT5X2/5j0Cw5mLI1BZBhF/w/nlza9u/uwGbQq
+         GvHg8pC/oZq6ErSfAzs4xXkfSVEKz3e0mYvqFe5NecYiZcUh6c/KQjbhr5TkeJ2FoO0S
+         MFUA==
+X-Gm-Message-State: AO0yUKX8lh9IKmKqHqxyEDNlh4aEtODW+alRQK+BIxj59bRUl16PjQ/Y
+        7UVsSKW8a7VeuntILWEBYE5cSqtQ+ndjrNZs9Dc=
+X-Google-Smtp-Source: AK7set9FvxyzRgLXZiMhQwV2U4jeU2LvMtifje2N7sBN9kpV64ohjU8fFGuqGy7dIhHwova76QIH9zyJHeP8GiJBQT0=
+X-Received: by 2002:a05:6808:9b1:b0:384:efe:729a with SMTP id
+ e17-20020a05680809b100b003840efe729amr7554284oig.2.1678376023726; Thu, 09 Mar
+ 2023 07:33:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302195618.156940-6-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: innocentwokocha4u@gmail.com
+Received: by 2002:a05:6359:382:b0:105:28d5:ccea with HTTP; Thu, 9 Mar 2023
+ 07:33:42 -0800 (PST)
+From:   Elena Tudorie <elenatudorie987@gmail.com>
+Date:   Thu, 9 Mar 2023 21:03:42 +0530
+X-Google-Sender-Auth: 2zKXB7SevHT00c_-mfub0A5bLlw
+Message-ID: <CAEyv66nUd8+MNzVHsWLGMwiJ566a5_79OvCda78YDkYk8mR6LQ@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2023-03-02 21:02:05, John Ogness wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> The current console/printk subsystem is protected by a Big Kernel Lock,
-> (aka console_lock) which has ill defined semantics and is more or less
-> stateless. This puts severe limitations on the console subsystem and
-> makes forced takeover and output in emergency and panic situations a
-> fragile endavour which is based on try and pray.
-> 
-> The goal of non-BKL consoles is to break out of the console lock jail
-> and to provide a new infrastructure that avoids the pitfalls and
-> allows console drivers to be gradually converted over.
-> 
-> The proposed infrastructure aims for the following properties:
-> 
->   - Per console locking instead of global locking
->   - Per console state which allows to make informed decisions
->   - Stateful handover and takeover
-> 
-
-So, this patch adds:
-
-	CON_NO_BKL		= BIT(8),
-
-	struct cons_state {
-
-	atomic_long_t		__private atomic_state[2];
-
-	include/linux/console.h
-	kernel/printk/printk_nobkl.c
-
-	enum state_selector {
-		CON_STATE_CUR,
-
-	cons_state_set()
-	cons_state_try_cmpxchg()
-
-	cons_nobkl_init()
-	cons_nobkl_cleanup()
-
-
-later patches add:
-
-	console_can_proceed(struct cons_write_context *wctxt);
-	console_enter_unsafe(struct cons_write_context *wctxt);
-
-	cons_atomic_enter()
-	cons_atomic_flush();
-
-	static bool cons_emit_record(struct cons_write_context *wctxt)
-
-
-All the above names seem to be used only by the NOBLK consoles.
-And they use "cons", "NO_BKL", "nobkl", "cons_atomic", "atomic", "console".
-
-I wonder if there is a system or if the names just evolved during several
-reworks.
-
-Please, let me know if I am over the edge, like too picky and that it
-is not worth it. But you know me. I think that it should help to be
-more consistent. And it actually might be a good idea to separate
-API specific to the NOBKL consoles.
-
-Here is my opinion:
-
-1. I am not even sure if "nobkl", aka "no_big_kernel_lock" is the
-   major property of these consoles.
-
-   It might get confused by the real famous big kernel lock.
-   Also I tend to confuse this with "noblk", aka "non-blocking".
-
-   I always liked the "atomic consoles" description.
-
-
-2. More importantly, an easy to distinguish shortcat would be nice
-   as a common prefix. The following comes to my mind:
-
-   + nbcon - aka nobkl/noblk consoles API
-   + acon  - atomic console API
-
-
-It would look like:
-
-a) variant with nbcom:
-
-
-	CON_NB		= BIT(8),
-
-	struct nbcon_state {
-	atomic_long_t		__private atomic_nbcon_state[2];
-
-	include/linux/console.h
-	kernel/printk/nbcon.c
-
-	enum nbcon_state_selector {
-		NBCON_STATE_CUR,
-
-	nbcon_state_set()
-	nbcon_state_try_cmpxchg()
-
-	nbcon_init()
-	nbcon_cleanup()
-
-	nbcon_can_proceed(struct cons_write_context *wctxt);
-	nbcon_enter_unsafe(struct cons_write_context *wctxt);
-
-	nbcon_enter()
-	nbcon_flush_all();
-
-	nbcon_emit_next_record()
-
-
-a) varianta with atomic:
-
-
-	CON_ATOMIC		= BIT(8),
-
-	struct acon_state {
-	atomic_long_t		__private acon_state[2];
-
-	include/linux/console.h
-	kernel/printk/acon.c  or atomic_console.c
-
-	enum acon_state_selector {
-		ACON_STATE_CUR,
-
-	acon_state_set()
-	acon_state_try_cmpxchg()
-
-	acon_init()
-	acon_cleanup()
-
-	acon_can_proceed(struct cons_write_context *wctxt);
-	acon_enter_unsafe(struct cons_write_context *wctxt);
-
-	acon_enter()
-	acon_flush_all();
-
-	acon_emit_next_record()
-
-
-I would prefer the variant with "nbcon" because
-
-	$> git grep nbcon | wc -l
-	0
-
-vs.
-
-	$> git grep acon | wc -l
-	11544
-
-
-Again, feel free to tell me that I ask for too much. I am not
-sure how complicated would be to do this mass change and if it
-is worth it. I can review this patchset even with the current names.
-
-My main concern is about the long term maintainability. It is
-always easier to see patches than a monolitic source code.
-I would like to reduce the risk of people hating us for what "a mess"
-we made ;-)
-
-Well, the current names might be fine when the legacy code gets
-removed one day. The question is how realistic it is. Also we
-probably should make them slightly more consistent anyway.
-
-Best Regards,
-Petr
+I am Ms Elena Tudorie, I have a important  business  to discuss with you,
+Thanks for your time and  Attention.
+Regards.
+Mrs.Elena Tudorie
