@@ -2,193 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764D36B3231
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A357E6B3239
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbjCIXrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 18:47:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        id S231300AbjCIXr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 18:47:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbjCIXrW (ORCPT
+        with ESMTP id S231299AbjCIXry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 18:47:22 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E56106A3E;
-        Thu,  9 Mar 2023 15:47:21 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329M1YOj029031;
-        Thu, 9 Mar 2023 23:47:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=3LlCvWW+Akb1tfv1EBs/FH6bYOv3lSRDD6cr8CZQbDU=;
- b=Btfe/GDJ45O7PsWyLD21OV9Zm41FA2sWZOchlnCJuusIout0UdQDkydDxSgA5tO5j9g+
- jsphngDrz08mIq04EkgXySEnuOokUWE8QACsF+eWd6O5ogLMDK5DxhDUw4rC9AZpjaeV
- +Cz18aRP+vtvsvtMLnXby/4c5+HuQaz3YIf/ripPcSJd7c5Y7wqjAG1QFgzwWuTd+8oM
- O7P5rkffrQiDgIhr5HtWoVRzXAFCMTv+ZBxqRM3CfJD5o45pg83EDxMBvQzoEfbRh+oi
- F4cOlzV8le6B5XyeTa1OxVPZxnocQ8Tgf3uGHPcluF2gTlxcRf9ig9u2j5KkV1WMMnjy RA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6rh4mxrg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 23:47:10 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 329Ni906017235;
-        Thu, 9 Mar 2023 23:47:10 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6rh4mxqx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 23:47:10 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 329FvDmV019985;
-        Thu, 9 Mar 2023 23:47:07 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3p6ftvk2e9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 23:47:07 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 329Nl5aS2753070
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Mar 2023 23:47:05 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F3BA62004B;
-        Thu,  9 Mar 2023 23:47:04 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7348E20043;
-        Thu,  9 Mar 2023 23:47:04 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Mar 2023 23:47:04 +0000 (GMT)
-Received: from [9.177.5.37] (unknown [9.177.5.37])
+        Thu, 9 Mar 2023 18:47:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B2B10B1CF;
+        Thu,  9 Mar 2023 15:47:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 6A4AD60112;
-        Fri, 10 Mar 2023 10:46:56 +1100 (AEDT)
-Message-ID: <393a03b2b681d12edfd864b3d02a7378611a4bcf.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH 02/13] powerpc: Add initial Dynamic Execution
- Control Register (DEXCR) support
-From:   Benjamin Gray <bgray@linux.ibm.com>
-To:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org
-Cc:     linux-hardening@vger.kernel.org, ajd@linux.ibm.com,
-        cmr@bluescreens.de, linux-kernel@vger.kernel.org
-Date:   Fri, 10 Mar 2023 10:46:51 +1100
-In-Reply-To: <CQZVLQQBO6K9.2A71BY640ZH5P@bobo>
-References: <20221128024458.46121-1-bgray@linux.ibm.com>
-         <20221128024458.46121-3-bgray@linux.ibm.com>
-         <CQZVLQQBO6K9.2A71BY640ZH5P@bobo>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        by ams.source.kernel.org (Postfix) with ESMTPS id E374BB820C6;
+        Thu,  9 Mar 2023 23:47:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90A80C433D2;
+        Thu,  9 Mar 2023 23:47:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678405670;
+        bh=NQ0z0vWRZKFSOsNta5bZXQwrrn+JWpr6q/3op/tZXNg=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=KW0qaj+KdPT2EaWE5uLTvMsecdNBQIGz46H7UdCdVjDFKIb/RC/8X/LvZsIJTkbVP
+         +imQ8wEZlv7TgHnR2B8J0eH9OLup1A91rJAE7An5kjloxS15rX23HoHQEluuNQAqN7
+         pWzaMkSCxk7vRCl2nmTAT/EJ2C+4dMEjM1H76mCfQv15kmsQNAND6135yZseXe6ynt
+         3RyPKTbfdhjIKG8PfYPB4Cii18HOmTHGSOO9Snd/cwNcGvjVB1E+KS9PpwDtTJmU3w
+         TCw6BUC8Y7UJQdo1/uXNxjjTxyEc6InZGRWBe68H212c3pRU6f6i9LNpkVbI0eb/Hy
+         1Cf+KucTYznSA==
+Message-ID: <ec1fb4d134181a1b1859bcb884dcd494.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: jt79bXgDpk57GoLDPDbqVeQGpncDzsU7
-X-Proofpoint-ORIG-GUID: jxeoHBgHrA6cYF_A4AzZO9TNWr7MUu04
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_12,2023-03-09_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 mlxlogscore=999 phishscore=0 priorityscore=1501 bulkscore=0
- spamscore=0 impostorscore=0 suspectscore=0 mlxscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303090189
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <b94ee1d2-b224-f9d5-3f3c-0096634f4c93@loongson.cn>
+References: <20230307115022.12846-2-zhuyinbo@loongson.cn> <202303082037.QPfBP64A-lkp@intel.com> <b94ee1d2-b224-f9d5-3f3c-0096634f4c93@loongson.cn>
+Subject: Re: [PATCH v13 2/2] clk: clk-loongson2: add clock controller driver support
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
+        loongson-kernel@lists.loongnix.cn
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        kernel test robot <lkp@intel.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhuyinbo <zhuyinbo@loongson.cn>
+Date:   Thu, 09 Mar 2023 15:47:46 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-03-07 at 14:45 +1000, Nicholas Piggin wrote:
-> On Mon Nov 28, 2022 at 12:44 PM AEST, Benjamin Gray wrote:
-> > diff --git a/arch/powerpc/include/asm/cputable.h
-> > b/arch/powerpc/include/asm/cputable.h
-> > index 757dbded11dc..03bc192f2d8b 100644
-> > --- a/arch/powerpc/include/asm/cputable.h
-> > +++ b/arch/powerpc/include/asm/cputable.h
-> > @@ -192,6 +192,10 @@ static inline void cpu_feature_keys_init(void)
-> > { }
-> > =C2=A0#define
-> > CPU_FTR_P9_RADIX_PREFETCH_BUG=C2=A0=C2=A0LONG_ASM_CONST(0x0002000000000=
-000)
-> > =C2=A0#define
-> > CPU_FTR_ARCH_31=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0LONG_ASM_CONST(0x00040000000
-> > 00000)
-> > =C2=A0#define
-> > CPU_FTR_DAWR1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0LONG_ASM_CONST(0x0008000=
-000000000)
-> > +#define
-> > CPU_FTR_DEXCR_SBHE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0LONG_ASM_CONST(0x0010000000000000)
-> > +#define
-> > CPU_FTR_DEXCR_IBRTPD=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0LONG_ASM_CONST(0x0020000000000000)
-> > +#define
-> > CPU_FTR_DEXCR_SRAPD=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0LONG_ASM_CONST(0x0040000000000000)
-> > +#define
-> > CPU_FTR_DEXCR_NPHIE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0LONG_ASM_CONST(0x0080000000000000)
+Quoting zhuyinbo (2023-03-08 18:58:02)
 >=20
-> We potentially don't need to use CPU_FTR bits for each of these. We
-> only really want them to use instruction patching and make feature
-> tests fast. But we have been a bit liberal with using them and they
-> are kind of tied into cpu feature parsing code so maybe it's easier
-> to go with them for now.
+> =E5=9C=A8 2023/3/8 =E4=B8=8B=E5=8D=888:16, kernel test robot =E5=86=99=E9=
+=81=93:
+> > Hi Yinbo,
+> >
+[...]
+> >
+> >     drivers/clk/clk-loongson2.c: In function 'loongson2_calc_pll_rate':
+> >>> drivers/clk/clk-loongson2.c:79:15: error: implicit declaration of fun=
+ction 'readq'; did you mean 'readl'? [-Werror=3Dimplicit-function-declarati=
+on]
+> >        79 |         val =3D readq(loongson2_pll_base + offset);
+> >           |               ^~~~~
+> >           |               readl
+> >     cc1: some warnings being treated as errors
+>=20
+> The CONFIG_64BIT not enabled in your config file, I will add a depend on =
 
-For the static only DEXCR series I've only got CPU_FTR_DEXCR_NPHIE
-because that's needed for hashkey updates. The others don't really
-matter; they are only interesting for masking out unsupported bits.
-Masking itself seems to be unnecessary; the DEXCR will just ignore
-unsupported bits. Attempting to set all bits on a P10 showed the first
-8 were set and the remainder stayed 0'd, and the kernel worked fine.
+> "CONFIG_64BIT" in my clock driver to fix this compile error.
 
-It's definitely easier to use CPU_FTR_* for feature detection from the
-PAPR specified blob though. Maybe it would be possible to support a
-callback on a match instead of setting a feature flag.
-@@ -1802,7 +1809,7 @@ int copy_thread(struct task_struct *p, const
->=20
->=20
-
-> > @@ -1802,7 +1809,7 @@ int copy_thread(struct task_struct *p, const
-> > struct kernel_clone_args *args)
-> > =C2=A0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0setup_ksp_vsid(p, sp);
-> > =C2=A0
-> > -#ifdef CONFIG_PPC64=20
-> > +#ifdef CONFIG_PPC64
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (cpu_has_feature(CPU=
-_FTR_DSCR)) {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0p->thread.dscr_inherit =3D current-
-> > >thread.dscr_inherit;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0p->thread.dscr =3D mfspr(SPRN_DSCR);
-> > @@ -1939,6 +1946,10 @@ void start_thread(struct pt_regs *regs,
-> > unsigned long start, unsigned long sp)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0current->thread.tm_tfia=
-r =3D 0;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0current->thread.load_tm=
- =3D 0;
-> > =C2=A0#endif /* CONFIG_PPC_TRANSACTIONAL_MEM */
-> > +#ifdef CONFIG_PPC_BOOK3S_64
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (cpu_has_feature(CPU_FTR_=
-ARCH_31))
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0mtspr(SPRN_DEXCR, get_thread_dexcr(&current-
-> > >thread));
-> > +#endif /* CONFIG_PPC_BOOK3S_64 */
->=20
-> You possibly don't need the ifdef here because CPU_FTR_ARCH_31 should
-> fold away. Some of the others do because they're using open-coded
-> access to struct members, but if you're using accessor functions to
-> get and set such things, there may be no need to.
->=20
-> I think my preference is for your style.
-
-I've been revisiting where the DEXCR is initialised and updated. With
-the static DEXCR, the thread value is just a field on the task struct
-like the others.
+Do you need to use readq() here? Can you read two 32-bit registers with
+readl() and put them together for a 64-bit number?
