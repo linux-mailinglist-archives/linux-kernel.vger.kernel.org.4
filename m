@@ -2,100 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BEF6B266B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3579C6B263E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:07:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbjCIOM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:12:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
+        id S231337AbjCIOG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:06:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbjCIOLz (ORCPT
+        with ESMTP id S231614AbjCIOGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:11:55 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4CCF16B6;
-        Thu,  9 Mar 2023 06:10:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678371043; x=1709907043;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Ke25aAr1RwAUHCxg3kvQY9jKyxSYBDAeHeJlTlHQ8tk=;
-  b=DrALIIB7DTWDubX9UArfOo0BY9fsiot0MCTu64Y6Uu1FkPxeKcTGCQsM
-   h3vNZYoOGe5/+8gvsUXnsVm9K3MVXhfYiPy8LI+TkCoWJ5Zdubkg6e8A3
-   V5cIWF+TgQKXUyIHwCcWcIrT7wZwNnWLFEZFINJl0PLG9dzZAtS71EHC8
-   MQmSgqjLoo23n+70aPni+06vdWkoyh60YXyIJAWD4/uMeGCFrvqT1hEVW
-   +0uCuVxVMdB3vELWgoCTpnCh8tz/+FYbq4ef62qtY/D4+IJlrYhFMZ8PP
-   SseE6vUfr3JkQCF8414nrTyJBxifozaGMCarn2PD1GZdaZ0a7DwV5NnAO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="338789586"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="338789586"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 06:04:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="801180904"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="801180904"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 09 Mar 2023 06:04:29 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1paGsd-000LqH-2E;
-        Thu, 09 Mar 2023 16:04:27 +0200
-Date:   Thu, 9 Mar 2023 16:04:27 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-gpio@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH] sh: mach-x3proto: Add missing #include
- <linux/gpio/driver.h>
-Message-ID: <ZAnna6xIhBZPG/nD@smile.fi.intel.com>
-References: <20230309135255.3861308-1-geert+renesas@glider.be>
+        Thu, 9 Mar 2023 09:06:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6615F1852
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:04:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79731B81EEB
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:04:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EF50C4339B;
+        Thu,  9 Mar 2023 14:04:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678370675;
+        bh=4R35ElemQenvIP7XOXmps7y6mw+Vr13Ba7RcexOZnwg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pAaAi+55lcMzorhxpAHCWAvs6myW/8QSx3mkJNAAJyYP6e+yDMs/LHlnFwOE4t1DT
+         FvqUR3NUn3e0femASF+wk7Nv0Vju1+/crDQU4PYMxO2m3riBRReFtnLequIqOgrQPz
+         phueGVz15Z1QOjCaDsbEj2pM8+OddBRJ0aDJZu9DM1vwgT2DIEGXvo8ocDGM5ZfEas
+         WvIvbQMdDB/JSWodhrehV1VmTjIR+3sDxKXobgDPtcDVWA4TfDLjKdhDd5ceWgvqPt
+         sewAa6rleSQfVtpGDLnmZVtChYBWK4/wFf84w6e8hzYZXTmzMXZvKW2Ll4CyGQvCcN
+         ScbpafbNPuCbQ==
+Date:   Thu, 9 Mar 2023 14:04:28 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lucas Tanure <lucas.tanure@collabora.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "Takashi Iwai --cc=alsa-devel @ alsa-project . org" <tiwai@suse.com>,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH v4] ASoC: cs35l41: Steam Deck Shared boost properties
+ quirk
+Message-ID: <c5b6077c-1e6e-43fe-8f83-ca7019d4a43d@sirena.org.uk>
+References: <20230309104133.537056-1-lucas.tanure@collabora.com>
+ <2881f527-1673-3496-85a2-84a13f074248@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="MeVrIPWLE+hND0ym"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230309135255.3861308-1-geert+renesas@glider.be>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2881f527-1673-3496-85a2-84a13f074248@linaro.org>
+X-Cookie: I will never lie to you.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 02:52:55PM +0100, Geert Uytterhoeven wrote:
-> shx3_defconfig:
-> 
->     arch/sh/boards/mach-x3proto/setup.c: In function ‘x3proto_devices_setup’:
->     arch/sh/boards/mach-x3proto/setup.c:246:62: error: invalid use of undefined type ‘struct gpio_chip’
->       246 |                 baseboard_buttons[i].gpio = x3proto_gpio_chip.base + i;
-> 	  |                                                              ^
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Link: https://lore.kernel.org/r/CA+G9fYs7suzGsEDK40G0pzxXyR1o2V4Pn-oy1owTsTWRVEVHog@mail.gmail.com
-> Fixes: 21d9526d13b5467b ("gpiolib: Make the legacy <linux/gpio.h> consumer-only")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Thank you!
+--MeVrIPWLE+hND0ym
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-...
+On Thu, Mar 09, 2023 at 11:42:42AM +0100, Krzysztof Kozlowski wrote:
+> On 09/03/2023 11:41, Lucas Tanure wrote:
 
->  #include <linux/gpio.h>
-> +#include <linux/gpio/driver.h>
+> > -	ret = device_property_read_u32(dev, "cirrus,boost-type", &val);
+> > -	if (ret >= 0)
+> > -		hw_cfg->bst_type = val;
+> > +	if (device_property_read_bool(dev, "cirrus,shared-boost-active")) {
 
-Do we still need the legacy header?
+> You are now changing ABI and adding undocumented properties.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Note also that this doesn't change the existing property, it continues
+to work identically.
 
+--MeVrIPWLE+hND0ym
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQJ52wACgkQJNaLcl1U
+h9BfzAf/ZQZeIWhkvUG2zW0YhKX/DwPY1nwEQk5jrslFfBH7hfk1/RrxzhQOCKNU
+OXzDL807rwVGAzO6/2MESzNSmYkLV8iGt6bYehvyYAY4lsP8NMh/e7bFKawYYhDi
+j/oMJ0xjxtEA5wiGMEP0ZnReXvIy73RnqO1QNHHRpUCNTrZJPU6ly4MDpI6LoDXe
+wRLxAw2ZZwplCQM6nnnTD0MMy68tU2WCbGjArdjYCncA7B83MdIdcgvWj+Cs4X80
+1psaVYXntOe91bOQkGiZFdGmTV2ZP0fWZcPIBYqhbONAJHNOIi1b4qf1qm5kgQtH
+duszXlKKyxRo2iVEzZEq8nxwylnMNQ==
+=L0t6
+-----END PGP SIGNATURE-----
+
+--MeVrIPWLE+hND0ym--
