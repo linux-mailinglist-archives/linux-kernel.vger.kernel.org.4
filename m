@@ -2,119 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA706B2D30
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B5F66B2D32
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjCISxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 13:53:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
+        id S231167AbjCISxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 13:53:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbjCISw7 (ORCPT
+        with ESMTP id S231166AbjCISxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 13:52:59 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF192FA8FC;
-        Thu,  9 Mar 2023 10:52:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678387967; x=1709923967;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Nfve8Lce1zqiun7hFxXQB5VXtzhusgUqDvAevZjwCms=;
-  b=QL4yPECllz8fiezQzXMucNJiDxvD2fihn58bCTow4F09ZL+a/MeEVMOh
-   i4HaUAk93UhHht/AwTl0+fHhgYmRc6eTjUem1aBWRc/dj829z/kl0GaML
-   0PBWg7AEn19xCG0PTSAj9B8sm/ZWaqXcA+ZjljbXTjz+2+6O77xxOcISu
-   jxFTh87FTRlZEQ/lqVU8fTnFNRUvOTL7OlCuOxTUUrwhzg1GtwKRSMxPl
-   0s/YW74VO9aHBVoKuqx21HpwtxGUjEF6hQ2QbGY+omY5c5u+m5Bl3PwaS
-   PEghUk3A6Ehf2An/le9tXUHXG9c1E6Szqp+hliSXl2PRFfhHMI4Ld74Fs
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="334014492"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="334014492"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 10:52:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="801275762"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="801275762"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 09 Mar 2023 10:52:45 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1paLNc-000UVC-0S;
-        Thu, 09 Mar 2023 20:52:44 +0200
-Date:   Thu, 9 Mar 2023 20:52:43 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 3/3] gpiolib: Move gpiodevice_*() to gpiodev namespace
-Message-ID: <ZAoq+yAyPnI4zgto@smile.fi.intel.com>
-References: <20230307182557.42215-1-andriy.shevchenko@linux.intel.com>
- <20230307182557.42215-4-andriy.shevchenko@linux.intel.com>
- <CAMRc=MdW7JjWvJUtvwJDwWLB5ygPiCRWLNM8E0iyRoD=HbzfVw@mail.gmail.com>
+        Thu, 9 Mar 2023 13:53:11 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FDC2B9D9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 10:53:08 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-536bbe5f888so52091027b3.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 10:53:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678387987;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fc1im8WIXCLJ3aPuivNhaqWtiUsYGYkccGBgkVEOYUY=;
+        b=x6CDd5mP5J/JBVh4mnPCHLqh8hQWA28uorc+A/RWDI1ZVEFG7QIm6K4Zws1Mw6VljT
+         stcYK5OfjQiiNtVP9o1XRdTP+/ZpQPbX9cqfNXTN7iOP0tPZUSxj/t134hduT4pPjv9z
+         p8aSyMXlJ6lNMZm/5wH67RyBwMui0IZWN1ItqoakktmbR2Ly+ZtBBG4UdZOgogFaBr6C
+         cVpjCO6GdrxuThuBeeTqlOwc4draaD1eLj9pryQVPT831GYqmQt1yCupnjtopoBBy57h
+         bW4eMuWPQTYernzLmQxsC+rwkeHzznl+ljl2QmWejZo1R7EvrtEPTFWeVNWGDTg5iAK/
+         xRLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678387987;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Fc1im8WIXCLJ3aPuivNhaqWtiUsYGYkccGBgkVEOYUY=;
+        b=oM6jlikg5P64jvDKSFRf7A8dq9EwTTUjLJlEJd76TexKdXhLJvtyECJxPhW3QR3MXJ
+         RMPbWe9hzTflbBSyda0YR0PUj2NGGjqayHxOC75DyUgQqyX79PHslt3MoYDfDMRapfjU
+         +P+V0Nzlri7IxkTSM9cjRvSz6kZ57AVT+DqKpmch1vZ6UHcy1AhapZovRMfEUZNqNAVr
+         abMyEYelmY9saaeXRUVZ1EXTnZ5qxk5syT/DbSTPldYMQgDLIj36J4DgwndnrD9lvs6j
+         ICXrxNECKbi6xQQIAm2rCMYfW9DLKw65DgA1g0lpCV57lGvjACebBMY9xnA/KRy6Srg9
+         fktg==
+X-Gm-Message-State: AO0yUKWPDoRM8BrCEmi3Kg6DG8sY5flMzUeb5I8Zz0bly0n7S3p2Snhw
+        CHu1LuRqqLrL3hCRgCaptCa+ElddA/Bq6buxsyGaDw==
+X-Google-Smtp-Source: AK7set8h6m/poIJaA1MSLpGytsT0tAbgxqFVpSfZhGBN7LyhbfaAFg6sbwjUUfvQLIAFIBRZ02I8DXPipcyzpkjgOXg=
+X-Received: by 2002:a81:af59:0:b0:535:5e8c:65ef with SMTP id
+ x25-20020a81af59000000b005355e8c65efmr14048163ywj.6.1678387987553; Thu, 09
+ Mar 2023 10:53:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=MdW7JjWvJUtvwJDwWLB5ygPiCRWLNM8E0iyRoD=HbzfVw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230301214952.2190757-1-saravanak@google.com> <CAGETcx_DTHW4-WMK4qRhvhxiunUB2f79cpXSfQ1x-hifZQ+tgw@mail.gmail.com>
+In-Reply-To: <CAGETcx_DTHW4-WMK4qRhvhxiunUB2f79cpXSfQ1x-hifZQ+tgw@mail.gmail.com>
+From:   Yongqin Liu <yongqin.liu@linaro.org>
+Date:   Fri, 10 Mar 2023 02:52:56 +0800
+Message-ID: <CAMSo37XuNaV4Y3+ExrUjNzPDRD_BNSn1258Ve3We+qtbsO7qEw@mail.gmail.com>
+Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 11:49:53AM +0100, Bartosz Golaszewski wrote:
-> On Tue, Mar 7, 2023 at 7:25 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
+Hi, Saravana
+
+Sorry for the lateness, I was just aware of this today.
+
+I tested with the ACK android-mainline branch + the 12 commits ending
+with fb42378dcc7f
++ the 4 commits of this series + hikey960 AOSP Master userspace.
+The hikey960 Android build could boot to the home screen, no stuck there,
+
+Here is the link of the logat in case you want to check some message here:
+https://gist.github.com/liuyq/6525af08c547cd2e494af5d1c8b181b5
+
+Thanks,
+Yongqin Liu
+On Fri, 10 Mar 2023 at 02:05, Saravana Kannan <saravanak@google.com> wrote:
+>
+> Greg,
+>
+> Don't pull in this series please. It needs more testing from the folks
+> I cc'ed and it's already breaking things for Martin. This needs more
+> revisions.
+>
+> -Saravana
+>
+> On Wed, Mar 1, 2023 at 1:49=E2=80=AFPM Saravana Kannan <saravanak@google.=
+com> wrote:
 > >
-> > The functions that operates on the same device object would
-> > have the same namespace for better code understanding and
-> > maintenance.
-
-...
-
-> > -static void gpiodevice_release(struct device *dev)
-> > +static void gpiodev_release(struct device *dev)
-> >  {
-> >         struct gpio_device *gdev = to_gpio_device(dev);
-> >         unsigned long flags;
-> > @@ -617,7 +617,7 @@ static int gpiochip_setup_dev(struct gpio_device *gdev)
-> >                 return ret;
+> > Yongqin, Martin, Amelie,
 > >
-> >         /* From this point, the .release() function cleans up gpio_device */
-> > -       gdev->dev.release = gpiodevice_release;
-> > +       gdev->dev.release = gpiodev_release;
+> > We recent refactor of fw_devlink that ends with commit fb42378dcc7f
+> > ("mtd: mtdpart: Don't create platform device that'll never probe"),
+> > fw_devlink is smarter and doesn't depend on compatible property. So, I
+> > don't think these calls are needed anymore. But I don't have these
+> > devices to test on and be sure and the hardware I use to test changes
+> > doesn't have this issue either.
 > >
-> >         ret = gpiochip_sysfs_register(gdev);
-> >         if (ret)
+> > Can you please test these changes on the hardware where you hit the
+> > issue to make sure things work as expected?
+> >
+> > Yongqin, If you didn't have the context, this affected hikey960.
+> >
+> > Greg,
+> >
+> > Let's wait for some tests before we land these.
+> >
+> > Thanks,
+> > Saravana
+> >
+> > Cc: Yongqin Liu <yongqin.liu@linaro.org>
+> > Cc: Sumit Semwal <sumit.semwal@linaro.org>
+> > Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > Cc: Amelie Delaunay <amelie.delaunay@foss.st.com>
+> >
+> > Saravana Kannan (4):
+> >   usb: typec: stusb160x: Remove use of
+> >     fw_devlink_purge_absent_suppliers()
+> >   usb: typec: tipd: Remove use of fw_devlink_purge_absent_suppliers()
+> >   usb: typec: tcpm: Remove use of fw_devlink_purge_absent_suppliers()
+> >   driver core: Delete fw_devlink_purge_absent_suppliers()
+> >
+> >  drivers/base/core.c           | 16 ----------------
+> >  drivers/usb/typec/stusb160x.c |  9 ---------
+> >  drivers/usb/typec/tcpm/tcpm.c |  9 ---------
+> >  drivers/usb/typec/tipd/core.c |  9 ---------
+> >  include/linux/fwnode.h        |  1 -
+> >  5 files changed, 44 deletions(-)
+> >
+> > --
+> > 2.39.2.722.g9855ee24e9-goog
+> >
 
-> But the only other function that's in the gpiodev_ namespace operates
-> on struct gpio_device so that change doesn't make much sense to me.
-
-I'm not sure I understood the comment.
-After this change we will have
-
-static int gpiodev_add_to_list(struct gpio_device *gdev)
-static void gpiodev_release(struct device *dev)
-
-There are also gpio_device_*() I have noticed, so may be these should be
-actually in that namespace?
-
-And we have
-
-static int gpiochip_setup_dev(struct gpio_device *gdev)
-static void gpiolib_dbg_show(struct seq_file *s, struct gpio_device *gdev)
-
-That said, what do you think is the best to make this more consistent?
-
--- 
-With Best Regards,
-Andy Shevchenko
 
 
+--=20
+Best Regards,
+Yongqin Liu
+---------------------------------------------------------------
+#mailing list
+linaro-android@lists.linaro.org
+http://lists.linaro.org/mailman/listinfo/linaro-android
