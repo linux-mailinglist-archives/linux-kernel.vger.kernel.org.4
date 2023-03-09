@@ -2,95 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1FBE6B2F5D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617256B2F61
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbjCIVMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 16:12:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
+        id S231171AbjCIVOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 16:14:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjCIVMW (ORCPT
+        with ESMTP id S231129AbjCIVN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 16:12:22 -0500
+        Thu, 9 Mar 2023 16:13:58 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B831BAFA;
-        Thu,  9 Mar 2023 13:12:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42B7E9CCB;
+        Thu,  9 Mar 2023 13:13:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 664D2B81F49;
-        Thu,  9 Mar 2023 21:12:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78835C433EF;
-        Thu,  9 Mar 2023 21:12:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A9BAB820C8;
+        Thu,  9 Mar 2023 21:13:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA451C433EF;
+        Thu,  9 Mar 2023 21:13:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678396338;
-        bh=emwxev2joapuzWTO2f23F5wjNsgEZTMzeCLrmUxz/FA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ob7Um5kAO7CzU59lJLPrYGoOplTDNcR1lqQU6UxANZX9ZLaHjs1EfDbjrwnu09o/c
-         Wm5lYIveSHn1KFBMxBeyi8AZQGIk13uJLqbG7V7Eof+vJj2mHctYJXq4AK9H8X5SvN
-         ZqoaVo4tAn9TST3j1CBWn6jgp4gnysyEbQY7xOTWMLAJk5t/xn9LatMfFQHxFzcZHn
-         YjFTc/G2ZjTevT1WhTPnrYsBoERCVMcvJSj3Wc/zioP6B6aSSvW+OHj1G2xaFEP6/9
-         NCpIynDWFmsi+fyf4NIHY99HQ8alW5INj0MiIWZunHeVRzOTYrt6itTVnSMi10vzGA
-         FYGj3lkobq3ew==
-Date:   Thu, 9 Mar 2023 22:12:14 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        Peter Senna Tschudin <peter.senna@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        linux-mtd@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, Evgeniy Polyakov <zbr@ioremap.net>,
-        Crt Mori <cmo@melexis.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Peter Rosin <peda@axentia.se>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH v2 0/9] i2c: Switch .probe() to not take an id parameter
-Message-ID: <ZApLrpD9Op59FgnB@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        Peter Senna Tschudin <peter.senna@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        linux-mtd@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, Evgeniy Polyakov <zbr@ioremap.net>,
-        Crt Mori <cmo@melexis.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Peter Rosin <peda@axentia.se>, Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>
-References: <20230226222654.1741900-1-u.kleine-koenig@pengutronix.de>
- <20230303220856.ebloz7kjw7sskxym@pengutronix.de>
+        s=k20201202; t=1678396433;
+        bh=BeV26pTW4A5lvPDrYbQpGFlfWF2dzD/VF0QL/uwIDgw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oW+gyq4GejWp1tCcd/bDmwPlmhQqO+xlLbPJvdgwU6OtHkSsRTJRt3bNFWFCsy8mv
+         69FeyKeDo3+o3OMJWdV96x9tRbuoDYtjWs9sq9LpIEfm/23rNUFa8nzWbfjwNCm2+i
+         39WKAmYcwrpXyJQ4g7obpCGRM1idCXSTQjtUHUSTRCctVtaik/rvBWouS6u1coltzr
+         P5uyzj0KxQiIaF5f0VFd1+F4im+HwSxeO3ENH0rXiBtc8BKjikWs+Bc+TXfEvizToc
+         IBpHCmdAY3sMrWQiqf/4EFsfZbfYU88CWP2v0c3NsK3yKeg+DAsqM7LUkY0UBm19AU
+         NyAUgZIsNnCRQ==
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Changbin Du <changbin.du@huawei.com>,
+        Ian Rogers <irogers@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [GIT PULL] perf tools fixes for v6.3
+Date:   Thu,  9 Mar 2023 18:13:46 -0300
+Message-Id: <20230309211346.904516-1-acme@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="11BnIObYxkIk2nlY"
-Content-Disposition: inline
-In-Reply-To: <20230303220856.ebloz7kjw7sskxym@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -100,35 +60,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
---11BnIObYxkIk2nlY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+	Please consider pulling,
 
+Best regards,
 
-> So this series is ready to be applied once Linus cuts -rc1.
-
-I applied it to for-current now and plan to have it in -rc2. Thank you!
+- Arnaldo
 
 
---11BnIObYxkIk2nlY
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit f9fa0778ee7349a9aa3d2ea10e9f2ab843a0b44e:
 
------BEGIN PGP SIGNATURE-----
+  perf tests stat_all_metrics: Change true workload to sleep workload for system wide check (2023-02-17 17:22:56 -0300)
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQKS64ACgkQFA3kzBSg
-KbZPuw/5AdHfkTRDnxz7iP/injeW9ZuXdUyU2WNYPhKG7gjBIddIl62rm7/IEca7
-p3URnVMb58tnKqvQ8waKpNu/SdPTrtQ/Xp35h3lBN9z2hvybGDjHztUar08DijrQ
-EU2K76NS83pZ2vQ0S4NRk3JQdGJVXmYs04hz3XBe9Fk61l+XgOaXjDfVMRYQdAHs
-KvjbHB+fCKrRY4pTYO/+3rah9NGj7Igm6bxWs8bwqqSHL7O95xan/NyDFSj6ast7
-5otOpDeFE90FeYuvJVhaDThUTf65ko6szMFT7tHRIYo2VPitA28I/Vq2/wei9e1K
-d8hwgwd5X73mVLAWK6zYsLN2hyjna6/O/6+AaUSjYzHoKlOHCqjMhfllzCTmqrBc
-tbxj4kw5uhH315V+S1wjdpQ/cCYqQQU1c1Lugrkgm/pAdFiyz9PxDap9ovxO5whY
-cElHujAXXDjCHU/wVB8rGCjJMlwpr1/mWOrmt7AcWCLUsK7CvuQjqgvDkZ7XuoRJ
-4PylU8+/MH+06JGUusE/bdCc1tR/lm1ZPWu0OVWTTdgvuWQ6fqT9xveERYleRl/M
-SEUbzagdMe1OqVzEFNoymReVc4Ds8n3IvyltPkR4w4rwSAdWLtoRCXmlf/L6WrBj
-SK0w5ZBTZKGdORg7eil1rxWED6YrQaAFOM9GnyCKapCPtM0zp+w=
-=wGSr
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---11BnIObYxkIk2nlY--
+  git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v6.3-1-2023-03-09
+
+for you to fetch changes up to 5b201a82cd9d0945d70562974ea6ad8e3b1861b5:
+
+  perf tools: Add Adrian Hunter to MAINTAINERS as a reviewer (2023-03-06 17:23:18 -0300)
+
+----------------------------------------------------------------
+perf tools fixes for v6.3:
+
+- Add Adrian Hunter to MAINTAINERS as a perf tools reviewer.
+
+- Sync various tools/ copies of kernel headers with the kernel sources, this
+  time trying to avoid first merging with upstream to then update but instead
+  copy from upstream so that a merge is avoided and the end result after merging
+  this pull request is the one expected, tools/perf/check-headers.sh (mostly)
+  happy, less warnings while building tools/perf/.
+
+- Fix counting when initial delay configured by setting
+  perf_attr.enable_on_exec when starting workloads from the perf command line.
+
+- Don't avoid emitting a PERF_RECORD_MMAP2 in 'perf inject --buildid-all' when
+  that record comes with a build-id, otherwise we end up not being able to
+  resolve symbols.
+
+- Don't use comma as the CSV output separator the "stat+csv_output" test, as
+  comma can appear on some tests as a modifier for an event, use @ instead,
+  ditto for the JSON linter test.
+
+- The offcpu test was looking for some bits being set on
+  task_struct->prev_state without masking other bits not important for this
+  specific 'perf test', fix it.
+
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+----------------------------------------------------------------
+Arnaldo Carvalho de Melo (12):
+      tools arch x86: Sync the msr-index.h copy with the kernel sources
+      tools headers svm: Sync svm headers with the kernel sources
+      tools headers: Update the copy of x86's mem{cpy,set}_64.S used in 'perf bench'
+      tools headers UAPI: Sync linux/prctl.h with the kernel sources
+      tools headers: Synchronize {linux,vdso}/bits.h with the kernel sources
+      tools include UAPI: Synchronize linux/fcntl.h with the kernel sources
+      tools headers kvm: Sync uapi/{asm/linux} kvm.h headers with the kernel sources
+      tools arch x86: Sync the msr-index.h copy with the kernel sources
+      tools include UAPI: Sync linux/vhost.h with the kernel sources
+      tools headers x86 cpufeatures: Sync with the kernel sources
+      tools headers UAPI: Sync linux/perf_event.h with the kernel sources
+      perf tools: Add Adrian Hunter to MAINTAINERS as a reviewer
+
+Changbin Du (1):
+      perf stat: Fix counting when initial delay configured
+
+Ian Rogers (2):
+      perf tests stat+csv_output: Switch CSV separator to @
+      perf test: Avoid counting commas in json linter
+
+Namhyung Kim (2):
+      perf test: Fix offcpu test prev_state check
+      perf inject: Fix --buildid-all not to eat up MMAP2
+
+ MAINTAINERS                                        |  1 +
+ tools/arch/arm64/include/uapi/asm/kvm.h            |  1 +
+ tools/arch/x86/include/asm/cpufeatures.h           |  2 +-
+ tools/arch/x86/include/asm/disabled-features.h     |  3 +-
+ tools/arch/x86/include/asm/msr-index.h             | 31 ++++++++++++++++++++
+ tools/arch/x86/include/asm/required-features.h     |  3 +-
+ tools/arch/x86/include/uapi/asm/kvm.h              | 34 ++++++++++++++++++++--
+ tools/arch/x86/include/uapi/asm/svm.h              |  6 ++++
+ tools/arch/x86/lib/memcpy_64.S                     |  5 ++--
+ tools/arch/x86/lib/memset_64.S                     |  4 ++-
+ tools/include/linux/bits.h                         |  1 -
+ tools/include/uapi/linux/fcntl.h                   |  1 +
+ tools/include/uapi/linux/kvm.h                     |  9 ++++++
+ tools/include/uapi/linux/perf_event.h              |  3 ++
+ tools/include/uapi/linux/prctl.h                   |  6 ++++
+ tools/include/uapi/linux/vhost.h                   |  8 +++++
+ tools/include/vdso/bits.h                          |  1 +
+ tools/perf/builtin-inject.c                        |  1 +
+ tools/perf/builtin-stat.c                          | 15 ++++------
+ .../perf/tests/shell/lib/perf_json_output_lint.py  | 29 +++++++++---------
+ tools/perf/tests/shell/stat+csv_output.sh          | 23 ++++++++-------
+ tools/perf/util/bpf_skel/off_cpu.bpf.c             |  2 +-
+ tools/perf/util/stat.c                             |  6 +---
+ tools/perf/util/stat.h                             |  1 -
+ tools/perf/util/target.h                           | 12 ++++++++
+ 25 files changed, 154 insertions(+), 54 deletions(-)
