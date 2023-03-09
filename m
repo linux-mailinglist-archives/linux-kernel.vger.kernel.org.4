@@ -2,62 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D886B2DEB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26AB26B2DEC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:50:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjCITsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 14:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
+        id S230001AbjCITtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 14:49:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCITsa (ORCPT
+        with ESMTP id S229917AbjCITtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 14:48:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3B7EBFA7;
-        Thu,  9 Mar 2023 11:48:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0962B82078;
-        Thu,  9 Mar 2023 19:48:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F021C433EF;
-        Thu,  9 Mar 2023 19:48:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678391305;
-        bh=EkoETZpyF72TwLfxVrHUyAiLu2LMN0UlkQ4+4D2jVlM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H9ZQ66zUNK8zTexQVJZW/sMiexOywmWMpOX1GrwOEUCKBZt/L1BY0Y1Fojr8sKiWr
-         u3U723s/d36zQM4Rjx5b5wUz+0Br0HxPaa/cDJgsgWsL0RkufRihr5KuG5aaTw9wKn
-         KuK7u4KbsHtKQAoQQWXvpsbQ4DrzimTEOczBMap/Qnnb/t1Ta/cC4HJ7T9Es5iGi+Y
-         BXbKT2jS4RpqQHIUtJ7TakswZG7B5+UpX2yG7hjOHTZPo5d/4kCUnRZoecGVz/OigN
-         PjX8B+MH//yXRyCTivJ7WIuiWEbQZGAK2eDQ7peSOxHFp2e1AXjpI/da7Fqr3sN9OH
-         bXt+bmf+vDnPQ==
-Date:   Thu, 9 Mar 2023 19:48:20 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Janne Grunau <j@jannau.net>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Marc Zyngier <maz@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] PCI: apple: Set only available ports up
-Message-ID: <08aa3766-d7a6-449d-a5cc-ddcf23601c43@spud>
-References: <20230307-apple_pcie_disabled_ports-v2-1-c3bd1fd278a4@jannau.net>
- <20230309163935.GA1140101@bhelgaas>
+        Thu, 9 Mar 2023 14:49:43 -0500
+Received: from forward500a.mail.yandex.net (forward500a.mail.yandex.net [178.154.239.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6019DF6392
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:49:41 -0800 (PST)
+Received: from vla3-f7c67ae63b5f.qloud-c.yandex.net (vla3-f7c67ae63b5f.qloud-c.yandex.net [IPv6:2a02:6b8:c15:2583:0:640:f7c6:7ae6])
+        by forward500a.mail.yandex.net (Yandex) with ESMTP id 141555EBB1;
+        Thu,  9 Mar 2023 22:49:39 +0300 (MSK)
+Received: by vla3-f7c67ae63b5f.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id Wnj3f66b2Cg1-BvIXeRj2;
+        Thu, 09 Mar 2023 22:49:38 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1678391378;
+        bh=Pc/rk4dcKZuCiuBSehiRiUFiAH3zsXSmR08iASFQff0=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=FA3TySb8yQQ7pgn0uuDJ9y420gBsz3A2kgWM7YwRXTK5pO6A3uFtHkupIIeDNyudq
+         oQEu63hR8C/O87djMe4Et+Re8z8XxT8m1LwKJ21r2hOulnZC4F0Qz7qMsp47BGU/lR
+         lqDbR7xCpcsGB0gKgwlfE/WnucAyzNdoouE5GAqo=
+Authentication-Results: vla3-f7c67ae63b5f.qloud-c.yandex.net; dkim=pass header.i=@ya.ru
+Message-ID: <14d66c0d-b436-7ac8-9e4b-21cfdf9631e6@ya.ru>
+Date:   Thu, 9 Mar 2023 22:49:31 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Y6suV7oa2FgnRcti"
-Content-Disposition: inline
-In-Reply-To: <20230309163935.GA1140101@bhelgaas>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 8/8] mm: shrinkers: convert shrinker_rwsem to mutex
+Content-Language: en-US
+To:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, shakeelb@google.com, mhocko@kernel.org,
+        roman.gushchin@linux.dev, muchun.song@linux.dev, david@redhat.com,
+        shy828301@gmail.com, rppt@kernel.org
+Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
+        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230307065605.58209-1-zhengqi.arch@bytedance.com>
+ <20230307065605.58209-9-zhengqi.arch@bytedance.com>
+From:   Kirill Tkhai <tkhai@ya.ru>
+In-Reply-To: <20230307065605.58209-9-zhengqi.arch@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,144 +57,270 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 07.03.2023 09:56, Qi Zheng wrote:
+> Now there are no readers of shrinker_rwsem, so we
+> can simply replace it with mutex lock.
+> 
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 
---Y6suV7oa2FgnRcti
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Kirill Tkhai <tkhai@ya.ru>
 
-On Thu, Mar 09, 2023 at 10:39:35AM -0600, Bjorn Helgaas wrote:
-> [+cc Daire, Conor for apple/microchip use of ECAM .init() method]
+> ---
+>  drivers/md/dm-cache-metadata.c |  2 +-
+>  drivers/md/dm-thin-metadata.c  |  2 +-
+>  fs/super.c                     |  2 +-
+>  mm/shrinker_debug.c            | 14 +++++++-------
+>  mm/vmscan.c                    | 34 +++++++++++++++++-----------------
+>  5 files changed, 27 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/md/dm-cache-metadata.c b/drivers/md/dm-cache-metadata.c
+> index acffed750e3e..9e0c69958587 100644
+> --- a/drivers/md/dm-cache-metadata.c
+> +++ b/drivers/md/dm-cache-metadata.c
+> @@ -1828,7 +1828,7 @@ int dm_cache_metadata_abort(struct dm_cache_metadata *cmd)
+>  	 * Replacement block manager (new_bm) is created and old_bm destroyed outside of
+>  	 * cmd root_lock to avoid ABBA deadlock that would result (due to life-cycle of
+>  	 * shrinker associated with the block manager's bufio client vs cmd root_lock).
+> -	 * - must take shrinker_rwsem without holding cmd->root_lock
+> +	 * - must take shrinker_mutex without holding cmd->root_lock
+>  	 */
+>  	new_bm = dm_block_manager_create(cmd->bdev, DM_CACHE_METADATA_BLOCK_SIZE << SECTOR_SHIFT,
+>  					 CACHE_MAX_CONCURRENT_LOCKS);
+> diff --git a/drivers/md/dm-thin-metadata.c b/drivers/md/dm-thin-metadata.c
+> index fd464fb024c3..9f5cb52c5763 100644
+> --- a/drivers/md/dm-thin-metadata.c
+> +++ b/drivers/md/dm-thin-metadata.c
+> @@ -1887,7 +1887,7 @@ int dm_pool_abort_metadata(struct dm_pool_metadata *pmd)
+>  	 * Replacement block manager (new_bm) is created and old_bm destroyed outside of
+>  	 * pmd root_lock to avoid ABBA deadlock that would result (due to life-cycle of
+>  	 * shrinker associated with the block manager's bufio client vs pmd root_lock).
+> -	 * - must take shrinker_rwsem without holding pmd->root_lock
+> +	 * - must take shrinker_mutex without holding pmd->root_lock
+>  	 */
+>  	new_bm = dm_block_manager_create(pmd->bdev, THIN_METADATA_BLOCK_SIZE << SECTOR_SHIFT,
+>  					 THIN_MAX_CONCURRENT_LOCKS);
+> diff --git a/fs/super.c b/fs/super.c
+> index 84332d5cb817..91a4037b1d95 100644
+> --- a/fs/super.c
+> +++ b/fs/super.c
+> @@ -54,7 +54,7 @@ static char *sb_writers_name[SB_FREEZE_LEVELS] = {
+>   * One thing we have to be careful of with a per-sb shrinker is that we don't
+>   * drop the last active reference to the superblock from within the shrinker.
+>   * If that happens we could trigger unregistering the shrinker from within the
+> - * shrinker path and that leads to deadlock on the shrinker_rwsem. Hence we
+> + * shrinker path and that leads to deadlock on the shrinker_mutex. Hence we
+>   * take a passive reference to the superblock to avoid this from occurring.
+>   */
+>  static unsigned long super_cache_scan(struct shrinker *shrink,
+> diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
+> index 6aa7a7ec69da..b0f6aff372df 100644
+> --- a/mm/shrinker_debug.c
+> +++ b/mm/shrinker_debug.c
+> @@ -7,7 +7,7 @@
+>  #include <linux/memcontrol.h>
+>  
+>  /* defined in vmscan.c */
+> -extern struct rw_semaphore shrinker_rwsem;
+> +extern struct mutex shrinker_mutex;
+>  extern struct list_head shrinker_list;
+>  extern struct srcu_struct shrinker_srcu;
+>  
+> @@ -167,7 +167,7 @@ int shrinker_debugfs_add(struct shrinker *shrinker)
+>  	char buf[128];
+>  	int id;
+>  
+> -	lockdep_assert_held(&shrinker_rwsem);
+> +	lockdep_assert_held(&shrinker_mutex);
+>  
+>  	/* debugfs isn't initialized yet, add debugfs entries later. */
+>  	if (!shrinker_debugfs_root)
+> @@ -210,7 +210,7 @@ int shrinker_debugfs_rename(struct shrinker *shrinker, const char *fmt, ...)
+>  	if (!new)
+>  		return -ENOMEM;
+>  
+> -	down_write(&shrinker_rwsem);
+> +	mutex_lock(&shrinker_mutex);
+>  
+>  	old = shrinker->name;
+>  	shrinker->name = new;
+> @@ -228,7 +228,7 @@ int shrinker_debugfs_rename(struct shrinker *shrinker, const char *fmt, ...)
+>  			shrinker->debugfs_entry = entry;
+>  	}
+>  
+> -	up_write(&shrinker_rwsem);
+> +	mutex_unlock(&shrinker_mutex);
+>  
+>  	kfree_const(old);
+>  
+> @@ -240,7 +240,7 @@ struct dentry *shrinker_debugfs_remove(struct shrinker *shrinker)
+>  {
+>  	struct dentry *entry = shrinker->debugfs_entry;
+>  
+> -	lockdep_assert_held(&shrinker_rwsem);
+> +	lockdep_assert_held(&shrinker_mutex);
+>  
+>  	kfree_const(shrinker->name);
+>  	shrinker->name = NULL;
+> @@ -265,14 +265,14 @@ static int __init shrinker_debugfs_init(void)
+>  	shrinker_debugfs_root = dentry;
+>  
+>  	/* Create debugfs entries for shrinkers registered at boot */
+> -	down_write(&shrinker_rwsem);
+> +	mutex_lock(&shrinker_mutex);
+>  	list_for_each_entry(shrinker, &shrinker_list, list)
+>  		if (!shrinker->debugfs_entry) {
+>  			ret = shrinker_debugfs_add(shrinker);
+>  			if (ret)
+>  				break;
+>  		}
+> -	up_write(&shrinker_rwsem);
+> +	mutex_unlock(&shrinker_mutex);
+>  
+>  	return ret;
+>  }
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index ac7ab4aa344f..c00302fabc3d 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -35,7 +35,7 @@
+>  #include <linux/cpuset.h>
+>  #include <linux/compaction.h>
+>  #include <linux/notifier.h>
+> -#include <linux/rwsem.h>
+> +#include <linux/mutex.h>
+>  #include <linux/delay.h>
+>  #include <linux/kthread.h>
+>  #include <linux/freezer.h>
+> @@ -202,7 +202,7 @@ static void set_task_reclaim_state(struct task_struct *task,
+>  }
+>  
+>  LIST_HEAD(shrinker_list);
+> -DECLARE_RWSEM(shrinker_rwsem);
+> +DEFINE_MUTEX(shrinker_mutex);
+>  DEFINE_SRCU(shrinker_srcu);
+>  static atomic_t shrinker_srcu_generation = ATOMIC_INIT(0);
+>  
+> @@ -225,7 +225,7 @@ static struct shrinker_info *shrinker_info_protected(struct mem_cgroup *memcg,
+>  {
+>  	return srcu_dereference_check(memcg->nodeinfo[nid]->shrinker_info,
+>  				      &shrinker_srcu,
+> -				      lockdep_is_held(&shrinker_rwsem));
+> +				      lockdep_is_held(&shrinker_mutex));
+>  }
+>  
+>  static struct shrinker_info *shrinker_info_srcu(struct mem_cgroup *memcg,
+> @@ -310,7 +310,7 @@ int alloc_shrinker_info(struct mem_cgroup *memcg)
+>  	int nid, size, ret = 0;
+>  	int map_size, defer_size = 0;
+>  
+> -	down_write(&shrinker_rwsem);
+> +	mutex_lock(&shrinker_mutex);
+>  	map_size = shrinker_map_size(shrinker_nr_max);
+>  	defer_size = shrinker_defer_size(shrinker_nr_max);
+>  	size = map_size + defer_size;
+> @@ -326,7 +326,7 @@ int alloc_shrinker_info(struct mem_cgroup *memcg)
+>  		info->map_nr_max = shrinker_nr_max;
+>  		rcu_assign_pointer(memcg->nodeinfo[nid]->shrinker_info, info);
+>  	}
+> -	up_write(&shrinker_rwsem);
+> +	mutex_unlock(&shrinker_mutex);
+>  
+>  	return ret;
+>  }
+> @@ -342,7 +342,7 @@ static int expand_shrinker_info(int new_id)
+>  	if (!root_mem_cgroup)
+>  		goto out;
+>  
+> -	lockdep_assert_held(&shrinker_rwsem);
+> +	lockdep_assert_held(&shrinker_mutex);
+>  
+>  	map_size = shrinker_map_size(new_nr_max);
+>  	defer_size = shrinker_defer_size(new_nr_max);
+> @@ -392,7 +392,7 @@ static int prealloc_memcg_shrinker(struct shrinker *shrinker)
+>  	if (mem_cgroup_disabled())
+>  		return -ENOSYS;
+>  
+> -	down_write(&shrinker_rwsem);
+> +	mutex_lock(&shrinker_mutex);
+>  	id = idr_alloc(&shrinker_idr, shrinker, 0, 0, GFP_KERNEL);
+>  	if (id < 0)
+>  		goto unlock;
+> @@ -406,7 +406,7 @@ static int prealloc_memcg_shrinker(struct shrinker *shrinker)
+>  	shrinker->id = id;
+>  	ret = 0;
+>  unlock:
+> -	up_write(&shrinker_rwsem);
+> +	mutex_unlock(&shrinker_mutex);
+>  	return ret;
+>  }
+>  
+> @@ -416,7 +416,7 @@ static void unregister_memcg_shrinker(struct shrinker *shrinker)
+>  
+>  	BUG_ON(id < 0);
+>  
+> -	lockdep_assert_held(&shrinker_rwsem);
+> +	lockdep_assert_held(&shrinker_mutex);
+>  
+>  	idr_remove(&shrinker_idr, id);
+>  }
+> @@ -451,7 +451,7 @@ void reparent_shrinker_deferred(struct mem_cgroup *memcg)
+>  		parent = root_mem_cgroup;
+>  
+>  	/* Prevent from concurrent shrinker_info expand */
+> -	down_write(&shrinker_rwsem);
+> +	mutex_lock(&shrinker_mutex);
+>  	for_each_node(nid) {
+>  		child_info = shrinker_info_protected(memcg, nid);
+>  		parent_info = shrinker_info_protected(parent, nid);
+> @@ -460,7 +460,7 @@ void reparent_shrinker_deferred(struct mem_cgroup *memcg)
+>  			atomic_long_add(nr, &parent_info->nr_deferred[i]);
+>  		}
+>  	}
+> -	up_write(&shrinker_rwsem);
+> +	mutex_unlock(&shrinker_mutex);
+>  }
+>  
+>  static bool cgroup_reclaim(struct scan_control *sc)
+> @@ -709,9 +709,9 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
+>  	shrinker->name = NULL;
+>  #endif
+>  	if (shrinker->flags & SHRINKER_MEMCG_AWARE) {
+> -		down_write(&shrinker_rwsem);
+> +		mutex_lock(&shrinker_mutex);
+>  		unregister_memcg_shrinker(shrinker);
+> -		up_write(&shrinker_rwsem);
+> +		mutex_unlock(&shrinker_mutex);
+>  		return;
+>  	}
+>  
+> @@ -721,11 +721,11 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
+>  
+>  void register_shrinker_prepared(struct shrinker *shrinker)
+>  {
+> -	down_write(&shrinker_rwsem);
+> +	mutex_lock(&shrinker_mutex);
+>  	list_add_tail_rcu(&shrinker->list, &shrinker_list);
+>  	shrinker->flags |= SHRINKER_REGISTERED;
+>  	shrinker_debugfs_add(shrinker);
+> -	up_write(&shrinker_rwsem);
+> +	mutex_unlock(&shrinker_mutex);
+>  }
+>  
+>  static int __register_shrinker(struct shrinker *shrinker)
+> @@ -775,13 +775,13 @@ void unregister_shrinker(struct shrinker *shrinker)
+>  	if (!(shrinker->flags & SHRINKER_REGISTERED))
+>  		return;
+>  
+> -	down_write(&shrinker_rwsem);
+> +	mutex_lock(&shrinker_mutex);
+>  	list_del_rcu(&shrinker->list);
+>  	shrinker->flags &= ~SHRINKER_REGISTERED;
+>  	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
+>  		unregister_memcg_shrinker(shrinker);
+>  	debugfs_entry = shrinker_debugfs_remove(shrinker);
+> -	up_write(&shrinker_rwsem);
+> +	mutex_unlock(&shrinker_mutex);
+>  
+>  	atomic_inc(&shrinker_srcu_generation);
+>  	synchronize_srcu(&shrinker_srcu);
 
-It's probably really a Daire question, although he is off in the weeds
-at the moment..
->=20
-> On Thu, Mar 09, 2023 at 02:36:24PM +0100, Janne Grunau wrote:
-> > Fixes following warning inside of_irq_parse_raw() called from the common
-> > PCI device probe path.
-> >=20
-> >   /soc/pcie@690000000/pci@1,0 interrupt-map failed, using interrupt-con=
-troller
-> >   WARNING: CPU: 4 PID: 252 at drivers/of/irq.c:279 of_irq_parse_raw+0x5=
-fc/0x724
->=20
-> Based on this commit log, I assume this patch only fixes the warning,
-> and the system *works* just fine either way.  If that's the case, it's
-> debatable whether it meets the stable kernel criteria, although the
-> documented criteria are much stricter than what happens in practice.
->=20
-> >   ...
-> >   Call trace:
-> >    of_irq_parse_raw+0x5fc/0x724
-> >    of_irq_parse_and_map_pci+0x128/0x1d8
-> >    pci_assign_irq+0xc8/0x140
-> >    pci_device_probe+0x70/0x188
-> >    really_probe+0x178/0x418
-> >    __driver_probe_device+0x120/0x188
-> >    driver_probe_device+0x48/0x22c
-> >    __device_attach_driver+0x134/0x1d8
-> >    bus_for_each_drv+0x8c/0xd8
-> >    __device_attach+0xdc/0x1d0
-> >    device_attach+0x20/0x2c
-> >    pci_bus_add_device+0x5c/0xc0
-> >    pci_bus_add_devices+0x58/0x88
-> >    pci_host_probe+0x124/0x178
-> >    pci_host_common_probe+0x124/0x198 [pci_host_common]
-> >    apple_pcie_probe+0x108/0x16c [pcie_apple]
-> >    platform_probe+0xb4/0xdc
-> >=20
-> > This became apparent after disabling unused PCIe ports in the Apple
-> > silicon device trees instead of deleting them.
-> >=20
-> > Use for_each_available_child_of_node instead of for_each_child_of_node
-> > which takes the "status" property into account.
-> >=20
-> > Link: https://lore.kernel.org/asahi/20230214-apple_dts_pcie_disable_unu=
-sed-v1-0-5ea0d3ddcde3@jannau.net/
-> > Link: https://lore.kernel.org/asahi/1ea2107a-bb86-8c22-0bbc-82c453ab08c=
-e@linaro.org/
-> > Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
-> > Cc: stable@vger.kernel.org
-> > Reviewed-by: Marc Zyngier <maz@kernel.org>
-> > Signed-off-by: Janne Grunau <j@jannau.net>
-> > ---
-> > Changes in v2:
-> > - rewritten commit message with more details and corrections
-> > - collected Marc's "Reviewed-by:"
-> > - Link to v1: https://lore.kernel.org/r/20230307-apple_pcie_disabled_po=
-rts-v1-1-b32ef91faf19@jannau.net
-> > ---
-> >  drivers/pci/controller/pcie-apple.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controll=
-er/pcie-apple.c
-> > index 66f37e403a09..f8670a032f7a 100644
-> > --- a/drivers/pci/controller/pcie-apple.c
-> > +++ b/drivers/pci/controller/pcie-apple.c
-> > @@ -783,7 +783,7 @@ static int apple_pcie_init(struct pci_config_window=
- *cfg)
-> >  	cfg->priv =3D pcie;
-> >  	INIT_LIST_HEAD(&pcie->ports);
-> > =20
-> > -	for_each_child_of_node(dev->of_node, of_port) {
-> > +	for_each_available_child_of_node(dev->of_node, of_port) {
-> >  		ret =3D apple_pcie_setup_port(pcie, of_port);
-> >  		if (ret) {
-> >  			dev_err(pcie->dev, "Port %pOF setup fail: %d\n", of_port, ret);
->=20
-> Is this change still needed after 6fffbc7ae137 ("PCI: Honor firmware's
-> device disabled status")?  This is a generic problem, and it would be
-> a lot nicer if we had a generic solution.  But I assume it *is* still
-> needed because Rob gave his Reviewed-by.
->=20
-> Not related to this patch, but this function looks funny to me.  Most
-> pci_ecam_ops.init functions just set up ECAM-related things.
->=20
-> In addition to ECAM stuff, apple_pcie_init() and mc_platform_init()
-> also initialize IRQs, clocks, and resets.
->=20
-> Maybe we shoehorn the IRQ, clock, reset setup into pci_ecam_ops.init
-> because we lack a generic hook for doing those things, but it seems a
-> little muddy conceptually.
-
-"We", and that's very much the royal variety, were in the middle of
-re-working some of this stuff actually.
-
-At the moment we're using pci_host_common_probe() as
-platform_driver.probe, but Daire has a patchset where he introduced an
-mc_host_probe() instead, which sets up the clocks.
-The interrupt setup is still done in the pci_ecam_ops.init function
-though, although with a comment added noting that "Address translation
-is up; safe to enable interrupts". The most relevant patch in that
-series is:
-https://lore.kernel.org/linux-pci/20230111125323.1911373-9-daire.mcnamara@m=
-icrochip.com/
-
-Robin/Lorenzo had some comments about the dt parsing that needed
-investigation & Daire's off in the weeds, but hopefully we'll get another
-version of that stuff out once he gets back.
-That'll at least move the clock setup out of the ecam bits and provide a
-reason for why we're doing the interrupt setup in pci_ecam_ops.init.
-
-FWIW, doing it this way was review feedback at some stage during the
-upstreaming process for the driver:
-https://lore.kernel.org/linux-pci/20200709200055.GA763222@bogus/
-Originally, Daire was doing this stuff in platform_device.probe but that
-was 3 years ago, so maybe the winds have changed since then!
-
-Hope that helps?
-Conor.
-
---Y6suV7oa2FgnRcti
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAo4AwAKCRB4tDGHoIJi
-0kXjAP9gzE7+3b8wGo8+7cIJEN3dcnt/5faCnm6i4/n+Lpit/QD8DuPg6PbVD7Mf
-Q+cw1y8yVA7f7Y4Qa5H8AlJTVUWpSw8=
-=LxFO
------END PGP SIGNATURE-----
-
---Y6suV7oa2FgnRcti--
