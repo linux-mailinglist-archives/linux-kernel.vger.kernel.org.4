@@ -2,175 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CF16B1E23
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA4E6B1E28
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjCIIbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 03:31:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
+        id S229835AbjCIIcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 03:32:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjCIIbU (ORCPT
+        with ESMTP id S229999AbjCIIbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:31:20 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC8DE1FE9;
-        Thu,  9 Mar 2023 00:29:30 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id C6EB95C011B;
-        Thu,  9 Mar 2023 03:29:24 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 09 Mar 2023 03:29:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1678350564; x=
-        1678436964; bh=Oa/m0zQYb/9cVTdeBVWVrncsae/cjF8bU6ixcrep6N4=; b=e
-        qVYCC9RU0vIhMD5Svk+mwY3qm4EVGZTIab4j6DZukQqwvwu2I1pyhisx49mTBNoB
-        R10G6H51ISsyWkQPpBgIxKblcyiBGNnPVEWUpmRmqpWh7f/fZ91qC4v9LKUrdpVp
-        HBamGmLwZUbyzgputxPsokvu6kgsr7BKCydBeUNwYWhFJmp4Fk+HdS6s6tA+Xy0M
-        Sc/mA0N76oy/iVS+h2dUapqTnwjuz9YHREc8EgvfQggAH6kA68u73jBBtC8OjrE5
-        N6gOeymg+oxGI5sLLdlKzbfgFE1ChBjrINZWwPWsiF/AlVcdgi83FvtshQ1j2XN5
-        HwjMCHhDS/ShYpSi1sXXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1678350564; x=1678436964; bh=Oa/m0zQYb/9cV
-        TdeBVWVrncsae/cjF8bU6ixcrep6N4=; b=Ioqvy6L3B/96WajH3znnyMdgmvN8d
-        BO7IuUE1hotFCXXb0JVbvD6AZdHPXKk7utAaxjrKtLdbpLYsvDBoYrhFxsjfY+OZ
-        1FE2G5iGup3RImVIQTAE0JJZYhVuo07SpLTYAlXufav8g2NhRa5ygpMXzxJubwcZ
-        A6f+Fu8VdYVqHrX5mZXDcvS4mdkKx4M5cWogSKNP50r/LB5ciPUFpMrZas/JbNEC
-        GRvw1M5l1/9BZT6BmxR50Xpay9B9GO+wMzXH/zDeVgQL4Z4k5KyfG4BAJ3lpuraJ
-        7chNcYChY48yu5h6VflcRX1tuNjJGR7dM8eBE5VD1cRYiq9EehhV8PJsA==
-X-ME-Sender: <xms:45gJZMD909XJ-PoqR9DIkjmKJEXf78pqI7VYcRhUBA2vg6wYbNK6Sw>
-    <xme:45gJZOimMzZGiYfDOaLZvCJiOfRymLFqloMZ9cd7n1hS-l68hqYtGQlvsjk29U_-W
-    gZq9O0Bc_iNOpE9wfE>
-X-ME-Received: <xmr:45gJZPnYMoHP3vjuz8G_oW_SGg_ztjOOiozXDDjd_jwFisTVArN3EH27aXz2MyOfjILb6MO4EOFrDY-45Y6MdRYycg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdduhedgvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfgrkhgr
-    shhhihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhird
-    hjpheqnecuggftrfgrthhtvghrnhephefhhfettefgkedvieeuffevveeufedtlefhjeei
-    ieetvdelfedtgfefuedukeeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
-X-ME-Proxy: <xmx:5JgJZCyEBeozrJeyqOW8CopBZ22mKWSpCRTRDwQaL8YENXfNAM8dGw>
-    <xmx:5JgJZBST7NUjtlUOOiQKRuZYQSjlmkLz-RE_o19_QXi7cuz5QkXeNA>
-    <xmx:5JgJZNYzNRG2m6sgw-WyqE3e_cxozLpCp-Mrq5Wg3NcU0QNkAFLTAw>
-    <xmx:5JgJZDlmIRE7__MNBhjrnyTEgUTxP45cnnIWJKH0QqxKnXfglyZLpQ>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 9 Mar 2023 03:29:20 -0500 (EST)
-Date:   Thu, 9 Mar 2023 17:29:18 +0900
-From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
-        andersson@kernel.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.com,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-Subject: Re: [PATCH v3 15/28] sound: usb: Introduce QC USB SND offloading
- support
-Message-ID: <20230309082918.GA220616@workstation>
-Mail-Followup-To: Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
-        andersson@kernel.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.com,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <20230308235751.495-16-quic_wcheng@quicinc.com>
+        Thu, 9 Mar 2023 03:31:40 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76DFDF261;
+        Thu,  9 Mar 2023 00:29:54 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3298Tjg3088676;
+        Thu, 9 Mar 2023 02:29:45 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678350585;
+        bh=EN6Y82ER0dPTcUGEYF3Fi4KOCr+DQRU5Jm1MApYxGmI=;
+        h=From:To:CC:Subject:Date;
+        b=KS41o0cMsSXIxZycxeH9OIezRZcyJy/qULzAM0R6bH6jV9RKmKM1Fd6OC5GfiLQpT
+         5EdRp0gIgtcWof7GKrQqOK8bji/8WvRkMIRR59vq7Svn9bHNKjS5LDODm4e3duJO+d
+         rJPENsp9yQYGZX0F7JQNJ6Tin/C6xGkC3IcBbZz8=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3298TjGn022718
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 9 Mar 2023 02:29:45 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 9
+ Mar 2023 02:29:45 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 9 Mar 2023 02:29:45 -0600
+Received: from uda0500640.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3298Tf59063317;
+        Thu, 9 Mar 2023 02:29:41 -0600
+From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
+To:     <nm@ti.com>, <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <s-vadapalli@ti.com>, <vaishnav.a@ti.com>, <r-gunasekaran@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v13 0/8] arm64: j721s2: Add support for additional IPs
+Date:   Thu, 9 Mar 2023 13:59:32 +0530
+Message-ID: <20230309082940.31535-1-r-gunasekaran@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230308235751.495-16-quic_wcheng@quicinc.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The following series of patches add support for the following
+on J721S2 common processor board,
 
-On Wed, Mar 08, 2023 at 03:57:38PM -0800, Wesley Cheng wrote:
-> diff --git a/sound/usb/qcom/qc_audio_offload.c b/sound/usb/qcom/qc_audio_offload.c
-> new file mode 100644
-> index 000000000000..2663906644f2
-> --- /dev/null
-> +++ b/sound/usb/qcom/qc_audio_offload.c
-> ...
-> +static int enable_audio_stream(struct snd_usb_substream *subs,
-> +				snd_pcm_format_t pcm_format,
-> +				unsigned int channels, unsigned int cur_rate,
-> +				int datainterval)
-> +{
-> +	struct snd_usb_audio *chip = subs->stream->chip;
-> +	struct snd_pcm_hw_params params;
-> +	const struct audioformat *fmt;
-> +	int ret;
-> +	bool fixed_rate;
-> +
-> +	_snd_pcm_hw_params_any(&params);
-> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_FORMAT,
-> +			(__force int) pcm_format, 0);
-> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_CHANNELS,
-> +			channels, 0);
-> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_RATE,
-> +			cur_rate, 0);
+- USB
+- SerDes
+- OSPI
+- PCIe
 
-I think the above code is equivalent to below code.
+Changes from v12:
+* Disabled only the nodes that need additonal info
 
-```
-// 1. Initialize the hardware parameter so that it expresses
-// the maximum flags of mask parameters and the maximum range of integer
-// parameters.
-_snd_pcm_hw_params_any(&params);
+Changes from v11:
+* Cleaned up comments for disabled nodes
+* Removed deprecated properties for flash node
 
-// 2. Then shrink the mask parameters and integer parameters.
-struct snd_mask *mask;
-struct snd_interval *interval;
+Changes from v10:
+* Removed the ti,j721e-system-controller bindings document
+  patch introduced in v9
+* Updated mux-controller node with "reg" property to fix dtbs
+  warnings
+* For the nodes which are disabled by default, added comments to
+  provide the reason behind it
+* Dropped Link tags in all patches
 
-mask = hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT);
-snd_mask_leave(mask, pcm_format);
+Changes from v9:
+* Disabled nodes in main.dtsi and enable them in the board
+  specific DT file
 
-interval = hw_param_interval(params, SNDRV_PCM_HW_PARAM_CHANNELS);
-snd_interval_setinteger(&interval);
-interval.min = interval.max = channels;
+Changes from v8:
+* Update the ti,j721e-system-controller bindings document
+* Fix dtbs warnings
 
-interval = hw_param_interval(params, SNDRV_PCM_HW_PARAM_RATE);
-snd_interval_setinteger(&interval);
-interval.min = interval.max = cur_rate;
-```
+Changes from v7:
+* Fix node names as per bindings document
 
-In '[PATCH v3 10/28] sound: usb: Export USB SND APIs for modules', some
-codes moved from ALSA Open Sound System compatibility layer to ALSA core
-to export some kernel APIs. The '_snd_pcm_hw_param_set()' is one of
-them. If they were needed just for the above operations, it would be
-exaggerating just for the driver.
+Changes from v6:
+* Changes to ti,j721s2-wiz-10g compatible string from ti,am64-wiz-10g but
+  requires this series to be merged first
+  Ref: https://lore.kernel.org/linux-arm-kernel/20221122092203.762308-1-mranostay@ti.com/
+* Removed unused pcie1_ep based on feedback
+* Switch from incorrect "ti,j721e-system-controller", "syscon", "simple-mfd" compatible for
+  SPI node to "simple-bus"
 
-Of course, we can assume that the similar kernel API would be required
-for the other drivers (OSS PCM, USB gadget, and so on.). However, at
-present, it is preferable to focus just on your driver. 
+Changes from v5:
+* Removed Cc from commit messages to reduce clutter
+* Squashed changes for device tree nodes that get modified latter in the patchset
+  series
 
-(I note that typical sound PCM driver has code to shrink hardware
-parameters in PCM rule. It consists of a set of test and refine API.)
+Changes from v4:
+* Add my Signed-off-by lines to all patchsets
+
+Changes from v3:
+* Rebased changes on top of '[PATCH 00/12] TI J7x Disable Incomplete DT Nodes'
+* Removed "dt-bindings: PCI: Add host mode device-id for j721s2 platform" patch and
+  send it own series to avoid a dependency that would hold up other patches in this
+  series.
+
+Changes from v2:
+* Added PCIe RC + EP enablement patchsets
+* Added device-id for j722s2 PCIe host in dt documentation
+* Reworked SERDES + WIZ enablement patchset to use properies for clocks
+  defines versus entire devicetree nodes. Results in cleaner code that
+  doesn't break dt-schema or the driver functionality.
+
+Changes from v1:
+* Resolve issues with dt schema reporting
+* Minor changes related to consistency on node naming and value
+
+v12: https://lore.kernel.org/all/20230301091136.17862-1-r-gunasekaran@ti.com/
+v11: https://lore.kernel.org/all/20230224102438.6541-1-r-gunasekaran@ti.com/
+v10: https://lore.kernel.org/all/20230221120612.27366-1-r-gunasekaran@ti.com/
+v9: https://lore.kernel.org/all/20230220111408.9476-1-r-gunasekaran@ti.com/
+v8: https://lore.kernel.org/all/20230123095733.31657-1-r-gunasekaran@ti.com/
+v7: https://lore.kernel.org/all/20221122101616.770050-1-mranostay@ti.com/
+v6: https://lore.kernel.org/all/20221119040906.9495-1-mranostay@ti.com/
+v5: https://lore.kernel.org/all/20221103044125.172864-1-mranostay@ti.com/
+v4: https://lore.kernel.org/all/20221101033204.33048-1-mranostay@ti.com/
+v3: https://lore.kernel.org/all/20220921031327.4135-1-mranostay@ti.com/
+v2: https://lore.kernel.org/all/20220908011911.3319-1-mranostay@ti.com/
+v1: https://lore.kernel.org/all/20220125131113.727-1-a-govindraju@ti.com/
+
+Aswath Govindraju (7):
+  arm64: dts: ti: k3-j721s2-main: Add support for USB
+  arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support of OSPI
+  arm64: dts: ti: k3-j721s2-common-proc-board: Enable SERDES0
+  arm64: dts: ti: k3-j721s2-common-proc-board: Add USB support
+  arm64: dts: ti: k3-j721s2: Add support for OSPI Flashes
+  arm64: dts: ti: k3-j721s2-main: Add PCIe device tree node
+  arm64: dts: ti: k3-j721s2-common-proc-board: Enable PCIe
+
+Matt Ranostay (1):
+  arm64: dts: ti: k3-j721s2-main: Add SERDES and WIZ device tree node
+
+ .../dts/ti/k3-j721s2-common-proc-board.dts    |  87 +++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    | 145 ++++++++++++++++++
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |  44 ++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  |  41 +++++
+ 4 files changed, 317 insertions(+)
 
 
-Regards
+base-commit: 2c6433e9294b6d0f4d8f08c3c70a3eac434d3ec8
+-- 
+2.17.1
 
-Takashi Sakamoto
