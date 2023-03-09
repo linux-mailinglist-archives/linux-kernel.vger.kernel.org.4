@@ -2,168 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2DA6B1863
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 02:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9399F6B1866
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 02:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjCIBCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 20:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
+        id S229760AbjCIBDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 20:03:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjCIBCA (ORCPT
+        with ESMTP id S229558AbjCIBDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 20:02:00 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0CBBC7AF;
-        Wed,  8 Mar 2023 17:01:51 -0800 (PST)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PX9qn2KsQzKmTS;
-        Thu,  9 Mar 2023 09:01:41 +0800 (CST)
-Received: from [10.40.193.166] (10.40.193.166) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 9 Mar 2023 09:01:48 +0800
-Subject: Re: [bug report] scsi: libsas: Fix hung when disable phys
-To:     yangxingui <yangxingui@huawei.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        <jejb@linux.ibm.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Linuxarm <linuxarm@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Kangfenglong <kangfenglong@huawei.com>,
-        John Garry <john.g.garry@oracle.com>
-References: <cf7ba927-c872-79c8-6e84-2196c350216e@huawei.com>
- <bd22a19a-dd51-aa34-0794-780368660683@huawei.com>
-From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
-Message-ID: <cc52e18a-41d2-cff1-a86c-de114d8a140e@hisilicon.com>
-Date:   Thu, 9 Mar 2023 09:01:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
+        Wed, 8 Mar 2023 20:03:33 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2079.outbound.protection.outlook.com [40.107.237.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B95D62873;
+        Wed,  8 Mar 2023 17:03:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V96lEws3kenQCoO0Vc5gwasWbvCXzUOjKbGq2LQ3a2yabiuC7M7Fkn+9ERIP0jncnh6w6djtNaYVURuv+wZWD3hq4+TilaBAhLa/wivkPJ9fxB7AoIMDIQWxwSlgJsJdkrBzEoNweYKOw8m0NCC/H1Nv5kj3QERxWQP2dO4GxG75pafyvvMsVo5N62sP6zCVSDVTeCXVKNXX7RbdCMJPs9feoQgtUKJo5/E+Lt1Bx2+sPx6/wBomfqufgJs/UbetvpqKvY7mSccXnZcqzlubft9AdfiPUDykGKmpC+QdQkKVIpTlnAWIzQTBojj+X1AJZjM/VWLLIL74fLgzeVt/Ow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FdSMggKDt2IfsUu3VrgpTm0RzzlA6Bllu+Bk6EhFTvY=;
+ b=AG/jinBQmmPPIvkUXCtjbkp0QqZnQYKUGy05a1vP9iS3hIQVtaq4IKBTm0mci/h2zDhIZI+jbRqJ7NKrOP6BiE3Ew6ATwhCqoIWCi9e9r+D1vupwugf0kW0sPXfpReiI2/cczDMascnCdAlwfEIItQL+7qLpASePmYH9RP4YTbkCvHoUeosodEO78f/W7veIhAd1b5Mfe/gZhXsKz+P/iqeJoH0zEIf0bZaZCywDLWGCavOTqfikQ/lp6ANv8f5+pjSQfKNdtgTx/lQCUxBMkPGKTL5ANvr4MpD1fDcwF1U0pxOw6BxXYYEbOQJ5cWXWtWoCe9VjrU7LarNkhFmNUQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FdSMggKDt2IfsUu3VrgpTm0RzzlA6Bllu+Bk6EhFTvY=;
+ b=aTvvnoALYP8eMAq4i4+WDOmzemOFOm+PCoAn0WnctYjr8EdpkmdpWHsvrBANAYRf83OVjmZVNGVxrmv/GrEWxK4nSvKMJfb39KFIJKkYG4PTv4q27+/I9DJuO32PMBvqwA9AGoVoMB8Rw9xrd3lwog4fzyenczIsTeWGZzgucTrkDr54Qoq8zBu51NRuGKmDDU7+29wEh4mSYyu6PS4Yju0LSVIeZmn1BAwxrdK7rn9euS22qIKXIoLDNoSgUvpND/JD+CgtfxANyu5vNjy4pIr/ID7Lc4fyvPaLdYT8m6/+LqX/1ImR87KsV+XcBXaswuIU8vljo9SVA7ugLsbawA==
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
+ by SN7PR12MB6713.namprd12.prod.outlook.com (2603:10b6:806:273::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Thu, 9 Mar
+ 2023 01:03:28 +0000
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::4aaa:495:78b4:1d7c]) by MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::4aaa:495:78b4:1d7c%3]) with mapi id 15.20.6156.029; Thu, 9 Mar 2023
+ 01:03:28 +0000
+From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
+CC:     "brauner@kernel.org" <brauner@kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] splice: Remove redundant assignment to ret
+Thread-Topic: [PATCH] splice: Remove redundant assignment to ret
+Thread-Index: AQHZUNG8E042L+4ihkmLXF77Zg+jgq7xpEYA
+Date:   Thu, 9 Mar 2023 01:03:28 +0000
+Message-ID: <7dc1cdeb-f2f4-617a-cc6c-934f4780f23c@nvidia.com>
+References: <20230307084918.28632-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20230307084918.28632-1-jiapeng.chong@linux.alibaba.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW2PR12MB4667:EE_|SN7PR12MB6713:EE_
+x-ms-office365-filtering-correlation-id: bea4f141-4fb5-421d-c4ea-08db203a1814
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HrYJD4tTXP+tqeDm6FWN+GT5CuSlqW0iPsEP8KGRM1Jl0kwG0KnKheKPqrMBrGziDtafP3LqrO2CMW2jzhJ2imeL9d2XRQ8h9D3aw3nv8I1Pif8Ysdz9LqraFTjonKr5ui0z09zBoqo1YvFLWQKvugdiPSIinGXXNgRuFW3n21HtcLZlLGTYuA138Ecrz8+wEqgpFLULisaXGZGsS7/cJp3FCW39POidrbyFGeLiJaUGzUFGH3tpH9EHnF+gQYTcA7PZ8TBPYJQsbQEzKuCdamt2ILuOz34P9NxnL26gSF2qvpUlInT6MsjYVOVNQdbnP8OiX6KYc70Os+Dww4fRGw1E0IQN9LrsS0B8bGdA+GmlJdQmSP6fTjuvu7i4PYNugh+k+t3qRiv/msrLaQ3jyVUyJ3gAhb6KT/Fsxjg3Et8Nsww5m7Pez9kgxO7Ila/i1rJjeL9NNFbE7FasXDIzfzGrKVLXgKKaxLfYCBqGaknsQFr4e9+JQO1yNZW/fZN2bjV3IUU3V7c50p8u7O5Aj+UtXYA/LGScbO1g6z2pvFeKDkJj18Ppi5X8Ol0q2i7H8TUBpZMmm3G1nTnt0OSyR+uPrlZURW9w0dHp8P37/+E1x0GP5T/UcA1VpzblwBEqF3tB0ZqueKf5PGlhWGiLkmyosynx6s+0U9Rw65LZBDRVQg3PCFBYplAnxRa3TAjrCgBP/zgqtYk8SrcPJIgqrq+9WCUahSzTCO5Ndq4cfGw2X3IH0dMGT4hlPQk4E6WXqVork/HOQTZFDwJFRw3L7SJFQyIeuy7dGmtXgmEP9KhvPiZmM31tsg7r3NR07qDo
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(366004)(346002)(39860400002)(376002)(136003)(451199018)(38100700002)(31696002)(31686004)(316002)(86362001)(110136005)(54906003)(66556008)(8676002)(66476007)(66946007)(64756008)(66446008)(122000001)(76116006)(8936002)(4326008)(91956017)(36756003)(6486002)(38070700005)(966005)(2616005)(478600001)(4744005)(5660300002)(41300700001)(71200400001)(83380400001)(2906002)(186003)(53546011)(26005)(6512007)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MnRhdlczMVVMci9wMUJHRE5CbDBuNW01cGFQT0EydDVTQ3JMVkxSZUNOQjBP?=
+ =?utf-8?B?YmJMeU0vdm1RcDJDREZKYk1HT2U1NTl3QXhBMEFEVXJaWGgzbyswQmUvNFY4?=
+ =?utf-8?B?YkNxYWR0dWhXcTAxM2gwa1VjMzVVRzIwN25KR0Q5L09TSGw0MlVEVkFIbEpH?=
+ =?utf-8?B?ME1WWXYwUTJiMWM1S0JIVEEvVXRkSnJGeFZLaGZld3ZnZjM2aU1WckcxazdZ?=
+ =?utf-8?B?ZjRBN0VxaTgrd1NGVFBhZUl4WkVJb1V0SiswOXhLRFFjQnRyczI2Z2ZZVVY3?=
+ =?utf-8?B?NmhhTDBTMXdNdHhZMURicis0bURCZThkdnBxVjBBVWJlMU5HV0pYTDJTTVlT?=
+ =?utf-8?B?ZEtiMU4vREJQMnpFV0xVc2RtY2pERk9xTmw1TmJaYmIvMWpUQ1Jza3UyK1Rl?=
+ =?utf-8?B?VWRQVWEyeElPMlNYdFNwTFhRN1oyOWlBRzNZY05zejJOc2pUNXM2VGVaTVlN?=
+ =?utf-8?B?VDJFNjJUSU0rcFhxWHZONUwzUW9iQ2RQVFFmQ0UzajN6SnprdlNkbXN2TDZX?=
+ =?utf-8?B?ZERPOWp0cW1lLzQxU2ptNks5VThYcmJXRlladVdZellRNjRRZ2FFeWl2SkQv?=
+ =?utf-8?B?clJFRnYrMExOV3l1YW1QbVh1WGVwWHptazF2cFNHcnk2NVJCOEVGQi9XOERs?=
+ =?utf-8?B?VnBReEpZWkFUQURjZTFYcXBhNDBLdVhEekRDTWoyOHJQVnI0Q0xMQ3RncDQw?=
+ =?utf-8?B?cElmbVdiWDZZaHhmU1pPYmZUVGh5NWxWcXlIdC95VzM0SUhtdE90QTlnSjQ4?=
+ =?utf-8?B?NERDc1RpemlpWTlQQ0ZRUFhHbDZQRXNya2h5U1FXc3RlYnZjRFFCakwrYlBl?=
+ =?utf-8?B?eUk4aEtSYWhNbEM1cXBvaHNhMGJTZzYvZFpLVXNkZDlGYklleTc5N0FQWnhP?=
+ =?utf-8?B?di9aWHYrRE91SlEwVTV0Sk92MUN2YThPT2U0RXBYdlpPUktNRHF1VkU0ZHZ2?=
+ =?utf-8?B?eFV2bFovYldZdGkxTUpYTzZsWVVEQU5kMVRKeHROVEJETnN6eXhNaU4vUnBX?=
+ =?utf-8?B?TVpJY1FsOE0wdGlsL2dSV2J0WndXd3ZxVkMzSTJML0k0UVRCdy91MjU3MU5m?=
+ =?utf-8?B?TWo2aGhhVURDQmVCaDhYRE1FYTVQdHdIL3Z0Q3daMVMxTmlQaytCWExWamFl?=
+ =?utf-8?B?cjNnU0U5aSs4OXJ1NWxFVWZZSWRpckFTSW1ha2VkSWpYUUJUU3crbUdxKzc3?=
+ =?utf-8?B?dVpJbnVuVkhUUitEYTl1Q29mbmoyM0lDRGx6ZmpEdTRkTFAwRCthNDJ6aEll?=
+ =?utf-8?B?YURrbFhCcGdDR1ZxZ1J0WVFkQ3RoekVlR3R0UUtOY29JNnRQVElaMmZoaFVQ?=
+ =?utf-8?B?djlNZEdITkI4QXg4a1NyRzdMUy9lRHo1UXJHQUxwdmJ1alZDTk9DdC9JZlZE?=
+ =?utf-8?B?bjRXeDlFWlFXdytOcEd4SDVOOWM5VVc0VnhBekM3aEhwWkRGTTU3NnVGV3J0?=
+ =?utf-8?B?V1h4TTdWQmVod0pqaUpERTZKSkpLaU5IaXVLMjljSkpoNEFMbmpXdmdOSWFu?=
+ =?utf-8?B?WTkvNUxXRVpYMjhuNHh6RnlMT0JXc09PVFpkT0plNWQwemEwMEExbHZ4V1FR?=
+ =?utf-8?B?Y1Vkd1JnWDBsRER5bTNpcnc3Slc3WmZDSFJxdEYzdTAxc2wzeER0Y3EyUGRK?=
+ =?utf-8?B?RlFveEVRZFV1d2J3UENlUkpCc003aXV6eG5Ec3BHam1Ub2NWTkFoNlJDZmN2?=
+ =?utf-8?B?OVF1QnR1WnpDcGpadlNocGptY2tWMDNMZHNvU29kZWZIRzR0VzFJd1FyOGwx?=
+ =?utf-8?B?a0h2cUlycTd3NjJsaWQyZGIrZkxpZUZMSWg4TzUxWFdWK2NaYmpqcGxETmNJ?=
+ =?utf-8?B?dU9sQlZ4QjdGaG8vWkhqNFhIOEZxL2F4Z2taOE5pN09kdkZObmRKU2pBd3hY?=
+ =?utf-8?B?N010MlNFaDF6TFJuNEN3NDBHMHZtWHZSWEFsVkZkYTFiOExZcXJNUDBiczZN?=
+ =?utf-8?B?S3N1Z1ptUXJIVGYrR0dhM0dXaG0zVXVXaXpyQWQ0T1NiNWk1UXlxb0h6KzBR?=
+ =?utf-8?B?SHBCTUtTeWtTbTNMaStYbzk1NjV3M2pXdTF3Q1lXaFRzMlNHN21YcmoyVHkr?=
+ =?utf-8?B?dkE4M2RuZUZvVDNzSEtuRnYrWFdqdnNJVEk3SVZXakN5QUlobVpVMk1XQWV2?=
+ =?utf-8?Q?Z33doIK9ASFddiQXqJCU/ET7g?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B3329F05C98A794E92819FAB7919702C@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <bd22a19a-dd51-aa34-0794-780368660683@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.40.193.166]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bea4f141-4fb5-421d-c4ea-08db203a1814
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2023 01:03:28.6950
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NvHRgJfrT8v2KYVvEwKkjojDxZnXj1SLQ1zLxHiMCEW9zctC8jivKl3eRP7ptieo1koPRhBsxSL6WEwDiYqo7Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6713
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-
-在 2023/2/27 21:17, yangxingui 写道:
->
-> Hi, All
->
-> If disabling remote PHY just after disabling all local PHYs in expander
-> envirnment,as follows:
-> echo 0 > /sys/class/sas_phy/phy-4\:0/enable
-> echo 0 > /sys/class/sas_phy/phy-4\:1/enable
-> echo 0 > /sys/class/sas_phy/phy-4\:2/enable
-> echo 0 > /sys/class/sas_phy/phy-4\:3/enable
-> echo 0 > /sys/class/sas_phy/phy-4\:4/enable
-> echo 0 > /sys/class/sas_phy/phy-4\:5/enable
-> echo 0 > /sys/class/sas_phy/phy-4\:6/enable
-> echo 0 > /sys/class/sas_phy/phy-4\:7/enable
-> echo 0 > /sys/class/sas_phy/phy-4:0:7/enable
->
-> a hung as follows occurs.
->
-> [  245.564088] INFO: task kworker/u256:1:883 blocked for more than 120 
-> seconds.
-> [  245.571115]       Tainted: G           O      5.16.0-rc4+ #1
-> [  245.576759] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" 
-> disables this message.
-> [  245.584557] task:kworker/u256:1  state:D stack:    0 pid:  883 
-> ppid:    2 flags:0x00000008
-> [  245.592878] Workqueue: 0000:74:02.0_event_q sas_phy_event_worker 
-> [libsas]
-> [  245.599652] Call trace:
-> [  245.602092]  __switch_to+0xd8/0x114
-> [  245.605574]  __schedule+0x2f0/0x85c
-> [  245.609054]  schedule+0x60/0x100
-> [  245.612273]  __kernfs_remove.part.0+0x288/0x2e0
-> [  245.616791]  kernfs_remove_by_name_ns+0x70/0xc0
-> [  245.621307]  sysfs_remove_file_ns+0x24/0x30
-> [  245.625477]  device_remove_file+0x24/0x34
-> [  245.629475]  attribute_container_remove_attrs+0x50/0x8c
-> [  245.634684]  attribute_container_class_device_del+0x24/0x3c
-> [  245.640237]  transport_remove_classdev+0x64/0x80
-> [  245.644839]  attribute_container_device_trigger+0x11c/0x124
-> [  245.650393]  transport_remove_device+0x24/0x30
-> [  245.654823]  sas_phy_delete+0x34/0x60
-> [  245.658475]  do_sas_phy_delete+0x60/0x70
-> [  245.662385]  device_for_each_child+0x68/0xb0
-> [  245.666640]  sas_remove_children+0x44/0x54
-> [  245.670723]  sas_destruct_devices+0x5c/0xa0 [libsas]
-> [  245.675676]  sas_deform_port+0x178/0x1bc [libsas]
-> [  245.680371]  sas_phye_loss_of_signal+0x28/0x34 [libsas]
-> [  245.685583]  sas_phy_event_worker+0x3c/0x60 [libsas]
-> [  245.690536]  process_one_work+0x1e0/0x46c
-> [  245.694534]  worker_thread+0x15c/0x464
-> [  245.698272]  kthread+0x188/0x194
-> [  245.701491]  ret_from_fork+0x10/0x20
-> [  245.705120] INFO: task bash:25579 blocked for more than 120 seconds.
-> [  245.711450]       Tainted: G           O      5.16.0-rc4+ #1
-> [  245.717087] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" 
-> disables this message.
-> [  245.724883] task:bash            state:D stack:    0 pid:25579 
-> ppid: 25113 flags:0x00000200
-> [  245.733202] Call trace:
-> [  245.735639]  __switch_to+0xd8/0x114
-> [  245.739117]  __schedule+0x2f0/0x85c
-> [  245.742595]  schedule+0x60/0x100
-> [  245.745814]  schedule_timeout+0x180/0x1bc
-> [  245.749811]  wait_for_completion+0x8c/0x100
-> [  245.753984]  flush_workqueue+0x108/0x3d4
-> [  245.757896]  drain_workqueue+0xc8/0x16c
-> [  245.761722]  __sas_drain_work+0x54/0x90 [libsas]
-> [  245.766328]  sas_drain_work+0x68/0x70 [libsas]
-> [  245.770760]  queue_phy_enable+0x9c/0xec [libsas]
-> [  245.775368]  store_sas_phy_enable+0xf0/0x10c
-> [  245.779624]  dev_attr_store+0x24/0x40
-> [  245.783275]  sysfs_kf_write+0x50/0x60
-> [  245.786930]  kernfs_fop_write_iter+0x124/0x1b4
-> [  245.791361]  new_sync_write+0xf0/0x190
-> [  245.795098]  vfs_write+0x23c/0x2a0
-> [  245.798490]  ksys_write+0x78/0x104
-> [  245.801882]  __arm64_sys_write+0x28/0x3c
-> [  245.805794]  invoke_syscall.constprop.0+0x58/0xf0
-> [  245.810483]  do_el0_svc+0x19c/0x1b0
-> [  245.813962]  el0_svc+0x28/0xec
-> [  245.817009]  el0t_64_sync_handler+0x1a8/0x1ac
-> [  245.821351]  el0t_64_sync+0x1a0/0x1a4
->
-> We find that when all local PHYs are disabled, all the devices will be
-> removed in work PHY_LOSS_OF_SIGNAL which will try to wait the kn->active
-> of the device to be deactivated (in function kernfs_drain)，but
-> kn->active may be still activated as we use sysfs interface to disable
-> remote PHYs at the same time, meanwhile it will drain libsas work
-> including work PHY_LOSS_OF_SIGNAL in the sysfs interface, so hung
-> occurs.
->
-> How to fix the problem in this scenario?
-
-It seems be a common issue in libsas layer.
-What about directly calling callback function of  phy_enable_work and 
-phy_reset_work in function
-queue_phy_enable/queue_phy_reset instead of (queue those works + 
-sas_drain_work)?
-
-
->
-> regards,
->
-> Xingui
->
-> .
->
-> .
->
-
+T24gMy83LzIzIDAwOjQ5LCBKaWFwZW5nIENob25nIHdyb3RlOg0KPiBUaGUgdmFyaWFibGUgcmV0
+IGJlbG9uZ3MgdG8gcmVkdW5kYW50IGFzc2lnbm1lbnQgYW5kIGNhbiBiZSBkZWxldGVkLg0KPg0K
+PiBmcy9zcGxpY2UuYzo5NDA6Mjogd2FybmluZzogVmFsdWUgc3RvcmVkIHRvICdyZXQnIGlzIG5l
+dmVyIHJlYWQuDQo+DQo+IFJlcG9ydGVkLWJ5OiBBYmFjaSBSb2JvdCA8YWJhY2lAbGludXguYWxp
+YmFiYS5jb20+DQo+IExpbms6IGh0dHBzOi8vYnVnemlsbGEub3BlbmFub2xpcy5jbi9zaG93X2J1
+Zy5jZ2k/aWQ9NDQwNg0KPiBTaWduZWQtb2ZmLWJ5OiBKaWFwZW5nIENob25nIDxqaWFwZW5nLmNo
+b25nQGxpbnV4LmFsaWJhYmEuY29tPg0KPiAtLS0NCj4gICBmcy9zcGxpY2UuYyB8IDEgLQ0KPiAg
+IDEgZmlsZSBjaGFuZ2VkLCAxIGRlbGV0aW9uKC0pDQo+DQo+IGRpZmYgLS1naXQgYS9mcy9zcGxp
+Y2UuYyBiL2ZzL3NwbGljZS5jDQo+IGluZGV4IDJlNzZkYmI4MWE4Zi4uMmMzZGVjMmI2ZGZhIDEw
+MDY0NA0KPiAtLS0gYS9mcy9zcGxpY2UuYw0KPiArKysgYi9mcy9zcGxpY2UuYw0KPiBAQCAtOTM3
+LDcgKzkzNyw2IEBAIHNzaXplX3Qgc3BsaWNlX2RpcmVjdF90b19hY3RvcihzdHJ1Y3QgZmlsZSAq
+aW4sIHN0cnVjdCBzcGxpY2VfZGVzYyAqc2QsDQo+ICAgCS8qDQo+ICAgCSAqIERvIHRoZSBzcGxp
+Y2UuDQo+ICAgCSAqLw0KPiAtCXJldCA9IDA7DQo+ICAgCWJ5dGVzID0gMDsNCj4gICAJbGVuID0g
+c2QtPnRvdGFsX2xlbjsNCj4gICAJZmxhZ3MgPSBzZC0+ZmxhZ3M7DQoNClRoZSB2YXJpYWJsZSBy
+ZXR1cm4gaXMgb25seSB1c2VkIGluIHRoZSB3aGlsZSBsb29wIHR3aWNlLA0KZWFjaCB0aW1lIGl0
+IGlzIGluaXRpYWxpemVkIGZyb20gdGhlIGZ1bmN0aW9uJ3MgcmV0dXJuIHZhbHVlLg0KDQotY2sN
+Cg0KDQo=
