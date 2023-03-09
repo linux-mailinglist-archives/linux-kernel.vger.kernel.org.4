@@ -2,107 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3E56B2307
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 687126B230C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbjCILaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:30:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S229878AbjCILbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:31:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbjCILae (ORCPT
+        with ESMTP id S230116AbjCILbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:30:34 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E544AFF7;
-        Thu,  9 Mar 2023 03:30:31 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 6BE0C1C0DFD; Thu,  9 Mar 2023 12:30:29 +0100 (CET)
-Date:   Thu, 9 Mar 2023 12:30:28 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Chris Paterson <Chris.Paterson2@renesas.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "patches@kernelci.org" <patches@kernelci.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        "pavel@denx.de" <pavel@denx.de>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
-        "srw@sladewatkins.net" <srw@sladewatkins.net>,
-        "rwarsow@gmx.de" <rwarsow@gmx.de>
-Subject: CIP doing -stable kernel testing -- was Re: [PATCH 6.1 000/887]
- 6.1.16-rc2 review
-Message-ID: <ZAnDVIl09wDaFNXy@duo.ucw.cz>
-References: <20230308091853.132772149@linuxfoundation.org>
- <TYCPR01MB105885F25AAE8A2FDBD2E577FB7B59@TYCPR01MB10588.jpnprd01.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="3uryvEXGq31Vxb63"
-Content-Disposition: inline
-In-Reply-To: <TYCPR01MB105885F25AAE8A2FDBD2E577FB7B59@TYCPR01MB10588.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+        Thu, 9 Mar 2023 06:31:07 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0AA1E5D9;
+        Thu,  9 Mar 2023 03:31:01 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 855CB32003D3;
+        Thu,  9 Mar 2023 06:30:57 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 09 Mar 2023 06:30:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1678361457; x=1678447857; bh=Fe
+        qfYyDSqOUmEcEBUp15BGtG58cytd7b24Ewa8plTfQ=; b=V84Rh9jj8AZS2IAtNT
+        A0UPcccrvFwJ7zKIXR/qavsrMnXtNHttEi6al7RjA46duXP0zEX1fUpQcojTOT4k
+        ZJqMhSdsmgPgGmCB7pcbyFlHjXyEHevDs8HZw1B0bXBSPm77Z9WTuN4YkJAo+LDI
+        i/8++X5e75bD0j1P81X69m1kE9x9x5B5dC2OZnzueK74qRFiJ30gJyWSMkSvcUWh
+        VUsenzPp+GPPfrDX8NIlHeF3ZAxH/8xAsEEFFRqQIMxRqqPZLS54bvrjQEIVNulp
+        oRQ0aCm7KBUkKCjKMiLTqfFsIIWQem50D44ZnUuo3ceOfzTRv+/vNWJ5BJXisM3e
+        MWNA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1678361457; x=1678447857; bh=FeqfYyDSqOUmE
+        cEBUp15BGtG58cytd7b24Ewa8plTfQ=; b=UHAF1XwCHhQ34oiPzzd/iX/fyoIJr
+        f2qlucdxwv7m47Dg4b3mXieqeGJlKb3OTcKkk6CwEUlYJ4W2sBZMDDp2+nbzGIYO
+        cbprXOvQz9eQUTAVUETXZ70PbrPsGwbJk3JdMxgDNWDMSNOyJyYlUlBhNfflIwNE
+        96ZC08YhUilgccXp94KjN6s8xIMwve1DbRhh9uANRp7vPnaWFvIenz4vIbbrcJFQ
+        Tgd/pMHRwkcufneAtfWQ+3KN4QLHF6vnMWQci3QwNm0lTBHJ1XbOhhoIGPS5Mjl2
+        4+zqc9B9CDXDMOZkG+7aduqiqioOjVdBTUN0mkkmAErYbEaqiUGfFmM2g==
+X-ME-Sender: <xms:cMMJZDXF50ZDDr497pwkXIXhNvJCWzziE-GBP4FhPOeX4_5UXAIH3w>
+    <xme:cMMJZLmxrnbgDZCwu1TwYvCM10TZsWUvTTBZst1kHXCZfWZlwntWpY6kA7le5hFKY
+    GD9lxOeINPvOSY2y4s>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdduiedgvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:cMMJZPY5-rdhOtpzrfFEPSgbr7I7cMbtdayBOphxI__1HF-wNMYycg>
+    <xmx:cMMJZOUdSS1n3oQ2cJYa_kph0ncl9RBb60vgtc3vMMSsHFoFK7pZoQ>
+    <xmx:cMMJZNk8XVpEfqpmLLav43c2LN8pEjC7ZFsmwHJShU6soK61vA4kEA>
+    <xmx:ccMJZMeOiHiwv7UMXh8pIQrnW2WYgvDXJ9v59zNhUNAp2L15ZvN5AQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3A5A8B60086; Thu,  9 Mar 2023 06:30:56 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-206-g57c8fdedf8-fm-20230227.001-g57c8fded
+Mime-Version: 1.0
+Message-Id: <2fffffcb-4f76-405b-acba-1b2e744d75c4@app.fastmail.com>
+In-Reply-To: <8e3c16a7-1155-419c-9bcb-cc3e3630fe5b@sirena.org.uk>
+References: <20230309071100.2856899-1-xiang.ye@intel.com>
+ <20230309071100.2856899-2-xiang.ye@intel.com>
+ <dcb805e1-2b48-481d-8e72-1b515c9d43e6@app.fastmail.com>
+ <8e3c16a7-1155-419c-9bcb-cc3e3630fe5b@sirena.org.uk>
+Date:   Thu, 09 Mar 2023 12:30:33 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Mark Brown" <broonie@kernel.org>
+Cc:     "Ye Xiang" <xiang.ye@intel.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        "Lee Jones" <lee@kernel.org>, "Wolfram Sang" <wsa@kernel.org>,
+        "Tyrone Ting" <kfting@nuvoton.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Sakari Ailus" <sakari.ailus@linux.intel.com>,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 9, 2023, at 12:03, Mark Brown wrote:
+> On Thu, Mar 09, 2023 at 08:56:05AM +0100, Arnd Bergmann wrote:
+>> On Thu, Mar 9, 2023, at 08:10, Ye Xiang wrote:
+>
+>> >  drivers/usb/misc/Kconfig  |  13 +
+>> >  drivers/usb/misc/Makefile |   1 +
+>> >  drivers/usb/misc/ljca.c   | 969 ++++++++++++++++++++++++++++++++++++++
+>> >  include/linux/mfd/ljca.h  |  95 ++++
+>
+>> Why is this in driver/usb/misc? It looks like a normal
+>> mfd driver to me, and it evenhas the header in include/linux/mfd/
+>
+> It was a MFD in the original version, Lee asked for it to be moved to
+> USB: https://lore.kernel.org/r/20230305103456.GF2574592@google.com
 
---3uryvEXGq31Vxb63
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ok, I see. That should probably be mentioned in the patch
+description then. I'm still not sure I follow the reasoning
+for the split between "usb functionality" and and mfd part:
+This is just a usb driver as it is attached to a usb bus, and
+drivers usually get put into a directory based on what they
+provide, not how they are attached to a parent bus.
 
-Hi!
-
-> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Sent: 08 March 2023 09:30
-> >=20
-> > This is the start of the stable review cycle for the 6.1.16 release.
-> > There are 887 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
->=20
-> CIP testing did not find any problems with Linux 6.1.16-rc2 (bb4e875c8c41=
-):
-> https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines=
-/800470660
-> https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/l=
-inux-6.1.y
-
-Hey, that was supposed to be my line! :-).
-
-Well, in fact Chris is doing testing for CIP, and I was just
-announcing the results. We decided to test all the -stable releases,
-and due to increased ammount of emails, likely Chris will be
-announcing successful tests from now on.
-
--stable is rather important for our work (and we'll likely be
-maintaining 6.1 for 10 years). We do have some resources we can
-dedicate to testing and stable maintainance, so if there's something
-else we could do, let us know and we might be able to arrange that.
-
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---3uryvEXGq31Vxb63
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZAnDVAAKCRAw5/Bqldv6
-8swPAJ43oyH290iaCbEvc9yCQo3wrwDhKwCfaB1Y1bywyCo/qEpb6ei8zIa0VQE=
-=fdjY
------END PGP SIGNATURE-----
-
---3uryvEXGq31Vxb63--
+    Arnd
