@@ -2,131 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6226B24F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:08:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D44AF6B24EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbjCINIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:08:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
+        id S229541AbjCINIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:08:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjCINId (ORCPT
+        with ESMTP id S231192AbjCINIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:08:33 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB0B7D82;
-        Thu,  9 Mar 2023 05:08:07 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PXTlB12Nyz9xGWf;
-        Thu,  9 Mar 2023 20:58:46 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwC3QAwS2glkNqSEAQ--.25311S2;
-        Thu, 09 Mar 2023 14:07:43 +0100 (CET)
-Message-ID: <92c36707c8f9398f7f626c3da01bb98586880836.camel@huaweicloud.com>
-Subject: Re: [PATCH 15/28] security: Introduce inode_post_removexattr hook
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
-        chuck.lever@oracle.com, jlayton@kernel.org,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 09 Mar 2023 14:07:26 +0100
-In-Reply-To: <f5a61c0f09c1b8d8aaeb99ad7ba4aab15818c5ed.camel@linux.ibm.com>
-References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
-         <20230303181842.1087717-16-roberto.sassu@huaweicloud.com>
-         <f5a61c0f09c1b8d8aaeb99ad7ba4aab15818c5ed.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 9 Mar 2023 08:08:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D8C7EDD;
+        Thu,  9 Mar 2023 05:07:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C10A461B68;
+        Thu,  9 Mar 2023 13:07:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 946C5C4339B;
+        Thu,  9 Mar 2023 13:07:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678367276;
+        bh=OkIirOLzi4noUGuDrFd3QCCm818DgLRyVk2I/IlEGhQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s/ndqFodvUQCwUqKRxSkbEyGEIKCjnv25Whg8kctG5EDX/jW38cY18B0TcYyHuby8
+         JSMK7w7Asw8Y2lBm/fn8/UDZzSA7hDzpW3uAKOFvL/eLtfj5zSiJAMMG62eXk6FLH2
+         X7k4lCc3QB1RdXJMWAJxIDk9nPqWQOMtwGY9K19A=
+Date:   Thu, 9 Mar 2023 14:07:53 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nipun Gupta <nipun.gupta@amd.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rafael@kernel.org, eric.auger@redhat.com,
+        alex.williamson@redhat.com, cohuck@redhat.com,
+        song.bao.hua@hisilicon.com, mchehab+huawei@kernel.org,
+        maz@kernel.org, f.fainelli@gmail.com, jeffrey.l.hugo@gmail.com,
+        saravanak@google.com, Michael.Srba@seznam.cz, mani@kernel.org,
+        yishaih@nvidia.com, jgg@ziepe.ca, jgg@nvidia.com,
+        robin.murphy@arm.com, will@kernel.org, joro@8bytes.org,
+        masahiroy@kernel.org, ndesaulniers@google.com,
+        rdunlap@infradead.org, linux-arm-kernel@lists.infradead.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, okaya@kernel.org,
+        harpreet.anand@amd.com, nikhil.agarwal@amd.com,
+        michal.simek@amd.com, pieter.jansen-van-vuuren@amd.com,
+        pablo.cascon@amd.com, git@amd.com
+Subject: Re: [PATCH v9 1/7] cdx: add the cdx bus driver
+Message-ID: <ZAnaKahHaVUXxlcw@kroah.com>
+References: <20230307131917.30605-1-nipun.gupta@amd.com>
+ <20230307131917.30605-2-nipun.gupta@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwC3QAwS2glkNqSEAQ--.25311S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw1DuFW3ur4ftrWxGr1xXwb_yoW8trykpF
-        s8t3ZxCF4rXr17GF97tF4UCwsagw48Gr4UJ3y2gw1jvFn7twn2qFWUKr15uFyrXr4j9Fyq
-        qFnIgr95Cr15AaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgALBF1jj4ZjhQAAsc
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230307131917.30605-2-nipun.gupta@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-08 at 10:43 -0500, Mimi Zohar wrote:
-> Hi Roberto,
+On Tue, Mar 07, 2023 at 06:49:11PM +0530, Nipun Gupta wrote:
+> Introduce AMD CDX bus, which provides a mechanism for scanning
+> and probing CDX devices. These devices are memory mapped on
+> system bus for Application Processors(APUs).
 > 
-> On Fri, 2023-03-03 at 19:18 +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > In preparation for moving IMA and EVM to the LSM infrastructure, introduce
-> > the inode_post_removexattr hook.
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  fs/xattr.c                    |  1 +
-> >  include/linux/lsm_hook_defs.h |  2 ++
-> >  include/linux/security.h      |  5 +++++
-> >  security/security.c           | 14 ++++++++++++++
-> >  4 files changed, 22 insertions(+)
-> > 
-> > diff --git a/fs/xattr.c b/fs/xattr.c
-> > index 14a7eb3c8fa..10c959d9fc6 100644
-> > --- a/fs/xattr.c
-> > +++ b/fs/xattr.c
-> > @@ -534,6 +534,7 @@ __vfs_removexattr_locked(struct mnt_idmap *idmap,
-> >  
-> >  	if (!error) {
-> >  		fsnotify_xattr(dentry);
-> > +		security_inode_post_removexattr(dentry, name);
-> >  		evm_inode_post_removexattr(dentry, name);
-> >  	}
+> CDX devices can be changed dynamically in the Fabric and CDX
+> bus interacts with CDX controller to rescan the bus and
+> rediscover the devices.
 > 
-> Nothing wrong with this, but other places in this function test "if
-> (error) goto ...".   Perhaps it is time to clean this up.
-
-Theoretically, all 'goto out' can be replaced with 'return error'.
-
-I would be more in favor of minimizing the changes as much as possible
-to reach the main goal. But it is ok also to change the last part.
-
-Thanks
-
-Roberto
-
-> >  
-> > diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> > index eedefbcdde3..2ae5224d967 100644
-> > --- a/include/linux/lsm_hook_defs.h
-> > +++ b/include/linux/lsm_hook_defs.h
-> > @@ -147,6 +147,8 @@ LSM_HOOK(int, 0, inode_getxattr, struct dentry *dentry, const char *name)
-> >  LSM_HOOK(int, 0, inode_listxattr, struct dentry *dentry)
-> >  LSM_HOOK(int, 0, inode_removexattr, struct mnt_idmap *idmap,
-> >  	 struct dentry *dentry, const char *name)
-> > +LSM_HOOK(void, LSM_RET_VOID, inode_post_removexattr, struct dentry *dentry,
-> > +	 const char *name)
+> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+> Reviewed-by: Pieter Jansen van Vuuren <pieter.jansen-van-vuuren@amd.com>
+> Tested-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
+> ---
+>  Documentation/ABI/testing/sysfs-bus-cdx |  12 +
+>  MAINTAINERS                             |   7 +
+>  drivers/Kconfig                         |   2 +
+>  drivers/Makefile                        |   1 +
+>  drivers/cdx/Kconfig                     |  17 +
+>  drivers/cdx/Makefile                    |   8 +
+>  drivers/cdx/cdx.c                       | 407 ++++++++++++++++++++++++
+>  drivers/cdx/cdx.h                       |  62 ++++
+>  include/linux/cdx/cdx_bus.h             | 147 +++++++++
+>  include/linux/mod_devicetable.h         |  15 +
+>  scripts/mod/devicetable-offsets.c       |   4 +
+>  scripts/mod/file2alias.c                |  12 +
+>  12 files changed, 694 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-cdx
+>  create mode 100644 drivers/cdx/Kconfig
+>  create mode 100644 drivers/cdx/Makefile
+>  create mode 100644 drivers/cdx/cdx.c
+>  create mode 100644 drivers/cdx/cdx.h
+>  create mode 100644 include/linux/cdx/cdx_bus.h
 > 
-> @Christian should the security_inode_removexattr() and
-> security_inode_post_removexattr() arguments be the same?
-> 
-> >  LSM_HOOK(int, 0, inode_set_acl, struct mnt_idmap *idmap,
-> >  	 struct dentry *dentry, const char *acl_name, struct posix_acl *kacl)
-> >  LSM_HOOK(int, 0, inode_get_acl, struct mnt_idmap *idmap,
+> diff --git a/Documentation/ABI/testing/sysfs-bus-cdx b/Documentation/ABI/testing/sysfs-bus-cdx
+> new file mode 100644
+> index 000000000000..063d1a0dd866
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-bus-cdx
+> @@ -0,0 +1,12 @@
+> +What:		/sys/bus/cdx/rescan
+> +Date:		March 2023
+> +Contact:	nipun.gupta@amd.com
+> +Description:
+> +		Writing a non-zero value to this file cause rescan of the bus
+> +		and devices on the CDX bus. Any new devices are scanned and
+> +		added to the list of Linux devices and any devices removed are
+> +		also deleted from Linux.
+> +
+> +		For example::
+> +
+> +		  # echo 1 > /sys/bus/cdx/rescan
 
+See my comments on patch 7/7 about "non-zero" not being a good idea.
+
+thanks,
+
+greg k-h
