@@ -2,190 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831826B234C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D4D6B2352
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbjCILoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40538 "EHLO
+        id S229998AbjCILpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:45:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbjCILof (ORCPT
+        with ESMTP id S231698AbjCILpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:44:35 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C89A0298
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 03:44:30 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-536cb25982eso29111497b3.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 03:44:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678362270;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k2ARfGbrFzKuSHnURKC/5PJD0C75Md2LiqEgXy54wAE=;
-        b=orp7HOM/XB9VSBysz/0+fd/kTqR/tptd1UmNcCi80ttcXn+66XUNEtTDxPtPE+6R/A
-         tUxssKCnO4HYV4Dq1ITEsSq4LRus5F/qBl1BSgpa/vi0I89uebJ4RKM/BgoOsPt6gn9U
-         5PmxxhbJ36t6IvvLe4Sme16YlNKnxH6L0JUqvYnqnTGLNA0f8TvEcoIxwDqDs8Jmp3a/
-         cVABJy+Nmg7i7RdBdMZBgZYG1wHpR7SCaB3cz+rT09xv6Gzkr3kFwgr/DhdNkaBxawaA
-         15ixynVU9boR+yvEUBA7eUfvVcSlHLU29tdSqkzxO3Nr7+JsHqvEU0xZK8CbawqJ4ZIe
-         aD5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678362270;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k2ARfGbrFzKuSHnURKC/5PJD0C75Md2LiqEgXy54wAE=;
-        b=kFN4dal5nLkinmTQp5QgWTqIwfGRteELm9q6vr5ZRZ4eLQXuE+SgzsFMUYPcmT50n5
-         y6wK3/MUtCVfAwvdwI8sThn2cyAUxtKowz0gk8MPFMtZExxiDWp5eoKP2p/uAFc/K0fz
-         dC1/5wSJu4kEBoE3orauNOqsINCDE9SWLexjVuLu16aEH+Rh/SboRByj+nY9T/Xi1ADn
-         cO0Y85S/WJC4boEmrJ+QCQRxk71X6F/AijzhPXi0eO9vFrVAiL+qxhfYn4mIfKzGlU1u
-         YFJD+KxcL+max9YS0xnejL9UFl+WxK7dsAYdSkZmIZWeGYl/l9tbgItqQzu5ur5rhPg7
-         VlWw==
-X-Gm-Message-State: AO0yUKW60B/KQmmD5S44pNOQ/f/qhAVGJacMr0W8zTIXBUqnW0BbXnnm
-        /w2optS0Schdh1fsRqKTi32OPdXr2l3JuEml/2s=
-X-Google-Smtp-Source: AK7set84BDjzV+05TdVmCspeK4c/vU9sZWPcqXlrhcF1wb5ai7eZ+ms9qA42D2O4aQD0/0xvdhWdT0pcSzkt37VqCK8=
-X-Received: by 2002:a81:ac4c:0:b0:533:9ffb:cb11 with SMTP id
- z12-20020a81ac4c000000b005339ffbcb11mr14193185ywj.7.1678362269931; Thu, 09
- Mar 2023 03:44:29 -0800 (PST)
+        Thu, 9 Mar 2023 06:45:10 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522799FE57;
+        Thu,  9 Mar 2023 03:45:09 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 329BilmV067182;
+        Thu, 9 Mar 2023 05:44:47 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678362288;
+        bh=/q/r+VqIDQV+nyf/HFdFt7S4d1PgKsozHa8XIbxD8aY=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=nAnAGXYW/BIh78fUHAF8Qk8hBwnEkuy5WmwDM9NDgykbzDS94TzunNiSbEHM08EZf
+         SIWLabHhn09QBlt8dfoAKNl6ODNLNseANMBusUJ7MwbOnfTuRmU91N+5Vx38gcKRZl
+         U/BcI1f82iMoQ6L9rvjidTWmPcFBFyVr70O/u3WA=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 329BiliX027723
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 9 Mar 2023 05:44:47 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 9
+ Mar 2023 05:44:47 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 9 Mar 2023 05:44:47 -0600
+Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 329BifPD012701;
+        Thu, 9 Mar 2023 05:44:42 -0600
+Message-ID: <d7f18805-7b26-e2c9-a40e-262165ec8f9b@ti.com>
+Date:   Thu, 9 Mar 2023 17:14:41 +0530
 MIME-Version: 1.0
-Received: by 2002:a05:7110:4a11:b0:1b8:3a1a:717 with HTTP; Thu, 9 Mar 2023
- 03:44:29 -0800 (PST)
-Reply-To: kodjovihegbor4@gmail.com
-From:   kodjovihegbor <franklinvaletine50@gmail.com>
-Date:   Thu, 9 Mar 2023 11:44:29 +0000
-Message-ID: <CA+17ep2e+28GmV2MKSKso03gPfdmki7=WitvqGoi3RjpM98x1w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [EXTERNAL] Re: [PATCH v5 1/2] dt-bindings: net: Add ICSSG
+ Ethernet
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>
+CC:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, <andrew@lunn.ch>,
+        <nm@ti.com>, <ssantosh@kernel.org>, <srk@ti.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230210114957.2667963-1-danishanwar@ti.com>
+ <20230210114957.2667963-2-danishanwar@ti.com>
+ <20230210192001.GB2923614-robh@kernel.org>
+ <43df3c2c-d0d0-f2b8-cf8b-8a2453ca43b4@ti.com>
+ <63dbbda7-a444-8dac-6399-45e305652155@linaro.org>
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <63dbbda7-a444-8dac-6399-45e305652155@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:112b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4984]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [franklinvaletine50[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [franklinvaletine50[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [kodjovihegbor4[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0J3Rg9C00LjQvCDRgdCy0L7RmNC1INC/0YDQuNGY0LDRgtC10ZnRgdGC0LLQviDQuCDQstC10YDR
-g9GY0LXQvCDQtNCwINGb0LXRgtC1INC80LUg0L/RgNC40YXQstCw0YLQuNGC0Lgg0YHQsCDQtNC+
-0LHRgNC40LwNCtGB0YDRhtC10LwsINCx0LjQviDRgdCw0Lwg0L/QvtC00YHRgtCw0LrQvdGD0YIg
-0LTQsCDQstCw0YEg0LrQvtC90YLQsNC60YLQuNGA0LDQvCDQuCDQstC40LTQuNC8INC60LDQutC+
-INC90LDRmNCx0L7RmdC1DQrQvNC+0LbQtdC80L4g0LTQsCDQv9C+0LzQvtCz0L3QtdC80L4g0ZjQ
-tdC00L3QuCDQtNGA0YPQs9C40LzQsC4g0IjQsCDRgdCw0LwNCtCT0ZLQsCDQmtC+0LTRmNC+0LLQ
-uCDQpdC10LPQsdC+0YAg0LjQtyDQotGD0YDRgdC60LUg0Lgg0ZjQsCDRgNCw0LTQuNC80L4g0LrQ
-sNC+INGI0LXRhCDQvtC00LXRmdC10ZrQsCDQt9CwINC+0L/QtdGA0LDRhtC40ZjQtQ0K0YMg0KHR
-gtCw0L3QtNCw0YDQtNCR0J3QnyDQkdCw0L3QuiDQm9C40LzQuNGC0LXQtCDQotGD0YDRgdC60LAu
-INCS0LXRgNGD0ZjQtdC8INC00LAg0ZjQtSDRgtC+INCR0L7QttGY0LAg0LLQvtGZ0LAg0LfQsCDQ
-vNC10L3QtQ0K0LTQsCDRgdCw0LTQsCDQvdCw0LjRktC1INC90LAg0YLQtdCx0LUuINCY0LzQsNC8
-INCy0LDQttC90YMg0L/QvtGB0LvQvtCy0L3RgyDQtNC40YHQutGD0YHQuNGY0YMg0LrQvtGY0YMg
-0LbQtdC70LjQvCDQtNCwDQrQv9C+0LTQtdC70LjQvCDRgdCwINCy0LDQvNCwINC30LAg0LrQvtGY
-0YMg0LLQtdGA0YPRmNC10Lwg0LTQsCDRm9C1INCy0LDRgSDQt9Cw0L3QuNC80LDRgtC4INGY0LXR
-gCDRmNC1INGDINCy0LXQt9C4INGB0LANCtC40LzQtdC90L7QvCDQstCw0YjQtSDQt9C10LzRmdC1
-INC4INC+0LQg0YLQvtCz0LAg0ZvQtdGC0LUg0LjQvNCw0YLQuCDQutC+0YDQuNGB0YLQuC4NCg0K
-0JPQvtC00LjQvdC1IDIwMTguINCz0YDQsNGS0LDQvdC40L0g0LLQsNGI0LUg0LfQtdC80ZnQtSDQ
-v9C+INC40LzQtdC90YMg0JjQstCw0L0g0L3QsNC/0YDQsNCy0LjQviDRmNC1DQrQvdC10YDQtdC3
-0LjQtNC10L3RgtC90Lgg0YDQsNGH0YPQvSDQt9CwIDM2INC80LXRgdC10YbQuCDQutCw0LvQtdC9
-0LTQsNGA0LAsINGDINCy0YDQtdC00L3QvtGB0YLQuCDQvtC0IDguNDAwLjAwMCwwMA0K0YTRg9C9
-0YLQuCDRgyDQvNC+0ZjQvtGYINCx0LDQvdGG0LguINCi0YXQtQ0K0JTQsNGC0YPQvCDQuNGB0YLQ
-tdC60LAg0L7QstC+0LMg0YPQs9C+0LLQvtGA0LAg0L4g0LTQtdC/0L7Qt9C40YLRgyDQsdC40L4g
-0ZjQtSAxNi4g0ZjQsNC90YPQsNGAIDIwMjEuINCd0LDQttCw0LvQvtGB0YIsDQrQvtC9INGY0LUg
-0LHQuNC+INC80LXRktGDINC20YDRgtCy0LDQvNCwINGB0LzRgNGC0Lgg0YMg0L3QtdC00LDQstC9
-0L7RmCDQv9Cw0L3QtNC10LzQuNGY0Lgg0KbQvtGA0L7QvdCw0JLQuNGA0YPRgQ0KKNCm0L7QstC4
-0LQxOSkgMjAxOS0yMDIwINC60L7RmNCwINGB0LUg0LTQvtCz0L7QtNC40LvQsCDRgyDQmtC40L3Q
-uCwg0LTQvtC6INGY0LUg0LHQuNC+INC90LAg0YHQu9GD0LbQsdC10L3QvtC8DQrQv9GD0YLRgyDR
-gyDQutC+0ZjQtdC8INGY0LUg0L/QvtCz0LjQvdGD0LvQviDQvdCw0ZjQvNCw0ZrQtSA2OC4wMDAg
-0ZnRg9C00LggLg0KDQrQnNC10L3QsNGf0LzQtdC90YIg0LzQvtGY0LUg0LHQsNC90LrQtSDRgtC1
-0Log0YLRgNC10LHQsCDQtNCwINC30L3QsCDQt9CwINGa0LXQs9C+0LLRgyDRgdC80YDRgiwg0ZjQ
-sCDRgdCw0Lwg0LfQvdCw0L4g0LfQsA0K0YLQviDRmNC10YAg0LzQuCDRmNC1INC+0L0g0LHQuNC+
-INC/0YDQuNGY0LDRgtC10ZksINCwINGY0LAg0YHQsNC8INCx0LjQviDRmtC10LPQvtCyINGB0LvR
-g9C20LHQtdC90LjQuiDRgNCw0YfRg9C90LAg0LrQsNC00LANCtGY0LUg0YDQsNGH0YPQvSDQsdC4
-0L4NCtC+0YLQstC+0YDQtdC9INC/0YDQtSDQvNC+0ZjQtSDQv9GA0L7QvNC+0YbQuNGY0LUuINCc
-0LXRktGD0YLQuNC8LCDQs9C+0YHQv9C+0LTQuNC9INCY0LLQsNC9INC90LjRmNC1INC/0L7QvNC1
-0L3Rg9C+DQrQvdC40ZjQtdC00L3QvtCzINC90LDRmNCx0LvQuNC20LXQsy/QvdCw0YHQu9C10LTQ
-vdC40LrQsCDQutCw0LTQsCDRmNC1INGA0LDRh9GD0L0g0L7RgtCy0L7RgNC10L0sINCwINC90LjR
-mNC1INCx0LjQviDQvtC20LXRmtC10L0NCtC4INC90LjRmNC1INC40LzQsNC+DQrQtNC10YbQsC4g
-0J/RgNC+0YjQu9C1INC90LXQtNC10ZnQtSDRmNC1INGA0YPQutC+0LLQvtC00YHRgtCy0L4g0LzQ
-vtGY0LUg0LHQsNC90LrQtSDQt9Cw0YLRgNCw0LbQuNC70L4g0LTQsCDQtNCw0LwNCtGD0L/Rg9GC
-0YHRgtCy0LAg0YjRgtCwINC00LAg0YDQsNC00LjQvCDRgdCwINGa0LXQs9C+0LLQuNC8INGB0YDQ
-tdC00YHRgtCy0LjQvNCwINCw0LrQviDQv9GA0L7QtNGD0LbQuNC8INGD0LPQvtCy0L7RgC4NCg0K
-0JfQvdCw0Lwg0LTQsCDRm9C1INGB0LUg0YLQviDQtNC+0LPQvtC00LjRgtC4INC4INC30LDRgtC+
-INGB0LDQvCDRgtGA0LDQttC40L4g0L3QsNGH0LjQvSDQtNCwINGB0LUg0LjQt9Cx0L7RgNC40Lwg
-0YHQsA0K0YHQuNGC0YPQsNGG0LjRmNC+0LwsINGY0LXRgCDQsNC60L4g0LzQvtGY0Lgg0LTQuNGA
-0LXQutGC0L7RgNC4INCx0LDQvdC60LUg0YHQu9GD0YfQsNGY0L3QviDQt9C90LDRmNGDINC00LAg
-0ZjQtSDQmNCy0LDQvQ0K0ZjQtSDQvNGA0YLQsNCyINC4INC90LXQvNCwINC90LDRgdC70LXQtNC9
-0LjQutCwLCDQvtC90Lgg0ZvQtSDRg9C30LXRgtC4INGB0YDQtdC00YHRgtCy0LAg0LfQsCDRgdCy
-0L7RmNC1INC70LjRh9C90LUNCtC/0L7RgtGA0LXQsdC1LCDRgtCw0LrQviDQtNCwINC90LUg0LbQ
-tdC70LjQvCDQtNCwINGB0LUg0YLQviDQtNC10YHQuC4g0KLQsNC00LAg0YHQsNC8INCy0LDRgSDQ
-stC40LTQtdC+LCDQsdC40L4g0YHQsNC8DQrRgdGA0LXRm9Cw0L0g0Lgg0YHQsNC00LAg0YLRgNCw
-0LbQuNC8INCy0LDRiNGDINGB0LDRgNCw0LTRmtGDINC00LAg0LLQsNGBINC/0YDQtdC00YHRgtCw
-0LLQuNC8INC60LDQvg0K0L3QsNGY0LHQu9C40LbQtdCzL9C90LDRgdC70LXQtNC90LjQutCwINGA
-0LDRh9GD0L3QsCDQv9C+0YjRgtC+INC40LzQsNGC0LUg0LjRgdGC0YMg0LTRgNC20LDQstGDINC6
-0LDQviDQuCDQvtC9INC4INC80L7RmNCwDQrRhtC10L3RgtGA0LDQu9CwINCx0LDQvdC60LUg0ZvQ
-tSDQstCw0Lwg0L/Rg9GB0YLQuNGC0Lgg0YDQsNGH0YPQvS4g0J3QtdC80LAg0YDQuNC30LjQutCw
-DQrRg9C60ZnRg9GH0LXQvdC4OyDRgtGA0LDQvdGB0LDQutGG0LjRmNCwINGb0LUg0LHQuNGC0Lgg
-0LjQt9Cy0YDRiNC10L3QsCDQv9C+0LQg0LvQtdCz0LjRgtC40LzQvdC40Lwg0LDRgNCw0L3QttC8
-0LDQvdC+0Lwg0LrQvtGY0LgNCtGb0LUg0LLQsNGBINC30LDRiNGC0LjRgtC40YLQuCDQvtC0INCx
-0LjQu9C+INC60LDQutCy0L7QsyDQutGA0YjQtdGa0LAg0LfQsNC60L7QvdCwLg0KDQrQkdC+0ZnQ
-tSDQtNCwINC80Lgg0YLRgNCw0LbQuNC80L4g0L3QvtCy0LDRhiDQvdC10LPQviDQtNCwINC00L7Q
-t9Cy0L7Qu9C40LzQviDQtNC40YDQtdC60YLQvtGA0LjQvNCwINCx0LDQvdCw0LrQsCDQtNCwINCz
-0LANCtGD0LfQvNGDLCDQvtC90Lgg0YHRgyDQstC10Zsg0LHQvtCz0LDRgtC4LiDQndC40YHQsNC8
-INC/0L7RhdC70LXQv9C90LAg0L7RgdC+0LHQsCwg0L/QsCDQv9GA0LXQtNC70LDQttC10LwNCtC/
-0L7QtNC10LvQuNGC0LUg0YHRgNC10LTRgdGC0LLQsCDQv9C+0LTRmNC10LTQvdCw0LrQviwgNTAv
-NTAlINC90LAg0L7QsdC1INGB0YLRgNCw0L3QtSwg0LzQvtGYINGD0LTQtdC+INGb0LUg0LzQuA0K
-0L/QvtC80L7Rm9C4INC00LAg0L/QvtC60YDQtdC90LXQvCDRgdC+0L/RgdGC0LLQtdC90YMg0LrQ
-vtC80L/QsNC90LjRmNGDINC4INC60L7RgNC40YHRgtC40Lwg0L/RgNC40YXQvtC0INGDINC00L7Q
-sdGA0L7RgtCy0L7RgNC90LUNCtGB0LLRgNGF0LUg0LrQvtGY0LUg0LzQuCDRmNC1DQrRgdCw0L0u
-DQoNCtCg0LXRhtC40YLQtSDQvNC4INGI0YLQsCDQvNC40YHQu9C40YLQtSDQviDQvNC+0Lwg0L/R
-gNC10LTQu9C+0LPRgywg0LzQvtC70LjQvCDQstCw0YEsINC30LDQuNGB0YLQsCDQvNC4INGY0LUg
-0L/QvtGC0YDQtdCx0L3QsA0K0LLQsNGI0LAg0L/QvtC80L7RmyDRgyDQvtCy0L7RmCDRgtGA0LDQ
-vdGB0LDQutGG0LjRmNC4LCDQuNC30LDQsdGA0LDQviDRgdCw0Lwg0LLQsNGBINC00LAg0LzQuCDQ
-v9C+0LzQvtCz0L3QtdGC0LUsINCwINC90LUNCtGC0LDQutC+INGI0YLQviDRmNCwINGA0LDQtNC4
-0Lwg0YHQstC+0ZjQtQ0K0LTRgNCw0LPQuCwg0LDQu9C4INCx0L7Qs9Cw0LzQuCwg0LTQsCDQu9C4
-INGB0LDQvCDQttC10LvQtdC+INC00LAg0LfQvdCw0Ygg0LTQsCDRgdCw0Lwg0L7QtNCy0L7RmNC4
-0L4g0LLRgNC10LzQtSDQtNCwINGB0LUNCtC/0L7QvNC+0LvQuNC8INC30LAg0L7QstGDINC60L7Q
-vNGD0L3QuNC60LDRhtC40ZjRgyDQv9GA0LUg0L3QtdCz0L4g0YjRgtC+INGB0LDQvCDRgtC1INC4
-0LrQsNC00LAg0LrQvtC90YLQsNC60YLQuNGA0LDQviwNCtGY0LDQstC4INC80LgNCtC+0LHRgNCw
-0YLQuNGC0LUg0L/QsNC20ZrRgyDQvdCwINC+0LLQviDQuCDQvNC+0LvQuNC8INCy0LDRgSDQtNCw
-INC+0LLQtSDQuNC90YTQvtGA0LzQsNGG0LjRmNC1INGC0YDQtdGC0LjRgNCw0YLQtSDQutCw0L4N
-CtCh0KLQoNCj0JPQniDQotCQ0IjQndCjLiDQn9C+INC/0YDQuNGY0LXQvNGDINCS0LDRiNC10LMg
-0L7QtNCz0L7QstC+0YDQsCwg0YHRgtGA0LjQutGC0L3QviDQv9GA0LXQutC+INC80L7RmNC1INC7
-0LjRh9C90LUNCtC40LzQtdGY0Lsg0LDQtNGA0LXRgdC1LCDQutC+0LTRmNC+0LLQuNGF0LXQs9Cx
-0L7RgDRA0LPQvNCw0LjQuy7RhtC+0LwNCtGb0LUg0LLQsNC8INC00LDRgtC4INC00LXRgtCw0ZnQ
-tSDRgtGA0LDQvdGB0LDQutGG0LjRmNC1LiDQmCDQutC+0L/QuNGY0YMg0L/QvtGC0LLRgNC00LUg
-0L4g0LTQtdC/0L7Qt9C40YLRgyDRhNC+0L3QtNCwINC4DQrRgtCw0LrQvtGS0LUg0L/QvtGC0LLR
-gNC00LUg0L4g0L7RgdC90LjQstCw0ZrRgyDQutC+0LzQv9Cw0L3QuNGY0LUg0LrQvtGY0LANCtGB
-0YLQstC+0YDQuNC+INGE0L7QvdC0LiDQkdC+0LMg0LHQu9Cw0LPQvtGB0LvQvtCy0LjQviwg0L7R
-h9C10LrRg9GY0YPRm9C4INCS0LDRiCDRhdC40YLQsNC9INC+0LTQs9C+0LLQvtGADQrQodGA0LTQ
-sNGH0LDQvSDQv9C+0LfQtNGA0LDQsg0K0LPQvtGB0L/QvtGS0LAg0JrQvtC00ZjQvtCy0Lgg0KXQ
-tdCz0LHQvtGADQrQutC+0LTRmNC+0LLQuNGF0LXQs9Cx0L7RgDRA0LPQvNCw0LjQuy7RhtC+0LwN
-Cg==
+Hi Krzysztof,
+
+On 07/03/23 14:28, Krzysztof Kozlowski wrote:
+> On 07/03/2023 05:57, Md Danish Anwar wrote:
+>>>> +allOf:
+>>>> +  - $ref: /schemas/remoteproc/ti,pru-consumer.yaml#
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    enum:
+>>>> +      - ti,am654-icssg-prueth  # for AM65x SoC family
+>>>> +
+>>>> +  ti,sram:
+>>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>>> +    description:
+>>>> +      phandle to MSMC SRAM node
+>>>
+>>> I believe we have a standard 'sram' property to point to SRAM nodes 
+>>> assuming this is just mmio-sram or similar.
+>>>
+>>
+>> Yes, we have standard 'sram' property but Krzysztof had asked me to make the
+>> sram property vendor specific in last revision of this series.
+> 
+> Sorry about that. I missed that we already have a 'sram'. The question
+> remains whether this is a phandle to MMIO SRAM or similar (sram.yaml).
+> 
+> Best regards,
+> Krzysztof
+> 
+
+The SRAM that we are using here is phandle to MMIO-SRAM only. In the example
+section you can see, sram node points to msmc_ram (ti,sram = <&msmc_ram>;) And
+msmc_ram has compatible as "mmio-sram" in k3-am65-main.dtsi [1].
+
+	msmc_ram: sram@70000000 {
+		compatible = "mmio-sram";
+		reg = <0x0 0x70000000 0x0 0x200000>;
+
+So I can use 'sram' property as there is no need to make this as ti specific.
+Let me know if it seems good to you.
+
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/ti/k3-am65-main.dtsi?h=v6.3-rc1#n11
+
+-- 
+Thanks and Regards,
+Danish.
