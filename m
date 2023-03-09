@@ -2,158 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1DD6B1E9A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8617C6B1E9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjCIIuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 03:50:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
+        id S230250AbjCIIua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 03:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjCIIuL (ORCPT
+        with ESMTP id S229994AbjCIIuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:50:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057C07585F
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:49:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678351770;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6XxVpP4I6etF/R+Wh1vjQAaCt3ds5sZTWni+6rnd9Rk=;
-        b=Vu87T3/03oazpXX7sgSKbXPsDGczcg7/cuIhGdyt/v0WCruAni8Jf99BJeOOE3tHESe61d
-        D/NkUtugKGUnVFm0Vf8x2DgYdjm4XHcNhi8qTD7bDlKCACPRIykMU+Hyg8Z924GzmDy5Vm
-        WWhDyF8Gc0rr+PsfzG/gVLLvhikaFPc=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-266-UADC2uOQOUejat3iSZck2g-1; Thu, 09 Mar 2023 03:49:29 -0500
-X-MC-Unique: UADC2uOQOUejat3iSZck2g-1
-Received: by mail-qv1-f69.google.com with SMTP id pm17-20020ad446d1000000b0057256b237b9so852345qvb.16
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 00:49:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678351768;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6XxVpP4I6etF/R+Wh1vjQAaCt3ds5sZTWni+6rnd9Rk=;
-        b=hFXn9CScxzAqZuURwZvl7aTmdjXOieA/iowKnfZ8txltRD4liqYA4ltl9ulPPtD97p
-         EKwUAWIUOTayp3hZlbf5oZe5cNC3SICHhfHHI+llN1Jlt9pxStud5bx7m2gafvdG7c4r
-         WKZumU0rmONMUFc70dVzVftMc+D5r5CtMzpZkbDQSTPH2zXK08BiOhUFL3YyRTPL+nV4
-         OWyoLqNfbG5Fiv2UJDnRkbT1qsnpLghD3ZdxP0Mc8hjEl7WdyUun3GQ+lnPEigKOzA9v
-         hGefBLc83HZvvea/OMgKCyhUBdbIddQXc+tcpvSed1c1J1sAJ9jp1tePqu9k9mwCmiUJ
-         ThWA==
-X-Gm-Message-State: AO0yUKWyc7H+870ugHOjY3r2ExPpgFSPJJpkd5WAqtLXnGuMEpYooC/t
-        xGjhVSKLQw9q875yf3jOCoSwyUN9GYY4W0QHe3tlNZQG/HnozlqWCMDsh/LUXLuO41V391KgCfq
-        JhQrZ0r7K9/7mOrJzKu2dzqD4
-X-Received: by 2002:a05:6214:2681:b0:56e:a9c6:d2c6 with SMTP id gm1-20020a056214268100b0056ea9c6d2c6mr36835531qvb.6.1678351768659;
-        Thu, 09 Mar 2023 00:49:28 -0800 (PST)
-X-Google-Smtp-Source: AK7set/thTK4EUAQWBzgsfLcQMoo2cMp3slVR0A8J9Dzj1kqFjwA7/OGlmJSuV6MuuTmFXXxDQbdYw==
-X-Received: by 2002:a05:6214:2681:b0:56e:a9c6:d2c6 with SMTP id gm1-20020a056214268100b0056ea9c6d2c6mr36835518qvb.6.1678351768410;
-        Thu, 09 Mar 2023 00:49:28 -0800 (PST)
-Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id 29-20020a05620a041d00b0073b8745fd39sm4523932qkp.110.2023.03.09.00.49.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 00:49:27 -0800 (PST)
-Date:   Thu, 9 Mar 2023 09:49:20 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Rong Tao <rtoax@foxmail.com>
-Cc:     Rong Tao <rongtao@cestc.cn>, "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tools/virtio: virtio_test -h,--help should return
- directly
-Message-ID: <20230309084920.oj66qnighnnyet3f@sgarzare-redhat>
-References: <tencent_822CEBEB925205EA1573541CD1C2604F4805@qq.com>
+        Thu, 9 Mar 2023 03:50:21 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627158A39A;
+        Thu,  9 Mar 2023 00:50:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678351820; x=1709887820;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hzJZZecRtLBuUUUYuZrjjCAOTv/teU3J5+ZEbs+0u74=;
+  b=abuvcZzHFEh3tPX20o+eHtwYZMrYd2XeyTfJfL17K7nHwE42erlZTJKr
+   Gz6+NIUf7vpzuLAH4n1Nbwy5vwxFpiGto44HUSwdaTrNOipsHDrZkR8d9
+   VhWXO8NIoUyCnpAoEUxqtKcMHSd5Nm7mdKyY8dW8Wm51zVcvlmUaFodFT
+   PkdH/SDs04Ps99WDnqNcMvPayVpULPC8WMk9A4aQDvRy9WMPTW7kRXSRw
+   p6cKi7hLcNikDc23NMeRbZE4Oxp4Rol5M6rnbty+4lEZwPDYsWYIwuD3x
+   C5GJvLM1Nxs04JH4ojtfAO9mLUYySIvtK8VTSPO9YIX5zcM/uQeAm6wm8
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="320220093"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="320220093"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:50:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="627283830"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="627283830"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 09 Mar 2023 00:50:17 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1paBya-0002om-2Y;
+        Thu, 09 Mar 2023 08:50:16 +0000
+Date:   Thu, 9 Mar 2023 16:49:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Davis <afd@ti.com>, Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrew Davis <afd@ti.com>
+Subject: Re: [PATCH v2 3/6] gpio: sch311x: Use devm_gpiochip_add_data() to
+ simplify remove path
+Message-ID: <202303091640.6XjHNouG-lkp@intel.com>
+References: <20230307193346.8718-3-afd@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_822CEBEB925205EA1573541CD1C2604F4805@qq.com>
+In-Reply-To: <20230307193346.8718-3-afd@ti.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 04:42:50PM +0800, Rong Tao wrote:
->From: Rong Tao <rongtao@cestc.cn>
->
->When we get help information, we should return directly, and we should not
->execute test cases. Move the exit() directly into the help() function and
->remove it from case '?'.
->
->Signed-off-by: Rong Tao <rongtao@cestc.cn>
->---
->v2: help(): exit with a value different from 0 (e.g. 2).
->v1: https://lore.kernel.org/lkml/tencent_4B5122C4158323A1D1ACA04B3295F1579207@qq.com/
->---
-> tools/virtio/virtio_test.c | 10 +++++-----
-> 1 file changed, 5 insertions(+), 5 deletions(-)
->
->diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
->index 120062f94590..33e17307441f 100644
->--- a/tools/virtio/virtio_test.c
->+++ b/tools/virtio/virtio_test.c
->@@ -327,7 +327,7 @@ const struct option longopts[] = {
-> 	}
-> };
->
->-static void help(void)
->+static void help(int status)
-> {
-> 	fprintf(stderr, "Usage: virtio_test [--help]"
-> 		" [--no-indirect]"
->@@ -337,6 +337,8 @@ static void help(void)
-> 		" [--batch=random/N]"
-> 		" [--reset=N]"
-> 		"\n");
->+
->+	exit(status);
+Hi Andrew,
 
-Sorry, I meant you can put exit(2) here, and remove the `int status` 
-parameter of help().
+Thank you for the patch! Yet something to improve:
 
-> }
->
-> int main(int argc, char **argv)
->@@ -354,14 +356,12 @@ int main(int argc, char **argv)
-> 		case -1:
-> 			goto done;
-> 		case '?':
->-			help();
->-			exit(2);
->+			help(2);
+[auto build test ERROR on brgl/gpio/for-next]
+[also build test ERROR on linus/master v6.3-rc1 next-20230309]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Here you can use help()
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrew-Davis/gpio-twl4030-Use-devm_gpiochip_add_data-to-simplify-remove-path/20230308-034717
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+patch link:    https://lore.kernel.org/r/20230307193346.8718-3-afd%40ti.com
+patch subject: [PATCH v2 3/6] gpio: sch311x: Use devm_gpiochip_add_data() to simplify remove path
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230309/202303091640.6XjHNouG-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/fcfc10c6817ac3ea88ced58cce2ae8568b0f2030
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andrew-Davis/gpio-twl4030-Use-devm_gpiochip_add_data-to-simplify-remove-path/20230308-034717
+        git checkout fcfc10c6817ac3ea88ced58cce2ae8568b0f2030
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpio/
 
-> 		case 'e':
-> 			features &= ~(1ULL << VIRTIO_RING_F_EVENT_IDX);
-> 			break;
-> 		case 'h':
->-			help();
->-			goto done;
->+			help(0);
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303091640.6XjHNouG-lkp@intel.com/
 
-And also here you can use help()
+All errors (new ones prefixed by >>):
 
-I'm sure you're learning the process, so as a suggestion for the future,
-if some thing is not clear, better to ask before sending another
-version.
+>> drivers/gpio/gpio-sch311x.c:322:13: error: use of undeclared identifier 'sch311x_gpio_remove'
+           .remove         = sch311x_gpio_remove,
+                             ^
+   1 error generated.
 
-Thanks,
-Stefano
 
-> 		case 'i':
-> 			features &= ~(1ULL << 
-> 			VIRTIO_RING_F_INDIRECT_DESC);
-> 			break;
->-- 
->2.39.1
->
+vim +/sch311x_gpio_remove +322 drivers/gpio/gpio-sch311x.c
 
+12262bef8f4614 Bruno Randolf 2013-12-04  318  
+12262bef8f4614 Bruno Randolf 2013-12-04  319  static struct platform_driver sch311x_gpio_driver = {
+12262bef8f4614 Bruno Randolf 2013-12-04  320  	.driver.name	= DRV_NAME,
+12262bef8f4614 Bruno Randolf 2013-12-04  321  	.probe		= sch311x_gpio_probe,
+12262bef8f4614 Bruno Randolf 2013-12-04 @322  	.remove		= sch311x_gpio_remove,
+12262bef8f4614 Bruno Randolf 2013-12-04  323  };
+12262bef8f4614 Bruno Randolf 2013-12-04  324  
+12262bef8f4614 Bruno Randolf 2013-12-04  325  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
