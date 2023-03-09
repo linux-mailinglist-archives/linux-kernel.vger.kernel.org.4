@@ -2,74 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61026B2D5A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 767BA6B2D68
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbjCITHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 14:07:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57402 "EHLO
+        id S229628AbjCITOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 14:14:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbjCITHL (ORCPT
+        with ESMTP id S229453AbjCITOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 14:07:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41914FC7F0;
-        Thu,  9 Mar 2023 11:07:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C95A661CD3;
-        Thu,  9 Mar 2023 19:07:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 32B8BC4339C;
-        Thu,  9 Mar 2023 19:07:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678388829;
-        bh=SWQEM1zPB0tTkFKxrhBgVwRH5vNgfvTN5WH7n88HHqA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=JJ3hnnlJOT6fPA70GAha2IlI3mDUn0u2X1tt2ZirB8GbUwFyU7xcmYLfwztZaFTfg
-         ncWR8tMQDj/SI8eo27siW3/wdvwNufLUXwARFE//bBa/AmxIjYr8NGNMvG5LuC3iDf
-         dSsHfdmpgmVHY1s+gF5idNhtF24pZeScF5V5qEiqJwELsF1G1HwlYlus0dLI/FYJ7F
-         glnpmGCJZtNmXA4TD3xEWm14d9PKyg+llK4qF5ynA/Tje/epOLrM6h+SlYt5fI/zcW
-         Jse4OE8BfoIJKLHuwfECQtvC0RkNRiuYXa1xrP+wruD338Au4aMLS/01AwujgHrMBS
-         Ku1UxronU06JQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1EBA8E61B61;
-        Thu,  9 Mar 2023 19:07:09 +0000 (UTC)
-Subject: Re: [GIT PULL] Networking for 6.3-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230309144349.52317-1-pabeni@redhat.com>
-References: <20230309144349.52317-1-pabeni@redhat.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230309144349.52317-1-pabeni@redhat.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.3-rc2
-X-PR-Tracked-Commit-Id: 67eeadf2f95326f6344adacb70c880bf2ccff57b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 44889ba56cbb3d51154660ccd15818bc77276696
-Message-Id: <167838882912.4761.13182920486501082636.pr-tracker-bot@kernel.org>
-Date:   Thu, 09 Mar 2023 19:07:09 +0000
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Mar 2023 14:14:42 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16625CC35;
+        Thu,  9 Mar 2023 11:14:40 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329IQrD8029534;
+        Thu, 9 Mar 2023 19:14:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=rI+P1BFFHZ8WHlaD0B4eoL0bauETBN0QF8emFVhth0M=;
+ b=i99+IgE7wjS576YtStFzLcLDOcYm9iAedkU3ifBfYfMdRaOTh/TwHZ3hHT30TaBsr8si
+ EpNK/Up5CPzkJ1DW5CBYTCbJUOjSA9nzLy0WUNVlOJA/GYAM1/eDPdtFbfdT7EZC0Mdm
+ 90b5V/VTx1TqDnxltrFH4XVcAUip0xZxcqTs82xyOc4ka8tGmzeGUktR7Vymd+ByGuk9
+ 0xqFJcqQuHIyQDxvEGoWi45UGRxf1LgdlkzL9SjHwjCoinpxz32usBgqU6an9zd+CVV1
+ WLsQHzmck742IbkK8NbZH3ccbZk2GoitzzeItNGR894lu5bb+J//aJSs4yxDQdK8Iccj 7A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6t3c3s65-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 19:14:39 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 329In5ko021919;
+        Thu, 9 Mar 2023 19:14:39 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6t3c3s60-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 19:14:39 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 329I0JFb023609;
+        Thu, 9 Mar 2023 19:14:38 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3p6fnwnk2p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 19:14:38 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 329JEauX12976752
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Mar 2023 19:14:37 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9C5A15805B;
+        Thu,  9 Mar 2023 19:14:36 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8575858058;
+        Thu,  9 Mar 2023 19:14:35 +0000 (GMT)
+Received: from [9.160.169.251] (unknown [9.160.169.251])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Mar 2023 19:14:35 +0000 (GMT)
+Message-ID: <0eb3ed4d-24cc-a09d-b4e4-87764c949bef@linux.ibm.com>
+Date:   Thu, 9 Mar 2023 14:14:35 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 3/4] s390/pci: remove redundant pci_bus_add_devices()
+ on new bus
+Content-Language: en-US
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lukas Wunner <lukas@wunner.de>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+References: <20230306151014.60913-1-schnelle@linux.ibm.com>
+ <20230306151014.60913-4-schnelle@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20230306151014.60913-4-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: E_kGx7VtsTE4uV7Gby1Nsbx2wbq35MAo
+X-Proofpoint-ORIG-GUID: 6iBS4zGxBqGjLHkOK1sSfxQ-1qsvwcaM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_10,2023-03-09_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303090153
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu,  9 Mar 2023 15:43:49 +0100:
+On 3/6/23 10:10 AM, Niklas Schnelle wrote:
+> The pci_bus_add_devices() call in zpci_bus_create_pci_bus() is without
+> function since at this point no device could have been added to the
+> freshly created PCI bus.
+> 
+> Suggested-by: Bjorn Helgaas <helgaas@kernel.org>> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.3-rc2
+Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/44889ba56cbb3d51154660ccd15818bc77276696
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
