@@ -2,246 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BABB6B20EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:07:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8A86B20F0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjCIKHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
+        id S230173AbjCIKJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:09:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjCIKHI (ORCPT
+        with ESMTP id S229768AbjCIKJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:07:08 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC880E4C77
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:07:06 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id a25so4944673edb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 02:07:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678356425;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O1rKZQWrvQdsaiUknj2gLx58N9hXAh/NcUMYH+8P2Io=;
-        b=NiDoNuNKomZlAKL/pzyIYZUo/9we1SdUtGyI3dm+QSAUoxdzMY/2nMis/n7ozTn75i
-         HSwbe8wbQkXHxOAs30NTUKURdBt9sThyysncB6m1Yo6aDJ2QzR6S4UBYIDhbPFiTBSC/
-         NihP53M2ZqKtlgm4yaGtqyG3HVJNt/CwqGCdK1ZKu/Hg0yf6pnT5gnzUTlaBP4rpoRES
-         uhG/BDxi+XD/M4qr0/qq3y04uC4Gr1kA6DxGhWxgYgjE/nmgwwsrRWf7mTcU58Thgez8
-         GM9JgCHjwZxLJG1YapfL1jM3GriBjqgbZ0qxTMbX+mbpUzM/5+857XK4DKHmVZdcU+ej
-         c9eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678356425;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O1rKZQWrvQdsaiUknj2gLx58N9hXAh/NcUMYH+8P2Io=;
-        b=K1zCnkWcZN+//ArRVjrWCV4IqadK+0mWiEjEnGgjTJyn6MwBKkVBzXNbeasrJTEWyr
-         6oU6FLz544eW1RgrhnZkZTcuKYhhrSuTGMhzRgvayy7eJ1PlF65hvUNT5zud2m7iWt1/
-         rnS7DjTykMMNQF02Gb176R/0JnIe1ZkLmPLX0/yl0PZxsR1QHDz1Kf14OHcTKRUvbOUN
-         V2MBwYULULQwIA7mtGBcZwf/LmCp48PuDotu3matOhiu1rucfHmOEv2AjWnXLq5CrX3Z
-         2+MDOhq2CgaxAJOfnAa/x0rRO9Hcpd/jy+GAjYF9vt7nnAvMHB4z7vBr88a+cSkgcBs3
-         4kTA==
-X-Gm-Message-State: AO0yUKXmNSZTeRMRTY6byroLnb1y86ZJ9D6fjtQbOEYSVkUWnpS8ZQML
-        D1Xglpx/Nj/5FwJo0Y8qyNdirw==
-X-Google-Smtp-Source: AK7set9dG7e71ZUsBA8QSEtjZmcxScdoi257cMlVacjcfvEL5jfaX1PVjAAYQWu+1xVUYACTvB0xpA==
-X-Received: by 2002:a17:907:8b16:b0:8b1:2e7c:df49 with SMTP id sz22-20020a1709078b1600b008b12e7cdf49mr23571182ejc.7.1678356425261;
-        Thu, 09 Mar 2023 02:07:05 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
-        by smtp.gmail.com with ESMTPSA id t25-20020a50c259000000b004efd65452a5sm3335676edf.70.2023.03.09.02.07.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 02:07:04 -0800 (PST)
-Message-ID: <8124eed7-b9ab-046d-4eb2-9b853ce2bcdd@linaro.org>
-Date:   Thu, 9 Mar 2023 11:07:02 +0100
+        Thu, 9 Mar 2023 05:09:48 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB5A2E3CE7
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:09:45 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 30FBEC14;
+        Thu,  9 Mar 2023 02:10:29 -0800 (PST)
+Received: from [10.57.91.187] (unknown [10.57.91.187])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 65D183F5A1;
+        Thu,  9 Mar 2023 02:09:44 -0800 (PST)
+Message-ID: <83ea3b68-5296-b919-1df8-3a75451a0c6c@arm.com>
+Date:   Thu, 9 Mar 2023 10:09:42 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: phy: Add StarFive JH7110 USB
- dt-binding
-Content-Language: en-US
-To:     Minda Chen <minda.chen@starfivetech.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <20230308082800.3008-1-minda.chen@starfivetech.com>
- <20230308082800.3008-2-minda.chen@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230308082800.3008-2-minda.chen@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH 5/8] coresight: Store in-connections as well as
+ out-connections
+To:     James Clark <james.clark@arm.com>, coresight@lists.linaro.org
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230308173904.3449231-1-james.clark@arm.com>
+ <20230308173904.3449231-6-james.clark@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20230308173904.3449231-6-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 09:27, Minda Chen wrote:
-> Add StarFive JH7110 SoC USB 3.0 phy dt-binding.
-> USB controller is cadence USB 3.0 IP.
-
-Subject: drop second/last, redundant "binding". The "dt-bindings" prefix
-is already stating that these are bindings.
-
+On 08/03/2023 17:38, James Clark wrote:
+> This will allow CATU to get its associated ETR in a generic way where
+> currently the enable path has some hard coded searches which avoid
+> the need to store input connections.
 > 
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+> Signed-off-by: James Clark <james.clark@arm.com>
 > ---
->  .../bindings/phy/starfive,jh7110-usb-phy.yaml | 158 ++++++++++++++++++
->  1 file changed, 158 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
+>   drivers/hwtracing/coresight/coresight-core.c  | 56 +++++++++++++++--
+>   .../hwtracing/coresight/coresight-platform.c  | 61 ++++++++++++++++---
+>   drivers/hwtracing/coresight/coresight-sysfs.c |  1 -
+>   include/linux/coresight.h                     | 33 +++++++++-
+>   4 files changed, 136 insertions(+), 15 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
-> new file mode 100644
-> index 000000000000..daa88d065deb
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
-> @@ -0,0 +1,158 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/starfive,jh7110-usb-phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+> index 617be08883da..fe9fb11ab283 100644
+> --- a/drivers/hwtracing/coresight/coresight-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-core.c
+> @@ -59,6 +59,7 @@ const u32 coresight_barrier_pkt[4] = {0x7fffffff, 0x7fffffff, 0x7fffffff, 0x7fff
+>   EXPORT_SYMBOL_GPL(coresight_barrier_pkt);
+>   
+>   static const struct cti_assoc_op *cti_assoc_ops;
+> +static int coresight_fixup_inputs(struct coresight_device *csdev);
+>   
+>   ssize_t coresight_simple_show_pair(struct device *_dev,
+>   			      struct device_attribute *attr, char *buf)
+> @@ -1369,6 +1370,35 @@ static int coresight_fixup_orphan_conns(struct coresight_device *csdev)
+>   			 csdev, coresight_orphan_match);
+>   }
+>   
+> +/*
+> + * Device connections are discovered before one/both devices have been created,
+> + * so inputs must be added later.
+> + */
+> +static int coresight_fixup_inputs(struct coresight_device *csdev)
+> +{
+> +	int i, ret = 0;
+> +	struct coresight_connection *out_conn;
+> +	struct coresight_connection in_conn;
 > +
-> +title: StarFive USB 2.0 and 3.0 PHY
+> +	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+> +		out_conn = &csdev->pdata->out_conns[i];
+> +		if (!out_conn->child_dev || !out_conn->child_dev->pdata)
+> +			continue;
 > +
-> +maintainers:
-> +  - Minda Chen<minda.chen@starfivetech.com>
+> +		/* Reverse in/out/child/parent relationships for inputs */
+> +		in_conn.child_dev = csdev;
+> +		in_conn.child_port = out_conn->outport;
+> +		in_conn.outport = out_conn->child_port;
+> +		in_conn.child_fwnode = csdev->dev.fwnode;
 
-Missing space
+Given that we are having both "input" and "output" connections
+represented using the "connection" structure, why don't we rename the
+struct coresight_connection fields to something, like:
 
-> +
-> +properties:
-> +  compatible:
-> +    items:
+		child_dev	=>	remote_dev
+		child_port	=>	remote_port
+		outport		=>	local_port or even simply "port"
+		child_fwnode	=>	remote_fwnode
 
-Drop items, it's just one item.
+Otherwise, thinking of in_conn.outport is actually the "input port" on 
+the local device is giving me headache ;-)
 
+This could be done at the beginning, when you after you rename the conns
+to out_conns
 
-> +      - const: starfive,jh7110-usb
-> +
-> +  reg:
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    items:
-> +      - const: usb3
-> +      - const: usb2
-> +
-> +  clocks:
-> +    items:
-> +      - description: usb 125m clock
-> +      - description: app 125m clock
-> +      - description: lpm clock
-> +      - description: stb clock
-> +      - description: apb clock
-> +      - description: axi clock
-> +      - description: utmi apb clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: usb_125m
-> +      - const: usb0_app_125
-> +      - const: usb0_lpm
-> +      - const: usb0_stb
-> +      - const: usb0_apb
-> +      - const: usb0_axi
-> +      - const: usb0_utmi_apb
-> +
-> +  resets:
-> +    items:
-> +      - description: USB0_PWRUP reset
-> +      - description: USB0_APB reset
-> +      - description: USB0_AXI reset
-> +      - description: USB0_UTMI_APB reset
-> +
-> +  starfive,sys-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      items:
-> +        - description: phandle to System Register Controller sys_syscon node.
-> +        - description: offset of SYS_SYSCONSAIF__SYSCFG register for USB.
-> +    description:
-> +      The phandle to System Register Controller syscon node and the offset
-> +      of SYS_SYSCONSAIF__SYSCFG register for USB.
-> +
-> +  starfive,stg-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      items:
-> +        - description: phandle to System Register Controller stg_syscon node.
-> +        - description: register0 offset of STG_SYSCONSAIF__SYSCFG register for USB.
-> +        - description: register1 offset of STG_SYSCONSAIF__SYSCFG register for USB.
-> +        - description: register2 offset of STG_SYSCONSAIF__SYSCFG register for USB.
-> +        - description: register3 offset of STG_SYSCONSAIF__SYSCFG register for USB.
-> +    description:
-> +      The phandle to System Register Controller syscon node and the offset
-> +      of STG_SYSCONSAIF__SYSCFG register for USB. Total 4 regsisters offset
-> +      for USB.
-> +
-> +  dr_mode:
-> +    description: PHY mode.
-> +    enum:
-> +      - host
-> +      - peripheral
-> +      - otg
-> +
-> +  "#address-cells":
-> +    maximum: 2
-> +
-> +  "#size-cells":
-> +    maximum: 2
-> +
-> +  ranges: true
-> +
-> +  starfive,usb2-only:
-> +    type: boolean
-> +    description: Set USB using usb 2.0 phy. Supprt USB 2.0 only
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - starfive,sys-syscon
-> +  - starfive,stg-syscon
-> +  - dr_mode
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - ranges
-> +
-> +patternProperties:
-
-This goes before required block
-
-> +  "^usb@[0-9a-f]+$":
-> +    type: object
-> +    description: |
-> +      usbphy node should have '1' usb controller subnode.
-> +      It could be Cadence USB3 DRD controller.
-> +      Cadence USB3 should follow the bindings specified in
-> +      Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-
-$ref instead of free form text
+Cheers
+Suzuki
 
 
-Best regards,
-Krzysztof
+> +		ret = coresight_add_in_conn(out_conn->child_dev->dev.parent,
+> +					    out_conn->child_dev->pdata,
+> +					    &in_conn);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+>   
+>   static int coresight_fixup_device_conns(struct coresight_device *csdev)
+>   {
+> @@ -1427,11 +1457,20 @@ static int coresight_remove_match(struct device *dev, void *data)
+>   			 */
+>   			fwnode_handle_put(conn->child_fwnode);
+>   			conn->child_fwnode = NULL;
+> +			conn->child_dev = NULL;
+> +			/* No need to continue */
+> +			break;
+> +		}
+> +	}
+> +	for (i = 0; i < iterator->pdata->nr_inconns; i++) {
+> +		conn = &iterator->pdata->in_conns[i];
+> +		if (csdev == conn->child_dev) {
+> +			conn->child_fwnode = NULL;
+> +			conn->child_dev = NULL;
+>   			/* No need to continue */
+>   			break;
+>   		}
+>   	}
+> -
+>   	/*
+>   	 * Returning '0' ensures that all known component on the
+>   	 * bus will be checked.
+> @@ -1552,21 +1591,28 @@ void coresight_release_platform_data(struct coresight_device *csdev,
+>   
+>   	for (i = 0; i < pdata->nr_outconns; i++) {
+>   		/* If we have made the links, remove them now */
+> -		if (csdev && conns[i].child_dev)
+> +		if (csdev && conns[i].child_dev) {
+>   			coresight_remove_links(csdev, &conns[i]);
+> +			conns[i].child_dev = NULL;
+> +		}
+> +
+>   		/*
+>   		 * Drop the refcount and clear the handle as this device
+>   		 * is going away
+>   		 */
+>   		if (conns[i].child_fwnode) {
+>   			fwnode_handle_put(conns[i].child_fwnode);
+> -			pdata->out_conns[i].child_fwnode = NULL;
+> +			conns[i].child_fwnode = NULL;
+>   		}
+>   	}
+> +	for (i = 0; i < pdata->nr_inconns; i++) {
+> +		pdata->in_conns[i].child_dev = NULL;
+> +		pdata->in_conns[i].child_fwnode = NULL;
+> +	}
+> +
+>   	if (csdev)
+>   		coresight_remove_conns_sysfs_group(csdev);
+>   }
+> -
+>   struct coresight_device *coresight_register(struct coresight_desc *desc)
+>   {
+>   	int ret;
+> @@ -1659,6 +1705,8 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
+>   	ret = coresight_create_conns_sysfs_group(csdev);
+>   	if (!ret)
+>   		ret = coresight_fixup_device_conns(csdev);
+> +	if (!ret)
+> +		ret = coresight_fixup_inputs(csdev);
+>   	if (!ret)
+>   		ret = coresight_fixup_orphan_conns(csdev);
+>   
+> diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
+> index 8effce5937d9..3ebf490601f3 100644
+> --- a/drivers/hwtracing/coresight/coresight-platform.c
+> +++ b/drivers/hwtracing/coresight/coresight-platform.c
+> @@ -20,8 +20,7 @@
+>   
+>   #include "coresight-priv.h"
+>   /*
+> - * coresight_alloc_conns: Allocate connections record for each output
+> - * port from the device.
+> + * coresight_alloc_conns: Allocate connections record for each input/output device.
+>    */
+>   static int coresight_alloc_conns(struct device *dev,
+>   				 struct coresight_platform_data *pdata)
+> @@ -33,7 +32,14 @@ static int coresight_alloc_conns(struct device *dev,
+>   		if (!pdata->out_conns)
+>   			return -ENOMEM;
+>   	}
+> -
+> +	if (pdata->nr_inconns) {
+> +		pdata->in_conns = devm_krealloc_array(dev, pdata->in_conns,
+> +						      pdata->nr_inconns,
+> +						      sizeof(*pdata->in_conns),
+> +						      GFP_KERNEL | __GFP_ZERO);
+> +		if (!pdata->in_conns)
+> +			return -ENOMEM;
+> +	}
+>   	return 0;
+>   }
+>   
+> @@ -79,6 +85,45 @@ int coresight_add_conn(struct device *dev,
+>   }
+>   EXPORT_SYMBOL_GPL(coresight_add_conn);
+>   
+> +/*
+> + * Add a connection in the first free slot, or realloc
+> + * if there is no space.
+> + *
+> + * Do nothing if the connection already exists because inputs are
+> + * fixed up multiple times.
+> + */
+> +int coresight_add_in_conn(struct device *dev,
+> +			  struct coresight_platform_data *pdata,
+> +			  struct coresight_connection *conn)
+> +{
+> +	int ret;
+> +	struct coresight_connection *free_conn = NULL;
+> +	int i;
+> +
+> +	/* Search for a free slot or exit if a duplicate is found */
+> +	if (pdata->in_conns) {
+> +		for (i = 0; i < pdata->nr_inconns; ++i) {
+> +			if (!free_conn && !pdata->in_conns[i].child_fwnode)
+> +				free_conn = &pdata->in_conns[i];
+> +			if (pdata->in_conns[i].child_fwnode ==
+> +			    conn->child_fwnode)
+> +				return 0;
+> +		}
+> +	}
+> +
+> +	if (!free_conn) {
+> +		pdata->nr_inconns++;
+> +		ret = coresight_alloc_conns(dev, pdata);
+> +		if (ret)
+> +			return ret;
+> +		free_conn = &pdata->in_conns[pdata->nr_inconns - 1];
+> +	}
+> +
+> +	*free_conn = *conn;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(coresight_add_in_conn);
+> +
+>   static struct device *
+>   coresight_find_device_by_fwnode(struct fwnode_handle *fwnode)
+>   {
+> @@ -249,7 +294,7 @@ static int of_coresight_get_cpu(struct device *dev)
+>   
+>   /*
+>    * of_coresight_parse_endpoint : Parse the given output endpoint @ep
+> - * and fill the connection information in @conn
+> + * and fill the connection information in @in_conn and @out_conn
+>    *
+>    * Parses the local port, remote device name and the remote port.
+>    *
+> @@ -333,14 +378,14 @@ static int of_get_coresight_platform_data(struct device *dev,
+>   	/* Get the number of input and output port for this component */
+>   	of_coresight_get_ports(node, &pdata->nr_inconns, &pdata->nr_outconns);
+>   
+> -	/* If there are no output connections, we are done */
+> -	if (!pdata->nr_outconns)
+> -		return 0;
+> -
+>   	ret = coresight_alloc_conns(dev, pdata);
+>   	if (ret)
+>   		return ret;
+>   
+> +	/* If there are no output connections, we are done */
+> +	if (!pdata->nr_outconns)
+> +		return 0;
+> +
+>   	parent = of_coresight_get_output_ports_node(node);
+>   	/*
+>   	 * If the DT uses obsoleted bindings, the ports are listed
+> diff --git a/drivers/hwtracing/coresight/coresight-sysfs.c b/drivers/hwtracing/coresight/coresight-sysfs.c
+> index 34d2a2d31d00..8c7cff502070 100644
+> --- a/drivers/hwtracing/coresight/coresight-sysfs.c
+> +++ b/drivers/hwtracing/coresight/coresight-sysfs.c
+> @@ -202,5 +202,4 @@ void coresight_remove_links(struct coresight_device *orig,
+>   	devm_kfree(&orig->dev, conn->link->orig_name);
+>   	devm_kfree(&orig->dev, conn->link);
+>   	conn->link = NULL;
+> -	conn->child_dev = NULL;
+>   }
+> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+> index 62cc8e43b6cb..daecee847b95 100644
+> --- a/include/linux/coresight.h
+> +++ b/include/linux/coresight.h
+> @@ -110,6 +110,7 @@ struct coresight_platform_data {
+>   	int nr_inconns;
+>   	int nr_outconns;
+>   	struct coresight_connection *out_conns;
+> +	struct coresight_connection *in_conns;
+>   };
+>   
+>   /**
+> @@ -167,9 +168,34 @@ struct coresight_desc {
+>    * @outport:	a connection's output port number.
+>    * @child_port:	remote component's port number @output is connected to.
+>    * @chid_fwnode: remote component's fwnode handle.
+> - * @child_dev:  remote component's @coresight_device representation. Will
+> - *		be looked up and assigned using @child_fwnode
+> + * @child_dev:  remote component's @coresight_device representation connected
+> + *              to @outport. Will be looked up and assigned using @child_fwnode
+> + *		upon device registration.
+> + * @parent_dev: a @coresight_device representation of the owner of this
+> +		connection. As in, the device connected to @child_port of the
+> +		target of the connection.
+>    * @link: Representation of the connection as a sysfs link.
+> + *
+> + * The full connection structure looks like this, where in_conns store references to
+> + * the parent device in the same child_dev member as output connections.
+> + *
+> + *       +-----------------------------+            +-----------------------------+
+> + *       |coresight_device             |            |coresight_connection         |
+> + *       |-----------------------------|            |-----------------------------|
+> + *  ---->|                             |            |                             |
+> + *  |    |                             |            |                   child_dev*|------
+> + *  |    |pdata->out_conns[nr_outconns]|----------->|                             |      |
+> + *  |    |                             |            |                             |      |
+> + *  |    +-----------------------------+            +-----------------------------+      |
+> + *  |                                                                                    |
+> + *  |    +-----------------------------+            +-----------------------------+      |
+> + *  |    |coresight_connection         |            |coresight_device             |      |
+> + *  |    |-----------------------------|            |------------------------------      |
+> + *  |    |                             |            |                             |<-----
+> + *  -----|child_dev*                   |            |                             |
+> + *       |                             |<-----------|pdata->in_conns[nr_inconns]  |
+> + *       |                             |            |                             |
+> + *       +-----------------------------+            +-----------------------------+
+>    */
+>   struct coresight_connection {
+>   	int outport;
+> @@ -612,5 +638,8 @@ struct coresight_platform_data *coresight_get_platform_data(struct device *dev);
+>   int coresight_add_conn(struct device *dev,
+>   		       struct coresight_platform_data *pdata,
+>   		       const struct coresight_connection *conn);
+> +int coresight_add_in_conn(struct device *dev,
+> +			  struct coresight_platform_data *pdata,
+> +			  struct coresight_connection *conn);
+>   
+>   #endif		/* _LINUX_COREISGHT_H */
 
