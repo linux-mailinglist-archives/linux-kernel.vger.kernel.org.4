@@ -2,178 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A19456B25AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C956B25B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbjCINmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:42:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
+        id S229544AbjCINna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:43:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbjCINma (ORCPT
+        with ESMTP id S230297AbjCINnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:42:30 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88003F7861
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 05:42:18 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id j2so1893086wrh.9
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 05:42:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678369337;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cYRhZ+LQKcNjJquoMvKplAWc0Q0BGJcYCcN6PUzcrU0=;
-        b=G4hEzH03S6LjSKf3OpeDK0GSaJY6+RnEVsEI34ZGb+KPmZi1JHg1/3wWPX07D7EDb0
-         q+zmu3Hd8w1Igy4pfmEN+OGuqnxa16a6XbJjpkZnKYoevxKe/IvU2zW3oHmjo9toFIK1
-         VBdCWmv37Wqs1Y3RYn+LkfI2YB6FEba24EKFoqyeJMPvjgPzg93jWqi2GhKamlPikqa3
-         7ps9t3681jWMahnZoL45dJkV2NGaCRS7fs8ECdIvdr+ZLC1d48Q7Rd124P0MHnHyGFNR
-         PHSwkVAN1GUyCiVx3k4Adk/T7PTt5gG4Uy5tuEIiw85WRkmCOdhmUFS0sV69VKtR/cf/
-         09nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678369337;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cYRhZ+LQKcNjJquoMvKplAWc0Q0BGJcYCcN6PUzcrU0=;
-        b=GWRsgn2u+rwC/lJE33f1HOAbU1rnqwuUrJ/gwwFlHtc8kb0s6vRjh6TLEUY4NbqNuU
-         gAYT5Em4ID3TGew7bNSHYL6Oe3/9eAOvVTdV8mefXq88yOfSf7yBlf1AzBgRnRjbSRwh
-         zJJGU+ngRxoAbkBVHixxvDNKW0hRYt5wYlaU/eT48NqK+0Ao9h9cm5SOp2nKCQgMUab3
-         dCoKnFgzS22+uE3ACw5cMeibrzOv+Ea75m95FNMbuUY/Cmw3gFpoO/SneDL6VWyDA9Iy
-         62akoEcTqoZa49OPiunYEemELPlti2TxOmySCZG/l1sr56sF27ahK8r+xvDgMCVHlPMV
-         pXJw==
-X-Gm-Message-State: AO0yUKXZmtKFn/QYNuYUH8blBWg36IgW1F+h2qEiY0SV7H/nBB3qVcv+
-        InxzHbTJfwBqCIFtaAyBVumy+WLgWNtzkYfpN/o=
-X-Google-Smtp-Source: AK7set9Rn2XbNH+GCzRxmbwEIXEYIywyUUAvuLxkZ7tB/bsYVtC/eaDuRU1SybiJl+td9URPJo0m9Q==
-X-Received: by 2002:a5d:4a51:0:b0:2c7:ca2:1a28 with SMTP id v17-20020a5d4a51000000b002c70ca21a28mr13999073wrs.68.1678369336941;
-        Thu, 09 Mar 2023 05:42:16 -0800 (PST)
-Received: from myrica (054592b0.skybroadband.com. [5.69.146.176])
-        by smtp.gmail.com with ESMTPSA id q9-20020a5d61c9000000b002c54911f50bsm18042908wrv.84.2023.03.09.05.42.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 05:42:16 -0800 (PST)
-Date:   Thu, 9 Mar 2023 13:42:17 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     jgg@nvidia.com, robin.murphy@arm.com, will@kernel.org,
-        eric.auger@redhat.com, kevin.tian@intel.com,
-        baolu.lu@linux.intel.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, yi.l.liu@intel.com
-Subject: Re: [PATCH v1 02/14] iommufd: Add nesting related data structures
- for ARM SMMUv3
-Message-ID: <20230309134217.GA1673607@myrica>
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <364cfbe5b228ab178093db2de13fa3accf7a6120.1678348754.git.nicolinc@nvidia.com>
+        Thu, 9 Mar 2023 08:43:14 -0500
+Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126EA1CBD5
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 05:43:09 -0800 (PST)
+Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 2023030913430628aaa27b6e8ee38528
+        for <linux-kernel@vger.kernel.org>;
+        Thu, 09 Mar 2023 14:43:06 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=alexander.sverdlin@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=LWWKSwja5zpZiSyAbqGvPA3W0gLM9JY5S2eHp533JBM=;
+ b=Nb4H6nKWf5vNXd8NWPi/hVRmqfXPnDDgQ2IE8j8xcJpvFWkAeqEuOTqBkLyf/irAEMHwFp
+ IlAX383PnSPfy3MkxMlvvwFK589VAzVepM5sL2zJmn4KITmd4vNhE18h3uwvvDVZHlyeTyw2
+ BiRd8tfUQFI/w6XlNTpfT4YnHIIxE=;
+From:   "A. Sverdlin" <alexander.sverdlin@siemens.com>
+To:     NXP Linux Team <linux-imx@nxp.com>
+Cc:     Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: lpi2c: cache peripheral clock rate
+Date:   Thu,  9 Mar 2023 14:43:01 +0100
+Message-Id: <20230309134302.74940-1-alexander.sverdlin@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <364cfbe5b228ab178093db2de13fa3accf7a6120.1678348754.git.nicolinc@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-456497:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nicolin,
+From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 
-On Thu, Mar 09, 2023 at 02:53:38AM -0800, Nicolin Chen wrote:
-> Add the following data structures for corresponding ioctls:
->                iommu_hwpt_arm_smmuv3 => IOMMUFD_CMD_HWPT_ALLOC
->     iommu_hwpt_invalidate_arm_smmuv3 => IOMMUFD_CMD_HWPT_INVALIDATE
-> 
-> Also, add IOMMU_HW_INFO_TYPE_ARM_SMMUV3 and IOMMU_PGTBL_TYPE_ARM_SMMUV3_S1
-> to the header and corresponding type/size arrays.
-> 
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+One of the reasons to do it is to save some CPU cycles on cpu_freq_get()
+under mutex. The second reason if the (false-positive) lockdep splat caused
+by the recursive feature of the "prepare_lock" (one clock instance is I2C
+peripheral clock and another is pcf85063 RTC as clock provider):
 
-> +/**
-> + * struct iommu_hwpt_arm_smmuv3 - ARM SMMUv3 specific page table data
-> + *
-> + * @flags: page table entry attributes
-> + * @s2vmid: Virtual machine identifier
-> + * @s1ctxptr: Stage-1 context descriptor pointer
-> + * @s1cdmax: Number of CDs pointed to by s1ContextPtr
-> + * @s1fmt: Stage-1 Format
-> + * @s1dss: Default substream
-> + */
-> +struct iommu_hwpt_arm_smmuv3 {
-> +#define IOMMU_SMMUV3_FLAG_S2	(1 << 0) /* if unset, stage-1 */
+======================================================
+WARNING: possible circular locking dependency detected
+5.15.71+... #1 Tainted: G           O
+------------------------------------------------------
+fs-value/2332 is trying to acquire lock:
+ffff8000096cae08 (prepare_lock){+.+.}-{3:3}, at: clk_prepare_lock+0x50/0xb0
 
-I don't understand the purpose of this flag, since the structure only
-provides stage-1 configuration fields
+but task is already holding lock:
+ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at: i2c_adapter_lock_bus+0x2c/0x3c
 
-> +#define IOMMU_SMMUV3_FLAG_VMID	(1 << 1) /* vmid override */
+which lock already depends on the new lock.
 
-Doesn't this break isolation?  The VMID space is global for the SMMU, so
-the guest could access cached mappings of another device
+the existing dependency chain (in reverse order) is:
 
-> +	__u64 flags;
-> +	__u32 s2vmid;
-> +	__u32 __reserved;
-> +	__u64 s1ctxptr;
-> +	__u64 s1cdmax;
-> +	__u64 s1fmt;
-> +	__u64 s1dss;
-> +};
-> +
+-> #2 (i2c_register_adapter){+.+.}-{3:3}:
+       lock_acquire+0x68/0x8c
+       rt_mutex_lock_nested+0x88/0xe0
+       i2c_adapter_lock_bus+0x2c/0x3c
+       i2c_transfer+0x58/0x130
+       regmap_i2c_read+0x64/0xb0
+       _regmap_raw_read+0x114/0x440
+       _regmap_bus_read+0x4c/0x84
+       _regmap_read+0x6c/0x270
+       regmap_read+0x54/0x80
+       pcf85063_probe+0xec/0x4cc
+       i2c_device_probe+0x10c/0x350
+       really_probe+0xc4/0x470
+       __driver_probe_device+0x11c/0x190
+       driver_probe_device+0x48/0x110
+       __device_attach_driver+0xc4/0x160
+       bus_for_each_drv+0x80/0xe0
+       __device_attach+0xb0/0x1f0
+       device_initial_probe+0x1c/0x2c
+       bus_probe_device+0xa4/0xb0
+       device_add+0x398/0x8ac
+       device_register+0x28/0x40
+       i2c_new_client_device+0x144/0x290
+       of_i2c_register_devices+0x18c/0x230
+       i2c_register_adapter+0x1dc/0x6b0
+       __i2c_add_numbered_adapter+0x68/0xbc
+       i2c_add_adapter+0xb0/0xe0
+       lpi2c_imx_probe+0x354/0x5e0
+       platform_probe+0x70/0xec
+       really_probe+0xc4/0x470
+       __driver_probe_device+0x11c/0x190
+       driver_probe_device+0x48/0x110
+       __device_attach_driver+0xc4/0x160
+       bus_for_each_drv+0x80/0xe0
+       __device_attach+0xb0/0x1f0
+       device_initial_probe+0x1c/0x2c
+       bus_probe_device+0xa4/0xb0
+       deferred_probe_work_func+0xa0/0xfc
+       process_one_work+0x2ac/0x6f4
+       worker_thread+0x7c/0x47c
+       kthread+0x150/0x16c
+       ret_from_fork+0x10/0x20
 
+-> #1 (rtc_pcf85063:560:(&config->regmap)->lock){+.+.}-{3:3}:
+       lock_acquire+0x68/0x8c
+       __mutex_lock+0x9c/0x4d0
+       mutex_lock_nested+0x48/0x5c
+       regmap_lock_mutex+0x1c/0x30
+       regmap_read+0x44/0x80
+       pcf85063_clkout_recalc_rate+0x34/0x80
+       __clk_register+0x520/0x880
+       devm_clk_register+0x64/0xc4
+       pcf85063_probe+0x24c/0x4cc
+       i2c_device_probe+0x10c/0x350
+       really_probe+0xc4/0x470
+       __driver_probe_device+0x11c/0x190
+       driver_probe_device+0x48/0x110
+       __device_attach_driver+0xc4/0x160
+       bus_for_each_drv+0x80/0xe0
+       __device_attach+0xb0/0x1f0
+       device_initial_probe+0x1c/0x2c
+       bus_probe_device+0xa4/0xb0
+       device_add+0x398/0x8ac
+       device_register+0x28/0x40
+       i2c_new_client_device+0x144/0x290
+       of_i2c_register_devices+0x18c/0x230
+       i2c_register_adapter+0x1dc/0x6b0
+       __i2c_add_numbered_adapter+0x68/0xbc
+       i2c_add_adapter+0xb0/0xe0
+       lpi2c_imx_probe+0x354/0x5e0
+       platform_probe+0x70/0xec
+       really_probe+0xc4/0x470
+       __driver_probe_device+0x11c/0x190
+       driver_probe_device+0x48/0x110
+       __device_attach_driver+0xc4/0x160
+       bus_for_each_drv+0x80/0xe0
+       __device_attach+0xb0/0x1f0
+       device_initial_probe+0x1c/0x2c
+       bus_probe_device+0xa4/0xb0
+       deferred_probe_work_func+0xa0/0xfc
+       process_one_work+0x2ac/0x6f4
+       worker_thread+0x7c/0x47c
+       kthread+0x150/0x16c
+       ret_from_fork+0x10/0x20
 
-> +/**
-> + * struct iommu_hwpt_invalidate_arm_smmuv3 - ARM SMMUv3 cahce invalidation info
-> + * @flags: boolean attributes of cache invalidation command
-> + * @opcode: opcode of cache invalidation command
-> + * @ssid: SubStream ID
-> + * @granule_size: page/block size of the mapping in bytes
-> + * @range: IOVA range to invalidate
-> + */
-> +struct iommu_hwpt_invalidate_arm_smmuv3 {
-> +#define IOMMU_SMMUV3_CMDQ_TLBI_VA_LEAF	(1 << 0)
-> +	__u64 flags;
-> +	__u8 opcode;
-> +	__u8 padding[3];
-> +	__u32 asid;
-> +	__u32 ssid;
-> +	__u32 granule_size;
-> +	struct iommu_iova_range range;
-> +};
+-> #0 (prepare_lock){+.+.}-{3:3}:
+       __lock_acquire+0x1298/0x20d0
+       lock_acquire.part.0+0xf0/0x250
+       lock_acquire+0x68/0x8c
+       __mutex_lock+0x9c/0x4d0
+       mutex_lock_nested+0x48/0x5c
+       clk_prepare_lock+0x50/0xb0
+       clk_get_rate+0x28/0x80
+       lpi2c_imx_xfer+0xb0/0xa9c
+       __i2c_transfer+0x174/0xa80
+       i2c_transfer+0x68/0x130
+       regmap_i2c_read+0x64/0xb0
+       _regmap_raw_read+0x114/0x440
+       regmap_raw_read+0x19c/0x28c
+       regmap_bulk_read+0x1b8/0x244
+       at24_read+0x14c/0x2c4
+       nvmem_reg_read+0x2c/0x54
+       bin_attr_nvmem_read+0x8c/0xbc
+       sysfs_kf_bin_read+0x74/0x94
+       kernfs_fop_read_iter+0xb0/0x1d0
+       new_sync_read+0xf0/0x184
+       vfs_read+0x154/0x1f0
+       ksys_read+0x70/0x100
+       __arm64_sys_read+0x24/0x30
+       invoke_syscall+0x50/0x120
+       el0_svc_common.constprop.0+0x68/0x124
+       do_el0_svc+0x30/0x9c
+       el0_svc+0x54/0x110
+       el0t_64_sync_handler+0xa4/0x130
+       el0t_64_sync+0x1a0/0x1a4
 
-Although we can keep the alloc and hardware info separate for each IOMMU
-architecture, we should try to come up with common invalidation methods.
+other info that might help us debug this:
 
-It matters because things like vSVA, or just efficient dynamic mappings,
-will require optimal invalidation latency. A paravirtual interface like
-vhost-iommu can help with that, as the host kernel will handle guest
-invalidations directly instead of doing a round-trip to host userspace
-(and we'll likely want the same path for PRI.)
+Chain exists of:
+  prepare_lock --> rtc_pcf85063:560:(&config->regmap)->lock --> i2c_register_adapter
 
-Supporting HW page tables for a common PV IOMMU does require some
-architecture-specific knowledge, but invalidation messages contain roughly
-the same information on all architectures. The PV IOMMU won't include
-command opcodes for each possible architecture if one generic command does
-the same job.
+ Possible unsafe locking scenario:
 
-Ideally I'd like something like this for vhost-iommu:
+       CPU0                    CPU1
+       ----                    ----
+  lock(i2c_register_adapter);
+                               lock(rtc_pcf85063:560:(&config->regmap)->lock);
+                               lock(i2c_register_adapter);
+  lock(prepare_lock);
 
-* slow path through userspace for complex requests like attach-table and
-  probe, where the VMM can decode arch-specific information and translate
-  them to iommufd and vhost-iommu ioctls to update the configuration.
+ *** DEADLOCK ***
 
-* fast path within the kernel for performance-critical requests like
-  invalidate, page request and response. It would be absurd for the
-  vhost-iommu driver to translate generic invalidation requests from the
-  guest into arch-specific commands with special opcodes, when the next
-  step is calling the IOMMU driver which does that for free.
+4 locks held by .../2332:
+ #0: ffff0000146eb288 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_read_iter+0x74/0x1d0
+ #1: ffff000010fe4400 (kn->active#72){.+.+}-{0:0}, at: kernfs_fop_read_iter+0x7c/0x1d0
+ #2: ffff0000110168e8 (&at24->lock){+.+.}-{3:3}, at: at24_read+0x8c/0x2c4
+ #3: ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at: i2c_adapter_lock_bus+0x2c/0x3c
 
-During previous discussions we came up with generic invalidations that
-could fit both Arm and x86 [1][2]. The only difference was the ASID
-(called archid/id in those proposals) which VT-d didn't need. Could we try
-to build on that?
+stack backtrace:
+CPU: 1 PID: 2332 Comm: ... Tainted: G           O      5.15.71+... #1
+Hardware name: ... (DT)
+Call trace:
+ dump_backtrace+0x0/0x1d4
+ show_stack+0x20/0x2c
+ dump_stack_lvl+0x8c/0xb8
+ dump_stack+0x18/0x34
+ print_circular_bug+0x1f8/0x200
+ check_noncircular+0x130/0x144
+ __lock_acquire+0x1298/0x20d0
+ lock_acquire.part.0+0xf0/0x250
+ lock_acquire+0x68/0x8c
+ __mutex_lock+0x9c/0x4d0
+ mutex_lock_nested+0x48/0x5c
+ clk_prepare_lock+0x50/0xb0
+ clk_get_rate+0x28/0x80
+ lpi2c_imx_xfer+0xb0/0xa9c
+ __i2c_transfer+0x174/0xa80
+ i2c_transfer+0x68/0x130
+ regmap_i2c_read+0x64/0xb0
+ _regmap_raw_read+0x114/0x440
+ regmap_raw_read+0x19c/0x28c
+ regmap_bulk_read+0x1b8/0x244
+ at24_read+0x14c/0x2c4
+ nvmem_reg_read+0x2c/0x54
+ bin_attr_nvmem_read+0x8c/0xbc
+ sysfs_kf_bin_read+0x74/0x94
+ kernfs_fop_read_iter+0xb0/0x1d0
+ new_sync_read+0xf0/0x184
+ vfs_read+0x154/0x1f0
+ ksys_read+0x70/0x100
+ __arm64_sys_read+0x24/0x30
+ invoke_syscall+0x50/0x120
+ el0_svc_common.constprop.0+0x68/0x124
+ do_el0_svc+0x30/0x9c
+ el0_svc+0x54/0x110
+ el0t_64_sync_handler+0xa4/0x130
+ el0t_64_sync+0x1a0/0x1a4
 
-[1] https://elixir.bootlin.com/linux/v5.17/source/include/uapi/linux/iommu.h#L161
-[2] https://lists.oasis-open.org/archives/virtio-dev/202102/msg00014.html
+Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+---
+ drivers/i2c/busses/i2c-imx-lpi2c.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-Thanks,
-Jean
+diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+index 188f2a36d2fd6..cf36f12b85573 100644
+--- a/drivers/i2c/busses/i2c-imx-lpi2c.c
++++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+@@ -100,6 +100,7 @@ struct lpi2c_imx_struct {
+ 	__u8			*rx_buf;
+ 	__u8			*tx_buf;
+ 	struct completion	complete;
++	unsigned int		rate_per;
+ 	unsigned int		msglen;
+ 	unsigned int		delivered;
+ 	unsigned int		block_data;
+@@ -202,20 +203,19 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct *lpi2c_imx)
+ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+ {
+ 	u8 prescale, filt, sethold, clkhi, clklo, datavd;
+-	unsigned int clk_rate, clk_cycle;
++	unsigned int clk_cycle;
+ 	enum lpi2c_imx_pincfg pincfg;
+ 	unsigned int temp;
+ 
+ 	lpi2c_imx_set_mode(lpi2c_imx);
+ 
+-	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
+ 	if (lpi2c_imx->mode == HS || lpi2c_imx->mode == ULTRA_FAST)
+ 		filt = 0;
+ 	else
+ 		filt = 2;
+ 
+ 	for (prescale = 0; prescale <= 7; prescale++) {
+-		clk_cycle = clk_rate / ((1 << prescale) * lpi2c_imx->bitrate)
++		clk_cycle = lpi2c_imx->rate_per / ((1 << prescale) * lpi2c_imx->bitrate)
+ 			    - 3 - (filt >> 1);
+ 		clkhi = (clk_cycle + I2C_CLK_RATIO) / (I2C_CLK_RATIO + 1);
+ 		clklo = clk_cycle - clkhi;
+@@ -588,6 +588,12 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	lpi2c_imx->rate_per = clk_get_rate(lpi2c_imx->clks[0].clk);
++	if (!lpi2c_imx->rate_per) {
++		dev_err(&pdev->dev, "can't get I2C peripheral clock rate\n");
++		return -EINVAL;
++	}
++
+ 	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
+ 	pm_runtime_use_autosuspend(&pdev->dev);
+ 	pm_runtime_get_noresume(&pdev->dev);
+-- 
+2.34.1
 
