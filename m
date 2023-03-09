@@ -2,229 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35EF6B2374
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E956B6B2384
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbjCILwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:52:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
+        id S231271AbjCIL7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:59:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbjCILvx (ORCPT
+        with ESMTP id S229933AbjCIL65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:51:53 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BD0E6835;
-        Thu,  9 Mar 2023 03:51:51 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3298QivW009122;
-        Thu, 9 Mar 2023 11:51:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=DNOlz2EYTj6weFcohqxG0NnpJE4xB0UXowa/63Q892w=;
- b=BWLzr8NZdvaEdimvictYzpPUd7ujpjmZBI3GgiDwXkZ6PhARNXOwN2t9iFHHcIcQIW5p
- DU6tkAarZ970FAtXfn3dDi6Bc/LIyl2vwusneKbeblFgCoEWKmGbjnUQ3T0gxx+o1ABf
- QYKx+33uALemidDt5054wxL9g2PrkVXzexnkZUTJV+UGrRfGYV3eoaWeIoZhpZ1YTWPE
- 7Fdky2qICPpO3DjxEmkXnJIlynienapTsp37qjwvR+aPf7AvYibAsz6z8qY9PXTzkrMU
- P4Vlt1afSETdnr+hfyqle+oHocZ0rSWe0he6Wb/4Lu1SkG5OVrB3TPYwYS1rKTYX3JgQ RA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p74drhkxe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 11:51:46 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 329BpjFS014867
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 9 Mar 2023 11:51:45 GMT
-Received: from [10.201.3.182] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 9 Mar 2023
- 03:51:41 -0800
-Message-ID: <73269ad0-5662-519c-f6c0-e5e2f918cd4e@quicinc.com>
-Date:   Thu, 9 Mar 2023 17:21:38 +0530
+        Thu, 9 Mar 2023 06:58:57 -0500
+X-Greylist: delayed 374 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Mar 2023 03:58:55 PST
+Received: from 6.mo576.mail-out.ovh.net (6.mo576.mail-out.ovh.net [46.105.50.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDDC7F011
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 03:58:55 -0800 (PST)
+Received: from director4.ghost.mail-out.ovh.net (unknown [10.108.20.216])
+        by mo576.mail-out.ovh.net (Postfix) with ESMTP id F347E2742D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:52:39 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-ml9bn (unknown [10.108.1.233])
+        by director4.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 23E731FE55;
+        Thu,  9 Mar 2023 11:52:38 +0000 (UTC)
+Received: from RCM-web10.webmail.mail.ovh.net ([151.80.29.18])
+        by ghost-submission-6684bf9d7b-ml9bn with ESMTPSA
+        id Tff4BobICWQMaB4AKXspMQ
+        (envelope-from <rafal@milecki.pl>); Thu, 09 Mar 2023 11:52:38 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 17/17] PCI: qcom: Expose link transition counts via
- debugfs
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        <andersson@kernel.org>, <lpieralisi@kernel.org>, <kw@linux.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh@kernel.org>
-CC:     <konrad.dybcio@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230309085102.120977-1-manivannan.sadhasivam@linaro.org>
- <20230309085102.120977-18-manivannan.sadhasivam@linaro.org>
-From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
-In-Reply-To: <20230309085102.120977-18-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: VrZ95vLubBXKCvrVPVzCJ29OTewhHoUI
-X-Proofpoint-ORIG-GUID: VrZ95vLubBXKCvrVPVzCJ29OTewhHoUI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_06,2023-03-08_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 priorityscore=1501 mlxscore=0 suspectscore=0
- clxscore=1011 adultscore=0 phishscore=0 spamscore=0 mlxlogscore=999
- bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303090095
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 09 Mar 2023 12:52:37 +0100
+From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        =?UTF-8?Q?Rafa=C5=82_Mi?= =?UTF-8?Q?=C5=82ecki?= 
+        <zajec5@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Michael Walle <michael@walle.cc>, gregkh@linuxfoundation.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, u-boot@lists.denx.de
+Subject: Re: [PATCH 2/4] nvmem: core: allow nvmem_cell_post_process_t
+ callbacks to adjust buffer
+In-Reply-To: <fb6d7c76-d3d3-b8a0-46f9-dc2eb76ae91a@linaro.org>
+References: <20230222172245.6313-1-zajec5@gmail.com>
+ <20230222172245.6313-3-zajec5@gmail.com>
+ <37f821b8-f681-08e4-d4f1-d37be191ff7f@linaro.org>
+ <20230309113211.6321ce3d@xps-13>
+ <2dc096f5-f5ce-f99b-42ac-0fb24682239a@linaro.org>
+ <20230309122324.4b012a58@xps-13>
+ <fb6d7c76-d3d3-b8a0-46f9-dc2eb76ae91a@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <fde09080fc420cca64e810a3c2ad9677@milecki.pl>
+X-Sender: rafal@milecki.pl
+X-Originating-IP: 194.187.74.233
+X-Webmail-UserID: rafal@milecki.pl
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 14449517931571489705
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdduiedgfedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtkehjtddtreejnecuhfhrohhmpeftrghfrghlucfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeejvdelgfeutdfhfeelheegfedtleduleeuvdfgfeefvefhvedtheetjeetfeehgeenucfkphepuddvjedrtddrtddruddpudelgedrudekjedrjeegrddvfeefpdduhedurdektddrvdelrddukeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehrrghfrghlsehmihhlvggtkhhirdhplheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehjeeipdhmohguvgepshhmthhpohhuth
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-03-09 12:44, Srinivas Kandagatla wrote:
+> On 09/03/2023 11:23, Miquel Raynal wrote:
+>> Hi Srinivas,
+>> 
+>> srinivas.kandagatla@linaro.org wrote on Thu, 9 Mar 2023 10:53:07 
+>> +0000:
+>> 
+>>> On 09/03/2023 10:32, Miquel Raynal wrote:
+>>>> Hi Srinivas,
+>>>> 
+>>>> srinivas.kandagatla@linaro.org wrote on Thu, 9 Mar 2023 10:12:24 
+>>>> +0000:
+>>>> 
+>>>>> On 22/02/2023 17:22, Rafał Miłecki wrote:
+>>>>>> @@ -1791,11 +1792,15 @@ ssize_t nvmem_device_cell_read(struct 
+>>>>>> nvmem_device *nvmem,
+>>>>>>     	if (!nvmem)
+>>>>>>     		return -EINVAL;
+>>>>>>     > +	/* Cells with read_post_process hook may realloc buffer we 
+>>>>>> can't allow here */
+>>>>>> +	if (info->read_post_process)
+>>>>>> +		return -EINVAL;
+>>>>> This should probably go in 1/4 patch. Other than that series looks 
+>>>>> good to me.
+>>>> 
+>>>> FYI patch 1/4 is also carried by the nvmem-layouts series, so it's
+>>>> probably best to keep these 2 patches separated to simplify the 
+>>>> merging.
+>>> that is intermediate thing, but Ideally this change belongs to 1/4 
+>>> patch, so once I apply these patches then we can always rebase layout 
+>>> series on top of nvmem-next
+>> 
+>> Well, I still don't see the need for this patch because we have no use
+>> for it *after* the introduction of layouts. Yes in some cases changing
+>> the size of a cell might maybe be needed, but right now the use case 
+>> is
+>> to provide a MAC address, we know beforehand the size of the cell, so
+>> there is no need, currently, for this hack.
+>> 
+> Am confused, should I ignore this series ?
+
+I'm confused no less.
+
+I think we have 3 different opinions and no agreement on how to proceed.
 
 
-On 3/9/2023 2:21 PM, Manivannan Sadhasivam wrote:
-> Qualcomm PCIe controllers have debug registers in the MHI region that
-> count PCIe link transitions. Expose them over debugfs to userspace to
-> help debug the low power issues.
-> 
-> Note that even though the registers are prefixed as PARF_, they don't
-> live under the "parf" register region. The register naming is following
-> the Qualcomm's internal documentation as like other registers.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->   drivers/pci/controller/dwc/pcie-qcom.c | 59 ++++++++++++++++++++++++++
->   1 file changed, 59 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index e1180c84f0fa..6d9bde64c9e9 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -10,6 +10,7 @@
->   
->   #include <linux/clk.h>
->   #include <linux/crc8.h>
-> +#include <linux/debugfs.h>
->   #include <linux/delay.h>
->   #include <linux/gpio/consumer.h>
->   #include <linux/interconnect.h>
-> @@ -62,6 +63,13 @@
->   #define AXI_MSTR_RESP_COMP_CTRL1		0x81c
->   #define MISC_CONTROL_1_REG			0x8bc
->   
-> +/* MHI registers */
-> +#define PARF_DEBUG_CNT_PM_LINKST_IN_L2		0xc04
-> +#define PARF_DEBUG_CNT_PM_LINKST_IN_L1		0xc0c
-> +#define PARF_DEBUG_CNT_PM_LINKST_IN_L0S		0xc10
-> +#define PARF_DEBUG_CNT_AUX_CLK_IN_L1SUB_L1	0xc84
-> +#define PARF_DEBUG_CNT_AUX_CLK_IN_L1SUB_L2	0xc88
-> +
->   /* PARF_SYS_CTRL register fields */
->   #define MAC_PHY_POWERDOWN_IN_P2_D_MUX_EN	BIT(29)
->   #define MST_WAKEUP_EN				BIT(13)
-> @@ -229,11 +237,13 @@ struct qcom_pcie {
->   	struct dw_pcie *pci;
->   	void __iomem *parf;			/* DT parf */
->   	void __iomem *elbi;			/* DT elbi */
-> +	void __iomem *mhi;
->   	union qcom_pcie_resources res;
->   	struct phy *phy;
->   	struct gpio_desc *reset;
->   	struct icc_path *icc_mem;
->   	const struct qcom_pcie_cfg *cfg;
-> +	struct dentry *debugfs;
->   };
->   
->   #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
-> @@ -1385,6 +1395,37 @@ static void qcom_pcie_icc_update(struct qcom_pcie *pcie)
->   	}
->   }
->   
-> +static int qcom_pcie_link_transition_count(struct seq_file *s, void *data)
-> +{
-> +	struct qcom_pcie *pcie = (struct qcom_pcie *)
-> +				     dev_get_drvdata(s->private);
-> +
-> +	seq_printf(s, "L0s transition count: %u\n",
-> +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_PM_LINKST_IN_L0S));
-> +
-> +	seq_printf(s, "L1 transition count: %u\n",
-> +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_PM_LINKST_IN_L1));
-> +
-> +	seq_printf(s, "L1.1 transition count: %u\n",
-> +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_AUX_CLK_IN_L1SUB_L1));
-> +
-> +	seq_printf(s, "L1.2 transition count: %u\n",
-> +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_AUX_CLK_IN_L1SUB_L2));
-> +
-> +	seq_printf(s, "L2 transition count: %u\n",
-> +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_PM_LINKST_IN_L2));
-> +
-> +	return 0;
-> +}
-> +
-> +static void qcom_pcie_init_debugfs(struct qcom_pcie *pcie)
-> +{
-> +	struct dw_pcie *pci = pcie->pci;
-> +
-> +	debugfs_create_devm_seqfile(pci->dev, "link_transition_count", pcie->debugfs,
-> +				    qcom_pcie_link_transition_count);
-> +}
-> +
->   static int qcom_pcie_probe(struct platform_device *pdev)
->   {
->   	struct device *dev = &pdev->dev;
-> @@ -1392,6 +1433,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->   	struct dw_pcie *pci;
->   	struct qcom_pcie *pcie;
->   	const struct qcom_pcie_cfg *pcie_cfg;
-> +	char *name;
->   	int ret;
->   
->   	pcie_cfg = of_device_get_match_data(dev);
-> @@ -1439,6 +1481,12 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->   		goto err_pm_runtime_put;
->   	}
->   
-> +	pcie->mhi = devm_platform_ioremap_resource_byname(pdev, "mhi");
-> +	if (IS_ERR(pcie->mhi)) {
-> +		ret = PTR_ERR(pcie->mhi);
-> +		goto err_pm_runtime_put;
-> +	}
-> +
+Rafał (me):
+NVMEM cells should be registered as they are in the raw format. No size
+adjustments should happen while registering them. If NVMEM cell requires
+some read post-processing then its size should be adjusted *while*
+reading.
 
-  Tested this series on ipq4019-ap.dk07.1-c1 board and the above hunk
-  breaks enumeration because there is no 'mhi' region. All the debug bits
-  used in the transition_count function is inside the PARF_STTS register
-  at offset 0x24 inside the PARF region.
 
-  Register: PCIE_0_PCIE20_PARF_PM_STTS | 0x80024
-  Offset:    0x24    Reset State:    0x00040000
+Michael:
+.read_post_process() should be realloc the buffer
 
-Bits    Field Name
-31    LINK_REQ_RST_NOT
-30    XMLH_LINK_UP
-29    PM_DSTATE_0
-0x0: D0
-0x1: D3
-28    PHYSTATUS
-27:16    PM_DSTATE
-15:12    PM_PME_EN
-11    PHYCLK_REQ_N
-10    L1SS_CLKREQN_OE
-9    L1SS_CLKREQN_IN
-8    PM_LINKST_IN_L1SUB
-7    PM_LINKST_IN_L0S
-6    PM_LINKST_L2_EXIT
-5    PM_LINKST_IN_L2
-4    PM_LINKST_IN_L1
-3:0    PM_STATUS
 
-Otherwise, with rest of the patches enumeration was fine.
-Tested with a pcie ethernet adapter.
+Miquel:
+While registering NVMEM cell its size should be already adjusted to
+match what .read_post_process() is about to return.
 
-Regards,
-  Sricharan
+
+I'm really sorry if I got anyone's view wrong.
