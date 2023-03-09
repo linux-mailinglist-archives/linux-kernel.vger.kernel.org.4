@@ -2,88 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8096B3124
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E726B30DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbjCIWkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 17:40:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
+        id S231307AbjCIWiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 17:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjCIWj0 (ORCPT
+        with ESMTP id S229876AbjCIWh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:39:26 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C76B26CC5;
-        Thu,  9 Mar 2023 14:38:20 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id j3so2257134wms.2;
-        Thu, 09 Mar 2023 14:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678401497;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hKTAoz/5c2gh8Y+1xcGszVL+VPGe5qIqtDhWxElzHg8=;
-        b=Lz9RBu9CNknt0QOl1Aljn3cwAQU50LY+AV7pSEK2Fj8y3Hddbp4bpOTZi5rdS139F9
-         8ptUcoz9oF26o4TdIU880734mFr6D//0Pup+yhl4sl+qWhzxl1EQsry/0hWIrecGVCYX
-         irkJVeam6BQf1XKfDhMOAItTSlHyiuUnGkQIZ69rZJp9rLO7ToxONC/5gBKjkgcQYWSn
-         aEgSeFeD1BuSXWBATUry4dvmFsB+d+jTHeR+0pf9nT6vw1LcZ1N5nbxeVBRBAl57csCT
-         E61stkETe6G9jYvNriFX3ip8Yen/ibpiuilcO10mTst/5qyra0K1kpwYzwAC22YbidoR
-         1EsQ==
+        Thu, 9 Mar 2023 17:37:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34E9FAEDC
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:37:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678401435;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KDlNY98zejjvKZ/14cSb+fv+AsQvq/yadRcmqDsBLIE=;
+        b=DzyMGrXDHSYgREdJdCH/XYOFlFLbqH4svGr/NNVrPJ6ramQU3t4aQpmt/ODGIwEWomNn4b
+        1o7VEvkmn9pncdXwnLuDGO1v1o9I0/kG8kSkuylbt9ft2YNkwPw0B68o0LgSOMx0YpbVhR
+        DEDaj7paqMU/kIE1AeimfeBJVgjl9q0=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-336-2rz4MP4rNnK994skoXiNnw-1; Thu, 09 Mar 2023 17:37:14 -0500
+X-MC-Unique: 2rz4MP4rNnK994skoXiNnw-1
+Received: by mail-qk1-f198.google.com with SMTP id 8-20020a370508000000b00724fd33cb3eso2048257qkf.14
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 14:37:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678401497;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hKTAoz/5c2gh8Y+1xcGszVL+VPGe5qIqtDhWxElzHg8=;
-        b=kEcujqqqkijUj054l9C65d3BYTAubaAtZqRFgtOeHs3QyUtz5aqXWNTmkiydFMo2SC
-         CwAbtBQjt8WIpVNvZs6mViXyjFz8bPMkE8YfoIm6NvHek3wU1AD8V/NVGYCLn/UWi7YS
-         J6sEHzkqyK1Vl9qKc1ifxaLgVkc5AGiTnhOw4kFmo9PFjCLT/G/RTr7Z42eSOxrEWExk
-         n8phLQAXr7IEWxX5MLKJ//TM2Pvqv83gN07TkAsloVCi4pISdcO0JU+RnnGRRCyB2b+Y
-         l+VnLkus75FalDRthkJDC0bIGpMw9LowcM8Eu20qj0JoA10Kd2I5jXWdaHIhylLKpF2P
-         MJGg==
-X-Gm-Message-State: AO0yUKW49xoQZ9bEjANu8wxWWFCoOoKX2l44u8mqpJFZ5YqZ5DwS/tbh
-        2CyXWVafnruB4ogXDbm1jYM=
-X-Google-Smtp-Source: AK7set9nJyc40zKBJjx/+yRO/PvBUSMQMAtbQH41bk/GikMpPlZvCnoCom8HjfPdmlaTb9H2ybUlWQ==
-X-Received: by 2002:a05:600c:3c8f:b0:3ea:bc08:b63e with SMTP id bg15-20020a05600c3c8f00b003eabc08b63emr808544wmb.2.1678401496818;
-        Thu, 09 Mar 2023 14:38:16 -0800 (PST)
-Received: from localhost.localdomain (93-34-89-197.ip49.fastwebnet.it. [93.34.89.197])
-        by smtp.googlemail.com with ESMTPSA id g12-20020a05600c310c00b003e209b45f6bsm1183981wmo.29.2023.03.09.14.38.15
+        d=1e100.net; s=20210112; t=1678401434;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KDlNY98zejjvKZ/14cSb+fv+AsQvq/yadRcmqDsBLIE=;
+        b=Kk67WnNEjDg0JZnmY570Io1rhRh04kN7qGv94GQ9az/DCALyootQ8BDUeKgyetOlOd
+         CtcY0Lkxvwa8yDiG06JpDHXXTEoo8i8KRQqRw09oe+wEk7HDtdN9ON8lhc5doQ1F4ZFQ
+         3dgZjMactt+dwh4CAT2WLSWIWhPHEAyMtIRUMUD2F7hW142O2CAvB3CicQR8wO81m7zj
+         X/X1DzfPFwBFJp3K1cgfexj6QJbYNzkOtGjE83yx0f+UuV/zf0W0kGgLM5zLPt21zSP/
+         HX3J+JQhCQtk5vaZompqeMZ6u4Tv1dPMLtHqy9Jd2LhiqgQ4vEintL2Ei6e/T7qsarYo
+         WUTQ==
+X-Gm-Message-State: AO0yUKWREsHfv6eqpjJJNOTQzrgUuiBK2vBqlWOGaP0IxyaoR/RaRZ7m
+        4BigPNzGnm09Awx2y3ZjvcrokTv45yTOX8dNMLK7u29JXNVgZTgKnebldKzAh/rlPMFllBR+FNe
+        j6JtXFRoBJt+yZw6MKXyAgcU2
+X-Received: by 2002:ac8:574a:0:b0:3bf:da3a:4e0f with SMTP id 10-20020ac8574a000000b003bfda3a4e0fmr1802883qtx.0.1678401434084;
+        Thu, 09 Mar 2023 14:37:14 -0800 (PST)
+X-Google-Smtp-Source: AK7set9P4uTGnpMVcrQQivitUTi4qOLneX/yghiqHshMuPYNiJZztd1t8zdeZ1iKzxRa9+JirB++KQ==
+X-Received: by 2002:ac8:574a:0:b0:3bf:da3a:4e0f with SMTP id 10-20020ac8574a000000b003bfda3a4e0fmr1802858qtx.0.1678401433663;
+        Thu, 09 Mar 2023 14:37:13 -0800 (PST)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id c26-20020ac84e1a000000b003b8484fdfccsm172215qtw.42.2023.03.09.14.37.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 14:38:16 -0800 (PST)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        linux-leds@vger.kernel.org
-Subject: [net-next PATCH v2 14/14] arm: mvebu: dt: Add PHY LED support for 370-rd WAN port
-Date:   Thu,  9 Mar 2023 23:35:24 +0100
-Message-Id: <20230309223524.23364-15-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230309223524.23364-1-ansuelsmth@gmail.com>
-References: <20230309223524.23364-1-ansuelsmth@gmail.com>
+        Thu, 09 Mar 2023 14:37:13 -0800 (PST)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Nadav Amit <nadav.amit@gmail.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>, peterx@redhat.com,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v4 0/2] mm/uffd: Add feature bit UFFD_FEATURE_WP_UNPOPULATED
+Date:   Thu,  9 Mar 2023 17:37:09 -0500
+Message-Id: <20230309223711.823547-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.39.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,52 +82,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Lunn <andrew@lunn.ch>
+v1: https://lore.kernel.org/r/20230215210257.224243-1-peterx@redhat.com
+v2: https://lore.kernel.org/r/20230227230044.1596744-1-peterx@redhat.com
+v3: https://lore.kernel.org/r/20230306213925.617814-1-peterx@redhat.com
 
-The WAN port of the 370-RD has a Marvell PHY, with one LED on
-the front panel. List this LED in the device tree.
+v4:
+- s/handle_pte_missing/do_pte_missing/, fix spellings, etc. [David]
+- Add a helper userfaultfd_wp_use_markers() [David]
+- Update userfaultfd.rst describing the new feature bit
 
-Set the LED default state to "keep" to not change any blink rule
-set by default.
+The new feature bit will make anonymous memory acts the same like file
+memory on userfaultfd-wp in that it'll also wr-protect none ptes.
 
-Signed-off-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- arch/arm/boot/dts/armada-370-rd.dts | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+It can be useful in two cases:
 
-diff --git a/arch/arm/boot/dts/armada-370-rd.dts b/arch/arm/boot/dts/armada-370-rd.dts
-index be005c9f42ef..ccd4699b219f 100644
---- a/arch/arm/boot/dts/armada-370-rd.dts
-+++ b/arch/arm/boot/dts/armada-370-rd.dts
-@@ -20,6 +20,7 @@
- /dts-v1/;
- #include <dt-bindings/input/input.h>
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/leds/common.h>
- #include <dt-bindings/gpio/gpio.h>
- #include "armada-370.dtsi"
- 
-@@ -135,6 +136,19 @@ &mdio {
- 	pinctrl-names = "default";
- 	phy0: ethernet-phy@0 {
- 		reg = <0>;
-+		leds {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			led@0 {
-+				reg = <0>;
-+				label = "WAN";
-+				color = <LED_COLOR_ID_WHITE>;
-+				function = LED_FUNCTION_LAN;
-+				function-enumerator = <1>;
-+				default-state = "keep";
-+			};
-+		};
- 	};
- 
- 	switch: switch@10 {
+(1) Uffd-wp app that needs to wr-protect none ptes like QEMU snapshot, so
+    pre-fault can be replaced by enabling this flag and speed up protections
+
+(2) It helps to implement async uffd-wp mode that Muhammad is working on [1]
+
+It's debateable whether this is the most ideal solution because with the
+new feature bit set, wr-protect none pte needs to pre-populate the pgtables
+to the last level (PAGE_SIZE).  But it seems fine so far to service either
+purpose above, so we can leave optimizations for later.
+
+The series brings pte markers to anonymous memory too.  There's some change
+in the common mm code path in the 1st patch, great to have some eye looking
+at it, but hopefully they're still relatively straightforward.
+
+Thanks,
+
+[1] https://lore.kernel.org/all/Y+v2HJ8+3i%2FKzDBu@x1n/
+
+Peter Xu (2):
+  mm/uffd: UFFD_FEATURE_WP_UNPOPULATED
+  selftests/mm: Smoke test UFFD_FEATURE_WP_UNPOPULATED
+
+ Documentation/admin-guide/mm/userfaultfd.rst | 17 ++++++
+ fs/userfaultfd.c                             | 16 ++++++
+ include/linux/mm_inline.h                    |  6 +++
+ include/linux/userfaultfd_k.h                | 23 ++++++++
+ include/uapi/linux/userfaultfd.h             | 10 +++-
+ mm/memory.c                                  | 56 +++++++++++++++-----
+ mm/mprotect.c                                | 51 ++++++++++++++----
+ tools/testing/selftests/mm/userfaultfd.c     | 45 +++++++++++++++-
+ 8 files changed, 197 insertions(+), 27 deletions(-)
+
 -- 
-2.39.2
+2.39.1
 
