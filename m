@@ -2,156 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FDA6B193B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 03:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6116B1941
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 03:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjCICdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 21:33:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
+        id S229885AbjCICiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 21:38:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjCICdJ (ORCPT
+        with ESMTP id S229905AbjCICh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 21:33:09 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FF42BF28
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 18:33:06 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id b20so619381pfo.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 18:33:06 -0800 (PST)
+        Wed, 8 Mar 2023 21:37:59 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2911A1A4A9
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 18:37:56 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id k37so239026wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 18:37:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1678329186;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eWBrUih/RRXh6LptA2jqLQdR79LGfEQflDsOHRkNIYE=;
-        b=TndqUjuz2mhJFsHfOlTwlNVgmSD8i0JOsy5RdKaE+OooTm/W5IcvtRod7Jj015SPmK
-         3jTaQOKL39NKi7wJcXvgYamueR8FWE91YVcQC7WL0odLoO+33gplRO1qY+KI+kqN/1hf
-         REe3qIWTvHS69jUUmmIuBXVUzYL+bIaKsi/z98XYGKVBalJUpYdyuSBP0/PpdTE7RCer
-         61+NSoLRWLxr13xZGDBDh+MBp1Z0wlBjPrHZUK4injVDofq9LtLkt2v54/0T3n7dO1Vd
-         aOq101hb8lm0LSjt3NgoN3NMpy4rIq0F9pLuZMnHMd0esDZvO5UE6LcqqVk6refFWpKb
-         tsWw==
+        d=google.com; s=20210112; t=1678329474;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TXL7RZERqmJzSobCVKRWDL9NAZQE0OJJ5vuFdJHuRnc=;
+        b=ZYU+Sb2tQjjifOx7Oqtj7ZDNib0alWBWvEgmvZ0qkrVD3lchav+vO+nVx5QbIq3XP7
+         mIW+zxWiNxuENT+uwoI/ndW7C+4u/I5mlwMXiox7puwclxcE7pu1nqdSuwsY43aIZxwy
+         8Awz0bjQlf3ZLlxZTukHSWp5DbKdWCXeH/zDO5B4DMuPRQNTi+uX1UGJSXyHza2pf4fM
+         9xnIxZbUFEvcADgMj3BgzFz/yYps5YWnBXwpx3MyS3AgXpBkpSQLyZG/UyCUgslzTewn
+         n8SV5ENCBL2ojwXGYil2eBK41oDVQxIgh1A5B5FvrEZWTd5Lb9I8qCrnW3xQ4Cpnlw1s
+         m+tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678329186;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=eWBrUih/RRXh6LptA2jqLQdR79LGfEQflDsOHRkNIYE=;
-        b=fcKecLUOiHbulCedrTexoZ85LMID54crWqavPj3TqgI8lHVUJ97Q3fn8q5jX/Nln7B
-         DY1S+TwqegDf/Q+8z9eKXUlSAlMaF5xM2N6LAsSQP4yMAYeP2tL/K/Zl3DCCKm7zECGF
-         PQVf1WD8dizIu92N0pcVl5Ka/I+gChVYOEzRk7ibofJYEiRcOFPBUTEDh2/ETmANsQmr
-         b7RhmDjCogsaDIq3OdL4j9U58aRi1SdNULivnS26HHUb4UWsTTZItY6cOqxyqLDBxmTO
-         z7R3Hj9k5imYRkjb+9IHoOEIdam4QCJCvAs9SAAg23Wc0yaX9UUa+n7WzMG18VDHkneI
-         7UmA==
-X-Gm-Message-State: AO0yUKXdF6O15VZUTstnQS8O0PmXza8D1F+SsVDwEYByPx5jQAIKOBjI
-        AqdC7GdEn++AFwsKOmdEi8j2/wjYmhKaox95rCM=
-X-Google-Smtp-Source: AK7set+aAhmSeEQpM5/fO0SMwY482EMidsA9DAGvcoxnyQXhsAvVF4n/vUkj32hjwPt95szWOR1DGQ==
-X-Received: by 2002:aa7:9418:0:b0:5cd:d766:8a26 with SMTP id x24-20020aa79418000000b005cdd7668a26mr17477255pfo.8.1678329186221;
-        Wed, 08 Mar 2023 18:33:06 -0800 (PST)
-Received: from [10.54.24.141] ([143.92.118.3])
-        by smtp.gmail.com with ESMTPSA id x8-20020aa79188000000b005dc70330d9bsm10009545pfa.26.2023.03.08.18.33.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 18:33:05 -0800 (PST)
-Message-ID: <060b2056-35c3-dbd3-e097-a53423737e45@shopee.com>
-Date:   Thu, 9 Mar 2023 10:33:02 +0800
+        d=1e100.net; s=20210112; t=1678329474;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TXL7RZERqmJzSobCVKRWDL9NAZQE0OJJ5vuFdJHuRnc=;
+        b=2R8rnDtf2pVYFjtNgMqe8tYwiY8rEEqjxPAvGMS890MdgtGWdsdErjPnrh4jHE+/nt
+         6HL7K7fu7/Dcad7QI3jbHzMNEO/XYMz7R5rSOcLZkiqQMpuIDTfpOUTM9/qUr2Ojnlzf
+         W6LBNlGV1mTA590OSRimDIgvXb8G5KCseOP4d77o+1PI0fNQaAMpjiiMDoTgpXic25Nt
+         O3aTmxv0I8ePkZ6pUx1nARlKXG11nBTKRMceE8ddBiZ5fMkmO+m+S5QiU7ujNcN4k5i3
+         zZaspmnIZ3B5tnbjkvTDP+owz2g2JTDoQp1BZ2/NxjjPeVn8j0OppGDTMufmToYyEpRI
+         KlsA==
+X-Gm-Message-State: AO0yUKWGZUMBH9nBgCMfzfDTapaP1eVuCFDMmNiz/NsKH2nwpnoorJL+
+        E1nD9OlGziXWzfnAhkNnO6I5iSnEAwPYEZezY+6TDg==
+X-Google-Smtp-Source: AK7set/q1INFZHRH5R1oph46r7oD8URJVmpPe1C0vjxVg86ZYtihS6TiUen+iaaRNGpIbtK17gQYlhdZIe3WNnue1Wg=
+X-Received: by 2002:a05:600c:a39a:b0:3df:d852:ede2 with SMTP id
+ hn26-20020a05600ca39a00b003dfd852ede2mr4078693wmb.0.1678329474477; Wed, 08
+ Mar 2023 18:37:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH] mm: remove redundant check in handle_mm_fault
-To:     David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230306024959.131468-1-haifeng.xu@shopee.com>
- <df3997ed-a844-597b-fbb1-154caad78543@redhat.com>
- <354360d5-dce6-a11c-ee61-d41e615bfa05@shopee.com>
- <ZAamFX/hq6Y/iNJb@casper.infradead.org>
- <6df72872-2829-47ab-552c-7ef8a6470e6f@shopee.com>
- <562e9cc3-d0aa-23e9-bd19-266b5aef2ae7@redhat.com>
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-In-Reply-To: <562e9cc3-d0aa-23e9-bd19-266b5aef2ae7@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230308203952.3060546-1-rmoar@google.com> <20230308203952.3060546-3-rmoar@google.com>
+In-Reply-To: <20230308203952.3060546-3-rmoar@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 9 Mar 2023 10:37:42 +0800
+Message-ID: <CABVgOSnhwDKRWsrLVHyoVWcozeMF=fu4_epUPGM-z7MkC7DQkw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] kunit: fix bug of extra newline characters in
+ debugfs logs
+To:     Rae Moar <rmoar@google.com>
+Cc:     brendanhiggins@google.com, dlatypov@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000002b633905f66e88e9"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--0000000000002b633905f66e88e9
+Content-Type: text/plain; charset="UTF-8"
 
+On Thu, 9 Mar 2023 at 04:40, Rae Moar <rmoar@google.com> wrote:
+>
+> Fix bug of the extra newline characters in debugfs logs. When a
+> line is added to debugfs with a newline character at the end,
+> an extra line appears in the debugfs log.
+>
+> This is due to a discrepancy between how the lines are printed and how they
+> are added to the logs. Remove this discrepancy by checking if a newline
+> character is present before adding a newline character. This should closely
+> match the printk behavior.
+>
+> Add kunit_log_newline_test to provide test coverage for this issue.  (Also,
+> move kunit_log_test above suite definition to remove the unnecessary
+> declaration prior to the suite definition)
+>
+> As an example, say we add these two lines to the log:
+>
+> kunit_log(..., "KTAP version 1\n");
+> kunit_log(..., "1..1");
+>
+> The debugfs log before this fix:
+>
+>  KTAP version 1
+>
+>  1..1
+>
+> The debugfs log after this fix:
+>
+>  KTAP version 1
+>  1..1
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
+> Reviewed-by: David Gow <davidgow@google.com>
+> ---
+>
+> Changes from v3 -> v4:
+> - Slight formatting change in test.h regarding "\" placement.
+>
 
-On 2023/3/8 17:13, David Hildenbrand wrote:
-> On 08.03.23 10:03, Haifeng Xu wrote:
->>
->>
->> On 2023/3/7 10:48, Matthew Wilcox wrote:
->>> On Tue, Mar 07, 2023 at 10:36:55AM +0800, Haifeng Xu wrote:
->>>> On 2023/3/6 21:49, David Hildenbrand wrote:
->>>>> On 06.03.23 03:49, Haifeng Xu wrote:
->>>>>> mem_cgroup_oom_synchronize() has checked whether current memcg_in_oom is
->>>>>> set or not, so remove the check in handle_mm_fault().
->>>>>
->>>>> "mem_cgroup_oom_synchronize() will returned immediately if memcg_in_oom is not set, so remove the check from handle_mm_fault()".
->>>>>
->>>>> However, that requires now always an indirect function call -- do we care about dropping that optimization?
->>>>>
->>>>>
->>>>
->>>> If memcg_in_oom is set, we will check it twice, one is from handle_mm_fault(), the other is from mem_cgroup_oom_synchronize(). That seems a bit redundant.
->>>>
->>>> if memcg_in_oom is not set, mem_cgroup_oom_synchronize() returns directly. Though it's an indirect function call, but the time spent can be negligible
->>>> compare to the whole mm user falut preocess. And that won't cause stack overflow error.
->>>
->>> I suggest you measure it.
->>
->> test steps:
->> 1) Run command: ./mmap_anon_test(global alloc, so the memcg_in_oom is not set)
->> 2) Calculate the quotient of cost time and page-fault counts, run 10 rounds and average the results.
->>
->> The test result shows that whether using indirect function call or not, the time spent in user fault
->> is almost the same, about 2.3ms.
-> 
-> I guess most of the benchmark time is consumed by allocating fresh pages in your test (also, why exactly do you use MAP_SHARED?).
+Thanks. This series looks good-to-go to me now!
 
-Yes, most of the time consumption is page allocation. MAP_SHARED or MAP_PRIVATE doesn't affect the result，so I just use one of them at will,
-although no process share memory with it.
+Cheers,
+-- David
 
-> 
-> Is 2.3ms the total time for writing to that 1GiB of memory or how did you derive that number? Posting both results would be cleaner (with more digits ;) ).
-> 
+> Changes from v2 -> v3:
+> - Changes to commit message.
+>
+> Changes from v1 -> v2:
+> - Changed the way extra newlines are removed. Instead of removing extra
+>   newline characters, add a newline if one is not present. This is a bit
+>   cleaner.
+> - Note: I looked into using KERN_CONT to match the printk behavior to
+>   vsnprintf but this could cause issues with KTAP printing on the same line
+>   as interrupting kernel messages. I also looked at just adding KERN_CONT
+>   functionality to kunit_log and I did get this to work but it was a bit
+>   messy because it required a few calls to kunit_log_newline in
+>   kunit_run_tests. If this is very desired functionality, happy to add this
+>   to version 3.
+>
+>  include/kunit/test.h   |  2 +-
+>  lib/kunit/kunit-test.c | 35 +++++++++++++++++++++++------------
+>  lib/kunit/test.c       | 18 ++++++++++++++++++
+>  3 files changed, 42 insertions(+), 13 deletions(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 0668d29f3453..9721584027d8 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -420,7 +420,7 @@ void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
+>  #define kunit_log(lvl, test_or_suite, fmt, ...)                                \
+>         do {                                                            \
+>                 printk(lvl fmt, ##__VA_ARGS__);                         \
+> -               kunit_log_append((test_or_suite)->log,  fmt "\n",       \
+> +               kunit_log_append((test_or_suite)->log,  fmt,            \
+>                                  ##__VA_ARGS__);                        \
+>         } while (0)
+>
+> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+> index 4df0335d0d06..b63595d3e241 100644
+> --- a/lib/kunit/kunit-test.c
+> +++ b/lib/kunit/kunit-test.c
+> @@ -443,18 +443,6 @@ static struct kunit_suite kunit_resource_test_suite = {
+>         .test_cases = kunit_resource_test_cases,
+>  };
+>
+> -static void kunit_log_test(struct kunit *test);
+> -
+> -static struct kunit_case kunit_log_test_cases[] = {
+> -       KUNIT_CASE(kunit_log_test),
+> -       {}
+> -};
+> -
+> -static struct kunit_suite kunit_log_test_suite = {
+> -       .name = "kunit-log-test",
+> -       .test_cases = kunit_log_test_cases,
+> -};
+> -
+>  static void kunit_log_test(struct kunit *test)
+>  {
+>         struct kunit_suite suite;
+> @@ -481,6 +469,29 @@ static void kunit_log_test(struct kunit *test)
+>  #endif
+>  }
+>
+> +static void kunit_log_newline_test(struct kunit *test)
+> +{
+> +       kunit_info(test, "Add newline\n");
+> +       if (test->log) {
+> +               KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "Add newline\n"),
+> +                       "Missing log line, full log:\n%s", test->log);
+> +               KUNIT_EXPECT_NULL(test, strstr(test->log, "Add newline\n\n"));
+> +       } else {
+> +               kunit_skip(test, "only useful when debugfs is enabled");
+> +       }
+> +}
+> +
+> +static struct kunit_case kunit_log_test_cases[] = {
+> +       KUNIT_CASE(kunit_log_test),
+> +       KUNIT_CASE(kunit_log_newline_test),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite kunit_log_test_suite = {
+> +       .name = "kunit-log-test",
+> +       .test_cases = kunit_log_test_cases,
+> +};
+> +
+>  static void kunit_status_set_failure_test(struct kunit *test)
+>  {
+>         struct kunit fake;
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 811fcc376d2f..e2910b261112 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -108,6 +108,22 @@ static void kunit_print_test_stats(struct kunit *test,
+>                   stats.total);
+>  }
+>
+> +/**
+> + * kunit_log_newline() - Add newline to the end of log if one is not
+> + * already present.
+> + * @log: The log to add the newline to.
+> + */
+> +static void kunit_log_newline(char *log)
+> +{
+> +       int log_len, len_left;
+> +
+> +       log_len = strlen(log);
+> +       len_left = KUNIT_LOG_SIZE - log_len - 1;
+> +
+> +       if (log_len > 0 && log[log_len - 1] != '\n')
+> +               strncat(log, "\n", len_left);
+> +}
+> +
+>  /*
+>   * Append formatted message to log, size of which is limited to
+>   * KUNIT_LOG_SIZE bytes (including null terminating byte).
+> @@ -135,6 +151,8 @@ void kunit_log_append(char *log, const char *fmt, ...)
+>         vsnprintf(log + log_len, min(len, len_left), fmt, args);
+>         va_end(args);
+>
+> +       /* Add newline to end of log if not already present. */
+> +       kunit_log_newline(log);
+>  }
+>  EXPORT_SYMBOL_GPL(kunit_log_append);
+>
+> --
+> 2.40.0.rc0.216.gc4246ad0f0-goog
+>
 
-I'm sorry I got the measuring unit wrong，actually it is 2.3us for every page fault. The details are as follows.
+--0000000000002b633905f66e88e9
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-without change
--------------------------------------------------------------------------------------------------
-cost time(ms)			number of page fault			time of page faults(ns)
-599				262144					2285
-590				262144					2251
-595				262144					2270
-595				262144					2270
-594				262144					2266
-597				262144					2277
-596				262144					2274
-598				262144					2281
-594				262144					2266
-598				262144					2281
--------------------------------------------------------------------------------------------------
-									average: 2272
-
-with change
--------------------------------------------------------------------------------------------------
-cost time(ms)			number of page fault			time of page faults(ns)
-600				262144					2289
-597				262144					2277
-596				262144					2274
-596				262144					2274
-597				262144					2277
-595				262144					2270
-598				262144					2281
-588				262144					2243
-596				262144					2274
-598				262144					2281
--------------------------------------------------------------------------------------------------
-									average: 2274
-
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAO
+dQLL4R/++JnLPc94/MZUMa9HHndRNipX9dY7tNYHpTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMDkwMjM3NTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAcEOJFecNSbMawGzR+q4I
+5sdDCrCS42whQlgnK2u57UXR3rw9XkbHXnHObkcEaZnR3NJKLWXCe/xkinJsHpWsRFvTE+7Xr6Pf
+mJh+pLx5xhfkVWWrOXJGhnZlPTJ3o6lyKIQAO2ADEpdZAMlQ77zbaD2p6vzlyqkAz+qvhdgI7r38
++knAeU8G7esXeU4ikX5R6455yi/J7JQ0jwNS393o9bfNNbwaNvax4Kax7S+k1b2HHialYqceDFOJ
+q8a7cU3ritw+e3QhFcwLspAe17A+BeS+XltoIgcgqbMTDoocqcNtDIT9eXB7rkdR/gvI9ZT6GSIr
+uN10MwCxoqtBmE9kSw==
+--0000000000002b633905f66e88e9--
