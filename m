@@ -2,499 +2,372 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E836B1F43
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:04:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FB86B1F4A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjCIJEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:04:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
+        id S230156AbjCIJFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:05:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbjCIJDZ (ORCPT
+        with ESMTP id S230188AbjCIJEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:03:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000C919C48;
-        Thu,  9 Mar 2023 01:02:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 819A961AA0;
-        Thu,  9 Mar 2023 09:02:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B7FDC433EF;
-        Thu,  9 Mar 2023 09:02:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678352541;
-        bh=Kn1GQKhx1G1N8YU+1iZTOBXBeco+HBu6Bb0ByS+ML9M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AHSEyg6FCuMVBcw02OHXAXqehBBaiY4o6CHR9rpZxak70PfMUOVMEcZ1RZcGjaQpQ
-         2/QV/ejsYEVhBpf1PUyz+bSjnTp78bcSxyVNJ3+6k5w31dVpG8gF9z5C3Q+If3yJLG
-         G9f0/W7mKc1WvYSrbXv7hj/ccT8nOpk7aK59ay4GcB2LTO8mhN1c9A1B159DkaHML+
-         CnbWvudTE8uPfGmNSK63cD00E99MAEzNfZWEeIgrBAFn3Eg/7zGSvYJ/bV2OuDSEZb
-         EymrZiaUPwDfYwoXAlCvFRqg8bVivBwdv3RzO8TwoYuPDIUnAKUXkm/XN+2+zFVvGY
-         8aV+AYmy7yhLg==
-Date:   Thu, 9 Mar 2023 11:02:05 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        James Houghton <jthoughton@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] mm: userfaultfd: combine 'mode' and 'wp_copy'
- arguments
-Message-ID: <ZAmgjeCNl8pFKJUR@kernel.org>
-References: <20230308221932.1548827-1-axelrasmussen@google.com>
- <20230308221932.1548827-4-axelrasmussen@google.com>
+        Thu, 9 Mar 2023 04:04:24 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA90238EA5;
+        Thu,  9 Mar 2023 01:03:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678352616; x=1709888616;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=vBvIq4/ekVeGynCWmOzqF/cn2MkaE3HgH1Kt7jXtXfg=;
+  b=b8PXZcGZ2kUY07oSYlZ8oIrAHAKAIpyadxGfyyN/SfA04emqmz/0+A2g
+   tOybp683eIEqhm2EqQ4R0Efad79AD6fWqowSbHY71fMKegBdHRvSHpcY9
+   obCuNPrFUGnsiI1KzdXXyliDOGmXhNVbIHumOxW15OnC2xGrT7zGwYEtV
+   hg/NuNmNhhNr+sI/WzSHzOWT57UgN+4L8y6MNi8ocA92rcG3s7JE7bnIe
+   ms9t2zmGs46JdokgromIx/1C61+X8+eA79jeg/NtuAogllynotIb2cOxl
+   A9z4QJsi9KUTlX2QzwTZCHCXd2ArpFFDZslUni9te5hPy60SnBbtMb2ZB
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="316788897"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="316788897"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 01:03:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="787484215"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="787484215"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga002.fm.intel.com with ESMTP; 09 Mar 2023 01:03:33 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 9 Mar 2023 01:03:32 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 9 Mar 2023 01:03:32 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 9 Mar 2023 01:03:32 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.106)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 9 Mar 2023 01:03:32 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g1Z20ddkSEBXO6DIQGSHokCpncAGwNx9zKk7sRLkea9uEuOUZSDWWn+y6OokYUBLWuwthD2uuxzr2F0m3c39KRen6yZRtzVCK5R82Vy/7VomXkS6WqseSMrgBS24jD999CgXCNUndKDTAO+v6A/fONDvFg9qzpdgQBmr4jJ3SGQo5GDwAY5hP+eRS3x+f0uF8jBamu1ZQhO5oZ9h3RgvCB7EpwC2IBosgICYl2YIfvoQKVT0CL54Y6l9Im7c3M3P4oIiRl6ZNhIgK9Bii/DyICGH2x/aTQ4EvGsAj1Sfoz7Rzq/yemRx9Uj5SOkAvMAEu3AUQECN5A6LzQeVdPsDng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+kMIadu9oNx2wD95ieywuB5i5xg8azc7c4uoqLcx2Oc=;
+ b=W7Y+xhrfat/7deORi9/2FgwJQ0XSeKC/vCegkyJ8zQJswL/XCoBP9NTFECBOh7711aVoc5zNUo1FYUgXmkufLQyQdLRnJvWbdswkC2vCiuZOBtu2vzbcSXUVWqAWdUMkgIyzfsmo0B91Oty3I95xthdtLJ2Js7uJmefMCuRmRwwEJeWUidh1i4E5lxGeg96sJ0sivhEUpdYPNl32UVlAlzwydLTjD1+ETPP/zlpWMkk3DoLsgV9UYrPSTK4PEbXNGfFUDw2j9vmqAoKa2mGf5lwt7fn58EIfthoYuH3Tm3wh5MijxxkgRnPNhFjb4cmvpl3gs7UB9MZouYT3qq0YpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA2PR11MB5052.namprd11.prod.outlook.com (2603:10b6:806:fa::15)
+ by SA0PR11MB4669.namprd11.prod.outlook.com (2603:10b6:806:99::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Thu, 9 Mar
+ 2023 09:03:24 +0000
+Received: from SA2PR11MB5052.namprd11.prod.outlook.com
+ ([fe80::7a21:ecaa:7ff4:2756]) by SA2PR11MB5052.namprd11.prod.outlook.com
+ ([fe80::7a21:ecaa:7ff4:2756%9]) with mapi id 15.20.6178.019; Thu, 9 Mar 2023
+ 09:03:24 +0000
+Message-ID: <02b38016-f8b3-724a-cf8d-36b343ebb9b6@intel.com>
+Date:   Thu, 9 Mar 2023 17:03:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [PATCH v12 050/106] KVM: TDX: MTRR: implement get_mt_mask() for
+ TDX
+To:     <isaku.yamahata@intel.com>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <isaku.yamahata@gmail.com>, Paolo Bonzini <pbonzini@redhat.com>,
+        <erdemaktas@google.com>, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>
+References: <cover.1677484918.git.isaku.yamahata@intel.com>
+ <93ef8e57cb80e8e0268c91758968a1950de4b5f0.1677484918.git.isaku.yamahata@intel.com>
+Content-Language: en-US
+From:   Chenyi Qiang <chenyi.qiang@intel.com>
+In-Reply-To: <93ef8e57cb80e8e0268c91758968a1950de4b5f0.1677484918.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR04CA0166.apcprd04.prod.outlook.com (2603:1096:4::28)
+ To SA2PR11MB5052.namprd11.prod.outlook.com (2603:10b6:806:fa::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230308221932.1548827-4-axelrasmussen@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PR11MB5052:EE_|SA0PR11MB4669:EE_
+X-MS-Office365-Filtering-Correlation-Id: 53214d48-beed-46fe-b920-08db207d2376
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mTKL4rtITbUO1F6+WulFvpMmFxTvFB7XzrcTFoOl5UsJpl25ONFxJ/2wpcgb/adweonreUuROhPkUmJYFG9LJCuTj8bK5Q08r5yoKl7xgmnFe5j7kHTklNHLw9wGxHHZt9aQMLVg7+o0nx2PckWM//t70m52feKUKRcz5w8TPiZEojez1+KovpogK6PCiPDIUjN74J+YGRx3uNRe9ZlPLpJSujV2gFSE5psnXdC72APBkINdAgIZbfCAtLe3jFTLToWkxjmern8vp3tz6Ku94VA/SJgx5y4fiyXlG0EaVFYdIAQUmB4eKqOBmdIGvG4AoY/TB+L64qchOXEdNax6xanH0YrP+Rqb8wvN2y2W89UXn9s/vXjodNPHRbmWfujP2pc5BrteqQK1/NpAQRcfyioFp8uuX9fRbovQGvhUCwJobYHC5rFp9wZogNTRfOC7Uavs+YAg6ODZXS0R+3aDgrRpv0hO/T7quDUV+QFLDa1djMEoe6E60mTY1nmi2bheErR9lawzVwe2cJPFsDeOsV5VLWF7zLw2kSzK5obIkhygDldfOsA/hVXHDB//0mjHLpqcGTAFDvcN0rG9BgX0Rau+wRMAFwoXJ7wneLIu81ndr4Fai0V89vRyFoO2kI53waXhMSJbV+XOS4v98Ox8cC2tHFRQwx3tdQ6WgU3ynVkt7zhkITAMrVyGzRlO9kK/40iqmJFf63FuXJaKiO1rebbnZjjYtY/1Fy5577MDwbE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB5052.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(396003)(136003)(366004)(346002)(376002)(451199018)(2906002)(31686004)(66946007)(4326008)(44832011)(5660300002)(26005)(36756003)(8936002)(41300700001)(54906003)(8676002)(66476007)(86362001)(316002)(478600001)(31696002)(6486002)(66556008)(82960400001)(6666004)(38100700002)(6512007)(53546011)(6506007)(2616005)(186003)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SllzaDBQSG93SWw2OUR3QlBBYVZJNEZVNlNyQWlHZlpIL2doTXdHd3NPRnkv?=
+ =?utf-8?B?WVA4a2UvRkZqZzNPem1udmNTZXZEOC9SaWxON0lBbW9YclhoSWZTNzZSN1do?=
+ =?utf-8?B?RVVXQkhoSVRNa0FxVnpTTCszUjJ4T2hKaFhHYU9LcXZjV3JCdU1IOFJ1cWJn?=
+ =?utf-8?B?ZlQ3VG55S2dMVlZTSEE4T2g1ZjRZUnNwdlJEbGxmMXhJZVpwclYraHU1V0l4?=
+ =?utf-8?B?QUpvS1kwMklCUjBuUDRKem0yeUIvQVdSNW1CUzB3dTdOZ2I2ZTZ6eDlna3I3?=
+ =?utf-8?B?RUEvM2x4VE5FcmZodE1HZTNnaHMrYXVaNVR6azZYYXBuOU9kSXFHNnlnV2g2?=
+ =?utf-8?B?eTZNUytoWDIrQ3VjdEdmblRISEcrT3J4c0xRU1ZzRm5WRE5WUzc1Um5NTUdM?=
+ =?utf-8?B?M0tRbXFPSHlwcHlRYm1vYXBkb2tUa0FkbllKNmJLK2tSSnp2UVJKaTkvaVdU?=
+ =?utf-8?B?SHRYRzVHLzBkcG0zWjBXbUJjZitJYXdQSm5qYzBtTng1SUNrcWZhWjVRN09n?=
+ =?utf-8?B?VmVtMHlZekFDcVNYUkNLWFA1MDdKdDVCbnFMK2FrSnhtN2QzcEpKbEhjdHEx?=
+ =?utf-8?B?bWF4a1EwUjg0VEJyRURnWEx3NTQxanZWVzhSQjErQklaNHlib09XMEpNakxl?=
+ =?utf-8?B?U1VJTE1jQWxwTExzcDhqSXc2dHE3dVExUjNyRlgvMUIrN04zVmE0V2hvd0dU?=
+ =?utf-8?B?UitTNkxOc2pEYWM4WENzR3M5bERPMlpxbzdjbzkwbExWNVpNK2sxTkE3enZs?=
+ =?utf-8?B?M0owUHdJZ0lQT3BjOFNpTnkrTXdRQ2NlaUVkNjRZbjlIRmYxa0tCelVobzZN?=
+ =?utf-8?B?L3UyRHhmQWV5WW9yUlE4YUo0TDhLVzFDSSszZ0JXZWFndEZmOWF5Q3R1cnJI?=
+ =?utf-8?B?bWNJT2kwNlRDUnJqcWMzNzQxTk1DQW81WnlFbEVQVTJFL3ZpZXBrODVSNHdH?=
+ =?utf-8?B?MlVkcEpDUWRCZnV5a1JKeVR6bzN0cXd5ODdIY0FVTW9TMjZ1V0dXN1gvRkVp?=
+ =?utf-8?B?U3lFcUYxakUzK3lUZ0NMQ1Q2OThZK1ZjQ1RXY1c2TitUWjZxK1lvNkJ5WHRp?=
+ =?utf-8?B?bUJRN1lJN1F5MFdQRWtOL3NyUWhVbC9NK0NQSEthV2xsTDNDUVF4UW41WWs3?=
+ =?utf-8?B?c0tGVmxPcHFxZHZRSU1LT2RwS1BhVXV0VzFKZE1QUHhEQ0hJSmU2ZlZOeUVv?=
+ =?utf-8?B?MFZ4K3hEMWFUY1VLVDRFdFNwcldTcnd3bWNWQ21Dc2VSd1pGcUl4UTVBa0Fp?=
+ =?utf-8?B?dWJ0cE8wVTJpNlZHc1Q5SzhRbHhienpaRTNtVzVXaVQzYzZLQXltcENQTHNa?=
+ =?utf-8?B?WUxVY2ZtQmNETGpzZDBEdit4RHVKUUtBWXd3RkJ0dHZjLzdROEx6bFJxVVBa?=
+ =?utf-8?B?c3lESTZSK3FmMko3SnpCT3d0RXJqUklVeVdwQ2pqQ3EvUDZvUGNpVkpuZGtS?=
+ =?utf-8?B?WmU4UGljQzVtRnNmcEVYdzNuWmlhSEl4S095VFhveTVkbHpCT2N0VGg3eGxY?=
+ =?utf-8?B?K0pHdzkvT00zdW8xQUxKRzdadlJ6WnMwcGZUaDlUWmxJRkMyY2hKTFRXa2VU?=
+ =?utf-8?B?aDFqQllkU2pzM1hmdS9YbHU3UXA3NDVaZi9XeXk0YmpwWFNzZWVBaEdvOGU1?=
+ =?utf-8?B?LytRR0ZXZ0p1WlZwcjJTUGhHTnB1SnFtL2hKbnB3cW1lcDQyZ0tlTEM0aVNP?=
+ =?utf-8?B?N0g1dFdLaDBNcENNR0xGUzJNaUU0UVdmNkZxUGVaQ2VaOG0rQVl1ejREaDBW?=
+ =?utf-8?B?ektmbThJNkJtRi9yRWlzT2cwUGdQU2ZnektKdm1tUTZlNm9HTlRRaCtudk9x?=
+ =?utf-8?B?L21UL243dTB5RWRqbWNiS1N4YnU1UW9jb1BBQ3ozRWt3aEU4ck1wNGJXa1o0?=
+ =?utf-8?B?UnZZV3Z4U2k1RFk1Y0EzOHkxZW9pTVdYSE1aZEgwSUdpWHRxT2tsSHd4S0h3?=
+ =?utf-8?B?MVYyUW5oNmJ1dFVxM3dFNFVjNG11SHVBUHE0UXNIcVlCL1ROMUZVZUFDUEJR?=
+ =?utf-8?B?MWZJWnhic014ZEN3UnFQY01WQ05lckNTb3BiNWYza0YxOXM2b1FPczJQbkIz?=
+ =?utf-8?B?a01SU2UrYUFub3RISEd6MkdpR25CbWo2TUY0ZG84aTlPUU1SS25yV2s1YjJt?=
+ =?utf-8?B?dzlmdkEvNHVxdFRWTVo3cjMwUyttSnhDZ0ZBWkhkV3FpVHlCMzJORDM2MEd3?=
+ =?utf-8?B?bFE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53214d48-beed-46fe-b920-08db207d2376
+X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB5052.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 09:03:24.4946
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: N1crdnoAxbb6kvhsPkxSHkBpLvH63EsyDIb7c4jIZIBpJmb6TLRXd5g15M8VNVHg6aDfcD4kJh4wc736+5Ge8w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4669
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 02:19:31PM -0800, Axel Rasmussen wrote:
-> Many userfaultfd ioctl functions take both a 'mode' and a 'wp_copy'
-> argument. In future commits we plan to plumb the flags through to more
-> places, so we'd be proliferating the very long argument list even
-> further.
+
+
+On 2/27/2023 4:22 PM, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
 > 
-> Let's take the time to simplify the argument list. Combine the two
-> arguments into one - and generalize, so when we add more flags in the
-> future, it doesn't imply more function arguments.
+> Because TDX virtualize cpuid[0x1].EDX[MTRR: bit 12] to fixed 1, guest TD
+> thinks MTRR is supported.  Although TDX supports only WB for private GPA,
+> it's desirable to support MTRR for shared GPA.  As guest access to MTRR
+> MSRs causes #VE and KVM/x86 tracks the values of MTRR MSRs, the remining
+> part is to implement get_mt_mask method for TDX for shared GPA.
 > 
-> Since the modes (copy, zeropage, continue) are mutually exclusive, store
-> them as an integer value (0, 1, 2) in the low bits. Place combine-able
-> flag bits in the high bits.
+> Pass around shared bit from kvm fault handler to get_mt_mask method so that
+> it can determine if the gfn is shared or private.  Implement get_mt_mask()
+> following vmx case for shared GPA and return WB for private GPA.
+> the existing vmx_get_mt_mask() can't be directly used as CPU state(CR0.CD)
+> is protected.  GFN passed to kvm_mtrr_check_gfn_range_consistency() should
+> include shared bit.
 > 
-> This is quite similar to an earlier patch proposed by Nadav Amit
-> ("userfaultfd: introduce uffd_flags" [1]). The main difference is that
-> patch only handled flags, whereas this patch *also* combines the "mode"
-> argument into the same type to shorten the argument list.
-> 
-> [1]: https://lore.kernel.org/all/20220619233449.181323-2-namit@vmware.com/
-> 
-> Acked-by: James Houghton <jthoughton@google.com>
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> Suggested-by: Kai Huang <kai.huang@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
 > ---
->  fs/userfaultfd.c              |  5 ++-
->  include/linux/hugetlb.h       | 10 ++---
->  include/linux/shmem_fs.h      |  5 ++-
->  include/linux/userfaultfd_k.h | 45 +++++++++++++--------
->  mm/hugetlb.c                  | 12 +++---
->  mm/shmem.c                    |  7 ++--
->  mm/userfaultfd.c              | 76 ++++++++++++++++-------------------
->  7 files changed, 83 insertions(+), 77 deletions(-)
-
-...
-
-> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-> index ba79e296fcc7..4d7425684171 100644
-> --- a/include/linux/userfaultfd_k.h
-> +++ b/include/linux/userfaultfd_k.h
-> @@ -40,30 +40,43 @@ extern int sysctl_unprivileged_userfaultfd;
->  
->  extern vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason);
->  
-> -/*
-> - * The mode of operation for __mcopy_atomic and its helpers.
-> - *
-> - * This is almost an implementation detail (mcopy_atomic below doesn't take this
-> - * as a parameter), but it's exposed here because memory-kind-specific
-> - * implementations (e.g. hugetlbfs) need to know the mode of operation.
-> - */
-> -enum mcopy_atomic_mode {
-> -	/* A normal copy_from_user into the destination range. */
-> -	MCOPY_ATOMIC_NORMAL,
-> -	/* Don't copy; map the destination range to the zero page. */
-> -	MCOPY_ATOMIC_ZEROPAGE,
-> -	/* Just install pte(s) with the existing page(s) in the page cache. */
-> -	MCOPY_ATOMIC_CONTINUE,
-> +/* A combined operation mode + behavior flags. */
-> +typedef unsigned int __bitwise uffd_flags_t;
-> +
-> +/* Mutually exclusive modes of operation. */
-> +enum mfill_atomic_mode {
-> +	MFILL_ATOMIC_COPY,
-> +	MFILL_ATOMIC_ZEROPAGE,
-> +	MFILL_ATOMIC_CONTINUE,
-> +	NR_MFILL_ATOMIC_MODES,
->  };
->  
-> +#define MFILL_ATOMIC_MODE_BITS (const_ilog2(NR_MFILL_ATOMIC_MODES - 1) + 1)
-> +#define MFILL_ATOMIC_BIT(nr) BIT(MFILL_ATOMIC_MODE_BITS + (nr))
-> +#define MFILL_ATOMIC_FLAG(nr) ((__force uffd_flags_t) MFILL_ATOMIC_BIT(nr))
-> +#define MFILL_ATOMIC_MODE_MASK ((__force uffd_flags_t) (MFILL_ATOMIC_BIT(0) - 1))
-> +
-> +static inline bool uffd_flags_has_mode(uffd_flags_t flags, enum mfill_atomic_mode expected)
-> +{
-> +	return (flags & MFILL_ATOMIC_MODE_MASK) == ((__force uffd_flags_t) expected);
-> +}
-> +
-> +static inline uffd_flags_t uffd_flags_set_mode(uffd_flags_t flags, enum mfill_atomic_mode mode)
-> +{
-> +	return flags | ((__force uffd_flags_t) mode);
-> +}
-
-I agree with Peter that uffd_flags_set_mode() implies that the modes are
-not mutually exclusive and uffd_flags_get_mode() sounds a better name to
-me.
-
-> +/* Flags controlling behavior. */
-
-I'd also emphasize that these apply to different modes.
-
-Aside from that 
-
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-
-> +#define MFILL_ATOMIC_WP MFILL_ATOMIC_FLAG(0)
-> +
->  extern int mfill_atomic_install_pte(pmd_t *dst_pmd,
->  				    struct vm_area_struct *dst_vma,
->  				    unsigned long dst_addr, struct page *page,
-> -				    bool newly_allocated, bool wp_copy);
-> +				    bool newly_allocated, uffd_flags_t flags);
->  
->  extern ssize_t mfill_atomic_copy(struct mm_struct *dst_mm, unsigned long dst_start,
->  				 unsigned long src_start, unsigned long len,
-> -				 atomic_t *mmap_changing, __u64 mode);
-> +				 atomic_t *mmap_changing, uffd_flags_t flags);
->  extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
->  				     unsigned long dst_start,
->  				     unsigned long len,
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index fe043034ab46..493406a2d61e 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -6161,12 +6161,12 @@ int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
->  			     struct vm_area_struct *dst_vma,
->  			     unsigned long dst_addr,
->  			     unsigned long src_addr,
-> -			     enum mcopy_atomic_mode mode,
-> -			     struct page **pagep,
-> -			     bool wp_copy)
-> +			     uffd_flags_t flags,
-> +			     struct page **pagep)
->  {
->  	struct mm_struct *dst_mm = dst_vma->vm_mm;
-> -	bool is_continue = (mode == MCOPY_ATOMIC_CONTINUE);
-> +	bool is_continue = uffd_flags_has_mode(flags, MFILL_ATOMIC_CONTINUE);
-> +	bool wp_enabled = (flags & MFILL_ATOMIC_WP);
->  	struct hstate *h = hstate_vma(dst_vma);
->  	struct address_space *mapping = dst_vma->vm_file->f_mapping;
->  	pgoff_t idx = vma_hugecache_offset(h, dst_vma, dst_addr);
-> @@ -6301,7 +6301,7 @@ int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
->  	 * For either: (1) CONTINUE on a non-shared VMA, or (2) UFFDIO_COPY
->  	 * with wp flag set, don't set pte write bit.
->  	 */
-> -	if (wp_copy || (is_continue && !vm_shared))
-> +	if (wp_enabled || (is_continue && !vm_shared))
->  		writable = 0;
->  	else
->  		writable = dst_vma->vm_flags & VM_WRITE;
-> @@ -6316,7 +6316,7 @@ int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
->  	_dst_pte = huge_pte_mkdirty(_dst_pte);
->  	_dst_pte = pte_mkyoung(_dst_pte);
->  
-> -	if (wp_copy)
-> +	if (wp_enabled)
->  		_dst_pte = huge_pte_mkuffd_wp(_dst_pte);
->  
->  	set_huge_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
-> diff --git a/mm/shmem.c b/mm/shmem.c
-> index 1d751b6cf1ac..7d688afb5e31 100644
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -76,7 +76,6 @@ static struct vfsmount *shm_mnt;
->  #include <linux/syscalls.h>
->  #include <linux/fcntl.h>
->  #include <uapi/linux/memfd.h>
-> -#include <linux/userfaultfd_k.h>
->  #include <linux/rmap.h>
->  #include <linux/uuid.h>
->  
-> @@ -2419,7 +2418,7 @@ int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
->  			   struct vm_area_struct *dst_vma,
->  			   unsigned long dst_addr,
->  			   unsigned long src_addr,
-> -			   bool zeropage, bool wp_copy,
-> +			   uffd_flags_t flags,
->  			   struct page **pagep)
->  {
->  	struct inode *inode = file_inode(dst_vma->vm_file);
-> @@ -2451,7 +2450,7 @@ int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
->  		if (!folio)
->  			goto out_unacct_blocks;
->  
-> -		if (!zeropage) {	/* COPY */
-> +		if (uffd_flags_has_mode(flags, MFILL_ATOMIC_COPY)) {
->  			page_kaddr = kmap_local_folio(folio, 0);
->  			/*
->  			 * The read mmap_lock is held here.  Despite the
-> @@ -2510,7 +2509,7 @@ int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
->  		goto out_release;
->  
->  	ret = mfill_atomic_install_pte(dst_pmd, dst_vma, dst_addr,
-> -				       &folio->page, true, wp_copy);
-> +				       &folio->page, true, flags);
->  	if (ret)
->  		goto out_delete_from_cache;
->  
-> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> index 4fc373476739..dd807924446f 100644
-> --- a/mm/userfaultfd.c
-> +++ b/mm/userfaultfd.c
-> @@ -58,7 +58,7 @@ struct vm_area_struct *find_dst_vma(struct mm_struct *dst_mm,
->  int mfill_atomic_install_pte(pmd_t *dst_pmd,
->  			     struct vm_area_struct *dst_vma,
->  			     unsigned long dst_addr, struct page *page,
-> -			     bool newly_allocated, bool wp_copy)
-> +			     bool newly_allocated, uffd_flags_t flags)
->  {
->  	int ret;
->  	struct mm_struct *dst_mm = dst_vma->vm_mm;
-> @@ -77,7 +77,7 @@ int mfill_atomic_install_pte(pmd_t *dst_pmd,
->  		writable = false;
->  	if (writable)
->  		_dst_pte = pte_mkwrite(_dst_pte);
-> -	if (wp_copy)
-> +	if (flags & MFILL_ATOMIC_WP)
->  		_dst_pte = pte_mkuffd_wp(_dst_pte);
->  
->  	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
-> @@ -132,8 +132,8 @@ static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
->  				 struct vm_area_struct *dst_vma,
->  				 unsigned long dst_addr,
->  				 unsigned long src_addr,
-> -				 struct page **pagep,
-> -				 bool wp_copy)
-> +				 uffd_flags_t flags,
-> +				 struct page **pagep)
->  {
->  	void *page_kaddr;
->  	int ret;
-> @@ -194,7 +194,7 @@ static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
->  		goto out_release;
->  
->  	ret = mfill_atomic_install_pte(dst_pmd, dst_vma, dst_addr,
-> -				       page, true, wp_copy);
-> +				       page, true, flags);
->  	if (ret)
->  		goto out_release;
->  out:
-> @@ -242,7 +242,7 @@ static int mfill_atomic_pte_zeropage(pmd_t *dst_pmd,
->  static int mfill_atomic_pte_continue(pmd_t *dst_pmd,
->  				     struct vm_area_struct *dst_vma,
->  				     unsigned long dst_addr,
-> -				     bool wp_copy)
-> +				     uffd_flags_t flags)
->  {
->  	struct inode *inode = file_inode(dst_vma->vm_file);
->  	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
-> @@ -268,7 +268,7 @@ static int mfill_atomic_pte_continue(pmd_t *dst_pmd,
->  	}
->  
->  	ret = mfill_atomic_install_pte(dst_pmd, dst_vma, dst_addr,
-> -				       page, false, wp_copy);
-> +				       page, false, flags);
->  	if (ret)
->  		goto out_release;
->  
-> @@ -313,8 +313,7 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
->  					      unsigned long dst_start,
->  					      unsigned long src_start,
->  					      unsigned long len,
-> -					      enum mcopy_atomic_mode mode,
-> -					      bool wp_copy)
-> +					      uffd_flags_t flags)
->  {
->  	struct mm_struct *dst_mm = dst_vma->vm_mm;
->  	int vm_shared = dst_vma->vm_flags & VM_SHARED;
-> @@ -334,7 +333,7 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
->  	 * by THP.  Since we can not reliably insert a zero page, this
->  	 * feature is not supported.
->  	 */
-> -	if (mode == MCOPY_ATOMIC_ZEROPAGE) {
-> +	if (uffd_flags_has_mode(flags, MFILL_ATOMIC_ZEROPAGE)) {
->  		mmap_read_unlock(dst_mm);
->  		return -EINVAL;
->  	}
-> @@ -402,7 +401,7 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
->  			goto out_unlock;
->  		}
->  
-> -		if (mode != MCOPY_ATOMIC_CONTINUE &&
-> +		if (!uffd_flags_has_mode(flags, MFILL_ATOMIC_CONTINUE) &&
->  		    !huge_pte_none_mostly(huge_ptep_get(dst_pte))) {
->  			err = -EEXIST;
->  			hugetlb_vma_unlock_read(dst_vma);
-> @@ -410,9 +409,8 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
->  			goto out_unlock;
->  		}
->  
-> -		err = hugetlb_mfill_atomic_pte(dst_pte, dst_vma,
-> -					       dst_addr, src_addr, mode, &page,
-> -					       wp_copy);
-> +		err = hugetlb_mfill_atomic_pte(dst_pte, dst_vma, dst_addr,
-> +					       src_addr, flags, &page);
->  
->  		hugetlb_vma_unlock_read(dst_vma);
->  		mutex_unlock(&hugetlb_fault_mutex_table[hash]);
-> @@ -466,23 +464,21 @@ extern ssize_t mfill_atomic_hugetlb(struct vm_area_struct *dst_vma,
->  				    unsigned long dst_start,
->  				    unsigned long src_start,
->  				    unsigned long len,
-> -				    enum mcopy_atomic_mode mode,
-> -				    bool wp_copy);
-> +				    uffd_flags_t flags);
->  #endif /* CONFIG_HUGETLB_PAGE */
->  
->  static __always_inline ssize_t mfill_atomic_pte(pmd_t *dst_pmd,
->  						struct vm_area_struct *dst_vma,
->  						unsigned long dst_addr,
->  						unsigned long src_addr,
-> -						struct page **page,
-> -						enum mcopy_atomic_mode mode,
-> -						bool wp_copy)
-> +						uffd_flags_t flags,
-> +						struct page **pagep)
->  {
->  	ssize_t err;
->  
-> -	if (mode == MCOPY_ATOMIC_CONTINUE) {
-> +	if (uffd_flags_has_mode(flags, MFILL_ATOMIC_CONTINUE)) {
->  		return mfill_atomic_pte_continue(dst_pmd, dst_vma,
-> -						 dst_addr, wp_copy);
-> +						 dst_addr, flags);
->  	}
->  
->  	/*
-> @@ -496,18 +492,17 @@ static __always_inline ssize_t mfill_atomic_pte(pmd_t *dst_pmd,
->  	 * and not in the radix tree.
->  	 */
->  	if (!(dst_vma->vm_flags & VM_SHARED)) {
-> -		if (mode == MCOPY_ATOMIC_NORMAL)
-> +		if (uffd_flags_has_mode(flags, MFILL_ATOMIC_COPY))
->  			err = mfill_atomic_pte_copy(dst_pmd, dst_vma,
-> -						    dst_addr, src_addr, page,
-> -						    wp_copy);
-> +						    dst_addr, src_addr,
-> +						    flags, pagep);
->  		else
->  			err = mfill_atomic_pte_zeropage(dst_pmd,
->  						 dst_vma, dst_addr);
->  	} else {
->  		err = shmem_mfill_atomic_pte(dst_pmd, dst_vma,
->  					     dst_addr, src_addr,
-> -					     mode != MCOPY_ATOMIC_NORMAL,
-> -					     wp_copy, page);
-> +					     flags, pagep);
->  	}
->  
->  	return err;
-> @@ -517,9 +512,8 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
->  					    unsigned long dst_start,
->  					    unsigned long src_start,
->  					    unsigned long len,
-> -					    enum mcopy_atomic_mode mcopy_mode,
->  					    atomic_t *mmap_changing,
-> -					    __u64 mode)
-> +					    uffd_flags_t flags)
->  {
->  	struct vm_area_struct *dst_vma;
->  	ssize_t err;
-> @@ -527,7 +521,6 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
->  	unsigned long src_addr, dst_addr;
->  	long copied;
->  	struct page *page;
-> -	bool wp_copy;
->  
->  	/*
->  	 * Sanitize the command parameters:
-> @@ -577,8 +570,7 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
->  	 * validate 'mode' now that we know the dst_vma: don't allow
->  	 * a wrprotect copy if the userfaultfd didn't register as WP.
->  	 */
-> -	wp_copy = mode & UFFDIO_COPY_MODE_WP;
-> -	if (wp_copy && !(dst_vma->vm_flags & VM_UFFD_WP))
-> +	if ((flags & MFILL_ATOMIC_WP) && !(dst_vma->vm_flags & VM_UFFD_WP))
->  		goto out_unlock;
->  
->  	/*
-> @@ -586,12 +578,12 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
->  	 */
->  	if (is_vm_hugetlb_page(dst_vma))
->  		return  mfill_atomic_hugetlb(dst_vma, dst_start,
-> -					     src_start, len, mcopy_mode,
-> -					     wp_copy);
-> +					     src_start, len, flags);
->  
->  	if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
->  		goto out_unlock;
-> -	if (!vma_is_shmem(dst_vma) && mcopy_mode == MCOPY_ATOMIC_CONTINUE)
-> +	if (!vma_is_shmem(dst_vma) &&
-> +	    uffd_flags_has_mode(flags, MFILL_ATOMIC_CONTINUE))
->  		goto out_unlock;
->  
->  	/*
-> @@ -639,7 +631,7 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
->  		BUG_ON(pmd_trans_huge(*dst_pmd));
->  
->  		err = mfill_atomic_pte(dst_pmd, dst_vma, dst_addr,
-> -				       src_addr, &page, mcopy_mode, wp_copy);
-> +				       src_addr, flags, &page);
->  		cond_resched();
->  
->  		if (unlikely(err == -ENOENT)) {
-> @@ -687,24 +679,24 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
->  
->  ssize_t mfill_atomic_copy(struct mm_struct *dst_mm, unsigned long dst_start,
->  			  unsigned long src_start, unsigned long len,
-> -			  atomic_t *mmap_changing, __u64 mode)
-> +			  atomic_t *mmap_changing, uffd_flags_t flags)
->  {
-> -	return mfill_atomic(dst_mm, dst_start, src_start, len,
-> -			    MCOPY_ATOMIC_NORMAL, mmap_changing, mode);
-> +	return mfill_atomic(dst_mm, dst_start, src_start, len, mmap_changing,
-> +			    uffd_flags_set_mode(flags, MFILL_ATOMIC_COPY));
->  }
->  
->  ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm, unsigned long start,
->  			      unsigned long len, atomic_t *mmap_changing)
->  {
-> -	return mfill_atomic(dst_mm, start, 0, len, MCOPY_ATOMIC_ZEROPAGE,
-> -			    mmap_changing, 0);
-> +	return mfill_atomic(dst_mm, start, 0, len, mmap_changing,
-> +			    uffd_flags_set_mode(0, MFILL_ATOMIC_ZEROPAGE));
->  }
->  
->  ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long start,
->  			      unsigned long len, atomic_t *mmap_changing)
->  {
-> -	return mfill_atomic(dst_mm, start, 0, len, MCOPY_ATOMIC_CONTINUE,
-> -			    mmap_changing, 0);
-> +	return mfill_atomic(dst_mm, start, 0, len, mmap_changing,
-> +			    uffd_flags_set_mode(0, MFILL_ATOMIC_CONTINUE));
->  }
->  
->  long uffd_wp_range(struct vm_area_struct *dst_vma,
-> -- 
-> 2.40.0.rc1.284.g88254d51c5-goog
+> Changes from v11 to V12
+> - Make common function for VMX and TDX
+> - pass around shared bit from KVM fault handler to get_mt_mask method
+> - updated commit message
+> ---
+>  arch/x86/kvm/mmu/mmu.c     |  2 +-
+>  arch/x86/kvm/mmu/spte.c    |  5 +++--
+>  arch/x86/kvm/mmu/spte.h    |  2 +-
+>  arch/x86/kvm/vmx/common.h  |  2 ++
+>  arch/x86/kvm/vmx/main.c    | 11 ++++++++++-
+>  arch/x86/kvm/vmx/tdx.c     | 17 +++++++++++++++++
+>  arch/x86/kvm/vmx/vmx.c     |  5 +++--
+>  arch/x86/kvm/vmx/x86_ops.h |  2 ++
+>  8 files changed, 39 insertions(+), 7 deletions(-)
 > 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 6421f92e618e..0c852517c0e7 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -4555,7 +4555,7 @@ int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>  	if (shadow_memtype_mask && kvm_arch_has_noncoherent_dma(vcpu->kvm)) {
+>  		for ( ; fault->max_level > PG_LEVEL_4K; --fault->max_level) {
+>  			int page_num = KVM_PAGES_PER_HPAGE(fault->max_level);
+> -			gfn_t base = fault->gfn & ~(page_num - 1);
+> +			gfn_t base = (fault->addr >> PAGE_SHIFT) & ~(page_num - 1);
+>  
+>  			if (kvm_mtrr_check_gfn_range_consistency(vcpu, base, page_num))
+>  				break;
+> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
+> index 48e17588a127..9c874bca69f6 100644
+> --- a/arch/x86/kvm/mmu/spte.c
+> +++ b/arch/x86/kvm/mmu/spte.c
+> @@ -137,13 +137,14 @@ bool spte_has_volatile_bits(u64 spte)
+>  
+>  bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>  	       const struct kvm_memory_slot *slot,
+> -	       unsigned int pte_access, gfn_t gfn, kvm_pfn_t pfn,
+> +	       unsigned int pte_access, gfn_t gfn_including_shared, kvm_pfn_t pfn,
+>  	       u64 old_spte, bool prefetch, bool can_unsync,
+>  	       bool host_writable, u64 *new_spte)
+>  {
+>  	int level = sp->role.level;
+>  	u64 spte = SPTE_MMU_PRESENT_MASK;
+>  	bool wrprot = false;
+> +	gfn_t gfn = gfn_including_shared & ~kvm_gfn_shared_mask(vcpu->kvm);
+>  
+>  	WARN_ON_ONCE(!pte_access && !shadow_present_mask);
+>  
+> @@ -191,7 +192,7 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>  		spte |= PT_PAGE_SIZE_MASK;
+>  
+>  	if (shadow_memtype_mask)
+> -		spte |= static_call(kvm_x86_get_mt_mask)(vcpu, gfn,
+> +		spte |= static_call(kvm_x86_get_mt_mask)(vcpu, gfn_including_shared,
+>  							 kvm_is_mmio_pfn(pfn));
+>  	if (host_writable)
+>  		spte |= shadow_host_writable_mask;
+> diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+> index 7046671b08cb..067ea1ae3a13 100644
+> --- a/arch/x86/kvm/mmu/spte.h
+> +++ b/arch/x86/kvm/mmu/spte.h
+> @@ -481,7 +481,7 @@ bool spte_has_volatile_bits(u64 spte);
+>  
+>  bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>  	       const struct kvm_memory_slot *slot,
+> -	       unsigned int pte_access, gfn_t gfn, kvm_pfn_t pfn,
+> +	       unsigned int pte_access, gfn_t gfn_including_shared, kvm_pfn_t pfn,
+>  	       u64 old_spte, bool prefetch, bool can_unsync,
+>  	       bool host_writable, u64 *new_spte);
+>  u64 make_huge_page_split_spte(struct kvm *kvm, u64 huge_spte,
+> diff --git a/arch/x86/kvm/vmx/common.h b/arch/x86/kvm/vmx/common.h
+> index 235908f3e044..422b24af7fc1 100644
+> --- a/arch/x86/kvm/vmx/common.h
+> +++ b/arch/x86/kvm/vmx/common.h
+> @@ -6,6 +6,8 @@
+>  
+>  #include "mmu.h"
+>  
+> +u8 __vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio, bool check_cr0_cd);
+> +
+>  static inline int __vmx_handle_ept_violation(struct kvm_vcpu *vcpu, gpa_t gpa,
+>  					     unsigned long exit_qualification)
+>  {
+> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> index a2ca09f10b6e..f42617c7aeaf 100644
+> --- a/arch/x86/kvm/vmx/main.c
+> +++ b/arch/x86/kvm/vmx/main.c
+> @@ -3,6 +3,7 @@
+>  
+>  #include "x86_ops.h"
+>  #include "mmu.h"
+> +#include "common.h"
+>  #include "vmx.h"
+>  #include "nested.h"
+>  #include "mmu.h"
+> @@ -206,6 +207,14 @@ static void vt_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa,
+>  	vmx_load_mmu_pgd(vcpu, root_hpa, pgd_level);
+>  }
+>  
+> +static u8 vt_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+> +{
+> +	if (is_td_vcpu(vcpu))
+> +		return tdx_get_mt_mask(vcpu, gfn, is_mmio);
+> +
+> +	return __vmx_get_mt_mask(vcpu, gfn, is_mmio, true);
+> +}
+> +
+>  static int vt_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
+>  {
+>  	if (!is_td(kvm))
+> @@ -326,7 +335,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+>  
+>  	.set_tss_addr = vmx_set_tss_addr,
+>  	.set_identity_map_addr = vmx_set_identity_map_addr,
+> -	.get_mt_mask = vmx_get_mt_mask,
+> +	.get_mt_mask = vt_get_mt_mask,
+>  
+>  	.get_exit_info = vmx_get_exit_info,
+>  
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index 8f191177bfe9..f532f5c352f3 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -5,6 +5,7 @@
+>  
+>  #include "capabilities.h"
+>  #include "x86_ops.h"
+> +#include "common.h"
+>  #include "tdx.h"
+>  #include "vmx.h"
+>  #include "x86.h"
+> @@ -345,6 +346,22 @@ int tdx_vm_init(struct kvm *kvm)
+>  	return 0;
+>  }
+>  
+> +u8 tdx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+> +{
+> +	/* TDX private GPA is always WB. */
+> +	if (kvm_gfn_private(vcpu->kvm, gfn)) {
 
--- 
-Sincerely yours,
-Mike.
+kvm_gfn_private() only drops shared bit instead of checking if gfn is
+private of shared. It should be !(gfn & shared mask) as mentioned in
+your v11 series :)
+
+> +		/* MMIO is only for shared GPA. */
+> +		WARN_ON_ONCE(is_mmio);
+> +		return  MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT;
+> +	}
+> +
+> +	/* Drop shared bit as MTRR doesn't know about shared bit. */
+> +	gfn = kvm_gfn_private(vcpu->kvm, gfn);
+> +
+> +	/* As TDX enforces CR0.CD to 0, pass check_cr0_cd = false. */
+> +	return __vmx_get_mt_mask(vcpu, gfn, is_mmio, false);
+> +}
+> +
+>  int tdx_vcpu_create(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_cpuid_entry2 *e;
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 3ff3b33fe9af..72da86abf989 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7552,7 +7552,8 @@ int vmx_vm_init(struct kvm *kvm)
+>  	return 0;
+>  }
+>  
+> -u8 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+> +u8 __vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio,
+> +		     bool check_cr0_cd)
+>  {
+>  	u8 cache;
+>  
+> @@ -7580,7 +7581,7 @@ u8 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+>  	if (!kvm_arch_has_noncoherent_dma(vcpu->kvm))
+>  		return (MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT) | VMX_EPT_IPAT_BIT;
+>  
+> -	if (kvm_read_cr0(vcpu) & X86_CR0_CD) {
+> +	if (check_cr0_cd && kvm_read_cr0(vcpu) & X86_CR0_CD) {
+>  		if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
+>  			cache = MTRR_TYPE_WRBACK;
+>  		else
