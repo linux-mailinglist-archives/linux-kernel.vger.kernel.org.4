@@ -2,54 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B4B6B2ACD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 684AF6B2AB9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjCIQcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 11:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
+        id S230143AbjCIQ3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 11:29:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbjCIQbt (ORCPT
+        with ESMTP id S230459AbjCIQ2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:31:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EF9E20FC;
-        Thu,  9 Mar 2023 08:23:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9563661C31;
-        Thu,  9 Mar 2023 16:17:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B060C433EF;
-        Thu,  9 Mar 2023 16:17:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678378664;
-        bh=q9RjBZs+ERaxIV0omkTJ1hSNgg0RjEI7/KoY1XKuSyU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jVhVYbvVqbdH2W69+wx8yTauEYWo0avO97NQe507F8tsK4F2Hte8WTtGIKAVkVf23
-         dis1Kce8ox34FbnT/tTE/5/8ozmdX88XWnaNdteMxf4stuKuUWqaYHxQfm6E3eWspg
-         anntKbMr0SzOEEfAU8A2wj3O+z2O90FDKm1SELV8=
-Date:   Thu, 9 Mar 2023 17:17:41 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-unisoc@lists.infradead.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 21/24] kbuild, serial: remove MODULE_LICENSE in
- non-modules
-Message-ID: <ZAoGpW+TnpRPMRdR@kroah.com>
-References: <20230217141059.392471-1-nick.alcock@oracle.com>
- <20230217141059.392471-22-nick.alcock@oracle.com>
+        Thu, 9 Mar 2023 11:28:46 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D481DFE0B9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 08:19:59 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id o12so9150412edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 08:19:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678378737;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6Zw8vqXpC0bU1WHMHt8aBbYpkThMfK2D6RUJ0aIcSMA=;
+        b=CNoumR7hRfEhiItHmA86DPUeSVhUeg2S0X9JMh6EIppwoan1fCQnNNMNpNIKnVTDfv
+         7A3C4sXQav4nOkupeInanOPXYmTt2byt3ngVoyvhgZZQ9qc1Rs6tT2+x4PKreMAlD3Wc
+         HVPRAh7PoeYvRi+CS3G1ArjOQeBdNc/N/NiPO6HljOZGrNl9Wh4ediz8S/GoIPCL3fSe
+         +3XTsoyLPXdEzxclhWz9OrtKNKhsd8P50EXoAXfOCDZK9PUoNKCBq9ViYRb+2YmeRvJK
+         VKmsMV/zlCeJ90eVOp5bbEmptQ9NOs9bwm5l4ZfNtR+7oTriWCR5JUkEzBehzKvR1Khv
+         LpXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678378737;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Zw8vqXpC0bU1WHMHt8aBbYpkThMfK2D6RUJ0aIcSMA=;
+        b=2Idgv2UR+hLoJ0G2wDmPv0yjlhU9tqrwcqh7iOPXaLc82z5R/Ly8vAEgNazgAhemHB
+         pZLRofPP52B/m/X435KFBqnkbr5uS0wm+iqdGYU2yW3vyufLDTlSw0460YWC5cygtWNt
+         voWrLnhgsoYduWMAF12qoGA4tBAUDbMJLIdlSP3m5ARyfgO0DK6DiIQ6FHa71aFoncs/
+         jm05oXNzxlr/VaO7aqtCoNKy2SSnQ6c4Vb5itfXHu1joJ/vmyw1dAb+O+xZ0phtf1tcu
+         FcNmJxSYnZO/BkTXUSG+tN0ZYYRuzdnmmbwIzSMOBP6lUMd4Z1GEpZF4jnTf6viZ1y/o
+         4f+w==
+X-Gm-Message-State: AO0yUKV9X94yrOzdR43lN97tUgKYrmzNeI1Vb9tfPi8LCYc8dCPRqzXv
+        sGkLdZTJje7Vjs8Issk4mTr5kQ==
+X-Google-Smtp-Source: AK7set9MuKtpLuEwfh0WkbsVykrcHMrmS6AkP4kRrrDO6biY/uwWxqA/HNR5xrHkqLsyNSqWdQJlkQ==
+X-Received: by 2002:a05:6402:3d8:b0:4bf:b2b1:84d8 with SMTP id t24-20020a05640203d800b004bfb2b184d8mr28243082edw.19.1678378737564;
+        Thu, 09 Mar 2023 08:18:57 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
+        by smtp.gmail.com with ESMTPSA id k21-20020a05640212d500b004aee4e2a56esm9743217edx.0.2023.03.09.08.18.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 08:18:57 -0800 (PST)
+Message-ID: <060a51e6-fbaa-253c-dfa3-c4abc38344c7@linaro.org>
+Date:   Thu, 9 Mar 2023 17:18:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230217141059.392471-22-nick.alcock@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5] ASoC: cs35l41: Steam Deck Shared boost properties
+ quirk
+Content-Language: en-US
+To:     Lucas Tanure <lucas.tanure@collabora.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "Takashi Iwai --cc=alsa-devel @ alsa-project . org" <tiwai@suse.com>
+Cc:     patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230309140051.945329-1-lucas.tanure@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230309140051.945329-1-lucas.tanure@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,46 +83,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 02:10:56PM +0000, Nick Alcock wrote:
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
+On 09/03/2023 15:00, Lucas Tanure wrote:
+> Add support for Steam Deck bios old properties. If a Steam deck didn't
+> upgrade the BIOS, the driver should be able to handle the previous
+> properties for shared boost types.
 > 
-> So remove it in the files in this commit, none of which can be built as
-> modules.
-> 
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Manivannan Sadhasivam <mani@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Jiri Slaby <jirislaby@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-unisoc@lists.infradead.org
-> Cc: linux-serial@vger.kernel.org
+> Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
+> Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 > ---
->  drivers/tty/serial/rda-uart.c | 1 -
->  1 file changed, 1 deletion(-)
+> Changes since V4:
+>  - Add documentation about this quirk
 > 
-> diff --git a/drivers/tty/serial/rda-uart.c b/drivers/tty/serial/rda-uart.c
-> index be5c842b5ba9..c3b29d124759 100644
-> --- a/drivers/tty/serial/rda-uart.c
-> +++ b/drivers/tty/serial/rda-uart.c
-> @@ -825,4 +825,3 @@ module_exit(rda_uart_exit);
->  
->  MODULE_AUTHOR("Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>");
->  MODULE_DESCRIPTION("RDA8810PL serial device driver");
-> -MODULE_LICENSE("GPL");
 
-No, this should be fine, either force remove all MODULE_* macros from
-built-in code, or none.
+Good for me, thanks.
 
-thanks,
+Best regards,
+Krzysztof
 
-greg k-h
