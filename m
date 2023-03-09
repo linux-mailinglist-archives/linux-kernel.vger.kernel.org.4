@@ -2,134 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D4D6B2352
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC9D6B2355
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjCILpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        id S231652AbjCILpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:45:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbjCILpK (ORCPT
+        with ESMTP id S231636AbjCILp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:45:10 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522799FE57;
-        Thu,  9 Mar 2023 03:45:09 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 329BilmV067182;
-        Thu, 9 Mar 2023 05:44:47 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678362288;
-        bh=/q/r+VqIDQV+nyf/HFdFt7S4d1PgKsozHa8XIbxD8aY=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=nAnAGXYW/BIh78fUHAF8Qk8hBwnEkuy5WmwDM9NDgykbzDS94TzunNiSbEHM08EZf
-         SIWLabHhn09QBlt8dfoAKNl6ODNLNseANMBusUJ7MwbOnfTuRmU91N+5Vx38gcKRZl
-         U/BcI1f82iMoQ6L9rvjidTWmPcFBFyVr70O/u3WA=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 329BiliX027723
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 9 Mar 2023 05:44:47 -0600
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 9
- Mar 2023 05:44:47 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 9 Mar 2023 05:44:47 -0600
-Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 329BifPD012701;
-        Thu, 9 Mar 2023 05:44:42 -0600
-Message-ID: <d7f18805-7b26-e2c9-a40e-262165ec8f9b@ti.com>
-Date:   Thu, 9 Mar 2023 17:14:41 +0530
+        Thu, 9 Mar 2023 06:45:26 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643B4ABB28;
+        Thu,  9 Mar 2023 03:45:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678362325; x=1709898325;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IJBUHluiD9xAyzjbFJfHVvyD/VXxIi5tVeFMgU76yik=;
+  b=h5qayGp2HDrcPU3CuIUR2hBD2qilva0TOJclG7dp3H4rFlWE2a52Ok0u
+   G5GXCjsQzWZja5kpyafBJMCIPyQS4FBvaPLRYjNSunYdFxVCVa/dmU9NT
+   W0zOQ8WosBnwwVJdQWk9e4IAScuwTBsI/KUPZWHJVpz1GSZVIjdcvXbGR
+   cYXYZDsfD6quI7TIu78KciGJj8DC2t41gC8ihi/kiEdStJGKLubHdVdb7
+   vAYatm4Gj7OZ/gR/m8S83oOkjN03iTK4H9ErqYGXKMvMpgotgKSZwBolr
+   Hp+UPsmva5l8jVR7672u03eWj6MtQWoR6/mrDbQVccNYulC+tDxeR/2Vz
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="335127260"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="335127260"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 03:45:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="851485141"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="851485141"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 09 Mar 2023 03:45:23 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1paEi2-0002uv-1b;
+        Thu, 09 Mar 2023 11:45:22 +0000
+Date:   Thu, 9 Mar 2023 19:44:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jani Nikula <jani.nikula@intel.com>, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Jani Nikula <jani.nikula@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: constify struct hwmon_chip_info info member harder
+Message-ID: <202303091901.0BoQeZI2-lkp@intel.com>
+References: <20230309082841.400118-1-jani.nikula@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [EXTERNAL] Re: [PATCH v5 1/2] dt-bindings: net: Add ICSSG
- Ethernet
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        MD Danish Anwar <danishanwar@ti.com>
-CC:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>, <andrew@lunn.ch>,
-        <nm@ti.com>, <ssantosh@kernel.org>, <srk@ti.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230210114957.2667963-1-danishanwar@ti.com>
- <20230210114957.2667963-2-danishanwar@ti.com>
- <20230210192001.GB2923614-robh@kernel.org>
- <43df3c2c-d0d0-f2b8-cf8b-8a2453ca43b4@ti.com>
- <63dbbda7-a444-8dac-6399-45e305652155@linaro.org>
-From:   Md Danish Anwar <a0501179@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <63dbbda7-a444-8dac-6399-45e305652155@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309082841.400118-1-jani.nikula@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Hi Jani,
 
-On 07/03/23 14:28, Krzysztof Kozlowski wrote:
-> On 07/03/2023 05:57, Md Danish Anwar wrote:
->>>> +allOf:
->>>> +  - $ref: /schemas/remoteproc/ti,pru-consumer.yaml#
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    enum:
->>>> +      - ti,am654-icssg-prueth  # for AM65x SoC family
->>>> +
->>>> +  ti,sram:
->>>> +    $ref: /schemas/types.yaml#/definitions/phandle
->>>> +    description:
->>>> +      phandle to MSMC SRAM node
->>>
->>> I believe we have a standard 'sram' property to point to SRAM nodes 
->>> assuming this is just mmio-sram or similar.
->>>
->>
->> Yes, we have standard 'sram' property but Krzysztof had asked me to make the
->> sram property vendor specific in last revision of this series.
-> 
-> Sorry about that. I missed that we already have a 'sram'. The question
-> remains whether this is a phandle to MMIO SRAM or similar (sram.yaml).
-> 
-> Best regards,
-> Krzysztof
-> 
+I love your patch! Perhaps something to improve:
 
-The SRAM that we are using here is phandle to MMIO-SRAM only. In the example
-section you can see, sram node points to msmc_ram (ti,sram = <&msmc_ram>;) And
-msmc_ram has compatible as "mmio-sram" in k3-am65-main.dtsi [1].
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.3-rc1 next-20230309]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-	msmc_ram: sram@70000000 {
-		compatible = "mmio-sram";
-		reg = <0x0 0x70000000 0x0 0x200000>;
+url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/hwmon-constify-struct-hwmon_chip_info-info-member-harder/20230309-163328
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230309082841.400118-1-jani.nikula%40intel.com
+patch subject: [PATCH] hwmon: constify struct hwmon_chip_info info member harder
+config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20230309/202303091901.0BoQeZI2-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/1ec9eaf0281f0a40044492700b7cdfe99d35d35e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jani-Nikula/hwmon-constify-struct-hwmon_chip_info-info-member-harder/20230309-163328
+        git checkout 1ec9eaf0281f0a40044492700b7cdfe99d35d35e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hwmon/
 
-So I can use 'sram' property as there is no need to make this as ti specific.
-Let me know if it seems good to you.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303091901.0BoQeZI2-lkp@intel.com/
 
-[1]
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/ti/k3-am65-main.dtsi?h=v6.3-rc1#n11
+All warnings (new ones prefixed by >>):
+
+   drivers/hwmon/hwmon.c: In function 'hwmon_thermal_set_trips':
+>> drivers/hwmon/hwmon.c:177:50: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     177 |         const struct hwmon_channel_info **info = chip->info;
+         |                                                  ^~~~
+   drivers/hwmon/hwmon.c: In function 'hwmon_thermal_register_sensors':
+   drivers/hwmon/hwmon.c:256:50: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     256 |         const struct hwmon_channel_info **info = chip->info;
+         |                                                  ^~~~
+
+
+vim +/const +177 drivers/hwmon/hwmon.c
+
+d560168b5d0fb4a Guenter Roeck   2015-08-26  171  
+e5181331359d931 Daniel Lezcano  2022-08-05  172  static int hwmon_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  173  {
+e5181331359d931 Daniel Lezcano  2022-08-05  174  	struct hwmon_thermal_data *tdata = tz->devdata;
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  175  	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  176  	const struct hwmon_chip_info *chip = hwdev->chip;
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23 @177  	const struct hwmon_channel_info **info = chip->info;
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  178  	unsigned int i;
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  179  	int err;
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  180  
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  181  	if (!chip->ops->write)
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  182  		return 0;
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  183  
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  184  	for (i = 0; info[i] && info[i]->type != hwmon_temp; i++)
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  185  		continue;
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  186  
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  187  	if (!info[i])
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  188  		return 0;
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  189  
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  190  	if (info[i]->config[tdata->index] & HWMON_T_MIN) {
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  191  		err = chip->ops->write(tdata->dev, hwmon_temp,
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  192  				       hwmon_temp_min, tdata->index, low);
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  193  		if (err && err != -EOPNOTSUPP)
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  194  			return err;
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  195  	}
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  196  
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  197  	if (info[i]->config[tdata->index] & HWMON_T_MAX) {
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  198  		err = chip->ops->write(tdata->dev, hwmon_temp,
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  199  				       hwmon_temp_max, tdata->index, high);
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  200  		if (err && err != -EOPNOTSUPP)
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  201  			return err;
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  202  	}
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  203  
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  204  	return 0;
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  205  }
+a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  206  
 
 -- 
-Thanks and Regards,
-Danish.
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
