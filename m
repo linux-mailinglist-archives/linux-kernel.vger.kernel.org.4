@@ -2,231 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37CC76B18A3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 02:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 058DA6B18AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 02:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjCIBSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 20:18:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
+        id S229667AbjCIBXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 20:23:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjCIBSK (ORCPT
+        with ESMTP id S229468AbjCIBXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 20:18:10 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A377B2A993
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 17:18:08 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id e82so459931ybh.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 17:18:08 -0800 (PST)
+        Wed, 8 Mar 2023 20:23:02 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3DB6183
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 17:22:58 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id t11so373720lfr.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 17:22:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678324688;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NfkfuVux5MI3FqeC+R5qOji3LmX+Ym2lI1Lut0jVNik=;
-        b=iHxzuMJ17ojY8SbpEpe0rLv/JVQDCIQL+6+gqJ/us4Qxc3osCUFH7cEox27YnaPopn
-         EuYMrdTVyXgpv7IXTf388GRia0vsuVho+q4BxfUj2knV7NZDKGjI9TAQgoIh/zXW8YOV
-         nLXqp2oLlTsoSprWD/As6Y1I1H3NdTeOWVvXOgOItXMaNseXR6vkE73eRvLDgjuwhH6u
-         H8cORd/9xdqtW4sqg3EG31Bu/a8WgLqtLanOZuyOgdvZRI9IMith3Gu44qjj5qoOqrX0
-         mIItNdL3NSsxbUpxqE4T5RYb45AXWGtsGWbu3eIriRia+xz7mXQr2e9hhp5Rmmvhzbjn
-         fsrA==
+        d=linaro.org; s=google; t=1678324977;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RPRocYM1lXMgoBs+nHaf6HlBtp3KWoifJ5sUnyZ81Hw=;
+        b=jogjfs43N3sZRwK7MfCLKHMYaBLHFNfoxxrhJYtLq4BKt5CvG+2mURzCcCTsvx6Um/
+         KmsChOuRnUxonsTjZ8qf0COFGJkxkiDak5/MM6ce1G4OJM+1ZKFFgRV+ofJTq3n25Vdb
+         0vDVGtZfrW9yUmOhQOAGFY1F3YhGCSVRBTDRXf0hUAtYkPIQrP+HR2XLoAhosv4/Q8e+
+         NiEl6T4DQca/XbuaDtoVzQTQnISWRqruaRUNUs7ZIYEq6S08r6Db5TiWSaPHt5L0rUUD
+         e5TBnM8Brw5zmYTN1na975j5PmSrZt/C4aDT24b5qtDUYnLnTsAVyhYmKgGLJkEZhfSJ
+         1DXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678324688;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NfkfuVux5MI3FqeC+R5qOji3LmX+Ym2lI1Lut0jVNik=;
-        b=Jzm6tx2B43ltP6c4WdYITeA89GyeteaathQe7S+KLgN8qDy6KGIdYdo/6c9LpaHr1T
-         zK5uHtdVpUj96RLQzkoLF8mBKx0oyKsCESo92hcY7v4lRIqg+PR2ApdTAJk1WFR0zg/y
-         t51jIu1rfXhsyelXBR43BG0ndIFJdxBdpBS/X4FrfPLGmncRoxA3gdTVtXpCzCWyfeYB
-         lyFpgnFH6Ao6BYUP0Y9kQ6zuxLF9jMCWTVM/MXio+l4UZNlKS5zB5/6BXgiIkfOeCOXE
-         TQYhxI2J+WE2WAjqNDmxtXQTI/TvnDIomvz+ygByteyMQ6XmX5ilwC67uxG3IpinPvvI
-         kxlQ==
-X-Gm-Message-State: AO0yUKXCwTKjWqMZeRm+8N0UaotqZyn9hKpahCJ70xit73Msxt742oYV
-        BaMtUhEpfjwds6ZtA4NptIuQ2E/jJXZpxqmxTWzj
-X-Google-Smtp-Source: AK7set8o9o7BN58xxFKCgEH/aJKw6WsWpysgxq3yKyVmUWbF6kQt+rrViU/BEgAbSoslLaqw/tfLU0esu7ryKUEWEes=
-X-Received: by 2002:a5b:40e:0:b0:ac2:ffe:9cc9 with SMTP id m14-20020a5b040e000000b00ac20ffe9cc9mr12374822ybp.3.1678324687713;
- Wed, 08 Mar 2023 17:18:07 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678324977;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RPRocYM1lXMgoBs+nHaf6HlBtp3KWoifJ5sUnyZ81Hw=;
+        b=ii+6RXTwEHUgC0wKQbZgdSauoHgVAxQlwUkdjSObIgCPWsngkbaDxG9CQwpW+JHb1p
+         eVe6o9m1y5+IjwjQvK7QCVpXRDO9cSgnJWJ8f4htp/hfamW+BxEg0REO3UZFHAE7CzLr
+         tNcD/yzTPlw9eM2Aa+KgpYJpQSFfxOYiC951b4Hm/R8MqbU7V5YOyRsnUu8M49HbNzBg
+         F7jg1xg42RMZNp/UJ9WAI32RKnUgeRTvc5q4SBWrgUl759ajn+ErWZQOhYm1DHRPqBbe
+         wfb66CG7IYhMm8DqfuRtZOmoj7MAiJlf6DBAj7R61vaN9AchTABljWKUAqPHkyTDcRst
+         28hQ==
+X-Gm-Message-State: AO0yUKWmrCZDjl0pngD7eqAY5InexMBMbeYrB8jDhDxN9TL4kVtxLFqF
+        8epwM8JdaTTjA6wW7FKyoqkYqQ==
+X-Google-Smtp-Source: AK7set8Yv8OxCxGQfg+QVnEMXpToxHXoUvgfz8Zyc3BBhy3EqJ5I+RQZgpMiNadTVu6FoN1x2fR7HQ==
+X-Received: by 2002:a19:7002:0:b0:4b4:e4a1:2fc6 with SMTP id h2-20020a197002000000b004b4e4a12fc6mr4911001lfc.68.1678324977147;
+        Wed, 08 Mar 2023 17:22:57 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id t22-20020a2e9c56000000b00295da33c42dsm2785231ljj.15.2023.03.08.17.22.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 17:22:56 -0800 (PST)
+Message-ID: <30403337-7001-47a8-63c1-6e41d8f2738d@linaro.org>
+Date:   Thu, 9 Mar 2023 02:22:54 +0100
 MIME-Version: 1.0
-References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
- <20230213190754.1836051-3-kan.liang@linux.intel.com> <CANDhNCqVcrZHGW4QJBD8_hZehmRpnNAsGFsmwsxBZNm3wpFZpQ@mail.gmail.com>
- <e306e2ea-dea5-0eab-9eae-f9ea5fe7d52e@linux.intel.com> <CANDhNCq1b-7C=cox6ufC3Kxycu87qPzDHtJH_5jwPmPjjig5ww@mail.gmail.com>
- <6898b1c8-9dbf-67ce-46e6-15d5307ced25@linux.intel.com> <0df181b9-fb34-78e8-1376-65d45f7f938f@linux.intel.com>
- <CANDhNCoZNmK12beqE5AAnQrpHEW01xKWwOWTQQEsWSuOaH0HRQ@mail.gmail.com>
- <568b09ce-dc6a-8d2a-13ca-6df045236449@linux.intel.com> <CANDhNCrooGXFvW6DDuRJHtM2K8wCbqajSP0KDVn+wkEcTNHJZA@mail.gmail.com>
- <77f1ac9f-0acd-1b70-c19e-3564caa45f41@linux.intel.com>
-In-Reply-To: <77f1ac9f-0acd-1b70-c19e-3564caa45f41@linux.intel.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Wed, 8 Mar 2023 17:17:57 -0800
-Message-ID: <CANDhNCpnoRjrX7k7spDdnUgwzygVUoaF5u7A2-heQfCuokcN6Q@mail.gmail.com>
-Subject: Re: [RFC PATCH V2 2/9] perf: Extend ABI to support post-processing
- monotonic raw conversion
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
-        mingo@redhat.com, linux-kernel@vger.kernel.org, sboyd@kernel.org,
-        eranian@google.com, namhyung@kernel.org, ak@linux.intel.com,
-        adrian.hunter@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RFT v2 09/14] clk: qcom: smd-rpm: Add support for
+ keepalive votes
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
+ <20230303-topic-rpmcc_sleep-v2-9-ae80a325fe94@linaro.org>
+ <091c0851-6f07-c7bc-0a40-b6910c33ab4f@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <091c0851-6f07-c7bc-0a40-b6910c33ab4f@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 10:44=E2=80=AFAM Liang, Kan <kan.liang@linux.intel.c=
-om> wrote:
-> On 2023-02-17 6:11 p.m., John Stultz wrote:
-> > On Tue, Feb 14, 2023 at 12:38 PM Liang, Kan <kan.liang@linux.intel.com>=
- wrote:
-> >> On 2023-02-14 3:11 p.m., John Stultz wrote:
-> >>> On Tue, Feb 14, 2023 at 9:00 AM Liang, Kan <kan.liang@linux.intel.com=
-> wrote:
-> >>>> On 2023-02-14 9:51 a.m., Liang, Kan wrote:
-> >>>>> If I understand correctly, the idea is to let the user space tool r=
-un
-> >>>>> the above interpoloation algorithm several times to 'guess' the ato=
-mic
-> >>>>> mapping. Using the mapping information to covert the TSC from the P=
-EBS
-> >>>>> record. Is my understanding correct?
-> >>>>>
-> >>>>> If so, to be honest, I doubt we can get the accuracy we want.
-> >>>>>
-> >>>>
-> >>>> I implemented a simple test to evaluate the error.
-> >>>
-> >>> Very cool!
-> >>>
-> >>>> I collected TSC -> CLOCK_MONOTONIC_RAW mapping using the above algor=
-ithm
-> >>>> at the start and end of perf cmd.
-> >>>>         MONO_RAW        TSC
-> >>>> start   89553516545645  223619715214239
-> >>>> end     89562251233830  223641517000376
-> >>>>
-> >>>> Here is what I get via mult/shift conversion from this patch.
-> >>>>         MONO_RAW        TSC
-> >>>> PEBS    89555942691466  223625770878571
-> >>>>
-> >>>> Then I use the time information from start and end to create a linea=
-r
-> >>>> function and 'guess' the MONO_RAW of PEBS from the TSC. I get
-> >>>> 89555942692721.
-> >>>> There is a 1255 ns difference.
-> >>>> I tried several different PEBS records. The error is ~1000ns.
-> >>>> I think it should be an observable error.
-> >>>
-> >>> Interesting. That's a good bit higher than I'd expect as I'd expect a
-> >>> clock_gettime() call to take ~ double digit nanoseconds range on
-> >>> average, so the error should be within that.
-> >>>
-> >>> Can you share your logic?
-> >>>
-> >>
-> >> I run the algorithm right before and after the perf command as below.
-> >> (The source code of time is attached.)
-> >>
-> >> $./time
-> >> $perf record -e cycles:upp --clockid monotonic_raw $some_workaround
-> >> $./time
-> >>
-> >> The time will dump both MONO_RAW and TSC. That's where "start" and "en=
-d"
-> >> from.
-> >> The perf command print out both TSC and converted MONO_RAW (using the
-> >> mul/shift from this patch series). That's where "PEBS" value from.
-> >>
-> >> Than I use the below formula to calculate the guessed MONO_RAW of PEBS=
- TSC.
-> >> Guessed_MONO_RAW =3D (PEBS_TSC - start_TSC) / (end_TSC - start_TSC) *
-> >> (end_MONO_RAW - start_MONO_RAW) + start_MONO_RAW.
-> >>
-> >> The guessed_MONO_RAW is 89555942692721.
-> >> The PEBS_MONO_RAW is 89555942691466.
-> >> The difference is 1255.
-> >>
-> >> Is the calculation correct?
-> >
-> > Thanks for sharing it. The equation you have there looks ok at a high
-> > level for the values you captured (there's small tweaks like doing the
-> > mult before the div to make sure you don't hit integer precision
-> > issues, but I didn't see that with your results).
-> >
-> > I've got a todo to try to see how the calculation changes if we do
-> > provide atomic TSC/RAW stamps, here but I got a little busy with other
-> > work and haven't gotten to it.
-> > So my apologies, but I'll try to get back to this soon.
-> >
->
-> Have you got a chance to try the idea?
->
-> I just want to check whether the userspace interpolation approach works.
-> Should I prepare V3 and go back to the kernel solution?
 
-Oh, my apologies. I had some other work come up and this fell off my plate.
 
-So I spent a little bit of time today adding some trace_printks to the
-timekeeping code so I could record the actual TSC and timestamps being
-calculated from CLOCK_MONOTONIC_RAW.
+On 9.03.2023 01:54, Dmitry Baryshkov wrote:
+> On 08/03/2023 23:35, Konrad Dybcio wrote:
+>> Some bus clock should always have a minimum (19.2 MHz) vote cast on
+>> them, otherwise the platform will fall apart, hang and reboot.
+>>
+>> Add support for specifying which clocks should be kept alive and
+>> always keep a vote on XO_A to make sure the clock tree doesn't
+>> collapse. This removes the need to keep a maximum vote that was
+>> previously guaranteed by clk_smd_rpm_handoff.
+>>
+>> This commit is a combination of existing (not-exactly-upstream) work
+>> by Taniya Das, Shawn Guo and myself.
+>>
+>> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
+>> Co-developed-by: Taniya Das <quic_tdas@quicinc.com>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>   drivers/clk/qcom/clk-smd-rpm.c | 29 +++++++++++++++++++++++++++--
+>>   1 file changed, 27 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+>> index eb7781e5c8c1..d89918f9ae60 100644
+>> --- a/drivers/clk/qcom/clk-smd-rpm.c
+>> +++ b/drivers/clk/qcom/clk-smd-rpm.c
+>> @@ -45,15 +45,17 @@
+>>           },                                  \
+>>       };                                      \
+>>       __DEFINE_CLK_SMD_RPM_AO_PREFIX(_prefix, _name, _active, type,          \
+>> -                       r_id, key, ao_flags)
+>> +                       r_id, key, ao_flags, false)
+>>     #define __DEFINE_CLK_SMD_RPM_AO_PREFIX(_prefix, _name, _active,              \
+>> -                       type, r_id, key, ao_flags)          \
+>> +                       type, r_id, key, ao_flags,          \
+>> +                       _keep_alive)                  \
+>>       static struct clk_smd_rpm clk_smd_rpm_##_prefix##_active = {          \
+>>           .rpm_res_type = (type),                          \
+>>           .rpm_clk_id = (r_id),                          \
+>>           .active_only = true,                          \
+>>           .rpm_key = (key),                          \
+>> +        .keep_alive = (_keep_alive),                      \
+>>           .peer = &clk_smd_rpm_##_prefix##_name,                  \
+>>           .rate = INT_MAX,                          \
+>>           .hw.init = &(struct clk_init_data){                  \
+>> @@ -170,6 +172,7 @@ struct clk_smd_rpm {
+>>       const bool active_only;
+>>       bool enabled;
+>>       bool branch;
+>> +    bool keep_alive;
+>>       struct clk_smd_rpm *peer;
+>>       struct clk_hw hw;
+>>       unsigned long rate;
+>> @@ -198,11 +201,16 @@ static int clk_smd_rpm_handoff(struct clk_smd_rpm *r)
+>>           .value = cpu_to_le32(r->branch ? 1 : INT_MAX),
+>>       };
+>>   +    /* Set up keepalive clocks with a minimum bus rate */
+>> +    if (r->keep_alive)
+>> +        req.value = cpu_to_le32(19200); /* 19.2 MHz */
+> 
+> 
+> Should this be set to cpu_to_le32(max(19200, ...)) ?
+I was debating this. Downstream explicitly sets 19.2 Mhz here and
+the only regression I can think of is that we'd throttle a bus that
+was left on by the bootloader and is (ab)used by us..
 
-I did catch one error in the test code, which unfortunately I'm to blame fo=
-r:
-  mid =3D start + (delta +(delta/2))/2; //round-closest
+But then, it's only an active vote, and we're voting INT_MAX on the
+non-active-only one, so that's a non-issue.
 
-That should be
-  mid =3D start + (delta +(2/2))/2  //round-closest
-or more simply
-  mid =3D start + (delta +1)/2; //round-closest
+So I think 19.2 here is okay as the bare minimum, whatever stupidity
+the eventual interconnect driver may entail..
 
-Generalized rounding should be: (value + (DIV/2))/DIV), but I'm
-guessing with two as the divisor, my brain mixed it up and typed
-"delta". My apologies!
-
-With that fix, I'm seeing closer to ~500ns of error in the
-interpolation, just using the userland sampling.   Now, I've also
-disabled vsyscalls for this (otherwise I wouldn't be able to
-trace_printk), so the error likely would be higher than with
-vsyscalls.
-
-Now, part of the error is that:
-  start=3D rdtsc();
-  clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
-  end =3D rdtsc();
-
-Ends up looking like
-  start=3D rdtsc();
-  clock_gettime() {
-     now =3D rdtsc();
-     delta =3D now - last;
-     ns =3D (delta * mult) >> shift
-[~midpoint~]
-     ts->nsec =3D base_ns + ns;
-     ts->sec =3D base_sec;
-     normalize_ts(ts)
-  }
-  end =3D rdtsc();
-
-And so by taking the mid-point we're always a little skewed from where
-the tsc was actually read.  Looking at the data for my case the tsc
-read seems to be ~12% in, so you could instead try:
-
-delta =3D end - start;
-p12 =3D start + ((delta * 12) + (100/2))/100;
-
-With that adjustment, I'm seeing error around ~40ns.
-
-Mind giving that a try?
-
-Now, if you had two snapshots of MONOTONIC_RAW + the TSC value used to
-calculate it(maybe the driver access this via a special internal
-timekeeping interface), in my testing interpolating will give you
-sub-ns error. So I think this is workable without exposing quite so
-much to userland.
-
-thanks
--john
+Konrad
+> 
+>> +
+>>       ret = qcom_rpm_smd_write(r->rpm, QCOM_SMD_RPM_ACTIVE_STATE,
+>>                    r->rpm_res_type, r->rpm_clk_id, &req,
+>>                    sizeof(req));
+>>       if (ret)
+>>           return ret;
+>> +
+>>       ret = qcom_rpm_smd_write(r->rpm, QCOM_SMD_RPM_SLEEP_STATE,
+>>                    r->rpm_res_type, r->rpm_clk_id, &req,
+>>                    sizeof(req));
+>> @@ -438,12 +446,29 @@ static int clk_smd_rpm_is_enabled(struct clk_hw *hw)
+>>       return r->enabled;
+>>   }
+>>   +static int clk_smd_rpm_determine_rate(struct clk_hw *hw,
+>> +                      struct clk_rate_request *req)
+>> +{
+>> +    struct clk_smd_rpm *r = to_clk_smd_rpm(hw);
+>> +
+>> +    /*
+>> +     * RPM resolves the rates internally. All we have to do on the kernel
+>> +     * side is ensure that we don't accidentally put down the keepalive
+>> +     * clocks, which could happen if they received a vote below 19.2 MHz.
+>> +     */
+>> +    if (r->keep_alive)
+>> +        req->rate = max(req->rate, 19200000UL);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>>   static const struct clk_ops clk_smd_rpm_ops = {
+>>       .prepare    = clk_smd_rpm_prepare,
+>>       .unprepare    = clk_smd_rpm_unprepare,
+>>       .set_rate    = clk_smd_rpm_set_rate,
+>>       .round_rate    = clk_smd_rpm_round_rate,
+>>       .recalc_rate    = clk_smd_rpm_recalc_rate,
+>> +    .determine_rate = clk_smd_rpm_determine_rate,
+>>       .is_enabled    = clk_smd_rpm_is_enabled,
+>>       .is_prepared    = clk_smd_rpm_is_enabled,
+>>   };
+>>
+> 
