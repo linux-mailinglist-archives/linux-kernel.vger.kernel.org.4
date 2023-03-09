@@ -2,59 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F3C6B2666
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E146B266F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbjCIOMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:12:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
+        id S231733AbjCIOMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:12:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231659AbjCIOL0 (ORCPT
+        with ESMTP id S231458AbjCIOMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:11:26 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B391A6152D;
-        Thu,  9 Mar 2023 06:10:05 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0435EAD7;
-        Thu,  9 Mar 2023 06:10:49 -0800 (PST)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 94FC63F5A1;
-        Thu,  9 Mar 2023 06:10:04 -0800 (PST)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>,
-        Dan Carpenter <error27@gmail.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] firmware: arm_scmi: Clean up a return statement
-Date:   Thu,  9 Mar 2023 14:10:02 +0000
-Message-Id: <167837075462.2091199.3854987429917984262.b4-ty@arm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <Y86im5M49p3ePGxj@kili>
-References: <Y86im5M49p3ePGxj@kili>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Mar 2023 09:12:20 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C626F63A9;
+        Thu,  9 Mar 2023 06:10:54 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B0D11200FF;
+        Thu,  9 Mar 2023 14:10:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1678371052; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dZu5yaZ5mJZQqJA4nKclTyIWmm8PdKTNVvbEDEeVGT0=;
+        b=FWF8Ci3XEzSZihVeE3Z2GsWUNVr0BiNeI+Z25ci1Og5smj48XhbfdpN1wrKbQL2uxsFogX
+        /dHx52MJNF0d5UwsA95bJ7XpgSV06H6rgRzlqo0yXBJvI4Wf/98MXsE2J7IXK1y9XHYDLR
+        VDXeFqLaKr711VDUO/nwdlErSi5P+BU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1678371052;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dZu5yaZ5mJZQqJA4nKclTyIWmm8PdKTNVvbEDEeVGT0=;
+        b=3oXZAtoM2KjAq7gkFLoZqPany+K5vsoQpLYADa4vO/1eVZoutbCq9eGoZ3M6pvIVFVewD0
+        gHfZ6owjjeNeIMAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 566981391B;
+        Thu,  9 Mar 2023 14:10:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id oYtDFOzoCWSGLgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 09 Mar 2023 14:10:52 +0000
+Date:   Thu, 09 Mar 2023 15:10:51 +0100
+Message-ID: <87r0tyf21g.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org, tiwai@suse.com,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+Subject: Re: [PATCH v3 09/28] sound: usb: card: Introduce USB SND platform op callbacks
+In-Reply-To: <ZAmAPX6Q1m0HU/Qo@kroah.com>
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+        <20230308235751.495-10-quic_wcheng@quicinc.com>
+        <ZAmAPX6Q1m0HU/Qo@kroah.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 18:07:07 +0300, Dan Carpenter wrote:
-> The comments say "enabled" where "disabled" is intended.  Also it's
-> cleaner to return zero explicitly instead of ret.
+On Thu, 09 Mar 2023 07:44:13 +0100,
+Greg KH wrote:
 > 
+> On Wed, Mar 08, 2023 at 03:57:32PM -0800, Wesley Cheng wrote:
+> > Allow for different platforms to be notified on USB SND connect/disconnect
+> > seqeunces.  This allows for platform USB SND modules to properly initialize
+> > and populate internal structures with references to the USB SND chip
+> > device.
+> > 
+> > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> > ---
+> >  sound/usb/card.c | 36 ++++++++++++++++++++++++++++++++++++
+> >  sound/usb/card.h | 20 ++++++++++++++++++++
+> >  2 files changed, 56 insertions(+)
+> > 
+> > diff --git a/sound/usb/card.c b/sound/usb/card.c
+> > index 26268ffb8274..9bcbaa0c0a55 100644
+> > --- a/sound/usb/card.c
+> > +++ b/sound/usb/card.c
+> > @@ -117,6 +117,30 @@ MODULE_PARM_DESC(skip_validation, "Skip unit descriptor validation (default: no)
+> >  static DEFINE_MUTEX(register_mutex);
+> >  static struct snd_usb_audio *usb_chip[SNDRV_CARDS];
+> >  static struct usb_driver usb_audio_driver;
+> > +static struct snd_usb_platform_ops *platform_ops;
 > 
+> As I've said before, you can not just have one of these.  They need to
+> be per-bus structure.  Or per-device, something dynamic, not static like
+> this.
 
-Applied to sudeep.holla/linux (for-next/scmi/fixes), thanks!
+Basically the change for USB-audio driver is a kind of add-on/plugin;
+that is, it allows the platform_ops to override some operations of the
+standard USB-audio driver for supporting the offload operations.
 
-[1/1] firmware: arm_scmi: Clean up a return statement
-      https://git.kernel.org/sudeep.holla/c/8ab5059dc4f4
---
-Regards,
-Sudeep
+So, in that sense, this add-on itself is neither per-bus nor
+per-device, and it's fine as a single pointer for now, IMO, since this
+is the only known use case and it'd simplify the code.  If we'll have
+more similar requirements in future, we may extend the implementation
+and the API to allow the registration of multiple addons, too.
 
+Though, there are a few obvious coding issues in the current patches,
+and they have to be addressed, sure :)
+
+
+thanks,
+
+Takashi
