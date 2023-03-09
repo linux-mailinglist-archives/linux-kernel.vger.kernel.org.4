@@ -2,69 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 013D46B1F6F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:09:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDC76B1F7E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjCIJJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:09:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
+        id S230166AbjCIJKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:10:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjCIJIs (ORCPT
+        with ESMTP id S230378AbjCIJJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:08:48 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD436485A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:08:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678352915; x=1709888915;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rQBTSbZ3B37+F1tPW9szoMiF5QEUNV1tqvs12tkY+EY=;
-  b=ch2UBfaXKiPSVz7HTt2gi9uFlpZYJlE8icq1S/O8gmlupGFpGsIL9tnc
-   rMfsGRBtA/voefqwkVu/Jefkp/p6JBF7UtxGHDcUtKlEdaEXU9ZDs5Gx2
-   OynmNZNnHJiciYQpHrVeNveOurdZXbXna5O1LrEmXeSpGWwf6ns+plu1+
-   8DDfaN0ODej6SEVDj5Gs/fTWQgJhNYWyUkSEfmseOnQcYu53f4vNdgFIE
-   mOiA4i7s0Ba2Mx5ojd5W1J2cN0MLnQ3TR9SEfP4+ocR6DieQQGuuyi1bh
-   ZAgOT1kx3szl0DQWEmGekv0YTMQ0cN5Wg4TchX81W11S8ZMG7+crk3OKE
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="338732494"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="338732494"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 01:08:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="766354693"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="766354693"
-Received: from doylejix-mobl1.ger.corp.intel.com (HELO [10.213.221.148]) ([10.213.221.148])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 01:08:30 -0800
-Message-ID: <93cbaa9f-6ec3-5843-7527-8e81b3ee091d@linux.intel.com>
-Date:   Thu, 9 Mar 2023 09:08:28 +0000
+        Thu, 9 Mar 2023 04:09:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDB3109
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:08:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678352920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=srx6n4gHkwmgsQ7OIE1qCU+GHs3BJds+nIoKBUJIQzE=;
+        b=Hfr7v9g1gh4/K8xTyfd5Mz6osEDxZoek1m/NCNLfWiNvOGZuJPoCgs+O5LOM8qkZXbbm+z
+        68RZmWU4ex7mx872O9kihdRJymsZpxtUpQlrYX52O6PogYsagr+iP5SDSLEN+BbAEL/obi
+        RxOt1BDkFqcdfbmGii4Juet17GxLsWg=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-407-uGLhOBpHPbGBjFYLviV33w-1; Thu, 09 Mar 2023 04:08:39 -0500
+X-MC-Unique: uGLhOBpHPbGBjFYLviV33w-1
+Received: by mail-qk1-f199.google.com with SMTP id z23-20020a05620a101700b0073b328e7d17so848218qkj.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 01:08:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678352919;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=srx6n4gHkwmgsQ7OIE1qCU+GHs3BJds+nIoKBUJIQzE=;
+        b=np5dGyabffK9y02MOGnmQR1HbsXCnySvIquzFA9K30IHXKT9VL9k3MMwg7WW0pdzSm
+         Potx8EI/zvFFo53H4RjLKaZK/IbGDbVHxeA9uIanDBzD/8YKjUmz43KiDwZtAlH9gIij
+         I8AyEVvBeio/XsNlqiFnJbdTQoImHaOfvpoDjMoV4GJpwFgqJMl2TQjfvKUNU2+0WJgr
+         h7M8ubMLEAXEIlNnh4vdP48eWiJyob76hAnyqNLlWxvaIayLQhVCcxENTHZdWvJd4fhH
+         nav/sZHhPIENWwB4b8RMX2m28BjAK47GYcaWzXiDZ1hA42aQeEdzTSmsvJeGdcsLNKju
+         LhHg==
+X-Gm-Message-State: AO0yUKX9cew+uQ61+NgAZ/jT2A+skMe4XnZXXLPz1yyzl2wOoWEOXLEL
+        b1t57fKq4OvCYzzZ4liN5/OgHCwblKceVn8/fKKfwiZCsu7lB4dZMBAmkvTUYQgOK/HfY26yE9H
+        k+Ojq+84GTE3jBwDU7aj05QKI
+X-Received: by 2002:a05:622a:60c:b0:3bf:c5ab:a0db with SMTP id z12-20020a05622a060c00b003bfc5aba0dbmr38984339qta.41.1678352919005;
+        Thu, 09 Mar 2023 01:08:39 -0800 (PST)
+X-Google-Smtp-Source: AK7set/d8xNHSc1KF09A6BOMVU1+xsSGs0gU6ARd/TmG6uhTMDQO4mBh2NmpStvK4BR9Za1QDXGlWg==
+X-Received: by 2002:a05:622a:60c:b0:3bf:c5ab:a0db with SMTP id z12-20020a05622a060c00b003bfc5aba0dbmr38984317qta.41.1678352918690;
+        Thu, 09 Mar 2023 01:08:38 -0800 (PST)
+Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
+        by smtp.gmail.com with ESMTPSA id b3-20020ac85bc3000000b003bfb820f17csm13555612qtb.63.2023.03.09.01.08.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 01:08:38 -0800 (PST)
+Date:   Thu, 9 Mar 2023 10:08:34 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     jasowang@redhat.com, linux-kernel@vger.kernel.org, mst@redhat.com,
+        rongtao@cestc.cn, virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH] tools/virtio: virtio_test -h,--help should return
+ directly
+Message-ID: <20230309090834.57bwsiahnlt6r35a@sgarzare-redhat>
+References: <20230309084920.oj66qnighnnyet3f@sgarzare-redhat>
+ <tencent_19934693116B0C1C8402B2A22F5355205F09@qq.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 4/4] drm/i915: add guard page to ggtt->error_capture
-Content-Language: en-US
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Chris Wilson <chris.p.wilson@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>
-References: <20230308-guard_error_capture-v5-0-6d1410d13540@intel.com>
- <20230308-guard_error_capture-v5-4-6d1410d13540@intel.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20230308-guard_error_capture-v5-4-6d1410d13540@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <tencent_19934693116B0C1C8402B2A22F5355205F09@qq.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,123 +79,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 09, 2023 at 04:56:09PM +0800, Rong Tao wrote:
+>Hi, Stefano.
+>
+>I'm wondering, does '-h,--help' help() should 'exit(0)'? Is '-h' considered
+>a successful run and returns '0'.
 
-On 08/03/2023 15:39, Andrzej Hajda wrote:
-> Write-combining memory allows speculative reads by CPU.
-> ggtt->error_capture is WC mapped to CPU, so CPU/MMU can try
-> to prefetch memory beyond the error_capture, ie it tries
-> to read memory pointed by next PTE in GGTT.
-> If this PTE points to invalid address DMAR errors will occur.
-> This behaviour was observed on ADL and RPL platforms.
-> To avoid it, guard scratch page should be added after error_capture.
-> The patch fixes the most annoying issue with error capture but
-> since WC reads are used also in other places there is a risk similar
-> problem can affect them as well.
-> 
-> v2:
->    - modified commit message (I hope the diagnosis is correct),
->    - added bug checks to ensure scratch is initialized on gen3 platforms.
->      CI produces strange stacktrace for it suggesting scratch[0] is NULL,
->      to be removed after resolving the issue with gen3 platforms.
-> v3:
->    - removed bug checks, replaced with gen check.
-> v4:
->    - change code for scratch page insertion to support all platforms,
->    - add info in commit message there could be more similar issues
-> v5:
->    - check for nop_clear_range instead of gen8 (Tvrtko),
->    - re-insert scratch pages on resume (Tvrtko)
-> 
-> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-> ---
->   drivers/gpu/drm/i915/gt/intel_ggtt.c | 35 +++++++++++++++++++++++++++++++----
->   1 file changed, 31 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gt/intel_ggtt.c b/drivers/gpu/drm/i915/gt/intel_ggtt.c
-> index b925da42c7cfc4..8fb700fde85c8f 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_ggtt.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_ggtt.c
-> @@ -502,6 +502,21 @@ static void cleanup_init_ggtt(struct i915_ggtt *ggtt)
->   	mutex_destroy(&ggtt->error_mutex);
->   }
->   
-> +static void
-> +ggtt_insert_scratch_pages(struct i915_ggtt *ggtt, u64 offset, u64 length)
-> +{
-> +	struct i915_address_space *vm = &ggtt->vm;
-> +
-> +	if (vm->clear_range != nop_clear_range)
+You're right.
+I thought -h would return an error, but that's not the case, so I guess
+this patch is fine!
 
-Hm I thought usually we would add a prefix for exported stuff, like in 
-this case i915_vm_nop_clear_range, however I see intel_gtt.h exports a 
-bunch of stuff with no prefixes already so I guess you could continue 
-like that by inertia. The conundrum also could have been avoided if you 
-left it static (leaving out dpt and mock_gtt patches) but no strong 
-opinion from me.
+Thanks,
+Stefano
 
-> +		return vm->clear_range(vm, offset, length);
-> +
-> +	while (length > 0) {
-> +		vm->insert_page(vm, px_dma(vm->scratch[0]), offset, I915_CACHE_NONE, 0);
-> +		offset += I915_GTT_PAGE_SIZE;
-> +		length -= I915_GTT_PAGE_SIZE;
-> +	}
-> +}
-> +
->   static int init_ggtt(struct i915_ggtt *ggtt)
->   {
->   	/*
-> @@ -550,8 +565,12 @@ static int init_ggtt(struct i915_ggtt *ggtt)
->   		 * paths, and we trust that 0 will remain reserved. However,
->   		 * the only likely reason for failure to insert is a driver
->   		 * bug, which we expect to cause other failures...
-> +		 *
-> +		 * Since CPU can perform speculative reads on error capture
-> +		 * (write-combining allows it) add scratch page after error
-> +		 * capture to avoid DMAR errors.
->   		 */
-> -		ggtt->error_capture.size = I915_GTT_PAGE_SIZE;
-> +		ggtt->error_capture.size = 2 * I915_GTT_PAGE_SIZE;
->   		ggtt->error_capture.color = I915_COLOR_UNEVICTABLE;
->   		if (drm_mm_reserve_node(&ggtt->vm.mm, &ggtt->error_capture))
->   			drm_mm_insert_node_in_range(&ggtt->vm.mm,
-> @@ -561,11 +580,15 @@ static int init_ggtt(struct i915_ggtt *ggtt)
->   						    0, ggtt->mappable_end,
->   						    DRM_MM_INSERT_LOW);
->   	}
-> -	if (drm_mm_node_allocated(&ggtt->error_capture))
-> +	if (drm_mm_node_allocated(&ggtt->error_capture)) {
-> +		u64 start = ggtt->error_capture.start;
-> +		u64 size = ggtt->error_capture.size;
-> +
-> +		ggtt_insert_scratch_pages(ggtt, start, size);
->   		drm_dbg(&ggtt->vm.i915->drm,
->   			"Reserved GGTT:[%llx, %llx] for use by error capture\n",
-> -			ggtt->error_capture.start,
-> -			ggtt->error_capture.start + ggtt->error_capture.size);
-> +			start, start + size);
-> +	}
->   
->   	/*
->   	 * The upper portion of the GuC address space has a sizeable hole
-> @@ -1256,6 +1279,10 @@ void i915_ggtt_resume(struct i915_ggtt *ggtt)
->   
->   	flush = i915_ggtt_resume_vm(&ggtt->vm);
->   
-> +	if (drm_mm_node_allocated(&ggtt->error_capture))
-> +		ggtt_insert_scratch_pages(ggtt, ggtt->error_capture.start,
-> +					  ggtt->error_capture.size);
+>
+>Best wishes,
+>Rong
+>
 
-Maybe it belongs in i915_ggtt_resume_vm since that one deals with PTEs? 
-Looks like it to me, but ack either way.
-
-Regards,
-
-Tvrtko
-
-> +
->   	ggtt->invalidate(ggtt);
->   
->   	if (flush)
-> 
