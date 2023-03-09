@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E3A6B21BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9062D6B21BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjCIKml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
+        id S229994AbjCIKnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:43:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231283AbjCIKly (ORCPT
+        with ESMTP id S230509AbjCIKmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:41:54 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279B759801;
-        Thu,  9 Mar 2023 02:40:41 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id y11so1532649plg.1;
-        Thu, 09 Mar 2023 02:40:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678358441;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kyl81I8ADQB7ZEDVkfI8Lf6EZZv8XRoJjGLTIx+4w3Y=;
-        b=X2DxsFWO7354x7Wcg2S1XxO6fQllb+Ut9X5C/gCorM/8OaoPrDIFI4aSH5CVgv1d26
-         4SHeRn37N8SpdOoHFfZGP08RjJwoQ8NqHlnVCKPqr0ZYAgoT41kKadTZS1HP3VfndaSd
-         4Mo5OwlQjVhqypCfikgkP2jQVeqxLdgHMlh2L4STrFQdoxL5U8hz9dYSOojeDjZ/ry1H
-         XIjY78Z8YgljvpSUo0kdXwAFJxDsghqsGMTAd9j6XeOtYGR5hnMBfUsb6NRuDcGkiYCc
-         f7KUGlDQ8DBwIOfevA9/vld+JnKOMX7ySvqZjueHURfdgd0zNbqNEM0dhFy4Lj3DUym5
-         3/Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678358441;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kyl81I8ADQB7ZEDVkfI8Lf6EZZv8XRoJjGLTIx+4w3Y=;
-        b=n3iWj3nU6gDZ+3P1wlDIeMwZCYGrjeJy4nOTZnOifQHimpwYyjEn81guki3ZrhMXNg
-         SwGJ2jI5GsOk9gcqQn67aX9qCMilmhbpzCFQ+FeOPbMdGYij2eCJ77ceM0f1In7RKNE5
-         CAIxWoQyFPF4nCmE3R+RxfhSuRzYAQUBhcAcxIHGLgT5UBav9YORB5ZTGr/jYoHtHWun
-         F9pgllqeHEm47zFBD08eTzKjyNgIQkc+hYeaf4glj+7r12C04Xb8k+ZzWkSWU/9G7A2h
-         EPTCQj0BVDXNGBcwZGLiw5ZxbYkLozvZeN3ln64zsTYyKQcmN9hztmJ3IeDPOr0aZcuw
-         8ZVg==
-X-Gm-Message-State: AO0yUKXnxg+o1zvNKzMOVVJjHGyoda2Klb7+cqH7Biarr/CIF9kycPtc
-        VFEBU5mmdzAYWeutSFuDQZA=
-X-Google-Smtp-Source: AK7set8dJtkAozR27n4w+Dp/CLZ6CxAmWHkP6lUx1GXw2VrnzQzDrGp5AVjBGZc33bBEYEqs0TCH9w==
-X-Received: by 2002:a17:902:d492:b0:19d:abd:bb7e with SMTP id c18-20020a170902d49200b0019d0abdbb7emr26319563plg.34.1678358441477;
-        Thu, 09 Mar 2023 02:40:41 -0800 (PST)
-Received: from redecorated-mbp (124-148-239-17.tpgi.com.au. [124.148.239.17])
-        by smtp.gmail.com with ESMTPSA id az11-20020a170902a58b00b0019aa8fd9485sm11256199plb.145.2023.03.09.02.40.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 02:40:41 -0800 (PST)
-Date:   Thu, 9 Mar 2023 21:40:32 +1100
-From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Gross <markgross@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the drivers-x86 tree
-Message-ID: <20230309214032.3683db01@redecorated-mbp>
-In-Reply-To: <4c63d660-1105-9a8a-1010-cc05125d06d3@redhat.com>
-References: <20230309122822.77435e33@canb.auug.org.au>
-        <4c63d660-1105-9a8a-1010-cc05125d06d3@redhat.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
+        Thu, 9 Mar 2023 05:42:50 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A4B4DE05
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:41:37 -0800 (PST)
+Received: from cryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: tanureal)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7F9956600367;
+        Thu,  9 Mar 2023 10:41:36 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678358496;
+        bh=rDJinSTUl2SsH8QxrfLak8PdCTIdyoUhmTvkTCGkzYo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fQJfGcZyxHN9NztsOTxKsUDBJzvCBZkVDSAAIKlQDt9L7iXyQeJ4AMHAt6gQrr512
+         M53fwrObR19IFUblv8aG6YmKgUJUmgdKYaqxtPhhQNJ+W/+QqC5bSnCitbbLxkNs0f
+         qoF5sGNGHeY9cKWGqXYFvs+BsbcmgQt6MPE3UK5XxBhcHrSTsYFXDHwYpingZRLsT8
+         3ob296muTtPud5Cb6B+q+OsCoRejKQiq5GiEwPI6nqsSSCh1IQwKNm7ACoFEuMOxCU
+         xtsVV7SiVaN0KjlJXrJRYf3VhFUcPZdLOftRYP56pc95gQKEbkzm2GoxkRdyQHT/b5
+         7SKOk8J6sD6qg==
+From:   Lucas Tanure <lucas.tanure@collabora.com>
+To:     David Rhodes <david.rhodes@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "Takashi Iwai --cc=alsa-devel @ alsa-project . org" <tiwai@suse.com>
+Cc:     patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, Lucas Tanure <lucas.tanure@collabora.com>
+Subject: [PATCH v4] ASoC: cs35l41: Steam Deck Shared boost properties quirk
+Date:   Thu,  9 Mar 2023 10:41:33 +0000
+Message-Id: <20230309104133.537056-1-lucas.tanure@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Mar 2023 09:48:58 +0100
-Hans de Goede <hdegoede@redhat.com> wrote:
+Add support for Steam Deck bios old properties. If a Steam deck didn't
+upgrade the BIOS, the driver should be able to handle the previous
+properties for shared boost types.
 
-> Hi all,
-> 
-> On 3/9/23 02:28, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the drivers-x86 tree, today's linux-next build
-> > (htmldocs) produced these warning:
-> > 
-> > include/linux/apple-gmux.h:99: warning: Function parameter or
-> > member 'type_ret' not described in 'apple_gmux_detect'
-> > include/linux/apple-gmux.h:99: warning: Excess function parameter
-> > 'indexed_ret' description in 'apple_gmux_detect'
-> > 
-> > Introduced by commit
-> > 
-> >   fc83fbc80e1a ("platform/x86: apple-gmux: refactor gmux types")  
+Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
+Changes since V3:
+ - Fixed missing space in if statement
+ - Fix the build issue, as dependency patches are already merged
 
-Thanks Stephen.
-> 
-> Stephen, thank you for reporting this.
-> 
-> Orlando, can you do a follow-up patch on top of your
-> latest series fixing this ?
+Changes since V2:
+ - sent the wrong patch with missing fixed lines
+Changes since V1:
+ - else in same line as {
+---
+ sound/soc/codecs/cs35l41.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-Yes, I'll send one soon.
-
-> 
-> Regards,
-> 
-> Hans
-> 
+diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
+index 1624510d09c0..2803ff0f0003 100644
+--- a/sound/soc/codecs/cs35l41.c
++++ b/sound/soc/codecs/cs35l41.c
+@@ -1022,9 +1022,15 @@ static int cs35l41_handle_pdata(struct device *dev, struct cs35l41_hw_cfg *hw_cf
+ 	unsigned int val;
+ 	int ret;
+ 
+-	ret = device_property_read_u32(dev, "cirrus,boost-type", &val);
+-	if (ret >= 0)
+-		hw_cfg->bst_type = val;
++	if (device_property_read_bool(dev, "cirrus,shared-boost-active")) {
++		hw_cfg->bst_type = CS35L41_SHD_BOOST_ACTV;
++	} else if (device_property_read_bool(dev, "cirrus,shared-boost-passive")) {
++		hw_cfg->bst_type = CS35L41_SHD_BOOST_PASS;
++	} else {
++		ret = device_property_read_u32(dev, "cirrus,boost-type", &val);
++		if (ret >= 0)
++			hw_cfg->bst_type = val;
++	}
+ 
+ 	ret = device_property_read_u32(dev, "cirrus,boost-peak-milliamp", &val);
+ 	if (ret >= 0)
+-- 
+2.39.2
 
