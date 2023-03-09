@@ -2,198 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E992A6B1BAA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 347E86B1BAC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:42:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjCIGmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 01:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43570 "EHLO
+        id S229729AbjCIGmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 01:42:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbjCIGl5 (ORCPT
+        with ESMTP id S229629AbjCIGmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 01:41:57 -0500
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E51F6A04D;
-        Wed,  8 Mar 2023 22:41:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1678344103;
-  x=1709880103;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YyvA9TXPf9GVqen8uKIEeEetOR39Q5lxbugDfV9IAuc=;
-  b=WlSuLXXbAIv7652tAqjpynfaYlGLuyUIQ7uJU3b14IEGTsHBKfZNCYTl
-   p4BOUvjvw2nqOSLiJEJK/+3ZwYA+7d3FtrSkD8P5lzIKdDEpu2VDpsUYk
-   xVLaGCrvB0n4OX4P/aEstAZrgsrHGdGi/oVxUL+5gKV0jyvMrOOQeroM2
-   AHVWrZIyScsWQtRROV809ObdH/7oJStNVeyvgzWVcq35yHaqkuCVbnM7M
-   H9OaZDwqJZQ02iaz1nXhxqzwXvFssqzIi6ojr0nU5LnbdoUTqmYxLF8jg
-   YHA9KRgfM+4Y12J+c26rlBImzCPkU8ZGgO+LHa5gyc3vS4T22/7JcT/NU
-   Q==;
-From:   Hermes Zhang <chenhuiz@axis.com>
-To:     Sebastian Reichel <sre@kernel.org>
-CC:     <kernel@axis.com>, Hermes Zhang <chenhuiz@axis.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] power: supply: bq256xx: Support to disable charger
-Date:   Thu, 9 Mar 2023 14:41:03 +0800
-Message-ID: <20230309064104.79005-1-chenhuiz@axis.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 9 Mar 2023 01:42:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A277A2B9C1;
+        Wed,  8 Mar 2023 22:42:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27AAF616B3;
+        Thu,  9 Mar 2023 06:41:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06258C433D2;
+        Thu,  9 Mar 2023 06:41:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678344091;
+        bh=anlaQGXty2j4C1rrpEoCgHw52aLsUAs5MLJO7BHeLtw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Tp9UzSYOO7BblVcizcgJB0esyCT6luFhHreKeawJZE6BxreN6ibZ6wbkze8JzrZvm
+         1nAeEs0nKuc+Du2rjYFK/qrr++qdd2iuphGhl0/2UezDrdhTaen4go1SOHXwEd/C7S
+         OmtiiYzQy3znxH/FHwl/NvEYL2vHh3h0+MA78xVo=
+Date:   Thu, 9 Mar 2023 07:41:28 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org, tiwai@suse.com,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+Subject: Re: [PATCH v3 04/28] ASoC: Add SOC USB APIs for adding an USB backend
+Message-ID: <ZAl/mHuP7U6zgzmZ@kroah.com>
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-5-quic_wcheng@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308235751.495-5-quic_wcheng@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To be able to control the charging process flexible, we need to able to
-disable the charger. This commit will allow to disable the charger by
-"echo 1 > /sys/class/power_supply/bq256xx-charger/charge_type"
-(1 = POWER_SUPPLY_CHARGE_TYPE_NONE) and enable the charger by set it to
-2/3 (POWER_SUPPLY_CHARGE_TYPE_TRICKLE/POWER_SUPPLY_CHARGE_TYPE_FAST)
+On Wed, Mar 08, 2023 at 03:57:27PM -0800, Wesley Cheng wrote:
+> Some platforms may have support for offloading USB audio devices to a
+> dedicated audio DSP.  Introduce a set of APIs that allow for management of
+> USB sound card and PCM devices enumerated by the USB SND class driver.
+> This allows for the ASoC components to be aware of what USB devices are
+> available for offloading.
+> 
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+>  include/sound/soc-usb.h |  35 ++++++++
+>  sound/soc/Makefile      |   2 +-
+>  sound/soc/soc-usb.c     | 180 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 216 insertions(+), 1 deletion(-)
+>  create mode 100644 include/sound/soc-usb.h
+>  create mode 100644 sound/soc/soc-usb.c
+> 
+> diff --git a/include/sound/soc-usb.h b/include/sound/soc-usb.h
+> new file mode 100644
+> index 000000000000..378992ea07bd
+> --- /dev/null
+> +++ b/include/sound/soc-usb.h
+> @@ -0,0 +1,35 @@
+> +/* SPDX-License-Identifier: GPL-2.0
+> + *
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#ifndef __LINUX_SND_SOC_USB_H
+> +#define __LINUX_SND_SOC_USB_H
+> +
+> +/**
+> + * struct snd_soc_usb
+> + * @list - list head for SND SOC struct list
+> + * @dev - USB backend device reference
+> + * @component - reference to DAPM component
+> + * @connection_status_cb - callback to notify connection events
+> + * @priv_data - driver data
+> + **/
+> +struct snd_soc_usb {
+> +	struct list_head list;
+> +	struct device *dev;
 
-Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
----
- drivers/power/supply/bq256xx_charger.c | 40 ++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+If this is a USB device, then make it a pointer to the real structure,
+not just struct device.
 
-diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/supply/bq256xx_charger.c
-index 9cf4936440c9..e624834ae66c 100644
---- a/drivers/power/supply/bq256xx_charger.c
-+++ b/drivers/power/supply/bq256xx_charger.c
-@@ -70,6 +70,9 @@
- #define BQ25611D_VBATREG_THRESH_uV	4290000
- #define BQ25618_VBATREG_THRESH_uV	4300000
- 
-+#define BQ256XX_CHG_CONFIG_MASK		BIT(4)
-+#define BQ256XX_CHG_CONFIG_BIT_SHIFT	4
-+
- #define BQ256XX_ITERM_MASK		GENMASK(3, 0)
- #define BQ256XX_ITERM_STEP_uA		60000
- #define BQ256XX_ITERM_OFFSET_uA		60000
-@@ -259,6 +262,7 @@ struct bq256xx_device {
-  * @bq256xx_set_iterm: pointer to instance specific set_iterm function
-  * @bq256xx_set_iprechg: pointer to instance specific set_iprechg function
-  * @bq256xx_set_vindpm: pointer to instance specific set_vindpm function
-+ * @bq256xx_set_charge_type: pointer to instance specific set_charge_type function
-  *
-  * @bq256xx_def_ichg: default ichg value in microamps
-  * @bq256xx_def_iindpm: default iindpm value in microamps
-@@ -290,6 +294,7 @@ struct bq256xx_chip_info {
- 	int (*bq256xx_set_iterm)(struct bq256xx_device *bq, int iterm);
- 	int (*bq256xx_set_iprechg)(struct bq256xx_device *bq, int iprechg);
- 	int (*bq256xx_set_vindpm)(struct bq256xx_device *bq, int vindpm);
-+	int (*bq256xx_set_charge_type)(struct bq256xx_device *bq, int type);
- 
- 	int bq256xx_def_ichg;
- 	int bq256xx_def_iindpm;
-@@ -449,6 +454,27 @@ static int bq256xx_get_state(struct bq256xx_device *bq,
- 	return 0;
- }
- 
-+static int bq256xx_set_charge_type(struct bq256xx_device *bq, int type)
-+{
-+	int chg_config = 0;
-+
-+	switch (type) {
-+	case POWER_SUPPLY_CHARGE_TYPE_NONE:
-+		chg_config = 0x0;
-+		break;
-+	case POWER_SUPPLY_CHARGE_TYPE_TRICKLE:
-+	case POWER_SUPPLY_CHARGE_TYPE_FAST:
-+		chg_config = 0x1;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return regmap_update_bits(bq->regmap, BQ256XX_CHARGER_CONTROL_0,
-+				BQ256XX_CHG_CONFIG_MASK,
-+				(chg_config ? 1 : 0) << BQ256XX_CHG_CONFIG_BIT_SHIFT);
-+}
-+
- static int bq256xx_get_ichg_curr(struct bq256xx_device *bq)
- {
- 	unsigned int charge_current_limit;
-@@ -915,6 +941,12 @@ static int bq256xx_set_charger_property(struct power_supply *psy,
- 			return ret;
- 		break;
- 
-+	case POWER_SUPPLY_PROP_CHARGE_TYPE:
-+		ret = bq->chip_info->bq256xx_set_charge_type(bq, val->intval);
-+		if (ret)
-+			return ret;
-+		break;
-+
- 	default:
- 		break;
- 	}
-@@ -1197,6 +1229,7 @@ static int bq256xx_property_is_writeable(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
- 	case POWER_SUPPLY_PROP_STATUS:
- 	case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
-+	case POWER_SUPPLY_PROP_CHARGE_TYPE:
- 		return true;
- 	default:
- 		return false;
-@@ -1286,6 +1319,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
- 		.bq256xx_set_iterm = bq256xx_set_term_curr,
- 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
- 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
-+		.bq256xx_set_charge_type = bq256xx_set_charge_type,
- 
- 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
- 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
-@@ -1316,6 +1350,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
- 		.bq256xx_set_iterm = bq256xx_set_term_curr,
- 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
- 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
-+		.bq256xx_set_charge_type = bq256xx_set_charge_type,
- 
- 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
- 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
-@@ -1346,6 +1381,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
- 		.bq256xx_set_iterm = bq256xx_set_term_curr,
- 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
- 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
-+		.bq256xx_set_charge_type = bq256xx_set_charge_type,
- 
- 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
- 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
-@@ -1376,6 +1412,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
- 		.bq256xx_set_iterm = bq256xx_set_term_curr,
- 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
- 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
-+		.bq256xx_set_charge_type = bq256xx_set_charge_type,
- 
- 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
- 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
-@@ -1406,6 +1443,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
- 		.bq256xx_set_iterm = bq256xx_set_term_curr,
- 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
- 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
-+		.bq256xx_set_charge_type = bq256xx_set_charge_type,
- 
- 		.bq256xx_def_ichg = BQ25611D_ICHG_DEF_uA,
- 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
-@@ -1436,6 +1474,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
- 		.bq256xx_set_iterm = bq25618_619_set_term_curr,
- 		.bq256xx_set_iprechg = bq25618_619_set_prechrg_curr,
- 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
-+		.bq256xx_set_charge_type = bq256xx_set_charge_type,
- 
- 		.bq256xx_def_ichg = BQ25618_ICHG_DEF_uA,
- 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
-@@ -1466,6 +1505,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
- 		.bq256xx_set_iterm = bq25618_619_set_term_curr,
- 		.bq256xx_set_iprechg = bq25618_619_set_prechrg_curr,
- 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
-+		.bq256xx_set_charge_type = bq256xx_set_charge_type,
- 
- 		.bq256xx_def_ichg = BQ25618_ICHG_DEF_uA,
- 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
--- 
-2.30.2
 
+> +	struct snd_soc_component *component;
+> +	int (*connection_status_cb)(struct snd_soc_usb *usb, int card_idx,
+> +				int connected);
+> +	void *priv_data;
+> +};
+> +
+> +int snd_soc_usb_connect(struct device *usbdev, int card_idx);
+> +int snd_soc_usb_disconnect(struct device *usbdev);
+> +void snd_soc_usb_set_priv_data(struct device *dev, void *priv);
+> +void *snd_soc_usb_get_priv_data(struct device *usbdev);
+
+Same here, you mix "dev" and "usbdev" in the names, make them real USB
+devices please.
+
+
+> +
+> +struct snd_soc_usb *snd_soc_usb_add_port(struct device *dev, void *priv,
+
+And here.
+
+> +			int (*connection_cb)(struct snd_soc_usb *usb, int card_idx,
+> +			int connected));
+> +int snd_soc_usb_remove_port(struct device *dev);
+> +#endif
+> diff --git a/sound/soc/Makefile b/sound/soc/Makefile
+> index 507eaed1d6a1..3305ceb59d84 100644
+> --- a/sound/soc/Makefile
+> +++ b/sound/soc/Makefile
+> @@ -1,5 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -snd-soc-core-objs := soc-core.o soc-dapm.o soc-jack.o soc-utils.o soc-dai.o soc-component.o
+> +snd-soc-core-objs := soc-core.o soc-dapm.o soc-jack.o soc-usb.o soc-utils.o soc-dai.o soc-component.o
+>  snd-soc-core-objs += soc-pcm.o soc-devres.o soc-ops.o soc-link.o soc-card.o
+>  snd-soc-core-$(CONFIG_SND_SOC_COMPRESS) += soc-compress.o
+>  
+> diff --git a/sound/soc/soc-usb.c b/sound/soc/soc-usb.c
+> new file mode 100644
+> index 000000000000..4293451cdd49
+> --- /dev/null
+> +++ b/sound/soc/soc-usb.c
+> @@ -0,0 +1,180 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +#include <linux/of.h>
+> +#include <linux/usb.h>
+> +#include <sound/soc.h>
+> +#include <sound/soc-usb.h>
+> +#include "../usb/card.h"
+> +
+> +static DEFINE_MUTEX(ctx_mutex);
+> +static LIST_HEAD(usb_ctx_list);
+> +
+> +static struct device_node *snd_soc_find_phandle(struct device *dev)
+> +{
+> +	struct device_node *node;
+> +
+> +	node = of_parse_phandle(dev->of_node, "usb-soc-be", 0);
+> +	if (!node)
+> +		return ERR_PTR(-ENODEV);
+> +
+> +	return node;
+> +}
+> +
+> +static struct snd_soc_usb *snd_soc_find_usb_ctx(struct device *dev)
+> +{
+> +	struct device_node *node;
+> +	struct snd_soc_usb *ctx = NULL;
+> +
+> +	node = snd_soc_find_phandle(dev);
+> +	if (IS_ERR(node))
+> +		return NULL;
+> +
+> +	mutex_lock(&ctx_mutex);
+> +	list_for_each_entry(ctx, &usb_ctx_list, list) {
+> +		if (ctx->dev->of_node == node) {
+> +			of_node_put(node);
+> +			mutex_unlock(&ctx_mutex);
+> +			return ctx;
+> +		}
+> +	}
+> +	of_node_put(node);
+> +	mutex_unlock(&ctx_mutex);
+> +
+> +	return NULL;
+> +}
+> +
+> +/**
+> + * snd_soc_usb_get_priv_data() - Retrieve private data stored
+> + * @dev: device reference
+> + *
+> + * Fetch the private data stored in the USB SND SOC structure.
+> + *
+> + */
+> +void *snd_soc_usb_get_priv_data(struct device *dev)
+> +{
+> +	struct snd_soc_usb *ctx;
+> +
+> +	ctx = snd_soc_find_usb_ctx(dev);
+> +	if (!ctx) {
+> +		/* Check if backend device */
+> +		list_for_each_entry(ctx, &usb_ctx_list, list) {
+> +			if (dev->of_node == ctx->dev->of_node)
+> +				goto out;
+
+No locking for this list traversal?
+
+thanks,
+
+greg k-h
