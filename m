@@ -2,111 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2160A6B1877
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 02:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8766B187E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 02:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjCIBFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 20:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
+        id S229776AbjCIBHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 20:07:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjCIBFc (ORCPT
+        with ESMTP id S229558AbjCIBHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 20:05:32 -0500
-Received: from mx.dolansoft.org (s2.dolansoft.org [212.51.146.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2EBC1C3D;
-        Wed,  8 Mar 2023 17:05:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=brun.one;
-        s=s1; h=MIME-Version:Message-Id:Date:Subject:Cc:To:From:In-Reply-To:
-        References:From:To:Subject:Date:Message-ID:Reply-To;
-        bh=q7r5ddN92A+gb/JSXPLt/QT21LW9kefr3aC+Q48S/lc=; b=pkDYxYF9MAOcCpo6lZKnuimK2r
-        kmS6NSQX1tzVZ/kGYQ2UDoAKPMn5lbx4DpcbG3r/Y8QS3VMcGlSu61mTTmyvu9d2uBv2ySzSnQaiS
-        Ck0bCPiqZ+6G/Ml8i0FgIuPRrzeeLRwNNe6qqiLyxJZ2CDgutqqEOzYR5P/06uwPDBn4fLjBGPZip
-        3OYMTF6Ve+sDIBevMZj+3QMyBpO6yGsOCoWYR5j+z+Zy0WJUrxgOtBFneGSpaFffmsMtx4lVzg+E6
-        E5/ZufKv1A+LTK0hvL3PK7FOnptK9WM9K3OjSUmd3xaWEWDvKOVJqhGb4ot72mkLWISpZ3PAe7qbA
-        nmtlSdNA==;
-Received: from [212.51.153.89] (helo=blacklava.cluster.local)
-        by mx.dolansoft.org with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <lorenz@dolansoft.org>)
-        id 1pa4hn-001JTb-1d;
-        Thu, 09 Mar 2023 01:04:27 +0000
-From:   Lorenz Brun <lorenz@brun.one>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH v2] pwm: mediatek: support inverted polarity
-Date:   Thu,  9 Mar 2023 02:04:10 +0100
-Message-Id: <20230309010410.2106525-1-lorenz@brun.one>
+        Wed, 8 Mar 2023 20:07:35 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490FD8C0C6
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 17:07:32 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pa4kd-00041d-LT; Thu, 09 Mar 2023 02:07:23 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Gerald Loacker <gerald.loacker@wolfvision.net>
+Cc:     Heiko Stuebner <heiko@sntech.de>, David Airlie <airlied@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sandy Huang <hjc@rock-chips.com>
+Subject: Re: [PATCH] drm/rockchip: vop2: add polarity flags to RGB output
+Date:   Thu,  9 Mar 2023 02:07:19 +0100
+Message-Id: <167832398246.362678.16304848436685688668.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230302123949.957998-1-gerald.loacker@wolfvision.net>
+References: <20230302123949.957998-1-gerald.loacker@wolfvision.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Sender: lorenz@dolansoft.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the MT7986 Reference Manual the Mediatek PWM controller
-doesn't appear to have support for inverted polarity.
+On Thu, 2 Mar 2023 13:39:49 +0100, Gerald Loacker wrote:
+> Use h/v-sync and pixel clock polarity flags for RGB output. For all other
+> outputs this is already implemented.
+> 
+> 
 
-To still support inverted PWM for common use cases, this relaxes the
-check for inverted polarity within the driver to allow it to work in
-case usage_power is set to true, i.e. the exact waveform does not
-matter. If usage_power is true and the polarity is inverted the duty
-cycle is mathematically inverted before being applied to the hardware.
+Applied, thanks!
 
-Signed-off-by: Lorenz Brun <lorenz@brun.one>
----
-V2: Only allow mathematically inverted PWM if usage_power is true
----
- drivers/pwm/pwm-mediatek.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+[1/1] drm/rockchip: vop2: add polarity flags to RGB output
+      commit: 66ab57574f2c8233550f641ecdc34fd0ef61341d
 
-diff --git a/drivers/pwm/pwm-mediatek.c b/drivers/pwm/pwm-mediatek.c
-index 5b5eeaff35da..18791304d1ca 100644
---- a/drivers/pwm/pwm-mediatek.c
-+++ b/drivers/pwm/pwm-mediatek.c
-@@ -202,8 +202,16 @@ static int pwm_mediatek_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- 			      const struct pwm_state *state)
- {
- 	int err;
--
--	if (state->polarity != PWM_POLARITY_NORMAL)
-+	u64 duty_cycle;
-+
-+	/* According to the MT7986 Reference Manual the peripheral does not
-+	 * appear to have the capability to invert the output.
-+	 * This means that inverted mode can not be fully supported as the
-+	 * waveform will always start with the low period and end with the high
-+	 * period. Thus reject non-normal polarity if the shape of the waveform
-+	 * matters, i.e. usage_power is not set.
-+	 */
-+	if (state->polarity != PWM_POLARITY_NORMAL && !state->usage_power)
- 		return -EINVAL;
- 
- 	if (!state->enabled) {
-@@ -213,7 +221,11 @@ static int pwm_mediatek_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- 		return 0;
- 	}
- 
--	err = pwm_mediatek_config(pwm->chip, pwm, state->duty_cycle, state->period);
-+	duty_cycle = state->duty_cycle;
-+	if (state->polarity == PWM_POLARITY_INVERSED)
-+		duty_cycle = state->period - state->duty_cycle;
-+
-+	err = pwm_mediatek_config(pwm->chip, pwm, duty_cycle, state->period);
- 	if (err)
- 		return err;
- 
+Best regards,
 -- 
-2.39.2
-
+Heiko Stuebner <heiko@sntech.de>
