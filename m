@@ -2,262 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239D76B2BF8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 18:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6776B2C00
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 18:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjCIRYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 12:24:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
+        id S229917AbjCIR0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 12:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbjCIRYX (ORCPT
+        with ESMTP id S230052AbjCIRZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 12:24:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B575F2FA8;
-        Thu,  9 Mar 2023 09:24:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03670B8203D;
-        Thu,  9 Mar 2023 17:24:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5CA5C433EF;
-        Thu,  9 Mar 2023 17:24:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678382659;
-        bh=VWtqIlKHObw1KkATVYaWAZcY7al17UIGC/BCtmz1hxA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lieMofFvyKBoYw8d8lO2KtuYkSfx7Rr9SRbhEsIJ8srQf96dcMCecIm35P9dzVj8U
-         SmisPpcjdnahi3DIACxSBuaF+3zMbnoxBTOI9agrQGxCSJikKbEKacHrdUkr3fis1x
-         BP53n/2l8sQflCpU3Ri2Vwku8re/4KMm4swsysxemwSr3PByGHVU5ZkJB6vwcOpHIg
-         SKED2Cj4VN/cKSc0pG5TtvLW/4hSlNK5f8YiTq6UI/wJXUaf3PWgiVbOlAForWc/9B
-         9VSSy6KLQCOX1oV0+T6mN/JrA2o/oNDG0BBJsg2i3KypcCjYdZ8todriC3sOoTuNyj
-         IkZX4lb2dqEJg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1paK0r-0002h6-7V; Thu, 09 Mar 2023 18:25:09 +0100
-Date:   Thu, 9 Mar 2023 18:25:09 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>
-Subject: Re: [PATCH v5 4/4] arm64: dts: qcom: thinkpad-x13s: Add bluetooth
-Message-ID: <ZAoWdR7mppnWclFr@hovoldconsulting.com>
-References: <20230209020916.6475-1-steev@kali.org>
- <20230209020916.6475-5-steev@kali.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230209020916.6475-5-steev@kali.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Mar 2023 12:25:58 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A942EF34E7
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 09:25:56 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id m9-20020a17090a7f8900b0023769205928so2963592pjl.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 09:25:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678382756;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nAzHwxIzKgR5cpPFlKSmTV6wBjCG9GNYIIeb+EiWOEw=;
+        b=pcfEThEU4Vasj7WYR/Waxpaik/NppP6KUs9ppDrOWtyN2K2o4KqOmGK0EDNvaR1PpN
+         /UnLgb4a0okqN8xPoiVdvT3V4a3xQpbxcpQw+hqc3obdWDA1zbjdpsZMinO2+XGf0pnk
+         tx9vE4rRQCJ5voH+cpItfZtOeBNDgs3HFupLFCjAMoI4yqWp5+vfnERiQVRovGhbDJlD
+         OI+CCOqeKsFNSgk9agGxkWOLj6VAn6Cx55qyTcqfd2JJGxyGwRwezuRC/2e6nTnTf9sd
+         6ToNYA8q0vemzt2KRH+BjeI+gz/XbfE+MvBJgD+F+nwK3UPkZ0AbCSmlQJnwfuNg6ozs
+         ZadA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678382756;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nAzHwxIzKgR5cpPFlKSmTV6wBjCG9GNYIIeb+EiWOEw=;
+        b=l1uc9bAzIW5Sv1cgStKFsA/AkNVBNHPM/1oYGTUy7l+mAR30mQFgjmIWiHnJnnHn7l
+         AI6/2g27cI6ELaMrKsXhFZ8lEsgstb6UYDfqhQKvkaCnUmx2S7gFTHPJTYdyhHdedJIS
+         J3J23Nyj8nrxSzav8EwZwd7rXNSDAaov3t9xvTexEelkm4xBF2CR6dzLec431NjltgfL
+         KjFo8S0QCQnaY94a1YegCQBghBF7JHmDtwGzbzFddLfg0aIE6yKE304oeTMIEJ4I+4fT
+         bL2Fb8MPARR7Mev1TXNECr8q85spvVdoVCIS/4sRV4QxtgWohm4JT5aXHSdDHIQ8nhJ9
+         Ze5g==
+X-Gm-Message-State: AO0yUKXqY8C60LfgHFCh/NVEHFmPB2i8Y/4LIWqLhe8PWeAB54/Jk0rp
+        U+meATW7V7OOMbUZpavt/LYfJrVf1GU=
+X-Google-Smtp-Source: AK7set/wzMVIYZAs4ttZZ0eOPrOq++LXdebZdExp7oCzxxYkXloK+akjBCXw06ZtDEXNHa6PBgMRsLH3hjo=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:4293:b0:199:ab4:e140 with SMTP id
+ ju19-20020a170903429300b001990ab4e140mr8601038plb.6.1678382756129; Thu, 09
+ Mar 2023 09:25:56 -0800 (PST)
+Date:   Thu, 9 Mar 2023 09:25:54 -0800
+In-Reply-To: <ZAmWefGcsBwcODxW@linux.dev>
+Mime-Version: 1.0
+References: <20230309010336.519123-1-seanjc@google.com> <20230309010336.519123-3-seanjc@google.com>
+ <ZAlGeYAmvhPmVmGe@debian.me> <ZAmWefGcsBwcODxW@linux.dev>
+Message-ID: <ZAoWogdeET5N0mug@google.com>
+Subject: Re: [PATCH v2 2/2] Documentation/process: Add a maintainer handbook
+ for KVM x86
+From:   Sean Christopherson <seanjc@google.com>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sagi Shahar <sagis@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Peter Shier <pshier@google.com>,
+        Anish Ghulati <aghulati@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Anish Moorthy <amoorthy@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Guang Zeng <guang.zeng@intel.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Junaid Shahid <junaids@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Leonardo Bras <leobras@redhat.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Li RongQing <lirongqing@baidu.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Michal Luczaj <mhal@rbox.co>,
+        Mingwei Zhang <mizhang@google.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Paul Durrant <pdurrant@amazon.com>,
+        Peng Hao <flyingpenghao@gmail.com>,
+        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
+        Robert Hoo <robert.hu@linux.intel.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 08:09:16PM -0600, Steev Klimaszewski wrote:
-> The Lenovo Thinkpad X13s has a WCN6855 Bluetooth controller on uart2,
-> add this.
+On Thu, Mar 09, 2023, Oliver Upton wrote:
+> On Thu, Mar 09, 2023 at 09:37:45AM +0700, Bagas Sanjaya wrote:
+> > On Wed, Mar 08, 2023 at 05:03:36PM -0800, Sean Christopherson wrote:
+> > > +As a general guideline, use ``kvm-x86/next`` even if a patch/series touches
+> > > +multiple architectures, i.e. isn't strictly scoped to x86.  Using any of the
+> > > +branches from the main KVM tree is usually a less good option as they likely
+> > > +won't have many, if any, changes for the next release, i.e. using the main KVM
+> > > +tree as a base is more likely to yield conflicts.  And if there are non-trivial
+> > > +conflicts with multiple architectures, coordination between maintainers will be
+> > > +required no matter what base is used.  Note, this is far from a hard rule, i.e.
+> > > +use a different base for multi-arch series if that makes the most sense.
 > 
-> Signed-off-by: Steev Klimaszewski <steev@kali.org>
-> Link: https://lore.kernel.org/r/20230207052829.3996-5-steev@kali.org
+> I don't think this is the best way to coordinate with other architectures.
+> Regardless of whether you intended this to be prescriptive, I'm worried most
+> folks will follow along and just base patches on kvm-x86/next anyway.
 
-This link should not be needed.
+Probably, but for the target audience (KVM x86 contributors), that's likely the
+least awful base 99% of the time.
 
-Also, please update the patch Subject to use the following prefix:
+> It'd be easier to just have multi-arch series use a stable base (i.e. a
+> release candidate) by default. That'd avoid the undesirable case where merging
+> a shared branch brings with it some random point in another arch's /next
+> history.
 
-	arm64: dts: qcom: sc8280xp-x13s: ...
+You're conflating the base of the patch series with the branch it is applied to.
+I'm most definitely not proposing that multi-arch series from x86 contributors
+always be routed through kvm-x86.  It's ultimately the responsibility of the
+maintainers, not the contributors, to avoid funky merges and histories.  If a
+series warrants a dedicated topic branch, then we need to create said topic branch
+off a stable, common base, irrespective of what the contributor based their patches
+on.
 
-> ---
-> Changes since v4:
->  * Address Konrad's review comments.
+If a series from an x86 contributor applies cleanly on kvm-x86/next but not on
+-rc2 (or whatever), then the reverse would also likely be true (if the contributor
+used -rc2 as the base).  In other words, for series with non-trivial modifications
+to other architectures and/or common KVM code, IMO the base used for the _initial_
+posting doesn't matter all that much for us maintainers since such series will
+likely require additional attention no matter what base is used.
+
+On the flip side, the vast majority of "multi-arch" series in KVM tend to be focused
+on a single architecture, with only incidental contact to other architectures and/or
+common KVM code.  Those types of series will likely be routed through their "target"
+arch tree, and so for x86, using kvm-x86/next as the base is preferrable.
+
+My goal with suggesting/prescribing kvm-x86/next to contributors is to make the
+easy things easy.  On my end, that means having _predictable_ submissions and
+minimizing the number of avoidable conflicts.  For contributors, that means having
+a very simple rule/guideline.  "Use kvm-x86/next unless you know better" satisfies
+all those conditions.
+
+> If a different approach makes sense for a particular series then we can
+> discuss it on the list and arrive at something agreeable for all parties
+> involved.
 > 
-> Changes since v3:
->  * Add vreg_s1c
->  * Add regulators and not dead code
->  * Fix commit message changelog
+> > That means patches that primarily kvm ARM changes should be based on
+> > kvm-x86/next, right?
 > 
-> Changes since v2:
->  * Remove dead code and add TODO comment
->  * Make dtbs_check happy with the pin definitions
->  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 76 +++++++++++++++++++
->  1 file changed, 76 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> index f936b020a71d..ad20cfb3a830 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> @@ -24,6 +24,8 @@ / {
->  	aliases {
->  		i2c4 = &i2c4;
->  		i2c21 = &i2c21;
-> +		serial0 = &uart17;
+> No, don't do that.
 
-This is an unrelated change that does not belong in this patch.
++<infinity symbol>
 
-> +		serial1 = &uart2;
->  	};
->  
->  	wcd938x: audio-codec {
-> @@ -297,6 +299,15 @@ pmc8280c-rpmh-regulators {
->  		qcom,pmic-id = "c";
->  		vdd-bob-supply = <&vreg_vph_pwr>;
->  
-> +		vreg_s1c: smps1 {
-> +			regulator-name = "vreg_s1c";
-> +			regulator-min-microvolt = <1880000>;
-> +			regulator-max-microvolt = <1900000>;
-> +			regulator-allowed-modes = <RPMH_REGULATOR_MODE_AUTO>,
-> +						  <RPMH_REGULATOR_MODE_RET>;
-> +			regulator-allow-set-load;
-
-Don't you need to specify initial-mode as well?
-
-> +		};
-> +
->  		vreg_l1c: ldo1 {
->  			regulator-name = "vreg_l1c";
->  			regulator-min-microvolt = <1800000>;
-> @@ -712,6 +723,32 @@ &qup0 {
->  	status = "okay";
->  };
->  
-> +&uart2 {
-> +	pinctrl-0 = <&uart2_state>;
-> +	pinctrl-names = "default";
-> +
-> +	status = "okay";
-> +
-> +	bluetooth {
-> +		compatible = "qcom,wcn6855-bt";
-> +
-> +		vddio-supply = <&vreg_s10b>;
-> +		vddbtcxmx-supply = <&vreg_s12b>;
-> +		vddrfacmn-supply = <&vreg_s12b>;
-> +		vddrfa0p8-supply = <&vreg_s12b>;
-> +		vddrfa1p2-supply = <&vreg_s11b>;
-> +		vddrfa1p7-supply = <&vreg_s1c>;
-> +
-> +		max-speed = <3200000>;
-> +
-> +		enable-gpios = <&tlmm 133 GPIO_ACTIVE_HIGH>;
-> +		swctrl-gpios = <&tlmm 132 GPIO_ACTIVE_HIGH>;
-> +
-> +		pinctrl-0 = <&bt_en>;
-> +		pinctrl-names = "default";
-> +	};
-> +};
-> +
->  &qup1 {
->  	status = "okay";
->  };
-> @@ -720,6 +757,11 @@ &qup2 {
->  	status = "okay";
->  };
->  
-> +&uart17 {
-> +	compatible = "qcom,geni-debug-uart";
-> +	status = "okay";
-> +};
-
-This bit does not belong here either. We don't have any means of
-accessing the debug uart on the X13s so we should probably just leave it
-disabled.
-
-> +
->  &remoteproc_adsp {
->  	firmware-name = "qcom/sc8280xp/LENOVO/21BX/qcadsp8280.mbn";
->  
-> @@ -980,6 +1022,19 @@ hastings_reg_en: hastings-reg-en-state {
->  &tlmm {
->  	gpio-reserved-ranges = <70 2>, <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
->  
-> +	bt_en: bt-en-state {
-
-As you are configuring more than one pin, please rename this as:
-
-	bt_default: bt-default-state
-
-> +		hstp-sw-ctrl-pins {
-> +			pins = "gpio132";
-> +			function = "gpio";
-
-You should define the bias configuration as well. I guess we need to
-keep the default pull-down enabled.
-
-> +		};
-> +
-> +		hstp-bt-en-pins {
-> +			pins = "gpio133";
-> +			function = "gpio";
-> +			drive-strength = <16>;
-
-bias-disable?
-
-> +		};
-> +	};
-> +
->  	edp_reg_en: edp-reg-en-state {
->  		pins = "gpio25";
->  		function = "gpio";
-> @@ -1001,6 +1056,27 @@ i2c4_default: i2c4-default-state {
->  		bias-disable;
->  	};
->  
-> +	uart2_state: uart2-state {
-
-Rename this one too:
-
-	uart2_default: uart2-default-state
-
-> +		cts-pins {
-> +			pins = "gpio122";
-
-This should be gpio121 (gpio122 is rts).
-
-> +			function = "qup2";
-> +			bias-disable;
-
-Don't we need a pull-down on this one to avoid a floating input when the
-module is powered down?
-
-> +		};
-> +
-> +		rts-tx-pins {
-
-Please split this in two nodes.
-
-> +			pins = "gpio122", "gpio123";
-> +			function = "qup2";
-> +			drive-strength = <2>;
-> +			bias-disable;
-> +		};
-> +
-> +		rx-pins {
-> +			pins = "gpio124";
-> +			function = "qup2";
-> +			bias-pull-up;
-> +		};
-> +	};
-> +
->  	i2c21_default: i2c21-default-state {
->  		pins = "gpio81", "gpio82";
->  		function = "qup21";
-
-Johan
+This doc is specifically for KVM x86.
