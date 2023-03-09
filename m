@@ -2,122 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FE46B2689
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2976B6B2678
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbjCIOQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
+        id S230326AbjCIOPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:15:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjCIOOW (ORCPT
+        with ESMTP id S231574AbjCIOO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:14:22 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859B993C4;
-        Thu,  9 Mar 2023 06:13:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678371193; x=1709907193;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3A65IKB9d2IfLyHPo1ILLZ4ADkCpExI8AS30ua1GCVc=;
-  b=LFnIFa2oy9cRbTo4OzS9IWHzz+tM4YrnopE/dyvvJ7RfwB6nCdwSnwvg
-   Ph8ZbjETf1/WwJ6XxFSRvegTaJfdUwoNQmGL90M5h2RKidbiJyHcba9f8
-   a1oNsOflRNVCUJ/ZQIrkq7MjUd87+adaaPuD6DDzyK6zhpP+lH1b+zXpy
-   nXxXCuKN0gt+Kh5yH4UWbGn1JhDzd99VD2v8oLcO+MK0rLbSasprnYeRE
-   O4i7wJU0/8lMSaGAuX45N+qjNDq5lwQm5dzsYnQnDy22lr+u50oVBOxFT
-   8JGUNr/22YVOO1SJw5RXLeUehwUe9WsN5+szWFKKr0RVVXxSOCDnoWGW8
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="364093939"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="364093939"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 06:13:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="787575064"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="787575064"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.219.30])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 06:13:01 -0800
-Message-ID: <ef2f8faf-76cc-d221-8281-cc7b8cb68485@intel.com>
-Date:   Thu, 9 Mar 2023 16:12:55 +0200
+        Thu, 9 Mar 2023 09:14:26 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849D55B5DA;
+        Thu,  9 Mar 2023 06:13:17 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id h3so1943818lja.12;
+        Thu, 09 Mar 2023 06:13:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678371192;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0L3e2Gc1woVMAVlvcEHWXDzcW7MDDTkeZvDGMyuHmDM=;
+        b=ZiP8eNuayA+2CcmAR5fDLa1MnQvzgU7G68TvxH2IoGFLGtrWnjeJnXBLCh2l9HMstZ
+         ZcsR2pVrQZXCuPdIwYjs2PQGRO1NtijEFZni5RC8W4tlLosV8KpxEq7s0N6vV/gFEKf+
+         GbUCvkKR6j5GVeK/BomL0ZZ4n5k790VtN1eHSKO98Ly4i+jO7Qaxeo0ppAWkGEJ0A+0h
+         gqpz0jvCe0A/WpvvHDtZ+6bYE0X8wGzle6tbA5HWQW4iZIVpogJE73oHPZyOExHxF4e6
+         UJPH5y8H8psogpWsAxR/fziAK9q9SVCWYRO/u+278qkRguOSL1jH8yoNIkJpWZiVAcM7
+         OYmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678371192;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0L3e2Gc1woVMAVlvcEHWXDzcW7MDDTkeZvDGMyuHmDM=;
+        b=XnZI2WsVMJTjYrwqBBPIQwU2VHXlF4rHewRNpx/EY0JbqPBgtV/nXnhptMwVAIzX6M
+         s3INjqxFgc4yvgGK/CwmGJ7i7VX6KfRR6fMwiiFa2vw4MLXPtqBP9SQDF6jtRu9pRE3b
+         2C+t7sf9AA6LbnJ4DPg6l6l1w0qcJWcybnJVOyUcqNt0HUdjbWagYo93f2UNaSwaw/F2
+         68916GYzoHQdTwB/KdWA0pnJNSmwOP8HcP5ENWG3nesfTVI7UYk9dZNSEJXR+orOUpau
+         2C599D7xwmoNXZ4ZSKtRT7fEeKjAXqzteOiSOqVgVpbTeJ3oPKakr13gu36okoVPGRDF
+         Id6g==
+X-Gm-Message-State: AO0yUKXjcTNLzdVJ8GXkv0IrLa2vi3heJ+lUYSL2Mm7K4yH8XHx1otjr
+        /yEzAAou5yNjvvxyj59+jnU=
+X-Google-Smtp-Source: AK7set/wGRG6DZwH1goQYuwyWeVqUPotbXSii8soBGsA0hvgGcEXtX1zIA8XR5JqSVge5Z0JqI+ZpQ==
+X-Received: by 2002:a2e:6109:0:b0:294:7028:c66a with SMTP id v9-20020a2e6109000000b002947028c66amr5600373ljb.38.1678371192149;
+        Thu, 09 Mar 2023 06:13:12 -0800 (PST)
+Received: from pc636 (host-95-193-108-241.mobileonline.telia.com. [95.193.108.241])
+        by smtp.gmail.com with ESMTPSA id r19-20020a2e9953000000b00293534d9760sm2963887ljj.127.2023.03.09.06.13.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 06:13:11 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Thu, 9 Mar 2023 15:13:08 +0100
+To:     Zhu Yanjun <zyjzyj2000@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org
+Cc:     Bob Pearson <rpearsonhpe@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+Subject: Re: [PATCH 07/13] RDMA/rxe: Rename kfree_rcu() to
+ kfree_rcu_mightsleep()
+Message-ID: <ZAnpdKV/VvvX0TZz@pc636>
+References: <20230201150815.409582-1-urezki@gmail.com>
+ <20230201150815.409582-8-urezki@gmail.com>
+ <ZAnjnRC1wY3RIFhM@pc636>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [PATCH v1 2/4] Revert "dt-bindings: mmc: Add bindings for Intel
- Thunder Bay SoC"
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>, rashmi.a@intel.com,
-        ulf.hansson@linaro.org, michal.simek@xilinx.com,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kishon@ti.com, vkoul@kernel.org,
-        andriy.shevchenko@linux.intel.com, linux-phy@lists.infradead.org,
-        mgross@linux.intel.com
-Cc:     kris.pan@linux.intel.com, mahesh.r.vaidya@intel.com,
-        nandhini.srikandan@intel.com, vasavi.v.itha@intel.com,
-        kenchappa.demakkanavar@intel.com, furong.zhou@intel.com,
-        mallikarjunappa.sangannavar@intel.com
-References: <20230124054427.28808-1-rashmi.a@intel.com>
- <20230124054427.28808-2-rashmi.a@intel.com>
- <c850df25-57b8-3172-8e5c-c466dc8556cd@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <c850df25-57b8-3172-8e5c-c466dc8556cd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAnjnRC1wY3RIFhM@pc636>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/23 13:31, Krzysztof Kozlowski wrote:
-> On 24/01/2023 06:44, rashmi.a@intel.com wrote:
->> From: "A, Rashmi" <rashmi.a@intel.com>
->>
->> This reverts commit ab991c05c42853f0b6110022db9bf30fcc6323dd.
+> On Wed, Feb 01, 2023 at 04:08:13PM +0100, Uladzislau Rezki (Sony) wrote:
+> > The kfree_rcu()'s single argument name is deprecated therefore
+> > rename it to kfree_rcu_mightsleep() variant. The goal is explicitly
+> > underline that it is for sleepable contexts.
+> > 
+> > Please check the RXE driver in a way that a single argument can
+> > be used. Briefly looking at it and rcu_head should be embed to
+> > free an obj over RCU-core. The context might be atomic.
+> > 
+> > Cc: Bob Pearson <rpearsonhpe@gmail.com>
+> > Cc: Jason Gunthorpe <jgg@nvidia.com>
+> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > ---
+> >  drivers/infiniband/sw/rxe/rxe_pool.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> Could you please add you reviwed-by or Acked-by tags so we can bring
+> our series with renaming for the next merge window?
 > 
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC.  It might happen, that command when run on an older
-> kernel, gives you outdated entries.  Therefore please be sure you base
-> your patches on recent Linux kernel.
+> Thanks!
 > 
->>
->> Revert Thunder Bay specific code as the product got cancelled
->> and there are no end customers.
->>
->> Signed-off-by: A, Rashmi <rashmi.a@intel.com>
->> Reviewed-by: Hunter, Adrian <adrian.hunter@intel.com>wq
-> 
-> Stray characters.
-> 
->> ---
->>  .../devicetree/bindings/mmc/arasan,sdhci.yaml | 25 -------------------
->>  1 file changed, 25 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
->> index 4053de758db6..0d5d21dd30bb 100644
->> --- a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
->> +++ b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
->> @@ -88,12 +88,6 @@ properties:
->>          description:
->>            For this device it is strongly suggested to include
->>            arasan,soc-ctl-syscon.
->> -      - items:
->> -          - const: intel,thunderbay-sdhci-5.1   # Intel Thunder Bay eMMC PHY
->> -          - const: arasan,sdhci-5.1
-> 
-> Instead should be made rather deprecated, unless you are sure there is
-> no single person in the world using the bindings (e.g. with BSD or
-> bootloader)?
+__rxe_cleanup() can be called in two contexts, sleepable and not.
+Therefore usage of a single argument of the kvfree_rcu() is not correct
+here.
 
-I am sorry but this is not clear to me.  As I understand it,
-the hardware was never released, so the binding serves no
-purpose.  Should it be removed or "deprecated"?
+Could you please fix and check your driver? If my above statement
+is not correct, please provide Acked-by or Reviwed-by tags to the
+path that is in question.
 
+Otherwise please add an rcu_head in your data to free objects over
+kvfree_rcu() using double argument API.
+
+Could you please support?
+
+--
+Uladzislau Rezki
