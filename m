@@ -2,187 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 652346B1F17
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0966B1F1B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjCII6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 03:58:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
+        id S231171AbjCII6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 03:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbjCII5b (ORCPT
+        with ESMTP id S229893AbjCII55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:57:31 -0500
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7297E500F
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:56:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1678352186; x=1709888186;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:mime-version:
-   content-transfer-encoding;
-  bh=a5vYyq3M8U/A7avZVWbkEyfBt22G/RH3fSlgSQLmuEQ=;
-  b=SWMNsetf0TUlL9PKkG8I4fsspxiN80FANzKGFP39WhsgH8m5GoZ0xBRZ
-   wYFZuZV2HTV+iSmYwuebhrtvy9X/pGJ3z6CAWFcN/HwaS4BjFs7iTSOJu
-   wA3GJ7CrNwwRiIDh4XZOdSlhodBf1w7xl0KL5lmFUGTKdTJ0iLd3wvB0N
-   4=;
-X-IronPort-AV: E=Sophos;i="5.98,245,1673913600"; 
-   d="scan'208";a="307184690"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-cadc3fbd.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 08:56:23 +0000
-Received: from EX19D020EUA004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-cadc3fbd.us-west-2.amazon.com (Postfix) with ESMTPS id AACE8A04BB;
-        Thu,  9 Mar 2023 08:56:20 +0000 (UTC)
-Received: from EX19D030EUC004.ant.amazon.com (10.252.61.164) by
- EX19D020EUA004.ant.amazon.com (10.252.50.56) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.24; Thu, 9 Mar 2023 08:56:18 +0000
-Received: from EX19D030EUC004.ant.amazon.com (10.252.61.164) by
- EX19D030EUC004.ant.amazon.com (10.252.61.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.24;
- Thu, 9 Mar 2023 08:56:18 +0000
-Received: from EX19D030EUC004.ant.amazon.com ([fe80::f98a:db18:b0eb:477]) by
- EX19D030EUC004.ant.amazon.com ([fe80::f98a:db18:b0eb:477%3]) with mapi id
- 15.02.1118.024; Thu, 9 Mar 2023 08:56:18 +0000
-From:   "Krcka, Tomas" <krckatom@amazon.de>
-To:     Robin Murphy <robin.murphy@arm.com>
-CC:     "Krcka, Tomas" <krckatom@amazon.de>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "will@kernel.org" <will@kernel.org>
-Subject: Re: [PATCH] iommu/arm-smmu-v3: Fix event queue overflow
- acknowledgment
-Thread-Topic: [PATCH] iommu/arm-smmu-v3: Fix event queue overflow
- acknowledgment
-Thread-Index: AQHZUmUDQvjM+UGuakej3zFJkdLkgg==
-Date:   Thu, 9 Mar 2023 08:56:18 +0000
-Message-ID: <A0F7B0A1-0441-47A4-A045-07604A6C1842@amazon.com>
-References: <8291b66d-b9b8-47c9-f5ed-a4e951c92154@arm.com>
- <20230308140204.83249-1-krckatom@amazon.de>
- <b8c21aec-75d6-7b5b-4777-58838f8d8602@arm.com>
-In-Reply-To: <b8c21aec-75d6-7b5b-4777-58838f8d8602@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.252.51.153]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2D7688FD1BB7ED4C947CE3CC61B1C854@amazon.com>
+        Thu, 9 Mar 2023 03:57:57 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F2A4ECCF;
+        Thu,  9 Mar 2023 00:56:42 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0DF70C000C;
+        Thu,  9 Mar 2023 08:56:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678352200;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OsU9P3Ur2VchpA2JUh4YcUF6jVWgdCHPblwwuyxuAmM=;
+        b=EW5TlrV4CQ9Mmh3SXctNaJ3E6vLQDFLpT6USUszQ40PiT/G/H4kAE2HOo8ELaXuTkQPE/7
+        PtSBDFGEz5+owBxACqFApT/rEhZ1UxHqNQ0JeqAu7Y49D+uyNiZTkb/3qaS0KlqJ0+rphE
+        qIHERnL/qjJdmjUuJZSbLAMEw5XPfRTXbqn2KpThaanjWeSO5BLuTHqBXNc78c2T3tDPoq
+        gxPCqP0Lav/+NoCIm4vbutUJeL5h6HwWDWnvPFToYQgPMhmyieIQfmBLWAYQ3xf2jWpDDV
+        cBud8//oMxWBO+HUTDJcrxne728LVfY0Y7zyx0qQ98HvdR1wEinFBBmNGtj0Cg==
+Date:   Thu, 9 Mar 2023 09:56:31 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH V2] nvmem: add explicit config option to read OF fixed
+ cells
+Message-ID: <20230309095631.7b4f610e@xps-13>
+In-Reply-To: <af5dfd4701666d4ea50ec1015b1d2e5c@milecki.pl>
+References: <20230224072903.20945-1-zajec5@gmail.com>
+        <20230308173256.3837b87b@xps-13>
+        <91ff425b4c901648b1faf34c784f20ad@milecki.pl>
+        <20230308190636.7fabab9c@xps-13>
+        <5974d28426057975e701c4a8454b5a13@milecki.pl>
+        <20230308193121.7f5b3d02@xps-13>
+        <930f3549-440d-adac-ae9d-1aa6ef07c44b@gmail.com>
+        <20230309093415.2b1088c8@xps-13>
+        <af5dfd4701666d4ea50ec1015b1d2e5c@milecki.pl>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+IA0KPiBPbiAyMDIzLTAzLTA4IDE0OjAyLCBUb21hcyBLcmNrYSB3cm90ZToNCj4+Pj4gV2hl
-biBhbiBvdmVyZmxvdyBvY2N1cnMgaW4gdGhlIGV2ZW50IHF1ZXVlLCB0aGUgU01NVSB0b2dnbGVz
-IG92ZXJmbG93DQo+Pj4+IGZsYWcgT1ZGTEcgaW4gdGhlIFBST0QgcmVnaXN0ZXIuDQo+Pj4+IFRo
-ZSBldnRxIHRocmVhZCBpcyBzdXBwb3NlZCB0byBhY2tub3dsZWRnZSB0aGUgb3ZlcmZsb3cgZmxh
-ZyBieSB0b2dnbGluZw0KPj4+PiBmbGFnIE9WQUNLRkxHIGluIHRoZSBDT05TIHJlZ2lzdGVyLCBv
-dGhlcndpc2UgdGhlIG92ZXJmbG93IGNvbmRpdGlvbiBpcw0KPj4+PiBzdGlsbCBhY3RpdmUgKE9W
-RkxHICE9IE9WQUNLRkxHKS4NCj4+Pj4gDQo+Pj4+IEN1cnJlbnRseSB0aGUgYWNrbm93bGVkZ2Ug
-cmVnaXN0ZXIgaXMgdG9nZ2xlZCBhZnRlciBjbGVhcmluZyB0aGUgZXZlbnQNCj4+Pj4gcXVldWUg
-YnV0IGlzIG5ldmVyIHByb3BhZ2F0ZWQgdG8gdGhlIGhhcmR3YXJlLiBJdCB3b3VsZCBiZSBkb25l
-IG5leHQNCj4+Pj4gdGltZSB3aGVuIGV4ZWN1dGluZyBldnRxIHRocmVhZC4NCj4+Pj4gDQo+Pj4+
-IFRoZSBTTU1VIHN0aWxsIGFkZHMgZWxlbWVudHMgdG8gdGhlIHF1ZXVlIHdoZW4gdGhlIG92ZXJm
-bG93IGNvbmRpdGlvbiBpcw0KPj4+PiBhY3RpdmUgYnV0IGFueSBzdWJzZXF1ZW50IG92ZXJmbG93
-IGluZm9ybWF0aW9uIGFmdGVyIGNsZWFyaW5nIHRoZSBldmVudA0KPj4+PiBxdWV1ZSB3aWxsIGJl
-IGxvc3QuDQo+Pj4+IA0KPj4+PiBUaGlzIGNoYW5nZSBrZWVwcyB0aGUgU01NVSBpbiBzeW5jIGFz
-IGl0J3MgZXhwZWN0ZWQgYnkgZGVzaWduLg0KPj4+IA0KPj4+IElmIEkndmUgdW5kZXJzdG9vZCBj
-b3JyZWN0bHksIHRoZSB1cHNob3Qgb2YgdGhpcyBpcyB0aGF0IGlmIHRoZSBxdWV1ZQ0KPj4+IGhh
-cyBvdmVyZmxvd2VkIG9uY2UsIGJlY29tZSBlbXB0eSwgdGhlbiBzb21laG93IGdvZXMgZnJvbSBl
-bXB0eSB0byBmdWxsDQo+Pj4gYmVmb3JlIHdlIG1hbmFnZSB0byBjb25zdW1lIGEgc2luZ2xlIGV2
-ZW50LCB3ZSB3b24ndCBwcmludCB0aGUgImV2ZW50cw0KPj4+IGxvc3QiIG1lc3NhZ2UgYSBzZWNv
-bmQgdGltZS4NCj4+PiANCj4+PiBIYXZlIHlvdSBzZWVuIHRoaXMgaGFwcGVuIGluIHByYWN0aWNl
-PyBUQkggaWYgdGhlIGV2ZW50IHF1ZXVlIGV2ZXINCj4+PiBvdmVyZmxvd3MgZXZlbiBvbmNlIGl0
-J3MgaW5kaWNhdGl2ZSB0aGF0IHRoZSBzeXN0ZW0gaXMgaG9zZWQgYW55d2F5LCBzbw0KPj4+IGl0
-J3Mgbm90IGNsZWFyIHRvIG1lIHRoYXQgdGhlcmUncyBhbnkgZ3JlYXQgbG9zcyBvZiB2YWx1ZSBp
-biBzb21ldGltZXMNCj4+PiBmYWlsaW5nIHRvIHJlcGVhdCBhIHdhcm5pbmcgZm9yIGEgY2hyb25p
-YyBvbmdvaW5nIG9wZXJhdGlvbmFsIGZhaWx1cmUuDQo+Pj4gDQo+PiANCj4+IFllcywgSSBkaWQg
-c2VlIGluIHByYWN0aWNlLiBBbmQgaXTigJlzIG5vdCBqdXN0IGFib3V0IGxvb3Npbmcgc3Vic2Vx
-dWVuY2Ugd2FybmluZy4NCj4+IFRoZSB3YXkgaG93IGl04oCZcyBkb25lIG5vdyBrZWVwcyBpbmNv
-bnNpc3RlbnQgQ09OUyByZWdpc3RlciB2YWx1ZSBiZXR3ZWVuIFNNTVUgYW5kIHRoZSBrZXJuZWwN
-Cj4+IHVudGlsIGFueSBuZXcgZXZlbnQgaGFwcGVucy4gVGhlIGtlcm5lbCBkb2VzbuKAmXQgaW5m
-b3JtIFNNTVUgdGhhdCB3ZSBrbm93IGFib3V0IHRoZSBvdmVyZmxvdw0KPj4gYW5kIGNvbnN1bWlu
-ZyBldmVudHMgYXMgZmFzdCBhcyB3ZSBjYW4uDQo+IA0KPiBJbnRlcmVzdGluZyAtIG91dCBvZiBj
-dXJpb3NpdHksIGlzIHNvbWV0aGluZyBibG9ja2luZyB0aGUgSVJRIHRocmVhZA0KPiBmcm9tIHJ1
-bm5pbmcgaW4gYSB0aW1lbHkgbWFubmVyLCBvciBhcmUgeW91IGp1c3QgdXNpbmcgYSByZWFsbHkg
-dGlueQ0KPiBldmVudCBxdWV1ZT8NCg0KT3VyIGNhc2Ugd2FzIHRoZSB0aW55IGV2ZW50IHF1ZXVl
-Lg0KPiANCj4gRWl0aGVyIHdheSB0aG91Z2gsIHRoZSBwb2ludCBpcyB0aGF0IHRoZXJlIGlzIG5v
-dGhpbmcgdG8gImluZm9ybSIgdGhlDQo+IFNNTVUgYWJvdXQgaGVyZS4gSXQgd2lsbCBzZWUgdGhh
-dCB3ZSdyZSBjb25zdW1pbmcgZXZlbnRzIGFuZCBtYWtpbmcNCj4gc3BhY2UgaW4gdGhlIHF1ZXVl
-LCBiZWNhdXNlIHdlJ3JlIHN0aWxsIHVwZGF0aW5nIENPTlMuUkQuIEFsbCB0aGF0IGFuDQo+IHVw
-ZGF0ZSBvZiBQUk9ELk9WRkxHIHNlcnZlcyB0byBkbyBpcyBpbmRpY2F0ZSB0byBzb2Z0d2FyZSB0
-aGF0IGV2ZW50cw0KPiBoYXZlIGJlZW4gZGlzY2FyZGVkIHNpbmNlIHRoZSBsYXN0IHRpbWUgQ09O
-Uy5PVkFDS0ZMRyB3YXMgdXBkYXRlZC4gSXQNCj4gbWFrZXMgbm8gZGlmZmVyZW5jZSB0byB0aGUg
-U01NVSBpZiBpdCBjb250aW51ZXMgdG8gZGlzY2FyZCAqbW9yZSogZXZlbnRzDQo+IHVudGlsIHNv
-ZnR3YXJlIHVwZGF0ZXMgQ09OUy5PVkFDS0ZMRyBhZ2Fpbi4gSXQncyBlbnRpcmVseSBzb2Z0d2Fy
-ZSdzIG93bg0KPiBkZWNpc2lvbiBob3cgY2xvc2VseSBpdCB3YW50cyB0byBrZWVwIHRyYWNrIG9m
-IG92ZXJmbG93cy4NCj4gDQo+IExpa2UgSSBzYXkgaXQncyBub3QgY2xlYXIgaG93IG11Y2ggTGlu
-dXggcmVhbGx5IGNhcmVzIGFib3V0IHRoYXQsIGdpdmVuDQo+IHRoYXQgYWxsIHdlIGRvIHdpdGgg
-dGhlIGluZm9ybWF0aW9uIGlzIGxvZyBhIG1lc3NhZ2UgdG8gaW5kaWNhdGUgdGhhdA0KPiBzb21l
-IG1vcmUgZXZlbnRzIGhhdmUgYmVlbiBsb3N0IHNpbmNlIHRoZSBsYXN0IHRpbWUgd2UgbG9nZ2Vk
-IHRoZSBzYW1lDQo+IG1lc3NhZ2UuIEZ1cnRoZXJtb3JlLCB0aGUgb25seSB0aGluZyB3ZSdsbCBk
-byB3aXRoIHRoZSBvdmVyd2hlbG1pbmcNCj4gbWFqb3JpdHkgb2YgZXZlbnRzIHRoZW1zZWx2ZXMg
-aXMgYWxzbyBsb2cgbWVzc2FnZXMuIFRodXMgcmVhbGlzdGljYWxseQ0KPiBpZiB3ZSdyZSBzdWRk
-ZW5seSBmYWNlZCB3aXRoIHByb2Nlc3NpbmcgYSBmdWxsIGV2ZW50IHF1ZXVlIG91dCBvZg0KPiBu
-b3doZXJlLCB0aGVuIG1hbnkgb2YgdGhlIGV2ZW50cyB3aGljaCAqd2VyZSogZGVsaXZlcmVkIHRv
-IHRoZSBxdWV1ZQ0KPiB3aWxsIGFsc28gYmUgImxvc3QiIHRoYW5rcyB0byByYXRlLWxpbWl0aW5n
-Lg0KPiANCj4gRldJVyBJIHRoaW5rIGl0J3Mgc3RpbGwgdHJ1ZSB0aGF0IGZvciBvdXIgY3VycmVu
-dGx5IHN1cHBvcnRlZCB1c2UtY2FzZXMNCj4gaW4gTGludXgsICphbnkqIGRpc2NhcmRhYmxlIGV2
-ZW50IGlzIGEgc2lnbiB0aGF0IHNvbWV0aGluZydzIGdvbmUgd3Jvbmc7DQo+IGEgZnVsbCBxdWV1
-ZSBvZiAzMksgZXZlbnRzIHdvdWxkIGFscmVhZHkgYmUgYSBzaWduIHRoYXQgc29tZXRoaW5nJ3Mg
-Z29uZQ0KPiAqc2V2ZXJlbHkqIHdyb25nLCBzbyBhdCB0aGF0IHBvaW50IGtub3dpbmcgd2hldGhl
-ciBpdCB3YXMgZXhhY3RseSAzMkssDQo+IG9yIDMySyArIG4gZm9yIHNvbWUgaW5kZXRlcm1pbmF0
-ZSB2YWx1ZSBvZiBuLCBpcyB1bmxpa2VseSB0byBiZQ0KPiBzaWduaWZpY2FudGx5IG1lYW5pbmdm
-dWwuDQoNClRoZSBpc3N1ZSBJIHNlZSB3aXRoIHRoZSBjdXJyZW50IHN0YXRlIGlzIHRoYXQgbG9j
-YWwgKGtlcm5lbCkgY29weSBvZiB0aGUgQ09OUyByZWdpc3Rlcg0Kd2lsbCBiZSBkaWZmZXJlbnQg
-ZnJvbSB0aGUgU01NVSBzdGF0ZSBmb3IgYW4gaW5kZWZpbml0ZSBwZXJpb2Qgb2YgdGltZSwgdW50
-aWwgd2UgZ2V0IG5ldyANCmV2ZW50Lg0KSW4gdGhlIG1lYW50aW1lLCB3ZSBjYW5ub3QgdXNlIHRo
-ZSBsb2NhbCBjb3B5IGFzIGEgdmFsdWUgcmVwcmVzZW50aW5nIHN0YXRlIGluIFNNTVUuDQpXaXRo
-IG9yIHdpdGhvdXQgdGhpcyBwYXRjaCwgaXQgc2hvdWxkIGJlIGNsZWFybHkgdmlzaWJsZS4gDQpS
-aWdodCBub3cgdGhlIGtlcm5lbCBqdXN0IHByaW50cyB3YXJuaW5nIG1lc3NhZ2VzLg0KSWYgYW55
-IGNoYW5nZSBpcyBpbXBsZW1lbnRlZCBpbiB0aGUgZnV0dXJlLCB0aGlzIHN0YXRlIHNob3VsZCBi
-ZSB0YWtlbiBpbnRvIGFjY291bnQuDQpTeW5jaW5nIHRoZSBDT05TIHJlZ2lzdGVyIGltbWVkaWF0
-ZWx5IGFmdGVyIHRoZSBjaGFuZ2Ugd291bGQgcHJldmVudCBhbnkgbWlzdW5kZXJzdGFuZGluZy4N
-ClRoYXQgaXMgd2h5IEkgaGF2ZSBwb3N0ZWQgdGhpcyBwYXRjaCwgbWF5YmUgSSBzaG91bGQgaGF2
-ZSBjbGFyaWZpZWQgaXQgYmV0dGVyIGluIHRoZQ0KY29tbWl0IG1lc3NhZ2UuDQoNCkFueXdheSwg
-ZG8geW91IHRoaW5rIHRoYXQgd2Ugc2hvdWxkIGF0IGxlYXN0IGZpbmQgYSB3YXkgaG93IHRvIG1h
-a2UgdGhlIGV2ZW50cSAgDQpDT05TLk9WQUNLRkxHICBzeW5jIHdvcmtmbG93IGNsZWFyZXIgPw0K
-PiANCj4+PiBJdCBjb3VsZCBiZSBhcmd1ZWQgdGhhdCB3ZSBoYXZlIGEgc3VidGxlIGluY29uc2lz
-dGVuY3kgYmV0d2Vlbg0KPj4+IGFybV9zbW11X2V2dHFfdGhyZWFkKCkgYW5kIGFybV9zbW11X3By
-aXFfdGhyZWFkKCkgaGVyZSwgYnV0IHRoZSBmYWN0IGlzDQo+Pj4gdGhhdCB0aGUgRXZlbnQgcXVl
-dWUgYW5kIFBSSSBxdWV1ZSAqZG8qIGhhdmUgZGlmZmVyZW50IG92ZXJmbG93DQo+Pj4gYmVoYXZp
-b3Vycywgc28gaXQgY291bGQgZXF1YWxseSBiZSBhcmd1ZWQgdGhhdCBpbmNvbnNpc3RlbmN5IGlu
-IHRoZSBjb2RlDQo+Pj4gaGVscHMgcmVmbGVjdCB0aGF0LiBGV0lXIEkgY2FuJ3Qgc2F5IEkgaGF2
-ZSBhIHN0cm9uZyBwcmVmZXJlbmNlIGVpdGhlciB3YXkuDQo+PiANCj4+IEZvciB0aGUgYXJndW1l
-bnQgdGhhdCB0aGUgY29kZSBjYW4gcmVmbGVjdCB0aGUgZGlmZmVyZW5jZS4NCj4+IFRoZW4gdGhl
-IGNvbW1lbnQgJ1N5bmMgb3VyIG92ZXJmbG93IGZsYWcsIGFzIHdlIGJlbGlldmUgd2UncmUgdXAg
-dG8gc3BlZWTigJkgaXMNCj4+IGFscmVhZHkgbWlzbGVhZGluZy4NCj4gDQo+IFllcywgdGhhdCBp
-cyB3aGF0IEkgd2FzIGFsbHVkaW5nIHRvLiBTb21ldGltZXMgaWYgYSBjb21tZW50IGRvZXNuJ3QN
-Cj4gY2xlYXJseSBtYXRjaCB0aGUgY29kZSBpdCBtZWFucyB0aGUgY29kZSBpcyB3cm9uZy4gU29t
-ZXRpbWVzIGl0IGp1c3QNCj4gbWVhbnMgdGhlIGNvbW1lbnQgaXMgd3JvbmcuDQo+IA0KPiBJJ20g
-bm90IHNheWluZyB0aGlzIHBhdGNoIGlzIHRoZSB3cm9uZyBhbnN3ZXIsIGJ1dCBhcyBwcmVzZW50
-ZWQgaXQNCj4gaGFzbid0IG1hbmFnZWQgdG8gY29udmluY2UgbWUgdGhhdCBpdCdzIHRoZSByaWdo
-dCBvbmUgZWl0aGVyLiBMYXJnZWx5DQo+IHNpbmNlIEknbSBub3QgMTAwJSBzdXJlIHdoYXQgdGhl
-IGV4YWN0IHF1ZXN0aW9uIGlzIC0gZXZlbiB3aXRoIHRoaXMNCj4gY2hhbmdlIHdlJ2Qgc3RpbGwg
-aGF2ZSB0aGUgc2FtZSBBQkEgcHJvYmxlbSB3aGVuZXZlciB0aGUgcXVldWUgb3ZlcmZsb3dzDQo+
-IGFnYWluICpiZWZvcmUqIGl0J3MgY29tcGxldGVseSBkcmFpbmVkLg0KPiANCj4gVGhhbmtzLA0K
-PiBSb2Jpbi4NCg0KVGhhbmsgeW91Lg0KVG9tYXMNCg0KDQoKCgpBbWF6b24gRGV2ZWxvcG1lbnQg
-Q2VudGVyIEdlcm1hbnkgR21iSApLcmF1c2Vuc3RyLiAzOAoxMDExNyBCZXJsaW4KR2VzY2hhZWZ0
-c2Z1ZWhydW5nOiBDaHJpc3RpYW4gU2NobGFlZ2VyLCBKb25hdGhhbiBXZWlzcwpFaW5nZXRyYWdl
-biBhbSBBbXRzZ2VyaWNodCBDaGFybG90dGVuYnVyZyB1bnRlciBIUkIgMTQ5MTczIEIKU2l0ejog
-QmVybGluClVzdC1JRDogREUgMjg5IDIzNyA4NzkKCgo=
+Hi Rafa=C5=82,
 
+rafal@milecki.pl wrote on Thu, 09 Mar 2023 09:39:54 +0100:
+
+> On 2023-03-09 09:34, Miquel Raynal wrote:
+> > Hi Rafa=C5=82,
+> >=20
+> > zajec5@gmail.com wrote on Thu, 9 Mar 2023 07:56:05 +0100:
+> >  =20
+> >> On 8.03.2023 19:31, Miquel Raynal wrote: =20
+> >> > Hi Rafa=C5=82,
+> >> >
+> >> > rafal@milecki.pl wrote on Wed, 08 Mar 2023 19:12:32 +0100:
+> >> > =20
+> >> >> On 2023-03-08 19:06, Miquel Raynal wrote: =20
+> >> >>> Hi Rafa=C5=82,
+> >> >>>
+> >> >>> rafal@milecki.pl wrote on Wed, 08 Mar 2023 17:55:46 +0100: =20
+> >> >>>    >>>> On 2023-03-08 17:34, Miquel Raynal wrote: =20
+> >> >>>>> Hi Rafa=C5=82,
+> >> >>>>>
+> >> >>>>> zajec5@gmail.com wrote on Fri, 24 Feb 2023 08:29:03 +0100: =20
+> >> >>>>>   >>>>>> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl> =20
+> >> >>>>>>>> NVMEM subsystem looks for fixed NVMEM cells (specified in DT)=
+ by =20
+> >> >>>>>> default. This behaviour made sense in early days before adding =
+support
+> >> >>>>>> for dynamic cells. =20
+> >> >>>>>>>> With every new supported NVMEM device with dynamic cells curr=
+ent =20
+> >> >>>>>> behaviour becomes non-optimal. It results in unneeded iterating=
+ over >> DT
+> >> >>>>>> nodes and may result in false discovery of cells (depending on =
+used DT
+> >> >>>>>> properties). =20
+> >> >>>>>>>> This behaviour has actually caused a problem already with the=
+ MTD =20
+> >> >>>>>> subsystem. MTD subpartitions were incorrectly treated as NVMEM =
+cells. =20
+> >> >>>>>
+> >> >>>>> That's true, but I expect this to be really MTD specific.
+> >> >>>>>
+> >> >>>>> A concrete proposal below. =20
+> >> >>>>>   >>>>>> Also with upcoming support for NVMEM layouts no new bin=
+ding or driver =20
+> >> >>>>>> should support fixed cells defined in device node. =20
+> >> >>>>>
+> >> >>>>> I'm not sure I agree with this statement. We are not preventing =
+new
+> >> >>>>> binding/driver to use fixed cells, or...? We offer a new way to =
+expose
+> >> >>>>> nvmem cells with another way than "fixed-offset" and "fixed-size=
+" OF
+> >> >>>>> nodes. =20
+> >> >>>>>>   From what I understood all new NVMEM bindings should have cel=
+ls >> defined =20
+> >> >>>> in the nvmem-layout { } node. That's what I mean by saying they s=
+hould
+> >> >>>> not be defined in device node (but its "nvmem-layout" instead). =
+=20
+> >> >>>
+> >> >>> Layouts are just another possibility, either you user the nvmem-ce=
+lls
+> >> >>> compatible and produce nvmem cells with fixed OF nodes, or you use=
+ the
+> >> >>> nvmem-layout container. I don't think all new bindings should have
+> >> >>> cells in layouts. It depends if the content is static or not. =20
+> >> >>>    >>>>>> Solve this by modifying drivers for bindings that suppor=
+t specifying =20
+> >> >>>>>> fixed NVMEM cells in DT. Make them explicitly tell NVMEM subsys=
+tem to
+> >> >>>>>> read cells from DT. =20
+> >> >>>>>>>> It wasn't clear (to me) if rtc and w1 code actually uses fixe=
+d cells. >> I =20
+> >> >>>>>> enabled them to don't risk any breakage. =20
+> >> >>>>>>>> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl> =20
+> >> >>>>>> [for drivers/nvmem/meson-{efuse,mx-efuse}.c]
+> >> >>>>>> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.c=
+om>
+> >> >>>>>> ---
+> >> >>>>>> V2: Fix stm32-romem.c typo breaking its compilation
+> >> >>>>>>      Pick Martin's Acked-by
+> >> >>>>>>      Add paragraph about layouts deprecating use_fixed_of_cells
+> >> >>>>>> ---
+> >> >>>>>>   drivers/mtd/mtdcore.c          | 2 ++
+> >> >>>>>>   drivers/nvmem/apple-efuses.c   | 1 +
+> >> >>>>>>   drivers/nvmem/core.c           | 8 +++++---
+> >> >>>>>>   drivers/nvmem/imx-ocotp-scu.c  | 1 +
+> >> >>>>>>   drivers/nvmem/imx-ocotp.c      | 1 +
+> >> >>>>>>   drivers/nvmem/meson-efuse.c    | 1 +
+> >> >>>>>>   drivers/nvmem/meson-mx-efuse.c | 1 +
+> >> >>>>>>   drivers/nvmem/microchip-otpc.c | 1 +
+> >> >>>>>>   drivers/nvmem/mtk-efuse.c      | 1 +
+> >> >>>>>>   drivers/nvmem/qcom-spmi-sdam.c | 1 +
+> >> >>>>>>   drivers/nvmem/qfprom.c         | 1 +
+> >> >>>>>>   drivers/nvmem/rave-sp-eeprom.c | 1 +
+> >> >>>>>>   drivers/nvmem/rockchip-efuse.c | 1 +
+> >> >>>>>>   drivers/nvmem/sc27xx-efuse.c   | 1 +
+> >> >>>>>>   drivers/nvmem/sprd-efuse.c     | 1 +
+> >> >>>>>>   drivers/nvmem/stm32-romem.c    | 1 +
+> >> >>>>>>   drivers/nvmem/sunplus-ocotp.c  | 1 +
+> >> >>>>>>   drivers/nvmem/sunxi_sid.c      | 1 +
+> >> >>>>>>   drivers/nvmem/uniphier-efuse.c | 1 +
+> >> >>>>>>   drivers/nvmem/zynqmp_nvmem.c   | 1 +
+> >> >>>>>>   drivers/rtc/nvmem.c            | 1 +
+> >> >>>>>>   drivers/w1/slaves/w1_ds250x.c  | 1 +
+> >> >>>>>>   include/linux/nvmem-provider.h | 2 ++
+> >> >>>>>>   23 files changed, 29 insertions(+), 3 deletions(-) =20
+> >> >>>>>>>> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c =20
+> >> >>>>>> index 0feacb9fbdac..1bb479c0f758 100644
+> >> >>>>>> --- a/drivers/mtd/mtdcore.c
+> >> >>>>>> +++ b/drivers/mtd/mtdcore.c
+> >> >>>>>> @@ -523,6 +523,7 @@ static int mtd_nvmem_add(struct mtd_info *m=
+td)
+> >> >>>>>>   	config.dev =3D &mtd->dev;
+> >> >>>>>>   	config.name =3D dev_name(&mtd->dev);
+> >> >>>>>>   	config.owner =3D THIS_MODULE;
+> >> >>>>>> +	config.use_fixed_of_cells =3D of_device_is_compatible(node, >=
+> "nvmem-cells"); =20
+> >> >>>>>
+> >> >>>>> I am wondering how mtd specific this is? For me all OF nodes con=
+taining
+> >> >>>>> the nvmem-cells compatible should be treated as cells providers =
+and
+> >> >>>>> populate nvmem cells as for each children.
+> >> >>>>>
+> >> >>>>> Why don't we just check for this compatible to be present? in
+> >> >>>>> nvmem_add_cells_from_of() ? And if not we just skip the operatio=
+n.
+> >> >>>>>
+> >> >>>>> This way we still follow the bindings (even though using nvmem-c=
+ells in
+> >> >>>>> the compatible property to require cells population was a mistak=
+e in
+> >> >>>>> the first place, as discussed in the devlink thread recently) bu=
+t there
+> >> >>>>> is no need for a per-driver config option? =20
+> >> >>>>>> This isn't mtd specific. Please check this patch for all occurr=
+ences >> of =20
+> >> >>>> the:
+> >> >>>> use_fixed_of_cells =3D true =20
+> >> >>>>>> The very first one: drivers/nvmem/apple-efuses.c driver for the=
+ =20
+> >> >>>> "apple,efuses" binding. That binding supports fixed OF cells, see:
+> >> >>>> Documentation/devicetree/bindings/nvmem/apple,efuses.yaml =20
+> >> >>>
+> >> >>> I'm saying: based on what has been enforced so far, I would expect=
+ all
+> >> >>> fixed cell providers to come with nvmem-cells as compatible, no?
+> >> >>>
+> >> >>> If that's the case we could use that as a common denominator? =20
+> >> >>
+> >> >> Sorry, I don't get it. Have you checked
+> >> >> Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
+> >> >> ?
+> >> >>
+> >> >> It's a NVMEM provied binding with fixed cells that doesn't use
+> >> >> nvmem-cells as compatible. There are many more. =20
+> >> >
+> >> > Oh yeah you're right, I'm mixing things. Well I guess you're right
+> >> > then, it's such a mess, we have to tell the core the parsing method.
+> >> >
+> >> > So maybe another question: do we have other situations than mtd which
+> >> > sometimes expect the nvmem core to parse the OF nodes to populate ce=
+lls,
+> >> > and sometimes not? =20
+> >> >> I'm not aware of that. Please also check my patch. The only case I =
+set =20
+> >> "use_fixed_of_cells" conditionally is mtd code. In other cases it's
+> >> hardcoded to "true". =20
+> >> >> >> > Also, what about "of_children_are_cells" ? Because actually in=
+ most =20
+> >> > cases it's a "fixed of cell", so I don't find the current naming
+> >> > descriptive enough for something so touchy. =20
+> >> >> That would be just incorrect because this new config property =20
+> >> ("use_fixed_of_cells") is only about FIXED cells. =20
+> >> >> There are cases of OF children being cells but NOT being fixed cell=
+s. =20
+> >> They should NOT be parsed by the nvmem_add_cells_from_of(). =20
+> >> >> Example: =20
+> >> a607a850ba1f ("dt-bindings: nvmem: u-boot,env: add basic NVMEM cells")
+> >> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/com=
+mit/?id=3Da607a850ba1fa966cbb035544c1588e24a6307df =20
+> >=20
+> > This is backwards. That's why layouts have been proposed: having
+> > a clear framework were the nvmem core should or should not play with
+> > the OF children nodes. If each binding is different, you end up with
+> > the mess we have today, where nobody knows how to properly
+> > populate the cells.
+> >=20
+> > Anyway, it's not a big deal either, if the cells are empty we can
+> > easily check that and have *yet another* specific case in the core.
+> >  =20
+> >> So that would result in U-Boot env:
+> >> 1. Having OF children nodes being cells
+> >> 2. Setting "of_children_are_cells" to false (counter-intuitive) to >> =
+avoid nvmem_add_cells_from_of() =20
+> >=20
+> > Agreed. So what about config.ignore_of_children?
+> > - mtd sets this to !is_compatible(nvmem-cells)
+> > - nobody else touches it (the core don't try to parse the cell if it's
+> >   empty so U-Boot env driver works) =20
+>=20
+> "ignore_of_children" would have opposite (reversed) meaning to the
+> "use_fixed_of_cells":
+> 1. By default it would be 0 / false
+> 2. By default NVMEM code would NOT ignore OF children nodes
+>=20
+> That is what I actually *don't* want.
+>=20
+> Having NVMEM core look for fixed cells in device node is undesirable.
+
+Is it?
+
+I think this is the standard case. Most of the time fixed cells are
+the simplest and most direct approach. I don't get why we would like
+to prevent it at some point? Only the more advanced stuff that does not
+fit the purpose of fixed OF cells should go through layouts.
+
+> I want that feature to be off by default. I want devices to have to
+> enable it explicitly only when it's needed.
+
+Well, that's exactly the opposite of what nvmem does right now, that's
+maybe why reviewers don't get the interest of the current
+implementation: it has many impacts on users which should not be
+impacted just because we messed with mtd.
+
+Thanks,
+Miqu=C3=A8l
