@@ -2,92 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727866B21C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:44:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3818C6B21C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjCIKnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
+        id S229453AbjCIKoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:44:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjCIKnL (ORCPT
+        with ESMTP id S229968AbjCIKnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:43:11 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74EC58B4B
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:42:40 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id t15so1372679wrz.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 02:42:40 -0800 (PST)
+        Thu, 9 Mar 2023 05:43:19 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CF5E7ED5
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:42:46 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id ay14so5052173edb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 02:42:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678358559;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1678358564;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=AXe5GLVgfCGpsOd/5Hq05tqMS28XNylXrDvLRZzzBYk=;
-        b=nBr8nAd36m9PAaXhfYM/4OLaddFdsGqVE33IkJXe836CVY1mwrMaJ0z6xZBf96qoOI
-         wHtu0PFtoKoyIzX+VPr+/fuzdwvpjf7WHn48t+f9zcU6YwYZWztwBuqGj7l0dwdbArgj
-         9BdJxnMMnENBMqvEWmtN9PjHCRl7l2YExcQXYKyBbziRvao/CePqrt7EvP4HpVtto5VH
-         QXi3YjTFTii/7goIfJr/GTdt68ovUVdmBOWoUiiz0gXw5VAu3RMa5w0b1gBU8OSuUqb4
-         AEtkZbqFYD4W0WJ0d3IiA/1XF2s9Fl82n7X/PtjFCiLZRgjUzj9Q13c24vjHb1a/yAmF
-         vQrA==
+        bh=QIqPwZfACxuoFE0kVLDEX5KFTlxcxIkjr0ZrsCZpJfg=;
+        b=euVIL+2duTNYwRJtF+ol1oSzOAan84vhnx9zvHZpXS6JSx5MDgCre/TmAdkCXB7MK2
+         I4jb/gEFln7Tc55yGheXC6LCyasYkbRvGkjcfnH9JWP8vMj2oH+ua3kT4DUVvIpio5qm
+         8KAaN0aPH4fcLlLBGN+bCLfbIkTte9imoBhZqKTxGi0Pyl2K5hQUKFadjITLBDgC4tRe
+         9JvJtm/9nd5d+j3EHVcot8cppwPfqzX8j+IqL+KBQkxJBxYiQJ6OML3Z4VtrIDeOXQI5
+         R9C9ULlDParFe3IljpQOQ8H2YOnIJ2Y3EfKjt1gDpCvFDTVz9a1P8ilGCS6jjqBQHFGC
+         UNmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678358559;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678358564;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AXe5GLVgfCGpsOd/5Hq05tqMS28XNylXrDvLRZzzBYk=;
-        b=D5PDAK6j15RogACMFEUuz6tNtt6W1YDZvJg8PZ+pkCbMHBnV1teb6INvH+6uNNK2/u
-         wWvELu+WKtAmVQ8nUV74s9RjwPq2mTrCldolMYd1kk1WMpbHIjLqbFZxaQ3RIZSEKgwX
-         YnK2updrzcYiSpgSo0h/+cg1FQjrOrxb4qJSDL5P/SMPDx3Xi8Bq7bL+HxhY8/foj0U2
-         5z7dSC1tL1Xyt/AnWK4tWt6WWCeESksBP9IPqN/aUeR90oTk5UW+bDBpEPWf1l6JZflu
-         Wh26XnSSH5T21iXV+6zerKfZEBVR/hvwJjqzyBmizjrf3KnJqw3G+uiX62Mo6tDUCSo5
-         6agw==
-X-Gm-Message-State: AO0yUKU5KKkbYbYNQ0GztE8bExrnrn/8C1aVugM1E06gbYCDsPG4ZdbA
-        LZorYO5VM+Qfgy9kbPj8t0e8vg==
-X-Google-Smtp-Source: AK7set9TX+g8GQa3ZvYm7K5IyQckLiVBKmzBF9eqRJS1rvlystpDX78yR8o1b1wUu4lOee+V+S+WMQ==
-X-Received: by 2002:a05:6000:507:b0:2c5:4f2d:d9b4 with SMTP id a7-20020a056000050700b002c54f2dd9b4mr12687108wrf.58.1678358559301;
-        Thu, 09 Mar 2023 02:42:39 -0800 (PST)
-Received: from [192.168.0.173] ([79.115.63.78])
-        by smtp.gmail.com with ESMTPSA id f12-20020a5d58ec000000b002c71b4d476asm17579951wrd.106.2023.03.09.02.42.36
+        bh=QIqPwZfACxuoFE0kVLDEX5KFTlxcxIkjr0ZrsCZpJfg=;
+        b=i19l8rvNpAZwmcQjKqrfHivVSCARjs3EOiDKS3XD4JUUdZ+cTLJTlDvt4drLcMg+oL
+         RJAMnS92pjCMhh4MnNrf65znmqOYt1DDxm+b+AXOPaQzMqSKpUmUKAQ7b5x7QbbWJlDl
+         BnrOMreGshq7qmQ8mEjayDwW1in2MnR6prJ1MTdPiRPnY71RjFdqugVb/Rz7YzhnLo3A
+         Pj6Lmi1j1YqgF2tAT8tZa1aAw4vfvVRD3+KHFypl9TmyHS++Yz/3wEMjVJatK0k9TJR2
+         kP+RHzPLWWyKhRhGa+iYvUOuzAKUxFMV73rh3IaaUEGgNNKb5KVk02GiSC3w3lsqH6E3
+         uh/w==
+X-Gm-Message-State: AO0yUKVgUcpdAjU3fIfwFLKghr5EDemHwtFdJy9iiHPZ3NE0qpjuQNSz
+        WYADO4RWb+AxtfGvujGH5hLxLQ==
+X-Google-Smtp-Source: AK7set8BzaVa4jd8dPDPAqB41K7DRKm9ax9xddxg4jIMPvb/7B3XF2VQMIRZi0xYFz1/FcAsN4zkZQ==
+X-Received: by 2002:a17:907:e8d:b0:8af:5752:691f with SMTP id ho13-20020a1709070e8d00b008af5752691fmr25759324ejc.76.1678358564466;
+        Thu, 09 Mar 2023 02:42:44 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
+        by smtp.gmail.com with ESMTPSA id se18-20020a170906ce5200b008d6e551e1bcsm8635884ejb.2.2023.03.09.02.42.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 02:42:38 -0800 (PST)
-Message-ID: <1849e2c8-54f5-9e56-4ed8-8b0e4a826d04@linaro.org>
-Date:   Thu, 9 Mar 2023 12:42:35 +0200
+        Thu, 09 Mar 2023 02:42:44 -0800 (PST)
+Message-ID: <2881f527-1673-3496-85a2-84a13f074248@linaro.org>
+Date:   Thu, 9 Mar 2023 11:42:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] spi: Replace `dummy.nbytes` with `dummy.ncycles`
-To:     Michael Walle <michael@walle.cc>
-Cc:     Serge Semin <fancer.lancer@gmail.com>, Sergiu.Moga@microchip.com,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        Claudiu.Beznea@microchip.com, chin-ting_kuo@aspeedtech.com,
-        clg@kaod.org, joel@jms.id.au, andrew@aj.id.au,
-        kdasu.kdev@gmail.com, han.xu@nxp.com, john.garry@huawei.com,
-        matthias.bgg@gmail.com, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, haibo.chen@nxp.com,
-        yogeshgaur.83@gmail.com, heiko@sntech.de,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        michal.simek@xilinx.com, bcm-kernel-feedback-list@broadcom.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20220911174551.653599-1-sergiu.moga@microchip.com>
- <20220925220304.buk3yuqoh6vszfci@mobilestation>
- <18e6e8a8-6412-7e31-21e0-6becd4400ac1@microchip.com>
- <20220926172454.kbpzck7med5bopre@mobilestation>
- <1766f6ef-d9d8-04f7-a6bf-0ea6bc0b3d23@linaro.org>
- <f647e713a65f5d3f0f2e3af95c4d0a89@walle.cc>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4] ASoC: cs35l41: Steam Deck Shared boost properties
+ quirk
 Content-Language: en-US
-In-Reply-To: <f647e713a65f5d3f0f2e3af95c4d0a89@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Lucas Tanure <lucas.tanure@collabora.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "Takashi Iwai --cc=alsa-devel @ alsa-project . org" <tiwai@suse.com>
+Cc:     patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230309104133.537056-1-lucas.tanure@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230309104133.537056-1-lucas.tanure@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -98,40 +83,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 09.03.2023 10:38, Michael Walle wrote:
->> In an ideal world, where both the controller and the device talk about
->> dummy number of cycles, I would agree with you, buswidth and dtr should
->> not be relevant for the number of dummy cycles. But it seems that there
->> are old controllers (e.g. spi-hisi-sfc-v3xx.c, spi-mt65xx.c, spi-mxic.c)
->> that support buswidths > 1 and work only with dummy nbytes, they are not
->> capable of specifying a smaller granularity (ncycles). Thus the older
->> controllers would have to convert the dummy ncycles to dummy nbytes.
->> Since mixed transfer modes are a thing (see jesd251, it talks about
->> 4S-4D-4D), where single transfer mode (S) can be mixed with double
->> transfer mode (D) for a command, the controller would have to guess the
->> buswidth and dtr of the dummy. Shall they replicate the buswidth and dtr
->> of the address or of the data? There's no rule for that.
+On 09/03/2023 11:41, Lucas Tanure wrote:
+> Add support for Steam Deck bios old properties. If a Steam deck didn't
+> upgrade the BIOS, the driver should be able to handle the previous
+> properties for shared boost types.
 > 
-> But in the end that doesn't matter because they are just dummy clock
-> cycles and the mode will only affect the data/address/command. Therefore,
-> the controller is free to choose the mode that suits it best.
->  > But that begs the question, is ncycles in regard to DTR or SDR? That is,
-> are you counting just one type of edges or both the falling and rising
-> edges. The smallest granularity would be ncycles in regard of DTR. To me,
-> it's not obvious what the SEMPER Nano Flash [1] uses. I'd say we choose
-> the smallest granularty in spi-mem to be future proof and maybe provide
-> some spi-mem helper to help setting the cycles for SDR/DTR. As an example,
-> if you want to wait 4 cycles in SDR you'd have ncycles=8 in spi-mem.
+> Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
+> Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> ---
+> Changes since V3:
+>  - Fixed missing space in if statement
+>  - Fix the build issue, as dependency patches are already merged
 > 
+> Changes since V2:
+>  - sent the wrong patch with missing fixed lines
+> Changes since V1:
+>  - else in same line as {
+> ---
+>  sound/soc/codecs/cs35l41.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
+> index 1624510d09c0..2803ff0f0003 100644
+> --- a/sound/soc/codecs/cs35l41.c
+> +++ b/sound/soc/codecs/cs35l41.c
+> @@ -1022,9 +1022,15 @@ static int cs35l41_handle_pdata(struct device *dev, struct cs35l41_hw_cfg *hw_cf
+>  	unsigned int val;
+>  	int ret;
+>  
+> -	ret = device_property_read_u32(dev, "cirrus,boost-type", &val);
+> -	if (ret >= 0)
+> -		hw_cfg->bst_type = val;
+> +	if (device_property_read_bool(dev, "cirrus,shared-boost-active")) {
 
-No, we can't invent our own measuring units. We have cycles and half 
-cycles (regardless of the transfer mode used (STR, DTR)).
+You are now changing ABI and adding undocumented properties.
 
-> So you won't need the mode nor the dtr property.
-> 
-> -michael
-> 
-> [1] 
-> https://www.infineon.com/dgdl/Infineon-S25FS256T_256Mb_SEMPER_Nano_Flash_Quad_SPI_1.8V-DataSheet-v01_00-EN.pdf?fileId=8ac78c8c80027ecd0180740c5a46707a
+NAK.
+
+Best regards,
+Krzysztof
+
