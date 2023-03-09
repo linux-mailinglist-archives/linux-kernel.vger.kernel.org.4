@@ -2,104 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314A86B2E0D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 21:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 717386B2E26
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 21:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjCIUAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 15:00:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
+        id S230323AbjCIUIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 15:08:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjCIUAm (ORCPT
+        with ESMTP id S229580AbjCIUIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 15:00:42 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EA8FA0A8
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 12:00:25 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id n18so3138307ybm.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 12:00:25 -0800 (PST)
+        Thu, 9 Mar 2023 15:08:13 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448E1311F4
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 12:08:11 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id j11so11779983edq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 12:08:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678392025;
+        d=kali.org; s=google; t=1678392490;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hRVfqzOHtxGfCOD/hmq5ZCFI3R/AhSmM69LhJPZlq7U=;
-        b=FTWdr5VUtQTk2dzVnzWpz5cXvej4xF8WCdYrQwTsknU6hKfGhe4UHUGfyw0Bu2425/
-         tqJ22veMT0/Th/qvPSzFtkd+ASBuwPe9WU83r+VVL3QzZgSlsH4JLqXpc17eKQN2NvOX
-         wSaKy/bge58jNDiUvFzN8sUZF9jtMVzt5dfotHBo2mE5rghOpXcGREm63j+ZhFqgR0YN
-         j2cuJb4N/vHr07aYBEvvoegKfRNJOzApIgcB/Gr0Ikw1zDLYxWSKLdhyqAju1XBVtM/b
-         epPozqqqdNkff4+Vrym14hTz//lIcnGaflEjG5vhVba2Bq0+oXhr1Jw+/oOo6l4DgX0s
-         3U5g==
+        bh=rkdqh8Mn4yYVcJRbj0k73VKeCBqKduyHj6J+C4uNHbk=;
+        b=GHJNSGs0ozGdUpE1NfeN06yA+sKV9j8iM4T3MaizrYC8y3Xkguqdvt9CGLF+wVxabQ
+         GjHtzIdzGaMVhs5kRs0zcAZigoMTMgRR3rL/Un1Kdj9TWTmskh7OXWXP7oEMC1d+Gaxe
+         t/J+tUlSjq7iO4QQtq3+CIcOZzkezl1W3+2ugK7blV0TOX4eWV+IWwKc6zwt7uqdFCaM
+         iElGs/PMnlpE3t3Y/qyPUXjTpFM9GYMwcEAn/LZBqxW9FxupcNIsq5o1jzifC4uMTivz
+         UA8uNSGT+x0gFE+bF+Hw5dOyKAhBM6CGLvIFEaBLVfQV1uT2DWqpO8z3uPf9wyUfgvK0
+         ykrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678392025;
+        d=1e100.net; s=20210112; t=1678392490;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hRVfqzOHtxGfCOD/hmq5ZCFI3R/AhSmM69LhJPZlq7U=;
-        b=GrmAjLPwUd0wEuTfNMk2wiC8MuWAgHYOGy92CrOrj1L1bzeCOsvls5exZ4ZpBEM21C
-         CgzvqPaKjULGELZf3N2QZXP8gLVCol/KiE8Ghd5BKn/bynCqBFqOFjc4zVL+T+WX7/Un
-         0YTZR/2OmJjogdtBrHh8MxHIWbPlBSpujBdbWBNcwE0/d7pNtRv7EI4MwPjOi8qNCzph
-         FYiyMwXmyPflvvAHbb19V3NhLlC2ZP+d/tY3lQh7leZ4qEDXXVOdZSl47Vy93Yh825Ti
-         fm8BIf3DovMIwFyFOkIwKAPvWplUboxzx2vOCiiWv5q1YWMN5FIu+XjERIUgl6OBbdin
-         a+iA==
-X-Gm-Message-State: AO0yUKULToKkMA+H8O38Td+LqIM3R/bS890vYjpXDvA8ArACf33nG84o
-        tYo9r09ATwBzdMlC92Fh1VKf79RhRKCRCxoj5b6FDQ==
-X-Google-Smtp-Source: AK7set/yHnG/9RXusfxXy2Y3OUlsTTSG233SidOIxR8aFoF7LJ4oqFfGvYqVVqWWh9cFIa3D1tS2bTgQ9T6cbE3qFis=
-X-Received: by 2002:a25:8e92:0:b0:914:fc5e:bbec with SMTP id
- q18-20020a258e92000000b00914fc5ebbecmr11155039ybl.13.1678392024664; Thu, 09
- Mar 2023 12:00:24 -0800 (PST)
+        bh=rkdqh8Mn4yYVcJRbj0k73VKeCBqKduyHj6J+C4uNHbk=;
+        b=Sz9/Tn8CWPq/dicJcyhiXBbNJJUew4giwQQ2sHXryvhVojrMMxg1zBE5Ur5cfaVM7H
+         w9SV2dNq8IOLTQikutykTXiLdM8iGVoepZ2eypojiQ4gTA8sqBp3GjtHiJVcemgP96F0
+         4WfpQOUERYK6gcrpQUzfaq4CEvnUXFBcuvcWqFQUALvQvvzgVE28YJSrMc3JX852cc/b
+         ZdbeAaqSxhDjV4UJXmnCPajM3nAn7yrzUTXV59EIBOv4DJlOPSnhT4e0yS7j3w+hNacp
+         vB/8eNRzKRK9m8RcGKuA1pKM77/iErDxXShombl8Uj0rPX4nL11RpXJEI/f9O6Ljp7B1
+         5DYw==
+X-Gm-Message-State: AO0yUKWi+/I3qFgoKsvdN0FR6UXEW+XVpGPwAB50Rej1uEWvQLdmIlIz
+        D2CD9aNJpdDOltIbMejsPLUsIfVpQtlkQ2j7HuUTew==
+X-Google-Smtp-Source: AK7set9FtsMby2FguByeoNJEQBInZqMAF0hTx+q7tMBEgbEGSz6VyxVYUtlDhjCvaUHueJ7BNK9KTXJ/2uQvQ7QqWB8=
+X-Received: by 2002:a17:906:310d:b0:87b:d50f:6981 with SMTP id
+ 13-20020a170906310d00b0087bd50f6981mr10758001ejx.14.1678392489733; Thu, 09
+ Mar 2023 12:08:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-7-vipinsh@google.com>
- <20230309180135.000043fe@gmail.com>
-In-Reply-To: <20230309180135.000043fe@gmail.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Thu, 9 Mar 2023 11:59:48 -0800
-Message-ID: <CAHVum0f+k=AX4yM=04SLEfuaLVOQVozMk10O9OuzJjj-NMjh9g@mail.gmail.com>
-Subject: Re: [Patch v4 06/18] KVM: x86/mmu: Shrink split_shadow_page_cache via
- MMU shrinker
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
-        dmatlack@google.com, jmattson@google.com, mizhang@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230209020916.6475-1-steev@kali.org> <20230209020916.6475-5-steev@kali.org>
+ <ZAoWdR7mppnWclFr@hovoldconsulting.com>
+In-Reply-To: <ZAoWdR7mppnWclFr@hovoldconsulting.com>
+From:   Steev Klimaszewski <steev@kali.org>
+Date:   Thu, 9 Mar 2023 14:07:58 -0600
+Message-ID: <CAKXuJqgAbdALaRdcoSV+sXbGzwm6h54hZtG2rBobcGA9vyu50g@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] arm64: dts: qcom: thinkpad-x13s: Add bluetooth
+To:     Johan Hovold <johan@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 8:01=E2=80=AFAM Zhi Wang <zhi.wang.linux@gmail.com> =
-wrote:
+On Thu, Mar 9, 2023 at 11:24=E2=80=AFAM Johan Hovold <johan@kernel.org> wro=
+te:
 >
-> On Mon,  6 Mar 2023 14:41:15 -0800
-> Vipin Sharma <vipinsh@google.com> wrote:
->
-> > Use MMU shrinker to free unused pages in split_shadow_page_cache.
-> > Refactor the code and make common function to try emptying the page cac=
-he.
+> On Wed, Feb 08, 2023 at 08:09:16PM -0600, Steev Klimaszewski wrote:
+> > The Lenovo Thinkpad X13s has a WCN6855 Bluetooth controller on uart2,
+> > add this.
 > >
-> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> > Signed-off-by: Steev Klimaszewski <steev@kali.org>
+> > Link: https://lore.kernel.org/r/20230207052829.3996-5-steev@kali.org
+>
+> This link should not be needed.
+>
+> Also, please update the patch Subject to use the following prefix:
+>
+>         arm64: dts: qcom: sc8280xp-x13s: ...
+>
+
+Yeah, that was me screwing up my  patch, will make those changes for v6
+
 > > ---
-> >  arch/x86/kvm/mmu/mmu.c | 34 +++++++++++++++++++++-------------
-> >  1 file changed, 21 insertions(+), 13 deletions(-)
+> > Changes since v4:
+> >  * Address Konrad's review comments.
 > >
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 0ebb8a2eaf47..73a0ac9c11ce 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -6696,13 +6696,24 @@ void kvm_mmu_invalidate_mmio_sptes(struct kvm *=
-kvm, u64 gen)
-> >       }
-> >  }
+> > Changes since v3:
+> >  * Add vreg_s1c
+> >  * Add regulators and not dead code
+> >  * Fix commit message changelog
 > >
+> > Changes since v2:
+> >  * Remove dead code and add TODO comment
+> >  * Make dtbs_check happy with the pin definitions
+> >  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 76 +++++++++++++++++++
+> >  1 file changed, 76 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts=
+ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> > index f936b020a71d..ad20cfb3a830 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> > @@ -24,6 +24,8 @@ / {
+> >       aliases {
+> >               i2c4 =3D &i2c4;
+> >               i2c21 =3D &i2c21;
+> > +             serial0 =3D &uart17;
 >
-> After adding the lock in the kvm_mmu_memory_cache, the cache_lock doesn't=
- need
-> to be passed here and in mmu_shrink_scan().
+> This is an unrelated change that does not belong in this patch.
 >
-Agree. Let us see what is the decision on moving the lock inside the cache.
+> > +             serial1 =3D &uart2;
+> >       };
+> >
+> >       wcd938x: audio-codec {
+> > @@ -297,6 +299,15 @@ pmc8280c-rpmh-regulators {
+> >               qcom,pmic-id =3D "c";
+> >               vdd-bob-supply =3D <&vreg_vph_pwr>;
+> >
+> > +             vreg_s1c: smps1 {
+> > +                     regulator-name =3D "vreg_s1c";
+> > +                     regulator-min-microvolt =3D <1880000>;
+> > +                     regulator-max-microvolt =3D <1900000>;
+> > +                     regulator-allowed-modes =3D <RPMH_REGULATOR_MODE_=
+AUTO>,
+> > +                                               <RPMH_REGULATOR_MODE_RE=
+T>;
+> > +                     regulator-allow-set-load;
+>
+> Don't you need to specify initial-mode as well?
+>
+> > +             };
+> > +
+> >               vreg_l1c: ldo1 {
+> >                       regulator-name =3D "vreg_l1c";
+> >                       regulator-min-microvolt =3D <1800000>;
+> > @@ -712,6 +723,32 @@ &qup0 {
+> >       status =3D "okay";
+> >  };
+> >
+> > +&uart2 {
+> > +     pinctrl-0 =3D <&uart2_state>;
+> > +     pinctrl-names =3D "default";
+> > +
+> > +     status =3D "okay";
+> > +
+> > +     bluetooth {
+> > +             compatible =3D "qcom,wcn6855-bt";
+> > +
+> > +             vddio-supply =3D <&vreg_s10b>;
+> > +             vddbtcxmx-supply =3D <&vreg_s12b>;
+> > +             vddrfacmn-supply =3D <&vreg_s12b>;
+> > +             vddrfa0p8-supply =3D <&vreg_s12b>;
+> > +             vddrfa1p2-supply =3D <&vreg_s11b>;
+> > +             vddrfa1p7-supply =3D <&vreg_s1c>;
+> > +
+> > +             max-speed =3D <3200000>;
+> > +
+> > +             enable-gpios =3D <&tlmm 133 GPIO_ACTIVE_HIGH>;
+> > +             swctrl-gpios =3D <&tlmm 132 GPIO_ACTIVE_HIGH>;
+> > +
+> > +             pinctrl-0 =3D <&bt_en>;
+> > +             pinctrl-names =3D "default";
+> > +     };
+> > +};
+> > +
+> >  &qup1 {
+> >       status =3D "okay";
+> >  };
+> > @@ -720,6 +757,11 @@ &qup2 {
+> >       status =3D "okay";
+> >  };
+> >
+> > +&uart17 {
+> > +     compatible =3D "qcom,geni-debug-uart";
+> > +     status =3D "okay";
+> > +};
+>
+> This bit does not belong here either. We don't have any means of
+> accessing the debug uart on the X13s so we should probably just leave it
+> disabled.
+>
+
+Will drop it (and the above one as well)
+
+> > +
+> >  &remoteproc_adsp {
+> >       firmware-name =3D "qcom/sc8280xp/LENOVO/21BX/qcadsp8280.mbn";
+> >
+> > @@ -980,6 +1022,19 @@ hastings_reg_en: hastings-reg-en-state {
+> >  &tlmm {
+> >       gpio-reserved-ranges =3D <70 2>, <74 6>, <83 4>, <125 2>, <128 2>=
+, <154 7>;
+> >
+> > +     bt_en: bt-en-state {
+>
+> As you are configuring more than one pin, please rename this as:
+>
+>         bt_default: bt-default-state
+>
+> > +             hstp-sw-ctrl-pins {
+> > +                     pins =3D "gpio132";
+> > +                     function =3D "gpio";
+>
+> You should define the bias configuration as well. I guess we need to
+> keep the default pull-down enabled.
+>
+> > +             };
+> > +
+> > +             hstp-bt-en-pins {
+> > +                     pins =3D "gpio133";
+> > +                     function =3D "gpio";
+> > +                     drive-strength =3D <16>;
+>
+> bias-disable?
+>
+> > +             };
+> > +     };
+> > +
+> >       edp_reg_en: edp-reg-en-state {
+> >               pins =3D "gpio25";
+> >               function =3D "gpio";
+> > @@ -1001,6 +1056,27 @@ i2c4_default: i2c4-default-state {
+> >               bias-disable;
+> >       };
+> >
+> > +     uart2_state: uart2-state {
+>
+> Rename this one too:
+>
+>         uart2_default: uart2-default-state
+>
+> > +             cts-pins {
+> > +                     pins =3D "gpio122";
+>
+> This should be gpio121 (gpio122 is rts).
+>
+
+You are right that it should be... however... if I actually set it to
+be 121.... bluetooth doesn't actually come up/work?
+
+> > +                     function =3D "qup2";
+> > +                     bias-disable;
+>
+> Don't we need a pull-down on this one to avoid a floating input when the
+> module is powered down?
+>
+Maybe?  I don't have access to the schematics or anything so I was
+going with the best guess based on what worked by poking and prodding.
+Will try this.
+
+
+> > +             };
+> > +
+> > +             rts-tx-pins {
+>
+> Please split this in two nodes.
+>
+> > +                     pins =3D "gpio122", "gpio123";
+> > +                     function =3D "qup2";
+> > +                     drive-strength =3D <2>;
+> > +                     bias-disable;
+> > +             };
+> > +
+> > +             rx-pins {
+> > +                     pins =3D "gpio124";
+> > +                     function =3D "qup2";
+> > +                     bias-pull-up;
+> > +             };
+> > +     };
+> > +
+> >       i2c21_default: i2c21-default-state {
+> >               pins =3D "gpio81", "gpio82";
+> >               function =3D "qup21";
+>
+> Johan
