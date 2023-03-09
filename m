@@ -2,52 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212E96B2CB9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C569C6B2CBC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbjCISNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 13:13:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
+        id S229983AbjCISPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 13:15:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbjCISNh (ORCPT
+        with ESMTP id S229827AbjCISP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 13:13:37 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3ED55553F
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 10:13:30 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id s1-20020a6bd301000000b0073e7646594aso1251331iob.8
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 10:13:30 -0800 (PST)
+        Thu, 9 Mar 2023 13:15:27 -0500
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A435F519;
+        Thu,  9 Mar 2023 10:15:26 -0800 (PST)
+Received: by mail-pj1-f47.google.com with SMTP id kb15so2902731pjb.1;
+        Thu, 09 Mar 2023 10:15:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678385609;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        d=1e100.net; s=20210112; t=1678385725;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eRq3TMJJZHy95+Bnu1oE5VxJ/AJwds9+h0Qo4sc5MT8=;
-        b=vQO0hhU9afFpAGZyE4wmD/VbBPr/arPBdIFz+qTYKIDK+NtBFB8mhNxzqrYvzM22dk
-         xvc7sJRmMBGZVTmPnTJj7N9by2gm3VgblAYUeF542M8LYQNh9XeQK7tgWM4Gbt6mTnx4
-         Gmxkw0nt9ZrkCxY4LcWczvLQoH3q3tkdaVSI2zlX8ExgauMbTxamzi0apzcrbQsvlt2A
-         n12kp9NkEWUrPJI+RhiyWfzW/kVl6vNQEu3cuwJvZ4IVx6K8FkAW2jbqolRF21ECTPbd
-         gI6f22JTOXtvH9n23iD4tdO3ZtWwbLUlYP5N08jzYFOTkp0bT1eJyBZr/ZKVpuwRgO0I
-         1D7Q==
-X-Gm-Message-State: AO0yUKV8VkvezQBZLTIW75qVd1kooQEYqdRb2JuH5F0Tv6LsF6W/TBnI
-        J6gMJtBqjAwAlCSJKl3EEobSRe/zI33suah6FPIr7Ofw8nnm
-X-Google-Smtp-Source: AK7set/dw+lBFz3VuekguS1j6XrbI8OFHItFn11I7RCeq74vSHR2atkqy55CSQaU2RexX6vC3Nv/T4g09iEyOdu+45bOcLLDXeSz
+        bh=1n3W7Mep7n+u6WTkNpOQ23YBe9QKdrpVK921z9QG0TQ=;
+        b=zXYeIFavPNXs0NSUY1vaTouA5F2poUYh82kKkaxUnIcAai5sw/s+Jm4lsNOGWMk9dj
+         I3H/3ItEw+H56JFnPN2+ifYoPAMsV+BFQdT0cFA+dzKh4t4byQaCRYD9BmNM4xegpFhd
+         2yDyca1H+gv6S4sks80zv9ZpRmEyXJP9jAxSIADEIvIlrSgQTFaZZMIpJ6yRHNerqmV0
+         q8Uwl9jEvjhq04Mz2HWKaqSFveeAMnoWB8iMh5+5Hhbply1QBLyfyDO3JYNb2IVEX5X8
+         wY9ayCqr6xs0wDiNQs4fPhb+1l5OLmfG+YBXVatx4U3pt7KVLPJCZDmyv1f9INYqescZ
+         F8xA==
+X-Gm-Message-State: AO0yUKXHvuQJYX/SYP9J5+f3OYJbSiq72f4/w/yjkL+BwFuWGfZHDZvt
+        6/nlx0Dm4xxhF/35beQZ+f8=
+X-Google-Smtp-Source: AK7set9GeDtPXB8h9zEYbgrrWoaLeCxwdQdVIz0UEBRPu3qTrNRUmyZBlWQmaCpnfCkVEMpxXLYVYQ==
+X-Received: by 2002:a05:6a20:8407:b0:cd:363d:b27c with SMTP id c7-20020a056a20840700b000cd363db27cmr32359263pzd.16.1678385725521;
+        Thu, 09 Mar 2023 10:15:25 -0800 (PST)
+Received: from [192.168.132.235] ([63.145.95.70])
+        by smtp.gmail.com with ESMTPSA id 1-20020a630301000000b004fb11a7f2d4sm11207080pgd.57.2023.03.09.10.15.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 10:15:24 -0800 (PST)
+Message-ID: <1ca7dbef-5747-29c2-a11c-086cf36d636f@acm.org>
+Date:   Thu, 9 Mar 2023 10:15:23 -0800
 MIME-Version: 1.0
-X-Received: by 2002:a02:85a1:0:b0:3a9:5ec2:ef41 with SMTP id
- d30-20020a0285a1000000b003a95ec2ef41mr10941296jai.3.1678385609080; Thu, 09
- Mar 2023 10:13:29 -0800 (PST)
-Date:   Thu, 09 Mar 2023 10:13:29 -0800
-In-Reply-To: <0000000000008fb52f05eb515c2d@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000068c2505f67b9a8d@google.com>
-Subject: Re: [syzbot] WARNING: fbcon: Driver 'vkmclient_loop: send disconnect:
- Broken pipe
-From:   syzbot <syzbot+8e67d6db6ac1d1b297f7@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, jiri@nvidia.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v2 1/3] ufs: mcq: Add supporting functions for mcq
+ abort
+Content-Language: en-US
+To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com, mani@kernel.org,
+        stanley.chu@mediatek.com, adrian.hunter@intel.com,
+        beanhuo@micron.com, avri.altman@wdc.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1678338926.git.quic_nguyenb@quicinc.com>
+ <68b786f390dbd93218a482d18c513bc332e82da3.1678338926.git.quic_nguyenb@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <68b786f390dbd93218a482d18c513bc332e82da3.1678338926.git.quic_nguyenb@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,23 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On 3/8/23 21:28, Bao D. Nguyen wrote:
+> +static bool ufshcd_mcq_sqe_search(struct ufs_hba *hba,
+> +		struct ufs_hw_queue *hwq, int task_tag)
+> +{
+> +	struct utp_transfer_req_desc *utrd;
+> +	u32 mask = hwq->max_entries - 1;
+> +	bool ret = false;
+> +	u64 addr, match;
+> +	u32 i;
 
-commit ed539ba614a079ea696b92beef1eafec66f831a4
-Author: Jakub Kicinski <kuba@kernel.org>
-Date:   Fri Jan 6 06:33:57 2023 +0000
+The variable name "i" is usually used for a loop index. In this case it 
+represents a slot in the submission queue. How about renaming "i" into 
+"slot"?
 
-    devlink: always check if the devlink instance is registered
+> +static inline void ufshcd_mcq_update_sq_head_slot(struct ufs_hw_queue *q)
+> +{
+> +	u32 val = readl(q->mcq_sq_head);
+> +
+> +	q->sq_head_slot = val / sizeof(struct utp_transfer_req_desc);
+> +}
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13f213eac80000
-start commit:   55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c29b6436e994d72e
-dashboard link: https://syzkaller.appspot.com/bug?extid=8e67d6db6ac1d1b297f7
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=172e57a4880000
+Please modify this function such that it returns the head slot value 
+instead of storing it in a member variable and remove the sq_head_slot 
+member variable. Storing the sq_head_slot value in a member variable 
+seems wrong to me since the value of that variable will be outdated as 
+soon as the submission queue is restarted.
 
-If the result looks correct, please mark the issue as fixed by replying with:
+> +static inline bool ufshcd_mcq_is_sq_empty(struct ufs_hw_queue *q)
+> +{
+> +	return q->sq_head_slot == q->sq_tail_slot;
+> +}
 
-#syz fix: devlink: always check if the devlink instance is registered
+Please remove this function and inline this function into its callers.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Thanks,
+
+Bart.
