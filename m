@@ -2,192 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079396B277D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 808AF6B278C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbjCIOom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:44:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S232037AbjCIOp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:45:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231941AbjCIOoV (ORCPT
+        with ESMTP id S232116AbjCIOpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:44:21 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648735CEEA;
-        Thu,  9 Mar 2023 06:44:00 -0800 (PST)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 8EFF485DCF;
-        Thu,  9 Mar 2023 15:43:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1678373038;
-        bh=uNtxW9PuxNtEv8F6P5VbTBX0XdsaKqaHd1sSxeSAaeI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PnG3ERWl0DqjDLxsRsMaXInt1x+2rI4yBcJI4qOnGLs0IqbtgTKvwd4glK8jpXLdW
-         hWayVmaY5GkfOemI9glBY5WltAQEmjjHadyfpkfg3f6I7EYZb0KQfNNQJjhrguMHH4
-         5dcVqzdPhasr7+Fhsq5/kL0WYmtoInnl9y7EVbBkx1X7XgKDVJi6DMX7TsbkY6tAdW
-         3nL3KiMTEsrBcfu03WAcrsMJyHHHDHCbxt7zqXDF1sgwNkqKlz1174dhYkWHsps2wG
-         1UAy73iRoifxhjwnV4y2FSbi0GoR9Jea/ojU1XTB0jOGKnXVVeNtlnaLXw7MMVCRSY
-         Fj7QsGrhW3PAA==
-Date:   Thu, 9 Mar 2023 15:43:50 +0100
-From:   Lukasz Majewski <lukma@denx.de>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/7] dsa: marvell: Correct value of max_frame_size
- variable after validation
-Message-ID: <20230309154350.0bdc54c8@wsk>
-In-Reply-To: <ZAnnk5MZc0w4VkDE@shell.armlinux.org.uk>
-References: <20230309125421.3900962-1-lukma@denx.de>
-        <20230309125421.3900962-7-lukma@denx.de>
-        <ZAnnk5MZc0w4VkDE@shell.armlinux.org.uk>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 9 Mar 2023 09:45:02 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE4BF9EFF
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:44:21 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id g3so8005572eda.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 06:44:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678373059;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=j0QCaTZpFQda66tbkDh4NA2798g5mrFM2KijxKnqpqY=;
+        b=JXlcZf5TJBTXPGC4CRaGGUxnbLNWt6tq33auMN/90FORiWH3AMH77DpWVbvaymIWwB
+         SW89Bb99rq8cYHyJwN1KtIo951dij/3LxxmD8xXkrEsLVgOG+Ww/jjk9zV5HSlHY/P04
+         iJhKxP+XILgPJjWgASKARUzJh39GHmxlDktWY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678373059;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j0QCaTZpFQda66tbkDh4NA2798g5mrFM2KijxKnqpqY=;
+        b=A5/IwSKVej3ERCGltOoykFF16R/YBAhkiF9g6fSFIeImgZY385j/q2i7os3g4dvVfw
+         H86jwF3NvYc+ijNV8UPKGmlYCCt+PzMkAprKFPlh/PqaeO9a76cNHcMDWtuuKGqqw96f
+         uwEFC8tX5R4fZd/3/IMnDqqrMhCaSibsxeEDXx9WTwH4Vpomq1VMZ/Jz8rJlhszQpLPa
+         AgcPVWUdu3JUmxUZxSGNwWYzLSSCGdppC6LSM/IgV75z+xiPyDLAKx17IB5a7sy1830w
+         Y9ABrbpjIchIAqFOKT3ErpedkliM/hfcapOsuw5OudMO2FqJy30jhjnwnYxt5kJqaxmw
+         e0pA==
+X-Gm-Message-State: AO0yUKVDOlZMgzCCgPEiy1V8x9tzBSbsVC1IxrHyPBrL8W6EsSSQxOyE
+        KERbT0w0nR7b/0HytfSC1SYK/DOwHuD7X3wdnrNhHg==
+X-Google-Smtp-Source: AK7set8sU/asqDzlZBJayNJABHwje8blfJCPJx2Zc8Gx6DoijRVWLy2bRAZjzpxeW3chkoaU8+mnaw==
+X-Received: by 2002:a17:906:1604:b0:879:bff:55c with SMTP id m4-20020a170906160400b008790bff055cmr24474305ejd.1.1678373059532;
+        Thu, 09 Mar 2023 06:44:19 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:1645:7aa4:a765:1966])
+        by smtp.gmail.com with ESMTPSA id l6-20020a50d6c6000000b004bdcc480c41sm9708931edj.96.2023.03.09.06.44.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 06:44:19 -0800 (PST)
+Subject: [PATCH v2 0/3] uvcvideo: Attempt N to land UVC race conditions fixes
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vs=WVZeAS0owu99XcNnn3P=";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALTwCWQC/3WNwQqDMBBEf0X23C1JLKn21P8oPZi4mgVNYKNCkf
+ x7Q+89DW/gzZyQSZgyPJoThA7OnGIFc2nAhyHOhDxWBqNMq1rV47xT3Ehw5cjY9Z3VTnU3mjRUxQ
+ 2Z0MkQfahS3JelloHzluTzuzh0jdeftUOjQmvuo1Z+stTbpw+SVt7Xa5IZ3qWUL2dRYMywAAAA
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 09 Mar 2023 15:44:04 +0100
+Message-Id: <20230309-guenter-mini-v2-0-e6410d590d43@chromium.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Max Staudt <mstaudt@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sean Paul <seanpaul@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3209; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=QHnRbL/75sY1mg763dtX1ee9LADH3yYE98GBTazRZhk=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkCfC2dCdyamuJtcwg32/a/jrzGAHWDnDucmFsS0bW
+ 3fMT20yJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZAnwtgAKCRDRN9E+zzrEiEOjD/
+ wI+h055aamjDQj8n6RWHDvLNqfRqM6BUIQGHopUnkQZRlFoK5Sucbg2e6n9ZIJ2pEe6BlEPZYrxv6g
+ 8MHx0gI1BLjSj5aEDpWwQ5emZ9wlvYsm6K3l4z67lmLr6ARj2TbBzvWql8hIeypb22oxEnNtzpdYzc
+ EL4e/Umrg5Dx7WJWipslAr70Tg4kfZctuzSnnJaqd70I0ThSBjfFsYrs+6MvZtlCUZJxGvw+ecsIVu
+ 42imzYtKHsDb0+wGwkcUszX8zww5HYW1MSKQLd1eficFMdlh4RnrPV0VN7xG/PWeL0i8BqRZ0inETj
+ +QQy4f6BZItd2++M+CxDuuj5+lu1H+Fc+pMDTaY3k5JaW1W7yFDFXPnlnr92H3UcFhIahUWWhWbzsp
+ keEleIyGsDXQIazJWBHUd1Q2SvS0leefGoC6UTGt/MUzyw0UGL0brVSOdEv/zBm9Mw9R5G031Y6fva
+ mn8vZK1yAnDW5tvIen4fWq0E4mvJ9WarvUNsL8RHWmE6W0nKE+4Bn3c+bOrJuXKzGgnohCTmch7R5P
+ 8dhjuQVaqO27vZSgw8khjgtL1Q9piU/u2mI45wQcEPg5vX1xJwCa65PQ8t0D9JMs9/QIS7f/e3+WLy
+ kuzaHmE5BduEzpnMrA0HWvCtONkA9GlufqK3dw+PZQN/CwEiKxrwpGiY3LAg==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/vs=WVZeAS0owu99XcNnn3P=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Back in 2020 Guenter published a set of patches to fix some race
+conditions on UVC.
+https://lore.kernel.org/all/20200917022547.198090-5-linux@roeck-us.net/
 
-Hi Russell,
+That kind of race conditions are not only seen on UVC, but are a common
+sin on almost all the kernel, so this is what it was decided back then
+that we should try to fix them at higher levels.
 
-> On Thu, Mar 09, 2023 at 01:54:20PM +0100, Lukasz Majewski wrote:
-> > Running of the mv88e6xxx_validate_frame_size() function provided
-> > following results:
-> >=20
-> > [    1.585565] BUG: Marvell 88E6020 has differing max_frame_size:
-> > 1632 !=3D 2048 [    1.592540] BUG: Marvell 88E6071 has differing
-> > max_frame_size: 1632 !=3D 2048 ^------ Correct -> mv88e6250 family
-> > max frame size =3D 2048B
-> >=20
-> > [    1.599507] BUG: Marvell 88E6085 has differing max_frame_size:
-> > 1632 !=3D 1522 [    1.606476] BUG: Marvell 88E6165 has differing
-> > max_frame_size: 1522 !=3D 1632 [    1.613445] BUG: Marvell 88E6190X
-> > has differing max_frame_size: 10240 !=3D 1522 [    1.620590] BUG:
-> > Marvell 88E6191X has differing max_frame_size: 10240 !=3D 1522 [
-> > 1.627730] BUG: Marvell 88E6193X has differing max_frame_size: 10240
-> > !=3D 1522 ^------ Needs to be fixed!!!
-> >=20
-> > [    1.634871] BUG: Marvell 88E6220 has differing max_frame_size:
-> > 1632 !=3D 2048 [    1.641842] BUG: Marvell 88E6250 has differing
-> > max_frame_size: 1632 !=3D 2048 ^------ Correct -> mv88e6250 family
-> > max frame size =3D 2048B =20
->=20
-> If I understand this correctly, in patch 4, you add a call to the 6250
-> family to call mv88e6185_g1_set_max_frame_size(), which sets a bit
-> called MV88E6185_G1_CTL1_MAX_FRAME_1632 if the frame size is larger
-> than 1518.
+After that. A lot of video_is_registered() were added to the core:
 
-Yes, correct.
+```
+ribalda@alco:~/work/linux$ git grep is_registered drivers/media/v4l2-core/
+drivers/media/v4l2-core/v4l2-compat-ioctl32.c:  if (!video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-dev.c:     if (video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-dev.c:     if (video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-dev.c:     if (video_is_registered(vdev)) {
+drivers/media/v4l2-core/v4l2-dev.c:             if (video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-dev.c:     if (!video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-dev.c:     if (video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-dev.c:     if (vdev == NULL || !video_is_registered(vdev)) {
+drivers/media/v4l2-core/v4l2-dev.c:             if (video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-dev.c:     if (!vdev || !video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-ioctl.c:   if (!video_is_registered(vfd)) {
+drivers/media/v4l2-core/v4l2-subdev.c:  if (video_is_registered(vdev)) {
+```
 
->=20
-> However, you're saying that 6250 has a frame size of 2048. That's
-> fine, but it makes MV88E6185_G1_CTL1_MAX_FRAME_1632 rather misleading
-> as a definition. While the bit may increase the frame size, I think
-> if we're going to do this, then this definition ought to be renamed.
->=20
+And recently Sakari is trying to land:
+https://lore.kernel.org/linux-media/20230201214535.347075-1-sakari.ailus@linux.intel.com/
 
-I thought about rename, but then I've double checked; register offset
-and exact bit definition is the same as for 6185, so to avoid
-unnecessary code duplication - I've reused the existing function.
+Which will make obsolete a lof (all?) of the video_is_registered() checks on
+Guenters patches.
 
-Maybe comment would be just enough?
+Besides those checks, there were some other valid races fixed on his
+patches.
 
-> That said, I would like Andrew and Vladimir's thoughts on this too.
->=20
+This series is just a rebase of what I think is missing on UVC even
+if we fixed v4l2/core with all the video_is_register() checks removed.
 
-Ok.
+Thanks!
 
-> Finally, I would expect, if this series was done the way I suggested,
-> that patch 1 should set the max frame size according to how the
-> existing code works, which means patch 2, being the validation patch,
-> should be completely silent if patch 1 is correct - and that's the
-> entire point of validating. It's to make sure that patch 1 is
-> correct.
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Max Staudt <mstaudt@chromium.org>
+Cc: Tomasz Figa <tfiga@chromium.org>
+Cc: Sakari Ailus <sakari.ailus@iki.fi>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Sean Paul <seanpaul@chromium.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+Changes in v2:
+- Actually send the series to the ML an not only to individuals.
+- Link to v1: https://lore.kernel.org/r/20230309-guenter-mini-v1-0-627d10cf6e96@chromium.org
 
-Ok.
+---
+Guenter Roeck (3):
+      media: uvcvideo: Cancel async worker earlier
+      media: uvcvideo: Lock video streams and queues while unregistering
+      media: uvcvideo: Release stream queue when unregistering video device
 
->=20
-> If it isn't correct, then patch 1 is wrong and should be updated.
->=20
-
-Please correct my understanding - I do see two approaches here:
-
-
-A. In patch 1 I do set the max_frame_size values (deduced). Then I add
-validation function (patch 2). This function shows "BUG:...." only when
-we do have a mismatch. In patch 3 I do correct the max_frame_size
-values (according to validation function) and remove the validation
-function. This is how it is done in v5 and is going to be done in v6.
-
-
-B. Having showed the v5 in public, the validation function is known.
-Then I do prepare v6 with only patch 1 having correct values (from the
-outset) and provide in the commit message the code for validation
-function. Then patch 2 and 3 (validation function and the corrected
-values of max_frame_size) can be omitted in v6.
-
-For me it would be better to choose approach B.
-
-> Essentially, this patch should only exist if the values we are using
-> today are actually incorrect.
->=20
-> To put this another way, the conversion from our existing way of
-> determining the max mtu to using the .max_frame_size method should be
-> an entire no-op from the driver operation point of view. Then any
-> errors in those values should be fixed and explained in a separate
-> commit. Then the new support added.
->=20
-> At least that's how I see it. Andrew and Vladimir may disagree.
->=20
-
-
-
+ drivers/media/usb/uvc/uvc_ctrl.c   | 11 +++++++----
+ drivers/media/usb/uvc/uvc_driver.c | 12 ++++++++++++
+ drivers/media/usb/uvc/uvcvideo.h   |  1 +
+ 3 files changed, 20 insertions(+), 4 deletions(-)
+---
+base-commit: 63355b9884b3d1677de6bd1517cd2b8a9bf53978
+change-id: 20230309-guenter-mini-89861b084ef1
 
 Best regards,
-
-Lukasz Majewski
-
---
-
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/vs=WVZeAS0owu99XcNnn3P=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmQJ8KcACgkQAR8vZIA0
-zr2jWQgA4WKkrUiFVA73xvGMMbixVLICXasATf2ikEGYpEvO0gVpgzmnsqXcqjVR
-SEcESCbtpI2XqpsL/HL7zgXCLIQKZ8xIXxLcPF5z4QX9iB95VfCmL6mg4xsuDo4O
-gm9dx5X8wnoLCBlOFsno4qTLWoS5ltiGwjwqIAK57lFyecn8QA7R7hU0FEDapmMu
-Fy6WcXziRc1mkNBPq3RgjnA1Jv/DmaJakzS8uQ1TJAtC6/6WR474oCdOqsRlL1gd
-xDLOrbWQctI2LgwgHbdA7B4VvzsZnTYsHgcbEShDvVDophEuwCz5IdKdtytYBdli
-FPGt1l6uqZjSuqGWBRp99erjzjU//A==
-=RA20
------END PGP SIGNATURE-----
-
---Sig_/vs=WVZeAS0owu99XcNnn3P=--
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
