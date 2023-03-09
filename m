@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49EFD6B2DF7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7C16B2DF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:52:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjCITxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 14:53:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
+        id S230060AbjCITwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 14:52:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjCITxI (ORCPT
+        with ESMTP id S229639AbjCITwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 14:53:08 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C2176AA
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:53:04 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id e82so3121294ybh.9
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 11:53:04 -0800 (PST)
+        Thu, 9 Mar 2023 14:52:47 -0500
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBE8F7EE3;
+        Thu,  9 Mar 2023 11:52:46 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-176e43eb199so3484966fac.7;
+        Thu, 09 Mar 2023 11:52:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678391583;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6jiAWDSdqEid6785iM8R8/HDPUK2YGRPhf1N7NBj6vE=;
-        b=V1Gi59vzWYkUoeVdm8xReUy8/fG5XinRQYo0Lenx8GX9MaVP7E+CyaS/xTyLveEhEA
-         kAs7cYzVUiW46znHsZ++7KLiab14PSn09SC5Ogu2f25SaHBGYq+cuEecNhQixTQQltPV
-         N6ugqiwBuh6FyUJ28tOGrJM4THIZpah/GvlY1l91vmAJL56S++BEOwHjQ0GasktKf8jw
-         eDuFEBJ+5itUiQGo4+tYQI9JDoYDG9kXCD0U/23VpM9Nd4MBU2u0Xocfj610IyOWijQh
-         /5DlxxAfwL6dwBTuyFnnD/VaYx/x1lwAIvWMRuKGva8qT0mjXXhB7i3p4m1dCYLUZGyf
-         LGbA==
+        d=gmail.com; s=20210112; t=1678391566;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XWQCnh1x5+krXU93i8HgoSaF1uKg4BYDXFBKy+L74+8=;
+        b=Ry+xObfcK1uOH3V2pspxGgO5Skos+sB2LZ8Z+7up+KxfpdewG9Z0Y9TGciBDSjWGUA
+         7+dBGoCwGGGNpJhUDGQYUMuJhpGlSDyYbT5vnkNlHYFMF4zMSMJaZ6zBXNSz3glBcAjD
+         uQZENBkA8T9WpK+DG3Qta2j9to+s25mGiw26Xo7UvTjhfesH+X4JdOHvn17N/MlUzrJ4
+         VnSMx8TAK2rxKeg/m9upDFPqqBxDl96XExNhHwCbd01rYg6d7YWF5pcp0eBA8Z0ydGfv
+         b1lI2XtTry7Nge/Ugf5jVTZmihi6Y59NNjnqwNAuEAAC7GsE72U8uZari6tNWgSWx22Q
+         osvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678391583;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678391566;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6jiAWDSdqEid6785iM8R8/HDPUK2YGRPhf1N7NBj6vE=;
-        b=aD7rRcve801R1Q6/7hp6vMSeVhVx075W1b9z1zqFD0T3Ohc5Djynmq7Lw1BTnWlpVz
-         OVbv8D9TAUQC2rFt+M5gVMG+vzlwkgoAze03Dy1dpC5KGVcnMcSUZHcrhZaQ5pqscuJF
-         tVaKYrhULL58rwkMmJAYkS87wi9MT6h5EjcGcK3MfN9zgwvcNFm4ACkP3pk2jAcO3u64
-         zXU7Ze58F6lR0silkN+QMgM/uxF2s9t9r02fDEkAybwfRwfqofFhe4wm2Y5gUql+08N6
-         Oij4kIdwk4kcYizdk0w8K2ub0fwIMZH74xe+5I1PSyS4qkpBrqMT+cXgY9j0DsgOgnyH
-         lQRw==
-X-Gm-Message-State: AO0yUKU8xLrQJQTkvreI5hVEh0lLem3O1G92gPDMhmBwnCAs4wZopwl1
-        hZwafjjFgH5+n7s3+Z7fwUudxBzLPdJOseGCPpkZlw==
-X-Google-Smtp-Source: AK7set84Z09q2f5EJzTn8palJn+0fPTTjkcVbIH1GUdew3q1IIV5xX+24zG2mdN9KRBfm7U7+M5XVZCFtpOEUR1KUL4=
-X-Received: by 2002:a25:d50e:0:b0:98e:6280:90e7 with SMTP id
- r14-20020a25d50e000000b0098e628090e7mr14055547ybe.13.1678391583057; Thu, 09
- Mar 2023 11:53:03 -0800 (PST)
+        bh=XWQCnh1x5+krXU93i8HgoSaF1uKg4BYDXFBKy+L74+8=;
+        b=YV8t1dpiTMaDH5D/M78YjPjuTMDO/CFUlCplVtaEe8jEDLkA7rwsJ9hoOp99dIiTNy
+         d/ZSV7Tns8QpuGsNhcew4fL58ja9+JP9xWiX1ifaGs93bZX98mwWQHy5DohBFxpjsY3j
+         Pqd0QpRa20+ueBZ04MxkUvYJU9E8JD6IugYzWwa4td9by3/ltWamsEHmH6RZC0djbD3F
+         hzQgJYLhCdkFvCq5GfX/BL+VX/MY8StuIOCpiogn8eCOe8GLLaTOn0mAEr3DhtiiAo3h
+         K7zmx+7nJfV2jD417WnHH5qRJS/iK6xWZMljx0okS1bDwiUwKa3sWmnHNPcPEMl+5bcY
+         +8zw==
+X-Gm-Message-State: AO0yUKXcE3/7R+aVx9chK8hkZX7k+lSTampYJG2C9BP6bRNYCHEbi/2b
+        a+v84on75c2+DcAX0mPFS6E=
+X-Google-Smtp-Source: AK7set+8qJ0xreXKo6gMhxrSUyU+a/gaVme2i0vyc7OYJ4R0Ki6IE+sJkLywCeoiVpW8ec0CgzH/KQ==
+X-Received: by 2002:a05:6871:5c8:b0:172:289b:93c5 with SMTP id v8-20020a05687105c800b00172289b93c5mr14269520oan.0.1678391565922;
+        Thu, 09 Mar 2023 11:52:45 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k19-20020a4a3113000000b0051fdb2cba97sm60206ooa.7.2023.03.09.11.52.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 11:52:45 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 9 Mar 2023 11:52:43 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 000/570] 5.15.99-rc2 review
+Message-ID: <81a8e51c-153d-4f11-a222-240e9a532639@roeck-us.net>
+References: <20230308091759.112425121@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-4-vipinsh@google.com>
- <20230308223331.00000234@gmail.com> <CAHVum0cMAwyQamr5yxCB56DSy7QHuCvTG06qRrJCGiZWQV+ZTw@mail.gmail.com>
- <ZAlsE0dei9I1MfpW@google.com> <20230309145221.000044b4@gmail.com>
-In-Reply-To: <20230309145221.000044b4@gmail.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Thu, 9 Mar 2023 11:52:26 -0800
-Message-ID: <CAHVum0dL2gxb=sf-1q_YLANp8AKXMfRJ6ps8-kHu=x7b2QxMUg@mail.gmail.com>
-Subject: Re: [Patch v4 03/18] KVM: x86/mmu: Track count of pages in KVM MMU
- page caches globally
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     Mingwei Zhang <mizhang@google.com>, seanjc@google.com,
-        pbonzini@redhat.com, bgardon@google.com, dmatlack@google.com,
-        jmattson@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308091759.112425121@linuxfoundation.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,76 +78,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 4:52=E2=80=AFAM Zhi Wang <zhi.wang.linux@gmail.com> =
-wrote:
->
-> On Thu, 9 Mar 2023 05:18:11 +0000
-> Mingwei Zhang <mizhang@google.com> wrote:
->
-> > > >
-> > > > 1) Previously mmu_topup_memory_caches() works fine without a lock.
-> > > > 2) IMHO I was suspecting if this lock seems affects the paralleliza=
-tion
-> > > > of the TDP MMU fault handling.
-> > > >
-> > > > TDP MMU fault handling is intend to be optimized for parallelizatio=
-n fault
-> > > > handling by taking a read lock and operating the page table via ato=
-mic
-> > > > operations. Multiple fault handling can enter the TDP MMU fault pat=
-h
-> > > > because of read_lock(&vcpu->kvm->mmu_lock) below.
-> > > >
-> > > > W/ this lock, it seems the part of benefit of parallelization is go=
-ne
-> > > > because the lock can contend earlier above. Will this cause perform=
-ance
-> > > > regression?
-> > >
-> > > This is a per vCPU lock, with this lock each vCPU will still be able
-> > > to perform parallel fault handling without contending for lock.
-> > >
-> >
-> > I am curious how effective it is by trying to accquiring this per vCPU
-> > lock? If a vcpu thread should stay within the (host) kernel (vmx
-> > root/non-root) for the vast majority of the time, isn't the shrinker
-> > always fail to make any progress?
->
-> IMHO the lock is to prevent the faulting path from being disturbed by the
-> shrinker. I guess even a vCPU thread stays in the host kernel, the shrink=
-er
-> should still be able to harvest the pages from the cache as long as there=
- is
-> no faulting flood.
+On Wed, Mar 08, 2023 at 10:29:40AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.99 release.
+> There are 570 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 10 Mar 2023 09:16:12 +0000.
+> Anything received after that time might be too late.
+> 
 
-Yes, lock is to prevent the faulting path from being disturbed by the
-shrinker. In this new approach, shrinker goes through each vCPU of
-each VM alive on the host. All of these vCPUs collectively being in
-the fault path while shrinker is invoked seems unlikely.
+Build results:
+	total: 155 pass: 155 fail: 0
+Qemu test results:
+	total: 499 pass: 499 fail: 0
 
-Let us say we free the cache during the fault path, now when a vCPU
-asks a page from the cache, it will dynamically allocate a page via
-GFP_ATOMIC which has higher chances of failing if a host is already
-under memory pressure. Shrinker by default should be at lower priority
-and based on discussions pointed in patch 1, it seems like it was of
-not much practical use before either.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
->
-> I am curious about the effectiveness as well. It would be nice there can =
-be
-> some unit tests that people can try by themselves to see the results, lik=
-e
-> when the shrinker isn't triggered, the faulting is still as effective as
-> before and when the shrinker is triggered, what would actually happen whe=
-n
-> the system memory is under different pressure. (like how much the faultin=
-g
-> will be slowed down)
->
-
-Not sure what can be a right test to measure this. My manual testing
-was to just run dirty_log_perf_test with and without shrinker and I
-didn't notice much difference. I did print some logs to see if
-shrinker is getting invoked, caches are freed by shrinker and when VM
-is freed to verify page accounting is right with patch 9 of the
-series.
+Guenter
