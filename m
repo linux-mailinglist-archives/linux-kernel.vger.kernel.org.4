@@ -2,102 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9DFB6B1FE6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9D56B1FE9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:25:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjCIJYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:24:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
+        id S230144AbjCIJYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjCIJYA (ORCPT
+        with ESMTP id S230071AbjCIJYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:24:00 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C398C9E303
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:23:59 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7D3A221D61;
-        Thu,  9 Mar 2023 09:23:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1678353838; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tYV6covs6q4sUYe1r5Moddm6dJCRP/An10t46izMECc=;
-        b=JSvynO75Xszjx9yhCPCK7KqJPpD/cobvo7VG5+XERG5kEy00TCqI0EmwupDQ+Oie6c1l+6
-        +s+WDFhJ4Iz+lsfMsUY+YNXzuVpmKkHoZGXJrMG0JCcAes1MQ9tkLqVuOAvFKsNS76Z9E5
-        dTgNemrjnQVm0M67NNCKNHudgwDrVOY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1678353838;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tYV6covs6q4sUYe1r5Moddm6dJCRP/An10t46izMECc=;
-        b=wV3yAiaKRytKsEooxLfqkYG/srj+yBnszPsDHbgI/QsJNWk2MFDGKRZfdB9nFRc6r/Tc75
-        5p6VmUchclkRBtBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3E9071391B;
-        Thu,  9 Mar 2023 09:23:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FiuADq6lCWRqDAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 09 Mar 2023 09:23:58 +0000
-Message-ID: <b3a200b7-e9c5-4627-409c-e198ac1dc30a@suse.cz>
-Date:   Thu, 9 Mar 2023 10:23:57 +0100
+        Thu, 9 Mar 2023 04:24:49 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27147A8802
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:24:45 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3299OcHN125982;
+        Thu, 9 Mar 2023 03:24:38 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678353878;
+        bh=BOKBHcCqGnaJkeAmMroI2rUSfeIV35zHDqQqZy70/a8=;
+        h=From:To:CC:Subject:Date;
+        b=MDpfjD+RFb2uwBXKDmSNYAXKH4PXwERA3yOoy6DcRmydZhqhYmrZEpQUzQM4eB6SR
+         aWd61LBMYdVadSADT0rmUFBzzGK1EkHS23gdS3TVjfmHLl45hPnUMA6kIEGMl6zcb1
+         szdqiWniESBuN750I85v1Fw+Y+4HlluViWBC3ffk=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3299OcCh078571
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 9 Mar 2023 03:24:38 -0600
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 9
+ Mar 2023 03:24:38 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 9 Mar 2023 03:24:38 -0600
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3299OZwG020927;
+        Thu, 9 Mar 2023 03:24:36 -0600
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <vkoul@kernel.org>, <kishon@kernel.org>, <rogerq@kernel.org>
+CC:     <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [PATCH] phy: ti: j721e-wiz: Add SGMII support in WIZ driver for J721E
+Date:   Thu, 9 Mar 2023 14:54:34 +0530
+Message-ID: <20230309092434.443550-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 4/8] mm: vmscan: add shrinker_srcu_generation
-Content-Language: en-US
-To:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
-        tkhai@ya.ru, hannes@cmpxchg.org, shakeelb@google.com,
-        mhocko@kernel.org, roman.gushchin@linux.dev, muchun.song@linux.dev,
-        david@redhat.com, shy828301@gmail.com, rppt@kernel.org
-Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
-        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230307065605.58209-1-zhengqi.arch@bytedance.com>
- <20230307065605.58209-5-zhengqi.arch@bytedance.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230307065605.58209-5-zhengqi.arch@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/23 07:56, Qi Zheng wrote:
-> From: Kirill Tkhai <tkhai@ya.ru>
-> 
-> After we make slab shrink lockless with SRCU, the longest
-> sleep unregister_shrinker() will be a sleep waiting for
-> all do_shrink_slab() calls.
-> 
-> To aviod long unbreakable action in the unregister_shrinker(),
+Enable full rate divider configuration support for J721E_WIZ_16G for SGMII.
 
-     ^ avoid
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+---
+ drivers/phy/ti/phy-j721e-wiz.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> add shrinker_srcu_generation to restore a check similar to the
-> rwsem_is_contendent() check that we had before.
-> 
-> And for memcg slab shrink, we unlock SRCU and continue
-> iterations from the next shrinker id.
-> 
-> Signed-off-by: Kirill Tkhai <tkhai@ya.ru>
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
+diff --git a/drivers/phy/ti/phy-j721e-wiz.c b/drivers/phy/ti/phy-j721e-wiz.c
+index 1b83c98a78f0..ed4b0442cf5b 100644
+--- a/drivers/phy/ti/phy-j721e-wiz.c
++++ b/drivers/phy/ti/phy-j721e-wiz.c
+@@ -1235,6 +1235,8 @@ static int wiz_phy_fullrt_div(struct wiz *wiz, int lane)
+ 		if (wiz->lane_phy_type[lane] == PHY_TYPE_PCIE)
+ 			return regmap_field_write(wiz->p0_fullrt_div[lane], 0x1);
+ 		break;
++
++	case J721E_WIZ_16G:
+ 	case J721E_WIZ_10G:
+ 	case J7200_WIZ_10G:
+ 	case J721S2_WIZ_10G:
+-- 
+2.25.1
 
