@@ -2,81 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A8D6B2FBD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAEAE6B2FC0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjCIVky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 16:40:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
+        id S230052AbjCIVli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 16:41:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCIVkw (ORCPT
+        with ESMTP id S229511AbjCIVlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 16:40:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF167F865E;
-        Thu,  9 Mar 2023 13:40:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2595FB819EE;
-        Thu,  9 Mar 2023 21:40:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4786C433EF;
-        Thu,  9 Mar 2023 21:40:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678398046;
-        bh=3wq26KsxRYgJgKQkJkLEWmbPo95CFXCI+ZKx265V92U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LEUhFdJZP0Z2dLCCGXGBBICPL6wkCO2qUJV/sKWkdjZRuXy1RNawaQBwfrmvA8V6h
-         vN5OSDr3dT5VipUuK0nnu6TMicwJrHnuSO860P54Y7CY+PzUWJ4j0HgUp0x50zxHuL
-         LuBpa5avCwJANtWxk0riBrMPYWSvt3CVwDJBEOsJoMQgLGo5gj7cw7ycSOEyovSGfK
-         uCwpchCJ06yeU7+s9Ba6QcW1XYvjcv40S9xMcdDnxqwdIIpm1iBDFy7dM2vBGAljNt
-         KCJZKplHAW3tQHQU2pqF73GVrwJ7XaNUt3VKigmxDpHzwlblDaFZytgY/E9i2uUdz4
-         JfaCqVziC5n+Q==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] filelocks: use mount idmapping for setlease permission check
-Date:   Thu,  9 Mar 2023 22:40:33 +0100
-Message-Id: <167839721674.824023.1725509969728722779.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230309-generic_setlease-use-idmapping-v1-1-6c970395ac4d@kernel.org>
-References: <20230309-generic_setlease-use-idmapping-v1-1-6c970395ac4d@kernel.org>
+        Thu, 9 Mar 2023 16:41:31 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AA2F865E;
+        Thu,  9 Mar 2023 13:41:30 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id x3so12653473edb.10;
+        Thu, 09 Mar 2023 13:41:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112; t=1678398089;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AR1b3GABOQLV0P4AFqJgRYAPV/jd6YPCXWJ10JJ7GQA=;
+        b=bVV9zB4PWz/GixwLQd9wj07swwOT/5L8l7AYGlJV39XCgfm5cBj2R76j8n/krnPBNF
+         e6HICDvbiaQ1x+XAwjDG08vSRQer/+wTj3q6MkzNMSS3saTFHaS1S2G6cRX2Utbv2eTh
+         tWb/JB6UcF+rBSP568bMYcbPnQ2dtX4rPGjdmatlyv7z3GqmrqLzsZq1x3SirUPCsaHu
+         LnmAjGvKRmkVtoqaSL09XqXrDe58MJ1OEVF6In8g1AEIakrXwIsRWGh7HbBFoPpaCO4W
+         c/kYP+I4vqJB6PSZdBea/WNQx9UYjXpcAk2AfzMmwcdOGOGificFynYzuK2ISXl506in
+         VU2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678398089;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AR1b3GABOQLV0P4AFqJgRYAPV/jd6YPCXWJ10JJ7GQA=;
+        b=CJGXnowa2LD3G+VU8YEnivLx482evwBa2s8h8CdvMcizA+ghKjp8+zYThGkjF3rXYp
+         6jtejzQ5abq6EIW0JmzQvAN9xX0vR4LcPRON+DOmvlPQtWHx8N1jgnbdguf/XGL8z8Pg
+         LkMpV2erV/Wh+1dzQL5ZeVTfSj/tlIR/i/22hTNL2/5BLyypZgwYt7tarGyOZKUjh+Rh
+         g6CE/EadqNt+93jC0II+FAAMHOjP2MIehiUoUlUPe52qYbOaKpMZpUqI9KH5W+ML16D5
+         nugd57XGd4nvXaRuYrGIE7vkFWvSDqEk9C2p/ajAgNt6YFEylCeUxbZNXgeruYrgswsI
+         kGCA==
+X-Gm-Message-State: AO0yUKUlxZGNgl7QF/iD/qpfXHk2sTQhmsih8UROTDqntlHCmxNMF/8t
+        USl4MgsADbtW9nMrHFvBstqRURUysrNXRMOZKMw=
+X-Google-Smtp-Source: AK7set+iplnwVXlr7+v6coCIsyOhlACFhoeoFarKEw4JA1Y6NwVDADLB4DScaPTQyE9qNP613oIHrbUsSOajkyzvD+I=
+X-Received: by 2002:a17:906:ce38:b0:8b1:30da:b585 with SMTP id
+ sd24-20020a170906ce3800b008b130dab585mr12117490ejb.6.1678398088913; Thu, 09
+ Mar 2023 13:41:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=883; i=brauner@kernel.org; h=from:subject:message-id; bh=nOBSVxLcGUkeyc4+harlKP21L0eUuTL5amUOKXFfV8A=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaRwBXnImf729Xj+9H2+R3uN/pfSrfP0ktsZZN4fq0kp1w19 Ibqxo5SFQYyLQVZMkcWh3SRcbjlPxWajTA2YOaxMIEMYuDgFYCJvpRj+CiqI3Drhk/pJP5nBd5t11E 8rIZvsm4+rZolWqddxZjz9z8jwpPXWion8ikX7rjGt27vk7MTZj6YuqzEVPSaqnTt1XfhiXgA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230306103533.4915-1-johan+linaro@kernel.org>
+In-Reply-To: <20230306103533.4915-1-johan+linaro@kernel.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Thu, 9 Mar 2023 22:41:18 +0100
+Message-ID: <CAFBinCBsC+P=zvh6RF3UKiPnferUYU0QZvZfnn1oS5xWX-65Jw@mail.gmail.com>
+Subject: Re: [PATCH] drm/meson: fix missing component unbind on bind errors
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Brauner (Microsoft) <brauner@kernel.org>
+Hi Johan,
+
+thanks for your patch!
+
+On Mon, Mar 6, 2023 at 11:35=E2=80=AFAM Johan Hovold <johan+linaro@kernel.o=
+rg> wrote:
+[...]
+> @@ -325,23 +325,23 @@ static int meson_drv_bind_master(struct device *dev=
+, bool has_components)
+>
+>         ret =3D meson_encoder_hdmi_init(priv);
+I'm wondering if component_bind_all() can be moved further down.
+Right now it's between meson_encoder_cvbs_init() and
+meson_encoder_hdmi_init(). So it seems that encoders don't rely on
+component registration.
+
+Unfortunately I am also not familiar with this and I'm hoping that
+Neil can comment on this.
 
 
-On Thu, 09 Mar 2023 14:39:09 -0600, Seth Forshee (DigitalOcean) wrote:
-> A user should be allowed to take out a lease via an idmapped mount if
-> the fsuid matches the mapped uid of the inode. generic_setlease() is
-> checking the unmapped inode uid, causing these operations to be denied.
-> 
-> Fix this by comparing against the mapped inode uid instead of the
-> unmapped uid.
-> 
-> [...]
-
-I've added a Cc: stable@vger.kernel.org so it's clear we should backport this.
-But just to note this here right away, this will likely apply cleanly on 5.15
-and 6.2 but fail to compile because our internal apis changed. So I'll have to
-do a custom backport for 5.15 and 6.2 once we'll get the failure report thingy
-from the stable folks. But applied now,
-
-[1/1] filelocks: use mount idmapping for setlease permission check
-      commit: 42d0c4bdf753063b6eec55415003184d3ca24f6e
+Best regards,
+Martin
