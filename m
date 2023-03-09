@@ -2,180 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52636B2ECB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 21:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C506B2EC6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 21:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjCIUhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 15:37:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
+        id S230397AbjCIUee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 15:34:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjCIUhO (ORCPT
+        with ESMTP id S229453AbjCIUeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 15:37:14 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924F7F754;
-        Thu,  9 Mar 2023 12:37:12 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id ECD315FD1B;
-        Thu,  9 Mar 2023 23:37:10 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1678394231;
-        bh=zJE1vZBgaWt5hdK5QnQB7pg0IiP1OR6zG7/Pzz6u6Fg=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=Vco/M2x5ANgKuY/MvK77bjXFzRFdPrx/GTUUlDVpCwjNpwDGiirc5eZtL8XQGtmWK
-         89bifpB1uJu9DQ9k+7EBNNTDYG0DajqS+8p997G6l/J3MuFspj/7pedSQz7rI+ZDzP
-         F+aalf1V77snd1VSM1bOW+HEAbGm4FpZAaFxIJh4WOh3SkUVy764hK7c49Ky1UG+qA
-         R43oYTqJdu2dMHlFhrpdgnmD7IlCHieXGyKQzQY4BFNAO4JiXDHEliIyEOmtOR9wdQ
-         1LSf13SNXaVmcOwABHdPemh6RTqRYmHrtlhsY+XvyzVVvflkYqk7F1o1ZrSaj74uoy
-         h77FxkFmemzbg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  9 Mar 2023 23:37:10 +0300 (MSK)
-Message-ID: <b0fe0f25-42d0-f51b-423d-0d1fb724b53d@sberdevices.ru>
-Date:   Thu, 9 Mar 2023 23:34:09 +0300
+        Thu, 9 Mar 2023 15:34:31 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9A2E388E;
+        Thu,  9 Mar 2023 12:34:29 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id e13so3118062wro.10;
+        Thu, 09 Mar 2023 12:34:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678394068;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7VHKM1TZh/tpZ43OaDrF8rGSweyNHxW44fC7EAr49fo=;
+        b=WAVzbaZbnD3x4HuwSI9TrmKRgwe7QVY8gXLTbm6xVVf56nymD2XpBzn1XFD3vo/BWG
+         gt3ukYKdL85ATHA8iaFqyl2Heey+2Rk+FZTe1VtAg64rtwUKp2aZb0DS5tixa9EA3rpR
+         rIugBIOBKrla+wQkGFDGrrfwl0n94u58IkLCQ/5XCY28ElgzNpybIyJvDaCeH+G5P5rL
+         /VZ9zz2xAu/tqpVGqU7cobsOlW+9s8oGKZkGoLvRll5lr/5pnWN5csvHw420DF28mDun
+         ABi/NyXaGH7CaA3LLzGuKk/TG7Zg0C99147WVcreH3l4tIYWqiicKa0uWvQpQpjx0swQ
+         DYGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678394068;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7VHKM1TZh/tpZ43OaDrF8rGSweyNHxW44fC7EAr49fo=;
+        b=TULt1wNYAEhFkAsftlEqgYyH/MMwkxafWzNSgAqrNIzWcSUBlH9a4oNizShxG7f8+m
+         /N3EntP1J0vk07X5bgrg3/m8ZWWhjf2glDZpJtiKxi23S3HVGXXkTgoXqRP6TFY/2YqH
+         NA47eB/8f9fpVIAzmQVeJhgaSgFWv0+oQzav/H0zWNYNy1Xrp3B3YLc7uA2cxqVZbKs+
+         ZwfqcW7xPgqcbz/WZrrfn1XPyLffJXG/g1IwmG5Me7SqYk+/+JpWEyGnt/naQxCkqfI0
+         GdivfTVFl5SpV/vvC3odu39kKVb4gkWPSYOSG+i9p32QFIL/FDeqjuXrKiDmOKrt9UzK
+         olPQ==
+X-Gm-Message-State: AO0yUKXlKVOld84XCP+pLL42vvrPTT/Pxb7ZAxYlCHnxY1g33ClW90NP
+        3XwqlCkGab2zDGSi2E19tsM=
+X-Google-Smtp-Source: AK7set+dQIZVtc0jXwLDVyZYQ1ZzOrtWt5RnkRmTPOM2tIXe3JOOw/0SFV7LQaziZLFrP7BzsnxKKw==
+X-Received: by 2002:a5d:4c52:0:b0:2c9:5675:7def with SMTP id n18-20020a5d4c52000000b002c956757defmr14949964wrt.2.1678394067753;
+        Thu, 09 Mar 2023 12:34:27 -0800 (PST)
+Received: from [10.23.0.3] ([194.126.177.54])
+        by smtp.gmail.com with ESMTPSA id b10-20020adff24a000000b002c559405a1csm312023wrp.20.2023.03.09.12.34.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 12:34:27 -0800 (PST)
+Message-ID: <e20e489b-c033-7a38-9750-24b9abb22a0c@gmail.com>
+Date:   Thu, 9 Mar 2023 21:34:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v3 0/4] several updates to virtio/vsock
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 3/4] dt-bindings: firmware: Add Qualcomm QSEECOM
+ interface
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230305022119.1331495-1-luzmaximilian@gmail.com>
+ <20230305022119.1331495-4-luzmaximilian@gmail.com>
+ <20230308221657.GA3935330-robh@kernel.org>
+ <93657561-d545-7ead-7f6c-dd2c62aab319@gmail.com>
+ <c92a44fe-7057-2d81-41fc-2e84ae60f881@linaro.org>
+ <951c717b-d094-4190-a04b-3ce9007d1554@gmail.com>
+ <57b436d2-79f9-a7c1-ab97-0b555beb6468@linaro.org>
 Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <0abeec42-a11d-3a51-453b-6acf76604f2e@sberdevices.ru>
- <20230309162150.qqrlqmqghi5muucx@sgarzare-redhat>
- <a1788ed6-89d4-27da-a049-99e29edea4cb@sberdevices.ru>
- <20230309163200.lq6dzop724diafpf@sgarzare-redhat>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230309163200.lq6dzop724diafpf@sgarzare-redhat>
-Content-Type: text/plain; charset="UTF-8"
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <57b436d2-79f9-a7c1-ab97-0b555beb6468@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/09 18:14:00 #20929517
-X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 09.03.2023 19:32, Stefano Garzarella wrote:
-> On Thu, Mar 09, 2023 at 07:20:20PM +0300, Arseniy Krasnov wrote:
->>
->>
->> On 09.03.2023 19:21, Stefano Garzarella wrote:
->>> On Thu, Mar 09, 2023 at 01:10:36PM +0300, Arseniy Krasnov wrote:
->>>> Hello,
+On 3/9/23 09:19, Dmitry Baryshkov wrote:
+> On 09/03/2023 04:27, Maximilian Luz wrote:
+>> On 3/9/23 02:33, Dmitry Baryshkov wrote:
+>>> On 09/03/2023 00:44, Maximilian Luz wrote:
+>>>> On 3/8/23 23:16, Rob Herring wrote:
+>>>>> On Sun, Mar 05, 2023 at 03:21:18AM +0100, Maximilian Luz wrote:
+>>>>>> Add bindings for the Qualcomm Secure Execution Environment interface
+>>>>>> (QSEECOM).
+>>>>>
+>>>>> Pretty sure I already asked, but no answer in the commit message. Why do
+>>>>> we need this? You've already declared the platform supports SCM calls
+>>>>> with "qcom,scm". Why can't you probe whether you have QSEECOM or not? DT
+>>>>> is for non-discoverable h/w we are stuck with.
 >>>>
->>>> this patchset evolved from previous v2 version (see link below). It does
->>>> several updates to virtio/vsock:
->>>> 1) Changes 'virtio_transport_inc/dec_rx_pkt()' interface. Now instead of
->>>>   using skbuff state ('head' and 'data' pointers) to update 'fwd_cnt'
->>>>   and 'rx_bytes', integer value is passed as an input argument. This
->>>>   makes code more simple, because in this case we don't need to udpate
->>>>   skbuff state before calling 'virtio_transport_inc/dec_rx_pkt()'. In
->>>>   more common words - we don't need to change skbuff state to update
->>>>   'rx_bytes' and 'fwd_cnt' correctly.
->>>> 2) For SOCK_STREAM, when copying data to user fails, current skbuff is
->>>>   not dropped. Next read attempt will use same skbuff and last offset.
->>>>   Instead of 'skb_dequeue()', 'skb_peek()' + '__skb_unlink()' are used.
->>>>   This behaviour was implemented before skbuff support.
->>>> 3) For SOCK_SEQPACKET it removes unneeded 'skb_pull()' call, because for
->>>>   this type of socket each skbuff is used only once: after removing it
->>>>   from socket's queue, it will be freed anyway.
+>>>> Yes, you've asked this before but I can only repeat what I've written in
+>>>> my last response to your question: I am not aware of any way to properly
+>>>> discover the interface at runtime from software.
 >>>>
->>>> Test for 2) also added:
->>>> Test tries to 'recv()' data to NULL buffer, then does 'recv()' with valid
->>>> buffer. For SOCK_STREAM second 'recv()' must return data, because skbuff
->>>> must not be dropped, but for SOCK_SEQPACKET skbuff will be dropped by
->>>> kernel, and 'recv()' will return EAGAIN.
+>>>> If it makes you happy, I can put this in the commit message as well...
 >>>>
->>>> Link to v1 on lore:
->>>> https://lore.kernel.org/netdev/c2d3e204-89d9-88e9-8a15-3fe027e56b4b@sberdevices.ru/
+>>>>> Why is software made non-discoverable too?
 >>>>
->>>> Link to v2 on lore:
->>>> https://lore.kernel.org/netdev/a7ab414b-5e41-c7b6-250b-e8401f335859@sberdevices.ru/
+>>>> Please direct that question at the Qualcomm guys who actually designed
+>>>> that interface. I can't give you an answer to that, and I'm not all that
+>>>> happy about this either.
 >>>>
->>>> Change log:
+>>>> To reiterate: I've reverse engineered this based on the Windows driver.
+>>>> The Windows driver loads on an ACPI HID and it doesn't use any function
+>>>> to check/verify whether the interface is actually present. Adding a DT
+>>>> entry is the straight-forward adaption to having a HID in ACPI.
 >>>>
->>>> v1 -> v2:
->>>> - For SOCK_SEQPACKET call 'skb_pull()' also in case of copy failure or
->>>>   dropping skbuff (when we just waiting message end).
->>>> - Handle copy failure for SOCK_STREAM in the same manner (plus free
->>>>   current skbuff).
->>>> - Replace bug repdroducer with new test in vsock_test.c
+>>>>> Nodes with only a compatible string are usually just an abuse of DT to
+>>>>> instantiate some driver.
 >>>>
->>>> v2 -> v3:
->>>> - Replace patch which removes 'skb->len' subtraction from function
->>>>   'virtio_transport_dec_rx_pkt()' with patch which updates functions
->>>>   'virtio_transport_inc/dec_rx_pkt()' by passing integer argument
->>>>   instead of skbuff pointer.
->>>> - Replace patch which drops skbuff when copying to user fails with
->>>>   patch which changes this behaviour by keeping skbuff in queue until
->>>>   it has no data.
->>>> - Add patch for SOCK_SEQPACKET which removes redundant 'skb_pull()'
->>>>   call on read.
->>>> - I remove "Fixes" tag from all patches, because all of them now change
->>>>   code logic, not only fix something.
+>>>> If you or anyone here has any idea on how to discover the presence of
+>>>> this, please feel free to let me know and I'd be happy to implement
+>>>> that. Until then, I unfortunately don't see any other way of dealing
+>>>> with this.
 >>>
->>> Yes, but they solve the problem, so we should use the tag (I think at
->>> least in patch 1 and 3).
+>>> You can probably try requesting QSEECOM version. According to msm-3.18:
 >>>
->>> We usually use the tag when we are fixing a problem introduced by a
->>> previous change. So we need to backport the patch to the stable branches
->>> as well, and we need the tag to figure out which branches have the patch
->>> or not.
->> Ahh, sorry. Ok. I see now :)
-> 
-> No problem at all :-)
-> 
-> I think also patch 2 can have the Fixes tag.
-> 
-Done, fixed everything in v4.
-
-Thanks, Arseniy
-
-> Thanks,
-> Stefano
-> 
->>
->> Thanks, Arseniy
+>>>          uint32_t feature = 10;
 >>>
->>> Thanks,
->>> Stefano
->>>
->>>>
->>>> Arseniy Krasnov (4):
->>>>  virtio/vsock: don't use skbuff state to account credit
->>>>  virtio/vsock: remove redundant 'skb_pull()' call
->>>>  virtio/vsock: don't drop skbuff on copy failure
->>>>  test/vsock: copy to user failure test
->>>>
->>>> net/vmw_vsock/virtio_transport_common.c |  29 +++---
->>>> tools/testing/vsock/vsock_test.c        | 118 ++++++++++++++++++++++++
->>>> 2 files changed, 131 insertions(+), 16 deletions(-)
->>>>
->>>> -- 
->>>> 2.25.1
->>>>
+>>>          rc = qseecom_scm_call(6, 3, &feature, sizeof(feature),
+>>>                  &resp, sizeof(resp));
+>>>          pr_info("qseecom.qsee_version = 0x%x\n", resp.result);
+>>>          if (rc) {
+>>>                  pr_err("Failed to get QSEE version info %d\n", rc);
+>>>                  goto exit_del_cdev;
+>>>          }
 >>>
 >>
+>> Thanks! I'll give that a try.
+>>
+>> As I can't test this on a device that doesn't have qseecom, it would
+>> probably be a good idea if someone could test this on a device that has
+>> qcom_scm but no qseecom (if those even exist) to make sure this doesn't
+>> misbehave.
 > 
+> I could not find a vendor dts which doesn't have the qseecom device (checked the source trees from 3.4 to the latest revisions).
+> 
+
+Thanks for checking!
+
+So that only leaves one potential issue: The re-entrant/blocking calls
+not being handled at the moment. If we detect qseecom based on the
+version and then try to query the app ID, we could get some devices that
+use those.
+
+I'm not sure what the consequences there are, i.e. if we're potentially
+blocking something else if one of those calls blocks on such devices. Is
+there any way we can detect this beforehand?
+
+The current proposal isn't very good at handling that either as it
+assumes that this depends on the SoC generation (which it probably
+doesn't). So I guess one possibility is to make the list of app-names to
+be checked SoC specific as well. That at least limits the scope
+somewhat. Maybe you have some other ideas?
+
+Regards,
+Max
