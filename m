@@ -2,348 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D93B6B20E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8026B20E3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbjCIKEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:04:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S229919AbjCIKFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjCIKE3 (ORCPT
+        with ESMTP id S229720AbjCIKFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:04:29 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D86FE348D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:04:23 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 329A3uob048548;
-        Thu, 9 Mar 2023 04:03:56 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678356236;
-        bh=oVGNjubgA1LuX49FyuBwm5DlshfpTfeRSSrz1PSeRUU=;
-        h=From:To:CC:Subject:Date;
-        b=XRhoNWhAoazrHd08dLmX1IqaaUl3XfkcVMMhkdmB2K3daZndF0+K9amjOC0sfz825
-         rxmEkvmvPr/lkzH68M3a5KTNeElt9EQCFp5O8EPxxV1RNGlCGGK5s9Q+fJG9naENoM
-         STD5qV7F9ZTYxHbgvGl+wskvSQFmbW3epRkFtd8M=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 329A3uer098177
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 9 Mar 2023 04:03:56 -0600
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 9
- Mar 2023 04:03:55 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 9 Mar 2023 04:03:55 -0600
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 329A3quU030194;
-        Thu, 9 Mar 2023 04:03:53 -0600
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <vkoul@kernel.org>, <kishon@kernel.org>, <lars@metafoo.de>
-CC:     <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <sjakhade@cadence.com>,
-        <srk@ti.com>, <s-vadapalli@ti.com>
-Subject: [PATCH] phy: cadence: Sierra: Add PCIe + SGMII PHY multilink configuration
-Date:   Thu, 9 Mar 2023 15:33:52 +0530
-Message-ID: <20230309100352.446917-1-s-vadapalli@ti.com>
+        Thu, 9 Mar 2023 05:05:35 -0500
+Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BB79E3893
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:05:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=bxZ79
+        5yEENBrrd7MDfyDdpZcPiVQDCMXI+gYy+pXktU=; b=Xqbs31eIKPJL6WjPchkYl
+        Ve1nfgrJrk3ExGCy+slhdONmH3EB/hpucc/XRZaZAu609YH5WP/QAlZdN+9Kior9
+        qAVwafFeIjHM68UDmRW7WEC7moKrnk7KcfILNHO1NQDdV1r9FUJR/AMskSgMMNaY
+        1shhCApxKhU96YGItfDk68=
+Received: from localhost.localdomain (unknown [113.91.40.179])
+        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wCnfGEirwlkqO40Aw--.51917S2;
+        Thu, 09 Mar 2023 18:04:19 +0800 (CST)
+From:   Xujun Leng <lengxujun2007@126.com>
+To:     david@redhat.com
+Cc:     akpm@linux-foundation.org, lengxujun2007@126.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH] mm: fix potential invalid pointer dereference in kmemdup()
+Date:   Thu,  9 Mar 2023 18:04:15 +0800
+Message-Id: <20230309100415.2382-1-lengxujun2007@126.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <fedd5372-2376-a354-b465-c6cbb930352e@redhat.com>
+References: <fedd5372-2376-a354-b465-c6cbb930352e@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wCnfGEirwlkqO40Aw--.51917S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3CrWDWF4fKr13WrykCw17ZFb_yoWDtF4xpr
+        W5JFW3Ka1kXr13Jr1jqw10yr1Ivw18ZF4DWF1qy3y5uF4q9r1kt3yxt3y2grn8Jr48Xa4x
+        t3WFkFW3KFyjkaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piFks9UUUUU=
+X-Originating-IP: [113.91.40.179]
+X-CM-SenderInfo: pohqw5hxmx0jqqqxqiyswou0bp/1tbikgctd1pEJ0I9AQAAsI
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Swapnil Jakhade <sjakhade@cadence.com>
+> On 09.03.23 07:46, Xujun Leng wrote:
+>>> On 07.03.23 10:03, Xujun Leng wrote:
+>>>> If kmemdup() was called with src == NULL, then memcpy() source address
+>>>> is fatal, and if kmemdup() was called with len == 0, kmalloc_track_caller()
+>>>> will return ZERO_SIZE_PTR to variable p, then memcpy() destination address
+>>>> is fatal. Both 2 cases will cause an invalid pointer dereference.
+>>>>
+>> 
+>>> "fix" in subject implies that there is actually a case broken. Is there,
+>>> or is this rather a "sanitize" ?
+>> Yes, I agree that word "sanitize" is a better choice.
+>> And no, I don't find an actually case but in my test code as follow:
+>> 
+>> #include <linux/module.h>
+>> #include <linux/string.h>
+>> #include <linux/slab.h>
+>> #include <linux/printk.h>
+>> #include <linux/err.h>
+>> 
+>> /*
+>>   * Test cases for kmemdup() and memdup_user().
+>>   */
+>> enum {
+>> 	TC_KMEMDUP_ARG0_NULL, /* i.e. kmemdup(NULL, 5, GFP_KERNEL) */
+>> 	TC_KMEMDUP_ARG1_ZERO, /* i.e. kmemdup("12345", 0, GFP_KERNEL) */
+>> 
+>> 	TC_MEMDUP_USER_ARG0_NULL, /* i.e. memdup_user(NULL, 5) */
+>> 	TC_MEMDUP_USER_ARG1_ZERO  /* i.e. memdup_user("12345", 0) */
+>> };
+>> 
+>> static int test_case;
+>> static const char *test_func_name[] = {"kmemdup", "memdup_user"};
+>> static void *ptr;
+>> 
+>> module_param(test_case, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+>> 
+>> static void *kmemdup_arg0_null(void)
+>> {
+>> 	return kmemdup(NULL, 5, GFP_KERNEL);
+>> }
+>> 
+>> static void *kmemdup_arg1_zero(void)
+>> {
+>> 	return kmemdup("12345", 0, GFP_KERNEL);
+>> }
+>> 
+>> static void *memdup_user_arg0_null(void)
+>> {
+>> 	return memdup_user(NULL, 5);
+>> }
+>> 
+>> static void *memdup_user_arg1_zero(void)
+>> {
+>> 	return memdup_user("12345", 0);
+>> }
+>> 
+>> static int check_ptr(void)
+>> {
+>> 	if (ZERO_OR_NULL_PTR(ptr)) {
+>> 		printk(KERN_ERR "test case %d: %s failed, PTR_ERR(ptr) = %ld\n",
+>> 				test_case, test_func_name[test_case / 2], PTR_ERR(ptr));
+>> 		return -EINVAL;
+>> 	}
+>> 	
+>> 	if (IS_ERR(ptr)) {
+>> 		printk(KERN_ERR "test case %d: %s failed, PTR_ERR(ptr) = %ld\n",
+>> 				test_case, test_func_name[test_case / 2], PTR_ERR(ptr));
+>> 		return PTR_ERR(ptr);
+>> 	}
+>> 
+>> 	printk(KERN_INFO "mm-util test module loaded.\n");
+>> 
+>> 	return 0;
+>> }
+>> 
+>> static int __init memdup_user_test_init(void)
+>> {
+>> 	if (test_case < 0 || test_case > TC_MEMDUP_USER_ARG1_ZERO) {
+>> 		printk(KERN_INFO "invalid test case %d\n", test_case);
+>> 		return -EINVAL;
+>> 	}
+>> 
+>> 	printk(KERN_INFO "test case: %d\n", test_case);
+>> 
+>> 	switch (test_case) {
+>> 	case TC_KMEMDUP_ARG0_NULL:
+>> 		ptr = kmemdup_arg0_null();
+>> 		break;
+>> 	case TC_KMEMDUP_ARG1_ZERO:
+>> 		ptr = kmemdup_arg1_zero();
+>> 		break;
+>> 
+>> 	case TC_MEMDUP_USER_ARG0_NULL:
+>> 		ptr = memdup_user_arg0_null();
+>> 		break;
+>> 
+>> 	case TC_MEMDUP_USER_ARG1_ZERO:
+>> 		ptr = memdup_user_arg1_zero();
+>> 		break;
+>> 	
+>> 	default:
+>> 		/* should be never happend */
+>> 		ptr = NULL;
+>> 		break;
+>> 	}
+>> 
+>> 	return check_ptr();
+>> }
+>> 
+>> static void __exit memdup_user_test_exit(void)
+>> {
+>> 	if (ptr) {
+>> 		kfree(ptr);
+>> 		ptr = NULL;
+>> 	}
+>> 
+>> 	printk(KERN_INFO "mm-util test module exited.\n");
+>> }
+>> 
+>> module_init(memdup_user_test_init);
+>> module_exit(memdup_user_test_exit);
+>> 
+>> MODULE_LICENSE("GPL");
+>> 
+>> Build the code as module, and run the module in QEMU ARM64, with different
+>> test case(pass 0,1,2,3 to moddule parameter "test_case"), get follow the
+>> results:
+>> 
+>> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=0
+>> [  142.979506] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+>> [  142.983171] Mem abort info:
+>> [  142.984049]   ESR = 0x0000000096000004
+>> [  142.984556]   EC = 0x25: DABT (current EL), IL = 32 bits
+>> [  142.985327]   SET = 0, FnV = 0
+>> [  142.986867]   EA = 0, S1PTW = 0
+>> [  142.987198]   FSC = 0x04: level 0 translation fault
+>> [  142.987555] Data abort info:
+>> [  142.987819]   ISV = 0, ISS = 0x00000004
+>> [  142.988132]   CM = 0, WnR = 0
+>> [  142.988540] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000046168000
+>> [  142.989715] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+>> [  142.992158] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+>> [  142.993012] Modules linked in: memdup_kernel_user_test(+) drm ip_tables x_tables ipv6
+>> [  142.996663] CPU: 0 PID: 133 Comm: modprobe Not tainted 6.3.0-rc1-next-20230307-dirty #1
+>> [  143.002024] Hardware name: linux,dummy-virt (DT)
+>> [  143.003370] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>> [  143.005461] pc : __memcpy+0x54/0x230
+>> [  143.006833] lr : kmemdup+0x50/0x68
+>> [  143.007208] sp : ffff80000aa53ae0
+>> [  143.011440] x29: ffff80000aa53ae0 x28: ffff8000010c0378 x27: ffff8000010c0058
+>> [  143.012386] x26: ffff80000a216fd8 x25: ffff80000aa53d00 x24: ffff8000010c0040
+>> [  143.014183] x23: 0000000000000000 x22: ffff0000037d6580 x21: 0000000000000000
+>> [  143.018590] x20: 0000000000000005 x19: ffff0000039a9100 x18: 0000000000000001
+>> [  143.020166] x17: ffff80000aa75000 x16: ffff0000047bed91 x15: ffff0000037d69f8
+>> [  143.021158] x14: 0000000000000147 x13: ffff0000037d69f8 x12: 00000000ffffffea
+>> [  143.024978] x11: 00000000ffffefff x10: 00000000ffffefff x9 : ffff80000a1fb518
+>> [  143.025800] x8 : 00000000ffffffff x7 : 00000000ffffffff x6 : ffff800036288000
+>> [  143.026667] x5 : ffff0000039a9105 x4 : 0000000000000005 x3 : 0000000080200020
+>> [  143.027257] x2 : 0000000000000005 x1 : 0000000000000000 x0 : ffff0000039a9100
+>> [  143.028177] Call trace:
+>> [  143.028833]  __memcpy+0x54/0x230
+>> [  143.029424]  memdup_user_test_init+0xd8/0x1000 [memdup_kernel_user_test]
+>> [  143.032466]  do_one_initcall+0x70/0x1b4
+>> [  143.038282]  do_init_module+0x58/0x1e8
+>> [  143.039354]  load_module+0x181c/0x1920
+>> [  143.040919]  __do_sys_finit_module+0xb8/0x10c
+>> [  143.041558]  __arm64_sys_finit_module+0x20/0x2c
+>> [  143.044052]  invoke_syscall+0x44/0x104
+>> [  143.044663]  el0_svc_common.constprop.0+0x44/0xec
+>> [  143.045562]  do_el0_svc+0x38/0x98
+>> [  143.047935]  el0_svc+0x2c/0x84
+>> [  143.048175]  el0t_64_sync_handler+0xb8/0xbc
+>> [  143.048295]  el0t_64_sync+0x190/0x194
+>> [  143.049274] Code: f9000006 f81f80a7 d65f03c0 361000c2 (b9400026)
+>> [  143.050933] ---[ end trace 0000000000000000 ]---
+>> Segmentation fault
+>> 
+>> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=1
+>> [   87.896982] test case 1: kmemdup failed, PTR_ERR(ptr) = 16
+>> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Invalid argument
+>> 
+>> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=2
+>> [  124.032509] test case 2: memdup_user failed, PTR_ERR(ptr) = -14
+>> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Bad address
+>> 
+>> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=3
+>> [  155.496285] test case 3: memdup_user failed, PTR_ERR(ptr) = 16
+>> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Invalid argument
+>> 
+>> To sum it up, it is:
+>> 1) If call kmemdup() with the src == NULL, a NULL pointer dereference
+>>     fault happened.
+>> 2) If call kmemdup() with the len == 0, an invalid address value
+>>     ZERO_SIZE_PTR returned, consider that many existing code check
+>>     kmemdup() return value like this:
+>>     ptr = kmemdup();
+>>     if (!ptr) {
+>>     	/* allocation failed */
+>>     }
+>>     this could be a problem, but no fault happended, memcpy() will do
+>>     nothing if copy length is zero, my previous statement is wrong.
+>> 3) If call memdup_user() with src == NULL, -EFAULT returned. Because
+>>     copy_from_user() takes care of the NULL pointer case, there is no
+>>     fault to happend.
+>> 4) If call memdup_user() with len == 0, an invalid address value
+>>     ZERO_SIZE_PTR returned. The existing code uses IS_ERR() to check
+>>     memdup_user() return value, unfortunately, the check range of the
+>>     macro function doesn't contain ZERO_SIZE_PTR value.
+>> 
+>> For 1), (2), we can add the following code to kmemdup() to eliminate:
+>> if (!src || len == 0)
+>> 	return NULL;
+>> 
+>> For 4), we can change the statement if (!p) of memdup_user() to
+>> if (ZERO_OR_NULL_PTR(s)) to solve that.
+>> 
+>> BTW, the return values of kmemdup() and memdup_user() got a little
+>> bit confused for now:
+>> . kmemdup() can return ZERO_SIZE_PTR, NULL, and a valid memory allocation
+>>    address, the caller should check those return values with ZERO_OR_NULL_PTR(),
+>>    but many existing code don't follow this.
+>> . memdup_user() can return ZERO_SIZE_PTR,-ENOMEM,-EFAULT,NULL, and a valid
+>>    memory allocation address, the caller should check those return values with
+>>    ZERO_OR_NULL_PTR() and IS_ERR() at the same time, but i can't find any code
+>>    do things like this.
+>> 
+>>>> Signed-off-by: Xujun Leng <lengxujun2007@126.com>
+>>>> ---
+>>>>    mm/util.c | 3 +++
+>>>>    1 file changed, 3 insertions(+)
+>>>>
+>>>> diff --git a/mm/util.c b/mm/util.c
+>>>> index dd12b9531ac4..d1a3b3d2988e 100644
+>>>> --- a/mm/util.c
+>>>> +++ b/mm/util.c
+>>>> @@ -128,6 +128,9 @@ void *kmemdup(const void *src, size_t len, gfp_t gfp)
+>>>>    {
+>>>>    	void *p;
+>>>>    
+>>>> +	if (!src || len == 0)
+>>>> +		return NULL;
+>>>> +
+>>>>    	p = kmalloc_track_caller(len, gfp);
+>>>>    	if (p)
+>>>>    		memcpy(p, src, len);
+>> 
+>>> Why should we take care of kmemdup(), but not memdup_user() ? Shouldn't
+>>> it suffer from similar problems?
+>> By the foregoing, i think that both kmemdup() and memdup_user() need to
+>> change.
+>
+> The issue is that you can call mostly any kernel function with 
+> unsupported arguments and trigger crashes. It all depends on with which 
+> parameters functions are expected to be called.
+>
+> If kmemdup() is not expected to be called with !src or !len, all is 
+> fine. And if there are no broken cases, existing code obeys these rules.
+>
+> Of course, we could improve the documentation or adjust the 
+> implementations, if there is real need to.
+>
+> But adjusting individual functions here while others are left with he 
+> same, theoretical (!) problems, is not a good approach IMHO.
 
-Add register sequences for PCIe + SGMII PHY multilink configuration.
+Yes, you're right. The best way is to change kmalloc_slab(), let it always
+return NULL on allocate failure, even for requested size == 0. And of course,
+the detailed error message ZERO_SIZE_PTR will lost.
 
-Signed-off-by: Swapnil Jakhade <sjakhade@cadence.com>
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- drivers/phy/cadence/phy-cadence-sierra.c | 141 ++++++++++++++++++++++-
- 1 file changed, 139 insertions(+), 2 deletions(-)
+On the other hand, except kmemdup() and memdup_user(), the other functions
+in mm/util.c, who called kmalloc_track_caller(), like kstrdup(), kstrndup(),
+kmemdup_nul(), memdup_user_nul(), their all do argument check, and the 
+len >= 1(if ignore the wrap case). So if we need change kmemdup() and
+memdup_user() a little, to let those all functions keep the same? If the 
+answer is NO, we can end the disscuss to save your time.
+--
+Thanks,
 
-diff --git a/drivers/phy/cadence/phy-cadence-sierra.c b/drivers/phy/cadence/phy-cadence-sierra.c
-index 6e86a6517f37..7c0daf3e8880 100644
---- a/drivers/phy/cadence/phy-cadence-sierra.c
-+++ b/drivers/phy/cadence/phy-cadence-sierra.c
-@@ -24,7 +24,7 @@
- #include <dt-bindings/phy/phy-cadence.h>
- 
- #define NUM_SSC_MODE		3
--#define NUM_PHY_TYPE		4
-+#define NUM_PHY_TYPE		5
- 
- /* PHY register offsets */
- #define SIERRA_COMMON_CDB_OFFSET			0x0
-@@ -46,7 +46,9 @@
- #define SIERRA_CMN_REFRCV_PREG				0x98
- #define SIERRA_CMN_REFRCV1_PREG				0xB8
- #define SIERRA_CMN_PLLLC1_GEN_PREG			0xC2
-+#define SIERRA_CMN_PLLLC1_FBDIV_INT_PREG		0xC3
- #define SIERRA_CMN_PLLLC1_LF_COEFF_MODE0_PREG		0xCA
-+#define SIERRA_CMN_PLLLC1_CLK0_PREG			0xCE
- #define SIERRA_CMN_PLLLC1_BWCAL_MODE0_PREG		0xD0
- #define SIERRA_CMN_PLLLC1_SS_TIME_STEPSIZE_MODE_PREG	0xE2
- 
-@@ -74,6 +76,7 @@
- #define SIERRA_PSC_RX_A1_PREG				0x031
- #define SIERRA_PSC_RX_A2_PREG				0x032
- #define SIERRA_PSC_RX_A3_PREG				0x033
-+#define SIERRA_PLLCTRL_FBDIV_MODE01_PREG		0x039
- #define SIERRA_PLLCTRL_SUBRATE_PREG			0x03A
- #define SIERRA_PLLCTRL_GEN_A_PREG			0x03B
- #define SIERRA_PLLCTRL_GEN_D_PREG			0x03E
-@@ -298,6 +301,7 @@ enum cdns_sierra_phy_type {
- 	TYPE_NONE,
- 	TYPE_PCIE,
- 	TYPE_USB,
-+	TYPE_SGMII,
- 	TYPE_QSGMII
- };
- 
-@@ -936,6 +940,9 @@ static int cdns_sierra_get_optional(struct cdns_sierra_inst *inst,
- 	case PHY_TYPE_USB3:
- 		inst->phy_type = TYPE_USB;
- 		break;
-+	case PHY_TYPE_SGMII:
-+		inst->phy_type = TYPE_SGMII;
-+		break;
- 	case PHY_TYPE_QSGMII:
- 		inst->phy_type = TYPE_QSGMII;
- 		break;
-@@ -1339,7 +1346,7 @@ static int cdns_sierra_phy_configure_multilink(struct cdns_sierra_phy *sp)
- 			}
- 		}
- 
--		if (phy_t1 == TYPE_QSGMII)
-+		if (phy_t1 == TYPE_SGMII || phy_t1 == TYPE_QSGMII)
- 			reset_control_deassert(sp->phys[node].lnk_rst);
- 	}
- 
-@@ -1537,6 +1544,71 @@ static int cdns_sierra_phy_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+/* SGMII PHY PMA lane configuration */
-+static struct cdns_reg_pairs sgmii_phy_pma_ln_regs[] = {
-+	{0x9010, SIERRA_PHY_PMA_XCVR_CTRL}
-+};
-+
-+static struct cdns_sierra_vals sgmii_phy_pma_ln_vals = {
-+	.reg_pairs = sgmii_phy_pma_ln_regs,
-+	.num_regs = ARRAY_SIZE(sgmii_phy_pma_ln_regs),
-+};
-+
-+/* SGMII refclk 100MHz, no ssc, opt3 and GE1 links using PLL LC1 */
-+static const struct cdns_reg_pairs sgmii_100_no_ssc_plllc1_opt3_cmn_regs[] = {
-+	{0x002D, SIERRA_CMN_PLLLC1_FBDIV_INT_PREG},
-+	{0x2085, SIERRA_CMN_PLLLC1_LF_COEFF_MODE0_PREG},
-+	{0x1005, SIERRA_CMN_PLLLC1_CLK0_PREG},
-+	{0x0000, SIERRA_CMN_PLLLC1_BWCAL_MODE0_PREG},
-+	{0x0800, SIERRA_CMN_PLLLC1_SS_TIME_STEPSIZE_MODE_PREG}
-+};
-+
-+static const struct cdns_reg_pairs sgmii_100_no_ssc_plllc1_opt3_ln_regs[] = {
-+	{0x688E, SIERRA_DET_STANDEC_D_PREG},
-+	{0x0004, SIERRA_PSC_LN_IDLE_PREG},
-+	{0x0FFE, SIERRA_PSC_RX_A0_PREG},
-+	{0x0106, SIERRA_PLLCTRL_FBDIV_MODE01_PREG},
-+	{0x0013, SIERRA_PLLCTRL_SUBRATE_PREG},
-+	{0x0003, SIERRA_PLLCTRL_GEN_A_PREG},
-+	{0x0106, SIERRA_PLLCTRL_GEN_D_PREG},
-+	{0x5231, SIERRA_PLLCTRL_CPGAIN_MODE_PREG },
-+	{0x0000, SIERRA_DRVCTRL_ATTEN_PREG},
-+	{0x9702, SIERRA_DRVCTRL_BOOST_PREG},
-+	{0x0051, SIERRA_RX_CREQ_FLTR_A_MODE0_PREG},
-+	{0x3C0E, SIERRA_CREQ_CCLKDET_MODE01_PREG},
-+	{0x3220, SIERRA_CREQ_FSMCLK_SEL_PREG},
-+	{0x0000, SIERRA_CREQ_EQ_CTRL_PREG},
-+	{0x0002, SIERRA_DEQ_PHALIGN_CTRL},
-+	{0x0186, SIERRA_DEQ_GLUT0},
-+	{0x0186, SIERRA_DEQ_GLUT1},
-+	{0x0186, SIERRA_DEQ_GLUT2},
-+	{0x0186, SIERRA_DEQ_GLUT3},
-+	{0x0186, SIERRA_DEQ_GLUT4},
-+	{0x0861, SIERRA_DEQ_ALUT0},
-+	{0x07E0, SIERRA_DEQ_ALUT1},
-+	{0x079E, SIERRA_DEQ_ALUT2},
-+	{0x071D, SIERRA_DEQ_ALUT3},
-+	{0x03F5, SIERRA_DEQ_DFETAP_CTRL_PREG},
-+	{0x0C01, SIERRA_DEQ_TAU_CTRL1_FAST_MAINT_PREG},
-+	{0x3C40, SIERRA_DEQ_TAU_CTRL1_SLOW_MAINT_PREG},
-+	{0x1C04, SIERRA_DEQ_TAU_CTRL2_PREG},
-+	{0x0033, SIERRA_DEQ_PICTRL_PREG},
-+	{0x0000, SIERRA_CPI_OUTBUF_RATESEL_PREG},
-+	{0x0B6D, SIERRA_CPI_RESBIAS_BIN_PREG},
-+	{0x0102, SIERRA_RXBUFFER_CTLECTRL_PREG},
-+	{0x0002, SIERRA_RXBUFFER_RCDFECTRL_PREG}
-+};
-+
-+static struct cdns_sierra_vals sgmii_100_no_ssc_plllc1_opt3_cmn_vals = {
-+	.reg_pairs = sgmii_100_no_ssc_plllc1_opt3_cmn_regs,
-+	.num_regs = ARRAY_SIZE(sgmii_100_no_ssc_plllc1_opt3_cmn_regs),
-+};
-+
-+static struct cdns_sierra_vals sgmii_100_no_ssc_plllc1_opt3_ln_vals = {
-+	.reg_pairs = sgmii_100_no_ssc_plllc1_opt3_ln_regs,
-+	.num_regs = ARRAY_SIZE(sgmii_100_no_ssc_plllc1_opt3_ln_regs),
-+};
-+
- /* QSGMII PHY PMA lane configuration */
- static struct cdns_reg_pairs qsgmii_phy_pma_ln_regs[] = {
- 	{0x9010, SIERRA_PHY_PMA_XCVR_CTRL}
-@@ -2363,6 +2435,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
- 				[EXTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
- 				[INTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
- 			},
-+			[TYPE_SGMII] = {
-+				[NO_SSC] = &pcie_phy_pcs_cmn_vals,
-+				[EXTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
-+				[INTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
-+			},
- 			[TYPE_QSGMII] = {
- 				[NO_SSC] = &pcie_phy_pcs_cmn_vals,
- 				[EXTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
-@@ -2377,6 +2454,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
- 				[EXTERNAL_SSC] = &pcie_100_ext_ssc_cmn_vals,
- 				[INTERNAL_SSC] = &pcie_100_int_ssc_cmn_vals,
- 			},
-+			[TYPE_SGMII] = {
-+				[NO_SSC] = &pcie_100_no_ssc_plllc_cmn_vals,
-+				[EXTERNAL_SSC] = &pcie_100_ext_ssc_plllc_cmn_vals,
-+				[INTERNAL_SSC] = &pcie_100_int_ssc_plllc_cmn_vals,
-+			},
- 			[TYPE_QSGMII] = {
- 				[NO_SSC] = &pcie_100_no_ssc_plllc_cmn_vals,
- 				[EXTERNAL_SSC] = &pcie_100_ext_ssc_plllc_cmn_vals,
-@@ -2388,6 +2470,13 @@ static const struct cdns_sierra_data cdns_map_sierra = {
- 				[EXTERNAL_SSC] = &usb_100_ext_ssc_cmn_vals,
- 			},
- 		},
-+		[TYPE_SGMII] = {
-+			[TYPE_PCIE] = {
-+				[NO_SSC] = &sgmii_100_no_ssc_plllc1_opt3_cmn_vals,
-+				[EXTERNAL_SSC] = &sgmii_100_no_ssc_plllc1_opt3_cmn_vals,
-+				[INTERNAL_SSC] = &sgmii_100_no_ssc_plllc1_opt3_cmn_vals,
-+			},
-+		},
- 		[TYPE_QSGMII] = {
- 			[TYPE_PCIE] = {
- 				[NO_SSC] = &qsgmii_100_no_ssc_plllc1_cmn_vals,
-@@ -2403,6 +2492,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
- 				[EXTERNAL_SSC] = &pcie_100_ext_ssc_ln_vals,
- 				[INTERNAL_SSC] = &pcie_100_int_ssc_ln_vals,
- 			},
-+			[TYPE_SGMII] = {
-+				[NO_SSC] = &ml_pcie_100_no_ssc_ln_vals,
-+				[EXTERNAL_SSC] = &ml_pcie_100_ext_ssc_ln_vals,
-+				[INTERNAL_SSC] = &ml_pcie_100_int_ssc_ln_vals,
-+			},
- 			[TYPE_QSGMII] = {
- 				[NO_SSC] = &ml_pcie_100_no_ssc_ln_vals,
- 				[EXTERNAL_SSC] = &ml_pcie_100_ext_ssc_ln_vals,
-@@ -2414,6 +2508,13 @@ static const struct cdns_sierra_data cdns_map_sierra = {
- 				[EXTERNAL_SSC] = &usb_100_ext_ssc_ln_vals,
- 			},
- 		},
-+		[TYPE_SGMII] = {
-+			[TYPE_PCIE] = {
-+				[NO_SSC] = &sgmii_100_no_ssc_plllc1_opt3_ln_vals,
-+				[EXTERNAL_SSC] = &sgmii_100_no_ssc_plllc1_opt3_ln_vals,
-+				[INTERNAL_SSC] = &sgmii_100_no_ssc_plllc1_opt3_ln_vals,
-+			},
-+		},
- 		[TYPE_QSGMII] = {
- 			[TYPE_PCIE] = {
- 				[NO_SSC] = &qsgmii_100_no_ssc_plllc1_ln_vals,
-@@ -2435,6 +2536,11 @@ static const struct cdns_sierra_data cdns_ti_map_sierra = {
- 				[EXTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
- 				[INTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
- 			},
-+			[TYPE_SGMII] = {
-+				[NO_SSC] = &pcie_phy_pcs_cmn_vals,
-+				[EXTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
-+				[INTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
-+			},
- 			[TYPE_QSGMII] = {
- 				[NO_SSC] = &pcie_phy_pcs_cmn_vals,
- 				[EXTERNAL_SSC] = &pcie_phy_pcs_cmn_vals,
-@@ -2443,6 +2549,13 @@ static const struct cdns_sierra_data cdns_ti_map_sierra = {
- 		},
- 	},
- 	.phy_pma_ln_vals = {
-+		[TYPE_SGMII] = {
-+			[TYPE_PCIE] = {
-+				[NO_SSC] = &sgmii_phy_pma_ln_vals,
-+				[EXTERNAL_SSC] = &sgmii_phy_pma_ln_vals,
-+				[INTERNAL_SSC] = &sgmii_phy_pma_ln_vals,
-+			},
-+		},
- 		[TYPE_QSGMII] = {
- 			[TYPE_PCIE] = {
- 				[NO_SSC] = &qsgmii_phy_pma_ln_vals,
-@@ -2458,6 +2571,11 @@ static const struct cdns_sierra_data cdns_ti_map_sierra = {
- 				[EXTERNAL_SSC] = &pcie_100_ext_ssc_cmn_vals,
- 				[INTERNAL_SSC] = &pcie_100_int_ssc_cmn_vals,
- 			},
-+			[TYPE_SGMII] = {
-+				[NO_SSC] = &pcie_100_no_ssc_plllc_cmn_vals,
-+				[EXTERNAL_SSC] = &pcie_100_ext_ssc_plllc_cmn_vals,
-+				[INTERNAL_SSC] = &pcie_100_int_ssc_plllc_cmn_vals,
-+			},
- 			[TYPE_QSGMII] = {
- 				[NO_SSC] = &pcie_100_no_ssc_plllc_cmn_vals,
- 				[EXTERNAL_SSC] = &pcie_100_ext_ssc_plllc_cmn_vals,
-@@ -2469,6 +2587,13 @@ static const struct cdns_sierra_data cdns_ti_map_sierra = {
- 				[EXTERNAL_SSC] = &usb_100_ext_ssc_cmn_vals,
- 			},
- 		},
-+		[TYPE_SGMII] = {
-+			[TYPE_PCIE] = {
-+				[NO_SSC] = &sgmii_100_no_ssc_plllc1_opt3_cmn_vals,
-+				[EXTERNAL_SSC] = &sgmii_100_no_ssc_plllc1_opt3_cmn_vals,
-+				[INTERNAL_SSC] = &sgmii_100_no_ssc_plllc1_opt3_cmn_vals,
-+			},
-+		},
- 		[TYPE_QSGMII] = {
- 			[TYPE_PCIE] = {
- 				[NO_SSC] = &qsgmii_100_no_ssc_plllc1_cmn_vals,
-@@ -2484,6 +2609,11 @@ static const struct cdns_sierra_data cdns_ti_map_sierra = {
- 				[EXTERNAL_SSC] = &pcie_100_ext_ssc_ln_vals,
- 				[INTERNAL_SSC] = &pcie_100_int_ssc_ln_vals,
- 			},
-+			[TYPE_SGMII] = {
-+				[NO_SSC] = &ti_ml_pcie_100_no_ssc_ln_vals,
-+				[EXTERNAL_SSC] = &ti_ml_pcie_100_ext_ssc_ln_vals,
-+				[INTERNAL_SSC] = &ti_ml_pcie_100_int_ssc_ln_vals,
-+			},
- 			[TYPE_QSGMII] = {
- 				[NO_SSC] = &ti_ml_pcie_100_no_ssc_ln_vals,
- 				[EXTERNAL_SSC] = &ti_ml_pcie_100_ext_ssc_ln_vals,
-@@ -2495,6 +2625,13 @@ static const struct cdns_sierra_data cdns_ti_map_sierra = {
- 				[EXTERNAL_SSC] = &usb_100_ext_ssc_ln_vals,
- 			},
- 		},
-+		[TYPE_SGMII] = {
-+			[TYPE_PCIE] = {
-+				[NO_SSC] = &sgmii_100_no_ssc_plllc1_opt3_ln_vals,
-+				[EXTERNAL_SSC] = &sgmii_100_no_ssc_plllc1_opt3_ln_vals,
-+				[INTERNAL_SSC] = &sgmii_100_no_ssc_plllc1_opt3_ln_vals,
-+			},
-+		},
- 		[TYPE_QSGMII] = {
- 			[TYPE_PCIE] = {
- 				[NO_SSC] = &qsgmii_100_no_ssc_plllc1_ln_vals,
--- 
-2.25.1
+Xujun Leng
 
