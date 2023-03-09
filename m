@@ -2,180 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B7F6B2C0E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 18:31:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B66186B2C1D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 18:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbjCIRbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 12:31:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
+        id S229767AbjCIRds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 12:33:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjCIRbB (ORCPT
+        with ESMTP id S230110AbjCIRdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 12:31:01 -0500
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2080.outbound.protection.outlook.com [40.107.14.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBD0F8F35;
-        Thu,  9 Mar 2023 09:30:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NiGMMiipFg6MaQieGmv+euQSBoLFM5e5Z5TkSroy2a2hMndz5l6kvfotrdryQx0eqdU5kNSCWe7K5WB2WTkAIDXGbLBnYls6usDNh339RzqblkCQZfoTzn98DmfvnEVCB38S5gF8xjweixljwr3Hx7O/evP1du6Rdj0g3l22zSSdVifZet0MIbhjc9kK/a5B79XfFQxIThAklZVcBYoUYcZI0El5O9S0AihbbQ1P+B2lgoS5l12veQxxZRvmBA22jziZgWMaNa4CDaCPA2NxETfxhPf7VaMgbORnRsMV1OOgGgyKt6/QQmskt4Le7FH9r63iYy2ixdMt306ovt9Smw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IWI6yxA3G0qUW1Oh6kbyHfjxL2wtcJRjpaihbjZk9fE=;
- b=UttppMhsyn5pMdW/oijc9grHSR7X5eMdQ5LnFKCHEBPzaSNI5KjK8nTIgNglfe/dT+eDpAOX8oI5eIa05bFC2pzQWySeoUVaVYEzXs6vwSYp6K86RZfT7vV7VJcGfs90U1OO3nbdvZ8uok2N0nETwT6Ya07uBHNLZpGROPijrmL+KEzws3Vmwrk1xEOnpiVVp61c0rh6P2/qVzd+yjxKmXGAu5TCgI2a/K6RFBop6R6U+teFXcyF+50TOTP/ISLsaU8baYr3LukXmta/3u2WSnvOwpYXikp7iRxcLHklUhnD95/S0lA3lF1oeOgb2DDTn9nOvnCt9HQzbNXiDUYVGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IWI6yxA3G0qUW1Oh6kbyHfjxL2wtcJRjpaihbjZk9fE=;
- b=RZ2O03nTfG+yn6Fl6g1ic4CnzZ4ymj4r+/HOr0RY4S01h3txGaMKsvoa+nwuhSI5zofEmND3WXIeoQGkS0YteNYVkcu8FSFrD2w/1hO001yx5+M+NBgR4ZfldhmB6QT2AOHBI3wmebWgLON41u9v73EA3A79DSEh/3suHZ/qZJLzEcz6H+0i5nagj+2gAI/8Mmp7NT0O941VY86LS+2eltcrHv0FN9vLtIXgJ07AgVak8lUSNXFBVQQvf5vSwCll0RMUYv+yy244d2axg2MSBNNz1YBsqlOhf4Zb6ey82PzpjrXGLTPyyeFvOUiZ4+OacL+z/LnNbINqLmBwB22utQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by DBBPR04MB7993.eurprd04.prod.outlook.com (2603:10a6:10:1eb::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Thu, 9 Mar
- 2023 17:30:56 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com ([fe80::2ea:4a86:9ab7])
- by VI1PR04MB7104.eurprd04.prod.outlook.com ([fe80::2ea:4a86:9ab7%3]) with
- mapi id 15.20.6178.019; Thu, 9 Mar 2023 17:30:56 +0000
-Message-ID: <5b34408d-8589-d735-9a77-a651ea661e01@suse.com>
-Date:   Thu, 9 Mar 2023 18:30:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 2/5] gpio: Add support for Intel LJCA USB GPIO driver
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Oliver Neukum <oneukum@suse.com>
-Cc:     Ye Xiang <xiang.ye@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
-        wentong.wu@intel.com, lixu.zhang@intel.com
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
- <20230309071100.2856899-3-xiang.ye@intel.com>
- <2865f3d0-428b-0df1-fc50-f6af3cb9dac3@suse.com>
- <ZAnku01goVDCuNM+@smile.fi.intel.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <ZAnku01goVDCuNM+@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0129.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9e::16) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        Thu, 9 Mar 2023 12:33:44 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9446F1FE1;
+        Thu,  9 Mar 2023 09:33:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678383223; x=1709919223;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=kBuk/qbo+wS0XQ/dFeyx8JguJDt+9dG8zDXc8OBOCnk=;
+  b=Q6WZDTBGq8VnVY4zJsvKQiOJY539J9omDyD+BiKBKc5ZB+pZQQEOc7/X
+   ZQ4rlzkj83cIv5CvkL+1+O3vINGU/WZ9jsVkTp3mcuBguPtctOr9EpAjB
+   gSIqiVQuUxMpTQoqNscBqgSd2+oYZRh1qsE34kk3LMBVNaaQEOBy8ylBf
+   8h74ozU3DIgDumUTMxV/5ZaSH1yKUNLyVpur9pZOp2PqLF1UmdtMuvgHL
+   7yEs2T+BVMpRAgpoR4g/ub2nflgdFNylfvJGvIMqtFfjhFs0hf5IAPWa2
+   P0GUvpzBauC4pAxSGRMZdCi4vzpSu8MNeqIt+L/s0OJyaYxHd7+YGkebj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="364156732"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="364156732"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 09:33:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="707697340"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="707697340"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 09 Mar 2023 09:33:36 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1paK91-00037N-0T;
+        Thu, 09 Mar 2023 17:33:35 +0000
+Date:   Fri, 10 Mar 2023 01:33:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?K=F6ry?= Maincent <kory.maincent@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-omap@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Michael Walle <michael@walle.cc>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Kory Maincent <kory.maincent@bootlin.com>,
+        thomas.petazzoni@bootlin.com, Russell King <linux@armlinux.org.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>
+Subject: Re: [PATCH v3 3/5] net: Let the active time stamping layer be
+ selectable.
+Message-ID: <202303100154.iqj4R4fL-lkp@intel.com>
+References: <20230308135936.761794-4-kory.maincent@bootlin.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|DBBPR04MB7993:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1ea57979-9092-4d7c-75f7-08db20c40a68
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: erNmKGom1EeWy+sCUCVG67Z+ZqpCrHuk790zLJKFfLGjlQGTph5/4Fez94uCTvVYSEFWzxIrFQK08djEapJ5WS1YAwTk0jm94jg5Cfy5Y/MTe3ty5UhWE1nCNbH51fj29WD3RnZ2IAqaeVCJ5EPVhXRX+KpnKUX4BRImppUmbJaN3xKw4f8yFPA5ftxsK1FIBLwNVeaUTmGm0SKeeXKSZUipej/0cyYe3ufHSbYfve/zu0YpRJNZAuiVAtlFz6V2tw2LgPn8/SfFXWxGSdQQgM/9RZCVTDv46FLcwtTHLfvsLjnilnnOd1CSktlOHylLUNcj9L393aIouh+a/nQFhlYYUBSQ8eLEmPM21HpXc0It6OmMM0ug/ciJT/KiU2giD/xXAN/P835OJBfDW7eG9eP7hI884bOMSmWxP2xMWoJQMQVpS6K8cP/0gsIUMfNpYWyRjknC1CSnaakkrvtkrge76bd6hoh9iHg6ay3HLW6C5sw6Z2xiMZVWQvG+w+qF1hXUkk6BIV1SZIv/CzHGszYFIQyokW9KIBl9kGjPE8QSZID71cwXxfkw7deGxp+SmyEB7TZkVFuXu7vNmdgqZnKZP7V3zrdvS2xh3cgBcrYISuxUzUoS0uZkuMBFgKyvc43/fI0i/0BLp2fPojxx1w2+dFdpHC8wTm+a3Vj7xbzZgVrygGpL2xDicEttxYhjHH1uNZ3hCHPBpg6y8YZpa40l9fB/fLfKiAm/kENQYFI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(39860400002)(366004)(376002)(136003)(346002)(451199018)(36756003)(66476007)(8936002)(5660300002)(7416002)(6512007)(53546011)(6506007)(6666004)(38100700002)(83380400001)(186003)(2616005)(66556008)(316002)(86362001)(31696002)(66946007)(41300700001)(54906003)(8676002)(4326008)(110136005)(6486002)(478600001)(31686004)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z2pVVDc3cFMxcDVycUswTVBmNXMwTWJ5dlpUQlNzU0FaQUJiRkdUS3kxVW1y?=
- =?utf-8?B?S3ViUVh0OWtwbWNJMTRUKzNUbElxd201cFg3azNHeVhQTUxlYUdKZFpiUWpF?=
- =?utf-8?B?ejZzUXFabVpZWW41SmxwN2F2QjJDdW91TTArR3Z3blFBN0k1ZzM4N2VVcUsv?=
- =?utf-8?B?OXkvcWRnS1ZDLzNvZzR1bW43UnEwRmJ3VWJodGdxbmZ5TDZ5Rk8rSnZzdGVy?=
- =?utf-8?B?UGlib2NtQzdyeE40RG5IRSsyN3NPTjRZK0xTZnVhMjNWRWltWjlCL251RlRN?=
- =?utf-8?B?M3NrSjdlK2diaUZ6eXpEaXl3dVhVSWpvcjF5cGFmd3VHQ005Yk93M01Ydzhw?=
- =?utf-8?B?Q3FlV3JuczlOYjk4cHowOEdhQ1B2SkxKTk9mNEw0QjdEMWx4RWR5dHhLbW9l?=
- =?utf-8?B?U3QzYU9vZlFNMmtLcE14QnB5dnR0RFd4SVYzcFZTbHVVU1BrSUNlbENjdU5I?=
- =?utf-8?B?cy9WQ2VHT2tkTEpTSTE2dktleUFiY0M3am94NWdJYzZvYWpRUVhaWW1GRlNW?=
- =?utf-8?B?RmxJMmJ5YjRZMmkrSnd2cXZZUWJxL1lMZzVJVnA1YWRjcjFpNjcrdmoyT29P?=
- =?utf-8?B?SWxmbTREcWRPL3RqR1VUblEyRkl1bHFObFoyMFZrcENjNExicGVKa2hTbmZS?=
- =?utf-8?B?bk9MR1F6aUtkQVJORnA3OHJrSy8vazYrSnBCNitqYlVzbGt0TUFmcnQzdGsx?=
- =?utf-8?B?dFQvUkN3d1YrVXVjS05xd01ZTEJsd0dVcEVBaWtLVkhPUFVkQ09Obk9OWmho?=
- =?utf-8?B?U0xTSlBpZzFRRmR4UDFENGpURk1Vb0pBendjWEszM2RHMlljS01TWHNuNjNU?=
- =?utf-8?B?S2YzcTFZQkNQaVJ3U09JVGtCbHZXdnd6M0ZrcTlJMGJLNzJIMVVKN0RPeVFG?=
- =?utf-8?B?dkVSYnFsa3dZS0Z2S0QvY0NsVmFYc2JmMzVHa1Zxb0NsdXpIUUdQOWRBTTNF?=
- =?utf-8?B?UUNWQkE5UEttT1gzYWtONzZjblBXQVVHc0srUnVDWnRFUHQxbzBNemFkeklv?=
- =?utf-8?B?eGNoTTQ5dHRXMWpkNFRkNG1yVGhEYVBxcytjenRMU2hPejBNOUl6MnRldmNP?=
- =?utf-8?B?L0N6a3NlTjg0KzFtaVVVU0tWTXB2SSthK1dtazhvWU1xZ3gxN04yY3hwTWo2?=
- =?utf-8?B?cmJIaUlsVjU2aUJoYmN3bkw5UHJtcWdrNDUrTjBlZHFWZXBXTzA4aGdGUGs4?=
- =?utf-8?B?dy9YS3A1Sm56OXRhSmxiZjN6R2NETEJib1NDbXNBUXFhYVRCaDVya01SdGVL?=
- =?utf-8?B?WFFaUS9UTk9IN2c5by9ENGxhM291cUhnNDFyU01UR3VxYXBEVk1mRFpKV2Q3?=
- =?utf-8?B?MUk0ZWQ3VjJ1NUovaGJTTTl3SjdtcVBsWFNlTWM1b1hKSnRJZUZ2bU5ML2Za?=
- =?utf-8?B?U0txc2s3VUZ4NGJJVEphWWVBYXQzOGJDdXpBSjRobHZIa3lTMHJ3V2pYc2gx?=
- =?utf-8?B?bmh2aGZid1NmalFCWWYrTWw1aXpSQWFGaXRvdHoyNHNNR21sN0RuOG1pTHZP?=
- =?utf-8?B?d0s2bllGV1dVRG93RTRMdlBSeWw4Y0RHdDBXWGZHY2VaRmF0YndCT1ByeTRq?=
- =?utf-8?B?MTQwNmdjbi9Ma2R3UnRiWHZ1RWRuVnd0aThSSnpKQXl1T0VNaVdEVjZYTURD?=
- =?utf-8?B?UCtQVTk5aVpBU0xzZzdWOWtzSWZwN25OZi9aYkROLzU0amdRTkM2WWIxZVpN?=
- =?utf-8?B?U01UMnRuRGZNeDVKUENVTXk5Q1QvUCt5MGN6N1NGRmtPZjlKaE1vQnNNOEhY?=
- =?utf-8?B?VlN5MTAxbCs5eEs2ZXpDVFhqQU9IS2hvdDFQUkUxVWxMNkh1Z2dmUStmTmN3?=
- =?utf-8?B?RUZJSTkrZ24wY1VsK3l6RTJTMVlrSWI4a2p4OWJvWjFzSTlGb1o4Q09OV2FQ?=
- =?utf-8?B?Si9ldWdkTEo0ZUJTSW1HVEt6c3BEVm4vNGlvS1cyS0hBeWs4eW12M2Z2ZkRY?=
- =?utf-8?B?TnVkVHFYQ3NqY2JSV3RySUM3eHRlOVprMHI4ZkxsL2xHcmREZ2JhcVJnM2cy?=
- =?utf-8?B?Zk9Bd09kUjBVR2ZkcFR3ZExnZnJNVHVwbjByOEorWXpIUjFJWkdoa3Nhdi9M?=
- =?utf-8?B?ZjBkY2V5UTB1dEtnZDZEN3E3am9pblJrNFNIdU1UYWQ5UHBwdFJnZ1NpbjZv?=
- =?utf-8?B?anQrRUFQZXI2STdQT2hzSzVmaWwyYndsdG1GWWJYQUU3b1RSa0tFMDZwL0No?=
- =?utf-8?Q?kW/p9+wUy0r4GtV+gvauYKJTvA6l1ViSwY6Ykp2aVjvP?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ea57979-9092-4d7c-75f7-08db20c40a68
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 17:30:56.6322
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Me18N8AWNBa5PmzHR+TeBKtoV3i5dpWSlVlwM9wECiA3TO6hyVLTACmdwJ4SRN6GAZoq83ZvqCbK8HVJeIJo4w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7993
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230308135936.761794-4-kory.maincent@bootlin.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Köry,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on v6.2]
+[cannot apply to robh/for-next horms-ipvs/master net/master net-next/master linus/master v6.3-rc1 next-20230309]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/K-ry-Maincent/net-ethtool-Refactor-identical-get_ts_info-implementations/20230308-220453
+patch link:    https://lore.kernel.org/r/20230308135936.761794-4-kory.maincent%40bootlin.com
+patch subject: [PATCH v3 3/5] net: Let the active time stamping layer be selectable.
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20230310/202303100154.iqj4R4fL-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d81a36f239360e7e3b9ca2633e52b3cb12205590
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review K-ry-Maincent/net-ethtool-Refactor-identical-get_ts_info-implementations/20230308-220453
+        git checkout d81a36f239360e7e3b9ca2633e52b3cb12205590
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/phy/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303100154.iqj4R4fL-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/phy/phy_device.c:1384:6: warning: no previous prototype for function 'of_set_timestamp' [-Wmissing-prototypes]
+   void of_set_timestamp(struct net_device *netdev, struct phy_device *phydev)
+        ^
+   drivers/net/phy/phy_device.c:1384:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void of_set_timestamp(struct net_device *netdev, struct phy_device *phydev)
+   ^
+   static 
+   1 warning generated.
 
 
-On 09.03.23 14:52, Andy Shevchenko wrote:
-> On Thu, Mar 09, 2023 at 02:40:10PM +0100, Oliver Neukum wrote:
->> On 09.03.23 08:10, Ye Xiang wrote:
+vim +/of_set_timestamp +1384 drivers/net/phy/phy_device.c
 
->>> +	u8 obuf[LJCA_GPIO_BUF_SIZE];
->>> +	u8 ibuf[LJCA_GPIO_BUF_SIZE];
->>
->> And here we have a violation of DMA coherency rules.
->> Basically you cannot embed buffers into other data structures
->> if they can be subject to DMA.
-> 
-> Huh?!
-> 
-> The problem here is alignment. But other than that I can't see the issue with
-> embedding into structures the instances of which will be allocated on the heap.
+  1383	
+> 1384	void of_set_timestamp(struct net_device *netdev, struct phy_device *phydev)
+  1385	{
+  1386		struct device_node *node = phydev->mdio.dev.of_node;
+  1387		const struct ethtool_ops *ops = netdev->ethtool_ops;
+  1388		const char *s;
+  1389		enum timestamping_layer ts_layer = 0;
+  1390	
+  1391		if (phy_has_hwtstamp(phydev))
+  1392			ts_layer = PHY_TIMESTAMPING;
+  1393		else if (ops->get_ts_info)
+  1394			ts_layer = MAC_TIMESTAMPING;
+  1395	
+  1396		if (of_property_read_string(node, "preferred-timestamp", &s))
+  1397			goto out;
+  1398	
+  1399		if (!s)
+  1400			goto out;
+  1401	
+  1402		if (phy_has_hwtstamp(phydev) && !strcmp(s, "phy"))
+  1403			ts_layer = PHY_TIMESTAMPING;
+  1404	
+  1405		if (ops->get_ts_info && !strcmp(s, "mac"))
+  1406			ts_layer = MAC_TIMESTAMPING;
+  1407	
+  1408	out:
+  1409		netdev->selected_timestamping_layer = ts_layer;
+  1410	}
+  1411	
 
-
-Hi,
-
-These constraints are documented in dma-api-howto, but perhaps this
-is inconvenient to read through.
-  
-Let me explain for the input case. On certain CPUs DMA does not
-update CPU caches. Hence when you want to read data generated by DMA
-you must read from RAM. Hence you invalidate the cache line with dma_map_*
-operations.
-Those cache lines must stay invalidated. If you wish to guarantee that,
-you cannot access a data structure that shares a cache line with a buffer,
-until you are sure that DMA is finished.
-
-On the affected architectures kmalloc() makes sure that no allocation straddles
-cache lines.
-
-	Regards
-		Oliver
-  
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
