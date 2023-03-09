@@ -2,100 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3579C6B263E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:07:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885C16B2643
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbjCIOG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:06:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
+        id S231569AbjCIOHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:07:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbjCIOGk (ORCPT
+        with ESMTP id S231629AbjCIOGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:06:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6615F1852
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:04:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79731B81EEB
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:04:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EF50C4339B;
-        Thu,  9 Mar 2023 14:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678370675;
-        bh=4R35ElemQenvIP7XOXmps7y6mw+Vr13Ba7RcexOZnwg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pAaAi+55lcMzorhxpAHCWAvs6myW/8QSx3mkJNAAJyYP6e+yDMs/LHlnFwOE4t1DT
-         FvqUR3NUn3e0femASF+wk7Nv0Vju1+/crDQU4PYMxO2m3riBRReFtnLequIqOgrQPz
-         phueGVz15Z1QOjCaDsbEj2pM8+OddBRJ0aDJZu9DM1vwgT2DIEGXvo8ocDGM5ZfEas
-         WvIvbQMdDB/JSWodhrehV1VmTjIR+3sDxKXobgDPtcDVWA4TfDLjKdhDd5ceWgvqPt
-         sewAa6rleSQfVtpGDLnmZVtChYBWK4/wFf84w6e8hzYZXTmzMXZvKW2Ll4CyGQvCcN
-         ScbpafbNPuCbQ==
-Date:   Thu, 9 Mar 2023 14:04:28 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lucas Tanure <lucas.tanure@collabora.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        "Takashi Iwai --cc=alsa-devel @ alsa-project . org" <tiwai@suse.com>,
-        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH v4] ASoC: cs35l41: Steam Deck Shared boost properties
- quirk
-Message-ID: <c5b6077c-1e6e-43fe-8f83-ca7019d4a43d@sirena.org.uk>
-References: <20230309104133.537056-1-lucas.tanure@collabora.com>
- <2881f527-1673-3496-85a2-84a13f074248@linaro.org>
+        Thu, 9 Mar 2023 09:06:48 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52879F28A4;
+        Thu,  9 Mar 2023 06:05:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=p4LnmBBm9xWxd/0OIEuDKqlIYCXfSPwHaLZhH3s8UOo=; b=F47G2uyR+Jrm+i/8eW+b5JtJP9
+        ef7vZt+p0VTUWMgbngoSIyNGpjiXLA6xUUIhv/3AP+tuAnGNJdg+oWgaVXzG/JEQNowqtrgFxrJXX
+        +OyoAqthc2VcO7owirtp05KDOUqDWB9eDyCAgBdvWA1SQPmBCSaSv4s+7vnrMUCTj7Sx0OTf6s5GT
+        mtDHPTG64FJ1vbKQjRHBaMOSCzuiLACVZb+FScCsm9i6qTgzExU96ZoVsk4w3IWxYHmxnfTmPeyfU
+        dTfeP1ak5/HdivIpefmnktH30tX9o+w+yz+XTWP+bNw8ux/O5gCqDYkWjCahfMKCsC41pwU/Ej3ev
+        CcfDonEg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:39770)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1paGtJ-0004jI-Av; Thu, 09 Mar 2023 14:05:09 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1paGtH-0003i8-7D; Thu, 09 Mar 2023 14:05:07 +0000
+Date:   Thu, 9 Mar 2023 14:05:07 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/7] dsa: marvell: Correct value of max_frame_size
+ variable after validation
+Message-ID: <ZAnnk5MZc0w4VkDE@shell.armlinux.org.uk>
+References: <20230309125421.3900962-1-lukma@denx.de>
+ <20230309125421.3900962-7-lukma@denx.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MeVrIPWLE+hND0ym"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2881f527-1673-3496-85a2-84a13f074248@linaro.org>
-X-Cookie: I will never lie to you.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230309125421.3900962-7-lukma@denx.de>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 09, 2023 at 01:54:20PM +0100, Lukasz Majewski wrote:
+> Running of the mv88e6xxx_validate_frame_size() function provided following
+> results:
+> 
+> [    1.585565] BUG: Marvell 88E6020 has differing max_frame_size: 1632 != 2048
+> [    1.592540] BUG: Marvell 88E6071 has differing max_frame_size: 1632 != 2048
+> 		^------ Correct -> mv88e6250 family max frame size = 2048B
+> 
+> [    1.599507] BUG: Marvell 88E6085 has differing max_frame_size: 1632 != 1522
+> [    1.606476] BUG: Marvell 88E6165 has differing max_frame_size: 1522 != 1632
+> [    1.613445] BUG: Marvell 88E6190X has differing max_frame_size: 10240 != 1522
+> [    1.620590] BUG: Marvell 88E6191X has differing max_frame_size: 10240 != 1522
+> [    1.627730] BUG: Marvell 88E6193X has differing max_frame_size: 10240 != 1522
+> 		^------ Needs to be fixed!!!
+> 
+> [    1.634871] BUG: Marvell 88E6220 has differing max_frame_size: 1632 != 2048
+> [    1.641842] BUG: Marvell 88E6250 has differing max_frame_size: 1632 != 2048
+> 		^------ Correct -> mv88e6250 family max frame size = 2048B
 
---MeVrIPWLE+hND0ym
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+If I understand this correctly, in patch 4, you add a call to the 6250
+family to call mv88e6185_g1_set_max_frame_size(), which sets a bit
+called MV88E6185_G1_CTL1_MAX_FRAME_1632 if the frame size is larger
+than 1518.
 
-On Thu, Mar 09, 2023 at 11:42:42AM +0100, Krzysztof Kozlowski wrote:
-> On 09/03/2023 11:41, Lucas Tanure wrote:
+However, you're saying that 6250 has a frame size of 2048. That's fine,
+but it makes MV88E6185_G1_CTL1_MAX_FRAME_1632 rather misleading as a
+definition. While the bit may increase the frame size, I think if we're
+going to do this, then this definition ought to be renamed.
 
-> > -	ret = device_property_read_u32(dev, "cirrus,boost-type", &val);
-> > -	if (ret >= 0)
-> > -		hw_cfg->bst_type = val;
-> > +	if (device_property_read_bool(dev, "cirrus,shared-boost-active")) {
+That said, I would like Andrew and Vladimir's thoughts on this too.
 
-> You are now changing ABI and adding undocumented properties.
+Finally, I would expect, if this series was done the way I suggested,
+that patch 1 should set the max frame size according to how the
+existing code works, which means patch 2, being the validation patch,
+should be completely silent if patch 1 is correct - and that's the
+entire point of validating. It's to make sure that patch 1 is
+correct.
 
-Note also that this doesn't change the existing property, it continues
-to work identically.
+If it isn't correct, then patch 1 is wrong and should be updated.
 
---MeVrIPWLE+hND0ym
-Content-Type: application/pgp-signature; name="signature.asc"
+Essentially, this patch should only exist if the values we are using
+today are actually incorrect.
 
------BEGIN PGP SIGNATURE-----
+To put this another way, the conversion from our existing way of
+determining the max mtu to using the .max_frame_size method should be
+an entire no-op from the driver operation point of view. Then any
+errors in those values should be fixed and explained in a separate
+commit. Then the new support added.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQJ52wACgkQJNaLcl1U
-h9BfzAf/ZQZeIWhkvUG2zW0YhKX/DwPY1nwEQk5jrslFfBH7hfk1/RrxzhQOCKNU
-OXzDL807rwVGAzO6/2MESzNSmYkLV8iGt6bYehvyYAY4lsP8NMh/e7bFKawYYhDi
-j/oMJ0xjxtEA5wiGMEP0ZnReXvIy73RnqO1QNHHRpUCNTrZJPU6ly4MDpI6LoDXe
-wRLxAw2ZZwplCQM6nnnTD0MMy68tU2WCbGjArdjYCncA7B83MdIdcgvWj+Cs4X80
-1psaVYXntOe91bOQkGiZFdGmTV2ZP0fWZcPIBYqhbONAJHNOIi1b4qf1qm5kgQtH
-duszXlKKyxRo2iVEzZEq8nxwylnMNQ==
-=L0t6
------END PGP SIGNATURE-----
+At least that's how I see it. Andrew and Vladimir may disagree.
 
---MeVrIPWLE+hND0ym--
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
