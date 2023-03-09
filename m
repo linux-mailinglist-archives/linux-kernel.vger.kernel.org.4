@@ -2,370 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE096B2532
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BA96B2536
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:24:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbjCINWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
+        id S229747AbjCINYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:24:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbjCINWR (ORCPT
+        with ESMTP id S230153AbjCINYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:22:17 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2937E7C86;
-        Thu,  9 Mar 2023 05:21:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678368108; x=1709904108;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=/aSOHP2iy5o9QSR4i1bSSxw+q9Bgq7CVe2su9njlcLM=;
-  b=XETOqRttMRQOjZngxZn/6jhuMg5js3i9nNdZQS/rC2h7SlDpXLsQBIZe
-   WFfVmd9HlihnOksQtZDriL1XYVtRXqUQMFGypD6cH9EDP5UHYiHgFbFlw
-   29Y9q9FRMQXs8aAmlNMkF+rlz5S6BL28IixH/TiQBR2HsMHNXy6cQnUPH
-   CTMNpQmqlNJjIHvM9UZWiF/8HTuLRht7ouATamu5QKkh/sP3h3KfWddx+
-   dnX0kN9YIVtyyxTYaAmRqT9RGpFfVXK5f5cPDGx+PrE+0pqFrREtm34HV
-   6NzIqYWmsuye7seKuEDXE/1D1zM7oz02zyAfbv9TIwl+F2jJGuSPJDVDx
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="338777999"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="338777999"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 05:21:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="670724408"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="670724408"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga007.jf.intel.com with ESMTP; 09 Mar 2023 05:21:47 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 9 Mar 2023 05:21:47 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 9 Mar 2023 05:21:47 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 9 Mar 2023 05:21:46 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NymYOe4j0Gc8ZjFltBFZRnGX4eAXgioSCCmfw05hhnlMkDmOIapE7M+KZZx+GSZRlud/2EQYPOPg/aOclmIyL4LSljXdpih4ukrY8yZoFWbP42kNnVvj+GrfzFHi0eoPtgXDgCaAmqbp5cAt4USzHfmGz75PwgKCFDyknq0rDi2kRcXs1dX4NoNzjXF9apUAALj0JI2hPyYAnFPs781R1EDXpWjFuaCNehYOKHDLfSUJOZeKSq/C+27Q6TX9BdX7bY3mYUDfT/ArXM7UWOlRj1jPtuN2r0rUL8bF7pSpFYNWQo2rSPoBmQrJPFTCPTYmfCU8OM+ukUqS3LJP/+5IvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/aSOHP2iy5o9QSR4i1bSSxw+q9Bgq7CVe2su9njlcLM=;
- b=kerYRdrgxaZMTduPPxQyrXTSw5Q+traUbNe9gG4vj27pyGuwyencGJLN5AJ4+1cRDbabasrRmHPYSrumTZhWB90G2/OGcL6JNZY7aZvU5YvKrur6WTh4dZLli52j8AHe5L0gF7W0dov0SNjTVzSI2ca9S98fcX3JBXOmkVwQner+pSmbRYhLF+QnWNYzT8UY3JlsqF9nnf20mhV/BmKQjBVv1+w0yOGpigIQyjw1zaExTEof23P189zG10fB8sNwIwq5lv4moIWRElm+MdQlqQpbmfXRHFD5LdfLAwU8yZbp9W712kF7OYnz7bM8ec4AV+HjNrLL6/aHVj4t1y26ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB4316.namprd11.prod.outlook.com (2603:10b6:5:205::16)
- by SN7PR11MB6948.namprd11.prod.outlook.com (2603:10b6:806:2ab::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Thu, 9 Mar
- 2023 13:21:44 +0000
-Received: from DM6PR11MB4316.namprd11.prod.outlook.com
- ([fe80::8b8d:f936:4e17:13f6]) by DM6PR11MB4316.namprd11.prod.outlook.com
- ([fe80::8b8d:f936:4e17:13f6%4]) with mapi id 15.20.6178.019; Thu, 9 Mar 2023
- 13:21:44 +0000
-From:   "Wu, Wentong" <wentong.wu@intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     "mchehab@kernel.org" <mchehab@kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
-        "Ye, Xiang" <xiang.ye@intel.com>,
-        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>,
-        "Cao, Bingbu" <bingbu.cao@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 0/3] media: pci: intel: ivsc: Add driver of Intel
- Visual Sensing Controller(IVSC)
-Thread-Topic: [PATCH v2 0/3] media: pci: intel: ivsc: Add driver of Intel
- Visual Sensing Controller(IVSC)
-Thread-Index: AQHZP1HlDdnw2M/ymEOJ6dDL3JcZGa7l1BmAgAACFoCACULV0IAABnKAgAABmnCAAAmBAIAClEUggACVcoCAAEDPMA==
-Date:   Thu, 9 Mar 2023 13:21:44 +0000
-Message-ID: <DM6PR11MB4316B02E112305F411B1A5158DB59@DM6PR11MB4316.namprd11.prod.outlook.com>
-References: <20230213022347.2480307-1-wentong.wu@intel.com>
- <Y/8qJzScTfFucpP9@kekkonen.localdomain>
- <ae28faf8-c8a4-3f75-08d0-8e5233f2fa5d@redhat.com>
- <DM6PR11MB4316F4B72F98ADBF577412378DB79@DM6PR11MB4316.namprd11.prod.outlook.com>
- <ZAb2G7kqsEvrBhpG@kekkonen.localdomain>
- <DM6PR11MB4316B4F865472CA998E696FC8DB79@DM6PR11MB4316.namprd11.prod.outlook.com>
- <4c3ba301-6241-f2f4-f139-b4f4a0cd6223@redhat.com>
- <DM6PR11MB43166ADFA7D0775BA2C223C78DB59@DM6PR11MB4316.namprd11.prod.outlook.com>
- <e12fe65e-0b1f-a058-75e6-fa3e0a292c5b@redhat.com>
-In-Reply-To: <e12fe65e-0b1f-a058-75e6-fa3e0a292c5b@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR11MB4316:EE_|SN7PR11MB6948:EE_
-x-ms-office365-filtering-correlation-id: aba02e46-c6ab-408d-d95a-08db20a13a5c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: IQx4e+U14XPLLTbZC+Lx1ODSJXj4CPQW7R4f45drbW07ZNC0VumnklhnrAWqlREX5DJ/0MQ7xO+L2sj9fWURCqTvd/DPUbbmmuTTLivm+boOZKJ/GJ7ELEx7UIjuPWMWkzwUCS2y25yrtpQI8fD4Tz3CqKnFSLVA1y6Yp91PXalBfgYa3xMrevTWU7EHRrgkqi/bHhZPS6UWyz40dj8I0IRtnXwMp4AfvvkItSHytH430Ellm2PythIrLpr5uTHr0qlLwK42TIg+TXzZYRGqO6abIxSCWxiJ1fHMs6UDp8Wt9J6m0qwF1eRX2Wh4tZvK177iOGPrInTfvot4mIgShJv/hcHD6IH4A6ETGthZr2RiUEsZgfoPY6oaNOjDXXjbioM9bQIdLf2nyVPeUpEnzIi1Sk3HIX40Qj7znQlRbP8xwbq0hDczj34fnX+FsQOgVELdrDRNxVPiH4XnG9Gk7qJwMrulgAbX+xVa6Ievyv8TSzlod3AC0/505I1XSlN1H81XMuXylAquUuKI8MZLsXuS+I5zCEN1Hta1tx6X6Cb/NmNLv8jd8dCimZDTlc5ELn1OCGSkYefd4uUjKOEHc1xYatS91hlk8aPIv5ybNNhKUsl+e/7BDe5r7MK7+/CbyiOnqvfns5nkrjS28VKyI63sa09vD1giwrts91qkoD7pssjzKypN3/E8I0WlbZ1QyDdtiiSl9UoiW1ZXD9Wjg6VZDv8OQOTLb5+I9VfH0N8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4316.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(136003)(376002)(366004)(39860400002)(396003)(451199018)(122000001)(110136005)(54906003)(186003)(53546011)(82960400001)(26005)(9686003)(6506007)(30864003)(7696005)(71200400001)(2906002)(33656002)(8936002)(55016003)(966005)(52536014)(38070700005)(5660300002)(478600001)(86362001)(76116006)(83380400001)(41300700001)(4326008)(66476007)(66946007)(66446008)(8676002)(66556008)(316002)(64756008)(66899018)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UXJUVU1lVVZ3N2IwMUhlNDFiNnRZd04xZFEzWHZuVGZ2NkllYmJEQmFZQ1lK?=
- =?utf-8?B?WUVqNzhSeFMzcy9XbnhtZTIwUk4ybE9zS3FHTk1UdUdpdVNQSEo4K2ZhcmNN?=
- =?utf-8?B?ekMzSzZNUFpCZ2YrMVNna1NKTTArOWsydkM2bFJiWnVCUTdOcmpsRUdoemIz?=
- =?utf-8?B?TXBsYlMwTGhRSU5rUFNwb1cya24wVzdDK2VKelVpYTh1aTNqeVMxQjNrcFQv?=
- =?utf-8?B?a2djTHNPeVRrYWkzWDlmWEFvRE9VaDM5eis2QUYyVk9EYkpUK2RwUWhPTDUr?=
- =?utf-8?B?RmlrcmpiU0k3RFFZOERvL2FLakZIK2IrT3FuWGVVUVVEdzhMRldJT1k5c2x0?=
- =?utf-8?B?S0FhUG95TC9TLzRoS2dZajBuc2NBRFNPR3RXVktsTlZzQlRUK21lVTZaN3U1?=
- =?utf-8?B?SjEyUkRzZ0xscWtYWVJkZm9sMXNQUktWaUx0K2xrN214ZWUwQUkxeWtTVVha?=
- =?utf-8?B?eEFoZnJHQUNzOEN1SWRjK2JuaUw4NllIbmd6TEJKRUhzQWwvWDNOczZyUHls?=
- =?utf-8?B?SjRzeXE5UFlVSDlqZzBiekt5UzhwdHh4Z0YrNkFKTkRDUStXLzROTVJ1WE52?=
- =?utf-8?B?bk5ERjhyVTRoak9SZUwwQ2RTN3ZkRlozTzBaMkVHd0pDNEpHSFA2SHluOWx2?=
- =?utf-8?B?OEswN2I0bktleExTcFNLbjIwN0w5c0FuaHRBdUxXMmNReVRYRlZmK3UyVlQw?=
- =?utf-8?B?UG0yZERpM3V5a1BQSnlnY2NEY1ZFa1RtZ3B0TmVJZE5CMEc4TlVVZDZpbDdL?=
- =?utf-8?B?bG9peGlpZzd2eFpVUFJYRGVZZ3BjOXlRR2RpcDd3SnBBc283aTNMMmNKU3hF?=
- =?utf-8?B?Y29ZYzVScGxtOWJWb1NLdjcydzlxMHNLYVJSOElCNWVtT3ZEckRlZXZHTjZH?=
- =?utf-8?B?LzRXS0IxdnNxeTA0d0NLMnZpNTFXd00vY2NiZHh6MHRKeHBkNEpGa3N5Mk9H?=
- =?utf-8?B?bG9EeVFuZFkrUFM5dFJWU25FS3pERFNVZzJXSEhTcTlVMDVtYWZuczdSV2tH?=
- =?utf-8?B?TEJ3UDJWRlA4WlNzaVJhNVRWQ1kyVTJDUjFQdFZCOXRXR010RFFXQXpvaVJj?=
- =?utf-8?B?UWlkUkJacVdWL1BQdStWeUxsSUFMbUpaenhyS1NRbnJqQWVGL2RCLy8zSlZX?=
- =?utf-8?B?b0dsS09yazUzNFg1SmwrUG52MGlONisyb3lMZkNvWHMySjN5aDlWM3dYR3NR?=
- =?utf-8?B?cDVERDBGZ0lwR2ZVRDRySTRseEVRV09WV0FsREFFS2JkMTVLTEd3TVZ6U3Z6?=
- =?utf-8?B?RnZPK0c3Vll3SjJMQmJQeTBzOU04WUdlelZSZHlBWm9vVmxhcVZUTEFQTnU1?=
- =?utf-8?B?Q2RYakttTy9DN1RzT1lSNDZuaktOTjVLR0czWGlrTlA4ME1VeW90bmNtaE03?=
- =?utf-8?B?Z29zREtHcVZzMUhObHF2aUcyaFJwWXhCd01vZ25BM3BzWmc1YWh2Y1RIM1Rn?=
- =?utf-8?B?YTloZDcrdktGUjZrSktXSXlXdXhnaDFRQWYwUHFIZ0ZmWHdiL3AxZTQ4RnhH?=
- =?utf-8?B?N1lVeWJsMFdYL1NrRVBsdU42M2tzU2FIOE11RXBtekhoRVhEeHdFTkROTTNy?=
- =?utf-8?B?TTZ5UGc0TnJ6WjhyNXlCK2xlZFZML1pYTTZ0T3BSYmtPUGExQmpRK0JSUG1i?=
- =?utf-8?B?V3hwSjNQQ0szSzVLSXhGWlFQK2xGV3lIblc5TGR1ckVhRjExek1kTE4yaVBO?=
- =?utf-8?B?ZGg4ZkNRZWRMUVVMNmdyK280WkZVZTJPbFltTTRzelZ2NW9QcXYrT2dzd1ZL?=
- =?utf-8?B?NkVuNWxrcnBRUWVGMzFUMGpCMUNXMURTNHBHZDFuTWFJZWpJM3hOZWVkMnVB?=
- =?utf-8?B?czA5elBuSjdXeEFrVHFrRUY1eE9HVEZpd0Y4U1Z1bElvQXV1cE1DemZsTjVw?=
- =?utf-8?B?YTVBWVhKL3NrUGJKNXZGUzUzSW1ySmVaRFpjeHBxNk9nNUZCZkhycWVZNWJS?=
- =?utf-8?B?NVZPa3ZlYXc3UzdOMnZFdnpSMVBaNCt4U1hsV29ubDhRVnV3RnVhdEc1ejIz?=
- =?utf-8?B?MDlmTmJsNXFPZ3J3elFaN0FsR0M1VEltODlNN1FpQmpLR2EvRTVVQ2ZrUStV?=
- =?utf-8?B?c3BTcExNdW5EaXcvcStvL3pwWExUWlhmem9VN1dQYk54QUxoaC9XcmxYbVFM?=
- =?utf-8?Q?QlW0nImWNhHInhW/nClRyW7Xx?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 9 Mar 2023 08:24:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9130D19C41
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 05:23:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678368181;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yhh05HEeTynj++ObYTl6qMBxPge98QWiHU+ULkQSrwM=;
+        b=NR1s9O0TxhdLqPQ4bjwTT7QA6Qeg4aKGo1qkLP3LWDhGdK3FYj85DEbIQMYFMKHIpvoh/Z
+        61HqdTYbhzWnEtZETsfDm+QD/seR3/mB5jq+XtHpRd14zb6JQ/4SMx2t2p5h9ETSrgq2b1
+        n2/t+rcRohMBajUy3K67vFrUI+/jDGY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-245-h_VLKafaMNC_0U4vN--noQ-1; Thu, 09 Mar 2023 08:23:00 -0500
+X-MC-Unique: h_VLKafaMNC_0U4vN--noQ-1
+Received: by mail-wm1-f70.google.com with SMTP id c7-20020a7bc847000000b003e00be23a70so2377988wml.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 05:22:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678368179;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Yhh05HEeTynj++ObYTl6qMBxPge98QWiHU+ULkQSrwM=;
+        b=kdqYKdz7aMrJGFs8MoRO1ibJe0zUkL3rmBdtvjNgBFE96XD/vvbEIHJJg1Lpw/7af6
+         gmtnGQjcbb3CeBn0YQ6rlvE1eb9IBK9iZTo+BAZpAIYWXKPNPrxgdDfh7ey7X0BysP6G
+         ph92MZIYe1DLo3+pr2SOAMXBIDBs935/UKsTjFh9/Hf0pJPY8R64d7Cxgpf532gVoEn5
+         cKHBenYQVRLpgoGl8/SbJTBNNQaBIJdHq+uVMYHRaDKZNh+B/3Pslz2ak4B/84BPt2jK
+         Y0uylgtACk9NVkHTWLnEoCW9p9dzmwTVpNnr5JyVbBwm5L6kLBN9F1s0lBMXo5xoiznd
+         tNgg==
+X-Gm-Message-State: AO0yUKWA8ESamKTXP6XlkPz7hQ5G88NkIWjRNLs3FpXhJ2s3Ogl0VDGM
+        DQgOQ88uSCI9A9CczdDDYD8e537P9e5AiYK/PUQfuelU5DziWn9ocZ4xQ3luhoCs/eCU3aTYUu+
+        xli75IeeWDgFJCLLPZTu5pkNm
+X-Received: by 2002:a5d:6604:0:b0:2c7:d7e:4c6c with SMTP id n4-20020a5d6604000000b002c70d7e4c6cmr12864106wru.44.1678368178938;
+        Thu, 09 Mar 2023 05:22:58 -0800 (PST)
+X-Google-Smtp-Source: AK7set/ZYO/c53IQo1unP9hzEw3MBcOJ/D9vBXdr4gD0cfHk7JyBlZHSLClP55Q8+cgLUagfjU8x/w==
+X-Received: by 2002:a5d:6604:0:b0:2c7:d7e:4c6c with SMTP id n4-20020a5d6604000000b002c70d7e4c6cmr12864095wru.44.1678368178535;
+        Thu, 09 Mar 2023 05:22:58 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:5200:a73:3e7e:12c:b175? (p200300cbc70252000a733e7e012cb175.dip0.t-ipconnect.de. [2003:cb:c702:5200:a73:3e7e:12c:b175])
+        by smtp.gmail.com with ESMTPSA id h19-20020a05600c315300b003db0bb81b6asm2820877wmo.1.2023.03.09.05.22.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 05:22:58 -0800 (PST)
+Message-ID: <42d864d6-6517-6601-c9c9-e06f7b731314@redhat.com>
+Date:   Thu, 9 Mar 2023 14:22:57 +0100
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4316.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aba02e46-c6ab-408d-d95a-08db20a13a5c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2023 13:21:44.3419
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SvJWnmZfV75uEyJGcsSieDs23UXZ8NEQttz4JO/I3o3CMB2rTcYpKjRw443mhcEOhCuUIx5Vkys6KytrusGVJg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6948
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mm: fix potential invalid pointer dereference in
+ kmemdup()
+Content-Language: en-US
+To:     Xujun Leng <lengxujun2007@126.com>
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <fedd5372-2376-a354-b465-c6cbb930352e@redhat.com>
+ <20230309100415.2382-1-lengxujun2007@126.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230309100415.2382-1-lengxujun2007@126.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBIYW5zIGRlIEdvZWRl
-IDxoZGVnb2VkZUByZWRoYXQuY29tPg0KPiBTZW50OiBUaHVyc2RheSwgTWFyY2ggOSwgMjAyMyA1
-OjI4IFBNDQo+IA0KPiBIaSwNCj4gDQo+IE9uIDMvOS8yMyAwMjowOCwgV3UsIFdlbnRvbmcgd3Jv
-dGU6DQo+ID4NCj4gPg0KPiA+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+PiBGcm9t
-OiBIYW5zIGRlIEdvZWRlIDxoZGVnb2VkZUByZWRoYXQuY29tPg0KPiA+PiBTZW50OiBUdWVzZGF5
-LCBNYXJjaCA3LCAyMDIzIDU6MTAgUE0NCj4gPj4NCj4gPj4gSGksDQo+ID4+DQo+ID4+IE9uIDMv
-Ny8yMyAwOTo0MCwgV3UsIFdlbnRvbmcgd3JvdGU6DQo+ID4+Pg0KPiA+Pj4NCj4gPj4+PiAtLS0t
-LU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+Pj4+IEZyb206IFNha2FyaSBBaWx1cyA8c2FrYXJp
-LmFpbHVzQGxpbnV4LmludGVsLmNvbT4NCj4gPj4+PiBTZW50OiBUdWVzZGF5LCBNYXJjaCA3LCAy
-MDIzIDQ6MzAgUE0NCj4gPj4+Pg0KPiA+Pj4+IEhpIFdlbnRvbmcsDQo+ID4+Pj4NCj4gPj4+PiBP
-biBUdWUsIE1hciAwNywgMjAyMyBhdCAwODoxNzowNEFNICswMDAwLCBXdSwgV2VudG9uZyB3cm90
-ZToNCj4gPj4+Pj4NCj4gPj4+Pj4NCj4gPj4+Pj4+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0t
-DQo+ID4+Pj4+PiBGcm9tOiBIYW5zIGRlIEdvZWRlIDxoZGVnb2VkZUByZWRoYXQuY29tPg0KPiA+
-Pj4+Pj4gU2VudDogV2VkbmVzZGF5LCBNYXJjaCAxLCAyMDIzIDY6NDIgUE0NCj4gPj4+Pj4+DQo+
-ID4+Pj4+PiBIaSwNCj4gPj4+Pj4+DQo+ID4+Pj4+PiBPbiAzLzEvMjMgMTE6MzQsIFNha2FyaSBB
-aWx1cyB3cm90ZToNCj4gPj4+Pj4+PiBIaSBXZW50b25nLA0KPiA+Pj4+Pj4+DQo+ID4+Pj4+Pj4g
-T24gTW9uLCBGZWIgMTMsIDIwMjMgYXQgMTA6MjM6NDRBTSArMDgwMCwgV2VudG9uZyBXdSB3cm90
-ZToNCj4gPj4+Pj4+Pj4gSW50ZWwgVmlzdWFsIFNlbnNpbmcgQ29udHJvbGxlciAoSVZTQyksIGNv
-ZGVuYW1lZCAiQ2xvdmVyDQo+ID4+Pj4+Pj4+IEZhbGxzIiwgaXMgYSBjb21wYW5pb24gY2hpcCBk
-ZXNpZ25lZCB0byBwcm92aWRlIHNlY3VyZSBhbmQgbG93DQo+ID4+Pj4+Pj4+IHBvd2VyIHZpc2lv
-biBjYXBhYmlsaXR5IHRvIElBIHBsYXRmb3Jtcy4gSVZTQyBpcyBhdmFpbGFibGUgaW4NCj4gPj4+
-Pj4+Pj4gZXhpc3RpbmcgY29tbWVyY2lhbCBwbGF0Zm9ybXMgZnJvbSBtdWx0aXBsZSBPRU1zLg0K
-PiA+Pj4+Pj4+Pg0KPiA+Pj4+Pj4+PiBUaGUgcHJpbWFyeSB1c2UgY2FzZSBvZiBJVlNDIGlzIHRv
-IGJyaW5nIGluIGNvbnRleHQgYXdhcmVuZXNzLg0KPiA+Pj4+Pj4+PiBJVlNDIGludGVyZmFjZXMg
-ZGlyZWN0bHkgd2l0aCB0aGUgcGxhdGZvcm0gbWFpbiBjYW1lcmEgc2Vuc29yDQo+ID4+Pj4+Pj4+
-IHZpYSBhIENTSS0yIGxpbmsgYW5kIHByb2Nlc3NlcyB0aGUgaW1hZ2UgZGF0YSB3aXRoIHRoZSBl
-bWJlZGRlZA0KPiA+Pj4+Pj4+PiBBSSBlbmdpbmUuIFRoZSBkZXRlY3RlZCBldmVudHMgYXJlIHNl
-bnQgb3ZlciBJMkMgdG8gSVNIIChJbnRlbA0KPiA+Pj4+Pj4+PiBTZW5zb3IgSHViKSBmb3IgYWRk
-aXRpb25hbCBkYXRhIGZ1c2lvbiBmcm9tIG11bHRpcGxlIHNlbnNvcnMuDQo+ID4+Pj4+Pj4+IFRo
-ZSBmdXNpb24gcmVzdWx0cyBhcmUgdXNlZCB0byBpbXBsZW1lbnQgYWR2YW5jZWQgdXNlIGNhc2Vz
-IGxpa2U6DQo+ID4+Pj4+Pj4+ICAtIEZhY2UgZGV0ZWN0aW9uIHRvIHVubG9jayBzY3JlZW4NCj4g
-Pj4+Pj4+Pj4gIC0gRGV0ZWN0IHVzZXIgcHJlc2VuY2UgdG8gbWFuYWdlIGJhY2tsaWdodCBzZXR0
-aW5nIG9yIHdha2luZw0KPiA+Pj4+Pj4+PiB1cCBzeXN0ZW0NCj4gPj4+Pj4+Pj4NCj4gPj4+Pj4+
-Pj4gU2luY2UgdGhlIEltYWdlIFByb2Nlc3NpbmcgVW5pdChJUFUpIHVzZWQgb24gdGhlIGhvc3Qg
-cHJvY2Vzc29yDQo+ID4+Pj4+Pj4+IG5lZWRzIHRvIGNvbmZpZ3VyZSB0aGUgQ1NJLTIgbGluayBp
-biBub3JtYWwgY2FtZXJhIHVzYWdlcywgdGhlDQo+ID4+Pj4+Pj4+IENTSS0yIGxpbmsgYW5kIGNh
-bWVyYSBzZW5zb3IgY2FuIG9ubHkgYmUgdXNlZCBpbg0KPiA+Pj4+Pj4+PiBtdXR1YWxseS1leGNs
-dXNpdmUgd2F5cyBieSBob3N0IElQVSBhbmQgSVZTQy4gQnkgZGVmYXVsdCB0aGUNCj4gPj4+Pj4+
-Pj4gSVZTQyBvd25zIHRoZSBDU0ktMiBsaW5rIGFuZCBjYW1lcmEgc2Vuc29yLiBUaGUgSVBVIGRy
-aXZlciBjYW4NCj4gPj4+Pj4+Pj4gdGFrZSBvd25lcnNoaXAgb2YgdGhlIENTSS0yIGxpbmsgYW5k
-IGNhbWVyYSBzZW5zb3IgdXNpbmcNCj4gPj4+Pj4+Pj4gaW50ZXJmYWNlcyBwcm92aWRlZA0KPiA+
-Pj4+IGJ5IHRoaXMgSVZTQyBkcml2ZXIuDQo+ID4+Pj4+Pj4+DQo+ID4+Pj4+Pj4+IFN3aXRjaGlu
-ZyBvd25lcnNoaXAgcmVxdWlyZXMgYW4gaW50ZXJmYWNlIHdpdGggdHdvIGRpZmZlcmVudA0KPiA+
-Pj4+Pj4+PiBoYXJkd2FyZSBtb2R1bGVzIGluc2lkZSBJVlNDLiBUaGUgc29mdHdhcmUgaW50ZXJm
-YWNlIHRvIHRoZXNlDQo+ID4+Pj4+Pj4+IG1vZHVsZXMgaXMgdmlhIEludGVsIE1FSSAoVGhlIElu
-dGVsIE1hbmFnZW1lbnQgRW5naW5lKSBjb21tYW5kcy4NCj4gPj4+Pj4+Pj4gVGhlc2UgdHdvIGhh
-cmR3YXJlIG1vZHVsZXMgaGF2ZSB0d28gZGlmZmVyZW50IE1FSSBVVUlEcyB0bw0KPiA+Pj4+Pj4+
-PiBlbnVtZXJhdGUuIFRoZXNlIGhhcmR3YXJlDQo+ID4+Pj4+PiBtb2R1bGVzIGFyZToNCj4gPj4+
-Pj4+Pj4gIC0gQUNFIChBbGdvcml0aG0gQ29udGV4dCBFbmdpbmUpOiBUaGlzIG1vZHVsZSBpcyBm
-b3IgYWxnb3JpdGhtDQo+ID4+Pj4+Pj4+IGNvbXB1dGluZyB3aGVuIElWU0Mgb3ducyBjYW1lcmEg
-c2Vuc29yLiBBbHNvIEFDRSBtb2R1bGUNCj4gPj4+Pj4+Pj4gY29udHJvbHMgY2FtZXJhIHNlbnNv
-cidzIG93bmVyc2hpcC4gVGhpcyBoYXJkd2FyZSBtb2R1bGUgaXMNCj4gPj4+Pj4+Pj4gdXNlZCB0
-byBzZXQgb3duZXJzaGlwDQo+ID4+Pj4+PiBvZiBjYW1lcmEgc2Vuc29yLg0KPiA+Pj4+Pj4+PiAg
-LSBDU0kgKENhbWVyYSBTZXJpYWwgSW50ZXJmYWNlKTogVGhpcyBtb2R1bGUgaXMgdXNlZCB0byBy
-b3V0ZQ0KPiA+Pj4+Pj4+PiBjYW1lcmEgc2Vuc29yIGRhdGEgZWl0aGVyIHRvIElWU0Mgb3IgdG8g
-aG9zdCBmb3IgSVBVIGRyaXZlciBhbmQNCj4gPj4+PiBhcHBsaWNhdGlvbi4NCj4gPj4+Pj4+Pj4N
-Cj4gPj4+Pj4+Pj4gSVZTQyBhbHNvIHByb3ZpZGVzIGEgcHJpdmFjeSBtb2RlLiBXaGVuIHByaXZh
-Y3kgbW9kZSBpcyB0dXJuZWQNCj4gPj4+Pj4+Pj4gb24sIGNhbWVyYSBzZW5zb3IgY2FuJ3QgYmUg
-dXNlZC4gVGhpcyBtZWFucyB0aGF0IGJvdGggQUNFIGFuZA0KPiA+Pj4+Pj4+PiBob3N0IElQVSBj
-YW4ndCBnZXQgaW1hZ2UgZGF0YS4gQW5kIHdoZW4gdGhpcyBtb2RlIGlzIHR1cm5lZCBvbiwNCj4g
-Pj4+Pj4+Pj4gaG9zdCBJUFUgZHJpdmVyIGlzIGluZm9ybWVkIHZpYSBhIHJlZ2lzdGVyZWQgY2Fs
-bGJhY2ssIHNvIHRoYXQNCj4gPj4+Pj4+Pj4gdXNlciBjYW4gYmUNCj4gPj4+PiBub3RpZmllZC4N
-Cj4gPj4+Pj4+Pj4NCj4gPj4+Pj4+Pj4gSW4gc3VtbWFyeSwgdG8gYWNxdWlyZSBvd25lcnNoaXAg
-b2YgY2FtZXJhIGJ5IElQVSBkcml2ZXIsIGZpcnN0DQo+ID4+Pj4+Pj4+IEFDRSBtb2R1bGUgbmVl
-ZHMgdG8gYmUgaW5mb3JtZWQgb2Ygb3duZXJzaGlwIGFuZCB0aGVuIHRvIHNldHVwDQo+ID4+Pj4+
-Pj4+IE1JUEkgQ1NJLTIgbGluayBmb3IgdGhlIGNhbWVyYSBzZW5zb3IgYW5kIElQVS4NCj4gPj4+
-Pj4+Pg0KPiA+Pj4+Pj4+IEkgdGhvdWdodCB0aGlzIGZvciBhIHdoaWxlIGFuZCBkaWQgc29tZSBy
-ZXNlYXJjaCwgYW5kIEkgY2FuDQo+ID4+Pj4+Pj4gc3VnZ2VzdCB0aGUNCj4gPj4+Pj4+PiBmb2xs
-b3dpbmc6DQo+ID4+Pj4+Pj4NCj4gPj4+Pj4+PiAtIFRoZSBJVlNDIHN1Yi1kZXZpY2UgaW1wbGVt
-ZW50cyBhIGNvbnRyb2wgZm9yIHByaXZhY3kNCj4gPj4gKFY0TDJfQ0lEX1BSSVZBQ1kNCj4gPj4+
-Pj4+PiAgIGlzIGEgZ29vZCBmaXQpLg0KPiA+Pj4+Pj4+DQo+ID4+Pj4+Pj4gLSBDYW1lcmEgc2Vu
-c29yIGFjY2VzcyBuZWVkcyB0byBiZSByZXF1ZXN0ZWQgZnJvbSBJVlNDIGJlZm9yZQ0KPiA+Pj4+
-Pj4+IGFjY2Vzc2luZw0KPiA+Pj4+IHRoZQ0KPiA+Pj4+Pj4+ICAgc2Vuc29yIHZpYSBJwrJDLiBU
-aGUgSVZTQyBvd25lcnNoaXAgY29udHJvbCBuZWVkcyB0byBiZSBpbiB0aGUgcmlnaHQNCj4gPj4+
-Pj4+PiAgIHNldHRpbmcgZm9yIHRoaXMgdG8gd29yaywgYW5kIGRldmljZSBsaW5rcyBjYW4gYmUg
-dXNlZCBmb3IgdGhhdCBwdXJwb3NlDQo+ID4+Pj4+Pj4gICAoc2VlIGRldmljZV9saW5rX2FkZCgp
-KS4gV2l0aCBETF9GTEFHX1BNX1JVTlRJTUUgYW5kDQo+ID4+Pj4+PiBETF9GTEFHX1JQTV9BQ1RJ
-VkUsDQo+ID4+Pj4+Pj4gICB0aGUgc3VwcGxpZXIgZGV2aWNlcyB3aWxsIGJlIFBNIHJ1bnRpbWUg
-cmVzdW1lZCBiZWZvcmUgdGhlIGNvbnN1bWVyDQo+ID4+Pj4+Pj4gICAoY2FtZXJhIHNlbnNvciku
-IEFzIHRoZXNlIGRldmljZXMgYXJlIHB1cmVseSB2aXJ0dWFsIG9uIGhvc3Qgc2lkZSBhbmQNCj4g
-aGFzDQo+ID4+Pj4+Pj4gICBubyBwb3dlciBzdGF0ZSBhcyBzdWNoLCB5b3UgY2FuIHVzZSBydW50
-aW1lIFBNIGNhbGxiYWNrcyB0bw0KPiA+Pj4+Pj4+IHRyYW5zZmVyDQo+ID4+IHRoZQ0KPiA+Pj4+
-Pj4+ICAgb3duZXJzaGlwLg0KPiA+Pj4+Pj4NCj4gPj4+Pj4+IEludGVyZXN0aW5nIHByb3Bvc2Fs
-IHRvIHVzZSBkZXZpY2UtbGlua3MgKyBydW50aW1lLXBtIGZvciB0aGlzDQo+ID4+Pj4+PiBpbnN0
-ZWFkIG9mIG1vZGVsbGluZyB0aGlzIGFzIGFuIGkyYy1tdXguIEZXSVcgSSdtIGZpbmUgd2l0aCBn
-b2luZw0KPiA+Pj4+Pj4gdGhpcyByb3V0ZSBpbnN0ZWFkIG9mIHVzaW5nIGFuIGkyYy1tdXggYXBw
-cm9hY2guDQo+ID4+Pj4+Pg0KPiA+Pj4+Pj4gSSBoYXZlIGJlZW4gdGhpbmtpbmcgYWJvdXQgdGhl
-IGkyYy1tdXggYXBwcm9hY2ggYSBiaXQgYW5kIHRoZQ0KPiA+Pj4+Pj4gcHJvYmxlbSBpcyB0aGF0
-IHdlIGFyZSBub3QgcmVhbGx5IG11eGluZyBidXQgd2FudCB0byB0dXJuIG9uL29mZg0KPiA+Pj4+
-Pj4gY29udHJvbCBhbmQgQUZBSUsgdGhlIGkyYy1tdXggZnJhbWV3b3JrIHNpbXBseSBsZWF2ZXMg
-dGhlIG11eA0KPiA+Pj4+Pj4gbXV4ZWQgdG8gdGhlIGxhc3QgdXNlZCBpMmMtY2hhaW4sIHNvIGNv
-bnRyb2wgd2lsbCBuZXZlciBiZQ0KPiA+Pj4+Pj4gcmVsZWFzZWQgd2hlbiB0aGUgaTJjDQo+ID4+
-Pj4gdHJhbnNmZXJzIGFyZSBkb25lLg0KPiA+Pj4+Pj4NCj4gPj4+Pj4+IEFuZCBpZiB3ZXJlIHRv
-IHNvbWVob3cgbW9kaWZ5IHRoaW5ncyAob3IgbWF5YmUgdGhlcmUgYWxyZWFkeSBpcw0KPiA+Pj4+
-Pj4gc29tZSByZWxlYXNlDQo+ID4+Pj4+PiBjYWxsYmFjaykgdGhlbiB0aGUgZG93bnNpZGUgYmVj
-b21lcyB0aGF0IHRoZSBpMmMtbXV4IGNvcmUgY29kZQ0KPiA+Pj4+Pj4gb3BlcmF0ZXMgYXQgdGhl
-IGkyYyB0cmFuc2ZlciBsZXZlbC4gU28gZWFjaCBpMmMgcmVhZC93cml0ZSB3b3VsZA0KPiA+Pj4+
-Pj4gdGhlbiBlbmFibGUgKw0KPiA+Pj4+IGRpc2F2bGUgY29udHJvbC4NCj4gPj4+Pj4+DQo+ID4+
-Pj4+PiBNb2RlbGxpbmcgdGhpcyB1c2luZyBzb21ldGhpbmcgbGlrZSBydW50aW1lIHBtIGFzIHN1
-Y2ggaXMgYSBtdWNoDQo+ID4+Pj4+PiBiZXR0ZXIgZml0IGJlY2F1c2UgdGhlbiB3ZSByZXF1ZXN0
-IGNvbnRyb2wgb25jZSBvbiBwcm9iZSAvDQo+ID4+Pj4+PiBzdHJlYW0tb24gYW5kIHJlbGVhc2Ug
-aXQgb25jZSB3ZSBhcmUgZnVsbHkgZG9uZSwgcmF0aGVyIHRoZW4NCj4gPj4+Pj4+IHJlcXVlc3Rp
-bmcgKyByZWxlYXNpbmcgY29udHJvbCBvbmNlIHBlciBpMmMtIHRyYW5zZmVyLg0KPiA+Pj4+Pg0K
-PiA+Pj4+PiBTZWVtcyBydW50aW1lIHBtIGNhbid0IGZpeCB0aGUgcHJvYmxlbSBvZiBpbml0aWFs
-IGkyYyB0cmFuc2Zlcg0KPiA+Pj4+PiBkdXJpbmcgc2Vuc29yIGRyaXZlciBwcm9iZSwgcHJvYmFi
-bHkgd2UgaGF2ZSB0byBzd2l0Y2ggdG8gaTJjLW11eA0KPiA+Pj4+PiBtb2RlbGluZw0KPiA+PiB3
-YXkuDQo+ID4+Pj4NCj4gPj4+PiBXaGF0IGRvIHlvdSBtZWFuPyBUaGUgc3VwcGxpZXIgZGV2aWNl
-cyBhcmUgcmVzdW1lZCBiZWZvcmUgdGhlDQo+ID4+Pj4gZHJpdmVyJ3MgcHJvYmUgaXMgY2FsbGVk
-Lg0KPiA+Pj4NCj4gPj4+IEJ1dCB3ZSBzZXR1cCB0aGUgbGluayB3aXRoIGRldmljZV9saW5rX2Fk
-ZCBkdXJpbmcgSVZTQyBkcml2ZXIncw0KPiA+Pj4gcHJvYmUsIHdlIGNhbid0IGd1YXJhbnRlZSBk
-cml2ZXIgcHJvYmUncyBzZXF1ZW5jZS4NCj4gPj4NCj4gPj4gVGhlbiBtYXliZSB3ZSBuZWVkIHRv
-IGRvIHRoZSBkZXZpY2VfbGlua19hZGQgc29tZXdoZXJlIGVsc2UuDQo+ID4NCj4gPiBzZW5zb3In
-cyBwYXJlbnQgaXMgdGhlIExKQ0EgSTJDIGRldmljZSB3aG9zZSBkcml2ZXIgaXMgYmVpbmcgdXBz
-dHJlYW0NCj4gPiBodHRwczovL3d3dy5zcGluaWNzLm5ldC9saXN0cy9rZXJuZWwvbXNnNDcwMjU1
-Mi5odG1sYW5kIGFuZCBzZW5zb3Incw0KPiA+IHBvd2VyIGlzIGNvbnRyb2xsZWQgYnkgSVZTQyBp
-bnN0ZWFkIG9mIElOVDM0NzIgaWYgSVZTQyBlbmFibGVkLg0KPiANCj4gSSBiZWxpZXZlIHRoYXQg
-dGhlIElOVDM0NzIgY29kZSBpcyBzdGlsbCBpbnZvbHZlZCBhdCBsZWFzdCBvbiBhIERlbGwgTGF0
-aXR1ZGUgOTQyMA0KPiB0aGUgSU5UMzQ3MiBjb2RlIHN0aWxsIG5lZWRzIHRvIHNldCB0aGUgY2xv
-Y2stZW5hYmxlIGFuZCB0aGUgcHJpdmFjeS1MRUQgR1BJT3MNCj4gb3RoZXJ3aXNlIHRoZSBtYWlu
-IGNhbWVyYSB3b24ndCB3b3JrLg0KPiANCj4gU28gSSdtIG5vdCBzdXJlIHdoYXQgeW91IG1lYW4g
-d2l0aCAic2Vuc29yJ3MgcG93ZXIgaXMgY29udHJvbGxlZCBieSBJVlNDDQo+IGluc3RlYWQgb2Yg
-SU5UMzQ3MiIgPw0KDQpDb3VsZCB5b3UgcGxlYXNlIHNoYXJlIHlvdXIga2VybmVsIGxvZyBhbmQg
-RFNEVD8gVGhhbmtzDQoNCkJSLA0KV2VudG9uZw0KPiANCj4gDQo+ID4gc3RydWN0IGRldmljZV9s
-aW5rICpkZXZpY2VfbGlua19hZGQoc3RydWN0IGRldmljZSAqY29uc3VtZXIsDQo+ID4gICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGRldmljZSAqc3VwcGxpZXIsIHUz
-Mg0KPiA+IGZsYWdzKQ0KPiA+DQo+ID4gU28gcHJvYmFibHkgd2UgaGF2ZSB0byBhZGQgYWJvdmUg
-ZGV2aWNlX2xpbmtfYWRkIGluIExKQ0EgSTJDJ3MgZHJpdmVyLA0KPiA+IGFuZCB3ZSBjYW4gZmlu
-ZCB0aGUgY29uc3VtZXIoY2FtZXJhIHNlbnNvcikgd2l0aCBBQ1BJIEFQSSwgYnV0IHRoZQ0KPiA+
-IHN1cHBsaWVyLCBtZWlfYWNlLCBpcyBtZWkgY2xpZW50IGRldmljZSB1bmRlciBtZWkgZnJhbWV3
-b3JrIGFuZCBpdCdzDQo+ID4gZHluYW1pY2FsbHkgYWxsb2NhdGVkIGRldmljZSBpbnN0ZWFkIG9m
-IEFDUEkgZGV2aWNlLCBwcm9iYWJseSBJIGNhbg0KPiA+IGZpbmQgaXRzIHBhcmVudCB3aXRoIHNv
-bWUgQUNQSSBsb29rdXAgZnJvbSB0aGlzIExKQ0EgSTJDIGRldmljZSwgYnV0DQo+ID4gdW5mb3J0
-dW5hdGVseSBtZWkgZnJhbWV3b3JrIGRvZXNuJ3QgZXhwb3J0IHRoZSBBUEkgdG8gZmluZCBtZWkg
-Y2xpZW50DQo+ID4gZGV2aWNlIHdpdGggaXRzIHBhcmVudCBidXMgZGV2aWNlKHN0cnVjdCBtZWlf
-ZGV2aWNlKS4NCj4gPg0KPiA+IEknbSBub3Qgc3VyZSBpZiBtb2RlbGluZyB0aGlzIG1laV9hY2Ug
-YXMgTEpDQSBJMkMncyBydW50aW1lIHBvd2VyDQo+ID4gY29udHJvbCBpcyBhY2NlcHRhYmxlLCBp
-ZiB5ZXMsIHByb2JhYmx5IHRoaXMgbWVpX2FjZSBkcml2ZXIgaGF2ZSB0byBnbw0KPiA+IHdpdGgg
-TEpDQSBJMkMgZGV2aWNlIGRyaXZlci4NCj4gDQo+IExvb2tpbmcgYXQgdGhlIEFDUEkgdGFibGUg
-dGhlIHNlbnNvciBBQ1BJIGRldmljZSBoYXMgMiBfREVQLXMgbGlzdGVkIHRoZSBJMkMNCj4gY29u
-dHJvbGxlciBhbmQgdGhlIElOVDM0NzIgZGV2aWNlLiBTaW5jZSB3ZSBhcmUgYWxyZWFkeSBkb2lu
-ZyBzaW1pbGFyIHNldHVwIGluDQo+IHRoZSBJTlQzNDcyIGRldmljZSB0aGF0IHNlZW1zIGxpa2Ug
-YSBnb29kIHBsYWNlIHRvIGFkZCB0aGUgZGV2aWNlX2xpbmsoKS1zIChpdCBjYW4NCj4gcmV0dXJu
-IC1FUFJPQkVfREVGRVIgdG8gd2FpdCBmb3IgdGhlIG1laV9hY2UgdG8gc2hvdyB1cCkuDQo+IA0K
-PiBCdXQgd2hlbiB0aGUgSU5UMzQ3MiBjb2RlIHJ1bnMsIHRoZSBjb25zdW1lciBkZXZpY2UgZG9l
-cyBub3QgZXhpc3QgeWV0IGFuZA0KPiBBRkFJQ1QgdGhlIHNhbWUgaXMgdHJ1ZSB3aGVuIHRoZSBM
-Q0pBIGkyYy1jb250cm9sbGVyIGRyaXZlciBpcyBnZXR0aW5nIHJlZ2lzdGVyZWQuDQo+IFRoZSBj
-b25zdW1lciBvbmx5IGV4aXN0cyB3aGVuIHRoZSBpMmNfY2xpZW50IGlzIGluc3RhbnRpYXRlZCBh
-bmQgYXQgdGhhdCBwb2ludA0KPiB0aGUgc2Vuc29yIGRyaXZlcnMgcHJvYmUoKSBtZXRob2QgY2Fu
-IHJ1biBpbW1lZGlhdGVseSBhbmQgd2UgYXJlIHRvbyBsYXRlIHRvDQo+IGFkZCB0aGUgZGV2aWNl
-X2xpbmsuDQo+IA0KPiBBcyBhIGhvYmJ5IHByb2plY3QgSSBoYXZlIGJlZW4gd29ya2luZyBvbiBh
-dG9taXNwMiBzdXBwb3J0IGFuZCBJIGhhdmUgYSBzaW1pbGFyDQo+IGlzc3VlIHRoZXJlLiBUaGVy
-ZSBpcyBubyBJTlQzNDcyIGRldmljZSB0aGVyZSwgYnV0IHRoZXJlIGlzIGEgX0RTTSBtZXRob2Qg
-d2hpY2gNCj4gbmVlZHMgdG8gYmUgdXNlZCB0byBmaWd1cmUgb3V0IHdoaWNoIEFDUEkgR1BJTyBy
-ZXNvdXJjZSBpcyByZXNldCAvIHBvd2VyZG93bg0KPiBhbmQgaWYgdGhlIEdQSU9zIGFyZSBhY3Rp
-dmUtbG93IG9yIGFjdGl2ZSBoaWdoLg0KPiANCj4gSSBoYXZlIHdyaXR0ZW4gYSBsaXR0bGUgaGVs
-cGVyIGZ1bmN0aW9uIHRvIGNhbGwgdGhlIF9EU00gYW5kIHRvIHRoZW4gdHVybiB0aGlzIGludG8N
-Cj4gbG9va3VwcyBhbmQgY2FsbCBkZXZtX2FjcGlfZGV2X2FkZF9kcml2ZXJfZ3Bpb3MoKS4NCj4g
-DQo+IFNpbmNlIG9uIGF0b21pc3AyIHdlIGNhbm5vdCB1c2UgdGhlIElOVDM0NzIgZHJpdmVyIHRv
-IGRlbGF5IHRoZSBzZW5zb3ItZHJpdmVyDQo+IHByb2JlIGFuZCBoYXZlIHRoZSBJTlQzNDcyIGRy
-aXZlciBzZXR1cCB0aGUgR1BJTyBsb29rdXAsIGF0IGxlYXN0IGZvciB0aGUNCj4gc2Vuc29yIGRy
-aXZlcnMgdXNlZCB3aXRoDQo+IGF0b21pc3AyIHRoZXJlIGlzIGdvaW5nIHRvIGJlIGEgbmVlZCB0
-byBhZGQgYSBzaW5nbGUgbGluZSB0byBwcm9iZSgpIGxpa2UgdGhpczoNCj4gDQo+IAl2NGwyX2dl
-dF9hY3BpX3NlbnNvcl9pbmZvKCZpMmNfY2xpZW50LT5kZXYsIE5VTEwpOw0KPiANCj4gVG8gbWUg
-aXQgc291bmRzIGxpa2Ugd2UgbmVlZCB0byBkbyBzb21ldGhpbmcgc2ltaWxhciBoZXJlIGFuZCBl
-eHRlbmQgdGhlIGhlbHBlcg0KPiBmdW5jdGlvbiB3aGljaCBJIGhhdmUgd3JpdHRlbiAoYnV0IG5v
-dCB5ZXQgc3VibWl0dGVkIHVwc3RyZWFtKSA6DQo+IA0KPiBodHRwczovL2dpdGh1Yi5jb20vandy
-ZGVnb2VkZS9saW51eC0NCj4gc3VueGkvY29tbWl0L2UyMjg3OTc5ZGI0M2Q0NmZhN2QzNTRjMWJk
-ZTkyZWI2MjE5YjYxM2QNCj4gDQo+IFRvIGFsc28gc2V0dXAgdGhlIGRldmljZS1saW5rcyBuZWVk
-ZWQgZm9yIHRoZSBydW50aW1lLXBtIHNvbHV0aW9uIHRvIGdldHRpbmcgdGhlDQo+IGkyYyBwYXNz
-ZWQgdGhyb3VnaCB0byB0aGUgc2Vuc29yLg0KPiANCj4gSWRlYWxseSB2NGwyX2dldF9hY3BpX3Nl
-bnNvcl9pbmZvKCkgc2hvdWxkIHJldHVybiB2b2lkIChlYXNpZXIgdG8gdXNlIGluIHRoZQ0KPiBz
-ZW5zb3IgZHJpdmVycykgYnV0IEkgdGhpbmsgaXQgc2hvdWxkIHJldHVybiBhbiBpbnQsIHNvIHRo
-YXQgaXQgY2FuIGUuZy4gcmV0dXJuIC0NCj4gRVBST0JFX0RFRkVSIHRvIHdhaXQgZm9yIHRoZSBt
-ZWlfYWNlLg0KPiANCj4gUmVnYXJkcywNCj4gDQo+IEhhbnMNCj4gDQo+IA0KPiANCj4gDQo+ID4+
-IFRoZSBtYWlubGluZSBrZXJuZWwgZGVsYXlzIHByb2Jpbmcgb2YgY2FtZXJhIHNlbnNvcnMgb24g
-SW50ZWwNCj4gPj4gcGxhdGZvcm1zIHVudGlsIHRoZSBJTlQzNDcyIGRyaXZlciBoYXMgcHJvYmVk
-IHRoZSBJTlQzNDcyIGRldmljZSBvbg0KPiA+PiB3aGljaCB0aGUgc2Vuc29ycyBoYXZlIGFuIEFD
-UEkgX0RFUC4NCj4gPj4NCj4gPj4gVGhpcyBpcyBhbHJlYWR5IHVzZWQgdG8gbWFrZSBzdXJlIHRo
-YXQgY2xvY2sgbG9va3VwcyBhbmQgcmVndWxhdG9yDQo+ID4+IGluZm8gaXMgaW4gcGxhY2UgYmVm
-b3JlIHRoZSBzZW5zb3IncyBwcm9iZSgpIGZ1bmN0aW9uIHJ1bnMuDQo+ID4+DQo+ID4+IFNvIHRo
-YXQgd2hlbiB0aGUgZHJpdmVyIGRvZXMgY2xrX2dldCgpIGl0IHN1Y2NlZWRzIGFuZCBzbyB0aGF0
-DQo+ID4+IHJlZ3VsYXRvcl9nZXQoKSBkb2VzIG5vdCBlbmQgdXAgcmV0dXJuaW5nIGEgZHVtbXkg
-cmVndWxhdG9yLg0KPiA+Pg0KPiA+PiBTbyBJIHRoaW5rIHRoZSBjb2RlIGFkZGluZyB0aGUgZGV2
-aWNlX2xpbmstcyBmb3IgdGhlIElWU0Mgc2hvdWxkIGJlDQo+ID4+IGFkZGVkDQo+ID4+IHRvOiBk
-cml2ZXJzL3BsYXRmb3JtL3g4Ni9pbnRlbC9pbnQzNDcyL2Rpc2NyZXRlLmMgYW5kIHRoZW4gdGhl
-DQo+ID4+IHJ1bnRpbWUtcmVzdW1lIHdpbGwgaGFwcGVuIGJlZm9yZSB0aGUgc2Vuc29yJ3MgcHJv
-YmUoKSBmdW5jdGlvbiBydW5zLg0KPiA+Pg0KPiA+PiBMaWtld2lzZSBkcml2ZXJzL3BsYXRmb3Jt
-L3g4Ni9pbnRlbC9pbnQzNDcyL2Rpc2NyZXRlLmMgc2hvdWxkIGFsc28NCj4gPj4gZW5zdXJlIHRo
-YXQgdGhlIGl2c2MgZHJpdmVyJ3MgcHJvYmUoKSBoYXMgcnVuIGJlZm9yZSBpdCBjYWxscw0KPiBh
-Y3BpX2Rldl9jbGVhcl9kZXBlbmRlbmNpZXMoKS4NCj4gPj4NCj4gPj4gVGhlIGFjcGlfZGV2X2Ns
-ZWFyX2RlcGVuZGVuY2llcygpIGNhbGwgaW4gZGlzY3JldGUuYyB0ZWxscyB0aGUgQUNQSQ0KPiA+
-PiBzdWJzeXN0ZW0gdG8gZ28gYWhlYWQgYW5kIGNyZWF0ZSB0aGUgaTJjLWNsaWVudHMgZm9yIHRo
-ZSBzZW5zb3JzIGFuZA0KPiA+PiBhbGxvdyB0aGUgc2Vuc29yIGRyaXZlcnMgdG8gZ2V0IGxvYWRl
-ZCBhbmQgcHJvYmUgdGhlIHNlbnNvci4NCj4gPj4NCj4gPj4gUmVnYXJkcywNCj4gPj4NCj4gPj4g
-SGFucw0KPiA+DQoNCg==
+On 09.03.23 11:04, Xujun Leng wrote:
+>> On 09.03.23 07:46, Xujun Leng wrote:
+>>>> On 07.03.23 10:03, Xujun Leng wrote:
+>>>>> If kmemdup() was called with src == NULL, then memcpy() source address
+>>>>> is fatal, and if kmemdup() was called with len == 0, kmalloc_track_caller()
+>>>>> will return ZERO_SIZE_PTR to variable p, then memcpy() destination address
+>>>>> is fatal. Both 2 cases will cause an invalid pointer dereference.
+>>>>>
+>>>
+>>>> "fix" in subject implies that there is actually a case broken. Is there,
+>>>> or is this rather a "sanitize" ?
+>>> Yes, I agree that word "sanitize" is a better choice.
+>>> And no, I don't find an actually case but in my test code as follow:
+>>>
+>>> #include <linux/module.h>
+>>> #include <linux/string.h>
+>>> #include <linux/slab.h>
+>>> #include <linux/printk.h>
+>>> #include <linux/err.h>
+>>>
+>>> /*
+>>>    * Test cases for kmemdup() and memdup_user().
+>>>    */
+>>> enum {
+>>> 	TC_KMEMDUP_ARG0_NULL, /* i.e. kmemdup(NULL, 5, GFP_KERNEL) */
+>>> 	TC_KMEMDUP_ARG1_ZERO, /* i.e. kmemdup("12345", 0, GFP_KERNEL) */
+>>>
+>>> 	TC_MEMDUP_USER_ARG0_NULL, /* i.e. memdup_user(NULL, 5) */
+>>> 	TC_MEMDUP_USER_ARG1_ZERO  /* i.e. memdup_user("12345", 0) */
+>>> };
+>>>
+>>> static int test_case;
+>>> static const char *test_func_name[] = {"kmemdup", "memdup_user"};
+>>> static void *ptr;
+>>>
+>>> module_param(test_case, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+>>>
+>>> static void *kmemdup_arg0_null(void)
+>>> {
+>>> 	return kmemdup(NULL, 5, GFP_KERNEL);
+>>> }
+>>>
+>>> static void *kmemdup_arg1_zero(void)
+>>> {
+>>> 	return kmemdup("12345", 0, GFP_KERNEL);
+>>> }
+>>>
+>>> static void *memdup_user_arg0_null(void)
+>>> {
+>>> 	return memdup_user(NULL, 5);
+>>> }
+>>>
+>>> static void *memdup_user_arg1_zero(void)
+>>> {
+>>> 	return memdup_user("12345", 0);
+>>> }
+>>>
+>>> static int check_ptr(void)
+>>> {
+>>> 	if (ZERO_OR_NULL_PTR(ptr)) {
+>>> 		printk(KERN_ERR "test case %d: %s failed, PTR_ERR(ptr) = %ld\n",
+>>> 				test_case, test_func_name[test_case / 2], PTR_ERR(ptr));
+>>> 		return -EINVAL;
+>>> 	}
+>>> 	
+>>> 	if (IS_ERR(ptr)) {
+>>> 		printk(KERN_ERR "test case %d: %s failed, PTR_ERR(ptr) = %ld\n",
+>>> 				test_case, test_func_name[test_case / 2], PTR_ERR(ptr));
+>>> 		return PTR_ERR(ptr);
+>>> 	}
+>>>
+>>> 	printk(KERN_INFO "mm-util test module loaded.\n");
+>>>
+>>> 	return 0;
+>>> }
+>>>
+>>> static int __init memdup_user_test_init(void)
+>>> {
+>>> 	if (test_case < 0 || test_case > TC_MEMDUP_USER_ARG1_ZERO) {
+>>> 		printk(KERN_INFO "invalid test case %d\n", test_case);
+>>> 		return -EINVAL;
+>>> 	}
+>>>
+>>> 	printk(KERN_INFO "test case: %d\n", test_case);
+>>>
+>>> 	switch (test_case) {
+>>> 	case TC_KMEMDUP_ARG0_NULL:
+>>> 		ptr = kmemdup_arg0_null();
+>>> 		break;
+>>> 	case TC_KMEMDUP_ARG1_ZERO:
+>>> 		ptr = kmemdup_arg1_zero();
+>>> 		break;
+>>>
+>>> 	case TC_MEMDUP_USER_ARG0_NULL:
+>>> 		ptr = memdup_user_arg0_null();
+>>> 		break;
+>>>
+>>> 	case TC_MEMDUP_USER_ARG1_ZERO:
+>>> 		ptr = memdup_user_arg1_zero();
+>>> 		break;
+>>> 	
+>>> 	default:
+>>> 		/* should be never happend */
+>>> 		ptr = NULL;
+>>> 		break;
+>>> 	}
+>>>
+>>> 	return check_ptr();
+>>> }
+>>>
+>>> static void __exit memdup_user_test_exit(void)
+>>> {
+>>> 	if (ptr) {
+>>> 		kfree(ptr);
+>>> 		ptr = NULL;
+>>> 	}
+>>>
+>>> 	printk(KERN_INFO "mm-util test module exited.\n");
+>>> }
+>>>
+>>> module_init(memdup_user_test_init);
+>>> module_exit(memdup_user_test_exit);
+>>>
+>>> MODULE_LICENSE("GPL");
+>>>
+>>> Build the code as module, and run the module in QEMU ARM64, with different
+>>> test case(pass 0,1,2,3 to moddule parameter "test_case"), get follow the
+>>> results:
+>>>
+>>> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=0
+>>> [  142.979506] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+>>> [  142.983171] Mem abort info:
+>>> [  142.984049]   ESR = 0x0000000096000004
+>>> [  142.984556]   EC = 0x25: DABT (current EL), IL = 32 bits
+>>> [  142.985327]   SET = 0, FnV = 0
+>>> [  142.986867]   EA = 0, S1PTW = 0
+>>> [  142.987198]   FSC = 0x04: level 0 translation fault
+>>> [  142.987555] Data abort info:
+>>> [  142.987819]   ISV = 0, ISS = 0x00000004
+>>> [  142.988132]   CM = 0, WnR = 0
+>>> [  142.988540] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000046168000
+>>> [  142.989715] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+>>> [  142.992158] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+>>> [  142.993012] Modules linked in: memdup_kernel_user_test(+) drm ip_tables x_tables ipv6
+>>> [  142.996663] CPU: 0 PID: 133 Comm: modprobe Not tainted 6.3.0-rc1-next-20230307-dirty #1
+>>> [  143.002024] Hardware name: linux,dummy-virt (DT)
+>>> [  143.003370] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>> [  143.005461] pc : __memcpy+0x54/0x230
+>>> [  143.006833] lr : kmemdup+0x50/0x68
+>>> [  143.007208] sp : ffff80000aa53ae0
+>>> [  143.011440] x29: ffff80000aa53ae0 x28: ffff8000010c0378 x27: ffff8000010c0058
+>>> [  143.012386] x26: ffff80000a216fd8 x25: ffff80000aa53d00 x24: ffff8000010c0040
+>>> [  143.014183] x23: 0000000000000000 x22: ffff0000037d6580 x21: 0000000000000000
+>>> [  143.018590] x20: 0000000000000005 x19: ffff0000039a9100 x18: 0000000000000001
+>>> [  143.020166] x17: ffff80000aa75000 x16: ffff0000047bed91 x15: ffff0000037d69f8
+>>> [  143.021158] x14: 0000000000000147 x13: ffff0000037d69f8 x12: 00000000ffffffea
+>>> [  143.024978] x11: 00000000ffffefff x10: 00000000ffffefff x9 : ffff80000a1fb518
+>>> [  143.025800] x8 : 00000000ffffffff x7 : 00000000ffffffff x6 : ffff800036288000
+>>> [  143.026667] x5 : ffff0000039a9105 x4 : 0000000000000005 x3 : 0000000080200020
+>>> [  143.027257] x2 : 0000000000000005 x1 : 0000000000000000 x0 : ffff0000039a9100
+>>> [  143.028177] Call trace:
+>>> [  143.028833]  __memcpy+0x54/0x230
+>>> [  143.029424]  memdup_user_test_init+0xd8/0x1000 [memdup_kernel_user_test]
+>>> [  143.032466]  do_one_initcall+0x70/0x1b4
+>>> [  143.038282]  do_init_module+0x58/0x1e8
+>>> [  143.039354]  load_module+0x181c/0x1920
+>>> [  143.040919]  __do_sys_finit_module+0xb8/0x10c
+>>> [  143.041558]  __arm64_sys_finit_module+0x20/0x2c
+>>> [  143.044052]  invoke_syscall+0x44/0x104
+>>> [  143.044663]  el0_svc_common.constprop.0+0x44/0xec
+>>> [  143.045562]  do_el0_svc+0x38/0x98
+>>> [  143.047935]  el0_svc+0x2c/0x84
+>>> [  143.048175]  el0t_64_sync_handler+0xb8/0xbc
+>>> [  143.048295]  el0t_64_sync+0x190/0x194
+>>> [  143.049274] Code: f9000006 f81f80a7 d65f03c0 361000c2 (b9400026)
+>>> [  143.050933] ---[ end trace 0000000000000000 ]---
+>>> Segmentation fault
+>>>
+>>> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=1
+>>> [   87.896982] test case 1: kmemdup failed, PTR_ERR(ptr) = 16
+>>> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Invalid argument
+>>>
+>>> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=2
+>>> [  124.032509] test case 2: memdup_user failed, PTR_ERR(ptr) = -14
+>>> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Bad address
+>>>
+>>> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=3
+>>> [  155.496285] test case 3: memdup_user failed, PTR_ERR(ptr) = 16
+>>> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Invalid argument
+>>>
+>>> To sum it up, it is:
+>>> 1) If call kmemdup() with the src == NULL, a NULL pointer dereference
+>>>      fault happened.
+>>> 2) If call kmemdup() with the len == 0, an invalid address value
+>>>      ZERO_SIZE_PTR returned, consider that many existing code check
+>>>      kmemdup() return value like this:
+>>>      ptr = kmemdup();
+>>>      if (!ptr) {
+>>>      	/* allocation failed */
+>>>      }
+>>>      this could be a problem, but no fault happended, memcpy() will do
+>>>      nothing if copy length is zero, my previous statement is wrong.
+>>> 3) If call memdup_user() with src == NULL, -EFAULT returned. Because
+>>>      copy_from_user() takes care of the NULL pointer case, there is no
+>>>      fault to happend.
+>>> 4) If call memdup_user() with len == 0, an invalid address value
+>>>      ZERO_SIZE_PTR returned. The existing code uses IS_ERR() to check
+>>>      memdup_user() return value, unfortunately, the check range of the
+>>>      macro function doesn't contain ZERO_SIZE_PTR value.
+>>>
+>>> For 1), (2), we can add the following code to kmemdup() to eliminate:
+>>> if (!src || len == 0)
+>>> 	return NULL;
+>>>
+>>> For 4), we can change the statement if (!p) of memdup_user() to
+>>> if (ZERO_OR_NULL_PTR(s)) to solve that.
+>>>
+>>> BTW, the return values of kmemdup() and memdup_user() got a little
+>>> bit confused for now:
+>>> . kmemdup() can return ZERO_SIZE_PTR, NULL, and a valid memory allocation
+>>>     address, the caller should check those return values with ZERO_OR_NULL_PTR(),
+>>>     but many existing code don't follow this.
+>>> . memdup_user() can return ZERO_SIZE_PTR,-ENOMEM,-EFAULT,NULL, and a valid
+>>>     memory allocation address, the caller should check those return values with
+>>>     ZERO_OR_NULL_PTR() and IS_ERR() at the same time, but i can't find any code
+>>>     do things like this.
+>>>
+>>>>> Signed-off-by: Xujun Leng <lengxujun2007@126.com>
+>>>>> ---
+>>>>>     mm/util.c | 3 +++
+>>>>>     1 file changed, 3 insertions(+)
+>>>>>
+>>>>> diff --git a/mm/util.c b/mm/util.c
+>>>>> index dd12b9531ac4..d1a3b3d2988e 100644
+>>>>> --- a/mm/util.c
+>>>>> +++ b/mm/util.c
+>>>>> @@ -128,6 +128,9 @@ void *kmemdup(const void *src, size_t len, gfp_t gfp)
+>>>>>     {
+>>>>>     	void *p;
+>>>>>     
+>>>>> +	if (!src || len == 0)
+>>>>> +		return NULL;
+>>>>> +
+>>>>>     	p = kmalloc_track_caller(len, gfp);
+>>>>>     	if (p)
+>>>>>     		memcpy(p, src, len);
+>>>
+>>>> Why should we take care of kmemdup(), but not memdup_user() ? Shouldn't
+>>>> it suffer from similar problems?
+>>> By the foregoing, i think that both kmemdup() and memdup_user() need to
+>>> change.
+>>
+>> The issue is that you can call mostly any kernel function with
+>> unsupported arguments and trigger crashes. It all depends on with which
+>> parameters functions are expected to be called.
+>>
+>> If kmemdup() is not expected to be called with !src or !len, all is
+>> fine. And if there are no broken cases, existing code obeys these rules.
+>>
+>> Of course, we could improve the documentation or adjust the
+>> implementations, if there is real need to.
+>>
+>> But adjusting individual functions here while others are left with he
+>> same, theoretical (!) problems, is not a good approach IMHO.
+> 
+> Yes, you're right. The best way is to change kmalloc_slab(), let it always
+> return NULL on allocate failure, even for requested size == 0. And of course,
+> the detailed error message ZERO_SIZE_PTR will lost.
+> 
+> On the other hand, except kmemdup() and memdup_user(), the other functions
+> in mm/util.c, who called kmalloc_track_caller(), like kstrdup(), kstrndup(),
+> kmemdup_nul(), memdup_user_nul(), their all do argument check, and the
+> len >= 1(if ignore the wrap case). So if we need change kmemdup() and
+> memdup_user() a little, to let those all functions keep the same? If the
+> answer is NO, we can end the disscuss to save your time.
+
+It's not me to decide. :) I consider sanitizing the input of all of 
+these functions valuable, I just don't think the individual poking makes 
+sense. So I would certainly review a patch (series) that unifies the 
+error checks performed in these functions (e.g., be able to handle NULL 
+pointers or len=0).
+
+-- 
+Thanks,
+
+David / dhildenb
+
