@@ -2,181 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739096B2675
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21FE46B2689
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:16:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbjCIOOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:14:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
+        id S231162AbjCIOQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbjCIONz (ORCPT
+        with ESMTP id S231263AbjCIOOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:13:55 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550531ADCF;
-        Thu,  9 Mar 2023 06:12:36 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DBDBE1EC06C0;
-        Thu,  9 Mar 2023 15:12:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678371153;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=w2fyPKd/3AyQO0vRIYAONySJuiNLLI9cVCZnriSsS1Y=;
-        b=daTlHMXWbU7km2++Pqh1oYE/nsYUwrFU5fXZAkkWykVSRndcnEPsQVIjbBxgSOZO1YC0BR
-        6UsZoKQ7vh+Hyd4HmhRuLraKwnWiCZMKlmf1iY9ezyPRnbOPeO9bzBsWJ/F8t4tRgCvm4g
-        Ol1SfaLsjAlGQdngAX8UoQnSwNF0pb4=
-Date:   Thu, 9 Mar 2023 15:12:29 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v7 30/41] x86/shstk: Handle thread shadow stack
-Message-ID: <ZAnpTYV55gbdROxx@zn.tnic>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-31-rick.p.edgecombe@intel.com>
- <ZAipCNBCtPA2bcck@zn.tnic>
- <d4d472e2e44787eccfbcc693bdf338370013f8a9.camel@intel.com>
+        Thu, 9 Mar 2023 09:14:22 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859B993C4;
+        Thu,  9 Mar 2023 06:13:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678371193; x=1709907193;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=3A65IKB9d2IfLyHPo1ILLZ4ADkCpExI8AS30ua1GCVc=;
+  b=LFnIFa2oy9cRbTo4OzS9IWHzz+tM4YrnopE/dyvvJ7RfwB6nCdwSnwvg
+   Ph8ZbjETf1/WwJ6XxFSRvegTaJfdUwoNQmGL90M5h2RKidbiJyHcba9f8
+   a1oNsOflRNVCUJ/ZQIrkq7MjUd87+adaaPuD6DDzyK6zhpP+lH1b+zXpy
+   nXxXCuKN0gt+Kh5yH4UWbGn1JhDzd99VD2v8oLcO+MK0rLbSasprnYeRE
+   O4i7wJU0/8lMSaGAuX45N+qjNDq5lwQm5dzsYnQnDy22lr+u50oVBOxFT
+   8JGUNr/22YVOO1SJw5RXLeUehwUe9WsN5+szWFKKr0RVVXxSOCDnoWGW8
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="364093939"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="364093939"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 06:13:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="787575064"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="787575064"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.219.30])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 06:13:01 -0800
+Message-ID: <ef2f8faf-76cc-d221-8281-cc7b8cb68485@intel.com>
+Date:   Thu, 9 Mar 2023 16:12:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <d4d472e2e44787eccfbcc693bdf338370013f8a9.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [PATCH v1 2/4] Revert "dt-bindings: mmc: Add bindings for Intel
+ Thunder Bay SoC"
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>, rashmi.a@intel.com,
+        ulf.hansson@linaro.org, michal.simek@xilinx.com,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kishon@ti.com, vkoul@kernel.org,
+        andriy.shevchenko@linux.intel.com, linux-phy@lists.infradead.org,
+        mgross@linux.intel.com
+Cc:     kris.pan@linux.intel.com, mahesh.r.vaidya@intel.com,
+        nandhini.srikandan@intel.com, vasavi.v.itha@intel.com,
+        kenchappa.demakkanavar@intel.com, furong.zhou@intel.com,
+        mallikarjunappa.sangannavar@intel.com
+References: <20230124054427.28808-1-rashmi.a@intel.com>
+ <20230124054427.28808-2-rashmi.a@intel.com>
+ <c850df25-57b8-3172-8e5c-c466dc8556cd@kernel.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <c850df25-57b8-3172-8e5c-c466dc8556cd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 08:03:17PM +0000, Edgecombe, Rick P wrote:
+On 24/01/23 13:31, Krzysztof Kozlowski wrote:
+> On 24/01/2023 06:44, rashmi.a@intel.com wrote:
+>> From: "A, Rashmi" <rashmi.a@intel.com>
+>>
+>> This reverts commit ab991c05c42853f0b6110022db9bf30fcc6323dd.
+> 
+> Please use scripts/get_maintainers.pl to get a list of necessary people
+> and lists to CC.  It might happen, that command when run on an older
+> kernel, gives you outdated entries.  Therefore please be sure you base
+> your patches on recent Linux kernel.
+> 
+>>
+>> Revert Thunder Bay specific code as the product got cancelled
+>> and there are no end customers.
+>>
+>> Signed-off-by: A, Rashmi <rashmi.a@intel.com>
+>> Reviewed-by: Hunter, Adrian <adrian.hunter@intel.com>wq
+> 
+> Stray characters.
+> 
+>> ---
+>>  .../devicetree/bindings/mmc/arasan,sdhci.yaml | 25 -------------------
+>>  1 file changed, 25 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+>> index 4053de758db6..0d5d21dd30bb 100644
+>> --- a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+>> +++ b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+>> @@ -88,12 +88,6 @@ properties:
+>>          description:
+>>            For this device it is strongly suggested to include
+>>            arasan,soc-ctl-syscon.
+>> -      - items:
+>> -          - const: intel,thunderbay-sdhci-5.1   # Intel Thunder Bay eMMC PHY
+>> -          - const: arasan,sdhci-5.1
+> 
+> Instead should be made rather deprecated, unless you are sure there is
+> no single person in the world using the bindings (e.g. with BSD or
+> bootloader)?
 
-Btw,
+I am sorry but this is not clear to me.  As I understand it,
+the hardware was never released, so the binding serves no
+purpose.  Should it be removed or "deprecated"?
 
-pls try to trim your replies as I need ot scroll through pages of quoted
-text to find the response.
-
-> Sure. Sometimes people tell me to only ifdef out whole functions to
-> make it easier to read. I suppose in this case it's not hard to see.
-
-Yeah, the less ifdeffery we have, the better.
-
-> If the default SSP value logic is too hidden, what about some clearer
-> code and comments, like this?
-
-The problem with this function is that it needs to return three things:
-
-* success:
- ** 0
- or
- ** shadow stack address
-* failure: due to allocation.
-
-How about this below instead? (totally untested ofc):
-
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index bf703f53fa49..6e323d4e32fc 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -142,7 +142,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 	struct inactive_task_frame *frame;
- 	struct fork_frame *fork_frame;
- 	struct pt_regs *childregs;
--	unsigned long shstk_addr = 0;
-+	unsigned long shstk_addr;
- 	int ret = 0;
- 
- 	childregs = task_pt_regs(p);
-@@ -178,10 +178,9 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- #endif
- 
- 	/* Allocate a new shadow stack for pthread if needed */
--	ret = shstk_alloc_thread_stack(p, clone_flags, args->stack_size,
--				       &shstk_addr);
--	if (ret)
--		return ret;
-+	shstk_addr = shstk_alloc_thread_stack(p, clone_flags, args->stack_size);
-+	if (IS_ERR_VALUE(shstk_addr))
-+		return PTR_ERR((void *)shstk_addr);
- 
- 	fpu_clone(p, clone_flags, args->fn, shstk_addr);
- 
-diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-index 13c02747386f..b1668b499e9a 100644
---- a/arch/x86/kernel/shstk.c
-+++ b/arch/x86/kernel/shstk.c
-@@ -157,8 +157,8 @@ void reset_thread_features(void)
- 	current->thread.features_locked = 0;
- }
- 
--int shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
--			     unsigned long stack_size, unsigned long *shstk_addr)
-+unsigned long shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
-+				       unsigned long stack_size)
- {
- 	struct thread_shstk *shstk = &tsk->thread.shstk;
- 	unsigned long addr, size;
-@@ -180,14 +180,12 @@ int shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
- 	size = adjust_shstk_size(stack_size);
- 	addr = alloc_shstk(size);
- 	if (IS_ERR_VALUE(addr))
--		return PTR_ERR((void *)addr);
-+		return addr;
- 
- 	shstk->base = addr;
- 	shstk->size = size;
- 
--	*shstk_addr = addr + size;
--
--	return 0;
-+	return addr + size;
- }
- 
- static unsigned long get_user_shstk_addr(void)
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
