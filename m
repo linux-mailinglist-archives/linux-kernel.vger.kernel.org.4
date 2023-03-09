@@ -2,243 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFF76B202B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFCE6B202E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbjCIJdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:33:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
+        id S231342AbjCIJeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:34:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbjCIJd2 (ORCPT
+        with ESMTP id S230209AbjCIJdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:33:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F5BE9831
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:32:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678354336;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sQ+J/SIf2Lwzsd+AvJuj8Brejkg7/l6hsC8VV8+8W1M=;
-        b=Lgc+Uyry8nh+xzHEt4bEc75oJxL0B9rJSx+Nv29OEEngdWlObB8yg9R/nqSM6ZFqiiISpp
-        nLNBqAL5fEL8ONmbqWDTmoITkrBDPc+IM9g5WEjCDD34Wt0V3iWk510hhqEDvKa/3IKg9t
-        g3yxXa+ZPj2ZPhv8WScudUiO6WKwoSU=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-387-iFsaJDaSMlmnzlQv9bndpg-1; Thu, 09 Mar 2023 04:32:14 -0500
-X-MC-Unique: iFsaJDaSMlmnzlQv9bndpg-1
-Received: by mail-ed1-f71.google.com with SMTP id ec11-20020a0564020d4b00b004e2cb85c8bcso2066887edb.16
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 01:32:14 -0800 (PST)
+        Thu, 9 Mar 2023 04:33:38 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0124F231F4
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:33:28 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id s23so694671uae.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 01:33:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678354408;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a6NJ8jZlGXDKqz4F6ViXwHF/cy0kv/iFG5qHu8dcTVk=;
+        b=OXyEusqXWGAEy8CnaYmZ30A720Fgy2SgZ3MHXomOY+4A+b34mJh94g8Nl0kYi5yvyS
+         MZm4/MREQjXd4gwIGWb1lIsZ7KZ+p6FneXLTvsUvx4lO34DDSf6uX0P2g/i9Ymelo5PS
+         J5PiRe7ZtQCUsXr+XN5/H9bXAd3w3R++hiJ1/zmvVG+EFVexFc0j/KXtOJS1N6+xst2y
+         0/NriDdtOz/51FkzwqBQWzE5HAwjSg3t4q1SiRG9ptCrAOjJfet9b+XAsRLZn/VGV/P4
+         89MBuwTz/fjmKlrLUXmIZxo67EFNK9TSum7JoyL24T8UcRf6DfWR+xt1qw6NlKt/TSL2
+         lNeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678354334;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sQ+J/SIf2Lwzsd+AvJuj8Brejkg7/l6hsC8VV8+8W1M=;
-        b=D4HcmvdcYEM3qChAx1vkCMNzCdZVcfeF+wLwiVoG/LjaiBkL7L8tQQVvfRYYnYqrnh
-         01fhQymGf97veSTl5Kkea64gjtoWKd7MPa6831479HFgqp83q7COeO23V6yGPPFLdLF/
-         jcQfgXKYWQ2I/fHFnU9HZhhVOOoHXha7A5GKiFH9jvXjXFEIGrbXYG93zTRFkIFfMcul
-         A7ZWwyE2i2UJS1nIVtmpKkOwERrOgrJYPlyRcLnTsYC63d9ojM0v5I6s81epMEa+1VyC
-         tdanZ1PDPgu9A8bPknFn9HFE15iLyO5bREEO7vC5qava54RiRiR6c5szBvRwwSnhg7en
-         uwfg==
-X-Gm-Message-State: AO0yUKXWj/3UYZE8JNZka4uOm+R4Luubp8EJOZhJWUhuV6Hf6WbRQvBT
-        S43LIEavfbg8waLC54knIxg8TprnWfZEVQXplpvAxCb2LSznmeN7mPxRoX7g+746y/eC/YiiSTu
-        dxbSkUnDRaSFReGSkC1kHA6kn
-X-Received: by 2002:aa7:da0a:0:b0:4af:7bdc:188e with SMTP id r10-20020aa7da0a000000b004af7bdc188emr25673771eds.16.1678354333816;
-        Thu, 09 Mar 2023 01:32:13 -0800 (PST)
-X-Google-Smtp-Source: AK7set9Zcc4VfH+adkU4CX8s8G2r+r/hbCkiRw8tT7qROHeFsFcauVxjL7MeoaeJyJi8J5zGFtIfvg==
-X-Received: by 2002:aa7:da0a:0:b0:4af:7bdc:188e with SMTP id r10-20020aa7da0a000000b004af7bdc188emr25673759eds.16.1678354333521;
-        Thu, 09 Mar 2023 01:32:13 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id t26-20020a1709060c5a00b008ec793ac3f4sm8527194ejf.192.2023.03.09.01.32.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 01:32:13 -0800 (PST)
-Message-ID: <9398f15b-6c50-b7ef-1886-c3c78f075e72@redhat.com>
-Date:   Thu, 9 Mar 2023 10:32:12 +0100
+        d=1e100.net; s=20210112; t=1678354408;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a6NJ8jZlGXDKqz4F6ViXwHF/cy0kv/iFG5qHu8dcTVk=;
+        b=DEbJPjJMvu7FBpY+ahzZyXfLpJBggX8Zfl7eluMlx2DtJ/O4JRXTOCCeN3ScJkDHpk
+         wCKjb9PmjRC5zBU7vjhhZNamkTQbPaNU9jxWDs2wNWIQsCOosdtmm0tNHjHSBytfE/B1
+         jisxLlRSRZzuoNBi7YZ5RaXsjzxqgtq/ULFZ9YPjaK56YalsjkL1yMTtPkpW38EwkOig
+         +j+OvwKXaxqkES3h4qEP0ldO7yx3Esx9rlPvk7tSQhH2UIY8G0ygIJeE8mTtyO0Puk7w
+         PQVH+vO+tFWKCHGhQIbiyJywPic7XMXp16JqWCrlCxMmQ7BJPjMqcchT5tZ13a8Ju1Hb
+         /VFw==
+X-Gm-Message-State: AO0yUKUNw7UeuCr9kPPK04naWQ/XDBOnqPmlvAgDtwtjwnujRsvYTJPQ
+        Wvymqs7PRWq7XVFMMaWbi7fMLte87yrU2KdpBhV9rQ==
+X-Google-Smtp-Source: AK7set8hOPKU1eR50fOB1UEnr0CrQBJzTH2q+0AWMw9HkBWVoerFlxX1Qd2y62wHSmDovrcyPhK/cga+kGDSuUdHpRA=
+X-Received: by 2002:a9f:310b:0:b0:663:e17a:e5f6 with SMTP id
+ m11-20020a9f310b000000b00663e17ae5f6mr15399979uab.2.1678354407846; Thu, 09
+ Mar 2023 01:33:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v8 00/13] Adds support for PHY LEDs with offload triggers
-Content-Language: en-US, nl
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Arun.Ramadoss@microchip.com
-References: <20230216013230.22978-1-ansuelsmth@gmail.com>
- <CACRpkda30Ky5oYPn_nGWGOzT5ntZYdE3gafrs7D27ZHxgGuO8A@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CACRpkda30Ky5oYPn_nGWGOzT5ntZYdE3gafrs7D27ZHxgGuO8A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230308091853.132772149@linuxfoundation.org>
+In-Reply-To: <20230308091853.132772149@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 9 Mar 2023 15:03:16 +0530
+Message-ID: <CA+G9fYt586nAUh7nOcpGre2ffxv8wXw7sQyUHztPTGh8ETyb6A@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/887] 6.1.16-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 3/9/23 10:09, Linus Walleij wrote:
-> Hi Christian,
-> 
-> thanks for your patch!
-> 
-> On Thu, Feb 16, 2023 at 2:36 AM Christian Marangi <ansuelsmth@gmail.com> wrote:
-> 
->> The current idea is:
->> - LED driver implement 3 API (hw_control_status/start/stop).
->>   They are used to put the LED in hardware mode and to configure the
->>   various trigger.
->> - We have hardware triggers that are used to expose to userspace the
->>   supported hardware mode and set the hardware mode on trigger
->>   activation.
->> - We can also have triggers that both support hardware and software mode.
->> - The LED driver will declare each supported hardware blink mode and
->>   communicate with the trigger all the supported blink modes that will
->>   be available by sysfs.
->> - A trigger will use blink_set to configure the blink mode to active
->>   in hardware mode.
->> - On hardware trigger activation, only the hardware mode is enabled but
->>   the blink modes are not configured. The LED driver should reset any
->>   link mode active by default.
-> 
-> The series looks good as a start.
-> There are some drivers and HW definitions etc for switch-controlled
-> LEDs, which is great.
-> 
-> I am a bit reluctant on the ambition to rely on configuration from sysfs
-> for the triggers, and I am also puzzled to how a certain trigger on a
-> certain LED is going to associate itself with, say, a certain port.
-> 
-> I want to draw your attention to this recently merged patch series
-> from Hans de Goede:
-> https://lore.kernel.org/linux-leds/20230120114524.408368-1-hdegoede@redhat.com/
-> 
-> This adds the devm_led_get() API which works similar to getting
-> regulators, clocks, GPIOs or any other resources.
-> 
-> It is not yet (I think) hooked into the device tree framework, but it
-> supports software nodes so adding DT handling should be sort of
-> trivial.
-
-That series contains this (unmerged) patch to hookup DT handling:
-
-https://lore.kernel.org/linux-leds/20230120114524.408368-6-hdegoede@redhat.com/
-
-this was not merged because there are no current users, but adding
-support is as easy as picking up that patch :)
-
-Note there also already is a devicetree *only*:
-
-struct led_classdev *of_led_get(struct device_node *np, int index);
-
-Since I was working on a x86/ACPI platform I needed something more
-generic though and ideally new code would use the generic approach.
-
-Regards,
-
-Hans
+On Wed, 8 Mar 2023 at 14:59, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.16 release.
+> There are 887 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 10 Mar 2023 09:16:12 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.16-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
 
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 6.1.16-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.1.y
+* git commit: bb4e875c8c41e8f41325722722e6a9cf02850f50
+* git describe: v6.1.15-889-gbb4e875c8c41
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.1=
+5-889-gbb4e875c8c41
 
-> 
-> I think the ambition should be something like this (conjured example)
-> for a DSA switch:
-> 
->     platform {
->             switch {
->                     compatible = "foo";
-> 
->                     leds {
->                             #address-cells = <1>;
->                             #size-cells = <0>;
->                             led0: led@0 {
->                                     reg = <0>;
->                                     color =...
->                                     function = ...
->                                     function-enumerator = ...
->                                     default-state = ...
->                             };
->                             led1: led@1 {
->                                     reg = <1>;
->                                     color =...
->                                     function = ...
->                                     function-enumerator = ...
->                                     default-state = ...
->                             };
->                     };
-> 
->                     ports {
->                             #address-cells = <1>;
->                             #size-cells = <0>;
->                             port@0 {
->                                     reg = <0>;
->                                     label = "lan0";
->                                     phy-handle = <&phy0>;
->                                     leds = <&led0>;
->                             };
->                             port@1 {
->                                     reg = <1>;
->                                     label = "lan1";
->                                     phy-handle = <&phy1>;
->                                     leds = <&led0>;
->                             };
->                     };
-> 
->                     mdio {
->                             compatible = "foo-mdio";
->                             #address-cells = <1>;
->                             #size-cells = <0>;
-> 
->                             phy0: ethernet-phy@0 {
->                                     reg = <0>;
->                             };
->                             phy1: ethernet-phy@1 {
->                                     reg = <1>;
->                             };
->                     };
->             };
->     };
-> 
-> I am not the man to tell whether the leds = <&led0>; phandle should be on
-> the port or actually on the phy, it may even vary. You guys know the answer
-> to this.
-> 
-> But certainly something like this resource phandle will be necessary to
-> assign the right LED to the right port or phy, I hope you were not going
-> to rely on strings and naming conventions?
-> 
-> Yours,
-> Linus Walleij
-> 
+## Test Regressions (compared to v6.1.15)
 
+## Metric Regressions (compared to v6.1.15)
+
+## Test Fixes (compared to v6.1.15)
+
+## Metric Fixes (compared to v6.1.15)
+
+## Test result summary
+total: 163829, pass: 144385, fail: 4981, skip: 14421, xfail: 42
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 145 total, 144 passed, 1 failed
+* arm64: 47 total, 47 passed, 0 failed
+* i386: 35 total, 34 passed, 1 failed
+* mips: 26 total, 26 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 34 total, 34 passed, 0 failed
+* riscv: 12 total, 12 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 40 total, 40 passed, 0 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
