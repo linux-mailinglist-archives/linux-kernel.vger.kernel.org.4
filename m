@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2CE6B2030
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 251CD6B2032
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjCIJen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:34:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
+        id S230095AbjCIJfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:35:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjCIJeX (ORCPT
+        with ESMTP id S231335AbjCIJef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:34:23 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10652DABBA
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:34:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678354448; x=1709890448;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5HY9ycegtQ0l806aIDHq3NLhsAJnPiDDsr2di1E4VO4=;
-  b=LYSXDx+oXS5BlMtBZgVaI7HKj+YUGV3aHXJFDWoZK05XIO9rohTCU9vD
-   jWvFOaE3wHfY0jC9wFPg2ipsaKvhsd+urWTMkdoFCl7PEi4cqeUkMUevl
-   S9Yo8qk4DClgyArV+mC01T0YQMTJFmdJHpnKZ0b+iniH1q+F/oZxVqMFc
-   dmpDS4LrgWwN5eYukyUPaI78Ie6QlEuVCN/jGG2WfbBGR4MTkfU02KIrm
-   TWWXwA4HygBgNkO9TYhykRiHCyGOdI5IoGhMMBn+C1RKKhg9VGqDfz/1q
-   uU7LktFwymCKZpvHHwPsLNvgBoqz4pk9iwkdRe/Bl4aiU60c+xuUU1miA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="336414076"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="336414076"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 01:34:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="787497567"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="787497567"
-Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.18.176]) ([10.213.18.176])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 01:34:05 -0800
-Message-ID: <1372db7c-7d65-cd28-43fc-1b04f57bef11@intel.com>
-Date:   Thu, 9 Mar 2023 10:34:03 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [PATCH v5 4/4] drm/i915: add guard page to ggtt->error_capture
-Content-Language: en-US
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Thu, 9 Mar 2023 04:34:35 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7599438A;
+        Thu,  9 Mar 2023 01:34:22 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id s20so1439670lfb.11;
+        Thu, 09 Mar 2023 01:34:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678354460;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xvRq5Jv0mE0gBOFKvZj3ILwliwYZSlL8lUsvNU1SHTw=;
+        b=N6P4qY+ylVk38GewMnGLjzS479rkCWyNCexALrNfM/t83h+q3Ga+7rowXUvguSg5xK
+         MpptfQ1TlQI+CXK0lihd4kUSz45+1aQXn5uq6lxXGHAcvKs4BDCteE2s77gNKylS667O
+         zs8tnPLVe3rM+hHCoJev27WWVAiTc/+tzH3bSvm1aXtgNvgDIeicz2kME1Lfbmvv8GSo
+         f95uQDBmMACPXZdLVITYnlaApTERsHCtA6Et4oEFLcrP8H6bcZ1ufsHVBs2MmrQQ015e
+         rQV67M76fE06cWG+HL72ASXv0FtJ5KStWHteViPn+NaHZdJ/idVqTU9iGAV0tuuS7D9c
+         3q6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678354460;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xvRq5Jv0mE0gBOFKvZj3ILwliwYZSlL8lUsvNU1SHTw=;
+        b=y68aGq5+aLNzEmZ7p8LDnaeZrAFGdyC0zoQy2wlhEKvQI2qq3aAyI+VqmxnRXr5xwh
+         Y1whia8JrvK8gHWM4I0GMUXSH3FBYjfjiQE3NuljqFgugXj+pdDbqfK1wtVnOL9pfh0X
+         vUoG1wX5XPWrLrBa75FzgMP/gxRZwGa4TgOVaLZZgpDeo+Kmygg0zuCi6z2Wgium3xwJ
+         woMFY2p/KWpLDcYqnq5D2MuIdd4KBUXIoO2XLouC2Ri6FQ0M0EOpIJiabfH5Y2TbUSeL
+         2g3qYCh33hKdhdm2aE3s3mPf3Bfn4VNBFE0MgE9UoSAYun7Jue+LvV96OBmTsHdIzvlj
+         nKog==
+X-Gm-Message-State: AO0yUKWZCPNODoYJ5444trCBTmGn409gsOOLo2Sf4oJHsI2B4yITWX8x
+        Ejn7rPlmylSav3lOn+OU6Ao=
+X-Google-Smtp-Source: AK7set/WKNhApt4nM8wOG5pTfVTWwLPjWUXOfR3RP4xKZx1nR6gL5xyZWTrm4pa3U2OsTNXTyJ8uTA==
+X-Received: by 2002:a05:6512:398e:b0:4db:1e7d:5d49 with SMTP id j14-20020a056512398e00b004db1e7d5d49mr7141933lfu.21.1678354460474;
+        Thu, 09 Mar 2023 01:34:20 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id y9-20020ac24e69000000b004db1a7e6decsm2583034lfs.205.2023.03.09.01.34.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 01:34:19 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Chris Wilson <chris.p.wilson@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>
-References: <20230308-guard_error_capture-v5-0-6d1410d13540@intel.com>
- <20230308-guard_error_capture-v5-4-6d1410d13540@intel.com>
- <93cbaa9f-6ec3-5843-7527-8e81b3ee091d@linux.intel.com>
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <93cbaa9f-6ec3-5843-7527-8e81b3ee091d@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH] dt-bindings: nvmem: layouts: add fixed-layout
+Date:   Thu,  9 Mar 2023 10:34:10 +0100
+Message-Id: <20230309093410.15214-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,137 +75,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Rafał Miłecki <rafal@milecki.pl>
 
+With the introduction of NVMEM layouts I believe we should prefer and
+support describing all NVMEM devices content in the "nvmem-layout" node.
+Inluding fixed NVMEM cells (those with hardcoded offset & size).
 
-On 09.03.2023 10:08, Tvrtko Ursulin wrote:
->
-> On 08/03/2023 15:39, Andrzej Hajda wrote:
->> Write-combining memory allows speculative reads by CPU.
->> ggtt->error_capture is WC mapped to CPU, so CPU/MMU can try
->> to prefetch memory beyond the error_capture, ie it tries
->> to read memory pointed by next PTE in GGTT.
->> If this PTE points to invalid address DMAR errors will occur.
->> This behaviour was observed on ADL and RPL platforms.
->> To avoid it, guard scratch page should be added after error_capture.
->> The patch fixes the most annoying issue with error capture but
->> since WC reads are used also in other places there is a risk similar
->> problem can affect them as well.
->>
->> v2:
->>    - modified commit message (I hope the diagnosis is correct),
->>    - added bug checks to ensure scratch is initialized on gen3 
->> platforms.
->>      CI produces strange stacktrace for it suggesting scratch[0] is 
->> NULL,
->>      to be removed after resolving the issue with gen3 platforms.
->> v3:
->>    - removed bug checks, replaced with gen check.
->> v4:
->>    - change code for scratch page insertion to support all platforms,
->>    - add info in commit message there could be more similar issues
->> v5:
->>    - check for nop_clear_range instead of gen8 (Tvrtko),
->>    - re-insert scratch pages on resume (Tvrtko)
->>
->> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
->> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
->> ---
->>   drivers/gpu/drm/i915/gt/intel_ggtt.c | 35 
->> +++++++++++++++++++++++++++++++----
->>   1 file changed, 31 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/i915/gt/intel_ggtt.c 
->> b/drivers/gpu/drm/i915/gt/intel_ggtt.c
->> index b925da42c7cfc4..8fb700fde85c8f 100644
->> --- a/drivers/gpu/drm/i915/gt/intel_ggtt.c
->> +++ b/drivers/gpu/drm/i915/gt/intel_ggtt.c
->> @@ -502,6 +502,21 @@ static void cleanup_init_ggtt(struct i915_ggtt 
->> *ggtt)
->>       mutex_destroy(&ggtt->error_mutex);
->>   }
->>   +static void
->> +ggtt_insert_scratch_pages(struct i915_ggtt *ggtt, u64 offset, u64 
->> length)
->> +{
->> +    struct i915_address_space *vm = &ggtt->vm;
->> +
->> +    if (vm->clear_range != nop_clear_range)
->
-> Hm I thought usually we would add a prefix for exported stuff, like in 
-> this case i915_vm_nop_clear_range, however I see intel_gtt.h exports a 
-> bunch of stuff with no prefixes already so I guess you could continue 
-> like that by inertia. The conundrum also could have been avoided if 
-> you left it static (leaving out dpt and mock_gtt patches) but no 
-> strong opinion from me.
->
->> +        return vm->clear_range(vm, offset, length);
->> +
->> +    while (length > 0) {
->> +        vm->insert_page(vm, px_dma(vm->scratch[0]), offset, 
->> I915_CACHE_NONE, 0);
->> +        offset += I915_GTT_PAGE_SIZE;
->> +        length -= I915_GTT_PAGE_SIZE;
->> +    }
->> +}
->> +
->>   static int init_ggtt(struct i915_ggtt *ggtt)
->>   {
->>       /*
->> @@ -550,8 +565,12 @@ static int init_ggtt(struct i915_ggtt *ggtt)
->>            * paths, and we trust that 0 will remain reserved. However,
->>            * the only likely reason for failure to insert is a driver
->>            * bug, which we expect to cause other failures...
->> +         *
->> +         * Since CPU can perform speculative reads on error capture
->> +         * (write-combining allows it) add scratch page after error
->> +         * capture to avoid DMAR errors.
->>            */
->> -        ggtt->error_capture.size = I915_GTT_PAGE_SIZE;
->> +        ggtt->error_capture.size = 2 * I915_GTT_PAGE_SIZE;
->>           ggtt->error_capture.color = I915_COLOR_UNEVICTABLE;
->>           if (drm_mm_reserve_node(&ggtt->vm.mm, &ggtt->error_capture))
->>               drm_mm_insert_node_in_range(&ggtt->vm.mm,
->> @@ -561,11 +580,15 @@ static int init_ggtt(struct i915_ggtt *ggtt)
->>                               0, ggtt->mappable_end,
->>                               DRM_MM_INSERT_LOW);
->>       }
->> -    if (drm_mm_node_allocated(&ggtt->error_capture))
->> +    if (drm_mm_node_allocated(&ggtt->error_capture)) {
->> +        u64 start = ggtt->error_capture.start;
->> +        u64 size = ggtt->error_capture.size;
->> +
->> +        ggtt_insert_scratch_pages(ggtt, start, size);
->>           drm_dbg(&ggtt->vm.i915->drm,
->>               "Reserved GGTT:[%llx, %llx] for use by error capture\n",
->> -            ggtt->error_capture.start,
->> -            ggtt->error_capture.start + ggtt->error_capture.size);
->> +            start, start + size);
->> +    }
->>         /*
->>        * The upper portion of the GuC address space has a sizeable hole
->> @@ -1256,6 +1279,10 @@ void i915_ggtt_resume(struct i915_ggtt *ggtt)
->>         flush = i915_ggtt_resume_vm(&ggtt->vm);
->>   +    if (drm_mm_node_allocated(&ggtt->error_capture))
->> +        ggtt_insert_scratch_pages(ggtt, ggtt->error_capture.start,
->> +                      ggtt->error_capture.size);
->
-> Maybe it belongs in i915_ggtt_resume_vm since that one deals with 
-> PTEs? Looks like it to me, but ack either way.
+This seems to be cleaner design and more explicit.
 
-i915_ggtt_resume_vm is called for ggtt and dpt. Of course I could add 
-conditionals there checking if it is ggtt, but in such situation 
-i915_ggtt_resume seems more natural candidate.
+Introduce a binding allowing fixed NVMEM cells as a type of layout.
 
-Regards
-Andrzej
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ .../bindings/nvmem/layouts/fixed-layout.yaml  | 52 +++++++++++++++++++
+ .../bindings/nvmem/layouts/nvmem-layout.yaml  |  1 +
+ 2 files changed, 53 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
 
->
-> Regards,
->
-> Tvrtko
->
->> +
->>       ggtt->invalidate(ggtt);
->>         if (flush)
->>
+diff --git a/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
+new file mode 100644
+index 000000000000..7eb86c999a5e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/layouts/fixed-layout.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NVMEM layout for fixed NVMEM cells
++
++description:
++  Many NVMEM devices have hardcoded cells layout (offset and size of specific
++  NVMEM content doesn't change).
++
++  This binding allows defining such cells using NVMEM layout. It can be used on
++  top of any NVMEM device.
++
++maintainers:
++  - Rafał Miłecki <rafal@milecki.pl>
++
++properties:
++  compatible:
++    const: fixed-layout
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 1
++
++patternProperties:
++  "@[a-f0-9]+$":
++    type: object
++    description: NVMEM cell
++    properties:
++      reg:
++        maxItems: 1
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++    nvmem-layout {
++        compatible = "fixed-layout";
++        #address-cells = <1>;
++        #size-cells = <1>;
++
++        calibration@4000 {
++            reg = <0x4000 0x100>;
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
+index 8512ee538c4c..03da7848c713 100644
+--- a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
++++ b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
+@@ -18,6 +18,7 @@ description: |
+   perform their parsing. The nvmem-layout container is here to describe these.
+ 
+ oneOf:
++  - $ref: fixed-layout.yaml
+   - $ref: kontron,sl28-vpd.yaml
+   - $ref: onie,tlv-layout.yaml
+ 
+-- 
+2.34.1
 
