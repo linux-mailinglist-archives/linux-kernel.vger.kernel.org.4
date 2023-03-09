@@ -2,113 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498156B271A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C183A6B2719
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbjCIOhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:37:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
+        id S231925AbjCIOhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:37:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbjCIOhD (ORCPT
+        with ESMTP id S231868AbjCIOhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:37:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C82EF7EDB;
-        Thu,  9 Mar 2023 06:36:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 9 Mar 2023 09:37:02 -0500
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 023FAF63B2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:36:49 -0800 (PST)
+Received: from 8bytes.org (p5b006afb.dip0.t-ipconnect.de [91.0.106.251])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83592B81F64;
-        Thu,  9 Mar 2023 14:36:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88D55C433D2;
-        Thu,  9 Mar 2023 14:36:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678372607;
-        bh=cv3mRrc0sgN9ywJSYCA+9wt3Wst1MMWKr0adp0O6Ytc=;
+        by mail.8bytes.org (Postfix) with ESMTPSA id D346522612F;
+        Thu,  9 Mar 2023 15:36:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1678372607;
+        bh=YEVQxyXVIWhtxmM89JVtDEvi45tG9UXS9RSbGs8FK7k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZnlJg+V+FlDZKUMZYNweebr4HU0P3ux8UprrorgPpU/iAGltdDeYk9lMEx3iqcRGP
-         OUWFc608w3PwiGVkEHqS7I+izSZOsSYFmdNrE1VVOPPb0+M33frIdVQ59kW0087Wkw
-         e/cJZzKSgKNWX4426M5uYZxVpGj2NQg37Zzep5Rg=
-Date:   Thu, 9 Mar 2023 15:36:44 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Ye Xiang <xiang.ye@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
-        wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v4 2/5] gpio: Add support for Intel LJCA USB GPIO driver
-Message-ID: <ZAnu/GlpS32BgmqG@kroah.com>
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
- <20230309071100.2856899-3-xiang.ye@intel.com>
- <2865f3d0-428b-0df1-fc50-f6af3cb9dac3@suse.com>
- <ZAnku01goVDCuNM+@smile.fi.intel.com>
- <CACRpkdYQfT=JXvmjKR_9O74H2dmwx1EF4QjCHM6fKAetpbrMOg@mail.gmail.com>
+        b=xCatCVjyEy4xQJHvjjbD2l9cMxXCXww3G7LEduHxM1vfuSPjxWRZg2kYog+LA0Wnk
+         bAJrDbNQKKKbVV0Z3qrDvbqaZrCPE641s9105ZPbxhOLLA4uIfNZgZhLveaHzUOoFw
+         ttR8WZFVJf9vZNlw8vQ43LUzsdU0ovlLOyu3NwD5+Kto4lKnZRokXfwpAcfsrYqMAC
+         xXNHm1ZsKNVrU9YJK+NO1cvqS4pfNCf1VyYdeJ/BF9ebc7KhCajE0fNygY9zIJkQNd
+         utNI0fJbSTdI1Y1uWTaEyB1W1JZ1HJUUfwT7eEkvsINHZcyAsOmlj/fCs7Q8UetRov
+         2n+MpjSTBe+gQ==
+Date:   Thu, 9 Mar 2023 15:36:45 +0100
+From:   =?iso-8859-1?Q?J=F6rg_R=F6del?= <joro@8bytes.org>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
+ to map as encrypted
+Message-ID: <ZAnu/Um+4qq4Owuh@8bytes.org>
+References: <Y/adN3GQJTdDPmS8@google.com>
+ <Y/ammgkyo3QVon+A@zn.tnic>
+ <Y/a/lzOwqMjOUaYZ@google.com>
+ <Y/dDvTMrCm4GFsvv@zn.tnic>
+ <BYAPR21MB1688F68888213E5395396DD9D7AB9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <255249f2-47af-07b7-d9d9-9edfdd108348@intel.com>
+ <20230306215104.GEZAZgSPa4qBBu9lRd@fat_crate.local>
+ <a23a36ccb8e1ad05e12a4c4192cdd98267591556.camel@infradead.org>
+ <20230309115937.GAZAnKKRef99EwOu/S@fat_crate.local>
+ <a4fc8686-f82d-370e-309f-d6d3fc0568e8@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACRpkdYQfT=JXvmjKR_9O74H2dmwx1EF4QjCHM6fKAetpbrMOg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a4fc8686-f82d-370e-309f-d6d3fc0568e8@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 03:18:53PM +0100, Linus Walleij wrote:
-> On Thu, Mar 9, 2023 at 2:53 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Thu, Mar 09, 2023 at 02:40:10PM +0100, Oliver Neukum wrote:
-> > > On 09.03.23 08:10, Ye Xiang wrote:
-> > >
-> > > > +#define LJCA_GPIO_BUF_SIZE 60
-> > > > +struct ljca_gpio_dev {
-> > > > +   struct platform_device *pdev;
-> > > > +   struct gpio_chip gc;
-> > > > +   struct ljca_gpio_info *gpio_info;
-> > > > +   DECLARE_BITMAP(unmasked_irqs, LJCA_MAX_GPIO_NUM);
-> > > > +   DECLARE_BITMAP(enabled_irqs, LJCA_MAX_GPIO_NUM);
-> > > > +   DECLARE_BITMAP(reenable_irqs, LJCA_MAX_GPIO_NUM);
-> > > > +   u8 *connect_mode;
-> > > > +   /* mutex to protect irq bus */
-> > > > +   struct mutex irq_lock;
-> > > > +   struct work_struct work;
-> > > > +   /* lock to protect package transfer to Hardware */
-> > > > +   struct mutex trans_lock;
-> > > > +
-> > > > +   u8 obuf[LJCA_GPIO_BUF_SIZE];
-> > > > +   u8 ibuf[LJCA_GPIO_BUF_SIZE];
-> > >
-> > > And here we have a violation of DMA coherency rules.
-> > > Basically you cannot embed buffers into other data structures
-> > > if they can be subject to DMA.
-> >
-> > Huh?!
-> >
-> > The problem here is alignment. But other than that I can't see the issue with
-> > embedding into structures the instances of which will be allocated on the heap.
-> 
-> Yups. And I think the solution looks something like this:
-> 
-> u8 obuf[LJCA_GPIO_BUF_SIZE] __aligned(8);
-> u8 ibuf[LJCA_GPIO_BUF_SIZE] __aligned(8);
-> 
-> __aligned(4) if it's 32bit DMA I guess? 8 always works that's
-> why we use it all over the IIO subsystem.
+On Thu, Mar 09, 2023 at 08:19:58AM -0600, Tom Lendacky wrote:
+> I believe Joerg added that key for performance reasons, since it is used on
+> the exception path and can avoid all the calls to cc_platform_has(). I think
+> that key should stay.
 
-To make it all simple, just make obuf and ibuf pointers to the data you
-allocate with a call to kmalloc().
+Yes, that is right. The key is mainly for the NMI entry path which can
+be performance relevant in some situations. For SEV-ES some special
+handling is needed there to re-enable NMIs and adjust the #VC stack in
+case it was raised on the VC-handlers entry path.
 
-thanks,
+Regards,
 
-greg k-h
+	Joerg
