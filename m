@@ -2,176 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55316B2320
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 489F86B2324
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbjCILfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
+        id S231483AbjCILfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:35:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjCILfM (ORCPT
+        with ESMTP id S231564AbjCILfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:35:12 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BF85FEB0;
-        Thu,  9 Mar 2023 03:35:09 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 329BYu2C065254;
-        Thu, 9 Mar 2023 05:34:56 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678361696;
-        bh=iX7y3Z0tBRNNQCGKDp9Uv30r+tezSHa9h/x0ELZdFOU=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=ODStmCmYnXJEu4Sg5+R8o7IloBIFmO9LWNtS2Gs19J4sED9hm3roD/HwqkWqsI+X2
-         9K2IyEzzog/RDd1HhMrXRxjoE35g3yHbFlN9LB58Of3VyITz4OvgXWeMuBabiipRHJ
-         st0VGIH5lbCaKHB2+gCzR4ARQxZ99Yqn+91DYPVs=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 329BYuNw017261
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 9 Mar 2023 05:34:56 -0600
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 9
- Mar 2023 05:34:55 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 9 Mar 2023 05:34:56 -0600
-Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 329BYo7K025813;
-        Thu, 9 Mar 2023 05:34:51 -0600
-Message-ID: <9c866140-6ca6-3594-95b5-5a7a37ce9c05@ti.com>
-Date:   Thu, 9 Mar 2023 17:04:50 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [EXTERNAL] Re: [PATCH v3 5/6] soc: ti: pruss: Add helper function
- to enable OCP master ports
-Content-Language: en-US
-To:     Tony Lindgren <tony@atomide.com>,
-        MD Danish Anwar <danishanwar@ti.com>
-CC:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
+        Thu, 9 Mar 2023 06:35:30 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EDC7E7A5;
+        Thu,  9 Mar 2023 03:35:22 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0D53E1C000A;
+        Thu,  9 Mar 2023 11:35:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678361721;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YkCJYe4xTl1nq4LBH2Nzf6GB3+OQQsqPo2Fge4ocTUs=;
+        b=hiIMPBEnM9/0A6RUHYRZqxFHogmol9ukA6pSF9yyH7WStCrXbZROuFrMCgPWYlCuvRnkhD
+        gSVPsluMhNKX56RZrjnI61iTpBTA4waKAQ6JqeRqsvyo/IWOPAl/QL51nSDgAxSyu94yKy
+        PIn9wIRH2IZFlmKfSzqKCR71LaKiGkrD/HSgaRQb245/oFmYH13le2EXgsHsrIH75UqLz3
+        Z11W3tJOxR+vBh6gHjbD5FbyG6FnNCzR4oHH8uG2wNHJnoqWJ9ZmEH7DlYcnZLCUcl1gLD
+        mNnKh0EMvdHeQcM3phRrh+OldNLWfiXLDIRmHeLX33lUlMygrtc3mKklFPVC1A==
+Date:   Thu, 9 Mar 2023 12:35:13 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <t-kristo@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>, <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <srk@ti.com>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-References: <20230306110934.2736465-1-danishanwar@ti.com>
- <20230306110934.2736465-6-danishanwar@ti.com>
- <20230309070450.GE7501@atomide.com>
-From:   Md Danish Anwar <a0501179@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <20230309070450.GE7501@atomide.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-rtc@vger.kernel.org,
+        Michael Walle <michael@walle.cc>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH V3] nvmem: add explicit config option to read OF fixed
+ cells
+Message-ID: <20230309123513.43b7134f@xps-13>
+In-Reply-To: <20230309112028.19215-1-zajec5@gmail.com>
+References: <20230309112028.19215-1-zajec5@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tony,
+Hi Rafa=C5=82,
 
-On 09/03/23 12:34, Tony Lindgren wrote:
-> Hi,
-> 
-> * MD Danish Anwar <danishanwar@ti.com> [230306 11:10]:
->> From: Suman Anna <s-anna@ti.com>
->> +/**
->> + * pruss_cfg_ocp_master_ports() - configure PRUSS OCP master ports
->> + * @pruss: the pruss instance handle
->> + * @enable: set to true for enabling or false for disabling the OCP master ports
->> + *
->> + * This function programs the PRUSS_SYSCFG.STANDBY_INIT bit either to enable or
->> + * disable the OCP master ports (applicable only on SoCs using OCP interconnect
->> + * like the OMAP family). Clearing the bit achieves dual functionalities - one
->> + * is to deassert the MStandby signal to the device PRCM, and the other is to
->> + * enable OCP master ports to allow accesses outside of the PRU-ICSS. The
->> + * function has to wait for the PRCM to acknowledge through the monitoring of
->> + * the PRUSS_SYSCFG.SUB_MWAIT bit when enabling master ports. Setting the bit
->> + * disables the master access, and also signals the PRCM that the PRUSS is ready
->> + * for Standby.
->> + *
->> + * Return: 0 on success, or an error code otherwise. ETIMEDOUT is returned
->> + * when the ready-state fails.
->> + */
->> +int pruss_cfg_ocp_master_ports(struct pruss *pruss, bool enable)
->> +{
->> +	int ret;
->> +	u32 syscfg_val, i;
->> +	const struct pruss_private_data *data;
->> +
->> +	if (IS_ERR_OR_NULL(pruss))
->> +		return -EINVAL;
->> +
->> +	data = of_device_get_match_data(pruss->dev);
->> +
->> +	/* nothing to do on non OMAP-SoCs */
->> +	if (!data || !data->has_ocp_syscfg)
->> +		return 0;
->> +
->> +	/* assert the MStandby signal during disable path */
->> +	if (!enable)
->> +		return pruss_cfg_update(pruss, PRUSS_CFG_SYSCFG,
->> +					SYSCFG_STANDBY_INIT,
->> +					SYSCFG_STANDBY_INIT);
->> +
->> +	/* enable the OCP master ports and disable MStandby */
->> +	ret = pruss_cfg_update(pruss, PRUSS_CFG_SYSCFG, SYSCFG_STANDBY_INIT, 0);
->> +	if (ret)
->> +		return ret;
->> +
->> +	/* wait till we are ready for transactions - delay is arbitrary */
->> +	for (i = 0; i < 10; i++) {
->> +		ret = pruss_cfg_read(pruss, PRUSS_CFG_SYSCFG, &syscfg_val);
->> +		if (ret)
->> +			goto disable;
->> +
->> +		if (!(syscfg_val & SYSCFG_SUB_MWAIT_READY))
->> +			return 0;
->> +
->> +		udelay(5);
->> +	}
->> +
->> +	dev_err(pruss->dev, "timeout waiting for SUB_MWAIT_READY\n");
->> +	ret = -ETIMEDOUT;
->> +
->> +disable:
->> +	pruss_cfg_update(pruss, PRUSS_CFG_SYSCFG, SYSCFG_STANDBY_INIT,
->> +			 SYSCFG_STANDBY_INIT);
->> +	return ret;
->> +}
->> +EXPORT_SYMBOL_GPL(pruss_cfg_ocp_master_ports);
-> 
-> The above you should no longer be needed, see for example am33xx-l4.dtsi
-> for pruss_tm: target-module@300000. The SYSCFG register is managed by
-> drivers/bus/ti-sysc.c using compatible "ti,sysc-pruss", and the "sysc"
-> reg-names property. So when any of the child devices do pm_runtime_get()
-> related functions, the PRUSS top level interconnect target module is
-> automatically enabled and disabled as needed.
-> 
-> If there's something still missing like dts configuration for some SoCs,
-> or quirk handling in ti-sysc.c, let's fix those instead so we can avoid
-> exporting a custom function for pruss_cfg_ocp_master_ports.
-> 
-> Regards,
-> 
-> Tony
+> diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provide=
+r.h
+> index 0262b86194eb..b3c14ce87a65 100644
+> --- a/include/linux/nvmem-provider.h
+> +++ b/include/linux/nvmem-provider.h
+> @@ -73,6 +73,7 @@ struct nvmem_cell_info {
+>   * @owner:	Pointer to exporter module. Used for refcounting.
+>   * @cells:	Optional array of pre-defined NVMEM cells.
+>   * @ncells:	Number of elements in cells.
+> + * @use_fixed_of_cells:	Read fixed NVMEM cells from OF.
 
-I will remove this patch in the next revision of this series as it is no longer
-needed.
+I'm still unhappy with the naming, especially since you explained in
+more details the whole plan which involves using a container to put
+these fixed cells from now on. In both cases you extract cells from
+fixed OF nodes but this boolean needs to be set to true in one
+case, and false in the other, which would not make sense.
 
--- 
-Thanks and Regards,
-Danish.
+Also, regarding the bindings changes, I'm fairly happy with the idea,
+but if we go this way I would prefer a full series instead of
+individual changes with:
+
+- the boolean you introduce here (renamed, at the very least)
+- the new bindings
+- the update of the current provider bindings to take the new bindings
+  into account and deprecate the old ones officially
+- support for the new bindings in the core
+
+>   * @keepout:	Optional array of keepout ranges (sorted ascending by start=
+).
+>   * @nkeepout:	Number of elements in the keepout array.
+>   * @type:	Type of the nvmem storage
+> @@ -103,6 +104,7 @@ struct nvmem_config {
+>  	struct module		*owner;
+>  	const struct nvmem_cell_info	*cells;
+>  	int			ncells;
+> +	bool			use_fixed_of_cells;
+>  	const struct nvmem_keepout *keepout;
+>  	unsigned int		nkeepout;
+>  	enum nvmem_type		type;
+
+Thanks,
+Miqu=C3=A8l
