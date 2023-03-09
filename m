@@ -2,93 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371B36B2B47
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A756B2B4C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjCIQ4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 11:56:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S229552AbjCIQ5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 11:57:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230409AbjCIQ4H (ORCPT
+        with ESMTP id S230444AbjCIQ4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:56:07 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F583B3D4;
-        Thu,  9 Mar 2023 08:48:12 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 329Gm1Up087571;
-        Thu, 9 Mar 2023 10:48:01 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678380481;
-        bh=gnC04kQptEQ9Ia4i3/2ZlkOrBmNCWxoroUhRnOhhwFY=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=uNuznbS5pJtFbTyyxJOZKbX8vu8gZhFNfSUrLtskR0rbMOcH5waZ995AWRLImLix9
-         6gYHyvYNMNo8Rsbf47m3n4bdyaOY4VhJQwbZ/mI2IktV2NFQhNDP7KuMiqimh0F0n2
-         TkzvYxWqoHtNOCIfHcvGnT/oJM9FjLM/HC5EaxWM=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 329Gm1k3009012
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 9 Mar 2023 10:48:01 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 9
- Mar 2023 10:48:01 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 9 Mar 2023 10:48:01 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 329Gm0IN096282;
-        Thu, 9 Mar 2023 10:48:00 -0600
-Date:   Thu, 9 Mar 2023 10:48:00 -0600
-From:   Bryan Brattlof <bb@ti.com>
-To:     Nitin Yadav <n-yadav@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: ti: k3-am62-main: Fix GPIO numbers in DT
-Message-ID: <20230309164800.uhhdol76t3agople@bryanbrattlof.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-References: <20230202085917.3044567-1-n-yadav@ti.com>
+        Thu, 9 Mar 2023 11:56:30 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6BE3BDA5;
+        Thu,  9 Mar 2023 08:48:47 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B22151EC0464;
+        Thu,  9 Mar 2023 17:48:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1678380525;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=y9fgVkJaonsv4Fq61FCxxoW1/dZqwLtrdhcT+JC/0gI=;
+        b=oLq0+xRxpNxRF+7gFw40PrZBhMfN77YRoJympjw43zS4MFdGKCzTRi2By/ji9HJjNc7h7U
+        O4mLJEfDttVF77nmvJWKyLxI3QXpfxZpZ0BF59AdTDPitGajtBIoCGPq1vS/PbRvDVzRYR
+        muTbKHWIQuzKGhFAr+6/DSiudLrczeE=
+Date:   Thu, 9 Mar 2023 17:48:42 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v7 31/41] x86/shstk: Introduce routines modifying shstk
+Message-ID: <ZAoN6tGi8kzgcLrK@zn.tnic>
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-32-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230202085917.3044567-1-n-yadav@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230227222957.24501-32-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nitin!
-
-On February  2, 2023 thus sayeth Nitin Yadav:
-> Fix number of gpio pins in main_gpio0 & main_gpio1
-> DT nodes according to AM62x SK datasheet. The Link
-> of datasheet is in the following line:
-> https://www.ti.com/lit/ds/symlink/am625.pdf?ts=1673852494660
+On Mon, Feb 27, 2023 at 02:29:47PM -0800, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> Section: 6.3.10 GPIO (Page No. 63-67)
->
+> Shadow stacks are normally written to via CALL/RET or specific CET
+				       ^
+				       indirectly.
 
-Thanks for getting this fixed. Should we add a fixes tag to help get 
-this back ported?
+> instructions like RSTORSSP/SAVEPREVSSP. However during some Linux
+> operations the kernel will need to write to directly using the ring-0 only
 
-Fixes: f1d17330a5bedc ("arm64: dts: ti: Introduce base support for AM62x SoC")
+"However, sometimes the kernel will need to..."
 
-> Signed-off-by: Nitin Yadav <n-yadav@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> WRUSS instruction.
 > 
+> A shadow stack restore token marks a restore point of the shadow stack, and
+> the address in a token must point directly above the token, which is within
+> the same shadow stack. This is distinctively different from other pointers
+> on the shadow stack, since those pointers point to executable code area.
+> 
+> Introduce token setup and verify routines. Also introduce WRUSS, which is
+> a kernel-mode instruction but writes directly to user shadow stack.
+> 
+> In future patches that enable shadow stack to work with signals, the kernel
+> will need something to denote the point in the stack where sigreturn may be
+> called. This will prevent attackers calling sigreturn at arbitrary places
+> in the stack, in order to help prevent SROP attacks.
+> 
+> To do this, something that can only be written by the kernel needs to be
+> placed on the shadow stack. This can be accomplished by setting bit 63 in
+> the frame written to the shadow stack. Userspace return addresses can't
+> have this bit set as it is in the kernel range. It is also can't be a
 
-Reviewed-by: Bryan Brattlof <bb@ti.com>
+s/is //
 
-~Bryan
+> valid restore token.
+
+...
+
+> diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
+> index de48d1389936..d6cd9344f6c7 100644
+> --- a/arch/x86/include/asm/special_insns.h
+> +++ b/arch/x86/include/asm/special_insns.h
+> @@ -202,6 +202,19 @@ static inline void clwb(volatile void *__p)
+>  		: [pax] "a" (p));
+>  }
+>  
+> +#ifdef CONFIG_X86_USER_SHADOW_STACK
+> +static inline int write_user_shstk_64(u64 __user *addr, u64 val)
+> +{
+> +	asm_volatile_goto("1: wrussq %[val], (%[addr])\n"
+> +			  _ASM_EXTABLE(1b, %l[fail])
+> +			  :: [addr] "r" (addr), [val] "r" (val)
+> +			  :: fail);
+> +	return 0;
+> +fail:
+> +	return -EFAULT;
+
+Nice!
+
+> +}
+> +#endif /* CONFIG_X86_USER_SHADOW_STACK */
+> +
+>  #define nop() asm volatile ("nop")
+>  
+>  static inline void serialize(void)
+
+...
+
+> +static int put_shstk_data(u64 __user *addr, u64 data)
+> +{
+> +	if (WARN_ON_ONCE(data & BIT(63)))
+
+Dunno, maybe something like:
+
+/*
+ * A comment explaining what that is...
+ */
+#define SHSTK_SIGRETURN_TOKEN	BIT_ULL(63)
+
+or so?
+
+And use that instead of that magical bit 63.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
