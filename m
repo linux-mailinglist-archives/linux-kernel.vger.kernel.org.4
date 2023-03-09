@@ -2,120 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928676B287E
+	by mail.lfdr.de (Postfix) with ESMTP id DF68F6B287F
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbjCIPQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S231658AbjCIPQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjCIPPj (ORCPT
+        with ESMTP id S231267AbjCIPPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:15:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE2B30DF
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:14:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 86042B81F6E
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 15:14:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03659C433D2;
-        Thu,  9 Mar 2023 15:14:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678374895;
-        bh=C4w5vmfcLPBn4U6yuKEqRWXaXPOuMzm9bLGZsROhwbc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qeIltWNziJV+7bwnl4rl5/rCSOBMCwEOvbEY/fJTksRb6IALA/kD8+j1i7mJyG3To
-         6g19+r0gBeRGPa0AiBhYrzV0eOPxlw58pCTc4xSP4UUUNVnEJNa/iNJMmJZ89p3cZk
-         2oYky2tsBVSbWajCn0Btcs+H3kon1KIZMDCw+VoyvstEqLLeqgT2nJFIv4diYTf2cc
-         yA3ScUZsCXDISpPdsirXBZNO6xdBUSXwM7BpRlBGCKMgOCokUxTIHD8ZTa78/qixNQ
-         DJEkNyY8zoxiQLcYTRd/q5KXhNSvnu9mWZpL7OWtHu7VfNIJiFCvQoOTuafjSbb47B
-         DESiBNQMs5eVA==
-Date:   Thu, 9 Mar 2023 17:14:40 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "song@kernel.org" <song@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [RFC PATCH 0/5] Prototype for direct map awareness in page
- allocator
-Message-ID: <ZAn34D3hXR7dp8KC@kernel.org>
-References: <20230308094106.227365-1-rppt@kernel.org>
- <e48a7fb1f8ab8d670b0884fd2a5d1e8c1c20e712.camel@intel.com>
+        Thu, 9 Mar 2023 10:15:41 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB51946B2;
+        Thu,  9 Mar 2023 07:15:00 -0800 (PST)
+Date:   Thu, 9 Mar 2023 16:14:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1678374898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=L0ut5A2YxWRkWpdHP5E3GMAlPPVxc9dYMp/47j8do5Y=;
+        b=oItcK2ZHJx1EFmyWZstM8+/1SiiDDnT+KCVGdOMXJZii98FD2zixFOhv/3ma9O4uSWzIWx
+        cbPb1WF6g7WJRlAguElyyqN9TVLPLMh67HBx9jXTu8Zl/q+nYP38ZtiSYrEy196mkONhjH
+        2YDmjwv9aX928iTq4O2fJn20UvI1aoEC+qq56oZ0+V4s6RU3A4Z8f13Fl5As3XBLqUR9Ey
+        FeLtV9doO/MyFlUL19TDJxAzCx/VG3Phtvbhe38Ci48PmYcXEyECNOQXes4q+bmtOrTZpW
+        kNFk6EYnbm5J9hGfViF0swg+9h24lxuJpAN/Qd+oWUWcbhDdN0c66ttRB1AGoA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1678374898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=L0ut5A2YxWRkWpdHP5E3GMAlPPVxc9dYMp/47j8do5Y=;
+        b=zbeoKVkYjK0oybMOkLY8mWISW0E57aW4ddCF8A+7c98shT+QDjFitQSLNveIwWWGKyrcDw
+        CEPaTaRFqjR0d/AA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [ANNOUNCE] v6.3-rc1-rt1
+Message-ID: <20230309151457.Z5BpEBUp@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e48a7fb1f8ab8d670b0884fd2a5d1e8c1c20e712.camel@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 01:59:00AM +0000, Edgecombe, Rick P wrote:
-> On Wed, 2023-03-08 at 11:41 +0200, Mike Rapoport wrote:
-> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > 
-> > Hi,
-> > 
-> > This is a third attempt to make page allocator aware of the direct
-> > map
-> > layout and allow grouping of the pages that must be unmapped from
-> > the direct map.
-> > 
-> > This a new implementation of __GFP_UNMAPPED, kinda a follow up for
-> > this set:
-> > 
-> > https://lore.kernel.org/all/20220127085608.306306-1-rppt@kernel.org
-> > 
-> > but instead of using a migrate type to cache the unmapped pages, the
-> > current implementation adds a dedicated cache to serve __GFP_UNMAPPED
-> > allocations.
-> 
-> It seems a downside to having a page allocator outside of _the_ page
-> allocator is you don't get all of the features that are baked in there.
-> For example does secretmem care about numa? I guess in this
-> implementation there is just one big cache for all nodes.
-> 
-> Probably most users would want __GFP_ZERO. Would secretmem care about
-> __GFP_ACCOUNT?
+Dear RT folks!
 
-The intention was that the pages in cache are always zeroed, so __GFP_ZERO
-is always implicitly there, at least should have been.
-__GFP_ACCOUNT is respected in this implementation. If you look at the
-changes to __alloc_pages(), after getting pages from unmapped cache there
-is 'goto out' to the point where the accounting is handled.
+I'm pleased to announce the v6.3-rc1-rt1 patch set. 
 
-> I'm sure there is more, but I guess the question is, is
-> the idea that these features all get built into unmapped-alloc at some
-> point? The alternate approach is to have little caches for each usage
-> like the grouped pages, which is probably less efficient when you have
-> a bunch of them. Or solve it just for modules like the bpf allocator.
-> Those are the tradeoffs for the approaches that have been explored,
-> right?
+Changes since v6.2-rt3:
 
-I think that no matter what cache we'll use it won't be able to support all
-features _the_ page allocator has. Indeed if we'd have per case cache
-implementation we can tune that implementation to support features of
-interest for that use case, but then we'll be less efficient in reducing
-splits of the large pages. Not to mention increase in complexity as there
-will be several caches doing similar but yet different things.
+  - Update to v6.3-rc1
 
-This POC mostly targets secretmem and modules, so this was pretty much
-about GFP_KERNEL without considerations for NUMA, but I think extending
-this unmapped alloc for NUMA should be simple enough but it will increase
-memory overhead even more.
- 
--- 
-Sincerely yours,
-Mike.
+Known issues
+     - Crystal Wood reported that a filesystem (XFS) may deadlock while flushing
+       during schedule.
+
+You can get this release via the git tree at:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v6.3-rc1-rt1
+
+The RT patch against v6.3-rc1 can be found here:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/older/patch-6.3-rc1-rt1.patch.xz
+
+The split quilt queue is available at:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/older/patches-6.3-rc1-rt1.tar.xz
+
+Sebastian
