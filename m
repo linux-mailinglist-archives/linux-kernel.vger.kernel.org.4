@@ -2,121 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D070A6B280F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D52C6B2812
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbjCIPBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:01:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
+        id S231344AbjCIPBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:01:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232112AbjCIPBE (ORCPT
+        with ESMTP id S232222AbjCIPBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:01:04 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEBC62DB2;
-        Thu,  9 Mar 2023 06:57:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8FDCDCE2441;
-        Thu,  9 Mar 2023 14:57:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE7DEC433EF;
-        Thu,  9 Mar 2023 14:57:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678373862;
-        bh=lrCJhGy31REAFHmpoQYpEnNmpg1BxinPjcIzS4zLQwc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dwRK5TvFHEOjFA1gJxyzNNpaoZTlAyUA24jtVNCJCjO9bjjEnNS6Hzvbcwkj5rQ7U
-         x6Aj/t6wb89PkNSrXXWha6lDESk8LQoGk/CTDCYQLZwj8b3CvyX9QknJmnWxAvCOEC
-         dxB5eqLSRu9mRE0aKKL2AIrXGlKd7GIjoXdt9/Ou3bFB+NHs9VsMnOedyDU6C8Ub4V
-         Z6MCKmDWKg0KGlhceC4CSE5Rlyy5SG+LNT4ZMFQHR2yeMUeOlBzJR8OmFEfFRxLrVl
-         Wbn3CWxeMXstVI9B3TDgUR+0fwHdclevSCbytb0fwuwmsO3z2p72+4iB/kJ1UFhCVT
-         qOAS9y0fJKdhg==
-Message-ID: <50c2b5de-4aed-ebd5-86e9-55813e740869@kernel.org>
-Date:   Thu, 9 Mar 2023 15:57:36 +0100
+        Thu, 9 Mar 2023 10:01:12 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A684D50B;
+        Thu,  9 Mar 2023 06:57:56 -0800 (PST)
+Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 786758B1;
+        Thu,  9 Mar 2023 15:57:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1678373874;
+        bh=4tUk+33kPiCk1+bL4NC4sgOTjs0IM6b95xiNWBvw28c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uVKMGDrj8Yxn3uJbT7pUZ9LO3Lz9PFkWn7yg2El9IYGR6DYm2rFSBf4ucDjUN/NKI
+         3/zKwHpqhh3IsMySTviYnMHlVjW2fWQxG1xfyTNgR62PsR2AARN7ZiVE0ywOGZnI+e
+         uSVtElQJlBfZXLt8gNAZN8RK9k3zAmJ9RAya6pYw=
+Date:   Thu, 9 Mar 2023 16:57:57 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Max Staudt <mstaudt@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sean Paul <seanpaul@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH v2 1/3] media: uvcvideo: Cancel async worker earlier
+Message-ID: <20230309145757.GB1088@pendragon.ideasonboard.com>
+References: <20230309-guenter-mini-v2-0-e6410d590d43@chromium.org>
+ <20230309-guenter-mini-v2-1-e6410d590d43@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 2/4] Revert "dt-bindings: mmc: Add bindings for Intel
- Thunder Bay SoC"
-Content-Language: en-US
-To:     Adrian Hunter <adrian.hunter@intel.com>, rashmi.a@intel.com,
-        ulf.hansson@linaro.org, michal.simek@xilinx.com,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kishon@ti.com, vkoul@kernel.org,
-        andriy.shevchenko@linux.intel.com, linux-phy@lists.infradead.org,
-        mgross@linux.intel.com
-Cc:     kris.pan@linux.intel.com, mahesh.r.vaidya@intel.com,
-        nandhini.srikandan@intel.com, vasavi.v.itha@intel.com,
-        kenchappa.demakkanavar@intel.com, furong.zhou@intel.com,
-        mallikarjunappa.sangannavar@intel.com
-References: <20230124054427.28808-1-rashmi.a@intel.com>
- <20230124054427.28808-2-rashmi.a@intel.com>
- <c850df25-57b8-3172-8e5c-c466dc8556cd@kernel.org>
- <ef2f8faf-76cc-d221-8281-cc7b8cb68485@intel.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <ef2f8faf-76cc-d221-8281-cc7b8cb68485@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230309-guenter-mini-v2-1-e6410d590d43@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2023 15:12, Adrian Hunter wrote:
-> On 24/01/23 13:31, Krzysztof Kozlowski wrote:
->> On 24/01/2023 06:44, rashmi.a@intel.com wrote:
->>> From: "A, Rashmi" <rashmi.a@intel.com>
->>>
->>> This reverts commit ab991c05c42853f0b6110022db9bf30fcc6323dd.
->>
->> Please use scripts/get_maintainers.pl to get a list of necessary people
->> and lists to CC.  It might happen, that command when run on an older
->> kernel, gives you outdated entries.  Therefore please be sure you base
->> your patches on recent Linux kernel.
->>
->>>
->>> Revert Thunder Bay specific code as the product got cancelled
->>> and there are no end customers.
->>>
->>> Signed-off-by: A, Rashmi <rashmi.a@intel.com>
->>> Reviewed-by: Hunter, Adrian <adrian.hunter@intel.com>wq
->>
->> Stray characters.
->>
->>> ---
->>>  .../devicetree/bindings/mmc/arasan,sdhci.yaml | 25 -------------------
->>>  1 file changed, 25 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
->>> index 4053de758db6..0d5d21dd30bb 100644
->>> --- a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
->>> +++ b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
->>> @@ -88,12 +88,6 @@ properties:
->>>          description:
->>>            For this device it is strongly suggested to include
->>>            arasan,soc-ctl-syscon.
->>> -      - items:
->>> -          - const: intel,thunderbay-sdhci-5.1   # Intel Thunder Bay eMMC PHY
->>> -          - const: arasan,sdhci-5.1
->>
->> Instead should be made rather deprecated, unless you are sure there is
->> no single person in the world using the bindings (e.g. with BSD or
->> bootloader)?
+Hi Ricardo and Guenter,
+
+Thank you for the patch.
+
+On Thu, Mar 09, 2023 at 03:44:05PM +0100, Ricardo Ribalda wrote:
+> From: Guenter Roeck <linux@roeck-us.net>
 > 
-> I am sorry but this is not clear to me.  As I understand it,
-> the hardware was never released, so the binding serves no
-> purpose.  Should it be removed or "deprecated"?
+> So far the asynchronous control worker was canceled only in
+> uvc_ctrl_cleanup_device. This is much later than the call to
+> uvc_disconnect. However, after the call to uvc_disconnect returns,
+> there must be no more USB activity. This can result in all kinds
+> of problems in the USB code. One observed example:
+> 
+> URB ffff993e83d0bc00 submitted while active
+> WARNING: CPU: 0 PID: 4046 at drivers/usb/core/urb.c:364 usb_submit_urb+0x4ba/0x55e
+> Modules linked in: <...>
+> CPU: 0 PID: 4046 Comm: kworker/0:35 Not tainted 4.19.139 #18
+> Hardware name: Google Phaser/Phaser, BIOS Google_Phaser.10952.0.0 08/09/2018
+> Workqueue: events uvc_ctrl_status_event_work [uvcvideo]
+> RIP: 0010:usb_submit_urb+0x4ba/0x55e
+> Code: <...>
+> RSP: 0018:ffffb08d471ebde8 EFLAGS: 00010246
+> RAX: a6da85d923ea5d00 RBX: ffff993e71985928 RCX: 0000000000000000
+> RDX: ffff993f37a1de90 RSI: ffff993f37a153d0 RDI: ffff993f37a153d0
+> RBP: ffffb08d471ebe28 R08: 000000000000003b R09: 001424bf85822e96
+> R10: 0000001000000000 R11: ffffffff975a4398 R12: ffff993e83d0b000
+> R13: ffff993e83d0bc00 R14: 0000000000000000 R15: 00000000fffffff0
+> FS:  0000000000000000(0000) GS:ffff993f37a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00000000ec9c0000 CR3: 000000025b160000 CR4: 0000000000340ef0
+> Call Trace:
+>  uvc_ctrl_status_event_work+0xd6/0x107 [uvcvideo]
+>  process_one_work+0x19b/0x4c5
+>  worker_thread+0x10d/0x286
+>  kthread+0x138/0x140
+>  ? process_one_work+0x4c5/0x4c5
+>  ? kthread_associate_blkcg+0xc1/0xc1
+>  ret_from_fork+0x1f/0x40
+> 
+> Introduce new function uvc_ctrl_stop_device() to cancel the worker
+> and call it from uvc_unregister_video() to solve the problem.
+> 
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+> Reviewed-by: Sean Paul <seanpaul@chromium.org>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/usb/uvc/uvc_ctrl.c   | 11 +++++++----
+>  drivers/media/usb/uvc/uvc_driver.c |  1 +
+>  drivers/media/usb/uvc/uvcvideo.h   |  1 +
+>  3 files changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index 5e9d3da862dd..769c1d2a2f45 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -2757,14 +2757,17 @@ static void uvc_ctrl_cleanup_mappings(struct uvc_device *dev,
+>  	}
+>  }
+>  
+> -void uvc_ctrl_cleanup_device(struct uvc_device *dev)
+> +void uvc_ctrl_stop_device(struct uvc_device *dev)
+>  {
+> -	struct uvc_entity *entity;
+> -	unsigned int i;
+> -
+>  	/* Can be uninitialized if we are aborting on probe error. */
+>  	if (dev->async_ctrl.work.func)
+>  		cancel_work_sync(&dev->async_ctrl.work);
+> +}
 
-Hm, commit msg said cancelled and I understood that it was released and
-then got cancelled. But indeed maybe just remove it.
+There may be an opportunity for refactoring, as we have
+uvc_status_stop() that stops the work queue, but I think this is good
+enough for now. I'm wondering, though, if there could be a race
+condition here similar to the one that the recent changes to
+uvc_status_stop() have fixed ? As uvc_ctrl_stop_device() is called at
+release time I assume that URBs have been cancelled, so there should be
+no race, but a second pair of eyeballs to confirm this would be
+appreciated.
 
-Best regards,
-Krzysztof
+Other than that, the patch looks good to me, and fixes an issue
+independent from the rest of the series, so
 
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+I will wait for a reply regarding the race condition before queuing this
+up though.
+
+> +
+> +void uvc_ctrl_cleanup_device(struct uvc_device *dev)
+> +{
+> +	struct uvc_entity *entity;
+> +	unsigned int i;
+>  
+>  	/* Free controls and control mappings for all entities. */
+>  	list_for_each_entry(entity, &dev->entities, list) {
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 7aefa76a42b3..4be6dfeaa295 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -1893,6 +1893,7 @@ static void uvc_unregister_video(struct uvc_device *dev)
+>  	}
+>  
+>  	uvc_status_unregister(dev);
+> +	uvc_ctrl_stop_device(dev);
+>  
+>  	if (dev->vdev.dev)
+>  		v4l2_device_unregister(&dev->vdev);
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index 9a596c8d894a..50f171e7381b 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -760,6 +760,7 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
+>  int uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
+>  			 const struct uvc_control_mapping *mapping);
+>  int uvc_ctrl_init_device(struct uvc_device *dev);
+> +void uvc_ctrl_stop_device(struct uvc_device *dev);
+>  void uvc_ctrl_cleanup_device(struct uvc_device *dev);
+>  int uvc_ctrl_restore_values(struct uvc_device *dev);
+>  bool uvc_ctrl_status_event_async(struct urb *urb, struct uvc_video_chain *chain,
+
+-- 
+Regards,
+
+Laurent Pinchart
