@@ -2,340 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433486B2D44
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B826B2D4C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbjCIS7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 13:59:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
+        id S229981AbjCITDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 14:03:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjCIS7B (ORCPT
+        with ESMTP id S229874AbjCITDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 13:59:01 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41596700D;
-        Thu,  9 Mar 2023 10:58:51 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 318C95FD16;
-        Thu,  9 Mar 2023 21:58:49 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1678388329;
-        bh=iQKqJC+KWHFowhWmAMuZH51JLu03/9S7uIDEb1nbsBc=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=m3i/BVqqs/jufZuSBQCtN9/7Nn669yDB8KcPN5JbhkHchwBDAXDipSgq18H9VegIr
-         5Eit8jVWSIwqLE2PTE25cfFRQ7bRi+CcyQzUadWLYEddeCCddaVFyTjeYIgPJtlZ+a
-         //FiFhQAeMQR0xXKp4faH9n5mhdDDIkNvLo+ixwZTyXreT2bvWtprJfEom3AcFRTck
-         EoauM5DVCqQ3OP5sLxGyz4Dol5Ah5HuD79PUyef9Dan8XReon0XLZ2SAe1x5wf8oZw
-         OgH7XcBbrD7ubkB/k87nEUxaiCY5zCzsNUOhAo8WlKaePv/NeO/TDuw2UXQMeCRS4k
-         uHbePJPXKDqQA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  9 Mar 2023 21:58:48 +0300 (MSK)
-Date:   Thu, 9 Mar 2023 21:58:48 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Jerome Brunet <jbrunet@baylibre.com>
-CC:     <neil.armstrong@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>, <jian.hu@amlogic.com>,
-        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v9 4/5] clk: meson: a1: add Amlogic A1 Peripherals clock
- controller driver
-Message-ID: <20230309185848.t43jdm7aj2jkxlhx@CAB-WSD-L081021>
-References: <20230301183759.16163-1-ddrokosov@sberdevices.ru>
- <20230301183759.16163-5-ddrokosov@sberdevices.ru>
- <1jilfeaync.fsf@starbuckisacylon.baylibre.com>
- <20230306190539.kl6n347kev5pskz6@CAB-WSD-L081021>
- <1jedpy0yv9.fsf@starbuckisacylon.baylibre.com>
+        Thu, 9 Mar 2023 14:03:00 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C327783F9;
+        Thu,  9 Mar 2023 11:02:56 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id nv15so2103181qvb.7;
+        Thu, 09 Mar 2023 11:02:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678388576;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XLJenGm5ch14w3UeDxfYArjzsY1MQxcLGblkePHk6S0=;
+        b=Quqrn8ga7PRKzhxtmOeUSAz33cDzmtzf/yBjjlR8UZ5N8I5c2XX9KJ3qxzokKbibyu
+         iFgQ8Z07JBkiVMWOcOLRicnbT0PlLSCtFisJeXhhITNLCbbwbUXK/IAk0WGmZeoBFC0d
+         M8np1/e/+uv0+5YOi+OVSQwBOUia1CZT2X+Hyz5yhSNc6uCR0VrIytUjPfjHUSzgQ8w0
+         OcbOKJNCu3YCgnFdBPhYqF+nN9e6Pg2hne2FsDq+CQbLb82GnApXVdzOX3GS/qnn71KL
+         ZIUMQMoPk7UqQKHh8IFgJcdPnk4yBwgHVavdCFU2k8iaw3oPZttM+APtQZLtfeitjzCp
+         o2tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678388576;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XLJenGm5ch14w3UeDxfYArjzsY1MQxcLGblkePHk6S0=;
+        b=ipzres8e5kGTujjQUVmCLCSzk+zQwdCP4WEMAwugBIUYamfA/er7AQc/yr8mBzR/d4
+         EdMvSrRkDyPTgC6HyUfjcZmaNjerQWp9CAQS4F97WS01eJOEiLBWzotIXVmqQT+p9sls
+         c6Qw59Dly4qaKCFWMEw8oG/IZeY54glfrSeu0ZRMIV/me4k92fsUtyF5E9bsyMW7Dih/
+         5Jj8ypAS4J3XUrSuVjLgsSUS8UnlJIqKxhiCIDuCebGk6KE2OSUGd9SkEccCnwum+DU/
+         vgIZ9f7dzxjxhQvSaA2WolmNJt9wzu+m9Ogf2mhVsYgW828Pn8CBTJPkH3pnMDHXImIo
+         wPdw==
+X-Gm-Message-State: AO0yUKWl1aTKmkc8te60wg+2srgPgUPK+4N+uxYiIj7cRNAKjEngNCZ/
+        RuZrmHUD2aaCGzQsHRYRfU0=
+X-Google-Smtp-Source: AK7set+1Vkjjy9orTfluWus7fOsPaT01h+Ouem6QnwN/B4E/NHICAZpDWH8Z6Y/2WfT8QZpZLC1UnA==
+X-Received: by 2002:a05:6214:ac5:b0:53c:818f:b093 with SMTP id g5-20020a0562140ac500b0053c818fb093mr47994778qvi.19.1678388575835;
+        Thu, 09 Mar 2023 11:02:55 -0800 (PST)
+Received: from stbirv-lnx-1.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id d199-20020ae9efd0000000b007423e52f9d2sm14033627qkg.71.2023.03.09.11.02.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 11:02:55 -0800 (PST)
+From:   Doug Berger <opendmb@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Doug Berger <opendmb@gmail.com>
+Subject: [PATCH] serial: 8250_bcm7271: Fix arbitration handling
+Date:   Thu,  9 Mar 2023 11:02:24 -0800
+Message-Id: <20230309190224.687380-1-opendmb@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1jedpy0yv9.fsf@starbuckisacylon.baylibre.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/09 14:25:00 #20928723
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 03:22:08PM +0100, Jerome Brunet wrote:
-> 
-> On Mon 06 Mar 2023 at 22:05, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> 
-> > Hello Jerome,
-> >
-> > Thanks a lot for such detailed review. Please find my comments and
-> > thoughts below.
-> >
-> > On Mon, Mar 06, 2023 at 12:38:22PM +0100, Jerome Brunet wrote:
-> >> 
-> >> On Wed 01 Mar 2023 at 21:37, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> >> 
-> >> > Introduce Peripherals clock controller for Amlogic A1 SoC family.
-> >> >
-> >> > Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> >> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> >
-> > [...]
-> >
-> >> > +static struct clk_regmap dspa_a_sel = {
-> >> > +	.data = &(struct clk_regmap_mux_data){
-> >> > +		.offset = DSPA_CLK_CTRL0,
-> >> > +		.mask = 0x7,
-> >> > +		.shift = 10,
-> >> > +		.table = mux_table_dsp_ab,
-> >> > +	},
-> >> > +	.hw.init = &(struct clk_init_data){
-> >> > +		.name = "dspa_a_sel",
-> >> > +		.ops = &clk_regmap_mux_ops,
-> >> > +		.parent_data = dsp_ab_parent_data,
-> >> > +		.num_parents = ARRAY_SIZE(dsp_ab_parent_data),
-> >> > +		/* DSPA_A clk parent should be set statically from dt */
-> >> > +		.flags = CLK_SET_RATE_NO_REPARENT,
-> >> > +	},
-> >> > +};
-> >> > +
-> >> > +static struct clk_regmap dspa_a_div = {
-> >> > +	.data = &(struct clk_regmap_div_data){
-> >> > +		.offset = DSPA_CLK_CTRL0,
-> >> > +		.shift = 0,
-> >> > +		.width = 10,
-> >> > +	},
-> >> > +	.hw.init = &(struct clk_init_data){
-> >> > +		.name = "dspa_a_div",
-> >> > +		.ops = &clk_regmap_divider_ops,
-> >> > +		.parent_hws = (const struct clk_hw *[]) {
-> >> > +			&dspa_a_sel.hw
-> >> > +		},
-> >> > +		.num_parents = 1,
-> >> > +		.flags = CLK_SET_RATE_PARENT,
-> >> > +	},
-> >> > +};
-> >> > +
-> >> > +static struct clk_regmap dspa_a = {
-> >> > +	.data = &(struct clk_regmap_gate_data){
-> >> > +		.offset = DSPA_CLK_CTRL0,
-> >> > +		.bit_idx = 13,
-> >> > +	},
-> >> > +	.hw.init = &(struct clk_init_data) {
-> >> > +		.name = "dspa_a",
-> >> > +		.ops = &clk_regmap_gate_ops,
-> >> > +		.parent_hws = (const struct clk_hw *[]) {
-> >> > +			&dspa_a_div.hw
-> >> > +		},
-> >> > +		.num_parents = 1,
-> >> > +		/*
-> >> > +		 * DSPA_A accelerator clk, cannot be disabled by CCF if it
-> >> > +		 * has been set by bootloader
-> >> 
-> >> Then IGNORE_UNUSED is wrong. use RO ops with you must retain the
-> >> bootloader config.
-> >
-> > I thought UNUSED logic will disable 'unused' clock during
-> > initialization. Or do you mean it's not relevant for ro ops clock,
-> > because disable() callback is not defined?
-> 
-> It does. It does no prevent a disable if the clock is enabled then
-> disabled. So what is here works as long as no driver touches this
-> clock. In such case you are better off with RO ops.
-> 
+The arbitration of the UART DMA is mishandled for a few
+exceptional cases when probing and releasing the driver.
 
-Okay. But for dspX clocks I'm going to listen to your suggestion and
-leave this out with default parameters.
+It is possible that the DMA register spaces are not defined in
+device tree for an instance of the driver, so attempts to access
+the registers in brcmuart_arbitration() would use NULL pointers.
 
-> >
-> >> 
-> >> Note that it is usually a bad idea to depend on the bootloader config.
-> >> Things tends to go bad when other bootloader version join the fun, like
-> >> upstream u-boot
-> >
-> > To be honest, I don't have the ability to test such behavior on our side,
-> > because in my hands I have SoC SKUs w/o DSP only.
-> 
-> Then maybe you should leave these clocks out for now.
-> 
+It is also possible for the probe function to return an error
+while still holding the UART DMA. This would prevent the UART
+DMA from being claimed by an instance that could use it.
 
-Sure, agree.
+These errors are addressed by only releasing the UART DMA if it
+is held by this instance (i.e. priv->dma_enabled == 1) and
+directing early error paths in probe to this common release_dma
+handling.
 
-> > But theoretically DSP FW can be started already from the bootloader, and
-> > then we shouldn't touch this clock.
-> 
-> In theory the bootloader can do it all, why bother booting linux ... :P
-> 
+Fixes: 41a469482de2 ("serial: 8250: Add new 8250-core based Broadcom STB driver")
+Signed-off-by: Doug Berger <opendmb@gmail.com>
+---
+ drivers/tty/serial/8250/8250_bcm7271.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-Exactly! It depends on your goals and motivation :-)
-
-> > May be CCF has device tree tricks to solve such situations, don't know
-> > actually. On the other hand, appropriate driver logic would be a nice
-> > exit here.
-> 
-> If you have a DSP, it is likely to have something to communicate with
-> the OS at some point, or at least monitor. Such driver would need to
-> handle to clocks properly.
-> 
-> Since you can test this, I strongly suggest to leave this out for now.
-> 
-
-Okay, it's the best decision in such situation.
-
-> >
-> > [...]
-> >
-> >> > +static struct clk_regmap dspa_en_nic = {
-> >> > +	.data = &(struct clk_regmap_gate_data){
-> >> > +		.offset = DSPA_CLK_EN,
-> >> > +		.bit_idx = 0,
-> >> > +	},
-> >> > +	.hw.init = &(struct clk_init_data) {
-> >> > +		.name = "dspa_en_nic",
-> >> > +		.ops = &clk_regmap_gate_ops,
-> >> > +		.parent_hws = (const struct clk_hw *[]) {
-> >> > +			&dspa_sel.hw
-> >> > +		},
-> >> > +		.num_parents = 1,
-> >> > +		/*
-> >> > +		 * DSPA_EN_NIC accelerator clk, cannot be disabled by CCF if it
-> >> > +		 * has been set by bootloader
-> >> > +		 */
-> >> > +		.flags = CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED,
-> >> 
-> >> All this just highlight the lack of proper drivers to handle the clock,
-> >> like remote proc one.
-> >> 
-> >
-> > Okay, let's imagine we have such a driver. If DSP is already running,
-> > we can skip the clock setup on this driver side. Hmmm. It looks like
-> > a proper solution...
-> >
-> > I would prefer to tag it with TODO and mark DSP clocks with ro_ops till
-> > we don't have such a driver.
-> >
-> > [...]
-> >
-> >> > +
-> >> > +static struct clk_regmap fclk_div2_divn = {
-> >> > +	.data = &(struct clk_regmap_gate_data){
-> >> > +		.offset = CLK12_24_CTRL,
-> >> > +		.bit_idx = 12,
-> >> > +	},
-> >> > +	.hw.init = &(struct clk_init_data){
-> >> > +		.name = "fclk_div2_divn",
-> >> > +		.ops = &clk_regmap_gate_ops,
-> >> > +		.parent_hws = (const struct clk_hw *[]) {
-> >> > +			&fclk_div2_divn_pre.hw
-> >> > +		},
-> >> > +		.num_parents = 1,
-> >> > +		.flags = CLK_SET_RATE_PARENT,
-> >> > +	},
-> >> > +};
-> >> > +
-> >> > +/*
-> >> > + * the index 2 is sys_pll_div16, it will be completed in the CPU clock ctrl,
-> >> 
-> >> I don't get this, what do you mean ? 
-> >> 
-> >
-> > I mean, it will be implemented in the CPU clock controller driver in the
-> > next patch series. Agree, I have to make a rephrase.
-> >
-> >> > + * the index 4 is the clock measurement source, it relies on
-> >> > + * the clock measurement register configuration.
-> >> 
-> >> Obviously ... What mean here is that clock measurement is a debug
-> >> feature and should be considered
-> >> 
-> 
-> Arff sorry, "should *NOT* be considered"
-> 
-
-Yep, in the current patch (and at all I suppose) it should not be
-considered. But IMHO I need to comment out why index 4 is missing.
-
-> >
-> > Should I mark it with TODO tag? I prefer to implement 'must have' logic
-> > first. Clock measurement are optional from my point of view.
-> >
-> > [...]
-> >
-> >> > +static struct clk_regmap pwm_a = {
-> >> > +	.data = &(struct clk_regmap_gate_data){
-> >> > +		.offset = PWM_CLK_AB_CTRL,
-> >> > +		.bit_idx = 8,
-> >> > +	},
-> >> > +	.hw.init = &(struct clk_init_data) {
-> >> > +		.name = "pwm_a",
-> >> > +		.ops = &clk_regmap_gate_ops,
-> >> > +		.parent_hws = (const struct clk_hw *[]) {
-> >> > +			&pwm_a_div.hw
-> >> > +		},
-> >> > +		.num_parents = 1,
-> >> > +		/*
-> >> > +		 * The CPU working voltage is controlled by pwm_a
-> >> > +		 * in BL2 firmware. The clock is required by the platform
-> >> > +		 * to operate correctly. Add the CLK_IS_CRITICAL flag to
-> >> > +		 * avoid changing at runtime.
-> >> > +		 * About critical, refer to sys
-> >> > +		 */
-> >> 
-> >> PWM_A required by the BL2 ... really ? Looks really fishy to me.
-> >> 
-> >> Is it possible it is used by regulator instead ?
-> >> 
-> >
-> > Honestly, this comment's information was grabbed from Amlogic custom
-> > driver. It has such words:
-> >
-> > /*
-> >  * add CLK_IGNORE_UNUSED flag for pwm controller GATE
-> >  * clk core will disable unused clock, it may disable
-> >  * vddcore voltage which contrlled by one pwm in bl21.
-> >  * add the flag to avoid changing cpu voltage.
-> >  */
-> >
-> > We don't have bl21 source code in the hands, so I can't check
-> > unfortunately. But I have no reasons to don't trust Amlogic custom
-> > clk driver decisions about low level bootloaders roles.
-> 
-> So it is a regulator. Not the BL2(1)
-> 
-> There are several reasons why this is wrong:
-> * CLK_IGNORE_UNUSED would be wrong for reasons I already mentionned
-> * CLK_SET_RATE_PARENT | CLK_IS_CRITICAL is not great either because
->   nothing prevents the rate to be changed to an absurdly low value, which
->   would not go well with a DVFS PWM.
-> * This bakes power contraints specific to your board in the SoC clock
->   controller. Another board, another BL21 could have different
->   contraints. We can't lock all PWM clock sources. This is not
->   appropriate.
-> 
-> You need to properly describe your regualtors in DT.
-> 
-
-I've got deeper and checked other board configurations. Now I see what
-you mean. Voltage regulations should happen using vddcpu driver and pwm
-clk is used to control core voltage. Thank you for pointing me to this
-architecture problem.
-In the next patch I will change pwm_a flags to the default value with
-CLK_SET_RATE_PARENT.
-
-[...]
-
+diff --git a/drivers/tty/serial/8250/8250_bcm7271.c b/drivers/tty/serial/8250/8250_bcm7271.c
+index ed5a94747692..f801b1f5b46c 100644
+--- a/drivers/tty/serial/8250/8250_bcm7271.c
++++ b/drivers/tty/serial/8250/8250_bcm7271.c
+@@ -1014,14 +1014,16 @@ static int brcmuart_probe(struct platform_device *pdev)
+ 	/* See if a Baud clock has been specified */
+ 	baud_mux_clk = of_clk_get_by_name(np, "sw_baud");
+ 	if (IS_ERR(baud_mux_clk)) {
+-		if (PTR_ERR(baud_mux_clk) == -EPROBE_DEFER)
+-			return -EPROBE_DEFER;
++		if (PTR_ERR(baud_mux_clk) == -EPROBE_DEFER) {
++			ret = -EPROBE_DEFER;
++			goto release_dma;
++		}
+ 		dev_dbg(dev, "BAUD MUX clock not specified\n");
+ 	} else {
+ 		dev_dbg(dev, "BAUD MUX clock found\n");
+ 		ret = clk_prepare_enable(baud_mux_clk);
+ 		if (ret)
+-			return ret;
++			goto release_dma;
+ 		priv->baud_mux_clk = baud_mux_clk;
+ 		init_real_clk_rates(dev, priv);
+ 		clk_rate = priv->default_mux_rate;
+@@ -1029,7 +1031,8 @@ static int brcmuart_probe(struct platform_device *pdev)
+ 
+ 	if (clk_rate == 0) {
+ 		dev_err(dev, "clock-frequency or clk not defined\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto release_dma;
+ 	}
+ 
+ 	dev_dbg(dev, "DMA is %senabled\n", priv->dma_enabled ? "" : "not ");
+@@ -1116,7 +1119,9 @@ static int brcmuart_probe(struct platform_device *pdev)
+ 	serial8250_unregister_port(priv->line);
+ err:
+ 	brcmuart_free_bufs(dev, priv);
+-	brcmuart_arbitration(priv, 0);
++release_dma:
++	if (priv->dma_enabled)
++		brcmuart_arbitration(priv, 0);
+ 	return ret;
+ }
+ 
+@@ -1128,7 +1133,8 @@ static int brcmuart_remove(struct platform_device *pdev)
+ 	hrtimer_cancel(&priv->hrt);
+ 	serial8250_unregister_port(priv->line);
+ 	brcmuart_free_bufs(&pdev->dev, priv);
+-	brcmuart_arbitration(priv, 0);
++	if (priv->dma_enabled)
++		brcmuart_arbitration(priv, 0);
+ 	return 0;
+ }
+ 
 -- 
-Thank you,
-Dmitry
+2.34.1
+
