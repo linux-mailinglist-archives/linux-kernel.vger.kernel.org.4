@@ -2,132 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E77A6B1C2A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4A06B1C2C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:19:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjCIHRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 02:17:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
+        id S229799AbjCIHTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 02:19:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjCIHRH (ORCPT
+        with ESMTP id S229549AbjCIHTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 02:17:07 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B679EDCF6A;
-        Wed,  8 Mar 2023 23:17:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678346224; x=1709882224;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qyB27+A/6jryhJBE3UAm43De2h+NbyfyCe38eaeTBNA=;
-  b=Q0la992SQAJyAoRRfMkmfh8RLkx0cya6b5QC6pGDnYmZ/XZLotMcZggH
-   z43VoKPNQee9CISsW0V7Tjv+0fD6cXwqH1a3cqwv3mj02PfPbm28wWXyK
-   rR7Q1WJ1jwRTqnf/JsVw61aqBnB6m6FzgY5Xde3CFfCPsClZz4AOPMjjh
-   8aqyXxAbVrLB27SORQRKG0bAq12rgWQArlyUnFSaBzNKKcYGOTxFQs/SO
-   R5nx+nV/AWW6dzc64xBRwd+76Uw6WfBUXSxbDj77GY0q4FM78mWGZPpGU
-   TOu6IA+LL7C4HqVh3nUzYfB7vj7eHp42cXdIcjyIwIBzSeJJmdSxtNVjc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="324694732"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="324694732"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 23:16:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="627251162"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="627251162"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2023 23:16:14 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1paAVZ-0002k1-1J;
-        Thu, 09 Mar 2023 07:16:13 +0000
-Date:   Thu, 9 Mar 2023 15:15:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anjali Kulkarni <anjali.k.kulkarni@oracle.com>, davem@davemloft.net
-Cc:     oe-kbuild-all@lists.linux.dev, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, zbr@ioremap.net,
-        brauner@kernel.org, johannes@sipsolutions.net,
-        ecree.xilinx@gmail.com, leon@kernel.org, keescook@chromium.org,
-        socketcan@hartkopp.net, petrm@nvidia.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        anjali.k.kulkarni@oracle.com
-Subject: Re: [PATCH 2/5] connector/cn_proc: Add filtering to fix some bugs
-Message-ID: <202303091536.tx7dCAzn-lkp@intel.com>
-References: <20230309031953.2350213-3-anjali.k.kulkarni@oracle.com>
+        Thu, 9 Mar 2023 02:19:05 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975FE5C9FB;
+        Wed,  8 Mar 2023 23:19:04 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id c10so867754pfv.13;
+        Wed, 08 Mar 2023 23:19:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678346339;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QfbJWUJGHH8nwSfPSekGj2SZwrexl9k35Jou//imJw0=;
+        b=SRZq3YHPj7/9HEc5G/hdmOiAH/cKObd8ba0wfRV07PEPjCoUEUxJUHeBohmZbHAvv7
+         r5ZigLdDFmjuKch3qWx86Y1QVVbigO95zw1uRzfUJ1AqGh0Sggu9a6HEkmLheAtE1/5N
+         bUXhmMGToE1NeGe6GJwh7I0QkD/c1BynyUFvBY7+NDmKVUwyinHY37ZztWmfPg9tGb5D
+         gDeBwBvBwv8mfMbe4aFtjdOR+V8cqdWKsGJJIyFYI80vz0/KM8PIAApY/sYAphhEbT4k
+         9Ei7DTpGftHhyfolQ/08Akg1Ocbec7C8nuxPZnWAt/0v9o13EGlMu8Pg6WnSWsk5tqr/
+         fIuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678346339;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QfbJWUJGHH8nwSfPSekGj2SZwrexl9k35Jou//imJw0=;
+        b=cy16nK8TjCHZENc/Fz6CsJgEmcMtwk0BFGlLRmpz6Jmwwzj+3BZe8Pelgi3wGWr/Uo
+         Hd1lx2RK2rthndYsCuLoYeSA7pVem3k1YjJtqBWm1AZVS8GYXqKIgRsI1AuM8WfexUkj
+         ZxwN6CvGXwhJfWSbdAxCZcA43GhoU7rloT9SkqPGkzgbLd+AWoqmYyRrOichM/UkvVHS
+         aIIj2rFItDk5G9gtMwn4rShxoCXPlx4kLMJozEYvXPQl18ZcDH4p7FF3A1SY9b9jD1VH
+         niE9uXdgJd5JXj86tbfRWEqXe5hqyDpdzhmRyCgR2mSTLoSsOdVlnyx5oePmp5vG+r+p
+         3NtA==
+X-Gm-Message-State: AO0yUKW8krAjTONFj4NOzUU5DmcM/Dvf7vi+6mkeu6/YXmn09XP2OB6i
+        5HCAuv7VTg8f1M0wNleeeLJOCGyNW2CFBAvqn8o=
+X-Google-Smtp-Source: AK7set/YWz7gZWkSMgyWc4wK6u9AzoqdFmwidNxJTC2APdBlFoKugVHoojpe26sybxvLybjN3eFc6dIyeU9+EBx9Q8w=
+X-Received: by 2002:a62:824b:0:b0:61d:d277:e077 with SMTP id
+ w72-20020a62824b000000b0061dd277e077mr1678177pfd.0.1678346339043; Wed, 08 Mar
+ 2023 23:18:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309031953.2350213-3-anjali.k.kulkarni@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302093715.811758-1-zyytlz.wz@163.com> <d27127a1-2572-4ad4-b69c-8a6f53384009@roeck-us.net>
+ <CAJedcCxYQYmORfnqcdudFKwy9hhU=mZh_d9MM7x+37ies2S-MA@mail.gmail.com> <e03134f9-9433-ab6b-170a-8ce752fccdeb@roeck-us.net>
+In-Reply-To: <e03134f9-9433-ab6b-170a-8ce752fccdeb@roeck-us.net>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Thu, 9 Mar 2023 15:18:45 +0800
+Message-ID: <CAJedcCy_cXh1jH4HT0hzG1NnQR5Gz9fTodAT_2trRRd=BWp57w@mail.gmail.com>
+Subject: Re: [PATCH] media: mtk-jpeg: Fix use after free bug due to uncanceled work
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, mchehab@kernel.org,
+        bin.liu@mediatek.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, 1395428693sheep@gmail.com,
+        alex000young@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anjali,
+Guenter Roeck <linux@roeck-us.net> =E4=BA=8E2023=E5=B9=B43=E6=9C=889=E6=97=
+=A5=E5=91=A8=E5=9B=9B 13:30=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On 3/8/23 19:58, Zheng Hacker wrote:
+> > Hi,
+> >
+> > Thanks for your reply. I think you're right. I don't know if there is
+> > other method to stop new work from enqueing. Could you please give me
+> > some advice about the fix?
+> >
+>
+> Top-posting is discouraged.
+>
 
-Thank you for the patch! Perhaps something to improve:
+Sorry I forgot that. Thanks for the kind reminder.
 
-[auto build test WARNING on net-next/master]
-[also build test WARNING on net/master vfs-idmapping/for-next linus/master v6.3-rc1 next-20230309]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Anyway -
+> I don't know the code well enough to suggest a solution.
+> It all depends on the driver architecture. The maintainers might
+> have a better idea.
+>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anjali-Kulkarni/netlink-Reverse-the-patch-which-removed-filtering/20230309-112151
-patch link:    https://lore.kernel.org/r/20230309031953.2350213-3-anjali.k.kulkarni%40oracle.com
-patch subject: [PATCH 2/5] connector/cn_proc: Add filtering to fix some bugs
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230309/202303091536.tx7dCAzn-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b27e8d125480d07c95a71e8ef2f0b38d890138cd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Anjali-Kulkarni/netlink-Reverse-the-patch-which-removed-filtering/20230309-112151
-        git checkout b27e8d125480d07c95a71e8ef2f0b38d890138cd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/
+Yes, some related developers have reached out to me and discussed fixes wit=
+h me.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303091536.tx7dCAzn-lkp@intel.com/
+> A worse problem appears to be that the worker is also canceled
+> from mtk_jpeg_enc_irq() and mtk_jpeg_dec_irq(). Those are non-threaded
+> interrupt handlers which, as far as I know, must not sleep and thus
+> can not call cancel_delayed_work_sync(). I have no idea how to solve
+> that problem either.
+>
 
-All warnings (new ones prefixed by >>):
+I'd be glad to pass along your thoughts and recommendations to the
+relevant parties.
 
->> drivers/connector/cn_proc.c:51:5: warning: no previous prototype for 'cn_filter' [-Wmissing-prototypes]
-      51 | int cn_filter(struct sock *dsk, struct sk_buff *skb, void *data)
-         |     ^~~~~~~~~
-
-
-vim +/cn_filter +51 drivers/connector/cn_proc.c
-
-    50	
-  > 51	int cn_filter(struct sock *dsk, struct sk_buff *skb, void *data)
-    52	{
-    53		enum proc_cn_mcast_op mc_op;
-    54	
-    55		if (!dsk)
-    56			return 0;
-    57	
-    58		mc_op = ((struct proc_input *)(dsk->sk_user_data))->mcast_op;
-    59	
-    60		if (mc_op == PROC_CN_MCAST_IGNORE)
-    61			return 1;
-    62	
-    63		return 0;
-    64	}
-    65	EXPORT_SYMBOL_GPL(cn_filter);
-    66	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best regards,
+Zheng
