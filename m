@@ -2,170 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48C86B25A3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:40:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92AD86B25AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbjCINk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:40:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
+        id S231259AbjCINmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjCINky (ORCPT
+        with ESMTP id S230440AbjCINmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:40:54 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2107.outbound.protection.outlook.com [40.107.243.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E1FEBFAF;
-        Thu,  9 Mar 2023 05:40:43 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h2bHRrDeF9FD8XxJbGa+AJgC4/lRt54Cwf4oofJxnjIx3uy16NUcpGQCxAvkYFx9J5dj50GWcm0b0kHfw/nLVuPXdRse1rVtciq/i2v7WDojXpLdAY7uStqn1Pw3T+A0fYpBYccoIRPFsZZWmkUiF/9Vgl3ffydD5wRN5ecRCW2U03/WFTs7gQs9iMkeKYNWNIsOgiBZcktHw59pGCPZcGeeNfFKEJgm1VzlQcGfPEQO+IQAiKTigXXDzFZwfeS22jStBLRPehOWeM1XHI3QCYBJL+xcoKK8OZNJojytMSf+AKZeYEwHfs+O/TZysetx5TDKJQTJ2Tblc7BEPShDdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eAoiYdj5XO5HY8fbXMDjjrjbKvQFDLqr4nM16eeJphA=;
- b=NRGRE7K65nU00NMnJvdhGeJkdrUEs6PS/Hs3GXmjx/ZsTMZjr0K7pKe1iZZ+7S6rQ9OLFcm+RclyR3VhjVGuHpsGKfEDnfqtUzorXsgvhNbBhpzTi2ZAM74r8NS+12NnNQ/CW4eP3VvZGa3lssue0ID0pI22nGjaHPI5kRp55evU9BcGePmhX4e7+FmII7/haDdpVfGhukTkWmE1bSMSZlfqG0JGIRNMLAWcKI2zHhZUQCYbEH+Y+d0F2dLZ4t25hXJHWa25xpyrRGHmglH60ceITStAVkvxGDmEaNev11DFTpQgLXdNiWWbgKGNOebYCtuNE76XU1l9GjD9K1q2pA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eAoiYdj5XO5HY8fbXMDjjrjbKvQFDLqr4nM16eeJphA=;
- b=XOT3uNl6gKHB/cE5JtaRjt027I467yzPP/mrHm5uRt/t1bFf3BSvN9+J9sLlwvYkL0JyO/RpLPh9eoOHzzvZEPqhq4JGUBVrJd8mtcaLXH4JZUs7BN1W9575QHb0b33HVtjaKBRSAYXbS2vkHQcdMGh4kihD5UwC8p66rCSismI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CH2PR13MB4412.namprd13.prod.outlook.com (2603:10b6:610:61::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.16; Thu, 9 Mar
- 2023 13:40:41 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.019; Thu, 9 Mar 2023
- 13:40:41 +0000
-Date:   Thu, 9 Mar 2023 14:40:33 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Leesoo Ahn <lsahn@ooseel.net>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH net-next] net: stmmac: call stmmac_finalize_xdp_rx() on a
- condition
-Message-ID: <ZAnh0TGtDkVUl/1m@corigine.com>
-References: <20230308162619.329372-1-lsahn@ooseel.net>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230308162619.329372-1-lsahn@ooseel.net>
-X-ClientProxiedBy: AM8P190CA0006.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:219::11) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Thu, 9 Mar 2023 08:42:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69461ED6B4
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 05:41:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678369269;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OJclciNwKVwJw6IIzt5prbM3eWs+xgxvHsGVYny+uR0=;
+        b=axLY14E352wwMGB7hnwFj+YWeu5Oq6ZoBkwkHjYtyaciJgn2UPlCOnkabQpOSTYS0UZYiD
+        Gpj71aasmTwR7T28RS+Xg4PM1O6826I8hzARO7VH1rPd8wW6h4SHglTrYxmuBJ8rrLnIUN
+        dX0e8mTjhsNfuUn03bSj+wvuFG567jk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-391-8quo7QNoMjGx7a4H28IlRQ-1; Thu, 09 Mar 2023 08:41:06 -0500
+X-MC-Unique: 8quo7QNoMjGx7a4H28IlRQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C2841857A84;
+        Thu,  9 Mar 2023 13:41:05 +0000 (UTC)
+Received: from xps-13.local (unknown [10.39.194.103])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5DB77C15BA0;
+        Thu,  9 Mar 2023 13:41:04 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Thu, 09 Mar 2023 14:40:51 +0100
+Subject: [PATCH] gpiolib: acpi: use the fwnode in acpi_gpiochip_find()
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB4412:EE_
-X-MS-Office365-Filtering-Correlation-Id: 18f7af00-7026-4cb8-a1d8-08db20a3dfbe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Urh7pR8EZzKSmRKAgdH+FNzyVQ3zqPoMZ3pRqKgRLSoWlaRtgimq7mM8Whc4ko+7rezqOQaUYDqHdiGJC+eiXbngHwe3FB/Qh1O/GGGzDp9cKw7Y32VY3u48g8ED59iKp/nFuVTSwtyQxDzNm1tKJw+glu45jcLKPj8NICOr8MC7EUHdXuSMMA8VV0wN6AYWC2GXvHlj2t5SioFdgK5S50h+ziqn9H/7IltWyhEmLIsuYCHIWma0x2R2BCIaZCwk9jwusNdMRibklN9phyeedU2tRGJgtDK4fqPbu1YI4Vi2YgxNZcDSCjvPMZC4qQRfqDqZILeBa0SN+tJuvUuJ1Cw+gbsIDS65255L/0TOvQw7T5Mf33tPF0sZLVxy260SWjLcfu4T8lb+Tcqwbwjbk6/+duxBWZS5QRFUVJ+m40V5YK6g1UB0OTbthGhtKvgdeF+LsfHboUlses7EbT0M6dKqpbbL85xWIPXGk+7kho8604Fn1sfw7ApiQXUdENSEwnxlCECT7bdzXYYKx6gm55vxMd3roQg29Ms2aPHatSAmUZ/pQchsuwTAGf4ulfux4xOvlaFoTbt9dMyWr9oSMe71AOQcMQGRwyWwwWCc3Huzea+mDD17FrGAnIxr6giD
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(346002)(366004)(39840400004)(376002)(451199018)(2906002)(6486002)(38100700002)(186003)(966005)(6666004)(6512007)(6506007)(86362001)(66946007)(41300700001)(66556008)(66476007)(4326008)(8676002)(54906003)(478600001)(6916009)(316002)(2616005)(7416002)(44832011)(36756003)(8936002)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NmttajZFa1kwM05JQjFidlAzVzJTMUU5MlltdU15QmN5eENiQWdLdnlmYlAz?=
- =?utf-8?B?dHlDWklnOGxEak4vZnl3ZnFZeHV5ZlBCNU9aYnlISWFrT3BrUmJSNmFHZEVK?=
- =?utf-8?B?S0JSejlEZHR1TkxCZTRzUWhzTXc3d2dsSW5RdlFDa2ZEaXU4eWRuSHg0dm1y?=
- =?utf-8?B?SWFXanEvZEpGeEhPdFhuZHVCZXlWWWRZb1VLaVhpd1pYZThlQlZxTVVVZTVS?=
- =?utf-8?B?aC83VlFlbnZIcjg0Q0tLa0lTb2x1QlF5bFJ4N1BkNkMvQnhIZ3AxUFlVc0o5?=
- =?utf-8?B?SGw0SExZdG9Hc1JnWklDdWhocnVsSnllcUdsME9Zbk5uaHJSSksyMEdMN3ZF?=
- =?utf-8?B?d3E0MDRGaUFNWStYOUJ3RHBISzBocExHWmhvS1VGMjgxc3IxREwwMWc1b2Jn?=
- =?utf-8?B?Y1FSWTB3aG1SZ2JVdENiT1FXZmE1ekZ3RWRVejZFU1dGUy9jbm55Syt2bkl5?=
- =?utf-8?B?UDNWYWxidjdJVFBxZXo2ZGc5NHlXUVJDZEFqSlM1OXhJUkFjSk1JTXdsUkMy?=
- =?utf-8?B?Nk1XQ05pdi9NZ1BlYzZ6QTdZQ3ZoL2xEUTB6ejdCbVpRTGlrOGw2emZyQStT?=
- =?utf-8?B?dVpJSmJlbitjNnFoWTQ2THE1UldJcG5Oejd6OTU3M0FacS9SaGZ1WXdHY25k?=
- =?utf-8?B?enVEVW5DZVpKajJtVHhvVFFYbzFOK0lyd2FndXVwdTIwNW5wSHlGdUEySjRR?=
- =?utf-8?B?T0ZGMytVQ3RSOCtFNWFIbTA3RU9VcGhsa3FqUHZSeThwakEzY1RLWHFIZEhD?=
- =?utf-8?B?d3VtWHZ6WU1LNFRZNVB0d29lK2xhVmJwUUV1VHVLemxQNWNKWWJTdm81RkdE?=
- =?utf-8?B?TENDVDhxa3RYaEZPMVVwekhDTVNoYXNnbWRQaXVDcURhRk1KRFQ4eHZkbXJn?=
- =?utf-8?B?eGg1SDJRZUFsN1p4a1Fnci9NdUZEQUthVkQ4dERHam9vYnd3M0hDNmxWYk9h?=
- =?utf-8?B?OWpXUU0wazZDSSttRm1ubWY5YnoxN05ReUt3dGwrM090cEp4RUpLdDV1bExD?=
- =?utf-8?B?MjRycWMwMVRjRkF3dWJBUHVlVE41VGVTVU5UZWJvSlY1T2RVUkVBRURLdGZU?=
- =?utf-8?B?aitGQVZ2cnhvaU55MkQyS0xudlBHWDJoN2xMUVdvR3dSaFZxVE1pYTVPRlEr?=
- =?utf-8?B?ZTh6VHozTExDUlJSL0lKNGh2K3BOOHV5TERUTUJkY25sbGh3T3pWNk1lL0FH?=
- =?utf-8?B?OFpha3M4SmhJd011YWJDdFoxVEhYK2lBSGU4ajBXVm84a2tqeWRuNEl6cFYv?=
- =?utf-8?B?ekNwZ0FsQkc4V0orSmxXSnluQ25OMXFBNTk1TWRtSHUyTVBwSytkNENqRmFm?=
- =?utf-8?B?ZCthSzFCU3pJOWNLcUFOZTlCYkRrNWQ2QTYxRW9nT2pBNXBLUTZ3WHdwNFRU?=
- =?utf-8?B?YnM0a2RNYmJtUkRZQTJaUmlwNmV0M2tTZWNnWmhhamZWeXlqd0RpZjJndFhS?=
- =?utf-8?B?RlJNcHcyQ05yRkMvVXo2aW8yR3pObmJ1eTBjZENZMmR5UjZQdFVIbUZFQTJr?=
- =?utf-8?B?YlpqZktpL2xvdFc4ZUlvd1ZOZE9KTHVIRTNqUW85UmJqdHVkRWNXTDNQSEtN?=
- =?utf-8?B?SndMV1RMYlB1MVRCTnRlNDhONVU0elRFaVR2V3p0MTZvNDUxVFozeVArRjVx?=
- =?utf-8?B?dzlvc1Z3SU9XSXEvRi9TckhtQXZQcGZKdGpiN0pKa2JIR3dmMjh6VkRQVnFz?=
- =?utf-8?B?emZFNDVUeHIvZnZRK2tNN1VaMHQwRE1COXRPU1owaTZqQ2sraTZsVmRKamFu?=
- =?utf-8?B?TGVCU0dhUkdDOXdmbDRjREN0ZWd4cWVFb3dydFI4M3A5T3JSblJ0bzZFWi8x?=
- =?utf-8?B?cVNhNDM2cC90ODZUa21rYnQ1MTltZ1o2TzJXTUoybmpWWUVQVjg3WkF5aDlm?=
- =?utf-8?B?cUoya29FVlZYUlBsOVFDMnRmZEVwZWxoTjZxY3lha29sWW0rQW1uOWJzcUFr?=
- =?utf-8?B?eEduMTJDMHczVGw3VjMycEdVOTZGUHh5Vk50dDVuTXR0MzJ4eDNOMWM5VEF2?=
- =?utf-8?B?U0dwQ0lOQldpVVAzTWczZmYvOGo5RFZVLzBaVWM5d3Z3ZkJoZnNBT3M3SUxU?=
- =?utf-8?B?SUVIdFdEWGN4QlB2NW9IdjJ0L2lCQnpXait2S09EVXFyYTlaK2lZa2Y4dEN3?=
- =?utf-8?B?K0k4MzlkcThOT2plckZpamJ2Rk92aldwYjFnNldHdnJPVXRoK3hzYmRPM1NM?=
- =?utf-8?B?dmpPQUcyWFRDa0ZwTDI4Rmx6Z1pXa2k0bWRrbEFZSUU1K1JrYlAxZDcrTjNT?=
- =?utf-8?B?WnN2eHhvMDBOSW5udTVYM2Z3czFnPT0=?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 18f7af00-7026-4cb8-a1d8-08db20a3dfbe
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 13:40:41.0346
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WQ44CydNN2c/fEzcPKfamF42PPCc68wSYwUVa5WnLEpyZZ058Onmeb1E1CEeWUZF+d4v8hZSKF3Kz3avh1bJGxPx/wWlgHTR6Rr+cAohEhg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB4412
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230309-fix-acpi-gpio-v1-1-b392d225efe8@redhat.com>
+X-B4-Tracking: v=1; b=H4sIAOPhCWQC/x3NQQqDMBCF4avIrB1IE6HUqxQXk3TUWRjDjEghe
+ PfGLn8eH6+CsQobjF0F5VNM9tzi0XeQVsoLo3xag3c+uOBeOMsXKRXBpciOFD3NIQwDPyM0E8k
+ Yo1JO6602soP1Hopyk/+j93RdP0HQIKx4AAAA
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Daniel Kaehn <kaehndan@gmail.com>, linux-gpio@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678369264; l=2531;
+ i=benjamin.tissoires@redhat.com; s=20230215; h=from:subject:message-id;
+ bh=XR4WGpf39AuZ6vh9qE6GCktK9QBOCoYIsi5+VzFHgXA=;
+ b=JRt/hGs0iewIH7p/jE1XmlWVicVopazOpWn0zmGWmHFgOlpdGeudrtsopI/xAXi0MBVDKA5vj
+ MNYxPdZ5776C1wKGq3pddnc6qY1/S+PAa36wOKrywqL3BolLEAFwlvp
+X-Developer-Key: i=benjamin.tissoires@redhat.com; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 01:26:18AM +0900, Leesoo Ahn wrote:
-> The current codebase calls the function no matter net device has XDP
-> programs or not. So the finalize function is being called everytime when RX
-> bottom-half in progress. It needs a few machine instructions for nothing
-> in the case that XDP programs are not attached at all.
-> 
-> Lets it call the function on a condition that if xdp_status variable has
-> not zero value. That means XDP programs are attached to the net device
-> and it should be finalized based on the variable.
-> 
-> The following instructions show that it's better than calling the function
-> unconditionally.
-> 
->   0.31 │6b8:   ldr     w0, [sp, #196]
->        │    ┌──cbz     w0, 6cc
->        │    │  mov     x1, x0
->        │    │  mov     x0, x27
->        │    │→ bl     stmmac_finalize_xdp_rx
->        │6cc:└─→ldr    x1, [sp, #176]
-> 
-> with 'if (xdp_status)' statement, jump to '6cc' label if xdp_status has
-> zero value.
-> 
-> Signed-off-by: Leesoo Ahn <lsahn@ooseel.net>
+While trying to set up an SSDT override for a USB-2-I2C chip [0],
+I realized that the function acpi_gpiochip_find() was using the parent
+of the gpio_chip to do the ACPI matching.
 
-Hi Leesoo,
+This works fine on my icelake laptop because AFAICT, the DSDT presents
+the PCI device INT3455 as the "Device (GPI0)", but is in fact handled
+by the pinctrl driver in Linux.
+The pinctrl driver then creates a gpio_chip device. This means that the
+gc->parent device in that case is the GPI0 device from ACPI and everything
+works.
 
-I am curious to know if you considered going a step further and using
-a static key.
+However, in the hid-cp2112 case, the parent is the USB device, and the
+gpio_chip is directly under that USB device. Which means that in this case
+gc->parent points at the USB device, and so we can not do an ACPI match
+towards the GPIO device.
 
-Link: https://www.kernel.org/doc/html/latest/staging/static-keys.html
+I think it is safe to resolve the ACPI matching through the fwnode
+because when we call gpiochip_add_data(), the first thing it does is
+setting a proper gc->fwnode: if it is not there, it borrows the fwnode
+of the parent.
+
+So in my icelake case, gc->fwnode is the one from the parent, meaning
+that the ACPI handle we will get is the one from the GPI0 in the DSDT
+(the pincrtl one). And in the hid-cp2112 case, we get the actual
+fwnode from the gpiochip we created in the HID device, making it working.
+
+Link: https://lore.kernel.org/linux-input/20230227140758.1575-1-kaehndan@gmail.com/T/#m592f18081ef3b95b618694a612ff864420c5aaf3 [0]
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+---
+Hi,
+
+As mentioned on the commit, I believe there is a bug on
+the gpiolib-acpi matching. It relies on the parent of the gpiochip
+when it should IMO trust the fwnode that was given to it.
+
+Tested on both the hid-cp2112 I am refering in the commit
+description and my XPS on Intel Icelake.
+
+Cheers,
+Benjamin
+---
+ drivers/gpio/gpiolib-acpi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+index d8a421ce26a8..5aebc266426b 100644
+--- a/drivers/gpio/gpiolib-acpi.c
++++ b/drivers/gpio/gpiolib-acpi.c
+@@ -126,7 +126,7 @@ static bool acpi_gpio_deferred_req_irqs_done;
+ 
+ static int acpi_gpiochip_find(struct gpio_chip *gc, void *data)
+ {
+-	return gc->parent && device_match_acpi_handle(gc->parent, data);
++	return ACPI_HANDLE_FWNODE(gc->fwnode) == data;
+ }
+ 
+ /**
+
+---
+base-commit: 6c71297eaf713ece684a367ce9aff06069d715b9
+change-id: 20230309-fix-acpi-gpio-ab2af3344e7b
+
+Best regards,
+-- 
+Benjamin Tissoires <benjamin.tissoires@redhat.com>
+
