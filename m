@@ -2,133 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B596B25C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 669566B25D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:49:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjCINsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33964 "EHLO
+        id S231309AbjCINtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbjCINsK (ORCPT
+        with ESMTP id S231216AbjCINsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:48:10 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24403F77B;
-        Thu,  9 Mar 2023 05:48:03 -0800 (PST)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id E0C5985D80;
-        Thu,  9 Mar 2023 14:48:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1678369681;
-        bh=1boxd4hO5c3HbEK0rNTKI0bA3sJhy3PS11MqmylPXD8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ChBYno7LjbS+oWrxHHOZbpSSOQIBSjuQxkKUkX5Ud0zpJr3oepzIT974ajVxQeUs2
-         Bjg5zDlts+HGFqySSktK3wx1saOYd/9pyCgM9ajX1xxW7cMC2tmLpgfeCEch50O/Bb
-         I+GrhZypdOPz6bK/3H4j4jjpGGgRIzyE8WuFeXwgv9itRLTeiD43QZz1vr0OXyN9Jf
-         q/VjjPA1sm/CtMIjMCmUN3yUCJsHJZTu5/8+FUHUR7gXLGqGNFwAb//Q8YAtqNOjPr
-         HOYni4tK6ln+oRLClfPV6TSVnYmXr23UVDxqN/Nct1K5UBpR/bA9iuS1aMia8N35pO
-         B2bkFl+l++bVg==
-Date:   Thu, 9 Mar 2023 14:47:52 +0100
-From:   Lukasz Majewski <lukma@denx.de>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
+        Thu, 9 Mar 2023 08:48:20 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CC06A4A;
+        Thu,  9 Mar 2023 05:48:18 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id i28so2406368lfv.0;
+        Thu, 09 Mar 2023 05:48:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678369697;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a6OGN98Yt7Z0hrSJIKuZZabeELhtpRYvOhGbBz2/84I=;
+        b=qltBbjjEexCUaZrP2Ecdcp2/zqNfoacyKxqBIp/lwGeFQbjksN+W+9q5VSrSdrP8BJ
+         aN8Z1Z+L8BQhwEQ/WpAQSGQ9W8WFvu7vKoepWZbJ7TtS6rZPOQMxj94mwv68IFIZ2dkY
+         Ib2O1w7PE6OXAsAKpBODGjpIjMYg/f4iKs5GM19B8cpVtkXQNvzD/lwd+uq0UD5Bqbmg
+         jZjO61kcnY39k/8LDNOAWSUMOetJ9YxJ+9s8vxEZyjC6hDupDn+2pIVhG80DtIyxK0mI
+         2jSHNEuvs/TZUlGvShI6yw/WYR5t/49H3+Rwjx/260KNyQjBrfru8JB+C3Vkt7W0NJaB
+         c8ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678369697;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a6OGN98Yt7Z0hrSJIKuZZabeELhtpRYvOhGbBz2/84I=;
+        b=Cx5AqwIMEc7S2Can24BLsEwt975sLCJrydZ2/1U0TkIA1oS4shypTwkXlH8//nySdL
+         aEQb5T/r3ViYR2eYH+Q5kOvVscevcxzGWUmAHLQTI/QgogMumKM2jw43mLyRJEeyOfGL
+         cewgwfMvWVT6mgWAwK8+fT4ITYyZHsHDZSGxx6nMgi9nAJTMjyyLAjLmHfS4L00DiGJ7
+         hSA+ek+uxXl7M8B1MYx0ys2n108r6FDkttT2RZE6vk2M/ZROfTGrtnnv2IKrZOsoXqg1
+         oSvl/d9qgT41M2Pa8DXB/aMBUivAAxQMYLntlx0M00+qWFcwoPz1uX2Z3BZvxhq2sL/o
+         oa2A==
+X-Gm-Message-State: AO0yUKUFW4Sa6GSpsx2SBzuJQLiCo6zt6qP0hFO/X7DBSPh2nQTTZfy1
+        5AY0lMuHz2R1fMk63NaW17s=
+X-Google-Smtp-Source: AK7set/nFRQzhATlw91whzLbUm6oXWTG5eIPQdImbEtBB0cNEGnGwRDfQhoJbZL11dl2nJyGgMABLw==
+X-Received: by 2002:ac2:5965:0:b0:4a4:68b8:f4f1 with SMTP id h5-20020ac25965000000b004a468b8f4f1mr5953697lfp.55.1678369696844;
+        Thu, 09 Mar 2023 05:48:16 -0800 (PST)
+Received: from pc636 (host-95-193-108-241.mobileonline.telia.com. [95.193.108.241])
+        by smtp.gmail.com with ESMTPSA id i22-20020a056512007600b004cb08ec4c30sm2664545lfo.99.2023.03.09.05.48.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 05:48:16 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Thu, 9 Mar 2023 14:48:13 +0100
+To:     Bob Pearson <rpearsonhpe@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/7] dsa: marvell: Add helper function to validate the
- max_frame_size variable
-Message-ID: <20230309144752.5e62e037@wsk>
-In-Reply-To: <ZAnefI4vCZSIPkEK@shell.armlinux.org.uk>
-References: <20230309125421.3900962-1-lukma@denx.de>
-        <20230309125421.3900962-6-lukma@denx.de>
-        <ZAndSR4L1QvOFta6@shell.armlinux.org.uk>
-        <ZAnefI4vCZSIPkEK@shell.armlinux.org.uk>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH 07/13] RDMA/rxe: Rename kfree_rcu() to
+ kfree_rcu_mightsleep()
+Message-ID: <ZAnjnRC1wY3RIFhM@pc636>
+References: <20230201150815.409582-1-urezki@gmail.com>
+ <20230201150815.409582-8-urezki@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lv_wEMCvIFJXo6OqNLGw5zo";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201150815.409582-8-urezki@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/lv_wEMCvIFJXo6OqNLGw5zo
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Feb 01, 2023 at 04:08:13PM +0100, Uladzislau Rezki (Sony) wrote:
+> The kfree_rcu()'s single argument name is deprecated therefore
+> rename it to kfree_rcu_mightsleep() variant. The goal is explicitly
+> underline that it is for sleepable contexts.
+> 
+> Please check the RXE driver in a way that a single argument can
+> be used. Briefly looking at it and rcu_head should be embed to
+> free an obj over RCU-core. The context might be atomic.
+> 
+> Cc: Bob Pearson <rpearsonhpe@gmail.com>
+> Cc: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> ---
+>  drivers/infiniband/sw/rxe/rxe_pool.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+Could you please add you reviwed-by or Acked-by tags so we can bring
+our series with renaming for the next merge window?
 
-Hi Russell,
-
-> On Thu, Mar 09, 2023 at 01:21:13PM +0000, Russell King (Oracle) wrote:
-> > On Thu, Mar 09, 2023 at 01:54:19PM +0100, Lukasz Majewski wrote: =20
-> > > This commit shall be regarded as a transition one, as this
-> > > function helps to validate the correctness of max_frame_size
-> > > variable added to mv88e6xxx_info structure.
-> > >=20
-> > > It is necessary to avoid regressions as manual assessment of this
-> > > value turned out to be error prone.
-> > >=20
-> > > Signed-off-by: Lukasz Majewski <lukma@denx.de>
-> > > Suggested-by: Russell King (Oracle) <linux@armlinux.org.uk> =20
-> >=20
-> > Shouldn't this be patch 2 - immediately after populating the
-> > .max_frame_size members, and before adding any additional devices? =20
->=20
-> Moreover, shouldn't the patch order be:
->=20
-> 1, 5, 6 (fixing the entry that needs it), 7 (which then gets the
-> max frame size support in place), 4 (so that .set_max_frame_size for
-> 6250 is in place), 2, 3
->=20
-> ?
->=20
-> In other words, get the new infrastructure you need in place first
-> (that being the new .max_frame_size and the .set_max_frame_size
-> function) before then adding the new support.
->=20
-
-Ok, I will reorder those patches and submit v6.
-
-Do you have any other comments regarding this patch set?
-
-
-Best regards,
-
-Lukasz Majewski
+Thanks!
 
 --
+Uladzislau Rezki
 
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
 
---Sig_/lv_wEMCvIFJXo6OqNLGw5zo
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmQJ44gACgkQAR8vZIA0
-zr10yggAo1vG2xwQvNUMsJwxrgZuAvdCXxJe4pYukh5o564iNNp8GdUgC3JitCUZ
-B5HLPBH/d4zSqWT2S4cTHOcv1SlSQPLSK/2t6E43nqPOV9hh5HSPnxBR3qB6+Jo0
-ReB6EdCi4nlcz7gSrZ4DUwyRFzjhXSaf6GrNcvqOZI4gjczyBmuB/sm4yKfWiNXQ
-JwZ09sh8Ynv/mFs6PMVql1L/mRww0cbrysBvTal4jjOmMKpommCpOjPC6CDeYA0E
-3Q95qFkyS/4FO2uIzelJ9BCRLMaGDfu+VF2si+hgNFTvSdKb4i3C783PIru/l7cp
-Y3GRlVQoycU7ZSlelMDinvKxmJbgMw==
-=qWDo
------END PGP SIGNATURE-----
-
---Sig_/lv_wEMCvIFJXo6OqNLGw5zo--
