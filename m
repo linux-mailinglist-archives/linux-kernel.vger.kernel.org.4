@@ -2,68 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE17D6B2594
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0CE6B2598
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjCINiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:38:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43214 "EHLO
+        id S230187AbjCINjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:39:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjCINiF (ORCPT
+        with ESMTP id S229737AbjCINjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:38:05 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA98861AA1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 05:38:03 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id l1so1869637wry.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 05:38:03 -0800 (PST)
+        Thu, 9 Mar 2023 08:39:10 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411F0EBDA8;
+        Thu,  9 Mar 2023 05:39:09 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id h9so1866766ljq.2;
+        Thu, 09 Mar 2023 05:39:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678369082;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WFCsPlJvFiEG1gWgfxQ9irsbXI75PMhtoxZ+VCbHyYI=;
-        b=SYSP+bPaSJ5yHksjPwCY9ezd0m7YqG2D8eZUmR2ZUXvumBzbgV1tpLRy1wzJsgrDHB
-         u58U5+QWT2I3yui+KiWN62ycWipxOCg93vWSnxcVjd0EC55PeQvpMAUaMOs0HbjDhFWO
-         EEHhyz5rLXL4JGzz60OSnwECzjw+f334AkG34nb/LMzE7mEOaw/9QrmCL8ktTpZXPLSd
-         H8Z8sFRCaPfh2TVr3Ln06TzURhQVavfSlMhXYQuHSGM4y5sjbwVwxWKEwz8a0+ASkGUN
-         wTJbeicvWCKcN6NuMijFHpEAmdzr5932EcG2UnZjzoGG1TWfsszdIcSNKsXjesW9TzJn
-         Ex1g==
+        d=gmail.com; s=20210112; t=1678369147;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/jj+nAMhd294m4r8r3v4RfFoTZThpiv0zLQAEtOcyNM=;
+        b=fKqDIH7zpxyLe65casyn1uInN7KRShTKhjeW4kwUiVzB0ITu528S3IM5DI2Vwegvkp
+         Pr961K2dqYNJ7V5k9T4KgAI9mnvDrUD0LxTT8l76IvDvsFHdi7Jd0l0rCx3AsLKO2Fu7
+         x9Kw1xZWsNVrYYoHluz6/bM+IVMvqwMSz710+uAiEw/q7krFUFrJs1yDW7lP+tfceQRn
+         4hdXTdIunCsqIQl6vPe86wCMTORk4A2ZqnnqMQ8ERpnfA8TIpPIeFSVc94LhjRO1zvUV
+         IEVte9mWn1SE50r66ZekI/ydOsj3SVmLqc3tylkxE/83VgyWh9CKAn1M0DlUj4Cm1geP
+         qMQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678369082;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WFCsPlJvFiEG1gWgfxQ9irsbXI75PMhtoxZ+VCbHyYI=;
-        b=HzNtsH4wFjuwGnED8oI/mzWF3vr60sHxRELNIkU0ySJiePChEzywiohirxU2OhTNaP
-         PK+H40THw0HIkWmNe+Okri3PSR5RpETFJEb5zOzwOZExCbs/4IdRN6CaxG2ImB9VWpoe
-         pD2Q30RLUk6cv+FRw0+oB8NYByOoAaRo+b7kLY+TMsQPZpd0nCopV9HujRi/3tmb/xFf
-         pcxnCVApL3GWjql1YDEYswbieuRW1oCYaS80McV7CbcOHbB/P+K3TFPjmHdOJLnWwOWR
-         TgIxAdR3zYIab7PFXEJe7bRbGuraGei/c9mvFiVBY/DWrGv7h/IAp9l9B9oGDwr9bStQ
-         VvHA==
-X-Gm-Message-State: AO0yUKUDypHJ5KZ7+WrCEwbpin/Am/ApRSzqRvRHoGIpOielhTBfPi8e
-        GioESxItwpUVPwn2PCCdRabLIeKciZfXwOr6up4S3Q==
-X-Google-Smtp-Source: AK7set9AfC6q4Rxn0AocmDb+9VcwvGOGcz0XmdqyPZaEkjT4oOSLNBmgqqcb469eety40wCrSfD1m1Zr0CxP3jUv7IM=
-X-Received: by 2002:adf:f38d:0:b0:2cb:3b68:3a88 with SMTP id
- m13-20020adff38d000000b002cb3b683a88mr4761748wro.7.1678369081978; Thu, 09 Mar
- 2023 05:38:01 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678369147;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/jj+nAMhd294m4r8r3v4RfFoTZThpiv0zLQAEtOcyNM=;
+        b=AWB8GhuPKVkitI7vynzFGg0nkbHIVQXWsFIFUh1F2D7BmBVUhIaPBV0yVnLeq7C/P9
+         2Me/wl2zYWSO29YbLg8EwO/093949XFU1VS00f8aArQcRYM6yv56C/UAt8J717Uj8TST
+         md9isPTiS4m/R+rmFh1B6iyGWEGPIB9qbR8NrXkTNSTQPxxXEIqOKlqmh+lMYbhMnYho
+         MXgHJfzhiKgDYlEoRm1i37UcFN7R88uhoqIRYfenmMsZm0cniQdCF2eUtWg5QIR7K2Sl
+         gxCxysIFHRiJy42rhNBialRIrihGnW/vD5MgptIPxglMK4FXXFEDGSdn9m9CFeLY2XkE
+         n/hQ==
+X-Gm-Message-State: AO0yUKUf3NrHUX5+iS8JRfJ6oBqCVdr4KDc29Nvfdd2WSCAuBRPdAti6
+        Olc5USFrmwqZxyUTtwVzeGA=
+X-Google-Smtp-Source: AK7set+L7wznDfgi2YEU2HN8+J9m6CEQp02DLJhTAmpZLt3y9KKXjBDBITbRor6/8lFNEZg3NP+7Yg==
+X-Received: by 2002:a2e:b0e2:0:b0:295:d31b:59d1 with SMTP id h2-20020a2eb0e2000000b00295d31b59d1mr6467837ljl.13.1678369147348;
+        Thu, 09 Mar 2023 05:39:07 -0800 (PST)
+Received: from pc636 (host-95-193-108-241.mobileonline.telia.com. [95.193.108.241])
+        by smtp.gmail.com with ESMTPSA id x19-20020a2e7c13000000b002946fb5b50asm2943465ljc.139.2023.03.09.05.39.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 05:39:07 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Thu, 9 Mar 2023 14:39:04 +0100
+To:     Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>
+Subject: Re: [PATCH 02/13] drbd: Rename kvfree_rcu() to
+ kvfree_rcu_mightsleep()
+Message-ID: <ZAnheG1zDQUe9NJu@pc636>
+References: <20230201150815.409582-1-urezki@gmail.com>
+ <20230201150815.409582-3-urezki@gmail.com>
 MIME-Version: 1.0
-References: <20230308190745.780221-1-leitao@debian.org>
-In-Reply-To: <20230308190745.780221-1-leitao@debian.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 9 Mar 2023 14:37:50 +0100
-Message-ID: <CANn89iLypT46pr+ShwXu+k0hYLNwoTjbHJ1eyA_fgZyS5U-1fw@mail.gmail.com>
-Subject: Re: [PATCH] tcp: tcp_make_synack() can be called from process context
-To:     Breno Leitao <leitao@debian.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, laurent.fasnacht@proton.ch,
-        hkchu@google.com, leit@meta.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201150815.409582-3-urezki@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,24 +86,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 8:07=E2=80=AFPM Breno Leitao <leitao@debian.org> wro=
-te:
->
-> tcp_rtx_synack() now could be called in process context as explained in
-> 0a375c822497 ("tcp: tcp_rtx_synack() can be called from process
-> context").
->
-> tcp_rtx_synack() might call tcp_make_synack(), which will touch per-CPU
-> variables with preemption enabled. This causes the following BUG:
->
->
-> Avoid calling __TCP_INC_STATS() with will touch per-cpu variables. Use
-> TCP_INC_STATS() which is safe to be called from context switch.
->
-> Fixes: 8336886f786f ("tcp: TCP Fast Open Server - support TFO listeners")
-> Signed-off-by: Breno Leitao <leitao@debian.org>
->
+> The kvfree_rcu()'s single argument name is deprecated therefore
+> rename it to kvfree_rcu_mightsleep() variant. The goal is explicitly
+> underline that it is for sleepable contexts.
+> 
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: Philipp Reisner <philipp.reisner@linbit.com>
+> Cc: Lars Ellenberg <lars.ellenberg@linbit.com>
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> ---
+>  drivers/block/drbd/drbd_nl.c       | 6 +++---
+>  drivers/block/drbd/drbd_receiver.c | 4 ++--
+>  drivers/block/drbd/drbd_state.c    | 2 +-
+>  3 files changed, 6 insertions(+), 6 deletions(-)
+> 
+Could you please add you reviwed-by or Acked-by tags so we can bring
+our series with renaming for the next merge window?
 
-This looks good to me, thanks !
+Thanks!
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+--
+Uladzislau Rezki
