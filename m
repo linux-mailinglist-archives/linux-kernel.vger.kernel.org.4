@@ -2,60 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621516B2D3D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:57:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9943E6B2D40
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:58:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbjCIS5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 13:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
+        id S230095AbjCIS6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 13:58:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjCIS5m (ORCPT
+        with ESMTP id S229546AbjCIS6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 13:57:42 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3894699648;
-        Thu,  9 Mar 2023 10:57:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678388261; x=1709924261;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=c5dTu2CZvuq1hBNYCmGy0MCK7h9+S2ynqISd2D698T8=;
-  b=dWAoyBH0bFvjKoKdsJ4ht5NlViYoUfh8zz2SEdzWpCmzizP8oBVSgkL4
-   mjf0sTKYihidfa8P1cUxl0N9d9lL6G0DC7fEBr2HzsAOMW9MYMynwBdHs
-   R5JC4D4cIJRm8ZX1WfFnMqeRRhExqDU2/59qxzW6urR6H9qoXG544bbda
-   Yhpw9u0FTdUXohA9iTupnJTSTrnV8eRmjaoihTjgvfXTrhWKpHKLmX3JY
-   DpWEooSmxXScLDbuD5dN0+l0I3QSeDcfkkaMep2/r3mcOTmij7QvswJgb
-   VnM0yRxcT7VkY8vAYy0S35tGzZIMmgEXSDmwopptkpBs9J3QobzW+zFw4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="401387672"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="401387672"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 10:57:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="766543583"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="766543583"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 Mar 2023 10:57:38 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 561B2143; Thu,  9 Mar 2023 20:58:22 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH v1 1/1] gpiolib: Use IRQ hardware number getter instead of direct access
-Date:   Thu,  9 Mar 2023 20:58:19 +0200
-Message-Id: <20230309185819.85050-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        Thu, 9 Mar 2023 13:58:30 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B3C4AFC9;
+        Thu,  9 Mar 2023 10:58:25 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id u9so11106695edd.2;
+        Thu, 09 Mar 2023 10:58:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678388304;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=owmgCOlzjzSmTLsvLFtUp1VdFrvtzaEkSR1qk7Evx2k=;
+        b=hZUZeIpeAF/agNfjqy61ZhgY6RbfPcJiSp0FQRgywwohSpfj+pVh5wuRjgipmaptNA
+         7DbxR7J/KTzehya+TezM5j0FFGsfBQpa2rGa91r5fDngliNZByhbQv65tg3NjkvzIW2r
+         JU05+Ooc+feied8G6Wfs91khBoRLhkgA6/eqBblHR2vZY1dQlb0pF3Loka2nyzrQQ4ri
+         C61NewzPC920cL2PlxVZ5j7zC58+WKk1eid82ceZi8rcHvc/I2Hn77NGNWgI8lmAerYZ
+         Cbqo3g8PO2kueJWBVbR3FtDeFuBMsh7cCNf9QuyFSLQmNm6Qr/u9P5bpU6F7FLVcBcW5
+         L8EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678388304;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=owmgCOlzjzSmTLsvLFtUp1VdFrvtzaEkSR1qk7Evx2k=;
+        b=7sT0NluHVzpuXijP45j8TQGdeyg5EcIrvgjBlEw548Xya1syoviXIe/56vUfMx2cxp
+         VSYvWnnqwLzxqysfIQrxT3ZaZ1M1BlfZl2Oc4CoaaRnl7sLnfCW6/tsoVwykUUyVfaFd
+         mFBKi9v1FpgVKjIB3haSstTr619wnkm/6u9ER474pRBRLM3sehaUaoSH3pRpeKNTShDy
+         yP8f1MbXjRj0yo0nfcq4CjvB91dzHOFJ0QKI6gb4a6n+PWua4K4kd/U9pDctuFlhXwWl
+         jlgy4hZ402a0bxb1QIt4qODPC4kASwY13k3yZeexGQfz3rOQgcF2Ebwp+9yBHeKUr+sU
+         xHxw==
+X-Gm-Message-State: AO0yUKVQdbs3SIGidvS+iK4eJOmFSoYRTsFUDpHTuojckNRxpiqTaZCs
+        w/3M5i+sfkmgYD9257bBk40=
+X-Google-Smtp-Source: AK7set+N18YKFkvztcUshIFpRWgFbTkUNg9bYiQfMV0lY6N33OsXZUmsfYc0BcZh4amuYP78MMdXgA==
+X-Received: by 2002:a17:907:31c3:b0:8af:2d2e:5d31 with SMTP id xf3-20020a17090731c300b008af2d2e5d31mr30331438ejb.31.1678388304131;
+        Thu, 09 Mar 2023 10:58:24 -0800 (PST)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-49-172.cust.vodafonedsl.it. [188.217.49.172])
+        by smtp.gmail.com with ESMTPSA id p23-20020a170906615700b008d5d721f8a4sm9100777ejl.197.2023.03.09.10.58.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 10:58:23 -0800 (PST)
+Date:   Thu, 9 Mar 2023 19:58:21 +0100
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Hal Feng <hal.feng@starfivetech.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 00/19] Basic clock, reset & device tree support for
+ StarFive JH7110 RISC-V SoC
+Message-ID: <ZAosTc6VNco1okyR@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+References: <20230221024645.127922-1-hal.feng@starfivetech.com>
+ <3a605bc8-104e-0935-4fd8-2da16ab9053b@starfivetech.com>
+ <ZAb7JVghuiwZF1Q5@wendy>
+ <2f03dfb2-5cf8-e954-913c-f0c27db6bcf5@starfivetech.com>
+ <ZAh/UeSlUeGoKxki@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <4c071642-e3c8-4716-a580-5b42e25efb1c@spud>
+ <ZAoOLIERMYI8UVlA@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <09630acb-f1ae-4dbd-9c9c-9adb1743bfe4@spud>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <09630acb-f1ae-4dbd-9c9c-9adb1743bfe4@spud>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,126 +94,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IRQ framework provides special type and getter to transform
-the Linux IRQ to the hardware pin. Use that type and getter
-function instead of direct access.
+On Thu, Mar 09, 2023 at 05:52:49PM +0000, Conor Dooley wrote:
+> On Thu, Mar 09, 2023 at 05:49:48PM +0100, Tommaso Merciai wrote:
+> > On Wed, Mar 08, 2023 at 01:36:41PM +0000, Conor Dooley wrote:
+> > > On Wed, Mar 08, 2023 at 01:28:01PM +0100, Tommaso Merciai wrote:
+> > > > On Tue, Mar 07, 2023 at 06:08:53PM +0800, Hal Feng wrote:
+> > > 
+> > > > > The above two methods can fix the problem. Here are my test results.
+> > > > > The VisionFive board can boot up successfully if and only if all above
+> > > > > two applied.
+> > > > > The VisionFive 2 board can boot up successfully if I merge Linus's new
+> > > > > changes.
+> > > > 
+> > > > Tested also on my side. Hope this can be helpfull.
+> > > > 
+> > > > > Hope your fix will be merged in rc2. Thank you for your reply.
+> > > > 
+> > > > Fully agree.
+> > > 
+> > > If you only have a VisionFive 2, it shouldn't matter to you, as you
+> > > don't need to fix up any SiFive errata (at the moment at least).
+> > > Linus' fix is already in his tree, so should be in -rc2!
+> > > The fix for the VisionFive was applied to Palmer's RISC-V fixes tree
+> > > last night:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/?h=fixes&id=bf89b7ee52af5a5944fa3539e86089f72475055b
+> > > 
+> > > Thanks,
+> > > Conor.
+> > 
+> > 
+> > Hi Conor,
+> > Thanks for the info.
+> > Playing with this series I got the following error:
+> > 
+> > [    6.278182] BUG: spinlock bad magic on CPU#0, udevd/136
+> > [    6.283414]  lock: 0xffffffd84135e6c0, .magic: ffffffff, .owner: <none>/-1, .owner_cpu: -1
+> > [    6.291677] CPU: 0 PID: 136 Comm: udevd Not tainted 6.3.0-rc1-g92569901a7f9-dirty #14
+> > [    6.299502] Hardware name: StarFive VisionFive 2 v1.3B (DT)
+> > [    6.305069] Call Trace:
+> > [    6.307517] [<ffffffff80005530>] dump_backtrace+0x1c/0x24
+> > [    6.312921] [<ffffffff80844b4e>] show_stack+0x2c/0x38
+> > [    6.317976] [<ffffffff8085032c>] dump_stack_lvl+0x3c/0x54
+> > [    6.323377] [<ffffffff80850358>] dump_stack+0x14/0x1c
+> > [    6.328429] [<ffffffff80845668>] spin_dump+0x64/0x70
+> > [    6.333394] [<ffffffff80058f26>] do_raw_spin_lock+0xb4/0xf2
+> > [    6.338970] [<ffffffff80857d04>] _raw_spin_lock+0x1a/0x22
+> > [    6.344370] [<ffffffff8008153c>] add_timer_on+0x8a/0x132
+> > [    6.349684] [<ffffffff8084b9fa>] try_to_generate_entropy+0x216/0x278
+> > [    6.356037] [<ffffffff804ebfdc>] urandom_read_iter+0x40/0xb8
+> > [    6.361697] [<ffffffff801a1216>] vfs_read+0x17e/0x1f8
+> > [    6.366752] [<ffffffff801a1986>] ksys_read+0x5e/0xc8
+> > [    6.371710] [<ffffffff801a19fe>] sys_read+0xe/0x16
+> > [    6.376503] [<ffffffff8000357a>] ret_from_syscall+0x0/0x2
+> > [    6.381905] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000007
+> > [    6.390683] Oops [#1]
+> > [    6.392956] Modules linked in:
+> > [    6.396011] CPU: 0 PID: 136 Comm: udevd Not tainted 6.3.0-rc1-g92569901a7f9-dirty #14
+> > [    6.403835] Hardware name: StarFive VisionFive 2 v1.3B (DT)
+> > [    6.409401] epc : enqueue_timer+0x1a/0x90
+> > [    6.413414]  ra : add_timer_on+0xe2/0x132
+> > [    6.417425] epc : ffffffff80080c60 ra : ffffffff80081594 sp : ffffffc8044dbc60
+> > [    6.424640]  gp : ffffffff814ffe50 tp : ffffffd8c171ad00 t0 : 6666666666663c5b
+> > [    6.431855]  t1 : 000000000000005b t2 : 666666666666663c s0 : ffffffc8044dbcc0
+> > [    6.439070]  s1 : ffffffc8044dbd08 a0 : ffffffd84135e6c0 a1 : ffffffc8044dbd08
+> > [    6.446284]  a2 : ffffffffffffffff a3 : 000000003e000000 a4 : 000000000000023e
+> > [    6.453498]  a5 : 000000000000023e a6 : ffffffd84135f930 a7 : 0000000000000038
+> > [    6.460712]  s2 : ffffffd84135e6c0 s3 : 0000000000000040 s4 : ffffffff81501080
+> > [    6.467926]  s5 : ffffffd84135e6c0 s6 : ffffffff815011b8 s7 : ffffffffffffffff
+> > [    6.475141]  s8 : ffffffff81502820 s9 : 0000000000000040 s10: 0000002ab0a49320
+> > [    6.482355]  s11: 0000000000000001 t3 : ffffffff81512e97 t4 : ffffffff81512e97
+> > [    6.489569]  t5 : ffffffff81512e98 t6 : ffffffc8044db948
+> > [    6.494875] status: 0000000200000100 badaddr: 0000000000000007 cause: 000000000000000f
+> > [    6.502783] [<ffffffff80080c60>] enqueue_timer+0x1a/0x90
+> > [    6.508095] [<ffffffff8084b9fa>] try_to_generate_entropy+0x216/0x278
+> > [    6.514448] [<ffffffff804ebfdc>] urandom_read_iter+0x40/0xb8
+> > [    6.520107] [<ffffffff801a1216>] vfs_read+0x17e/0x1f8
+> > [    6.525160] [<ffffffff801a1986>] ksys_read+0x5e/0xc8
+> > [    6.530126] [<ffffffff801a19fe>] sys_read+0xe/0x16
+> > [    6.534918] [<ffffffff8000357a>] ret_from_syscall+0x0/0x2
+> > [    6.540322] Code: 87b2 0813 0805 1613 0037 9832 3603 0008 e190 c211 (e60c) 5613
+> > [    6.547711] ---[ end trace 0000000000000000 ]---
+> > [    6.552325] note: udevd[136] exited with irqs disabled
+> > [    6.557531] note: udevd[136] exited with preempt_count 2
+> > 
+> > 
+> > I'm working on top of Linux version 6.3.0-rc1-g92569901a7f.
 
-While at it, amend an indentation in a couple of places.
+Hi Conor,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/gpio/gpiolib.c | 29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+> 
+> Unfortunately, this g<sha> bit doesn't mean anything outside of your
+> repo so it's hard to infer anything from that.
+> This looks exactly like a bug is in v6.3-rc1, but Linus fixed in like
+> the second commit *after* -rc1.
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index e47e462b14ed..72e907134bac 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -1216,7 +1216,7 @@ static int gpiochip_hierarchy_irq_domain_alloc(struct irq_domain *d,
- 	if (ret)
- 		return ret;
- 
--	chip_dbg(gc, "allocate IRQ %d, hwirq %lu\n", irq,  hwirq);
-+	chip_dbg(gc, "allocate IRQ %d, hwirq %lu\n", irq, hwirq);
- 
- 	ret = girq->child_to_parent_hwirq(gc, hwirq, type,
- 					  &parent_hwirq, &parent_type);
-@@ -1384,8 +1384,7 @@ static bool gpiochip_hierarchy_is_hierarchical(struct gpio_chip *gc)
-  * gpiochip by assigning the gpiochip as chip data, and using the irqchip
-  * stored inside the gpiochip.
-  */
--int gpiochip_irq_map(struct irq_domain *d, unsigned int irq,
--		     irq_hw_number_t hwirq)
-+int gpiochip_irq_map(struct irq_domain *d, unsigned int irq, irq_hw_number_t hwirq)
- {
- 	struct gpio_chip *gc = d->host_data;
- 	int ret = 0;
-@@ -1461,8 +1460,9 @@ int gpiochip_irq_domain_activate(struct irq_domain *domain,
- 				 struct irq_data *data, bool reserve)
- {
- 	struct gpio_chip *gc = domain->host_data;
-+	unsigned int hwirq = irqd_to_hwirq(data);
- 
--	return gpiochip_lock_as_irq(gc, data->hwirq);
-+	return gpiochip_lock_as_irq(gc, hwirq);
- }
- EXPORT_SYMBOL_GPL(gpiochip_irq_domain_activate);
- 
-@@ -1479,8 +1479,9 @@ void gpiochip_irq_domain_deactivate(struct irq_domain *domain,
- 				    struct irq_data *data)
- {
- 	struct gpio_chip *gc = domain->host_data;
-+	unsigned int hwirq = irqd_to_hwirq(data);
- 
--	return gpiochip_unlock_as_irq(gc, data->hwirq);
-+	return gpiochip_unlock_as_irq(gc, hwirq);
- }
- EXPORT_SYMBOL_GPL(gpiochip_irq_domain_deactivate);
- 
-@@ -1520,33 +1521,37 @@ static int gpiochip_to_irq(struct gpio_chip *gc, unsigned int offset)
- int gpiochip_irq_reqres(struct irq_data *d)
- {
- 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	unsigned int hwirq = irqd_to_hwirq(d);
- 
--	return gpiochip_reqres_irq(gc, d->hwirq);
-+	return gpiochip_reqres_irq(gc, hwirq);
- }
- EXPORT_SYMBOL(gpiochip_irq_reqres);
- 
- void gpiochip_irq_relres(struct irq_data *d)
- {
- 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	unsigned int hwirq = irqd_to_hwirq(d);
- 
--	gpiochip_relres_irq(gc, d->hwirq);
-+	gpiochip_relres_irq(gc, hwirq);
- }
- EXPORT_SYMBOL(gpiochip_irq_relres);
- 
- static void gpiochip_irq_mask(struct irq_data *d)
- {
- 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	unsigned int hwirq = irqd_to_hwirq(d);
- 
- 	if (gc->irq.irq_mask)
- 		gc->irq.irq_mask(d);
--	gpiochip_disable_irq(gc, d->hwirq);
-+	gpiochip_disable_irq(gc, hwirq);
- }
- 
- static void gpiochip_irq_unmask(struct irq_data *d)
- {
- 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	unsigned int hwirq = irqd_to_hwirq(d);
- 
--	gpiochip_enable_irq(gc, d->hwirq);
-+	gpiochip_enable_irq(gc, hwirq);
- 	if (gc->irq.irq_unmask)
- 		gc->irq.irq_unmask(d);
- }
-@@ -1554,17 +1559,19 @@ static void gpiochip_irq_unmask(struct irq_data *d)
- static void gpiochip_irq_enable(struct irq_data *d)
- {
- 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	unsigned int hwirq = irqd_to_hwirq(d);
- 
--	gpiochip_enable_irq(gc, d->hwirq);
-+	gpiochip_enable_irq(gc, hwirq);
- 	gc->irq.irq_enable(d);
- }
- 
- static void gpiochip_irq_disable(struct irq_data *d)
- {
- 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	unsigned int hwirq = irqd_to_hwirq(d);
- 
- 	gc->irq.irq_disable(d);
--	gpiochip_disable_irq(gc, d->hwirq);
-+	gpiochip_disable_irq(gc, hwirq);
- }
- 
- static void gpiochip_set_irq_hooks(struct gpio_chip *gc)
--- 
-2.39.1
+Thanks for the tips.
+I rebase my working branch on top of:
+
+6a98c9cae232 (origin/master, origin/HEAD) Merge tag 'fs_for_v6.3-rc2' of git://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs
+https://github.com/Scott31393/linux/tree/tm/master_visionv2_v1.3b_vf2-6.2-gmac
+
+I'm able to boot the board using nfs ;)
+(without issue)
+
+[    0.000000] Linux version 6.3.0-rc1-gcf4a201af313 (tom@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation) (riscv64-buildroot-linux-gnu-gcc.br_real (Buildroot VF2_v2.10.4) 10.3.0, GNU ld (GNU Binutils) 2.36.1) #16 SM
+P Thu Mar  9 19:31:50 CET 2023
+[    0.000000] OF: fdt: Ignoring memory range 0x40000000 - 0x40200000
+[    0.000000] Machine model: StarFive VisionFive 2 v1.3B
+[    0.000000] earlycon: sbi0 at I/O port 0x0 (options '')
+[    0.000000] printk: bootconsole [sbi0] enabled
+[    0.000000] efi: UEFI not found.
+[    0.000000] Zone ranges:
+[    0.000000]   DMA32    [mem 0x0000000040200000-0x00000000ffffffff]
+[    0.000000]   Normal   [mem 0x0000000100000000-0x000000013fffffff]
+[    0.000000] Movable zone start for each node
+
+
+> 
+> What branch/commit/tag did you apply the series on top of?
+
+Thanks again,
+Tommaso
+
+> 
+> Cheers,
+> Conor.
+
 
