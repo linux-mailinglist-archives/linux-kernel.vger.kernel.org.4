@@ -2,113 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250BC6B2571
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 265E26B2573
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjCIN3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:29:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
+        id S231228AbjCINbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbjCIN2Z (ORCPT
+        with ESMTP id S230135AbjCINaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:28:25 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF44F6130B
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 05:28:14 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id c18so1142523wmr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 05:28:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678368492;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4Tp9zLtCwVp7RxG9ro6QJ1uHwHoo+Kd5QBn3UiGJnHo=;
-        b=NCUBebvjDz+6NC5QufmIFkxawl1AuJIZ0HVIGF/Cscn8ErFIBKRgmCx1dvVMAwbaQn
-         0xtUL7KQOAxqIWd2n8HB6avFYO+bs6OpZQMdbLv8VmUj4Nz3wK0X4pPAsK3BdJJ/Ybbd
-         6SLXTo6KTNoYmQ2S8sAuwao8cuHh3blp0t7q1ejdigE9+jsJtv+/7DSj6fAAWX9tB7R+
-         FdOFNSRsbgeoqCFyhuRUHHSGNoTYAvCasxdgqDDLpyV05JDeicY396QvFgL1/uzM+/eA
-         umC2ekGeKIO+4oJmPNx7Vg4aRDXnktl0x18g01jfuXZ+TQhEILW7SU1q/RT2GC9Jxsqg
-         vHcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678368492;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4Tp9zLtCwVp7RxG9ro6QJ1uHwHoo+Kd5QBn3UiGJnHo=;
-        b=FQ6ngrePjEPKJbpdo4K5X69aqrKP82Lu3f2gedHkvmnUPBNX6mAmw7zaTW6uustg4v
-         8lXs1tIKIQfe3p4cvL5VFFfwlricaL6UWnmiLReZU3hRXi3GgaGTRFlNQSEJlSFU0dvf
-         iUdXxhbIbpB/L+a8jO5lJOv9HXzV9Nxx6c0rE2mol7HOlRnOtoZp9/rHfFCfiKrVw6uF
-         CnyXVyKPraq99ER0r15kMkhas+JNuho5rUH3672D5hnVhJ1ZTUAN4sNAR626ZgRcVLtw
-         A9+yQF/IUrMnblk7ZgTZcxPCX20PldDj/m6xjCzE2/m2RSIC/IZtiOtH5qBWTnk/I6nM
-         cRHQ==
-X-Gm-Message-State: AO0yUKX4J+GOOm2xE1aCS500cjbvtKtOU9ubF51lZKWa3Olsx0/2NxcW
-        cCPrYMRyptjBYnuo88AY/1FvNQ==
-X-Google-Smtp-Source: AK7set+yhUnRnE75Evc8i1auRgI7JJDA5jtzXR/IRNFnYhUJFTbzGmu5u5QjdxQ2xDs3HZ4IWiAPWA==
-X-Received: by 2002:a05:600c:3148:b0:3eb:3fea:a2ac with SMTP id h8-20020a05600c314800b003eb3feaa2acmr19973699wmo.22.1678368492706;
-        Thu, 09 Mar 2023 05:28:12 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id r7-20020a05600c458700b003eb966d39desm2926714wmo.2.2023.03.09.05.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 05:28:12 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 09 Mar 2023 14:28:03 +0100
-Subject: [PATCH v3 12/12] arm64: defconfig: add PMIC GLINK modules
+        Thu, 9 Mar 2023 08:30:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587BDF1693;
+        Thu,  9 Mar 2023 05:30:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 384D1B81EE0;
+        Thu,  9 Mar 2023 13:29:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBBCAC433A8;
+        Thu,  9 Mar 2023 13:29:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678368552;
+        bh=7V354Spv5IUkBJIg8jXo9ixLOnbIWtGCEOzt13+mHNY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZgAs1LHavVbpt/2FRRvMTB/isX7s1oq2Mm6axPkOQ/aw0tKiJDq79Ondp3TmP41r0
+         3n21y80t5sxyiKTEZMcMJAM+5CRE6Rg5f3AbL1Bph7we57LZNHbQyzDrmEpnucPB0j
+         xwv2BgFbTFd0WEqL6nvXp4p70U2ezTFxAIuqqN2x8IV02TuRue60dI6esijQSLgfty
+         OVRFEKNPNRCLETk1b0JxhKEINeQh+6t8IT3Yo/FrBnmba1K2lvGb/7UUBaVomO9zOE
+         jf4TsdLZbmhrTqTq9K87/qugmwE2fGfCX3AqT2ieHZ9lgl6w5WH0jTB3oVtJ7lC9lo
+         IgtgKZTGCEWvw==
+Received: by mail-ua1-f52.google.com with SMTP id v48so1117233uad.6;
+        Thu, 09 Mar 2023 05:29:11 -0800 (PST)
+X-Gm-Message-State: AO0yUKWh0cWxozuYLcA4H/T3ICiftC/CZtEjRxdfczVT+VyZOrtWMzPy
+        bN5HbQw45VNpCucILjvUNCemSuf53iIJouNqDQ==
+X-Google-Smtp-Source: AK7set/UtlhkNYhNExNPyFO1gM3SmkCcbPOZsx+tIDLnmUllfa/2k5vXtp1lR3nqmqn8GAzcbB+evRXlrjrOrrh5PSQ=
+X-Received: by 2002:ab0:4a1a:0:b0:68b:8665:a73b with SMTP id
+ q26-20020ab04a1a000000b0068b8665a73bmr13895606uae.1.1678368550753; Thu, 09
+ Mar 2023 05:29:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230130-topic-sm8450-upstream-pmic-glink-v3-12-4c860d265d28@linaro.org>
-References: <20230130-topic-sm8450-upstream-pmic-glink-v3-0-4c860d265d28@linaro.org>
-In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v3-0-4c860d265d28@linaro.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+References: <20230307165359.225361-1-miquel.raynal@bootlin.com>
+ <20230307165359.225361-4-miquel.raynal@bootlin.com> <20230308001903.GA513330-robh@kernel.org>
+ <fca549f7-a79a-4d8f-b609-efef830becd2@mercury.local>
+In-Reply-To: <fca549f7-a79a-4d8f-b609-efef830becd2@mercury.local>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 9 Mar 2023 07:28:59 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+bs1mxdTTeazhzD39fV0EBjCKZ_HKKjLpWgSezTLJ-4A@mail.gmail.com>
+Message-ID: <CAL_Jsq+bs1mxdTTeazhzD39fV0EBjCKZ_HKKjLpWgSezTLJ-4A@mail.gmail.com>
+Subject: Re: [PATCH v2 03/21] of: Rename of_modalias_node()
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Michael Walle <michael@walle.cc>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Wolfram Sang <wsa@kernel.org>, Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the PMIC GLINK core, altmode, battery and UCSI
-aux drivers as module to enable USB Type-C management
-over the PMIC GLINK protocol on modern Qcom platforms.
+On Wed, Mar 8, 2023 at 4:06=E2=80=AFPM Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+>
+> Hi,
+>
+> On Tue, Mar 07, 2023 at 06:19:03PM -0600, Rob Herring wrote:
+> > On Tue, Mar 07, 2023 at 05:53:41PM +0100, Miquel Raynal wrote:
+> > > This helper does not produce a real modalias, but tries to get the
+> > > "product" compatible part of the "vendor,product" compatibles only. I=
+t
+> > > is far from creating a purely useful modalias string and does not see=
+m
+> > > to be used like that directly anyway, so let's try to give this helpe=
+r a
+> > > more meaningful name before moving there a real modalias helper (alre=
+ady
+> > > existing under of/device.c).
+> > >
+> > > Also update the various documentations to refer to the strings as
+> > > "aliases" rather than "modaliases" which has a real meaning in the Li=
+nux
+> > > kernel.
+> > >
+> > > There is no functional change.
+> > >
+> > > Cc: Rafael J. Wysocki <rafael@kernel.org>
+> > > Cc: Len Brown <lenb@kernel.org>
+> > > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> > > Cc: Maxime Ripard <mripard@kernel.org>
+> > > Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> > > Cc: Sebastian Reichel <sre@kernel.org>
+> > > Cc: Wolfram Sang <wsa@kernel.org>
+> > > Cc: Mark Brown <broonie@kernel.org>
+> > > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> > > ---
+> > >  drivers/acpi/bus.c                |  7 ++++---
+> > >  drivers/gpu/drm/drm_mipi_dsi.c    |  2 +-
+> > >  drivers/hsi/hsi_core.c            |  2 +-
+> >
+> > These should not have been using this function. The matching on just th=
+e
+> > product was a relic from I2C and SPI which we don't want to propogate.
+> > No clue why ACPI needed it...
+> >
+> > If you respin or want to fixup while applying, can you add a kerneldoc
+> > comment to not add new users of the function. Not that anyone will
+> > follow that... :(
+> >
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+>
+> I just checked and HSI is not using the data for matching. Instead
+> it uses the returned data to set the device name. Matching happens
+> using the full compatible.
+>
+> FWIW the MIPI HSI standard never became a big thing, so we have only
+> one HSI DT driver upstream and that is the Nokia N900 modem driver.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/configs/defconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+Can we add a patch in removing the call then.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 7790ee42c68a..a925c9dc7f19 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -273,6 +273,10 @@ CONFIG_VIRTIO_BLK=y
- CONFIG_BLK_DEV_NVME=m
- CONFIG_QCOM_COINCELL=m
- CONFIG_QCOM_FASTRPC=m
-+CONFIG_BATTERY_QCOM_BATTMGR=m
-+CONFIG_QCOM_PMIC_GLINK=m
-+CONFIG_TYPEC_UCSI=m
-+CONFIG_UCSI_PMIC_GLINK=m
- CONFIG_SRAM=y
- CONFIG_PCI_ENDPOINT_TEST=m
- CONFIG_EEPROM_AT24=m
+I'm pretty sure MIPI stands for Must Invent Peripheral Interfaces.
 
--- 
-2.34.1
-
+Rob
