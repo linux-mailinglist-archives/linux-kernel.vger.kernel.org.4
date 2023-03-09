@@ -2,149 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30496B21AA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5251C6B21B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbjCIKij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:38:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
+        id S230303AbjCIKlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:41:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbjCIKiH (ORCPT
+        with ESMTP id S230419AbjCIKkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:38:07 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE03193F5
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:38:04 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id q16so1379494wrw.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 02:38:04 -0800 (PST)
+        Thu, 9 Mar 2023 05:40:40 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAC77C3E4
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:39:29 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id bw19so1340508wrb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 02:39:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678358284;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h4J+1GJ0DTm4BTyDlgRz+lJ76XEQHv+rIcqt4lsLOI0=;
-        b=Pi6/etCxC3M1Ec9xrJa0vEZxTvl5yADqVtsEQHDYZWWvKfJzwnrQPBJQnHF5fBfeuL
-         9SKKb/iKogiJJDyM4zbTE8X9KLBHpywwY5NFV0Jnieweud9+zuKNbLslGBN9zejgoEss
-         k1RuoGjkmb9aen9dz2fP+OV9LeWDI9E0F9WX4f4nW+GGaHt3ICRsdKVXufYDMfcAm8/k
-         n0NIauOJKLWRVIiLjoz70Ziw07ZUkU1qxyrdV8PMjJZTGvGy+pEQQCwajwEXshtQJ7Ph
-         rcPyBbnfNg458Oyi2EEHp01RiebEAkjGiq9xWw5TxQWOGm2mQ83KxPW2Ubtyp7u46EmM
-         V6Iw==
+        d=linaro.org; s=google; t=1678358355;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hqPGgd3BFdJ5Z3N2xYuAK2cKJFro8IMB7DoFRyNGYm4=;
+        b=cyuWrije1J+G0kpt9rtg9Zl9sy2vZ6FM3iuAuq3aa6xpiGzEf2lm0y2C8jOCJlsWeJ
+         EWmWc+ptmmIZ9VpxZoDLI1gR53mm2YZY+lWHHX9DnYPngQ1jRmg6Jeu657tZGxz2jX6N
+         YsoLVo8eGy3iUnDoOpwdsva1cuCV/u8EvWap4XFofYLdq6F3rlwtUXKWVPAevmo9lZVA
+         HDTeFqtX5+kZHYiMCjYQZiL2O9EhJWAWwx+6m0tXDA025+3xrVorFWwpWXEzFQ6EFYpQ
+         qC2bZ8Hc50FwsaxXuDrl5qnMSJlJexrK54vU2rtvMh2yoUkAcNaGANtYbeaPWwZlJBxe
+         G4/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678358284;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h4J+1GJ0DTm4BTyDlgRz+lJ76XEQHv+rIcqt4lsLOI0=;
-        b=ste+eSPHuyR6TTRpfcVVhwUjTRuJAfHstJWhnadWi7ILw/d9tfChHWFbv1y5pRc2Na
-         ZUknuLv/jz8i4EYPnv0z/GQvyqzzvbUBa6YGh0OYDX9XptapM0o5skf3LePS+6V6fYlQ
-         qiLXysM42ChsQo5CIk5leu2sQDMfi4nPe0HCRNrHPXQkM3kQK8b3lUXKHJaOH/JF0q8E
-         rnQrosACJB1qnKDenOpgRGDRs06y1MSHhQuneqcoVA3aBY2e1+Xl9+BV+BPkm7K2K1E2
-         atlZcK4jiYpTq4kHaErlzI1kAYOAQKDDdW81RRNEX36DKDV1tJV7Qtu1pKMA4eiyH4Hc
-         XkwQ==
-X-Gm-Message-State: AO0yUKVV0V3jD0XIozRWWlIBFtYg69NlsSCs2LpPETvAuuN+T5lrmMs+
-        Egayvzlncw5Dc4UzY8U4MxLV4TJH0D3KHMi0GCY=
-X-Google-Smtp-Source: AK7set/9cdU3wUGQmsIJBGi7HwZ8gdCGSZJhatqDvxbLAN3B+K+bRg3ptteM/per8kvHfDpk7tGoew==
-X-Received: by 2002:adf:e681:0:b0:2c7:faf:af28 with SMTP id r1-20020adfe681000000b002c70fafaf28mr13879476wrm.43.1678358284462;
-        Thu, 09 Mar 2023 02:38:04 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:f14c:2275:50fc:c056])
-        by smtp.gmail.com with ESMTPSA id f2-20020a5d58e2000000b002c56af32e8csm17638119wrd.35.2023.03.09.02.38.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 02:38:04 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v5 9/9] arm64: dts: qcom: sa8775p-ride: enable the BT UART port
-Date:   Thu,  9 Mar 2023 11:37:52 +0100
-Message-Id: <20230309103752.173541-10-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230309103752.173541-1-brgl@bgdev.pl>
-References: <20230309103752.173541-1-brgl@bgdev.pl>
+        d=1e100.net; s=20210112; t=1678358355;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hqPGgd3BFdJ5Z3N2xYuAK2cKJFro8IMB7DoFRyNGYm4=;
+        b=FWHXqr5eutkz22E+kLJmmJ28PUtINXhSol2CD55w4uHIByuTkZ3oOcQyR6ZXxyipo6
+         CQSF/H/lKzNJmcNRxWGnOYSqJDNmD19jVFwFPpPg9zTJgZfTgmAIXb6E16edCd8YFk0P
+         I33NxVsmFIEviGDUBjF2kuTVOUSxqLZXTHGxyQ1hvJ4Io+6NsIMo2Q5iAXJit8i+WXDk
+         wzr/E2srBr3ORon2HaJUsaISd2F2OHr9bPkIzPS5QaU0RYWdWcRFY/NmF9ohJJKUEbH/
+         BbQaPYIlt2hpzxJYtaYdMuQLAs8SJf+vOscxgP1nKNlDqfiu42x13UKh505wZx0iXe66
+         R70w==
+X-Gm-Message-State: AO0yUKXyGIzyj5b024HQYhJgrrCGi5qa1SR0UPiFkVKe3AvX6G+3ZULI
+        LIwb8913KZHLAe1MQy/ZQQXVDA==
+X-Google-Smtp-Source: AK7set/FRRRB0+8uQ1yztBz2VteqoM/5ZDzGzNq25bY2dg07fWy53EiQjle/35Q0iTayjTBe36Tw7Q==
+X-Received: by 2002:a5d:4a43:0:b0:2cd:ceab:df1a with SMTP id v3-20020a5d4a43000000b002cdceabdf1amr14687125wrs.32.1678358354769;
+        Thu, 09 Mar 2023 02:39:14 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:fbda:65f5:e873:7527? ([2a05:6e02:1041:c10:fbda:65f5:e873:7527])
+        by smtp.googlemail.com with ESMTPSA id s1-20020a5d5101000000b002c559405a1csm17580482wrt.20.2023.03.09.02.39.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 02:39:14 -0800 (PST)
+Message-ID: <e5959cb5-af8c-9410-9530-b3e19e9b647a@linaro.org>
+Date:   Thu, 9 Mar 2023 11:39:13 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/4] dt-bindings: thermal: mediatek: Add AP domain to LVTS
+ thermal controllers for mt8195
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>, bchihi@baylibre.com
+Cc:     angelogioacchino.delregno@collabora.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230307154524.118541-1-bchihi@baylibre.com>
+ <20230307154524.118541-2-bchihi@baylibre.com>
+ <CAGXv+5FUrWEF4SZ6DKjoF8Oai--JGFffzQ3_DyzQrUrThVEQ7Q@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAGXv+5FUrWEF4SZ6DKjoF8Oai--JGFffzQ3_DyzQrUrThVEQ7Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 09/03/2023 05:40, Chen-Yu Tsai wrote:
+> On Wed, Mar 8, 2023 at 12:46 AM <bchihi@baylibre.com> wrote:
+>>
+>> From: Balsam CHIHI <bchihi@baylibre.com>
+>>
+>> Add AP Domain to LVTS thermal controllers dt-binding definition for mt8195.
+>>
+>> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+>> ---
+>>   include/dt-bindings/thermal/mediatek,lvts-thermal.h | 10 ++++++++++
+>>   1 file changed, 10 insertions(+)
+>>
+>> diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+>> index c09398920468..8fa5a46675c4 100644
+>> --- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+>> +++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+>> @@ -16,4 +16,14 @@
+>>   #define MT8195_MCU_LITTLE_CPU2  6
+>>   #define MT8195_MCU_LITTLE_CPU3  7
+>>
+>> +#define MT8195_AP_VPU0  8
+> 
+> Can't this start from 0? This is a different hardware block. The index
+> namespace is separate. Same question for MT8192.
 
-Enable the high-speed UART port connected to the Bluetooth controller on
-the sa8775p-adp development board.
+The ID is used to differentiate the thermal zone identifier in the 
+device tree from the driver.
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 33 +++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
++		vpu0-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap MT8195_AP_VPU0>;
++
++			trips {
++				vpu0_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-index cba7c8116141..1020dfd21da2 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-@@ -14,6 +14,7 @@ / {
- 	aliases {
- 		serial0 = &uart10;
- 		serial1 = &uart12;
-+		serial2 = &uart17;
- 		i2c18 = &i2c18;
- 		spi16 = &spi16;
- 	};
-@@ -93,6 +94,32 @@ qup_uart12_rx: qup-uart12-rx-pins {
- 			bias-pull-down;
- 		};
- 	};
-+
-+	qup_uart17_default: qup-uart17-state {
-+		qup_uart17_cts: qup-uart17-cts-pins {
-+			pins = "gpio91";
-+			function = "qup2_se3";
-+			bias-disable;
-+		};
-+
-+		qup_uart17_rts: qup0-uart17-rts-pins {
-+			pins = "gpio92";
-+			function = "qup2_se3";
-+			bias-pull-down;
-+		};
-+
-+		qup_uart17_tx: qup0-uart17-tx-pins {
-+			pins = "gpio93";
-+			function = "qup2_se3";
-+			bias-pull-up;
-+		};
-+
-+		qup_uart17_rx: qup0-uart17-rx-pins {
-+			pins = "gpio94";
-+			function = "qup2_se3";
-+			bias-pull-down;
-+		};
-+	};
- };
- 
- &uart10 {
-@@ -108,6 +135,12 @@ &uart12 {
- 	status = "okay";
- };
- 
-+&uart17 {
-+	pinctrl-0 = <&qup_uart17_default>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <38400000>;
- };
+If MT8195_AP_VPU0 is 0, then the code won't be able to differentiate 
+MT8195_AP_VPU0 and MT8195_MCU_BIG_CPU0
+
+The LVTS driver will call devm_thermal_of_zone_register() with the 
+sensor id. If MT8195_MCU_BIG_CPU0 and MT8195_AP_VPU0 have the same id, 
+then at the moment of registering the MT8195_AP_VPU0, the underlying OF 
+thermal framework code will use MT8195_MCU_BIG_CPU0 description instead 
+because it will be the first to be find in the DT.
+
+If MT8195_AP_VPU0 is described in DT before, then the same will happen 
+when registering MT8195_MCU_BIG_CPU0, MT8195_AP_VPU0 will be registered 
+instead.
+
+IOW all ids must be different.
+
+The namespace is already described by the macro name AFAICS, so whatever 
+the values, we see only the macro names and those IDs are private the 
+kernel implementation.
+
+If the numbering is really important, may be something like:
+
+#define MT8195_MCU_BIG_CPU0     00
+#define MT8195_MCU_BIG_CPU1     01
+#define MT8195_MCU_BIG_CPU2     02
+#define MT8195_MCU_BIG_CPU3     03
+#define MT8195_MCU_LITTLE_CPU0  04
+#define MT8195_MCU_LITTLE_CPU1  05
+#define MT8195_MCU_LITTLE_CPU2  06
+#define MT8195_MCU_LITTLE_CPU3  07
+
+#define MT8195_AP_VPU1  10
+#define MT8195_AP_GPU0  11
+#define MT8195_AP_GPU1  12
+#define MT8195_AP_VDEC  13
+#define MT8195_AP_IMG   14
+#define MT8195_AP_INFRA 15
+#define MT8195_AP_CAM0  16
+#define MT8195_AP_CAM1  17
+
+But I would suggest considering this change as a separate patch after 
+the AP domain is added.
+
+
 -- 
-2.37.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
