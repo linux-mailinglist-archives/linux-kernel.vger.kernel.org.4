@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9256B23EB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 13:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED546B23F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 13:19:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjCIMRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 07:17:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
+        id S230189AbjCIMTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 07:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbjCIMRn (ORCPT
+        with ESMTP id S229722AbjCIMTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 07:17:43 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443E7EB8A6;
-        Thu,  9 Mar 2023 04:17:17 -0800 (PST)
+        Thu, 9 Mar 2023 07:19:17 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5268D1C7FC;
+        Thu,  9 Mar 2023 04:19:16 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 12D4820077;
-        Thu,  9 Mar 2023 12:17:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1678364225; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EB262219B9;
+        Thu,  9 Mar 2023 12:19:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1678364354; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NZ34mnLvJ8gVQLVSVWHKU1AB3ileldqMJmN37jEgrbw=;
-        b=JYZywW0ESK4fs5GcBwXUlX1WUtxibRtOY8z1Tet+qOzKJ6cAFjXQxzCdlm3rGQYTxs8uHM
-        DUxomD7S+KTwxw25UPolSKNP26LKlNPjg+7fSNq+RkAwCWos2Km1wXPe/KhWduDexhO5YH
-        8jBDujovmLJCUZ6+T1cmzEFtHfUthjI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1678364225;
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YtlE06MK38v4wUEGCfv9Lya1P+SBRtcUPdCKrIFmkWY=;
+        b=QwhEfbgNYoa66mBXwPIK8+kmgDqlUpWJkv6ic6Gy6A7Rq9mKxoPQHH0y4k/0UxBPIHIQD0
+        t6jTVm0xwkpiQBSBAt4Nf4r9NC3dflMXxqe8ns4QsiAPFD/5PQwL9Rvvds/MVfplCxK6ih
+        ihqL+OtK1toFylXVi5L7C8629S9aKvs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1678364354;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NZ34mnLvJ8gVQLVSVWHKU1AB3ileldqMJmN37jEgrbw=;
-        b=IqHZ1eZP/uA1sZ8SOjuVDQ89pSfw9DfHz1l19b1GpVN7SUbe7xm/1uQI6ayX3737Lf14RV
-        p7hBvXusIBRVfPAw==
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YtlE06MK38v4wUEGCfv9Lya1P+SBRtcUPdCKrIFmkWY=;
+        b=WIhze/eSN4I/rAvLyoYJrZuLC+wJtkXKfuRQSukyV+HhYD79jz9HhL9NvBqZqMXS717V9b
+        UJHzZ04V1VSwo2Bw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F341713A10;
-        Thu,  9 Mar 2023 12:17:04 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4D12913A10;
+        Thu,  9 Mar 2023 12:19:14 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id OWBlO0DOCWSFawAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 09 Mar 2023 12:17:04 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 6C7F6A06FF; Thu,  9 Mar 2023 13:17:04 +0100 (CET)
-Date:   Thu, 9 Mar 2023 13:17:04 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>, Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [RFC 06/11] ext4: Add counter to track successful allocation of
- goal length
-Message-ID: <20230309121704.ogaczohlwmlgku56@quack3>
-References: <cover.1674822311.git.ojaswin@linux.ibm.com>
- <e6a33294b00b5e02eb0b621e8192a641d34eea1f.1674822311.git.ojaswin@linux.ibm.com>
+        id V2WpD8LOCWSqbAAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Thu, 09 Mar 2023 12:19:14 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id a07c9311;
+        Thu, 9 Mar 2023 12:19:13 +0000 (UTC)
+From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+To:     Eric Biggers <ebiggers@kernel.org>, Xiubo Li <xiubli@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>
+Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        linux-fscrypt@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+Subject: [RFC PATCH 0/2] ceph: fscrypt: fix atomic open bug for encrypted directories
+Date:   Thu,  9 Mar 2023 12:19:08 +0000
+Message-Id: <20230309121910.18939-1-lhenriques@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e6a33294b00b5e02eb0b621e8192a641d34eea1f.1674822311.git.ojaswin@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -74,66 +74,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 27-01-23 18:07:33, Ojaswin Mujoo wrote:
-> Track number of allocations where the length of blocks allocated is equal to the
-> length of goal blocks (post normalization). This metric could be useful if
-> making changes to the allocator logic in the future as it could give us
-> visibility into how often do we trim our requests.
-> 
-> PS: ac_b_ex.fe_len might get modified due to preallocation efforts and
-> hence we use ac_f_ex.fe_len instead since we want to compare how much the
-> allocator was able to actually find.
-> 
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Hi!
 
-Looks good to me. Feel free to add:
+I started seeing fstest generic/123 failing in ceph fscrypt, when running it
+with 'test_dummy_encryption'.  This test is quite simple:
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+1. Creates a directory with write permissions for root only
+2. Writes into a file in that directory
+3. Uses 'su' to try to modify that file as a different user, and
+   gets -EPERM
 
-								Honza
+All the test steps succeed, but the test fails to cleanup: 'rm -rf <dir>'
+will fail with -ENOTEMPTY.  'strace' shows that calling unlinkat() to remove
+the file got a -ENOENT and then -ENOTEMPTY for the directory.
 
-> ---
->  fs/ext4/ext4.h    | 1 +
->  fs/ext4/mballoc.c | 3 +++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> index 4ba2c95915eb..d8fa01e54e81 100644
-> --- a/fs/ext4/ext4.h
-> +++ b/fs/ext4/ext4.h
-> @@ -1636,6 +1636,7 @@ struct ext4_sb_info {
->  	atomic_t s_bal_cX_ex_scanned[EXT4_MB_NUM_CRS];	/* total extents scanned */
->  	atomic_t s_bal_groups_scanned;	/* number of groups scanned */
->  	atomic_t s_bal_goals;	/* goal hits */
-> +	atomic_t s_bal_len_goals;	/* len goal hits */
->  	atomic_t s_bal_breaks;	/* too long searches */
->  	atomic_t s_bal_2orders;	/* 2^order hits */
->  	atomic_t s_bal_cr0_bad_suggestions;
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index 07a50a13751c..c4ab8f412d32 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -2930,6 +2930,7 @@ int ext4_seq_mb_stats_show(struct seq_file *seq, void *offset)
->  		   atomic64_read(&sbi->s_bal_cX_failed[CR3]));
->  	seq_printf(seq, "\textents_scanned: %u\n", atomic_read(&sbi->s_bal_ex_scanned));
->  	seq_printf(seq, "\t\tgoal_hits: %u\n", atomic_read(&sbi->s_bal_goals));
-> +	seq_printf(seq, "\t\tlen_goal_hits: %u\n", atomic_read(&sbi->s_bal_len_goals));
->  	seq_printf(seq, "\t\t2^n_hits: %u\n", atomic_read(&sbi->s_bal_2orders));
->  	seq_printf(seq, "\t\tbreaks: %u\n", atomic_read(&sbi->s_bal_breaks));
->  	seq_printf(seq, "\t\tlost: %u\n", atomic_read(&sbi->s_mb_lost_chunks));
-> @@ -4233,6 +4234,8 @@ static void ext4_mb_collect_stats(struct ext4_allocation_context *ac)
->  		if (ac->ac_g_ex.fe_start == ac->ac_b_ex.fe_start &&
->  				ac->ac_g_ex.fe_group == ac->ac_b_ex.fe_group)
->  			atomic_inc(&sbi->s_bal_goals);
-> +		if (ac->ac_f_ex.fe_len == ac->ac_g_ex.fe_len)
-> +			atomic_inc(&sbi->s_bal_len_goals);
->  		if (ac->ac_found > sbi->s_mb_max_to_scan)
->  			atomic_inc(&sbi->s_bal_breaks);
->  	}
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+This is because 'su' does a drop_caches ('su (874): drop_caches: 2' in
+dmesg), and ceph's atomic open will do:
+
+	if (IS_ENCRYPTED(dir)) {
+		set_bit(CEPH_MDS_R_FSCRYPT_FILE, &req->r_req_flags);
+		if (!fscrypt_has_encryption_key(dir)) {
+			spin_lock(&dentry->d_lock);
+			dentry->d_flags |= DCACHE_NOKEY_NAME;
+			spin_unlock(&dentry->d_lock);
+		}
+	}
+
+Although 'dir' has the encryption key available, fscrypt_has_encryption_key()
+will return 'false' because fscrypt info isn't yet set after the cache
+cleanup.
+
+The first patch will add a new helper for the atomic_open that will force
+the fscrypt info to be loaded into an inode that has been evicted recently
+but for which the key is still available.
+
+The second patch switches ceph atomic_open to use the new fscrypt helper.
+
+Cheers,
+--
+Luís Henriques
+
+Luís Henriques (2):
+  fscrypt: new helper function - __fscrypt_prepare_atomic_open()
+  ceph: switch atomic open to use new fscrypt helper
+
+ fs/ceph/file.c          |  8 +++-----
+ fs/crypto/hooks.c       | 14 ++++++++++++++
+ include/linux/fscrypt.h |  6 ++++++
+ 3 files changed, 23 insertions(+), 5 deletions(-)
+
