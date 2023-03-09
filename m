@@ -2,139 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6426B2BA4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 18:08:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7006B2BB0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 18:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjCIRId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 12:08:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
+        id S229774AbjCIRKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 12:10:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbjCIRIK (ORCPT
+        with ESMTP id S231324AbjCIRKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 12:08:10 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE96E6D9B;
-        Thu,  9 Mar 2023 09:04:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678381491; x=1709917491;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7G0O80eoi717307ESCF3NXvsdQ1Hks/w/yE5W6NxlwA=;
-  b=hu4T1vRH2Jr7FYKWqEjn6k0D8EmqaPKqTGlTkl/iETZewK9CgcEKPdsM
-   BLsaEJEA+vlopVrbRsUWfrqhsItEUtHlWEXTLksCmKjlcAfEbDpgJCHh4
-   jEIapWZjzsNjb/NuKvsJUF5z/SSEzxIh6FI4ElKTW13jtSXmYljcHrHgL
-   W41DSFVzpYImffTa/wk303nIZ8LK5b2OxRkz7QaHnfaj+pmEynvmOUcI3
-   50bMbWammJihTBpqLru+ihoZcYhATQ+Re9arbzjgcevHR+BQAZDQThyjq
-   PVL8OQTdkqqUWpcNBwDmLcAApYHrY0xiTrf0M1MMJIz310YNwaMWSaORv
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="333975373"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="333975373"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 09:02:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="787663874"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="787663874"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 09:02:31 -0800
-Date:   Thu, 9 Mar 2023 09:06:23 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 3/4] iommu/sva: Support reservation of global PASIDs
-Message-ID: <20230309090623.7ea2c3fe@jacob-builder>
-In-Reply-To: <ZAY5d2MSXjWRGF0n@nvidia.com>
-References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
-        <20230302005959.2695267-4-jacob.jun.pan@linux.intel.com>
-        <BN9PR11MB52765C5E0DC0759880C08E258CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <20230303134753.660d0755@jacob-builder>
-        <ZAXkLN39VUSl+t65@nvidia.com>
-        <20230306094408.2d675d5b@jacob-builder>
-        <ZAYmS4Sx6bm+ziDY@nvidia.com>
-        <20230306095759.1dd65cca@jacob-builder>
-        <ZAYunPcgSOGFK8Qi@nvidia.com>
-        <SJ1PR11MB6083DFA2C1D00B00C3918982FCB69@SJ1PR11MB6083.namprd11.prod.outlook.com>
-        <ZAY5d2MSXjWRGF0n@nvidia.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Thu, 9 Mar 2023 12:10:01 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A9B28865
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 09:08:02 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id da10so9838121edb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 09:08:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678381681;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/IW6jOhEQae0VahvJ9lpEAcJtiLMnzIs5xUlg7BvZZk=;
+        b=MPbJfhEdxadekYy9b0KrGA43OzUuCz3m1Mfe4CqfRt06h5tQE3UhRzGL7VmC2Up/Tn
+         /Rg8Pg86KOgcgeFysVe3Slr0M/1L1hDTUs579QlIfPwed0aSuxiFMZOs+bDneufr1Pd0
+         xX2gc19fi+CjAZHjpNQrvDD4Sd0S00KmPYQgHnX0DdwACU6/Hj6mckLrp1N3sLEqc3OM
+         2pJ7lJco+ErLFnxaCpvLnvTGvd5DNrPjQrBgjjjSTymEjySBqisjhZRmSOzPqIluU5fG
+         ZDPSxyHIvMftFl/Llj5KEw99MQW4ATui101kpR8sOOiYssOiABmblhDq0FrD2QkINSBI
+         XwQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678381681;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/IW6jOhEQae0VahvJ9lpEAcJtiLMnzIs5xUlg7BvZZk=;
+        b=EA2Nyxvry6maDj2pHocc9/0V4CfZrDaWCbRbukg1aTeJKuFOtquLLtobhiCp2Y1n6p
+         bn5EwOmjqF193C1RA3Kv69URXCcsWhmPTwUrWeviA2cgLriX+eUIpfz2qg+iIIqjurrw
+         +keDXL+1VP5DOSxmGCjZ44k+IJXIPbHGVi4w5wOGQ5dfe3kaYvTVAFxSdtRGCBOJaAKA
+         L5vPWTzN4R93AX8Uit039EXA+ohw3oxQQFGt4r8s3kavJfRkJGHYkpmHTtATAV8rcOYE
+         TrWsFeUSC+bRkmqFdvB1jys5nM3ZjtICy6C44GUI5dIfl3nfDgahclYduEfzQpc/a1Y3
+         NhjQ==
+X-Gm-Message-State: AO0yUKU8D2xj9NuWcxtHGuT64XV3zk5y1UdHc58ger+YkYEhzmYHazr0
+        jlL942razmNqBYuOvyIbjB60+8swsGpaJw==
+X-Google-Smtp-Source: AK7set/A2XtQsaVyS5fbr8946mBTRI0WB9xHh0hBR0vCHiYcdihatOE+Y51jNuX2/nk3QA17uvQdUg==
+X-Received: by 2002:a05:6402:716:b0:4ab:554:37ea with SMTP id w22-20020a056402071600b004ab055437eamr20660956edx.4.1678381680794;
+        Thu, 09 Mar 2023 09:08:00 -0800 (PST)
+Received: from lelloman-5950.. (host-79-22-154-28.retail.telecomitalia.it. [79.22.154.28])
+        by smtp.gmail.com with ESMTPSA id bj8-20020a170906b04800b008d85435f914sm9154867ejb.98.2023.03.09.09.07.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 09:08:00 -0800 (PST)
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     peterz@infradead.org, surenb@google.com, brauner@kernel.org,
+        chris@chrisdown.name, hannes@cmpxchg.org,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Subject: [PATCH 0/4] sched/psi: Allow unprivileged PSI polling
+Date:   Thu,  9 Mar 2023 18:07:52 +0100
+Message-Id: <20230309170756.52927-1-cerasuolodomenico@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+PSI offers 2 mechanisms to get information about a specific resource
+pressure. One is reading from /proc/pressure/<resource>, which gives
+average pressures aggregated every 2s. The other is creating a pollable
+fd for a specific resource and cgroup.
 
-On Mon, 6 Mar 2023 15:05:27 -0400, Jason Gunthorpe <jgg@nvidia.com> wrote:
+The trigger creation requires CAP_SYS_RESOURCE, and gives the
+possibility to pick specific time window and threshold, spawing an RT
+thread to aggregate the data.
 
-> On Mon, Mar 06, 2023 at 06:48:43PM +0000, Luck, Tony wrote:
-> > >> ENQCMDS does not have the restriction of using a single CPU MSR to
-> > >> store PASIDs, PASID is supplied to the instruction operand.   
-> > >
-> > > Huh? That isn't what it says in the programming manual. It says the
-> > > PASID only comes from the IA32_PASID msr and the only two operands are
-> > > the destination MMIO and the memory source for the rest of the
-> > > payload.  
-> > 
-> > Jason,
-> > 
-> > Two different instructions with only one letter different in the name.
-> > 
-> > ENQCMD - ring 3 instruction. The PASID is inserted into the descriptor
-> > pushed to the device from the IA32_PASID MSR.
-> > 
-> > ENQCMDS - ring 0 instruction (see that trailing "S" for Supervisor
-> > mode). In this case the submitter can include any PASID value they want
-> > in the in-memory copy of the descriptor and ENQCMDS will pass that to
-> > the device.  
-> 
-> Ah, well, my comment wasn't talking about ENQCMDS :)
-> 
-> If ENQCMDS can take in an arbitary PASID then there is no
-> justification here to use the global allocator.
-> 
-> The rational is more like:
-> 
->  IDXD uses PASIDs that come from the SVA allocator. It needs to create
->  an internal kernel-only PASID that is non-overlapping so allow the SVA
->  allocator to reserve PASIDs for driver use.
-> 
->  IDXD has to use the global SVA PASID allocator beacuse its userspace
->  will use ENQCMD which requires global PASIDs.
-> 
-yes, great summary. I think that is the same as what I was trying to say
-earlier :)
-"due the unforgiving nature of ENQCMD that requires global PASIDs, ENQCMDS
-has no choice but to allocate from the same numberspace to avoid conflict."
+Systemd would like to provide containers the option to monitor pressure
+on their own cgroup and sub-cgroups. For example, if systemd launches a
+container that itself then launches services, the container should have
+the ability to poll() for pressure in individual services. But neither
+the container nor the services are privileged.
 
-In that sense, I feel the global allocator should be staying with SVA
-instead of moving to iommu core (as Kevin suggested). Because we are trying
-to have non-overlapping pasid with SVA.
+The series is implemented in 4 steps in order to reduce the noise of
+the change.
 
-Thanks,
+Domenico Cerasuolo (4):
+  sched/psi: rearrange polling code in preparation
+  sched/psi: rename existing poll members in preparation
+  sched/psi: extract update_triggers side effect
+  sched/psi: allow unprivileged polling of N*2s period
 
-Jacob
+ Documentation/accounting/psi.rst |   4 +
+ include/linux/psi.h              |   2 +-
+ include/linux/psi_types.h        |  43 ++--
+ kernel/cgroup/cgroup.c           |   2 +-
+ kernel/sched/psi.c               | 412 ++++++++++++++++---------------
+ 5 files changed, 250 insertions(+), 213 deletions(-)
+
+-- 
+2.34.1
+
