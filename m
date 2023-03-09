@@ -2,159 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F1C6B226C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6E66B2272
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbjCILPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:15:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
+        id S231524AbjCILQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbjCILOf (ORCPT
+        with ESMTP id S231515AbjCILQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:14:35 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6364AF24A1;
-        Thu,  9 Mar 2023 03:09:52 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3297ehhf018305;
-        Thu, 9 Mar 2023 11:09:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2022-7-12;
- bh=sM2f8KUGw2ieEok7xffWn1NRPRHy+6lIt8O7z1nqwUA=;
- b=TSnSEGn5fb0r5OLvOmUoycnnvxGcMtkvj/9K5fXfjPDk9H8e+BsRTw2uEkMU64l1vELt
- aKRdI2H/G4dZsIpo3IJXtA0+sTk8iJzlIig9WYSj42yiRC20iPnTLAfw7xbxFk4NGbsv
- fAUU1a0c9ZPPgIOYiCw0zCAnLYMpgsH90fLJ4ilnFoqXLDpeP+0PxTuAJ8Ka31WQUpKD
- BSQ1H4dQ7EgM8MFHSHQNhxHF2vEp/QZLOagIHzUsYu/NtfarilnJfAQ1za8URmfhtyeU
- aWG/rkqYpVFuOzgPtj5XzP90WmFP17XqbXdCEgdU+QlDiVNQamF5pJCX1cuYikzzwo4B ig== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p5nn96r6y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 09 Mar 2023 11:09:48 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 3299XM3J020822;
-        Thu, 9 Mar 2023 11:09:47 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3p6fu9b78j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 09 Mar 2023 11:09:47 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 329B70tO021817;
-        Thu, 9 Mar 2023 11:09:46 GMT
-Received: from localhost.localdomain (dhcp-10-191-129-247.vpn.oracle.com [10.191.129.247])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3p6fu9b73f-4;
-        Thu, 09 Mar 2023 11:09:46 +0000
-From:   Imran Khan <imran.f.khan@oracle.com>
-To:     tj@kernel.org, gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk,
-        willy@infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        joe.jin@oracle.com
-Subject: [PATCH v2 3/3] kernfs: change kernfs_rename_lock into a read-write lock.
-Date:   Thu,  9 Mar 2023 22:09:32 +1100
-Message-Id: <20230309110932.2889010-4-imran.f.khan@oracle.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230309110932.2889010-1-imran.f.khan@oracle.com>
-References: <20230309110932.2889010-1-imran.f.khan@oracle.com>
+        Thu, 9 Mar 2023 06:16:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C37ED0D1;
+        Thu,  9 Mar 2023 03:12:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29F42B81ED6;
+        Thu,  9 Mar 2023 11:12:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B29EEC433D2;
+        Thu,  9 Mar 2023 11:12:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678360323;
+        bh=UjTdMRVXaqEY+xVySMqwPf3Ofga2yedHc4jEmU/eCFY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=t2iOlfHELw7E8hKJOA+2s/bUMo5oUk0AujU2MOqNAxEQpNwTJpoxnOMelHDAi0vlv
+         w5vW92q34ANgty4tpHBVnjUGRPPuF0fiow8Gj+0KP0sIqG1E94iV0KbAjQzN4mMtf+
+         RXrVduRxNTPKq9oh7x/H3432IyWqEfy+EFint5/Gl0o1+IH7ZUPNlTAlRs9YM8ZEib
+         LwbTIBN58VXpZuE5s8xgM2hvkCjKCnAR1GBfZ6LAdOemo5mt5mitK0YAH2sm336gRm
+         AP4pMHDJOu17fnHV9RjbLD55XuL33Lgq3bngiN+v/6FBPd0K+vGPrN5eLtrOW+mYXk
+         yCA/mA7CfTj+w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1paECa-0008EG-Kc; Thu, 09 Mar 2023 12:12:52 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [PATCH] firmware: qcom: scm: fix bogus irq error at probe
+Date:   Thu,  9 Mar 2023 12:12:09 +0100
+Message-Id: <20230309111209.31606-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_06,2023-03-08_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- phishscore=0 suspectscore=0 malwarescore=0 spamscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303090088
-X-Proofpoint-GUID: ZO8p4MktoRctYaJuWOGPKLN1rJZ9us9T
-X-Proofpoint-ORIG-GUID: ZO8p4MktoRctYaJuWOGPKLN1rJZ9us9T
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernfs_rename_lock protects a node's ->parent and thus kernfs topology.
-Thus it can be used in cases that rely on a stable kernfs topology.
-Change it to a read-write lock for better scalability.
+A recent commit added support for an optional interrupt which is only
+available on some platforms.
 
-Suggested by: Al Viro <viro@zeniv.linux.org.uk>
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
+Stop spamming the logs with bogus error messages on platforms that do
+not use this new optional resource:
+
+	qcom_scm firmware:scm: error -ENXIO: IRQ index 0 not found
+
+Fixes: 6bf325992236 ("firmware: qcom: scm: Add wait-queue handling logic")
+Cc: Guru Das Srinagesh <quic_gurus@quicinc.com>
+Cc: Sibi Sankar <quic_sibis@quicinc.com>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- fs/kernfs/dir.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/firmware/qcom_scm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-index 2cdb8516e5287..06e27b36216fe 100644
---- a/fs/kernfs/dir.c
-+++ b/fs/kernfs/dir.c
-@@ -17,7 +17,7 @@
+diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+index 468d4d5ab550..b1e11f85b805 100644
+--- a/drivers/firmware/qcom_scm.c
++++ b/drivers/firmware/qcom_scm.c
+@@ -1479,7 +1479,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
  
- #include "kernfs-internal.h"
+ 	init_completion(&__scm->waitq_comp);
  
--static DEFINE_SPINLOCK(kernfs_rename_lock);	/* kn->parent and ->name */
-+static DEFINE_RWLOCK(kernfs_rename_lock);	/* kn->parent and ->name */
- /*
-  * Don't use rename_lock to piggy back on pr_cont_buf. We don't want to
-  * call pr_cont() while holding rename_lock. Because sometimes pr_cont()
-@@ -196,9 +196,9 @@ int kernfs_name(struct kernfs_node *kn, char *buf, size_t buflen)
- 	unsigned long flags;
- 	int ret;
- 
--	spin_lock_irqsave(&kernfs_rename_lock, flags);
-+	read_lock_irqsave(&kernfs_rename_lock, flags);
- 	ret = kernfs_name_locked(kn, buf, buflen);
--	spin_unlock_irqrestore(&kernfs_rename_lock, flags);
-+	read_unlock_irqrestore(&kernfs_rename_lock, flags);
- 	return ret;
- }
- 
-@@ -224,9 +224,9 @@ int kernfs_path_from_node(struct kernfs_node *to, struct kernfs_node *from,
- 	unsigned long flags;
- 	int ret;
- 
--	spin_lock_irqsave(&kernfs_rename_lock, flags);
-+	read_lock_irqsave(&kernfs_rename_lock, flags);
- 	ret = kernfs_path_from_node_locked(to, from, buf, buflen);
--	spin_unlock_irqrestore(&kernfs_rename_lock, flags);
-+	read_unlock_irqrestore(&kernfs_rename_lock, flags);
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(kernfs_path_from_node);
-@@ -294,10 +294,10 @@ struct kernfs_node *kernfs_get_parent(struct kernfs_node *kn)
- 	struct kernfs_node *parent;
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&kernfs_rename_lock, flags);
-+	read_lock_irqsave(&kernfs_rename_lock, flags);
- 	parent = kn->parent;
- 	kernfs_get(parent);
--	spin_unlock_irqrestore(&kernfs_rename_lock, flags);
-+	read_unlock_irqrestore(&kernfs_rename_lock, flags);
- 
- 	return parent;
- }
-@@ -1731,7 +1731,7 @@ int kernfs_rename_ns(struct kernfs_node *kn, struct kernfs_node *new_parent,
- 	kernfs_get(new_parent);
- 
- 	/* rename_lock protects ->parent and ->name accessors */
--	spin_lock_irq(&kernfs_rename_lock);
-+	write_lock_irq(&kernfs_rename_lock);
- 
- 	old_parent = kn->parent;
- 	kn->parent = new_parent;
-@@ -1742,7 +1742,7 @@ int kernfs_rename_ns(struct kernfs_node *kn, struct kernfs_node *new_parent,
- 		kn->name = new_name;
- 	}
- 
--	spin_unlock_irq(&kernfs_rename_lock);
-+	write_unlock_irq(&kernfs_rename_lock);
- 
- 	kn->hash = kernfs_name_hash(kn->name, kn->ns);
- 	kernfs_link_sibling(kn);
+-	irq = platform_get_irq(pdev, 0);
++	irq = platform_get_irq_optional(pdev, 0);
+ 	if (irq < 0) {
+ 		if (irq != -ENXIO)
+ 			return irq;
 -- 
-2.34.1
+2.39.2
 
