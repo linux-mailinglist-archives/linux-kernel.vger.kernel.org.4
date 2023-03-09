@@ -2,171 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D686B2DF2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:51:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49EFD6B2DF7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:53:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjCITvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 14:51:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
+        id S230106AbjCITxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 14:53:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjCITvk (ORCPT
+        with ESMTP id S230075AbjCITxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 14:51:40 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419CDF7EE2;
-        Thu,  9 Mar 2023 11:51:38 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329Jmu0O017492;
-        Thu, 9 Mar 2023 19:51:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=RCEYb1Ihg59IinP+txkWtQHoA64JPH94f7dtWtPgKEs=;
- b=VI5vS0TLXE11Qhq/53pkIMtV4dW5FASfwLhdzoHM+ICxdhfwSUrqsi44oIgNO+Hf9jsf
- fY07IEMg2wYO5aweMMAt1QMaDPMRYAbf+Hd8cj616/isUkdvqpebPL6wu1O5LkCx8ypx
- XW4NR4Pm8l2EhkvouE8YICy5WGgRY3yFazmUL1z2JqPxYDv6iPJ491HMDxUXoYB7EC1x
- smzcvd2RsONRRJ8aCKaAN514led6L/pX0Jk9OJJWvqHZN3kwciZlT9OqtvHTM8Gxlapz
- gG09U/qkVLIid3qPLz595MR4yj/IicuDZd5VWLYiTaAMOrr1CjylUvGBnCkjYna+sEAn Ew== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p72qau466-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 19:51:06 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 329Jp5cO030563
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 9 Mar 2023 19:51:05 GMT
-Received: from [10.110.90.116] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 9 Mar 2023
- 11:51:04 -0800
-Message-ID: <74b92725-8596-2f86-02b9-8dbfd6df9d95@quicinc.com>
-Date:   Thu, 9 Mar 2023 11:51:03 -0800
+        Thu, 9 Mar 2023 14:53:08 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C2176AA
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:53:04 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id e82so3121294ybh.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 11:53:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678391583;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6jiAWDSdqEid6785iM8R8/HDPUK2YGRPhf1N7NBj6vE=;
+        b=V1Gi59vzWYkUoeVdm8xReUy8/fG5XinRQYo0Lenx8GX9MaVP7E+CyaS/xTyLveEhEA
+         kAs7cYzVUiW46znHsZ++7KLiab14PSn09SC5Ogu2f25SaHBGYq+cuEecNhQixTQQltPV
+         N6ugqiwBuh6FyUJ28tOGrJM4THIZpah/GvlY1l91vmAJL56S++BEOwHjQ0GasktKf8jw
+         eDuFEBJ+5itUiQGo4+tYQI9JDoYDG9kXCD0U/23VpM9Nd4MBU2u0Xocfj610IyOWijQh
+         /5DlxxAfwL6dwBTuyFnnD/VaYx/x1lwAIvWMRuKGva8qT0mjXXhB7i3p4m1dCYLUZGyf
+         LGbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678391583;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6jiAWDSdqEid6785iM8R8/HDPUK2YGRPhf1N7NBj6vE=;
+        b=aD7rRcve801R1Q6/7hp6vMSeVhVx075W1b9z1zqFD0T3Ohc5Djynmq7Lw1BTnWlpVz
+         OVbv8D9TAUQC2rFt+M5gVMG+vzlwkgoAze03Dy1dpC5KGVcnMcSUZHcrhZaQ5pqscuJF
+         tVaKYrhULL58rwkMmJAYkS87wi9MT6h5EjcGcK3MfN9zgwvcNFm4ACkP3pk2jAcO3u64
+         zXU7Ze58F6lR0silkN+QMgM/uxF2s9t9r02fDEkAybwfRwfqofFhe4wm2Y5gUql+08N6
+         Oij4kIdwk4kcYizdk0w8K2ub0fwIMZH74xe+5I1PSyS4qkpBrqMT+cXgY9j0DsgOgnyH
+         lQRw==
+X-Gm-Message-State: AO0yUKU8xLrQJQTkvreI5hVEh0lLem3O1G92gPDMhmBwnCAs4wZopwl1
+        hZwafjjFgH5+n7s3+Z7fwUudxBzLPdJOseGCPpkZlw==
+X-Google-Smtp-Source: AK7set84Z09q2f5EJzTn8palJn+0fPTTjkcVbIH1GUdew3q1IIV5xX+24zG2mdN9KRBfm7U7+M5XVZCFtpOEUR1KUL4=
+X-Received: by 2002:a25:d50e:0:b0:98e:6280:90e7 with SMTP id
+ r14-20020a25d50e000000b0098e628090e7mr14055547ybe.13.1678391583057; Thu, 09
+ Mar 2023 11:53:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 02/28] usb: xhci: Add XHCI APIs to support USB
- offloading
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
-        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>, <tiwai@suse.com>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <20230308235751.495-3-quic_wcheng@quicinc.com> <ZAl+ydxOCoGXIj1Y@kroah.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <ZAl+ydxOCoGXIj1Y@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: geECP4ky0IkofcbkGzEuZCV5TJOm-pFx
-X-Proofpoint-ORIG-GUID: geECP4ky0IkofcbkGzEuZCV5TJOm-pFx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_10,2023-03-09_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 impostorscore=0 suspectscore=0 clxscore=1015 bulkscore=0
- mlxlogscore=999 spamscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303090158
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-4-vipinsh@google.com>
+ <20230308223331.00000234@gmail.com> <CAHVum0cMAwyQamr5yxCB56DSy7QHuCvTG06qRrJCGiZWQV+ZTw@mail.gmail.com>
+ <ZAlsE0dei9I1MfpW@google.com> <20230309145221.000044b4@gmail.com>
+In-Reply-To: <20230309145221.000044b4@gmail.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Thu, 9 Mar 2023 11:52:26 -0800
+Message-ID: <CAHVum0dL2gxb=sf-1q_YLANp8AKXMfRJ6ps8-kHu=x7b2QxMUg@mail.gmail.com>
+Subject: Re: [Patch v4 03/18] KVM: x86/mmu: Track count of pages in KVM MMU
+ page caches globally
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     Mingwei Zhang <mizhang@google.com>, seanjc@google.com,
+        pbonzini@redhat.com, bgardon@google.com, dmatlack@google.com,
+        jmattson@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Thu, Mar 9, 2023 at 4:52=E2=80=AFAM Zhi Wang <zhi.wang.linux@gmail.com> =
+wrote:
+>
+> On Thu, 9 Mar 2023 05:18:11 +0000
+> Mingwei Zhang <mizhang@google.com> wrote:
+>
+> > > >
+> > > > 1) Previously mmu_topup_memory_caches() works fine without a lock.
+> > > > 2) IMHO I was suspecting if this lock seems affects the paralleliza=
+tion
+> > > > of the TDP MMU fault handling.
+> > > >
+> > > > TDP MMU fault handling is intend to be optimized for parallelizatio=
+n fault
+> > > > handling by taking a read lock and operating the page table via ato=
+mic
+> > > > operations. Multiple fault handling can enter the TDP MMU fault pat=
+h
+> > > > because of read_lock(&vcpu->kvm->mmu_lock) below.
+> > > >
+> > > > W/ this lock, it seems the part of benefit of parallelization is go=
+ne
+> > > > because the lock can contend earlier above. Will this cause perform=
+ance
+> > > > regression?
+> > >
+> > > This is a per vCPU lock, with this lock each vCPU will still be able
+> > > to perform parallel fault handling without contending for lock.
+> > >
+> >
+> > I am curious how effective it is by trying to accquiring this per vCPU
+> > lock? If a vcpu thread should stay within the (host) kernel (vmx
+> > root/non-root) for the vast majority of the time, isn't the shrinker
+> > always fail to make any progress?
+>
+> IMHO the lock is to prevent the faulting path from being disturbed by the
+> shrinker. I guess even a vCPU thread stays in the host kernel, the shrink=
+er
+> should still be able to harvest the pages from the cache as long as there=
+ is
+> no faulting flood.
 
-On 3/8/2023 10:38 PM, Greg KH wrote:
-> On Wed, Mar 08, 2023 at 03:57:25PM -0800, Wesley Cheng wrote:
->> Some use cases, such as USB audio offloading, will allow for a DSP to take
->> over issuing USB transfers to the host controller.  In order for the DSP to
->> submit transfers for a particular endpoint, and to handle its events, the
->> client driver will need to query for some parameters allocated by XHCI.
->>
->> - XHCI secondary interrupter event ring address
->> - XHCI transfer ring address (for a particular EP)
->> - Stop endpoint command API
->>
->> Once the resources are handed off to the DSP, the offload begins, and the
->> main processor can enter idle.  When stopped, since there are no URBs
->> submitted from the main processor, the client will just issue a stop
->> endpoint command to halt any pending transfers.
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->> ---
->>   drivers/usb/host/xhci.c       | 130 ++++++++++++++++++++++++++++++++++
->>   include/linux/usb/xhci-intr.h |   8 +++
->>   2 files changed, 138 insertions(+)
-> 
-> Please use checkpatch.pl on your patches before sending them out :(
-> 
-> Some other minor comments:
-> 
+Yes, lock is to prevent the faulting path from being disturbed by the
+shrinker. In this new approach, shrinker goes through each vCPU of
+each VM alive on the host. All of these vCPUs collectively being in
+the fault path while shrinker is invoked seems unlikely.
 
-Thanks for taking the time to review these!
+Let us say we free the cache during the fault path, now when a vCPU
+asks a page from the cache, it will dynamically allocate a page via
+GFP_ATOMIC which has higher chances of failing if a host is already
+under memory pressure. Shrinker by default should be at lower priority
+and based on discussions pointed in patch 1, it seems like it was of
+not much practical use before either.
 
-Hmm, I did run checkpatch, and cleaned up the warnings it did give. 
-However, I think something changed with regards to the tools on my host 
-env.  Will address those and make sure it runs properly next time.
+>
+> I am curious about the effectiveness as well. It would be nice there can =
+be
+> some unit tests that people can try by themselves to see the results, lik=
+e
+> when the shrinker isn't triggered, the faulting is still as effective as
+> before and when the shrinker is triggered, what would actually happen whe=
+n
+> the system memory is under different pressure. (like how much the faultin=
+g
+> will be slowed down)
+>
 
-Will fix the minor changes you mentioned, and focus on the general 
-questions you had.
-
->> diff --git a/include/linux/usb/xhci-intr.h b/include/linux/usb/xhci-intr.h
->> index 738b0f0481a6..d42cc9a1e698 100644
->> --- a/include/linux/usb/xhci-intr.h
->> +++ b/include/linux/usb/xhci-intr.h
->> @@ -80,7 +80,15 @@ struct xhci_interrupter {
->>   	u64	s3_erst_dequeue;
->>   };
->>   
->> +/* Secondary interrupter */
->>   struct xhci_interrupter *
->>   xhci_create_secondary_interrupter(struct usb_hcd *hcd, int intr_num);
->>   void xhci_remove_secondary_interrupter(struct usb_hcd *hcd, struct xhci_interrupter *ir);
->> +
->> +/* Offload */
->> +int xhci_stop_endpoint(struct usb_device *udev,
->> +			struct usb_host_endpoint *ep);
->> +phys_addr_t xhci_get_xfer_resource(struct usb_device *udev,
->> +					struct usb_host_endpoint *ep, dma_addr_t *dma);
->> +phys_addr_t xhci_get_ir_resource(struct usb_device *udev, struct xhci_interrupter *ir);
-> 
-> Why are these functions unique to offload?
-> 
-
-Wanted to separate the set of APIs used for creating a secondary 
-interrupter versus offload related ones.  In general, the APIs under the 
-secondary interrupter portion can be used for other things other than 
-offloading.  As Mathias pointed out, they had a use case where they 
-wanted to utilize the secondary interrupter to actually route and 
-receive interrupts on the secondary ring, not to suppress them. (which 
-is opposite of what the offload concept is doing)
-
-Now for the offload section, those are specific to that feature, because 
-we need to pass certain memory information about what was allocated by 
-XHCI to the entity that we are offloading the IO operations to.  Hence, 
-why they are APIs which fetch the transfer ring and event ring 
-addresses.  In addition, we do have the stop EP as well, since in the 
-offload case, since the main processor doesn't submit TDs (transfer 
-descriptors) then it isn't aware there are transfers in progress.  When 
-the endpoint is released, then the offload driver needs to be the one 
-that halts the EP.
-
-As you mentioned, I will add documentation to better describe these.
-
-Thanks
-Wesley Cheng
+Not sure what can be a right test to measure this. My manual testing
+was to just run dirty_log_perf_test with and without shrinker and I
+didn't notice much difference. I did print some logs to see if
+shrinker is getting invoked, caches are freed by shrinker and when VM
+is freed to verify page accounting is right with patch 9 of the
+series.
