@@ -2,213 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6A96B1A8E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 06:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358536B1A92
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 06:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjCIFCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 00:02:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
+        id S229549AbjCIFEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 00:04:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjCIFCs (ORCPT
+        with ESMTP id S229468AbjCIFEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 00:02:48 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C33D5A58;
-        Wed,  8 Mar 2023 21:02:40 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3293a3Xk013313;
-        Thu, 9 Mar 2023 05:02:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=XignhGqn0DKeadkVrirF3wS6LskIOAPVlPWY/Ol1iCk=;
- b=X7oSz9WWbum/xCIJp/Pel6alrg3YjyCwnQRPiSfC5KvFEM+vXjSLJoFuijCBb9Txou3o
- FKvOpeTKUxWUe51V9Kh+T6MTwAfbcjlEGzKBtSfr98r+OA8I+nu7oEh1RzDgnHjYAJPN
- IfPcMaU2/6RyoxdQTdrb4xv3q9QN5kHT1gz4qG+vwgeY4d57PGzHfv6cTxE5NcxpTwKt
- hXGXW6KJ/j2vsRJT/jiz0NZcWMHZTLOXFnAZaSr1e1dZCcb53w7WN3VaX3Z2RxYkrTTr
- FB68Uv9Y/fSGQyVwjnrPy7w3+9zyMQf/2FQjUI8OP8+Qm9UkAzHRFQrj4ysg2xgbFAat Dw== 
-Received: from aptaippmta02.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p6ycb9ajj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 05:02:20 +0000
-Received: from pps.filterd (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-        by APTAIPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32952Hif006518;
-        Thu, 9 Mar 2023 05:02:17 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTPS id 3p4ff2jphu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 09 Mar 2023 05:02:17 +0000
-Received: from APTAIPPMTA02.qualcomm.com (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32952G89006513;
-        Thu, 9 Mar 2023 05:02:16 GMT
-Received: from cbsp-sh-gv.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
-        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 32952GFP006511;
-        Thu, 09 Mar 2023 05:02:16 +0000
-Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 393357)
-        id C90E244FE; Thu,  9 Mar 2023 13:02:14 +0800 (CST)
-From:   Ziqi Chen <quic_ziqichen@quicinc.com>
-To:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nguyenb@quicinc.com, bvanassche@acm.org, mani@kernel.org,
-        stanley.chu@mediatek.com, adrian.hunter@intel.com,
-        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
-        martin.petersen@oracle.com, quic_ziqichen@quicinc.com
-Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v1] scsi: ufs: core: print trs for pending requests in MCQ mode
-Date:   Thu,  9 Mar 2023 13:01:31 +0800
-Message-Id: <1678338122-88611-1-git-send-email-quic_ziqichen@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Pe9L2GZu-HR2YKxG5hJyOLlisJleWSkG
-X-Proofpoint-ORIG-GUID: Pe9L2GZu-HR2YKxG5hJyOLlisJleWSkG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_02,2023-03-08_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 spamscore=0
- clxscore=1015 mlxscore=0 adultscore=0 phishscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303090038
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 9 Mar 2023 00:04:43 -0500
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F474D49FF
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 21:04:41 -0800 (PST)
+Received: by mail-ua1-x92c.google.com with SMTP id f17so359380uax.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 21:04:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678338280;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nvkWCp3TULXIw9lqlVxOiEqPNkLIY/UrROP9j1sk4DQ=;
+        b=lbAt2URQRLe8LSJFqdWbpmomRJNiXMA2424uR+W3DwF1OllEBMLepSWz3duHq5LKjz
+         e3N2GlqN+Jy7R6PLD51J9fQF0wraQPE0TwvU1KO9hG4/sQN5Lp5o03WmBIPppEkT224T
+         /kXv/iwsZ732FpJ6xRaE+1J8ASH0gwBJSLqaM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678338280;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nvkWCp3TULXIw9lqlVxOiEqPNkLIY/UrROP9j1sk4DQ=;
+        b=VVQQO8B6fj7FctdMgSixai7oc+HKTM3z3GyEEUwg0ryjmPjucKW2X3rZheT/2K+BL3
+         VtEYk/MVv7M4pxbN0LIGZszF8p0rMfDtvoYUZmMD19bjbQnTw5K/wl4dMw7mDW7Y+egk
+         YgNcNCUMBIuBWqGQ5K8TT516KSpzeQYkhINSFtqYDnEN6ygZCcNj4oCU9Azr/acWavL3
+         VC0WR4wwgX5pCVlXLSFbT5YH0HO73jKSsSxXi8sEkSgeoZnZFDQduX0/fdA93vT00NID
+         vNQegacnr1PFwh5RycRjInuYG8+WknmuLrFS3QTttXT8dO6vtf7whmdDu2kJVykQccjO
+         Mzjw==
+X-Gm-Message-State: AO0yUKWP8JkwyUH8VlZh20xal8r6GIOOFcDAHwQMxdoAxEE4IZkl+yOM
+        HWHlQKoEXjuO44gRSAUAHrwRxTb2jW3lyyu2DV7y1Q==
+X-Google-Smtp-Source: AK7set/OuQNpfgATPmolGrn1KWxAEgo1eFsbDxOcmXs+3rXUpUz7lh8AvnQYkuxuMH2T2pWDyTvifVRol2PYQlc8zIY=
+X-Received: by 2002:ab0:5402:0:b0:68a:a9d:13f5 with SMTP id
+ n2-20020ab05402000000b0068a0a9d13f5mr13684728uaa.1.1678338280324; Wed, 08 Mar
+ 2023 21:04:40 -0800 (PST)
+MIME-Version: 1.0
+References: <20230307163413.143334-1-bchihi@baylibre.com>
+In-Reply-To: <20230307163413.143334-1-bchihi@baylibre.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 9 Mar 2023 13:04:29 +0800
+Message-ID: <CAGXv+5E0wUJYUVD3wx3-=uES612ARQmUE0rxgAruFHxpZCBjzA@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Add LVTS support for mt8192
+To:     bchihi@baylibre.com
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We don't have outstanding_reqs bitmap in MCQ mode. And in consideration
-of the queue depth may increase beyond 64 in the future, we reworked
-ufshcd_print_trs() to get rid of usage of bitmap so that we can print
-trs for pending requests in both SDB and MCQ mode.
+On Wed, Mar 8, 2023 at 12:34=E2=80=AFAM <bchihi@baylibre.com> wrote:
+>
+> From: Balsam CHIHI <bchihi@baylibre.com>
+>
+> Add full LVTS support (MCU thermal domain + AP thermal domain) to MediaTe=
+k MT8192 SoC.
+>
+> This series is a continuation of the previous series "Add LVTS Thermal Ar=
+chitecture" v14 :
+>     https://patchwork.kernel.org/project/linux-pm/cover/20230209105628.50=
+294-1-bchihi@baylibre.com/
+> and "Add LVTS's AP thermal domain support for mt8195" :
+>     https://patchwork.kernel.org/project/linux-pm/cover/20230307154524.11=
+8541-1-bchihi@baylibre.com/
+>
+> Based on top of thermal/linux-next :
+>     base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
+>
+> Depends on these patches as they are not yet applyied to thermal/linux-ne=
+xt branch :
+>     [1/4] dt-bindings: thermal: mediatek: Add AP domain to LVTS thermal c=
+ontrollers for mt8195
+>     https://patchwork.kernel.org/project/linux-pm/patch/20230307154524.11=
+8541-2-bchihi@baylibre.com/
+>     [2/4] thermal/drivers/mediatek/lvts_thermal: Add AP domain for mt8195
+>     https://patchwork.kernel.org/project/linux-pm/patch/20230307154524.11=
+8541-3-bchihi@baylibre.com/
+>
+> Balsam CHIHI (4):
+>   dt-bindings: thermal: mediatek: Add LVTS thermal controller definition
+>     for mt8192
+>   thermal/drivers/mediatek/lvts_thermal: Add mt8192 support
+>   arm64: dts: mediatek: mt8192: Add thermal zones and thermal nodes
+>   arm64: dts: mediatek: mt8192: Add temperature mitigation threshold
 
-Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
----
- drivers/ufs/core/ufshcd.c | 68 +++++++++++++++++++++++++++--------------------
- 1 file changed, 39 insertions(+), 29 deletions(-)
+I tried this on my Hayato. As soon as lvts_ap probes and its thermal zones
+are registered, a "critical temperature reached" warning is immediately
+triggered for all the zones, a reboot is forced. A NULL pointer dereference
+is also triggered somewhere. I filtered out all the interspersed "critical
+temperature" messages:
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index e43aee1..a654d66 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -542,47 +542,57 @@ static void ufshcd_print_evt_hist(struct ufs_hba *hba)
- }
- 
- static
--void ufshcd_print_trs(struct ufs_hba *hba, unsigned long bitmap, bool pr_prdt)
-+void ufshcd_print_tr(struct ufs_hba *hba, int tag, bool pr_prdt)
- {
- 	const struct ufshcd_lrb *lrbp;
- 	int prdt_length;
--	int tag;
- 
--	for_each_set_bit(tag, &bitmap, hba->nutrs) {
--		lrbp = &hba->lrb[tag];
-+	lrbp = &hba->lrb[tag];
- 
--		dev_err(hba->dev, "UPIU[%d] - issue time %lld us\n",
--				tag, div_u64(lrbp->issue_time_stamp_local_clock, 1000));
--		dev_err(hba->dev, "UPIU[%d] - complete time %lld us\n",
--				tag, div_u64(lrbp->compl_time_stamp_local_clock, 1000));
--		dev_err(hba->dev,
-+	dev_err(hba->dev, "UPIU[%d] - issue time %lld us\n",
-+			tag, div_u64(lrbp->issue_time_stamp_local_clock, 1000));
-+	dev_err(hba->dev, "UPIU[%d] - complete time %lld us\n",
-+			tag, div_u64(lrbp->compl_time_stamp_local_clock, 1000));
-+	dev_err(hba->dev,
- 			"UPIU[%d] - Transfer Request Descriptor phys@0x%llx\n",
- 			tag, (u64)lrbp->utrd_dma_addr);
- 
--		ufshcd_hex_dump("UPIU TRD: ", lrbp->utr_descriptor_ptr,
--				sizeof(struct utp_transfer_req_desc));
--		dev_err(hba->dev, "UPIU[%d] - Request UPIU phys@0x%llx\n", tag,
-+	ufshcd_hex_dump("UPIU TRD: ", lrbp->utr_descriptor_ptr,
-+					sizeof(struct utp_transfer_req_desc));
-+	dev_err(hba->dev, "UPIU[%d] - Request UPIU phys@0x%llx\n", tag,
- 			(u64)lrbp->ucd_req_dma_addr);
--		ufshcd_hex_dump("UPIU REQ: ", lrbp->ucd_req_ptr,
--				sizeof(struct utp_upiu_req));
--		dev_err(hba->dev, "UPIU[%d] - Response UPIU phys@0x%llx\n", tag,
-+	ufshcd_hex_dump("UPIU REQ: ", lrbp->ucd_req_ptr,
-+					sizeof(struct utp_upiu_req));
-+	dev_err(hba->dev, "UPIU[%d] - Response UPIU phys@0x%llx\n", tag,
- 			(u64)lrbp->ucd_rsp_dma_addr);
--		ufshcd_hex_dump("UPIU RSP: ", lrbp->ucd_rsp_ptr,
--				sizeof(struct utp_upiu_rsp));
-+	ufshcd_hex_dump("UPIU RSP: ", lrbp->ucd_rsp_ptr,
-+					sizeof(struct utp_upiu_rsp));
- 
--		prdt_length = le16_to_cpu(
--			lrbp->utr_descriptor_ptr->prd_table_length);
--		if (hba->quirks & UFSHCD_QUIRK_PRDT_BYTE_GRAN)
--			prdt_length /= ufshcd_sg_entry_size(hba);
-+	prdt_length = le16_to_cpu(
-+		lrbp->utr_descriptor_ptr->prd_table_length);
-+	if (hba->quirks & UFSHCD_QUIRK_PRDT_BYTE_GRAN)
-+		prdt_length /= ufshcd_sg_entry_size(hba);
- 
--		dev_err(hba->dev,
-+	dev_err(hba->dev,
- 			"UPIU[%d] - PRDT - %d entries  phys@0x%llx\n",
- 			tag, prdt_length,
- 			(u64)lrbp->ucd_prdt_dma_addr);
- 
--		if (pr_prdt)
--			ufshcd_hex_dump("UPIU PRDT: ", lrbp->ucd_prdt_ptr,
--				ufshcd_sg_entry_size(hba) * prdt_length);
-+	if (pr_prdt)
-+		ufshcd_hex_dump("UPIU PRDT: ", lrbp->ucd_prdt_ptr,
-+						ufshcd_sg_entry_size(hba) * prdt_length);
-+}
-+
-+static void ufshcd_print_trs_all(struct ufs_hba *hba, bool pr_prdt)
-+{
-+	const struct ufshcd_lrb *lrbp;
-+	int tag;
-+
-+	for (tag = 0; tag < hba->nutrs; tag++) {
-+		lrbp = &hba->lrb[tag];
-+
-+		if (lrbp->cmd)
-+			ufshcd_print_tr(hba, tag, pr_prdt);
- 	}
- }
- 
-@@ -5332,7 +5342,7 @@ ufshcd_transfer_rsp_status(struct ufs_hba *hba, struct ufshcd_lrb *lrbp,
- 
- 	if ((host_byte(result) != DID_OK) &&
- 	    (host_byte(result) != DID_REQUEUE) && !hba->silence_err_logs)
--		ufshcd_print_trs(hba, 1 << lrbp->task_tag, true);
-+		ufshcd_print_tr(hba, lrbp->task_tag, true);
- 	return result;
- }
- 
-@@ -6406,7 +6416,7 @@ static void ufshcd_err_handler(struct work_struct *work)
- 		ufshcd_print_pwr_info(hba);
- 		ufshcd_print_evt_hist(hba);
- 		ufshcd_print_tmrs(hba, hba->outstanding_tasks);
--		ufshcd_print_trs(hba, hba->outstanding_reqs, pr_prdt);
-+		ufshcd_print_trs_all(hba, pr_prdt);
- 		spin_lock_irqsave(hba->host->host_lock, flags);
- 	}
- 
-@@ -7435,9 +7445,9 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
- 		ufshcd_print_evt_hist(hba);
- 		ufshcd_print_host_state(hba);
- 		ufshcd_print_pwr_info(hba);
--		ufshcd_print_trs(hba, 1 << tag, true);
-+		ufshcd_print_tr(hba, tag, true);
- 	} else {
--		ufshcd_print_trs(hba, 1 << tag, false);
-+		ufshcd_print_tr(hba, tag, false);
- 	}
- 	hba->req_abort_count++;
- 
--- 
-2.7.4
+[    2.943847] Unable to handle kernel NULL pointer dereference at
+virtual address 0000000000000600
+[    2.958818] Mem abort info:
+[    2.965996]   ESR =3D 0x0000000096000005
+[    2.973765] SMCCC: SOC_ID: ID =3D jep106:0426:8192 Revision =3D 0x000000=
+00
+[    2.975442]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+[    2.987305]   SET =3D 0, FnV =3D 0
+[    2.995521]   EA =3D 0, S1PTW =3D 0
+[    3.004265]   FSC =3D 0x05: level 1 translation fault
+[    3.014365] Data abort info:
+[    3.017344]   ISV =3D 0, ISS =3D 0x00000005
+[    3.021279]   CM =3D 0, WnR =3D 0
+[    3.022124] GACT probability NOT on
+[    3.024277] [0000000000000600] user address but active_mm is swapper
+[    3.034190] Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
+[    3.044738] Modules linked in:
+[    3.044745] CPU: 0 PID: 97 Comm: irq/273-1100b00 Not tainted
+6.3.0-rc1-next-20230308-01996-g3c0b9a61a3e5-dirty #575
+c7b94096b594a95f18217c2ad4a2bd6d2c431108
+[    3.044751] Hardware name: Google Hayato rev1 (DT)
+[    3.044755] pstate: 60000009 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=
+=3D--)
+[    3.052055] pc : __mutex_lock+0x60/0x438
+[    3.052066] lr : __mutex_lock+0x54/0x438
+[    3.052070] sp : ffffffc008883c60
+[    3.070822] x29: ffffffc008883c60 x28: ffffff80c281a880 x27: 000881f0000=
+9001f
+[    3.070830] x26: 1fc0000000247c00 x25: ffffff80c281a900 x24: 00000000000=
+00000
+[    3.070837] x23: 0000000000000000 x22: ffffffe5ae5d45f4 x21: 00000000000=
+00002
+[    3.086211] x20: 0000000000000000 x19: 00000000000005a0 x18: fffffffffff=
+fffff
+[    3.086218] x17: 6568636165722065 x16: 727574617265706d x15: 00000000000=
+00028
+[    3.097773] x14: 0000000000000000 x13: 0000000000003395 x12: ffffffe5af7=
+f6ff0
+[    3.097780] x11: 65706d655428206e x10: 0000000000000000 x9 : ffffffe5adc=
+f4b08
+[    3.097787] x8 : ffffffe5afe03230 x7 : 00000000000261b0 x6 : ffffff80c2b=
+86600
+[    3.105609] x5 : 0000000000000000 x4 : ffffff80c2b86600 x3 : 00000000000=
+00000
+[    3.112565] x2 : ffffff9b505f6000 x1 : 0000000000000000 x0 : 00000000000=
+00000
+[    3.127593] Call trace:
+[    3.127595]  __mutex_lock+0x60/0x438
+[    3.127600]  mutex_lock_nested+0x34/0x48
+[    3.141844]  thermal_zone_device_update+0x34/0x80
+[    3.152879]  lvts_irq_handler+0xbc/0x158
+[    3.152886]  irq_thread_fn+0x34/0xb8
+[    3.161489]  irq_thread+0x19c/0x298
+[    3.161494]  kthread+0x11c/0x128
+[    3.175152]  ret_from_fork+0x10/0x20
+[    3.175163] Code: 97ccbb7c 9000bea0 b9411400 35000080 (f9403260)
+[    3.189402] ---[ end trace 0000000000000000 ]---
+[    3.193417] Kernel panic - not syncing: Oops: Fatal exception
+[    3.201255] Kernel Offset: 0x25a5c00000 from 0xffffffc008000000
+[    3.201257] PHYS_OFFSET: 0x40000000
+[    3.201259] CPU features: 0x600000,01700506,3200720b
+[    3.201263] Memory Limit: none
+[    3.376838] Rebooting in 30 seconds..
 
+
+>  arch/arm64/boot/dts/mediatek/mt8192.dtsi      | 454 ++++++++++++++++++
+>  drivers/thermal/mediatek/lvts_thermal.c       | 106 +++-
+>  .../thermal/mediatek,lvts-thermal.h           |  19 +
+>  3 files changed, 577 insertions(+), 2 deletions(-)
+>
+>
+> base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
+> prerequisite-patch-id: 73be949bd16979769e5b94905b244dcee4a8f687
+> prerequisite-patch-id: 9076e9b3bd3cc411b7b80344211364db5f0cca17
+> prerequisite-patch-id: e220d6ae26786f524c249588433f02e5f5f906ad
+> prerequisite-patch-id: 58e295ae36ad4784f3eb3830412f35dad31bb8b6
+> prerequisite-patch-id: d23d83a946e5b876ef01a717fd51b07df1fa08dd
+> prerequisite-patch-id: d67f2455eef1c4a9ecc460dbf3c2e3ad47d213ec
+> prerequisite-patch-id: b407d2998e57678952128b3a4bac92a379132b09
+> prerequisite-patch-id: fbb9212ce8c3530da17d213f56fa334ce4fa1b2b
+> prerequisite-patch-id: 5db9eed2659028cf4419f2de3d093af7df6c2dad
+> prerequisite-patch-id: a83c00c628605d1c8fbe1d97074f9f28efb1bcfc
+> --
+> 2.34.1
+>
+>
