@@ -2,242 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A924C6B2F3C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1186B2F48
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbjCIVFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 16:05:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
+        id S230298AbjCIVI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 16:08:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjCIVFl (ORCPT
+        with ESMTP id S229835AbjCIVIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 16:05:41 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A92F7EDD;
-        Thu,  9 Mar 2023 13:05:39 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 990F3604FA;
-        Thu,  9 Mar 2023 22:05:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678395936; bh=qQPbkr5OXoSZCu1Cm9eaL2wmT8GuciMElwAaQGa+yK8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=n9Fy91zG0amZ0tSOOJQyg587k3v6bpCv7FE8YxUZhc1+uXWKcKqX7jr3tm4M+8mtX
-         lK78cjAXjH4aZ63Auc7licef7kKx2IjNS0wVHBPhym7w87tHwivRSat40bcNJbjX4p
-         jk8p6RQLIZsRCcRQFosmQ+TcUaX/HWt2EBYW8vASkXs32KKWygRJ/UX1s8bt8EXGQS
-         O/chsJHf7JddKbCgb9PUz2ibIsZd4zad/DkfAmzd008MHiSft0TZ9p17o9EvJtaB4p
-         MFHhEGOyh6oAFIDtKzNkHpicUfqPkuTQbINuaHzLe/nrYkvdkIR1j1thoKbHW7qVvW
-         KOSAsvITN06tA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id GxgLvk3dFiYw; Thu,  9 Mar 2023 22:05:33 +0100 (CET)
-Received: from [192.168.1.4] (unknown [77.237.109.125])
-        by domac.alu.hr (Postfix) with ESMTPSA id 417FE604F9;
-        Thu,  9 Mar 2023 22:05:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678395933; bh=qQPbkr5OXoSZCu1Cm9eaL2wmT8GuciMElwAaQGa+yK8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Qw3X4TJClqf0E5plN1fsNSobqK+IXK1L7QzygNFhoyvYCLn8YsehOFJs4Ksie6v/4
-         6q7uT14rUtfY9wEYkX4fQ3gtUfXbQrO32Fpik81myyMd573vq1y7IVFAN6ozOKkCKo
-         eRzXcPf8y+utdW/qXv2Z5iSCfAl5h/xZJ7pW6yupFq8mm1di8R6JQarl2NFMh19FAh
-         1HvSPJpUQcgyKloFnXW2H2FACPQKctrBCfxaJC5MY+jiRYm3eLctk1G4J6PUXW1H/3
-         4qsk5uS+sqYJHh8SIIDUdHFVm+AZ1nBXR3h0Nc90QhTUMRaKYNByb+KpJ4RGGQCSbR
-         6v84BD5MkoRDw==
-Message-ID: <d85ba503-d93c-3483-25e1-6043d4af444f@alu.unizg.hr>
-Date:   Thu, 9 Mar 2023 22:05:32 +0100
+        Thu, 9 Mar 2023 16:08:23 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904305C9FD
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 13:08:21 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so7617091pjh.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 13:08:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1678396101;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nFe2Va1kto8iMTDHzrCFEwZq2bEoPAeV/MZRx7NhfCo=;
+        b=XboDOUpa1aTr7k1b025xwPcjVRaQiMLC1Aoo1bkE5r/kRn+UeARaJDLwA240gY709c
+         I6cDI6xDrK/HSNk2oPRFgG3KEX19NyKB9V+7bOmrm9mLlHB44PIhUPFsBSePzukpC5mD
+         VMAKMiLmIbb74iDvnp4c9xuzhl1twFzy/+FXxWQNT3jh+PIqZcbb9GtCKZkSka0C9KP3
+         uBiOGiQ7ZZ5aHkG4kMaeggl6pIgZnV5Gpvm9zWkeWoe6TqmQcOAKX52cGkBOuNpH6+Ja
+         U20ySyGawW8W16n4I3IB+X5UtPvHLj2PlhDg9DgzSdz5qGMJNgnObIcGORJZGCjGwpAS
+         QiTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678396101;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nFe2Va1kto8iMTDHzrCFEwZq2bEoPAeV/MZRx7NhfCo=;
+        b=P7Vedt8LVqvUfXEukz3qTvEUaM4YhGElPX4pvP1bA19uoumPhuwnZ2pQBITeUrG5rD
+         YSF1p7rnyBhLwLOMjK/+CXKC9/d04MDfQ5/xCGfLL9tce86pyqfZe+RRW+6Jrbj7bRyv
+         TWrnlQ5Sz1ztPqHzo6twjkmdRkLlRmEuJTBMvt7hVpMYrq4i/FVpQliFP51l1jQot19p
+         kJOKenPle+bdGQRwA49S6hfHo2OhnDSWtUfTr3xO2w0tR7IjH3sgv85a+lUliMq0DkdF
+         L3aO0Zt38a4b+jUa0H6BOkU3F6PP/ChjSdHUltBoKOg0hVQTPLiVpFEFCw8HSPenxh7S
+         dU/Q==
+X-Gm-Message-State: AO0yUKU7bRk+jcTlJNMld19yZDblUiSn8+0nb37i2otSJPbcmTDnWbok
+        7vUijUzqHh43CvVdBtyElLMfYQ==
+X-Google-Smtp-Source: AK7set/REsTS4uUCxJ8i0WFSHkq4LKPiRUgWYxIJGw83tcjExfSl3lxLhgKGfRTlFj0TctbQIbHWmA==
+X-Received: by 2002:a05:6a20:3942:b0:cc:9ca2:8b5f with SMTP id r2-20020a056a20394200b000cc9ca28b5fmr28182199pzg.15.1678396100918;
+        Thu, 09 Mar 2023 13:08:20 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id d7-20020a631d47000000b004fab4455748sm37975pgm.75.2023.03.09.13.08.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 13:08:20 -0800 (PST)
+Date:   Thu, 9 Mar 2023 13:08:17 -0800
+From:   Deepak Gupta <debug@rivosinc.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "al.grant@arm.com" <al.grant@arm.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>, "nd@arm.com" <nd@arm.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v7 33/41] x86/shstk: Introduce map_shadow_stack syscall
+Message-ID: <20230309210817.GB1964069@debug.ba.rivosinc.com>
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-34-rick.p.edgecombe@intel.com>
+ <ZADbP7HvyPHuwUY9@arm.com>
+ <20230309185511.GA1964069@debug.ba.rivosinc.com>
+ <aaf918de8585204fb0785ac1fc0f686a8fd88bb0.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] block: don't embed integrity_kobj into gendisk
-To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20230309-kobj_release-gendisk_integrity-v1-1-a240f54eac60@weissschuh.net>
-Content-Language: en-US, hr
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <20230309-kobj_release-gendisk_integrity-v1-1-a240f54eac60@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <aaf918de8585204fb0785ac1fc0f686a8fd88bb0.camel@intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09. 03. 2023. 21:23, Thomas Weißschuh wrote:
-> A struct kobject is only supposed to be embedded into objects which
-> lifetime it will manage.
-> Objects of type struct gendisk however are refcounted by their part0
-> block_device.
-> Therefore the integrity_kobj should not be embedded but split into its
-> own independently managed object.
-> 
-> This will also provide a proper .release function for the ktype which
-> avoid warnings like the following:
-> kobject: 'integrity' (000000005198bea8): does not have a release() function, it is broken and must be fixed.
-> 
-> While modifying blk_integrity_del() also drop the explicit call to
-> kobject_uevent(KOBJ_REMOVE) as the driver care will do this
-> automatically.
-> 
-> Reported-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-> Link: https://lore.kernel.org/lkml/60b2b66c-22c9-1d38-ed1c-7b7d95e32720@alu.unizg.hr/
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->  block/blk-integrity.c  | 32 ++++++++++++++++++++++++--------
->  include/linux/blkdev.h |  2 +-
->  2 files changed, 25 insertions(+), 9 deletions(-)
-> 
-> diff --git a/block/blk-integrity.c b/block/blk-integrity.c
-> index 8f01d786f5cb..40adf33f5535 100644
-> --- a/block/blk-integrity.c
-> +++ b/block/blk-integrity.c
-> @@ -218,10 +218,15 @@ struct integrity_sysfs_entry {
->  	ssize_t (*store)(struct blk_integrity *, const char *, size_t);
->  };
->  
-> +static inline struct gendisk *integrity_kobj_to_disk(struct kobject *kobj)
-> +{
-> +	return dev_to_disk(kobj_to_dev(kobj->parent));
-> +}
-> +
->  static ssize_t integrity_attr_show(struct kobject *kobj, struct attribute *attr,
->  				   char *page)
->  {
-> -	struct gendisk *disk = container_of(kobj, struct gendisk, integrity_kobj);
-> +	struct gendisk *disk = integrity_kobj_to_disk(kobj);
->  	struct blk_integrity *bi = &disk->queue->integrity;
->  	struct integrity_sysfs_entry *entry =
->  		container_of(attr, struct integrity_sysfs_entry, attr);
-> @@ -233,7 +238,7 @@ static ssize_t integrity_attr_store(struct kobject *kobj,
->  				    struct attribute *attr, const char *page,
->  				    size_t count)
->  {
-> -	struct gendisk *disk = container_of(kobj, struct gendisk, integrity_kobj);
-> +	struct gendisk *disk = integrity_kobj_to_disk(kobj);
->  	struct blk_integrity *bi = &disk->queue->integrity;
->  	struct integrity_sysfs_entry *entry =
->  		container_of(attr, struct integrity_sysfs_entry, attr);
-> @@ -356,9 +361,15 @@ static const struct sysfs_ops integrity_ops = {
->  	.store	= &integrity_attr_store,
->  };
->  
-> +static void integrity_release(struct kobject *kobj)
-> +{
-> +	kfree(kobj);
-> +}
-> +
->  static const struct kobj_type integrity_ktype = {
->  	.default_groups = integrity_groups,
->  	.sysfs_ops	= &integrity_ops,
-> +	.release        = integrity_release,
->  };
->  
->  static blk_status_t blk_integrity_nop_fn(struct blk_integrity_iter *iter)
-> @@ -442,16 +453,21 @@ int blk_integrity_add(struct gendisk *disk)
->  {
->  	int ret;
->  
-> -	ret = kobject_init_and_add(&disk->integrity_kobj, &integrity_ktype,
-> +	disk->integrity_kobj = kmalloc(sizeof(*disk->integrity_kobj), GFP_KERNEL);
-> +	if (!disk->integrity_kobj)
-> +		return -ENOMEM;
-> +
-> +	ret = kobject_init_and_add(disk->integrity_kobj, &integrity_ktype,
->  				   &disk_to_dev(disk)->kobj, "%s", "integrity");
-> -	if (!ret)
-> -		kobject_uevent(&disk->integrity_kobj, KOBJ_ADD);
-> +	if (ret)
-> +		kobject_put(disk->integrity_kobj);
-> +	else
-> +		kobject_uevent(disk->integrity_kobj, KOBJ_ADD);
-> +
->  	return ret;
->  }
->  
->  void blk_integrity_del(struct gendisk *disk)
->  {
-> -	kobject_uevent(&disk->integrity_kobj, KOBJ_REMOVE);
-> -	kobject_del(&disk->integrity_kobj);
-> -	kobject_put(&disk->integrity_kobj);
-> +	kobject_put(disk->integrity_kobj);
->  }
-> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-> index d1aee08f8c18..2fbfb3277a2b 100644
-> --- a/include/linux/blkdev.h
-> +++ b/include/linux/blkdev.h
-> @@ -164,7 +164,7 @@ struct gendisk {
->  	atomic_t sync_io;		/* RAID */
->  	struct disk_events *ev;
->  #ifdef  CONFIG_BLK_DEV_INTEGRITY
-> -	struct kobject integrity_kobj;
-> +	struct kobject *integrity_kobj;
->  #endif	/* CONFIG_BLK_DEV_INTEGRITY */
->  
->  #ifdef CONFIG_BLK_DEV_ZONED
-> 
-> ---
-> base-commit: 44889ba56cbb3d51154660ccd15818bc77276696
-> change-id: 20230309-kobj_release-gendisk_integrity-e26c0bc126aa
-> 
-> Best regards,
+On Thu, Mar 09, 2023 at 07:39:41PM +0000, Edgecombe, Rick P wrote:
+>On Thu, 2023-03-09 at 10:55 -0800, Deepak Gupta wrote:
+>> On Thu, Mar 02, 2023 at 05:22:07PM +0000, Szabolcs Nagy wrote:
+>> > The 02/27/2023 14:29, Rick Edgecombe wrote:
+>> > > Previously, a new PROT_SHADOW_STACK was attempted,
+>> >
+>> > ...
+>> > > So rather than repurpose two existing syscalls (mmap, madvise)
+>> > > that don't
+>> > > quite fit, just implement a new map_shadow_stack syscall to allow
+>> > > userspace to map and setup new shadow stacks in one step. While
+>> > > ucontext
+>> > > is the primary motivator, userspace may have other unforeseen
+>> > > reasons to
+>> > > setup it's own shadow stacks using the WRSS instruction. Towards
+>> > > this
+>> > > provide a flag so that stacks can be optionally setup securely
+>> > > for the
+>> > > common case of ucontext without enabling WRSS. Or potentially
+>> > > have the
+>> > > kernel set up the shadow stack in some new way.
+>> >
+>> > ...
+>> > > The following example demonstrates how to create a new shadow
+>> > > stack with
+>> > > map_shadow_stack:
+>> > > void *shstk = map_shadow_stack(addr, stack_size,
+>> > > SHADOW_STACK_SET_TOKEN);
+>> >
+>> > i think
+>> >
+>> > mmap(addr, size, PROT_READ, MAP_ANON|MAP_SHADOW_STACK, -1, 0);
+>> >
+>> > could do the same with less disruption to users (new syscalls
+>> > are harder to deal with than new flags). it would do the
+>> > guard page and initial token setup too (there is no flag for
+>> > it but could be squeezed in).
+>>
+>> Discussion on this topic in v6
+>>
+>https://lore.kernel.org/all/20230223000340.GB945966@debug.ba.rivosinc.com/
+>>
+>> Again I know earlier CET patches had protection flag and somehow due
+>> to pushback
+>> on mailing list,
+>>  it was adopted to go for special syscall because no one else
+>> had shadow stack.
+>>
+>> Seeing a response from Szabolcs, I am assuming arm4 would also want
+>> to follow
+>> using mmap to manufacture shadow stack. For reference RFC patches for
+>> risc-v shadow stack,
+>> use a new protection flag = PROT_SHADOWSTACK.
+>>
+>https://lore.kernel.org/lkml/20230213045351.3945824-1-debug@rivosinc.com/
+>>
+>> I know earlier discussion had been that we let this go and do a re-
+>> factor later as other
+>> arch support trickle in. But as I thought more on this and I think it
+>> may just be
+>> messy from user mode point of view as well to have cognition of two
+>> different ways of
+>> creating shadow stack. One would be special syscall (in current libc)
+>> and another `mmap`
+>> (whenever future re-factor happens)
+>>
+>> If it's not too late, it would be more wise to take `mmap`
+>> approach rather than special `syscall` approach.
+>
+>There is sort of two things intermixed here when we talk about a
+>PROT_SHADOW_STACK.
+>
+>One is: what is the interface for specifying how the shadow stack
+>should be provisioned with data? Right now there are two ways
+>supported, all zero or with an X86 shadow stack restore token at the
+>end. Then there was already some conversation about a third type. In
+>which case the question would be is using mmap MAP_ flags the right
+>place for this? How many types of initialization will be needed in the
+>end and what is the overlap between the architectures?
 
-Hello Thomas,
+First of all, arches can choose to have token at the bottom or not.
 
-Thank you for Cc:-ing me on this.
+Token serve following purposes
+  - It allows one to put desired value in shadow stack pointer in safe/secure manner.
+    Note: x86 doesn't provide any opcode encoding to value in SSP register. So having
+    a token is kind of a necessity because x86 doesn't easily allow writing shadow stack.
 
-The patch applied successfully against 6.3-rc1 commit 44889ba56cbb Merge tag 'net-6.3-rc2'
-and I'm just in a build with
+  - A token at the bottom acts marker / barrier and can be useful in debugging
 
-CONFIG_DEBUG_KOBJECT=y
-CONFIG_DEBUG_KOBJECT_RELEASE=y
+  - If (and a big *if*) we ever reach a point in future where return address is only pushed
+    on shadow stack (x86 should have motivation to do this because less uops on call/ret),
+    a token at the bottom (bottom means lower address) is ensuring sure shot way of getting
+    a fault when exhausted.
 
-However, I can see remotely whether the kernel is operating, but not these special messages
-that are emitted past rsyslog's end of lifetime. It looks like it will require physical
-access to the box tomorrow morning, Lord willing.
+Current RISCV zisslpcfi proposal doesn't define CPU based tokens because it's RISC.
+It allows mechanisms using which software can define formatting of token for itself.
+Not sure of what ARM is doing.
 
-I hate to object to your solution, still, I fail to see how it releases 
+Now coming to the point of all zero v/s shadow stack token.
+Why not always have token at the bottom?
 
-security/integrity/iint.c:
-175 static int __init integrity_iintcache_init(void)
-176 {
-177         iint_cache =
-178             kmem_cache_create("iint_cache", sizeof(struct integrity_iint_cache),
-179                               0, SLAB_PANIC, init_once);
-180         return 0;
-181 }
-182 DEFINE_LSM(integrity) = {
-183         .name = "integrity",
-184         .init = integrity_iintcache_init,
-185 };
+In case of x86, Why need for two ways and why not always have a token at the bottom.
+The way x86 is going, user mode is responsible for establishing shadow stack and thus
+whenever shadow stack is created then if x86 kernel implementation always place a token
+at the base/bottom.
 
-It is declared here:
+Now user mode can do following:--
+  - If it has access to WRSS, it can sure go ahead and create a token of its choosing and
+    overwrite kernel created token. and then do RSTORSSP on it's own created token.
 
-26 static struct kmem_cache *iint_cache __read_mostly;
+  - If it doesn't have access to WRSS (and dont need to create its own token), it can do
+    RSTORSSP on this. As soon as it does, no other thread in process can restore to it.
+    On `fork`, you get the same un-restorable token.
 
-so it ought to be kmem_cache_destroy()-ed from this module, unless there is something that
-is not obvious nor transparent.
+So why not always have a token at the bottom.
+This is my plan for riscv implementation as well (to have a token at the bottom)
 
-Can you help me see what I'm doing wrong?
+>
+>The other thing is: should shadow stack memory creation be tightly
+>controlled? For example in x86 we limit this to anonymous memory, etc.
+>Some reasons for this are x86 specific, but some are not. So if we
+>disallow most of the options why allow the interface to take them? And
+>then you are in the position of carefully maintaining a list of not-
+>allowed options instead letting a list of allowed options sit there.
 
-(Many thanks to Mr. Andy Schevchenko from Intel who narrowed the search for the bug to
-security/integrity/iint.c.)
+I am new to linux kernel and thus may be not able to follow the argument of
+limiting to anonymous memory.
 
-Best regards,
-Mirsad
+Why is limiting it to anonymous memory a problem. IIRC, ARM's PROT_MTE is applicable
+only to anonymous memory. I can probably find few more examples. 
 
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
+Eventually syscall will also go ahead and use memory management code to
+perform mapping. So I didn't understand the reasoning here. The way syscall
+can limit it to anonymous memory, why mmap can't do the same if it sees
+PROT_SHADOWSTACK.
+
+>
+>The only benefit I've heard is that it saves creating a new syscall,
+>but it also saves several MAP_ flags. That, and that the RFC for riscv
+>did a PROT_SHADOW_STACK to start. So, yes, two people asked the same
+>question, but I'm still not seeing any benefits. Can you give the pros
+>and cons please?
+
+Again the way syscall will limit it to anonymous memory, Why mmap can't do same?
+There is precedence for it (like PROT_MTE is applicable only to anonymous memory)
+
+So if it can be done, then why introduce a new syscall?
+
+>
+>BTW, in glibc map_shadow_stack is called from arch code. So I think
+>userspace wise, for this to affect other architectures there would need
+>to be some code that could do things generically, with somehow the
+>shadow stack pivot abstracted but the shadow stack allocation not.
+
+Agreed, yes it can be done in a way where it won't put tax on other architectures.
+
+But what about fragmentation within x86. Will x86 always choose to use system call
+method map shadow stack. If future re-factor results in x86 also use `mmap` method.
+Isn't it a mess for x86 glibc to figure out what to do; whether to use system call
+or `mmap`?
 
