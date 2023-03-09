@@ -2,97 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA336B2DF9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE4D6B2DFC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjCITxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 14:53:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
+        id S230074AbjCITyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 14:54:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjCITxK (ORCPT
+        with ESMTP id S229613AbjCITyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 14:53:10 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D15A267;
-        Thu,  9 Mar 2023 11:53:09 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-176b90e14a9so3467979fac.9;
-        Thu, 09 Mar 2023 11:53:09 -0800 (PST)
+        Thu, 9 Mar 2023 14:54:07 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882986B32B
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:54:06 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id a3so2717469vsi.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 11:54:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678391588;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MvMVuj1YYfAwGHDiRte1xIKNtCoI7g0aNfnni9Ql/Lw=;
-        b=WqAgLHW8B0jrm/YOu7zDvVQ5aK4NBR3+MzQkrRkeeFyN0skUylsiQX9KKfQ3P43tfP
-         PLCPBvc9qleOMaESQRGFYgjzc0JseN3+aPI7Cxo+53CcbuITtxzMMo7OdH+bvsG8SkQK
-         E6QPDphMq6BqUg5wu6O1OFxlZIuooYm/C8miqR3oa9benAXKQX0AVUvvr9pKFZkAkP49
-         0OCjC2tbUZAvPDGKWBRry8E5SDdE20up3gL36H6k0FwItaF3jJNQfGcmpH6iK1ayinfh
-         wKwmPP/ltTBW81LnXIipeShGqiKqJp+WiTZ/+f4Dap2oYY4OKXtMX2mNj0eOr5FeVhaK
-         MV2Q==
+        d=chromium.org; s=google; t=1678391645;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RqpcGDTF9TvNcH8vUk4y3HxaqWz3ChIQXFNytcqy8nU=;
+        b=OJbln4sdUL4EAT7TMgmdVYhV87K5DCcUK1N6+s4b6mo9FsSNTACJr8B67kxGsBmgAo
+         GcY7w0Mdqf0D+1c4yh6n1ULBJUXd1SI97oywSezgjCGdhd8deH6bTizYEtqVtlJ21zkO
+         2kycYb+om4iP4IdH/xivp18F5koYqU0fjFJaI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678391588;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678391645;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MvMVuj1YYfAwGHDiRte1xIKNtCoI7g0aNfnni9Ql/Lw=;
-        b=SwS+Cih80nutZomzgWh7gEfIjdsHzVNzGO1VuEi0kSyjBupeczNkz4hxPCBcQ/FsiH
-         IeGzZ+OcCQlO0UsbSOonzrlE/Y6m+fSnrTUdJHQRYP/GGCcNW1bIzsSZH2ZUmmqIFz68
-         WFe5uzBZGhg9yeX9hg0f7VPE7m6+s6UQcR0IIeD3nmeH9kG0mjyoQfQr8KTfclKhe7Me
-         62QisMPXNyoNwzgQl6WLFAgr56HE0lc+NhljELOFMoseXXB+650uJEwyIf19OEKxBVHk
-         4wjRpsGqwFJsvouuTGiDYCJYew8fBFstmw8FmsFe579VXSW38A0nLr2g0FdM5OBtmPvc
-         SMbg==
-X-Gm-Message-State: AO0yUKXq3JY52JdEg+nYzKIcYACWHPAEPq23ylLB1fkXbUIrBGDSQ7HO
-        gJkrQ4SlXzchlqT5T6gWqDY=
-X-Google-Smtp-Source: AK7set9ywH0iPXbx8MLsKKqviQkeTLzJRDrBRAxLuJBw8HSmq7UChKtBfFkT18N9TWB3movRkBUPdg==
-X-Received: by 2002:a05:6870:7394:b0:16d:eac4:7b5f with SMTP id z20-20020a056870739400b0016deac47b5fmr14214221oam.48.1678391588740;
-        Thu, 09 Mar 2023 11:53:08 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a18-20020a05687103d200b0017293fa734asm98142oag.48.2023.03.09.11.53.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 11:53:08 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 9 Mar 2023 11:53:07 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/887] 6.1.16-rc2 review
-Message-ID: <2816288c-1701-41bf-ae66-53cf5d2a9fae@roeck-us.net>
-References: <20230308091853.132772149@linuxfoundation.org>
+        bh=RqpcGDTF9TvNcH8vUk4y3HxaqWz3ChIQXFNytcqy8nU=;
+        b=jGMT74FNRF+kUIGMOCI0ixywfy9rxq9UidnCjhDrEGu3yi3RDjyOyh/qYwocI3dDpx
+         HOMBKSZPIsIJVkTgK9iKaMXvMOIaYgINZ32EGm728cUK6XzoyGSOTAeVMK+Q1B8nBlcS
+         ob0st91OUWSCaQtCe8zWRnrdN0maRPaXhB02dmhjyLK2ut8vCjcq2vWvoTN361pyfhTh
+         sFwGHxODJhoqkdF/ufUCuLTroDwhW7w+FP9tJh1HMwbCVwtjjkAvyG1CyJpNgJjluqiR
+         5BB89/ntvP2Tu5GoJjt3angzZ2EcvvgTi9aHEHxJAdePtAdXFW1HBMQwxGMX/NRUbZ6e
+         39yQ==
+X-Gm-Message-State: AO0yUKVU4Hzr4OfargDJ8tluaetzLduRV6213qRbnrVxoNxI7L9al95A
+        TSqe2UNLYdOTNitR2sCaHQpSr8aVhZwhdpHCO/UO2g==
+X-Google-Smtp-Source: AK7set8IhMjIfSIqc5tWtr8EnGWBjwWQ1Qw4o1RTQNtpBk0PXRu13Gppe1EWsTNPEF2TEFMhKolo/tokyByyIxtxAxo=
+X-Received: by 2002:a05:6102:3167:b0:421:a2e2:cf30 with SMTP id
+ l7-20020a056102316700b00421a2e2cf30mr15502192vsm.5.1678391645507; Thu, 09 Mar
+ 2023 11:54:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230308091853.132772149@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230308202159.2419227-1-grundler@chromium.org>
+ <20230308202159.2419227-2-grundler@chromium.org> <ZAnBCQsv7tTBIUP1@nanopsycho>
+ <CANEJEGuK-=tTBXG6FpC4aBb7KbsNZng2-Rmi0k6BJJ7An=Pyxw@mail.gmail.com> <07dd1c76-68a1-4c2f-98fe-7c25118eaff9@lunn.ch>
+In-Reply-To: <07dd1c76-68a1-4c2f-98fe-7c25118eaff9@lunn.ch>
+From:   Grant Grundler <grundler@chromium.org>
+Date:   Thu, 9 Mar 2023 11:53:54 -0800
+Message-ID: <CANEJEGurX3Kr30Dv5_LzxN+shYuWXxxbEJG1MOgOOhpAq1WzLA@mail.gmail.com>
+Subject: Re: [PATCHv3 net 2/2] net: asix: init mdiobus from one function
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Grant Grundler <grundler@chromium.org>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 10:29:31AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.16 release.
-> There are 887 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 10 Mar 2023 09:16:12 +0000.
-> Anything received after that time might be too late.
-> 
+On Thu, Mar 9, 2023 at 11:30=E2=80=AFAM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> > I hope the maintainers can apply both to net-next and only apply the
+> > first to net branch.
+>
+> Hi Grant
+>
+> Please take a look at
+> https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+>
+> Please submit the first patch to net. Then wait a week for net to be
+> merged into net-next, and submit the second patch to net-next.
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 516 pass: 516 fail: 0
+Thanks Andrew!
+I read maintainer-netdev.html when Jakub pointed me at it a few days
+ago. He also instructed me to use "net" but didn't specify for the
+second patch - so I assumed both patches.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+I'll follow your instructions and repost to net-next once the first
+patch has been merged.
 
-Guenter
+cheers,
+grant
+
+>
+>        Andrew
