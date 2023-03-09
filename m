@@ -2,269 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED2D6B1FAB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:15:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F656B1FA8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjCIJPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:15:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
+        id S230468AbjCIJPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:15:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjCIJPY (ORCPT
+        with ESMTP id S231236AbjCIJPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:15:24 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E9F769DF;
-        Thu,  9 Mar 2023 01:15:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1678353318; x=1709889318;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2T70OKG7KgIEMwaSO0d7AReWE5H9q7hJM3GfzyRu8mY=;
-  b=icJ7HdNRZE1wAF+mvOFyRI0ykgz8ikJHn0uc5BedtLwmI82UW/PdTo1E
-   cuc3hx9eyFqNookEgiJP6esbu4q270jjAo668NnlGz0e2CyQpYPovlawl
-   iu7disYXb0cyU72B8+RIJha6HQlAg5b/RbrwejnIRYCNDrobU4AjJu/F2
-   YtGpomjwVOfnYEfpFNM12KxWkqkbjaRM6UU6anMpjc178O2nzWSoCPMmw
-   FHamj0BUYKKv6WKS3NReqwvCIy2gEsKIImFQJS1RJPLZq4CzYLf8aT0Uf
-   FnpXFIGDMBs5XapAvWu8OyT5hpbsIMQm+eqzXsdVjzXpTjTlCUJcffQHO
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,245,1673938800"; 
-   d="asc'?scan'208";a="203992667"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Mar 2023 02:15:17 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 9 Mar 2023 02:15:17 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Thu, 9 Mar 2023 02:15:15 -0700
-Date:   Thu, 9 Mar 2023 09:14:46 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Mike Rapoport <rppt@kernel.org>
-CC:     Conor Dooley <conor@kernel.org>, <palmer@dabbelt.com>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <frowand.list@gmail.com>,
-        <robh+dt@kernel.org>, <mick@ics.forth.gr>,
-        <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>,
-        <Valentina.FernandezAlanis@microchip.com>,
-        <Daire.McNamara@microchip.com>
-Subject: Re: RISC-V reserved memory problems
-Message-ID: <3ffac9cc-ffb2-4e16-ad18-ff1ed4b6289f@spud>
-References: <8e10bf15-9fa9-fe90-1656-35bf3e87e7f8@microchip.com>
- <f8e67f82-103d-156c-deb0-d6d6e2756f5e@microchip.com>
- <Y9wytv5KSt1ca+td@spud>
- <ZAchb/DfbIh+qaE4@kernel.org>
+        Thu, 9 Mar 2023 04:15:10 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D74864265;
+        Thu,  9 Mar 2023 01:15:06 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 8699741F78;
+        Thu,  9 Mar 2023 09:14:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1678353304;
+        bh=5NvQExJBE/2u/mwalmBIy0G1FlF3VvdxJMh+roXHaLw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=KbySdjG9+l7bYziRG7wlG0Uny+k+kSCwHuz0PRkGZSuiH0e2GjLTVETfhUFxliLN9
+         0BgYaDMv6QGsz/z9oI3hs3XE9Us2YKlYl526TjYqlP6x4PcqpDoDN2n1ReOAXKQukZ
+         xgEWb3sefmBsFzJqIO9TYEt/8g6+Eo3SYTuk8tM1NCers6bdARbpAvPl+2VLDf1d+o
+         n1baBbYKEeRxORaDt87nOEUNCIH249QGBDwbawpQ1U3+QqD7lXMyAQpnUQbijSSujD
+         KNEYqNjWXpWm2bbFi8/ZJwNPg7g8x0IkK+FVPXZC5uzG74iwtS0jtnDVLTy9rjYM1N
+         XCJh32fO005nw==
+Message-ID: <d36046e6-acf5-89a3-46b4-1c813ca925c8@asahilina.net>
+Date:   Thu, 9 Mar 2023 18:14:55 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="McODTL91jRNtt7ou"
-Content-Disposition: inline
-In-Reply-To: <ZAchb/DfbIh+qaE4@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
+ <cd788ccf-0cf1-85d5-1bf8-efc259bd7e11@amd.com>
+ <a075d886-0820-b6fb-fcd0-45bfdc75e37d@asahilina.net>
+ <2b1060e9-86ba-7e16-14f1-5b5fa63de719@amd.com>
+ <9f76bb68-b462-b138-d0ad-d27c972530d4@asahilina.net>
+ <a39c6b40-f190-002d-ae1c-8b58c6442df2@amd.com>
+ <4bbfc1a3-cfc3-87f4-897b-b6637bac3bd0@asahilina.net>
+ <b0aa78b2-b432-200a-8953-a80c462fa6ee@amd.com>
+ <c0624252-070e-bd44-2116-93a1d63a1359@asahilina.net>
+ <d1fccceb-ca77-f653-17fc-63168e0da884@amd.com>
+ <9c3dc2ad-11e4-6004-7230-8ca752e3d9f7@asahilina.net>
+ <d544748c-8a2b-7c08-f199-182a56af22be@amd.com>
+ <3e5e0120-50fd-51c0-d817-5b1dc4c14e97@asahilina.net>
+ <f93448e6-4133-8a49-a12e-7a7012cb5409@amd.com>
+From:   Asahi Lina <lina@asahilina.net>
+In-Reply-To: <f93448e6-4133-8a49-a12e-7a7012cb5409@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---McODTL91jRNtt7ou
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 09/03/2023 17.05, Christian König wrote:
+> Am 09.03.23 um 07:30 schrieb Asahi Lina:
+>> On 09/03/2023 05.14, Christian König wrote:
+>>>> I think you mean wake_up_interruptible(). That would be
+>>>> drm_sched_job_done(), on the fence callback when a job completes, which
+>>>> as I keep saying is the same logic used for
+>>>> hw_rq_count/hw_submission_limit tracking.
+>>> As the documentation to wait_event says:
+>>>
+>>>    * wake_up() has to be called after changing any variable that could
+>>>    * change the result of the wait condition.
+>>>
+>>> So what you essentially try to do here is to skip that and say
+>>> drm_sched_job_done() would call that anyway, but when you read any
+>>> variable to determine that state then as far as I can see nothing is
+>>> guarantying that order.
+>> The driver needs to guarantee that any changes to that state precede a
+>> job completion fence signal of course, that's the entire idea of the
+>> API. It's supposed to represent a check for per-scheduler (or more
+>> specific, but not more global) resources that are released on job
+>> completion. Of course if you misuse the API you could cause a problem,
+>> but what I'm trying to say is that the API as designed and when used as
+>> intended does work properly.
+>>
+>> Put another way: job completions always need to cause the sched main
+>> loop to run an iteration anyway (otherwise we wouldn't make forward
+>> progress), and job completions are exactly the signal that the
+>> can_run_job() condition may have changed.
+>>
+>>> The only other possibility how you could use the callback correctly
+>>> would be to call drm_fence_is_signaled() to query the state of your hw
+>>> submission from the same fence which is then signaled. But then the
+>>> question is once more why you don't give that fence directly to the
+>>> scheduler?
+>> But the driver is supposed to guarantee that the ordering is always 1.
+>> resources freed, 2. fence signaled. So you don't need to check for the
+>> fence, you can just check for the resource state.
+> 
+> Yeah, but this is exactly what the dma_fence framework tried to prevent. 
+> We try very hard to avoid such side channel signaling :)
 
-On Tue, Mar 07, 2023 at 01:35:11PM +0200, Mike Rapoport wrote:
-> Hi Conor,
->=20
-> Sorry for the delay, somehow this slipped between the cracks.
+Right, and it's fine, I can use the fences directly easily enough. I'm
+just trying to explain why my original idea works too, even if it's not
+the best solution for other reasons!
 
-No worries.
+Of course I don't have the context of what other drivers are doing or
+did historically and what the pitfalls are, so I can't know what the
+"right" solution for any of this is in that context. I did my best to
+understand the drm_sched code and come up with a solution that works
+(which it does) without any more info. When I saw the hw submission
+limit stuff, I thought "okay, I need the same thing but with slightly
+more complex logic, so let's add a callback so the driver can customize
+it and do its own inflight counting".
 
-> On Thu, Feb 02, 2023 at 10:01:26PM +0000, Conor Dooley wrote:
-> > Hullo Palmer, Mike & whoever else may read this,
-> >=20
-> > Just reviving this thread from a little while ago as I have been in the
-> > area again recently...
->=20
-> TBH, I didn't really dig deep into the issues,
+After this discussion, I can see that this is equivalent to doing the
+same check in prepare_job() followed by returning the oldest running
+job's fence (as long as there's no race there... it should be fine if
+the fence reference is taken first, before the resource check, or if
+everything is done within the same critical section taking the firmware
+queue lock), so I'm happy to switch to that and drop this patch.
 
-I only preserved most of the context here to point out that it wasn't an
-isolated issue, the top-down/bottom-up bit is the main part that I was
-interested in. The others are fixed, or workaround-able without
-"harming" anyone else.
+But keep in mind none of this is documented, and there's no way for us
+driver authors to understand what we're supposed to do without
+documentation. As I said I spent a long time trying to understand
+drm_sched, and then my original attempt missed the drm_sched_fini()
+issue with dangling jobs and Alyssa managed to hit an oops on the test
+branch, I guessed what the problem was from her trace, figured out a way
+to reproduce it (the kill-loop glmark2 thing), and fixed it in the next
+patch in this series. So even trying my best to figure out how to do
+this, reading the code and what scarce docs there are, I managed to miss
+something that caused a potential oops on the first try. If I can't even
+get the API usage right after spending hours on it trying really hard
+not to (because it's not just about my driver, I need the Rust
+abstraction to be safe for any driver), there's no way I'm going to
+divine what approaches to resource/dependency signaling are
+problematic/easy to abuse... the most I can hope for is "I got the
+wrapper right and the API/driver interaction is correct and guarantees
+forward progress if the driver follows the rules".
 
-> but the thought I had was
-> what if DT was mapped via fixmap until the setup_vm_final() and then it
-> would be possible to call DT methods early.
+So when I submit something, and you reply with "Well complete NAK",
+that's just not nice. Honestly, I was kind of upset when I got that
+email. It sounded as if you were saying my solution was completely
+broken and couldn't work, but no matter how I looked at it I couldn't
+figure out how it's broken. And then it took several emails to even
+understand what you were suggesting with the prepare_job callback (and
+yes, that works too and is probably harder to abuse than a new
+callback). I'm trying really hard to make this all work and be correct,
+and of course I make mistakes too... but then I look at the code and no
+matter what I can come up with it seems to work and be correct, what am
+I supposed to do? I'm happy to learn and figure out better approaches
+for everything that lead to better drivers, but I need an actual
+explanation of the issues, not just a NAK...
 
-=46rom my memory, this would be more along the lines of what arm64 does.
-I'll give it a shot and see how it goes. I figure it'll take me some
-time!
+I also would appreciate it if people give me the benefit of the doubt
+and let me explain what I'm doing and how I'm doing it and how this
+hardware works, because the whole thing is subtle to the core and very
+different to other GPUs. Honestly, I don't think any reviewer that
+hasn't spent hours poring over the driver/abstraction code could
+confidently say that a certain subtle sync issue exists at a first pass
+(other than for really obvious bad code sequences). I'm happy to look
+into issues and I definitely want to know what cases to look at and what
+to check for and fix anything we find... but isn't it better if we work
+together instead of shouting "this is broken" at the first hint of
+possible trouble?
 
-> Could be I'm shooting in the dark :)
+> But putting that issue aside for a moment. What I don't get is when you 
+> have such intra queue dependencies, then why can't you check that at a 
+> much higher level?
+> 
+> In other words even userspace should be able to predict that for it's 
+> submissions X amount of resources are needed and when all of my 
+> submissions run in parallel that won't work.
 
-A pointer on where to start is helpful, even if it is "rewrite a bunch
-of stuff".
+Technically yes, but we can't trust userspace to honor this, since
+overflowing the firmware queue breaks everything, so the kernel has to
+do the check... plus we're trying to insulate userspace from the details
+of how work is queued at the firmware. We need to support multiple
+firmware versions including future ones we can't predict yet without
+breaking UAPI, so the less the UAPI depends on firmware details, the
+better. That's why at the UAPI level, this is boiled down to a simpler
+"max commands per submission" limit that gets passed in the params
+struct, which is conservative, and then the kernel can deal with the
+actual in-flight count tracking and only submit things to the hardware
+when they fit.
 
-Cheers,
-Conor.
+In the future we could even support job splitting on the kernel side and
+remove the max commands per submission limit altogether (though it
+probably still makes sense to have for other reasons, like bounding how
+much kernel/firmware memory a single queue can consume, so I'm not sure
+this is even worth doing at all).
 
-> > On Tue, Aug 16, 2022 at 08:41:05PM +0000, Conor.Dooley@microchip.com wr=
-ote:
-> > > Hey all,
-> > > We've run into a bit of a problem with reserved memory on PolarFire, =
-or
-> > > more accurately a pair of problems that seem to have opposite fixes.
-> > >=20
-> > > The first of these problems is triggered when trying to implement a
-> > > remoteproc driver. To get the reserved memory buffer, remoteproc
-> > > does an of_reserved_mem_lookup(), something like:
-> > >=20
-> > > 	np =3D of_parse_phandle(pdev->of_node, "memory-region", 0);
-> > > 	if (!np)
-> > > 		return -EINVAL;
-> > >=20
-> > > 	rmem =3D of_reserved_mem_lookup(np);
-> > > 	if (!rmem)
-> > > 		return -EINVAL;
-> > >=20
-> > > of_reserved_mem_lookup() then uses reserved_mem[i].name to try and fi=
-nd
-> > > a match - but this was triggering kernel panics for us. We did some
-> > > debugging and found that the name string's pointer was pointing to an
-> > > address in the 0x4000_0000 range. The minimum reproduction for this
-> > > crash is attached - it hacks in some print_reserved_mem()s into
-> > > setup_vm_final() around a tlb flush so you can see the before/after.
-> > > (You'll need a reserved memory node in your dts to replicate)
-> > >=20
-> > > The output is like so, with the same crash as in the remoteproc drive=
-r:
-> > >=20
-> > > [    0.000000] Linux version 6.0.0-rc1-00001-g0d9d6953d834 (conor@wen=
-dy) (riscv64-unknown-linux-gnu-gcc (g5964b5cd727) 11.1.0, GNU ld (GNU Binut=
-ils) 2.37) #1 SMP Tue Aug 16 13:42:09 IST 2022
-> >=20
-> > [...]
-> >=20
-> > > [    0.000000] ---[ end Kernel panic - not syncing: Attempted to kill=
- the idle task! ]---
-> > >=20
-> > > We traced this back to early_init_fdt_scan_reserved_mem() in
-> > > setup_bootmem() - moving it later back up the boot sequence to
-> > > after the dt has been remapped etc has fixed the problem for us.
-> > >=20
-> > > The least movement to get it working is attached, and also pushed
-> > > here: git.kernel.org/conor/c/1735589baefc
-> >=20
-> > This one is fixed now, as of commit 50e63dd8ed92 ("riscv: fix reserved
-> > memory setup").
-> >=20
-> > > The second problem is a bit more complicated to explain - but we
-> > > found the solution conflicted with the remoteproc fix as we had
-> > > to move early_init_fdt_scan_reserved_mem() _earlier_ in the boot
-> > > process to solve this one.
-> > >=20
-> > > We want to have a node in our devicetree that contains some memory
-> > > that is non-cached & marked as reserved-memory. Maybe we have just
-> > > missed something, but from what we've seen:
-> > > - the really early setup looks at the dtb, picks the highest bit
-> > >    of memory and puts the dtb etc there so it can start using it
-> > > - early_init_fdt_scan_reserved_mem() is then called, which figures
-> > >    out if memory is reserved or not.
-> > >=20
-> > > Unfortunately, the highest bit of memory is the non-cached bit so
-> > > everything falls over, but we can avoid this by moving the call to
-> > > early_init_fdt_scan_reserved_mem() above the dtb memblock alloc that
-> > > takes place right before it in setup_bootmem().
-> > >=20
-> > > Obviously, both of these changes are moving the function call in
-> > > opposite directions and we can only really do one of them. We are not
-> > > sure if what we are doing with the non-cached reserved-memory section
-> > > is just not permitted & cannot work - or if this is something that
-> > > was overlooked for RISC-V specifically and works for other archs.
-> >=20
-> > We ended up working around this one by making sure that U-Boot loaded
-> > the dtb to somewhere that would be inside the kernel's memory map, thus
-> > avoiding the remapping in the first place.
-> >=20
-> > We did run into another problem recently though, and 50e63dd8ed92 is
-> > kinda at fault for it.
-> > This particular issue was encountered with a devicetree where the
-> > top-most memory region was entirely reserved & was not observed prior
-> > to my fix for the first issue.
-> >=20
-> > On RISC-V, the boot sequence is something like:
-> > 	setup_bootmem();
-> > 	setup_vm_final();
-> > 	unflatten_device_tree();
-> > 	early_init_fdt_scan_reserved_mem();
-> >=20
-> > Whereas, before my patch it used to be (give-or-take):
-> > 	setup_bootmem();
-> > 	early_init_fdt_scan_reserved_mem();
-> > 	setup_vm_final();
-> > 	unflatten_device_tree();
-> >=20
-> > The difference being that we used to have scanned the reserved memory
-> > regions before calling setup_vm_final() & therefore know which regions
-> > we cannot use. As a reminder, calling early_init_fdt_scan_reserved_mem()
-> > before we've got the dt in a proper virtual memory address will cause
-> > the kernel to panic if it tries to read a reserved memory node's label.
-> >=20
-> > As we are now calling setup_vm_final() *before* we know what the
-> > reserved memory regions are & as RISC-V allocates memblocks from the top
-> > down, the allocations in setup_vm_final() will be done in the highest
-> > memory region.
-> > When early_init_fdt_scan_reserved_mem() then tries to reserve the
-> > entirety of that top-most memory region, the reservation fails as part
-> > of this region has already been allocated.
-> > In the scenario where I found this bug, that top-most region is non-
-> > cached memory & the kernel ends up panicking.
-> > The memblock debug code made this pretty easy to spot, otherwise I'd
-> > probably have spent more than just a few hours trying to figure out why
-> > it was panicking!
-> >=20
-> > My "this needs to be fixed today" solution for this problem was calling
-> > memblock_set_bottom_up(true) in setup_bootmem() & that's what we are
-> > going to carry downstream for now.
-> >=20
-> > I haven't tested it (yet) but I suspect that it would also fix our
-> > problem of the dtb being remapped into a non-cached region of memory
-> > that we would later go on to reserve too. Non-cached being an issue
-> > mainly due to the panicking, but failing to reserve (and using!) memory
-> > regions that are meant to be reserved is very far from ideal even when
-> > they are memory that the kernel can actually use.
-> >=20
-> > I have no idea if that is an acceptable solution for upstream though, so
-> > I guess this is me putting out feelers as to whether this is something I
-> > should send a patch to do *OR* if this is another sign of the issues
-> > that you (Mike, Palmer) mentioned in the past.
-> > If it isn't an acceptable solution, I'm not really too sure how to
-> > proceed!
-> >=20
-> > Cheers,
-> > Conor.
-> >=20
->=20
->=20
->=20
-> --=20
-> Sincerely yours,
-> Mike.
->=20
+> Asking the firmware for a status is usually a magnitudes slower than 
+> just computing it before submission.
 
---McODTL91jRNtt7ou
-Content-Type: application/pgp-signature; name="signature.asc"
+I'm not asking the firmware for status, I'm just asking my own firmware
+queue code how many slots are currently free in each backing queue.
+That's just based on internal driver state, there is no firmware round trip!
 
------BEGIN PGP SIGNATURE-----
+I could technically compute this before submission and figure out how
+much work has been queued and pre-populate fences that ensure we never
+exceed the max, but honestly that's a lot more code to track job sizes
+and I don't think it makes sense when I can just ask "Do we have space?
+No? Okay, return the oldest running job fence for now and try again when
+it completes" in prepare_job(). Maybe it's faster in pathological cases
+to do something fancier, but let's wait until Vulkan works and we can
+run real AAA games and see where the bottlenecks are before going down
+the optimization road ^^
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAmjfAAKCRB4tDGHoIJi
-0tFdAQDHopmrSHySTTwn2q2HqhgTs5Nkor5VHzHgmHIgT+UsqAEA9GT6SanTju8R
-HcLHCyzJA2EVc9QwCQU6dC9CLwSYJQw=
-=F8lV
------END PGP SIGNATURE-----
-
---McODTL91jRNtt7ou--
+~~ Lina
