@@ -2,144 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743926B2AAD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:26:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 050476B2AC5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbjCIQ0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 11:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
+        id S230362AbjCIQbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 11:31:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbjCIQ0O (ORCPT
+        with ESMTP id S230328AbjCIQbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:26:14 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172E9FAFA9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 08:17:48 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id a25so9333321edb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 08:17:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678378599;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pU1OTBYl8ElxfZaqjfIJsMTqsKjO/PQMi+tQNnzKT4Q=;
-        b=LhpPkPEZNcA6deEMbxuAY4BI/bFxp9zl0nO+hgsnLAiOSJkKjT00UwaUDG0PHiiz3/
-         nEwQeuirJtr8wgHLXWy9IgZdMD8SlsgN+LaLMBNQkYqRi+TR0N/ojIl0BI+BC1cB3po8
-         AKLBGBReYfs4R/dvrq6Kz3qLcwgmqJkXDbNgBMRhaaQYUR/s+UmACSYpM7UzPzFP+EC3
-         Euhjxdc0eh2oEicLY1rKrEhBYAJHD1qM5zFKHZZ7EaSfxH87mxzZSWrSdec0qtGPEf+7
-         5ZQh6jdzQeWaSPX5ScfB6GKvZ3OYHtyiKaqrgWCWwvaMA7fetS6SDHjp3WC/0mJNEJxO
-         DW3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678378599;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pU1OTBYl8ElxfZaqjfIJsMTqsKjO/PQMi+tQNnzKT4Q=;
-        b=WIOwCjlGHjsusRtfUgd2UXTkKu23KaSD55J2CPP8RgPGUSgK33vVWJyqTdXVonet7M
-         39oqkew6T1Nvq7XQ/gOxZvYgnAsAtBR+0f5bcB6dB65LFJmXaNdmbw1xixjd4ScIWPpT
-         4MUng8q7OhUjwdhA+V8tbongXrQTkbBvDBr7tFw+BncaSWQxGdiMRgh8GFF1WeVaNJW7
-         EycAFIWaLFVd88LF83v1F43RhYFU+OG78cTwra3bfuoP33VUfpiOollX/zsWu/gqrAGZ
-         Ziv+nQhUNa7Y/10h/eLCf6MX6hIk3fzak28vpr7x0enslX4mk0uVcc9X+ZGfqU40vUP9
-         /YZw==
-X-Gm-Message-State: AO0yUKULH46TOFXlqRypoqB/mcwp7oeQAhnir9vPMX0xFEDR9c1qsw9e
-        a4ZjkYu/UWGN0elgSY++mYzEEsWX3e+2HCylcSE=
-X-Google-Smtp-Source: AK7set/uDxSQX6guni2q9LjuMZgDKvnwtVPDVc/y4ZwVZTtKpMFGC+aDylsQfmADZ8cH166t4rv0qg==
-X-Received: by 2002:a05:600c:1906:b0:3eb:3c76:c23c with SMTP id j6-20020a05600c190600b003eb3c76c23cmr20444802wmq.3.1678378147773;
-        Thu, 09 Mar 2023 08:09:07 -0800 (PST)
-Received: from localhost ([82.66.159.240])
-        by smtp.gmail.com with ESMTPSA id z18-20020a1c4c12000000b003e876122dc1sm216880wmf.47.2023.03.09.08.09.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 08:09:07 -0800 (PST)
-From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
-To:     Jason Andryuk <jandryuk@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        Phillip Susi <phill@thesusis.net>, stable@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH v2] Input: xen-kbdfront - drop keys to shrink modalias
-In-Reply-To: <CAKf6xpsGy7rjK3Rkosevr3dD+64-WqCEzAecBbHEHpBMeAHh7A@mail.gmail.com>
-References: <20221209142615.33574-1-jandryuk@gmail.com>
- <87359gkc1d.fsf@baylibre.com>
- <CAKf6xpsGy7rjK3Rkosevr3dD+64-WqCEzAecBbHEHpBMeAHh7A@mail.gmail.com>
-Date:   Thu, 09 Mar 2023 17:09:05 +0100
-Message-ID: <87o7p1dhzy.fsf@baylibre.com>
+        Thu, 9 Mar 2023 11:31:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391512821A;
+        Thu,  9 Mar 2023 08:23:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E67961AE0;
+        Thu,  9 Mar 2023 16:09:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5104C4339B;
+        Thu,  9 Mar 2023 16:09:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678378188;
+        bh=Vs5yR73fwenbspC7Hc7MZqjQddF+NqnLXNP8Zyl3t5I=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=alKJkV+TfvLPRdueZ1xcZnxDkXUBPNyJmhNvaOyn3Yko+Z8MknKt40SxrToOw1lmT
+         NMcYCCb/dLiF1ZAZghf5v/Zi+KW1vcCojkX9dmPVsDAmSpeEIdFMzetdk5YTk4WtyZ
+         XPrDwHV5LsZqIZiS30nYkAMsQ3G2/jQPJhpOyyUccduBTRWAKtSkgcHaqgJnIJ2dO+
+         bP42RdWk5zO+VNLw9uU2V5iPJDhjZX5T0qpsDnHuRRE6t110JuPu+wDvuzDehAgCA3
+         tGmCWZax8mMqz8v3XzNOZDrZisMXFA7KegDEBmyWWRGSNYqJyABTqEfWdlvDY9ygFr
+         C7r8+LxONRvxw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>,
+        Herve Codina <herve.codina@bootlin.com>
+Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20230307141503.159766-1-herve.codina@bootlin.com>
+References: <20230307141503.159766-1-herve.codina@bootlin.com>
+Subject: Re: [PATCH 0/3] Fix the PowerQUICC audio support using the QMC
+Message-Id: <167837818442.37742.7557223272230360155.b4-ty@kernel.org>
+Date:   Thu, 09 Mar 2023 16:09:44 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bd1bf
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+On Tue, 07 Mar 2023 15:15:00 +0100, Herve Codina wrote:
+> A previous series added the PowerQUICC audio support using the QMC.
+> The v6 version of this previous series was applied but some feedbacks
+> lead to a v7 version.
+> 
+> The v6 can be found here:
+>  https://lore.kernel.org/linux-kernel/20230217145645.1768659-1-herve.codina@bootlin.com/
+> and the v7, here:
+>  https://lore.kernel.org/linux-kernel/20230306161754.89146-1-herve.codina@bootlin.com/
+> 
+> [...]
 
-On mer., mars 08, 2023 at 11:26, Jason Andryuk <jandryuk@gmail.com> wrote:
+Applied to
 
-> On Thu, Dec 15, 2022 at 8:54=E2=80=AFAM Mattijs Korpershoek
-> <mkorpershoek@baylibre.com> wrote:
->>
->> On Fri, Dec 09, 2022 at 09:26, Jason Andryuk <jandryuk@gmail.com> wrote:
->>
->> > xen kbdfront registers itself as being able to deliver *any* key since
->> > it doesn't know what keys the backend may produce.
->> >
->> > Unfortunately, the generated modalias gets too large and uevent creati=
-on
->> > fails with -ENOMEM.
->> >
->> > This can lead to gdm not using the keyboard since there is no seat
->> > associated [1] and the debian installer crashing [2].
->> >
->> > Trim the ranges of key capabilities by removing some BTN_* ranges.
->> > While doing this, some neighboring undefined ranges are removed to trim
->> > it further.
->> >
->> > An upper limit of KEY_KBD_LCD_MENU5 is still too large.  Use an upper
->> > limit of KEY_BRIGHTNESS_MENU.
->> >
->> > This removes:
->> > BTN_DPAD_UP(0x220)..BTN_DPAD_RIGHT(0x223)
->> > Empty space 0x224..0x229
->> >
->> > Empty space 0x28a..0x28f
->> > KEY_MACRO1(0x290)..KEY_MACRO30(0x2ad)
->> > KEY_MACRO_RECORD_START          0x2b0
->> > KEY_MACRO_RECORD_STOP           0x2b1
->> > KEY_MACRO_PRESET_CYCLE          0x2b2
->> > KEY_MACRO_PRESET1(0x2b3)..KEY_MACRO_PRESET3(0xb5)
->> > Empty space 0x2b6..0x2b7
->> > KEY_KBD_LCD_MENU1(0x2b8)..KEY_KBD_LCD_MENU5(0x2bc)
->> > Empty space 0x2bd..0x2bf
->> > BTN_TRIGGER_HAPPY(0x2c0)..BTN_TRIGGER_HAPPY40(0x2e7)
->> > Empty space 0x2e8..0x2ff
->> >
->> > The modalias shrinks from 2082 to 1550 bytes.
->> >
->> > A chunk of keys need to be removed to allow the keyboard to be used.
->> > This may break some functionality, but the hope is these macro keys are
->> > uncommon and don't affect any users.
->> >
->> > [1] https://github.com/systemd/systemd/issues/22944
->> > [2] https://lore.kernel.org/xen-devel/87o8dw52jc.fsf@vps.thesusis.net/=
-T/
->> >
->> > Cc: Phillip Susi <phill@thesusis.net>
->> > Cc: stable@vger.kernel.org
->> > Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
->>
->> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
->
-> Thank you, Mattjis.
->
-> Any other thoughts?  Can this patch be applied?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-That's not up to to decide, Dmitry might pick this up or give you a
-review whenever he has time.
+Thanks!
 
->
-> Thanks,
-> Jason
+[1/3] dt-bindings: soc: fsl: cpm_qe: cpm1-scc-qmc: Remove unneeded property
+      commit: 33a33005b2db0966c00d4f58dd2a36e5a44217db
+[2/3] dt-bindings: soc: fsl: cpm_qe: cpm1-tsa: Remove unneeded property
+      commit: 0fb6f518cb46cf8bac7c30c29171050e355cd738
+[3/3] soc: fsl: cpm1: qmc: Fix assigned timeslot masks
+      commit: f37acbde076d8dbf5e4c694f29760e608fdffe11
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
