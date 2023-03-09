@@ -2,105 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E26466B1E09
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD49F6B1E0F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbjCII1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 03:27:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S229733AbjCII3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 03:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjCII0z (ORCPT
+        with ESMTP id S230161AbjCII2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:26:55 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79612E20C5
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:24:55 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id x3so3730422edb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 00:24:55 -0800 (PST)
+        Thu, 9 Mar 2023 03:28:51 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC5CEB89D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:26:41 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id cy23so3708998edb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 00:26:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678350294;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p0WNWiNoThDdKJdR6l/VK0hHflrQJ+6jbMnoczwCR5A=;
-        b=vYMiir8Pt9oNQfkOENopaYqriGaOppN9EklvT6m7/lbBlknxj1VH10yYL63jvt/JLA
-         J3rL3T7rutGgL/6j+dWHA6MJqTdXi6Q3KbLPfn2c9afbD5wlf+lKtRPmCDkJ7XS9sHew
-         OF0cO7gAJ+IrXxmTQq3kR5YBVLp6tE4ek53iC8mIYdH7lHA8XVmsexep5JHXjvsk3HOj
-         iA6axWi2cQDDDv7AKsnvf1DMjve/M0/T3HafO0N23Qf6hSKLjdACWPQffRpluOdGbCWL
-         3DzyitbzmigE3/g4itAQxhgx7H9DMAs4Uxw9BA0PSRn4mhU1++KDQ0GU/7W4d26FZn4f
-         60dw==
+        d=linaro.org; s=google; t=1678350395;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wu8DwsqsqfKPKGEkJB9iRAr5gDSdJd+ozW53J8HXH2k=;
+        b=mjXLqCtz5Wx9vHDpCtORqHRtbK7NBTn8AF25cuWdHPh6ZSUioLBtES4qfnst0aHZam
+         xAzcwxm2JlmhdPZ+oTY8Bsj2CzJh+j3WeIjQ9lP7I8fNNA30V0WFIYt/o9LWOJtftFn/
+         rpBptk46k8qfjNKhT81s/BMsqUVZy6jgNxClSgb8fXAVGsczXkyCSpU9TF0OtVHY32BJ
+         DBpwZ6ZEFi4fX8rY4k4/5uv/jxXhgr7CV+Rb5BDqKOnn8lH+ndPXaSph88C1bDQ4sq4l
+         6wRzbTxAWF0LTjEAReNvHSmq3tlzRl/b84prTms5fOCSw06U2TsiSd+eS3kXNiOP6sWu
+         V4Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678350294;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p0WNWiNoThDdKJdR6l/VK0hHflrQJ+6jbMnoczwCR5A=;
-        b=PBxlkqvjLxDvIyV3EaAxWLDgFG5HKU6otwmhDS+k9v4AVg+4q1dklaXDR7GmIEBhu1
-         sX22AtwDuJCJmZr6lgVjItwG0m8EImYx30GOHR76FouRgeQQ9mkOk52tQjHMtTscRWZZ
-         L4r3Gy52drMn8idVIAf0xj7K/q7Eut20oyHPD7/+Dm96L6oUkH2+/RbJBsIDcqVR0LRW
-         +BkRzM5eYn7+9hDSckfykQYqwRs53pxX7hF9UuIWd7asQPbxTssCNIdhZTlKVXPU90nE
-         bmkybwAVQTfTWr1Cl16AvFiQrZDG19C9fwpGmLa1odcI6riVjvb/iMfl/3KNT+uT7+EC
-         LStg==
-X-Gm-Message-State: AO0yUKXI4mB658Nt/qQ3pbfrvCCVwbsUvOG6LHu6eMO/df9PvADRn4Td
-        BMA4TApOMaIOa0vMaxE0sCnVXA==
-X-Google-Smtp-Source: AK7set+tZfN/EYmPGsRwPetG11xMezjlUnu7jNsveMpFcbilfaWDDbHlasDvuliHuwaqG25sieR+Bg==
-X-Received: by 2002:a17:906:dac9:b0:8d9:8f8f:d542 with SMTP id xi9-20020a170906dac900b008d98f8fd542mr23087299ejb.32.1678350294028;
-        Thu, 09 Mar 2023 00:24:54 -0800 (PST)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
-        by smtp.gmail.com with ESMTPSA id k7-20020a170906578700b008b904cb2bcdsm8662276ejq.11.2023.03.09.00.24.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 00:24:53 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 3/3] dt-bindings: remoteproc: qcom,sm8550-pas: require memory-region
-Date:   Thu,  9 Mar 2023 09:24:46 +0100
-Message-Id: <20230309082446.37362-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230309082446.37362-1-krzysztof.kozlowski@linaro.org>
-References: <20230309082446.37362-1-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20210112; t=1678350395;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wu8DwsqsqfKPKGEkJB9iRAr5gDSdJd+ozW53J8HXH2k=;
+        b=EsDqEyTne2x4laU1BKdWKXpjqSHochsT/78h8ffTUoP2DHdT+Q/LXc+VuJalWuHMNK
+         PaO1I1SQ4usbhUIYHuGczECdva2zmnlPBw283TQGUCT7GWud+9gfKupm1aRcgv2t/MoC
+         YbuZOG/Z3OuYJ5McSNdxiSQumrkbLWyhxoCFlIEy/XXQ0c6GxLX1PUFsa7uKWYyvrIf0
+         LxR3/AkCpltjVNq+ABwJqHKiSXRIlOKuICjkmuozkaB77hW22hWloDSRpp5xiR+usKcN
+         AfUtaa3K98O6USogyKSRb2vhEYkWEAPDJBD3PBVn7emlK4nxwnCEt/LFtonBylV6SWt4
+         0PWA==
+X-Gm-Message-State: AO0yUKUQ2HxFgS+J9UU+2CQxcz+vD/+gv/l5MoviqrtqsKmqsWH7fm52
+        BSAUvE/A+QPsarwHxzwkIF60Cw==
+X-Google-Smtp-Source: AK7set/JVbDVD2QiBnl1Ztxd5l85KNjzT5jJF+Dn+W2fce5O8vrQOWLCaKJi9mG1tcKxWTsQY6REyw==
+X-Received: by 2002:a17:907:2ce1:b0:8b1:32dd:3af with SMTP id hz1-20020a1709072ce100b008b132dd03afmr28905926ejc.28.1678350394825;
+        Thu, 09 Mar 2023 00:26:34 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
+        by smtp.gmail.com with ESMTPSA id ca5-20020a170906a3c500b008bc2c2134c5sm8528879ejb.216.2023.03.09.00.26.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 00:26:34 -0800 (PST)
+Message-ID: <7cbd882d-c71c-ad92-6dbe-0f178043fdfd@linaro.org>
+Date:   Thu, 9 Mar 2023 09:26:32 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/2] dt-bindings: remoteproc: qcom: Add sm6115 pas yaml
+ file
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     mani@kernel.org, mathieu.poirier@linaro.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bhupesh.linux@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+References: <20230128053504.2099620-1-bhupesh.sharma@linaro.org>
+ <20230128053504.2099620-2-bhupesh.sharma@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230128053504.2099620-2-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memory-region is defined in device specific binding, not in
-qcom,pas-common.yaml, thus also require it in the same place.
+On 28/01/2023 06:35, Bhupesh Sharma wrote:
+> This documents the aDSP, cDSP and MPSS DSPs present
+> on the SM6115 SoC.
+> 
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  .../bindings/remoteproc/qcom,sm6115-pas.yaml  | 143 ++++++++++++++++++
+>  1 file changed, 143 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sm6115-pas.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sm6115-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sm6115-pas.yaml
+> new file mode 100644
+> index 000000000000..f5d1fa9f45f1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sm6115-pas.yaml
+> @@ -0,0 +1,143 @@
+> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/remoteproc/qcom,sm6115-pas.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm SM6115 Peripheral Authentication Service
+> +
+> +maintainers:
+> +  - Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> +
+> +description:
+> +  Qualcomm SM6115 SoC Peripheral Authentication Service loads and boots
+> +  firmware on the Qualcomm DSP Hexagon cores.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,sm6115-adsp-pas
+> +      - qcom,sm6115-cdsp-pas
+> +      - qcom,sm6115-mpss-pas
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: XO clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: xo
+> +
+> +  memory-region:
+> +    minItems: 1
 
-Fixes: 084258d60712 ("dt-bindings: remoteproc: qcom: adsp: document sm8550 adsp, cdsp & mpss compatible")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml          | 1 +
- 1 file changed, 1 insertion(+)
+maxItems instead
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml
-index fe216aa531ed..58120829fb06 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml
-@@ -53,6 +53,7 @@ properties:
- required:
-   - compatible
-   - reg
-+  - memory-region
- 
- allOf:
-   - $ref: /schemas/remoteproc/qcom,pas-common.yaml#
--- 
-2.34.1
+> +    description: Reference to the reserved-memory for the Hexagon core
+> +
+> +  smd-edge: false
+> +
+> +  firmware-name:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: Firmware name for the Hexagon core
+> +
+> +required:
+> +  - compatible
+> +  - reg
+
+also memory-region
+
+
+Best regards,
+Krzysztof
 
