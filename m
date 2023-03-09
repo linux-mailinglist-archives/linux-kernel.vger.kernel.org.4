@@ -2,116 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80036B1A1C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 04:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC26F6B1A28
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 04:51:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjCIDsU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Mar 2023 22:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41742 "EHLO
+        id S229468AbjCIDv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 22:51:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjCIDsS (ORCPT
+        with ESMTP id S229686AbjCIDvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 22:48:18 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A699241F4;
-        Wed,  8 Mar 2023 19:48:15 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3293lMhaD012407, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3293lMhaD012407
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 9 Mar 2023 11:47:22 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 9 Mar 2023 11:47:32 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 9 Mar 2023 11:47:32 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Thu, 9 Mar 2023 11:47:32 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] wifi: rtw88: fix memory leak in rtw_usb_probe()
-Thread-Topic: [PATCH v2] wifi: rtw88: fix memory leak in rtw_usb_probe()
-Thread-Index: AQHZUi8SMsf/3uLRP0mluFYdnBlKyK7xziXw
-Date:   Thu, 9 Mar 2023 03:47:31 +0000
-Message-ID: <792ecb45f7e540b1abdb30bf965c5072@realtek.com>
-References: <20230309021636.528601-1-dzm91@hust.edu.cn>
-In-Reply-To: <20230309021636.528601-1-dzm91@hust.edu.cn>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2023/3/9_=3F=3F_12:38:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 8 Mar 2023 22:51:23 -0500
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740DCC80A9
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 19:51:09 -0800 (PST)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1767a208b30so1087480fac.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 19:51:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678333868;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hp14W4WtX0awNKWlLDE8zn48w3QnOXp8Ol12gIgmm9Q=;
+        b=VZC2zz9bQaHlgp8s90U6kGkWkCxhJ0OE6aJWd1dOE4d569lv4K6qFJSquVuLElIU2D
+         5ODRKZ63UrxfYKmBbMwSdSoQseO4AfRK8ijNU9SkX2D8EX9Gk83Bnu4EnkfvfY6w9upt
+         D5/Qtn9yzYeGgoB8Bkmh4nvLK9glBHUKJzQnfzR1YXvDippAqffd19QWHj3tY1v/Vs3X
+         nd0C2ks7xZaVJpQjsl0Cexx5DUixu11eN5ZOIAsQEqp56KkY3RZPtfOFKRY9dkVsfA3A
+         APpFa2to/g+3eoj7mBecMyyk76ALfu9L4xC70YQmfF2mkvU0jR59u1xV6dOWvCMXUWuA
+         /Jug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678333868;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Hp14W4WtX0awNKWlLDE8zn48w3QnOXp8Ol12gIgmm9Q=;
+        b=Gh+Rg6z/kLgEulIKFSlh2zW560yYcTul6mgtaSeWppnVvq2F+W4dPHZWhLF8RazIa+
+         soyqq47OXofzF6Ndr9X5SJBc1Qzb0uBgh/8q+vAgswcys0CPVAfwHfRko6mPrzjwziLV
+         81s8GntA/xIBuEagW4vOalhW2Agr22WNDMr6zuwE/7Rlo+xoqyn5xa3S81wrYStzRqUq
+         HrgthtPcfeR833nEPRjzXMLIn/7zxJN06OMTemttl9txO4wJ2qM6t2YbS3HBqXeQy8JS
+         A3uGqJhamkPp12T6i87nDUG2DfoalXTuMcODlbas68fV2Gfmk+BXIGm8TCfMuz4VvS+E
+         MhdA==
+X-Gm-Message-State: AO0yUKWHfpj8O5BjeZjFHAGCPg1LQJgIan7DKeUL9KKLq9+Hpc2w3811
+        XohHOGfgGE5Vow63eRKKfDwYSG5KS/MLeII6z3l4PY/7
+X-Google-Smtp-Source: AK7set8/iY7kVgL0ioTsy+Jeuo0eKBcUzi4tLPsAvZfwHYXHjco2pvMZKjXNsvI/ayzliVhBEIXgojGVUdg8xahMuAY=
+X-Received: by 2002:a05:6871:6ab0:b0:176:4261:5e36 with SMTP id
+ zf48-20020a0568716ab000b0017642615e36mr6988343oab.3.1678333868432; Wed, 08
+ Mar 2023 19:51:08 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230309033654.64762-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20230309033654.64762-1-jiapeng.chong@linux.alibaba.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 8 Mar 2023 22:50:56 -0500
+Message-ID: <CADnq5_NEYTz3kU+2BRC9x3hyMGO7+hEmr4zoabKpU9uzW3xG8g@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: Remove useless else if
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     alexander.deucher@amd.com, Xinhui.Pan@amd.com,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Dongliang Mu <dzm91@hust.edu.cn>
-> Sent: Thursday, March 9, 2023 10:17 AM
-> To: Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; David S. Miller
-> <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni
-> <pabeni@redhat.com>
-> Cc: Dongliang Mu <dzm91@hust.edu.cn>; linux-wireless@vger.kernel.org; netdev@vger.kernel.org;
-> linux-kernel@vger.kernel.org
-> Subject: [PATCH v2] wifi: rtw88: fix memory leak in rtw_usb_probe()
-> 
-> drivers/net/wireless/realtek/rtw88/usb.c:876 rtw_usb_probe()
-> warn: 'hw' from ieee80211_alloc_hw() not released on lines: 811
-
-Can I know which tool can detect this? It would be good to mention the tool
-in commit message.
-
-> 
-> Fix this by modifying return to a goto statement.
-> 
-> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+On Wed, Mar 8, 2023 at 10:37 PM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
+>
+> The assignment of the else and if branches is the same, so the if else
+> here is redundant, so we remove it.
+>
+> ./drivers/gpu/drm/amd/amdgpu/nv.c:1048:2-4: WARNING: possible condition with no effect (if == else).
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4454
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 > ---
-> v1->v2: modify the commit title
->  drivers/net/wireless/realtek/rtw88/usb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/realtek/rtw88/usb.c b/drivers/net/wireless/realtek/rtw88/usb.c
-> index 2a8336b1847a..68e1b782d199 100644
-> --- a/drivers/net/wireless/realtek/rtw88/usb.c
-> +++ b/drivers/net/wireless/realtek/rtw88/usb.c
-> @@ -808,7 +808,7 @@ int rtw_usb_probe(struct usb_interface *intf, const struct usb_device_id *id)
-> 
->         ret = rtw_usb_alloc_rx_bufs(rtwusb);
->         if (ret)
-> -               return ret;
-> +               goto err_release_hw;
-> 
->         ret = rtw_core_init(rtwdev);
->         if (ret)
-> --
-> 2.39.2
+>  drivers/gpu/drm/amd/amdgpu/nv.c | 18 +++++-------------
+>  1 file changed, 5 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/nv.c b/drivers/gpu/drm/amd/amdgpu/nv.c
+> index 855d390c41de..84803929f7d9 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/nv.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/nv.c
+> @@ -1045,19 +1045,11 @@ static int nv_common_late_init(void *handle)
+>
+>         if (amdgpu_sriov_vf(adev)) {
+>                 xgpu_nv_mailbox_get_irq(adev);
+> -               if (adev->vcn.harvest_config & AMDGPU_VCN_HARVEST_VCN0) {
+> -                       amdgpu_virt_update_sriov_video_codec(adev,
+> -                                                            sriov_sc_video_codecs_encode_array,
+> -                                                            ARRAY_SIZE(sriov_sc_video_codecs_encode_array),
+> -                                                            sriov_sc_video_codecs_decode_array_vcn1,
+> -                                                            ARRAY_SIZE(sriov_sc_video_codecs_decode_array_vcn1));
+> -               } else {
+> -                       amdgpu_virt_update_sriov_video_codec(adev,
+> -                                                            sriov_sc_video_codecs_encode_array,
+> -                                                            ARRAY_SIZE(sriov_sc_video_codecs_encode_array),
+> -                                                            sriov_sc_video_codecs_decode_array_vcn1,
+> -                                                            ARRAY_SIZE(sriov_sc_video_codecs_decode_array_vcn1));
 
+This should be vcn0.  I'll send out a patch.  Thanks!
+
+Alex
+
+
+> -               }
+> +               amdgpu_virt_update_sriov_video_codec(adev,
+> +                                                    sriov_sc_video_codecs_encode_array,
+> +                                                    ARRAY_SIZE(sriov_sc_video_codecs_encode_array),
+> +                                                    sriov_sc_video_codecs_decode_array_vcn1,
+> +                                                    ARRAY_SIZE(sriov_sc_video_codecs_decode_array_vcn1));
+>         }
+>
+>         return 0;
+> --
+> 2.20.1.7.g153144c
+>
