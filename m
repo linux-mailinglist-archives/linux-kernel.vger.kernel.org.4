@@ -2,171 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E026B2949
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 269E06B29F0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjCIQBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 11:01:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
+        id S232037AbjCIQEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 11:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbjCIQAu (ORCPT
+        with ESMTP id S230401AbjCIQCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:00:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97461F5AA4;
-        Thu,  9 Mar 2023 08:00:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 9 Mar 2023 11:02:15 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78606F7EC9;
+        Thu,  9 Mar 2023 08:02:12 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 293B461C22;
-        Thu,  9 Mar 2023 16:00:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C83CC4339C;
-        Thu,  9 Mar 2023 16:00:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678377648;
-        bh=xGVkS6scNuvZhWVzQCSAM/tJ2TcWmpRwNjJ04sFqFgw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=M5mlTu6hmiPeisf1qvoP5apm1YS99Su77yn/KtMZ2GaLHcMurIwkePcWzjEah8axX
-         JZgNtVrRMOx8bkt84F4Zw8OKA6ZDvPyB0qBtMTlF0KyoxyY/hC+jsep4XBNzegYofk
-         MiHX9LJe6pnq7fZIoMMjxbuFKmlNnS57Nc2+/E1+7/JncH1rSpn4QNx/WM0jq7oEax
-         hk8HSxs3ltZbu1u9916mWiAKZ5E/2sS8NM+sbcA1UHvnTHCGqeSa7ZtM+K+864A8Xv
-         eXO0hoEkfnKXHnUFmFbmmnGPMkPAvsIRslAAmPRgiAGvPI33yBIRnX3RcMRe2lG3Se
-         OQ/fjcjM7Th5w==
-Received: by mail-lj1-f174.google.com with SMTP id f16so2325118ljq.10;
-        Thu, 09 Mar 2023 08:00:48 -0800 (PST)
-X-Gm-Message-State: AO0yUKWGGvsQ2GVmvvobuvgNUYq5W1B6rt9WdZOglYHJmAmc2lYi6ngN
-        gTm0utMftVisolcjLoR+hUxMG8kiDDwJYE2F9R0=
-X-Google-Smtp-Source: AK7set/q/bEE3jDzwupjxsdH3cF5Xe44HjEhNbwszAPe7QVUsBz9MEFkkz91I839rXg8qCjxo0eGWWIDzvVBGP1oPZM=
-X-Received: by 2002:a2e:595:0:b0:298:6d17:eaa7 with SMTP id
- 143-20020a2e0595000000b002986d17eaa7mr2195444ljf.2.1678377646558; Thu, 09 Mar
- 2023 08:00:46 -0800 (PST)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2D88920181;
+        Thu,  9 Mar 2023 16:02:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1678377731; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SJYqvik/3Pi6dI1miyqZ08ohqvv4ZrpaT119P+hD1IU=;
+        b=gZYHkAGGCBpzucB+9DfvAz7g3V1UNyAxmXrngjZEG0L4g1gfYV7XA3QOJH5mbsOnKadlra
+        GJUqh69NK1elgbJH/i1IBM9KQ90ZG0lYk79d5Lp0bYcoUd++JSItVK/TukQSdzNtI6t3c3
+        ILe/E6xdn7X/FHegdfzPAc4Jy2dxrDU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1678377731;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SJYqvik/3Pi6dI1miyqZ08ohqvv4ZrpaT119P+hD1IU=;
+        b=ZQ/k/eGGYhinigMgOYX4ZC7cDP3vEqf1mMU5WFIp+4HmVyn5ftu8J6Yw/+ordqALw4zoJa
+        Jr1gXN4EPyi4MQBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BA9591391B;
+        Thu,  9 Mar 2023 16:02:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id UCGKLAIDCmQHbgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 09 Mar 2023 16:02:10 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     deller@gmx.de, geert+renesas@glider.be, timur@kernel.org,
+        rdunlap@infradead.org, paulus@samba.org, benh@kernel.crashing.org,
+        linux@armlinux.org.uk, pjones@redhat.com, adaplas@gmail.com,
+        s.hauer@pengutronix.de, shawnguo@kernel.org, mbroemme@libmpq.org,
+        thomas@winischhofer.net, James.Bottomley@HansenPartnership.com,
+        sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
+        corbet@lwn.net
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v2 016/101] fbdev/cirrusfb: Parse option string with struct option_iter
+Date:   Thu,  9 Mar 2023 17:00:36 +0100
+Message-Id: <20230309160201.5163-17-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230309160201.5163-1-tzimmermann@suse.de>
+References: <20230309160201.5163-1-tzimmermann@suse.de>
 MIME-Version: 1.0
-References: <cover.1671098103.git.baskov@ispras.ru> <8945a9cd072754d8dda9961a5499fc7b0c2e8743.1671098103.git.baskov@ispras.ru>
-In-Reply-To: <8945a9cd072754d8dda9961a5499fc7b0c2e8743.1671098103.git.baskov@ispras.ru>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 9 Mar 2023 17:00:35 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXH+vfZQMxfO+tZPnZrxaZX4ffxpzHrdCnTfP70DgO=YJQ@mail.gmail.com>
-Message-ID: <CAMj1kXH+vfZQMxfO+tZPnZrxaZX4ffxpzHrdCnTfP70DgO=YJQ@mail.gmail.com>
-Subject: Re: [PATCH v4 15/26] efi/x86: Support extracting kernel from libstub
-To:     Evgeniy Baskov <baskov@ispras.ru>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 at 13:40, Evgeniy Baskov <baskov@ispras.ru> wrote:
->
-> Doing it that way allows setting up stricter memory attributes,
-> simplifies boot code path and removes potential relocation
-> of kernel image.
->
-> Wire up required interfaces and minimally initialize zero page
-> fields needed for it to function correctly.
->
-> Tested-by: Peter Jones <pjones@redhat.com>
-> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
-> ---
->  arch/x86/boot/compressed/head_32.S            |  50 ++++-
->  arch/x86/boot/compressed/head_64.S            |  58 ++++-
->  drivers/firmware/efi/Kconfig                  |   2 +
->  drivers/firmware/efi/libstub/Makefile         |   2 +-
->  .../firmware/efi/libstub/x86-extract-direct.c | 208 ++++++++++++++++++
->  drivers/firmware/efi/libstub/x86-stub.c       | 119 +---------
->  drivers/firmware/efi/libstub/x86-stub.h       |  14 ++
->  7 files changed, 338 insertions(+), 115 deletions(-)
->  create mode 100644 drivers/firmware/efi/libstub/x86-extract-direct.c
->  create mode 100644 drivers/firmware/efi/libstub/x86-stub.h
->
-> diff --git a/arch/x86/boot/compressed/head_32.S b/arch/x86/boot/compressed/head_32.S
-> index ead6007df1e5..0be75e5072ae 100644
-> --- a/arch/x86/boot/compressed/head_32.S
-> +++ b/arch/x86/boot/compressed/head_32.S
-> @@ -152,11 +152,57 @@ SYM_FUNC_END(startup_32)
->
->  #ifdef CONFIG_EFI_STUB
->  SYM_FUNC_START(efi32_stub_entry)
-> +/*
-> + * Calculate the delta between where we were compiled to run
-> + * at and where we were actually loaded at.  This can only be done
-> + * with a short local call on x86.  Nothing  else will tell us what
-> + * address we are running at.  The reserved chunk of the real-mode
-> + * data at 0x1e4 (defined as a scratch field) are used as the stack
-> + * for this calculation. Only 4 bytes are needed.
-> + */
+Use struct option_iter to walk over the individual options in the
+driver's option string. Replaces the hand-written strsep() loop with
+a clean interface. The helpers for struct option_iter handle empty
+option strings and empty options transparently. The struct's _init
+and _release functions duplicate and release the option string's
+memory buffer as needed.
 
-Please drop this comment
+Done in preparation of constifying the option string.
 
-> +       call    1f
-> +1:     popl    %ebx
-> +       addl    $_GLOBAL_OFFSET_TABLE_+(.-1b), %ebx
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+---
+ drivers/video/fbdev/cirrusfb.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-Please drop this and ...
+diff --git a/drivers/video/fbdev/cirrusfb.c b/drivers/video/fbdev/cirrusfb.c
+index 85b9442031b3..a5e99a8feadd 100644
+--- a/drivers/video/fbdev/cirrusfb.c
++++ b/drivers/video/fbdev/cirrusfb.c
+@@ -35,6 +35,7 @@
+  */
+ 
+ #include <linux/aperture.h>
++#include <linux/cmdline.h>
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+ #include <linux/errno.h>
+@@ -2324,17 +2325,14 @@ static struct zorro_driver cirrusfb_zorro_driver = {
+ #endif /* CONFIG_ZORRO */
+ 
+ #ifndef MODULE
+-static int __init cirrusfb_setup(char *options)
++static int __init cirrusfb_setup(const char *options)
+ {
++	struct option_iter iter;
+ 	char *this_opt;
+ 
+-	if (!options || !*options)
+-		return 0;
+-
+-	while ((this_opt = strsep(&options, ",")) != NULL) {
+-		if (!*this_opt)
+-			continue;
++	option_iter_init(&iter, options);
+ 
++	while (option_iter_next(&iter, &this_opt)) {
+ 		if (!strcmp(this_opt, "noaccel"))
+ 			noaccel = 1;
+ 		else {
+@@ -2345,6 +2343,9 @@ static int __init cirrusfb_setup(char *options)
+ 			mode_option = mode_option_buf;
+ 		}
+ 	}
++
++	option_iter_release(&iter);
++
+ 	return 0;
+ }
+ #endif
+-- 
+2.39.2
 
-> +
-> +       /* Clear BSS */
-> +       xorl    %eax, %eax
-> +       leal    _bss@GOTOFF(%ebx), %edi
-> +       leal    _ebss@GOTOFF(%ebx), %ecx
-
-just use (_bss - 1b) here (etc)
-
-> +       subl    %edi, %ecx
-> +       shrl    $2, %ecx
-> +       rep     stosl
-> +
->         add     $0x4, %esp
->         movl    8(%esp), %esi   /* save boot_params pointer */
-> +       movl    %edx, %edi      /* save GOT address */
-
-What does this do?
-
->         call    efi_main
-> -       /* efi_main returns the possibly relocated address of startup_32 */
-> -       jmp     *%eax
-> +       movl    %eax, %ecx
-> +
-> +       /*
-> +        * efi_main returns the possibly
-> +        * relocated address of extracted kernel entry point.
-> +        */
-> +
-> +       cli
-> +
-> +       /* Load new GDT */
-> +       leal    gdt@GOTOFF(%ebx), %eax
-> +       movl    %eax, 2(%eax)
-> +       lgdt    (%eax)
-> +
-> +       /* Load segment registers with our descriptors */
-> +       movl    $__BOOT_DS, %eax
-> +       movl    %eax, %ds
-> +       movl    %eax, %es
-> +       movl    %eax, %fs
-> +       movl    %eax, %gs
-> +       movl    %eax, %ss
-> +
-> +       /* Zero EFLAGS */
-> +       pushl   $0
-> +       popfl
-> +
-> +       jmp     *%ecx
->  SYM_FUNC_END(efi32_stub_entry)
->  SYM_FUNC_ALIAS(efi_stub_entry, efi32_stub_entry)
->  #endif
-...
