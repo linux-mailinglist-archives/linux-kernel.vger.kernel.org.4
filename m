@@ -2,94 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4036B2CD3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BCE16B2CD6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbjCISUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 13:20:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
+        id S230059AbjCISX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 13:23:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjCISUN (ORCPT
+        with ESMTP id S229453AbjCISXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 13:20:13 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75653C6411
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 10:20:12 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id o1so2852182ybu.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 10:20:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678386011;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N2FHn4vNTsI7Pkb7eR9OOTXHHjNIfcX864otfH8ImVk=;
-        b=c/Y+ySejKOs+mZC7cXA5f/Wl7S5l6jsKQzLG0Z5ZAFPREDe8DOqsYNmFdsV5JYIMWh
-         AKzH22z/N8q+qc2Tpj5GwFJ5FicmnWwy5b5R/8P/s5y43WmDCKtcC2s4Y3DwnhzYzAQ5
-         QPKrnxccRxl2ENsTl6La5FiRRemaNldkvVkFsNhA5VSqqplYF0v8Qz5OwwknfHspAyVG
-         MsnEmwSpbDko1MPWzXAshuUYlw0bSQRS0WLvHx688TD4xYWdck3HLP0d57EESa3rHzyT
-         zo5nMXFZlmeo0Yn3y+QP912ZfYI0ATUXQgbVSGI/uY50nMmY72DkR7c+smvqeTgy00mC
-         m8cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678386011;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N2FHn4vNTsI7Pkb7eR9OOTXHHjNIfcX864otfH8ImVk=;
-        b=LbJWNboaHDYvzo6sg+LRJXmcsW0RrbfCibGiAiQdQmfBqa6r3jDPX74WomcU9ACeY8
-         ccAG4M9p9fjX+bC9zXjjND9+X9PqOyBemcy+Gid4Ct8/xSroEVye+kjfNKDVZIx5X0Tw
-         wK5Zx1NjCffTWRa8gzZRkYbXPl2na+8iT5k+AM3MCgonLaM2TzNrv8zoUWRMlVUFxL5u
-         W5GP276RjwNvsB3xGQjLO/nm7HStPDwiWnqlS4AJW7htFmzh4cnKkVdRnlGF1PmExGFD
-         HEwQGkZCmF8rtCxECM8pvzsCSPMlmd04wiGiSivOSbmssI7jR4BBEphqivbCt9Dnpgf1
-         HrwQ==
-X-Gm-Message-State: AO0yUKVy6zZp9G8ddvP7DlCO5a0gvnsSbOBC3c4vlOZS1gbfTsWok3J2
-        /WiPJcvgqICE/y82ZhEKv+yM2q8Q70DbYmXVjMbIyS5LnOt7eGPoQr8=
-X-Google-Smtp-Source: AK7set/g/HiwEjyA3yT4naLUcO9drgcQWzaFo7l8Z+z29sUgBInscWhDcw+bC7BmS+oMBV7W/gYz/KztcuNDxemkXCc=
-X-Received: by 2002:a5b:bc6:0:b0:a0d:8150:be04 with SMTP id
- c6-20020a5b0bc6000000b00a0d8150be04mr11512210ybr.13.1678386011401; Thu, 09
- Mar 2023 10:20:11 -0800 (PST)
+        Thu, 9 Mar 2023 13:23:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9FE55072;
+        Thu,  9 Mar 2023 10:23:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D105FB82049;
+        Thu,  9 Mar 2023 18:23:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23EBAC433D2;
+        Thu,  9 Mar 2023 18:23:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678386200;
+        bh=B8aarlloxQhXvTzMnoHLGVrwoYPf0Qv0vpup1c+r4oY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I8UEnwq2li48NXA2lg4Mqv5K5NLCt/ujoHCoZG9K7XTz+0xGKFqya3O4ifPfIwt5b
+         1rF8BKVgVDvI3TApMC8yGtK+RB6gc/DnxNQ25/W4RuncQbaZ+dQVVrkDdCQwgnvsS9
+         VXQCzVLjVcqth+armh9ConGtkhelsCeUB5dAu6+N/gGDYhUf+hcGaueHpktg+Lv3Ne
+         kD2Ybl8bOItUCqFaIxiH2QbEBANYpG6LrCJHSOHF7Ue80e4vmCIsVk1NgPCXEd8HXd
+         v+tTXA/fk2EZl1h4MBi+hO8BSJD+vdXmTIEKCEtD0joOw+vMiZVLTuSSkJ6zBheIFu
+         gL/0JPZiOIr1A==
+Date:   Thu, 9 Mar 2023 10:23:18 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
+Cc:     Xiubo Li <xiubli@redhat.com>, Jeff Layton <jlayton@kernel.org>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        linux-fscrypt@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] fscrypt: new helper function -
+ __fscrypt_prepare_atomic_open()
+Message-ID: <ZAokFixlHwav4oio@sol.localdomain>
+References: <20230309121910.18939-1-lhenriques@suse.de>
+ <20230309121910.18939-2-lhenriques@suse.de>
 MIME-Version: 1.0
-References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-4-vipinsh@google.com>
- <20230309173709.0000505e@gmail.com>
-In-Reply-To: <20230309173709.0000505e@gmail.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Thu, 9 Mar 2023 10:19:35 -0800
-Message-ID: <CAHVum0f9JBE9vL4FW1_iH7mq6xjGQWG3J6TZ2Z-rRMQM8GocVg@mail.gmail.com>
-Subject: Re: [Patch v4 03/18] KVM: x86/mmu: Track count of pages in KVM MMU
- page caches globally
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
-        dmatlack@google.com, jmattson@google.com, mizhang@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230309121910.18939-2-lhenriques@suse.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 7:37=E2=80=AFAM Zhi Wang <zhi.wang.linux@gmail.com> =
-wrote:
->
-> On Mon,  6 Mar 2023 14:41:12 -0800
-> Vipin Sharma <vipinsh@google.com> wrote:
-> >  /*
-> > @@ -6994,3 +7048,11 @@ void kvm_mmu_pre_destroy_vm(struct kvm *kvm)
-> >       if (kvm->arch.nx_huge_page_recovery_thread)
-> >               kthread_stop(kvm->arch.nx_huge_page_recovery_thread);
-> >  }
-> > +
-> > +void *mmu_sp_memory_cache_alloc(struct kvm_mmu_memory_cache *shadow_pa=
-ge_cache,
-> > +                             bool count_allocation)
->
-> Is it necessary to have the control of count_allocation in every call of
-> mmu_sp_memory_cache_alloc() instead of taking
-> shadow_page_cache->count_shadow_page_allocation directly?
->
- You have found in patch 7 that this is cleaned up.
+On Thu, Mar 09, 2023 at 12:19:09PM +0000, Luís Henriques wrote:
+> This patch introduces a new helper function which prepares an atomic_open.
+> Because atomic open can act as a lookup if handed a dentry that is negative,
+> we need to set DCACHE_NOKEY_NAME if the key for the parent isn't available.
+> 
+> The reason for getting the encryption info before checking if the directory
+> has the encryption key is because we may have the key available but the
+> encryption info isn't yet set (maybe due to a drop_caches).  The regular
+> open path will use fscrypt_file_open for that but in the atomic open a
+> different approach is required.
+> 
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+>  fs/crypto/hooks.c       | 14 ++++++++++++++
+>  include/linux/fscrypt.h |  6 ++++++
+>  2 files changed, 20 insertions(+)
+> 
+> diff --git a/fs/crypto/hooks.c b/fs/crypto/hooks.c
+> index 7b8c5a1104b5..cbb828ecc5eb 100644
+> --- a/fs/crypto/hooks.c
+> +++ b/fs/crypto/hooks.c
+> @@ -117,6 +117,20 @@ int __fscrypt_prepare_readdir(struct inode *dir)
+>  }
+>  EXPORT_SYMBOL_GPL(__fscrypt_prepare_readdir);
+>  
+> +int __fscrypt_prepare_atomic_open(struct inode *dir, struct dentry *dentry)
+
+Anything exported to filesystems should have a kerneldoc comment.  That would be
+a good place to put some of the explanation that you currently have only in the
+commit message.
+
+Also, double-underscored functions are not for use by filesystems directly.
+Normally the pattern would be to make fscrypt_prepare_atomic_open() an inline
+function that checks IS_ENCRYPTED() and calls an out-of-line function
+__fscrypt_prepare_atomic_open().  But if it happens to be simpler to make the
+caller handle the IS_ENCRYPTED() check in this case, then there should simply be
+one function: fscrypt_prepare_atomic_open() (no leading underscores).
+
+> +{
+> +	int err = fscrypt_get_encryption_info(dir, true);
+> +
+> +	if (err || (!err && !fscrypt_has_encryption_key(dir))) {
+> +		spin_lock(&dentry->d_lock);
+> +		dentry->d_flags |= DCACHE_NOKEY_NAME;
+> +		spin_unlock(&dentry->d_lock);
+> +	}
+
+Why does DCACHE_NOKEY_NAME need to be set on error?
+
+Also note that the '!err &&' part has no effect.
+
+- Eric
