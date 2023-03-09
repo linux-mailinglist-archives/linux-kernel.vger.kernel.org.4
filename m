@@ -2,192 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5CB06B251F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5696B2528
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:21:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbjCINTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:19:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
+        id S231182AbjCINVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjCINTb (ORCPT
+        with ESMTP id S229825AbjCINVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:19:31 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28764C06;
-        Thu,  9 Mar 2023 05:19:29 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D29391BF203;
-        Thu,  9 Mar 2023 13:19:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678367968;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KCS0grjDle8LqIHXYUqxgW9dQGLLuD8q9UNKbRuhYbk=;
-        b=Xwei8LaM7A3PtmP2nNF4x28yyM+iJOS9s9PrMxCrGzZC58KjSVM8cHaBeXrAZI/NtfH/9j
-        r01nhfdqw3Y5E4seWycsQrKTDFGGLW5n7wwD+gr+9XPRGo17l49ulVlJXO+zEXIj6W/wVp
-        xHnGPGBF0BnN6CjB6Mu7s0CWOOvq/3wpWShvMBXpv9A0NVrQOjh4c49bXdwQz2Qj8hWt33
-        zxizmlPdNsdJMSab2n/Xqmakf0DwsfvgnyFw9d/JVszhf957LuH1cfuu0MN5C7gxIvLwp6
-        eigmkj5aTAo76n4kZiDx68XnLa0GLX9JeCOa/Bk5Ds7ImdmzV7EC+0ot+vZz3Q==
-Date:   Thu, 9 Mar 2023 14:19:20 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-rtc@vger.kernel.org,
-        Michael Walle <michael@walle.cc>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH V3] nvmem: add explicit config option to read OF fixed
- cells
-Message-ID: <20230309141920.1d3f774e@xps-13>
-In-Reply-To: <e845b38c-d0eb-716c-dc51-b89582750f07@gmail.com>
-References: <20230309112028.19215-1-zajec5@gmail.com>
-        <20230309123513.43b7134f@xps-13>
-        <e845b38c-d0eb-716c-dc51-b89582750f07@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Mar 2023 08:21:09 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A2AE6FFE;
+        Thu,  9 Mar 2023 05:21:06 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329D4eCA029648;
+        Thu, 9 Mar 2023 13:20:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=pNHCbqRQafX/ACjbDKS29OWZUQTgc8vIxhSBvT7xme0=;
+ b=O8GRs4Es2Mmgk28NSbkjteFHV5l4cwoUOZselt2XH4yHzePswClyXxp3ncTvedAd6Nak
+ 0+HSYUmdGPzqBYUrouOE7ASckr6rQliLQDObM7uyd2fiwf3M1UVPlbM7Noa9YZPdKTHS
+ Ivtf1mBSI5O+db7EU08zvZAE3Z3+eagkFASETr6m/MnNmfG6X6ZZYiYjYQFDsm1ixVIf
+ SnuCZjDWbQj9E1/BW3Hb1YnHj3naHSA2IM6U/HcKHzXR3ME6gdLZq95g1sh0p2WHM9uV
+ 5mMHEPKhNsstpkkbGrpcN6W2m+bJUlMkAPL+qBKL3FZd/sJ6xUVJTJS+Re0MOXZKClk9 hg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6t3bsxyj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 13:20:38 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 329D5bNm012989;
+        Thu, 9 Mar 2023 13:20:38 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6t3bsxy4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 13:20:38 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 329CU4u4023573;
+        Thu, 9 Mar 2023 13:20:37 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3p6fnwkpg5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 13:20:37 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 329DKZGS19268266
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Mar 2023 13:20:36 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B82CF58061;
+        Thu,  9 Mar 2023 13:20:35 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB4DA5805D;
+        Thu,  9 Mar 2023 13:20:34 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.90.179])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Mar 2023 13:20:34 +0000 (GMT)
+Message-ID: <397cb437bbd41e7eb223a07bc92a10bb57df696e.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 1/3] security: Introduce LSM_ORDER_LAST and set it
+ for the integrity LSM
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, mic@digikod.net
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 09 Mar 2023 08:20:34 -0500
+In-Reply-To: <20230309085433.1810314-2-roberto.sassu@huaweicloud.com>
+References: <20230309085433.1810314-1-roberto.sassu@huaweicloud.com>
+         <20230309085433.1810314-2-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: klGFtrN_aONy7MWhWwYH4GEQF-YdaOII
+X-Proofpoint-ORIG-GUID: Tf2q3-RDKlL0JJXY9cIGOIypQYWVQ3r8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_06,2023-03-08_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=767 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1011 impostorscore=0 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303090105
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafa=C5=82,
+On Thu, 2023-03-09 at 09:54 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs needing to be
+> last, e.g. the 'integrity' LSM, without changing the kernel command line or
+> configuration.
+> 
+> Also, set this order for the 'integrity' LSM. While not enforced, this is
+> the only LSM expected to use it.
+> 
+> Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled
+> and put at the end of the LSM list.
+> 
+> Finally, for LSM_ORDER_MUTABLE LSMs, set the found variable to true if an
+> LSM is found, regardless of its order. In this way, the kernel would not
+> wrongly report that the LSM is not built-in in the kernel if its order is
+> LSM_ORDER_LAST.
+> 
+> Fixes: 79f7865d844c ("LSM: Introduce "lsm=" for boottime LSM selection")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-zajec5@gmail.com wrote on Thu, 9 Mar 2023 13:01:19 +0100:
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 
-> On 9.03.2023 12:35, Miquel Raynal wrote:
-> >> diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-prov=
-ider.h
-> >> index 0262b86194eb..b3c14ce87a65 100644
-> >> --- a/include/linux/nvmem-provider.h
-> >> +++ b/include/linux/nvmem-provider.h
-> >> @@ -73,6 +73,7 @@ struct nvmem_cell_info {
-> >>    * @owner:	Pointer to exporter module. Used for refcounting.
-> >>    * @cells:	Optional array of pre-defined NVMEM cells.
-> >>    * @ncells:	Number of elements in cells.
-> >> + * @use_fixed_of_cells:	Read fixed NVMEM cells from OF. =20
-> >=20
-> > I'm still unhappy with the naming, especially since you explained in
-> > more details the whole plan which involves using a container to put
-> > these fixed cells from now on. In both cases you extract cells from
-> > fixed OF nodes but this boolean needs to be set to true in one
-> > case, and false in the other, which would not make sense.
-> >=20
-> > Also, regarding the bindings changes, I'm fairly happy with the idea,
-> > but if we go this way I would prefer a full series instead of
-> > individual changes with:
-> >=20
-> > - the boolean you introduce here (renamed, at the very least)
-> > - the new bindings =20
->=20
-> I assume you mean fixed-layout.yaml?
-
-Yes!
-
-> > - the update of the current provider bindings to take the new bindings
-> >    into account and deprecate the old ones officially =20
->=20
-> What has to be updated in current proceds? It seems to me that:
-> 1. Current NVMEM providers reference nvmem.yaml
-> 2. nvmem.yaml references nvmem-layout.yaml
-> 3. nvmem-layout.yaml references fixed-layout.yaml
->=20
-> what else is missing?
-
-That's the theory, but then provider bindings should reflect the
-changes as well in their own binding documents.
-
-IOW, this one (and all its cousins) becomes legacy and must be updated:
-
-https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bin=
-dings/nvmem/imx-ocotp.yaml#L92
-
-(and there are many files to update then)
-
->=20
->=20
-> > - support for the new bindings in the core =20
->=20
-> Please, don't get me wrong, but I'm not going to spend more hours on
-> actual coding without approval of chosen path.
-
-Well, you want to make the bindings evolve. Just updating a single
-binding file is not enough, I believe we should at least provide full
-support for the new description. But of course I'm fine discussing what
-description we want first.
-
-> I'll need to have
-> [PATCH V2] dt-bindings: nvmem: layouts: add fixed-layout
-> reviewed/acked first. If you can do that that's great.
->=20
->=20
-> >>    * @keepout:	Optional array of keepout ranges (sorted ascending by s=
-tart).
-> >>    * @nkeepout:	Number of elements in the keepout array.
-> >>    * @type:	Type of the nvmem storage
-> >> @@ -103,6 +104,7 @@ struct nvmem_config {
-> >>   	struct module		*owner;
-> >>   	const struct nvmem_cell_info	*cells;
-> >>   	int			ncells;
-> >> +	bool			use_fixed_of_cells;
-> >>   	const struct nvmem_keepout *keepout;
-> >>   	unsigned int		nkeepout;
-> >>   	enum nvmem_type		type; =20
-> >=20
-> > Thanks,
-> > Miqu=C3=A8l =20
->=20
-
-
-Thanks,
-Miqu=C3=A8l
