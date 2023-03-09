@@ -2,126 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C356B3035
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4B76B3037
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:11:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjCIWJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 17:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
+        id S230236AbjCIWLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 17:11:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCIWJC (ORCPT
+        with ESMTP id S229895AbjCIWK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:09:02 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1716F4B40
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:09:01 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id ff4so2477817qvb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 14:09:01 -0800 (PST)
+        Thu, 9 Mar 2023 17:10:59 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F055F6024
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:10:58 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id op8so2447353qvb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 14:10:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maine.edu; s=google; t=1678399741;
-        h=mime-version:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OXNyR4ldCmmeOEB/szGPTm+ITsBHmfaV/WCZ2Vpd7cw=;
-        b=bAMrz2llNFkXvlarv9jhJiKYOO+cU69QYOFihMNbNfO/3vGrlMcNYUcqlaqD5TKNgU
-         vehhcmzUhB4YP8p6FJIcTu8fk1uLXzeH1NQNFJIQKemXmM6t6reFrU4AxldNbayA85kc
-         g47dJunLFid6LQ1sgm9eiiT7ewk1wHLty4PIs=
+        d=joelfernandes.org; s=google; t=1678399857;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vWhT84CK6LOvh74niMhTS7YujYkiY2d3+6ptF98Dgak=;
+        b=rz5prbdOcEyLdpQBMKt0TOvKzC2C/IfVp0Km9x1EhHRqM08tce38j3WxOXADVaO2Nb
+         udadLQ3IORYDH5B7MFJXp7Rm07MksreX7YK0mrMUQul1pOqDvNvs3p0Dasdxsxq3G1Us
+         Xs0HspJ+tjRRIvhQS+EiRpkd3FMuGKUJojft4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678399741;
-        h=mime-version:message-id:subject:cc:to:date:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OXNyR4ldCmmeOEB/szGPTm+ITsBHmfaV/WCZ2Vpd7cw=;
-        b=J0H0gfjK6iZl3eeGUtl73SsSUahpRukApR0UnbGYfbNVr8PAkJSQcIPsM2+VKWFi8a
-         SytcLNdIZQXf4eUJw1lq+CTjBPsNnZZ5U6NXEADkQc/rQ9gGzeNEIOI0viJUQ/tdxQGA
-         p8VOtGIis3IBqw5UEb7QlvPRQ6qq9HgXP0UzQTXyfiscmvccOI2ZDlhcV0nZKT0dqwph
-         H7WUL4TGsb+bUZ90XuugL2d/d5FplLPnhazcP4oZNhtJIOzH51uTuvXjzXHJKQ2GF/+i
-         p4+HQu3+YaagwWzcAmI5RCIpHaom9f4EQERNvKDE8prBQmiJbg6y0CoFikAnpgccdLSE
-         m+Vw==
-X-Gm-Message-State: AO0yUKUfNKg2GTAsylDDRfFbN957F3YdRZjfq49k7TwH1r2hzE4VdXgE
-        770ZHqMHFpnf2prlRqIQfRRwMtg26fGMxNtB9JA=
-X-Google-Smtp-Source: AK7set//U+PyWSlasp1uLb7rQiH/rLxJJkj9e6xic09tbEW4OYLoJN/wzRCRWTcM/EbjVo7vwPdBgQ==
-X-Received: by 2002:a05:6214:f0f:b0:56f:1b7e:d87f with SMTP id gw15-20020a0562140f0f00b0056f1b7ed87fmr43954528qvb.34.1678399740768;
-        Thu, 09 Mar 2023 14:09:00 -0800 (PST)
-Received: from macbook-air.local (weaver.eece.maine.edu. [130.111.218.23])
-        by smtp.gmail.com with ESMTPSA id bs37-20020a05620a472500b007424376ca4bsm98277qkb.18.2023.03.09.14.08.59
+        d=1e100.net; s=20210112; t=1678399857;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vWhT84CK6LOvh74niMhTS7YujYkiY2d3+6ptF98Dgak=;
+        b=Upj+/UF6YLcMZpmK5cEN9ZSpudyDBScyhPBp9KB5LvZ6bf1Myd3Lyrm3jDxBXFhe3j
+         ePXDW0Gu7JhizBA3pKuaKu+8x7WTmKKcHQByNIR1eckF06DlJg++fQk20Bz86P86gVMp
+         FhlIQ1R/fR9PPym4VJwvEmrO7jMl5896/oq78ObQUF4HJVlUxGdeDYqTdsPPWJ46Kzqg
+         a0Y28GcNEOUTXMohV4/AIEciYum9O+/ht/usw3tKERsWXdWfhRlgkUoN9z1ZJMV4R7GJ
+         Brs94zfnjS08iRleK0iVdflqcAt0l8KAKT+uT3n83wTcIALtjWMZweBdc65EXfozX5LY
+         L4HA==
+X-Gm-Message-State: AO0yUKUw+n5SEq2yRmGVpsTTO0zQfL0V+Gkykg+OnRtrOPZl+Ro0wWRO
+        6LNwGDDbcZFprX/df337lxFdzg==
+X-Google-Smtp-Source: AK7set/IkaMJWra/Hd4Ec5D5NNMfYHcNZHJCeHl5jb4VMObRe9L2a42goReF50PoPRF6RkjXLf6FLQ==
+X-Received: by 2002:a05:6214:2263:b0:56b:f1f7:c67f with SMTP id gs3-20020a056214226300b0056bf1f7c67fmr41522345qvb.6.1678399857362;
+        Thu, 09 Mar 2023 14:10:57 -0800 (PST)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id r9-20020a374409000000b00741a8e96f25sm54780qka.88.2023.03.09.14.10.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 14:09:00 -0800 (PST)
-From:   Vince Weaver <vincent.weaver@maine.edu>
-X-Google-Original-From: Vince Weaver <vince@maine.edu>
-Date:   Thu, 9 Mar 2023 17:08:55 -0500 (EST)
-To:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: [perf] perf_fuzzer triggers KASAN BUG in x86_pmu_del
-Message-ID: <41f6fea1-999a-0463-3dd6-cea750f51976@maine.edu>
+        Thu, 09 Mar 2023 14:10:56 -0800 (PST)
+Date:   Thu, 9 Mar 2023 22:10:56 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-doc@vger.kernel.org, rcu@vger.kernel.org
+Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
+Message-ID: <20230309221056.GB148448@google.com>
+References: <20230303213851.2090365-1-joel@joelfernandes.org>
+ <ZAc1wsvd4trjP/xi@lothringen>
+ <ZAc+vVZUhXdhpSki@pc636>
+ <CAEXW_YRTLQpQpOW-+n+X59pmB=4TkV=gdsMiQfBkdK_4wO9Jug@mail.gmail.com>
+ <20230307173313.GJ1301832@paulmck-ThinkPad-P17-Gen-1>
+ <20230307185443.GA516865@google.com>
+ <20230307192726.GL1301832@paulmck-ThinkPad-P17-Gen-1>
+ <ZAhYP9a8u05hzsOn@pc636>
+ <20230308144528.GR1301832@paulmck-ThinkPad-P17-Gen-1>
+ <ZAnXxr9OyFT63xSx@pc636>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAnXxr9OyFT63xSx@pc636>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello
+On Thu, Mar 09, 2023 at 01:57:42PM +0100, Uladzislau Rezki wrote:
+[..]
+> > > > > > See this commit:
+> > > > > > 
+> > > > > > 3705b88db0d7cc ("rcu: Add a module parameter to force use of
+> > > > > > expedited RCU primitives")
+> > > > > > 
+> > > > > > Antti provided this commit precisely in order to allow Android
+> > > > > > devices to expedite the boot process and to shut off the
+> > > > > > expediting at a time of Android userspace's choosing.  So Android
+> > > > > > has been making this work for about ten years, which strikes me
+> > > > > > as an adequate proof of concept.  ;-)
+> > > > > 
+> > > > > Thanks for the pointer. That's true. Looking at Android sources, I
+> > > > > find that Android Mediatek devices at least are setting
+> > > > > rcu_expedited to 1 at late stage of their userspace boot (which is
+> > > > > weird, it should be set to 1 as early as possible), and
+> > > > > interestingly I cannot find them resetting it back to 0!.  Maybe
+> > > > > they set rcu_normal to 1? But I cannot find that either. Vlad? :P
+> > > > 
+> > > > Interesting.  Though this is consistent with Antti's commit log,
+> > > > where he talks about expediting grace periods but not unexpediting
+> > > > them.
+> > > > 
+> > > Do you think we need to unexpedite it? :))))
+> > 
+> > Android runs on smallish systems, so quite possibly not!
+> > 
+> We keep it enabled and never unexpedite it. The reason is a performance.  I
+> have done some app-launch time analysis with enabling and disabling of it.
+> 
+> An expedited case is much better when it comes to app launch time. It
+> requires ~25% less time to run an app comparing with unexpedited variant.
+> So we have a big gain here.
 
-I hit this KASAN BUG running the perf_fuzzer on a haswell machine running
-6.3.0-rc1
+Wow, that's huge. I wonder if you can dig deeper and find out why that is so
+as the callbacks may need to be synchronize_rcu_expedited() then, as it could
+be slowing down other usecases! I find it hard to believe, real-time
+workloads will run better without those callbacks being always-expedited if
+it actually gives back 25% in performance!
 
-It is reproducible.
+thanks,
 
-It looks like it's from the __set_bit line here in x86_pmu_del().  Let me 
-know if there's more I can do to debug this.
-
-Vince
-
-	/*
-         * If we're called during a txn, we only need to undo x86_pmu.add.
-         * The events never got scheduled and ->cancel_txn will truncate
-         * the event_list.
-         *
-         * XXX assumes any ->del() called during a TXN will only be on
-         * an event added during that same TXN.
-         */
-        if (cpuc->txn_flags & PERF_PMU_TXN_ADD)
-                goto do_del;
-
-        __set_bit(event->hw.idx, cpuc->dirty);
-
-
-[ 5867.174432] ==================================================================
-[ 5867.181684] BUG: KASAN: wild-memory-access in x86_pmu_del+0x92/0x2e0
-[ 5867.188058] Write of size 8 at addr 1fff8880d09a1fa0 by task perf_fuzzer/3025
-[ 5867.196720] CPU: 7 PID: 3025 Comm: perf_fuzzer Not tainted 6.3.0-rc1 #179
-[ 5867.203521] Hardware name: LENOVO 10AM000AUS/SHARKBAY, BIOS FBKT72AUS 01/26/2014
-[ 5867.210931] Call Trace:
-[ 5867.213398]  <TASK>
-[ 5867.215518]  dump_stack_lvl+0x57/0x90
-[ 5867.219204]  kasan_report+0xbb/0xf0
-[ 5867.222713]  ? perf_event_update_userpage+0x2a1/0x450
-[ 5867.227788]  ? x86_pmu_del+0x92/0x2e0
-[ 5867.231477]  kasan_check_range+0x13f/0x1a0
-[ 5867.235594]  x86_pmu_del+0x92/0x2e0
-[ 5867.239105]  ? lock_is_held_type+0xe3/0x140
-[ 5867.243309]  event_sched_out+0x1c6/0x480
-[ 5867.247261]  merge_sched_in+0x728/0x7b0
-[ 5867.251128]  visit_groups_merge.constprop.0.isra.0+0x30e/0x970
-[ 5867.256985]  ? __pfx_visit_groups_merge.constprop.0.isra.0+0x10/0x10
-[ 5867.263366]  ? visit_groups_merge.constprop.0.isra.0+0x374/0x970
-[ 5867.269399]  ctx_flexible_sched_in+0x11c/0x140
-[ 5867.273865]  ? __pfx_ctx_flexible_sched_in+0x10/0x10
-[ 5867.278849]  ? lock_is_held_type+0xe3/0x140
-[ 5867.283053]  ctx_sched_in+0x1a5/0x3b0
-[ 5867.286736]  ? __pfx_ctx_sched_in+0x10/0x10
-[ 5867.290938]  ? ctx_sched_out+0x191/0x340
-[ 5867.294885]  __perf_event_task_sched_in+0x258/0x400
-[ 5867.299789]  ? __pfx___perf_event_task_sched_in+0x10/0x10
-[ 5867.305208]  finish_task_switch.isra.0+0x3d4/0x570
-[ 5867.310025]  schedule_tail+0xe/0x90
-[ 5867.313535]  ret_from_fork+0x12/0x50
-[ 5867.317135]  </TASK>
-[ 5867.319347] ==================================================================
-[ 5867.326586] Disabling lock debugging due to kernel taint
+ - Joel
 
