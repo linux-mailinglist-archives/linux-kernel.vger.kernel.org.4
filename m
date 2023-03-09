@@ -2,91 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F646B25EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7092D6B25ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbjCINx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
+        id S231218AbjCINxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbjCINwu (ORCPT
+        with ESMTP id S231370AbjCINxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:52:50 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6E319118;
-        Thu,  9 Mar 2023 05:52:32 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id l1so1914005wry.12;
-        Thu, 09 Mar 2023 05:52:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678369950;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MEPzzOTco8F0XZ6j2XkzBBoW/FXirFOe4frZRxNgqgA=;
-        b=Fhdv4P1+aH4EuW26fCMYNvV2DyTsd4E3U0S6DDVGuME9pajmGk/a+oxpbhgEEduVKx
-         wA+LyDi2RUWyh77q70mi6HCYde+6NjHYh0wJAy3A3QmTiRIzfl0b2mLiuEn+/qZjg/Vy
-         /q9URBFxcbvFTYhM9uT4/aXvZDhraBwGTgxYCh9rB+c0PbJNer7+6wB93RkOqlbEBzRr
-         C6/S42ep9895fzKt9pX1sxIOPg4kGBQ6EYyuuCWle1DvkKyKCjhQAp8w9S4OEBoeSee7
-         XEpgJiJjR6RP8zI2JctCHJuj/0c9h/ZPBCHtf5GKz6DHtY+iLkNf+pZALV8XNovcKXpp
-         GtkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678369950;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MEPzzOTco8F0XZ6j2XkzBBoW/FXirFOe4frZRxNgqgA=;
-        b=j+cEcnWEpv0xwzXQnj+Sbiru3gGNXK+qshnqmq+M9XklUdXrEND0tNjSc7ii42FL5n
-         jBvailkOTWVX7caoqXqLEDf8cDN1yBNOr91uv64FbYqfsGN4cUvMiwC+PiLjcMn07wMn
-         H4KF26c52XUN6/NA+ZItEMqMWYZyqX6VMKj1kbWIGGj85hI7fOp/+YRRIg7gFpD+k4Rf
-         cl9o4oJJrTLQMfIkz+Go29yj/bqFy/grg5uViyMsxYkUQyFULBbkAr7yRo8lfZfPc0Bx
-         8pqIkG2h6R/WYeJ+OB01w1sMfhFOBuTwe4PkjWKfJd5DTDNv6Eu5Hs8fVxf9GjmdsRHQ
-         cpVQ==
-X-Gm-Message-State: AO0yUKUwLT/34ADMWNUCIwyhPpdaYfXwIzyRyxGktkKPh7BGzOgxbgMs
-        k9Ya1CTIaUzOM1JTwymsfe8=
-X-Google-Smtp-Source: AK7set+R7mRNWL8lBNiwn3d4ckYcO738CPOQt17XTJF1MKCwKj0CXWEynZhuxbeB8yAFjf2sm+d+Aw==
-X-Received: by 2002:a05:6000:43:b0:2c7:1603:16c5 with SMTP id k3-20020a056000004300b002c7160316c5mr13310641wrx.67.1678369950483;
-        Thu, 09 Mar 2023 05:52:30 -0800 (PST)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id f2-20020adfdb42000000b002c54fb024b2sm17657612wrj.61.2023.03.09.05.52.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 05:52:30 -0800 (PST)
-Date:   Thu, 9 Mar 2023 15:52:27 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/7] dsa: marvell: Add helper function to validate the
- max_frame_size variable
-Message-ID: <20230309135227.cmn5j3tundeugyzd@skbuf>
-References: <20230309125421.3900962-1-lukma@denx.de>
- <20230309125421.3900962-6-lukma@denx.de>
- <ZAndSR4L1QvOFta6@shell.armlinux.org.uk>
- <ZAnefI4vCZSIPkEK@shell.armlinux.org.uk>
- <20230309144752.5e62e037@wsk>
+        Thu, 9 Mar 2023 08:53:03 -0500
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A9E23DBE
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 05:53:00 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:3a77:63e:b168:ae06])
+        by baptiste.telenet-ops.be with bizsmtp
+        id WDsw2900754Hw2A01DswFl; Thu, 09 Mar 2023 14:52:56 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1paGgv-00BKoW-Iy;
+        Thu, 09 Mar 2023 14:52:56 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1paGhU-00GCVN-3q;
+        Thu, 09 Mar 2023 14:52:56 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-gpio@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+Subject: [PATCH] sh: mach-x3proto: Add missing #include <linux/gpio/driver.h>
+Date:   Thu,  9 Mar 2023 14:52:55 +0100
+Message-Id: <20230309135255.3861308-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309144752.5e62e037@wsk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        TVD_SPACE_RATIO autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 02:47:52PM +0100, Lukasz Majewski wrote:
-> Ok, I will reorder those patches and submit v6.
-> 
-> Do you have any other comments regarding this patch set?
+shx3_defconfig:
 
-Please allow for at least 24 hours between reposts. I would like to look
-at this patch set too, later today or tomorrow.
+    arch/sh/boards/mach-x3proto/setup.c: In function ‘x3proto_devices_setup’:
+    arch/sh/boards/mach-x3proto/setup.c:246:62: error: invalid use of undefined type ‘struct gpio_chip’
+      246 |                 baseboard_buttons[i].gpio = x3proto_gpio_chip.base + i;
+	  |                                                              ^
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Link: https://lore.kernel.org/r/CA+G9fYs7suzGsEDK40G0pzxXyR1o2V4Pn-oy1owTsTWRVEVHog@mail.gmail.com
+Fixes: 21d9526d13b5467b ("gpiolib: Make the legacy <linux/gpio.h> consumer-only")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ arch/sh/boards/mach-x3proto/setup.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/sh/boards/mach-x3proto/setup.c b/arch/sh/boards/mach-x3proto/setup.c
+index 95b85f2e13dda75b..7f39fca95e57a109 100644
+--- a/arch/sh/boards/mach-x3proto/setup.c
++++ b/arch/sh/boards/mach-x3proto/setup.c
+@@ -17,6 +17,7 @@
+ #include <linux/usb/r8a66597.h>
+ #include <linux/usb/m66592.h>
+ #include <linux/gpio.h>
++#include <linux/gpio/driver.h>
+ #include <linux/gpio_keys.h>
+ #include <mach/ilsel.h>
+ #include <mach/hardware.h>
+-- 
+2.34.1
+
