@@ -2,107 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB566B1DB6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 368F96B1DB7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjCIITB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 03:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
+        id S229963AbjCIITE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 03:19:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjCIISN (ORCPT
+        with ESMTP id S229623AbjCIISU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:18:13 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51DAE2C7C;
-        Thu,  9 Mar 2023 00:14:54 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 2138B24E1D3;
-        Thu,  9 Mar 2023 16:13:47 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 9 Mar
- 2023 16:13:47 +0800
-Received: from [192.168.125.128] (183.27.96.115) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 9 Mar
- 2023 16:13:45 +0800
-Message-ID: <783fe50c-1649-b1c4-06cd-ac81bcad5117@starfivetech.com>
-Date:   Thu, 9 Mar 2023 16:13:46 +0800
+        Thu, 9 Mar 2023 03:18:20 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369C2E5006
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:14:56 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 51B6A604EF;
+        Thu,  9 Mar 2023 09:14:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678349652; bh=eQYgYGof5e27Nf41t5KKL3ucmmdEiYbCoIwcdj/66oQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=qJ6hoo7oUvARXYBKwPdGCDR6gWXc4Vvdxj2FfyeDBLERYfI87kZxJT+7G6ogCUxr6
+         /DryWk+I8Z781piFuKbvrMsub0+rRje6xZnUVW5+o5qW/LWS3HghbxmTbuiM5aWRtl
+         HkuoeWqHd1jJqZYkEMnYXLcFm3tjjtXY4AwleG/kBSz0C27z7gnSZfiuqkuAP5DLa3
+         lF5HxaD+mPMD9W4c6eWmy3vSYcE2HyAykIx0vXIVgv6HwybURbaUcsxmi2hPnT36YF
+         REH3IJWRK7r2kTXRk1iFH6O+WuM1Euw+62PtfGraT+O2KsP/m9yi7AEss5ddPl9BN/
+         ht2uGEA7v2a1A==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 4PxQJUlCSToQ; Thu,  9 Mar 2023 09:14:09 +0100 (CET)
+Received: from [10.0.1.57] (grf-nat.grf.hr [161.53.83.23])
+        by domac.alu.hr (Postfix) with ESMTPSA id 7AA7B604ED;
+        Thu,  9 Mar 2023 09:14:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678349649; bh=eQYgYGof5e27Nf41t5KKL3ucmmdEiYbCoIwcdj/66oQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AEkOFcmmXLo3TSQEecKqbrj8m6x0tyUhUX68JDHdujeDwHw6FoxJo7Sl/eSGf/iUk
+         GdYOSeT5SnHH9lvL/uTRSZbLVWMiGsI6jx4RIXytd0l56Vf1IV2D5W88fg9zu4c8SR
+         bnAvZR6QwMxLnKULxn45cAk/OsI680qldw+GzqYsmo+uqqJtQFyjvBSq87Ex87Mskd
+         WZgPvKNLR1cLioeACONYrX+VGzNhXrwSwJlTSRb+AKe8y55v/TadLP8r53NJJCRtJI
+         4SEJooo+XbLeE4KhAkbaUYIqLlDuxRJ8DbjtpGhKPYTVwhHIoq7SDon9CQqPxsulbR
+         VmRw7Yuy9hA7Q==
+Message-ID: <7590df81-3bdd-b04e-7b4e-797b45fabded@alu.unizg.hr>
+Date:   Thu, 9 Mar 2023 09:14:08 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v4 1/3] dt-bindings: watchdog: Add watchdog for StarFive
- JH7100 and JH7110
+Subject: Re: INFO: BUG: kobject: integrity does not have a release function
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230308034036.99213-1-xingyu.wu@starfivetech.com>
- <20230308034036.99213-2-xingyu.wu@starfivetech.com>
- <94ba1427-21ea-86ee-d60d-7817f8e673fa@linaro.org>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <94ba1427-21ea-86ee-d60d-7817f8e673fa@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.96.115]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+References: <20230309021556.2203-1-hdanton@sina.com>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230309021556.2203-1-hdanton@sina.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/9 15:30, Krzysztof Kozlowski wrote:
-> On 08/03/2023 04:40, Xingyu Wu wrote:
->> Add bindings to describe the watchdog for the StarFive JH7100/JH7110 SoC.
->> And Use JH7100 as first StarFive SoC with watchdog.
->> 
->> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->> ---
+On 9.3.2023. 3:15, Hillf Danton wrote:
+> On 8 Mar 2023 15:08:21 +0100 Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+>>
+>> Please see the bug reports from the kernel log:
+>>
+>> https://domac.alu.hr/~mtodorov/linux/bugreports/integrity/20230308_123748.jpg
+>>
+>> https://domac.alu.hr/~mtodorov/linux/bugreports/integrity/20230308_123752.jpg
+>>
+>> The kernel is Linux 6.2.0-mg-andy-devres-12485-gf3a2439f20d9-dirty x86_64
+>> on a LENOVO_MT_10TX_BU_Lenovo_FM_V530S-07ICB running AlmaLinux 8.7.
 > 
-> What happened here? You wrote in changelog "Modified" but what exactly?
-> How am I supposed to find it?
+> Only in case no support from your linux vendor, take a look at the debug/fix
+> diffs below.
+>>
+>> I was unable to reproduce on the other Lenovo laptop box, for the kernel
+>> refused to boot, unable to find root drive on NVMe (other kernels w/o
+>> CONFIG_DEBUG_KOBJECT=y run smoothly).
+>>
+>> Config used is:
+>>
+>> https://domac.alu.hr/~mtodorov/linux/bugreports/integrity/config-6.2.0-mg-andy-devres-12485-gf3a2439f20d9-dirty
+>>
+>> As I already said to Andy, this might not be a critical bug, for it happens
+>> only at shutdown AFAICS. However, it can be a sign of some more serious problem
+>> in the code. :-/
+>>
+>> Hope this helps.
+>>
+>> Regards,
+>> Mirsad
+>>
+>> -- 
+>> Mirsad Goran Todorovac
+>> Sistem inženjer
+>> Grafički fakultet | Akademija likovnih umjetnosti
+>> Sveučilište u Zagrebu
+>>
+>> System engineer
+>> Faculty of Graphic Arts | Academy of Fine Arts
+>> University of Zagreb, Republic of Croatia
 > 
-> Provide detailed description, since you decided to remove my tag.
-> Otherwise, standard response:
+> Add a dummy release callback to the integrity ktype in order to
+> quiesce kobj warning.
 > 
-> This is a friendly reminder during the review process.
+> --- 6.2/block/blk-integrity.c
+> +++ b/block/blk-integrity.c
+> @@ -356,7 +356,11 @@ static const struct sysfs_ops integrity_
+>   	.store	= &integrity_attr_store,
+>   };
+>   
+> +static void blk_integrity_kobj_release(struct kobject *kobj)
+> +{
+> +}
+>   static const struct kobj_type integrity_ktype = {
+> +	.release = blk_integrity_kobj_release,
+>   	.default_groups = integrity_groups,
+>   	.sysfs_ops	= &integrity_ops,
+>   };
+> --
 > 
-> It looks like you received a tag and forgot to add it.
+> Add debug info to catch invalid kobj type.
 > 
-> If you do not know the process, here is a short explanation:
-> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-> versions. However, there's no need to repost patches *only* to add the
-> tags. The upstream maintainer will do that for acks received on the
-> version they apply.
-> 
-> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-> 
-> If a tag was not added on purpose, please state why and what changed.
-> 
+> --- 6.2/lib/kobject.c
+> +++ b/lib/kobject.c
+> @@ -443,6 +443,8 @@ int kobject_init_and_add(struct kobject
+>   	va_list args;
+>   	int retval;
+>   
+> +	if (WARN_ON(!ktype || !ktype->release))
+> +		return -EINVAL;
+>   	kobject_init(kobj, ktype);
+>   
+>   	va_start(args, fmt);
+> --
 
-I am sorry I did not elaborate it. The dt-bindings was only supported JH7110 watchdog in v3 patchset
-and you had sent Reviewed-by tags. But at the same time tried to add JH7100 watchdog after discussion
-and used JH7100 as the dt-binding's name because JH7100 is the first StarFive SoCs about watchdog.
-The compatible also add 'starfive,jh7100-wdt' in the dt-binding. It is different from the v3 patch and
-I did not add the Reviewed-by tag.
+Hi, Hillf, thank you very much for the patch.
 
-Best regards,
-Xingyu Wu
+However, I have seen another inconsistency here:
+
+security/integrity/iint.c:
+175 static int __init integrity_iintcache_init(void)
+176 {
+177         iint_cache =
+178             kmem_cache_create("iint_cache", sizeof(struct integrity_iint_cache),
+179                               0, SLAB_PANIC, init_once);
+180         return 0;
+181 }
+182 DEFINE_LSM(integrity) = {
+183         .name = "integrity",
+184         .init = integrity_iintcache_init,
+185 };
+
+There is no call to kmem_cache_destroy(iint_cache) in entire security/integrity subtree?
+
+Is that intentional?
+
+I know there is little logic in releasing resources at shutdown, but it seems like the
+right thing to do ... :-/
+
+Thank you very much, again.
+
+Regards,
+Mirsad
+
+-- 
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
+
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 
