@@ -2,56 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8016B2009
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9646B2014
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjCIJaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:30:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
+        id S230207AbjCIJbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:31:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbjCIJaJ (ORCPT
+        with ESMTP id S229913AbjCIJb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:30:09 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7919E526
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:30:08 -0800 (PST)
-Received: from dggpeml500018.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PXP5W0pKBzrSFQ;
-        Thu,  9 Mar 2023 17:29:19 +0800 (CST)
-Received: from [10.67.111.186] (10.67.111.186) by
- dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 9 Mar 2023 17:30:06 +0800
-Message-ID: <6a45bb5c-d851-d48d-44b1-cf533293a6d8@huawei.com>
-Date:   Thu, 9 Mar 2023 17:30:06 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <mingo@redhat.com>,
-        <peterz@infradead.org>, <juri.lelli@redhat.com>,
-        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
-        <bristot@redhat.com>, <vschneid@redhat.com>, <rkagan@amazon.de>
-References: <20230306132418.50389-1-zhangqiao22@huawei.com>
- <CAKfTPtAYpkQVDBR0mcymVgu7aYY5rN1svW713mGJxbewHGJRqQ@mail.gmail.com>
- <CAKfTPtAOFthDtQj=EGbTzwG6ZE7GPpp_3Xg9wVr_8epO+fiFjw@mail.gmail.com>
- <d4d849e3-ea4b-1f84-b287-513fb7bff415@huawei.com>
- <CAKfTPtAVrmPCwuJ55e6TLrVjQnsgDAdg2rGY_0DXcJGzBft15Q@mail.gmail.com>
- <ZAiFxWLSb9HDazSI@vingu-book>
- <07c692fd-fe59-1bd4-a6d0-e84bee6dbb3b@huawei.com>
- <5250a0fc-3470-b313-0810-5d7a68c7cf50@arm.com>
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-In-Reply-To: <5250a0fc-3470-b313-0810-5d7a68c7cf50@arm.com>
+        Thu, 9 Mar 2023 04:31:26 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E664167832
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:31:23 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536a5a0b6e3so14679577b3.10
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 01:31:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678354283;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XmqAffVC+m+oVrrIAcB4LBUAdhmCJbGaOFJSOfA6Apk=;
+        b=TFj7MTDsZpBNZ1Pa0nPpBjAVMapPhqIjEuIqItxSZfA4ak3MR9Zb48iIb7foczQpbX
+         WbksQYQHrdZrln4nHdw6+5sdurXfjnbNe/kDD/0fdzYnrK4FPkh80+fXTAFYX+K7ErEh
+         1rcQSsoydEEK0CwMuckiZLK2zbAhv/zNi+QuBYMCZBwEZzkU8Itoiq8WU1TgB18gc2Bw
+         EDGa5MXDFojPNO9J/WmuxVzK2IXT3yxoZSKw2S8SO1+F98jJAYgqAMtZYNYjCgHAsfK6
+         fm7hVlPreLuzvKK1gsnbhaUhDW/3kun5nSsDzOEnqh2wUc39UfeqzmXDz1CyRuaUl0uD
+         IRvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678354283;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XmqAffVC+m+oVrrIAcB4LBUAdhmCJbGaOFJSOfA6Apk=;
+        b=TtCu0SDIJkFfef2OvU4iwUzwpKCc/H2Dgx6NJkkPJdf4e36tnGSaAzsFhGu2XZ1z7j
+         ph6ueL877G7VTVeTngr1Ec6mnLGaBXxvDH7w0WuPOlVkJhoN3FkS6smJWMCug/T7D7Ap
+         S8wIpWqV+Kn+XanamOCKjzvE7dkhfQzXDNrTW6hwL4cx5SIdlee2lo/q6EfcTTU04l/+
+         r8bdI94961cseDUlAk3I6mvK4ske4ipVdvXYRg0SYmwWAJ/IWzPMI8VmOik/bjqBJwpd
+         YaSTEMrsus8sW5iofqrpTeG3cwKvLsKTRvIWFxCEP58h68UFoMFjhZeg+ixAIOJi3FR2
+         7gjw==
+X-Gm-Message-State: AO0yUKVFJzznez48po7fCFHV2JLdHnLDLELc0g2ubv0FUwxj87JI+gtD
+        V3tHWgVwOVbfXpAbSzz67gt1W5euouynsvJc
+X-Google-Smtp-Source: AK7set8lfhDA1hmab01GBmCcbW1gNF0jJVZZ3P6U2WtB9nZ0L2Sl5efbx+XPbYy5GSpQU4+BOx2RAfHOQQ1GpTqg
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a25:fe04:0:b0:b1a:64ba:9c9b with SMTP
+ id k4-20020a25fe04000000b00b1a64ba9c9bmr4212060ybe.1.1678354283152; Thu, 09
+ Mar 2023 01:31:23 -0800 (PST)
+Date:   Thu,  9 Mar 2023 09:31:06 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
+Message-ID: <20230309093109.3039327-1-yosryahmed@google.com>
+Subject: [PATCH v2 0/3] Ignore non-LRU-based reclaim in memcg reclaim
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
+        Yosry Ahmed <yosryahmed@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.186]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,62 +81,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Upon running some proactive reclaim tests using memory.reclaim, we
+noticed some tests flaking where writing to memory.reclaim would be
+successful even though we did not reclaim the requested amount fully.
+Looking further into it, I discovered that *sometimes* we over-report
+the number of reclaimed pages in memcg reclaim.
 
+Reclaimed pages through other means than LRU-based reclaim are tracked
+through reclaim_state in struct scan_control, which is stashed in
+current task_struct. These pages are added to the number of reclaimed
+pages through LRUs. For memcg reclaim, these pages generally cannot be
+linked to the memcg under reclaim and can cause an overestimated count
+of reclaimed pages. This short series tries to address that.
 
-在 2023/3/9 17:09, Dietmar Eggemann 写道:
-> On 09/03/2023 09:37, Zhang Qiao wrote:
->>
->> 在 2023/3/8 20:55, Vincent Guittot 写道:
->>> Le mercredi 08 mars 2023 à 09:01:05 (+0100), Vincent Guittot a écrit :
->>>> On Tue, 7 Mar 2023 at 14:41, Zhang Qiao <zhangqiao22@huawei.com> wrote:
-> 
-> [...]
-> 
->>>>> 在 2023/3/7 18:26, Vincent Guittot 写道:
->>>>>> On Mon, 6 Mar 2023 at 14:53, Vincent Guittot <vincent.guittot@linaro.org> wrote:
->>>>>>>
->>>>>>> On Mon, 6 Mar 2023 at 13:57, Zhang Qiao <zhangqiao22@huawei.com> wrote:
-> 
-> [...]
-> 
->>> +static inline bool migrate_long_sleeper(struct sched_entity *se)
->>> +{
->>> +       struct cfs_rq *cfs_rq;
->>> +       u64 sleep_time;
->>> +
->>> +       if (se->exec_start == 0)
->>
->> How about use `se->avg.last_update_time == 0` here?
-> 
-> IMHO, both checks are not needed here since we're still dealing with the
-> originating CPU of the migration. Both of them are set to 0 only at the
-> end of migrate_task_rq_fair().
+Patches 1-2 are just refactoring, they add helpers that wrap some
+operations on current->reclaim_state, and rename
+reclaim_state->reclaimed_slab to reclaim_state->reclaimed.
 
-Yes, if place_entity() don't call migrate_long_sleeper(), the check can remove.
+Patch 3 ignores pages reclaimed outside of LRU reclaim in memcg reclaim.
+The pages are uncharged anyway, so even if we end up under-reporting
+reclaimed pages we will still succeed in making progress during
+charging.
 
-> 
-> 
->>> +               return false;
->>> +
->>> +       cfs_rq = cfs_rq_of(se);
->>> +       /*
->>> +        * If the entity slept for a long time, don't even try to normalize its
->>> +        * vruntime with the base as it may be too far off and might generate
->>> +        * wrong decision because of s64 overflow.
->>> +        * We estimate its sleep duration with the last update of se's pelt.
->>> +        * The last update happened before sleeping. The cfs' pelt is not
->>> +        * always updated when cfs is idle but this is not a problem because
->>> +        * its min_vruntime is not updated too, so the situation can't get
->>> +        * worse.
->>> +        */
->>> +       sleep_time = cfs_rq_last_update_time(cfs_rq) - se->avg.last_update_time;
-> 
-> Looks like this doesn't work for asymmetric CPU capacity systems since
-> we specifically do a sync_entity_load_avg() in select_task_rq_fair()
-> (find_energy_efficient_cpu() for EAS and select_idle_sibling() for CAS)
-> to sync cfs_rq and se (including their last_update_time).
-> 
-> [...]
-> 
-> .
-> 
+Do not let the diff stat deceive you, the core of this series is patch 3,
+which has one line of code change. All the rest is refactoring and one
+huge comment.
+
+v1 -> v2:
+- Renamed report_freed_pages() to mm_account_reclaimed_pages(), as
+  suggested by Dave Chinner. There were discussions about leaving
+  updating current->reclaim_state open-coded as it's not worth hiding
+  the current dereferencing to remove one line, but I'd rather have the
+  logic contained with mm/vmscan.c so that the next person that changes
+  this logic doesn't have to change 7 different files.
+- Renamed add_non_vmscan_reclaimed() to flush_reclaim_state() (Johannes
+  Weiner).
+- Added more context about how this problem was found in the cover
+  letter (Johannes Weiner).
+- Added a patch to move set_task_reclaim_state() below the definition of
+  cgroup_reclaim(), and added additional helpers in the same position.
+  This way all the helpers for reclaim_state live together, and there is
+  no need to declare cgroup_reclaim() early or move its definition
+  around to call it from flush_reclaim_state(). This should also fix the
+  build error reported by the bot in !CONFIG_MEMCG.
+
+RFC -> v1:
+- Exported report_freed_pages() in case XFS is built as a module (Matthew
+  Wilcox).
+- Renamed reclaimed_slab to reclaim in previously missed MGLRU code.
+- Refactored using reclaim_state to update sc->nr_reclaimed into a
+  helper and added an XL comment explaining why we ignore
+  reclaim_state->reclaimed in memcg reclaim (Johannes Weiner).
+
+Yosry Ahmed (3):
+  mm: vmscan: move set_task_reclaim_state() after cgroup_reclaim()
+  mm: vmscan: refactor updating reclaimed pages in reclaim_state
+  mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
+
+ fs/inode.c           |  3 +-
+ fs/xfs/xfs_buf.c     |  3 +-
+ include/linux/swap.h |  5 ++-
+ mm/slab.c            |  3 +-
+ mm/slob.c            |  6 +--
+ mm/slub.c            |  5 +--
+ mm/vmscan.c          | 88 +++++++++++++++++++++++++++++++++++---------
+ 7 files changed, 81 insertions(+), 32 deletions(-)
+
+-- 
+2.40.0.rc0.216.gc4246ad0f0-goog
+
