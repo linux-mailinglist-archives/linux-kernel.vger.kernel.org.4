@@ -2,234 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70396B1E75
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDA46B1E85
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjCIInM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 03:43:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35892 "EHLO
+        id S229893AbjCIIqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 03:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjCIImc (ORCPT
+        with ESMTP id S229994AbjCIIpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:42:32 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D782F5A6EB;
-        Thu,  9 Mar 2023 00:42:28 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1141540002;
-        Thu,  9 Mar 2023 08:42:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678351346;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lOMLsxz0wbG36jgtfIBiMyWVZzrLsmwJtyvij7rHbfQ=;
-        b=jn9W8Zy2xQsX2X+qLuYbzfxLR/Ea+nvrpMsxqrdO4qigembgIxCmalVWx9uRcAmh/5st2n
-        FGlbAO/SWg/789NUvzk/g/rL4hBATR1xNjvogTXBEk7utrtLUnxA6Bn0sEFSmSuUo0Eaq5
-        5aEKdFzdjwEHhkefobsHBhwJ4o75Hun3OUZ9OA8TXEjnPZqvPw50xjZK+cFGm+/UzpY3fE
-        t2jRTIui/0Dtvt5lWuNZf29l2UlF257q4ytHIBzbZNY4aZBZhgX3fXeWGoZiW7/N2aMfgZ
-        LFg4zgNS6k7/wayTkLe2r2DC7GcznO0+CZuxPj657vormEljoMA4pz6kczRqIw==
-Date:   Thu, 9 Mar 2023 09:45:07 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>, Lizhi Hou <lizhi.hou@amd.com>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, helgaas@kernel.org, max.zhen@amd.com,
-        sonal.santan@amd.com, larry.liu@amd.com, brian.xu@amd.com,
-        stefano.stabellini@xilinx.com, trix@redhat.com,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Steen.Hegelund@microchip.com" <Steen.Hegelund@microchip.com>,
-        "Horatiu.Vultur@microchip.com" <Horatiu.Vultur@microchip.com>,
-        "Allan.Nielsen@microchip.com" <Allan.Nielsen@microchip.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>
-Subject: Re: [PATCH V7 0/3] Generate device tree node for pci devices
-Message-ID: <20230309094507.62d7c35e@fixe.home>
-In-Reply-To: <9b4bb45a-f6e4-c95c-d27c-21c7fecb5505@gmail.com>
-References: <1674183732-5157-1-git-send-email-lizhi.hou@amd.com>
-        <af2a6686-ea35-e5fc-7541-27e5d6ca9311@gmail.com>
-        <20230227113150.398dcfa7@fixe.home>
-        <52b8f136-c73f-a97d-2bb6-48aff3755f98@gmail.com>
-        <f927790dc9839cd93902c0d2e5afe5e8@bootlin.com>
-        <1886b888-a0e8-b1ee-c48a-ddbc8b5b0c63@gmail.com>
-        <CAL_JsqL_ER32ys-yW_7-QKLjEmKK8StOeM5yvH2ChuvX++fe5Q@mail.gmail.com>
-        <9b4bb45a-f6e4-c95c-d27c-21c7fecb5505@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Thu, 9 Mar 2023 03:45:54 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A645C13F
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:45:51 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id s22so1302082lfi.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 00:45:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678351550;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F54gfgbPklTu2py/9aI/2w0PbtYlKXXyzesasenBUDk=;
+        b=eAJLvRPUzBtGYU3gVMcuZpXJ1nip8dTU5GaESZGJGEBQHC643xrsaNqW3DbxVNcyXO
+         fiwg2IomRD+G9OFVlBwPQhTWRtTgxIxPKWnjow3ytIQHBHakBVkZAguW/KmKBhNYvwFN
+         4RhEAqjIXH+u2fCEQsX5TzwXmnjsAS9TNRO8E8v6YcvWsJJdnvYLM9AiCzTIYzRo0OFL
+         U2wAUTRaAYbdwAOKuCMkMg1+Y/L0VaZGRyFunFOHxXqRcDnKZwTU9oyOb6aYk6tfQ+Lz
+         oJb/54/7OygwxGkNBY/6Mehs9Qi0/CNcWwsyswvn1/aSdJS5zXIR5tVUH2cgnwNmCIRJ
+         SPjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678351550;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F54gfgbPklTu2py/9aI/2w0PbtYlKXXyzesasenBUDk=;
+        b=jxA92SMa/JQE4H8x+3lhIfJLfSgJ1Vl4kyjt0pcyA8eSG5kRShR3StgCI0OzaPmupC
+         mYsOmLuj5b/Wd94bK/vNQ9es2EnW1PQwkXiqvDe7c2CjbHWXRpsgost5JoxsCo9DLSof
+         iH33YvCmwlnNkk6UoGy9Stn2yzCClZU7UwjQzLyVd4fBfb1wJgfomrimqalK4zpuRS63
+         EVafKwCdWQURcGmc/kqzaQcJP5CmkdXc1IN1DIBI4vKe7V5m9uEd6b7FPdNI3hlFJg9E
+         IA0IaGOcINX5wSnX5VpCEpWqi6uSytSdFJaLaXDMwtv/8fOP+Vi8UYKvye9gLXRIIVQ6
+         wlpA==
+X-Gm-Message-State: AO0yUKUgM23jxyugRyt37P4xelbbHGUrodqRZCTAkq598mmgl4uy9Nzl
+        K+G5yNErwr+Ozaji5GWWri7bDg==
+X-Google-Smtp-Source: AK7set+P8qbsvSgtIi9ZGJk3lgiV250XEvE0beCWF/nX68x45Ulgg1JF/jpy/uRbpDLV8hbro6o3vw==
+X-Received: by 2002:a19:7406:0:b0:4db:4fe8:fd0f with SMTP id v6-20020a197406000000b004db4fe8fd0fmr5643476lfe.25.1678351550221;
+        Thu, 09 Mar 2023 00:45:50 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id j9-20020ac253a9000000b004d61af6771dsm2591705lfh.41.2023.03.09.00.45.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 00:45:49 -0800 (PST)
+Message-ID: <98f20683-bb1d-47c2-18ca-f3de61c9a91f@linaro.org>
+Date:   Thu, 9 Mar 2023 10:45:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 2/4] firmware: Add support for Qualcomm Secure
+ Execution Environment SCM interface
+Content-Language: en-GB
+To:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230305022119.1331495-1-luzmaximilian@gmail.com>
+ <20230305022119.1331495-3-luzmaximilian@gmail.com>
+ <84e6cfd8-ee4b-a5f4-5249-d87df9909246@linaro.org>
+ <fa9cfc41-1d6c-1003-e6d9-6a1545487177@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <fa9cfc41-1d6c-1003-e6d9-6a1545487177@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Wed, 8 Mar 2023 01:31:52 -0600,
-Frank Rowand <frowand.list@gmail.com> a =C3=A9crit :
+On 08/03/2023 15:59, Maximilian Luz wrote:
+> On 3/7/23 16:32, Dmitry Baryshkov wrote:
+>> On 05/03/2023 04:21, Maximilian Luz wrote:
+> 
+> [...]
+> 
+>>> +/* -- DMA helpers. 
+>>> ---------------------------------------------------------- */
+>>> +
+>>> +/* DMA requirements for QSEECOM SCM calls. */
+>>> +#define QSEECOM_DMA_ALIGNMENT        8
+>>> +#define QSEECOM_DMA_ALIGN(ptr)        ALIGN(ptr, QSEECOM_DMA_ALIGNMENT)
+>>> +
+>>> +/**
+>>> + * struct qseecom_dma - DMA memory region.
+>>> + * @size: Size of the memory region, in bytes.
+>>> + * @virt: Pointer / virtual address to the memory, accessible by the 
+>>> kernel.
+>>> + * @phys: Physical address of the memory region.
+>>> + */
+>>> +struct qseecom_dma {
+>>> +    unsigned long size;
+>>
+>> size_t ?
+> 
+> Will fix.
+> 
+>>> +    void *virt;
+>>> +    dma_addr_t phys;
+>>> +};
+>>
+>> Do we really need this wrapper and the wrappers bellow? They look like 
+>> a pure syntax sugar for me, hiding the dma functions from the user.
+> 
+> The idea was that they take care of proper allocation. The Windows 
+> driver that
+> I've reverse-engineered this from allocates memory in multiples of 
+> PAGE_SIZE,
+> so I believe that this might be a requirement (at least on some 
+> systems). These
+> functions are there to ensure that and with that prevent potential bugs by
+> taking that responsibility from the caller.
 
-> On 3/6/23 18:52, Rob Herring wrote:
-> > On Mon, Mar 6, 2023 at 3:24=E2=80=AFPM Frank Rowand <frowand.list@gmail=
-.com> wrote: =20
-> >> =20
->=20
-> < snip >
->=20
-> Hi Rob,
->=20
-> I am in no position to comment intelligently on your comments until I
-> understand the SoC on PCI card model I am asking to be described in
-> this subthread.
+I see. As I wrote in another comment, it might be better to review the 
+whole memory allocation system: pass required sizes, get the data filled.
 
-Hi Frank,
+> 
+>>> +
+>>> +/**
+>>> + * qseecom_dma_alloc() - Allocate a DMA-able memory region suitable 
+>>> for QSEECOM
+>>> + * SCM calls.
+>>> + * @dev:  The device used for DMA memory allocation.
+>>> + * @dma:  Where to write the allocated memory addresses and size to.
+>>> + * @size: Minimum size of the memory to be allocated.
+>>> + * @gfp:  Flags used for allocation.
+>>> + *
+>>> + * Allocate a DMA-able memory region suitable for interaction with SEE
+>>> + * services/applications and the TzOS. The provided size is treated 
+>>> as the
+>>> + * minimum required size and rounded up, if necessary. The actually 
+>>> allocated
+>>> + * memory region will be stored in @dma. Allocated memory must be 
+>>> freed via
+>>> + * qseecom_dma_free().
+>>> + *
+>>> + * Return: Returns zero on success, -ENOMEM on allocation failure.
+>>> + */
+>>> +static inline int qseecom_dma_alloc(struct device *dev, struct 
+>>> qseecom_dma *dma,
+>>> +                    unsigned long size, gfp_t gfp)
+>>
+>> size_t size
+>>
+>> gfp is not used
+> 
+> Right, that should have been passed to dma_alloc_coherent(). Will fix that.
+> 
+>>> +{
+>>> +    size = PAGE_ALIGN(size);
+>>> +
+>>> +    dma->virt = dma_alloc_coherent(dev, size, &dma->phys, GFP_KERNEL);
+>>> +    if (!dma->virt)
+>>> +        return -ENOMEM;
+>>> +
+>>> +    dma->size = size;
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +/**
+>>> + * qseecom_dma_free() - Free a DMA memory region.
+>>> + * @dev: The device used for allocation.
+>>> + * @dma: The DMA region to be freed.
+>>> + *
+>>> + * Free a DMA region previously allocated via qseecom_dma_alloc(). 
+>>> Note that
+>>> + * freeing sub-regions is not supported.
+>>> + */
+>>> +static inline void qseecom_dma_free(struct device *dev, struct 
+>>> qseecom_dma *dma)
+>>> +{
+>>> +    dma_free_coherent(dev, dma->size, dma->virt, dma->phys);
+>>> +}
+>>> +
+>>> +/**
+>>> + * qseecom_dma_realloc() - Re-allocate DMA memory region with the 
+>>> requested size.
+>>> + * @dev:  The device used for allocation.
+>>> + * @dma:  The region descriptor to be updated.
+>>> + * @size: The new requested size.
+>>> + * @gfp:  Flags used for allocation.
+>>> + *
+>>> + * Re-allocates a DMA memory region suitable for QSEECOM SCM calls 
+>>> to fit the
+>>> + * requested amount of bytes, if necessary. Does nothing if the 
+>>> provided region
+>>> + * already has enough space to store the requested data.
+>>> + *
+>>> + * See qseecom_dma_alloc() for details.
+>>> + *
+>>> + * Return: Returns zero on success, -ENOMEM on allocation failure.
+>>> + */
+>>> +static inline int qseecom_dma_realloc(struct device *dev, struct 
+>>> qseecom_dma *dma,
+>>> +                      unsigned long size, gfp_t gfp)
+>>> +{
+>>> +    if (PAGE_ALIGN(size) <= dma->size)
+>>> +        return 0;
+>>> +
+>>> +    qseecom_dma_free(dev, dma);
+>>> +    return qseecom_dma_alloc(dev, dma, size, gfp);
+>>> +}
+>>
+>> I'll comment on this function when commenting patch 4.
+>>
+>>> +
+>>> +/**
+>>> + * qseecom_dma_aligned() - Create a aligned DMA memory sub-region 
+>>> suitable for
+>>> + * QSEECOM SCM calls.
+>>> + * @base:   Base DMA memory region, in which the new region will 
+>>> reside.
+>>> + * @out:    Descriptor to store the aligned sub-region in.
+>>> + * @offset: The offset inside base region at which to place the new 
+>>> sub-region.
+>>> + *
+>>> + * Creates an aligned DMA memory region suitable for QSEECOM SCM 
+>>> calls at or
+>>> + * after the given offset. The size of the sub-region will be set to 
+>>> the
+>>> + * remaining size in the base region after alignment, i.e., the end 
+>>> of the
+>>> + * sub-region will be equal the end of the base region.
+>>> + *
+>>> + * Return: Returns zero on success or -EINVAL if the new aligned 
+>>> memory address
+>>> + * would point outside the base region.
+>>> + */
+>>> +static inline int qseecom_dma_aligned(const struct qseecom_dma 
+>>> *base, struct qseecom_dma *out,
+>>> +                      unsigned long offset)
+>>> +{
+>>> +    void *aligned = (void *)QSEECOM_DMA_ALIGN((uintptr_t)base->virt 
+>>> + offset);
+>>> +
+>>> +    if (aligned - base->virt > base->size)
+>>> +        return -EINVAL;
+>>> +
+>>> +    out->virt = aligned;
+>>> +    out->phys = base->phys + (out->virt - base->virt);
+>>> +    out->size = base->size - (out->virt - base->virt);
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +
+>>> +/* -- Common interface. 
+>>> ----------------------------------------------------- */
+>>> +
+>>> +struct qseecom_device {
+>>> +    struct device *dev;
+>>> +    struct mutex scm_call_lock;    /* Guards QSEECOM SCM calls. */
+>>
+>> There can be only one instance of the qseecom call infrastructure. 
+>> Make this mutex static in the qcom_scm.c
+> 
+> Right, will do that.
+> 
+>>> +};
+>>> +
+>>> +
+>>> +/* -- Secure-OS SCM call interface. 
+>>> ----------------------------------------- */
+>>> +
+>>> +#define QSEECOM_TZ_OWNER_TZ_APPS        48
+>>> +#define QSEECOM_TZ_OWNER_QSEE_OS        50
+>>> +
+>>> +#define QSEECOM_TZ_SVC_APP_ID_PLACEHOLDER    0
+>>> +#define QSEECOM_TZ_SVC_APP_MGR            1
+>>> +
+>>> +enum qseecom_scm_result {
+>>> +    QSEECOM_RESULT_SUCCESS            = 0,
+>>> +    QSEECOM_RESULT_INCOMPLETE        = 1,
+>>> +    QSEECOM_RESULT_BLOCKED_ON_LISTENER    = 2,
+>>> +    QSEECOM_RESULT_FAILURE            = 0xFFFFFFFF,
+>>> +};
+>>> +
+>>> +enum qseecom_scm_resp_type {
+>>> +    QSEECOM_SCM_RES_APP_ID            = 0xEE01,
+>>> +    QSEECOM_SCM_RES_QSEOS_LISTENER_ID    = 0xEE02,
+>>> +};
+>>> +
+>>> +/**
+>>> + * struct qseecom_scm_resp - QSEECOM SCM call response.
+>>> + * @status:    Status of the SCM call. See &enum qseecom_scm_result.
+>>> + * @resp_type: Type of the response. See &enum qseecom_scm_resp_type.
+>>> + * @data:      Response data. The type of this data is given in 
+>>> @resp_type.
+>>> + */
+>>> +struct qseecom_scm_resp {
+>>> +    u64 status;
+>>> +    u64 resp_type;
+>>> +    u64 data;
+>>> +};
+>>> +
+>>> +int qseecom_scm_call(struct qseecom_device *qsee, const struct 
+>>> qcom_scm_desc *desc,
+>>> +             struct qseecom_scm_resp *res);
+>>> +
+>>> +
+>>> +/* -- Secure App interface. 
+>>> ------------------------------------------------- */
+>>> +
+>>> +#define QSEECOM_MAX_APP_NAME_SIZE            64
+>>> +
+>>> +int qseecom_app_get_id(struct qseecom_device *qsee, const char 
+>>> *app_name, u32 *app_id);
+>>> +int qseecom_app_send(struct qseecom_device *qsee, u32 app_id, struct 
+>>> qseecom_dma *req,
+>>> +             struct qseecom_dma *rsp);
+>>
+>> I think that only these calls should be made public / available to 
+>> other modules. qseecom_scm_call also is an internal helper.
+> 
+> So move all calls to qcom_scm and only make these two public? Or move only
+> qseecom_scm_call() to qcom_scm (which would require to make it public 
+> there,
+> however). Or how would you want this to look?
 
-Rather than answering all of the assumptions that were made in the upper
-thread (that are probably doing a bit too much of inference), I will
-re-explain that from scratch.
+I think we can make it with just these calls being public. Or even with 
+just the second one being public and available to other drivers. If the 
+app_id is a part of qseecom_app_device, we can pass that device to the 
+qseecom_app_send(). And qseecom_app_get_id() becomes a part of app 
+registration.
 
-Our usecase involves the lan966x SoCs. These SoCs are mainly targeting
-networking application and offers multiple SFP and RGMII interfaces.
-This Soc can be used in two exclusive modes (at least for the intended
-usage):
+> 
+>>> +
+>>> +#endif /* _LINUX_QCOM_QSEECOM_H */
+>>
+> 
+> Regards,
+> Max
 
-SoC mode:
-   The device runs Linux by itself, on ARM64 cores included in the
-   SoC. This use-case of the lan966x is currently almost upstreamed,
-   using a traditional Device Tree representation of the lan996x HW
-   blocks [1] A number of drivers for the different IPs of the SoC have
-   already been merged in upstream Linux (see
-   arch/arm/boot/dts/lan966x.dtsi)
+-- 
+With best wishes
+Dmitry
 
-PCI mode:
-  The lan966x SoC is configured as a PCIe endpoint (PCI card),
-  connected to a separate platform that acts as the PCIe root complex.
-  In this case, all the IO memories that are exposed by the devices
-  embedded on this SoC are exposed through PCI BARs 0 & 1 and the ARM64
-  cores of the SoC are not used. Since this is a PCIe card, it can be
-  plugged on any platform, of any architecture supporting PCIe.
-
-This work only focus on the *PCI mode* usage. In this mode, we have the
-following prerequisites:
-- Should work on all architectures (x86, ARM64, etc)
-- Should be self-contained in the driver
-- Should be able to reuse all existing platform drivers
-
-In PCI mode, the card runs a firmware (not that it matters at all by
-the way) which configure the card in PCI mode at boot time. In this
-mode, it exposes a single PCI physical function associated with
-vendor/product 0x1055/0x9660. This is not a multi-function PCI device !
-This means that all the IO memories (peripheral memories, device
-memories, registers, whatever you call them) are accessible using
-standard readl()/writel() on the BARs that have been remapped. For
-instance (not accurate), in the BAR 0, we will have this kind of memory
-map:
-
-           BAR0
-   0x0 =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90
-       =E2=94=82           =E2=94=82
-       =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4
-       =E2=94=82   Clock   =E2=94=82
-       =E2=94=82 controller=E2=94=82
-       =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4
-       =E2=94=82           =E2=94=82
-       =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4
-       =E2=94=82   I2C     =E2=94=82
-       =E2=94=82 controller=E2=94=82
-       =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4
-       =E2=94=82           =E2=94=82
-       =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4
-       =E2=94=82   MDIO    =E2=94=82
-       =E2=94=82 Controller=E2=94=82
-       =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4
-       =E2=94=82           =E2=94=82
-       =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4
-       =E2=94=82  Switch   =E2=94=82
-       =E2=94=82 Controller=E2=94=82
-       =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4
-       =E2=94=82           =E2=94=82
-       =E2=94=82   ...     =E2=94=82
-         =20
-
-It also exposes either a single interrupt via the legacy interrupt
-(which can then be demuxed by reading the SoC internal interrupt
-controller registers), or multiple interrupts using MSI interrupts.
-
-As stated before, all these peripherals are already supported in SoC
-mode and thus, there are aleready existing platform drivers for each of
-them. For more information about the devices that are exposed please
-see link [1] which is the device-tree overlay used to describe the
-lan9662 card.
-
-In order to use the ethernet switch, we must configure everything that
-lies around this ethernet controller, here are a few amongst all of
-them:
-- MDIO bus
-- I2C controller for SFP modules access
-- Clock controller
-- Ethernet controller
-- Syscon
-
-Since all the platform drivers already exist for these devices, we
-want to reuse them. Multiple solutions were thought of (fwnode, mfd,
-ACPI, device-tree) and eventually ruled out for some of them and efforts
-were made to try to tackle that (using fwnode [2], device-tree [3])
-
-One way to do so is to use a device-tree overlay description that is
-loaded dynamically on the PCI device OF node. This can be done using the
-various device-tree series series that have been proposed (included
-this one). On systems that do not provide a device-tree of_root, create
-an empty of_root node (see [4]). Then during PCI enumeration, create
-device-tree node matching the PCI tree that was enumerated (See [5]).
-This is needed since the PCI card can be plugged on whatever port the
-user wants and thus it can not be statically described using a fixed
-"target-path" property in the overlay.
-
-Finally, to glue everything together, we add a PCI driver for the
-VID/PID of the PCI card (See [6]). This driver is responsible of adding
-the "ranges" property in the device-tree PCI node to remap the child
-nodes "reg" property to the PCI memory map. This is needed because the
-PCI memory addresses differ between platform, enumeration order and so
-on.Finally, the driver will load the device-tree overlay (See [1]) to
-the PCI device-tree node. Eventually, a call to
-of_platform_default_populate() will probe the nodes and platform
-drivers.
-
-I hope this will help you understanding what is going on here. In the
-meantime, I'm also trying to obtain public documentation about the
-lan966x SoC.
-
-[1]
-https://github.com/clementleger/linux/blob/bf9b4ef803d86c4ae59a4ca195a4152b=
-0d5c3cea/drivers/mfd/lan966x_pci.dts
-[2]
-https://lore.kernel.org/netdev/YhPSkz8+BIcdb72R@smile.fi.intel.com/T/
-[3]
-https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.=
-com/
-[4]
-https://lore.kernel.org/lkml/20230223213418.891942-1-frowand.list@gmail.com/
-[5]
-https://lore.kernel.org/lkml/1674183732-5157-1-git-send-email-lizhi.hou@amd=
-.com/
-[6]
-https://github.com/clementleger/linux/blob/bf9b4ef803d86c4ae59a4ca195a4152b=
-0d5c3cea/drivers/mfd/lan966x_pci_of.c
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
