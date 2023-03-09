@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461046B2AE1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743926B2AAD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjCIQfO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Mar 2023 11:35:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
+        id S230504AbjCIQ0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 11:26:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbjCIQeT (ORCPT
+        with ESMTP id S230518AbjCIQ0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:34:19 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624AA1116A9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 08:25:56 -0800 (PST)
-Received: from lhrpeml500002.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PXYwl1bqWz6J6rf;
-        Fri, 10 Mar 2023 00:07:19 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- lhrpeml500002.china.huawei.com (7.191.160.78) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 9 Mar 2023 16:07:54 +0000
-Received: from lhrpeml500005.china.huawei.com ([7.191.163.240]) by
- lhrpeml500005.china.huawei.com ([7.191.163.240]) with mapi id 15.01.2507.021;
- Thu, 9 Mar 2023 16:07:54 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kevin.tian@intel.com" <kevin.tian@intel.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "yi.l.liu@intel.com" <yi.l.liu@intel.com>
-Subject: RE: [PATCH v1 02/14] iommufd: Add nesting related data structures for
- ARM SMMUv3
-Thread-Topic: [PATCH v1 02/14] iommufd: Add nesting related data structures
- for ARM SMMUv3
-Thread-Index: AQHZUnWTVXhuXoh0OkWPSyQY1srSfq7ydQKAgAAVzLCAAAsqAIAAANyQgAAEp4CAAACeQA==
-Date:   Thu, 9 Mar 2023 16:07:54 +0000
-Message-ID: <4c1f57adbe0c4d48849d585508595939@huawei.com>
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <364cfbe5b228ab178093db2de13fa3accf7a6120.1678348754.git.nicolinc@nvidia.com>
- <20230309134217.GA1673607@myrica>
- <213a05ef06944a55a148995053b187f8@huawei.com> <ZAn94BXkjiJKQ66O@nvidia.com>
- <39979642ba8042ba9d4de651fecfeffb@huawei.com> <ZAoCf9+kpMof6R+4@nvidia.com>
-In-Reply-To: <ZAoCf9+kpMof6R+4@nvidia.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.202.227.178]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 9 Mar 2023 11:26:14 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172E9FAFA9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 08:17:48 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id a25so9333321edb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 08:17:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678378599;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pU1OTBYl8ElxfZaqjfIJsMTqsKjO/PQMi+tQNnzKT4Q=;
+        b=LhpPkPEZNcA6deEMbxuAY4BI/bFxp9zl0nO+hgsnLAiOSJkKjT00UwaUDG0PHiiz3/
+         nEwQeuirJtr8wgHLXWy9IgZdMD8SlsgN+LaLMBNQkYqRi+TR0N/ojIl0BI+BC1cB3po8
+         AKLBGBReYfs4R/dvrq6Kz3qLcwgmqJkXDbNgBMRhaaQYUR/s+UmACSYpM7UzPzFP+EC3
+         Euhjxdc0eh2oEicLY1rKrEhBYAJHD1qM5zFKHZZ7EaSfxH87mxzZSWrSdec0qtGPEf+7
+         5ZQh6jdzQeWaSPX5ScfB6GKvZ3OYHtyiKaqrgWCWwvaMA7fetS6SDHjp3WC/0mJNEJxO
+         DW3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678378599;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pU1OTBYl8ElxfZaqjfIJsMTqsKjO/PQMi+tQNnzKT4Q=;
+        b=WIOwCjlGHjsusRtfUgd2UXTkKu23KaSD55J2CPP8RgPGUSgK33vVWJyqTdXVonet7M
+         39oqkew6T1Nvq7XQ/gOxZvYgnAsAtBR+0f5bcB6dB65LFJmXaNdmbw1xixjd4ScIWPpT
+         4MUng8q7OhUjwdhA+V8tbongXrQTkbBvDBr7tFw+BncaSWQxGdiMRgh8GFF1WeVaNJW7
+         EycAFIWaLFVd88LF83v1F43RhYFU+OG78cTwra3bfuoP33VUfpiOollX/zsWu/gqrAGZ
+         Ziv+nQhUNa7Y/10h/eLCf6MX6hIk3fzak28vpr7x0enslX4mk0uVcc9X+ZGfqU40vUP9
+         /YZw==
+X-Gm-Message-State: AO0yUKULH46TOFXlqRypoqB/mcwp7oeQAhnir9vPMX0xFEDR9c1qsw9e
+        a4ZjkYu/UWGN0elgSY++mYzEEsWX3e+2HCylcSE=
+X-Google-Smtp-Source: AK7set/uDxSQX6guni2q9LjuMZgDKvnwtVPDVc/y4ZwVZTtKpMFGC+aDylsQfmADZ8cH166t4rv0qg==
+X-Received: by 2002:a05:600c:1906:b0:3eb:3c76:c23c with SMTP id j6-20020a05600c190600b003eb3c76c23cmr20444802wmq.3.1678378147773;
+        Thu, 09 Mar 2023 08:09:07 -0800 (PST)
+Received: from localhost ([82.66.159.240])
+        by smtp.gmail.com with ESMTPSA id z18-20020a1c4c12000000b003e876122dc1sm216880wmf.47.2023.03.09.08.09.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 08:09:07 -0800 (PST)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Jason Andryuk <jandryuk@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        Phillip Susi <phill@thesusis.net>, stable@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH v2] Input: xen-kbdfront - drop keys to shrink modalias
+In-Reply-To: <CAKf6xpsGy7rjK3Rkosevr3dD+64-WqCEzAecBbHEHpBMeAHh7A@mail.gmail.com>
+References: <20221209142615.33574-1-jandryuk@gmail.com>
+ <87359gkc1d.fsf@baylibre.com>
+ <CAKf6xpsGy7rjK3Rkosevr3dD+64-WqCEzAecBbHEHpBMeAHh7A@mail.gmail.com>
+Date:   Thu, 09 Mar 2023 17:09:05 +0100
+Message-ID: <87o7p1dhzy.fsf@baylibre.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,52 +75,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jason,
 
+On mer., mars 08, 2023 at 11:26, Jason Andryuk <jandryuk@gmail.com> wrote:
 
-> -----Original Message-----
-> From: Jason Gunthorpe [mailto:jgg@nvidia.com]
-> Sent: 09 March 2023 16:00
-> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-> Cc: Jean-Philippe Brucker <jean-philippe@linaro.org>; Nicolin Chen
-> <nicolinc@nvidia.com>; robin.murphy@arm.com; will@kernel.org;
-> eric.auger@redhat.com; kevin.tian@intel.com; baolu.lu@linux.intel.com;
-> joro@8bytes.org; linux-arm-kernel@lists.infradead.org;
-> iommu@lists.linux.dev; linux-kernel@vger.kernel.org; yi.l.liu@intel.com
-> Subject: Re: [PATCH v1 02/14] iommufd: Add nesting related data structures
-> for ARM SMMUv3
-> 
-> On Thu, Mar 09, 2023 at 03:51:42PM +0000, Shameerali Kolothum Thodi
-> wrote:
-> 
-> > > For ARM cases where there is no shared VMID space with KVM, the ARM
-> > > VMID should be somehow assigned to the iommfd_ctx itself and the alloc
-> > > domain op should receive it from there.
-> >
-> > Is there any use of VMID outside SMMUv3? I was thinking if nested domain
-> alloc
-> > doesn't provide the KVM instance, then SMMUv3 can use its internal VMID.
-> 
-> When we talk about exposing an SMMUv3 IOMMU CMDQ directly to
-> userspace then
-> VMID is the security token that protects it.
-> 
-> So in that environment every domain under the same iommufd should
-> share the same VMID so that the CMDQ's also share the same VMID.
-> 
-> I expect this to be a common sort of requirement as we will see
-> userspace command queues in the other HW as well.
-> 
-> So, I suppose the answer for now is that ARM SMMUv3 should just
-> allocate one VMID per iommu_domain and there should be no VMID in the
-> uapi at all.
-> 
-> Moving all iommu_domains to share the same VMID is a future patch.
-> 
-> Though.. I have no idea how vVMID is handled in the SMMUv3
-> architecture. I suppose the guest IOMMU HW caps are set in a way that
-> it knows it does not have VMID?
+> On Thu, Dec 15, 2022 at 8:54=E2=80=AFAM Mattijs Korpershoek
+> <mkorpershoek@baylibre.com> wrote:
+>>
+>> On Fri, Dec 09, 2022 at 09:26, Jason Andryuk <jandryuk@gmail.com> wrote:
+>>
+>> > xen kbdfront registers itself as being able to deliver *any* key since
+>> > it doesn't know what keys the backend may produce.
+>> >
+>> > Unfortunately, the generated modalias gets too large and uevent creati=
+on
+>> > fails with -ENOMEM.
+>> >
+>> > This can lead to gdm not using the keyboard since there is no seat
+>> > associated [1] and the debian installer crashing [2].
+>> >
+>> > Trim the ranges of key capabilities by removing some BTN_* ranges.
+>> > While doing this, some neighboring undefined ranges are removed to trim
+>> > it further.
+>> >
+>> > An upper limit of KEY_KBD_LCD_MENU5 is still too large.  Use an upper
+>> > limit of KEY_BRIGHTNESS_MENU.
+>> >
+>> > This removes:
+>> > BTN_DPAD_UP(0x220)..BTN_DPAD_RIGHT(0x223)
+>> > Empty space 0x224..0x229
+>> >
+>> > Empty space 0x28a..0x28f
+>> > KEY_MACRO1(0x290)..KEY_MACRO30(0x2ad)
+>> > KEY_MACRO_RECORD_START          0x2b0
+>> > KEY_MACRO_RECORD_STOP           0x2b1
+>> > KEY_MACRO_PRESET_CYCLE          0x2b2
+>> > KEY_MACRO_PRESET1(0x2b3)..KEY_MACRO_PRESET3(0xb5)
+>> > Empty space 0x2b6..0x2b7
+>> > KEY_KBD_LCD_MENU1(0x2b8)..KEY_KBD_LCD_MENU5(0x2bc)
+>> > Empty space 0x2bd..0x2bf
+>> > BTN_TRIGGER_HAPPY(0x2c0)..BTN_TRIGGER_HAPPY40(0x2e7)
+>> > Empty space 0x2e8..0x2ff
+>> >
+>> > The modalias shrinks from 2082 to 1550 bytes.
+>> >
+>> > A chunk of keys need to be removed to allow the keyboard to be used.
+>> > This may break some functionality, but the hope is these macro keys are
+>> > uncommon and don't affect any users.
+>> >
+>> > [1] https://github.com/systemd/systemd/issues/22944
+>> > [2] https://lore.kernel.org/xen-devel/87o8dw52jc.fsf@vps.thesusis.net/=
+T/
+>> >
+>> > Cc: Phillip Susi <phill@thesusis.net>
+>> > Cc: stable@vger.kernel.org
+>> > Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
+>>
+>> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+>
+> Thank you, Mattjis.
+>
+> Any other thoughts?  Can this patch be applied?
 
-I think, Guest only sets up the SMMUv3 S1 stage and it doesn't use VMID.
+That's not up to to decide, Dmitry might pick this up or give you a
+review whenever he has time.
 
-Thanks,
-Shameer
+>
+> Thanks,
+> Jason
