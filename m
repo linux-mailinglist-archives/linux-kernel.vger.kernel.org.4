@@ -2,325 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26AB26B2DEC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D686B2DF2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:51:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjCITtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 14:49:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
+        id S230004AbjCITvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 14:51:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjCITtn (ORCPT
+        with ESMTP id S229639AbjCITvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 14:49:43 -0500
-Received: from forward500a.mail.yandex.net (forward500a.mail.yandex.net [178.154.239.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6019DF6392
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:49:41 -0800 (PST)
-Received: from vla3-f7c67ae63b5f.qloud-c.yandex.net (vla3-f7c67ae63b5f.qloud-c.yandex.net [IPv6:2a02:6b8:c15:2583:0:640:f7c6:7ae6])
-        by forward500a.mail.yandex.net (Yandex) with ESMTP id 141555EBB1;
-        Thu,  9 Mar 2023 22:49:39 +0300 (MSK)
-Received: by vla3-f7c67ae63b5f.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id Wnj3f66b2Cg1-BvIXeRj2;
-        Thu, 09 Mar 2023 22:49:38 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1678391378;
-        bh=Pc/rk4dcKZuCiuBSehiRiUFiAH3zsXSmR08iASFQff0=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=FA3TySb8yQQ7pgn0uuDJ9y420gBsz3A2kgWM7YwRXTK5pO6A3uFtHkupIIeDNyudq
-         oQEu63hR8C/O87djMe4Et+Re8z8XxT8m1LwKJ21r2hOulnZC4F0Qz7qMsp47BGU/lR
-         lqDbR7xCpcsGB0gKgwlfE/WnucAyzNdoouE5GAqo=
-Authentication-Results: vla3-f7c67ae63b5f.qloud-c.yandex.net; dkim=pass header.i=@ya.ru
-Message-ID: <14d66c0d-b436-7ac8-9e4b-21cfdf9631e6@ya.ru>
-Date:   Thu, 9 Mar 2023 22:49:31 +0300
+        Thu, 9 Mar 2023 14:51:40 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419CDF7EE2;
+        Thu,  9 Mar 2023 11:51:38 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329Jmu0O017492;
+        Thu, 9 Mar 2023 19:51:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=RCEYb1Ihg59IinP+txkWtQHoA64JPH94f7dtWtPgKEs=;
+ b=VI5vS0TLXE11Qhq/53pkIMtV4dW5FASfwLhdzoHM+ICxdhfwSUrqsi44oIgNO+Hf9jsf
+ fY07IEMg2wYO5aweMMAt1QMaDPMRYAbf+Hd8cj616/isUkdvqpebPL6wu1O5LkCx8ypx
+ XW4NR4Pm8l2EhkvouE8YICy5WGgRY3yFazmUL1z2JqPxYDv6iPJ491HMDxUXoYB7EC1x
+ smzcvd2RsONRRJ8aCKaAN514led6L/pX0Jk9OJJWvqHZN3kwciZlT9OqtvHTM8Gxlapz
+ gG09U/qkVLIid3qPLz595MR4yj/IicuDZd5VWLYiTaAMOrr1CjylUvGBnCkjYna+sEAn Ew== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p72qau466-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 19:51:06 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 329Jp5cO030563
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 9 Mar 2023 19:51:05 GMT
+Received: from [10.110.90.116] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 9 Mar 2023
+ 11:51:04 -0800
+Message-ID: <74b92725-8596-2f86-02b9-8dbfd6df9d95@quicinc.com>
+Date:   Thu, 9 Mar 2023 11:51:03 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 8/8] mm: shrinkers: convert shrinker_rwsem to mutex
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 02/28] usb: xhci: Add XHCI APIs to support USB
+ offloading
 Content-Language: en-US
-To:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, shakeelb@google.com, mhocko@kernel.org,
-        roman.gushchin@linux.dev, muchun.song@linux.dev, david@redhat.com,
-        shy828301@gmail.com, rppt@kernel.org
-Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
-        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230307065605.58209-1-zhengqi.arch@bytedance.com>
- <20230307065605.58209-9-zhengqi.arch@bytedance.com>
-From:   Kirill Tkhai <tkhai@ya.ru>
-In-Reply-To: <20230307065605.58209-9-zhengqi.arch@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
+        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>, <tiwai@suse.com>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
+        <quic_plai@quicinc.com>
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-3-quic_wcheng@quicinc.com> <ZAl+ydxOCoGXIj1Y@kroah.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <ZAl+ydxOCoGXIj1Y@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: geECP4ky0IkofcbkGzEuZCV5TJOm-pFx
+X-Proofpoint-ORIG-GUID: geECP4ky0IkofcbkGzEuZCV5TJOm-pFx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_10,2023-03-09_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 impostorscore=0 suspectscore=0 clxscore=1015 bulkscore=0
+ mlxlogscore=999 spamscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303090158
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.03.2023 09:56, Qi Zheng wrote:
-> Now there are no readers of shrinker_rwsem, so we
-> can simply replace it with mutex lock.
+Hi Greg,
+
+On 3/8/2023 10:38 PM, Greg KH wrote:
+> On Wed, Mar 08, 2023 at 03:57:25PM -0800, Wesley Cheng wrote:
+>> Some use cases, such as USB audio offloading, will allow for a DSP to take
+>> over issuing USB transfers to the host controller.  In order for the DSP to
+>> submit transfers for a particular endpoint, and to handle its events, the
+>> client driver will need to query for some parameters allocated by XHCI.
+>>
+>> - XHCI secondary interrupter event ring address
+>> - XHCI transfer ring address (for a particular EP)
+>> - Stop endpoint command API
+>>
+>> Once the resources are handed off to the DSP, the offload begins, and the
+>> main processor can enter idle.  When stopped, since there are no URBs
+>> submitted from the main processor, the client will just issue a stop
+>> endpoint command to halt any pending transfers.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>   drivers/usb/host/xhci.c       | 130 ++++++++++++++++++++++++++++++++++
+>>   include/linux/usb/xhci-intr.h |   8 +++
+>>   2 files changed, 138 insertions(+)
 > 
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-
-Acked-by: Kirill Tkhai <tkhai@ya.ru>
-
-> ---
->  drivers/md/dm-cache-metadata.c |  2 +-
->  drivers/md/dm-thin-metadata.c  |  2 +-
->  fs/super.c                     |  2 +-
->  mm/shrinker_debug.c            | 14 +++++++-------
->  mm/vmscan.c                    | 34 +++++++++++++++++-----------------
->  5 files changed, 27 insertions(+), 27 deletions(-)
+> Please use checkpatch.pl on your patches before sending them out :(
 > 
-> diff --git a/drivers/md/dm-cache-metadata.c b/drivers/md/dm-cache-metadata.c
-> index acffed750e3e..9e0c69958587 100644
-> --- a/drivers/md/dm-cache-metadata.c
-> +++ b/drivers/md/dm-cache-metadata.c
-> @@ -1828,7 +1828,7 @@ int dm_cache_metadata_abort(struct dm_cache_metadata *cmd)
->  	 * Replacement block manager (new_bm) is created and old_bm destroyed outside of
->  	 * cmd root_lock to avoid ABBA deadlock that would result (due to life-cycle of
->  	 * shrinker associated with the block manager's bufio client vs cmd root_lock).
-> -	 * - must take shrinker_rwsem without holding cmd->root_lock
-> +	 * - must take shrinker_mutex without holding cmd->root_lock
->  	 */
->  	new_bm = dm_block_manager_create(cmd->bdev, DM_CACHE_METADATA_BLOCK_SIZE << SECTOR_SHIFT,
->  					 CACHE_MAX_CONCURRENT_LOCKS);
-> diff --git a/drivers/md/dm-thin-metadata.c b/drivers/md/dm-thin-metadata.c
-> index fd464fb024c3..9f5cb52c5763 100644
-> --- a/drivers/md/dm-thin-metadata.c
-> +++ b/drivers/md/dm-thin-metadata.c
-> @@ -1887,7 +1887,7 @@ int dm_pool_abort_metadata(struct dm_pool_metadata *pmd)
->  	 * Replacement block manager (new_bm) is created and old_bm destroyed outside of
->  	 * pmd root_lock to avoid ABBA deadlock that would result (due to life-cycle of
->  	 * shrinker associated with the block manager's bufio client vs pmd root_lock).
-> -	 * - must take shrinker_rwsem without holding pmd->root_lock
-> +	 * - must take shrinker_mutex without holding pmd->root_lock
->  	 */
->  	new_bm = dm_block_manager_create(pmd->bdev, THIN_METADATA_BLOCK_SIZE << SECTOR_SHIFT,
->  					 THIN_MAX_CONCURRENT_LOCKS);
-> diff --git a/fs/super.c b/fs/super.c
-> index 84332d5cb817..91a4037b1d95 100644
-> --- a/fs/super.c
-> +++ b/fs/super.c
-> @@ -54,7 +54,7 @@ static char *sb_writers_name[SB_FREEZE_LEVELS] = {
->   * One thing we have to be careful of with a per-sb shrinker is that we don't
->   * drop the last active reference to the superblock from within the shrinker.
->   * If that happens we could trigger unregistering the shrinker from within the
-> - * shrinker path and that leads to deadlock on the shrinker_rwsem. Hence we
-> + * shrinker path and that leads to deadlock on the shrinker_mutex. Hence we
->   * take a passive reference to the superblock to avoid this from occurring.
->   */
->  static unsigned long super_cache_scan(struct shrinker *shrink,
-> diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
-> index 6aa7a7ec69da..b0f6aff372df 100644
-> --- a/mm/shrinker_debug.c
-> +++ b/mm/shrinker_debug.c
-> @@ -7,7 +7,7 @@
->  #include <linux/memcontrol.h>
->  
->  /* defined in vmscan.c */
-> -extern struct rw_semaphore shrinker_rwsem;
-> +extern struct mutex shrinker_mutex;
->  extern struct list_head shrinker_list;
->  extern struct srcu_struct shrinker_srcu;
->  
-> @@ -167,7 +167,7 @@ int shrinker_debugfs_add(struct shrinker *shrinker)
->  	char buf[128];
->  	int id;
->  
-> -	lockdep_assert_held(&shrinker_rwsem);
-> +	lockdep_assert_held(&shrinker_mutex);
->  
->  	/* debugfs isn't initialized yet, add debugfs entries later. */
->  	if (!shrinker_debugfs_root)
-> @@ -210,7 +210,7 @@ int shrinker_debugfs_rename(struct shrinker *shrinker, const char *fmt, ...)
->  	if (!new)
->  		return -ENOMEM;
->  
-> -	down_write(&shrinker_rwsem);
-> +	mutex_lock(&shrinker_mutex);
->  
->  	old = shrinker->name;
->  	shrinker->name = new;
-> @@ -228,7 +228,7 @@ int shrinker_debugfs_rename(struct shrinker *shrinker, const char *fmt, ...)
->  			shrinker->debugfs_entry = entry;
->  	}
->  
-> -	up_write(&shrinker_rwsem);
-> +	mutex_unlock(&shrinker_mutex);
->  
->  	kfree_const(old);
->  
-> @@ -240,7 +240,7 @@ struct dentry *shrinker_debugfs_remove(struct shrinker *shrinker)
->  {
->  	struct dentry *entry = shrinker->debugfs_entry;
->  
-> -	lockdep_assert_held(&shrinker_rwsem);
-> +	lockdep_assert_held(&shrinker_mutex);
->  
->  	kfree_const(shrinker->name);
->  	shrinker->name = NULL;
-> @@ -265,14 +265,14 @@ static int __init shrinker_debugfs_init(void)
->  	shrinker_debugfs_root = dentry;
->  
->  	/* Create debugfs entries for shrinkers registered at boot */
-> -	down_write(&shrinker_rwsem);
-> +	mutex_lock(&shrinker_mutex);
->  	list_for_each_entry(shrinker, &shrinker_list, list)
->  		if (!shrinker->debugfs_entry) {
->  			ret = shrinker_debugfs_add(shrinker);
->  			if (ret)
->  				break;
->  		}
-> -	up_write(&shrinker_rwsem);
-> +	mutex_unlock(&shrinker_mutex);
->  
->  	return ret;
->  }
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index ac7ab4aa344f..c00302fabc3d 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -35,7 +35,7 @@
->  #include <linux/cpuset.h>
->  #include <linux/compaction.h>
->  #include <linux/notifier.h>
-> -#include <linux/rwsem.h>
-> +#include <linux/mutex.h>
->  #include <linux/delay.h>
->  #include <linux/kthread.h>
->  #include <linux/freezer.h>
-> @@ -202,7 +202,7 @@ static void set_task_reclaim_state(struct task_struct *task,
->  }
->  
->  LIST_HEAD(shrinker_list);
-> -DECLARE_RWSEM(shrinker_rwsem);
-> +DEFINE_MUTEX(shrinker_mutex);
->  DEFINE_SRCU(shrinker_srcu);
->  static atomic_t shrinker_srcu_generation = ATOMIC_INIT(0);
->  
-> @@ -225,7 +225,7 @@ static struct shrinker_info *shrinker_info_protected(struct mem_cgroup *memcg,
->  {
->  	return srcu_dereference_check(memcg->nodeinfo[nid]->shrinker_info,
->  				      &shrinker_srcu,
-> -				      lockdep_is_held(&shrinker_rwsem));
-> +				      lockdep_is_held(&shrinker_mutex));
->  }
->  
->  static struct shrinker_info *shrinker_info_srcu(struct mem_cgroup *memcg,
-> @@ -310,7 +310,7 @@ int alloc_shrinker_info(struct mem_cgroup *memcg)
->  	int nid, size, ret = 0;
->  	int map_size, defer_size = 0;
->  
-> -	down_write(&shrinker_rwsem);
-> +	mutex_lock(&shrinker_mutex);
->  	map_size = shrinker_map_size(shrinker_nr_max);
->  	defer_size = shrinker_defer_size(shrinker_nr_max);
->  	size = map_size + defer_size;
-> @@ -326,7 +326,7 @@ int alloc_shrinker_info(struct mem_cgroup *memcg)
->  		info->map_nr_max = shrinker_nr_max;
->  		rcu_assign_pointer(memcg->nodeinfo[nid]->shrinker_info, info);
->  	}
-> -	up_write(&shrinker_rwsem);
-> +	mutex_unlock(&shrinker_mutex);
->  
->  	return ret;
->  }
-> @@ -342,7 +342,7 @@ static int expand_shrinker_info(int new_id)
->  	if (!root_mem_cgroup)
->  		goto out;
->  
-> -	lockdep_assert_held(&shrinker_rwsem);
-> +	lockdep_assert_held(&shrinker_mutex);
->  
->  	map_size = shrinker_map_size(new_nr_max);
->  	defer_size = shrinker_defer_size(new_nr_max);
-> @@ -392,7 +392,7 @@ static int prealloc_memcg_shrinker(struct shrinker *shrinker)
->  	if (mem_cgroup_disabled())
->  		return -ENOSYS;
->  
-> -	down_write(&shrinker_rwsem);
-> +	mutex_lock(&shrinker_mutex);
->  	id = idr_alloc(&shrinker_idr, shrinker, 0, 0, GFP_KERNEL);
->  	if (id < 0)
->  		goto unlock;
-> @@ -406,7 +406,7 @@ static int prealloc_memcg_shrinker(struct shrinker *shrinker)
->  	shrinker->id = id;
->  	ret = 0;
->  unlock:
-> -	up_write(&shrinker_rwsem);
-> +	mutex_unlock(&shrinker_mutex);
->  	return ret;
->  }
->  
-> @@ -416,7 +416,7 @@ static void unregister_memcg_shrinker(struct shrinker *shrinker)
->  
->  	BUG_ON(id < 0);
->  
-> -	lockdep_assert_held(&shrinker_rwsem);
-> +	lockdep_assert_held(&shrinker_mutex);
->  
->  	idr_remove(&shrinker_idr, id);
->  }
-> @@ -451,7 +451,7 @@ void reparent_shrinker_deferred(struct mem_cgroup *memcg)
->  		parent = root_mem_cgroup;
->  
->  	/* Prevent from concurrent shrinker_info expand */
-> -	down_write(&shrinker_rwsem);
-> +	mutex_lock(&shrinker_mutex);
->  	for_each_node(nid) {
->  		child_info = shrinker_info_protected(memcg, nid);
->  		parent_info = shrinker_info_protected(parent, nid);
-> @@ -460,7 +460,7 @@ void reparent_shrinker_deferred(struct mem_cgroup *memcg)
->  			atomic_long_add(nr, &parent_info->nr_deferred[i]);
->  		}
->  	}
-> -	up_write(&shrinker_rwsem);
-> +	mutex_unlock(&shrinker_mutex);
->  }
->  
->  static bool cgroup_reclaim(struct scan_control *sc)
-> @@ -709,9 +709,9 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
->  	shrinker->name = NULL;
->  #endif
->  	if (shrinker->flags & SHRINKER_MEMCG_AWARE) {
-> -		down_write(&shrinker_rwsem);
-> +		mutex_lock(&shrinker_mutex);
->  		unregister_memcg_shrinker(shrinker);
-> -		up_write(&shrinker_rwsem);
-> +		mutex_unlock(&shrinker_mutex);
->  		return;
->  	}
->  
-> @@ -721,11 +721,11 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
->  
->  void register_shrinker_prepared(struct shrinker *shrinker)
->  {
-> -	down_write(&shrinker_rwsem);
-> +	mutex_lock(&shrinker_mutex);
->  	list_add_tail_rcu(&shrinker->list, &shrinker_list);
->  	shrinker->flags |= SHRINKER_REGISTERED;
->  	shrinker_debugfs_add(shrinker);
-> -	up_write(&shrinker_rwsem);
-> +	mutex_unlock(&shrinker_mutex);
->  }
->  
->  static int __register_shrinker(struct shrinker *shrinker)
-> @@ -775,13 +775,13 @@ void unregister_shrinker(struct shrinker *shrinker)
->  	if (!(shrinker->flags & SHRINKER_REGISTERED))
->  		return;
->  
-> -	down_write(&shrinker_rwsem);
-> +	mutex_lock(&shrinker_mutex);
->  	list_del_rcu(&shrinker->list);
->  	shrinker->flags &= ~SHRINKER_REGISTERED;
->  	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
->  		unregister_memcg_shrinker(shrinker);
->  	debugfs_entry = shrinker_debugfs_remove(shrinker);
-> -	up_write(&shrinker_rwsem);
-> +	mutex_unlock(&shrinker_mutex);
->  
->  	atomic_inc(&shrinker_srcu_generation);
->  	synchronize_srcu(&shrinker_srcu);
+> Some other minor comments:
+> 
 
+Thanks for taking the time to review these!
+
+Hmm, I did run checkpatch, and cleaned up the warnings it did give. 
+However, I think something changed with regards to the tools on my host 
+env.  Will address those and make sure it runs properly next time.
+
+Will fix the minor changes you mentioned, and focus on the general 
+questions you had.
+
+>> diff --git a/include/linux/usb/xhci-intr.h b/include/linux/usb/xhci-intr.h
+>> index 738b0f0481a6..d42cc9a1e698 100644
+>> --- a/include/linux/usb/xhci-intr.h
+>> +++ b/include/linux/usb/xhci-intr.h
+>> @@ -80,7 +80,15 @@ struct xhci_interrupter {
+>>   	u64	s3_erst_dequeue;
+>>   };
+>>   
+>> +/* Secondary interrupter */
+>>   struct xhci_interrupter *
+>>   xhci_create_secondary_interrupter(struct usb_hcd *hcd, int intr_num);
+>>   void xhci_remove_secondary_interrupter(struct usb_hcd *hcd, struct xhci_interrupter *ir);
+>> +
+>> +/* Offload */
+>> +int xhci_stop_endpoint(struct usb_device *udev,
+>> +			struct usb_host_endpoint *ep);
+>> +phys_addr_t xhci_get_xfer_resource(struct usb_device *udev,
+>> +					struct usb_host_endpoint *ep, dma_addr_t *dma);
+>> +phys_addr_t xhci_get_ir_resource(struct usb_device *udev, struct xhci_interrupter *ir);
+> 
+> Why are these functions unique to offload?
+> 
+
+Wanted to separate the set of APIs used for creating a secondary 
+interrupter versus offload related ones.  In general, the APIs under the 
+secondary interrupter portion can be used for other things other than 
+offloading.  As Mathias pointed out, they had a use case where they 
+wanted to utilize the secondary interrupter to actually route and 
+receive interrupts on the secondary ring, not to suppress them. (which 
+is opposite of what the offload concept is doing)
+
+Now for the offload section, those are specific to that feature, because 
+we need to pass certain memory information about what was allocated by 
+XHCI to the entity that we are offloading the IO operations to.  Hence, 
+why they are APIs which fetch the transfer ring and event ring 
+addresses.  In addition, we do have the stop EP as well, since in the 
+offload case, since the main processor doesn't submit TDs (transfer 
+descriptors) then it isn't aware there are transfers in progress.  When 
+the endpoint is released, then the offload driver needs to be the one 
+that halts the EP.
+
+As you mentioned, I will add documentation to better describe these.
+
+Thanks
+Wesley Cheng
