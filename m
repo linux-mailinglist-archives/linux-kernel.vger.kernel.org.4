@@ -2,333 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8026B20E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA04E6B20E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjCIKFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:05:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S230208AbjCIKE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjCIKFf (ORCPT
+        with ESMTP id S229825AbjCIKEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:05:35 -0500
-Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BB79E3893
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:05:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=bxZ79
-        5yEENBrrd7MDfyDdpZcPiVQDCMXI+gYy+pXktU=; b=Xqbs31eIKPJL6WjPchkYl
-        Ve1nfgrJrk3ExGCy+slhdONmH3EB/hpucc/XRZaZAu609YH5WP/QAlZdN+9Kior9
-        qAVwafFeIjHM68UDmRW7WEC7moKrnk7KcfILNHO1NQDdV1r9FUJR/AMskSgMMNaY
-        1shhCApxKhU96YGItfDk68=
-Received: from localhost.localdomain (unknown [113.91.40.179])
-        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wCnfGEirwlkqO40Aw--.51917S2;
-        Thu, 09 Mar 2023 18:04:19 +0800 (CST)
-From:   Xujun Leng <lengxujun2007@126.com>
-To:     david@redhat.com
-Cc:     akpm@linux-foundation.org, lengxujun2007@126.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] mm: fix potential invalid pointer dereference in kmemdup()
-Date:   Thu,  9 Mar 2023 18:04:15 +0800
-Message-Id: <20230309100415.2382-1-lengxujun2007@126.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <fedd5372-2376-a354-b465-c6cbb930352e@redhat.com>
-References: <fedd5372-2376-a354-b465-c6cbb930352e@redhat.com>
+        Thu, 9 Mar 2023 05:04:24 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409BC65C74
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:04:14 -0800 (PST)
+Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 07F56589;
+        Thu,  9 Mar 2023 11:04:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1678356252;
+        bh=66ENrWoctqa/DlNjCXXgOhffsRQ+ky57kWuEqZE5+lg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=myO+297I4TPOi+JY/TNTTg+khd3lhmmZoFeeH5xkMvcdmhmR9zxYBGnIInbQY16/s
+         qq63Skef0FGB+YVSGv8E/Pe72y6Bwd+YcBu+tZX4EflqqIKQeGyI+8/c3JBj2YF/Gq
+         lmmkPKWcC/mXXDuk/+cpE9W9haBLGZ87eZdnqGYw=
+Date:   Thu, 9 Mar 2023 12:04:15 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     David Binderman <dcb314@hotmail.com>
+Cc:     "andrzej.hajda@intel.com" <andrzej.hajda@intel.com>,
+        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
+        "rfoss@kernel.org" <rfoss@kernel.org>,
+        "jonas@kwiboo.se" <jonas@kwiboo.se>,
+        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: drivers/gpu/drm/bridge/fsl-ldb.c:101: possible loss of
+ information.
+Message-ID: <20230309100415.GO31765@pendragon.ideasonboard.com>
+References: <DB6P189MB0568FCA97758B820EAC036989CB79@DB6P189MB0568.EURP189.PROD.OUTLOOK.COM>
+ <20230308232224.GG31765@pendragon.ideasonboard.com>
+ <DB6P189MB056810B266B656706ECF7EAB9CB59@DB6P189MB0568.EURP189.PROD.OUTLOOK.COM>
+ <20230309092647.GM31765@pendragon.ideasonboard.com>
+ <DB6P189MB0568832655843F63CCE9B63C9CB59@DB6P189MB0568.EURP189.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wCnfGEirwlkqO40Aw--.51917S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3CrWDWF4fKr13WrykCw17ZFb_yoWDtF4xpr
-        W5JFW3Ka1kXr13Jr1jqw10yr1Ivw18ZF4DWF1qy3y5uF4q9r1kt3yxt3y2grn8Jr48Xa4x
-        t3WFkFW3KFyjkaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piFks9UUUUU=
-X-Originating-IP: [113.91.40.179]
-X-CM-SenderInfo: pohqw5hxmx0jqqqxqiyswou0bp/1tbikgctd1pEJ0I9AQAAsI
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <DB6P189MB0568832655843F63CCE9B63C9CB59@DB6P189MB0568.EURP189.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 09.03.23 07:46, Xujun Leng wrote:
->>> On 07.03.23 10:03, Xujun Leng wrote:
->>>> If kmemdup() was called with src == NULL, then memcpy() source address
->>>> is fatal, and if kmemdup() was called with len == 0, kmalloc_track_caller()
->>>> will return ZERO_SIZE_PTR to variable p, then memcpy() destination address
->>>> is fatal. Both 2 cases will cause an invalid pointer dereference.
->>>>
->> 
->>> "fix" in subject implies that there is actually a case broken. Is there,
->>> or is this rather a "sanitize" ?
->> Yes, I agree that word "sanitize" is a better choice.
->> And no, I don't find an actually case but in my test code as follow:
->> 
->> #include <linux/module.h>
->> #include <linux/string.h>
->> #include <linux/slab.h>
->> #include <linux/printk.h>
->> #include <linux/err.h>
->> 
->> /*
->>   * Test cases for kmemdup() and memdup_user().
->>   */
->> enum {
->> 	TC_KMEMDUP_ARG0_NULL, /* i.e. kmemdup(NULL, 5, GFP_KERNEL) */
->> 	TC_KMEMDUP_ARG1_ZERO, /* i.e. kmemdup("12345", 0, GFP_KERNEL) */
->> 
->> 	TC_MEMDUP_USER_ARG0_NULL, /* i.e. memdup_user(NULL, 5) */
->> 	TC_MEMDUP_USER_ARG1_ZERO  /* i.e. memdup_user("12345", 0) */
->> };
->> 
->> static int test_case;
->> static const char *test_func_name[] = {"kmemdup", "memdup_user"};
->> static void *ptr;
->> 
->> module_param(test_case, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
->> 
->> static void *kmemdup_arg0_null(void)
->> {
->> 	return kmemdup(NULL, 5, GFP_KERNEL);
->> }
->> 
->> static void *kmemdup_arg1_zero(void)
->> {
->> 	return kmemdup("12345", 0, GFP_KERNEL);
->> }
->> 
->> static void *memdup_user_arg0_null(void)
->> {
->> 	return memdup_user(NULL, 5);
->> }
->> 
->> static void *memdup_user_arg1_zero(void)
->> {
->> 	return memdup_user("12345", 0);
->> }
->> 
->> static int check_ptr(void)
->> {
->> 	if (ZERO_OR_NULL_PTR(ptr)) {
->> 		printk(KERN_ERR "test case %d: %s failed, PTR_ERR(ptr) = %ld\n",
->> 				test_case, test_func_name[test_case / 2], PTR_ERR(ptr));
->> 		return -EINVAL;
->> 	}
->> 	
->> 	if (IS_ERR(ptr)) {
->> 		printk(KERN_ERR "test case %d: %s failed, PTR_ERR(ptr) = %ld\n",
->> 				test_case, test_func_name[test_case / 2], PTR_ERR(ptr));
->> 		return PTR_ERR(ptr);
->> 	}
->> 
->> 	printk(KERN_INFO "mm-util test module loaded.\n");
->> 
->> 	return 0;
->> }
->> 
->> static int __init memdup_user_test_init(void)
->> {
->> 	if (test_case < 0 || test_case > TC_MEMDUP_USER_ARG1_ZERO) {
->> 		printk(KERN_INFO "invalid test case %d\n", test_case);
->> 		return -EINVAL;
->> 	}
->> 
->> 	printk(KERN_INFO "test case: %d\n", test_case);
->> 
->> 	switch (test_case) {
->> 	case TC_KMEMDUP_ARG0_NULL:
->> 		ptr = kmemdup_arg0_null();
->> 		break;
->> 	case TC_KMEMDUP_ARG1_ZERO:
->> 		ptr = kmemdup_arg1_zero();
->> 		break;
->> 
->> 	case TC_MEMDUP_USER_ARG0_NULL:
->> 		ptr = memdup_user_arg0_null();
->> 		break;
->> 
->> 	case TC_MEMDUP_USER_ARG1_ZERO:
->> 		ptr = memdup_user_arg1_zero();
->> 		break;
->> 	
->> 	default:
->> 		/* should be never happend */
->> 		ptr = NULL;
->> 		break;
->> 	}
->> 
->> 	return check_ptr();
->> }
->> 
->> static void __exit memdup_user_test_exit(void)
->> {
->> 	if (ptr) {
->> 		kfree(ptr);
->> 		ptr = NULL;
->> 	}
->> 
->> 	printk(KERN_INFO "mm-util test module exited.\n");
->> }
->> 
->> module_init(memdup_user_test_init);
->> module_exit(memdup_user_test_exit);
->> 
->> MODULE_LICENSE("GPL");
->> 
->> Build the code as module, and run the module in QEMU ARM64, with different
->> test case(pass 0,1,2,3 to moddule parameter "test_case"), get follow the
->> results:
->> 
->> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=0
->> [  142.979506] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
->> [  142.983171] Mem abort info:
->> [  142.984049]   ESR = 0x0000000096000004
->> [  142.984556]   EC = 0x25: DABT (current EL), IL = 32 bits
->> [  142.985327]   SET = 0, FnV = 0
->> [  142.986867]   EA = 0, S1PTW = 0
->> [  142.987198]   FSC = 0x04: level 0 translation fault
->> [  142.987555] Data abort info:
->> [  142.987819]   ISV = 0, ISS = 0x00000004
->> [  142.988132]   CM = 0, WnR = 0
->> [  142.988540] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000046168000
->> [  142.989715] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
->> [  142.992158] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
->> [  142.993012] Modules linked in: memdup_kernel_user_test(+) drm ip_tables x_tables ipv6
->> [  142.996663] CPU: 0 PID: 133 Comm: modprobe Not tainted 6.3.0-rc1-next-20230307-dirty #1
->> [  143.002024] Hardware name: linux,dummy-virt (DT)
->> [  143.003370] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->> [  143.005461] pc : __memcpy+0x54/0x230
->> [  143.006833] lr : kmemdup+0x50/0x68
->> [  143.007208] sp : ffff80000aa53ae0
->> [  143.011440] x29: ffff80000aa53ae0 x28: ffff8000010c0378 x27: ffff8000010c0058
->> [  143.012386] x26: ffff80000a216fd8 x25: ffff80000aa53d00 x24: ffff8000010c0040
->> [  143.014183] x23: 0000000000000000 x22: ffff0000037d6580 x21: 0000000000000000
->> [  143.018590] x20: 0000000000000005 x19: ffff0000039a9100 x18: 0000000000000001
->> [  143.020166] x17: ffff80000aa75000 x16: ffff0000047bed91 x15: ffff0000037d69f8
->> [  143.021158] x14: 0000000000000147 x13: ffff0000037d69f8 x12: 00000000ffffffea
->> [  143.024978] x11: 00000000ffffefff x10: 00000000ffffefff x9 : ffff80000a1fb518
->> [  143.025800] x8 : 00000000ffffffff x7 : 00000000ffffffff x6 : ffff800036288000
->> [  143.026667] x5 : ffff0000039a9105 x4 : 0000000000000005 x3 : 0000000080200020
->> [  143.027257] x2 : 0000000000000005 x1 : 0000000000000000 x0 : ffff0000039a9100
->> [  143.028177] Call trace:
->> [  143.028833]  __memcpy+0x54/0x230
->> [  143.029424]  memdup_user_test_init+0xd8/0x1000 [memdup_kernel_user_test]
->> [  143.032466]  do_one_initcall+0x70/0x1b4
->> [  143.038282]  do_init_module+0x58/0x1e8
->> [  143.039354]  load_module+0x181c/0x1920
->> [  143.040919]  __do_sys_finit_module+0xb8/0x10c
->> [  143.041558]  __arm64_sys_finit_module+0x20/0x2c
->> [  143.044052]  invoke_syscall+0x44/0x104
->> [  143.044663]  el0_svc_common.constprop.0+0x44/0xec
->> [  143.045562]  do_el0_svc+0x38/0x98
->> [  143.047935]  el0_svc+0x2c/0x84
->> [  143.048175]  el0t_64_sync_handler+0xb8/0xbc
->> [  143.048295]  el0t_64_sync+0x190/0x194
->> [  143.049274] Code: f9000006 f81f80a7 d65f03c0 361000c2 (b9400026)
->> [  143.050933] ---[ end trace 0000000000000000 ]---
->> Segmentation fault
->> 
->> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=1
->> [   87.896982] test case 1: kmemdup failed, PTR_ERR(ptr) = 16
->> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Invalid argument
->> 
->> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=2
->> [  124.032509] test case 2: memdup_user failed, PTR_ERR(ptr) = -14
->> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Bad address
->> 
->> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=3
->> [  155.496285] test case 3: memdup_user failed, PTR_ERR(ptr) = 16
->> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Invalid argument
->> 
->> To sum it up, it is:
->> 1) If call kmemdup() with the src == NULL, a NULL pointer dereference
->>     fault happened.
->> 2) If call kmemdup() with the len == 0, an invalid address value
->>     ZERO_SIZE_PTR returned, consider that many existing code check
->>     kmemdup() return value like this:
->>     ptr = kmemdup();
->>     if (!ptr) {
->>     	/* allocation failed */
->>     }
->>     this could be a problem, but no fault happended, memcpy() will do
->>     nothing if copy length is zero, my previous statement is wrong.
->> 3) If call memdup_user() with src == NULL, -EFAULT returned. Because
->>     copy_from_user() takes care of the NULL pointer case, there is no
->>     fault to happend.
->> 4) If call memdup_user() with len == 0, an invalid address value
->>     ZERO_SIZE_PTR returned. The existing code uses IS_ERR() to check
->>     memdup_user() return value, unfortunately, the check range of the
->>     macro function doesn't contain ZERO_SIZE_PTR value.
->> 
->> For 1), (2), we can add the following code to kmemdup() to eliminate:
->> if (!src || len == 0)
->> 	return NULL;
->> 
->> For 4), we can change the statement if (!p) of memdup_user() to
->> if (ZERO_OR_NULL_PTR(s)) to solve that.
->> 
->> BTW, the return values of kmemdup() and memdup_user() got a little
->> bit confused for now:
->> . kmemdup() can return ZERO_SIZE_PTR, NULL, and a valid memory allocation
->>    address, the caller should check those return values with ZERO_OR_NULL_PTR(),
->>    but many existing code don't follow this.
->> . memdup_user() can return ZERO_SIZE_PTR,-ENOMEM,-EFAULT,NULL, and a valid
->>    memory allocation address, the caller should check those return values with
->>    ZERO_OR_NULL_PTR() and IS_ERR() at the same time, but i can't find any code
->>    do things like this.
->> 
->>>> Signed-off-by: Xujun Leng <lengxujun2007@126.com>
->>>> ---
->>>>    mm/util.c | 3 +++
->>>>    1 file changed, 3 insertions(+)
->>>>
->>>> diff --git a/mm/util.c b/mm/util.c
->>>> index dd12b9531ac4..d1a3b3d2988e 100644
->>>> --- a/mm/util.c
->>>> +++ b/mm/util.c
->>>> @@ -128,6 +128,9 @@ void *kmemdup(const void *src, size_t len, gfp_t gfp)
->>>>    {
->>>>    	void *p;
->>>>    
->>>> +	if (!src || len == 0)
->>>> +		return NULL;
->>>> +
->>>>    	p = kmalloc_track_caller(len, gfp);
->>>>    	if (p)
->>>>    		memcpy(p, src, len);
->> 
->>> Why should we take care of kmemdup(), but not memdup_user() ? Shouldn't
->>> it suffer from similar problems?
->> By the foregoing, i think that both kmemdup() and memdup_user() need to
->> change.
->
-> The issue is that you can call mostly any kernel function with 
-> unsupported arguments and trigger crashes. It all depends on with which 
-> parameters functions are expected to be called.
->
-> If kmemdup() is not expected to be called with !src or !len, all is 
-> fine. And if there are no broken cases, existing code obeys these rules.
->
-> Of course, we could improve the documentation or adjust the 
-> implementations, if there is real need to.
->
-> But adjusting individual functions here while others are left with he 
-> same, theoretical (!) problems, is not a good approach IMHO.
+Hi David,
 
-Yes, you're right. The best way is to change kmalloc_slab(), let it always
-return NULL on allocate failure, even for requested size == 0. And of course,
-the detailed error message ZERO_SIZE_PTR will lost.
+On Thu, Mar 09, 2023 at 09:42:54AM +0000, David Binderman wrote:
+> Hello there Laurent,
+> 
+> > Would you be able to send a patch to fix this ?
+> 
+> Sadly, no. My success rate with kernel patches is low enough to make
+> it not worth trying.
 
-On the other hand, except kmemdup() and memdup_user(), the other functions
-in mm/util.c, who called kmalloc_track_caller(), like kstrdup(), kstrndup(),
-kmemdup_nul(), memdup_user_nul(), their all do argument check, and the 
-len >= 1(if ignore the wrap case). So if we need change kmemdup() and
-memdup_user() a little, to let those all functions keep the same? If the 
-answer is NO, we can end the disscuss to save your time.
---
-Thanks,
+I'm sorry to hear that. If you were willing to try again, I can offer
+help with tooling and review to get your patch merged.
 
-Xujun Leng
+> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Sent: 09 March 2023 09:26
+> To: David Binderman <dcb314@hotmail.com>
+> Cc: andrzej.hajda@intel.com <andrzej.hajda@intel.com>; neil.armstrong@linaro.org <neil.armstrong@linaro.org>; rfoss@kernel.org <rfoss@kernel.org>; jonas@kwiboo.se <jonas@kwiboo.se>; jernej.skrabec@gmail.com <jernej.skrabec@gmail.com>; airlied@gmail.com <airlied@gmail.com>; daniel@ffwll.ch <daniel@ffwll.ch>; dri-devel@lists.freedesktop.org <dri-devel@lists.freedesktop.org>; linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>
+> Subject: Re: drivers/gpu/drm/bridge/fsl-ldb.c:101: possible loss of information. 
+>  
+> Hi David,
+> 
+> On Thu, Mar 09, 2023 at 07:59:34AM +0000, David Binderman wrote:
+> > Hello there Laurent,
+> > 
+> > > We could, but I don't think it will make any difference in practice as
+> > > the maximum pixel clock frequency supported by the SoC is 80MHz (per
+> > > LVDS channel). That would result in a 560MHz frequency returned by this
+> > > function, well below the 31 bits limit.
+> > 
+> > Thanks for your explanation. I have a couple of suggestions for possible improvements:
+> > 
+> > 1. Your explanatory text in a comment nearby. This helps all readers of the code.
+> > 
+> > 2. Might the frequency go up to 300 MHz anytime soon ? The code will stop working then. 
+> > In this case, I would suggest to put in a run time sanity check to make sure no 31 bit overflow. 
+> 
+> As it's a hardware limit of the SoC, I wouldn't expect so.
+> 
+> This being said, I think adding a UL suffix to the constants would be
+> better than a comment as it will please static checkers and serve as
+> documentation to humans. Would you be able to send a patch to fix this ?
+> 
+> > Just a couple of ideas for the code.
+> 
+> Thanks for taking the time to share those.
 
+-- 
+Regards,
+
+Laurent Pinchart
