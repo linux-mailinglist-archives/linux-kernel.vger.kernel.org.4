@@ -2,159 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F806B313E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:46:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78AAB6B3136
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbjCIWqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 17:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
+        id S231552AbjCIWo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 17:44:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbjCIWq1 (ORCPT
+        with ESMTP id S231534AbjCIWoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:46:27 -0500
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16BC10C727
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:45:49 -0800 (PST)
-Received: by mail-lf1-f46.google.com with SMTP id bi9so4289071lfb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 14:45:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678401610;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QbAikeIdL+omb6y11NKt1vr7KucGsxizbqoLplhFCoo=;
-        b=DkAi09PuPVTp0hxHpLSz4t87TRBgGLDjZ9W4eKqEWOosoh7NEt2ji+IrV4y/BdgcY9
-         skLeabsKW4jeG2GzdbXYXwyO+MsKjGqXldrPeDdFRmTSd/uFUS8ec7Bn2+AjYHuCaESx
-         weJLsbQ1qHUJ5RAtAOYTNaviRtR1X+0QPCY9OhbKxhB5nDmp5wOWw4UBRzy/bMgQNQBr
-         dPgZGHl4IojX9goLytD6PJVC92GxsOh2TfNXEjmmQDB3qTrtDDjxUPQM2+DUAJiE1LLR
-         YFdepkGF4YX3sbCfx6WYuiNAH/RneZ17WAP7RBd1anbeQX0C5MJ+HkeqWIRf3rAB6pZx
-         /djw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678401610;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QbAikeIdL+omb6y11NKt1vr7KucGsxizbqoLplhFCoo=;
-        b=K0+nWsiwA6Hy60VXy1Mf1GX5xA4427CSWG181YHWcZCSK5BmZRMWy9J0ICy7j6BF4w
-         b4KiQnVUO3Co4ajTfzRKvfcKXD8988qgtEjbdTSQtvQMnnCjQSFxyZvgAoFRD3Es/ynp
-         npcGQhKmwFwWrzGF4XADKvRdagSKBIBYrBoa3k3zh+oo7kP8B0kPYLSOUwi1Tprd7WP4
-         hmRJG0WhVQyrdu8pmUw/hrM9w+5eRkm3mqIf25GsaAds1kysPiV0K3y3Zmob2sAKE+8W
-         3L96zTAxQq84n4YBkpmoTp45w3siGOgiKDXNpZ+uT6zRV/r+TR+umRCltgNquzZOiPxr
-         Xklw==
-X-Gm-Message-State: AO0yUKVizIMwDzIyxUnEUwAwOjWi78oQ42Moyr5g6Ggwm8r8reB6mZ7t
-        LEOYymoZL2VGoOSR6bvnIOAxAch/Scl/oDBdkEN+4w==
-X-Google-Smtp-Source: AK7set9wPQ7n+O+qozP441kYgMXEWRqd09XR/uf9pCcC+fLMi9lyfYb5jxqy2HTgbAi1e6AGJJ6CFWpaMh2S7PfTWlM=
-X-Received: by 2002:a05:6512:3c99:b0:4d8:86c2:75ea with SMTP id
- h25-20020a0565123c9900b004d886c275eamr149481lfv.3.1678401609928; Thu, 09 Mar
- 2023 14:40:09 -0800 (PST)
+        Thu, 9 Mar 2023 17:44:08 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A87365C56;
+        Thu,  9 Mar 2023 14:43:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678401830; x=1709937830;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fBE1n3VDHKOa0my/fpWQs/hh4OEzhEHXYLpvjY/5Y0Q=;
+  b=dPbm4nXmq99X2ep99J4vzLJ6u1gjzlzgjL0SNI9L55ZHTIy3HkySEhb3
+   WX4gr59wlATQowjxz+91nxZA2kWsXHUiJD5cJUuf8vQFT+2RAZzZL7rAT
+   Cp+DzHCkEmng1aafKzUQsQGpdV1rbQncRFnyvGbUZZpWVoPpf+ozZsjge
+   7P8jkyDNjpXcg3CWyCSgiv+KWPFzf612tFWFXOxYER7q2GgE1t2sTHxa2
+   bm8eCtHMaW2sOp1sN9Zdw+gWW6M/T5QUXKoR+esx8qWYu4DbKwIFXSUFD
+   P4o0UCOUa0EA1SVlShCoPnt+rSM26u1VmUWMcf5IlvDDy57XxCCXlE9KS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="335289373"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="335289373"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 14:42:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="654953046"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="654953046"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 09 Mar 2023 14:42:42 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1paOy9-0003H1-2U;
+        Thu, 09 Mar 2023 22:42:41 +0000
+Date:   Fri, 10 Mar 2023 06:42:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Danila Tikhonov <danila@jiaxyga.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davidwronek@gmail.com, Danila Tikhonov <danila@jiaxyga.com>
+Subject: Re: [PATCH 2/2] phy: qcom-qmp-ufs: Add SM7150 support
+Message-ID: <202303100615.2vRPxq4R-lkp@intel.com>
+References: <20230309185049.170878-3-danila@jiaxyga.com>
 MIME-Version: 1.0
-References: <20230308221932.1548827-1-axelrasmussen@google.com>
- <20230308221932.1548827-4-axelrasmussen@google.com> <ZAkPmy0EqcW6Mfvn@x1n>
-In-Reply-To: <ZAkPmy0EqcW6Mfvn@x1n>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 9 Mar 2023 14:39:33 -0800
-Message-ID: <CAJHvVcjDtt0CEEyihViUeQYHr8zV97kZEr+zPFBRVmqwMXZzSg@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] mm: userfaultfd: combine 'mode' and 'wp_copy' arguments
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Shuah Khan <shuah@kernel.org>,
-        James Houghton <jthoughton@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309185049.170878-3-danila@jiaxyga.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 2:43=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
->
-> All nitpicks below.
->
-> On Wed, Mar 08, 2023 at 02:19:31PM -0800, Axel Rasmussen wrote:
-> > +static inline bool uffd_flags_has_mode(uffd_flags_t flags, enum mfill_=
-atomic_mode expected)
-> > +{
-> > +     return (flags & MFILL_ATOMIC_MODE_MASK) =3D=3D ((__force uffd_fla=
-gs_t) expected);
-> > +}
->
-> I would still call it uffd_flags_get_mode() or uffd_flags_mode(), "has"
-> sounds a bit like there can be >1 modes set but it's not.
+Hi Danila,
 
-I want a helper which does the comparison, instead of just returning
-the mode, because it avoids all callers needing to do the __force cast
-themselves to appease sparse.
+Thank you for the patch! Yet something to improve:
 
-How about uffd_flags_mode_is() ?
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v6.3-rc1 next-20230309]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
-> > +
-> > +static inline uffd_flags_t uffd_flags_set_mode(uffd_flags_t flags, enu=
-m mfill_atomic_mode mode)
-> > +{
-> > +     return flags | ((__force uffd_flags_t) mode);
-> > +}
->
-> IIUC this __force mostly won't work in any way because it protects
-> e.g. illegal math ops upon it (to only allow bitops, iiuc) but here it's =
-an
-> OR so it's always legal..
->
-> So I'd just drop it and also clear the mode mask to be very clear it sets
-> the mode right, rather than any chance of messing up when set twice:
->
->     flags &=3D ~MFILL_ATOMIC_MODE_MASK;
->     return flags | mode;
+url:    https://github.com/intel-lab-lkp/linux/commits/Danila-Tikhonov/dt-bindings-phy-Add-QMP-UFS-PHY-comptible-for-SM7150/20230310-025222
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230309185049.170878-3-danila%40jiaxyga.com
+patch subject: [PATCH 2/2] phy: qcom-qmp-ufs: Add SM7150 support
+config: arm64-randconfig-r023-20230308 (https://download.01.org/0day-ci/archive/20230310/202303100615.2vRPxq4R-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/95e826acacaf3b5ba79c06b481199a17abed44ba
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Danila-Tikhonov/dt-bindings-phy-Add-QMP-UFS-PHY-comptible-for-SM7150/20230310-025222
+        git checkout 95e826acacaf3b5ba79c06b481199a17abed44ba
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/phy/qualcomm/
 
-Without this __force, "make C=3D1" gives errors like this:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303100615.2vRPxq4R-lkp@intel.com/
 
-./include/linux/userfaultfd_k.h:66:16: warning: restricted
-uffd_flags_t degrades to integer
-./include/linux/userfaultfd_k.h:66:22: warning: incorrect type in
-return expression (different base types)
-./include/linux/userfaultfd_k.h:66:22:    expected restricted uffd_flags_t
-./include/linux/userfaultfd_k.h:66:22:    got unsigned int
+All errors (new ones prefixed by >>):
 
-This is because the mode being passed in is effectively an integer, so
-the | expression loses the restricted type. Casting the mode first
-like this appeases sparse.
+>> drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:380:3: error: expected identifier or '('
+   };)
+     ^
+>> drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:972:14: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+                   .serdes         = sm8150_ufsphy_serdes,
+                                     ^
+   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:973:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+                   .serdes_num     = ARRAY_SIZE(sm8150_ufsphy_serdes),
+                                                ^
+   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:973:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:973:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:1004:14: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+                   .serdes         = sm8150_ufsphy_serdes,
+                                     ^
+   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:1005:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+                   .serdes_num     = ARRAY_SIZE(sm8150_ufsphy_serdes),
+                                                ^
+   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:1005:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:1005:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+   9 errors generated.
 
-An alternative would be to do the cast in the definition of the mode
-values up-front; but as we noticed before, we can't really usefully do
-that with it still being an enum (so we'd have to hard-code things
-like the mode mask, etc.)
 
-I do completely agree about clearing the mask bits first, to avoid
-mistakes. I'll send an updated version with that change. If we're
-going to have an inline helper anyway to do that, for me it makes less
-sense to switch away from the num approach (basically the benefit of
-that would be to avoid needing this cast, and therefore the helper;
-but if we want the helper anyway for other reasons ...).
+vim +380 drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
 
->
-> But feel free to ignore this if there's no other reason to repost, I don'=
-t
-> think it matters a huge deal.
->
-> Acked-by: Peter Xu <peterx@redhat.com>
->
-> Thanks,
->
-> --
-> Peter Xu
->
+   370	
+   371	static const struct qmp_phy_init_tbl sm7150_ufsphy_pcs[] = {
+   372		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_RX_SIGDET_CTRL2, 0x6f),
+   373		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_TX_LARGE_AMP_DRV_LVL, 0x0f),
+   374		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_TX_SMALL_AMP_DRV_LVL, 0x02),
+   375		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_RX_SYM_RESYNC_CTRL, 0x03),
+   376		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_TX_MID_TERM_CTRL1, 0x43),
+   377		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_RX_SIGDET_CTRL1, 0x0f),
+   378		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_RX_MIN_HIBERN8_TIME, 0xFF),
+   379		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_MULTI_LANE_CTRL1, 0x02),
+ > 380	};)
+   381	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
