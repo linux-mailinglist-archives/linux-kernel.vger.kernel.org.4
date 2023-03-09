@@ -2,70 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F1B6B3125
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63ED06B30EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbjCIWkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 17:40:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
+        id S231470AbjCIWkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 17:40:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbjCIWkC (ORCPT
+        with ESMTP id S231561AbjCIWjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:40:02 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F53D509BB
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:38:50 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id u9so13297796edd.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 14:38:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678401519;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iIVP+U9IXmg9igNMbR9KE+dlRtqJIh5HRgs4QRiTQQA=;
-        b=ifpidnJUCwCO7tXzTto2idUUHuYawl7SNcbA1YLMw7oJweI8S0ykSH+vudNquLAV2f
-         r0T4JfyTZY54X4tZHvAWag8GZTNQkcHDzfijfkkoRGVPOlZb5iC6PKVK7AkyR911Uyse
-         3zXzBs+xhdCa2r7E/zroPX110xJxmWp00O5P2o/mxZ6WQ5DMNIwr7URcmr7KG/no6Qu2
-         pkPcM9F05p0G5shNzx+TH8Oxeu0sosJCuqhHwoj+u7zhMhUC8C1OhsHg1pSgkbpHvBD/
-         GTe6P8k5PYEq6uFqEK6rBR9/DXkGvR86aoS3XTH4et7vWLcE/DJszY7ARrtX1hDmAVxS
-         4iEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678401519;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iIVP+U9IXmg9igNMbR9KE+dlRtqJIh5HRgs4QRiTQQA=;
-        b=KP2vA5BknNoCbpV+QoEv/eVPC36tY4z/rQUrYx0PQpKQy8p2D5du7Q83m8gSE8NxTr
-         lLXTVg7znUQLtsh0nLNYO+LtgM50fsFPSt5X+y6BaqB7ezpq2P53zcRo2ZfbNC2jgeBc
-         o5cP2hdoTw5h7vdYtyCn2dDMZgjEmJijfTCAYhhXvKodcVcB9McCaY7o+jVbmkOGvrGT
-         j1ZttHyxXcXdRwbQj/TkIAh7WXGJdgUlNM4+Th2dMcWfxumdU/pAs96nPXRTMeo4uZuE
-         4UjQO4qxffs0VpTRwya0OF4kQeqvPZ/Vo3UQFQuyyD3OkhrgWrUtZKEyQg6PgLPy4z3o
-         vLXQ==
-X-Gm-Message-State: AO0yUKUaV1vkw0kZN8NR6C53xd2m1fI7D8e0KEBv1YdZLqBlynqh7S2F
-        9ooXYEG5/Q3uH7AMyYNMOqUEJu7J4Wxdl91CbAIu4Q==
-X-Google-Smtp-Source: AK7set9ZCtHMECp6dFXoSY1Mc/M0yJkIFeY9zLiltN6dJ2EEYBuUWVxA6LVpRPp/SJpk68hCxQcWkM9w/3Uen4BjbbY=
-X-Received: by 2002:a50:d581:0:b0:4c2:ed2:1198 with SMTP id
- v1-20020a50d581000000b004c20ed21198mr12985289edi.4.1678401518988; Thu, 09 Mar
- 2023 14:38:38 -0800 (PST)
+        Thu, 9 Mar 2023 17:39:25 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A25FAEFB;
+        Thu,  9 Mar 2023 14:38:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1PvKmwZcyksJ2SYGDMFjiDpKB95k8a9eLSUB6squPR0=; b=e+XG5W33Iv56l/VtXIFplLKSnZ
+        d82PzigQYiiLbpPJwLWpUzu2PRbKFhAR5erVIz/43/1qpvjnMYdsXBlklyehdvzjGQDrOV0FM0JTQ
+        lkS5kw7lWQBnwy1DDpxFKB/qNQeR7J9sUmj51XIqfhU6zYvDod7vH+GBwyMpWakVZfq0MdYYFNYCY
+        Lz706Sgj+1myU4dubM/sXVt7gBF8IcEaEpQmZr2vKDy8jWU7zMUquef0Wa8zeCp7HDkmNm+Wkr6Fo
+        sbqubBSB0uy2vs3FHuLWCKqPHSBR/zx2ZK8E9nCMq+PZ6p6l3Tq8Mjo/mux+fu6BFuK+LoXSHw51Z
+        VlHbB+mQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1paOtm-00CBrd-QA; Thu, 09 Mar 2023 22:38:10 +0000
+Date:   Thu, 9 Mar 2023 14:38:10 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Nick Alcock <nick.alcock@oracle.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
+Message-ID: <ZApf0iNOsSAUbhMz@bombadil.infradead.org>
+References: <20230302211759.30135-1-nick.alcock@oracle.com>
+ <20230302211759.30135-11-nick.alcock@oracle.com>
+ <ZAoGLhRpTr5f7AD/@kroah.com>
 MIME-Version: 1.0
-References: <20230306235730.GA31451@monkey> <ZAaCISgq4A/GnkCk@x1n>
- <20230307004049.GC4956@monkey> <20230308190206.GA4005@monkey>
-In-Reply-To: <20230308190206.GA4005@monkey>
-From:   "Zach O'Keefe" <zokeefe@google.com>
-Date:   Thu, 9 Mar 2023 14:38:01 -0800
-Message-ID: <CAAa6QmSdTo77dP2q2nU==C_2PdyF611+PVF32uPOTUQbp1kc9Q@mail.gmail.com>
-Subject: Re: THP backed thread stacks
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAoGLhRpTr5f7AD/@kroah.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,72 +57,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 11:02=E2=80=AFAM Mike Kravetz <mike.kravetz@oracle.c=
-om> wrote:
->
-> On 03/06/23 16:40, Mike Kravetz wrote:
-> > On 03/06/23 19:15, Peter Xu wrote:
-> > > On Mon, Mar 06, 2023 at 03:57:30PM -0800, Mike Kravetz wrote:
-> > > >
-> > > > Just wondering if there is anything better or more selective that c=
-an be
-> > > > done?  Does it make sense to have THP backed stacks by default?  If=
- not,
-> > > > who would be best at disabling?  A couple thoughts:
-> > > > - The kernel could disable huge pages on stacks.  libpthread/glibc =
-pass
-> > > >   the unused flag MAP_STACK.  We could key off this and disable hug=
-e pages.
-> > > >   However, I'm sure there is somebody somewhere today that is getti=
-ng better
-> > > >   performance because they have huge pages backing their stacks.
-> > > > - We could push this to glibc/libpthreads and have them use
-> > > >   MADV_NOHUGEPAGE on thread stacks.  However, this also has the pot=
-ential
-> > > >   of regressing performance if somebody somewhere is getting better
-> > > >   performance due to huge pages.
-> > >
-> > > Yes it seems it's always not safe to change a default behavior to me.
-> > >
-> > > For stack I really can't tell why it must be different here.  I assum=
-e the
-> > > problem is the wasted space and it exaggerates easily with N-threads.=
-  But
-> > > IIUC it'll be the same as thp to normal memories iiuc, e.g., there ca=
-n be a
-> > > per-thread mmap() of 2MB even if only 4K is used each, then if such m=
-map()
-> > > is populated by THP for each thread there'll also be a huge waste.
->
-> I may be alone in my thinking here, but it seems that stacks by their nat=
-ure
-> are not generally good candidates for huge pages.  I am just thinking abo=
-ut
-> the 'normal' use case where stacks contain local function data and argume=
-nts.
-> Am I missing something, or are huge pages really a benefit here?
->
-> Of course, I can imagine some thread with a large amount of frequently
-> accessed data allocated on it's stack which could benefit from huge
-> pages.  But, this seems to be an exception rather than the rule.
->
-> I understand the argument that THP always means always and everywhere.
-> It just seems that thread stacks may be 'special enough' to consider
-> disabling by default
+On Thu, Mar 09, 2023 at 05:15:42PM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Mar 02, 2023 at 09:17:52PM +0000, Nick Alcock wrote:
+> > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> > are used to identify modules. As a consequence, uses of the macro
+> > in non-modules will cause modprobe to misidentify their containing
+> > object file as a module when it is not (false positives), and modprobe
+> > might succeed rather than failing with a suitable error message.
+> > 
+> > So remove it in the files in this commit, none of which can be built as
+> > modules.
+> > 
+> > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > Cc: linux-modules@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Jiri Slaby <jirislaby@kernel.org>
+> > ---
+> >  drivers/tty/n_null.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/drivers/tty/n_null.c b/drivers/tty/n_null.c
+> > index f913b665af725..c24f75942c49d 100644
+> > --- a/drivers/tty/n_null.c
+> > +++ b/drivers/tty/n_null.c
+> > @@ -63,7 +63,6 @@ static void __exit n_null_exit(void)
+> >  module_init(n_null_init);
+> >  module_exit(n_null_exit);
+> >  
+> > -MODULE_LICENSE("GPL");
+> >  MODULE_AUTHOR("Alan Cox");
+> >  MODULE_ALIAS_LDISC(N_NULL);
+> >  MODULE_DESCRIPTION("Null ldisc driver");
+> > -- 
+> > 2.39.1.268.g9de2f9a303
+> > 
+> 
+> Nope, sorry, this is not good to do, please fix kbuild instead of
+> forcing a tree-wide change like this.
 
-Just my drive-by 2c, but would agree with you here (at least wrt
-hugepages not being good candidates, in general). A user mmap()'ing
-memory has a lot more (direct) control over how they fault / utilize
-the memory: you know when you're running out of space and can map more
-space as needed. For these stacks, you're setting the stack size to
-2MB just as a precaution so you can avoid overflow -- AFAIU there is
-no intention of using the whole mapping (and looking at some data,
-it's very likely you won't come close).
+Masahiro Yamada already NACK'd it such effort:
 
-That said, why bother setting stack attribute to 2MiB in size if there
-isn't some intention of possibly being THP-backed? Moreover, how did
-it happen that the mappings were always hugepage-aligned here?
+https://lkml.kernel.org/r/CAK7LNAQLttPD=Ae==e0CYeQtS78=o_JZFK+zxa29JnUYio52Ug@mail.gmail.com
 
-> --
-> Mike Kravetz
->
+And his descriptiuon of the reasoning and logic is explained here:              
+
+https://lore.kernel.org/all/CAK7LNASL7_RgfASstBvN6AzhR=nMU=HsQvODf5q13Xud8tBWRQ@mail.gmail.com/
+
+Let me summarize it though with a few quotes from him:
+
+"Having false-positives in modules.builtin should be OK"
+"In this sense, having always-builtin entries in module.builtin is OK."
+
+The reason Nick wants to do this work is that his future patches
+(which have been under review for years and I'm starting to chew on
+it and provide guidance on now) extend our ability to have more
+elaborate symbol to address mapping with more metdata, which does
+include information such as if something came from a module. So
+long term *I* certainly am interested in a deterministic way to
+determine if something could be a module.
+
+For a more elaborate attempt on my part to try to describe the problem
+and some side ideas I had if we wanted an alternative:
+
+https://lore.kernel.org/all/Y/kXDqW+7d71C4wz@bombadil.infradead.org/
+
+I should also mention Christoph has also suggested we eventually move
+towards automatically generating the module license tag from the SPDX
+tag:
+
+https://lore.kernel.org/all/Y5BNCbFyvNA1Xp%2FX@infradead.org
+
+I agree with Christoph and I think we should get there. For now we want
+1-1 mapping of real modules to the tag for both reasons of us not going
+to revert 8b41fc4454e and of later us wanting to do the full swoop
+automation of the module license tag.
+
+Although having modprobe not fail even if your module listed cannot be
+a module is non-fatal, the long term goal of cleaning this up is
+desirable anyway.
+
+If you have constructive ways to provide an alternative for this in kbuild,
+and help with the long term goals Nick has, patches or suggestions to
+are greatly welcomed.
+
+The simplest alternative I've come up with is the -DMODULE_POSSIBLE I
+mentioned in the thread above. But as I mentioned in that same thread
+the difficulty is in gathering the possible-obj-m without incurring a
+slow down on the build.
+
+  Luis
