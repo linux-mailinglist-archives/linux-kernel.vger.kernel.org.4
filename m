@@ -2,96 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6162B6B267F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78DDE6B264A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbjCIOPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:15:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
+        id S231665AbjCIOHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbjCIOPA (ORCPT
+        with ESMTP id S231491AbjCIOHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:15:00 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CFDE38C;
-        Thu,  9 Mar 2023 06:14:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678371294; x=1709907294;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=3wo4F1B6Ahe3oBt+iAXX6bg+LjItHYHDyzBMJv10cZI=;
-  b=juRZHzy8DHSgQihK7Yf9OajwWFx1ddVW+PNIzqYM/FqBlNFpxaxYn0Pd
-   vwh1yxefRs1gMnVDj9fFo/LAaRdzsYiKSpPQLNF7bi8JV8l35WorinYUF
-   4GkPvMBM25Ev5uKJgoCRxatzAbIa4zeiRwRNwzJCOMrYh4oAwfKrcmSDv
-   HyeGIFryN3fCADGIF+w/AiHezy8PRzC7momM5iBJ3/Fg/i19zjeDrXexx
-   CmqndiZRjVgCspFHzmon91yehFtpVh0hpTSBS29bvqBKDAgPF9mJMQuGE
-   2008Q0eEe337rFU51f9lfNMHQmR+hgOhXQ+H094jS8jxYBaSzf8UETkwH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="338791440"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="338791440"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 06:05:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="801181776"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="801181776"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 09 Mar 2023 06:05:53 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1paGu0-000Lrl-0Y;
-        Thu, 09 Mar 2023 16:05:52 +0200
-Date:   Thu, 9 Mar 2023 16:05:51 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mips: ar71: include linux/gpio/driver.h
-Message-ID: <ZAnnv/1ETFTRH8Qi@smile.fi.intel.com>
-References: <20230308145303.826942-1-arnd@kernel.org>
- <CACRpkdZAJJr5+f8wiEhnAAV8mLjzYCBMDC9GXwQOAmsQLfShoA@mail.gmail.com>
+        Thu, 9 Mar 2023 09:07:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02E05D747;
+        Thu,  9 Mar 2023 06:06:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7584C61B5C;
+        Thu,  9 Mar 2023 14:06:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5766AC433EF;
+        Thu,  9 Mar 2023 14:06:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678370774;
+        bh=HukZ+ILxzTnCQfpiikli+vpJ+j7QZXr1rOExU9Cd028=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A7w0BiKmJDFqnf6FXNmD0HW/rcBRaXuGdvtl/atJt2ssNfdcEieJ5YyfIALm53wLC
+         cgIMAHNHnbHvWfY9g6zZcHICQFsiHvDJNq2sx9TcWl8DAjgCrjnWA/G/jIKMfspZiI
+         PrIOXv6CaBrI25isoxOuosC+ZtG82vx0B9SKkWpM=
+Date:   Thu, 9 Mar 2023 15:06:11 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Oliver Neukum <oneukum@suse.com>, Ye Xiang <xiang.ye@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
+        wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH v4 2/5] gpio: Add support for Intel LJCA USB GPIO driver
+Message-ID: <ZAnn07XEqxeV8Bpq@kroah.com>
+References: <20230309071100.2856899-1-xiang.ye@intel.com>
+ <20230309071100.2856899-3-xiang.ye@intel.com>
+ <2865f3d0-428b-0df1-fc50-f6af3cb9dac3@suse.com>
+ <ZAnku01goVDCuNM+@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdZAJJr5+f8wiEhnAAV8mLjzYCBMDC9GXwQOAmsQLfShoA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZAnku01goVDCuNM+@smile.fi.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 10:56:02PM +0100, Linus Walleij wrote:
-> On Wed, Mar 8, 2023 at 3:53 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Thu, Mar 09, 2023 at 03:52:59PM +0200, Andy Shevchenko wrote:
+> On Thu, Mar 09, 2023 at 02:40:10PM +0100, Oliver Neukum wrote:
+> > On 09.03.23 08:10, Ye Xiang wrote:
+> > 
+> > > +#define LJCA_GPIO_BUF_SIZE 60
+> > > +struct ljca_gpio_dev {
+> > > +	struct platform_device *pdev;
+> > > +	struct gpio_chip gc;
+> > > +	struct ljca_gpio_info *gpio_info;
+> > > +	DECLARE_BITMAP(unmasked_irqs, LJCA_MAX_GPIO_NUM);
+> > > +	DECLARE_BITMAP(enabled_irqs, LJCA_MAX_GPIO_NUM);
+> > > +	DECLARE_BITMAP(reenable_irqs, LJCA_MAX_GPIO_NUM);
+> > > +	u8 *connect_mode;
+> > > +	/* mutex to protect irq bus */
+> > > +	struct mutex irq_lock;
+> > > +	struct work_struct work;
+> > > +	/* lock to protect package transfer to Hardware */
+> > > +	struct mutex trans_lock;
+> > > +
+> > > +	u8 obuf[LJCA_GPIO_BUF_SIZE];
+> > > +	u8 ibuf[LJCA_GPIO_BUF_SIZE];
+> > 
+> > And here we have a violation of DMA coherency rules.
+> > Basically you cannot embed buffers into other data structures
+> > if they can be subject to DMA.
 > 
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > The change to remove the implicit gpio/driver.h include was done
-> > after fixing all the other users, but the ar7 file still needs
-> > the same change.
-> >
-> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> > Fixes: 21d9526d13b5 ("gpiolib: Make the legacy <linux/gpio.h> consumer-only")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Huh?!
 > 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> 
-> If this is the only problem merging this set was amazingly painless.
+> The problem here is alignment. But other than that I can't see the issue with
+> embedding into structures the instances of which will be allocated on the heap.
 
-Too early to celebrate. We have one more patch on the same matters.
-
-That said, I will collect them and send a new PR to Bart.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+As you said, the problem is alignment.
