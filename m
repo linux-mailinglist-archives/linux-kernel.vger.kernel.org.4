@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3186B2E07
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA7C6B2E0C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 21:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjCIT7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 14:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
+        id S230326AbjCIT77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 14:59:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbjCIT7P (ORCPT
+        with ESMTP id S230335AbjCIT7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 14:59:15 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5196FCCEB6
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:59:14 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id o199so1303461ybc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 11:59:14 -0800 (PST)
+        Thu, 9 Mar 2023 14:59:45 -0500
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FEEF92E0
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:59:37 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-53916ab0c6bso55546317b3.7
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 11:59:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678391953;
+        d=google.com; s=20210112; t=1678391977;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uFCNC/vYq94itAnDGpHNmbJxauP9MDrM1R5OhIvk1z4=;
-        b=GFvoS4a+KU4C5zL5l2DiI8whruPL/E4xmsQFgvVnXDAWFx8l1HpKOHIEV9LG209me7
-         eVKn6rW9wzmvAmbN6yawN385xakFtbzOb6GdUPj/utHXy5jZnZ6E7IBjvQvuxH2X01uB
-         E7CDvcoiL+Lc8k5mxtBi97oiwav4sUzNC9+ePXZRo9tAdrVO5Rs2w0I032a8Vnw8seBf
-         zW3rbNeLOUO/aCupFvziq03hjmJ0rFg1UV/fAW74kA/DtMf1dnuM8ftshPdrxhG93zJ9
-         S6NJjgqez+t3FuZDpQFyW0Cd4eTqjcAf6kJyPVEJClpoJB6y3FxH0It0w/8kiHHjFgzv
-         2O4w==
+        bh=3vNJ5leP47dzTnf81JmNzO3kZKlUcAdWzEpMj2al3ps=;
+        b=ZbV45xN0xfCzaoIr+bcYMr4uFSnv4cw5SiU7yho3+d3MhnSKMhcw0SShbkLT9G6Jgb
+         SusYaPPV7w1f3OvaU1gGlWpJ2g0roeBtGAE1MFdHzJ349eETVq+6KPorp2I0Jiy2jELR
+         pwtNSRuzqyDfBk7urYzCY2R98fsZ2ksr7Gcy9jx9a2r7xBX2QPOz08nu6owZ/JaNP9X9
+         IT7/zTBD3YK8Vtbpw/ScHkEa/vDAaRsRl9SNnBi8eV0VzbzJS91szKvtIrl/7X02QAMX
+         kU9nVhHQM2uTWEzDABRQShyXGkijpLsiot+HEiE5UYhQW/Ej6xzfjSQ70URaYs0JhdFz
+         dSdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678391953;
+        d=1e100.net; s=20210112; t=1678391977;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uFCNC/vYq94itAnDGpHNmbJxauP9MDrM1R5OhIvk1z4=;
-        b=qHRFzIvVj9iJRA/93gJV8NPdRk2i+1NXfmg3oTWpNn/P1zojGYlkE4IHkUq7dGH6vY
-         1H/TZ80DZPMPeycMXIKKy2yNcPP5vUjq7Zz+qCHRHBAixlSclKqA+i5ZVQ5cmIXPb2Mi
-         kL6QMNhTY2crZbScIT9vqJxtDeD7JJveqIgkeu7KFJEt78eq+CrQzIS44MJn+ariZ+hi
-         S5Zcp1DricjDMdEkAyJIGNFWGbhJFYmjTdC9/DTR3nLgDJTKHg0SRXg/+UYmeK8NT9Pb
-         iuupHl5tBQtKsDydwUtzMucgzzDSwYEcaSCgxI6ZG+myO2JbBv9ZKHO5c1Co4A5zIbRv
-         WH8g==
-X-Gm-Message-State: AO0yUKWz1nmh27W6pamWFplHJcqOL6QVaMan/QtiwaGQ5yucG9fG1dz1
-        GaZDI4z1KaiVO2iW+G7HZ/+EjB4MfHRynLimdy6+Ww==
-X-Google-Smtp-Source: AK7set/wWc7mwdGSf47sts1b6uAdfX2X95Pk6naGMsMYvcMW9zYO/9EgJXe2P2wXjghWqhKOV0OxTgyMRafpQudLJ4E=
-X-Received: by 2002:a5b:a0c:0:b0:a24:1001:1fd2 with SMTP id
- k12-20020a5b0a0c000000b00a2410011fd2mr13996848ybq.0.1678391953431; Thu, 09
- Mar 2023 11:59:13 -0800 (PST)
+        bh=3vNJ5leP47dzTnf81JmNzO3kZKlUcAdWzEpMj2al3ps=;
+        b=KtpyMJKL+be8YUDEdxaclzu038UELWVohFMgYB5R54uY5FPydr2DWBncH7oT6s7qKK
+         EXkboBJLXgXfzrRIoM1KZNqoUiA4IAhVq4AM3cjoloJ1SHf9HF0EkF8lm/JPQIDgiq6C
+         ApE9pGnpAqn7t/d9wIgY+U+rZLAPpwsnLCBo5kso2IwKC5HQD3BUsrPf3tTPvdc7FF76
+         0UL/GMfAyDbMhXGcvX/0gkEgEICzIjVxNLuYgEh7QXl2wrUSq5UEGm7AN7IYGAEoOlm0
+         wjT9fW1ZmNFeea84A5r9oHURKAsOVWjV/lrNGpA3CrzFzOm6E/yLPcKCaEX6pty4ew2K
+         cfIg==
+X-Gm-Message-State: AO0yUKXStMFHeII0n6Jix7CPUNNlfgxHXv7bMksJPo++d1JsxQYg8/mJ
+        BGmafm0IxawVX5zi8Q409h/oI+9Kog6OTUzlpq7Jcw==
+X-Google-Smtp-Source: AK7set90CbrDevVoVNGYf4xSDL+/fwBY+7ly63+oQL8q06DErAyUAwJmz8Rqako/v5+RMtUYbhFU3TJBJQH/Hsk3kyU=
+X-Received: by 2002:a81:af5d:0:b0:52a:9eac:92b with SMTP id
+ x29-20020a81af5d000000b0052a9eac092bmr15058768ywj.4.1678391976646; Thu, 09
+ Mar 2023 11:59:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20230306230004.1387007-1-jthoughton@google.com>
- <20230306230004.1387007-2-jthoughton@google.com> <20230307215420.GA59222@monkey>
- <CADrL8HVa3vzmrfFJD5hx_GuXVnsWhSo9hzJFb4TTzzjMhWG+sQ@mail.gmail.com> <ZAkEecMShUAGwZ62@x1n>
-In-Reply-To: <ZAkEecMShUAGwZ62@x1n>
-From:   James Houghton <jthoughton@google.com>
-Date:   Thu, 9 Mar 2023 11:58:37 -0800
-Message-ID: <CADrL8HWT8-MZeL-G+Qj4vQHVrrMxd8EWkPWO9eDfwvvZvoh69A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] mm: rmap: make hugetlb pages participate in _nr_pages_mapped
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Hugh Dickins <hughd@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-6-vipinsh@google.com>
+ <20230309175849.0000565e@gmail.com>
+In-Reply-To: <20230309175849.0000565e@gmail.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Thu, 9 Mar 2023 11:59:00 -0800
+Message-ID: <CAHVum0fhU2PAQEerG5t92R1ropoh1-ML4Yv1CzwGThRtbbvWHg@mail.gmail.com>
+Subject: Re: [Patch v4 05/18] KVM: x86/mmu: Add split_shadow_page_cache pages
+ to global count of MMU cache pages
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        dmatlack@google.com, jmattson@google.com, mizhang@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -81,53 +73,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 1:56=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
+On Thu, Mar 9, 2023 at 7:58=E2=80=AFAM Zhi Wang <zhi.wang.linux@gmail.com> =
+wrote:
 >
-> On Tue, Mar 07, 2023 at 04:36:51PM -0800, James Houghton wrote:
-> > > >       if (likely(!compound)) {
-> > > > +             if (unlikely(folio_test_hugetlb(folio)))
-> > > > +                     VM_BUG_ON_PAGE(HPageVmemmapOptimized(&folio->=
-page),
-> > > > +                                    page);
+> On Mon,  6 Mar 2023 14:41:14 -0800
+> Vipin Sharma <vipinsh@google.com> wrote:
 >
-> How about moving folio_test_hugetlb() into the BUG_ON()?
->
->                 VM_BUG_ON_PAGE(folio_test_hugetlb(folio) &&
->                                HPageVmemmapOptimized(&folio->page),
->                                page);
->
-> Note that BUG_ON() already contains an "unlikely".
-
-Ok I can do that. It's a little cleaner.
-
-> > > >               first =3D atomic_inc_and_test(&page->_mapcount);
-> > > >               nr =3D first;
-> > > >               if (first && folio_test_large(folio)) {
-> > > >                       nr =3D atomic_inc_return_relaxed(mapped);
-> > > >                       nr =3D (nr < COMPOUND_MAPPED);
-> > > >               }
-> > > > -     } else if (folio_test_pmd_mappable(folio)) {
-> > > > -             /* That test is redundant: it's for safety or to opti=
-mize out */
-> > >
-> > > I 'think' removing this check is OK.  It would seem that the caller
-> > > knows if the folio is mappable.  If we want a similar test, we might =
-be
-> > > able to use something like:
-> > >
-> > >         arch_hugetlb_valid_size(folio_size(folio))
-> > >
+> > Add pages in split_shadow_page_cache to the global counter
+> > kvm_total_unused_cached_pages. These pages will be freed by MMU shrinke=
+r
+> > in future commit.
 > >
-> > Ack. I think leaving the check(s) removed is fine.
+> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> > ---
+> >  arch/x86/kvm/mmu/mmu.c | 7 +++++--
+> >  1 file changed, 5 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index df8dcb7e5de7..0ebb8a2eaf47 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -6149,7 +6149,9 @@ static void mmu_free_vm_memory_caches(struct kvm =
+*kvm)
+> >  {
+> >       kvm_mmu_free_memory_cache(&kvm->arch.split_desc_cache);
+> >       kvm_mmu_free_memory_cache(&kvm->arch.split_page_header_cache);
+> > -     kvm_mmu_free_memory_cache(&kvm->arch.split_shadow_page_cache);
+> > +     mutex_lock(&kvm->slots_lock);
+> > +     mmu_free_sp_memory_cache(&kvm->arch.split_shadow_page_cache);
+> > +     mutex_unlock(&kvm->slots_lock);
 >
-> Would it still be good to keep that as another BUG_ON()?
+> Taking the lock of the calling path in the layer of cache topping/free la=
+yer
+> seems off.
+>
+> My vote goes to have a lock for each cache and take the lock of the cache=
+ when
+> topping/free the cache. It is more self-contained and architecturally nic=
+e.
+>
 
-Sure, that sounds reasonable to me. I'll add it unless someone disagrees.
+Yeah, this can be one way. However, in future patches when I am adding
+per NUMA node cache, it will add up a lot of locks for the same code
+path before a topup. In split huge page case we know what NUMA node we
+need to allocate from so we can fine tune which lock to take but  in
+fault path code we don't know what NUMA node the page will be coming
+from so we need to topup all of the NUMA caches. Having a single lock
+simplifies code a little bit.
 
-As you suggested in your other email, I'll also add a BUG_ON() if we
-attempt to do a non-compound mapping of a folio that is larger than
-COMPOUND_MAPPED / 2. (Maybe a BUG_ON() in alloc_hugetlb_folio() to
-check that the size of the folio we're allocating is less than
-COMPOUND_MAPPED / 2 makes sense instead. Just an idea.)
-
-- James
+I agree with you on being more self-contained. I will wait for others
+to also chime in on this and go from there.
