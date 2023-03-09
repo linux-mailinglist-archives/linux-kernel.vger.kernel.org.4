@@ -2,130 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701C26B17CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 01:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBF76B17D4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 01:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjCIAXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 19:23:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
+        id S229814AbjCIAZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 19:25:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjCIAXo (ORCPT
+        with ESMTP id S229708AbjCIAZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 19:23:44 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927B66486F;
-        Wed,  8 Mar 2023 16:23:42 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328NQ3MO012078;
-        Thu, 9 Mar 2023 00:23:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=ow1SlrV3VkY4IMsLryNLahQ4dIZNZmzPOnahCnP8KdM=;
- b=Rr39/ZR+twTBGooUxR9g/sR6GzGyF5zEqs39hqTfwKYv/hVQbllDOWkeo31X4cu0C66L
- +L72tROPD+XZicRQeho5gauxa5NoODJFj82ozxiDtwl0xLrNITSt1IuqzwNtL5L8IvUI
- krfHQOCPgUF6TTfqZmW1mCauBw58CFFpqIbWCUenCZ2Encf65gDXQU221weHS6/MpAG9
- yEM3Y5Ztk8keT80t0PySpL8z6SY0uuJLMfpc6QHEhPCbWXwymtDRUdRQOfJ4Vb4kO8Xa
- rxWzMO23Pa6hTXFcpYsIHSHEOK0jURBqnnSYBDNujpn/McCw/OtPYOqZa62fLhm13E/D WA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6ry3u08n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 00:23:20 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3290Mxhg030392;
-        Thu, 9 Mar 2023 00:23:20 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6ry3u08c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 00:23:20 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 328NlIh6016691;
-        Thu, 9 Mar 2023 00:23:18 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3p6fhk68v9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Mar 2023 00:23:18 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3290NHZx6160992
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Mar 2023 00:23:17 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5EA1358061;
-        Thu,  9 Mar 2023 00:23:17 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 702005803F;
-        Thu,  9 Mar 2023 00:23:16 +0000 (GMT)
-Received: from sig-9-77-134-135.ibm.com (unknown [9.77.134.135])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Mar 2023 00:23:16 +0000 (GMT)
-Message-ID: <b8ed9f24e051158580c561a8d8863622ba2f4c8e.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] security: Introduce LSM_ORDER_LAST and set it for
- the integrity LSM
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 08 Mar 2023 19:23:16 -0500
-In-Reply-To: <20230308171119.1784326-1-roberto.sassu@huaweicloud.com>
-References: <20230308171119.1784326-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: c-VbPkxHX5k1D9-kLy0mz-FB7xTTCgW4
-X-Proofpoint-ORIG-GUID: fDqI-sBskH4SOAuOpEB0E9XinzmYVQHB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-08_15,2023-03-08_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- mlxlogscore=555 priorityscore=1501 lowpriorityscore=0 spamscore=0
- bulkscore=0 malwarescore=0 phishscore=0 suspectscore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303080202
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 8 Mar 2023 19:25:13 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B9064B38;
+        Wed,  8 Mar 2023 16:25:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678321512; x=1709857512;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9dM7kn4pp6sfTQF2DTxl3EoqHV4XCsiAN4jcbawygdc=;
+  b=VJwS7n5wt1cc0WO0/UMJSWyLihv3TNoJpFySAQxNM5JxvJ9G15yIFCzr
+   YxdH4vZAZ7AhnkApQNC27Cm0EY1yr8yXnnaCZsTr2An8OHjXaEMQjR45D
+   +Y7+RD6Abmw6pHuqhdDL+IhPTSDH9DuPA8iSc4oQS1moDa+wv5eoXhwBB
+   OGXOeuWAJ3znElF9+3cu4mlWZ7gpmgMheX+Q+QmmCZAq4DBSp+JFtI3wG
+   i0m1QhxcssMX7UIws/DiW0INEGWl5wVX0gt7rWnuDD7WYon0adYx6DKsn
+   CZr4zQRMSmIjR4Pvjqgzz5/P7HBLC9HAaREisidmZW2xf2CgQV2Qqv8Lx
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="422585947"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="422585947"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 16:25:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="923005680"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="923005680"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 08 Mar 2023 16:25:09 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pa45f-0002Vz-2J;
+        Thu, 09 Mar 2023 00:25:03 +0000
+Date:   Thu, 9 Mar 2023 08:24:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Svyatoslav Ryhel <clamor95@gmail.com>,
+        Iskren Chernev <me@iskren.info>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/4] power: max17040: get thermal data from adc if
+ available
+Message-ID: <202303090802.G5XRtUbY-lkp@intel.com>
+References: <20230308084419.11934-5-clamor95@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308084419.11934-5-clamor95@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-08 at 18:11 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs willing to be
-> the last, e.g. the 'integrity' LSM, without changing the kernel command
-> line or configuration.
+Hi Svyatoslav,
 
-^needing to be last
+Thank you for the patch! Yet something to improve:
 
-> 
-> Also, set this order for the 'integrity' LSM. While not enforced, this is
-> the only LSM expected to use it.
-> 
-> Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled
-> and put at the end of the LSM list.
-> 
-> Finally, for LSM_ORDER_MUTABLE LSMs, set the found variable to true if an
-> LSM is found, regardless of its order. In this way, the kernel would not
-> wrongly report that the LSM is not built-in in the kernel if its order is
-> LSM_ORDER_LAST.
-> 
-> Fixes: 79f7865d844c ("LSM: Introduce "lsm=" for boottime LSM selection")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+[auto build test ERROR on sre-power-supply/for-next]
+[also build test ERROR on krzk-dt/for-next linus/master v6.3-rc1 next-20230308]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks, Roberto.  With this patch, 'integrity' can be safely removed
-from CONFIG_LSM definitions.
+url:    https://github.com/intel-lab-lkp/linux/commits/Svyatoslav-Ryhel/dt-bindings-power-supply-maxim-max17040-update-properties/20230308-164538
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20230308084419.11934-5-clamor95%40gmail.com
+patch subject: [PATCH v1 4/4] power: max17040: get thermal data from adc if available
+config: xtensa-randconfig-r002-20230308 (https://download.01.org/0day-ci/archive/20230309/202303090802.G5XRtUbY-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7b9bbf6f2b910ef4ffab18022223573e9094f007
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Svyatoslav-Ryhel/dt-bindings-power-supply-maxim-max17040-update-properties/20230308-164538
+        git checkout 7b9bbf6f2b910ef4ffab18022223573e9094f007
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303090802.G5XRtUbY-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   arch/xtensa/kernel/entry.o: in function `fast_syscall_spill_registers':
+   arch/xtensa/kernel/entry.S:1424:(.exception.text+0x1e3): dangerous relocation: windowed longcall crosses 1GB boundary; return may fail: make_task_dead
+   xtensa-linux-ld: drivers/power/supply/max17040_battery.o: in function `max17040_stop_work':
+>> max17040_battery.c:(.text+0x60): undefined reference to `iio_read_channel_raw'
+   xtensa-linux-ld: drivers/power/supply/max17040_battery.o: in function `max17040_get_property':
+   max17040_battery.c:(.text+0x11e): undefined reference to `iio_read_channel_raw'
+>> xtensa-linux-ld: max17040_battery.c:(.text+0x170): undefined reference to `iio_channel_release'
+   xtensa-linux-ld: drivers/power/supply/max17040_battery.o: in function `max17040_remove':
+>> max17040_battery.c:(.text+0x188): undefined reference to `iio_channel_release'
+>> xtensa-linux-ld: max17040_battery.c:(.text+0x260): undefined reference to `iio_channel_get'
+   xtensa-linux-ld: drivers/power/supply/max17040_battery.o: in function `max17040_probe':
+>> max17040_battery.c:(.text+0x542): undefined reference to `iio_channel_get'
 
 -- 
-thanks,
-
-Mimi
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
