@@ -2,68 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957826B210A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B176B20F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbjCIKPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:15:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
+        id S230004AbjCIKMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:12:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbjCIKOw (ORCPT
+        with ESMTP id S229668AbjCIKMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:14:52 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE9D515EF;
-        Thu,  9 Mar 2023 02:14:19 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 703E05FD38;
-        Thu,  9 Mar 2023 13:13:40 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1678356820;
-        bh=Ar8EpR1QVdZc2qgf8SPgt+ILQTHYEu4nfHN9aAAB8Qk=;
-        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
-        b=XHcmk+AkXXWXBp/pGJlndL3ZEJKUVwwA2YVgkru62e9Ng6rK7I7njCyq4BS3YX7LU
-         mPl5Gq7NDsXsFB8+z+gY52NsqI2F1PxcBifJx3pdNJoSZb3R1ThbQiubiMc9J4Fbyt
-         qyO6CTYq7QZ1xQNMg6v2bU4r9LdfagUijseY8AOz8ucigT2l1MfY7DKJID814KeGcm
-         /AwdNGzc+ahU4bMGJYCaVdGnki0Zlky1u52/DDVZXwmeVXIoCHrYw6sehNHCHZ4kja
-         y9gCXm45h7Rqwa5OjuibME7CvMUPlxhVOA/HIK1p4pfgKU2HaYarW6Tj96JY5iRnh8
-         I7f2xpyjNB0fA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  9 Mar 2023 13:13:36 +0300 (MSK)
-Message-ID: <0abeec42-a11d-3a51-453b-6acf76604f2e@sberdevices.ru>
-Date:   Thu, 9 Mar 2023 13:10:36 +0300
+        Thu, 9 Mar 2023 05:12:18 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2066.outbound.protection.outlook.com [40.107.220.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29103E4DB6;
+        Thu,  9 Mar 2023 02:12:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mzHUBo6KpdVDWdEiuCSnbns9+3icl6J7PW8osU1Wug2r1VWlj1o0jmLoIJGc3HkcedzA+eyqXGA2bCA/bq3Ait5s5Mn6t1eGDxi3UfpyJY6de2VkUAnmt4o/t8Sd+tZPSrAfSxT7lA9Qkxri8g1m56j+1VrBPDcnr6bzZ4MgHRvexZ7ezTaJJ6yoLPPSRsJUMu/owSVYkueMG7W2md83AumZXCN4CU/MamHarUboLBKtG/LC3BVbBkrS/91UTgz++V7WfaxbHjAQdi6lSe+EJtDvgJJx+SrWK9/5d1+TuHu+9A3H483vtCi2LaF3127ZI38JZGjzsNSU5A6e0zQfVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gY6W4wlh43KwuFpKy6hJPU6UY343SCZuOKcWNhvonLo=;
+ b=GAFAmEdUOtOfIM0+TYmXoyqJVqgkjnUHFmGD8irW8aB07uiBloOQPQr6Vg1xuX7GaCAh/nGqoPiKX+aZ6QP2VMntd9Xtrdw0sYyOnjMqzffEfoCSqPHUmYMDvaL5bQiyt+zP5Utwx2EcKXAfN9r0R6vQOFM5clVHU2IqCsgpkW4eNtw4MqF29RBmJkIToMZ4LY9FnL87pRlVD+2pukitcZTUaEHlLsfl53wvcA0mBkN9t1g9t+k5C+B0OHm/ks6N9ByiwNuvO9ZYnsn5r7Pbnvbhb6ZAUydmqu70hc6ztuHxcYPKwmwKjX2OK81CP6OdChzBWRi9izsxI+WDTgl97w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gY6W4wlh43KwuFpKy6hJPU6UY343SCZuOKcWNhvonLo=;
+ b=OTDGZpwWsFlpmUzE6/E/Rh8h/7DElsk+pIytcs5vljz77qClK1g4IMUbA1xIP/tvWl7DxselRb7MhXzACx5+QioCV5EGWTnG4bUMYyy7KwyxzUjQ3s9NptBXqdEie5LfDClGuO82YqORqypw2MzY/dND2mwALRgwnTifG8QP29w=
+Received: from DS7PR03CA0191.namprd03.prod.outlook.com (2603:10b6:5:3b6::16)
+ by PH0PR12MB5450.namprd12.prod.outlook.com (2603:10b6:510:e8::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Thu, 9 Mar
+ 2023 10:12:13 +0000
+Received: from DM6NAM11FT025.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b6:cafe::13) by DS7PR03CA0191.outlook.office365.com
+ (2603:10b6:5:3b6::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19 via Frontend
+ Transport; Thu, 9 Mar 2023 10:12:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT025.mail.protection.outlook.com (10.13.172.197) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6178.18 via Frontend Transport; Thu, 9 Mar 2023 10:12:13 +0000
+Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 9 Mar
+ 2023 04:12:07 -0600
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+To:     <peterz@infradead.org>
+CC:     <ravi.bangoria@amd.com>, <namhyung@kernel.org>,
+        <eranian@google.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
+        <jolsa@kernel.org>, <irogers@google.com>, <bp@alien8.de>,
+        <x86@kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sandipan.das@amd.com>,
+        <ananth.narayan@amd.com>, <santosh.shukla@amd.com>
+Subject: [PATCH v2 0/3] perf/ibs: Fix interface via core pmu events
+Date:   Thu, 9 Mar 2023 15:41:08 +0530
+Message-ID: <20230309101111.444-1-ravi.bangoria@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
-        <avkrasnov@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Subject: [RFC PATCH v3 0/4] several updates to virtio/vsock
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/09 05:43:00 #20927523
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT025:EE_|PH0PR12MB5450:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1d7f3283-3841-4988-aa04-08db2086c0c8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sUymjZNpB9LRIhOZpXmIOPLPobbNp01j021HT0abQ4WEOWgV7z16AmcoNuubteQ9qg1gNyNtKJsRQICCgyB4eQbvHXwz7GHpZY5NmY9Nm79oDT/ksnIfoRS+hhii5zDk3YT6UtZyufeR58osQH4a7NxhYuhbETmeqiiqiLPqut5+8l9wWXiRAOqsQlmI+qoWraSb99ZkDAqSXYeOWo2lbPJYCBXd8Ra4whAImzcLcxqhRJi+o0NLBo26CkK8BG0jUWFswnD/9IlQl+2nmxb+osIWlhmBK8msskCjJAp70zS29oF/Ru95rUcarxv3HjvvgictB+ONsr3Y/ZWS5UN2wHM8j4Nmk5/Fu5WZFUK6kBETUWQkaitxVnN/O6XjM/Z2HXr1TCQBZCTBbvxzmqJMZ7lKJM8s63jrmeXywp/RA5Cg17XcZI4m6JhXfMieR076uZFct9dlhWc/XY/o4/xfB8PHxoeO8S/eWUvkFAiwTqbcoG2fL73Cc8hYnYG4AQ/RuPVM4oL4akq3plrDeqsIwa2pw/tzPYn6v6em4KbL/snVv0IXfBlV8Cnak7kXwg1aCPI8dw1QYGifNIyCsFRyueEuzoH9mdn+M9ZOaOMMbelSQGkmJ0g3f0zeIhuBXptUgkbUCIMNUlhX2gPkqmXP3piaMmJUgM7kSXR14zw/FhmMlo/CGnn1t4e34MEkIguO75ov4FE8/Qeq6OMnZmDkChjch4WKD5vVOlUDt13qpJc=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(346002)(136003)(396003)(451199018)(40470700004)(46966006)(36840700001)(36756003)(40460700003)(356005)(26005)(316002)(54906003)(41300700001)(5660300002)(478600001)(966005)(7696005)(7416002)(44832011)(8676002)(2906002)(70206006)(70586007)(8936002)(6916009)(4326008)(1076003)(82740400003)(16526019)(81166007)(40480700001)(86362001)(36860700001)(186003)(2616005)(83380400001)(82310400005)(47076005)(426003)(336012)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 10:12:13.4358
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1d7f3283-3841-4988-aa04-08db2086c0c8
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT025.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5450
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,68 +101,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+IBS used to allow event creation via core pmu events with precise_ip
+attribute set, but it's broken since late 2019. 1st patch does pre-
+req changes, 2nd patch fixes the issue and 3rd patch adds simple perf
+test for the same.
 
-this patchset evolved from previous v2 version (see link below). It does
-several updates to virtio/vsock:
-1) Changes 'virtio_transport_inc/dec_rx_pkt()' interface. Now instead of
-   using skbuff state ('head' and 'data' pointers) to update 'fwd_cnt'
-   and 'rx_bytes', integer value is passed as an input argument. This
-   makes code more simple, because in this case we don't need to udpate
-   skbuff state before calling 'virtio_transport_inc/dec_rx_pkt()'. In
-   more common words - we don't need to change skbuff state to update
-   'rx_bytes' and 'fwd_cnt' correctly.
-2) For SOCK_STREAM, when copying data to user fails, current skbuff is
-   not dropped. Next read attempt will use same skbuff and last offset.
-   Instead of 'skb_dequeue()', 'skb_peek()' + '__skb_unlink()' are used.
-   This behaviour was implemented before skbuff support.
-3) For SOCK_SEQPACKET it removes unneeded 'skb_pull()' call, because for
-   this type of socket each skbuff is used only once: after removing it
-   from socket's queue, it will be freed anyway.
+v1: https://lore.kernel.org/r/20230302092109.367-1-ravi.bangoria@amd.com
+v1->v2:
+ - Instead of using pmu capability, use error code -ESRCH to forward
+   the event to different pmu.
+ - Rebase on v6.3-rc1
 
-Test for 2) also added:
-Test tries to 'recv()' data to NULL buffer, then does 'recv()' with valid
-buffer. For SOCK_STREAM second 'recv()' must return data, because skbuff
-must not be dropped, but for SOCK_SEQPACKET skbuff will be dropped by
-kernel, and 'recv()' will return EAGAIN.
+Ravi Bangoria (3):
+  perf/ibs: Introduce ibs_core_pmu_event()
+  perf/ibs: Fix interface via core pmu events
+  perf test: Add selftest to test IBS invocation via core pmu events
 
-Link to v1 on lore:
-https://lore.kernel.org/netdev/c2d3e204-89d9-88e9-8a15-3fe027e56b4b@sberdevices.ru/
-
-Link to v2 on lore:
-https://lore.kernel.org/netdev/a7ab414b-5e41-c7b6-250b-e8401f335859@sberdevices.ru/
-
-Change log:
-
-v1 -> v2:
- - For SOCK_SEQPACKET call 'skb_pull()' also in case of copy failure or
-   dropping skbuff (when we just waiting message end).
- - Handle copy failure for SOCK_STREAM in the same manner (plus free
-   current skbuff).
- - Replace bug repdroducer with new test in vsock_test.c
-
-v2 -> v3:
- - Replace patch which removes 'skb->len' subtraction from function
-   'virtio_transport_dec_rx_pkt()' with patch which updates functions
-   'virtio_transport_inc/dec_rx_pkt()' by passing integer argument
-   instead of skbuff pointer.
- - Replace patch which drops skbuff when copying to user fails with
-   patch which changes this behaviour by keeping skbuff in queue until
-   it has no data.
- - Add patch for SOCK_SEQPACKET which removes redundant 'skb_pull()'
-   call on read.
- - I remove "Fixes" tag from all patches, because all of them now change
-   code logic, not only fix something.
-
-Arseniy Krasnov (4):
-  virtio/vsock: don't use skbuff state to account credit
-  virtio/vsock: remove redundant 'skb_pull()' call
-  virtio/vsock: don't drop skbuff on copy failure
-  test/vsock: copy to user failure test
-
- net/vmw_vsock/virtio_transport_common.c |  29 +++---
- tools/testing/vsock/vsock_test.c        | 118 ++++++++++++++++++++++++
- 2 files changed, 131 insertions(+), 16 deletions(-)
+ arch/x86/events/amd/core.c          | 11 +++--
+ arch/x86/events/amd/ibs.c           | 52 +++++++++++----------
+ arch/x86/include/asm/perf_event.h   |  2 +
+ kernel/events/core.c                | 10 ++++-
+ tools/perf/tests/Build              |  1 +
+ tools/perf/tests/builtin-test.c     |  1 +
+ tools/perf/tests/ibs-via-core-pmu.c | 70 +++++++++++++++++++++++++++++
+ tools/perf/tests/tests.h            |  1 +
+ 8 files changed, 121 insertions(+), 27 deletions(-)
+ create mode 100644 tools/perf/tests/ibs-via-core-pmu.c
 
 -- 
-2.25.1
+2.39.2
+
