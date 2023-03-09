@@ -2,163 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 367A66B2224
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA686B2219
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbjCILCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
+        id S230367AbjCILBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:01:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbjCILAo (ORCPT
+        with ESMTP id S230512AbjCIK7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:00:44 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5029E93E07;
-        Thu,  9 Mar 2023 02:58:23 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1paDyW-0003bi-1b;
-        Thu, 09 Mar 2023 11:58:20 +0100
-Date:   Thu, 9 Mar 2023 10:56:43 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Alexander Couzens <lynxis@fe80.eu>
-Subject: [PATCH net-next v13 07/16] net: ethernet: mtk_eth_soc: only write
- values if needed
-Message-ID: <a8102c27d735c0b46eccb739c7a76b76fe20d87d.1678357225.git.daniel@makrotopia.org>
-References: <cover.1678357225.git.daniel@makrotopia.org>
+        Thu, 9 Mar 2023 05:59:24 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66343E2535;
+        Thu,  9 Mar 2023 02:57:24 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 02408127D;
+        Thu,  9 Mar 2023 11:56:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1678359411;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/io0tiHurftvED5sx9LsxUT6zxO/u5fmUM2T3ONQg1w=;
+        b=Q0KB9CqTeuqMIUSe2pVjnWRuOwcuUmKy9D5oFkhfi/+moFgjMCQ/lunzoGmezZzlumqVKC
+        MrQg1kXbHWxTsyWsmj7NWDC/TENDDKHttjXm4yTCVHYePbZbHZoKkrXHx8CbxPIV34zeHU
+        +jfWs5s6CLuPLu8k4bHcBAttFBHFY10zEQWk+lkFlnRP1ytW2BqgvY7WGvS5HgIoxF5D4K
+        YNqzc1ck8iGX27ks548/YZDSqdK+1eYjVP2ukcLY5Va037kd8vocBPbRc52qQnq41ErkKV
+        4ZcoSCVyIYjrBToOMlILYNHuHLBiYOvk6DiBaFHGE4O0o5TSwpozL9l8guW67g==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1678357225.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 09 Mar 2023 11:56:50 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc:     Serge Semin <fancer.lancer@gmail.com>, Sergiu.Moga@microchip.com,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        Claudiu.Beznea@microchip.com, chin-ting_kuo@aspeedtech.com,
+        clg@kaod.org, joel@jms.id.au, andrew@aj.id.au,
+        kdasu.kdev@gmail.com, han.xu@nxp.com, john.garry@huawei.com,
+        matthias.bgg@gmail.com, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, haibo.chen@nxp.com,
+        yogeshgaur.83@gmail.com, heiko@sntech.de,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        michal.simek@xilinx.com, bcm-kernel-feedback-list@broadcom.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] spi: Replace `dummy.nbytes` with `dummy.ncycles`
+In-Reply-To: <1849e2c8-54f5-9e56-4ed8-8b0e4a826d04@linaro.org>
+References: <20220911174551.653599-1-sergiu.moga@microchip.com>
+ <20220925220304.buk3yuqoh6vszfci@mobilestation>
+ <18e6e8a8-6412-7e31-21e0-6becd4400ac1@microchip.com>
+ <20220926172454.kbpzck7med5bopre@mobilestation>
+ <1766f6ef-d9d8-04f7-a6bf-0ea6bc0b3d23@linaro.org>
+ <f647e713a65f5d3f0f2e3af95c4d0a89@walle.cc>
+ <1849e2c8-54f5-9e56-4ed8-8b0e4a826d04@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <302ecf0421fe4c99fca3eb0ca2f66127@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only restart auto-negotiation and write link timer if actually
-necessary. This prevents losing the link in case of minor
-changes.
+Am 2023-03-09 11:42, schrieb Tudor Ambarus:
+> On 09.03.2023 10:38, Michael Walle wrote:
+>>> In an ideal world, where both the controller and the device talk 
+>>> about
+>>> dummy number of cycles, I would agree with you, buswidth and dtr 
+>>> should
+>>> not be relevant for the number of dummy cycles. But it seems that 
+>>> there
+>>> are old controllers (e.g. spi-hisi-sfc-v3xx.c, spi-mt65xx.c, 
+>>> spi-mxic.c)
+>>> that support buswidths > 1 and work only with dummy nbytes, they are 
+>>> not
+>>> capable of specifying a smaller granularity (ncycles). Thus the older
+>>> controllers would have to convert the dummy ncycles to dummy nbytes.
+>>> Since mixed transfer modes are a thing (see jesd251, it talks about
+>>> 4S-4D-4D), where single transfer mode (S) can be mixed with double
+>>> transfer mode (D) for a command, the controller would have to guess 
+>>> the
+>>> buswidth and dtr of the dummy. Shall they replicate the buswidth and 
+>>> dtr
+>>> of the address or of the data? There's no rule for that.
+>> 
+>> But in the end that doesn't matter because they are just dummy clock
+>> cycles and the mode will only affect the data/address/command. 
+>> Therefore,
+>> the controller is free to choose the mode that suits it best.
+>>  > But that begs the question, is ncycles in regard to DTR or SDR? 
+>> That is,
+>> are you counting just one type of edges or both the falling and rising
+>> edges. The smallest granularity would be ncycles in regard of DTR. To 
+>> me,
+>> it's not obvious what the SEMPER Nano Flash [1] uses. I'd say we 
+>> choose
+>> the smallest granularty in spi-mem to be future proof and maybe 
+>> provide
+>> some spi-mem helper to help setting the cycles for SDR/DTR. As an 
+>> example,
+>> if you want to wait 4 cycles in SDR you'd have ncycles=8 in spi-mem.
+>> 
+> 
+> No, we can't invent our own measuring units. We have cycles and half
+> cycles (regardless of the transfer mode used (STR, DTR)).
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Tested-by: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/net/ethernet/mediatek/mtk_sgmii.c | 24 +++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+That is basically what I was saying, just using the correct term.
+Ok. So we don't need the dtr property, right? I'm still not sure,
+what the semper nano flash uses. Half cycles? But according to your
+naming you'd specify full cylces?
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-index d7e7352041a4..61bd9986466a 100644
---- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
-+++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-@@ -38,20 +38,16 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 			  const unsigned long *advertising,
- 			  bool permit_pause_to_mac)
- {
-+	bool mode_changed = false, changed, use_an;
- 	struct mtk_pcs *mpcs = pcs_to_mtk_pcs(pcs);
- 	unsigned int rgc3, sgm_mode, bmcr;
- 	int advertise, link_timer;
--	bool changed, use_an;
- 
- 	advertise = phylink_mii_c22_pcs_encode_advertisement(interface,
- 							     advertising);
- 	if (advertise < 0)
- 		return advertise;
- 
--	link_timer = phylink_get_link_timer_ns(interface);
--	if (link_timer < 0)
--		return link_timer;
--
- 	/* Clearing IF_MODE_BIT0 switches the PCS to BASE-X mode, and
- 	 * we assume that fixes it's speed at bitrate = line rate (in
- 	 * other words, 1000Mbps or 2500Mbps).
-@@ -77,13 +73,16 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 	}
- 
- 	if (use_an) {
--		/* FIXME: Do we need to set AN_RESTART here? */
--		bmcr = SGMII_AN_RESTART | SGMII_AN_ENABLE;
-+		bmcr = SGMII_AN_ENABLE;
- 	} else {
- 		bmcr = 0;
- 	}
- 
- 	if (mpcs->interface != interface) {
-+		link_timer = phylink_get_link_timer_ns(interface);
-+		if (link_timer < 0)
-+			return link_timer;
-+
- 		/* PHYA power down */
- 		regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL,
- 				   SGMII_PHYA_PWD, SGMII_PHYA_PWD);
-@@ -106,16 +105,17 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 		regmap_update_bits(mpcs->regmap, mpcs->ana_rgc3,
- 				   RG_PHY_SPEED_3_125G, rgc3);
- 
-+		/* Setup the link timer */
-+		regmap_write(mpcs->regmap, SGMSYS_PCS_LINK_TIMER, link_timer / 2 / 8);
-+
- 		mpcs->interface = interface;
-+		mode_changed = true;
- 	}
- 
- 	/* Update the advertisement, noting whether it has changed */
- 	regmap_update_bits_check(mpcs->regmap, SGMSYS_PCS_ADVERTISE,
- 				 SGMII_ADVERTISE, advertise, &changed);
- 
--	/* Setup the link timer and QPHY power up inside SGMIISYS */
--	regmap_write(mpcs->regmap, SGMSYS_PCS_LINK_TIMER, link_timer / 2 / 8);
--
- 	/* Update the sgmsys mode register */
- 	regmap_update_bits(mpcs->regmap, SGMSYS_SGMII_MODE,
- 			   SGMII_REMOTE_FAULT_DIS | SGMII_SPEED_DUPLEX_AN |
-@@ -123,7 +123,7 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 
- 	/* Update the BMCR */
- 	regmap_update_bits(mpcs->regmap, SGMSYS_PCS_CONTROL_1,
--			   SGMII_AN_RESTART | SGMII_AN_ENABLE, bmcr);
-+			   SGMII_AN_ENABLE, bmcr);
- 
- 	/* Release PHYA power down state
- 	 * Only removing bit SGMII_PHYA_PWD isn't enough.
-@@ -137,7 +137,7 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 	usleep_range(50, 100);
- 	regmap_write(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL, 0);
- 
--	return changed;
-+	return changed || mode_changed;
- }
- 
- static void mtk_pcs_restart_an(struct phylink_pcs *pcs)
--- 
-2.39.2
-
+-michael
