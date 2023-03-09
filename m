@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4146B2128
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4806B2132
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbjCIKSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:18:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
+        id S230248AbjCIKTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:19:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbjCIKSA (ORCPT
+        with ESMTP id S229746AbjCIKSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:18:00 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E3D50FBF
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:17:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678357035; x=1709893035;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PqiamAYu6WsjA2TFzZCOCWevy0v60e4fUpTa8FsawEk=;
-  b=Gc0hGOH7/W650FowBLzEcYPLApd2LRilaYWwoQODYv5YEhA99Ay5+cES
-   XF0J9aB5mDM9fNG+cZY9qGLLmlkRkYLeuXZYpGVnJkc+ikGyO4a3OoMu/
-   uXcyz+FU3G6DP1ad3heTc8d+u+W/GTeZvwPfpfx/dL6d1fXknqtPXACM7
-   692f3p7eBMy5GJSSCezzV6UKKePjJySp4Rg6t60fsfzY1FTZmx0GH0nnF
-   HHcxctWWiNJE2U1k/vrNL8IWv183Fg3x1FSw+l3roz0Qp0qVIhwPwkDAT
-   tuOs0KlqfxhJsFPXOxy/n/AciGLnKoDva2K7+iGSUdY0rj5RDEAL1PR14
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="338746027"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="338746027"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 02:17:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="670672529"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="670672529"
-Received: from doylejix-mobl1.ger.corp.intel.com (HELO [10.213.221.148]) ([10.213.221.148])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 02:17:13 -0800
-Message-ID: <286b82dd-3d0b-22e3-45ac-b40705aed78d@linux.intel.com>
-Date:   Thu, 9 Mar 2023 10:17:11 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 4/4] drm/i915: add guard page to ggtt->error_capture
-Content-Language: en-US
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Chris Wilson <chris.p.wilson@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>
-References: <20230308-guard_error_capture-v5-0-6d1410d13540@intel.com>
- <20230308-guard_error_capture-v5-4-6d1410d13540@intel.com>
- <93cbaa9f-6ec3-5843-7527-8e81b3ee091d@linux.intel.com>
- <1372db7c-7d65-cd28-43fc-1b04f57bef11@intel.com>
- <b90e8e31-1729-175c-2fdb-85fb51db4fdc@linux.intel.com>
- <21879b92-35d7-6a80-7c27-b681860906ec@intel.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <21879b92-35d7-6a80-7c27-b681860906ec@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Thu, 9 Mar 2023 05:18:54 -0500
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1261F5EC
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 02:18:06 -0800 (PST)
+Received: by mail-ed1-x549.google.com with SMTP id k12-20020a50c8cc000000b004accf30f6d3so2252884edh.14
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 02:18:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678357085;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/g34wc/bzNoY5huESod7peN9hpH8a494unvdVXAlQmU=;
+        b=e/3pzWXG4gieRCbBxuedbCvfWgSt3DXpMWw8fLP20MPVDEDnQUq7xbbz5A3jgWhd07
+         nfhPJOOylsfr52BEgUwj3vvx9hl306SUgSPlaaBneBja9Hkht/JcVnzpJVF6/RoGRv41
+         y3vbbioTdg9Znwm9rxJAWNtejkYEWU6kq/1JCRP3kRp8xb1KL5m4QKReFM0m1MN6QGGI
+         Pl9NGQ6uk7MlAh6e1K+3awbpbpWh/XUVthcVvg+CJcBaKKO14sM71tzMiLg2ae2v6xAX
+         6KcaT11VwHrsDxcIq79sOgv4IkIL1aV5jmrblwpimoIMiwi1UH7tahHAIF1vG4N7nH47
+         Z56Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678357085;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/g34wc/bzNoY5huESod7peN9hpH8a494unvdVXAlQmU=;
+        b=pZCQJ2WEugtm526EsZFLtrqur7uWc0ZX/pRb401AChTgMCcVIiPUBGozJ65pGsPLNS
+         rQXEsgx/zLCvCm18IBB4MmK8wQUTpJJIp+XMg0ZsNLYQsZLFUd4OB0UBzQ4/FaNZnCzK
+         mV9K1qP8m6Y50tQraf5H2rDZ+VXUaS1LlbphJa+RDwqtAauAFN1CrewAq001bnDbeHE0
+         ieYJ3e2+YUListVM/sI7TGXvmG8bUIY9uyXArTiksQymlvsM19Bhl296VbpOGd9qXEP6
+         LxAdPL/O73Nn0JnWE2lEQ7aPB6JBOo169vvtju3JOmdyrqy/ePW4gFBh7VExTEzoRtyb
+         IEAg==
+X-Gm-Message-State: AO0yUKXl79pBCtuMTZz+uQdN2gDYqoiqD7zPE4eP+rbg+vOPKAtDIcbU
+        ps3DQZ3seWYU7564SguvMW2n26se0Q==
+X-Google-Smtp-Source: AK7set8XY5X4rc0+VEcsi/jTNRcF+G1D9/iuh/Lt7aqSbP4oTxQo3GMi9gM4Lr8njrKWFMZ7jiigZng3vA==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:2628:265b:fcee:2ca0])
+ (user=elver job=sendgmr) by 2002:a17:906:d041:b0:8bf:e82a:2988 with SMTP id
+ bo1-20020a170906d04100b008bfe82a2988mr11015180ejb.4.1678357085082; Thu, 09
+ Mar 2023 02:18:05 -0800 (PST)
+Date:   Thu,  9 Mar 2023 11:17:52 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230309101752.2025459-1-elver@google.com>
+Subject: [PATCH] kcsan: Avoid READ_ONCE() in read_instrumented_memory()
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Haibo Li <haibo.li@mediatek.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,156 +70,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Haibo Li reported:
 
-On 09/03/2023 09:59, Andrzej Hajda wrote:
-> 
-> 
-> On 09.03.2023 10:43, Tvrtko Ursulin wrote:
->>
->> On 09/03/2023 09:34, Andrzej Hajda wrote:
->>>
->>>
->>> On 09.03.2023 10:08, Tvrtko Ursulin wrote:
->>>>
->>>> On 08/03/2023 15:39, Andrzej Hajda wrote:
->>>>> Write-combining memory allows speculative reads by CPU.
->>>>> ggtt->error_capture is WC mapped to CPU, so CPU/MMU can try
->>>>> to prefetch memory beyond the error_capture, ie it tries
->>>>> to read memory pointed by next PTE in GGTT.
->>>>> If this PTE points to invalid address DMAR errors will occur.
->>>>> This behaviour was observed on ADL and RPL platforms.
->>>>> To avoid it, guard scratch page should be added after error_capture.
->>>>> The patch fixes the most annoying issue with error capture but
->>>>> since WC reads are used also in other places there is a risk similar
->>>>> problem can affect them as well.
->>>>>
->>>>> v2:
->>>>>    - modified commit message (I hope the diagnosis is correct),
->>>>>    - added bug checks to ensure scratch is initialized on gen3 
->>>>> platforms.
->>>>>      CI produces strange stacktrace for it suggesting scratch[0] is 
->>>>> NULL,
->>>>>      to be removed after resolving the issue with gen3 platforms.
->>>>> v3:
->>>>>    - removed bug checks, replaced with gen check.
->>>>> v4:
->>>>>    - change code for scratch page insertion to support all platforms,
->>>>>    - add info in commit message there could be more similar issues
->>>>> v5:
->>>>>    - check for nop_clear_range instead of gen8 (Tvrtko),
->>>>>    - re-insert scratch pages on resume (Tvrtko)
->>>>>
->>>>> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
->>>>> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
->>>>> ---
->>>>>   drivers/gpu/drm/i915/gt/intel_ggtt.c | 35 
->>>>> +++++++++++++++++++++++++++++++----
->>>>>   1 file changed, 31 insertions(+), 4 deletions(-)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/i915/gt/intel_ggtt.c 
->>>>> b/drivers/gpu/drm/i915/gt/intel_ggtt.c
->>>>> index b925da42c7cfc4..8fb700fde85c8f 100644
->>>>> --- a/drivers/gpu/drm/i915/gt/intel_ggtt.c
->>>>> +++ b/drivers/gpu/drm/i915/gt/intel_ggtt.c
->>>>> @@ -502,6 +502,21 @@ static void cleanup_init_ggtt(struct i915_ggtt 
->>>>> *ggtt)
->>>>>       mutex_destroy(&ggtt->error_mutex);
->>>>>   }
->>>>>   +static void
->>>>> +ggtt_insert_scratch_pages(struct i915_ggtt *ggtt, u64 offset, u64 
->>>>> length)
->>>>> +{
->>>>> +    struct i915_address_space *vm = &ggtt->vm;
->>>>> +
->>>>> +    if (vm->clear_range != nop_clear_range)
->>>>
->>>> Hm I thought usually we would add a prefix for exported stuff, like 
->>>> in this case i915_vm_nop_clear_range, however I see intel_gtt.h 
->>>> exports a bunch of stuff with no prefixes already so I guess you 
->>>> could continue like that by inertia. The conundrum also could have 
->>>> been avoided if you left it static (leaving out dpt and mock_gtt 
->>>> patches) but no strong opinion from me.
->>>>
->>>>> +        return vm->clear_range(vm, offset, length);
->>>>> +
->>>>> +    while (length > 0) {
->>>>> +        vm->insert_page(vm, px_dma(vm->scratch[0]), offset, 
->>>>> I915_CACHE_NONE, 0);
->>>>> +        offset += I915_GTT_PAGE_SIZE;
->>>>> +        length -= I915_GTT_PAGE_SIZE;
->>>>> +    }
->>>>> +}
->>>>> +
->>>>>   static int init_ggtt(struct i915_ggtt *ggtt)
->>>>>   {
->>>>>       /*
->>>>> @@ -550,8 +565,12 @@ static int init_ggtt(struct i915_ggtt *ggtt)
->>>>>            * paths, and we trust that 0 will remain reserved. However,
->>>>>            * the only likely reason for failure to insert is a driver
->>>>>            * bug, which we expect to cause other failures...
->>>>> +         *
->>>>> +         * Since CPU can perform speculative reads on error capture
->>>>> +         * (write-combining allows it) add scratch page after error
->>>>> +         * capture to avoid DMAR errors.
->>>>>            */
->>>>> -        ggtt->error_capture.size = I915_GTT_PAGE_SIZE;
->>>>> +        ggtt->error_capture.size = 2 * I915_GTT_PAGE_SIZE;
->>>>>           ggtt->error_capture.color = I915_COLOR_UNEVICTABLE;
->>>>>           if (drm_mm_reserve_node(&ggtt->vm.mm, &ggtt->error_capture))
->>>>> drm_mm_insert_node_in_range(&ggtt->vm.mm,
->>>>> @@ -561,11 +580,15 @@ static int init_ggtt(struct i915_ggtt *ggtt)
->>>>>                               0, ggtt->mappable_end,
->>>>>                               DRM_MM_INSERT_LOW);
->>>>>       }
->>>>> -    if (drm_mm_node_allocated(&ggtt->error_capture))
->>>>> +    if (drm_mm_node_allocated(&ggtt->error_capture)) {
->>>>> +        u64 start = ggtt->error_capture.start;
->>>>> +        u64 size = ggtt->error_capture.size;
->>>>> +
->>>>> +        ggtt_insert_scratch_pages(ggtt, start, size);
->>>>>           drm_dbg(&ggtt->vm.i915->drm,
->>>>>               "Reserved GGTT:[%llx, %llx] for use by error capture\n",
->>>>> -            ggtt->error_capture.start,
->>>>> -            ggtt->error_capture.start + ggtt->error_capture.size);
->>>>> +            start, start + size);
->>>>> +    }
->>>>>         /*
->>>>>        * The upper portion of the GuC address space has a sizeable 
->>>>> hole
->>>>> @@ -1256,6 +1279,10 @@ void i915_ggtt_resume(struct i915_ggtt *ggtt)
->>>>>         flush = i915_ggtt_resume_vm(&ggtt->vm);
->>>>>   +    if (drm_mm_node_allocated(&ggtt->error_capture))
->>>>> +        ggtt_insert_scratch_pages(ggtt, ggtt->error_capture.start,
->>>>> +                      ggtt->error_capture.size);
->>>>
->>>> Maybe it belongs in i915_ggtt_resume_vm since that one deals with 
->>>> PTEs? Looks like it to me, but ack either way.
->>>
->>> i915_ggtt_resume_vm is called for ggtt and dpt. Of course I could add 
->>> conditionals there checking if it is ggtt, but in such situation 
->>> i915_ggtt_resume seems more natural candidate.
->>
->> "if (drm_mm_node_allocated(&ggtt->error_capture))" check would handle 
->> that automatically, no? i915_ggtt_resume has nothing about PTEs at the 
->> moment..
-> 
-> Yes but since i915_ggtt_resume_vm  has vm as an argument (ie it operates 
-> on generic vm), there will be needed downcasting somewhere:
-> if (vm->is_ggtt) {
->      struct i915_ggtt *ggtt = i915_vm_to_ggtt(vm);
->      if (drm_mm_node_allocated(&ggtt->error_capture))
->          ...
-> }
-> 
-> In i915_ggtt_resume we have it for free, but moreover 
-> i915_ggtt_resume_vm (despite its name) seems to handle common stuff of 
-> ggtt and dpt, and i915_ggtt_resume looks as specific for ggtt, similarly 
-> intel_dpt_resume is specific for dpt.
-> If it does not convince you, I will update patch with above code.
+ | Unable to handle kernel paging request at virtual address
+ |   ffffff802a0d8d7171
+ | Mem abort info:o:
+ |   ESR = 0x9600002121
+ |   EC = 0x25: DABT (current EL), IL = 32 bitsts
+ |   SET = 0, FnV = 0 0
+ |   EA = 0, S1PTW = 0 0
+ |   FSC = 0x21: alignment fault
+ | Data abort info:o:
+ |   ISV = 0, ISS = 0x0000002121
+ |   CM = 0, WnR = 0 0
+ | swapper pgtable: 4k pages, 39-bit VAs, pgdp=000000002835200000
+ | [ffffff802a0d8d71] pgd=180000005fbf9003, p4d=180000005fbf9003,
+ | pud=180000005fbf9003, pmd=180000005fbe8003, pte=006800002a0d8707
+ | Internal error: Oops: 96000021 [#1] PREEMPT SMP
+ | Modules linked in:
+ | CPU: 2 PID: 45 Comm: kworker/u8:2 Not tainted
+ |   5.15.78-android13-8-g63561175bbda-dirty #1
+ | ...
+ | pc : kcsan_setup_watchpoint+0x26c/0x6bc
+ | lr : kcsan_setup_watchpoint+0x88/0x6bc
+ | sp : ffffffc00ab4b7f0
+ | x29: ffffffc00ab4b800 x28: ffffff80294fe588 x27: 0000000000000001
+ | x26: 0000000000000019 x25: 0000000000000001 x24: ffffff80294fdb80
+ | x23: 0000000000000000 x22: ffffffc00a70fb68 x21: ffffff802a0d8d71
+ | x20: 0000000000000002 x19: 0000000000000000 x18: ffffffc00a9bd060
+ | x17: 0000000000000001 x16: 0000000000000000 x15: ffffffc00a59f000
+ | x14: 0000000000000001 x13: 0000000000000000 x12: ffffffc00a70faa0
+ | x11: 00000000aaaaaaab x10: 0000000000000054 x9 : ffffffc00839adf8
+ | x8 : ffffffc009b4cf00 x7 : 0000000000000000 x6 : 0000000000000007
+ | x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffffffc00a70fb70
+ | x2 : 0005ff802a0d8d71 x1 : 0000000000000000 x0 : 0000000000000000
+ | Call trace:
+ |  kcsan_setup_watchpoint+0x26c/0x6bc
+ |  __tsan_read2+0x1f0/0x234
+ |  inflate_fast+0x498/0x750
+ |  zlib_inflate+0x1304/0x2384
+ |  __gunzip+0x3a0/0x45c
+ |  gunzip+0x20/0x30
+ |  unpack_to_rootfs+0x2a8/0x3fc
+ |  do_populate_rootfs+0xe8/0x11c
+ |  async_run_entry_fn+0x58/0x1bc
+ |  process_one_work+0x3ec/0x738
+ |  worker_thread+0x4c4/0x838
+ |  kthread+0x20c/0x258
+ |  ret_from_fork+0x10/0x20
+ | Code: b8bfc2a8 2a0803f7 14000007 d503249f (78bfc2a8) )
+ | ---[ end trace 613a943cb0a572b6 ]-----
 
-Right, I see your point - I was mislead by the name i915_ggtt_resume_vm 
-thinking it signifies it working on i915_ggtt. It's all good then.
+The reason for this is that on certain arm64 configuration since
+e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire when
+CONFIG_LTO=y"), READ_ONCE() may be promoted to a full atomic acquire
+instruction which cannot be used on unaligned addresses.
 
-Regards,
+Fix it by avoiding READ_ONCE() in read_instrumented_memory(), and simply
+forcing the compiler to do the required access by casting to the
+appropriate volatile type. In terms of generated code this currently
+only affects architectures that do not use the default READ_ONCE()
+implementation.
 
-Tvrtko
+The only downside is that we are not guaranteed atomicity of the access
+itself, although on most architectures a plain load up to machine word
+size should still be atomic (a fact the default READ_ONCE() still relies
+on itself).
+
+Reported-by: Haibo Li <haibo.li@mediatek.com>
+Tested-by: Haibo Li <haibo.li@mediatek.com>
+Cc: <stable@vger.kernel.org> # 5.17+
+Signed-off-by: Marco Elver <elver@google.com>
+---
+ kernel/kcsan/core.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
+index 54d077e1a2dc..5a60cc52adc0 100644
+--- a/kernel/kcsan/core.c
++++ b/kernel/kcsan/core.c
+@@ -337,11 +337,20 @@ static void delay_access(int type)
+  */
+ static __always_inline u64 read_instrumented_memory(const volatile void *ptr, size_t size)
+ {
++	/*
++	 * In the below we don't necessarily need the read of the location to
++	 * be atomic, and we don't use READ_ONCE(), since all we need for race
++	 * detection is to observe 2 different values.
++	 *
++	 * Furthermore, on certain architectures (such as arm64), READ_ONCE()
++	 * may turn into more complex instructions than a plain load that cannot
++	 * do unaligned accesses.
++	 */
+ 	switch (size) {
+-	case 1:  return READ_ONCE(*(const u8 *)ptr);
+-	case 2:  return READ_ONCE(*(const u16 *)ptr);
+-	case 4:  return READ_ONCE(*(const u32 *)ptr);
+-	case 8:  return READ_ONCE(*(const u64 *)ptr);
++	case 1:  return *(const volatile u8 *)ptr;
++	case 2:  return *(const volatile u16 *)ptr;
++	case 4:  return *(const volatile u32 *)ptr;
++	case 8:  return *(const volatile u64 *)ptr;
+ 	default: return 0; /* Ignore; we do not diff the values. */
+ 	}
+ }
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
+
