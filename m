@@ -2,114 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91936B27FD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5976B2803
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232180AbjCIOzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:55:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
+        id S232139AbjCIO5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:57:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbjCIOy7 (ORCPT
+        with ESMTP id S232177AbjCIO5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:54:59 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EAAF0C7A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:51:56 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id bh20so1810204oib.9
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 06:51:56 -0800 (PST)
+        Thu, 9 Mar 2023 09:57:23 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C52ADC08F
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:53:46 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id nn12so2336895pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 06:53:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678373516;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gpqy2UwJbTsT8CSlsBkekwaizPbfI6waBJSct+QDKo8=;
-        b=7VnZ8eoq8JCRR9LWSoq6SXSKIYIRedzcewZzSE9gKx6AQQB2Ax7dwKBcAYwJrjlsWs
-         4TCezR69X8MwfD4+CKaz/SObaltdvIIieLVdJ+BWlplOPFiALrUJwDgjMU47Vf51qRDl
-         xdFrwA1rnPNMA0GVzeDnkpXSGfyag6vAi04knNO8VIXj+D5n+705no78/qGHcnD2tLqc
-         nohnomuGXgF8COo7QbluFk8QfItIs5fLy7I2ZnAC1v81iSP6Ds1uiOBx5oP32kgrJXPW
-         yTtqYLrIVGryvFjGoykGRd0Kl8dTZeGhvhFDQoCSZrB7mIPyeb5SEOWrMbUnxfz7JmgZ
-         oQYA==
+        d=linaro.org; s=google; t=1678373619;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ajn0irKfODeu29T27vBEk3b6tZAzgItP9Y7adDy5FNY=;
+        b=X51svFjqtC/TCcW6bPWDvW2nWe6HnqmaZdaU3RapG4c14StMzoHfQFaA6yVRuOcTYs
+         SspI1wIlrYGHWdAL2eR0qZFqfF+0w9jqnCsbQgbckbCw9eiEVUcCI8icdSaDzMFUX7ZW
+         Y7wQB1AfbittvehB0lglNiL6hJd/koqdQH/f0RHW6vDxrlSv0ubC1hW1yhht3C7c7nJn
+         3aDwpRhMO+1v1AWYHLQKfwDa9p5OmawEsPvEnzIIo+5CYjGi3E7DdjuL+4tAZfe6YSxM
+         h6gYNEd0lgNjTE3txJ+3P7FdgnaPMeAiEdrX69b62TcDo5SYHm+1Jhr+LUQoKKQy1DCH
+         DntQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678373516;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gpqy2UwJbTsT8CSlsBkekwaizPbfI6waBJSct+QDKo8=;
-        b=wPfPUmaYMQedFcODv5kxO/X557Bw+aXoCipA+fzPPLfUXXX5D3+Wr0b6LkhjzdLV66
-         zcYRgDGjUp6GxxtYYYWNNKbBBzH6+bohL3P8/LnxSjGqrFwAPQIQdADD/FIk+geDlV6K
-         s/5t+wdtWyi4x89ME7AOHqMZ6RYjHWJlAGYB4BHSzxzkYq0rl9h13ucJC0Z1Bn9PY6CM
-         4t1lDJRB9/6cckrCw6dVxFztAimL2zg0NNTVIL7pXp29RRP6+GZNAhYqTxHevJBZen4y
-         llC5kLamlUFjAgCucUnuPwaQeVqb7+ENjz8oNeqdqqAlurZkRSL8NUGSuIMEb65jeeit
-         c/Cg==
-X-Gm-Message-State: AO0yUKVzWGhi2naXtgew3Cf+0DkMbwJBFO/jRm8I16Ny2X+976zHW6WR
-        yhfi+ZYpomkLWKjaOunT+L5oTq08Xo3G/4Uf7xmMkg==
-X-Google-Smtp-Source: AK7set8A8FpW9dqaR73G09blcvv/Ti7DIE1vGNLlncw0hLE8FnQCoXHRSlvX0YUqfVCqYXdazGxGSi3CnqOThNIO2y8=
-X-Received: by 2002:a05:6808:2208:b0:37a:2bed:5756 with SMTP id
- bd8-20020a056808220800b0037a2bed5756mr12243997oib.0.1678373515531; Thu, 09
- Mar 2023 06:51:55 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678373619;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ajn0irKfODeu29T27vBEk3b6tZAzgItP9Y7adDy5FNY=;
+        b=thxdFgps+5qMbg+WW5zh7MaNbK5QmX2utUJJEjbbf3hu8uVkPxqa4aKjHyRz2fn8LU
+         /+Fdh5a+HkW5Ba4P4gemqe9IJ/E95xB1CO9PhljoOFffYvsnaEXI3Hwt6AvJ6WK6IqMY
+         GkuLDCgjeGR8vGFLo6VA+NrTtH943rHNP6/KnY4qMN/b3FF2t/t7WWVmOeGT9zaciQz0
+         1AtiJgXhkx1IB7vUpUWIZzP9x6HYJyo40VLwUFo9xt8MBYH1EkB6iMGjxrT5XYDEA/4+
+         O6e+7xk7cHQ5GLUXBq9BIdmSF7Jp93F5ajMQZY+jFgHuiwyiNQ3c8kYhnZ5ljNXt9yt/
+         QTBA==
+X-Gm-Message-State: AO0yUKXXyzgEDKevz4yxIKqIvdOZz+ry1GzVtNP1RWYEh2QAMgDRBNE6
+        SxyV00te2DW3GYUi+oSaF2Ns
+X-Google-Smtp-Source: AK7set92yPbWSlSCHKtu9usIcTPG8eCz611nJqbZEe/CFsZ7limy7zblGDwjR3R+vpZ99bzTp9pDQQ==
+X-Received: by 2002:a17:902:e5c2:b0:19c:d5c7:e3d5 with SMTP id u2-20020a170902e5c200b0019cd5c7e3d5mr27426127plf.65.1678373618860;
+        Thu, 09 Mar 2023 06:53:38 -0800 (PST)
+Received: from thinkpad ([27.111.75.67])
+        by smtp.gmail.com with ESMTPSA id la15-20020a170902fa0f00b0019ee0ad15b4sm4566964plb.191.2023.03.09.06.53.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 06:53:38 -0800 (PST)
+Date:   Thu, 9 Mar 2023 20:23:28 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>
+Cc:     andersson@kernel.org, lpieralisi@kernel.org, kw@linux.com,
+        krzysztof.kozlowski+dt@linaro.org, robh@kernel.org,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 17/17] PCI: qcom: Expose link transition counts via
+ debugfs
+Message-ID: <20230309145328.GD5151@thinkpad>
+References: <20230309085102.120977-1-manivannan.sadhasivam@linaro.org>
+ <20230309085102.120977-18-manivannan.sadhasivam@linaro.org>
+ <73269ad0-5662-519c-f6c0-e5e2f918cd4e@quicinc.com>
 MIME-Version: 1.0
-References: <20230203-evk-board-support-v2-0-6ec7cdb10ccf@baylibre.com>
- <20230203-evk-board-support-v2-17-6ec7cdb10ccf@baylibre.com> <0fb37a8f-f284-76f2-e2f3-ff0f23eaa200@collabora.com>
-In-Reply-To: <0fb37a8f-f284-76f2-e2f3-ff0f23eaa200@collabora.com>
-From:   =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
-Date:   Thu, 9 Mar 2023 15:51:44 +0100
-Message-ID: <CAP2ifjOtORrGKEBMw-CzPR4B8CPDaRKnqKHyKL7mC_8qH08=iA@mail.gmail.com>
-Subject: Re: [PATCH v2 17/18] arm64: dts: mediatek: fix systimer properties
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mmc@vger.kernel.org, Alexandre Bailon <abailon@baylibre.com>,
-        devicetree@vger.kernel.org,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <73269ad0-5662-519c-f6c0-e5e2f918cd4e@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Mar 09, 2023 at 05:21:38PM +0530, Sricharan Ramabadhran wrote:
+> 
+> 
+> On 3/9/2023 2:21 PM, Manivannan Sadhasivam wrote:
+> > Qualcomm PCIe controllers have debug registers in the MHI region that
+> > count PCIe link transitions. Expose them over debugfs to userspace to
+> > help debug the low power issues.
+> > 
+> > Note that even though the registers are prefixed as PARF_, they don't
+> > live under the "parf" register region. The register naming is following
+> > the Qualcomm's internal documentation as like other registers.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >   drivers/pci/controller/dwc/pcie-qcom.c | 59 ++++++++++++++++++++++++++
+> >   1 file changed, 59 insertions(+)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > index e1180c84f0fa..6d9bde64c9e9 100644
+> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > @@ -10,6 +10,7 @@
+> >   #include <linux/clk.h>
+> >   #include <linux/crc8.h>
+> > +#include <linux/debugfs.h>
+> >   #include <linux/delay.h>
+> >   #include <linux/gpio/consumer.h>
+> >   #include <linux/interconnect.h>
+> > @@ -62,6 +63,13 @@
+> >   #define AXI_MSTR_RESP_COMP_CTRL1		0x81c
+> >   #define MISC_CONTROL_1_REG			0x8bc
+> > +/* MHI registers */
+> > +#define PARF_DEBUG_CNT_PM_LINKST_IN_L2		0xc04
+> > +#define PARF_DEBUG_CNT_PM_LINKST_IN_L1		0xc0c
+> > +#define PARF_DEBUG_CNT_PM_LINKST_IN_L0S		0xc10
+> > +#define PARF_DEBUG_CNT_AUX_CLK_IN_L1SUB_L1	0xc84
+> > +#define PARF_DEBUG_CNT_AUX_CLK_IN_L1SUB_L2	0xc88
+> > +
+> >   /* PARF_SYS_CTRL register fields */
+> >   #define MAC_PHY_POWERDOWN_IN_P2_D_MUX_EN	BIT(29)
+> >   #define MST_WAKEUP_EN				BIT(13)
+> > @@ -229,11 +237,13 @@ struct qcom_pcie {
+> >   	struct dw_pcie *pci;
+> >   	void __iomem *parf;			/* DT parf */
+> >   	void __iomem *elbi;			/* DT elbi */
+> > +	void __iomem *mhi;
+> >   	union qcom_pcie_resources res;
+> >   	struct phy *phy;
+> >   	struct gpio_desc *reset;
+> >   	struct icc_path *icc_mem;
+> >   	const struct qcom_pcie_cfg *cfg;
+> > +	struct dentry *debugfs;
+> >   };
+> >   #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
+> > @@ -1385,6 +1395,37 @@ static void qcom_pcie_icc_update(struct qcom_pcie *pcie)
+> >   	}
+> >   }
+> > +static int qcom_pcie_link_transition_count(struct seq_file *s, void *data)
+> > +{
+> > +	struct qcom_pcie *pcie = (struct qcom_pcie *)
+> > +				     dev_get_drvdata(s->private);
+> > +
+> > +	seq_printf(s, "L0s transition count: %u\n",
+> > +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_PM_LINKST_IN_L0S));
+> > +
+> > +	seq_printf(s, "L1 transition count: %u\n",
+> > +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_PM_LINKST_IN_L1));
+> > +
+> > +	seq_printf(s, "L1.1 transition count: %u\n",
+> > +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_AUX_CLK_IN_L1SUB_L1));
+> > +
+> > +	seq_printf(s, "L1.2 transition count: %u\n",
+> > +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_AUX_CLK_IN_L1SUB_L2));
+> > +
+> > +	seq_printf(s, "L2 transition count: %u\n",
+> > +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_PM_LINKST_IN_L2));
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static void qcom_pcie_init_debugfs(struct qcom_pcie *pcie)
+> > +{
+> > +	struct dw_pcie *pci = pcie->pci;
+> > +
+> > +	debugfs_create_devm_seqfile(pci->dev, "link_transition_count", pcie->debugfs,
+> > +				    qcom_pcie_link_transition_count);
+> > +}
+> > +
+> >   static int qcom_pcie_probe(struct platform_device *pdev)
+> >   {
+> >   	struct device *dev = &pdev->dev;
+> > @@ -1392,6 +1433,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+> >   	struct dw_pcie *pci;
+> >   	struct qcom_pcie *pcie;
+> >   	const struct qcom_pcie_cfg *pcie_cfg;
+> > +	char *name;
+> >   	int ret;
+> >   	pcie_cfg = of_device_get_match_data(dev);
+> > @@ -1439,6 +1481,12 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+> >   		goto err_pm_runtime_put;
+> >   	}
+> > +	pcie->mhi = devm_platform_ioremap_resource_byname(pdev, "mhi");
+> > +	if (IS_ERR(pcie->mhi)) {
+> > +		ret = PTR_ERR(pcie->mhi);
+> > +		goto err_pm_runtime_put;
+> > +	}
+> > +
+> 
+>  Tested this series on ipq4019-ap.dk07.1-c1 board and the above hunk
+>  breaks enumeration because there is no 'mhi' region. All the debug bits
+>  used in the transition_count function is inside the PARF_STTS register
+>  at offset 0x24 inside the PARF region.
+> 
 
-On Thu, Mar 9, 2023 at 2:32=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 07/03/23 14:17, Alexandre Mergnat ha scritto:
-> > From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> >
-> > MT8365 has a SYST timer (System Timer), therefore the compatible node
-> > should be "mediatek,mt6765-timer" instead of "mediatek,mt6795-systimer"
-> > (which corresponds to ARM/ARM64 System Timer).
->
-> So this is not a CPUXGPT, not a GPT, but a SYST?
->
-> At this point, this should not be even introduced because commit [1] is
-> not in linux-next yet.
->
-> [1]: https://lore.kernel.org/all/20230125143503.1015424-10-bero@baylibre.=
-com/
+Ah, "mhi" is supposed to be optional, my bad. Will fix it in next revision.
 
-I've posted a new revision of this patchset containing the systimer fix.
+>  Register: PCIE_0_PCIE20_PARF_PM_STTS | 0x80024
+>  Offset:    0x24    Reset State:    0x00040000
+> 
 
-https://lore.kernel.org/linux-mediatek/20230309143459.401783-1-bero@baylibr=
-e.com/
+Hmm, is this register present on other IPQ/APQ SoCs?
 
-ttyl
-bero
+> Bits    Field Name
+> 31    LINK_REQ_RST_NOT
+> 30    XMLH_LINK_UP
+> 29    PM_DSTATE_0
+> 0x0: D0
+> 0x1: D3
+> 28    PHYSTATUS
+> 27:16    PM_DSTATE
+> 15:12    PM_PME_EN
+> 11    PHYCLK_REQ_N
+> 10    L1SS_CLKREQN_OE
+> 9    L1SS_CLKREQN_IN
+> 8    PM_LINKST_IN_L1SUB
+> 7    PM_LINKST_IN_L0S
+> 6    PM_LINKST_L2_EXIT
+> 5    PM_LINKST_IN_L2
+> 4    PM_LINKST_IN_L1
+> 3:0    PM_STATUS
+> 
+> Otherwise, with rest of the patches enumeration was fine.
+> Tested with a pcie ethernet adapter.
+> 
+
+Thanks a lot for testing!
+
+- Mani
+
+> Regards,
+>  Sricharan
+
+-- 
+மணிவண்ணன் சதாசிவம்
