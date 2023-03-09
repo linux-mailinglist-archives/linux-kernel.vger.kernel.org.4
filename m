@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6716B2A4E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F936B2A57
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjCIQGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 11:06:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
+        id S232282AbjCIQH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 11:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbjCIQC0 (ORCPT
+        with ESMTP id S231670AbjCIQC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:02:26 -0500
+        Thu, 9 Mar 2023 11:02:27 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576F4F7EEF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0533F7EF5;
         Thu,  9 Mar 2023 08:02:25 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B475222159;
-        Thu,  9 Mar 2023 16:02:23 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 25DDE2214C;
+        Thu,  9 Mar 2023 16:02:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678377743; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1678377744; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=A4w8kD6lS+dFzIR63p5dUUwf4D44kkwhnZ/hkW7PWvQ=;
-        b=iDXxHErhFvLptDDcHlghTmcBvSp1EOtHjXWV9z7c4sMdO0MmTcmFUZba4t8Tgko6jidwvf
-        7izSf1/V7pekx7B33M3cKNXsdppS5eHTOtSB4LGfgDAlC9AX6713Pv7Ulilr/lwLYry5Cq
-        tppXhFt4Jdw44vRZnVJ2W2Nn0TvWcoc=
+        bh=oiht1Q677qYpu9/3uJW+gjpB4dNDmWpMrYhgfn9g2bY=;
+        b=DxMk3p9pHKgXUCXSS9Kql+DZLobewJ5VeFW2S3TV7oTkGJbY95wtdOCPVMj7KBU8TDSSn0
+        jj913Ar5Psna5Ck6IhBstQTcKktCdX0kTxmq6ssOSjp0sE+kln31aSLeafAQHhlJy7IASM
+        oOqfk0BYxACG9UVMKmcJElhzndt2XEM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678377743;
+        s=susede2_ed25519; t=1678377744;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=A4w8kD6lS+dFzIR63p5dUUwf4D44kkwhnZ/hkW7PWvQ=;
-        b=x0I9OXLcL+NnyqJYs6yQHXgnjh0C8YZXabB8ASmWG/y2Fyeu7R+tvqHtbYVpxQWyZaBOwF
-        Zx/7CPvfEv66pBBA==
+        bh=oiht1Q677qYpu9/3uJW+gjpB4dNDmWpMrYhgfn9g2bY=;
+        b=4BMvzee+Y7GQI119psWkGbS3oWLO9HQ6S8ktySDte0nmC3x32D4oZtQHAaJB00NzzF6pDi
+        EZG1tCBuTByvxaCg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5C3BA13A73;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B82951391B;
         Thu,  9 Mar 2023 16:02:23 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id GB6gFQ8DCmQHbgAAMHmgww
+        id uJIaLA8DCmQHbgAAMHmgww
         (envelope-from <tzimmermann@suse.de>); Thu, 09 Mar 2023 16:02:23 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     deller@gmx.de, geert+renesas@glider.be, timur@kernel.org,
@@ -60,9 +60,9 @@ To:     deller@gmx.de, geert+renesas@glider.be, timur@kernel.org,
 Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v2 047/101] fbdev/mx3fb: Parse option string with struct option_iter
-Date:   Thu,  9 Mar 2023 17:01:07 +0100
-Message-Id: <20230309160201.5163-48-tzimmermann@suse.de>
+Subject: [PATCH v2 048/101] fbdev/neofb: Duplicate video-mode option string
+Date:   Thu,  9 Mar 2023 17:01:08 +0100
+Message-Id: <20230309160201.5163-49-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230309160201.5163-1-tzimmermann@suse.de>
 References: <20230309160201.5163-1-tzimmermann@suse.de>
@@ -77,64 +77,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use struct option_iter to walk over the individual options in the
-driver's option string. Replaces the hand-written strsep() loop with
-a clean interface. The helpers for struct option_iter handle empty
-option strings and empty options transparently. The struct's _init
-and _release functions duplicate and release the option string's
-memory buffer as needed.
+Assume that the driver does not own the option string or its substrings
+and hence duplicate the option string for the video mode. Allocate the
+copy's memory with kstrdup() and free it in the module's exit function.
 
-Done in preparation of constifying the option string.
+Done in preparation of switching the driver to struct option_iter and
+constifying the option string.
+
+v2:
+	* replace static memory with kstrdup()/kfree() (Geert)
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 ---
- drivers/video/fbdev/mx3fb.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/video/fbdev/neofb.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/video/fbdev/mx3fb.c b/drivers/video/fbdev/mx3fb.c
-index e33ad125318f..ca58afe366b4 100644
---- a/drivers/video/fbdev/mx3fb.c
-+++ b/drivers/video/fbdev/mx3fb.c
-@@ -6,6 +6,7 @@
-  * Copyright 2004-2007 Freescale Semiconductor, Inc. All Rights Reserved.
-  */
+diff --git a/drivers/video/fbdev/neofb.c b/drivers/video/fbdev/neofb.c
+index 39d8cdef5c97..98edb6822832 100644
+--- a/drivers/video/fbdev/neofb.c
++++ b/drivers/video/fbdev/neofb.c
+@@ -83,6 +83,7 @@ static bool external;
+ static bool libretto;
+ static bool nostretch;
+ static bool nopciburst;
++static char *mode_option_buf;
+ static char *mode_option = NULL;
  
-+#include <linux/cmdline.h>
- #include <linux/module.h>
- #include <linux/kernel.h>
- #include <linux/platform_device.h>
-@@ -1654,17 +1655,16 @@ static struct platform_driver mx3fb_driver = {
- static int __init mx3fb_setup(void)
- {
- #ifndef MODULE
--	char *opt, *options = NULL;
-+	char *options = NULL;
-+	struct option_iter iter;
-+	char *opt;
- 
- 	if (fb_get_options("mx3fb", &options))
- 		return -ENODEV;
- 
--	if (!options || !*options)
--		return 0;
-+	option_iter_init(&iter, options);
- 
--	while ((opt = strsep(&options, ",")) != NULL) {
--		if (!*opt)
--			continue;
-+	while (option_iter_next(&iter, &opt)) {
- 		if (!strncmp(opt, "bpp=", 4))
- 			default_bpp = simple_strtoul(opt + 4, NULL, 0);
- 		else {
-@@ -1673,6 +1673,8 @@ static int __init mx3fb_setup(void)
- 			fb_mode = fb_mode_buf;
- 		}
+ #ifdef MODULE
+@@ -2198,8 +2199,11 @@ static int __init neofb_setup(char *options)
+ 			nopciburst = 1;
+ 		else if (!strncmp(this_opt, "libretto", 8))
+ 			libretto = 1;
+-		else
+-			mode_option = this_opt;
++		else {
++			kfree(mode_option_buf);
++			mode_option_buf = kstrdup(this_opt, GFP_KERNEL); // ignore errors
++			mode_option = mode_option_buf;
++		}
  	}
-+
-+	option_iter_release(&iter);
- #endif
- 
  	return 0;
+ }
+@@ -2228,6 +2232,7 @@ module_init(neofb_init);
+ static void __exit neofb_exit(void)
+ {
+ 	pci_unregister_driver(&neofb_driver);
++	kfree(mode_option_buf);
+ }
+ 
+ module_exit(neofb_exit);
 -- 
 2.39.2
 
