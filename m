@@ -2,81 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3626B25B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C226B25B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbjCINnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:43:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
+        id S229794AbjCINop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:44:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjCINnZ (ORCPT
+        with ESMTP id S229541AbjCINom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:43:25 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3452A26F;
-        Thu,  9 Mar 2023 05:43:23 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id a32so1854024ljr.9;
-        Thu, 09 Mar 2023 05:43:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678369402;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gSqyTtkVH//KFU0TvvADWxO4DxoXwsXcefBj8prULwk=;
-        b=Rg9e0ZTSfWUMkYwoF2kMwo5b/FUW49IluCkbpuoL32e4KVBuZzUryUVgNvrZUDbRWn
-         AO1gOp0y+Nc62zl6DFmejSz3RsEC7B8qtmBMUsb8RkuI678m5l8XwCLj0i1o9qWqhXLu
-         WvtcVzbG7ibOtn+9XkgzUP7nOh0TZ7JqgnGw4dLaBU4cxoEn5ZVz67JN0/QujQ8+iC5V
-         piKE+mE7bKxCcq9ceflgFQuOUGrHdQNEvsPXQqkxWkP38eCfhyn4+SCsTSqlRAIhRFrb
-         4njb+eOgG5c0nTOnppUQDm02DbKZ03Di7rBLtPY9e/oqrBTdRGwdCrEpAu34pZShxLZz
-         G0aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678369402;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gSqyTtkVH//KFU0TvvADWxO4DxoXwsXcefBj8prULwk=;
-        b=L04VmJae2zp32zptLVeN7peFhz4b0QeYzbVnkn3UalkbfH7EYB3sJLehqCO7n8x18W
-         3ZJylfhXHIW7uWPtquVwVjpln9DknqdDyWTSGFiAX2ENoTCLscIf6KjPjok+CApWBkYo
-         4MY5Wcn/Q6yUsNea4JYHcrU4LOVyX/yTSbaQ/wY4Y6ztOFGaf8EolhxQkSZfSF5W9bz4
-         nQZuZMz6SXmM7tUZ1ulTJ3PdQMl+GVs6H9Ja1JbOE05gf+hYYKDdLdZQ6cDhPU+M50C3
-         G5EcgN9bVq6SF7fKo8C+sRa1wfBmArtT75U69199HTb/7sPG3AI7ydKsM6PcuJpN/aOq
-         6djw==
-X-Gm-Message-State: AO0yUKWXvDvN/aNQSa4OfnQSdFS9fZKFhZHRv+45Sr9DX2RilN2OTs7g
-        Aer/sORxn307eQ9fo7QxJKI=
-X-Google-Smtp-Source: AK7set9EZi1/9oSWSns4aJm+/MqyF+TF0ys0Zilv4PWZXPArUgyBwZuuJ5cZ3TAaciBXP8vdxniQYg==
-X-Received: by 2002:a05:651c:301:b0:295:9d32:a195 with SMTP id a1-20020a05651c030100b002959d32a195mr5656804ljp.32.1678369401843;
-        Thu, 09 Mar 2023 05:43:21 -0800 (PST)
-Received: from pc636 (host-95-193-108-241.mobileonline.telia.com. [95.193.108.241])
-        by smtp.gmail.com with ESMTPSA id t8-20020a2e9d08000000b00295a3a64816sm2966518lji.2.2023.03.09.05.43.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 05:43:21 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Thu, 9 Mar 2023 14:43:18 +0100
-To:     Theodore Ts'o <tytso@mit.edu>, Lukas Czerner <lczerner@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>,
-        Lukas Czerner <lczerner@redhat.com>
-Subject: Re: [PATCH 09/13] ext4/super: Rename kfree_rcu() to
- kfree_rcu_mightsleep()
-Message-ID: <ZAnidvBE8tL69qfy@pc636>
-References: <20230201150815.409582-1-urezki@gmail.com>
- <20230201150815.409582-10-urezki@gmail.com>
+        Thu, 9 Mar 2023 08:44:42 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 559C43B3FD
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 05:44:41 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 902AAC14;
+        Thu,  9 Mar 2023 05:45:24 -0800 (PST)
+Received: from [10.57.91.145] (unknown [10.57.91.145])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4F03D3F71A;
+        Thu,  9 Mar 2023 05:44:39 -0800 (PST)
+Message-ID: <510e6e1a-884f-ae5a-35f3-4f4db997abfd@arm.com>
+Date:   Thu, 9 Mar 2023 13:44:34 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201150815.409582-10-urezki@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 13/14] iommu/arm-smmu-v3: Add CMDQ_OP_TLBI_NH_VAA and
+ CMDQ_OP_TLBI_NH_ALL
+Content-Language: en-GB
+To:     Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com, will@kernel.org
+Cc:     eric.auger@redhat.com, kevin.tian@intel.com,
+        baolu.lu@linux.intel.com, joro@8bytes.org,
+        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <cover.1678348754.git.nicolinc@nvidia.com>
+ <3b059f4b0bda1e83d402248114a774186f678387.1678348754.git.nicolinc@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <3b059f4b0bda1e83d402248114a774186f678387.1678348754.git.nicolinc@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,18 +50,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The kfree_rcu()'s single argument name is deprecated therefore
-> rename it to kfree_rcu_mightsleep() variant. The goal is explicitly
-> underline that it is for sleepable contexts.
+On 2023-03-09 10:53, Nicolin Chen wrote:
+> With a nested translation setup, a stage-1 Context Descriptor table can be
+> managed by a guest OS in the user space. So, the kernel driver should not
+> assume that the guest OS will use a user space device driver that doesn't
+> support TLBI_NH_VAA and TLBI_NH_ALL commands.
 > 
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Cc: Lukas Czerner <lczerner@redhat.com>
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
->
-Could you please add you reviwed-by or Acked-by tags so we can bring
-our series with renaming for the next merge window?
+> Add them in the arm_smmu_cmdq_build_cmd(), to prepare for support of these
+> two TLBI invalidation requests from the guest level.
+> 
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 4 ++++
+>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h | 2 ++
+>   2 files changed, 6 insertions(+)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> index 1f318b5e0921..ac63185ae268 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> @@ -277,6 +277,9 @@ static int arm_smmu_cmdq_build_cmd(u64 *cmd, struct arm_smmu_cmdq_ent *ent)
+>   		/* Cover the entire SID range */
+>   		cmd[1] |= FIELD_PREP(CMDQ_CFGI_1_RANGE, 31);
+>   		break;
+> +	case CMDQ_OP_TLBI_NH_VAA:
+> +		ent->tlbi.asid = 0;
 
-Thanks!
+This is backwards - NH_VA is a superset of NH_VAA (not to mention that 
+quietly modifying the input argument is ugly; in fact it might be nice 
+if ent was const here).
 
---
-Uladzislau Rezki
+Please follow the existing pattern, and decouple NH_VA from EL2_VA if 
+necessary.
+
+Thanks,
+Robin.
+
+> +		fallthrough;
+>   	case CMDQ_OP_TLBI_NH_VA:
+>   		cmd[0] |= FIELD_PREP(CMDQ_TLBI_0_VMID, ent->tlbi.vmid);
+>   		fallthrough;
+> @@ -301,6 +304,7 @@ static int arm_smmu_cmdq_build_cmd(u64 *cmd, struct arm_smmu_cmdq_ent *ent)
+>   	case CMDQ_OP_TLBI_NH_ASID:
+>   		cmd[0] |= FIELD_PREP(CMDQ_TLBI_0_ASID, ent->tlbi.asid);
+>   		fallthrough;
+> +	case CMDQ_OP_TLBI_NH_ALL:
+>   	case CMDQ_OP_TLBI_S12_VMALL:
+>   		cmd[0] |= FIELD_PREP(CMDQ_TLBI_0_VMID, ent->tlbi.vmid);
+>   		break;
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> index 6cf516852721..6181d6cd8b51 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> @@ -454,8 +454,10 @@ struct arm_smmu_cmdq_ent {
+>   			};
+>   		} cfgi;
+>   
+> +		#define CMDQ_OP_TLBI_NH_ALL	0x10
+>   		#define CMDQ_OP_TLBI_NH_ASID	0x11
+>   		#define CMDQ_OP_TLBI_NH_VA	0x12
+> +		#define CMDQ_OP_TLBI_NH_VAA	0x13
+>   		#define CMDQ_OP_TLBI_EL2_ALL	0x20
+>   		#define CMDQ_OP_TLBI_EL2_ASID	0x21
+>   		#define CMDQ_OP_TLBI_EL2_VA	0x22
