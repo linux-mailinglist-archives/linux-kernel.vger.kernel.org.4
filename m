@@ -2,151 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540036B28BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7536B28C2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231405AbjCIPXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:23:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
+        id S231771AbjCIPXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:23:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbjCIPXC (ORCPT
+        with ESMTP id S231580AbjCIPX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:23:02 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64ECEF1444
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:22:31 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id d7so1955831vsj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 07:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678375350;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wnQ1JLkorEsC0faYzxDw+JFZG2Ei/m3Pat9Daw2w3Gk=;
-        b=Q4LtAtcwLUPWrpzaXeGN56IlGGfWu+kYpEOvHSLS/L4jH1ri6By3E9pqF9M2TdUYbT
-         l30gkFtPBW6LwRTH9Efqo6pOwGoYv/8Jgf1ijfmXIiWOqJKGs+UxQD92eqp6kQuLKVmF
-         lapgpQDEfjPQoL0LG+RQW+qABMNzbhGcOBF33XEfm0aIRsspijGgoE/xRXYMKUrqrK4s
-         aLHab+Itc7i0Lt2vhCR8bSvo5Lt8cXFNzMUY9gjQqweotGH4gbTuMHU3flHb2DDCuoDj
-         kT5evC8vWodEdpmrNIVfgEWgDfE8GHMGg9pv7TIKsKW0PdRCHYgx+Gjc4M4vdEeUXZNR
-         Pceg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678375350;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wnQ1JLkorEsC0faYzxDw+JFZG2Ei/m3Pat9Daw2w3Gk=;
-        b=0GdGxmucyKIDISv+gy78xerNwXvOyM2O9FabN7LjnyeWuEi6b9qG3R3E6Ox7J+Up1m
-         3GUecsirmz3Eghp4I4davtWqyemX9/j+qz4of7DgnEsswIlnbKMSi72r0ITrdj0HRFZR
-         fw/vNc7H3UKvmyEoqDLuNs6SBwDtTgyEnhb3OE7TOisgyXjKKb6DAPw8ydbVn5RgzZ65
-         4DPYj5s+6XO3F7R7wg0elw7LEiqTZaDouWq7B8NjTTiPaKUY50IB8fXM4KfOVxm/5jrS
-         a7RwDxDA1D8WamFOIVCKc5o9LJJOdkPnkGJ+5IBTmpyAs3qp+EIBHOfJevfpNSE+8l5D
-         aFjA==
-X-Gm-Message-State: AO0yUKUWSuZ/H6xc6rzg5cw+yXgKB6GCTbA3Y0L5n6PMn1UZ1l187ngN
-        nnJzJM851EjHCQjbqudjzemJyaZhNguqrxm/VioHXg==
-X-Google-Smtp-Source: AK7set99Wa14Cl7q41QmEjig3d5y5XriZa4QovGX0AF/AQi3FUH59Z9nsjhzY/teq5TZvqlm1Mn1bo+B5wbkcw5GyVQ=
-X-Received: by 2002:a67:d48c:0:b0:402:999f:44d2 with SMTP id
- g12-20020a67d48c000000b00402999f44d2mr15314715vsj.0.1678375350449; Thu, 09
- Mar 2023 07:22:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20230306195556.55475-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230306195556.55475-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 9 Mar 2023 16:22:19 +0100
-Message-ID: <CAMRc=Me-FMZ3e=EaUA1kimEonz=HVHBp7coxCz53bJK9NYBuFg@mail.gmail.com>
-Subject: Re: [PATCH v1 00/16] gpio: Use string_choices.h
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Schspa Shi <schspa@gmail.com>, Marc Zyngier <maz@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        patches@opensource.cirrus.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Doug Berger <opendmb@gmail.com>,
+        Thu, 9 Mar 2023 10:23:27 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3489EF16AB;
+        Thu,  9 Mar 2023 07:22:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=TZtnq4ErD6+p46J1xiQAutyT1OfQ3UHS3Utv9OsbD3k=; b=4u643A2Y3jE+yVdrqGMaYCOOLt
+        pUoE/QBgVG8HivDUgvuxodEqXCK/29gfplEGQEf/qEFBYL8Ii/Tir4i9ovOxmF8wVWYwl0TW0weqA
+        ygUG5e8884d5Ik+oAh26XdFyioQdTjOlFbjCA44mXbPUSidZwDRvcnL5pPeD8JZqv7OQ=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1paI63-006t3h-Ua; Thu, 09 Mar 2023 16:22:23 +0100
+Date:   Thu, 9 Mar 2023 16:22:23 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Nandor Han <nandor.han@ge.com>,
-        Semi Malinen <semi.malinen@ge.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Arun.Ramadoss@microchip.com
+Subject: Re: [PATCH v8 00/13] Adds support for PHY LEDs with offload triggers
+Message-ID: <8226f000-dd9c-4774-b972-a7f1113f0986@lunn.ch>
+References: <20230216013230.22978-1-ansuelsmth@gmail.com>
+ <CACRpkda30Ky5oYPn_nGWGOzT5ntZYdE3gafrs7D27ZHxgGuO8A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACRpkda30Ky5oYPn_nGWGOzT5ntZYdE3gafrs7D27ZHxgGuO8A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 8:55=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Use string_choices.h in the GPIO drivers and library.
-> It has been tested on x86_64 and (semi-)compile tested
-> over all.
->
-> Andy Shevchenko (16):
->   lib/string_helpers: Add missing header files to MAINTAINERS database
->   lib/string_helpers: Split out string_choices.h
->   lib/string_choices: Add str_high_low() helper
->   lib/string_choices: Add str_input_output() helper
->   gpiolib: Utilize helpers from string_choices.h
->   gpio: adnp: Utilize helpers from string_choices.h
->   gpio: brcmstb: Utilize helpers from string_choices.h
->   gpio: crystalcove: Utilize helpers from string_choices.h
->   gpio: grgpio: Utilize helpers from string_choices.h
->   gpio: mvebu: Utilize helpers from string_choices.h
->   gpio: pl061: Utilize helpers from string_choices.h
->   gpio: stmpe: Utilize helpers from string_choices.h
->   gpio: wcove: Utilize helpers from string_choices.h
->   gpio: wm831x: Utilize helpers from string_choices.h
->   gpio: wm8994: Utilize helpers from string_choices.h
->   gpio: xra1403: Utilize helpers from string_choices.h
->
->  MAINTAINERS                     |  3 ++
->  drivers/gpio/gpio-adnp.c        | 24 ++++----------
->  drivers/gpio/gpio-brcmstb.c     |  3 +-
->  drivers/gpio/gpio-crystalcove.c | 17 +++++-----
->  drivers/gpio/gpio-grgpio.c      |  3 +-
->  drivers/gpio/gpio-mvebu.c       | 27 +++++++---------
->  drivers/gpio/gpio-pl061.c       |  4 +--
->  drivers/gpio/gpio-stmpe.c       | 19 +++++------
->  drivers/gpio/gpio-wcove.c       | 15 ++++-----
->  drivers/gpio/gpio-wm831x.c      |  5 +--
->  drivers/gpio/gpio-wm8994.c      |  6 ++--
->  drivers/gpio/gpio-xra1403.c     |  5 +--
->  drivers/gpio/gpiolib-sysfs.c    |  3 +-
->  drivers/gpio/gpiolib.c          | 13 ++++----
->  include/linux/string_choices.h  | 56 +++++++++++++++++++++++++++++++++
->  include/linux/string_helpers.h  | 26 +--------------
->  16 files changed, 125 insertions(+), 104 deletions(-)
->  create mode 100644 include/linux/string_choices.h
->
-> --
-> 2.39.1
->
+> I am a bit reluctant on the ambition to rely on configuration from sysfs
+> for the triggers, and I am also puzzled to how a certain trigger on a
+> certain LED is going to associate itself with, say, a certain port.
 
-I've been thinking about this and I must say it doesn't make much
-sense to me. Not only does it NOT reduce the code size (even if we
-assume the unlikely case where we'd build all those modules that use
-the helpers) but also decreases the readability for anyone not
-familiar with the new interfaces (meaning time spent looking up the
-new function). The "%s", x ? "if" : "else" statement is concise and
-clear already, I don't see much improvement with this series. And I'm
-saying it from the position of someone who loves factoring out common
-code. :)
+Hi Linus
 
-I'll wait to hear what others have to say but if it were up to me, I'd
-politely say no.
+There will need to be a device tree binding for the default
+trigger. That is what nearly all the rejected hacks so far have been
+about, write registers in the PHYs LEDs registers to put it into a
+specific mode. I don't see that part of the overall problem too
+problematic, apart from the old issue, is it describing configuration,
+not hardware.
 
-(I mean: I guess, in the end it is up to me, but I'm open to arguments.) :)
+As to 'how a certain trigger on a certain LED is going to associate
+itself with, say, a certain port' is clearly a property of the
+hardware, when offloading is supported. I've not seen a switch you can
+arbitrarily assign LEDs to ports. The Marvell switches have the LED
+registers within the port registers, for example, two LEDs per port.
 
-Bart
+> 
+> I want to draw your attention to this recently merged patch series
+> from Hans de Goede:
+> https://lore.kernel.org/linux-leds/20230120114524.408368-1-hdegoede@redhat.com/
+> 
+> This adds the devm_led_get() API which works similar to getting
+> regulators, clocks, GPIOs or any other resources.
+
+Interesting. Thanks for pointing this out. But i don't think it is of
+interest in our use case, which is hardware offload. For a purely
+software controlled LED, where the LED could be anywhere,
+devm_led_get() makes sense. But in our case, the LED is in a well
+defined place, either the MAC or the PHY, where it has access to the
+RX and TX packets, link status etc. So we don't have the problem of
+finding it in an arbitrary location.
+
+There is also one additional problem we have, both for MAC and PHY
+LEDs. The trigger is ledtrig-netdev. All trigger state revolves around
+a netdev. A DSA port is not a netdev. A PHY is not a netdev. Each of
+these three things have there own life cycle. Often, a PHY does not
+know what netdev it is associated to until the interface is opened,
+ie. ip link set eth0 up. But once it is associated, phylib knows this
+information, so can return it, without any additional configuration
+data in DT. A DSA switch port can be created before the netdev
+associated to it is created. But again, the DSA core does know the
+mapping between a netdev and a port. Using devm_led_get() does not
+gain us anything.
+
+	Andrew
