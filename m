@@ -2,102 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDB86B262C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E5C6B262F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbjCIOBw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Mar 2023 09:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
+        id S230050AbjCIOCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:02:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbjCIOAY (ORCPT
+        with ESMTP id S231474AbjCIOAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Mar 2023 09:00:24 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B9D5983B;
-        Thu,  9 Mar 2023 05:58:21 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1paGmd-003ofv-0O; Thu, 09 Mar 2023 14:58:15 +0100
-Received: from dynamic-077-188-003-023.77.188.pool.telefonica.de ([77.188.3.23] helo=[192.168.1.11])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1paGmc-002po9-Py; Thu, 09 Mar 2023 14:58:14 +0100
-Message-ID: <77c0a979af8c46a52dac2af435c16744698d6e5c.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH] sh: mach-x3proto: Add missing #include
- <linux/gpio/driver.h>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-gpio@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Date:   Thu, 09 Mar 2023 14:58:14 +0100
-In-Reply-To: <CAMuHMdUbZ69hcUBUBHpH1P1ZJ59ejTF=9vOdUMO-cgOHtBgGCA@mail.gmail.com>
-References: <20230309135255.3861308-1-geert+renesas@glider.be>
-         <a1f72b2bb25f8a06a10a436138e1032cc12b6506.camel@physik.fu-berlin.de>
-         <CAMuHMdUbZ69hcUBUBHpH1P1ZJ59ejTF=9vOdUMO-cgOHtBgGCA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956CA5F6E1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 05:58:30 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-536bbef1c5eso36277407b3.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 05:58:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678370310;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9FztTG0yEY1M7up9GTdt6AZAFT3eSix/P5t5wSb4M4Q=;
+        b=yAH/1mbhCjrFmFWF6Ajt/KXo9D7ovq1fnbB7Z+inJdmHtUffl59r1xzmst6ICHNFZg
+         i01B3Qi6MnbM9rpq5S7zRZqOGUGn2M+pX6zPcK87lzJ0QMhOkJxlNLUOiGI5ksen0EgX
+         QA8Ltpbgnks1U7FfkUb9RZW3Pw043jWkUkg9hrgURiXf+wi4qA1t0EdPBZGMDr6H/F+v
+         TT3Jaelr+Z0HPprgak1KyqyRwT1I+2wR8lbR5/7M26kgszUQ4Q6PuVHO3qfMPc4k1Kwz
+         bB0horMRmWBi6gkNGH1sseNwjP9scQpr7q+QMoRgr/zPr5JXHbqw/j98A0ukGCCQa079
+         VRXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678370310;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9FztTG0yEY1M7up9GTdt6AZAFT3eSix/P5t5wSb4M4Q=;
+        b=opNrtILZQqcGg6+OcZEC9yte8IsMDg6pOyc9SEZP6GgYpoBA031A44s89vqGF44Rve
+         +9kGpuhZEodG24o8fOLMjcxJufcaWZs7CsP5/HPoYR1fBCC0ivBDZUOOLANkLDRClFSm
+         S1RfjrYkiVNS+bhHsK677ZFjx4ayKmKp2Y4JEKl2NH9YwfIBGm3H9fg0pXBKVGcpvKm0
+         cG33VRjZbEG9PP4XzboaD7waSAjgT8J+PV290yrViJY0MZzhNrtnJkETKbPYDvxdDCox
+         6/81xnij6OHvN3xvOjf3k99nTpy9LZ8+29qBJTlRxZLUWPlet6DnDCLnUoSSsCuQGhCx
+         cg4Q==
+X-Gm-Message-State: AO0yUKX/39tg6PI4xH4UP9jxtx8IKPKIqnx4yXMpgkWJBYbR5uF9Xcep
+        DMOjNqdrvs8c46PaqAo6n03a/zMWFaVYdZmm0ZN9MTnjJ4P6b6QeQ8g=
+X-Google-Smtp-Source: AK7set9Lddr01I7FEPfmy28PrzTHgUL7aK4KyPL5RLNUWqq7nUyUumYXZQJ2gOopwUmMWUHGn85S3hP+MtQ1thjJ2dk=
+X-Received: by 2002:a81:ae4b:0:b0:536:5557:33a8 with SMTP id
+ g11-20020a81ae4b000000b00536555733a8mr14124567ywk.9.1678370309858; Thu, 09
+ Mar 2023 05:58:29 -0800 (PST)
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 77.188.3.23
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230307182557.42215-1-andriy.shevchenko@linux.intel.com> <20230307182557.42215-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230307182557.42215-3-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 9 Mar 2023 14:58:18 +0100
+Message-ID: <CACRpkdb1fO3kBhyQbi0Gnw+SK3ejL3ACW=fJPNUitMXQfN3vvA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] gpiolib: Get rid of gpio_bus_match() forward declaration
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-03-09 at 14:56 +0100, Geert Uytterhoeven wrote:
-> Hi Adrian,
-> 
-> > On Thu, 2023-03-09 at 14:52 +0100, Geert Uytterhoeven wrote:
-> > > shx3_defconfig:
-> > > 
-> > >     arch/sh/boards/mach-x3proto/setup.c: In function ‘x3proto_devices_setup’:
-> > >     arch/sh/boards/mach-x3proto/setup.c:246:62: error: invalid use of undefined type ‘struct gpio_chip’
-> > >       246 |                 baseboard_buttons[i].gpio = x3proto_gpio_chip.base + i;
-> > >         |                                                              ^
-> > > 
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > Link: https://lore.kernel.org/r/CA+G9fYs7suzGsEDK40G0pzxXyR1o2V4Pn-oy1owTsTWRVEVHog@mail.gmail.com
-> > > Fixes: 21d9526d13b5467b ("gpiolib: Make the legacy <linux/gpio.h> consumer-only")
-> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> 
-> > > --- a/arch/sh/boards/mach-x3proto/setup.c
-> > > +++ b/arch/sh/boards/mach-x3proto/setup.c
-> > > @@ -17,6 +17,7 @@
-> > >  #include <linux/usb/r8a66597.h>
-> > >  #include <linux/usb/m66592.h>
-> > >  #include <linux/gpio.h>
-> > > +#include <linux/gpio/driver.h>
-> > >  #include <linux/gpio_keys.h>
-> > >  #include <mach/ilsel.h>
-> > >  #include <mach/hardware.h>
-> > 
-> > Thanks. You were much faster than me. I didn't even have the time to have a look
-> > at the problem yet ;-). Is it sufficient to pick this up for 6.4?
-> 
-> As the problem is introduced in and only found in gpio/for-next,
-> I expect Linus or Andy to pick it up.
+On Tue, Mar 7, 2023 at 7:25 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-OK, thanks! I'm planning to prepare my for-next changes this weekend.
+> There is nothing specific about gpio_bus_match(), so we may
+> simply move it to the top of the file and get rid of forward
+> declaration.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Adrian
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Yours,
+Linus Walleij
