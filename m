@@ -2,83 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A357E6B3239
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8BC6B3243
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbjCIXr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 18:47:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S231312AbjCIXsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 18:48:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbjCIXry (ORCPT
+        with ESMTP id S231327AbjCIXr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 18:47:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B2B10B1CF;
-        Thu,  9 Mar 2023 15:47:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E374BB820C6;
-        Thu,  9 Mar 2023 23:47:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90A80C433D2;
-        Thu,  9 Mar 2023 23:47:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678405670;
-        bh=NQ0z0vWRZKFSOsNta5bZXQwrrn+JWpr6q/3op/tZXNg=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=KW0qaj+KdPT2EaWE5uLTvMsecdNBQIGz46H7UdCdVjDFKIb/RC/8X/LvZsIJTkbVP
-         +imQ8wEZlv7TgHnR2B8J0eH9OLup1A91rJAE7An5kjloxS15rX23HoHQEluuNQAqN7
-         pWzaMkSCxk7vRCl2nmTAT/EJ2C+4dMEjM1H76mCfQv15kmsQNAND6135yZseXe6ynt
-         3RyPKTbfdhjIKG8PfYPB4Cii18HOmTHGSOO9Snd/cwNcGvjVB1E+KS9PpwDtTJmU3w
-         TCw6BUC8Y7UJQdo1/uXNxjjTxyEc6InZGRWBe68H212c3pRU6f6i9LNpkVbI0eb/Hy
-         1Cf+KucTYznSA==
-Message-ID: <ec1fb4d134181a1b1859bcb884dcd494.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Thu, 9 Mar 2023 18:47:57 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7AA198A
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 15:47:54 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id m6so4452803lfq.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 15:47:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678405673;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0SVPt+h4FP4oJDZC6OlFD7ds1qk6UpRDvDwg5Hg2Ch0=;
+        b=qOF8IJ9CgvDsTlfU/8eoO1f6RspcB4sHxm9UeX9TFcT4atBj8xB6gEoLOsFGYN444h
+         ycK9aYQMdjDpF3aZAPYkh6i5m2xqgQHH74bi/AP1So09TXRxCRFvmV4bgxA65MgKfQNt
+         a1QAnKAHDzb1I/TMjnle/icABRaNsrbq8t7vSM259FwKCaNoIYB8GrEims5Emd0R7fhk
+         65ntWyddvk0oceLMo6eaWL3fL7WDwHWDLmH4SeRL0U0gcHB3z+CcjK+GrGxlCpZHq8+K
+         8GOfwvC4LBMIAsEDBrSxdpHwrepiQZgLKzocjxrCpJ0zw21TiBkh1k1oq7GJjQrgXNZ9
+         aHJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678405673;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0SVPt+h4FP4oJDZC6OlFD7ds1qk6UpRDvDwg5Hg2Ch0=;
+        b=a6PAdXNv3sF82OuEpTxIpV6+berwzIsoKTOYtksCJi2E6wxa91nc4ofav7l0DsK9yV
+         YegIalXsp0dhL/zdsGvz9b18BgQ//NWT2b3qLDLR9ZpC/5xbSRUhq01ocGR2vswokRRP
+         mnaHHWsPV+T/SV6Y5SaVV8Uwf1KRdTmR8m1P7wal160IkqoCIpEoImWFncf9MlS70jbM
+         SOi6jaEth1XPhthax9AA92OxLoX6SmACPIqNYK6A4kdccRnoXbqon+bNA9Sdt2h8oYhl
+         VZK46ocK/JIAvx7sSq/jwd4LNfapDHS3tceBtWLWlWM8ebWXstqjjSZxM5nlL9NzEJLz
+         KnOQ==
+X-Gm-Message-State: AO0yUKUAPSWVuwYDTddlVBplguvrvWD4oSpW5M0jwWGTZxmPPcwqGNfz
+        Nw1VQnHRYliibz0QIE29ew09xQ==
+X-Google-Smtp-Source: AK7set+p5ZH/21/+ytoGxOzCZqhn5qFsf6Cr8OTUVLsl1UVreF+fG8OGkqnex37YJM4kqTm/sXIzQQ==
+X-Received: by 2002:ac2:5238:0:b0:4d8:6e26:c74c with SMTP id i24-20020ac25238000000b004d86e26c74cmr6850336lfl.53.1678405673020;
+        Thu, 09 Mar 2023 15:47:53 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id s28-20020a05651c201c00b00295b597c8fasm57939ljo.22.2023.03.09.15.47.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 15:47:52 -0800 (PST)
+Message-ID: <43c11038-91d5-cbfd-7349-06fcd61a0661@linaro.org>
+Date:   Fri, 10 Mar 2023 00:47:49 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <b94ee1d2-b224-f9d5-3f3c-0096634f4c93@loongson.cn>
-References: <20230307115022.12846-2-zhuyinbo@loongson.cn> <202303082037.QPfBP64A-lkp@intel.com> <b94ee1d2-b224-f9d5-3f3c-0096634f4c93@loongson.cn>
-Subject: Re: [PATCH v13 2/2] clk: clk-loongson2: add clock controller driver support
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
-        loongson-kernel@lists.loongnix.cn
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        kernel test robot <lkp@intel.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhuyinbo <zhuyinbo@loongson.cn>
-Date:   Thu, 09 Mar 2023 15:47:46 -0800
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] arm64: dts: qcom: sa8775p: add symbols to dtb
+Content-Language: en-US
+To:     Eric Chanudet <echanude@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230309233945.1199358-1-echanude@redhat.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230309233945.1199358-1-echanude@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting zhuyinbo (2023-03-08 18:58:02)
->=20
-> =E5=9C=A8 2023/3/8 =E4=B8=8B=E5=8D=888:16, kernel test robot =E5=86=99=E9=
-=81=93:
-> > Hi Yinbo,
-> >
-[...]
-> >
-> >     drivers/clk/clk-loongson2.c: In function 'loongson2_calc_pll_rate':
-> >>> drivers/clk/clk-loongson2.c:79:15: error: implicit declaration of fun=
-ction 'readq'; did you mean 'readl'? [-Werror=3Dimplicit-function-declarati=
-on]
-> >        79 |         val =3D readq(loongson2_pll_base + offset);
-> >           |               ^~~~~
-> >           |               readl
-> >     cc1: some warnings being treated as errors
->=20
-> The CONFIG_64BIT not enabled in your config file, I will add a depend on =
 
-> "CONFIG_64BIT" in my clock driver to fix this compile error.
 
-Do you need to use readq() here? Can you read two 32-bit registers with
-readl() and put them together for a 64-bit number?
+On 10.03.2023 00:39, Eric Chanudet wrote:
+> ABL uses the __symbols__ section to process the DTB before passing it
+> forward. Without it, the bootstrap is interrupted.
+> 
+> Signed-off-by: Eric Chanudet <echanude@redhat.com>
+> ---
+Fix your ABL.
+
+Konrad
+> Depends on initial sa8775p-ride.dts:
+> https://lore.kernel.org/all/20230214092713.211054-3-brgl@bgdev.pl/
+> 
+>  arch/arm64/boot/dts/qcom/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index b63cd1861e68..72e85ab31d74 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -1,4 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> +
+> +# Enable support for device-tree overlays required on sa8775p-ride.
+> +DTC_FLAGS_sa8775p-ride := -@
+> +
+>  dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
