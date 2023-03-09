@@ -2,286 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760966B1E62
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E00F46B1E6A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjCIIis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 03:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
+        id S230034AbjCIIkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 03:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjCIIiZ (ORCPT
+        with ESMTP id S229544AbjCIIjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:38:25 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFB9E1C89
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:37:08 -0800 (PST)
-Received: from dggpeml500018.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PXMt06D1Wz16PCq;
-        Thu,  9 Mar 2023 16:34:16 +0800 (CST)
-Received: from [10.67.111.186] (10.67.111.186) by
- dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 9 Mar 2023 16:37:05 +0800
-Message-ID: <07c692fd-fe59-1bd4-a6d0-e84bee6dbb3b@huawei.com>
-Date:   Thu, 9 Mar 2023 16:37:05 +0800
+        Thu, 9 Mar 2023 03:39:33 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAD520072;
+        Thu,  9 Mar 2023 00:38:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678351094; x=1709887094;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=dlGlMy640JD1Y7x742ADAbcu0VK+hnDBh/IIP7/8FeA=;
+  b=CIE3nrEuGhxZR7ozDPCC3svME7eaciXi+Kr5dswol5nz9aVoSPR0n1J4
+   t23m2va8xU5kkC62WkdgCWQkDCTqmQS5gT+ex7y5mQESk87sMmRUgKn3o
+   YyJb2hiN0hcB9LHbw+dVbjDlzRWXZKmf9yUVGpH3ivciR+1j8F+1g9sNv
+   I3qYiyn4g3TFMVEk5qni25pBJVFzmotixSUjvX5VmIif/BtVTRMaF3l/C
+   S30Bt9MeYrVUYNmrnCcntcWTMdZHJNsGO/hmFaAjlnayRyUpSmhFgcKhz
+   DH51nfdOm6i8W0BuBmaezXkTvP9eYYsNSKpYoYvGKPEMRHC347UsE6+X+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="398968363"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="398968363"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:38:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="707520420"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="707520420"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:38:11 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [GIT PULL] hotfixes for 6.3-rc1
+References: <20230304131528.4645d19a2ab897fb7518159e@linux-foundation.org>
+        <CAHk-=wj9guryjifHyr26w73ta+kNeoHtGde682Z5N6OSjKu4UQ@mail.gmail.com>
+        <20230304152058.de91bf7abf424383ce31d500@linux-foundation.org>
+        <CAHk-=wiHX2NQiVH8uQZ_U8vB=qnzmQHauGAqAkC=4ZWp95ya8w@mail.gmail.com>
+        <87jzzu7jt9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <43f35191-9147-0aec-cb57-0bc14d041039@suse.cz>
+Date:   Thu, 09 Mar 2023 16:37:07 +0800
+In-Reply-To: <43f35191-9147-0aec-cb57-0bc14d041039@suse.cz> (Vlastimil Babka's
+        message of "Wed, 8 Mar 2023 11:39:28 +0100")
+Message-ID: <877cvq8gng.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <mingo@redhat.com>,
-        <peterz@infradead.org>, <juri.lelli@redhat.com>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <rkagan@amazon.de>
-References: <20230306132418.50389-1-zhangqiao22@huawei.com>
- <CAKfTPtAYpkQVDBR0mcymVgu7aYY5rN1svW713mGJxbewHGJRqQ@mail.gmail.com>
- <CAKfTPtAOFthDtQj=EGbTzwG6ZE7GPpp_3Xg9wVr_8epO+fiFjw@mail.gmail.com>
- <d4d849e3-ea4b-1f84-b287-513fb7bff415@huawei.com>
- <CAKfTPtAVrmPCwuJ55e6TLrVjQnsgDAdg2rGY_0DXcJGzBft15Q@mail.gmail.com>
- <ZAiFxWLSb9HDazSI@vingu-book>
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-In-Reply-To: <ZAiFxWLSb9HDazSI@vingu-book>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.186]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Vlastimil Babka <vbabka@suse.cz> writes:
 
-
-在 2023/3/8 20:55, Vincent Guittot 写道:
-> Le mercredi 08 mars 2023 à 09:01:05 (+0100), Vincent Guittot a écrit :
->> On Tue, 7 Mar 2023 at 14:41, Zhang Qiao <zhangqiao22@huawei.com> wrote:
->>>
->>>
->>>
->>> 在 2023/3/7 18:26, Vincent Guittot 写道:
->>>> On Mon, 6 Mar 2023 at 14:53, Vincent Guittot <vincent.guittot@linaro.org> wrote:
->>>>>
->>>>> On Mon, 6 Mar 2023 at 13:57, Zhang Qiao <zhangqiao22@huawei.com> wrote:
->>>>>>
->>>>>> Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of
->>>>>> entity being placed") fix an overflowing bug, but ignore
->>>>>> a case that se->exec_start is reset after a migration.
->>>>>>
->>>>>> For fixing this case, we reset the vruntime of a long
->>>>>> sleeping task in migrate_task_rq_fair().
->>>>>>
->>>>>> Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
->>>>>> Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
->>>>>> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
->>>>>
->>>>> Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
->>>>>
->>>>>> ---
->>>>>>
->>>>>> v1 -> v2:
->>>>>> - fix some typos and update comments
->>>>>> - reformat the patch
->>>>>>
->>>>>> ---
->>>>>>  kernel/sched/fair.c | 76 ++++++++++++++++++++++++++++++++-------------
->>>>>>  1 file changed, 55 insertions(+), 21 deletions(-)
->>>>>>
->>>>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>>>>> index 7a1b1f855b96..74c9918ffe76 100644
->>>>>> --- a/kernel/sched/fair.c
->>>>>> +++ b/kernel/sched/fair.c
->>>>>> @@ -4648,11 +4648,45 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
->>>>>>  #endif
->>>>>>  }
->>>>>>
->>>>>> +static inline bool entity_is_long_sleep(struct sched_entity *se)
->>>>>> +{
->>>>>> +       struct cfs_rq *cfs_rq;
->>>>>> +       u64 sleep_time;
->>>>>> +
->>>>>> +       if (se->exec_start == 0)
->>>>>> +               return false;
->>>>>> +
->>>>>> +       cfs_rq = cfs_rq_of(se);
->>>>>> +       sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
->>>>>> +       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
->>>>>> +               return true;
->>>>>> +
->>>>>> +       return false;
->>>>>> +}
->>>>>> +
->>>>>> +static inline u64 sched_sleeper_credit(struct sched_entity *se)
->>>>>> +{
->>>>>> +       unsigned long thresh;
->>>>>> +
->>>>>> +       if (se_is_idle(se))
->>>>>> +               thresh = sysctl_sched_min_granularity;
->>>>>> +       else
->>>>>> +               thresh = sysctl_sched_latency;
->>>>>> +
->>>>>> +       /*
->>>>>> +        * Halve their sleep time's effect, to allow
->>>>>> +        * for a gentler effect of sleepers:
->>>>>> +        */
->>>>>> +       if (sched_feat(GENTLE_FAIR_SLEEPERS))
->>>>>> +               thresh >>= 1;
->>>>>> +
->>>>>> +       return thresh;
->>>>>> +}
->>>>>> +
->>>>>>  static void
->>>>>>  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->>>>>>  {
->>>>>>         u64 vruntime = cfs_rq->min_vruntime;
->>>>>> -       u64 sleep_time;
->>>>>>
->>>>>>         /*
->>>>>>          * The 'current' period is already promised to the current tasks,
->>>>>> @@ -4664,23 +4698,8 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->>>>>>                 vruntime += sched_vslice(cfs_rq, se);
->>>>>>
->>>>>>         /* sleeps up to a single latency don't count. */
->>>>>> -       if (!initial) {
->>>>>> -               unsigned long thresh;
->>>>>> -
->>>>>> -               if (se_is_idle(se))
->>>>>> -                       thresh = sysctl_sched_min_granularity;
->>>>>> -               else
->>>>>> -                       thresh = sysctl_sched_latency;
->>>>>> -
->>>>>> -               /*
->>>>>> -                * Halve their sleep time's effect, to allow
->>>>>> -                * for a gentler effect of sleepers:
->>>>>> -                */
->>>>>> -               if (sched_feat(GENTLE_FAIR_SLEEPERS))
->>>>>> -                       thresh >>= 1;
->>>>>> -
->>>>>> -               vruntime -= thresh;
->>>>>> -       }
->>>>>> +       if (!initial)
->>>>>> +               vruntime -= sched_sleeper_credit(se);
->>>>>>
->>>>>>         /*
->>>>>>          * Pull vruntime of the entity being placed to the base level of
->>>>>> @@ -4689,8 +4708,7 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->>>>>>          * the base as it may be too far off and the comparison may get
->>>>>>          * inversed due to s64 overflow.
->>>>>>          */
->>>>>> -       sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
->>>>>> -       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
->>>>>> +       if (entity_is_long_sleep(se))
->>>>>>                 se->vruntime = vruntime;
->>>>>>         else
->>>>>>                 se->vruntime = max_vruntime(se->vruntime, vruntime);
->>>>>> @@ -7635,7 +7653,23 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->>>>>>         if (READ_ONCE(p->__state) == TASK_WAKING) {
->>>>>>                 struct cfs_rq *cfs_rq = cfs_rq_of(se);
->>>>>>
->>>>>> -               se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
->>>>>> +               /*
->>>>>> +                * We determine whether a task sleeps for long by checking
->>>>>> +                * se->exec_start, and if it is, we sanitize its vruntime at
->>>>>> +                * place_entity(). However, after a migration, this detection
->>>>>> +                * method fails due to se->exec_start being reset.
->>>>>> +                *
->>>>>> +                * For fixing this case, we add the same check here. For a task
->>>>>> +                * which has slept for a long time, its vruntime should be reset
->>>>>> +                * to cfs_rq->min_vruntime with a sleep credit. Because waking
->>>>>> +                * task's vruntime will be added to cfs_rq->min_vruntime when
->>>>>> +                * enqueue, we only need to reset the se->vruntime of waking task
->>>>>> +                * to a credit here.
->>>>>> +                */
->>>>>> +               if (entity_is_long_sleep(se))
+> On 3/6/23 02:25, Huang, Ying wrote:
+>> Hi, Linus,
+>>=20
+>> Linus Torvalds <torvalds@linux-foundation.org> writes:
+>>=20
+>>> On Sat, Mar 4, 2023 at 3:21=E2=80=AFPM Andrew Morton <akpm@linux-founda=
+tion.org> wrote:
 >>>>
->>>> I completely overlooked that we can't use rq_clock_task here. Need to
->>>> think a bit more on this
+>>>> Ah. Ying did it this way:
 >>>
->>> Hi,Vincent,
+>>> Yeah, I saw that patch flying past, but I actually think that it only
+>>> silences the warning almost by mistake. There's nothing fundamental in
+>>> there that a compiler wouldn't just follow across two assignments, and
+>>> it just happens to now not trigger any more.
 >>>
->>> How about using exec_start of the parent sched_entity instant of rq_clock_task()?
->>
->> How do we handle sched_entity without a parent sched_entity ?
-> 
-> The change below should do the stuff. Not that we can't use it in place entity because
-> pelt is not enabled in UP.
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 74c9918ffe76..b8b381b0ff20 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -7635,6 +7635,32 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
->         return new_cpu;
->  }
-> 
-> +static inline bool migrate_long_sleeper(struct sched_entity *se)
-> +{
-> +       struct cfs_rq *cfs_rq;
-> +       u64 sleep_time;
-> +
-> +       if (se->exec_start == 0)
+>>> Assigning to a union entry is a more fundamental operation in that
+>>> respect. Not that the compiler still doesn't see that it's assigning a
+>>> value that in the end is not really type compatible, so a different
+>>> version of gcc could still warn, but at that point I feel like it's
+>>> more of an actual compiler bug than just "oh, the compiler didn't
+>>> happen to follow the cast through a temporary".
+>>=20
+>> Yes.  Your fix is much better.  This can be used for
+>> __page_set_anon_rmap() family too to make the code look better?
+>
+> Those are trickier due to the PAGE_MAPPING_ANON tagging bit which your
+> code doesn't need to handle because you can simply store an untagged
+> anon_vma pointer. Otherwise we could have the union at the struct page
+> level already (but probably not at this point as IIRC Matthew is
+> planning to have completely separate types for anon and file folios).
+>
+> So right now we have e.g. folio_get_anon_vma() using unsigned long as
+> the intermediate variable, page_move_anon_rmap() using a void *
+> variable, __page_set_anon_rmap() casting through a (void *) ... Is there
+> a single recommended way for "tagged pointers" that we could unify that t=
+o?
 
-How about use `se->avg.last_update_time == 0` here?
+Ah, you are right.  We need to deal with tagging bit and maybe struct
+movable_operations *.  I tried to write the below debug patch (only
+build test it).  The code adds 1 or 2 lines for each function.  But to
+be honest, the original force casting method appears more natural to me.
 
-> +               return false;
-> +
-> +       cfs_rq = cfs_rq_of(se);
-> +       /*
-> +        * If the entity slept for a long time, don't even try to normalize its
-> +        * vruntime with the base as it may be too far off and might generate
-> +        * wrong decision because of s64 overflow.
-> +        * We estimate its sleep duration with the last update of se's pelt.
-> +        * The last update happened before sleeping. The cfs' pelt is not
-> +        * always updated when cfs is idle but this is not a problem because
-> +        * its min_vruntime is not updated too, so the situation can't get
-> +        * worse.
-> +        */
-> +       sleep_time = cfs_rq_last_update_time(cfs_rq) - se->avg.last_update_time;
-> +       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
+Best Regards,
+Huang, Ying
 
-I tested with this patch and found it make hackbench slower.
+---------------------------8<------------------------------------
+From 68a0f54921beca8aeaa8fe78867e62b5a66658b8 Mon Sep 17 00:00:00 2001
+From: Huang Ying <ying.huang@intel.com>
+Date: Thu, 9 Mar 2023 15:29:58 +0800
+Subject: [PATCH] dbg mapping_ptr
 
+---
+ mm/rmap.c | 28 ++++++++++++++++++++--------
+ 1 file changed, 20 insertions(+), 8 deletions(-)
 
-> +               return true;
-> +
-> +       return false;
-> +}
-> +
->  /*
->   * Called immediately before a task is migrated to a new CPU; task_cpu(p) and
->   * cfs_rq_of(p) references at time of call are still valid and identify the
-> @@ -7666,7 +7692,7 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->                  * enqueue, we only need to reset the se->vruntime of waking task
->                  * to a credit here.
->                  */
-> -               if (entity_is_long_sleep(se))
-> +               if (migrate_long_sleeper(se))
->                         se->vruntime = -sched_sleeper_credit(se);
->                 else
->                         se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
-> 
-> 
-> 
->>
->>
->>
->>>>
->>>>>> +                       se->vruntime = -sched_sleeper_credit(se);
->>>>>> +               else
->>>>>> +                       se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
->>>>>>         }
->>>>>>
->>>>>>         if (!task_on_rq_migrating(p)) {
->>>>>> --
->>>>>> 2.17.1
->>>>>>
->>>> .
->>>>
-> .
-> 
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 8632e02661ac..50ee208baff9 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -466,6 +466,13 @@ void __init anon_vma_init(void)
+ 			SLAB_PANIC|SLAB_ACCOUNT);
+ }
+=20
++union mapping_ptr {
++	struct address_space *mapping;
++	unsigned long tag;
++	struct anon_vma *anon_vma;
++	struct movable_operations *mops;
++};
++
+ /*
+  * Getting a lock on a stable anon_vma from a page off the LRU is tricky!
+  *
+@@ -493,16 +500,17 @@ void __init anon_vma_init(void)
+ struct anon_vma *folio_get_anon_vma(struct folio *folio)
+ {
+ 	struct anon_vma *anon_vma =3D NULL;
+-	unsigned long anon_mapping;
++	union mapping_ptr mptr;
+=20
+ 	rcu_read_lock();
+-	anon_mapping =3D (unsigned long)READ_ONCE(folio->mapping);
+-	if ((anon_mapping & PAGE_MAPPING_FLAGS) !=3D PAGE_MAPPING_ANON)
++	mptr.mapping =3D READ_ONCE(folio->mapping);
++	if ((mptr.tag & PAGE_MAPPING_FLAGS) !=3D PAGE_MAPPING_ANON)
+ 		goto out;
+ 	if (!folio_mapped(folio))
+ 		goto out;
+=20
+-	anon_vma =3D (struct anon_vma *) (anon_mapping - PAGE_MAPPING_ANON);
++	mptr.tag &=3D ~PAGE_MAPPING_FLAGS;
++	anon_vma =3D mptr.anon_vma;
+ 	if (!atomic_inc_not_zero(&anon_vma->refcount)) {
+ 		anon_vma =3D NULL;
+ 		goto out;
+@@ -1115,18 +1123,20 @@ int folio_total_mapcount(struct folio *folio)
+ void page_move_anon_rmap(struct page *page, struct vm_area_struct *vma)
+ {
+ 	void *anon_vma =3D vma->anon_vma;
++	union mapping_ptr mptr;
+ 	struct folio *folio =3D page_folio(page);
+=20
+ 	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
+ 	VM_BUG_ON_VMA(!anon_vma, vma);
+=20
+-	anon_vma +=3D PAGE_MAPPING_ANON;
++	mptr.anon_vma =3D anon_vma;
++	mptr.tag |=3D PAGE_MAPPING_ANON;
+ 	/*
+ 	 * Ensure that anon_vma and the PAGE_MAPPING_ANON bit are written
+ 	 * simultaneously, so a concurrent reader (eg folio_referenced()'s
+ 	 * folio_test_anon()) will not see one without the other.
+ 	 */
+-	WRITE_ONCE(folio->mapping, anon_vma);
++	WRITE_ONCE(folio->mapping, mptr.mapping);
+ 	SetPageAnonExclusive(page);
+ }
+=20
+@@ -1142,6 +1152,7 @@ static void __page_set_anon_rmap(struct folio *folio,=
+ struct page *page,
+ 	struct vm_area_struct *vma, unsigned long address, int exclusive)
+ {
+ 	struct anon_vma *anon_vma =3D vma->anon_vma;
++	union mapping_ptr mptr;
+=20
+ 	BUG_ON(!anon_vma);
+=20
+@@ -1162,8 +1173,9 @@ static void __page_set_anon_rmap(struct folio *folio,=
+ struct page *page,
+ 	 * the PAGE_MAPPING_ANON type identifier, otherwise the rmap code
+ 	 * could mistake the mapping for a struct address_space and crash.
+ 	 */
+-	anon_vma =3D (void *) anon_vma + PAGE_MAPPING_ANON;
+-	WRITE_ONCE(folio->mapping, (struct address_space *) anon_vma);
++	mptr.anon_vma =3D anon_vma;
++	mptr.tag |=3D PAGE_MAPPING_ANON;
++	WRITE_ONCE(folio->mapping, mptr.mapping);
+ 	folio->index =3D linear_page_index(vma, address);
+ out:
+ 	if (exclusive)
+--=20
+2.39.2
+
