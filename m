@@ -2,92 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FBB26B1FF6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290D46B1FF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 10:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbjCIJ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 04:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
+        id S230426AbjCIJ0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 04:26:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjCIJ0e (ORCPT
+        with ESMTP id S230401AbjCIJ0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 04:26:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C038DFB4A;
-        Thu,  9 Mar 2023 01:26:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09067B81EAE;
-        Thu,  9 Mar 2023 09:26:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D5AEC433D2;
-        Thu,  9 Mar 2023 09:26:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678353990;
-        bh=9b08XN45Lh+BMI8HPZZB/eyAjR+ruGRTYkmxSuHREVs=;
+        Thu, 9 Mar 2023 04:26:47 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681DCE2770
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 01:26:46 -0800 (PST)
+Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EE6A5589;
+        Thu,  9 Mar 2023 10:26:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1678354004;
+        bh=985r8IrokRF8amPQ6ZhYBq5GHVrxwHEK3rPc1CLk8JQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u+kIr0i6SFGucqoNW8Gik1AsvNuVPfARYoXDkaNxyobYpC9MRrS4CU+pj4RWReEjh
-         MQU8h5iJjez0FeQ/AxbT42VpSrZJmosmE9IeqsMye4sQCG4pyM4oBRslU7T2JX1cE0
-         7TJCwXD2UogE8y2mgbp+xkgCNRdgK/omKmAAFbuQ=
-Date:   Thu, 9 Mar 2023 10:26:27 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Ye, Xiang" <xiang.ye@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
-Message-ID: <ZAmmQ/yKYnOG7xOS@kroah.com>
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
- <20230309071100.2856899-2-xiang.ye@intel.com>
- <ZAmPjfH6rA0pbiUa@kroah.com>
- <ZAmimLMY49ktjagX@ye-NUC7i7DNHE>
+        b=hYKR2646XK6LX7lKXgP/Xm8sIkfzIq+oALiZHzh0WLFG4BtfOijbBEgITrR8+FswQ
+         okl5Wnq1UteTzxOvoQ/B0CaX52fxVFZPo4IJZWZEeCtRm72JPtiiLAFYMGz9aP+teR
+         r+gP22YF88zE3CR+7vTN8CbVLxzn5dzeigvkZRGs=
+Date:   Thu, 9 Mar 2023 11:26:47 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     David Binderman <dcb314@hotmail.com>
+Cc:     "andrzej.hajda@intel.com" <andrzej.hajda@intel.com>,
+        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
+        "rfoss@kernel.org" <rfoss@kernel.org>,
+        "jonas@kwiboo.se" <jonas@kwiboo.se>,
+        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: drivers/gpu/drm/bridge/fsl-ldb.c:101: possible loss of
+ information.
+Message-ID: <20230309092647.GM31765@pendragon.ideasonboard.com>
+References: <DB6P189MB0568FCA97758B820EAC036989CB79@DB6P189MB0568.EURP189.PROD.OUTLOOK.COM>
+ <20230308232224.GG31765@pendragon.ideasonboard.com>
+ <DB6P189MB056810B266B656706ECF7EAB9CB59@DB6P189MB0568.EURP189.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZAmimLMY49ktjagX@ye-NUC7i7DNHE>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <DB6P189MB056810B266B656706ECF7EAB9CB59@DB6P189MB0568.EURP189.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 05:10:48PM +0800, Ye, Xiang wrote:
-> Hi Greg,
+Hi David,
+
+On Thu, Mar 09, 2023 at 07:59:34AM +0000, David Binderman wrote:
+> Hello there Laurent,
 > 
-> Thanks for the review.
-> On Thu, Mar 09, 2023 at 08:49:33AM +0100, Greg Kroah-Hartman wrote:
-> > On Thu, Mar 09, 2023 at 03:10:56PM +0800, Ye Xiang wrote:
-> > > This patch implements the USB part of Intel USB-I2C/GPIO/SPI adapter
-> > > device named "La Jolla Cove Adapter" (LJCA).
-> > 
-> > Then why is this called "mfd" in the subject line?
-> Sorry, it's a mistake. I forget to change mfd to usb in the commit message
-> because I just move the ljca.c from driver/mfd to drivers/usb/misc according
-> to previous review comments[1]. And I will address this on v5.
+> >We could, but I don't think it will make any difference in practice as
+> >the maximum pixel clock frequency supported by the SoC is 80MHz (per
+> >LVDS channel). That would result in a 560MHz frequency returned by this
+> >function, well below the 31 bits limit.
 > 
-> [1] https://www.spinics.net/lists/kernel/msg4708451.html
-> > 
-> > >  include/linux/mfd/ljca.h  |  95 ++++
-> > 
-> > Why is this .h file in the mfd directory?
-> It's a mistake as well. Will address it by moving include/linux/mfd/ljca.h
-> to include/linux/usb/ljca.h.
+> Thanks for your explanation. I have a couple of suggestions for possible improvements:
+> 
+> 1. Your explanatory text in a comment nearby. This helps all readers of the code.
+> 
+> 2. Might the frequency go up to 300 MHz anytime soon ? The code will stop working then. 
+> In this case, I would suggest to put in a run time sanity check to make sure no 31 bit overflow. 
 
-Why do you need a .h file at all for such a tiny .c file?  If you don't
-need it, don't have one please.
+As it's a hardware limit of the SoC, I wouldn't expect so.
 
-thanks,
+This being said, I think adding a UL suffix to the constants would be
+better than a comment as it will please static checkers and serve as
+documentation to humans. Would you be able to send a patch to fix this ?
 
-greg k-h
+> Just a couple of ideas for the code.
+
+Thanks for taking the time to share those.
+
+-- 
+Regards,
+
+Laurent Pinchart
