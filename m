@@ -2,97 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842A16B3183
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 337A26B3185
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjCIWzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 17:55:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
+        id S231394AbjCIWzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 17:55:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjCIWzK (ORCPT
+        with ESMTP id S230481AbjCIWzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Mar 2023 17:55:10 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520653CE03;
-        Thu,  9 Mar 2023 14:54:40 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PXkyW6RNvz4x7s;
-        Fri, 10 Mar 2023 09:54:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1678402469;
-        bh=HnGqhsJTeGjqlPVUTmz3g9ouF0ULtGaBV4DNsEeVxsY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=qtChMEayOa7BG3gV8biPN1UquvZjKKHH1PLnOktZLFk+z7+30lmoHFQWG/ybTGOfV
-         Msn+vq0214G/5bCC5sK8YEWC4SONYn3IjVV2gLKa55Cy0vLJqZpwyIgKHr5xpyRlRO
-         2B59x+JG32iD6Ll1IeACkY+jSFZ42uC6mHr940GQ8rZCqsWJ73oUfODgJNTU1QA4cH
-         /Zt2BN0brA6nfVHnuvaamrjV+75syVJwmQZUAWs6jzdNGb6ONfyH1iskU2QALlqqJR
-         fcr5fnsHZCG3RA30SBInWnaih8rWQ8VzjneqbRw1yHLKc3Q/ihjyNUCZJzzzjHFnUd
-         puglrrgtkl1qg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        geert@linux-m68k.org, mcgrof@kernel.org, hch@infradead.org,
-        Baoquan He <bhe@redhat.com>, linux-alpha@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] arch/*/io.h: remove ioremap_uc in some
- architectures
-In-Reply-To: <20230308130710.368085-4-bhe@redhat.com>
-References: <20230308130710.368085-1-bhe@redhat.com>
- <20230308130710.368085-4-bhe@redhat.com>
-Date:   Fri, 10 Mar 2023 09:54:27 +1100
-Message-ID: <874jqtpmcc.fsf@mpe.ellerman.id.au>
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB6D65058;
+        Thu,  9 Mar 2023 14:54:41 -0800 (PST)
+Received: by mail-pj1-f47.google.com with SMTP id ce8-20020a17090aff0800b0023a61cff2c6so6912288pjb.0;
+        Thu, 09 Mar 2023 14:54:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678402472;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9DHNxVrsY82uW8tniKyTIOA7RxD60GlDeGu+usTAULI=;
+        b=QMDC2o4qnVpB4mskNuM7SkHyf1Prg8cLIuvl4Q6Ff0h7eus+MKjck08GdCDG8KdVvZ
+         JGF9T6+uEvX5AmbqTQ2b6VLTIE3zcRQJUEeuQZ9D85coiJdLpphZyByGBthP96Gcvo9g
+         cNL9UtrYxbnby1JHzZ9Zg6g+m7jzfDrdvTsr3jfmJLZkO9UzySMng+Ykk07CYg7NUl/9
+         8A4+IsL4tF/g/HlE7vpJHoy0iEBw1gczhplHSERGQ2mlrbjGtzkZoCRlek4K+C+mABqn
+         fejzZ37/L27mZw5P6QBXuvnyQg4RTOdXsF/He6MInegTqHnyibjHAZCzA+VSrmENLaQN
+         +Meg==
+X-Gm-Message-State: AO0yUKXXxRP9tn+UUobFEm3ZzE+fWiCk5SWgZSGza6AGuugOItegspPm
+        YswmTuNK7Jil4jajhrhvVDY=
+X-Google-Smtp-Source: AK7set+jkRQluRAU5RZj4XY0WCg95mDlja9mv+95zKVHerFsG1t+RXQCJPKskXKnb/j6TqXtmAFDFQ==
+X-Received: by 2002:a17:903:514:b0:19e:68e4:859c with SMTP id jn20-20020a170903051400b0019e68e4859cmr18952806plb.36.1678402471908;
+        Thu, 09 Mar 2023 14:54:31 -0800 (PST)
+Received: from [192.168.132.235] ([63.145.95.70])
+        by smtp.gmail.com with ESMTPSA id jy13-20020a17090342cd00b0019ea9e5815bsm158581plb.45.2023.03.09.14.54.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 14:54:31 -0800 (PST)
+Message-ID: <a7970fd0-ee6f-f1c1-e8c4-6ee42237a567@acm.org>
+Date:   Thu, 9 Mar 2023 14:54:30 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v2 1/3] ufs: mcq: Add supporting functions for mcq
+ abort
+Content-Language: en-US
+To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com, mani@kernel.org,
+        stanley.chu@mediatek.com, adrian.hunter@intel.com,
+        beanhuo@micron.com, avri.altman@wdc.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1678338926.git.quic_nguyenb@quicinc.com>
+ <68b786f390dbd93218a482d18c513bc332e82da3.1678338926.git.quic_nguyenb@quicinc.com>
+ <1ca7dbef-5747-29c2-a11c-086cf36d636f@acm.org>
+ <821e6994-9fed-2c15-6c25-b1761a267ec9@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <821e6994-9fed-2c15-6c25-b1761a267ec9@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baoquan He <bhe@redhat.com> writes:
-> ioremap_uc() is only meaningful on old x86-32 systems with the PAT
-> extension, and on ia64 with its slightly unconventional ioremap()
-> behavior. So remove the ioremap_uc() definition in architecutures
-> other than x86 and ia64. These architectures all have asm-generic/io.h
-> included and will have the default ioremap_uc() definition which
-> returns NULL.
->
-> This changes the existing behaviour, while no need to worry about
-> any breakage because in the only callsite of ioremap_uc(), code
-> has been adjusted to eliminate the impact. Please see
-> atyfb_setup_generic() of drivers/video/fbdev/aty/atyfb_base.c.
->
-> If any new invocation of ioremap_uc() need be added, please consider
-> using ioremap() intead or adding a ARCH specific version if necessary.
->
-> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> Cc: linux-alpha@vger.kernel.org
-> Cc: linux-hexagon@vger.kernel.org
-> Cc: linux-m68k@lists.linux-m68k.org
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-parisc@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: linux-sh@vger.kernel.org
-> Cc: sparclinux@vger.kernel.org
-> ---
->  Documentation/driver-api/device-io.rst | 9 +++++----
->  arch/alpha/include/asm/io.h            | 1 -
->  arch/hexagon/include/asm/io.h          | 3 ---
->  arch/m68k/include/asm/kmap.h           | 1 -
->  arch/mips/include/asm/io.h             | 1 -
->  arch/parisc/include/asm/io.h           | 2 --
->  arch/powerpc/include/asm/io.h          | 1 -
+On 3/9/23 14:47, Bao D. Nguyen wrote:
+> On 3/9/2023 10:15 AM, Bart Van Assche wrote:
+>> On 3/8/23 21:28, Bao D. Nguyen wrote:
+>>> +static inline bool ufshcd_mcq_is_sq_empty(struct ufs_hw_queue *q)
+>>> +{
+>>> +    return q->sq_head_slot == q->sq_tail_slot;
+>>> +}
+>>
+>> Please remove this function and inline this function into its callers.
+> 
+> Same comment. Should I also update the existing ufshcd_mcq_is_cq_empty() 
+> in a separate patch together with ufshcd_mcq_update_cq_tail_slot(), 
+> ufshcd_mcq_update_cq_head() mentioned above?
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+Hi Bao,
 
-cheers
+Modifying the existing code may improve uniformity of the UFS host 
+controller driver. If any existing code is refactored, please do that 
+via a separate patch.
+
+Thanks,
+
+Bart.
+
