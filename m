@@ -2,145 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD006B28D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE996B28D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjCIP0g convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Mar 2023 10:26:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45632 "EHLO
+        id S229916AbjCIP10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjCIP0S (ORCPT
+        with ESMTP id S229929AbjCIP1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:26:18 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132FF6A060
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:26:16 -0800 (PST)
-Received: from lhrpeml500006.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PXY186fLvz6J7Xn;
-        Thu,  9 Mar 2023 23:26:04 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 9 Mar 2023 15:26:12 +0000
-Received: from lhrpeml500005.china.huawei.com ([7.191.163.240]) by
- lhrpeml500005.china.huawei.com ([7.191.163.240]) with mapi id 15.01.2507.021;
- Thu, 9 Mar 2023 15:26:12 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Nicolin Chen <nicolinc@nvidia.com>
-CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kevin.tian@intel.com" <kevin.tian@intel.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "yi.l.liu@intel.com" <yi.l.liu@intel.com>
-Subject: RE: [PATCH v1 02/14] iommufd: Add nesting related data structures for
- ARM SMMUv3
-Thread-Topic: [PATCH v1 02/14] iommufd: Add nesting related data structures
- for ARM SMMUv3
-Thread-Index: AQHZUnWTVXhuXoh0OkWPSyQY1srSfq7ydQKAgAAVzLA=
-Date:   Thu, 9 Mar 2023 15:26:12 +0000
-Message-ID: <213a05ef06944a55a148995053b187f8@huawei.com>
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <364cfbe5b228ab178093db2de13fa3accf7a6120.1678348754.git.nicolinc@nvidia.com>
- <20230309134217.GA1673607@myrica>
-In-Reply-To: <20230309134217.GA1673607@myrica>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.202.227.178]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 9 Mar 2023 10:27:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4631BF8
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:27:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5588B81F7A
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 15:27:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96BCAC433EF;
+        Thu,  9 Mar 2023 15:27:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678375640;
+        bh=jsK3tmby10Zy34nLJCJxkX/QS4loLNlyWVZ4G9+hhRU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LVulMktlIRbvD/FGHqyjw1/jbFDRkwJZgvCV11hU6NBtOVxLBeZDeqRKbet2/TFjS
+         hxphOdBXISNO1uf4TcGzLLMR9xQT6rbqLwybzqSdyxyItxup0LBS5G3n9MOQyIxwa2
+         jRRN5CZaVpK7L4JGc2hR/pwlQr9R8qmeX30rH7g135lFYd2twFV3unkEMwG12p7uSA
+         ZV9dExQJ1HMeyH7ePsuillYdxJQw+zuAPI+n5YPQ3S6D9r7zh9r5uGrAInnQ28ObUG
+         JhXWxxQhHGgVIl1+xx5m9pkNJoRjhniZPZPc+GQWeUmwzFnavDCxnsalrWIWUv6RW6
+         Du+wmFGEseflQ==
+Date:   Thu, 9 Mar 2023 17:27:06 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Song Liu <song@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
+Message-ID: <ZAn6yuP3d0JbhlBZ@kernel.org>
+References: <20230308094106.227365-1-rppt@kernel.org>
+ <20230308094106.227365-2-rppt@kernel.org>
+ <ZAl9PbMe1CRlvzva@localhost>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAl9PbMe1CRlvzva@localhost>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Jean-Philippe Brucker [mailto:jean-philippe@linaro.org]
-> Sent: 09 March 2023 13:42
-> To: Nicolin Chen <nicolinc@nvidia.com>
-> Cc: jgg@nvidia.com; robin.murphy@arm.com; will@kernel.org;
-> eric.auger@redhat.com; kevin.tian@intel.com; baolu.lu@linux.intel.com;
-> joro@8bytes.org; Shameerali Kolothum Thodi
-> <shameerali.kolothum.thodi@huawei.com>;
-> linux-arm-kernel@lists.infradead.org; iommu@lists.linux.dev;
-> linux-kernel@vger.kernel.org; yi.l.liu@intel.com
-> Subject: Re: [PATCH v1 02/14] iommufd: Add nesting related data structures
-> for ARM SMMUv3
+On Thu, Mar 09, 2023 at 06:31:25AM +0000, Hyeonggon Yoo wrote:
+> On Wed, Mar 08, 2023 at 11:41:02AM +0200, Mike Rapoport wrote:
+> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > 
+> > When set_memory or set_direct_map APIs used to change attribute or
+> > permissions for chunks of several pages, the large PMD that maps these
+> > pages in the direct map must be split. Fragmenting the direct map in such
+> > manner causes TLB pressure and, eventually, performance degradation.
+> > 
+> > To avoid excessive direct map fragmentation, add ability to allocate
+> > "unmapped" pages with __GFP_UNMAPPED flag that will cause removal of the
+> > allocated pages from the direct map and use a cache of the unmapped pages.
+> > 
+> > This cache is replenished with higher order pages with preference for
+> > PMD_SIZE pages when possible so that there will be fewer splits of large
+> > pages in the direct map.
+> > 
+> > The cache is implemented as a buddy allocator, so it can serve high order
+> > allocations of unmapped pages.
 > 
-> Hi Nicolin,
+> Hello,
 > 
-> On Thu, Mar 09, 2023 at 02:53:38AM -0800, Nicolin Chen wrote:
-> > Add the following data structures for corresponding ioctls:
-> >                iommu_hwpt_arm_smmuv3 =>
-> IOMMUFD_CMD_HWPT_ALLOC
-> >     iommu_hwpt_invalidate_arm_smmuv3 =>
-> IOMMUFD_CMD_HWPT_INVALIDATE
-> >
-> > Also, add IOMMU_HW_INFO_TYPE_ARM_SMMUV3 and
-> IOMMU_PGTBL_TYPE_ARM_SMMUV3_S1
-> > to the header and corresponding type/size arrays.
-> >
-> > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> To me it seems unnecessary to increase pageblock bitmap size just to
+> distinguish if it is allocated with __GFP_UNMAPPED.
 > 
-> > +/**
-> > + * struct iommu_hwpt_arm_smmuv3 - ARM SMMUv3 specific page table
-> data
-> > + *
-> > + * @flags: page table entry attributes
-> > + * @s2vmid: Virtual machine identifier
-> > + * @s1ctxptr: Stage-1 context descriptor pointer
-> > + * @s1cdmax: Number of CDs pointed to by s1ContextPtr
-> > + * @s1fmt: Stage-1 Format
-> > + * @s1dss: Default substream
-> > + */
-> > +struct iommu_hwpt_arm_smmuv3 {
-> > +#define IOMMU_SMMUV3_FLAG_S2	(1 << 0) /* if unset, stage-1 */
-> 
-> I don't understand the purpose of this flag, since the structure only
-> provides stage-1 configuration fields
-> 
-> > +#define IOMMU_SMMUV3_FLAG_VMID	(1 << 1) /* vmid override */
-> 
-> Doesn't this break isolation?  The VMID space is global for the SMMU, so
-> the guest could access cached mappings of another device
+> I think this can be implemented as an independent cache on top of
+> buddy allocator, and introducing new API for unmapped page
+> allocation and freeing?
 
-On platforms that supports BTM [1], we may need the VMID allocated by KVM.
-But again getting that from user pace doesn't look safe. I have attempted to revise
-the earlier RFC to pin and use the KVM VMID from SMMUv3 here[2].
+Yes, it could. But with such API we'd also need to take care of
+mapping/unmapping these pages for the modules use case which is not that
+difficult, but still more complex than a flag to vmalloc().
+As for secretmem, freeing of secretmem pages happens in the page cache, so
+changing that to use, say, unmapped_free() would be quite intrusive.
 
-But the problem is getting the KVM instance associated with the device. Currently I am 
-going through the VFIO layer to retrieve the KVM instance(vfio_device->kvm).
+Another reason to mark the entire pageblock as unmapped is possibility to
+steal pages from that pageblock into the unmmaped cache when they become
+free. When we allocate pages to replenish the unmapped cache, we split the
+large mapping in the direct map, so even the pages in the same pageblock
+that do not get into the cache are still mapped at PTE level. When they are
+freed, they will be put in the cache and so fewer explicit cache refills
+that split the large mappings will be required.
+ 
+> Thanks,
+> Hyeonggon
 
-On the previous RFC discussion thread[3], Jean has proposed,
-
-" In the new design we can require from the start that creating a nesting IOMMU
-container through /dev/iommu *must* come with a KVM context, that way
-we're sure to reuse the existing VMID. "
-
-Is that something we can still do or there is a better way to handle this now?
-
-Thanks,
-Shameer
-
-
-1. https://lore.kernel.org/linux-arm-kernel/YEEUocRn3IfIDpLj@myrica/T/#m478f7e7d5dcb729e02721beda35efa12c1d20707
-2. https://github.com/hisilicon/kernel-dev/commits/iommufd-v6.2-rc4-nesting-arm-btm-v2
-3. https://lore.kernel.org/linux-arm-kernel/YEEUocRn3IfIDpLj@myrica/T/#m11cde7534943ea7cf35f534cb809a023eabd9da3
-
+-- 
+Sincerely yours,
+Mike.
