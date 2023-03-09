@@ -2,134 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44BB6B1B34
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 836CE6B1B2E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjCIGOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 01:14:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
+        id S229893AbjCIGNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 01:13:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjCIGOW (ORCPT
+        with ESMTP id S229900AbjCIGNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 01:14:22 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072EDC9A4E;
-        Wed,  8 Mar 2023 22:14:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678342461; x=1709878461;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=2K62SrZiHQjF6e8srmIrQVlR1O8haqnD1lsxLpt8L60=;
-  b=DX47vwfWGB4haEFQDZgFaJ00tCIvBQOzvuMJj0mZIjmtmCCb62bMDTix
-   1BUVCBVCM6jzW2Di63L1ayL3sVMRMxGDVTKhP5oK1HzIBUhcJr7+3PR3H
-   I7i3W9F2EgIXeq20LGMXpVfjPQJcm0MtLj4xHXMX8UIXV8PK+13QHyLad
-   MSRkBl5k1wN6QpMmMcU3RGkbzOvVhgWq78IxhVOHJM9bNXf7A9L6rl3Lx
-   cow0QSP+/ImRSlLqCdij+De+/Iba33PmbxWBNmP9JlcRL9GulurmEx0WJ
-   MBJURfD9HNspbXNd2MQ6/c880Fl+8sjhWH0WeBQVEKZx23PZItG3fDdJ7
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="337889162"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="337889162"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 22:14:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="709720991"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="709720991"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 08 Mar 2023 22:14:12 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pa9XY-0002hh-08;
-        Thu, 09 Mar 2023 06:14:12 +0000
-Date:   Thu, 9 Mar 2023 14:13:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?iso-8859-1?Q?K=F6ry?= Maincent <kory.maincent@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-omap@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Michael Walle <michael@walle.cc>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Kory Maincent <kory.maincent@bootlin.com>,
-        thomas.petazzoni@bootlin.com, Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>
-Subject: Re: [PATCH v3 3/5] net: Let the active time stamping layer be
- selectable.
-Message-ID: <202303091304.yj8NySNz-lkp@intel.com>
-References: <20230308135936.761794-4-kory.maincent@bootlin.com>
+        Thu, 9 Mar 2023 01:13:31 -0500
+Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20135FEBB
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 22:13:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1678342403;
+        bh=Fbuox8QW2JDjAeHw3oLM723lCtUM2XciyiEPjQ8rQlY=;
+        h=From:To:Cc:Subject:Date;
+        b=PHISvihbJ+67p8CJxaN8drK0KLxGBXzZ6/NFaZIo61cSo6X2xjbHkqO0gVxEqoZaP
+         zNXv0gsYv7jB5NhEcPhVk0mhDckcIgOJrDcODLmbW9sTbPEYMUsPs48XIz4D1aPP7u
+         Vl1ktok9dk5uKia22SIiVdM7HgWVVNL45aa6eZgg=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
+        id 3559E6D2; Thu, 09 Mar 2023 14:13:21 +0800
+X-QQ-mid: xmsmtpt1678342401t4e66esh6
+Message-ID: <tencent_89579C514BC4020324A1A4ACA44B5B95BB07@qq.com>
+X-QQ-XMAILINFO: NkHKfw09D6j8PsoUArMVLcSk1Xpwh7+bVG1cJS9O/CbP0bdPjXNjbYkjnJdAzY
+         QK/J67TtJeqUlj25+QWrnIqBBQFUsWDi0fLvE3IIwlOqAB0ZTWUgqCSGnQ/BREhASD6COX+tIjFB
+         y5zKTHC3uy2xjp++OfFYk+Bj1ogRidwXbN0na2hDAhbVQ6SYlqVDme93YxDFcdtZMcb4eSAHzG0T
+         n+G4KJdm3XCxSZJx81TSGNN7VyquwIQOHm6mcSUUTXIqBHjfYwPzLNRcSvBSRi7ObJFkLpdhtM7e
+         09K4KKFg5mANnLfryzD8x2hCFxgRat442NbHPojnq1Yu248neb8uKQSklRs6//lhkl8yxo5yyK4u
+         OsDLKhr69JGGntOwhiTHH9gmDarTzveKwLxy08lLedDy54QFkcpBYsf7LPp07Dj7paqW/bZ1szY2
+         wZ33HbVAWXYsA7swrozYCRbuQ/7maWx8m7nFDTgRKUKBywe/mGaR7DrlqdsRpFi3PuF+ytNg/xlR
+         0Wyy/85hEcPLjLmoMHP1Jlyc5nqXXU9oiY37/RrwD+hoTvbuSE0kIQWhZ68PTJcQyhRdf6bMkGS5
+         vK4QxaZL4Te720aWDpuXDFYashXsJtCRrxspvbg9xdm2RzYIALMsshmNzWbRjkKpEuUTQe+rAJg6
+         4NIHpV4scw5nPv1fsoHPisuBzQ4Tz1A2xla0ScAJZax1ApdztwonAsglLi6WRAuCTwjOU5RBIKbx
+         Uh2bcFW7hvbZAWDTp82zcqQ+nODAvdQu7ig0dusa6TlECU2Q5t9bTtuaePXgc0oVZ1exflAYXlhM
+         oADxA0LP7AlTl13ps8bWFRAbImEeCK8GpPoqeVoWIGiemhaTjtsDQ0H0lYF2bJREymSAJmXUkQJ5
+         moIPQmh7M42E/bk2H1/b+2ePSplXd3m4ep1NtoZHtSJlT1wdHx1ebLgABPUv0tjUvJL38Huv5HXA
+         jBk8foyJ3PR1b+UnpGzhBY7rdnnLaZYmhM5K6GwAfMz4jXeokvjJFmEFj+th0VF4mvLK4fiR8=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     sgarzare@redhat.com, mst@redhat.com
+Cc:     Rong Tao <rtoax@foxmail.com>, Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org (open list:VIRTIO CORE AND
+        NET DRIVERS), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] tools/virtio: virtio_test: Fix indentation
+Date:   Thu,  9 Mar 2023 14:13:20 +0800
+X-OQ-MSGID: <20230309061320.30123-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230308135936.761794-4-kory.maincent@bootlin.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Köry,
+Replace eight spaces with Tab.
 
-I love your patch! Yet something to improve:
+Signed-off-by: Rong Tao <rtoax@foxmail.com>
+---
+ tools/virtio/virtio_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[auto build test ERROR on v6.2]
-[cannot apply to robh/for-next horms-ipvs/master net/master net-next/master linus/master v6.3-rc1 next-20230309]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/K-ry-Maincent/net-ethtool-Refactor-identical-get_ts_info-implementations/20230308-220453
-patch link:    https://lore.kernel.org/r/20230308135936.761794-4-kory.maincent%40bootlin.com
-patch subject: [PATCH v3 3/5] net: Let the active time stamping layer be selectable.
-config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20230309/202303091304.yj8NySNz-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/d81a36f239360e7e3b9ca2633e52b3cb12205590
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review K-ry-Maincent/net-ethtool-Refactor-identical-get_ts_info-implementations/20230308-220453
-        git checkout d81a36f239360e7e3b9ca2633e52b3cb12205590
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SUBARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303091304.yj8NySNz-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   /usr/bin/ld: warning: arch/x86/um/checksum_32.o: missing .note.GNU-stack section implies executable stack
-   /usr/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-   /usr/bin/ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
-   /usr/bin/ld: net/core/dev_ioctl.o: in function `dev_hwtstamp_ioctl':
-   net/core/dev_ioctl.c:280: undefined reference to `phy_do_ioctl'
->> /usr/bin/ld: net/core/dev_ioctl.c:290: undefined reference to `phy_mii_ioctl'
-   collect2: error: ld returned 1 exit status
-
+diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
+index 6e348fbdc5d8..44409a311580 100644
+--- a/tools/virtio/virtio_test.c
++++ b/tools/virtio/virtio_test.c
+@@ -134,7 +134,7 @@ static void vdev_info_init(struct vdev_info* dev, unsigned long long features)
+ 	dev->buf_size = 1024;
+ 	dev->buf = malloc(dev->buf_size);
+ 	assert(dev->buf);
+-        dev->control = open("/dev/vhost-test", O_RDWR);
++	dev->control = open("/dev/vhost-test", O_RDWR);
+ 	assert(dev->control >= 0);
+ 	r = ioctl(dev->control, VHOST_SET_OWNER, NULL);
+ 	assert(r >= 0);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.1
+
