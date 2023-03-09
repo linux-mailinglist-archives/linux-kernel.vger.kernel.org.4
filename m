@@ -2,180 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2299A6B27C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C716B27BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 15:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbjCIOvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 09:51:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
+        id S231975AbjCIOva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 09:51:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbjCIOvY (ORCPT
+        with ESMTP id S231965AbjCIOvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:51:24 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 258FFF401D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:50:03 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B20E2AD7;
-        Thu,  9 Mar 2023 06:50:05 -0800 (PST)
-Received: from [10.57.91.145] (unknown [10.57.91.145])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6BDD63F5A1;
-        Thu,  9 Mar 2023 06:49:20 -0800 (PST)
-Message-ID: <1467e666-1b6c-c285-3f79-f8e8b088718b@arm.com>
-Date:   Thu, 9 Mar 2023 14:49:14 +0000
+        Thu, 9 Mar 2023 09:51:12 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667E6F4B6B
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 06:49:36 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id g17so2612581lfv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 06:49:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678373360;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6IEW8M/aeCm2sE5fVkmadnoct+8r+q1Vjruu3SWPyz4=;
+        b=JDGWw6n/bGtww37vqF5bJEUF5OLuzOGZoRY3GeMOF0jknYjbBC4WV51Qe3htdU4oB4
+         KaLBMDzhCwVC1vD/kxoF9lGJUtnE5u9RZAARdJu54kZLN4L7lguTv5XkyzR4DIMedS5Q
+         Ap20WlP9mnwSWYVuPLalJo9WTO8CD9m7xL5G6OGu3zbvNlbJwxJObleGQzMx0LQj1lnL
+         mvtoBMcRwu9mXunuhwdrZmg/Pl6oyYiRpOrBKxM9rnpXgsVVsaNAd54Er485w13aFkM6
+         56iKRoSCedVc1svUs20og8E0aK1MCoF4yv96W21egG58IzZlEz+8oE3O1mJuBR1QQJVN
+         +L5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678373360;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6IEW8M/aeCm2sE5fVkmadnoct+8r+q1Vjruu3SWPyz4=;
+        b=Vl14g9UlSdjdLRDhiZyAswvJcZzCK4jJvJO1YmrlAI8P9dvFO9QFCOvpU5AO8Nwl/N
+         8V1ht1H9dEC7HSkan86A9Pn91c5R66kbU1ZbyU9Yu1RU5trXxzJHV/rrAwAb/uXNKss0
+         rHgUU954A4l61YNaPAnCO+eW8yUcd4w45k+qfx/2TdCZygL/Xxcx6JZ5pPcI4xlTB55c
+         P2nyeL9dLIeePPfjFrUg5wkbwTvDz6p9WAxpXRljsD26lUt26AxCV/CdRaK3rh0ou7qA
+         4tDuV2AR4PEy0Ou6g5EKW+f3EEOL9CgV0s7oqseHT+mL/C6qNqbEonGf4qdm+t4CvPNH
+         +cjA==
+X-Gm-Message-State: AO0yUKX6DjaQ4yBdrSVkmrzTJoWAYjhQpwNjhPHOv2kAlNg30WflV3K4
+        biBLcQ7CqbFsIVJGlMlRcdvy45BmMw2+jESuqZg=
+X-Google-Smtp-Source: AK7set+JGAQzKxmezNd7RQx8YEGiJc1RmAtTo+6cEJpQm6vgJINCoqE/RuqNP6OEM0zj+lk2yqH0G8QsAxMhcjQgxSI=
+X-Received: by 2002:a05:6512:281f:b0:4db:1e7d:5d42 with SMTP id
+ cf31-20020a056512281f00b004db1e7d5d42mr12673495lfb.0.1678373359921; Thu, 09
+ Mar 2023 06:49:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
- arm_smmu_cache_invalidate_user
-Content-Language: en-GB
-To:     Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com, will@kernel.org
-Cc:     eric.auger@redhat.com, kevin.tian@intel.com,
-        baolu.lu@linux.intel.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <aa327f9ea61e5a4771c13e53639e33955b9acde3.1678348754.git.nicolinc@nvidia.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <aa327f9ea61e5a4771c13e53639e33955b9acde3.1678348754.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6022:9116:b0:3a:4b9f:4650 with HTTP; Thu, 9 Mar 2023
+ 06:49:19 -0800 (PST)
+Reply-To: wormer.amos@aol.com
+From:   Wormer Amos <devynurmalayousef01@gmail.com>
+Date:   Thu, 9 Mar 2023 15:49:19 +0100
+Message-ID: <CAApZ1XwamMYRdqTQ8KLsA3my=iG4wuCoyrDWKFTX791BLZNPbQ@mail.gmail.com>
+Subject: CAN I KNOW MORE ABOUT YOU
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:143 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.7491]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [devynurmalayousef01[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [devynurmalayousef01[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-09 10:53, Nicolin Chen wrote:
-> Add arm_smmu_cache_invalidate_user() function for user space to invalidate
-> TLB entries and Context Descriptors, since either an IO page table entrie
-> or a Context Descriptor in the user space is still cached by the hardware.
-> 
-> The input user_data is defined in "struct iommu_hwpt_invalidate_arm_smmuv3"
-> that contains the essential data for corresponding invalidation commands.
-> 
-> Co-developed-by: Eric Auger <eric.auger@redhat.com>
-> Signed-off-by: Eric Auger <eric.auger@redhat.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 56 +++++++++++++++++++++
->   1 file changed, 56 insertions(+)
-> 
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> index ac63185ae268..7d73eab5e7f4 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> @@ -2880,9 +2880,65 @@ static void arm_smmu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
->   	arm_smmu_sva_remove_dev_pasid(domain, dev, pasid);
->   }
->   
-> +static void arm_smmu_cache_invalidate_user(struct iommu_domain *domain,
-> +					   void *user_data)
-> +{
-> +	struct iommu_hwpt_invalidate_arm_smmuv3 *inv_info = user_data;
-> +	struct arm_smmu_cmdq_ent cmd = { .opcode = inv_info->opcode };
-> +	struct arm_smmu_domain *smmu_domain = to_smmu_domain(domain);
-> +	struct arm_smmu_device *smmu = smmu_domain->smmu;
-> +	size_t granule_size = inv_info->granule_size;
-> +	unsigned long iova = 0;
-> +	size_t size = 0;
-> +	int ssid = 0;
-> +
-> +	if (!smmu || !smmu_domain->s2 || domain->type != IOMMU_DOMAIN_NESTED)
-> +		return;
-> +
-> +	switch (inv_info->opcode) {
-> +	case CMDQ_OP_CFGI_CD:
-> +	case CMDQ_OP_CFGI_CD_ALL:
-> +		return arm_smmu_sync_cd(smmu_domain, inv_info->ssid, true);
-
-Since we let the guest choose its own S1Fmt (and S1CDMax, yet not 
-S1DSS?), how can we assume leaf = true here?
-
-> +	case CMDQ_OP_TLBI_NH_VA:
-> +		cmd.tlbi.asid = inv_info->asid;
-> +		fallthrough;
-> +	case CMDQ_OP_TLBI_NH_VAA:
-> +		if (!granule_size || !(granule_size & smmu->pgsize_bitmap) ||
-
-Non-range invalidations with TG=0 are perfectly legal, and should not be 
-ignored.
-
-> +		    granule_size & ~(1ULL << __ffs(granule_size)))
-
-If that's intended to mean is_power_of_2(), please just use is_power_of_2().
-
-> +			return;
-> +
-> +		iova = inv_info->range.start;
-> +		size = inv_info->range.last - inv_info->range.start + 1;
-
-If the design here is that user_data is so deeply driver-specific and 
-special to the point that it can't possibly be passed as a type-checked 
-union of the known and publicly-visible UAPI types that it is, wouldn't 
-it make sense to just encode the whole thing in the expected format and 
-not have to make these kinds of niggling little conversions at both ends?
-
-> +		if (!size)
-> +			return;
-> +
-> +		cmd.tlbi.vmid = smmu_domain->s2->s2_cfg.vmid;
-> +		cmd.tlbi.leaf = inv_info->flags & IOMMU_SMMUV3_CMDQ_TLBI_VA_LEAF;
-> +		__arm_smmu_tlb_inv_range(&cmd, iova, size, granule_size, smmu_domain);
-> +		break;
-> +	case CMDQ_OP_TLBI_NH_ASID:
-> +		cmd.tlbi.asid = inv_info->asid;
-> +		fallthrough;
-> +	case CMDQ_OP_TLBI_NH_ALL:
-> +		cmd.tlbi.vmid = smmu_domain->s2->s2_cfg.vmid;
-> +		arm_smmu_cmdq_issue_cmd_with_sync(smmu, &cmd);
-> +		break;
-> +	case CMDQ_OP_ATC_INV:
-> +		ssid = inv_info->ssid;
-> +		iova = inv_info->range.start;
-> +		size = inv_info->range.last - inv_info->range.start + 1;
-> +		break;
-
-Can we do any better than multiplying every single ATC_INV command, even 
-for random bogus StreamIDs, into multiple commands across every physical 
-device? In fact, I'm not entirely confident this isn't problematic, if 
-the guest wishes to send invalidations for one device specifically while 
-it's put some other device into a state where sending it a command would 
-do something bad. At the very least, it's liable to be confusing if the 
-guest sends a command for one StreamID but gets an error back for a 
-different one.
-
-And if we expect ATS, what about PRI? Per patch #4 you're currently 
-offering that to the guest as well.
-
-> +	default:
-> +		return;
-
-What about NSNH_ALL? That still needs to invalidate all the S1 context 
-that the guest *thinks* it's invalidating.
-
-Also, perhaps I've overlooked something obvious, but what's the 
-procedure for reflecting illegal commands back to userspace? Some of the 
-things we're silently ignoring here would be expected to raise 
-CERROR_ILL. Same goes for all the other fault events which may occur due 
-to invalid S1 config, come to think of it.
-
-Thanks,
-Robin.
-
-> +	}
-> +
-> +	arm_smmu_atc_inv_domain(smmu_domain, ssid, iova, size);
-> +}
-> +
->   static const struct iommu_domain_ops arm_smmu_nested_domain_ops = {
->   	.attach_dev		= arm_smmu_attach_dev,
->   	.free			= arm_smmu_domain_free,
-> +	.cache_invalidate_user	= arm_smmu_cache_invalidate_user,
->   };
->   
->   static struct iommu_domain *
+Dear how are you? Are you capable for investment in your country. i
+need serious investment project with good background, kindly connect
+me to discuss details immediately. i will appreciate you to contact me
+on this email address Thanks and awaiting your quick response yours
+Amos
