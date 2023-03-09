@@ -2,164 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEE96B19E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 04:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 463636B19E7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 04:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjCIDSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 22:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
+        id S229621AbjCIDUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 22:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjCIDSY (ORCPT
+        with ESMTP id S229546AbjCIDUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 22:18:24 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E84E113505;
-        Wed,  8 Mar 2023 19:18:09 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8AxJMTwTwlkWTQKAA--.1921S3;
-        Thu, 09 Mar 2023 11:18:08 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxHuTpTwlkWhxQAA--.37414S3;
-        Thu, 09 Mar 2023 11:18:03 +0800 (CST)
-Subject: Re: [PATCH v13 2/2] clk: clk-loongson2: add clock controller driver
- support
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-To:     kernel test robot <lkp@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
-        loongson-kernel@lists.loongnix.cn
-References: <20230307115022.12846-2-zhuyinbo@loongson.cn>
- <202303082037.QPfBP64A-lkp@intel.com>
- <b94ee1d2-b224-f9d5-3f3c-0096634f4c93@loongson.cn>
-Message-ID: <a16ac33d-e313-2eeb-007d-20f61d670308@loongson.cn>
-Date:   Thu, 9 Mar 2023 11:18:01 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 8 Mar 2023 22:20:22 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C3012F2E;
+        Wed,  8 Mar 2023 19:20:21 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328N4VoF015865;
+        Thu, 9 Mar 2023 03:19:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=QRt4YAdTiZeDMCcYTiGjJS1xzx8pV60zEPhaTxIBt6c=;
+ b=mjAb/XTdWR4/7iD5ekytaykwzLaOjPLHWnnnerWEjHBLsEsLRX947Qe7Yzu/aRGbpUky
+ Fk2e5EjQPhUB1LonsRN88ZA3DiVAqwGNJOPZkT7knSiMJgZJw8l62ekkYBgN7yjPxF9D
+ 4GfBKh49VlrRvhDfXGoUPGHTBfW7SnfauoDjVxLvxb8OeSR3FRdHj/lTygx7uefFjR3C
+ qHbSnqwZI064FoYbC1wCvK6p2SfiKikQnMz0ySa1Y+I1fH6LqWOlvDvBLbSTJA4LpEEY
+ PDkzzsHWRFbMg1HpZ63UN6vFfHkq8MiEj47DH+ue4onQ0Rux8ZxqfYo+JTYhGl+8+bG7 Uw== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p5nn960w0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 09 Mar 2023 03:19:59 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32931tmG022310;
+        Thu, 9 Mar 2023 03:19:58 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3p6fr9p4r0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 09 Mar 2023 03:19:58 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3293Iwm6022200;
+        Thu, 9 Mar 2023 03:19:57 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3p6fr9p4pq-1;
+        Thu, 09 Mar 2023 03:19:57 +0000
+From:   Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+To:     davem@davemloft.net
+Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        zbr@ioremap.net, brauner@kernel.org, johannes@sipsolutions.net,
+        ecree.xilinx@gmail.com, leon@kernel.org, keescook@chromium.org,
+        socketcan@hartkopp.net, petrm@nvidia.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        anjali.k.kulkarni@oracle.com
+Subject: [PATCH 0/5] Process connector bug fixes & enhancements
+Date:   Wed,  8 Mar 2023 19:19:48 -0800
+Message-Id: <20230309031953.2350213-1-anjali.k.kulkarni@oracle.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-In-Reply-To: <b94ee1d2-b224-f9d5-3f3c-0096634f4c93@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8AxHuTpTwlkWhxQAA--.37414S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWF18ur13tF17Gr15Wr1ftFb_yoWrAw4xpw
-        4ktryUJryFqr18Xr4UKryUXry5tr4DJ3WDJr1UJFyUZrWDZw1jqr4I9F1jgr1DJr4kGryU
-        Jr1DXrWxuF17JwUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
-        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07joKZXUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-08_15,2023-03-08_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 bulkscore=0
+ suspectscore=0 mlxlogscore=999 phishscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303090025
+X-Proofpoint-GUID: ES1mUgtgU-1aCl4NnT8WX8M9jLOuPO2P
+X-Proofpoint-ORIG-GUID: ES1mUgtgU-1aCl4NnT8WX8M9jLOuPO2P
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 
-在 2023/3/9 上午10:58, zhuyinbo 写道:
->
-> 在 2023/3/8 下午8:16, kernel test robot 写道:
->> Hi Yinbo,
->>
->> I love your patch! Yet something to improve:
->>
->> [auto build test ERROR on clk/clk-next]
->> [also build test ERROR on robh/for-next linus/master v6.3-rc1 
->> next-20230308]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>
->> url: 
->> https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/clk-clk-loongson2-add-clock-controller-driver-support/20230307-195252
->> base: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git 
->> clk-next
->> patch link: 
->> https://lore.kernel.org/r/20230307115022.12846-2-zhuyinbo%40loongson.cn
->> patch subject: [PATCH v13 2/2] clk: clk-loongson2: add clock 
->> controller driver support
->> config: mips-allyesconfig 
->> (https://download.01.org/0day-ci/archive/20230308/202303082037.QPfBP64A-lkp@intel.com/config)
->> compiler: mips-linux-gcc (GCC) 12.1.0
->> reproduce (this is a W=1 build):
->>          wget 
->> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
->> -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # 
->> https://github.com/intel-lab-lkp/linux/commit/391d6fc63ac65f5456e4755c9dd85232a6296285
->>          git remote add linux-review 
->> https://github.com/intel-lab-lkp/linux
->>          git fetch --no-tags linux-review 
->> Yinbo-Zhu/clk-clk-loongson2-add-clock-controller-driver-support/20230307-195252
->>          git checkout 391d6fc63ac65f5456e4755c9dd85232a6296285
->>          # save the config file
->>          mkdir build_dir && cp config build_dir/.config
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 
->> make.cross W=1 O=build_dir ARCH=mips olddefconfig
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 
->> make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/
->>
->> If you fix the issue, kindly add following tag where applicable
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Link: 
->> https://lore.kernel.org/oe-kbuild-all/202303082037.QPfBP64A-lkp@intel.com/
->>
->> All errors (new ones prefixed by >>):
->>
->>     drivers/clk/clk-loongson2.c: In function 'loongson2_calc_pll_rate':
->>>> drivers/clk/clk-loongson2.c:79:15: error: implicit declaration of 
->>>> function 'readq'; did you mean 'readl'? 
->>>> [-Werror=implicit-function-declaration]
->>        79 |         val = readq(loongson2_pll_base + offset);
->>           |               ^~~~~
->>           |               readl
->>     cc1: some warnings being treated as errors
->
-> The CONFIG_64BIT not enabled in your config file, I will add a depend 
-> on "CONFIG_64BIT" in my clock driver to fix this compile error.
-My clock is for LoongArch platform, The LOONGARCH had select 
-"CONFIG_64BIT", I will add a depend on "LOONGARCH" in my clock driver to 
-fix this compile error.
->
->>
->>
->> vim +79 drivers/clk/clk-loongson2.c
->>
->>      73
->>      74    static unsigned long loongson2_calc_pll_rate(int offset, 
->> unsigned long rate)
->>      75    {
->>      76        u64 val;
->>      77        u32 mult = 1, div = 1;
->>      78
->>    > 79        val = readq(loongson2_pll_base + offset);
->>      80
->>      81        mult = (val >> LOONGSON2_PLL_MULT_SHIFT) &
->>      82                clk_div_mask(LOONGSON2_PLL_MULT_WIDTH);
->>      83        div = (val >> LOONGSON2_PLL_DIV_SHIFT) &
->>      84                clk_div_mask(LOONGSON2_PLL_DIV_WIDTH);
->>      85
->>      86        return div_u64((u64)rate * mult, div);
->>      87    }
->>      88
->>
+In this series, we add back filtering to the proc connector module. This
+is required to fix some bugs and also will enable the addition of event 
+based filtering, which will improve performance for anyone interested
+in a subset of process events, as compared to the current approach,
+which is to send all event notifications.
+
+Thus, a client can register to listen for only exit or fork or a mix or
+all of the events. This greatly enhances performance - currently, we
+need to listen to all events, and there are 9 different types of events.
+For eg. handling 3 types of events - 8K-forks + 8K-exits + 8K-execs takes
+200ms, whereas handling 2 types - 8K-forks + 8K-exits takes about 150ms,
+and handling just one type - 8K exits takes about 70ms.
+
+Reason why we need the above changes and also a new event type 
+PROC_EVENT_NONZERO_EXIT, which is only sent by kernel to a listening
+application when any process exiting has a non-zero exit status is:
+
+Oracle DB runs on a large scale with 100000s of short lived processes,
+starting up and exiting quickly. A process monitoring DB daemon which
+tracks and cleans up after processes that have died without a proper exit
+needs notifications only when a process died with a non-zero exit code
+(which should be rare).
+
+This change will give Oracle DB substantial performance savings - it takes
+50ms to scan about 8K PIDs in /proc, about 500ms for 100K PIDs. DB does
+this check every 3 secs, so over an hour we save 10secs for 100K PIDs.
+
+Measuring the time using pidfds for monitoring 8K process exits took 4
+times longer - 200ms, as compared to 70ms using only exit notifications
+of proc connector. Hence, we cannot use pidfd for our use case.
+
+This kind of a new event could also be useful to other applications like
+Google's lmkd daemon, which needs a killed process's exit notification.
+
+This patch series is organized as follows -
+
+Patch 1    : Is needed for patches 2 & 3 to work.
+Patches 2-3: Fixes some bugs in proc connector, details in the patches.
+Patch 4    : Allow non-root users access to proc connector events.
+Patch 5    : Adds event based filtering for performance enhancements.
+
+Anjali Kulkarni (5):
+  netlink: Reverse the patch which removed filtering
+  connector/cn_proc: Add filtering to fix some bugs
+  connector/cn_proc: Test code for proc connector
+  connector/cn_proc: Allow non-root users access
+  connector/cn_proc: Performance improvements
+
+ drivers/connector/cn_proc.c     | 103 +++++++++--
+ drivers/connector/connector.c   |  13 +-
+ drivers/w1/w1_netlink.c         |   6 +-
+ include/linux/connector.h       |   6 +-
+ include/linux/netlink.h         |   5 +
+ include/uapi/linux/cn_proc.h    |  62 +++++--
+ net/netlink/af_netlink.c        |  35 +++-
+ samples/connector/proc_filter.c | 299 ++++++++++++++++++++++++++++++++
+ 8 files changed, 485 insertions(+), 44 deletions(-)
+ create mode 100644 samples/connector/proc_filter.c
+
+-- 
+2.39.2
 
