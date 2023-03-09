@@ -2,76 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DD36B236F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A35EF6B2374
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbjCILvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:51:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
+        id S231678AbjCILwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:52:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbjCILu6 (ORCPT
+        with ESMTP id S231649AbjCILvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:50:58 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82347E8244
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 03:50:52 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id t14so1520490ljd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 03:50:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678362651;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0p4GJeTW3q1Bm2/iH91/9m5M3HxUnLVVr8JEVsqlujU=;
-        b=uAZSDpCmSBwNzHJsUgDMCykjDJ1+2EhsM3/sNOoqDYXq/5IoNNAZHXLRQpZD/iQ2mO
-         DfO3Vd5oKvloFhnYdYxwf7fx03eusaNTzTHu/5kxR3x9g0Cfb0/YVrzDSX+4ZDOK895C
-         AHZk3GcyQT/gIUQNz6INSDejCZWbIHQrJHbCIC4aZGzy7iCd0pDgjwFs/rsPzVKT/4li
-         FpFH+I546qrIOkmnXGNP007f37EO6FLk11hWjo4AOPRPu1EGIr7T9AfZC7vZgWvO20fd
-         jWSj7JnjEPymzcU3/1s4Vnu0Ek0DzFR09UKXps49HrcGzyIuxRYlgSAnAa3d58RoWijR
-         JR/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678362651;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0p4GJeTW3q1Bm2/iH91/9m5M3HxUnLVVr8JEVsqlujU=;
-        b=Cw2t0HKSO7Jcqt2CL4NQbTyybMR6XykrSxpqjx5TW7RRHvQtyTfKE7yY57bwvJ+LKy
-         QKTQ5GGPL88sLP1nxlpsTzjtlhwnEHJQGJLSy6OtkjjXErIR7tZZlCazAo/dLdJjTdu/
-         MW6uuKxyS+8Pm7GFM/8DwP01GVfV/M8y+5plkLJwehHrPSis6dQZ7gcTJOqEPuO4hhFd
-         uFwMFJfDUwRObyLvCqvfNwdoAR3Z2YKwRaaRSxXYUveaXwfo14fAbTtIWG83Wj1bwKyH
-         67rovuOX8iYJ7oEr2g+lVSJJawur0pefEne1Zusr1Rrf1Ygf7Kn0OVgu5llIYX7QIOVi
-         Jb9g==
-X-Gm-Message-State: AO0yUKX2xY3rm3ZzPpN4kmMvsd+4L1SU5hmUZZxmuyilWLkQVeX4Fmsy
-        /wJAvkteAgxukGeyAVxgAznVfw==
-X-Google-Smtp-Source: AK7set8qaEPB+6IvkHMO2wAKbTPPW2DKT1KREG6IcHAlmzSU24LD0/9ZZbHq/qvLBERUYYPsKzm2CA==
-X-Received: by 2002:a2e:b5b7:0:b0:293:45dc:8b0f with SMTP id f23-20020a2eb5b7000000b0029345dc8b0fmr5553203ljn.26.1678362650788;
-        Thu, 09 Mar 2023 03:50:50 -0800 (PST)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id i186-20020a2e22c3000000b002946be8475esm2905584lji.135.2023.03.09.03.50.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 03:50:49 -0800 (PST)
-Message-ID: <fb9392b2-429c-2dd4-baa9-953f2a2f6dd7@linaro.org>
-Date:   Thu, 9 Mar 2023 12:50:47 +0100
+        Thu, 9 Mar 2023 06:51:53 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BD0E6835;
+        Thu,  9 Mar 2023 03:51:51 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3298QivW009122;
+        Thu, 9 Mar 2023 11:51:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=DNOlz2EYTj6weFcohqxG0NnpJE4xB0UXowa/63Q892w=;
+ b=BWLzr8NZdvaEdimvictYzpPUd7ujpjmZBI3GgiDwXkZ6PhARNXOwN2t9iFHHcIcQIW5p
+ DU6tkAarZ970FAtXfn3dDi6Bc/LIyl2vwusneKbeblFgCoEWKmGbjnUQ3T0gxx+o1ABf
+ QYKx+33uALemidDt5054wxL9g2PrkVXzexnkZUTJV+UGrRfGYV3eoaWeIoZhpZ1YTWPE
+ 7Fdky2qICPpO3DjxEmkXnJIlynienapTsp37qjwvR+aPf7AvYibAsz6z8qY9PXTzkrMU
+ P4Vlt1afSETdnr+hfyqle+oHocZ0rSWe0he6Wb/4Lu1SkG5OVrB3TPYwYS1rKTYX3JgQ RA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p74drhkxe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 11:51:46 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 329BpjFS014867
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 9 Mar 2023 11:51:45 GMT
+Received: from [10.201.3.182] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 9 Mar 2023
+ 03:51:41 -0800
+Message-ID: <73269ad0-5662-519c-f6c0-e5e2f918cd4e@quicinc.com>
+Date:   Thu, 9 Mar 2023 17:21:38 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] firmware: qcom: scm: fix bogus irq error at probe
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-References: <20230309111209.31606-1-johan+linaro@kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 17/17] PCI: qcom: Expose link transition counts via
+ debugfs
 Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230309111209.31606-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <andersson@kernel.org>, <lpieralisi@kernel.org>, <kw@linux.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh@kernel.org>
+CC:     <konrad.dybcio@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230309085102.120977-1-manivannan.sadhasivam@linaro.org>
+ <20230309085102.120977-18-manivannan.sadhasivam@linaro.org>
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+In-Reply-To: <20230309085102.120977-18-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: VrZ95vLubBXKCvrVPVzCJ29OTewhHoUI
+X-Proofpoint-ORIG-GUID: VrZ95vLubBXKCvrVPVzCJ29OTewhHoUI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_06,2023-03-08_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 priorityscore=1501 mlxscore=0 suspectscore=0
+ clxscore=1011 adultscore=0 phishscore=0 spamscore=0 mlxlogscore=999
+ bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303090095
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,36 +85,146 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 9.03.2023 12:12, Johan Hovold wrote:
-> A recent commit added support for an optional interrupt which is only
-> available on some platforms.
+On 3/9/2023 2:21 PM, Manivannan Sadhasivam wrote:
+> Qualcomm PCIe controllers have debug registers in the MHI region that
+> count PCIe link transitions. Expose them over debugfs to userspace to
+> help debug the low power issues.
 > 
-> Stop spamming the logs with bogus error messages on platforms that do
-> not use this new optional resource:
+> Note that even though the registers are prefixed as PARF_, they don't
+> live under the "parf" register region. The register naming is following
+> the Qualcomm's internal documentation as like other registers.
 > 
-> 	qcom_scm firmware:scm: error -ENXIO: IRQ index 0 not found
-> 
-> Fixes: 6bf325992236 ("firmware: qcom: scm: Add wait-queue handling logic")
-> Cc: Guru Das Srinagesh <quic_gurus@quicinc.com>
-> Cc: Sibi Sankar <quic_sibis@quicinc.com>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  drivers/firmware/qcom_scm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   drivers/pci/controller/dwc/pcie-qcom.c | 59 ++++++++++++++++++++++++++
+>   1 file changed, 59 insertions(+)
 > 
-> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> index 468d4d5ab550..b1e11f85b805 100644
-> --- a/drivers/firmware/qcom_scm.c
-> +++ b/drivers/firmware/qcom_scm.c
-> @@ -1479,7 +1479,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
->  
->  	init_completion(&__scm->waitq_comp);
->  
-> -	irq = platform_get_irq(pdev, 0);
-> +	irq = platform_get_irq_optional(pdev, 0);
->  	if (irq < 0) {
->  		if (irq != -ENXIO)
->  			return irq;
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index e1180c84f0fa..6d9bde64c9e9 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -10,6 +10,7 @@
+>   
+>   #include <linux/clk.h>
+>   #include <linux/crc8.h>
+> +#include <linux/debugfs.h>
+>   #include <linux/delay.h>
+>   #include <linux/gpio/consumer.h>
+>   #include <linux/interconnect.h>
+> @@ -62,6 +63,13 @@
+>   #define AXI_MSTR_RESP_COMP_CTRL1		0x81c
+>   #define MISC_CONTROL_1_REG			0x8bc
+>   
+> +/* MHI registers */
+> +#define PARF_DEBUG_CNT_PM_LINKST_IN_L2		0xc04
+> +#define PARF_DEBUG_CNT_PM_LINKST_IN_L1		0xc0c
+> +#define PARF_DEBUG_CNT_PM_LINKST_IN_L0S		0xc10
+> +#define PARF_DEBUG_CNT_AUX_CLK_IN_L1SUB_L1	0xc84
+> +#define PARF_DEBUG_CNT_AUX_CLK_IN_L1SUB_L2	0xc88
+> +
+>   /* PARF_SYS_CTRL register fields */
+>   #define MAC_PHY_POWERDOWN_IN_P2_D_MUX_EN	BIT(29)
+>   #define MST_WAKEUP_EN				BIT(13)
+> @@ -229,11 +237,13 @@ struct qcom_pcie {
+>   	struct dw_pcie *pci;
+>   	void __iomem *parf;			/* DT parf */
+>   	void __iomem *elbi;			/* DT elbi */
+> +	void __iomem *mhi;
+>   	union qcom_pcie_resources res;
+>   	struct phy *phy;
+>   	struct gpio_desc *reset;
+>   	struct icc_path *icc_mem;
+>   	const struct qcom_pcie_cfg *cfg;
+> +	struct dentry *debugfs;
+>   };
+>   
+>   #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
+> @@ -1385,6 +1395,37 @@ static void qcom_pcie_icc_update(struct qcom_pcie *pcie)
+>   	}
+>   }
+>   
+> +static int qcom_pcie_link_transition_count(struct seq_file *s, void *data)
+> +{
+> +	struct qcom_pcie *pcie = (struct qcom_pcie *)
+> +				     dev_get_drvdata(s->private);
+> +
+> +	seq_printf(s, "L0s transition count: %u\n",
+> +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_PM_LINKST_IN_L0S));
+> +
+> +	seq_printf(s, "L1 transition count: %u\n",
+> +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_PM_LINKST_IN_L1));
+> +
+> +	seq_printf(s, "L1.1 transition count: %u\n",
+> +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_AUX_CLK_IN_L1SUB_L1));
+> +
+> +	seq_printf(s, "L1.2 transition count: %u\n",
+> +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_AUX_CLK_IN_L1SUB_L2));
+> +
+> +	seq_printf(s, "L2 transition count: %u\n",
+> +		   readl_relaxed(pcie->mhi + PARF_DEBUG_CNT_PM_LINKST_IN_L2));
+> +
+> +	return 0;
+> +}
+> +
+> +static void qcom_pcie_init_debugfs(struct qcom_pcie *pcie)
+> +{
+> +	struct dw_pcie *pci = pcie->pci;
+> +
+> +	debugfs_create_devm_seqfile(pci->dev, "link_transition_count", pcie->debugfs,
+> +				    qcom_pcie_link_transition_count);
+> +}
+> +
+>   static int qcom_pcie_probe(struct platform_device *pdev)
+>   {
+>   	struct device *dev = &pdev->dev;
+> @@ -1392,6 +1433,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>   	struct dw_pcie *pci;
+>   	struct qcom_pcie *pcie;
+>   	const struct qcom_pcie_cfg *pcie_cfg;
+> +	char *name;
+>   	int ret;
+>   
+>   	pcie_cfg = of_device_get_match_data(dev);
+> @@ -1439,6 +1481,12 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>   		goto err_pm_runtime_put;
+>   	}
+>   
+> +	pcie->mhi = devm_platform_ioremap_resource_byname(pdev, "mhi");
+> +	if (IS_ERR(pcie->mhi)) {
+> +		ret = PTR_ERR(pcie->mhi);
+> +		goto err_pm_runtime_put;
+> +	}
+> +
+
+  Tested this series on ipq4019-ap.dk07.1-c1 board and the above hunk
+  breaks enumeration because there is no 'mhi' region. All the debug bits
+  used in the transition_count function is inside the PARF_STTS register
+  at offset 0x24 inside the PARF region.
+
+  Register: PCIE_0_PCIE20_PARF_PM_STTS | 0x80024
+  Offset:    0x24    Reset State:    0x00040000
+
+Bits    Field Name
+31    LINK_REQ_RST_NOT
+30    XMLH_LINK_UP
+29    PM_DSTATE_0
+0x0: D0
+0x1: D3
+28    PHYSTATUS
+27:16    PM_DSTATE
+15:12    PM_PME_EN
+11    PHYCLK_REQ_N
+10    L1SS_CLKREQN_OE
+9    L1SS_CLKREQN_IN
+8    PM_LINKST_IN_L1SUB
+7    PM_LINKST_IN_L0S
+6    PM_LINKST_L2_EXIT
+5    PM_LINKST_IN_L2
+4    PM_LINKST_IN_L1
+3:0    PM_STATUS
+
+Otherwise, with rest of the patches enumeration was fine.
+Tested with a pcie ethernet adapter.
+
+Regards,
+  Sricharan
