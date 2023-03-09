@@ -2,127 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938296B2333
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D9F6B2337
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbjCILjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:39:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60802 "EHLO
+        id S231451AbjCILj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbjCILjB (ORCPT
+        with ESMTP id S229876AbjCILjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:39:01 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805576A9C9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 03:39:00 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id x11so1614838pln.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 03:39:00 -0800 (PST)
+        Thu, 9 Mar 2023 06:39:48 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E705DC0BE;
+        Thu,  9 Mar 2023 03:39:47 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id b10so1528991ljr.0;
+        Thu, 09 Mar 2023 03:39:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678361940;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kYsJiKyy+lTF4z1H2mSxKLr6ADWPzBDDBXemJTJ36Ks=;
-        b=qrYsSdWwsRhgnb8uDOtCBtoRToUCHBFxclejPIK5uKZNh5GhkUHLsx+shQWLFKnQRb
-         lxqZQ7iqj1Rp1ij8OB5I0DCtrrEKznEBMWwEe6u77MBH82sEen6sPY+AK54YhhVv6Zov
-         vVErC58toiN46BPkGNds4B1oKmfDQo1P/GuPXKmcewJs6zIMxMm2vzB9g83cmrN9i5As
-         3jOPPHhtpAPnN92dBR7TQxAt+FDacKrAzodTNH8J3HQmZbftdnunON5V2OXxGUfugwm2
-         fiLZlmKMfYQPp/+CjWQfWUNFi6694qDSqu+QN+UfHSYk0Ofg9B5XTmduB99kk4/x/5ov
-         zsgQ==
+        d=gmail.com; s=20210112; t=1678361985;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5/fm4EqRCQX8P0V8IgQoUdGEPJ3+a5JFn9mYMwtSO3Q=;
+        b=jz8hJhESfDuPQgyoO4TMijhXSSWQRZKlV81/ZaLE1L19/bVehhsCxPiTATZqsogeuP
+         Lm3C+nd6zUQfQOtHYmgIQ1N7emCuJszYTIwguedZttJi05Z23HC5g6HjeBQYH++q++Il
+         kx4dChfSsKnGmc96ExgaWdu9F5O7qyzK+/hlfh76osrzvCofmzlRyELaeXYoNrKQcRfV
+         YSHnkWH5QtT7Nmnqh7UaEPHV1ijH7qgq2tOg2L/I4jclKK5JTrt6X7SGLWwx9QomW999
+         7S8JEJRdCvnraQz2ErxcFWSQXHaWifE0WrDLK2yErSOFGy/V0nmLbef6e9xIJx3ORAwk
+         K+Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678361940;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kYsJiKyy+lTF4z1H2mSxKLr6ADWPzBDDBXemJTJ36Ks=;
-        b=W/qhkcFk4bBnNiYjyzZPOBR9/FIpVJ4z8tGHtmClNGpygS5N+xskj2QVQa1DJVJwCI
-         WX/6VFfXaXGlsMPmKsiMlnEcd7EHv5f5A9lUFsve0sEEKr5bvLzkzebWomxG+NMLrAP5
-         EhxBVl/IkVOonJutLqVyk14OifOwu5UZSM950Igw1ujSO86gV/oKfG5scaRtJsru1XER
-         36w0oR1LqwzuEMqyYLpOyUFAm7nXW9m6CxLRHiOSPpzsQNlJTsEGO7y6tebBr8Pgpt/a
-         Pt0v4i5fylU7l/nUR09ZmKiUygoCrUbGV/0gH5436ei6X1ZFlo/wBuRVwZtD9zyO2P/z
-         Sn0A==
-X-Gm-Message-State: AO0yUKWciE+wx3/MntWizC06lpdMZgbSnPxJLSQCCZOGm17uxUrh3xb6
-        B4gEZz52zdu7KVgsCwY4tofshQ==
-X-Google-Smtp-Source: AK7set9BcKzdqEvVwBm1rR1GGtYhrdXP+ByCdfjj8e7gOOwRGmWRyMbWRum5esDB5AWQTC0hTpRL3g==
-X-Received: by 2002:a17:90b:4a4c:b0:237:9cc7:28a4 with SMTP id lb12-20020a17090b4a4c00b002379cc728a4mr22842172pjb.14.1678361939798;
-        Thu, 09 Mar 2023 03:38:59 -0800 (PST)
-Received: from leoy-yangtze.lan ([107.151.177.133])
-        by smtp.gmail.com with ESMTPSA id mm14-20020a17090b358e00b0023493354f37sm1427084pjb.26.2023.03.09.03.38.55
+        d=1e100.net; s=20210112; t=1678361985;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5/fm4EqRCQX8P0V8IgQoUdGEPJ3+a5JFn9mYMwtSO3Q=;
+        b=wGFk4PoB14gY6K/p9TXXHKkkTjalNG2OUar0xhriunz5c9MgQN+KtfHdA9VkfRbTCR
+         DvtxpH6NueyIZ9qUULtH06gtI+9JvCINd4XBw9DcQF4+iblBJmYydYgJieQmSJ0mlXJ3
+         CqkeXJFpXNNlC3DQYA4+s26OlZXCL6P9HzCICumxIePueeSb8h8GegWp8h8t3j8bCciW
+         I38qiRyhLYyjE0kQczojZ2B0mvC4Vqgfa3esEZpeIrRnb1rvDAHFCG748DCZmQTObXMd
+         Wvbjj/gwiMsk6li7MWWF+hKlKkx2xn/RC0ZOQqTYNMkQKnv/kJC95HpgGi4WUbij8Na6
+         BKFQ==
+X-Gm-Message-State: AO0yUKWA/5kN7hE+PyKLFCt96mUQ56TbTsUkp3GSoq3moTZ+Bnp96bAb
+        3xG4zztDxZ0el9d4296yxYI=
+X-Google-Smtp-Source: AK7set9QKUcxRVrUyzBPzAU0cb0zeeb5y7pCe8dkUsIrv4s0TRIbWUItLm1utqdEMYdS/g7S64hEyg==
+X-Received: by 2002:a2e:8812:0:b0:298:7061:1172 with SMTP id x18-20020a2e8812000000b0029870611172mr1434269ljh.42.1678361985413;
+        Thu, 09 Mar 2023 03:39:45 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id y13-20020a2e9d4d000000b00295965f7495sm2922373ljj.0.2023.03.09.03.39.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 03:38:59 -0800 (PST)
-Date:   Thu, 9 Mar 2023 19:38:51 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        coresight@lists.linaro.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mathieu.poirier@linaro.org, adrian.hunter@intel.com,
-        Jiri Olsa <jolsa@kernel.org>, acme@redhat.com,
-        mike.leach@linaro.org, Will Deacon <will@kernel.org>,
-        suzuki.poulose@arm.com
-Subject: Re: [BUG] perf: No samples found when using kcore + coresight
-Message-ID: <20230309113851.GF19253@leoy-yangtze.lan>
-References: <CAHbLzkrJQTrYBtPkf=jf3OpQ-yBcJe7XkvQstX9j2frz4WF-SQ@mail.gmail.com>
- <8ca2b07e-674e-afb6-ff12-87504f51f252@arm.com>
- <CAHbLzkpf4RUZugKdn-uXC5m3RpAQH5aDmRXdsxPZi0Cbf-yiyw@mail.gmail.com>
- <CAHbLzkq_7aXcys1cpgGFsfMDDDKMsT3e7zdNW=0jAkw7kBtJ0Q@mail.gmail.com>
+        Thu, 09 Mar 2023 03:39:44 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH V2] dt-bindings: nvmem: layouts: add fixed-layout
+Date:   Thu,  9 Mar 2023 12:39:36 +0100
+Message-Id: <20230309113936.20162-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHbLzkq_7aXcys1cpgGFsfMDDDKMsT3e7zdNW=0jAkw7kBtJ0Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yang,
+From: Rafał Miłecki <rafal@milecki.pl>
 
-On Wed, Mar 08, 2023 at 11:56:38AM -0800, Yang Shi wrote:
+With the introduction of NVMEM layouts we should prefer and support
+describing all NVMEM devices content in the "nvmem-layout" node. That
+inludes using it for fixed NVMEM cells (those with hardcoded offset &
+size).
 
-[...]
+This seems to be cleaner design and more explicit.
 
-> > Dumping raw events could show the events from the bad data file. But
-> > it has zero samples after event collapse.
-> >
-> > The only difference is --kcore inserted a new text_poke dummy event.
-> > It seems coresight also inserted a dummy event with my command but
-> > your command didn't. So it seems like the two dummy events confused
-> > event collapse.
-> >
-> > The text_poke dummy event is added by commit
-> > f42c0ce573df79d1b8bd169008c994dcdd43585a ("perf record: Always get
-> > text_poke events with --kcore option"). If I reverted this commit,
-> > then it works. But I'm not sure whether this is the right fix or real
-> > root cause or not. Or coresight shouldn't insert its own dummy event?
-> 
-> It seems like coresight needs to insert the dummy event if
-> full_auxtrace is on IIUC. So it sounds like event collapse can't
-> handle such a case?
+Introduce a binding allowing fixed NVMEM cells as a type of layout. To
+avoid code duplication put shared part in the fixed-cell.yaml.
 
-I am struggling to understand the meaning "event collapse" :)
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+V2: Use fixed-cell.yaml
+---
+ .../bindings/nvmem/layouts/fixed-cell.yaml    | 30 ++++++++++++
+ .../bindings/nvmem/layouts/fixed-layout.yaml  | 49 +++++++++++++++++++
+ .../bindings/nvmem/layouts/nvmem-layout.yaml  |  1 +
+ .../devicetree/bindings/nvmem/nvmem.yaml      | 18 +------
+ 4 files changed, 81 insertions(+), 17 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
+ create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
 
-I reviewed your shared dump, the bad and good perf data both contain the
-dummy event with 'text_poke = 1'.  Could you confirm the shared dump in
-your previous email is correct or not?
+diff --git a/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml b/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
+new file mode 100644
+index 000000000000..2c77d02052d9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
+@@ -0,0 +1,30 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/layouts/fixed-cell.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Fixed offset & size NVMEM cell
++
++maintainers:
++  - Rafał Miłecki <rafal@milecki.pl>
++
++properties:
++  reg:
++    maxItems: 1
++
++  bits:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    items:
++      - minimum: 0
++        maximum: 7
++        description:
++          Offset in bit within the address range specified by reg.
++      - minimum: 1
++        description:
++          Size in bit within the address range specified by reg.
++
++required:
++  - reg
++
++additionalProperties: false
+diff --git a/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
+new file mode 100644
+index 000000000000..4c4a968bb302
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/layouts/fixed-layout.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NVMEM layout for fixed NVMEM cells
++
++description:
++  Many NVMEM devices have hardcoded cells layout (offset and size of specific
++  NVMEM content doesn't change).
++
++  This binding allows defining such cells using NVMEM layout. It can be used on
++  top of any NVMEM device.
++
++maintainers:
++  - Rafał Miłecki <rafal@milecki.pl>
++
++properties:
++  compatible:
++    const: fixed-layout
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 1
++
++patternProperties:
++  "@[a-f0-9]+$":
++    type: object
++    $ref: fixed-cell.yaml
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++    nvmem-layout {
++        compatible = "fixed-layout";
++        #address-cells = <1>;
++        #size-cells = <1>;
++
++        calibration@4000 {
++            reg = <0x4000 0x100>;
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
+index 8512ee538c4c..03da7848c713 100644
+--- a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
++++ b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
+@@ -18,6 +18,7 @@ description: |
+   perform their parsing. The nvmem-layout container is here to describe these.
+ 
+ oneOf:
++  - $ref: fixed-layout.yaml
+   - $ref: kontron,sl28-vpd.yaml
+   - $ref: onie,tlv-layout.yaml
+ 
+diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+index 75bb93dda9df..732162e9d13e 100644
+--- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
++++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+@@ -49,23 +49,7 @@ properties:
+ patternProperties:
+   "@[0-9a-f]+(,[0-7])?$":
+     type: object
+-
+-    properties:
+-      reg:
+-        maxItems: 1
+-        description:
+-          Offset and size in bytes within the storage device.
+-
+-      bits:
+-        $ref: /schemas/types.yaml#/definitions/uint32-array
+-        items:
+-          - minimum: 0
+-            maximum: 7
+-            description:
+-              Offset in bit within the address range specified by reg.
+-          - minimum: 1
+-            description:
+-              Size in bit within the address range specified by reg.
++    $ref: layouts/fixed-cell.yaml
+ 
+ additionalProperties: true
+ 
+-- 
+2.34.1
 
-> I also tried v5.19 (before "perf record: Always
-> get text_poke events with --kcore option", which was merged in v6.0),
-> it works. So it seems like a regression.
-
-Yeah, we need to fix it.  I am not sure the Linux kernel for Arm64
-supports text poke or not (kernel needs some specific handling when
-alter instructions), the kernel change is the prerequisites.
-
-On the other hand, in the current code cs-etm misses to handle the
-event PERF_RECORD_TEXT_POKE in the function cs_etm__process_event().
-This might be the cause for the failure.
-
-Do you mind to share the bad perf.data file with James and me?
-
-Thanks,
-Leo
