@@ -2,71 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595CC6B225D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 849D26B2261
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:14:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjCILMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
+        id S230437AbjCILOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:14:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231504AbjCILL7 (ORCPT
+        with ESMTP id S231419AbjCILN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:11:59 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3F5ED0F3;
-        Thu,  9 Mar 2023 03:06:25 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-176d1a112bfso1894820fac.5;
-        Thu, 09 Mar 2023 03:06:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678359979;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=samIwn+mrYCkPDlmXVkTL6VnYSrs9OlBexxb29Tur4c=;
-        b=obi3QXc3bLKBnOvmv6OSDVVFshnXDnskKZJKDTTlYE8ToK4v3PyDRmN5czpLfs7etP
-         ah4OW+U38zylXSKYcJy71QeFY4XShRVdknvvc7RfDKg8zZHJmcZUOY8PSLziNRgubG/E
-         IUiwmSYA0rMkLRmmZLVQNUqZn0QPCrYA8Y/X9LHMjkoHFlfDg+IIN28ZCuIu2Yj/3yUN
-         CHKqYGth2G/CE5KZa+0rAmc0/2aVrEBr6N0yl7Ve1uylYR3ctY3Pcquv9Pmr9KigKVsR
-         PDxwFCticS07GGCk46gFTyjIYQLxwjxurWciduvxC9kb8kTN0YpY5CtyIaH69ZHAXQdS
-         5jmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678359979;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=samIwn+mrYCkPDlmXVkTL6VnYSrs9OlBexxb29Tur4c=;
-        b=0Zo7ewVgyxvH/U8jfnJJi+6CH7ObxpKBh5eSk65E4I8rkkNr9TcHRZPVZ9VSvmuOQs
-         VYtfQpvYey+3gf8sl/Kl68OujQ6b9kM474aXACjlGFohuLlJ7mADIP8TV+ROMiD2rlU0
-         0EKuQydM3ZG20fqwwjJcs0R2ImAWKADADOT2I+OUobKS/872m6hRqw8JTyNUVA6nofID
-         bbIWc/sMMgeM9VChUBvpsu9dWAEm1VMNwIpEJfn1QBaGbxv1XWw5zRHRId1+wB8VqGCW
-         zgMVmR5PMxXZsDvQiL2rauVwvfIUvJrKL3HcRwanaiYPdc7Nd3ccfzJsOxeWZ5TR4iVl
-         3Szg==
-X-Gm-Message-State: AO0yUKUtQSJR4yrBKGo/MqGz5PFD2yBE9DUwA/LRpS+uQiufHvxemX9J
-        dqg1vaNpVtmYOnt8O0+mfQKjnx06r8A=
-X-Google-Smtp-Source: AK7set/VP49RzW8BUZKF/HspzTXzVSvnjMdvEgb0lFm/xA03cgHDo1EM1wXG6lvWFZGkJ8OBqglZNw==
-X-Received: by 2002:a05:6871:711:b0:172:9b45:3730 with SMTP id f17-20020a056871071100b001729b453730mr13292002oap.56.1678359979287;
-        Thu, 09 Mar 2023 03:06:19 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s9-20020a05682003c900b0051763d6497fsm7028016ooj.38.2023.03.09.03.06.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 03:06:18 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 9 Mar 2023 03:06:16 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jani Nikula <jani.nikula@intel.com>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: constify struct hwmon_chip_info info member harder
-Message-ID: <e0579cbe-cbd6-46cf-b425-234cfed4ff00@roeck-us.net>
-References: <20230309082841.400118-1-jani.nikula@intel.com>
+        Thu, 9 Mar 2023 06:13:57 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 742A8E7C89;
+        Thu,  9 Mar 2023 03:09:06 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B4F04C14;
+        Thu,  9 Mar 2023 03:09:49 -0800 (PST)
+Received: from [10.1.27.175] (C02CF1NRLVDN.cambridge.arm.com [10.1.27.175])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A51BF3F67D;
+        Thu,  9 Mar 2023 03:09:05 -0800 (PST)
+Message-ID: <5e2f8747-cff8-08ac-7280-f8978cbf56a8@arm.com>
+Date:   Thu, 9 Mar 2023 11:09:04 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309082841.400118-1-jani.nikula@intel.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v3 00/34] New page table range API
+Content-Language: en-US
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20230228213738.272178-1-willy@infradead.org>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230228213738.272178-1-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,37 +45,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 10:28:41AM +0200, Jani Nikula wrote:
-> Let the struct hwmon_chip_info info member be a pointer to a const array
-> of const pointers, rather than mutable array of const pointers.
+On 28/02/2023 21:37, Matthew Wilcox (Oracle) wrote:
+> This patchset changes the API used by the MM to set up page table entries.
+> The four APIs are:
+>     set_ptes(mm, addr, ptep, pte, nr)
+>     update_mmu_cache_range(vma, addr, ptep, nr)
+>     flush_dcache_folio(folio)
+>     flush_icache_pages(vma, page, nr)
 > 
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
-> Signed-off-by: Jani Nikula <jani.nikula@intel.com>
-> ---
->  include/linux/hwmon.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> flush_dcache_folio() isn't technically new, but no architecture
+> implemented it, so I've done that for you.  The old APIs remain around
+> but are mostly implemented by calling the new interfaces.
 > 
-> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-> index c1b62384b6ee..492dd27a5dd8 100644
-> --- a/include/linux/hwmon.h
-> +++ b/include/linux/hwmon.h
-> @@ -430,7 +430,7 @@ struct hwmon_channel_info {
->   */
->  struct hwmon_chip_info {
->  	const struct hwmon_ops *ops;
-> -	const struct hwmon_channel_info **info;
-> +	const struct hwmon_channel_info * const *info;
-
-As pointed out by 0-day, you's also have to change each
-instance where this is is assigned to another variable.
-
-Guenter
-
->  };
->  
->  /* hwmon_device_register() is deprecated */
-> -- 
-> 2.39.1
+> The new APIs are based around setting up N page table entries at once.
+> The N entries belong to the same PMD, the same folio and the same VMA,
+> so ptep++ is a legitimate operation, and locking is taken care of for
+> you.  Some architectures can do a better job of it than just a loop,
+> but I have hesitated to make too deep a change to architectures I don't
+> understand well.
 > 
+> One thing I have changed in every architecture is that PG_arch_1 is now a
+> per-folio bit instead of a per-page bit.  This was something that would
+> have to happen eventually, and it makes sense to do it now rather than
+> iterate over every page involved in a cache flush and figure out if it
+> needs to happen.
+> 
+> The point of all this is better performance, and Fengwei Yin has
+> measured improvement on x86.  I suspect you'll see improvement on
+> your architecture too.  Try the new will-it-scale test mentioned here:
+> https://lore.kernel.org/linux-mm/20230206140639.538867-5-fengwei.yin@intel.com/
+> You'll need to run it on an XFS filesystem and have
+> CONFIG_TRANSPARENT_HUGEPAGE set.
+> 
+> For testing, I've only run the code on x86.  If an x86->foo compiler
+> exists in Debian, I've built defconfig.  I'm relying on the buildbots
+> to tell me what I missed, and people who actually have the hardware to
+> tell me if it actually works.
+> 
+> I'd like to get this into the MM tree soon after the current merge window
+> closes, so quick feedback would be appreciated.
+
+I've boot-tested the series (with the Yin's typo fix for patch 32) on arm64 FVP
+and Ampere Altra. On the Altra, I also ran page_fault4 from will-it-scale, and
+see ~35% improvement from this series. So:
+
+Tested-by: Ryan Roberts <ryan.roberts@arm.com>
+
+Thanks,
+Ryan
+
