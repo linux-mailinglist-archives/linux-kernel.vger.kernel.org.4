@@ -2,128 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622366B1B15
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F9E6B1B1C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjCIGE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 01:04:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
+        id S229686AbjCIGJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 01:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjCIGE0 (ORCPT
+        with ESMTP id S229577AbjCIGJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 01:04:26 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B9987D8B;
-        Wed,  8 Mar 2023 22:04:24 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 9 Mar 2023 01:09:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC01F80909;
+        Wed,  8 Mar 2023 22:09:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id E42A342037;
-        Thu,  9 Mar 2023 06:04:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1678341862;
-        bh=yXH1tZdsDmO++xIlBpu0JLuAAbte1OW7AlybHK5hIBg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=L26euRJ0eRSChLfBBV+IWoJpXejfXnHpxYL7EKKxQNfNY3MHWKaHrZ0sXQwYPrYjl
-         j0hAICH5fd0yIi9MUnBCGQJ2J/6Qbc2vaFXhPzja0rtJkPaOT0D6BVUaDh2KleQjJb
-         V9Q8BguecZBBMPvATXnO5AmpObEALYXxJDP4XlSvevTfXkmhlRxHWnw8QuunLcXUOm
-         YrZoEGe/la+xsrlvECQsvt7d+kil4hHLFigx8YmCEzkKb1Y6ouadywOXrPImwCCfU5
-         EkNVKQwuFJFHWt9UWr30hoU/WCszEJG2VRApZSuCsQz88fGHJUdoD9Yew/iCxUuDC7
-         BTptPp5MzKzeg==
-Message-ID: <11ce9291-c17f-e73d-fb5d-13d5386fe6be@asahilina.net>
-Date:   Thu, 9 Mar 2023 15:04:13 +0900
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6680A61A0A;
+        Thu,  9 Mar 2023 06:09:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 141E3C433EF;
+        Thu,  9 Mar 2023 06:09:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678342165;
+        bh=fsLhHcjhO5MajeqhhNrUkIj89nd00dnJ8w3YBl4clAw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hrIEBIkX5gxzeBg72m0QXHTSpFepipJm7bADK0SO0OqyWMSGdo6Lv4/ih+XqQJuXy
+         wc/brZvytSdfqJhQxyLhn1XgTws0mpHbCq3In1/dx/++OeWGACN/ngYUVG4IQ7Uj/D
+         Ox1aybG128qoxQoy0SFMSQtb3HQ9J/kncj1pK8TZXePQb2JafflXrZ7zP+BQvJN+wn
+         d29p3GKgx3ZwSJaH8/qcXpHV+UVePk2K9ezoXqIOCKKFEYFf/2j5eF1x6a80jHcHms
+         k35cM/0KniwHVcYKSAA41i3b/rN30Q9rtuSL3XMzVYujEAMNf2fHiGHB99gVldEHkP
+         C1DAuf5pO/I4w==
+Message-ID: <d4148245-fade-e228-6e61-f004f6cff249@kernel.org>
+Date:   Thu, 9 Mar 2023 07:09:20 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH RFC 01/18] rust: drm: ioctl: Add DRM ioctl abstraction
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v13 2/2] clk: clk-loongson2: add clock controller driver
+ support
+To:     zhuyinbo <zhuyinbo@loongson.cn>, kernel test robot <lkp@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
+        loongson-kernel@lists.loongnix.cn
+References: <20230307115022.12846-2-zhuyinbo@loongson.cn>
+ <202303082037.QPfBP64A-lkp@intel.com>
+ <b94ee1d2-b224-f9d5-3f3c-0096634f4c93@loongson.cn>
 Content-Language: en-US
-To:     =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-1-917ff5bc80a8@asahilina.net>
- <D9Cyx-9kbjaeb8QVBFqapDyctoDdVyu5uXEJDR41sdXUDXM1VgdRicV5huJDwfC3-T2J-R_DYHH8JZ1_aRdgbeYZFT78J9QveeeYbiTq4yU=@protonmail.com>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <D9Cyx-9kbjaeb8QVBFqapDyctoDdVyu5uXEJDR41sdXUDXM1VgdRicV5huJDwfC3-T2J-R_DYHH8JZ1_aRdgbeYZFT78J9QveeeYbiTq4yU=@protonmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <b94ee1d2-b224-f9d5-3f3c-0096634f4c93@loongson.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 02.34, Björn Roy Baron wrote:
->> +                            // SAFETY: This is just the ioctl argument, which hopefully has the right type
->> +                            // (we've done our best checking the size).
+On 09/03/2023 03:58, zhuyinbo wrote:
 > 
-> In the rust tree there is the ReadableFromBytes [1] trait which indicates that it is safe to read arbitrary bytes into the type. Maybe you could add it as bound on the argument type when it lands in rust-next? This way you can't end up with for example a struct containing a bool with the byte value 2, which is UB.
-
-There's actually a much bigger story here, because that trait isn't
-really very useful without a way to auto-derive it. I need the same kind
-of guarantee for all the GPU firmware structs...
-
-There's one using only declarative macros [1] and one using proc macros
-[2]. And then, since ioctl arguments are declared in C UAPI header
-files, we need a way to be able to derive those traits for them... which
-I guess means bindgen changes?
-
-For now though, I don't think this is something we need to worry about
-too much for this particular use case because the macro forces all
-struct types to be part of `bindings`, and any driver UAPI should
-already follow these constraints if it is well-formed (and UAPIs are
-going to already attract a lot of scrutiny anyway). Technically you
-could try taking a random kernel struct containing a `bool` in an ioctl
-list, but that would stand out as nonsense just as much as trying to
-unsafe impl ReadableFromBytes for it so... it's kind of an academic
-problem ^^
-
-Actually, I think we talked of moving UAPI types to a separate crate (so
-drivers can get access to those types and only those types, not the main
-bindings crate). Then maybe we could just say that if the macro forces
-the type to be from that crate, it's inherently safe since all UAPIs
-should already be castable to/from bytes if properly designed.
-
-Aside: I'm not sure the ReadableFromBytes/WritableToBytes distinction is
-very useful. I know it exists (padding bytes, uninit fields, and
-technically bool should be WritableToBytes but not ReadableFromBytes),
-but I can't think of a good use case for it... I think I'd rather start
-with a single trait and just always enforce the union of the rules,
-because pretty much any time you're casting to/from bytes you want
-well-defined "bag of bytes" struct layouts anyway. ioctls can be R/W/RW
-so having separate traits depending on ioctl type complicates the code...
-
-[1]
-https://github.com/QubesOS/qubes-gui-rust/blob/940754bfefb7325548eece658c307a0c41c9bc7c/qubes-castable/src/lib.rs
-[2] https://docs.rs/pkbuffer/latest/pkbuffer/derive.Castable.html
-
+> 在 2023/3/8 下午8:16, kernel test robot 写道:
+>> Hi Yinbo,
+>>
+>> I love your patch! Yet something to improve:
+>>
+>> [auto build test ERROR on clk/clk-next]
+>> [also build test ERROR on robh/for-next linus/master v6.3-rc1 next-20230308]
+>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>
+>> url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/clk-clk-loongson2-add-clock-controller-driver-support/20230307-195252
+>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+>> patch link:    https://lore.kernel.org/r/20230307115022.12846-2-zhuyinbo%40loongson.cn
+>> patch subject: [PATCH v13 2/2] clk: clk-loongson2: add clock controller driver support
+>> config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230308/202303082037.QPfBP64A-lkp@intel.com/config)
+>> compiler: mips-linux-gcc (GCC) 12.1.0
+>> reproduce (this is a W=1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # https://github.com/intel-lab-lkp/linux/commit/391d6fc63ac65f5456e4755c9dd85232a6296285
+>>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>>          git fetch --no-tags linux-review Yinbo-Zhu/clk-clk-loongson2-add-clock-controller-driver-support/20230307-195252
+>>          git checkout 391d6fc63ac65f5456e4755c9dd85232a6296285
+>>          # save the config file
+>>          mkdir build_dir && cp config build_dir/.config
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/
+>>
+>> If you fix the issue, kindly add following tag where applicable
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Link: https://lore.kernel.org/oe-kbuild-all/202303082037.QPfBP64A-lkp@intel.com/
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>     drivers/clk/clk-loongson2.c: In function 'loongson2_calc_pll_rate':
+>>>> drivers/clk/clk-loongson2.c:79:15: error: implicit declaration of function 'readq'; did you mean 'readl'? [-Werror=implicit-function-declaration]
+>>        79 |         val = readq(loongson2_pll_base + offset);
+>>           |               ^~~~~
+>>           |               readl
+>>     cc1: some warnings being treated as errors
 > 
-> https://rust-for-linux.github.io/docs/kernel/io_buffer/trait.ReadableFromBytes.html [1]
-> 
+> The CONFIG_64BIT not enabled in your config file, I will add a depend on 
+> "CONFIG_64BIT" in my clock driver to fix this compile error.
 
-~~ Lina
+No, that's not how it should be fixed. Fix your code instead.
+
+
+
+Best regards,
+Krzysztof
+
