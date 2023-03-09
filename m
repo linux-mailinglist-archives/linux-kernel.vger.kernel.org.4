@@ -2,118 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EA66B1B6F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48516B1B71
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjCIG1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 01:27:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
+        id S229453AbjCIG1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 01:27:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjCIG1V (ORCPT
+        with ESMTP id S229830AbjCIG1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 01:27:21 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2223119C63
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 22:27:20 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id x3so2804030edb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 22:27:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678343238;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zGFQnDrQBIiVyn9kddrJO7rpyZ4MXu5CWKlUhDi2u0g=;
-        b=aj3BzEBY4Uo21mdLrBRWNwMs3LGQRkDqO+fzc+cnzpiVqpAiwAtLEYiFi9umdikWLg
-         bcvsa5AfXPqH9TV9SvMagFF2U80bRbR145ok4KqF2ze2wM2VdkgpY7LCMTBr8Fmrj5V9
-         qxQrwkRGdpGJuqDqpl9d8stLfoqTBj6l5xqJe27LCulHCwzSM7kz6lAsPJB7evhQ3zQH
-         NpcPz1NJsMcdxBiwVNZt7jwoBEr+ERZrLlv8Zof7QBPL/N7hNC28jAbbismfS7AASssB
-         MdX6H8quM7BCUkkcAi9jGnkmZ9HGIUfYEmO4rzqgT1MPdTb1EERt0k/zR66BTrAkwqdS
-         +PHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678343238;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zGFQnDrQBIiVyn9kddrJO7rpyZ4MXu5CWKlUhDi2u0g=;
-        b=qGu/FA86Mn4KHH1wOXbi09GvY6yYy8bvITRAJfgznzcCtUvU2UYWa9MrP6aQKaHFIK
-         YhI88Cm8ynyCi2yJeXimEFVdVlvah9J+Je1VPoOpJVFvwVQ1o8ArW8PmQFWe0lI+cbaX
-         k0gTfvFiDDO09RvF7DVzvJ50YK6thEFLShATRErT1N721DeOxMEHP9098IuOpCX+6unP
-         cYD0YkhbV6msO97auMAuHwyI+xzzdKe40k2A3OaV3S/SuKY5aL83YgE+s8bVzLgdNNFG
-         WY0YN5GNiFuSpwY79PJ4AbT+qc+1x08czMyTFmRI3ZtXc8G++PnFTr2BJvhkuGrBHQ4y
-         nKxg==
-X-Gm-Message-State: AO0yUKW/SnI1sMHUbpLMMjCguuTGO8kqgjEx9v6JQ5cZSRzK4VW0niQa
-        cadWdrrscPqlLocvshzvIOwXnw==
-X-Google-Smtp-Source: AK7set9bprPmsq40zKSYFropkIOReUtzA33UKmaaS4PewfQrVtMYpRPcJQQxlSLJMr7PhtmXPVmd3A==
-X-Received: by 2002:aa7:c245:0:b0:4ac:c44e:a493 with SMTP id y5-20020aa7c245000000b004acc44ea493mr19500817edo.2.1678343238615;
-        Wed, 08 Mar 2023 22:27:18 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
-        by smtp.gmail.com with ESMTPSA id kq17-20020a170906abd100b008e82cb55195sm8325008ejb.203.2023.03.08.22.27.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 22:27:18 -0800 (PST)
-Message-ID: <bce148d7-7e22-dda7-820d-5d940f313add@linaro.org>
-Date:   Thu, 9 Mar 2023 07:27:16 +0100
+        Thu, 9 Mar 2023 01:27:32 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820711C5B1;
+        Wed,  8 Mar 2023 22:27:23 -0800 (PST)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PXK2f0By3zrSZG;
+        Thu,  9 Mar 2023 14:26:34 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 9 Mar
+ 2023 14:27:21 +0800
+Subject: Re: [PATCH] net: calxeda: fix race condition in xgmac_remove due to
+ unfinshed work
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     Zheng Wang <zyytlz.wz@163.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <hackerzheng666@gmail.com>,
+        <1395428693sheep@gmail.com>, <alex000young@gmail.com>
+References: <20230309035641.3439953-1-zyytlz.wz@163.com>
+ <ec579c96-9955-f317-b37a-4f3fcd0c206e@huawei.com>
+Message-ID: <c9bafa3d-12ba-e9fe-8606-8160a8c42517@huawei.com>
+Date:   Thu, 9 Mar 2023 14:27:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] dt-bindings: remoteproc: qcom,adsp: bring back
- firmware-name
+In-Reply-To: <ec579c96-9955-f317-b37a-4f3fcd0c206e@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230305125917.209262-1-krzysztof.kozlowski@linaro.org>
- <20230308224848.GA3947747-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230308224848.GA3947747-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 23:48, Rob Herring wrote:
-> On Sun, Mar 05, 2023 at 01:59:17PM +0100, Krzysztof Kozlowski wrote:
->> The firmware-name property was moved from common qcom,pas-common.yaml
->> binding to each device-specific schema, but the qcom,adsp.yaml was not
->> updated.
+On 2023/3/9 14:23, Yunsheng Lin wrote:
+> On 2023/3/9 11:56, Zheng Wang wrote:
+>> In xgmac_probe, the priv->tx_timeout_work is bound with 
+>> xgmac_tx_timeout_work. In xgmac_remove, if there is an 
+>> unfinished work, there might be a race condition that 
+>> priv->base was written byte after iounmap it.
 >>
->> Fixes: cee616c68846 ("dt-bindings: remoteproc: qcom: adsp: move memory-region and firmware-name out of pas-common")
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 4 ++++
->>  1 file changed, 4 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
->> index 643ee787a81f..828dfebaef6a 100644
->> --- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
->> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
->> @@ -44,6 +44,10 @@ properties:
->>      maxItems: 1
->>      description: Reference to the reserved-memory for the Hexagon core
->>  
->> +  firmware-name:
->> +    $ref: /schemas/types.yaml#/definitions/string
+>> Fix it by finishing the work before cleanup.
 > 
-> We need to stop redefining the type for 'firmware-name'. I'm adding it 
-> to dtschema, so here just put 'maxItems: 1'. 
+> This should go to net branch, so title should be:
+> 
+>  [PATCH net] net: calxeda: fix race condition in xgmac_remove due to unfinshed work
 
-Oh, yes! But maybe we should add string pattern to "-name" in general?
-Just like we have for "-names"?
+typo error:
+unfinshed -> unfinished
 
-
-
-Best regards,
-Krzysztof
-
+> 
+>>From history commit, it seems more common to use "net: calxedaxgmac" instead of
+> "net: calxeda", I am not sure which one is better.
+> 
+> Also there should be a Fixes tag for net branch, maybe:
+> 
+> Fixes: 8746f671ef04 ("net: calxedaxgmac: fix race between xgmac_tx_complete and xgmac_tx_err")
+> 
+> 
+>>
+>> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+>> ---
+>>  drivers/net/ethernet/calxeda/xgmac.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/net/ethernet/calxeda/xgmac.c b/drivers/net/ethernet/calxeda/xgmac.c
+>> index f4f87dfa9687..94c3804001e3 100644
+>> --- a/drivers/net/ethernet/calxeda/xgmac.c
+>> +++ b/drivers/net/ethernet/calxeda/xgmac.c
+>> @@ -1831,6 +1831,7 @@ static int xgmac_remove(struct platform_device *pdev)
+>>  	/* Free the IRQ lines */
+>>  	free_irq(ndev->irq, ndev);
+>>  	free_irq(priv->pmt_irq, ndev);
+>> +	cancel_work_sync(&priv->tx_timeout_work);
+> 
+> It seems the blow function need to stop the dev_watchdog() from
+> calling dev->netdev_ops->ndo_tx_timeout before calling
+> cancel_work_sync(&priv->tx_timeout_work), otherwise the
+> dev_watchdog() may trigger the priv->tx_timeout_work to run again.
+> 
+> 	netif_carrier_off(ndev);
+> 	netif_tx_disable(ndev);
+> 
+>>  
+>>  	unregister_netdev(ndev);
+>>  	netif_napi_del(&priv->napi);
+>>
+> .
+> 
