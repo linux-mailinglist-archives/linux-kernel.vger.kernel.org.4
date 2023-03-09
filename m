@@ -2,58 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075FE6B1CFD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4FB6B1D04
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjCIHxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 02:53:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S229629AbjCIHyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 02:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbjCIHxV (ORCPT
+        with ESMTP id S229916AbjCIHyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 02:53:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058761B57E;
-        Wed,  8 Mar 2023 23:52:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 897B561A5C;
-        Thu,  9 Mar 2023 07:52:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607E7C4339B;
-        Thu,  9 Mar 2023 07:52:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678348347;
-        bh=rt/evWsxMPEyg16HAMZfcM0/9RSG53O+3iv4l9BJwEA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Aor2EstCjVBa8Ryyd/MhYkKGxGYCKPn+oobVHgtJolMvYNqcD3TCbffPVNbEQSYq1
-         /0AONv/1wKgrqYaFd6kr/S/rZKiB4FgIDt/hGNrC3rgJHOyBpCDm4WvhITvy/mVcVL
-         LEwmD763aw7H2rquGKF+2kIELrKPdW4AwnolmRr0=
-Date:   Thu, 9 Mar 2023 08:52:24 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ye Xiang <xiang.ye@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
-Message-ID: <ZAmQOIh/71rY4Pa4@kroah.com>
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
- <20230309071100.2856899-2-xiang.ye@intel.com>
+        Thu, 9 Mar 2023 02:54:13 -0500
+X-Greylist: delayed 37824 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Mar 2023 23:53:54 PST
+Received: from sender3-op-o17.zoho.com (sender3-op-o17.zoho.com [136.143.184.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48EE6B957;
+        Wed,  8 Mar 2023 23:53:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1678348406; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=nzz/SZmrVGDdioH8gd2ceSR5S33TJJH1SOWXyGiilM4kIIYmJDlDBzMtTQ+VoPAiKa3na2dZEWt10SamAIAm3IPtth/hbtRgABWsXdeh9IeTC6iRNqa5Hux+9ShYkfPMJySSKZ9LNs6+nEOV6pkV734PZyM+f/b2WWup8sN71wU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1678348406; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=1fd7a9BQQqeefatGkptmpq6+Xp+BD4kDPIyZZcKeqWo=; 
+        b=PBivApT/Xh8cQ5OYjSTQ4L1H1J0tTBWlnsbY/K9fFNglEdtqU0KiZzIqwrSWCami65hEklncFHjgkGy/Qc4bC918kPplGxjcw0qkFYby4bh6jt8LIBJVdvGIePL+H8cqr8GS8kHC49i9+BTx+6P1WSHL6MBqdyeYAZdKMqt+6uU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1678348406;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=1fd7a9BQQqeefatGkptmpq6+Xp+BD4kDPIyZZcKeqWo=;
+        b=LCrfBHk2uzlnL8inI09VTobjR/W4aJWYPiPnu+/P5ig6K+WNHIsWVAL1LpengfMp
+        xulJpbe0jGodtkiggMHWyMmT8ZDaz/PLdOrFsk3hIL1/5qpiouFgb5iZKoNMSi6EeVd
+        kp28eEcce2u0hDMWNR4OU0pboJv2ub6Fai1hlLjk=
+Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
+        with SMTPS id 167834840432473.9346941163709; Wed, 8 Mar 2023 23:53:24 -0800 (PST)
+Message-ID: <ccdfd262-eaf3-dbbe-7a3c-a911a5ec0fc4@arinc9.com>
+Date:   Thu, 9 Mar 2023 10:53:17 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309071100.2856899-2-xiang.ye@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 09/20] dt-bindings: pinctrl: ralink: {mt7620,mt7621}:
+ rename to mediatek
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+References: <20230303002850.51858-1-arinc.unal@arinc9.com>
+ <20230303002850.51858-10-arinc.unal@arinc9.com>
+ <20230308210514.GA3767521-robh@kernel.org>
+ <12be053e-b70a-faca-71c8-d8eef69a3b73@arinc9.com>
+Content-Language: en-US
+In-Reply-To: <12be053e-b70a-faca-71c8-d8eef69a3b73@arinc9.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,55 +79,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 03:10:56PM +0800, Ye Xiang wrote:
-> +static int ljca_mng_get_version(struct ljca_stub *stub, char *buf)
-> +{
-> +	struct fw_version version = {};
-> +	unsigned int len = sizeof(version);
-> +	int ret;
-> +
-> +	ret = ljca_stub_write(stub, LJCA_MNG_GET_VERSION, NULL, 0, &version, &len, true,
-> +			      LJCA_USB_WRITE_ACK_TIMEOUT_MS);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (len != sizeof(version)) {
-> +		dev_err(&stub->intf->dev, "get version failed, len:%d\n", len);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return sysfs_emit(buf, "%d.%d.%d.%d\n", version.major, version.minor,
-> +			  le16_to_cpu(version.patch), le16_to_cpu(version.build));
-> +}
+On 9.03.2023 00:19, Arınç ÜNAL wrote:
+> On 9.03.2023 00:05, Rob Herring wrote:
+>> On Fri, Mar 03, 2023 at 03:28:38AM +0300, arinc9.unal@gmail.com wrote:
+>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>
+>>> This platform from Ralink was acquired by MediaTek in 2011. Then, 
+>>> MediaTek
+>>> introduced these SoCs which utilise this platform. Rename the schemas to
+>>> mediatek to address the incorrect naming.
+>>
+>> I said we don't do renames due to acquistions, you said that wasn't the
+>> reason, but then that's your reasoning here.
+> 
+> It's not a marketing/acquistion rename as the name of these SoCs were 
+> wrong from the get go. The information on the first sentence is to give 
+> the idea of why these SoCs were wrongfully named as the base platform 
+> that these new MediaTek SoCs share code with was called Ralink.
+> 
+>>
+>> To give you another example, *new* i.MX things are still called
+>> 'fsl,imx...' and it has been how many years since merging with NXP?
+> 
+> Ok this is a point I see now. Though, I fail to see how this is called 
+> renaming when there's only new SoCs (from NXP in this case) to be added.
 
-You have sysfs files, yet no Documentation/ABI/ entries?  That's not
-allowed, you know this :(
+If I understand correctly, i.MX is a family from Freescale so the name 
+was kept the same on new SoC releases from NXP. I believe it's different 
+in this case here. There's no family name. The closest thing on the name 
+of the SoC model is, it's RT for Ralink, MT for MediaTek.
 
-> +static ssize_t cmd_store(struct device *dev, struct device_attribute *attr, const char *buf,
-> +			 size_t count)
-> +{
-> +	struct usb_interface *intf = to_usb_interface(dev);
-> +	struct ljca_dev *ljca_dev = usb_get_intfdata(intf);
-> +	struct ljca_stub *mng_stub = ljca_stub_find(ljca_dev, LJCA_MNG_STUB);
-> +	struct ljca_stub *diag_stub = ljca_stub_find(ljca_dev, LJCA_DIAG_STUB);
-> +
-> +	if (sysfs_streq(buf, "dfu"))
-> +		ljca_mng_set_dfu_mode(mng_stub);
-> +	else if (sysfs_streq(buf, "debug"))
-> +		ljca_diag_set_trace_level(diag_stub, 3);
+On top of that, mediatek strings already exist for MT SoCs already, at 
+least for MT7621.
 
-Sorry, but no, you can't do this in a sysfs file.
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/Documentation/devicetree/bindings/mips/ralink.yaml?id=dd3cb467ebb5659d6552999d6f16a616653f9933#n83
 
-> +
-> +	return count;
-> +}
-> +
-> +static ssize_t cmd_show(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +	return sysfs_emit(buf, "%s\n", "supported cmd: [dfu, debug]");
-
-sysfs files do not show "help text".
-
-thanks,
-
-greg k-h
+Arınç
