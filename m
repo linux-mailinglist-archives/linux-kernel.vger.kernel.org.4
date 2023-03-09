@@ -2,109 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6236B282E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ADED6B2833
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 16:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbjCIPF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 10:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58146 "EHLO
+        id S232193AbjCIPFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 10:05:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbjCIPEs (ORCPT
+        with ESMTP id S232267AbjCIPEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 10:04:48 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5532CEDB4D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:02:52 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id d6so1228832pgu.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 07:02:52 -0800 (PST)
+        Thu, 9 Mar 2023 10:04:52 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753DC93CA
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 07:02:55 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id d6so1228940pgu.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 07:02:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678374172;
+        d=linaro.org; s=google; t=1678374174;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mpG+8TjRKU1Xq1b7ChN1vz1PZS008U/FxhApKNmqYlY=;
-        b=ELYbTvyRDRvOH8dgBQ/Fwx17+m9R3aqgz5pT7V7fAkZJsA+oV5WiXFMZLcOenBBcbo
-         Iomz7JdnKuw/g52XHENDsg9hzunSk4MHravqG2QuI/iiHrQirjr8y73m7ZbBXY/o7vLg
-         qvwNTEDQsWU9Of4q0G3fEWJe30V6onvW2a3+JTt/V7Y4xmemTnj3zMSH2yh0yqy6v2Cj
-         a/57s24pd09PXcbhcLZVSXqhgklg7hVV+a1VfUTBgAPlfhwUzkjH5KHMImC7zUxFSqTO
-         FQHaGZXufx854DG2kV0GcvrLGNTYFThFRHLCUDrtkIwO46cukE2cBALux/qu3ME/ggcP
-         lUFg==
+        bh=kvvFe6UE/AYXWScGr9mkG/95G71XHJDx0d83LjJ1ufA=;
+        b=DGV9PtKUctpsFz094ALkkGzwPjnZ+iPH5p+KbK/pTLpKrg8EOlEs1M582z9aLqHXvG
+         ZtQJJ/sqLkKIuYcoYpQeX3BedQg4/ZcO4klD/zpsNT5I5Vmu9G8p03ezEOhfsIkl8ayy
+         2JvNykJW4XeO+HaR313gd2RYvIf1PMKOAPgY3b1LwBgALBJHfmm0ibPjzSp5ggchKo7b
+         7KVmSzoV17NSAD6oGCJks3Yq26B4wEHMFdz/hS44vVgFQHX4wd1Ef60+yyy6JEaA+Tzv
+         se2tL9KeBsdPEnhGUC1RL5hUyugCwl+9lQqiIjVrMqop7RwlhXN52pqG6sSrXbjeJEYd
+         8P0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678374172;
+        d=1e100.net; s=20210112; t=1678374174;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mpG+8TjRKU1Xq1b7ChN1vz1PZS008U/FxhApKNmqYlY=;
-        b=uK1Hj0Ovb9ssVvUQnyM2onHGnK6crttmnb80exqFwwYILpm+J56LE/cVmGwK08DcqW
-         A6lxHwmIVqyKXPFthBIgHPugdcnKjSAJLwMks1l294rGX6hixcR/LFjFcgJPGFuU9HRx
-         6YNZYx3r7mJwen0g6h0/IsiKTdAo7GbHl8QTz4kKTWXotGzBrEINeH9I9NxSET7ZAVHu
-         OfRU2z7oEXE9OxOCWa6uPGRtYQaqdJluh7LA919mibUR0g7Qcv51+mrorgjcc5MZna4w
-         oufbD8yEa9R1SwiabkJMJVBiSI+Za3I+kCknUP42s9w/Ws94BjLE8viaM5aH02f7rySZ
-         g9cQ==
-X-Gm-Message-State: AO0yUKV99LzqijBMKKVslQc4wotPKwvzphGe+YqpLwsq8iw8Sw0vaQxS
-        B7O0ucaxllU65jPYMG+STJqgeb26R72/xPnzzl6YLA==
-X-Google-Smtp-Source: AK7set/Pu4XGzKcyUzu0ET/xIBNGm/Mc7zvqzaKEVvMGZxTLOsJ3vWQd5u10L1Z/1FJ77TF3nXXUVY+1mwvJkbrIn10=
-X-Received: by 2002:a63:bc02:0:b0:4fb:d6b9:abea with SMTP id
- q2-20020a63bc02000000b004fbd6b9abeamr7692841pge.5.1678374171737; Thu, 09 Mar
- 2023 07:02:51 -0800 (PST)
+        bh=kvvFe6UE/AYXWScGr9mkG/95G71XHJDx0d83LjJ1ufA=;
+        b=RLj3jnNCCLLBl3mg5CUNrGsbb0pLaBtm3pqvCye+sQWWY1s8KgKNNmxOBe9H/DD9oT
+         r1VWk2P5fq1zV+bkp2LFLZUj0Kq9HQkz6oZ9SyViAwml2b2VH/e9pizvSbUkbExuqPnJ
+         YQOy3wFvMPZHFEvd8SHbAeref1JIPvysn5gXGPHxAvtNyGzAOOFMSfA9S2be7gpXdNMC
+         E0fPJ4NMgNRcXs26M4/Mpb+uqiYW45mruIv1rkxuA270Gha/7Px98Rz0k8Bd9wP2KVcd
+         Sq5aVGOcl2mE89KAcbAKgEY8Wew5qCYBR0yrhxVQ36YezHaY0tCqnpt+7SmP2io/yUcr
+         Biyg==
+X-Gm-Message-State: AO0yUKUblWgqphVotKKO0EDPKuFatVe49wJnANOXehjmUE4kPxxCMlET
+        /orT2oFOgtRhoYx7VahFaNJWwjBb5pSirfeVF7lyZA==
+X-Google-Smtp-Source: AK7set8BvqTU8HcO89O4sLJTzLfcCTtLtR8RSfk0EY0PihdbgIh+Nawl1V6aNDZle+awq/RD+FaCggLV3wVTc0NL/pQ=
+X-Received: by 2002:a63:7b4f:0:b0:503:ae1b:df3f with SMTP id
+ k15-20020a637b4f000000b00503ae1bdf3fmr7927904pgn.5.1678374174636; Thu, 09 Mar
+ 2023 07:02:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20230307024646.10216-1-william.qiu@starfivetech.com> <20230307024646.10216-3-william.qiu@starfivetech.com>
-In-Reply-To: <20230307024646.10216-3-william.qiu@starfivetech.com>
+References: <20230307164338.1246287-1-zyytlz.wz@163.com>
+In-Reply-To: <20230307164338.1246287-1-zyytlz.wz@163.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 9 Mar 2023 16:02:15 +0100
-Message-ID: <CAPDyKFp204LOmo9rD7DS5hE=s2jHuFfgsaj05MRzdTKNrscWWQ@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] mmc: starfive: Add initialization of prev_err
-To:     William Qiu <william.qiu@starfivetech.com>
-Cc:     devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org
+Date:   Thu, 9 Mar 2023 16:02:18 +0100
+Message-ID: <CAPDyKFoV9aZObZ5GBm0U_-UVeVkBN_rAG-kH3BKoP4EXdYM4bw@mail.gmail.com>
+Subject: Re: [PATCH] memstick: r592: Fix UAF bug in r592_remove due to race condition
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     maximlevitsky@gmail.com, oakad@yahoo.com,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
+        alex000young@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Mar 2023 at 03:46, William Qiu <william.qiu@starfivetech.com> wrote:
+On Tue, 7 Mar 2023 at 17:44, Zheng Wang <zyytlz.wz@163.com> wrote:
 >
-> Add a incremental updates to fix a bug that prev_err is uninitialized.
+> In r592_probe, dev->detect_timer was bound with r592_detect_timer.
+> In r592_irq function, the timer function will be invoked by mod_timer.
 >
-> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> Reported-by: Dan Carpenter <error27@gmail.com>
+> If we remove the module which will call hantro_release to make cleanup,
+> there may be a unfinished work. The possible sequence is as follows,
+> which will cause a typical UAF bug.
+>
+> Fix it by canceling the work before cleanup in r592_remove.
+>
+> CPU0                  CPU1
+>
+>                     |r592_detect_timer
+> r592_remove         |
+>   memstick_free_host|
+>   put_device;       |
+>   kfree(host);      |
+>                     |
+>                     | queue_work
+>                     |   &host->media_checker //use
+>
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 
-I took the liberty of updating the commit message a bit, to try to
-further clarify things. Moreover, future wise, let's use the prefix,
-"mmc: dw_mmc-starfive" for the commit message header, to be consistent
-with the other dw_mmc drivers.
-
-So, applied for fixes and by adding a fixes tag, thanks!
+Applied for next, thanks!
 
 Kind regards
 Uffe
 
 
 > ---
->  drivers/mmc/host/dw_mmc-starfive.c | 2 +-
+>  drivers/memstick/host/r592.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/mmc/host/dw_mmc-starfive.c b/drivers/mmc/host/dw_mmc-starfive.c
-> index 40f5969b07a6..dab1508bf83c 100644
-> --- a/drivers/mmc/host/dw_mmc-starfive.c
-> +++ b/drivers/mmc/host/dw_mmc-starfive.c
-> @@ -51,7 +51,7 @@ static int dw_mci_starfive_execute_tuning(struct dw_mci_slot *slot,
->         struct dw_mci *host = slot->host;
->         struct starfive_priv *priv = host->priv;
->         int rise_point = -1, fall_point = -1;
-> -       int err, prev_err;
-> +       int err, prev_err = 0;
->         int i;
->         bool found = 0;
->         u32 regval;
+> diff --git a/drivers/memstick/host/r592.c b/drivers/memstick/host/r592.c
+> index 1d35d147552d..2bfa7eaae80a 100644
+> --- a/drivers/memstick/host/r592.c
+> +++ b/drivers/memstick/host/r592.c
+> @@ -829,7 +829,7 @@ static void r592_remove(struct pci_dev *pdev)
+>         /* Stop the processing thread.
+>         That ensures that we won't take any more requests */
+>         kthread_stop(dev->io_thread);
+> -
+> +       del_timer_sync(&dev->detect_timer);
+>         r592_enable_device(dev, false);
+>
+>         while (!error && dev->req) {
 > --
-> 2.34.1
+> 2.25.1
 >
