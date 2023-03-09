@@ -2,110 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8BC6B3243
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DAED6B3269
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbjCIXsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 18:48:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
+        id S231300AbjCIXwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 18:52:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbjCIXr5 (ORCPT
+        with ESMTP id S229827AbjCIXwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 18:47:57 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7AA198A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 15:47:54 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id m6so4452803lfq.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 15:47:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678405673;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0SVPt+h4FP4oJDZC6OlFD7ds1qk6UpRDvDwg5Hg2Ch0=;
-        b=qOF8IJ9CgvDsTlfU/8eoO1f6RspcB4sHxm9UeX9TFcT4atBj8xB6gEoLOsFGYN444h
-         ycK9aYQMdjDpF3aZAPYkh6i5m2xqgQHH74bi/AP1So09TXRxCRFvmV4bgxA65MgKfQNt
-         a1QAnKAHDzb1I/TMjnle/icABRaNsrbq8t7vSM259FwKCaNoIYB8GrEims5Emd0R7fhk
-         65ntWyddvk0oceLMo6eaWL3fL7WDwHWDLmH4SeRL0U0gcHB3z+CcjK+GrGxlCpZHq8+K
-         8GOfwvC4LBMIAsEDBrSxdpHwrepiQZgLKzocjxrCpJ0zw21TiBkh1k1oq7GJjQrgXNZ9
-         aHJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678405673;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0SVPt+h4FP4oJDZC6OlFD7ds1qk6UpRDvDwg5Hg2Ch0=;
-        b=a6PAdXNv3sF82OuEpTxIpV6+berwzIsoKTOYtksCJi2E6wxa91nc4ofav7l0DsK9yV
-         YegIalXsp0dhL/zdsGvz9b18BgQ//NWT2b3qLDLR9ZpC/5xbSRUhq01ocGR2vswokRRP
-         mnaHHWsPV+T/SV6Y5SaVV8Uwf1KRdTmR8m1P7wal160IkqoCIpEoImWFncf9MlS70jbM
-         SOi6jaEth1XPhthax9AA92OxLoX6SmACPIqNYK6A4kdccRnoXbqon+bNA9Sdt2h8oYhl
-         VZK46ocK/JIAvx7sSq/jwd4LNfapDHS3tceBtWLWlWM8ebWXstqjjSZxM5nlL9NzEJLz
-         KnOQ==
-X-Gm-Message-State: AO0yUKUAPSWVuwYDTddlVBplguvrvWD4oSpW5M0jwWGTZxmPPcwqGNfz
-        Nw1VQnHRYliibz0QIE29ew09xQ==
-X-Google-Smtp-Source: AK7set+p5ZH/21/+ytoGxOzCZqhn5qFsf6Cr8OTUVLsl1UVreF+fG8OGkqnex37YJM4kqTm/sXIzQQ==
-X-Received: by 2002:ac2:5238:0:b0:4d8:6e26:c74c with SMTP id i24-20020ac25238000000b004d86e26c74cmr6850336lfl.53.1678405673020;
-        Thu, 09 Mar 2023 15:47:53 -0800 (PST)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id s28-20020a05651c201c00b00295b597c8fasm57939ljo.22.2023.03.09.15.47.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 15:47:52 -0800 (PST)
-Message-ID: <43c11038-91d5-cbfd-7349-06fcd61a0661@linaro.org>
-Date:   Fri, 10 Mar 2023 00:47:49 +0100
+        Thu, 9 Mar 2023 18:52:00 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22281102A5;
+        Thu,  9 Mar 2023 15:51:58 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7096C1EC01CE;
+        Fri, 10 Mar 2023 00:51:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1678405917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=2DAEMT8RlTvZl2+BqR845kghr2jrP8dvdCHxG77kors=;
+        b=sNT2LjHr1xLCN8Hf+/O17MPOKXi8ykZLPI6+jeKeL8xBpnmXy8pmPgMKial0vCUmOIZ4Wn
+        bykEQ5qA2QURxyKkcsl6dKoxr1bpvbycgolJ7SH8Jb81EfLPGAYWA9fSWN7qB6lmEiYVoi
+        gUxgyBMJWKuf708XZCKlWUw/EPvJaAM=
+Date:   Fri, 10 Mar 2023 00:51:52 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v7 28/41] x86: Introduce userspace API for shadow stack
+Message-ID: <20230309235152.GBZApxGNnXLvkGXCet@fat_crate.local>
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-29-rick.p.edgecombe@intel.com>
+ <ZAhjLAIm91rJ2Lpr@zn.tnic>
+ <9e00b2a3d988f7b24d274a108d31f5f0096eeaae.camel@intel.com>
+ <20230309125739.GCZAnXw5T1dfzwtqh8@fat_crate.local>
+ <a4dd415ac908450b09b9abbd4421a9132b3c34cc.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] arm64: dts: qcom: sa8775p: add symbols to dtb
-Content-Language: en-US
-To:     Eric Chanudet <echanude@redhat.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230309233945.1199358-1-echanude@redhat.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230309233945.1199358-1-echanude@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a4dd415ac908450b09b9abbd4421a9132b3c34cc.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 09, 2023 at 04:56:37PM +0000, Edgecombe, Rick P wrote:
+> There is a proc that shows if shadow stack is enabled in a thread. It
+> does indeed come later in the series.
 
+Not good enough:
 
-On 10.03.2023 00:39, Eric Chanudet wrote:
-> ABL uses the __symbols__ section to process the DTB before passing it
-> forward. Without it, the bootstrap is interrupted.
-> 
-> Signed-off-by: Eric Chanudet <echanude@redhat.com>
-> ---
-Fix your ABL.
+1. buried somewhere in proc where no one knows about it
 
-Konrad
-> Depends on initial sa8775p-ride.dts:
-> https://lore.kernel.org/all/20230214092713.211054-3-brgl@bgdev.pl/
-> 
->  arch/arm64/boot/dts/qcom/Makefile | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index b63cd1861e68..72e85ab31d74 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -1,4 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0
-> +
-> +# Enable support for device-tree overlays required on sa8775p-ride.
-> +DTC_FLAGS_sa8775p-ride := -@
-> +
->  dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
+2. it is per thread so user needs to grep *all*
+
+>  ... We previously tried to add some batch operations to improve the
+>  performance, but tglx had suggested to start with something simple.
+>  So we end up with this simple composable API.
+
+I agree with starting simple and thanks for explaining this in detail.
+
+TBH, though, it already sounds like a mess to me. I guess a mess we'll
+have to deal with because there will always be this case of some
+shared object/lib not being enabled for shstk because of raisins.
+
+And TBH #2, I would've done it even simpler: if some shared object can't
+do shadow stack, we disable it for the whole process. I mean, what's the
+point? Only some of the stack is shadowed so an attacker could find
+a way to keep the process perhaps run this shstk-unsupporting shared
+object more/longer and ROP its way around the system.
+
+But I tend to oversimplify things sometimes so...
+
+What I'd like to have, though, is a kernel cmdline param which disables
+permissive mode and userspace can't do anything about it. So that once
+you boot your kernel, you can know that everything that runs on the
+machine has shstk and is properly protected.
+
+Also, it'll allow for faster fixing of all those shared objects to use
+shstk by way of political pressure.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
