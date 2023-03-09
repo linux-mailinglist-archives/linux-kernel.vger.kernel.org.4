@@ -2,140 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130E36B1B0B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 06:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5A96B1B0E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjCIF67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 00:58:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40780 "EHLO
+        id S229605AbjCIGAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 01:00:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjCIF6w (ORCPT
+        with ESMTP id S229691AbjCIGA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 00:58:52 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17A0637F0;
-        Wed,  8 Mar 2023 21:58:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678341531; x=1709877531;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ka36+aBjWro1R1NjP+oqzaZACgg+/ZgCvacxGDr861U=;
-  b=E4iNjqb+wL86c/7/ZUe+czd5oPoxIj6YtVWoBCDMB5Q5nbiH5ucDRpBH
-   B0vh4/v3oIo6EqeoeOFJVk9X9dTh26ZuM8omggw62cAMSucoHqXNiBEXM
-   YRIPGNQSJXQQJcKSPMLN/0K2JyqtrnddMgMaUtgqLlx6vAsfxkJ568hWG
-   Jbw94EIrd/qgyH+Eoteepis6ZK/Tgtct18eB7XBfacdt1eb5YNSCKImXl
-   /dnOBru5bxxBsk3asZQF+1cuHH3tRWsvv5DtmOCA6BMukzh4/3E6sh9GO
-   m3v6pvIUHM+QvREYNWUqEVenNdECSx1tb1brPbju4v+Hw4B0uXOyjU0Q5
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="337886316"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="337886316"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 21:58:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="670605428"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="670605428"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.219.30])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 21:58:47 -0800
-Message-ID: <16dd4f27-aee6-97ee-ed20-87c0523c247d@intel.com>
-Date:   Thu, 9 Mar 2023 07:58:42 +0200
+        Thu, 9 Mar 2023 01:00:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A68BC362C;
+        Wed,  8 Mar 2023 22:00:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6326B81DEC;
+        Thu,  9 Mar 2023 06:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D824C433D2;
+        Thu,  9 Mar 2023 06:00:20 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     linux-efi@vger.kernel.org, loongarch@lists.linux.dev,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH] efi/libstub: Call setup_graphics() before handle_kernel_image()
+Date:   Thu,  9 Mar 2023 14:00:12 +0800
+Message-Id: <20230309060012.4189412-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [RFC PATCH v2 1/3] ufs: mcq: Add supporting functions for mcq
- abort
-To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        bvanassche@acm.org, mani@kernel.org, stanley.chu@mediatek.com,
-        beanhuo@micron.com, avri.altman@wdc.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <cover.1678338926.git.quic_nguyenb@quicinc.com>
- <68b786f390dbd93218a482d18c513bc332e82da3.1678338926.git.quic_nguyenb@quicinc.com>
-Content-Language: en-US
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <68b786f390dbd93218a482d18c513bc332e82da3.1678338926.git.quic_nguyenb@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/03/23 07:28, Bao D. Nguyen wrote:
-> Add supporting functions to handle ufs abort in mcq mode.
-> 
-> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
-> ---
->  drivers/ufs/core/ufs-mcq.c     | 181 +++++++++++++++++++++++++++++++++++++++++
->  drivers/ufs/core/ufshcd-priv.h |  14 ++++
->  drivers/ufs/core/ufshcd.c      |   3 +-
->  include/ufs/ufshcd.h           |   1 +
->  include/ufs/ufshci.h           |  16 ++++
->  5 files changed, 214 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-> index 31df052..4c33c1a 100644
-> --- a/drivers/ufs/core/ufs-mcq.c
-> +++ b/drivers/ufs/core/ufs-mcq.c
-> @@ -12,6 +12,9 @@
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include "ufshcd-priv.h"
-> +#include <linux/delay.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <linux/bitfield.h>
->  
->  #define MAX_QUEUE_SUP GENMASK(7, 0)
->  #define UFS_MCQ_MIN_RW_QUEUES 2
-> @@ -27,6 +30,9 @@
->  #define MCQ_ENTRY_SIZE_IN_DWORD	8
->  #define CQE_UCD_BA GENMASK_ULL(63, 7)
->  
-> +/* Max mcq register polling time in millisecond unit */
-> +#define MCQ_POLL_MS 500
-> +
->  static int rw_queue_count_set(const char *val, const struct kernel_param *kp)
->  {
->  	return param_set_uint_minmax(val, kp, UFS_MCQ_MIN_RW_QUEUES,
-> @@ -429,3 +435,178 @@ int ufshcd_mcq_init(struct ufs_hba *hba)
->  	host->host_tagset = 1;
->  	return 0;
->  }
-> +
-> +static int ufshcd_mcq_poll_register(void __iomem *reg, u32 mask,
-> +			u32 val, unsigned long timeout_ms)
-> +{
-> +	unsigned long timeout = jiffies + msecs_to_jiffies(timeout_ms);
-> +	int err = 0;
-> +
-> +	/* ignore bits that we don't intend to wait on */
-> +	val = val & mask;
-> +
-> +	while ((readl(reg) & mask) != val) {
-> +		usleep_range(10, 50);
-> +		if (time_after(jiffies, timeout)) {
-> +			err = -ETIMEDOUT;
-> +			break;
-> +		}
-> +	}
+Commit 42c8ea3dca094ab8 ("efi: libstub: Factor out EFI stub entrypoint
+into separate file") moves setup_graphics() into efi_stub_common() which
+is after handle_kernel_image(). This causes efifb no longer work because
+handle_kernel_image() may move the core kernel to its preferred address,
+which means the screen_info filled by the efistub will not be the same
+as the one accessed by the core kernel. So let us call setup_graphics()
+before handle_kernel_image() which restores the old behavior.
 
-Should be able to use a macro from include/linux/iopoll.h
-here
+The side effect is zboot will not call setup_graphics(), but I think
+zboot doesn't need it either.
 
-> +
-> +	return err;
-> +}
+Fixes: 42c8ea3dca094ab8 ("efi: libstub: Factor out EFI stub entrypoint into separate file")
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ drivers/firmware/efi/libstub/efi-stub-entry.c | 29 +++++++++++++++++++
+ drivers/firmware/efi/libstub/efi-stub.c       | 27 -----------------
+ 2 files changed, 29 insertions(+), 27 deletions(-)
 
+diff --git a/drivers/firmware/efi/libstub/efi-stub-entry.c b/drivers/firmware/efi/libstub/efi-stub-entry.c
+index 5245c4f031c0..f971fd25a4eb 100644
+--- a/drivers/firmware/efi/libstub/efi-stub-entry.c
++++ b/drivers/firmware/efi/libstub/efi-stub-entry.c
+@@ -5,6 +5,30 @@
+ 
+ #include "efistub.h"
+ 
++struct screen_info *setup_graphics(void)
++{
++	unsigned long size;
++	efi_status_t status;
++	efi_guid_t gop_proto = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
++	void **gop_handle = NULL;
++	struct screen_info *si = NULL;
++
++	size = 0;
++	status = efi_bs_call(locate_handle, EFI_LOCATE_BY_PROTOCOL,
++			     &gop_proto, NULL, &size, gop_handle);
++	if (status == EFI_BUFFER_TOO_SMALL) {
++		si = alloc_screen_info();
++		if (!si)
++			return NULL;
++		status = efi_setup_gop(si, &gop_proto, size);
++		if (status != EFI_SUCCESS) {
++			free_screen_info(si);
++			return NULL;
++		}
++	}
++	return si;
++}
++
+ /*
+  * EFI entry point for the generic EFI stub used by ARM, arm64, RISC-V and
+  * LoongArch. This is the entrypoint that is described in the PE/COFF header
+@@ -22,6 +46,7 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
+ 	efi_guid_t loaded_image_proto = LOADED_IMAGE_PROTOCOL_GUID;
+ 	unsigned long reserve_addr = 0;
+ 	unsigned long reserve_size = 0;
++	struct screen_info *si;
+ 
+ 	WRITE_ONCE(efi_system_table, systab);
+ 
+@@ -47,6 +72,8 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
+ 
+ 	efi_info("Booting Linux Kernel...\n");
+ 
++	si = setup_graphics();
++
+ 	status = handle_kernel_image(&image_addr, &image_size,
+ 				     &reserve_addr,
+ 				     &reserve_size,
+@@ -58,6 +85,8 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
+ 
+ 	status = efi_stub_common(handle, image, image_addr, cmdline_ptr);
+ 
++	free_screen_info(si);
++
+ 	efi_free(image_size, image_addr);
+ 	efi_free(reserve_size, reserve_addr);
+ 
+diff --git a/drivers/firmware/efi/libstub/efi-stub.c b/drivers/firmware/efi/libstub/efi-stub.c
+index 2955c1ac6a36..bc67af721412 100644
+--- a/drivers/firmware/efi/libstub/efi-stub.c
++++ b/drivers/firmware/efi/libstub/efi-stub.c
+@@ -56,30 +56,6 @@ void __weak free_screen_info(struct screen_info *si)
+ {
+ }
+ 
+-static struct screen_info *setup_graphics(void)
+-{
+-	efi_guid_t gop_proto = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
+-	efi_status_t status;
+-	unsigned long size;
+-	void **gop_handle = NULL;
+-	struct screen_info *si = NULL;
+-
+-	size = 0;
+-	status = efi_bs_call(locate_handle, EFI_LOCATE_BY_PROTOCOL,
+-			     &gop_proto, NULL, &size, gop_handle);
+-	if (status == EFI_BUFFER_TOO_SMALL) {
+-		si = alloc_screen_info();
+-		if (!si)
+-			return NULL;
+-		status = efi_setup_gop(si, &gop_proto, size);
+-		if (status != EFI_SUCCESS) {
+-			free_screen_info(si);
+-			return NULL;
+-		}
+-	}
+-	return si;
+-}
+-
+ static void install_memreserve_table(void)
+ {
+ 	struct linux_efi_memreserve *rsv;
+@@ -163,14 +139,12 @@ efi_status_t efi_stub_common(efi_handle_t handle,
+ 			     unsigned long image_addr,
+ 			     char *cmdline_ptr)
+ {
+-	struct screen_info *si;
+ 	efi_status_t status;
+ 
+ 	status = check_platform_features();
+ 	if (status != EFI_SUCCESS)
+ 		return status;
+ 
+-	si = setup_graphics();
+ 
+ 	efi_retrieve_tpm2_eventlog();
+ 
+@@ -190,7 +164,6 @@ efi_status_t efi_stub_common(efi_handle_t handle,
+ 
+ 	status = efi_boot_kernel(handle, image, image_addr, cmdline_ptr);
+ 
+-	free_screen_info(si);
+ 	return status;
+ }
+ 
+-- 
+2.39.1
 
