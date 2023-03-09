@@ -2,195 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A526B1E50
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A046B1E58
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjCIIgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 03:36:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
+        id S230309AbjCIIhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 03:37:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjCIIgX (ORCPT
+        with ESMTP id S230030AbjCIIhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:36:23 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDC3E1913
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:34:33 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id x3so3816429edb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 00:34:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678350871;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bf5h9B4GjXB46KIfBV4Jul3CUEr4UPwk87maz3zdFaU=;
-        b=KYtpme7mZtwMcP/RYUD2GRhVzrQ79etsVr3hsmX/w3XpWtZTQ0Og7rqFqZ5FqcN1m7
-         6V13ODVLWHU/YzoZAe9aDmdScCZclp1d7DdPvgEkM5UzZoQnFHL0MpaAbUkrzdCuuJW1
-         83sCF1nebd4RTPpEjTtPlGRoDGVkqMoEbj0gWAPA4TJX7i6MnyLVyUfzrOGMgFMFMVkI
-         QfrqlErzZ+s9Q/gG8qJ+XGP0yNZKp5+XbolfzSKvlS31Hb0zfj+3S60u1JQeRCIdn2Ez
-         IYFwJxbVWte3S0rY2nOOITy8Rj43L9QwOt2g8sX1X1HLaYHzY+Fcr++/TSaHMRy51OYT
-         y56Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678350871;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bf5h9B4GjXB46KIfBV4Jul3CUEr4UPwk87maz3zdFaU=;
-        b=07NkrIvAP/DPt95FHNuGTKaQNxVDx96fYUUJI+Zldn5fI/2hwUBfdrp+pfauzsb84d
-         nGXLxzY7R0Z+FvI0j0wQ8eCb5hdbsDlHy3OOkM5Os9lbLyEFtDliDLp+5cbz/q18ha2E
-         OwqkXbYwTIcwuBm1h3RpblfpI6ALEXbi63IhmajwyoGgDuWFlUviPD6F1XStvpEpNsiX
-         ivxco+N1/rFlttzz2hWHZs5QKUUa6tdUVfKSiROiBAsNxw/DQt0188zA2d++a5GtYtZ8
-         kT5YP0P0T4f/WJk8sbByuhUnizknucDQURb+fjBF2h0CqtYmy3eRVmnMnVs0sjx3VR9g
-         NatA==
-X-Gm-Message-State: AO0yUKVgCJmpf8AOUxUVdet8JPp9I4au1F2VPGdWcRccxxpa/b67VsFg
-        ooiihNGudskKGG1KBhJS02waFQ==
-X-Google-Smtp-Source: AK7set8CoMNWnVZzsifH057MaEVwmYB5sNqItMfusNWAvB1Iskv+7NVWFMrkezq1IqQcuXrPSGzXZA==
-X-Received: by 2002:a05:6402:150b:b0:4c1:bfa5:adfa with SMTP id f11-20020a056402150b00b004c1bfa5adfamr17173963edw.33.1678350870940;
-        Thu, 09 Mar 2023 00:34:30 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
-        by smtp.gmail.com with ESMTPSA id p24-20020a50cd98000000b004af6163f845sm9169133edi.28.2023.03.09.00.34.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 00:34:30 -0800 (PST)
-Message-ID: <67b84336-4632-0b71-1c93-8fc975cea69b@linaro.org>
-Date:   Thu, 9 Mar 2023 09:34:29 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 3/7] dt-bindings: remoteproc: mpss: Document
- QDU1000/QRU1000 mpss devices
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Melody Olvera <quic_molvera@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
-References: <20230306231202.12223-1-quic_molvera@quicinc.com>
- <20230306231202.12223-4-quic_molvera@quicinc.com>
- <ea1c0579-1b37-77de-3c47-e5b9772cff70@linaro.org>
-In-Reply-To: <ea1c0579-1b37-77de-3c47-e5b9772cff70@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 9 Mar 2023 03:37:22 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E99C35B9;
+        Thu,  9 Mar 2023 00:35:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678350944; x=1709886944;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=Z03IcnWFGG3Wb0J5NQK1cXbN7py7d13W/RrstUIkXrs=;
+  b=ew+MP6kzZZBdZiiOwnLjS2IHecmQBBoECKKMfe79BgLpXRHLy0Ir0l6l
+   8VJYjX1LPBEhZeGiyWRE7cjjFkLrCJshIo4nx+i7Vk1HSr2Y7fCbrcc92
+   7lhPRXCBNo82H3a74XSzIy7bh8iThh9Z5bfRtD7VzuBpQI97wc1TKa7QT
+   Ew1aXQLP3LP3fF83nNlNcDLbv2J6A0JaH2HMyp8LeJLzPYRRNCnlNGHyk
+   e/Unp/Rj9oTKqz75ILfl6lxuiqP3RQhOipDiTsqprIfe22Mu4JgUCbnNC
+   bfyUs/vCkTDEgXTYPCw4EUEi2xcTka7z1XbNT2tlAplzCwNoezyOkJeS4
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="316782699"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="316782699"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:35:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="654668877"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="654668877"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.105])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:35:28 -0800
+From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To:     tglx@linutronix.de
+Cc:     arjan.van.de.ven@intel.com, arjan@linux.intel.com,
+        boqun.feng@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, maz@kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, peterz@infradead.org,
+        torvalds@linuxfoundation.org, wangyang.guo@intel.com,
+        will@kernel.org, x86@kernel.org
+Subject: Re: [patch V2 3/4] atomics: Provide rcuref - scalable reference counting
+Date:   Thu,  9 Mar 2023 16:35:23 +0800
+Message-Id: <20230309083523.66592-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230307125538.932671660@linutronix.de>
+References: <20230307125538.932671660@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2023 09:33, Krzysztof Kozlowski wrote:
-> On 07/03/2023 00:11, Melody Olvera wrote:
->> This documents the compatible for the component used to boot the
-> 
-> Do not use "This commit/patch".
-> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-> 
->> MPSS on the QDU1000 and QRU1000 SoCs.
->>
->> The QDU1000 and QRU1000 mpss boot process now requires the specification
->> of an RMB register space to complete the handshake needed to start or
->> attach the mpss.
->>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>  .../remoteproc/qcom,qdu1000-mpss-pas.yaml     | 130 ++++++++++++++++++
->>  1 file changed, 130 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,qdu1000-mpss-pas.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,qdu1000-mpss-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,qdu1000-mpss-pas.yaml
->> new file mode 100644
->> index 000000000000..9cb4296c1fa6
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,qdu1000-mpss-pas.yaml
->> @@ -0,0 +1,130 @@
->> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/remoteproc/qcom,qdu1000-mpss-pas.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm QDU1000 Modem Peripheral Authentication Service
->> +
->> +maintainers:
->> +  - Melody Olvera <quic_molvera@quicinc.com>
->> +
->> +description:
->> +  Qualcomm QDU1000 SoC Peripheral Authentication Service loads and boots firmware
->> +  on the Qualcomm DSP Hexagon core.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - qcom,qdu1000-mpss-pas
->> +
->> +  reg:
->> +    maxItems: 2
-> 
-> You need to list the items instead (just like for clocks).
-> 
->> +
->> +  clocks:
->> +    items:
->> +      - description: XO clock
->> +
->> +  clock-names:
->> +    items:
->> +      - const: xo
->> +
->> +  qcom,qmp:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description: Reference to the AOSS side-channel message RAM.
->> +
->> +  smd-edge: false
->> +
->> +  firmware-name:
->> +    $ref: /schemas/types.yaml#/definitions/string-array
-> 
-> You can now drop the $ref.
-> 
->> +    items:
->> +      - description: Firmware name of the Hexagon core
->> +      - description: Firmware name of the Hexagon Devicetree
->> +
->> +  memory-region:
->> +    items:
->> +      - description: Memory region for main Firmware authentication
->> +      - description: Memory region for Devicetree Firmware authentication
->> +      - description: DSM Memory region
->> +
->> +  interrupts:
->> +    minItems: 6
->> +
->> +  interrupt-names:
->> +    minItems: 6
->> +
->> +  interconnects:
->> +    minItems: 1
-> 
-> maxItems instead
+Hi Thomas,
 
-Wait, I already commented on this... Some other comments also ignored.
+Some comments on the comments.
+If I'm wrong, please correct me ;-).
 
-This is a friendly reminder during the review process.
+> From: Thomas Gleixner <tglx@linutronix.de>
+> To: LKML <linux-kernel@vger.kernel.org>
+> Cc: Linus Torvalds <torvalds@linuxfoundation.org>,
+> 	x86@kernel.org, Wangyang Guo <wangyang.guo@intel.com>,
+> 	Arjan van De Ven <arjan@linux.intel.com>,
+> 	"David S. Miller" <davem@davemloft.net>,
+> 	Eric Dumazet <edumazet@google.com>,
+> 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+> 	netdev@vger.kernel.org, Will Deacon <will@kernel.org>,
+> 	Peter Zijlstra <peterz@infradead.org>,
+> 	Boqun Feng <boqun.feng@gmail.com>,
+> 	Mark Rutland <mark.rutland@arm.com>,
+> 	Marc Zyngier <maz@kernel.org>,
+> 	Arjan Van De Ven <arjan.van.de.ven@intel.com>
+> Subject: [patch V2 3/4] atomics: Provide rcuref - scalable reference counting
+> 
+> atomic_t based reference counting, including refcount_t, uses
+> atomic_inc_not_zero() for acquiring a reference. atomic_inc_not_zero() is
+> implemented with a atomic_try_cmpxchg() loop. High contention of the
+> reference count leads to retry loops and scales badly. There is nothing to
+> improve on this implementation as the semantics have to be preserved.
+> 
+> Provide rcuref as a scalable alternative solution which is suitable for RCU
+> managed objects. Similar to refcount_t it comes with overflow and underflow
+> detection and mitigation.
+> 
+> rcuref treats the underlying atomic_t as an unsigned integer and partitions
+> this space into zones:
+> 
+>   0x00000000 - 0x7FFFFFFF	valid zone (1 .. INT_MAX references)
 
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
+From the point of rcuref_read()'s view:
+0x00000000 encodes 1, ...,  then 0x7FFFFFFF should encode INT_MAX + 1 references.
 
-Thank you.
+>   0x80000000 - 0xBFFFFFFF	saturation zone
+>   0xC0000000 - 0xFFFFFFFE	dead zone
+>   0xFFFFFFFF   			no reference
+> 
+> rcuref_get() unconditionally increments the reference count with
+> atomic_add_negative_relaxed(). rcuref_put() unconditionally decrements the
+> reference count with atomic_add_negative_release().
+> 
+> This unconditional increment avoids the inc_not_zero() problem, but
+> requires a more complex implementation on the put() side when the count
+> drops from 0 to -1.
+> 
+> When this transition is detected then it is attempted to mark the reference
+> count dead, by setting it to the midpoint of the dead zone with a single
+> atomic_cmpxchg_release() operation. This operation can fail due to a
+> concurrent rcuref_get() elevating the reference count from -1 to 0 again.
+> 
+> If the unconditional increment in rcuref_get() hits a reference count which
+> is marked dead (or saturated) it will detect it after the fact and bring
+> back the reference count to the midpoint of the respective zone. The zones
+> provide enough tolerance which makes it practically impossible to escape
+> from a zone.
 
+[...]
 
-Best regards,
-Krzysztof
+> + * Why not refcount?
+> + * =================
+> + *
+> + * In principle it should be possible to make refcount use the rcuref
+> + * scheme, but the destruction race described below cannot be prevented
+> + * unless the protected object is RCU managed.
+> + *
+> + * Theory of operation
+> + * ===================
+> + *
+> + * rcuref uses an unsigned integer reference counter. As long as the
+> + * counter value is greater than or equal to RCUREF_ONEREF and not larger
+> + * than RCUREF_MAXREF the reference is alive:
+> + *
+> + * ONEREF   MAXREF               SATURATED             RELEASED      DEAD    NOREF
+> + * 0        0x7FFFFFFF 0x8000000 0xA0000000 0xBFFFFFFF 0xC0000000 0xE0000000 0xFFFFFFFF
+> + * <---valid --------> <-------saturation zone-------> <-----dead zone----->
+> + *
+> + * The get() and put() operations do unconditional increments and
+> + * decrements. The result is checked after the operation. This optimizes
+> + * for the fast path.
+> + *
+> + * If the reference count is saturated or dead, then the increments and
+> + * decrements are not harmful as the reference count still stays in the
+> + * respective zones and is always set back to STATURATED resp. DEAD. The
+> + * zones have room for 2^28 racing operations in each direction, which
+> + * makes it practically impossible to escape the zones.
+> + *
+> + * Once the last reference is dropped the reference count becomes
+> + * RCUREF_NOREF which forces rcuref_put() into the slowpath operation. The
+> + * slowpath then tries to set the reference count from RCUREF_NOREF to
+> + * RCUREF_DEAD via a cmpxchg(). This opens a small window where a
+> + * concurrent rcuref_get() can acquire the reference count and bring it
+> + * back to RCUREF_ONEREF or even drop the reference again and mark it DEAD.
+> + *
+> + * If the cmpxchg() succeeds then a concurrent rcuref_get() will result in
+> + * DEAD + 1, which is inside the dead zone. If that happens the reference
+> + * count is put back to DEAD.
+> + *
+> + * The actual race is possible due to the unconditional increment and
+> + * decrements in rcuref_get() and rcuref_put():
+> + *
+> + *	T1				T2
+> + *	get()				put()
+> + *					if (atomic_add_negative(1, &ref->refcnt))
 
+For T2 put() here:
+"if (atomic_add_negative(1, &ref->refcnt))" ->
+"if (atomic_add_negative(-1, &ref->refcnt))"
+
+> + *		succeeds->			atomic_cmpxchg(&ref->refcnt, -1, DEAD);
+
+Is it more readable if 's/-1/NODEF/g' ?
+
+> + *
+> + *	atomic_add_negative(1, &ref->refcnt);	<- Elevates refcount to DEAD + 1
+> + *
+> + * As the result of T1's add is negative, the get() goes into the slow path
+> + * and observes refcnt being in the dead zone which makes the operation fail.
+> + *
+> + * Possible critical states:
+> + *
+> + *	Context Counter	References	Operation
+> + *	T1	0	1		init()
+> + *	T2	1	2		get()
+> + *	T1	0	1		put()
+> + *	T2     -1	0		put() tries to mark dead
+> + *	T1	0	1		get()
+> + *	T2	0	1		put() mark dead fails
+> + *	T1     -1	0		put() tries to mark dead
+> + *	T1    DEAD	0		put() mark dead succeeds
+> + *	T2    DEAD+1	0		get() fails and puts it back to DEAD
+> + *
+> + * Of course there are more complex scenarios, but the above illustrates
+> + * the working principle. The rest is left to the imagination of the
+> + * reader.
+> + *
+> + * Deconstruction race
+> + * ===================
+> + *
+> + * The release operation must be protected by prohibiting a grace period in
+> + * order to prevent a possible use after free:
+> + *
+> + *	T1				T2
+> + *	put()				get()
+> + *	// ref->refcnt = ONEREF
+> + *	if (atomic_add_negative(-1, &ref->cnt))
+
+For T1 put() here:
+"if (atomic_add_negative(-1, &ref->cnt))" ->
+"if (!atomic_add_negative(-1, &ref->cnt))"
+
+> + *		return false;				<- Not taken
+> + *
+> + *	// ref->refcnt == NOREF
+> + *	--> preemption
+> + *					// Elevates ref->c to ONEREF
+
+s/ref->c/ref->refcnt/g
+
+> + *					if (!atomic_add_negative(1, &ref->refcnt))
+> + *						return true;			<- taken
+> + *
+> + *					if (put(&p->ref)) { <-- Succeeds
+> + *						remove_pointer(p);
+> + *						kfree_rcu(p, rcu);
+> + *					}
+> + *
+> + *		RCU grace period ends, object is freed
+> + *
+> + *	atomic_cmpxchg(&ref->refcnt, NONE, DEAD);	<- UAF
+
+s/NONE/NOREF/g
+
+[...]
