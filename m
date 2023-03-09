@@ -2,146 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119BE6B1DC6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 042D66B1DCA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjCIIW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 03:22:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
+        id S229933AbjCIIW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 03:22:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjCIIWD (ORCPT
+        with ESMTP id S229806AbjCIIW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:22:03 -0500
-Received: from out-63.mta1.migadu.com (out-63.mta1.migadu.com [95.215.58.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C826AB53DE
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:19:22 -0800 (PST)
-Date:   Thu, 9 Mar 2023 08:19:05 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1678349958;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=x50v67TYwBiKWgeN27hRP+v0wvobGEIlSfVqgnbcpZE=;
-        b=VhYz7y8T/2f5wHgbuvYDigGr5lA7gNx2UEc+6kPfl51jVXEKmODWQrK+erpNl3I+fYAGk0
-        OLP4W54Mdr1zZDcTnZtBmtEdcQWprwRVwxmeRnoIvopUISYuw3tOVeHyt7tzXXc7thjBxD
-        Sz2a8RbgDpGxbCDWDzaFfHz5kYp6oVc=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sagi Shahar <sagis@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Peter Shier <pshier@google.com>,
-        Anish Ghulati <aghulati@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Anish Moorthy <amoorthy@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Junaid Shahid <junaids@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Leonardo Bras <leobras@redhat.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Luczaj <mhal@rbox.co>,
-        Mingwei Zhang <mizhang@google.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Paul Durrant <pdurrant@amazon.com>,
-        Peng Hao <flyingpenghao@gmail.com>,
-        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
-        Robert Hoo <robert.hu@linux.intel.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] Documentation/process: Add a maintainer handbook
- for KVM x86
-Message-ID: <ZAmWefGcsBwcODxW@linux.dev>
-References: <20230309010336.519123-1-seanjc@google.com>
- <20230309010336.519123-3-seanjc@google.com>
- <ZAlGeYAmvhPmVmGe@debian.me>
+        Thu, 9 Mar 2023 03:22:27 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DFADF721;
+        Thu,  9 Mar 2023 00:20:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678350047; x=1709886047;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tHtq6ZIyJtPvDKcfRGVQgt5pQ1iWkR5DQjr+pW50ZoA=;
+  b=g8EYJDX4CKrUCOUO24cRK4zHFBKQTCKrlpA3RKXxEFOcGQpym3T5tewh
+   k4rHfnzjHqUEL8NgSgNUI7/eeelev92Jy39gmWJkb0sEkGAvyCfMRuCrQ
+   YT1Nu6SaBD4+xkzYeEAF93EwxkZfW3zVC12FH47v8FKQvKxCotZ1QbbA9
+   JPPdSZEEHjn9EqhH+5od8voxQAFpsdgNcKZToeKFp3dmNooqBgfLkjzyp
+   rhFbtvXX6bR/8sZBR8AmZtM9TS+ZvstNCHY764OdR2WBm6XnPWyEsdzUk
+   AV3ITZr+bxu64tlXFTI/PV1I7yA5mxw4WMTYjaZuLJ4YFlPjeNbB8Vaup
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="364025715"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="364025715"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:20:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="787473820"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="787473820"
+Received: from unknown (HELO ijarvine-MOBL2.mshome.net) ([10.237.66.35])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:20:45 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 0/8] tty: Cleanups
+Date:   Thu,  9 Mar 2023 10:20:27 +0200
+Message-Id: <20230309082035.14880-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAlGeYAmvhPmVmGe@debian.me>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 09:37:45AM +0700, Bagas Sanjaya wrote:
-> On Wed, Mar 08, 2023 at 05:03:36PM -0800, Sean Christopherson wrote:
-> > +As a general guideline, use ``kvm-x86/next`` even if a patch/series touches
-> > +multiple architectures, i.e. isn't strictly scoped to x86.  Using any of the
-> > +branches from the main KVM tree is usually a less good option as they likely
-> > +won't have many, if any, changes for the next release, i.e. using the main KVM
-> > +tree as a base is more likely to yield conflicts.  And if there are non-trivial
-> > +conflicts with multiple architectures, coordination between maintainers will be
-> > +required no matter what base is used.  Note, this is far from a hard rule, i.e.
-> > +use a different base for multi-arch series if that makes the most sense.
+Small cleanups to tty.
 
-I don't think this is the best way to coordinate with other architectures.
-Regardless of whether you intended this to be prescriptive, I'm worried most
-folks will follow along and just base patches on kvm-x86/next anyway.
+Ilpo Järvinen (8):
+  n_tty: Convert no_space_left to space_left boolean
+  tty_ioctl: Use BIT() for internal flags
+  Bluetooth: hci_ldisc: Fix tty_set_termios() return value assumptions
+  n_tty: Sort includes alphabetically
+  n_tty: Use DIV_ROUND_UP() in room calculation
+  n_tty: Cleanup includes
+  n_tty: Reindent if condition
+  tty: Convert hw_stopped in tty_struct to bool
 
-It'd be easier to just have multi-arch series use a stable base (i.e. a
-release candidate) by default. That'd avoid the undesirable case where merging
-a shared branch brings with it some random point in another arch's /next
-history.
-
-If a different approach makes sense for a particular series then we can
-discuss it on the list and arrive at something agreeable for all parties
-involved.
-
-> That means patches that primarily kvm ARM changes should be based on
-> kvm-x86/next, right?
-
-No, don't do that.
-
-Patches aimed at KVM/arm64 should be based on a sensible release candidate.
-We tend to contstruct the kvmarm/next with an early-ish release candidate
-(rc2-rc4). For example the 6.3 pull request was based on 6.2-rc4. We use topic
-branches in a slightly different manner than x86, creating ad-hoc branches for
-individual patch series grabbed from the list.
-
-If one has a series that conflicts with/depends on another that is in-flight
-or already picked up then that should be mentioned in the cover letter.
-Ultimately its up to the maintainer(s) to address conflicts, and neither
-Marc nor I are afraid to ask for a rebase/respin if it makes our lives
-easier to glue it all together.
+ drivers/bluetooth/hci_ldisc.c     |  8 +++---
+ drivers/char/pcmcia/synclink_cs.c |  6 ++---
+ drivers/mmc/core/sdio_uart.c      | 10 +++----
+ drivers/tty/amiserial.c           |  6 ++---
+ drivers/tty/mxser.c               |  6 ++---
+ drivers/tty/n_tty.c               | 43 +++++++++++++++----------------
+ drivers/tty/synclink_gt.c         |  6 ++---
+ drivers/tty/tty_ioctl.c           |  9 ++++---
+ include/linux/tty.h               |  2 +-
+ 9 files changed, 48 insertions(+), 48 deletions(-)
 
 -- 
-Thanks,
-Oliver
+2.30.2
+
