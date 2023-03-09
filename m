@@ -2,345 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCCD6B2DE1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:44:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2296B2DE3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 20:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjCITnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 14:43:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
+        id S229917AbjCIToi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 14:44:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjCITna (ORCPT
+        with ESMTP id S229887AbjCITof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 14:43:30 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344DD9609E
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 11:43:28 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id u5so3140483plq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 11:43:28 -0800 (PST)
+        Thu, 9 Mar 2023 14:44:35 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2087.outbound.protection.outlook.com [40.107.255.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD450E6FE8;
+        Thu,  9 Mar 2023 11:44:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jm6GLac0qJf17J7n5xonbE8KSGtfZRMboR7NVygPWuXZqYbCtWeYxEWpf73duJOgly0u8Z2uPlf9xDvnudoHEPHXVjWE8poml0E+jUhmTk7wezU51bu8D1EQ5vkdsKMA5p1gCxlcirzfl0ZGQSfONThc/WgMvQELhOvoiq9MJ68sMamC7OAHarBA8uvndsKNW+LyKVjrvLnNbwRMDCGRkQGeLR07Ys0ohAYBDRgm1+EDtpY/8Yci34/IAUB1yhjg+LnIyHm7voEi6KrkFFPtA7OGTMuY+C0RnN1fJAT+oUQJQ79qnLhRxJJanUNT8B3SLwleZ1GcZH7MH18QY5d+Sw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+cNJ6+qqP1dNogbazChbFz6FXbCy2cB/7zx+H744R80=;
+ b=djzke3lRbYyRB+rNXDyK9mPcykCN7LYIrEQ1zYgTKJu+wn2WFybLOWlSSiOgGhv4rjY/E081onURB7jJ8kJS3dpK6AujqP2Q9q2oCMiEKQiPNNsPiHNDiNzpukYayjgd1aQvpYqFNY+9JTm0hCVukIdwwDVBos4HkGDWL4X7n2a/lHm7ac0nV0hkrE/y1+D/S96mLP7sj7hSyTkF7EBHzR0rjxSimgPvEgPFiJevWTEeV3hklgqVC9RgOZlaadswq0nsn+L8us8WyDR//nHcurXat5POib4W7Sms/wvnru3H7OLdxWqsId2wImUYUVQNBL8/RUjX5VzJ9GfUsmTxvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 175.98.123.7) smtp.rcpttodomain=baylibre.com smtp.mailfrom=nuvoton.com;
+ dmarc=fail (p=none sp=quarantine pct=100) action=none header.from=gmail.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678391007;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AhIccO2Ibh/2D57bjEJOalL7wM9TCFp3PlDPHsJPBi8=;
-        b=R0kkIOvWQ7t86yton+4U5qb0iLf3+wHNiaLjYDFm6CfCuvVeedUm2vfMk5nMEVmrsp
-         dDOpRP2ZENS+dgtZNM65AF1bzVPGG/tZ32AcElpIkDdJfCjcwZt/5b/TcKyOIeGofrAJ
-         hlecq9c7SU2SIEEzvkF9aT3pbIfjTeBhORtQg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678391007;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AhIccO2Ibh/2D57bjEJOalL7wM9TCFp3PlDPHsJPBi8=;
-        b=VKYHnfu5XkU6L2ld24WkkoT7/knvLrf56fsfRvAsq+JUDCj8zMVDGG7tOjot85bUh9
-         NpY2Yp/J5DILVFyjOupsDbwkr3wG41aYYJht1AH4mdwIyAAgzkIj/2hMUob+IsFd+1jD
-         O384shhbyw36tINFoOeOmCAmwAVGz7U8DjCN+Q1AkmEZ72T9rELJng2YQ47qvICd8EhL
-         xNPYN/8DvMkRJSwpWk6vuFuxLvBaHUqyTKQzEeQ1vSbJJkyWkD6Mw0p9gTRD94ZiPlL4
-         wTDx/5nOMF+2ejG5HQmX6bXcMiz+Di0qXHcsdd9n/dSvEoDZWOumYInk+SEESC49Tq0a
-         9Tew==
-X-Gm-Message-State: AO0yUKXX8GSrzXrtQ3nkivFzGixs7ZkSWvq7dGLY1YlFC/9gG8fpf+zY
-        1J8piXwL9QkXiKVOLWgL1TV64sJSncMOOVubkrraDQ==
-X-Google-Smtp-Source: AK7set8wJe/4uPpFDobU2eODVai6vE0Q5X5S5iGVmQtTM32kUHSR3J89+QXovN5TtzNPe8usrgCSvg==
-X-Received: by 2002:a17:903:32ca:b0:19c:e937:6d04 with SMTP id i10-20020a17090332ca00b0019ce9376d04mr29562536plr.0.1678391007598;
-        Thu, 09 Mar 2023 11:43:27 -0800 (PST)
-Received: from wafflehead.lan ([47.144.140.44])
-        by smtp.gmail.com with ESMTPSA id kp13-20020a170903280d00b0019c919bccf8sm42619plb.86.2023.03.09.11.43.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 11:43:27 -0800 (PST)
-From:   Jeffrey Kardatzke <jkardatzke@chromium.org>
-X-Google-Original-From: Jeffrey Kardatzke <jkardatzke@google.com>
-To:     op-tee@lists.trustedfirmware.org
-Cc:     Jeffrey Kardatzke <jkardatzke@google.com>,
-        Jeffrey Kardatzke <jkardatzke@chromium.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6] tee: optee: Add SMC for loading OP-TEE image
-Date:   Thu,  9 Mar 2023 11:43:24 -0800
-Message-Id: <20230309114319.v6.1.I8e7f9b01d9ac940507d78e15368e200a6a69bedb@changeid>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+ d=nuvoton.onmicrosoft.com; s=selector2-nuvoton-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+cNJ6+qqP1dNogbazChbFz6FXbCy2cB/7zx+H744R80=;
+ b=sQ+AXcdb+6ftAR+zHPDA/x/v080AsRnzKLIlitdNHSZEBse6ApTXvQDrF1vh7wvX5BFY5cC+VYNlBESrS4AC6WjNdQ/p8KMVvRe+3RXN0bay3l9MYQu2PNk63jGGgdk9T402a2cXCv3wxmuqMI3Kt4PLRl/+e3BLdxa/Q+Tjfsw=
+Received: from TYCPR01CA0157.jpnprd01.prod.outlook.com (2603:1096:400:2b1::10)
+ by SI2PR03MB5771.apcprd03.prod.outlook.com (2603:1096:4:150::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.26; Thu, 9 Mar
+ 2023 19:44:10 +0000
+Received: from TYZAPC01FT022.eop-APC01.prod.protection.outlook.com
+ (2603:1096:400:2b1:cafe::75) by TYCPR01CA0157.outlook.office365.com
+ (2603:1096:400:2b1::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.18 via Frontend
+ Transport; Thu, 9 Mar 2023 19:44:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 175.98.123.7)
+ smtp.mailfrom=nuvoton.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=gmail.com;
+Received-SPF: Pass (protection.outlook.com: domain of nuvoton.com designates
+ 175.98.123.7 as permitted sender) receiver=protection.outlook.com;
+ client-ip=175.98.123.7; helo=NTHCCAS04.nuvoton.com; pr=C
+Received: from NTHCCAS04.nuvoton.com (175.98.123.7) by
+ TYZAPC01FT022.mail.protection.outlook.com (10.118.152.106) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.20.6178.19 via Frontend Transport; Thu, 9 Mar 2023 19:44:09 +0000
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 10
+ Mar 2023 03:44:08 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server id 15.1.2375.7 via Frontend Transport;
+ Fri, 10 Mar 2023 03:44:08 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id BC1126473B; Thu,  9 Mar 2023 21:44:07 +0200 (IST)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
+        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>
+CC:     <openbmc@lists.ozlabs.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v15 0/1] Introduce Nuvoton Arbel NPCM8XX BMC SoC
+Date:   Thu, 9 Mar 2023 21:44:01 +0200
+Message-ID: <20230309194402.119562-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-NotSetDelaration: True
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZAPC01FT022:EE_|SI2PR03MB5771:EE_
+X-MS-Office365-Filtering-Correlation-Id: ae2f820b-fe9f-4d2c-923a-08db20d6a6ca
+X-MS-Exchange-SenderADCheck: 0
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uRJi+i8c90IezMt1Oe933aI10Djq2Dfn3lqYMkm2GEvtW4+rmIqC2hmRnGLLojWQmfLKALgewCJXY5KSmhSvTtbj3LYbcRxxA+eYa4XjoGimqh/1kLfOAcnwzFWEHWItdlOUnNaMZ7zkgC18n5KYV1kVcMeoFDMPivjIh0QFsOAdmwMoUfHgRLA1WnqIIvxdq9WqFWHPWYEJ9S2mTMXGJlSxiFli95Z74zN8Ey+jny5t2B874YfPahlBBb62zzf22PAdH1TlF7uhSTdolFxAtqdfIkAelSxUei5bsDq+BPGukHkLNfPKdUMVZoWkclCYTDaVxQxHji6cwtF+Yzu8P7vGSyby4moQKsQ7oe81nqmNzdBLcin6pzsHlWN0Yskb2LiZ/J1MIZ6kIU+CUjMEs7jToyhaJlz7mzb8OHzlT/65lAA7/NrPq6jb4edRw09cRejhMgsBzXecNU868pmHQ9yjFJxTFuwcXzNEqSznlFqw3gDOCssc+XaBIVMzq7Rx90f1k30ZzP/eZWzboA1tn4trC1XkTvTSv7v69qt33SgvRv94ySQ7ldGXXPX8xqcMHaWO1jrnObqO991v8QAiCJXf0sY3NUIJkEqUbLUQhSGYsPQiB2Ul7l4DIQ5pfmB5JeIkmQ26MDk0HaXkzMbBzo+nLQDqmFLSuC5ss700xhp9CoWLI7iiJFPxJNK/N7/uyj3QsSPcqVjuuckqywyPS1RQSSSJFcCGE5zOILFCG6A9S9mEj7ydG9s5qaW6dfy3z/LAnDNrrDadrmhZiH4fqQ==
+X-Forefront-Antispam-Report: CIP:175.98.123.7;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:NTHCCAS04.nuvoton.com;PTR:175-98-123-7.static.tfn.net.tw;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(136003)(376002)(451199018)(36840700001)(40470700004)(46966006)(2616005)(36860700001)(47076005)(42882007)(336012)(83380400001)(82310400005)(73392003)(54906003)(26005)(478600001)(42186006)(186003)(76482006)(110136005)(7416002)(82202003)(6266002)(1076003)(6666004)(316002)(966005)(8936002)(83170400001)(40460700003)(55446002)(40480700001)(356005)(81166007)(82740400003)(2906002)(5660300002)(70586007)(70206006)(41300700001)(8676002)(36756003)(4326008)(45356006)(32563001)(35450700002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: nuvoton.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 19:44:09.5660
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae2f820b-fe9f-4d2c-923a-08db20d6a6ca
+X-MS-Exchange-CrossTenant-Id: a3f24931-d403-4b4a-94f1-7d83ac638e07
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=a3f24931-d403-4b4a-94f1-7d83ac638e07;Ip=[175.98.123.7];Helo=[NTHCCAS04.nuvoton.com]
+X-MS-Exchange-CrossTenant-AuthSource: TYZAPC01FT022.eop-APC01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR03MB5771
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        DKIM_SIGNED,DKIM_VALID,FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds an SMC call that will pass an OP-TEE binary image to EL3 and
-instruct it to load it as the BL32 payload. This works in conjunction
-with a feature added to Trusted Firmware for ARMv8 and above
-architectures that supports this.
+This patchset adds clock support for the Nuvoton 
+Arbel NPCM8XX Board Management controller (BMC) SoC family.
 
-The main purpose of this change is to facilitate updating the OP-TEE
-component on devices via a rootfs change rather than having to do a
-firmware update. Further details are linked to in the Kconfig file.
+This patchset cover letter is based from the initial support for NPCM8xx BMC to
+keep tracking the version history.
 
-Signed-off-by: Jeffrey Kardatzke <jkardatzke@chromium.org>
-Signed-off-by: Jeffrey Kardatzke <jkardatzke@google.com>
----
+all the other initial support patches had been applied to Linux kernel 6.0.
 
-Changes in v6:
-- Expanded Kconfig documentation
+This patchset was tested on the Arbel NPCM8XX evaluation board.
 
-Changes in v5:
-- Renamed config option
-- Added runtime warning when config is used
+Addressed comments from:
 
-Changes in v4:
-- Update commit message
-- Added more documentation
-- Renamed config option, added ARM64 dependency
+ - Stephen Boyd: https://www.spinics.net/lists/linux-clk/msg78406.html
 
-Changes in v3:
-- Removed state tracking for driver reload
-- Check UID of service to verify it needs image load
+Changes since version 14:
+ - NPCM8XX clock driver
+	- Remove unnecessary register definitions.
+	- Remove the internal reference clock, instead use the external DT reference clock.
+	- rearrange the driver.
+	- using .names parameter in DT to define clock (refclk).
 
-Changes in v2:
-- Fixed compile issue when feature is disabled
-- Addressed minor comments
-- Added state tracking for driver reload
+Changes since version 13:
+ - NPCM8XX clock driver
+	- Remove unnecessary definitions and add module.h define
+	- Use in clk_parent_data struct.fw_name and .name.
+	- Add module_exit function.
+	- Add const to divider clock names.
+	- Add MODULE_DESCRIPTION and MODULE_LICENSE
 
- drivers/tee/optee/Kconfig     | 29 +++++++++++
- drivers/tee/optee/optee_msg.h | 12 +++++
- drivers/tee/optee/optee_smc.h | 24 +++++++++
- drivers/tee/optee/smc_abi.c   | 97 +++++++++++++++++++++++++++++++++++
- 4 files changed, 162 insertions(+)
+Changes since version 12:
+ - NPCM8XX clock driver
+	- Use clk_parent_data in mux and div clock structure.
+	- Add const to mux tables.
+	- Using devm_clk_hw_register_fixed_rate function.
+	- use only .name clk_parent_data instead .name and .fw_name.
+	- Modify mask values in mux clocks. 
 
-diff --git a/drivers/tee/optee/Kconfig b/drivers/tee/optee/Kconfig
-index f121c224e682..8d4836c58486 100644
---- a/drivers/tee/optee/Kconfig
-+++ b/drivers/tee/optee/Kconfig
-@@ -7,3 +7,32 @@ config OPTEE
- 	help
- 	  This implements the OP-TEE Trusted Execution Environment (TEE)
- 	  driver.
-+
-+config OPTEE_INSECURE_LOAD_IMAGE
-+	bool "Load OP-TEE image as firmware"
-+	default n
-+	depends on OPTEE && ARM64
-+	help
-+	  This loads the BL32 image for OP-TEE as firmware when the driver is
-+	  probed. This returns -EPROBE_DEFER until the firmware is loadable from
-+	  the filesystem which is determined by checking the system_state until
-+	  it is in SYSTEM_RUNNING. This also requires enabling the corresponding
-+	  option in Trusted Firmware for Arm. The documentation there explains
-+	  the security threat associated with enabling this as well as
-+	  mitigations at the firmware and platform level.
-+	  https://trustedfirmware-a.readthedocs.io/en/latest/threat_model/threat_model.html
-+
-+	  When utilizing this option, the following mitigations should be
-+	  implemented to prevent attacks at the kernel level.
-+	  1. There must be boot chain security that verifies the kernel and
-+	     rootfs, otherwise an attacker can modify the loaded OP-TEE binary.
-+	  2. It is recommended to build it as an included driver rather than
-+	     a module to prevent exploits that may cause the module to not be
-+	     loaded.
-+	  3. If there are alternate methods of booting the device, such as a
-+	     recovery mode, it should be ensured that the same mitigations are
-+	     applied in that mode.
-+	  4. The OP-TEE driver must be loaded before any potential attack
-+	     vectors are opened up. This should include mounting of any
-+	     modifiable filesystems, opening of network ports or communicating
-+	     with external devices (such a USB).
-diff --git a/drivers/tee/optee/optee_msg.h b/drivers/tee/optee/optee_msg.h
-index 70e9cc2ee96b..e8840a82b983 100644
---- a/drivers/tee/optee/optee_msg.h
-+++ b/drivers/tee/optee/optee_msg.h
-@@ -241,11 +241,23 @@ struct optee_msg_arg {
-  * 384fb3e0-e7f8-11e3-af63-0002a5d5c51b.
-  * Represented in 4 32-bit words in OPTEE_MSG_UID_0, OPTEE_MSG_UID_1,
-  * OPTEE_MSG_UID_2, OPTEE_MSG_UID_3.
-+ *
-+ * In the case where the OP-TEE image is loaded by the kernel, this will
-+ * initially return an alternate UID to reflect that we are communicating with
-+ * the TF-A image loading service at that time instead of OP-TEE. That UID is:
-+ * a3fbeab1-1246-315d-c7c4-06b9c03cbea4.
-+ * Represented in 4 32-bit words in OPTEE_MSG_IMAGE_LOAD_UID_0,
-+ * OPTEE_MSG_IMAGE_LOAD_UID_1, OPTEE_MSG_IMAGE_LOAD_UID_2,
-+ * OPTEE_MSG_IMAGE_LOAD_UID_3.
-  */
- #define OPTEE_MSG_UID_0			0x384fb3e0
- #define OPTEE_MSG_UID_1			0xe7f811e3
- #define OPTEE_MSG_UID_2			0xaf630002
- #define OPTEE_MSG_UID_3			0xa5d5c51b
-+#define OPTEE_MSG_IMAGE_LOAD_UID_0	0xa3fbeab1
-+#define OPTEE_MSG_IMAGE_LOAD_UID_1	0x1246315d
-+#define OPTEE_MSG_IMAGE_LOAD_UID_2	0xc7c406b9
-+#define OPTEE_MSG_IMAGE_LOAD_UID_3	0xc03cbea4
- #define OPTEE_MSG_FUNCID_CALLS_UID	0xFF01
- 
- /*
-diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.h
-index 73b5e7760d10..7d9fa426505b 100644
---- a/drivers/tee/optee/optee_smc.h
-+++ b/drivers/tee/optee/optee_smc.h
-@@ -104,6 +104,30 @@ struct optee_smc_call_get_os_revision_result {
- 	unsigned long reserved1;
- };
- 
-+/*
-+ * Load Trusted OS from optee/tee.bin in the Linux firmware.
-+ *
-+ * WARNING: Use this cautiously as it could lead to insecure loading of the
-+ * Trusted OS.
-+ * This SMC instructs EL3 to load a binary and execute it as the Trusted OS.
-+ *
-+ * Call register usage:
-+ * a0 SMC Function ID, OPTEE_SMC_CALL_LOAD_IMAGE
-+ * a1 Upper 32bit of a 64bit size for the payload
-+ * a2 Lower 32bit of a 64bit size for the payload
-+ * a3 Upper 32bit of the physical address for the payload
-+ * a4 Lower 32bit of the physical address for the payload
-+ *
-+ * The payload is in the OP-TEE image format.
-+ *
-+ * Returns result in a0, 0 on success and an error code otherwise.
-+ */
-+#define OPTEE_SMC_FUNCID_LOAD_IMAGE 2
-+#define OPTEE_SMC_CALL_LOAD_IMAGE \
-+	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, ARM_SMCCC_SMC_32, \
-+			   ARM_SMCCC_OWNER_TRUSTED_OS_END, \
-+			   OPTEE_SMC_FUNCID_LOAD_IMAGE)
-+
- /*
-  * Call with struct optee_msg_arg as argument
-  *
-diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-index a1c1fa1a9c28..00b6b69b6f79 100644
---- a/drivers/tee/optee/smc_abi.c
-+++ b/drivers/tee/optee/smc_abi.c
-@@ -8,9 +8,11 @@
- 
- #include <linux/arm-smccc.h>
- #include <linux/errno.h>
-+#include <linux/firmware.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/irqdomain.h>
-+#include <linux/kernel.h>
- #include <linux/mm.h>
- #include <linux/module.h>
- #include <linux/of.h>
-@@ -1149,6 +1151,22 @@ static bool optee_msg_api_uid_is_optee_api(optee_invoke_fn *invoke_fn)
- 	return false;
- }
- 
-+#ifdef CONFIG_OPTEE_INSECURE_LOAD_IMAGE
-+static bool optee_msg_api_uid_is_optee_image_load(optee_invoke_fn *invoke_fn)
-+{
-+	struct arm_smccc_res res;
-+
-+	invoke_fn(OPTEE_SMC_CALLS_UID, 0, 0, 0, 0, 0, 0, 0, &res);
-+
-+	if (res.a0 == OPTEE_MSG_IMAGE_LOAD_UID_0 &&
-+	   res.a1 == OPTEE_MSG_IMAGE_LOAD_UID_1 &&
-+	   res.a2 == OPTEE_MSG_IMAGE_LOAD_UID_2 &&
-+	   res.a3 == OPTEE_MSG_IMAGE_LOAD_UID_3)
-+		return true;
-+	return false;
-+}
-+#endif
-+
- static void optee_msg_get_os_revision(optee_invoke_fn *invoke_fn)
- {
- 	union {
-@@ -1354,6 +1372,81 @@ static void optee_shutdown(struct platform_device *pdev)
- 		optee_disable_shm_cache(optee);
- }
- 
-+#ifdef CONFIG_OPTEE_INSECURE_LOAD_IMAGE
-+
-+#define OPTEE_FW_IMAGE "optee/tee.bin"
-+
-+static int optee_load_fw(struct platform_device *pdev,
-+			 optee_invoke_fn *invoke_fn)
-+{
-+	const struct firmware *fw = NULL;
-+	struct arm_smccc_res res;
-+	phys_addr_t data_pa;
-+	u8 *data_buf = NULL;
-+	u64 data_size;
-+	u32 data_pa_high, data_pa_low;
-+	u32 data_size_high, data_size_low;
-+	int rc;
-+
-+	if (!optee_msg_api_uid_is_optee_image_load(invoke_fn))
-+		return 0;
-+
-+	rc = request_firmware(&fw, OPTEE_FW_IMAGE, &pdev->dev);
-+	if (rc) {
-+		/*
-+		 * The firmware in the rootfs will not be accessible until we
-+		 * are in the SYSTEM_RUNNING state, so return EPROBE_DEFER until
-+		 * that point.
-+		 */
-+		if (system_state < SYSTEM_RUNNING)
-+			return -EPROBE_DEFER;
-+		goto fw_err;
-+	}
-+
-+	data_size = fw->size;
-+	/*
-+	 * This uses the GFP_DMA flag to ensure we are allocated memory in the
-+	 * 32-bit space since TF-A cannot map memory beyond the 32-bit boundary.
-+	 */
-+	data_buf = kmalloc(fw->size, GFP_KERNEL | GFP_DMA);
-+	if (!data_buf) {
-+		rc = -ENOMEM;
-+		goto fw_err;
-+	}
-+	memcpy(data_buf, fw->data, fw->size);
-+	data_pa = virt_to_phys(data_buf);
-+	reg_pair_from_64(&data_pa_high, &data_pa_low, data_pa);
-+	reg_pair_from_64(&data_size_high, &data_size_low, data_size);
-+	goto fw_load;
-+
-+fw_err:
-+	pr_warn("image loading failed\n");
-+	data_pa_high = data_pa_low = data_size_high = data_size_low = 0;
-+
-+fw_load:
-+	/*
-+	 * Always invoke the SMC, even if loading the image fails, to indicate
-+	 * to EL3 that we have passed the point where it should allow invoking
-+	 * this SMC.
-+	 */
-+	pr_warn("OP-TEE image loaded from kernel, this can be insecure");
-+	invoke_fn(OPTEE_SMC_CALL_LOAD_IMAGE, data_size_high, data_size_low,
-+		  data_pa_high, data_pa_low, 0, 0, 0, &res);
-+	if (!rc)
-+		rc = res.a0;
-+	if (fw)
-+		release_firmware(fw);
-+	kfree(data_buf);
-+
-+	return rc;
-+}
-+#else
-+static inline int optee_load_fw(struct platform_device *__unused1,
-+		optee_invoke_fn *__unused2) {
-+	return 0;
-+}
-+#endif
-+
- static int optee_probe(struct platform_device *pdev)
- {
- 	optee_invoke_fn *invoke_fn;
-@@ -1372,6 +1465,10 @@ static int optee_probe(struct platform_device *pdev)
- 	if (IS_ERR(invoke_fn))
- 		return PTR_ERR(invoke_fn);
- 
-+	rc = optee_load_fw(pdev, invoke_fn);
-+	if (rc)
-+		return rc;
-+
- 	if (!optee_msg_api_uid_is_optee_api(invoke_fn)) {
- 		pr_warn("api uid mismatch\n");
- 		return -EINVAL;
+Changes since version 11:
+ - NPCM8XX clock driver
+	- Modify Kconfig help.
+	- Modify loop variable to unsigned int.
+
+Changes since version 11:
+ - NPCM8XX clock driver
+	- Modify Kconfig help.
+	- Modify loop variable to unsigned int.
+
+Changes since version 10:
+ - NPCM8XX clock driver
+	- Fix const warning.
+
+Changes since version 9:
+ - NPCM8XX clock driver
+	- Move configuration place.
+	- Using clk_parent_data instead of parent_name
+	- using devm_ioremap instead of ioremap. deeply sorry, I know we had
+	 a long discussion on what should the driver use, from other examples 
+	 (also in other clock drivers) I see the combination of 
+	 platform_get_resource and devm_ioremap are commonly used and it answer
+	 the reset and clock needs.
+
+Changes since version 8:
+ - NPCM8XX clock driver
+	- Move configuration place.
+	- Add space before and aftre '{' '}'.
+	- Handle devm_of_clk_add_hw_provider function error.
+
+Changes since version 7:
+ - NPCM8XX clock driver
+	- The clock and reset registers using the same memory region, 
+	  due to it the clock driver should claim the ioremap directly 
+	  without checking the memory region.
+
+Changes since version 6:
+ - NPCM reset driver
+	- Modify warning message.
+ - dt-bindings: serial: 8250: Add npcm845 compatible string patch accepted, due
+   to it the patch removed from the patchset.
+
+Changes since version 5:
+ - NPCM8XX clock driver
+	- Remove refclk if devm_of_clk_add_hw_provider function failed.
+ - NPCM8XX clock source driver
+	- Remove NPCM8XX TIMER_OF_DECLARE support, using the same as NPCM7XX.
+
+Changes since version 4:
+ - NPCM8XX clock driver
+	- Use the same quote in the dt-binding file.
+
+Changes since version 3:
+ - NPCM8XX clock driver
+	- Rename NPCM8xx clock dt-binding header file.
+	- Remove unused structures.
+	- Improve Handling the clocks registration.
+ - NPCM reset driver
+	- Add ref phandle to dt-binding.
+
+Changes since version 2:
+ - Remove NPCM8xx WDT compatible patch.
+ - Remove NPCM8xx UART compatible patch.
+ - NPCM8XX clock driver
+	- Add debug new line.
+	- Add 25M fixed rate clock.
+	- Remove unused clocks and clock name from dt-binding.
+ - NPCM reset driver
+	- Revert to npcm7xx dt-binding.
+	- Skip dt binding quotes.
+	- Adding DTS backward compatibility.
+	- Remove NPCM8xx binding include file.
+	- Warp commit message.
+- NPCM8XX device tree:
+	- Remove unused clock nodes (used in the clock driver)
+	- Modify gcr and rst node names.
+
+Changes since version 1:
+ - NPCM8XX clock driver
+	- Modify dt-binding.
+	- Remove unsed definition and include.
+	- Include alphabetically.
+	- Use clock devm.
+ - NPCM reset driver
+	- Modify dt-binding.
+	- Modify syscon name.
+	- Add syscon support to NPCM7XX dts reset node.
+	- use data structure.
+ - NPCM8XX device tree:
+	- Modify evb compatible name.
+	- Add NPCM7xx compatible.
+	- Remove disable nodes from the EVB DTS.
+
+Tomer Maimon (1):
+  clk: npcm8xx: add clock controller
+
+ drivers/clk/Kconfig       |   8 +
+ drivers/clk/Makefile      |   1 +
+ drivers/clk/clk-npcm8xx.c | 561 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 570 insertions(+)
+ create mode 100644 drivers/clk/clk-npcm8xx.c
+
 -- 
-2.40.0.rc1.284.g88254d51c5-goog
+2.33.0
 
