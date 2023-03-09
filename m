@@ -2,135 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 060806B1E39
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 578E56B1E37
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 09:32:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjCIIct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 03:32:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
+        id S230397AbjCIIce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 03:32:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjCIIcF (ORCPT
+        with ESMTP id S229706AbjCIIcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:32:05 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616AB1421F;
-        Thu,  9 Mar 2023 00:30:55 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3298UGii088836;
-        Thu, 9 Mar 2023 02:30:16 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678350616;
-        bh=I3lq2iT8KGZnNcSfvrJ8/WAlAe3Iqt8pkOvMQpKrax0=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Y+QMZE7kiISvWWmNd9pSjq4qAywUJwjoEGC5VZ+aM4ILGkO63GKsHVr17BcP5d5rb
-         dfw+jofBxPzgZBYhkH+7xDDHy3Nze77TAAW3Hm3nXSLN6amlnNnNk7zJaVTIuUAw2Z
-         Ffqh7YX4TDNJerua+AoGTrU70u/23uAt8i7zPV8I=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3298UGfC042805
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 9 Mar 2023 02:30:16 -0600
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 9
- Mar 2023 02:30:15 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 9 Mar 2023 02:30:15 -0600
-Received: from uda0500640.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3298Tf5H063317;
-        Thu, 9 Mar 2023 02:30:12 -0600
-From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
-To:     <nm@ti.com>, <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <s-vadapalli@ti.com>, <vaishnav.a@ti.com>, <r-gunasekaran@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v13 8/8] arm64: dts: ti: k3-j721s2-common-proc-board: Enable PCIe
-Date:   Thu, 9 Mar 2023 13:59:40 +0530
-Message-ID: <20230309082940.31535-9-r-gunasekaran@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230309082940.31535-1-r-gunasekaran@ti.com>
-References: <20230309082940.31535-1-r-gunasekaran@ti.com>
+        Thu, 9 Mar 2023 03:32:02 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53A8BDE7
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 00:30:40 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id v13so1186932ybu.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 00:30:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678350640;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6X01iIU0wnxPVN4mE7EbEfeiXJ0H/q86RXnLPkaXpNQ=;
+        b=sFFwDzyP/v/Gl+iJe8PCcylVUjYTJrmsMUblQNR9XkeUOZMY0fQ/Hc0T8Gwc/6uMq2
+         91LZ3Tz4iYasKiwJiIJeDzz+C3SkEpdJuEvZCa6Pe9UlGlmlajfZOiVEPA/8wGrYAKjA
+         LmGzDBMrO6/hVFU1kCe/8ncg01bk3tUxqDYtQe6qkBUYVmQfCW+WQliQlqbkx1d/J2N8
+         MdLjWXCRsGXSmVqjHwy+iHqigZedg08E7CePrj5752x+w70FD1ufJU6sATF8pxmFC85V
+         fE3T39j5W3O2Osjenh6sZ47hgip062gCMozpYQKpRfzSF1AK3nefZDMdRlfBlduVHZFP
+         XfsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678350640;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6X01iIU0wnxPVN4mE7EbEfeiXJ0H/q86RXnLPkaXpNQ=;
+        b=CSCoI5U+dhy8r0MjiovRUkA2XQPBuDigLyqBfVVE13oSi54x5KGgRC5VZ1K03wS+PT
+         bwVBpS2v/Q4Hdz9LQ1lW2QLrLAqTxUkDOkzf5m46j5+BKmPDSa8SVGe81BHPakPUzRZU
+         l9nKqNoRzsbuiiQXUyGRMrcjYgyhThr0jvJ2adDMMORRDaNOaJNSwD2NRMpUpQhSw3+m
+         vhjd5c9KdQVeUdM2tuN02xtnsp9gK98oas6KxrsXzA7bfz2UO4p9712p2Ov5rNEPv7Bp
+         pYFFNMFQN/ybAeromYOeNhANNffjI4NYzZt5iXyiPjN5yKD1Elp1G2sEx3zE6WKmLSxv
+         eRow==
+X-Gm-Message-State: AO0yUKVxCh3ZlocHL9QztRvk4XGwWfCqj2ap4dJ2M4qFRzzuXLpEgBBZ
+        acj0xrG4P6IznRIpwIzqrRVB8ZPjJaTWKF5Wc2zmow==
+X-Google-Smtp-Source: AK7set+0Omu29SoUGI3ideA2ereu9ALg/F/QLm40StIVYVsoJ0c5ssjGhRiOVnxdmvi71H975er5diCiOZcF+UB5KCk=
+X-Received: by 2002:a25:cd0a:0:b0:b26:884:c35e with SMTP id
+ d10-20020a25cd0a000000b00b260884c35emr1643582ybf.4.1678350640088; Thu, 09 Mar
+ 2023 00:30:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <03a8cd13af352c4d990bc70b72df4915b9fa2874.1678347776.git.geert+renesas@glider.be>
+In-Reply-To: <03a8cd13af352c4d990bc70b72df4915b9fa2874.1678347776.git.geert+renesas@glider.be>
+From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date:   Thu, 9 Mar 2023 09:30:29 +0100
+Message-ID: <CACMJSevqE8NC-=so7W_Xge-yw7w+La0dJTqx0z9u_AYt-7gtuQ@mail.gmail.com>
+Subject: Re: [PATCH] i2c: dev: Fix bus callback return values
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aswath Govindraju <a-govindraju@ti.com>
+On Thu, 9 Mar 2023 at 08:45, Geert Uytterhoeven <geert+renesas@glider.be> wrote:
+>
+> The i2cdev_{at,de}tach_adapter() callbacks are used for two purposes:
+>   1. As notifier callbacks, when (un)registering I2C adapters created or
+>      destroyed after i2c_dev_init(),
+>   2. As bus iterator callbacks, for registering already existing
+>      adapters from i2c_dev_init(), and for cleanup.
+>
+> Unfortunately both use cases expect different return values: the former
+> expects NOTIFY_* return codes, while the latter expects zero or error
+> codes, and aborts in case of error.
+>
+> Hence in case 2, as soon as i2cdev_{at,de}tach_adapter() returns
+> (non-zero) NOTIFY_OK, the bus iterator aborts.  This causes (a) only the
+> first already existing adapter to be registered, leading to missing
+> /dev/i2c-* entries, and (b) a failure to unregister all but the first
+> I2C adapter during cleanup.
+>
+> Fix this by introducing separate callbacks for the bus iterator,
+> wrapping the notifier functions, and always returning succes.
+> Any errors inside these callback functions are unlikely to happen, and
+> are fatal anyway.
+>
+> Fixes: cddf70d0bce71c2a ("i2c: dev: fix notifier return values")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> Seen on r8a7740/armadillo and r8a73a4/ape6evm, where the i2c-shmobile
+> adapters are probed before i2c_dev_init().
+> Not seen on r8a779g0/white-hawk, where all I2C adapters are probed after
+> i2c_dev_init().
+>
+>  drivers/i2c/i2c-dev.c | 24 ++++++++++++++++++------
+>  1 file changed, 18 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+> index 107623c4cc14aaf9..95a0b63ac560cf33 100644
+> --- a/drivers/i2c/i2c-dev.c
+> +++ b/drivers/i2c/i2c-dev.c
+> @@ -646,7 +646,7 @@ static void i2cdev_dev_release(struct device *dev)
+>         kfree(i2c_dev);
+>  }
+>
+> -static int i2cdev_attach_adapter(struct device *dev, void *dummy)
+> +static int i2cdev_attach_adapter(struct device *dev)
+>  {
+>         struct i2c_adapter *adap;
+>         struct i2c_dev *i2c_dev;
+> @@ -685,7 +685,7 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
+>         return NOTIFY_DONE;
+>  }
+>
+> -static int i2cdev_detach_adapter(struct device *dev, void *dummy)
+> +static int i2cdev_detach_adapter(struct device *dev)
+>  {
+>         struct i2c_adapter *adap;
+>         struct i2c_dev *i2c_dev;
+> @@ -711,9 +711,9 @@ static int i2cdev_notifier_call(struct notifier_block *nb, unsigned long action,
+>
+>         switch (action) {
+>         case BUS_NOTIFY_ADD_DEVICE:
+> -               return i2cdev_attach_adapter(dev, NULL);
+> +               return i2cdev_attach_adapter(dev);
+>         case BUS_NOTIFY_DEL_DEVICE:
+> -               return i2cdev_detach_adapter(dev, NULL);
+> +               return i2cdev_detach_adapter(dev);
+>         }
+>
+>         return NOTIFY_DONE;
+> @@ -725,6 +725,18 @@ static struct notifier_block i2cdev_notifier = {
+>
+>  /* ------------------------------------------------------------------------- */
+>
+> +static int __init i2c_dev_attach_adapter(struct device *dev, void *dummy)
+> +{
+> +       i2cdev_attach_adapter(dev);
+> +       return 0;
+> +}
+> +
+> +static int __exit i2c_dev_detach_adapter(struct device *dev, void *dummy)
+> +{
+> +       i2cdev_detach_adapter(dev);
+> +       return 0;
+> +}
+> +
+>  /*
+>   * module load/unload record keeping
+>   */
+> @@ -752,7 +764,7 @@ static int __init i2c_dev_init(void)
+>                 goto out_unreg_class;
+>
+>         /* Bind to already existing adapters right away */
+> -       i2c_for_each_dev(NULL, i2cdev_attach_adapter);
+> +       i2c_for_each_dev(NULL, i2c_dev_attach_adapter);
+>
+>         return 0;
+>
+> @@ -768,7 +780,7 @@ static int __init i2c_dev_init(void)
+>  static void __exit i2c_dev_exit(void)
+>  {
+>         bus_unregister_notifier(&i2c_bus_type, &i2cdev_notifier);
+> -       i2c_for_each_dev(NULL, i2cdev_detach_adapter);
+> +       i2c_for_each_dev(NULL, i2c_dev_detach_adapter);
+>         class_destroy(i2c_dev_class);
+>         unregister_chrdev_region(MKDEV(I2C_MAJOR, 0), I2C_MINORS);
+>  }
+> --
+> 2.34.1
+>
 
-x1 lane PCIe slot in the common processor board is enabled and connected to
-J721S2 SOM. Add PCIe DT node in common processor board to reflect the
-same.
+Thanks for addressing it.
 
-Reviewed-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-Signed-off-by: Matt Ranostay <mranostay@ti.com>
-Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
----
-Changes from v12:
-* No change
-
-Changes from v11:
-* No change
-
-Changes from v10:
-* Removed Link tag from commit message
-
-Changes from v9:
-* No change
-
-Changes from v8:
-* No change
-
-Changes from v7:
-* No change
-
-Changes from v6:
-* Removed pcie_ep node update
-
-Changes from v5:
-* No change
-
-Changes from v4:
-* No change
-
-Changes from v3:
-* No change
-
-Changes from v2:
-* Patch newly added to the series
-
- arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-index ede8857db7c9..cd3013354493 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-@@ -375,6 +375,14 @@
- 	};
- };
- 
-+&pcie1_rc {
-+	status = "okay";
-+	reset-gpios = <&exp1 2 GPIO_ACTIVE_HIGH>;
-+	phys = <&serdes0_pcie_link>;
-+	phy-names = "pcie-phy";
-+	num-lanes = <1>;
-+};
-+
- &mcu_mcan0 {
- 	status = "okay";
- 	pinctrl-names = "default";
--- 
-2.17.1
-
+Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
