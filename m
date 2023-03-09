@@ -2,127 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE366B1C75
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB6E6B1C7A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:37:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjCIHgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 02:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
+        id S230037AbjCIHgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 02:36:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjCIHft (ORCPT
+        with ESMTP id S229809AbjCIHgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 02:35:49 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF60DD345
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 23:35:34 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-536cb25982eso18863497b3.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 23:35:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678347333;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BdV+4ekYzEX2zluka+Ae9nWocB3Egh4fr8hk8d8QYXw=;
-        b=EKqMsvpzCXKMI5aX8f3xs8CPEOPXJewyVNUUcFc3G1GZMv/azP+RNWKyKqL46InX6N
-         hFsidcfiHk+6LTbg40j/pNi4FctywQqkqtTldJuHmmK2wWJn1CGiyvwXmPNFUd7MYS9s
-         yBIzGzMnbRqvgBdI7k7BBCzZDBOLSa/MEd7XCq0eV4vRemoZEtoIyNo9ZhllagHDMGt+
-         SvISprl8K2ROh7M+n/VGk22USiGzWlY90WvsynSqZ+IBRcJ0XEMrVx57kv/19euyyO3r
-         pQtwcGlJksyL4OyHuGAloXQOjiSLg3amE7olnED8VAI2gGJ59whqvSJjl9YCF/g9Uhrm
-         8lsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678347333;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BdV+4ekYzEX2zluka+Ae9nWocB3Egh4fr8hk8d8QYXw=;
-        b=I8+8pGTnZ53xvUp9iQrRwWoQgA7ix4IW1/WAnTGwK6OkQH40nRFsBM/eTW3qma0jj0
-         7dtkHnLZ+RLh0p99MjiAHOH/wJ4XE+OWgUsyK5YXME7HLYbcGwq5HFotbES4osh/oijz
-         v/8zcqtL4gVHB8BgIr8Ymxg4HMWNmJOhNutDcxPa789H3sIonbxoJSSsF0SAD+JiBYfq
-         xlXERJDdUrvoOGqd2bxqkVB9CbdxIhvgP7zKRK2kVVByt3ko8PeSEjbUvjDpeovc2xBU
-         pb2k701M80GDn6RnxsMUuDoEXe4IEZgPp/NP/+QQJiazSk3MA5KT1W98VbI6dPRWPRK3
-         QLZA==
-X-Gm-Message-State: AO0yUKX58Q36ZqqTXtPs/e2t/41hJb0JZ+ECfibUGEA1gvC4I8N9m+cj
-        LUT/8MS47/LpozrQI+I3sOn3KesZPO10r0CRQS0i8A==
-X-Google-Smtp-Source: AK7set9Ja/GCRaDydWCAyQwBS9jZIATgAx4CvCrcuDDV4SJYEpzXZqeohZJdyNwu6e4Mu4KnpP+hODHjLJmyQAVNWdQ=
-X-Received: by 2002:a81:b149:0:b0:530:b21f:d604 with SMTP id
- p70-20020a81b149000000b00530b21fd604mr5782757ywh.9.1678347333493; Wed, 08 Mar
- 2023 23:35:33 -0800 (PST)
+        Thu, 9 Mar 2023 02:36:41 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF9B34007;
+        Wed,  8 Mar 2023 23:36:37 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3297aIHs075859;
+        Thu, 9 Mar 2023 01:36:18 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678347378;
+        bh=4kesHyziIIecK257RJyxYTTFFwyIPqWkBk5KU73VZKE=;
+        h=From:To:CC:Subject:Date;
+        b=SypZOeqyUTUQoiV/fZfIYXyOHT2WeF91NnaHGPgLXIZvyDTExBjjdyt6Eu7IlgaGR
+         03F1lVcOoSIV2i8L9bkYFdQLiLGL0U9Lo0emIUk7IkIbt9OSahj5/sweEisjATMjRd
+         gOLceNZoWQ4ELByQERjSQ9cLBRsE7iTcJFM8OIY0=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3297aIue015637
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 9 Mar 2023 01:36:18 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 9
+ Mar 2023 01:36:17 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 9 Mar 2023 01:36:17 -0600
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3297aDWv019672;
+        Thu, 9 Mar 2023 01:36:13 -0600
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <linux@armlinux.org.uk>, <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <nsekhar@ti.com>,
+        <rogerq@kernel.org>
+CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [PATCH net-next v3 0/2] Update CPSW bindings for Serdes PHY
+Date:   Thu, 9 Mar 2023 13:06:10 +0530
+Message-ID: <20230309073612.431287-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <E1pZ2fs-000e27-4H@formenos.hmeau.com> <CACRpkdY8iN_ga0VuQ-z=8KUWaJ6=5rh2vZEwcp+oNgcBuPFk=g@mail.gmail.com>
- <ZAcNhtm/+mik1N2m@gondor.apana.org.au> <CACRpkdbcrCa9v82xVWtixWdDPvCu6E6Rkw-3Vg3APisdvYGwqQ@mail.gmail.com>
- <ZAf/rAbc3bMIwBcr@gondor.apana.org.au> <ZAgDku9htWcetafb@gondor.apana.org.au>
- <CACRpkdZ-zPZG4jK-AF2YF0wUFb8qrKBeoa4feb1qJ9SPusjv+Q@mail.gmail.com>
- <ZAhfBmlNHUpGEwW3@gondor.apana.org.au> <ZAhhGch6TtI8LA6x@gondor.apana.org.au>
- <CACRpkdabjrpsiVgm=EyGrTK7PGXth6FdvxSp=QULA+LyqtdBgg@mail.gmail.com> <ZAl1gGCv51FKOXtm@gondor.apana.org.au>
-In-Reply-To: <ZAl1gGCv51FKOXtm@gondor.apana.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 9 Mar 2023 08:35:21 +0100
-Message-ID: <CACRpkdY4gAT7RUtL6ctcsqxEX2_rZMyjMktPta7e4UB19OyGow@mail.gmail.com>
-Subject: Re: [v5 PATCH 7/7] crypto: stm32 - Save and restore between each request
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
-        Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 6:58=E2=80=AFAM Herbert Xu <herbert@gondor.apana.org=
-.au> wrote:
-> On Wed, Mar 08, 2023 at 10:19:48PM +0100, Linus Walleij wrote:
-> >
-> > So now the driver is fixed from a Ux500 point of view.
->
-> I think there is actually a nasty bug in it that may be hard to
-> trigger.
->
-> The stm32 driver as it stands will write up to 256 bytes into
-> the FIFO which on the ux500 is limited to 64 bytes.  We need to
-> change the fixed 256-byte size to be dependent on the hardware
-> type.
+Hello,
 
-Right so that is done implicitly by using a buffer of 256 bytes.
+This series adds documentation for the Serdes PHY. Also, the name used to
+refer to the Serdes PHY in the am65-cpsw driver is updated to match the
+documented name.
 
-But actually I think the bug will never trigger, because the datasheet
-for the DB8500 (Ux500) says this:
+---
+Documenting the Serdes PHY bindings was missed out in the already merged
+series at:
+https://lore.kernel.org/r/20230104103432.1126403-1-s-vadapalli@ti.com/
+This miss was pointed out at:
+https://lore.kernel.org/r/CAMuHMdW5atq-FuLEL3htuE3t2uO86anLL3zeY7n1RqqMP_rH1g@mail.gmail.com/
 
-"Then the message can be sent, by writing it word per word into the
-HASH_DIN register.
-When a block of 512 bits, i.e. 16 words have been written, a partial
-digest computation will
-start upon writing the first data of the next block. The AHB bus will
-be busy for 82 cycles for
-SHA-1 algorithm (66 cycles for SHA-256 algorithm)."
+Changes from v2:
+1. Drop "phy" suffixes in the phy-names property, changing "mac-phy" and
+   "serdes-phy" to "mac" and "serdes".
+2. Add a new patch to update the name used by the am65-cpsw driver to
+   refer to the Serdes PHY, from "serdes-phy" to "serdes".
 
-The way I interpret it is that if you write 64 bytes (16 32bit words)
-the AHB bus will simply
-stall until the data is processed, so the writel() hangs there and
-then 66/82 bus cycles
-later it will continue.
+Changes from v1:
+1. Describe phys property with minItems, items and description.
+2. Use minItems and items in phy-names.
+3. Remove the description in phy-names.
 
-This isn't the prettiest from a system PoV, as it can stall interrupt
-handling and
-cause latency jitter, but it's not actually a bug. It's kind of
-similar to that user
-experience "bug" on x86 PCs where the sound starts breaking up if you have =
-too
-intense graphics going on, because the bus is too busy so the sound FIFO go=
-es
-empty.
+v2:
+https://lore.kernel.org/r/20230308051835.276552-1-s-vadapalli@ti.com/
+v1:
+https://lore.kernel.org/r/20230306094750.159657-1-s-vadapalli@ti.com/
 
-But I can certainly make a patch to shrink the buffer from 256 to 64 bytes =
-on
-Ux500 if it's the right thing to do.
+Siddharth Vadapalli (2):
+  dt-bindings: net: ti: k3-am654-cpsw-nuss: Document Serdes PHY
+  net: ethernet: ti: am65-cpsw: Update name of Serdes PHY
 
-Yours,
-Linus Walleij
+ .../bindings/net/ti,k3-am654-cpsw-nuss.yaml        | 14 ++++++++++++--
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c           |  2 +-
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+
+-- 
+2.25.1
+
