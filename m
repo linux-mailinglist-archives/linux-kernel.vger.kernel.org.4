@@ -2,168 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB5A6B3074
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F81D6B308B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 23:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbjCIWUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 17:20:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
+        id S230283AbjCIW0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 17:26:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbjCIWUp (ORCPT
+        with ESMTP id S229827AbjCIW0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:20:45 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F7A8A3BE
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:20:06 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id e21so2872439oie.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 14:20:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678400358;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jym0nUiEEbOOCFzlnlOfW+LijEktB+G0Iqs6BtQtNZI=;
-        b=s+CvGVw1kC4Rp4CiFuDvNherDkdkqI71dca1eQMFFKnt/ztNDdolfJ3V/EFzX9CoGL
-         Zmq3uiPhG+DhMSodJ1+x/pYKXPB0TcR6piRswV/C6I7kOvMB6XwoZqw7DDrCIEVmLqzV
-         jhoWc1JhFiRfIowkQ3YowN/5iBUTsmvT8jLRN7ZBntHzDbRcNk//PIuhxaOwSB5IoAJX
-         ZXgoIlisxtV8sMd5bsquQc7mP1euMQy32d4gKV6OPnhst+oRTpfIx+BB/ATMzOVtB2T2
-         uPqSHkcOMPRvQwCC69BQ4qqfYios5ZgcNabJL4CGaGrNYoZfdRiPpe94s/+VKEb7Yaft
-         kNlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678400358;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jym0nUiEEbOOCFzlnlOfW+LijEktB+G0Iqs6BtQtNZI=;
-        b=fxfqebqwlNB1GKvKaNCuiWa7yvuL40ynh74ce73auH9oslB4QMZa+pbcYjx0fMWsTo
-         aWyMgY78A/jjpHFGwhYrWZteFj6dEX2Jch2UdYTTlwq4R7nk8lgh4vpDl889gTaLui7+
-         0YU0dV1CeeoWnhUzTWTtjiFZXgGY7FC65Wx83b7hFc1keiN2tve1i/4oK12xbubLIrTC
-         m77HCNIntnwT+vFgF/SQDRwPugihaVXSgukmhpMDbWHoYPN4LfphJnm4gkOnffQ/TAfL
-         1MI365dLgWRFrNA3PwgdjT0KRHfW6S9cla3V2PSnzM/BLeBXdKVCtCgkhShyiLaUHrrk
-         S71g==
-X-Gm-Message-State: AO0yUKUZSjW/Txj5ZXK8uLyiwFJzCKWj77eM6UqfjGsZN+01EZ4OHLip
-        xe2w2V2hRWOwxJsYiunNykDLRmX3V9U2I+iuB2bSgA==
-X-Google-Smtp-Source: AK7set+PZFyz/IkkqHj3/hze6nBpdrjOZL7Z92InN2k9JiBNkaLuMMQTPuvGBxTXFbyreldmu/TdVrCVAIl6lmnmJy4=
-X-Received: by 2002:a54:4102:0:b0:37f:ab56:ff42 with SMTP id
- l2-20020a544102000000b0037fab56ff42mr8087904oic.9.1678400358006; Thu, 09 Mar
- 2023 14:19:18 -0800 (PST)
+        Thu, 9 Mar 2023 17:26:03 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689BBA72B5
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 14:26:02 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-16-mytVSe0nOmGLnDgiSo5IHA-1; Thu, 09 Mar 2023 22:19:46 +0000
+X-MC-Unique: mytVSe0nOmGLnDgiSo5IHA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Thu, 9 Mar
+ 2023 22:19:44 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.047; Thu, 9 Mar 2023 22:19:44 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Linus Walleij' <linus.walleij@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+CC:     Lionel Debieve <lionel.debieve@foss.st.com>,
+        Li kunyu <kunyu@nfschina.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>
+Subject: RE: [v5 PATCH 7/7] crypto: stm32 - Save and restore between each
+ request
+Thread-Topic: [v5 PATCH 7/7] crypto: stm32 - Save and restore between each
+ request
+Thread-Index: AQHZUlnVfe29z1dm7kSSXyVRszx6pK7zBGDQ
+Date:   Thu, 9 Mar 2023 22:19:44 +0000
+Message-ID: <dac62e9452a5417e9de00546d1aae1f4@AcuMS.aculab.com>
+References: <E1pZ2fs-000e27-4H@formenos.hmeau.com>
+ <CACRpkdY8iN_ga0VuQ-z=8KUWaJ6=5rh2vZEwcp+oNgcBuPFk=g@mail.gmail.com>
+ <ZAcNhtm/+mik1N2m@gondor.apana.org.au>
+ <CACRpkdbcrCa9v82xVWtixWdDPvCu6E6Rkw-3Vg3APisdvYGwqQ@mail.gmail.com>
+ <ZAf/rAbc3bMIwBcr@gondor.apana.org.au> <ZAgDku9htWcetafb@gondor.apana.org.au>
+ <CACRpkdZ-zPZG4jK-AF2YF0wUFb8qrKBeoa4feb1qJ9SPusjv+Q@mail.gmail.com>
+ <ZAhfBmlNHUpGEwW3@gondor.apana.org.au> <ZAhhGch6TtI8LA6x@gondor.apana.org.au>
+ <CACRpkdabjrpsiVgm=EyGrTK7PGXth6FdvxSp=QULA+LyqtdBgg@mail.gmail.com>
+ <ZAl1gGCv51FKOXtm@gondor.apana.org.au>
+ <CACRpkdY4gAT7RUtL6ctcsqxEX2_rZMyjMktPta7e4UB19OyGow@mail.gmail.com>
+In-Reply-To: <CACRpkdY4gAT7RUtL6ctcsqxEX2_rZMyjMktPta7e4UB19OyGow@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20230215010717.3612794-1-rananta@google.com> <20230215010717.3612794-8-rananta@google.com>
- <CAAeT=FxVyHVRTj_78Jebz9nsc79yfYcbOu2c2hcekJTLgKFFaQ@mail.gmail.com>
-In-Reply-To: <CAAeT=FxVyHVRTj_78Jebz9nsc79yfYcbOu2c2hcekJTLgKFFaQ@mail.gmail.com>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Thu, 9 Mar 2023 14:19:07 -0800
-Message-ID: <CAJHc60w7gwUJ_rh6B3F_9SD_uxEDMRLFyahowGpCi54-84y3Hg@mail.gmail.com>
-Subject: Re: [REPOST PATCH 07/16] selftests: KVM: aarch64: Add PMU cycle
- counter helpers
-To:     Reiji Watanabe <reijiw@google.com>
-Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
-        Ricardo Koller <ricarkol@google.com>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reiji,
+RnJvbTogTGludXMgV2FsbGVpag0KPiBTZW50OiAwOSBNYXJjaCAyMDIzIDA3OjM1DQouLi4NCj4g
+QnV0IGFjdHVhbGx5IEkgdGhpbmsgdGhlIGJ1ZyB3aWxsIG5ldmVyIHRyaWdnZXIsIGJlY2F1c2Ug
+dGhlIGRhdGFzaGVldA0KPiBmb3IgdGhlIERCODUwMCAoVXg1MDApIHNheXMgdGhpczoNCj4gDQo+
+ICJUaGVuIHRoZSBtZXNzYWdlIGNhbiBiZSBzZW50LCBieSB3cml0aW5nIGl0IHdvcmQgcGVyIHdv
+cmQgaW50byB0aGUNCj4gSEFTSF9ESU4gcmVnaXN0ZXIuDQo+IFdoZW4gYSBibG9jayBvZiA1MTIg
+Yml0cywgaS5lLiAxNiB3b3JkcyBoYXZlIGJlZW4gd3JpdHRlbiwgYSBwYXJ0aWFsDQo+IGRpZ2Vz
+dCBjb21wdXRhdGlvbiB3aWxsDQo+IHN0YXJ0IHVwb24gd3JpdGluZyB0aGUgZmlyc3QgZGF0YSBv
+ZiB0aGUgbmV4dCBibG9jay4gVGhlIEFIQiBidXMgd2lsbA0KPiBiZSBidXN5IGZvciA4MiBjeWNs
+ZXMgZm9yDQo+IFNIQS0xIGFsZ29yaXRobSAoNjYgY3ljbGVzIGZvciBTSEEtMjU2IGFsZ29yaXRo
+bSkuIg0KDQpXaGF0IHNwZWVkIGNsb2NrIGlzIHRoYXQ/DQoNCjQgb3IgNSBleHRyYSBjbG9ja3Mv
+d29yZCBtYXkgKG9yIG1heSBub3QpIGJlIHNpZ25pZmljYW50Lg0KDQpJbiB0ZXJtcyBvZiBsYXRl
+bmN5IGl0IG1heSBiZSBub2lzZSBjb21wYXJlZCB0byBzb21lIFBDSWUNCnJlYWRzIGRvbmUgYnkg
+aGFyZHdhcmUgaW50ZXJydXB0IGhhbmRsZXJzLg0KU29tZSBzbG93IFBDSWUgdGFyZ2V0cyAobGlr
+ZSB0aGUgZnBnYSBvbmUgd2UgdXNlKSBwcmV0dHkNCm11Y2ggdGFrZSAxdXMgdG8gaGFuZGxlIGEg
+cmVhZCBjeWNsZS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwg
+QnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVn
+aXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-On Thu, Mar 2, 2023 at 7:06=E2=80=AFPM Reiji Watanabe <reijiw@google.com> w=
-rote:
->
-> Hi Raghu,
->
-> On Tue, Feb 14, 2023 at 5:07=E2=80=AFPM Raghavendra Rao Ananta
-> <rananta@google.com> wrote:
-> >
-> > Add basic helpers for the test to access the cycle counter
-> > registers. The helpers will be used in the upcoming patches
-> > to run the tests related to cycle counter.
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > ---
-> >  .../testing/selftests/kvm/aarch64/vpmu_test.c | 40 +++++++++++++++++++
-> >  1 file changed, 40 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/kvm/aarch64/vpmu_test.c b/tools/te=
-sting/selftests/kvm/aarch64/vpmu_test.c
-> > index d72c3c9b9c39f..15aebc7d7dc94 100644
-> > --- a/tools/testing/selftests/kvm/aarch64/vpmu_test.c
-> > +++ b/tools/testing/selftests/kvm/aarch64/vpmu_test.c
-> > @@ -147,6 +147,46 @@ static inline void disable_counter(int idx)
-> >         isb();
-> >  }
-> >
-> > +static inline uint64_t read_cycle_counter(void)
-> > +{
-> > +       return read_sysreg(pmccntr_el0);
-> > +}
-> > +
-> > +static inline void reset_cycle_counter(void)
-> > +{
-> > +       uint64_t v =3D read_sysreg(pmcr_el0);
-> > +
-> > +       write_sysreg(ARMV8_PMU_PMCR_C | v, pmcr_el0);
-> > +       isb();
-> > +}
-> > +
-> > +static inline void enable_cycle_counter(void)
-> > +{
-> > +       uint64_t v =3D read_sysreg(pmcntenset_el0);
-> > +
-> > +       write_sysreg(ARMV8_PMU_CNTENSET_C | v, pmcntenset_el0);
-> > +       isb();
-> > +}
->
-> You might want to use enable_counter() and disable_counter()
-> from enable_cycle_counter() and disable_cycle_counter() respectively?
->
-Yes, that should work. I'll do that.
-
-Thank you.
-Raghavendra
-
-> Thank you,
-> Reiji
->
-> > +
-> > +static inline void disable_cycle_counter(void)
-> > +{
-> > +       uint64_t v =3D read_sysreg(pmcntenset_el0);
-> > +
-> > +       write_sysreg(ARMV8_PMU_CNTENSET_C | v, pmcntenclr_el0);
-> > +       isb();
-> > +}
-> > +
-> > +static inline void write_pmccfiltr(unsigned long val)
-> > +{
-> > +       write_sysreg(val, pmccfiltr_el0);
-> > +       isb();
-> > +}
-> > +
-> > +static inline uint64_t read_pmccfiltr(void)
-> > +{
-> > +       return read_sysreg(pmccfiltr_el0);
-> > +}
-> > +
-> >  static inline uint64_t get_pmcr_n(void)
-> >  {
-> >         return FIELD_GET(ARMV8_PMU_PMCR_N, read_sysreg(pmcr_el0));
-> > --
-> > 2.39.1.581.gbfd45094c4-goog
-> >
