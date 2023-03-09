@@ -2,95 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7E46B2F2C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 21:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F366B2F2E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 21:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjCIU7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 15:59:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        id S230236AbjCIU7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 15:59:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjCIU67 (ORCPT
+        with ESMTP id S229721AbjCIU7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 15:58:59 -0500
-Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65CD6F2C34;
-        Thu,  9 Mar 2023 12:58:57 -0800 (PST)
-Received: from [192.168.0.2] (chello089173232159.chello.sk [89.173.232.159])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hosting.gsystem.sk (Postfix) with ESMTPSA id D14637A0158;
-        Thu,  9 Mar 2023 21:58:55 +0100 (CET)
-From:   Ondrej Zary <linux@zary.sk>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: Re: [PATCH 04/32] pata_parport-bpck6: pass around struct pi_adapter *
-Date:   Thu, 9 Mar 2023 21:58:49 +0100
-User-Agent: KMail/1.9.10
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, linux-block@vger.kernel.org,
-        linux-parport@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230307224627.28011-1-linux@zary.sk> <20230307224627.28011-5-linux@zary.sk> <6040658f-990f-8cca-eabb-09e97e09c547@omp.ru>
-In-Reply-To: <6040658f-990f-8cca-eabb-09e97e09c547@omp.ru>
-X-KMail-QuotePrefix: > 
+        Thu, 9 Mar 2023 15:59:03 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4033FF2F9E;
+        Thu,  9 Mar 2023 12:59:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=owJaMoMtxEN64DUlKy7PO9Hs/EgMQqVwePryYhex8+M=; b=AlG12XrZF7/pfY0fL8Cj/K1xqm
+        Pcab2Qyy/DB+KXZB4DBls0BRUIYBNb3ShVEe+wnnIe+tepbPjwAn6vIpQximhi4f0uxRfQ1KrhwBx
+        OkK4h4NI4fUA5ynSJ1M6MRXbEPkgLQ5+8MuT9qbQAJuNBTCxMDXsehP4N+ulEr6bm3aEsDWh/C0FM
+        LUg7RssiWE+DBI6Y2rMmzGQYOPKL0FOyZVF5nMqMhEIllzuc/d0twBGYAHmZEKgBZo7uSIp47AVQ3
+        oMv0iHbkeKYct8PtUOBY487j/esWARGFvm8R3L3qpxxrt+FchEkfQ0Apvtdepo0P1S8B1O+bBHAuh
+        MN0xgj3Q==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1paNLn-00BuAy-Gy; Thu, 09 Mar 2023 20:58:59 +0000
+Date:   Thu, 9 Mar 2023 12:58:59 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Cc:     Jason Baron <jbaron@akamai.com>, jim.cromie@gmail.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v3 2/2] dyndbg: use the module notifier callbacks
+Message-ID: <ZApIk1aY/OnDfpOM@bombadil.infradead.org>
+References: <cover.1677861177.git.jbaron@akamai.com>
+ <5884c688d10c9703fb0457f8839d6becc8657f8f.1677861177.git.jbaron@akamai.com>
+ <CQZHTJDTRJXM.3OF3W3WAZBLAK@vincent-arch>
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Message-Id: <202303092158.50217.linux@zary.sk>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CQZHTJDTRJXM.3OF3W3WAZBLAK@vincent-arch>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 08 March 2023 21:33:59 Sergey Shtylyov wrote:
-> On 3/8/23 1:45 AM, Ondrej Zary wrote:
+On Mon, Mar 06, 2023 at 06:57:17PM +0100, Vincenzo Palazzo wrote:
+> > Bring dynamic debug in line with other subsystems by using the module
+> > notifier callbacks. This results in a net decrease in core module
+> > code.
+> >
+> > Additionally, Jim Cromie has a new dynamic debug classmap feature,
+> > which requires that jump labels be initialized prior to dynamic debug.
+> > Specifically, the new feature toggles a jump label from the existing
+> > dynamic_debug_setup() function. However, this does not currently work
+> > properly, because jump labels are initialized via the
+> > 'module_notify_list' notifier chain, which is invoked after the
+> > current call to dynamic_debug_setup(). Thus, this patch ensures that
+> > jump labels are initialized prior to dynamic debug by setting the
+> > dynamic debug notifier priority to 0, while jump labels have the
+> > higher priority of 1.
+> >
+> > Tested by Jim using his new test case, and I've verfied the correct
+> > printing via: # modprobe test_dynamic_debug dyndbg.
+> >
+> > Link: https://lore.kernel.org/lkml/20230113193016.749791-21-jim.cromie@gmail.com/
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Link: https://lore.kernel.org/oe-kbuild-all/202302190427.9iIK2NfJ-lkp@intel.com/
+> > Tested-by: Jim Cromie <jim.cromie@gmail.com>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > CC: Jim Cromie <jim.cromie@gmail.com>
+> > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Jason Baron <jbaron@akamai.com>
 > 
-> > Remove Interface typedef, pass around struct pi_adapter * down to all
-> > functions instead. Remove PPCSTRUCT define.
-> > 
-> > Signed-off-by: Ondrej Zary <linux@zary.sk>
-> 
-> Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> 
->    I had some nit tho -- see below...
-> 
-> [...]
-> 
-> > diff --git a/drivers/ata/pata_parport/bpck6.c b/drivers/ata/pata_parport/bpck6.c
-> > index fa1f7d4fe3cb..bc128a2c444e 100644
-> > --- a/drivers/ata/pata_parport/bpck6.c
-> > +++ b/drivers/ata/pata_parport/bpck6.c
-> [...]
-> >  static void bpck6_connect(struct pi_adapter *pi)
-> >  {
-> > +	struct ppc_storage *ppc = (void *)(pi->private);
-> 
->    Parens around pi->private are unnecessary here and elsewhere...
-> 
-> [...]
-> > diff --git a/drivers/ata/pata_parport/ppc6lnx.c b/drivers/ata/pata_parport/ppc6lnx.c
-> > index 5e5521d3b1dd..f12bb019fc61 100644
-> > --- a/drivers/ata/pata_parport/ppc6lnx.c
-> > +++ b/drivers/ata/pata_parport/ppc6lnx.c
-> [...]
-> > @@ -101,26 +101,27 @@ typedef struct ppc_storage {
-> [...]
-> >  //***************************************************************************
-> >  
-> > -static int ppc6_select(Interface *ppc)
-> > +static int ppc6_select(struct pi_adapter *pi)
-> >  {
-> > +	struct ppc_storage *ppc = (void *)(pi->private);
-> 
->    Parens around pi->private are unnecessary here and elsewhere...
+> Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
 
-Yes, missed that. But it's "fixed" in patch 9 by removing this code :)
+Tag applied too thanks.
 
--- 
-Ondrej Zary
+  Luis
