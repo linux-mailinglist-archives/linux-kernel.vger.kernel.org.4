@@ -2,97 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100F76B2FDD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593816B3012
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 22:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjCIVw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 16:52:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44068 "EHLO
+        id S231437AbjCIV6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 16:58:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjCIVwZ (ORCPT
+        with ESMTP id S229651AbjCIV5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 16:52:25 -0500
+        Thu, 9 Mar 2023 16:57:01 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093C2FAFBF;
-        Thu,  9 Mar 2023 13:52:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508DCFB26B;
+        Thu,  9 Mar 2023 13:56:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A124D61D0B;
-        Thu,  9 Mar 2023 21:52:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A9D3C433EF;
-        Thu,  9 Mar 2023 21:52:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678398744;
-        bh=s627jAj2kVljutcqH7pExotsSn1sgfGVSZniU6lArww=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rm3leIH4JH5N5Fa1BTwtxFY4sqjOVKGMsQI4ok8wJxLqTCVvYRgBEmDkS20Ui2K8O
-         7ZXsqZT4YhrsVESCvlaJtzwSe++0GOKE3U/OUwB715wsw3rBnxuZcNPjWWtGjIES92
-         oMj/FyBNOOw72EHFdeNii1E+HSLXXPiAaA8HSCHfiD6wDHKNEcrkmmU4WELPSry8S7
-         xzGoUXEWeZ5V7BFYgQdInAWxXDyopcIGZcXI+F2V0EZD6L5I06MUHS6ckLYBJpjS5W
-         sYI79JOj07RYW5DOs2YFkckO+t/XTKTueMWkZgRxNYo2NFdJZejiRNsEoySXEfxAMe
-         iSntFtpop5X0Q==
-Date:   Thu, 9 Mar 2023 13:55:53 -0800
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Brian Masney <bmasney@redhat.com>
-Cc:     quic_shazhuss@quicinc.com, agross@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sa8540p-ride: correct name of
- remoteproc_nsp0 firmware
-Message-ID: <20230309215553.pe523cmw6nc4pmnw@ripper>
-References: <20230307232340.2370476-1-bmasney@redhat.com>
- <1a915c33-ef32-852c-a856-10c8d35be151@linaro.org>
- <ZAh6O9TbX/pnOnxp@x1>
- <8f7bddf8-84de-27b5-26a3-d80b2e2f0097@linaro.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF71061D12;
+        Thu,  9 Mar 2023 21:56:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C46C433D2;
+        Thu,  9 Mar 2023 21:56:05 +0000 (UTC)
+Date:   Thu, 9 Mar 2023 16:56:03 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: [PATCH] tracing: Make tracepoint lockdep check actually test
+ something
+Message-ID: <20230309165603.6967197d@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8f7bddf8-84de-27b5-26a3-d80b2e2f0097@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 01:36:52PM +0100, Krzysztof Kozlowski wrote:
-> On 08/03/2023 13:06, Brian Masney wrote:
-> > On Wed, Mar 08, 2023 at 12:02:04PM +0100, Krzysztof Kozlowski wrote:
-> >> On 08/03/2023 00:23, Brian Masney wrote:
-> >>> The cdsp.mbn firmware that's referenced in sa8540p-ride.dts is actually
-> >>> named cdsp0.mbn in the deliverables from Qualcomm. Let's go ahead and
-> >>> correct the name to match what's in Qualcomm's deliverable.
-> >>
-> >> I don't think vendor deliverables matter. linux-firmware is here more
-> >> important. The file will be cdsp.mbn in the firmware, won't it?
-> > 
-> > cdsp0.mbn and cdsp1.mbn for the sa8540p are not in linux-firmware and I
-> > far as I know there's no plan for someone to submit those since QC would
-> > need to approve that. I can ask though since the DTS for these two bits
-> > has been submitted upstream.
-> 
-> If they are never going to be submitted, vendor is allowed to rename
-> them all the time in their "deliverables". Are you going to rename the
-> file every time Qualcomm decides to rename them? There is no single
-> guarantee the names would be fixed, because vendor is allowed to do
-> absolutely anything.
-> 
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-cdsp0.mbn and cdsp1.mbn are better names, so let's use this patch to
-define that if/when they are pushed to linux-firmware it should follow
-this scheme.
+A while ago where the trace events had the following:
 
-> Sorry, but any argument in upstream DTS that "someone downstream does
-> something" is deemed to fail in many cases.
-> 
+   rcu_read_lock_sched_notrace();
+   rcu_dereference_sched(...);
+   rcu_read_unlock_sched_notrace();
 
-That is indeed an insufficient argument, in many cases.
+If the tracepoint is enabled, it could trigger RCU issues if called in
+the wrong place. And this warning was only triggered if lockdep was
+enabled. If the tracepoint was never enabled with lockdep, the bug would
+not be caught. To handle this, the above sequence was done when lockdep
+was enabled regardless if the tracepoint was enabled or not (although the
+always enabled code really didn't do anything, it would still trigger a
+warning).
 
-Regards,
-Bjorn
+But a lot has changed since that lockdep code was added. One is, that
+sequence no longer triggers any warning. Another is, the tracepoint when
+enabled doesn't even do that sequence anymore.
+
+The main check we care about today is whether RCU is "watching" or not.
+So if lockdep is enabled, always check if rcu_is_watching() which will
+trigger a warning if it is not (tracepoints require RCU to be watching).
+
+Note, that old sequence did add a bit of overhead when lockdep was enabled,
+and with the latest kernel updates, would cause the system to slow down
+enough to trigger kernel "stalled" warnings.
+
+Link: http://lore.kernel.org/lkml/20140806181801.GA4605@redhat.com
+Link: http://lore.kernel.org/lkml/20140807175204.C257CAC5@viggo.jf.intel.com
+Link: https://lore.kernel.org/lkml/20230307184645.521db5c9@gandalf.local.home/
+
+Cc: stable@vger.kernel.org
+Fixes: e6753f23d961 ("tracepoint: Make rcuidle tracepoint callers use SRCU")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ include/linux/tracepoint.h | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+index e299f29375bb..d3a221158ab1 100644
+--- a/include/linux/tracepoint.h
++++ b/include/linux/tracepoint.h
+@@ -260,9 +260,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+ 				TP_ARGS(args),				\
+ 				TP_CONDITION(cond), 0);			\
+ 		if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {		\
+-			rcu_read_lock_sched_notrace();			\
+-			rcu_dereference_sched(__tracepoint_##name.funcs);\
+-			rcu_read_unlock_sched_notrace();		\
++			WARN_ON_ONCE(!rcu_is_watching());		\
+ 		}							\
+ 	}								\
+ 	__DECLARE_TRACE_RCU(name, PARAMS(proto), PARAMS(args),		\
+-- 
+2.39.1
 
