@@ -2,1020 +2,455 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17446B2A8B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:11:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90AD66B2A84
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbjCIQLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 11:11:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
+        id S229541AbjCIQL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 11:11:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbjCIQDT (ORCPT
+        with ESMTP id S232064AbjCIQH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:03:19 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B7AF8F16;
-        Thu,  9 Mar 2023 08:02:46 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AC3A72017C;
-        Thu,  9 Mar 2023 16:02:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678377765; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x6nOdyACdlp2+E7E8cMNwfz97h9DQ5BqN65CR4y0Dbo=;
-        b=lQYJVy+mhC2ctbwQXeLl/39u2oV6GDl6doXRuE0K58xJgh4yJ8lYSd9Fvn0QdZaGXrgXhb
-        BT9Q58D34KuI6piQCudvOYdu1LuRS53gBS+EAVNGc/IBIJ9UZUB63HXpeu3O/1ZVwnjawG
-        JPrhXzKgUUApgMeEFSU7z+VMOgZ9c6g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678377765;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x6nOdyACdlp2+E7E8cMNwfz97h9DQ5BqN65CR4y0Dbo=;
-        b=Yo+F/nO3imM1VV8MOoD01kgpwd/AbpFgU6nrXqnWSDfc/cqr4DLUa8KuX01aJNtCmImYKi
-        CGircmhCF23YFvDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 39BD41391B;
-        Thu,  9 Mar 2023 16:02:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id SA/sDCUDCmQHbgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 09 Mar 2023 16:02:45 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     deller@gmx.de, geert+renesas@glider.be, timur@kernel.org,
-        rdunlap@infradead.org, paulus@samba.org, benh@kernel.crashing.org,
-        linux@armlinux.org.uk, pjones@redhat.com, adaplas@gmail.com,
-        s.hauer@pengutronix.de, shawnguo@kernel.org, mbroemme@libmpq.org,
-        thomas@winischhofer.net, James.Bottomley@HansenPartnership.com,
-        sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
-        corbet@lwn.net
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v2 101/101] fbdev: Constify option strings
-Date:   Thu,  9 Mar 2023 17:02:01 +0100
-Message-Id: <20230309160201.5163-102-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230309160201.5163-1-tzimmermann@suse.de>
-References: <20230309160201.5163-1-tzimmermann@suse.de>
+        Thu, 9 Mar 2023 11:07:58 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D933EFC21B
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 08:04:02 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id f23so2033215vsa.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 08:04:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678377829;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VtzxcV9+d+7ddnD0tdQHfmSE6FYbF8HS0Y5dbZjnBYE=;
+        b=XGJ7pYxbIyvSknn+TCVMhtQarUpH5ScMEJFjRxN7fQvKjOTcoxz6zDAEdz07t3w32U
+         0JMgmB4Q7JFgSe7aW+tc6inmAWpmoUrxTcmGIZ7EQx8cerUjuHY9cpiKgSLlxKE+Md63
+         8G976/IGwpd4ZaOeoFkxkqsw3v+tbOF8EefU1CEpOUyBQqTP9qDhxsOmkOw2uQdZqtog
+         RJareruckFQusEqJgkrvxaSIm+i75B74h6tRVW8mt6UkShZGo1vcRINO7AahefiQzO7Z
+         ogOP4gu/kbRupq/Ce4GZ7jQxwkc68QBvDTqyQPAfRMAyEUrJGxOjfLU3d2zXm2FVvUjK
+         UWXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678377829;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VtzxcV9+d+7ddnD0tdQHfmSE6FYbF8HS0Y5dbZjnBYE=;
+        b=rpkX8u0Rm04jigvAAAhvD649ktrZ/J4poTFgnCQISV/GLMHVxRyX8W9cLEYhtiJEE0
+         /A6dai8G9RVAlUlxIQuv5PlPvLwWrhdVp+ifQPDFio5Y/LPPJcOkWtx793TZh5R5qFvO
+         zg4rhNsM2Kmxb0Wrn7nQmBzz71tvwBfHB/EoBZhpDjOkzoA23z6z2AYiNcVGgO4yTquQ
+         xzAnqM9rYtk0A7sN9lfKytdSyA7rTGuJbCnF38BMXAp86dPGuLH9KWdvC1pR9X0MfIUa
+         Eg8d9pbVAKCPL5CZN2AZ+uZb4P3GbhQxGJXJBG1JdcxS+aba2/MsqprKzS30JwKlxO9r
+         b/QA==
+X-Gm-Message-State: AO0yUKUJY7EIO18RdD/LzhYNOdqxjAaA2DrjVRXtpk9ZltO8Aop945Rk
+        2XgU1W+oNsDn+Yxej1IX30adq4Cc9N6VZuSE26NiJA==
+X-Google-Smtp-Source: AK7set/VwtP920P26uvjHKICcmnsK8dWOuxBbSaNfw/SrllKnQW311Ce3K7pCAO2OZVi4xOqQ0OM92XZJB1VOgEQtQ4=
+X-Received: by 2002:a67:fb19:0:b0:402:99ce:1d9c with SMTP id
+ d25-20020a67fb19000000b0040299ce1d9cmr15194342vsr.1.1678377829229; Thu, 09
+ Mar 2023 08:03:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 9 Mar 2023 21:33:29 +0530
+Message-ID: <CA+G9fYv94gx8+-JMzbmQaue3q3y6QdBmsGUCdD-26X5XavL3Ag@mail.gmail.com>
+Subject: selftests: gpio: crash on arm64
+To:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-mm <linux-mm@kvack.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return the option string as const char* from fb_get_options() to
-enforce fbdev's ownership of the memory region. Also avoids memory
-allocation within fb_get_options().
+Following kernel warnings and crash notices on arm64 Rpi4 device while
+running selftests: gpio on Linux mainline 6.3.0-rc1 kernel and Linux next.
 
-Callers that have to modify the option string must create their own
-copy. As most drivers use struct option_iter, this already happens
-transparently in many cases.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Adapt all callers of fb_get_options().
+Please refer to test log links for detailed test plan and kernel crash logs.
+It is reproducible on arm64 juno-r2, Rpi4 and Qualcomm dragonboard 410c
+and qemu-arm64.
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
----
- drivers/staging/sm750fb/sm750.c              |  2 +-
- drivers/video/fbdev/acornfb.c                |  2 +-
- drivers/video/fbdev/amifb.c                  |  2 +-
- drivers/video/fbdev/arkfb.c                  |  2 +-
- drivers/video/fbdev/atafb.c                  |  2 +-
- drivers/video/fbdev/aty/aty128fb.c           |  2 +-
- drivers/video/fbdev/aty/atyfb_base.c         |  2 +-
- drivers/video/fbdev/aty/radeon_base.c        |  2 +-
- drivers/video/fbdev/au1100fb.c               |  2 +-
- drivers/video/fbdev/au1200fb.c               |  2 +-
- drivers/video/fbdev/cirrusfb.c               |  2 +-
- drivers/video/fbdev/controlfb.c              |  2 +-
- drivers/video/fbdev/core/fb_cmdline.c        | 13 +++----------
- drivers/video/fbdev/core/modedb.c            |  8 ++------
- drivers/video/fbdev/cyber2000fb.c            |  2 +-
- drivers/video/fbdev/efifb.c                  |  2 +-
- drivers/video/fbdev/ep93xx-fb.c              |  2 +-
- drivers/video/fbdev/fm2fb.c                  |  2 +-
- drivers/video/fbdev/fsl-diu-fb.c             |  2 +-
- drivers/video/fbdev/gbefb.c                  |  2 +-
- drivers/video/fbdev/geode/gx1fb_core.c       |  2 +-
- drivers/video/fbdev/geode/gxfb_core.c        |  2 +-
- drivers/video/fbdev/geode/lxfb_core.c        |  2 +-
- drivers/video/fbdev/grvga.c                  |  3 ++-
- drivers/video/fbdev/gxt4500.c                |  2 +-
- drivers/video/fbdev/hyperv_fb.c              |  2 +-
- drivers/video/fbdev/i740fb.c                 |  2 +-
- drivers/video/fbdev/i810/i810_main.c         |  2 +-
- drivers/video/fbdev/imsttfb.c                |  2 +-
- drivers/video/fbdev/imxfb.c                  |  2 +-
- drivers/video/fbdev/intelfb/intelfbdrv.c     |  2 +-
- drivers/video/fbdev/kyro/fbdev.c             |  2 +-
- drivers/video/fbdev/macfb.c                  |  2 +-
- drivers/video/fbdev/matrox/matroxfb_base.c   |  2 +-
- drivers/video/fbdev/mx3fb.c                  |  2 +-
- drivers/video/fbdev/neofb.c                  |  2 +-
- drivers/video/fbdev/nvidia/nvidia.c          |  2 +-
- drivers/video/fbdev/ocfb.c                   |  2 +-
- drivers/video/fbdev/omap/omapfb_main.c       |  2 +-
- drivers/video/fbdev/platinumfb.c             |  2 +-
- drivers/video/fbdev/pm2fb.c                  |  2 +-
- drivers/video/fbdev/pm3fb.c                  |  2 +-
- drivers/video/fbdev/ps3fb.c                  |  2 +-
- drivers/video/fbdev/pvr2fb.c                 |  2 +-
- drivers/video/fbdev/pxafb.c                  |  2 +-
- drivers/video/fbdev/riva/fbdev.c             |  2 +-
- drivers/video/fbdev/s3fb.c                   |  2 +-
- drivers/video/fbdev/savage/savagefb_driver.c |  2 +-
- drivers/video/fbdev/sis/sis_main.c           |  2 +-
- drivers/video/fbdev/skeletonfb.c             |  2 +-
- drivers/video/fbdev/sm712fb.c                |  2 +-
- drivers/video/fbdev/sstfb.c                  |  2 +-
- drivers/video/fbdev/stifb.c                  |  2 +-
- drivers/video/fbdev/tdfxfb.c                 |  2 +-
- drivers/video/fbdev/tgafb.c                  |  2 +-
- drivers/video/fbdev/tridentfb.c              |  2 +-
- drivers/video/fbdev/uvesafb.c                |  2 +-
- drivers/video/fbdev/valkyriefb.c             |  2 +-
- drivers/video/fbdev/vesafb.c                 |  2 +-
- drivers/video/fbdev/vfb.c                    |  2 +-
- drivers/video/fbdev/via/viafbdev.c           |  2 +-
- drivers/video/fbdev/vt8623fb.c               |  3 +--
- include/linux/fb.h                           |  2 +-
- 63 files changed, 67 insertions(+), 78 deletions(-)
+Test log:
+-----------
+kselftest: Running tests in gpio
+TAP version 13
+1..2
+# selftests: gpio: gpio-mockup.sh
+# 1.  Module load tests
+[   61.176149] =============================================================================
+[   61.176802]
+[   61.176807] ======================================================
+[   61.176809] WARNING: possible circular locking dependency detected
+[   61.176811] 6.3.0-rc1-next-20230307 #1 Not tainted
+[   61.176814] ------------------------------------------------------
+[   61.176816] modprobe/510 is trying to acquire lock:
+[   61.176818] ffff80000b2284e8 (console_owner){..-.}-{0:0}, at:
+console_flush_all (kernel/printk/printk.c:2879
+kernel/printk/printk.c:2942)
+[   61.176846]
+[   61.176846] but task is already holding lock:
+[   61.176848] ffff000040000698 (&n->list_lock){-.-.}-{2:2}, at:
+get_partial_node.part.0 (mm/slub.c:2271)
+[   61.176861]
+[   61.176861] which lock already depends on the new lock.
+[   61.176861]
+[   61.176863]
+[   61.176863] the existing dependency chain (in reverse order) is:
+[   61.176864]
+[   61.176864] -> #2 (&n->list_lock){-.-.}-{2:2}:
+[   61.176871] lock_acquire (kernel/locking/lockdep.c:5673)
+[   61.176879] _raw_spin_lock_irqsave
+(include/linux/spinlock_api_smp.h:111 kernel/locking/spinlock.c:162)
+[   61.176885] get_partial_node.part.0 (mm/slub.c:2271)
+[   61.176890] ___slab_alloc (mm/slub.c:2268 mm/slub.c:2386 mm/slub.c:3188)
+[   61.176894] __slab_alloc.constprop.0 (mm/slub.c:3292)
+[   61.176899] __kmem_cache_alloc_node (mm/slub.c:3345 mm/slub.c:3442
+mm/slub.c:3491)
+[   61.176903] __kmalloc (mm/slab_common.c:968 mm/slab_common.c:980)
+[   61.176908] tty_buffer_alloc (drivers/tty/tty_buffer.c:182)
+[   61.176914] __tty_buffer_request_room (drivers/tty/tty_buffer.c:279)
+[   61.176919] __tty_insert_flip_char (drivers/tty/tty_buffer.c:398)
+[   61.176924] uart_insert_char (drivers/tty/serial/serial_core.c:3341)
+[   61.176929] pl011_fifo_to_tty.isra.0 (drivers/tty/serial/amba-pl011.c:314)
+[   61.176934] pl011_int (include/linux/spinlock.h:390
+drivers/tty/serial/amba-pl011.c:1396
+drivers/tty/serial/amba-pl011.c:1571)
+[   61.176937] __handle_irq_event_percpu (kernel/irq/handle.c:158)
+[   61.176941] handle_irq_event (kernel/irq/handle.c:193
+kernel/irq/handle.c:210)
+[   61.176944] handle_fasteoi_irq (kernel/irq/chip.c:716)
+[   61.176950] generic_handle_domain_irq (kernel/irq/irqdesc.c:652
+kernel/irq/irqdesc.c:707)
+[   61.176953] gic_handle_irq (arch/arm64/include/asm/io.h:75
+include/asm-generic/io.h:335 drivers/irqchip/irq-gic.c:344)
+[   61.176958] call_on_irq_stack (arch/arm64/kernel/entry.S:905)
+[   61.176962] do_interrupt_handler (arch/arm64/kernel/entry-common.c:274)
+[   61.176968] el1_interrupt (arch/arm64/kernel/entry-common.c:472
+arch/arm64/kernel/entry-common.c:486)
+[   61.176971] el1h_64_irq_handler (arch/arm64/kernel/entry-common.c:492)
+[   61.176975] el1h_64_irq (arch/arm64/kernel/entry.S:587)
+[   61.176978] __kmem_cache_alloc_node (mm/slub.c:3490)
+[   61.176983] kmalloc_trace (mm/slab_common.c:1064 (discriminator 4))
+[   61.176986] inet6_dump_fib (net/ipv6/ip6_fib.c:657)
+[   61.176991] rtnl_dump_all (net/core/rtnetlink.c:3964)
+[   61.176997] netlink_dump (net/netlink/af_netlink.c:2296)
+[   61.177004] netlink_recvmsg (net/netlink/af_netlink.c:2024)
+[   61.177009] ____sys_recvmsg (net/socket.c:1015 net/socket.c:1036
+net/socket.c:2723)
+[   61.177014] ___sys_recvmsg (net/socket.c:2765)
+[   61.177019] __sys_recvmsg (include/linux/file.h:31 net/socket.c:2797)
+[   61.177025] __arm64_sys_recvmsg (net/socket.c:2802)
+[   61.177030] invoke_syscall (arch/arm64/include/asm/current.h:19
+arch/arm64/kernel/syscall.c:57)
+[   61.177037] el0_svc_common.constprop.0 (arch/arm64/kernel/syscall.c:149)
+[   61.177043] do_el0_svc (arch/arm64/kernel/syscall.c:194)
+[   61.177049] el0_svc (arch/arm64/include/asm/daifflags.h:28
+arch/arm64/kernel/entry-common.c:133
+arch/arm64/kernel/entry-common.c:142
+arch/arm64/kernel/entry-common.c:638)
+[   61.177052] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:656)
+[   61.177055] el0t_64_sync (arch/arm64/kernel/entry.S:591)
+[   61.177058]
+[   61.177058] -> #1 (&port_lock_key){-.-.}-{2:2}:
+[   61.177065] lock_acquire (kernel/locking/lockdep.c:5673)
+[   61.177071] _raw_spin_lock_irqsave
+(include/linux/spinlock_api_smp.h:111 kernel/locking/spinlock.c:162)
+[   61.177074] serial8250_console_write
+(drivers/tty/serial/8250/8250_port.c:3394)
+[   61.177082] univ8250_console_write (drivers/tty/serial/8250/8250_core.c:585)
+[   61.177087] console_flush_all (kernel/printk/printk.c:2888
+kernel/printk/printk.c:2942)
+[   61.177093] console_unlock.part.0 (kernel/printk/printk.c:3017)
+[   61.177098] vprintk_emit (kernel/printk/printk.c:2317)
+[   61.177104] vprintk_default (kernel/printk/printk.c:2328)
+[   61.177110] vprintk (kernel/printk/printk_safe.c:50)
+[   61.177116] _printk (kernel/printk/printk.c:2341)
+[   61.177121] register_console (kernel/printk/printk.c:3468)
+[   61.177126] uart_add_one_port
+(drivers/tty/serial/serial_core.c:2579
+drivers/tty/serial/serial_core.c:3100)
+[   61.177130] serial8250_register_8250_port
+(drivers/tty/serial/8250/8250_core.c:1093)
+[   61.177135] bcm2835aux_serial_probe
+(drivers/tty/serial/8250/8250_bcm2835aux.c:184)
+[   61.177141] platform_probe (drivers/base/platform.c:1405)
+[   61.177148] really_probe (drivers/base/dd.c:552 drivers/base/dd.c:631)
+[   61.177152] __driver_probe_device (drivers/base/dd.c:768)
+[   61.177157] driver_probe_device (drivers/base/dd.c:798)
+[   61.177161] __driver_attach (drivers/base/dd.c:1185)
+[   61.177166] bus_for_each_dev (drivers/base/bus.c:368)
+[   61.177170] driver_attach (drivers/base/dd.c:1202)
+[   61.177173] bus_add_driver (drivers/base/bus.c:673)
+[   61.177177] driver_register (drivers/base/driver.c:246)
+[   61.177182] __platform_driver_register (drivers/base/platform.c:868)
+[   61.177188] bcm2835aux_serial_driver_init
+(drivers/tty/serial/8250/8250_bcm2835aux.c:233)
+[   61.177195] do_one_initcall (init/main.c:1306)
+[   61.177199] kernel_init_freeable (init/main.c:1378 init/main.c:1395
+init/main.c:1414 init/main.c:1634)
+[   61.177207] kernel_init (init/main.c:1524)
+[   61.177212] ret_from_fork (arch/arm64/kernel/entry.S:871)
+[   61.177216]
+[   61.177216] -> #0 (console_owner){..-.}-{0:0}:
+[   61.177222] __lock_acquire (kernel/locking/lockdep.c:3099
+kernel/locking/lockdep.c:3217 kernel/locking/lockdep.c:3832
+kernel/locking/lockdep.c:5056)
+[   61.177228] lock_acquire.part.0 (arch/arm64/include/asm/percpu.h:40
+kernel/locking/lockdep.c:467 kernel/locking/lockdep.c:5671)
+[   61.177233] lock_acquire (kernel/locking/lockdep.c:5673)
+[   61.177238] console_flush_all (kernel/printk/printk.c:2883
+kernel/printk/printk.c:2942)
+[   61.177244] console_unlock.part.0 (kernel/printk/printk.c:3017)
+[   61.177250] vprintk_emit (kernel/printk/printk.c:2317)
+[   61.177255] vprintk_default (kernel/printk/printk.c:2328)
+[   61.177261] vprintk (kernel/printk/printk_safe.c:50)
+[   61.177267] _printk (kernel/printk/printk.c:2341)
+[   61.177271] slab_bug (mm/slub.c:892)
+[   61.177274] check_bytes_and_report (mm/slub.c:1054)
+[   61.177279] check_object (mm/slub.c:1196 (discriminator 2))
+[   61.177283] alloc_debug_processing (mm/slub.c:1415 mm/slub.c:1425)
+[   61.177287] get_partial_node.part.0 (mm/slub.c:2146 mm/slub.c:2279)
+[   61.177291] ___slab_alloc (mm/slub.c:2268 mm/slub.c:2386 mm/slub.c:3188)
+[   61.177295] __slab_alloc.constprop.0 (mm/slub.c:3292)
+[   61.177300] __kmem_cache_alloc_node (mm/slub.c:3345 mm/slub.c:3442
+mm/slub.c:3491)
+[   61.177304] kmalloc_trace (mm/slab_common.c:1064 (discriminator 4))
+[   61.177308] device_add (drivers/base/core.c:3436 drivers/base/core.c:3486)
+[   61.177311] platform_device_add (drivers/base/platform.c:717)
+[   61.177317] platform_device_register_full (drivers/base/platform.c:844)
+[   61.177323] gpio_mockup_register_chip+0x1ec/0x2b8 gpio_mockup
+[   61.177342] gpio_mockup_init+0xf0/0xd40 gpio_mockup
+[   61.177352] do_one_initcall (init/main.c:1306)
+[   61.177356] do_init_module (kernel/module/main.c:2457)
+[   61.177363] load_module (kernel/module/main.c:2859)
+[   61.177369] __do_sys_finit_module (kernel/module/main.c:2961)
+[   61.177375] __arm64_sys_finit_module (kernel/module/main.c:2928)
+[   61.177381] invoke_syscall (arch/arm64/include/asm/current.h:19
+arch/arm64/kernel/syscall.c:57)
+[   61.177387] el0_svc_common.constprop.0 (arch/arm64/kernel/syscall.c:149)
+[   61.177393] do_el0_svc (arch/arm64/kernel/syscall.c:194)
+[   61.177398] el0_svc (arch/arm64/include/asm/daifflags.h:28
+arch/arm64/kernel/entry-common.c:133
+arch/arm64/kernel/entry-common.c:142
+arch/arm64/kernel/entry-common.c:638)
+[   61.177402] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:656)
+[   61.177405] el0t_64_sync (arch/arm64/kernel/entry.S:591)
+[   61.177408]
+[   61.177408] other info that might help us debug this:
+[   61.177408]
+[   61.177410] Chain exists of:
+[   61.177410]   console_owner --> &port_lock_key --> &n->list_lock
+[   61.177410]
+[   61.177417]  Possible unsafe locking scenario:
+[   61.177417]
+[   61.177418]        CPU0                    CPU1
+[   61.177419]        ----                    ----
+[   61.177420]   lock(&n->list_lock);
+[   61.177423]                                lock(&port_lock_key);
+[   61.177426]                                lock(&n->list_lock);
+[   61.177429]   lock(console_owner);
+[   61.177432]
+[   61.177432]  *** DEADLOCK ***
+[   61.177432]
+[   61.177434] 3 locks held by modprobe/510:
+[   61.177436] #0: ffff000040000698 (&n->list_lock){-.-.}-{2:2}, at:
+get_partial_node.part.0 (mm/slub.c:2271)
+[   61.177448] #1: ffff80000b227f18 (console_lock){+.+.}-{0:0}, at:
+vprintk_emit (kernel/printk/printk.c:1936 kernel/printk/printk.c:2315)
+[   61.177460] #2: ffff80000b228388 (console_srcu){....}-{0:0}, at:
+console_flush_all (include/linux/srcu.h:200 kernel/printk/printk.c:290
+kernel/printk/printk.c:2934)
+[   61.177471]
+[   61.177471] stack backtrace:
+[   61.177474] CPU: 3 PID: 510 Comm: modprobe Not tainted
+6.3.0-rc1-next-20230307 #1
+[   61.177479] Hardware name: Raspberry Pi 4 Model B (DT)
+[   61.177482] Call trace:
+[   61.177483] dump_backtrace (arch/arm64/kernel/stacktrace.c:160)
+[   61.177487] show_stack (arch/arm64/kernel/stacktrace.c:167)
+[   61.177490] dump_stack_lvl (lib/dump_stack.c:107)
+[   61.177498] dump_stack (lib/dump_stack.c:114)
+[   61.177504] print_circular_bug (kernel/locking/lockdep.c:2057)
+[   61.177509] check_noncircular (kernel/locking/lockdep.c:2181)
+[   61.177514] __lock_acquire (kernel/locking/lockdep.c:3099
+kernel/locking/lockdep.c:3217 kernel/locking/lockdep.c:3832
+kernel/locking/lockdep.c:5056)
+[   61.177520] lock_acquire.part.0 (arch/arm64/include/asm/percpu.h:40
+kernel/locking/lockdep.c:467 kernel/locking/lockdep.c:5671)
+[   61.177525] lock_acquire (kernel/locking/lockdep.c:5673)
+[   61.177530] console_flush_all (kernel/printk/printk.c:2883
+kernel/printk/printk.c:2942)
+[   61.177536] console_unlock.part.0 (kernel/printk/printk.c:3017)
+[   61.177542] vprintk_emit (kernel/printk/printk.c:2317)
+[   61.177547] vprintk_default (kernel/printk/printk.c:2328)
+[   61.177553] vprintk (kernel/printk/printk_safe.c:50)
+[   61.177559] _printk (kernel/printk/printk.c:2341)
+[   61.177564] slab_bug (mm/slub.c:892)
+[   61.177567] check_bytes_and_report (mm/slub.c:1054)
+[   61.177571] check_object (mm/slub.c:1196 (discriminator 2))
+[   61.177575] alloc_debug_processing (mm/slub.c:1415 mm/slub.c:1425)
+[   61.177579] get_partial_node.part.0 (mm/slub.c:2146 mm/slub.c:2279)
+[   61.177583] ___slab_alloc (mm/slub.c:2268 mm/slub.c:2386 mm/slub.c:3188)
+[   61.177587] __slab_alloc.constprop.0 (mm/slub.c:3292)
+[   61.177592] __kmem_cache_alloc_node (mm/slub.c:3345 mm/slub.c:3442
+mm/slub.c:3491)
+[   61.177596] kmalloc_trace (mm/slab_common.c:1064 (discriminator 4))
+[   61.177600] device_add (drivers/base/core.c:3436 drivers/base/core.c:3486)
+[   61.177603] platform_device_add (drivers/base/platform.c:717)
+[   61.177609] platform_device_register_full (drivers/base/platform.c:844)
+[   61.177615] gpio_mockup_register_chip+0x1ec/0x2b8 gpio_mockup
+[   61.177625] gpio_mockup_init+0xf0/0xd40 gpio_mockup
+[   61.177634] do_one_initcall (init/main.c:1306)
+[   61.177638] do_init_module (kernel/module/main.c:2457)
+[   61.177644] load_module (kernel/module/main.c:2859)
+[   61.177650] __do_sys_finit_module (kernel/module/main.c:2961)
+[   61.177656] __arm64_sys_finit_module (kernel/module/main.c:2928)
+[   61.177662] invoke_syscall (arch/arm64/include/asm/current.h:19
+arch/arm64/kernel/syscall.c:57)
+[   61.177668] el0_svc_common.constprop.0 (arch/arm64/kernel/syscall.c:149)
+[   61.177674] do_el0_svc (arch/arm64/kernel/syscall.c:194)
+[   61.177680] el0_svc (arch/arm64/include/asm/daifflags.h:28
+arch/arm64/kernel/entry-common.c:133
+arch/arm64/kernel/entry-common.c:142
+arch/arm64/kernel/entry-common.c:638)
+[   61.177683] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:656)
+[   61.177686] el0t_64_sync (arch/arm64/kernel/entry.S:591)
+[   62.011685] BUG kmalloc-512 (Not tainted): Poison overwritten
+[   62.017513] -----------------------------------------------------------------------------
+[   62.017513]
+[   62.027300] 0xffff00004ecb7a38-0xffff00004ecb7a47 @offset=31288.
+First byte 0x6a instead of 0x6b
+[   62.036210] Allocated in swnode_register+0x40/0x218 age=808 cpu=3 pid=386
+[   62.043101] __kmem_cache_alloc_node (mm/slub.c:3345 mm/slub.c:3442
+mm/slub.c:3491)
+[   62.047784] kmalloc_trace (mm/slab_common.c:1064 (discriminator 4))
+[   62.051406] swnode_register (drivers/base/swnode.c:776)
+[   62.055293] fwnode_create_software_node (drivers/base/swnode.c:934
+(discriminator 4))
+[   62.060238] gpio_mockup_register_chip+0x1c4/0x2b8 gpio_mockup
+[   62.066337] gpio_mockup_init+0xf0/0xd40 gpio_mockup
+[   62.071551] do_one_initcall (init/main.c:1306)
+[   62.075437] do_init_module (kernel/module/main.c:2457)
+[   62.079238] load_module (kernel/module/main.c:2859)
+[   62.083037] __do_sys_finit_module (kernel/module/main.c:2961)
+[   62.087455] __arm64_sys_finit_module (kernel/module/main.c:2928)
+[   62.092048] invoke_syscall (arch/arm64/include/asm/current.h:19
+arch/arm64/kernel/syscall.c:57)
+[   62.095848] el0_svc_common.constprop.0 (arch/arm64/kernel/syscall.c:149)
+[   62.100793] do_el0_svc (arch/arm64/kernel/syscall.c:194)
+[   62.104151] el0_svc (arch/arm64/include/asm/daifflags.h:28
+arch/arm64/kernel/entry-common.c:133
+arch/arm64/kernel/entry-common.c:142
+arch/arm64/kernel/entry-common.c:638)
+[   62.107244] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:656)
+[   62.111570] Freed in software_node_release+0xdc/0x108 age=632 cpu=0 pid=428
+[   62.118633] __kmem_cache_free (mm/slub.c:3732 mm/slub.c:3788 mm/slub.c:3800)
+[   62.122784] kfree (mm/slab_common.c:1020)
+[   62.125788] software_node_release (drivers/base/swnode.c:761)
+[   62.130204] kobject_put (lib/kobject.c:685 lib/kobject.c:712
+include/linux/kref.h:65 lib/kobject.c:729)
+[   62.133739] software_node_notify_remove (drivers/base/swnode.c:1093)
+[   62.138597] device_del (drivers/base/core.c:2265 drivers/base/core.c:3778)
+[   62.142134] platform_device_del.part.0 (drivers/base/platform.c:753)
+[   62.146903] platform_device_unregister (drivers/base/platform.c:551
+drivers/base/platform.c:794)
+[   62.151672] gpio_mockup_exit+0x54/0x280 gpio_mockup
+[   62.156888] __arm64_sys_delete_module (kernel/module/main.c:756
+kernel/module/main.c:698 kernel/module/main.c:698)
+[   62.161745] invoke_syscall (arch/arm64/include/asm/current.h:19
+arch/arm64/kernel/syscall.c:57)
+[   62.165545] el0_svc_common.constprop.0 (arch/arm64/kernel/syscall.c:149)
+[   62.170490] do_el0_svc (arch/arm64/kernel/syscall.c:194)
+[   62.173850] el0_svc (arch/arm64/include/asm/daifflags.h:28
+arch/arm64/kernel/entry-common.c:133
+arch/arm64/kernel/entry-common.c:142
+arch/arm64/kernel/entry-common.c:638)
+[   62.176941] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:656)
+[   62.181267] el0t_64_sync (arch/arm64/kernel/entry.S:591)
+[   62.184975] Slab 0xfffffc00013b2c00 objects=21 used=7
+fp=0xffff00004ecb7400
+flags=0x7fffc0000010200(slab|head|node=0|zone=1|lastcpupid=0xffff)
+[   62.197943] Object 0xffff00004ecb7a00 @offset=31232 fp=0xffff00004ecb7400
+[   62.197943]
+[   62.206325] Redzone  ffff00004ecb7800:
 
-diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-index 0e3712fcf0e0..3d7cde9add4e 100644
---- a/drivers/staging/sm750fb/sm750.c
-+++ b/drivers/staging/sm750fb/sm750.c
-@@ -1165,7 +1165,7 @@ static struct pci_driver lynxfb_driver = {
- 
- static int __init lynxfb_init(void)
- {
--	char *option;
-+	const char *option;
- 
- 	if (fb_modesetting_disabled("sm750fb"))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/acornfb.c b/drivers/video/fbdev/acornfb.c
-index 3fed89e03554..27e6796b27b6 100644
---- a/drivers/video/fbdev/acornfb.c
-+++ b/drivers/video/fbdev/acornfb.c
-@@ -926,7 +926,7 @@ static int acornfb_probe(struct platform_device *dev)
- 	unsigned long size;
- 	u_int h_sync, v_sync;
- 	int rc, i;
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	if (fb_get_options("acornfb", &option))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/amifb.c b/drivers/video/fbdev/amifb.c
-index a09edc576437..f0ed718a4f3c 100644
---- a/drivers/video/fbdev/amifb.c
-+++ b/drivers/video/fbdev/amifb.c
-@@ -3539,7 +3539,7 @@ static int __init amifb_probe(struct platform_device *pdev)
- 	u_int defmode;
- 
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	if (fb_get_options("amifb", &option)) {
- 		amifb_video_off();
-diff --git a/drivers/video/fbdev/arkfb.c b/drivers/video/fbdev/arkfb.c
-index 98c710cadaab..7e9f5b37fd50 100644
---- a/drivers/video/fbdev/arkfb.c
-+++ b/drivers/video/fbdev/arkfb.c
-@@ -1188,7 +1188,7 @@ static int __init arkfb_init(void)
- {
- 
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("arkfb"))
-diff --git a/drivers/video/fbdev/atafb.c b/drivers/video/fbdev/atafb.c
-index 6e625ac020b5..2ede6ce0ec0e 100644
---- a/drivers/video/fbdev/atafb.c
-+++ b/drivers/video/fbdev/atafb.c
-@@ -2991,7 +2991,7 @@ static int __init atafb_probe(struct platform_device *pdev)
- 	int pad, detected_mode, error;
- 	unsigned int defmode = 0;
- 	unsigned long mem_req;
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	if (fb_get_options("atafb", &option))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/aty/aty128fb.c b/drivers/video/fbdev/aty/aty128fb.c
-index ee2be122de2d..e7e1c7c0da92 100644
---- a/drivers/video/fbdev/aty/aty128fb.c
-+++ b/drivers/video/fbdev/aty/aty128fb.c
-@@ -2509,7 +2509,7 @@ static int __maybe_unused aty128_pci_resume(struct device *dev)
- static int aty128fb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("aty128fb"))
-diff --git a/drivers/video/fbdev/aty/atyfb_base.c b/drivers/video/fbdev/aty/atyfb_base.c
-index f4b22d2f0d3d..73a54738f58c 100644
---- a/drivers/video/fbdev/aty/atyfb_base.c
-+++ b/drivers/video/fbdev/aty/atyfb_base.c
-@@ -3965,7 +3965,7 @@ static int __init atyfb_init(void)
- {
- 	int err1 = 1, err2 = 1;
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("atyfb"))
-diff --git a/drivers/video/fbdev/aty/radeon_base.c b/drivers/video/fbdev/aty/radeon_base.c
-index 975323e82f52..a44f9c423703 100644
---- a/drivers/video/fbdev/aty/radeon_base.c
-+++ b/drivers/video/fbdev/aty/radeon_base.c
-@@ -2611,7 +2611,7 @@ static int __init radeonfb_setup (const char *options)
- static int __init radeonfb_init (void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("radeonfb"))
-diff --git a/drivers/video/fbdev/au1100fb.c b/drivers/video/fbdev/au1100fb.c
-index 0c063c8e6312..4034aeb37d45 100644
---- a/drivers/video/fbdev/au1100fb.c
-+++ b/drivers/video/fbdev/au1100fb.c
-@@ -366,7 +366,7 @@ static const struct fb_ops au1100fb_ops =
- 
- static int au1100fb_setup(struct au1100fb_device *fbdev)
- {
--	char *options;
-+	const char *options;
- 	struct option_iter iter;
- 	char *this_opt;
- 	int num_panels = ARRAY_SIZE(known_lcd_panels);
-diff --git a/drivers/video/fbdev/au1200fb.c b/drivers/video/fbdev/au1200fb.c
-index 43b6a9dfeec4..9e84a1095d2f 100644
---- a/drivers/video/fbdev/au1200fb.c
-+++ b/drivers/video/fbdev/au1200fb.c
-@@ -1578,7 +1578,7 @@ static int au1200fb_init_fbinfo(struct au1200fb_device *fbdev)
- 
- static int au1200fb_setup(struct au1200fb_platdata *pd)
- {
--	char *options = NULL;
-+	const char *options = NULL;
- 	struct option_iter iter;
- 	char *this_opt;
- 	char *endptr;
-diff --git a/drivers/video/fbdev/cirrusfb.c b/drivers/video/fbdev/cirrusfb.c
-index a5e99a8feadd..dc900f2fcd01 100644
---- a/drivers/video/fbdev/cirrusfb.c
-+++ b/drivers/video/fbdev/cirrusfb.c
-@@ -2363,7 +2363,7 @@ static int __init cirrusfb_init(void)
- 	int error = 0;
- 
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("cirrusfb"))
-diff --git a/drivers/video/fbdev/controlfb.c b/drivers/video/fbdev/controlfb.c
-index 65e2f9949420..a02a5ea99a7a 100644
---- a/drivers/video/fbdev/controlfb.c
-+++ b/drivers/video/fbdev/controlfb.c
-@@ -1004,7 +1004,7 @@ static int __init control_of_init(struct device_node *dp)
- static int __init control_init(void)
- {
- 	struct device_node *dp;
--	char *option = NULL;
-+	const char *option = NULL;
- 	int ret = -ENXIO;
- 
- 	if (fb_get_options("controlfb", &option))
-diff --git a/drivers/video/fbdev/core/fb_cmdline.c b/drivers/video/fbdev/core/fb_cmdline.c
-index 4d1634c492ec..67f9df7096f1 100644
---- a/drivers/video/fbdev/core/fb_cmdline.c
-+++ b/drivers/video/fbdev/core/fb_cmdline.c
-@@ -28,12 +28,9 @@
-  *          (video=<name>:<options>)
-  * @option: the option will be stored here
-  *
-- * The caller owns the string returned in @option and is
-- * responsible for releasing the memory.
-- *
-  * NOTE: Needed to maintain backwards compatibility
-  */
--int fb_get_options(const char *name, char **option)
-+int fb_get_options(const char *name, const char **option)
- {
- 	const char *options = NULL;
- 	bool is_of = false;
-@@ -49,12 +46,8 @@ int fb_get_options(const char *name, char **option)
- 			enabled = false;
- 	}
- 
--	if (option) {
--		if (options)
--			*option = kstrdup(options, GFP_KERNEL);
--		else
--			*option = NULL;
--	}
-+	if (option)
-+		*option = options;
- 
- 	return enabled ? 0 : 1; // 0 on success, 1 otherwise
- }
-diff --git a/drivers/video/fbdev/core/modedb.c b/drivers/video/fbdev/core/modedb.c
-index 23cf8eba785d..5ff5a56925cc 100644
---- a/drivers/video/fbdev/core/modedb.c
-+++ b/drivers/video/fbdev/core/modedb.c
-@@ -620,7 +620,6 @@ int fb_find_mode(struct fb_var_screeninfo *var,
- 		 const struct fb_videomode *default_mode,
- 		 unsigned int default_bpp)
- {
--	char *mode_option_buf = NULL;
- 	int i;
- 
- 	/* Set up defaults */
-@@ -636,10 +635,8 @@ int fb_find_mode(struct fb_var_screeninfo *var,
- 		default_bpp = 8;
- 
- 	/* Did the user specify a video mode? */
--	if (!mode_option) {
--		fb_get_options(NULL, &mode_option_buf);
--		mode_option = mode_option_buf;
--	}
-+	if (!mode_option)
-+		fb_get_options(NULL, &mode_option);
- 	if (mode_option) {
- 		const char *name = mode_option;
- 		unsigned int namelen = strlen(name);
-@@ -718,7 +715,6 @@ int fb_find_mode(struct fb_var_screeninfo *var,
- 			res_specified = 1;
- 		}
- done:
--		kfree(mode_option_buf);
- 		if (cvt) {
- 			struct fb_videomode cvt_mode;
- 			int ret;
-diff --git a/drivers/video/fbdev/cyber2000fb.c b/drivers/video/fbdev/cyber2000fb.c
-index f21d11a73455..c6a46e870e98 100644
---- a/drivers/video/fbdev/cyber2000fb.c
-+++ b/drivers/video/fbdev/cyber2000fb.c
-@@ -1877,7 +1877,7 @@ static int __init cyber2000fb_init(void)
- 	int ret = -1, err;
- 
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("CyberPro"))
-diff --git a/drivers/video/fbdev/efifb.c b/drivers/video/fbdev/efifb.c
-index be77a76f7d1d..1fc1dee75552 100644
---- a/drivers/video/fbdev/efifb.c
-+++ b/drivers/video/fbdev/efifb.c
-@@ -366,7 +366,7 @@ static int efifb_probe(struct platform_device *dev)
- 	unsigned int size_vmode;
- 	unsigned int size_remap;
- 	unsigned int size_total;
--	char *option = NULL;
-+	const char *option = NULL;
- 	efi_memory_desc_t md;
- 
- 	if (screen_info.orig_video_isVGA != VIDEO_TYPE_EFI || pci_dev_disabled)
-diff --git a/drivers/video/fbdev/ep93xx-fb.c b/drivers/video/fbdev/ep93xx-fb.c
-index 305f1587bd89..33a9aa2ecc3b 100644
---- a/drivers/video/fbdev/ep93xx-fb.c
-+++ b/drivers/video/fbdev/ep93xx-fb.c
-@@ -464,7 +464,7 @@ static int ep93xxfb_probe(struct platform_device *pdev)
- 	struct fb_info *info;
- 	struct ep93xx_fbi *fbi;
- 	struct resource *res;
--	char *video_mode;
-+	const char *video_mode;
- 	int err;
- 
- 	if (!mach_info)
-diff --git a/drivers/video/fbdev/fm2fb.c b/drivers/video/fbdev/fm2fb.c
-index a787884a6a7f..79607301e176 100644
---- a/drivers/video/fbdev/fm2fb.c
-+++ b/drivers/video/fbdev/fm2fb.c
-@@ -315,7 +315,7 @@ static int __init fm2fb_setup(const char *options)
- 
- static int __init fm2fb_init(void)
- {
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	if (fb_get_options("fm2fb", &option))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/fsl-diu-fb.c b/drivers/video/fbdev/fsl-diu-fb.c
-index 78996995568c..c0c13135a6e1 100644
---- a/drivers/video/fbdev/fsl-diu-fb.c
-+++ b/drivers/video/fbdev/fsl-diu-fb.c
-@@ -1903,7 +1903,7 @@ static int __init fsl_diu_init(void)
- #endif
- 	int ret;
- #ifndef MODULE
--	char *option;
-+	const char *option;
- 
- 	/*
- 	 * For kernel boot options (in 'video=xxxfb:<options>' format)
-diff --git a/drivers/video/fbdev/gbefb.c b/drivers/video/fbdev/gbefb.c
-index d20ef48263f3..a5e480964fa4 100644
---- a/drivers/video/fbdev/gbefb.c
-+++ b/drivers/video/fbdev/gbefb.c
-@@ -1125,7 +1125,7 @@ static int gbefb_probe(struct platform_device *p_dev)
- 	struct fb_info *info;
- 	struct gbefb_par *par;
- #ifndef MODULE
--	char *options = NULL;
-+	const char *options = NULL;
- #endif
- 
- 	info = framebuffer_alloc(sizeof(struct gbefb_par), &p_dev->dev);
-diff --git a/drivers/video/fbdev/geode/gx1fb_core.c b/drivers/video/fbdev/geode/gx1fb_core.c
-index 6f1e9aadc192..c51e69b98ba8 100644
---- a/drivers/video/fbdev/geode/gx1fb_core.c
-+++ b/drivers/video/fbdev/geode/gx1fb_core.c
-@@ -445,7 +445,7 @@ static struct pci_driver gx1fb_driver = {
- static int __init gx1fb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("gx1fb"))
-diff --git a/drivers/video/fbdev/geode/gxfb_core.c b/drivers/video/fbdev/geode/gxfb_core.c
-index aede22566775..6a1391f88599 100644
---- a/drivers/video/fbdev/geode/gxfb_core.c
-+++ b/drivers/video/fbdev/geode/gxfb_core.c
-@@ -512,7 +512,7 @@ static int __init gxfb_setup(const char *options)
- static int __init gxfb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("gxfb"))
-diff --git a/drivers/video/fbdev/geode/lxfb_core.c b/drivers/video/fbdev/geode/lxfb_core.c
-index 855dc96b5669..2496bf85b6f3 100644
---- a/drivers/video/fbdev/geode/lxfb_core.c
-+++ b/drivers/video/fbdev/geode/lxfb_core.c
-@@ -650,7 +650,7 @@ static int __init lxfb_setup(const char *options)
- static int __init lxfb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("lxfb"))
-diff --git a/drivers/video/fbdev/grvga.c b/drivers/video/fbdev/grvga.c
-index 742331d0f08b..e39997a36ccc 100644
---- a/drivers/video/fbdev/grvga.c
-+++ b/drivers/video/fbdev/grvga.c
-@@ -334,7 +334,8 @@ static int grvga_probe(struct platform_device *dev)
- 	unsigned long physical_start = 0;
- 	unsigned long grvga_mem_size = 0;
- 	struct grvga_par *par = NULL;
--	char *options = NULL, *mode_opt = NULL;
-+	const char *options = NULL;
-+	const *mode_opt = NULL;
- 	struct option_iter iter;
- 	char *this_opt;
- 
-diff --git a/drivers/video/fbdev/gxt4500.c b/drivers/video/fbdev/gxt4500.c
-index 65cb44c281c1..21c0fbddcbdb 100644
---- a/drivers/video/fbdev/gxt4500.c
-+++ b/drivers/video/fbdev/gxt4500.c
-@@ -781,7 +781,7 @@ static struct pci_driver gxt4500_driver = {
- static int gxt4500_init(void)
- {
- #ifndef MODULE
--	char *options;
-+	const char *options;
- #endif
- 
- 	if (fb_modesetting_disabled("gxt4500"))
-diff --git a/drivers/video/fbdev/hyperv_fb.c b/drivers/video/fbdev/hyperv_fb.c
-index edb0555239c6..c7956626eed0 100644
---- a/drivers/video/fbdev/hyperv_fb.c
-+++ b/drivers/video/fbdev/hyperv_fb.c
-@@ -903,7 +903,7 @@ static const struct fb_ops hvfb_ops = {
- static void hvfb_get_option(struct fb_info *info)
- {
- 	struct hvfb_par *par = info->par;
--	char *options = NULL;
-+	const char *options = NULL;
- 	char *optbuf, *opt, *p;
- 	uint x = 0, y = 0;
- 
-diff --git a/drivers/video/fbdev/i740fb.c b/drivers/video/fbdev/i740fb.c
-index 6da2f3b7846d..2c852f3ce450 100644
---- a/drivers/video/fbdev/i740fb.c
-+++ b/drivers/video/fbdev/i740fb.c
-@@ -1289,7 +1289,7 @@ static int  __init i740fb_setup(const char *options)
- static int __init i740fb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("i740fb"))
-diff --git a/drivers/video/fbdev/i810/i810_main.c b/drivers/video/fbdev/i810/i810_main.c
-index 952d1a69dfb9..428bd5b53e98 100644
---- a/drivers/video/fbdev/i810/i810_main.c
-+++ b/drivers/video/fbdev/i810/i810_main.c
-@@ -2150,7 +2150,7 @@ static void i810fb_remove_pci(struct pci_dev *dev)
- #ifndef MODULE
- static int i810fb_init(void)
- {
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	if (fb_modesetting_disabled("i810fb"))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/imsttfb.c b/drivers/video/fbdev/imsttfb.c
-index 1e2b45faa26b..98a9a5891822 100644
---- a/drivers/video/fbdev/imsttfb.c
-+++ b/drivers/video/fbdev/imsttfb.c
-@@ -1620,7 +1620,7 @@ imsttfb_setup(const char *options)
- static int __init imsttfb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("imsttfb"))
-diff --git a/drivers/video/fbdev/imxfb.c b/drivers/video/fbdev/imxfb.c
-index d4e347aca0b0..ca67b32a29dd 100644
---- a/drivers/video/fbdev/imxfb.c
-+++ b/drivers/video/fbdev/imxfb.c
-@@ -846,7 +846,7 @@ static struct lcd_ops imxfb_lcd_ops = {
- 
- static int imxfb_setup(struct platform_device *pdev)
- {
--	char *options = NULL;
-+	const char *options = NULL;
- 	struct option_iter iter;
- 	char *opt;
- 
-diff --git a/drivers/video/fbdev/intelfb/intelfbdrv.c b/drivers/video/fbdev/intelfb/intelfbdrv.c
-index 43d677897392..664a8625e25c 100644
---- a/drivers/video/fbdev/intelfb/intelfbdrv.c
-+++ b/drivers/video/fbdev/intelfb/intelfbdrv.c
-@@ -385,7 +385,7 @@ static int __init intelfb_setup(const char *options)
- static int __init intelfb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	DBG_MSG("intelfb_init\n");
-diff --git a/drivers/video/fbdev/kyro/fbdev.c b/drivers/video/fbdev/kyro/fbdev.c
-index ccfec4e55ecf..903f0ac03bca 100644
---- a/drivers/video/fbdev/kyro/fbdev.c
-+++ b/drivers/video/fbdev/kyro/fbdev.c
-@@ -792,7 +792,7 @@ static void kyrofb_remove(struct pci_dev *pdev)
- static int __init kyrofb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("kyrofb"))
-diff --git a/drivers/video/fbdev/macfb.c b/drivers/video/fbdev/macfb.c
-index c7e17a14daf1..dbddf9e83b2f 100644
---- a/drivers/video/fbdev/macfb.c
-+++ b/drivers/video/fbdev/macfb.c
-@@ -541,7 +541,7 @@ static int __init macfb_init(void)
- {
- 	int video_cmap_len, video_is_nubus = 0;
- 	struct nubus_rsrc *ndev = NULL;
--	char *option = NULL;
-+	const char *option = NULL;
- 	int err;
- 
- 	if (fb_get_options("macfb", &option))
-diff --git a/drivers/video/fbdev/matrox/matroxfb_base.c b/drivers/video/fbdev/matrox/matroxfb_base.c
-index 4c2086136e9b..c1d1076bc172 100644
---- a/drivers/video/fbdev/matrox/matroxfb_base.c
-+++ b/drivers/video/fbdev/matrox/matroxfb_base.c
-@@ -2475,7 +2475,7 @@ static int __initdata initialized = 0;
- 
- static int __init matroxfb_init(void)
- {
--	char *option = NULL;
-+	const char *option = NULL;
- 	int err = 0;
- 
- 	DBG(__func__)
-diff --git a/drivers/video/fbdev/mx3fb.c b/drivers/video/fbdev/mx3fb.c
-index ca58afe366b4..04818f352eea 100644
---- a/drivers/video/fbdev/mx3fb.c
-+++ b/drivers/video/fbdev/mx3fb.c
-@@ -1655,7 +1655,7 @@ static struct platform_driver mx3fb_driver = {
- static int __init mx3fb_setup(void)
- {
- #ifndef MODULE
--	char *options = NULL;
-+	const char *options = NULL;
- 	struct option_iter iter;
- 	char *opt;
- 
-diff --git a/drivers/video/fbdev/neofb.c b/drivers/video/fbdev/neofb.c
-index 01ed78d987b1..21e8a72cda90 100644
---- a/drivers/video/fbdev/neofb.c
-+++ b/drivers/video/fbdev/neofb.c
-@@ -2213,7 +2213,7 @@ static int __init neofb_setup(const char *options)
- static int __init neofb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("neofb"))
-diff --git a/drivers/video/fbdev/nvidia/nvidia.c b/drivers/video/fbdev/nvidia/nvidia.c
-index d779163f919a..bd649539181f 100644
---- a/drivers/video/fbdev/nvidia/nvidia.c
-+++ b/drivers/video/fbdev/nvidia/nvidia.c
-@@ -1532,7 +1532,7 @@ static struct pci_driver nvidiafb_driver = {
- static int nvidiafb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("nvidiafb"))
-diff --git a/drivers/video/fbdev/ocfb.c b/drivers/video/fbdev/ocfb.c
-index fa15b932b323..07b7d5e61895 100644
---- a/drivers/video/fbdev/ocfb.c
-+++ b/drivers/video/fbdev/ocfb.c
-@@ -412,7 +412,7 @@ static struct platform_driver ocfb_driver = {
- static int __init ocfb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	if (fb_get_options("ocfb", &option))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/omap/omapfb_main.c b/drivers/video/fbdev/omap/omapfb_main.c
-index db5256c71f5b..8715eaf8ddf6 100644
---- a/drivers/video/fbdev/omap/omapfb_main.c
-+++ b/drivers/video/fbdev/omap/omapfb_main.c
-@@ -1905,7 +1905,7 @@ static int __init omapfb_setup(const char *options)
- static int __init omapfb_init(void)
- {
- #ifndef MODULE
--	char *option;
-+	const char *option;
- 
- 	if (fb_get_options("omapfb", &option))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/platinumfb.c b/drivers/video/fbdev/platinumfb.c
-index 33bf75309815..ab75df9d0bb6 100644
---- a/drivers/video/fbdev/platinumfb.c
-+++ b/drivers/video/fbdev/platinumfb.c
-@@ -683,7 +683,7 @@ static struct platform_driver platinum_driver =
- static int __init platinumfb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	if (fb_get_options("platinumfb", &option))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/pm2fb.c b/drivers/video/fbdev/pm2fb.c
-index 38c5c57ce2b0..d87ceaaf529d 100644
---- a/drivers/video/fbdev/pm2fb.c
-+++ b/drivers/video/fbdev/pm2fb.c
-@@ -1809,7 +1809,7 @@ static int __init pm2fb_setup(const char *options)
- static int __init pm2fb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("pm2fb"))
-diff --git a/drivers/video/fbdev/pm3fb.c b/drivers/video/fbdev/pm3fb.c
-index c4d4f08b4114..500a8c1130c6 100644
---- a/drivers/video/fbdev/pm3fb.c
-+++ b/drivers/video/fbdev/pm3fb.c
-@@ -1545,7 +1545,7 @@ static int __init pm3fb_init(void)
- 	 *  For kernel boot options (in 'video=pm3fb:<options>' format)
- 	 */
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("pm3fb"))
-diff --git a/drivers/video/fbdev/ps3fb.c b/drivers/video/fbdev/ps3fb.c
-index 575b2911977a..62236bbb02b5 100644
---- a/drivers/video/fbdev/ps3fb.c
-+++ b/drivers/video/fbdev/ps3fb.c
-@@ -1257,7 +1257,7 @@ static struct ps3_system_bus_driver ps3fb_driver = {
- 
- static int __init ps3fb_setup(void)
- {
--	char *options;
-+	const char *options;
- 	struct option_iter iter;
- 	char *this_opt;
- 
-diff --git a/drivers/video/fbdev/pvr2fb.c b/drivers/video/fbdev/pvr2fb.c
-index c332f2c38114..acc81fb11da1 100644
---- a/drivers/video/fbdev/pvr2fb.c
-+++ b/drivers/video/fbdev/pvr2fb.c
-@@ -1085,7 +1085,7 @@ static int __init pvr2fb_init(void)
- 	int i, ret = -ENODEV;
- 
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("pvr2fb"))
-diff --git a/drivers/video/fbdev/pxafb.c b/drivers/video/fbdev/pxafb.c
-index d2db9c20d515..0699710b0beb 100644
---- a/drivers/video/fbdev/pxafb.c
-+++ b/drivers/video/fbdev/pxafb.c
-@@ -2040,7 +2040,7 @@ static char g_options[256] = "";
- #ifndef MODULE
- static int __init pxafb_setup_options(void)
- {
--	char *options = NULL;
-+	const char *options = NULL;
- 
- 	if (fb_get_options("pxafb", &options))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/riva/fbdev.c b/drivers/video/fbdev/riva/fbdev.c
-index 7f35edad249e..934c6e30109b 100644
---- a/drivers/video/fbdev/riva/fbdev.c
-+++ b/drivers/video/fbdev/riva/fbdev.c
-@@ -2167,7 +2167,7 @@ static struct pci_driver rivafb_driver = {
- static int rivafb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("rivafb"))
-diff --git a/drivers/video/fbdev/s3fb.c b/drivers/video/fbdev/s3fb.c
-index 37f5ea25efd6..824325eb9fbe 100644
---- a/drivers/video/fbdev/s3fb.c
-+++ b/drivers/video/fbdev/s3fb.c
-@@ -1562,7 +1562,7 @@ static int __init s3fb_init(void)
- {
- 
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("s3fb"))
-diff --git a/drivers/video/fbdev/savage/savagefb_driver.c b/drivers/video/fbdev/savage/savagefb_driver.c
-index 4650688fd23c..a6e573b2d996 100644
---- a/drivers/video/fbdev/savage/savagefb_driver.c
-+++ b/drivers/video/fbdev/savage/savagefb_driver.c
-@@ -2560,7 +2560,7 @@ static int __init savagefb_setup(const char *options)
- 
- static int __init savagefb_init(void)
- {
--	char *option;
-+	const char *option;
- 
- 	DBG("savagefb_init");
- 
-diff --git a/drivers/video/fbdev/sis/sis_main.c b/drivers/video/fbdev/sis/sis_main.c
-index 9f63812a5f66..d8109dd20bc6 100644
---- a/drivers/video/fbdev/sis/sis_main.c
-+++ b/drivers/video/fbdev/sis/sis_main.c
-@@ -6587,7 +6587,7 @@ static struct pci_driver sisfb_driver = {
- static int __init sisfb_init(void)
- {
- #ifndef MODULE
--	char *options = NULL;
-+	const char *options = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("sisfb"))
-diff --git a/drivers/video/fbdev/skeletonfb.c b/drivers/video/fbdev/skeletonfb.c
-index ee6944d0ebc1..f6efad18e4d7 100644
---- a/drivers/video/fbdev/skeletonfb.c
-+++ b/drivers/video/fbdev/skeletonfb.c
-@@ -899,7 +899,7 @@ static int __init xxxfb_init(void)
- 	 *  For kernel boot options (in 'video=xxxfb:<options>' format)
- 	 */
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	if (fb_get_options("xxxfb", &option))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/sm712fb.c b/drivers/video/fbdev/sm712fb.c
-index a83f48fce5b1..c6232bc688ea 100644
---- a/drivers/video/fbdev/sm712fb.c
-+++ b/drivers/video/fbdev/sm712fb.c
-@@ -1755,7 +1755,7 @@ static struct pci_driver smtcfb_driver = {
- 
- static int __init sm712fb_init(void)
- {
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	if (fb_modesetting_disabled("sm712fb"))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/sstfb.c b/drivers/video/fbdev/sstfb.c
-index b509020fed74..7a0a612a7658 100644
---- a/drivers/video/fbdev/sstfb.c
-+++ b/drivers/video/fbdev/sstfb.c
-@@ -1507,7 +1507,7 @@ static struct pci_driver sstfb_driver = {
- 
- static int sstfb_init(void)
- {
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	if (fb_modesetting_disabled("sstfb"))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/stifb.c b/drivers/video/fbdev/stifb.c
-index 304ce8fcb9f8..c1f28bb046d3 100644
---- a/drivers/video/fbdev/stifb.c
-+++ b/drivers/video/fbdev/stifb.c
-@@ -1401,7 +1401,7 @@ static int __init stifb_init(void)
- 	int i;
- 
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	if (fb_get_options("stifb", &option))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/tdfxfb.c b/drivers/video/fbdev/tdfxfb.c
-index 1fdaf328f03e..3158644454d7 100644
---- a/drivers/video/fbdev/tdfxfb.c
-+++ b/drivers/video/fbdev/tdfxfb.c
-@@ -1635,7 +1635,7 @@ static void tdfxfb_remove(struct pci_dev *pdev)
- static int __init tdfxfb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("tdfxfb"))
-diff --git a/drivers/video/fbdev/tgafb.c b/drivers/video/fbdev/tgafb.c
-index 0862d9a54aef..ad88fc0cd01e 100644
---- a/drivers/video/fbdev/tgafb.c
-+++ b/drivers/video/fbdev/tgafb.c
-@@ -1600,7 +1600,7 @@ static int tgafb_init(void)
- {
- 	int status;
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("tgafb"))
-diff --git a/drivers/video/fbdev/tridentfb.c b/drivers/video/fbdev/tridentfb.c
-index 3299806c0f58..2a70b48e6d15 100644
---- a/drivers/video/fbdev/tridentfb.c
-+++ b/drivers/video/fbdev/tridentfb.c
-@@ -1818,7 +1818,7 @@ static int __init tridentfb_setup(const char *options)
- static int __init tridentfb_init(void)
- {
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("tridentfb"))
-diff --git a/drivers/video/fbdev/uvesafb.c b/drivers/video/fbdev/uvesafb.c
-index 13bd8503a06b..98e074d3e61b 100644
---- a/drivers/video/fbdev/uvesafb.c
-+++ b/drivers/video/fbdev/uvesafb.c
-@@ -1886,7 +1886,7 @@ static int uvesafb_init(void)
- 	int err;
- 
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	if (fb_get_options("uvesafb", &option))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/valkyriefb.c b/drivers/video/fbdev/valkyriefb.c
-index 3c20f392370a..daf218632d53 100644
---- a/drivers/video/fbdev/valkyriefb.c
-+++ b/drivers/video/fbdev/valkyriefb.c
-@@ -304,7 +304,7 @@ static int __init valkyriefb_init(void)
- 	struct fb_info_valkyrie	*p;
- 	unsigned long frame_buffer_phys, cmap_regs_phys;
- 	int err;
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	if (fb_get_options("valkyriefb", &option))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/vesafb.c b/drivers/video/fbdev/vesafb.c
-index 7299cebb6962..5d909d88a251 100644
---- a/drivers/video/fbdev/vesafb.c
-+++ b/drivers/video/fbdev/vesafb.c
-@@ -253,7 +253,7 @@ static int vesafb_probe(struct platform_device *dev)
- 	unsigned int size_vmode;
- 	unsigned int size_remap;
- 	unsigned int size_total;
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	/* ignore error return of fb_get_options */
- 	fb_get_options("vesafb", &option);
-diff --git a/drivers/video/fbdev/vfb.c b/drivers/video/fbdev/vfb.c
-index 7694e5026155..b68c0dd747cf 100644
---- a/drivers/video/fbdev/vfb.c
-+++ b/drivers/video/fbdev/vfb.c
-@@ -513,7 +513,7 @@ static int __init vfb_init(void)
- 	int ret = 0;
- 
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- 
- 	if (fb_get_options("vfb", &option))
- 		return -ENODEV;
-diff --git a/drivers/video/fbdev/via/viafbdev.c b/drivers/video/fbdev/via/viafbdev.c
-index 749aee9f6c56..40a4739ff060 100644
---- a/drivers/video/fbdev/via/viafbdev.c
-+++ b/drivers/video/fbdev/via/viafbdev.c
-@@ -1923,7 +1923,7 @@ void via_fb_pci_remove(struct pci_dev *pdev)
- #ifndef MODULE
- static int __init viafb_setup(void)
- {
--	char *options;
-+	const char *options;
- 	struct option_iter iter;
- 	char *this_opt;
- 
-diff --git a/drivers/video/fbdev/vt8623fb.c b/drivers/video/fbdev/vt8623fb.c
-index 321b1813cf3c..9bd908dace15 100644
---- a/drivers/video/fbdev/vt8623fb.c
-+++ b/drivers/video/fbdev/vt8623fb.c
-@@ -919,9 +919,8 @@ static void __exit vt8623fb_cleanup(void)
- 
- static int __init vt8623fb_init(void)
- {
--
- #ifndef MODULE
--	char *option = NULL;
-+	const char *option = NULL;
- #endif
- 
- 	if (fb_modesetting_disabled("vt8623fb"))
-diff --git a/include/linux/fb.h b/include/linux/fb.h
-index d96529caa35e..0bebdd03f287 100644
---- a/include/linux/fb.h
-+++ b/include/linux/fb.h
-@@ -601,7 +601,7 @@ extern void fb_pad_aligned_buffer(u8 *dst, u32 d_pitch, u8 *src, u32 s_pitch, u3
- extern void fb_set_suspend(struct fb_info *info, int state);
- extern int fb_get_color_depth(struct fb_var_screeninfo *var,
- 			      struct fb_fix_screeninfo *fix);
--extern int fb_get_options(const char *name, char **option);
-+extern int fb_get_options(const char *name, const char **option);
- extern int fb_new_modelist(struct fb_info *info);
- 
- extern bool fb_center_logo;
--- 
-2.39.2
+...
 
+[   63.089597] CPU: 3 PID: 510 Comm: modprobe Not tainted
+6.3.0-rc1-next-20230307 #1
+[   63.097186] Hardware name: Raspberry Pi 4 Model B (DT)
+[   63.102392] Call trace:
+[   63.104865] dump_backtrace (arch/arm64/kernel/stacktrace.c:160)
+[   63.108665] show_stack (arch/arm64/kernel/stacktrace.c:167)
+[   63.112021] dump_stack_lvl (lib/dump_stack.c:107)
+[   63.115734] dump_stack (lib/dump_stack.c:114)
+[   63.119093] print_trailer (mm/slub.c:953)
+[   63.122892] check_bytes_and_report (mm/slub.c:1058)
+[   63.127395] check_object (mm/slub.c:1196 (discriminator 2))
+[   63.131104] alloc_debug_processing (mm/slub.c:1415 mm/slub.c:1425)
+[   63.135606] get_partial_node.part.0 (mm/slub.c:2146 mm/slub.c:2279)
+[   63.140286] ___slab_alloc (mm/slub.c:2268 mm/slub.c:2386 mm/slub.c:3188)
+[   63.144084] __slab_alloc.constprop.0 (mm/slub.c:3292)
+[   63.148674] __kmem_cache_alloc_node (mm/slub.c:3345 mm/slub.c:3442
+mm/slub.c:3491)
+[   63.153354] kmalloc_trace (mm/slab_common.c:1064 (discriminator 4))
+[   63.156974] device_add (drivers/base/core.c:3436 drivers/base/core.c:3486)
+[   63.160508] platform_device_add (drivers/base/platform.c:717)
+[   63.164837] platform_device_register_full (drivers/base/platform.c:844)
+[   63.169959] gpio_mockup_register_chip+0x1ec/0x2b8 gpio_mockup
+[   63.176057] gpio_mockup_init+0xf0/0xd40 gpio_mockup
+[   63.181269] do_one_initcall (init/main.c:1306)
+[   63.185155] do_init_module (kernel/module/main.c:2457)
+[   63.188956] load_module (kernel/module/main.c:2859)
+[   63.192755] __do_sys_finit_module (kernel/module/main.c:2961)
+[   63.197171] __arm64_sys_finit_module (kernel/module/main.c:2928)
+[   63.201765] invoke_syscall (arch/arm64/include/asm/current.h:19
+arch/arm64/kernel/syscall.c:57)
+[   63.205565] el0_svc_common.constprop.0 (arch/arm64/kernel/syscall.c:149)
+[   63.210510] do_el0_svc (arch/arm64/kernel/syscall.c:194)
+[   63.213869] el0_svc (arch/arm64/include/asm/daifflags.h:28
+arch/arm64/kernel/entry-common.c:133
+arch/arm64/kernel/entry-common.c:142
+arch/arm64/kernel/entry-common.c:638)
+[   63.216961] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:656)
+[   63.221287] el0t_64_sync (arch/arm64/kernel/entry.S:591)
+[   63.224998] FIX kmalloc-512: Restoring Poison
+0xffff00004ecb7a38-0xffff00004ecb7a47=0x6b
+[   63.233202] FIX kmalloc-512: Marking all objects used
+[   63.399213] =============================================================================
+
+links to the crash:
+  - https://lkft.validation.linaro.org/scheduler/job/6224830#L1291
+  - https://lkft.validation.linaro.org/scheduler/job/6224742#L1202
+  - https://lkft.validation.linaro.org/scheduler/job/6224784#L3415
+   - https://lkft.validation.linaro.org/scheduler/job/6224810#L2029
+
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: 709c6adf19dc558e44ab5c01659b09a16a2d3c82
+  git_describe: next-20230307
+  kernel_version: 6.3.0-rc1
+  kernel-config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2MfXESbRAbSUj9oic6d8dK2d7Q8/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/798095907
+  artifact-location:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2MfXESbRAbSUj9oic6d8dK2d7Q8
+  toolchain: gcc-11
+
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
