@@ -2,172 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE886B25DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BADA26B25DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 14:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbjCINuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 08:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
+        id S231361AbjCINua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 08:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbjCINtg (ORCPT
+        with ESMTP id S231459AbjCINtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:49:36 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A1FE2526;
-        Thu,  9 Mar 2023 05:48:48 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 0EE6F42037;
-        Thu,  9 Mar 2023 13:48:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1678369725;
-        bh=AE3z/Hbuidfh0VnEdFu5MrRvC3cGbJJCXqEsPKkKv1I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=KTG/4UqJc8WfavSUh7tqLucA9Wp0OzX4DyjTmJUOp0sRWjLxntOHlni3Y7XaywGDd
-         hU4uXroyp55O6O1tp6qYAIxz+d8FeMIxLBPltCQDvMDCPDO11JEXrxE97V9VaoDS2N
-         JXflI7UOyImooOYtVzFxbWaF3BGr5UNDZFXoGWpcURhEzBPFGOXzZstYOndJg7wJu9
-         o3zByU3WOc1Ihx4z7svazX+2gQOlWDYn5sacZcA4MLiiP9AsOfzTjfi7Bd36YumoOJ
-         6aVufEmspdikuXAb6yavwZ2tJ5pzEC4mrfqcvUBqMQeJM0LXdYFW523hFD7GDmEmuG
-         dd2HP9y7U3aBw==
-Message-ID: <e517dc90-0289-7339-e36e-54ba2635ed1f@asahilina.net>
-Date:   Thu, 9 Mar 2023 22:48:37 +0900
+        Thu, 9 Mar 2023 08:49:45 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01699DF739;
+        Thu,  9 Mar 2023 05:48:59 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id i20so1865254lja.11;
+        Thu, 09 Mar 2023 05:48:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678369738;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3FudcHKQ9C/ngiFd0m6bXjPnSdZmZHDOaPcXEf1NoUY=;
+        b=QH1E80R931to/itzqCLl/92TGvWsT34/Xg1+SIoWE5K4mZMKhmrrZraQO9xOled4P/
+         cgTz6Yq7biSlbv1GgFP7UbzpUKodz6us+pOLxDwJpdn4YbnKzPvi6HK7JzlFiqD5SQM7
+         0GdmsvKVDLfiE4xbqs8S4zVo9SqH/j4MXFJr9YxTKifH1ZL5Nn1q2ysaJ7cWJ5KBOBbg
+         3gYTSs8rxRfTpPQDl+eHwnTViNaEm76g7ZTP8VwBOzaM+z0U/6TEdWK2A3b+lT3CHRMP
+         ZrhJlP0Co6nVoukUyE+2Aqi1d7f64T678ft8oqnWsofJECY3TkVW30s38cN1zf2dpvJY
+         VskQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678369738;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3FudcHKQ9C/ngiFd0m6bXjPnSdZmZHDOaPcXEf1NoUY=;
+        b=8HtFU5lf19PI50s52tHaizIXNB7wMNoPCTLcArh/xzaIu6XzPg4eDrLChSD2nhiZvf
+         maWMcAgruACs1/AzhJzGReXpbabTdasUbX7xNX0DrXlW7IEQVCStIfIUmV5lt7Tkf0o9
+         xF+kguBOaTUngFT4v4O0e0i6QN2cwGhvXNki2DPqRohDJv+q1xrOhwXKPnutqnyGGJd+
+         FfnQAHu3PGwbuEpn/3yDO/8QNXSXBKQ74lCn2sVc/5SSmkrl9CIcHZ5kDiTlwUL8mjZW
+         R71Yfk2rrurgO6ThlA4UyOCGTysH4bn5A2cK6a+Nb+LWuEmyJNDNEeS8beKndZzAQSn3
+         w/BQ==
+X-Gm-Message-State: AO0yUKWyiQlktYXx2EWd/JGNJx3fsehi/xOGQJ00e1r1THYRs59vgkCB
+        Ast9vWQkcEz1t7F2I3hb8kI=
+X-Google-Smtp-Source: AK7set+3y+9sIZ9bwERBoAgL/96ayOf2fLhRTH7d36V/q64JwvSZt5/eUSvcDDvcetwLKaCeYI3WGA==
+X-Received: by 2002:a2e:2ac3:0:b0:294:697a:d6af with SMTP id q186-20020a2e2ac3000000b00294697ad6afmr6295232ljq.39.1678369738066;
+        Thu, 09 Mar 2023 05:48:58 -0800 (PST)
+Received: from pc636 (host-95-193-108-241.mobileonline.telia.com. [95.193.108.241])
+        by smtp.gmail.com with ESMTPSA id f9-20020ac24e49000000b004db48ae69cbsm2641622lfr.206.2023.03.09.05.48.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 05:48:57 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Thu, 9 Mar 2023 14:48:54 +0100
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 06/13] net/sysctl: Rename kvfree_rcu() to
+ kvfree_rcu_mightsleep()
+Message-ID: <ZAnjxuXPR6j14W8u@pc636>
+References: <20230201150815.409582-1-urezki@gmail.com>
+ <20230201150815.409582-7-urezki@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH RFC 11/18] drm/scheduler: Clean up jobs when the scheduler
- is torn down
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-11-917ff5bc80a8@asahilina.net>
- <bbd7c5ee-c2f0-3e19-757d-a9aff1a26d3d@linux.intel.com>
- <585fa052-4eff-940e-b307-2415c315686a@amd.com>
- <3320e497-09c0-6eb6-84c5-bab2e63f28ec@asahilina.net>
- <7b39ef96-3ec5-c492-6e1b-bf065b7c90a2@amd.com>
- <0f14c1ae-0c39-106c-9563-7c1c672154c0@asahilina.net>
- <e18500b5-21a0-77fd-8434-86258cefce5a@amd.com>
- <8696d00a-c642-b080-c19a-b0e619e4b585@asahilina.net>
- <5f0814a3-4be3-a609-d3b3-dd51a4f459a1@amd.com>
- <9403e89d-a78f-8abd-2869-20da23d89475@asahilina.net>
- <ac92cea6-89e7-6147-a8fb-8b76e89cdcb6@amd.com>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <ac92cea6-89e7-6147-a8fb-8b76e89cdcb6@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201150815.409582-7-urezki@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2023 20.47, Christian König wrote:
-> Am 09.03.23 um 10:43 schrieb Asahi Lina:
->> On 09/03/2023 17.42, Christian König wrote:
->>> Am 08.03.23 um 20:37 schrieb Asahi Lina:
->>>> On 09/03/2023 03.12, Christian König wrote:
->>>>> Am 08.03.23 um 18:32 schrieb Asahi Lina:
->>>>>> [SNIP]
->>>>>> Yes but... none of this cleans up jobs that are already submitted by the
->>>>>> scheduler and in its pending list, with registered completion callbacks,
->>>>>> which were already popped off of the entities.
->>>>>>
->>>>>> *That* is the problem this patch fixes!
->>>>> Ah! Yes that makes more sense now.
->>>>>
->>>>>>> We could add a warning when users of this API doesn't do this
->>>>>>> correctly, but cleaning up incorrect API use is clearly something we
->>>>>>> don't want here.
->>>>>> It is the job of the Rust abstractions to make incorrect API use that
->>>>>> leads to memory unsafety impossible. So even if you don't want that in
->>>>>> C, it's my job to do that for Rust... and right now, I just can't
->>>>>> because drm_sched doesn't provide an API that can be safely wrapped
->>>>>> without weird bits of babysitting functionality on top (like tracking
->>>>>> jobs outside or awkwardly making jobs hold a reference to the scheduler
->>>>>> and defer dropping it to another thread).
->>>>> Yeah, that was discussed before but rejected.
->>>>>
->>>>> The argument was that upper layer needs to wait for the hw to become
->>>>> idle before the scheduler can be destroyed anyway.
->>>> Unfortunately, that's not a requirement you can encode in the Rust type
->>>> system easily as far as I know, and Rust safety rules mean we need to
->>>> make it safe even if the upper layer doesn't do this... (or else we have
->>>> to mark the entire drm_sched abstraction unsafe, but that would be a pity).
->>> Yeah, that should really not be something we should do.
->>>
->>> But you could make the scheduler depend on your fw context object, don't
->>> you?
->> Yes, and that would fix the problem for this driver, but it wouldn't
->> make the abstraction safe. The thing is we have to make it *impossible*
->> to misuse drm_sched in such a way that it crashes, at the Rust
->> abstraction level. If we start depending on the driver following rules
->> like that, that means the drm_sched abstraction has to be marked unsafe.
->>
->>> Detaching the scheduler from the underlying hw fences is certainly
->>> possible, but we removed that functionality because some people people
->>> tried to force push some Windows recovery module into Linux. We are in
->>> the process of reverting that and cleaning things up once more, but that
->>> will take a while.
->> Okay, but I don't see why that should block the Rust abstractions...
+On Wed, Feb 01, 2023 at 04:08:12PM +0100, Uladzislau Rezki (Sony) wrote:
+> The kvfree_rcu()'s single argument name is deprecated therefore
+> rename it to kvfree_rcu_mightsleep() variant. The goal is explicitly
+> underline that it is for sleepable contexts.
 > 
-> Because even with removing the fence callback this is inherently unsafe.
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: David S. Miller <davem@davemloft.net>
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> ---
+>  net/core/sysctl_net_core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> You not only need to remove the callback, but also make sure that no 
-> parallel timeout handling is running.
+Could you please add you reviwed-by or Acked-by tags so we can bring
+our series with renaming for the next merge window?
 
-If by that you mean that the timeout handling functions aren't being
-called by the driver, then that's implied. If the scheduler is being
-dropped, by definition there are no references left to call into the
-scheduler directly from the Rust side. So we only need to worry about
-what drm_sched itself does.
+Thanks!
 
-Right now the cleanup function tears down the timeout work at the end,
-but it probably makes sense to do it at the start? Then if we do that
-and stop the kthread, we can be really sure nothing else is accessing
-the scheduler and we can clean up without taking any locks:
-
-Roughly:
-
-void drm_sched_fini(struct drm_gpu_scheduler *sched)
-{
-    sched->ready = false; /* Should probably do this first? */
-    kthread_stop(sched->thread);
-    cancel_delayed_work_sync(&sched->work_tdr);
-
-    /* Clean up the pending_list here */
-}
-
-I'm also not sure what the rest of the drm_sched_fini() function is
-doing right now. It's going through all entities and removing them, and
-then wakes up entities stuck in drm_sched_entity_flush()... but didn't
-we just agree that the API requires users to tear down entities before
-tearing down the scheduler anyway?
-
-~~ Lina
+--
+Uladzislau Rezki
