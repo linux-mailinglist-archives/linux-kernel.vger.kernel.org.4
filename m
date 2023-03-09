@@ -2,192 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B13536B18EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 02:50:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0456B18F0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 02:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjCIBuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 20:50:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35706 "EHLO
+        id S229634AbjCIBvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 20:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjCIBuM (ORCPT
+        with ESMTP id S229542AbjCIBvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 20:50:12 -0500
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6767D8537E;
-        Wed,  8 Mar 2023 17:50:03 -0800 (PST)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.46
-        by mg.richtek.com with MailGates ESMTP Server V5.0(20041:0:AUTH_RELAY)
-        (envelope-from <cy_huang@richtek.com>); Thu, 09 Mar 2023 09:49:28 +0800 (CST)
-Received: from ex3.rt.l (192.168.10.46) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Thu, 9 Mar
- 2023 09:49:27 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex3.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
- Transport; Thu, 9 Mar 2023 09:49:27 +0800
-Date:   Thu, 9 Mar 2023 09:49:27 +0800
-From:   ChiYuan Huang <cy_huang@richtek.com>
-To:     Lee Jones <lee@kernel.org>
-CC:     ChiaEn Wu <chiaen_wu@richtek.com>, <corbet@lwn.net>,
-        <pavel@ucw.cz>, <matthias.bgg@gmail.com>,
-        <andriy.shevchenko@linux.intel.com>, <jacek.anaszewski@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-doc@vger.kernel.org>, <peterwu.pub@gmail.com>,
-        <linux-leds@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <szunichen@gmail.com>
-Subject: Re: [PATCH v17 RESEND 2/3] leds: flash: mt6370: Add MediaTek MT6370
- flashlight support
-Message-ID: <20230309014927.GA12537@linuxcarl2.richtek.com>
-References: <cover.1677150607.git.chiaen_wu@richtek.com>
- <dc467984ebfc443685af62310aadb45389e804d6.1677150607.git.chiaen_wu@richtek.com>
- <20230305100608.GD2574592@google.com>
- <20230307034433.GA10739@linuxcarl2.richtek.com>
- <20230308135433.GL9667@google.com>
+        Wed, 8 Mar 2023 20:51:45 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482A66B305
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 17:51:44 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id g20so213625qkm.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 17:51:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678326703;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q3gWq2KWwWeTeT4vJi002XPuT0w4S0agkfJiRSvLNdg=;
+        b=Kb0Jt3/rkqdr8EsUwVAeQ59qswTdjGNo6iONanDNni3xiu8Qn/kPxLzovNp+cz4xuJ
+         cM236NU906POUBqkNnr2AysArsQsFidVO6whC6vcKO++cDWkbcDB21z0pGh9qV5tAOVz
+         7oCZTTF5gAJ6Xpp8nXAl3Lfj1GK6Suh4vS2/I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678326703;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q3gWq2KWwWeTeT4vJi002XPuT0w4S0agkfJiRSvLNdg=;
+        b=H2VBCiGBCkGYqCqZLEswNkRvV6VWzdRoutQz9Bp70pnhsmmSWDASKzrw6+SFferiub
+         s1aEcEXZ3JhHCatRYpirVDaIh6M81YxqMZ1c92yK/Xh530q9HT2lXfdRp5C5OSIKocZs
+         qCp07NEUfQBtlo8lH7XRLrS9QYlpVz1CLSZbOhJqzUNgKym7+LxFRlgsuAU5fqjbI8ZF
+         bAGrGlGPWpwdcVQ4Z+VG7SSFsRVLUVDTa0aEsaoLryiFfug9EC2/lwzF3S0BYG/Gu+4U
+         O0MRGXVxRJ3kWlJRcMaCAIUfo6T3iex8p9TW01PhkxPtLRYdu2yWUDV/ayit++KrhVay
+         IG/w==
+X-Gm-Message-State: AO0yUKV3e8MC2779ZYZHfAUiXbalgpsQfOV6lITXkEk10t+ZwbXw0Lzp
+        Wpdez7inkhjallO9eRcfmVQQ1aKml/0Wqq6zACWItw==
+X-Google-Smtp-Source: AK7set96jsF8W1fuTyQyux+cmSvjCWmllqfGQFSInipiA+zNdKUtK5r/hH9JloDBSMa3Wo8Ao8ojbYQ1MIvey6DJ9jA=
+X-Received: by 2002:a37:5cf:0:b0:71f:b8e9:3631 with SMTP id
+ 198-20020a3705cf000000b0071fb8e93631mr5741085qkf.13.1678326703043; Wed, 08
+ Mar 2023 17:51:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230308135433.GL9667@google.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230307220553.631069-1-jaz@semihalf.com> <20230307164158.4b41e32f.alex.williamson@redhat.com>
+ <CAH76GKNapD8uB0B2+m70ZScDaOM8TmPNAii9TGqRSsgN4013+Q@mail.gmail.com>
+ <20230308104944.578d503c.alex.williamson@redhat.com> <CABUrSUD6hE=h3-Ho7L_J=OYeRUw_Bmg9o4fuw591iw9QyBQv9A@mail.gmail.com>
+ <20230308130619.3736cf18.alex.williamson@redhat.com> <CABUrSUBBbXRVRo6b1EKBpgu7zk=8yZhQ__UXFGL_GpO+BA4Pkg@mail.gmail.com>
+ <20230308163803.6bfc2922.alex.williamson@redhat.com>
+In-Reply-To: <20230308163803.6bfc2922.alex.williamson@redhat.com>
+From:   Dominik Behr <dbehr@chromium.org>
+Date:   Wed, 8 Mar 2023 17:51:32 -0800
+Message-ID: <CABUrSUAbJJJfGYQuXe-k+partE8UebEvK47zuGXEAtdAjg-yPA@mail.gmail.com>
+Subject: Re: [PATCH] vfio/pci: Propagate ACPI notifications to the user-space
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     Dominik Behr <dbehr@chromium.org>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        linux-kernel@vger.kernel.org, dmy@semihalf.com, tn@semihalf.com,
+        upstream@semihalf.com, dtor@google.com, jgg@ziepe.ca,
+        kevin.tian@intel.com, cohuck@redhat.com, abhsahu@nvidia.com,
+        yishaih@nvidia.com, yi.l.liu@intel.com, kvm@vger.kernel.org,
+        libvir-list@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 01:54:33PM +0000, Lee Jones wrote:
-Hi, Lee:
-> On Tue, 07 Mar 2023, ChiYuan Huang wrote:
-> 
-> > Hi, Lee:
-> >    Reply below the comments.
-> >
-> > On Sun, Mar 05, 2023 at 10:06:08AM +0000, Lee Jones wrote:
-> > > On Thu, 23 Feb 2023, ChiaEn Wu wrote:
-> > >
-> > > > From: ChiYuan Huang <cy_huang@richtek.com>
-> > > >
-> > > > The MediaTek MT6370 is a highly-integrated smart power management IC,
-> > > > which includes a single cell Li-Ion/Li-Polymer switching battery
-> > > > charger, a USB Type-C & Power Delivery (PD) controller, dual Flash
-> > > > LED current sources, a RGB LED driver, a backlight WLED driver,
-> > > > a display bias driver and a general LDO for portable devices.
-> > > >
-> > > > Add support for the MT6370 Flash LED driver. Flash LED in MT6370
-> > > > has 2 channels and support torch/strobe mode.
-> > > >
-> > > > Acked-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-> > > > Co-developed-by: Alice Chen <alice_chen@richtek.com>
-> > > > Signed-off-by: Alice Chen <alice_chen@richtek.com>
-> > > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > > > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> > > > ---
-> > > > v17
-> > > > - Update the year of Copyright from 2022 to 2023
-> > > >
-> > > > ---
-> > > >  drivers/leds/flash/Kconfig             |  13 +
-> > > >  drivers/leds/flash/Makefile            |   1 +
-> > > >  drivers/leds/flash/leds-mt6370-flash.c | 596 +++++++++++++++++++++++++++++++++
-> > > >  3 files changed, 610 insertions(+)
-> > > >  create mode 100644 drivers/leds/flash/leds-mt6370-flash.c
-> 
-> [...]
-> 
-> > > > +static int _mt6370_flash_brightness_set(struct led_classdev_flash *fl_cdev,
-> > > > +					u32 brightness)
-> > > > +{
-> > > > +	struct mt6370_led *led = to_mt6370_led(fl_cdev, flash);
-> > > > +	struct mt6370_priv *priv = led->priv;
-> > > > +	struct led_flash_setting *setting = &fl_cdev->brightness;
-> > > > +	u32 val = (brightness - setting->min) / setting->step;
-> > > > +	int ret, i;
-> > > > +
-> > > > +	if (led->led_no == MT6370_LED_JOINT) {
-> > >
-> > > What is a "JOINT"?
-> > >
-> > Since MT6370 has two flash led channels. Per channel can drive the current up to 1.5A.
-> > 'JOINT' case is used if 1.5A driving current is not enough, like as flash current 2A.
-> > They can use two channels to drive 'one' flash led by the HW application.
-> > This will make the driving current larger than the capability of one channel.
-> 
-> Is "joint" the term used in the datasheet?
+All other ACPI events that are available to userspace are on netlink alread=
+y.
+As for translation of ACPI paths. It is sort of a requirement for VMM
+to translate the PCI path from host to guest because the PCI device
+tree in the guest is totally different already. The same follows for
+ACPI paths.
+
+What would you propose instead of netlink?
+Sysfs entry for VFIO PCI device that accepts eventfd and signals the
+events via eventfd? Or moving it into ACPI layer entirely and adding
+eventfd sysfs interface for all ACPI devices?
+--
+Dominik
+
+
+
+On Wed, Mar 8, 2023 at 3:38=E2=80=AFPM Alex Williamson
+<alex.williamson@redhat.com> wrote:
 >
-Nope, this term is not clearly defined in the datasheet. but this kind of HW application is
-allowed. 
-> Please make this definition clear in the code.
-> 
-> If I'm asking, others are likely to too.
-> 
-Thanks, I'll add more comments to clearly describe what the 'JOINT' code did.
-> [...]
-> 
-> > > > +static int mt6370_init_flash_properties(struct device *dev,
-> > > > +					struct mt6370_led *led,
-> > > > +					struct fwnode_handle *fwnode)
-> > > > +{
-> > > > +	struct led_classdev_flash *flash = &led->flash;
-> > > > +	struct led_classdev *lcdev = &flash->led_cdev;
-> > > > +	struct mt6370_priv *priv = led->priv;
-> > > > +	struct led_flash_setting *s;
-> > > > +	u32 sources[MT6370_MAX_LEDS];
-> > > > +	u32 max_ua, val;
-> > > > +	int i, ret, num;
-> > > > +
-> > > > +	num = fwnode_property_count_u32(fwnode, "led-sources");
-> > > > +	if (num < 1)
-> > > > +		return dev_err_probe(dev, -EINVAL,
-> > > > +				     "Not specified or wrong number of led-sources\n");
-> > > > +
-> > > > +	ret = fwnode_property_read_u32_array(fwnode, "led-sources", sources, num);
-> > > > +	if (ret)
-> > > > +		return ret;
-> > > > +
-> > > > +	for (i = 0; i < num; i++) {
-> > > > +		if (sources[i] >= MT6370_MAX_LEDS)
-> > > > +			return -EINVAL;
-> > > > +		if (priv->leds_active & BIT(sources[i]))
-> > > > +			return -EINVAL;
-> > > > +		priv->leds_active |= BIT(sources[i]);
-> > > > +	}
-> > > > +
-> > > > +	led->led_no = num == 2 ? MT6370_LED_JOINT : sources[0];
-> > > > +
-> > > > +	max_ua = num == 2 ? MT6370_ITORCH_DOUBLE_MAX_uA : MT6370_ITORCH_MAX_uA;
-> > > > +	val = MT6370_ITORCH_MIN_uA;
+> On Wed, 8 Mar 2023 14:44:28 -0800
+> Dominik Behr <dbehr@google.com> wrote:
+>
+> > On Wed, Mar 8, 2023 at 12:06=E2=80=AFPM Alex Williamson
+> > <alex.williamson@redhat.com> wrote:
 > > >
-> > > In what scenario does this not get overwritten?
+> > > On Wed, 8 Mar 2023 10:45:51 -0800
+> > > Dominik Behr <dbehr@chromium.org> wrote:
 > > >
-> > Only if the property is missing. This will make the value keep in minimum.
-> 
-> If the property is missing, fwnode_property_read_u32() returns an errno, no?
-> 
-> If that's the case, val will be over-written in the if() clause?
-> 
-In this funciton, three properties needs to be paresed from DT. Each one need to clamp the value.
-There're two ways to write the code.
-
-[Option 1]
-ret = fwnode_property_read_u32(...)
-if (ret)
-    val = MIM_uA;
-
-val = mt6370_clamp(val, MIN, MAX);
-
-[Option 2]
-val = MIN_uA;
-if (!ret)
-    val = mt6370_clamp(val, MIN, MAX);
-
-
-From the above, the sencond one can save more LOC, no?
-But it seems the first one is more preferable by you, right?
-> --
-> Lee Jones [李琼斯]
+> > > > It is the same interface as other ACPI events like AC adapter LID e=
+tc
+> > > > are forwarded to user-space.
+> > > >  ACPI events are not particularly high frequency like interrupts.
+> > >
+> > > I'm not sure that's relevant, these interfaces don't proclaim to
+> > > provide isolation among host processes which manage behavior relative
+> > > to accessories.  These are effectively system level services.  It's o=
+nly
+> > > a very, very specialized use case that places a VMM as peers among th=
+ese
+> > > processes.  Generally we don't want to grant a VMM any privileges bey=
+ond
+> > > what it absolutely needs, so letting a VMM managing an assigned NIC
+> > > really ought not to be able to snoop host events related to anything
+> > > other than the NIC.
+> > How is that related to the fact that we are forwarding VFIO-PCI events
+> > to netlink? Kernel does not grant any privileges to VMM.
+> > There are already other ACPI events on netlink. The implementer of the
+> > VMM can choose to allow VMM to snoop them or not.
+> > In our case our VMM (crosvm) does already snoop LID, battery and AC
+> > adapter events so the guest can adjust its behavior accordingly.
+> > This change just adds another class of ACPI events that are forwarded
+> > to netlink.
+>
+> That's true, it is the VMM choice whether to allow snooping netlink,
+> but this is being proposed as THE solution to allow VMMs to receive
+> ACPI events related to vfio assigned devices.  If the solution
+> inherently requires escalating the VMM privileges to see all netlink
+> events, that's a weakness in the proposal.  As noted previously,
+> there's also no introspection here, the VMM can't know whether it
+> should listen to netlink for ACPI events or include AML related to a
+> GPE for the device.  It cannot determine if either the kernel supports
+> this feature or if the device has an ACPI companion that can generate
+> these events.
+>
+> > >
+> > > > > > > What sort of ACPI events are we expecting to see here and wha=
+t does user space do with them?
+> > > > The use we are looking at right now are D-notifier events about the
+> > > > GPU power available to mobile discrete GPUs.
+> > > > The firmware notifies the GPU driver and resource daemon to
+> > > > dynamically adjust the amount of power that can be used by the GPU.
+> > > >
+> > > > > The proposed interface really has no introspection, how does the =
+VMM
+> > > > > know which devices need ACPI tables added "upfront"?  How do thes=
+e
+> > > > > events factor into hotplug device support, where we may not be ab=
+le to
+> > > > > dynamically inject ACPI code into the VM?
+> > > >
+> > > > The VMM can examine PCI IDs and the associated firmware node of the
+> > > > PCI device to figure out what events to expect and what ACPI table =
+to
+> > > > generate to support it but that should not be necessary.
+> > >
+> > > I'm not entirely sure where your VMM is drawing the line between the =
+VM
+> > > and management tools, but I think this is another case where the
+> > > hypervisor itself should not have privileges to examine the host
+> > > firmware tables to build its own.  Something like libvirt would be
+> > > responsible for that.
+> > Yes, but that depends on the design of hypervisor and VMM and is not
+> > related to this patch.
+>
+> It is very much related to this patch if it proposes an interface to
+> solve a problem which is likely not compatible with the security model
+> of other VMMs.  We need a single solution to support all VMMs.
+>
+> > >
+> > > > A generic GPE based ACPI event forwarder as Grzegorz proposed can b=
+e
+> > > > injected at VM init time and handle any notification that comes lat=
+er,
+> > > > even from hotplug devices.
+> > >
+> > > It appears that forwarder is sending the notify to a specific ACPI
+> > > device node, so it's unclear to me how that becomes boilerplate AML
+> > > added to all VMs.  We'll need to notify different devices based on
+> > > different events, right?
+> > Valid point. The notifications have a "scope" ACPI path.
+> > In my experience these events are consumed without looking where they
+> > came from but I believe the patch can be extended to
+> > provide ACPI path, in your example "_SB.PCI0.GPP0.PEGP" instead of
+> > generic vfio_pci which VMM could use to translate an equivalent ACPI
+> > path in the guest and pass it to a generic ACPI GPE based notifier via
+> > shared memory. Grzegorz could you chime in whether that would be
+> > possible?
+>
+> So effectively we're imposing the host ACPI namespace on the VM, or at
+> least a mapping between the host and VM namespace?  The generality of
+> this is not improving.
+>
+> > > > > The acpi_bus_generate_netlink_event() below really only seems to =
+form a
+> > > > > u8 event type from the u32 event.  Is this something that could b=
+e
+> > > > > provided directly from the vfio device uAPI with an ioeventfd, th=
+us
+> > > > > providing introspection that a device supports ACPI event notific=
+ations
+> > > > > and the ability for the VMM to exclusively monitor those events, =
+and
+> > > > > only those events for the device, without additional privileges?
+> > > >
+> > > > From what I can see these events are 8 bit as they come from ACPI.
+> > > > They also do not carry any payload and it is up to the receiving
+> > > > driver to query any additional context/state from the device.
+> > > > This will work the same in the VM where driver can query the same
+> > > > information from the passed through PCI device.
+> > > > There are multiple other netflink based ACPI events forwarders whic=
+h
+> > > > do exactly the same thing for other devices like AC adapter, lid/po=
+wer
+> > > > button, ACPI thermal notifications, etc.
+> > > > They all use the same mechanism and can be received by user-space
+> > > > programs whether VMMs or others.
+> > >
+> > > But again, those other receivers are potentially system services, not
+> > > an isolated VM instance operating in a limited privilege environment.
+> > > IMO, it's very different if the host display server has access to lid
+> > > or power events than it is to allow some arbitrary VM that happens to
+> > > have an unrelated assigned device that same privilege.
+> > Therefore these VFIO related ACPI events could be received by a system
+> > service via this netlink event and selectively forwarded to VMM if
+> > such is a desire of whoever implements the userspace.
+> > This is outside the scope of this patch. In our case our VMM does
+> > receive these LID, AC or battery events.
+>
+> But this is backwards, we're presupposing the choice to use netlink
+> based on the convenience of one VMM, which potentially creates
+> obstacles, maybe even security isolation issues for other VMMs.  The
+> method of delivering ACPI events to a VMM is very much within the scope
+> of this proposal.  Thanks,
+>
+> Alex
+>
