@@ -2,86 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836CE6B1B2E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:13:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A176B1B3A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 07:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjCIGNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 01:13:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S229917AbjCIGPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 01:15:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjCIGNb (ORCPT
+        with ESMTP id S229614AbjCIGPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 01:13:31 -0500
-Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20135FEBB
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 22:13:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1678342403;
-        bh=Fbuox8QW2JDjAeHw3oLM723lCtUM2XciyiEPjQ8rQlY=;
-        h=From:To:Cc:Subject:Date;
-        b=PHISvihbJ+67p8CJxaN8drK0KLxGBXzZ6/NFaZIo61cSo6X2xjbHkqO0gVxEqoZaP
-         zNXv0gsYv7jB5NhEcPhVk0mhDckcIgOJrDcODLmbW9sTbPEYMUsPs48XIz4D1aPP7u
-         Vl1ktok9dk5uKia22SIiVdM7HgWVVNL45aa6eZgg=
-Received: from localhost.localdomain ([39.156.73.13])
-        by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
-        id 3559E6D2; Thu, 09 Mar 2023 14:13:21 +0800
-X-QQ-mid: xmsmtpt1678342401t4e66esh6
-Message-ID: <tencent_89579C514BC4020324A1A4ACA44B5B95BB07@qq.com>
-X-QQ-XMAILINFO: NkHKfw09D6j8PsoUArMVLcSk1Xpwh7+bVG1cJS9O/CbP0bdPjXNjbYkjnJdAzY
-         QK/J67TtJeqUlj25+QWrnIqBBQFUsWDi0fLvE3IIwlOqAB0ZTWUgqCSGnQ/BREhASD6COX+tIjFB
-         y5zKTHC3uy2xjp++OfFYk+Bj1ogRidwXbN0na2hDAhbVQ6SYlqVDme93YxDFcdtZMcb4eSAHzG0T
-         n+G4KJdm3XCxSZJx81TSGNN7VyquwIQOHm6mcSUUTXIqBHjfYwPzLNRcSvBSRi7ObJFkLpdhtM7e
-         09K4KKFg5mANnLfryzD8x2hCFxgRat442NbHPojnq1Yu248neb8uKQSklRs6//lhkl8yxo5yyK4u
-         OsDLKhr69JGGntOwhiTHH9gmDarTzveKwLxy08lLedDy54QFkcpBYsf7LPp07Dj7paqW/bZ1szY2
-         wZ33HbVAWXYsA7swrozYCRbuQ/7maWx8m7nFDTgRKUKBywe/mGaR7DrlqdsRpFi3PuF+ytNg/xlR
-         0Wyy/85hEcPLjLmoMHP1Jlyc5nqXXU9oiY37/RrwD+hoTvbuSE0kIQWhZ68PTJcQyhRdf6bMkGS5
-         vK4QxaZL4Te720aWDpuXDFYashXsJtCRrxspvbg9xdm2RzYIALMsshmNzWbRjkKpEuUTQe+rAJg6
-         4NIHpV4scw5nPv1fsoHPisuBzQ4Tz1A2xla0ScAJZax1ApdztwonAsglLi6WRAuCTwjOU5RBIKbx
-         Uh2bcFW7hvbZAWDTp82zcqQ+nODAvdQu7ig0dusa6TlECU2Q5t9bTtuaePXgc0oVZ1exflAYXlhM
-         oADxA0LP7AlTl13ps8bWFRAbImEeCK8GpPoqeVoWIGiemhaTjtsDQ0H0lYF2bJREymSAJmXUkQJ5
-         moIPQmh7M42E/bk2H1/b+2ePSplXd3m4ep1NtoZHtSJlT1wdHx1ebLgABPUv0tjUvJL38Huv5HXA
-         jBk8foyJ3PR1b+UnpGzhBY7rdnnLaZYmhM5K6GwAfMz4jXeokvjJFmEFj+th0VF4mvLK4fiR8=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     sgarzare@redhat.com, mst@redhat.com
-Cc:     Rong Tao <rtoax@foxmail.com>, Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org (open list:VIRTIO CORE AND
-        NET DRIVERS), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] tools/virtio: virtio_test: Fix indentation
-Date:   Thu,  9 Mar 2023 14:13:20 +0800
-X-OQ-MSGID: <20230309061320.30123-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.1
+        Thu, 9 Mar 2023 01:15:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91224C9A4E;
+        Wed,  8 Mar 2023 22:15:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB203B81DEC;
+        Thu,  9 Mar 2023 06:15:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3BC6C433EF;
+        Thu,  9 Mar 2023 06:15:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678342541;
+        bh=S5+pdx69OCp0NpUvVJzuTRg/Jd7567+ywNHesio5JsQ=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=DV8Fr2LZYj25xMrNlhFvABHT/o2gO9E+ebdYhft3HIZuCTCFNPkcRIf5F8NImnHGH
+         pp7aZmmtFnbMn1aQgWmA6QOC125bYu/HcFWrSbbyacfEnDTXAnoys6OzIuspN5imXW
+         IXHh2kNbGTc9h3btOTfad+EohSXDc9yckTTmCmNySm5OSij2dchaWVxPf8V50d7fY/
+         F412C6D4pCrHzF9KZjlQYSf6nVB3qIYmiUyVmec2MtU+guaFpKHFkHkXp9XC8se5Z+
+         PHUmm4m0l6KXGRSsIvyvCRJ04F21YqzK9nUQHZWodIxsb94pApeuaadJSwio4ByKuW
+         cG8bckkhPn2XQ==
+Message-ID: <7b269c9f-803e-69d6-9416-1620e1726e7e@kernel.org>
+Date:   Thu, 9 Mar 2023 07:15:36 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V2 6/6] arm64: tegra: Add GTE nodes
+Content-Language: en-US
+To:     Dipen Patel <dipenp@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linus.walleij@linaro.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, robh+dt@kernel.org,
+        timestamp@lists.linux.dev
+References: <20230214115553.10416-1-dipenp@nvidia.com>
+ <20230214115553.10416-7-dipenp@nvidia.com>
+ <16e3ddb4-219e-70a8-8644-c62973f84d31@kernel.org>
+ <ef58cd61-f90d-f242-9923-e9544d1aa963@nvidia.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <ef58cd61-f90d-f242-9923-e9544d1aa963@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace eight spaces with Tab.
+On 08/03/2023 21:13, Dipen Patel wrote:
+> On 2/16/23 6:18 AM, Krzysztof Kozlowski wrote:
+>> On 14/02/2023 12:55, Dipen Patel wrote:
+>>> Add GTE nodes for the tegra234. Also modify AON GTE nodes for the
+>>> tegra194 to remove nvidia,slice property and add nvidia,gpio-controller
+>>> propertyto specify AON GPIO controller node so that GTE driver can
+>>> do namespace conversion between GPIO lines provided by the gpiolib
+>>> framework and hardware timestamping engine subsystem.
+>>>
+>>> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
+>>> ---
+>>>  arch/arm64/boot/dts/nvidia/tegra194.dtsi |  3 +--
+>>>  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 19 +++++++++++++++++++
+>>>  2 files changed, 20 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/nvidia/tegra194.dtsi b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+>>> index 4afcbd60e144..4c92850b1ec4 100644
+>>> --- a/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+>>> +++ b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+>>> @@ -1363,7 +1363,6 @@
+>>>  			reg = <0x3aa0000 0x10000>;
+>>>  			interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>>>  			nvidia,int-threshold = <1>;
+>>> -			nvidia,slices = <11>;
+>>>  			#timestamp-cells = <1>;
+>>>  			status = "okay";
+>>>  		};
+>>> @@ -1586,7 +1585,7 @@
+>>>  			reg = <0xc1e0000 0x10000>;
+>>>  			interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>>>  			nvidia,int-threshold = <1>;
+>>> -			nvidia,slices = <3>;
+>>> +			nvidia,gpio-controller = <&gpio_aon>;
+>>>  			#timestamp-cells = <1>;
+>>>  			status = "okay";
+>>>  		};
+>>> diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+>>> index eaf05ee9acd1..4a87490c5fd4 100644
+>>> --- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+>>> +++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+>>> @@ -1086,6 +1086,15 @@
+>>>  			clock-names = "fuse";
+>>>  		};
+>>>  
+>>> +		hte_lic: hardware-timestamp@3aa0000 {
+>>> +			compatible = "nvidia,tegra234-gte-lic";
+>>> +			reg = <0x3aa0000 0x10000>;
+>>> +			interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>>> +			nvidia,int-threshold = <1>;
+>>> +			#timestamp-cells = <1>;
+>>> +			status = "okay";
+>>
+>> Why do you need status? It's okay by default.
+> what's harm of having to explicitly mentioned? 
 
-Signed-off-by: Rong Tao <rtoax@foxmail.com>
----
- tools/virtio/virtio_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Because useless code is not helping any review. We do not add other
+useless properties, or shall we add them?
 
-diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
-index 6e348fbdc5d8..44409a311580 100644
---- a/tools/virtio/virtio_test.c
-+++ b/tools/virtio/virtio_test.c
-@@ -134,7 +134,7 @@ static void vdev_info_init(struct vdev_info* dev, unsigned long long features)
- 	dev->buf_size = 1024;
- 	dev->buf = malloc(dev->buf_size);
- 	assert(dev->buf);
--        dev->control = open("/dev/vhost-test", O_RDWR);
-+	dev->control = open("/dev/vhost-test", O_RDWR);
- 	assert(dev->control >= 0);
- 	r = ioctl(dev->control, VHOST_SET_OWNER, NULL);
- 	assert(r >= 0);
--- 
-2.39.1
+>I can see status = okay in this dtsi file
+> for other nodes as well and was just following that.
+
+So if you see a bug somewhere, you also duplicate it in your code?
+
+
+Best regards,
+Krzysztof
 
