@@ -2,66 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622716B2CE5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:29:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A44596B2CE8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 19:30:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjCIS3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 13:29:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
+        id S230446AbjCISah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 13:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjCIS3X (ORCPT
+        with ESMTP id S229628AbjCISaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 13:29:23 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB573E9CED;
-        Thu,  9 Mar 2023 10:29:19 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id u9so10783757edd.2;
-        Thu, 09 Mar 2023 10:29:19 -0800 (PST)
+        Thu, 9 Mar 2023 13:30:35 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10F6EABBF;
+        Thu,  9 Mar 2023 10:30:33 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id j11so10756164edq.4;
+        Thu, 09 Mar 2023 10:30:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678386558;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=gmail.com; s=20210112; t=1678386632;
+        h=in-reply-to:references:subject:to:from:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GgC3HDaEpmFyb9DAxDUkQOQXcep6v1nc1CwMKps2T+o=;
-        b=bGY7djHpyJ7ZwaqMVFVM2S1b/x07wAdwn7rja1U0PCijLYqoed6L+GUz9eZ13SSViF
-         li3g4wvKzrbA82E9mHy2p+v4FOPRJVClxMNzOtSz1KlfgM7TeSgRf9UWONZQzsVpphWe
-         ILKXQ0CAB0SmchYGh1rGf/2Sl1AnMQ6UjiVIIhF88nDnMuYdahGBFchQJPANuGLV7T4l
-         BHQoRnBb0yF1TYV766Dd3dTmwvj5J4A9GUe42nHNoCnA17IuBYHB/Xy4PNvFlDzlmBVP
-         mC/yYYpobCHyQaNmQm3QdX5OOrbyawPOF28oj8b5dB9fobR++yA2S5qAMCDL7Gz1jBP6
-         lxFg==
+        bh=V4urQlGXr8lLq17WGtaGhswXCBsX5EW+r3M6mgsqTyI=;
+        b=ovjWDmv4Ap8nOOitMzjcklX07UedzlN+7WXWqXR9oikjmjmvid0fHdowugb7+bueHH
+         mD54YPL3axZRFnLh4lUi/5vc+XMAHWq3gHsfllVWH87PYOmEwG+4/BWeQ+4fGjqSwkCP
+         qYVxazf5vuXsG21NTuC9WJFOt2BgsfK9MqIwDlWdkagLBYPgvKCIMuFASgYiPnFiJ6vS
+         AIj46g46tiYOk14KkbQ3vV8LUhKPZPVy8m7SbCxJF3SwSqkGTf/f+kKpdhHYs5ZKT6Of
+         d17sM08iHg3loOe26HSjGlSOZadrO13Y8NT5VQ2brpBm6YfbeQv+jv5zYPkz0QG5TH1I
+         borg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678386558;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=1e100.net; s=20210112; t=1678386632;
+        h=in-reply-to:references:subject:to:from:message-id:date
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=GgC3HDaEpmFyb9DAxDUkQOQXcep6v1nc1CwMKps2T+o=;
-        b=lPlrgJHWD9bNKfOiMCOZt991qRlZWeRwkrav7pxeGLn6ZrGHjtdpOcYLDJv4z8f9uR
-         FHHiJGHZWoZOyOq9svA83Oc7mFuVC0Sf/SR0ql2crmrzcs86GyeSNjjYymGy760mW79S
-         OaOEwWxGRGS57faHe1LpxcagS7uci3M8RLp3NKMj5/JXE3qqlD9/CKsMI1xC2Hlmms2l
-         7emLkSA9YW06/XZQ8XxGCJS9hLYr/jqkTkC0nywfP+nRTtn/lF8I5degBF9S9zcJCnOB
-         nYbjN+G7aOjbTsdJhio3IUPJcjGeVS+ycqauQqamV0vTpXmR6zbscv351KUHMevDo1VY
-         vOWA==
-X-Gm-Message-State: AO0yUKUPOm8eFLXmLTSnp0Ol2ocYsHAKyYgVoJdYIFtqmMRCGwdk5Rho
-        CSajU+NEdhfACu2bJrAwiBg=
-X-Google-Smtp-Source: AK7set8ACfzLsWFpKM3jLkWMhsKGJ2+zm21sGRpeKiJGGPgCQXzThQL5D30LYKf74epYpgKXO4eGlg==
-X-Received: by 2002:a17:907:c689:b0:914:4164:658a with SMTP id ue9-20020a170907c68900b009144164658amr11842570ejc.42.1678386558363;
-        Thu, 09 Mar 2023 10:29:18 -0800 (PST)
+        bh=V4urQlGXr8lLq17WGtaGhswXCBsX5EW+r3M6mgsqTyI=;
+        b=gD1vsMoG7lMVNW3clcuOsALFgG6qM0Cc+p+4TXN0EkNz3BNehp5cSBIqQdmXWKNfqP
+         0tX6Nn+fWu3dCMCyE8ylofTvdM/v7BX0O35FOevoFWr9GESvA7t3eQ+pYPI8cP3EByuH
+         SgA4ZCMwFFqfukhg/p/AXYWMpkLOoLbtO47COvHK8IVib4E7cAL8lZL9hu0IMcWv+j1+
+         rkUOt/yv9smk7tUYTsYFoMu5ehY3sSoeYDeuz5rhUWca/kNcufR6YBFr12/s+sdfHbWu
+         ZkLNcw29L/oIbglCE+CwTw6GvKgrTXpi88cQ/bVlEEVgZF4lx1eTcRiUuPiSKBWsvzdP
+         JJgA==
+X-Gm-Message-State: AO0yUKWJtbVKKU/D2h0dRQ87hskOPBvTB2blCL6JHZVQMZfIXv+aZZlp
+        Nw9OhLb/ERKuXl4IvyEBjDE=
+X-Google-Smtp-Source: AK7set/CL7WxyYZfbx/czNNe8zzv7/nvtiCTsyGmkEqu68TNOIIpf/5nzg8TcPZ5HtIF31S3BeDoVg==
+X-Received: by 2002:a17:906:5ca:b0:8f6:ad32:cd51 with SMTP id t10-20020a17090605ca00b008f6ad32cd51mr26136198ejt.62.1678386632294;
+        Thu, 09 Mar 2023 10:30:32 -0800 (PST)
 Received: from localhost ([2001:b07:5d37:537d:5e25:9ef5:7977:d60c])
-        by smtp.gmail.com with ESMTPSA id h23-20020a170906719700b008c673cd9ba2sm9071713ejk.126.2023.03.09.10.29.17
+        by smtp.gmail.com with ESMTPSA id f3-20020a170906738300b008cf377e8795sm9167547ejl.199.2023.03.09.10.30.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 10:29:17 -0800 (PST)
+        Thu, 09 Mar 2023 10:30:31 -0800 (PST)
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 09 Mar 2023 19:29:17 +0100
-Message-Id: <CR22DNZPIO70.3917L1ALY2HDV@vincent-arch>
-To:     "Nick Alcock" <nick.alcock@oracle.com>, <lee@kernel.org>
-Cc:     <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 10/18] mfd: da9055: do not cite as modular
+Date:   Thu, 09 Mar 2023 19:30:30 +0100
+Message-Id: <CR22ELPAP7ZX.TVASVAQNUS6S@vincent-arch>
 From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
-References: <20230308194307.374789-1-nick.alcock@oracle.com>
- <20230308194307.374789-10-nick.alcock@oracle.com>
-In-Reply-To: <20230308194307.374789-10-nick.alcock@oracle.com>
+To:     "Zhen Lei" <thunder.leizhen@huawei.com>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        "Josh Poimboeuf" <jpoimboe@kernel.org>,
+        "Jiri Kosina" <jikos@kernel.org>,
+        "Miroslav Benes" <mbenes@suse.cz>,
+        "Petr Mladek" <pmladek@suse.com>,
+        "Joe Lawrence" <joe.lawrence@redhat.com>,
+        "Jiri Olsa" <jolsa@kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Masami Hiramatsu" <mhiramat@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH] kallsyms: Delete an unused parameter related to
+ {module_}kallsyms_on_each_symbol()
+References: <20230308073846.1882-1-thunder.leizhen@huawei.com>
+In-Reply-To: <20230308073846.1882-1-thunder.leizhen@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -72,14 +84,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This driver cannot be built as a module, so don't suggest otherwise
-> in Kconfig help.
+> The parameter 'struct module *' in the hook function associated with
+> {module_}kallsyms_on_each_symbol() is no longer used. Delete it.
 >
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Lee Jones <lee@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Lee Jones <lee@kernel.org>
-> ---
+> Suggested-by: Petr Mladek <pmladek@suse.com>
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 
 Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
