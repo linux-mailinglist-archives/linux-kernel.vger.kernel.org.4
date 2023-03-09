@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0756B2A83
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D396B2A86
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 17:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbjCIQK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 11:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47694 "EHLO
+        id S232554AbjCIQKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 11:10:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjCIQCl (ORCPT
+        with ESMTP id S229890AbjCIQCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:02:41 -0500
+        Thu, 9 Mar 2023 11:02:42 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25685F7EEF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBB2F7EF6;
         Thu,  9 Mar 2023 08:02:41 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B1E1A2216B;
-        Thu,  9 Mar 2023 16:02:39 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 25E942216C;
+        Thu,  9 Mar 2023 16:02:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678377759; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1678377760; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MbkEoqNuabDKTrYaFVmNx0VjwVOlQDJULtP3vwgd1E0=;
-        b=Cn8uGqp5M5smyRMMNCsXWHxfc/s4Z5peRZTRDoPdA2g9IOYOgWr2rzh3xx+V4sdGFgxvdv
-        8yI6Zuhl8I6oaIKM4fKLNPc94cWJ7xQDOixwbE0TlrIk0VRuDROcy0xPywTsRaGcmshX9+
-        jk/i3u0/vsw2BUXA8EkQ3hGIdJRIWKg=
+        bh=/dsBu08X7CrCBT10ixXdDAS0haFqJIXlgAumcvDvbBg=;
+        b=FsD5gBy583vIY7YvnpfIJKy9uwiqlhb9qvnQE8ps1jInPHVviMB8rEaW/PmYSER4KTOobP
+        aibSid/g9QFS3VWXaHgS4wei5jKdcFmTTU/w3OEU0btlJw0MR36KBBr+/haDB9hbHMWGFn
+        qzYafoVt13nFr3qXebOnSyeo1sv0PAg=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678377759;
+        s=susede2_ed25519; t=1678377760;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MbkEoqNuabDKTrYaFVmNx0VjwVOlQDJULtP3vwgd1E0=;
-        b=uRdHWmq96txYBHIvZDC762EjfU5koNZU/tZip6TPvrOcv/cYJbOwK+/p+a1gCcTNlvDQXG
-        PBZUyIYWK8ZAhVBw==
+        bh=/dsBu08X7CrCBT10ixXdDAS0haFqJIXlgAumcvDvbBg=;
+        b=/nqtmYu+X988xVpabmzApU1pgK/FeOvOlSfibJW+gWR53wche8LJzbjSgv8TAYn9Giu0jW
+        90PQDH5uY+rtokDQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4EADE13A73;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B5C201391B;
         Thu,  9 Mar 2023 16:02:39 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id CJ1DEh8DCmQHbgAAMHmgww
+        id CIhsKx8DCmQHbgAAMHmgww
         (envelope-from <tzimmermann@suse.de>); Thu, 09 Mar 2023 16:02:39 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     deller@gmx.de, geert+renesas@glider.be, timur@kernel.org,
@@ -60,9 +60,9 @@ To:     deller@gmx.de, geert+renesas@glider.be, timur@kernel.org,
 Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v2 087/101] fbdev/uvesafb: Duplicate video-mode option string
-Date:   Thu,  9 Mar 2023 17:01:47 +0100
-Message-Id: <20230309160201.5163-88-tzimmermann@suse.de>
+Subject: [PATCH v2 088/101] fbdev/uvesafb: Parse option string with struct option_iter
+Date:   Thu,  9 Mar 2023 17:01:48 +0100
+Message-Id: <20230309160201.5163-89-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230309160201.5163-1-tzimmermann@suse.de>
 References: <20230309160201.5163-1-tzimmermann@suse.de>
@@ -77,52 +77,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Assume that the driver does not own the option string or its substrings
-and hence duplicate the option string for the video mode. Allocate the
-copy's memory with kstrdup() and free it in the module's exit function.
+Use struct option_iter to walk over the individual options in the
+driver's option string. Replaces the hand-written strsep() loop with
+a clean interface. The helpers for struct option_iter handle empty
+option strings and empty options transparently. The struct's _init
+and _release functions duplicate and release the option string's
+memory buffer as needed.
 
-Done in preparation of switching the driver to struct option_iter and
-constifying the option string.
-
-v2:
-	* replace static memory with kstrdup()/kfree() (Geert)
+Done in preparation of constifying the option string.
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 ---
- drivers/video/fbdev/uvesafb.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/video/fbdev/uvesafb.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/video/fbdev/uvesafb.c b/drivers/video/fbdev/uvesafb.c
-index f09f483c219b..ff8f511a00c2 100644
+index ff8f511a00c2..13bd8503a06b 100644
 --- a/drivers/video/fbdev/uvesafb.c
 +++ b/drivers/video/fbdev/uvesafb.c
-@@ -56,6 +56,7 @@ static u16 maxclk;		/* maximum pixel clock */
- static u16 maxvf;		/* maximum vertical frequency */
- static u16 maxhf;		/* maximum horizontal frequency */
- static u16 vbemode;		/* force use of a specific VBE mode */
-+static char *mode_option_buf;
- static char *mode_option;
- static u8  dac_width	= 6;
+@@ -9,6 +9,7 @@
  
-@@ -1851,7 +1852,9 @@ static int uvesafb_setup(char *options)
- 		else if (!strncmp(this_opt, "vbemode:", 8))
- 			vbemode = simple_strtoul(this_opt + 8, NULL, 0);
- 		else if (this_opt[0] >= '0' && this_opt[0] <= '9') {
--			mode_option = this_opt;
-+			kfree(mode_option_buf);
-+			mode_option_buf = kstrdup(this_opt, GFP_KERNEL); // ignore errors
-+			mode_option = mode_option_buf;
- 		} else {
- 			pr_warn("unrecognized option %s\n", this_opt);
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
++#include <linux/cmdline.h>
+ #include <linux/init.h>
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
+@@ -1809,16 +1810,14 @@ static struct platform_driver uvesafb_driver = {
+ static struct platform_device *uvesafb_device;
+ 
+ #ifndef MODULE
+-static int uvesafb_setup(char *options)
++static int uvesafb_setup(const char *options)
+ {
++	struct option_iter iter;
+ 	char *this_opt;
+ 
+-	if (!options || !*options)
+-		return 0;
+-
+-	while ((this_opt = strsep(&options, ",")) != NULL) {
+-		if (!*this_opt) continue;
++	option_iter_init(&iter, options);
+ 
++	while (option_iter_next(&iter, &this_opt)) {
+ 		if (!strcmp(this_opt, "redraw"))
+ 			ypan = 0;
+ 		else if (!strcmp(this_opt, "ypan"))
+@@ -1860,6 +1859,8 @@ static int uvesafb_setup(char *options)
  		}
-@@ -1937,6 +1940,7 @@ static void uvesafb_exit(void)
- 	driver_remove_file(&uvesafb_driver.driver, &driver_attr_v86d);
- 	platform_device_unregister(uvesafb_device);
- 	platform_driver_unregister(&uvesafb_driver);
-+	kfree(mode_option_buf);
- }
+ 	}
  
- module_exit(uvesafb_exit);
++	option_iter_release(&iter);
++
+ 	if (mtrr != 3 && mtrr != 0)
+ 		pr_warn("uvesafb: mtrr should be set to 0 or 3; %d is unsupported", mtrr);
+ 
 -- 
 2.39.2
 
