@@ -2,115 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E686B2370
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 887836B236C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 12:50:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbjCILvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 06:51:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
+        id S231229AbjCILuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 06:50:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231725AbjCILva (ORCPT
+        with ESMTP id S230130AbjCILu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:51:30 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A90E775A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 03:51:22 -0800 (PST)
-Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PXSDT3BPRzfZ5S;
-        Thu,  9 Mar 2023 19:50:33 +0800 (CST)
-Received: from huawei.com (10.67.175.85) by kwepemi500009.china.huawei.com
- (7.221.188.199) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 9 Mar
- 2023 19:51:20 +0800
-From:   Xia Fukun <xiafukun@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <prajnoha@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, <xiafukun@huawei.com>
-Subject: [PATCH v3] kobject: Fix global-out-of-bounds in kobject_action_type()
-Date:   Thu, 9 Mar 2023 19:49:19 +0800
-Message-ID: <20230309114919.63973-1-xiafukun@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 9 Mar 2023 06:50:29 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429CFE6817
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 03:50:27 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id f31so1359015vsv.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 03:50:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678362626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HiYZzwXd4jtoSzThZQPKSQxGIapRPCL9zH5yq/Shf0M=;
+        b=YiRM8YJH6aJ2n64d4YL25ODZVcXkN1HF02cA2PipZrqEnc+F/wAh82TRVzHRVU4zoY
+         qsIsVorBFCAXJHDHZaBc+geUe1sgynoGRy1HCdyerXZwNALeSxOz50A1N6/UpmuyR65i
+         96NdseMM7UYh0QIe10D3Ko18A97ZNce/YBpVEBtNcKQSUmBZiXaiuwSNjyCDq4o2uyPW
+         Dd1o4PADjmdjtwI123PlGVsnWvGCTIJS9g9w5obggWc9CGwHvp3xwZk/HRmcC6o7Z1aL
+         99tFx0gXUHuUYw9WerA/cRHFxchKd7rcN+vB0OdJS9fqLO8UhhhvBcmSASL93EGPeVOx
+         MLQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678362626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HiYZzwXd4jtoSzThZQPKSQxGIapRPCL9zH5yq/Shf0M=;
+        b=uegM2Kwe6ZwzO44/fmiDtB+E6EAx+pGjIyUNsqM65uphyKcoc7zKY8XKm9Je2WBc9N
+         qP1hyg7voY+EZ4B0GLELMCrfe2mIGp74aOOHv7vThch1zY4dsmLeRt/gTkQhIRv2Jq1+
+         QD9HELctwCfrtPdoMsDjQimYC3iZkYqr/YsMmxYf8WpBMz1tbUkj3K0LcjGM6EARTcL8
+         VGN2KHd/6isxY6Xdwj35PnPech2u/klo+UqiNDkac01ImK4u7elZZfiOlqTVL6hwRyyd
+         rXHcv6uDWMd8oyVAOeeNYbIcAmVfhc6Gqt2cPGRRUYEtNUgqQhLqxYSFQgc2jdktJbgV
+         f+gg==
+X-Gm-Message-State: AO0yUKVmVy7EXR64Gos5BoBKP2Bx/fXay6+68UgA8Jfs2+n8y6nAs1Zb
+        8v83yoVQuCWge/GGO8ecTf+9FBvWx6WD6mnEY6Vr5w==
+X-Google-Smtp-Source: AK7set+ckfVi4sH4kFYU88j8MVo7KGl04SpGQdxUqBTSjr0HT2/3p81USQ4erk/mbUXzgEg5nUJTBteC6Ve1oJa3TCE=
+X-Received: by 2002:a05:6102:3e10:b0:421:c926:4b6d with SMTP id
+ j16-20020a0561023e1000b00421c9264b6dmr14291413vsv.0.1678362626175; Thu, 09
+ Mar 2023 03:50:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.85]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500009.china.huawei.com (7.221.188.199)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230308091759.112425121@linuxfoundation.org>
+In-Reply-To: <20230308091759.112425121@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 9 Mar 2023 17:20:14 +0530
+Message-ID: <CA+G9fYv=uYWAX=fCGZ7ENwAshgFUhVZi6YMJiHsqoTKJMCrLiA@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/570] 5.15.99-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following c language code can trigger KASAN's global variable
-out-of-bounds access error in kobject_action_type():
+On Wed, 8 Mar 2023 at 14:59, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.99 release.
+> There are 570 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 10 Mar 2023 09:16:12 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.99-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-int main() {
-    int fd;
-    char *filename = "/sys/block/ram12/uevent";
-    char str[86] = "offline";
-    int len = 86;
 
-    fd = open(filename, O_WRONLY);
-    if (fd == -1) {
-        printf("open");
-        exit(1);
-    }
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-    if (write(fd, str, len) == -1) {
-        printf("write");
-        exit(1);
-    }
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-    close(fd);
-    return 0;
-}
+## Build
+* kernel: 5.15.99-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 95417703d86d2be28dc9d740163b8f48b7869ca1
+* git describe: v5.15.98-572-g95417703d86d
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.98-572-g95417703d86d
 
-Function kobject_action_type() receives the input parameters buf and count,
-where count is the length of the string buf.
+## Test Regressions (compared to v5.15.98)
 
-In the use case we provided, count is 86, the count_first is 85.
-Buf points to a string with a length of 86, and its first seven
-characters are "offline".
-In line 87 of the code, kobject_actions[action] is the string "offline"
-with the length of 7,an out-of-boundary access will appear:
+## Metric Regressions (compared to v5.15.98)
 
-kobject_actions[action][85].
+## Test Fixes (compared to v5.15.98)
 
-Modify the judgment logic in line 87. If the length of the string
-kobject_actions[action] is greater than count_first(e.g. buf is "off",
-count is 3), continue the loop.
-Otherwise, the match is considered successful.
+## Metric Fixes (compared to v5.15.98)
 
-This change means that our test case will be successfully parsed as an
-offline event and no out-of-bounds access error will occur.
+## Test result summary
+total: 138674, pass: 115790, fail: 4504, skip: 18075, xfail: 305
 
-Fixes: f36776fafbaa ("kobject: support passing in variables for synthetic uevents")
-Signed-off-by: Xia Fukun <xiafukun@huawei.com>
----
-v2 -> v3:
-- only declare that it is the latest version of the patch, no change
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 115 total, 114 passed, 1 failed
+* arm64: 42 total, 40 passed, 2 failed
+* i386: 33 total, 30 passed, 3 failed
+* mips: 27 total, 26 passed, 1 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 27 total, 26 passed, 1 failed
+* riscv: 11 total, 11 passed, 0 failed
+* s390: 12 total, 11 passed, 1 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 36 total, 34 passed, 2 failed
 
-v1 -> v2:
-- modify the matching logic
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
 
- lib/kobject_uevent.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/lib/kobject_uevent.c b/lib/kobject_uevent.c
-index 7c44b7ae4c5c..474f996895c7 100644
---- a/lib/kobject_uevent.c
-+++ b/lib/kobject_uevent.c
-@@ -84,7 +84,7 @@ static int kobject_action_type(const char *buf, size_t count,
- 	for (action = 0; action < ARRAY_SIZE(kobject_actions); action++) {
- 		if (strncmp(kobject_actions[action], buf, count_first) != 0)
- 			continue;
--		if (kobject_actions[action][count_first] != '\0')
-+		if (strlen(kobject_actions[action]) > count_first)
- 			continue;
- 		if (args)
- 			*args = args_start;
--- 
-2.17.1
-
+--
+Linaro LKFT
+https://lkft.linaro.org
