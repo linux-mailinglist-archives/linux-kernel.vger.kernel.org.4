@@ -2,73 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C5A6B21DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 772EE6B21DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 11:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjCIKvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 05:51:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
+        id S230179AbjCIKwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 05:52:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjCIKvW (ORCPT
+        with ESMTP id S229613AbjCIKw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 05:51:22 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7701BE1C8D;
-        Thu,  9 Mar 2023 02:51:20 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F030320039;
-        Thu,  9 Mar 2023 10:51:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678359079; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        Thu, 9 Mar 2023 05:52:29 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC059E6FFB;
+        Thu,  9 Mar 2023 02:52:26 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1D32321E4E;
+        Thu,  9 Mar 2023 10:52:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1678359145; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5z2z1TJRrdW4HC7J8YkWQ4B4sI+z+nwQyG06Gl2UpNU=;
-        b=s6TuZFD4hUUzMvLOY0n/a3FbGguBQZrA9xzMLNkZYyabhbTdgD1fHao1uVahkZ2m3AEaxa
-        e28LW86HNtiQooegxTnT/GnfyBNlJaGuG7WE5DghorZP68g1lCBU+8iWIgJhYMbOGju+fA
-        DivY3jFcnlwgEBSQkVpPASiEmsiNDoQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678359079;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5z2z1TJRrdW4HC7J8YkWQ4B4sI+z+nwQyG06Gl2UpNU=;
-        b=OROPJXhr44+iv79vzrIuVXGiS4nuc4IpTbFyPLtrCFNleZh2uKWD8Qqu71+tucY98rhZL9
-        f/S1VATGqy0pkIBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=py3v23k5lBm2min2Hx1rcN6D3GgCinn1Kv4TN5q1Kpc=;
+        b=UTqglCapLF9xzfpE+c9cGNEhd2rsqS6MTrORlfhkGt4Q1DmM0LH6n+0qN5dZ3coU+5wSt1
+        en6rws4ouyYMHj4T1/wMU9bsBGYJyHhapZLkxaJQF1dd8tBhOY+ITcblH04gqO2ASe1UWP
+        XOJr3kpPlUuuFd+i1HRvfutamRDD3C0=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 930E313A10;
-        Thu,  9 Mar 2023 10:51:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id dhekIia6CWR9OwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Thu, 09 Mar 2023 10:51:18 +0000
-Date:   Thu, 09 Mar 2023 11:51:18 +0100
-Message-ID: <87356egpuh.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
-        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <tiwai@suse.com>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v3 01/28] xhci: Add support to allocate several interrupters
-In-Reply-To: <20230308235751.495-2-quic_wcheng@quicinc.com>
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
-        <20230308235751.495-2-quic_wcheng@quicinc.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+        by relay2.suse.de (Postfix) with ESMTPS id 2F5642C142;
+        Thu,  9 Mar 2023 10:52:21 +0000 (UTC)
+Date:   Thu, 9 Mar 2023 11:52:23 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] livepatch: Make kobj_type structures constant
+Message-ID: <ZAm6Z7hML4Pwp/Mp@alley>
+References: <20230217-kobj_type-livepatch-v1-1-06ded292e897@weissschuh.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230217-kobj_type-livepatch-v1-1-06ded292e897@weissschuh.net>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -78,33 +57,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Mar 2023 00:57:24 +0100,
-Wesley Cheng wrote:
-> +struct xhci_interrupter *
-> +xhci_create_secondary_interrupter(struct usb_hcd *hcd, int intr_num)
-> +{
-> +	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-> +	struct xhci_interrupter *ir;
-> +	unsigned int i;
-> +	unsigned int idx = 0;
-> +	unsigned long flags;
-> +
-> +	if (!xhci->interrupters || intr_num > xhci->max_interrupters)
-> +		return NULL;
-> +
-> +	spin_lock_irqsave(&xhci->lock, flags);
-....
-> +	if (idx > 0) {
-> +		ir = xhci_alloc_interrupter(xhci, idx, GFP_KERNEL);
-> +		if (!ir) {
-> +			spin_unlock_irqrestore(&xhci->lock, flags);
-> +			return NULL;
-> +		}
-> +		ir->intr_num = idx;
-> +		xhci->interrupters[idx] = ir;
-> +		spin_unlock_irqrestore(&xhci->lock, flags);
+On Fri 2023-02-17 03:14:41, Thomas Weiﬂschuh wrote:
+> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+> the driver core allows the usage of const struct kobj_type.
+> 
+> Take advantage of this to constify the structure definitions to prevent
+> modification at runtime.
+> 
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
 
-You can't use GFP_KERNEL allocation inside the spinlock.
+JFYI, the patch has been comitted into livepatching.git,
+branch for-6.4/core.
 
-
-Takashi
+Best Regards,
+Petr
