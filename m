@@ -2,156 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 851FD6B3206
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:20:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1B76B3207
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:20:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjCIXUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 18:20:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
+        id S231204AbjCIXUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 18:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbjCIXUR (ORCPT
+        with ESMTP id S229939AbjCIXUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 18:20:17 -0500
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94F6F4B67
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 15:20:15 -0800 (PST)
-Received: by mail-ua1-x933.google.com with SMTP id n4so2339059ual.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 15:20:15 -0800 (PST)
+        Thu, 9 Mar 2023 18:20:18 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F142BF4D84
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 15:20:16 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id l18so4001146qtp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 15:20:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678404015;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rnSlv/rmjMDZUxybeJVifkYNGPUHnfVxFIfeq1kf7IY=;
-        b=TQ5NV6TQGumFikTyM6kNsgCEnE/kyO78cIo3cAVUv/HKv4J7O37baiRyJHxsUo7hCw
-         tRFiaLvmu3NMfGPErd1v8EPJlT8xt578Uiir94fVnV/q/AQgDOs6eg3qWTubqy0nRaus
-         NN5eZDKE1pj9mqcod3O2Y9Z1mzdIPAFyFIV3YArBVY7x2SgJdVekt5YblIdbt5he4P9N
-         2q5he3O+/5KurruS1sk3fYNrh1NpcAmhTflSFM6WuFDgXCxoEZUJO1hRb0oJJOr+H10O
-         ugtZ/ASKtyBzsBNyMvEFytXAjXG7TbPd1yc4Sw9WF0WsFppIilsTCwFWjSCVH3vWqSye
-         0GPg==
+        d=linaro.org; s=google; t=1678404016;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aBHwsJnMX9DfsOKpSMcW/aw+nI15IPSIsttp1LlPPZM=;
+        b=yCntCUurVPIiseJiy8rX+PhlTcvOGf9eiht/GJltQEqVCASz+A7NuF4cyiMffIMAJ9
+         p1O+OanISm+azY548eAq6jZhiJWP9heb6hjZzrSPpXy98hx0yHO8tl0llaqCgfrxN0Nd
+         aIS5F6Z+CH8ps7Rliam2xZMs7IUpiRB0UUrxoqnfBvRpEgJ4p5xiDUO12d5+h/YjzmHh
+         SwPism6W6Wyje6DvDit4Q4jkrtC3LXX4JPgdWbCvs8mOy14h3mpmJ4TBEj+MN2W2rEn9
+         YZeq/9x7L/X39H7Mff7oiSqhiF/8M+qv5UpW5TB2EKlNGulDfc731vArIfg325THgkyB
+         Mg8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678404015;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678404016;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rnSlv/rmjMDZUxybeJVifkYNGPUHnfVxFIfeq1kf7IY=;
-        b=C7oZjs/l+ZuKTB3fsa9mqhuperX7+1+KkQ94P38U19HOuebijo6ogZEdFSRXXWPOzq
-         aRMYZGMYurKCao4MEtRLjdHx4As2i8fd7CczKi2cF2jREmKXdr3S03tZj6i7YgtasTpo
-         l9Kv6Wj6br6LgkhHgnf3XKnviSVg03nBk8+O3aXXaOrdz3crgxamLiCLc8hUy7/obkEJ
-         iebjK743rD7ZDnpBEJ8Wqlatjxabcuu843l1T6NwYdoTHHcEuMBD1IRqJ7GGnihWnDqU
-         +IWeVkwmhjccaTVGQ5YK9MZBXrV70XQO5QOSMKQFMM4aMzdNh/WOgwCS2WnnYE8ztffm
-         6nxA==
-X-Gm-Message-State: AO0yUKXV1RNywKek6LCpuNdpIGvYLYxLpIgkuHH70YvABQaiHQP8Lgim
-        Zu+khjLwUZpcVEOaf12RTXqVuNpw0jLUb750n0bA7g==
-X-Google-Smtp-Source: AK7set+L6zLR+gRS/iA552uIT6W/6f8DkT8CZtR7ZjTQsevZx3fGHENFeWF1CxlWZMz34NHLLJXGBQGdqI4W9iPwqfg=
-X-Received: by 2002:a9f:3001:0:b0:68b:817b:eec8 with SMTP id
- h1-20020a9f3001000000b0068b817beec8mr15421336uab.0.1678404014773; Thu, 09 Mar
- 2023 15:20:14 -0800 (PST)
+        bh=aBHwsJnMX9DfsOKpSMcW/aw+nI15IPSIsttp1LlPPZM=;
+        b=T2S1AKMR2m+78EStRewquVKcR+4gxdlSXN8PAYEjzQCQn89h6fY/oIRiEaid7yIBTp
+         9G7y6UgRhuJxRFv5WGFBjFleSmUqizAqg2xPL8OiBqL6ZM6TwnMTN3CneQZpus+/QpLw
+         FOtQUVLQQWLPJe/+x8xhDPoUyZs+GCXw6thvYGfXtsTMNHXFbpUDXGIlRJx9nHB5thUS
+         IwJuFqiVIKBFGuUkFIOaj6rcv8iqHXUKqDAiYClD5p5nDXwnpVIpY2CBMP1AEPGknjmq
+         wCnYc1JO4s3fxBhloHPprB1jekSCAToYwZJKMvUkVznsgKWy//r8lRHq+iewLDy9vapP
+         GMgA==
+X-Gm-Message-State: AO0yUKWYUbVt0AssCQ6E+WjHAnLkUUZ3hPNa3v/4mvysuP5yGncMtPqu
+        4wwBKW9EBMk09OzftYz9YmxICQ==
+X-Google-Smtp-Source: AK7set/Vxrb8t3bBGwkCLFgGGlD5FjG4dKd0pmJwhKOoKGvmXf2dR/9/N0i3vkZppfuUhwtYxy9jaA==
+X-Received: by 2002:a05:622a:40f:b0:3b3:7d5:a752 with SMTP id n15-20020a05622a040f00b003b307d5a752mr40710756qtx.50.1678404016071;
+        Thu, 09 Mar 2023 15:20:16 -0800 (PST)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id 8-20020ac84e88000000b003bfd8e2ab40sm289755qtp.16.2023.03.09.15.20.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 15:20:15 -0800 (PST)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     broonie@kernel.org
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH] regmap-irq: Drop map from handle_mask_sync() parameters
+Date:   Thu,  9 Mar 2023 18:20:09 -0500
+Message-Id: <20230309232009.2938-1-william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230309101752.2025459-1-elver@google.com> <510ecaa9-508c-4f85-b6aa-fc42d2a96254@paulmck-laptop>
-In-Reply-To: <510ecaa9-508c-4f85-b6aa-fc42d2a96254@paulmck-laptop>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 10 Mar 2023 00:19:35 +0100
-Message-ID: <CANpmjNOGbSsXLqM59HQJ04T4ueMWjQjzpt4QqyKpne=KbHWREg@mail.gmail.com>
-Subject: Re: [PATCH] kcsan: Avoid READ_ONCE() in read_instrumented_memory()
-To:     paulmck@kernel.org
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, Haibo Li <haibo.li@mediatek.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Mar 2023 at 23:08, Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Thu, Mar 09, 2023 at 11:17:52AM +0100, Marco Elver wrote:
-> > Haibo Li reported:
-> >
-> >  | Unable to handle kernel paging request at virtual address
-> >  |   ffffff802a0d8d7171
-> >  | Mem abort info:o:
-> >  |   ESR = 0x9600002121
-> >  |   EC = 0x25: DABT (current EL), IL = 32 bitsts
-> >  |   SET = 0, FnV = 0 0
-> >  |   EA = 0, S1PTW = 0 0
-> >  |   FSC = 0x21: alignment fault
-> >  | Data abort info:o:
-> >  |   ISV = 0, ISS = 0x0000002121
-> >  |   CM = 0, WnR = 0 0
-> >  | swapper pgtable: 4k pages, 39-bit VAs, pgdp=000000002835200000
-> >  | [ffffff802a0d8d71] pgd=180000005fbf9003, p4d=180000005fbf9003,
-> >  | pud=180000005fbf9003, pmd=180000005fbe8003, pte=006800002a0d8707
-> >  | Internal error: Oops: 96000021 [#1] PREEMPT SMP
-> >  | Modules linked in:
-> >  | CPU: 2 PID: 45 Comm: kworker/u8:2 Not tainted
-> >  |   5.15.78-android13-8-g63561175bbda-dirty #1
-> >  | ...
-> >  | pc : kcsan_setup_watchpoint+0x26c/0x6bc
-> >  | lr : kcsan_setup_watchpoint+0x88/0x6bc
-> >  | sp : ffffffc00ab4b7f0
-> >  | x29: ffffffc00ab4b800 x28: ffffff80294fe588 x27: 0000000000000001
-> >  | x26: 0000000000000019 x25: 0000000000000001 x24: ffffff80294fdb80
-> >  | x23: 0000000000000000 x22: ffffffc00a70fb68 x21: ffffff802a0d8d71
-> >  | x20: 0000000000000002 x19: 0000000000000000 x18: ffffffc00a9bd060
-> >  | x17: 0000000000000001 x16: 0000000000000000 x15: ffffffc00a59f000
-> >  | x14: 0000000000000001 x13: 0000000000000000 x12: ffffffc00a70faa0
-> >  | x11: 00000000aaaaaaab x10: 0000000000000054 x9 : ffffffc00839adf8
-> >  | x8 : ffffffc009b4cf00 x7 : 0000000000000000 x6 : 0000000000000007
-> >  | x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffffffc00a70fb70
-> >  | x2 : 0005ff802a0d8d71 x1 : 0000000000000000 x0 : 0000000000000000
-> >  | Call trace:
-> >  |  kcsan_setup_watchpoint+0x26c/0x6bc
-> >  |  __tsan_read2+0x1f0/0x234
-> >  |  inflate_fast+0x498/0x750
-> >  |  zlib_inflate+0x1304/0x2384
-> >  |  __gunzip+0x3a0/0x45c
-> >  |  gunzip+0x20/0x30
-> >  |  unpack_to_rootfs+0x2a8/0x3fc
-> >  |  do_populate_rootfs+0xe8/0x11c
-> >  |  async_run_entry_fn+0x58/0x1bc
-> >  |  process_one_work+0x3ec/0x738
-> >  |  worker_thread+0x4c4/0x838
-> >  |  kthread+0x20c/0x258
-> >  |  ret_from_fork+0x10/0x20
-> >  | Code: b8bfc2a8 2a0803f7 14000007 d503249f (78bfc2a8) )
-> >  | ---[ end trace 613a943cb0a572b6 ]-----
-> >
-> > The reason for this is that on certain arm64 configuration since
-> > e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire when
-> > CONFIG_LTO=y"), READ_ONCE() may be promoted to a full atomic acquire
-> > instruction which cannot be used on unaligned addresses.
-> >
-> > Fix it by avoiding READ_ONCE() in read_instrumented_memory(), and simply
-> > forcing the compiler to do the required access by casting to the
-> > appropriate volatile type. In terms of generated code this currently
-> > only affects architectures that do not use the default READ_ONCE()
-> > implementation.
-> >
-> > The only downside is that we are not guaranteed atomicity of the access
-> > itself, although on most architectures a plain load up to machine word
-> > size should still be atomic (a fact the default READ_ONCE() still relies
-> > on itself).
-> >
-> > Reported-by: Haibo Li <haibo.li@mediatek.com>
-> > Tested-by: Haibo Li <haibo.li@mediatek.com>
-> > Cc: <stable@vger.kernel.org> # 5.17+
-> > Signed-off-by: Marco Elver <elver@google.com>
->
-> Queued, thank you!
->
-> This one looks like it might want to go into v6.4 rather than later.
+Remove the map parameter from the struct regmap_irq_chip callback
+handle_mask_sync() because it can be passed via the irq_drv_data
+parameter instead. The gpio-104-dio-48e driver is the only consumer of
+this callback and is thus updated accordingly.
 
-Yes, I think that'd be appropriate - thank you!
+Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+---
+ drivers/base/regmap/regmap-irq.c |  5 ++---
+ drivers/gpio/gpio-104-dio-48e.c  | 32 +++++++++++++++++++++++---------
+ include/linux/regmap.h           |  3 +--
+ 3 files changed, 26 insertions(+), 14 deletions(-)
 
-Thanks,
--- Marco
+diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
+index f4d544ee7..ff6b585b9 100644
+--- a/drivers/base/regmap/regmap-irq.c
++++ b/drivers/base/regmap/regmap-irq.c
+@@ -116,8 +116,7 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
+ 	for (i = 0; i < d->chip->num_regs; i++) {
+ 		if (d->mask_base) {
+ 			if (d->chip->handle_mask_sync)
+-				d->chip->handle_mask_sync(d->map, i,
+-							  d->mask_buf_def[i],
++				d->chip->handle_mask_sync(i, d->mask_buf_def[i],
+ 							  d->mask_buf[i],
+ 							  d->chip->irq_drv_data);
+ 			else {
+@@ -918,7 +917,7 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
+ 
+ 		if (d->mask_base) {
+ 			if (chip->handle_mask_sync) {
+-				ret = chip->handle_mask_sync(d->map, i,
++				ret = chip->handle_mask_sync(i,
+ 							     d->mask_buf_def[i],
+ 							     d->mask_buf[i],
+ 							     chip->irq_drv_data);
+diff --git a/drivers/gpio/gpio-104-dio-48e.c b/drivers/gpio/gpio-104-dio-48e.c
+index a3846faf3..1de551677 100644
+--- a/drivers/gpio/gpio-104-dio-48e.c
++++ b/drivers/gpio/gpio-104-dio-48e.c
+@@ -99,14 +99,25 @@ static const struct regmap_irq dio48e_regmap_irqs[] = {
+ 	DIO48E_REGMAP_IRQ(0), DIO48E_REGMAP_IRQ(1),
+ };
+ 
+-static int dio48e_handle_mask_sync(struct regmap *const map, const int index,
++/**
++ * struct dio48e_gpio - GPIO device private data structure
++ * @map:	Regmap for the device
++ * @irq_mask:	Current IRQ mask state on the device
++ */
++struct dio48e_gpio {
++	struct regmap *map;
++	unsigned int irq_mask;
++};
++
++static int dio48e_handle_mask_sync(const int index,
+ 				   const unsigned int mask_buf_def,
+ 				   const unsigned int mask_buf,
+ 				   void *const irq_drv_data)
+ {
+-	unsigned int *const irq_mask = irq_drv_data;
+-	const unsigned int prev_mask = *irq_mask;
++	struct dio48e_gpio *const dio48egpio = irq_drv_data;
++	const unsigned int prev_mask = dio48egpio->irq_mask;
+ 	const unsigned int all_masked = GENMASK(1, 0);
++	struct regmap *const map = dio48egpio->map;
+ 	int err;
+ 	unsigned int val;
+ 
+@@ -115,7 +126,7 @@ static int dio48e_handle_mask_sync(struct regmap *const map, const int index,
+ 		return 0;
+ 
+ 	/* remember the current mask for the next mask sync */
+-	*irq_mask = mask_buf;
++	dio48egpio->irq_mask = mask_buf;
+ 
+ 	/* if all previously masked, enable interrupts when unmasking */
+ 	if (prev_mask == all_masked) {
+@@ -168,7 +179,7 @@ static int dio48e_probe(struct device *dev, unsigned int id)
+ 	struct regmap *map;
+ 	int err;
+ 	struct regmap_irq_chip *chip;
+-	unsigned int irq_mask;
++	struct dio48e_gpio *dio48egpio;
+ 	struct regmap_irq_chip_data *chip_data;
+ 
+ 	if (!devm_request_region(dev, base[id], DIO48E_EXTENT, name)) {
+@@ -186,12 +197,14 @@ static int dio48e_probe(struct device *dev, unsigned int id)
+ 		return dev_err_probe(dev, PTR_ERR(map),
+ 				     "Unable to initialize register map\n");
+ 
+-	chip = devm_kzalloc(dev, sizeof(*chip), GFP_KERNEL);
+-	if (!chip)
++	dio48egpio = devm_kzalloc(dev, sizeof(*dio48egpio), GFP_KERNEL);
++	if (!dio48egpio)
+ 		return -ENOMEM;
+ 
+-	chip->irq_drv_data = devm_kzalloc(dev, sizeof(irq_mask), GFP_KERNEL);
+-	if (!chip->irq_drv_data)
++	dio48egpio->map = map;
++
++	chip = devm_kzalloc(dev, sizeof(*chip), GFP_KERNEL);
++	if (!chip)
+ 		return -ENOMEM;
+ 
+ 	chip->name = name;
+@@ -206,6 +219,7 @@ static int dio48e_probe(struct device *dev, unsigned int id)
+ 	chip->irqs = dio48e_regmap_irqs;
+ 	chip->num_irqs = ARRAY_SIZE(dio48e_regmap_irqs);
+ 	chip->handle_mask_sync = dio48e_handle_mask_sync;
++	chip->irq_drv_data = dio48egpio;
+ 
+ 	/* Initialize to prevent spurious interrupts before we're ready */
+ 	err = dio48e_irq_init_hw(map);
+diff --git a/include/linux/regmap.h b/include/linux/regmap.h
+index 19d54f019..6516f975c 100644
+--- a/include/linux/regmap.h
++++ b/include/linux/regmap.h
+@@ -1649,8 +1649,7 @@ struct regmap_irq_chip {
+ 
+ 	int (*handle_pre_irq)(void *irq_drv_data);
+ 	int (*handle_post_irq)(void *irq_drv_data);
+-	int (*handle_mask_sync)(struct regmap *map, int index,
+-				unsigned int mask_buf_def,
++	int (*handle_mask_sync)(int index, unsigned int mask_buf_def,
+ 				unsigned int mask_buf, void *irq_drv_data);
+ 	int (*set_type_virt)(unsigned int **buf, unsigned int type,
+ 			     unsigned long hwirq, int reg);
+
+base-commit: 054a0da568b94f6b69ccf34b80f7c41a6623eb11
+-- 
+2.39.2
+
