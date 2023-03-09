@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0446B3201
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 851FD6B3206
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 00:20:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbjCIXSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 18:18:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
+        id S230467AbjCIXUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 18:20:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjCIXSR (ORCPT
+        with ESMTP id S230427AbjCIXUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 18:18:17 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF8E4346F;
-        Thu,  9 Mar 2023 15:18:14 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 329NI2Bb014703;
-        Thu, 9 Mar 2023 17:18:02 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678403882;
-        bh=w5g9O5yVcu5RudsvWZQ/nhMKJuII/q6Dcd9DVOzevpg=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=sW3In/TzeYU7dT52GfSZ+AW8XjRxsTuI/LSUeEpP2fGYuJHkE9TUlfFnSO1d5v6UY
-         lZsCa+vV+dI7HvsoZcq65FKbojjykKq/FT4wTSYFA81Sn0sgwuwh2qoyaHoZJuh1s5
-         mG5Gg/ucuuuwLdjJx6vkQXXhAzzmnlY5YcKcQ6bo=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 329NI2Od047698
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 9 Mar 2023 17:18:02 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 9
- Mar 2023 17:18:01 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 9 Mar 2023 17:18:01 -0600
-Received: from [10.249.48.175] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 329NI1TV014030;
-        Thu, 9 Mar 2023 17:18:01 -0600
-Message-ID: <8662e02b-9d28-8ffa-6ec2-5cc6348933fb@ti.com>
-Date:   Thu, 9 Mar 2023 17:18:01 -0600
+        Thu, 9 Mar 2023 18:20:17 -0500
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94F6F4B67
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 15:20:15 -0800 (PST)
+Received: by mail-ua1-x933.google.com with SMTP id n4so2339059ual.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 15:20:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678404015;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rnSlv/rmjMDZUxybeJVifkYNGPUHnfVxFIfeq1kf7IY=;
+        b=TQ5NV6TQGumFikTyM6kNsgCEnE/kyO78cIo3cAVUv/HKv4J7O37baiRyJHxsUo7hCw
+         tRFiaLvmu3NMfGPErd1v8EPJlT8xt578Uiir94fVnV/q/AQgDOs6eg3qWTubqy0nRaus
+         NN5eZDKE1pj9mqcod3O2Y9Z1mzdIPAFyFIV3YArBVY7x2SgJdVekt5YblIdbt5he4P9N
+         2q5he3O+/5KurruS1sk3fYNrh1NpcAmhTflSFM6WuFDgXCxoEZUJO1hRb0oJJOr+H10O
+         ugtZ/ASKtyBzsBNyMvEFytXAjXG7TbPd1yc4Sw9WF0WsFppIilsTCwFWjSCVH3vWqSye
+         0GPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678404015;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rnSlv/rmjMDZUxybeJVifkYNGPUHnfVxFIfeq1kf7IY=;
+        b=C7oZjs/l+ZuKTB3fsa9mqhuperX7+1+KkQ94P38U19HOuebijo6ogZEdFSRXXWPOzq
+         aRMYZGMYurKCao4MEtRLjdHx4As2i8fd7CczKi2cF2jREmKXdr3S03tZj6i7YgtasTpo
+         l9Kv6Wj6br6LgkhHgnf3XKnviSVg03nBk8+O3aXXaOrdz3crgxamLiCLc8hUy7/obkEJ
+         iebjK743rD7ZDnpBEJ8Wqlatjxabcuu843l1T6NwYdoTHHcEuMBD1IRqJ7GGnihWnDqU
+         +IWeVkwmhjccaTVGQ5YK9MZBXrV70XQO5QOSMKQFMM4aMzdNh/WOgwCS2WnnYE8ztffm
+         6nxA==
+X-Gm-Message-State: AO0yUKXV1RNywKek6LCpuNdpIGvYLYxLpIgkuHH70YvABQaiHQP8Lgim
+        Zu+khjLwUZpcVEOaf12RTXqVuNpw0jLUb750n0bA7g==
+X-Google-Smtp-Source: AK7set+L6zLR+gRS/iA552uIT6W/6f8DkT8CZtR7ZjTQsevZx3fGHENFeWF1CxlWZMz34NHLLJXGBQGdqI4W9iPwqfg=
+X-Received: by 2002:a9f:3001:0:b0:68b:817b:eec8 with SMTP id
+ h1-20020a9f3001000000b0068b817beec8mr15421336uab.0.1678404014773; Thu, 09 Mar
+ 2023 15:20:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 1/3] dt-bindings: remoteproc: k3-m4f: Add bindings for
- K3 AM64x SoCs
-Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Martyn Welch <martyn.welch@collabora.com>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <kernel@collabora.com>, <linux-remoteproc@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230302171450.1598576-1-martyn.welch@collabora.com>
- <20230302171450.1598576-2-martyn.welch@collabora.com>
- <20230308205833.GA1768401@p14s>
-From:   Hari Nagalla <hnagalla@ti.com>
-In-Reply-To: <20230308205833.GA1768401@p14s>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230309101752.2025459-1-elver@google.com> <510ecaa9-508c-4f85-b6aa-fc42d2a96254@paulmck-laptop>
+In-Reply-To: <510ecaa9-508c-4f85-b6aa-fc42d2a96254@paulmck-laptop>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 10 Mar 2023 00:19:35 +0100
+Message-ID: <CANpmjNOGbSsXLqM59HQJ04T4ueMWjQjzpt4QqyKpne=KbHWREg@mail.gmail.com>
+Subject: Re: [PATCH] kcsan: Avoid READ_ONCE() in read_instrumented_memory()
+To:     paulmck@kernel.org
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Haibo Li <haibo.li@mediatek.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,23 +72,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 14:58, Mathieu Poirier wrote:
->> +required:
->> +  - compatible
->> +  - reg
->> +  - reg-names
->> +  - ti,sci
->> +  - ti,sci-dev-id
->> +  - ti,sci-proc-ids
->> +  - resets
->> +  - firmware-name
->> +  - mboxes
-> The 'mboxes' property is marked as required but the description section above
-> clearly state the M4F can operate without IPC.
-> 
-Well, when the M4F is used as a safety processor it is typically booted 
-from SBL/u-boot and may isolate the MCU domain from main domain/A53 to 
-function in higher safety level. In these scenarios there is no remote 
-proc handling of M4F life cycle management (LCM) and IPC. But, on the 
-other hand, when the M4F is used as a non safety processor its LCM is 
-handled by remote proc(main domain) and mailboxes for IPC are required.
+On Thu, 9 Mar 2023 at 23:08, Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Thu, Mar 09, 2023 at 11:17:52AM +0100, Marco Elver wrote:
+> > Haibo Li reported:
+> >
+> >  | Unable to handle kernel paging request at virtual address
+> >  |   ffffff802a0d8d7171
+> >  | Mem abort info:o:
+> >  |   ESR = 0x9600002121
+> >  |   EC = 0x25: DABT (current EL), IL = 32 bitsts
+> >  |   SET = 0, FnV = 0 0
+> >  |   EA = 0, S1PTW = 0 0
+> >  |   FSC = 0x21: alignment fault
+> >  | Data abort info:o:
+> >  |   ISV = 0, ISS = 0x0000002121
+> >  |   CM = 0, WnR = 0 0
+> >  | swapper pgtable: 4k pages, 39-bit VAs, pgdp=000000002835200000
+> >  | [ffffff802a0d8d71] pgd=180000005fbf9003, p4d=180000005fbf9003,
+> >  | pud=180000005fbf9003, pmd=180000005fbe8003, pte=006800002a0d8707
+> >  | Internal error: Oops: 96000021 [#1] PREEMPT SMP
+> >  | Modules linked in:
+> >  | CPU: 2 PID: 45 Comm: kworker/u8:2 Not tainted
+> >  |   5.15.78-android13-8-g63561175bbda-dirty #1
+> >  | ...
+> >  | pc : kcsan_setup_watchpoint+0x26c/0x6bc
+> >  | lr : kcsan_setup_watchpoint+0x88/0x6bc
+> >  | sp : ffffffc00ab4b7f0
+> >  | x29: ffffffc00ab4b800 x28: ffffff80294fe588 x27: 0000000000000001
+> >  | x26: 0000000000000019 x25: 0000000000000001 x24: ffffff80294fdb80
+> >  | x23: 0000000000000000 x22: ffffffc00a70fb68 x21: ffffff802a0d8d71
+> >  | x20: 0000000000000002 x19: 0000000000000000 x18: ffffffc00a9bd060
+> >  | x17: 0000000000000001 x16: 0000000000000000 x15: ffffffc00a59f000
+> >  | x14: 0000000000000001 x13: 0000000000000000 x12: ffffffc00a70faa0
+> >  | x11: 00000000aaaaaaab x10: 0000000000000054 x9 : ffffffc00839adf8
+> >  | x8 : ffffffc009b4cf00 x7 : 0000000000000000 x6 : 0000000000000007
+> >  | x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffffffc00a70fb70
+> >  | x2 : 0005ff802a0d8d71 x1 : 0000000000000000 x0 : 0000000000000000
+> >  | Call trace:
+> >  |  kcsan_setup_watchpoint+0x26c/0x6bc
+> >  |  __tsan_read2+0x1f0/0x234
+> >  |  inflate_fast+0x498/0x750
+> >  |  zlib_inflate+0x1304/0x2384
+> >  |  __gunzip+0x3a0/0x45c
+> >  |  gunzip+0x20/0x30
+> >  |  unpack_to_rootfs+0x2a8/0x3fc
+> >  |  do_populate_rootfs+0xe8/0x11c
+> >  |  async_run_entry_fn+0x58/0x1bc
+> >  |  process_one_work+0x3ec/0x738
+> >  |  worker_thread+0x4c4/0x838
+> >  |  kthread+0x20c/0x258
+> >  |  ret_from_fork+0x10/0x20
+> >  | Code: b8bfc2a8 2a0803f7 14000007 d503249f (78bfc2a8) )
+> >  | ---[ end trace 613a943cb0a572b6 ]-----
+> >
+> > The reason for this is that on certain arm64 configuration since
+> > e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire when
+> > CONFIG_LTO=y"), READ_ONCE() may be promoted to a full atomic acquire
+> > instruction which cannot be used on unaligned addresses.
+> >
+> > Fix it by avoiding READ_ONCE() in read_instrumented_memory(), and simply
+> > forcing the compiler to do the required access by casting to the
+> > appropriate volatile type. In terms of generated code this currently
+> > only affects architectures that do not use the default READ_ONCE()
+> > implementation.
+> >
+> > The only downside is that we are not guaranteed atomicity of the access
+> > itself, although on most architectures a plain load up to machine word
+> > size should still be atomic (a fact the default READ_ONCE() still relies
+> > on itself).
+> >
+> > Reported-by: Haibo Li <haibo.li@mediatek.com>
+> > Tested-by: Haibo Li <haibo.li@mediatek.com>
+> > Cc: <stable@vger.kernel.org> # 5.17+
+> > Signed-off-by: Marco Elver <elver@google.com>
+>
+> Queued, thank you!
+>
+> This one looks like it might want to go into v6.4 rather than later.
+
+Yes, I think that'd be appropriate - thank you!
+
+Thanks,
+-- Marco
