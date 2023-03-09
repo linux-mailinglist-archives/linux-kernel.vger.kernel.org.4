@@ -2,85 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33D56B1C47
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501D76B1C51
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 08:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjCIHaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 02:30:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49718 "EHLO
+        id S230100AbjCIHa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 02:30:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjCIHaQ (ORCPT
+        with ESMTP id S229611AbjCIHaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 02:30:16 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B025FE9A
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 23:30:12 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id cw28so3340614edb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 23:30:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678347011;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4/22MdafNm4FKoxnbLfNBQXnvqpzeoVWKMXqp2Oll14=;
-        b=Vq36nEc8g7mIpo/VFbRKg5FMlaheTgvtr7tzK30IOy6RSEXsumDuSHT/6qQf210+iN
-         5LGlhkHPNjU6dC1rBfySYwcWeTPtw2qEeA8aY9bG1XRBIBnE9IjpVtxxw4LTvTUA6j+0
-         lNSJyYbVXW1JN8Ji2IGE6+7TjMHNNo2SbJcMhnEC6eabuqZO5MHCf+uYjO6vRnKQTV07
-         25JZbhRccHw5LsXotBA88AEnaN5amwV6EB8rHG5PRgbCv9jUExgGKnOyrvb+WWQAFNgS
-         7HP44UrIL6hw9EV+Qg7qKRVgBAsD1BDB6pD4Xde095n9mxAvvCDIeqSO5bQ6aZC2sUV4
-         3ecw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678347011;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4/22MdafNm4FKoxnbLfNBQXnvqpzeoVWKMXqp2Oll14=;
-        b=75+UFXV4KtcUPDKToBIFvwyz9yd+Y/yrEGcJqQL7vcEIRnW+beXO9LPScqHcK17LnD
-         e8ZziNFDLEUC23fDz3zEhty5GhIhWRyeE5mMHuPhg0WoN7P5fxT2DJuwkwCOCBr2OY7u
-         33hDuqh7aKATJPMTAPWTCCIwd1jmkKbjMRJ4o4nqZif3UrI9u//+vcZAE0gE/qiUFrPK
-         rxbCmG/jFzjWk7Db173X0DUEwVv5oKFbKiFF7Tp/Lo2aC4dpNUSS8lnfzBlp6pPI3wdH
-         WLh85rUdmLPOxZsgy7IHpngnSjOKfVrQlS9GPY1haRMs3rud8bS6abPB37uwAN3uIhhk
-         9bMQ==
-X-Gm-Message-State: AO0yUKXRqj97NsZWPzau5m44Dqn0WKpUo7FwdDRk8Q9S+aZszl+U0cXx
-        3VRFver5z9QpxWu67hx37hwb6w==
-X-Google-Smtp-Source: AK7set9Mg1SPFpN7kjqfzf5y5X29pTuyYLdiehsZW6a1rjetEIlurobM2qIZJVgSOtKscqg7Ht2yyA==
-X-Received: by 2002:a17:907:7205:b0:8b2:fa6d:45d5 with SMTP id dr5-20020a170907720500b008b2fa6d45d5mr26703620ejc.71.1678347010938;
-        Wed, 08 Mar 2023 23:30:10 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
-        by smtp.gmail.com with ESMTPSA id gq15-20020a170906e24f00b008b17b123a47sm8385818ejb.208.2023.03.08.23.30.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 23:30:10 -0800 (PST)
-Message-ID: <94ba1427-21ea-86ee-d60d-7817f8e673fa@linaro.org>
-Date:   Thu, 9 Mar 2023 08:30:09 +0100
+        Thu, 9 Mar 2023 02:30:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D83661A91;
+        Wed,  8 Mar 2023 23:30:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE253B81E92;
+        Thu,  9 Mar 2023 07:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 76B23C433D2;
+        Thu,  9 Mar 2023 07:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678347020;
+        bh=JgUaHUieKlq5j09NA5/MYf0E8p1BKJC2tOJvSLQP9zc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=a32uoB6llCfq/3LqJgnWyzcl64fzX26ZD9f1MyFDb4LFKG7/+R241ALklF3/3+iS5
+         Ch8FMs9wUcL0BWInmu93H/ohnZi/5lsqfmHRK5Ek5krOc+yVnYfhD+TQT1g1x+sNrE
+         3MuMisg4xxyYuYkURUtxEm4JIhHG6bMPcGLYurit3oN4i760ZyKWIDIG4FGpiLoxTL
+         /YQuFTBFAEiD31ZiDt4e4vcu9cSVSOZQM/sCjifI5MQoH3c4gcRsusfU4NhhE4Wm/a
+         vHUnPgulmoheQNLCzuEqS7h/xIrSHZQ8iTevj3f0ZbqybU6GS3+3ngJgiWWpikAUVf
+         ug5oFiQwdNYYQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 56542E5250A;
+        Thu,  9 Mar 2023 07:30:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 1/3] dt-bindings: watchdog: Add watchdog for StarFive
- JH7100 and JH7110
-Content-Language: en-US
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org
-References: <20230308034036.99213-1-xingyu.wu@starfivetech.com>
- <20230308034036.99213-2-xingyu.wu@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230308034036.99213-2-xingyu.wu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: dsa: mt7530: permit port 5 to work without port 6 on
+ MT7621 SoC
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167834701934.22182.717765078192352405.git-patchwork-notify@kernel.org>
+Date:   Thu, 09 Mar 2023 07:30:19 +0000
+References: <20230307155411.868573-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20230307155411.868573-1-vladimir.oltean@nxp.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, sean.wang@mediatek.com,
+        Landen.Chao@mediatek.com, dqfext@gmail.com, andrew@lunn.ch,
+        f.fainelli@gmail.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, linux@armlinux.org.uk,
+        opensource@vdorst.com, lynxis@fe80.eu, ilya.lipnitskiy@gmail.com,
+        richard@routerhints.com, frank-w@public-files.de,
+        erkin.bozoglu@xeront.com, gerg@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, arinc9.unal@gmail.com,
+        arinc.unal@arinc9.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,35 +66,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 04:40, Xingyu Wu wrote:
-> Add bindings to describe the watchdog for the StarFive JH7100/JH7110 SoC.
-> And Use JH7100 as first StarFive SoC with watchdog.
+Hello:
+
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue,  7 Mar 2023 17:54:11 +0200 you wrote:
+> The MT7530 switch from the MT7621 SoC has 2 ports which can be set up as
+> internal: port 5 and 6. Arınç reports that the GMAC1 attached to port 5
+> receives corrupted frames, unless port 6 (attached to GMAC0) has been
+> brought up by the driver. This is true regardless of whether port 5 is
+> used as a user port or as a CPU port (carrying DSA tags).
 > 
-> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-> ---
+> Offline debugging (blind for me) which began in the linked thread showed
+> experimentally that the configuration done by the driver for port 6
+> contains a step which is needed by port 5 as well - the write to
+> CORE_GSWPLL_GRP2 (note that I've no idea as to what it does, apart from
+> the comment "Set core clock into 500Mhz"). Prints put by Arınç show that
+> the reset value of CORE_GSWPLL_GRP2 is RG_GSWPLL_POSDIV_500M(1) |
+> RG_GSWPLL_FBKDIV_500M(40) (0x128), both on the MCM MT7530 from the
+> MT7621 SoC, as well as on the standalone MT7530 from MT7623NI Bananapi
+> BPI-R2. Apparently, port 5 on the standalone MT7530 can work under both
+> values of the register, while on the MT7621 SoC it cannot.
+> 
+> [...]
 
-What happened here? You wrote in changelog "Modified" but what exactly?
-How am I supposed to find it?
+Here is the summary with links:
+  - [net] net: dsa: mt7530: permit port 5 to work without port 6 on MT7621 SoC
+    https://git.kernel.org/netdev/net/c/c8b8a3c601f2
 
-Provide detailed description, since you decided to remove my tag.
-Otherwise, standard response:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-This is a friendly reminder during the review process.
-
-It looks like you received a tag and forgot to add it.
-
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However, there's no need to repost patches *only* to add the
-tags. The upstream maintainer will do that for acks received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-
-If a tag was not added on purpose, please state why and what changed.
-
-
-
-Best regards,
-Krzysztof
 
