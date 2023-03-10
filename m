@@ -2,168 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DFD6B3B48
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 929A26B3B53
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:50:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbjCJJsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:48:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
+        id S230344AbjCJJuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:50:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjCJJsc (ORCPT
+        with ESMTP id S231199AbjCJJtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:48:32 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CC565446;
-        Fri, 10 Mar 2023 01:47:58 -0800 (PST)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id D5BA385A2E;
-        Fri, 10 Mar 2023 10:47:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1678441676;
-        bh=AtAyJXZxxLAkbb+4sWsugabeLxh6plYeWu7LMmy0eP8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=K8hAI/cK3xa5dry/OinyifD99bGQUclOZ9TVe4vVTBsFt1T5JH7EsLujp+wZw3Qc3
-         zOkkysg+yqY8m5LAXUfGpdebX3/d5z+LidTnNuJgvxfm9oMP1OeRYCo5riMbg8VyiW
-         wBnz9Z4hxJkVeu9/zUgevGTLlNd/vKtx6fXCWzYUcNi0GaqaiU8dflxVMcCIrnL8EI
-         1SLrkgXfBhcAuAlgDuVoeV/GQglf/dvW3m9nKwu4k3Her3GU4jw1jg4Ejk/uohfRmW
-         Cekh4i0WWWKyzF+eJd1fPHPdiPb84WSUP3BalEj64CZE7M8QhJ9b6bar/e+yhk1U+v
-         o5bE7rT7XtfjQ==
-Date:   Fri, 10 Mar 2023 10:47:55 +0100
-From:   Lukasz Majewski <lukma@denx.de>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/7] dsa: marvell: Correct value of max_frame_size
- variable after validation
-Message-ID: <20230310104755.79b24384@wsk>
-In-Reply-To: <ZAn7vkjj0bYdZnhz@shell.armlinux.org.uk>
-References: <20230309125421.3900962-1-lukma@denx.de>
-        <20230309125421.3900962-7-lukma@denx.de>
-        <ZAnnk5MZc0w4VkDE@shell.armlinux.org.uk>
-        <20230309154350.0bdc54c8@wsk>
-        <ZAn7vkjj0bYdZnhz@shell.armlinux.org.uk>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 10 Mar 2023 04:49:36 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C54DF25F
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:49:10 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id k10so18018946edk.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:49:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678441747;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ahJSHmQLtPVdmNDDAHsnHqPzzECXMaWekgN5sUQ1o3I=;
+        b=YNysE4r2hrmA4kC733zwQhtDIqOKWmSkLHT1XqzoJrcpgnWw7g6SqD0Aw3WFUjhhiK
+         /ueCS4E4CUL9uL0Q37MII64qUfgms58a1W56OuEnDTDl2cY7KAhE25Xp7FALDilnA90V
+         C1r11RgWkCpekdOQfhE7COCaJYQROpwgLfWvlLZjFnKy4UFT5CvhsqOlaFYTZ+jTtvcI
+         O/x3mBO7J0saedWNlauBWen69jRojJ3hj1qRaRByT031hbnQe23xcIXDeCjvvSGluM6h
+         Cb1ImX287wJC2N2L9ffwg6wID6OJlOov6g70Uc+PJbvj6v7lghN7bBOSny2/+Ma5fGe3
+         LN0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678441747;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ahJSHmQLtPVdmNDDAHsnHqPzzECXMaWekgN5sUQ1o3I=;
+        b=OVYjQsuOF3il6cWpSDRe1TY4kV0zwZedCMKfvFn4y02dIUidKiXpBZrv0Uwepwkuab
+         D2Dytmni3KtcWYt7eNVxd9XmEOEo3TW9vu3BCYBGQtg7Sqxjt0461oro21auyFkOSaUz
+         CD8/spgsMpl0Fwxjy6fQGBouYn0gp6ePMlpjrUe8nzmbsBNbrDBheHS+WxnSl3AnXOCj
+         7YhzOhMY1t9Fw6c+HvQD2ej8MJSwAh3Hxx11ugWPkj2rtlY7BQTk35jjYYM0FYGIK0Q2
+         VoNcA/4nBrz/Q16+x9PS45OPCeqlIU/Ne3XT0kMkpwDmhTpAWsHCmT+NGT9B68+pNgjT
+         pM/Q==
+X-Gm-Message-State: AO0yUKUxjxfkS++hqWA2S57CenTkb/5QwXOh8SCe9VrFfZDpeuBp6Eg0
+        2WWWXGsOEhhijymHpvJFUTjwGvepvsfetWvbCxylVQ==
+X-Google-Smtp-Source: AK7set+iYCDzTb+GCZYpdHmKn2K88vNdEu4RiDNgbzG/8IT5j66eDN9fxEz66C3Esgky5rWnaHUx2A==
+X-Received: by 2002:a17:907:9611:b0:8aa:1f89:122e with SMTP id gb17-20020a170907961100b008aa1f89122emr32491450ejc.39.1678441747048;
+        Fri, 10 Mar 2023 01:49:07 -0800 (PST)
+Received: from localhost.localdomain ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id s1-20020a1709060c0100b008dd6bf721c2sm746995ejf.106.2023.03.10.01.49.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 01:49:06 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH] nvmem: core: return -ENOENT if nvmem cell is not found
+Date:   Fri, 10 Mar 2023 09:48:45 +0000
+Message-Id: <20230310094845.139400-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZHcuUdRLWXX3ZTVqfJr0udO";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ZHcuUdRLWXX3ZTVqfJr0udO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: Michael Walle <michael@walle.cc>
 
-Hi Russell,
+Prior to commit 5d8e6e6c10a3 ("nvmem: core: add an index parameter to
+the cell") of_nvmem_cell_get() would return -ENOENT if the cell wasn't
+found. Particularly, if of_property_match_string() returned -EINVAL,
+that return code was passed as the index to of_parse_phandle(), which
+then detected it as invalid and returned NULL. That led to an return
+code of -ENOENT.
 
-> On Thu, Mar 09, 2023 at 03:43:50PM +0100, Lukasz Majewski wrote:
-> > Hi Russell,
-> >=20
-> > Please correct my understanding - I do see two approaches here:
-> >=20
-> > A. In patch 1 I do set the max_frame_size values (deduced). Then I
-> > add validation function (patch 2). This function shows "BUG:...."
-> > only when we do have a mismatch. In patch 3 I do correct the
-> > max_frame_size values (according to validation function) and remove
-> > the validation function. This is how it is done in v5 and is going
-> > to be done in v6. =20
->=20
-> I don't see much point in adding the validation, then correcting the
-> values that were added in patch 1 that were identified by patch 2 in
-> patch 3 - because that means patch 1's deduction was incorrect in
-> some way.
+With the new code, the negative index will lead to an -EINVAL of
+of_parse_phandle_with_optional_args() which pass straight to the
+caller and break those who expect an -ENOENT.
 
-Yes. I do agree.
+Fix it by always returning -ENOENT.
 
->=20
-> If there is any correction to be done, then it should be:
->=20
-> patch 1 - add the max_frame_size values
-> patch 2 - add validation (which should not produce any errors)
-> patch 3 - convert to use max_frame_size, and remove validation,
-> stating that the validation had no errors
-> patch 4 (if necessary) - corrections to max_frame_size values if they
->   are actually incorrect (in other words, they were buggy before patch
->   1.)
-> patch 5 onwards - the rest of the series.
->=20
+Fixes: 5d8e6e6c10a3 ("nvmem: core: add an index parameter to the cell")
+Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Link: https://lore.kernel.org/r/2143916.GUh0CODmnK@steina-w/
+Signed-off-by: Michael Walle <michael@walle.cc>
+Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+Hi Greg, 
 
-Ok. I will restructure patches to follow above scheme.
+Could you please pick this nvmem fix for next possible rc.
+thanks for your help.
 
-> > B. Having showed the v5 in public, the validation function is known.
-> > Then I do prepare v6 with only patch 1 having correct values (from
-> > the outset) and provide in the commit message the code for
-> > validation function. Then patch 2 and 3 (validation function and
-> > the corrected values of max_frame_size) can be omitted in v6.
-> >=20
-> > For me it would be better to choose approach B. =20
->=20
-> I would suggest that is acceptable for the final round of patches, but
-> I'm wary about saying "yes" to it because... what if something changes
-> in that table between the time you've validated it, and when it
-> eventually gets accepted.
+--Srini
 
-The "peace" of changes for this code is rather slow, so the risk is
-minimal.
+ drivers/nvmem/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Moreover, next ICs added would _require_ to have the max_frame_size
-field set (the WARN_ON() clause).
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 174ef3574e07..22024b830788 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -1231,7 +1231,7 @@ struct nvmem_cell *of_nvmem_cell_get(struct device_node *np, const char *id)
+ 						  "#nvmem-cell-cells",
+ 						  index, &cell_spec);
+ 	if (ret)
+-		return ERR_PTR(ret);
++		return ERR_PTR(-ENOENT);
+ 
+ 	if (cell_spec.args_count > 1)
+ 		return ERR_PTR(-EINVAL);
+-- 
+2.25.1
 
-> Keeping the validation code means that
-> during the review of the series, and subsequent updates onto net-next
-> (which should of course include re-running the validation code) we
-> can be more certain that nothing has changed that would impact it.
->=20
-> What I worry about is if something changes, the patch adding the
-> values mis-patches (e.g. due to other changes - much of the context
-> for each hunk is quite similar) then we will have quite a problem to
-> sort it out.
->=20
-
-Ok. I hope that we will avoid this threat.
-
-
-Best regards,
-
-Lukasz Majewski
-
---
-
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/ZHcuUdRLWXX3ZTVqfJr0udO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmQK/MsACgkQAR8vZIA0
-zr3NxwgAs7xRh+00Knb97P5Wd9XHBQTDtazIpZGz1ajSPwu0nsB96aA34yZfFg+R
-fl81Jk9gflwdtGyUJNuH8nGX99jBXC5PfmGourdifsxg+3tBiNGdnpLA7qZZJahi
-ydoEv60QUMVdXaMjno/xwRwsTeujt6s43FQ2rlngS+cp76whk0Um6IQZEbAUBuKy
-Pfe3JTC/1YQIufghnbDy/uN509cJWfnIZJ/trFytk0byVIT+yQq2sNzQN/HnnD8j
-8SLYElVIo5fgMo9/QyO4/YAsT+lqtyqSKWqolJZ8HQLEryFn7aUgTgVj1gZebB68
-amJlUSuk8psGIqGr2Gq/rddCLWUSlQ==
-=lABy
------END PGP SIGNATURE-----
-
---Sig_/ZHcuUdRLWXX3ZTVqfJr0udO--
