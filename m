@@ -2,70 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A8A6B3BDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3336B3BDE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjCJKTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 05:19:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S230161AbjCJKTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 05:19:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjCJKS4 (ORCPT
+        with ESMTP id S229994AbjCJKT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 05:18:56 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E50122006
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:18:50 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PY2854VW8z4x4r;
-        Fri, 10 Mar 2023 21:18:45 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1678443525;
-        bh=jiJuyTX5wFANGcuOeY73DhON2fnne2lEj0SJrCko2lo=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=VBK1EyHgI7Ah60Dwwosee2JOBs/BGT8QYjNSoJ9mMCZpXB6cfJKi0eaKz4LhRXuRF
-         JkogByCJps4SkQWaT5Qg6PDUyGqGTCT6Im1+dTwAoS+w7FwGVIR4yG1kC/cEpFBrbA
-         RwJaYGuzEA9M2Yt3UaNK1i5UjSfkwdKJOGFVPite+pMIsJEvlGT2nYILK0XdxcSBBb
-         K0KmjyDtxEYWj4kEUbydq3tWAzrD8Q2Ud/u8Ljl3BIDnJrjURVCin9/mwRUeRi8kO1
-         V/Mv3oJT/nM6stubCmTJlFQieXkU5I3w+HLx5A6ygk2vBd9397gcQ0BLbEm1JjXU9j
-         EfYX0QZEb7XWQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH] KVM: PPC: Mark three local functions "static"
-In-Reply-To: <20230308232437.500031-1-seanjc@google.com>
-References: <20230308232437.500031-1-seanjc@google.com>
-Date:   Fri, 10 Mar 2023 21:18:42 +1100
-Message-ID: <87ttysoqnx.fsf@mpe.ellerman.id.au>
+        Fri, 10 Mar 2023 05:19:26 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94B2A56BB;
+        Fri, 10 Mar 2023 02:19:23 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32AAJI6e109458;
+        Fri, 10 Mar 2023 04:19:18 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678443558;
+        bh=pVNanGnzeyfpN747FmkvYRwS210SW/78Jb2JiH9pMHI=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=EPY8bd22ocZmqUH81dPBxnLpwxLT++DZlhSYuqjcqdsmwFL27vJgsF/W4pwuxMXbW
+         4W3gGyk2WrR1Rdcn6t2fPAcpeVb+pzwVlfTUF0kn4+KgSmMTUiDRNk8mQRZsHwU7e5
+         ZZwEEqoquAf3skUgAPBTva7iM0YnsaLSwtYZAWLI=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32AAJIiN066579
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 10 Mar 2023 04:19:18 -0600
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 10
+ Mar 2023 04:19:18 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 10 Mar 2023 04:19:18 -0600
+Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32AAJETI028433;
+        Fri, 10 Mar 2023 04:19:15 -0600
+Message-ID: <eb097dd5-8689-0598-780e-5f9a00128d8f@ti.com>
+Date:   Fri, 10 Mar 2023 15:49:13 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH 2/2] arm64: dts: ti: k3-j721e: Add overlay to enable
+ CPSW9G ports in QSGMII mode
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+References: <20230310092804.692303-1-s-vadapalli@ti.com>
+ <20230310092804.692303-3-s-vadapalli@ti.com>
+ <af686c3d-8a24-3066-ea6d-59d435c470b6@linaro.org>
+Content-Language: en-US
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <af686c3d-8a24-3066-ea6d-59d435c470b6@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
-> Tag a few functions that are local and don't have a previous prototype as
-> "static".
->
-> No functional change intended.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202303031630.ntvIuYqo-lkp@intel.com
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->
-> This was prompted by a new W=1 build warning for a commit that went in
-> through the KVM tree, but said commit has made its way to Linus, so it
-> shouldn't matter who grabs this.
+Hello Krzysztof,
 
-OK thanks. I'll take this via the powerpc tree for v6.4.
+On 10/03/23 14:59, Krzysztof Kozlowski wrote:
+> On 10/03/2023 10:28, Siddharth Vadapalli wrote:
+>> The J7 Quad Port Add-On Ethernet Card for J721E Common-Proc-Board supports
+>> QSGMII mode. Use the overlay to configure CPSW9G ports in QSGMII mode.
+>>
+>> Add support to reset the PHY from kernel by using gpio-hog and gpio-reset.
+>>
+>> Add aliases for CPSW9G ports to enable kernel to fetch MAC addresses
+>> directly from U-Boot.
+>>
+> 
+> 
+>> +&exp2 {
+>> +	qsgmii-line-hog {
+>> +		gpio-hog;
+>> +		gpios = <16 GPIO_ACTIVE_HIGH>;
+>> +		output-low;
+>> +		line-name = "qsgmii-pwrdn-line";
+>> +	};
+>> +};
+>> +
+>> +&main_pmx0 {
+>> +	mdio_pins_default: mdio_pins_default {
+> 
+> No underscores in node names. Didn't you already get such comments?
 
-cheers
+Sorry, I overlooked this. I am aware that underscores shouldn't be used. I will
+post the v2 series fixing this.
+
+Regards,
+Siddharth.
