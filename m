@@ -2,154 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9AED6B3E79
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 552246B3E83
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjCJLzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 06:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
+        id S229948AbjCJL5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:57:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjCJLzD (ORCPT
+        with ESMTP id S229522AbjCJL5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 06:55:03 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE645E4D98;
-        Fri, 10 Mar 2023 03:54:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678449271; x=1709985271;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=nIWpHw2BCcdfQcmlIB8R1kJOhrf+WWeFFtoqhQep9NA=;
-  b=TBGnQj39+bGi/lBr7d3u7e6WxWiBCqP0SWwEvfUJiGvdn+7VcWYaUZjm
-   FFwfMAUT6Na097GN4ZKFaRpKgKrovUadMy1P1rsZs9OH894DpH2Ck4QCN
-   wQ08iFEiEJQl26G9UEUVQxr27FlPpAvJgTc3l1h8cD9VUbdkhrFEgaZtv
-   UeNHl2uWfEoIg60wj/6kFoHcGOMAuTvTkCJ4MShJ4qKI2BWNl0PZ1hnM6
-   4vRSGQLO4A0hH9F0gsxukfohARJ3SweB6lnpzRJrhM3nGRLTNh/RVvrX3
-   gcTU3Ec58IQI40H9LLI62btmLYWpcIza5wwuf6xQyV3Bc3Vitb8QVXI6B
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="339075347"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="339075347"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 03:54:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="821021118"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="821021118"
-Received: from klausuhl-mobl.ger.corp.intel.com (HELO localhost) ([10.252.33.190])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 03:54:21 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Jianhua Lu <lujianhua000@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     phone-devel@vger.kernel.org, Jianhua Lu <lujianhua000@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH] drm/mipi-dsi: Add a mipi_dual_dsi_dcs_write_seq() macro
-In-Reply-To: <20230310110542.6649-1-lujianhua000@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230310110542.6649-1-lujianhua000@gmail.com>
-Date:   Fri, 10 Mar 2023 13:54:18 +0200
-Message-ID: <87mt4k95zp.fsf@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 10 Mar 2023 06:57:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28058C562E;
+        Fri, 10 Mar 2023 03:57:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C739EB821BD;
+        Fri, 10 Mar 2023 11:56:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73C45C433EF;
+        Fri, 10 Mar 2023 11:56:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678449417;
+        bh=7i/O5youjH9jNHfG2Dg9EU6CeFBIYVpumpfWkEMxXfU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=a46pcBzu9a477UOMmZuc+sSkhr6PUFGJwhE8oX4QMI/g4zvYUAbeYfBamCRRS6uGv
+         Sh93VbL1dkUoaOapB6wyhvccd8w9n4+Ouuj/VUeQtIgEdQ6Z4ZosAYcfVeau9FYEUe
+         mT1T1Ws0V3XxP/jj4VVw8ygHLIvVJceTyVKzB0gfCAjzxgO4e6o3M9H/3qD06pJQG0
+         ehsCcwMEkqMR8sXQIObj0WvlwnvHphmJsRHGOhd6ENkoEQ6II6GLRAfVOZVhhqEyeM
+         sWDEipfoaGI7d6RVEBj1sMqlLswIhXSGvgwQwQfilVq3LWQtMEuSpTSNh9ofl3/Qf2
+         P5dNa1H/+ocEQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pabMl-00Gan5-3J;
+        Fri, 10 Mar 2023 11:56:55 +0000
+Date:   Fri, 10 Mar 2023 11:56:54 +0000
+Message-ID: <86v8j8yg3d.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Lucas Tanure <lucas.tanure@collabora.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, Qu Wenruo <wqu@suse.com>,
+        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, kernel@collabora.com,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH 1/7] irqchip/gic-v3: Add a DMA Non-Coherent flag
+In-Reply-To: <CAMdYzYpL7V6udw=T7ZChTFi0xOj1tb-5CVHb84u1pL4kj3eDZA@mail.gmail.com>
+References: <20230310080518.78054-1-lucas.tanure@collabora.com>
+        <20230310080518.78054-2-lucas.tanure@collabora.com>
+        <CAMdYzYpL7V6udw=T7ZChTFi0xOj1tb-5CVHb84u1pL4kj3eDZA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pgwipeout@gmail.com, lucas.tanure@collabora.com, vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de, tglx@linutronix.de, lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com, wqu@suse.com, piotr.oniszczuk@gmail.com, kever.yang@rock-chips.com, linux-phy@lists.infradead.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, kernel@collabora.com, robin.murphy@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023, Jianhua Lu <lujianhua000@gmail.com> wrote:
-> The panels with two dsi connected (sync dual dsi mode) need to transmit
-> dcs command to the two dsi host simultaneously, let's add
-> mipi_dual_dsi_dcs_write_seq() macro for this kind of panels.
+On Fri, 10 Mar 2023 11:41:46 +0000,
+Peter Geis <pgwipeout@gmail.com> wrote:
+> 
+> On Fri, Mar 10, 2023 at 3:05 AM Lucas Tanure <lucas.tanure@collabora.com> wrote:
+> >
+> > The GIC600 integration in RK356x, used in rk3588, doesn't support
+> > any of the shareability or cacheability attributes, and requires
+> > both values to be set to 0b00 for all the ITS and Redistributor
+> > tables.
+> >
+> > This is loosely based on prior work from XiaoDong Huang and
+> > Peter Geis fixing this issue specifically for Rockchip 356x.
+> 
+> Good Morning,
+> 
+> Since the gic is using dma, would it be reasonable to have all memory
+> allocations be requested with the GFP_DMA flag? Otherwise this doesn't
+> fully solve the problem for rk356x, where only the lower 4GB range is
+> DMA capable, but this tends to get allocated in the upper 4GB on 8GB
+> boards.
 
-If we were to add a helper for this case, it should be a proper function
-and not a macro like this.
+That's an erratum. Please treat as such.
 
-We'd also need to see a user for this upstream.
-
->
-> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
-> ---
->  include/drm/drm_mipi_dsi.h | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->
-> diff --git a/include/drm/drm_mipi_dsi.h b/include/drm/drm_mipi_dsi.h
-> index c9df0407980c..d0f0f75d4d83 100644
-> --- a/include/drm/drm_mipi_dsi.h
-> +++ b/include/drm/drm_mipi_dsi.h
-> @@ -336,6 +336,21 @@ int mipi_dsi_dcs_get_display_brightness_large(struct mipi_dsi_device *dsi,
->  		}                                                          \
->  	} while (0)
->  
-> +/**
-> + * mipi_dsi_dcs_write_seq - transmit a DCS command with payload
-> + * @dsi: array of 2 DSI peripheral devices
-
-This makes the assumption the devices are stored in an array. What if
-drivers want to store them differently, for whatever reason? Maybe they
-have an array of some container structs that have the devices? Maybe
-they just have two struct mipi_dsi_device pointers?
-
-> + * @cmd: Command
-> + * @seq: buffer containing data to be transmitted
-> + */
-> +#define mipi_dual_dsi_dcs_write_seq(dsi, cmd, seq...)                   \
-> +	do {                                                             \
-> +		if (ARRAY_SIZE(dsi) > 2)                                 \
-> +			return -EINVAL;                                  \
-> +		int i;                                                   \
-
-I believe this should lead to a warning for mixing code and
-declarations.
-
-> +		for (i = 0; i < ARRAY_SIZE(dsi); i++)                    \
-> +			mipi_dsi_dcs_write_seq(dsi[i], cmd, seq);        \
-
-This ignores errors.
-
-> +	} while (0)
-> +
-
-Without an example user, I'm not yet convinced about the usefulness of
-the helper, but I'd imagine something like this would be a more generic
-approach, not enforcing the array, and handling errors properly:
-
-ssize_t mipi_dsi_dual_dcs_write(struct mipi_dsi_device *dsi0,
-                                struct mipi_dsi_device *dsi1,
-                                u8 cmd, const void *data, size_t len)
-{
-	ssize_t err = 0;
-
-	if (dsi0)
-        	err = mipi_dsi_dcs_write(dsi0, cmd, data, len);
-
-	if (dsi1 && !err)
-        	err = mipi_dsi_dcs_write(dsi1, cmd, data, len);
-
-	return err;
-}
-
-But even that begs the question where does it end? There are a lot of
-mipi_dsi_dcs_*() functions as well as mipi_dsi_generic_write(). Dual
-wrappers for all of them? :o
-
-
-BR,
-Jani.
-
-
->  /**
->   * struct mipi_dsi_driver - DSI driver
->   * @driver: device driver model driver
+	M.
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+Without deviation from the norm, progress is not possible.
