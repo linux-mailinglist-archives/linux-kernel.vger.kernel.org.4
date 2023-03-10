@@ -2,149 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E476B37C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9EA6B37D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjCJHwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 02:52:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
+        id S229758AbjCJHxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 02:53:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjCJHv7 (ORCPT
+        with ESMTP id S229751AbjCJHxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 02:51:59 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821FF4C6E3;
-        Thu,  9 Mar 2023 23:51:56 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id i28so5552138lfv.0;
-        Thu, 09 Mar 2023 23:51:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678434715;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P+Y+kKVSplNK0Q0iu8ToDogpEQGUULDqafcR05uVFhw=;
-        b=PKPmN7tigMaSTERU9kl3Nw/xNPhwNY3xRmsF2OIwXvnDcrnpthOVUzn6QfgdnFyoYa
-         kWIn7KtiyHxzNJI4tGaX255pUv+iE4BPJ58LhDDELRCXHQb7cHVfYem4XnhKK41JEKN4
-         TsvPX6ypZMETQQhqOmyL+JWnJnv6EZOlQAYPV+GdKeBCjxDKW32KwJcv9/M3gI1Ye54e
-         Mianq+tw11lZ9xA3Ac/CB8MD1R3YJMJHNPLfZXzyToJGwWpyucHUjI5648r1O8xThITj
-         CNlolzng5n/SWQNpRI/JjyJAedknADJV/Oe6DQPavBu8OouwYilP+wIK4nmHaxmzUV4M
-         +5ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678434715;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P+Y+kKVSplNK0Q0iu8ToDogpEQGUULDqafcR05uVFhw=;
-        b=gHB/ktyj3cOzGK4shiS30RI9uGiZiDak6efIczVKOtEZx8RrIeB6q8TBl1rYGI/rEW
-         B2yEybAmeOS8weE5c4iRIz2B8b923wDoxYmkqauPlT0iyTOH53EdMzLzPtyaYjtIlvSY
-         GtGugzlit8ZsUpmhDnYnjVnDBNq0LcOsYRCwwrFWiV2Eqw2cpr4mmpjASGsyLSMF1ojf
-         /exof4JvtPZjsE8sghw9b1BheTel+hQHDnYevRIyorrRMJ/jkGQrMy1+WHxgS4XiV9GP
-         Nj2vuO8xDKRG/WOwz0k1xRzjK0HpXYfz/bPl3T5KTZGjxmZmXGiWr3vSszCqFtfVHElH
-         qp+A==
-X-Gm-Message-State: AO0yUKX6abjPW8AcjNVbb+zqS/CI+8MdGmWXH7N9lTofX8nhSnOSOTYV
-        7o1vUkZiynsFOBwwDBYbiko=
-X-Google-Smtp-Source: AK7set9lFaO+GI43rwCWMX3vPETcw+/BfJYV2h4F9s49cJEVAGIPFI9IjGhH1prD6C2lwdK29zIBNQ==
-X-Received: by 2002:ac2:5dc8:0:b0:4b5:3621:7ecb with SMTP id x8-20020ac25dc8000000b004b536217ecbmr6781518lfq.63.1678434714674;
-        Thu, 09 Mar 2023 23:51:54 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id l27-20020ac2555b000000b004b5480edf67sm162066lfk.36.2023.03.09.23.51.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 23:51:54 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V3] dt-bindings: nvmem: convert base example to use "nvmem-layout" node
-Date:   Fri, 10 Mar 2023 08:51:45 +0100
-Message-Id: <20230310075145.3996-2-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230310075145.3996-1-zajec5@gmail.com>
-References: <20230310075145.3996-1-zajec5@gmail.com>
+        Fri, 10 Mar 2023 02:53:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B432A9BA;
+        Thu,  9 Mar 2023 23:53:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB74CB821CF;
+        Fri, 10 Mar 2023 07:53:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 023D7C433D2;
+        Fri, 10 Mar 2023 07:53:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678434793;
+        bh=9+QnbrppRJUwYF5GQ0ybibMT/QYcq+oKbMtLdejGYtw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bMC/euHR3lJgI/9XAsPmsikWdtsw7K6Acm68qQcRF105K4vwO660CvWNSph8rTWWM
+         908+o8hbQsIOh158ciTspUwYqA02OhIBFs/4Zn/dvwKeJsOLC96ZUwYtFdjb1aKUL7
+         jjNAfj7/L6iPoUFPvCHM2D9cQouWrHimGHkbBx5I=
+Date:   Fri, 10 Mar 2023 08:53:10 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Ye, Xiang" <xiang.ye@intel.com>
+Cc:     Oliver Neukum <oneukum@suse.com>, Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH v4 2/5] gpio: Add support for Intel LJCA USB GPIO driver
+Message-ID: <ZArh5iMkdj0L9AXZ@kroah.com>
+References: <20230309071100.2856899-1-xiang.ye@intel.com>
+ <20230309071100.2856899-3-xiang.ye@intel.com>
+ <2865f3d0-428b-0df1-fc50-f6af3cb9dac3@suse.com>
+ <ZAqyhXt9nNIE9Ej7@ye-NUC7i7DNHE>
+ <ZArYCD0r6n0sJ7LI@kroah.com>
+ <ZArem5MwWrgOY2nJ@ye-NUC7i7DNHE>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZArem5MwWrgOY2nJ@ye-NUC7i7DNHE>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On Fri, Mar 10, 2023 at 03:39:07PM +0800, Ye, Xiang wrote:
+> On Fri, Mar 10, 2023 at 08:11:04AM +0100, Greg Kroah-Hartman wrote:
+> > On Fri, Mar 10, 2023 at 01:01:11PM +0800, Ye, Xiang wrote:
+> > > On Thu, Mar 09, 2023 at 02:40:10PM +0100, Oliver Neukum wrote:
+> > > > 
+> > > > 
+> > > > On 09.03.23 08:10, Ye Xiang wrote:
+> > > > 
+> > > > > +#define LJCA_GPIO_BUF_SIZE 60
+> > > > > +struct ljca_gpio_dev {
+> > > > > +	struct platform_device *pdev;
+> > > > > +	struct gpio_chip gc;
+> > > > > +	struct ljca_gpio_info *gpio_info;
+> > > > > +	DECLARE_BITMAP(unmasked_irqs, LJCA_MAX_GPIO_NUM);
+> > > > > +	DECLARE_BITMAP(enabled_irqs, LJCA_MAX_GPIO_NUM);
+> > > > > +	DECLARE_BITMAP(reenable_irqs, LJCA_MAX_GPIO_NUM);
+> > > > > +	u8 *connect_mode;
+> > > > > +	/* mutex to protect irq bus */
+> > > > > +	struct mutex irq_lock;
+> > > > > +	struct work_struct work;
+> > > > > +	/* lock to protect package transfer to Hardware */
+> > > > > +	struct mutex trans_lock;
+> > > > > +
+> > > > > +	u8 obuf[LJCA_GPIO_BUF_SIZE];
+> > > > > +	u8 ibuf[LJCA_GPIO_BUF_SIZE];
+> > > > 
+> > > > And here we have a violation of DMA coherency rules.
+> > > > Basically you cannot embed buffers into other data structures
+> > > > if they can be subject to DMA.
+> > > But obuf and ibuf does not used to do DMA transfer here.
+> > > It is actually copied from or to ljca buffer to do URB transfer.
+> > 
+> > urb transfers _ARE_ DMA transfers.
+> > 
+> > > Should it still need to follow the DMA coherency rules?
+> > 
+> > Yes, all buffers for USB urbs are required to follow those rules.
+> But these two buffers are not used to do USB urb transfer directly.
+> For the "u8 obuf[LJCA_GPIO_BUF_SIZE]",  it will be copied to ljca buffer
+> ("header->data" as below code [1] showed) first. Then the "header" is used
+> to do the actual urb transfer.
+> 
+> And the "header" is allocated by using kmalloc. It should has met the DMA
+> coherency rules.
+> 
+> [1] """
+> struct ljca_msg *header;
+> ...
+> header = kmalloc(msg_len, GFP_KERNEL);
+> if (!header)
+> 	return -ENOMEM;
 
-With support for "fixed-layout" binding we can use now "nvmem-layout"
-even for fixed NVMEM cells. Use that in the base example as it should be
-preferred over placing cells directly in the device node.
+Ok, that's good, but why have 2 buffers for this then?
 
-New and other bindings should follow as old binding will get deprecated
-at some point.
+thanks,
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- .../devicetree/bindings/nvmem/nvmem.yaml      | 42 +++++++++++--------
- 1 file changed, 24 insertions(+), 18 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-index 732162e9d13e..c77be1c20e47 100644
---- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-@@ -67,24 +67,30 @@ examples:
- 
-           /* ... */
- 
--          /* Data cells */
--          tsens_calibration: calib@404 {
--              reg = <0x404 0x10>;
--          };
--
--          tsens_calibration_bckp: calib_bckp@504 {
--              reg = <0x504 0x11>;
--              bits = <6 128>;
--          };
--
--          pvs_version: pvs-version@6 {
--              reg = <0x6 0x2>;
--              bits = <7 2>;
--          };
--
--          speed_bin: speed-bin@c{
--              reg = <0xc 0x1>;
--              bits = <2 3>;
-+          nvmem-layout {
-+              compatible = "fixed-layout";
-+              #address-cells = <1>;
-+              #size-cells = <1>;
-+
-+              /* Data cells */
-+              tsens_calibration: calib@404 {
-+                  reg = <0x404 0x10>;
-+              };
-+
-+              tsens_calibration_bckp: calib_bckp@504 {
-+                  reg = <0x504 0x11>;
-+                  bits = <6 128>;
-+              };
-+
-+              pvs_version: pvs-version@6 {
-+                  reg = <0x6 0x2>;
-+                  bits = <7 2>;
-+              };
-+
-+              speed_bin: speed-bin@c{
-+                  reg = <0xc 0x1>;
-+                  bits = <2 3>;
-+              };
-           };
-       };
- 
--- 
-2.34.1
-
+greg k-h
