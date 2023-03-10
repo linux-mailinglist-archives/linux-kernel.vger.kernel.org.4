@@ -2,109 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 827286B3979
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B116B3962
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:01:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbjCJJCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:02:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
+        id S231440AbjCJJBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:01:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjCJJA5 (ORCPT
+        with ESMTP id S231132AbjCJJAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:00:57 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8DB10E278;
-        Fri, 10 Mar 2023 00:54:55 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PY0593rGsz9v7H9;
-        Fri, 10 Mar 2023 16:46:05 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDnbmUy8ApkK+yFAQ--.17497S5;
-        Fri, 10 Mar 2023 09:54:37 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        mic@digikod.net
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v4 3/3] security: Remove integrity from the LSM list in Kconfig
-Date:   Fri, 10 Mar 2023 09:54:01 +0100
-Message-Id: <20230310085401.1964889-4-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230310085401.1964889-1-roberto.sassu@huaweicloud.com>
-References: <20230310085401.1964889-1-roberto.sassu@huaweicloud.com>
+        Fri, 10 Mar 2023 04:00:46 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA4E10E26A
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:54:18 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id x3so17489645edb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:54:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678438457;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0G4CMlZfkEr/pUVhqqpiK868gP5MCbnttTXJO4riC/8=;
+        b=yrmRhGUK9n/vSM7XBc3U+wnQugThzSxbvwnySaViTDrKExvs1c4HFCowjA0XwEY6sj
+         gNSuFvCoGm+bRk7Ypzinz/wU6AeqmFekGl1qpWvqCbbZVrDKhw1PuiUBNe41bi/uwvVe
+         Z+IE/E30eh5wJ9JrGAsg+6qnJ5bLgntGmAQ5Kl/D8eW8c/4nSuTipaPu7p9hircNa39E
+         c9bHuzX0hV2OCZVQgM1LHAJa2t0acEavP4VoD23SVq0b7oah98F0TYdg11JHZaZ3vwpP
+         KtXz66qeb2g3uh9gVoYvMPPT6eruYLe8EzzVoCqfIGzvJyVIOIt3ktPFLbYX7ThYJjeb
+         zoRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678438457;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0G4CMlZfkEr/pUVhqqpiK868gP5MCbnttTXJO4riC/8=;
+        b=UApNXjl2h21UNYDWAfhmsFwPgOKkHRsYtJ+XeQXFF1TlL24pe3GF61tthbOece8Qp2
+         Pxp33Yo466emHOcH1bPRbGl9GuJ+GCFJhg/iwRwB4nIWXdbV3T5QA9lZJlDekUvW97cw
+         xThbapIC4AFbK+pGTExhFAimhrKAsQOqRygE8LoocM0Z3aniiAXbSm1dkgW80TvUWWBq
+         SZtG2Jf+y6NpQpaISS3Nq6pe8MeWDCtC89jUOTu4CwT/O/h1fWe0zMDH4dOyGT4gbCbn
+         9F/gMMkAtpaB2Cp0OhN5CdvqSATg09HquXFLP3EfpLHmIh5XjrQcXRD77+Uq3BNU1+Te
+         ajfQ==
+X-Gm-Message-State: AO0yUKW5CYmgjKpvi37wE+zIkbBwXSWaNnThvquK2jZRJV28d9TpAKN3
+        qo4harF33QyBNxLn3U3o8Uj7ag==
+X-Google-Smtp-Source: AK7set812Bofrp/sGeq5amwMWFXsz5YA/xM5fstbRrXekWsK6vQjpuABBLx9AIKzPFBTukuBbo+tBA==
+X-Received: by 2002:a17:906:d8c1:b0:880:3129:d84a with SMTP id re1-20020a170906d8c100b008803129d84amr24317473ejb.60.1678438457012;
+        Fri, 10 Mar 2023 00:54:17 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:2a59:841a:ebc:7974? ([2a02:810d:15c0:828:2a59:841a:ebc:7974])
+        by smtp.gmail.com with ESMTPSA id r14-20020a170906a20e00b008d7a8083dffsm679457ejy.222.2023.03.10.00.54.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 00:54:16 -0800 (PST)
+Message-ID: <499ee440-0c52-bb21-d04d-086aebc0cf4e@linaro.org>
+Date:   Fri, 10 Mar 2023 09:54:15 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwDnbmUy8ApkK+yFAQ--.17497S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFykCF13uw4rJw4xWr18Grg_yoW8Kr1fpF
-        srKay7trnrZFyF9r4DWrnxCFyxC3s5Wr98Cay3WF4DKa43Aa4qqrsrKr15CFy5Wrs7AFZ8
-        Gryagw1a93ZFgFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
-        JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-        0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-        JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwI
-        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-        6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAMBF1jj4ZsBQABsV
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 20/28] ASoC: dt-bindings: Add Q6USB backend bindings
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-21-quic_wcheng@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230308235751.495-21-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On 09/03/2023 00:57, Wesley Cheng wrote:
+> Add a dt-binding to describe the definition of enabling the Q6 USB backend
+> device for audio offloading.  The node carries information, which is passed
+> along to the QC USB SND class driver counterpart.  These parameters will be
+> utilized during QMI stream enable requests.
+> 
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+>  .../bindings/sound/qcom,q6usb-dais.yaml       | 49 +++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml b/Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml
+> new file mode 100644
+> index 000000000000..8477abc511dd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml
+> @@ -0,0 +1,49 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/qcom,q6usb-dais.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm ASoC USB backend DAI
+> +
+> +maintainers:
+> +  - Wesley Cheng <quic_wcheng@quicinc.com>
+> +
+> +description:
+> +  The Q6USB backend is a supported AFE port on the Q6DSP. This backend
+> +  driver will communicate the required settings to the QC USB SND class
 
-Remove 'integrity' from the list of LSMs in Kconfig, as it is no longer
-necessary. Since the recent change (set order to LSM_ORDER_LAST), the
-'integrity' LSM is always enabled (if selected in the kernel
-configuration).
+What does the "driver" mean? Linux driver? Then drop and focus on
+hardware/Q6DSP.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/Kconfig | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+> +  driver for properly enabling the audio stream.  Parameters defined
+> +  under this node will carry settings, which will be passed along during
+> +  the QMI stream enable request.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,q6usb-dais
 
-diff --git a/security/Kconfig b/security/Kconfig
-index e6db09a779b..1699dda6821 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -246,15 +246,17 @@ endchoice
- 
- config LSM
- 	string "Ordered list of enabled LSMs"
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFAULT_SECURITY_DAC
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
-+	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
-+	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
-+	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
-+	default "landlock,lockdown,yama,loadpin,safesetid,bpf" if DEFAULT_SECURITY_DAC
-+	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf"
- 	help
- 	  A comma-separated list of LSMs, in initialization order.
--	  Any LSMs left off this list will be ignored. This can be
--	  controlled at boot with the "lsm=" parameter.
-+	  Any LSMs left off this list, except for those with order
-+	  LSM_ORDER_FIRST and LSM_ORDER_LAST, which are always enabled
-+	  if selected in the kernel configuration, will be ignored.
-+	  This can be controlled at boot with the "lsm=" parameter.
- 
- 	  If unsure, leave this as the default.
- 
--- 
-2.25.1
+Can q6usb mean anything else? Why "-dais" suffix?
+
+> +
+> +  iommus:
+> +    maxItems: 1
+> +
+> +  "#sound-dai-cells":
+> +    const: 1
+> +
+> +  qcom,usb-audio-intr-num:
+> +    description:
+> +      Desired XHCI interrupter number to use.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+
+Why this should be configurable per board or SoC? It's the first use in
+DT and in the same time sounds generic...
+
+> +
+> +required:
+> +  - compatible
+> +  - "#sound-dai-cells"
+> +  - qcom,usb-audio-intr-num
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    dais {
+> +      compatible = "qcom,q6usb-dais";
+> +      #sound-dai-cells = <1>;
+> +      iommus = <&apps_smmu 0x180f 0x0>;
+> +      qcom,usb-audio-intr-num = <2>;
+> +    };
+
+Best regards,
+Krzysztof
 
