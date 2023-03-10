@@ -2,80 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E506A6B4DAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC4A6B4D70
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbjCJQyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 11:54:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
+        id S230305AbjCJQp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 11:45:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjCJQxl (ORCPT
+        with ESMTP id S232601AbjCJQpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:53:41 -0500
-X-Greylist: delayed 323 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Mar 2023 08:50:47 PST
-Received: from mail.antaris-organics.com (mail.antaris-organics.com [91.227.220.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0E6135976;
-        Fri, 10 Mar 2023 08:50:45 -0800 (PST)
-Received: by mail.antaris-organics.com (Postfix, from userid 200)
-        id 323EB45BD0; Fri, 10 Mar 2023 17:50:24 +0100 (CET)
-Received: by mail.antaris-organics.com (Postfix, from userid 200)
-        id 5F0B545BCF; Fri, 10 Mar 2023 17:47:32 +0100 (CET)
-Date:   Fri, 10 Mar 2023 17:42:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mareichelt.com;
-        s=202107; t=1678466539;
-        bh=rxemhKFCYeI9vDlgONo5pSH8U3Bu/Qezhd1e2LPmVWE=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=WLXfS/02mnMD+00LsQRk1PkxF5B4+kXFcoz1K0SrJhgO0T4nMi+y4paJOmN3R2Qwq
-         swGwPIdSDUGvPD8mJKvG9fLBTAskUzGTIm1Q+fP0l5UyUed6RIkFycJd6k8zQ7buIw
-         +I99QwKVi3bKI2qgDJCT9XZFvBbHBUGTD6XZFQaiySXTvzpM/T3Kdv7TZhjlMHEajO
-         jlScv8PU6n04C4AnGumD4hkXs6CgUcGI6Pt2G/rTFkcoNzSIFSF9OT6amu/TcQJOAv
-         mXIAvsmdxRwFmAufVl2TuEB1e9sk3hr9vYZoJzigMp/tMns9H1Il5O3EOMILLEx13J
-         I3qxYRFxAozCg==
-From:   Markus Reichelt <lkt+2023@mareichelt.com>
-To:     stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6.1 000/200] 6.1.17-rc1 review
-Message-ID: <20230310164218.GA2619@pc21.mareichelt.com>
-Mail-Followup-To: stable@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230310133717.050159289@linuxfoundation.org>
+        Fri, 10 Mar 2023 11:45:16 -0500
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BDB7DB6;
+        Fri, 10 Mar 2023 08:42:58 -0800 (PST)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1755e639b65so6471840fac.3;
+        Fri, 10 Mar 2023 08:42:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678466578;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B29QGOV1oU2OAPPIlwHXxzMdgo8tuidvdIqMcEjr/vw=;
+        b=BFRQ0+/nXreA7BSsEcFenRU0URS5rguQ1hSCbD6rNSJewxQTJNgUBhj52fG6Z9achO
+         LxTmwlDQ8b+eYRfDGULK1SO68dtlfjbbT7M4rAxSGT7FrX+9mOU2GTNTsrnzFtnN0p6Q
+         jdvzB2oGfqdP+zKSLeQv7YWZQgesxSLzLsbfwdOgoAQjUaJ8Vv4lxtbFgAfhfAbhi9Ir
+         4D/GQrRCf4zP7LTTGWbk68ebG7bFXMORia8UvlcvTvMTPjeVAtWnRVW11PXcjcxisVPz
+         qiHBaQORUFPdZcxUgQJEqB9MlSUYRkdq7JSyyCuz/UchbSQqVM3FPeMIn3BrZLLhUXIT
+         aw5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678466578;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B29QGOV1oU2OAPPIlwHXxzMdgo8tuidvdIqMcEjr/vw=;
+        b=urRoZ7NYQ9FnNUCYxi1X2j8emnNWhZ1Yz8YFEwSGWOMHwDoqX92To7aj0Fokz0TfhC
+         GXTgewbXqY0s0w3rx4G+SNTf5wW2fc2ESoq+S0W9iaP7J4dwxTEd+QD9ekIcpLLRZjro
+         rRQFAoGbiK713PeuTGH/9HbA72BuOEkG0Zaxtt0Fka5eE4XHip2XbYwTVXhgwg5VOriY
+         6Aqalla8bgtZxLcW64FGOOXS4RbGcxO1l6hzCazmPvSwzjdh6l0anXNADCCH4H76q7sY
+         ngZBuqZfBBWxgaU1GK/xYuoU/sp/KkJie0iM9NCrukmxPt2HrVdgOVk04XSR+0EvGucO
+         1ZfA==
+X-Gm-Message-State: AO0yUKWiLdTQzOMKe9ajIcd7d4P+xys9tzykysfISBtPNx0S4FZPxv6E
+        PINF6fEzjQA/TR74NuUAuz87Wc1QGyg=
+X-Google-Smtp-Source: AK7set/otLxjU6FVcmOy+zMvWy/+ibTNVpcRUYxVYJoAyuFjFlQnV6L7WiOdptb1sKd/Ku0lM2rP3A==
+X-Received: by 2002:a05:6870:d389:b0:176:361c:8abb with SMTP id k9-20020a056870d38900b00176361c8abbmr17102425oag.37.1678466578287;
+        Fri, 10 Mar 2023 08:42:58 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i18-20020a9d6112000000b0068bcef4f543sm239623otj.21.2023.03.10.08.42.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 08:42:58 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 10 Mar 2023 08:42:56 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     void0red <void0red@gmail.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mezin.alexander@gmail.com
+Subject: Re: [PATCH v2 1/2] hwmon: g762: add a check of devm_add_action in
+ g762_of_clock_enable
+Message-ID: <4f4b71ed-2c9c-4e87-aceb-1d2f098e0408@roeck-us.net>
+References: <42cdd5e4-c9da-b31a-0ffd-76846757645c@roeck-us.net>
+ <20230227030913.893004-1-void0red@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230310133717.050159289@linuxfoundation.org>
-Organization: still stuck in reorganization mode
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230227030913.893004-1-void0red@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-
-> This is the start of the stable review cycle for the 6.1.17 release.
-> There are 200 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Feb 27, 2023 at 11:09:12AM +0800, void0red wrote:
+> From: Kang Chen <void0red@gmail.com>
 > 
-> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
-> Anything received after that time might be too late.
+> devm_add_action may fails, check it and do the cleanup.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.17-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
+> Signed-off-by: Kang Chen <void0red@gmail.com>
+
+Applied.
+
+Thanks,
+Guenter
+
+> ---
+> v2 -> v1: split the patch
 > 
-> thanks,
+>  drivers/hwmon/g762.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-> greg k-h
-
-Hi Greg
-
-6.1.17-rc1
-
-compiles, boots and runs here on x86_64
-(AMD Ryzen 5 PRO 4650G, Slackware64-15.0)
-
-Tested-by: Markus Reichelt <lkt+2023@mareichelt.com>
+> diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
+> index 64a0599b2..e2c3c34f0 100644
+> --- a/drivers/hwmon/g762.c
+> +++ b/drivers/hwmon/g762.c
+> @@ -620,7 +620,12 @@ static int g762_of_clock_enable(struct i2c_client *client)
+>  	data = i2c_get_clientdata(client);
+>  	data->clk = clk;
+>  
+> -	devm_add_action(&client->dev, g762_of_clock_disable, data);
+> +	ret = devm_add_action(&client->dev, g762_of_clock_disable, data);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to add disable clock action\n");
+> +		goto clk_unprep;
+> +	}
+> +
+>  	return 0;
+>  
+>   clk_unprep:
