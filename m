@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DBE6B3D27
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04DD76B3D37
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjCJLDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 06:03:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
+        id S229995AbjCJLFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:05:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjCJLDu (ORCPT
+        with ESMTP id S229598AbjCJLFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 06:03:50 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC81C97C8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:03:49 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso3173702wmo.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:03:48 -0800 (PST)
+        Fri, 10 Mar 2023 06:05:52 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04B0DB6FD;
+        Fri, 10 Mar 2023 03:05:51 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id a7so3350465pfx.10;
+        Fri, 10 Mar 2023 03:05:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678446227;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f2cqaQ7P3+QlFidPWZAuEu2duN2TwjDZBG31X7oHFQk=;
-        b=pXW/fXq1BSv1IPdAh0bFQhD5mDGZW4TKqVFC7WBT4PG+9tpctEcpKkMtEzEXovXcbW
-         b2NA7ywFBB3/PR4SineOULUiVDAoZ6PMUYM23RuHN9DVWAApvqttgaV3KQI/ruILANSB
-         V0CA8pJ1fAIHS+tQmWgy+/uRBKY1dRdA+saFYqpZa4dtYXkUkarkcClKwoF5IPohwM0b
-         62hgP1Oc0CAwxdKakHjx8PmLsgen8XdUumBT1bak1t78tQtuesCrV5Ab7ZG4lE2fukZm
-         qcWdWXoL3yTu0BujG5pNCqro5Dn2RL07aC/hU10qUJGSak/KT+TjAu44XEK4PaafRw6i
-         AlxA==
+        d=gmail.com; s=20210112; t=1678446351;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mGDXehSv6v2/D0JVf9XtETXZgmT2wS6LdL23tIL4g10=;
+        b=ge7D1BbJ4Alm9bFtz18cnSDZjuLOmJjClVb4OQIEIZvKSELkBpUdP6juxrj5O6os2H
+         nAnjjZGuWn4/iw1eb9hBi6I62RapyKOq45rrwmydepWzKiw83ltKiPXl+VRArXzgcl9I
+         6HsLXRa+HMrCSFwSI54Uh9O7kuH3nYPC1gJoPrcxZIgQb7f4fkBvNKMbYuBfpOrCeTBi
+         MAeQ3eNif4CceQr71Q9JPapootB0ACJ/LeB2rd2IjeRW2Nuc1fB4JrpvinElR+lu2aeX
+         WWOFMZvEPF836T0YEcwt7W9wycvOMKgRuDulX5GQbsVzhyj+ANTl6PaSI7l2beWfJIUX
+         BnmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678446227;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f2cqaQ7P3+QlFidPWZAuEu2duN2TwjDZBG31X7oHFQk=;
-        b=fiBxqOm73l7bYbe9ajIyZrRvQVKmpg4/g+fjYQYCd+/ZdbiZQZ2bsNBN0Q5QXEXC+3
-         ojAfiH6wtL8ySrr48qpPqpWdSkAZVrqXsP1BxAK1EsyVK1x5ALdqIGP12NG3mSj8zYlZ
-         1DDJP/+EMlRrzg7BNQmJ6CFpW6otcyy6L8r6WTfaL9RoE6t06t26sGkIOXegelw5W2XH
-         J/zT1j4G54qd7Czi+LuD1b0N8qPnVscjZjwvD4zNg7pcSD2apIUWIOsKbfumd1upW5In
-         LTCAD23/1OFu2LBJfTAmqhqsHQadTORnePxHnwVKvDyeZr5Pd2d4BljW8FuO7rqa1JEH
-         EsPA==
-X-Gm-Message-State: AO0yUKVelAdHV6KThwTFaWIq6umSpCqLmvCiJ34QA6eAqnm5vxMrPaLn
-        ZOdrtkUQbUpREJyDS9msZTYh1g==
-X-Google-Smtp-Source: AK7set9MxonTrQIssC7Z8UMeHgkpnv2EPMV7DEIuDlDQUmWtedQcdBRMlZISj50c2oYgxOBjDojdNA==
-X-Received: by 2002:a05:600c:4450:b0:3eb:36fa:b791 with SMTP id v16-20020a05600c445000b003eb36fab791mr2152882wmn.31.1678446227516;
-        Fri, 10 Mar 2023 03:03:47 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id d20-20020a1c7314000000b003e1202744f2sm2582484wmb.31.2023.03.10.03.03.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 03:03:46 -0800 (PST)
-Message-ID: <54e7ee75-6035-c2e9-fb8b-fe96adbb571a@linaro.org>
-Date:   Fri, 10 Mar 2023 11:03:45 +0000
+        d=1e100.net; s=20210112; t=1678446351;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mGDXehSv6v2/D0JVf9XtETXZgmT2wS6LdL23tIL4g10=;
+        b=qDjk7VSEUazz7PbF0/0PI/6Rm4A4C/3SCUT0NFR/AdVHx1vRLKqmdGfibIFVd32qic
+         oKdmSZKatdBykE61CHNjSwf3uldKKsprX6Ixyt4uHCvdVWHS5jh/MOgZU/CCCeeDEKB3
+         X5oM6XmLsj8IGBnUFhT/x1945a4+xc/hDu2VIlGL/UwRFstf2WT+p3W8ACV+dok7XzBa
+         rE/KLyKmzFhPL/dqKiXFM9t5cCMYMdFtMy6jwm4sdLlLInodKxS+2vEq5IqcPm1NFoOE
+         xuKdhtXcN/niVXSZIxnd0eGuCNvft85ig540Q9fd5CuzVVSuIR5PvAKBPcNJzLZSN8Ox
+         KGWA==
+X-Gm-Message-State: AO0yUKXgtzUa+BNx+MdIhj30NZ3I0R/FRXdJJuXaeiatjyyZ2ZeVKY04
+        OWCNYIO5JPsdRYw4fncDuazH5Y0jGnA=
+X-Google-Smtp-Source: AK7set80h3e9ZU13GZnCB2/z6kk4c+Jx02r0J4nPo1t+JZz1/n6ZHQufX+AkCBRe8Lk+QproaTFffA==
+X-Received: by 2002:aa7:940b:0:b0:5a8:b705:4dd3 with SMTP id x11-20020aa7940b000000b005a8b7054dd3mr21395673pfo.13.1678446351208;
+        Fri, 10 Mar 2023 03:05:51 -0800 (PST)
+Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id h12-20020a62b40c000000b005a8b4dcd213sm1170602pfn.78.2023.03.10.03.05.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 03:05:50 -0800 (PST)
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jianhua Lu <lujianhua000@gmail.com>
+Subject: [PATCH] drm/mipi-dsi: Add a mipi_dual_dsi_dcs_write_seq() macro
+Date:   Fri, 10 Mar 2023 19:05:42 +0800
+Message-Id: <20230310110542.6649-1-lujianhua000@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 17/20] nvmem: layouts: sl28vpd: Add new layout driver
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Walle <michael@walle.cc>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org
-References: <20230308153200.682248-1-miquel.raynal@bootlin.com>
- <20230308153200.682248-18-miquel.raynal@bootlin.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230308153200.682248-18-miquel.raynal@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,28 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The panels with two dsi connected (sync dual dsi mode) need to transmit
+dcs command to the two dsi host simultaneously, let's add
+mipi_dual_dsi_dcs_write_seq() macro for this kind of panels.
 
+Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+---
+ include/drm/drm_mipi_dsi.h | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-On 08/03/2023 15:31, Miquel Raynal wrote:
-> +
-> +static int __init sl28vpd_init(void)
-> +{
-> +	return nvmem_layout_register(&sl28vpd_layout);
-> +}
-> +
-> +static void __exit sl28vpd_exit(void)
-> +{
-> +	nvmem_layout_unregister(&sl28vpd_layout);
-> +}
-> +
-> +module_init(sl28vpd_init);
-> +module_exit(sl28vpd_exit);
-Looking at this pattern in two drivers, we could come up with some 
-helper macro like.
+diff --git a/include/drm/drm_mipi_dsi.h b/include/drm/drm_mipi_dsi.h
+index c9df0407980c..d0f0f75d4d83 100644
+--- a/include/drm/drm_mipi_dsi.h
++++ b/include/drm/drm_mipi_dsi.h
+@@ -336,6 +336,21 @@ int mipi_dsi_dcs_get_display_brightness_large(struct mipi_dsi_device *dsi,
+ 		}                                                          \
+ 	} while (0)
+ 
++/**
++ * mipi_dsi_dcs_write_seq - transmit a DCS command with payload
++ * @dsi: array of 2 DSI peripheral devices
++ * @cmd: Command
++ * @seq: buffer containing data to be transmitted
++ */
++#define mipi_dual_dsi_dcs_write_seq(dsi, cmd, seq...)                   \
++	do {                                                             \
++		if (ARRAY_SIZE(dsi) > 2)                                 \
++			return -EINVAL;                                  \
++		int i;                                                   \
++		for (i = 0; i < ARRAY_SIZE(dsi); i++)                    \
++			mipi_dsi_dcs_write_seq(dsi[i], cmd, seq);        \
++	} while (0)
++
+ /**
+  * struct mipi_dsi_driver - DSI driver
+  * @driver: device driver model driver
+-- 
+2.39.2
 
-#define module_nvmem_layout_driver(__layout_driver) \
-         module_driver(__layout_driver, nvmem_layout_register, \
-                         nvmem_layout_unregister)
-
-
---srini
