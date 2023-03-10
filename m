@@ -2,106 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FA56B4974
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C16F66B49C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233965AbjCJPMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:12:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
+        id S234074AbjCJPPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:15:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbjCJPMf (ORCPT
+        with ESMTP id S234151AbjCJPPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:12:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4AD123DCC;
-        Fri, 10 Mar 2023 07:04:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57D3061A4E;
-        Fri, 10 Mar 2023 15:04:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D66EC4339E;
-        Fri, 10 Mar 2023 15:04:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678460645;
-        bh=mqk0HwoIiz3oQZAzA3nO4eAGQCmcs8r7gMDQJtl6vC8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A1grifkb0unP7UXl7M6IKeC1E+2Lf/xVmtTNrgSaYdOEphZMzj5RgyCPm2lXEiglt
-         cZmgyPLrd4yEN2jb6MkbVeGg1n+iRsx5FYN6WR2IJIcYDpbh1Yvy63nJ36A3YtDwOZ
-         XzEJJ8lEIGDZxX66/mSI0cst4mAdkxLMyo8cRNPHbyo1CxK7hWJL4KUMchIJtCv6jC
-         avIGlHd/mWNDP76esfh2ec5UX7h9gSyhRvgAT3x1JdClX7RO9i/CkFnb718l7SS0Gl
-         pSDdXGmXC5jltVjj/p8OKC+dCQKns1dk8byzIaSut4SHzqeA6IRy7BTH3alYOd0D1t
-         T5orV4yzAzf8A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 6750E4049F; Fri, 10 Mar 2023 12:04:03 -0300 (-03)
-Date:   Fri, 10 Mar 2023 12:04:03 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Song Liu <song@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [RFC/PATCHSET 0/9] perf record: Implement BPF sample filter (v4)
-Message-ID: <ZAtG43JZkUoO9XkF@kernel.org>
-References: <20230307233309.3546160-1-namhyung@kernel.org>
- <f5b3de20-797c-4ff6-a85b-06c85b4eaa1b@amd.com>
+        Fri, 10 Mar 2023 10:15:01 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B1BF4B57
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:06:22 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id a9so5839946plh.11
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:06:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google; t=1678460724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mI9SynFLOYtOEHXFt34hbbK+yCygpvgICPPgvO9gfV8=;
+        b=VJ1dnBmXbkWcmPGgaIqe8y1AjzPkpkCDA30L72GW1BCNILg9Ux93MdjuFClsREO7vk
+         lPuzSZIDtThvsRkSsKGr3zO9rAsKWjoosj6IS8v322FG/klrkxUO4FIp6lMfqPuj4TxI
+         7iye1Ahz/4AiFFf6VAwHflCsxCwez6c0dgsKDphb107iKdmAqMvuRIOUZ+bfwhCgORMs
+         iHbeIn5DKK69O/9p0RZAo34CKsm8KqzEPsCeBsRVrQgTElcQ7BdUZWM4zM+YwjZmMWwf
+         jpTB1yeDWY83Dl59FnSeE0Klte9uU8zLnIN4Ka4GVeK62dZ/tM49vJHupbAcFDxR1gnt
+         LTqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678460724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mI9SynFLOYtOEHXFt34hbbK+yCygpvgICPPgvO9gfV8=;
+        b=vvhqZ7tTOLYORPOFfo1rpKz+0AS1UpGHZ9i6igug5WwcwCnJ1WqnUBz3BGwjLX+e8l
+         6Mwa8Vk9syt1gT4Huaz7C7M6//Vdy5nj+umrZ7p9b7sGvFWiOca7cOJtCpz3CZDbrmwm
+         BIJGGJpYVA0d3JKVhJYd3WpQ3lGZ6YALnG0Q+zSNrSIkOwLqxhU/2nhrh6jbccpFWIHH
+         u7oVV1kQEKE8owDLzLz5HcCqlTqY1d7IzJ8JUHftHuXoEdnCnlgImszDObHV3PPCybYV
+         fz2AvfJcwcLeotaH2hS1kBrtRx+ELcBbNrGScBBLV+VIKi+eo4rJJUxxtnl0zomLEOvW
+         1+kg==
+X-Gm-Message-State: AO0yUKW4AZcNZ5reegM/8yVO9aj7POwjSIeLVhDUIgshdSs9M7UscCsC
+        AXwm+mN1h/4dCA/gYQTWt7FXHkSo7R0Jez0dMVFcXA==
+X-Google-Smtp-Source: AK7set8IWRb0c5QRI0mCvofn+53toeLUf0QAqBXeiHkxJiCHSENVWUwl0Cn9xhaO9TH0b6aLOo+bYIjEMz5NYxW8+6s=
+X-Received: by 2002:a17:902:7e09:b0:199:6fd:ecf6 with SMTP id
+ b9-20020a1709027e0900b0019906fdecf6mr9641502plm.9.1678460723997; Fri, 10 Mar
+ 2023 07:05:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f5b3de20-797c-4ff6-a85b-06c85b4eaa1b@amd.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230130105423.1338554-1-mk@semmihalf.com> <20230130135418.1604455-1-mk@semmihalf.com>
+ <CAJMMOfNJV+eOqTgUoLLWKQe2MJ=6fXL3aaP6d=YrSBQvfhOXiA@mail.gmail.com>
+ <DM8PR02MB8169B2AC8918F8E31628F61AF3DB9@DM8PR02MB8169.namprd02.prod.outlook.com>
+ <CAJMMOfN-6fgN0VohA5ViwVXmNWtA13ycfZFoO4ys9_CLes0feA@mail.gmail.com> <CAJMMOfM41dfqx0NoiHGE=8X5hoRHo1=qPEp4KXLP1kygestEJQ@mail.gmail.com>
+In-Reply-To: <CAJMMOfM41dfqx0NoiHGE=8X5hoRHo1=qPEp4KXLP1kygestEJQ@mail.gmail.com>
+From:   =?UTF-8?Q?Micha=C5=82_Krawczyk?= <mk@semihalf.com>
+Date:   Fri, 10 Mar 2023 16:05:12 +0100
+Message-ID: <CAJMMOfN6tUzGZOkP6ZXbKCr-vszqf3nnRM-dhXfpOUSiHr2EHA@mail.gmail.com>
+Subject: Re: [PATCH v2] media: venus: dec: Fix handling of the start cmd
+To:     Vikash Garodia <vgarodia@qti.qualcomm.com>
+Cc:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        "Vikash Garodia (QUIC)" <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mw@semihalf.com" <mw@semihalf.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Mar 10, 2023 at 03:28:03PM +0530, Ravi Bangoria escreveu:
-> > It requires samples satisfy all the filter expressions otherwise it'd
-> > drop the sample.  IOW filter expressions are connected with logical AND
-> > operations unless they used "||" explicitly.  So if user has something
-> > like 'A, B || C, D', then BOTH A and D should be true AND either B or C
-> > also needs to be true.
-> > 
-> > Essentially the BPF filter expression is:
-> > 
-> >   <term> <operator> <value> (("," | "||") <term> <operator> <value>)*
-> > 
-> > The <term> can be one of:
-> >   ip, id, tid, pid, cpu, time, addr, period, txn, weight, phys_addr,
-> >   code_pgsz, data_pgsz, weight1, weight2, weight3, ins_lat, retire_lat,
-> >   p_stage_cyc, mem_op, mem_lvl, mem_snoop, mem_remote, mem_lock,
-> >   mem_dtlb, mem_blk, mem_hops
-> > 
-> > The <operator> can be one of:
-> >   ==, !=, >, >=, <, <=, &
-> > 
-> > The <value> can be one of:
-> >   <number> (for any term)
-> >   na, load, store, pfetch, exec (for mem_op)
-> >   l1, l2, l3, l4, cxl, io, any_cache, lfb, ram, pmem (for mem_lvl)
-> >   na, none, hit, miss, hitm, fwd, peer (for mem_snoop)
-> >   remote (for mem_remote)
-> >   na, locked (for mem_locked)
-> >   na, l1_hit, l1_miss, l2_hit, l2_miss, any_hit, any_miss, walk, fault (for mem_dtlb)
-> >   na, by_data, by_addr (for mem_blk)
-> >   hops0, hops1, hops2, hops3 (for mem_hops)
-> 
-> I think this and few examples should be added in perf-record man page.
+Hi,
 
-Agreed, and even mentioning cases where it overcome problems like the
-filtering you mentioned for AMD systems.
+Any update on this patch? It would be great if we could make some
+progress there (and, hopefully, finally merge it :))
 
-- Arnaldo
+Thanks,
+Micha=C5=82
+
+pt., 10 lut 2023 o 16:18 Micha=C5=82 Krawczyk <mk@semihalf.com> napisa=C5=
+=82(a):
+>
+> Hi,
+>
+> I'm wondering if there are any more comments for this patch? I would
+> be happy to clarify anything that's unclear or improve the code if
+> needed.
+>
+> I know it's pretty late, but it would be really great if this fix
+> could land before v6.2 is released, so I'd appreciate your help and
+> review.
+>
+> Thank you,
+> Micha=C5=82
+>
+> wt., 7 lut 2023 o 12:15 Micha=C5=82 Krawczyk <mk@semihalf.com> napisa=C5=
+=82(a):
+> >
+> > wt., 7 lut 2023 o 10:54 Vikash Garodia <vgarodia@qti.qualcomm.com> napi=
+sa=C5=82(a):
+> > > I have reviewed the patch, and the drain sequence handling looks good=
+ to me.
+> > > Could you share some details on the test client which you are using t=
+o catch this issue ?
+> >
+> > Hi Vikash,
+> >
+> > Thank you for looking at the code!
+> >
+> > I've been testing it using the Chromium implementation of the V4L2
+> > codec [1]. Meanwhile, we were running a test suite which changes the
+> > encryption method in the middle of the video decoding. This triggers
+> > the flush behavior and the Chromium sends the stop/start cmd to the
+> > V4L2 kernel component, and the test expects the video to continue the
+> > playback normally. Unfortunately, it was causing a stall of the video
+> > at the same time.
+> >
+> > [1] https://source.chromium.org/chromium/chromium/src/+/main:media/gpu/=
+v4l2/
+> >
+> > >
+> > > > Thank you,
+> > > > Micha=C5=82
+> > >
+> > > Thanks,
+> > > Vikash
