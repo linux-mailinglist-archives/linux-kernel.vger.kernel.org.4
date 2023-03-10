@@ -2,46 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6A66B424F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 782216B4261
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:02:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbjCJOBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:01:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S231605AbjCJOCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:02:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbjCJOBp (ORCPT
+        with ESMTP id S231607AbjCJOCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:01:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890011151D5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:01:41 -0800 (PST)
+        Fri, 10 Mar 2023 09:02:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFD31165F7;
+        Fri, 10 Mar 2023 06:02:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA485B822BF
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1651DC433EF;
-        Fri, 10 Mar 2023 14:01:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 759EA617D5;
+        Fri, 10 Mar 2023 14:02:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF695C433A4;
+        Fri, 10 Mar 2023 14:02:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678456898;
-        bh=mKGr1ypxxF+X86Tp40In+ocfizQZWE08+13VDMyFtKs=;
+        s=k20201202; t=1678456943;
+        bh=ErYVAbLVamYNt3qQNBRsX1S2V8QgsRXls6t6ttuYrlY=;
         h=From:To:Cc:Subject:Date:From;
-        b=kAwUaG4HVbRtWn1cBmNVqoVVPq5YkHkTAg4VjF9d8uYVG73w+fp0TUHlrqIp2T0YB
-         6bg7nlfFYU0Fk0WkXPCovchICKr5neGoOdcTYn32+LBtZoHaY7jMt7bAAN1niYl47A
-         rE/Y9v1i4JTXQmwBWP8EckehUbM6Fc87SJrvuD5sZdac5e/ObEgcTXcSA+nI/7Y8kn
-         Gdyip129SVoRtTeYQB6lZKfrywBPofiR2MqT+uarenABArCPc9WuaVA+a2utgMtamy
-         G8M1n8rzhysT2qmJI+l35iX9VBQclUDeaotFhg9qXYpbcu/7d6oEu4nw9w0bw3qQTu
-         y3+seKYb2ThjA==
+        b=p4YmYyE6q1EyqUqw/DTav8vWyakg1RfT7xytTEAcSgSFVydDWq5ZVeGXTGKwaH4hz
+         PloPMEPQtM16c6yw3gwaOT6DxVHSZznny+MlawvnFsI4Kh5PggNfOFF2+rTvqJLbqm
+         NDx6NK+r3Ovis4xS67Evbkt9L6AmWRTuC8eyXBf5WZpWF7/AQ7e6RqhOS9VcM/0f6j
+         FaVibUE+BpkdecLpo2wsd7PfuntYdlJ0SQC5Eo4f4TFESxjRrS4WRSBvH21BZ2qCkH
+         mOa/PFSu/iF/0wwghTVApq3oLNL5zVcPSLEd2Fgz3ZF2xnWcI8o8JkR3RKTHfC1Z3h
+         IQdLi0f6lSVjQ==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jason Baron <jbaron@akamai.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dyndbg: allow including dyndbg.h in decompressor
-Date:   Fri, 10 Mar 2023 15:01:26 +0100
-Message-Id: <20230310140133.291594-1-arnd@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ricardo Ribalda <ribalda@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Maxime Ripard <maxime@cerno.tech>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: avoid build failure on CLK_OF_DECLARE() with invalid name
+Date:   Fri, 10 Mar 2023 15:02:04 +0100
+Message-Id: <20230310140218.326626-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,48 +62,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-After a change to linux/module.h, dyndbg.h is now included
-indirectly from the decompressor for lz4 support, which in turn
-causes a build failure on 32-bit Arm:
+Generating an init function function from CLK_OF_DECLARE() broke for the
+98dx1135_clk declaration because that string starts with a digit and
+is not a valid C identifier:
 
-In file included from include/linux/module.h:30,
-                 from arch/arm/boot/compressed/../../../../lib/lz4/lz4_decompress.c:39,
-                 from arch/arm/boot/compressed/../../../../lib/decompress_unlz4.c:10,
-                 from arch/arm/boot/compressed/decompress.c:59:
-include/linux/dynamic_debug.h: In function 'ddebug_dyndbg_module_param_cb':
-include/linux/dynamic_debug.h:307:14: error: implicit declaration of function 'strcmp' [-Werror=implicit-function-declaration]
-  307 |         if (!strcmp(param, "dyndbg")) {
-      |              ^~~~~~
-include/linux/dynamic_debug.h:1:1: note: 'strcmp' is defined in header '<string.h>'; did you forget to '#include <string.h>'?
-  +++ |+#include <string.h>
+In file included from drivers/clk/mvebu/kirkwood.c:15:
+drivers/clk/mvebu/kirkwood.c:358:16: error: invalid suffix "dx1135_clk_of_clk_init_declare" on integer constant
+  358 | CLK_OF_DECLARE(98dx1135_clk, "marvell,mv98dx1135-core-clock",
+      |                ^~~~~~~~~~~~
+include/linux/clk-provider.h:1367:28: note: in definition of macro 'CLK_OF_DECLARE'
+ 1367 |         static void __init name##_of_clk_init_declare(struct device_node *np) \
+      |                            ^~~~
+drivers/clk/mvebu/kirkwood.c:358:16: error: expected identifier or '(' before numeric constant
+  358 | CLK_OF_DECLARE(98dx1135_clk, "marvell,mv98dx1135-core-clock",
+      |                ^~~~~~~~~~~~
+include/linux/clk-provider.h:1367:28: note: in definition of macro 'CLK_OF_DECLARE'
+ 1367 |         static void __init name##_of_clk_init_declare(struct device_node *np) \
+      |                            ^~~~
 
-The decompressor has its own replacement for the linux/string.h contents,
-so the normal declaration is not visible here. Since the function is
-not actually called, it is sufficient to add a declaration, and this
-is in fact the correct one as it matches the definition in
-arch/arm/boot/compressed/string.c.
+This could be fixed in the driver by renaming 98dx1135_clk to a valid
+C identifier, but it's easy enough to make the macro more robust by
+reversing the two parts of the name, which makes it work for other files
+that may have the same issue. Since CLK_OF_DECLARE_DRIVER() has a very
+similar definition, do the same change in both.
 
-Fixes: 7deabd674988 ("dyndbg: use the module notifier callbacks")
+Fixes: c7296c51ce5d ("clk: core: New macro CLK_OF_DECLARE_DRIVER")
+Fixes: c28cd1f3433c ("clk: Mark a fwnode as initialized when using CLK_OF_DECLARE() macro")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-The patch that caused the problem is in linux-next, maybe fold
-the fix into that patch if possible
----
- arch/arm/boot/compressed/decompress.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/clk-provider.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/compressed/decompress.c b/arch/arm/boot/compressed/decompress.c
-index 74255e819831..0669851394f0 100644
---- a/arch/arm/boot/compressed/decompress.c
-+++ b/arch/arm/boot/compressed/decompress.c
-@@ -31,6 +31,7 @@
- /* Not needed, but used in some headers pulled in by decompressors */
- extern char * strstr(const char * s1, const char *s2);
- extern size_t strlen(const char *s);
-+extern int strcmp(const char *cs, const char *ct);
- extern int memcmp(const void *cs, const void *ct, size_t count);
- extern char * strchrnul(const char *, int);
+diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+index c9f5276006a0..3586a029db05 100644
+--- a/include/linux/clk-provider.h
++++ b/include/linux/clk-provider.h
+@@ -1364,24 +1364,24 @@ struct clk_hw_onecell_data {
+ };
  
+ #define CLK_OF_DECLARE(name, compat, fn) \
+-	static void __init name##_of_clk_init_declare(struct device_node *np) \
++	static void __init of_clk_init_declare##name(struct device_node *np) \
+ 	{								\
+ 		fn(np);							\
+ 		fwnode_dev_initialized(of_fwnode_handle(np), true);	\
+ 	}								\
+-	OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
++	OF_DECLARE_1(clk, name, compat, of_clk_init_declare##name)
+ 
+ /*
+  * Use this macro when you have a driver that requires two initialization
+  * routines, one at of_clk_init(), and one at platform device probe
+  */
+ #define CLK_OF_DECLARE_DRIVER(name, compat, fn) \
+-	static void __init name##_of_clk_init_driver(struct device_node *np) \
++	static void __init of_clk_init_driver##name(struct device_node *np) \
+ 	{								\
+ 		of_node_clear_flag(np, OF_POPULATED);			\
+ 		fn(np);							\
+ 	}								\
+-	OF_DECLARE_1(clk, name, compat, name##_of_clk_init_driver)
++	OF_DECLARE_1(clk, name, compat, of_clk_init_driver##name)
+ 
+ #define CLK_HW_INIT(_name, _parent, _ops, _flags)		\
+ 	(&(struct clk_init_data) {				\
 -- 
 2.39.2
 
