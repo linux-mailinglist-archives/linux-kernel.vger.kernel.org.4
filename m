@@ -2,78 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E846B3889
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C22376B388A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:27:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbjCJI0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 03:26:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59110 "EHLO
+        id S230346AbjCJI1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:27:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjCJI02 (ORCPT
+        with ESMTP id S229521AbjCJI1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:26:28 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB28F1070FF
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:26:26 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id j11so17308050edq.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:26:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678436785;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gOKNGZG0x2BIsC/5CftnnrxuLbXbpdy0LX8bxWaSAVU=;
-        b=UCKEXum4m6mhbU0y2hfd5gRlpkWmkywyX6s/hGJKD+RgZ7Zrqyt8CZlCP51o1lalIs
-         p8bihyAvtfm0vA2ObxyqHJmD2G8GIMNiYR3S570uylOz45p7s3HEOn9ryQ9b+bONdil6
-         jtIq9Q/dXdH5yFDlP63PQJG6LONAChRboU3hDg62zRx+CMC8aghAUV4cy9X82Q/2Z03L
-         bJ8G71pu40fewu8ZJtSj7kMcFJAW+7TJ6bvYBpjUKlpha5wvhzMBN2gyNXx2WLs+h/Vc
-         +3HMgfr4KgOXqbO43UkPtOMSorO5YAR/AIH4WBt3FXEGH9f7jAY+Oe2xF2a/0Zp7BOXz
-         2uIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678436785;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gOKNGZG0x2BIsC/5CftnnrxuLbXbpdy0LX8bxWaSAVU=;
-        b=O2X4VICnWsDTvMSYksE4vixOn29d7wJkY7/HejYengvU6NL8YyGuBH8Xo8OAbTm97K
-         ztVtcGTt40smO1OCSuVxELvMtC7a3+mitZHBTrBs4idVYKm+GR3xicOqOPRhb5l7zAlo
-         AQIRRsIVzgDRMlSr8ASEhPQfhvGonq8waOGqOUZPLfIF9UWpvewXbA4NJpm1EacK4BoT
-         zUVyTW7TYudFzRww9YnSaKOL6rQ+xHSzFrf0FykDIg5VSWjvuTr9REcvCD5QXUtGsdaa
-         00odOCslw0HuhChNtqlfjuUJQYFDF26yNYy8PCsBVH5L3W7hyK6QDv6q+4BgkxXR7jVf
-         nnag==
-X-Gm-Message-State: AO0yUKU8++cWSHg7kEsgqCzMq5QBbiTe/BWqkjLs/2vb+f6oS/vvOTmt
-        p0YYRuh5rt9nSvmsrpU6ePRKtw==
-X-Google-Smtp-Source: AK7set8ABKS7JbAcneG8iYh20ou85gWAGqUNTg0LRchqU9xjGRT4vtjfOFqdJbjXxi/awgvijdCmEQ==
-X-Received: by 2002:a17:907:d24:b0:8a9:e330:3a23 with SMTP id gn36-20020a1709070d2400b008a9e3303a23mr32101268ejc.26.1678436785198;
-        Fri, 10 Mar 2023 00:26:25 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:2a59:841a:ebc:7974? ([2a02:810d:15c0:828:2a59:841a:ebc:7974])
-        by smtp.gmail.com with ESMTPSA id sd13-20020a170906ce2d00b008eb89a435c9sm649327ejb.164.2023.03.10.00.26.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 00:26:24 -0800 (PST)
-Message-ID: <f02e072c-a963-669c-95b7-e093a0073bde@linaro.org>
-Date:   Fri, 10 Mar 2023 09:26:23 +0100
+        Fri, 10 Mar 2023 03:27:35 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EE110976D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:27:30 -0800 (PST)
+Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PXzcP10YQznWXp;
+        Fri, 10 Mar 2023 16:24:37 +0800 (CST)
+Received: from [10.67.103.158] (10.67.103.158) by
+ kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 10 Mar 2023 16:27:27 +0800
+Subject: Re: [PATCH v8 0/5] add debugfs to migration driver
+To:     <alex.williamson@redhat.com>, <jgg@nvidia.com>,
+        <shameerali.kolothum.thodi@huawei.com>,
+        <jonathan.cameron@huawei.com>
+CC:     <cohuck@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>
+References: <20230217084831.35783-1-liulongfang@huawei.com>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <beadef1f-c8cd-3c42-4802-04cf1665dc17@huawei.com>
+Date:   Fri, 10 Mar 2023 16:27:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: PWM: Add StarFive PWM module
-Content-Language: en-US
-To:     William Qiu <william.qiu@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Hal Feng <hal.feng@starfivetech.com>
-References: <20230310074503.155131-1-william.qiu@starfivetech.com>
- <20230310074503.155131-2-william.qiu@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230310074503.155131-2-william.qiu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20230217084831.35783-1-liulongfang@huawei.com>
+Content-Type: text/plain; charset="gbk"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Originating-IP: [10.67.103.158]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,33 +51,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/03/2023 08:45, William Qiu wrote:
-> Add documentation to describe StarFive Pulse Width Modulation
-> controller driver.
+On 2023/2/17 16:48, Longfang Liu wrote:
+> Add a debugfs function to the migration driver in VFIO to provide
+> a step-by-step test function for the migration driver.
 > 
-> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> When the execution of live migration fails, the user can view the
+> status and data during the migration process separately from the
+> source and the destination, which is convenient for users to analyze
+> and locate problems.
+> 
+> Changes v7 -> v8
+> 	Add support for platform devices.
+> 
+> Changes v6 -> v7
+> 	Fix some code style issues.
+> 
+> Changes v5 -> v6
+> 	Control the creation of debugfs through the CONFIG_DEBUG_FS.
+> 
+> Changes v4 -> v5
+> 	Remove the newly added vfio_migration_ops and use seq_printf
+> 	to optimize the implementation of debugfs.
+> 
+> Changes v3 -> v4
+> 	Change the migration_debug_operate interface to debug_root file.
+> 
+> Changes v2 -> v3
+> 	Extend the debugfs function from hisilicon device to vfio.
+> 
+> Changes v1 -> v2
+> 	Change the registration method of root_debugfs to register
+> 	with module initialization.
+> 
+> Longfang Liu (5):
+>   vfio/migration: Add debugfs to live migration driver
+>   hisi_acc_vfio_pci: extract public functions for container_of
+>   hisi_acc_vfio_pci: register debugfs for hisilicon migration driver
+>   Documentation: add debugfs description for vfio
+>   vfio: update live migration device status
+> 
+>  .../ABI/testing/debugfs-hisi-migration        |  28 ++
+>  Documentation/ABI/testing/debugfs-vfio        |  17 +
+>  drivers/vfio/Makefile                         |   2 +-
+>  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 306 +++++++++++++++++-
+>  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |  11 +
+>  drivers/vfio/pci/mlx5/main.c                  |   3 +
+>  drivers/vfio/vfio.h                           |  14 +
+>  drivers/vfio/vfio_debugfs.c                   |  82 +++++
+>  drivers/vfio/vfio_main.c                      |   5 +
+>  include/linux/vfio.h                          |   8 +
+>  10 files changed, 465 insertions(+), 11 deletions(-)
+>  create mode 100644 Documentation/ABI/testing/debugfs-hisi-migration
+>  create mode 100644 Documentation/ABI/testing/debugfs-vfio
+>  create mode 100644 drivers/vfio/vfio_debugfs.c
+> 
+Hi Alex:
+please help to review this patchset.
+thanks.
 
-(...)
-
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    pwm@120d0000 {
-> +        compatible = "starfive,jh7110-pwm";
-> +        reg = <0x120d0000 0x10000>;
-> +        clocks = <&syscrg 121>;
-> +        resets = <&syscrg 108>;
-> +        #pwm-cells=<3>;
-
-Missing spaces around =
-
-With above:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
-
+Longfang.
