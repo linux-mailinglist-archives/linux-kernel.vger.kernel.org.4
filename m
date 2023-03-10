@@ -2,145 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81FBA6B36EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 07:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC816B36F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 07:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjCJG4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 01:56:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
+        id S230119AbjCJG6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 01:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjCJG4j (ORCPT
+        with ESMTP id S230111AbjCJG5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 01:56:39 -0500
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A482F7ECC;
-        Thu,  9 Mar 2023 22:56:35 -0800 (PST)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.46
-        by mg.richtek.com with MailGates ESMTP Server V5.0(20043:0:AUTH_RELAY)
-        (envelope-from <chiaen_wu@richtek.com>); Fri, 10 Mar 2023 14:56:02 +0800 (CST)
-Received: from ex3.rt.l (192.168.10.46) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Fri, 10 Mar
- 2023 14:56:02 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex3.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
- Transport; Fri, 10 Mar 2023 14:56:02 +0800
-From:   ChiaEn Wu <chiaen_wu@richtek.com>
-To:     <corbet@lwn.net>, <pavel@ucw.cz>, <lee@kernel.org>,
-        <matthias.bgg@gmail.com>, <andriy.shevchenko@linux.intel.com>,
-        <jacek.anaszewski@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>
-CC:     <linux-doc@vger.kernel.org>, <peterwu.pub@gmail.com>,
-        <cy_huang@richtek.com>, <linux-leds@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <szunichen@gmail.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>
-Subject: [PATCH v18 3/3] docs: leds: Add MT6370 RGB LED pattern document
-Date:   Fri, 10 Mar 2023 14:55:57 +0800
-Message-ID: <38f1e863b0f099158a63fb6f95056a1cb30d80a0.1678430444.git.chiaen_wu@richtek.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1678430444.git.chiaen_wu@richtek.com>
-References: <cover.1678430444.git.chiaen_wu@richtek.com>
+        Fri, 10 Mar 2023 01:57:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9438105F39;
+        Thu,  9 Mar 2023 22:57:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F13E0B821BE;
+        Fri, 10 Mar 2023 06:57:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 313C2C4339B;
+        Fri, 10 Mar 2023 06:57:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678431431;
+        bh=znZU5YKV5/tr94Mn/anv8wqsM1ocNElvGuGexz0++JU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=E2ka8xkQoAJf71fR68m51EtHqdlGxXnTv79eA4jG5B793KJfQ4daVuRk3ragzsG08
+         OoNrknNax77dGcy893F4+pzFq0N3j9nqQxtnaW9xRlJaoFfBSbpIUFMaJOlOXu0T6V
+         s756P+S7m1+U6wyqSwXtH4UpBwv37FxaTSQ+VzBTlFmiUVYX/LOGCMR4mxWzmzJh06
+         4JJDnZBWuairGImMZCkZIIRBf0hGOXM0TjUdodQPfCxwy4Efh9mIlzupTbiagdtAqZ
+         zYc31GyVRQKC4DPcNWvHHVnoF1RJpGDDig2pCBZ0kqt2e/4XcwvnBHt8mDo4j4yJkL
+         m5HH1wtOC/4tA==
+Date:   Thu, 9 Mar 2023 22:57:10 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Maxim Korotkov <korotkov.maxim.s@gmail.com>
+Cc:     Rasesh Mody <rmody@marvell.com>, GR-Linux-NIC-Dev@marvell.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michael Chan <mchan@broadcom.com>,
+        Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH net-next] bnx2: remove deadcode in bnx2_init_cpus()
+Message-ID: <20230309225710.78cd606c@kernel.org>
+In-Reply-To: <20230309174231.3135-1-korotkov.maxim.s@gmail.com>
+References: <20230309174231.3135-1-korotkov.maxim.s@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+On Thu,  9 Mar 2023 20:42:31 +0300 Maxim Korotkov wrote:
+> The load_cpu_fw function has no error return code
+> and always returns zero. Checking the value returned by
+> this function does not make sense.
+> As a result, bnx2_init_cpus() will also return only zero
+> Therefore, it will be safe to change the type of functions
+> to void and remove checking
 
-Document the MT6370 RGB LED pattern trigger.
-
-This simply describe how the pattern works, each timing period, and the
-pattern diagram for MT6370 RGB LED.
-
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
----
-v18:
-- Revise the text in document title and description.
----
- Documentation/leds/leds-mt6370-rgb.rst | 64 ++++++++++++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 Documentation/leds/leds-mt6370-rgb.rst
-
-diff --git a/Documentation/leds/leds-mt6370-rgb.rst b/Documentation/leds/leds-mt6370-rgb.rst
-new file mode 100644
-index 00000000..abf739e
---- /dev/null
-+++ b/Documentation/leds/leds-mt6370-rgb.rst
-@@ -0,0 +1,64 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=========================================
-+The device for Mediatek MT6370 RGB LED
-+=========================================
-+
-+Description
-+-----------
-+
-+The MT6370 integrates a four-channel RGB LED driver, designed to provide a
-+variety of lighting effect for mobile device applications. The RGB LED devices
-+includes a smart LED string controller and it can drive 3 channels of LEDs with
-+a sink current up to 24mA and a CHG_VIN power good indicator LED with sink
-+current up to 6mA. It provides three operation modes for RGB LEDs:
-+PWM Dimming mode, breath pattern mode, and constant current mode. The device
-+can increase or decrease the brightness of the RGB LED via an I2C interface.
-+
-+The breath pattern for a channel can be programmed using the "pattern" trigger,
-+using the hw_pattern attribute.
-+
-+/sys/class/leds/<led>/hw_pattern
-+--------------------------------
-+
-+Specify a hardware breath pattern for a MT6370 RGB LED.
-+
-+The breath pattern is a series of timing pairs, with the hold-time expressed in
-+milliseconds. And the brightness is controlled by
-+'/sys/class/leds/<led>/brightness'. The pattern doesn't include the brightness
-+setting. Hardware pattern only controls the timing for each pattern stage
-+depending on the current brightness setting.
-+
-+Pattern diagram::
-+
-+     "0 Tr1 0 Tr2 0 Tf1 0 Tf2 0 Ton 0 Toff" --> '0' for dummy brightness code
-+
-+      ^
-+      |           ============
-+      |          /            \                                /
-+Icurr |         /              \                              /
-+      |        /                \                            /
-+      |       /                  \                          /   .....repeat
-+      |      /                    \                        /
-+      |   ---                      ---                  ---
-+      |---                            ---            ---
-+      +----------------------------------============------------> Time
-+       < Tr1><Tr2><   Ton    ><Tf1><Tf2 ><  Toff    >< Tr1><Tr2>
-+
-+Timing description::
-+
-+Tr1:    First rising time for duty 0 to 30%.
-+Tr2:    Second rising time for duty 31% to 100%.
-+Ton:    On time for duty 100%.
-+Tf1:    First falling time for duty 100% to 31%.
-+Tf2:    Second falling time for duty 30% to 0%.
-+Toff:   Off time for duty 0%.
-+
-+Tr1/Tr2/Tf1/Tf2/Ton: 125ms to 3125ms, 200ms per step.
-+Toff: 250ms to 6250ms, 400ms per step.
-+
-+Pattern example::
-+
-+       "0 125 0 125 0 125 0 125 0 625 0 1050"
-+
-+This Will configure Tr1/Tr2/Tf1/Tf2 to 125m, Ton to 625ms, and Toff to 1050ms.
--- 
-2.7.4
-
+True, but you need to tell the reader why you're making the change.
+One of the impossible-to-hit error handling paths is missing unwind
+or some such?
