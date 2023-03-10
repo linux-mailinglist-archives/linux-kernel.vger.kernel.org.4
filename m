@@ -2,60 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9E46B3CEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCD46B3CFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbjCJKzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 05:55:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S230283AbjCJK4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 05:56:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjCJKyc (ORCPT
+        with ESMTP id S231256AbjCJKz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 05:54:32 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F687B9A4;
-        Fri, 10 Mar 2023 02:54:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678445656; x=1709981656;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XevK55Fhdi1F4E2UswEgkp6e+jGL+EBQhW2E/dZl4mE=;
-  b=msIu2mxTYbP5+Ww/mG3sYHbUkxyVvORH8v6mtTKNZLa51DnFUkGfsCac
-   vCeTyfLUFwmTpaiLvL+HsbVzn6JjZSjP9Mj2c8OewB3tqeNmDzo+AU3WX
-   +0JZs1XPttyyh2zi3dba4AxFUKyvwVci7dlVo/MlviEzqPdEsis/1BX4I
-   VgQeg3AAoLCRNEvrJtDdVSWoAgrgm8Jeupt4QiCG9oeJkjYkjXEtlJUF0
-   w5ZezETZgvUj2TAthQaG+hXyLSC1NmALoJydLKkIJvomqEK8cckmOR0OI
-   x1HyhLNbHgAP3kQpdPNC46xzQtSxTH9PHVA4fQwe2iNYBAqQqY2e2KCh8
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="334178684"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="334178684"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 02:54:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="766786487"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="766786487"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Mar 2023 02:54:14 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1paaO6-0003mB-19;
-        Fri, 10 Mar 2023 10:54:14 +0000
-Date:   Fri, 10 Mar 2023 18:54:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34:
- warning: unused variable 'c8sectpfe_match'
-Message-ID: <202303101857.1koJ8iHX-lkp@intel.com>
+        Fri, 10 Mar 2023 05:55:58 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEB9F98F5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:55:31 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id cw28so18826028edb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:55:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678445728;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WC7hm2nRazRUAYiyrvvNyUIuBUW+XVoXe8jGjfF3+FI=;
+        b=ydSatIflL9OJ7OfdnzsIrIarQk0QU6JeIdN1Eqrmiwlo8WzzX7xhbtdERYf4WIH09v
+         ZuAuCfWbpcd9/dBQPOtHC1s8IouRZ+d3EtnEyf9vYIIPlx39EZjEAbEy9dWltCXOsIJ5
+         C+xnNxjxQ250QIH6RHO8A97m+IjK3YRQVXu5KfKsOfO3PrfcOur2bFO2HaNALwXkQXtt
+         HWZZb8jQZqzz+wrOZU7kABasDTd9VVZjUpWbsMSV0N7/meCRVAiuNQg0/D4kC/9KC8ya
+         H0+eZXu1MnkdMoT4YSxJ9FRaE4yMaG/6DIMrKrQIfhViuYsUBy99YrkVjIdNVfhCrNWu
+         DpJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678445728;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WC7hm2nRazRUAYiyrvvNyUIuBUW+XVoXe8jGjfF3+FI=;
+        b=IdiWuXF9NjUB+MDemQpNT1YZ/mP2+T1/D2TgjOevz2yLyoHJkJTvaRowwFcN4cnRAl
+         4eKmBK6UHC+K/yf4/173LGtyE9eTLRGUxG11wYxCC5Akj3WRW2AsSs2RsJkRq880nFQU
+         dB9gOUSaHppvzOiIeAzT4M+VGfclut4ZnzP2K9K/cGzF+lzbl1m2Bylo8m6hTfSb3B0R
+         hmFpZwFS+Mku52Akfj6Sme/GUloMCezuZJsylk+qJyRvgZP/5RPGGpTVfwv/S+kkbuVE
+         kU8f3gBJSkhDMGwBXFXzcTLSxhJkNzBLYupmKVTyDK1UZeX9eXJB+D7bdqsxfZ5Ie70a
+         Lfag==
+X-Gm-Message-State: AO0yUKUK0KrscKaci6vmUvh2sYil5Bb9dLmuYjH/YlVuO0H90WzbxTx0
+        +0tzsbq2ayzPXRnQbf5GGSWt3Q==
+X-Google-Smtp-Source: AK7set/GP3SmL+YTmqa3Ysong5dQ/XeLO92S+qA3OrI9jGY15/72iN5GdYBxWlCE4G3vI1e+t+U8Aw==
+X-Received: by 2002:a17:906:b04e:b0:89e:8c3d:bb87 with SMTP id bj14-20020a170906b04e00b0089e8c3dbb87mr27304419ejb.71.1678445728064;
+        Fri, 10 Mar 2023 02:55:28 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id m9-20020a170906234900b008b95c1fe636sm800812eja.207.2023.03.10.02.55.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 02:55:27 -0800 (PST)
+Message-ID: <2580b45b-5d66-d716-41f3-4050236e89c2@linaro.org>
+Date:   Fri, 10 Mar 2023 10:55:26 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 09/20] nvmem: core: introduce NVMEM layouts
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Walle <michael@walle.cc>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org
+References: <20230308153200.682248-1-miquel.raynal@bootlin.com>
+ <20230308153200.682248-10-miquel.raynal@bootlin.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230308153200.682248-10-miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,56 +84,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   44889ba56cbb3d51154660ccd15818bc77276696
-commit: e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2 media: platform: place stm32/ and sti/ under st/ dir
-date:   12 months ago
-config: hexagon-randconfig-r031-20230310 (https://download.01.org/0day-ci/archive/20230310/202303101857.1koJ8iHX-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/st/sti/c8sectpfe/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303101857.1koJ8iHX-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34: warning: unused variable 'c8sectpfe_match' [-Wunused-const-variable]
-   static const struct of_device_id c8sectpfe_match[] = {
-                                    ^
-   1 warning generated.
 
 
-vim +/c8sectpfe_match +1175 drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
+On 08/03/2023 15:31, Miquel Raynal wrote:
+> +const void *nvmem_layout_get_match_data(struct nvmem_device *nvmem,
+> +					struct nvmem_layout *layout)
+> +{
+> +	struct device_node __maybe_unused *layout_np;
+> +	const struct of_device_id *match;
+> +
+> +	layout_np = of_nvmem_layout_get_container(nvmem);
+> +	match = of_match_node(layout->of_match_table, layout_np);
+> +
+> +	return match ? match->data : NULL;
+> +}
+> +EXPORT_SYMBOL_GPL(nvmem_layout_get_match_data);
 
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1174  
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30 @1175  static const struct of_device_id c8sectpfe_match[] = {
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1176  	{ .compatible = "st,stih407-c8sectpfe" },
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1177  	{ /* sentinel */ },
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1178  };
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1179  MODULE_DEVICE_TABLE(of, c8sectpfe_match);
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1180  
+who is the user of this function, in the current patchset I see none?
 
-:::::: The code at line 1175 was first introduced by commit
-:::::: c5f5d0f99794cfb675ecacfe37a1b33b352b9752 [media] c8sectpfe: STiH407/10 Linux DVB demux support
+On the other hand interpretation of match data is pretty much driver 
+specific i see no reason for this to be in core.
 
-:::::: TO: Peter Griffin <peter.griffin@linaro.org>
-:::::: CC: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--srini
+> +
