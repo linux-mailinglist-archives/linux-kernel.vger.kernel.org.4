@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D71536B50B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 20:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E5E6B50B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 20:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbjCJTJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 14:09:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
+        id S230488AbjCJTKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 14:10:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbjCJTJf (ORCPT
+        with ESMTP id S230426AbjCJTKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 14:09:35 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAF4112A79
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 11:08:54 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id a32so6387830ljr.9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 11:08:54 -0800 (PST)
+        Fri, 10 Mar 2023 14:10:38 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8742B5F6F8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 11:10:09 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id az36so4127261wmb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 11:10:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678475331;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5aAsGyVx7NR5HR+xvNYcoRf6KVgVqRWKFB6FO2GAIJA=;
-        b=Vtz7Nmt9yoM4cZJAd4Ac/Lz5W1ayYre4GZ4trac1YWMbDvMTha4GS/2mEqQi1XKwaa
-         l4h8yDZu0Va957lrgp1DW9AxkF3IW27YWn9SlWst8zTIcF5Vqb3ndk39YlLZCJ3EaRfb
-         QkoxjljEs+EHQOrmdJ1GEdz8AX9fg8FV9eIUJt4GeJS9sP3Eu+sm2D7wHYc14eqgq6EN
-         /zfCa135Kj9lLWH8CkgLhdA3lv4/ey5CdOcAEw4q6y4Sc3UVgLehZh453fpGBdtg0QvU
-         jG1oka/PXnsDYABLF6Mdmm3grLtFB6UbZt+7LST4mcGtZl/nOL00LnLskwDfWmzYIlVQ
-         RKNA==
+        d=google.com; s=20210112; t=1678475406;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cUHbwYiner6YWWsz85bbEgaPM/h3afo2jYmrpleK+vE=;
+        b=rZ8J35Zy4a5UNeiY0zKCgGpGCDSqJvpCJBHyr2aL0aNWu2LVnruvhIiZvRPwj43RA7
+         pVOYlwrDYASf3v7G5oIYZrvNXkqELixFJVAFqaHW5/cq4e3Lqc6cuQMptJL5/n9jimSf
+         TbpnVYHlHNYsfnS1pzkrNHp3f27uB/YOniDwlLkWd5iCWmhxO+XuDzdYYM/gL3GPXlE2
+         8WZo21fE1fFXugrmhhZth3eDSF9twfYBkTwupNQ3WCiAEVMZI42hq7u6GrpCRPUVJk4i
+         RPsb5i+QjMyf4AM7NKx0YZHwm/bcT+Itn/ZNJsK0MJGFiRhN5W3nkljaV5ViavA4Ortk
+         TDJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678475331;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5aAsGyVx7NR5HR+xvNYcoRf6KVgVqRWKFB6FO2GAIJA=;
-        b=tH7eimQgdFWjKQiPwMhphGgasJpMHD5wMMZF7AfjohU8F4k7ba1xdLsDDRHMpaSewv
-         F847e+wHynpv7IGLD2qjj0LCRl02Wd0YsOX/MPFBKYOJYRa4HTviu5x2Z3Cf52X8VNVk
-         iAt9GJGxiDNOCN4BGsAN5GGv7mqKfUWQG4WhedJHOE77GI37fJI71DdjxXNwDY06AymK
-         i1mLZwWAmDygVS1Xg6CtST09uw7Mlb1R3LE9HhtJ51CH6t98gMlwZ54kJwOnHj7v7FDw
-         J7l+cc8VSsz/O5GCGAdQaP7Ur5AL/AGxCg4OA7XGzECk5OGLcoqLn6F4tOQzn5BHaxNf
-         R+/g==
-X-Gm-Message-State: AO0yUKUwVDZ79nwUtFPz7ykoAWiMGYFYSQWsW4VKjKauBoY+LjZDfGVl
-        nkcdw+tXjOyNehgdL982Dle3EVSYmDXhuw==
-X-Google-Smtp-Source: AK7set9/3pAcpnd/tpmly8oKdr2X6da4QN4Rphc1UEr7Lsx9gJSNMfzLIyA8p2JVtxUv6qcGSzCLZQ==
-X-Received: by 2002:a2e:720c:0:b0:293:4ba1:a78b with SMTP id n12-20020a2e720c000000b002934ba1a78bmr8007295ljc.25.1678475331101;
-        Fri, 10 Mar 2023 11:08:51 -0800 (PST)
-Received: from ?IPV6:2a00:1370:8180:6b00:a1a8:4887:1af4:637a? ([2a00:1370:8180:6b00:a1a8:4887:1af4:637a])
-        by smtp.gmail.com with ESMTPSA id bf37-20020a2eaa25000000b002946be8475esm95843ljb.135.2023.03.10.11.08.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 11:08:50 -0800 (PST)
-Message-ID: <660ef0b7-fb09-5a72-57b1-3b57ddee924e@gmail.com>
-Date:   Fri, 10 Mar 2023 22:08:49 +0300
+        d=1e100.net; s=20210112; t=1678475406;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cUHbwYiner6YWWsz85bbEgaPM/h3afo2jYmrpleK+vE=;
+        b=uHQv9JEA+Pn2F08uOx61jhz7p5FPJCA2eC3gkwW7rCBpF9OihQzFb5P0MO5scCDweH
+         PwTa6sqSVryf6A0/ycP+QLU+nR7zfpylBb6FJBLM+uiyyQhRmOHFrFHzxyUI5WoT4aDz
+         tswmQc17DBWzdz8KVUjsM3y4oPg64qExkB6YCWJE8vsH965oIIsfd+GQXypJFlDDdLX6
+         Hwl3wdp89ur+CqRpw109c3cQCRmLDRT+7gb9otgJP1+Vzi68qYJ611ANS0pWAqhB0/Ij
+         2yTRwXmRTKVmahLArQGHX9OPkwGLXZ2hblFllf5mhp+W+3fUy1CsdclviI4C27mHjukS
+         c2Mg==
+X-Gm-Message-State: AO0yUKW3bKXO4mEp7pL+nnDyPh5/c6JB+ryCg1UNBYdjZ23oqxiLOYSq
+        eoQ302pwPZVDoSu/l68nEgq0xgcjbnKG8KFSUHpBtuN23pSc9HoFyWNvZw==
+X-Google-Smtp-Source: AK7set9gS2QTGUszwInb5cwaSN89LsS0pyJZW7wVQdRjjaK2gGc6BDOXQq285jV3s5OSsm0S1MCyovF3RiLpgKIv8co=
+X-Received: by 2002:a7b:c2b1:0:b0:3eb:5824:f0ee with SMTP id
+ c17-20020a7bc2b1000000b003eb5824f0eemr1146298wmk.2.1678475406234; Fri, 10 Mar
+ 2023 11:10:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] staging: r8188eu: delete driver
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Hans de Goede <hdegoede@redhat.com>,
-        Martin Kaiser <martin@kaiser.cx>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>
-References: <20230308131934.380395-1-gregkh@linuxfoundation.org>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20230308131934.380395-1-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230309213742.572091-1-nhuck@google.com> <ZAq8Ey8CZ5I2xcpW@sol.localdomain>
+ <20230310065511.2390-1-hdanton@sina.com>
+In-Reply-To: <20230310065511.2390-1-hdanton@sina.com>
+From:   Nathan Huckleberry <nhuck@google.com>
+Date:   Fri, 10 Mar 2023 11:09:55 -0800
+Message-ID: <CAJkfWY6xWhcwfV-E5brz_qvW0v-ebqp8wYhgg_ZWyD9cUp-EJg@mail.gmail.com>
+Subject: Re: [PATCH] fsverity: Remove WQ_UNBOUND from fsverity read workqueue
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>, fsverity@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,34 +71,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Fri, Mar 10, 2023 at 12:01=E2=80=AFAM Hillf Danton <hdanton@sina.com> wr=
+ote:
+>
+> On 9 Mar 2023 21:11:47 -0800 Eric Biggers <ebiggers@kernel.org>
+> > On Thu, Mar 09, 2023 at 01:37:41PM -0800, Nathan Huckleberry wrote:
+> > > WQ_UNBOUND causes significant scheduler latency on ARM64/Android.  Th=
+is
+> > > is problematic for latency sensitive workloads like I/O post-processi=
+ng.
+> > >
+> > > Removing WQ_UNBOUND gives a 96% reduction in fsverity workqueue relat=
+ed
+> > > scheduler latency and improves app cold startup times by ~30ms.
+> >
+> > Maybe mention that WQ_UNBOUND was recently removed from the dm-verity w=
+orkqueue
+> > too, for the same reason?
+> >
+> > I'm still amazed that it's such a big improvement!  I don't really need=
+ it to
+> > apply this patch, but it would be very interesting to know exactly why =
+the
+> > latency is so bad with WQ_UNBOUND.
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> says:
-> Now that the same hardware that the r8188eu driver supported is
-> supported by the real wireless driver rtl8xxxu, the r8188eu driver can
-> be deleted.
-> 
-> Also the rtl8xxxu driver supports way more devices, and is a fraction of
-> the overall size, making this a much better overall solution.
-> 
-> Thanks to the r8188eu developers and maintainers and reviewers over the
-> years, your work allowed Linux users to use their hardware before the
-> real driver was implemented properly.
-> 
-> Reported-by: Hans de Goede <hdegoede@redhat.com>
-> Cc: Martin Kaiser <martin@kaiser.cx>
-> Cc: Larry Finger <Larry.Finger@lwfinger.net>
-> Cc: Phillip Potter <phil@philpotter.co.uk>
-> Cc: Pavel Skripkin <paskripkin@gmail.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
+My current guess for the root cause is excessing saving/restoring of
+the FPSIMD state.
 
-I guess, I am late to the party, but if it matters
+> >
+> > > This code was tested by running Android app startup benchmarks and
+> > > measuring how long the fsverity workqueue spent in the ready queue.
+> > >
+> > > Before
+> > > Total workqueue scheduler latency: 553800us
+> > > After
+> > > Total workqueue scheduler latency: 18962us
+>
+> Given the gap between data above and the 15253 us in diagram[1], and
+> the SHA instructions[2], could you specify a bit on your test?
 
-Acked-by: Pavel Skripkin <paskripkin@gmail.com>
+The test I'm running opens the Android messaging APK which is
+validated with fsverity. It opens the messaging app 25 times, dropping
+caches each time. The benchmark produces a Perfetto trace which we use
+to compute the scheduler latency. We sum up the amount of time that
+each fsverity worker spent in the ready state. The test in [1] is
+similar, but may be using a different APK. These tests are not in
+AOSP, so I can't share a link to them, but I would expect that fio on
+a ramdisk would produce similarly good results.
 
-
-
-
-With regards,
-Pavel Skripkin
+>
+> [1] https://lore.kernel.org/linux-erofs/20230106073502.4017276-1-dhavale@=
+google.com/
+> [2] https://lore.kernel.org/lkml/CAJkfWY490-m6wNubkxiTPsW59sfsQs37Wey279L=
+miRxKt7aQYg@mail.gmail.com/
