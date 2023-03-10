@@ -2,96 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 652196B40D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:46:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7E16B410B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbjCJNqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 08:46:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44720 "EHLO
+        id S230375AbjCJNs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 08:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjCJNqW (ORCPT
+        with ESMTP id S230381AbjCJNsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:46:22 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F3010BA5A;
-        Fri, 10 Mar 2023 05:46:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678455981; x=1709991981;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bRieUvM7mwqpEqyRNij92CPtcQ20rS/UHWcE93X/HzI=;
-  b=bzFR3Sfgl8v+ER/8roMsxPE5WaXZnbPvZGC9MKzTCaIJj5nq34EKZ6RO
-   F6VnhIwNOnJg9RfFExYaI3oqi6QmKaWxPFPOgNxoAL6NopbH/vq/ZKvUA
-   zJxVp9mVtEtH2MSi7ugvGYqZQKmyXnFd1NKLQYh17S7Nr01DOGqlCVzOS
-   m+RyegZoNMcJ2B91pegaKZnCjXIY/sn3qbehisYNJMB2Roc1gnYi+GL5x
-   ypldTtZeQf29g6YteTnJfSVzt+qIYyTONpGkyRMMstTIxzeigIcJhfUYx
-   SAQosFlHB3VctHAV/tTh2LvzKcgnD8iK0Z8CWTSBfhPdUMoTgEbHdNjHp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="335426020"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="335426020"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 05:46:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="741981046"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="741981046"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Mar 2023 05:46:16 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1pad4Y-000tiL-1B;
-        Fri, 10 Mar 2023 15:46:14 +0200
-Date:   Fri, 10 Mar 2023 15:46:14 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
+        Fri, 10 Mar 2023 08:48:55 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8AF85682;
+        Fri, 10 Mar 2023 05:48:43 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id EB859240009;
+        Fri, 10 Mar 2023 13:48:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678456122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HB/pbQhDhg7B7QwfyKv1SCZm0Tn/atunyx/ifJpw/FI=;
+        b=l8BtWiMIBPishNyfN2XkcAhzEoCELEatIGy3uNHLtZrfy80CSHAAHG8trCJB6CXSVnq/8l
+        5yaOpLOpO2JnaSxDlvbDSw+l9CUt9C9dVmPdyPJvrg07SbG+1R5y44QboMKl+BOxFI7nOL
+        PhatGwcOAZp87VxkE0vYKejqyYw5g5/w+Di3HbSqMpVC0iEXl1MRBLD3q7GIme8ZovIG68
+        /v3tLpH687kv1DwHgUpeJGzwfz81mXbmdhw0NyGhFa8RwxQFSZjmY+3uxGS+UOllTC+UH9
+        LQSuzfi6dXx1veLw+J5Mof8aYRWWng9f4secjTO6DJC+ztegJdDWZ7j6S9pqRQ==
+Date:   Fri, 10 Mar 2023 14:48:40 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        oe-kbuild-all@lists.linux.dev,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v6 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-Message-ID: <ZAs0pvTByHWbb+9N@smile.fi.intel.com>
-References: <20230309085713.57700-1-tony@atomide.com>
- <202303100516.22vtkWv4-lkp@intel.com>
- <20230310065238.GJ7501@atomide.com>
+        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH] dt-bindings: nvmem: allow MTD to be explicitly an NVMEM
+ provider
+Message-ID: <20230310144840.5203fe50@xps-13>
+In-Reply-To: <20230310105330.14181-1-zajec5@gmail.com>
+References: <20230310105330.14181-1-zajec5@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310065238.GJ7501@atomide.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 08:52:38AM +0200, Tony Lindgren wrote:
-> * kernel test robot <lkp@intel.com> [230309 21:31]:
-> > >> drivers/tty/serial/serial_ctrl.c:17:34: warning: 'serial_ctrl_pm' defined but not used [-Wunused-const-variable=]
-> >       17 | static DEFINE_RUNTIME_DEV_PM_OPS(serial_ctrl_pm, NULL, NULL, NULL);
-> >          |                                  ^~~~~~~~~~~~~~
-> 
-> Thanks I'll tag it with __maybe_unused.
+Hi Rafa=C5=82,
 
-It requires to use pm_ptr() macro, it was designed exactly to *not* spread
-__maybe_unused.
+zajec5@gmail.com wrote on Fri, 10 Mar 2023 11:53:30 +0100:
 
--- 
-With Best Regards,
-Andy Shevchenko
+> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+>=20
+> There are a lot of devices with NVMEM content stored in MTD devices in
+> relevant partitions. Add a DT binding for marking such partitions.
+>=20
+> Note: Linux already treats every MTD partition as NVMEM provider so in
+> general it doesn't need to care about this binding. It's meant just to
+> make DT clearer in describing hardware.
+>=20
+> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+> ---
+> As explained in commit body this isn't really needed for Linux. I
+> thought it'd be a small nice addition for writing clear DTS files.
+> ---
+>  .../devicetree/bindings/nvmem/mtd.yaml        | 52 +++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/nvmem/mtd.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/nvmem/mtd.yaml b/Documenta=
+tion/devicetree/bindings/nvmem/mtd.yaml
+> new file mode 100644
+> index 000000000000..7435b2803cf9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/nvmem/mtd.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/nvmem/mtd.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MTD access based NVMEM
+> +
+> +description: |
+> +  MTD partitions can be NVMEM providers. This binding allows explicitly =
+marking
+> +  such partitions.
+
+We already have that, it's nvmem-cell? I understand what you want to
+do, but I think it suffers from a common problem, see below.
+
+> +  The exact way of handling MTD partition content (NVMEM cells) should be
+> +  described using a proper NVMEM layout.
+
+Ok so I believe this is another solution for the layout offset proposed
+by Michael. Except that it only fixes it for mtd. I think I would
+prefer the former solution which handles all nvmem cases.
+
+> +
+> +maintainers:
+> +  - Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+> +
+> +allOf:
+> +  - $ref: nvmem.yaml#
+> +  - $ref: /schemas/mtd/partitions/partition.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: mtd-nvmem
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    partitions {
+> +        compatible =3D "fixed-partitions";
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <1>;
+> +
+> +        partition@0 {
+> +            compatible =3D "mtd-nvmem";
+
+Actually there has been valid push-back from devlink gurus against stale
+compatibles (on a device-driver point of view) like that. Maybe
+something like this instead:
+
+	partition@x{
+		<mtd-nvmem-property>
+
+?
+
+> +            reg =3D <0x0 0x40000>;
+> +            label =3D "device-data";
+> +
+> +            nvmem-layout {
+> +                /* Just a dummy example: Kontron can be found on OTP act=
+ually */
+> +                compatible =3D "kontron,sl28-vpd";
+
+The Onie tlv compatible would perfectly apply here.
+
+> +            };
+> +        };
+> +    };
 
 
+Thanks,
+Miqu=C3=A8l
