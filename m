@@ -2,100 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE6E6B4C95
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E7E6B4CA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbjCJQRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 11:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
+        id S230510AbjCJQUP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 11:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbjCJQRV (ORCPT
+        with ESMTP id S231426AbjCJQT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:17:21 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6445226C27;
-        Fri, 10 Mar 2023 08:12:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=ENIictmQQrUukowLJhwcEIVurshXzW2oH3AKELncnZg=; b=QvypUm8Dg5JjCs4xIDiXwqCTPh
-        0eo9je+L45XcF1Ku4g7S+NGODWtTcMBpbtS9F75EhFN2Nb2/Khhb8Eqr8BUs27ZxLs0PVcqBbJkC/
-        cOTvHgbNA0pOnjVfpZ10RozR7kHjHyBY53ovotjHTguKR+HbYrIqFpzRCu6OeVauHL/k=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pafLo-006zgP-Gl; Fri, 10 Mar 2023 17:12:12 +0100
-Date:   Fri, 10 Mar 2023 17:12:12 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Lukasz Majewski <lukma@denx.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] dsa: marvell: Provide per device information about
- max frame size
-Message-ID: <2ed80772-feed-40ac-b0ac-612227558d08@lunn.ch>
-References: <20230309125421.3900962-1-lukma@denx.de>
- <20230309125421.3900962-2-lukma@denx.de>
- <20230310120235.2cjxauvqxyei45li@skbuf>
- <20230310141719.7f691b45@wsk>
- <20230310154511.yqf3ykknnwe22b77@skbuf>
+        Fri, 10 Mar 2023 11:19:27 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562B012A4D8;
+        Fri, 10 Mar 2023 08:14:43 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id h19so6211110qtk.7;
+        Fri, 10 Mar 2023 08:14:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678464822;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/6VRob8/fQLV06XBny84iEJyLShqBsknJt6xLcf5GB4=;
+        b=NAbPPdQbyDUCAPPDMwgvZa3G0obTXAHWu7+L5ASMbUgsqPs7I+AZJzUMs/dtXwzpLI
+         iJTDzUEdu4u3aAfw0CcpQU7UqZEiC8j+OGcSSRjPycNyGifkOlyPuPjDHjgbzn9LjtgS
+         dFZqh/WR/hB5N1OnTb6ozwI6X2U5NcT5wwZcrEPy1MwagqfsYvtSDsNgGdB6lMjhkjRU
+         LMi7dl3MgSuc5JAoaBG9UgkoSebCCpJCjT2Xe16xfYy14QvMW4seZluxK3l8UCPQIoxA
+         aI9t3TgZPK8wEPOoRRdkT4kmBlo0K1w3Ku8Wg2H1KTGE1r0B30jx/PDO7UrsQ3DYzYUe
+         bLaA==
+X-Gm-Message-State: AO0yUKURJT+FWjmx7QWZ+uKd/g7sPXhD6p0Dwz6tf07VOCD8pvB7fqjF
+        NZeJmKyNREgt33CY3a83SfxdWpZHx6mD/A==
+X-Google-Smtp-Source: AK7set/mckn+eI7WfHTg2ENgQp1Tj8tCUf7tx/ZZg3qQ/dqREzvx2Y3gJX6EIMk39ae0WFk3iCE9Xw==
+X-Received: by 2002:a05:622a:553:b0:3bf:bac6:9961 with SMTP id m19-20020a05622a055300b003bfbac69961mr10709383qtx.55.1678464822343;
+        Fri, 10 Mar 2023 08:13:42 -0800 (PST)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id j6-20020ac86646000000b003bfb820f17csm52906qtp.63.2023.03.10.08.13.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 08:13:41 -0800 (PST)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-536bf92b55cso106282207b3.12;
+        Fri, 10 Mar 2023 08:13:41 -0800 (PST)
+X-Received: by 2002:a81:b206:0:b0:52f:184a:da09 with SMTP id
+ q6-20020a81b206000000b0052f184ada09mr2028227ywh.2.1678464821172; Fri, 10 Mar
+ 2023 08:13:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310154511.yqf3ykknnwe22b77@skbuf>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230307105645.5285-1-wsa+renesas@sang-engineering.com>
+ <20230307105645.5285-2-wsa+renesas@sang-engineering.com> <CACRpkdZ5vNdakcGrhhOn=q-tXb7CyCCeMbhCMgrO0bD--KcU6Q@mail.gmail.com>
+In-Reply-To: <CACRpkdZ5vNdakcGrhhOn=q-tXb7CyCCeMbhCMgrO0bD--KcU6Q@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 10 Mar 2023 17:13:29 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUzvX3-O4d1XnirwRH37NwBmAmZfAwoGp=bRSQkuCX0TQ@mail.gmail.com>
+Message-ID: <CAMuHMdUzvX3-O4d1XnirwRH37NwBmAmZfAwoGp=bRSQkuCX0TQ@mail.gmail.com>
+Subject: Re: [PATCH 1/5] pinctrl: renesas: remove R-Car H3 ES1.* handling
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 05:45:11PM +0200, Vladimir Oltean wrote:
-> On Fri, Mar 10, 2023 at 02:17:19PM +0100, Lukasz Majewski wrote:
-> > This is the "patch 4" in the comment sent by Russel (to fix stuff which
-> > is already broken, but it has been visible after running the validation
-> > code):
-> > 
-> > https://lists.openwall.net/netdev/2023/03/09/233
-> 
-> Ok, so nope, what I was talking about here (MTU 1492) is *not* what you
-> have discussed with Russell in patch 4.
-> 
-> What I was talking about is this:
-> https://patchwork.kernel.org/project/netdevbpf/patch/20230309125421.3900962-2-lukma@denx.de/#25245979
-> and Russell now seems to agree with me that it should be addressed
-> separately, and prior to the extra development work done here.
-> 
-> It looks like it will also need a bit of assistance from Andrew to
-> untangle whether EDSA_HLEN should be included in the max_mtu calculations
-> for some switch families only, rather than for all.
+Hi Linus,
 
-That is hard to say. From other peoples experiments, it seems like
-some families don't impose the frame length check on DSA and CPU
-ports. Hence they accept frames with DSA or EDSA headers, even if that
-puts them over the theoretical port max. Other families do seem to
-perform check on DSA and CPU ports. I don't think the datasheets say
-anything about this.
+On Thu, Mar 9, 2023 at 2:53 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Tue, Mar 7, 2023 at 11:57 AM Wolfram Sang
+> <wsa+renesas@sang-engineering.com> wrote:
+>
+> > R-Car H3 ES1.* was only available to an internal development group and
+> > needed a lot of quirks and workarounds. These become a maintenance
+> > burden now, so our development group decided to remove upstream support
+> > and disable booting for this SoC. Public users only have ES2 onwards.
+> >
+> > Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>
+> Good bye ES1.*, I expect that Geert will queue the patches as usual.
 
-The safe thing to do is:
+At your service, queuing in renesas-pinctrl-for-v6.4.
 
-Assume all switches can accept the standard minimum MTU + DSA/EDSA
-headers on their CPU ports.
+Gr{oetje,eeting}s,
 
-For those switches which accept frames bigger than the standard,
-assume the DSA/EDSA header is counted as part of the limit, and so
-adjust the calculation.
+                        Geert
 
-This might short change a few switches 4/8 bytes, but that is better
-than being broken because frames are dropped.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-     Andrew
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
