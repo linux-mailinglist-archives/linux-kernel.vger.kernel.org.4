@@ -2,82 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CF66B394E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0BE6B3954
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjCJIyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 03:54:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
+        id S231437AbjCJI5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbjCJIvx (ORCPT
+        with ESMTP id S230304AbjCJIzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:51:53 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8622610113B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:50:27 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id x3so17451610edb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:50:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678438226;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ipfX94R9wbmrYkXyBfnbFGquCgHOanUWP3JAxF36ZcA=;
-        b=CWyJs+HWQi1vX3RPNnm/J6gE4kcyoJbjzCVEOr5t+k6oH1rq9W3mljVyz2njWhuMu5
-         gUCw6m97KV6iRT101NgZRNtiRFiDbz9U55ShEvv5dWXno7YmYWH7aRLy7SlAqpPIkPPt
-         DshBMRc7B0KKO93e0ndoTfQueqnPIE6RZPwvH8zGvU2yLW3/e3/3sZugcpFDiGvKn97F
-         GvPgx53wUbuCPxQ7ATQQPenbXkM79AXzK1ev1axdgKPHV4wVwBi1uZaC+7PnbQc1Qt8/
-         a/cWJeoQHup9sAQHHKBiA3CyFERBbQDdcDuFgpbmA8PhRpXONoGSsyjYW3Y1ckTLR5ir
-         blqg==
+        Fri, 10 Mar 2023 03:55:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35C21091F4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:51:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678438268;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XCB3NLRMqFtG3fMsofAO3zKYURlj2MLuhu7W0R6/NpQ=;
+        b=GikLs8+L4v3YNd3VL1BRYoLyLXpe8lMUQnSn9mG2VQsSNQBYV+Uz7lFcTgw+B+tkVypXzp
+        f/0qgNd+ZjI4h0rTGJUxnZ1k2bl3YO9RiR4Em1FPo4esM75sgcfg69GE3IvbpprU3TyTIv
+        K9WoM8x6g8U3CtYd7ojzoOCxFL2f58I=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-652-YGclpmyAMJ-mpl2JkwJ49Q-1; Fri, 10 Mar 2023 03:51:06 -0500
+X-MC-Unique: YGclpmyAMJ-mpl2JkwJ49Q-1
+Received: by mail-wr1-f72.google.com with SMTP id l5-20020a5d6745000000b002c91cb49949so900789wrw.14
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:51:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678438226;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ipfX94R9wbmrYkXyBfnbFGquCgHOanUWP3JAxF36ZcA=;
-        b=7uajg+DCcZJipEs7aJXBS1rdq1fN4KeMKrbtaSFCgwITqoBSWz1Ab0s0c/CXvGmuL4
-         t1Fr0yrfe9A/bk9yjWpU/h8X1a67L14UHTSG+lwXZAcYmB7GG5pKV3rxVblBUybWoLU4
-         DuA3ImfVWTSTUaEEB4QgLxugIL6H0lQ/qJMdwuoyh0b9I5OCzumQFzqNUoIgplJu6Vsw
-         /XdSPijcsQgiPUOgZ6zwbzjz228Ng4IpVJGvfe7mgOpGe66No6BNzlK1pXN5AsTcZy/S
-         bfsCAfcsFmH2zgyGaG9Qs5dY5d/lqhrpco+lHVTDR7fK/J8Da7yJuZ4aP2/wdYXeuwT+
-         ZZww==
-X-Gm-Message-State: AO0yUKWzgFe6J5s4LEclSg7xcGir5yH1zROAwRG623cp0RakQBKtH/RH
-        HNPYsIMFz+llPYxNGO9NcYTExQ==
-X-Google-Smtp-Source: AK7set+E/4fAteq3rh76C+cieesyxjxboaO7qVk8PaVAPoe5+SoyWke2NX6ryFSI3UcOSVu5Y66lsA==
-X-Received: by 2002:aa7:d7c5:0:b0:4ae:f496:1372 with SMTP id e5-20020aa7d7c5000000b004aef4961372mr21528108eds.36.1678438226060;
-        Fri, 10 Mar 2023 00:50:26 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:2a59:841a:ebc:7974? ([2a02:810d:15c0:828:2a59:841a:ebc:7974])
-        by smtp.gmail.com with ESMTPSA id e5-20020a50d4c5000000b004c0057b478bsm562719edj.34.2023.03.10.00.50.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 00:50:25 -0800 (PST)
-Message-ID: <7f0fd384-936b-02f9-c067-1e680b04ec95@linaro.org>
-Date:   Fri, 10 Mar 2023 09:50:24 +0100
+        d=1e100.net; s=20210112; t=1678438265;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XCB3NLRMqFtG3fMsofAO3zKYURlj2MLuhu7W0R6/NpQ=;
+        b=VUgmWFsuclvEd1viPSkVBnaL5fJdGh+SPnEXZ6ZQ73jJCCQ7u0cH3iHmXhDilEhUPN
+         pa2flrD0OpSok3kz8131jBTttCyzmuYGh0nvGfD65U6NNPyzf/aPDpxTDC9ptM20gIJc
+         iFnQn/Zc1Qy1xcpX/UNP0etmuuV2BZmm+GYFmi+Ohw1RtNfVHqKGeCjXB0IwvWyGR8JZ
+         IpubWipTYJXgsJ9lwcuVIYPkfGJBOUnyoSLphbktqG3XcpfTR2UejhSBLkVOoaLgdnNe
+         o+JOYiiF1Np8pBLCWqvOzrA7vBDLe7qxrawHAEPNwp3oT47LWIqecsXmjKFlBZrajMOa
+         IB5w==
+X-Gm-Message-State: AO0yUKXCHzODMW+5KSwD33SATl1+LAe9qgZWob+L8sEkUvg7fKnf2qrx
+        QcvzkVNle4t2PPGytU8PzPPesrZZIInARi1IUH49hm3w2WpM635CfSl1FZz6HkopBFO9fb2tjvU
+        27Jo0V6YnvqvOFbF6p0OP2Jcc9ykODags
+X-Received: by 2002:a05:600c:3491:b0:3eb:2e19:ff3a with SMTP id a17-20020a05600c349100b003eb2e19ff3amr1925861wmq.7.1678438265304;
+        Fri, 10 Mar 2023 00:51:05 -0800 (PST)
+X-Google-Smtp-Source: AK7set+YCSlbveYwJJSJ8QQkuxSPnYyAuHAXqgAyeZXp5ze1IHRI4pjohjPqmISg5ZfMnz/zcZvJdw==
+X-Received: by 2002:a05:600c:3491:b0:3eb:2e19:ff3a with SMTP id a17-20020a05600c349100b003eb2e19ff3amr1925847wmq.7.1678438265038;
+        Fri, 10 Mar 2023 00:51:05 -0800 (PST)
+Received: from redhat.com ([2.52.9.88])
+        by smtp.gmail.com with ESMTPSA id 18-20020a05600c229200b003dc4a47605fsm2344351wmf.8.2023.03.10.00.51.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 00:51:04 -0800 (PST)
+Date:   Fri, 10 Mar 2023 03:51:01 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Xie Yongji <xieyongji@bytedance.com>
+Cc:     jasowang@redhat.com, tglx@linutronix.de, hch@lst.de,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 01/11] lib/group_cpus: Export group_cpus_evenly()
+Message-ID: <20230310035013-mutt-send-email-mst@kernel.org>
+References: <20230228094110.37-1-xieyongji@bytedance.com>
+ <20230228094110.37-2-xieyongji@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 11/28] dt-bindings: usb: dwc3: Add
- snps,num-hc-interrupters definition
-Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
-        andersson@kernel.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <20230308235751.495-12-quic_wcheng@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230308235751.495-12-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230228094110.37-2-xieyongji@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,18 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2023 00:57, Wesley Cheng wrote:
-> Add a new definition for specifying how many XHCI secondary interrupters
-> can be allocated.  XHCI in general can potentially support up to 1024
-> interrupters, which some uses may want to limit depending on how many
-> users utilize the interrupters.
+On Tue, Feb 28, 2023 at 05:41:00PM +0800, Xie Yongji wrote:
+> Export group_cpus_evenly() so that some modules
+> can make use of it to group CPUs evenly according
+> to NUMA and CPU locality.
 > 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+
+Thomas can I get an ack from you pls?
+Anyone else?
+
 > ---
-
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+>  lib/group_cpus.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/lib/group_cpus.c b/lib/group_cpus.c
+> index 9c837a35fef7..aa3f6815bb12 100644
+> --- a/lib/group_cpus.c
+> +++ b/lib/group_cpus.c
+> @@ -426,3 +426,4 @@ struct cpumask *group_cpus_evenly(unsigned int numgrps)
+>  	return masks;
+>  }
+>  #endif /* CONFIG_SMP */
+> +EXPORT_SYMBOL_GPL(group_cpus_evenly);
+> -- 
+> 2.20.1
 
