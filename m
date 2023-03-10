@@ -2,123 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E426B52E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 036E56B52EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbjCJVcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 16:32:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        id S231836AbjCJVjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 16:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbjCJVcq (ORCPT
+        with ESMTP id S231517AbjCJVjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 16:32:46 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3DBCC15;
-        Fri, 10 Mar 2023 13:32:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678483964; x=1710019964;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ehc2G1Khk+7j9DBXV2qWdm7ZCJBZCQ3dNkGTzQyl2kg=;
-  b=AmW5umhUJfOQkJlVzyAIttVnBXuw6fbnNoCDidMa3JT90D5xd1DGfNcC
-   1hEV7tHLpO+sxsNZAIR0q+dqiDkvl7cKSNVbwD4ERwb7C8GLct2i9n5dn
-   VJT1nnIzhrpyY//aMQ8fKsY3sTloiQz0N9ZfiaoErtKyg/ARcr4o7xcfh
-   owT7VR0pqZnfijCCS8lHJIeO7eQfYKHXuusLPOgk4+jBodEK2AM2i9mpV
-   NNUTooMLGhmLudzjBZjjWRZCe3FSzWRXa3IRFo0fYIcHJJpsbjnJfGxlG
-   5Wn0FRn1vVjq9ygg4dXUuUQdTFsIhuHmo6OqxNP5uI+fQrAbmOMwa9ibO
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="335530957"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="335530957"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 13:32:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="766977604"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="766977604"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 13:32:35 -0800
-Date:   Fri, 10 Mar 2023 13:36:28 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        X86 Kernel <x86@kernel.org>, bp@alien8.de,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
-        vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-doc@vger.kernel.org, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v5 2/7] iommu/sva: Move PASID helpers to sva code
-Message-ID: <20230310133628.290c0efa@jacob-builder>
-In-Reply-To: <30923327-6c08-f0c1-1b52-c1d818f3a3a2@arm.com>
-References: <20230309222159.487826-1-jacob.jun.pan@linux.intel.com>
-        <20230309222159.487826-4-jacob.jun.pan@linux.intel.com>
-        <30923327-6c08-f0c1-1b52-c1d818f3a3a2@arm.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Fri, 10 Mar 2023 16:39:08 -0500
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E2CEABB6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:39:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=n7LpUb4SbtnQ/1uvOiki2E3c5r7Yfb2jhJ053NwsPOQ=;
+  b=qAB5mPKnFq8MmEkupkqXG/j1if7qzV9CA7vklZxHOll9CseqS4AClfSI
+   AyA/DlDvuC69ii5DR4UD4J1fXIo6AaMHmWMOMaDiAh2mHslmjv6DjnAvY
+   2gFvLIC2fxP1Sv/LYcltTAYnnEHck1zM3/PmY0tIQglU/oF/J3yOl7dCd
+   Q=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,250,1673910000"; 
+   d="scan'208";a="96598191"
+Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 22:39:04 +0100
+Date:   Fri, 10 Mar 2023 22:39:04 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Kloudifold <cloudifold.3125@gmail.com>
+cc:     teddy.wang@siliconmotion.com, sudipm.mukherjee@gmail.com,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: sm750: Rename camel case functions in
+ sm750_cursor.*
+In-Reply-To: <ZAuiDTDT8dmBcRoH@CloudiRingWorld>
+Message-ID: <alpine.DEB.2.22.394.2303102236190.3199@hadrien>
+References: <ZAuiDTDT8dmBcRoH@CloudiRingWorld>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+You don't need the filename in the subject.
 
-On Fri, 10 Mar 2023 20:00:52 +0000, Robin Murphy <robin.murphy@arm.com>
-wrote:
+On Sat, 11 Mar 2023, Kloudifold wrote:
 
-> On 2023-03-09 22:21, Jacob Pan wrote:
-> > Preparing to remove IOASID infrastructure, PASID management will be
-> > under SVA code. Decouple mm code from IOASID. Use iommu-help.h instead
-> > of iommu.h to prevent circular inclusion.
-> > 
-> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > ---
-> > v5:
-> > 	- move definition of helpers to iommu code to be consistent with
-> > 	  declarations. (Kevin)
-> > 	- fix patch partitioning bug (Baolu)
-> > v4:
-> > 	- delete and open code mm_set_pasid
-> > 	- keep mm_init_pasid() as inline for fork performance
-> > ---
-> >   drivers/iommu/iommu-sva.c    | 10 +++++++++-
-> >   include/linux/ioasid.h       |  2 +-
-> >   include/linux/iommu-helper.h | 12 ++++++++++++  
-> 
-> Eww, can we not? iommu-helper is very much just parts of a specific type 
-> of bitmap-based IOVA allocator used by some crusty old arch-specific 
-> IOMMU code and SWIOTLB. It is unrelated to the iommu.h IOMMU API, and 
-> dragging that stuff into modern SVA-related matters seems bizarrely 
-> inappropriate. Could we just move the mm_pasid stuff into ioasid.h here, 
-> then maybe rename it to iommu-sva.h at the end if eradicating the old 
-> name really matters?
-thanks for explaining the history behind iommu-helper.h, having a new
-include/linux/iommu-sva.h would probably be cleaner.
+> This patch fixes the "CHECK: Avoid CamelCase" reported by
+> checkpatch.pl by renaming camel case functions.
+>
+> Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
+> ---
+>  drivers/staging/sm750fb/sm750_cursor.c | 14 +++++++-------
+>  drivers/staging/sm750fb/sm750_cursor.h | 12 ++++++------
+>  2 files changed, 13 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
+> index 43e6f52c2..ff643e33f 100644
+> --- a/drivers/staging/sm750fb/sm750_cursor.c
+> +++ b/drivers/staging/sm750fb/sm750_cursor.c
+> @@ -58,13 +58,13 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
+>  	poke32(HWC_ADDRESS, 0);
+>  }
+>
+> -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
+> +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
+>  {
+>  	cursor->w = w;
+>  	cursor->h = h;
+>  }
+>
+> -void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
+> +void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y)
+>  {
+>  	u32 reg;
+>
+> @@ -73,7 +73,7 @@ void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
+>  	poke32(HWC_LOCATION, reg);
+>  }
+>
+> -void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
+> +void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg)
+>  {
+>  	u32 reg = (fg << HWC_COLOR_12_2_RGB565_SHIFT) &
+>  		HWC_COLOR_12_2_RGB565_MASK;
+> @@ -82,8 +82,8 @@ void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
+>  	poke32(HWC_COLOR_3, 0xffe0);
+>  }
+>
+> -void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+> -			     const u8 *pcol, const u8 *pmsk)
+> +void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
+> +			      const u8 *pcol, const u8 *pmsk)
 
-my original intent for using iommu-helper.h was to avoid problems by mm.h
-#include iommu.h. So I just needed a separate small header. let me do
-without iommu-helper.h.
+The indentation of the second line looks random.  It's not a multiple of
+the tabs, and it doesn't line up with the right side of the (.  So there
+doesn't seem to be any need to change it for this patch.
 
-Thanks,
+>  {
+>  	int i, j, count, pitch, offset;
+>  	u8 color, mask, opr;
+> @@ -132,8 +132,8 @@ void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+>  	}
+>  }
+>
+> -void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
+> -			      const u8 *pcol, const u8 *pmsk)
+> +void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
+> +			       const u8 *pcol, const u8 *pmsk)
 
-Jacob
+Likewise.
+
+>  {
+>  	int i, j, count, pitch, offset;
+>  	u8 color, mask;
+> diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
+> index b59643dd6..88fa02f63 100644
+> --- a/drivers/staging/sm750fb/sm750_cursor.h
+> +++ b/drivers/staging/sm750fb/sm750_cursor.h
+> @@ -5,11 +5,11 @@
+>  /* hw_cursor_xxx works for voyager,718 and 750 */
+>  void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
+>  void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
+> -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
+> -void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
+> -void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
+> -void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+> -			     const u8 *data, const u8 *mask);
+> -void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
+> +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
+> +void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y);
+> +void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg);
+> +void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
+>  			      const u8 *data, const u8 *mask);
+> +void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
+> +			       const u8 *data, const u8 *mask);
+
+Likewise.
+
+julia
+
+>  #endif
+> --
+> 2.39.2
+>
+>
+>
