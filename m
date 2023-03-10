@@ -2,206 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38F96B3BCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DC76B3BD3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:16:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbjCJKOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 05:14:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
+        id S230119AbjCJKQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 05:16:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjCJKOZ (ORCPT
+        with ESMTP id S230021AbjCJKQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 05:14:25 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5EC10C722;
-        Fri, 10 Mar 2023 02:14:23 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32AAEIxu108147;
-        Fri, 10 Mar 2023 04:14:18 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678443258;
-        bh=pwOt/uEj2pkzB/suUkIUg9ic3JUX/kEHRfFn+j21zT4=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=dWghT0REVUCO7PV19EfVP1PeEDzpyDgLXzbpSvr4ZMYVTymH6KePSqBcuFYxm0Qxb
-         qncYDa8bPTUGvOmeDt1cUjrgQ/Tmx/ryV5HoCN42zmN4kvddJgSZapkAtzxoKy8YIo
-         AMCHL+S4pKQQU5DfnVtcjwktOhYYtrb9k40CMg5c=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32AAEIwd063475
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 10 Mar 2023 04:14:18 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 10
- Mar 2023 04:14:18 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 10 Mar 2023 04:14:18 -0600
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32AAE8f9024145;
-        Fri, 10 Mar 2023 04:14:15 -0600
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH 2/2] arm64: dts: ti: k3-j7200: Add overlay to enable CPSW5G ports in QSGMII mode
-Date:   Fri, 10 Mar 2023 15:44:07 +0530
-Message-ID: <20230310101407.722334-3-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230310101407.722334-1-s-vadapalli@ti.com>
-References: <20230310101407.722334-1-s-vadapalli@ti.com>
+        Fri, 10 Mar 2023 05:16:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0065110F857
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:15:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678443304;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ETwri0Lb5u/XoTqkQ552K4Q0/ZV79dpN0E7lfbInptY=;
+        b=LGQLRDaz/YHD7tjsHX6aRy7/sZV1czQ0BqwjtkojCi03WLnfTvNcpfnXFuQSDu8scq23+s
+        xnklF4Eh/srdm7ZToxA1oI4Nec4FlChPGKR1iNjbx0tN112i1n35luPNnDdBFmHV+7qYFo
+        51Avn9/FfcIGqheKRvibmNUaxYzsJ2s=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-592-INoPo8fFMfiHtrZs_Qrn-g-1; Fri, 10 Mar 2023 05:15:02 -0500
+X-MC-Unique: INoPo8fFMfiHtrZs_Qrn-g-1
+Received: by mail-wr1-f69.google.com with SMTP id r14-20020a0560001b8e00b002cdb76f7e80so965060wru.19
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:15:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678443301;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ETwri0Lb5u/XoTqkQ552K4Q0/ZV79dpN0E7lfbInptY=;
+        b=Fkwk8PVyiPdOoTO8agIN1GrtChH7sAr4QLJR0bhdyM9wcDvtgmJFYktAfgbT8/L9hD
+         M+RbLaagqQqANkSggKZ4NknwvTiKRkTe8oWqoxedkujOkYSGM/d+OSKjy055BHpdOuIc
+         X3skPFXJ5WiVMNkLYiJZQTddGKhBq7jHD+tPuYoMKMZhhrS3pECOeDMyMlRL11m6ifl9
+         r5aBQG07MzDiPYwxiLR6T5r/mOGj/Z7+GMMQ3Om7/21G8+w37VMdiXpGId1i7CwkbkhU
+         HpsV74pDmZbawhir3BVypEmewEVF3eZMGhR4FI2Mje1defQ/1YO1iaCRjGzOgSupyr4J
+         NrXQ==
+X-Gm-Message-State: AO0yUKVvCHh4gdT1hwYM2+jNBA6JuVJBa1a37EChIRHUCLg5vMDzfmVB
+        oHC7f/Vmo/Fbmf0M3t+JXcrAM7Prbg1YEYaSi8Y24uIbbxsZcgJ1mwJeQL6vfFv5SkOA0uUQGxI
+        n4Vs7J6SrV4rfr1S+f0iv8utA
+X-Received: by 2002:a05:6000:118e:b0:2ca:e4ac:5089 with SMTP id g14-20020a056000118e00b002cae4ac5089mr16054754wrx.30.1678443301430;
+        Fri, 10 Mar 2023 02:15:01 -0800 (PST)
+X-Google-Smtp-Source: AK7set/RSIo4dqLWNAC2JYIQOcjcrJak1jBI4P4lDS7Q+nG9frkPuYJUc3dJzQYBO/nndN83PdPYOw==
+X-Received: by 2002:a05:6000:118e:b0:2ca:e4ac:5089 with SMTP id g14-20020a056000118e00b002cae4ac5089mr16054734wrx.30.1678443301160;
+        Fri, 10 Mar 2023 02:15:01 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id e15-20020a056000120f00b002c5493a17efsm1744232wrx.25.2023.03.10.02.14.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 02:15:00 -0800 (PST)
+Message-ID: <eddde530-cd37-f493-7f0f-c97905f0de64@redhat.com>
+Date:   Fri, 10 Mar 2023 11:14:59 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Reply-To: eric.auger@redhat.com
+Subject: Re: [PATCH v1 01/14] iommu: Add iommu_get_unmanaged_domain helper
+Content-Language: en-US
+To:     Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
+        robin.murphy@arm.com, will@kernel.org
+Cc:     kevin.tian@intel.com, baolu.lu@linux.intel.com, joro@8bytes.org,
+        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <cover.1678348754.git.nicolinc@nvidia.com>
+ <9b1077601cace998533129327f5e7ad946752d29.1678348754.git.nicolinc@nvidia.com>
+From:   Eric Auger <eric.auger@redhat.com>
+In-Reply-To: <9b1077601cace998533129327f5e7ad946752d29.1678348754.git.nicolinc@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The J7 Quad Port Add-On Ethernet Card for J7200 Common-Proc-Board supports
-QSGMII mode. Use the overlay to configure CPSW5G ports in QSGMII mode.
+Hi Nicolin,
 
-Add support to reset the PHY from kernel by using gpio-hog and gpio-reset.
+On 3/9/23 11:53, Nicolin Chen wrote:
+> The nature of ITS virtualization on ARM is done via hypercalls, so kernel
+> handles all IOVA mappings for the MSI doorbell in iommu_dma_prepare_msi()
+> and iommu_dma_compose_msi_msg(). The current virtualization solution with
+> a 2-stage nested translation setup is to do 1:1 IOVA mappings at stage-1
+Note that if we still intend to use that trick there is a known issue at
+kernel side that needs to be fixed.
 
-Add aliases for CPSW5G ports to enable kernel to fetch MAC addresses
-directly from U-Boot.
+ARM DEN 0049E.b IORT specification mandates that when
+RMRs are present, the OS must preserve PCIe configuration
+performed by the boot FW.
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- arch/arm64/boot/dts/ti/Makefile               |   2 +
- .../dts/ti/k3-j7200-quad-port-eth-exp.dtso    | 100 ++++++++++++++++++
- 2 files changed, 102 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-quad-port-eth-exp.dtso
+As discussed in the past, enforcing this causes issue with PCI devices
+with IO ports. See qemu commit
+40c3472a29c9 ("Revert "acpi/gpex: Inform os to keep firmware resource
+map"). This seemed to require a fix at kernel level. I am not sure this
+fix has been worked on.
 
-diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index 167bcd9b09b7..04e95377a72a 100644
---- a/arch/arm64/boot/dts/ti/Makefile
-+++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -45,7 +45,9 @@ dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
- 
- # Enable support for device-tree overlays
- DTC_FLAGS_k3-am6548-iot2050-advanced-m2 += -@
-+DTC_FLAGS_k3-j7200-common-proc-board += -@
- DTC_FLAGS_k3-j721e-common-proc-board += -@
- 
- # Device-tree overlays
-+dtb-$(CONFIG_ARCH_K3) += k3-j7200-quad-port-eth-exp.dtbo
- dtb-$(CONFIG_ARCH_K3) += k3-j721e-quad-port-eth-exp.dtbo
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-quad-port-eth-exp.dtso b/arch/arm64/boot/dts/ti/k3-j7200-quad-port-eth-exp.dtso
-new file mode 100644
-index 000000000000..b84f185c0a31
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-quad-port-eth-exp.dtso
-@@ -0,0 +1,100 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/**
-+ * DT Overlay for CPSW5G in QSGMII mode using J7 Quad Port ETH EXP Add-On Ethernet Card with
-+ * J7200 board.
-+ *
-+ * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/mux/ti-serdes.h>
-+#include <dt-bindings/pinctrl/k3.h>
-+
-+/ {
-+	fragment@101 {
-+		target-path = "/";
-+		__overlay__ {
-+			aliases {
-+				ethernet1 = "/bus@100000/ethernet@c000000/ethernet-ports/port@1";
-+				ethernet2 = "/bus@100000/ethernet@c000000/ethernet-ports/port@2";
-+				ethernet3 = "/bus@100000/ethernet@c000000/ethernet-ports/port@3";
-+				ethernet4 = "/bus@100000/ethernet@c000000/ethernet-ports/port@4";
-+			};
-+		};
-+	};
-+};
-+
-+&cpsw0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mdio0_pins_default>;
-+};
-+
-+&cpsw0_port1 {
-+	phy-handle = <&cpsw5g_phy0>;
-+	phy-mode = "qsgmii";
-+	mac-address = [00 00 00 00 00 00];
-+	phys = <&cpsw0_phy_gmii_sel 1>;
-+};
-+
-+&cpsw0_port2 {
-+	phy-handle = <&cpsw5g_phy1>;
-+	phy-mode = "qsgmii";
-+	mac-address = [00 00 00 00 00 00];
-+	phys = <&cpsw0_phy_gmii_sel 2>;
-+};
-+
-+&cpsw0_port3 {
-+	phy-handle = <&cpsw5g_phy2>;
-+	phy-mode = "qsgmii";
-+	mac-address = [00 00 00 00 00 00];
-+	phys = <&cpsw0_phy_gmii_sel 3>;
-+};
-+
-+&cpsw0_port4 {
-+	phy-handle = <&cpsw5g_phy3>;
-+	phy-mode = "qsgmii";
-+	mac-address = [00 00 00 00 00 00];
-+	phys = <&cpsw0_phy_gmii_sel 4>;
-+};
-+
-+&cpsw5g_mdio {
-+	reset-gpios = <&exp2 17 GPIO_ACTIVE_LOW>;
-+	reset-post-delay-us = <120000>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	cpsw5g_phy0: ethernet-phy@16 {
-+		reg = <16>;
-+	};
-+	cpsw5g_phy1: ethernet-phy@17 {
-+		reg = <17>;
-+	};
-+	cpsw5g_phy2: ethernet-phy@18 {
-+		reg = <18>;
-+	};
-+	cpsw5g_phy3: ethernet-phy@19 {
-+		reg = <19>;
-+	};
-+};
-+
-+&exp2 {
-+	qsgmii-line-hog {
-+		gpio-hog;
-+		gpios = <16 GPIO_ACTIVE_HIGH>;
-+		output-low;
-+		line-name = "qsgmii-pwrdn-line";
-+	};
-+};
-+
-+&main_pmx0 {
-+	mdio0_pins_default: mdio0-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x00a8, PIN_OUTPUT, 5) /* (W19) UART8_TXD.MDIO0_MDC */
-+			J721E_IOPAD(0x00a4, PIN_INPUT, 5) /* (W14) UART8_RXD.MDIO0_MDIO */
-+		>;
-+	};
-+};
--- 
-2.25.1
+Thanks
+
+Eric
+
+> guest-level IO page table via a RMR region in guest-level IORT, aligning
+> with an IOVA region that's predefined and mapped in the host kernel:
+>
+>   [stage-2 host level]
+>   #define MSI_IOVA_BASE		0x8000000
+>   #define MSI_IOVA_LENGTH	0x100000
+>   ...
+>   iommu_get_msi_cookie():
+> 	cookie->msi_iova = MSI_IOVA_BASE;
+>   ...
+>   iommu_dma_prepare_msi(its_pa):
+> 	domain = iommu_get_domain_for_dev(dev);
+> 	iommu_dma_get_msi_page(its_pa, domain):
+> 		cookie = domain->iova_cookie;
+> 		iova = iommu_dma_alloc_iova():
+> 			return cookie->msi_iova - size;
+> 		iommu_map(iova, its_pa, ...);
+>
+>   [stage-1 guest level]
+>   // Define in IORT a RMR [MSI_IOVA_BASE, MSI_IOVA_LENGTH]
+>   ...
+>   iommu_create_device_direct_mappings():
+> 	iommu_map(iova=MSI_IOVA_BASE, pa=MSI_IOVA_BASE, len=MSI_IOVA_LENGTH);
+>
+> This solution calling iommu_get_domain_for_dev() needs the device to get
+> attached to a host-level iommu_domain that has the msi_cookie.
+>
+> On the other hand, IOMMUFD designs two iommu_domain objects to represent
+> the two stages: a stage-1 domain (IOMMU_DOMAIN_NESTED type) and a stage-2
+> domain (IOMMU_DOMAIN_UNMANAGED type). In this design, the device will be
+> attached to the stage-1 domain representing a guest-level IO page table,
+> or a Context Descriptor Table in SMMU's term.
+>
+> This is obviously a mismatch, as the iommu_get_domain_for_dev() does not
+> return the correct domain pointer in iommu_dma_prepare_msi().
+>
+> Add an iommu_get_unmanaged_domain helper to allow drivers to return the
+> correct IOMMU_DOMAIN_UNMANAGED iommu_domain having the IOVA mappings for
+> the msi_cookie. Keep it in the iommu-priv header for internal use only.
+>
+> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>  drivers/iommu/dma-iommu.c  |  5 +++--
+>  drivers/iommu/iommu-priv.h | 15 +++++++++++++++
+>  include/linux/iommu.h      |  2 ++
+>  3 files changed, 20 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+> index 99b2646cb5c7..6b0409d0ff85 100644
+> --- a/drivers/iommu/dma-iommu.c
+> +++ b/drivers/iommu/dma-iommu.c
+> @@ -31,6 +31,7 @@
+>  #include <linux/vmalloc.h>
+>  
+>  #include "dma-iommu.h"
+> +#include "iommu-priv.h"
+>  
+>  struct iommu_dma_msi_page {
+>  	struct list_head	list;
+> @@ -1652,7 +1653,7 @@ static struct iommu_dma_msi_page *iommu_dma_get_msi_page(struct device *dev,
+>  int iommu_dma_prepare_msi(struct msi_desc *desc, phys_addr_t msi_addr)
+>  {
+>  	struct device *dev = msi_desc_to_dev(desc);
+> -	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
+> +	struct iommu_domain *domain = iommu_get_unmanaged_domain(dev);
+>  	struct iommu_dma_msi_page *msi_page;
+>  	static DEFINE_MUTEX(msi_prepare_lock); /* see below */
+>  
+> @@ -1685,7 +1686,7 @@ int iommu_dma_prepare_msi(struct msi_desc *desc, phys_addr_t msi_addr)
+>  void iommu_dma_compose_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
+>  {
+>  	struct device *dev = msi_desc_to_dev(desc);
+> -	const struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
+> +	const struct iommu_domain *domain = iommu_get_unmanaged_domain(dev);
+>  	const struct iommu_dma_msi_page *msi_page;
+>  
+>  	msi_page = msi_desc_get_iommu_cookie(desc);
+> diff --git a/drivers/iommu/iommu-priv.h b/drivers/iommu/iommu-priv.h
+> index a6e694f59f64..da8044da9ad8 100644
+> --- a/drivers/iommu/iommu-priv.h
+> +++ b/drivers/iommu/iommu-priv.h
+> @@ -15,6 +15,21 @@ static inline const struct iommu_ops *dev_iommu_ops(struct device *dev)
+>  	return dev->iommu->iommu_dev->ops;
+>  }
+>  
+> +static inline struct iommu_domain *iommu_get_unmanaged_domain(struct device *dev)
+> +{
+> +	const struct iommu_ops *ops;
+> +
+> +	if (!dev->iommu || !dev->iommu->iommu_dev)
+> +		goto attached_domain;
+> +
+> +	ops = dev_iommu_ops(dev);
+> +	if (ops->get_unmanaged_domain)
+> +		return ops->get_unmanaged_domain(dev);
+> +
+> +attached_domain:
+> +	return iommu_get_domain_for_dev(dev);
+> +}
+> +
+>  int iommu_group_replace_domain(struct iommu_group *group,
+>  			       struct iommu_domain *new_domain);
+>  
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 080278c8154d..76c65cc4fc15 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -275,6 +275,8 @@ struct iommu_ops {
+>  						  struct iommu_domain *parent,
+>  						  const void *user_data);
+>  
+> +	struct iommu_domain *(*get_unmanaged_domain)(struct device *dev);
+> +
+>  	struct iommu_device *(*probe_device)(struct device *dev);
+>  	void (*release_device)(struct device *dev);
+>  	void (*probe_finalize)(struct device *dev);
 
