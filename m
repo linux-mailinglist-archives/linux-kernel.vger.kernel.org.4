@@ -2,86 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 055746B5161
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 330786B5163
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjCJUFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 15:05:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        id S231239AbjCJUGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 15:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjCJUF1 (ORCPT
+        with ESMTP id S230391AbjCJUGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 15:05:27 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849AB1223B9;
-        Fri, 10 Mar 2023 12:05:26 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9FA451EC0505;
-        Fri, 10 Mar 2023 21:05:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678478724;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=LxdcVjTex/5D1F21dsooykzTuaD2TSooCSq9ywUUbCo=;
-        b=OB18JSyEdXi4pf5angNvJJKWTx+eE2riAiW7HZ8+/koQuO8c7cn9BCKwos+7vWXzK3bqe9
-        gI5QFueasqn8lGgpHOzIQpqvyWwSNr6wPX30zwl9MVbWoY3VHuxGT6B2sLbgl5ZUxzrzU5
-        2XmSXnM+O6phpIyuU4WoRuNqm5zDS7Y=
-Date:   Fri, 10 Mar 2023 21:05:19 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v7 33/41] x86/shstk: Introduce map_shadow_stack syscall
-Message-ID: <20230310200519.GDZAuNf+bvYjGtazqv@fat_crate.local>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-34-rick.p.edgecombe@intel.com>
- <ZAtWp76svXxvQl94@zn.tnic>
- <b85a86e8013280ce17a54d570aa162f1d463a230.camel@intel.com>
+        Fri, 10 Mar 2023 15:06:10 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C701241C5;
+        Fri, 10 Mar 2023 12:06:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678478766; x=1710014766;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GCX+SREOuUTF6DWJe6G4+KBSCJjSU2JwO0ekPKHb1t8=;
+  b=bWOwQ60GwPznPkATBLbrXg1aRW8kLNqMvkqqZqFEwLF1wZdrFifFksZT
+   +5txfSwWQLVVSIyk61RZG0Xo2Ka8jSWucO8D+qn9atVj7TcaTxZSBTVDp
+   5RJcRQST4LAexrLANsn+DvFmaGY3Sjgn16XD2hpKbXJxX1JiNYwVcZc7G
+   NOJveZbnqPstsKPnTtEEWKIgOJsYGZtd+2JufHWFO5IYYGh8Q+4ThVa70
+   VILTHoDJQ8Z1Rx9yBk8bwAQM7Dx47VMyQj56U4JMZgQEO1oHe6t+7YNlI
+   3TsIAnjhz+PoK3hPFtD8N3ptEmgmF4Wx0sJmZwmGPhbuVMRV1H+ZJNkhx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="338374049"
+X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
+   d="scan'208";a="338374049"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 12:06:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="766943684"
+X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
+   d="scan'208";a="766943684"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Mar 2023 12:06:02 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1paj04-0017wX-0t;
+        Fri, 10 Mar 2023 22:06:00 +0200
+Date:   Fri, 10 Mar 2023 22:06:00 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net-next v5 1/1] net: dsa: hellcreek: Get rid of custom
+ led_init_default_state_get()
+Message-ID: <ZAuNqChj3MUNbHqe@smile.fi.intel.com>
+References: <20230310163855.21757-1-andriy.shevchenko@linux.intel.com>
+ <ZAt0gqmOifS65Z91@corigine.com>
+ <ZAt6dDGQ7stx36UC@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b85a86e8013280ce17a54d570aa162f1d463a230.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <ZAt6dDGQ7stx36UC@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,27 +76,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 05:12:40PM +0000, Edgecombe, Rick P wrote:
-> > Can we use distinct negative retvals in each case so that it is clear
-> > to
-> > userspace where it fails, *if* it fails?
+On Fri, Mar 10, 2023 at 08:44:05PM +0200, Andy Shevchenko wrote:
+> On Fri, Mar 10, 2023 at 07:18:42PM +0100, Simon Horman wrote:
+> > On Fri, Mar 10, 2023 at 06:38:55PM +0200, Andy Shevchenko wrote:
+
+...
+
+> > This seems to duplicate the logic in the earlier hunk of this patch.
+> > Could it be moved into a helper?
 > 
-> Good idea, I think maybe ERANGE.
+> It's possible, but in a separate patch as it's out of scope of this one.
+> Do you want to create a such?
 
-For those two, right?
-
-        /* If there isn't space for a token */
-        if (set_tok && size < 8)
-                return -EINVAL;
-
-        if (addr && addr <= 0xFFFFFFFF)
-                return -EINVAL;
-
-They are kinda range-checking of sorts. A wider range but still
-similar... 
+FWIW, I tried and it gives us +9 lines of code. So, what would be the point?
+I can send as RFC in v6.
 
 -- 
-Regards/Gruss,
-    Boris.
+With Best Regards,
+Andy Shevchenko
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
