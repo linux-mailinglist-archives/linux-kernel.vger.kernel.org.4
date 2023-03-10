@@ -2,118 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B49B6B5376
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:54:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A8C6B5371
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbjCJVyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 16:54:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
+        id S232224AbjCJVww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 16:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbjCJVxr (ORCPT
+        with ESMTP id S231298AbjCJVwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 16:53:47 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD0314FE07
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:50:19 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1paka5-00043Y-LX; Fri, 10 Mar 2023 22:47:17 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1paka1-003GHn-RB; Fri, 10 Mar 2023 22:47:13 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1paka1-003tZx-3f; Fri, 10 Mar 2023 22:47:13 +0100
-Date:   Fri, 10 Mar 2023 22:46:58 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     fnkl.kernel@gmail.com
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        - <asahi@lists.linux.dev>, Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v8 2/5] pwm: Add Apple PWM controller
-Message-ID: <20230310214658.424vui3frynit437@pengutronix.de>
-References: <20230214-fpwm-v8-0-65518a0d4944@gmail.com>
- <20230214-fpwm-v8-2-65518a0d4944@gmail.com>
+        Fri, 10 Mar 2023 16:52:30 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417D8104AE1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:49:04 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id i10so7035777plr.9
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:49:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678484857;
+        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bvqFMoukHnbi8zZDWrIR0Cqy/xe4wY5XQEtCWDlrMbs=;
+        b=BeDvODNBbxMyZd3xLBMTn42Ye5wUOBf3+W6xynBoF1HKwlfiXBTl7fR4zm7QJPwoZZ
+         cmKJbTnaLgjaJ+aTnMOwAlpxW8myh6xHG8rX7jrFZDBqxQMttj+CdJiJGPkZXVEur2hD
+         p+8PLPnJBxxGOEwEYR7rn3WJp3ZeHyNgRwxYLyvLwf3hN0EWNzNxkadxxFrTT5ipenRw
+         +nlWqKFSkJGPRuxE5nHF+p7/lADlSDQywvp0zsyZrpft8rlB659wDvzC0oQ07B1882vd
+         GL3hHafPSRSsXwgSQricA/HUVKJpRj2NCsAFjzdEkbciO+07L96H1QwIYZKDX7Av1L6k
+         Zq5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678484857;
+        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bvqFMoukHnbi8zZDWrIR0Cqy/xe4wY5XQEtCWDlrMbs=;
+        b=3xUlWFUtfKtWPn0wh2zZTiLiBNwyyFBp+xeXZBXpJABVlQppgjq8CqGtMMubLRPPlY
+         +vVw+XVLwUZRKQG0v/0AZx8yjjTBhZed6HrH26VjCfwQBfzx7cJ8+RnHuDshAVsKs4MH
+         6fOR9FGaEOhuau5MCLhl5cp5Aoy4/2KllTwJbFaLhKq0PRzA+9f2TLQNu/2hJEtd3JzE
+         zMfPZYpJwcfoILEkTRr75kBUnmsa4JhDW7InK/PEsr4p6Fy+1guJ//xBI2iH3JlY7P0O
+         3XRXLRw33QGz7pXVX+5Z4EDnR3wpsqRTtSmNg2t69Z3F9nESzs+IhYY7usqdAKF9m7xY
+         73ZA==
+X-Gm-Message-State: AO0yUKWdCRlFQV9dQeP7/j1y7LOrTlqq6Bl3Vgb8TvvBEntB6E4RlZsk
+        FLVQ87KVG5iolykz4qTt+3/v2KqyGt6Zu668iJ0=
+X-Google-Smtp-Source: AK7set81yoZfs27jmZWjD5lcqJFLlosobBO6dGfYY0pTt3rY7iVNSgVyfQifMqMFA2RVvbm4WsF6bw==
+X-Received: by 2002:a17:90a:2c2:b0:233:e305:f617 with SMTP id d2-20020a17090a02c200b00233e305f617mr28341289pjd.32.1678484857168;
+        Fri, 10 Mar 2023 13:47:37 -0800 (PST)
+Received: from CloudiRingWorld ([122.231.69.163])
+        by smtp.gmail.com with ESMTPSA id m15-20020a17090ab78f00b002369e16b276sm360893pjr.32.2023.03.10.13.47.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 13:47:36 -0800 (PST)
+Date:   Sat, 11 Mar 2023 05:47:34 +0800
+From:   Kloudifold <cloudifold.3125@gmail.com>
+To:     julia.lawall@inria.fr
+Cc:     teddy.wang@siliconmotion.com, sudipm.mukherjee@gmail.com,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: sm750: Rename camel case functions in
+ sm750_cursor.*
+Message-ID: <ZAuldn536Ci0fcrV@CloudiRingWorld>
+Reply-To: alpine.DEB.2.22.394.2303102236190.3199@hadrien
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wbrnvcvhbc5cviao"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230214-fpwm-v8-2-65518a0d4944@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thank you for your advice! Should I change this patch and patch message
+and resend it?
 
---wbrnvcvhbc5cviao
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sat, 11 Mar 2023 at 05:39, Julia Lawall <julia.lawall@inria.fr> wrote:
+>
+> You don't need the filename in the subject.
+>
+> On Sat, 11 Mar 2023, Kloudifold wrote:
+>
+> > This patch fixes the "CHECK: Avoid CamelCase" reported by
+> > checkpatch.pl by renaming camel case functions.
+> >
+> > Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
+> > ---
+> >  drivers/staging/sm750fb/sm750_cursor.c | 14 +++++++-------
+> >  drivers/staging/sm750fb/sm750_cursor.h | 12 ++++++------
+> >  2 files changed, 13 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
+> > index 43e6f52c2..ff643e33f 100644
+> > --- a/drivers/staging/sm750fb/sm750_cursor.c
+> > +++ b/drivers/staging/sm750fb/sm750_cursor.c
+> > @@ -58,13 +58,13 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
+> >       poke32(HWC_ADDRESS, 0);
+> >  }
+> >
+> > -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
+> > +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
+> >  {
+> >       cursor->w = w;
+> >       cursor->h = h;
+> >  }
+> >
+> > -void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
+> > +void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y)
+> >  {
+> >       u32 reg;
+> >
+> > @@ -73,7 +73,7 @@ void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
+> >       poke32(HWC_LOCATION, reg);
+> >  }
+> >
+> > -void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
+> > +void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg)
+> >  {
+> >       u32 reg = (fg << HWC_COLOR_12_2_RGB565_SHIFT) &
+> >               HWC_COLOR_12_2_RGB565_MASK;
+> > @@ -82,8 +82,8 @@ void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
+> >       poke32(HWC_COLOR_3, 0xffe0);
+> >  }
+> >
+> > -void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+> > -                          const u8 *pcol, const u8 *pmsk)
+> > +void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
+> > +                           const u8 *pcol, const u8 *pmsk)
+>
+> The indentation of the second line looks random.  It's not a multiple of
+> the tabs, and it doesn't line up with the right side of the (.  So there
+> doesn't seem to be any need to change it for this patch.
 
-Hello Sascha,
-
-On Fri, Mar 10, 2023 at 07:44:08PM +0100, Sasha Finkelstein via B4 Relay wr=
-ote:
-> +static int apple_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-> +			   const struct pwm_state *state)
-> +{
-> +	struct apple_pwm *fpwm;
-> +
-> +	if (state->polarity =3D=3D PWM_POLARITY_INVERSED)
-> +		return -EINVAL;
-> +
-> +	fpwm =3D to_apple_pwm(chip);
-> +	if (state->enabled) {
-> +		u64 on_cycles, off_cycles;
-> +
-> +		on_cycles =3D mul_u64_u64_div_u64(fpwm->clkrate,
-> +						state->duty_cycle, NSEC_PER_SEC);
-> +		if (on_cycles > 0xFFFFFFFF)
-> +			on_cycles =3D 0xFFFFFFFF;
-> +
-> +		off_cycles =3D mul_u64_u64_div_u64(fpwm->clkrate,
-> +						 state->period, NSEC_PER_SEC) - on_cycles;
-> +		if (off_cycles > 0xFFFFFFFF)
-> +			return -ERANGE;
-
-This is still wrong and needs clamping, too.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---wbrnvcvhbc5cviao
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQLpU8ACgkQwfwUeK3K
-7Al6iAf/brzDkPdu7qhixSZXlHEcf+6cCEGjYdch6SwKLkspprLcOrBvHsvEa8ay
-TYG02baQpF4eNbZdPBbBv2b4VOqDOJ92H8Bx7IvfhCQy+fdZkSCiSeXHPteY91Hc
-A56UkrBNesv68qEdfX6e4vtVYZbexHFqgaeTZMPfr8dsqt0ms0RyyMMuT/DhrpPs
-sBTZd7V0IybwXTCEomXUMbxOA1mzWfU05rEz4bPUOS14N9TL8i1Mom8VsZrMD5UH
-bO6F9Y13HCXq8xUgLKZnoxqEEm1E2r6ZunUTSb/RenSaxGE2xx9NlHlTNeyKJR2V
-FYA1FefcQgl8RIZvCowtSH9Y+Lkcvg==
-=MgXN
------END PGP SIGNATURE-----
-
---wbrnvcvhbc5cviao--
