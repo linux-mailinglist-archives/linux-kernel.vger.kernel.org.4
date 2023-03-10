@@ -2,205 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6741E6B5216
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4836B521B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231466AbjCJUmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 15:42:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
+        id S231426AbjCJUoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 15:44:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjCJUmt (ORCPT
+        with ESMTP id S229940AbjCJUoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 15:42:49 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E23D135520;
-        Fri, 10 Mar 2023 12:42:47 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id o5-20020a05600c510500b003ec0e4ec6deso890843wms.3;
-        Fri, 10 Mar 2023 12:42:47 -0800 (PST)
+        Fri, 10 Mar 2023 15:44:04 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AA8D1ACE;
+        Fri, 10 Mar 2023 12:44:02 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-536af432ee5so121391327b3.0;
+        Fri, 10 Mar 2023 12:44:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678480966;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xtdqo2ZxphSElsKQbC7tvl0caLRLqCXXyE2IaE675+8=;
-        b=FTT4ONWceB/5GsdfPoOPF7cMWniFtzHvok1pdW4JldPu+5WJtcsRq3m7mcxfM5HY5H
-         h6agUt2CK7MYmBiLSjw/MBp5pFgjipGJM897tYNGwzOysVXrTXman290g9TOAUxnC7+H
-         ZORaN5MBBMQhD1FTJmYoyuO4oER3hT+dKOa+lDblrO29j7nm5ymJvRpDbHeLR7OwFEd9
-         Evc6ZmDTIXzUyK04Su3WZdkr83dn1LRrs3V5AEv+/R1JcDtyosTBPn6jc+D/GuImw9nQ
-         jHOCEnfrLO+4Un4zY+Km4yA3I7ZWAJYpxjU9pmN+J5YxOdPjSVvzZXXMrjYcQDXwKYar
-         RjZw==
+        d=gmail.com; s=20210112; t=1678481042;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MiHyK6eFcFQYW0X9EQJHwCgulOPguYCYeXhog8HuzIs=;
+        b=bWhKR3NGDtXleP47GUljwpGUd0ZL772CbqQX5a8h1Cb2+VINP3RxlrjyHM10iAn2O+
+         SdnPFx1STjV9IOiCLIpPRReha5ycRwuThEYT5fYenqk3N582y6ngxY8vt9p+vls4hvh0
+         qUb+yErHdSwsoFJfneYrQi3pZJ/7whFeV5w6LeldnliyC3Sw+7dVhTb3K/nKSsBLT7MB
+         YeH++ImohPUUHeokysg68dANFfa+j6G+I19en6V7gBXDRjLJbQhB8A4W2m18HD3hROIC
+         CJR7apmB3nJsFEVSB1hz7oEiYwx4jRbCv+WRKRaDcyh4BOTFARjocbxWPqWT4FmDBl+y
+         JiGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678480966;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xtdqo2ZxphSElsKQbC7tvl0caLRLqCXXyE2IaE675+8=;
-        b=MGyo549oZ2EOFc9cRbfKMisDdcDfYzHBrsHTETXMnlTq8y5mPE3Zg8mr1HZhtiK5sM
-         ZCB7lIN6eJu6PFkVRqefNlQZNOLgl1tc0Fm89NczkKxqd76b0f1zGPCnbClDpjVDsaQ/
-         k22b9qsQHbvlEL2eR/8FWWpAbNJ3yRvaLgOPIWq8J2kU895PEOKQK8Nv9AehKPD3qlTH
-         KMjXQDijoKusf8EFytmtihp6xZhReBfp4J+K6n134LgcxKty2KilPDoUP/JCljSUy2k9
-         ZXETmEZ/uRIqmEywwGXdEJPFEDp8sIJVRVQW6xEU29Gaji9Y10wMngYKvemCaArZ1AiY
-         mmfA==
-X-Gm-Message-State: AO0yUKW4nyC2Fz8mT2svUOqmrQY2c2Of+8VEBsiduBh5a5Sa2npZl8+1
-        TvZxAKMICyvSB4q7urOBSns=
-X-Google-Smtp-Source: AK7set9i/H7lcl1NiLITrPig13UwQIZ46O/VTbTxY7tSer8zWM3Q7SYO2ulKXHjtb5w01F+NRCNjAQ==
-X-Received: by 2002:a05:600c:3b13:b0:3eb:2e32:72b4 with SMTP id m19-20020a05600c3b1300b003eb2e3272b4mr3947184wms.15.1678480965890;
-        Fri, 10 Mar 2023 12:42:45 -0800 (PST)
-Received: from ?IPV6:2a01:c22:7669:bf00:58d7:455f:e597:a838? (dynamic-2a01-0c22-7669-bf00-58d7-455f-e597-a838.c22.pool.telefonica.de. [2a01:c22:7669:bf00:58d7:455f:e597:a838])
-        by smtp.googlemail.com with ESMTPSA id a7-20020a5d5707000000b002c54f4d0f71sm670939wrv.38.2023.03.10.12.42.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 12:42:21 -0800 (PST)
-Message-ID: <eb2bee03-1b2c-384b-e9c1-5ddf2240c828@gmail.com>
-Date:   Fri, 10 Mar 2023 21:42:04 +0100
+        d=1e100.net; s=20210112; t=1678481042;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MiHyK6eFcFQYW0X9EQJHwCgulOPguYCYeXhog8HuzIs=;
+        b=PqaNJ1n9DB17ogoxPxT2ycz6LlScNlvXGwuOiTS8vXfXJhWnnjobFI4irHnZ0ez6B2
+         whrsiBbM2MhbMryie5tuTYVSlNQqJIPnsHN1yiSCKVUEK2NhWRRlm5LCXS8VAiRvOPvT
+         VLjCP/jX/8pRsxjJcP6eI+1NR6ANblquQDY/lcr25ANqqKm0NxXkyQa0GmIrl2vbMgDs
+         l/2uNb1GllXuIuerx01mfNoHzMdiqwDbRww7RQvUbDqrGLOHb2aHz5Z3XVOYGyyQodv5
+         JHrDYho8+8Uz1aUdRzC0PI+/y6A+2NJEbBbjD+1vepxLNWFHr9WoSt02GpqkW73KJIvR
+         pZpw==
+X-Gm-Message-State: AO0yUKWLqSlz06p5ialLxCnYfA3cknj5QPz/xv62LrlLhDupQBIkBfd4
+        C77YlBAFqSQzmFZEltF/ytD2jBY81viOpmJStKk=
+X-Google-Smtp-Source: AK7set/wnmFzHOkuniTe8FhWVZ1SloaUAzrTpFYzMfVKG6Gf7/z0x1JQCIVDicqLTJnrMPNaqokwAQhpHW8IDezq6Xw=
+X-Received: by 2002:a81:ac1a:0:b0:533:cf4e:9a80 with SMTP id
+ k26-20020a81ac1a000000b00533cf4e9a80mr16886546ywh.6.1678481042094; Fri, 10
+ Mar 2023 12:44:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH net-next v9 3/5] r8169: Consider chip-specific ASPM can be
- enabled on more cases
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     nic_swsd@realtek.com, bhelgaas@google.com, koba.ko@canonical.com,
-        acelan.kao@canonical.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, vidyas@nvidia.com,
-        rafael.j.wysocki@intel.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20230309201705.GA1165139@bhelgaas>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <20230309201705.GA1165139@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-29-rick.p.edgecombe@intel.com> <ZAhjLAIm91rJ2Lpr@zn.tnic>
+ <9e00b2a3d988f7b24d274a108d31f5f0096eeaae.camel@intel.com>
+ <20230309125739.GCZAnXw5T1dfzwtqh8@fat_crate.local> <a4dd415ac908450b09b9abbd4421a9132b3c34cc.camel@intel.com>
+ <20230309235152.GBZApxGNnXLvkGXCet@fat_crate.local> <e83ee9fc1a6e98cab62b681de7209598394df911.camel@intel.com>
+ <CAMe9rOrK2d6+Y_Xb+NUW4i+GWRbX+mGx+mJLwnEAB4hvsQ_eiw@mail.gmail.com>
+ <CAMe9rOo990TPY-VDzOgGq7aN1aQUjZaWiXLRC81XTq_xqFUm9w@mail.gmail.com> <f020ce5ba5727dc6e25b6cc158be15e9c2ad0bee.camel@intel.com>
+In-Reply-To: <f020ce5ba5727dc6e25b6cc158be15e9c2ad0bee.camel@intel.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Fri, 10 Mar 2023 12:43:26 -0800
+Message-ID: <CAMe9rOqSSH06azPmGM4_oLsJO65D5F5UzZoN_GJ3+s842a9mAA@mail.gmail.com>
+Subject: Re: [PATCH v7 28/41] x86: Introduce userspace API for shadow stack
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.03.2023 21:17, Bjorn Helgaas wrote:
-> On Sat, Feb 25, 2023 at 11:46:33AM +0800, Kai-Heng Feng wrote:
->> To really enable ASPM on r8169 NICs, both standard PCIe ASPM and
->> chip-specific ASPM have to be enabled at the same time.
->>
->> Before enabling ASPM at chip side, make sure the following conditions
->> are met:
->> 1) Use pcie_aspm_support_enabled() to check if ASPM is disabled by
->>    kernel parameter.
->> 2) Use pcie_aspm_capable() to see if the device is capable to perform
->>    PCIe ASPM.
->> 3) Check the return value of pci_disable_link_state(). If it's -EPERM,
->>    it means BIOS doesn't grant ASPM control to OS, and device should use
->>    the ASPM setting as is.
->>
->> Consider ASPM is manageable when those conditions are met.
->>
->> While at it, disable ASPM at chip-side for TX timeout reset, since
->> pci_disable_link_state() doesn't have any effect when OS isn't granted
->> with ASPM control.
-> 
-> 1) "While at it, ..." is always a hint that maybe this part could be
-> split to a separate patch.
-> 
-> 2) The mix of chip-specific and standard PCIe ASPM configuration is a
-> mess.  Does it *have* to be intermixed at run-time, or could all the
-> chip-specific stuff be done once, e.g., maybe chip-specific ASPM
-> enable could be done at probe-time, and then all subsequent ASPM
-> configuration could done via the standard PCIe registers?
-> 
-> I.e., does the chip work correctly if chip-specific ASPM is enabled,
-> but standard PCIe ASPM config is *disabled*?
-> 
-> The ASPM sysfs controls [1] assume that L0s, L1, L1.1, L1.2 can all be
-> controlled simply by using the standard PCIe registers.  If that's not
-> the case for r8169, things will break when people use the sysfs knobs.
-> 
-This series has been superseded meanwhile and what is being discussed
-here has become obsolete.
+On Fri, Mar 10, 2023 at 12:27 PM Edgecombe, Rick P
+<rick.p.edgecombe@intel.com> wrote:
+>
+> On Fri, 2023-03-10 at 12:00 -0800, H.J. Lu wrote:
+> > > > So it does:
+> > > > 1. Enable shadow stack
+> > > > 2. Call elf libs checking functions
+> > > > 3. If all good, lock shadow stack. Else, disable shadow stack.
+> > > > 4. Return from elf checking functions and if shstk is enabled,
+> > > > don't
+> > > > underflow because it was enabled in step 1 and we have return
+> > > > addresses
+> > > > from 2 on the shadow stack
+> > > >
+> > > > I'm wondering if this can't be improved in glibc to look like:
+> > > > 1. Check elf libs, and record it somewhere
+> > > > 2. Wait until just the right spot
+> > > > 3. If all good, enable and lock shadow stack.
+> > >
+> > > I will try it out.
+> > >
+> >
+> > Currently glibc enables shadow stack as early as possible.  There
+> > are only a few places where a function call in glibc never returns.
+> > We can enable shadow stack just before calling main.   There are
+> > quite some code paths without shadow stack protection.   Is this
+> > an issue?
+>
+> Thanks for checking. Hmm, does the loader get attacked?
 
-> Bjorn
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/ABI/testing/sysfs-bus-pci?id=v6.2#n420
-> 
->> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->> ---
->> v9:
->>  - No change.
->>
->> v8:
->>  - Enable chip-side ASPM only when PCIe ASPM is already available.
->>  - Wording.
->>
->> v7:
->>  - No change.
->>
->> v6:
->>  - Unconditionally enable chip-specific ASPM.
->>
->> v5:
->>  - New patch.
->>
->>  drivers/net/ethernet/realtek/r8169_main.c | 22 ++++++++++++++++++----
->>  1 file changed, 18 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
->> index 45147a1016bec..a857650c2e82b 100644
->> --- a/drivers/net/ethernet/realtek/r8169_main.c
->> +++ b/drivers/net/ethernet/realtek/r8169_main.c
->> @@ -2675,8 +2675,11 @@ static void rtl_disable_exit_l1(struct rtl8169_private *tp)
->>  
->>  static void rtl_hw_aspm_clkreq_enable(struct rtl8169_private *tp, bool enable)
->>  {
->> -	/* Don't enable ASPM in the chip if OS can't control ASPM */
->> -	if (enable && tp->aspm_manageable) {
->> +	/* Skip if PCIe ASPM isn't possible */
->> +	if (!tp->aspm_manageable)
->> +		return;
->> +
->> +	if (enable) {
->>  		RTL_W8(tp, Config5, RTL_R8(tp, Config5) | ASPM_en);
->>  		RTL_W8(tp, Config2, RTL_R8(tp, Config2) | ClkReqEn);
->>  
->> @@ -4545,8 +4548,13 @@ static void rtl_task(struct work_struct *work)
->>  		/* ASPM compatibility issues are a typical reason for tx timeouts */
->>  		ret = pci_disable_link_state(tp->pci_dev, PCIE_LINK_STATE_L1 |
->>  							  PCIE_LINK_STATE_L0S);
->> +
->> +		/* OS may not be granted to control PCIe ASPM, prevent the driver from using it */
->> +		tp->aspm_manageable = 0;
->> +
->>  		if (!ret)
->>  			netdev_warn_once(tp->dev, "ASPM disabled on Tx timeout\n");
->> +
->>  		goto reset;
->>  	}
->>  
->> @@ -5227,13 +5235,19 @@ static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
->>  	 * Chips from RTL8168h partially have issues with L1.2, but seem
->>  	 * to work fine with L1 and L1.1.
->>  	 */
->> -	if (rtl_aspm_is_safe(tp))
->> +	if (!pcie_aspm_support_enabled() || !pcie_aspm_capable(pdev))
->> +		rc = -EINVAL;
->> +	else if (rtl_aspm_is_safe(tp))
->>  		rc = 0;
->>  	else if (tp->mac_version >= RTL_GIGA_MAC_VER_46)
->>  		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1_2);
->>  	else
->>  		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1);
->> -	tp->aspm_manageable = !rc;
->> +
->> +	/* -EPERM means BIOS doesn't grant OS ASPM control, ASPM should be use
->> +	 * as is. Honor it.
->> +	 */
->> +	tp->aspm_manageable = (rc == -EPERM) ? 1 : !rc;
->>  
->>  	tp->dash_type = rtl_check_dash(tp);
->>  
->> -- 
->> 2.34.1
->>
+Not I know of.  But there are user codes from .init_array
+and .preinit_array which are executed before main.   In theory,
+an attack can happen before main.
 
+-- 
+H.J.
