@@ -2,63 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECA16B34EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 586036B34EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjCJDoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 22:44:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
+        id S230130AbjCJDpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 22:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjCJDoP (ORCPT
+        with ESMTP id S229550AbjCJDps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 22:44:15 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49142E6D96;
-        Thu,  9 Mar 2023 19:44:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bVXg3/N0udKCRyKcsw/ty2s14jHV9mY2+I33imZcLao=; b=vUKPxgJ5uqxNJjdH0hJnYDyhha
-        QwQdRmnMCgcMqHCQzq4FmWkg3VYymlYNC7ykzdJezJppbejaYvl4f63dNzgWmdILzBQiqYCwQgXRQ
-        aUAuyqur+dMhLJxXI2MlLo3HsqAFLwidxmssrtpGGb0wMG2B50ibu5LkV3raH6N5XwzIaFyq312xK
-        Px5vsgSpOCjZleK0yQZbAEqcOGBo/kUKUN2rEf67qhGgvGgmjhn2Aw7O2qbtHtCptkucEjuYb91qq
-        YOySJBvBGtfVsOyXm81NKUDCtrSQ6OUINOWSdZy1HfBbtQHHpAXnc5FHYCY+3rioUZqleAq2fmhzo
-        10g8dunA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1paTfr-00FCi4-0t;
-        Fri, 10 Mar 2023 03:44:07 +0000
-Date:   Fri, 10 Mar 2023 03:44:07 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     brauner@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH] fs: Fix description of vfs_tmpfile()
-Message-ID: <20230310034407.GI3390869@ZenIV>
-References: <20230306103531.1298202-1-roberto.sassu@huaweicloud.com>
+        Thu, 9 Mar 2023 22:45:48 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0874EBDB2;
+        Thu,  9 Mar 2023 19:45:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678419948; x=1709955948;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BtK5yk4L+JcH4nc/mPssOI1zi/KR19RumHOvaryUomQ=;
+  b=cJIEh8kPbqNraHkPfFA3XyVsNJ6BxbOHQ/AkcyiTktFYSXRB0SQRVc4F
+   C+5AH1oF9tveTrlSuBcQDlzAIPcwuhjIiNYspJ3b0wopkEyd6YcYjLrtB
+   cZUHIYKtlT1qhSCBZr+1s4awvnpYJSedIWFePC8Z0TesIU92+49uSy9iv
+   YWoOTmLep5HlpWgMUAqtiFgbqDLOmXmKFXASEP3+aE2j9r2+HOt3NVyS1
+   vkZ/0c99pr+HORVysgLEaW1A9vQ+kmFZ+0TQP9Lb3I9yr7fT1Z2Cndw7V
+   /KL2ipnW7fIildvFNxKu6dNtODqVW8jsnsOzdErMygGacCjq1gXnx+uW1
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="401498152"
+X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
+   d="scan'208";a="401498152"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 19:45:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="741809582"
+X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
+   d="scan'208";a="741809582"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by fmsmga008.fm.intel.com with ESMTP; 09 Mar 2023 19:45:41 -0800
+Message-ID: <c23246ff-6bee-a251-82ae-45990e3e4f8d@linux.intel.com>
+Date:   Fri, 10 Mar 2023 11:44:41 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306103531.1298202-1-roberto.sassu@huaweicloud.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH v5 3/7] iommu/sva: Remove PASID to mm lookup function
+Content-Language: en-US
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        X86 Kernel <x86@kernel.org>, bp@alien8.de,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
+        vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20230309222159.487826-1-jacob.jun.pan@linux.intel.com>
+ <20230309222159.487826-5-jacob.jun.pan@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230309222159.487826-5-jacob.jun.pan@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 11:35:31AM +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On 3/10/23 6:21 AM, Jacob Pan wrote:
+> There is no user of iommu_sva_find() function, remove it so that PASID
+> allocator can be a simple IDA. Device drivers are expected to store
+> and keep track of their own PASID metadata.
 > 
-> Update the description of vfs_tmpfile() to match the current parameters of
-> that function.
-> 
-> Fixes: 9751b338656f ("vfs: move open right after ->tmpfile()")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Acked-by: Christian Brauner <brauner@kernel.org>
+> Signed-off-by: Jason Gunthorpe<jgg@nvidia.com>
+> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
 
-Applied (#work.misc)
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+
+Best regards,
+baolu
