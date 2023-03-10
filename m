@@ -2,199 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C656B40AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 652196B40D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjCJNoE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 08:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
+        id S230251AbjCJNqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 08:46:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjCJNoB (ORCPT
+        with ESMTP id S229895AbjCJNqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:44:01 -0500
-Received: from mail5.swissbit.com (mail5.swissbit.com [148.251.244.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D9277E07;
-        Fri, 10 Mar 2023 05:43:58 -0800 (PST)
-Received: from mail5.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 079703A2B24;
-        Fri, 10 Mar 2023 14:43:52 +0100 (CET)
-Received: from mail5.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id EEE1C3A2B1F;
-        Fri, 10 Mar 2023 14:43:51 +0100 (CET)
-X-TM-AS-ERS: 10.181.10.102-127.5.254.253
-X-TM-AS-SMTP: 1.0 bXgyLmRtei5zd2lzc2JpdC5jb20= Y2xvZWhsZUBoeXBlcnN0b25lLmNvb
-        Q==
-X-DDEI-TLS-USAGE: Used
-Received: from mx2.dmz.swissbit.com (mx2.dmz.swissbit.com [10.181.10.102])
-        by mail5.swissbit.com (Postfix) with ESMTPS;
-        Fri, 10 Mar 2023 14:43:51 +0100 (CET)
-From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>
-CC:     Wenchao Chen <wenchao.chen666@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an
- internal cache
-Thread-Topic: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an
- internal cache
-Thread-Index: AQHZTRVhGw7IamWdbkW+N3YLAv3UBK70EaAw
-Date:   Fri, 10 Mar 2023 13:43:50 +0000
-Message-ID: <54cee7de4ab7479db74b21e64e5f53cf@hyperstone.com>
-References: <20230302144330.274947-1-ulf.hansson@linaro.org>
-In-Reply-To: <20230302144330.274947-1-ulf.hansson@linaro.org>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Fri, 10 Mar 2023 08:46:22 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F3010BA5A;
+        Fri, 10 Mar 2023 05:46:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678455981; x=1709991981;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bRieUvM7mwqpEqyRNij92CPtcQ20rS/UHWcE93X/HzI=;
+  b=bzFR3Sfgl8v+ER/8roMsxPE5WaXZnbPvZGC9MKzTCaIJj5nq34EKZ6RO
+   F6VnhIwNOnJg9RfFExYaI3oqi6QmKaWxPFPOgNxoAL6NopbH/vq/ZKvUA
+   zJxVp9mVtEtH2MSi7ugvGYqZQKmyXnFd1NKLQYh17S7Nr01DOGqlCVzOS
+   m+RyegZoNMcJ2B91pegaKZnCjXIY/sn3qbehisYNJMB2Roc1gnYi+GL5x
+   ypldTtZeQf29g6YteTnJfSVzt+qIYyTONpGkyRMMstTIxzeigIcJhfUYx
+   SAQosFlHB3VctHAV/tTh2LvzKcgnD8iK0Z8CWTSBfhPdUMoTgEbHdNjHp
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="335426020"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="335426020"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 05:46:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="741981046"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="741981046"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Mar 2023 05:46:16 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pad4Y-000tiL-1B;
+        Fri, 10 Mar 2023 15:46:14 +0200
+Date:   Fri, 10 Mar 2023 15:46:14 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        oe-kbuild-all@lists.linux.dev,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v6 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <ZAs0pvTByHWbb+9N@smile.fi.intel.com>
+References: <20230309085713.57700-1-tony@atomide.com>
+ <202303100516.22vtkWv4-lkp@intel.com>
+ <20230310065238.GJ7501@atomide.com>
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-27494.007
-X-TMASE-Result: 10--15.961800-10.000000
-X-TMASE-MatchedRID: 0aps3uOmWi7UL3YCMmnG4rqQyAveNtg6OyEDKyNnz+8/gf7afIrQUxiQ
-        n63S7zCUOelg+pLqPPFjHpk2g6Yfbmk5Fql3Faa7PMcAlOC0qrDhx1VJT84rPWjliw+xvItdXH3
-        W+57nGflI/gFRC4jJyCcntLVR9yI1xONdUAdRajMR3SGennXG69FBNyU0Q3FE7zyq0taM3pg8Uy
-        YxPpz6Nj+Ok6f9gUlFzhQxGE0nTV42KFyqcyHlTZ4CIKY/Hg3AY2fxc+IAshspZfPxcZsT/Cq2r
-        l3dzGQ18DFFIBzQ4Q0i4mJ41W/O+n7cGd19dSFd
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: 6faa3291-c63b-4be6-97a1-769330bd3ce7-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310065238.GJ7501@atomide.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have benchmarked the FUA/Cache behavior a bit.
-I don't have an actual filesystem benchmark that does what I wanted and is easy to port to the target so I used:
+On Fri, Mar 10, 2023 at 08:52:38AM +0200, Tony Lindgren wrote:
+> * kernel test robot <lkp@intel.com> [230309 21:31]:
+> > >> drivers/tty/serial/serial_ctrl.c:17:34: warning: 'serial_ctrl_pm' defined but not used [-Wunused-const-variable=]
+> >       17 | static DEFINE_RUNTIME_DEV_PM_OPS(serial_ctrl_pm, NULL, NULL, NULL);
+> >          |                                  ^~~~~~~~~~~~~~
+> 
+> Thanks I'll tag it with __maybe_unused.
 
-# call with
-# for loop in {1..3}; do sudo dd if=/dev/urandom bs=1M of=/dev/mmcblk2; done; for loop in {1..5}; do time ./filesystembenchmark.sh; umount /mnt; done
-mkfs.ext4 -F /dev/mmcblk2
-mount /dev/mmcblk2 /mnt
-for i in {1..3}
-do
-cp -r linux-6.2.2 /mnt/$i
-done
-for i in {1..3}
-do
-rm -r /mnt/$i
-done
-for i in {1..3}
-do
-cp -r linux-6.2.2 /mnt/$i
-done
+It requires to use pm_ptr() macro, it was designed exactly to *not* spread
+__maybe_unused.
 
+-- 
+With Best Regards,
+Andy Shevchenko
 
-I found a couple of DUTs that I can link, I also tested one industrial card.
-
-DUT1: blue PCB Foresee eMMC
-https://pine64.com/product/32gb-emmc-module/
-DUT2: green PCB SiliconGo eMMC
-Couldn't find that one online anymore unfortunately
-DUT3: orange hardkernel PCB 8GB
-https://www.hardkernel.com/shop/8gb-emmc-module-c2-android/
-DUT4: orange hardkernel PCB white dot
-https://rlx.sk/en/odroid/3198-16gb-emmc-50-module-xu3-android-for-odroid-xu3.html
-DUT5: Industrial card
-
-
-The test issued 461 DO_REL_WR during one of the iterations for DUT5
-
-DUT1:
-Cache, no FUA:
-13:04.49
-13:13.82
-13:30.59
-13:28:13
-13:20:64
-FUA:
-13:30.32
-13:36.26
-13:10.86
-13:32.52
-13:48.59
-
-DUT2:
-FUA:
-8:11.24
-7:47.73
-7:48.00
-7:48.18
-7:47.38
-Cache, no FUA:
-8:10.30
-7:48.97
-7:48.47
-7:47.93
-7:44.18
-
-DUT3:
-Cache, no FUA:
-7:02.82
-6:58.94
-7:03.20
-7:00.27
-7:00.88
-FUA:
-7:05.43
-7:03.44
-7:04.82
-7:03.26
-7:04.74
-
-DUT4:
-FUA:
-7:23.92
-7:20.15
-7:20.52
-7:19.10
-7:20.71
-Cache, no FUA:
-7:20.23
-7:20.48
-7:19.94
-7:18.90
-7:19.88
-
-Cache, no FUA:
-7:19.36
-7:02.11
-7:01.53
-7:01.35
-7:00.37
-Cache, no FUA CQE:
-7:17.55
-7:00.73
-6:59.25
-6:58.44
-6:58.60
-FUA:
-7:15.10
-6:58.99
-6:58.94
-6:59.17
-6:60.00
-FUA CQE:
-7:11.03
-6:58.04
-6:56.89
-6:56.43
-6:56:28
-
-If anyone has any comments or disagrees with the benchmark, or has a specific eMMC to test, let me know.
-
-Regards,
-Christian
-
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
 
