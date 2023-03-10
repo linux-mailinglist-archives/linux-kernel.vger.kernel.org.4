@@ -2,78 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B4F6B482F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F26676B4833
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233419AbjCJPAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
+        id S233624AbjCJPAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:00:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233703AbjCJO7o (ORCPT
+        with ESMTP id S233784AbjCJO74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:59:44 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5635C12116D
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:53:59 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77AED1515;
-        Fri, 10 Mar 2023 06:53:33 -0800 (PST)
-Received: from [10.57.90.67] (unknown [10.57.90.67])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11F5C3F71A;
-        Fri, 10 Mar 2023 06:52:47 -0800 (PST)
-Message-ID: <82f5b94b-01fe-5c99-608c-f7d124247b7c@arm.com>
-Date:   Fri, 10 Mar 2023 14:52:42 +0000
+        Fri, 10 Mar 2023 09:59:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B55212B02A;
+        Fri, 10 Mar 2023 06:54:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62F69B82314;
+        Fri, 10 Mar 2023 14:53:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 183ACC433AA;
+        Fri, 10 Mar 2023 14:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678459985;
+        bh=1U3ZGoxMVWmjPucnPpBAP/Pp5NuMyMLxskxUDpQAahI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=i/yeV+Zb6roRkp4hdufvESXq2SYqYvYRO/h+YE+WGVAV8SBfvjVgPCcwGN/iCz3rq
+         rsixtQmshaxwAcTRcoslV/kr/068ZuWsFVoQ97ju/2ARbAuhEn55xdaz4UGUDuLAU+
+         IcZEO/V4Tj+N//IAXAOCOEG+5x4vwaE4pA1If28GjnL+SzgzASQPArQDMDXeMWpi9/
+         +VJwo3fi2mH4C/3ZPqvbOtsYRS/9zsavEilo6m1aVYwHDEs+ZEnXtWKC8eqcpcYXNG
+         Y3PppAdyKVK1Y64gYQTHaVsWm2mr/UfH90jhioBstTr9SMk0krigovXeXywCZXNv+V
+         6vcpMjtHkEwgw==
+Received: by mail-lj1-f177.google.com with SMTP id a32so5543294ljr.9;
+        Fri, 10 Mar 2023 06:53:05 -0800 (PST)
+X-Gm-Message-State: AO0yUKWKSfw71Od6AZQTVmDAv192A77fdIa7m/HrGzvohL3EFVIvl9tE
+        g5qgQ5eb9UxQCxIB2gfMR60XjZvRWaOS1SDIddg=
+X-Google-Smtp-Source: AK7set92uO/ZIaujKuol6kgCT0IK0ijm8dq2HYhWO2YoU9AsIHslUiUioFlCWcMaKWTMA7mjBB9jZZrRQioRZ45lAJs=
+X-Received: by 2002:a05:651c:1725:b0:295:8ef2:8707 with SMTP id
+ be37-20020a05651c172500b002958ef28707mr8028412ljb.2.1678459983160; Fri, 10
+ Mar 2023 06:53:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 02/14] iommufd: Add nesting related data structures for
- ARM SMMUv3
-Content-Language: en-GB
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     Nicolin Chen <nicolinc@nvidia.com>, will@kernel.org,
-        eric.auger@redhat.com, kevin.tian@intel.com,
-        baolu.lu@linux.intel.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, yi.l.liu@intel.com
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <364cfbe5b228ab178093db2de13fa3accf7a6120.1678348754.git.nicolinc@nvidia.com>
- <20230309134217.GA1673607@myrica> <ZAnx0lUkw02cVTi+@nvidia.com>
- <20230309182659.GA1710571@myrica> <ZApJGwPjHhlDwTDV@nvidia.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <ZApJGwPjHhlDwTDV@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1671098103.git.baskov@ispras.ru> <2ebefd395ecadb2b2605bc52a8ac223392c0c153.1671098103.git.baskov@ispras.ru>
+In-Reply-To: <2ebefd395ecadb2b2605bc52a8ac223392c0c153.1671098103.git.baskov@ispras.ru>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 10 Mar 2023 15:52:52 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHY045xxhbC_+JRhwy-vObfKGFA8YnZr7anh6Khuk-HAA@mail.gmail.com>
+Message-ID: <CAMj1kXHY045xxhbC_+JRhwy-vObfKGFA8YnZr7anh6Khuk-HAA@mail.gmail.com>
+Subject: Re: [PATCH v4 12/26] x86/boot: Make kernel_add_identity_map() a pointer
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-09 21:01, Jason Gunthorpe wrote:
->> For a lot of SMMUv3 implementations that have a single queue and for
->> other architectures, we can do better than hardware emulation.
-> 
-> How is using a SW emulated virtio formatted queue better than using a
-> SW emulated SMMUv3 ECMDQ?
+On Thu, 15 Dec 2022 at 13:40, Evgeniy Baskov <baskov@ispras.ru> wrote:
+>
+> Convert kernel_add_identity_map() into a function pointer to be able
+> to provide alternative implementations of this function. Required
+> to enable calling the code using this function from EFI environment.
+>
+> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+> Tested-by: Peter Jones <pjones@redhat.com>
+> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+> ---
+>  arch/x86/boot/compressed/ident_map_64.c |  7 ++++---
+>  arch/x86/boot/compressed/misc.c         | 24 ++++++++++++++++++++++++
+>  arch/x86/boot/compressed/misc.h         | 15 +++------------
+>  3 files changed, 31 insertions(+), 15 deletions(-)
+>
+> diff --git a/arch/x86/boot/compressed/ident_map_64.c b/arch/x86/boot/compressed/ident_map_64.c
+> index ba5108c58a4e..1aee524d3c2b 100644
+> --- a/arch/x86/boot/compressed/ident_map_64.c
+> +++ b/arch/x86/boot/compressed/ident_map_64.c
+> @@ -92,9 +92,9 @@ bool has_nx; /* set in head_64.S */
+>  /*
+>   * Adds the specified range to the identity mappings.
+>   */
+> -unsigned long kernel_add_identity_map(unsigned long start,
+> -                                     unsigned long end,
+> -                                     unsigned int flags)
+> +unsigned long kernel_add_identity_map_(unsigned long start,
 
-Since it's not been said, the really big thing is that virtio explicitly 
-informs the host whenever the guest maps something. Emulating SMMUv3 
-means the host has to chase all the pagetable pointers in guest memory 
-and trap writes such that it has visibility of invalid->valid 
-transitions and can update the physical shadow pagetable correspondingly.
+Please use a more discriminating name here - the trailing _ is rather
+hard to spot.
 
-FWIW we spent quite some time on and off discussing something like 
-VT-d's "caching mode", but never found a convincing argument that it was 
-a gap which needed filling, since we already had hardware nesting for 
-maximum performance and a paravirtualisation option for efficient 
-emulation. Thus full SMMUv3 emulation seems to just sit at the bottom as 
-the maximum-compatibility option for pushing an unmodified legacy 
-bare-metal software stack into a VM where nesting isn't available.
+> +                                      unsigned long end,
+> +                                      unsigned int flags)
+>  {
+>         int ret;
+>
+> @@ -142,6 +142,7 @@ void initialize_identity_maps(void *rmode)
+>         struct setup_data *sd;
+>
+>         boot_params = rmode;
+> +       kernel_add_identity_map = kernel_add_identity_map_;
+>
+>         /* Exclude the encryption mask from __PHYSICAL_MASK */
+>         physical_mask &= ~sme_me_mask;
+> diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
+> index aa4a22bc9cf9..c9c235d65d16 100644
+> --- a/arch/x86/boot/compressed/misc.c
+> +++ b/arch/x86/boot/compressed/misc.c
+> @@ -275,6 +275,22 @@ static void parse_elf(void *output, unsigned long output_len,
+>         free(phdrs);
+>  }
+>
+> +/*
+> + * This points to actual implementation of mapping function
+> + * for current environment: either EFI API wrapper,
+> + * own implementation or dummy implementation below.
+> + */
+> +unsigned long (*kernel_add_identity_map)(unsigned long start,
+> +                                        unsigned long end,
+> +                                        unsigned int flags);
+> +
+> +static inline unsigned long kernel_add_identity_map_dummy(unsigned long start,
 
-Cheers,
-Robin.
+This function is never called, it only has its address taken, so the
+'inline' makes no sense here.
+
+> +                                                         unsigned long end,
+> +                                                         unsigned int flags)
+> +{
+> +       return start;
+> +}
+> +
+>  /*
+>   * The compressed kernel image (ZO), has been moved so that its position
+>   * is against the end of the buffer used to hold the uncompressed kernel
+> @@ -312,6 +328,14 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+>
+>         init_default_io_ops();
+>
+> +       /*
+> +        * On 64-bit this pointer is set during page table uninitialization,
+
+initialization
+
+> +        * but on 32-bit it remains uninitialized, since paging is disabled.
+> +        */
+> +       if (IS_ENABLED(CONFIG_X86_32))
+> +               kernel_add_identity_map = kernel_add_identity_map_dummy;
+> +
+> +
+>         /*
+>          * Detect TDX guest environment.
+>          *
+> diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
+> index 38d31bec062d..0076b2845b4b 100644
+> --- a/arch/x86/boot/compressed/misc.h
+> +++ b/arch/x86/boot/compressed/misc.h
+> @@ -180,18 +180,9 @@ static inline int count_immovable_mem_regions(void) { return 0; }
+>  #ifdef CONFIG_X86_5LEVEL
+>  extern unsigned int __pgtable_l5_enabled, pgdir_shift, ptrs_per_p4d;
+>  #endif
+> -#ifdef CONFIG_X86_64
+> -extern unsigned long kernel_add_identity_map(unsigned long start,
+> -                                            unsigned long end,
+> -                                            unsigned int flags);
+> -#else
+> -static inline unsigned long kernel_add_identity_map(unsigned long start,
+> -                                                   unsigned long end,
+> -                                                   unsigned int flags)
+> -{
+> -       return start;
+> -}
+> -#endif
+> +extern unsigned long (*kernel_add_identity_map)(unsigned long start,
+> +                                               unsigned long end,
+> +                                               unsigned int flags);
+>  /* Used by PAGE_KERN* macros: */
+>  extern pteval_t __default_kernel_pte_mask;
+>
+> --
+> 2.37.4
+>
