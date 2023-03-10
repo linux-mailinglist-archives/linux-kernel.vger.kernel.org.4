@@ -2,94 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B458E6B560E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEBB6B560F
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbjCJXyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 18:54:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
+        id S232016AbjCJXzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 18:55:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231994AbjCJXyo (ORCPT
+        with ESMTP id S229530AbjCJXze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 18:54:44 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4831112CBA7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 15:54:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pxINQc+Ngasq0Mq+gPAA8xkkXnRUKv144A0HUyerW4g=; b=EuxiFJtH+TrAf9qF7mBCZJgaqs
-        WV1/Q5gqm2U169x2MZySKm85KTT0Q2ycAUaGnStZCBDx+nkZf5wZ/qyxRSRcAqvNNm12OhBdLfjzf
-        C7U7eFt59QCGCsAFHXeiKY8cj8NkJDHfJEBG3P45dOLCuy2hb+GP04XNnUeF4SIjcoz/7clVaP7YB
-        vdw7OjaVOK3olZfXBbB1etEpiiVaytUr1/XNeBSzSoptH79z1WKEV4w89niwyUp3ycALlLEhWE8Nk
-        L2MJFs99OHkIAo4Ikvk7MH8cK7iZfRtwkm5GIbfRXkWotsJfntkNbib17zK+mtekNNK6z71lTlB+u
-        WpxT9J3A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pamZN-00GkyF-S1; Fri, 10 Mar 2023 23:54:41 +0000
-Date:   Fri, 10 Mar 2023 15:54:41 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Jason Baron <jbaron@akamai.com>
-Cc:     linux-kernel@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH] dyndbg: cleanup dynamic usage in ib_srp.c
-Message-ID: <ZAvDQdY14BVKz09h@bombadil.infradead.org>
-References: <20230310212728.82021-1-jbaron@akamai.com>
+        Fri, 10 Mar 2023 18:55:34 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825D7E91B6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 15:55:33 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-536c2a1cc07so128617637b3.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 15:55:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678492532;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6T67u9qiBnxZK6yM+YE+DE3Z4ixj9FN+kLodEfozavM=;
+        b=RLWyNTcIDMRGSZ+TsJzdSAzJ6T/VlanZ3KjZiaA2sfAGKhQ2BYbFuyfBvU5J8CpToR
+         IZ8Zf7BvaD6mFfZDk6FhKtNcH96fuMosd7vE0oLxV7UhuQKdPIt6MKTTmfXjW3fmcrkW
+         rSr5z40iwsjAD3pA5oY0qSc7ymGgmFhcPJD9FL31mndm2mAorsL8W12ubC6fz24Cs/Ji
+         rkO5p601WN9sGGdMwjExj0+SeJ7sUE7foH1RMwa+ZtKndOj6JFf90mkKumNzMxnVginZ
+         cqvd94WXC+7AWF2VqDzQp7E7Au+9IrmmSZ8Be5aWLY8CAkoomT1acmVnPpKNw/MmMgF0
+         4ToA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678492532;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6T67u9qiBnxZK6yM+YE+DE3Z4ixj9FN+kLodEfozavM=;
+        b=p1unXFTdDzz8zKwIMZU57qm5BIgNovcMPAreT7ST46FpZewaPXLY+sOKDuq4C3IKMS
+         fIImXzhyDj0eI/h4dKRfIXiiqgCNPw9GtPAE/bvJhH/nc/z/P1EyCvmfLTwnrJlZ4Zem
+         4yxxIqAwdRtHIt+e3WEAnsMK3LsVUIfqtfv+XzC6VahY1Ogh+yZss0mesIRxS+hz7/YW
+         Qe3LObX3WwqhebRmVxrMUpoNRnpHo5M8/QA2Tjc7Gi7JXt4zSgYz+2/SWWXzbUGasOVJ
+         PEbPCo/SvMO4pWGb2c3rrET9cqPZ6LunvEMJlPcsq1y0lFRQbilPGu5AttITBPLRa8DD
+         UKVA==
+X-Gm-Message-State: AO0yUKVEGsF3+jf5f3T3iI6v4lU409eyhqDpx/wvp9/LnVSXhEX3Dm0R
+        JouElpPDLecp3Ch+CWwbUWkJMlChBWoIKpIlW51+MQ==
+X-Google-Smtp-Source: AK7set+wPxRik1vLXVOjZi47R3V+MThG93j9VO8C8SGLknV/y5pCvR1I7B5rqUkSyw2LwpPfYM/GuR7RJVFVs34KesI=
+X-Received: by 2002:a81:af4e:0:b0:521:db3f:9e27 with SMTP id
+ x14-20020a81af4e000000b00521db3f9e27mr17774983ywj.2.1678492532641; Fri, 10
+ Mar 2023 15:55:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310212728.82021-1-jbaron@akamai.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230310184201.1302232-1-ajye_huang@compal.corp-partner.google.com>
+ <0456bd4e-cfee-b863-e02d-98084b5da0f6@linux.intel.com> <CALprXBamM-M-YdyfX9dQHp_AQAovcqzL5H4rMPsZPXS426+VgA@mail.gmail.com>
+ <a5962d12-ccd2-79ea-27bc-674e0b3065f4@linux.intel.com>
+In-Reply-To: <a5962d12-ccd2-79ea-27bc-674e0b3065f4@linux.intel.com>
+From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Date:   Sat, 11 Mar 2023 07:55:21 +0800
+Message-ID: <CALprXBYVFWDFkT5tnrj6Ef=+ibFLoBAnCnBHtZwSThDauN=uzw@mail.gmail.com>
+Subject: Re: [PATCH v1] ASoC: Intel: sof_rt5682: Enable Bluetooth offload on adl_rt1019_rt5682
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>,
+        Yong Zhi <yong.zhi@intel.com>, dharageswari.r@intel.com,
+        Vamshi Krishna <vamshi.krishna.gopal@intel.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        alsa-devel@alsa-project.org, Mac Chiang <mac.chiang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 04:27:28PM -0500, Jason Baron wrote:
-> Currently, in dynamic_debug.h we only provide
-> DEFINE_DYNAMIC_DEBUG_METADATA() and DYNAMIC_DEBUG_BRANCH()
-> definitions if CONFIG_DYNAMIC_CORE is enabled. Thus, drivers
-> such as infiniband srp (see: drivers/infiniband/ulp/srp/ib_srp.c)
-> must provide their own definitions for !CONFIG_DYNAMIC_CORE.
-> 
-> Thus, let's move this !CONFIG_DYNAMIC_CORE case into dynamic_debug.h.
-> However, the dynamic debug interfaces should really only be defined
-> if CONFIG_DYNAMIC_DEBUG is set or CONFIG_DYNAMIC_CORE is set along
-> with DYNAMIC_DEBUG_MODULE, (see:
-> Documentation/admin-guide/dynamic-debug-howto.rst). Thus, the
-> undefined case becomes: !((CONFIG_DYNAMIC_DEBUG ||
-> (CONFIG_DYNAMIC_CORE && DYNAMIC_DEBUG_MODULE)).
-> With those changes in place, we can remove the !CONFIG_DYNAMIC_CORE
-> case from ib_srp.c
-> 
-> This change was prompted by a build breakeage in ib_srp.c stemming
-> from the inclusion of dynamic_debug.h unconditionally in module.h, due
-> to commit 7deabd674988 ("dyndbg: use the module notifier callbacks").
-> In that case, if we have CONFIG_DYNAMIC_CORE=y and
-> CONFIG_DYNAMIC_DEBUG=n then the definitions for
-> DEFINE_DYNAMIC_DEBUG_METADATA() and DYNAMIC_DEBUG_BRANCH() are defined
-> once in ib_srp.c and then again in the dynamic_debug.h. This had been
-> working prior to the above referenced commit because dynamic_debug.h
-> was only pulled into ib_srp.c conditinally via printk.h if
-> CONFIG_DYNAMIC_DEBUG was set.
-> 
-> Cc: Jim Cromie <jim.cromie@gmail.com>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Bart Van Assche <bvanassche@acm.org>
-> Fixes: 7deabd674988 ("dyndbg: use the module notifier callbacks")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://urldefense.com/v3/__https://lore.kernel.org/oe-kbuild-all/202303071444.sIbZTDCy-lkp@intel.com/__;!!GjvTz_vk!S6X1T0wd8DP8kxf6V06_uDcxrNwKJhPOU_7dY0PNghJRL0ahqvE8bh-5544ThnyRkpVyK4Q$
-> Signed-off-by: Jason Baron <jbaron@akamai.com>
+On Sat, Mar 11, 2023 at 6:46=E2=80=AFAM Pierre-Louis Bossart
+<pierre-louis.bossart@linux.intel.com> wrote:
+>
 
-Thanks, applied and pushed to modules-next!
+> It's best if you provide a series that enables BT offload across the
+> board for ADL, if that's the intended goal.
+Hi Pierre,
 
-  Luis
+  {        .name =3D "adl_mx98357_rt5682",
+        .driver_data =3D (kernel_ulong_t)(SOF_RT5682_MCLK_EN |
+                    SOF_RT5682_SSP_CODEC(0) |
+                    SOF_SPEAKER_AMP_PRESENT |
+                    SOF_RT5682_SSP_AMP(2) |
+                    SOF_RT5682_NUM_HDMIDEV(4)),
+    },
+The "adl_mx98357_rt5682" is the sound card of the google "Brya" Board proje=
+ct.
+Because the SSP2 is used for the max98357 amplifier, so SSP2
+bt_offload can't be enabled at the drv_name  "adl_mx98357_rt5682".
+(The hardway layout I2S port2 connected to max98357 amplifier)
+
+The other adl projects that enabled the bt_offload feature were
+designed with ssp1 for amp, ssp2 for bt_offload based on pins
+definition.
+    {
+        .name =3D "adl_rt1019_rt5682",
+        .driver_data =3D (kernel_ulong_t)(SOF_RT5682_MCLK_EN |
+                    SOF_RT5682_SSP_CODEC(0) |
+                    SOF_SPEAKER_AMP_PRESENT |
+                    SOF_RT1019_SPEAKER_AMP_PRESENT |
+                    SOF_RT5682_SSP_AMP(1) |
+                    SOF_RT5682_NUM_HDMIDEV(4) |
+                    SOF_BT_OFFLOAD_SSP(2) |
+                    SOF_SSP_BT_OFFLOAD_PRESENT),
+    },
+thanks
