@@ -2,169 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0186B513B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 20:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 199426B5142
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 20:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjCJT6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 14:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
+        id S231140AbjCJT7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 14:59:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjCJT57 (ORCPT
+        with ESMTP id S230488AbjCJT7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 14:57:59 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CFA30FE
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 11:57:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678478275; x=1710014275;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=AvQXkWLwjpJ8v7CwePbl0zyFCBb/9wMGNOMxU9EW9ak=;
-  b=CuIwj2LXRg2jjCDGJHtp5o4xcoMieHmrpbeBRn9/ohyWOK5qd/F+WJIy
-   gxexZvv6Si9bstNrF9PRWWeWer7Z3mvMTxatOsRXg4eouKwxm53Bi4KPU
-   xfMIegl4B/52dCDX8vziAvxRG33LU5N57gWjtPbFd+DJbkhRQHr8RekEE
-   6mRmrsM/HDUjF4qscaKuY8ZHI6JnsZ71wZTXGXsscrJX0ls7Vx52Mmuca
-   V47Kum21KVXrM/pdG8s8g6MxXJP6RHGNh2vecglcukGDHKAVA2Xqef5RH
-   5LJPBOz9CiDeFUodrTvtsXbrUSFr4baQRKAiGCpEICW+JH1RbL5ANURMV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="334294354"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="334294354"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 11:57:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="852039692"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="852039692"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga005.jf.intel.com with ESMTP; 10 Mar 2023 11:57:54 -0800
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 10 Mar 2023 11:57:53 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Fri, 10 Mar 2023 11:57:53 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.105)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Fri, 10 Mar 2023 11:57:53 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i6PBMFZDXfMCsuHhzhsS4a+e8aoCA7DdQrjNQTBhIH4xxxqX69j+LDUxiXq59484B3jyM74tfPvPag0RpraJKocqUvFJregGdmUNea5lmY9knT8FV9Vh2tkBkE0BCBP1CHSfWXMpKYP6/P7+s2MPXMDajFrq+aYNbTrDHVQvbAdDEuzgTL5JX50s0hSVPcSEyasDmMOtMZ8iNg7QX8XkgzJ9pBp6vMXxQtSKx3eFa6DTCBB60IK8FPIFL4BMOQ8EDwcvcbynwB9zeeomW18c86K4YC0d+5nF1/kIwZzpTuXPI1FdnbdLLIzv9Wu3+IHfcewJaeF54c9w0HXVIj0i+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KRTlr3ampdzK3dM2ABJzvNtkEJ78yT0AnUbe8gqR3CE=;
- b=a3jDUffqEn/QfCua7BOn1N1WgBgwJ3GMab9pWIRIVk0BkUSfha+jsB4+uuqFSr1u66ws2wSiQbfrFleC4hBwltOPzYtr7rjJqcjv5Az2mziAfmoV2iJ904f2SyfndF+/UwNPO5zf53Tx2Q9MAnM/R/HSPD8b7XyhQSFJdgIpranKXleBYY6GmX5kXGHVEAAG7d6K0vrcXonoNizH6lfqFXhIP2Whzwo+AphO/U8Gk3j1osr6Ps3xmal4EOYmdZ/4OoLD5z4EZDmJE87EBGXtBFEaholcX8uvaNCJpB8Nbf5EXIWqCJQ4ip2oINTIUqf8YZwuawrbdXsS8mnm7P5AGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by CY5PR11MB6320.namprd11.prod.outlook.com (2603:10b6:930:3c::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.25; Fri, 10 Mar
- 2023 19:57:52 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::d651:ac39:526d:604f]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::d651:ac39:526d:604f%12]) with mapi id 15.20.6178.019; Fri, 10 Mar
- 2023 19:57:51 +0000
-Message-ID: <e15a6fe7-42e1-cb9d-37b7-d350d8168eb7@intel.com>
-Date:   Fri, 10 Mar 2023 11:57:48 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.2
-Subject: Re: [PATCH v2 05/18] x86/resctrl: Allow RMID allocation to be scoped
- by CLOSID
-To:     James Morse <james.morse@arm.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        <shameerali.kolothum.thodi@huawei.com>,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        <carl@os.amperecomputing.com>, <lcherian@marvell.com>,
-        <bobo.shaobowang@huawei.com>, <tan.shaopeng@fujitsu.com>,
-        <xingxin.hx@openanolis.org>, <baolin.wang@linux.alibaba.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>, <peternewman@google.com>
-References: <20230113175459.14825-1-james.morse@arm.com>
- <20230113175459.14825-6-james.morse@arm.com>
- <2ad21ffe-6019-eb34-a0b3-2c9d26799269@intel.com>
- <753cd447-24a8-0dd8-6f35-9ad75ba619c5@arm.com>
-Content-Language: en-US
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <753cd447-24a8-0dd8-6f35-9ad75ba619c5@arm.com>
+        Fri, 10 Mar 2023 14:59:41 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3F0123CDB;
+        Fri, 10 Mar 2023 11:59:39 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32AH3p6t027756;
+        Fri, 10 Mar 2023 19:59:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=VSVqmCryi08IhnKuyDD1hUxsXZuYTuB5guadql6qFKw=;
+ b=Y11vPUeRZ/OPWLuV9G1bHd9SHJneQ4Iw0HTpY8kCZXwveUHXE5qFj6WgqBMdaEWCK5PU
+ oFFhfUrtT/D+zhDA8fNnW564sui9cIbl7Whqeo0arIyb2NWQMoK9UVB6UEP7YhJWbob2
+ S6vtp+bkdTiJVEWUl40lvfRWz20PLD/DJyJD5e4PbrxVNUEA/MTQ/gahUXEhZ5/oBFzX
+ jatQIJCTFW1VUtXEIXfJ1FS4wlNDfkzgcbedjyNTiUFhs4LxUW5g2IIqE4F++z4TwejJ
+ u2g0+/jNi2gPeYfgIdS8AGEOqp59RpfLfGSZVqfhUkkElWWVH7AG2bgUtVVvHrZng4Sj NA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p86m1fa4d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 19:59:22 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32AJuDXm022840;
+        Fri, 10 Mar 2023 19:59:22 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p86m1fa45-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 19:59:22 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32AHj1Z3023609;
+        Fri, 10 Mar 2023 19:59:21 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3p6fnwvx64-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 19:59:21 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32AJxJ7V49807760
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Mar 2023 19:59:19 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A78A858053;
+        Fri, 10 Mar 2023 19:59:19 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7452C58043;
+        Fri, 10 Mar 2023 19:59:18 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.71.208])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Mar 2023 19:59:18 +0000 (GMT)
+Message-ID: <dd449eb3ab697b630edd2df8d0912061859d5160.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 1/3] security: Introduce LSM_ORDER_LAST and set it
+ for the integrity LSM
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Paul Moore <paul@paul-moore.com>
+Cc:     dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        mic@digikod.net, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 10 Mar 2023 14:59:17 -0500
+In-Reply-To: <66e9fefe918463e8fbe2e8d8ca46a76f4428a944.camel@huaweicloud.com>
+References: <20230309085433.1810314-1-roberto.sassu@huaweicloud.com>
+         <20230309085433.1810314-2-roberto.sassu@huaweicloud.com>
+         <397cb437bbd41e7eb223a07bc92a10bb57df696e.camel@linux.ibm.com>
+         <CAHC9VhTt7xZqkfZQsWVLRHzza_9idzxkY7bXxzBMq=Xxfc6+Cg@mail.gmail.com>
+         <3c2ad86758d13939afa9dceaab87fee2ded8201f.camel@linux.ibm.com>
+         <CAHC9VhQ80t8z79iYaY8xpoiQ5fTURoesaau+5r0bCXZrsO5GUQ@mail.gmail.com>
+         <66e9fefe918463e8fbe2e8d8ca46a76f4428a944.camel@huaweicloud.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0202.namprd05.prod.outlook.com
- (2603:10b6:a03:330::27) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 1v5bzE5HxGeMZPw-HG61ODP0bKB7x3Rw
+X-Proofpoint-GUID: HXrRBX18kUockpNF6zmmZ3A2lORHr2Gm
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|CY5PR11MB6320:EE_
-X-MS-Office365-Filtering-Correlation-Id: a8c163eb-08b3-43ea-9d8a-08db21a1baf2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zEd6pfQGdx6VY35ofCgoxdXyjX0s0TgKPHpjM2CJWBA9IeBx1X5//bo/p2HfnbIXZRK7ElL0/YswU/wHHhLecBstKz8JyFgIg/IpMZweOz1kI8dtHYbABBgZTry3/jI8dcGmBe1lvgJQhNiMPS8Dvr8ZzirVqB5gt8/NcQjvofRVhejps8YgIBY5kNkZQ2j32ZqxA1mNN6Y8spAOtiRRYWDQX4LV7pxJrkY+9uswxjmoxhsB6VYSSZVM6pjUI4K+BHd2oAlAN470AVWeq9JMpUep2vX5yEKH4jl0Qdg6XwOZIwEDRmwcvbskbikGah1XhuUIlF4nrYpHciCnX1ObgQ0zx8Zo2LQltPM77TkIeaZeRqaY/A7qWcxspPjkLWB2t2Zs9vMzB5/b+EC6xjd+2EwNjF+s55ljnoHSciM2o+SfWLUTH5ZQZZtAXk9HPonhP0Qfr3IhGh+DJJbEnlEm7ESh8gS7qfnt8Vo9Iz9gmFTnIl5dGu26a1aVzbq/XYPjE7axuiSPO0EWU673Lvcsn7mHHBOZJoHL0rW3jQeMbMLvYR8qvVaeFco3bIHpR6pJ3pWp3NNoQIVV/OfVlwMMomzzQS+8FrNkq2nqCVNQ4E+orB97ccJDVRUKD0Y9TNbvHSnrQvGd1TAVHboEAtcA8uk7N4i6/ZHGakOVX1S6IukX47vnVJhM06XHHJtEA6qtJqHaz0+I0UoJvsaIBp4wv6ntl2PtjiR8CKKUMQ8W+zU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(346002)(39860400002)(376002)(136003)(366004)(451199018)(31686004)(53546011)(6506007)(2616005)(6512007)(54906003)(186003)(86362001)(31696002)(36756003)(8936002)(6486002)(26005)(82960400001)(6666004)(478600001)(7416002)(2906002)(41300700001)(5660300002)(38100700002)(44832011)(316002)(66946007)(4326008)(66476007)(66556008)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWZadUROQzRvZ3JldEJoZTRiNzZSenhYZDNvaldiZzNjL0w5VEVEczBkZHB3?=
- =?utf-8?B?SElYWFZPV2lVSEhOaGVHZUJEZ2pSYUc3blg0WjdaanFIS0RxTkJOOEpPT29m?=
- =?utf-8?B?c0NZNC9ieFN2M25NOUFjeG5rZkoxQ3Y3UnhQMWhyZGFmams2Q2MyakZuWWx1?=
- =?utf-8?B?R2RKMlp1ZVJqM2tPQ2RlbXZsL0tKZDg4Smx0YWdjZFM5Wm4wT2NGN013cjNo?=
- =?utf-8?B?ekpvTjU5K3VHOXdDK3hPK2trWkQ4ZVc3Q052M1JVZStMajd0RWdHN3F1a0xR?=
- =?utf-8?B?RE83NVVmWE1wNFlTSVcrNzE1ZzF2YXVJTVFYd2wzK1EzUlVRTVJHMUZ4VUJu?=
- =?utf-8?B?Sm1ZNXI1WXJTbTE5N0Z0MGIvb0hrcU5sSXp1L1RmWjZDcEpQeVZzY1IrN0Uw?=
- =?utf-8?B?WVhhRnpvT0NqUzZneTVJaTVhOU5BRU94cXhUbTMvcHA3Ull1Y1BlaVVoTTha?=
- =?utf-8?B?V3BJODBDTnhpUlNrQkVwek9EaGRuZTdmUU5TRHV5ZmVIMVNkUjFRVlo2RXJE?=
- =?utf-8?B?S1B6R2tmbFJHMVhVVU9SaGtoV0FxMFJYekw3WUVHMHdETnF0bEtKL3FBVnBx?=
- =?utf-8?B?S3FQVWdZQS9NV0IzU0ZBWFdwVDBwa2tzRVRQR3ByL1gzak1TVnNxRGhUcHRJ?=
- =?utf-8?B?M2xPdmEybC9hZ0p3M3NIcDVieHErWDZTb3Z6UitxKzBUdTFaWkcrSW0yMDVq?=
- =?utf-8?B?SFc2N3lQTEJtT3ZPb05tVXV4by9meWtYWHhyUmFVSEwzWmFYbUt1ZGRONzJr?=
- =?utf-8?B?VVQyL284YXJPbE13UmdrL25LSlNOR0s3UmJSbXIvTGlCaE53N04yS3NKSXN3?=
- =?utf-8?B?aEt0eHVzNWg3Tks4SkR1QjVSajgvbUx2VW9mS0phWTl2czZIblB4YkJRT0VM?=
- =?utf-8?B?dGtOUjZGUERiMTR5OCswalhINUVoTGREZ05OL2J5M2RoUUlwZHFZWHdybFJT?=
- =?utf-8?B?UllmSW5ZWmV0MGdtZWJaYUpuN2N6RFBOTGc0cjdPL1F3QTh2VU9QK2Y5bUlu?=
- =?utf-8?B?VmxwMitJWEtSOFJNVHh2T21ScDY4bEx3Qmg4WUlGRTBodmJVYW9pZSsxTSt5?=
- =?utf-8?B?VUdTemgzZGpLMzB5TjA2NFV6d0EwVERpUDUyZndkbSt2NVdpbEdicjErNENm?=
- =?utf-8?B?ejNUTSt6d3B6Qzl6endQWW95eUx6cHZKV3RtaVFUc2VhSTB6a2VOMy82SWNu?=
- =?utf-8?B?cGlYVWJBYUE2eC8yUUhHeVZOZ2hmWmdzRGJ3Y3NtbG96WHBsT294b1hkUzUy?=
- =?utf-8?B?V1l1SDdxc2srV1Y4V0VxeHJLVjR2S01hV1BJMnRpaHpxUnBzdFVKdnZVaENr?=
- =?utf-8?B?K0NsY0hnb2RoU3EwcWRUZEtzRVY3ZUJEbGtmZ2RqbytWSVBGbDhuYWxQM0w5?=
- =?utf-8?B?akkrTWdxeE1jWm5MOWNEcW1sTWpYMHpRWmZpdWdBdTF0eGtMQ0pPRzZ5STZS?=
- =?utf-8?B?dmZjNXdmMFRvcExvWE5MQTkzNFg0N2YwNmZ5dFNtNWZYaEx4TStQckcyNTlz?=
- =?utf-8?B?ZWZOaDFnZ0JicUlDRERqQjZac3FoTzcxdTRrTUR3andwblgzc1NyZmxkNnNR?=
- =?utf-8?B?SFNKUHZTMkhsSmllSThWa2FiZTVPZnJydTVTOHh4em1FTHFKL3JiNmRXWEMx?=
- =?utf-8?B?MGo4ejlFaFB1NlU4V3k0Qk1nMlNMT2VpQnhEcEtGVzdEQVRCMk5vdHd6OFQz?=
- =?utf-8?B?OEs4dmNvWVJKakozejZCdk5jWU04dnlkMnord3kycFlQUzZUWDByeDVHeGI5?=
- =?utf-8?B?Ym02NWtZOUdSY2NYT1ovWURzZTlsaCt0Y0xPUlZXbDQ4SGZvUG15bWgxcmpZ?=
- =?utf-8?B?RWRCMnhhQzhTclppWkhzeFlmUjg5cFYvV3RILy9ETWRhZ2VvZTVFbGlKWlV0?=
- =?utf-8?B?Zk1xM1BIRmV3RUk5Q2JEZnFwak90RDhkcTlSL3gyMUhPNFNDRFRzNDdHWW0w?=
- =?utf-8?B?a3VpU2oxWjMwS2FKS0RyaDk5VHVCTXBtd21PMitpSXBZQm81T0JDcjMwdGN0?=
- =?utf-8?B?MS9iSElmU2dLU0ZKWkRib1JOV1NVU2Foc3VRNXlzdlhaTUxld3JrY0lqRGds?=
- =?utf-8?B?ZGRUNGFGaEh5SVZlcUc0RlBHK1NRZXEvaDFVWU9QemwrNk42MWpwLzl2ZW1k?=
- =?utf-8?B?U1AxMjByTGZPNTB2d1lHK1pTb0JhU2dubFJKT3lnVnZLT2s4MXFVV1JEb0Nn?=
- =?utf-8?B?Mnc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8c163eb-08b3-43ea-9d8a-08db21a1baf2
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 19:57:51.6251
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: obf/Rl/CGWgVfXnQtq4ecyB9lsjHhQoEKFV5j4vWrGjr5qxz1fTmhs54RWrocX6BdmdWBN/uKqbG8PFUCAZvTZ6ybvPICJfc9sdf6RZjo1E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6320
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-10_10,2023-03-10_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 spamscore=0 clxscore=1015 priorityscore=1501
+ suspectscore=0 malwarescore=0 mlxlogscore=999 phishscore=0 mlxscore=0
+ adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303100155
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -172,43 +103,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+On Fri, 2023-03-10 at 17:33 +0100, Roberto Sassu wrote:
+> On Fri, 2023-03-10 at 11:22 -0500, Paul Moore wrote:
+> > On Fri, Mar 10, 2023 at 8:39 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > > On Thu, 2023-03-09 at 17:04 -0500, Paul Moore wrote:
+> > > > On Thu, Mar 9, 2023 at 8:21 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > > > > On Thu, 2023-03-09 at 09:54 +0100, Roberto Sassu wrote:
+> > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > > 
+> > > > > > Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs needing to be
+> > > > > > last, e.g. the 'integrity' LSM, without changing the kernel command line or
+> > > > > > configuration.
+> > > > > > 
+> > > > > > Also, set this order for the 'integrity' LSM. While not enforced, this is
+> > > > > > the only LSM expected to use it.
+> > > > > > 
+> > > > > > Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled
+> > > > > > and put at the end of the LSM list.
+> > > > > > 
+> > > > > > Finally, for LSM_ORDER_MUTABLE LSMs, set the found variable to true if an
+> > > > > > LSM is found, regardless of its order. In this way, the kernel would not
+> > > > > > wrongly report that the LSM is not built-in in the kernel if its order is
+> > > > > > LSM_ORDER_LAST.
+> > > > > > 
+> > > > > > Fixes: 79f7865d844c ("LSM: Introduce "lsm=" for boottime LSM selection")
+> > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > 
+> > > > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > > 
+> > > > Warning: procedural nitpicking ahead ...
+> > > > 
+> > > > The 'Signed-off-by' tag is in reference to the DCO, which makes sense
+> > > > to add if you are a patch author or are merging a patch into a tree,
+> > > > but it doesn't make much sense as a ACK/thumbs-up; this is why we have
+> > > > the 'Acked-by' and 'Reviewed-by' tags.  I generally read the
+> > > > 'Acked-by' tag as "I'm the one responsible for a chunk of code
+> > > > affected by this patch and I'm okay with this change" and the
+> > > > 'Reviewed-by' tag as "I looked at this patch and it looks like a good
+> > > > change to me".  Perhaps surprisingly to some, while an 'Acked-by' is a
+> > > > requirement for merging in a lot of cases, I appreciate 'Reviewed-by'
+> > > > tags much more as it indicates the patch is getting some third-part
+> > > > eyeballs on it ... so all you lurkers on this list, if you're
+> > > > reviewing patches as they hit your inbox, don't be shy about posting
+> > > > your 'Reviewed-by' tag if your comfortable doing so, we all welcome
+> > > > the help :)
+> > > > 
+> > > > https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
+> > > 
+> > > In this case, it was a bit unclear who actually was going to upstream
+> > > this patch set.
+> > 
+> > FWIW, I wasn't expecting to see your sign-off without a note that you
+> > had merged it.  Normally I would have expected either an acked-by or a
+> > note that you had merged it, a sign-off without a merge notice seemed
+> > a little odd to me so I thought I would mention the above :)  No harm
+> > either way, I just figured a little discussion on process might not be
+> > a terrible idea to make sure we are all on the same page.
+> > 
+> > > It's better that you upstream it,  but since this
+> > > affects subsequent IMA and EVM patches, please create a topic branch.
+> > 
+> > I generally don't do topic branches for work that has been merged into
+> > a -next or -stable branch. I prefer to limit topic branches to
+> > special-cases where there is some value in keeping a central branch
+> > for multiple people to coordinate while the patchset is still in
+> > development; once a patchset has progressed far enough to be merged
+> > into a -stable or -next branch I stop maintaining the topic branch.
 
-On 3/3/2023 10:34 AM, James Morse wrote:
-> On 02/02/2023 23:45, Reinette Chatre wrote:
->> On 1/13/2023 9:54 AM, James Morse wrote:
+I'm definitely not the expert in this, but topic branches normally need
+to remain around until they make it into a release or an -rc, not
+-next.
 
-...
+> > 
+> > In this particular case the changes to the IMA/EVM code looked very
+> > minor, so I doubt there would be a significant merge conflict with the
+> > IMA/EVM tree during this development cycle, but if you would prefer to
+> > take this patchset via the IMA/EVM tree that is okay with me; just let
+> > me know so I can ACK the two LSM-related patches (I'm going to review
+> > the latest posting today).
+> 
+> Probably it would be beneficial if you carry this patch set, so that
+> the next 'evm: Do HMAC of multiple per LSM xattrs for new inodes', and
+> 'security: Move IMA and EVM to the LSM infrastructure' could be applied
+> on top (assuming that we are able to finish within this cycle).
 
->>>  /*
->>> - * As of now the RMIDs allocation is global.
->>> + * As of now the RMIDs allocation is the same in each domain.
-> 
->> Could you please elaborate what is meant/intended with this change
->> (global vs per domain)? From the changelog a comment that RMID
->> allocation is the same in each resource group for MPAM may be
->> expected but per domain is not clear to me.
-> 
-> This is badly worded. It's referring to the limbo list management, while RMID=7 isn't
-> unique on MPAM, the struct rmid_entry used in two domains will be the same because the
-> CLOSID doesn't change. This means its still sufficient to move around the struct
-> rmid_entry to manage the limbo list.
-> 
-> I think this had me confused because 'as of now' implies the RMID won't always be globally
-> allocated, and MPAM has non-unique RMID/PMG values which are a different kind of global.
-> 
-> 
-> I'll change this to read:
-> /*
->  * For MPAM the RMID value is not unique, and has to be considered with
->  * the CLOSID. The (CLOSID, RMID) pair is allocated on all domains, which
->  * allows all domains to be managed by a single limbo list.
->  * Each domain also has a rmid_busy_llc to reduce the work of the limbo handler.
->  */
-> 
-> (seeing as the function doesn't touch rmid_budy_llc, or refer to it by name)
-> 
+That's fine.
 
-Thank you. This is easier to understand.
+> 
+> > As a bit of an aside, while this doesn't cover topic branches (once
+> > again, I consider those special cases), when managing the LSM tree I
+> > follow the process that is documented here:
+> > 
+> > https://github.com/LinuxSecurityModule/kernel/blob/main/README.md
+> > 
+> > [NOTE: the above GH repo is a read-only mirror of the canonical LSM
+> > kernel.org repo, it just happens that GH does a better job rendering
+> > txt]
+> > 
+> > The main LSM repo process "docs" / pointers can be found in the main
+> > README or "about" page:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/about
+> > 
+> > If people have suggestions for a different approach to managing the
+> > LSM tree I'm always open to discussion.
 
-Reinette
+Thank you for the pointer.  Nicely written.
+
+-- 
+thanks,
+
+Mimi
+
