@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F106B3EC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 13:06:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C556B3EC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 13:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbjCJMGp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 07:06:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
+        id S230371AbjCJMGt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 07:06:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjCJMGP (ORCPT
+        with ESMTP id S230207AbjCJMGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 07:06:15 -0500
+        Fri, 10 Mar 2023 07:06:17 -0500
 Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF2CFA8FE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B15FAAD7;
         Fri, 10 Mar 2023 04:06:02 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id A7AE024E1B7;
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id DE23724E257;
         Fri, 10 Mar 2023 20:05:55 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
  2023 20:05:55 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
  (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
@@ -42,9 +42,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <jack.zhu@starfivetech.com>,
         <changhuang.liang@starfivetech.com>
-Subject: [PATCH v2 1/6] media: dt-bindings: Add bindings for JH7110 Camera Subsystem
-Date:   Fri, 10 Mar 2023 20:05:48 +0800
-Message-ID: <20230310120553.60586-2-jack.zhu@starfivetech.com>
+Subject: [PATCH v2 2/6] media: dt-bindings: cadence-csi2rx: Convert to DT schema
+Date:   Fri, 10 Mar 2023 20:05:49 +0800
+Message-ID: <20230310120553.60586-3-jack.zhu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230310120553.60586-1-jack.zhu@starfivetech.com>
 References: <20230310120553.60586-1-jack.zhu@starfivetech.com>
@@ -63,165 +63,305 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the bindings documentation for Starfive JH7110 Camera Subsystem
-which is used for handing image sensor data.
+Convert DT bindings document for Cadence MIPI-CSI2 RX controller
+to DT schema format and add new properties.
 
 Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
 ---
- .../bindings/media/starfive,jh7110-camss.yaml | 144 ++++++++++++++++++
- 1 file changed, 144 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+ .../devicetree/bindings/media/cdns,csi2rx.txt | 100 -----------
+ .../bindings/media/cdns,csi2rx.yaml           | 163 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ 3 files changed, 164 insertions(+), 100 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+ create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
 
-diff --git a/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt b/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+deleted file mode 100644
+index 6b02a0657ad9..000000000000
+--- a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
++++ /dev/null
+@@ -1,100 +0,0 @@
+-Cadence MIPI-CSI2 RX controller
+-===============================
+-
+-The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
+-lanes in input, and 4 different pixel streams in output.
+-
+-Required properties:
+-  - compatible: must be set to "cdns,csi2rx" and an SoC-specific compatible
+-  - reg: base address and size of the memory mapped region
+-  - clocks: phandles to the clocks driving the controller
+-  - clock-names: must contain:
+-    * sys_clk: main clock
+-    * p_clk: register bank clock
+-    * pixel_if[0-3]_clk: pixel stream output clock, one for each stream
+-                         implemented in hardware, between 0 and 3
+-
+-Optional properties:
+-  - phys: phandle to the external D-PHY, phy-names must be provided
+-  - phy-names: must contain "dphy", if the implementation uses an
+-               external D-PHY
+-
+-Required subnodes:
+-  - ports: A ports node with one port child node per device input and output
+-           port, in accordance with the video interface bindings defined in
+-           Documentation/devicetree/bindings/media/video-interfaces.txt. The
+-           port nodes are numbered as follows:
+-
+-           Port Description
+-           -----------------------------
+-           0    CSI-2 input
+-           1    Stream 0 output
+-           2    Stream 1 output
+-           3    Stream 2 output
+-           4    Stream 3 output
+-
+-           The stream output port nodes are optional if they are not
+-           connected to anything at the hardware level or implemented
+-           in the design.Since there is only one endpoint per port,
+-           the endpoints are not numbered.
+-
+-
+-Example:
+-
+-csi2rx: csi-bridge@0d060000 {
+-	compatible = "cdns,csi2rx";
+-	reg = <0x0d060000 0x1000>;
+-	clocks = <&byteclock>, <&byteclock>
+-		 <&coreclock>, <&coreclock>,
+-		 <&coreclock>, <&coreclock>;
+-	clock-names = "sys_clk", "p_clk",
+-		      "pixel_if0_clk", "pixel_if1_clk",
+-		      "pixel_if2_clk", "pixel_if3_clk";
+-
+-	ports {
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-
+-		port@0 {
+-			reg = <0>;
+-
+-			csi2rx_in_sensor: endpoint {
+-				remote-endpoint = <&sensor_out_csi2rx>;
+-				clock-lanes = <0>;
+-				data-lanes = <1 2>;
+-			};
+-		};
+-
+-		port@1 {
+-			reg = <1>;
+-
+-			csi2rx_out_grabber0: endpoint {
+-				remote-endpoint = <&grabber0_in_csi2rx>;
+-			};
+-		};
+-
+-		port@2 {
+-			reg = <2>;
+-
+-			csi2rx_out_grabber1: endpoint {
+-				remote-endpoint = <&grabber1_in_csi2rx>;
+-			};
+-		};
+-
+-		port@3 {
+-			reg = <3>;
+-
+-			csi2rx_out_grabber2: endpoint {
+-				remote-endpoint = <&grabber2_in_csi2rx>;
+-			};
+-		};
+-
+-		port@4 {
+-			reg = <4>;
+-
+-			csi2rx_out_grabber3: endpoint {
+-				remote-endpoint = <&grabber3_in_csi2rx>;
+-			};
+-		};
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
 new file mode 100644
-index 000000000000..3f348dd53441
+index 000000000000..ed573a67f93e
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
-@@ -0,0 +1,144 @@
++++ b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+@@ -0,0 +1,163 @@
 +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/media/starfive,jh7110-camss.yaml#
++$id: http://devicetree.org/schemas/media/cdns,csi2rx.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Starfive SoC CAMSS ISP
++title: Cadence MIPI-CSI2 RX controller
 +
 +maintainers:
-+  - Jack Zhu <jack.zhu@starfivetech.com>
-+  - Changhuang Liang <changhuang.liang@starfivetech.com>
++  - Maxime Ripard <mripard@kernel.org>
 +
 +description:
-+  The Starfive CAMSS ISP is a Camera interface for Starfive JH7110 SoC.It
-+  consists of a VIN controller(Video In Controller, a top-level control until)
-+  and an ISP.
++  The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
++  lanes in input, and 4 different pixel streams in output.
 +
 +properties:
 +  compatible:
-+    const: starfive,jh7110-camss
++    enum:
++      - cdns,csi2rx
 +
 +  reg:
-+    maxItems: 2
-+
-+  reg-names:
-+    items:
-+      - const: syscon
-+      - const: isp
++    maxItems: 1
 +
 +  clocks:
-+    maxItems: 7
++    items:
++      - description: CSI2Rx system clock
++      - description: Gated Register bank clock for APB interface
++      - description: pixel Clock for Stream interface 0
++      - description: pixel Clock for Stream interface 1
++      - description: pixel Clock for Stream interface 2
++      - description: pixel Clock for Stream interface 3
 +
 +  clock-names:
 +    items:
-+      - const: apb_func
-+      - const: wrapper_clk_c
-+      - const: dvp_inv
-+      - const: axiwr
-+      - const: mipi_rx0_pxl
-+      - const: ispcore_2x
-+      - const: isp_axi
++      - const: sys
++      - const: reg_bank
++      - const: pixel_if0
++      - const: pixel_if1
++      - const: pixel_if2
++      - const: pixel_if3
 +
 +  resets:
-+    maxItems: 6
++    items:
++      - description: CSI2Rx system reset
++      - description: Gated Register bank reset for APB interface
++      - description: pixel reset for Stream interface 0
++      - description: pixel reset for Stream interface 1
++      - description: pixel reset for Stream interface 2
++      - description: pixel reset for Stream interface 3
 +
 +  reset-names:
 +    items:
-+      - const: wrapper_p
-+      - const: wrapper_c
-+      - const: axird
-+      - const: axiwr
-+      - const: isp_top_n
-+      - const: isp_top_axi
++      - const: sys
++      - const: reg_bank
++      - const: pixel_if0
++      - const: pixel_if1
++      - const: pixel_if2
++      - const: pixel_if3
 +
-+  power-domains:
++  phys:
++    maxItems: 1
++    description: MIPI D-PHY
++
++  phy-names:
 +    items:
-+      - description: JH7110 ISP Power Domain Switch Controller.
-+
-+  interrupts:
-+    maxItems: 4
++      - const: dphy
 +
 +  ports:
 +    $ref: /schemas/graph.yaml#/properties/ports
 +
 +    properties:
-+      port@1:
++      port@0:
 +        $ref: /schemas/graph.yaml#/$defs/port-base
 +        unevaluatedProperties: false
 +        description:
-+          Input port for receiving CSI data.
++          Input port node, single endpoint describing the CSI-2 transmitter.
 +
 +        properties:
 +          endpoint:
 +            $ref: video-interfaces.yaml#
 +            unevaluatedProperties: false
 +
++            properties:
++              bus-type:
++                enum:
++                  - 4
++
++              clock-lanes:
++                maximum: 4
++
++              data-lanes:
++                minItems: 1
++                maxItems: 4
++                items:
++                  maximum: 4
++
++            required:
++              - clock-lanes
++              - data-lanes
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description:
++          Output port node
++
 +    required:
++      - port@0
 +      - port@1
 +
 +required:
 +  - compatible
 +  - reg
-+  - reg-names
 +  - clocks
 +  - clock-names
-+  - resets
-+  - reset-names
-+  - power-domains
-+  - interrupts
++  - ports
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    stfcamss: isp@19840000 {
-+        compatible = "starfive,jh7110-camss";
-+        reg = <0x19840000 0x10000>,
-+              <0x19870000 0x30000>;
-+        reg-names = "syscon", "isp";
-+        clocks = <&ispcrg 0>,
-+                 <&ispcrg 13>,
-+                 <&ispcrg 2>,
-+                 <&ispcrg 12>,
-+                 <&ispcrg 1>,
-+                 <&syscrg 51>,
-+                 <&syscrg 52>;
-+        clock-names = "apb_func",
-+                      "wrapper_clk_c",
-+                      "dvp_inv",
-+                      "axiwr",
-+                      "mipi_rx0_pxl",
-+                      "ispcore_2x",
-+                      "isp_axi";
-+        resets = <&ispcrg 0>,
-+                 <&ispcrg 1>,
-+                 <&ispcrg 10>,
-+                 <&ispcrg 11>,
-+                 <&syscrg 41>,
-+                 <&syscrg 42>;
-+        reset-names = "wrapper_p",
-+                      "wrapper_c",
-+                      "axird",
-+                      "axiwr",
-+                      "isp_top_n",
-+                      "isp_top_axi";
-+        power-domains = <&pwrc 5>;
-+        interrupts = <92>, <87>, <88>, <90>;
++    csi2rx: csi@0d060000 {
++        compatible = "cdns,csi2rx";
++        reg = <0x0d060000 0x1000>;
++        clocks = <&byteclock 7>, <&byteclock 6>,
++                 <&coreclock 8>, <&coreclock 9>,
++                 <&coreclock 10>, <&coreclock 11>;
++        clock-names = "sys", "reg_bank",
++                      "pixel_if0", "pixel_if1",
++                      "pixel_if2", "pixel_if3";
++        resets = <&bytereset 9>, <&bytereset 4>,
++                 <&corereset 5>, <&corereset 6>,
++                 <&corereset 7>, <&corereset 8>;
++        reset-names = "sys", "reg_bank",
++                      "pixel_if0", "pixel_if1",
++                      "pixel_if2", "pixel_if3";
++        phys = <&csi_phy>;
++        phy-names = "dphy";
 +
 +        ports {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            port@1 {
-+                reg = <1>;
 +                #address-cells = <1>;
 +                #size-cells = <0>;
 +
-+                vin_from_csi2rx: endpoint {
-+                    remote-endpoint = <&csi2rx_to_vin>;
++                port@0 {
++                    reg = <0>;
++
++                    csi2rx_in_sensor: endpoint {
++                        remote-endpoint = <&sensor_out_csi2rx>;
++                        clock-lanes = <0>;
++                        data-lanes = <1 2>;
++                    };
 +                };
-+            };
++
++                port@1 {
++                    reg = <1>;
++
++                    csi2rx_out_grabber0: endpoint {
++                        remote-endpoint = <&grabber0_in_csi2rx>;
++                    };
++                };
 +        };
 +    };
++
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8ddef8669efb..b2e7ca5603c3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4632,6 +4632,7 @@ M:	Maxime Ripard <mripard@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/media/cdns,*.txt
++F:	Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+ F:	drivers/media/platform/cadence/cdns-csi2*
+ 
+ CADENCE NAND DRIVER
 -- 
 2.34.1
 
