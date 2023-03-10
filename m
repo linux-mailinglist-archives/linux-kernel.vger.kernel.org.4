@@ -2,80 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F38F6B3BD9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:18:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A8A6B3BDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjCJKSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 05:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
+        id S229959AbjCJKTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 05:19:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjCJKSA (ORCPT
+        with ESMTP id S230036AbjCJKS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 05:18:00 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [123.126.96.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BBB19ECA;
-        Fri, 10 Mar 2023 02:17:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=ovFLq
-        x1Bf6i8X0C5fFEA/SoD0OZdlMeBnF2sAwARGF0=; b=mNG8jiFxY1caMezlLiFF0
-        ZLt2nqH+hwf4lHRxS8nvi+94dQdbJXLvWJh/e+1AaT7nc3L4l0Kco2cY5uLWLhWy
-        SYLaT1+7OucUlzPDk0yWloHeQJMHy3RXSQCSHNTn8157sqmGi80Z0mKKOklxvpzm
-        H08jT0/CXcSIrvM+KOOx3k=
-Received: from jbd-ThinkPad-X1-Nano-Gen-1.. (unknown [223.104.68.74])
-        by smtp16 (Coremail) with SMTP id MNxpCgCnkUfmAwtkDRU7HA--.61346S2;
-        Fri, 10 Mar 2023 18:18:16 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     mani@kernel.org, loic.poulain@linaro.org, fabio.porcedda@gmail.com
-Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] bus: mhi: host: pci_generic: Revert "Add a secondary AT port to Telit FN990"
-Date:   Fri, 10 Mar 2023 18:17:15 +0800
-Message-Id: <20230310101715.69209-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 10 Mar 2023 05:18:56 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E50122006
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:18:50 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PY2854VW8z4x4r;
+        Fri, 10 Mar 2023 21:18:45 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1678443525;
+        bh=jiJuyTX5wFANGcuOeY73DhON2fnne2lEj0SJrCko2lo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=VBK1EyHgI7Ah60Dwwosee2JOBs/BGT8QYjNSoJ9mMCZpXB6cfJKi0eaKz4LhRXuRF
+         JkogByCJps4SkQWaT5Qg6PDUyGqGTCT6Im1+dTwAoS+w7FwGVIR4yG1kC/cEpFBrbA
+         RwJaYGuzEA9M2Yt3UaNK1i5UjSfkwdKJOGFVPite+pMIsJEvlGT2nYILK0XdxcSBBb
+         K0KmjyDtxEYWj4kEUbydq3tWAzrD8Q2Ud/u8Ljl3BIDnJrjURVCin9/mwRUeRi8kO1
+         V/Mv3oJT/nM6stubCmTJlFQieXkU5I3w+HLx5A6ygk2vBd9397gcQ0BLbEm1JjXU9j
+         EfYX0QZEb7XWQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH] KVM: PPC: Mark three local functions "static"
+In-Reply-To: <20230308232437.500031-1-seanjc@google.com>
+References: <20230308232437.500031-1-seanjc@google.com>
+Date:   Fri, 10 Mar 2023 21:18:42 +1100
+Message-ID: <87ttysoqnx.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: MNxpCgCnkUfmAwtkDRU7HA--.61346S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Xry8Ww1fGF4kKrWfWryUKFg_yoWktrg_Ca
-        n2grn7G3yxXr98Zr4Iq3WkZrWjya45X3WDA3WxtrnYq3srt3srWrs0qFZYvrna9a9xCrZr
-        Cw45XrW7Ar12kjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRRPl15UUUUU==
-X-Originating-IP: [223.104.68.74]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbivxQuZFWB32rMRgAAsK
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 2d5253a096c6057bbf7caa5520856dcdf7eca8bb.
-There are 2 commits with commit message "Add a secondary AT
-port to Telit FN990". But the last one 2d5253a096 was added
-on Foxconn devices. Actually the second AT port of Foxconn
-devices doesn't work in PCIe mode. And the commit message
-mismatch with the changes. So we need to remove it.
+Sean Christopherson <seanjc@google.com> writes:
+> Tag a few functions that are local and don't have a previous prototype as
+> "static".
+>
+> No functional change intended.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202303031630.ntvIuYqo-lkp@intel.com
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>
+> This was prompted by a new W=1 build warning for a commit that went in
+> through the KVM tree, but said commit has made its way to Linus, so it
+> shouldn't matter who grabs this.
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- drivers/bus/mhi/host/pci_generic.c | 2 --
- 1 file changed, 2 deletions(-)
+OK thanks. I'll take this via the powerpc tree for v6.4.
 
-diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-index 6e13c43a84d1..91d02f84ba21 100644
---- a/drivers/bus/mhi/host/pci_generic.c
-+++ b/drivers/bus/mhi/host/pci_generic.c
-@@ -343,8 +343,6 @@ static const struct mhi_channel_config mhi_foxconn_sdx55_channels[] = {
- 	MHI_CHANNEL_CONFIG_DL(13, "MBIM", 32, 0),
- 	MHI_CHANNEL_CONFIG_UL(32, "DUN", 32, 0),
- 	MHI_CHANNEL_CONFIG_DL(33, "DUN", 32, 0),
--	MHI_CHANNEL_CONFIG_UL(92, "DUN2", 32, 1),
--	MHI_CHANNEL_CONFIG_DL(93, "DUN2", 32, 1),
- 	MHI_CHANNEL_CONFIG_HW_UL(100, "IP_HW0_MBIM", 128, 2),
- 	MHI_CHANNEL_CONFIG_HW_DL(101, "IP_HW0_MBIM", 128, 3),
- };
--- 
-2.34.1
-
+cheers
