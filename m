@@ -2,185 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 631676B3621
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 06:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F36E6B362B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 06:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjCJFgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 00:36:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
+        id S229941AbjCJFtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 00:49:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjCJFgl (ORCPT
+        with ESMTP id S229471AbjCJFtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 00:36:41 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2083.outbound.protection.outlook.com [40.107.223.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAF5F34D6
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 21:36:39 -0800 (PST)
+        Fri, 10 Mar 2023 00:49:11 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2117.outbound.protection.outlook.com [40.107.117.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22220F98CB;
+        Thu,  9 Mar 2023 21:49:08 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FdOGJSfkeFwzCG75AahD7VxzMeNqY4Tqn0SgeC6yZpHIXAyCqqXtsgcs/I6cFnr4hBft/gBYMKFiBjL/8B/W17i92902xhsSWemYi9xCEBeVyVg14PPtM97V9p1s5ZhXgFZCYDu4UhlPyG5oY3kvZZ5HlN0wen9iVfP63y+3kUXwHCTjwbBvUmgmm3QFXvoeD6XvJ65Xd5UtGHOFXjan2ZDuxG39X+PbT/aNN82SoAnlaLSV7pRLcXEXFqx9by2wV9K2BRFtfE2Dvf+HxjeRmWotJA+aOUq3jHcO3Ig6Equ0vKs1oDJo0Zkpnks+ZUAXYM9i5MKcsQE/N2F6uZdTvw==
+ b=RwkRTiksMlNNeCiakrmb83uKXGeusGyimWPUXjJ3mO+HGrSuOJTs/ZY0dHCxieMNEUJ/7byyMduQneVy8ErbqnfjF78/AWF8LzRgy5DWyVOV9jx7nZT1ZxwktNJZ1sa0eQtVO7SUyvLuhTtxAVGcV+APm1ZMci/Mo6ir43Z4qh16e3q0pwP43zt36qnKIzdftSl9WhOuVaqBuwgZhHc5MXQHUNGEhLKWmPVtOuFycTmId18Y5kG9l/vpLil76rhrX14AXy8475uoHiuI0OK2bGTerrc4HkogaHy5TwKyBBzfCe94rVL/vcEeo2sZKNPjf3m8+YF6tlin1CWq8a1MEg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bi7fBG/MtgpBvfuLwyZ1KulaW7gbnAUgcf75uXv6E/M=;
- b=b+GG6CrPCrt1j5VGLnWjFOK/uvmZpQkaCDvIHsU89llNwlrPdNrYYbkIFgwo1Vlax+6iPWuYPbzPjlL6+foFqBGH0HrYPvx/nTVJ2dkwbf+3GRYAVV9mSBWpuEqBjRj9yZFXE9/gqT5KQNJl19rlz3lj7QPEakBiHjPNryG5k4F+8HJBDqhrGjp/BKJCOw5Lo23siU2/pjaPYNhNxE1In40cEQuDMZNkyqZUlxlM5xoVW2HHWO6eSlwx3pMMFCCdkvAykkKgJpKvh7ARn7pN1jZE0FaTUQS+Rz0FHIg2lTuvxa4pXjkDyFqJ8bwkZr8jkUyqU8optfSP8dNL7Gilqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=huawei.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=3TAffNeOIPDXwmJpJmg+oAqVVOrB+2BtWDSDZs2nixE=;
+ b=hi1wUju2c9ZwhegyrxrDv+F3AlPk2VxMa2fDoHB1ZMgRkezMKQ7a1LDcNtMTw90Klqvm5s714/R4EOi3VdjVnnoffQcnA8S4X44/3QXXn4PllcckrJYqNuKhyRDyVZLeP+Ea4RgmTvNdbcLKu+Ji/lMekPngutZisZMrva/apLWXo23jzvWQ5INVU1x9VTpU6pMSpB4SqR26+P48SBNf+enqlXWT+d6eAW1yfUDywlZ29x6MRrE6GgvP55cGTgQAlSVL+xorJpLhFiYrWIXoaRFWgHZVto+acxfOr51f8MVk0hPNd6q+yzXkgrrPQlSsUACt4bgQqNaXjnt48V/4XA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bi7fBG/MtgpBvfuLwyZ1KulaW7gbnAUgcf75uXv6E/M=;
- b=YV3Av4Sdqq9KhgkaqMCkJpdRkha9jBKUrY/WAorE+llWCp02KVpdqq9hTQw5OlxLnoZtvrtIYAK2H/E6W47gMiuKtgPdUy9L9KIxjGGBunEY/3uaAchJscFgT+3XjV6+pQgQnYMGQNtts3ibSpslYLmfohVTdK1rpQYlVtXsVhxPqdLqSInmaNUqgqLXUKyuB6JCbXbvUEyKqLsLIeiqRXoa5NklOHQc4Zq0lDh/YC+hrjEUZvYh/tQm7OtDl9qZ4EsOXLFECLd9wxvNNglDDznDGL40V58voBgTtqVY+k7RSYOMFDduHE5D403Ht9ZZ1ZOoffiB6XOsWwiKykvN2Q==
-Received: from BN9PR03CA0369.namprd03.prod.outlook.com (2603:10b6:408:f7::14)
- by BL0PR12MB5009.namprd12.prod.outlook.com (2603:10b6:208:1c2::18) with
+ bh=3TAffNeOIPDXwmJpJmg+oAqVVOrB+2BtWDSDZs2nixE=;
+ b=PnMuaBEzswFltY0fcHXCO7pPnp2DZKrwcx9UR8s3y/hHG+l3R3mR87q7uY/aq/beKl+R8Ukf9KNVZUecw3zbIzerPjQNAdnnIUOmgyFqf92h4k2J/dm2Ov+dNPYt5KMHYiShkTjQCodOHTR4eKQIQqUfjAG0mw9spF8vz5Nm1naJOFmE0h4oUP+7kNNCHCceFlfmabY9bwW42v+TSa44BL+J10FEa1av0VDl+u9R8TWv+MNBfDd3/sahso0m1U/yhQ15bK9fnwJsUxx9pgoeIH3PkUVHP6TuT5ptWUg047+YC5dGWQ5A67HUYCoOSIXTN1YwGV6SqZwBEYsnmU20Yw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TYZPR06MB6023.apcprd06.prod.outlook.com (2603:1096:400:341::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
- 2023 05:36:37 +0000
-Received: from BN8NAM11FT004.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f7:cafe::2e) by BN9PR03CA0369.outlook.office365.com
- (2603:10b6:408:f7::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19 via Frontend
- Transport; Fri, 10 Mar 2023 05:36:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT004.mail.protection.outlook.com (10.13.176.164) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.20 via Frontend Transport; Fri, 10 Mar 2023 05:36:37 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 9 Mar 2023
- 21:36:21 -0800
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 9 Mar 2023
- 21:36:21 -0800
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
- Transport; Thu, 9 Mar 2023 21:36:20 -0800
-Date:   Thu, 9 Mar 2023 21:36:18 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-CC:     Jason Gunthorpe <jgg@nvidia.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kevin.tian@intel.com" <kevin.tian@intel.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "yi.l.liu@intel.com" <yi.l.liu@intel.com>
-Subject: Re: [PATCH v1 02/14] iommufd: Add nesting related data structures
- for ARM SMMUv3
-Message-ID: <ZArB0n0J3GW75WNz@Asurada-Nvidia>
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <364cfbe5b228ab178093db2de13fa3accf7a6120.1678348754.git.nicolinc@nvidia.com>
- <20230309134217.GA1673607@myrica>
- <213a05ef06944a55a148995053b187f8@huawei.com>
- <ZAn94BXkjiJKQ66O@nvidia.com>
- <39979642ba8042ba9d4de651fecfeffb@huawei.com>
- <ZAoCf9+kpMof6R+4@nvidia.com>
- <4c1f57adbe0c4d48849d585508595939@huawei.com>
- <ZAq/n4PNeow6wftN@Asurada-Nvidia>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.18; Fri, 10 Mar
+ 2023 05:49:05 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::daf6:5ebb:a93f:1869]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::daf6:5ebb:a93f:1869%9]) with mapi id 15.20.6178.019; Fri, 10 Mar 2023
+ 05:49:05 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
+        jefflexu@linux.alibaba.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca, rpeterso@redhat.com, agruenba@redhat.com,
+        mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org
+Cc:     linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, cluster-devel@redhat.com,
+        ocfs2-devel@oss.oracle.com, linux-fsdevel@vger.kernel.org,
+        Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH v4 1/5] fs: add i_blockmask()
+Date:   Fri, 10 Mar 2023 13:48:25 +0800
+Message-Id: <20230310054829.4241-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR04CA0006.apcprd04.prod.outlook.com
+ (2603:1096:4:197::13) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZAq/n4PNeow6wftN@Asurada-Nvidia>
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT004:EE_|BL0PR12MB5009:EE_
-X-MS-Office365-Filtering-Correlation-Id: a56c21cb-0a74-42e1-d7ab-08db21296add
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TYZPR06MB6023:EE_
+X-MS-Office365-Filtering-Correlation-Id: f656adcf-6898-4ad5-6580-08db212b28c0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MrUB+zYoIvYQDnGNoP2YfEXzlmoeD9u4psy0t6HShyWLseFjFTXKDAfNgLv5T9uWst8jQGDJhNt+cY8rnEi2dnxRnwn3waA05y3SWj/F9A9RDeDVw0JRS+FgIJizrLRtv5R3dKm6TaWeXXXj334f6tTFu7rsSRwc/KDJpLlI9iKmY7WUSdvmavGdmP/cDyhB7ez9+SOVxwWEU3QzJr6M3rGXRCqIFq+WdS7Tz6TSoW/1liKK3ehh0IyH54jczxj9rKDfap3Ub2fPxEwPRAwNH2irtnSKrPHYd6iO0UfKYqZ4GcilTpJLMlZq3fQh5taAqdF5l115oZgfyTXUBknO+mkJNXvVSzcIft/8qJ3c0cYLdl4UQ0ws/TflU+bF6A7dB1c+FtWHGie4NGkDtXh+gfYS4l1C7Xkfs9hjM+56+KL5TvDopLEZYj5/CWnYvX1YNqkdmVl0FuvLLeLArliKZ96lv0C0hGTgwI4IR3opVlCTdsbpMtluF4a8IQEE7Pxc6/jDDmTiqV1tEJkR2jUuPnXAUhPtm1CINNRvZU1mGDCEzMWAMuqR1cv3pUclA27j/itXsRoIFURPXP8z6JV2+sC+q2qtbWn4ZxoehyNqbgixTHIe5LFm9WO7x4OKw536moAR2tAJrFvpCBR8f+bHWsQrmBDjqOPJLxOuN6SO1E+vt44b47oHAAf+A3Ux18e+qzjdtK3SyvTNxQ0dc4ftc723LThAq6W7KaYpx5oYPrA=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(346002)(136003)(396003)(451199018)(36840700001)(46966006)(70586007)(70206006)(8676002)(4326008)(6916009)(54906003)(316002)(2906002)(5660300002)(7416002)(53546011)(26005)(41300700001)(9686003)(186003)(47076005)(426003)(336012)(8936002)(478600001)(356005)(82310400005)(86362001)(40480700001)(55016003)(36860700001)(83380400001)(82740400003)(33716001)(7636003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 05:36:37.1325
+X-Microsoft-Antispam-Message-Info: q5loVG/P0L8dPSpzK4iqHvOo3G3acBqRX7+o4Q0X6w8SrT+S8DT8na1IHtp+t0Nd0a+KxLiV/YGfQBZBFl8JeQ4YeCp13xBXGrq8xjrREtuRmG6rp9IcAcRjWVWeNrH27dHIsEsz4Qbcvi2thbipeWR2MlZKEhkGXhl4YUcwZQCrD4OCg78xMofqdo9dQhIRc2HFF27RX/xkaKZGE0RBIU4sH9au2kaUEHGnioNyJS2VFnH//IGT82dUP1IkqBEWuar/Tzudp8lWOz+0xQaem2kEdOI2Gu7TQ3EGcYoK+TjxZnfQ45sJ4FU5V0LLhBsDslIOLUrb2KCFiuh3WEn174RJR90kXavhQ11Q4qztfm0d69QVt3ZvGL8KcEGEts1La2sr5kx9xzaHrHU0w+xrD0TwcRVCwe3IXp7oUSmBWAVJtU/rVM2kWkYrWDEc+j27xm5/YfVse8HC/2oTTPag+dlg+CqigwQTHaGZ/FgpCRSUUlhkh2lVBDlZDH54lSiiE/BPFd4VWyU8vgcNlC5+psPv+yVDf5rO4RtMFZMEazHxiKPZJmVRO5dtFsX4erUOkmTvpZtWwMa6SLc46Yi61wu1vIDrzVDxQfrNYBeGxPKUtKJaY3q2TYO7mWcK+/EU6vWHS+YAjowY5R/3CAxJ29tpTidrDY1hE/2qGcMA/i9fhsTXAb5CQws5POwxWlcKNKvcmb8r6t9/eyRlitjWxA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(39850400004)(136003)(396003)(366004)(451199018)(52116002)(6486002)(1076003)(26005)(6506007)(6666004)(6512007)(107886003)(186003)(4744005)(41300700001)(66946007)(66476007)(66556008)(4326008)(8676002)(7416002)(8936002)(5660300002)(86362001)(2906002)(36756003)(316002)(478600001)(921005)(83380400001)(38100700002)(38350700002)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aprk+g84nqLMpNNI5rUbx6iM5UMphBCJ9RK2qPxGW7h8m8JzB33rKsiQRtDV?=
+ =?us-ascii?Q?pqTgd2pTe/i0h1kLN61ORIlFcpiP2n4isWBMiYUUneQEvNgRxGy1UtDo01ct?=
+ =?us-ascii?Q?Dy7orjvXIF1ER90NC0gvD3lD3XUL6L/xN+CMSuo99tN/nPb5hSLUEJRpvjUm?=
+ =?us-ascii?Q?iCyg/KQiGQ4eGfC5saOz53S9umPvgZKV+Z2p2fvcOvOt8ZCblkIGPiomX2QZ?=
+ =?us-ascii?Q?edoRVO6/J+Pas2jZ9AlVIaGJd7hhpWPOz3WuYOyIQHVWlLXUs1zMVVrkMdEm?=
+ =?us-ascii?Q?KBSdeJn7sDvsTt35C4Fw9OtZlpgk+Kt9j2S/o2S3JveIIh2GdQpyjygtu8dv?=
+ =?us-ascii?Q?bJw3TM6Vl2goTKl/yxqnEyPeIwGXfTI5nFzIgFXMVk1cyCq9L54cYhNTcS3L?=
+ =?us-ascii?Q?LuSly58RXb0K+GhG2FUyjXqgzx8y9MNP+uTMHF6LOBJlnzqnHFIXWJLmQlfi?=
+ =?us-ascii?Q?FIg03nXNrVvgr8v+NukhifRPLYg4CWnJ786W8TzVqnEs6iiLfO1TAw354g19?=
+ =?us-ascii?Q?aSyYRMh1a+aGVEoZwFKlSnEsMtVZ7MYgwDkhgMpaAFzAldNyvxVkcdzWP57N?=
+ =?us-ascii?Q?+hkjrev+7rtzAvF1IuPceA0zNFqGxkCB4gof2eWz5E4Yb6b4bD6sHJguvsQY?=
+ =?us-ascii?Q?YzMWA6R1xIGOtXAtmDCOUr2+6J/XTRkdsjNL8dFjqfWo/NhSYUhxL1loNri2?=
+ =?us-ascii?Q?3vEuXMGkJvhgEMhbZ7kVdpWaA0NBZ0toLmZ7zbM4e6HEs2m+L087UK8dFfEH?=
+ =?us-ascii?Q?w1vl+cyhLtRhL8VkRHwlUgJIXh2TcR8hCJK1idwUHduJm4YjCtPkWTmCqQmv?=
+ =?us-ascii?Q?PLqO5+h8Cic2DilnEhehXkbgJDNrtHSQ4WWw8V08JbcxqRusfW9U3SgM0lkD?=
+ =?us-ascii?Q?MJfYF/6qFZ+/rkrzprrfDUQ+oK1/HXNT8jOWTflh3Soz2LRmFZNq3NZmx8RH?=
+ =?us-ascii?Q?/zAn9ikbrNJ2F/Jn9Xs260X+8UyVLTcsATP6y9MrhbP6xY/m4SNERB8R1fGV?=
+ =?us-ascii?Q?t3J59j/nGGuyRwRgCKUaY0i3QAkVPXCfP7rrvAuNPiUN8NgbOyb4v2G45Ow0?=
+ =?us-ascii?Q?8ZBtMUOQpugU7fg7FEFEQE6AYap2TlKeF0GGC7eUIuNwnuhNerWUdOrXCOEc?=
+ =?us-ascii?Q?J1DHTkzkDceh/gcHn2bEYGxeppiX3jToHz8T6BfCh/+iqmiQwaiQGLyhMy0P?=
+ =?us-ascii?Q?RRo45RPFtFyJ8Rwjks5xRrAWRHj6nJpAeDpt+i462y80yje9Cd5WRn1dZi9v?=
+ =?us-ascii?Q?UnFBys9tA5/rWziHAe2+3Ppc421RraD1Borf7GHDUSb5PDYuaVNhN1VGcF11?=
+ =?us-ascii?Q?AijhZ+Y0rNgUD7FZnZcOVXHwd6Af/086bTtdDaUh8D6fIwoBQePvhW7XntN3?=
+ =?us-ascii?Q?BaQeD8lFToPFFI+A2Vj6WSJ8b8Eilh5aIYUPHMsKHfdpMl/zARi/k2FezH8O?=
+ =?us-ascii?Q?JgdhcRAFPb0heyF/EOeX2TLusKQHWcWK17l/0E0/pkiX8xi8akjCf7vUXM8x?=
+ =?us-ascii?Q?z4oJNpsB4osfWJS/7uBgRB8z9ZvxD3bpjQ2Pce49vpeyJoIF4nUIf4rNXW02?=
+ =?us-ascii?Q?50b2EBkBmkDPuA20By6EezsCBfMTa2Cgee4Np7PS?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f656adcf-6898-4ad5-6580-08db212b28c0
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 05:49:05.6408
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a56c21cb-0a74-42e1-d7ab-08db21296add
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT004.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB5009
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8GGE7Fo335S2snThWbu0+AtI41kdP2hhJuIk+9ccCwlb+qS60p9Ofe5+dBMtZRWhKpBx6n8xGTGX62ets8gdCw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6023
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 09:26:57PM -0800, Nicolin Chen wrote:
-> On Thu, Mar 09, 2023 at 04:07:54PM +0000, Shameerali Kolothum Thodi wrote:
-> > External email: Use caution opening links or attachments
-> > 
-> > 
-> > > -----Original Message-----
-> > > From: Jason Gunthorpe [mailto:jgg@nvidia.com]
-> > > Sent: 09 March 2023 16:00
-> > > To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-> > > Cc: Jean-Philippe Brucker <jean-philippe@linaro.org>; Nicolin Chen
-> > > <nicolinc@nvidia.com>; robin.murphy@arm.com; will@kernel.org;
-> > > eric.auger@redhat.com; kevin.tian@intel.com; baolu.lu@linux.intel.com;
-> > > joro@8bytes.org; linux-arm-kernel@lists.infradead.org;
-> > > iommu@lists.linux.dev; linux-kernel@vger.kernel.org; yi.l.liu@intel.com
-> > > Subject: Re: [PATCH v1 02/14] iommufd: Add nesting related data structures
-> > > for ARM SMMUv3
-> > >
-> > > On Thu, Mar 09, 2023 at 03:51:42PM +0000, Shameerali Kolothum Thodi
-> > > wrote:
-> > >
-> > > > > For ARM cases where there is no shared VMID space with KVM, the ARM
-> > > > > VMID should be somehow assigned to the iommfd_ctx itself and the alloc
-> > > > > domain op should receive it from there.
-> > > >
-> > > > Is there any use of VMID outside SMMUv3? I was thinking if nested domain
-> > > alloc
-> > > > doesn't provide the KVM instance, then SMMUv3 can use its internal VMID.
-> > >
-> > > When we talk about exposing an SMMUv3 IOMMU CMDQ directly to
-> > > userspace then
-> > > VMID is the security token that protects it.
-> > >
-> > > So in that environment every domain under the same iommufd should
-> > > share the same VMID so that the CMDQ's also share the same VMID.
-> > >
-> > > I expect this to be a common sort of requirement as we will see
-> > > userspace command queues in the other HW as well.
-> > >
-> > > So, I suppose the answer for now is that ARM SMMUv3 should just
-> > > allocate one VMID per iommu_domain and there should be no VMID in the
-> > > uapi at all.
-> > >
-> > > Moving all iommu_domains to share the same VMID is a future patch.
-> > >
-> > > Though.. I have no idea how vVMID is handled in the SMMUv3
-> > > architecture. I suppose the guest IOMMU HW caps are set in a way that
-> > > it knows it does not have VMID?
-> > 
-> > I think, Guest only sets up the SMMUv3 S1 stage and it doesn't use VMID.
-> 
-> Yea, a vmid is only allocated in an S2 domain allocation. So,
-> a guest allocating only S1 domains always sets VMID=0. Yet, I
-> think that the hypervisor or some where in host kernel should
-> replace the VMID=0 with a unified VMID.
+Introduce i_blockmask() to simplify code, which replace
+(i_blocksize(node) - 1). Like done in commit
+93407472a21b("fs: add i_blocksize()").
 
-Ah, I just recall a conversation with Jason that a VM should only
-have one S2 domain. In that case, the VMID is already unified?
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+v4:
+-drop ext4 patch
+-erofs patch based on mainline
+-a bit change in ocfs2 patch
+ include/linux/fs.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thanks
-Nic
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index c85916e9f7db..17387d465b8b 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -711,6 +711,11 @@ static inline unsigned int i_blocksize(const struct inode *node)
+ 	return (1 << node->i_blkbits);
+ }
+ 
++static inline unsigned int i_blockmask(const struct inode *node)
++{
++	return i_blocksize(node) - 1;
++}
++
+ static inline int inode_unhashed(struct inode *inode)
+ {
+ 	return hlist_unhashed(&inode->i_hash);
+-- 
+2.25.1
+
