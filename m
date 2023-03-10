@@ -2,118 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F9E6B41AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE086B41EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjCJNzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 08:55:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
+        id S231362AbjCJN5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 08:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbjCJNzI (ORCPT
+        with ESMTP id S231354AbjCJN5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:55:08 -0500
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA28010F448;
-        Fri, 10 Mar 2023 05:55:05 -0800 (PST)
-Received: by mail-ot1-f49.google.com with SMTP id e26-20020a9d6e1a000000b00694274b5d3aso2949282otr.5;
-        Fri, 10 Mar 2023 05:55:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678456505;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1cES9JR6anob8B/1PeJEqQZqZDCXMpYC1azdrACVsv4=;
-        b=444C6Pa8l7fJvzbmB8IWYVPgs0mcMMD3dxI3sj+4oGVi41ss6ONPyYOxzDHWA80bJ3
-         9ZNSnuo2487Gx+BsOTH58B9vnJNYszTmSRWWPtWzqNXcIpRHdgRis8+QcWGYLv4uFvY+
-         ACdf/4h09MUyzxyh3W1C/ibd5mS9Gm4Q4qyf4EyOqQxXPeYDeH7HhYMStYv2TmJwIsfi
-         U7J49huWfrFN7PVwNaLSn5Iit7XZR0hHBeWR5Z3MgTTpkvIKkxYUNf7Y2CpzczjyThSs
-         jkmGkYr/Z0EFd6pEyda5wkMZxnr0mlj3+9MPWndwqu+wW3y4BbctQ25HC6K+0ibQ6Hvz
-         Is0Q==
-X-Gm-Message-State: AO0yUKX0XLs1TZkQ9eafmLySEJzxG/EosGn3pEa8fb2xfKK576dxmKzL
-        54bMKnAMPy0nE3qacCszKg==
-X-Google-Smtp-Source: AK7set91xSxVmm1bc6gMoW8m16OBii5leH8D61yMBfeyo5aP3CIP/5w8GRmTKk8N52oHN6eErOu9Yw==
-X-Received: by 2002:a9d:62d:0:b0:693:bfc4:3eaf with SMTP id 42-20020a9d062d000000b00693bfc43eafmr11511281otn.26.1678456504945;
-        Fri, 10 Mar 2023 05:55:04 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x31-20020a056830409f00b0068bcf7995aesm50856ott.64.2023.03.10.05.55.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 05:55:04 -0800 (PST)
-Received: (nullmailer pid 1177459 invoked by uid 1000);
-        Fri, 10 Mar 2023 13:55:03 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Fri, 10 Mar 2023 08:57:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7251151D5;
+        Fri, 10 Mar 2023 05:57:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BF41B822C4;
+        Fri, 10 Mar 2023 13:57:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 401ACC433EF;
+        Fri, 10 Mar 2023 13:57:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678456656;
+        bh=mT1HOidPYDpxr3nntqZI04qBLNZBAbmkfmHjty9P84o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SI81lqCXcL40716aiyF1qLrEV1MfzrAXv6tkwMPChYYpNR5Iv4bf2ReRHXXsBPuyu
+         oFJv8JAAQM3yVtq3PUadz91x11qW1DfKk1BYakfNEYZUPcoURfd1Mqkb6F6lEOqKFe
+         ddRpSQJ+Sv9UsJYy5+I7S5W5Uco4iA4xpmErG1o9SRlq8q356xayQKkAM6S8cshf0n
+         G7b8p2VZQ9ukfd/LcEl7L0850tcQYRIe/RiqeY+u8kQLAJZ5+bkahvDjGo7X4lvM6g
+         78RoBBK/ZRJT20dAsQ8hlWRpGY14ZxBJ6rlV7LUF6R8GBs+tYaW1DSEEIt4Z9n0htv
+         0u5JS6GjgJiig==
+Date:   Fri, 10 Mar 2023 14:57:30 +0100
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: ixp4xx: Use PCI_CONF1_ADDRESS() macro
+Message-ID: <ZAs3SgNsYb31x4UU@lpieralisi>
+References: <20220928122539.15116-1-pali@kernel.org>
+ <CACRpkda-WcnRdwYNi0oeZsvX9xO+ECBF15rd41+Pr+MWmrZuBg@mail.gmail.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Jack Zhu <jack.zhu@starfivetech.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Maxime Ripard <mripard@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        changhuang.liang@starfivetech.com,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Todor Tomov <todor.too@gmail.com>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-In-Reply-To: <20230310120553.60586-3-jack.zhu@starfivetech.com>
-References: <20230310120553.60586-1-jack.zhu@starfivetech.com>
- <20230310120553.60586-3-jack.zhu@starfivetech.com>
-Message-Id: <167845582304.1165699.16322398900784780057.robh@kernel.org>
-Subject: Re: [PATCH v2 2/6] media: dt-bindings: cadence-csi2rx: Convert to
- DT schema
-Date:   Fri, 10 Mar 2023 07:55:03 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkda-WcnRdwYNi0oeZsvX9xO+ECBF15rd41+Pr+MWmrZuBg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Fri, 10 Mar 2023 20:05:49 +0800, Jack Zhu wrote:
-> Convert DT bindings document for Cadence MIPI-CSI2 RX controller
-> to DT schema format and add new properties.
+On Tue, Oct 04, 2022 at 09:56:18AM +0200, Linus Walleij wrote:
+> On Wed, Sep 28, 2022 at 2:25 PM Pali Rohár <pali@kernel.org> wrote:
 > 
-> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
-> ---
->  .../devicetree/bindings/media/cdns,csi2rx.txt | 100 -----------
->  .../bindings/media/cdns,csi2rx.yaml           | 163 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  3 files changed, 164 insertions(+), 100 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
->  create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+> > Simplify pci-ixp4xx.c driver code and use new PCI_CONF1_ADDRESS() macro for
+> > accessing PCI config space.
+> >
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
 > 
+> I have no way to evaluate this change in my head, once the kernel test robot is
+> happy I can test the patch on IXP4xx.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+If you can manage to test it I can go ahead and merge it.
 
-yamllint warnings/errors:
+Thanks,
+Lorenzo
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/media/cdns,csi2rx.example.dts:18.30-58.11: Warning (unit_address_format): /example-0/csi@0d060000: unit name should not have leading 0s
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230310120553.60586-3-jack.zhu@starfivetech.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+> Yours,
+> Linus Walleij
