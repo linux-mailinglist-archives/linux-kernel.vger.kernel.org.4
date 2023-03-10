@@ -2,110 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30986B5187
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B47776B518B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:14:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbjCJUOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 15:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
+        id S231341AbjCJUOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 15:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbjCJUOM (ORCPT
+        with ESMTP id S229933AbjCJUOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 15:14:12 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1274C12D404;
-        Fri, 10 Mar 2023 12:14:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678479252; x=1710015252;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x15Y/xNp6x5PWl7ixmxyrgkMNZmZuvLaLDNTFcnQCoc=;
-  b=ibINhq3Xkm7t9chKezxnZBIrj6G6epWo2T8GVDnT6/5YPUx+LHjJpBuo
-   3v4dVv5NvcV5fcEsOMvw2e5eOdb0tCu/PBfGwwtdlgCyepHoRYSjbChOL
-   sqJC2JzK3KcHRSgBD+9+lNI7I0LDjlNLRXFetjJsmiK3aSS6dgk3Q/lzv
-   VFUpoPIczefts1Hq0AZApo9PLm8/5Vlx/bo6FQKu2v9hwARd7LhzfpHQS
-   83SozUgLfgF6Mk9wWbEtny/OCdIQ9sdw5XZyq7DuKdXbmOmQX5ephCpGG
-   RBPi/F+JuBRatRo6tFjg6m59J6GoSpqk5CuU+CfbWUAH9knXnbtl/ArIQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="320674514"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="320674514"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 12:14:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="710402788"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="710402788"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 10 Mar 2023 12:14:07 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1paj7s-0018GF-2h;
-        Fri, 10 Mar 2023 22:14:04 +0200
-Date:   Fri, 10 Mar 2023 22:14:04 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Paul Moore <paul@paul-moore.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Frederick Lawler <fred@cloudflare.com>
-Subject: Re: [PATCH v1 1/2] Add release hook to LSM
-Message-ID: <ZAuPjCT/GGy860hW@smile.fi.intel.com>
-References: <20230310194159.GB528@domac.alu.hr>
- <ZAuJY1MM3hEiT0ri@smile.fi.intel.com>
- <147c1a43-b5a1-a802-3d14-5f2de8306cc3@alu.unizg.hr>
+        Fri, 10 Mar 2023 15:14:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1609F12CBBC;
+        Fri, 10 Mar 2023 12:14:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8D75B822C2;
+        Fri, 10 Mar 2023 20:14:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 578AAC433D2;
+        Fri, 10 Mar 2023 20:14:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678479250;
+        bh=FSvN0dMMOIBal+krA5fTetvx6l6nuLKvzSK+sAbhgiA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U0l4qrR6LKxW7/w82/tVMbCJVD1vicHfXGsBaVPcgnD0WOykHWSPU4tbANimy2No/
+         QOAx7HIe8xf7kvAKCYGghKebx76Bgs+Ph0WWoD7+reWWpN9MDXhxDBXffzkOkx144i
+         sFG642df2Umtdr4MdDEelvAUEexay8BwrVqJfrpLGX/lwhhPWL9jstuLqMDl5L6JY6
+         h5JUwXFiuvsLxqm5cltSRqwznt7CUJfx1cvGkWB4bpl7Pi4vqs8Expp5pz2D4AW6X+
+         SWIhwqAhkxvsAXzLK1tmFLgdvLzTvQohP5Qs20DPDaXme/x8BR/WqikoyNNVVRVM2Z
+         6XI/Fqf5O2hlQ==
+Date:   Fri, 10 Mar 2023 12:14:08 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Mike Cloaked <mike.cloaked@gmail.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: Possible kernel fs block code regression in 6.2.3 umounting usb
+ drives
+Message-ID: <ZAuPkCn49urWBN5P@sol.localdomain>
+References: <CAOCAAm7AEY9tkZpu2j+Of91fCE4UuE_PqR0UqNv2p2mZM9kqKw@mail.gmail.com>
+ <CAOCAAm4reGhz400DSVrh0BetYD3Ljr2CZen7_3D4gXYYdB4SKQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <147c1a43-b5a1-a802-3d14-5f2de8306cc3@alu.unizg.hr>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAOCAAm4reGhz400DSVrh0BetYD3Ljr2CZen7_3D4gXYYdB4SKQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 09:02:18PM +0100, Mirsad Goran Todorovac wrote:
-> On 10. 03. 2023. 20:47, Andy Shevchenko wrote:
-> > On Fri, Mar 10, 2023 at 08:42:00PM +0100, Mirsad Goran Todorovac wrote:
-> >>
-> >> Add release() hook to the definition of the LSM modules, to enable calling
-> >> destructors and deallocating allocated resources cleanly.
-> >>
-> >> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-> > 
-> >> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > 
-> > I haven't given you this tag. Sorry, you must not add something
-> > which was not explicitly given.
-
-> This change could have long lasting consequences if approved, and I am not
-> continuing the patch submission without your mentoring and approval.
+On Fri, Mar 10, 2023 at 07:33:37PM +0000, Mike Cloaked wrote:
+> With kerne. 6.2.3 if I simply plug in a usb external drive, mount it
+> and umount it, then the journal has a kernel Oops and I have submitted
+> a bug report, that includes the journal output, at
+> https://bugzilla.kernel.org/show_bug.cgi?id=217174
 > 
-> It is true that I assumed that you have reviewed the patch, but you did not
-> explicitly give the Reviewed-by tag.
+> As soon as the usb drive is unmounted, the kernel Oops occurs, and the
+> machine hangs on shutdown and needs a hard reboot.
 > 
-> But I am rather new to this patch submission process, and please would you
-> please mentor me to do this the right way.
+> I have reproduced the same issue on three different machines, and in
+> each case downgrading back to kernel 6.2.2 resolves the issue and it
+> no longer occurs.
+> 
+> This would seem to be a regression in kernel 6.2.3
+> 
+> Mike C
 
-We have a nice documentation for that [1]. Please, read it in full.
-If some questions left, do not hesitate to ask.
+Thanks for reporting this!  If this is reliably reproducible and is known to be
+a regression between v6.2.2 and v6.2.3, any chance you could bisect it to find
+out the exact commit that introduced the bug?
 
-[1]: https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+For reference I'm also copying the stack trace from bugzilla below:
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+BUG: kernel NULL pointer dereference, address: 0000000000000028
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 0 P4D 0
+ Oops: 0000 [#1] PREEMPT SMP PTI
+ CPU: 9 PID: 1118 Comm: lvcreate Tainted: G                T  6.2.3-1>
+ Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./Z370 Ex>
+ RIP: 0010:blk_throtl_update_limit_valid+0x1f/0x110
+ Code: 90 90 90 90 90 90 90 90 90 90 90 0f 1f 44 00 00 41 54 49 89 fc>
+ RSP: 0018:ffffb5fd01b47bb8 EFLAGS: 00010046
+ RAX: 0000000000000000 RBX: ffff9d09040d8000 RCX: 0000000000000000
+ RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+ RBP: ffffffff97b2f648 R08: 0000000000000000 R09: 0000000000000000
+ R10: 0000000000000000 R11: 0000000000000000 R12: ffff9d090fce2c00
+ R13: ffff9d090aedf060 R14: ffff9d090aedf1c8 R15: ffff9d090aedf0d8
+ FS:  00007f3896fc7240(0000) GS:ffff9d109f040000(0000) knlGS:00000000>
+ CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ CR2: 0000000000000028 CR3: 0000000111ce4003 CR4: 00000000003706e0
+ DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+ DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+ Call Trace:
+  <TASK>
+  throtl_pd_offline+0x40/0x70
+  blkcg_deactivate_policy+0xab/0x140
+  ? __pfx_dev_remove+0x10/0x10 [dm_mod]
+  blk_throtl_exit+0x45/0x80
+  disk_release+0x4a/0xf0
+  device_release+0x34/0x90
+  kobject_put+0x97/0x1d0
+  cleanup_mapped_device+0xe0/0x170 [dm_mod]
+  __dm_destroy+0x120/0x1e0 [dm_mod]
+  dev_remove+0x11b/0x190 [dm_mod]
+  ctl_ioctl+0x302/0x5b0 [dm_mod]
+  dm_ctl_ioctl+0xe/0x20 [dm_mod]
+  __x64_sys_ioctl+0x9c/0xe0
+  do_syscall_64+0x5c/0x90
+  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+ RIP: 0033:0x7f389745653f
+ Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48>
+ RSP: 002b:00007ffe5499e4f0 EFLAGS: 00000246 ORIG_RAX: 00000000000000>
+ RAX: ffffffffffffffda RBX: 000055d198c3bec0 RCX: 00007f389745653f
+ RDX: 000055d1994501b0 RSI: 00000000c138fd04 RDI: 0000000000000003
+ RBP: 0000000000000006 R08: 000055d197547088 R09: 00007ffe5499e3a0
+ R10: 0000000000000000 R11: 0000000000000246 R12: 000055d1974d10d6
+ R13: 000055d199450260 R14: 000055d1974d10c7 R15: 000055d197545bbb
+  </TASK>
+ Modules linked in: dm_cache_smq dm_cache dm_persistent_data dm_bio_p>
+  soundcore pcspkr intel_wmi_thunderbolt i2c_smbus mei sysimgblt inpu>
+ CR2: 0000000000000028
+ ---[ end trace 0000000000000000 ]---
+ RIP: 0010:blk_throtl_update_limit_valid+0x1f/0x110
+ Code: 90 90 90 90 90 90 90 90 90 90 90 0f 1f 44 00 00 41 54 49 89 fc>
