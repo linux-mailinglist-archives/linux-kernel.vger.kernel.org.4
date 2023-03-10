@@ -2,60 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75326B4B58
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A868B6B4B56
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbjCJPml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        id S234401AbjCJPmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:42:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjCJPmS (ORCPT
+        with ESMTP id S234246AbjCJPmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:42:18 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CD212C0E6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:29:10 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1paefg-0005bY-F9; Fri, 10 Mar 2023 16:28:40 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1paefe-003CqW-NB; Fri, 10 Mar 2023 16:28:38 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1paefd-003pLw-JQ; Fri, 10 Mar 2023 16:28:37 +0100
-Date:   Fri, 10 Mar 2023 16:28:36 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial: Use of_property_present() for testing DT
- property presence
-Message-ID: <20230310152836.f4n5cu6kexa3gl7z@pengutronix.de>
-References: <20230310144727.1545630-1-robh@kernel.org>
+        Fri, 10 Mar 2023 10:42:13 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A9F212DDC2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:29:03 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A2F611FB;
+        Fri, 10 Mar 2023 07:29:46 -0800 (PST)
+Received: from [10.57.90.67] (unknown [10.57.90.67])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 559233F71A;
+        Fri, 10 Mar 2023 07:29:01 -0800 (PST)
+Message-ID: <5cc56149-965a-bb47-f23f-6aa9d0ecce4e@arm.com>
+Date:   Fri, 10 Mar 2023 15:28:56 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ati6fbauj5jqixyf"
-Content-Disposition: inline
-In-Reply-To: <20230310144727.1545630-1-robh@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 04/14] iommu/arm-smmu-v3: Add arm_smmu_hw_info
+Content-Language: en-GB
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     jgg@nvidia.com, will@kernel.org, eric.auger@redhat.com,
+        kevin.tian@intel.com, baolu.lu@linux.intel.com, joro@8bytes.org,
+        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <cover.1678348754.git.nicolinc@nvidia.com>
+ <494e36cbb77d49e11427b308868dbc1b0e19fe18.1678348754.git.nicolinc@nvidia.com>
+ <bfa43614-c052-4bed-b87e-691141f41909@arm.com>
+ <ZAqFFolbw5xoJDfb@Asurada-Nvidia>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <ZAqFFolbw5xoJDfb@Asurada-Nvidia>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,46 +51,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-03-10 01:17, Nicolin Chen wrote:
+> Hi Robin,
+> 
+> Thanks for the inputs.
+> 
+> On Thu, Mar 09, 2023 at 01:03:41PM +0000, Robin Murphy wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 2023-03-09 10:53, Nicolin Chen wrote:
+>>> This is used to forward the host IDR values to the user space, so the
+>>> hypervisor and the guest VM can learn about the underlying hardware's
+>>> capabilities.
+>>>
+>>> Also, set the driver_type to IOMMU_HW_INFO_TYPE_ARM_SMMUV3 to pass the
+>>> corresponding type sanity in the core.
+>>>
+>>> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+>>> ---
+>>>    drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 25 +++++++++++++++++++++
+>>>    drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h |  2 ++
+>>>    include/uapi/linux/iommufd.h                | 14 ++++++++++++
+>>>    3 files changed, 41 insertions(+)
+>>>
+>>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>>> index f2425b0f0cd6..c1aac695ae0d 100644
+>>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>>> @@ -2005,6 +2005,29 @@ static bool arm_smmu_capable(struct device *dev, enum iommu_cap cap)
+>>>        }
+>>>    }
+>>>
+>>> +static void *arm_smmu_hw_info(struct device *dev, u32 *length)
+>>> +{
+>>> +     struct arm_smmu_master *master = dev_iommu_priv_get(dev);
+>>> +     struct iommu_hw_info_smmuv3 *info;
+>>> +     void *base_idr;
+>>> +     int i;
+>>> +
+>>> +     if (!master || !master->smmu)
+>>> +             return ERR_PTR(-ENODEV);
+>>> +
+>>> +     info = kzalloc(sizeof(*info), GFP_KERNEL);
+>>> +     if (!info)
+>>> +             return ERR_PTR(-ENOMEM);
+>>> +
+>>> +     base_idr = master->smmu->base + ARM_SMMU_IDR0;
+>>> +     for (i = 0; i <= 5; i++)
+>>> +             info->idr[i] = readl_relaxed(base_idr + 0x4 * i);
+>>
+>> You need to take firmware overrides etc. into account here. In
+>> particular, features like BTM may need to be hidden to work around
+>> errata either in the system integration or the SMMU itself. It isn't
+>> reasonable to expect every VMM to be aware of every erratum and
+>> workaround, and there may even be workarounds where we need to go out of
+>> our way to prevent guests from trying to use certain features in order
+>> to maintain correctness at S2.
+> 
+> We can add a bit of overrides after this for errata, perhaps?
+> 
+> I have some trouble with finding the errata docs. Would it be
+> possible for you to direct me to it with a link maybe?
 
---ati6fbauj5jqixyf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The key Arm term is "Software Developer Errata Notice", or just SDEN. 
+Here's the ones for MMU-600 and MMU-700:
 
-On Fri, Mar 10, 2023 at 08:47:26AM -0600, Rob Herring wrote:
-> It is preferred to use typed property access functions (i.e.
-> of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties. As
-> part of this, convert of_get_property/of_find_property calls to the
-> recently added of_property_present() helper when we just want to test
-> for presence of a property and nothing more.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
+https://developer.arm.com/documentation/SDEN-946810/latest/
+https://developer.arm.com/documentation/SDEN-1786925/latest/
 
-Looks reasonable,
+Note that until now it has been extremely fortunate that in pretty much 
+every case Linux either hasn't supported the affected feature at all, or 
+has happened to avoid meeting the conditions. Once we do introduce 
+nesting support that all goes out the window (and I'll have to think 
+more when reviewing new errata in future...)
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+I've been putting off revisiting all the existing errata to figure out 
+what we'd need to do until new nesting patches appeared, so I'll try to 
+get to that soon now. I think in many cases it's likely to be best to 
+just disallowing nesting entirely on affected implementations.
 
-Thanks
-Uwe
+Thanks,
+Robin.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ati6fbauj5jqixyf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQLTKEACgkQwfwUeK3K
-7Al9PAf/Rh6USL2v/0+eSNRzqW+0QUGeBmGE62ZU3YAxtKlM3Rr3Na7iJ4qbmefa
-OUsmybvFtpi5m6ht0GWOx3GQ9FSEa24Q2BEslg6l7EmCf0kw94UlQMMp8xE3UAZN
-T+OUMyFs6ZIPd+VtGQ+KaMHeuJe9AejLDtWmtv6VX2r9ywmHKY6mYNxDl+shVaJP
-741gIg4CDAtSyR3hjkwh4WbL7Q8wdJlvxEmppeNByPf7gHXymWYcc5i5GqcqnNxh
-Vtvc/Ni9LJDtXRRhvO0iP8b5Z43mhgNuyEuk3P4IdoR3nOCEf90Bj3eAgdiDvKhg
-HxA6yUvDO7Obl/X5Hm3mtZdmoF9h9Q==
-=xrfu
------END PGP SIGNATURE-----
-
---ati6fbauj5jqixyf--
+>> In general this should probably follow the same principle as KVM, where
+>> we only expose sanitised feature registers representing the
+>> functionality the host understands. Code written today is almost
+>> guaranteed to be running on hardware released in 2030, at least *somewhere*.
+> 
+> Yes.
+> 
+> Thanks
+> Nicolin
