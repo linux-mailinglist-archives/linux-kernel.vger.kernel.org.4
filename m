@@ -2,95 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14096B351B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 05:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B696B351E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 05:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbjCJECJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 23:02:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
+        id S229937AbjCJEEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 23:04:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjCJEBj (ORCPT
+        with ESMTP id S229550AbjCJEEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 23:01:39 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5800103ED4
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 20:01:26 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id a2so4302069plm.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 20:01:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678420886;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OkeU/XIvYLV7i/BgDe2gN+ETpxPN9Z7bVS2VtFVoXBQ=;
-        b=VmwKFKxsj4V7DC/N7M+8Yp58I1Pd7coa9KKLGavkX4MwK+VBg/TTQJtfJRzTywrLPO
-         nFBbSmUUomVQVkKzK3pLbK8gtBKOQWefsgx/f14Beb73MOrlNhRwShvc4fjZoj6T5jCI
-         8ko//+4ctKuEN2fNUoDa+cZspp/MxfDraN309nTuT6gfbfvZfGpBzn/NF5/2dwlrKDor
-         VllBIkjuvV1MFSn4NodHmGIaly1EFWnAq5z5Z/fVqWtQ5GEwNU1VDPbfE3/Rnx6Y71cd
-         Wr5tS/koB+yaP7RFuITmL9/NtT9/ByaMaP8k5RqqDNkgcz7N25uGV3Wu1kL8Hc3hUB+r
-         x4oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678420886;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OkeU/XIvYLV7i/BgDe2gN+ETpxPN9Z7bVS2VtFVoXBQ=;
-        b=JGJw5F0Pw1KpwFU6gPA+AvhaM30X/afX9Ms9MZDdiu4t4o/OTfQuZRxD/RZ2Q8yKtK
-         aI3n+mD2ZBVHJYJoqiopq4xrfrO2tC28NBcGsIdBHA6qwabpkDuwuJNdraKjIg8kbKLD
-         iAibTDCzEOvnXpraGLFxn7c5g2nq3l82o60fs420Pg4YhdX/hEtycuFZah4Dw4AnxU/m
-         xPXfUf/0O71ZPg0lkxYw7sul6rTgkRtHWdRXXOSHd7c0SUVX2+TGrFZXTK0z5qRbO3uz
-         bxHqlLQzy8kGo8jdeHdPxqVoy8j/VemBaUoz3Obt/D0wElrM2mm6mYJ9Cza1odphGBSX
-         JDHw==
-X-Gm-Message-State: AO0yUKUBOzJhyLqSp9IOzOyqbZfdz6kYwH1TKCqoDTU4FIAYstb6W5Iv
-        PmQyABhs9cCw9CIJ1fe74Oqj/eq0dOR7uQqyR14=
-X-Google-Smtp-Source: AK7set+xOPSnesA1jGx25WYZmGOi3VMcUa0/wGgX01Cvh5lRAe2wMpjt0fhEDksDw43BN8ewWdSxhA==
-X-Received: by 2002:a17:90a:6acf:b0:236:6e4f:bc1e with SMTP id b15-20020a17090a6acf00b002366e4fbc1emr24949878pjm.49.1678420886155;
-        Thu, 09 Mar 2023 20:01:26 -0800 (PST)
-Received: from CloudiRingWorld ([122.231.69.163])
-        by smtp.gmail.com with ESMTPSA id u5-20020a17090aa20500b00233b18e6fb3sm358597pjp.1.2023.03.09.20.01.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 20:01:25 -0800 (PST)
-Date:   Fri, 10 Mar 2023 12:01:21 +0800
-From:   Kloudifold <cloudifold.3125@gmail.com>
-To:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        linux-staging@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: fbtft: fixes alignment should match open parenthesis
-Message-ID: <ZAqrkWn22Q1eXjCL@CloudiRingWorld>
+        Thu, 9 Mar 2023 23:04:35 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F3EE501E;
+        Thu,  9 Mar 2023 20:04:33 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32A16TZ4002304;
+        Fri, 10 Mar 2023 04:04:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Qy1PUzn19VptN8IfOjaioaDlFAVD7aWdoVwO37RW/Ko=;
+ b=GUtsNN75D+5nCv7YyGv4381CVWdZniukmtlgVzuxvR6l2QsH3JG6EEg7Z1Cti5lSKdr4
+ 0Xv6ELqm9ai6/gXk9C4qP471zFMIbbWzOCH01/C57dj0xwPkYLEaRLOIbR/zejlar9kK
+ Gzvw8myX0Ay5ZVDluFBugtkAq+mx2Mn3yxeKuhWdDrFVdoH7G+vVQKoNMo3wp4AQRosr
+ c/GEIURZUeL94Tjbt46O3YuAsR7iuJSLOmfYJ3ak7Ph73s/39QxET8AUdMpJvG8c+hcz
+ Q8iR9xpgB4tkSoTRACXAP0wz26KiPg2IWDvxLupRO8atYf629Fy7eYR/vxVRj3DQ6jg4 rQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p758cuufh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 04:04:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32A44P7l002890
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 04:04:25 GMT
+Received: from [10.79.43.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 9 Mar 2023
+ 20:04:14 -0800
+Message-ID: <affcec97-6cc2-aa0a-103d-efa8ad3b68bf@quicinc.com>
+Date:   Fri, 10 Mar 2023 09:34:10 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v1 1/1] remoteproc: qcom: pas: Coredump elf class to elf64
+Content-Language: en-US
+To:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
+        <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        "Elliot Berman" <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>
+References: <20230309001035.24024-1-quic_gokukris@quicinc.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <20230309001035.24024-1-quic_gokukris@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 8useoCWDgeErQAEsQYb-NErQBF6ghjH6
+X-Proofpoint-GUID: 8useoCWDgeErQAEsQYb-NErQBF6ghjH6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_14,2023-03-09_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ priorityscore=1501 suspectscore=0 spamscore=0 clxscore=1011
+ impostorscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303100029
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes the checks reported by checkpatch.pl
-for alignment should match open parenthesis
+Hey Gokul,
 
-Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
----
- drivers/staging/fbtft/fb_tinylcd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks for the patch.
 
-diff --git a/drivers/staging/fbtft/fb_tinylcd.c b/drivers/staging/fbtft/fb_tinylcd.c
-index 9469248f2..7d4741c47 100644
---- a/drivers/staging/fbtft/fb_tinylcd.c
-+++ b/drivers/staging/fbtft/fb_tinylcd.c
-@@ -37,8 +37,8 @@ static int init_display(struct fbtft_par *par)
- 	write_reg(par, 0xB3, 0x00);
- 	write_reg(par, 0xE5, 0x00);
- 	write_reg(par, 0xF0, 0x36, 0xA5, 0x53);
--	write_reg(par, 0xE0, 0x00, 0x35, 0x33, 0x00, 0x00, 0x00,
--		       0x00, 0x35, 0x33, 0x00, 0x00, 0x00);
-+	write_reg(par, 0xE0, 0x00, 0x35, 0x33, 0x00, 0x00,
-+		  0x00, 0x00, 0x35, 0x33, 0x00, 0x00, 0x00);
- 	write_reg(par, MIPI_DCS_SET_PIXEL_FORMAT, 0x55);
- 	write_reg(par, MIPI_DCS_EXIT_SLEEP_MODE);
- 	udelay(250);
--- 
-2.39.2
+On 3/9/23 05:40, Gokul krishna Krishnakumar wrote:
+> This change adds a new initialization param which modifies the elf
+> class accordingly. Some of the subsystem dump analysis tools need
+> the elf class to be elf64.
+> 
 
+https://lore.kernel.org/lkml/8dea333d-544d-7c07-d560-a1a9c3a38ddc@quicinc.com/
+
+This patch was already sent upstream a while back ^^. IIRC the firmware
+certainly aren't 64 bit elfs and dump analysis tools don't really care 
+as long the coredump contains section headers.
+
+- Sibi
+
+> Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+> ---
+>   drivers/remoteproc/qcom_q6v5_pas.c | 9 ++++++++-
+>   1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+> index 0871108fb4dc..17ce3177be7b 100644
+> --- a/drivers/remoteproc/qcom_q6v5_pas.c
+> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+> @@ -39,6 +39,7 @@ struct adsp_data {
+>   	int pas_id;
+>   	int dtb_pas_id;
+>   	unsigned int minidump_id;
+> +	bool uses_elf64;
+>   	bool auto_boot;
+>   	bool decrypt_shutdown;
+>   
+> @@ -681,7 +682,10 @@ static int adsp_probe(struct platform_device *pdev)
+>   	}
+>   
+>   	rproc->auto_boot = desc->auto_boot;
+> -	rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
+> +	if (desc->uses_elf64)
+> +		rproc_coredump_set_elf_info(rproc, ELFCLASS64, EM_NONE);
+> +	else
+> +		rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
+>   
+>   	adsp = (struct qcom_adsp *)rproc->priv;
+>   	adsp->dev = &pdev->dev;
+> @@ -1126,6 +1130,7 @@ static const struct adsp_data sm8550_adsp_resource = {
+>   	.pas_id = 1,
+>   	.dtb_pas_id = 0x24,
+>   	.minidump_id = 5,
+> +	.uses_elf64 = true,
+>   	.auto_boot = true,
+>   	.proxy_pd_names = (char*[]){
+>   		"lcx",
+> @@ -1145,6 +1150,7 @@ static const struct adsp_data sm8550_cdsp_resource = {
+>   	.pas_id = 18,
+>   	.dtb_pas_id = 0x25,
+>   	.minidump_id = 7,
+> +	.uses_elf64 = true,
+>   	.auto_boot = true,
+>   	.proxy_pd_names = (char*[]){
+>   		"cx",
+> @@ -1165,6 +1171,7 @@ static const struct adsp_data sm8550_mpss_resource = {
+>   	.pas_id = 4,
+>   	.dtb_pas_id = 0x26,
+>   	.minidump_id = 3,
+> +	.uses_elf64 = true,
+>   	.auto_boot = false,
+>   	.decrypt_shutdown = true,
+>   	.proxy_pd_names = (char*[]){
