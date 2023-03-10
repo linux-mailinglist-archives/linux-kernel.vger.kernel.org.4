@@ -2,110 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFB26B3CA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9D16B3CA3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjCJKpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 05:45:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S229932AbjCJKp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 05:45:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjCJKpD (ORCPT
+        with ESMTP id S229845AbjCJKpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 05:45:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E998F6002;
-        Fri, 10 Mar 2023 02:44:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 068E66136C;
-        Fri, 10 Mar 2023 10:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64D3FC4339C;
-        Fri, 10 Mar 2023 10:44:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678445097;
-        bh=TPxM6KK9/OyA82h8iJjmd8WFZT103NQH+ETqZREhhgY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=D+j9smyxvtBK/Ms2aaaY40QVCvRcaB8b1yBg1H4n9IxI+4YZ+OundcY1FnH7GGKj9
-         1Y++jlWf55aSc0fGF+NGC5U/G62ZYKXcY1suUMO9Xl0QKzlrrhuxMzOx38PmLNnF+f
-         dmI8fERezRXUDAo9olrN9xjbRVuyZgvbIwn3qxFwlXmq6nA4ZnvulzrwMqu6yOeT0g
-         aBFTHdmP4lK2b1F3Uvmv75el+7byuqVbIdu+ROydahT4xaP5gZDqMVyDieAgNvPlSO
-         wb3YiZdhuJocqzHnLtUGu3ny+auNY5PrS/grMaumTePFWohmwFbhPuhIkJd1LjOqmg
-         b9c6nP1DTlLuw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1paaF4-00GZyH-VJ;
-        Fri, 10 Mar 2023 10:44:55 +0000
-Date:   Fri, 10 Mar 2023 10:44:54 +0000
-Message-ID: <86wn3oyjfd.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Lucas Tanure <lucas.tanure@collabora.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Fri, 10 Mar 2023 05:45:25 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCEF5DCB5;
+        Fri, 10 Mar 2023 02:45:15 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D7D56240013;
+        Fri, 10 Mar 2023 10:45:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678445113;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CWY3HesGLrysSju0oFUekcV3H8bb2gpbjs5u2RCuvBk=;
+        b=kDWZuTvk2gh2uCI8CNSyJlU9qVOQ2AyCdvYSKsg6uksN1Ec263sZlhQjbqKUllvKxZWO0s
+        VW1H+pm0zRwRpoVmYbWlGp52ntKEYk1SgykFON/INLhxeEYknpKgpGtAC7t2NKlBmF9u5J
+        iWCMIOwn520B4fDbsaN51I0e/jgrZ3aiRj3uWs1DqVrm2lsmKpb2V+vBktd41zwOPU1DIp
+        hTTqos39Wsa25Lzt/qS68EdTF+EyvR0FS2PV6+397RPU7muWelP9OIp6Wwh7i1o1g5rFRF
+        vM/x6Hkc96zsP4rFb7VY3ysLKcSzF84l+hxRQnmHkpIK5Ubhd8Q/9+zkWAHhMQ==
+Date:   Fri, 10 Mar 2023 11:45:10 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Walle <michael@walle.cc>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, Qu Wenruo <wqu@suse.com>,
-        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, kernel@collabora.com,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH 1/7] irqchip/gic-v3: Add a DMA Non-Coherent flag
-In-Reply-To: <37adba14-1add-187c-01b5-5109be38018e@collabora.com>
-References: <20230310080518.78054-1-lucas.tanure@collabora.com>
-        <20230310080518.78054-2-lucas.tanure@collabora.com>
-        <a43dee4ef0e72c393dea6ce924347f81@kernel.org>
-        <37adba14-1add-187c-01b5-5109be38018e@collabora.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: lucas.tanure@collabora.com, vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de, tglx@linutronix.de, lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com, wqu@suse.com, piotr.oniszczuk@gmail.com, pgwipeout@gmail.com, kever.yang@rock-chips.com, linux-phy@lists.infradead.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, kernel@collabora.com, robin.murphy@arm.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 11/21] nvmem: core: handle the absence of expected
+ layouts
+Message-ID: <20230310114510.0867e0bd@xps-13>
+In-Reply-To: <c37d2d5d-4a25-27de-3f80-033984232ed9@linaro.org>
+References: <20230307165359.225361-1-miquel.raynal@bootlin.com>
+        <20230307165359.225361-12-miquel.raynal@bootlin.com>
+        <c37d2d5d-4a25-27de-3f80-033984232ed9@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023 09:53:16 +0000,
-Lucas Tanure <lucas.tanure@collabora.com> wrote:
-> 
-> On 10-03-2023 08:56, Marc Zyngier wrote:
-> > On 2023-03-10 08:05, Lucas Tanure wrote:
-> >> The GIC600 integration in RK356x, used in rk3588, doesn't support
-> >> any of the shareability or cacheability attributes, and requires
-> >> both values to be set to 0b00 for all the ITS and Redistributor
-> >> tables.
-> >> 
-> >> This is loosely based on prior work from XiaoDong Huang and
-> >> Peter Geis fixing this issue specifically for Rockchip 356x.
-> > 
-> > No.
-> > 
-> > If we are going to do *anything* about this thing, it is by
-> > describing the actual topology.
-> What do you mean by describe the topology?
+Hi Srinivas,
 
-Exactly what it means. Describe which shareability domains the GIC is
-in w.r.t the whole SoC. Do it consistently over the whole SoC.
+srinivas.kandagatla@linaro.org wrote on Fri, 10 Mar 2023 10:30:14 +0000:
 
-	M.
+> On 07/03/2023 16:53, Miquel Raynal wrote:
+> > Make nvmem_layout_get() return -EPROBE_DEFER while the expected layout
+> > is not available. This condition cannot be triggered today as nvmem
+> > layout drivers are initialed as part of an early init call, but soon
+> > these drivers will be converted into modules and be initialized with a
+> > standard priority, so the unavailability of the drivers might become a
+> > reality that must be taken care of.
+> >=20
+> > Let's anticipate this by telling the caller the layout might not yet be
+> > available. A probe deferral is requested in this case.
+> >=20
+> > Please note this does not affect any nvmem device not using layouts,
+> > because an early check against the "nvmem-layout" container presence
+> > will return NULL in this case.
+> >=20
+> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> > Tested-by: Michael Walle <michael@walle.cc>
+> > ---
+> >   drivers/nvmem/core.c | 10 +++++++++-
+> >   1 file changed, 9 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> > index b9be1faeb7be..51fd792b8d70 100644
+> > --- a/drivers/nvmem/core.c
+> > +++ b/drivers/nvmem/core.c
+> > @@ -755,7 +755,7 @@ EXPORT_SYMBOL_GPL(nvmem_layout_unregister);
+> >   static struct nvmem_layout *nvmem_layout_get(struct nvmem_device *nvm=
+em)
+> >   { =20
+>=20
+> Any reason why this is not part of 10/21?
 
--- 
-Without deviation from the norm, progress is not possible.
+Yes, I would like to credit everybody for his work, so Michael for the
+base implementation and myself for the module sitaution handling,
+arguing this is two different features. May we keep these separated?
+
+> kernel doc for nvmem_layout_get needs updating with this behavior.
+
+There is no kdoc for nvmem_layout_get, do you want one ? I thought the
+comment where this function is called would be more descriptive (and
+read by interested people).
+
+Thanks,
+Miqu=C3=A8l
