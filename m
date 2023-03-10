@@ -2,115 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8706B4FC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 19:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF51E6B4FCA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 19:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjCJSHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 13:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
+        id S230448AbjCJSIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 13:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjCJSHW (ORCPT
+        with ESMTP id S230118AbjCJSII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 13:07:22 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88221314C7;
-        Fri, 10 Mar 2023 10:07:21 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id me6-20020a17090b17c600b0023816b0c7ceso10713900pjb.2;
-        Fri, 10 Mar 2023 10:07:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678471641;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+5jGJYm0wL4TU+GInA55FTV+ma7xO70le58dL4DX4ys=;
-        b=MZvRpi166r8cPLxmI4Wj2nTjboTVgIlUSNoTZ0GEKuD172rYOKmAnVQb5/nQYacoWT
-         TovuiPpr7y2PnF1VP2kZ97vtg8bSK8YZ5yMoTO3ZTmP+LC5nxfLhYxpr+8YWDljyQFfL
-         RjZ890CYGCRocpbCh9ZVKMs1L/UYwiX/CWVse4HJiH4QPkbXtNCKqXJrGbZfojm/F7ca
-         A6N/nkZOj0E4UOwL3L7xhVmh6f0Yjk6iHCr2diO27gnOWhQZvbAZ+a4x//nxwoljrlGP
-         qBCms2xT0VDOFEs1YxgjFlhxSirsnvnkpg87zsMHfutd11qmxoYxyOf4ff8s1ugbZnm7
-         ycVQ==
+        Fri, 10 Mar 2023 13:08:08 -0500
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BC212BE0;
+        Fri, 10 Mar 2023 10:07:59 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id cy23so23810987edb.12;
+        Fri, 10 Mar 2023 10:07:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678471641;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+5jGJYm0wL4TU+GInA55FTV+ma7xO70le58dL4DX4ys=;
-        b=Fr44AdkZ1RJsXDIA0x4BnNW9HhtqmvKeIuzFo7Ah0u96wqR80Oy4uqBFjcDIm9W3YW
-         mVWRFQ4zkHgximwuBlebKMKFfkeXjESJroaTxvwuv5bBB71ZLvn2vMZwxGe7kmesypW+
-         MrMj8PQFv/sR83zb6D7Q9PFcp5vzmqSAeSR6TWgOcEpO1NVfExtvQmWhuXb+MIzRgzLk
-         IfZLnboJaXswJmyWQieaoVr22Iq/i+35wf7aV5dDatqPLe0vqPAW8PVcof0mWAQvNGky
-         oPEv6CeNCt5m9SRPPonMqG8ZbuxmGZFk2XITzZLPP69YQPbCvrjA3Mp5VFRf1gsBeW5U
-         j+HA==
-X-Gm-Message-State: AO0yUKUzGoUXdFYztDno0cp6g4hNEfO0auQrGVZ15kWidsuz9KGpLRu9
-        nEkJiv+DMo6GACZBHq7CGjQzRlmEqt4=
-X-Google-Smtp-Source: AK7set/6HkbBFXtz3z8XyA+x6G75td2z6mPUHNDgY11R3c9ADc80r5wuC4UgzbgQZmk2Zktp4juJyw==
-X-Received: by 2002:a17:90a:18e:b0:232:fa13:4453 with SMTP id 14-20020a17090a018e00b00232fa134453mr26741085pjc.13.1678471641394;
-        Fri, 10 Mar 2023 10:07:21 -0800 (PST)
-Received: from Gentoo (n220246252084.netvigator.com. [220.246.252.84])
-        by smtp.gmail.com with ESMTPSA id jx18-20020a17090b46d200b00233e860f69esm201403pjb.56.2023.03.10.10.07.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 10:07:20 -0800 (PST)
-Date:   Sat, 11 Mar 2023 02:07:13 +0800
-From:   Jianhua Lu <lujianhua000@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] drm/panel: Add driver for Novatek NT36523
-Message-ID: <ZAtx0c4U70DtMuyV@Gentoo>
-References: <20230310132144.2241-1-lujianhua000@gmail.com>
- <20230310132144.2241-2-lujianhua000@gmail.com>
+        d=1e100.net; s=20210112; t=1678471678;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GzoWKK0oHU996RcpYCG8oeeKvgCP3Ci5e6SGWugHzK4=;
+        b=DSNZ7JzQEa9xDNYsnnPo/pQBgBKg1Y2AUjSurtd2cV2YMXyXjy1kEfWzQDUcCe6I+c
+         Np+c0v7Ow/Q+JgNJLMLSfX0ji/fn+0HyZFn+nt6bmNMGYYwemrPoDdtGYA6RodevPrpa
+         MetehwFWHUmWYYg2NORTwlJf4cefJ5Uca0x51+luhAFx8ULTEUrLDUdZqdDFzkdo2eMI
+         uubfG0F+lV7Rd76PRtqWzxD9SRCyUUfpW/CM57XHLd1QUT4fMDhUkefTQn/kZqiSClyX
+         jNDxlVGPF9BVoqT7/IaWJemXWmWNfqQFsb5hwxYsgWL7pksuwBTxOEO7/cZWk1z27NFz
+         1Sfg==
+X-Gm-Message-State: AO0yUKWkephHQGzFLTaMCLmNfML1DC5Fk/39ZS1hB3WmCuvsGwU4jGVC
+        kwvujlsMsPq0vjGQJKx2jpjRumt+dDIQu/L1wW2aVlio8++Oag==
+X-Google-Smtp-Source: AK7set+0tP0CEF1x1/xxME5zLOlQkjDRbmbA3HlKFWRTf4dY873FCQCa6HTfZp+EY4sfYjr4wxjNi2sDKk5R7ykbOxc=
+X-Received: by 2002:a17:906:4094:b0:8b1:28e5:a1bc with SMTP id
+ u20-20020a170906409400b008b128e5a1bcmr12485216ejj.5.1678471677765; Fri, 10
+ Mar 2023 10:07:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310132144.2241-2-lujianhua000@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 10 Mar 2023 19:07:46 +0100
+Message-ID: <CAJZ5v0jbVwQ-NcdbRwru+T2mr9e9AKZRAFkCjNVoFzE31GQJXw@mail.gmail.com>
+Subject: [GIT PULL] Thermal control fix for v6.3-rc2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 09:21:44PM +0800, Jianhua Lu wrote:
-> Add a driver for panels using the Novatek NT36523 display driver IC.
-...
-> +
-> +static int nt36523_get_modes(struct drm_panel *panel,
-> +			       struct drm_connector *connector)
-> +{
-> +	struct panel_info *pinfo = to_panel_info(panel);
-> +	int i;
-> +
-> +	for (i =0; i < pinfo->desc->num_modes; i++) {
-s/i =0/i = 0/, I forget to run checkpatch, sorry. I will fix it in v5 
-> +		const struct drm_display_mode *m = &pinfo->desc->modes[i];
-> +		struct drm_display_mode *mode;
-> +		mode = drm_mode_duplicate(connector->dev, m);
-> +		if (!mode) {
-> +			dev_err(panel->dev, "failed to add mode %ux%u@%u\n",
-> +				m->hdisplay, m->vdisplay, drm_mode_vrefresh(m));
-> +			return -ENOMEM;
-> +		}
-> +		mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
-> +		drm_mode_set_name(mode);
-> +		drm_mode_probed_add(connector, mode);
-> +	}
-> +
-> +	connector->display_info.width_mm = pinfo->desc->width_mm;
-> +	connector->display_info.height_mm = pinfo->desc->height_mm;
-> +	connector->display_info.bpc = pinfo->desc->bpc;
-> +
-> +	return pinfo->desc->num_modes;
-> +}
-> 
-> 
+Hi Linus,
+
+Please pull from the tag
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-6.3-rc2
+
+with top-most commit 52f04f10b9005ac4ce640da14a52ed7a146432fa
+
+ thermal: intel: int340x: processor_thermal: Fix deadlock
+
+on top of commit 0a3f9a6b0265b64c02226fcabb5e9a958307913b
+
+ Merge tag 'thermal-6.3-rc1-2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+
+to receive a thermal control fix for 6.3-rc2.
+
+This fixes a recently introduced deadlock in the int340x thermal control
+driver (Srinivas Pandruvada).
+
+Thanks!
+
+
+---------------
+
+Srinivas Pandruvada (1):
+      thermal: intel: int340x: processor_thermal: Fix deadlock
+
+---------------
+
+ drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
