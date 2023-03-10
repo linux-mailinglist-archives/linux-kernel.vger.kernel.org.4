@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790A76B404D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7B56B404E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjCJNXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 08:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S230453AbjCJNXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 08:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjCJNWd (ORCPT
+        with ESMTP id S230293AbjCJNWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:22:33 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0100C1009E3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:22:11 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id x3so20274838edb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:22:11 -0800 (PST)
+        Fri, 10 Mar 2023 08:22:34 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16848102B5C
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:22:13 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id k10so20236980edk.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:22:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678454531;
+        d=linaro.org; s=google; t=1678454532;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=goKtutnQ2PFd8NfCZ2pE04cCvKUKzYAaQ26RIq4NWcQ=;
-        b=RER2Rx5gJ5R+wduk0rXzfE5ryA2rbohjb7XXb5g/kkl2V2gOITdv2x91WBUBe7GyZu
-         gzQbl+KyFVnkjtsfyt9c8aTcZ18c1l+o5RLpBbGD68Ni62VRCbISEs5sNNCcsi+36g4f
-         2vVyUQ1J6lHFysa2mx7T/qGJ+l0ANCp4QCkyc0QDHgTG5l7m32OikC7JGiDQLVYgfyCH
-         XjJe4M3wPRViScfkziAQb7/3RSrIi3jjT8TWv2XSG1eOnKcUU5ncO7NE6gh93BC8K+lC
-         CFJiG/yjDHOOGiz9uglm9l8ev1HtlL2Y2sK6FaFJcbDq30igz/dR79IR18o3dXzc3Ke9
-         /7Pg==
+        bh=xZM2NPsZ49ia+Dqe6wkMeZpgWpRvBEKr1bmuDVGwMmU=;
+        b=JlQDMdsrzCaAUa+EGwPt5baDL9e2sGUjcXtUdJmMtd7LdVysOe++LpLVZR62ZYEocf
+         GGVu0LPvWKnC66Cv9zwZp3AKNIEU1IsV+efkj4Zdhpi1Qn705w49uz4Qt4ogxN68cuty
+         0btX2P47p6t+EP6BHBkWAX6XjqGKRBGaLunRWDvwsqanUk9dOf8jvcK9ViDIqNgwdom1
+         k4NSndhZRy4ftXOedg/VJHgTL8ZCB6pJHn7t6u1DrjNOUZWGxzBqnHKGkXTE5Fh27rvy
+         b55y67Vv7B4MpMRYC+WHN+xQMbxaIMYtq4vueu0BPH6BTVqC6/qOMmKfnBkrNYJvSt06
+         0T8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678454531;
+        d=1e100.net; s=20210112; t=1678454532;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=goKtutnQ2PFd8NfCZ2pE04cCvKUKzYAaQ26RIq4NWcQ=;
-        b=bTXpYK3aZaeOpInnsDf+Ps3nvY/UU9K844tIhxjbYo+b0TH+fgINWPvB1xRN1Hc1AU
-         g5FFMbD1dlgYjRcSBHFWBwwvKrAkxEghQGL+0Kwsu+riSj36jCBs5IChcwVyFwTaYdBo
-         3q8/T0Qy2urZlZ1+ItNW+buaBEQfDE+fei66LKRpD7JZ6a936aDOBvMZOWNh4NUoXIf/
-         QOFFM+R6se5zyfEEoSR+EzLbW44bDPT/qKO05tWF2RLyOA1Q+PDcTKpiFR0EQBuRDETV
-         Rfo9nNObaVlgGD/FazPJNf0Wls6bdk68B/BoGK2cca/tgQ84YyFBgQnpt0ZZmKvCDdC5
-         Iydg==
-X-Gm-Message-State: AO0yUKXxKEXXz3ZuNHnHq9A3YFDz+iJ4xNuNSlA9c2tVUvIlbdlAr74z
-        GIGe9J28TNyKcaSSvYjEkn46Tg==
-X-Google-Smtp-Source: AK7set/7m+fKbY/1jI+CUKTq8FToiMZNX8tVAOxvsseLOOiw8ysUD1u+jkKI1OdVBofqe2vcOObR+g==
-X-Received: by 2002:a17:906:1ed1:b0:8e9:6f9f:7c2d with SMTP id m17-20020a1709061ed100b008e96f9f7c2dmr1874600ejj.35.1678454531631;
-        Fri, 10 Mar 2023 05:22:11 -0800 (PST)
+        bh=xZM2NPsZ49ia+Dqe6wkMeZpgWpRvBEKr1bmuDVGwMmU=;
+        b=KpcRJ/kVYKyh9dnsugPvS8M6bxFg+LzH708PFZb7MmF+nNoDk8seA8SvhJohc3a+Li
+         9aMrMrjRDqsxXZovctVg6/0ZVimCLDkixy4cqK/n/u3gAMx81L9YobvnBqHCp1rr/eb7
+         JwSLDUbIMR+3X95NfFtS/H5v8bAXzi7XV3BlzJJF3rI1be8e2KCCFnasrdl0X0ewbH4a
+         ZGer/fRC64281ffVCFezEhD1YqbWFkNIdiGtXaxK1DA4HaOFNf5hHd5rNske1l65V7aE
+         kSaK10jOYtOKcV9qhtMAXcC+Wt8cMp7HXsxPuLnCoczy/wxp7rN3kihLhJzBombupWX/
+         2Ieg==
+X-Gm-Message-State: AO0yUKWExzIcMuv++JBX5E58BrhIc0Sp8oZVL2QVt8p2Zh8Syvy7NA5c
+        +XNucxbh5T16b84zQwFtDNiyGw==
+X-Google-Smtp-Source: AK7set8fTAqNDHmQ2vbdeXcsnUybj+MQE1TaFOBt/wDYcsvEaTyVp4p/mNTUNlPd4pLUH6uptZ5WVw==
+X-Received: by 2002:a17:906:30d3:b0:878:7291:d558 with SMTP id b19-20020a17090630d300b008787291d558mr23731297ejb.34.1678454532716;
+        Fri, 10 Mar 2023 05:22:12 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:45c4:46be:ec71:4a51])
-        by smtp.gmail.com with ESMTPSA id zc4-20020a170906988400b008b17879ec95sm959124ejb.22.2023.03.10.05.22.10
+        by smtp.gmail.com with ESMTPSA id zc4-20020a170906988400b008b17879ec95sm959124ejb.22.2023.03.10.05.22.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 05:22:11 -0800 (PST)
+        Fri, 10 Mar 2023 05:22:12 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -65,9 +65,9 @@ To:     Andy Gross <agross@kernel.org>,
         alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 7/9] ASoC: dt-bindings: qcom,lpass-va-macro: Add SM8550 VA macro
-Date:   Fri, 10 Mar 2023 14:21:59 +0100
-Message-Id: <20230310132201.322148-8-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 8/9] ASoC: dt-bindings: qcom,lpass-wsa-macro: Add SM8550 WSA macro
+Date:   Fri, 10 Mar 2023 14:22:00 +0100
+Message-Id: <20230310132201.322148-9-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230310132201.322148-1-krzysztof.kozlowski@linaro.org>
 References: <20230310132201.322148-1-krzysztof.kozlowski@linaro.org>
@@ -75,59 +75,76 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the VA macro codec on Qualcomm SM8550, which comes without NPL clock
+Add the WSA macro codec on Qualcomm SM8550, which comes without NPL clock
 exposed.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
 ---
+ .../bindings/sound/qcom,lpass-wsa-macro.yaml  | 23 +++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
-Depends on:
-https://lore.kernel.org/r/20221118071849.25506-2-srinivas.kandagatla@linaro.org
----
- .../bindings/sound/qcom,lpass-va-macro.yaml    | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml b/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml
-index 528b677a439c..4a56108c444b 100644
---- a/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml
-+++ b/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml
+diff --git a/Documentation/devicetree/bindings/sound/qcom,lpass-wsa-macro.yaml b/Documentation/devicetree/bindings/sound/qcom,lpass-wsa-macro.yaml
+index 66cbb1f5e31a..eea7609d1b33 100644
+--- a/Documentation/devicetree/bindings/sound/qcom,lpass-wsa-macro.yaml
++++ b/Documentation/devicetree/bindings/sound/qcom,lpass-wsa-macro.yaml
 @@ -15,6 +15,7 @@ properties:
-       - qcom,sc7280-lpass-va-macro
-       - qcom,sm8250-lpass-va-macro
-       - qcom,sm8450-lpass-va-macro
-+      - qcom,sm8550-lpass-va-macro
-       - qcom,sc8280xp-lpass-va-macro
+       - qcom,sc7280-lpass-wsa-macro
+       - qcom,sm8250-lpass-wsa-macro
+       - qcom,sm8450-lpass-wsa-macro
++      - qcom,sm8550-lpass-wsa-macro
+       - qcom,sc8280xp-lpass-wsa-macro
  
    reg:
-@@ -110,6 +111,23 @@ allOf:
-             - const: dcodec
-             - const: npl
+@@ -27,11 +28,11 @@ properties:
+     const: 0
+ 
+   clocks:
+-    minItems: 5
++    minItems: 4
+     maxItems: 6
+ 
+   clock-names:
+-    minItems: 5
++    minItems: 4
+     maxItems: 6
+ 
+   clock-output-names:
+@@ -62,6 +63,7 @@ allOf:
+     then:
+       properties:
+         clocks:
++          minItems: 5
+           maxItems: 5
+         clock-names:
+           items:
+@@ -89,6 +91,23 @@ allOf:
+             - const: va
+             - const: fsgen
  
 +  - if:
 +      properties:
 +        compatible:
-+          contains:
-+            enum:
-+              - qcom,sm8550-lpass-va-macro
++          enum:
++            - qcom,sm8550-lpass-wsa-macro
 +    then:
 +      properties:
 +        clocks:
-+          minItems: 3
-+          maxItems: 3
++          minItems: 4
++          maxItems: 4
 +        clock-names:
 +          items:
 +            - const: mclk
 +            - const: macro
 +            - const: dcodec
++            - const: fsgen
 +
  unevaluatedProperties: false
  
