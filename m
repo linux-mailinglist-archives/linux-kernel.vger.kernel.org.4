@@ -2,78 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0A76B408C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 592076B409D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:39:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjCJNg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 08:36:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
+        id S230243AbjCJNjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 08:39:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjCJNg5 (ORCPT
+        with ESMTP id S230207AbjCJNjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:36:57 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03C210D329;
-        Fri, 10 Mar 2023 05:36:55 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id cy23so20404638edb.12;
-        Fri, 10 Mar 2023 05:36:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678455414;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fF6dAIDj+uVyHBsn9QKyWfa4FJOS/uyNw5ttJ+sPzcQ=;
-        b=qiTEvhVQnsW5MRh9NLhcq+ddgbRUPLD2t9GyEBSuvp+P3qubK1AESBPhuBAFzipIls
-         EJE+J1P1MbRI3rguCmBi66b61coWbUgSj9/8LmbGkIcmKl+SN3acMn3U1qsueFnl/u/0
-         JBefRnOBzx1ZiHgeLWQUTMZv7tzPw4b7JKP5hSETiQQdfiKgnH2Rr2e0qu1hbmc30tQU
-         CLzTc+VrBRiwDUvrtWqKOAMN16db8LcMAfBWNhpPtrwBb3nOKAlJKA9DAdzY2v0gs4BI
-         udOhvzz+J8U1tTlxumNzECZrGLbKtXCPvkIabgzKn3I8BpbfzXyJsBtmbofbWL0/0aph
-         QLEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678455414;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fF6dAIDj+uVyHBsn9QKyWfa4FJOS/uyNw5ttJ+sPzcQ=;
-        b=eq8y99fDQR4flqwEBZyf8UrBwZpNQpw/3jc0Zzuuut2RRiHE7sONqDccaA4FbrddUP
-         Z5wi4hrEtOyMohJoDExWwHx0HiQJIJ1qPjzdN6iioA8Ry3MmBNVkxGfz0FtkwrcoTwxJ
-         jWwiqUFHuikL03N/PSEi3cIdl1Nrs2/ZZxWh2q7cwU4amCSAnUM5hTR91dpNz7vAvapd
-         Peds6YGEzlNaSDSZuozdVIypDj3dbGX2MrkAertbuo7FtHwU+fv3n2F5hMF3wW7SEOk0
-         T+40iFfmqgCKWE32pG/2lXg8Vvt67quTHkpZDDva/3TFOQtm/4oZk70qsfrOG1iXOZhq
-         gpwA==
-X-Gm-Message-State: AO0yUKVSKBTAsideaupqVJdcuiqY515DGL1hGEp1KssoHx3Qexyg++yz
-        sz2YDhkHn3QBjAOiEafLEso=
-X-Google-Smtp-Source: AK7set8XCaYfUjVa92XaxkgsXmYJ94mXtcsadsofsX0yKl9NVjm8XURygRCBdhsXh0qjgSsniqj7Tg==
-X-Received: by 2002:a50:ec96:0:b0:4af:59c0:744a with SMTP id e22-20020a50ec96000000b004af59c0744amr25297197edr.24.1678455414168;
-        Fri, 10 Mar 2023 05:36:54 -0800 (PST)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id 12-20020a508e4c000000b004af720b855fsm19949edx.82.2023.03.10.05.36.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 05:36:53 -0800 (PST)
-Date:   Fri, 10 Mar 2023 15:36:51 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] dsa: marvell: Provide per device information about
- max frame size
-Message-ID: <20230310133651.pfqldx6jdgssbe54@skbuf>
-References: <20230309125421.3900962-1-lukma@denx.de>
- <20230309125421.3900962-2-lukma@denx.de>
- <20230310120235.2cjxauvqxyei45li@skbuf>
- <20230310141719.7f691b45@wsk>
+        Fri, 10 Mar 2023 08:39:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA1646092
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:38:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678455505;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=j2OR9fIPJYHr1cJflr+8XvQFdV93TGp9o5m8EX8cFoI=;
+        b=ZsT6edn/8cf+eX0MBtQ9ldBv+oR3wTKV+Lz55uEmbkKtsCGyHDzNbaBr1LTUPSshvdaAqa
+        3mNZPo4vk/ZD+KV2aTYl2QlFsBgBXb+2uuCi8WHHHUZwI3POUZojhStpCniA7NrAVSQeEy
+        MdF8QtvLX2XX+hsgfRKJQlHB8CHkl1I=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-587-O4uCNK7HNYGvW62_WP5abw-1; Fri, 10 Mar 2023 08:38:22 -0500
+X-MC-Unique: O4uCNK7HNYGvW62_WP5abw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6DD24185A78B;
+        Fri, 10 Mar 2023 13:38:20 +0000 (UTC)
+Received: from xps-13.local (unknown [10.39.194.103])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 21B1E492C3E;
+        Fri, 10 Mar 2023 13:38:19 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 10 Mar 2023 14:38:10 +0100
+Subject: [PATCH v2] gpiolib: acpi: use the fwnode in acpi_gpiochip_find()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310141719.7f691b45@wsk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230309-fix-acpi-gpio-v2-1-9eb20a1fd42c@redhat.com>
+X-B4-Tracking: v=1; b=H4sIAMEyC2QC/3WNMQ6DMAxFr4Iy1xU4VC2deo+KwQmGeIAgB6FWi
+ Ls3sHd8/+vpbSaxCifzLDajvEqSOGXAS2F8oGlgkC6zwRJtacsGevkA+VlgmCUCOaTe2rrmuzP
+ ZcZQYnNLkw2GNlBbW45iVs3mG3m3mIGmJ+j27a3Ws/xJrBRU422CHeOOeHy/lLtBy9XE07b7vP
+ 2hmkJzEAAAA
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Daniel Kaehn <kaehndan@gmail.com>, linux-gpio@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678455498; l=2737;
+ i=benjamin.tissoires@redhat.com; s=20230215; h=from:subject:message-id;
+ bh=flBfYltySue3KVmhGsoXQ/zcqrinrRTi7aXDpYk9Y7E=;
+ b=F+hEj5C3qLWtzIjuLE97GOReGRIFFpR+wpJj1q0vcQyJybqnS1E8wYsk7ubcnt5EK565IQCBe
+ o4StTHgOZhyCvj6X1OK3S3CqRl1p0P1AT0Tn2+n3I7mygPOVPXWbWj4
+X-Developer-Key: i=benjamin.tissoires@redhat.com; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,98 +73,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 02:17:19PM +0100, Lukasz Majewski wrote:
-> > > For example mv88e6185 supports max 1632 bytes, which is now
-> > > in-driver standard value.  
-> > 
-> > What is the criterion based on which 1632 is the "in-driver standard
-> > value"?
-> 
-> It comes from the documentation I suppose. Moreover, this might be the
-> the "first" used value when set_max_mtu callback was introduced.
+While trying to set up an SSDT override for a USB-2-I2C chip [0],
+I realized that the function acpi_gpiochip_find() was using the parent
+of the gpio_chip to do the ACPI matching.
 
-I'm not playing dumb, I just don't understand what is meant by
-"in-driver standard value". Is it the return value of mv88e6xxx_get_max_mtu()
-for the MV88E6185 chip? Because I understood it to be somehow the value
-returned by default, for chips which don't have a way to change the MTU
-(because of the "standard" word).
+This works fine on my Ice Lake laptop because AFAICT, the DSDT presents
+the PCI device INT3455 as the "Device (GPI0)", but is in fact handled
+by the pinctrl driver in Linux.
+The pinctrl driver then creates a gpio_chip device. This means that the
+gc->parent device in that case is the GPI0 device from ACPI and everything
+works.
 
-> > > On the other hand - mv88e6250 supports 2048 bytes.  
-> > 
-> > What you mean to suggest here is that, using the current
-> > classification from mv88e6xxx_get_max_mtu(), mv88e6250 falls into the
-> > "none of the above" bucket, for which the driver returns 1522 -
-> > VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN // 1492. But it truly
-> > supports a maximum frame length of 2048, per your research.
-> > 
-> 
-> And this cannot be easily fixed.
-> 
-> I could just provide callback to .set_max_frame_size in mv88e6250_ops
-> and the mv88e6250 would use 1632 bytes which would prevent errors.
-> 
-> However, when I dig deeper - it turned out that this value is larger.
-> And hence I wanted to do it in "right way".
+However, in the hid-cp2112 case, the parent is the USB device, and the
+gpio_chip is directly under that USB device. Which means that in this case
+gc->parent points at the USB device, and so we can not do an ACPI match
+towards the GPIO device.
 
-Correct, I'm not debating this. I'm just saying, as a reader of this
-patch set in linear order, that the justification is not obvious.
+I think it is safe to resolve the ACPI matching through the fwnode
+because when we call gpiochip_add_data(), the first thing it does is
+setting a proper gc->fwnode: if it is not there, it borrows the fwnode
+of the parent.
 
-> > I have also noticed that you have not acted upon my previous review
-> > comment:
-> > https://patchwork.kernel.org/project/netdevbpf/patch/20230106101651.1137755-1-lukma@denx.de/
-> > 
-> > | 1522 - 30 = 1492.
-> > | 
-> > | I don't believe that there are switches which don't support the
-> > standard | MTU of 1500 ?!
-> > | 
-> > | >  		.port_base_addr = 0x10,
-> > | >  		.phy_base_addr = 0x0,
-> > | >  		.global1_addr = 0x1b,
-> > | 
-> > | Note that I see this behavior isn't new. But I've simulated it, and
-> > it | will produce the following messages on probe:
-> > | 
-> > | [    7.425752] mscc_felix 0000:00:00.5 swp0 (uninitialized): PHY
-> > [0000:00:00.3:10] driver [Microsemi GE VSC8514 SyncE] (irq=POLL) | [
-> >   7.437516] mscc_felix 0000:00:00.5: nonfatal error -34 setting MTU
-> > to 1500 on port 0 | [    7.588585] mscc_felix 0000:00:00.5 swp1
-> > (uninitialized): PHY [0000:00:00.3:11] driver [Microsemi GE VSC8514
-> > SyncE] (irq=POLL) | [    7.600433] mscc_felix 0000:00:00.5: nonfatal
-> > error -34 setting MTU to 1500 on port 1 | [    7.752613] mscc_felix
-> > 0000:00:00.5 swp2 (uninitialized): PHY [0000:00:00.3:12] driver
-> > [Microsemi GE VSC8514 SyncE] (irq=POLL) | [    7.764457] mscc_felix
-> > 0000:00:00.5: nonfatal error -34 setting MTU to 1500 on port 2 | [
-> > 7.900771] mscc_felix 0000:00:00.5 swp3 (uninitialized): PHY
-> > [0000:00:00.3:13] driver [Microsemi GE VSC8514 SyncE] (irq=POLL) | [
-> >   7.912501] mscc_felix 0000:00:00.5: nonfatal error -34 setting MTU
-> > to 1500 on port 3 | | I wonder, shouldn't we first fix that, and
-> > apply this patch set afterwards?
-> > 
-> > I guess I will have to fix this now, since you haven't done it.
-> 
-> I do agree with Russel's reply here.
+So in my Ice Lake case, gc->fwnode is the one from the parent, meaning
+that the ACPI handle we will get is the one from the GPI0 in the DSDT
+(the pincrtl one). And in the hid-cp2112 case, we get the actual
+fwnode from the gpiochip we created in the HID device, making it working.
 
-It's possible that Russell might have slightly misunderstood my quoted
-reply here, because he said something about a PHY.
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Link: https://lore.kernel.org/linux-input/20230227140758.1575-1-kaehndan@gmail.com/T/#m592f18081ef3b95b618694a612ff864420c5aaf3 [0]
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+---
+Hi,
 
-> Moreover, as 6250 and 6220 also have max frame size equal to 2048
-> bytes, this would be fixed in v6 after getting the "validation"
-> function run.
+As mentioned on the commit, I believe there is a bug on
+the gpiolib-acpi matching. It relies on the parent of the gpiochip
+when it should IMO trust the fwnode that was given to it.
 
-The problem with this kind of fix is that it should go to the "net" tree;
-it removes a user-visible warning that could have been avoided.
+Tested on both the hid-cp2112 I am refering in the commit
+description and my XPS on Intel Icelake.
 
-OTOH, the kind of "fix" for 6250 and 6220 is different. It is
-sub-optimal use of hardware capabilities. That classifies as net-next
-material.
+Cheers,
+Benjamin
+---
+Changes in v2:
+- Fix commit description
+- Link to v1: https://lore.kernel.org/r/20230309-fix-acpi-gpio-v1-1-b392d225efe8@redhat.com
+---
+ drivers/gpio/gpiolib-acpi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The 2 go to different kernel branches.
+diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+index d8a421ce26a8..5aebc266426b 100644
+--- a/drivers/gpio/gpiolib-acpi.c
++++ b/drivers/gpio/gpiolib-acpi.c
+@@ -126,7 +126,7 @@ static bool acpi_gpio_deferred_req_irqs_done;
+ 
+ static int acpi_gpiochip_find(struct gpio_chip *gc, void *data)
+ {
+-	return gc->parent && device_match_acpi_handle(gc->parent, data);
++	return ACPI_HANDLE_FWNODE(gc->fwnode) == data;
+ }
+ 
+ /**
 
-> This is the "patch 4" in the comment sent by Russel (to fix stuff which
-> is already broken, but it has been visible after running the validation
-> code):
-> 
-> https://lists.openwall.net/netdev/2023/03/09/233
+---
+base-commit: 6c71297eaf713ece684a367ce9aff06069d715b9
+change-id: 20230309-fix-acpi-gpio-ab2af3344e7b
 
-I will get there.. eventually.
+Best regards,
+-- 
+Benjamin Tissoires <benjamin.tissoires@redhat.com>
+
