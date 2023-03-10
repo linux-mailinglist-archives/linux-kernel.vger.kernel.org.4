@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587046B48D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFB56B495E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233789AbjCJPHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
+        id S234053AbjCJPLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:11:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233709AbjCJPGf (ORCPT
+        with ESMTP id S234037AbjCJPL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:06:35 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA8599D4E;
-        Fri, 10 Mar 2023 06:59:39 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-536c02eea4dso102496147b3.4;
-        Fri, 10 Mar 2023 06:59:39 -0800 (PST)
+        Fri, 10 Mar 2023 10:11:26 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0865A1AD;
+        Fri, 10 Mar 2023 07:03:28 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id k199so5559748ybf.4;
+        Fri, 10 Mar 2023 07:03:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678460254;
+        d=1e100.net; s=20210112; t=1678460486;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZSlcrAdOk2ZHbJaFPGHkD2mhUxcO2+0jdOc1ehU4BF0=;
-        b=Q4SZI/q1Q7vDg9eqmTg3II4xYhX1r4nHDn2Kfg8LMyHEDd0WBtT7MQt09BYWC4VPJJ
-         MS2+PZIV04UWYBh88L+eSEpy8eamCgQWmsdx741usuRfbRWLsuubqjAmbCjUbkI1LB8W
-         IaD5b13agylttOhXgGSb5LaAQicPo87I3DtAJjShED/dbJuKIT22znp8O8/hJxE9MonD
-         guYkPHh98xWLydU7IAoyNlMqv0PQ4jh8zW7wDCUipKmiRmSfVUC+amVFYZWcZePhKE7a
-         PvQJyMCclbWV5dVdapgV0Ir9DdkMabklw5W9MSHb84ELJDQWWLFrxv3SLk6dCVX0uxDK
-         rhkA==
-X-Gm-Message-State: AO0yUKXsCxu9cHBdTLmawPGZY17/RxzIoS5DwKYGSJB6McpDfF/FdWM4
-        7+yKO8otFENOsoBqbDC7bMIZsmkGwA==
-X-Google-Smtp-Source: AK7set81+R7SptvFiU1mElhgKcbUszs0JCXieCGbcvg5GrDnQizYVUU/z1OANIDVszl1Z9u1lrX8nw==
-X-Received: by 2002:aca:2210:0:b0:384:ea9:237d with SMTP id b16-20020aca2210000000b003840ea9237dmr11076654oic.36.1678459724416;
-        Fri, 10 Mar 2023 06:48:44 -0800 (PST)
+        bh=JCpL7ocfi58njdErkPxcygUe6uPmxZK7sL4VjSYUEoA=;
+        b=CdxM2mokQ7mDhh2kVELL+O2mAZ7F7huAMb0UADDNSBNfwOzB0mKKQ3qI5G5fks15d4
+         rHYm3XJiGHarYlPXM5/djs0MFaLwsOYvge6IJgenm3L45d8+jYo3YrfGdax1mxZt/cSH
+         EKCLIaDxYenFbSGl0zrCmdUiVo9hG5vBQYThlEOHVOBeSyCCCAwHSCAMbDQGNV1gOl4g
+         10BQnWMSO4RxOKb3IhdzSnxURbHoHR3A8Ah/k1my5ltnVyPiD/kOlDg/zOoRrF0PhMZj
+         BGoST1E/47VuznV4XQ4mqE2PUo20FkBgC9NExwuVeIvfA0DOPqMsjjDRyEDNVL8/eVyi
+         H7GQ==
+X-Gm-Message-State: AO0yUKWTdjRt0ROH93ajRGAffJP6JtgHMRIninu4m1U+gkFPaBhsW+IX
+        VKSrqSURYsCqYGFnEbWPT03FifSc6A==
+X-Google-Smtp-Source: AK7set9LLLPhoeaA3/Sg53Plp3DTTBj+aU8Zy7fyHRUUAbXf8XfSnbThVAnP+AQCUm9GPyAxYbX8Pw==
+X-Received: by 2002:a05:6870:4195:b0:16d:f177:1a1a with SMTP id y21-20020a056870419500b0016df1771a1amr16870566oac.46.1678459911484;
+        Fri, 10 Mar 2023 06:51:51 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y129-20020acae187000000b0038476262f65sm967368oig.33.2023.03.10.06.48.43
+        by smtp.gmail.com with ESMTPSA id p12-20020a9d4e0c000000b00690df568258sm107688otf.63.2023.03.10.06.51.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:48:43 -0800 (PST)
-Received: (nullmailer pid 1546844 invoked by uid 1000);
-        Fri, 10 Mar 2023 14:47:35 -0000
+        Fri, 10 Mar 2023 06:51:51 -0800 (PST)
+Received: (nullmailer pid 1546998 invoked by uid 1000);
+        Fri, 10 Mar 2023 14:47:36 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Colin Leroy <colin@colino.net>
-Cc:     devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] macintosh: Use of_property_present() for testing DT property presence
+To:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] remoteproc: st: Use of_property_present() for testing DT property presence
 Date:   Fri, 10 Mar 2023 08:47:35 -0600
-Message-Id: <20230310144735.1546817-1-robh@kernel.org>
+Message-Id: <20230310144736.1546972-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,36 +71,22 @@ for presence of a property and nothing more.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/macintosh/rack-meter.c    | 2 +-
- drivers/macintosh/therm_adt746x.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/remoteproc/st_remoteproc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/macintosh/rack-meter.c b/drivers/macintosh/rack-meter.c
-index c28893e41a8b..40240bce77b0 100644
---- a/drivers/macintosh/rack-meter.c
-+++ b/drivers/macintosh/rack-meter.c
-@@ -387,7 +387,7 @@ static int rackmeter_probe(struct macio_dev* mdev,
- 	       if (of_node_name_eq(np, "lightshow"))
- 		       break;
- 	       if (of_node_name_eq(np, "sound") &&
--		   of_get_property(np, "virtual", NULL) != NULL)
-+		   of_property_present(np, "virtual"))
- 		       break;
+diff --git a/drivers/remoteproc/st_remoteproc.c b/drivers/remoteproc/st_remoteproc.c
+index a3268d95a50e..50ef40671652 100644
+--- a/drivers/remoteproc/st_remoteproc.c
++++ b/drivers/remoteproc/st_remoteproc.c
+@@ -379,7 +379,7 @@ static int st_rproc_probe(struct platform_device *pdev)
+ 		clk_set_rate(ddata->clk, ddata->clk_rate);
  	}
- 	if (np == NULL) {
-diff --git a/drivers/macintosh/therm_adt746x.c b/drivers/macintosh/therm_adt746x.c
-index 8f5db9093c9a..384b87d661e1 100644
---- a/drivers/macintosh/therm_adt746x.c
-+++ b/drivers/macintosh/therm_adt746x.c
-@@ -483,7 +483,7 @@ static int probe_thermostat(struct i2c_client *client)
- 	if (vers != 1)
- 		return -ENXIO;
  
--	if (of_get_property(np, "hwsensor-location", NULL)) {
-+	if (of_property_present(np, "hwsensor-location")) {
- 		for (i = 0; i < 3; i++) {
- 			sensor_location[i] = of_get_property(np,
- 					"hwsensor-location", NULL) + offset;
+-	if (of_get_property(np, "mbox-names", NULL)) {
++	if (of_property_present(np, "mbox-names")) {
+ 		ddata->mbox_client_vq0.dev		= dev;
+ 		ddata->mbox_client_vq0.tx_done		= NULL;
+ 		ddata->mbox_client_vq0.tx_block	= false;
 -- 
 2.39.2
 
