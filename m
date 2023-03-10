@@ -2,172 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 348726B34A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:17:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B2B6B34AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjCJDRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 22:17:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43044 "EHLO
+        id S229906AbjCJDTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 22:19:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjCJDRd (ORCPT
+        with ESMTP id S229612AbjCJDS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 22:17:33 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2445FEF25;
-        Thu,  9 Mar 2023 19:17:28 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329LwtYM021575;
-        Fri, 10 Mar 2023 03:17:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2022-7-12;
- bh=NTS2zXOM11VY7y4ktvyXhfGblo8wAyR/aWfJ8Y7NYrM=;
- b=clBTo7yx3bSS8kCT1ydbDtXgSRk54n6rTL7WL1jhHkU/b58bnkTxKSH03MhwMAKJyndl
- 3lp/Ok74dldH77/iSlIW30yG1unEafIgqBUqX9/8xgjhjTj1Cf6hsx9zv2oMsKHkT5sn
- nIt3kbwgIfH/nFXBBsoLxvgDTDUikkIkNS/O1ZqU3uzer4DRtRRNhOl9bmdhhuv8351Q
- ThxGd5zwb7HK0QvSVwV/nf0v5roNb8vxaBguyNYTWSsuobrnUJwHbl8AjHsc2wzJJBvu
- SNz45ZdNHBamkdURl9U9zMnPHBT8cHJyr3dbGP8dyq2WPsA+JpttROz/PdxaiU/kwrra yQ== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p418146c6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Mar 2023 03:17:18 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32A30nQc021719;
-        Fri, 10 Mar 2023 03:17:18 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2044.outbound.protection.outlook.com [104.47.66.44])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3p6frb6dpu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Mar 2023 03:17:18 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PtgxISZZDEVS+QKLrh6L5voW2d3MXPkMwSxvJVuzxxt80A0DPjoatnPYu8Do5cq+aolB8sy5RWOtr8UPgap3G2ZIbr1k37hxgXgyO8GfGPicHcDB9ltYQUMl7DXRHvfkAdGG3r9bcKkH+8+KrWOujYn4NfegT+2LiW2miut2CILxSqslyS9xgrxMFfOXK/sRwCUdCynO0I0lFPjHfr9khPxD3uI7Tv+wyEKSbFMWjpFaap5P/3rqvY4oeRPmK6varlR08xVz767MLFSsVfnInrCtgJcn5xJTSXqSTpmdIFiF908GF61mL8iGXZILPdJFVb0f6hoYJKeXxV7jmiYZ5Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NTS2zXOM11VY7y4ktvyXhfGblo8wAyR/aWfJ8Y7NYrM=;
- b=NShDkqLb6+qZulmtCZwhFJiTHz+3Ouuuoi5Y2b28m3tsyZKXXHSdWOpfQrXrcIL+mHhy7GCmNeJ1l74np+5iWid3n4FDK2nskLjTdnw0PB0ZOcTwfZoRSjewaFG2gYKKGSf5FZf5pMoGYcGMqXK8knMxhYxf61Cg9ET/nL+DnpIeOdO3muB35K5kbp9QUFNgjytcMw8yslbZ5sA3y5A99K1b2HkWOjibRqOBe0+Md7wv4hI2pgkGjWttrBCv7O3POUEwUdMmahub3Hotm2g4n4/z3CA9hJVf7soY/A7avNb2BKK/jOb1Q499P+w3dTwgjf+WWbx8r5DaR+xOQrYiVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 9 Mar 2023 22:18:59 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F846FAF97;
+        Thu,  9 Mar 2023 19:18:57 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id ce7so2808885pfb.9;
+        Thu, 09 Mar 2023 19:18:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NTS2zXOM11VY7y4ktvyXhfGblo8wAyR/aWfJ8Y7NYrM=;
- b=Ve/jZMoMVhAR1SM9qXlPFPEJOyHlRaKd2Dva69dmPZqjRIvqPlF/5+phlAO0VKmD4pA63ZQdT7J9rwiNqV2TvtUf/N1REgzd9nnhBbnhJGlksL7LrXCdPfQpn1cqnY6C7yw/RW4OzhUSL5NGythaJTASj160RAycQAkCXCLyfks=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by SJ1PR10MB5978.namprd10.prod.outlook.com (2603:10b6:a03:45f::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
- 2023 03:17:15 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::8ef9:5939:13aa:d6a2]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::8ef9:5939:13aa:d6a2%8]) with mapi id 15.20.6178.019; Fri, 10 Mar 2023
- 03:17:15 +0000
-To:     Lee Duncan <lduncan@suse.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Lee Duncan <leeman.duncan@gmail.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Martin Wilck <mwilck@suse.com>, Hannes Reinecke <hare@suse.de>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Subject: Re: [PATCH] scsi: core: Add BLIST_NO_ASK_VPD_SIZE for some VDASD
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1o7p170tc.fsf@ca-mkp.ca.oracle.com>
-References: <20220928181350.9948-1-leeman.duncan@gmail.com>
-        <88927435-ae58-c24b-e7b7-b675985de433@leemhuis.info>
-        <86D685F2-D411-460B-A09B-6BE942372F0A@gmail.com>
-        <yq1zg8pl1nq.fsf@ca-mkp.ca.oracle.com>
-        <f8c5619f-1e1a-f759-6ab6-ea84bba3d635@suse.com>
-        <yq1edq0jg2h.fsf@ca-mkp.ca.oracle.com>
-        <a4ecf9eb-509a-84a6-8a9f-a3f5ea54ecac@suse.com>
-Date:   Thu, 09 Mar 2023 22:17:06 -0500
-In-Reply-To: <a4ecf9eb-509a-84a6-8a9f-a3f5ea54ecac@suse.com> (Lee Duncan's
-        message of "Wed, 8 Mar 2023 10:41:51 -0800")
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0009.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::10) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        d=gmail.com; s=20210112; t=1678418336;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rsCnFJ8PSGUzFdCzTiLh7Z1kzISQTZaHfvqBt6EF9ZU=;
+        b=F0mg0KC7a0wv8F1WT5DmHtrb7pJvxGTZsLveZUhw3z6Eb+PB4Zb02c+MckQ2BJ2fZS
+         WKviogH/Zf0ss0WMs5bedNJiXGu+9FJJ4tJgQoEpAiZKihS7Mb2bp8MObEmwzTpESzqX
+         eYCMe0S7DH/xDdCGTTRG9M1n6z0jQl6KvvpksmhRbkqDUYsGLhee2pKD6wG+taS4G/zl
+         imcgeenfAhIza6djkXz3a812+cyyhSYSibDyiYfPyfbmRVwRVQLKOmarFTYe9vZdTg3Q
+         crbp624fKUcF6MmlF6+yjMNs4xK31rero24nfp/ASX4TcUbC0tMOhDpHcmP8WDMz8GTL
+         9UvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678418336;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rsCnFJ8PSGUzFdCzTiLh7Z1kzISQTZaHfvqBt6EF9ZU=;
+        b=bUIl7NWddCt3/rLe0wMXLb8uuy2p6+MdVnYmqXdW6oY9H7XANN2Dc0vP9DiTOImGC9
+         zgNMn0xaCEWau3yD6aFLJjZf+7zaTU60vBuQdLB3ES95V1tNIrKnacliqxoyEwxKhA9Q
+         xbAnzcvPKSn5RmLk7zLIFjNQ5v76avsl8OS6k/GitphGhGOgeAG+OGulqoJVwAabXfTM
+         D30kvMRE4UU+AmfYEKUemjheNHBeXJNKE1iuMVwrJVj6r/gPzqu/GgJBn3Re0EQ5WvO/
+         j9secGGpd9DrMdFtHO0F+Bug1ZENmDXIK9KQSi2K6dAl0+wUrAEV/YIVU6+koj07+q4e
+         D/cw==
+X-Gm-Message-State: AO0yUKXQfQYemaYNTSVLNmVsWUP7HB9smYCajaiq6qPYabCcwuIK1CT8
+        I9PuHGXSP+NYZYcuyVCTv7g=
+X-Google-Smtp-Source: AK7set+iVUu6nuuCPTwGgCWPTBA4O6HZ276dcLjAxz9AFOIAnvFUofT57czHJWT/E37dXu5MrFKE2w==
+X-Received: by 2002:a05:6a00:ce:b0:5dc:fa22:1bd9 with SMTP id e14-20020a056a0000ce00b005dcfa221bd9mr18878923pfj.23.1678418336504;
+        Thu, 09 Mar 2023 19:18:56 -0800 (PST)
+Received: from debian.me (subs03-180-214-233-23.three.co.id. [180.214.233.23])
+        by smtp.gmail.com with ESMTPSA id e11-20020aa78c4b000000b005a87d636c70sm285961pfd.130.2023.03.09.19.18.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 19:18:55 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 1620A106628; Fri, 10 Mar 2023 10:18:51 +0700 (WIB)
+Date:   Fri, 10 Mar 2023 10:18:51 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     David Vernet <void@manifault.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the bpf-next tree with the bpf tree
+Message-ID: <ZAqhm/VFjju2aOCP@debian.me>
+References: <20230307095812.236eb1be@canb.auug.org.au>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|SJ1PR10MB5978:EE_
-X-MS-Office365-Filtering-Correlation-Id: a5b6a188-20ae-41e2-b27e-08db2115f2a4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NH/QrwP5GlU4nPnuvjebXYyL+qZ4v+qMKJQJUw0ktVwXQ9ryslLJmf1fsAclPESDBnXDVBDgM8g111FfxVNM5yxd4/R4VyN1LF1/V5Bw1O8JhB5pQ4foeN4MeEmlJPZHd6gYNKs15QlKFmCH39gJ4PtVaop1Dg55bMck/Ctq5TsZY5YdWgpFk0solv5KCt6HL1KEzHN/WXe/r+Jd7uBfaIQlO2rP8Z45R3Uqqam3bZxkaP70u90kuQdprtYsYnWU8/3CoHI4Sub75QLvAXXS9DSL3YH9GTIuFUTV90NUWAJr1WoE2g10nxC7D+QZH4Gr3o3zb9HsOFzJTouUSMviuLYdT/qfDYyHDeQPNS5bmWWYZzZfzmvlQ/c4eLmN7dstcMXpmgPtVj07K7v/iOS6W+B5DvoeYHuTFeRFD+PpKVoyH4Hr+f3r6SJnSVaItfUtVag3boU0Rvl8bsLEWU6c1iZCyN8TlAscHqc5gFTl3WZv+iKTNudkDuXhzQg5xYUIISopn64JBd70QrXuVXe2CYP4FEuidbvQSc0jrG8DL0QT0FYQ4JTkWXCniMKezKe9+ZyQ+ERKhJhdsvK1fZ03rj1qFxe63j6Gds2Czrs9mjWtI4Z+UG4nnhOwJk6OZTJi6FuWIC+ylyhi+CvquK737Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(366004)(136003)(39860400002)(396003)(376002)(451199018)(38100700002)(54906003)(478600001)(316002)(6486002)(26005)(6666004)(36916002)(6506007)(6512007)(186003)(8936002)(5660300002)(4744005)(66476007)(66556008)(2906002)(41300700001)(86362001)(66946007)(8676002)(6916009)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?O796x2VhAJbmhUiT/zo3zjBwj+7Tsz+eYCZDt9K4zlwzSDJFRBlcB6fSfbZ+?=
- =?us-ascii?Q?8ESZQR0znSzHrQdqOML/boO3fwJM3K7Ki6BwEk8XhI31jiLROW+qTD8g/9Ms?=
- =?us-ascii?Q?Qkah9y1Vp/qSfaO8RcTQsEMBpe8WldMDNgPl20+TwAIKUB+nxTyNZ9KmS3J0?=
- =?us-ascii?Q?6+cwxeF62K4v/EKGToz0C0lsAcz8jixJLcUWcziUHsDiChJMHiw4t60bWCXk?=
- =?us-ascii?Q?aaOAwg9Z2jBoSDNqV5gK6UPblJlqyBCFdgZ5kbfeNsZNSO7eP8sbztTOT1rw?=
- =?us-ascii?Q?5gNWZht8tg0QSxXiVKYXVH7MUMb0M75SqDb12wXk4MLSvse+A7PyRhtvBJMn?=
- =?us-ascii?Q?SgGK7luZCPi2VlSJaW7BQGcZCORKjLwaVV0lnwUFSD5tDdk1ZfO1OYbsJTr1?=
- =?us-ascii?Q?Whfk6dmByONIFKkiKJWtuKrwwFyztDl8W8VMnBbpO48TQvIXSHhauXjHvZux?=
- =?us-ascii?Q?WUEroVWaRwj3oKbmFbVsHRw8ZUzN2I1r3bkzAxSn06fW+ZZwgM45MhkcR2Fj?=
- =?us-ascii?Q?8SKLjm1CDZkGUJH+Fb3xQNSi06oWNXRkr1gex1Vb7aVjRsju3Lks4q0IqU/z?=
- =?us-ascii?Q?mtLrLUq9oOsNXJ4dEnpKyLAUjct8XxbqUN/1QjR2ED+FFvNy8TXdmsXC5GUq?=
- =?us-ascii?Q?mJj8xkiJ59OMklu4tv4JLiDFtyAiG2azM0G3cGEcK8uzV2VE9okGDvKuUwc0?=
- =?us-ascii?Q?9Gsv3R6+8CQAH6zGpjTf76jIkQ6gvxj9QjKW8DwsiQmyCpNAw6pLbPTwq5Bf?=
- =?us-ascii?Q?jDPG9BK0fwC2jNDeIOxW8AoNNyJ0F2ZMWFlw0MkhMDuVqxXL8jHvYOyrF8FX?=
- =?us-ascii?Q?CnOFEQAoIee5Fq6fH1KxK2DgYwXskKZfQFK300ImRoB9Bq8xQInXuMtm16ai?=
- =?us-ascii?Q?LICAm64IUZ7O2+pmsf26/Fkwz+LrzGBDI96ApVk6xwmOEN5sTeWoR96+SVy/?=
- =?us-ascii?Q?MS8CwdNJsawEDIs239N6DptUQU9MIS5UhFXcAwMjNZHckAXSq+tBgg3BN1RE?=
- =?us-ascii?Q?NW0re45wE9EcvO39RU2swZgF2IE2iBRkpmBnjawLP/KIZE5uivxZ1cbXCCBG?=
- =?us-ascii?Q?NxlJMfWdVOhtL2XGawoaZTh82GcrWOjMG+nLT/24tLlvXIsCaWv60yeGBvts?=
- =?us-ascii?Q?SdpJcmoXPeTfB2xcv1beXGaWLVZLeVTFXY1ognSA8lBcLEjoJvVtr5PzYWxx?=
- =?us-ascii?Q?gtC9qfxrkLDviKLhQUS6kclusXOd5vAfdOCgW3IxQgenO3qGVz3VlROsE+zf?=
- =?us-ascii?Q?LOpAdgz7AS7k/AA4t18v7WNtRs4UA3HhqzBKSd4koN+91n1qc52GfKmvul3c?=
- =?us-ascii?Q?taMtzBtZwG4s6hqfj850XT+NcCzFF6vfCIaoTNQGTdE8yJUXdQ4Z9i2fanlG?=
- =?us-ascii?Q?CMQvqSaNwH92Xtc1IMz3fvobVqQhiRCI1uQgk017kPYMy28Eaz04gAGTadyQ?=
- =?us-ascii?Q?l6uBhhAWpgs/Bb43UgCYRYvMsSylzCOeSk32w5eJFoe18yILmLmyfPABwvnS?=
- =?us-ascii?Q?gZdIR6r8tw1RLOY2Zz3AOzooqE/WAfUzLYYnV2RPA3HXUvD8lEQvH6HDNIsq?=
- =?us-ascii?Q?X6/FVMSeaHvkEvXfVMGM++56wx8hQnE8S9ar23KfBmHB+ObOT1eXzgefLIgV?=
- =?us-ascii?Q?+Q=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?SG2H9zt94eShoSLTprwOjrXElKneMK4zh84lHdZoMVU6iSfC91ITclJ6rMSw?=
- =?us-ascii?Q?RFEtkMbpqnKi05mHHq9/hijFoheD3AJ8ugnyFveWuYlMUjyosq3EARqnH8Mi?=
- =?us-ascii?Q?K5bBaUBYYyeImnotAZa1sGvUFSBDc/9W9m6gUscZynfzci3b+cU04dg6U/XG?=
- =?us-ascii?Q?wKKh5UvWMD9NzGtSdJcQs84tCYA3CaKJ3SMF9pasqj3NUSHV5Z4SBVA0mvBG?=
- =?us-ascii?Q?9ore6AMQBVvPV9yCCtmsnSGbgcMONcizH/NfOoNRYzCuzFkeezN5RX9Bf7fP?=
- =?us-ascii?Q?W3SuThIWoxFtZ85GXMt3SdoLV2vCFlQeYregppeHu581Hc8EVG35p3tAOBy8?=
- =?us-ascii?Q?wCtc+OGbn9pq4a/SqpOgHZ3TTSjV3CDClnTir2aEJOEdGzcoWjQHKv7FHbij?=
- =?us-ascii?Q?Jqi6NqnOG/9JF3TqCcp9/zNI5kELbC4cm4aGDb4Ay4/ICcK9OvnL4imkmZDf?=
- =?us-ascii?Q?+b/spgtkb0SmFHVLzYFUsO3FKtE5QConLP8sAlORouQ41lbzl3Tv0GTOtsCI?=
- =?us-ascii?Q?RvkLevQdGWU2UqYvyXrjCR47uByOH2pJt3voipfMFRPmVvY6SX84BlDrHAkU?=
- =?us-ascii?Q?Ojn5TyTiCWC6Dwkk60G134OHwhAXlJnXFegcFE4COrkYQUQ6T+OcczDXMuct?=
- =?us-ascii?Q?S3yDegw8fOeCdxzXDZuSnFNiKv6n2reIkiax4IBtl+99z722CeXoMUudOjKr?=
- =?us-ascii?Q?CGDF8qeKrq6YiSNZI6pP2sbGaocqRbgE5eZwMHcccdKQ+zQorQ3eUi4pPJJW?=
- =?us-ascii?Q?g2cw3ki8V5cHZDw+ESMda96Kxhma2MWWgvSL6Lpv6lStmw37TODlfY4gx5iM?=
- =?us-ascii?Q?5Ckx275lq5rS8IdbUyifrapn3+9Jxul1PSjvMr7GSqUxVYruPwcTcC6kjdTY?=
- =?us-ascii?Q?WabcGWumSFKTfNmQLzVDg20PwCveEVzAvuGrJnzzaA3s+7OyENCFfxGClu3B?=
- =?us-ascii?Q?0XFCt+6gk9qH+D6Jpfj9Mw=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5b6a188-20ae-41e2-b27e-08db2115f2a4
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 03:17:15.8059
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tOHifdTruKdl7DUYClSXVc4fmXpUv3NU1btBW8HwuNyn9wB5lgp88OgvjiJmMztrS4CHuKCUUApWTc8u0OrGeXuquf7C0KMs1yZC6pF4tUk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR10MB5978
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_14,2023-03-09_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 bulkscore=0
- suspectscore=0 mlxlogscore=891 phishscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303100023
-X-Proofpoint-ORIG-GUID: 5DlUnYmB5DWQAPm4mV9Bfa55G_do6U86
-X-Proofpoint-GUID: 5DlUnYmB5DWQAPm4mV9Bfa55G_do6U86
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6PcdzRuw3Y4u/5hI"
+Content-Disposition: inline
+In-Reply-To: <20230307095812.236eb1be@canb.auug.org.au>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -175,18 +80,161 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Lee,
+--6PcdzRuw3Y4u/5hI
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->> In the scsi_get_vpd_buf() case we will allocate a 255 byte buffer
->> since that's what scsi_get_vpd_size() returns for a VDASD.  And in
->> the scsi_get_vpd_page() case, where a buffer already exists, we clamp
->> the INQUIRY size to the minimum of scsi_get_vpd_size() and the buffer
->> length provided by the caller.
->> 
->
-> Please add my Reviewed-by tag then.
+On Tue, Mar 07, 2023 at 09:58:12AM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Today's linux-next merge of the bpf-next tree got a conflict in:
+>=20
+>   Documentation/bpf/bpf_devel_QA.rst
+>=20
+> between commit:
+>=20
+>   b7abcd9c656b ("bpf, doc: Link to submitting-patches.rst for general pat=
+ch submission info")
+>=20
+> from the bpf tree and commit:
+>=20
+>   d56b0c461d19 ("bpf, docs: Fix link to netdev-FAQ target")
+>=20
+> from the bpf-next tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc Documentation/bpf/bpf_devel_QA.rst
+> index b421d94dc9f2,5f5f9ccc3862..000000000000
+> --- a/Documentation/bpf/bpf_devel_QA.rst
+> +++ b/Documentation/bpf/bpf_devel_QA.rst
+> @@@ -684,8 -684,12 +684,8 @@@ when
+>  =20
+>  =20
+>   .. Links
+> - .. _netdev-FAQ: Documentation/process/maintainer-netdev.rst
+>  -.. _Documentation/process/: https://www.kernel.org/doc/html/latest/proc=
+ess/
+> + .. _netdev-FAQ: https://www.kernel.org/doc/html/latest/process/maintain=
+er-netdev.html
+>   .. _selftests:
+>      https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/t=
+ree/tools/testing/selftests/bpf/
+>  -.. _Documentation/dev-tools/kselftest.rst:
+>  -   https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
+>  -.. _Documentation/bpf/btf.rst: btf.rst
+>  =20
+>   Happy BPF hacking!
 
-Applied to 6.3/scsi-fixes, thanks!
+I think the correct solution is to instead use internal link to netdev FAQ,
+to be consistent with my change in bpf tree:
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+---- >8 ----
+diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_dev=
+el_QA.rst
+index 5f5f9ccc3862b4..e523991da9e0ce 100644
+--- a/Documentation/bpf/bpf_devel_QA.rst
++++ b/Documentation/bpf/bpf_devel_QA.rst
+@@ -128,7 +128,7 @@ into the bpf-next tree will make their way into net-nex=
+t tree. net and
+ net-next are both run by David S. Miller. From there, they will go
+ into the kernel mainline tree run by Linus Torvalds. To read up on the
+ process of net and net-next being merged into the mainline tree, see
+-the `netdev-FAQ`_.
++the :doc:`netdev-FAQ </process/maintainer-netdev>`.
+=20
+=20
+=20
+@@ -147,7 +147,8 @@ request)::
+ Q: How do I indicate which tree (bpf vs. bpf-next) my patch should be appl=
+ied to?
+ --------------------------------------------------------------------------=
+-------
+=20
+-A: The process is the very same as described in the `netdev-FAQ`_,
++A: The process is the very same as described in the
++:doc:`netdev-FAQ </process/maintainer-netdev>`,
+ so please read up on it. The subject line must indicate whether the
+ patch is a fix or rather "next-like" content in order to let the
+ maintainers know whether it is targeted at bpf or bpf-next.
+@@ -206,8 +207,8 @@ ii) run extensive BPF test suite and
+ Once the BPF pull request was accepted by David S. Miller, then
+ the patches end up in net or net-next tree, respectively, and
+ make their way from there further into mainline. Again, see the
+-`netdev-FAQ`_ for additional information e.g. on how often they are
+-merged to mainline.
++:doc:`netdev-FAQ </process/maintainer-netdev>` for additional
++information e.g. on how often they are merged to mainline.
+=20
+ Q: How long do I need to wait for feedback on my BPF patches?
+ -------------------------------------------------------------
+@@ -230,7 +231,8 @@ Q: Are patches applied to bpf-next when the merge windo=
+w is open?
+ -----------------------------------------------------------------
+ A: For the time when the merge window is open, bpf-next will not be
+ processed. This is roughly analogous to net-next patch processing,
+-so feel free to read up on the `netdev-FAQ`_ about further details.
++so feel free to read up on the
++:doc:`netdev-FAQ </process/maintainer-netdev>` about further details.
+=20
+ During those two weeks of merge window, we might ask you to resend
+ your patch series once bpf-next is open again. Once Linus released
+@@ -394,7 +396,7 @@ netdev kernel mailing list in Cc and ask for the fix to=
+ be queued up:
+   netdev@vger.kernel.org
+=20
+ The process in general is the same as on netdev itself, see also the
+-`netdev-FAQ`_.
++:doc:`netdev-FAQ </process/maintainer-netdev>`.
+=20
+ Q: Do you also backport to kernels not currently maintained as stable?
+ ----------------------------------------------------------------------
+@@ -410,7 +412,7 @@ Q: The BPF patch I am about to submit needs to go to st=
+able as well
+ What should I do?
+=20
+ A: The same rules apply as with netdev patch submissions in general, see
+-the `netdev-FAQ`_.
++the :doc:`netdev-FAQ </process/maintainer-netdev>`.
+=20
+ Never add "``Cc: stable@vger.kernel.org``" to the patch description, but
+ ask the BPF maintainers to queue the patches instead. This can be done
+@@ -685,7 +687,6 @@ when:
+=20
+ .. Links
+ .. _Documentation/process/: https://www.kernel.org/doc/html/latest/process/
+-.. _netdev-FAQ: https://www.kernel.org/doc/html/latest/process/maintainer-=
+netdev.html
+ .. _selftests:
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/tools/testing/selftests/bpf/
+ .. _Documentation/dev-tools/kselftest.rst:
+
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--6PcdzRuw3Y4u/5hI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZAqhkgAKCRD2uYlJVVFO
+o9tbAP96T3EuJs1K2w/DPLlZOJf3i6hR/yV6W7gd20/+W9d9NwEAtd5Djc5Fc5KQ
+OHRb1SbicIIhspeBQbBpSxOIobeSzwI=
+=AnfF
+-----END PGP SIGNATURE-----
+
+--6PcdzRuw3Y4u/5hI--
