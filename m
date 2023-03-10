@@ -2,121 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969AB6B3E3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDDF6B3E4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjCJLno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 06:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
+        id S229521AbjCJLql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:46:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCJLnk (ORCPT
+        with ESMTP id S229522AbjCJLqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 06:43:40 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9008113DF3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:43:38 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id cy23so19169381edb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:43:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678448617;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XXII15CH7MYFfh54srfbDSk76SUFLnbMAlJIzw3D41s=;
-        b=qDC8NqCLoCXp/8Sv71am8rVaa4PwHul/TUaHJcQCFCOqiCUxePjC82wzRPo3RqIBiJ
-         fUtTp5sSk/EB4EDFEV//7E/0UdM3idkwpgzlURXApyG0uwCaBu+NOFg6BuC/Lyk2NcxI
-         NT2taYogQ0RGOb+ve3RnAiKffhe7zcPPAG1dsFgOB9v8w/ZAFSyFsZDP/jUcdDkQy+JK
-         C1K3QiHjpD4z4KxU/ehaGG8t7WVRnsyhIAjiQ/wW8gop1t1L4lkkTLFLA97RDd5Y7rsc
-         fyxhRiXW25Uf+2L5k1iyKa0fWnCfTP0/VhC7bZ0hdinkY9Koxcr+GOotImVhYnOjPmAo
-         nrsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678448617;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XXII15CH7MYFfh54srfbDSk76SUFLnbMAlJIzw3D41s=;
-        b=fUi8H0yYpPGBVREk/I14h7el1iXm28F3CaMa66PJ6uuXGNg8lGw/SAAi1vYpQh3VWO
-         opGnCCK7aiLCSneP6WtCnA4/cMUEQbDHdEf4AWGH3wNNoNEAT2SO56g7boBFlf/0qKV1
-         ZRW6sMhj8Qnr2MH1TlDSEIwxhH964YvNV9q35URw28nkHiOhp0MdnOAHczDGThoQY1Bu
-         aLlO+tSwfz5uh2lwTmyqLHScsZnbecXBcmO2bg3wgcwFBpTPh4O9P0ubMhlqZb8q/Bxj
-         ak/UPq3LuYlBWh79o6e8DwUebJErHbcvUMr75Q3Rnsg7nmz9e7pSBkLXLotabgacuY20
-         dyZw==
-X-Gm-Message-State: AO0yUKUT1D8wJmXaT0dO8uCDy2ZuBEix1UF8Wiwp2xOa8E4tUITcTMV3
-        tT6+isuY9BusBx2Zby8uogV84A==
-X-Google-Smtp-Source: AK7set9XX2Tk842WNqeTCOB9kbdJvINY4C8MlsDz/uhUcEYQogE27njaMOiJjwwiz/hcNzXtSucCtA==
-X-Received: by 2002:a50:fc03:0:b0:4bf:4b5c:1d58 with SMTP id i3-20020a50fc03000000b004bf4b5c1d58mr24499966edr.11.1678448617049;
-        Fri, 10 Mar 2023 03:43:37 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id rs24-20020a170907037800b00905a1abecbfsm859403ejb.47.2023.03.10.03.43.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 03:43:36 -0800 (PST)
-Message-ID: <7fc2206d-ddb0-5817-ac6a-51d41803f691@linaro.org>
-Date:   Fri, 10 Mar 2023 11:43:34 +0000
+        Fri, 10 Mar 2023 06:46:37 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DCD12859
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:46:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678448778; x=1709984778;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=o7hg4SolW8RVgtgFZuww+xyDrgP1C46gIwpjxCqkG44=;
+  b=Zf0dMXbauxTf0EnF0cyvwxMIkU6rDD1ORb6aK7+QgrJn9W/WfEdDn8+p
+   C7uR7brxlJvC5lfTMVJ/DXdQop8idB1+XuAXY2f19S86wVz3osRG58uhO
+   ezisO80T+Pfq9/n4EwqlhZWztZxyKw6DvDLshDpEgh6ITmoiRBOm0Zeg1
+   aIFGTCqsurkji1s1VxK50HljEAKzgFF0tZYKsDuNQ1+3T58oOSLlC97Vn
+   +geaYnJB42UzcAoZyUSg6TcxIYzcjuXgzjHzumHUuSyEVyfW6Y4E+nlCd
+   0jz1TxEkZrQe5qluef/uOtbadgc91Oe77aC1Rtd5ROJZj2lgHxiRqiF02
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="338263945"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="338263945"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 03:46:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="627783937"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="627783937"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 10 Mar 2023 03:46:17 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pabCS-0003ox-0i;
+        Fri, 10 Mar 2023 11:46:16 +0000
+Date:   Fri, 10 Mar 2023 19:45:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: drivers/video/fbdev/omap/lcdc.c:642:23: sparse: sparse: incorrect
+ type in assignment (different address spaces)
+Message-ID: <202303101931.gO4cNEu3-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 17/20] nvmem: layouts: sl28vpd: Add new layout driver
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Walle <michael@walle.cc>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org
-References: <20230308153200.682248-1-miquel.raynal@bootlin.com>
- <20230308153200.682248-18-miquel.raynal@bootlin.com>
- <54e7ee75-6035-c2e9-fb8b-fe96adbb571a@linaro.org>
- <20230310121602.109c58e7@xps-13>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230310121602.109c58e7@xps-13>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   44889ba56cbb3d51154660ccd15818bc77276696
+commit: 804f7f19c2e2928aeb8eafef8379fe8b8d13f98b fbdev: omap: avoid using mach/*.h files
+date:   11 months ago
+config: arm-randconfig-s041-20230310 (https://download.01.org/0day-ci/archive/20230310/202303101931.gO4cNEu3-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=804f7f19c2e2928aeb8eafef8379fe8b8d13f98b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 804f7f19c2e2928aeb8eafef8379fe8b8d13f98b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/video/fbdev/omap/
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303101931.gO4cNEu3-lkp@intel.com/
 
-On 10/03/2023 11:16, Miquel Raynal wrote:
-> Hi Srinivas,
-> 
-> srinivas.kandagatla@linaro.org wrote on Fri, 10 Mar 2023 11:03:45 +0000:
-> 
->> On 08/03/2023 15:31, Miquel Raynal wrote:
->>> +
->>> +static int __init sl28vpd_init(void)
->>> +{
->>> +	return nvmem_layout_register(&sl28vpd_layout);
->>> +}
->>> +
->>> +static void __exit sl28vpd_exit(void)
->>> +{
->>> +	nvmem_layout_unregister(&sl28vpd_layout);
->>> +}
->>> +
->>> +module_init(sl28vpd_init);
->>> +module_exit(sl28vpd_exit);
->> Looking at this pattern in two drivers, we could come up with some helper macro like.
->>
->> #define module_nvmem_layout_driver(__layout_driver) \
->>           module_driver(__layout_driver, nvmem_layout_register, \
->>                           nvmem_layout_unregister)
-> 
-> Nice idea! I will make a patch; is it okay do it on top?
-sounds good
+sparse warnings: (new ones prefixed by >>)
+>> drivers/video/fbdev/omap/lcdc.c:642:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem *vaddr @@     got void *static [addressable] [assigned] [toplevel] vram_virt @@
+   drivers/video/fbdev/omap/lcdc.c:642:23: sparse:     expected void [noderef] __iomem *vaddr
+   drivers/video/fbdev/omap/lcdc.c:642:23: sparse:     got void *static [addressable] [assigned] [toplevel] vram_virt
+--
+>> drivers/video/fbdev/omap/omapfb_main.c:1027:11: sparse: sparse: cast removes address space '__iomem' of expression
 
---srini
-> 
-> Thanks,
-> Miquèl
+vim +642 drivers/video/fbdev/omap/lcdc.c
+
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  620  
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  621  static int alloc_fbmem(struct omapfb_mem_region *region)
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  622  {
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  623  	int bpp;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  624  	int frame_size;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  625  	struct lcd_panel *panel = lcdc.fbdev->panel;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  626  
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  627  	bpp = panel->bpp;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  628  	if (bpp == 12)
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  629  		bpp = 16;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  630  	frame_size = PAGE_ALIGN(panel->x_res * bpp / 8 * panel->y_res);
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  631  	if (region->size > frame_size)
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  632  		frame_size = region->size;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  633  	lcdc.vram_size = frame_size;
+f6e45661f9be54 drivers/video/fbdev/omap/lcdc.c Luis R. Rodriguez 2016-01-22  634  	lcdc.vram_virt = dma_alloc_wc(lcdc.fbdev->dev, lcdc.vram_size,
+f6e45661f9be54 drivers/video/fbdev/omap/lcdc.c Luis R. Rodriguez 2016-01-22  635  				      &lcdc.vram_phys, GFP_KERNEL);
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  636  	if (lcdc.vram_virt == NULL) {
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  637  		dev_err(lcdc.fbdev->dev, "unable to allocate FB DMA memory\n");
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  638  		return -ENOMEM;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  639  	}
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  640  	region->size = frame_size;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  641  	region->paddr = lcdc.vram_phys;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17 @642  	region->vaddr = lcdc.vram_virt;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  643  	region->alloc = 1;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  644  
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  645  	memset(lcdc.vram_virt, 0, lcdc.vram_size);
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  646  
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  647  	return 0;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  648  }
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  649  
+
+:::::: The code at line 642 was first introduced by commit
+:::::: 569755c706f0f94409edd2ae60b9878cb420844f OMAP: add TI OMAP1 internal LCD controller
+
+:::::: TO: Imre Deak <imre.deak@solidboot.com>
+:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
