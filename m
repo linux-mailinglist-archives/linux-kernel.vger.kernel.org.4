@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2116B378A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 641B96B3789
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbjCJHki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 02:40:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+        id S230111AbjCJHkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 02:40:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbjCJHju (ORCPT
+        with ESMTP id S230363AbjCJHjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 02:39:50 -0500
+        Fri, 10 Mar 2023 02:39:51 -0500
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87136FCF25;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00925F8E46;
         Thu,  9 Mar 2023 23:39:38 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PXycQ0XBwz4f3jqY;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PXycQ3n94z4f3jqn;
         Fri, 10 Mar 2023 15:39:34 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgDn4R+03gpkwSimEg--.34063S8;
-        Fri, 10 Mar 2023 15:39:35 +0800 (CST)
+        by APP3 (Coremail) with SMTP id _Ch0CgDn4R+03gpkwSimEg--.34063S9;
+        Fri, 10 Mar 2023 15:39:36 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     guoqing.jiang@linux.dev, song@kernel.org, jgq516@gmail.com,
         neilb@suse.de, shli@fb.com, lzhong@suse.com
 Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
         yangerkun@huawei.com
-Subject: [PATCH v2 4/6] md/radi10: fix leak of 'r10bio->remaining' for recovery
-Date:   Fri, 10 Mar 2023 15:38:53 +0800
-Message-Id: <20230310073855.1337560-5-yukuai1@huaweicloud.com>
+Subject: [PATCH v2 5/6] md/raid10: fix memleak for 'conf->bio_split'
+Date:   Fri, 10 Mar 2023 15:38:54 +0800
+Message-Id: <20230310073855.1337560-6-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230310073855.1337560-1-yukuai1@huaweicloud.com>
 References: <20230310073855.1337560-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDn4R+03gpkwSimEg--.34063S8
-X-Coremail-Antispam: 1UD129KBjvJXoWxJryrWr1xGr4UAw4UAry8uFg_yoW8uFyUpF
-        ZIkFWFyryUGa17Ar4DJ3yDAa4Fk3ykWrW3AF42g3yfAw1avrWv9a1UJrW5Wr98uFWSg34j
-        qrn8Xr4DAFZrtF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: _Ch0CgDn4R+03gpkwSimEg--.34063S9
+X-Coremail-Antispam: 1UD129KBjvJXoW7CrWxGw4UXF43tF48uw18Grg_yoW8Kr1fpa
+        nxK345Kr47Za9xJryDJFWDua4Yqr1xtayUCry7Aw4rXF4ftrZ2y3W0yrWxWryUuay2gry3
+        tFW5KFWruFn8Gr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUPF14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
         kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
@@ -49,7 +49,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxJryrWr1xGr4UAw4UAry8uFg_yoW8uFyUpF
         M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
         kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
         14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIx
-        kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+        kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAF
         wI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
         W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOBTY
         UUUUU
@@ -66,64 +66,87 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-raid10_sync_request() will add 'r10bio->remaining' for both rdev and
-replacement rdev. However, if the read io fails, recovery_request_write()
-returns without issuing the write io, in this case, end_sync_request()
-is only called once and 'remaining' is leaked, cause an io hang.
+In the error path of raid10_run(), 'conf' need be freed, however,
+'conf->bio_split' is missed and memory will be leaked.
 
-Fix the problem by decreasing 'remaining' according to if 'bio' and
-'repl_bio' is valid.
+Since there are 3 places to free 'conf', factor out a helper to fix the
+problem.
 
-Fixes: 24afd80d99f8 ("md/raid10: handle recovery of replacement devices.")
+Fixes: fc9977dd069e ("md/raid10: simplify the splitting of requests.")
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/md/raid10.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ drivers/md/raid10.c | 37 +++++++++++++++++--------------------
+ 1 file changed, 17 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index a8b5fecef136..f7002a1aa9cf 100644
+index f7002a1aa9cf..bdfa02e8fe7e 100644
 --- a/drivers/md/raid10.c
 +++ b/drivers/md/raid10.c
-@@ -2611,11 +2611,22 @@ static void recovery_request_write(struct mddev *mddev, struct r10bio *r10_bio)
- {
- 	struct r10conf *conf = mddev->private;
- 	int d;
--	struct bio *wbio, *wbio2;
-+	struct bio *wbio = r10_bio->devs[1].bio;
-+	struct bio *wbio2 = r10_bio->devs[1].repl_bio;
+@@ -4009,6 +4009,20 @@ static int setup_geo(struct geom *geo, struct mddev *mddev, enum geo_type new)
+ 	return nc*fc;
+ }
+ 
++static void raid10_free_conf(struct r10conf *conf)
++{
++	if (!conf)
++		return;
 +
-+	/* Need to test wbio2->bi_end_io before we call
-+	 * submit_bio_noacct as if the former is NULL,
-+	 * the latter is free to free wbio2.
-+	 */
-+	if (wbio2 && !wbio2->bi_end_io)
-+		wbio2 = NULL;
++	mempool_exit(&conf->r10bio_pool);
++	kfree(conf->mirrors);
++	kfree(conf->mirrors_old);
++	kfree(conf->mirrors_new);
++	safe_put_page(conf->tmppage);
++	bioset_exit(&conf->bio_split);
++	kfree(conf);
++}
++
+ static struct r10conf *setup_conf(struct mddev *mddev)
+ {
+ 	struct r10conf *conf = NULL;
+@@ -4091,13 +4105,7 @@ static struct r10conf *setup_conf(struct mddev *mddev)
+ 	return conf;
  
- 	if (!test_bit(R10BIO_Uptodate, &r10_bio->state)) {
- 		fix_recovery_read_error(r10_bio);
--		end_sync_request(r10_bio);
-+		if (wbio->bi_end_io)
-+			end_sync_request(r10_bio);
-+		if (wbio2)
-+			end_sync_request(r10_bio);
- 		return;
- 	}
+  out:
+-	if (conf) {
+-		mempool_exit(&conf->r10bio_pool);
+-		kfree(conf->mirrors);
+-		safe_put_page(conf->tmppage);
+-		bioset_exit(&conf->bio_split);
+-		kfree(conf);
+-	}
++	raid10_free_conf(conf);
+ 	return ERR_PTR(err);
+ }
  
-@@ -2624,14 +2635,6 @@ static void recovery_request_write(struct mddev *mddev, struct r10bio *r10_bio)
- 	 * and submit the write request
- 	 */
- 	d = r10_bio->devs[1].devnum;
--	wbio = r10_bio->devs[1].bio;
--	wbio2 = r10_bio->devs[1].repl_bio;
--	/* Need to test wbio2->bi_end_io before we call
--	 * submit_bio_noacct as if the former is NULL,
--	 * the latter is free to free wbio2.
--	 */
--	if (wbio2 && !wbio2->bi_end_io)
--		wbio2 = NULL;
- 	if (wbio->bi_end_io) {
- 		atomic_inc(&conf->mirrors[d].rdev->nr_pending);
- 		md_sync_acct(conf->mirrors[d].rdev->bdev, bio_sectors(wbio));
+@@ -4288,10 +4296,7 @@ static int raid10_run(struct mddev *mddev)
+ 
+ out_free_conf:
+ 	md_unregister_thread(&mddev->thread);
+-	mempool_exit(&conf->r10bio_pool);
+-	safe_put_page(conf->tmppage);
+-	kfree(conf->mirrors);
+-	kfree(conf);
++	raid10_free_conf(conf);
+ 	mddev->private = NULL;
+ out:
+ 	return -EIO;
+@@ -4299,15 +4304,7 @@ static int raid10_run(struct mddev *mddev)
+ 
+ static void raid10_free(struct mddev *mddev, void *priv)
+ {
+-	struct r10conf *conf = priv;
+-
+-	mempool_exit(&conf->r10bio_pool);
+-	safe_put_page(conf->tmppage);
+-	kfree(conf->mirrors);
+-	kfree(conf->mirrors_old);
+-	kfree(conf->mirrors_new);
+-	bioset_exit(&conf->bio_split);
+-	kfree(conf);
++	raid10_free_conf(priv);
+ }
+ 
+ static void raid10_quiesce(struct mddev *mddev, int quiesce)
 -- 
 2.31.1
 
