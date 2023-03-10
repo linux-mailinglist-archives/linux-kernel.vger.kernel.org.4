@@ -2,81 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A036B5440
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6940B6B5445
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbjCJW0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 17:26:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
+        id S231771AbjCJW3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 17:29:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjCJW0b (ORCPT
+        with ESMTP id S230232AbjCJW3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 17:26:31 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFEDD1AC0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:26:30 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id cw28so26473349edb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:26:30 -0800 (PST)
+        Fri, 10 Mar 2023 17:29:03 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29356120491
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:29:02 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id i34so26419614eda.7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:29:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678487188;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=QgANQIPfsm3NJ5At1Do8k2p89dCpDt7xQYwrUkYHLfM=;
-        b=kM4Oxd8zDW6a2QGoLhzJSS+044s+JscuwdK3CZhQyxopPGRy31pJyaunuSd+aq+qGv
-         i+qcB30Z9Ze/2A/9wOKGsHExNFGcUsermD9wwV9ryNZgSrjSvQLd7rhPvT9bVFxmaT9r
-         MFRKDyF+miyhLC1Q+OPY+rXmXZSS/MEUvT6oIS/EVF/NwYNG9ITtNsuMwPIG9RVHDvkr
-         MysrL8xLGv5VIcgnJwGUHs55nK/2bM/4WWv9vL0Ft4lTyjUjbj/4FuLBPtspqSGT9id4
-         h5885XsZzrNVfCRk4uFUAwuIX8wejFqdhi7txSJne9bAgTR3RQTVaGrpBiUMz6J7iaKx
-         BMvg==
+        d=linaro.org; s=google; t=1678487340;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=60PuEIm35j5/lTNeJPhlkXRZcGNjzFmtFVCVem+hEDw=;
+        b=LEfc0zEi+LQ5St5qp/OpSxRZTLSGwJrZ1Hg1Bjj2BqrW0jf1MDtYIRP0HBSYpqADEj
+         WF3P0M3JfPUzD+0gnosaMbTzjvm7A21OxNXWw1cCY3V/EijHD8A57mAb+tmulhwrtNmZ
+         /ey6MnBObA52rMXrEjca40rbROCtoOkxo00ygLa6tTa4IPsuDoy8BCLW4mXNNsI/mb3R
+         JtMWGx0rRuUOJTylIlHrwVyQ7uG44r5J62FtVEjBEXguCGv+0Um5Q7oEhqDemugm9lCP
+         n2LNdiqGW9semV4b/A988X57tQIYizAda0dcfvCxdBt2WybsTGqY6mRciCT0f6OPhsrB
+         qMNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678487188;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QgANQIPfsm3NJ5At1Do8k2p89dCpDt7xQYwrUkYHLfM=;
-        b=7+sS53deusjE6dZVkhM6fypBomAp4/23u97lSk4CQ9OFmR6YCNlW/6aBsHuxjy5TcI
-         cEFynpou9aHyFJIEEiYxai66i9/XEFieoyJB0809ls4pAOU93oaDA90GGGhfrGn0uFl/
-         e5Xlu5wHdxEPi6BA74N23QLYuqmAaxlMs7yuesI0koTqYSXtlYc48cu0aizVjX4i+hKU
-         IpH1hmXpV2F+MMhzKyCoxN2MR24vYKs8/tV2uE0ajY3fY/qrRQVRgKLCo3WAzO0MWk1/
-         AYd1bPyF1FYiBmKF4XjBF/VrA3RcbPLkSlQzd2vZ4WJAx1XECUV9pGzBqC1Kyx2M1j5v
-         FWaA==
-X-Gm-Message-State: AO0yUKVMaUd+Uk0v+Qi+taQflttxdGxf+s0Jpf63WgENeGfc4vHWusdw
-        sMT0C7LOPh1Mfyi1PpZ/BJP4MkoFuHAuDq4Wzqo=
-X-Google-Smtp-Source: AK7set9fOKbCoRtM3Xdk5F3kzcWDRMycANItl6l0NsfErynLNqrTpNKHxIvtaWNT61DWHRbJQaZId3tIQgEL1NVuLbA=
-X-Received: by 2002:a50:d615:0:b0:4bb:c90e:1fa5 with SMTP id
- x21-20020a50d615000000b004bbc90e1fa5mr14802515edi.8.1678487188384; Fri, 10
- Mar 2023 14:26:28 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678487340;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=60PuEIm35j5/lTNeJPhlkXRZcGNjzFmtFVCVem+hEDw=;
+        b=0qw/Cz4RSNII0l+n/W0mA3v9e5CG4jsBCHxPoaowpLOCVhidKUzqxojY59XLridMy2
+         PC+wwGqiIWgvZzkL02u3NsCUusfUryqauCCp6fzR5SimXIWZlq6a3MBcuxK/UO4qN2bm
+         Q43UokPqplWhiColJOpcEOdzqDYleRVLREhIr9qp1Rvn2+pM/CpxPAAx7ww9DPhdVppo
+         6Yuuzz4vEo8CwR/AiyYkWRB4XVDaHbp0EDeBVQgmyuR1c0n6Xts2uVEZOSCMiuB5P+ak
+         fSVbozSCRdvtRLShSQUcY7TCy9Wo/+EtJPrH/Stsevpf1xUS6xaLy6yd5c8mtNHb/lm3
+         dBwg==
+X-Gm-Message-State: AO0yUKUW1XuNtG2qdmSLXpSb96LWZh4oko3+8Jjs0T9tCQlroXW3wQyU
+        mFeeR4LTdmww5MEqcQHQ4pwsUQ==
+X-Google-Smtp-Source: AK7set/w56mrFx7St5tpjzC1nqrpGgftY5conmyuZ6lJBZWH6ul1PMXKHMQPItpT75fNAsz/ObHAxg==
+X-Received: by 2002:a05:6402:1506:b0:4ac:c7b3:8c27 with SMTP id f6-20020a056402150600b004acc7b38c27mr25909175edw.28.1678487340674;
+        Fri, 10 Mar 2023 14:29:00 -0800 (PST)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:34:52e3:a77e:cac5])
+        by smtp.gmail.com with ESMTPSA id x101-20020a50baee000000b004aeeb476c5bsm525467ede.24.2023.03.10.14.28.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 14:29:00 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Mark Brown <broonie@kernel.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH 01/16] spi: armada-3700: Drop of_match_ptr for ID table
+Date:   Fri, 10 Mar 2023 23:28:42 +0100
+Message-Id: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From:   Samantha James <quickerlist@gmail.com>
-Date:   Fri, 10 Mar 2023 16:26:11 -0600
-Message-ID: <CAMwiB3A97naytPebTkrvzKRoSeaXmREg023Ot=i6eLKAXP35Bg@mail.gmail.com>
-Subject: RE: Gartner Data & Analytics Summit- Attendees Email- 2023
-To:     Samantha James <quickerlist@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The driver can match only via the DT table so the table should be always
+used and the of_match_ptr does not have any sense (this also allows ACPI
+matching via PRP0001, even though it is not relevant here).
 
-Would you be interested in acquiring Gartner Data & Analytics Summit
-Attendees Data List 2023?
+  drivers/spi/spi-armada-3700.c:807:34: error: ‘a3700_spi_dt_ids’ defined but not used [-Werror=unused-const-variable=]
 
-You'll get access to 10,386 opt-in contacts, including their
-organization name, first and last name, contact job title, verified
-email address, website URL, mailing address, phone number, fax number,
-industry, and much more.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/spi/spi-armada-3700.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-No of Contacts:- 10,523
-Cost: $1,626
+diff --git a/drivers/spi/spi-armada-3700.c b/drivers/spi/spi-armada-3700.c
+index 6a7e605f73bf..feb7371940bc 100644
+--- a/drivers/spi/spi-armada-3700.c
++++ b/drivers/spi/spi-armada-3700.c
+@@ -919,7 +919,7 @@ static void a3700_spi_remove(struct platform_device *pdev)
+ static struct platform_driver a3700_spi_driver = {
+ 	.driver = {
+ 		.name	= DRIVER_NAME,
+-		.of_match_table = of_match_ptr(a3700_spi_dt_ids),
++		.of_match_table = a3700_spi_dt_ids,
+ 	},
+ 	.probe		= a3700_spi_probe,
+ 	.remove_new	= a3700_spi_remove,
+-- 
+2.34.1
 
-Contact us today to purchase Gartner Data & Analytics Summit Attendees
-Data List or for more information.
-
-Best regards,
-Samantha James
