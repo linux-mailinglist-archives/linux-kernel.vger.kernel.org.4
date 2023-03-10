@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6F76B5455
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 926A56B5457
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbjCJW3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 17:29:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
+        id S231821AbjCJW3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 17:29:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbjCJW3G (ORCPT
+        with ESMTP id S231700AbjCJW3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 17:29:06 -0500
+        Fri, 10 Mar 2023 17:29:13 -0500
 Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4821220BF
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:29:05 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id i34so26420166eda.7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:29:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15A9122CFB
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:29:07 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id cy23so26355237edb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:29:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678487345;
+        d=linaro.org; s=google; t=1678487346;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ADHlp/biBCVZeifGXqje13pwL1TD/yH+Vs4GNRSOSmk=;
-        b=gOjP1UUs30lsqxRQ45sMLZli5wdZwOUprEKASjWMuOlyLzQDeiBSD2Hq3tIo+JrpKI
-         AArmC+ZLrunGz5fN3pTsr9FDr1XBx+iXT2ewlMt4mqhfD1/xs0oPen4jvt8byPCJmURq
-         oPDOovgdqKMczeymwr2b7yNBm6QACG+fmkmSzHtc+G9+qsU4Ol1bCgf42TFMSBv5mo0z
-         2prH2dORIW8Fj83FHmH5UmMl5Hv7Q0/N53UmQ05E2Zvih2Taqzkpmw+w+q7nolMec0/h
-         +ntxOzSypN9XSEK03IgE8Bm20Ofus/MK+h5mh+VvTIfDF5G5gnoSvhCZL49djmgt7RwL
-         IDDg==
+        bh=f4hsdqWnTrZCw8a5RzNxKgld2eq5ESSNSd43t/rkHbA=;
+        b=sQ9AnmWrtkGTib7XAuvnkd/mECJ9fJ3H135f812M5x+86PSP40RwLIlTRgQ1T4m70O
+         /5u/uQm3FN3/qjs3kbzAn3amwi8BH54NeZ9ak/3qqOHRxONcHK+LS0jQ2lZFKn5gYTUc
+         RpRtfSA2m+jUdaaoLfdezgQ0HnabwAw5Zd5UJ5dqV3uQXLsbWK3iN7ntET4GLmfonbHG
+         HqTHQEpi57dXBQigF2FBMVwrXUfCvgWj/8SOoCpunzh11ZkB+PNH65nvKVZkueb62SGb
+         mXX9xdEOWyKpvgeLMJaW+kaCM65dZySOzCAtYIZjl7k+9cAThGz1l/FTIQEQq4iT2/ER
+         RJ5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678487345;
+        d=1e100.net; s=20210112; t=1678487346;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ADHlp/biBCVZeifGXqje13pwL1TD/yH+Vs4GNRSOSmk=;
-        b=ooCa+N3prTtT+dMNnUxXG7qKaPL1x6a6/8jp8JUdeVBTNBWgAw5JwG4qnJzj16w+9T
-         WT58+gAJLTlcr8TByk/rOi2nLlgDbVKCEJW1t3z02ora/xLxOijWBgaYsMDWIKk4vstT
-         S+ihN4Z/bD5uYaun/+Wj9gdGqm7lTzagDXDX/2qwYC4N8FI2rCM+6e31pTuFCJlcn1PC
-         s8pqaSIgabXyt+NBQwbpgeghu36eoJyh1ksXXlZqygTx7lqKyO/caU0cfKHdohAlISL1
-         g1FZ8z5Vnet2oLZv1au1zndodYlymWz+420NOG64XAGDYkw3NyaJazygckq7+DwhZf3N
-         UTMA==
-X-Gm-Message-State: AO0yUKU/svcbxq7RVL67qJDUGx1xh+PPXRrsZsIsJs6MKe5T6nchpApM
-        Sjr4/Bt+aX+wPgq9J0HqNRvVUw==
-X-Google-Smtp-Source: AK7set8jBrx8YyuYtrKMeUiH9xfKEhHMLTU3KB16tvrIfpqUWe0eJHY4hKaNb7RoSr0Tp0Ya9mPiGA==
-X-Received: by 2002:a17:907:cf48:b0:8e0:4baf:59bb with SMTP id uv8-20020a170907cf4800b008e04baf59bbmr28471712ejc.22.1678487345059;
-        Fri, 10 Mar 2023 14:29:05 -0800 (PST)
+        bh=f4hsdqWnTrZCw8a5RzNxKgld2eq5ESSNSd43t/rkHbA=;
+        b=uZYN+WGUPwC0rh1TtEd2V+n/j6L1Hy4bGXVZZEnXAK48eTsrJEvU8nMdyez0dgVHC4
+         5wS+2BPB0uaj5cu8FsD1ogw8cmorkQ7+TShnTOAiS3n0TrrgLlMsxlYxzMTyhZjxrZu6
+         LQnLDyZKsuRkrupOukgNWc48ewp8kQOQ+beNBkUXEivARCGJHNbyYFOsxlUm7OUixd8t
+         MTaURRUuQEi6ni5indAFowEiC5RMij5ungow4ESHdpujTBjS+vGgKR2yGB5iefaI9pmh
+         KqXo1TpayP0j3eZcZbf63QYA5fQ18fBTB67UlogLQMuSgbrNe6w7iknU+M2vZ7GARaLf
+         PSxA==
+X-Gm-Message-State: AO0yUKV/6XcWo7Gcj4hjLSwqcY0Vdg+ttz5VWQnpCWuhJJ3c9ZXUqbBS
+        u/vTUD76T0ThhREyX+94YuutpA==
+X-Google-Smtp-Source: AK7set8req7DR8ncW0h8QB4fOrmA/Kz78djHJzJDXsGh0OSt5DpOgdDc5EHeCp2kQeLQUU4yam/Ccw==
+X-Received: by 2002:a05:6402:2028:b0:4af:70a5:55ee with SMTP id ay8-20020a056402202800b004af70a555eemr23535448edb.3.1678487346365;
+        Fri, 10 Mar 2023 14:29:06 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:34:52e3:a77e:cac5])
-        by smtp.gmail.com with ESMTPSA id x101-20020a50baee000000b004aeeb476c5bsm525467ede.24.2023.03.10.14.29.03
+        by smtp.gmail.com with ESMTPSA id x101-20020a50baee000000b004aeeb476c5bsm525467ede.24.2023.03.10.14.29.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 14:29:04 -0800 (PST)
+        Fri, 10 Mar 2023 14:29:06 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Mark Brown <broonie@kernel.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
         Broadcom internal kernel review list 
@@ -75,9 +75,9 @@ To:     Mark Brown <broonie@kernel.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
         linux-rockchip@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH 04/16] spi: meson-spifc: Drop of_match_ptr for ID table
-Date:   Fri, 10 Mar 2023 23:28:45 +0100
-Message-Id: <20230310222857.315629-4-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 05/16] spi: orion: Drop of_match_ptr for ID table
+Date:   Fri, 10 Mar 2023 23:28:46 +0100
+Message-Id: <20230310222857.315629-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
 References: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
@@ -86,8 +86,8 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -98,26 +98,26 @@ The driver can match only via the DT table so the table should be always
 used and the of_match_ptr does not have any sense (this also allows ACPI
 matching via PRP0001, even though it is not relevant here).
 
-  drivers/spi/spi-meson-spifc.c:434:34: error: ‘meson_spifc_dt_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/spi/spi-orion.c:615:34: error: ‘orion_spi_of_match_table’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/spi/spi-meson-spifc.c | 2 +-
+ drivers/spi/spi-orion.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-meson-spifc.c b/drivers/spi/spi-meson-spifc.c
-index 06626f406f68..af832fbbf258 100644
---- a/drivers/spi/spi-meson-spifc.c
-+++ b/drivers/spi/spi-meson-spifc.c
-@@ -443,7 +443,7 @@ static struct platform_driver meson_spifc_driver = {
- 	.remove_new = meson_spifc_remove,
- 	.driver	= {
- 		.name		= "meson-spifc",
--		.of_match_table	= of_match_ptr(meson_spifc_dt_match),
-+		.of_match_table	= meson_spifc_dt_match,
- 		.pm		= &meson_spifc_pm_ops,
+diff --git a/drivers/spi/spi-orion.c b/drivers/spi/spi-orion.c
+index e79d1fe0bca4..c63b75c1829a 100644
+--- a/drivers/spi/spi-orion.c
++++ b/drivers/spi/spi-orion.c
+@@ -852,7 +852,7 @@ static struct platform_driver orion_spi_driver = {
+ 	.driver = {
+ 		.name	= DRIVER_NAME,
+ 		.pm	= &orion_spi_pm_ops,
+-		.of_match_table = of_match_ptr(orion_spi_of_match_table),
++		.of_match_table = orion_spi_of_match_table,
  	},
- };
+ 	.probe		= orion_spi_probe,
+ 	.remove_new	= orion_spi_remove,
 -- 
 2.34.1
 
