@@ -2,135 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCB96B37A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9376B37AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjCJHpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 02:45:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S230422AbjCJHq2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 02:46:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjCJHpA (ORCPT
+        with ESMTP id S229893AbjCJHqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 02:45:00 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F87F6C6B
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 23:43:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678434217; x=1709970217;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=EYsUT3LB5xbwY4fZEYgwByeXNeQyE0pH3kno5ArjuuQ=;
-  b=BWKQuES3diejDihFsydOpIJpeMpRvBoSFnicEkxvZYCSXYDZShKrZZXq
-   n3hI/QlcJfgKGmaD20ZmmSvQvB2x9Hp2rGuuQWtf8nXq2sOGJXHOneA/T
-   BM9N53nbg+Q/oVJp+XX8pMtFi5UHtpiLGU5bIcn5TL2ZjMbw1LrpcDRpR
-   BnAqORc/j26/PsVIQuOmDhBpe57UlwAFJpulHd3EqMb4VJyAmnw9y/26g
-   NZ5HjKXi0GtX4c0ophjJ1Elr/O8fvwWvk+RzHGvNu3M2XtWmvBWIEvWMv
-   XCIwcRrlpjQXVW1lfisl3dvbjhZXVDgsxIq7aURXtSCM1Su8VqDevQonr
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="316323713"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="316323713"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 23:43:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="710183217"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="710183217"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 09 Mar 2023 23:43:08 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1paXP9-0003ct-2G;
-        Fri, 10 Mar 2023 07:43:07 +0000
-Date:   Fri, 10 Mar 2023 15:42:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/fsfa3] BUILD SUCCESS
- b708fd61b656d15a508359a92dd02ddfa8442a89
-Message-ID: <640adf81.ygyTtwE/yumm/pyP%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 10 Mar 2023 02:46:03 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B4B2ED41;
+        Thu,  9 Mar 2023 23:45:07 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 0F0B724E24E;
+        Fri, 10 Mar 2023 15:45:05 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
+ 2023 15:45:05 +0800
+Received: from williamqiu-virtual-machine.starfivetech.com (171.223.208.138)
+ by EXMBX068.cuchost.com (172.16.6.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Fri, 10 Mar 2023 15:45:03 +0800
+From:   William Qiu <william.qiu@starfivetech.com>
+To:     <devicetree@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        William Qiu <william.qiu@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>
+Subject: [PATCH v2 0/2] StarFive's Pulse Width Modulation driver support
+Date:   Fri, 10 Mar 2023 15:45:01 +0800
+Message-ID: <20230310074503.155131-1-william.qiu@starfivetech.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fsfa3
-branch HEAD: b708fd61b656d15a508359a92dd02ddfa8442a89  wifi: carl9170: Replace fake flex-arrays with flexible-arrays
+Hi,
 
-elapsed time: 860m
+This patchset adds initial rudimentary support for the StarFive
+Pulse Width Modulation controller driver. And this driver will
+be used in StarFive's VisionFive 2 board.The first patch add
+Documentations for the device and Patch 2 adds device probe for
+the module.
 
-configs tested: 54
-configs skipped: 3
+Changes v1->v2:
+- Renamed the dt-binding 'pwm-starfive.yaml' to 'starfive,jh7110-pwm.yaml'.
+- Dropped the compatible's Items.
+- Dropped the unuse defines.
+- Modified the code to follow the Linux coding style.
+- Changed return value to dev_err_probe.
+- Dropped the unnecessary local variable.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The patch series is based on v6.2.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                        spear6xx_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                          tiger_defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                         cobalt_defconfig   gcc  
-mips                 randconfig-r023-20230308   gcc  
-mips                 randconfig-r026-20230308   gcc  
-nios2                               defconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r024-20230308   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                  iss476-smp_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                   randconfig-r021-20230308   gcc  
-sh                          rsk7201_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r022-20230308   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r025-20230308   gcc  
+William Qiu (2):
+  dt-bindings: PWM: Add StarFive PWM module
+  pwm: starfive: Add PWM driver support
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+ .../bindings/pwm/starfive,jh7110-pwm.yaml     |  53 ++++
+ MAINTAINERS                                   |   7 +
+ drivers/pwm/Kconfig                           |  10 +
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-starfive-ptc.c                | 245 ++++++++++++++++++
+ 5 files changed, 316 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pwm/starfive,jh7110-pwm.yaml
+ create mode 100644 drivers/pwm/pwm-starfive-ptc.c
+
+--
+2.34.1
+
