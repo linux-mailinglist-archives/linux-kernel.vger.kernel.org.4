@@ -2,74 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DFF6B549A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1F76B549C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbjCJWjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 17:39:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
+        id S231461AbjCJWkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 17:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231404AbjCJWjb (ORCPT
+        with ESMTP id S231991AbjCJWkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 17:39:31 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9194912C435
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:39:25 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id f11so6383377wrv.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:39:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678487964;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5PuvKOvfLUjyVO4mPIX/XjsIPQ+ajMnbP2SJqNrL1cI=;
-        b=oXFqjObqygxkHRfqqAMKRIVwozsa0l3DRG6a6G7slqeC+CHe384vkDLPFFrgbGeydG
-         kOyWZjR1179dMQJLO+/tAshkv3m/fLIQ9GVzY+IpruvMWcjLnEFkfdIjGzLuE3mCpzMl
-         pPcnQljNsdvoaKgdB+l6cu1hkxG9Itfx6XfTpL8ZJAzK+z6tsEy4BMFChg/kwBhWE2PD
-         VXznHjVeZosZojk7dMs3t3JzdXmlhdhS3gtM8Uht7t5EjvAM2UYmD2GidzVMbs6gI2A6
-         h86Y9mL27HXXz9sUl3QlbAPk4Gq8EuD74Mu7I5Ox+Z05pfIyMha48spVo9zCnOxh5f0B
-         dosw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678487964;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5PuvKOvfLUjyVO4mPIX/XjsIPQ+ajMnbP2SJqNrL1cI=;
-        b=5sKy/yuwj8o3iqy7PKwccNmxZkkM+pUAXYObiPOK8y04m0e/lDJYERHuzaJ817XRa4
-         aOpOAhvfmuwNixdYeRuvk/NXClf1Gy8XSUBOp2FpEriu/k/36VB3UUuJhaLezcFHIRAt
-         1q+BAuBh2R8rk4U7eTYA4V+6+83uKfaIi/oLs5FdhL4BjKfVHPs5CTzL8dJKSo/zJAOf
-         oB6V0ZxhDnsAGXmGs6nRi7g4J3spKU9uu9TLJGRJMCGPbHFQj9q58SxX4UJn8HdqYVDD
-         +efHS91OOECP+Q6h9IeId1NPi3E66j4o62JxGgxRccp+lltl1OFtVEZMHcfeKOprsldi
-         GbTA==
-X-Gm-Message-State: AO0yUKXuhGw0KiZGEq1NSVEs+OfW1h/AfU0J7PSETaRPsSDbfbXT7c1f
-        kRd/Zb/zZlrg+SyL5iUN0tnMGCmzkCrqUu2J
-X-Google-Smtp-Source: AK7set/7u/SY1mUQXvz+1eJcT8g0IyPHytdodVx6/Y9NnoSmRa1Uw6b/LVVnXac95BUA3XmVBqxmqQ==
-X-Received: by 2002:a5d:474b:0:b0:2c5:a38f:ca3a with SMTP id o11-20020a5d474b000000b002c5a38fca3amr2557906wrs.10.1678487963664;
-        Fri, 10 Mar 2023 14:39:23 -0800 (PST)
-Received: from khadija-virtual-machine ([39.41.45.115])
-        by smtp.gmail.com with ESMTPSA id f16-20020a7bcd10000000b003dfe5190376sm1095707wmj.35.2023.03.10.14.39.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 14:39:23 -0800 (PST)
-Date:   Sat, 11 Mar 2023 03:39:20 +0500
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     Dan Carpenter <error27@gmail.com>, julia.lawall@inria.fr,
-        drv@mailo.com
-Cc:     outreachy@lists.linux.dev,
-        Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: greybus: fix exceeds line length
-Message-ID: <ZAuxmGmVQMSwig44@khadija-virtual-machine>
-References: <ZAtkW6g6DwPg/pDp@khadija-virtual-machine>
- <eb7475da-7548-4820-a2b6-ff0f6cf4be71@kili.mountain>
+        Fri, 10 Mar 2023 17:40:04 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C0E12C0DE;
+        Fri, 10 Mar 2023 14:40:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=kyWpWo0acxXgbXOKbiq5AQoZeq7yr4dxSGGgNTZKgqM=; b=R+OzvH3LAmf4i0wBfbnsej4V56
+        OLQQKIarbjmZMH5HZc3IWX98s8S8ONBA80HxhNDI8I0UvzO0ql4Cq+tbWgx+JoiBcf+j3lU2mApWD
+        GZr6uCLJ9qJTHB3Bn6fE4CdwKhPbKiApnEyzng3TvckRtlJ5d9pSahYoPzEOCZofyO5MNd3s8wGIR
+        8WLdzdA9ltlA/9cez3MYrN/2uMn3ajjSq8qa4p1/82bnZlZnGpmDjZydx2UsKLU7nsamsGh557+Hf
+        mjDh0yWii6rJgOQePz8cvbgbjmOhQjtppKdaXfnu53yG3FElaSbVoY+boyOzxtYaDsYIJY2+f2K69
+        FITGTriA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1palOu-00GRBO-J4; Fri, 10 Mar 2023 22:39:48 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com
+Cc:     j.granados@samsung.com, patches@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH] proc_sysctl: enhance documentation
+Date:   Fri, 10 Mar 2023 14:39:47 -0800
+Message-Id: <20230310223947.3917711-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eb7475da-7548-4820-a2b6-ff0f6cf4be71@kili.mountain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,10 +49,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey! 
-Sorry, I am unable to understand this enough. Since it is mentioned that
-the patch raises another checkpatch warning, should I stop working on
-this patch and look for some other files? Kindly let me know.
+Expand documentation to clarify:
 
-As for now, I have submitted another revision of this patch.
-Thank you.
+  o that paths don't need to exist for the new API callers
+  o clarify that we *require* callers to keep the memory of
+    the table around during the lifetime of the sysctls
+  o annotate routines we are trying to deprecate and later remove
+
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+
+I'm sending this out separately from the rest of the changes so I can
+refer to this new documentation update separately. With the next few
+patches I am posting we should be able to deprecate the recursion path
+of sysctl registration in about 1-2 kernel cycles max!
+
+ fs/proc/proc_sysctl.c | 25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
+
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 15d5e02f1ec0..7ad07435828f 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -1316,7 +1316,10 @@ static struct ctl_dir *sysctl_mkdir_p(struct ctl_dir *dir, const char *path)
+  * __register_sysctl_table - register a leaf sysctl table
+  * @set: Sysctl tree to register on
+  * @path: The path to the directory the sysctl table is in.
+- * @table: the top-level table structure without any child
++ * @table: the top-level table structure without any child. This table
++ * 	 should not be free'd after registration. So it should not be
++ * 	 used on stack. It can either be a global or dynamically allocated
++ * 	 by the caller and free'd later after sysctl unregistration.
+  *
+  * Register a sysctl table hierarchy. @table should be a filled in ctl_table
+  * array. A completely 0 filled entry terminates the table.
+@@ -1410,8 +1413,15 @@ struct ctl_table_header *__register_sysctl_table(
+ 
+ /**
+  * register_sysctl - register a sysctl table
+- * @path: The path to the directory the sysctl table is in.
+- * @table: the table structure
++ * @path: The path to the directory the sysctl table is in. If the path
++ * 	doesn't exist we will create it for you.
++ * @table: the table structure. The calller must ensure the life of the @table
++ * 	will be kept during the lifetime use of the syctl. It must not be freed
++ * 	until unregister_sysctl_table() is called with the given returned table
++ * 	with this registration. If your code is non modular then you don't need
++ * 	to call unregister_sysctl_table() and can instead use something like
++ * 	register_sysctl_init() which does not care for the result of the syctl
++ * 	registration.
+  *
+  * Register a sysctl table. @table should be a filled in ctl_table
+  * array. A completely 0 filled entry terminates the table.
+@@ -1427,8 +1437,11 @@ EXPORT_SYMBOL(register_sysctl);
+ 
+ /**
+  * __register_sysctl_init() - register sysctl table to path
+- * @path: path name for sysctl base
+- * @table: This is the sysctl table that needs to be registered to the path
++ * @path: path name for sysctl base. If that path doesn't exist we will create
++ * 	it for you.
++ * @table: This is the sysctl table that needs to be registered to the path.
++ * 	The caller must ensure the life of the @table will be kept during the
++ * 	lifetime use of the sysctl.
+  * @table_name: The name of sysctl table, only used for log printing when
+  *              registration fails
+  *
+@@ -1570,6 +1583,7 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+  *
+  * Register a sysctl table hierarchy. @table should be a filled in ctl_table
+  * array. A completely 0 filled entry terminates the table.
++ * We are slowly deprecating this call so avoid its use.
+  *
+  * See __register_sysctl_table for more details.
+  */
+@@ -1641,6 +1655,7 @@ struct ctl_table_header *__register_sysctl_paths(
+  *
+  * Register a sysctl table hierarchy. @table should be a filled in ctl_table
+  * array. A completely 0 filled entry terminates the table.
++ * We are slowly deprecating this caller so avoid future uses of it.
+  *
+  * See __register_sysctl_paths for more details.
+  */
+-- 
+2.39.1
+
