@@ -2,149 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95E16B424A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:01:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6A66B424F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:01:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbjCJOBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:01:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S231557AbjCJOBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:01:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbjCJOB1 (ORCPT
+        with ESMTP id S231493AbjCJOBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:01:27 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568CC114EF0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:01:23 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id i3so5627299plg.6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:01:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678456882;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1E1H01G5yHTefNIXDYDwx8BnHam3cp9im/vl/s0zSJg=;
-        b=paKTama3iHQUROKjuwszpwKu1vGrHb0C8kTFWk/OFl5k4xxjcPUQg3QwKohLz2Seva
-         duc++0cFytkwWflXtPn99raoCbKXCbI+usvcgFDNWr8s3g34NPvLDYNJHUoCknWtNbov
-         Mn+duwew2vbd4E2St/NsZ8go+P5EoxCFJSibkgrTPaqsKvcMVe8Lt4z/ERLyQqWhKCHV
-         HV9sAJQX6BLcJnXcqH9qrmPLdbmChYsrXUNlPalBe9S18F556lyJY/ydflReQrNrtk1A
-         W3axWXi56lbL+wQtT/BhwMAJBpVuwkmAw9kl2B6sXZSJyrlGEnrg1Yov4+O4YXYPxHEA
-         XEog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678456882;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1E1H01G5yHTefNIXDYDwx8BnHam3cp9im/vl/s0zSJg=;
-        b=U66wmsG9cGXH0/XfQoIetLElli0NlBizDISEG98A8AzippJx+1lfdjlKysJ3BmZ83B
-         R83t3xm70tO1GejGzlSq3n+Zmm6ClLoMFHeu+WTw3gF8Am7fkG3phsAaTL1QleRqE9JB
-         vQ5DOc1pQ58kiGypXRx5ea/euqCmujRuZ4+IhZy5D9P0oJxqyN5ofNsvtp+hYpt/kj1Y
-         85Xjf5hR+w8Dp+DTpTRNX60PbJH8O7ZiNoXRoMc4okK5Lx37xsZ6Bx6koXxwNXFN/0Nw
-         Q61haqj1AjerxJiBPiiElBsOvOmQBuOf6E5pIrBmDLTFri7BPmNZUkebjpXVgY6U/jMY
-         eRbw==
-X-Gm-Message-State: AO0yUKXWYpWuMbuxckQhJDsZz6oAg5s1Z4lJNp6h5xemW/ePiLgUX6E2
-        YsiY+VuNLkug/8csAubJKRoQgMiYbe1gzg==
-X-Google-Smtp-Source: AK7set979+teWvE1FEu6RfhEUebp9t15CkaDEwF0V5DUouuImINlNm7Z+d+ZXPcWXwFfFUIbSmJjBw==
-X-Received: by 2002:a17:902:e74d:b0:19a:a520:b1fc with SMTP id p13-20020a170902e74d00b0019aa520b1fcmr2087123plf.14.1678456882061;
-        Fri, 10 Mar 2023 06:01:22 -0800 (PST)
-Received: from ubuntu ([117.245.164.94])
-        by smtp.gmail.com with ESMTPSA id km13-20020a17090327cd00b00194c2f78581sm47239plb.199.2023.03.10.06.01.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:01:21 -0800 (PST)
-Date:   Fri, 10 Mar 2023 06:01:19 -0800
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     abbotti@mev.co.uk, hsweeten@visionengravers.com,
-        outreachy@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] comedi: drivers: ni_pcimio: Remove the code enclosed by #if
- 0 and its #endif
-Message-ID: <20230310140119.GA12544@ubuntu>
+        Fri, 10 Mar 2023 09:01:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890011151D5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:01:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA485B822BF
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:01:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1651DC433EF;
+        Fri, 10 Mar 2023 14:01:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678456898;
+        bh=mKGr1ypxxF+X86Tp40In+ocfizQZWE08+13VDMyFtKs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kAwUaG4HVbRtWn1cBmNVqoVVPq5YkHkTAg4VjF9d8uYVG73w+fp0TUHlrqIp2T0YB
+         6bg7nlfFYU0Fk0WkXPCovchICKr5neGoOdcTYn32+LBtZoHaY7jMt7bAAN1niYl47A
+         rE/Y9v1i4JTXQmwBWP8EckehUbM6Fc87SJrvuD5sZdac5e/ObEgcTXcSA+nI/7Y8kn
+         Gdyip129SVoRtTeYQB6lZKfrywBPofiR2MqT+uarenABArCPc9WuaVA+a2utgMtamy
+         G8M1n8rzhysT2qmJI+l35iX9VBQclUDeaotFhg9qXYpbcu/7d6oEu4nw9w0bw3qQTu
+         y3+seKYb2ThjA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jason Baron <jbaron@akamai.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dyndbg: allow including dyndbg.h in decompressor
+Date:   Fri, 10 Mar 2023 15:01:26 +0100
+Message-Id: <20230310140133.291594-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reported by checkpatch.pl:
+From: Arnd Bergmann <arnd@arndb.de>
 
-WARNING: Consider removing the code enclosd by this #if 0 and its #endif
-at line 482, 501, 570.
+After a change to linux/module.h, dyndbg.h is now included
+indirectly from the decompressor for lz4 support, which in turn
+causes a build failure on 32-bit Arm:
 
-Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+In file included from include/linux/module.h:30,
+                 from arch/arm/boot/compressed/../../../../lib/lz4/lz4_decompress.c:39,
+                 from arch/arm/boot/compressed/../../../../lib/decompress_unlz4.c:10,
+                 from arch/arm/boot/compressed/decompress.c:59:
+include/linux/dynamic_debug.h: In function 'ddebug_dyndbg_module_param_cb':
+include/linux/dynamic_debug.h:307:14: error: implicit declaration of function 'strcmp' [-Werror=implicit-function-declaration]
+  307 |         if (!strcmp(param, "dyndbg")) {
+      |              ^~~~~~
+include/linux/dynamic_debug.h:1:1: note: 'strcmp' is defined in header '<string.h>'; did you forget to '#include <string.h>'?
+  +++ |+#include <string.h>
+
+The decompressor has its own replacement for the linux/string.h contents,
+so the normal declaration is not visible here. Since the function is
+not actually called, it is sufficient to add a declaration, and this
+is in fact the correct one as it matches the definition in
+arch/arm/boot/compressed/string.c.
+
+Fixes: 7deabd674988 ("dyndbg: use the module notifier callbacks")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/comedi/drivers/ni_pcimio.c | 48 ------------------------------
- 1 file changed, 48 deletions(-)
+The patch that caused the problem is in linux-next, maybe fold
+the fix into that patch if possible
+---
+ arch/arm/boot/compressed/decompress.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/comedi/drivers/ni_pcimio.c b/drivers/comedi/drivers/ni_pcimio.c
-index 0b055321023d..1603095f2ed9 100644
---- a/drivers/comedi/drivers/ni_pcimio.c
-+++ b/drivers/comedi/drivers/ni_pcimio.c
-@@ -479,43 +479,6 @@ static const struct ni_board_struct ni_boards[] = {
- 		.ao_speed	= 250,
- 		.caldac		= { ad8804, ad8804 },
- 	},
--#if 0
--	/* The 6115 boards probably need their own driver */
--	[BOARD_PCI6115] = {	/* .device_id = 0x2ed0, */
--		.name		= "pci-6115",
--		.n_adchan	= 4,
--		.ai_maxdata	= 0x0fff,
--		.ai_fifo_depth	= 8192,
--		.gainlkup	= ai_gain_611x,
--		.ai_speed	= 100,
--		.n_aochan	= 2,
--		.ao_maxdata	= 0xffff,
--		.ao_671x	= 1,
--		.ao_fifo_depth	= 2048,
--		.ao_speed	= 250,
--		.reg_611x	= 1,
--		/* XXX */
--		.caldac		= { ad8804_debug, ad8804_debug, ad8804_debug },
--	},
--#endif
--#if 0
--	[BOARD_PXI6115] = {	/* .device_id = ????, */
--		.name		= "pxi-6115",
--		.n_adchan	= 4,
--		.ai_maxdata	= 0x0fff,
--		.ai_fifo_depth	= 8192,
--		.gainlkup	= ai_gain_611x,
--		.ai_speed	= 100,
--		.n_aochan	= 2,
--		.ao_maxdata	= 0xffff,
--		.ao_671x	= 1,
--		.ao_fifo_depth	= 2048,
--		.ao_speed	= 250,
--		.reg_611x	= 1,
--		/* XXX */
--		.caldac		= { ad8804_debug, ad8804_debug, ad8804_debug },
--	},
--#endif
- 	[BOARD_PCI6711] = {
- 		.name = "pci-6711",
- 		.n_aochan	= 4,
-@@ -567,17 +530,6 @@ static const struct ni_board_struct ni_boards[] = {
- 		.reg_type	= ni_reg_6711,
- 		.caldac		= { ad8804_debug },
- 	},
--#if 0
--	[BOARD_PXI6731] = {	/* .device_id = ????, */
--		.name		= "pxi-6731",
--		.n_aochan	= 4,
--		.ao_maxdata	= 0xffff,
--		.ao_fifo_depth	= 8192,
--		.ao_range_table	= &range_bipolar10,
--		.reg_type	= ni_reg_6711,
--		.caldac		= { ad8804_debug },
--	},
--#endif
- 	[BOARD_PCI6733] = {
- 		.name		= "pci-6733",
- 		.n_aochan	= 8,
+diff --git a/arch/arm/boot/compressed/decompress.c b/arch/arm/boot/compressed/decompress.c
+index 74255e819831..0669851394f0 100644
+--- a/arch/arm/boot/compressed/decompress.c
++++ b/arch/arm/boot/compressed/decompress.c
+@@ -31,6 +31,7 @@
+ /* Not needed, but used in some headers pulled in by decompressors */
+ extern char * strstr(const char * s1, const char *s2);
+ extern size_t strlen(const char *s);
++extern int strcmp(const char *cs, const char *ct);
+ extern int memcmp(const void *cs, const void *ct, size_t count);
+ extern char * strchrnul(const char *, int);
+ 
 -- 
-2.25.1
+2.39.2
 
