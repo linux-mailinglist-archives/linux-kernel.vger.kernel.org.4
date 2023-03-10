@@ -2,91 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7BA6B3733
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5366B3738
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjCJHNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 02:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
+        id S229722AbjCJHSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 02:18:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbjCJHN1 (ORCPT
+        with ESMTP id S229453AbjCJHSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 02:13:27 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB744DBC5
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 23:13:25 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1paWwD-00009Y-5c; Fri, 10 Mar 2023 08:13:13 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1paWwA-0007IL-PW; Fri, 10 Mar 2023 08:13:10 +0100
-Date:   Fri, 10 Mar 2023 08:13:10 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Arun.Ramadoss@microchip.com
-Cc:     olteanv@gmail.com, andrew@lunn.ch, f.fainelli@gmail.com,
-        kuba@kernel.org, pabeni@redhat.com, edumazet@google.com,
-        Woojung.Huh@microchip.com, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, kernel@pengutronix.de
-Subject: Re: [PATCH net-next v2 1/2] net: dsa: microchip: add
- ksz_setup_tc_mode() function
-Message-ID: <20230310071310.GB29822@pengutronix.de>
-References: <20230308091237.3483895-1-o.rempel@pengutronix.de>
- <20230308091237.3483895-2-o.rempel@pengutronix.de>
- <6263ddb2ad1fb38dcde524197b5897676c3ddf8c.camel@microchip.com>
- <95ca2bceeb4326b993a160f5c4e8b060e4f47392.camel@microchip.com>
+        Fri, 10 Mar 2023 02:18:41 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BBD6130B;
+        Thu,  9 Mar 2023 23:18:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678432720; x=1709968720;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/FJu325oNwFinYt0K14XQFuq7WkzPV6Z6PHz2Vd/EK8=;
+  b=AvHzHTQoUUPuCE5NOksf+91Nv2KrSFNcyGQyithOCFQpc8ZrLWwJKX61
+   xJwRf8e39XCwTMYShDn0hy/cqR1TmBkIyLxWONXkdtNJ5/lxxtuT4L60B
+   vWihzhAQkDQouuUokjC5Z0qXQgVuSkzqyLKSy1NZaweIBDnaDdyWFMYDy
+   heLg7y15qWa7iH5EHaTSyujrHKOcSCNa9HelfoIKf9BPvyrNFqg0+dOhN
+   LihV0BuSvOA1/K7WeepSD4YyhejlY1X+BI5trl0xDqZB/9xNbH7QKkDws
+   sLiI7KlanIdnR9okGiBolod9I7fBF7DYbMR5ImbaBGsQSoghnv7J/5S0Y
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="401528380"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="401528380"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 23:18:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="851812467"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="851812467"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 09 Mar 2023 23:18:38 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 1DA5D143; Fri, 10 Mar 2023 09:19:22 +0200 (EET)
+Date:   Fri, 10 Mar 2023 09:19:22 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     liao.zenghui@zte.com.cn
+Cc:     jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        jsd@semihalf.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: designware: fix slave not acknowledge when address
+ matched
+Message-ID: <20230310071922.GZ62143@black.fi.intel.com>
+References: <202303101510464477898@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <95ca2bceeb4326b993a160f5c4e8b060e4f47392.camel@microchip.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <202303101510464477898@zte.com.cn>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 04:22:34AM +0000, Arun.Ramadoss@microchip.com wrote:
-> On Fri, 2023-03-10 at 04:00 +0000, Arun Ramadoss - I17769 wrote:
-> > On Wed, 2023-03-08 at 10:12 +0100, Oleksij Rempel wrote:
-> > > EXTERNAL EMAIL: Do not click links or open attachments unless you
-> > > know the content is safe
-> > > 
-> > > Add ksz_setup_tc_mode() to make queue scheduling and shaping
-> > > configuration more visible.
-> > > 
-> > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > 
-> > Acked-by: Arun Ramadoss <arun.ramadoss@microchip.com
-> > 
-> 
-> If the ets command is supported only in KSZ9477 series of switch, do we
-> need to return Not supported for KSZ87xx/KSZ88xx switch similar to tc
-> cbs implementation. I could infer from the patch set that, all the
-> register set are for KSZ9477, so invoking the command in
-> KSZ87xx/KSZ88xx will have undefined behaviour. Correct me if I am
-> wrong.
+Hi,
 
-Ack. You are correct.
+On Fri, Mar 10, 2023 at 03:10:46PM +0800, liao.zenghui@zte.com.cn wrote:
+> static inline void __i2c_dw_enable(struct dw_i2c_dev *dev)
+> {
+> + u32 enabled;
+> +
+> dev->status |= STATUS_ACTIVE;
+> - regmap_write(dev->map, DW_IC_ENABLE, 1);
+> + regmap_read(dev->map, DW_IC_ENABLE, &enabled);
+> + regmap_write(dev->map, DW_IC_ENABLE, enabled | DW_IC_ENABLE_ENABLE);
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Looks like this patch has some whitespace damage. Probably good to use
+git send-email or so to make sure the formatting stays intact.
