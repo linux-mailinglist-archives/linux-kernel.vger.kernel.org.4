@@ -2,105 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767186B3375
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 02:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA086B341F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjCJBCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 20:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
+        id S229761AbjCJCPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 21:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjCJBCa (ORCPT
+        with ESMTP id S229943AbjCJCPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 20:02:30 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F306115B73;
-        Thu,  9 Mar 2023 17:02:26 -0800 (PST)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PXnks5rRbznVNR;
-        Fri, 10 Mar 2023 08:59:33 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 10 Mar
- 2023 09:02:24 +0800
-Subject: Re: [PATCH net] vmxnet3: use gro callback when UPT is enabled
-To:     Ronak Doshi <doshir@vmware.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Pv-drivers <Pv-drivers@vmware.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Guolin Yang <gyang@vmware.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230308222504.25675-1-doshir@vmware.com>
- <e3768ae9-6a2b-3b5e-9381-21407f96dd63@huawei.com>
- <4DF8ED21-92C2-404F-9766-691AEA5C4E8B@vmware.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <252026f5-f979-2c8d-90d9-7ba396d495c8@huawei.com>
-Date:   Fri, 10 Mar 2023 09:02:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Thu, 9 Mar 2023 21:15:33 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E0E104627;
+        Thu,  9 Mar 2023 18:15:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678414524; x=1709950524;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FAurejgzZDgiq4zpMgWd/d8Gh7qfzGeEBH4Wzs2K1W8=;
+  b=eJjR95LNPBMxBXEfBKYwEUaAflaO1eSPkVAxOABh8eK6djOSxDBgKnXI
+   ey6+f5LlYvZi21oIwbTEMvCg3EQX3KLCIn6TEQBNVxMZtO4qXzHNPc8pi
+   MFBpYCkdsJr4PdzNX4J1Mh5/U9nHx+8xk1e69SD94XUMAlAYMiC+13yAM
+   Oupp3zVcuiEHWTVV2wZZc5WrjoxIqulvv/KkoMVwESMbZ6U5oKyo2BL8D
+   nn/ItkSGs990+AkvmpamoMuTH4fd8CPo6vfhQqoOra1/OL758WLwOa4YA
+   vJ8qlRwOjvrd/ebrqg2P10vPrWkzGSIFCzPZfewAWy7BEo6ms3W5Nc0BW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="338988955"
+X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
+   d="scan'208";a="338988955"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 18:15:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="670935165"
+X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
+   d="scan'208";a="670935165"
+Received: from hamannjo-mobl1.amr.corp.intel.com (HELO [10.255.34.234]) ([10.255.34.234])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 18:15:21 -0800
+Message-ID: <a211f26d-a045-0729-871f-248d5fce3f3f@linux.intel.com>
+Date:   Thu, 9 Mar 2023 18:37:57 -0600
 MIME-Version: 1.0
-In-Reply-To: <4DF8ED21-92C2-404F-9766-691AEA5C4E8B@vmware.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH v3 00/28] Introduce QC USB SND audio offloading support
 Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <4f8a66c0-398f-5655-3aa7-a59bc9ba56cc@linux.intel.com>
+ <8b2f3ce7-3e0c-bdf0-8d9f-9aeabba09a15@quicinc.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <8b2f3ce7-3e0c-bdf0-8d9f-9aeabba09a15@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/10 6:50, Ronak Doshi wrote:
+
+>>> Create vendor ops for the USB SND driver:
+>>> qc_audio_offload: This particular driver has several components
+>>> associated
+>>> with it:
+>>> - QMI stream request handler
+>>> - XHCI interrupter and resource management
+>>> - audio DSP memory management
+>>
+>> so how does this 'qc_audio_offload' interface with 'q6usb' described
+>> above? how are the roles different or complementary?
+>>
+> So in general you can think that the qc_audio_offload is a complement to
+> the USB SND USB class driver, while q6usb is to ASoC.  Since the ASoC
+
+Humm, that is far from clear. I don't get how a something that interacts
+with the USB class driver can also be in charge of the audio DSP memory
+management.
+
+> framework doesn't have any communication with USB SND, the ASoC DPCM USB
+> backend (q6usb) will have to be the entity that maintains what is going
+> on in USB SND.  That way, sessions initiated through the ASoC managed
+> sound card can evaluate what is available based on information reported
+> by q6usb.
 > 
-> ﻿> > On 3/8/23, 4:34 PM, "Yunsheng Lin" <linyunsheng@huawei.com <mailto:linyunsheng@huawei.com>> wrote:
+> qc_audio_offload and q6usb will have some interaction between each
+> other.  The majority of communication between qc_audio_offload and q6usb
+> is reporting the device connection events.
+
+It's already complicated to figure out how the DSP and USB class driver
+might interact and probe/timing dependencies, but with two additional
+drivers in the mix it's really hard to understand.
+
+Maybe ascii-art would help describe the concepts and types of
+information exchanged. Maintaining a consistent state across multiple
+drivers is not an easy task.
+
+> 
+>>> When the audio DSP wants to enable a playback stream, the request is
+>>> first
+>>> received by the ASoC platform sound card.  Depending on the selected
+>>> route,
+>>> ASoC will bring up the individual DAIs in the path.  The Q6USB
+>>> backend DAI
+>>> will send an AFE port start command (with enabling the USB playback
+>>> path), and
+>>> the audio DSP will handle the request accordingly.
 >>>
->>> - if (adapter->netdev->features & NETIF_F_LRO)
->>> + /* Use GRO callback if UPT is enabled */
->>> + if ((adapter->netdev->features & NETIF_F_LRO) && !rq->shared->updateRxProd)
+>>> Part of the AFE USB port start handling will have an exchange of control
+>>> messages using the QMI protocol.  The qc_audio_offload driver will
+>>> populate the
+>>> buffer information:
+>>> - Event ring base address
+>>> - EP transfer ring base address
 >>>
+>>> and pass it along to the audio DSP.  All endpoint management will now
+>>> be handed
+>>> over to the DSP, and the main processor is not involved in transfers.
 >>>
->> If UPT devicve does not support LRO, why not just clear the NETIF_F_LRO from
->> adapter->netdev->features?
+>>> Overall, implementing this feature will still expose separate sound
+>>> card and PCM
+>>> devices for both the platorm card and USB audio device:
+>>>   0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
+>>>                        SM8250-MTP-WCD9380-WSA8810-VA-DMIC
+>>>   1 [Audio          ]: USB-Audio - USB Audio
+>>>                        Generic USB Audio at usb-xhci-hcd.1.auto-1.4,
+>>> high speed
+>>>
+>>> This is to ensure that userspace ALSA entities can decide which route
+>>> to take
+>>> when executing the audio playback.  In the above, if card#1 is
+>>> selected, then
+>>> USB audio data will take the legacy path over the USB PCM drivers,
+>>> etc...
 >>
+>> I already voiced my concerns about exposing two cards, each with their
+>> own set of volume controls with the same device. It would be much better
+>> to have an additional offloaded PCM device for card0...
 >>
->> With above change, it seems that LRO is supported for user' POV, but the GRO
->> is actually being done.
+>> But if the consensus is to have two cards, it's still not clear how the
+>> routing would be selected. In the case where there are two USB audio
+>> devices attached, the offloaded path would only support one of the two.
+>> How would userspace know which of the two is selected?
 >>
+> 
+> With patch#24:
+> https://lore.kernel.org/linux-usb/20230308235751.495-25-quic_wcheng@quicinc.com/T/#u
+> 
+> Now, userspace can at least choose which device it wants to offload.
+> Part of doing that would mean userspace knows what USB SND card devices
+> are available, so it is aware of which devices are shared (between the
+> offload and USB SND path)
+> 
+>> And how would userspace know the difference anyways between two physical
+>> devices attached to the platform with no offload, and one physical
+>> device with one additional offload path? The names you selected can't be
+>> used to identify that card1 is the optimized version of card0.
 >>
->> Also, if NETIF_F_LRO is set, do we need to clear the NETIF_F_GRO bit, so that
->> there is no confusion for user?
 > 
-> We cannot clear LRO bit as the virtual nic can run in either emulation or UPT mode.
-> When the vnic switches the mode between UPT and emulation, the guest vm is not
-> notified. Hence, we use updateRxProd which is shared in datapath to check what mode
-> is being run.
-
-So it is a run time thing? What happens if some LRO'ed packet is put in the rx queue,
-and the the vnic switches the mode to UPT, is it ok for those LRO'ed packets to go through
-the software GSO processing? If yes, why not just call napi_gro_receive() for LRO case too?
-
-Looking closer, it seems vnic is implementing hw GRO from driver' view, as the driver is
-setting skb_shinfo(skb)->gso_* accordingly:
-
-https://elixir.bootlin.com/linux/latest/source/drivers/net/vmxnet3/vmxnet3_drv.c#L1665
-
-In that case, you may call napi_gro_receive() for those GRO'ed skb too, see:
-
-https://lore.kernel.org/netdev/166479721495.20474.5436625882203781290.git-patchwork-notify@kernel.org/T/
-
+> Is userspace currently able to differentiate between cards that are
+> created by USB SND versus ASoC?  How complex can the userspace card
+> discovery be?  Can it query kcontrols at this point in time?  If so,
+> maybe we can change the names of the newly added ones to reflect that it
+> is an offload device?
 > 
-> Also, we plan to add an event to notify the guest about this but that is for separate patch
-> and may take some time.
+> SND kcontrol names are currently:
+> Q6USB offload status
+> Q6USB offload SND device select
+
+I must admit I've never seen kcontrols being used to identify what the
+card is, and in this case it's a pretend-card that's just an improved
+version of another. It might be easier to use something else, such as
+the component strings.
 > 
-> Thanks, 
-> Ronak 
+>> Before we review low-level kernel plumbing, it would be good to give a
+>> better overview of how userspace applications are supposed to interact
+>> with the cards and identify the offloaded path. Testing with
+>> tinyplay/tinymix is fine, but that's a developer-level or CI unit test.
+>> we've got to see the broader picture of how a sound server would use
+>> this USB offload capability.
 > 
+> Sure, I think that is fine.  I was hoping that at least adding some of
+> the new kcontrols would help userspace make use of this path in general,
+> but we can add more information if required.
+
+Can I ask if this solution has been used with a complete userspace stack
+already? I could see how this might be used with a relatively fixed
+Android HAL, where the platform and routing are relatively controlled. I
+don't see how a more generic audio server would deal with the discovery
+and routing.
+
