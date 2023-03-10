@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D38B6B5050
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 19:44:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AC56B504F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 19:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbjCJSod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 13:44:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S231378AbjCJSoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 13:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbjCJSoP (ORCPT
+        with ESMTP id S230378AbjCJSoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Mar 2023 13:44:15 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C89122CE9;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF47122392;
         Fri, 10 Mar 2023 10:44:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5B28B82382;
-        Fri, 10 Mar 2023 18:44:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 66750C433A1;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43206B823AF;
+        Fri, 10 Mar 2023 18:44:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 852E4C433AC;
         Fri, 10 Mar 2023 18:44:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1678473850;
-        bh=T0yrlYh6fLNBmEygIOf06ax4LoeO/yfEvilUDk3ALb0=;
+        bh=DxASz2lknCh6bcl9lub36jkmurw78TkqTmOu4olxjho=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-        b=G8T6Jb2i94gU4vHSPMhVGNFiANl+5s9RcU7pga9cvJAMaD28c2BMPgprw6ygLIvRn
-         AAbPN3uWdc6vP0LdJ7+9BpkfluFllmww/PKlz/zCTIvJwbfCyb2U5Uo0+R87MrNWF6
-         4OZN3lDWeKyp3hKtPbH5eZxFdqj8iRsvcoi+Bylb/Pt3OrOVw6iIq2nZq+GKGxHjjt
-         wz1Lrg2UDHdQtge2EmiJ8MgXyOCh0HCw2YbFaow6zbcvByqErldsxKDxnWTqEDeGM+
-         BWuKiR3SbqZz79bgYFaj8JZo+f0fUuHjt7q9n85ptn4q/G6uecyAVbZHYfyLHj0pu/
-         dvHSwboLA+/FQ==
+        b=qAQpfalztKPM1Hg6T6xX9v2s4ul17ZXD/3ekRyL6V2q+ViHx3MVCdyeivWevWePPd
+         piOH4tG1TjRmVm9kz6H5Y4E/3RHWke7Kz0dNuePviOioK5TV7FxRvDKlxTOD6MGDEX
+         qIR9Vmt8CGEpKKucB2t6m1y83/RQEC0lA1J8f+3XHlvFwaEhnn+UwDO3d+BEv7LXeC
+         tB6JSeydevnsOsTXUK2lLrWL9QGLr2yVQoCNmdKwC0wwrX86vPC5I+WPduuoIytFL9
+         q/m1vrdPrhf2xLoDb/SKf3dh2fiZMWP9bczD9LqTkMXwsVgVa7fMo8BZPeVdZ/8CTp
+         Dy7tTlfYFT8ew==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id 54EC2C6FD19;
+        by smtp.lore.kernel.org (Postfix) with ESMTP id 67AE4C74A44;
         Fri, 10 Mar 2023 18:44:10 +0000 (UTC)
 From:   Sasha Finkelstein via B4 Relay 
         <devnull+fnkl.kernel.gmail.com@kernel.org>
-Date:   Fri, 10 Mar 2023 19:44:10 +0100
-Subject: [PATCH v8 4/5] arm64: dts: apple: t600x: Add PWM controller
+Date:   Fri, 10 Mar 2023 19:44:11 +0100
+Subject: [PATCH v8 5/5] MAINTAINERS: Add entries for Apple PWM driver
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230214-fpwm-v8-4-65518a0d4944@gmail.com>
+Message-Id: <20230214-fpwm-v8-5-65518a0d4944@gmail.com>
 References: <20230214-fpwm-v8-0-65518a0d4944@gmail.com>
 In-Reply-To: <20230214-fpwm-v8-0-65518a0d4944@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
@@ -55,14 +55,13 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Sven Peter <sven@svenpeter.dev>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>
 Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Sasha Finkelstein <7d578vix8hzw@opayq.net>
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678473848; l=2061;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678473848; l=1109;
  i=fnkl.kernel@gmail.com; s=20230213; h=from:subject:message-id;
- bh=kC8e0IqG+WMbKwdUXKBwuQCvwcxm5IAUASQM0mxJcPI=;
- b=F7yQVfm5aPAgMPY2ACL3tNlGDcgvbrejU0z+OT0V5MhYfS98A5n69rZljI4n3AUkzmNJicuiw
- MaoCf0W0Ew6DcboaGgTqXS25fr2IHrwLibz2RMQhdPEVu6iPi8UFACN
+ bh=H0yqy74irk0iRnaCY9EguySiHLNBuNpFanSkZMAqDr0=;
+ b=ty8TwQo11Z1cAyoRSio6JTxjGYIrLVadUutTZbmq/YWf6J8bFurORutZllhWghqquqzC0/K5h
+ lN3fx1yMMguDRkHlnIIMtDqpSLoX9U1dR/MvQIENInn3AS816afUHwT
 X-Developer-Key: i=fnkl.kernel@gmail.com; a=ed25519;
  pk=7LFSAJtxIWAs9LzCIyX0sSvCZy2wQTyEIu1zch6o804=
 X-Endpoint-Received: by B4 Relay for fnkl.kernel@gmail.com/20230213 with auth_id=28
@@ -78,79 +77,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sasha Finkelstein <7d578vix8hzw@opayq.net>
+From: Sasha Finkelstein <fnkl.kernel@gmail.com>
 
-Adds PWM controller and keyboard backlight bindings for M1 Pro/Max MacBook Pros
+Add the MAINTAINERS entries for the driver
 
 Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
-Acked-by: Hector Martin <marcan@marcan.st>
+Acked-by: Sven Peter <sven@svenpeter.dev>
 ---
- arch/arm64/boot/dts/apple/t600x-die0.dtsi      |  9 +++++++++
- arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi | 18 ++++++++++++++++++
- 2 files changed, 27 insertions(+)
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/apple/t600x-die0.dtsi b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-index 1c41954e3899..9157ae2a9f7f 100644
---- a/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-@@ -71,6 +71,15 @@ sio_dart_1: iommu@39b008000 {
- 		power-domains = <&ps_sio_cpu>;
- 	};
- 
-+	fpwm0: pwm@39b030000 {
-+		compatible = "apple,t6000-fpwm", "apple,s5l-fpwm";
-+		reg = <0x3 0x9b030000 0x0 0x4000>;
-+		power-domains = <&ps_fpwm0>;
-+		clocks = <&clkref>;
-+		#pwm-cells = <2>;
-+		status = "disabled";
-+	};
-+
- 	i2c0: i2c@39b040000 {
- 		compatible = "apple,t6000-i2c", "apple,i2c";
- 		reg = <0x3 0x9b040000 0x0 0x4000>;
-diff --git a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-index 34906d522f0a..96de7165df6d 100644
---- a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-@@ -9,6 +9,8 @@
-  * Copyright The Asahi Linux Contributors
-  */
- 
-+#include <dt-bindings/leds/common.h>
-+
- / {
- 	aliases {
- 		serial0 = &serial0;
-@@ -34,6 +36,18 @@ memory@10000000000 {
- 		device_type = "memory";
- 		reg = <0x100 0 0x2 0>; /* To be filled by loader */
- 	};
-+
-+	led-controller {
-+		compatible = "pwm-leds";
-+		led-0 {
-+			pwms = <&fpwm0 0 40000>;
-+			label = "kbd_backlight";
-+			function = LED_FUNCTION_KBD_BACKLIGHT;
-+			color = <LED_COLOR_ID_WHITE>;
-+			max-brightness = <255>;
-+			default-state = "keep";
-+		};
-+	};
- };
- 
- &serial0 {
-@@ -110,5 +124,9 @@ &pcie0_dart_3 {
- 	status = "disabled";
- };
- 
-+&fpwm0 {
-+	status = "okay";
-+};
-+
- /delete-node/ &port02;
- /delete-node/ &port03;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8d5bc223f305..7c0b7c2bb55f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1955,6 +1955,7 @@ F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
+ F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+ F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+ F:	Documentation/devicetree/bindings/power/apple*
++F:	Documentation/devicetree/bindings/pwm/pwm-apple.yaml
+ F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+ F:	arch/arm64/boot/dts/apple/
+ F:	drivers/bluetooth/hci_bcm4377.c
+@@ -1970,6 +1971,7 @@ F:	drivers/mailbox/apple-mailbox.c
+ F:	drivers/nvme/host/apple.c
+ F:	drivers/nvmem/apple-efuses.c
+ F:	drivers/pinctrl/pinctrl-apple-gpio.c
++F:	drivers/pwm/pwm-apple.c
+ F:	drivers/soc/apple/*
+ F:	drivers/watchdog/apple_wdt.c
+ F:	include/dt-bindings/interrupt-controller/apple-aic.h
 
 -- 
 Git-137.1)
