@@ -2,115 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88CD16B3ABC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F446B3AB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbjCJJhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
+        id S229680AbjCJJgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:36:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbjCJJgo (ORCPT
+        with ESMTP id S229521AbjCJJgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:36:44 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01A3814E88;
-        Fri, 10 Mar 2023 01:34:04 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8AxJPxj+Qpk5u0KAA--.14919S3;
-        Fri, 10 Mar 2023 17:33:23 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxSL1e+QpkTcxRAA--.10888S3;
-        Fri, 10 Mar 2023 17:33:22 +0800 (CST)
-Subject: Re: [PATCH v1 1/2] dt-bindings: spi: add loongson spi
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liu Peibao <liupeibao@loongson.cn>, devicetree@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn, Mark Brown <broonie@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Rob Herring <robh+dt@kernel.org>, wanghongliang@loongson.cn,
-        zhuyinbo@loongson.cn
-References: <20230308025908.21491-1-zhuyinbo@loongson.cn>
- <20230308025908.21491-2-zhuyinbo@loongson.cn>
- <167828359942.2612999.3798783623764270312.robh@kernel.org>
- <1f14658a-5dc3-fc48-5291-28e14f88abaa@loongson.cn>
- <c254b2f1-2086-498f-35c6-c87d838bcb2d@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <3370cbee-1b17-3473-4462-c574398fb83d@loongson.cn>
-Date:   Fri, 10 Mar 2023 17:33:18 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 10 Mar 2023 04:36:21 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E328822123;
+        Fri, 10 Mar 2023 01:33:43 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so9210302pjb.1;
+        Fri, 10 Mar 2023 01:33:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678440816;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sAFEXOe7wgsyLbBLPoY5abX+Iy4JMH27UPzyBAnZiOs=;
+        b=algmRXAmw/PTACbZXDj+h5hzSPXyXWmQ5V72lVynjL3emQQs6L1JcbtUpqKC/oD0qV
+         +Z2fugA9+G/J2FOxB+faEcy+HDAdOC1b8vNiA9JyuPz1NJM02byxh7+TKGV3r/SRvFBx
+         cmSPF1w3TZdiCJqglUnVbyMpBjHFI1ycxacbs4bkLIFUXBNiFZHAmTWGqkzxIm/ubdby
+         vskqkfbquFIGeFuW+jDwgnBlPkWWN67lENx592waOxVmAtZWuJVmdNNgbAif8suLATOc
+         MSEpQhJvXArDhj5l0TAHfUQppuh7X4IY6IO/HizZQushmhNNrmcv+6aba2RmvlHhcnm3
+         7G4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678440816;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sAFEXOe7wgsyLbBLPoY5abX+Iy4JMH27UPzyBAnZiOs=;
+        b=PRBr7xfboUpMuDYO4FlBrl8tqNad2jcH48Iu+oVvpWHllnT+l6SOPSQTw0neoCUfc5
+         ULKPA6lti+1zAzspT8tY/X7xgNc1sTY3nJ++/WJnV6ryglXByoLbHjDkrZqkk/DLkydC
+         75aGG6Vg+10okpN7W2oinCPt01m7VcRjD2WYPEJu1CEO87c7FIUEw0OVA3vj+4v0b65E
+         3YA8YWjD1P8yOXsBMj6Pvrc2v4bVcbDLwE4p4DRMVgvZCUAStL/dS+FqcipozSRNl8Xc
+         VERRPq6aVwuQp6ATHeb42jWNqZuRjdRrYLmxg0V32Ru6bVXbuwOIZrdhaMGOzlS2IY38
+         AeTg==
+X-Gm-Message-State: AO0yUKURSnjuDaaiNMYJxT4HBgsq94+rqqkoLrDsWhExqaF9eVVfESCL
+        kQaKprC5mu6gtwtVpos270qB7hQBCck=
+X-Google-Smtp-Source: AK7set+wVmUJflBiERXkVgtH8PJDpvz6KI8ttDs/c84M6LdycwYb06z/rwzgOHJOF+hekfz0ogXRdg==
+X-Received: by 2002:a05:6a20:bc97:b0:cc:ce95:7dcb with SMTP id fx23-20020a056a20bc9700b000ccce957dcbmr20997681pzb.13.1678440816140;
+        Fri, 10 Mar 2023 01:33:36 -0800 (PST)
+Received: from Gentoo (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id i3-20020a63e443000000b00478ca052819sm916856pgk.47.2023.03.10.01.33.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 01:33:35 -0800 (PST)
+Date:   Fri, 10 Mar 2023 17:33:28 +0800
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] drm/panel: Add driver for Novatek NT36523
+Message-ID: <ZAr5aO0BpSeW5iXD@Gentoo>
+References: <20230308043706.16318-1-lujianhua000@gmail.com>
+ <20230308043706.16318-2-lujianhua000@gmail.com>
+ <66d293a8-f850-cb80-0c83-2ebf7e29d0c2@linaro.org>
+ <ZAh3MSpQ30YyPAVe@Gentoo>
+ <1cbe9e29-13a4-574e-6d8c-b2506e7a36b3@linaro.org>
+ <ZAiPTat/kmLyaJmA@Gentoo>
+ <aac6ba9c-4230-aff7-c93d-23eaf6895464@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <c254b2f1-2086-498f-35c6-c87d838bcb2d@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8BxSL1e+QpkTcxRAA--.10888S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Ar45uw4UCr1fuF4UGF48Zwb_yoW8WF4Upw
-        48Can8tF4Utr13Kw4Sq345Kw1YqrWrGryYqF9xKr17GFyqg3WFvr4akr1UuFsruF17GFyx
-        ZF15Kw15KryUZr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bx8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
-        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
-        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
-        AFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
-        0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz4
-        8v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j8pnQUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aac6ba9c-4230-aff7-c93d-23eaf6895464@linaro.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2023/3/10 下午5:08, Krzysztof Kozlowski 写道:
-> On 10/03/2023 03:31, zhuyinbo wrote:
->> 在 2023/3/8 下午10:06, Rob Herring 写道:
->>> On Wed, 08 Mar 2023 10:59:07 +0800, Yinbo Zhu wrote:
->>>> Add the Loongson platform spi binding with DT schema format using
->>>> json-schema.
->>>>
->>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>> ---
->>>>    .../bindings/spi/loongson,ls-spi.yaml         | 47 +++++++++++++++++++
->>>>    MAINTAINERS                                   |  6 +++
->>>>    2 files changed, 53 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>>>
->>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>>
->>> yamllint warnings/errors:
->>>
->>> dtschema/dtc warnings/errors:
->>> Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
->>> FATAL ERROR: Unable to parse input tree
->>> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
->>> make[1]: *** Waiting for unfinished jobs....
->>> make: *** [Makefile:1512: dt_binding_check] Error 2
->>>
->>> doc reference errors (make refcheckdocs):
->> This yaml patch need depend on
->>
->> https://lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
->>
->> , then yaml  compile will be successfull.
-> Nothing in the patch changelog (where it is preferred), not even cover
-> letter, mention dependencies.
-
-okay, I will add it in changelog  in next version.
-
->
-> Best regards,
-> Krzysztof
-
+On Thu, Mar 09, 2023 at 11:37:17PM +0100, Konrad Dybcio wrote:
+> 
+> [...]
+> = of_graph_get_remote_node(dsi->dev.of_node, 1, -1);
+> >>>>> +		if (!dsi1) {
+> >>>>> +			dev_err(dev, "cannot get secondary DSI node.\n");
+> >>>>> +			return -ENODEV;
+> >>>>> +		}
+> >>>>> +
+> >>>>> +		dsi1_host = of_find_mipi_dsi_host_by_node(dsi1);
+> >>>>> +		of_node_put(dsi1);
+> >>>> Shouldn't you put the reference only if it's found?
+> >>> thanks for spot it.
+> Apparently not.. please don't change this
+OK
+> 
+> Konrad
+> >>>>
+> >>>>> +		if (!dsi1_host) {
+> >>>>> +			dev_err(dev, "cannot get secondary DSI host\n");
+> >>>>> +			return -EPROBE_DEFER;
+> >>>> dev_err_probe, here and in neighbouring exit return paths?
+> >>> Acked.
+> >>>>
+> >>>>
+> >>>> Konrad
