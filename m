@@ -2,120 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA7D6B42C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56256B42A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231641AbjCJOEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:04:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
+        id S231708AbjCJOFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:05:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbjCJOEb (ORCPT
+        with ESMTP id S231536AbjCJOE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:04:31 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237521588C;
-        Fri, 10 Mar 2023 06:04:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=2PyfUlnwgN5RjZe7ar8tVggCq1gu3L2eKgJ5SOORC40=; b=kvPMzlQP3K6BQ04TJU1vzMI43o
-        MfFe631uEbjqIdKC49kceDEQ9BZAq1RvdbRUB+aY5cukUU4prKFihUklp8rF14d84rB9dge8pu+Ki
-        lfAou2K0vj4pzmU1f+Pwh8iKmz82RPhAk/VCNM/6KukQi0GeI7lslhMJr+ekPRMFDQgRt1KMQsBnC
-        PO8AhgQyxiQ/RZcfEL91OF0E86uEehSgTuykWt3DjrUhm7p0aIUbq1Wp1rN9YhPGg7t9fzVthtdhv
-        rpAD8qzTHx5Ps5BmoR9ZRNp1VMUlR4D+NaL4qW3cSXBlXmpHXCPdX6lHscMJoxZC6dbzurnGCph6q
-        QYf5CgVA==;
-Received: from 201-68-164-191.dsl.telesp.net.br ([201.68.164.191] helo=localhost)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1padM1-002qb0-GZ; Fri, 10 Mar 2023 15:04:17 +0100
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To:     linux-hyperv@vger.kernel.org, x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, decui@microsoft.com,
-        haiyangz@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        thomas.lendacky@amd.com, jpoimboe@kernel.org, peterz@infradead.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH] x86/hyperv: Mark hv_ghcb_terminate() as noreturn
-Date:   Fri, 10 Mar 2023 11:02:52 -0300
-Message-Id: <20230310140251.1159036-1-gpiccoli@igalia.com>
-X-Mailer: git-send-email 2.39.2
+        Fri, 10 Mar 2023 09:04:56 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B1310C738;
+        Fri, 10 Mar 2023 06:04:53 -0800 (PST)
+Received: (Authenticated sender: kory.maincent@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id EF22220008;
+        Fri, 10 Mar 2023 14:04:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678457091;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OLDH45p1qG8y4EdPpmyGB/Q5c9zloIChc2+wUWU2DFQ=;
+        b=at+4MyMNlbycCZ9yplHkkHBQYpSdfxZylE3/YfdOhPm6DaihUBgNeWGVSOcWA8Jd1Q+sMo
+        gyWOP70vq9jtmiLUHI+fDvxzQgU0qUPWjfqT4auPDB4r7lLDd/Ul9RELLEC0pOtfxi23Uk
+        3YuOel2Uk0Lk90KaxD1yWzxHVrxNgN8iCKzzuBUdFMNjKTdtz3OJ81X7TRZYm52q0jWCjZ
+        I6VV9WlyeYMdrB1OrNHShl/c44TUd7435qGt8LQPRUVJXcDsgpDij8HDC+eZfuAIsGA+CP
+        gOF4EASefCiExwLFhbCahM4ofMElOvvWHtAkL8nOHrElMMT7QrLPxmBei3Jl3w==
+Date:   Fri, 10 Mar 2023 15:04:36 +0100
+From:   =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-omap@vger.kernel.org,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        thomas.petazzoni@bootlin.com, Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Minghao Chi <chi.minghao@zte.com.cn>,
+        Jie Wang <wangjie125@huawei.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Sean Anderson <sean.anderson@seco.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Marco Bonelli <marco@mebeim.net>
+Subject: Re: [PATCH v3 3/5] net: Let the active time stamping layer be
+ selectable.
+Message-ID: <20230310150436.40ed168d@kmaincent-XPS-13-7390>
+In-Reply-To: <0d2304a9bc276a0d321629108cf8febd@walle.cc>
+References: <20230308135936.761794-1-kory.maincent@bootlin.com>
+        <20230308135936.761794-1-kory.maincent@bootlin.com>
+        <20230308135936.761794-4-kory.maincent@bootlin.com>
+        <20230308135936.761794-4-kory.maincent@bootlin.com>
+        <20230308230321.liw3v255okrhxg6s@skbuf>
+        <20230310114852.3cef643d@kmaincent-XPS-13-7390>
+        <20230310113533.l7flaoli7y3bmlnr@skbuf>
+        <b4ebfd3770ffa5ad1233d2b5e79499ee@walle.cc>
+        <20230310131529.6bahmi4obryy5dsx@soft-dev3-1>
+        <0d2304a9bc276a0d321629108cf8febd@walle.cc>
+Organization: bootlin
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Annotate the function prototype as noreturn to prevent objtool
-warnings like:
+On Fri, 10 Mar 2023 14:34:07 +0100
+Michael Walle <michael@walle.cc> wrote:
 
-vmlinux.o: warning: objtool: hyperv_init+0x55c: unreachable instruction
+> >> > There is a slight inconvenience caused by the fact that there are
+> >> > already PHY drivers using PHY timestamping, and those may have been
+> >> > introduced into deployments with PHY timestamping. We cannot change =
+the
+> >> > default behavior for those either. There are 5 such PHY drivers today
+> >> > (I've grepped for mii_timestamper in drivers/net/phy).
+> >> >
+> >> > I would suggest that the kernel implements a short whitelist of 5
+> >> > entries containing PHY driver names, which are compared against
+> >> > netdev->phydev->drv->name (with the appropriate NULL pointer checks).
+> >> > Matches will default to PHY timestamping. Otherwise, the new default
+> >> > will be to keep the behavior as if PHY timestamping doesn't exist
+> >> > (MAC still provides the timestamps), and the user needs to select the
+> >> > PHY as the timestamping source explicitly.
+> >> >
+> >> > Thoughts? =20
+> >>=20
+> >> While I agree in principle (I have suggested to make MAC timestamping
+> >> the default before), I see a problem with the recent LAN8814 PHY
+> >> timestamping support, which will likely be released with 6.3. That
+> >> would now switch the timestamping to PHY timestamping for our board
+> >> (arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts). I could
+> >> argue that is a regression for our board iff NETWORK_PHY_TIMESTAMPING
+> >> is enabled. Honestly, I don't know how to proceed here and haven't
+> >> tried to replicate the regression due to limited time. Assuming,
+> >> that I can show it is a regression, what would be the solution then,
+> >> reverting the commit? Horatiu, any ideas?
 
-As a comparison, an objdump output without the annotation:
+Adding this whitelist will add some PHY driver specific name in the phy API
+core.
+Will it be accepted? Is it not better to add a "legacy_default_timestamping"
+boolean in the phy_device struct and set it for these 5 PHY drivers?
+Then move on the default behavior to MAC default timestamping on the otehr
+cases.
+=20
+> >> I digress from the original problem a bit. But if there would be such
+> >> a whitelist, I'd propose that it won't contain the lan8814 driver. =20
+> >=20
+> > I don't have anything against having a whitelist the PHY driver names. =
+=20
+>=20
+> Yeah, but my problem right now is, that if this discussion won't find
+> any good solution, the lan8814 phy timestamping will find it's way
+> into an official kernel and then it is really hard to undo things.
 
-[...]
-1b63:  mov    $0x1,%esi
-1b68:  xor    %edi,%edi
-1b6a:  callq  ffffffff8102f680 <hv_ghcb_terminate>
-1b6f:  jmpq   ffffffff82f217ec <hyperv_init+0x9c> # unreachable
-1b74:  cmpq   $0xffffffffffffffff,-0x702a24(%rip)
-[...]
+Yes and we need to find a solution as the issue will raise at each new PHY =
+PTP
+support.
 
-Now, after adding the __noreturn to the function prototype:
-
-[...]
-17df:  callq  ffffffff8102f6d0 <hv_ghcb_negotiate_protocol>
-17e4:  test   %al,%al
-17e6:  je     ffffffff82f21bb9 <hyperv_init+0x469>
-[...]  <many insns>
-1bb9:  mov    $0x1,%esi
-1bbe:  xor    %edi,%edi
-1bc0:  callq  ffffffff8102f680 <hv_ghcb_terminate>
-1bc5:  nopw   %cs:0x0(%rax,%rax,1) # end of function
-
-Reported-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/r/9698eff1-9680-4f0a-94de-590eaa923e94@app.fastmail.com/
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
----
-
-
-Hey folks, after getting the warning myself a quick search led me to Arnd's
-thorough report - investigating a bit, this seems to be the proper solution.
-
-Notice I didn't add the function to objtool's static list, seems this is
-unnecessary in this case - lemme know otherwise!
-Thanks in advance for reviews,
-
-
-Guilherme
-
-
- arch/x86/include/asm/mshyperv.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index 4c4c0ec3b62e..09c26e658bcc 100644
---- a/arch/x86/include/asm/mshyperv.h
-+++ b/arch/x86/include/asm/mshyperv.h
-@@ -212,7 +212,7 @@ int hv_set_mem_host_visibility(unsigned long addr, int numpages, bool visible);
- void hv_ghcb_msr_write(u64 msr, u64 value);
- void hv_ghcb_msr_read(u64 msr, u64 *value);
- bool hv_ghcb_negotiate_protocol(void);
--void hv_ghcb_terminate(unsigned int set, unsigned int reason);
-+void __noreturn hv_ghcb_terminate(unsigned int set, unsigned int reason);
- #else
- static inline void hv_ghcb_msr_write(u64 msr, u64 value) {}
- static inline void hv_ghcb_msr_read(u64 msr, u64 *value) {}
--- 
-2.39.2
-
+K=C3=B6ry
