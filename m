@@ -2,208 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CEB6B5150
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2886F6B5152
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbjCJUBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 15:01:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
+        id S230035AbjCJUBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 15:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbjCJUBP (ORCPT
+        with ESMTP id S231192AbjCJUBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 15:01:15 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BACE125DBE;
-        Fri, 10 Mar 2023 12:01:05 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A0F0BAD7;
-        Fri, 10 Mar 2023 12:01:48 -0800 (PST)
-Received: from [10.57.90.67] (unknown [10.57.90.67])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3764D3F71A;
-        Fri, 10 Mar 2023 12:00:59 -0800 (PST)
-Message-ID: <30923327-6c08-f0c1-1b52-c1d818f3a3a2@arm.com>
-Date:   Fri, 10 Mar 2023 20:00:52 +0000
+        Fri, 10 Mar 2023 15:01:40 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66100126F07
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:01:15 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id o199so4602828ybc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:01:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678478474;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N0d1xsr+DN56cc9eqodWxWKDt8Iv1tRk/OI0c43Ndtg=;
+        b=LAaS3pGI1Osaw4DtM3xeC30oH8sKranbYZeTuX8Vzg49M1/mogrhIPfN2T0wDRdeeE
+         5xXqWispLmk8ataNHf89gxmqI1sRX90bKlCMDkQ2rQuuRZZVIjkRXT7wuexDjrnlzxOp
+         SL5Ml0goazrs5/ZxLvoGhlAzOQKWoNmxzP6wCtgJE/SJWvkluD2j+q5vKMNd6Ds4/8kV
+         lHg/ZptYboP8N1F6NUu1GyUuTFBQlZq+edJNQNiutMdBmaSTndrAgaqshELwMh/yT/Ym
+         4XY4QVmbeXeGdC96syMjBHY+EN1FojDTRGonTCLATsANiI3gsl5/7t4egfdmjQb+kfA5
+         yWVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678478474;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N0d1xsr+DN56cc9eqodWxWKDt8Iv1tRk/OI0c43Ndtg=;
+        b=3+1xeguXi825+VpNc+mt/tEMvvWc6Dyec3QEO/6IFpVLXmH4Rn9ck2xa3PUaxxYG6i
+         JptNeaIir8lP5e0VX5Z/4uBbQvmZJY06mO2XneolzmCzNmzUdGOgQpu8KzECA+N8V1BB
+         YH1gppni+KOKdQrc8uAuAlHCX+eGeBA+CF5pDd7HGtP1swMZKssqecgQzqNKo+wDUz+v
+         f0Hp82LprS9r+XVXlsjWlgZvgpXP5EVz4auM3rf9GpMWGlhp3m4wTAzJESH0EJfmhe9I
+         Xxu5O1KFw1Z5OW3UHBzBUbh7AIdawyoM1ZfLyT6k98PdyKwo5MFNteTuD+ROv8FuMBJd
+         j4+g==
+X-Gm-Message-State: AO0yUKWL60AxPhDXbY3Zb12Bu6t4hV78obqpRDi50jmOUDWXQXDwYsOm
+        ZSya5zteWztU5/ZV5SnGpyRF1T9ThU1csJv1Rzsg4Php0Py7QBqAERo=
+X-Google-Smtp-Source: AK7set8PzWChg34BeGJ/K5IA6aQA2R2lLiu+Zi+vILRV/LYxe7V78GhtoR7rdp12bBuHtALcNwqoV++zKjgV3CrYDl4=
+X-Received: by 2002:a05:6902:4c3:b0:a6a:3356:6561 with SMTP id
+ v3-20020a05690204c300b00a6a33566561mr13400434ybs.1.1678478473984; Fri, 10 Mar
+ 2023 12:01:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 2/7] iommu/sva: Move PASID helpers to sva code
-Content-Language: en-GB
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        X86 Kernel <x86@kernel.org>, bp@alien8.de,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
-        vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Cc:     Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>
-References: <20230309222159.487826-1-jacob.jun.pan@linux.intel.com>
- <20230309222159.487826-4-jacob.jun.pan@linux.intel.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20230309222159.487826-4-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230310184201.1302232-1-ajye_huang@compal.corp-partner.google.com>
+ <0456bd4e-cfee-b863-e02d-98084b5da0f6@linux.intel.com>
+In-Reply-To: <0456bd4e-cfee-b863-e02d-98084b5da0f6@linux.intel.com>
+From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Date:   Sat, 11 Mar 2023 04:01:03 +0800
+Message-ID: <CALprXBamM-M-YdyfX9dQHp_AQAovcqzL5H4rMPsZPXS426+VgA@mail.gmail.com>
+Subject: Re: [PATCH v1] ASoC: Intel: sof_rt5682: Enable Bluetooth offload on adl_rt1019_rt5682
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>,
+        Yong Zhi <yong.zhi@intel.com>, dharageswari.r@intel.com,
+        Vamshi Krishna <vamshi.krishna.gopal@intel.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        alsa-devel@alsa-project.org, Mac Chiang <mac.chiang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-09 22:21, Jacob Pan wrote:
-> Preparing to remove IOASID infrastructure, PASID management will be
-> under SVA code. Decouple mm code from IOASID. Use iommu-help.h instead
-> of iommu.h to prevent circular inclusion.
-> 
-> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> ---
-> v5:
-> 	- move definition of helpers to iommu code to be consistent with
-> 	  declarations. (Kevin)
-> 	- fix patch partitioning bug (Baolu)
-> v4:
-> 	- delete and open code mm_set_pasid
-> 	- keep mm_init_pasid() as inline for fork performance
-> ---
->   drivers/iommu/iommu-sva.c    | 10 +++++++++-
->   include/linux/ioasid.h       |  2 +-
->   include/linux/iommu-helper.h | 12 ++++++++++++
+On Sat, Mar 11, 2023 at 2:48=E2=80=AFAM Pierre-Louis Bossart
+<pierre-louis.bossart@linux.intel.com> wrote:
+>
+> This sounds good, but if the intent is to have BT offload enabled across
+> all ADL skews there are still misses, e.g.
+>
+> .name =3D "adl_mx98357_rt5682",
+>
+> Can we please try to add this BT offload in a more consistent manner, or
+> add a comment when this is officially not planned/supported?
 
-Eww, can we not? iommu-helper is very much just parts of a specific type 
-of bitmap-based IOVA allocator used by some crusty old arch-specific 
-IOMMU code and SWIOTLB. It is unrelated to the iommu.h IOMMU API, and 
-dragging that stuff into modern SVA-related matters seems bizarrely 
-inappropriate. Could we just move the mm_pasid stuff into ioasid.h here, 
-then maybe rename it to iommu-sva.h at the end if eradicating the old 
-name really matters?
+Hi Pierre,
 
-Thanks,
-Robin.
+The "sof-adl-rt1019-rt5682.tplg" for this "adl_rt1019_rt5682" sound
+card also need to enable bt_offload, this one I will submit to SOF
+later this weekend.
+ex, topology: sof-adl-rt1019-rt5682: add bluetooth offload uses SSP2
+link -- https://github.com/ajye-huang/sof/commit/09dcbc3cc1617df652944299c6=
+3082f1936dea6e
 
->   include/linux/sched/mm.h     | 27 +--------------------------
->   4 files changed, 23 insertions(+), 28 deletions(-)
-> 
-> diff --git a/drivers/iommu/iommu-sva.c b/drivers/iommu/iommu-sva.c
-> index 24bf9b2b58aa..fcfdc80a3939 100644
-> --- a/drivers/iommu/iommu-sva.c
-> +++ b/drivers/iommu/iommu-sva.c
-> @@ -44,7 +44,7 @@ int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max)
->   	if (!pasid_valid(pasid))
->   		ret = -ENOMEM;
->   	else
-> -		mm_pasid_set(mm, pasid);
-> +		mm->pasid = pasid;
->   out:
->   	mutex_unlock(&iommu_sva_lock);
->   	return ret;
-> @@ -238,3 +238,11 @@ iommu_sva_handle_iopf(struct iommu_fault *fault, void *data)
->   
->   	return status;
->   }
-> +
-> +void mm_pasid_drop(struct mm_struct *mm)
-> +{
-> +	if (pasid_valid(mm->pasid)) {
-> +		ioasid_free(mm->pasid);
-> +		mm->pasid = INVALID_IOASID;
-> +	}
-> +}
-> diff --git a/include/linux/ioasid.h b/include/linux/ioasid.h
-> index af1c9d62e642..2c502e77ee78 100644
-> --- a/include/linux/ioasid.h
-> +++ b/include/linux/ioasid.h
-> @@ -4,8 +4,8 @@
->   
->   #include <linux/types.h>
->   #include <linux/errno.h>
-> +#include <linux/iommu-helper.h>
->   
-> -#define INVALID_IOASID ((ioasid_t)-1)
->   typedef unsigned int ioasid_t;
->   typedef ioasid_t (*ioasid_alloc_fn_t)(ioasid_t min, ioasid_t max, void *data);
->   typedef void (*ioasid_free_fn_t)(ioasid_t ioasid, void *data);
-> diff --git a/include/linux/iommu-helper.h b/include/linux/iommu-helper.h
-> index 74be34f3a20a..be1451a05a15 100644
-> --- a/include/linux/iommu-helper.h
-> +++ b/include/linux/iommu-helper.h
-> @@ -6,6 +6,7 @@
->   #include <linux/log2.h>
->   #include <linux/math.h>
->   #include <linux/types.h>
-> +#include <linux/mm_types.h>
->   
->   static inline unsigned long iommu_device_max_index(unsigned long size,
->   						   unsigned long offset,
-> @@ -41,4 +42,15 @@ static inline unsigned long iommu_num_pages(unsigned long addr,
->   	return DIV_ROUND_UP(size, io_page_size);
->   }
->   
-> +#define INVALID_IOASID	(-1U)
-> +#ifdef CONFIG_IOMMU_SVA
-> +static inline void mm_pasid_init(struct mm_struct *mm)
-> +{
-> +	mm->pasid = INVALID_IOASID;
-> +}
-> +void mm_pasid_drop(struct mm_struct *mm);
-> +#else
-> +static inline void mm_pasid_init(struct mm_struct *mm) {}
-> +static inline void mm_pasid_drop(struct mm_struct *mm) {}
-> +#endif
->   #endif
-> diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-> index 2a243616f222..f341a7a855e8 100644
-> --- a/include/linux/sched/mm.h
-> +++ b/include/linux/sched/mm.h
-> @@ -8,7 +8,7 @@
->   #include <linux/mm_types.h>
->   #include <linux/gfp.h>
->   #include <linux/sync_core.h>
-> -#include <linux/ioasid.h>
-> +#include <linux/iommu-helper.h>
->   
->   /*
->    * Routines for handling mm_structs
-> @@ -451,29 +451,4 @@ static inline void membarrier_update_current_mm(struct mm_struct *next_mm)
->   }
->   #endif
->   
-> -#ifdef CONFIG_IOMMU_SVA
-> -static inline void mm_pasid_init(struct mm_struct *mm)
-> -{
-> -	mm->pasid = INVALID_IOASID;
-> -}
-> -
-> -/* Associate a PASID with an mm_struct: */
-> -static inline void mm_pasid_set(struct mm_struct *mm, u32 pasid)
-> -{
-> -	mm->pasid = pasid;
-> -}
-> -
-> -static inline void mm_pasid_drop(struct mm_struct *mm)
-> -{
-> -	if (pasid_valid(mm->pasid)) {
-> -		ioasid_free(mm->pasid);
-> -		mm->pasid = INVALID_IOASID;
-> -	}
-> -}
-> -#else
-> -static inline void mm_pasid_init(struct mm_struct *mm) {}
-> -static inline void mm_pasid_set(struct mm_struct *mm, u32 pasid) {}
-> -static inline void mm_pasid_drop(struct mm_struct *mm) {}
-> -#endif
-> -
->   #endif /* _LINUX_SCHED_MM_H */
+To be more clear, I think we can add a comment in the commit message
+for mention " The related "sof-adl-rt1019-rt5682.tplg" enabled the
+bt_offload feature", is it ok?
