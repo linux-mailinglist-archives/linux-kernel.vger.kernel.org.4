@@ -2,109 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04EB26B558D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:23:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A376B5590
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbjCJXXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 18:23:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
+        id S231922AbjCJXXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 18:23:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbjCJXXI (ORCPT
+        with ESMTP id S231917AbjCJXX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 18:23:08 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E1F10D313;
-        Fri, 10 Mar 2023 15:22:41 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id bk32so5463698oib.10;
-        Fri, 10 Mar 2023 15:22:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678490561;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=QfYglAGkfr3BRMsJPjHGCJtCvEB+ftexBj7lDKr1RwA=;
-        b=ezQWBvAjvehY8i9RWJU0KcevbaRrDnvcK5PJD2l6tDRUEb4BK+qI+upa3y2Rxy6eqS
-         yWxoWtJiWxGrAG+1v1W343hQ+2tUjwsLQUxMJ4ePL3AKC4m+1Lr7bX93SFDZGc9SYU8M
-         0Co39AqtSSTDc8LVnYC2A8XCb3aHj01AuulZNoW1HpQcJ5wG47LfNWft1K7zeWUxcoi5
-         vUoBLjcvC5pzUapiD6I+4ZLFmL8twRQFH7kmEDCS3R9NyePFjGNeBiLBmkh54mnKmMw/
-         3yPB07cVkg+rdxSZX7iqy6nY1Iylv4t8C4QVN30XokiTe/8ezrESpVbj0u6WcpFjR+tG
-         ZZeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678490561;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QfYglAGkfr3BRMsJPjHGCJtCvEB+ftexBj7lDKr1RwA=;
-        b=kpfM1+Q5+jpao4KAhXzxjttwQQoaZ19B37+X9QfGurQSSXX/kdw6XmV5JS9bNhz5dT
-         HqOcD6Sn9VyaObZljwQx2mNCfyMkAZH89kyUyLA5UQFPx3GfJxD682rMOdbqPU4zkz83
-         Q5ilK5bbiQuJV+NtXjAZSbNq48uNzsuRzHpb9AlMPG9XMw5zaOy+lNrPXqgZI7EImo1T
-         NBnn1IzeykFl/hATdxJiJkITpS/eMd2BaLKU8VAfhV2yBPFdqAMY6Oj6blLOq1hjVRW8
-         bc9BWFs5S5CyMcNuAwhZz9zf6ZlrEnjgwphDSrxprG4EJHWFc1ON0KTMLGAPjO9lRI8m
-         3Ppg==
-X-Gm-Message-State: AO0yUKUcc+js9ou71JaIi+GyUPA5kJqtsUx34x4hMQTqplaTatZY+qVR
-        q3FUgfL0RUSDtyHfFVCdgyk=
-X-Google-Smtp-Source: AK7set8nQsbGVqni05QAgQNbWWBHtQ9FL/McmnoCZjVMmIWVqZvcsjQSqlkRjdNG5vzNdPezaAyY6A==
-X-Received: by 2002:aca:1c02:0:b0:383:c945:703 with SMTP id c2-20020aca1c02000000b00383c9450703mr11756257oic.34.1678490560900;
-        Fri, 10 Mar 2023 15:22:40 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w9-20020a056830078900b0068bbf5f2e49sm592169ots.37.2023.03.10.15.22.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 15:22:40 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f225f9a0-77a6-8238-ea68-79eda1846ebc@roeck-us.net>
-Date:   Fri, 10 Mar 2023 15:22:39 -0800
+        Fri, 10 Mar 2023 18:23:28 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1369223109;
+        Fri, 10 Mar 2023 15:23:10 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id DABC6604EF;
+        Sat, 11 Mar 2023 00:23:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678490587; bh=thvE290k7D9fKCuXiWV3PdNOaCPUOdzAVZV5qp0MFaI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XelauMt9V0BR30I2DeSWVdLMp3fjRRprGISVaGa/2PpBAPkZsgXlA6nCnXDCh8G/5
+         FVLcrk+9BvrqrNoaP6Jsyngk6CpZZK8iIkfWk88hZogbtXF1IFJHVg6h8kL2KDlT/X
+         +BycPFoh5srfm5q0FooCnC/aMTFE/IMqW3C74Them1WbA5Wj7sBB6rCUpzo7/bHrA5
+         cDtcxBRKzm6KzeEzKxtS4u0yvm7LUrzAPj4lD8gL6hj5r1XUNFOZpIMaKdPAMWL8AK
+         sD/7pJTUCJp1UJx7iCtqga3v4ZwfkoXbHwN0rKB2kpJsV6mb5zBDf5CUb6QSPbuLsa
+         X3ne6+cswserA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id lJ1aZtSHt-_N; Sat, 11 Mar 2023 00:23:05 +0100 (CET)
+Received: from [192.168.1.4] (unknown [77.237.109.125])
+        by domac.alu.hr (Postfix) with ESMTPSA id D9E26604ED;
+        Sat, 11 Mar 2023 00:23:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678490585; bh=thvE290k7D9fKCuXiWV3PdNOaCPUOdzAVZV5qp0MFaI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=zj0O/soo4ROwwe0iFHEL956mOPrscivw9/KyXdlEYay/TmHSKxNcC+N00BcIjgCAZ
+         Kea6VF2TXL84G1OEwbZC7+XmzAYGUqWq5L50VQLNTbuA3yo+VUfi69k2tOzOyKBhVu
+         9ONlAxf43LkYTipcm+hpCeCIIGc7rI1HjqOaORnfdfndP8ragw5opbWFSFqfn2glxq
+         B8bkq2abg0sis5n5FGp6QDXfeJ0qsdfJ9+btSBVR9HShvwksoF66FOnm2tdhU74GhM
+         DknS9KHOLDOx2AhUnWx3+ayIkZWXe88Zk8JOWLgcGidmXrvk7BQJlAGkuZ6jW2NDqr
+         lE0ttaSAeUp/g==
+Message-ID: <d20c7249-d407-1ddf-7903-ff1037d69656@alu.unizg.hr>
+Date:   Sat, 11 Mar 2023 00:23:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] usb: typec: hd3ss3220: Drop of_match_ptr for ID table
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+Subject: Re: [PATCH v1 1/2] Add release hook to LSM
+Content-Language: en-US, hr
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230310222937.315773-1-krzysztof.kozlowski@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230310222937.315773-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Paul Moore <paul@paul-moore.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        Frederick Lawler <fred@cloudflare.com>
+References: <20230310194159.GB528@domac.alu.hr>
+ <ZAuJY1MM3hEiT0ri@smile.fi.intel.com>
+ <47129238-d98e-0561-0921-adfe40b6b85f@alu.unizg.hr>
+ <ZAuPNm3UdC/c1EXm@smile.fi.intel.com>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ZAuPNm3UdC/c1EXm@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/23 14:29, Krzysztof Kozlowski wrote:
-> The driver can match only via the DT table so the table should be always
-> used and the of_match_ptr does not have any sense (this also allows ACPI
-> matching via PRP0001, even though it is not relevant here).
+On 10. 03. 2023. 21:12, Andy Shevchenko wrote:
+> On Fri, Mar 10, 2023 at 08:52:32PM +0100, Mirsad Goran Todorovac wrote:
+>> On 10. 03. 2023. 20:47, Andy Shevchenko wrote:
+>>> On Fri, Mar 10, 2023 at 08:42:00PM +0100, Mirsad Goran Todorovac wrote:
+>>>>
+>>>> Add release() hook to the definition of the LSM modules, to enable calling
+>>>> destructors and deallocating allocated resources cleanly.
+>>>>
+>>>> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+>>>
+>>>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>>>
+>>> I haven't given you this tag. Sorry, you must not add something
+>>> which was not explicitly given.
+>>
+>> Mea culpa.
+>>
+>> I misunderstood that you have approved the change when saying that I should
+>> file a formal patch. It worked with Florian Westphal in my first patch, so I
+>> thought it would be inappropriate to leave out who endorsed the patch.
 > 
->    drivers/usb/typec/hd3ss3220.c:284:34: error: ‘dev_ids’ defined but not used [-Werror=unused-const-variable=]
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> We have Suggested-by tag for that.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Done exactly that, and now I have to reward myself for the first
+successful multi-part patch submission.
 
-> ---
->   drivers/usb/typec/hd3ss3220.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>> Thousand apologies. This is my second patch, so I am asking for some extra
+>> grace ...
 > 
-> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-> index 746ef3a75b76..8bbeb9b1e439 100644
-> --- a/drivers/usb/typec/hd3ss3220.c
-> +++ b/drivers/usb/typec/hd3ss3220.c
-> @@ -290,7 +290,7 @@ MODULE_DEVICE_TABLE(of, dev_ids);
->   static struct i2c_driver hd3ss3220_driver = {
->   	.driver = {
->   		.name = "hd3ss3220",
-> -		.of_match_table = of_match_ptr(dev_ids),
-> +		.of_match_table = dev_ids,
->   	},
->   	.probe_new = hd3ss3220_probe,
->   	.remove =  hd3ss3220_remove,
+>> What should I do now?
+> 
+> Wait at least a couple of days (even more, since it's weekend) for other
+> comments and then send a v2 of the series with the comments addressed.
+
+Actually, Mr. Paul Moore requested the rest of the patch, so I
+did a complete resend immediately.
+
+> Btw, you may take my "smart" script [1] for sending patch series. It
+> makes much less headache on how to do that properly.
+> 
+> [1]: https://github.com/andy-shev/home-bin-tools/blob/master/ge2maintainer.sh
+
+Thanks for the tip.
+
+It's pleasure to be working with you guys, it's a great brainstorming
+session and I really enjoyed it. It's a privilege to assist your
+excellent team.
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+ 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
 
