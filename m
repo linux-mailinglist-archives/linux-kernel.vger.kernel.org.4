@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987D36B4771
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1656B4768
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbjCJOua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:50:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
+        id S233340AbjCJOtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:49:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233227AbjCJOtL (ORCPT
+        with ESMTP id S232910AbjCJOsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:49:11 -0500
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088D71241C8;
-        Fri, 10 Mar 2023 06:47:44 -0800 (PST)
-Received: by mail-ot1-f46.google.com with SMTP id e9-20020a056830200900b00694651d19f6so3018291otp.12;
-        Fri, 10 Mar 2023 06:47:44 -0800 (PST)
+        Fri, 10 Mar 2023 09:48:20 -0500
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F2A10A12D;
+        Fri, 10 Mar 2023 06:47:33 -0800 (PST)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-176d1a112bfso6058966fac.5;
+        Fri, 10 Mar 2023 06:47:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459663;
+        d=1e100.net; s=20210112; t=1678459653;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IV8iy1W+HzbM7y1sc4cc2CVnizJ5BO/3Cf1trLEFKYw=;
-        b=HUggcPDvnndBgOC2PHR7gxqRevwSVmFEquvZevOMBDTy/jnQ/wDqSKEQqF3NW3TEv/
-         o+ucbkrMIipWjfWsTOr7Ia5B9qoNq0V09v6kaS3L8WiJ9J1ud5VK8JdrIIb5UCQ9XV/1
-         5ozTflou0WTL36uXXlC8Q7ZqQHsUvS4GnHR7vJ4U2pGXfMkFDqLX0tmEz48tO7qvUaeI
-         6omGfN/awsaLlSUJuTLHRyLAm646+dpFyKmYb0rIpqcJe476fq6NkHZEXd7D8gSYMpPg
-         WXbzCgI3g0O4X1bXqVIdEXUpkjW4S9mJy+jBTZAKSFdcK1KDlEWx3qdcMZh5VXrTk9pL
-         QN/w==
-X-Gm-Message-State: AO0yUKWHKbf8Fv5VPr/nGx1icP61kUP9ToQUseRvbRvbspgitti75zuy
-        CTeB8NqVpuji0PDjpqR35w==
-X-Google-Smtp-Source: AK7set/E91M/DeQ2a1JpWl0X0cQUJeecXU0OnwwVJTHI7R2Y9BdaX8OyAkHZpawpFKpiIsbABzXv0A==
-X-Received: by 2002:a05:6830:44a2:b0:690:e454:fc1e with SMTP id r34-20020a05683044a200b00690e454fc1emr15757037otv.7.1678459663313;
-        Fri, 10 Mar 2023 06:47:43 -0800 (PST)
+        bh=f2lTtjWUMnJBmccOD7sA1r/lC9FUen1jFS0i++9lx7Q=;
+        b=UkIKxn4M53jXCHs42yJQx2FU1sA+NF1K9WoA9fbF2wYFsXubnlNZzWUoumlDGIOw7R
+         ahhr2zXE+KuCxAoOxN2+GIwbSdcoWwO8Uhldk4hERbAlv+HoxQKgwK9Ca18uTJ2ZOZjJ
+         iNGcCV9+tgQGlNT2vrRZwi0dxKPy0SdyB5iFbystR7eJBU9QAyQYErHCBqL3jQLDUEZb
+         xoXS595knYz2UqkDoaQ5AitqixLE24e02IDJzJ4lbRM0KCRmvfWP5LqD8E9MJd5g5XmS
+         70a4VvDoOrVLPIhdf/XsS4fMDRN/LiN6UrZ1pRQ6SpDQSe/RFWMYnTSrdthfnafvadjt
+         XJAQ==
+X-Gm-Message-State: AO0yUKWB8zqkaLUthpaLDO/0vuOvwZnNN0eY4fz5/VkLawlr+AdrQ3fk
+        XtuWkaH3tniPVHIeLkdUCQ==
+X-Google-Smtp-Source: AK7set8QdGWW9Ap+0QPRi0nLe9hGsHW1DfpJIT8al6u/OSLp22lw3dj34v105XOmPR2CdhO8nZ8RnA==
+X-Received: by 2002:a05:6870:819d:b0:172:21e9:21c7 with SMTP id k29-20020a056870819d00b0017221e921c7mr16014357oae.40.1678459652873;
+        Fri, 10 Mar 2023 06:47:32 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 64-20020a9d06c6000000b006864816ecd9sm106511otx.59.2023.03.10.06.47.42
+        by smtp.gmail.com with ESMTPSA id z13-20020a056870e14d00b00172721f6cd5sm114767oaa.16.2023.03.10.06.47.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:47:42 -0800 (PST)
-Received: (nullmailer pid 1542708 invoked by uid 1000);
+        Fri, 10 Mar 2023 06:47:32 -0800 (PST)
+Received: (nullmailer pid 1542798 invoked by uid 1000);
         Fri, 10 Mar 2023 14:47:08 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
 Cc:     devicetree@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Input: zinitix: Use of_property_present() for testing DT property presence
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH] Input: Use of_property_read_bool() for boolean properties
 Date:   Fri, 10 Mar 2023 08:47:08 -0600
-Message-Id: <20230310144708.1542682-1-robh@kernel.org>
+Message-Id: <20230310144708.1542751-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,29 +65,80 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 It is preferred to use typed property access functions (i.e.
 of_property_read_<type> functions) rather than low-level
-of_get_property/of_find_property functions for reading properties. As
-part of this, convert of_get_property/of_find_property calls to the
-recently added of_property_present() helper when we just want to test
-for presence of a property and nothing more.
+of_get_property/of_find_property functions for reading properties.
+Convert reading boolean properties to to of_property_read_bool().
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/input/touchscreen/zinitix.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/input/keyboard/matrix_keypad.c  | 6 ++----
+ drivers/input/keyboard/omap4-keypad.c   | 3 +--
+ drivers/input/keyboard/samsung-keypad.c | 3 +--
+ drivers/input/keyboard/tegra-kbc.c      | 3 +--
+ 4 files changed, 5 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/input/touchscreen/zinitix.c b/drivers/input/touchscreen/zinitix.c
-index cdf9bcd744db..b6ece47151b8 100644
---- a/drivers/input/touchscreen/zinitix.c
-+++ b/drivers/input/touchscreen/zinitix.c
-@@ -260,7 +260,7 @@ static int zinitix_init_regulators(struct bt541_ts_data *bt541)
- 	 * so check if "vddo" is present and in that case use these names.
- 	 * Else use the proper supply names on the component.
- 	 */
--	if (of_find_property(dev->of_node, "vddo-supply", NULL)) {
-+	if (of_property_present(dev->of_node, "vddo-supply")) {
- 		bt541->supplies[0].supply = "vdd";
- 		bt541->supplies[1].supply = "vddo";
- 	} else {
+diff --git a/drivers/input/keyboard/matrix_keypad.c b/drivers/input/keyboard/matrix_keypad.c
+index 203310727d88..a1b037891af2 100644
+--- a/drivers/input/keyboard/matrix_keypad.c
++++ b/drivers/input/keyboard/matrix_keypad.c
+@@ -425,14 +425,12 @@ matrix_keypad_parse_dt(struct device *dev)
+ 		return ERR_PTR(-EINVAL);
+ 	}
+ 
+-	if (of_get_property(np, "linux,no-autorepeat", NULL))
+-		pdata->no_autorepeat = true;
++	pdata->no_autorepeat = of_property_read_bool(np, "linux,no-autorepeat");
+ 
+ 	pdata->wakeup = of_property_read_bool(np, "wakeup-source") ||
+ 			of_property_read_bool(np, "linux,wakeup"); /* legacy */
+ 
+-	if (of_get_property(np, "gpio-activelow", NULL))
+-		pdata->active_low = true;
++	pdata->active_low = of_property_read_bool(np, "gpio-activelow");
+ 
+ 	pdata->drive_inactive_cols =
+ 		of_property_read_bool(np, "drive-inactive-cols");
+diff --git a/drivers/input/keyboard/omap4-keypad.c b/drivers/input/keyboard/omap4-keypad.c
+index 4426120398b0..9f085d5679db 100644
+--- a/drivers/input/keyboard/omap4-keypad.c
++++ b/drivers/input/keyboard/omap4-keypad.c
+@@ -274,8 +274,7 @@ static int omap4_keypad_parse_dt(struct device *dev,
+ 	if (err)
+ 		return err;
+ 
+-	if (of_get_property(np, "linux,input-no-autorepeat", NULL))
+-		keypad_data->no_autorepeat = true;
++	keypad_data->no_autorepeat = of_property_read_bool(np, "linux,input-no-autorepeat");
+ 
+ 	return 0;
+ }
+diff --git a/drivers/input/keyboard/samsung-keypad.c b/drivers/input/keyboard/samsung-keypad.c
+index 09e883ea1352..d85dd2489293 100644
+--- a/drivers/input/keyboard/samsung-keypad.c
++++ b/drivers/input/keyboard/samsung-keypad.c
+@@ -291,8 +291,7 @@ samsung_keypad_parse_dt(struct device *dev)
+ 		*keymap++ = KEY(row, col, key_code);
+ 	}
+ 
+-	if (of_get_property(np, "linux,input-no-autorepeat", NULL))
+-		pdata->no_autorepeat = true;
++	pdata->no_autorepeat = of_property_read_bool(np, "linux,input-no-autorepeat");
+ 
+ 	pdata->wakeup = of_property_read_bool(np, "wakeup-source") ||
+ 			/* legacy name */
+diff --git a/drivers/input/keyboard/tegra-kbc.c b/drivers/input/keyboard/tegra-kbc.c
+index da4019cf0c83..d5a6c7d8eb25 100644
+--- a/drivers/input/keyboard/tegra-kbc.c
++++ b/drivers/input/keyboard/tegra-kbc.c
+@@ -504,8 +504,7 @@ static int tegra_kbc_parse_dt(struct tegra_kbc *kbc)
+ 	if (!of_property_read_u32(np, "nvidia,repeat-delay-ms", &prop))
+ 		kbc->repeat_cnt = prop;
+ 
+-	if (of_find_property(np, "nvidia,needs-ghost-filter", NULL))
+-		kbc->use_ghost_filter = true;
++	kbc->use_ghost_filter = of_property_present(np, "nvidia,needs-ghost-filter");
+ 
+ 	if (of_property_read_bool(np, "wakeup-source") ||
+ 	    of_property_read_bool(np, "nvidia,wakeup-source")) /* legacy */
 -- 
 2.39.2
 
