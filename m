@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4606B5202
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 138FD6B5201
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbjCJUeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 15:34:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        id S231582AbjCJUeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 15:34:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231510AbjCJUeB (ORCPT
+        with ESMTP id S230391AbjCJUdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 15:34:01 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0DB193DC
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:33:16 -0800 (PST)
+        Fri, 10 Mar 2023 15:33:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD4718B17
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:33:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 02067CE2AE5
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1FCCCB82403
         for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 20:31:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED33AC433A4;
-        Fri, 10 Mar 2023 20:31:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8015EC433A1;
+        Fri, 10 Mar 2023 20:31:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1678480310;
-        bh=CBHxIGuSYu6bJMUaDANXQBrNAVJXopMpEyLRVtQvHW8=;
+        bh=qMXFE2QpBff7KMyqc4AG0xYnUKng/KHjtSGW+0DAOko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sZZW+prDIBIphH77NQg7znMT6xO5n8NcyL301B8iRCfMSHxgDQLBzPrTIPiysU9fJ
-         nPoQJYHSg/1tJvVZDThgzkyj2+NExjlNBs3ynkvPBLJ11VYGq8RBrCy9CXS+F34qES
-         2xe8is378eqqLV3cw5orfQwAQH/29Xw5GdVtY0dIUpbq8gmlNCLWtE4Ms2uDMWLL6X
-         gP6XJ64yfwD+/BZ4PGe/i2+1IHaqCB8G7vPXGLCssJ3AtmkG8h1aSbGZPEfGJ+LGDh
-         FW6DRm/l0CajzEGLcLwN75HZwDWa+EdTm1+dGRQNaNYWpxHjbOSgNnSYGkWKYLuRsZ
-         49hXhqt6gJwxg==
+        b=el9XcffuQmHP/XhWiD/xUbgnILI7z87CcpYivmuxImz8T7YvyOudi2Vzs8v6sFbhR
+         TOKWrYIrPTJ5IqqJBRuz5kjegdEPi/x1+H0jb2nWOQGNlscJjOgl8n0x8i1uDb5mu/
+         mfdUtre92689YIba0xgNu6oeM9Wr2rK3HJ2+67uqDpu6WO+iOUl9Hgn++c0TBELG5D
+         WI3ejyeXZOG0T1JlOUnfhfqcRzmwLSotHAuVG9Hfg6bHYrQgyd9rH1y63hoDDN7CNw
+         tEv3AbVdC2KXRy6tZiXxogdPSBBL8358VOTOJbsBUizpAui0iWuf8FFovxOtybXRnm
+         fushUaCoeA/kg==
 From:   Josh Poimboeuf <jpoimboe@kernel.org>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sean Christopherson <seanjc@google.com>
-Subject: [RFC][PATCH 4/5] static_call: Remove DEFINE_STATIC_CALL_RET0() and its uses
-Date:   Fri, 10 Mar 2023 12:31:16 -0800
-Message-Id: <82391676fd575d7123899d0dc44dcc07fe2ca2f7.1678474914.git.jpoimboe@kernel.org>
+Subject: [RFC][PATCH 5/5] x86/kvm: Simplify static call handling
+Date:   Fri, 10 Mar 2023 12:31:17 -0800
+Message-Id: <432e4844ba65840af4a24f5e3f561aead867f6e7.1678474914.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1678474914.git.jpoimboe@kernel.org>
 References: <cover.1678474914.git.jpoimboe@kernel.org>
@@ -61,162 +61,279 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DEFINE_STATIC_CALL_RET0() is now identical to DEFINE_STATIC_CALL_NULL().
-All static calls to NULL function pointers are actually calls to "do
-nothing return 0" functions.
-
-Replace all DEFINE_STATIC_CALL_RET0() usages and remove it.
+Static calls with a NULL function pointer are now "do nothing return 0"
+functions by default.  Simplify the KVM static call handling
+accordingly.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- arch/powerpc/kernel/irq.c   |  2 +-
- arch/x86/events/amd/core.c  |  2 +-
- arch/x86/events/core.c      |  2 +-
- include/linux/static_call.h |  7 -------
- kernel/events/core.c        |  8 ++++----
- kernel/sched/core.c         | 10 +++++-----
- 6 files changed, 12 insertions(+), 19 deletions(-)
+ arch/x86/include/asm/kvm-x86-ops.h     | 85 ++++++++++++--------------
+ arch/x86/include/asm/kvm-x86-pmu-ops.h | 16 ++---
+ arch/x86/include/asm/kvm_host.h        |  2 -
+ arch/x86/kvm/pmu.c                     |  7 +--
+ arch/x86/kvm/x86.c                     | 12 +---
+ 5 files changed, 48 insertions(+), 74 deletions(-)
 
-diff --git a/arch/powerpc/kernel/irq.c b/arch/powerpc/kernel/irq.c
-index c9535f2760b5..320e1a41abd6 100644
---- a/arch/powerpc/kernel/irq.c
-+++ b/arch/powerpc/kernel/irq.c
-@@ -220,7 +220,7 @@ static __always_inline void call_do_softirq(const void *sp)
- }
+diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+index 2f0bfd910637..ea18a8abf4a1 100644
+--- a/arch/x86/include/asm/kvm-x86-ops.h
++++ b/arch/x86/include/asm/kvm-x86-ops.h
+@@ -1,17 +1,12 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-#if !defined(KVM_X86_OP) || !defined(KVM_X86_OP_OPTIONAL)
++#if !defined(KVM_X86_OP)
+ BUILD_BUG_ON(1)
  #endif
  
--DEFINE_STATIC_CALL_RET0(ppc_get_irq, *ppc_md.get_irq);
-+DEFINE_STATIC_CALL_NULL(ppc_get_irq, *ppc_md.get_irq);
+ /*
+- * KVM_X86_OP() and KVM_X86_OP_OPTIONAL() are used to help generate
+- * both DECLARE/DEFINE_STATIC_CALL() invocations and
+- * "static_call_update()" calls.
+- *
+- * KVM_X86_OP_OPTIONAL() can be used for those functions that can have
+- * a NULL definition.  KVM_X86_OP_OPTIONAL_RET0() can be used likewise
+- * to make a definition optional, but in this case the default will
+- * be __static_call_return0.
++ * KVM_X86_OP() is used to help generate both DECLARE/DEFINE_STATIC_CALL()
++ * invocations and "static_call_update()" calls.  Note that NULL static calls
++ * default to "do-nothing return 0" functions.
+  */
+ KVM_X86_OP(check_processor_compatibility)
+ KVM_X86_OP(hardware_enable)
+@@ -20,8 +15,8 @@ KVM_X86_OP(hardware_unsetup)
+ KVM_X86_OP(has_emulated_msr)
+ KVM_X86_OP(vcpu_after_set_cpuid)
+ KVM_X86_OP(vm_init)
+-KVM_X86_OP_OPTIONAL(vm_destroy)
+-KVM_X86_OP_OPTIONAL_RET0(vcpu_precreate)
++KVM_X86_OP(vm_destroy)
++KVM_X86_OP(vcpu_precreate)
+ KVM_X86_OP(vcpu_create)
+ KVM_X86_OP(vcpu_free)
+ KVM_X86_OP(vcpu_reset)
+@@ -37,7 +32,7 @@ KVM_X86_OP(get_cpl)
+ KVM_X86_OP(set_segment)
+ KVM_X86_OP(get_cs_db_l_bits)
+ KVM_X86_OP(set_cr0)
+-KVM_X86_OP_OPTIONAL(post_set_cr3)
++KVM_X86_OP(post_set_cr3)
+ KVM_X86_OP(is_valid_cr4)
+ KVM_X86_OP(set_cr4)
+ KVM_X86_OP(set_efer)
+@@ -53,15 +48,15 @@ KVM_X86_OP(set_rflags)
+ KVM_X86_OP(get_if_flag)
+ KVM_X86_OP(flush_tlb_all)
+ KVM_X86_OP(flush_tlb_current)
+-KVM_X86_OP_OPTIONAL(tlb_remote_flush)
+-KVM_X86_OP_OPTIONAL(tlb_remote_flush_with_range)
++KVM_X86_OP(tlb_remote_flush)
++KVM_X86_OP(tlb_remote_flush_with_range)
+ KVM_X86_OP(flush_tlb_gva)
+ KVM_X86_OP(flush_tlb_guest)
+ KVM_X86_OP(vcpu_pre_run)
+ KVM_X86_OP(vcpu_run)
+ KVM_X86_OP(handle_exit)
+ KVM_X86_OP(skip_emulated_instruction)
+-KVM_X86_OP_OPTIONAL(update_emulated_instruction)
++KVM_X86_OP(update_emulated_instruction)
+ KVM_X86_OP(set_interrupt_shadow)
+ KVM_X86_OP(get_interrupt_shadow)
+ KVM_X86_OP(patch_hypercall)
+@@ -75,19 +70,19 @@ KVM_X86_OP(get_nmi_mask)
+ KVM_X86_OP(set_nmi_mask)
+ KVM_X86_OP(enable_nmi_window)
+ KVM_X86_OP(enable_irq_window)
+-KVM_X86_OP_OPTIONAL(update_cr8_intercept)
++KVM_X86_OP(update_cr8_intercept)
+ KVM_X86_OP(refresh_apicv_exec_ctrl)
+-KVM_X86_OP_OPTIONAL(hwapic_irr_update)
+-KVM_X86_OP_OPTIONAL(hwapic_isr_update)
+-KVM_X86_OP_OPTIONAL_RET0(guest_apic_has_interrupt)
+-KVM_X86_OP_OPTIONAL(load_eoi_exitmap)
+-KVM_X86_OP_OPTIONAL(set_virtual_apic_mode)
+-KVM_X86_OP_OPTIONAL(set_apic_access_page_addr)
++KVM_X86_OP(hwapic_irr_update)
++KVM_X86_OP(hwapic_isr_update)
++KVM_X86_OP(guest_apic_has_interrupt)
++KVM_X86_OP(load_eoi_exitmap)
++KVM_X86_OP(set_virtual_apic_mode)
++KVM_X86_OP(set_apic_access_page_addr)
+ KVM_X86_OP(deliver_interrupt)
+-KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
+-KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
+-KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
+-KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
++KVM_X86_OP(sync_pir_to_irr)
++KVM_X86_OP(set_tss_addr)
++KVM_X86_OP(set_identity_map_addr)
++KVM_X86_OP(get_mt_mask)
+ KVM_X86_OP(load_mmu_pgd)
+ KVM_X86_OP(has_wbinvd_exit)
+ KVM_X86_OP(get_l2_tsc_offset)
+@@ -99,15 +94,15 @@ KVM_X86_OP(check_intercept)
+ KVM_X86_OP(handle_exit_irqoff)
+ KVM_X86_OP(request_immediate_exit)
+ KVM_X86_OP(sched_in)
+-KVM_X86_OP_OPTIONAL(update_cpu_dirty_logging)
+-KVM_X86_OP_OPTIONAL(vcpu_blocking)
+-KVM_X86_OP_OPTIONAL(vcpu_unblocking)
+-KVM_X86_OP_OPTIONAL(pi_update_irte)
+-KVM_X86_OP_OPTIONAL(pi_start_assignment)
+-KVM_X86_OP_OPTIONAL(apicv_post_state_restore)
+-KVM_X86_OP_OPTIONAL_RET0(dy_apicv_has_pending_interrupt)
+-KVM_X86_OP_OPTIONAL(set_hv_timer)
+-KVM_X86_OP_OPTIONAL(cancel_hv_timer)
++KVM_X86_OP(update_cpu_dirty_logging)
++KVM_X86_OP(vcpu_blocking)
++KVM_X86_OP(vcpu_unblocking)
++KVM_X86_OP(pi_update_irte)
++KVM_X86_OP(pi_start_assignment)
++KVM_X86_OP(apicv_post_state_restore)
++KVM_X86_OP(dy_apicv_has_pending_interrupt)
++KVM_X86_OP(set_hv_timer)
++KVM_X86_OP(cancel_hv_timer)
+ KVM_X86_OP(setup_mce)
+ #ifdef CONFIG_KVM_SMM
+ KVM_X86_OP(smi_allowed)
+@@ -115,22 +110,20 @@ KVM_X86_OP(enter_smm)
+ KVM_X86_OP(leave_smm)
+ KVM_X86_OP(enable_smi_window)
+ #endif
+-KVM_X86_OP_OPTIONAL(mem_enc_ioctl)
+-KVM_X86_OP_OPTIONAL(mem_enc_register_region)
+-KVM_X86_OP_OPTIONAL(mem_enc_unregister_region)
+-KVM_X86_OP_OPTIONAL(vm_copy_enc_context_from)
+-KVM_X86_OP_OPTIONAL(vm_move_enc_context_from)
+-KVM_X86_OP_OPTIONAL(guest_memory_reclaimed)
++KVM_X86_OP(mem_enc_ioctl)
++KVM_X86_OP(mem_enc_register_region)
++KVM_X86_OP(mem_enc_unregister_region)
++KVM_X86_OP(vm_copy_enc_context_from)
++KVM_X86_OP(vm_move_enc_context_from)
++KVM_X86_OP(guest_memory_reclaimed)
+ KVM_X86_OP(get_msr_feature)
+ KVM_X86_OP(can_emulate_instruction)
+ KVM_X86_OP(apic_init_signal_blocked)
+-KVM_X86_OP_OPTIONAL(enable_l2_tlb_flush)
+-KVM_X86_OP_OPTIONAL(migrate_timers)
++KVM_X86_OP(enable_l2_tlb_flush)
++KVM_X86_OP(migrate_timers)
+ KVM_X86_OP(msr_filter_changed)
+ KVM_X86_OP(complete_emulated_msr)
+ KVM_X86_OP(vcpu_deliver_sipi_vector)
+-KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
++KVM_X86_OP(vcpu_get_apicv_inhibit_reasons);
  
- static void __do_irq(struct pt_regs *regs, unsigned long oldsp)
+ #undef KVM_X86_OP
+-#undef KVM_X86_OP_OPTIONAL
+-#undef KVM_X86_OP_OPTIONAL_RET0
+diff --git a/arch/x86/include/asm/kvm-x86-pmu-ops.h b/arch/x86/include/asm/kvm-x86-pmu-ops.h
+index 6815319c4ff3..b11885d1bcd4 100644
+--- a/arch/x86/include/asm/kvm-x86-pmu-ops.h
++++ b/arch/x86/include/asm/kvm-x86-pmu-ops.h
+@@ -1,15 +1,12 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-#if !defined(KVM_X86_PMU_OP) || !defined(KVM_X86_PMU_OP_OPTIONAL)
++#if !defined(KVM_X86_PMU_OP)
+ BUILD_BUG_ON(1)
+ #endif
+ 
+ /*
+- * KVM_X86_PMU_OP() and KVM_X86_PMU_OP_OPTIONAL() are used to help generate
+- * both DECLARE/DEFINE_STATIC_CALL() invocations and
+- * "static_call_update()" calls.
+- *
+- * KVM_X86_PMU_OP_OPTIONAL() can be used for those functions that can have
+- * a NULL definition.
++ * KVM_X86_PMU_OP() is used to help generate both DECLARE/DEFINE_STATIC_CALL()
++ * invocations and "static_call_update()" calls.  Note that NULL static calls
++ * default to "do-nothing return 0" functions.
+  */
+ KVM_X86_PMU_OP(hw_event_available)
+ KVM_X86_PMU_OP(pmc_is_enabled)
+@@ -23,8 +20,7 @@ KVM_X86_PMU_OP(set_msr)
+ KVM_X86_PMU_OP(refresh)
+ KVM_X86_PMU_OP(init)
+ KVM_X86_PMU_OP(reset)
+-KVM_X86_PMU_OP_OPTIONAL(deliver_pmi)
+-KVM_X86_PMU_OP_OPTIONAL(cleanup)
++KVM_X86_PMU_OP(deliver_pmi)
++KVM_X86_PMU_OP(cleanup)
+ 
+ #undef KVM_X86_PMU_OP
+-#undef KVM_X86_PMU_OP_OPTIONAL
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 1dfba499d3e5..612531e1c478 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1789,8 +1789,6 @@ extern struct kvm_x86_ops kvm_x86_ops;
+ 
+ #define KVM_X86_OP(func) \
+ 	DECLARE_STATIC_CALL(kvm_x86_##func, *(((struct kvm_x86_ops *)0)->func));
+-#define KVM_X86_OP_OPTIONAL KVM_X86_OP
+-#define KVM_X86_OP_OPTIONAL_RET0 KVM_X86_OP
+ #include <asm/kvm-x86-ops.h>
+ 
+ int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops);
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index 6accb46295a3..5f7f860c5f17 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -77,20 +77,15 @@ static struct kvm_pmu_ops kvm_pmu_ops __read_mostly;
+ #define KVM_X86_PMU_OP(func)					     \
+ 	DEFINE_STATIC_CALL_NULL(kvm_x86_pmu_##func,			     \
+ 				*(((struct kvm_pmu_ops *)0)->func));
+-#define KVM_X86_PMU_OP_OPTIONAL KVM_X86_PMU_OP
+ #include <asm/kvm-x86-pmu-ops.h>
+ 
+ void kvm_pmu_ops_update(const struct kvm_pmu_ops *pmu_ops)
  {
-diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-index 8c45b198b62f..3c545595bfeb 100644
---- a/arch/x86/events/amd/core.c
-+++ b/arch/x86/events/amd/core.c
-@@ -330,7 +330,7 @@ static inline bool amd_is_pair_event_code(struct hw_perf_event *hwc)
- 	}
+ 	memcpy(&kvm_pmu_ops, pmu_ops, sizeof(kvm_pmu_ops));
+ 
+-#define __KVM_X86_PMU_OP(func) \
+-	static_call_update(kvm_x86_pmu_##func, kvm_pmu_ops.func);
+ #define KVM_X86_PMU_OP(func) \
+-	WARN_ON(!kvm_pmu_ops.func); __KVM_X86_PMU_OP(func)
+-#define KVM_X86_PMU_OP_OPTIONAL __KVM_X86_PMU_OP
++	static_call_update(kvm_x86_pmu_##func, kvm_pmu_ops.func);
+ #include <asm/kvm-x86-pmu-ops.h>
+-#undef __KVM_X86_PMU_OP
  }
  
--DEFINE_STATIC_CALL_RET0(amd_pmu_branch_hw_config, *x86_pmu.hw_config);
-+DEFINE_STATIC_CALL_NULL(amd_pmu_branch_hw_config, *x86_pmu.hw_config);
+ static inline bool pmc_is_enabled(struct kvm_pmc *pmc)
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index fcf845fc5770..a9521e5b2435 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -135,9 +135,8 @@ struct kvm_x86_ops kvm_x86_ops __read_mostly;
+ #define KVM_X86_OP(func)					     \
+ 	DEFINE_STATIC_CALL_NULL(kvm_x86_##func,			     \
+ 				*(((struct kvm_x86_ops *)0)->func));
+-#define KVM_X86_OP_OPTIONAL KVM_X86_OP
+-#define KVM_X86_OP_OPTIONAL_RET0 KVM_X86_OP
+ #include <asm/kvm-x86-ops.h>
++
+ EXPORT_STATIC_CALL_GPL(kvm_x86_get_cs_db_l_bits);
+ EXPORT_STATIC_CALL_GPL(kvm_x86_cache_reg);
  
- static int amd_core_hw_config(struct perf_event *event)
+@@ -9316,16 +9315,9 @@ static inline void kvm_ops_update(struct kvm_x86_init_ops *ops)
  {
-diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index c94537501091..3f662c16aa08 100644
---- a/arch/x86/events/core.c
-+++ b/arch/x86/events/core.c
-@@ -96,7 +96,7 @@ DEFINE_STATIC_CALL_NULL(x86_pmu_filter, *x86_pmu.filter);
-  * This one is magic, it will get called even when PMU init fails (because
-  * there is no PMU), in which case it should simply return NULL.
-  */
--DEFINE_STATIC_CALL_RET0(x86_pmu_guest_get_msrs, *x86_pmu.guest_get_msrs);
-+DEFINE_STATIC_CALL_NULL(x86_pmu_guest_get_msrs, *x86_pmu.guest_get_msrs);
+ 	memcpy(&kvm_x86_ops, ops->runtime_ops, sizeof(kvm_x86_ops));
  
- u64 __read_mostly hw_cache_event_ids
- 				[PERF_COUNT_HW_CACHE_MAX]
-diff --git a/include/linux/static_call.h b/include/linux/static_call.h
-index 3b3e9e9a1582..6b8d7b687c13 100644
---- a/include/linux/static_call.h
-+++ b/include/linux/static_call.h
-@@ -17,7 +17,6 @@
-  *   DECLARE_STATIC_CALL(name, func);
-  *   DEFINE_STATIC_CALL(name, func);
-  *   DEFINE_STATIC_CALL_NULL(name, typename);
-- *   DEFINE_STATIC_CALL_RET0(name, typename);
-  *
-  *   __static_call_return0;
-  *
-@@ -171,8 +170,6 @@ extern int static_call_text_reserved(void *start, void *end);
- 	};								\
- 	ARCH_DEFINE_STATIC_CALL_RET0_TRAMP(name)
+-#define __KVM_X86_OP(func) \
+-	static_call_update(kvm_x86_##func, kvm_x86_ops.func);
+ #define KVM_X86_OP(func) \
+-	WARN_ON(!kvm_x86_ops.func); __KVM_X86_OP(func)
+-#define KVM_X86_OP_OPTIONAL __KVM_X86_OP
+-#define KVM_X86_OP_OPTIONAL_RET0(func) \
+-	static_call_update(kvm_x86_##func, (void *)kvm_x86_ops.func ? : \
+-					   (void *)__static_call_return0);
++	static_call_update(kvm_x86_##func, kvm_x86_ops.func);
+ #include <asm/kvm-x86-ops.h>
+-#undef __KVM_X86_OP
  
--#define DEFINE_STATIC_CALL_RET0 DEFINE_STATIC_CALL_NULL
--
- #define EXPORT_STATIC_CALL(name)					\
- 	EXPORT_SYMBOL(STATIC_CALL_KEY(name));				\
- 	EXPORT_SYMBOL(STATIC_CALL_TRAMP(name))
-@@ -206,8 +203,6 @@ static inline int static_call_init(void) { return 0; }
- 	};								\
- 	ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)
- 
--#define DEFINE_STATIC_CALL_RET0 DEFINE_STATIC_CALL_NULL
--
- static inline
- void __static_call_update(struct static_call_key *key, void *tramp, void *func)
- {
-@@ -251,8 +246,6 @@ static inline int static_call_init(void) { return 0; }
- #define DEFINE_STATIC_CALL_NULL(name, _func)				\
- 	__DEFINE_STATIC_CALL(name, _func, __static_call_return0)
- 
--#define DEFINE_STATIC_CALL_RET0 DEFINE_STATIC_CALL_NULL
--
- static inline
- void __static_call_update(struct static_call_key *key, void *tramp, void *func)
- {
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index f79fd8b87f75..42017f696e2e 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -6757,9 +6757,9 @@ static void perf_pending_task(struct callback_head *head)
- #ifdef CONFIG_GUEST_PERF_EVENTS
- struct perf_guest_info_callbacks __rcu *perf_guest_cbs;
- 
--DEFINE_STATIC_CALL_RET0(__perf_guest_state, *perf_guest_cbs->state);
--DEFINE_STATIC_CALL_RET0(__perf_guest_get_ip, *perf_guest_cbs->get_ip);
--DEFINE_STATIC_CALL_RET0(__perf_guest_handle_intel_pt_intr, *perf_guest_cbs->handle_intel_pt_intr);
-+DEFINE_STATIC_CALL_NULL(__perf_guest_state, *perf_guest_cbs->state);
-+DEFINE_STATIC_CALL_NULL(__perf_guest_get_ip, *perf_guest_cbs->get_ip);
-+DEFINE_STATIC_CALL_NULL(__perf_guest_handle_intel_pt_intr, *perf_guest_cbs->handle_intel_pt_intr);
- 
- void perf_register_guest_info_callbacks(struct perf_guest_info_callbacks *cbs)
- {
-@@ -13766,4 +13766,4 @@ struct cgroup_subsys perf_event_cgrp_subsys = {
- };
- #endif /* CONFIG_CGROUP_PERF */
- 
--DEFINE_STATIC_CALL_RET0(perf_snapshot_branch_stack, perf_snapshot_branch_stack_t);
-+DEFINE_STATIC_CALL_NULL(perf_snapshot_branch_stack, perf_snapshot_branch_stack_t);
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index af017e038b48..cf50562277b7 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -8492,12 +8492,12 @@ EXPORT_SYMBOL(__cond_resched);
- #if defined(CONFIG_HAVE_PREEMPT_DYNAMIC_CALL)
- #define cond_resched_dynamic_enabled	__cond_resched
- #define cond_resched_dynamic_disabled	((void *)&__static_call_return0)
--DEFINE_STATIC_CALL_RET0(cond_resched, __cond_resched);
-+DEFINE_STATIC_CALL_NULL(cond_resched, __cond_resched);
- EXPORT_STATIC_CALL_TRAMP(cond_resched);
- 
- #define might_resched_dynamic_enabled	__cond_resched
- #define might_resched_dynamic_disabled	((void *)&__static_call_return0)
--DEFINE_STATIC_CALL_RET0(might_resched, __cond_resched);
-+DEFINE_STATIC_CALL_NULL(might_resched, __cond_resched);
- EXPORT_STATIC_CALL_TRAMP(might_resched);
- #elif defined(CONFIG_HAVE_PREEMPT_DYNAMIC_KEY)
- static DEFINE_STATIC_KEY_FALSE(sk_dynamic_cond_resched);
-@@ -8598,7 +8598,7 @@ EXPORT_SYMBOL(__cond_resched_rwlock_write);
-  *
-  * NONE:
-  *   cond_resched               <- __cond_resched
-- *   might_resched              <- RET0
-+ *   might_resched              <- NULL
-  *   preempt_schedule           <- NOP
-  *   preempt_schedule_notrace   <- NOP
-  *   irqentry_exit_cond_resched <- NOP
-@@ -8611,8 +8611,8 @@ EXPORT_SYMBOL(__cond_resched_rwlock_write);
-  *   irqentry_exit_cond_resched <- NOP
-  *
-  * FULL:
-- *   cond_resched               <- RET0
-- *   might_resched              <- RET0
-+ *   cond_resched               <- NULL
-+ *   might_resched              <- NULL
-  *   preempt_schedule           <- preempt_schedule
-  *   preempt_schedule_notrace   <- preempt_schedule_notrace
-  *   irqentry_exit_cond_resched <- irqentry_exit_cond_resched
+ 	kvm_pmu_ops_update(ops->pmu_ops);
+ }
 -- 
 2.39.2
 
