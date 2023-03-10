@@ -2,135 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1F76B549C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D4D6B549E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbjCJWkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 17:40:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
+        id S231473AbjCJWkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 17:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231991AbjCJWkE (ORCPT
+        with ESMTP id S231513AbjCJWkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 17:40:04 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C0E12C0DE;
-        Fri, 10 Mar 2023 14:40:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=kyWpWo0acxXgbXOKbiq5AQoZeq7yr4dxSGGgNTZKgqM=; b=R+OzvH3LAmf4i0wBfbnsej4V56
-        OLQQKIarbjmZMH5HZc3IWX98s8S8ONBA80HxhNDI8I0UvzO0ql4Cq+tbWgx+JoiBcf+j3lU2mApWD
-        GZr6uCLJ9qJTHB3Bn6fE4CdwKhPbKiApnEyzng3TvckRtlJ5d9pSahYoPzEOCZofyO5MNd3s8wGIR
-        8WLdzdA9ltlA/9cez3MYrN/2uMn3ajjSq8qa4p1/82bnZlZnGpmDjZydx2UsKLU7nsamsGh557+Hf
-        mjDh0yWii6rJgOQePz8cvbgbjmOhQjtppKdaXfnu53yG3FElaSbVoY+boyOzxtYaDsYIJY2+f2K69
-        FITGTriA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1palOu-00GRBO-J4; Fri, 10 Mar 2023 22:39:48 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com
-Cc:     j.granados@samsung.com, patches@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH] proc_sysctl: enhance documentation
-Date:   Fri, 10 Mar 2023 14:39:47 -0800
-Message-Id: <20230310223947.3917711-1-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.37.1
+        Fri, 10 Mar 2023 17:40:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C266012DDDA;
+        Fri, 10 Mar 2023 14:40:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 728D7B8233B;
+        Fri, 10 Mar 2023 22:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E33C2C433A0;
+        Fri, 10 Mar 2023 22:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678488009;
+        bh=X6JJ8hKaOwjK+z85rFeVDIA0F8rbcMZOIeRWogzIjB4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IreQiwUg2l90VWXx0SVc5MK/HfOvai9Jj8sV99x78eYPhaBLRrkuMLL9kB5NT2jyc
+         PaNY43x+Graq29L3aW5W4bLyTHdK5+BhB+8uJxaIaHQfSo96Ni1goURjs6n9FiJEig
+         AFtaZujpbUTKD5c79ywYJdDGDheeyBwzk0KOcFAr/yQlwuTQGFoDRtR1Y5z/05F39Q
+         6XgD0HNJHw1IprlERxsQVQaM+BfVDeD1zlrd6lHIRaSbjp7JFnnI5TcK9yrk3j7XVZ
+         NoRF75mneLE52uNYiOMqdpDmLse9ayIBXy6H/BZaillBzjcXaDoL/CV9PYHubdqgzo
+         lsUlg6FIFBL/A==
+Received: by mail-ua1-f46.google.com with SMTP id p2so4581350uap.1;
+        Fri, 10 Mar 2023 14:40:09 -0800 (PST)
+X-Gm-Message-State: AO0yUKWyU2QZxOjlSSryWyyhYRIDPh3dmpB6Sepz5XpPq67sbcyS8y74
+        YSqVQCFEPvOtiHI7CB9UzJYMv5SQwBhoCzDCmg==
+X-Google-Smtp-Source: AK7set+Z52Frd//pueEciK1V0k1o5hAldF9l+GJeEdz88kQqINdcsNfemJBGP8kHwDNSRn+msUGBFNIbcvN4gs3UIZI=
+X-Received: by 2002:ab0:4714:0:b0:68e:2ed3:92eb with SMTP id
+ h20-20020ab04714000000b0068e2ed392ebmr12478359uac.1.1678488008830; Fri, 10
+ Mar 2023 14:40:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <197ea188-c59d-6c53-77fd-3a0551ef8e70@linaro.org>
+In-Reply-To: <197ea188-c59d-6c53-77fd-3a0551ef8e70@linaro.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 10 Mar 2023 16:39:57 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLYdyqe+=zb_sDOcffbbb3AUhxsCbUp_1GHk1fKu2xiJw@mail.gmail.com>
+Message-ID: <CAL_JsqLYdyqe+=zb_sDOcffbbb3AUhxsCbUp_1GHk1fKu2xiJw@mail.gmail.com>
+Subject: Re: Qualcomm Kryo core compatibles
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Expand documentation to clarify:
+On Wed, Mar 8, 2023 at 4:44=E2=80=AFAM Konrad Dybcio <konrad.dybcio@linaro.=
+org> wrote:
+>
+> Hi!
+>
+> I was recently debating what to do about Qualcomm Kryo compatibles.
+>
+> There are basically 3 cases:
+>
+> 1. Falkor/"real Kryo" - the (never shipped?) server platform & MSM8996
+>
+> This one's easy, it's actually Kryo so it should stay Kryo.
+>
+>
+> 2. Fake Kryo ("customized" Arm Cortex cores) (MSM8998-SM8x50)
+>
+> This one's tough.. Qualcomm marketing material seems to sometimes say
+> Cortex, sometimes Kryo, sometimes "customized Cortex".. They do use
+> their own arm IMPLEMENTER_ID in the MIDR_EL1 register and their
+> PART_NUM values are not Arm-stock, but these cores don't seem to be
+> any special.. Maybe some irq lines are routed differently? Not sure.
+>
+> My proposition here is to do:
+>
+> "qcom,kryoXXX", "arm,cortex-ABC"
+>
+> or
+>
+> "qcom,kryoXXX-PQR", "arm,cortex-ABC"
 
-  o that paths don't need to exist for the new API callers
-  o clarify that we *require* callers to keep the memory of
-    the table around during the lifetime of the sysctls
-  o annotate routines we are trying to deprecate and later remove
+I don't see much value in the fallback here. We don't do much with the
+values anyways as everything uses ID registers anyways. Do you know
+the level of modification?
 
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
+> where PQR is one of:
+> - silver (LITTLE cores)
+> - gold (big cores)
+> - gold_plus (prime core(s))
+>
+>
+> 3. Arm cores modified within Arm implementation-defined allowance (SC8280=
+XP+)
+>
+> These cores report Arm IMPLEMENTER_IDs and actual Arm PART_NUMs, which wo=
+uld
+> suggest they're bone stock Arm Cortex cores, with some Qualcomm-iness com=
+ing
+> as part of implementation details which are.. expected since Cortex allow=
+s for
+> some IMPLEMENTATION DEFINED things. The only non-obvious part here is tha=
+t
+> the REVISION field they report does not always seem covered by the Arm TR=
+Ms.
+>
+> In this case I think going with
+>
+> "arm,cortex-ABC"
+>
+> is fine.. I already did this for 8550 and 8280xp and Rob seems to have li=
+ked it.
+>
+> So, I suppose the real question is what to do about 2., should they stay =
+as
+> they are, or maybe my proposition seems attractive?
 
-I'm sending this out separately from the rest of the changes so I can
-refer to this new documentation update separately. With the next few
-patches I am posting we should be able to deprecate the recursion path
-of sysctl registration in about 1-2 kernel cycles max!
+What about the generic 'qcom,kryo' strings?
 
- fs/proc/proc_sysctl.c | 25 ++++++++++++++++++++-----
- 1 file changed, 20 insertions(+), 5 deletions(-)
-
-diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-index 15d5e02f1ec0..7ad07435828f 100644
---- a/fs/proc/proc_sysctl.c
-+++ b/fs/proc/proc_sysctl.c
-@@ -1316,7 +1316,10 @@ static struct ctl_dir *sysctl_mkdir_p(struct ctl_dir *dir, const char *path)
-  * __register_sysctl_table - register a leaf sysctl table
-  * @set: Sysctl tree to register on
-  * @path: The path to the directory the sysctl table is in.
-- * @table: the top-level table structure without any child
-+ * @table: the top-level table structure without any child. This table
-+ * 	 should not be free'd after registration. So it should not be
-+ * 	 used on stack. It can either be a global or dynamically allocated
-+ * 	 by the caller and free'd later after sysctl unregistration.
-  *
-  * Register a sysctl table hierarchy. @table should be a filled in ctl_table
-  * array. A completely 0 filled entry terminates the table.
-@@ -1410,8 +1413,15 @@ struct ctl_table_header *__register_sysctl_table(
- 
- /**
-  * register_sysctl - register a sysctl table
-- * @path: The path to the directory the sysctl table is in.
-- * @table: the table structure
-+ * @path: The path to the directory the sysctl table is in. If the path
-+ * 	doesn't exist we will create it for you.
-+ * @table: the table structure. The calller must ensure the life of the @table
-+ * 	will be kept during the lifetime use of the syctl. It must not be freed
-+ * 	until unregister_sysctl_table() is called with the given returned table
-+ * 	with this registration. If your code is non modular then you don't need
-+ * 	to call unregister_sysctl_table() and can instead use something like
-+ * 	register_sysctl_init() which does not care for the result of the syctl
-+ * 	registration.
-  *
-  * Register a sysctl table. @table should be a filled in ctl_table
-  * array. A completely 0 filled entry terminates the table.
-@@ -1427,8 +1437,11 @@ EXPORT_SYMBOL(register_sysctl);
- 
- /**
-  * __register_sysctl_init() - register sysctl table to path
-- * @path: path name for sysctl base
-- * @table: This is the sysctl table that needs to be registered to the path
-+ * @path: path name for sysctl base. If that path doesn't exist we will create
-+ * 	it for you.
-+ * @table: This is the sysctl table that needs to be registered to the path.
-+ * 	The caller must ensure the life of the @table will be kept during the
-+ * 	lifetime use of the sysctl.
-  * @table_name: The name of sysctl table, only used for log printing when
-  *              registration fails
-  *
-@@ -1570,6 +1583,7 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
-  *
-  * Register a sysctl table hierarchy. @table should be a filled in ctl_table
-  * array. A completely 0 filled entry terminates the table.
-+ * We are slowly deprecating this call so avoid its use.
-  *
-  * See __register_sysctl_table for more details.
-  */
-@@ -1641,6 +1655,7 @@ struct ctl_table_header *__register_sysctl_paths(
-  *
-  * Register a sysctl table hierarchy. @table should be a filled in ctl_table
-  * array. A completely 0 filled entry terminates the table.
-+ * We are slowly deprecating this caller so avoid future uses of it.
-  *
-  * See __register_sysctl_paths for more details.
-  */
--- 
-2.39.1
-
+Rob
