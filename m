@@ -2,199 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09906B3DDF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:34:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6DA6B3DE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjCJLeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 06:34:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
+        id S230401AbjCJLeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:34:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbjCJLeH (ORCPT
+        with ESMTP id S230392AbjCJLeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 06:34:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD305A6CD
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:33:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678448001;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O4S3SJNUbgNLYyhpATwshP+7xAKmJ12/+l9BB0p8/V4=;
-        b=Yd6El9QNxLh8IUlVjANYkis+KIYQQuZX4dp0V9WuezOUwle19VpYeOgw/6O0hvhnwL2PMZ
-        oipY+GPaBM9AtOsasLcohhdDwnDn3JRknBhjd66Vgi6IeE6ep5Fxg5giuiCYwNDNhF3EMl
-        /Tflzswq03bMtLMz7hDHfGQSdD4TqJM=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-130-UW2-zTXaMS2cz_zEMuJ-sQ-1; Fri, 10 Mar 2023 06:33:19 -0500
-X-MC-Unique: UW2-zTXaMS2cz_zEMuJ-sQ-1
-Received: by mail-qk1-f200.google.com with SMTP id s21-20020a05620a0bd500b0074234f33f24so2912318qki.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:33:19 -0800 (PST)
+        Fri, 10 Mar 2023 06:34:10 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE415A6CD;
+        Fri, 10 Mar 2023 03:34:08 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id q31-20020a17090a17a200b0023750b69614so4881583pja.5;
+        Fri, 10 Mar 2023 03:34:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678448048;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gUEAdqF+264y6tlNIPm7sGs8cFITkhpABstRdo7c1DM=;
+        b=MRvkh5/PNs0WAUTuQkUSErisBQ7SsJAicgBMz6NQmzDG4hjoYzDT4DvVMPKDsQp0Ln
+         2XXYoBb64e6AJIQS9sBUzRC0oFKVe93Dch7ihhYyBk75Gkybk8Xc5g551xYhIqSnbeYU
+         0FNmL1uk8Tp9+eEbQJCQRMCFgchDK0xi4JA6v4HHpHYK71B7ZizhuKQFOfU8/5E4HR5p
+         SbxHiCInlm4h2GtMHK7ioKz5BLyOpUHxaaJVz15UugrOC/3OQe8q69NdFiwZckFvnHgk
+         aIHTUgPMnNpvtvxsPJODfkASHHgayhGAswmwbrjk7d2Qjk0YGXpP/9TR+RapSto7d5Tq
+         fKjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678447998;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678448048;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=O4S3SJNUbgNLYyhpATwshP+7xAKmJ12/+l9BB0p8/V4=;
-        b=Obmw//ZtxrKZ79Hs3araAs3ifsoW79k+126quaQnqD9h7oz2umcIjnLW083ihwU61q
-         FKE3R973SDiCaf5HBDwg6+X930brR/4WT/APxHMIauPJQnSlMlYuwu9t32K767tXFM45
-         pfST+wc8bdLMBEHmVVQFxbph2/efurXiXcfeWTbRCguC4Bjc/Ipo3ZWsynVreQKHWR26
-         e5lkq4xc8HB1TT/wv55jSt/bgxHJgYWzGsZ46NX1FifcSkgBv0fwoQtPY5wygYBI1tbX
-         TpxCidmvAuP7qDsfwGI2LeFnk6BpmGJm5jezW5oyDzsHav0zNikwsbykd4W9+zL9Bj94
-         YvDQ==
-X-Gm-Message-State: AO0yUKVfiN2N9yOb2M4ttQ7Wd8U60m05D9KVapcFcvyTwpTVXdX8K99g
-        rJKQg85WPhKCkeQ6wlTv9erhmNeHQVAYi6bWyXPAQAaoPOalWBP+zR0nA3l87kDWpruBY9KSxOB
-        PscsTGwnEQ2tfCI4qlCa/pWPBqsHsL2vd
-X-Received: by 2002:a05:6214:252c:b0:56e:fb4c:c1c4 with SMTP id gg12-20020a056214252c00b0056efb4cc1c4mr17633047qvb.14.1678447997935;
-        Fri, 10 Mar 2023 03:33:17 -0800 (PST)
-X-Google-Smtp-Source: AK7set+ObrN18F32cy+WpRBzCha3lX+Kgx4jipHI9s53RhcUyjRx5aXFaUu+xqai/SF8up4rIR787Q==
-X-Received: by 2002:a05:6214:252c:b0:56e:fb4c:c1c4 with SMTP id gg12-20020a056214252c00b0056efb4cc1c4mr17633010qvb.14.1678447997662;
-        Fri, 10 Mar 2023 03:33:17 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id y20-20020a37f614000000b0074308a0124asm1152231qkj.50.2023.03.10.03.33.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 03:33:17 -0800 (PST)
-Message-ID: <5288c0e9-b806-370d-e7de-8d69d5b8e902@redhat.com>
-Date:   Fri, 10 Mar 2023 12:33:12 +0100
+        bh=gUEAdqF+264y6tlNIPm7sGs8cFITkhpABstRdo7c1DM=;
+        b=QzxhQ0eh9IoXhPNXYXoaUAulFdJnm3t4g2tNOKiO5EaQJGEIpL4Ey1hd454iV2aY9c
+         FBo9ylgcCUl0mAx26ycUTDK6mlLM+qx0ZSkwNzSDBPwXRQVAYcD5/k30S+nrVaA+eG35
+         BRXUUJsYv0Ny1371yn0ZCTvyuBK8S62KpyqWcM17tFh/1ngcKTvNifeoP1aKTomIeSDb
+         C6Rqzr8qWZxUe5nDNEBCQEEWiWvmX+blw/w9lXI2GLwjMxbi1TZegl/htdzgGrralZ4B
+         ZfcdsXcz2I3mtW38+QKhI6KVLNrRkLhHB3qCAVDn5Ip8SMLUtpsG3IoM5ULW4hHPbdPV
+         oQYw==
+X-Gm-Message-State: AO0yUKXgRzIuvaGRXC2tyoWvN131dA4E7cMYIF++1A9rFtjjtzn8LXKP
+        xoWZVvtBpIHJ60BCQUNuRXc=
+X-Google-Smtp-Source: AK7set/OHox9rucqDPJR8yo7aCauRXYUk3HSK2MhXL8vQd/4hyDXGo0VYrHSc03jBfNFe7z2C+EO2g==
+X-Received: by 2002:a17:902:b193:b0:19a:a815:2876 with SMTP id s19-20020a170902b19300b0019aa8152876mr22021968plr.62.1678448048257;
+        Fri, 10 Mar 2023 03:34:08 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id a17-20020a170902b59100b00198fde9178csm1242857pls.197.2023.03.10.03.34.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 03:34:07 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] KVM: x86/pmu/misc: Fix a typo on kvm_pmu_request_counter_reprogam()
+Date:   Fri, 10 Mar 2023 19:33:49 +0800
+Message-Id: <20230310113349.31799-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Reply-To: eric.auger@redhat.com
-Subject: Re: [PATCH v1 02/14] iommufd: Add nesting related data structures for
- ARM SMMUv3
-Content-Language: en-US
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Nicolin Chen <nicolinc@nvidia.com>
-Cc:     jgg@nvidia.com, robin.murphy@arm.com, will@kernel.org,
-        kevin.tian@intel.com, baolu.lu@linux.intel.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, yi.l.liu@intel.com
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <364cfbe5b228ab178093db2de13fa3accf7a6120.1678348754.git.nicolinc@nvidia.com>
- <20230309134217.GA1673607@myrica>
-From:   Eric Auger <eric.auger@redhat.com>
-In-Reply-To: <20230309134217.GA1673607@myrica>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-On 3/9/23 14:42, Jean-Philippe Brucker wrote:
-> Hi Nicolin,
->
-> On Thu, Mar 09, 2023 at 02:53:38AM -0800, Nicolin Chen wrote:
->> Add the following data structures for corresponding ioctls:
->>                iommu_hwpt_arm_smmuv3 => IOMMUFD_CMD_HWPT_ALLOC
->>     iommu_hwpt_invalidate_arm_smmuv3 => IOMMUFD_CMD_HWPT_INVALIDATE
->>
->> Also, add IOMMU_HW_INFO_TYPE_ARM_SMMUV3 and IOMMU_PGTBL_TYPE_ARM_SMMUV3_S1
->> to the header and corresponding type/size arrays.
->>
->> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
->> +/**
->> + * struct iommu_hwpt_arm_smmuv3 - ARM SMMUv3 specific page table data
->> + *
->> + * @flags: page table entry attributes
->> + * @s2vmid: Virtual machine identifier
->> + * @s1ctxptr: Stage-1 context descriptor pointer
->> + * @s1cdmax: Number of CDs pointed to by s1ContextPtr
->> + * @s1fmt: Stage-1 Format
->> + * @s1dss: Default substream
->> + */
->> +struct iommu_hwpt_arm_smmuv3 {
->> +#define IOMMU_SMMUV3_FLAG_S2	(1 << 0) /* if unset, stage-1 */
-> I don't understand the purpose of this flag, since the structure only
-> provides stage-1 configuration fields
->
->> +#define IOMMU_SMMUV3_FLAG_VMID	(1 << 1) /* vmid override */
-> Doesn't this break isolation?  The VMID space is global for the SMMU, so
-> the guest could access cached mappings of another device
->
->> +	__u64 flags;
->> +	__u32 s2vmid;
->> +	__u32 __reserved;
->> +	__u64 s1ctxptr;
->> +	__u64 s1cdmax;
->> +	__u64 s1fmt;
->> +	__u64 s1dss;
->> +};
->> +
->
->> +/**
->> + * struct iommu_hwpt_invalidate_arm_smmuv3 - ARM SMMUv3 cahce invalidation info
->> + * @flags: boolean attributes of cache invalidation command
->> + * @opcode: opcode of cache invalidation command
->> + * @ssid: SubStream ID
->> + * @granule_size: page/block size of the mapping in bytes
->> + * @range: IOVA range to invalidate
->> + */
->> +struct iommu_hwpt_invalidate_arm_smmuv3 {
->> +#define IOMMU_SMMUV3_CMDQ_TLBI_VA_LEAF	(1 << 0)
->> +	__u64 flags;
->> +	__u8 opcode;
->> +	__u8 padding[3];
->> +	__u32 asid;
->> +	__u32 ssid;
->> +	__u32 granule_size;
->> +	struct iommu_iova_range range;
->> +};
-> Although we can keep the alloc and hardware info separate for each IOMMU
-> architecture, we should try to come up with common invalidation methods.
->
-> It matters because things like vSVA, or just efficient dynamic mappings,
-> will require optimal invalidation latency. A paravirtual interface like
-> vhost-iommu can help with that, as the host kernel will handle guest
-> invalidations directly instead of doing a round-trip to host userspace
-> (and we'll likely want the same path for PRI.)
->
-> Supporting HW page tables for a common PV IOMMU does require some
-> architecture-specific knowledge, but invalidation messages contain roughly
-> the same information on all architectures. The PV IOMMU won't include
-> command opcodes for each possible architecture if one generic command does
-> the same job.
->
-> Ideally I'd like something like this for vhost-iommu:
->
-> * slow path through userspace for complex requests like attach-table and
->   probe, where the VMM can decode arch-specific information and translate
->   them to iommufd and vhost-iommu ioctls to update the configuration.
->
-> * fast path within the kernel for performance-critical requests like
->   invalidate, page request and response. It would be absurd for the
->   vhost-iommu driver to translate generic invalidation requests from the
->   guest into arch-specific commands with special opcodes, when the next
->   step is calling the IOMMU driver which does that for free.
->
-> During previous discussions we came up with generic invalidations that
-> could fit both Arm and x86 [1][2]. The only difference was the ASID
-> (called archid/id in those proposals) which VT-d didn't need. Could we try
-> to build on that?
+From: Like Xu <likexu@tencent.com>
 
-I do agree with Jean. We spent a lot of efforts all together to define
-this generic invalidation API and if there is compelling reason that
-prevents from using it, we should try to reuse it.
+Fix a "reprogam" typo in the kvm_pmu_request_counter_reprogam(), which
+should be fixed earlier to follow the meaning of {pmc_}reprogram_counter().
 
-Thanks
+Fixes: 68fb4757e867 ("KVM: x86/pmu: Defer reprogram_counter() to kvm_pmu_handle_event()")
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+v1: https://lore.kernel.org/all/20230308104707.27284-1-likexu@tencent.com
+ arch/x86/kvm/pmu.c           | 2 +-
+ arch/x86/kvm/pmu.h           | 2 +-
+ arch/x86/kvm/svm/pmu.c       | 2 +-
+ arch/x86/kvm/vmx/pmu_intel.c | 6 +++---
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-Eric
->
-> [1] https://elixir.bootlin.com/linux/v5.17/source/include/uapi/linux/iommu.h#L161
-> [2] https://lists.oasis-open.org/archives/virtio-dev/202102/msg00014.html
->
-> Thanks,
-> Jean
->
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index 7b6c3ba2c8e1..bdeec0ab5e2b 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -646,7 +646,7 @@ static void kvm_pmu_incr_counter(struct kvm_pmc *pmc)
+ {
+ 	pmc->prev_counter = pmc->counter;
+ 	pmc->counter = (pmc->counter + 1) & pmc_bitmask(pmc);
+-	kvm_pmu_request_counter_reprogam(pmc);
++	kvm_pmu_request_counter_reprogram(pmc);
+ }
+ 
+ static inline bool eventsel_match_perf_hw_id(struct kvm_pmc *pmc,
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index 79988dafb15b..cff0651b030b 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -183,7 +183,7 @@ static inline void kvm_init_pmu_capability(const struct kvm_pmu_ops *pmu_ops)
+ 					     KVM_PMC_MAX_FIXED);
+ }
+ 
+-static inline void kvm_pmu_request_counter_reprogam(struct kvm_pmc *pmc)
++static inline void kvm_pmu_request_counter_reprogram(struct kvm_pmc *pmc)
+ {
+ 	set_bit(pmc->idx, pmc_to_pmu(pmc)->reprogram_pmi);
+ 	kvm_make_request(KVM_REQ_PMU, pmc->vcpu);
+diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+index cc77a0681800..5fa939e411d8 100644
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -161,7 +161,7 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		data &= ~pmu->reserved_bits;
+ 		if (data != pmc->eventsel) {
+ 			pmc->eventsel = data;
+-			kvm_pmu_request_counter_reprogam(pmc);
++			kvm_pmu_request_counter_reprogram(pmc);
+ 		}
+ 		return 0;
+ 	}
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index e8a3be0b9df9..797fff9dbe80 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -57,7 +57,7 @@ static void reprogram_fixed_counters(struct kvm_pmu *pmu, u64 data)
+ 		pmc = get_fixed_pmc(pmu, MSR_CORE_PERF_FIXED_CTR0 + i);
+ 
+ 		__set_bit(INTEL_PMC_IDX_FIXED + i, pmu->pmc_in_use);
+-		kvm_pmu_request_counter_reprogam(pmc);
++		kvm_pmu_request_counter_reprogram(pmc);
+ 	}
+ }
+ 
+@@ -81,7 +81,7 @@ static void reprogram_counters(struct kvm_pmu *pmu, u64 diff)
+ 	for_each_set_bit(bit, (unsigned long *)&diff, X86_PMC_IDX_MAX) {
+ 		pmc = intel_pmc_idx_to_pmc(pmu, bit);
+ 		if (pmc)
+-			kvm_pmu_request_counter_reprogam(pmc);
++			kvm_pmu_request_counter_reprogram(pmc);
+ 	}
+ }
+ 
+@@ -482,7 +482,7 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 				reserved_bits ^= HSW_IN_TX_CHECKPOINTED;
+ 			if (!(data & reserved_bits)) {
+ 				pmc->eventsel = data;
+-				kvm_pmu_request_counter_reprogam(pmc);
++				kvm_pmu_request_counter_reprogram(pmc);
+ 				return 0;
+ 			}
+ 		} else if (intel_pmu_handle_lbr_msrs_access(vcpu, msr_info, false))
+
+base-commit: 13738a3647368f7f600b30d241779bcd2a3ebbfd
+-- 
+2.39.2
 
