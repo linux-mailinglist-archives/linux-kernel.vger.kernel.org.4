@@ -2,135 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF97C6B4BC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3560E6B4BCB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjCJP54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:57:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        id S229937AbjCJP6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:58:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbjCJP51 (ORCPT
+        with ESMTP id S230437AbjCJP5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:57:27 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216DA11E97
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:51:59 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id g9-20020a17090a300900b0023a8d6e327dso2489414pjb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:51:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678463518;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JWVbW737nKxFCj4MT7r6npOdAHrQ078Zlu0cOQ+zqXE=;
-        b=a+Fm2iTltql6hooUjhzjQTNaT6EzSupmnae8tyt0+CpmgPs1phb+xSg8RpkJ17rdl/
-         Cu2UqcikT+0nz0Tm1+eCcj7RS6qfWLMA2pn7YdLwzHIgLYyDI1MG7ESCDCjYUVq8DER8
-         aZPIzis0bpmg34KmR01ftj+vEvqLPY0femNxEtU5XVUPJlf+dCV9geRrpRmp5DYBIOgn
-         /FyqRlkEkNlhShsLMbnwP2EDTwQaHissPJZLiAi8z9FVuOg4R+CvCZgbm2POs8Xwo2Ek
-         gc/NlhkKDiI2/jlIB/8shePIgiiKnFs1G5oFCGVz1iNVFUNDWOQzRD4vsLZtlQdaB6Wo
-         mxcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678463518;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JWVbW737nKxFCj4MT7r6npOdAHrQ078Zlu0cOQ+zqXE=;
-        b=j9PPFQF0uC3zzk6toJEdM5K3TPI7WRfJ4aAMKWkGprQAEhxgAwzyYRfX/Wl9uVK1Fq
-         BWqv5Ho0TbeA7AUQEqH9b5qW/Ye1X40XppOBI7zmSiYWP9TWaHrZHoMzYgLhabuga8Px
-         H5oXG06Xquw45ZTxCA79BNqlwyR/E9ivAuvGrcO1cAIrxTcPYW+wtGlDzibVNn2nrchX
-         giLomRtKcUUgOEzt8aSuYpjDcvVYE/AK+ljQ+FUJg5QDuQATo04ZFlqpQQ1nZapRRQ84
-         m3YeR+sqoPxbqureHQhQMt0JlFfDR6DNbpXMCWShU7CrL5cyJ0XJ0AGH7w5vK+LDy9Kb
-         XjNQ==
-X-Gm-Message-State: AO0yUKXKZT6999ULhweT8AXRegXgwh4GLxkw4oE1iP83/3Oy8YlBamJc
-        VFINKBjmd/a3vR7T8xqMh2/gGu4jfiI=
-X-Google-Smtp-Source: AK7set9uZBmMV2Z1i9xlaNUaTJlFzTVMPOsafM0owNkpQTNrjOap8/LeWEt7zkBNsFPhAUCBkmzoOGBo6Yk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:1a1f:0:b0:4f2:8281:8afb with SMTP id
- a31-20020a631a1f000000b004f282818afbmr8560785pga.4.1678463518479; Fri, 10 Mar
- 2023 07:51:58 -0800 (PST)
-Date:   Fri, 10 Mar 2023 07:51:57 -0800
-In-Reply-To: <81e3e68b02528e1720df5ccb43d960e11de17e3c.camel@linux.intel.com>
-Mime-Version: 1.0
-References: <20230309010336.519123-1-seanjc@google.com> <20230309010336.519123-3-seanjc@google.com>
- <81e3e68b02528e1720df5ccb43d960e11de17e3c.camel@linux.intel.com>
-Message-ID: <ZAtR5kCdUkb8jkoY@google.com>
-Subject: Re: [PATCH v2 2/2] Documentation/process: Add a maintainer handbook
- for KVM x86
-From:   Sean Christopherson <seanjc@google.com>
-To:     Robert Hoo <robert.hu@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sagi Shahar <sagis@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Peter Shier <pshier@google.com>,
-        Anish Ghulati <aghulati@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Anish Moorthy <amoorthy@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Junaid Shahid <junaids@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Leonardo Bras <leobras@redhat.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Luczaj <mhal@rbox.co>,
-        Mingwei Zhang <mizhang@google.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Paul Durrant <pdurrant@amazon.com>,
-        Peng Hao <flyingpenghao@gmail.com>,
-        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 10 Mar 2023 10:57:41 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2046.outbound.protection.outlook.com [40.107.220.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C138D7A95;
+        Fri, 10 Mar 2023 07:52:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NUpqxIv4McvKpUxm9zVSwc2BkQ/zQa/5ahbkXoZTnJ/Zqp3ailXDdQiN1l7uG+wcePABDoRujrmH9xkqIZzAWVIUhcMmJmC8+4fhx543/O96ODPBydIPJz81xt3jCbE+HFVlKpmlrN+BgU75Z1KGvhdOfoHRr6/YN3gOsjh4E22gjPn7kL4JqigabH0MhMhovmvvSyZIBf3nZUJrurazlZN5HbrR4EoKcJFJakTG1kGHYEC009oWcqrAnb2kWN8NlOd6o+Lzqbey6bz3poTlBI78V/SdJa9Z1xpTUObCQlgN2YEeac8efwJEa3XEdtjBjcMb0HOp8q1AW+Q2hIMgUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Jtn5xgU92dXdxPrVv6HgqsyKhfJIQsak61N/j4HyXhc=;
+ b=jaKXl+acReDivHmlndUSH0qe2JfTpHXxvy3hvyf9zUSXwxw1vlQzvjgswGiL+UoQECY4hH+tpL7DVxy2PVWzzOb2O6pQcUjLVJDpiZhIzx/bp0ZG3HZFPrYOijbEYA2Pb7Dyh/iPxqM8fLFzI1jfOobmvhfBOHeOlMfPVdBeNTBBDt4s/uaLTzfA7GvkpZM/229c/eyvz19FpcFbismdMn3w7ZbgXMWbvHK+A3wR0E3JQ8YypjjFwo0OULnr/yzaI+Vd6yPKz4SNBgkuDJ0bCu4wu1wRr92DN90O+QhyvuxUa5SFWxhSLw+Rwqaa5CPRD3/sH5eVCooZqFJV8IAEfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Jtn5xgU92dXdxPrVv6HgqsyKhfJIQsak61N/j4HyXhc=;
+ b=Lm9U/4jceYFczvP5kzPCrmwp2DISnNXSaI22BWxbPH1xysJnqrpIpSxQEbo4IpaKXJN9yqOWkVo8fVJsIbuS6rl5Sy/1nLnQRJns93bqb+12VyetfEEu12vi2iFKtjcnT5kpsLkn6KVIigKjzQ3U8eYyYKE6YEcDmHNvr8QMm+H5y9iUZBd4cLGkOhUdJcWDaK2b8Zg5tRk4qT/8XzRGo9fJjFK64/0ZTPlVpYCNs5Ssc7SR18NQ1kL9IZQBIni7wlgD1bHRnMax63Y5WK0ko2O1Kpdak5UZ2gZirymAl+k+vgim5HCEXRea6mQJ8667Bf1R5nc0I70cFSsBjVN40g==
+Received: from BN9PR03CA0132.namprd03.prod.outlook.com (2603:10b6:408:fe::17)
+ by DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
+ 2023 15:52:45 +0000
+Received: from BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:fe:cafe::b0) by BN9PR03CA0132.outlook.office365.com
+ (2603:10b6:408:fe::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19 via Frontend
+ Transport; Fri, 10 Mar 2023 15:52:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT007.mail.protection.outlook.com (10.13.177.109) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.19 via Frontend Transport; Fri, 10 Mar 2023 15:52:45 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 10 Mar 2023
+ 07:52:34 -0800
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 10 Mar
+ 2023 07:52:34 -0800
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.5 via Frontend
+ Transport; Fri, 10 Mar 2023 07:52:30 -0800
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     <christian.koenig@amd.com>, <digetx@gmail.com>,
+        <jonathanh@nvidia.com>, <ldewangan@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <sumit.semwal@linaro.org>,
+        <thierry.reding@gmail.com>, <wsa@kernel.org>
+CC:     <akhilrajeev@nvidia.com>
+Subject: [PATCH] i2c: tegra: Fix PEC support for SMBUS block read
+Date:   Fri, 10 Mar 2023 21:22:17 +0530
+Message-ID: <20230310155217.11993-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
+MIME-Version: 1.0
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT007:EE_|DM4PR12MB6280:EE_
+X-MS-Office365-Filtering-Correlation-Id: d1df0166-a831-4063-9eba-08db217f7dc5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gNDygaGFIIQp+ZVuVN56MgE5JCcxX2g5Y6RSRyLK2XEYWjtBKTOpo2AT9+Wt9vtYh6UQgiAMK7jGrdkBZ0nVvDP2zBuKOGZiDtk+HWUIFda+x2vQww0gSAkQvZJU5SanGNUT49AEbakTg/tfB2CBbLjofqOH/mQSWlZbW8oskK2l+yilqu+Fs+W2UjOv+bkXob3j8NjxBKkVlbP/CDk+hnnJMPP7XsCl0jGPFXBKtef9ViRGe6/qIoE1TkcOAIhjzcFrSOsmr4CojR2JyKUS/D9W912dF7HX1SgbWh9hTGvA244y0gA306IjsiNy3uS/HQ/JERv5MEJA92KrLus1KiIUbZUpXclEw1jsOy4m96waX1enE9Uvcyf3ycKlVmeTvP5jqrQqnO962qkKY5o/8d3xi/qoXNmWBZjizvNrmudtwW+uDY+/FEIY3N7r61zH+0K0PzvTk0Mhi0N27YZcKODBr00b1gh844gKEOGpBkRvgWkwCL/LCM8XhBJc7BXvjTHuXabtmCNdyZlo4u1XaNEA/1DAWYaKa9Ks8WLiRntahrPJujy+BHqZ6bExjyAYhQh40EBpLIAGA4L1b9hV2PN2oU2Z4eIqbVQ+uTFfeox1Af/fp7cnL/nqnv5UuM95wBxFo1Iq1MQjzc2B8O4LWLZ+bRt+yy/r7sp6GnOoVpII24QARTyKLYLZ2zD+09JWPNgM+xrNGhzraRz/JRJlCQyJBhiR9VPpw+LrgBVKPq9sHrYlbH47wJPE9APZuJGR9cYiCE0dOSDtLwIhNsrZssa7mdyUwcNO2PlmkYmCXQLkcwW6d4N+rG5ze9+G5TYF
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(396003)(136003)(346002)(451199018)(40470700004)(46966006)(36840700001)(47076005)(426003)(336012)(110136005)(40460700003)(36756003)(356005)(86362001)(83380400001)(7636003)(82740400003)(36860700001)(26005)(1076003)(82310400005)(186003)(6666004)(2616005)(316002)(7696005)(5660300002)(478600001)(921005)(40480700001)(107886003)(4326008)(8936002)(2906002)(70206006)(8676002)(41300700001)(70586007)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 15:52:45.5692
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1df0166-a831-4063-9eba-08db217f7dc5
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6280
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023, Robert Hoo wrote:
-> On Wed, 2023-03-08 at 17:03 -0800, Sean Christopherson wrote:
-> (...)
-> > +Using reverse fir tree for variable declarations isn't strictly
-> > required,
-> > +though it is still preferred.
-> > +
-> I googled, but didn't find what's "fir tree". Shed more light?
+Update the msg->len value correctly for SMBUS block read. The discrepancy
+went unnoticed as msg->len is used in SMBUS transfers only when a PEC
+byte is added.
 
-Y'all need to improve your Google-fu ;-)
+Fixes: d7583c8a5748 ("i2c: tegra: Add SMBus block read function")
+Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 37 +++++++++++++++++++++++-----------
+ 1 file changed, 25 insertions(+), 12 deletions(-)
 
-Since many people seem to be surprised by this one, I'll reword this section to:
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 6aab84c8d22b..75250a46cf71 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -279,6 +279,7 @@ struct tegra_i2c_dev {
+ 	size_t msg_buf_remaining;
+ 	int msg_err;
+ 	u8 *msg_buf;
++	__u16 msg_len;
+ 
+ 	struct completion dma_complete;
+ 	struct dma_chan *tx_dma_chan;
+@@ -1169,7 +1170,7 @@ static void tegra_i2c_push_packet_header(struct tegra_i2c_dev *i2c_dev,
+ 	else
+ 		i2c_writel(i2c_dev, packet_header, I2C_TX_FIFO);
+ 
+-	packet_header = msg->len - 1;
++	packet_header = i2c_dev->msg_len - 1;
+ 
+ 	if (i2c_dev->dma_mode && !i2c_dev->msg_read)
+ 		*dma_buf++ = packet_header;
+@@ -1242,20 +1243,32 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 		return err;
+ 
+ 	i2c_dev->msg_buf = msg->buf;
++	i2c_dev->msg_len = msg->len;
+ 
+-	/* The condition true implies smbus block read and len is already read */
+-	if (msg->flags & I2C_M_RECV_LEN && end_state != MSG_END_CONTINUE)
+-		i2c_dev->msg_buf = msg->buf + 1;
+-
+-	i2c_dev->msg_buf_remaining = msg->len;
+ 	i2c_dev->msg_err = I2C_ERR_NONE;
+ 	i2c_dev->msg_read = !!(msg->flags & I2C_M_RD);
+ 	reinit_completion(&i2c_dev->msg_complete);
+ 
++	/* *
++	 * For SMBUS block read command, read only 1 byte in the first transfer.
++	 * Adjust that 1 byte for the next transfer in the msg buffer and msg
++	 * length.
++	 */
++	if (msg->flags & I2C_M_RECV_LEN) {
++		if (end_state == MSG_END_CONTINUE) {
++			i2c_dev->msg_len = 1;
++		} else {
++			i2c_dev->msg_buf += 1;
++			i2c_dev->msg_len -= 1;
++		}
++	}
++
++	i2c_dev->msg_buf_remaining = i2c_dev->msg_len;
++
+ 	if (i2c_dev->msg_read)
+-		xfer_size = msg->len;
++		xfer_size = i2c_dev->msg_len;
+ 	else
+-		xfer_size = msg->len + I2C_PACKET_HEADER_SIZE;
++		xfer_size = i2c_dev->msg_len + I2C_PACKET_HEADER_SIZE;
+ 
+ 	xfer_size = ALIGN(xfer_size, BYTES_PER_FIFO_WORD);
+ 
+@@ -1295,7 +1308,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 	if (!i2c_dev->msg_read) {
+ 		if (i2c_dev->dma_mode) {
+ 			memcpy(i2c_dev->dma_buf + I2C_PACKET_HEADER_SIZE,
+-			       msg->buf, msg->len);
++			       msg->buf, i2c_dev->msg_len);
+ 
+ 			dma_sync_single_for_device(i2c_dev->dma_dev,
+ 						   i2c_dev->dma_phys,
+@@ -1352,7 +1365,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 						i2c_dev->dma_phys,
+ 						xfer_size, DMA_FROM_DEVICE);
+ 
+-			memcpy(i2c_dev->msg_buf, i2c_dev->dma_buf, msg->len);
++			memcpy(i2c_dev->msg_buf, i2c_dev->dma_buf, i2c_dev->msg_len);
+ 		}
+ 	}
+ 
+@@ -1408,8 +1421,8 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 			ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], MSG_END_CONTINUE);
+ 			if (ret)
+ 				break;
+-			/* Set the read byte as msg len */
+-			msgs[i].len = msgs[i].buf[0];
++			/* Set the msg length from first byte */
++			msgs[i].len += msgs[i].buf[0];
+ 			dev_dbg(i2c_dev->dev, "reading %d bytes\n", msgs[i].len);
+ 		}
+ 		ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], end_type);
+-- 
+2.17.1
 
-  Using reverse fir tree, a.k.a. reverse Christmas tree or reverse XMAS tree, for
-  variable declarations isn't strictly required, though it is still preferred.
