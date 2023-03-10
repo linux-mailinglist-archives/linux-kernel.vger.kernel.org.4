@@ -2,139 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281A16B34CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C8D6B34D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjCJDZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 22:25:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
+        id S229639AbjCJD0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 22:26:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjCJDYy (ORCPT
+        with ESMTP id S229774AbjCJD0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 22:24:54 -0500
-Received: from out-19.mta1.migadu.com (out-19.mta1.migadu.com [IPv6:2001:41d0:203:375::13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE44EACB92
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 19:24:23 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1678418662;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pP06L+IpLhISdvjGC5iq9vZgdcS3+6CJ+d3Vd5ZwOCA=;
-        b=Ctgbz0dEUgNOhJUXMVBoshmkC7Ro1zJqglQ1LGU7OwR69fIP8obSyWBFq/7DKLbV1eCM9y
-        xY4+w6SaAxr1S23w3+6yjlKF0C1RcmlkDIgWjoY18OL55ZIgyaQHvF8tqqNynE1bIraRdZ
-        4jPLa2jKCTZO/iWameuF5vKe84AiV3I=
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     fancer.lancer@gmail.com
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: [PATCH v6 5/5] dmaengine: dw-edma: Optimization in dw_edma_v0_core_handle_int
-Date:   Fri, 10 Mar 2023 11:23:38 +0800
-Message-Id: <20230310032342.17395-6-cai.huoqing@linux.dev>
-In-Reply-To: <20230310032342.17395-1-cai.huoqing@linux.dev>
-References: <20230310032342.17395-1-cai.huoqing@linux.dev>
+        Thu, 9 Mar 2023 22:26:37 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD322F8F37;
+        Thu,  9 Mar 2023 19:26:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=u8e2ZdAGsrDs5mc8tdhL4wOZzMMIPUZ2NIMj6U1DMDU=; b=EyM1eRQycjfDodnwphsbE/w0GD
+        4GSBdTKxZjNXgFXT3S1cfE2Cj2w7p++EBUL20k8CV/WQ5IJV6TnxjKIHfOp23yKTH1yv8sH+bnhso
+        NQzHkrlD0K6ebfI0YbzvAaUrXy56zWlrvdGLol5HZ0gTtl6Z/sxYpU0zPoxR6V5CSKsaAUM0+xfoG
+        Crd/TrAtj1NTfS8pi4d6K9U9JcIa60NnEM+2x2Tia4PS2feU2NQ7VPBycgaCHA7/z0P52ZZ9Zl38H
+        NOKFsMJWnEN18CIiLLqiZyw1pERtByrbV4R4qgBHCXcbx6wXhTqQVHbZo2gmfRWW8wrreGNuhKout
+        AUZwnThg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1paTOV-00FCYB-32;
+        Fri, 10 Mar 2023 03:26:12 +0000
+Date:   Fri, 10 Mar 2023 03:26:11 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
+        jefflexu@linux.alibaba.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca, rpeterso@redhat.com, agruenba@redhat.com,
+        mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        brauner@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        cluster-devel@redhat.com, ocfs2-devel@oss.oracle.com,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] ocfs2: convert to use i_blockmask()
+Message-ID: <20230310032611.GF3390869@ZenIV>
+References: <20230309152127.41427-1-frank.li@vivo.com>
+ <20230309152127.41427-5-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309152127.41427-5-frank.li@vivo.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Optimization in dw_edma_v0_core_handle_int, remove some
-unnecessary wrapper function.
+On Thu, Mar 09, 2023 at 11:21:26PM +0800, Yangtao Li wrote:
+> Use i_blockmask() to simplify code. BTW convert ocfs2_is_io_unaligned
+> to return bool type.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+> v3:
+> -none
+>  fs/ocfs2/file.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/ocfs2/file.c b/fs/ocfs2/file.c
+> index efb09de4343d..baefab3b12c9 100644
+> --- a/fs/ocfs2/file.c
+> +++ b/fs/ocfs2/file.c
+> @@ -2159,14 +2159,14 @@ int ocfs2_check_range_for_refcount(struct inode *inode, loff_t pos,
+>  	return ret;
+>  }
+>  
+> -static int ocfs2_is_io_unaligned(struct inode *inode, size_t count, loff_t pos)
+> +static bool ocfs2_is_io_unaligned(struct inode *inode, size_t count, loff_t pos)
+>  {
+> -	int blockmask = inode->i_sb->s_blocksize - 1;
+> +	int blockmask = i_blockmask(inode);
+>  	loff_t final_size = pos + count;
+>  
+>  	if ((pos & blockmask) || (final_size & blockmask))
+> -		return 1;
+> -	return 0;
+> +		return true;
+> +	return false;
+>  }
 
-Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
----
-v5->v6:
-  11.Remove some unnecessary wrapper function.
+Ugh...
+	return (pos | count) & blockmask;
+surely?  Conversion to bool will take care of the rest.  Or you could make
+that
+	return ((pos | count) & blockmask) != 0;
 
- drivers/dma/dw-edma/dw-edma-v0-core.c | 38 +++++----------------------
- 1 file changed, 6 insertions(+), 32 deletions(-)
-
-diff --git a/drivers/dma/dw-edma/dw-edma-v0-core.c b/drivers/dma/dw-edma/dw-edma-v0-core.c
-index 09c9cec652e1..097385e3e688 100644
---- a/drivers/dma/dw-edma/dw-edma-v0-core.c
-+++ b/drivers/dma/dw-edma/dw-edma-v0-core.c
-@@ -258,34 +258,6 @@ static enum dma_status dw_edma_v0_core_ch_status(struct dw_edma_chan *chan)
- 		return DMA_ERROR;
- }
- 
--static void dw_edma_v0_core_clear_done_int(struct dw_edma_chan *chan)
--{
--	struct dw_edma *dw = chan->dw;
--
--	SET_RW_32(dw, chan->dir, int_clear,
--		  FIELD_PREP(EDMA_V0_DONE_INT_MASK, BIT(chan->id)));
--}
--
--static void dw_edma_v0_core_clear_abort_int(struct dw_edma_chan *chan)
--{
--	struct dw_edma *dw = chan->dw;
--
--	SET_RW_32(dw, chan->dir, int_clear,
--		  FIELD_PREP(EDMA_V0_ABORT_INT_MASK, BIT(chan->id)));
--}
--
--static u32 dw_edma_v0_core_status_done_int(struct dw_edma *dw, enum dw_edma_dir dir)
--{
--	return FIELD_GET(EDMA_V0_DONE_INT_MASK,
--			 GET_RW_32(dw, dir, int_status));
--}
--
--static u32 dw_edma_v0_core_status_abort_int(struct dw_edma *dw, enum dw_edma_dir dir)
--{
--	return FIELD_GET(EDMA_V0_ABORT_INT_MASK,
--			 GET_RW_32(dw, dir, int_status));
--}
--
- static
- irqreturn_t dw_edma_v0_core_handle_int(struct dw_edma_irq *dw_irq, enum dw_edma_dir dir,
- 				       dw_edma_handler_t done, dw_edma_handler_t abort)
-@@ -307,23 +279,25 @@ irqreturn_t dw_edma_v0_core_handle_int(struct dw_edma_irq *dw_irq, enum dw_edma_
- 		mask = dw_irq->rd_mask;
- 	}
- 
--	val = dw_edma_v0_core_status_done_int(dw, dir);
-+	val = FIELD_GET(EDMA_V0_DONE_INT_MASK, GET_RW_32(dw, dir, int_status));
- 	val &= mask;
- 	for_each_set_bit(pos, &val, total) {
- 		chan = &dw->chan[pos + off];
- 
--		dw_edma_v0_core_clear_done_int(chan);
-+		SET_RW_32(dw, chan->dir, int_clear,
-+			  FIELD_PREP(EDMA_V0_DONE_INT_MASK, BIT(chan->id)));
- 		done(chan);
- 
- 		ret = IRQ_HANDLED;
- 	}
- 
--	val = dw_edma_v0_core_status_abort_int(dw, dir);
-+	val = FIELD_GET(EDMA_V0_ABORT_INT_MASK, GET_RW_32(dw, dir, int_status));
- 	val &= mask;
- 	for_each_set_bit(pos, &val, total) {
- 		chan = &dw->chan[pos + off];
- 
--		dw_edma_v0_core_clear_abort_int(chan);
-+		SET_RW_32(dw, chan->dir, int_clear,
-+			  FIELD_PREP(EDMA_V0_ABORT_INT_MASK, BIT(chan->id)));
- 		abort(chan);
- 
- 		ret = IRQ_HANDLED;
--- 
-2.34.1
-
+And the fact that the value will be the same (i.e. that ->i_blkbits is never
+changed by ocfs2) is worth mentioning in commit message...
