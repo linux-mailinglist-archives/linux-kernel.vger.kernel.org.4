@@ -2,114 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C806B503B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 19:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F45E6B5039
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 19:41:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjCJSmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 13:42:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
+        id S230229AbjCJSlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 13:41:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjCJSmO (ORCPT
+        with ESMTP id S230164AbjCJSlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 13:42:14 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA7D121B5A
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 10:42:13 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id p3-20020a17090ad30300b0023a1cd5065fso6065013pju.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 10:42:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=compal-corp-partner-google-com.20210112.gappssmtp.com; s=20210112; t=1678473732;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NUkP7iMk62KicMLNDd9BONghE79lxMRHNMqjVddqeEY=;
-        b=5D/IrCBNlqsFdQEotLM08QXSEwuzu2FsMhZ5GQVd9rc/Fpm6QsZ4zvjWozspgkb9pM
-         bX7EkVdQQPPTlqmhb3D62wXWEqDqrTWEvkyNlda8NrVboOwG52cU/CYHB1phHFQLHorJ
-         VZ33Ma1xqjG1QE1kwoy1fV8JhYj3r9m5rNWVySJWtyexcUZ7dk95sjHOnM/k8qZMJM+D
-         xfKRPlR/8iV53xJpg62wS8RQJfcDtvWOvFeoy7mEoSODcu7MdcCqJNRUNWmukqb3z9Ix
-         fpM5PjrG8ncUyvG70z6oPa1zD7Y1KwWTkAs+us9eOhR2IrKyHZlemVLQ23JVuyhxm3vu
-         edNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678473732;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NUkP7iMk62KicMLNDd9BONghE79lxMRHNMqjVddqeEY=;
-        b=ORZzcePvmHEAD2OGW3Av7ACRj4XDdEK1jUq1eml+VOt73oPEdIYV/eHDjRr0G6wNcC
-         XIS/eQbplvo9gWr0sMDGsWQAFtbXWH+DfqlRRzQgjyexQ3DR3KVEiFtHi2NjNv7TFnNz
-         oLKqbAuyj+zK8HCpUBMMQYzmPiV1olyuX8StykHO86yYrZSM9UsP4kMnlpFjqS9yVdQw
-         lznxklYiZ4cG6kvG9LI+aeinAXzaiQ6xRPDRcx9gTytsDADvZ60ufAZZP7dCZas2BhTm
-         H5V6gr/r1xbfSXTP/N0J9sIDCoI4/V66WL/KFNjgmBzOwlUJhH/LYBvhkhrA96tG1/o2
-         38+A==
-X-Gm-Message-State: AO0yUKWLajRxFIT5XajnNOL/jPRYhK6RjC9p9HQOeUR4mb2UnB92KaoJ
-        wJ5fM4VMB/N+LF2JK2UzeW2SkfH/FwrWAQGPVGM=
-X-Google-Smtp-Source: AK7set860Vqv2C+1CB57cpDPc4uXVqQY/Vb5fpr9eIyb1UBzdvJHeHaLRK9kTImQvRdbX8fyMPlbow==
-X-Received: by 2002:a17:902:da87:b0:199:3a4a:d702 with SMTP id j7-20020a170902da8700b001993a4ad702mr3462541plx.0.1678473732597;
-        Fri, 10 Mar 2023 10:42:12 -0800 (PST)
-Received: from localhost.localdomain (1-171-145-144.dynamic-ip.hinet.net. [1.171.145.144])
-        by smtp.gmail.com with ESMTPSA id u15-20020a170902e5cf00b0019949fd956bsm309309plf.178.2023.03.10.10.42.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 10:42:12 -0800 (PST)
-From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        Yong Zhi <yong.zhi@intel.com>, dharageswari.r@intel.com,
-        Vamshi Krishna <vamshi.krishna.gopal@intel.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        alsa-devel@alsa-project.org, Mac Chiang <mac.chiang@intel.com>
-Subject: [PATCH v1] ASoC: Intel: sof_rt5682: Enable Bluetooth offload on adl_rt1019_rt5682
-Date:   Sat, 11 Mar 2023 02:42:01 +0800
-Message-Id: <20230310184201.1302232-1-ajye_huang@compal.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 10 Mar 2023 13:41:31 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2082.outbound.protection.outlook.com [40.107.237.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEBC12143B
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 10:41:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O7BVvSBTg4Pg7XO8cItxIK1jwX7e7a05u1v13OnLx4n5GgKqbfNcJLAz3TCpstfUkvzn5yqrrADqm40idqJO/ucsc7HIp5LrCKkKmbv5pAT5GiZyqX0WDWqTpRp9Bk02jDhfGF13KpaiEvasLzru9xfoj38b9AyGf4t3ddpqo/IJwPx786nd7pCsXlDR4+cwD/SuGsLZs83fjRc9gRT2ePIsEtspNQx1DUwcxY2HG/qZaqaNnctGQTmfEpMNOTyImgb4vP/fihMvZvA2QIAKvX0BN/KcYH/W+k5OAzEuw+6vLzvWSxxbuWpvFjoiOCnlG3j4MlYiJuTPE/shdvpeXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=r3mb7OXmR0KQmFQhUL3FGCV0dKKCgMQqJOF2eQ9Cazs=;
+ b=D3Zx0FgulPEzTb3XXmiM6PY618cs/7Vxepx7OxnqSVhq/BYUW6etZfmxxpeUtB9AXjho5davIJe9Y3bcNZkPBMFYRqKg9ngVDpiGWRpevfXB7/6XycQMyS7pfi5+tXaUy2ZCv6VdiJZkZidrrohyIIxza5UGV+KMHgyNdo2plvVuOGnGTwjtsysjBV4TKzWF2sw1KIn1+oqlc1T9tW/vvfjSay3MIGZuaIvoOR7sGgxy86O+DWURMzJWL0QiodZwqtSjZ1N0VI5n1PbbNDs/mjLjSqLjs+OyqSzSFrAuo2SFe75cFQVVwusrJMIcgKUqmMuHDqpaerGjBhNXOmjd7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r3mb7OXmR0KQmFQhUL3FGCV0dKKCgMQqJOF2eQ9Cazs=;
+ b=slZacDEdEAL6gpmpEE73+ykj/f+LEuOZlvIVrgI1aYUMFgfgoAM+vNy+V0IAjp16WU9+CBfALJVT+pUiqgB87ID6KgYHGKCFfLauBhRuxrYxB0/70Mcadune+K77FTODV8RgTjcMpLyy509SPk0+B4e8zVcli5IdHFv/Kk0iNmM=
+Received: from DS7PR05CA0104.namprd05.prod.outlook.com (2603:10b6:8:56::16) by
+ BL0PR12MB4852.namprd12.prod.outlook.com (2603:10b6:208:1ce::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.20; Fri, 10 Mar
+ 2023 18:41:28 +0000
+Received: from DS1PEPF0000E630.namprd02.prod.outlook.com
+ (2603:10b6:8:56:cafe::85) by DS7PR05CA0104.outlook.office365.com
+ (2603:10b6:8:56::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.20 via Frontend
+ Transport; Fri, 10 Mar 2023 18:41:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS1PEPF0000E630.mail.protection.outlook.com (10.167.17.134) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6178.12 via Frontend Transport; Fri, 10 Mar 2023 18:41:28 +0000
+Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 10 Mar
+ 2023 12:41:26 -0600
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
+        Wayne Lin <Wayne.Lin@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Wenjing Liu <wenjing.liu@amd.com>,
+        Sung Joon Kim <sungjoon.kim@amd.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] drm/amd/display: use a more accurate check in dm_helpers_dp_read_dpcd()
+Date:   Fri, 10 Mar 2023 13:42:33 -0500
+Message-ID: <20230310184233.284388-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E630:EE_|BL0PR12MB4852:EE_
+X-MS-Office365-Filtering-Correlation-Id: c849887f-e3cc-4c8e-0790-08db21970f24
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 52BE22lALr5ZleHAOjxJTQuZNjZ6T4+Z68CIp4m02hdGG6ffRl6+cdF81caML/3Zpfr5qNwXLdLlQkp8b9I6cnTmjMktuJZpGsxPf6OiCIAibPKFznd8N4oyxhvsJ3LDGeyYNM64nlrXsHC0r2MDrjukQlVYqtkl6oRALymsBLNWiAUoxXoZntjve5s//mlQCLABxapoHJqab8XcHvGNKtjrRS+K+dNzsJN5LfKxVR7X9Jb8a3bVmmTg3ey5s1Yg1wgTuQyG2FihiEym2dY6YWoipWkRLWgVG8o/QkEZzoLPIDqHfv3R7FZ1v3xfq8/8h8oVGHTNGIHbse1lRtXOzQyuejMWjAcMsHNfZba5rSCIQUl7TgpWvA+Ou/HLWyYTctKe1KEwhQCp5/tGKti3qr+Ya41A6neunuJVs3RU1VaPTLJyoOqgPTDv6z6KuoT1gfzgDOzW2BEdWMvGSk+Oh6MnZjDr8shf+RIApF+Up7gAMU/53aoISXAxC+DRx+T/YOzeOKASg+aOFDOFho9Tpn8vXvMbrDJOz4RVGg4uABSajyX/0NIynuxvkhGEyxP1DInWb1Lf9naIQciQAjBmDfTJ0V53nQxMQUPmMUZekmJsXbqUEqCn3T378fiTRx172Bz4mlKlQJtlXFWq/Uy63Wu58+p5qB9NRjrWETqhusnNTp2+7gQwju9WoQHzXYocqlR4eoKjDkqT276ypqDGWnz8YW7H9uRDOlnkRnuXIyXSwKVmbhwuy8zX+d7xUGRBaGjPtxagQ8ZV2RPyByJTXw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(136003)(376002)(39860400002)(451199018)(46966006)(36840700001)(40470700004)(2906002)(81166007)(82740400003)(83380400001)(4744005)(44832011)(5660300002)(36756003)(40460700003)(40480700001)(41300700001)(70206006)(8936002)(356005)(8676002)(4326008)(6916009)(316002)(36860700001)(86362001)(54906003)(478600001)(82310400005)(186003)(426003)(47076005)(70586007)(2616005)(336012)(16526019)(1076003)(26005)(6666004)(36900700001)(16060500005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 18:41:28.0229
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c849887f-e3cc-4c8e-0790-08db21970f24
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E630.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4852
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable Bluetooth audio offload for drv_name "adl_rt1019_rt5682" with
-following board configuration specifically:
+We should be checking if drm_dp_dpcd_read() returns the size that we are
+asking it to read instead of just checking if it is greater than zero.
+So, compare the return value of drm_dp_dpcd_read() to the requested
+read size.
 
-SSP0 - rt5682 Headset
-SSP1 - alc1019p speaker amp
-SSP2 - Bluetooth audio
-
-Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-Signed-off-by: Mac Chiang <mac.chiang@intel.com>
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 ---
- sound/soc/intel/boards/sof_rt5682.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+v2: drop the WARN_ON().
+---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/intel/boards/sof_rt5682.c b/sound/soc/intel/boards/sof_rt5682.c
-index 4fe448295a90..2eec32846078 100644
---- a/sound/soc/intel/boards/sof_rt5682.c
-+++ b/sound/soc/intel/boards/sof_rt5682.c
-@@ -1109,7 +1109,9 @@ static const struct platform_device_id board_ids[] = {
- 					SOF_SPEAKER_AMP_PRESENT |
- 					SOF_RT1019_SPEAKER_AMP_PRESENT |
- 					SOF_RT5682_SSP_AMP(1) |
--					SOF_RT5682_NUM_HDMIDEV(4)),
-+					SOF_RT5682_NUM_HDMIDEV(4) |
-+					SOF_BT_OFFLOAD_SSP(2) |
-+					SOF_SSP_BT_OFFLOAD_PRESENT),
- 	},
- 	{
- 		.name = "mtl_mx98357_rt5682",
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+index 8d598b322e5b..9c1e91c2179e 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+@@ -511,8 +511,8 @@ bool dm_helpers_dp_read_dpcd(
+ 		return false;
+ 	}
+ 
+-	return drm_dp_dpcd_read(&aconnector->dm_dp_aux.aux, address,
+-			data, size) > 0;
++	return drm_dp_dpcd_read(&aconnector->dm_dp_aux.aux, address, data,
++				size) == size;
+ }
+ 
+ bool dm_helpers_dp_write_dpcd(
 -- 
-2.25.1
+2.39.2
 
