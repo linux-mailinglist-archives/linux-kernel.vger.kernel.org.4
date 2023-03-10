@@ -2,80 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EBD6B404F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F17046B405E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:25:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjCJNXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 08:23:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        id S229959AbjCJNZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 08:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjCJNWz (ORCPT
+        with ESMTP id S229804AbjCJNZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:22:55 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7FA102873
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:22:14 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id i34so20318563eda.7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:22:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678454533;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YeDnl6eYe/Y1WHUjjQBiVQQ785HgKzOroIPYymGFtHY=;
-        b=JIQkZtApYvCbzbSNsLyjszUm5ZltrUAYgrhR6dsl+1X2fMEMD5287v3iMgZKLL/Gf7
-         1BV3eBn4craIdBuyzofyeHhHj4SyBwaiKGMaThJ6TaL6ebqGjkqIPH2JmFPhO5bVwDWc
-         Ha4GehtuYrC8GzMn0y3zAZ6CLKE+w0WBxmwunF4nFRataYTPmTuncSHXq5ONUyledlhP
-         To+7ypxXaKOcFwWjQtVdF9L0/m3wQk0Hp/DAW7DmDGyMZ87LCKvPJ+o0KbNAMdhDfLBa
-         jNyTrjph1qtpbtVEFbjIFiMnwoVoYiE85g5+0Es9nDL7Z+ld0Dl3IuNdfCE3MdaotvKp
-         Ox9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678454533;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YeDnl6eYe/Y1WHUjjQBiVQQ785HgKzOroIPYymGFtHY=;
-        b=lnJuXWofFWNWiZK8rn2WZ7ts5fpJqDm/NmKQGdiQjUniFHTSA90rLaOY87SYHfQCH6
-         gMVS0RervHnFQ11GWuP50FDsEzZoEb7iNDPILsImZ0GjSxIqVkVRVX0CVAgLLZPzonkO
-         Ee+VtciUaufCqUnH6UflOjdyrU8cX8ma7HJHy5O9opUWhCb833o4gJ+sulipd6ZlIzOP
-         UZ0anNo4ismE85lteETuPox22/L+6vS00JOTNJgVR8lnZnP3pDRgbWOR7IRC45h2k5Sb
-         jkRsCwfv3oLgUHezS4Jx5ioxT4GDFXeFgON+6sB7iZZjet2TXvwjC098ne9yoZI7xwvY
-         XmDQ==
-X-Gm-Message-State: AO0yUKUK/WXNu2rtCLVfPhHPjE3KW3/jC5iGUknfsCovCHZZHymUfDbj
-        qMtpKxTIjt639/ntiAgFFfGIAw==
-X-Google-Smtp-Source: AK7set88AkgWffk6HYNIFQUMvmQ8KVcmU2jML2j4j71jiqRgBFuHLjnjJU1DOFwTomCcbkWOutVKgA==
-X-Received: by 2002:a17:907:3f23:b0:84d:4e4f:1f85 with SMTP id hq35-20020a1709073f2300b0084d4e4f1f85mr33780491ejc.59.1678454533717;
-        Fri, 10 Mar 2023 05:22:13 -0800 (PST)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:45c4:46be:ec71:4a51])
-        by smtp.gmail.com with ESMTPSA id zc4-20020a170906988400b008b17879ec95sm959124ejb.22.2023.03.10.05.22.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 05:22:13 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 9/9] ASoC: codecs: lpass-wsa-macro: add support for SM8550
-Date:   Fri, 10 Mar 2023 14:22:01 +0100
-Message-Id: <20230310132201.322148-10-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230310132201.322148-1-krzysztof.kozlowski@linaro.org>
-References: <20230310132201.322148-1-krzysztof.kozlowski@linaro.org>
+        Fri, 10 Mar 2023 08:25:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF465A181;
+        Fri, 10 Mar 2023 05:25:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C389961743;
+        Fri, 10 Mar 2023 13:23:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD5DC433D2;
+        Fri, 10 Mar 2023 13:23:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678454621;
+        bh=JxGawBRBiAOKWI5mLLvbiOwWip4wIDn5bcx4U5k5Nkw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=nJ80UnqY7geRXzONADjCSgCs2PTfGcUUR3qPrctyesUDIck0YSBHRNbYu1ajilYq7
+         lZvbNJ+YUFxK5yqdzVksIHiQT6U/XIKt0wpnp29IV2wNpIdSE4Ug6rl9emMFjCWACa
+         2RTCzQU4znfxqahoGfB4ruot4XQzewlrqsrVvK3GYsGOM972CvQDp1m+kKxv74S9UY
+         1FAVhLtvkJ65oGHRW/4MyrS4nm/lRVcoUIW6iTlaZyEJNFui1LFeAWuu9E6l8gPJQg
+         V6ykPimE4c4oVP0mBRZ9fFstknXkh9oi4JBfwfY3GJkSRy6wS2ImQsux+NnFImGhog
+         ML4HFt+sPST4Q==
+Message-ID: <46415d8e-3c92-d489-3f44-01a586160082@kernel.org>
+Date:   Fri, 10 Mar 2023 15:23:34 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v3 3/6] soc: ti: pruss: Add
+ pruss_cfg_read()/update() API
+To:     Md Danish Anwar <a0501179@ti.com>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+Cc:     linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230306110934.2736465-1-danishanwar@ti.com>
+ <20230306110934.2736465-4-danishanwar@ti.com>
+ <7076208d-7dca-6980-5399-498e55648740@kernel.org>
+ <afd6cd8a-8ba7-24b2-d7fc-c25a9c5f3c42@ti.com>
+ <a74e5079-d89d-2420-b6af-d630c4f04380@kernel.org>
+ <a4395259-9b83-1101-7c4c-d8a36c3600eb@ti.com>
+ <367f6b50-e4cc-c3eb-e8e9-dabd4e044530@ti.com>
+Content-Language: en-US
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <367f6b50-e4cc-c3eb-e8e9-dabd4e044530@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,94 +73,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the WSA macro codec on Qualcomm SM8550.  SM8550 does not
-use NPL clock, thus add flags allowing to skip it.
+Hi Danish,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- sound/soc/codecs/lpass-wsa-macro.c | 38 +++++++++++++++++++++++-------
- 1 file changed, 30 insertions(+), 8 deletions(-)
+On 10/03/2023 13:53, Md Danish Anwar wrote:
+> Hi Roger,
+> 
+> On 09/03/23 17:00, Md Danish Anwar wrote:
+>> Hi Roger,
+>>
+>> On 08/03/23 17:12, Roger Quadros wrote:
+>>>
+>>>
+>>> On 08/03/2023 13:36, Md Danish Anwar wrote:
+>>>> Hi Roger,
+>>>>
+>>>> On 08/03/23 13:57, Roger Quadros wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On 06/03/2023 13:09, MD Danish Anwar wrote:
+>>>>>> From: Suman Anna <s-anna@ti.com>
+>>>>>>
+>>>>>> Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
+>>>>>> the PRUSS platform driver to allow other drivers to read and program
+>>>>>> respectively a register within the PRUSS CFG sub-module represented
+>>>>>> by a syscon driver. This interface provides a simple way for client
+>>>>>
+>>>>> Do you really need these 2 functions to be public?
+>>>>> I see that later patches (4-6) add APIs for doing specific things
+>>>>> and that should be sufficient than exposing entire CFG space via
+>>>>> pruss_cfg_read/update().
+>>>>>
+>>>>>
+>>>>
+>>>> I think the intention here is to keep this APIs pruss_cfg_read() and
+>>>> pruss_cfg_update() public so that other drivers can read / modify PRUSS config
+>>>> when needed.
+>>>
+>>> Where are these other drivers? If they don't exist then let's not make provision
+>>> for it now.
+>>> We can provide necessary API helpers when needed instead of letting client drivers
+>>> do what they want as they can be misused and hard to debug.
+>>>
+>>
+>> The ICSSG Ethernet driver uses pruss_cfg_update() API. It is posted upstream in
+>> the series [1]. The ethernet driver series is dependent on this series. In
+>> series [1] we are using pruss_cfg_update() in icssg_config.c file,
+>> icssg_config() API.
 
-diff --git a/sound/soc/codecs/lpass-wsa-macro.c b/sound/soc/codecs/lpass-wsa-macro.c
-index ba7480f3831e..5155362de111 100644
---- a/sound/soc/codecs/lpass-wsa-macro.c
-+++ b/sound/soc/codecs/lpass-wsa-macro.c
-@@ -246,6 +246,9 @@
- #define WSA_MACRO_EC_MIX_TX1_MASK 0x18
- #define WSA_MACRO_MAX_DMA_CH_PER_PORT 0x2
- 
-+/* NPL clock is expected */
-+#define WSA_MACRO_FLAG_HAS_NPL_CLOCK		BIT(0)
-+
- enum {
- 	WSA_MACRO_GAIN_OFFSET_M1P5_DB,
- 	WSA_MACRO_GAIN_OFFSET_0_DB,
-@@ -2346,7 +2349,10 @@ static int wsa_macro_register_mclk_output(struct wsa_macro *wsa)
- 	struct clk_init_data init;
- 	int ret;
- 
--	parent_clk_name = __clk_get_name(wsa->npl);
-+	if (wsa->npl)
-+		parent_clk_name = __clk_get_name(wsa->npl);
-+	else
-+		parent_clk_name = __clk_get_name(wsa->mclk);
- 
- 	init.name = "mclk";
- 	of_property_read_string(dev_of_node(dev), "clock-output-names",
-@@ -2379,9 +2385,12 @@ static int wsa_macro_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct wsa_macro *wsa;
-+	kernel_ulong_t flags;
- 	void __iomem *base;
- 	int ret;
- 
-+	flags = (kernel_ulong_t)device_get_match_data(dev);
-+
- 	wsa = devm_kzalloc(dev, sizeof(*wsa), GFP_KERNEL);
- 	if (!wsa)
- 		return -ENOMEM;
-@@ -2398,9 +2407,11 @@ static int wsa_macro_probe(struct platform_device *pdev)
- 	if (IS_ERR(wsa->mclk))
- 		return PTR_ERR(wsa->mclk);
- 
--	wsa->npl = devm_clk_get(dev, "npl");
--	if (IS_ERR(wsa->npl))
--		return PTR_ERR(wsa->npl);
-+	if (flags & WSA_MACRO_FLAG_HAS_NPL_CLOCK) {
-+		wsa->npl = devm_clk_get(dev, "npl");
-+		if (IS_ERR(wsa->npl))
-+			return PTR_ERR(wsa->npl);
-+	}
- 
- 	wsa->fsgen = devm_clk_get(dev, "fsgen");
- 	if (IS_ERR(wsa->fsgen))
-@@ -2553,10 +2564,21 @@ static const struct dev_pm_ops wsa_macro_pm_ops = {
- };
- 
- static const struct of_device_id wsa_macro_dt_match[] = {
--	{.compatible = "qcom,sc7280-lpass-wsa-macro"},
--	{.compatible = "qcom,sm8250-lpass-wsa-macro"},
--	{.compatible = "qcom,sm8450-lpass-wsa-macro"},
--	{.compatible = "qcom,sc8280xp-lpass-wsa-macro" },
-+	{
-+		.compatible = "qcom,sc7280-lpass-wsa-macro",
-+		.data = (void *)WSA_MACRO_FLAG_HAS_NPL_CLOCK,
-+	}, {
-+		.compatible = "qcom,sm8250-lpass-wsa-macro",
-+		.data = (void *)WSA_MACRO_FLAG_HAS_NPL_CLOCK,
-+	}, {
-+		.compatible = "qcom,sm8450-lpass-wsa-macro",
-+		.data = (void *)WSA_MACRO_FLAG_HAS_NPL_CLOCK,
-+	}, {
-+		.compatible = "qcom,sm8550-lpass-wsa-macro",
-+	}, {
-+		.compatible = "qcom,sc8280xp-lpass-wsa-macro",
-+		.data = (void *)WSA_MACRO_FLAG_HAS_NPL_CLOCK,
-+	},
- 	{}
- };
- MODULE_DEVICE_TABLE(of, wsa_macro_dt_match);
--- 
-2.34.1
+You can instead add a new API on what exactly you want it to do rather than exposing
+entire CFG space.
 
+>>
+>> So for this, the API pruss_cfg_update() needs to be public.
+>>
+>> [1] https://lore.kernel.org/all/20230210114957.2667963-3-danishanwar@ti.com/
+>>
+> 
+> I will keep this patch as it is as pruss_cfg_update() needs to be public for
+> ICSSG Ethernet driver and pruss_cfg_read() is kind of a complementary function
+> to update. I will do required changes in other patches and send next revision
+> if that's OK with you. Please let me know.
+> 
+>>>>
+>>>> The later patches (4-6) add APIs to do specific thing, but those APIs also
+>>>> eventually call pruss_cfg_read/update().
+>>>
+>>> They can still call them but they need to be private to pruss.c
+>>>
+>>>>
+>>>>>> drivers without having them to include and parse the CFG syscon node
+>>>>>> within their respective device nodes. Various useful registers and
+>>>>>> macros for certain register bit-fields and their values have also
+>>>>>> been added.
+>>>>>>
+>>>>>> It is the responsibility of the client drivers to reconfigure or
+>>>>>> reset a particular register upon any failures.
+>>>>>>
+>>>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>>>>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>>>>>> ---
+>>>>>>  drivers/soc/ti/pruss.c           |  41 +++++++++++++
+>>>>>>  include/linux/remoteproc/pruss.h | 102 +++++++++++++++++++++++++++++++
+>>>>>>  2 files changed, 143 insertions(+)
+>>>>>>
+>>>>>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+>>>>>> index c8053c0d735f..537a3910ffd8 100644
+>>>>>> --- a/drivers/soc/ti/pruss.c
+>>>>>> +++ b/drivers/soc/ti/pruss.c
+>>>>>> @@ -164,6 +164,47 @@ int pruss_release_mem_region(struct pruss *pruss,
+>>>>>>  }
+>>>>>>  EXPORT_SYMBOL_GPL(pruss_release_mem_region);
+>>>>>
+
+cheers,
+-roger
