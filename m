@@ -2,159 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B696B351E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 05:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 463226B3521
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 05:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjCJEEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 23:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
+        id S230098AbjCJEFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 23:05:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCJEEf (ORCPT
+        with ESMTP id S229967AbjCJEF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 23:04:35 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F3EE501E;
-        Thu,  9 Mar 2023 20:04:33 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32A16TZ4002304;
-        Fri, 10 Mar 2023 04:04:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Qy1PUzn19VptN8IfOjaioaDlFAVD7aWdoVwO37RW/Ko=;
- b=GUtsNN75D+5nCv7YyGv4381CVWdZniukmtlgVzuxvR6l2QsH3JG6EEg7Z1Cti5lSKdr4
- 0Xv6ELqm9ai6/gXk9C4qP471zFMIbbWzOCH01/C57dj0xwPkYLEaRLOIbR/zejlar9kK
- Gzvw8myX0Ay5ZVDluFBugtkAq+mx2Mn3yxeKuhWdDrFVdoH7G+vVQKoNMo3wp4AQRosr
- c/GEIURZUeL94Tjbt46O3YuAsR7iuJSLOmfYJ3ak7Ph73s/39QxET8AUdMpJvG8c+hcz
- Q8iR9xpgB4tkSoTRACXAP0wz26KiPg2IWDvxLupRO8atYf629Fy7eYR/vxVRj3DQ6jg4 rQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p758cuufh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 04:04:26 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32A44P7l002890
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 04:04:25 GMT
-Received: from [10.79.43.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 9 Mar 2023
- 20:04:14 -0800
-Message-ID: <affcec97-6cc2-aa0a-103d-efa8ad3b68bf@quicinc.com>
-Date:   Fri, 10 Mar 2023 09:34:10 +0530
+        Thu, 9 Mar 2023 23:05:28 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB277F24A2;
+        Thu,  9 Mar 2023 20:05:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sXO3jdqVtcE9IkmkZO6INMTY092zGfYbJtv9fnxM+sA=; b=s4GPi5XiLpgFxOlwC+NflMG4/X
+        5HbPrHSvN06Y/6GM49O0nUugEJWHbzRYk7+EIhVHCxwEJLArUtCzzLmbb/w8xsdE1ryBSkDa4o/UH
+        /N3oi9I6KVELpO4jbxOBBgqadEWL8k8Wl3X6o65G0ZkCGO7az4JwtM2Xp0Ugz8+6prxwsSFqzhWjX
+        uX2Z+9SprefB8puk0M9v8g355tcJYOHb6tD4sgQOoxH5zYgTMjICW2GSKbf5ZGmTfecoDhGe3HaF4
+        TTuzOp2phpd65QIpwrHo9QfKuhFLoKM1nmI+Zh35Eab3siV3m/GriED+HcHPd+vQqeBt2OFkrlOnZ
+        M5IC4GPQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1paU0C-00FCuh-1q;
+        Fri, 10 Mar 2023 04:05:08 +0000
+Date:   Fri, 10 Mar 2023 04:05:08 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
+        jefflexu@linux.alibaba.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca, rpeterso@redhat.com, agruenba@redhat.com,
+        mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        brauner@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        cluster-devel@redhat.com, ocfs2-devel@oss.oracle.com,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: erofs: convert to use i_blockmask()
+Message-ID: <20230310040508.GN3390869@ZenIV>
+References: <20230310031547.GD3390869@ZenIV>
+ <20230310035121.56591-1-frank.li@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v1 1/1] remoteproc: qcom: pas: Coredump elf class to elf64
-Content-Language: en-US
-To:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
-        <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        "Elliot Berman" <quic_eberman@quicinc.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>
-References: <20230309001035.24024-1-quic_gokukris@quicinc.com>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <20230309001035.24024-1-quic_gokukris@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 8useoCWDgeErQAEsQYb-NErQBF6ghjH6
-X-Proofpoint-GUID: 8useoCWDgeErQAEsQYb-NErQBF6ghjH6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_14,2023-03-09_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- priorityscore=1501 suspectscore=0 spamscore=0 clxscore=1011
- impostorscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303100029
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310035121.56591-1-frank.li@vivo.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Gokul,
-
-Thanks for the patch.
-
-On 3/9/23 05:40, Gokul krishna Krishnakumar wrote:
-> This change adds a new initialization param which modifies the elf
-> class accordingly. Some of the subsystem dump analysis tools need
-> the elf class to be elf64.
+On Fri, Mar 10, 2023 at 11:51:21AM +0800, Yangtao Li wrote:
+> Hi AI,
 > 
-
-https://lore.kernel.org/lkml/8dea333d-544d-7c07-d560-a1a9c3a38ddc@quicinc.com/
-
-This patch was already sent upstream a while back ^^. IIRC the firmware
-certainly aren't 64 bit elfs and dump analysis tools don't really care 
-as long the coredump contains section headers.
-
-- Sibi
-
-> Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-> ---
->   drivers/remoteproc/qcom_q6v5_pas.c | 9 ++++++++-
->   1 file changed, 8 insertions(+), 1 deletion(-)
+> > Umm...  What's the branchpoint for that series?
+> > Not the mainline - there we have i_blocksize() open-coded...
 > 
-> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-> index 0871108fb4dc..17ce3177be7b 100644
-> --- a/drivers/remoteproc/qcom_q6v5_pas.c
-> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
-> @@ -39,6 +39,7 @@ struct adsp_data {
->   	int pas_id;
->   	int dtb_pas_id;
->   	unsigned int minidump_id;
-> +	bool uses_elf64;
->   	bool auto_boot;
->   	bool decrypt_shutdown;
->   
-> @@ -681,7 +682,10 @@ static int adsp_probe(struct platform_device *pdev)
->   	}
->   
->   	rproc->auto_boot = desc->auto_boot;
-> -	rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
-> +	if (desc->uses_elf64)
-> +		rproc_coredump_set_elf_info(rproc, ELFCLASS64, EM_NONE);
-> +	else
-> +		rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
->   
->   	adsp = (struct qcom_adsp *)rproc->priv;
->   	adsp->dev = &pdev->dev;
-> @@ -1126,6 +1130,7 @@ static const struct adsp_data sm8550_adsp_resource = {
->   	.pas_id = 1,
->   	.dtb_pas_id = 0x24,
->   	.minidump_id = 5,
-> +	.uses_elf64 = true,
->   	.auto_boot = true,
->   	.proxy_pd_names = (char*[]){
->   		"lcx",
-> @@ -1145,6 +1150,7 @@ static const struct adsp_data sm8550_cdsp_resource = {
->   	.pas_id = 18,
->   	.dtb_pas_id = 0x25,
->   	.minidump_id = 7,
-> +	.uses_elf64 = true,
->   	.auto_boot = true,
->   	.proxy_pd_names = (char*[]){
->   		"cx",
-> @@ -1165,6 +1171,7 @@ static const struct adsp_data sm8550_mpss_resource = {
->   	.pas_id = 4,
->   	.dtb_pas_id = 0x26,
->   	.minidump_id = 3,
-> +	.uses_elf64 = true,
->   	.auto_boot = false,
->   	.decrypt_shutdown = true,
->   	.proxy_pd_names = (char*[]){
+> Sorry, I'm based on the latest branch of the erofs repository.
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git/log/?h=dev-test
+> 
+> I think I can resend based on mainline.
+> 
+> > Umm...  That actually asks for DIV_ROUND_UP(i_size_read_inode(), i_blocksize(inode))
+> > - compiler should bloody well be able to figure out that division by (1 << n)
+> > is shift down by n and it's easier to follow that way...
+> 
+> So it seems better to change to DIV_ROUND_UP(i_size_read_inode(), i_blocksize(inode))?
+> 
+> > And the fact that the value will be the same (i.e. that ->i_blkbits is never changed by ocfs2)
+> > is worth mentioning in commit message...
+> 
+> How about the following msg?
+> 
+> Use i_blockmask() to simplify code. BTW convert ocfs2_is_io_unaligned
+> to return bool type and the fact that the value will be the same
+> (i.e. that ->i_blkbits is never changed by ocfs2).
+> 
+> 
+> 
+> A small question, whether this series of changes will be merged
+> into each fs branch or all merged into vfs?
+
+Depends.  The thing to avoid is conflicts between the trees and
+convoluted commit graph.
+
+In cases like that the usual approach is
+	* put the helper into never-rebased branch - in vfs tree, in this
+case; I've no real objections against the helper in question.
+	* let other trees convert to the helper at leisure - merging
+that never-rebased branch from vfs.git before they use the helper, of
+course.  Or wait until the next cycle, for that matter...
+
+I can pick the stuff in the areas that don't have active development,
+but doing that for e.g. ext4 won't help anybody - it would only cause
+headache for everyone involved down the road.  And I'd expect the gfs2
+to be in the same situation...
