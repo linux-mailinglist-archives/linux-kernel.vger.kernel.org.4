@@ -2,142 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A376B5590
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 212FF6B5593
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbjCJXXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 18:23:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
+        id S231803AbjCJXYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 18:24:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231917AbjCJXX2 (ORCPT
+        with ESMTP id S231952AbjCJXYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 18:23:28 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1369223109;
-        Fri, 10 Mar 2023 15:23:10 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id DABC6604EF;
-        Sat, 11 Mar 2023 00:23:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678490587; bh=thvE290k7D9fKCuXiWV3PdNOaCPUOdzAVZV5qp0MFaI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XelauMt9V0BR30I2DeSWVdLMp3fjRRprGISVaGa/2PpBAPkZsgXlA6nCnXDCh8G/5
-         FVLcrk+9BvrqrNoaP6Jsyngk6CpZZK8iIkfWk88hZogbtXF1IFJHVg6h8kL2KDlT/X
-         +BycPFoh5srfm5q0FooCnC/aMTFE/IMqW3C74Them1WbA5Wj7sBB6rCUpzo7/bHrA5
-         cDtcxBRKzm6KzeEzKxtS4u0yvm7LUrzAPj4lD8gL6hj5r1XUNFOZpIMaKdPAMWL8AK
-         sD/7pJTUCJp1UJx7iCtqga3v4ZwfkoXbHwN0rKB2kpJsV6mb5zBDf5CUb6QSPbuLsa
-         X3ne6+cswserA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id lJ1aZtSHt-_N; Sat, 11 Mar 2023 00:23:05 +0100 (CET)
-Received: from [192.168.1.4] (unknown [77.237.109.125])
-        by domac.alu.hr (Postfix) with ESMTPSA id D9E26604ED;
-        Sat, 11 Mar 2023 00:23:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678490585; bh=thvE290k7D9fKCuXiWV3PdNOaCPUOdzAVZV5qp0MFaI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=zj0O/soo4ROwwe0iFHEL956mOPrscivw9/KyXdlEYay/TmHSKxNcC+N00BcIjgCAZ
-         Kea6VF2TXL84G1OEwbZC7+XmzAYGUqWq5L50VQLNTbuA3yo+VUfi69k2tOzOyKBhVu
-         9ONlAxf43LkYTipcm+hpCeCIIGc7rI1HjqOaORnfdfndP8ragw5opbWFSFqfn2glxq
-         B8bkq2abg0sis5n5FGp6QDXfeJ0qsdfJ9+btSBVR9HShvwksoF66FOnm2tdhU74GhM
-         DknS9KHOLDOx2AhUnWx3+ayIkZWXe88Zk8JOWLgcGidmXrvk7BQJlAGkuZ6jW2NDqr
-         lE0ttaSAeUp/g==
-Message-ID: <d20c7249-d407-1ddf-7903-ff1037d69656@alu.unizg.hr>
-Date:   Sat, 11 Mar 2023 00:23:04 +0100
+        Fri, 10 Mar 2023 18:24:18 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047685CECC;
+        Fri, 10 Mar 2023 15:24:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=n3ibBOSHwLtyYWSPz4byfz4X1HpWIu7EDA2VdrWLfGg=; b=oY5BhI0UKiQJz+oVu3mMg8gY7t
+        zqnqSgmo9/fkhKmgDQNJSot1ASq8dmZpKF3mHqTbtmtmRukQ/tB7GS1fAluaTbQfhd4TOlTqMapR5
+        PPp1v2kxfb5Tqdx3/FAIg9O3eYr8KFWck+wdleTjGP4Dfsym9ZsKEUpRKs19Cz2nigJ8ilbF+zrIC
+        /ZzQ3KQ2Ih8LAvctLYJv4LfZUEpXXms0Lmu3Wix/wtbK5SmHjF8VFe4zBfvTuQcL1dZWHikG+huRl
+        yp5D0i3FpTXu5kH5iMkVSi4ZOoRVeNxM4PhFF7utzvjjCUfJkKJVAfmVtesXWAtp2oqeOqc99R+U9
+        Sc/kDHhw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pam5w-00Gbr0-MM; Fri, 10 Mar 2023 23:24:16 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     linux-ia64@vger.kernel.org
+Cc:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
+        j.granados@samsung.com, patches@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH] ia64: simplify one-level sysctl registration for kdump_ctl_table
+Date:   Fri, 10 Mar 2023 15:24:16 -0800
+Message-Id: <20230310232416.3958751-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 1/2] Add release hook to LSM
-Content-Language: en-US, hr
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        Paul Moore <paul@paul-moore.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        Frederick Lawler <fred@cloudflare.com>
-References: <20230310194159.GB528@domac.alu.hr>
- <ZAuJY1MM3hEiT0ri@smile.fi.intel.com>
- <47129238-d98e-0561-0921-adfe40b6b85f@alu.unizg.hr>
- <ZAuPNm3UdC/c1EXm@smile.fi.intel.com>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZAuPNm3UdC/c1EXm@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10. 03. 2023. 21:12, Andy Shevchenko wrote:
-> On Fri, Mar 10, 2023 at 08:52:32PM +0100, Mirsad Goran Todorovac wrote:
->> On 10. 03. 2023. 20:47, Andy Shevchenko wrote:
->>> On Fri, Mar 10, 2023 at 08:42:00PM +0100, Mirsad Goran Todorovac wrote:
->>>>
->>>> Add release() hook to the definition of the LSM modules, to enable calling
->>>> destructors and deallocating allocated resources cleanly.
->>>>
->>>> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->>>
->>>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>>
->>> I haven't given you this tag. Sorry, you must not add something
->>> which was not explicitly given.
->>
->> Mea culpa.
->>
->> I misunderstood that you have approved the change when saying that I should
->> file a formal patch. It worked with Florian Westphal in my first patch, so I
->> thought it would be inappropriate to leave out who endorsed the patch.
-> 
-> We have Suggested-by tag for that.
+There is no need to declare an extra tables to just create directory,
+this can be easily be done with a prefix path with register_sysctl().
 
-Done exactly that, and now I have to reward myself for the first
-successful multi-part patch submission.
+Simplify this registration.
 
->> Thousand apologies. This is my second patch, so I am asking for some extra
->> grace ...
-> 
->> What should I do now?
-> 
-> Wait at least a couple of days (even more, since it's weekend) for other
-> comments and then send a v2 of the series with the comments addressed.
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
 
-Actually, Mr. Paul Moore requested the rest of the patch, so I
-did a complete resend immediately.
+If ia64 is not removed from the kernel feel free to take this or I can
+take it through sysctl-next.
 
-> Btw, you may take my "smart" script [1] for sending patch series. It
-> makes much less headache on how to do that properly.
-> 
-> [1]: https://github.com/andy-shev/home-bin-tools/blob/master/ge2maintainer.sh
+ arch/ia64/kernel/crash.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-Thanks for the tip.
-
-It's pleasure to be working with you guys, it's a great brainstorming
-session and I really enjoyed it. It's a privilege to assist your
-excellent team.
-
-Best regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
+diff --git a/arch/ia64/kernel/crash.c b/arch/ia64/kernel/crash.c
+index 76730f34685c..88b3ce3e66cd 100644
+--- a/arch/ia64/kernel/crash.c
++++ b/arch/ia64/kernel/crash.c
+@@ -234,15 +234,6 @@ static struct ctl_table kdump_ctl_table[] = {
+ 	},
+ 	{ }
+ };
+-
+-static struct ctl_table sys_table[] = {
+-	{
+-	  .procname = "kernel",
+-	  .mode = 0555,
+-	  .child = kdump_ctl_table,
+-	},
+-	{ }
+-};
+ #endif
  
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
+ static int
+@@ -257,7 +248,7 @@ machine_crash_setup(void)
+ 	if((ret = register_die_notifier(&kdump_init_notifier_nb)) != 0)
+ 		return ret;
+ #ifdef CONFIG_SYSCTL
+-	register_sysctl_table(sys_table);
++	register_sysctl("kernel", kdump_ctl_table);
+ #endif
+ 	return 0;
+ }
+-- 
+2.39.1
 
