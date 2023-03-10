@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 016796B3A8B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:32:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 080B16B3A93
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjCJJca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
+        id S229843AbjCJJdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:33:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbjCJJbu (ORCPT
+        with ESMTP id S230243AbjCJJc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:31:50 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94AED7C2A
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:29:23 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id l1so4391262wry.12
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:29:23 -0800 (PST)
+        Fri, 10 Mar 2023 04:32:29 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437D7E9833
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:29:51 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id j11so17953794edq.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:29:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678440560;
+        d=linaro.org; s=google; t=1678440590;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hlUmQdynEDDUy3XFMHBGRZdv5WkYIHR+kJeUOIiQplU=;
-        b=cgGOgq8CYAlQPbMmdDwACtEPQ7pENf0DEWujsvFWZRFFjTJO2lVx76cYvDWFkdzr2B
-         49a3sZSre7oL6SZEjYn1J/VN7F9QGjY1IS93sluhMEs676+0E2Q3vxUAAIyhn1/gFbVf
-         bqzmdpKB3m6ztZ62RyKZ1uzuagUijd1qlAAzC8KOF0f7qPS9LaTbccmE0BBDLMZ9B2Eg
-         onX3gRM0m+LX0+vCcR/ORxTnJhH8nKUk3wZtbLMS33PJarlt/UX9iguHqW0Yp8J/4za0
-         W8+ma1ndFk6xSTPs0sv8x/1DWVRN87ad1Wb/IQpkQeGRxqIir08PKJLWhCQhiu+YKU8Q
-         uJug==
+        bh=Wsu4G0p4vEq69pMVCyBTh1I0kHccMhzIhqWLhW5ud4c=;
+        b=Kx72YYwDQDiIAC4wPIWGMjJT8AEzo2ydzXIQJrIaRm6yFcBB/cpxbcETZALCm77ftm
+         1l/HBA5oGVYkBrJzyGJW7imKGng5FP4UTAMln7m74+LqskH25Aby4hbt5cjv6Ub6u/2z
+         bmJrn4WTr1qIh5H0hK2DIFDvx/naAps863DLpXVA9xoeGgUJH8u5reHpv7wUlrQv1OMx
+         0fHPu+ZYhU/uInVYptlFHeSxG5t3VJit6DnGhuXIGU7i3qrovc75XWpeOJ4Gr23GYpXk
+         qsw2NudAMhdVV3wawp5XmDA7zHNkESgzSZ6nKnV3WxrIdeJgt0nffL67ZxZFmYI+Ne8n
+         TLyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678440560;
+        d=1e100.net; s=20210112; t=1678440590;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hlUmQdynEDDUy3XFMHBGRZdv5WkYIHR+kJeUOIiQplU=;
-        b=IMiilvJWuFH0HlRZCN3/VskZyR4myBEaDj8i62qb+IGOLyNRtojP4Do7N2Jc1BiLPs
-         CMAVGqE+CXSt0nUCn2OEgYghzWc5Gcnh+Kw8JETgN8MDLAlszpc3lCzjVTRhXcpVraSZ
-         1Zm2JGW9Ycu3oPB2X/YEGxHtlbmnYO3ti6JujW3RdIlj0eskzCIBlJrjj690oV5TGHnU
-         cD05aT/D+lYo4prfM6jXDKudJbkZrLhdE1CvJY61pZX+xQe6qhc1yJr+oVXI9YQ7Lwpp
-         IPlulayLecSonAVfjwM/UIRBhlXlzD9zud7jE/ww9nVlJiUyOI+pSwmue0aNylZEQhWg
-         QVdg==
-X-Gm-Message-State: AO0yUKU5ruGwGCSM0q2NU8VSyzeHCpfbwNPrtAPR/qxqCgmAi6tMdc4Q
-        ysJzd4fDbOfOhc37GPqLAeekbw==
-X-Google-Smtp-Source: AK7set9UfIn2ioxvZ1tkR9i4TGq5CpQtDQZjJA0xwOH8loj2I1wqWMJKLkQmTzDQwkIgH+u0qVpANA==
-X-Received: by 2002:a5d:4809:0:b0:2ca:428f:76d0 with SMTP id l9-20020a5d4809000000b002ca428f76d0mr15103621wrq.13.1678440559905;
-        Fri, 10 Mar 2023 01:29:19 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id g9-20020a5d4889000000b002c5691f13eesm1652807wrq.50.2023.03.10.01.29.18
+        bh=Wsu4G0p4vEq69pMVCyBTh1I0kHccMhzIhqWLhW5ud4c=;
+        b=vpmhDfxP7kTPoPDvFKkzigWoXu1AsMrtbj4tb4BXP0YPmSnek6nNXXfncph2ztLkek
+         vdH4+rJc6jqNQKeMBVjeDhb/u7/9mJkD3ugZ8i08xQWrMG9A/U+pyRI95GgRsjl+DNIc
+         yqwvAqs/l2/fkvM0m4BM9Z2pv3t427SA5wFgkUcw6aP12VRelhtv4biOmc6odKcBDDgL
+         nHeRIXZDYTcMjQPiGeQccbeBeAABO+ZwWlGxmbJx3f/fw8zE7j0uSY0Q3JnTglFA91WJ
+         XHav+iUulYvjuSJCG+Vu2ADTf59t0aipf5xGUNidF3VKEFVw3LX1pzkInwhE/k/tMQaY
+         Xshg==
+X-Gm-Message-State: AO0yUKUejnMKlt8f4qhpHYkK4WCUUBlIKNSkNt3PME/NVMuDCcn/lnI6
+        wbzd4qv2Dehh1jU8LD5vUJWp4g==
+X-Google-Smtp-Source: AK7set+oCnVYTX8cnXy7SOVYOpWEmkjZuRXYtFCaMOuDrVNbOSiL1LDDgbBP+EZlM+JqUHrwQ71HYQ==
+X-Received: by 2002:a17:907:a808:b0:8aa:c35b:a34b with SMTP id vo8-20020a170907a80800b008aac35ba34bmr25831494ejc.20.1678440589760;
+        Fri, 10 Mar 2023 01:29:49 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:2a59:841a:ebc:7974? ([2a02:810d:15c0:828:2a59:841a:ebc:7974])
+        by smtp.gmail.com with ESMTPSA id ci7-20020a170906c34700b008b17de96f00sm727793ejb.151.2023.03.10.01.29.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 01:29:19 -0800 (PST)
-Message-ID: <9d8ef6df-c0b4-f578-26c3-b186d43c9660@linaro.org>
-Date:   Fri, 10 Mar 2023 09:29:18 +0000
+        Fri, 10 Mar 2023 01:29:49 -0800 (PST)
+Message-ID: <af686c3d-8a24-3066-ea6d-59d435c470b6@linaro.org>
+Date:   Fri, 10 Mar 2023 10:29:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V3] dt-bindings: nvmem: convert base example to use
- "nvmem-layout" node
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/2] arm64: dts: ti: k3-j721e: Add overlay to enable
+ CPSW9G ports in QSGMII mode
 Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20230310075145.3996-1-zajec5@gmail.com>
- <20230310075145.3996-2-zajec5@gmail.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230310075145.3996-2-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>, nm@ti.com,
+        vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srk@ti.com
+References: <20230310092804.692303-1-s-vadapalli@ti.com>
+ <20230310092804.692303-3-s-vadapalli@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230310092804.692303-3-s-vadapalli@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -82,82 +79,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/03/2023 07:51, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
+On 10/03/2023 10:28, Siddharth Vadapalli wrote:
+> The J7 Quad Port Add-On Ethernet Card for J721E Common-Proc-Board supports
+> QSGMII mode. Use the overlay to configure CPSW9G ports in QSGMII mode.
 > 
-> With support for "fixed-layout" binding we can use now "nvmem-layout"
-> even for fixed NVMEM cells. Use that in the base example as it should be
-> preferred over placing cells directly in the device node.
+> Add support to reset the PHY from kernel by using gpio-hog and gpio-reset.
 > 
-Fixed layouts are the core part of nvmem, am not sure why you want to 
-deprecate this. Either we derive the cell information dt or via layouts 
-or some post processing they should still endup as fixed layouts.
-this way the core part is always same irrespective of where the cell 
-info comes from.
+> Add aliases for CPSW9G ports to enable kernel to fetch MAC addresses
+> directly from U-Boot.
+> 
 
 
---srini
+> +&exp2 {
+> +	qsgmii-line-hog {
+> +		gpio-hog;
+> +		gpios = <16 GPIO_ACTIVE_HIGH>;
+> +		output-low;
+> +		line-name = "qsgmii-pwrdn-line";
+> +	};
+> +};
+> +
+> +&main_pmx0 {
+> +	mdio_pins_default: mdio_pins_default {
 
-> New and other bindings should follow as old binding will get deprecated
-> at some point.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
->   .../devicetree/bindings/nvmem/nvmem.yaml      | 42 +++++++++++--------
->   1 file changed, 24 insertions(+), 18 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-> index 732162e9d13e..c77be1c20e47 100644
-> --- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-> @@ -67,24 +67,30 @@ examples:
->   
->             /* ... */
->   
-> -          /* Data cells */
-> -          tsens_calibration: calib@404 {
-> -              reg = <0x404 0x10>;
-> -          };
-> -
-> -          tsens_calibration_bckp: calib_bckp@504 {
-> -              reg = <0x504 0x11>;
-> -              bits = <6 128>;
-> -          };
-> -
-> -          pvs_version: pvs-version@6 {
-> -              reg = <0x6 0x2>;
-> -              bits = <7 2>;
-> -          };
-> -
-> -          speed_bin: speed-bin@c{
-> -              reg = <0xc 0x1>;
-> -              bits = <2 3>;
-> +          nvmem-layout {
-> +              compatible = "fixed-layout";
-> +              #address-cells = <1>;
-> +              #size-cells = <1>;
-> +
-> +              /* Data cells */
-> +              tsens_calibration: calib@404 {
-> +                  reg = <0x404 0x10>;
-> +              };
-> +
-> +              tsens_calibration_bckp: calib_bckp@504 {
-> +                  reg = <0x504 0x11>;
-> +                  bits = <6 128>;
-> +              };
-> +
-> +              pvs_version: pvs-version@6 {
-> +                  reg = <0x6 0x2>;
-> +                  bits = <7 2>;
-> +              };
-> +
-> +              speed_bin: speed-bin@c{
-> +                  reg = <0xc 0x1>;
-> +                  bits = <2 3>;
-> +              };
->             };
->         };
->   
+No underscores in node names. Didn't you already get such comments?
+
+
+
+Best regards,
+Krzysztof
+
