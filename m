@@ -2,101 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A126B32D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 01:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B336F6B32D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 01:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjCJAhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 19:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
+        id S229621AbjCJAi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 19:38:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCJAhD (ORCPT
+        with ESMTP id S229473AbjCJAiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 19:37:03 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9551009F4
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 16:37:02 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id n18so3772142ybm.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 16:37:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678408622;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WAzBBc9wHE3faAQaHPnJrzBYGicXWfO6YwSCnEUYwO8=;
-        b=DP801WyB9U7zGzT/wgHu2FqpcApFrv30zcfazOvaL/QbMhY+5UMOiBKi9iletv3b2+
-         BdsHI56hT7iu4nY0wvzW2XE3B5pG6LV7vevijrN9KvG67biMrDWkTxPH4MVQvoahknWl
-         NMzP6AqxUaxgSJOU78wmtxBCot39quUVXNJ0iDWAA0HdPCdUM1Etlm6A+kMs19wjT1TN
-         HD1wUzxcmQBK8OUmtH5OWX+Cg74EuyKV6DplhR6tktVccIUbNCnmrjLntJv+h+GSrYV4
-         WAbVX3Y9XYnsicXx4KSAsJmnRsn7XLeBWlmTnnJR+XwvkPn+ocN7zpdZwMi5v4nVxJNm
-         viVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678408622;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WAzBBc9wHE3faAQaHPnJrzBYGicXWfO6YwSCnEUYwO8=;
-        b=DaQ70bkN6ycXB+jUu/c4DxC1HnYY5CdaZoHEVJBkN+peasqkC3o58C/FTEjsL1F0M7
-         olxK/6DiJwSQpvqHq49cJLw8DrV0wxmYVoWWXmFrvjStu8YE2pKZUzB2ObhaMKRlqiHJ
-         drwIfT0/IS4EGMswiQaSeAFjVIqmzu47lPJoiJsA0/Vl2H3+1t456XSsVmZU74dScUMy
-         /P5RRrr5OAZKpkgzxTGPLV70a18FAJTed+/Fq89n/fshGlejnIycIb5aMABqqOO6yvSS
-         7wSa4IwsysssiYwk3DhrcwPirQmaTkIFg0U1y5FRnb64zfToKxyCXpDWrzFJkihvHYld
-         NNUw==
-X-Gm-Message-State: AO0yUKWVdWZArlnWX8Yftj3pwX03beRysIaqvTJRi2ZdSMwfV0cw38P/
-        a3Io15D08obH/IFjn7TYEJe+BwBYpL3XWkwRjJ1OCw==
-X-Google-Smtp-Source: AK7set8Yeo5N8u/LejHHlCHchZWu+69KL1Q3WfPtOJGkyHp006nurs5zxDXdmyxrnnCzgJcZSC8U8vwsygq9QuT+t3g=
-X-Received: by 2002:a25:9d06:0:b0:a58:7139:cf85 with SMTP id
- i6-20020a259d06000000b00a587139cf85mr14574043ybp.13.1678408622000; Thu, 09
- Mar 2023 16:37:02 -0800 (PST)
+        Thu, 9 Mar 2023 19:38:24 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD275C9FD;
+        Thu,  9 Mar 2023 16:38:23 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PXnGN0nSWz4x7v;
+        Fri, 10 Mar 2023 11:38:19 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678408701;
+        bh=JsHc1igOc4Eb43fU6eO4BGsI5tx0g6dZVy+B67z7JMs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AktlXja5BihYVa6Q0S4+ghoDQ28KLwCMJ1elTPluDEFXZfOD770+HpJ9SgkpIE6au
+         7aWvAoPI//bka6Egt6OTpQK5TLd0GMGfpfzju20RF9eVhIR7rTEyvHa4WdYhtTmItK
+         Fn+0s76iKL4KyoNqtfGGf2KnUDr2C/0n9dhsxVJTL0ZJFy1D9h/LfkvEu/7pYmtbbu
+         nFizkky90GFBXrxATrkAt1ziQQdTjzJAbLCIhuf7SL29gx2lI7V6NTKgtW9++3w408
+         IsQ87UCIkYrXZjRjTqmGlvZRXEZi92tqQbTkh8lfMwcOEzUgxx3Mxw3B1TSfIDvhAf
+         GJmsMYJRiskIA==
+Date:   Fri, 10 Mar 2023 11:38:18 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        David Vernet <void@manifault.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the bpf-next tree with the bpf tree
+Message-ID: <20230310113818.3f27de45@canb.auug.org.au>
+In-Reply-To: <20230307095812.236eb1be@canb.auug.org.au>
+References: <20230307095812.236eb1be@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-4-vipinsh@google.com>
- <ZAp4Tb8MYoggn/Rb@google.com>
-In-Reply-To: <ZAp4Tb8MYoggn/Rb@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Thu, 9 Mar 2023 16:36:26 -0800
-Message-ID: <CAHVum0ffHpUCyZTVUYwk4AT1hYqrts6_ErrMo1wrFSFpDZNcEA@mail.gmail.com>
-Subject: Re: [Patch v4 03/18] KVM: x86/mmu: Track count of pages in KVM MMU
- page caches globally
-To:     David Matlack <dmatlack@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
-        jmattson@google.com, mizhang@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Y.WdL2fUM0E+dmerrA8t=Gx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 4:22=E2=80=AFPM David Matlack <dmatlack@google.com> =
-wrote:
->
-> On Mon, Mar 06, 2023 at 02:41:12PM -0800, Vipin Sharma wrote:
-> >
-> >  static void mmu_free_memory_caches(struct kvm_vcpu *vcpu)
-> >  {
-> >       kvm_mmu_free_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache);
-> > -     kvm_mmu_free_memory_cache(&vcpu->arch.mmu_shadow_page_cache);
-> > +     mutex_lock(&vcpu->arch.mmu_shadow_page_cache_lock);
-> > +     mmu_free_sp_memory_cache(&vcpu->arch.mmu_shadow_page_cache);
-> > +     mutex_unlock(&vcpu->arch.mmu_shadow_page_cache_lock);
->
-> Is this lock necessary (even when the shrinker is hooked up)?
-> mmu_free_memory_caches() is only called when KVM fails to create a vCPU
-> (before it has been added to vcpu_array) or during VM destruction (after
-> the VM has been removed from vm_list).
+--Sig_/Y.WdL2fUM0E+dmerrA8t=Gx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-My approach was if shrinker ran just before VM destruction and removed
-pages, it would reduce nobjs variable in the cache. Now, when the VM
-is being destroyed, mmu_free_sp_memory_cache() will first read the
-nobjs variable to update the global counter and free the cache. To be
-sure that the latest value is read and there is no memory ordering
-issue I used mutex.
+Hi all,
 
-I discussed with Sean offline and he pointed out that x86 is strongly
-ordered and mutex is not needed when freeing memory caches.
+On Tue, 7 Mar 2023 09:58:12 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> Today's linux-next merge of the bpf-next tree got a conflict in:
+>=20
+>   Documentation/bpf/bpf_devel_QA.rst
+>=20
+> between commit:
+>=20
+>   b7abcd9c656b ("bpf, doc: Link to submitting-patches.rst for general pat=
+ch submission info")
+>=20
+> from the bpf tree and commit:
+>=20
+>   d56b0c461d19 ("bpf, docs: Fix link to netdev-FAQ target")
+>=20
+> from the bpf-next tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc Documentation/bpf/bpf_devel_QA.rst
+> index b421d94dc9f2,5f5f9ccc3862..000000000000
+> --- a/Documentation/bpf/bpf_devel_QA.rst
+> +++ b/Documentation/bpf/bpf_devel_QA.rst
+> @@@ -684,8 -684,12 +684,8 @@@ when
+>  =20
+>  =20
+>   .. Links
+> - .. _netdev-FAQ: Documentation/process/maintainer-netdev.rst
+>  -.. _Documentation/process/: https://www.kernel.org/doc/html/latest/proc=
+ess/
+> + .. _netdev-FAQ: https://www.kernel.org/doc/html/latest/process/maintain=
+er-netdev.html
+>   .. _selftests:
+>      https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/t=
+ree/tools/testing/selftests/bpf/
+>  -.. _Documentation/dev-tools/kselftest.rst:
+>  -   https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
+>  -.. _Documentation/bpf/btf.rst: btf.rst
+>  =20
+>   Happy BPF hacking!
+
+This is now a conflict between the net-next tree and Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Y.WdL2fUM0E+dmerrA8t=Gx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQKe/sACgkQAVBC80lX
+0GwC1wf/RXdwB6V64d2FmGNLAOXcwdNdjog6gxjgZqNWqyp/L+gw9tFRB+2bUx4q
+8TT7yXos2gU3SB+IkExmgMSD5eCCzX3nDcqVstoFMnyfY7oYk7jhptIFq0zwbqrI
+QADkm6PAKQyYj5FNVYdpcHrdvr2Gsz5hifcB0OPp0Oj+ohNWP1bCAJ4fNSil4BjP
+Uaj/GatXItd+kPwDM1v88d8jr+yeCUV0Z14w0bhWu0dEj/hegmIy8wJ0K/vMCPQg
+UdA6LEHNfe+auaPqt8nFacW8uJ/bCk/OPC+/+EcDuNFJIZAdDxAzVQmsP7kIYuv3
+kFmSRJKMFxwJr+a7zCDDxLjXQJpEGQ==
+=SBe0
+-----END PGP SIGNATURE-----
+
+--Sig_/Y.WdL2fUM0E+dmerrA8t=Gx--
