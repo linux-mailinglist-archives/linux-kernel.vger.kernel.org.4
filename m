@@ -2,98 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE1D6B54E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8F56B54E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231767AbjCJWyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 17:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        id S230488AbjCJWzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 17:55:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231864AbjCJWyQ (ORCPT
+        with ESMTP id S231695AbjCJWzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 17:54:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E7C5FA46;
-        Fri, 10 Mar 2023 14:53:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB0B5B8242E;
-        Fri, 10 Mar 2023 22:53:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25656C433EF;
-        Fri, 10 Mar 2023 22:53:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678488801;
-        bh=8rw2KDCKekrHmNc8hHv1I2pH/HRctBmo8/l54PCIy2A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bhfc0hKMNKyuw2V5FZpRwfs/xZOQNGvate7GE4kfHCmL9nZjLiejBFph1vGWYUzwC
-         RRIw7e+Jb22yIwDYnsuAQNCG9yhB46M3d3vut7435FUeCFSOutvKmeTuxcoyjQitkx
-         laNHtCV2J6F19e7K4/t01sk5dXalEXq6qL7uGY1P83seaRtQuMlkbkcS2VksCbkWSK
-         n2L1QHsoODZzmkcPvgbKS/R2TcvtBqpuQEGi0X33JE81zLv2QYZUg+MS5JT3zzn0E4
-         XSrr0yM7yH653naETdFzsarXDsLhsvTvMsi39k8LXndQ5X/oFV1BH+jlVR6QfH4LRY
-         Os/Jd8npksCfA==
-Date:   Fri, 10 Mar 2023 14:53:19 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     stable@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Mike Cloaked <mike.cloaked@gmail.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yu Kuai <yukuai3@huawei.com>, Genes Lists <lists@sapience.com>
-Subject: Re: Possible kernel fs block code regression in 6.2.3 umounting usb
- drives
-Message-ID: <ZAu030xtaPBGFPBS@sol.localdomain>
-References: <CAOCAAm7AEY9tkZpu2j+Of91fCE4UuE_PqR0UqNv2p2mZM9kqKw@mail.gmail.com>
- <CAOCAAm4reGhz400DSVrh0BetYD3Ljr2CZen7_3D4gXYYdB4SKQ@mail.gmail.com>
- <ZAuPkCn49urWBN5P@sol.localdomain>
- <ZAuQOHnfa7xGvzKI@sol.localdomain>
- <ad021e89-c05c-f85a-2210-555837473734@kernel.dk>
- <88b36c03-780f-61a5-4a66-e69072aa7536@sapience.com>
+        Fri, 10 Mar 2023 17:55:20 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE29E3A90;
+        Fri, 10 Mar 2023 14:54:42 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 2A16D60502;
+        Fri, 10 Mar 2023 23:53:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678488832; bh=rk862eW1fTcupKjZCZV4qVJp30st+OAtyH4yxU602sA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gh14jWjYA/a24Rlf+B/mu5aMRXom5NEcthcprianGO7qR2gXEhomWktW39oGPISWg
+         QYkKoYue26tNJDaOflRLiqEOb4ukOJbly4tGo3EaGiZtVryMqi0cCciSc/hh/6aqHw
+         ahPRefbuuqU8+m2MOZEKzAUKd+a0HvEmKRiKIRJwL18bKncrKQ/ydulVx2Q61Zi93V
+         Ttepdik0pVnuX8kS2cfKpMn07I/yYA+zGo2ydg88lCR0LGHBefKNdC03qo9PYhgwKP
+         +6U04ULbrnmHNNeGA9fFX3pTI/5Jy8deO28iDXYqK1qmqx5w0pMiiXSQpVt08mHypp
+         yoWzIR6zPEUYg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id KCbVmp58HOj0; Fri, 10 Mar 2023 23:53:49 +0100 (CET)
+Received: from [192.168.1.4] (unknown [77.237.109.125])
+        by domac.alu.hr (Postfix) with ESMTPSA id 9587D60501;
+        Fri, 10 Mar 2023 23:53:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678488829; bh=rk862eW1fTcupKjZCZV4qVJp30st+OAtyH4yxU602sA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=rb02J2SL5VwuGmsVv2ZmT4p3iXHYBJ+pWMncN3jgvOwPSMRI3wGXdeByKWt/zSdsw
+         AvvfY92T0vJ4obbKNCh7Oz4LWWr0dMhKW/wOq1+Ri8JsXhHnmFbm+TYKEjEY37Ahr2
+         iV3BH14NK9YGhQI4BggHts7jXP9kJztAgg0JXTW2qDuqtm4lfaDvfgZklNDs3Qtp5a
+         SWRX5aIA/wT5q5ACdXIvwnPOfoNJe5WlgGhWA/xhc3yjeLWKGWIylw7cjTQD3y51Z5
+         h1Vqg2GxBA/24Tg6xIEZKy6MUJQ+A9p/tGpmWFuFElickvhUVSOB7esJqOlY384FAW
+         lc5zViSLa2OWQ==
+Message-ID: <c1c1cbcc-10b6-de3f-81e8-78e6b173d46f@alu.unizg.hr>
+Date:   Fri, 10 Mar 2023 23:53:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1 0/2] Add destructor hook to LSM modules
+Content-Language: en-US, hr
+To:     Paul Moore <paul@paul-moore.com>,
+        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        Frederick Lawler <fred@cloudflare.com>
+References: <20230310192614.GA528@domac.alu.hr>
+ <CAHC9VhSzppHevG_Td+hKU4KRSDgV_NYf2RSeKA06PR-rD+dJLw@mail.gmail.com>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <CAHC9VhSzppHevG_Td+hKU4KRSDgV_NYf2RSeKA06PR-rD+dJLw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <88b36c03-780f-61a5-4a66-e69072aa7536@sapience.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 04:08:21PM -0500, Genes Lists wrote:
-> On 3/10/23 15:23, Jens Axboe wrote:
-> > On 3/10/23 1:16 PM, Eric Biggers wrote:
-> ...
-> > But I would revert:
-> > 
-> > bfe46d2efe46c5c952f982e2ca94fe2ec5e58e2a
-> > 57a425badc05c2e87e9f25713e5c3c0298e4202c
-> > 
-> > in that order from 6.2.3 and see if that helps. Adding Yu.
-> > 
-> Confirm the 2 Reverts fixed in my tests as well (nvme + sata drives).
-> Nasty crash - some needed to be power cycled as they hung on shutdown.
+On 10. 03. 2023. 23:33, Paul Moore wrote:
+> On Fri, Mar 10, 2023 at 2:26 PM Mirsad Goran Todorovac
+> <mirsad.goran.todorovac@alu.hr> wrote:
+>>
+>> LSM security/integrity/iint.c had the case of kmem_cache_create() w/o a proper
+>> kmem_cache_destroy() destructor.
+>>
+>> Introducing the release() hook would enable LSMs to release allocated resources
+>> on exit, and in proper order, rather than dying all together with kernel shutdown
+>> in an undefined order.
+>>
+>> Thanks,
+>>         Mirsad
+>>
+>> ---
+>>  include/linux/lsm_hooks.h | 1 +
+>>  security/integrity/iint.c | 7 +++++++
+>>  2 files changed, 8 insertions(+)
 > 
-> Thank you!
-> 
-> gene
-> 
-> 
+> I only see the 1/2 patch, did you send the 2/2 patch to the LSM list?
+> If not, you need to do that
 
-Great, thanks.  BTW, 6.1 is also affected.  A simple reproducer is to run:
+I will resend everything, because this first attempt was buggy and
+incorrect regarding the credits. Will try this, Andy said that I wait
+for the comments, but I did not expect them before the weekend.
 
-	dmsetup create dev --table "0 128 zero"
-	dmsetup remove dev
+Thank you guys for patience, I am just finishing the test of devres
+patch and then I will proceed with integrity LSM patch submission.
 
-The following kconfigs are needed for the bug to be hit:
+Best regards,
+Mirsad
 
-	CONFIG_BLK_CGROUP=y
-	CONFIG_BLK_DEV_THROTTLING=y
-	CONFIG_BLK_DEV_THROTTLING_LOW=y
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+ 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
 
-Sasha or Greg, can you please revert the indicated commits from 6.1 and 6.2?
-
-- Eric
