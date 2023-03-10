@@ -2,84 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B29B6B39A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:07:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7386B3A27
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbjCJJHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:07:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
+        id S231386AbjCJJRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjCJJGn (ORCPT
+        with ESMTP id S230248AbjCJJRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:06:43 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9880F112593
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:02:40 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id x3so17575252edb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:02:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678438936;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xnm0YfgvCV+Ipm6xs9Mtjl0Q+VTBw28sf5U+arx5bb8=;
-        b=MZri77WSkYEyxC5HlP1IFuaW3AYi3chr9mQhghCiMLqfSj8Op8753JyQ+sP6jCVbBX
-         X6WYRTE7y5kJ5xuHCV/CMqVloSssG0qaTpCBjWmwXRK98gc6FwdVjWIF0SHnydheijRA
-         IPXW2HPRgLVpdx9k8ktWDKm3hDi2bmGFYaf/k=
+        Fri, 10 Mar 2023 04:17:08 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41E722DD8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:13:24 -0800 (PST)
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9F3B8445B9
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 09:03:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678439035;
+        bh=l7P6OpQtpiO31JbN3tB83JPnIs3LDbM5XdhGwbnJ6b4=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=HgNyJezG5mkbcEM9SkHkqLuM6XFS+CKKpGHprHaJ6h109HCOuD2qxlBHHFJm3ZC+Y
+         tF506aVFZcS/+VKL0/eI7lvrZM1KCATF6ZhTzKascyfhHwFK+zBkaLoLszn63sPqqI
+         2MRoYIbJSj50jqfb4KQmrqduyB4vFUgpSw8c1jdExfeCbdc1UEqJY54Zje2oVOltYH
+         8MRwPRipxwcFcIpe8aXZXJGl5E4vEFKdkG64V0uh8ccTboLzma/34lmn+IJLq2dDfZ
+         NwWZ8vK1Ee11+f6SqTrs5Eqn3AnPBd9noBBBoxjO8X4wtvSxJgKCUvU/Ma7j1z4TMA
+         7ZX3Dk73FbWJg==
+Received: by mail-qk1-f199.google.com with SMTP id u28-20020a05620a085c00b0073b88cae2f5so2714329qku.8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:03:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678438936;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678439029;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Xnm0YfgvCV+Ipm6xs9Mtjl0Q+VTBw28sf5U+arx5bb8=;
-        b=b5ewiCi82BC8bgOzi8F7jnboA7PmtM2q2U9PHNp2n3hTaORZORpKmtHF9HmUHUQLvb
-         sDOZH4RRWjpEji3PiszD2fo47cxOm0lbdvFdpFzkLrWTXXVEywJ2fXue5UH3eWBpyd+C
-         n0uWQBGp2+2gE2aJCrbCTLKN1p0JLyBjZZZExg9xkLvA3Ya8tUm/3X14ziURgcemg1bv
-         TJ5FumVLmHs98vLiX3HUeZt/7rOVgqWuLUaJVuSXkDwBzDmcUZDpKZuLyuxAzOBZd7D+
-         YsKPLKYrqe6m7U7Mz+WbkP5LASKdb/dBjTP+0vznxkgGyhJH2sEiG7Eiv/ZgqcteYd9R
-         wvjA==
-X-Gm-Message-State: AO0yUKV1o9AOQDATJCrUUCgDjxAl9Xn3lhYBkhfqareV0zLoN7psKep1
-        JjrH8+RdgAjpz5ystXOJ/OGP/A==
-X-Google-Smtp-Source: AK7set+GWN0YNI3hB6snrIv4co9cLgbNHNwz5c1pc74Nkl8Zth62IfdQcLIoOo5krx7RR2duasVxWQ==
-X-Received: by 2002:a17:907:c0c:b0:8af:2cf7:dd2b with SMTP id ga12-20020a1709070c0c00b008af2cf7dd2bmr31570396ejc.13.1678438936082;
-        Fri, 10 Mar 2023 01:02:16 -0800 (PST)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:ef69:7ab6:87ac:99f])
-        by smtp.gmail.com with ESMTPSA id s5-20020a170906454500b008b23b22b062sm692931ejq.114.2023.03.10.01.02.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 01:02:15 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Fri, 10 Mar 2023 10:01:33 +0100
-Subject: [PATCH v7 6/6] media: uvcvideo: Fix hw timestamp handling for slow FPS
+        bh=l7P6OpQtpiO31JbN3tB83JPnIs3LDbM5XdhGwbnJ6b4=;
+        b=AlKrsnP1noLDxDdT7nW0A/+VpxNrszS0+QhNMsfsGBGZ43pC6oK6z0sjP8AyfMa1M1
+         pSxhl54fwcR9LciTfBFNh8dV74Va8GzmQ88TeVgWLcnOfnjHbBTO8g947ajPSGDLhNtp
+         7aFL2/4u+2f3IadHduP/zLfeB0NWbYWqN45JvFvMUZkcUnWxxqmaNemCp7AAW0wj/dEU
+         NsWtFXqzVeG2hDRDvfyJFxGuHL7PhdZ5FmYJzY8IBn4FklYMTk8IOTuAFncVJyRUvFRE
+         geGwJzxyWew8mp5qiLGeDWlSIH+oi/okaKocDkJzRezQOmsSvGLprMxncjVLT9qB3At2
+         0pSg==
+X-Gm-Message-State: AO0yUKVNyP3ajyTaBDzKSmMI4qgG3jo1/X6lOVfLypeMWuh7lwAKW0AX
+        j+DP+fvxoOHOQlSd/PeQDSPxx/gDo6zGD2dQuKbRypvPGX9oefTjnmKkq6Os7VGvhPIA6sKLSml
+        uykyFA4yKMELBWcBlvp6vNc9J5FNBgdcWuR71hSmdBqttn5ezK/m3gOXDHw==
+X-Received: by 2002:ac8:7006:0:b0:3bd:1fb6:c67a with SMTP id x6-20020ac87006000000b003bd1fb6c67amr6508825qtm.3.1678439029566;
+        Fri, 10 Mar 2023 01:03:49 -0800 (PST)
+X-Google-Smtp-Source: AK7set+KWnXYz9aSz4TArFL25XmNgJvRdjP3rg/DyLtzfDCPLX7B5HWzhWnLogf8I17gdbpWfK55ntywjImEB0Di21c=
+X-Received: by 2002:ac8:7006:0:b0:3bd:1fb6:c67a with SMTP id
+ x6-20020ac87006000000b003bd1fb6c67amr6508813qtm.3.1678439029220; Fri, 10 Mar
+ 2023 01:03:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20220920-resend-hwtimestamp-v7-6-cf1d78bb8821@chromium.org>
-References: <20220920-resend-hwtimestamp-v7-0-cf1d78bb8821@chromium.org>
-In-Reply-To: <20220920-resend-hwtimestamp-v7-0-cf1d78bb8821@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        "hn.chen" <hn.chen@sunplusit.com>
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2453; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=QSOtDi8Lpp1WwCcscneU3GgnDWNqfm9La5ACGKDE/1s=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkCvIO/4kYmLvH1iiWCJT+hFKLcOK8Wi79IHBtmT/M
- xtdiMKmJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZAryDgAKCRDRN9E+zzrEiLBTD/
- 0Ryz/FeiC6LVOp07enO0v9qf4Yw+/Lu6WjBWFsRm1oOxcANF9lL/mkE2Qd6SqcXJf1QXdBfy7udIUe
- iwVaULNUu/VVWWskPMDTqswdyiqbHHf4+B5BHzWTteEvlmipjYbHcmsRxh7i8IJBBMDiE7vIJ9WXd4
- uoD4xc05qskdOKx0lYis65D7w3y6LY5jL+GmXcJdYtu9dYYXYcakIfS9XoMGnMyip4yiBTgsRvXTGM
- NH49PIao1aOkOoX8vDCo6R650JNDAq0B4Pgz0hiwgg8r/CpVp3vGAKD1nItbVV9XFcrUPXwK5ecxjv
- eQpK2zsvMm+11YYPEWQFsO/u08HcQhw9t6fg7/zGUUrfzfilL+ajc7P48vHpY5LNBSBh9B6am/JOCc
- e390J6WA5FMP07H5LlchX1ssgjSAh4u7bIGcXprxx2OzOwGgad8y3feYSZ5GSGhmRE/3cU2+DFky1F
- 499RTkiyJQ/C5QEDoxJtslOqo9yxOa7hMpBEWJ2+cDqdW/E31+AxPizo0RqLYZWgmrVpk3PIG12AOd
- 4jg90tUWWXxTde+4qr08qyWBE8L8doLVWrZOgc9AAqwPptrURcfjm1ckTSPDYbj/UOTTxGpnehQFYR
- bnbq0uhBZnz/Gkqxge8yvbDbZpfmISWGF1eslE0oy8a3E1TvPH4ipZYIV8CQ==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20230303085928.4535-1-samin.guo@starfivetech.com>
+ <20230303085928.4535-7-samin.guo@starfivetech.com> <CAJM55Z_YUXbny3NR7xLRu1ekzkgOsx2wgBWmCoQ5peMkN+fV_Q@mail.gmail.com>
+ <CAJM55Z-xojA5onmQu+suwaB2F4e8imBRqVFeLScuZQ1ixdv_EA@mail.gmail.com> <49bf9e1d-95ac-8cf5-ca43-43bb82ace690@starfivetech.com>
+In-Reply-To: <49bf9e1d-95ac-8cf5-ca43-43bb82ace690@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Fri, 10 Mar 2023 10:03:32 +0100
+Message-ID: <CAJM55Z9EwR_zmtBwvue+dSQ+ngiOdVqbFmuK9wiN3bm0i1LHqA@mail.gmail.com>
+Subject: Re: [PATCH v5 06/12] net: stmmac: Add glue layer for StarFive JH7110 SoC
+To:     Guo Samin <samin.guo@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,72 +91,319 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In UVC 1.5 we get a single clock value per frame. With the current
-buffer size of 32, FPS slowers than 32 might roll-over twice.
+On Fri, 10 Mar 2023 at 02:55, Guo Samin <samin.guo@starfivetech.com> wrote:
+> -------- =E5=8E=9F=E5=A7=8B=E4=BF=A1=E6=81=AF --------
+> =E4=B8=BB=E9=A2=98: Re: [PATCH v5 06/12] net: stmmac: Add glue layer for =
+StarFive JH7110 SoC
+> From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+> =E6=94=B6=E4=BB=B6=E4=BA=BA: Samin Guo <samin.guo@starfivetech.com>
+> =E6=97=A5=E6=9C=9F: 2023/3/10
+>
+> > On Fri, 10 Mar 2023 at 01:02, Emil Renner Berthing
+> > <emil.renner.berthing@canonical.com> wrote:
+> >> On Fri, 3 Mar 2023 at 10:01, Samin Guo <samin.guo@starfivetech.com> wr=
+ote:
+> >>>
+> >>> This adds StarFive dwmac driver support on the StarFive JH7110 SoC.
+> >>>
+> >>> Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
+> >>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> >>> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+> >>> ---
+> >>>  MAINTAINERS                                   |   1 +
+> >>>  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
+> >>>  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+> >>>  .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 125 ++++++++++++++++=
+++
+> >>>  4 files changed, 139 insertions(+)
+> >>>  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfiv=
+e.c
+> >>>
+> >>> diff --git a/MAINTAINERS b/MAINTAINERS
+> >>> index 4e236b7c7fd2..91a4f190c827 100644
+> >>> --- a/MAINTAINERS
+> >>> +++ b/MAINTAINERS
+> >>> @@ -19916,6 +19916,7 @@ STARFIVE DWMAC GLUE LAYER
+> >>>  M:     Emil Renner Berthing <kernel@esmil.dk>
+> >>>  M:     Samin Guo <samin.guo@starfivetech.com>
+> >>>  S:     Maintained
+> >>> +F:     Documentation/devicetree/bindings/net/dwmac-starfive.c
+> >>>  F:     Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.y=
+aml
+> >>>
+> >>>  STARFIVE JH71X0 CLOCK DRIVERS
+> >>> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/ne=
+t/ethernet/stmicro/stmmac/Kconfig
+> >>> index f77511fe4e87..47fbccef9d04 100644
+> >>> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> >>> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> >>> @@ -165,6 +165,18 @@ config DWMAC_SOCFPGA
+> >>>           for the stmmac device driver. This driver is used for
+> >>>           arria5 and cyclone5 FPGA SoCs.
+> >>>
+> >>> +config DWMAC_STARFIVE
+> >>> +       tristate "StarFive dwmac support"
+> >>> +       depends on OF  && (ARCH_STARFIVE || COMPILE_TEST)
+> >>> +       depends on STMMAC_ETH
+> >>> +       default ARCH_STARFIVE
+> >>> +       help
+> >>> +         Support for ethernet controllers on StarFive RISC-V SoCs
+> >>> +
+> >>> +         This selects the StarFive platform specific glue layer supp=
+ort for
+> >>> +         the stmmac device driver. This driver is used for StarFive =
+JH7110
+> >>> +         ethernet controller.
+> >>> +
+> >>>  config DWMAC_STI
+> >>>         tristate "STi GMAC support"
+> >>>         default ARCH_STI
+> >>> diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/n=
+et/ethernet/stmicro/stmmac/Makefile
+> >>> index 057e4bab5c08..8738fdbb4b2d 100644
+> >>> --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
+> >>> +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
+> >>> @@ -23,6 +23,7 @@ obj-$(CONFIG_DWMAC_OXNAS)     +=3D dwmac-oxnas.o
+> >>>  obj-$(CONFIG_DWMAC_QCOM_ETHQOS)        +=3D dwmac-qcom-ethqos.o
+> >>>  obj-$(CONFIG_DWMAC_ROCKCHIP)   +=3D dwmac-rk.o
+> >>>  obj-$(CONFIG_DWMAC_SOCFPGA)    +=3D dwmac-altr-socfpga.o
+> >>> +obj-$(CONFIG_DWMAC_STARFIVE)   +=3D dwmac-starfive.o
+> >>>  obj-$(CONFIG_DWMAC_STI)                +=3D dwmac-sti.o
+> >>>  obj-$(CONFIG_DWMAC_STM32)      +=3D dwmac-stm32.o
+> >>>  obj-$(CONFIG_DWMAC_SUNXI)      +=3D dwmac-sunxi.o
+> >>> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c b/d=
+rivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+> >>> new file mode 100644
+> >>> index 000000000000..566378306f67
+> >>> --- /dev/null
+> >>> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+> >>> @@ -0,0 +1,125 @@
+> >>> +// SPDX-License-Identifier: GPL-2.0+
+> >>> +/*
+> >>> + * StarFive DWMAC platform driver
+> >>> + *
+> >>> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+> >>> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
+> >>> + *
+> >>> + */
+> >>> +
+> >>> +#include <linux/of_device.h>
+> >>> +
+> >>> +#include "stmmac_platform.h"
+> >>> +
+> >>> +struct starfive_dwmac {
+> >>> +       struct device *dev;
+> >>> +       struct clk *clk_tx;
+> >>> +       struct clk *clk_gtx;
+> >>> +       bool tx_use_rgmii_rxin_clk;
+> >>> +};
+> >>> +
+> >>> +static void starfive_eth_fix_mac_speed(void *priv, unsigned int spee=
+d)
+> >>> +{
+> >>> +       struct starfive_dwmac *dwmac =3D priv;
+> >>> +       unsigned long rate;
+> >>> +       int err;
+> >>> +
+> >>> +       /* Generally, the rgmii_tx clock is provided by the internal =
+clock,
+> >>> +        * which needs to match the corresponding clock frequency acc=
+ording
+> >>> +        * to different speeds. If the rgmii_tx clock is provided by =
+the
+> >>> +        * external rgmii_rxin, there is no need to configure the clo=
+ck
+> >>> +        * internally, because rgmii_rxin will be adaptively adjusted=
+.
+> >>> +        */
+> >>> +       if (dwmac->tx_use_rgmii_rxin_clk)
+> >>> +               return;
+> >>> +
+> >>> +       switch (speed) {
+> >>> +       case SPEED_1000:
+> >>> +               rate =3D 125000000;
+> >>> +               break;
+> >>> +       case SPEED_100:
+> >>> +               rate =3D 25000000;
+> >>> +               break;
+> >>> +       case SPEED_10:
+> >>> +               rate =3D 2500000;
+> >>> +               break;
+> >>> +       default:
+> >>> +               dev_err(dwmac->dev, "invalid speed %u\n", speed);
+> >>> +               break;
+> >>> +       }
+> >>> +
+> >>> +       err =3D clk_set_rate(dwmac->clk_tx, rate);
+> >>
+> >> Hi Samin,
+> >>
+> >> I tried exercising this code by forcing the interface to downgrade
+> >> from 1000Mbps to 100Mbps (ethtool -s end0 speed 100), and it doesn't
+> >> seem to work. The reason is that clk_tx is a mux, and when you call
+> >> clk_set_rate it will try to find the parent with the closest clock
+> >> rate instead of adjusting the current parent as is needed here.
+> >> However that is easily fixed by calling clk_set_rate on clk_gtx which
+> >> is just a gate that *will* propagate the rate change to the parent.
+> >>
+> >> With this change, this piece of code and downgrading from 1000Mbps to
+> >> 100Mbps works on the JH7100. However on the JH7110 there is a second
+> >> problem. The parent of clk_gtx, confusingly called
+> >> clk_gmac{0,1}_gtxclk is a divider (and gate) that takes the 1GHz PLL0
+> >> clock and divides it by some integer. But according to [1] it can at
+> >> most divide by 15 which is not enough to generate the 25MHz clock
+> >> needed for 100Mbps. So now I wonder how this is supposed to work on
+> >> the JH7110.
+> >>
+> >> [1]: https://doc-en.rvspace.org/JH7110/TRM/JH7110_TRM/sys_crg.html#sys=
+_crg__section_skz_fxm_wsb
+> >
+> > Ah, I see now that gmac0_gtxclk is only used by gmac0 on the
+> > VisionFive 2 v1.2A, where I think it's a known problem that only
+> > 1000Mbps works.
+> > On the 1.3B this function is not used at all, and I guess it also
+> > ought to be skipped for gmac1 of the 1.2A using the rmii interface so
+> > it doesn't risk changing the parent of the tx clock.
+> >
+> Hi Emil,
+>
+> V1.2A gmac0 only supports 1000M due to known problem, and v1.2A gmac1 sup=
+ports 100M/10M.
+>
+> V1.2A gmac1 uses a parent clock from gmac1_rmii_rtx, whose parent clock i=
+s from external phy clock gmac1_rmii_refin (fixed is 50M).
+> The default frequency division value of gmac1_rmii_rtx is 2, so it can wo=
+rk in 100M mode. =EF=BC=88clk_tx: 50/2=3D25M =3D=3D=3D> 100M mode=EF=BC=89.
+> When gmac1 switches to 10M mode, the clock frequency of gmac1_rmii_rtx ne=
+eds to be modified to 2.5M.
+> So,if 1.2A gmac1 is skipped the starfive_eth_fix_mac_speed, 10M mode will=
+ be unavailable.
+>
+>         gmac1_rmii_refin=EF=BC=8850M) =3D=3D> gmac1_rmii_rtx=EF=BC=88div =
+2, by default) =3D=3D>  clk_tx (25M)  =EF=BC=88100M mode=EF=BC=89
+>         gmac1_rmii_refin=EF=BC=8850M=EF=BC=89=3D=3D> gmac1_rmii_rtx=EF=BC=
+=88div 20) =3D=3D> clk_tx (2.5M)  =EF=BC=8810M mode=EF=BC=89
+>
 
-The current code cannot handle two roll-over and provide invalid
-timestamps.
+I see. So on the JH7110 it is only when using gmac{0,1}_rmii_rtx ->
+clk_tx with the rmii interface that this function is needed?
 
-Revome all the samples from the circular buffer that are more than two
-rollovers old, so the algorithm always provides good timestamps.
+As noted above using the current fix_mac_speed with gmac{0,1}_gtxclk
+-> clk_tx will produce wrong results, so for the VF2 v1.2A you
+probably just want something like this in the device tree
+&gmac0 {
+  assigned-clocks =3D <&aoncrg JH7110_AONCLK_GMAC0_TX>, <&syscrg
+JH7110_SYSCLK_GMAC0_GTXCLK>;
+  assigned-clock-parents =3D <&syscrg JH7110_SYSCLK_GMAC0_GTXCLK>;
+  assigned-clock-rates =3D <0> <125000000>;
+};
 
-Note that we are removing values that are more than one second old,
-which means that there is enough distance between the two points that
-we use for the interpolation to provide good values.
+..and then don't set the fix_mac_speed callback.
 
-Tested-by: HungNien Chen <hn.chen@sunplusit.com>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/usb/uvc/uvc_video.c | 16 ++++++++++++++++
- drivers/media/usb/uvc/uvcvideo.h  |  1 +
- 2 files changed, 17 insertions(+)
+> Of course, as you mentioned earlier, we need to add gmac1_clk_tx uses CLK=
+_SET_RATE_PARENT flag.
 
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index 8156efcf48ac..eb1165366fa0 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -473,6 +473,21 @@ static void uvc_video_clock_add_sample(struct uvc_clock *clock,
- 
- 	spin_lock_irqsave(&clock->lock, flags);
- 
-+	/* Delete last overflows */
-+	if (clock->head == clock->last_sof_overflow)
-+		clock->last_sof_overflow = -1;
-+
-+	/* Handle overflows */
-+	if (clock->count > 0 && clock->last_sof > sample->dev_sof) {
-+		/* Remove data from the last^2 overflows */
-+		if (clock->last_sof_overflow != -1) {
-+			clock->count = (clock->head - clock->last_sof_overflow
-+					+ clock->count)	% clock->count;
-+		}
-+		clock->last_sof_overflow = clock->head;
-+	}
-+
-+	/* Add sample */
- 	memcpy(&clock->samples[clock->head], sample, sizeof(*sample));
- 	clock->head = (clock->head + 1) % clock->size;
- 	clock->count = min(clock->count + 1, clock->size);
-@@ -605,6 +620,7 @@ static void uvc_video_clock_reset(struct uvc_clock *clock)
- 	clock->head = 0;
- 	clock->count = 0;
- 	clock->last_sof = -1;
-+	clock->last_sof_overflow = -1;
- 	clock->sof_offset = -1;
- }
- 
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 07b2fdb80adf..bf9f5162b833 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -499,6 +499,7 @@ struct uvc_streaming {
- 		unsigned int head;
- 		unsigned int count;
- 		unsigned int size;
-+		unsigned int last_sof_overflow;
- 
- 		u16 last_sof;
- 		u16 sof_offset;
+Yes, I'm not too sure how clk_set_rate on mux'es are supposed to work,
+but if you can convince Hal and Stephen (the clock maintainer) that
+clk_set_rate should always propagate the rate change to the current
+parent, then I'm fine with it.
 
--- 
-2.40.0.rc1.284.g88254d51c5-goog-b4-0.11.0-dev-696ae
+Alternatively you can add an optional clock to the bindings, and only
+if the optional clock is set then set the fix_mac_speed callback to
+modify the rate of that clock. This way you won't need the special
+"starfive,tx-use-rgmii-clk" flag either.
+
+/Emil
+>
+> Best regards,
+> Samin
+>
+> >>> +       if (err)
+> >>> +               dev_err(dwmac->dev, "failed to set tx rate %lu\n", ra=
+te);
+> >>> +}
+> >>> +
+> >>> +static int starfive_dwmac_probe(struct platform_device *pdev)
+> >>> +{
+> >>> +       struct plat_stmmacenet_data *plat_dat;
+> >>> +       struct stmmac_resources stmmac_res;
+> >>> +       struct starfive_dwmac *dwmac;
+> >>> +       int err;
+> >>> +
+> >>> +       err =3D stmmac_get_platform_resources(pdev, &stmmac_res);
+> >>> +       if (err)
+> >>> +               return err;
+> >>> +
+> >>> +       plat_dat =3D stmmac_probe_config_dt(pdev, stmmac_res.mac);
+> >>> +       if (IS_ERR(plat_dat)) {
+> >>> +               dev_err(&pdev->dev, "dt configuration failed\n");
+> >>> +               return PTR_ERR(plat_dat);
+> >>> +       }
+> >>> +
+> >>> +       dwmac =3D devm_kzalloc(&pdev->dev, sizeof(*dwmac), GFP_KERNEL=
+);
+> >>> +       if (!dwmac)
+> >>> +               return -ENOMEM;
+> >>> +
+> >>> +       dwmac->clk_tx =3D devm_clk_get_enabled(&pdev->dev, "tx");
+> >>> +       if (IS_ERR(dwmac->clk_tx))
+> >>> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_t=
+x),
+> >>> +                                   "error getting tx clock\n");
+> >>> +
+> >>> +       dwmac->clk_gtx =3D devm_clk_get_enabled(&pdev->dev, "gtx");
+> >>> +       if (IS_ERR(dwmac->clk_gtx))
+> >>> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_g=
+tx),
+> >>> +                                   "error getting gtx clock\n");
+> >>> +
+> >>> +       if (device_property_read_bool(&pdev->dev, "starfive,tx-use-rg=
+mii-clk"))
+> >>> +               dwmac->tx_use_rgmii_rxin_clk =3D true;
+> >>> +
+> >>> +       dwmac->dev =3D &pdev->dev;
+> >>> +       plat_dat->fix_mac_speed =3D starfive_eth_fix_mac_speed;
+> >>> +       plat_dat->init =3D NULL;
+> >>> +       plat_dat->bsp_priv =3D dwmac;
+> >>> +       plat_dat->dma_cfg->dche =3D true;
+> >>> +
+> >>> +       err =3D stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+> >>> +       if (err) {
+> >>> +               stmmac_remove_config_dt(pdev, plat_dat);
+> >>> +               return err;
+> >>> +       }
+> >>> +
+> >>> +       return 0;
+> >>> +}
+> >>> +
+> >>> +static const struct of_device_id starfive_dwmac_match[] =3D {
+> >>> +       { .compatible =3D "starfive,jh7110-dwmac" },
+> >>> +       { /* sentinel */ }
+> >>> +};
+> >>> +MODULE_DEVICE_TABLE(of, starfive_dwmac_match);
+> >>> +
+> >>> +static struct platform_driver starfive_dwmac_driver =3D {
+> >>> +       .probe  =3D starfive_dwmac_probe,
+> >>> +       .remove =3D stmmac_pltfr_remove,
+> >>> +       .driver =3D {
+> >>> +               .name =3D "starfive-dwmac",
+> >>> +               .pm =3D &stmmac_pltfr_pm_ops,
+> >>> +               .of_match_table =3D starfive_dwmac_match,
+> >>> +       },
+> >>> +};
+> >>> +module_platform_driver(starfive_dwmac_driver);
+> >>> +
+> >>> +MODULE_LICENSE("GPL");
+> >>> +MODULE_DESCRIPTION("StarFive DWMAC platform driver");
+> >>> +MODULE_AUTHOR("Emil Renner Berthing <kernel@esmil.dk>");
+> >>> +MODULE_AUTHOR("Samin Guo <samin.guo@starfivetech.com>");
+> >>> --
+> >>> 2.17.1
+> >>>
+> >>>
+> >>> _______________________________________________
+> >>> linux-riscv mailing list
+> >>> linux-riscv@lists.infradead.org
+> >>> http://lists.infradead.org/mailman/listinfo/linux-riscv
+>
+>
