@@ -2,329 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182A66B3DA4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3291E6B3DA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjCJL0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 06:26:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
+        id S230392AbjCJL1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:27:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbjCJL0P (ORCPT
+        with ESMTP id S230391AbjCJL0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 06:26:15 -0500
-Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94108C9C02
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:26:11 -0800 (PST)
-Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 20230310112609bb39dfadbe35dfdd77
-        for <linux-kernel@vger.kernel.org>;
-        Fri, 10 Mar 2023 12:26:09 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=alexander.sverdlin@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
- bh=tIEAqYP/wLaKRHcKSYtG5bpqw7t5g2+gyPY6Qp62no0=;
- b=Dm8Qv0tZx0hzGnkkN4Ja9VzdXPXIpka2KL5SlEhhxLMPrkRxlJV2Bp+0gFfW9jlceE8R5+
- pgoGiUtpqM55+xmJe3qwCeBQgosU2k6beRHciXK6ZmZRqMCutjk+SKA9pQ1Uf9PGH92tO0ri
- HubZanGmmAZpZJZYHYgLObVKcg/NM=;
-From:   "A. Sverdlin" <alexander.sverdlin@siemens.com>
-To:     NXP Linux Team <linux-imx@nxp.com>
-Cc:     Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] i2c: lpi2c: cache peripheral clock rate
-Date:   Fri, 10 Mar 2023 12:26:05 +0100
-Message-Id: <20230310112605.476922-1-alexander.sverdlin@siemens.com>
+        Fri, 10 Mar 2023 06:26:53 -0500
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0973BDCF70;
+        Fri, 10 Mar 2023 03:26:39 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1paatF-002XvC-Hz; Fri, 10 Mar 2023 19:26:26 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 10 Mar 2023 19:26:25 +0800
+Date:   Fri, 10 Mar 2023 19:26:25 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     steffen.klassert@secunet.com, daniel.m.jordan@oracle.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@weissschuh.net
+Subject: Re: [PATCH] padata: Make kobj_type structure constant
+Message-ID: <ZAsT4burgpA15qoF@gondor.apana.org.au>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-456497:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230217-kobj_type-padata-v1-1-e70b6cab4875@weissschuh.net>
+X-Newsgroups: apana.lists.os.linux.cryptoapi,apana.lists.os.linux.kernel
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+Thomas Weiﬂschuh <linux@weissschuh.net> wrote:
+> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+> the driver core allows the usage of const struct kobj_type.
+> 
+> Take advantage of this to constify the structure definition to prevent
+> modification at runtime.
+> 
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> ---
+> kernel/padata.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
 
-One of the reasons to do it is to save some CPU cycles on cpu_freq_get()
-under mutex. The second reason if the (false-positive) lockdep splat caused
-by the recursive feature of the "prepare_lock" (one clock instance is I2C
-peripheral clock and another is pcf85063 RTC as clock provider):
-
-======================================================
-WARNING: possible circular locking dependency detected
-5.15.71+... #1 Tainted: G           O
-------------------------------------------------------
-fs-value/2332 is trying to acquire lock:
-ffff8000096cae08 (prepare_lock){+.+.}-{3:3}, at: clk_prepare_lock
-
-but task is already holding lock:
-ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at: i2c_adapter_lock_bus
-
-which lock already depends on the new lock.
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (i2c_register_adapter){+.+.}-{3:3}:
-       lock_acquire
-       rt_mutex_lock_nested
-       i2c_adapter_lock_bus
-       i2c_transfer
-       regmap_i2c_read
-       _regmap_raw_read
-       _regmap_bus_read
-       _regmap_read
-       regmap_read
-       pcf85063_probe
-       i2c_device_probe
-       really_probe
-       __driver_probe_device
-       driver_probe_device
-       __device_attach_driver
-       bus_for_each_drv
-       __device_attach
-       device_initial_probe
-       bus_probe_device
-       device_add
-       device_register
-       i2c_new_client_device
-       of_i2c_register_devices
-       i2c_register_adapter
-       __i2c_add_numbered_adapter
-       i2c_add_adapter
-       lpi2c_imx_probe
-       platform_probe
-       really_probe
-       __driver_probe_device
-       driver_probe_device
-       __device_attach_driver
-       bus_for_each_drv
-       __device_attach
-       device_initial_probe
-       bus_probe_device
-       deferred_probe_work_func
-       process_one_work
-       worker_thread
-       kthread
-       ret_from_fork
-
--> #1 (rtc_pcf85063:560:(&config->regmap)->lock){+.+.}-{3:3}:
-       lock_acquire
-       __mutex_lock
-       mutex_lock_nested
-       regmap_lock_mutex
-       regmap_read
-       pcf85063_clkout_recalc_rate
-       __clk_register
-       devm_clk_register
-       pcf85063_probe
-       i2c_device_probe
-       really_probe
-       __driver_probe_device
-       driver_probe_device
-       __device_attach_driver
-       bus_for_each_drv
-       __device_attach
-       device_initial_probe
-       bus_probe_device
-       device_add
-       device_register
-       i2c_new_client_device
-       of_i2c_register_devices
-       i2c_register_adapter
-       __i2c_add_numbered_adapter
-       i2c_add_adapter
-       lpi2c_imx_probe
-       platform_probe
-       really_probe
-       __driver_probe_device
-       driver_probe_device
-       __device_attach_driver
-       bus_for_each_drv
-       __device_attach
-       device_initial_probe
-       bus_probe_device
-       deferred_probe_work_func
-       process_one_work
-       worker_thread
-       kthread
-       ret_from_fork
-
--> #0 (prepare_lock){+.+.}-{3:3}:
-       __lock_acquire
-       lock_acquire.part.0
-       lock_acquire
-       __mutex_lock
-       mutex_lock_nested
-       clk_prepare_lock
-       clk_get_rate
-       lpi2c_imx_xfer
-       __i2c_transfer
-       i2c_transfer
-       regmap_i2c_read
-       _regmap_raw_read
-       regmap_raw_read
-       regmap_bulk_read
-       at24_read
-       nvmem_reg_read
-       bin_attr_nvmem_read
-       sysfs_kf_bin_read
-       kernfs_fop_read_iter
-       new_sync_read
-       vfs_read
-       ksys_read
-       __arm64_sys_read
-       invoke_syscall
-       ...
-
-other info that might help us debug this:
-
-Chain exists of:
-  prepare_lock --> rtc_pcf85063:560:(&config->regmap)->lock --> i2c_register_adapter
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(i2c_register_adapter);
-                               lock(rtc_pcf85063:560:(&config->regmap)->lock);
-                               lock(i2c_register_adapter);
-  lock(prepare_lock);
-
- *** DEADLOCK ***
-
-4 locks held by .../2332:
- #0: ffff0000146eb288 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_read_iter
- #1: ffff000010fe4400 (kn->active#72){.+.+}-{0:0}, at: kernfs_fop_read_iter
- #2: ffff0000110168e8 (&at24->lock){+.+.}-{3:3}, at: at24_read
- #3: ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at: i2c_adapter_lock_bus
-
-stack backtrace:
-CPU: 1 PID: 2332 Comm: ... Tainted: G           O      5.15.71+... #1
-Hardware name: ... (DT)
-Call trace:
- dump_backtrace
- show_stack
- dump_stack_lvl
- dump_stack
- print_circular_bug
- check_noncircular
- __lock_acquire
- lock_acquire.part.0
- lock_acquire
- __mutex_lock
- mutex_lock_nested
- clk_prepare_lock
- clk_get_rate
- lpi2c_imx_xfer
- __i2c_transfer
- i2c_transfer
- regmap_i2c_read
- _regmap_raw_read
- regmap_raw_read
- regmap_bulk_read
- at24_read
- nvmem_reg_read
- bin_attr_nvmem_read
- sysfs_kf_bin_read
- kernfs_fop_read_iter
- new_sync_read
- vfs_read
- ksys_read
- __arm64_sys_read
- invoke_syscall
- ...
-
-Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
----
- drivers/i2c/busses/i2c-imx-lpi2c.c | 33 +++++++++++++++++++++++++++---
- 1 file changed, 30 insertions(+), 3 deletions(-)
-
-Changelog:
-v2: added clk_notifier as Alexander suggested
-
-diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-index 188f2a36d2fd6..5f1d1d4e018bd 100644
---- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-+++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-@@ -100,6 +100,8 @@ struct lpi2c_imx_struct {
- 	__u8			*rx_buf;
- 	__u8			*tx_buf;
- 	struct completion	complete;
-+	struct notifier_block	clk_change_nb;
-+	unsigned int		rate_per;
- 	unsigned int		msglen;
- 	unsigned int		delivered;
- 	unsigned int		block_data;
-@@ -198,24 +200,37 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct *lpi2c_imx)
- 	} while (1);
- }
- 
-+static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
-+				   unsigned long action, void *data)
-+{
-+	struct clk_notifier_data *ndata = data;
-+	struct lpi2c_imx_struct *lpi2c_imx = container_of(&ndata->clk,
-+							  struct lpi2c_imx_struct,
-+							  clk_per);
-+
-+	if (action & POST_RATE_CHANGE)
-+		lpi2c_imx->rate_per = ndata->new_rate;
-+
-+	return NOTIFY_OK;
-+}
-+
- /* CLKLO = I2C_CLK_RATIO * CLKHI, SETHOLD = CLKHI, DATAVD = CLKHI/2 */
- static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
- {
- 	u8 prescale, filt, sethold, clkhi, clklo, datavd;
--	unsigned int clk_rate, clk_cycle;
-+	unsigned int clk_cycle;
- 	enum lpi2c_imx_pincfg pincfg;
- 	unsigned int temp;
- 
- 	lpi2c_imx_set_mode(lpi2c_imx);
- 
--	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
- 	if (lpi2c_imx->mode == HS || lpi2c_imx->mode == ULTRA_FAST)
- 		filt = 0;
- 	else
- 		filt = 2;
- 
- 	for (prescale = 0; prescale <= 7; prescale++) {
--		clk_cycle = clk_rate / ((1 << prescale) * lpi2c_imx->bitrate)
-+		clk_cycle = lpi2c_imx->rate_per / ((1 << prescale) * lpi2c_imx->bitrate)
- 			    - 3 - (filt >> 1);
- 		clkhi = (clk_cycle + I2C_CLK_RATIO) / (I2C_CLK_RATIO + 1);
- 		clklo = clk_cycle - clkhi;
-@@ -588,6 +603,18 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	lpi2c_imx->clk_change_nb.notifier_call = lpi2c_imx_clk_change_cb;
-+	ret = devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
-+					 &lpi2c_imx->clk_change_nb);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "can't register peripheral clock notifier\n");
-+	lpi2c_imx->rate_per = clk_get_rate(lpi2c_imx->clks[0].clk);
-+	if (!lpi2c_imx->rate_per) {
-+		dev_err(&pdev->dev, "can't get I2C peripheral clock rate\n");
-+		return -EINVAL;
-+	}
-+
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
- 	pm_runtime_use_autosuspend(&pdev->dev);
- 	pm_runtime_get_noresume(&pdev->dev);
+Patch applied.  Thanks.
 -- 
-2.34.1
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
