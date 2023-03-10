@@ -2,115 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3496F6B4D5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3716B4D63
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbjCJQnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 11:43:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
+        id S231820AbjCJQnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 11:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231328AbjCJQmh (ORCPT
+        with ESMTP id S230432AbjCJQm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:42:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8951E290
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 08:40:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF2E861AC7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:40:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D3F5C433A4;
-        Fri, 10 Mar 2023 16:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678466421;
-        bh=lF4WQCD0iAfVt+U1sHPjQ+RcRXvl9M8ViINfhAY6SF8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=V+8fpkbisZNTc39jlqnOxlbNiBvxEmUYsdJ6F+oOUw5nJLfqqE5Wii6BgLDDlRhSi
-         1PclQm+31z6r8bt8mmvNFxEvnpnXOmXSJ7BnP+RE47Duofyqx2ZJFc0CsZ5dmgb4aY
-         joyrhG63M+GrXerqaZ0BH1+A8aHZn6/HJhPBkGpsAjq4qrrLOnvJZmuVFQ1GHmUk0H
-         In9SlABlwBMhAHMuIcVdU8S/fZQUqNwSjToOLJXwD5/gFxtUzBBeMpDTwQfXtIqL1t
-         1aTaG60cy0CcRSXVGGVEb6XXbAZpqAInHN7GswlWb4PJVhKNloaAgumwiBQeftif48
-         44ASInrgcn9gg==
-Date:   Sat, 11 Mar 2023 00:40:14 +0800
-From:   Gao Xiang <xiang@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        Yangtao Li <frank.li@vivo.com>, Yue Hu <huyue2@coolpad.com>,
-        Chao Yu <chao@kernel.org>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>
-Subject: [GIT PULL] erofs fixes for 6.3-rc2
-Message-ID: <ZAtdbhFmLD4MCRk+@debian>
-Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        Yangtao Li <frank.li@vivo.com>, Yue Hu <huyue2@coolpad.com>,
-        Chao Yu <chao@kernel.org>, Jingbo Xu <jefflexu@linux.alibaba.com>
+        Fri, 10 Mar 2023 11:42:57 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3DB11F62D;
+        Fri, 10 Mar 2023 08:40:43 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id be16so4732306oib.0;
+        Fri, 10 Mar 2023 08:40:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678466438;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jBvFWrg6mAMkwkQ8SljaAvheQM7EIirHVmL1w1bEVNo=;
+        b=X5CtmMPn2kOVec/4NiHmamfxtPdKG1/eHlLzVQjG9YPcEHdftSX3T9gXV8xtf0EAnj
+         2RKzNUtubrxpDAnxpxiJdmOvCsrBuLwiTaCke+PULh2m2TVJHERSMsPgdjf1rXdbbDi4
+         qHWyLisLzasd1fCHQ6GoFWQ4kQkmwNZ+Rjw09UIXFZW3c026F0RnYX2z75mEi/QnP0RW
+         /ufQXEN0GzWKuPPM8YdsVsINc2tp2yoA7dZg/cCNvK2DjePD8agnRGI/SDrhBgG265sg
+         Hj7zwMCvZc7zzpPkPvxdb9z0+X1hyq4FU6emGjPFRnrmunKpgDQZAU8fKFVuFpJRAQos
+         nWeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678466438;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jBvFWrg6mAMkwkQ8SljaAvheQM7EIirHVmL1w1bEVNo=;
+        b=u7qHZqHI88nti3+g4LfxMH9chwlGZYuTxuVjdTfZ6l2smYkkjd7C5BJwrRdljMfXSn
+         8TpvKbhSVqk+C1oJNfidPfKYrFCehLeQ+LtKwMH9Sz2fxYHrymDFjcJEPuPnxD6odOZY
+         6wsXDg7Fej5th9JcVqgo1zp9reAHubQs260mTZPKpRbLrYiLDTRX1cjiTkwfvscFhz1J
+         E2lSfBMwF58v3h5lKEWMsaVwNtM+27104bpYFpeg+XJ5//Jswg/ZJVSIbWMZ/GCTrkQh
+         n0tPXhLmp8hwZbkhdQB19vCbYGFHR/f8vCIZ6SdZBZhE44bhLTwz1xqBg9NcyO9OvDlV
+         A2pg==
+X-Gm-Message-State: AO0yUKVVjv9hsFgzooIgVIveGwEoHzqpDCriVa8CAVVCjiWPIBPCjVoV
+        nJgO3/QgA/vibGNgFC+It/7B1WjB+t8=
+X-Google-Smtp-Source: AK7set9HuDt+qOpqR7eyTe9az8RXhvaIVIIhH1ETOCOQ1Z8gdforHkz/vhtVjYHI70EKMaPzkeoQMQ==
+X-Received: by 2002:a05:6808:298a:b0:384:2942:e2e1 with SMTP id ex10-20020a056808298a00b003842942e2e1mr11393992oib.41.1678466437904;
+        Fri, 10 Mar 2023 08:40:37 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bj34-20020a05680819a200b0037d8aec19e0sm31751oib.36.2023.03.10.08.40.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 08:40:37 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 10 Mar 2023 08:40:36 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (ftsteutates) Update specifications website
+Message-ID: <8c41e889-55c5-4386-b1b4-b2675bfe3330@roeck-us.net>
+References: <20230226014830.10929-1-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230226014830.10929-1-W_Armin@gmx.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Sun, Feb 26, 2023 at 02:48:30AM +0100, Armin Wolf wrote:
+> The Fujitsu OEM Mainboard business was acquired by Kontron,
+> so the specifications of the Teutates chip was transferred to
+> the new Kontron FTP server.
+> 
+> Update the specifications website accordingly. The outdated
+> sensors how-to was omitted.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-Could you consider these fixes for 6.3-rc2?
-
-The most important one reverts an improper fix which can cause an
-unexpected warning more often on specific images, and another one
-fixes LZMA decompression on 32-bit platforms.  The others are minor
-fixes and cleanups.
-
-All commits have been in -next and tested without strange happening.
+Applied.
 
 Thanks,
-Gao Xiang
+Guenter
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
-
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.3-rc2-fixes
-
-for you to fetch changes up to 3993f4f456309580445bb515fbc609d995b6a3ae:
-
-  erofs: use wrapper i_blocksize() in erofs_file_read_iter() (2023-03-09 23:36:04 +0800)
-
-----------------------------------------------------------------
-Changes since last update:
-
- - Fix LZMA decompression failure on HIGHMEM platforms;
-
- - Revert an inproper fix since it is actually an implementation
-   issue of vmalloc();
-
- - Avoid a wrong DBG_BUGON since it could be triggered with -EINTR;
-
- - Minor cleanups.
-
-----------------------------------------------------------------
-Gao Xiang (3):
-      erofs: fix wrong kunmap when using LZMA on HIGHMEM platforms
-      erofs: Revert "erofs: fix kvcalloc() misuse with __GFP_NOFAIL"
-      erofs: get rid of a useless DBG_BUGON
-
-Yangtao Li (1):
-      erofs: mark z_erofs_lzma_init/erofs_pcpubuf_init w/ __init
-
-Yue Hu (1):
-      erofs: use wrapper i_blocksize() in erofs_file_read_iter()
-
- fs/erofs/data.c              |  2 +-
- fs/erofs/decompressor_lzma.c |  4 ++--
- fs/erofs/internal.h          |  4 ++--
- fs/erofs/pcpubuf.c           |  2 +-
- fs/erofs/zdata.c             | 12 ++++++------
- fs/erofs/zmap.c              |  3 ---
- 6 files changed, 12 insertions(+), 15 deletions(-)
+> ---
+>  Documentation/hwmon/ftsteutates.rst | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> --
+> 2.30.2
+> 
+> diff --git a/Documentation/hwmon/ftsteutates.rst b/Documentation/hwmon/ftsteutates.rst
+> index b3bfec36661d..2abd16830c99 100644
+> --- a/Documentation/hwmon/ftsteutates.rst
+> +++ b/Documentation/hwmon/ftsteutates.rst
+> @@ -36,7 +36,7 @@ correct path to the alarm file::
+> 
+>  	echo 0 >XXXX_alarm
+> 
+> -Specification of the chip can be found here:
+> +Specifications of the chip can be found at the `Kontron FTP Server <http://ftp.kontron.com/>`_ (username = "anonymous", no password required)
+> +under the following path:
+> 
+> -- ftp://ftp.ts.fujitsu.com/pub/Mainboard-OEM-Sales/Services/Software&Tools/Linux_SystemMonitoring&Watchdog&GPIO/BMC-Teutates_Specification_V1.21.pdf
+> -- ftp://ftp.ts.fujitsu.com/pub/Mainboard-OEM-Sales/Services/Software&Tools/Linux_SystemMonitoring&Watchdog&GPIO/Fujitsu_mainboards-1-Sensors_HowTo-en-US.pdf
+> +  /Services/Software_Tools/Linux_SystemMonitoring_Watchdog_GPIO/BMC-Teutates_Specification_V1.21.pdf
