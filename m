@@ -2,82 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B806B416E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BE56B4177
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:53:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjCJNwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 08:52:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
+        id S231221AbjCJNxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 08:53:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbjCJNww (ORCPT
+        with ESMTP id S231219AbjCJNxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:52:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11A5115668;
-        Fri, 10 Mar 2023 05:52:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A44F5B822B4;
-        Fri, 10 Mar 2023 13:52:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B19DC433D2;
-        Fri, 10 Mar 2023 13:52:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678456357;
-        bh=dpDGW2N1xqRPYgeros8o5hPMwYMnc2iwLM7fkp1Wqs0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=q0Tn/K2AN7/bNlSBDz0jmL0PSDR8Cqag47gd0zulxUjLo7J4xUc3SlT75f1Co1K2m
-         IZ2SFMrcb8CJQHO8jVybi8U5lBimhJ7OTTgGLYbP7mB5sfzPh3mh3g/EnYKHHoqatf
-         u4Fzs2hLYcRCHjxal53dGzF3kg54yTpuINRdS2ajPMaC11Sowf5BHTTl3XEzKhMh6q
-         WO3ZwPJI8ToMKnGOwepwi7wr8tQFcTWx6ZyR83oI319Qb99x/W5YIVpTPezoRznPDN
-         tPc7dgytpwjN7U0j1ljVGgDDi3quk393qFVX/mb1tdMSF20IX8vhKcrrhDkSBBr9kM
-         Ju7SE3VAHkbaQ==
-Message-ID: <21a188b3-d3f9-ac13-4e9b-d870401b074f@kernel.org>
-Date:   Fri, 10 Mar 2023 14:52:34 +0100
+        Fri, 10 Mar 2023 08:53:10 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B857E17170;
+        Fri, 10 Mar 2023 05:53:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678456381; x=1709992381;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=LKwfq6RnektJkoOmro9Y/2N5E1HI+eqc/JBfvfgrniQ=;
+  b=QmfUMncj1uaTUNeAfH+tBgaZ86zFJJq/vs6nYRZT6v1r36l5CQLBJd6N
+   4hnjfMiVb12rXIpd+dM+LwHDYyr8DX76OIX1IF4DAxuVoAObsQi1xIVHE
+   x6Fwrj9mTMz45A++gNkTJzyNIpz+vBPl/YiTV9WJoLcNVa6s6vqQ97kpK
+   M8WgJD5PoRLotdDLcgGvwD0bZXiMiB2p/EKUeZl2we1Els5ZM/SRA3E0d
+   7qFj+nc6cCHv0GR4BVvuI4ExaJrGQYWsSVDmiWlt8AlZX0y78JStgona5
+   TqGQdamChBKMJ1k3i+kXcFSjFn3RkvG+pzOXMPFwmGAKksRzR0lTunRMM
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="325080581"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="325080581"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 05:52:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="677818074"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="677818074"
+Received: from klausuhl-mobl.ger.corp.intel.com (HELO localhost) ([10.252.33.190])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 05:52:48 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Jianhua Lu <lujianhua000@gmail.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH] drm/mipi-dsi: Add a mipi_dual_dsi_dcs_write_seq() macro
+In-Reply-To: <ZAsgd4zsgbvWT0U0@Gentoo>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230310110542.6649-1-lujianhua000@gmail.com>
+ <87mt4k95zp.fsf@intel.com> <ZAsgd4zsgbvWT0U0@Gentoo>
+Date:   Fri, 10 Mar 2023 15:52:45 +0200
+Message-ID: <87bkl090ia.fsf@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCHv2 2/2] trace/hwlat: Do not start per-cpu thread if it is
- already running
-Content-Language: en-US
-To:     Tero Kristo <tero.kristo@linux.intel.com>, rostedt@goodmis.org,
-        mhiramat@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-References: <20230310100451.3948583-1-tero.kristo@linux.intel.com>
- <20230310100451.3948583-3-tero.kristo@linux.intel.com>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20230310100451.3948583-3-tero.kristo@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/23 11:04, Tero Kristo wrote:
-> The hwlatd tracer will end up starting multiple per-cpu threads with
-> the following script:
-> 
->     #!/bin/sh
->     cd /sys/kernel/debug/tracing
->     echo 0 > tracing_on
->     echo hwlat > current_tracer
->     echo per-cpu > hwlat_detector/mode
->     echo 100000 > hwlat_detector/width
->     echo 200000 > hwlat_detector/window
->     echo 1 > tracing_on
-> 
-> To fix the issue, check if the hwlatd thread for the cpu is already
-> running, before starting a new one. Along with the previous patch, this
-> avoids running multiple instances of the same CPU thread on the system.
-> 
-> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
+On Fri, 10 Mar 2023, Jianhua Lu <lujianhua000@gmail.com> wrote:
+> On Fri, Mar 10, 2023 at 01:54:18PM +0200, Jani Nikula wrote:
+>> On Fri, 10 Mar 2023, Jianhua Lu <lujianhua000@gmail.com> wrote:
+>> > The panels with two dsi connected (sync dual dsi mode) need to transmit
+>> > dcs command to the two dsi host simultaneously, let's add
+>> > mipi_dual_dsi_dcs_write_seq() macro for this kind of panels.
+>> 
+>> If we were to add a helper for this case, it should be a proper function
+>> and not a macro like this.
+>> 
+>> We'd also need to see a user for this upstream.
+>> 
+>> >
+>> > Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+>> > ---
+>> >  include/drm/drm_mipi_dsi.h | 15 +++++++++++++++
+>> >  1 file changed, 15 insertions(+)
+>> >
+>> > diff --git a/include/drm/drm_mipi_dsi.h b/include/drm/drm_mipi_dsi.h
+>> > index c9df0407980c..d0f0f75d4d83 100644
+>> > --- a/include/drm/drm_mipi_dsi.h
+>> > +++ b/include/drm/drm_mipi_dsi.h
+>> > @@ -336,6 +336,21 @@ int mipi_dsi_dcs_get_display_brightness_large(struct mipi_dsi_device *dsi,
+>> >  		}                                                          \
+>> >  	} while (0)
+>> >  
+>> > +/**
+>> > + * mipi_dsi_dcs_write_seq - transmit a DCS command with payload
+>> > + * @dsi: array of 2 DSI peripheral devices
+>> 
+>> This makes the assumption the devices are stored in an array. What if
+>> drivers want to store them differently, for whatever reason? Maybe they
+>> have an array of some container structs that have the devices? Maybe
+>> they just have two struct mipi_dsi_device pointers?
+> This array just store two struct mipi_dsi_device pointers
+>> 
+>> > + * @cmd: Command
+>> > + * @seq: buffer containing data to be transmitted
+>> > + */
+>> > +#define mipi_dual_dsi_dcs_write_seq(dsi, cmd, seq...)                   \
+>> > +	do {                                                             \
+>> > +		if (ARRAY_SIZE(dsi) > 2)                                 \
+>> > +			return -EINVAL;                                  \
+>> > +		int i;                                                   \
+>> 
+>> I believe this should lead to a warning for mixing code and
+>> declarations.
+>> 
+>> > +		for (i = 0; i < ARRAY_SIZE(dsi); i++)                    \
+>> > +			mipi_dsi_dcs_write_seq(dsi[i], cmd, seq);        \
+>> 
+>> This ignores errors.
+> mipi_dsi_dcs_write_seq is also a macro, contains error checks in the body block.
 
-Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Ugh, I think it's pretty scary to hide control flow like return
+statements in macros like this.
 
--- Daniel
+IMO the the main user of mipi_dsi_dcs_write_seq()
+i.e. panel_nv3051d_init_sequence() in
+drivers/gpu/drm/panel/panel-newvision-nv3051d.c should be written to do
+the writes from an array in a loop instead.
+
+BR,
+Jani.
+
+
+>> 
+>> > +	} while (0)
+>> > +
+>> 
+>> Without an example user, I'm not yet convinced about the usefulness of
+>> the helper, but I'd imagine something like this would be a more generic
+>> approach, not enforcing the array, and handling errors properly:
+>> 
+>> ssize_t mipi_dsi_dual_dcs_write(struct mipi_dsi_device *dsi0,
+>>                                 struct mipi_dsi_device *dsi1,
+>>                                 u8 cmd, const void *data, size_t len)
+>> {
+>> 	ssize_t err = 0;
+>> 
+>> 	if (dsi0)
+>>         	err = mipi_dsi_dcs_write(dsi0, cmd, data, len);
+>> 
+>> 	if (dsi1 && !err)
+>>         	err = mipi_dsi_dcs_write(dsi1, cmd, data, len);
+>> 
+>> 	return err;
+>> }
+> Thanks for your explanation and this looks more reasonable.
+>> 
+>> But even that begs the question where does it end? There are a lot of
+>> mipi_dsi_dcs_*() functions as well as mipi_dsi_generic_write(). Dual
+>> wrappers for all of them? :o
+> It's definitly useless to wrap all of them. Please ignore this patch.
+>> 
+>> 
+>> BR,
+>> Jani.
+>> 
+>> 
+>> >  /**
+>> >   * struct mipi_dsi_driver - DSI driver
+>> >   * @driver: device driver model driver
+>> 
+>> -- 
+>> Jani Nikula, Intel Open Source Graphics Center
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
