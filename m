@@ -2,83 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBE26B37B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A606B37BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbjCJHrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 02:47:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46306 "EHLO
+        id S230045AbjCJHs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 02:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbjCJHqi (ORCPT
+        with ESMTP id S229680AbjCJHss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 02:46:38 -0500
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A4D59F1;
-        Thu,  9 Mar 2023 23:46:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1678434342; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=Ru7IYBxv1TeMY1HDSIbcbhxUNtx0dao2F3QOW2pbVrTwW8MMATPUUfhpbPFDqiDvMQKahq7ri2Mjiem2lj9SCcw7TkhylZSmeax3MK2J/VXzpVq0e8LoVw6F0Lyc+GVikjDwhJ+02yn6gCRLlLwrAU8XmJgfer7Iz/t5NdVBCVs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1678434342; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=5U8jD0mceNdxMH5d+XXNMoLuXyA0CAviMCHpJ7kQo4A=; 
-        b=Nlr0Yw6/VEg6XyZsWZZjN5V+6CSnxtknPmaDq4A1F1Aq0jElIB0fJixzWdmEx39LOFK24K6DTfFAd0WuZflWOJs9fZXNuYm3ByHDcJ0sC+fsJVPd0N5srafRM1XWvuVrVQ8pY4FF5jJKqm8UdH+LKfiUUxXn5dZAzJT3cTpeXqM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1678434342;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=5U8jD0mceNdxMH5d+XXNMoLuXyA0CAviMCHpJ7kQo4A=;
-        b=JUSLKQwACAis7T3MVKl2xbQaFmgnTQo32wE1WLFdrJdA3G0c59CgRzZ19UN+6JQh
-        MwtY0l61oqaAqNpV7FUhS0MXf2b1ywfgpncP3s5GnBaNnVlNwq7QzsVNhAA00kLHeZc
-        rJLu4yaNfejgJibc+I4PLJsuL2k//ZaEdZRqu7XI=
-Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
-        with SMTPS id 1678434340115989.170333737338; Thu, 9 Mar 2023 23:45:40 -0800 (PST)
-Message-ID: <6019d3ff-3fdf-543f-c5fb-cba512582fb3@arinc9.com>
-Date:   Fri, 10 Mar 2023 10:45:33 +0300
+        Fri, 10 Mar 2023 02:48:48 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B456A4E5DD
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 23:48:29 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id p16so2770609wmq.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 23:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678434508;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BUDFtqMWsthDMffvpAoMPW6y3w7gutRliueCUvQ1lFA=;
+        b=c6uhtTrlFvX2BM8B+Ij5mKWKymjeCvxSSmfGjwYSjVIxzqXYqP0SfOHZbK741oT7wk
+         NlxxCK1gj7+WYqCqxLHjNmwHAMPxA6AdgeB34pBQHICdqg1jH8WCuE4H/e5ROaw9ND1T
+         lZbnKpoTm/BtattMX8rP3s1T8PlvxgJdWJYSXe72miYt/JQjJlsJYXa50BRfatV47R9O
+         Gj7MjEHfW8ERZcfYLfJgqMxXPMaKRnWz+oh2dAzB+dKNrKPuBzWIXA51XCcNivWXyxQB
+         tbumrMp/BpwZfMBTg35Td7IcZXcaxrc8+FwhutpNMfHGfg+X7LRU/BcJh0hT3SqXoEvo
+         weGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678434508;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BUDFtqMWsthDMffvpAoMPW6y3w7gutRliueCUvQ1lFA=;
+        b=UvvmH7KodZnVDxoZcsgLKW9RDrUmIQ9Qr2rBFOndLftplEGGgdKqegMJuG7b0ms2a6
+         9nCzpM5E/qGQKWVyXUJLCmQyCQjMw0buiWzHI1g6JQqCIZehgxSVlhDStwchG+nFDzX2
+         tCXoQWULzgwj2edkx6sl/nfD3MZMPoMCsn8n9ZFVfi8DKrWCvgFNwBADszlJO0LlOlH0
+         GoHh59vsyI9MZZwEQZmH9e4zhb3g6u7zoiMGwoKvYvbHU7iLrlzNiS9BqBPHvuRW76BA
+         LvPJoiSne3h9f1ZWpa9GAVtfw6oBcDmhLc7V1IR36Oy7q8WM/Jia9RMeINBq/xTtfQ2e
+         xUtw==
+X-Gm-Message-State: AO0yUKVMn446cFtWRhAmA5vgVUqbwzZXPTm1kiDX1VITzkzqMvl4WCBK
+        k1NGz91VbdbWjPOAV0CfqUYxg+yE5EG1XZ+T1qQ8yA==
+X-Google-Smtp-Source: AK7set94tVYBFQ1almKq6L6E58IH8EKll1s7tduKC7DwGESChOPVpHL44fz+HerWj+MZWnIFNyPsKsUfV78uSRoksBg=
+X-Received: by 2002:a1c:7910:0:b0:3eb:4cbe:1e87 with SMTP id
+ l16-20020a1c7910000000b003eb4cbe1e87mr290872wme.3.1678434508065; Thu, 09 Mar
+ 2023 23:48:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 09/20] dt-bindings: pinctrl: ralink: {mt7620,mt7621}:
- rename to mediatek
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
+References: <20230302013822.1808711-1-sboyd@kernel.org> <2ce31cd1-7a0e-18ac-8a5b-ed09d6539241@gmail.com>
+In-Reply-To: <2ce31cd1-7a0e-18ac-8a5b-ed09d6539241@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 10 Mar 2023 15:48:15 +0800
+Message-ID: <CABVgOS=6mLLYDr3ZOmv6iBQKPdFxTGDFP+uy9xgTHvdc03=vPw@mail.gmail.com>
+Subject: Re: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230303002850.51858-1-arinc.unal@arinc9.com>
- <20230303002850.51858-10-arinc.unal@arinc9.com>
- <20230308210514.GA3767521-robh@kernel.org>
- <12be053e-b70a-faca-71c8-d8eef69a3b73@arinc9.com>
- <ccdfd262-eaf3-dbbe-7a3c-a911a5ec0fc4@arinc9.com>
- <9663817e-7f6f-c3b1-8bf9-321f9b067e96@linaro.org>
- <deca532a-bdf5-c49e-1422-ce6124b61882@arinc9.com>
- <CAMhs-H8M3ir+DshHF60W=QMn9WG3Jgbo8GgXZnDKCLhs=+WBoQ@mail.gmail.com>
- <81cf9e50-d626-cbb3-ebb1-56d080eca66d@arinc9.com>
- <CAMhs-H_YkdacZXE2xqn=_JQtitLvqRFB20s7rjS63dFabAL4qw@mail.gmail.com>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <CAMhs-H_YkdacZXE2xqn=_JQtitLvqRFB20s7rjS63dFabAL4qw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,84 +82,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.03.2023 10:05, Sergio Paracuellos wrote:
-> On Thu, Mar 9, 2023 at 10:09 PM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
->>
->> On 9.03.2023 14:33, Sergio Paracuellos wrote:
->>> On Thu, Mar 9, 2023 at 11:34 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
->>>>
->>>> On 9.03.2023 12:52, Krzysztof Kozlowski wrote:
->>>>> On 09/03/2023 08:53, Arınç ÜNAL wrote:
->>>>>> On 9.03.2023 00:19, Arınç ÜNAL wrote:
->>>>>>> On 9.03.2023 00:05, Rob Herring wrote:
->>>>>>>> On Fri, Mar 03, 2023 at 03:28:38AM +0300, arinc9.unal@gmail.com wrote:
->>>>>>>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>>>>>>>
->>>>>>>>> This platform from Ralink was acquired by MediaTek in 2011. Then,
->>>>>>>>> MediaTek
->>>>>>>>> introduced these SoCs which utilise this platform. Rename the schemas to
->>>>>>>>> mediatek to address the incorrect naming.
->>>>>>>>
->>>>>>>> I said we don't do renames due to acquistions, you said that wasn't the
->>>>>>>> reason, but then that's your reasoning here.
->>>>>>>
->>>>>>> It's not a marketing/acquistion rename as the name of these SoCs were
->>>>>>> wrong from the get go. The information on the first sentence is to give
->>>>>>> the idea of why these SoCs were wrongfully named as the base platform
->>>>>>> that these new MediaTek SoCs share code with was called Ralink.
->>>>>>>
->>>>>>>>
->>>>>>>> To give you another example, *new* i.MX things are still called
->>>>>>>> 'fsl,imx...' and it has been how many years since merging with NXP?
->>>>>>>
->>>>>>> Ok this is a point I see now. Though, I fail to see how this is called
->>>>>>> renaming when there's only new SoCs (from NXP in this case) to be added.
->>>>>>
->>>>>> If I understand correctly, i.MX is a family from Freescale so the name
->>>>>
->>>>> It's the same "family" as your platform, because as you said:
->>>>> "introduced these SoCs which utilise this platform"
->>>>>
->>>>>> was kept the same on new SoC releases from NXP. I believe it's different
->>>>>> in this case here. There's no family name. The closest thing on the name
->>>>>> of the SoC model is, it's RT for Ralink, MT for MediaTek.
->>>>>
->>>>> It's not about the name. NXP took Freescale platform and since many
->>>>> years makes entirely new products, currently far, far away from original
->>>>> platform.
->>>>>
->>>>> That's the same case you have here - Mediatek took existing platform and
->>>>> started making new products with it.
->>>>>
->>>>>>
->>>>>> On top of that, mediatek strings already exist for MT SoCs already, at
->>>>>> least for MT7621.
->>>>>>
->>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/Documentation/devicetree/bindings/mips/ralink.yaml?id=dd3cb467ebb5659d6552999d6f16a616653f9933#n83
->>>>>
->>>>> NXP also has compatibles with nxp, thus still not that good reason.
->>>>
->>>> Ok, makes sense. Am I free to call the SoCs MediaTek, change the schema
->>>> name from ralink,mtXXXX-pinctrl.yaml to mediatek,mtXXXX-pinctrl.yaml
->>>> whilst keeping the compatible string ralink?
->>>>
->>>> I plan to do some cleanup on ralink.yaml as well. From what I
->>>> understand, I should change the mediatek,mt7621-soc compatible string to
->>>> ralink,mt7621-soc?
->>>
->>> You have to take care of these SoC strings since they are used in the
->>> very beginning of the ralink startup platforms for any single ralink
->>> SoC. See for example [0] and [1] (but they are in all soc init code).
->>> I think it is better to maintain the ralink.yaml file as it is.
->>
->> I'd really rather address this inconsistency everywhere possible. The
->> code you pointed out looks different than what I did on the pinctrl
->> driver but, surely it's possible on the code to introduce ralink and
->> keep the mediatek string for the sake of old DTs, no?
-> 
-> In any case, the changes you might have in mind for this should be a
-> different patch series.
+On Sat, 4 Mar 2023 at 23:50, Frank Rowand <frowand.list@gmail.com> wrote:
+>
+> On 3/1/23 19:38, Stephen Boyd wrote:
+> > This patch series adds unit tests for the clk fixed rate basic type and
+> > the clk registration functions that use struct clk_parent_data. To get
+> > there, we add support for loading a DTB into the UML kernel that's
+> > running the unit tests along with probing platform drivers to bind to
+> > device nodes specified in DT.
+> >
+> > With this series, we're able to exercise some of the code in the common
+> > clk framework that uses devicetree lookups to find parents and the fixed
+> > rate clk code that scans devicetree directly and creates clks. Please
+> > review.
+>
+> I would _really_ like to _not_ have devicetree tests in two locations:
+> DT unittests and kunit tests.
+>
 
-Agreed.
+I agree we don't want to split things up needlessly, but I think there
+is a meaningful distinction between:
+- Testing the DT infrastructure itself (with DT unittests)
+- Testing a driver which may have some interaction with DT (via KUnit)
 
-Arınç
+So, rather than going for a "devicetree" KUnit suite (unless we wanted
+to port OF_UNITTEST to KUnit, which as you point out, would involve a
+fair bit of reworking), I think the goal is for there to be lots of
+driver test suites, each of which may verify that their specific
+properties can be loaded from the devicetree correctly.
+
+This is also why I prefer the overlay method, if we can get it to
+work: it makes it clearer that the organisational hierarchy for these
+tests is [driver]->[devicetree], not [devicetree]->[drvier].
+
+> For my testing, I already build and boot four times on real hardware:
+>
+>   1) no DT unittests
+>   2) CONFIG_OF_UNITTEST
+>   3) CONFIG_OF_UNITTEST
+>      CONFIG_OF_DYNAMIC
+>   4) CONFIG_OF_UNITTEST
+>      CONFIG_OF_DYNAMIC
+>      CONFIG_OF_OVERLAY
+>
+> I really should also be testing the four configurations on UML, but at
+> the moment I am not.
+>
+> I also check for new compile warnings at various warn levels for all
+> four configurations.
+>
+> If I recall correctly, the kunit framework encourages more (many more?)
+> kunit config options to select which test(s) are build for a test run.
+> Someone please correct this paragraph if I am mis-stating.
+
+We do tend to suggest that there is a separate kconfig option for each
+area being tested (usually one per test suite, but if there are
+several closely related suites, sticking them under a single config
+option isn't a problem.)
+
+That being said:
+- It's possible (and encouraged) to just test once with all of those
+tests enabled, rather than needing to test every possible combination
+of configs enabled/disabled.
+- (Indeed, this is what we do with .kunitconfig files a lot: they're
+collections of related configs, so you can quickly run, e.g., all DRM
+tests)
+- Because a KUnit test being run is an independent action from it
+being built-in, it's possible to build the tests once and then just
+run different subsets anyway, or possibly run them after boot if
+they're compiled as modules.
+- This of course, depends on two test configs not conflicting with
+each other: obviously if there were some tests which relied on
+OF_OVERLAY=n, and others which require OF_OVERLAY=y, you'd need two
+builds.
+
+The bigger point is that, if the KUnit tests are focused on individual
+drivers, rather than the devicetree infrastructure itself, then these
+probably aren't as critical to run on every devicetree change (the DT
+unittests should hopefully catch anything which affects devicetree as
+a whole), but only on tests which affect a specific driver (as they're
+really intended to make sure the drivers are accessing / interacting
+with the DT properly, not that the DT infrastructure functions).
+
+And obviously if this KUnit/devicetree support ends up depending on
+overlays, that means there's no need to test them with overlays
+disabled. :-)
+
+>
+> Adding devicetree tests to kunit adds additional build and boot cycles
+> and additional test output streams to verify.
+>
+> Are there any issues with DT unittests that preclude adding clk tests
+> into the DT unittests?
+>
+
+I think at least part of it is that there are already some clk KUnit
+tests, so it's easier to have all of the clk tests behave similarly
+(for the same reasons, alas, as using DT unittests makes it easier to
+keep all of the DT tests in the same place).
+
+Of course, as DT unittests move to KTAP, and possibly in the future
+are able to make use of more KUnit infrastructure, this should get
+simpler for everyone.
+
+
+Does that seem sensible?
+
+-- David
