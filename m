@@ -2,81 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910636B51B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0B76B51BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbjCJUWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 15:22:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
+        id S231401AbjCJUXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 15:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbjCJUWt (ORCPT
+        with ESMTP id S231373AbjCJUXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 15:22:49 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E888B12DC02;
-        Fri, 10 Mar 2023 12:22:47 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id s11so25354045edy.8;
-        Fri, 10 Mar 2023 12:22:47 -0800 (PST)
+        Fri, 10 Mar 2023 15:23:04 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A75A1D903;
+        Fri, 10 Mar 2023 12:22:59 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id j3so4230217wms.2;
+        Fri, 10 Mar 2023 12:22:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678479766;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ORasYKUX0Hwis7sfGua1CSHjFk1HruseacmaBr5a+Uk=;
-        b=Xr7tRGNyOBC3CdRyrCHS+ePzgrFutYl2lauA4U2kxId9Ibdtglafm276EA2CQoLa/I
-         YWooVbkXjxxC04X9n2QyHRKboB70j3grprJH/fRMAd6IJcrd+5PzlNG9Dts1emyWrtE2
-         j0Xcwlv0P1TvrfIHwxilUNtxFHvgMIvv0TmGpl+4JWAWlatyL0g2+o0Ht3RU02DjgI0a
-         yLOj2Ua9c5i/nalbwV3k0lFJskYGyBvmT1EAfOfTT20yRDL1b9LEiYtuFCKOP+c406PT
-         UjU9Yi1ASE1SZ+ErFPNV525RPdMD15/r/3qR1hnBaH/BKaPsvZqy+ECGYcENp1Z9orIz
-         a2kg==
+        d=gmail.com; s=20210112; t=1678479778;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4FSUfPM9PzkBQgHDUuENGncvGQIkUiTKD50SixP/pVQ=;
+        b=nqYajTJnlqn2QszL583h60rJxUCMetnsvZgOsAO3yQAfcrcBdEo8ujageLvtqCYR1C
+         EWgzG34cjLhLbcN7aJJpu48AZ4GJOjR/lpJu3wYFmjF8nEqXcEIUWHhA/XO01XBK/KOl
+         cW4rWfcpfb+IWiCe5/+7ZV5n5gYAttg7um8uQH9aMdNGjyZIvqHHcr/gXZ4S/31TsRXz
+         gWu3t9TM1IV3j3/3DNK8Dg60318W85GLtsAc7npo0uVGZvcoer/OD3fANpZRJkO4vkU7
+         ycrXXqP0TTHiM3zAo+1tjLoQGM7zk5RgYPG2JXldcnhAbIdK5G+jqkQssPhif40m7KGy
+         SDaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678479766;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ORasYKUX0Hwis7sfGua1CSHjFk1HruseacmaBr5a+Uk=;
-        b=wrbCJaGl0vNYoPav1VY7YAzBKC8o1lxzuYB3KOC+9xto52086ZrgitMATlJ2EkSYG4
-         A2dQS2pIcUZpUGQUzqLVQi6Hpysf95IajsqK/xSs5OMrFt8AP9Qn0y+8BUk+rzW59jpB
-         wKXku6b3c1V+JPSqOo8j7JEnXFHm8SoMVFVFl2lINaFIyfX/VpR8L85IquJkON4+K+9c
-         F1tIkB1nLC8GKypnJibyZ9Cdrca2+RaWFwgZwrvsCntZrsa7gg1bty9cLzZ+bqutf6+J
-         xl+Ke3Zqw9dWFYqgyGYOLmyyIOCSHab+0khMcYrgt7Mmqqr+jV9tNrmM/q1Nx+x0T2mj
-         NF9A==
-X-Gm-Message-State: AO0yUKU/8zQUSziLa3o1oZElDKEY7tnFZMv0p0aEBotAUSWmcKlGuhvJ
-        pLdCryguO+/lyfZVqbE6Z7N8GumLMsb2YR9bPiA=
-X-Google-Smtp-Source: AK7set8+IJlquFhRcIll2Sg7NI6g9Rxrd9l9Dplhy9MmVoPi+eOapi1cXygTd87AZKZ9aPUtBON+QV/JWQhpJxTBm+E=
-X-Received: by 2002:a17:906:1643:b0:8af:4963:fb08 with SMTP id
- n3-20020a170906164300b008af4963fb08mr13955189ejd.15.1678479766130; Fri, 10
- Mar 2023 12:22:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20230116010115.490713-1-irogers@google.com> <CAP-5=fVUgc8xtBzGi66YRUxZHyXvW2kiMjGz39dywaLxrO4Hpg@mail.gmail.com>
- <Y8mAuDvs566zwG67@kernel.org> <Y8myfqy5EMit3Kr/@krava> <CAP-5=fUugnKd=pGpZve7tKThhM5b0AqGMnuiELF+fZQw-xJz9w@mail.gmail.com>
- <ZAmRjk1x4p4TrFb0@gentoo.org> <CAEf4BzZJvEnWdTKVSgdBDr_KEgkW5HLHc7N-HRkmb-drCbg2uw@mail.gmail.com>
- <CAP-5=fWvMFXOaKA0bKaKdzYjqOxTCXGapJy-4x34hJyZxqD-Dw@mail.gmail.com>
-In-Reply-To: <CAP-5=fWvMFXOaKA0bKaKdzYjqOxTCXGapJy-4x34hJyZxqD-Dw@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 10 Mar 2023 12:22:34 -0800
-Message-ID: <CAEf4BzZyxyqC1KB3zou46ckf3UvDY9PwgrKdofnPfbhXrN3=XQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Assume libbpf 1.0+
-To:     Ian Rogers <irogers@google.com>
-Cc:     Guilherme Amadio <amadio@gentoo.org>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andres Freund <andres@anarazel.de>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Christy Lee <christylee@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
-        Ben Hutchings <ben@decadent.org.uk>
+        d=1e100.net; s=20210112; t=1678479778;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4FSUfPM9PzkBQgHDUuENGncvGQIkUiTKD50SixP/pVQ=;
+        b=l5dzu1nErKxBMUR0cuSCPG/3q55hxZvie7b1Yoze8s3/oxs3MKZZ2I8J0PA+Ad6jG5
+         rMcFzPs+h5jx2MCBgYeoxHZjlXeig4btzeJundKOjCtjVJ3VrtLykjw0YtD8nGlBDAxp
+         AJiEjw/yHDe1yln0yHgPnUG90DAEkJ+GffZNzba80b6Di/cDqQ/pyEDDTsje83HrnXbK
+         qYs7Uq07swEA9t3kSKG9KfzsiAv2vASjAdPkNMnVM5qU6OAyrYEWvkh+ChPnwztRIIGR
+         Dm691toUDqjuVc9jtcGKdVIxS+BVrrKCvrsJ5nK/qOJBZKK5hlHRtHdpO1vKHL3dllNt
+         yytA==
+X-Gm-Message-State: AO0yUKXLU8XEODxA2yT6TuqMOaIOZ7398G56hGk0XZL7M50ET/gb/EhX
+        3X9+n4P/hdc8QIrVuTqBJxs=
+X-Google-Smtp-Source: AK7set+Y2IDpfiEwJF5RRzfh95sswmbosQPuhKf9C3F+lrJubOCiXt2+E2ADzjiE7HXqA7OK3SfoaQ==
+X-Received: by 2002:a05:600c:4f01:b0:3ea:f6c4:3060 with SMTP id l1-20020a05600c4f0100b003eaf6c43060mr3857549wmq.18.1678479777626;
+        Fri, 10 Mar 2023 12:22:57 -0800 (PST)
+Received: from ?IPv6:2a02:168:6806:0:66a2:bd80:e6ae:416? ([2a02:168:6806:0:66a2:bd80:e6ae:416])
+        by smtp.gmail.com with ESMTPSA id k6-20020a5d5186000000b002c707785da4sm576606wrv.107.2023.03.10.12.22.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 12:22:57 -0800 (PST)
+Message-ID: <10da10caea22a8f5da8f1779df3e13b948e8a363.camel@gmail.com>
+Subject: Re: [PATCH net-next v2 4/6] net: mdio: scan bus based on bus
+ capabilities for C22 and C45
+From:   Klaus Kudielka <klaus.kudielka@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Michael Walle <michael@walle.cc>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bryan Whitehead <bryan.whitehead@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-aspeed@lists.ozlabs.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Date:   Fri, 10 Mar 2023 21:22:56 +0100
+In-Reply-To: <70f5bca0-322c-4bae-b880-742e56365abe@lunn.ch>
+References: <20230116-net-next-remove-probe-capabilities-v2-0-15513b05e1f4@walle.cc>
+         <20230116-net-next-remove-probe-capabilities-v2-4-15513b05e1f4@walle.cc>
+         <449bde236c08d5ab5e54abd73b645d8b29955894.camel@gmail.com>
+         <100c439a-2a4d-4cb2-96f2-5bf273e2121a@lunn.ch>
+         <712bc92ca6d576f33f63f1e9c2edf0030b10d3ae.camel@gmail.com>
+         <db6b8a09-b680-4baa-8963-d355ad29eb09@lunn.ch>
+         <0e10aa8492eadb587949d8744b56fccaabbd183b.camel@gmail.com>
+         <72530e86-9ba9-4a01-9cd2-68835ecae7a0@lunn.ch>
+         <09d65e1ee0679e1e74b4f3a5a4c55bd48332f043.camel@gmail.com>
+         <70f5bca0-322c-4bae-b880-742e56365abe@lunn.ch>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-1 
+MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -87,195 +106,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 7:26=E2=80=AFPM Ian Rogers <irogers@google.com> wrot=
-e:
->
-> On Thu, Mar 9, 2023 at 9:25=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Wed, Mar 8, 2023 at 11:58=E2=80=AFPM Guilherme Amadio <amadio@gentoo=
-.org> wrote:
-> > >
-> > > On Wed, Mar 08, 2023 at 06:13:34PM -0800, Ian Rogers wrote:
-> > > > On Thu, Jan 19, 2023 at 1:13=E2=80=AFPM Jiri Olsa <olsajiri@gmail.c=
-om> wrote:
-> > > > >
-> > > > > On Thu, Jan 19, 2023 at 02:41:12PM -0300, Arnaldo Carvalho de Mel=
-o wrote:
-> > > > > > Em Thu, Jan 19, 2023 at 09:11:03AM -0800, Ian Rogers escreveu:
-> > > > > > > On Sun, Jan 15, 2023 at 5:01 PM Ian Rogers <irogers@google.co=
-m> wrote:
-> > > > > > > > libbpf 1.0 was a major change in API. Perf has partially su=
-pported
-> > > > > > > > older libbpf's but an implementation may be:
-> > > > > > > > ..
-> > > > > > > >        pr_err("%s: not support, update libbpf\n", __func__)=
-;
-> > > > > > > >        return -ENOTSUP;
-> > > > > > > > ..
-> > > > > > > >
-> > > > > > > > Rather than build a binary that would fail at runtime it is
-> > > > > > > > preferrential just to build libbpf statically and link agai=
-nst
-> > > > > > > > that. The static version is in the kernel tools tree and ne=
-wer than
-> > > > > > > > 1.0.
-> > > > > > > >
-> > > > > > > > These patches change the libbpf test to only pass when at l=
-east
-> > > > > > > > version 1.0 is installed, then remove the conditional build=
- and
-> > > > > > > > feature logic.
-> > > > > > > >
-> > > > > > > > The issue is discussed here:
-> > > > > > > > https://lore.kernel.org/lkml/20230106151320.619514-1-iroger=
-s@google.com/
-> > > > > > > > perf bpf:
-> > > > > > > >
-> > > > > > > > A variant of this fix was added to Linux 6.2 in:
-> > > > > > > > "perf bpf: Avoid build breakage with libbpf < 0.8.0 + LIBBP=
-F_DYNAMIC=3D1"
-> > > > > > > > https://lore.kernel.org/lkml/Y71+eh00Ju7WeEFX@kernel.org/
-> > > > > > > > This change goes further in removing logic that is now no l=
-onger
-> > > > > > > > necessary.
-> > > > > > > >
-> > > > > > > > v2. Rebase now that breakage fix patch is in linus/master.
-> > > > > > >
-> > > > > > > I missed the:
-> > > > > > > Acked/Tested-by: Jiri Olsa <jolsa@kernel.org>
-> > > > > > > I believe we are waiting for package maintainer input.
-> > > > > >
-> > > > > > Yes, as fedora:37 still is at libbpf 0.8.0 :-\
-> > > > >
-> > > > > rawhide (f38) is already on 1.1.0 ... I'll check how bad it'd be =
-to move
-> > > > > f37 to 1.x, but I had to do bulk update of like 10 other dependen=
-t packages
-> > > > > for f38, so not sure how bad it'd be for f37
-> > > > >
-> > > > > jirka
-> > > >
-> > > > +Guilherme
-> > > >
-> > > > We were looking for maintainer input on these changes, but there is=
- no
-> > > > update in over a month. Here is the original lore link:
-> > > > https://lore.kernel.org/lkml/CAP-5=3DfVUgc8xtBzGi66YRUxZHyXvW2kiMjG=
-z39dywaLxrO4Hpg@mail.gmail.com/
-> > > > Should these changes land in perf-tools-next targeting Linux 6.4?
-> > >
-> > > Gentoo has libbpf-1.1 already available, so requiring >libbpf-1.0 is =
-not
-> > > a problem. We (Gentoo) just need to make sure to stabilize libbpf-1.x=
- before
-> > > stabilizing newer versions of perf, as the stable libbpf is 0.8.1 at =
-the moment.
-> > >
-> >
-> > libbpf v0.8 is basically all the 1.0 APIs, except by default 1.0
-> > semantics is not enforced, unless libbpf_set_strict_mode() is enabled.
-> >
-> > So, if 0.8 is a restriction, perf can stay on 0.8, use all the same
-> > APIs that are in 1.0 (except newer one added later, but I'm not sure
-> > perf needs any of the newer additions), and just stick to setting
-> > libbpf_set_strict_mode() unconditionally.
->
-> Thanks Andrii,
->
+On Thu, 2023-03-09 at 17:36 +0100, Andrew Lunn wrote:
+>=20
+> I was wrong about something i said earlier. A C22 scan reads two
+> registers for each of the 32 possible locations of a C22 PHY on the
+> bus. A C45 scan is however much more expensive. It will read 30 time
+> two registers for each of the 32 possible locations of a C45 PHY on
+> the bus.
+>=20
+> One things that could help is moving some code around a bit. Currently
+> mv88e6xxx_mdios_register() is called at the end of
+> mv88e6xxx_probe(). Try moving it to the beginning of
+> mv88e6xxx_setup(). The call to mv88e6xxx_mdios_unregister() then need
+> to move into mv88e6xxx_teardown().
+>=20
 
-Full disclosure, I'm totally supporting the switch to v1.0+, just
-trying to be helpful here from the standpoint of 0.x vs 1.x libbpf
-transition. See below. I believe you can keep 0.8+ dependency and drop
-all the legacy code completely.
+Yes, that helps. Primarily, because mdiobus_scan_bus_c45 now is called only=
+ once,
+and at least some things are done in parallel.
 
-But just take it as an information, and feel free to do whatever you
-think is best with it.
+(Still, ~2s waiting for the C45 scan to complete).
 
-> The default perf build is to build against tools/lib/bpf and
-> statically link libbpf in. This means by default we have the latest
-> libbpf 1.2. If any perf code has a dependency on 0.8 (we don't support
-> earlier) we need to #ifdef for it. Currently we have 7 feature tests
-> for libbpf, but perhaps there is some cruft that's carried forward.
-> The features are:
->  - btf__load_from_kernel_by_id
+[    0.382715] mdio_bus mv88e6xxx-0: *** mdiobus_scan_bus_c22 call ***
+[    0.387571] mmc0: new high speed MMC card at address 0001
+[    0.387953] mmcblk0: mmc0:0001 H8G4a\x92 7.28 GiB=20
+[    0.388929]  mmcblk0: p1
+[    0.389197] mmcblk0boot0: mmc0:0001 H8G4a\x92 4.00 MiB=20
+[    0.389508] mmcblk0boot1: mmc0:0001 H8G4a\x92 4.00 MiB=20
+[    0.389850] mmcblk0rpmb: mmc0:0001 H8G4a\x92 4.00 MiB, chardev (250:0)
+[    0.393323] ata2: SATA link down (SStatus 0 SControl 300)
+[    0.486839] mdio_bus mv88e6xxx-0: *** mdiobus_scan_bus_c22 return ***
+[    0.486850] mdio_bus mv88e6xxx-0: *** mdiobus_scan_bus_c45 call ***
+[    0.554696] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+[    0.555373] ata1.00: supports DRM functions and may not be fully accessi=
+ble
+[    0.555378] ata1.00: ATA-10: KINGSTON SKC600MS512G, S4800105, max UDMA/1=
+33
+[    0.555384] ata1.00: 1000215216 sectors, multi 1: LBA48 NCQ (depth 32)
+[    0.556055] ata1.00: Features: Trust Dev-Sleep
+[    0.556150] ata1.00: supports DRM functions and may not be fully accessi=
+ble
+[    0.556800] ata1.00: configured for UDMA/133
+[    0.556981] scsi 0:0:0:0: Direct-Access     ATA      KINGSTON SKC600M 01=
+05 PQ: 0 ANSI: 5
+[    0.557506] sd 0:0:0:0: [sda] 1000215216 512-byte logical blocks: (512 G=
+B/477 GiB)
+[    0.557515] sd 0:0:0:0: [sda] 4096-byte physical blocks
+[    0.557552] sd 0:0:0:0: [sda] Write Protect is off
+[    0.557557] sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
+[    0.557613] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled,=
+ doesn't support DPO or FUA
+[    0.557736] sd 0:0:0:0: [sda] Preferred minimum I/O size 4096 bytes
+[    0.558295]  sda: sda1
+[    0.558417] sd 0:0:0:0: [sda] Attached SCSI removable disk
+[    0.685992] sfp sfp: module TP-LINK          TL-SM321B        rev      s=
+n 1403076900       dc 140401
+[    0.686009] mvneta f1034000.ethernet eth2: switched to inband/1000base-x=
+ link mode
+[    2.820390] mdio_bus mv88e6xxx-0: *** mdiobus_scan_bus_c45 return ***
+[    3.464461] mv88e6085 f1072004.mdio-mii:10: configuring for fixed/rgmii-=
+id link mode
+[    3.466123] mv88e6085 f1072004.mdio-mii:10: configuring for fixed/rgmii-=
+id link mode
+[    3.467397] mv88e6085 f1072004.mdio-mii:10: Link is Up - 1Gbps/Full - fl=
+ow control off
+[    3.471263] mv88e6085 f1072004.mdio-mii:10: Link is Up - 1Gbps/Full - fl=
+ow control off
+[    3.538112] mv88e6085 f1072004.mdio-mii:10 lan0 (uninitialized): PHY [mv=
+88e6xxx-0:00] driver [Marvell 88E1540] (irq=3D68)
+[    3.602833] mv88e6085 f1072004.mdio-mii:10 lan1 (uninitialized): PHY [mv=
+88e6xxx-0:01] driver [Marvell 88E1540] (irq=3D69)
+[    3.674111] mv88e6085 f1072004.mdio-mii:10 lan2 (uninitialized): PHY [mv=
+88e6xxx-0:02] driver [Marvell 88E1540] (irq=3D70)
+[    3.746290] mv88e6085 f1072004.mdio-mii:10 lan3 (uninitialized): PHY [mv=
+88e6xxx-0:03] driver [Marvell 88E1540] (irq=3D71)
+[    3.818291] mv88e6085 f1072004.mdio-mii:10 lan4 (uninitialized): PHY [mv=
+88e6xxx-0:04] driver [Marvell 88E1540] (irq=3D72)
+[    3.820845] device eth1 entered promiscuous mode
+[    3.821730] device eth0 entered promiscuous mode
+[    3.821749] DSA: tree 0 setup
+[    3.822563] Freeing unused kernel image (initmem) memory: 1024K
+[    3.822727] Run /init as init process
 
-v0.5 API
 
->  - bpf_prog_load
->  - bpf_object__next_program
->  - bpf_object__next_map
+Regards, Klaus
 
-all three are v0.6 APIs
-
->  - bpf_program__set_insns
-
-v0.8 API
-
->  - btf__raw_data
->  - bpf_map_create
-
-both v0.6 API
-
->
-> The not present implementations look like:
-> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools=
-/perf/util/bpf-loader.c?h=3Dperf-tools#n36
-> ```
-> int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
->   struct bpf_insn *new_insns __maybe_unused, size_t new_insn_cnt __maybe_=
-unused)
-> {
-> pr_err("%s: not support, update libbpf\n", __func__);
-> return -ENOTSUP;
-> }
->
-> int libbpf_register_prog_handler(const char *sec __maybe_unused,
->                                  enum bpf_prog_type prog_type __maybe_unu=
-sed,
->                                  enum bpf_attach_type exp_attach_type
-> __maybe_unused,
->                                  const struct libbpf_prog_handler_opts
-> *opts __maybe_unused)
-> {
-> pr_err("%s: not support, update libbpf\n", __func__);
-> return -ENOTSUP;
-> }
-> ```
-
-both are v0.8 APIs
-
-> This will basically mean that while you dynamically linked with libbpf
-> 0.8 you are in all likelihood not going to get proper BPF support.
-> These changes up the version requirement to 1.0 and get rid entirely
-> of the feature tests - so no runtime failing implementations. If the
-
-100% supportive on upgrade and dropping feature checks. My point is
-that you don't need those feature checks with v0.8+ requirement.
-
-The only difference between staying on v0.8+ vs going all the way to
-v1.0+ would be that you have to keep libbpf_set_strict() call. In
-v1.0+ it's a noop, so could be dropped.
-
-> build determines at build time libbpf 1.0+ isn't present then it still
-> executes, switching from dynamic libbpf to the default static libbpf
-> that is at 1.2. As mentioned in this thread, distributions like Debian
-> use the default static linking of libbpf.
->
-
-oh, that's nice, good to know
-
-> I'm not keen to hold on to the feature tests for the complexity that
-> they hold and their needlessly (as you can always statically link)
-> broken at runtime behavior. We could but my opinion is, let's not :-)
-
-I've been consistently advocating for static linking with libbpf, so
-100% support this.
-
->
-> Thanks,
-> Ian
->
-> > > Best regards,
-> > > -Guilherme
-> > >
