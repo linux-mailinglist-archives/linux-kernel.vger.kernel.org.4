@@ -2,103 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA8A6B5597
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0144D6B559E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbjCJXZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 18:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
+        id S231853AbjCJX3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 18:29:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbjCJXZt (ORCPT
+        with ESMTP id S231404AbjCJX3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 18:25:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B820916336;
-        Fri, 10 Mar 2023 15:25:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3724B8244C;
-        Fri, 10 Mar 2023 23:25:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8A1DC4339B;
-        Fri, 10 Mar 2023 23:25:43 +0000 (UTC)
-Date:   Fri, 10 Mar 2023 18:25:42 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Minwoo Im <minwoo.im.dev@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: Re: [PATCH] mm: mmap: remove newline at the end of the trace
-Message-ID: <20230310182542.695e9933@gandalf.local.home>
-In-Reply-To: <ZAu6qDsNPmk82UjV@minwoo-desktop>
-References: <ZAu6qDsNPmk82UjV@minwoo-desktop>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 10 Mar 2023 18:29:11 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5779E12C822;
+        Fri, 10 Mar 2023 15:29:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=vxh+5loJXr3QOkEBXraKRrSEsoLxyjcuI0B+WEdhvrc=; b=ICn+4H1Gid6ISIQtmA0dRRbsb8
+        TA5WsB7AvOCX+EZG9pAFvNij/xCRcRVffQ8DW1eKISqZhVdSweKez4Ce4x6bNBbtzrxAb3g/QEuQY
+        Tgr2QdR77Rqua6uRpaqyFTZqzSdIsVTrMeEb8BmWcxEHuLzpriCVgZUTuzips3XFyZibgMPeH/JJG
+        7AHXtJJ84yqwS7cGnh2ZAZre7hmo0fkKTYShqUS1WzB3bJkjmaooFmGGSreXLsWcb5IK6592fhuCN
+        NLUCBWdbzyfO99+sFR9jKYhNMMC+dlHEnIFt5rF3WEDeMKkGshOoxh1DZjxsHRCEEpSrV6uM7y73S
+        ls83Dbxw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pamAN-00GcM6-0Y; Fri, 10 Mar 2023 23:28:51 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu
+Cc:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
+        j.granados@samsung.com, patches@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH 0/2] ppc: simplify sysctl registration
+Date:   Fri, 10 Mar 2023 15:28:48 -0800
+Message-Id: <20230310232850.3960676-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023 08:18:00 +0900
-Minwoo Im <minwoo.im.dev@gmail.com> wrote:
+We can simplify the way we do sysctl registration both by
+reducing the number of lines and also avoiding calllers which
+could do recursion. The docs are being updated to help reflect
+this better [0].
 
-> We already have newline in TP_printk so remove the redundant newline
-> character at the end of the mmap trace.
-> 
-> <...>-345     [006] .....    95.589290: exit_mmap: mt_mod ...
-> 
-> <...>-345     [006] .....    95.589413: vm_unmapped_area: addr=...
-> 
-> <...>-345     [006] .....    95.589571: vm_unmapped_area: addr=...
-> 
-> <...>-345     [006] .....    95.589606: vm_unmapped_area: addr=...
-> 
-> to
-> 
-> <...>-336     [006] .....    44.762506: exit_mmap: mt_mod ...
-> <...>-336     [006] .....    44.762654: vm_unmapped_area: addr=...
-> <...>-336     [006] .....    44.762794: vm_unmapped_area: addr=...
-> <...>-336     [006] .....    44.762835: vm_unmapped_area: addr=...
-> 
-> Signed-off-by: Minwoo Im <minwoo.im.dev@gmail.com>
+[0] https://lore.kernel.org/all/20230310223947.3917711-1-mcgrof@kernel.org/T/#u     
 
-This should go through the mm folks.
+Luis Chamberlain (2):
+  ppc: simplify one-level sysctl registration for
+    powersave_nap_ctl_table
+  ppc: simplify one-level sysctl registration for
+    nmi_wd_lpm_factor_ctl_table
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+ arch/powerpc/kernel/idle.c                | 10 +---------
+ arch/powerpc/platforms/pseries/mobility.c | 10 +---------
+ 2 files changed, 2 insertions(+), 18 deletions(-)
 
--- Steve
-
-> ---
->  include/trace/events/mmap.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/trace/events/mmap.h b/include/trace/events/mmap.h
-> index 216de5f03621..f8d61485de16 100644
-> --- a/include/trace/events/mmap.h
-> +++ b/include/trace/events/mmap.h
-> @@ -35,7 +35,7 @@ TRACE_EVENT(vm_unmapped_area,
->  		__entry->align_offset = info->align_offset;
->  	),
->  
-> -	TP_printk("addr=0x%lx err=%ld total_vm=0x%lx flags=0x%lx len=0x%lx lo=0x%lx hi=0x%lx mask=0x%lx ofs=0x%lx\n",
-> +	TP_printk("addr=0x%lx err=%ld total_vm=0x%lx flags=0x%lx len=0x%lx lo=0x%lx hi=0x%lx mask=0x%lx ofs=0x%lx",
->  		IS_ERR_VALUE(__entry->addr) ? 0 : __entry->addr,
->  		IS_ERR_VALUE(__entry->addr) ? __entry->addr : 0,
->  		__entry->total_vm, __entry->flags, __entry->length,
-> @@ -110,7 +110,7 @@ TRACE_EVENT(exit_mmap,
->  		       __entry->mt		= &mm->mm_mt;
->  	),
->  
-> -	TP_printk("mt_mod %p, DESTROY\n",
-> +	TP_printk("mt_mod %p, DESTROY",
->  		  __entry->mt
->  	)
->  );
+-- 
+2.39.1
 
