@@ -2,163 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2C86B32C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 01:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 780C66B32C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 01:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbjCJAYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 19:24:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
+        id S229910AbjCJA2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 19:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbjCJAYo (ORCPT
+        with ESMTP id S229893AbjCJA2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 19:24:44 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E23EE484E
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 16:24:42 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id fa28so2624490pfb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 16:24:42 -0800 (PST)
+        Thu, 9 Mar 2023 19:28:48 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC21F248B
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 16:28:47 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-536bbe5f888so67146927b3.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 16:28:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678407881;
+        d=google.com; s=20210112; t=1678408126;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l+V3aYlmwqb5X0ONYtzyuh6v2xQDgHWPmfFHQGk3o8g=;
-        b=hR+qhxvvS3eP36MtryvpNULln5F1Yw4KWdRZ6I9J38LvCOg2aWXhv+uSpCy0/bg6jA
-         RNlV8WtFbYxVJbPjnJuC4dsHEdxYp0G8DO/SPhpM9UePjnvActuq8JBYvqhTp7Vwc5u6
-         F23dLvj9l4WuEk5x4ZNSnkcwzzgxJ0N//KeCNR5Mzni9ZvXU3OS8h7/a2GtKXw4/Mk9g
-         QBD3BZctdd5RNbkubQZC0JBLFkPhFCJH6zP0lSVPZVjLPCMP4ezmnWv9lwxkTaVIFMYo
-         bd8YlwSORTpsUk6Cf8ybmH8gT4Qy8S6G4Qnn1NJYF5vF/Ay2SkI5ZH1mGwe93QmzSy3f
-         2tiQ==
+        bh=qF04VPgueh2SKaxQTFBfaR6wxxhC9lXU3sZE07syoaw=;
+        b=X3aHcVPsPrl6qNUh8U2pEh3DTck3BpDkmOKKBD7vl0sz6Nu734G6K7QOCJ6VITu+OC
+         RHxnhEz3BlrDa+jOzy7Xwea1rID4KIvlAnYZb+kydHFZEnC4h1NmBIPku1Q1ZT8dyM6h
+         27/bq0R6+0gT3dhZ4rONl9p1mbx0reGbZFfPa32lTc0/1l+4lQBQKbn+Cvv00pT0tVjy
+         YHB/jbFdKgU+pjLPCO8QIVWumtvoROZlurXuHiCnv8hAJ2hR6gVC19qqkOc2WmD8Eu3G
+         MCkFAWtbAtScxsNMaqDutzFqSqlUy75IMqW9Oz7kSgIE1xz0tnL2TtA0vGvf0W3fp847
+         r7Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678407881;
+        d=1e100.net; s=20210112; t=1678408126;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=l+V3aYlmwqb5X0ONYtzyuh6v2xQDgHWPmfFHQGk3o8g=;
-        b=0Jw00h5SSkJLMEDSRMmOwBDwTGPna8N+SIPu4MEQvHwfrY7lCTWc7KUiMoKalrR7RX
-         AvVRhlWIViLjQk5aobJGttXZI2a/KZTwdqMv6Fu8JK75SDOZm1j8iqB4okmIlVNZ1MAp
-         8Ra3c2q6qc/+LeNNjzAnKrIUj5ouFbs7jmzHyTEtImwPcHbaai5ozbrTIlI1SXFzu+hB
-         qaUQK/+upr+x8pKJlkSx5UeJWTtMHV0F/5xPkvoAh+qU8NYjp9+jxVQ9QOSkGfQEeu0L
-         p86wGuHNIc8YnB4ohVxMauUuO3UsSztF+mJFBvaY6nL/c+aeLcVxmAQXpH7GMooH9fwa
-         GTZg==
-X-Gm-Message-State: AO0yUKWY8li45oGItFuUF3ufNqNlBo2YjEtDbqOQMOKMNL4h0XAQQiZ/
-        QtqbpkC1ZSIDYewbao9YBT8q7NZyWgGLFrZ6mYEAgA==
-X-Google-Smtp-Source: AK7set9ORvroYLFAXYpfLQXjWnnjDaxY+n0btSLbGMHX5m3kutUt6364A93lcXxwEwJIKyvmvltfUJuODMWNMCE7GaI=
-X-Received: by 2002:a63:2950:0:b0:4fd:5105:eb93 with SMTP id
- bu16-20020a632950000000b004fd5105eb93mr7766307pgb.3.1678407881336; Thu, 09
- Mar 2023 16:24:41 -0800 (PST)
+        bh=qF04VPgueh2SKaxQTFBfaR6wxxhC9lXU3sZE07syoaw=;
+        b=ZKZihE80fueNUXL7kHLzETmsabXaq4lU2cWpHlM3XUt7pf36bBJserCBbVN2z4kF7N
+         Ud5ukcWkI+XiFORuxsSouqy/L9deo7gsJ4C2fo8EwPkvZIhZiSAhq9SHTcNm3zHlhSFK
+         U3VKuQcOXjteRvcSedlbgWMlayNYyXDDm1h9heaEIUNlC39mRRIoGlGzh5E+2Bmvv/Jf
+         gtPcGeVF4S1WetbFCd3X4q5zVYmqVwtnQJ+/RfnSfuEQLLhgImoj8HSc3ovausVIrysb
+         WnhMtOs+V1LdMTjIQ+bPqj9nbx6hyMWjQ0gRiQnk9lujaeyaaI2spV6klWm+j46ViLn3
+         XT+w==
+X-Gm-Message-State: AO0yUKVUz6rhCheU9RbIrEJxDE7chjn3o62AS1gFJcRoMjPQLT4D7cpT
+        MqC7eh3rjeC+3nqde0gNz6WxoXYI23lztp4DMVi/9Q==
+X-Google-Smtp-Source: AK7set+g99RJ9xbUn+LPvdxkpcJsaqN4LP1rQPmQKWucbbV4hxwHZ6toxcBx4ohxx0rJfG6pEt81IuQjqcSHjJ1XtuI=
+X-Received: by 2002:a81:ad24:0:b0:52e:bb2d:2841 with SMTP id
+ l36-20020a81ad24000000b0052ebb2d2841mr14718152ywh.10.1678408126408; Thu, 09
+ Mar 2023 16:28:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20230301214952.2190757-1-saravanak@google.com>
- <2a8e407f4f18c9350f8629a2b5fa18673355b2ae.camel@puri.sm> <e65e08c13885468675af527ffa2ab882cc9e682d.camel@puri.sm>
-In-Reply-To: <e65e08c13885468675af527ffa2ab882cc9e682d.camel@puri.sm>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 9 Mar 2023 16:24:05 -0800
-Message-ID: <CAGETcx93K1VjAosX9NDEyLVLPK2utPSUV6dwzdAT-Dc5BfmhzQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Yongqin Liu <yongqin.liu@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
+References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-4-vipinsh@google.com>
+ <ZApxh/GYfqev7sHA@google.com>
+In-Reply-To: <ZApxh/GYfqev7sHA@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Thu, 9 Mar 2023 16:28:10 -0800
+Message-ID: <CAHVum0eQzmLXDxMy3+LpmGxVU7YsT1wRNYkFq9o7sfR2uNK-xA@mail.gmail.com>
+Subject: Re: [Patch v4 03/18] KVM: x86/mmu: Track count of pages in KVM MMU
+ page caches globally
+To:     David Matlack <dmatlack@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        jmattson@google.com, mizhang@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 1:41=E2=80=AFAM Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
+On Thu, Mar 9, 2023 at 3:53=E2=80=AFPM David Matlack <dmatlack@google.com> =
+wrote:
 >
-> Am Donnerstag, dem 02.03.2023 um 10:12 +0100 schrieb Martin Kepplinger:
-> > Am Mittwoch, dem 01.03.2023 um 13:49 -0800 schrieb Saravana Kannan:
-> > > Yongqin, Martin, Amelie,
-> > >
-> > > We recent refactor of fw_devlink that ends with commit fb42378dcc7f
-> > > ("mtd: mtdpart: Don't create platform device that'll never probe"),
-> > > fw_devlink is smarter and doesn't depend on compatible property.
-> > > So,
-> > > I
-> > > don't think these calls are needed anymore. But I don't have these
-> > > devices to test on and be sure and the hardware I use to test
-> > > changes
-> > > doesn't have this issue either.
-> > >
-> > > Can you please test these changes on the hardware where you hit the
-> > > issue to make sure things work as expected?
-> > >
-> > > Yongqin, If you didn't have the context, this affected hikey960.
-> > >
-> > > Greg,
-> > >
-> > > Let's wait for some tests before we land these.
-> > >
-> > > Thanks,
-> > > Saravana
-> >
-> > hi Sravana,
-> >
-> > I picked the 12 commits leading up to commit fb42378dcc7f ("mtd:
-> > mtdpart: Don't create platform device that'll never probe") (
-> > https://source.puri.sm/martin.kepplinger/linux-next/-/commits/test_fw_d=
-evlink
-> > ) and included the tipd patch below to test it.
-> >
-> > With that, I get the following errors:
-> >
-> > [    0.237931] imx-uart 30890000.serial: Failed to create device link
-> > with regulator-gnss
-> > [    0.334054] nwl-dsi 30a00000.mipi-dsi: Failed to create device
-> > link
-> > with regulator-lcd-1v8
-> > [    0.346964] nwl-dsi 30a00000.mipi-dsi: Failed to create device
-> > link
-> > with backlight-dsi
-> >
-> > but they are independent of this final tipd patch below. I'll test a
-> > real linux-next tree soon, for completeness, maybe I missed
-> > something?
-> >
-> > Anyways, on that tree, your tipd removal patch breaks type-c still
-> > for
-> > me, imx8mq-librem5.dtsi
-> >
-> > just to give a first reply quickly... thanks,
-> >
-> >                              martin
-> >
+> On Mon, Mar 06, 2023 at 02:41:12PM -0800, Vipin Sharma wrote:
+> > Create a global counter for total number of pages available
+> > in MMU page caches across all VMs. Add mmu_shadow_page_cache
+> > pages to this counter.
 >
-> just confirming: it's the same as above on next-20230302 + this patch (
-> https://source.puri.sm/martin.kepplinger/linux-next/-/commits/test_fw_dev=
-link_next-20230302
-> ) with the errors already independent from the patch. I should have
-> tested earlier patches -.-
+> I think I prefer counting the objects on-demand in mmu_shrink_count(),
+> instead of keeping track of the count. Keeping track of the count adds
+> complexity to the topup/alloc paths for the sole benefit of the
+> shrinker. I'd rather contain that complexity to the shrinker code unless
+> there is a compelling reason to optimize mmu_shrink_count().
+>
+> IIRC we discussed this at one point. Was there a reason to take this
+> approach that I'm just forgetting?
 
-Thanks a lot for testing Martin!
+To count on demand, we first need to lock on kvm_lock and then for
+each VMs iterate through each vCPU, take a lock, and sum the objects
+count in caches. When the NUMA support will be introduced in this
+series then it means we have to iterate even more caches. We
+can't/shouldn't use mutex_trylock() as it will not give the correct
+picture and when shrink_scan is called count can be totally different.
 
-Your email is a little ambiguous to me. With the 12 refactor commits +
-the 4 patches in this series, things are breaking for you. But if you
-drop the 4 patches in this series, things work again. Is that right?
-
-Let's ignore the "Failed to create device link" errors for now -- it's
-not related to this usb-c-connector series. It's basically pointing
-out issues that we ignored silently in the past -- it's basically
-pointing out holes in fw_devlink's visibility of devices. I'll get to
-them later.
-
--Saravana
+scan_count() API comment says to not do any deadlock check (I don't
+know what does that mean) and percpu_counter is very fast when we are
+adding/subtracting pages so the effect of using it to keep global
+count is very minimal. Since, there is not much impact to using
+percpu_count compared to previous one, we ended our discussion with
+keeping this per cpu counter.
