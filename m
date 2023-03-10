@@ -2,115 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7DD6B439A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C24F6B438F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbjCJOQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:16:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
+        id S231740AbjCJOPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbjCJOPg (ORCPT
+        with ESMTP id S231770AbjCJOPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:15:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376AD733B3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:13:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678457619;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A7zxiTlY/KjLxdbyEM0eMfFkU0GBlfDz/AuaOXGMZI0=;
-        b=PCpVkVTIl0hhNTYB+Zz16CTVQpsR3JwCBs4RBqGvbOVVs8Y5cCaBFalVf2REocUT4NDn/c
-        0n6BWoU036P+YRP44eVYNzugZ7HycXgkcB0hrT9NWAH667n7Pe0tbrMYbosSxb7+22XM5+
-        g2o5Iu+8MaIaviZTYHZz8QNjafy5axE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-592-XxxlqPh5MnmyVFm0Bp4xvQ-1; Fri, 10 Mar 2023 09:13:38 -0500
-X-MC-Unique: XxxlqPh5MnmyVFm0Bp4xvQ-1
-Received: by mail-wm1-f71.google.com with SMTP id k20-20020a05600c1c9400b003e2249bd2b4so1872719wms.5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:13:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678457617;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A7zxiTlY/KjLxdbyEM0eMfFkU0GBlfDz/AuaOXGMZI0=;
-        b=qcoJxl3D591UsbnC2OceGNZSx5KTjBAlDMI+O/eu6k7NXYpRqjEw1qOiWAjJMxAM7Q
-         ySxTPAePbjIIoP1PZ0HBl28zeoF6EhIlBWDgdYuR32g+cbaGicDq12uKyDq5KAF4suzi
-         5T/sigqJJ+MivA1NGpHqQsm0xVQIL89wBdW3PJ8EF6J4CdTx3UXcyPJW+0svVO4OesGN
-         RVMcjIPygbIurqYWtL+2zWBpi74tohhON69lEefWpYXMGO6Kbecwkwpf3iHHRQyeibOC
-         K81YhdR18oaehxRovcUCl1f3xjP8B/HTbwZfOH/B4538m/zAQ8fQD1695HFb4B5LC8TW
-         60pg==
-X-Gm-Message-State: AO0yUKV2wsGu4T2NAYQrBAR0TZA//M6GiOu4ieD1mfipNreDOH03KaAy
-        8HofhLYPKumz9NsZAlwV021MS3Zx0PmMzXZ8u0ZBfvBWPpfoPyQjmi0/cwINY8MQ6HpEgwEIyJ6
-        45AQDjE0uVWL94GcEm7ORdXIy
-X-Received: by 2002:adf:f34c:0:b0:2c7:b3b9:a39d with SMTP id e12-20020adff34c000000b002c7b3b9a39dmr17068380wrp.11.1678457616965;
-        Fri, 10 Mar 2023 06:13:36 -0800 (PST)
-X-Google-Smtp-Source: AK7set8n9E7TFK3Ba8ZSojU5csRxgVkI3eiMHH3uZmv6dakjA9e52sCj2rxvfm8TjkNYBkF6OFenTw==
-X-Received: by 2002:adf:f34c:0:b0:2c7:b3b9:a39d with SMTP id e12-20020adff34c000000b002c7b3b9a39dmr17068362wrp.11.1678457616612;
-        Fri, 10 Mar 2023 06:13:36 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:1100:12e6:ffa5:775d:18ee? (p200300cbc707110012e6ffa5775d18ee.dip0.t-ipconnect.de. [2003:cb:c707:1100:12e6:ffa5:775d:18ee])
-        by smtp.gmail.com with ESMTPSA id c7-20020adffb47000000b002c567b58e9asm2202310wrs.56.2023.03.10.06.13.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 06:13:36 -0800 (PST)
-Message-ID: <117b3a88-0046-95f9-060b-98dd8c09fc64@redhat.com>
-Date:   Fri, 10 Mar 2023 15:13:35 +0100
+        Fri, 10 Mar 2023 09:15:18 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378AB11786A;
+        Fri, 10 Mar 2023 06:14:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678457646; x=1709993646;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wnHp8QotpEXnl4syrGWTVi+ZzBP8IVSR7jssb+hIwqU=;
+  b=e25VbFKxeO1nlE7ALxE6pf2eYKtsx1Xpiko1CAvgvDJ8Oum8OjmR4Pm6
+   JYNUdHyOHL7PeqCUmt8rF2RMXLAJmk+B7NcDkizl54bYME2Ua1xZWADKx
+   /1NJBB/jXhA9vGRyhWTKGtmEPUlM9k1dcYWW8oH3sf8SX+26ubuvQod5q
+   sqDAcMpsPbhcORzmrvg8GVP/Oeq0VobByTguFoqgEgF828RLpm8uMzQ3w
+   hX1RMU/sPKXwCCycso+op7tQMDPsNUBZaL3owz1tMKMtJA9L7+wMS4ApZ
+   fwui31txsrFvM+TzJLjOlYWBllxhlwHzHnIZinE8+ze5kIyvIMDEB6UET
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="401593953"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="401593953"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 06:13:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="671093619"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="671093619"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 10 Mar 2023 06:13:55 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1padVJ-000wyG-1H;
+        Fri, 10 Mar 2023 16:13:53 +0200
+Date:   Fri, 10 Mar 2023 16:13:53 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Kaehn <kaehndan@gmail.com>, linux-gpio@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] gpiolib: acpi: use the fwnode in acpi_gpiochip_find()
+Message-ID: <ZAs7IS8tcc92RVCM@smile.fi.intel.com>
+References: <20230309-fix-acpi-gpio-v2-1-9eb20a1fd42c@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] mm: memory-failure: correct HWPOISON_INJECT config
-Content-Language: en-US
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc:     Miaohe Lin <linmiaohe@huawei.com>, linux-kernel@vger.kernel.org
-References: <20230310133843.76883-1-wangkefeng.wang@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230310133843.76883-1-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309-fix-acpi-gpio-v2-1-9eb20a1fd42c@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.03.23 14:38, Kefeng Wang wrote:
-> Use IS_ENABLED(CONFIG_HWPOISON_INJECT) to check whether or not to
-> enable HWPoison injector module.
+On Fri, Mar 10, 2023 at 02:38:10PM +0100, Benjamin Tissoires wrote:
+> While trying to set up an SSDT override for a USB-2-I2C chip [0],
+> I realized that the function acpi_gpiochip_find() was using the parent
+> of the gpio_chip to do the ACPI matching.
 > 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->   mm/memory-failure.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> This works fine on my Ice Lake laptop because AFAICT, the DSDT presents
+> the PCI device INT3455 as the "Device (GPI0)", but is in fact handled
+> by the pinctrl driver in Linux.
+> The pinctrl driver then creates a gpio_chip device. This means that the
+> gc->parent device in that case is the GPI0 device from ACPI and everything
+> works.
 > 
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index fae9baf3be16..f761704d27d7 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -168,7 +168,7 @@ static bool page_handle_poison(struct page *page, bool hugepage_or_freepage, boo
->   	return true;
->   }
->   
-> -#if defined(CONFIG_HWPOISON_INJECT) || defined(CONFIG_HWPOISON_INJECT_MODULE)
-> +#if IS_ENABLED(CONFIG_HWPOISON_INJECT)
->   
->   u32 hwpoison_filter_enable = 0;
->   u32 hwpoison_filter_dev_major = ~0U;
+> However, in the hid-cp2112 case, the parent is the USB device, and the
+> gpio_chip is directly under that USB device. Which means that in this case
+> gc->parent points at the USB device, and so we can not do an ACPI match
+> towards the GPIO device.
+> 
+> I think it is safe to resolve the ACPI matching through the fwnode
+> because when we call gpiochip_add_data(), the first thing it does is
+> setting a proper gc->fwnode: if it is not there, it borrows the fwnode
+> of the parent.
+> 
+> So in my Ice Lake case, gc->fwnode is the one from the parent, meaning
+> that the ACPI handle we will get is the one from the GPI0 in the DSDT
+> (the pincrtl one). And in the hid-cp2112 case, we get the actual
+> fwnode from the gpiochip we created in the HID device, making it working.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Pushed to my review and testing queue, thanks!
 
 -- 
-Thanks,
+With Best Regards,
+Andy Shevchenko
 
-David / dhildenb
 
