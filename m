@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546156B5409
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CE06B540B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbjCJWO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 17:14:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        id S231372AbjCJWOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 17:14:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbjCJWOV (ORCPT
+        with ESMTP id S231355AbjCJWOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 17:14:21 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B43115DE6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:14:19 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id p5-20020a056a0026c500b005cbeecd5c0dso3471010pfw.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:14:19 -0800 (PST)
+        Fri, 10 Mar 2023 17:14:24 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D4613F56F
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:14:21 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id m6-20020a056902118600b00aeb1e3dbd1bso7061743ybu.9
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:14:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678486459;
+        d=google.com; s=20210112; t=1678486460;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=pE0BeI9z8Btfvf5fmHYTFVBRcoqQtEODzvdHtDO3xCE=;
-        b=nRb2x/Az02iItbQ3I1bSF4yJ9xu29h0hIwwWhVNSJNRSMZNeINtGtQihw8x/ogzEwj
-         Vd5WHSRuHp58cuzg+TBKg88rjb8fidPwPHdxzg3JtQyhLzyp6UXqN+RgK2NB0Vv0eP8j
-         RyIk8lIGN74xRgM5GkcSf7HJJDRvg87Kooip0b7WCcy3+vUFeTtDqXBYfFNpHldfChxg
-         P5F6EEbuDxLxeqSmK6GaQy17ujAAN0c5HgbwydDUWLCR30mDFyMVo62MgbmKkdNIoQHG
-         WWx2BBn6pbm6Ecxov3jmRE3kuoJEy5J0lX4KhD6cm6eJrDSn+8pst2PuKMNhZrxIxurE
-         M/Ww==
+        bh=2opxKga+fb5i4H+BY6IhBhjz7Vmgmcavrh6WO0nAabw=;
+        b=XANFaeRYOx5Rd/kapDHhNmO90qoMVlvQlylWOJKFiusgRTk50x3TP11Tb99KjhRtRp
+         Ilp6Fnx2ETLBE3ONxbTQK/JHBUg90svkVN5Ksjq6gDLd6XGGLH3cF/yhlaBgocMStinz
+         BgYUmwsqJH2QawF4/6NH9+aU6CFGqKWcG0poEIYHj6EwiQB9E2zPA277B2ph+E8+ViKI
+         skXt6AXZdpliK6f0KboRPpk16NPL23XsUnuJZwzJxP6uQZnZFD4DhdkN8ZAiCA34+SyC
+         eiBTO57MgJwbaZpawRvV5J7htbbDb96jJ2ohiFCXMIPVyvl34nTNPoV17hacH1Od+NjM
+         RPGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678486459;
+        d=1e100.net; s=20210112; t=1678486460;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pE0BeI9z8Btfvf5fmHYTFVBRcoqQtEODzvdHtDO3xCE=;
-        b=DXj8ynTbfHP46PhL8gLD8LbQo+RkEKvOkqzXdkzNXqStlxXIwXVDBB8jQeVd2p7waw
-         +UY//XSajFWHQBdkfCvdcCZraG8ya7IfD8eUmQ36JmwbuT82d4M5EOdOQ+kcaRH7JpY9
-         hKP+9qLHMWk9gOKMIvIltTnAchsTos1CShEs2mJ9gqYE9xfxNJoIZmx4pGWmpnwcVEiV
-         qcA+58GpUz0gtUHO4mzb7EZxixoISb9Tc64Z4/4eoH1TO5j/NAbn7UgikGlIUWl27iAp
-         3nAPAxPSgs0uuVz6PwQV0SANdrmPN5hd8tB9YSpFo9v0Tgyj52D/motbiPX++Y2YS3yv
-         L/nw==
-X-Gm-Message-State: AO0yUKXSWIo/GHcLGk5ncTtOiD7BkFSVwDWWCBXYdhiHnEt3EjyrDSG1
-        4BMb2GmQltqHf1UZw+YMuYikhnwm3Hw=
-X-Google-Smtp-Source: AK7set/UaGZlFDNJJDtnC1S1I4yxriVlz2I1afrzyalSLmeX7FDonyxhmqzPFzIIW/vSmY89hMYR7KUSZJs=
+        bh=2opxKga+fb5i4H+BY6IhBhjz7Vmgmcavrh6WO0nAabw=;
+        b=wO/v/zsyPiowWpu2VLAC5uY8eJX6HRguS3xn2zljEJytpguTi9S8ZLSv4tskrPHtwQ
+         bXpgsyjl/nOMQokd9vSyBZ3EfQed8xH6HRYXYu6NR3um4Dw4vpkfeyE7tdWJG+cGpJPM
+         kh9UpdhHD0WS5uLsoO/hEOOM+9eELT3Ek0Gv75snmZOvLnHMjxpsV2BRrjBReK+iGiCb
+         BjVKGTA32qbNeT8B0gfpGDz1eC8m1IyRD9M9VIwHqEoMbvNZemrXNEWxQns8CPnrvhDL
+         CbY19uDfu5CxjHbiomkdnxe6r0rvpF1BjNoqR1aIECOYnq+u7D0n/ffqMzBRmgNzY3o7
+         cOjg==
+X-Gm-Message-State: AO0yUKV0Ow6TbZrtufWUpyGqKjKLGKNM528uBq0Zl3NfiQjISB4pauco
+        ehLKj4zSotvBze4tIm7hTeLBJSGlGS4=
+X-Google-Smtp-Source: AK7set9W78UovW/m1wQ6WBrZF9xvfIQRknxFWcTaYsNYshb2LLp3atXf4mwpxmtOXFU5GAMHzAFXebzuJ+s=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:f783:b0:19e:2a1b:2798 with SMTP id
- q3-20020a170902f78300b0019e2a1b2798mr10477888pln.4.1678486458964; Fri, 10 Mar
- 2023 14:14:18 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1149:b0:8da:3163:224 with SMTP id
+ p9-20020a056902114900b008da31630224mr2418826ybu.0.1678486460678; Fri, 10 Mar
+ 2023 14:14:20 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 10 Mar 2023 14:14:13 -0800
+Date:   Fri, 10 Mar 2023 14:14:14 -0800
 In-Reply-To: <20230310221414.811690-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230310221414.811690-1-seanjc@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230310221414.811690-2-seanjc@google.com>
-Subject: [PATCH 1/2] KVM: Use syscore_ops instead of reboot_notifier to hook restart/shutdown
+Message-ID: <20230310221414.811690-3-seanjc@google.com>
+Subject: [PATCH 2/2] KVM: Don't enable hardware after a restart/shutdown is initiated
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -72,7 +72,7 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,91 +80,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use syscore_ops.shutdown to disable hardware virtualization during a
-reboot instead of using the dedicated reboot_notifier so that KVM disables
-virtualization _after_ system_state has been updated.  This will allow
-fixing a race in KVM's handling of a forced reboot where KVM can end up
-enabling hardware virtualization between kernel_restart_prepare() and
-machine_restart().
+Reject hardware enabling, i.e. VM creation, if a restart/shutdown has
+been initiated to avoid re-enabling hardware between kvm_reboot() and
+machine_{halt,power_off,restart}().  The restart case is especially
+problematic (for x86) as enabling VMX (or clearing GIF in KVM_RUN on
+SVM) blocks INIT, which results in the restart/reboot hanging as BIOS
+is unable to wake and rendezvous with APs.
 
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oliver.upton@linux.dev>
-Cc: James Morse <james.morse@arm.com>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc: Zenghui Yu <yuzenghui@huawei.com>
-Cc: kvmarm@lists.linux.dev
-Cc: Huacai Chen <chenhuacai@kernel.org>
-Cc: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-Cc: Anup Patel <anup@brainfault.org>
-Cc: Atish Patra <atishp@atishpatra.org>
-Cc: kvm-riscv@lists.infradead.org
+Note, this bug, and the original issue that motivated the addition of
+kvm_reboot(), is effectively limited to a forced reboot, e.g. `reboot -f`.
+In a "normal" reboot, userspace will gracefully teardown userspace before
+triggering the kernel reboot (modulo bugs, errors, etc), i.e. any process
+that might do ioctl(KVM_CREATE_VM) is long gone.
+
+Fixes: 8e1c18157d87 ("KVM: VMX: Disable VMX when system shutdown")
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- virt/kvm/kvm_main.c | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+ virt/kvm/kvm_main.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
 diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index d255964ec331..6cdfbb2c641b 100644
+index 6cdfbb2c641b..b2bf4c105181 100644
 --- a/virt/kvm/kvm_main.c
 +++ b/virt/kvm/kvm_main.c
-@@ -5211,8 +5211,7 @@ static int hardware_enable_all(void)
- 	return r;
- }
- 
--static int kvm_reboot(struct notifier_block *notifier, unsigned long val,
--		      void *v)
-+static void kvm_reboot(void)
- {
- 	/*
- 	 * Some (well, at least mine) BIOSes hang on reboot if
-@@ -5223,14 +5222,8 @@ static int kvm_reboot(struct notifier_block *notifier, unsigned long val,
- 	pr_info("kvm: exiting hardware virtualization\n");
- 	kvm_rebooting = true;
- 	on_each_cpu(hardware_disable_nolock, NULL, 1);
--	return NOTIFY_OK;
- }
- 
--static struct notifier_block kvm_reboot_notifier = {
--	.notifier_call = kvm_reboot,
--	.priority = 0,
--};
--
- static int kvm_suspend(void)
- {
- 	/*
-@@ -5261,6 +5254,8 @@ static void kvm_resume(void)
- static struct syscore_ops kvm_syscore_ops = {
- 	.suspend = kvm_suspend,
- 	.resume = kvm_resume,
-+	.shutdown = kvm_reboot,
-+
- };
- #else /* CONFIG_KVM_GENERIC_HARDWARE_ENABLING */
+@@ -5182,7 +5182,20 @@ static void hardware_disable_all(void)
  static int hardware_enable_all(void)
-@@ -5967,7 +5962,6 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
- 	if (r)
- 		return r;
+ {
+ 	atomic_t failed = ATOMIC_INIT(0);
+-	int r = 0;
++	int r;
++
++	/*
++	 * Do not enable hardware virtualization if the system is going down.
++	 * If userspace initiated a forced reboot, e.g. reboot -f, then it's
++	 * possible for an in-flight KVM_CREATE_VM to trigger hardware enabling
++	 * after kvm_reboot() is called.  Note, this relies on system_state
++	 * being set _before_ kvm_reboot(), which is why KVM uses a syscore ops
++	 * hook instead of registering a dedicated reboot notifier (the latter
++	 * runs before system_state is updated).
++	 */
++	if (system_state == SYSTEM_HALT || system_state == SYSTEM_POWER_OFF ||
++	    system_state == SYSTEM_RESTART)
++		return -EBUSY;
  
--	register_reboot_notifier(&kvm_reboot_notifier);
- 	register_syscore_ops(&kvm_syscore_ops);
- #endif
+ 	/*
+ 	 * When onlining a CPU, cpu_online_mask is set before kvm_online_cpu()
+@@ -5195,6 +5208,8 @@ static int hardware_enable_all(void)
+ 	cpus_read_lock();
+ 	mutex_lock(&kvm_lock);
  
-@@ -6039,7 +6033,6 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
- err_vcpu_cache:
- #ifdef CONFIG_KVM_GENERIC_HARDWARE_ENABLING
- 	unregister_syscore_ops(&kvm_syscore_ops);
--	unregister_reboot_notifier(&kvm_reboot_notifier);
- 	cpuhp_remove_state_nocalls(CPUHP_AP_KVM_ONLINE);
- #endif
- 	return r;
-@@ -6065,7 +6058,6 @@ void kvm_exit(void)
- 	kvm_async_pf_deinit();
- #ifdef CONFIG_KVM_GENERIC_HARDWARE_ENABLING
- 	unregister_syscore_ops(&kvm_syscore_ops);
--	unregister_reboot_notifier(&kvm_reboot_notifier);
- 	cpuhp_remove_state_nocalls(CPUHP_AP_KVM_ONLINE);
- #endif
- 	kvm_irqfd_exit();
++	r = 0;
++
+ 	kvm_usage_count++;
+ 	if (kvm_usage_count == 1) {
+ 		on_each_cpu(hardware_enable_nolock, &failed, 1);
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
