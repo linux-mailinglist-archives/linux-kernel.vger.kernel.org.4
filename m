@@ -2,164 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445C16B50E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 20:21:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9201B6B50D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 20:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjCJTVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 14:21:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35242 "EHLO
+        id S230363AbjCJTTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 14:19:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjCJTVY (ORCPT
+        with ESMTP id S230101AbjCJTTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 14:21:24 -0500
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D9A132BFA;
-        Fri, 10 Mar 2023 11:21:14 -0800 (PST)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4PYG9w5CGVz9sSg;
-        Fri, 10 Mar 2023 20:21:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1678476068;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LcYGd1/e2TxnVo/Nykvxyvg5HOuPY1jiueiJQW2bu0k=;
-        b=ktub/gRxYcjJP5DYSbaReocn+QKlGpv01U8pCyc0S9Bd9xnT3kl7ZgzZ8I8REYnv791ovZ
-        neKwv9t3wIDgk1L9WLg9Z0frKB2ThewjRKBqd1My+hhrl4CoTmgKJTNhD87hxf6lMbGAPX
-        FmrUporAv2qTdTtHwTozv5978gQD2XfLDB6ffG6XE/vgci84CgY/ZJWC3r4pafa/Zk6oqL
-        to/epgatbTsxOIKZRnRU4/cJvXYBIDaPE0pXtKc/wpD3MmolJxpq+RqPaYE5d3SmxmBxG2
-        GbDqemNvrBmn4MUw2Qs8lWW74yaHsU/K4PnIDdqunY1B3IyVSqCinAJVhZuR9A==
-Message-ID: <16d9f738-18fd-a929-e711-f2a1e757e33f@mailbox.org>
-Date:   Fri, 10 Mar 2023 19:20:56 +0000
+        Fri, 10 Mar 2023 14:19:18 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41E9120E8C;
+        Fri, 10 Mar 2023 11:19:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678475956; x=1710011956;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=6TjAizJZ0Z7OgkuuCfD17cXy68nJRib2Dg7u3RNtp2M=;
+  b=hIXejWL+tPB0mthmYeF3+GqKjYQYtRG6zfYk56Blx1MBd4zQzW3hRSYF
+   cNRoQ9FCYug5lDAHMqOZ1GeGuq8o5Yp/emqe5dnOz3O996OsSABJq1gRA
+   Vtful8oBZIb2ysYS3A0RARL1d7Ms7jqn6C50WCmdyeXXSFaL53CsBjo57
+   wFMjtIp2Tn7CtXCEmOvitjFd1jQg3NmiIWBb7osyHhlwBVT3jjke1uaNV
+   eM3i3vTyOPD+wPkZr8zBxKKZa/Fnk6gpx2EweGCOxMRWL/clvtu887xxI
+   l+hscfeapTlvYVGgIq5OMoDpTGEN4xOm8MU7eTPZOxeeq61dFuJcmlW8c
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="336830636"
+X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
+   d="scan'208";a="336830636"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 11:19:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="708122699"
+X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
+   d="scan'208";a="708122699"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 11:19:16 -0800
+Date:   Fri, 10 Mar 2023 11:23:09 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        X86 Kernel <x86@kernel.org>, bp@alien8.de,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
+        vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-doc@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v5 2/7] iommu/sva: Move PASID helpers to sva code
+Message-ID: <20230310112309.024f6558@jacob-builder>
+In-Reply-To: <ZAqLUG0uhACSMeXP@nvidia.com>
+References: <20230309222159.487826-1-jacob.jun.pan@linux.intel.com>
+        <20230309222159.487826-4-jacob.jun.pan@linux.intel.com>
+        <ZAqLUG0uhACSMeXP@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [PATCH v14 00/12] Parallel CPU bringup for x86_64
-To:     Usama Arif <usama.arif@bytedance.com>, dwmw2@infradead.org,
-        tglx@linutronix.de, kim.phillips@amd.com, brgerst@gmail.com
-Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com
-References: <20230308171328.1562857-1-usama.arif@bytedance.com>
-Content-Language: en-US
-From:   Tor Vic <torvic9@mailbox.org>
-In-Reply-To: <20230308171328.1562857-1-usama.arif@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-MBO-RS-ID: 0b61b0862a564b2e27f
-X-MBO-RS-META: wrc5czsm3dap5qh9hq756znyyj3bc7qi
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jason,
 
+On Thu, 9 Mar 2023 21:43:44 -0400, Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-On 08.03.23 17:13, Usama Arif wrote:
-> The main code change over v13 is to enable parallel bringup for SEV-ES guests.
+> On Thu, Mar 09, 2023 at 02:21:54PM -0800, Jacob Pan wrote:
+> > diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+> > index 2a243616f222..f341a7a855e8 100644
+> > --- a/include/linux/sched/mm.h
+> > +++ b/include/linux/sched/mm.h
+> > @@ -8,7 +8,7 @@
+> >  #include <linux/mm_types.h>
+> >  #include <linux/gfp.h>
+> >  #include <linux/sync_core.h>
+> > -#include <linux/ioasid.h>
+> > +#include <linux/iommu-helper.h>  
 > 
-> Thanks,
-> Usama
-> 
-> Changes across versions:
-> v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing more
-> v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
->      in preparation for more parallelisation.
-> v4: Fixes to the real mode parallelisation patch spotted by SeanC, to
->      avoid scribbling on initial_gs in common_cpu_up(), and to allow all
->      24 bits of the physical X2APIC ID to be used. That patch still needs
->      a Signed-off-by from its original author, who once claimed not to
->      remember writing it at all. But now we've fixed it, hopefully he'll
->      admit it now :)
-> v5: rebase to v6.1 and remeasure performance, disable parallel bringup
->      for AMD CPUs.
-> v6: rebase to v6.2-rc6, disabled parallel boot on amd as a cpu bug and
->      reused timer calibration for secondary CPUs.
-> v7: [David Woodhouse] iterate over all possible CPUs to find any existing
->      cluster mask in alloc_clustermask. (patch 1/9)
->      Keep parallel AMD support enabled in AMD, using APIC ID in CPUID leaf
->      0x0B (for x2APIC mode) or CPUID leaf 0x01 where 8 bits are sufficient.
->      Included sanity checks for APIC id from 0x0B. (patch 6/9)
->      Removed patch for reusing timer calibration for secondary CPUs.
->      commit message and code improvements.
-> v8: Fix CPU0 hotplug by setting up the initial_gs, initial_stack and
->      early_gdt_descr.
->      Drop trampoline lock and bail if APIC ID not found in find_cpunr.
->      Code comments improved and debug prints added.
-> v9: Drop patch to avoid repeated saves of MTRR at boot time.
->      rebased and retested at v6.2-rc8.
->      added kernel doc for no_parallel_bringup and made do_parallel_bringup
->      __ro_after_init.
-> v10: Fixed suspend/resume not working with parallel smpboot.
->       rebased and retested to 6.2.
->       fixed checkpatch errors.
-> v11: Added patches from Brian Gerst to remove the global variables initial_gs,
->       initial_stack, and early_gdt_descr from the 64-bit boot code
->       (https://lore.kernel.org/all/20230222221301.245890-1-brgerst@gmail.com/).
-> v12: Fixed compilation errors, acquire tr_lock for every stack setup in
->       trampoline_64.S.
->       Rearranged commits for a cleaner git history.
-> v13: Fix build error with CONFIG_FORCE_NR_CPUS.
->       Commit message improved, typos fixed and extra comments added.
-> v14: Enable parallel bringup for SEV-ES guests
->   
-> Brian Gerst (3):
->    x86/smpboot: Remove initial_stack on 64-bit
->    x86/smpboot: Remove early_gdt_descr on 64-bit
->    x86/smpboot: Remove initial_gs
-> 
-> David Woodhouse (9):
->    x86/apic/x2apic: Allow CPU cluster_mask to be populated in parallel
->    cpu/hotplug: Move idle_thread_get() to <linux/smpboot.h>
->    cpu/hotplug: Add dynamic parallel bringup states before
->      CPUHP_BRINGUP_CPU
->    x86/smpboot: Reference count on smpboot_setup_warm_reset_vector()
->    x86/smpboot: Split up native_cpu_up into separate phases and document
->      them
->    x86/smpboot: Support parallel startup of secondary CPUs
->    x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
->    x86/smpboot: Serialize topology updates for secondary bringup
->    x86/smpboot: Allow parallel bringup for SEV-ES
-> 
->   .../admin-guide/kernel-parameters.txt         |   3 +
->   arch/x86/include/asm/cpu.h                    |   1 +
->   arch/x86/include/asm/processor.h              |   6 +-
->   arch/x86/include/asm/realmode.h               |   4 +-
->   arch/x86/include/asm/sev-common.h             |   3 +
->   arch/x86/include/asm/sev.h                    |   5 +
->   arch/x86/include/asm/smp.h                    |  18 +-
->   arch/x86/include/asm/topology.h               |   2 -
->   arch/x86/kernel/acpi/sleep.c                  |  30 +-
->   arch/x86/kernel/apic/apic.c                   |   2 +-
->   arch/x86/kernel/apic/x2apic_cluster.c         | 126 +++---
->   arch/x86/kernel/asm-offsets.c                 |   1 +
->   arch/x86/kernel/cpu/common.c                  |   6 +-
->   arch/x86/kernel/cpu/topology.c                |   2 +-
->   arch/x86/kernel/head_64.S                     | 162 ++++++--
->   arch/x86/kernel/smpboot.c                     | 366 +++++++++++++-----
->   arch/x86/realmode/init.c                      |   3 +
->   arch/x86/realmode/rm/trampoline_64.S          |  27 +-
->   arch/x86/xen/smp_pv.c                         |   4 +-
->   arch/x86/xen/xen-head.S                       |   2 +-
->   include/linux/cpuhotplug.h                    |   2 +
->   include/linux/smpboot.h                       |   7 +
->   kernel/cpu.c                                  |  31 +-
->   kernel/smpboot.h                              |   2 -
->   24 files changed, 614 insertions(+), 201 deletions(-)
-> 
+> Don't include this here, fork.cc is the only caller put the include
+> there
+make sense, will do.
 
-On Linux 6.2, Zen2 and Skylake, no issues or boot problems:
+Thanks,
 
-Tested-by: Tor Vic <torvic9@mailbox.org>
+Jacob
