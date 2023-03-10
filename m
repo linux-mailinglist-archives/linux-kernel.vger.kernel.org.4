@@ -2,69 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B90D6B38BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9458E6B38C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbjCJIcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 03:32:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
+        id S230089AbjCJIcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:32:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbjCJIcI (ORCPT
+        with ESMTP id S230431AbjCJIcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:32:08 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD74AE8CCA
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:31:58 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-536bbe5f888so84032557b3.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:31:58 -0800 (PST)
+        Fri, 10 Mar 2023 03:32:43 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622ADFEF06
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:32:37 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id x3so17278485edb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:32:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678437118;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yEnDDQC7GhZEI1kmJpTuNmo6i9voSvFWeItpPldUIYU=;
-        b=cD7vD9Z1570thbPMT0MfQRnKjBSUb9CqZPM0xYCHqCuvP1TriRXZTLOaJQg3e0j0xv
-         vF4UXxoWFEUhYG+S6iyTO/cS8Zk14IaLq7ewYCEX1hASo2mZFUmguU9VaPAQCB875cwn
-         CyB9mXKtHUvw5UtoA0m/qoUAJpmelkAV865sn4UcYuqFYQEvX1W69b48IhZurvoINQ+7
-         Jl1Tgz4+nJyiGVY32DVZ8n4lWyvH/+trpIXJ8pPS+2Fi4tNU+Y7zJsEV8Tbb2f860jte
-         YaMWuNzBgBxa9SlIjIAxc3jCX29lk9eJsoS3YfRLlMzHClXKezdNcy6Nmw0MoKukiirW
-         /w3A==
+        d=linaro.org; s=google; t=1678437156;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qHBd3Y0VvrBuq7MZ50gDgjgTfAiwAuooNzx/I7JEUXw=;
+        b=ZlWttD2E/fTc6sozsXYMOODaiBWhScr+YjJItVN2GefRH0xMUdqwOZf8mE7FjehfuQ
+         9uTTkBaSBSi+znvYbHXEKAOvqQ7huiNNmdgyCuyC2J86I+9grR6wR6V/j+IU2reXffua
+         RbLfMFlxGQNAU2knCQCVMa3Yp2rOhkmFhWdiOZaNg4oYsuQZWhjOzQu4ZBOBOtK4rSV6
+         Js1mBHru/S7XfykzdxLGLlzwNXq5t5zIGEIlE7fcxAhjKseDLIjR+G9zLIqe4NvQ75Sp
+         DmwySuInWyF9kLDeuhVoPKE+JphSSizzKcaAyNNzzKeiq5QiRRN7TVLz5yxJbdWTyJ8z
+         8XMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678437118;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yEnDDQC7GhZEI1kmJpTuNmo6i9voSvFWeItpPldUIYU=;
-        b=OJSlUEkq+g/O+TncmdUhbJjtLCKWspVi5t7L0WYKdf+aWgG3fr31ldaTIjBHuVGxyW
-         1cTfLYFnDL2cMWf1x/6kEDUMDBDp1nEZgyjL+hMbGPB1cjEuPhcqgnSvu1DNeGB5HifH
-         //l9Tzmn+MmKaLCv923nQtId/Rh1gHPqPpSQLmFQzV+y5pIXes8RVqOodHixj5/rKzya
-         9ZD/btGdjCBHdQdsgeCRMJq+g06B9fgAUJhidt8jqRK/FY+sewqYlqbgCvPsyLJar/qN
-         4GFpiwSD7XAD1DhWGesF5GOjJzLIy6T7u9nO9/Ore6cKcuKEMdXyjpaxuzkaiwUfycYY
-         Zvlg==
-X-Gm-Message-State: AO0yUKUACJMEvx9TxfZPQclS70JoSbSRaG0d2IYOQ/nXHwGRW5bxN+GM
-        RJ1Qvje988DYVJtL1BaCtwaaX3hDuMQTv0RjoXutfQ==
-X-Google-Smtp-Source: AK7set/dzMiqf5mSy0pANYi5bUztGCql2W6gCMXtz6HB1aFjDIVxaXeUN9JRSGvg7YJ9h8wxNHPwjjTrVbv03zrk03Y=
-X-Received: by 2002:a81:b705:0:b0:535:fe26:acc with SMTP id
- v5-20020a81b705000000b00535fe260accmr16173406ywh.10.1678437118046; Fri, 10
- Mar 2023 00:31:58 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678437156;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qHBd3Y0VvrBuq7MZ50gDgjgTfAiwAuooNzx/I7JEUXw=;
+        b=HQUDNYvnw+BAPZyN7YWv/ayupTWmrpIbNsUsJ20W8WrJHezAyyL9s12/KeDNDs8S7U
+         3N30dTbjhKTLcKpzxMv+8OOBEZZyDCQ66nbzAf7+m5sPn8R/QIgrQjwcHhjUkRTnlBxo
+         OdEovBNpTYxh2F/tb5SALIQA3d9b4PX53QkjbhpaFYlDFTXAq4Sgr/aroddSXhgHPvFK
+         IXO9zqDys7aUKm34CoGvMI88AQslaV3wnV0WtM5UxrsmaAcgo8KvryDVIsckdutVSsVQ
+         QepbrmNGBHAYgGhzF2JCt4wcj5uWRHgt0amUV1cSSuRaKYNsblYwiy/9f3Pb5U6lZbNV
+         Dg9A==
+X-Gm-Message-State: AO0yUKVHpaxSXUsiwv2Kp845gPwC8w7hfZr1TMAYIK1h1pMKNY/zLtrc
+        MHKaZsLJkOacMSv7DYeg6zMDGA==
+X-Google-Smtp-Source: AK7set97xnKWsVre6NDR3NC+jr6Wd86sRJG6DewHgTjoe4XcRjSjYtnBHv4PeuEjxhBj7P+etdDudw==
+X-Received: by 2002:a17:907:608d:b0:88c:a43d:81bc with SMTP id ht13-20020a170907608d00b0088ca43d81bcmr28538165ejc.58.1678437155821;
+        Fri, 10 Mar 2023 00:32:35 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:2a59:841a:ebc:7974? ([2a02:810d:15c0:828:2a59:841a:ebc:7974])
+        by smtp.gmail.com with ESMTPSA id e11-20020a50a68b000000b004bb810e0b87sm539370edc.39.2023.03.10.00.32.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 00:32:35 -0800 (PST)
+Message-ID: <3b7c6f28-57bd-33de-5531-8c4eae8cf6eb@linaro.org>
+Date:   Fri, 10 Mar 2023 09:32:33 +0100
 MIME-Version: 1.0
-References: <20230309225041.477440-1-sre@kernel.org> <20230309225041.477440-10-sre@kernel.org>
-In-Reply-To: <20230309225041.477440-10-sre@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 10 Mar 2023 09:31:46 +0100
-Message-ID: <CACRpkdY5kzCm5fQgoXQBV_mAGYQP2rvjgc9cdLQwfFhO7LKdYw@mail.gmail.com>
-Subject: Re: [PATCHv1 09/11] power: supply: generic-adc-battery: simplify
- read_channel logic
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 03/18] dt-bindings: pinctrl: mediatek,mt8365-pinctrl:
+ add drive strength property
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-mmc@vger.kernel.org, Alexandre Bailon <abailon@baylibre.com>,
+        devicetree@vger.kernel.org,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>
+References: <20230203-evk-board-support-v2-0-6ec7cdb10ccf@baylibre.com>
+ <20230203-evk-board-support-v2-3-6ec7cdb10ccf@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230203-evk-board-support-v2-3-6ec7cdb10ccf@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,16 +95,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 11:50=E2=80=AFPM Sebastian Reichel <sre@kernel.org> =
-wrote:
+On 07/03/2023 14:17, Alexandre Mergnat wrote:
+> This SoC is able to drive the following output current:
+> - 2 mA
+> - 4 mA
+> - 6 mA
+> - 8 mA
+> - 10 mA
+> - 12 mA
+> - 14 mA
+> - 16 mA
+> 
+> Then drive-strength property is set with enum to reflect its HW capability.
+> 
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>  Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+> index 4b96884a1afc..101871ec6693 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+> @@ -79,6 +79,9 @@ patternProperties:
+>  
+>            bias-pull-down: true
+>  
+> +          drive-strength:
+> +            enum: [2, 4, 6, 8, 10, 12, 14, 16]
 
-> Drop mostly useless gab_prop_to_chan() function by directly
-> supplying the correct enum value to read_channel().
->
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
+Isn't this conflicting with mediatek,drive-strength-adv? Your commit msg
+suggests you add a missing property, but I would say nothing was missing
+here.
 
-Looks correct.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+You need review from (pinctrl) Mediatek maintainers how the bindings for
+all Mediateks are organized.
 
-Yours,
-Linus Walleij
+Best regards,
+Krzysztof
+
