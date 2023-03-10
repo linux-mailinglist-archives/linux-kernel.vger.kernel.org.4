@@ -2,124 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9EA6B37D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD94E6B37D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjCJHxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 02:53:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
+        id S229895AbjCJHza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 02:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjCJHxR (ORCPT
+        with ESMTP id S229523AbjCJHz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 02:53:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B432A9BA;
-        Thu,  9 Mar 2023 23:53:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB74CB821CF;
-        Fri, 10 Mar 2023 07:53:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 023D7C433D2;
-        Fri, 10 Mar 2023 07:53:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678434793;
-        bh=9+QnbrppRJUwYF5GQ0ybibMT/QYcq+oKbMtLdejGYtw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bMC/euHR3lJgI/9XAsPmsikWdtsw7K6Acm68qQcRF105K4vwO660CvWNSph8rTWWM
-         908+o8hbQsIOh158ciTspUwYqA02OhIBFs/4Zn/dvwKeJsOLC96ZUwYtFdjb1aKUL7
-         jjNAfj7/L6iPoUFPvCHM2D9cQouWrHimGHkbBx5I=
-Date:   Fri, 10 Mar 2023 08:53:10 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Ye, Xiang" <xiang.ye@intel.com>
-Cc:     Oliver Neukum <oneukum@suse.com>, Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v4 2/5] gpio: Add support for Intel LJCA USB GPIO driver
-Message-ID: <ZArh5iMkdj0L9AXZ@kroah.com>
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
- <20230309071100.2856899-3-xiang.ye@intel.com>
- <2865f3d0-428b-0df1-fc50-f6af3cb9dac3@suse.com>
- <ZAqyhXt9nNIE9Ej7@ye-NUC7i7DNHE>
- <ZArYCD0r6n0sJ7LI@kroah.com>
- <ZArem5MwWrgOY2nJ@ye-NUC7i7DNHE>
+        Fri, 10 Mar 2023 02:55:27 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9A6DF24C
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 23:55:23 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id h11so4190051wrm.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 23:55:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678434922;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hg8gm9UXcuofNWv7bFMURJvZUDWceYZ+g4VoqacHVTs=;
+        b=XcSpm5S1c3LTIpRC/qSv/wD4Phhsa4jCsOLrRowE6+YdUtdlMT2Koo4r4ka6wFxa4s
+         mtmwQTOSxubEKjDOJHdMhFnLsJGYGswUw+sr1KNk2NKS2T3JoyJ4tC2yQ7YMYIa1d3Mt
+         rHkS/x1f4mBTfXxgRjQzy3tmceUijtRWfxMuKBwmqxZWRKc7Z53+obu/JywSWMi4tQEc
+         vz5tAeb/V/iMQ9/rY/c15TPEilikvL592wkSLIgZUx2SfyPHnWmM/7/g3imS6vKW19yI
+         ym6Zc3ZpQIlu8g5Hy7T8VPCgf5PMVTYE/XTZxI225FdRPvGAKhPftedSSGQ2tCGKfR3b
+         I7dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678434922;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Hg8gm9UXcuofNWv7bFMURJvZUDWceYZ+g4VoqacHVTs=;
+        b=WJyL+hH73aOZyjrUTLf/bG1rUfMv3xn2oyjBw6I19rYuJjVc8i+lIDNkeSf7oniqnN
+         gexgwXlLMFTfPTwe2IK1sHAiThnFl1NVRXstwDbamKRhBDwbA50tWPR/JhzVOuplVpBn
+         18OG+TfjxQhZG1munmJN3d+2v1Pck8paQK52lTeLdOqHCHOeG6mYvXyK2PhYtNv/lSK5
+         B4bU3D6s8p92fIG5EyBqOtLiCGAt937E62fYtEoyifQGpNQKQ04sZWIFTHoMgFMKSkeb
+         RTK3lkzR0Pwe9zIykY8fgZ97Sq9q1jj08QAUxwv86VKtjvtr9kjZ7Dv/ZXISzRuCNVFm
+         vevw==
+X-Gm-Message-State: AO0yUKXfawxphWAZQ48mlNFbYwfOBvVxz6/x+2WGxFiftQlud9Bh5OuS
+        uvNQHoROJWTGDith7AonLgx2uo6BZYstv+fV3KwAOrgpUNQiMksBqmzTb0oP
+X-Google-Smtp-Source: AK7set8YJqVZRqtut+bMEQTqwl6r469KIAYC+a6PXbytDy5dL9Ft02+G7BXUCv4WmitzpSAnNx588vSN5VKBNG4uKa8=
+X-Received: by 2002:adf:fc0d:0:b0:2c5:8377:3eaf with SMTP id
+ i13-20020adffc0d000000b002c583773eafmr4846173wrr.2.1678434921777; Thu, 09 Mar
+ 2023 23:55:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZArem5MwWrgOY2nJ@ye-NUC7i7DNHE>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230302013822.1808711-1-sboyd@kernel.org> <20230302013822.1808711-2-sboyd@kernel.org>
+ <CABVgOSkxOxpaHVtq1YpvNEshTZ3nic1p7NjV5DPdz066=tiS-A@mail.gmail.com> <377046f369227a11fbf9e67c3c122d79.sboyd@kernel.org>
+In-Reply-To: <377046f369227a11fbf9e67c3c122d79.sboyd@kernel.org>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 10 Mar 2023 15:55:09 +0800
+Message-ID: <CABVgOSm_yRjqKYegZeFkObkS9cgXaDfD2CTeoE1s7RRLo=RuEg@mail.gmail.com>
+Subject: Re: [PATCH 1/8] dt-bindings: Add linux,kunit binding
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 03:39:07PM +0800, Ye, Xiang wrote:
-> On Fri, Mar 10, 2023 at 08:11:04AM +0100, Greg Kroah-Hartman wrote:
-> > On Fri, Mar 10, 2023 at 01:01:11PM +0800, Ye, Xiang wrote:
-> > > On Thu, Mar 09, 2023 at 02:40:10PM +0100, Oliver Neukum wrote:
-> > > > 
-> > > > 
-> > > > On 09.03.23 08:10, Ye Xiang wrote:
-> > > > 
-> > > > > +#define LJCA_GPIO_BUF_SIZE 60
-> > > > > +struct ljca_gpio_dev {
-> > > > > +	struct platform_device *pdev;
-> > > > > +	struct gpio_chip gc;
-> > > > > +	struct ljca_gpio_info *gpio_info;
-> > > > > +	DECLARE_BITMAP(unmasked_irqs, LJCA_MAX_GPIO_NUM);
-> > > > > +	DECLARE_BITMAP(enabled_irqs, LJCA_MAX_GPIO_NUM);
-> > > > > +	DECLARE_BITMAP(reenable_irqs, LJCA_MAX_GPIO_NUM);
-> > > > > +	u8 *connect_mode;
-> > > > > +	/* mutex to protect irq bus */
-> > > > > +	struct mutex irq_lock;
-> > > > > +	struct work_struct work;
-> > > > > +	/* lock to protect package transfer to Hardware */
-> > > > > +	struct mutex trans_lock;
-> > > > > +
-> > > > > +	u8 obuf[LJCA_GPIO_BUF_SIZE];
-> > > > > +	u8 ibuf[LJCA_GPIO_BUF_SIZE];
-> > > > 
-> > > > And here we have a violation of DMA coherency rules.
-> > > > Basically you cannot embed buffers into other data structures
-> > > > if they can be subject to DMA.
-> > > But obuf and ibuf does not used to do DMA transfer here.
-> > > It is actually copied from or to ljca buffer to do URB transfer.
-> > 
-> > urb transfers _ARE_ DMA transfers.
-> > 
-> > > Should it still need to follow the DMA coherency rules?
-> > 
-> > Yes, all buffers for USB urbs are required to follow those rules.
-> But these two buffers are not used to do USB urb transfer directly.
-> For the "u8 obuf[LJCA_GPIO_BUF_SIZE]",  it will be copied to ljca buffer
-> ("header->data" as below code [1] showed) first. Then the "header" is used
-> to do the actual urb transfer.
-> 
-> And the "header" is allocated by using kmalloc. It should has met the DMA
-> coherency rules.
-> 
-> [1] """
-> struct ljca_msg *header;
-> ...
-> header = kmalloc(msg_len, GFP_KERNEL);
-> if (!header)
-> 	return -ENOMEM;
+On Fri, 10 Mar 2023 at 07:12, Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting David Gow (2023-03-02 23:14:55)
+> > On Thu, 2 Mar 2023 at 09:38, Stephen Boyd <sboyd@kernel.org> wrote:
+> > >
+> > > Document the linux,kunit board compatible string. This board is loaded
+> > > into the Linux kernel when KUnit is testing devicetree dependent code.
+> >
+> > As with the series as a whole, this might need to change a little bit
+> > if we want to either use devicetree overlays and/or other
+> > architectures.
+> >
+> > That being said, I'm okay with having this until then: the only real
+> > topic for bikeshedding is the name.
+> > - Is KUnit best as a board name, or part of the vendor name?
+> > - Do we want to include the architecture in the name?
+> > Should it be "linux,kunit", "linux-kunit,uml", "linux,kunit-uml", etc?
+>
+> I think I will drop this patch. I have overlays working. I hijacked
+> of_core_init() to load the testcase data from drivers/of/unittest-data
+> and made a container node for kunit overlays to apply to.
 
-Ok, that's good, but why have 2 buffers for this then?
+Makes sense to me, thanks!
 
-thanks,
-
-greg k-h
+Looking forward to seeing how the overlays work in practice!
