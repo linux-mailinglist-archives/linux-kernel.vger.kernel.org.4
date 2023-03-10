@@ -2,143 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108996B32F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 01:55:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC89B6B32F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 01:56:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjCJAzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 19:55:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
+        id S229891AbjCJA4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 19:56:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjCJAzf (ORCPT
+        with ESMTP id S229872AbjCJA4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 19:55:35 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC952F34DB
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 16:55:31 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id ne1so2689211qvb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 16:55:31 -0800 (PST)
+        Thu, 9 Mar 2023 19:56:12 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479D6FA8E8
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 16:56:03 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id x7so2672789pff.7
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 16:56:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678409731;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=B+uJ25jQ+MXikhQk+40cCXbpkdq02pm9Z8nSn09JPc4=;
-        b=OAybaaeM9yb7q1OS2RJM//hJipMHt5TzwcfAUfPmrxGeQ+nJz0c+YpDgz5qP+tkz5y
-         1q6JuS1iR2pqMe1ualukvZq7A8W+ghiTJqs+5v4Q7STkTteaknPHK/QHf3WgqPCybSJo
-         k4GlfqWGh2ZXG2SSMhCqZuWyWF2838gkmWVtU=
+        d=google.com; s=20210112; t=1678409763;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0kkspEbZEZODss7I79B81pms6JUpvvYXQ/aQnNzr8OM=;
+        b=LTIT81GL7apINIbESfLtE5tv3ICnJvaUZ5XaovqNJOZTZoRTmIJ3m20hnFpazeCh1Q
+         F0opPGgNKlnMlCZSdJYIr8oKLf0tNJncOM0UkVFpbm0k33DiHxTngv5Ri6YqEpc5dZA+
+         KXRY5+5BxI/igIkhbZsCIT6OFYB6EduOHCh8UWUw5eItCarj1ljEQavzOqph9hGo7CLK
+         HtqPwIFEE25covgQg5E59cXcb+9PAlXXhRgDW7WIUzURDpfYWDVCquRlM0t8cWBofVDX
+         zMSTM+u4SP4fGHrQhtpOKkHVsWQiVArICtOw60cj9wZnof3OT5inp5z4deKIB3i6Xdtz
+         t6dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678409731;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B+uJ25jQ+MXikhQk+40cCXbpkdq02pm9Z8nSn09JPc4=;
-        b=bnoL6n3LufrFgNh8LHmo7jNbL93Y8axi3HNYFvhVtUuzLs6r14+OMHMd7bR1ouFoIn
-         8CsnfZkj/r64JgxyPeQYSQr0VSMgTe+w6VE2YIOsUAr8BkRxVIb2SmlyK7ewqNgdJ/v9
-         zBtFzsfbGimGOPYQDD/GNyp5XBqA9d/cQfDp0yvgDIcPCiEB7JYtoibMR/ZAxY9FXaKc
-         MaN8NzbeUnOIieM3cme857wDN4eTFXUOgbmy9OA3jVmXY7bmwME+5uXS/WF2HMlNJz4Z
-         Esv1DbDkwMPLjzJVCTi7NYNjt6k9SJWVU2o95Z1vBGDTH83mb9n6YBwe8hRIFywtnjQ6
-         nXUg==
-X-Gm-Message-State: AO0yUKUQu6f672QDoToLLNcwcQVvM37E/flBXLIuzsPFJQX18Wqf5XAo
-        5h8MGFlO32vt3Hl7k7UOyDE6iA==
-X-Google-Smtp-Source: AK7set8CY2LJIqzBMBqGQ6iHnL0EIZbfa2k6lpmGNjPR7f+vGT6J0SlINuNgn0GupBAs2CyAsQahfw==
-X-Received: by 2002:a05:6214:29ef:b0:56b:fa99:7866 with SMTP id jv15-20020a05621429ef00b0056bfa997866mr38258901qvb.7.1678409730734;
-        Thu, 09 Mar 2023 16:55:30 -0800 (PST)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id l17-20020a37f911000000b0074281812276sm297141qkj.97.2023.03.09.16.55.29
+        d=1e100.net; s=20210112; t=1678409763;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0kkspEbZEZODss7I79B81pms6JUpvvYXQ/aQnNzr8OM=;
+        b=7yM5ygEpe6znvYHCYA5q4PTiGyktR6btZ4GyqxTfubos3LZO9YSuakCSK2ACODVNxV
+         9l09jmfdM9FEmOcuFuXJz7lk9gnu4lkeQlmjKNT1V9XDjkBiZDQ83OgPQF9Dcda2qpah
+         PMNtHXyD1g99bLGyBNRL7hqQ96NrVH1W+s/HIicRRvZB6A9zEtbFBy+wTqU7i8OxQd4D
+         jemK7oEjnYBxoVfXCvywvHuFhKG07wv0Kg6AaTy4iunPClLb6eHQS7CqJE0X+WFYxzEX
+         fw6PoKGPpHRlrNypz7y1BQQuaNGx/MoLt7DnGuE57URzqCJBC31lp5seVt6H+eSBo2Ni
+         KZow==
+X-Gm-Message-State: AO0yUKX18mQ5W1JcV5pyu5n6F4TpHrboXPkDqcDNkC3tRpx0J5RD5sce
+        qc7Gn5vB0Yf4Exp30o9soHJTLj96qfpRVWkFkvSDzA==
+X-Google-Smtp-Source: AK7set9DwuNdqc8mVCX3g4wsvx5F11+p8Uqv+KdNRUFNuvlWAplhbqMb2zW0vs4vGChtEBlh98IY6Q==
+X-Received: by 2002:aa7:9405:0:b0:5aa:4df7:7ef6 with SMTP id x5-20020aa79405000000b005aa4df77ef6mr21287884pfo.7.1678409762556;
+        Thu, 09 Mar 2023 16:56:02 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id z5-20020aa791c5000000b005a909290425sm168638pfa.172.2023.03.09.16.56.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 16:55:29 -0800 (PST)
-Date:   Fri, 10 Mar 2023 00:55:29 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
-Subject: Re: [PATCH 07/13] RDMA/rxe: Rename kfree_rcu() to
- kfree_rcu_mightsleep()
-Message-ID: <20230310005529.GA339498@google.com>
-References: <20230201150815.409582-1-urezki@gmail.com>
- <20230201150815.409582-8-urezki@gmail.com>
- <ZAnjnRC1wY3RIFhM@pc636>
- <ZAnpdKV/VvvX0TZz@pc636>
+        Thu, 09 Mar 2023 16:56:01 -0800 (PST)
+Date:   Thu, 9 Mar 2023 16:55:58 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        jmattson@google.com, mizhang@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Patch v4 03/18] KVM: x86/mmu: Track count of pages in KVM MMU
+ page caches globally
+Message-ID: <ZAqAHiaCz0b2OKJF@google.com>
+References: <20230306224127.1689967-1-vipinsh@google.com>
+ <20230306224127.1689967-4-vipinsh@google.com>
+ <ZApxh/GYfqev7sHA@google.com>
+ <CAHVum0eQzmLXDxMy3+LpmGxVU7YsT1wRNYkFq9o7sfR2uNK-xA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZAnpdKV/VvvX0TZz@pc636>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHVum0eQzmLXDxMy3+LpmGxVU7YsT1wRNYkFq9o7sfR2uNK-xA@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 03:13:08PM +0100, Uladzislau Rezki wrote:
-> > On Wed, Feb 01, 2023 at 04:08:13PM +0100, Uladzislau Rezki (Sony) wrote:
-> > > The kfree_rcu()'s single argument name is deprecated therefore
-> > > rename it to kfree_rcu_mightsleep() variant. The goal is explicitly
-> > > underline that it is for sleepable contexts.
-> > > 
-> > > Please check the RXE driver in a way that a single argument can
-> > > be used. Briefly looking at it and rcu_head should be embed to
-> > > free an obj over RCU-core. The context might be atomic.
-> > > 
-> > > Cc: Bob Pearson <rpearsonhpe@gmail.com>
-> > > Cc: Jason Gunthorpe <jgg@nvidia.com>
-> > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > > ---
-> > >  drivers/infiniband/sw/rxe/rxe_pool.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > Could you please add you reviwed-by or Acked-by tags so we can bring
-> > our series with renaming for the next merge window?
-> > 
-> > Thanks!
-> > 
-> __rxe_cleanup() can be called in two contexts, sleepable and not.
-> Therefore usage of a single argument of the kvfree_rcu() is not correct
-> here.
+On Thu, Mar 09, 2023 at 04:28:10PM -0800, Vipin Sharma wrote:
+> On Thu, Mar 9, 2023 at 3:53 PM David Matlack <dmatlack@google.com> wrote:
+> >
+> > On Mon, Mar 06, 2023 at 02:41:12PM -0800, Vipin Sharma wrote:
+> > > Create a global counter for total number of pages available
+> > > in MMU page caches across all VMs. Add mmu_shadow_page_cache
+> > > pages to this counter.
+> >
+> > I think I prefer counting the objects on-demand in mmu_shrink_count(),
+> > instead of keeping track of the count. Keeping track of the count adds
+> > complexity to the topup/alloc paths for the sole benefit of the
+> > shrinker. I'd rather contain that complexity to the shrinker code unless
+> > there is a compelling reason to optimize mmu_shrink_count().
+> >
+> > IIRC we discussed this at one point. Was there a reason to take this
+> > approach that I'm just forgetting?
 > 
-> Could you please fix and check your driver? If my above statement
-> is not correct, please provide Acked-by or Reviwed-by tags to the
-> path that is in question.
-> 
-> Otherwise please add an rcu_head in your data to free objects over
-> kvfree_rcu() using double argument API.
-> 
-> Could you please support?
+> To count on demand, we first need to lock on kvm_lock and then for
+> each VMs iterate through each vCPU, take a lock, and sum the objects
+> count in caches. When the NUMA support will be introduced in this
+> series then it means we have to iterate even more caches. We
+> can't/shouldn't use mutex_trylock() as it will not give the correct
+> picture and when shrink_scan is called count can be totally different.
 
-Also this one needs renaming? It came in because of the commit in 6.3-rc1:
-72a03627443d ("RDMA/rxe: Remove rxe_alloc()")
+Yeah good point. Hm, do we need to take the cache mutex to calculate the
+count though? mmu_shrink_count() is inherently racy (something could get
+freed or allocated in between count() and scan()). I don't think holding
+the mutex buys us anything over just reading the count without the
+mutex.
 
-It could be squashed into this patch itself since it is infiniband related.
+e.g.
 
-Paul noticed that this breaks dropping the old API on -next, so it is
-blocking the renaming.
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index df8dcb7e5de7..c80a5c52f0ea 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -6739,10 +6739,20 @@ static unsigned long mmu_shrink_scan(struct shrinker *shrink,
+ static unsigned long mmu_shrink_count(struct shrinker *shrink,
+                                      struct shrink_control *sc)
+ {
+-       s64 count = percpu_counter_sum(&kvm_total_unused_cached_pages);
++       struct kvm *kvm, *next_kvm;
++       unsigned long count = 0;
 
----8<-----------------------
+-       WARN_ON(count < 0);
+-       return count <= 0 ? SHRINK_EMPTY : count;
++       mutex_lock(&kvm_lock);
++       list_for_each_entry_safe(kvm, next_kvm, &vm_list, vm_list) {
++               struct kvm_vcpu *vcpu;
++               unsigned long i;
++
++               kvm_for_each_vcpu(i, vcpu, kvm)
++                       count += READ_ONCE(vcpu->arch.mmu_shadow_page_cache.nobjs);
++       }
++       mutex_unlock(&kvm_lock);
++
++       return count == 0 ? SHRINK_EMPTY : count;
 
-diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
-index b10aa1580a64..ae3a100e18fb 100644
---- a/drivers/infiniband/sw/rxe/rxe_mr.c
-+++ b/drivers/infiniband/sw/rxe/rxe_mr.c
-@@ -731,7 +731,7 @@ int rxe_dereg_mr(struct ib_mr *ibmr, struct ib_udata *udata)
- 		return -EINVAL;
- 
- 	rxe_cleanup(mr);
--	kfree_rcu(mr);
-+	kfree_rcu_mightsleep(mr);
- 	return 0;
  }
- 
+
+Then the only concern is an additional acquire of kvm_lock. But it
+should be fairly quick (quicker than mmu_shrink_scan()). If we can
+tolerate the kvm_lock overhead of mmu_shrink_scan(), then we should be
+able to tolerate some here.
+
+> 
+> scan_count() API comment says to not do any deadlock check (I don't
+> know what does that mean) and percpu_counter is very fast when we are
+> adding/subtracting pages so the effect of using it to keep global
+> count is very minimal. Since, there is not much impact to using
+> percpu_count compared to previous one, we ended our discussion with
+> keeping this per cpu counter.
+
+Yeah it's just the code complexity of maintaing
+kvm_total_unused_cached_pages that I'm hoping to avoid. We have to
+create the counter, destroy it, and keep it up to date. Some
+kvm_mmu_memory_caches have to update the counter, and others don't. It's
+just adds a lot of bookkeeping code that I'm not convinced is worth the
+it.
