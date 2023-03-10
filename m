@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40ACF6B46EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52DBF6B46EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbjCJOrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
+        id S233088AbjCJOrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:47:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbjCJOrW (ORCPT
+        with ESMTP id S233023AbjCJOrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Mar 2023 09:47:22 -0500
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF45F122090;
-        Fri, 10 Mar 2023 06:47:03 -0800 (PST)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-176261d7f45so6033146fac.11;
-        Fri, 10 Mar 2023 06:47:03 -0800 (PST)
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1E8105568;
+        Fri, 10 Mar 2023 06:47:04 -0800 (PST)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1755e639b65so6078243fac.3;
+        Fri, 10 Mar 2023 06:47:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459618;
+        d=1e100.net; s=20210112; t=1678459619;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BGX0FXfNI3dLKikH/musE/uxQbEGTra0C5FWKvnCxVA=;
-        b=eyJWdcLB2b//vfOxgUYoiPFVojXp42GbOz9urNsb6qRmd13fsEy/k9kuVtSaT0pp6m
-         /cQ7rFjB5dE3YVpWBN551gjSA5CbLvB8k1tBsTdVkyZCWs2RmoM6kVgDtqdVPs+Uui4X
-         6pLTV8WsULrPzkByfDbfI8ic+ZUnvsdvNWjxrg7n8mzKGpj6lzm3Dz5RGwte1n6P67dJ
-         uO/9jZJV51daOO4RXN7k6S1+t69P3V9XevK+l1XKN1W8989iQJ6zPf1ryjRYmzAhbfE0
-         bDwdjZKD8dtwNrwWkfBEdAVerYqi6emeR9Ld/vMg1rqwP03WTKqawaOPysIz0wPEDLlE
-         xBhA==
-X-Gm-Message-State: AO0yUKVKiY2DgYnPypg3OxGmArl7aa4XSt7u9R9waqOwdy5e1WuLp6NC
-        Xcr24MFpt7Hz2yF6Musx0ibJkOShMA==
-X-Google-Smtp-Source: AK7set9VN0RJ1wRIetkEXYIdaNM1jjaRix9csyPHcN3ptokbn4vVRTw8IIvPUBkv2JoCus5vftouqA==
-X-Received: by 2002:a05:6870:6324:b0:16e:92d2:e810 with SMTP id s36-20020a056870632400b0016e92d2e810mr14171417oao.53.1678459618310;
-        Fri, 10 Mar 2023 06:46:58 -0800 (PST)
+        bh=Ze4x2UjW4SC+7SgOWlyCc0ynsM258m+gI2GkQIZTPMI=;
+        b=yTt3CTEiH7cPMBp+ZAX14PZgaXmETv68qxJToExAFp3anwLcRJQr8Lwi2eWSxrSAqb
+         LDES7Zo/NifSQGbRrOUcUSVjh4G2mbDT/YsiBntb9DsC6Cl9cC3so/wPvkcccUIpiFww
+         fGw2T2pdJdAcFgUFr3zh2kR80PICZ3xlCoD4DG8IWeED7/t3wfG1zHnyVCxMzzRkYvAS
+         3D9s1QQEZdi4vimwlcdOxvmhsxX+jWLs6I8QpAcvbpAe75zRitsH2Q2oiFNAP+bDnQoh
+         MD6TymTyicoYlzm02C79BMC1zZ7s8Vbz/DJFgbMBGdsQwZ0+V3VLwONFj0OdFbOl0Vy/
+         DoXQ==
+X-Gm-Message-State: AO0yUKXu0WBUCF1cYqarvawRkMz5TxMrlGo7z2hm3jzGDf15SQJaLEvM
+        iSbwkynCJlH29eFt/yHt2wvYBNsY8g==
+X-Google-Smtp-Source: AK7set82KIT56SQJ6WqeSwMPkCDv0B0eHIXclgRxzxBAzHabdT7fVwRv6tyCkq20rhBO+1pi1bynLQ==
+X-Received: by 2002:a05:6870:73cc:b0:176:4920:bf8c with SMTP id a12-20020a05687073cc00b001764920bf8cmr16477103oan.55.1678459619557;
+        Fri, 10 Mar 2023 06:46:59 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h21-20020a4abb95000000b0051ff746e2b2sm7644oop.8.2023.03.10.06.46.57
+        by smtp.gmail.com with ESMTPSA id e15-20020a056871044f00b0016e9308e17bsm73055oag.52.2023.03.10.06.46.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:46:57 -0800 (PST)
-Received: (nullmailer pid 1540681 invoked by uid 1000);
+        Fri, 10 Mar 2023 06:46:59 -0800 (PST)
+Received: (nullmailer pid 1540838 invoked by uid 1000);
         Fri, 10 Mar 2023 14:46:55 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Russell King <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: exynos: Use of_property_read_bool() for boolean properties
-Date:   Fri, 10 Mar 2023 08:46:54 -0600
-Message-Id: <20230310144655.1540655-1-robh@kernel.org>
+To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Paul Walmsley <paul@pwsan.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     devicetree@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: omap2: Use of_property_read_bool() for boolean properties
+Date:   Fri, 10 Mar 2023 08:46:55 -0600
+Message-Id: <20230310144655.1540793-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,22 +71,28 @@ Convert reading boolean properties to to of_property_read_bool().
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- arch/arm/mach-exynos/suspend.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/mach-omap2/omap_hwmod.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/mach-exynos/suspend.c b/arch/arm/mach-exynos/suspend.c
-index 3bf14ca78b62..6d5d7696aaf7 100644
---- a/arch/arm/mach-exynos/suspend.c
-+++ b/arch/arm/mach-exynos/suspend.c
-@@ -667,7 +667,7 @@ void __init exynos_pm_init(void)
- 		return;
- 	}
+diff --git a/arch/arm/mach-omap2/omap_hwmod.c b/arch/arm/mach-omap2/omap_hwmod.c
+index 5a2a9b8e61ed..989195f6f7be 100644
+--- a/arch/arm/mach-omap2/omap_hwmod.c
++++ b/arch/arm/mach-omap2/omap_hwmod.c
+@@ -2322,11 +2322,11 @@ static int __init _init_mpu_rt_base(struct omap_hwmod *oh, void *data,
+ static void __init parse_module_flags(struct omap_hwmod *oh,
+ 				      struct device_node *np)
+ {
+-	if (of_find_property(np, "ti,no-reset-on-init", NULL))
++	if (of_property_read_bool(np, "ti,no-reset-on-init"))
+ 		oh->flags |= HWMOD_INIT_NO_RESET;
+-	if (of_find_property(np, "ti,no-idle-on-init", NULL))
++	if (of_property_read_bool(np, "ti,no-idle-on-init"))
+ 		oh->flags |= HWMOD_INIT_NO_IDLE;
+-	if (of_find_property(np, "ti,no-idle", NULL))
++	if (of_property_read_bool(np, "ti,no-idle"))
+ 		oh->flags |= HWMOD_NO_IDLE;
+ }
  
--	if (WARN_ON(!of_find_property(np, "interrupt-controller", NULL))) {
-+	if (WARN_ON(!of_property_read_bool(np, "interrupt-controller"))) {
- 		pr_warn("Outdated DT detected, suspend/resume will NOT work\n");
- 		of_node_put(np);
- 		return;
 -- 
 2.39.2
 
