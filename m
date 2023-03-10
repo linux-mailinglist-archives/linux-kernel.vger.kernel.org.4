@@ -2,213 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CFA6B35D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 06:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F79E6B35E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 06:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjCJFBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 00:01:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
+        id S229887AbjCJFFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 00:05:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjCJFBY (ORCPT
+        with ESMTP id S229761AbjCJFFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 00:01:24 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A47E775E;
-        Thu,  9 Mar 2023 21:01:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678424483; x=1709960483;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=RTnWnuVcJecJiNaQ+mqs7AHbX9fiAUeGlFbTCGLIRTA=;
-  b=Jg3N0WYGzkB/X1hiGuFoMiIdCKYnEtHydtN0pT3tBJagsLJYfJuRtfOH
-   XJbqJsTuuXbx96ptdTIk5URz186luJAltBRzARwGPnLgTFo2Y7Cuyy60i
-   IrjVuRXil4rlm2zNr3Zaf/kTs5pixsd2t0KS5/q3utd/G7FXrBd2EOJem
-   GPk5a1mdDCg/je/DZ3xJ4fZbUwdSbpGy5cZGfDfnq2wCAHvWQhuXFa+xx
-   mQgMzz83QKyTQEP1XL9uLJt52q596Fa9v9YSKI3rxOZuhVve7CKxyajO7
-   NFu+P+oF57KHQXuC6UZ13mRnX9Gu5E66OrhAxSL4eVzpwTMfOg0AQ49yz
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="364300089"
-X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
-   d="scan'208";a="364300089"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 21:01:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="820911483"
-X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
-   d="scan'208";a="820911483"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Mar 2023 21:01:21 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 9 Mar 2023 21:01:20 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 9 Mar 2023 21:01:20 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.172)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 9 Mar 2023 21:01:20 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jKWhMV1Bh7ZLrLUkdvx+eZWoDKljBXSVtSEjFv/javgB4JGpfnQSsQ2OUmJNjWVgDQ0BNTgu6qMyZrB+PPuzOElJv6zrP/w5MM6/gPrE5rkOv/X5IpSeSrMn6UP4gaiBemklD7MJgkePa1xiEToIM+16bfrLUbvGL8c89hKcv5lTI8c8IFgNAbJ/RnrnQ/tpU+m97ANPy5FixOueE5MXR5iW2J7YWwedm6aiG/tsrVKjb2DL/XSaq6WW8lTWMe1EiTsLlKctC+5P/A4M9F7qLUQCsD/Zffb/6m0RB3arp1VZo6wX3ki32g7pDNDyYyc8vW6SPG+fmgK+cxGUEi05mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=InzPKqEvzvtge920vApORZLt+5RMF7liiZBkWNNWlT0=;
- b=lJJ7P4NN6eg7bbVzhI3CbCKUWrM2CfO2OIj0Flc0/GtdCcOh1vJlcNqhSCdFLj+Jy7CqkibY6VF0nDZHIZneNFi/X/3clMXa83lkUyxP1+JI7xRfZNXaD+YL0I0ETGVDX8tbJ3947fRhJudoP/Ovr6i3WB42p0v1x/7PShif4f6GlNVOg8O5xqEChFFP/HYWB2WGYbbDcHnnHbTpi9YAOw5lQw7cBvMRd5Ao4M+2Hc4NRD9zazQIa7I8Oc8cr1ESGHZ3F809QFU+EqzebqNM7AXkSc/RMDwL7MIwrbmUIbwjMHjDoGfYxZRm8frqMZL6DacjRPY66FbEOaCnJqhILw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM5PR11MB1418.namprd11.prod.outlook.com (2603:10b6:3:8::9) by
- DS0PR11MB7997.namprd11.prod.outlook.com (2603:10b6:8:125::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.19; Fri, 10 Mar 2023 05:01:19 +0000
-Received: from DM5PR11MB1418.namprd11.prod.outlook.com
- ([fe80::7ef8:2573:5a1b:c9f1]) by DM5PR11MB1418.namprd11.prod.outlook.com
- ([fe80::7ef8:2573:5a1b:c9f1%6]) with mapi id 15.20.6178.019; Fri, 10 Mar 2023
- 05:01:18 +0000
-Date:   Fri, 10 Mar 2023 13:01:11 +0800
-From:   "Ye, Xiang" <xiang.ye@intel.com>
-To:     Oliver Neukum <oneukum@suse.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        <linux-usb@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <srinivas.pandruvada@intel.com>,
-        <heikki.krogerus@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <sakari.ailus@linux.intel.com>, <zhifeng.wang@intel.com>,
-        <wentong.wu@intel.com>, <lixu.zhang@intel.com>
-Subject: Re: [PATCH v4 2/5] gpio: Add support for Intel LJCA USB GPIO driver
-Message-ID: <ZAqyhXt9nNIE9Ej7@ye-NUC7i7DNHE>
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
- <20230309071100.2856899-3-xiang.ye@intel.com>
- <2865f3d0-428b-0df1-fc50-f6af3cb9dac3@suse.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2865f3d0-428b-0df1-fc50-f6af3cb9dac3@suse.com>
-X-ClientProxiedBy: SG2PR02CA0054.apcprd02.prod.outlook.com
- (2603:1096:4:54::18) To DM5PR11MB1418.namprd11.prod.outlook.com
- (2603:10b6:3:8::9)
+        Fri, 10 Mar 2023 00:05:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97376AE11F
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 21:04:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678424661;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nx/XrFLQvqfoRq6KKJKJHRcfKaN5Rmhaf8hT4bKmpuo=;
+        b=D/Lbbnc/3kHBD9QIjCvpqIaYE4jM7VR4dYDTp7WOUQRWc/l6qnyYwU3Z/wMgok598LnsRo
+        X5Etsmz1ZdYWOKwxzjH1zcMVRWSYgV3nunkkjxmlWpFqqqLK5VXAMtj4+jE66J4ohVydRL
+        pRfqsCl/Szq4JTSot7J/DajeBd2jjgE=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-336-CJ6Rk5vyPRWs_9o0wulBeg-1; Fri, 10 Mar 2023 00:04:20 -0500
+X-MC-Unique: CJ6Rk5vyPRWs_9o0wulBeg-1
+Received: by mail-ot1-f71.google.com with SMTP id y15-20020a0568301d8f00b006942b6e66d8so1891302oti.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 21:04:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678424660;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Nx/XrFLQvqfoRq6KKJKJHRcfKaN5Rmhaf8hT4bKmpuo=;
+        b=q9ztL82xc7YhznWgCdJtR2aEwydhpXeNk8KU3rZ80ZPjoLBwiSOlzGpnQbYZjs0quX
+         jR81z5p/jldLU+zHwIBx1S9GuZB+eeHE2nY/zZJnznGHcB0YUWM3TZMCu7LxIJxRLeQH
+         OKsf38ZP6fSOBcWAcE8dx+g9zHbJ9G8gUYPVgbrbcDcxiKpgjf2bW5LNcPRgNcpTQRA7
+         vw72/A2qAmyhIr9g+bcV72H5IC8sYKgHZ7fuFN1Wf1c+1Gr+C2dV7IGgK+QQwOT1fuFD
+         YKfvBjmIRFbH8LSMWAq814Ch6vXOuce/+LJO1LSTSHrhmNGR2AIOTR6Una3gluHCCYsi
+         rVfw==
+X-Gm-Message-State: AO0yUKUXrUSZZI0C2zHRHfSFf26YmPkTf8Y4n9fg3b8NfL5fyVmAnq0i
+        NFk92pKRZAiaX7MO45cZLg1B58EX3/LXTviKL2t1f5FSku/VgnJLKW20MvzwX7trJvYB0xSI+IZ
+        CIvQAIdIAI4YzkeS5gRMqLv25yfIdnZ6E5rPMQsrL
+X-Received: by 2002:a05:6870:c384:b0:175:31d3:e12d with SMTP id g4-20020a056870c38400b0017531d3e12dmr8635643oao.9.1678424659759;
+        Thu, 09 Mar 2023 21:04:19 -0800 (PST)
+X-Google-Smtp-Source: AK7set92I9VIrrlmhqu1YN/YhNS8WXn8ihRpW9eviURI8x/Q9g7yf9JQeAZf1+rcX4mAPszXbnlct4tl+NlTEAEgtFc=
+X-Received: by 2002:a05:6870:c384:b0:175:31d3:e12d with SMTP id
+ g4-20020a056870c38400b0017531d3e12dmr8635628oao.9.1678424659454; Thu, 09 Mar
+ 2023 21:04:19 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR11MB1418:EE_|DS0PR11MB7997:EE_
-X-MS-Office365-Filtering-Correlation-Id: 70fd8f71-34db-45e6-1050-08db21247bed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j83zbujfKq86yzsSBUOVERB9WsWuMlpRaHrMItC4jZrnd1L1rc4afbiPrRw1hI6FAWq32rpbqJRrT8XvISqvsHuAcydPL/sgQddKgzgEn36QoN2Z7ESlCYLPfZFPL4VlDeY+qVOZWvPXYk+UQs64OOu7KolFO0ul0rtFhM8R2syoz8P1z9C8uCjEBj1zPTAY89vkk1qYcea/ClitNr99v4L6l7LE63Ldsj2bn8o9rbVQzof4GIZJFNgoqPgcpMPpZvlFYYRpGvZcwM/yKbEQEZwo2UhlsPkQgWDIkf01r1bX8R4aminxwsysp/s1YSrCCAy9PlX29OwDFLJMlWqeL7YW7MvaQG1jUXkX0P5XlP1cl2pprH3GbQIGmE+4XQYAE2E4mmyJtVtiEFTUCZS/KLaBw5NFhQOqXWbLHG5+fnrxUOB3GJHGTxD8KKId2l7PDSg3IGkyQ3XFk0T9qzEI1/WFJA2hgtvyl2g76TBXABgdXEm8uXlNwNCCHZ5FLaEcJ8KhtEGcJdiXbIN3VZ3KI2owuErTj6BMJUKuoc/tm8/EBZzF6E7QAbNytzGn26rwB+ddtSz7B1q2A4XGe9N1y4217+x6+Zg9h9zOjZwgqPsV+wuFc5YDXFGx6q3AX8dgiUBLVbtIdgenXyaq6IjRRA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1418.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(346002)(39860400002)(396003)(366004)(376002)(136003)(451199018)(54906003)(6486002)(5660300002)(6916009)(316002)(7416002)(66476007)(2906002)(8936002)(66946007)(66556008)(8676002)(41300700001)(4326008)(82960400001)(26005)(186003)(86362001)(9686003)(6666004)(33716001)(53546011)(6512007)(478600001)(83380400001)(6506007)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MBJluYeSBesbQ5KK7FdiOtC4vEop+ydfob2u5nDEVxHa3uB3osw9sjkard1T?=
- =?us-ascii?Q?SUBYCJB/0lX+bdAmjpmIVHWoQvv52fxQFKsY2RnOt3rd7V0NzDVL3HKulyzb?=
- =?us-ascii?Q?2UDTcp3n0C5o3sgeA6b9OqaY/t3/GBJ1d5IFcYm9Wk80ghmHonzK9VX4To/A?=
- =?us-ascii?Q?fLQ+viEiO7lk7RJgFoNTH3d2zCMPAXTjfwhvYRJovV9pl41zgOCVDl1xwo6L?=
- =?us-ascii?Q?282EiNHmp+tpbdYk/yXRYdxJUR4EexD4EVkqvCGZ5zNz8TFijIG74rdlDkLv?=
- =?us-ascii?Q?Y0TcYZ9Ak4USBln8ZrT8lQZ3mU6plOs89YFzXElkH6K+UFl5R/PcUK05jXD6?=
- =?us-ascii?Q?4RcC1rFekBGye+iwq6s01t5WN9V+TV9/r3FUvQInHvOpIhhWROCpp+WqRpJt?=
- =?us-ascii?Q?I48xPkkYLM23r85MTFJEyPigo8MnZovIjXFQyK1WQZ+6vC6GZvNcu8/tXRrC?=
- =?us-ascii?Q?AXSF4dgsuz2oSynfPD1LsO9+KLl6bIXJBT3C//nKseaWzr9jbmNV/SoMRh4X?=
- =?us-ascii?Q?elOVfncT5O4+YDeS2yDFjHJ3ynF4ZYyhoKbiFEHUNku2/x5kU+41iPxoG4gg?=
- =?us-ascii?Q?+0tXG+iTMz0Hyd4IGkn01Jyo0Z4+8UQtCVCZFbyeYl2U/SRCaQnDEhApOqH8?=
- =?us-ascii?Q?ACE/LDczbICvnvC5YalnHqKGNf6a+re+U5N8UjIdifnWEXAl1v68NhfkIng+?=
- =?us-ascii?Q?XKk1xtBP1tXsdC3NgYO54O4+3CS3NT7sKqjRE/DXOLyY/gZBFVCHa3NAp+si?=
- =?us-ascii?Q?qULccBDKA+m4n4NgQErnjEFAXApCfzFTfVjHLMEhVIHf0LZqF6epAiI7+dGU?=
- =?us-ascii?Q?dg8MXbo21RnaUTtjffsnz86UO+qA4t+WNXcYCneryURDAmoJ/6jvkkZpLqgy?=
- =?us-ascii?Q?QtWy71aV6oWubGKkwyJEK4y0iOAyzOtxD/Rf6qHg42SSfAuWeXXw1JXoU+l2?=
- =?us-ascii?Q?I71kzXosP81nXUMn7YjBS4NO4whnRKz3fDsP4WfS9YGqsU75kXYXeWZAObMd?=
- =?us-ascii?Q?yzh6AuEcijLU+HcjmX9PBZxw3lfvsBi/Zglq77g1Xk6krbkfueNLLgylsgVT?=
- =?us-ascii?Q?WrO6Oka7woZQVsRnvL6K9oUVAgHFiAsTryVcJRW0/LzbPZYfuoWL+YIbtEpY?=
- =?us-ascii?Q?GZinWFpui7SN0WH0exQTmKQ9ggWNYl7FkssV56r5oMXGi3kKpwsxEnqBcBkM?=
- =?us-ascii?Q?u6SzVhV7qUUWE99jli6kUOnvtKMydOpeP9Je7vwn4VxWbhV6RaHC4H6bC1X1?=
- =?us-ascii?Q?KzwsfFuvSd63GU3xG3dGW8vtuAm97dI88M63gz3dtCpBykufB8+UOEw8vd9k?=
- =?us-ascii?Q?SQez7xKUELOBpFXm7FnhQIwzYdY3Znb2a5Yrub7WZUOxgC1uX/8aNqXFmG2Y?=
- =?us-ascii?Q?DBFqiZ6v8w+vUe7fZp/JC+sKhkRFZY73WMW332BjmL+3nwD3kzsMo0k57JyT?=
- =?us-ascii?Q?WfevN9gcMHwm3BFo3o90KUgEPV6mBCkU9nbsxidjy3O9evcWwd/UzWWjDCdc?=
- =?us-ascii?Q?JpNiUKddTdCRCth3XlYqeMpoWS4PC5jnGonguZexb3Pe0pWePByDmKMs5qOl?=
- =?us-ascii?Q?+RxAw7vC3hj1tKiQNI+jQ4nsf6HPkT2/bTgwW027?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 70fd8f71-34db-45e6-1050-08db21247bed
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1418.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 05:01:18.6605
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: C70ySAh6t06/FqzkWGhDdXHzAlRZiGatV7KmYmDUqbaXeqFc/RqYwQMS4cUz0QEaCOnmVbgcbs/P4OZEBIaRJw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7997
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230307113621.64153-1-gautam.dawar@amd.com> <20230307113621.64153-5-gautam.dawar@amd.com>
+In-Reply-To: <20230307113621.64153-5-gautam.dawar@amd.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 10 Mar 2023 13:04:08 +0800
+Message-ID: <CACGkMEvUhC3HfizpiM8zxMa2RwgkR=yLm-GDpY120_32aBmWFw@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 04/14] sfc: evaluate vdpa support based on FW
+ capability CLIENT_CMD_VF_PROXY
+To:     Gautam Dawar <gautam.dawar@amd.com>
+Cc:     linux-net-drivers@amd.com, Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        eperezma@redhat.com, harpreet.anand@amd.com, tanuj.kamde@amd.com,
+        koushik.dutta@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 02:40:10PM +0100, Oliver Neukum wrote:
-> 
-> 
-> On 09.03.23 08:10, Ye Xiang wrote:
-> 
-> > +#define LJCA_GPIO_BUF_SIZE 60
-> > +struct ljca_gpio_dev {
-> > +	struct platform_device *pdev;
-> > +	struct gpio_chip gc;
-> > +	struct ljca_gpio_info *gpio_info;
-> > +	DECLARE_BITMAP(unmasked_irqs, LJCA_MAX_GPIO_NUM);
-> > +	DECLARE_BITMAP(enabled_irqs, LJCA_MAX_GPIO_NUM);
-> > +	DECLARE_BITMAP(reenable_irqs, LJCA_MAX_GPIO_NUM);
-> > +	u8 *connect_mode;
-> > +	/* mutex to protect irq bus */
-> > +	struct mutex irq_lock;
-> > +	struct work_struct work;
-> > +	/* lock to protect package transfer to Hardware */
-> > +	struct mutex trans_lock;
-> > +
-> > +	u8 obuf[LJCA_GPIO_BUF_SIZE];
-> > +	u8 ibuf[LJCA_GPIO_BUF_SIZE];
-> 
-> And here we have a violation of DMA coherency rules.
-> Basically you cannot embed buffers into other data structures
-> if they can be subject to DMA.
-But obuf and ibuf does not used to do DMA transfer here.
-It is actually copied from or to ljca buffer to do URB transfer.
-Should it still need to follow the DMA coherency rules?
-> 
-> 
-> 
-> 
-> > +static int ljca_gpio_remove(struct platform_device *pdev)
-> > +{
-> > +	struct ljca_gpio_dev *ljca_gpio = platform_get_drvdata(pdev);
-> > +
-> > +	gpiochip_remove(&ljca_gpio->gc);
-> > +	ljca_unregister_event_cb(ljca_gpio->gpio_info->ljca);
-> > +	mutex_destroy(&ljca_gpio->irq_lock);
-> > +	mutex_destroy(&ljca_gpio->trans_lock);
-> 
-> At this time, what has made sure that no work is scheduled?
-Can't make sure of that. Could Adding cancel_work_sync(&ljca_gpio->work) before
-mutex_destroy can address it?
-> 
-> > +	return 0;
-> > +}
-> 
-> 
+On Tue, Mar 7, 2023 at 7:37=E2=80=AFPM Gautam Dawar <gautam.dawar@amd.com> =
+wrote:
+>
+> Add and update vdpa_supported field to struct efx_nic to true if
+> running Firmware supports CLIENT_CMD_VF_PROXY capability. This is
+> required to ensure DMA isolation between MCDI command buffer and guest
+> buffers.
+>
+> Signed-off-by: Gautam Dawar <gautam.dawar@amd.com>
+> ---
+>  drivers/net/ethernet/sfc/ef100_netdev.c | 26 +++++++++++++++---
+>  drivers/net/ethernet/sfc/ef100_nic.c    | 35 +++++++++----------------
+>  drivers/net/ethernet/sfc/ef100_nic.h    |  6 +++--
+>  drivers/net/ethernet/sfc/ef100_vdpa.h   |  5 ++--
+>  4 files changed, 41 insertions(+), 31 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/sfc/ef100_netdev.c b/drivers/net/ethern=
+et/sfc/ef100_netdev.c
+> index d916877b5a9a..5d93e870d9b7 100644
+> --- a/drivers/net/ethernet/sfc/ef100_netdev.c
+> +++ b/drivers/net/ethernet/sfc/ef100_netdev.c
+> @@ -355,6 +355,28 @@ void ef100_remove_netdev(struct efx_probe_data *prob=
+e_data)
+>         efx->state =3D STATE_PROBED;
+>  }
+>
+> +static void efx_ef100_update_tso_features(struct efx_nic *efx)
+> +{
+> +       struct ef100_nic_data *nic_data =3D efx->nic_data;
+> +       struct net_device *net_dev =3D efx->net_dev;
+> +       netdev_features_t tso;
+> +
+> +       if (!efx_ef100_has_cap(nic_data->datapath_caps2, TX_TSO_V3))
+> +               return;
+> +
+> +       tso =3D NETIF_F_TSO | NETIF_F_TSO6 | NETIF_F_GSO_PARTIAL |
+> +             NETIF_F_GSO_UDP_TUNNEL | NETIF_F_GSO_UDP_TUNNEL_CSUM |
+> +             NETIF_F_GSO_GRE | NETIF_F_GSO_GRE_CSUM;
+> +
+> +       net_dev->features |=3D tso;
+> +       net_dev->hw_features |=3D tso;
+> +       net_dev->hw_enc_features |=3D tso;
+> +       /* EF100 HW can only offload outer checksums if they are UDP,
+> +        * so for GRE_CSUM we have to use GSO_PARTIAL.
+> +        */
+> +       net_dev->gso_partial_features |=3D NETIF_F_GSO_GRE_CSUM;
+> +}
 
---
+I don't see a direct relationship between vDPA and the TSO capability.
+Is this an independent fix?
+
+> +
+>  int ef100_probe_netdev(struct efx_probe_data *probe_data)
+>  {
+>         struct efx_nic *efx =3D &probe_data->efx;
+> @@ -387,9 +409,7 @@ int ef100_probe_netdev(struct efx_probe_data *probe_d=
+ata)
+>                                ESE_EF100_DP_GZ_TSO_MAX_HDR_NUM_SEGS_DEFAU=
+LT);
+>         efx->mdio.dev =3D net_dev;
+>
+> -       rc =3D efx_ef100_init_datapath_caps(efx);
+> -       if (rc < 0)
+> -               goto fail;
+> +       efx_ef100_update_tso_features(efx);
+>
+>         rc =3D ef100_phy_probe(efx);
+>         if (rc)
+> diff --git a/drivers/net/ethernet/sfc/ef100_nic.c b/drivers/net/ethernet/=
+sfc/ef100_nic.c
+> index 8cbe5e0f4bdf..ef6e295efcf7 100644
+> --- a/drivers/net/ethernet/sfc/ef100_nic.c
+> +++ b/drivers/net/ethernet/sfc/ef100_nic.c
+> @@ -161,7 +161,7 @@ int ef100_get_mac_address(struct efx_nic *efx, u8 *ma=
+c_address,
+>         return 0;
+>  }
+>
+> -int efx_ef100_init_datapath_caps(struct efx_nic *efx)
+> +static int efx_ef100_init_datapath_caps(struct efx_nic *efx)
+>  {
+>         MCDI_DECLARE_BUF(outbuf, MC_CMD_GET_CAPABILITIES_V7_OUT_LEN);
+>         struct ef100_nic_data *nic_data =3D efx->nic_data;
+> @@ -197,25 +197,15 @@ int efx_ef100_init_datapath_caps(struct efx_nic *ef=
+x)
+>         if (rc)
+>                 return rc;
+>
+> -       if (efx_ef100_has_cap(nic_data->datapath_caps2, TX_TSO_V3)) {
+> -               struct net_device *net_dev =3D efx->net_dev;
+> -               netdev_features_t tso =3D NETIF_F_TSO | NETIF_F_TSO6 | NE=
+TIF_F_GSO_PARTIAL |
+> -                                       NETIF_F_GSO_UDP_TUNNEL | NETIF_F_=
+GSO_UDP_TUNNEL_CSUM |
+> -                                       NETIF_F_GSO_GRE | NETIF_F_GSO_GRE=
+_CSUM;
+> -
+> -               net_dev->features |=3D tso;
+> -               net_dev->hw_features |=3D tso;
+> -               net_dev->hw_enc_features |=3D tso;
+> -               /* EF100 HW can only offload outer checksums if they are =
+UDP,
+> -                * so for GRE_CSUM we have to use GSO_PARTIAL.
+> -                */
+> -               net_dev->gso_partial_features |=3D NETIF_F_GSO_GRE_CSUM;
+> -       }
+>         efx->num_mac_stats =3D MCDI_WORD(outbuf,
+>                                        GET_CAPABILITIES_V4_OUT_MAC_STATS_=
+NUM_STATS);
+>         netif_dbg(efx, probe, efx->net_dev,
+>                   "firmware reports num_mac_stats =3D %u\n",
+>                   efx->num_mac_stats);
+> +
+> +       nic_data->vdpa_supported =3D efx_ef100_has_cap(nic_data->datapath=
+_caps3,
+> +                                                    CLIENT_CMD_VF_PROXY)=
+ &&
+> +                                  efx->type->is_vf;
+>         return 0;
+>  }
+>
+> @@ -806,13 +796,6 @@ static char *bar_config_name[] =3D {
+>         [EF100_BAR_CONFIG_VDPA] =3D "vDPA",
+>  };
+>
+> -#ifdef CONFIG_SFC_VDPA
+> -static bool efx_vdpa_supported(struct efx_nic *efx)
+> -{
+> -       return efx->type->is_vf;
+> -}
+> -#endif
+> -
+>  int efx_ef100_set_bar_config(struct efx_nic *efx,
+>                              enum ef100_bar_config new_config)
+>  {
+> @@ -828,7 +811,7 @@ int efx_ef100_set_bar_config(struct efx_nic *efx,
+>
+>  #ifdef CONFIG_SFC_VDPA
+>         /* Current EF100 hardware supports vDPA on VFs only */
+> -       if (new_config =3D=3D EF100_BAR_CONFIG_VDPA && !efx_vdpa_supporte=
+d(efx)) {
+> +       if (new_config =3D=3D EF100_BAR_CONFIG_VDPA && !nic_data->vdpa_su=
+pported) {
+>                 pci_err(efx->pci_dev, "vdpa over PF not supported : %s",
+>                         efx->name);
+>                 return -EOPNOTSUPP;
+> @@ -1208,6 +1191,12 @@ static int ef100_probe_main(struct efx_nic *efx)
+>                 goto fail;
+>         }
+>
+> +       rc =3D efx_ef100_init_datapath_caps(efx);
+> +       if (rc) {
+> +               pci_info(efx->pci_dev, "Unable to initialize datapath cap=
+s\n");
+> +               goto fail;
+> +       }
+> +
+>         return 0;
+>  fail:
+>         return rc;
+> diff --git a/drivers/net/ethernet/sfc/ef100_nic.h b/drivers/net/ethernet/=
+sfc/ef100_nic.h
+> index 4562982f2965..117a73d0795c 100644
+> --- a/drivers/net/ethernet/sfc/ef100_nic.h
+> +++ b/drivers/net/ethernet/sfc/ef100_nic.h
+> @@ -76,6 +76,9 @@ struct ef100_nic_data {
+>         u32 datapath_caps3;
+>         unsigned int pf_index;
+>         u16 warm_boot_count;
+> +#ifdef CONFIG_SFC_VDPA
+> +       bool vdpa_supported; /* true if vdpa is supported on this PCIe FN=
+ */
+> +#endif
+>         u8 port_id[ETH_ALEN];
+>         DECLARE_BITMAP(evq_phases, EFX_MAX_CHANNELS);
+>         enum ef100_bar_config bar_config;
+> @@ -95,9 +98,8 @@ struct ef100_nic_data {
+>  };
+>
+>  #define efx_ef100_has_cap(caps, flag) \
+> -       (!!((caps) & BIT_ULL(MC_CMD_GET_CAPABILITIES_V4_OUT_ ## flag ## _=
+LBN)))
+> +       (!!((caps) & BIT_ULL(MC_CMD_GET_CAPABILITIES_V7_OUT_ ## flag ## _=
+LBN)))
+>
+> -int efx_ef100_init_datapath_caps(struct efx_nic *efx);
+>  int ef100_phy_probe(struct efx_nic *efx);
+>  int ef100_filter_table_probe(struct efx_nic *efx);
+>
+> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa.h b/drivers/net/ethernet=
+/sfc/ef100_vdpa.h
+> index f6564448d0c7..90062fd8a25d 100644
+> --- a/drivers/net/ethernet/sfc/ef100_vdpa.h
+> +++ b/drivers/net/ethernet/sfc/ef100_vdpa.h
+> @@ -1,7 +1,6 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+> -/* Driver for Xilinx network controllers and boards
+> - * Copyright (C) 2020-2022, Xilinx, Inc.
+> - * Copyright (C) 2022, Advanced Micro Devices, Inc.
+> +/* Driver for AMD network controllers and boards
+> + * Copyright (C) 2023, Advanced Micro Devices, Inc.
+
+Let's fix this in the patch that introduces this.
+
 Thanks
-Ye Xiang
+
+
+
+>   *
+>   * This program is free software; you can redistribute it and/or modify =
+it
+>   * under the terms of the GNU General Public License version 2 as publis=
+hed
+> --
+> 2.30.1
+>
+
