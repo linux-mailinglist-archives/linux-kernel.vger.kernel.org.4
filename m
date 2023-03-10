@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363BA6B4948
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:11:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B296B4951
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234021AbjCJPLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:11:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
+        id S233974AbjCJPLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:11:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233905AbjCJPKe (ORCPT
+        with ESMTP id S233988AbjCJPKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:10:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388F36A45
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:02:54 -0800 (PST)
+        Fri, 10 Mar 2023 10:10:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA58A6EBD;
+        Fri, 10 Mar 2023 07:03:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDAF2B82317
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 15:02:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2A9CC433AC;
-        Fri, 10 Mar 2023 15:02:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3752BB822E7;
+        Fri, 10 Mar 2023 15:02:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0828FC4339E;
+        Fri, 10 Mar 2023 15:02:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678460564;
-        bh=YSUJSGnMzkT4PKVgsJp5gq4NAM6BAlf2/mbSSdMEWfQ=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=twrehLJotCuofLThz6lZiDhstbQJHPNdY78M5lM2ntHMsajLjOuHf5FZu5w6EcRcV
-         BX3TEyfgxWVi4tl45bqZGru2danSABMVY2wUBU1ktb7/sHY2MYjXs/pl9WXO0Re8xM
-         2bgMiyQP/W9JsiV4NkYqRUFCOpUOe5x8PPDnew2lI4TBV9Q/i/gpxpdNiI3YpIxztB
-         sWvRu6v8qJkP/BYKz9HgNUIyHlhY3OoioRDSqBrCbp3L6HP2az2A3XMPHgV2G3P+Go
-         hrJZNttUVdAdGMQ3LcrXxgfZEdOyw20thc1Ycz8kah03OpD4Xv6gVsnCgR/bjs3ANh
-         6UnM4IDccDJtA==
+        s=k20201202; t=1678460570;
+        bh=bR6o38pte2bX2RJ2Qi0Md1WJSFY/WN5nA5yKZB+fd+k=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=FSYzEDovf3oeByWBK8kGqK2XKsY3ygIZ4TnNd1DCIrQ5bY5Xg4hx27scoKGQJ/gqC
+         0pOyus4PjwbYHs8HvBDh/6hsJv12XKaeD3VMPzVg0c25u51feifRSv7QXrCRXr1jCQ
+         FkKZlSNsFrDQnRUja/RUxlc3Ndy9fLQe8b0FDEQfxrm3Q7uoN/fNL2xDraIjTh7isb
+         JH5YG1jAFgnj8fgK/sHdqPvnFpEbmDX4jCoK6+l9gTC3ayyZT7teQziZXfLtb7rCEE
+         BqmfDaK/J8Y+5fZtfowIypORnLl8aDlQPp4HeoIZQa10Ma8X8PPdNWNOh3BIXIACAc
+         iwWdXhkcVWixA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        linux-kernel@vger.kernel.org,
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230217185326.23490-1-andriy.shevchenko@linux.intel.com>
-References: <20230217185326.23490-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] regmap-irq: Place kernel doc of struct
- regmap_irq_chip in order
-Message-Id: <167846056338.924636.18339070324763154632.b4-ty@kernel.org>
-Date:   Fri, 10 Mar 2023 15:02:43 +0000
+Cc:     kernel test robot <lkp@intel.com>
+In-Reply-To: <20230310111544.57342-1-andriy.shevchenko@linux.intel.com>
+References: <20230310111544.57342-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: mpc5xxx-psc: Remove goto to the unexisted
+ label
+Message-Id: <167846056875.924688.11655271939766506433.b4-ty@kernel.org>
+Date:   Fri, 10 Mar 2023 15:02:48 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,21 +55,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Feb 2023 20:53:26 +0200, Andy Shevchenko wrote:
-> It seems that a couple of members got lost theirorder, put them back.
-> Besides that, split field descriptions into groups in the same way
-> as it's done in the structure definition.
+On Fri, 10 Mar 2023 13:15:44 +0200, Andy Shevchenko wrote:
+> The previous cleanup patch had lost one of its parts in a crack,
+> Finish the cleanup by removing the leftovers.
 > 
 > 
 
 Applied to
 
-   broonie/regmap.git for-next
+   broonie/spi.git for-next
 
 Thanks!
 
-[1/1] regmap-irq: Place kernel doc of struct regmap_irq_chip in order
-      commit: 9b400171a69d2487c3196cc3b6de60de3b08e1ee
+[1/1] spi: mpc5xxx-psc: Remove goto to the unexisted label
+      commit: 21d19e601fd221cd61105286b0b6ec2f9c5a2576
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
