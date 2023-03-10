@@ -2,70 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A716B38D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1516B38DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbjCJIfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 03:35:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49188 "EHLO
+        id S231312AbjCJIgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:36:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbjCJIfN (ORCPT
+        with ESMTP id S231241AbjCJIfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:35:13 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8A962DB3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:35:10 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id i34so17339096eda.7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:35:10 -0800 (PST)
+        Fri, 10 Mar 2023 03:35:32 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334079270D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:35:19 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id cy23so17255938edb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:35:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678437309;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=msAKBo8aTzc9Ggd6g1HwoQudAOedzcnckHsa9qcUuhU=;
-        b=PzmwXRfMGrJIqx4xxVlb9XULjKpymRYv/u7KKo5I3aB4ihccXSnVkurxp8VjDYqVnC
-         JfKZgG+LjfQY86kxUQyadFXLr3qUrkX9/DwITbpftNDZyfrGt5UKQ4cSP5CVdAvP8/8U
-         cyRB2N8XU6M3CBY/HLOxaeSA/bSDQ1ix+BHV1SXvvSGAs0K0X6/3cP8HTwwnv6dqr28n
-         fcygIkgSKCU9Xthq6eON9P3rgwVWtddSpzJ7/gVd7RMPESnjaEUEJB7zbJFwPff7MuzC
-         G9ky1RkvmKhgyrJM63ww/3nMqJJ2j5jIyKe9+UNCjqg/oGeKteOrSFWvD0l1YE5czzDd
-         t1pg==
+        d=linaro.org; s=google; t=1678437317;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SFsIUvQhnh2wbwHqMLG7mN4Mz01L3GW7UAQC2+jEkIo=;
+        b=fYVytIbt0kRF0tnnLPcwQ7EF7XcCYv8OYZL5/yoNCRnv8tAcHblkanGpQ6JgV540qy
+         WTNSxJfv8NIfoWNrswkv8xcwveQt7yMHOP1s+ei/Y1ocjefH37NAuC5JvViV8j8v3B7P
+         pXbFsWMp8NFOeQOSBznsU208r6uF2UP2EyGv1Z6H8YCU17FOy5ja6t9TtuvLGnEaO5gq
+         i/HzF9WKrQhg5ZcXC7dSpeJZrkSZfKGhQq5V/OL8HE7CqamcOR1WNRHUV7JnpeX+2p11
+         vUNpFu4PHTU2z7DD5E13TkmCLb/1JM1gzQ4mY/VDbPwTxjfg5y/MkZl9Ce2W8iC0Ii2P
+         ReOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678437309;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=msAKBo8aTzc9Ggd6g1HwoQudAOedzcnckHsa9qcUuhU=;
-        b=y21iEt8rLSkBAKSvo19YMnHDTg6CDIuy6HpLyxpAEY0z+alwo6+ZiEhjRYMb3KCE8k
-         ddbDpYS2/Lsv10NpWHkGbMgtHivbPOxv+/IqgyUiCZ80Cu+/vILFWXLywat/Y/Eu8db/
-         Rp0TzzBDZ8TmcQ5BRDzVU5wbMNmK0PZIoFuoAIBXq+YjL2tmCeOIz20OehegvSOblxLf
-         XFfCghNjpBtQ88hZDRtQMZT7A5Tf/qf8Rm/0KLIkLDzeZG5ScqP8z5GlT28SldhMUu9u
-         TgYH4bTWCkMOxxZeJwwF3ePySjAfuH6x4HuX3KM+81ySFW3wUIQZK9594ihRmsHjHcf7
-         zw7Q==
-X-Gm-Message-State: AO0yUKVkZCQ0xSgBz+WVPnQT13f9Ah3ISSlPGDET1M/Pji8b5ZgHXEKk
-        cFotNkGr9ISU6dbkhV9BBivW1L9O518=
-X-Google-Smtp-Source: AK7set8PRabUyEPOVX0EH2+KGtKBA2MWD26erh7YDXt7xGRcF62/POeOCoHiLP/ZLnf4MU+I4ApfcQ==
-X-Received: by 2002:a17:907:8746:b0:8b1:7fe9:162e with SMTP id qo6-20020a170907874600b008b17fe9162emr27434749ejc.47.1678437309325;
-        Fri, 10 Mar 2023 00:35:09 -0800 (PST)
-Received: from localhost.localdomain (ip5f5abbd3.dynamic.kabel-deutschland.de. [95.90.187.211])
-        by smtp.gmail.com with ESMTPSA id h10-20020a17090619ca00b008ce5b426d77sm697888ejd.13.2023.03.10.00.35.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 00:35:09 -0800 (PST)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     hdegoede@redhat.com, Larry.Finger@lwfinger.net,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 5/5] staging: rtl8723bs: rtw_get_raw_rssi_info() is not used
-Date:   Fri, 10 Mar 2023 09:34:49 +0100
-Message-Id: <20230310083449.23775-6-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230310083449.23775-1-straube.linux@gmail.com>
-References: <20230310083449.23775-1-straube.linux@gmail.com>
+        d=1e100.net; s=20210112; t=1678437317;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SFsIUvQhnh2wbwHqMLG7mN4Mz01L3GW7UAQC2+jEkIo=;
+        b=T/HHinHopaZnCob1BvnS69wmlM43BfUsWnCQzYoigez5TO/5jexeWr59+2odkBo90Y
+         su7x6B5ENxB8GvDvSWPcGk2jPKBq3fLS0cKa4thnrbdf2QTQSR9T+QGYgoEbuA2iBssw
+         FqP8f0RTh/YLgEUi+Rf8mJ8kMkM+GYhIR4qC+LBgxkw2h5jXqDp2+yEf3mb5dayTVwO6
+         xRreJjzQ/2dQS+wKb/ONb1kVM8lyTYsZ3C3k/e5ZJbdPokwlNmiLW81XhnleP0LUj14b
+         FwjXLBN1JnGqeiRHJuFqcPeHluA+N70i1Y4j0WYhsZwXx2jEUsDpvbM2F8xJlSkFE+6M
+         /HOQ==
+X-Gm-Message-State: AO0yUKWqHqLAtGa4dkkDuhLaPIELZdbErezdGWVH4sVDxBywal8L8iN7
+        gCFHCtD+qShow0J6GU3r2wZryw==
+X-Google-Smtp-Source: AK7set9I5xoClWzOboxhwkIqcXcQKYAuUC4Krc6brpIBR2aX71Y2At8rBXzZdBkd+8bMsc88kMSK1g==
+X-Received: by 2002:aa7:c153:0:b0:4ac:b614:dcfc with SMTP id r19-20020aa7c153000000b004acb614dcfcmr24012037edp.9.1678437317709;
+        Fri, 10 Mar 2023 00:35:17 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:2a59:841a:ebc:7974? ([2a02:810d:15c0:828:2a59:841a:ebc:7974])
+        by smtp.gmail.com with ESMTPSA id y94-20020a50bb67000000b004d47ce55e57sm541331ede.10.2023.03.10.00.35.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 00:35:17 -0800 (PST)
+Message-ID: <81466b52-826f-b4ab-5a1d-d4d49381d7f7@linaro.org>
+Date:   Fri, 10 Mar 2023 09:35:15 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 03/21] dt-bindings: display: mediatek: color: add binding
+ for MT8365 SoC
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Xinlei Lee <xinlei.lee@mediatek.com>
+Cc:     Guillaume La Roque <glaroque@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230220-display-v1-0-45cbc68e188b@baylibre.com>
+ <20230220-display-v1-3-45cbc68e188b@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230220-display-v1-3-45cbc68e188b@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,69 +95,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function rtw_get_raw_rssi_info() is not used anywhere, remove it.
+On 09/03/2023 15:22, Alexandre Mergnat wrote:
+> Display Color for MT8365 is compatible with another SoC.
+> Then, add MT8365 binding along with MT8183 SoC.
+> 
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/rtl8723bs/hal/hal_com.c     | 32 ---------------------
- drivers/staging/rtl8723bs/include/hal_com.h |  1 -
- 2 files changed, 33 deletions(-)
 
-diff --git a/drivers/staging/rtl8723bs/hal/hal_com.c b/drivers/staging/rtl8723bs/hal/hal_com.c
-index 792636fe3270..852232102433 100644
---- a/drivers/staging/rtl8723bs/hal/hal_com.c
-+++ b/drivers/staging/rtl8723bs/hal/hal_com.c
-@@ -898,38 +898,6 @@ void rtw_hal_check_rxfifo_full(struct adapter *adapter)
- }
- 
- #ifdef DBG_RX_SIGNAL_DISPLAY_RAW_DATA
--void rtw_get_raw_rssi_info(void *sel, struct adapter *padapter)
--{
--	u8 isCCKrate, rf_path;
--	struct hal_com_data *pHalData = GET_HAL_DATA(padapter);
--	struct rx_raw_rssi *psample_pkt_rssi = &padapter->recvpriv.raw_rssi_info;
--
--	netdev_dbg(padapter->pnetdev,
--		   "RxRate = %s, PWDBALL = %d(%%), rx_pwr_all = %d(dBm)\n",
--		   HDATA_RATE(psample_pkt_rssi->data_rate),
--		   psample_pkt_rssi->pwdball, psample_pkt_rssi->pwr_all);
--
--	isCCKrate = psample_pkt_rssi->data_rate <= DESC_RATE11M;
--
--	if (isCCKrate)
--		psample_pkt_rssi->mimo_signal_strength[0] = psample_pkt_rssi->pwdball;
--
--	for (rf_path = 0; rf_path < pHalData->NumTotalRFPath; rf_path++) {
--		netdev_dbg(padapter->pnetdev,
--			   "RF_PATH_%d =>signal_strength:%d(%%), signal_quality:%d(%%)\n",
--			   rf_path,
--			   psample_pkt_rssi->mimo_signal_strength[rf_path],
--			   psample_pkt_rssi->mimo_signal_quality[rf_path]);
--
--		if (!isCCKrate) {
--			netdev_dbg(padapter->pnetdev,
--				   "\trx_ofdm_pwr:%d(dBm), rx_ofdm_snr:%d(dB)\n",
--				   psample_pkt_rssi->ofdm_pwr[rf_path],
--				   psample_pkt_rssi->ofdm_snr[rf_path]);
--		}
--	}
--}
--
- void rtw_dump_raw_rssi_info(struct adapter *padapter)
- {
- 	u8 isCCKrate, rf_path;
-diff --git a/drivers/staging/rtl8723bs/include/hal_com.h b/drivers/staging/rtl8723bs/include/hal_com.h
-index c1aa7f0a35f9..17d5cfb66a36 100644
---- a/drivers/staging/rtl8723bs/include/hal_com.h
-+++ b/drivers/staging/rtl8723bs/include/hal_com.h
-@@ -150,7 +150,6 @@ bool eqNByte(u8 *str1, u8 *str2, u32 num);
- bool GetU1ByteIntegerFromStringInDecimal(char *str, u8 *in);
- 
- #ifdef DBG_RX_SIGNAL_DISPLAY_RAW_DATA
--void rtw_get_raw_rssi_info(void *sel, struct adapter *padapter);
- void rtw_store_phy_info(struct adapter *padapter, union recv_frame *prframe);
- void rtw_dump_raw_rssi_info(struct adapter *padapter);
- #endif
--- 
-2.39.2
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
