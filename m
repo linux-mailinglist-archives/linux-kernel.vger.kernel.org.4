@@ -2,130 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F056B3768
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8786B376F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjCJHcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 02:32:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
+        id S230132AbjCJHeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 02:34:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjCJHcQ (ORCPT
+        with ESMTP id S229621AbjCJHdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 02:32:16 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B483410A4CA
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 23:32:12 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1paXEX-0002G3-W2; Fri, 10 Mar 2023 08:32:10 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1paXES-0037ox-Nl; Fri, 10 Mar 2023 08:32:04 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1paXES-003jf4-1H; Fri, 10 Mar 2023 08:32:04 +0100
-Date:   Fri, 10 Mar 2023 08:32:03 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Schspa Shi <schspa@gmail.com>, Marc Zyngier <maz@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        patches@opensource.cirrus.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Doug Berger <opendmb@gmail.com>,
+        Fri, 10 Mar 2023 02:33:47 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD195B7DB5;
+        Thu,  9 Mar 2023 23:33:45 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id v16so4199687wrn.0;
+        Thu, 09 Mar 2023 23:33:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678433624;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zarTkLijwIfhb3++coRGP/AsVqk8HV3V1KUfOUgPVtk=;
+        b=JzR3GSzGt6g7r6i4Cwic2dUusdk/8qRxYUN/wpStfXAPOmEF1yGACv2eH3kQGepu8+
+         di2klWZbKaTV059r+B0wKDMMRMn6tD/qA1zOBnT7aQr2k0cg0lbSTms0fg4Mn+0DVRvu
+         MBepKuw6rj9cwHTCI6q54QNE0hRSYeCsExGOmG0Nk5HKjpylZS8flUqZz8mUKtZfsmjS
+         U+Hmy1VNJTFE/YsqwOBAQJVfuO3j6dW/sJSrztzHrzghLfEkibEzqS0dS1H+SNY2+fAA
+         9WByQ3A62u2/y6AfL5Ezw1EUFBl7yVcgoEHGbwbVamu5KnyD+FHqzKn8FAhNscSh48cn
+         k9lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678433624;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zarTkLijwIfhb3++coRGP/AsVqk8HV3V1KUfOUgPVtk=;
+        b=WNgLVcVLZWK972Uaf1vG1BX6Q873s8Lt1j55wtmlBrEBOcmchzjF91NzMnoHBLNmTp
+         mpiYQKk5jSKX33OweGpID+cY+4TpQMmDZy3aUEwgT0IzXKhsNjUzsRdhxN3PhreaI/Kk
+         Uz4yEjzKK8lOzSz6o940m2OwUo8zj7+6+aMX2fGW3noI6TmzTfL2iBQ6A3ucVQApvE+H
+         2jpvK5qoUke3MJKDOjBhelM07vSKwmAAPHM+icexErOO3oV/eXLSly4qqDuz8GzyaQ6j
+         76cka6fQH/atnnmEvVgjg6xJui2rXu0E84te9WGmBeWg7uUlRyMQMKl1VcZNyso6ewA9
+         Qcmw==
+X-Gm-Message-State: AO0yUKVhwCctnegCH15R8bSdH71o/rT54YhJCo5u4wAE8jGnmGjZk6BA
+        UUtqK/WFujRZBDdbNG5XQMs=
+X-Google-Smtp-Source: AK7set+zzlSuseUVR2p0H+i3yVkYgwFZudbMm/ifjGFcScl8DRFJsT55wM1RvasPdakrhp0aDQHY1Q==
+X-Received: by 2002:a5d:4012:0:b0:2c5:532a:98c4 with SMTP id n18-20020a5d4012000000b002c5532a98c4mr502630wrp.33.1678433624124;
+        Thu, 09 Mar 2023 23:33:44 -0800 (PST)
+Received: from arinc9-PC.lan ([212.68.60.226])
+        by smtp.gmail.com with ESMTPSA id bi11-20020a05600c3d8b00b003daffc2ecdesm2023129wmb.13.2023.03.09.23.33.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 23:33:43 -0800 (PST)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Nandor Han <nandor.han@ge.com>,
-        Semi Malinen <semi.malinen@ge.com>
-Subject: Re: [PATCH v1 00/16] gpio: Use string_choices.h
-Message-ID: <20230310073203.2mpd24pxe5rvm4e7@pengutronix.de>
-References: <20230306195556.55475-1-andriy.shevchenko@linux.intel.com>
- <CAMRc=Me-FMZ3e=EaUA1kimEonz=HVHBp7coxCz53bJK9NYBuFg@mail.gmail.com>
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>
+Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        netdev@vger.kernel.org, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v3 net 1/2] net: dsa: mt7530: remove now incorrect comment regarding port 5
+Date:   Fri, 10 Mar 2023 10:33:37 +0300
+Message-Id: <20230310073338.5836-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vlcr3xdkx227as3g"
-Content-Disposition: inline
-In-Reply-To: <CAMRc=Me-FMZ3e=EaUA1kimEonz=HVHBp7coxCz53bJK9NYBuFg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
---vlcr3xdkx227as3g
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Remove now incorrect comment regarding port 5 as GMAC5. This is supposed to
+be supported since commit 38f790a80560 ("net: dsa: mt7530: Add support for
+port 5") under mt7530_setup_port5().
 
-Hi Bart, hi Andy,
+Fixes: 38f790a80560 ("net: dsa: mt7530: Add support for port 5")
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+---
 
-On Thu, Mar 09, 2023 at 04:22:19PM +0100, Bartosz Golaszewski wrote:
-> I've been thinking about this and I must say it doesn't make much
-> sense to me. Not only does it NOT reduce the code size (even if we
-> assume the unlikely case where we'd build all those modules that use
-> the helpers) but also decreases the readability for anyone not
-> familiar with the new interfaces (meaning time spent looking up the
-> new function). The "%s", x ? "if" : "else" statement is concise and
-> clear already, I don't see much improvement with this series. And I'm
-> saying it from the position of someone who loves factoring out common
-> code. :)
->=20
-> I'll wait to hear what others have to say but if it were up to me, I'd
-> politely say no.
+v3: Resend so the bot can test it now.
 
-Interpreting this as request to share my view: I'm having the same
-doubts. While I'm not a big fan of the ?: operator, it's semantic is
-more obvious here.
+---
+ drivers/net/dsa/mt7530.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-What I find most difficult about
+diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+index a508402c4ecb..b1a79460df0e 100644
+--- a/drivers/net/dsa/mt7530.c
++++ b/drivers/net/dsa/mt7530.c
+@@ -2201,7 +2201,7 @@ mt7530_setup(struct dsa_switch *ds)
+ 
+ 	mt7530_pll_setup(priv);
+ 
+-	/* Enable Port 6 only; P5 as GMAC5 which currently is not supported */
++	/* Enable port 6 */
+ 	val = mt7530_read(priv, MT7530_MHWTRAP);
+ 	val &= ~MHWTRAP_P6_DIS & ~MHWTRAP_PHY_ACCESS;
+ 	val |= MHWTRAP_MANUAL;
+-- 
+2.37.2
 
-	str_high_low(plr & BIT(j))
-
-(from patch #6) is: Does this give me "high" or "low" if the argument is
-zero? You could tell me, and judging from the patch I'd hope that it
-would give me "low". But if I stumble over this code in two weeks I
-have probably forgotten and have to look it up again.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---vlcr3xdkx227as3g
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQK3PAACgkQwfwUeK3K
-7AmKrQgAi8eFePklYAe1Wkc5DrOA8FgxUuMACZnge32N4GuJ70WGZLkl0kmPTU1b
-ljClqGfUibetO51uLK9T73BwZNJYXSjcEQ70XwdyiSIronRbhlzw13m6+/JdGD6y
-b//gxazdUU3qw70JoLbKZwfBHea/9CPDEJdcb6OvqkrVbH6GMjg5Lsyf3SW4dfRe
-Td4CSACc7My0VurOCjOPWw0Ui3gUws20Zs5/dKgZCHzjYlykGC9rS2mmn5CZP2oB
-L5AriYmEQodEt6FLgbkYhp1gDE2ONqYwm64RsHUJcWcBKZahBDFuXAoGZLVjgeXo
-YMvSCemK36RkwM5w3AHNzK63ETBAIA==
-=s9xY
------END PGP SIGNATURE-----
-
---vlcr3xdkx227as3g--
