@@ -2,79 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 346E76B4BAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:52:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 492AA6B4BAF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjCJPwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:52:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
+        id S230268AbjCJPxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjCJPwU (ORCPT
+        with ESMTP id S232266AbjCJPwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:52:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E828125D8B;
-        Fri, 10 Mar 2023 07:45:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1619B822E4;
-        Fri, 10 Mar 2023 15:45:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C03F5C4339B;
-        Fri, 10 Mar 2023 15:45:00 +0000 (UTC)
-Date:   Fri, 10 Mar 2023 10:44:58 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH] tracing: Make tracepoint lockdep check actually test
- something
-Message-ID: <20230310104458.4f3b1343@gandalf.local.home>
-In-Reply-To: <20230310172758.38c1ec9c6272e41a579ff820@kernel.org>
-References: <20230309165603.6967197d@gandalf.local.home>
-        <20230310172758.38c1ec9c6272e41a579ff820@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 10 Mar 2023 10:52:30 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D6F1ACD8;
+        Fri, 10 Mar 2023 07:45:15 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id k37so3693724wms.0;
+        Fri, 10 Mar 2023 07:45:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678463114;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dKsqBboH0bFfsTwY9easxEwnBQtTjr8MI+NIbG15Q4E=;
+        b=FSbozOfKvQ0yLANaCquRNtdUOoWRUGksqLCLGjv8mN7NJ8iZxeKGgP4C3c7soZoQAf
+         cQy+UnsnsbSwZ79fFXaiaBfwu1xKf88ox+vcir/9o4aGlIlkw3hqPmBp0aJ4s8K6Z9wB
+         afZoaQqd/c88l63ZN8I5be9e+Of9R07Mb7kHQvpPSqxGeCkFzZXpUxRP2HxljAfKcUO3
+         eq0E2V7q+pQfG0UrBOo9mS34bY9K5m/HCEYFFTmk7gHxyEqt6uOW24FwY3ZWka7CsQiW
+         whA/itd93zceF2I0AE9BKUF8KpM1XaY5OY0jJO5nR3TsDMcybnMr0d1VFJTZFPz8I0V6
+         Q3PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678463114;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dKsqBboH0bFfsTwY9easxEwnBQtTjr8MI+NIbG15Q4E=;
+        b=eoyVtOe2Lweo0byJOKAkCs0IUAivl3XP4945MousK9wSyIvFwpJg1wirLrBeOjDynt
+         XRBj/mRfxRvkDIYAcfUbbDNt4pjki7sF3dePmPQdwvAws8p12aNdQSjj0ApsLhXCRF/K
+         Umnm8zFUDMsdIb5DStw/6WPy/VGERbk2GMeBcieSbEolXozr+76kCYL+7WFlx4qGULR2
+         c0Dx5JTBSyxEfo7HSeUbMJnSEx3uO4hAy9uP8CSq8ip7HaApErJDSWV8JGdRHHlk63v/
+         rT8Jqv3QEvc4Pddk1RThmSM1h8lhTiPIuujdXk3Yx34pz7+WoeTX9oo4s7Cq8+h/ZZtI
+         Rw1g==
+X-Gm-Message-State: AO0yUKU0x4//ajBR5ntx9V5u1g56LnIb/cmI8AiRHAy0iF1r8fm40BUH
+        7WNBd5j4WRbquViXtCReW9M=
+X-Google-Smtp-Source: AK7set8UCP7CXFtZRJTw9jeIdrSGuxZr9PNgk2NyFKxZiectyGBgI60/Klaio3VkmZe8Wx7bdsg12Q==
+X-Received: by 2002:a05:600c:450c:b0:3eb:966e:b2a5 with SMTP id t12-20020a05600c450c00b003eb966eb2a5mr3155154wmo.17.1678463113930;
+        Fri, 10 Mar 2023 07:45:13 -0800 (PST)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id n6-20020a5d6b86000000b002c54c8e70b1sm133394wrx.9.2023.03.10.07.45.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 07:45:13 -0800 (PST)
+Date:   Fri, 10 Mar 2023 17:45:11 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] dsa: marvell: Provide per device information about
+ max frame size
+Message-ID: <20230310154511.yqf3ykknnwe22b77@skbuf>
+References: <20230309125421.3900962-1-lukma@denx.de>
+ <20230309125421.3900962-2-lukma@denx.de>
+ <20230310120235.2cjxauvqxyei45li@skbuf>
+ <20230310141719.7f691b45@wsk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310141719.7f691b45@wsk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023 17:27:58 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-
-> This check has been introduced by commit 3a630178fd5f ("tracing: generate RCU
-> warnings even when tracepoints are disabled"), and it also added a comment
-> above this macro.
+On Fri, Mar 10, 2023 at 02:17:19PM +0100, Lukasz Majewski wrote:
+> This is the "patch 4" in the comment sent by Russel (to fix stuff which
+> is already broken, but it has been visible after running the validation
+> code):
 > 
->  * When lockdep is enabled, we make sure to always do the RCU portions of
->  * the tracepoint code, regardless of whether tracing is on. However,
->  * don't check if the condition is false, due to interaction with idle
->  * instrumentation. This lets us find RCU issues triggered with tracepoints
->  * even when this tracepoint is off. This code has no purpose other than
->  * poking RCU a bit.
-> 
-> I think at least the last sentence will be outdated by this fix.
+> https://lists.openwall.net/netdev/2023/03/09/233
 
-Ah thanks, I forgot to update that part. What about:
+Ok, so nope, what I was talking about here (MTU 1492) is *not* what you
+have discussed with Russell in patch 4.
 
-  * When lockdep is enabled, we make sure to always test if RCU is
-  * "watching" regardless if the tracepoint is enabled or not. Tracepoints
-  * require RCU to be active, and it should always warn at the tracepoint
-  * site if it is not watching, as it will need to be active when the
-  * tracepoint is enabled.
+What I was talking about is this:
+https://patchwork.kernel.org/project/netdevbpf/patch/20230309125421.3900962-2-lukma@denx.de/#25245979
+and Russell now seems to agree with me that it should be addressed
+separately, and prior to the extra development work done here.
 
-?
-
--- Steve
+It looks like it will also need a bit of assistance from Andrew to
+untangle whether EDSA_HLEN should be included in the max_mtu calculations
+for some switch families only, rather than for all.
