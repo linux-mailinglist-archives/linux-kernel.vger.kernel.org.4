@@ -2,165 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD276B38F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:40:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 816426B38F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbjCJIk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 03:40:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
+        id S231241AbjCJIki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbjCJIju (ORCPT
+        with ESMTP id S231355AbjCJIj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:39:50 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF40E10A13E;
-        Fri, 10 Mar 2023 00:38:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678437483; x=1709973483;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QtZvbYRePTNq2hQ0hWKhD/pks5jqsVWhwxiA5aU7K0Y=;
-  b=A+PJH0chdbn829RGWrRVIBZn9jcctoc4ZGvs3hw+Wp9ASTKLZervrEjw
-   RbBbHDqyAinXhzvqeXM9T7tq6DDt9Y/w8Y1m40YqXk93K553pVMOsJGeM
-   Eket3htCQUgWe+e90UiFFW0B1BspSXLAxWYxXWTyKH8zLogZl24xkF+Ji
-   0fBG4L/hDg5dZrAdpZJmyTx/PmDla/DpEiSeQ3ecgo0hVg2gvXxD4H13/
-   wxORKjRPJlL5XoRzr4Bte69i3yHHcbMfzBzKtt5geRYBrwPeX0WMjoSlx
-   CoKJHhvorJydTi2nbo9HVc0XxrFRulopQ3lRkuTKRtRJmZEeW1HrB+ZZW
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="422946941"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="422946941"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 00:37:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="851831733"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="851831733"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 10 Mar 2023 00:37:10 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1paYFS-0003fh-0W;
-        Fri, 10 Mar 2023 08:37:10 +0000
-Date:   Fri, 10 Mar 2023 16:37:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Douglas RAILLARD <douglas.raillard@arm.com>
-Subject: Re: [PATCH] tracing: Error if a trace event has an array for a
- __field()
-Message-ID: <202303101645.28bnQoH2-lkp@intel.com>
-References: <20230309221302.642e82d9@gandalf.local.home>
+        Fri, 10 Mar 2023 03:39:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC16810A124
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:37:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678437451;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=O8ovMxuqTav+RM59yevfCqZhcFC/qRlWg3JJtflmVmY=;
+        b=GY6G42BoTJlkX5lWNmM1dhaPuFIaCAJ+YouFbQKNy1rnrXdKHUMpUNmWP76FNoyUGn5TTL
+        W9urTHoB1cDDCSuOzGvShowk1hPhYUYS7/I5c6lpyAS3GZRXG7vaU5Q29/8wB4LxUPFjnW
+        FSBFmLFhyIxyaxguvt5tEY7V+m37N1w=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-637-yE87zvQxPIG4zm3vicwVAg-1; Fri, 10 Mar 2023 03:37:30 -0500
+X-MC-Unique: yE87zvQxPIG4zm3vicwVAg-1
+Received: by mail-wm1-f69.google.com with SMTP id l31-20020a05600c1d1f00b003e8626cdd42so1525452wms.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:37:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678437449;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O8ovMxuqTav+RM59yevfCqZhcFC/qRlWg3JJtflmVmY=;
+        b=sjLpniEOwhmye3+RQnETt7rtztHU6pO2y8XzmeSfsuKvWhcwHXzbE2LuB3JwEGf31I
+         xEJxII+smoJGnZv17qao7eeQPnBRlL+3pr6ZzhHc1ydYsv+ERygLqVkY3LpZGLhQrkor
+         Z6cEbCQ8fQb5I5Z1W8VIjUecn9TjjWuu3ZDEo2vqrZw645g8qw5Q2EeDClbBhdD/lNGv
+         ify2P8EPLEFVrrVaSNeSK70gvLew8Zo7iTHjfi9g4dACOIDfYqYBdyDaGkzZ7qfcqT9R
+         VuJvXQ9HYcPXvImIFGE9RemYYAR8Xz5Qm0FDwLEXU6xJCU881ZHUqPx3PRUjYRPpOTAA
+         EAWg==
+X-Gm-Message-State: AO0yUKXFEKgZk6p8C/YFILGub/69CwT0eH9rGlKOOKQSlF6ay9uTMA9o
+        QOnZsUhrh55pT0RsaYLdiytV7u5Y7GG/36Ylem5xw1gY8odcMz+qPSdC4v+NIxLod8iiiq+bLEc
+        apvcnK5uLwBEfjWiz/6bSvnO7
+X-Received: by 2002:a5d:6605:0:b0:2c7:7701:2578 with SMTP id n5-20020a5d6605000000b002c777012578mr15657389wru.54.1678437449506;
+        Fri, 10 Mar 2023 00:37:29 -0800 (PST)
+X-Google-Smtp-Source: AK7set+y1SLlYCLoZWlLhVUFLLO4mwRgZFYa2PT7ddRAXzE9lqne3QFfWheWewGObdmXBjz49fAnmw==
+X-Received: by 2002:a5d:6605:0:b0:2c7:7701:2578 with SMTP id n5-20020a5d6605000000b002c777012578mr15657381wru.54.1678437449202;
+        Fri, 10 Mar 2023 00:37:29 -0800 (PST)
+Received: from redhat.com ([2.52.9.88])
+        by smtp.gmail.com with ESMTPSA id c14-20020adffb0e000000b002c7107ce17fsm1562448wrr.3.2023.03.10.00.37.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 00:37:28 -0800 (PST)
+Date:   Fri, 10 Mar 2023 03:37:25 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
+        <longpeng2@huawei.com>
+Cc:     Jason Wang <jasowang@redhat.com>, arei.gonglei@huawei.com,
+        yechuan@huawei.com, huangzhichao@huawei.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH] vhost-vdpa: cleanup memory maps when closing vdpa fds
+Message-ID: <20230310033706-mutt-send-email-mst@kernel.org>
+References: <20230131145310.2069-1-longpeng2@huawei.com>
+ <db99245c-606a-2f24-52fe-836a6972437f@redhat.com>
+ <35b94992-0c6b-a190-1fce-5dda9c8dcf4b@huawei.com>
+ <CACGkMEt0Rgkcmt9k4dWsp-qqtPvrM40mtgmSERc0A7Ve1wzKHw@mail.gmail.com>
+ <ad0ab6b8-1e1e-f686-eb5c-78cc63869c54@huawei.com>
+ <CACGkMEsOWmVGA1RYTNZybmzkz53g5cYEkJeMK_9uuQu-ezZcqg@mail.gmail.com>
+ <af95c38d-fdca-aef0-55ae-bbb0baee6029@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230309221302.642e82d9@gandalf.local.home>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <af95c38d-fdca-aef0-55ae-bbb0baee6029@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
+On Wed, Feb 15, 2023 at 01:15:55PM +0800, Longpeng (Mike, Cloud Infrastructure Service Product Dept.) wrote:
+> 
+> 
+> 在 2023/2/15 10:56, Jason Wang 写道:
+> > On Wed, Feb 15, 2023 at 10:49 AM Longpeng (Mike, Cloud Infrastructure
+> > Service Product Dept.) <longpeng2@huawei.com> wrote:
+> > > 
+> > > 
+> > > 
+> > > 在 2023/2/15 10:00, Jason Wang 写道:
+> > > > On Tue, Feb 14, 2023 at 2:28 PM Longpeng (Mike, Cloud Infrastructure
+> > > > Service Product Dept.) <longpeng2@huawei.com> wrote:
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > 在 2023/2/14 14:16, Jason Wang 写道:
+> > > > > > 
+> > > > > > 在 2023/1/31 22:53, Longpeng(Mike) 写道:
+> > > > > > > From: Longpeng <longpeng2@huawei.com>
+> > > > > > > 
+> > > > > > > We must cleanup all memory maps when closing the vdpa fds, otherwise
+> > > > > > > some critical resources (e.g. memory, iommu map) will leaked if the
+> > > > > > > userspace exits unexpectedly (e.g. kill -9).
+> > > > > > 
+> > > > > > 
+> > > > > > Sounds like a bug of the kernel, should we fix there?
+> > > > > > 
+> > > > > 
+> > > > > For example, the iommu map is setup when QEMU calls VHOST_IOTLB_UPDATE
+> > > > > ioctl and it'll be freed if QEMU calls VHOST_IOTLB_INVALIDATE ioctl.
+> > > > > 
+> > > > > So maybe we release these resources in vdpa framework in kernel is a
+> > > > > suitable choice?
+> > > > 
+> > > > I think I need understand what does "resources" mean here:
+> > > > 
+> > > > For iommu mapping, it should be freed by vhost_vdpa_free_domain() in
+> > > > vhost_vdpa_release()?
+> > > > 
+> > > 
+> > > Please consider the following lifecycle of the vdpa device:
+> > > 
+> > > 1. vhost_vdpa_open
+> > >       vhost_vdpa_alloc_domain
+> > > 
+> > > 2. vhost_vdpa_pa_map
+> > >       pin_user_pages
+> > >       vhost_vdpa_map
+> > >         iommu_map
+> > > 
+> > > 3. kill QEMU
+> > > 
+> > > 4. vhost_vdpa_release
+> > >       vhost_vdpa_free_domain
+> > > 
+> > > In this case, we have no opportunity to invoke unpin_user_pages or
+> > > iommu_unmap to free the memory.
+> > 
+> > We do:
+> > 
+> > vhost_vdpa_cleanup()
+> >      vhost_vdpa_remove_as()
+> >          vhost_vdpa_iotlb_unmap()
+> >              vhost_vdpa_pa_unmap()
+> >                  unpin_user_pages()
+> >                  vhost_vdpa_general_unmap()
+> >                      iommu_unmap()
+> > ?
+> > 
+> Oh, my codebase is linux-6.2-rc2 and the commit c070c1912a8 (vhost-vdpa: fix
+> an iotlb memory leak) already fixed this bug in linux-6.2-rc3.
 
-Thank you for the patch! Yet something to improve:
+OK I dropped this.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.3-rc1]
-[cannot apply to next-20230310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > Btw, it looks like we should call vhost_vdpa_free_domain() *after*
+> > vhost_vdpa_cleanup() otherwise it's a UAF?
+> > 
+> I think so, the v->domain is set to NULL in vhost_vdpa_free_domain(), it
+> seems would trigger null-pointer access in my case.
+> 
+> > Thanks
+> > 
+> > > 
+> > > > static int vhost_vdpa_release(struct inode *inode, struct file *filep)
+> > > > {
+> > > >           struct vhost_vdpa *v = filep->private_data;
+> > > >           struct vhost_dev *d = &v->vdev;
+> > > > 
+> > > >           mutex_lock(&d->mutex);
+> > > >           filep->private_data = NULL;
+> > > >           vhost_vdpa_clean_irq(v);
+> > > >           vhost_vdpa_reset(v);
+> > > >           vhost_dev_stop(&v->vdev);
+> > > >           vhost_vdpa_free_domain(v);
+> > > >           vhost_vdpa_config_put(v);
+> > > >           vhost_vdpa_cleanup(v);
+> > > >           mutex_unlock(&d->mutex);
+> > > > 
+> > > >           atomic_dec(&v->opened);
+> > > >           complete(&v->completion);
+> > > > 
+> > > >           return 0;
+> > > > }
+> > > > 
+> > > > > 
+> > > > > By the way, Jason, can you reproduce the problem in your machine?
+> > > > > 
+> > > > 
+> > > > Haven't got time in doing this but it should be the responsibility of
+> > > > the author to validate this anyhow.
+> > > > 
+> > > > Thanks
+> > > > 
+> > > > > > Thanks
+> > > > > > 
+> > > > > > 
+> > > > > > > 
+> > > > > > > Signed-off-by: Longpeng <longpeng2@huawei.com>
+> > > > > > > ---
+> > > > > > >     drivers/vhost/vdpa.c | 13 +++++++++++++
+> > > > > > >     1 file changed, 13 insertions(+)
+> > > > > > > 
+> > > > > > > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> > > > > > > index a527eeeac637..37477cffa5aa 100644
+> > > > > > > --- a/drivers/vhost/vdpa.c
+> > > > > > > +++ b/drivers/vhost/vdpa.c
+> > > > > > > @@ -823,6 +823,18 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
+> > > > > > >             vhost_vdpa_remove_as(v, asid);
+> > > > > > >     }
+> > > > > > > +static void vhost_vdpa_clean_map(struct vhost_vdpa *v)
+> > > > > > > +{
+> > > > > > > +    struct vhost_vdpa_as *as;
+> > > > > > > +    u32 asid;
+> > > > > > > +
+> > > > > > > +    for (asid = 0; asid < v->vdpa->nas; asid++) {
+> > > > > > > +        as = asid_to_as(v, asid);
+> > > > > > > +        if (as)
+> > > > > > > +            vhost_vdpa_unmap(v, &as->iotlb, 0ULL, 0ULL - 1);
+> > > > > > > +    }
+> > > > > > > +}
+> > > > > > > +
+> > > > > > >     static int vhost_vdpa_va_map(struct vhost_vdpa *v,
+> > > > > > >                      struct vhost_iotlb *iotlb,
+> > > > > > >                      u64 iova, u64 size, u64 uaddr, u32 perm)
+> > > > > > > @@ -1247,6 +1259,7 @@ static int vhost_vdpa_release(struct inode
+> > > > > > > *inode, struct file *filep)
+> > > > > > >         vhost_vdpa_clean_irq(v);
+> > > > > > >         vhost_vdpa_reset(v);
+> > > > > > >         vhost_dev_stop(&v->vdev);
+> > > > > > > +    vhost_vdpa_clean_map(v);
+> > > > > > >         vhost_vdpa_free_domain(v);
+> > > > > > >         vhost_vdpa_config_put(v);
+> > > > > > >         vhost_vdpa_cleanup(v);
+> > > > > > 
+> > > > > > .
+> > > > > 
+> > > > 
+> > > > .
+> > > 
+> > 
+> > .
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/tracing-Error-if-a-trace-event-has-an-array-for-a-__field/20230310-111456
-patch link:    https://lore.kernel.org/r/20230309221302.642e82d9%40gandalf.local.home
-patch subject: [PATCH] tracing: Error if a trace event has an array for a __field()
-config: x86_64-randconfig-a006 (https://download.01.org/0day-ci/archive/20230310/202303101645.28bnQoH2-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/4828e98216144ead91bbb26298aae865dac9f837
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Steven-Rostedt/tracing-Error-if-a-trace-event-has-an-array-for-a-__field/20230310-111456
-        git checkout 4828e98216144ead91bbb26298aae865dac9f837
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/rcu/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303101645.28bnQoH2-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/trace/define_trace.h:102,
-                    from include/trace/events/rcu.h:839,
-                    from kernel/rcu/rcu.h:13,
-                    from kernel/rcu/update.c:49:
-   include/trace/events/rcu.h: In function 'trace_event_get_offsets_rcu_torture_read':
->> include/trace/stages/stage5_get_offsets.h:23:53: error: expected ')' before '*' token
-      23 |         { (void)sizeof(struct _test_no_array_##item *); }
-         |                       ~                             ^
-   include/trace/trace_events.h:263:9: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     263 |         tstruct;                                                        \
-         |         ^~~~~~~
-   include/trace/trace_events.h:43:30: note: in expansion of macro 'PARAMS'
-      43 |                              PARAMS(tstruct),                  \
-         |                              ^~~~~~
-   include/trace/events/rcu.h:11:25: note: in expansion of macro 'TRACE_EVENT'
-      11 | #define TRACE_EVENT_RCU TRACE_EVENT
-         |                         ^~~~~~~~~~~
-   include/trace/events/rcu.h:770:9: note: in expansion of macro 'TP_STRUCT__entry'
-     770 |         TP_STRUCT__entry(
-         |         ^~~~~~~~~~~~~~~~
-   include/trace/events/rcu.h:771:17: note: in expansion of macro '__field'
-     771 |                 __field(char, rcutorturename[RCUTORTURENAME_LEN])
-         |                 ^~~~~~~
->> include/trace/events/rcu.h:771:45: error: array type has incomplete element type 'struct _test_no_array_rcutorturename'
-     771 |                 __field(char, rcutorturename[RCUTORTURENAME_LEN])
-         |                                             ^
-   include/trace/trace_events.h:263:9: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     263 |         tstruct;                                                        \
-         |         ^~~~~~~
-   include/trace/trace_events.h:43:30: note: in expansion of macro 'PARAMS'
-      43 |                              PARAMS(tstruct),                  \
-         |                              ^~~~~~
-   include/trace/events/rcu.h:11:25: note: in expansion of macro 'TRACE_EVENT'
-      11 | #define TRACE_EVENT_RCU TRACE_EVENT
-         |                         ^~~~~~~~~~~
-   include/trace/events/rcu.h:770:9: note: in expansion of macro 'TP_STRUCT__entry'
-     770 |         TP_STRUCT__entry(
-         |         ^~~~~~~~~~~~~~~~
-   include/trace/events/rcu.h:771:17: note: in expansion of macro '__field'
-     771 |                 __field(char, rcutorturename[RCUTORTURENAME_LEN])
-         |                 ^~~~~~~
-
-
-vim +23 include/trace/stages/stage5_get_offsets.h
-
-    11	
-    12	/*
-    13	 * Fields should never declare an array: i.e. __field(int, arr[5])
-    14	 * If they do, it will cause issues in parsing and possibly corrupt the
-    15	 * events. To prevent that from happening, test the sizeof() a fictitious
-    16	 * type called "struct _test_no_array_##item" which will fail if "item"
-    17	 * contains array elements (like "arr[5]").
-    18	 *
-    19	 * If you hit this, use __array(int, arr, 5) instead.
-    20	 */
-    21	#undef __field
-    22	#define __field(type, item)					\
-  > 23		{ (void)sizeof(struct _test_no_array_##item *); }
-    24	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
