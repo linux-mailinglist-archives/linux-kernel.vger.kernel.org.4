@@ -2,138 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126CD6B4D48
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7AD6B4D27
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbjCJQiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 11:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
+        id S230199AbjCJQhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 11:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjCJQhX (ORCPT
+        with ESMTP id S229928AbjCJQg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:37:23 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87544B776;
-        Fri, 10 Mar 2023 08:35:36 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32ADccxF006002;
-        Fri, 10 Mar 2023 16:35:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=X25k0ljmd07bmkdZ/R1kKNVU+KtTLV92UgIrOURq3sg=;
- b=Rq84zF6cbbGGwgbUx4bWiF7kpp87Dbcgt6rYABDVXFsAsj7FRy0E24/ynbd+jiMbM3vC
- XEtKBqxaG4tsBZOKysHeq22wjiYfV7zWYy65wJPY1dGrXAcXNKRFEwAmryh92Qk88ixh
- yHY57rF5bGS2pV+c+7wuIBo1Ev0GKdpERwqpHMikTY+UN3aEzMIk54QULfhoEOcDvIr7
- WxDxPjl+XPwwyZaCc+Oe+DZcEJ8eu3EndBioX9KamHEvJvp8wV1bSOTfN30LOEkheEkG
- CEuH2P636A7/Q2sLVvOx/X9/A1F27SHw1xxCUdKgU24KEQ2RYmedTl1HdtxZijmPITls hg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p7jutu3d9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 16:35:26 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32AGZQGr000810
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 16:35:26 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Fri, 10 Mar 2023 08:35:20 -0800
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>,
-        <quic_harshq@quicinc.com>, <ahalaney@redhat.com>,
-        <quic_shazhuss@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH 8/8] arm64: dts: qcom: sa8540-ride: Enable first port of teritiary usb controller
-Date:   Fri, 10 Mar 2023 22:04:20 +0530
-Message-ID: <20230310163420.7582-9-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230310163420.7582-1-quic_kriskura@quicinc.com>
-References: <20230310163420.7582-1-quic_kriskura@quicinc.com>
+        Fri, 10 Mar 2023 11:36:26 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C435511A2EF;
+        Fri, 10 Mar 2023 08:34:30 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17671fb717cso6415211fac.8;
+        Fri, 10 Mar 2023 08:34:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678466070;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FPJxiCRlQW/W48kByDBhimvQnyU3C5JNlIoFKiJIKsY=;
+        b=I9hW2rHEbSHl/El+QE/fJYhZuX4ngiNfGCVohLu1ytEasDqTDiDoqHvTGFDNqHTwif
+         bAKx+WxnUIzlUGnAQZ4KCkzxHLeAwExFjAJe2HWhYST4u17aPF5Huw0rpc2do/ZAFX6j
+         tNM85NC26RzFu7JDW5H/sZ2y6EcDi7QKybKzuDWS7lI4I8Tm8LJ0M1d0jUwWs1roQE51
+         4BFHty0H4e9M3cbgALyKgtmcmlS8Bnm0f+Bo3RG00l3SMG+Luo4eCDGpEIJx0ECSsyca
+         pAVWxoVySVfa6loVxqKTiHw0KG2uQuiWUhx4f13pKQYCRVISiwvEY09v3kd9BVMXT5OB
+         jHbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678466070;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FPJxiCRlQW/W48kByDBhimvQnyU3C5JNlIoFKiJIKsY=;
+        b=EuXoMn5K9FAk4NeDIttkQ8KAV+LBHGfwQP612bI71MhBtueP21p8BO/0IMtFErNpbI
+         EF7NLc1YEMLCTXDh5lu77m1FJYQmIp8E9CnxCpvzDlLyEfB14uyG5vEWMX8sdfN3fLYw
+         /lVfOH8PtRPIOEdqC1Yan7YPLMrgASAxpmwL4le/J1zq3e+f2hnYiipwpWKL7U13vTZ8
+         nYkVkbVlsT5B1xzOucesbAYdX/rCMOp87NHA0e+AHJrZDR10a2gbJ2pJm0G8UCougIb2
+         /ICNwktq8dhbDnC2GzOnurerpbfuWemN1asldcRjSF5KBbejs+AOnenLeeiUuAdhg4dU
+         Qtrg==
+X-Gm-Message-State: AO0yUKWuaiU7vFAkKwsrxwudZCYs2t98bfhKBguSQcNof3lbN0o4gZk9
+        W72hRo84lGtqycfTmXLOhtcZgVjIfw0=
+X-Google-Smtp-Source: AK7set8eONhgxwikN6SJ1cfNKEg3V62ib8kLAFMsc33wZIBpBBWnsdGWDQECMhKDwvEFshE1fCeZkA==
+X-Received: by 2002:a05:6870:5709:b0:172:6d0c:e98c with SMTP id k9-20020a056870570900b001726d0ce98cmr14222316oap.29.1678466069925;
+        Fri, 10 Mar 2023 08:34:29 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v18-20020a056870e49200b0017243e98ce9sm166730oag.54.2023.03.10.08.34.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 08:34:29 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 10 Mar 2023 08:34:28 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (ina3221) return prober error code
+Message-ID: <cfbf7f59-6f93-4e21-8a1b-88a769fcec0d@roeck-us.net>
+References: <20230310075035.246083-1-marcus.folkesson@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: SS672G8MjsPXXfB0eExUSBmgSz8QjXEZ
-X-Proofpoint-ORIG-GUID: SS672G8MjsPXXfB0eExUSBmgSz8QjXEZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-10_08,2023-03-10_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 bulkscore=0 spamscore=0 phishscore=0 suspectscore=0
- mlxscore=0 malwarescore=0 impostorscore=0 priorityscore=1501 clxscore=1015
- mlxlogscore=960 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303100131
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310075035.246083-1-marcus.folkesson@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable first port of Quad port Teritiary USB controller for SA8540 Ride.
+On Fri, Mar 10, 2023 at 08:50:35AM +0100, Marcus Folkesson wrote:
+> ret is set to 0 which do not indicate an error.
+> Return -EINVAL instead.
+> 
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Applied.
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-index 3ccb5ffdb3ca..46e9ca9c666e 100644
---- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-@@ -309,6 +309,19 @@ &usb_2_qmpphy0 {
- 	status = "okay";
- };
- 
-+&usb_2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&usb2_en_state>;
-+
-+	status = "okay";
-+};
-+
-+&usb_2_dwc3 {
-+	dr_mode = "host";
-+	phy-names = "usb2-port0", "usb3-port0";
-+	phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>;
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <38400000>;
- };
-@@ -401,4 +414,13 @@ wake-pins {
- 			bias-pull-up;
- 		};
- 	};
-+
-+	usb2_en_state: usb2-en-state {
-+		/* TS3USB221A USB2.0 mux select */
-+		pins = "gpio24";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+		output-low;
-+	};
- };
--- 
-2.39.0
+Thanks,
+Guenter
 
+> ---
+>  drivers/hwmon/ina3221.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+> index e06186986444..f3a4c5633b1e 100644
+> --- a/drivers/hwmon/ina3221.c
+> +++ b/drivers/hwmon/ina3221.c
+> @@ -772,7 +772,7 @@ static int ina3221_probe_child_from_dt(struct device *dev,
+>  		return ret;
+>  	} else if (val > INA3221_CHANNEL3) {
+>  		dev_err(dev, "invalid reg %d of %pOFn\n", val, child);
+> -		return ret;
+> +		return -EINVAL;
+>  	}
+>  
+>  	input = &ina->inputs[val];
