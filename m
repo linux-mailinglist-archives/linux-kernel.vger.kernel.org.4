@@ -2,111 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8E16B3C02
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 223BE6B3C0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbjCJK1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 05:27:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
+        id S230382AbjCJK2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 05:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbjCJK1G (ORCPT
+        with ESMTP id S230000AbjCJK2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 05:27:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906C5110516
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:26:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678443978;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zSYT9NdKeIbjdIT8S3/yTKu9A/BiOzhczLFXXBYF9tk=;
-        b=MYVnxnphoDJD98CZgDLfxhXGjMIP7xTZ3zcq3kJpLlK6ihgi2ejPunrXO6duW3aEG+p983
-        mJ7vch39wvrcM+QsdrCsNpZxLkYnNL4+lWULIK/Tr8AkcSMiYBLnHTf1pj3w4zQ1i0iDK8
-        SJc3qDD2y44jX3/asxUfZnDCbg1DuFU=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-96-av8b9GlxNuG8kuSfza7DJg-1; Fri, 10 Mar 2023 05:26:17 -0500
-X-MC-Unique: av8b9GlxNuG8kuSfza7DJg-1
-Received: by mail-ed1-f69.google.com with SMTP id b7-20020a056402350700b004d2a3d5cd3fso7040650edd.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:26:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678443976;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zSYT9NdKeIbjdIT8S3/yTKu9A/BiOzhczLFXXBYF9tk=;
-        b=z6I4c7uo+7zfb4fNp1JNzvC/AJcnyItGf7+LHbq9SzIsZ0rRalRFxV4fdjbwqBNx49
-         ZjrM0HgRtVAZQ1ElYHHl6MPwuakDa42npetJ5nhYqj5SZneTzrDME9JGMAnpi1zryky3
-         SZuP92Gx2/WutYdsNOFyDGV3BFS968fPN0l0IxBzBBQKBDeoCrxZFd0LSwzXjqJFzoUN
-         Jp0yzgdE//to5vR0w6JvZrtoI+Dman3Wq4p1CgVybMinOxKeGhcRX416KyOqKSdEtlKQ
-         9oK40oB1qHxY4E9XFdvuabbT1LZeNOfsxOHR3T2bAi7DHnX8LFyVwbgvqqU3n7gZIDx8
-         l3xQ==
-X-Gm-Message-State: AO0yUKX6iS2cjRb3n8zGS30ANMpOxg6bFGM/rV06c2bYyBLw/Q2ngUjI
-        fX7SRk5FmmzDDKcHzB5EdgfE5UQO8lLdcVGzH6m4XEj8L/0qx3ha3lDBuRcL4WwjoPXZMPSe+zd
-        L/t21vaMDxT5s+3xaFoaLnL79VjWm3Sw3
-X-Received: by 2002:a17:906:4756:b0:8ed:5af8:d4ba with SMTP id j22-20020a170906475600b008ed5af8d4bamr1557177ejs.38.1678443976130;
-        Fri, 10 Mar 2023 02:26:16 -0800 (PST)
-X-Google-Smtp-Source: AK7set+xHrvOFHbxAWQ1eD/jbBpVJSXkKAk6Q7FFe6t2ghKJjQXr/bZkp4vlYrU3T86K9j2Y0urShg==
-X-Received: by 2002:a17:906:4756:b0:8ed:5af8:d4ba with SMTP id j22-20020a170906475600b008ed5af8d4bamr1557163ejs.38.1678443975907;
-        Fri, 10 Mar 2023 02:26:15 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id m25-20020a170906235900b008ca52f7fbcbsm789348eja.1.2023.03.10.02.26.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 02:26:15 -0800 (PST)
-Message-ID: <9d0bbfb3-cb7f-15f9-0e84-172dd08c6148@redhat.com>
-Date:   Fri, 10 Mar 2023 11:26:14 +0100
+        Fri, 10 Mar 2023 05:28:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC6ABD4CA;
+        Fri, 10 Mar 2023 02:28:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06970B82255;
+        Fri, 10 Mar 2023 10:28:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9E8A6C433D2;
+        Fri, 10 Mar 2023 10:28:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678444124;
+        bh=cw6JqgVRcBRQwD+z2NKbYa9SyRaPNNVKjwnBlcot7bE=;
+        h=From:Date:Subject:To:Cc:Reply-To:From;
+        b=aI7whm0G7BL+SDbSEQLMo19R/Yl0B8vCDcerm/+ZDBLcGbKQn7hntvpCUgDfsqL5U
+         Xh1soBiEtw7ps/57DW7E8ShbDcMiRG7Mid6MzIE6c9YFw4yKncFUu1eUrCwGaJKkT1
+         UOGKSlFXnn+WxEca9H54oswFcLgrfkiNqhZU9iWscfsZ7V0KLB57zSl5rsKTI6s0YU
+         DckXvX4pVPc7xaHW7dmYLgsiaxOfPd0VUt8G4ObGFYbMrvh7EcTtyKKLNhUTws366i
+         nIxsw0h2pUknPsNz/HFXsdiW4fCfdg5vOnYEWWMWRtTR60XSm1LKwgCs5O1lK44YA1
+         Yu/q1tDfBBJXQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id 8AE39C6FA99;
+        Fri, 10 Mar 2023 10:28:44 +0000 (UTC)
+From:   Sasha Finkelstein via B4 Relay 
+        <devnull+fnkl.kernel.gmail.com@kernel.org>
+Date:   Fri, 10 Mar 2023 11:28:42 +0100
+Subject: [PATCH RESEND] bluetooth: btbcm: Fix logic error in forming the
+ board name.
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 0/5] staging: rtl8723bs: remove some unused functions
-Content-Language: en-US, nl
-To:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230310083449.23775-1-straube.linux@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230310083449.23775-1-straube.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <20230224-btbcm-wtf-v1-1-98b56133a5b7@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAFkGC2QC/x2NsQ7CMAxEf6XyTKSQsMBMVwYYUYckdYiHpsiOo
+ FXVfydhfO/udBsIMqHApduA8UNCc65wPHQQkssvVDRWBqON1caclC8+TOpboorRmoijxbPVUPv
+ eCSrPLofUFpOTgtyCN2Ok5X/yhHv/6G9XGKpPJGXmtelh3383ljhSiwAAAA==
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Sasha Finkelstein <fnkl.kernel@gmail.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678444123; l=1051;
+ i=fnkl.kernel@gmail.com; s=20230213; h=from:subject:message-id;
+ bh=+hMNA2WpUNZu2o8n2bsPzKVxjKjxWwSwKggqeF2dZBY=;
+ b=mnQHxqtnBZuBU3DFpb7akNdZHagVnnVmY8+FCTDQjEVM1DQ4fsHWry00l2w0Im+Fgy5WF0vLl
+ 75//dVWW7IFBLEApayjftPEIfRMwpLeYHsC8x9DmKeliO8NQJN6XsnD
+X-Developer-Key: i=fnkl.kernel@gmail.com; a=ed25519;
+ pk=7LFSAJtxIWAs9LzCIyX0sSvCZy2wQTyEIu1zch6o804=
+X-Endpoint-Received: by B4 Relay for fnkl.kernel@gmail.com/20230213 with auth_id=28
+X-Original-From: Sasha Finkelstein <fnkl.kernel@gmail.com>
+Reply-To: <fnkl.kernel@gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Sasha Finkelstein <fnkl.kernel@gmail.com>
 
-On 3/10/23 09:34, Michael Straube wrote:
-> This series removes some unused functions from hal/hal_com.c.
+This patch fixes an incorrect loop exit condition in code that replaces
+'/' symbols in the board name. There might also be a memory corruption
+issue here, but it is unlikely to be a real problem.
 
-Thanks, the entire series looks good to me:
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
+---
+ drivers/bluetooth/btbcm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+diff --git a/drivers/bluetooth/btbcm.c b/drivers/bluetooth/btbcm.c
+index 3006e2a0f37e..43e98a598bd9 100644
+--- a/drivers/bluetooth/btbcm.c
++++ b/drivers/bluetooth/btbcm.c
+@@ -511,7 +511,7 @@ static const char *btbcm_get_board_name(struct device *dev)
+ 	len = strlen(tmp) + 1;
+ 	board_type = devm_kzalloc(dev, len, GFP_KERNEL);
+ 	strscpy(board_type, tmp, len);
+-	for (i = 0; i < board_type[i]; i++) {
++	for (i = 0; i < len; i++) {
+ 		if (board_type[i] == '/')
+ 			board_type[i] = '-';
+ 	}
 
-for the series.
+---
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+change-id: 20230224-btbcm-wtf-ff32fed3e930
 
-Regards,
-
-Hans
-
-> 
-> Michael Straube (5):
->   staging: rtl8723bs: MapCharToHexDigit() is not used
->   staging: rtl8723bs: ParseQualifiedString() is not used
->   staging: rtl8723bs: isAllSpaceOrTab() is not used
->   staging: rtl8723bs: linked_info_dump() is not used
->   staging: rtl8723bs: rtw_get_raw_rssi_info() is not used
-> 
->  drivers/staging/rtl8723bs/hal/hal_com.c     | 108 --------------------
->  drivers/staging/rtl8723bs/include/hal_com.h |   9 --
->  2 files changed, 117 deletions(-)
-> 
+Best regards,
+-- 
+Sasha Finkelstein <fnkl.kernel@gmail.com>
 
