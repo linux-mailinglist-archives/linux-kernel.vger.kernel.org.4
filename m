@@ -2,140 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F45E6B5039
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 19:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA266B503E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 19:44:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjCJSlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 13:41:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
+        id S230229AbjCJSoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 13:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjCJSlb (ORCPT
+        with ESMTP id S230102AbjCJSoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 13:41:31 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2082.outbound.protection.outlook.com [40.107.237.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEBC12143B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 10:41:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O7BVvSBTg4Pg7XO8cItxIK1jwX7e7a05u1v13OnLx4n5GgKqbfNcJLAz3TCpstfUkvzn5yqrrADqm40idqJO/ucsc7HIp5LrCKkKmbv5pAT5GiZyqX0WDWqTpRp9Bk02jDhfGF13KpaiEvasLzru9xfoj38b9AyGf4t3ddpqo/IJwPx786nd7pCsXlDR4+cwD/SuGsLZs83fjRc9gRT2ePIsEtspNQx1DUwcxY2HG/qZaqaNnctGQTmfEpMNOTyImgb4vP/fihMvZvA2QIAKvX0BN/KcYH/W+k5OAzEuw+6vLzvWSxxbuWpvFjoiOCnlG3j4MlYiJuTPE/shdvpeXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r3mb7OXmR0KQmFQhUL3FGCV0dKKCgMQqJOF2eQ9Cazs=;
- b=D3Zx0FgulPEzTb3XXmiM6PY618cs/7Vxepx7OxnqSVhq/BYUW6etZfmxxpeUtB9AXjho5davIJe9Y3bcNZkPBMFYRqKg9ngVDpiGWRpevfXB7/6XycQMyS7pfi5+tXaUy2ZCv6VdiJZkZidrrohyIIxza5UGV+KMHgyNdo2plvVuOGnGTwjtsysjBV4TKzWF2sw1KIn1+oqlc1T9tW/vvfjSay3MIGZuaIvoOR7sGgxy86O+DWURMzJWL0QiodZwqtSjZ1N0VI5n1PbbNDs/mjLjSqLjs+OyqSzSFrAuo2SFe75cFQVVwusrJMIcgKUqmMuHDqpaerGjBhNXOmjd7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r3mb7OXmR0KQmFQhUL3FGCV0dKKCgMQqJOF2eQ9Cazs=;
- b=slZacDEdEAL6gpmpEE73+ykj/f+LEuOZlvIVrgI1aYUMFgfgoAM+vNy+V0IAjp16WU9+CBfALJVT+pUiqgB87ID6KgYHGKCFfLauBhRuxrYxB0/70Mcadune+K77FTODV8RgTjcMpLyy509SPk0+B4e8zVcli5IdHFv/Kk0iNmM=
-Received: from DS7PR05CA0104.namprd05.prod.outlook.com (2603:10b6:8:56::16) by
- BL0PR12MB4852.namprd12.prod.outlook.com (2603:10b6:208:1ce::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.20; Fri, 10 Mar
- 2023 18:41:28 +0000
-Received: from DS1PEPF0000E630.namprd02.prod.outlook.com
- (2603:10b6:8:56:cafe::85) by DS7PR05CA0104.outlook.office365.com
- (2603:10b6:8:56::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.20 via Frontend
- Transport; Fri, 10 Mar 2023 18:41:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0000E630.mail.protection.outlook.com (10.167.17.134) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6178.12 via Frontend Transport; Fri, 10 Mar 2023 18:41:28 +0000
-Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 10 Mar
- 2023 12:41:26 -0600
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Wayne Lin <Wayne.Lin@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Wenjing Liu <wenjing.liu@amd.com>,
-        Sung Joon Kim <sungjoon.kim@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] drm/amd/display: use a more accurate check in dm_helpers_dp_read_dpcd()
-Date:   Fri, 10 Mar 2023 13:42:33 -0500
-Message-ID: <20230310184233.284388-1-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.39.2
+        Fri, 10 Mar 2023 13:44:05 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4D6118820
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 10:44:03 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pahif-0007Qj-BF; Fri, 10 Mar 2023 19:43:57 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pahie-003Eag-4u; Fri, 10 Mar 2023 19:43:56 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pahic-003re9-9R; Fri, 10 Mar 2023 19:43:54 +0100
+Date:   Fri, 10 Mar 2023 19:43:52 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Munehisa Kamata <kamatam@amazon.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 4/4] pwm: sprd: Explicitly set .polarity in .get_state()
+Message-ID: <20230310184352.rqdc7oirzwhtj6fy@pengutronix.de>
+References: <20230228135508.1798428-1-u.kleine-koenig@pengutronix.de>
+ <20230228135508.1798428-5-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000E630:EE_|BL0PR12MB4852:EE_
-X-MS-Office365-Filtering-Correlation-Id: c849887f-e3cc-4c8e-0790-08db21970f24
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 52BE22lALr5ZleHAOjxJTQuZNjZ6T4+Z68CIp4m02hdGG6ffRl6+cdF81caML/3Zpfr5qNwXLdLlQkp8b9I6cnTmjMktuJZpGsxPf6OiCIAibPKFznd8N4oyxhvsJ3LDGeyYNM64nlrXsHC0r2MDrjukQlVYqtkl6oRALymsBLNWiAUoxXoZntjve5s//mlQCLABxapoHJqab8XcHvGNKtjrRS+K+dNzsJN5LfKxVR7X9Jb8a3bVmmTg3ey5s1Yg1wgTuQyG2FihiEym2dY6YWoipWkRLWgVG8o/QkEZzoLPIDqHfv3R7FZ1v3xfq8/8h8oVGHTNGIHbse1lRtXOzQyuejMWjAcMsHNfZba5rSCIQUl7TgpWvA+Ou/HLWyYTctKe1KEwhQCp5/tGKti3qr+Ya41A6neunuJVs3RU1VaPTLJyoOqgPTDv6z6KuoT1gfzgDOzW2BEdWMvGSk+Oh6MnZjDr8shf+RIApF+Up7gAMU/53aoISXAxC+DRx+T/YOzeOKASg+aOFDOFho9Tpn8vXvMbrDJOz4RVGg4uABSajyX/0NIynuxvkhGEyxP1DInWb1Lf9naIQciQAjBmDfTJ0V53nQxMQUPmMUZekmJsXbqUEqCn3T378fiTRx172Bz4mlKlQJtlXFWq/Uy63Wu58+p5qB9NRjrWETqhusnNTp2+7gQwju9WoQHzXYocqlR4eoKjDkqT276ypqDGWnz8YW7H9uRDOlnkRnuXIyXSwKVmbhwuy8zX+d7xUGRBaGjPtxagQ8ZV2RPyByJTXw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(136003)(376002)(39860400002)(451199018)(46966006)(36840700001)(40470700004)(2906002)(81166007)(82740400003)(83380400001)(4744005)(44832011)(5660300002)(36756003)(40460700003)(40480700001)(41300700001)(70206006)(8936002)(356005)(8676002)(4326008)(6916009)(316002)(36860700001)(86362001)(54906003)(478600001)(82310400005)(186003)(426003)(47076005)(70586007)(2616005)(336012)(16526019)(1076003)(26005)(6666004)(36900700001)(16060500005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 18:41:28.0229
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c849887f-e3cc-4c8e-0790-08db21970f24
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E630.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4852
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="s36ewetkwq53ykaq"
+Content-Disposition: inline
+In-Reply-To: <20230228135508.1798428-5-u.kleine-koenig@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We should be checking if drm_dp_dpcd_read() returns the size that we are
-asking it to read instead of just checking if it is greater than zero.
-So, compare the return value of drm_dp_dpcd_read() to the requested
-read size.
 
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
----
-v2: drop the WARN_ON().
----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--s36ewetkwq53ykaq
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-index 8d598b322e5b..9c1e91c2179e 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-@@ -511,8 +511,8 @@ bool dm_helpers_dp_read_dpcd(
- 		return false;
- 	}
- 
--	return drm_dp_dpcd_read(&aconnector->dm_dp_aux.aux, address,
--			data, size) > 0;
-+	return drm_dp_dpcd_read(&aconnector->dm_dp_aux.aux, address, data,
-+				size) == size;
- }
- 
- bool dm_helpers_dp_write_dpcd(
--- 
-2.39.2
+On Tue, Feb 28, 2023 at 02:55:08PM +0100, Uwe Kleine-K=F6nig wrote:
+> The driver only supports normal polarity. Complete the implementation of
+> .get_state() by setting .polarity accordingly.
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
+I think we should apply this patch as a fix to prevent similar failures
+as reported for the meson driver. To justify that:
+
+Fixes: 8aae4b02e8a6 ("pwm: sprd: Add Spreadtrum PWM support")
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--s36ewetkwq53ykaq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQLemUACgkQwfwUeK3K
+7AnxBAf+MMTLjVc9dRtCeZKhwZ8QhBasZzAJnWIhcmFDKtKBuDQiR1f2WDj9S/n9
+2cuyOZwB2PXbVyjbWe2orpcNuno/7xuIIwPbgMhiEUv4+7DM7Yd4Y0rXHJeFx9aO
+ePb8m/WFQwgkGg4D1DTJkuS0MefHAkckMC6BmpQVcdgzJjn59iUaesitUfYHxPoM
+VcY8KPs9MhamccK69Jxe7R3TIpI5kPqFLrM7QC2eGnMpt2TWVh5xh8hh984wiNVO
+yU7w3oJih4oK5LxDpzAhQm1ceUJawNH/5cXOo36dvqZi5gcqgxmcKnLUDX6xtWlx
+RC/aCcZZXvxC94glNsr7tglkvFA6rQ==
+=F3JG
+-----END PGP SIGNATURE-----
+
+--s36ewetkwq53ykaq--
