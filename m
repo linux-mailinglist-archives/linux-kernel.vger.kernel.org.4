@@ -2,102 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155CC6B3985
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4CC6B3987
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbjCJJCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
+        id S231490AbjCJJDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:03:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbjCJJBM (ORCPT
+        with ESMTP id S231466AbjCJJBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:01:12 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B74210A10C
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:57:20 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id d6so2652651pgu.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:57:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678438640;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L1VtgZWk+HjXenFKjPpHfn0DN33LLaYk0FmNJWNjz/8=;
-        b=B/I2yfr49AEDmOO3dUKOiflWB5RtJAuXC/DJk7jtMBh+UtRe4lfJY66f9dDsSRNkjG
-         s64zfOQYmLzGWm7t7mkYoTr9fx93OaTM1/L3DQS4PUXrR/KEqumGMQ/enUgmMU2SUl7F
-         nP/tAlESCAMxOSZE1DEwDDaoROEOXTtGVJOdfPx5d9Pwcqiqb7fXV/IMfiNx3bUMWS2V
-         wik1CRUzqe/crq/ywwqx1oroJjCNkrTZ6E/5DtpmP7Xtk19Ojd3qh9uZrs5XkQmy0B0C
-         tiOqgANXMHxtgd/nRKPLPLMjIraN7GzSaVvzVJB2c0lLw5J5sN/lzBWSSDfl1jYefJHh
-         XXuA==
+        Fri, 10 Mar 2023 04:01:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603381111CD
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:55:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678438538;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vfaGyjJVfm635JeXhSuWAc4er0IJMoVENEv0pUS72pE=;
+        b=I1u/JC6AwMelFLsEEZpnfECD3i75FudEbp8L0lOM1xYwBHozTl/QP7T7kXJK7FGmIidgIw
+        ZzWrFbyhG7dlM2J2lJkoNSNMMWV/13h2Q3Fmvjb1fqSxUfOe456HQTH5k/LOBEuumQVSXC
+        Ssql97/r/qvK2hnD4ys4YNq6lbX42RM=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-610-5UUb5KFYOMqvm5shdWhxjA-1; Fri, 10 Mar 2023 03:55:31 -0500
+X-MC-Unique: 5UUb5KFYOMqvm5shdWhxjA-1
+Received: by mail-wm1-f69.google.com with SMTP id e17-20020a05600c219100b003e21fa60ec1so1737354wme.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:55:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678438640;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L1VtgZWk+HjXenFKjPpHfn0DN33LLaYk0FmNJWNjz/8=;
-        b=7hHG7kj+HKl50H25Fi+YYwUpPTQJ8VaQAFz676rOKd41kNyqOpWGHqN3FA61O6hl6P
-         7om9mEoFzPlftlSQIe8klCX8EazZF06sKXfFj4AjwGv0iB4SIa4b4TWCFE9VBr6ib9LY
-         O/a8n6HG+uoELJarNdZvd7ODleuHuVn15gw94k9MKeuuSn95PmSSoqeUnv8n4LhoiEPs
-         zQzpI2HaADUTGNWizflHAexe3D5eBW0MbJ+p/N2UVa5jzL4xBHLAdN7vW/Xx6Y8+MEiw
-         w6/r49B8TbIZIvaAubAKA+7WWYWiWdEgJG8rke0KNG0oBmvMydCgIym5EBmi0n4Ry1Tx
-         1Omw==
-X-Gm-Message-State: AO0yUKUw6CeM5iylbNH9tE1sbiPsGlqYWOMd/1Vgwt0UGC3OSzXkezEB
-        eHZPl/tq+Pm5AtC7+R/4p6xtMA==
-X-Google-Smtp-Source: AK7set+yZha6GiSITCQI2jS/+04CLPiNL6J0wLrKIb2itQreHUPzN+GqaGS24sVC5b2tgEF76HNtcQ==
-X-Received: by 2002:a62:6143:0:b0:5a8:bbac:1cf2 with SMTP id v64-20020a626143000000b005a8bbac1cf2mr20558744pfb.1.1678438639683;
-        Fri, 10 Mar 2023 00:57:19 -0800 (PST)
-Received: from localhost.localdomain ([49.206.47.87])
-        by smtp.gmail.com with ESMTPSA id g21-20020aa78755000000b005a9bf65b591sm899151pfo.135.2023.03.10.00.57.15
+        d=1e100.net; s=20210112; t=1678438525;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vfaGyjJVfm635JeXhSuWAc4er0IJMoVENEv0pUS72pE=;
+        b=zWaQdGjoM0c0w5HW6IT7y3orWz/+fabwrNBZQTHBpikdC/7GfCaNo9+tb91f0ZXvnz
+         a/ghiZSSGtjPSl2Fu93yySysFNCGhCZ5cPKcWAsWlpbQQJLFEF4sGdqPk0HlRX4RaHj+
+         WsFRqG98B2e1AsTCmxmcflLDJSgVCvORYaMjs0OG3TXc8hsOpu7W7wN28LeUC/bWeRLd
+         u0jJGYU5h98FkrnEXduAKgMvbS7ltjuddmAthJPU0tP2NrJVY992YHAmEOSZBbtc8/MN
+         cTEzyDScnE9eKralIH6x0ufsvhpraoeUSnSbU/ogvfZEyAot4T5DX/6l/fL/mOwKPqCx
+         5sNQ==
+X-Gm-Message-State: AO0yUKU8inZfikMzpfbJzxkMjJSlQeiC8iPi/MdPQ+bpK2BVbUB3M/U8
+        F+BReq7Yfm44iuXQIY3/wM9kKMp2SwLhVlQXhBunPV4JmOizk7KC9zF2Nyu24SG+02vp5MNMIow
+        zGzOY3b4ywx3PR0RF6xEamwt5
+X-Received: by 2002:a5d:558e:0:b0:2c9:e5f0:bd4f with SMTP id i14-20020a5d558e000000b002c9e5f0bd4fmr16454641wrv.18.1678438525522;
+        Fri, 10 Mar 2023 00:55:25 -0800 (PST)
+X-Google-Smtp-Source: AK7set+ZCJLrhyjyYuI2NKYdYVdjVvFfujK+H8p82JNRkHzpuum9+WBjmlvVp1x6vFu5g5usem1xCg==
+X-Received: by 2002:a5d:558e:0:b0:2c9:e5f0:bd4f with SMTP id i14-20020a5d558e000000b002c9e5f0bd4fmr16454627wrv.18.1678438525223;
+        Fri, 10 Mar 2023 00:55:25 -0800 (PST)
+Received: from redhat.com ([2.52.9.88])
+        by smtp.gmail.com with ESMTPSA id j13-20020a5d564d000000b002c5694aef92sm1620415wrw.21.2023.03.10.00.55.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 00:57:19 -0800 (PST)
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-To:     kernelfans@gmail.com
-Cc:     akpm@linux-foundation.org, ardb@kernel.org,
-        catalin.marinas@arm.com, kexec@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: [PATCH 0/6] arm64: make kexec_file able to load zboot image
-Date:   Fri, 10 Mar 2023 14:27:12 +0530
-Message-Id: <20230310085712.31515-1-naresh.kamboju@linaro.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230306030305.15595-1-kernelfans@gmail.com>
-References: <20230306030305.15595-1-kernelfans@gmail.com>
+        Fri, 10 Mar 2023 00:55:24 -0800 (PST)
+Date:   Fri, 10 Mar 2023 03:55:21 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Andrey Smetanin <asmetanin@yandex-team.ru>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yc-core@yandex-team.ru" <yc-core@yandex-team.ru>
+Subject: Re: [PATCH] vhost_net: revert upend_idx only on retriable error
+Message-ID: <20230310035509-mutt-send-email-mst@kernel.org>
+References: <20221123102207.451527-1-asmetanin@yandex-team.ru>
+ <CACGkMEs3gdcQ5_PkYmz2eV-kFodZnnPPhvyRCyLXBYYdfHtNjw@mail.gmail.com>
+ <20221219023900-mutt-send-email-mst@kernel.org>
+ <62621671437948@mail.yandex-team.ru>
+ <20230127031904-mutt-send-email-mst@kernel.org>
+ <278011674821181@mail.yandex-team.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <278011674821181@mail.yandex-team.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Results from Linaroâ€™s test farm.
-
-> After introducing zboot image, kexec_file can not load and jump to the
-> new style image. Hence it demands a method to load the new kernel.
-
-...
-
-This patch set build and boot tested on arm, arm64 and FVP.
-
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: kexec@lists.infradead.org
-> To: linux-arm-kernel@lists.infradead.org
-> To: linux-kernel@vger.kernel.org
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-links to test results,
- - https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/lore_kernel_org_linux-arm-kernel_20230306030305_15595-1-kernelfans_gmail_com/?failures_only=false#!#test-results
+On Fri, Jan 27, 2023 at 03:08:18PM +0300, Andrey Smetanin wrote:
+> Yes, I plan. I need some time, currently I'm very busy in another direction,
+> but I will return.
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Jason you want to take this up maybe?
+
+> 27.01.2023, 11:19, "Michael S. Tsirkin" <mst@redhat.com>:
+> 
+> 
+>     On Mon, Dec 19, 2022 at 11:24:26AM +0300, Andrey Smetanin wrote:
+> 
+>          Sorry for the delay.
+>          I will send update on this week after some tests.
+>          19.12.2022, 10:39, "Michael S. Tsirkin" <mst@redhat.com>:
+> 
+> 
+>     Do you still plan to send something? Dropping this for now.
+>      
+> 
+
