@@ -2,234 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 359D16B45BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4F46B45B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232654AbjCJOgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:36:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
+        id S232632AbjCJOgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:36:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232626AbjCJOgW (ORCPT
+        with ESMTP id S232626AbjCJOgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:36:22 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6F61188C7;
-        Fri, 10 Mar 2023 06:36:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1678458941; i=p.jungkamp@gmx.net;
-        bh=mFAKBwec07W+wMZVRlgIuZRX8jmMl9ZIB3CeRLO90eI=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=UH5Uf8lfBmK+dUPe26G/qqIMHOHA6gVNQXaotuK6yRg01QQT4NOibZONVNrNXsfLj
-         D9eQ5KnUZUu0wzBzM5CWBMii0UP+HvKVHVOcMlw0zyWCpr9TDytcNjKW4KLv87jjE7
-         +12lTQmvhXfrI7PQ01EoXP1xmwZQSDZSc+FIIlMBlI3mJv3EdwgblXNx25vKN0koYy
-         +lTRvuXiCivmpPlcYXJsnbwX9UMi5GJPzYExH3zP2bqczE1qhDRChwxj75vQoemkc4
-         SrgOdrxX1MsUTTuk5CrJzS/0+4e9Gd4zGz1yHk/0O29Duk/Aqa97fsP0wUOFYiL5BQ
-         Nz93C1MxW7gYQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from yoga9.fritz.box ([93.238.84.250]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MWRVb-1q2PSA2GPz-00XuER; Fri, 10
- Mar 2023 15:35:41 +0100
-Message-ID: <424882ed2a79a641f88b5f2d1ed5a5d3d4fe98d9.camel@gmx.net>
-Subject: Re: BUG: hid-sensor-ids code includes binary data in device name
-From:   Philipp Jungkamp <p.jungkamp@gmx.net>
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        todd.e.brandt@linux.intel.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Even Xu <even.xu@intel.com>
-Cc:     Jonathan.Cameron@huawei.com, jkosina@suse.cz,
-        todd.e.brandt@intel.com
-Date:   Fri, 10 Mar 2023 15:35:38 +0100
-In-Reply-To: <317ce138f63b9317ac7be1949a68db5117c19b92.camel@linux.intel.com>
-References: <592bcdcbb3603cf5dfefd09abdd6916db4efc691.camel@linux.intel.com>
-         <317ce138f63b9317ac7be1949a68db5117c19b92.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 
+        Fri, 10 Mar 2023 09:36:15 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671541194DB
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:35:58 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id k10so21157376edk.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:35:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678458957;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9dXUSpxrhc852kQQYbEFtQeOQhI46gAz+RPdDgDM6is=;
+        b=NJm58VDWAWv6i7hMdG19RulhdsV5x/wxmH+8isFWJXUEqhG9N1Iqam21CFjdWwOcf7
+         WbGU2ZLahrjJhgrwUXGZZOr/UUubNVwr+fffhEkmzZzlXjgYMTf5ileDas5NFPtnkRYz
+         rT1ppaC7hRiXW/QJZrnMQFTP/hrCdqvLkxJJnhQuhlTf8Vju7UjALujTrLiQiCu3pQ8n
+         0rBzVorTxQGCkdQN00kx2uvsvNBgqy/Ui+0y+4ofz7CSAFx+utphlSOdoiSIpzWxIxd8
+         piE0QUGtQ4uGoqve0lwBw8SSB6y06R3Awp5eeMjAxsRBNwq71v3OhLkmVdKccRmAi/nc
+         YzwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678458957;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9dXUSpxrhc852kQQYbEFtQeOQhI46gAz+RPdDgDM6is=;
+        b=k8HWCD02/JQvRIZwdK1CVMsNOdd9AGpMhEAO9STv6W9zKYhPEkE2cGaG/dXy/lVvVf
+         bRHltPQ6AMMxI1cKRiDjmBKIY2Vt7gpu5xXh+D8RNUxyfOqJYgccjC/8gd4D2scIfBum
+         F9YuLEPigvBV5CP+J6BQAcd3dRFu3eUFxzj/YPoSovDiOEZAvS0gL13LO+WfjhYsDp81
+         bT80oRnx8D55G7vBBCmujK1EfWu+89TJlV/DgkhHqJiYc1zSjOs2BiApx7v/ppPZaqRF
+         WzrkkEDdfnMZoIWTtzDzMKRPrgpUxEYGaTkSxzB32NQObBb9cVR4/5gsEWWI+ZU2CY9N
+         aQeA==
+X-Gm-Message-State: AO0yUKU+c6UeivK+U9XG4PNoCxHrR6arTB2WEBjQlMi5iK8q6iEI1TvA
+        kc6a3WpkCeD6aMlteDDGobp6wg==
+X-Google-Smtp-Source: AK7set/cT6KeCdA2Ngom7Mk8z4udlb+B1Ld/45Z85Z40xRKfE+CLp5lePmjx8hRRhNtGefKW/p0Myw==
+X-Received: by 2002:a17:906:f255:b0:886:fcbf:a1e5 with SMTP id gy21-20020a170906f25500b00886fcbfa1e5mr22623077ejb.59.1678458956870;
+        Fri, 10 Mar 2023 06:35:56 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:45c4:46be:ec71:4a51? ([2a02:810d:15c0:828:45c4:46be:ec71:4a51])
+        by smtp.gmail.com with ESMTPSA id u23-20020a509517000000b004c0cc79f4aesm80130eda.92.2023.03.10.06.35.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 06:35:56 -0800 (PST)
+Message-ID: <b5e4c34b-b0d2-0f73-7c0b-8233e545c068@linaro.org>
+Date:   Fri, 10 Mar 2023 15:35:55 +0100
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:FUveCr1Am3P8y4UZy/e3l87Y7WBAVrENwGPQpjNtgmnswCEz/+/
- 5ykUALHVxxCBob9HxiORZViK16lHVVsa6c06BCLX9SlUBWsv1Ajoeu7y6ticUF4poTwKCfN
- b77Ij9b1tOEirIxrPE+YNb7gbBvSl00AE9w82ixfw+USV3SOcqv5TKJ8vGr5oY4+F+DCrTV
- DQ+NFR2MHAoe9mEs308wA==
-UI-OutboundReport: notjunk:1;M01:P0:CpRuxpJGfuw=;R9k9rI7g0pCK8p4biNpGUWex0Xs
- zqMcUMMnapb0z/HZCaSulXaM6gP9hr64ibaN9gMTNiFsh5LKb1N16SPKQ0C/OocAwJwx6JFQS
- AulgOUrKfRm6Xchk7LKJgPILyE0V4jrfEcPSt3UqzgVmsjfF0Ci0bnBOylpavmRmcTVjy/fLR
- LASKXt0pKLSib2/uxTlc0Xt+TA53oWGQMpOQo7eHOlvIyhU8TYAERWk6wfDhqIA0pjAX8kbAX
- 2KPt3OoE4g1m35XjiQDt3Iswc5B/6YAghtd6f4PzwLxrCdScvJp9Mjmnu7G4Hpsgn4ms6Yk3P
- dfO/FFYlUsafjRfpxXRmdB6Py4oDYbL0huJVELyH5y+BfkkamLr3CeMTYIIbTsOOZwF95lZFl
- MUG1DhTGgMPEH3NMfpCiYdxYoY36xqj7uUiIe12VgJBiT3AUVdlYLul0Pat+70tYpvbwuqUIO
- 9U8hj9crx1u1M5nGFYgs0UFMMxlZe7RjzGzXO/mGgISRCZJoHHQMq3mpUK2LkCpdF00rJVRgs
- ID4LYSCdss6YkO/SW/59kghibMH++OOp7ccCDV8XEXgerNAmBwiMv0JyTTFpKbWM5Nh1a5SPL
- z3ljEC1s90iSmEyzU9eHtXfFLhcmLHJbn34l0xnMseiM8XO7JOLPSgMMrHYEteUhOU3kehHN4
- akbqqqDsl8oZbiGks/BYVKcj7NzJaGWe+g/+LbcX3NWw9ySBSggrZbVsLfv4X2LNVstGoszU5
- cgJwaP7Vn5uOe2nqJzVPmW65iliDlCGhwsvFIZmVBhH9B5d9jsmhEj7yNP/y2YqmwcgK9aTpO
- HddcvRLzmm45v3lMQbL47UskHLTZHNiOUV7fCAiT9FI9QWgew+3f77xZnKwEkw1jCPHZJO3/j
- LNF5b6YJsZBWQ7FsphBOF486yfNW9RiSv8NKkbWOzzapZb3z+sI26T1n+nODvmyv4hGuf4yBM
- DPb1rI2JQR5L4MhEd89JLqzMaOk=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 0/9] ASoC: add audio digital codecs for Qualcomm SM8550
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230310132201.322148-1-krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230310132201.322148-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 10/03/2023 14:21, Krzysztof Kozlowski wrote:
+> Hi,
+> 
+> Dependencies
+> ============
+> For va-macro bindings:
+> https://lore.kernel.org/r/20221118071849.25506-2-srinivas.kandagatla@linaro.org
+> 
+> NOT a dependency
+> ================
+> The patchset can be applied independently of my previous fix:
+> https://lore.kernel.org/linux-arm-msm/20230310100937.32485-1-krzysztof.kozlowski@linaro.org/T/#u
 
-on v3 of the patchset I had this comment on the 'real_usage'
-initialization:
+DTS implementing the bindings is here:
 
-> > -	char real_usage[HID_SENSOR_USAGE_LENGTH] =3D { 0 };
-> > +	char real_usage[HID_SENSOR_USAGE_LENGTH];
-> >  	struct platform_device *custom_pdev;
-> >  	const char *dev_name;
-> >  	char *c;
-> >=20
-> > -	/* copy real usage id */
-> > -	memcpy(real_usage, known_sensor_luid[index], 4);
-> > +	memcpy(real_usage, match->luid, 4);
-> > +	real_usage[4] =3D '\0';
->=20
-> Why the change in approach for setting the NULL character?
-> Doesn't seem relevant to main purpose of this patch.
+https://lore.kernel.org/linux-arm-msm/20230310134925.514125-1-krzysztof.kozlowski@linaro.org/T/#u
 
-Based on the comment, I changed that in the final v4 revision to:
-
-> -       char real_usage[HID_SENSOR_USAGE_LENGTH] =3D { 0 };
-> +       char real_usage[HID_SENSOR_USAGE_LENGTH];
->         struct platform_device *custom_pdev;
->         const char *dev_name;
->         char *c;
-> =20
-> -       /* copy real usage id */
-> -       memcpy(real_usage, known_sensor_luid[index], 4);
-> +       memcpy(real_usage, match->luid, 4);
-
-I ommitted the line adding the null terminator to the string but kept
-that I didn't initialize the 'real_usage' as { 0 } anymore. The string
-now misses the null terminator which leads to the broken utf-8.
-
-The simple fix is to reintroduce the 0 initialization in
-hid_sensor_register_platform_device. E.g.
-
--	char real_usage[HID_SENSOR_USAGE_LENGTH];
-+	char real_usage[HID_SENSOR_USAGE_LENGTH] =3D { 0 };
-
-Where do I need to submit a patch for this? And on which tree should I
-base the patch?
-
-I'm sorry for the problems my patch caused.
-
-Regards,
-Philipp Jungkamp
-
-On Fri, 2023-03-10 at 01:51 -0800, srinivas pandruvada wrote:
-> +Even
->=20
-> On Thu, 2023-03-09 at 15:33 -0800, Todd Brandt wrote:
-> > Hi all, I've run into an issue in 6.3.0-rc1 that causes problems
-> > with
-> > ftrace and I've bisected it to this commit:
-> >=20
-> > commit 98c062e8245199fa9121141a0bf1035dc45ae90e (HEAD,
-> > refs/bisect/bad)
-> > Author: Philipp Jungkamp p.jungkamp@gmx.net
-> > Date:=C2=A0=C2=A0 Fri Nov 25 00:38:38 2022 +0100
-> >=20
-> > =C2=A0=C2=A0=C2=A0 HID: hid-sensor-custom: Allow more custom iio sensor=
-s
-> >=20
-> > =C2=A0=C2=A0=C2=A0 The known LUID table for established/known custom HI=
-D sensors
-> > was
-> > =C2=A0=C2=A0=C2=A0 limited to sensors with "INTEL" as manufacturer. But=
- some
-> > vendors
-> > such
-> > =C2=A0=C2=A0=C2=A0 as Lenovo also include fairly standard iio sensors (=
-e.g.
-> > ambient
-> > light)
-> > =C2=A0=C2=A0=C2=A0 in their custom sensors.
-> >=20
-> > =C2=A0=C2=A0=C2=A0 Expand the known custom sensors table by a tag used =
-for the
-> > platform
-> > =C2=A0=C2=A0=C2=A0 device name and match sensors based on the LUID as w=
-ell as
-> > optionally
-> > =C2=A0=C2=A0=C2=A0 on model and manufacturer properties.
-> >=20
-> > =C2=A0=C2=A0=C2=A0 Signed-off-by: Philipp Jungkamp p.jungkamp@gmx.net
-> > =C2=A0=C2=A0=C2=A0 Reviewed-by: Jonathan Cameron Jonathan.Cameron@huawe=
-i.com
-> > =C2=A0=C2=A0=C2=A0 Acked-by: Srinivas Pandruvada
-> > srinivas.pandruvada@linux.intel.com
-> > =C2=A0=C2=A0=C2=A0 Signed-off-by: Jiri Kosina jkosina@suse.cz
-> >=20
-> > You're using raw data as part of the devname in the "real_usage"
-> > string, but it includes chars other than ASCII, and those chars end
-> > up being printed out in the ftrace log which is meant to be ASCII
-> > only.
-> >=20
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* HID-SENSOR-INT-REAL_USAGE_ID *=
-/
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_name =3D kasprintf(GFP_KERNEL=
-, "HID-SENSOR-INT-%s",
-> > real_usage);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* HID-SENSOR-TAG-REAL_USAGE_ID *=
-/
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_name =3D kasprintf(GFP_KERNEL=
-, "HID-SENSOR-%s-%s",
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 match->tag, real_usage);
-> >=20
-> > My sleepgraph tool started to crash because it read these lines
-> > from
-> > ftrace:
-> >=20
-> > device_pm_callback_start: platform HID-SENSOR-INT-020b?.39.auto,
-> > parent: 001F:8087:0AC2.0003, [suspend]
-> > device_pm_callback_end: platform HID-SENSOR-INT-020b?.39.auto,
-> > err=3D0
-> >=20
->=20
-> Here tag is:
-> .tag =3D "INT",
-> .luid =3D "020B000000000000",
->=20
->=20
-> The LUID is still a string. Probably too long for a dev_name.
->=20
-> Even,
->=20
-> Please check.
->=20
-> Thanks.
-> Srinivas
->=20
->=20
-> > The "HID-SENSOR-INT-020b?.39.auto" string includes a binary char
-> > that
-> > kills
-> > python3 code that loops through an ascii file as such:
-> >=20
-> > =C2=A0 File "/usr/bin/sleepgraph", line 5579, in executeSuspend
-> > =C2=A0=C2=A0=C2=A0 for line in fp:
-> > =C2=A0 File "/usr/lib/python3.10/codecs.py", line 322, in decode
-> > =C2=A0=C2=A0=C2=A0 (result, consumed) =3D self._buffer_decode(data, sel=
-f.errors,
-> > final)
-> > UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in
-> > position
-> > 1568: invalid start byte
-> >=20
-> > I've updated sleepgraph to handle random non-ascii chars, but other
-> > tools
-> > may suffer the same fate. Can you rewrite this to ensure that no
-> > binary
-> > chars make it into the devname?
-> >=20
->=20
+Best regards,
+Krzysztof
 
