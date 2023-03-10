@@ -2,89 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AFB66B3B10
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B146B3B02
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:42:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjCJJn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:43:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57072 "EHLO
+        id S230243AbjCJJmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:42:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbjCJJmr (ORCPT
+        with ESMTP id S229852AbjCJJmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:42:47 -0500
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9CD87F740;
-        Fri, 10 Mar 2023 01:42:15 -0800 (PST)
-Received: from dzm91$hust.edu.cn ( [172.16.0.254] ) by ajax-webmail-app2
- (Coremail) ; Fri, 10 Mar 2023 17:41:24 +0800 (GMT+08:00)
-X-Originating-IP: [172.16.0.254]
-Date:   Fri, 10 Mar 2023 17:41:24 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5oWV5Yas5Lqu?= <dzm91@hust.edu.cn>
-To:     claudiu.beznea@microchip.com
-Cc:     chengziqiu@hust.edu.cn, eugen.hristev@collabora.com,
-        jic23@kernel.org, lars@metafoo.de, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] drivers: iio: remove dead code in at91_adc_probe
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
- Copyright (c) 2002-2023 www.mailtech.cn hust
-In-Reply-To: <cc97cfe5-e90a-d901-147a-2bb829a4409d@microchip.com>
-References: <20230309150502.400312-1-chengziqiu@hust.edu.cn>
- <cc97cfe5-e90a-d901-147a-2bb829a4409d@microchip.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Fri, 10 Mar 2023 04:42:14 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208FAFAEE9;
+        Fri, 10 Mar 2023 01:41:42 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id k10so17941534edk.13;
+        Fri, 10 Mar 2023 01:41:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678441300;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=70s013/dgDQt9Hd+q0XNfufjQBVoZkl0Jr00dHEDQc0=;
+        b=CNOQ4ilSrUMZ33NsFPGzmze1c+zg2tDxYaWD2JYyHbHbP8zyfMlCog7bIagZl5egXZ
+         s4co2jGPI5S1x2CHDcEAOVTmfu6ND3ygBCdVcEHbI1Vis3KO+afxkMZ7QuJYSe4vIydB
+         lKrFHTKDbVf2s4BI4mz5LN8x/5d7mWUl06+UjWt7ZPiPiIJzbD7RCNVC2jmUUiQsizt9
+         ADBOFa2w9qrv5PJ+G2KRmP8IBs2ZAvhqomHypCvLBnoKs+RiKWpA0pqMEbUoSnZtwwIf
+         9eAdyZ/wPw6v20hPvQSFxQCcwVUkzplXu3M0R2tEFSXNr/o90c3vqApsGfZCon+aqvse
+         qCSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678441300;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=70s013/dgDQt9Hd+q0XNfufjQBVoZkl0Jr00dHEDQc0=;
+        b=KSr2AtZeomKpfxBgIaze+qFkXvK5btR2aSqiRUjvvwz9RzJsGUXtBwTulIr5DE/dOV
+         1QA4qqXiGxkwMR/bBYLEs/y7ES6B29eaxlB73YSZlsFiP7NYVcV4PDQpPUpxGJiC81UX
+         kiLykSzkFeY+9WdaRncLewwXmAzqzNGifS2pVQLkNTMWLvvZV+zgc738eZ1Oq63x7hpU
+         uFS+w56UbMxO7eYcPRJTH+uLmeanDs+pyqkocWXsRZhOit3IBwgkLnuEya3E2YHif2Un
+         hD7Dw0a3+L20F3wT0iNPiwCIaV8pQDQbdVYoxIJyI+VppjK8jSpUIieCTI1MfXWk6QFp
+         A5qg==
+X-Gm-Message-State: AO0yUKVcAjgo7XsLdEWP34lIv1UIJJKTSVeIkpDRJwaK2DHidQMmMcKB
+        RgzbMx++XVzEwM7Gdnm51DIiZqJej7kRZ5kaWNw=
+X-Google-Smtp-Source: AK7set8oFzojnyc0nMewgFeFCqKlKX1jTXihG7AGJrPnOHK4nsBLCYfa9PnLzoVR3Yx/V/zE3IBF6oE0ur5E4jzjXnw=
+X-Received: by 2002:a17:906:40b:b0:8b1:2916:9804 with SMTP id
+ d11-20020a170906040b00b008b129169804mr12748877eja.9.1678441299970; Fri, 10
+ Mar 2023 01:41:39 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <774cfa3a.25898.186cae584b7.Coremail.dzm91@hust.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: GQEQrAAHDeFE+wpk9GySAQ--.23967W
-X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/1tbiAQkGD17Em4RsRgACss
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230224-btbcm-wtf-v1-1-d2dbd7ca7ae4@gmail.com> <ZArmD064NVhNS96C@kroah.com>
+In-Reply-To: <ZArmD064NVhNS96C@kroah.com>
+From:   Sasha Finkelstein <fnkl.kernel@gmail.com>
+Date:   Fri, 10 Mar 2023 10:41:28 +0100
+Message-ID: <CAMT+MTT1RE2M0Fn3k+EXO=WNgAvNGPGHpidpTp0Jdus61M5UPw@mail.gmail.com>
+Subject: Re: [PATCH RESEND] bluetooth: btbcm: Fix logic error in forming the
+ board name.
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiBDbGF1ZGl1LkJlem5lYUBt
-aWNyb2NoaXAuY29tCj4g5Y+R6YCB5pe26Ze0OiAyMDIzLTAzLTEwIDE3OjE0OjU2ICjmmJ/mnJ/k
-upQpCj4g5pS25Lu25Lq6OiBjaGVuZ3ppcWl1QGh1c3QuZWR1LmNuLCBldWdlbi5ocmlzdGV2QGNv
-bGxhYm9yYS5jb20sIGppYzIzQGtlcm5lbC5vcmcsIGxhcnNAbWV0YWZvby5kZSwgTmljb2xhcy5G
-ZXJyZUBtaWNyb2NoaXAuY29tLCBhbGV4YW5kcmUuYmVsbG9uaUBib290bGluLmNvbQo+IOaKhOmA
-gTogZHptOTFAaHVzdC5lZHUuY24sIGxpbnV4LWlpb0B2Z2VyLmtlcm5lbC5vcmcsIGxpbnV4LWFy
-bS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZywgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9y
-Zwo+IOS4u+mimDogUmU6IFtQQVRDSF0gZHJpdmVyczogaWlvOiByZW1vdmUgZGVhZCBjb2RlIGlu
-IGF0OTFfYWRjX3Byb2JlCj4gCj4gT24gMDkuMDMuMjAyMyAxNzowNSwgQ2hlbmcgWmlxaXUgd3Jv
-dGU6Cj4gPj5Gcm9tIHRoZSBjb21tZW50IG9mIHBsYXRmb3JtX2dldF9pcnEsIGl0IG9ubHkgcmV0
-dXJucyBub24temVybyBJUlEKPiA+IG51bWJlciBhbmQgbmVnYXRpdmUgZXJyb3IgbnVtYmVyLCBv
-dGhlciB0aGFuIHplcm8uCj4gPiAKPiA+IEZpeCB0aGlzIGJ5IHJlbW92aW5nIHRoZSBpZiBjb25k
-aXRpb24uCj4gPiAKPiA+IFNpZ25lZC1vZmYtYnk6IENoZW5nIFppcWl1IDxjaGVuZ3ppcWl1QGh1
-c3QuZWR1LmNuPgo+IAo+IEkgc2VlIEZyb20gYW5kIDFzdCBTb0IgbWF0Y2hlcyBidXQKPiAKPiA+
-IFNpZ25lZC1vZmYtYnk6IERvbmdsaWFuZyBNdSA8ZHptOTFAaHVzdC5lZHUuY24+Cj4gCj4gdGhp
-cyBTb0Igc2VlbXMgZXh0cmEuIFdoYXQgaXMgdGhlIGNvbnRyaWJ1dGlvbiBvZiBEb25nbGlhbmcg
-TXUgdG8gdGhpcyBwYXRjaD8KCkkgcmV2aWV3ZWQgdGhpcyBwYXRjaCBsb2NhbGx5IHNpbmNlIHRo
-aXMgc3R1ZGVudCBpcyB0aGUgZmlyc3QgdGltZSB0byBzdWJtaXQgcGF0Y2ggdG8gdGhlIGtlcm5l
-bCBtYWlsaW5nIGxpc3QuCgpJbiBteSBsYWIsIEkgZW5jb3VyYWdlIGFsbCBzdHVkZW50cyB0byBm
-aXgga2VybmVsIGlzc3Vlcy4gSG93ZXZlciwgdGhlaXIgcGF0Y2hlcyBzaG91bGQgYmUgcmV2aWV3
-ZWQgYnkgbWUgZmlyc3QgYmVmb3JlIHNlbmRpbmcgdGhlIG1haWxpbmcgbGlzdC4KCj4gCj4gPiAt
-LS0KPiA+ICBkcml2ZXJzL2lpby9hZGMvYXQ5MS1zYW1hNWQyX2FkYy5jIHwgNiArLS0tLS0KPiA+
-ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDUgZGVsZXRpb25zKC0pCj4gPiAKPiA+
-IGRpZmYgLS1naXQgYS9kcml2ZXJzL2lpby9hZGMvYXQ5MS1zYW1hNWQyX2FkYy5jIGIvZHJpdmVy
-cy9paW8vYWRjL2F0OTEtc2FtYTVkMl9hZGMuYwo+ID4gaW5kZXggNTBkMDJlNWZjNmZjLi4xNjgz
-OTkwOTI1OTAgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL2lpby9hZGMvYXQ5MS1zYW1hNWQyX2Fk
-Yy5jCj4gPiArKysgYi9kcml2ZXJzL2lpby9hZGMvYXQ5MS1zYW1hNWQyX2FkYy5jCj4gPiBAQCAt
-MjQwMCwxMiArMjQwMCw4IEBAIHN0YXRpYyBpbnQgYXQ5MV9hZGNfcHJvYmUoc3RydWN0IHBsYXRm
-b3JtX2RldmljZSAqcGRldikKPiA+ICAgICAgICAgc3QtPmRtYV9zdC5waHlzX2FkZHIgPSByZXMt
-PnN0YXJ0Owo+ID4gCj4gPiAgICAgICAgIHN0LT5pcnEgPSBwbGF0Zm9ybV9nZXRfaXJxKHBkZXYs
-IDApOwo+ID4gLSAgICAgICBpZiAoc3QtPmlycSA8PSAwKSB7Cj4gPiAtICAgICAgICAgICAgICAg
-aWYgKCFzdC0+aXJxKQo+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgc3QtPmlycSA9IC1FTlhJ
-TzsKPiA+IC0KPiA+ICsgICAgICAgaWYgKHN0LT5pcnEgPCAwKQo+ID4gICAgICAgICAgICAgICAg
-IHJldHVybiBzdC0+aXJxOwo+ID4gLSAgICAgICB9Cj4gPiAKPiA+ICAgICAgICAgc3QtPnBlcl9j
-bGsgPSBkZXZtX2Nsa19nZXQoJnBkZXYtPmRldiwgImFkY19jbGsiKTsKPiA+ICAgICAgICAgaWYg
-KElTX0VSUihzdC0+cGVyX2NsaykpCj4gPiAtLQo+ID4gMi4zNC4xCj4gPiAKPiAKCgotLQpCZXN0
-IHJlZ2FyZHMsCkRvbmdsaWFuZyBNdQo=
+> <formletter>
+>
+> This is not the correct way to submit patches for inclusion in the
+> stable kernel tree.  Please read:
+>     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+> for how to do this properly.
+>
+> </formletter>
+Sorry about that, let's just skip the stable tree part for now then.
