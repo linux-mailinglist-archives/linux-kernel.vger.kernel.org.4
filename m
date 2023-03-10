@@ -2,119 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D836B350B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3074E6B3505
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:50:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjCJDvF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Mar 2023 22:51:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
+        id S229804AbjCJDuW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Mar 2023 22:50:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjCJDvA (ORCPT
+        with ESMTP id S229599AbjCJDuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 22:51:00 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461B4101F3D;
-        Thu,  9 Mar 2023 19:50:59 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32A3oFplD010067, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32A3oFplD010067
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Fri, 10 Mar 2023 11:50:15 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Fri, 10 Mar 2023 11:49:49 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 10 Mar 2023 11:49:48 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Fri, 10 Mar 2023 11:49:48 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] wifi: rtw88: fix memory leak in rtw_usb_probe()
-Thread-Topic: [PATCH v2] wifi: rtw88: fix memory leak in rtw_usb_probe()
-Thread-Index: AQHZUi8SMsf/3uLRP0mluFYdnBlKyK7zYkMQ
-Date:   Fri, 10 Mar 2023 03:49:48 +0000
-Message-ID: <3a8382b826464d76b3c721e99613d6e9@realtek.com>
-References: <20230309021636.528601-1-dzm91@hust.edu.cn>
-In-Reply-To: <20230309021636.528601-1-dzm91@hust.edu.cn>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2023/3/9_=3F=3F_11:07:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 9 Mar 2023 22:50:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B7DAB0AD;
+        Thu,  9 Mar 2023 19:50:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A963D60C15;
+        Fri, 10 Mar 2023 03:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78AE3C4339B;
+        Fri, 10 Mar 2023 03:50:18 +0000 (UTC)
+Date:   Thu, 9 Mar 2023 22:50:16 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [BUILD BUG v6.3-rc1] platform/x86/amd: error: implicit
+ declaration of function =?UTF-8?B?4oCYYW1kX3BtY193cml0ZV9zdGLigJk=?=
+Message-ID: <20230309225016.2e8cd211@gandalf.local.home>
+In-Reply-To: <20230309224451.13b9648b@gandalf.local.home>
+References: <20230309224451.13b9648b@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 9 Mar 2023 22:44:51 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
+> With CONFIG_SUSPEND not defined I get:
+> 
+> drivers/platform/x86/amd/pmc.c: In function ‘amd_pmc_stb_debugfs_open_v2’:
+> drivers/platform/x86/amd/pmc.c:256:15: error: implicit declaration of function ‘amd_pmc_write_stb’; did you mean ‘amd_pmc_read_stb’? [-Werror=implicit-function-declaration]
+>   256 |         ret = amd_pmc_write_stb(dev, AMD_PMC_STB_DUMMY_PC);
+>       |               ^~~~~~~~~~~~~~~~~
+>       |               amd_pmc_read_stb
+> 
 
-> -----Original Message-----
-> From: Dongliang Mu <dzm91@hust.edu.cn>
-> Sent: Thursday, March 9, 2023 10:17 AM
-> To: Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; David S. Miller
-> <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni
-> <pabeni@redhat.com>
-> Cc: Dongliang Mu <dzm91@hust.edu.cn>; linux-wireless@vger.kernel.org; netdev@vger.kernel.org;
-> linux-kernel@vger.kernel.org
-> Subject: [PATCH v2] wifi: rtw88: fix memory leak in rtw_usb_probe()
-> 
-> drivers/net/wireless/realtek/rtw88/usb.c:876 rtw_usb_probe()
-> warn: 'hw' from ieee80211_alloc_hw() not released on lines: 811
-> 
-> Fix this by modifying return to a goto statement.
-> 
-> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+And I just checked out Linus's top of tree and see that all the
+CONFIG_SUSPEND defines are removed from that file.
 
-Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
+As the Church Lady use to say...
 
-> ---
-> v1->v2: modify the commit title
->  drivers/net/wireless/realtek/rtw88/usb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/realtek/rtw88/usb.c b/drivers/net/wireless/realtek/rtw88/usb.c
-> index 2a8336b1847a..68e1b782d199 100644
-> --- a/drivers/net/wireless/realtek/rtw88/usb.c
-> +++ b/drivers/net/wireless/realtek/rtw88/usb.c
-> @@ -808,7 +808,7 @@ int rtw_usb_probe(struct usb_interface *intf, const struct usb_device_id *id)
-> 
->         ret = rtw_usb_alloc_rx_bufs(rtwusb);
->         if (ret)
-> -               return ret;
-> +               goto err_release_hw;
-> 
->         ret = rtw_core_init(rtwdev);
->         if (ret)
-> --
-> 2.39.2
+     Never mind!
 
+-- Steve
