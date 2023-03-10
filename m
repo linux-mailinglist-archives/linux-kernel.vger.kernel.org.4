@@ -2,161 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315C06B5081
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 20:05:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C45176B5091
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 20:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjCJTFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 14:05:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
+        id S230493AbjCJTGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 14:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjCJTFC (ORCPT
+        with ESMTP id S229901AbjCJTGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 14:05:02 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC9A12FD12;
-        Fri, 10 Mar 2023 11:05:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=++rrP4Cjvo+1VSixc4iffAuUXXF57XYeVVXnpi7PUsQ=; b=wcwiBo/YXzmFufYjQZ8tPGifRA
-        bqFH2boUZlsZ1VB6Pfgs6uIR4eLHhU4jNvgaGsbfmcq0otSj7NVqpHzHS3qaB0E8AGsK5A/G2k9+1
-        lbHgtA+tzkBl3fB7jTTfBbJUtMpCKZN1qWjQJeOyOtCnz9KZWdkLZj8lMcqdc/DMrWg2uRVlmdkmZ
-        LOprCwegknRPdeWMYQw3yGkqBzVg3E0e7jhCAtkZWNJuVMtX7kabqflB0l4nia6tuS2bIja+fbkkO
-        E/F/JHq/Zb3bgwrLr4lRKzXIHCHCAjRUaMKT2GSKLZ5dkcTnO22q7DPFA18AYJW/ZTHzNWZqZOvif
-        fcNgomdQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pai30-00FrCm-07; Fri, 10 Mar 2023 19:04:58 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tj@kernel.org, bpf@vger.kernel.org
-Cc:     christophe.leroy@csgroup.eu, jolsa@kernel.org, vmalik@redhat.com,
-        john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, nick.alcock@oracle.com, keescook@chromium.org,
-        gregkh@linuxfoundation.org, tglx@linutronix.de, mcgrof@kernel.org
-Subject: [PATCH] kernel/module: add documentation for try_module_get()
-Date:   Fri, 10 Mar 2023 11:04:57 -0800
-Message-Id: <20230310190457.3779415-1-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.37.1
+        Fri, 10 Mar 2023 14:06:49 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2055.outbound.protection.outlook.com [40.107.94.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F921308C5;
+        Fri, 10 Mar 2023 11:06:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QNSErk0G6nJOcPP2tmr4XXGKpZ2auep7vuk8r2BhyqtG+nEruULv1/F2TN6bGJxg/AAMnp8IpuFkHUL8w13w7hizDIrTGvD9EX83cmX46qugzK8mfzN8d7bW7mjlYsBaGgKFhVSt7iW9tn3o1fPpSPHSs1CxbA1TUX6bPW7sPt9pJP2EjeYv68wAzNHu8wqFRrOXz5CNih99YRitbl1s15hLD/UOFHHc48vtMqlrF32yXAEwTZPkfTH4NWhNal6eNCag3sE0VVvX2v8D81wBdiX6iJeM8dYHu0w0SqLVq+c4ME+aclIfmdSusy1xKTCjUCE41DORj2Iig7qY6wXGuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ccpyOUqXwzhN8nWhoV4dQoCUJHgnsAVUXx0SK9bjC94=;
+ b=ZE5CLiFldJnRzwdseTvbGz4rjZKd9pK6ooXNkxtJ+Ev3Fhw6zG2mudVQVnXyMSBtAvrdm4/bI/smbHxjfRKQfiZBRcFThazv7EN4GJKZA8lhlghez2y8NjLuKVyZnRJMy5685VJY6FHAazAxiCCbmnLgAm2YpVjFjYT2NUHnRRxtyGAYZMQ4HNCPT+Z4mURCielYwK32olzNBwUCMsRADUJfc9hbE6JP81cJ4FzM2jKSBtOd1jucSe/22RX7xIyGqbhRMSQxowRDWwbNRiTzzF706XlH/EhDO8BYhv3q/EoPXTnyRMWSWPCuluF9Aq+YjdlvaV8AdisWggcru5DgoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ccpyOUqXwzhN8nWhoV4dQoCUJHgnsAVUXx0SK9bjC94=;
+ b=EBHNc90RqKn/Pr7smedTe5vI9rKh6xZqjU7RQCfcE/LhWxilKverJMdnQ0eorcl5iNjett5UHEFoVzZL23KfANDXLUJ7CFfUbApAvFy+Z8y9JifYeUDgJfpT11KZbxCYxeOP7kdZOvICGTOkiHi0cynvu6ct3aFhIRMYT3Gy0P+gPLenUwYLmx/x/B8S5FRyhSYXLiz3d8CPQfp4s8q/6zVgUnICQ038kqDQdpk+ADCCFhRA0ydM80sYFu9005tShhx/VfgpLrFlGJtrtoHJ4scYHvyAJJTc+v6Ii5CN6Brpq98SUEltk8Om+AZE2tPBTz1+J6vFuiZ3oPLajk0BuQ==
+Received: from MW4PR04CA0267.namprd04.prod.outlook.com (2603:10b6:303:88::32)
+ by DS7PR12MB5862.namprd12.prod.outlook.com (2603:10b6:8:79::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.20; Fri, 10 Mar 2023 19:06:45 +0000
+Received: from CO1NAM11FT101.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:88:cafe::7a) by MW4PR04CA0267.outlook.office365.com
+ (2603:10b6:303:88::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.20 via Frontend
+ Transport; Fri, 10 Mar 2023 19:06:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT101.mail.protection.outlook.com (10.13.175.164) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.20 via Frontend Transport; Fri, 10 Mar 2023 19:06:44 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 10 Mar 2023
+ 11:06:38 -0800
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 10 Mar
+ 2023 11:06:37 -0800
+Received: from dipenp.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.5 via Frontend
+ Transport; Fri, 10 Mar 2023 11:06:37 -0800
+From:   Dipen Patel <dipenp@nvidia.com>
+To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linus.walleij@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <robh+dt@kernel.org>, <timestamp@lists.linux.dev>,
+        <krzysztof.kozlowski+dt@linaro.org>, <brgl@bgdev.pl>,
+        <corbet@lwn.net>, <gregkh@linuxfoundation.org>
+CC:     Dipen Patel <dipenp@nvidia.com>
+Subject: [PATCH V3 0/6] Add Tegra234 HTE support
+Date:   Fri, 10 Mar 2023 11:06:28 -0800
+Message-ID: <20230310190634.5053-1-dipenp@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT101:EE_|DS7PR12MB5862:EE_
+X-MS-Office365-Filtering-Correlation-Id: 061deccf-126f-4190-fa68-08db219a9749
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pQiIqJ3QYDoXOEjjkZd/gbvHYvoz3EGiADuM52fEQZhv9spYQrlx7QERxksoFSg8IU2W+KQ7cg2vee4+rkEv+u2P3MjiD3/2bmSe6BYtvTdSq/uSZH0QrX0iX2557yY0u6LR/VHZ2Kb+4P8DBWSCIfxesyo2LuQ1MELP71HXOI9p5rdq6QRIQXTc2M9UtVgUspcsVIxcPsXmkIe/NC2um80MMeE+wozdaYNXYD6UTrBCD2DICklhy6xI/2BL7rozDMBjR0tu8NDeomqvv6G5DRkLdpCUpibIasCOOJi7P0NIUHyOhrHEW6Ld3b5xT6QkovBPjdVNfiKZ1KX8T3Q1jjHbOmTIJYNhqdxRqESSdKB4COL4lqpJn6WNcTuaop4qPfbfe4R26j42CZrog9p09qES1jpW3OTNfDfBJzVgV53riR+gIVRfeM/AN+qTkavyS5NkNT83PgFDXTzGIiXYrdSOWC9vswAE/dD2y0zJAkW2YPOZMS/eM4TY0un4etEPG9DTa4YxcQ7bibxMlEIiNVDNrwo2lXlnyPhJ6RKKXqzmkVG/KFqxF8uGnIwgt6JpjwAwIILTQecjU2JOGOhKp0PwDb0gq7BmAyGjsdwZZDjChNoUqX6+JiZUZUdcXj3t6K6SYYj1ZvhDY+62Rn+fye/uwTm6Ke/osYLvb1mk8trYniSL8QXDC6xaggDufWs4TKzt+TK/JbUkpDZkyVdM+ZDQAqJ/MV5qHhSxWdSXI70aotKyG3JL3u5a67OXW9waim+oV8xq8hrZFcsuAmWpUbEQSqfMYjfAzvMRqFQDtbE=
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(136003)(376002)(451199018)(46966006)(36840700001)(7416002)(5660300002)(36756003)(83380400001)(426003)(82310400005)(47076005)(70206006)(8676002)(478600001)(7696005)(107886003)(6666004)(26005)(336012)(2616005)(1076003)(186003)(41300700001)(921005)(4326008)(70586007)(40480700001)(316002)(8936002)(356005)(86362001)(36860700001)(110136005)(82740400003)(7636003)(2906002)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 19:06:44.9007
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 061deccf-126f-4190-fa68-08db219a9749
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT101.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5862
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is quite a bit of tribal knowledge around proper use of try_module_get()
-and requiring *somehow* the module to still exist to use this call in a way
-that is safe. Document this bit of tribal knowledge. To be clear, you should
-only use try_module_get() *iff* you are 100% sure the module already does
-exist and is not on its way out.
+This patch series mainly adds support for the Tegra234 HTE provider. In
+addition, it addresses dt binding comments which prompted code
+changes in the existing HTE provider driver for the Tegra194 chips. The
+comments raised concern how existing code retrieves gpio controller node
+(the node is used to help namespace conversion between HTE and GPIOLIB).
+To help simplify that process, new DT property is suggested which adds
+gpio
+controller node in the HTE provider binding as phandle property. To
+conlude this patch series:
+- adds Tegra234 HTE provider
+- modifies existing Tegra194 and Tegra234 provider code to add address
+provider dt binding changes.
 
-You can be sure the module still exists and is alive through:
+The V1 patch series:
+- Adds tegra Tegra234 HTE(timestamp) provider supports.
+- Updates MAINTAINERS file for git tree, mail list fields.
+- Updates devicetree and API documentations.
+- Enables HTE subsystem, Tegra194 and Tegra234 HTE providers
+by default in arm64 defconfig and dts files.
 
-1) Direct protection with its refcount: you know some earlier caller called
-   __module_get() safely
-2) Implied protection: there is an implied protection against module removal
+The V2 patch series:
+- Changes in dt bindings to remove slices property
+- Adds nvidia,gpio-controller dt property
+- Add GTE node for the Tegra234
 
-Having an idea of when you are sure __module_get() might be called earlier is
-easy to understand however the implied protection requires an example. We use
-sysfs an an example for implied protection without a direct module reference
-count bump. kernfs / sysfs uses its own internal reference counting for files
-being actively used, when such file are active they completely prevent
-the module from being removed. kernfs protects this with its kernfs_active().
-Effort has been put into verifying the kernfs implied protection works by
-using a currently out-of-tree test_sysfs selftest test #32 [0]:
+The V3 patch series:
+- Re-arranged patches to have dt bindings first before its usage
+- Addressed review comments regarding dt bindings
 
-./tools/testing/selftests/sysfs/sysfs.sh -t 0032
+Dipen Patel (6):
+  MAINTAINERS: Add HTE/timestamp subsystem details
+  dt-bindings: timestamp: Add Tegra234 support
+  hte: Re-phrase tegra API document
+  hte: Add Tegra234 provider
+  gpio: tegra186: Add Tegra234 hte support
+  arm64: tegra: Add GTE nodes
 
-Without kernfs / sysfs preventing module removal through its active reference
-count (kernfs_active()) the write would fail or worse, a crash would happen in
-this test and it does not.
+ .../timestamp/nvidia,tegra194-hte.yaml        |  31 ++--
+ Documentation/driver-api/hte/tegra194-hte.rst |  33 ++--
+ MAINTAINERS                                   |   3 +
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi      |   3 +-
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi      |  17 ++
+ drivers/gpio/gpio-tegra186.c                  |   1 +
+ drivers/hte/hte-tegra194-test.c               |   2 +-
+ drivers/hte/hte-tegra194.c                    | 152 ++++++++++++++++--
+ 8 files changed, 196 insertions(+), 46 deletions(-)
 
-Similar safeguards are required for other users of try_module_get() *iff*
-they are not ensuring the above rule 1) is followed.
 
-[0] https://lore.kernel.org/lkml/20211029184500.2821444-4-mcgrof@kernel.org/
-
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
-
-I had actually written an initial version of these docs [0] *two years* ago
-through my test_sysfs patches [1]. Back then the only pushback I got to get this
-test upstream was Greg's opposition to me using copyleft-next for my test driver.
-Upon feedback from the comunity, we've now have passed that hurtle, and we
-have proper SPDX tags for copyleft-next driver upstream. Before I follow up
-again with that test_sysfs driver though *this* patch in particular seems
-important enough to get upstream and so sending this separately because
-I see some folks might still be in high need of these docs.
-
-I'll reply to the thread / patch in question next.
-
-[0] https://lore.kernel.org/all/20211029184500.2821444-7-mcgrof@kernel.org/
-[1] https://lore.kernel.org/all/20211029184500.2821444-1-mcgrof@kernel.org/
-
- include/linux/module.h | 40 ++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 38 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 91726444d55f..c3b357196470 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -671,10 +671,46 @@ void symbol_put_addr(void *addr);
-    to handle the error case (which only happens with rmmod --wait). */
- extern void __module_get(struct module *module);
- 
--/* This is the Right Way to get a module: if it fails, it's being removed,
-- * so pretend it's not there. */
-+/**
-+ * try_module_get() - take module refcount unless module is being removed
-+ * @module: the module we should check for
-+ *
-+ * Only try to get a module reference count if the module is not being removed.
-+ * This call will fail if the module is already being removed.
-+ *
-+ * Care must also be taken to ensure the module exists and is alive prior to
-+ * usage of this call. This can be gauranteed through two means:
-+ *
-+ * 1) Direct protection: you know an earlier caller must have increased the
-+ *    module reference through __module_get(). This can typically be achieved
-+ *    by having another entity other than the module itself increment the
-+ *    module reference count.
-+ *
-+ * 2) Implied protection: there is an implied protection against module
-+ *    removal. An example of this is the implied protection used by kernfs /
-+ *    sysfs. The sysfs store / read file operations are guaranteed to exist
-+ *    through the use of kernfs's active reference (see kernfs_active()) and a
-+ *    sysfs / kernfs file removal cannot happen unless the same file is not
-+ *    active. Therefore, if a sysfs file is being read or written to the module
-+ *    which created it must still exist. It is therefore safe to use
-+ *    try_module_get() on module sysfs store / read ops.
-+ *
-+ * One of the real values to try_module_get() is the module_is_live() check
-+ * which ensures that the caller of try_module_get() can yield to userspace
-+ * module removal requests and gracefully fail if the module is on its way out.
-+ *
-+ * Returns true if the reference count was successfully incremented.
-+ */
- extern bool try_module_get(struct module *module);
- 
-+/**
-+ * module_put() - release a reference count to a module
-+ * @module: the module we should release a reference count for
-+ *
-+ * If you successfully bump a reference count to a module with try_module_get(),
-+ * when you are finished you must call module_put() to release that reference
-+ * count.
-+ */
- extern void module_put(struct module *module);
- 
- #else /*!CONFIG_MODULE_UNLOAD*/
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
 -- 
-2.39.1
+2.17.1
 
