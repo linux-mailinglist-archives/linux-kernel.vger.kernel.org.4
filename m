@@ -2,367 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5C36B4FDA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 19:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDF96B4FE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 19:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbjCJSKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 13:10:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57638 "EHLO
+        id S230325AbjCJSS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 13:18:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbjCJSKi (ORCPT
+        with ESMTP id S229827AbjCJSSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 13:10:38 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B5B121B7B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 10:10:34 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id a32so6230084ljq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 10:10:34 -0800 (PST)
+        Fri, 10 Mar 2023 13:18:55 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on20721.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::721])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014C7F6B40;
+        Fri, 10 Mar 2023 10:18:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HC2nDV9z6t1FIq+Ib2VnfxNWeqvhFXrZRsF/ZGPwS19ASw884N2nkMwk4w8Ofy5ylmLSGJ52NrABcQOVoDyfvv6arEuwIX4qLfdIsucgpGnCWzlb0N60RmHjg8SqZFVTrHHbv73ynvOxyEGbXYOVuB8leVtlNAM2Wa6jgIZ03UP5MbAj6s/Jj7EcgA3Fnp2Zgg03wOcW5MdruaG+otJfkr4X5sk4ilAFDVIy4tm26G0yElKts2eNLe+05xLHDMe5hde8DhUeB37KItIJUJ/cljnCyT4EKUVvxelIQ/5fvPjLEx1fi9YazDG0AtsM0qNV22jKxGc2lQ5Fl/0E3XhjWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IItsG2DopOyVR2EhLh0oWEKnw1GHLQuOGMNbGjCloEc=;
+ b=RJjZlCfpk++cGGLuH21poOO2ooZwrW6JSm3C6qm7SUeS2FoptiuSrT8LcoryR7g/D4xZUor+K2Fh1Sp798S1orfEH6ReaiQUpkp839d2AgK+ZHoSwtoseZJpxVSTSXjqmkvzYrcReK4ReU0ScUamjDVhV7z+vxHAWFwydleJmGcFVCW8BHDb+g/lUJr823YkFu2t/99LrJ9w1ZKI0nCj5gnnTEC7vNSNCZWnhohjrjNkEmdUq/ou7WWKBPZfLDdBMjJ2agmS7rPuSGZBqQcExGGst8T4oXxm5ERcJsXgyvzB2C+5yBQijc6ampMpxpsEFAin3SAq+LcQBrqWpxutFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678471832;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M46Ypt24nBb7PiPePkRiWJ0mAqFjlBx1ci9a7ayJTZs=;
-        b=xt73l++1dpEFS7++Mfaw/PElqS7u14ponezDnY0eB3IciL8vhPxb7X6EPKPSsKuNdS
-         oE2Vch8kNYX5b6B8iSUj04okwSwz9N2g46voP4MRkLSfDoSlj6JWykuhn2W1O27EAStU
-         BlApQ39pcStrP+owZQ/Ff/88oNA1siLHUfYrNGyYjDW6H8XzCmKEoBv2ZDu0hsDClY7+
-         SDoVYzX1RmiUnUtyLmVurkjJjr9WabqYXbTqtT5w9xIqgYurRsjfc9mk2ZMeNqs6rHDm
-         moQpieYlzUXu1IrB/Qvj8aqMP4Rs/BrVANH4a5yvxy3cWADEZ3sSVmE5euD1Q+wnq3qN
-         YUWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678471832;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M46Ypt24nBb7PiPePkRiWJ0mAqFjlBx1ci9a7ayJTZs=;
-        b=dERn8nLLXXrCs8sswslOw2ZsQJykJp8PxTFx3q4J5CK+BmnpQnK2aBH7VyD8Lyykp9
-         /BUXgelSi/XUUOC2mgvYHlk6RdGQB727a9Wxw2neS/lUUk9dX6mUa/NQ5ZihnkY56J0h
-         19j0r3RBOPKzt14heYN2QZ9FRB7eLf+F+7rGow8IT3qVBf3yHkJrDDAiKxIjUdV6jIux
-         r25W4eWvsviVllaF35czaH5r89+lQeAeUriA5rqAnIovTWS/uRu2lDdYaWhlF4VmL1/v
-         iVou/lvY60/414dhB7X5t2J3tPjJk+jKOgv0ozHTT2bO/5ZilT5hd/rZpSra/WTE5WoT
-         oX/w==
-X-Gm-Message-State: AO0yUKUlMxkZBaSi/Dza8Bcqiu8FXuFqmdc5oc7YmL4POnFJf9TpAvlz
-        3jK/7gH+4KXXjCZFDP1NAjnmzA==
-X-Google-Smtp-Source: AK7set8TBrhWDnnqeV6ZMAgkMrJsGMtuojst6Ogp8An+BFYvB0QyN1zuACfjkrI6CmLsnKOsVv9o2w==
-X-Received: by 2002:a2e:b173:0:b0:295:b054:6809 with SMTP id a19-20020a2eb173000000b00295b0546809mr8407884ljm.8.1678471832596;
-        Fri, 10 Mar 2023 10:10:32 -0800 (PST)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id c12-20020a2ea1cc000000b00295a9be8764sm81063ljm.117.2023.03.10.10.10.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 10:10:31 -0800 (PST)
-Message-ID: <6539f132-c740-b9b6-8810-0affd6ab91ba@linaro.org>
-Date:   Fri, 10 Mar 2023 19:10:21 +0100
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IItsG2DopOyVR2EhLh0oWEKnw1GHLQuOGMNbGjCloEc=;
+ b=jhiiDCrTcAwZQGDiIsIEMYO2I4g0yDLR8bG8tusNCtE3C+JPojfTB+zeqXJa3w1B165XdwFMwQSwIAUy1S0ZhsoXHOSmwGn8hJ8nP6dsEz7Sr4cwQDXPbeiQzadBGbz3ek/9gshm3hGy3MDAVq+qth2qkT2Osx+rZMT1W4SGwKM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BL0PR13MB4483.namprd13.prod.outlook.com (2603:10b6:208:1ce::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
+ 2023 18:18:49 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.020; Fri, 10 Mar 2023
+ 18:18:49 +0000
+Date:   Fri, 10 Mar 2023 19:18:42 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net-next v5 1/1] net: dsa: hellcreek: Get rid of custom
+ led_init_default_state_get()
+Message-ID: <ZAt0gqmOifS65Z91@corigine.com>
+References: <20230310163855.21757-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310163855.21757-1-andriy.shevchenko@linux.intel.com>
+X-ClientProxiedBy: AM0PR10CA0020.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:17c::30) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 2/2] drm/panel: Add driver for Novatek NT36523
-Content-Language: en-US
-To:     Jianhua Lu <lujianhua000@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230310132144.2241-1-lujianhua000@gmail.com>
- <20230310132144.2241-2-lujianhua000@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230310132144.2241-2-lujianhua000@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BL0PR13MB4483:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6f1f7ffa-09f6-4f33-c18b-08db2193e52d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RX3kSso8q0OhEESGYXOKONe9qwQFjfD2on7iJnrIfNeLMPSysY8DVSA1xISLKk0oNV5F1RG5oqz9WYsWKgS2gxlcI/nQH1W8kHMiqKxd8jKZukXNHt5b4gR3IrivhJYuKsd003WaWjv3rTVPuQcnpS0Bstd+Cvzghirg/UomgueCTg+aREmKXmnRaEf58O80fN/Dgc1cYbrKEFQY8yxLMgX9ZwS/d5rDRVvMKTML/aHHLBq9LhVXaBGoaIQlslRej3La64zrUSkCrfXFmiuPNwTudWqKxg9vt0hK2EUehkb5h54vEZ9cBHLLBDYeYdQ9XKWgRlPDs9eHc8zvGJHyqHkqk9wB/rYM5vOE3bPIvCCfNC/DOS4EfaxgFa9z2TAwLJI2E4O9jejvVlQmD3aaiNa5iwOkI8yr9EhjvyA/GqB/HSF5/sfF49LqQQYH52/TZY+svHubDGxa9Sw5xPRM4MeeWC16APPqHCO/i8ri7vIlJmw9syBz53urbiUJu8UFPDfprSNk8dyMjVsDIjypIm4huEuslOYMg3x37qoaD5TwjYpDpBybnV4+A5KfZ5g/drtI9EJt1cltyKOcoEpAC4iuhDbl7CYJ1KezGhXdTEhJutuHlGNzLdYeR+dLMOIOkw3YKs3MGEAnlvB71viz5dEoPVNXEa1DCtr3KKuSLfko2JdO3apPXd6CCyNT/gdp
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39830400003)(376002)(366004)(136003)(396003)(346002)(451199018)(2906002)(83380400001)(44832011)(36756003)(7416002)(5660300002)(8676002)(66476007)(66556008)(66946007)(41300700001)(8936002)(478600001)(6916009)(4326008)(316002)(38100700002)(86362001)(54906003)(2616005)(6512007)(186003)(6666004)(6486002)(6506007)(26583001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6TaAWtb5PfJC4DZevRen3jhtJur1Z7XdRWEx3+ZjhT04CwcPa9T/KMykQYa+?=
+ =?us-ascii?Q?XSLiiQuEo2d/v5fl4DNC+X2lEbiuK8hb07zCe+Cg0dZLh8Wa8K74nXJbrVCE?=
+ =?us-ascii?Q?RxwUjXGGEsrnl2kiz0gQEoUmzifKA0fkIRvgomPFIH9GCI2yqMJyl+iq3PXw?=
+ =?us-ascii?Q?Q73TNuYq+E+bfIR40nqfGnXjyJvi25Fjdul6STQrau0B0l/LcdpFEJmrH06O?=
+ =?us-ascii?Q?XwIA1imI15AdZBlSQhAHJUuVaAEf1mEZcvi7J2e9bVCMoQpUaaACSJz4NkCU?=
+ =?us-ascii?Q?BWrYGBZphQ5Rp8C6AhLBlQw11zXVkxXFlMFGIhesabpIRO7pFbOOlPgHzM9h?=
+ =?us-ascii?Q?tGugF4+anFsxYIwpjbUkt9xzRUFiC3da+K5rYJ8asyUsCfE66kS8I5I7kUEr?=
+ =?us-ascii?Q?EKIKuDN9vP4XURPlonzkUJz+lZ3qU+zE3kaJ+wSyqSrikFFjCdFB1D4EWVDV?=
+ =?us-ascii?Q?hPT40PczQUVbnWmjdHEiM4x656UUdaJ6oBaOymoQSYQy+w6mhq4JseYncvDz?=
+ =?us-ascii?Q?exLAjhim38IFGnVVpjOo29FBphYNv/c8auE6hu2AxSA0PTYvRWGPkMATdnGW?=
+ =?us-ascii?Q?Nb6W5sWFS9gxUl2hNY07ggT6aJtguXrg2WQH015uHr4tzCXg5EPlCc5VGd6V?=
+ =?us-ascii?Q?rIsKcha8RBlbrCtAOkboD/MZkRpaevjaLJNvjTldotgKP1Bd8+IiLWX5HXsR?=
+ =?us-ascii?Q?KrNsGGOYDdtb8zyIIhTw33l8y4jqFekKAYq8ADX+NxI3ldU3wgpjEgxkKpFV?=
+ =?us-ascii?Q?0Op7ad+q7CjmCZyCmkQiPOB7pelcaO9LVsNBJwIX88mMBCbG3OdJ7cUC1uUp?=
+ =?us-ascii?Q?5QMhIlbg8vJlBTDjalUP+HeR7jcdwtIBGuKqX8sQ73LaS3YE5vdGkEYjJsG7?=
+ =?us-ascii?Q?L3pvE+IAzrZ8kzMIDzbplIeloTd9iEXfyBq2zsBIwcB3hRVeUSsyGNKZ2oYX?=
+ =?us-ascii?Q?JVSoCKsv85Fx2soZfAg0ZnhXKcJZq37iJl6uHVPbYhqkumgi6YDcqtAIjnVI?=
+ =?us-ascii?Q?nO4o7hVMmzL9oxP1jDFek8/wIWH209BPHNa1hEpOJ8stpDkeRUAnzH70qdF+?=
+ =?us-ascii?Q?skMo5yghmidZqCADXf4G2AxuhPYGmZ5nQIoq9xriJiOebvJtszKgodAAHKNl?=
+ =?us-ascii?Q?0AgABylcdrYdgKknf6JpCENWoZ6atr0APCOqW1gXRJMYz8d4UYi4sM4U0UbE?=
+ =?us-ascii?Q?tPTMklCnMO4yLHpaUeGU5+acLzNspMMK9b+oi5VNmvt6QcOngyfSHas68s9/?=
+ =?us-ascii?Q?xvEdP57SR5c2ndgBRXNuypo1Kp7Xhta3fqpV6sX6pNLcLtx2005pspUBHoVr?=
+ =?us-ascii?Q?LvNi3g5uiOCdwhqTgGyUs2+C9SvG5LXW2cD6lhC3YLiUTqZ9Jn4cG4oUcqMy?=
+ =?us-ascii?Q?mXgu/KXdzpupK8CUVMDrhW30H7IEEnGAZik9Nb+hhHN9h8R+jouSzKZFdKnR?=
+ =?us-ascii?Q?i6UtRmTlp4YnENcxGWjnmMsGi2FwYJl3131QEz+kwRn4HI32pcH6ong1OWOt?=
+ =?us-ascii?Q?y14NfOSR1l8sN5rsLaQLEd0jZRH4abRVmzqRXRBIPc2i30mSWIF5BD8/TJsj?=
+ =?us-ascii?Q?wpD76eqUXAhVcKLbchJ+gGXGVN43WLvApPTufuAIEiHyK529KZJSuYqLPb0R?=
+ =?us-ascii?Q?GfXDtgRzgSCjPNS9VenU6xn6V7y10kBHSw6VeXYwl5wNh+K76iMZREh8gf3B?=
+ =?us-ascii?Q?yH5nvw=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f1f7ffa-09f6-4f33-c18b-08db2193e52d
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 18:18:49.6647
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ax6l/8vniRAJsOuVBiOQqOZTbchpwEDYaER/FENgy9O/X+XvO8Gy1O27ng1JaCcRf2uG/vFo0dKLQPm+WfKAEjLWHW18ykiorlU/FUacXh8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR13MB4483
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10.03.2023 14:21, Jianhua Lu wrote:
-> Add a driver for panels using the Novatek NT36523 display driver IC.
+On Fri, Mar 10, 2023 at 06:38:55PM +0200, Andy Shevchenko wrote:
+> LED core provides a helper to parse default state from firmware node.
+> Use it instead of custom implementation.
 > 
-> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
 > ---
-> Changes in v4:
->   - add multiple modes support
->   - use dev_err_probe helper
->   - fix dsi_info type string
->   - reimplement mipi_dsi_dual_dcs_write_seq() macro
+> v5: resent after v6.3-rc1 with proper net-next prefix
+>  drivers/net/dsa/hirschmann/hellcreek_ptp.c | 45 ++++++++++++----------
+>  1 file changed, 24 insertions(+), 21 deletions(-)
 > 
-> Changes in v3:
->   - Refactor source code
-> 
-> Changes in v2:
->   - Refactor and clean up source code
-> 
->  MAINTAINERS                                   |   7 +
->  drivers/gpu/drm/panel/Kconfig                 |  10 +
->  drivers/gpu/drm/panel/Makefile                |   1 +
->  drivers/gpu/drm/panel/panel-novatek-nt36523.c | 771 ++++++++++++++++++
->  4 files changed, 789 insertions(+)
->  create mode 100644 drivers/gpu/drm/panel/panel-novatek-nt36523.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5383af5d3b45..3586248bb05d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6537,6 +6537,13 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
->  F:	Documentation/devicetree/bindings/display/panel/sony,acx424akp.yaml
->  F:	drivers/gpu/drm/panel/panel-novatek-nt35560.c
+> diff --git a/drivers/net/dsa/hirschmann/hellcreek_ptp.c b/drivers/net/dsa/hirschmann/hellcreek_ptp.c
+> index b28baab6d56a..793b2c296314 100644
+> --- a/drivers/net/dsa/hirschmann/hellcreek_ptp.c
+> +++ b/drivers/net/dsa/hirschmann/hellcreek_ptp.c
+> @@ -297,7 +297,8 @@ static enum led_brightness hellcreek_led_is_gm_get(struct led_classdev *ldev)
+>  static int hellcreek_led_setup(struct hellcreek *hellcreek)
+>  {
+>  	struct device_node *leds, *led = NULL;
+> -	const char *label, *state;
+> +	enum led_default_state state;
+> +	const char *label;
+>  	int ret = -EINVAL;
 >  
-> +DRM DRIVER FOR NOVATEK NT36523 PANELS
-> +M:	Jianhua Lu <lujianhua000@gmail.com>
-> +S:	Maintained
-> +T:	git git://anongit.freedesktop.org/drm/drm-misc
-> +F:	Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
-> +F:	drivers/gpu/drm/panel/panel-novatek-nt36523.c
-> +
->  DRM DRIVER FOR NOVATEK NT36672A PANELS
->  M:	Sumit Semwal <sumit.semwal@linaro.org>
->  S:	Maintained
-> diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-> index 8eeee71c0000..268508743b5c 100644
-> --- a/drivers/gpu/drm/panel/Kconfig
-> +++ b/drivers/gpu/drm/panel/Kconfig
-> @@ -377,6 +377,16 @@ config DRM_PANEL_NOVATEK_NT35950
->  	  Sharp panels used in Sony Xperia Z5 Premium and XZ Premium
->  	  mobile phones.
+>  	of_node_get(hellcreek->dev->of_node);
+> @@ -318,16 +319,17 @@ static int hellcreek_led_setup(struct hellcreek *hellcreek)
+>  	ret = of_property_read_string(led, "label", &label);
+>  	hellcreek->led_sync_good.name = ret ? "sync_good" : label;
 >  
-> +config DRM_PANEL_NOVATEK_NT36523
-> +	tristate "Novatek NT36523 panel driver"
-> +	depends on OF
-> +	depends on DRM_MIPI_DSI
-> +	depends on BACKLIGHT_CLASS_DEVICE
-> +	help
-> +	  Say Y here if you want to enable support for the panels built
-> +	  around the Novatek NT36523 display controller, such as some
-> +	  Boe panels used in Xiaomi Mi Pad 5 and 5 Pro tablets.
-> +
->  config DRM_PANEL_NOVATEK_NT36672A
->  	tristate "Novatek NT36672A DSI panel"
->  	depends on OF
-> diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-> index c05aa9e23907..570eab8bf2b2 100644
-> --- a/drivers/gpu/drm/panel/Makefile
-> +++ b/drivers/gpu/drm/panel/Makefile
-> @@ -35,6 +35,7 @@ obj-$(CONFIG_DRM_PANEL_NEWVISION_NV3052C) += panel-newvision-nv3052c.o
->  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35510) += panel-novatek-nt35510.o
->  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35560) += panel-novatek-nt35560.o
->  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35950) += panel-novatek-nt35950.o
-> +obj-$(CONFIG_DRM_PANEL_NOVATEK_NT36523) += panel-novatek-nt36523.o
->  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT36672A) += panel-novatek-nt36672a.o
->  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT39016) += panel-novatek-nt39016.o
->  obj-$(CONFIG_DRM_PANEL_MANTIX_MLAF057WE51) += panel-mantix-mlaf057we51.o
-> diff --git a/drivers/gpu/drm/panel/panel-novatek-nt36523.c b/drivers/gpu/drm/panel/panel-novatek-nt36523.c
-> new file mode 100644
-> index 000000000000..78232c2735ff
-> --- /dev/null
-> +++ b/drivers/gpu/drm/panel/panel-novatek-nt36523.c
-> @@ -0,0 +1,771 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Novatek NT36523 DriverIC panels driver
-> + *
-> + * Copyright (c) 2022, 2023 Jianhua Lu <lujianhua000@gmail.com>
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of_graph.h>
-> +#include <linux/regulator/consumer.h>
-> +
-> +#include <drm/drm_connector.h>
-> +#include <drm/drm_crtc.h>
-> +#include <drm/drm_mipi_dsi.h>
-> +#include <drm/drm_modes.h>
-> +#include <drm/drm_panel.h>
-> +
-> +#define DSI_NUM_MIN 1
-> +
-> +#define mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, cmd, seq...)        \
-> +		do {                                                 \
-> +			mipi_dsi_dcs_write_seq(dsi0, cmd, seq);      \
-> +			mipi_dsi_dcs_write_seq(dsi1, cmd, seq);      \
-> +		} while (0)
-This should be in the same file as mipi_dsi_dcs_write_seq, imo
+> -	ret = of_property_read_string(led, "default-state", &state);
+> -	if (!ret) {
+> -		if (!strcmp(state, "on"))
+> -			hellcreek->led_sync_good.brightness = 1;
+> -		else if (!strcmp(state, "off"))
+> -			hellcreek->led_sync_good.brightness = 0;
+> -		else if (!strcmp(state, "keep"))
+> -			hellcreek->led_sync_good.brightness =
+> -				hellcreek_get_brightness(hellcreek,
+> -							 STATUS_OUT_SYNC_GOOD);
+> +	state = led_init_default_state_get(of_fwnode_handle(led));
+> +	switch (state) {
+> +	case LEDS_DEFSTATE_ON:
+> +		hellcreek->led_sync_good.brightness = 1;
+> +		break;
+> +	case LEDS_DEFSTATE_KEEP:
+> +		hellcreek->led_sync_good.brightness =
+> +				hellcreek_get_brightness(hellcreek, STATUS_OUT_SYNC_GOOD);
 
-[...]
+nit: I think < 80 columns wide is still preferred for network code
 
-> +static int elish_boe_init_sequence(struct panel_info *pinfo)
-> +{
-> +	struct mipi_dsi_device *dsi0 = pinfo->dsi[0];
-> +	struct mipi_dsi_device *dsi1 = pinfo->dsi[1];
-> +	/* No datasheet, so write magic init sequence directly */
-> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xFF, 0x10);
-> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xFB, 0x01);
-> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xB9, 0x05);
-Non-#defines should use lowercase hex
+> +		break;
+> +	default:
+> +		hellcreek->led_sync_good.brightness = 0;
+>  	}
+>  
+>  	hellcreek->led_sync_good.max_brightness = 1;
+> @@ -344,16 +346,17 @@ static int hellcreek_led_setup(struct hellcreek *hellcreek)
+>  	ret = of_property_read_string(led, "label", &label);
+>  	hellcreek->led_is_gm.name = ret ? "is_gm" : label;
+>  
+> -	ret = of_property_read_string(led, "default-state", &state);
+> -	if (!ret) {
+> -		if (!strcmp(state, "on"))
+> -			hellcreek->led_is_gm.brightness = 1;
+> -		else if (!strcmp(state, "off"))
+> -			hellcreek->led_is_gm.brightness = 0;
+> -		else if (!strcmp(state, "keep"))
+> -			hellcreek->led_is_gm.brightness =
+> -				hellcreek_get_brightness(hellcreek,
+> -							 STATUS_OUT_IS_GM);
+> +	state = led_init_default_state_get(of_fwnode_handle(led));
+> +	switch (state) {
+> +	case LEDS_DEFSTATE_ON:
+> +		hellcreek->led_is_gm.brightness = 1;
+> +		break;
+> +	case LEDS_DEFSTATE_KEEP:
+> +		hellcreek->led_is_gm.brightness =
+> +				hellcreek_get_brightness(hellcreek, STATUS_OUT_IS_GM);
+> +		break;
+> +	default:
+> +		hellcreek->led_is_gm.brightness = 0;
+>  	}
 
-[...]
+This seems to duplicate the logic in the earlier hunk of this patch.
+Could it be moved into a helper?
 
-> +	msleep(70);
-> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x29);
-> +	return 0;
-I think it's a general practice to add a newline before the return
-statement, but that's just a nit that triggered my OCD..
-
-[...]
-
-> +			       struct drm_connector *connector)
-> +{
-> +	struct panel_info *pinfo = to_panel_info(panel);
-> +	int i;
-> +
-> +	for (i =0; i < pinfo->desc->num_modes; i++) {
-missing space after =
-> +		const struct drm_display_mode *m = &pinfo->desc->modes[i];
-> +		struct drm_display_mode *mode;
-Missing newline between declarations and code
-
-> +		mode = drm_mode_duplicate(connector->dev, m);
-> +		if (!mode) {
-> +			dev_err(panel->dev, "failed to add mode %ux%u@%u\n",
-> +				m->hdisplay, m->vdisplay, drm_mode_vrefresh(m));
-> +			return -ENOMEM;
-> +		}
-> +		mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
-DRM_MODE_TYPE_PREFERRED: Preferred mode, usually the native resolution of an LCD panel. There should only be one preferred mode per connector at any given time.
-
-https://docs.kernel.org/gpu/drm-kms.html
-
-I'd suggest adding something like:
-
-if (i == 0)
-	mode->type |= DRM_MODE_TYPE_PREFERRED
-
-
-I think I've ran out of things to complain about.. And that's
-a good thing! :D
-
-Konrad
-> +		drm_mode_set_name(mode);
-> +		drm_mode_probed_add(connector, mode);
-> +	}
-> +
-> +	connector->display_info.width_mm = pinfo->desc->width_mm;
-> +	connector->display_info.height_mm = pinfo->desc->height_mm;
-> +	connector->display_info.bpc = pinfo->desc->bpc;
-> +
-> +	return pinfo->desc->num_modes;
-> +}
-> +
-> +static const struct drm_panel_funcs nt36523_panel_funcs = {
-> +	.disable = nt36523_disable,
-> +	.prepare = nt36523_prepare,
-> +	.unprepare = nt36523_unprepare,
-> +	.get_modes = nt36523_get_modes,
-> +};
-> +
-> +static int nt36523_probe(struct mipi_dsi_device *dsi)
-> +{
-> +	struct device *dev = &dsi->dev;
-> +	struct device_node *dsi1;
-> +	struct mipi_dsi_host *dsi1_host;
-> +	struct panel_info *pinfo;
-> +	const struct mipi_dsi_device_info *info;
-> +	int i, ret;
-> +
-> +	pinfo = devm_kzalloc(dev, sizeof(*pinfo), GFP_KERNEL);
-> +	if (!pinfo)
-> +		return -ENOMEM;
-> +
-> +	pinfo->vddio = devm_regulator_get(dev, "vddio");
-> +	if (IS_ERR(pinfo->vddio))
-> +		return dev_err_probe(dev, PTR_ERR(pinfo->vddio), "failed to get vddio regulator\n");
-> +
-> +	pinfo->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
-> +	if (IS_ERR(pinfo->reset_gpio))
-> +		return dev_err_probe(dev, PTR_ERR(pinfo->reset_gpio), "failed to get reset gpio\n");
-> +
-> +	pinfo->desc = of_device_get_match_data(dev);
-> +	if (!pinfo->desc)
-> +		return -ENODEV;
-> +
-> +	/* If the panel is dual dsi, register DSI1 */
-> +	if (pinfo->desc->is_dual_dsi) {
-> +		info = &pinfo->desc->dsi_info;
-> +
-> +		dsi1 = of_graph_get_remote_node(dsi->dev.of_node, 1, -1);
-> +		if (!dsi1) {
-> +			dev_err(dev, "cannot get secondary DSI node.\n");
-> +			return -ENODEV;
-> +		}
-> +
-> +		dsi1_host = of_find_mipi_dsi_host_by_node(dsi1);
-> +		of_node_put(dsi1);
-> +		if (!dsi1_host) {
-> +			return dev_err_probe(dev, -EPROBE_DEFER, "cannot get secondary DSI host\n");
-> +		}
-> +
-> +		pinfo->dsi[1] = mipi_dsi_device_register_full(dsi1_host, info);
-> +		if (!pinfo->dsi[1]) {
-> +			dev_err(dev, "cannot get secondary DSI device\n");
-> +			return -ENODEV;
-> +		}
-> +	}
-> +
-> +	pinfo->dsi[0] = dsi;
-> +	mipi_dsi_set_drvdata(dsi, pinfo);
-> +	drm_panel_init(&pinfo->panel, dev, &nt36523_panel_funcs, DRM_MODE_CONNECTOR_DSI);
-> +
-> +	ret = drm_panel_of_backlight(&pinfo->panel);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "failed to get backlight\n");
-> +
-> +	drm_panel_add(&pinfo->panel);
-> +
-> +	for (i = 0; i < DSI_NUM_MIN + pinfo->desc->is_dual_dsi; i++) {
-> +		pinfo->dsi[i]->lanes = pinfo->desc->lanes;
-> +		pinfo->dsi[i]->format = pinfo->desc->format;
-> +		pinfo->dsi[i]->mode_flags = pinfo->desc->mode_flags;
-> +
-> +		ret = mipi_dsi_attach(pinfo->dsi[i]);
-> +		if (ret < 0)
-> +			return dev_err_probe(dev, ret, "cannot attach to DSI%d host.\n", i);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id nt36523_of_match[] = {
-> +	{
-> +		.compatible = "xiaomi,elish-boe-nt36523",
-> +		.data = &elish_boe_desc,
-> +	},
-> +	{
-> +		.compatible = "xiaomi,elish-csot-nt36523",
-> +		.data = &elish_csot_desc,
-> +	},
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, nt36523_of_match);
-> +
-> +static struct mipi_dsi_driver nt36523_driver = {
-> +	.probe = nt36523_probe,
-> +	.remove = nt36523_remove,
-> +	.driver = {
-> +		.name = "panel-novatek-nt36523",
-> +		.of_match_table = nt36523_of_match,
-> +	},
-> +};
-> +module_mipi_dsi_driver(nt36523_driver);
-> +
-> +MODULE_AUTHOR("Jianhua Lu <lujianhua000@gmail.com>");
-> +MODULE_DESCRIPTION("DRM driver for Novatek NT36523 based MIPI DSI panels");
-> +MODULE_LICENSE("GPL");
+>  
+>  	hellcreek->led_is_gm.max_brightness = 1;
+> -- 
+> 2.39.1
+> 
