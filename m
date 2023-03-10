@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C132D6B3E69
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49FD16B3E75
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbjCJLxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 06:53:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S229914AbjCJLyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCJLxC (ORCPT
+        with ESMTP id S229469AbjCJLyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 06:53:02 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2284C1725
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:52:59 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id p23-20020a05600c1d9700b003ead4835046so4834960wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:52:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678449177;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vnnitKm8ItU8z8UrLfELFTzSkVG2XnAG/fMiiC7+9Kw=;
-        b=Wz0mqDYqd17E6Wn7L3/29NOx03d1Pqhz9S3gEmC6srrIH0w/inGiKDVH3OW99iGsp1
-         idNHqx0KLHxiXvRmEHMzkKoqLslBjgBc10bciShO7DJkyKrlPGB2Q9Gh5bX+vGXWPRCi
-         aW8Ol13JUNUlH26E+f7SobZSoMAFRunTcTLBwucLlY7NJXC4+qDa0k3k/e/eUdiNA3mN
-         twyMAjC2MZCdO2GX173ex6jxe6/RmfdOCDL/oNlOWScn2AGbL0m2/Ex8hbDs+UrHyVXe
-         955auGgApdlM29wm439j7ukwW5qlz6PqnPxvtj2IuRPoGy5lDpK5gSVGN74xdVv2odCK
-         XUzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678449177;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vnnitKm8ItU8z8UrLfELFTzSkVG2XnAG/fMiiC7+9Kw=;
-        b=bt4LXd15b9EEplgPB/RRfYlfgm+hBDV5wM0R5vfWC+AEnuujdUC6Viig/vukQo5U9s
-         KaHzoXFE5WB5R25r7sVqudhjw/nBYqq8OSZ12nE2Xm+vVU2/k4h6KOzmQIpCgYUJ4wtK
-         xFTdadiaW4lmsCShGc6IEEZUAiOMDR4jW8B6em6heMLD2PDetbAKGCl7e87YyGWU1IMB
-         ZjSPrWoP7q/meqUEFiOpj/J0bMU77oGQ5DbBess5zBSIACRcUZiblpBZvczqtg49xfck
-         OKkCvvXM9VQfwf9ZT/RGjLy8/Yt957vg7t4WSo7YhDEADv0m/+NsfynzQcrWg1ft4WPZ
-         W0zQ==
-X-Gm-Message-State: AO0yUKUn/D2gqhY7ajswzekQHWZPGoTxQ7bhPwOLyHkxRstSoqKV5ijE
-        citrmeplM/+zt4wnnpobsgs=
-X-Google-Smtp-Source: AK7set8E+XSGSa2CFpzjmVNdJGqPvK4JPcy5i1Xt68mjbNUB8UxMiBGww5GdmStnIKmwkCL2gZQ7KA==
-X-Received: by 2002:a05:600c:5104:b0:3ea:dbdd:66df with SMTP id o4-20020a05600c510400b003eadbdd66dfmr2458024wms.2.1678449177369;
-        Fri, 10 Mar 2023 03:52:57 -0800 (PST)
-Received: from suse.localnet (host-95-235-93-126.retail.telecomitalia.it. [95.235.93.126])
-        by smtp.gmail.com with ESMTPSA id r26-20020a05600c2f1a00b003e11f280b8bsm2801519wmn.44.2023.03.10.03.52.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 03:52:56 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Khadija Kamran <kamrankhadijadj@gmail.com>
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        paskripkin@gmail.com, gregkh@linuxfoundation.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] Staging: r8188eu: Fixed block comment
-Date:   Fri, 10 Mar 2023 12:52:55 +0100
-Message-ID: <10238267.qUNvkh4Gvn@suse>
-In-Reply-To: <Y+8p7Hyaf4LhO/Sw@khadija-virtual-machine>
-References: <Y+8p7Hyaf4LhO/Sw@khadija-virtual-machine>
+        Fri, 10 Mar 2023 06:54:03 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7450AC2237;
+        Fri, 10 Mar 2023 03:54:00 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32ABro76127449;
+        Fri, 10 Mar 2023 05:53:50 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678449230;
+        bh=QSIrK2hf0RVPY4b/FgB+Q97RERaUbLYuYjYCaB2CdYQ=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=USybG5S2djIhE2wGOt/XlHuHsO3yvv7Mxug4un46WUoMCM+2BK8kU+nJm28KePPeR
+         0QYi884r64b+bJo6keFHmWj6YHAcQvcr7aCB9tzjNQnyKZNp3aq6a+l8nxiQebyHr6
+         H3XE4NII6n3IBMG9S7N3C3sFtD5GnOB57F4Se5Eo=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32ABronN096866
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 10 Mar 2023 05:53:50 -0600
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 10
+ Mar 2023 05:53:50 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 10 Mar 2023 05:53:50 -0600
+Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32ABrj67017278;
+        Fri, 10 Mar 2023 05:53:45 -0600
+Message-ID: <367f6b50-e4cc-c3eb-e8e9-dabd4e044530@ti.com>
+Date:   Fri, 10 Mar 2023 17:23:44 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v3 3/6] soc: ti: pruss: Add
+ pruss_cfg_read()/update() API
+Content-Language: en-US
+From:   Md Danish Anwar <a0501179@ti.com>
+To:     Roger Quadros <rogerq@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <20230306110934.2736465-1-danishanwar@ti.com>
+ <20230306110934.2736465-4-danishanwar@ti.com>
+ <7076208d-7dca-6980-5399-498e55648740@kernel.org>
+ <afd6cd8a-8ba7-24b2-d7fc-c25a9c5f3c42@ti.com>
+ <a74e5079-d89d-2420-b6af-d630c4f04380@kernel.org>
+ <a4395259-9b83-1101-7c4c-d8a36c3600eb@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <a4395259-9b83-1101-7c4c-d8a36c3600eb@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,49 +83,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On venerd=EC 17 febbraio 2023 08:17:00 CET Khadija Kamran wrote:
-> Fixed block comment by adding '*' in each line. The Check message was
-> shown by using checkpatch.pl script.
->=20
-> Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
-> ---
->  drivers/staging/r8188eu/core/rtw_br_ext.c | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
->=20
+Hi Roger,
 
-Hi Khadija,
+On 09/03/23 17:00, Md Danish Anwar wrote:
+> Hi Roger,
+> 
+> On 08/03/23 17:12, Roger Quadros wrote:
+>>
+>>
+>> On 08/03/2023 13:36, Md Danish Anwar wrote:
+>>> Hi Roger,
+>>>
+>>> On 08/03/23 13:57, Roger Quadros wrote:
+>>>> Hi,
+>>>>
+>>>> On 06/03/2023 13:09, MD Danish Anwar wrote:
+>>>>> From: Suman Anna <s-anna@ti.com>
+>>>>>
+>>>>> Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
+>>>>> the PRUSS platform driver to allow other drivers to read and program
+>>>>> respectively a register within the PRUSS CFG sub-module represented
+>>>>> by a syscon driver. This interface provides a simple way for client
+>>>>
+>>>> Do you really need these 2 functions to be public?
+>>>> I see that later patches (4-6) add APIs for doing specific things
+>>>> and that should be sufficient than exposing entire CFG space via
+>>>> pruss_cfg_read/update().
+>>>>
+>>>>
+>>>
+>>> I think the intention here is to keep this APIs pruss_cfg_read() and
+>>> pruss_cfg_update() public so that other drivers can read / modify PRUSS config
+>>> when needed.
+>>
+>> Where are these other drivers? If they don't exist then let's not make provision
+>> for it now.
+>> We can provide necessary API helpers when needed instead of letting client drivers
+>> do what they want as they can be misused and hard to debug.
+>>
+> 
+> The ICSSG Ethernet driver uses pruss_cfg_update() API. It is posted upstream in
+> the series [1]. The ethernet driver series is dependent on this series. In
+> series [1] we are using pruss_cfg_update() in icssg_config.c file,
+> icssg_config() API.
+> 
+> So for this, the API pruss_cfg_update() needs to be public.
+> 
+> [1] https://lore.kernel.org/all/20230210114957.2667963-3-danishanwar@ti.com/
+> 
 
-As Greg said this driver is not here any longer. This makes me think that y=
-ou=20
-forgot at least two things...
+I will keep this patch as it is as pruss_cfg_update() needs to be public for
+ICSSG Ethernet driver and pruss_cfg_read() is kind of a complementary function
+to update. I will do required changes in other patches and send next revision
+if that's OK with you. Please let me know.
 
-1) Please pull and rebase the staging tree every day while working on patch=
-es=20
-during this period of the Outreachy project. If you had done so, you would=
-=20
-have noticed that your patch cannot any more be applied.
+>>>
+>>> The later patches (4-6) add APIs to do specific thing, but those APIs also
+>>> eventually call pruss_cfg_read/update().
+>>
+>> They can still call them but they need to be private to pruss.c
+>>
+>>>
+>>>>> drivers without having them to include and parse the CFG syscon node
+>>>>> within their respective device nodes. Various useful registers and
+>>>>> macros for certain register bit-fields and their values have also
+>>>>> been added.
+>>>>>
+>>>>> It is the responsibility of the client drivers to reconfigure or
+>>>>> reset a particular register upon any failures.
+>>>>>
+>>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>>>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>>>>> ---
+>>>>>  drivers/soc/ti/pruss.c           |  41 +++++++++++++
+>>>>>  include/linux/remoteproc/pruss.h | 102 +++++++++++++++++++++++++++++++
+>>>>>  2 files changed, 143 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+>>>>> index c8053c0d735f..537a3910ffd8 100644
+>>>>> --- a/drivers/soc/ti/pruss.c
+>>>>> +++ b/drivers/soc/ti/pruss.c
+>>>>> @@ -164,6 +164,47 @@ int pruss_release_mem_region(struct pruss *pruss,
+>>>>>  }
+>>>>>  EXPORT_SYMBOL_GPL(pruss_release_mem_region);
+>>>>
+>>>> cheers,
+>>>> -roger
+>>>
+> 
 
-2) I saw this patch by pure luck because you forgot to Cc the Outreachy lis=
-t.=20
-Therefore, please don't ever forget to Cc that list. Most mentors don't=20
-subscribe the linux-staging list.
-
-Thanks,
-
-=46abio
-
-P.S.: Please use an imperative tone, both in the subject and in the commit=
-=20
-message. For example this patch could have been written the following way:
-
-staging: axis-fifo: Add "*" to multi-line comment
-
-Add asterisks to each line of a multi-line comment to conform to the Linux=
-=20
-development guidelines. Warning reported by checkpatch.pl.
-
-Signed-off-by: [...]
-
-
-
-
+-- 
+Thanks and Regards,
+Danish.
