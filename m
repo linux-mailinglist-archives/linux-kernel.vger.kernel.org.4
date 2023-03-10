@@ -2,71 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA086B341F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 956C56B3380
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 02:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjCJCPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 21:15:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48148 "EHLO
+        id S229599AbjCJBIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 20:08:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjCJCPd (ORCPT
+        with ESMTP id S229476AbjCJBIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 21:15:33 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E0E104627;
-        Thu,  9 Mar 2023 18:15:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678414524; x=1709950524;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FAurejgzZDgiq4zpMgWd/d8Gh7qfzGeEBH4Wzs2K1W8=;
-  b=eJjR95LNPBMxBXEfBKYwEUaAflaO1eSPkVAxOABh8eK6djOSxDBgKnXI
-   ey6+f5LlYvZi21oIwbTEMvCg3EQX3KLCIn6TEQBNVxMZtO4qXzHNPc8pi
-   MFBpYCkdsJr4PdzNX4J1Mh5/U9nHx+8xk1e69SD94XUMAlAYMiC+13yAM
-   Oupp3zVcuiEHWTVV2wZZc5WrjoxIqulvv/KkoMVwESMbZ6U5oKyo2BL8D
-   nn/ItkSGs990+AkvmpamoMuTH4fd8CPo6vfhQqoOra1/OL758WLwOa4YA
-   vJ8qlRwOjvrd/ebrqg2P10vPrWkzGSIFCzPZfewAWy7BEo6ms3W5Nc0BW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="338988955"
-X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
-   d="scan'208";a="338988955"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 18:15:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="670935165"
-X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
-   d="scan'208";a="670935165"
-Received: from hamannjo-mobl1.amr.corp.intel.com (HELO [10.255.34.234]) ([10.255.34.234])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 18:15:21 -0800
-Message-ID: <a211f26d-a045-0729-871f-248d5fce3f3f@linux.intel.com>
-Date:   Thu, 9 Mar 2023 18:37:57 -0600
+        Thu, 9 Mar 2023 20:08:32 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB3A7D575
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 17:08:31 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id r5so4229128qtp.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 17:08:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1678410510;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UokTDAQn7q1obW3NWHDp8O1nKfc0rpJyGGobFx0lY6o=;
+        b=AFuy3V+dW135wdLQvl9/LwGgMzJeucpm5kFAghEhvP68Vp94KirvGilj4Nr6OGYE03
+         ZCUlGhLFeCPV3cThc3ejh4S+0ngKiyGmMcM9CJ1C/yIRCqVDmsLTgGEkQyMplp9vOyfk
+         8zQ/K0Rw2DOabJ5y50H/0HeDBtThSPxTDoiL4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678410510;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UokTDAQn7q1obW3NWHDp8O1nKfc0rpJyGGobFx0lY6o=;
+        b=pZZwNPN06mcukzioY9Vxbgg00XPiDq+mFCxQkstknv/PyYPLamCuvTqbaH/BTVYm2e
+         mBp/5TVbqzDwjJhhrsycRY2U2HuqNvjvukkIueElahiPRlX3VJ81mf4SMKlnPTZM8OOH
+         0o3uTpnzYrjngFDx55ol6Q4lS+hEqxt/4hjwfnW2RNYWE5TusU6gmysxRpMAjJoZ43yp
+         CDVRSjgl39+VqejgtX/VtU3BJmv6o6qgeN2USITm3ytiLuP1JeZR/0RDkQLbzL7JeEq7
+         UnO3WfAvwDtXoMm2x075owwH8je1TgO8U5srr3D3tE1LDRdxMaEdbus5U6RTqwHE2+Tq
+         k2DQ==
+X-Gm-Message-State: AO0yUKUvA+JA97lSLh3KPt5feOGF52StGDxSetimyk9Jqs39WYZzLDs2
+        zVoH8oAC50aWkYsb9opElq1Zgg==
+X-Google-Smtp-Source: AK7set80WO4khewW3Wd6Q+Vozjr+sXkPlub6kbcMazLjmw+NFebExQZI8lk3QDLhbcQYfCmbN4V9zw==
+X-Received: by 2002:ac8:5b56:0:b0:3bf:dbd3:a014 with SMTP id n22-20020ac85b56000000b003bfdbd3a014mr35729700qtw.45.1678410510171;
+        Thu, 09 Mar 2023 17:08:30 -0800 (PST)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id t134-20020a37468c000000b007422eee8058sm306238qka.125.2023.03.09.17.08.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 17:08:29 -0800 (PST)
+Date:   Fri, 10 Mar 2023 01:08:28 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, Julian Anastasov <ja@ssi.bg>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Jiri Wiesner <jwiesner@suse.de>
+Subject: Re: [PATCH 10/13] ipvs: Rename kfree_rcu() to kfree_rcu_mightsleep()
+Message-ID: <20230310010828.GA586277@google.com>
+References: <20230201150954.409693-1-urezki@gmail.com>
+ <Y9qLB6Zyx5atcFUV@salvia>
+ <7e87836a-c72-eefd-9c74-fc2637accd2@ssi.bg>
+ <Y9qc+lgR1CgdszKs@salvia>
+ <Y9qfNV0IX1tBsTxP@pc636>
+ <20230309001101.GA155598@google.com>
+ <ZAmkrxguzzsqNFM+@salvia>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH v3 00/28] Introduce QC USB SND audio offloading support
-Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
-        andersson@kernel.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <4f8a66c0-398f-5655-3aa7-a59bc9ba56cc@linux.intel.com>
- <8b2f3ce7-3e0c-bdf0-8d9f-9aeabba09a15@quicinc.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <8b2f3ce7-3e0c-bdf0-8d9f-9aeabba09a15@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAmkrxguzzsqNFM+@salvia>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,134 +84,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 09, 2023 at 10:19:43AM +0100, Pablo Neira Ayuso wrote:
+> On Thu, Mar 09, 2023 at 12:11:01AM +0000, Joel Fernandes wrote:
+> > Hello,
+> > 
+> > On Wed, Feb 01, 2023 at 06:19:49PM +0100, Uladzislau Rezki wrote:
+> > > On Wed, Feb 01, 2023 at 06:10:18PM +0100, Pablo Neira Ayuso wrote:
+> > > > On Wed, Feb 01, 2023 at 06:12:04PM +0200, Julian Anastasov wrote:
+> > > > > 
+> > > > > 	Hello,
+> > > > > 
+> > > > > On Wed, 1 Feb 2023, Pablo Neira Ayuso wrote:
+> > > > > 
+> > > > > > Hi,
+> > > > > > 
+> > > > > > On Wed, Feb 01, 2023 at 04:09:51PM +0100, Uladzislau Rezki (Sony) wrote:
+> > > > > > > The kfree_rcu()'s single argument name is deprecated therefore
+> > > > > > > rename it to kfree_rcu_mightsleep() variant. The goal is explicitly
+> > > > > > > underline that it is for sleepable contexts.
+> > > > > > > 
+> > > > > > > Cc: Julian Anastasov <ja@ssi.bg>
+> > > > > > > Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+> > > > > > > Cc: Jiri Wiesner <jwiesner@suse.de>
+> > > > > > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > > > > > ---
+> > > > > > >  net/netfilter/ipvs/ip_vs_est.c | 2 +-
+> > > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > > > 
+> > > > > > > diff --git a/net/netfilter/ipvs/ip_vs_est.c b/net/netfilter/ipvs/ip_vs_est.c
+> > > > > > > index ce2a1549b304..a39baf6d1367 100644
+> > > > > > > --- a/net/netfilter/ipvs/ip_vs_est.c
+> > > > > > > +++ b/net/netfilter/ipvs/ip_vs_est.c
+> > > > > > > @@ -549,7 +549,7 @@ void ip_vs_stop_estimator(struct netns_ipvs *ipvs, struct ip_vs_stats *stats)
+> > > > > > >  	__set_bit(row, kd->avail);
+> > > > > > >  	if (!kd->tick_len[row]) {
+> > > > > > >  		RCU_INIT_POINTER(kd->ticks[row], NULL);
+> > > > > > > -		kfree_rcu(td);
+> > > > > > 
+> > > > > > I also found this kfree_rcu() without rcu_head call a few weeks ago.
+> > > > > > 
+> > > > > > @Wiesner, @Julian: Any chance this can be turned into kfree_rcu(td, rcu_head); ?
+> > > > > 
+> > > > > 	Yes, as simple as this:
+> > > > > 
+> > > > > diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
+> > > > > index c6c61100d244..6d71a5ff52df 100644
+> > > > > --- a/include/net/ip_vs.h
+> > > > > +++ b/include/net/ip_vs.h
+> > > > > @@ -461,6 +461,7 @@ void ip_vs_stats_free(struct ip_vs_stats *stats);
+> > > > >  
+> > > > >  /* Multiple chains processed in same tick */
+> > > > >  struct ip_vs_est_tick_data {
+> > > > > +	struct rcu_head		rcu_head;
+> > > > >  	struct hlist_head	chains[IPVS_EST_TICK_CHAINS];
+> > > > >  	DECLARE_BITMAP(present, IPVS_EST_TICK_CHAINS);
+> > > > >  	DECLARE_BITMAP(full, IPVS_EST_TICK_CHAINS);
+> > > > > diff --git a/net/netfilter/ipvs/ip_vs_est.c b/net/netfilter/ipvs/ip_vs_est.c
+> > > > > index df56073bb282..25c7118d9348 100644
+> > > > > --- a/net/netfilter/ipvs/ip_vs_est.c
+> > > > > +++ b/net/netfilter/ipvs/ip_vs_est.c
+> > > > > @@ -549,7 +549,7 @@ void ip_vs_stop_estimator(struct netns_ipvs *ipvs, struct ip_vs_stats *stats)
+> > > > >  	__set_bit(row, kd->avail);
+> > > > >  	if (!kd->tick_len[row]) {
+> > > > >  		RCU_INIT_POINTER(kd->ticks[row], NULL);
+> > > > > -		kfree_rcu(td);
+> > > > > +		kfree_rcu(td, rcu_head);
+> > > > >  	}
+> > > > >  	kd->est_count--;
+> > > > >  	if (kd->est_count) {
+> > > > > 
+> > > > > 	I was about to reply to Uladzislau Rezki but his patchset
+> > > > > looks more like a renaming, so I'm not sure how we are about
+> > > > > to integrate this change, as separate patch or as part of his
+> > > > > patchset. I don't have preference, just let me know how to
+> > > > > handle it.
+> > > > 
+> > > > @Uladzislau Rezki: Are you fine with dropping this patch from your
+> > > > series and Julian will send us a patch for inclusion into net-next to
+> > > > use the kfree_rcu(x, rcu_head) variant?
+> > > Absolutely. So i will drop it from my series.
+> > 
+> > Since this patch was dropped, it is the only case blocking the proper
+> > integration of this series into linux-next. We want to drop the old API and
+> > currently we are not able to, thus this revert [1] has to be unfortunately
+> > carried in linux-next.
+> >
+> > For that reason, there are 2 options:
+> > 
+> > 1. Can we get the new rcu_head approach for ipvs posted and reviewed with
+> > suitable Acks?
+> > 
+> > 2. Can we carry Vlad's patch to use kfree_rcu_mightsleep() in ipvs and drop
+> > it later if/when #1 is completed?
+> > 
+> > Option 2 has the unfortunate effect that it will conflict with your new
+> > approach of using rcu_head so I'd rather you fix it that way and get it
+> > Acked. And once acked, we can also take it via the RCU tree if the net
+> > maintainers are Ok with that.
+> > 
+> > Please advise.
+> 
+> JFYI, this patch is already in linux.git
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e4d0fe71f59dc5137a2793ff7560730d80d1e1f4
 
->>> Create vendor ops for the USB SND driver:
->>> qc_audio_offload: This particular driver has several components
->>> associated
->>> with it:
->>> - QMI stream request handler
->>> - XHCI interrupter and resource management
->>> - audio DSP memory management
->>
->> so how does this 'qc_audio_offload' interface with 'q6usb' described
->> above? how are the roles different or complementary?
->>
-> So in general you can think that the qc_audio_offload is a complement to
-> the USB SND USB class driver, while q6usb is to ASoC.  Since the ASoC
+Indeed it is in, thank you!
 
-Humm, that is far from clear. I don't get how a something that interacts
-with the USB class driver can also be in charge of the audio DSP memory
-management.
-
-> framework doesn't have any communication with USB SND, the ASoC DPCM USB
-> backend (q6usb) will have to be the entity that maintains what is going
-> on in USB SND.  That way, sessions initiated through the ASoC managed
-> sound card can evaluate what is available based on information reported
-> by q6usb.
-> 
-> qc_audio_offload and q6usb will have some interaction between each
-> other.  The majority of communication between qc_audio_offload and q6usb
-> is reporting the device connection events.
-
-It's already complicated to figure out how the DSP and USB class driver
-might interact and probe/timing dependencies, but with two additional
-drivers in the mix it's really hard to understand.
-
-Maybe ascii-art would help describe the concepts and types of
-information exchanged. Maintaining a consistent state across multiple
-drivers is not an easy task.
-
-> 
->>> When the audio DSP wants to enable a playback stream, the request is
->>> first
->>> received by the ASoC platform sound card.  Depending on the selected
->>> route,
->>> ASoC will bring up the individual DAIs in the path.  The Q6USB
->>> backend DAI
->>> will send an AFE port start command (with enabling the USB playback
->>> path), and
->>> the audio DSP will handle the request accordingly.
->>>
->>> Part of the AFE USB port start handling will have an exchange of control
->>> messages using the QMI protocol.  The qc_audio_offload driver will
->>> populate the
->>> buffer information:
->>> - Event ring base address
->>> - EP transfer ring base address
->>>
->>> and pass it along to the audio DSP.  All endpoint management will now
->>> be handed
->>> over to the DSP, and the main processor is not involved in transfers.
->>>
->>> Overall, implementing this feature will still expose separate sound
->>> card and PCM
->>> devices for both the platorm card and USB audio device:
->>>   0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
->>>                        SM8250-MTP-WCD9380-WSA8810-VA-DMIC
->>>   1 [Audio          ]: USB-Audio - USB Audio
->>>                        Generic USB Audio at usb-xhci-hcd.1.auto-1.4,
->>> high speed
->>>
->>> This is to ensure that userspace ALSA entities can decide which route
->>> to take
->>> when executing the audio playback.  In the above, if card#1 is
->>> selected, then
->>> USB audio data will take the legacy path over the USB PCM drivers,
->>> etc...
->>
->> I already voiced my concerns about exposing two cards, each with their
->> own set of volume controls with the same device. It would be much better
->> to have an additional offloaded PCM device for card0...
->>
->> But if the consensus is to have two cards, it's still not clear how the
->> routing would be selected. In the case where there are two USB audio
->> devices attached, the offloaded path would only support one of the two.
->> How would userspace know which of the two is selected?
->>
-> 
-> With patch#24:
-> https://lore.kernel.org/linux-usb/20230308235751.495-25-quic_wcheng@quicinc.com/T/#u
-> 
-> Now, userspace can at least choose which device it wants to offload.
-> Part of doing that would mean userspace knows what USB SND card devices
-> are available, so it is aware of which devices are shared (between the
-> offload and USB SND path)
-> 
->> And how would userspace know the difference anyways between two physical
->> devices attached to the platform with no offload, and one physical
->> device with one additional offload path? The names you selected can't be
->> used to identify that card1 is the optimized version of card0.
->>
-> 
-> Is userspace currently able to differentiate between cards that are
-> created by USB SND versus ASoC?  How complex can the userspace card
-> discovery be?  Can it query kcontrols at this point in time?  If so,
-> maybe we can change the names of the newly added ones to reflect that it
-> is an offload device?
-> 
-> SND kcontrol names are currently:
-> Q6USB offload status
-> Q6USB offload SND device select
-
-I must admit I've never seen kcontrols being used to identify what the
-card is, and in this case it's a pretend-card that's just an improved
-version of another. It might be easier to use something else, such as
-the component strings.
-> 
->> Before we review low-level kernel plumbing, it would be good to give a
->> better overview of how userspace applications are supposed to interact
->> with the cards and identify the offloaded path. Testing with
->> tinyplay/tinymix is fine, but that's a developer-level or CI unit test.
->> we've got to see the broader picture of how a sound server would use
->> this USB offload capability.
-> 
-> Sure, I think that is fine.  I was hoping that at least adding some of
-> the new kcontrols would help userspace make use of this path in general,
-> but we can add more information if required.
-
-Can I ask if this solution has been used with a complete userspace stack
-already? I could see how this might be used with a relatively fixed
-Android HAL, where the platform and routing are relatively controlled. I
-don't see how a more generic audio server would deal with the discovery
-and routing.
+ - Joel
 
