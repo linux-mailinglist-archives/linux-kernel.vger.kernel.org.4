@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6626B3763
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F056B3768
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjCJHcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 02:32:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        id S230163AbjCJHcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 02:32:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjCJHbl (ORCPT
+        with ESMTP id S230246AbjCJHcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 02:31:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54549F2229;
-        Thu,  9 Mar 2023 23:31:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D2E7860EC7;
-        Fri, 10 Mar 2023 07:31:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAEA3C433D2;
-        Fri, 10 Mar 2023 07:31:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678433493;
-        bh=Zd/t5z51QCYiE1nCPk5YdpBtLOJWZ/cFSHGaMEyK61M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UhQ0oq4Tqo1bIqORlFuA6bq5TlxV+s84ekSjfkbPbbM6QhavxRfRBPbpyG0f0uWgx
-         WCmKY8NhZ6OWzL8Kzwqrc929Ep/aaU9OyrBL76V4H8VPlN8ef4wskPol1irOjOzyLl
-         2lbpdMZK1VHNBlQuugGPZSoS2jvoI4YkkhsGPxI0=
-Date:   Fri, 10 Mar 2023 08:31:30 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Nick Alcock <nick.alcock@oracle.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
-Message-ID: <ZArc0ib697JIwKou@kroah.com>
-References: <20230302211759.30135-1-nick.alcock@oracle.com>
- <20230302211759.30135-11-nick.alcock@oracle.com>
- <ZAoGLhRpTr5f7AD/@kroah.com>
- <ZApf0iNOsSAUbhMz@bombadil.infradead.org>
+        Fri, 10 Mar 2023 02:32:16 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B483410A4CA
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 23:32:12 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1paXEX-0002G3-W2; Fri, 10 Mar 2023 08:32:10 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1paXES-0037ox-Nl; Fri, 10 Mar 2023 08:32:04 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1paXES-003jf4-1H; Fri, 10 Mar 2023 08:32:04 +0100
+Date:   Fri, 10 Mar 2023 08:32:03 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Schspa Shi <schspa@gmail.com>, Marc Zyngier <maz@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        patches@opensource.cirrus.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Doug Berger <opendmb@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Nandor Han <nandor.han@ge.com>,
+        Semi Malinen <semi.malinen@ge.com>
+Subject: Re: [PATCH v1 00/16] gpio: Use string_choices.h
+Message-ID: <20230310073203.2mpd24pxe5rvm4e7@pengutronix.de>
+References: <20230306195556.55475-1-andriy.shevchenko@linux.intel.com>
+ <CAMRc=Me-FMZ3e=EaUA1kimEonz=HVHBp7coxCz53bJK9NYBuFg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vlcr3xdkx227as3g"
 Content-Disposition: inline
-In-Reply-To: <ZApf0iNOsSAUbhMz@bombadil.infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <CAMRc=Me-FMZ3e=EaUA1kimEonz=HVHBp7coxCz53bJK9NYBuFg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,111 +71,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 02:38:10PM -0800, Luis Chamberlain wrote:
-> On Thu, Mar 09, 2023 at 05:15:42PM +0100, Greg Kroah-Hartman wrote:
-> > On Thu, Mar 02, 2023 at 09:17:52PM +0000, Nick Alcock wrote:
-> > > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> > > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> > > are used to identify modules. As a consequence, uses of the macro
-> > > in non-modules will cause modprobe to misidentify their containing
-> > > object file as a module when it is not (false positives), and modprobe
-> > > might succeed rather than failing with a suitable error message.
-> > > 
-> > > So remove it in the files in this commit, none of which can be built as
-> > > modules.
-> > > 
-> > > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> > > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> > > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > > Cc: linux-modules@vger.kernel.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Cc: Jiri Slaby <jirislaby@kernel.org>
-> > > ---
-> > >  drivers/tty/n_null.c | 1 -
-> > >  1 file changed, 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/tty/n_null.c b/drivers/tty/n_null.c
-> > > index f913b665af725..c24f75942c49d 100644
-> > > --- a/drivers/tty/n_null.c
-> > > +++ b/drivers/tty/n_null.c
-> > > @@ -63,7 +63,6 @@ static void __exit n_null_exit(void)
-> > >  module_init(n_null_init);
-> > >  module_exit(n_null_exit);
-> > >  
-> > > -MODULE_LICENSE("GPL");
-> > >  MODULE_AUTHOR("Alan Cox");
-> > >  MODULE_ALIAS_LDISC(N_NULL);
-> > >  MODULE_DESCRIPTION("Null ldisc driver");
-> > > -- 
-> > > 2.39.1.268.g9de2f9a303
-> > > 
-> > 
-> > Nope, sorry, this is not good to do, please fix kbuild instead of
-> > forcing a tree-wide change like this.
-> 
-> Masahiro Yamada already NACK'd it such effort:
-> 
-> https://lkml.kernel.org/r/CAK7LNAQLttPD=Ae==e0CYeQtS78=o_JZFK+zxa29JnUYio52Ug@mail.gmail.com
-> 
-> And his descriptiuon of the reasoning and logic is explained here:              
-> 
-> https://lore.kernel.org/all/CAK7LNASL7_RgfASstBvN6AzhR=nMU=HsQvODf5q13Xud8tBWRQ@mail.gmail.com/
-> 
-> Let me summarize it though with a few quotes from him:
-> 
-> "Having false-positives in modules.builtin should be OK"
-> "In this sense, having always-builtin entries in module.builtin is OK."
 
-None of that matters, sorry.
+--vlcr3xdkx227as3g
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Again, all I am saying is that you can not have some MODULE_() macros
-that are ok for code that is built in, and some that are not, for
-"reasons" that have to do how you all are treating the build system
-infrastructure as you are now putting arbritrary requirements for all
-driver authors (of which there are thousands) to know this.
+Hi Bart, hi Andy,
 
-Just change the macros to work properly in both cases, I can't believe
-this is all that hard as obviously all of the other macros work both
-ways, right?  That should not require any kbuild changes.
+On Thu, Mar 09, 2023 at 04:22:19PM +0100, Bartosz Golaszewski wrote:
+> I've been thinking about this and I must say it doesn't make much
+> sense to me. Not only does it NOT reduce the code size (even if we
+> assume the unlikely case where we'd build all those modules that use
+> the helpers) but also decreases the readability for anyone not
+> familiar with the new interfaces (meaning time spent looking up the
+> new function). The "%s", x ? "if" : "else" statement is concise and
+> clear already, I don't see much improvement with this series. And I'm
+> saying it from the position of someone who loves factoring out common
+> code. :)
+>=20
+> I'll wait to hear what others have to say but if it were up to me, I'd
+> politely say no.
 
-> The reason Nick wants to do this work is that his future patches
-> (which have been under review for years and I'm starting to chew on
-> it and provide guidance on now) extend our ability to have more
-> elaborate symbol to address mapping with more metdata, which does
-> include information such as if something came from a module. So
-> long term *I* certainly am interested in a deterministic way to
-> determine if something could be a module.
-> 
-> For a more elaborate attempt on my part to try to describe the problem
-> and some side ideas I had if we wanted an alternative:
-> 
-> https://lore.kernel.org/all/Y/kXDqW+7d71C4wz@bombadil.infradead.org/
-> 
-> I should also mention Christoph has also suggested we eventually move
-> towards automatically generating the module license tag from the SPDX
-> tag:
-> 
-> https://lore.kernel.org/all/Y5BNCbFyvNA1Xp%2FX@infradead.org
+Interpreting this as request to share my view: I'm having the same
+doubts. While I'm not a big fan of the ?: operator, it's semantic is
+more obvious here.
 
-That too would be wonderful, and I would love to see that, but it does
-not remove the base problem here that you are somehow forcing all driver
-authors to change their code for the build system changes which should
-not be affecting them at all at this point in time.
+What I find most difficult about
 
-If you all do trigger off of the SPDX tags, then the removal of all
-MODULE_LICENSE() instances would be great too, but I don't think you are
-there yet (and it also wouldn't require removal all at once as you could
-just stub out that macro to be nothing.)  But this is not the real issue
-here...
+	str_high_low(plr & BIT(j))
 
-Maybe the solution is to stop triggering on MODULE_LICENSE() as
-something magic for the build, as obviously that is the root problem
-here.  Or something else, I don't know, but what you all are doing here
-does not seem correct at all, sorry, and is only going to cause more
-long-term problems with maintenance and headaches for driver authors.
+(from patch #6) is: Does this give me "high" or "low" if the argument is
+zero? You could tell me, and judging from the patch I'd hope that it
+would give me "low". But if I stumble over this code in two weeks I
+have probably forgotten and have to look it up again.
 
-thanks,
+Best regards
+Uwe
 
-greg k-h
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--vlcr3xdkx227as3g
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQK3PAACgkQwfwUeK3K
+7AmKrQgAi8eFePklYAe1Wkc5DrOA8FgxUuMACZnge32N4GuJ70WGZLkl0kmPTU1b
+ljClqGfUibetO51uLK9T73BwZNJYXSjcEQ70XwdyiSIronRbhlzw13m6+/JdGD6y
+b//gxazdUU3qw70JoLbKZwfBHea/9CPDEJdcb6OvqkrVbH6GMjg5Lsyf3SW4dfRe
+Td4CSACc7My0VurOCjOPWw0Ui3gUws20Zs5/dKgZCHzjYlykGC9rS2mmn5CZP2oB
+L5AriYmEQodEt6FLgbkYhp1gDE2ONqYwm64RsHUJcWcBKZahBDFuXAoGZLVjgeXo
+YMvSCemK36RkwM5w3AHNzK63ETBAIA==
+=s9xY
+-----END PGP SIGNATURE-----
+
+--vlcr3xdkx227as3g--
