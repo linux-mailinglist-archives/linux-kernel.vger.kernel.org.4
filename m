@@ -2,157 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 123FA6B3EAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 13:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 296F16B3EB0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 13:06:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjCJMFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 07:05:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
+        id S230193AbjCJMGL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 07:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjCJMFt (ORCPT
+        with ESMTP id S230145AbjCJMGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 07:05:49 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CF2EA014;
-        Fri, 10 Mar 2023 04:05:47 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4A22322A98;
-        Fri, 10 Mar 2023 12:05:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678449946; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k6lGtX45aQeF36lTGiVeBvqf1CI5X3sksG7oKS/gG5k=;
-        b=njDc490kvCw9DcdNEoifK7T5faKZdoqKFI5wlQiiCaj9fH/Y+g3CabK7bAPxldTEoEWSFk
-        mN27qODCXVNhz+xOe8apcUwqcFQbMR3ameAldT3uHFLg14Z67qG9bmpnZUipw9iuh+G3ze
-        BNC8t6b+siUY7iGHBFqx6IrpJLA0jGo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678449946;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k6lGtX45aQeF36lTGiVeBvqf1CI5X3sksG7oKS/gG5k=;
-        b=Evn4CpWypLC/2eEKZweFOSUmlmWxaD3Rq+fmrdi/22TT5NDF28vK6hgExFeus2C7de+zC/
-        biVhUCa/e1kPebAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A200913592;
-        Fri, 10 Mar 2023 12:05:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id v6gMJBkdC2SXEgAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Fri, 10 Mar 2023 12:05:45 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id c14305a8;
-        Fri, 10 Mar 2023 12:05:42 +0000 (UTC)
-From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Xiubo Li <xiubli@redhat.com>, Jeff Layton <jlayton@kernel.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        linux-fscrypt@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] fscrypt: new helper function -
- __fscrypt_prepare_atomic_open()
-References: <20230309121910.18939-1-lhenriques@suse.de>
-        <20230309121910.18939-2-lhenriques@suse.de>
-        <ZAokFixlHwav4oio@sol.localdomain>
-Date:   Fri, 10 Mar 2023 12:05:42 +0000
-In-Reply-To: <ZAokFixlHwav4oio@sol.localdomain> (Eric Biggers's message of
-        "Thu, 9 Mar 2023 10:23:18 -0800")
-Message-ID: <87mt4k6cbt.fsf@suse.de>
+        Fri, 10 Mar 2023 07:06:02 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA25F34D6;
+        Fri, 10 Mar 2023 04:05:56 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 6827D24E2B9;
+        Fri, 10 Mar 2023 20:05:55 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
+ 2023 20:05:55 +0800
+Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
+ 2023 20:05:54 +0800
+From:   Jack Zhu <jack.zhu@starfivetech.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        "Todor Tomov" <todor.too@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Eugen Hristev <eugen.hristev@collabora.com>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <jack.zhu@starfivetech.com>,
+        <changhuang.liang@starfivetech.com>
+Subject: [PATCH v2 0/6] Add Starfive Camera Subsystem driver
+Date:   Fri, 10 Mar 2023 20:05:47 +0800
+Message-ID: <20230310120553.60586-1-jack.zhu@starfivetech.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric Biggers <ebiggers@kernel.org> writes:
+Hi,
 
-> On Thu, Mar 09, 2023 at 12:19:09PM +0000, Lu=C3=ADs Henriques wrote:
->> This patch introduces a new helper function which prepares an atomic_ope=
-n.
->> Because atomic open can act as a lookup if handed a dentry that is negat=
-ive,
->> we need to set DCACHE_NOKEY_NAME if the key for the parent isn't availab=
-le.
->>=20
->> The reason for getting the encryption info before checking if the direct=
-ory
->> has the encryption key is because we may have the key available but the
->> encryption info isn't yet set (maybe due to a drop_caches).  The regular
->> open path will use fscrypt_file_open for that but in the atomic open a
->> different approach is required.
->>=20
->> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
->> ---
->>  fs/crypto/hooks.c       | 14 ++++++++++++++
->>  include/linux/fscrypt.h |  6 ++++++
->>  2 files changed, 20 insertions(+)
->>=20
->> diff --git a/fs/crypto/hooks.c b/fs/crypto/hooks.c
->> index 7b8c5a1104b5..cbb828ecc5eb 100644
->> --- a/fs/crypto/hooks.c
->> +++ b/fs/crypto/hooks.c
->> @@ -117,6 +117,20 @@ int __fscrypt_prepare_readdir(struct inode *dir)
->>  }
->>  EXPORT_SYMBOL_GPL(__fscrypt_prepare_readdir);
->>=20=20
->> +int __fscrypt_prepare_atomic_open(struct inode *dir, struct dentry *den=
-try)
->
-> Anything exported to filesystems should have a kerneldoc comment.  That w=
-ould be
-> a good place to put some of the explanation that you currently have only =
-in the
-> commit message.
->
-> Also, double-underscored functions are not for use by filesystems directl=
-y.
-> Normally the pattern would be to make fscrypt_prepare_atomic_open() an in=
-line
-> function that checks IS_ENCRYPTED() and calls an out-of-line function
-> __fscrypt_prepare_atomic_open().  But if it happens to be simpler to make=
- the
-> caller handle the IS_ENCRYPTED() check in this case, then there should si=
-mply be
-> one function: fscrypt_prepare_atomic_open() (no leading underscores).
+This patch series adds support for the Starfive Camera Subsystem
+found on Starfive JH7110 SoC.
 
-Thank you, Eric.  I'll make sure that next rev will take these comments
-into account.  It definitely makes sense to move (or duplicate) the
-details as a kerneldoc comment.
+The driver implements V4L2, Media controller and V4L2 subdev interfaces.
+Camera sensor using V4L2 subdev interface in the kernel is supported.
 
->> +{
->> +	int err =3D fscrypt_get_encryption_info(dir, true);
->> +
->> +	if (err || (!err && !fscrypt_has_encryption_key(dir))) {
->> +		spin_lock(&dentry->d_lock);
->> +		dentry->d_flags |=3D DCACHE_NOKEY_NAME;
->> +		spin_unlock(&dentry->d_lock);
->> +	}
->
-> Why does DCACHE_NOKEY_NAME need to be set on error?
->=20
-> Also note that the '!err &&' part has no effect.
+The driver is tested on VisionFive V2 board with IMX219 camera sensor.
+GStreamer 1.18.5 with v4l2src plugin is supported.
 
-To be honest, I wasn't really sure that if the d_flags should be set on
-error either.  I'll drop that, and then the 'if' statement will make more
-sense without the '||'.
+Changes since v1:
+- Deleted starfive,jh7110-mipi-csi2.yaml.
+- Converted cdns,csi2rx.txt to cdns,csi2rx.yaml and added ‘resets’
+  properties.
+- Added ‘cdns,csi2rx.yaml’ in ‘CADENCE MIPI-CSI2 BRIDGES’ entry.
+- The following contents were modified in starfive,jh7110-camss.yaml:
+  dropped quotes from ’id’ and ‘schema’; dropped ‘|’ for ‘description’;
+  corrected the wrong or redundant words: ‘a ISP’, ‘PD ISP’;
+  dropped ‘minItems’ for ‘reg’, ‘clocks’, ‘resets’ and ‘interrupts’;
+  dropped the '_clk' and 'rst_' prefix about the 'clock-names' and
+  'reset-names';
+  changed ‘endpoint@1’ to ‘endpoint’; updated examples;
+- Updated Subject for some patches.
+- Merged patch 6, 7, 8, 9, 10, 11 into one patch.
 
-Cheers
---=20
-Lu=C3=ADs
+Jack Zhu (6):
+  media: dt-bindings: Add bindings for JH7110 Camera Subsystem
+  media: dt-bindings: cadence-csi2rx: Convert to DT schema
+  media: admin-guide: Add starfive_camss.rst for Starfive Camera
+    Subsystem
+  media: cadence: Add support for external dphy and JH7110 SoC
+  MAINTAINERS: Add Starfive Camera Subsystem driver
+  media: starfive: Add Starfive Camera Subsystem driver
+
+ .../admin-guide/media/starfive_camss.rst      |   68 +
+ .../media/starfive_camss_graph.dot            |   28 +
+ .../admin-guide/media/v4l-drivers.rst         |    1 +
+ .../devicetree/bindings/media/cdns,csi2rx.txt |  100 --
+ .../bindings/media/cdns,csi2rx.yaml           |  163 ++
+ .../bindings/media/starfive,jh7110-camss.yaml |  144 ++
+ MAINTAINERS                                   |   10 +
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/cadence/cdns-csi2rx.c  |  273 +++-
+ drivers/media/platform/starfive/Kconfig       |   18 +
+ drivers/media/platform/starfive/Makefile      |   14 +
+ drivers/media/platform/starfive/stf_camss.c   |  728 +++++++++
+ drivers/media/platform/starfive/stf_camss.h   |  104 ++
+ drivers/media/platform/starfive/stf_common.h  |  149 ++
+ drivers/media/platform/starfive/stf_isp.c     | 1079 ++++++++++++++
+ drivers/media/platform/starfive/stf_isp.h     |  183 +++
+ .../media/platform/starfive/stf_isp_hw_ops.c  | 1286 ++++++++++++++++
+ drivers/media/platform/starfive/stf_video.c   | 1286 ++++++++++++++++
+ drivers/media/platform/starfive/stf_video.h   |   89 ++
+ drivers/media/platform/starfive/stf_vin.c     | 1314 +++++++++++++++++
+ drivers/media/platform/starfive/stf_vin.h     |  194 +++
+ .../media/platform/starfive/stf_vin_hw_ops.c  |  357 +++++
+ include/uapi/linux/stf_isp_ioctl.h            |  127 ++
+ 24 files changed, 7607 insertions(+), 110 deletions(-)
+ create mode 100644 Documentation/admin-guide/media/starfive_camss.rst
+ create mode 100644 Documentation/admin-guide/media/starfive_camss_graph.dot
+ delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+ create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+ create mode 100644 drivers/media/platform/starfive/Kconfig
+ create mode 100644 drivers/media/platform/starfive/Makefile
+ create mode 100644 drivers/media/platform/starfive/stf_camss.c
+ create mode 100644 drivers/media/platform/starfive/stf_camss.h
+ create mode 100644 drivers/media/platform/starfive/stf_common.h
+ create mode 100644 drivers/media/platform/starfive/stf_isp.c
+ create mode 100644 drivers/media/platform/starfive/stf_isp.h
+ create mode 100644 drivers/media/platform/starfive/stf_isp_hw_ops.c
+ create mode 100644 drivers/media/platform/starfive/stf_video.c
+ create mode 100644 drivers/media/platform/starfive/stf_video.h
+ create mode 100644 drivers/media/platform/starfive/stf_vin.c
+ create mode 100644 drivers/media/platform/starfive/stf_vin.h
+ create mode 100644 drivers/media/platform/starfive/stf_vin_hw_ops.c
+ create mode 100644 include/uapi/linux/stf_isp_ioctl.h
+
+-- 
+2.34.1
+
