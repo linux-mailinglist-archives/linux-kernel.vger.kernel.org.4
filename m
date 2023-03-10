@@ -2,106 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8576B510C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 20:38:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0826B510F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 20:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjCJTic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 14:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
+        id S230355AbjCJTkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 14:40:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjCJTib (ORCPT
+        with ESMTP id S230252AbjCJTki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 14:38:31 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F09D5B430;
-        Fri, 10 Mar 2023 11:38:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678477110; x=1710013110;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SFrSHn6wWTytcNJCIUp5rOcYiQP4rHp4kuKwJv6VehU=;
-  b=kn2fHtdR8sxA3DCGkgWR5qh8gSikMsCfghC4jPxtTyb7ujJblkkZ0Fxu
-   QI9nkmtKfuWI9QOeEllidMrtebaWEs2q/Ynlg9R5tPAjcb8UDlJrE7wA6
-   FVQHCqevmyeI375jZmNYbahOGUMesQt1zKPrp0FjGn4Rv+Vv5CIgkW4Wt
-   rzjkeEGs34yeKZCIVatHVHF7EGsPuF0+4KEFe7fwIYvdMo7KG4O1uWCBP
-   BgpDpbD2uXc0gC7IaZXqns/daV6jWOilBGrGfWZo9ERJ+oje4shoCMIHV
-   J/DbMjtdwD2zFmw6IDTDDrhH9iP4iXuiErrmKBZpwyZo5KOSZ9KFMWTlU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="364469041"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="364469041"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 11:38:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="627922741"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="627922741"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 10 Mar 2023 11:38:27 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1paiZP-00044V-0z;
-        Fri, 10 Mar 2023 19:38:27 +0000
-Date:   Sat, 11 Mar 2023 03:38:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yangtao Li <frank.li@vivo.com>, tytso@mit.edu,
-        adilger.kernel@dilger.ca
-Cc:     oe-kbuild-all@lists.linux.dev, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        Yangtao Li <frank.li@vivo.com>
-Subject: Re: [PATCH] ext4: convert to DIV_ROUND_UP() in
- mpage_process_page_bufs()
-Message-ID: <202303110358.NxL6UI32-lkp@intel.com>
-References: <20230310060734.8780-1-frank.li@vivo.com>
+        Fri, 10 Mar 2023 14:40:38 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8960F8E72
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 11:40:36 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id d41-20020a05600c4c2900b003e9e066550fso4177687wmp.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 11:40:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678477235;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hIVM9gDEt50e3uY9K91rrf6A4MD0eVPqdDEqNDoPjx0=;
+        b=Af7JO7HxSOsGysQU2nQpndk//csoYcKGBL4rZwe2nN407kJAQPmjKfXEFVRhXMEVNZ
+         ikk5tm3pAxtPM2b0fQFjy7Cio6kRgg620dAkNUa+zbgAgP/U4Np0VSLP5obKSYj28w6Z
+         Rlq3qqrIZFsiNbuZzjQFJFVuaIeSMMFVho++ESu8t02hi9IhbmcEo85kvl8ngm/p7ccI
+         wzIr//rPJb6Hnys6s6/TLrTxjF8exKUkOB4NQrGMAfbipv1vOCVI91eEi7SAh/YSRwic
+         DsyBBT0D/8vR0Yt0zd6yTtBmKPAAwbWxI7nJY9jH/qiauQQv885WXlEPACEmxWnqmSGN
+         41gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678477235;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hIVM9gDEt50e3uY9K91rrf6A4MD0eVPqdDEqNDoPjx0=;
+        b=xErDDeEhUBNYhCmr7u/6E+OvdYxpZf3BwTDuSTs8nYdV1LW9vfafgTxJ55440fP8fC
+         QIKiiyTrhBlKjEacX6fAUPl5GGUIM87TW45qzSQs8IwVfs+iVikkyOtcOm6RG+uyCElh
+         W3B30TtWRyw8rkce1sB4W3F6x5F1zGdNG3E8t4TnKLqjcdIReuaO61cGcuyMc91vPvvs
+         ZYqz0cESs0amSKTD7a9XtsgIC1ftMTpt22TZhNRNeuCDAPgIeiAYJKiGBcqK0vtemobG
+         vYr0BiqwAnfer2wSdreCspwruwFvGmPRHscg72f0gwB5mCiMGoFaZBQdGoFBAVu+w+lI
+         N+MQ==
+X-Gm-Message-State: AO0yUKULI/AhW4flRLD5/asnOuJrL8TPBZlChaDLghGIzKKqOVEvgeDX
+        vouM90beAmeMazu0wI4eQvt2raFyuYuYow==
+X-Google-Smtp-Source: AK7set9066pNFYOHzB+Q22vNE9iBk4JmLORV4Yc2gkxfEkMoebK5w//tiGEoY8OZ+zx+nNOcp+LjGw==
+X-Received: by 2002:a05:600c:154a:b0:3e7:95ba:e1c7 with SMTP id f10-20020a05600c154a00b003e795bae1c7mr3836812wmg.32.1678477235162;
+        Fri, 10 Mar 2023 11:40:35 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id m16-20020a7bce10000000b003eaee9e0d22sm718524wmc.33.2023.03.10.11.40.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 11:40:34 -0800 (PST)
+Date:   Fri, 10 Mar 2023 22:40:29 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     outreachy@lists.linux.dev,
+        Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: greybus: fix exceeds line length
+Message-ID: <eb7475da-7548-4820-a2b6-ff0f6cf4be71@kili.mountain>
+References: <ZAtkW6g6DwPg/pDp@khadija-virtual-machine>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230310060734.8780-1-frank.li@vivo.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZAtkW6g6DwPg/pDp@khadija-virtual-machine>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yangtao,
+On Fri, Mar 10, 2023 at 10:09:47PM +0500, Khadija Kamran wrote:
+> Length of line 182 exceeds 100 columns in file
+> drivers/staging/grebus/arche-platform.c, fix by removing tabs from the
+> line.
+> 
+> Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> ---
+>  drivers/staging/greybus/arche-platform.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/greybus/arche-platform.c b/drivers/staging/greybus/arche-platform.c
+> index fcbd5f71eff2..0f0fbc263f8a 100644
+> --- a/drivers/staging/greybus/arche-platform.c
+> +++ b/drivers/staging/greybus/arche-platform.c
+> @@ -179,7 +179,7 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
+>  				if (arche_pdata->wake_detect_state !=
+>  						WD_STATE_COLDBOOT_START) {
+>  					arche_platform_set_wake_detect_state(arche_pdata,
+> -									     WD_STATE_COLDBOOT_TRIG);
+> +						WD_STATE_COLDBOOT_TRIG);
 
-I love your patch! Yet something to improve:
+The original line was done deliberately so that it lines up.  If we
+apply your patch and re-run checkpatch -f on the file then it has a new
+warning:
 
-[auto build test ERROR on tytso-ext4/dev]
-[also build test ERROR on linus/master v6.3-rc1 next-20230310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+CHECK: Alignment should match open parenthesis
+#182: FILE: drivers/staging/greybus/arche-platform.c:182:
++                                       arche_platform_set_wake_detect_state(arche_pdata,
++                                               WD_STATE_COLDBOOT_TRIG);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yangtao-Li/ext4-convert-to-DIV_ROUND_UP-in-mpage_process_page_bufs/20230310-140903
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-patch link:    https://lore.kernel.org/r/20230310060734.8780-1-frank.li%40vivo.com
-patch subject: [PATCH] ext4: convert to DIV_ROUND_UP() in mpage_process_page_bufs()
-config: i386-debian-10.3 (https://download.01.org/0day-ci/archive/20230311/202303110358.NxL6UI32-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/f4d2db5f59592a5688be6e4d2d3dd6f3f94d4f96
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yangtao-Li/ext4-convert-to-DIV_ROUND_UP-in-mpage_process_page_bufs/20230310-140903
-        git checkout f4d2db5f59592a5688be6e4d2d3dd6f3f94d4f96
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Always try to think about the bigger picture.  Why did the original
+author do it that way?  The change makes checkpatch happy, but does it
+make the code more readable?  Is there a more important readability
+improvement to be done here?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303110358.NxL6UI32-lkp@intel.com/
+For example, you could re-arrange the if statements like this and pull
+everything in a few tabs.  Don't necessarily do that.  Just think about
+doing it.  I write quite a few cleanup patches that I don't send because
+the next day I just decide it's not worth it.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+When I look at this file, the style is not bad at all.  But at the start
+of the file there is #if IS_ENABLED(CONFIG_USB_HSIC_USB3613).  What is
+that?  The CONFIG doesn't exist and the header doesn't exits.  Probably
+it can be deleted.
 
->> ERROR: modpost: "__divdi3" [fs/ext4/ext4.ko] undefined!
+But that raises a new question.  Lukas Bulwahn is always looking for
+CONFIG_ entries which don't exist.  I would have expected him to find
+this already.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Anyway, we can write our own scripts to make a list of stuff inside
+IS_ENABLED():
+
+git grep IS_ENABLED | \
+	perl -ne 'if (/IS_ENABLED\((.+?)\)/){ print "$1\n"}' | \
+	sort -u | tee CONFIG_list
+
+Then we can go through the CONFIG_list file and see which other stuff
+doesn't exist.
+
+for i in $(grep ^CONFIG CONFIG_list  | cut -d '_' -f 2-) ; do \
+	grep -q -w "config $i$" $(find -name Kconfig) || echo $i ; \
+done | tee CONFIG_not_found
+
+I have never done this before so I don't know what you'll find.  But
+everywhere you look if you just look closer then it raises questions
+which raise more questions.  So it's interesting to explore.  Anyway,
+look closely at each line in the file and follow the rabbit holes until
+you find something interesting to work on.
+
+regards,
+dan carpenter
+
+diff --git a/drivers/staging/greybus/arche-platform.c b/drivers/staging/greybus/arche-platform.c
+index fcbd5f71eff2..2d9e0c41b5e3 100644
+--- a/drivers/staging/greybus/arche-platform.c
++++ b/drivers/staging/greybus/arche-platform.c
+@@ -165,43 +165,39 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
+ 		 * 30msec, then standby boot sequence is initiated, which is not
+ 		 * supported/implemented as of now. So ignore it.
+ 		 */
+-		if (arche_pdata->wake_detect_state == WD_STATE_BOOT_INIT) {
+-			if (time_before(jiffies,
+-					arche_pdata->wake_detect_start +
+-					msecs_to_jiffies(WD_COLDBOOT_PULSE_WIDTH_MS))) {
+-				arche_platform_set_wake_detect_state(arche_pdata,
+-								     WD_STATE_IDLE);
+-			} else {
+-				/*
+-				 * Check we are not in middle of irq thread
+-				 * already
+-				 */
+-				if (arche_pdata->wake_detect_state !=
+-						WD_STATE_COLDBOOT_START) {
+-					arche_platform_set_wake_detect_state(arche_pdata,
+-									     WD_STATE_COLDBOOT_TRIG);
+-					spin_unlock_irqrestore(&arche_pdata->wake_lock,
+-							       flags);
+-					return IRQ_WAKE_THREAD;
+-				}
+-			}
+-		}
+-	} else {
+-		/* wake/detect falling */
+-		if (arche_pdata->wake_detect_state == WD_STATE_IDLE) {
+-			arche_pdata->wake_detect_start = jiffies;
++		if (arche_pdata->wake_detect_state != WD_STATE_BOOT_INIT)
++			goto out_unlock;
++
++		if (time_before(jiffies,
++				arche_pdata->wake_detect_start +
++				msecs_to_jiffies(WD_COLDBOOT_PULSE_WIDTH_MS))) {
++			arche_platform_set_wake_detect_state(arche_pdata,
++							     WD_STATE_IDLE);
++		} else if (arche_pdata->wake_detect_state != WD_STATE_COLDBOOT_START) {
+ 			/*
+-			 * In the beginning, when wake/detect goes low
+-			 * (first time), we assume it is meant for coldboot
+-			 * and set the flag. If wake/detect line stays low
+-			 * beyond 30msec, then it is coldboot else fallback
+-			 * to standby boot.
++			 * Check we are not in middle of irq thread
++			 * already
+ 			 */
+ 			arche_platform_set_wake_detect_state(arche_pdata,
+-							     WD_STATE_BOOT_INIT);
++							     WD_STATE_COLDBOOT_TRIG);
++			spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
++			return IRQ_WAKE_THREAD;
+ 		}
++	} else if (arche_pdata->wake_detect_state == WD_STATE_IDLE) {
++		/* wake/detect falling */
++		arche_pdata->wake_detect_start = jiffies;
++		/*
++		 * In the beginning, when wake/detect goes low
++		 * (first time), we assume it is meant for coldboot
++		 * and set the flag. If wake/detect line stays low
++		 * beyond 30msec, then it is coldboot else fallback
++		 * to standby boot.
++		 */
++		arche_platform_set_wake_detect_state(arche_pdata,
++						     WD_STATE_BOOT_INIT);
+ 	}
+ 
++out_unlock:
+ 	spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
+ 
+ 	return IRQ_HANDLED;
