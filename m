@@ -2,129 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329246B36D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 07:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 235796B36DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 07:51:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjCJGu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 01:50:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
+        id S229521AbjCJGvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 01:51:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjCJGuz (ORCPT
+        with ESMTP id S229761AbjCJGv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 01:50:55 -0500
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2116.outbound.protection.outlook.com [40.107.215.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67075F209F;
-        Thu,  9 Mar 2023 22:50:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ezbdg+W3b9vNhUcY5aduDnZEdzkxNfjiXr7xKG4kSmMj2vlvwDp/ji1vuUHDd2aYOMqfOcHcqXkaYuOMwVVSS1EtXgEIMZo0LiOjXOZDfg+Egw07wXjM3Tuti1jHfYaF4uq+VwQgFTP1urvj+Meg6iuM/2sjODm3j//laG1h6OUEdKQvPH541hzw4Q+MWiHVMy58fT6zztqCkyBzOXAV6DQCt8VE2A1wlTeQEGn/RTmQt2cXW8N2r89lzHBHuMKrrSi7YNNA1JoW9vORYLU1qZB0CM0YyBJm7J09q6TvFh0q0jMa7+BItH7X4z+FoSzXuvI3bTR19CY+SBxEuKrMRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Pex9aEt2J/rXn68Q7Mhe+oUcnvnN1Kkk+C785IQtocg=;
- b=mSG3wnzLjliIU9PdHI0E19DQb7dOwzaBxQR7/GDOA8B3kQPPGUjGjclqbOuC6NYIklgtMMfq888QBRqxZrj52kN5phjKUc3tfsrPdHiJ7fLdFwcaM/k2bY8maRW6Qlwrj3Bw3FnP8znoLkHIenteNXzF/KpeXig4e39akDKq7F6WiU1jHvrNqa9jzdq+ncS/rgT+VJC47QdVFk/A6pjmyO1ONRJ69+M96lRkB1YqhTlJXVUcQZSi1Nxk2R/lq0w632jkR1ArZ6FVwg3Mvk9OrPXH5Y1I3yPElMvUWP4/iBt8Qq50V8yFFNunLL+Aqne/hDSOKD4TE9lsOybHkSqn2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pex9aEt2J/rXn68Q7Mhe+oUcnvnN1Kkk+C785IQtocg=;
- b=aQ33MwahQWbbBn2++ZkGngd7GAzn9+SpCsNs2abi33tNUAQq46qbaAGDPAVDsZ6slSgqcjpL5uZABFvALN3fq8IF7RjO5almr6Jv/5I3KBcmQaeOEYCYLmo6MsRBIlDGG87jzGQj6bXYFvitNcLaFQGAapgRYnEF9wJcm/RSslNxHtOlrHWGpAZstrrblQE0rKnQy1lxmBTeQnPEj4c2axJXUscY4jW0gUVYrquSw9pirtkkJH/qDW/z76DTP0uiE8+o9xmHiYDJU+Q1tFQnJ9dzTEXj4cjbfEoWeifOcYSh0uM6kZ2jPGJgmPovMwjO4wU4EaRYJjJ+Uu+B/hy6Mg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SEYPR06MB5327.apcprd06.prod.outlook.com (2603:1096:101:6a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
- 2023 06:50:45 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::daf6:5ebb:a93f:1869]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::daf6:5ebb:a93f:1869%9]) with mapi id 15.20.6178.019; Fri, 10 Mar 2023
- 06:50:45 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
-        jefflexu@linux.alibaba.com, tytso@mit.edu,
-        adilger.kernel@dilger.ca, rpeterso@redhat.com, agruenba@redhat.com,
-        mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org
-Cc:     linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, cluster-devel@redhat.com,
-        ocfs2-devel@oss.oracle.com, linux-fsdevel@vger.kernel.org
-Subject: Re: erofs: convert to use i_blockmask()
-Date:   Fri, 10 Mar 2023 14:50:34 +0800
-Message-Id: <20230310065034.62340-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230310040508.GN3390869@ZenIV>
-References: <20230310040508.GN3390869@ZenIV>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0193.apcprd04.prod.outlook.com
- (2603:1096:4:14::31) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Fri, 10 Mar 2023 01:51:27 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00353F34D6;
+        Thu,  9 Mar 2023 22:51:16 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id t11so5363744lfr.1;
+        Thu, 09 Mar 2023 22:51:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678431075;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4u6uCpUbBngUSRyb6gEuJ2P6dc/+CCHVDEEw2CGgqYE=;
+        b=GVfAFGtZLUGU8Cr5l+vAdhJvOIvLARMZwwN7mPv+hzJA93Rmxez8HvAnt3P0CcOGVW
+         yMNZOvibCckbi3kuKrOW0EuhOt2yRHOxShErg0m6j0yrq8Yyh1bpWV9MsUnsCfA7xiEB
+         1m0ShUR6poN9zcNjpx4PZZ4TD+fhzQtZ3RE6igE+W4+/7ErB6SCj+FTWZDUeQOI18Knl
+         bZD3A8GhxjfZ6V+Hq6Ui8K8qXoCMm2V7Huc0YV6N3zlaEVob8Ov7URlW7g78MzrQCsJb
+         dEJLlfYFiOvj6w9D6Kc1k8QvwAeTbnj9FR/aBJVa6GgFmXX3f7Z7H99wlyEpRpY9G57m
+         2YuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678431075;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4u6uCpUbBngUSRyb6gEuJ2P6dc/+CCHVDEEw2CGgqYE=;
+        b=if+1db79ymGDogWiI8x467ArGdj7CoksVDfi2QjqCUaJ4p/VmQNwqdsrEug/GPG1q5
+         aU+ZtQmjwxP7xKMJ7ZT6lmMGHqKdmywtDkBiMpB3ZSCziGRdPUTA1oV/U7oECKIbkzIv
+         RUlvgVKaBBL4hn2J/Re7WaOFzRmv3MPwJcIvwEGT2bkTjcYkEBccLk9PjpzNYOgs/Ty1
+         4rB+6fUiqhcNpCmthsLTGsb2FW3NX+iZW/K5B+jbiGEdwGOmM83WFbbIH79f38C8aNGU
+         D81O2VHNczDEiSlRZkWl5zJA8RknylJ9b+M1uOEfk6WbAVoU89fipOQNIB/OZ4Y8dQM4
+         IzgQ==
+X-Gm-Message-State: AO0yUKUaeClXd2siFp8zbG2E2u1/prmibYJlpBEfRlRCoh5bgPbudwrI
+        gvgVLzbhKeicwJKMcAV6wjrT/s1xHNBtUw==
+X-Google-Smtp-Source: AK7set/715anJ0DnygLF68jBNXXpbzugoyMt12gpYvAr/ocyTnNbT8aIHSoutEDB4DA4TZDebO9Szw==
+X-Received: by 2002:a05:6512:487:b0:4de:7a23:23e7 with SMTP id v7-20020a056512048700b004de7a2323e7mr6751015lfq.36.1678431075030;
+        Thu, 09 Mar 2023 22:51:15 -0800 (PST)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id y18-20020ac255b2000000b004db51387ad6sm148020lfg.129.2023.03.09.22.51.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 22:51:14 -0800 (PST)
+Message-ID: <7ca3ab00-5146-7d78-aa56-9c412fd415cb@gmail.com>
+Date:   Fri, 10 Mar 2023 07:51:12 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEYPR06MB5327:EE_
-X-MS-Office365-Filtering-Correlation-Id: 203119cc-15b1-4f75-5403-08db2133c5d1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JgJbj/huh9APjUupHDrNv+G6xx3b3bGJmK88sf3xYGB5e8nOK7WSfjJ+GTEr/gsoEFlpwXo0EK0+AdiV94/m9bIw2JGWfWKwI4zjTIy7v2LEEnSKVtrrwib7vNQHzdKSAEt4JDlip9upoF9kxt+/nYzJ9g75oPRDu4olaU7NtSU/HnYDCZ0KnibOaIqkhKcKCV2RjHl85Q72AQrZeEG1sTHEMukEtzu6g/RcObh/UFxYJfC8HaAZj/iJ5WgCUBogudchs0yBuKUqDGu9P9H3uHRMW20IXqvj3ouRxtQMOMo4QAqL63Y0YrPkvRv42WCj4AoGMI1JsI5xIUR6MY928+NW2Nw2RKNLGKqXAvr6uTx0EDKhaxN1Wt2ovpUVJ3usFdcMVG2Wno2zUQz42qZ/DSTOSRwCTaBlO1Ww67K9L6YqIU1plmF10bhVUGVHDGctWTi7C9M0dvPXehJu5ZoSbyyU27UznKEa/f9CfIu06Eu/gDDpysXnR5f+L1LT0xmgB06PF7lwOczBwWEdcCGVuHqW8VICryHP6QudTDinIXYN/HKtdClh+N0flxvvNxyOybzZvjpNkzWntja0DFOrOHxFG5f0NtwfEG9BEpiAw85UL4LbFjBl3CZ9qOgHAkq3Ga1pZ5s3qs13K+wDrw6LVLMaNRvKxCS5gQKX3h49HDjoMSk4eF0ye3WTPWe2+iEao20pshGj+mKbbmKYlL3CDw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(376002)(366004)(39860400002)(346002)(451199018)(2906002)(5660300002)(7416002)(26005)(8936002)(36756003)(66476007)(8676002)(41300700001)(66556008)(4326008)(558084003)(66946007)(316002)(86362001)(52116002)(478600001)(921005)(966005)(6486002)(38100700002)(6666004)(1076003)(38350700002)(6506007)(6512007)(186003)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?I6Vq5WUZhkZFCYCL6wFKVPQhhOoRsvYiiu9qvv0ekAqFgXpvKw59OjYKykI/?=
- =?us-ascii?Q?dIZ9VT5TJCkR3uHr1lfoFZgxcPgR2YwUcR38Xjmcb2Niqgn09j4bznyNcqRF?=
- =?us-ascii?Q?aJnobe/5Kdz2YNjIy5xKN/TSKyhUBQFQeanWatH0TKeb+RgTK5czo/PDPB6J?=
- =?us-ascii?Q?e02rednEDTX01XjU8Di1U9vA+PElbY6yngSM7SL8LhaIich+1K3x9a6Gy0Sh?=
- =?us-ascii?Q?wDXcQLkNLpy8ROzfXkl9ndni8UNHY11P9A5KtvaB+mXniiyw3m9Mc8sIiT2I?=
- =?us-ascii?Q?o/Lxpq+U7OugrQGspV8snqUx3wpKHW9ibaOllwCaXHctqTLF31Y+a+oQIVkO?=
- =?us-ascii?Q?iZZ5yX9M2F4nbFducQcMGxoj5cv7vMT306NHH5Y2xmR170A8jgsIJO6nTF/C?=
- =?us-ascii?Q?8MdUCkLqDoNAP7LQaHI4agkNUwV3rXgkjhx147otDxxMgewonFuk6YSXRlab?=
- =?us-ascii?Q?ylC1yFV1juolTFk9tjqeTTJ4LyQ0PnLKEyvr5CPpaIzESYViZT0TGmgkuS/m?=
- =?us-ascii?Q?CNnUJ3Zmpu9EXFD671x+E77qY4XUH9E0+Dvf2RhTtChdBzPzQjCR9el3QOBf?=
- =?us-ascii?Q?RaWAthdU5PXwcQmpjKnXPMPmz12/3P6l0XoNhoMzhrz+kQ/8Tg7SbMrpDTW0?=
- =?us-ascii?Q?h8Wejyx+dvkJ199P85Ngk+RWm9eaQEL0s1XrnQEJQZXReK+FB2sgAhOrGxy3?=
- =?us-ascii?Q?Lm36yLZqvZC+J25+7evH2qpMBxKj4OAswOT+KdpCVehce7/Ha8c//09rEBy4?=
- =?us-ascii?Q?nB5dYQVAOs16vj0QfZutcBw3Kjt1nsrAylCoRELEMA/50gUDgcWonlQAN6DE?=
- =?us-ascii?Q?mvKsOAs6dWVq2B+JI+nVqF+t3lFMuRfJubT7EMNZr4lbEwbJ6M+2xzGUC1c9?=
- =?us-ascii?Q?XooEDUX0w1ZUmBQZwGAyty9lwYrwvAd7Rpz+Goyal+fmyyx6BIbEHo6uxqyr?=
- =?us-ascii?Q?QgtqiAs4qlewCr0Uksjvv512cd4Zdrr8hBPXvFe7U4cPOn5FIZDFg0GZd6Uf?=
- =?us-ascii?Q?jq1KYqLbnvJyVC5vIio6bBrXxJo/WB1B6De8kw+9B2GydAviWw95vggiOcNl?=
- =?us-ascii?Q?3SeJVzIQGvz5ysGB6CX8rNALrHPONr3PLn++AgE5mPwdi2sFu4Ucqt/0q+vP?=
- =?us-ascii?Q?R+WAo1Y5fPTWOAh5/C5zo5Ex+6br6toXA4+zQHP8N7Bx3AqOALvZroXs5x/9?=
- =?us-ascii?Q?/GqCS5emv1aH9exuSXBnRG3ePep4bDSOLvLf/qKzBTmVBvrDikFz0zvQlzFL?=
- =?us-ascii?Q?j5z37DiH6BOcJfGSfrBQFaIuiZUxgTGduMfujpcd2jN9b0GxAVlY4IoILvx8?=
- =?us-ascii?Q?ppP3PwoqahMJBnvjHkvWSwaGl340b88fwBn/5j+fDwGj8BKvSf1l86wbTpJR?=
- =?us-ascii?Q?J/1xRW0v8jV4oRTSdYxBp3uBtYIqNFnGVVQK9OT88eeqmMyWFoVo0rnGlRBH?=
- =?us-ascii?Q?OOuKZbmIRFP/smp32LI5eO8GdT6V7OtpbA3GfWs9Q/Y13FqUtNRWXm2Bs8ni?=
- =?us-ascii?Q?hJwRLT7++A18wofqK+ml4OX6ykhdMOVs0nTbkFztDEIMrjOgngR4E93HS/LP?=
- =?us-ascii?Q?uAqMZkToYtDNPgGQuV14kMeKXhdRzI5opia3Y+kz?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 203119cc-15b1-4f75-5403-08db2133c5d1
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 06:50:45.2529
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /Q0ck/xcFXaRje+KC1xWYIwFMs8gx5V3IcVYhhp2PWIritf1xxrCfwe5WtKAZkqjSAVMxDWvxR5DXfmyxXOYlw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5327
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH V2] dt-bindings: nvmem: layouts: add fixed-layout
+To:     Michael Walle <michael@walle.cc>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20230309113936.20162-1-zajec5@gmail.com>
+ <8478b23e903d5236500ef2f6f7edb88f@walle.cc>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <8478b23e903d5236500ef2f6f7edb88f@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I can pick the stuff in the areas that don't have active development.
+On 9.03.2023 14:07, Michael Walle wrote:
+> Am 2023-03-09 12:39, schrieb Rafał Miłecki:
+>> From: Rafał Miłecki <rafal@milecki.pl>
+>>
+>> With the introduction of NVMEM layouts we should prefer and support
+>> describing all NVMEM devices content in the "nvmem-layout" node. That
+>> inludes using it for fixed NVMEM cells (those with hardcoded offset &
+>> size).
+>>
+>> This seems to be cleaner design and more explicit.
+>>
+>> Introduce a binding allowing fixed NVMEM cells as a type of layout. To
+>> avoid code duplication put shared part in the fixed-cell.yaml.
+>>
+>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> 
+> I don't feel comfortable to add an acked-by or reviewed-by here
+> because I don't do much with dt-bindings myself, but this looks
+> good to me.
 
-Could you please consider helping to pick this
-patch("ecryptfs: make splice write available again")?
-ecryptfs seems to be unmaintained.
+Thank you!
 
-https://lore.kernel.org/lkml/20220831033505.23178-1-frank.li@vivo.com/
 
-Thx,
-Yangtao
+>  From a device tree binding POV, could there be a
+> 
+> nvmem-layout@0 {
+>    reg = <0>;
+>    compatible = "layout1";
+> };
+> 
+> nvmem-layout@1000 {
+>    reg = <1000>;
+>    compatible = "layout2";
+> };
+> 
+> for partitioned eeproms for example?
+
+Maybe. Could you send a patch adding such binding with a proper
+explanation what devices need it, please? It's out of scope of this
+patch.
