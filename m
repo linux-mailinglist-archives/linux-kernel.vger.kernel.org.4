@@ -2,115 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5468C6B4B6B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8DC6B4B6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234426AbjCJPo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
+        id S234381AbjCJPob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:44:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbjCJPoF (ORCPT
+        with ESMTP id S234425AbjCJPoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Mar 2023 10:44:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519A9137895;
-        Fri, 10 Mar 2023 07:31:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1E54B822DD;
-        Fri, 10 Mar 2023 15:31:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A2C7C433EF;
-        Fri, 10 Mar 2023 15:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678462312;
-        bh=nUzOTuEgT91ilSzmzilIEFK3iqUy+T792nACm/ObXo8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gVDFRff32CUeg4VYZc0KxwyW7FRibHcCgOsXmEDulirUJ1Y3IyxHc+k5rgu+krn+f
-         LBLRHqN5iB4qujARfr6I9K6XSy+CpZYXKc9iBpNeqJgEQjktyxklC051kSVeXuXp86
-         JVJvV5eicKe6jDyHOv2homy93sYvRn15szXjW3Tj1/dYeFN8Wt6oinxlLREFqNWcDj
-         OiaZHKqvOX2i3j13+TXuGVlappDzZhw+hPOVsmKsc7A50KTP6aUO8ZEAsiAIbyz1QU
-         Bmga1n6munzOp/7VgWSY+hRQ5BxxIuDpQJbVN4cUcijREMpgWaikEsXTllWMHmJTis
-         IaWc+rpQsCniw==
-Date:   Fri, 10 Mar 2023 15:31:49 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] ASoC: Use of_property_present() for testing DT property
- presence
-Message-ID: <ZAtNZUifDt/Yl2qp@sirena.org.uk>
-References: <20230310144732.1546328-1-robh@kernel.org>
- <a23852d7-c70c-a03c-99fb-b453bdc750a1@linux.intel.com>
- <CAL_Jsq+XBzEMWrz=quxq4TkrejMMFRRvo0UinghmBphtmr=XXw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YQTqPomgC6kqCvBH"
-Content-Disposition: inline
-In-Reply-To: <CAL_Jsq+XBzEMWrz=quxq4TkrejMMFRRvo0UinghmBphtmr=XXw@mail.gmail.com>
-X-Cookie: Single tasking: Just Say No.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40071386AE
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:31:56 -0800 (PST)
+Received: by mail-qv1-xf49.google.com with SMTP id m1-20020a05621402a100b004bb706b3a27so3091157qvv.20
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:31:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678462315;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=A8Duh/Zsh4S+kv1rlFybyzg/cDPlN6w2nn2zcQL7LhA=;
+        b=G1QvjVFDpfEKlgx9BrRxDddKTWpfqafZE7uilFyCLO1b2UuA7kZgD1VKKaIPFEMOxr
+         bYJZM9Gc+gJ09wk6ZQJUbj29V4t3zAI4qoFJFNlaBu426Zt77Qj+gk5Gf81W6p+7ph99
+         bwR9SyfABhYXTv+5rsem6w7sCKrhOBinQEUHaXHcghAptwRklXC5sepjLBQ3l+xlsjnr
+         YnWLOIBCEFE3pU6ghlWxZd6VDgGsMVnAMx6dQHEe9eVontMiBXXUuWnIJuPV41jDw7+d
+         0RpNP8WMexmz6a4T87OqRRAyw+3bFctM4fqc9Py4w4YMrGREZ/cjdkvv0cpSmvp8v+gW
+         fs0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678462315;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A8Duh/Zsh4S+kv1rlFybyzg/cDPlN6w2nn2zcQL7LhA=;
+        b=zv5TRDR0QgXCd+ViuqNgIeD2LyVfqu5xCEY3/srUnLwhE1vg+CTLJqIbBBLbdtu/mL
+         8fA6496If/Wd5n8JFeuCZdf23/xMrHl8TcCsUbQCnsmEW+ozPQYLMlm718vtwkmdEMvQ
+         9/GPN4FadlR+vY8u4xPfdKwpivs024md0O3n3KK9J8gOWvAmCUmK4PrHgZeA51FtT92N
+         ujI7Z6+7E2Ob8Jo0ieAWVdq0XyUwmS3ut4Ut0qC9qygB6ANiKW7KH0IcCoS5Rr3YTJYf
+         VSDU5ruf8baTtB3oUXJOlwWpxk10pEqHwdautg3jTCbhJHG7tNBxk0Phc7XCjn+Uj2yT
+         ooxA==
+X-Gm-Message-State: AO0yUKWU9CJsNXYDxQF47IcLJUrtNC4xaqbUW/t+jg4kjRBCFWAga9Dc
+        KjAn5rbQXfLExkxbmbBRWruG45+SzO9cRlWL
+X-Google-Smtp-Source: AK7set8AiueNxyV99oSxmG1FTXMqdtmTpERMv8GkqMOmr0TQNPSQjxAMeLKsp5o3ijmei0/m1Lyaav4tX55S3Xet
+X-Received: from zenghuchen.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:2448])
+ (user=zenghuchen job=sendgmr) by 2002:a37:9a45:0:b0:742:76a6:8e90 with SMTP
+ id c66-20020a379a45000000b0074276a68e90mr892400qke.14.1678462315733; Fri, 10
+ Mar 2023 07:31:55 -0800 (PST)
+Date:   Fri, 10 Mar 2023 10:31:51 -0500
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230310153151.293608-1-zenghuchen@google.com>
+Subject: [PATCH] spi: dw: remove delay between write and read
+From:   Jack Chen <zenghuchen@google.com>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jesus Sanchez-Palencia <jesussanp@google.com>,
+        Mark Slevinsky <markslevinsky@google.com>,
+        Jack Chen <zenghuchen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Delay between write and read in polling mode is not necessary in dw spi
+driver. It was added assuming that dw spi controller need the delay to
+send data from tx fifo to spi devices. But it is not needed because
+following reasons:
+1) dw spi datasheet claims transfer begins when first data word is
+   present in the transmit FIFO and a slave is enabled. So at least we
+   do not need the full fifo-size-transfer time delay.
+2) in practice, due to spi devices implementation, spi full-duplex
+   (write and read real data) is always split into two transfers.
+Delay between spi transfers may be needed. But this can be introduced by
+using a more formal helper function "spi_transfer_delay_exec", in which
+the delay time is passed by users through spi_ioc_transfer.
 
---YQTqPomgC6kqCvBH
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Jack Chen <zenghuchen@google.com>
+---
+ drivers/spi/spi-dw-core.c | 20 +++++++-------------
+ 1 file changed, 7 insertions(+), 13 deletions(-)
 
-On Fri, Mar 10, 2023 at 09:14:08AM -0600, Rob Herring wrote:
-> On Fri, Mar 10, 2023 at 9:01=E2=80=AFAM Amadeusz S=C5=82awi=C5=84ski
-> > On 3/10/2023 3:47 PM, Rob Herring wrote:
+diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+index c3bfb6c84cab..7c10fb353567 100644
+--- a/drivers/spi/spi-dw-core.c
++++ b/drivers/spi/spi-dw-core.c
+@@ -379,9 +379,12 @@ static void dw_spi_irq_setup(struct dw_spi *dws)
+ 
+ /*
+  * The iterative procedure of the poll-based transfer is simple: write as much
+- * as possible to the Tx FIFO, wait until the pending to receive data is ready
+- * to be read, read it from the Rx FIFO and check whether the performed
+- * procedure has been successful.
++ * as possible to the Tx FIFO, then read from the Rx FIFO and check whether the
++ * performed procedure has been successful.
++ *
++ * Delay is introduced in the end of each transfer before (optionally) changing
++ * the chipselect status, then starting the next transfer or completing the
++ * list of @spi_message.
+  *
+  * Note this method the same way as the IRQ-based transfer won't work well for
+  * the SPI devices connected to the controller with native CS due to the
+@@ -390,21 +393,12 @@ static void dw_spi_irq_setup(struct dw_spi *dws)
+ static int dw_spi_poll_transfer(struct dw_spi *dws,
+ 				struct spi_transfer *transfer)
+ {
+-	struct spi_delay delay;
+-	u16 nbits;
+ 	int ret;
+ 
+-	delay.unit = SPI_DELAY_UNIT_SCK;
+-	nbits = dws->n_bytes * BITS_PER_BYTE;
+-
+ 	do {
+ 		dw_writer(dws);
+-
+-		delay.value = nbits * (dws->rx_len - dws->tx_len);
+-		spi_delay_exec(&delay, transfer);
+-
+ 		dw_reader(dws);
+-
++		spi_transfer_delay_exec(transfer);
+ 		ret = dw_spi_check_status(dws, true);
+ 		if (ret)
+ 			return ret;
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
 
-> > > -             if (of_get_property(ep,   "reg", NULL))
-> > > +             if (of_property_present(ep,   "reg"))
-
-> > Bit of nit picking, but any reason, why there are multiple spaces,
-> > before "reg" here?
-
-> Only because there was before and it was a scripted change.
-
-Yeah, I don't think there's any reason for that - perhaps at some
-point it caused the code to line up?
-
---YQTqPomgC6kqCvBH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQLTWQACgkQJNaLcl1U
-h9Ap4gf9HaaXZcTMkFjkbHzWE/oyzg7IX24irsYTqkShQjQs79+TcFLpH/R2wAJP
-D5Op6bvPzyNokg0rlIA1bPuTtJxvAOgboa9LobpsLRNso9ezIW/7c+IXmDfa1ZAB
-eWXBs3HN4IXKkDybSV2eyC5e9wckRJQfOAx2OTMeT7AmNs1nWTw4Ls6sIbAKxh4o
-osLdFick4HeMgxdZtNeTFr9dvlGqjkh6zR78oavbu132XUlvfqctErcIQ9qh4w7Y
-8yGUubnPOeOfr54Z5iT1MgcgLXXiyuziWdWaRGupAV8WqKmf8O0HySGKr1w3IVYP
-vyuuWuc++z0Kg8zh15H/vsdrTSVlUg==
-=7fFJ
------END PGP SIGNATURE-----
-
---YQTqPomgC6kqCvBH--
