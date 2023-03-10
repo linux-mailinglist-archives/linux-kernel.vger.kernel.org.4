@@ -2,312 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7F7B6B327F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 01:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 508006B3285
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 01:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbjCJACZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 19:02:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42890 "EHLO
+        id S230256AbjCJAF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 19:05:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjCJACX (ORCPT
+        with ESMTP id S230060AbjCJAFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 19:02:23 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0B9111691
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 16:02:20 -0800 (PST)
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5004C3F75D
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:02:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678406539;
-        bh=BoSkneUy12T8t+j3LhsvuTkbzqLXyS0o4aZ72Mu8r5A=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=SairPqm+dG5DflxecNB57vQ9HD7udPdi26TCCt9oGaWSE6snFFjszhLBgjfOGdljL
-         wSTbFITTVn8QBkoZ1P4l8+w5egl2Z41Qj2YKmLAVMQbxE0pymsRF1BxP+N+1dn1MnG
-         zm0tCDWBrEjjTbEndz1p9xDe/x1jfQDLhKl8eagOgOyaRdos7Adpj+iHpiCag5kOJc
-         TKfaOmTJ4FI8daUCUzwFwuFFsejzWYA9GUAaKgRLqoiCSs6TClWzn2b37aM/oUD3QR
-         IYsLl+u8jWVxJXj8G7ZqwPQXU9/DopxKuCW6TeoTWhcAc1my88Tpv5vgSEIRm7H5pD
-         SNoYB5wEJzB6A==
-Received: by mail-qv1-f71.google.com with SMTP id pz4-20020ad45504000000b0056f060452adso2098909qvb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 16:02:19 -0800 (PST)
+        Thu, 9 Mar 2023 19:05:53 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46FFE8A8D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 16:05:51 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id a25so14079771edb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 16:05:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678406750;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TOQ2JwrgXFV05O9tRlxq9mUvvX5cwHSFjxQP49GBiII=;
+        b=s/togCRF/U8G5aJGup6+UUy1vUxgTglMyHmabUkcmccX9d1MOs200hR0ZT7xD0I0tR
+         D0vbyE7VzURzFPRaW+7fNph0qGIDKejB9vhKBfXCETcj3GBtSZ4YCHJXdoaGaQVl2vNt
+         /AMYSrr4m/26Yc5Sm8sugPnCFGCTvH6SZ4rcnjjTgFYZ6QqI6NlFEqv4z9sHNpSAHAxC
+         kZ0e4NETFqkqAR5eqD5orN1/V+uox5TZSucGENw1KFZVMehbKNITeU4f8ImpWYvTxmYH
+         EinLcP1hhyyOxjgoCFvZKmFIy8rPm6oOdn3pLqjOcAjG0EWnwzkY8d/r9Rry53bJAh4G
+         UAlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678406538;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BoSkneUy12T8t+j3LhsvuTkbzqLXyS0o4aZ72Mu8r5A=;
-        b=eilEPtwzrsIGUnPVEcU/e4dsx47lUJ6zw/bWDTHeRMFu3Prp3m6rAZRpPLrM5VV2n2
-         i63U7ry6K2gJpm5MsmGdeKerRboE11FNfMsIpZ5keDqxeslIa3czgSDBYczNsanO4ayy
-         hg7f+xosJC5vG5x7BwSLCibpJ/5oAF/fQBjqJgzJd9RXims+wrB/WDSk2GbEbyhYfx+Z
-         D9876vN1NbTU+8rWc6BeEI9emNfdt0D9CoO4HpfLO4CyvViAExk1aL0vrHjTZLGkiIDT
-         eXp8c2vKpXwx9zhGX6zdKQ4oqbBJTRNQTHGwigJPVu7uuf6rZPUA4mr2F4+v+J9hL4A7
-         ESMw==
-X-Gm-Message-State: AO0yUKU68f5ga7obW+zXmZSw7Rxp0zcn7Fonh5ovL6EgC+Y7k8zAg4Pd
-        QRtpAks3vyI4uXSnvzvj0/MRPpDLSQS9aNosI/Gfg1W/xXuZHdcyzxRIrlmqBuLgmW5xlV+nanR
-        dtN9005xsH1eqduxR5J8Y+hzFSMwj8dbDIvOjpch8LWilNDEu48k1svkZXw==
-X-Received: by 2002:ac8:429a:0:b0:3bf:bba8:69b0 with SMTP id o26-20020ac8429a000000b003bfbba869b0mr6312062qtl.5.1678406538043;
-        Thu, 09 Mar 2023 16:02:18 -0800 (PST)
-X-Google-Smtp-Source: AK7set8fRvxdpfPVM2OPFg9A6xTfRqxPsgiTT/xuGVJfVz9pB5Ua2+ICgn69kaCOjlMNrWxSkchQ8EYhFTim0wfP3xE=
-X-Received: by 2002:ac8:429a:0:b0:3bf:bba8:69b0 with SMTP id
- o26-20020ac8429a000000b003bfbba869b0mr6312054qtl.5.1678406537745; Thu, 09 Mar
- 2023 16:02:17 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678406750;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TOQ2JwrgXFV05O9tRlxq9mUvvX5cwHSFjxQP49GBiII=;
+        b=GS+16YkUQ5IidW0ysC2Kf619jXGyFsjOvxqvJJbj20Tt80Mt9s7gXRd+pIH9uOBGI9
+         LlUKeRY7h5Ef80vWkOaM/a3qxfFB3zRk2xnQYyvXEHKB9VwdMTv4hnXZ7Y81k/o0AjTp
+         xzqjYlh4lIAuocKo3RL0N2mlF3op5+Gbjm0l5KxtJ/JvL7UZrYyI1z+7xHIEdCa6UrYJ
+         fIOHLjGmhfHTfc0mZrO7BiyeiLbre0gmNeQGPMcIlSrWGCHOieO8jkfSwSNCyGeWPzq/
+         PHTfE/nWExnYccDmJoCh20jNvATikU5bHMaV7SbL3B27srFlpOsDxPYeIEU2n3ALunAx
+         o9GA==
+X-Gm-Message-State: AO0yUKVG5EV3h8yI9eWOGRZ7ZL4by+qn352MmhCAKZPzUh5bCS6v2mDO
+        7OZ3ei7mKrkIaNETkCCgU4IvJVh3cgR92je7c5fbmnSEUEE55kludxRpsQ==
+X-Google-Smtp-Source: AK7set/v4KpK5OJys67IvSPsijPpyucP+9dcxti8BzahB/SHxHqNo5m2OHgr4lu195qf+XV87sPuXopsDYEaFZ8Ur5M=
+X-Received: by 2002:a17:906:7803:b0:8db:b5c1:7203 with SMTP id
+ u3-20020a170906780300b008dbb5c17203mr12143219ejm.11.1678406749957; Thu, 09
+ Mar 2023 16:05:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20230303085928.4535-1-samin.guo@starfivetech.com> <20230303085928.4535-7-samin.guo@starfivetech.com>
-In-Reply-To: <20230303085928.4535-7-samin.guo@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Fri, 10 Mar 2023 01:02:01 +0100
-Message-ID: <CAJM55Z_YUXbny3NR7xLRu1ekzkgOsx2wgBWmCoQ5peMkN+fV_Q@mail.gmail.com>
-Subject: Re: [PATCH v5 06/12] net: stmmac: Add glue layer for StarFive JH7110 SoC
-To:     Samin Guo <samin.guo@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
+References: <20230306235730.GA31451@monkey> <ZAaCISgq4A/GnkCk@x1n>
+ <20230307004049.GC4956@monkey> <20230308190206.GA4005@monkey>
+ <CAAa6QmSdTo77dP2q2nU==C_2PdyF611+PVF32uPOTUQbp1kc9Q@mail.gmail.com> <20230309233340.GC3700@monkey>
+In-Reply-To: <20230309233340.GC3700@monkey>
+From:   "Zach O'Keefe" <zokeefe@google.com>
+Date:   Thu, 9 Mar 2023 16:05:13 -0800
+Message-ID: <CAAa6QmSiuFF6Oe0-j+eD0ma2tZAbhZuwENDYSZQSBrh1oeaLdA@mail.gmail.com>
+Subject: Re: THP backed thread stacks
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Mar 2023 at 10:01, Samin Guo <samin.guo@starfivetech.com> wrote:
+On Thu, Mar 9, 2023 at 3:33=E2=80=AFPM Mike Kravetz <mike.kravetz@oracle.co=
+m> wrote:
 >
-> This adds StarFive dwmac driver support on the StarFive JH7110 SoC.
+> On 03/09/23 14:38, Zach O'Keefe wrote:
+> > On Wed, Mar 8, 2023 at 11:02=E2=80=AFAM Mike Kravetz <mike.kravetz@orac=
+le.com> wrote:
+> > >
+> > > On 03/06/23 16:40, Mike Kravetz wrote:
+> > > > On 03/06/23 19:15, Peter Xu wrote:
+> > > > > On Mon, Mar 06, 2023 at 03:57:30PM -0800, Mike Kravetz wrote:
+> > > > > >
+> > > > > > Just wondering if there is anything better or more selective th=
+at can be
+> > > > > > done?  Does it make sense to have THP backed stacks by default?=
+  If not,
+> > > > > > who would be best at disabling?  A couple thoughts:
+> > > > > > - The kernel could disable huge pages on stacks.  libpthread/gl=
+ibc pass
+> > > > > >   the unused flag MAP_STACK.  We could key off this and disable=
+ huge pages.
+> > > > > >   However, I'm sure there is somebody somewhere today that is g=
+etting better
+> > > > > >   performance because they have huge pages backing their stacks=
+.
+> > > > > > - We could push this to glibc/libpthreads and have them use
+> > > > > >   MADV_NOHUGEPAGE on thread stacks.  However, this also has the=
+ potential
+> > > > > >   of regressing performance if somebody somewhere is getting be=
+tter
+> > > > > >   performance due to huge pages.
+> > > > >
+> > > > > Yes it seems it's always not safe to change a default behavior to=
+ me.
+> > > > >
+> > > > > For stack I really can't tell why it must be different here.  I a=
+ssume the
+> > > > > problem is the wasted space and it exaggerates easily with N-thre=
+ads.  But
+> > > > > IIUC it'll be the same as thp to normal memories iiuc, e.g., ther=
+e can be a
+> > > > > per-thread mmap() of 2MB even if only 4K is used each, then if su=
+ch mmap()
+> > > > > is populated by THP for each thread there'll also be a huge waste=
+.
+> > >
+> > > I may be alone in my thinking here, but it seems that stacks by their=
+ nature
+> > > are not generally good candidates for huge pages.  I am just thinking=
+ about
+> > > the 'normal' use case where stacks contain local function data and ar=
+guments.
+> > > Am I missing something, or are huge pages really a benefit here?
+> > >
+> > > Of course, I can imagine some thread with a large amount of frequentl=
+y
+> > > accessed data allocated on it's stack which could benefit from huge
+> > > pages.  But, this seems to be an exception rather than the rule.
+> > >
+> > > I understand the argument that THP always means always and everywhere=
+.
+> > > It just seems that thread stacks may be 'special enough' to consider
+> > > disabling by default
+> >
+> > Just my drive-by 2c, but would agree with you here (at least wrt
+> > hugepages not being good candidates, in general). A user mmap()'ing
+> > memory has a lot more (direct) control over how they fault / utilize
+> > the memory: you know when you're running out of space and can map more
+> > space as needed. For these stacks, you're setting the stack size to
+> > 2MB just as a precaution so you can avoid overflow -- AFAIU there is
+> > no intention of using the whole mapping (and looking at some data,
+> > it's very likely you won't come close).
+> >
+> > That said, why bother setting stack attribute to 2MiB in size if there
+> > isn't some intention of possibly being THP-backed? Moreover, how did
+> > it happen that the mappings were always hugepage-aligned here?
 >
-> Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
-> ---
->  MAINTAINERS                                   |   1 +
->  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
->  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
->  .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 125 ++++++++++++++++++
->  4 files changed, 139 insertions(+)
->  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+> I do not have the details as to why the Java group chose 2MB for stack
+> size.  My 'guess' is that they are trying to save on virtual space (altho=
+ugh
+> that seems silly).  2MB is actually reducing the default size.  The
+> default pthread stack size on my desktop (fedora) is 8MB [..]
+
+Oh, that's interesting -- I did not know that. That's huge.
+
+> [..]  This also is
+> a nice multiple of THP size.
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 4e236b7c7fd2..91a4f190c827 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19916,6 +19916,7 @@ STARFIVE DWMAC GLUE LAYER
->  M:     Emil Renner Berthing <kernel@esmil.dk>
->  M:     Samin Guo <samin.guo@starfivetech.com>
->  S:     Maintained
-> +F:     Documentation/devicetree/bindings/net/dwmac-starfive.c
->  F:     Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
->
->  STARFIVE JH71X0 CLOCK DRIVERS
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> index f77511fe4e87..47fbccef9d04 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> @@ -165,6 +165,18 @@ config DWMAC_SOCFPGA
->           for the stmmac device driver. This driver is used for
->           arria5 and cyclone5 FPGA SoCs.
->
-> +config DWMAC_STARFIVE
-> +       tristate "StarFive dwmac support"
-> +       depends on OF  && (ARCH_STARFIVE || COMPILE_TEST)
-> +       depends on STMMAC_ETH
-> +       default ARCH_STARFIVE
-> +       help
-> +         Support for ethernet controllers on StarFive RISC-V SoCs
-> +
-> +         This selects the StarFive platform specific glue layer support for
-> +         the stmmac device driver. This driver is used for StarFive JH7110
-> +         ethernet controller.
-> +
->  config DWMAC_STI
->         tristate "STi GMAC support"
->         default ARCH_STI
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
-> index 057e4bab5c08..8738fdbb4b2d 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
-> +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
-> @@ -23,6 +23,7 @@ obj-$(CONFIG_DWMAC_OXNAS)     += dwmac-oxnas.o
->  obj-$(CONFIG_DWMAC_QCOM_ETHQOS)        += dwmac-qcom-ethqos.o
->  obj-$(CONFIG_DWMAC_ROCKCHIP)   += dwmac-rk.o
->  obj-$(CONFIG_DWMAC_SOCFPGA)    += dwmac-altr-socfpga.o
-> +obj-$(CONFIG_DWMAC_STARFIVE)   += dwmac-starfive.o
->  obj-$(CONFIG_DWMAC_STI)                += dwmac-sti.o
->  obj-$(CONFIG_DWMAC_STM32)      += dwmac-stm32.o
->  obj-$(CONFIG_DWMAC_SUNXI)      += dwmac-sunxi.o
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
-> new file mode 100644
-> index 000000000000..566378306f67
-> --- /dev/null
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
-> @@ -0,0 +1,125 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * StarFive DWMAC platform driver
-> + *
-> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
-> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
-> + *
-> + */
-> +
-> +#include <linux/of_device.h>
-> +
-> +#include "stmmac_platform.h"
-> +
-> +struct starfive_dwmac {
-> +       struct device *dev;
-> +       struct clk *clk_tx;
-> +       struct clk *clk_gtx;
-> +       bool tx_use_rgmii_rxin_clk;
-> +};
-> +
-> +static void starfive_eth_fix_mac_speed(void *priv, unsigned int speed)
-> +{
-> +       struct starfive_dwmac *dwmac = priv;
-> +       unsigned long rate;
-> +       int err;
-> +
-> +       /* Generally, the rgmii_tx clock is provided by the internal clock,
-> +        * which needs to match the corresponding clock frequency according
-> +        * to different speeds. If the rgmii_tx clock is provided by the
-> +        * external rgmii_rxin, there is no need to configure the clock
-> +        * internally, because rgmii_rxin will be adaptively adjusted.
-> +        */
-> +       if (dwmac->tx_use_rgmii_rxin_clk)
-> +               return;
-> +
-> +       switch (speed) {
-> +       case SPEED_1000:
-> +               rate = 125000000;
-> +               break;
-> +       case SPEED_100:
-> +               rate = 25000000;
-> +               break;
-> +       case SPEED_10:
-> +               rate = 2500000;
-> +               break;
-> +       default:
-> +               dev_err(dwmac->dev, "invalid speed %u\n", speed);
-> +               break;
-> +       }
-> +
-> +       err = clk_set_rate(dwmac->clk_tx, rate);
+> I think the hugepage alignment in their environment was somewhat luck.
+> One suggestion made was to change stack size to avoid alignment and
+> hugepage usage.  That 'works' but seems kind of hackish.
 
-Hi Samin,
+That was my first thought, if the alignment was purely due to luck,
+and not somebody manually specifying it. Agreed it's kind of hackish
+if anyone can get bit by this by sheer luck.
 
-I tried exercising this code by forcing the interface to downgrade
-from 1000Mbps to 100Mbps (ethtool -s end0 speed 100), and it doesn't
-seem to work. The reason is that clk_tx is a mux, and when you call
-clk_set_rate it will try to find the parent with the closest clock
-rate instead of adjusting the current parent as is needed here.
-However that is easily fixed by calling clk_set_rate on clk_gtx which
-is just a gate that *will* propagate the rate change to the parent.
+> Also, David H pointed out the somewhat recent commit to align sufficientl=
+y
+> large mappings to THP boundaries.  This is going to make all stacks huge
+> page aligned.
 
-With this change, this piece of code and downgrading from 1000Mbps to
-100Mbps works on the JH7100. However on the JH7110 there is a second
-problem. The parent of clk_gtx, confusingly called
-clk_gmac{0,1}_gtxclk is a divider (and gate) that takes the 1GHz PLL0
-clock and divides it by some integer. But according to [1] it can at
-most divide by 15 which is not enough to generate the 25MHz clock
-needed for 100Mbps. So now I wonder how this is supposed to work on
-the JH7110.
+I think that change was reverted by Linus in commit 0ba09b173387
+("Revert "mm: align larger anonymous mappings on THP boundaries""),
+until it's perf regressions were better understood -- and I haven't
+seen a revamp of it.
 
-[1]: https://doc-en.rvspace.org/JH7110/TRM/JH7110_TRM/sys_crg.html#sys_crg__section_skz_fxm_wsb
-
-> +       if (err)
-> +               dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
-> +}
-> +
-> +static int starfive_dwmac_probe(struct platform_device *pdev)
-> +{
-> +       struct plat_stmmacenet_data *plat_dat;
-> +       struct stmmac_resources stmmac_res;
-> +       struct starfive_dwmac *dwmac;
-> +       int err;
-> +
-> +       err = stmmac_get_platform_resources(pdev, &stmmac_res);
-> +       if (err)
-> +               return err;
-> +
-> +       plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
-> +       if (IS_ERR(plat_dat)) {
-> +               dev_err(&pdev->dev, "dt configuration failed\n");
-> +               return PTR_ERR(plat_dat);
-> +       }
-> +
-> +       dwmac = devm_kzalloc(&pdev->dev, sizeof(*dwmac), GFP_KERNEL);
-> +       if (!dwmac)
-> +               return -ENOMEM;
-> +
-> +       dwmac->clk_tx = devm_clk_get_enabled(&pdev->dev, "tx");
-> +       if (IS_ERR(dwmac->clk_tx))
-> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_tx),
-> +                                   "error getting tx clock\n");
-> +
-> +       dwmac->clk_gtx = devm_clk_get_enabled(&pdev->dev, "gtx");
-> +       if (IS_ERR(dwmac->clk_gtx))
-> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_gtx),
-> +                                   "error getting gtx clock\n");
-> +
-> +       if (device_property_read_bool(&pdev->dev, "starfive,tx-use-rgmii-clk"))
-> +               dwmac->tx_use_rgmii_rxin_clk = true;
-> +
-> +       dwmac->dev = &pdev->dev;
-> +       plat_dat->fix_mac_speed = starfive_eth_fix_mac_speed;
-> +       plat_dat->init = NULL;
-> +       plat_dat->bsp_priv = dwmac;
-> +       plat_dat->dma_cfg->dche = true;
-> +
-> +       err = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
-> +       if (err) {
-> +               stmmac_remove_config_dt(pdev, plat_dat);
-> +               return err;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct of_device_id starfive_dwmac_match[] = {
-> +       { .compatible = "starfive,jh7110-dwmac" },
-> +       { /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, starfive_dwmac_match);
-> +
-> +static struct platform_driver starfive_dwmac_driver = {
-> +       .probe  = starfive_dwmac_probe,
-> +       .remove = stmmac_pltfr_remove,
-> +       .driver = {
-> +               .name = "starfive-dwmac",
-> +               .pm = &stmmac_pltfr_pm_ops,
-> +               .of_match_table = starfive_dwmac_match,
-> +       },
-> +};
-> +module_platform_driver(starfive_dwmac_driver);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("StarFive DWMAC platform driver");
-> +MODULE_AUTHOR("Emil Renner Berthing <kernel@esmil.dk>");
-> +MODULE_AUTHOR("Samin Guo <samin.guo@starfivetech.com>");
 > --
-> 2.17.1
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> Mike Kravetz
