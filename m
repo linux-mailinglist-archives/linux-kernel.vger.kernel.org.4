@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7F16B478F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 950546B4862
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:02:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbjCJOvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:51:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
+        id S233830AbjCJPB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:01:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbjCJOvG (ORCPT
+        with ESMTP id S233671AbjCJPB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:51:06 -0500
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6753E3A85C;
-        Fri, 10 Mar 2023 06:48:18 -0800 (PST)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-17638494edbso6035572fac.10;
-        Fri, 10 Mar 2023 06:48:18 -0800 (PST)
+        Fri, 10 Mar 2023 10:01:28 -0500
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F41D12C436;
+        Fri, 10 Mar 2023 06:54:58 -0800 (PST)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-176261d7f45so6038506fac.11;
+        Fri, 10 Mar 2023 06:54:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459698;
+        d=1e100.net; s=20210112; t=1678459714;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Jcxqo0ngoDPG8sfx3l2EfDlYPoRMEx1f3UACnu8WIP0=;
-        b=0lqaUpwXPDQ/UH/1ch27rldKG9EYMJuIBC7iQqdQDKCxMD33ngW/nSQLnfg491bMEj
-         dPbZSbw2HJ9+1WlD6fsvp/FCOCYgcqejWu9aZtIMInBpKAztGN7dy7ayewwApNMMzQB0
-         XDQ7JYbSEbP3iub8/JrhBU+pHx5mKW6SWoIJorQ4MpUkEJFF7Al/MtlQWL2sWRqw/rXf
-         VuqziBveaBbxyQEArefABMTCMi1Ap6NzD7OhTG6epjaRhvHIrNAIV/XTLEVmWJ8mDn6H
-         5hrUV2NSPqowIPnhncYxhF382XnhCf0pPY9CNDAytdAeEqUZ156z2WdD0B/jF4X40k+u
-         U8fw==
-X-Gm-Message-State: AO0yUKUSfGCigVrzN9Y8kWh2Rotuyni+aoBr7JRjQ4D2ae38yrLT6x0K
-        ZoFEi+aJqEv39+2ENfZPHtUBlBlSxg==
-X-Google-Smtp-Source: AK7set+/NJfKhDjq/US9Zgnj2vnj5ULRkdXtv1anFiXdX/PaEZpHr9aZmeUXkDHFpmVGgwO/W+nGBw==
-X-Received: by 2002:a05:6870:20e:b0:172:3a2f:c5ec with SMTP id j14-20020a056870020e00b001723a2fc5ecmr15852389oad.2.1678459698281;
-        Fri, 10 Mar 2023 06:48:18 -0800 (PST)
+        bh=uImUbNaV7wiBHen0L703XZwJA1EUSBWF5TLrsQa3YcU=;
+        b=4ZbjPo5LB7eZ280GPReYYHpcpZX4wf2SRfP627EQE2CAywOKVOWNuy1KRHgZ53mv8L
+         bm7Cqy95JhNuD+SVEk4q5RctBBH/sK5Z6dtM5E/xHnHpm2f/SRPyQiY6F/TXcYSds4m8
+         s2QUiZ4BJ0vvdQe2j5M/kf0Lh3KGwBOvT5vKhUZXomIXkHxFYCwlCozxy5dF5q5/7rlE
+         +nP5QM1YT64RkSMChhHP6fQX5ttajWhQu9YpFBLb+f2nMk6cWLozNusaD/z26+QPA2BW
+         HBJFvcZjTnCjXO2iwKkyYui9ZqRuA/ITYbf+bq0r8N5c8LMjVTRQ79N4kKLlWsWdLGuv
+         4MWQ==
+X-Gm-Message-State: AO0yUKWqgUIvE4wditpcDNDtB6LaBEljIac2+fbSeIQY16TFxQYHiezL
+        C93nJREdq40ZfzPhDoHa6A==
+X-Google-Smtp-Source: AK7set+mUxeO0Q6zckV3Wzj+6l9vR087TJSeGxvZsKMOFQZVU9d3N3/5VVxhw7OKw38MOpvafeMSpw==
+X-Received: by 2002:a05:6870:9107:b0:16e:18a:7e08 with SMTP id o7-20020a056870910700b0016e018a7e08mr15840947oae.39.1678459713975;
+        Fri, 10 Mar 2023 06:48:33 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id zq48-20020a0568718eb000b00172473f9fe0sm118665oab.13.2023.03.10.06.48.17
+        by smtp.gmail.com with ESMTPSA id k6-20020a056870d38600b001764f55398bsm113643oag.20.2023.03.10.06.48.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:48:17 -0800 (PST)
-Received: (nullmailer pid 1545259 invoked by uid 1000);
+        Fri, 10 Mar 2023 06:48:33 -0800 (PST)
+Received: (nullmailer pid 1545179 invoked by uid 1000);
         Fri, 10 Mar 2023 14:47:24 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] soc: sunxi: Use of_property_present() for testing DT property presence
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] soc: qcom: Use of_property_present() for testing DT property presence
 Date:   Fri, 10 Mar 2023 08:47:24 -0600
-Message-Id: <20230310144724.1545223-1-robh@kernel.org>
+Message-Id: <20230310144724.1545153-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,22 +71,50 @@ for presence of a property and nothing more.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/soc/sunxi/sunxi_mbus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/soc/qcom/qcom_aoss.c | 2 +-
+ drivers/soc/qcom/smem.c      | 2 +-
+ drivers/soc/qcom/smsm.c      | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/soc/sunxi/sunxi_mbus.c b/drivers/soc/sunxi/sunxi_mbus.c
-index d90e4a264b6f..1734da357ca2 100644
---- a/drivers/soc/sunxi/sunxi_mbus.c
-+++ b/drivers/soc/sunxi/sunxi_mbus.c
-@@ -82,7 +82,7 @@ static int sunxi_mbus_notifier(struct notifier_block *nb,
- 	 * Older DTs or SoCs who are not clearly understood need to set
- 	 * that DMA offset though.
- 	 */
--	if (of_find_property(dev->of_node, "interconnects", NULL))
-+	if (of_property_present(dev->of_node, "interconnects"))
- 		return NOTIFY_DONE;
+diff --git a/drivers/soc/qcom/qcom_aoss.c b/drivers/soc/qcom/qcom_aoss.c
+index 18c856056475..e376c32cc16e 100644
+--- a/drivers/soc/qcom/qcom_aoss.c
++++ b/drivers/soc/qcom/qcom_aoss.c
+@@ -395,7 +395,7 @@ static int qmp_cooling_devices_register(struct qmp *qmp)
+ 		return -ENOMEM;
  
- 	ret = dma_direct_set_offset(dev, PHYS_OFFSET, 0, SZ_4G);
+ 	for_each_available_child_of_node(np, child) {
+-		if (!of_find_property(child, "#cooling-cells", NULL))
++		if (!of_property_present(child, "#cooling-cells"))
+ 			continue;
+ 		ret = qmp_cooling_device_add(qmp, &qmp->cooling_devs[count++],
+ 					     child);
+diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+index 4f163d62942c..25f5925a8d51 100644
+--- a/drivers/soc/qcom/smem.c
++++ b/drivers/soc/qcom/smem.c
+@@ -1045,7 +1045,7 @@ static int qcom_smem_probe(struct platform_device *pdev)
+ 	int i;
+ 
+ 	num_regions = 1;
+-	if (of_find_property(pdev->dev.of_node, "qcom,rpm-msg-ram", NULL))
++	if (of_property_present(pdev->dev.of_node, "qcom,rpm-msg-ram"))
+ 		num_regions++;
+ 
+ 	array_size = num_regions * sizeof(struct smem_region);
+diff --git a/drivers/soc/qcom/smsm.c b/drivers/soc/qcom/smsm.c
+index 3e8994d6110e..8c137dff7dac 100644
+--- a/drivers/soc/qcom/smsm.c
++++ b/drivers/soc/qcom/smsm.c
+@@ -510,7 +510,7 @@ static int qcom_smsm_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	for_each_child_of_node(pdev->dev.of_node, local_node) {
+-		if (of_find_property(local_node, "#qcom,smem-state-cells", NULL))
++		if (of_property_present(local_node, "#qcom,smem-state-cells"))
+ 			break;
+ 	}
+ 	if (!local_node) {
 -- 
 2.39.2
 
