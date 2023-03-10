@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575046B4664
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E19D46B468D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:44:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbjCJOms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58780 "EHLO
+        id S232935AbjCJOoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:44:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232818AbjCJOmf (ORCPT
+        with ESMTP id S232858AbjCJOnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:42:35 -0500
+        Fri, 10 Mar 2023 09:43:46 -0500
 Received: from out203-205-221-221.mail.qq.com (out203-205-221-221.mail.qq.com [203.205.221.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BE81220B1;
-        Fri, 10 Mar 2023 06:42:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E601EFCF1F;
+        Fri, 10 Mar 2023 06:43:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1678459040;
-        bh=OfRq4RsjFmFjVbXxoteCcZ+CskP3emYj476+qItt3ZA=;
+        s=s201512; t=1678459421;
+        bh=UGzmVkXCL+1EkPSwzlDgNi3i411tT8zWbKctyhvLmow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=geHRgdeWEUWgC4Mt1YUk2R7/0LfeUCfM73w/GwQ8G06aVR/UcO6mb+D2XHFeQOuTa
-         +A2dnCZ3OQJ5UYUBxIjdQvjA96BR6NTB7LmdkGTtgcHwRD3sUU3oMEPkZ9RW9BNijz
-         ojKrarmUwCGPkrzl/+VptoadD61Tf6ytmP3oychU=
+        b=vIeVl9ykyZz35GKcZWAPeSCGGw2SH6irRPNoyyT1IFXDepP7t/PWaMf5PY6rTLA6P
+         +d/h3w18YitflKHhr10lUIBnZm83fnKNB/20uZ1NJqtl5MJdqQwpzH7Az8ta1gwz0d
+         mfXA0g8AKYm+Ln/h8LOYN0Phh0X5cQWbc6tqPZK4=
 Received: from DESKTOP-ZMX.localdomain ([115.156.143.0])
         by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
         id 8A61225E; Fri, 10 Mar 2023 22:34:38 +0800
-X-QQ-mid: xmsmtpt1678458899t5mn9caiy
-Message-ID: <tencent_27DD0718C3FD9C5F7D6E2FBA225CAA760405@qq.com>
-X-QQ-XMAILINFO: N01B81DxkqnprkTzGWFG4fKDVG1Fe4WRIhp70ERlCuCKVw1hHjAwrqMnQdl5e8
-         NdgW28oHtGkAPms5je69zlTX45CrP9nR6StYUnPGrwEtsviDgrOR67w57LBlChakUKkCSSUy42/d
-         cQIM57R3RJjgEQ+epwrwdy5s7LfjEcvfeRhIbtdvdHJOSFT34IC0eM7OuxffWcU6/yGXnfTGxv8T
-         TOt+aC1X1uPUb6JghMeye6Xf5SFCAhTl8shgG501nDz4ubR9jF+lkvPGi9d5jRrh1qGyKzBMILmW
-         LWUxXOYKYMvjxHaah2QseiszGFlyLVJdRSa8g718hI4Ryb8hWAQKoQfWVzprLKBkiIXB6Q0FtaJU
-         aXRZqgTj5p8PGUD/btPkcmQgDp74MhwJfDfDj1m8ZpnfqYQFFaMbMoOvbPD5uPBVeKgyFg2ZdWek
-         YHAXvCvtE5oMW3Vw0mC9qGPSSIQuYpemn6qzlS//EEEDV6wSXe141jD7hUJP5Sd7iXeKVGvO0nRU
-         KFb4Z0qofHhMUeo+gmOffGqN/WV3uo0SgV5wHvC2ecC1tlNZyUBRSgUYm0ogGRePw1/rduc+osTe
-         zjf+wHp+Tvz+lK6KsInWu1jEdtM2HqqqfMKaqR1rplXG0pSJyE3uCHefeKUHGHIkuiQnipEciaOc
-         QYq3nR6Alvp+ecffLnYIbKHNJSyo/P4gCpt5Y29RFXkGFzhhkEkKFcp0oqcGIeRhpC7WTF0fks2Z
-         E+reguygacWZLj/kNirzDIZvk0vp1NLWbs6/NAIGjkjGRenIt/asOzrAAm1zWuQCuxLY5C7FyULr
-         YPpV4kbSe2pMG5rR2aLo6e0TRn/BLnRm420xrC1F5cMX0LmVSZG+xD5nnttxlR4VyEOn85WeLNWJ
-         QvikSoDrq6hITqkLKN/YhuBRBYCWZYxXHgXROlPPBopqoOAG3tTFlHvSN65IJk3udRmKEaaSRINM
-         DW47b+JiIdy4hO19yCJ+zU9/QFWRvwZIfUGVwr5xdBTMXSr60MUaGPwvsDvsYyKMek2LDIXY9sw+
-         cJriHndfJDUB+NPi/4PFdwO6AafE+1Xw+oCI0Y8ZiqhS2gVbAR
+X-QQ-mid: xmsmtpt1678458904tlpmm9eo4
+Message-ID: <tencent_62395CA0D608DD0078DD3D889F6E4E22BA05@qq.com>
+X-QQ-XMAILINFO: NupD2wIGF7MkbLXrURGLr0r0johuVIoGwBoq/JHBCOruw2uSS9jS+BMqd9dldZ
+         qVJLBxTB9v93hyTPPsO2OMwOSJqVqimvxSCU+OIhe9JhtTCjUcI3IaK8f+RW71xY+qIkO1ctmD2H
+         c17ZnkE+HhOaJxwiXLa/iB7pTywZFrIGfNpK9J6ZjhO1H1mVn15DgzCWmonXqtCSS7SblPip83rm
+         7bqPhguIrqnq63bThqEhunaHhY3QU6jZVcNhjuU2en84POVg7VkBLW2RAklAw95o7aYUyACL0qrd
+         EWJgeV2VGpuF3HSH9UoR6M61+4b+y5bj58xIIrdASUGCj8RWgbxc+jBIXrxRtogFJg3Ut9g59Pp2
+         u3PvEHnKdYW8qimtkb9XMtdRC6xiISrZqtPa0MboJIelvVD2LoX5zgK+QFBxHVyJdTPnQ+5EeQny
+         h8rle+kEBGvtUP6c+3I6C+2H/a/Uk03Md6B0GYBgu3Vvkk0H/7Nl7pXROhEhvnvdqG8RCzeSa9oD
+         IFmzItzrW2Bi5JBWH1gWH4k1VYloU5+4YmCYu5+KRAPm+nC8a8BhARaG3YdfJzly3n91VlzefipC
+         YFdYzmVfamzCKn8tdPZGiPgEKkQyVcEGCtSKrWBef5QEpyflrK/+U8r6igjm7u/fKFkOVqGi2+Hu
+         3+OhomhkDzBUU5faUhK0M4yEYzWiXdzoYMQZYsq3g1MArnt6R6+3gvNldW9r0l3uOz9hP2Y19QDp
+         uz7luM73o+XFnVSZ/35vxf0pAzZS+T7s4yM8KuGdjpA9my3RhVhwd40JykS/bqHgrDinm7AfzFwn
+         cVqa1o2h8MznjP1fTQRJOYquySrxSBdNqBRMPXM6aEiREid5Xlq/bQwUEQI36wLQMNUcBKvKDPqS
+         2LPE6yh9qU0jTr4eW1MomXxlrEyp0qUVn5VQFHjeWDXhrAq/QjrjnlN2zPLe4ij1mFapvIhmip3/
+         armkDUMlIEmUtmmMUpsCL7Nf6BgRbtZyLQ6mhphl776WQAzuEltzuwEGdiE6s1WV1iBhu0x0g=
 From:   Yang Xiwen <forbidden405@foxmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -51,9 +50,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>,
         Yang Xiwen <forbidden405@foxmail.com>
-Subject: [PATCH 1/3] dt-bindings: vendor-prefixes: Add Henan Yiming Technology Co., Ltd.
-Date:   Fri, 10 Mar 2023 22:33:28 +0800
-X-OQ-MSGID: <20230310143330.9485-2-forbidden405@foxmail.com>
+Subject: [PATCH 3/3] arm64: dts: qcom: msm8916-yiming-uz801v3: Add initial device tree
+Date:   Fri, 10 Mar 2023 22:33:30 +0800
+X-OQ-MSGID: <20230310143330.9485-4-forbidden405@foxmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230310143330.9485-1-forbidden405@foxmail.com>
 References: <20230310143330.9485-1-forbidden405@foxmail.com>
@@ -71,29 +70,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Henan Yiming Technology Co., Ltd. was established in 2021. The business
-scope of the company includes: communication equipment (excluding radio
-control equipment).
+This commit adds support for the uz801 v3.0 WiFi/LTE dongle made by
+Henan Yiming Technology Co., Ltd. based on MSM8916.
 
-Link: https://gw.yimingkeji.net
+Note: The original firmware does not support 64-bit OS. It is necessary
+to flash 64-bit TZ firmware to boot arm64.
+
+Currently supported:
+- All CPU cores
+- Buttons
+- LEDs
+- Modem
+- SDHC
+- USB Device Mode
+- UART
+
 Signed-off-by: Yang Xiwen <forbidden405@foxmail.com>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/boot/dts/qcom/Makefile             |  1 +
+ .../boot/dts/qcom/msm8916-yiming-uz801v3.dts  | 35 +++++++++++++++++++
+ 2 files changed, 36 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-yiming-uz801v3.dts
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index ed64e06ecca49..d6ec61904d6b8 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1528,6 +1528,8 @@ patternProperties:
-     description: Yes Optoelectronics Co.,Ltd.
-   "^yic,.*":
-     description: YIC System Co., Ltd.
-+  "^yiming,.*":
-+    description: Henan Yiming Technology Co., Ltd.
-   "^ylm,.*":
-     description: Shenzhen Yangliming Electronic Technology Co., Ltd.
-   "^yna,.*":
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index 31aa54f0428c3..0c4c71d6277b7 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -28,6 +28,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-uf896.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-ufi001c.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-yiming-uz801v3.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-motorola-potter.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-daisy.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-mido.dtb
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-yiming-uz801v3.dts b/arch/arm64/boot/dts/qcom/msm8916-yiming-uz801v3.dts
+new file mode 100644
+index 0000000000000..74ce6563be183
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/msm8916-yiming-uz801v3.dts
+@@ -0,0 +1,35 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++/dts-v1/;
++
++#include "msm8916-ufi.dtsi"
++
++/ {
++	model = "uz801 v3.0 4G Modem Stick";
++	compatible = "yiming,uz801-v3", "qcom,msm8916";
++};
++
++&button_restart {
++	gpios = <&msmgpio 23 GPIO_ACTIVE_LOW>;
++};
++
++&led_r {
++	gpios = <&msmgpio 7 GPIO_ACTIVE_HIGH>;
++};
++
++&led_g {
++	gpios = <&msmgpio 8 GPIO_ACTIVE_HIGH>;
++};
++
++&led_b {
++	gpios = <&msmgpio 6 GPIO_ACTIVE_HIGH>;
++};
++
++&button_default {
++	pins = "gpio23";
++	bias-pull-up;
++};
++
++&gpio_leds_default {
++	pins = "gpio6", "gpio7", "gpio8";
++};
 -- 
 2.39.1
 
