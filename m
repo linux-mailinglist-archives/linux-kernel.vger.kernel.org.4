@@ -2,100 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8A56B3ECC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 13:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD76B6B3ED0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 13:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbjCJMKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 07:10:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
+        id S229453AbjCJMKn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 07:10:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjCJMJO (ORCPT
+        with ESMTP id S230179AbjCJMKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 07:09:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430D42FCCD;
-        Fri, 10 Mar 2023 04:08:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EECC76130C;
-        Fri, 10 Mar 2023 12:07:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED2DAC433EF;
-        Fri, 10 Mar 2023 12:07:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678450053;
-        bh=di2j3nQbkXRg2ckj9GOfhfAoU2Sqk7XeV5n5iWf9XCM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ez83VQzmNe6Ghgmg5skqmKhAgrh72ajFWeZEVj9PVQ/t/cb/PRyfpklhJQfnkwb6T
-         N38JZhvwiWtmvGEm0qm8udenPMBb4Am3xl5P9t8p4LcfDcsEPed2XzoBJahE2cFC0g
-         HUGccem8IOCBKwemr7mtckYztsZgW5KVaNJn2mYQ=
-Date:   Fri, 10 Mar 2023 13:07:30 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        stable@vger.kernel.org, kraxel@redhat.com,
-        linux-kernel@vger.kernel.org, emil.l.velikov@gmail.com,
-        airlied@linux.ie, error27@gmail.com, darren.kenny@oracle.com,
-        vegard.nossum@oracle.com
-Subject: Re: [PATCH 5.15.y] drm/virtio: Fix error code in
- virtio_gpu_object_shmem_init()
-Message-ID: <ZAsdguMTwKIRdVBn@kroah.com>
-References: <20230302172538.3508747-1-harshit.m.mogalapalli@oracle.com>
- <d2cf9564-3b0c-b9e4-6066-8e8e6eb854f0@collabora.com>
+        Fri, 10 Mar 2023 07:10:22 -0500
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7A3FCBDC;
+        Fri, 10 Mar 2023 04:09:12 -0800 (PST)
+Received: by mail-qt1-f169.google.com with SMTP id s12so5306959qtq.11;
+        Fri, 10 Mar 2023 04:09:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678450151;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=osXtcLpzII8HMhQvnw8NYQ8r9e4scUgeSo4VdhXXuHE=;
+        b=5dEtkieSX9+kHCz8QaMU9V8XUJZ/s19MsauE4JHCZpAu2g1HywkZveQ0xWXuUVnM97
+         wYDQ2Q2e/AJlRz+brJDYr0CrPvYEnoUUhTdLzPvvt8UVVJ32+Vmcsdv0VTn616QgdZp4
+         TDKFweE64593eW7rO5w5nH3GiDYOyPdBI/x7gIEslwM5RS3UPLHYonseAra6c0CBbOGg
+         mR+StBSCJg/736OJ1AqZjsoGURbzm22BKYS2mYfP5F5Ex9ylnWSXSy+4ZaZ3GhaiyaGM
+         ZdxGD1dUI6YU8HmqtFlQbhFHQvtuLHhMj76ZtUj6uEbGTSzbBijb0Pv6EhbwVqoon1+K
+         nAnw==
+X-Gm-Message-State: AO0yUKUYq9lhs/0sNAKqLp+A1Pkp34pYCQXqtcD/fYVBzSu+tfvZ+HeZ
+        0Tp3opag1sDjwCM9oq1pHQvV/I7S/b9slA==
+X-Google-Smtp-Source: AK7set934mArPxO5dbqovGMYLgSAAPJIfOG8DTjMSXBlIWDrgXtKI/SoxXM+uHqZZ5IbmVEn2arOng==
+X-Received: by 2002:ac8:5715:0:b0:3b9:bc8c:c1f8 with SMTP id 21-20020ac85715000000b003b9bc8cc1f8mr2589875qtw.3.1678450150861;
+        Fri, 10 Mar 2023 04:09:10 -0800 (PST)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id i6-20020a378606000000b00741b312c899sm1234512qkd.6.2023.03.10.04.09.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 04:09:10 -0800 (PST)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-53d277c1834so93230327b3.10;
+        Fri, 10 Mar 2023 04:09:09 -0800 (PST)
+X-Received: by 2002:a81:ae4a:0:b0:52e:b7cf:4cd1 with SMTP id
+ g10-20020a81ae4a000000b0052eb7cf4cd1mr16210644ywk.5.1678450149576; Fri, 10
+ Mar 2023 04:09:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d2cf9564-3b0c-b9e4-6066-8e8e6eb854f0@collabora.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230217185225.43310-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230217185225.43310-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20230217185225.43310-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 10 Mar 2023 13:08:57 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXDJe7pSM8buhwRkYF-DXy4C9NnxbgTWefhRwOXFs0DAA@mail.gmail.com>
+Message-ID: <CAMuHMdXDJe7pSM8buhwRkYF-DXy4C9NnxbgTWefhRwOXFs0DAA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] arm64: dts: renesas: r9a07g043: Update IRQ numbers
+ for SSI channels
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 04, 2023 at 12:32:22AM +0300, Dmitry Osipenko wrote:
-> On 3/2/23 20:25, Harshit Mogalapalli wrote:
-> > In virtio_gpu_object_shmem_init() we are passing NULL to PTR_ERR, which
-> > is returning 0/success.
-> > 
-> > Fix this by storing error value in 'ret' variable before assigning
-> > shmem->pages to NULL.
-> > 
-> > Found using static analysis with Smatch.
-> > 
-> > Fixes: 64b88afbd92f ("drm/virtio: Correct drm_gem_shmem_get_sg_table() error handling")
-> > Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-> > ---
-> > Only compile tested.
-> > 
-> > Upstream commit b5c9ed70d1a9 ("drm/virtio: Improve DMA API usage for shmem BOs")
-> > deleted this code, so this patch is not necessary in linux-6.1.y and
-> > linux-6.2.y.
-> > ---
-> >  drivers/gpu/drm/virtio/virtgpu_object.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/virtio/virtgpu_object.c b/drivers/gpu/drm/virtio/virtgpu_object.c
-> > index 7e75fb0fc7bd..25d399b00404 100644
-> > --- a/drivers/gpu/drm/virtio/virtgpu_object.c
-> > +++ b/drivers/gpu/drm/virtio/virtgpu_object.c
-> > @@ -169,8 +169,9 @@ static int virtio_gpu_object_shmem_init(struct virtio_gpu_device *vgdev,
-> >  	shmem->pages = drm_gem_shmem_get_sg_table(&bo->base);
-> >  	if (IS_ERR(shmem->pages)) {
-> >  		drm_gem_shmem_unpin(&bo->base);
-> > +		ret = PTR_ERR(shmem->pages);
-> >  		shmem->pages = NULL;
-> > -		return PTR_ERR(shmem->pages);
-> > +		return ret;
-> >  	}
-> >  
-> >  	if (use_dma_api) {
-> 
-> Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+On Fri, Feb 17, 2023 at 7:54 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> From R01UH0968EJ0100 Rev.1.00 HW manual the interrupt numbers for SSI
+> channels have been updated,
+>
+> SPI 329 - SSIF0 is now marked as reserved
+> SPI 333 - SSIF1 is now marked as reserved
+> SPI 335 - SSIF2 is now marked as reserved
+> SPI 336 - SSIF2 is now marked as reserved
+> SPI 341 - SSIF3 is now marked as reserved
+>
+> This patch drops the above IRQs from SoC DTSI.
+>
+> Fixes: 559f2b0708c70 ("arm64: dts: renesas: r9a07g043: Add SSI{1,2,3} nodes and fillup the SSI0 stub node")
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-Both fixes now queued up, thanks.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.4.
 
-greg k-h
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
