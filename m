@@ -2,106 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9DFF6B3474
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4976E6B341A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjCJDBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 22:01:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
+        id S229830AbjCJCPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 21:15:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjCJDBQ (ORCPT
+        with ESMTP id S229963AbjCJCOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 22:01:16 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A021F6C41;
-        Thu,  9 Mar 2023 19:01:14 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PXrRD4KCFz4x80;
-        Fri, 10 Mar 2023 14:01:12 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678417272;
-        bh=1JrlsnXi1EOsu+4DdrGsOaAXXhmN01ZZTDilkSx+VnA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Wczv/nooJ68TzRFZEPVIQAd8jdkVpRmU68MJGjGcUryHNNkSeEwLpSby6nUePS7g8
-         SSzn3r3moLSBx/uHI+flyNP3uBjMmf6376r8e00WsTs1ma1e6PFTEtWwdPi7/5YHyL
-         8lLFFH+2DXoNyM39CPc5WLWLFnVhOwCpyMuYs8L5PTJ/4zMAisUeEiIVqF/K40Wy6i
-         rrUV38UINBO2hN1N6UH4OTI0jVsWf8G+ZgGKpH44sUEdkj85PVj5fKWujUoIPS7K+3
-         ipP07jkcARoK98bkQbjsISCRv0GkPP31QTqPszVCeG69548+xJyDSQTdWewpgRtoW5
-         RF/Xj0ZxJytAg==
-Date:   Fri, 10 Mar 2023 14:01:11 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the drm-msm-lumag
- tree
-Message-ID: <20230310140111.6843985b@canb.auug.org.au>
+        Thu, 9 Mar 2023 21:14:53 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B2D1009ED
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 18:14:51 -0800 (PST)
+Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PXqMG2kjBzKpx9;
+        Fri, 10 Mar 2023 10:12:42 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by dggpemm500016.china.huawei.com
+ (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 10 Mar
+ 2023 10:14:48 +0800
+From:   Yipeng Zou <zouyipeng@huawei.com>
+To:     <tglx@linutronix.de>, <maz@kernel.org>, <samuel@sholland.org>,
+        <oleksandr_tyshchenko@epam.com>, <andy.shevchenko@gmail.com>,
+        <apatel@ventanamicro.com>, <lvjianmin@loongson.cn>,
+        <jason@lakedaemon.net>, <linux-kernel@vger.kernel.org>
+CC:     <chris.zjh@huawei.com>, <liaochang1@huawei.com>
+Subject: [RFC PATCH] genirq: introduce handle_fasteoi_edge_irq flow handler
+Date:   Fri, 10 Mar 2023 10:14:17 +0000
+Message-ID: <20230310101417.1081434-1-zouyipeng@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wrj2VbZs=FFensSiyBzgkuY";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.73]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500016.china.huawei.com (7.185.36.25)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/wrj2VbZs=FFensSiyBzgkuY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Recently, We have a LPI migration issue on the ARM SMP platform.
 
-Hi all,
+For example, NIC device generates MSI and sends LPI to CPU0 via ITS,
+meanwhile irqbalance running on CPU1 set irq affinity of NIC to CPU1,
+the next interrupt will be sent to CPU2, due to the state of irq is
+still in progress, kernel does not end up performing irq handler on
+CPU2, which results in some userland service timeouts, the sequence
+of events is shown as follows:
 
-Commits
+NIC                     CPU0                    CPU1
 
-  7eaace06eaaa ("drm/msm/dp: set self refresh aware based on PSR support")
-  22459a50890f ("drm/msm/disp/dpu: update dpu_enc crtc state on crtc enable=
-/disable during self refresh")
-  31c98355c44e ("drm/msm/disp/dpu: add PSR support for eDP interface in dpu=
- driver")
-  e57669adb9c9 ("drm/msm/disp/dpu: use atomic enable/disable callbacks for =
-encoder functions")
-  94d3b11ccbf0 ("drm/msm/dp: use the eDP bridge ops to validate eDP modes")
-  0b2997e060cc ("drm/msm/dp: Add basic PSR support for eDP")
-  884ad965b6df ("drm/msm/dp: use atomic callbacks for DP bridge ops")
-  acb0c11f657d ("drm/msm/disp/dpu: reset the datapath after timing engine d=
-isable")
-  9cc249dfddab ("drm/msm/disp/dpu: wait for extra vsync till timing engine =
-status is disabled")
-  8a9ca0105519 ("drm/msm/disp/dpu: get timing engine status from intf statu=
-s register")
-  01733a9d3510 ("drm/msm/disp/dpu: check for crtc enable rather than crtc a=
-ctive to release shared resources")
-  7a4d735b3fca ("drm/bridge: add psr support for panel bridge callbacks")
-  afed6525a251 ("drm/bridge: use atomic enable/disable callbacks for panel =
-bridge")
-  52e6ac96e351 ("drm: add helper functions to retrieve old and new crtc")
+Generate IRQ#1          READ_IAR
+                        Lock irq_desc
+                        Set IRQD_IN_PROGRESS
+                        Unlock irq_desc
+                                                Lock irq_desc
+                                                Change LPI Affinity
+                                                Unlock irq_desc
+                        Call irq_handler
+Generate IRQ#2
+                                                READ_IAR
+                                                Lock irq_desc
+                                                Check IRQD_IN_PROGRESS
+                                                Unlock irq_desc
+                                                Return from interrupt#2
+                        Lock irq_desc
+                        Clear IRQD_IN_PROGRESS
+                        Unlock irq_desc
+                        return from interrupt#1
 
-are missing a Signed-off-by from their committer.
+For this scenario, The IRQ#2 will be lost. This does cause some exceptions.
 
---=20
-Cheers,
-Stephen Rothwell
+For further information, see [1].
 
---Sig_/wrj2VbZs=FFensSiyBzgkuY
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+This patch introduced a new flow handler which combines fasteoi and edge
+type as a workaround.
+An additional loop will be executed if the IRQS_PENDING has been setup.
 
------BEGIN PGP SIGNATURE-----
+[1]: https://lore.kernel.org/all/b0f2623b-ec70-d57e-b744-26c62b1ce523@huawei.com/
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQKnXcACgkQAVBC80lX
-0GzKzAgAgy6g4GP/oE93pII4Y4FkYEba5c+2u4nN65lERW26g2eqmcqqdrOcxrs9
-4wN4Ezf18/m0ckV1sMd8ln+R/NfRfFfRU9s0ScQhVWqcNgfBpYctMwgZKVR2byqR
-vuA0FIPvH6yb42C2LkzuBLrRv2bEBeYTaatvPopmeSiUQHZA0pi8rtuKtr5JC5nn
-M3aJbhVVYDU5yPG8GsmTeCSPo71jVhtHGDy1l8m6IH9MCb5/JID0ftykgqvUqk4Q
-NasagxxF8lSuZLL63WPOuwf4zlea5TuC4JFS3GKfwpSe49/dhmV4m7RtF3drTNUM
-vUGs0+KT9XQmVeUJy275htlsPkVW1Q==
-=3cvv
------END PGP SIGNATURE-----
+Fixes: cc2d3216f53c ("irqchip: GICv3: ITS command queue")
+Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
+---
+ drivers/irqchip/irq-gic-v3.c |  2 +-
+ include/linux/irq.h          |  1 +
+ kernel/irq/chip.c            | 62 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 64 insertions(+), 1 deletion(-)
 
---Sig_/wrj2VbZs=FFensSiyBzgkuY--
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index fd134e1f481a..625ec64f0218 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -1456,7 +1456,7 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int irq,
+ 		if (!gic_dist_supports_lpis())
+ 			return -EPERM;
+ 		irq_domain_set_info(d, irq, hw, chip, d->host_data,
+-				    handle_fasteoi_irq, NULL, NULL);
++				    handle_fasteoi_edge_irq, NULL, NULL);
+ 		break;
+ 
+ 	default:
+diff --git a/include/linux/irq.h b/include/linux/irq.h
+index b1b28affb32a..adca5340edeb 100644
+--- a/include/linux/irq.h
++++ b/include/linux/irq.h
+@@ -656,6 +656,7 @@ static inline int irq_set_parent(int irq, int parent_irq)
+  */
+ extern void handle_level_irq(struct irq_desc *desc);
+ extern void handle_fasteoi_irq(struct irq_desc *desc);
++extern void handle_fasteoi_edge_irq(struct irq_desc *desc);
+ extern void handle_edge_irq(struct irq_desc *desc);
+ extern void handle_edge_eoi_irq(struct irq_desc *desc);
+ extern void handle_simple_irq(struct irq_desc *desc);
+diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+index 49e7bc871fec..bd3d346b468d 100644
+--- a/kernel/irq/chip.c
++++ b/kernel/irq/chip.c
+@@ -677,6 +677,68 @@ static void cond_unmask_eoi_irq(struct irq_desc *desc, struct irq_chip *chip)
+ 	}
+ }
+ 
++/**
++ *	handle_fasteoi_edge_irq - irq handler for transparent controllers
++ *	edge type IRQ.
++ *	@desc:	the interrupt description structure for this irq
++ */
++void handle_fasteoi_edge_irq(struct irq_desc *desc)
++{
++	struct irq_chip *chip = desc->irq_data.chip;
++
++	raw_spin_lock(&desc->lock);
++
++	if (!irq_may_run(desc)) {
++		desc->istate |= IRQS_PENDING;
++		mask_irq(desc);
++		goto out;
++	}
++
++	desc->istate &= ~(IRQS_REPLAY | IRQS_WAITING);
++
++	/*
++	 * If its disabled or no action available
++	 * then mask it and get out of here:
++	 */
++	if (unlikely(!desc->action || irqd_irq_disabled(&desc->irq_data))) {
++		desc->istate |= IRQS_PENDING;
++		mask_irq(desc);
++		goto out;
++	}
++
++	kstat_incr_irqs_this_cpu(desc);
++
++	if (desc->istate & IRQS_ONESHOT)
++		mask_irq(desc);
++
++	do {
++		/*
++		 * When another irq arrived while we were handling
++		 * one, we could have masked the irq.
++		 * Reenable it, if it was not disabled in meantime.
++		 */
++		if (unlikely(desc->istate & IRQS_PENDING)) {
++			if (!irqd_irq_disabled(&desc->irq_data) &&
++			    irqd_irq_masked(&desc->irq_data))
++				unmask_irq(desc);
++		}
++
++		handle_irq_event(desc);
++
++	} while ((desc->istate & IRQS_PENDING) &&
++		 !irqd_irq_disabled(&desc->irq_data));
++
++	cond_unmask_eoi_irq(desc, chip);
++
++	raw_spin_unlock(&desc->lock);
++	return;
++out:
++	if (!(chip->flags & IRQCHIP_EOI_IF_HANDLED))
++		chip->irq_eoi(&desc->irq_data);
++	raw_spin_unlock(&desc->lock);
++}
++EXPORT_SYMBOL_GPL(handle_fasteoi_edge_irq);
++
+ /**
+  *	handle_fasteoi_irq - irq handler for transparent controllers
+  *	@desc:	the interrupt description structure for this irq
+-- 
+2.34.1
+
