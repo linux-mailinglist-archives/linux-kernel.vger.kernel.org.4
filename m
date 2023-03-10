@@ -2,301 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F226B4BB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5B76B4BB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbjCJPxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:53:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
+        id S230293AbjCJPya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:54:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbjCJPxF (ORCPT
+        with ESMTP id S231485AbjCJPyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:53:05 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEBC231F6;
-        Fri, 10 Mar 2023 07:45:59 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id m6so7167650lfq.5;
-        Fri, 10 Mar 2023 07:45:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678463158;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0AGkxAlBYXX/Z2S16SKpXnZXTnF2Z5IaHkyIEFDi/ME=;
-        b=VEz9ohMuno+DEbnSf4WW21JokIcYlbj2EJU+8DEQSOSi0Pxfjd/6xLH4vNXSRGf9H0
-         QZk4achaOlWOedHmxfWjYy1PR1i0E0QqIsZw/WPEmk2P7oHhvff5Y/Kmg2fFAnUkp592
-         n81tWygRoF+b95Cr24Cb4ekDWujuXuSuFD1R66txhW5gLTx7SqLRdvqX+WRBfubTlpxs
-         f+9yWFImjDIKgevYqYHwKEhE1gaKHcX/hKoT2UoS1Q057myCAjZJ8ELiRR4rBAQqO37Y
-         sUy4hJH29SPxhN1ww9RmweIrZUpizpLXeA8Z6mQbrlmZpX+IIL8rZbRGO28KpDrdIMid
-         bnJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678463158;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0AGkxAlBYXX/Z2S16SKpXnZXTnF2Z5IaHkyIEFDi/ME=;
-        b=pLokDlbyXQakBZwoOv3FTgNerWvwjgmlUpKl1rFP1VXEWD3kBhNpz8Qq5YHOn7AaTi
-         2l4jABzGxn3fnRcOfaeMjjIAweXTayZaO4qXrqZ6yBIx3FVTbqYyIkOqZx3YfTY3CbY8
-         0tk6eqtRH6ifHVrCNrCEl/Yg5PxVzD5qXJHAAvO17QUwQPBgFVZ0tN8tw48ZDQ/Tx1z5
-         ATP7jJAKfllfkackofs9Eenm/4wLdigRU0uJcwXFxFNfbi3yyux8iv/yFYt5cifBjw6F
-         yl5Z6B0XOCNNVRw4/c6V71XUNhWFe5ggvcf+HXPjySrBJw12oyKMdJppplMbWI+Dla1n
-         87Ow==
-X-Gm-Message-State: AO0yUKXsLGLfZslRXNecI5IBuvv+PFNYw39v1JTIFkBSEHkos1IG7r2C
-        OAFVzMOkQD4ZjYaiaT9bAaU=
-X-Google-Smtp-Source: AK7set8SLblBVupI+yVdlPp0ni+W1a7WVdI12StisJp4d6ODMGYLfW8aS9MEVe4/AXMoJXkFELJQ6A==
-X-Received: by 2002:ac2:5238:0:b0:4d8:6e26:c74c with SMTP id i24-20020ac25238000000b004d86e26c74cmr7520718lfl.53.1678463157768;
-        Fri, 10 Mar 2023 07:45:57 -0800 (PST)
-Received: from gmail.com (host-95-193-64-255.mobileonline.telia.com. [95.193.64.255])
-        by smtp.gmail.com with ESMTPSA id q11-20020a19a40b000000b004a6f66eed7fsm24181lfc.165.2023.03.10.07.45.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 07:45:57 -0800 (PST)
-Date:   Fri, 10 Mar 2023 16:45:54 +0100
-From:   Jonas =?iso-8859-1?Q?=C5dahl?= <jadahl@gmail.com>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        intel-gfx@lists.freedesktop.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Matt Turner <mattst88@gmail.com>,
-        freedreno@lists.freedesktop.org,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>
-Subject: Re: [PATCH v10 01/15] dma-buf/dma-fence: Add deadline awareness
-Message-ID: <ZAtQspuFjPtGy7ze@gmail.com>
-References: <20230308155322.344664-1-robdclark@gmail.com>
- <20230308155322.344664-2-robdclark@gmail.com>
+        Fri, 10 Mar 2023 10:54:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E62B58C0F;
+        Fri, 10 Mar 2023 07:47:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20DA6B822BF;
+        Fri, 10 Mar 2023 15:47:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3572C433D2;
+        Fri, 10 Mar 2023 15:47:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678463233;
+        bh=gzue86b2gSvOsnn9Q/6GTc0RLgmyxaXXm1MWH4Xg/es=;
+        h=Date:From:To:Subject:In-Reply-To:References:From;
+        b=UvZz8QqfXAvTUElNtCyXSgDO9z+QXA0jkc6pA9wuimJhrDt3rxq62DV3c4iTw9jZv
+         BpL6pRMZt6fopnP5w01CUPrq+Vc9p4zvqPEZdesT657VZe8TxiIEr7JjJBVsVolM9J
+         jETO+J0xrrQnYb48VInAyYpjO3abwea6PH54oKx78TdVsSZzezPPEavEub0PchFqU6
+         hsmz+2zfW+EfF85PovbALWoX1FLvFjF2W8QaCd6uq7SjTMFUswsKBrOAL7bcrDWmea
+         Wb4W+VG73xXaqU/pYtA7e50XEmxHPodM9VKTk4BP8L/Lnsz2oNV8qmdVBuHxqdvZ8o
+         2gmLSXEzHVbwA==
+Date:   Fri, 10 Mar 2023 07:47:12 -0800
+From:   Kees Cook <kees@kernel.org>
+To:     Ornaghi Davide <davide.ornaghi@intre.it>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "nsaenzju@redhat.com" <nsaenzju@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH] Introduce per-interrupt kernel-stack randomization
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ef2c926cf7b148028f1902279cb35a41@intre.it>
+References: <ef2c926cf7b148028f1902279cb35a41@intre.it>
+Message-ID: <906901ED-DAE3-4A36-A3E4-16DF6F251C48@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230308155322.344664-2-robdclark@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 07:52:52AM -0800, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> Add a way to hint to the fence signaler of an upcoming deadline, such as
-> vblank, which the fence waiter would prefer not to miss.  This is to aid
-> the fence signaler in making power management decisions, like boosting
-> frequency as the deadline approaches and awareness of missing deadlines
-> so that can be factored in to the frequency scaling.
-> 
-> v2: Drop dma_fence::deadline and related logic to filter duplicate
->     deadlines, to avoid increasing dma_fence size.  The fence-context
->     implementation will need similar logic to track deadlines of all
->     the fences on the same timeline.  [ckoenig]
-> v3: Clarify locking wrt. set_deadline callback
-> v4: Clarify in docs comment that this is a hint
-> v5: Drop DMA_FENCE_FLAG_HAS_DEADLINE_BIT.
-> v6: More docs
-> v7: Fix typo, clarify past deadlines
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> Reviewed-by: Christian König <christian.koenig@amd.com>
-> Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
+On March 9, 2023 1:00:20 PM PST, Ornaghi Davide <davide=2Eornaghi@intre=2Ei=
+t> wrote:
+>Per-system-call kernel-stack randomization was introduced to
+>prevent attackers from predicting the addresses of certain data
+>structures on the stack upon sequential syscalls=2E
+>
+>However, when entering soft interrupt context, a new stack is allocated
+>via vmalloc at a location that stays constant for each cpu until reboot=
+=2E
+>
+>Recent security vulnerabilities such as CVE-2023-0179 showed how an
+>infoleak under the softirq context could allow the attacker to locate
+>kernel data structures like nftables registers, where a malicious payload
+>could be stored=2E
+>
+>Instead of keeping a constant address, reuse kstack_offset to also
+>randomize the soft interrupt stack on every __do_softirq entry=2E
+>
+>This basic patch version has the drawback of using the same base
+>address for all pending softirqs, including softirqd ones, but has low
+>impacts on performance=2E
+>Alternatively, the stack offset could be updated for every softirq
+>action, which I suspect might cause some performance issues=2E
+>
+>Signed-off-by: Davide Ornaghi <davide=2Eornaghi@intre=2Eit>
 
-Hi Rob!
+This seems like a good place to start=2E Thanks!
 
->  Documentation/driver-api/dma-buf.rst |  6 +++
->  drivers/dma-buf/dma-fence.c          | 59 ++++++++++++++++++++++++++++
->  include/linux/dma-fence.h            | 22 +++++++++++
->  3 files changed, 87 insertions(+)
-> 
-> diff --git a/Documentation/driver-api/dma-buf.rst b/Documentation/driver-api/dma-buf.rst
-> index 622b8156d212..183e480d8cea 100644
-> --- a/Documentation/driver-api/dma-buf.rst
-> +++ b/Documentation/driver-api/dma-buf.rst
-> @@ -164,6 +164,12 @@ DMA Fence Signalling Annotations
->  .. kernel-doc:: drivers/dma-buf/dma-fence.c
->     :doc: fence signalling annotation
->  
-> +DMA Fence Deadline Hints
-> +~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +.. kernel-doc:: drivers/dma-buf/dma-fence.c
-> +   :doc: deadline hints
-> +
->  DMA Fences Functions Reference
->  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->  
-> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
-> index 0de0482cd36e..f177c56269bb 100644
-> --- a/drivers/dma-buf/dma-fence.c
-> +++ b/drivers/dma-buf/dma-fence.c
-> @@ -912,6 +912,65 @@ dma_fence_wait_any_timeout(struct dma_fence **fences, uint32_t count,
->  }
->  EXPORT_SYMBOL(dma_fence_wait_any_timeout);
->  
-> +/**
-> + * DOC: deadline hints
-> + *
-> + * In an ideal world, it would be possible to pipeline a workload sufficiently
-> + * that a utilization based device frequency governor could arrive at a minimum
-> + * frequency that meets the requirements of the use-case, in order to minimize
-> + * power consumption.  But in the real world there are many workloads which
-> + * defy this ideal.  For example, but not limited to:
-> + *
-> + * * Workloads that ping-pong between device and CPU, with alternating periods
-> + *   of CPU waiting for device, and device waiting on CPU.  This can result in
-> + *   devfreq and cpufreq seeing idle time in their respective domains and in
-> + *   result reduce frequency.
-> + *
-> + * * Workloads that interact with a periodic time based deadline, such as double
-> + *   buffered GPU rendering vs vblank sync'd page flipping.  In this scenario,
-> + *   missing a vblank deadline results in an *increase* in idle time on the GPU
-> + *   (since it has to wait an additional vblank period), sending a signal to
-> + *   the GPU's devfreq to reduce frequency, when in fact the opposite is what is
-> + *   needed.
+Reviewed-by: Kees Cook <keescook@chromium=2Eorg>
 
-This is the use case I'd like to get some better understanding about how
-this series intends to work, as the problematic scheduling behavior
-triggered by missed deadlines has plagued compositing display servers
-for a long time.
+One thought is that without a reselection of the offset after this use, th=
+e offset will be shared by the next syscall too=2E If softirq timing is con=
+trollable by an attacker, this might allow for some exposure?
 
-I apologize, I'm not a GPU driver developer, nor an OpenGL driver
-developer, so I will need some hand holding when it comes to
-understanding exactly what piece of software is responsible for
-communicating what piece of information.
+-Kees
 
-> + *
-> + * To this end, deadline hint(s) can be set on a &dma_fence via &dma_fence_set_deadline.
-> + * The deadline hint provides a way for the waiting driver, or userspace, to
-> + * convey an appropriate sense of urgency to the signaling driver.
-> + *
-> + * A deadline hint is given in absolute ktime (CLOCK_MONOTONIC for userspace
-> + * facing APIs).  The time could either be some point in the future (such as
-> + * the vblank based deadline for page-flipping, or the start of a compositor's
-> + * composition cycle), or the current time to indicate an immediate deadline
-> + * hint (Ie. forward progress cannot be made until this fence is signaled).
-
-Is it guaranteed that a GPU driver will use the actual start of the
-vblank as the effective deadline? I have some memories of seing
-something about vblank evasion browsing driver code, which I might have
-misunderstood, but I have yet to find whether this is something
-userspace can actually expect to be something it can rely on.
-
-Can userspace set a deadline that targets the next vblank deadline
-before GPU work has been flushed e.g. at the start of a paint cycle, and
-still be sure that the kernel has the information it needs to know it should
-make its clocks increase their speed in time for when the actual work
-has been actually flushed? Or is it needed that the this deadline is set
-at the end?
-
-What I'm more or less trying to ask is, will a mode setting compositor
-be able to tell the kernel to boost its clocks at the time it knows is
-best, and how will it in practice achieve this?
-
-For example relying on the atomic mode setting commit setting the
-deadline is fundamentally flawed, since user space will at times want to
-purposefully delay committing until as late as possible, without doing
-so causing an increased risk of missing the deadline due to the kernel
-not speeding up clocks at the right time for GPU work that has already
-been flushed long ago.
-
-Relying on commits also has no effect on GPU work queued by
-a compositor drawing only to dma-bufs that are never intended to be
-presented using mode setting. How can we make sure a compositor can
-provide hints that the kernel will know to respect despite the
-compositor not being drm master?
+>---
+> kernel/softirq=2Ec | 2 ++
+> 1 file changed, 2 insertions(+)
+>
+>diff --git a/kernel/softirq=2Ec b/kernel/softirq=2Ec
+>index c8a6913c067d=2E=2E8c3eb2fffe39 100644
+>--- a/kernel/softirq=2Ec
+>+++ b/kernel/softirq=2Ec
+>@@ -27,6 +27,7 @@
+> #include <linux/tick=2Eh>
+> #include <linux/irq=2Eh>
+> #include <linux/wait_bit=2Eh>
+>+#include <linux/randomize_kstack=2Eh>
+>
+> #include <asm/softirq_stack=2Eh>
+>
+>@@ -535,6 +536,7 @@ asmlinkage __visible void __softirq_entry __do_softir=
+q(void)
+>  __u32 pending;
+>  int softirq_bit;
+>
+>+ add_random_kstack_offset();
+>  /*
+>  * Mask out PF_MEMALLOC as the current task context is borrowed for the
+>  * softirq=2E A softirq handled, such as network RX, might set PF_MEMALL=
+OC
+>--
+>2=2E34=2E1
+>
+>
+>Davide Ornaghi
+>Offensive Security Specialist & Intrusion Analyst
+>
+>T=2E +39 039 28=2E45=2E774 +39 039 96=2E34=2E717
+>Intr=C3=A9 Security - a venture of Intr=C3=A9 S=2Er=2El=2E
+>www=2Eintre=2Eit
+>
+>Nota informativa: In ottemperanza della Legge 196/2003 e al Regolamento U=
+E 679/2016 (GDPR) sulla tutela dei dati personali, le informazioni contenut=
+e in questo messaggio sono strettamente riservate e sono esclusivamente ind=
+irizzate al destinatario indicato (oppure alla persona responsabile di rime=
+tterlo al destinatario)=2E Le idee e opinioni espresse sono quelle dell'aut=
+ore e, a meno che non sia chiaramente scritto, non rappresentano necessaria=
+mente quelle di Intr=C3=A9 S=2Er=2El=2E Qualsiasi uso, riproduzione o divul=
+gazione di questo messaggio e' vietata, anche ai sensi dell'art=2E 616 c=2E=
+p=2E italiano=2E Nel caso in cui aveste ricevuto questa e-mail per errore, =
+vogliate avvertirci al piu' presto a mezzo posta elettronica all'indirizzo =
+privacy@intre=2Eit e distruggere il presente messaggio=2E
+>
+>Please note: In reference to Italian law 196/2003 and to the Regulation E=
+U 679/2016 (GDPR), this email transmission including its attachments, is in=
+tended only for the person or entity to which it is addressed and may conta=
+in confidential and/or privileged material=2E Any views or opinions are sol=
+ely those of the author and do not necessarily represent those of Intr=C3=
+=A9 S=2Er=2El=2E, unless specifically stated=2E Any review, retransmission,=
+ dissemination or other use of, or taking of any action in reliance upon, t=
+his information by persons or entities other than the intended recipient is=
+ prohibited=2E If you received this email due to an error, please contact t=
+he sender via e-mail to the address privacy@intre=2Eit and delete the email=
+ transmission immediately=2E
 
 
-Jonas
-
-> + *
-> + * Multiple deadlines may be set on a given fence, even in parallel.  See the
-> + * documentation for &dma_fence_ops.set_deadline.
-> + *
-> + * The deadline hint is just that, a hint.  The driver that created the fence
-> + * may react by increasing frequency, making different scheduling choices, etc.
-> + * Or doing nothing at all.
-> + */
-> +
-> +/**
-> + * dma_fence_set_deadline - set desired fence-wait deadline hint
-> + * @fence:    the fence that is to be waited on
-> + * @deadline: the time by which the waiter hopes for the fence to be
-> + *            signaled
-> + *
-> + * Give the fence signaler a hint about an upcoming deadline, such as
-> + * vblank, by which point the waiter would prefer the fence to be
-> + * signaled by.  This is intended to give feedback to the fence signaler
-> + * to aid in power management decisions, such as boosting GPU frequency
-> + * if a periodic vblank deadline is approaching but the fence is not
-> + * yet signaled..
-> + */
-> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
-> +{
-> +	if (fence->ops->set_deadline && !dma_fence_is_signaled(fence))
-> +		fence->ops->set_deadline(fence, deadline);
-> +}
-> +EXPORT_SYMBOL(dma_fence_set_deadline);
-> +
->  /**
->   * dma_fence_describe - Dump fence describtion into seq_file
->   * @fence: the 6fence to describe
-> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
-> index 775cdc0b4f24..d54b595a0fe0 100644
-> --- a/include/linux/dma-fence.h
-> +++ b/include/linux/dma-fence.h
-> @@ -257,6 +257,26 @@ struct dma_fence_ops {
->  	 */
->  	void (*timeline_value_str)(struct dma_fence *fence,
->  				   char *str, int size);
-> +
-> +	/**
-> +	 * @set_deadline:
-> +	 *
-> +	 * Callback to allow a fence waiter to inform the fence signaler of
-> +	 * an upcoming deadline, such as vblank, by which point the waiter
-> +	 * would prefer the fence to be signaled by.  This is intended to
-> +	 * give feedback to the fence signaler to aid in power management
-> +	 * decisions, such as boosting GPU frequency.
-> +	 *
-> +	 * This is called without &dma_fence.lock held, it can be called
-> +	 * multiple times and from any context.  Locking is up to the callee
-> +	 * if it has some state to manage.  If multiple deadlines are set,
-> +	 * the expectation is to track the soonest one.  If the deadline is
-> +	 * before the current time, it should be interpreted as an immediate
-> +	 * deadline.
-> +	 *
-> +	 * This callback is optional.
-> +	 */
-> +	void (*set_deadline)(struct dma_fence *fence, ktime_t deadline);
->  };
->  
->  void dma_fence_init(struct dma_fence *fence, const struct dma_fence_ops *ops,
-> @@ -583,6 +603,8 @@ static inline signed long dma_fence_wait(struct dma_fence *fence, bool intr)
->  	return ret < 0 ? ret : 0;
->  }
->  
-> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadline);
-> +
->  struct dma_fence *dma_fence_get_stub(void);
->  struct dma_fence *dma_fence_allocate_private_stub(void);
->  u64 dma_fence_context_alloc(unsigned num);
-> -- 
-> 2.39.2
-> 
+--=20
+Kees Cook
