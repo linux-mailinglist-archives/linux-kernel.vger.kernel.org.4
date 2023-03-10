@@ -2,58 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95D26B3A7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B666B3A80
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:31:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjCJJbg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 04:31:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
+        id S230486AbjCJJbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:31:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjCJJbO (ORCPT
+        with ESMTP id S230092AbjCJJbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:31:14 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94F928218
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:28:34 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-159-vKUi8V-KMYKHbSDPHvzBqg-1; Fri, 10 Mar 2023 09:28:22 +0000
-X-MC-Unique: vKUi8V-KMYKHbSDPHvzBqg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Fri, 10 Mar
- 2023 09:28:19 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.047; Fri, 10 Mar 2023 09:28:19 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jaegeuk Kim' <jaegeuk@kernel.org>
-CC:     'Chao Yu' <chao@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Zhiguo Niu <zhiguo.niu@unisoc.com>
-Subject: RE: [PATCH] f2fs: fix unaligned field offset in 32-bits platform
-Thread-Topic: [PATCH] f2fs: fix unaligned field offset in 32-bits platform
-Thread-Index: AQHZUQf4b45n81mohk6KYf6qmq4uP67wqZ1AgAJ5ZoCAAJUJQA==
-Date:   Fri, 10 Mar 2023 09:28:19 +0000
-Message-ID: <362576043b2f4c56a3ea112364d04fcd@AcuMS.aculab.com>
-References: <20230307151408.58490-1-chao@kernel.org>
- <942fe8111fdb48e583b846f3e2902228@AcuMS.aculab.com>
- <ZApxy2u9j3yKFRyS@google.com>
-In-Reply-To: <ZApxy2u9j3yKFRyS@google.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 10 Mar 2023 04:31:19 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93C17DF91
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:28:47 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id l18so5055494qtp.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:28:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678440526;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tZdy1P0udAVGBEEd8jG6Z8VoqMNmC2jFqJ+/rO79irE=;
+        b=hBoWSQxXZavr/bzcwRGuJs6ela9Gpp/99bp2sG4/TAlA4P0HB4/+7toBSTm4fifGZr
+         qGRCpAGcLpeNN3kQ+FpTAHHKI5G7nIaeinncywb69w+yYkUKS9UYXep3yrXA7N8wl4x5
+         BonBtWu3kAyCZJW3lcE40PA1nMF+iU7WLn+kHNA9Dp2CC7/IEnGq69E5NHWpUqS+wUIl
+         tAe3tE3IFQAJsSpHxCDew/cVrM9NQSdPIJkky7bt0lU6Zb07HLEZTJhuOVRJwquw77o/
+         eFAsRKNtq8y47tuzz4UDm0GCzz1ljfse5ImTfj9AQQLO3LojsF3C2XWnGd6Dpy51lDxU
+         9zMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678440526;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tZdy1P0udAVGBEEd8jG6Z8VoqMNmC2jFqJ+/rO79irE=;
+        b=I3N195PrweFEET9R9SlJit2NxMU2s513SH6B21DtmSZoIiDIkaMG+5duczutLxjvz6
+         dCuDiV1gz5P4n2AD9W03kRK8vyjuaYdfJWOgE46DmD9c2kx5Gv5nk+z3/rleKI5zgnf2
+         cCtdMbR1ROS9HrYEI8fPkYOq8ZgnzWAk8tNK1MdAQanNoDX0DaiB6rnETkq3ERu/cH7t
+         +Rr8+d2H41SnWSJlgsKbY4c5XoNmRFC1hTINlzXhjASZRi7X52JHlDD+VN9rv5o48q7M
+         7OZdoxIGGhsGuHEmCk2FqfvK405rrB6H5rLF2KbZQ2P7znSSkMRNFz+oV+i7LxZrm5h6
+         03og==
+X-Gm-Message-State: AO0yUKW0U7toz2GjnMEtY+M6IP36lNRjqOJHJ+pZRQ1Hh8fzpRi6PxH1
+        QhaVphf2jZStC5T1J6NDEWPOgmkfLMQQbp0K/97AmJKKDT2YLAsiiTWt39yw
+X-Google-Smtp-Source: AK7set8SI6hqiihFH9OfdhL0vFvBV/9qw/caFH3w5z4HbTMUjYRtF7WqrmH5Rgr8cODmG8iGcxY022/07zKT6HE+Mtc=
+X-Received: by 2002:ac8:410c:0:b0:3c0:3c09:a4a3 with SMTP id
+ q12-20020ac8410c000000b003c03c09a4a3mr3512358qtl.6.1678440526500; Fri, 10 Mar
+ 2023 01:28:46 -0800 (PST)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230113175459.14825-1-james.morse@arm.com> <20230113175459.14825-10-james.morse@arm.com>
+ <CALPaoCg4T52ju5XJC-BVX-EuZUtc67LruWbgyH5s8CoiEwOUPw@mail.gmail.com>
+ <c3ca6d66-e58c-8ace-e88e-45ded5de836f@arm.com> <CALPaoCik0j7ATCv-He5HWVqbL+3njpqO1fhF5FQJO7qqT1zR3w@mail.gmail.com>
+ <c8d85eae-e291-99a6-509c-94c41514ac16@arm.com> <CALPaoCgEaT2oax35ezRydUZwL9bMmMFFr2wRqPe4VYAnEQ-GGg@mail.gmail.com>
+ <f8a25b5f-4a7d-0891-1152-33f349059b5d@arm.com>
+In-Reply-To: <f8a25b5f-4a7d-0891-1152-33f349059b5d@arm.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Fri, 10 Mar 2023 10:28:35 +0100
+Message-ID: <CALPaoCim-QkHbm=dXzpfh1N5mx-4u=d21SUrjnBk2OU=R4apbA@mail.gmail.com>
+Subject: Re: [PATCH v2 09/18] x86/resctrl: Allow resctrl_arch_rmid_read() to sleep
+To:     James Morse <james.morse@arm.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,117 +87,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jaegeuk Kim
-> Sent: 09 March 2023 23:55
-> 
-> On 03/08, David Laight wrote:
-> > From: Chao Yu <chao@kernel.org>
-> > > Sent: 07 March 2023 15:14
-> > >
-> > > F2FS-fs (dm-x): inconsistent rbtree, cur(3470333575168) next(3320009719808)
-> > > ------------[ cut here ]------------
-> > > kernel BUG at fs/f2fs/gc.c:602!
-> > > Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
-> > > PC is at get_victim_by_default+0x13c0/0x1498
-> > > LR is at f2fs_check_rb_tree_consistence+0xc4/0xd4
-> > > ....
-> > > [<c04d98b0>] (get_victim_by_default) from [<c04d4f44>] (f2fs_gc+0x220/0x6cc)
-> > > [<c04d4f44>] (f2fs_gc) from [<c04d4780>] (gc_thread_func+0x2ac/0x708)
-> > > [<c04d4780>] (gc_thread_func) from [<c015c774>] (kthread+0x1a8/0x1b4)
-> > > [<c015c774>] (kthread) from [<c01010b4>] (ret_from_fork+0x14/0x20)
-> > >
-> > > The reason is there is __packed attribute in struct rb_entry, but there
-> > > is no __packed attribute in struct victim_entry, so wrong offset of key
-> > > field will be parsed in struct rb_entry in f2fs_check_rb_tree_consistence,
-> > > it describes memory layouts of struct rb_entry and struct victim_entry in
-> > > 32-bits platform as below:
-> > >
-> > > struct rb_entry {
-> > >    [0] struct rb_node rb_node;
-> > >        union {
-> > >            struct {...};
-> > >   [12]     unsigned long long key;
-> > >        } __packed;
-> >
-> > This __packed removes the 4-byte pad before the union.
-> > I bet it should be removed...
-> 
-> struct rb_node {
->         unsigned long  __rb_parent_color;
->         struct rb_node *rb_right;
->         struct rb_node *rb_left;
-> } __attribute__((aligned(sizeof(long))));
-> 
-> Hmm, isn't this aligned to 32bits originally? Why does 32bits pad 4-bytes
-> if we remove __packed?
+Hi James,
 
-That attribute is entirely pointless.
-IIRC It is a request to increase the alignment to that of long.
-It wouldn't have any effect even if 'packed' was also specified.
-(Unless you are building for 64-bit windows.)
+On Thu, Mar 9, 2023 at 6:35=E2=80=AFPM James Morse <james.morse@arm.com> wr=
+ote:
+> On 09/03/2023 13:41, Peter Newman wrote:
+> > However, I do want to be sure that MBWU counters will never be silently
+> > deallocated because we will never be able to trust the data unless we
+> > know that the counter has been watching the group's tasks for the
+> > entirety of the measurement window.
+>
+> Absolutely.
+>
+> The MPAM driver requires the number of monitors to match the value of
+> resctrl_arch_system_num_rmid_idx(), otherwise 'mbm_local' won't be offere=
+d via resctrl.
+> (see class_has_usable_mbwu() in [0])
+>
+> If the files exist in resctrl, then a monitor was reserved for this PARTI=
+D+PMG, and won't
+> get allocated for anything else.
+>
+>
+> [0]
+> https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?h=
+=3Dmpam/snapshot/v6.2&id=3Df28d3fefdcf7022a49f62752acbecf180ea7d32f
+>
+>
+> > Unlike on AMD, MPAM allows software to control which PARTID+PMG the
+> > monitoring hardware is watching. Could we instead make the user
+> > explicitly request the mbm_{total,local}_bytes events be allocated to
+> > monitoring groups after creating them? Or even just allocating the
+> > events on monitoring group creation only when they're available could
+> > also be marginably usable if a single user agent is managing rdtgroups.
+>
+> Hmmmm, what would that look like to user-space?
+>
+> I'm against inventing anything new here until there is feature-parity whe=
+re possible
+> upstream. It's a walk, then run kind of thing.
+>
+> I worry that extra steps to setup the monitoring on MPAM:resctrl will be =
+missing or broken
+> in many (all?) software projects if they're not also required on Intel:re=
+sctrl.
+>
+> My plan for hardware with insufficient counters is to make the counters a=
+ccessible via
+> perf, and do that in a way that works on Intel and AMD too.
 
-The 'issue' is that on arm32 (unlike x86) 'long long' has
-64bit alignment.
-So without the __packed on the union there is a 4 byte hole
-before the union.
+In the interest of enabling MPAM functionality, I think the low-effort
+approach is to only allocate an MBWU monitor to a newly-created MON or
+CTRL_MON group if one is available. On Intel and AMD, the resources are
+simply always available.
 
-...
-> IIUC, the problem comes since we access the same object with two structures
-> to handle rb_tree.
-> 
-> E.g.,
-> 
-> [struct extent_node]                   [struct rb_entry]
-> struct rb_node rb_node;                struct rb_node rb_node;
->                                        union {
-> struct extent_info ei;                   struct {
->   unsigned int fofs;                       unsigned int ofs;
->   unsigned int len;                        unsigned int len;
->                                          };
->                                          unsigned long long key;
->                                        } __packed;
-> 
-> So, I think if we get a different offset of fofs or ofs between in
-> extent_node and rb_entry, further work'll access a wrong memory since
-> we simply cast the object pointer between two.
+The downside on monitor-poor (or PARTID-rich) hardware is the user gets
+maximually-featureful monitoring groups first, whether they want them or
+not, but I think it's workable. Perhaps in a later change we can make an
+interface to prevent monitors from being allocated to new groups or one
+to release them when they're not needed after group creation.
 
-That example actually happens to work.
-But replace 'unsigned int' with 'long long' and it all fails.
+At least in this approach there's still a way to use MBWU with resctrl
+when systems have more PARTIDs than monitors.
 
-That is horribly broken (by design).
-You can't do that and expect it to work at all.
-This is another case where you don't want __packed, but to
-request a compilation error if padding was added.
+This also seems like less work than making resctrl able to interface
+with the perf subsystem.
 
-The safest 'fix' (it is still broken by design) is to change the
-alignment of rb_node to be that of 'long long' and remove the
-__packed from the union.
-That adds a 4 byte pad to rb_node on some, but not all, 32bit
-architectures.
-Then all the code that used the above pattern is (probably) ok.
-
-You can use (if I've spelt them right) aligned(Alignof(long long))
-but not aligned(__alignof(long long)) because the latter returns
-the preferred alignment not the actual alignment (8 not 4 on x86).
-I think Alignof() is ok for current kernels, but not for anything
-that might get backported to stable.
-You can use __alignof(struct {long long x;}).
-
-Actually this should also work:
-struct rb_node {
-    union {
-        long long alignment;
-        struct {
-            unsigned long  __rb_parent_color;
-            struct rb_node *rb_right;
-            struct rb_node *rb_left;
-        }
-    }
-};
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+-Peter
