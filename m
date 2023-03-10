@@ -2,81 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BEF56B3679
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 07:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6380E6B367D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 07:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbjCJGRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 01:17:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
+        id S229751AbjCJGTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 01:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjCJGRY (ORCPT
+        with ESMTP id S229652AbjCJGTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 01:17:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE81EBCBBB;
-        Thu,  9 Mar 2023 22:17:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6418CB82150;
-        Fri, 10 Mar 2023 06:17:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0C0FC433D2;
-        Fri, 10 Mar 2023 06:17:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678429038;
-        bh=3KQoEB5xsbUba6lDC22OBK8J/6CcI/caBunnFrPzGqc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jzAeZrjeLE9bYoqbwv3FGQ3UoDO/5Q01Wg/FT2OuEBoQtuSSiy8Rx7rR4XjfQiNVh
-         vFOlQD0BqlskUJgQPksOwJ0pMMH4INIP+tFSgWqaYoRXjuvKy2ZzwFDkwdYzW4Nt3r
-         NXRWffhKhfJfMxtxZ0NpW5QjA1h0jz49z1pOy1kyriRUlKCBQJRq+sKPUG3RLbUs0S
-         B4cPH82ZJw0ZAoJgmwbhN6vDh6tnLPcMj4Wok9ETs3C7w1O6vHDQ+cLphGmXbogpjk
-         Y/t4bpPApCeg7TMFksHFwm+9Vh4U1XKmWFD7VHeG1ezxfZYjqVTyPxpPsC6KVSPFpq
-         L2c1W0xX17gwA==
-Date:   Thu, 9 Mar 2023 22:17:16 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        viro@zeniv.linux.org.uk
-Subject: Re: [PATCH] ext4: convert to DIV_ROUND_UP() in
- mpage_process_page_bufs()
-Message-ID: <ZArLbO1ckmcXwQf0@sol.localdomain>
-References: <20230310060734.8780-1-frank.li@vivo.com>
+        Fri, 10 Mar 2023 01:19:15 -0500
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B641EDB43;
+        Thu,  9 Mar 2023 22:19:13 -0800 (PST)
+Received: by mail-qt1-f178.google.com with SMTP id y10so4741671qtj.2;
+        Thu, 09 Mar 2023 22:19:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678429152;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2QivXt8zfdhcwelJzzxGLwGDIAnA1Rdksg2B5MmKcE8=;
+        b=HzUFmKeeVRUlh0eIwsbEiCN8KZJueviCvZ6ybc3ZS5WaFCZzmtiS1G4OlxqnfAm8dd
+         hQiwdJtncfO7JfSH/sagkkG10zVm7cOGZcYgO7dnoi0vckpFPTksDRLxMn8BGIgr+u5Y
+         bc3iC/8DFacEUVPpWeDJaEJNOVcpJMxhFg3lApsUxsZ70HuQ2wWRoWhDKAR8AwjxQvYi
+         J5LV/ox3dh/34YKYLX9DxV0Hg7v2qMaK/+S/F7HhDslXxxfbyyf51CHPTFBsm/cJqtzV
+         gg70ok8lKwIaN+QlHRJ51Oztn+jr8GQXM9uisnZFndrXOJX7mm7cmB8130shAt/r9Hj2
+         544Q==
+X-Gm-Message-State: AO0yUKX3PsecROJm7Cei+i6xJNm4g2CufjWv96e2sWxXgqmWL0Uyj1LB
+        MgTibPzX9wohgcIKJdbs04M2ppz30zviho1i
+X-Google-Smtp-Source: AK7set8FcP9hhRnt5cwezC0b+VHMeQX7NxS56QG/aiiftgPTrUY1Z36zFyzScuha/QKl/UKdoTdMsg==
+X-Received: by 2002:ac8:5bc6:0:b0:3b8:3c4e:d334 with SMTP id b6-20020ac85bc6000000b003b83c4ed334mr35744161qtb.50.1678429152084;
+        Thu, 09 Mar 2023 22:19:12 -0800 (PST)
+Received: from localhost ([2620:10d:c091:400::5:388b])
+        by smtp.gmail.com with ESMTPSA id z17-20020ac83e11000000b003bfd27755d7sm866723qtf.19.2023.03.09.22.19.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 22:19:11 -0800 (PST)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com
+Subject: [PATCH bpf-next v2] bpf/selftests: Fix send_signal tracepoint tests
+Date:   Fri, 10 Mar 2023 00:19:09 -0600
+Message-Id: <20230310061909.1420887-1-void@manifault.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310060734.8780-1-frank.li@vivo.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 02:07:34PM +0800, Yangtao Li wrote:
-> Just for better readability, no code logic change.
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->  fs/ext4/inode.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> index d251d705c276..d121cde74522 100644
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@ -2218,8 +2218,7 @@ static int mpage_process_page_bufs(struct mpage_da_data *mpd,
->  {
->  	struct inode *inode = mpd->inode;
->  	int err;
-> -	ext4_lblk_t blocks = (i_size_read(inode) + i_blocksize(inode) - 1)
-> -							>> inode->i_blkbits;
-> +	ext4_lblk_t blocks = DIV_ROUND_UP(i_size_read(inode), i_blocksize(inode));
->  
+The send_signal tracepoint tests are non-deterministically failing in
+CI. The test works as follows:
 
-Please don't do this.  This makes the code compile down to a division, which is
-far less efficient.  I've verified this by checking the assembly generated.
+1. Two pairs of file descriptors are created using the pipe() function.
+   One pair is used to communicate between a parent process -> child
+   process, and the other for the reverse direction.
 
-- Eric
+2. A child is fork()'ed. The child process registers a signal handler,
+   notifies its parent that the signal handler is registered, and then
+   and waits for its parent to have enabled a BPF program that sends a
+   signal.
+
+3. The parent opens and loads a BPF skeleton with programs that send
+   signals to the child process. The different programs are triggered by
+   different perf events (either NMI or normal perf), or by regular
+   tracepoints. The signal is delivered to the child whenever the child
+   triggers the program.
+
+4. The child's signal handler is invoked, which sets a flag saying that
+   the signal handler was reached. The child then signals to the parent
+   that it received the signal, and the test ends.
+
+The perf testcases (send_signal_perf{_thread} and
+send_signal_nmi{_thread}) work 100% of the time, but the tracepoint
+testcases fail non-deterministically because the tracepoint is not
+always being fired for the child.
+
+There are two tracepoint programs registered in the test:
+'tracepoint/sched/sched_switch', and
+'tracepoint/syscalls/sys_enter_nanosleep'. The child never intentionally
+blocks, nor sleeps, so neither tracepoint is guaranteed to be triggered.
+To fix this, we can have the child trigger the nanosleep program with a
+usleep().
+
+Before this patch, the test would fail locally every 2-3 runs. Now, it
+doesn't fail after more than 1000 runs.
+
+Signed-off-by: David Vernet <void@manifault.com>
+---
+Changelog:
+
+v1 -> v2:
+- Remove ASSERT_EQ around usleep(). It could be interrupted by a signal
+  and return EINTR (that's the whole point of the test), so let's just
+  call it directly.
+- Add a comment explaining why the usleep() is there.
+
+ tools/testing/selftests/bpf/prog_tests/send_signal.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/send_signal.c b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+index d63a20fbed33..b15b343ebb6b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/send_signal.c
++++ b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+@@ -64,8 +64,12 @@ static void test_send_signal_common(struct perf_event_attr *attr,
+ 		ASSERT_EQ(read(pipe_p2c[0], buf, 1), 1, "pipe_read");
+ 
+ 		/* wait a little for signal handler */
+-		for (int i = 0; i < 1000000000 && !sigusr1_received; i++)
++		for (int i = 0; i < 1000000000 && !sigusr1_received; i++) {
+ 			j /= i + j + 1;
++			if (!attr)
++				/* trigger the nanosleep tracepoint program. */
++				usleep(1);
++		}
+ 
+ 		buf[0] = sigusr1_received ? '2' : '0';
+ 		ASSERT_EQ(sigusr1_received, 1, "sigusr1_received");
+-- 
+2.39.0
+
