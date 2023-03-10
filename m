@@ -2,74 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9A86B515D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E92E6B5173
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:08:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjCJUDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 15:03:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
+        id S231269AbjCJUIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 15:08:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjCJUCz (ORCPT
+        with ESMTP id S231313AbjCJUIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 15:02:55 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAD7127111;
-        Fri, 10 Mar 2023 12:02:34 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id A63D460501;
-        Fri, 10 Mar 2023 21:02:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678478544; bh=YffeLnjDyEIx0w1ntHgM2BilIFpyn+oOnwxK3tGazGo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XATnsg8W6DxG7i+SYve4S65ExlmyB89A8SYOR+8SmcJm5J1LCELUu7q/g5hdUs98d
-         UfSs4DuW66SglxShrhnRmHO3o48oFp1ywm32/eeNnYulFE9W2kKa0Ql1L3Q8C8kDQF
-         XOBqqDGAubmyWZY0wZR3/aifMGADofdfnocOTDVIDRCAWPyMI2a1Da3T6ZRfxpN5WR
-         whtQYDDTeO9u0yVgvSQS3Ui1OFLzCgmewpGV6ks9zJGlviL+DDF/VFIyoFaLlcYyGx
-         3Mc5HaLq1SPAXPAJZFHPBxS0dm2J6W8wsXd4jE49391HBydEmUcG2sv3rp22XaxEFJ
-         VNcg7HimBxBEw==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id QF18HONfvMVj; Fri, 10 Mar 2023 21:02:22 +0100 (CET)
-Received: from [192.168.1.4] (unknown [77.237.109.125])
-        by domac.alu.hr (Postfix) with ESMTPSA id D037660502;
-        Fri, 10 Mar 2023 21:02:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678478542; bh=YffeLnjDyEIx0w1ntHgM2BilIFpyn+oOnwxK3tGazGo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=P/mdzVPhYEfanPkfTQqLi9wsf7ysEWmnr1r7Ku5P0mGL4OYJP/8pzN0yVBBf2H2zE
-         XFi7qqqIDiFxzGSpB2PX6zsYmjZ1N5lkvQ48AXiIsuK5XN8rC1n+9uttKz6iE/XjHQ
-         gX4tTFEJcO0OOHcQsrWtADtFO5xM0RvSM6Lhz6VLBjGlVyuPo3g9dzn2wgjbVXkJn6
-         Iwgzz5d2McH8F5ZNnXQKC14gzYjCHcHLiiOVKa4qWcJWdhg2SbMQBWKOHtUeygfEGf
-         wgXPH5Tvm1UgfBCoaMWUGajgLkyrQJiuZgqtpeFA5Cg4UFpJBzIWMJKxiljCbM6Uaw
-         mqDkieiuFEKww==
-Message-ID: <147c1a43-b5a1-a802-3d14-5f2de8306cc3@alu.unizg.hr>
-Date:   Fri, 10 Mar 2023 21:02:18 +0100
+        Fri, 10 Mar 2023 15:08:09 -0500
+X-Greylist: delayed 197 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Mar 2023 12:07:49 PST
+Received: from einhorn-mail-out.in-berlin.de (einhorn.in-berlin.de [192.109.42.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06FF126F17
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:07:49 -0800 (PST)
+X-Envelope-From: stefanr@s5r6.in-berlin.de
+Received: from authenticated.user (localhost [127.0.0.1]) by einhorn.in-berlin.de  with ESMTPSA id 32AK3utg3412285
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 21:03:56 +0100
+Date:   Fri, 10 Mar 2023 21:03:56 +0100
+From:   Stefan Richter <stefanr@s5r6.in-berlin.de>
+To:     Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Cc:     linux-kernel@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, tiwai@suse.de,
+        broonie@kernel.org
+Subject: Re: [PATCH] MAINTAINERS: replace maintainer of FireWire subsystem
+Message-ID: <20230310210356.561dbe63@kant>
+In-Reply-To: <20230306035814.78455-1-o-takashi@sakamocchi.jp>
+References: <20230306035814.78455-1-o-takashi@sakamocchi.jp>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 1/2] Add release hook to LSM
-Content-Language: en-US, hr
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        Paul Moore <paul@paul-moore.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        Frederick Lawler <fred@cloudflare.com>
-References: <20230310194159.GB528@domac.alu.hr>
- <ZAuJY1MM3hEiT0ri@smile.fi.intel.com>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZAuJY1MM3hEiT0ri@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,41 +43,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10. 03. 2023. 20:47, Andy Shevchenko wrote:
-> On Fri, Mar 10, 2023 at 08:42:00PM +0100, Mirsad Goran Todorovac wrote:
->>
->> Add release() hook to the definition of the LSM modules, to enable calling
->> destructors and deallocating allocated resources cleanly.
->>
->> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+On Mar 06 Takashi Sakamoto wrote:
+> In the last few years, I have reviewed patches for FireWire subsystem and
+> requested sound subsystem maintainer to sent them to mainline, since
+> FireWire subsystem maintainer has been long absent. This situation is not
+> preferable since we have some user of sound hardware in IEEE 1394 bus.
 > 
->> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> I will stand for the maintainer, and work for FireWire core functions and
+> 1394 OHCI driver, as well as sound drivers. This commit replaces the
+> corresponding entry.
 > 
-> I haven't given you this tag. Sorry, you must not add something
-> which was not explicitly given.
+> As you know, IEEE 1394 is enough legacy. I would like to schedule the end
+> of my work in the subsystem. My effort will last next 6 years. In 2026, I
+> will start strong announcement for users to migrate their work load from
+> IEEE 1394 bus (e.g. by purchasing alternative devices in USB and hardening
+> system for them), then in 2029 let me resign the maintainer and close
+> Linux 1394 project.
+> 
+> My current work focuses on real time data (sampling data) transmission
+> protocol in packet-oriented communication, thus I would provide less help
+> to implementations for the other type of protocol; i.e. IPv4/IPv6 over
+> IEEE 1394 bus (firewire-net), SCSI transport protocol over IEEE 1394 bus
+> (firewire-sbp2) and iSCSI target (sbp-target).
+> 
+> If receiving few objections from developers, I will start my work to send
+> fixes for v6.3 prepatch, and PR for future v6.4 or later. I'm pleased if
+> getting any help until the end.
+> 
+> Reference: commit b32744751e75 ("firewire: add to MAINTAINERS")
+> Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 
-Hi, Andy,
+Acked-by: Stefan Richter <stefanr@s5r6.in-berlin.de>
+> ---
+>  MAINTAINERS | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8d5bc223f..e137c1b2f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7954,10 +7954,11 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/nab/lio-core-2.6.git master
+>  F:	drivers/target/sbp/
+>  
+>  FIREWIRE SUBSYSTEM
+> -M:	Stefan Richter <stefanr@s5r6.in-berlin.de>
+> +M:	Takashi Sakamoto <o-takashi@sakamocchi.jp>
+> +M:	Takashi Sakamoto <takaswie@kernel.org>
+>  L:	linux1394-devel@lists.sourceforge.net
+>  S:	Maintained
+> -W:	http://ieee1394.wiki.kernel.org/
+> +W:	http://ieee1394.docs.kernel.org/
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/linux1394.git
+>  F:	drivers/firewire/
+>  F:	include/linux/firewire.h
 
-This change could have long lasting consequences if approved, and I am not
-continuing the patch submission without your mentoring and approval.
 
-It is true that I assumed that you have reviewed the patch, but you did not
-explicitly give the Reviewed-by tag.
-
-But I am rather new to this patch submission process, and please would you
-please mentor me to do this the right way.
-
-Best regards,
-Mirsad
 
 -- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
+Stefan Richter
+-======--=== --== -=-=-
+http://arcgraph.de/sr/
