@@ -2,79 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83F76B32AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 01:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BECA6B32B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 01:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbjCJARs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 19:17:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
+        id S231436AbjCJATH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 19:19:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjCJARp (ORCPT
+        with ESMTP id S229876AbjCJATF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 19:17:45 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7AA113D2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 16:17:43 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id 132so2111120pgh.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 16:17:43 -0800 (PST)
+        Thu, 9 Mar 2023 19:19:05 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD80ED690;
+        Thu,  9 Mar 2023 16:19:03 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id j2so3546552wrh.9;
+        Thu, 09 Mar 2023 16:19:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678407463;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y55T+l/IfTjCYszzbPp698Fcr0D4XjtGiCIDgfvFkg0=;
-        b=GGGeBw2uMvUsuHTfssHrt4nvsmcKhgr6GdOHAcn/hs/w9MS1XDg5m2UFoEwevuoWk/
-         kZdzjwJq4ithAYy23mDIw9hMEqffNHpveWr0U0BCi3LaIpOPvtDRazQA2adwLL3xVEuI
-         4xbw3w36l7Tc/gFvZ7ADzoY1elod9gEJeNmunQYw0juQAf3PPK8wuI8FYUOu3aUTXT3d
-         XUMq31BTX2Xtji31A0mvwEVauTtkRccAmsGIl2QH9TqsGitvxc+QNIP67pOMQ83qYl+W
-         1l/SYEdz+QFPmr+sGDi+bORjjVaFFbdzgQe2/bRauvIBKwqfnFPNMZoRLEfK3+B8jLUm
-         yA0A==
+        d=gmail.com; s=20210112; t=1678407542;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=c7dl0alc83k3Pp3Xko6c+R33xqt0UW862N4ynk36/DU=;
+        b=GrrwBmz4rV3JXTc5sfXhimJtJsl5GW01u3aqSpSblxPNu7ki6TJAiOtM4nXo/efYhg
+         7KEq3FcW1+7yoEZT+NlhqDV26TRUiPBnanF2Pfg1SgP7Sdrly2ASppWGXNtokJsSJBCB
+         brjzGx9dxVn7wG/QSJTEsUm8XhPyhdFdWYza06JRHmBTfRm2t56gqSVW6u3uwKUPbudR
+         8lEZP3sD4rq8+r+dbh1EHMn4WGhp8XwAYS+HubzxqlpZ1LtRBMORPPQMJWg9HwXhwrdC
+         lacrbP+Iginx2qsnhqg6iggnDlyfebFzuYE2Q71HoZxSJ0Q9ujcyjh8AcYLkNBsVslJl
+         GC/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678407463;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y55T+l/IfTjCYszzbPp698Fcr0D4XjtGiCIDgfvFkg0=;
-        b=y5XVcERCSI9Yx5vkfhmh8i7Pyup16qSd5rqdIRKudozbW5Fz5akE68k5t5EuRe0RX+
-         o18YW3UOEy/R2a3SaXAhOvye0SIIRAOCTdB3j26d9fNAJaPUgJ2e6wu5U9SAxziGN48A
-         QwNkhN+IL1lEFw7kq5kpezQbyqJtVZxmNIDuO1OA6L4g7VgI6lcfYgcOjRHMsxZqtJCB
-         iIjMUfCE+ihurzB8++1QBDVk5+JhpW4jH9/HcfOHQbaHYqWBVVSS303uRDyhwwiZczyG
-         4HKiRGFGrX123xeO0nK8mt3Lbri9FG2S5a6eGIpnbH0xll/zH3qj2UsYo1wNozz/v2Fn
-         yzyA==
-X-Gm-Message-State: AO0yUKVsUTpyiSUzEe53/0ALf4IKurJdPTs8Wbe4XllS4XBkY6JcO3hT
-        Za3ZA43kt32QF2vIuiRq30Fl4ZdB3Zj3zNsSsGbtog==
-X-Google-Smtp-Source: AK7set92DDVjOWKfeLKwM45A4T+HyVX6lNUCVfNJW8njYHTduRXJDj6gJmYe1OxHGI6KMdngasI1DOiBRQUQ5WAWPJo=
-X-Received: by 2002:a62:1cc6:0:b0:620:1f4c:4b9f with SMTP id
- c189-20020a621cc6000000b006201f4c4b9fmr795319pfc.6.1678407462746; Thu, 09 Mar
- 2023 16:17:42 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678407542;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c7dl0alc83k3Pp3Xko6c+R33xqt0UW862N4ynk36/DU=;
+        b=wBGvDbpKQFANNAVAsIsDpYLOjNybOxpyeAlyWmo0RbiQvbt2mLA9RdJnEE5j8ho6ZT
+         4wYnKl3VGzg5kxCDaF21x2U1ZyzC74gxUGhYedXIk3dYXopLY2xypOL99EJdFTZ4eJvT
+         Lovr6G7g+Ng+6Z7E0QqaTSh8j9DPN0d9HkPFjbwT8Zbs0rwLVBfWbvubGnE33LMV0swv
+         k94wvNK0XuGT2KXrCNjrW9bbYnSiZ1K8csZAsFGEPTj2/6GBuof1YQfAZCOzYClSgWOz
+         ked5CRzrUsjsIUKhlRrNICrSp4ZmzrFu/qrvuwPc1KKu4qMOgyZwFsKjDMDB9CMQkdaw
+         DSCg==
+X-Gm-Message-State: AO0yUKUTjyhYYUOQUL3o7fOHCd3LGDpW920vRYiWVe9GO3TzEfT4s3Bz
+        C87+jjrKckAEAlg6LdZMWFw=
+X-Google-Smtp-Source: AK7set85ENtFtGvDeF+Y/oq3nXZWYElGoArcMrJ/c0/syf+xVDTOZCV+GRwVevQcpjXsxRravVokag==
+X-Received: by 2002:adf:eec2:0:b0:2c5:8d06:75c2 with SMTP id a2-20020adfeec2000000b002c58d0675c2mr17947826wrp.35.1678407541846;
+        Thu, 09 Mar 2023 16:19:01 -0800 (PST)
+Received: from Ansuel-xps. (93-34-89-197.ip49.fastwebnet.it. [93.34.89.197])
+        by smtp.gmail.com with ESMTPSA id x15-20020a5d490f000000b002c553e061fdsm596633wrq.112.2023.03.09.16.19.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 16:19:01 -0800 (PST)
+Message-ID: <640a7775.5d0a0220.110eb.3e41@mx.google.com>
+X-Google-Original-Message-ID: <ZAp3aL+DpvM6aPFQ@Ansuel-xps.>
+Date:   Fri, 10 Mar 2023 01:18:48 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH v2 02/14] net: dsa: qca8k: add LEDs basic support
+References: <20230309223524.23364-1-ansuelsmth@gmail.com>
+ <20230309223524.23364-3-ansuelsmth@gmail.com>
+ <a8c60aa6-2a89-4b2e-b773-224c6a5b03c0@lunn.ch>
 MIME-Version: 1.0
-References: <20230301214952.2190757-1-saravanak@google.com>
- <CAGETcx_DTHW4-WMK4qRhvhxiunUB2f79cpXSfQ1x-hifZQ+tgw@mail.gmail.com> <CAMSo37XuNaV4Y3+ExrUjNzPDRD_BNSn1258Ve3We+qtbsO7qEw@mail.gmail.com>
-In-Reply-To: <CAMSo37XuNaV4Y3+ExrUjNzPDRD_BNSn1258Ve3We+qtbsO7qEw@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 9 Mar 2023 16:17:06 -0800
-Message-ID: <CAGETcx8qKCNuD5p=e-f-T93VstptPWHq2gVzmghkQucNyhwocA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
-To:     Yongqin Liu <yongqin.liu@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a8c60aa6-2a89-4b2e-b773-224c6a5b03c0@lunn.ch>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,102 +92,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 10:53=E2=80=AFAM Yongqin Liu <yongqin.liu@linaro.org=
-> wrote:
+On Fri, Mar 10, 2023 at 01:12:03AM +0100, Andrew Lunn wrote:
+> > +config NET_DSA_QCA8K_LEDS_SUPPORT
+> > +	tristate "Qualcomm Atheros QCA8K Ethernet switch family LEDs support"
+> 
+> Is tristate correct here? That means the code can either be built in,
+> a module, or not built at all. Is that what you want?
+> 
+> It seems more normal to use a bool, not a tristate.
 >
-> Hi, Saravana
->
-> Sorry for the lateness, I was just aware of this today.
 
-No worries.
+Think you are right, can't really be a module.
 
-> I tested with the ACK android-mainline branch + the 12 commits ending
-> with fb42378dcc7f
-> + the 4 commits of this series + hikey960 AOSP Master userspace.
-> The hikey960 Android build could boot to the home screen, no stuck there,
+> > +static enum led_brightness
+> > +qca8k_led_brightness_get(struct qca8k_led *led)
+> > +{
+> > +	struct qca8k_led_pattern_en reg_info;
+> > +	struct qca8k_priv *priv = led->priv;
+> > +	u32 val;
+> > +	int ret;
+> > +
+> > +	qca8k_get_enable_led_reg(led->port_num, led->led_num, &reg_info);
+> > +
+> > +	ret = regmap_read(priv->regmap, reg_info.reg, &val);
+> > +	if (ret)
+> > +		return 0;
+> > +
+> > +	val >>= reg_info.shift;
+> > +
+> > +	if (led->port_num == 0 || led->port_num == 4) {
+> > +		val &= QCA8K_LED_PATTERN_EN_MASK;
+> > +		val >>= QCA8K_LED_PATTERN_EN_SHIFT;
+> > +	} else {
+> > +		val &= QCA8K_LED_PHY123_PATTERN_EN_MASK;
+> > +	}
+> > +
+> > +	return val > 0 ? 1 : 0;
+> > +}
+> 
+> What will this return when in the future you add hardware offload, and
+> the LED is actually blinking because of frames being sent etc?
+> 
+> Is it better to not implement _get() when it is unclear what it should
+> return when offload is in operation?
+> 
+>        Andrew
 
-Thanks for testing! Can you confirm what happens if you drop the "12
-commits ending with fb42378dcc7f" ? Does it get stuck at boot or have
-some limited functionality?
+My idea was that anything that is not 'always off' will have brightness
+1. So also in accelerated blink brightness should be 1.
 
-It's surprising that for the same type of DT node, in your case
-fw_devlink is able to handle it
-correctly, but no so for Martin's case.
+My idea of get was that it should reflect if the led is active or always
+off. Is it wrong?
 
--Saravana
-
->
-> Here is the link of the logat in case you want to check some message here=
-:
-> https://gist.github.com/liuyq/6525af08c547cd2e494af5d1c8b181b5
->
-> Thanks,
-> Yongqin Liu
-> On Fri, 10 Mar 2023 at 02:05, Saravana Kannan <saravanak@google.com> wrot=
-e:
-> >
-> > Greg,
-> >
-> > Don't pull in this series please. It needs more testing from the folks
-> > I cc'ed and it's already breaking things for Martin. This needs more
-> > revisions.
-> >
-> > -Saravana
-> >
-> > On Wed, Mar 1, 2023 at 1:49=E2=80=AFPM Saravana Kannan <saravanak@googl=
-e.com> wrote:
-> > >
-> > > Yongqin, Martin, Amelie,
-> > >
-> > > We recent refactor of fw_devlink that ends with commit fb42378dcc7f
-> > > ("mtd: mtdpart: Don't create platform device that'll never probe"),
-> > > fw_devlink is smarter and doesn't depend on compatible property. So, =
-I
-> > > don't think these calls are needed anymore. But I don't have these
-> > > devices to test on and be sure and the hardware I use to test changes
-> > > doesn't have this issue either.
-> > >
-> > > Can you please test these changes on the hardware where you hit the
-> > > issue to make sure things work as expected?
-> > >
-> > > Yongqin, If you didn't have the context, this affected hikey960.
-> > >
-> > > Greg,
-> > >
-> > > Let's wait for some tests before we land these.
-> > >
-> > > Thanks,
-> > > Saravana
-> > >
-> > > Cc: Yongqin Liu <yongqin.liu@linaro.org>
-> > > Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> > > Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > > Cc: Amelie Delaunay <amelie.delaunay@foss.st.com>
-> > >
-> > > Saravana Kannan (4):
-> > >   usb: typec: stusb160x: Remove use of
-> > >     fw_devlink_purge_absent_suppliers()
-> > >   usb: typec: tipd: Remove use of fw_devlink_purge_absent_suppliers()
-> > >   usb: typec: tcpm: Remove use of fw_devlink_purge_absent_suppliers()
-> > >   driver core: Delete fw_devlink_purge_absent_suppliers()
-> > >
-> > >  drivers/base/core.c           | 16 ----------------
-> > >  drivers/usb/typec/stusb160x.c |  9 ---------
-> > >  drivers/usb/typec/tcpm/tcpm.c |  9 ---------
-> > >  drivers/usb/typec/tipd/core.c |  9 ---------
-> > >  include/linux/fwnode.h        |  1 -
-> > >  5 files changed, 44 deletions(-)
-> > >
-> > > --
-> > > 2.39.2.722.g9855ee24e9-goog
-> > >
->
->
->
-> --
-> Best Regards,
-> Yongqin Liu
-> ---------------------------------------------------------------
-> #mailing list
-> linaro-android@lists.linaro.org
-> http://lists.linaro.org/mailman/listinfo/linaro-android
+-- 
+	Ansuel
