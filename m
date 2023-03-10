@@ -2,112 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB07C6B3DA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E12DB6B3DA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjCJL0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 06:26:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
+        id S230116AbjCJL0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:26:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjCJL0S (ORCPT
+        with ESMTP id S229523AbjCJL0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 06:26:18 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4086C9C02
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:26:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678447577; x=1709983577;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OvhknMFo3UrUUi+yQGjrYHn4syo9HmaS79KGg6CVSzI=;
-  b=WknSFy48kzlRveYyt7qWrZBZORIsGMNUPlCgrGdv3qI0d3MhAoOQ90+/
-   Qz5C0D3Kz+NJ59hveU0lH80I1RH+wlFRLLUWjzhNNK6hD9COjTUTGstny
-   0yQWx6gixa3cqDpEbLyGIsCXY5uFWuybp4q7irgwhkpnnLxbWp4IMW1Q1
-   +AGOQ1vt4pO9lpQQpZeiknngSjf2T5LEcp5X5yCrOMm70IYmMgCNJKE7p
-   GWXTK2PLUhJz/LSZzZaOlaW5aRp+snr6I8va52J3lB3h3Mvqk6cT0bxcI
-   I4dVdjOqUzAyenu3GJdRoFlLzTmv1+rJrYS1pH7fh2IOO2lO9qUeyWwk8
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="338261434"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="338261434"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 03:26:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="627778980"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="627778980"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 10 Mar 2023 03:26:15 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1paat5-0003nH-0W;
-        Fri, 10 Mar 2023 11:26:15 +0000
-Date:   Fri, 10 Mar 2023 19:25:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Julien Massot <julien.massot@iot.bzh>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Subject: drivers/remoteproc/rcar_rproc.c:45:20: sparse: sparse: incorrect
- type in argument 1 (different address spaces)
-Message-ID: <202303101943.LHvbqxeT-lkp@intel.com>
+        Fri, 10 Mar 2023 06:26:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC95C80AB
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:25:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678447542;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wnd+07RC7REbUFCKV/Th3JnGXK55wayqDQMn9UZgDc0=;
+        b=Z2OvGRelR1YkZanx+Rl8dB69GDgZx12PFtJusProLTU6g5w+8ejV4kku28K8jkkidrZGKf
+        IAW8ETrJ6NlYVCliCphOPQwJonm0bHW9pZzwgpOdpckeTSCv3x2/wi8jMw6cycgvnZGx2n
+        s2tsnTi6owLz3bXWl/rDfTygm7qIp4Y=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-460-coFqZZ1VOjGHJL2CH3rLuA-1; Fri, 10 Mar 2023 06:25:41 -0500
+X-MC-Unique: coFqZZ1VOjGHJL2CH3rLuA-1
+Received: by mail-wm1-f70.google.com with SMTP id k26-20020a05600c0b5a00b003dfe4bae099so1869373wmr.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:25:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678447540;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Wnd+07RC7REbUFCKV/Th3JnGXK55wayqDQMn9UZgDc0=;
+        b=rK6zdL+iq9HPr+M1R3Ht+lK9eYhJcw7sCyho2jB/+xxON4l3R3SXQ1XHaQlxfAODS8
+         UtMtFr14AlbgjWO1ASJY9JNaU9hqwr7DzLaZT00lQTwirzsEVCSMfQxlLSL6IdTFfjeZ
+         r5HFJhYsMekxLrBexrme6Eao+f+Fl4tcawO30Xhfu6eFLSqSI+QjjEsJ+fmK5NSU4dD6
+         7ZEbvx34/Kvo+uGyczwyT1nKK8MLiNIoLsmnkjWva6yLjGmDyXsCc6GED9/7pAcoCXAN
+         qFN2au/1LI7S5GPw6cwAOjT0fwAlH/qTeYEZ7aPPz3kc69coZud22tbzIZqGRIv1xgXy
+         xl5w==
+X-Gm-Message-State: AO0yUKXeJ8KAqfQe1Tn7l/+F0XOND1CEsr/zV1fJlI8ORMAg+q76xgTv
+        YhL2qD/qy3UG71svclGRmuXsJ97oHR/99PQt5Qfolp7gYS9+O6XWxvYUzk3/BZjGCpvI+vQZ8p2
+        fArH5MkDIj742SnXUfFfXgCt8
+X-Received: by 2002:a05:600c:1c18:b0:3eb:40de:9838 with SMTP id j24-20020a05600c1c1800b003eb40de9838mr1493787wms.7.1678447540111;
+        Fri, 10 Mar 2023 03:25:40 -0800 (PST)
+X-Google-Smtp-Source: AK7set9Gs81tceVs9wUO6S04OgBq58QF0bgNdk/WOJfvkRngarnjh92tvKWEeNaXnZ8S9MvTf4e2sg==
+X-Received: by 2002:a05:600c:1c18:b0:3eb:40de:9838 with SMTP id j24-20020a05600c1c1800b003eb40de9838mr1493775wms.7.1678447539807;
+        Fri, 10 Mar 2023 03:25:39 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:1100:12e6:ffa5:775d:18ee? (p200300cbc707110012e6ffa5775d18ee.dip0.t-ipconnect.de. [2003:cb:c707:1100:12e6:ffa5:775d:18ee])
+        by smtp.gmail.com with ESMTPSA id f21-20020a7bcc15000000b003e20a6fd604sm1812910wmh.4.2023.03.10.03.25.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 03:25:39 -0800 (PST)
+Message-ID: <9f44de08-b484-baa7-80c8-0a02a7abb717@redhat.com>
+Date:   Fri, 10 Mar 2023 12:25:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: THP backed thread stacks
+Content-Language: en-US
+To:     William Kucharski <william.kucharski@oracle.com>,
+        Zach O'Keefe <zokeefe@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Xu <peterx@redhat.com>, Rik van Riel <riel@surriel.com>,
+        Mike Rapoport <rppt@kernel.org>, Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230306235730.GA31451@monkey> <ZAaCISgq4A/GnkCk@x1n>
+ <20230307004049.GC4956@monkey> <20230308190206.GA4005@monkey>
+ <CAAa6QmSdTo77dP2q2nU==C_2PdyF611+PVF32uPOTUQbp1kc9Q@mail.gmail.com>
+ <20230309233340.GC3700@monkey>
+ <CAAa6QmSiuFF6Oe0-j+eD0ma2tZAbhZuwENDYSZQSBrh1oeaLdA@mail.gmail.com>
+ <9F855331-33B2-4366-9375-988B0D3DAC98@oracle.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <9F855331-33B2-4366-9375-988B0D3DAC98@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   44889ba56cbb3d51154660ccd15818bc77276696
-commit: 285892a74f1370a12249f765c6a4e3b16194852e remoteproc: Add Renesas rcar driver
-date:   1 year, 3 months ago
-config: nios2-randconfig-s051-20230310 (https://download.01.org/0day-ci/archive/20230310/202303101943.LHvbqxeT-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=285892a74f1370a12249f765c6a4e3b16194852e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 285892a74f1370a12249f765c6a4e3b16194852e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/remoteproc/
+On 10.03.23 02:40, William Kucharski wrote:
+> 
+> 
+>> On Mar 9, 2023, at 17:05, Zach O'Keefe <zokeefe@google.com> wrote:
+>>
+>>> I think the hugepage alignment in their environment was somewhat luck.
+>>> One suggestion made was to change stack size to avoid alignment and
+>>> hugepage usage.  That 'works' but seems kind of hackish.
+>>
+>> That was my first thought, if the alignment was purely due to luck,
+>> and not somebody manually specifying it. Agreed it's kind of hackish
+>> if anyone can get bit by this by sheer luck.
+> 
+> I don't agree it's "hackish" at all, but I go more into that below.
+> 
+>>
+>>> Also, David H pointed out the somewhat recent commit to align sufficiently
+>>> large mappings to THP boundaries.  This is going to make all stacks huge
+>>> page aligned.
+>>
+>> I think that change was reverted by Linus in commit 0ba09b173387
+>> ("Revert "mm: align larger anonymous mappings on THP boundaries""),
+>> until it's perf regressions were better understood -- and I haven't
+>> seen a revamp of it.
+> 
+> It's too bad it was reverted, though I understand the concerns regarding it.
+> 
+>  From my point of view, if an address is properly aligned and a caller is
+> asking for 2M+ to be mapped, it's going to be advantageous from a purely
+> system-focused point of view to do that mapping with a THP. 
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303101943.LHvbqxeT-lkp@intel.com/
+Just noting that, if user space requests multiple smaller mappings, and 
+the kernel decides to all place them in the same PMD, all VMAs might get 
+merged and you end up with a properly aligned VMA where khugepaged would 
+happily place a THP.
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/remoteproc/rcar_rproc.c:28:12: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *va @@     got void [noderef] __iomem * @@
-   drivers/remoteproc/rcar_rproc.c:28:12: sparse:     expected void *va
-   drivers/remoteproc/rcar_rproc.c:28:12: sparse:     got void [noderef] __iomem *
->> drivers/remoteproc/rcar_rproc.c:45:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got void *va @@
-   drivers/remoteproc/rcar_rproc.c:45:20: sparse:     expected void [noderef] __iomem *addr
-   drivers/remoteproc/rcar_rproc.c:45:20: sparse:     got void *va
-
-vim +45 drivers/remoteproc/rcar_rproc.c
-
-    40	
-    41	static int rcar_rproc_mem_release(struct rproc *rproc,
-    42					   struct rproc_mem_entry *mem)
-    43	{
-    44		dev_dbg(&rproc->dev, "unmap memory: %pa\n", &mem->dma);
-  > 45		iounmap(mem->va);
-    46	
-    47		return 0;
-    48	}
-    49	
+That case is, of course, different to the "user space asks for 2M+" 
+mapping case, but from khugepaged perspective they might look alike -- 
+and it might be unclear if a THP is valuable or not (IOW maybe that THP 
+could be better used somewhere else).
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+
+David / dhildenb
+
