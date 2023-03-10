@@ -2,118 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93586B3594
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 05:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0136E6B3593
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 05:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjCJEXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 23:23:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
+        id S230247AbjCJEXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 23:23:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjCJEWv (ORCPT
+        with ESMTP id S230190AbjCJEWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 23:22:51 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A5DF8287;
-        Thu,  9 Mar 2023 20:20:22 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32A3AjQB029841;
-        Fri, 10 Mar 2023 04:20:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=AJ5dBzBaSKqSf1Ba/YZpvWjGeMq5RaKskpH+CDXL1pA=;
- b=dfX0wJHdRZcaxXc+W8nxZ1a2XLAf4fyGBenqSltmiMnAIxthkEC/M4jxTR+5+tZrEugu
- BrC4vrr4LT33V6LbKL2ZzW/JqB1IGd3rDrcHTiuuKflOwwJE12d+fXqM6twYHGnvXwRF
- OrskvvFnqwaq9Z5+WnK3GmNepniTaqJa6OjisdlV/J/fHQSOD4pdx7AULBfnGobh8vTC
- FB87eVpsSw2Wd+HWfWlkZPQ8x13J73z3jFPewvUT6sgMz4GO5sHIVxUGT+pKhMkg908y
- 9EecnEWCONy95FshLJGFIQ1QR2a0VDXy4/gq+O/k+TcrpTlv5kYUx9hAtxWdyTwlBD7Q ew== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p7q0y0x3s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 04:20:06 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32A4K5uo025099
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 04:20:05 GMT
-Received: from [10.239.155.136] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 9 Mar 2023
- 20:20:01 -0800
-Message-ID: <9d54e732-75e6-6912-750b-2c4238d618bb@quicinc.com>
-Date:   Fri, 10 Mar 2023 12:19:59 +0800
+        Thu, 9 Mar 2023 23:22:50 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2083.outbound.protection.outlook.com [40.107.220.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3BFF7EF6
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 20:20:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BCH/DJRfNE9K2+ddHDmrsWgg3j4qqox6U1e+i/wDV/2YgfnZW/6Sv5LZ+gB1AmBjXoOvgrHcz17XZ6JPrngzgfAVfxo7m3uuyzMqcd8XDKip79mH0NDuMvmTkwlAW1gqgWqIb/CocZuxVr03hkM3BG/eIKqrpa1RRY2fzJE69T9QEoSDpwosxHFiRm0Wvam4Fw5GS71sJ1yhgiuQhUqKu8zQEv9QUQ4AF1N8LSCwnOUD+iZJH3KqmD3jSxLXI0XvOKsHvv8Dc8MbAubA9jIvCOHSaQs6nze4jjtzH88jeWmVQYu9mdy14j57FXP6KHhZPqLYk3168y665C50ulEUQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HgXEAztKs9b0IfXjQgNfAxuc2TMk5WtHqr8NuhHcU6g=;
+ b=Qv5z6JpJgaRW/GDff+PpkRmlmeO3kLqRRZ+SZiLDoT4kqEwWbQ1t2wf22yNc05vP+4pemztebFtdnN5+ZdVf87+HaPXRki/V59gk946X4SDgOeMPMMM5o4ZmgIc0SAhaXE5IdOmmt928wOwIkRrAu5diESGJKNR1vP9on2fvc/CspaBXXnRvn7NFL1nNC5f2KlVwNJusZS9tAmCjr5nRQHkwwHh0P71Dwq3E+RxZyU7pM+PmYc/6+JtnBo7aLI1U+gvM8vv4VVlSuOwB9pr3aoGk8dHXkuJTofi3C2o0aO1hZWJa1S9NIlOcyNcHvxbvwY6n/XtOEmKZuUfZwyyUIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HgXEAztKs9b0IfXjQgNfAxuc2TMk5WtHqr8NuhHcU6g=;
+ b=EHh4mVOafE2jD3rKEDT+V2InhqcuOCn+IE3GjADuffJyHMwAo3T91WZIRKgH/VqnFDZDkd81to5NFs89c2U9N4mn5lybgn8D/LUrKZs1u9qTquGkvOPdhjiUoSy0mkxK5koh+czhddjzkX1OtHMz+v1bAlpHkgZJWuOPHiVaN5dPS15yGWkBRR6KEYYNkoLfhiTZcW6i9tAypCwSqf4K3uWEnn+reLmPTtPyA+ngXZBWDaoLrFA3EJ8PHO5/XnNaX5skPCV6Hy9nU9Ck64RJFrPmNovLnRj/TUWj0J4S3PAoa6LEk9D43Z4mayH1/EzCF3iilEyxPRa1mJjQ7YXbiw==
+Received: from BN1PR14CA0023.namprd14.prod.outlook.com (2603:10b6:408:e3::28)
+ by CH3PR12MB8234.namprd12.prod.outlook.com (2603:10b6:610:125::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Fri, 10 Mar
+ 2023 04:20:17 +0000
+Received: from BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e3:cafe::cc) by BN1PR14CA0023.outlook.office365.com
+ (2603:10b6:408:e3::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19 via Frontend
+ Transport; Fri, 10 Mar 2023 04:20:17 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT054.mail.protection.outlook.com (10.13.177.102) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.19 via Frontend Transport; Fri, 10 Mar 2023 04:20:17 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 9 Mar 2023
+ 20:20:06 -0800
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 9 Mar 2023
+ 20:20:06 -0800
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.6)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
+ Transport; Thu, 9 Mar 2023 20:20:05 -0800
+Date:   Thu, 9 Mar 2023 20:20:03 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     Robin Murphy <robin.murphy@arm.com>, <will@kernel.org>,
+        <eric.auger@redhat.com>, <kevin.tian@intel.com>,
+        <baolu.lu@linux.intel.com>, <joro@8bytes.org>,
+        <shameerali.kolothum.thodi@huawei.com>, <jean-philippe@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
+ arm_smmu_cache_invalidate_user
+Message-ID: <ZAqv87fjbdynVaHA@Asurada-Nvidia>
+References: <cover.1678348754.git.nicolinc@nvidia.com>
+ <aa327f9ea61e5a4771c13e53639e33955b9acde3.1678348754.git.nicolinc@nvidia.com>
+ <1467e666-1b6c-c285-3f79-f8e8b088718b@arm.com>
+ <ZAn7uC9UweiNdGkJ@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4] scsi: ufs: core: Add trace event for MCQ
-Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>, <quic_asutoshd@quicinc.com>,
-        <quic_cang@quicinc.com>, <mani@kernel.org>,
-        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
-        <beanhuo@micron.com>, <avri.altman@wdc.com>,
-        <junwoo80.lee@samsung.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:TRACING" <linux-trace-kernel@vger.kernel.org>
-References: <1677836154-29192-1-git-send-email-quic_ziqichen@quicinc.com>
- <67db2c6b-c3b0-c525-e6a9-2b2fe6c6adbb@acm.org>
- <f80fd91b-3a03-5c38-72c0-cd5c3edb33b8@quicinc.com>
- <8a83ec79-be04-ec5c-f3ef-67f64dc55f12@acm.org>
- <f96b1867-142f-7fdc-8123-58fe3bdce844@quicinc.com>
- <99f2ea8e-e543-fc14-91d7-0e7e29d2f381@acm.org>
-From:   Ziqi Chen <quic_ziqichen@quicinc.com>
-In-Reply-To: <99f2ea8e-e543-fc14-91d7-0e7e29d2f381@acm.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: kzG8T3kxifzbSNm8Di_lm03_QUcfGaeD
-X-Proofpoint-ORIG-GUID: kzG8T3kxifzbSNm8Di_lm03_QUcfGaeD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-10_01,2023-03-09_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- impostorscore=0 lowpriorityscore=0 malwarescore=0 clxscore=1015 mlxscore=0
- mlxlogscore=999 suspectscore=0 bulkscore=0 priorityscore=1501 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303100032
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZAn7uC9UweiNdGkJ@nvidia.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT054:EE_|CH3PR12MB8234:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1dc000e9-a87c-4a6f-3c99-08db211ec126
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Kmq6ETRdw03iWd6ldB5FtgDYA+WaqyfRvi0XaaitDRoC5730XKoeDImZaAUHNHWCb3ss7T0mAMhIlGqE2LEHUC+D84FgkbaQZnEP93dMGLobyRj/fXOhcUm/MW5Svc7gxQK6RpdWZaIxn+JdvaPqFZ61Jq79oLr59JhP+aQ9t8P20p5B0OPrIFgd6kmqUVI6O2jGFmOAkrhUiJU0WRfjK28FSoxpxHOFUsuUZmyG0qec8kKHaNxvFDVm0ss/ToXE+biHs1lgpNbXZk7WwbXedfMYdFXqU2frVIQH4MajiJ8yBhfKnEv3Fft75G891NELan5Whnks1/zA0+dopY+n8ZosVhq+NMgipVkJ7d87/C8By1rJDbe66LR85gBW/E0OTTEfbx0B1QSTTVQEuD5GOrsWsfvHLZBuLsgbew1fqQeeB11Iq0NzEmmD2CwlDYp6DEPCWWITN5oeWqpWMAeOfL34qlJGtEDr/BPGsKBvV9dluiHrLhcIs0V1sFWUXt59cQyKS1rkWJU4iSQi53DI84I/oxdvpi7DYJzaP8nQ35sLIAE0yZPugwLTHcQaDG399v6T2tfoBZ1zmv72hl+ZPMeQPh6sTIc3Bh8cjwR7Tl7Aqxme+wMdtTiS9HEDyuw/A2fWmpYCEH3TBdfC7Q2C9WerWxcjZCwz7XPSfQ+liGD+gN+CCcFXZ7FVzdyTopz83KDphbkX43YaqLzFJpLIdPwbBKtV7Wg/YUn4Mokhz0ijF40n6Zkx0aDRUKwvaGSA
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(346002)(376002)(396003)(451199018)(36840700001)(46966006)(40470700004)(47076005)(36860700001)(426003)(82740400003)(186003)(26005)(40480700001)(40460700003)(2906002)(70206006)(6862004)(8676002)(4326008)(8936002)(86362001)(70586007)(9686003)(7416002)(336012)(5660300002)(41300700001)(316002)(356005)(7636003)(478600001)(54906003)(55016003)(6636002)(33716001)(82310400005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 04:20:17.3957
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1dc000e9-a87c-4a6f-3c99-08db211ec126
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8234
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 3/9/2023 11:45 PM, Bart Van Assche wrote:
-> On 3/8/23 18:44, Ziqi Chen wrote:
->> Thanks for you suggestion. But the member hwq->id is an Unsigned 
->> integer. if you want to identify SDB mode and MCQ mode,  using "0" is 
->> enough, Or how about add string such as below?
->>
->> ufshcd_command: MCQ: complete_rsp: 1d84000.ufshc: tag: 14, DB: 0x0, 
->> size: 32768, IS: 0, LBA: 5979448,opcode: 0x2a (WRITE_10),group_id: 
->> 0x0, hqid: 2
+On Thu, Mar 09, 2023 at 11:31:04AM -0400, Jason Gunthorpe wrote:
+> On Thu, Mar 09, 2023 at 02:49:14PM +0000, Robin Murphy wrote:
 > 
-> Hi Ziqi,
+> > If the design here is that user_data is so deeply driver-specific and
+> > special to the point that it can't possibly be passed as a type-checked
+> > union of the known and publicly-visible UAPI types that it is, wouldn't it
+> > make sense to just encode the whole thing in the expected format and not
+> > have to make these kinds of niggling little conversions at both ends?
 > 
-> Since 0 is a valid queue ID using 0 to identify the legacy command 
-> submission mechanism is ambiguous.
-> 
-> Thanks,
-> 
-> Bart.
+> Yes, I suspect the design for ARM should have the input be the entire
+> actual command work queue entry. There is no reason to burn CPU cycles
+> in userspace marshalling it to something else and then decode it again
+> in the kernel. Organize things to point the ioctl directly at the
+> queue entry, and the kernel can do a single memcpy from guest
+> controlled pages to kernel memory then parse it?
 
-OK, let me convert hwq id to int from ftrace side.
+There still can be complications to do something straightforward
+like that. Firstly, the consumer and producer indexes might need
+to be synced between the host and kernel? Secondly, things like
+SID and VMID fields in the commands need to be replaced manually
+when the host kernel reads commands out, which means that there
+need to be a translation table(s) in the host kernel to replace
+those fields. These actually are parts of the features of VCMDQ
+hardware itself.
 
+Though I am not sure about the amounts of burning CPU cycles, it
+at least can simplify the uAPI a bit and meanwhile address the
+multiplying issue at the ATC_INV command that Robin raised, so
+long as we ensure the consumer and producer indexes wouldn't be
+messed between host and guest?
 
-Best Regards,
-Ziqi
+Thanks
+Nic
