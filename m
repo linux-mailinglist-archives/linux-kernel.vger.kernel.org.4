@@ -2,93 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A3D6B4B19
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E426B48BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234366AbjCJPaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:30:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38466 "EHLO
+        id S233619AbjCJPGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234337AbjCJPaP (ORCPT
+        with ESMTP id S233214AbjCJPFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:30:15 -0500
-Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6051220A7;
-        Fri, 10 Mar 2023 07:18:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1678461472;
-        bh=i5ecUFTtu8gE2VtNKUKEO0PlHAqi+1Iwkf2T4V9zR8Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=lmxYkmqr29L2LWuMOLm05jwyMn82LZPVSLEMC/HxVICp0xd72aHBWS0lICP5Fa4th
-         pW4Dtv4dj+B6OkTcNX4ERaBn65duI66GX0qt/1eGbmgMEoLBWADrugCX8o0F4vM4ke
-         X7Jp7U9jVZ9kWHt0Xs3j2d7GEImLwGMEfY7a9WQ4=
-Received: from DESKTOP-ZMX.localdomain ([115.156.143.0])
-        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
-        id 8A61225E; Fri, 10 Mar 2023 22:34:38 +0800
-X-QQ-mid: xmsmtpt1678458901tvdq2of68
-Message-ID: <tencent_61B4697855AD14BA2930AC7B21FFC75C4406@qq.com>
-X-QQ-XMAILINFO: NMGzQWUSIfvTkpZXdI0KmUOakjYxFf3TJBcnTvjsonGe8oB2aMXKQhIMuTGzOI
-         h92UByFh0TAoRgHqcVMOcdccq1skiQE32YG5LEn8ITcsnDltMmX9QPx3F4pEFyWUQcW6OQIbtZry
-         H2IyfU4yMHTOllwD5qXnsC8sQ3ohnd5SH1XYvqWAwOD+0ErRLhWn5Jp9l0Y5C4HHMDAdQ6e49wN3
-         8uus6jL1W52nQxONMqude0IsQD606jOodzzScg1CnkPIYtRKzgdMvKi1gA25we00y1Dj4dlIUQRU
-         4EcHfFfVXKMRacgD6X8tYl5O2fXppvZv2R5hxHuFfJ58eq5O/xzsa9/2t7sh75xaom9P/vn0mYeE
-         4geniVrO3dHi62isTxa94YUfp99aXzt8eu8bqqaeoUaqUQFEKKEhpqpIfVfVdoNLuDiffQ3VJyBB
-         lvXms5nORoxmDzj4kn6aJCBc4xjfxmKiJFsHfOjXKMvVlzfuzRSokPqYzmw7GxtvgVsjnb6t8lUR
-         vw1+Yua96xW2kvEK6HZNTkCCqM7dLYlBO4GTB8upRYw+Do7Eg8wqC36a3wveyrHN6IDfTYKpUD/o
-         2LdnFe4hroNz1V3OG2B6AMtYwMMYSeA7D/VX9B3PWacLeU8lbMV8LfRwGcXONxHU9iUXUJlPTd5p
-         Zw9fEmuz+8tpUQvTtQ5s+tOuNSxdyuj9eMUJK0QNEgN75a77LHqQMcD4vYkHznUJayuYFDHvFQsP
-         oWq4uiXUTeaYiH5o09vo1epeUJMTDSQI2g1h1YRPz7Mbsj+SwXtPsE1nkvCRIHqTU4cBFTyPFy9h
-         xIVaswInBbwr1KTv9RcU5FNcnp99Hw4nPUX0zU2GbWe+jvooupUl9mjknyxJZue1JcTNo2LXsObI
-         Hp96WSiS9p8bD7L1VsArDw0fE4KSIy+HAAgMVBRIdkVp5gWzu5KhX6Q6Gxkf6J72usl6NGemVuNa
-         IaGKR/yOq3ghUNXFZiL8UihNPYPQKb7SFWJfF7BuimuXXQ1ZdTxhdASmc5D9ghqzDj9rRjiB4=
-From:   Yang Xiwen <forbidden405@foxmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>,
-        Yang Xiwen <forbidden405@foxmail.com>
-Subject: [PATCH 2/3] dt-bindings: arm: qcom: Add Yiming LTE dongle uz801-v3.0 (yiming-uz801v3)
-Date:   Fri, 10 Mar 2023 22:33:29 +0800
-X-OQ-MSGID: <20230310143330.9485-3-forbidden405@foxmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230310143330.9485-1-forbidden405@foxmail.com>
-References: <20230310143330.9485-1-forbidden405@foxmail.com>
+        Fri, 10 Mar 2023 10:05:31 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88CF129734;
+        Fri, 10 Mar 2023 06:58:47 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-176b48a9a05so6166635fac.0;
+        Fri, 10 Mar 2023 06:58:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678460205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OQk+ypPqgihyUeUIiesj0AXK7svmXbRQzGpX4VpHfOM=;
+        b=RMIejRn7oxglsP3kjx2Oy8efmC0b0r4mvv6j7gN0qUEtrc/BdycJkuoDoIaafdlgCm
+         BmiVithf1j/MxnRUfFecfhXHT32UFnPEGnjkGVuPLyoLhr8wD9aF7da2ienBunUXQ2sU
+         tAW6ynrw8Erei3466N0IGaZGzQ3hww8cgym/i+YLvIiVvOcY6zEeE5wBMq5t/lKMJHla
+         F2HZGErYzK8ny3kprVrjTQHOCAoE//VPCduy3euaSzNzBEagi2rUoHQw9IPcMsiQoFcR
+         IDT8MVBx/dB+8KGHQ7+rKYEgwFhlkbxLEFGraIHsuoDlU8JUP7q9mU+BmKWUznQq9Mxy
+         eALg==
+X-Gm-Message-State: AO0yUKWOoTefyezEiIbZ7X3mVhY2+NISExBDdhIcFXNz2061Qd0epseJ
+        XvR0JpvvYZm5+FVQHv53X0X5ahQcWw==
+X-Google-Smtp-Source: AK7set8EIbIkzUtJ90ghmwkL/cci31MqBBSA3xxJJ9nkn5CXYyyFP2bawNWYEbOMktuugW9dBrg3pg==
+X-Received: by 2002:a05:6871:207:b0:176:53a1:b65c with SMTP id t7-20020a056871020700b0017653a1b65cmr16734662oad.11.1678459711546;
+        Fri, 10 Mar 2023 06:48:31 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j21-20020a056870d45500b0017697dfc20fsm119271oag.12.2023.03.10.06.48.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 06:48:30 -0800 (PST)
+Received: (nullmailer pid 1543883 invoked by uid 1000);
+        Fri, 10 Mar 2023 14:47:15 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Russell King <linux@armlinux.org.uk>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Ben Dooks <ben-linux@fluff.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH] mmc: Use of_property_read_bool() for boolean properties
+Date:   Fri, 10 Mar 2023 08:47:14 -0600
+Message-Id: <20230310144715.1543836-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a compatible for Yiming LTE dongle uz801-v3.0
+It is preferred to use typed property access functions (i.e.
+of_property_read_<type> functions) rather than low-level
+of_get_property/of_find_property functions for reading properties.
+Convert reading boolean properties to to of_property_read_bool().
 
-Signed-off-by: Yang Xiwen <forbidden405@foxmail.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mmc/host/mmci.c            | 22 +++++++++++-----------
+ drivers/mmc/host/omap_hsmmc.c      |  8 ++++----
+ drivers/mmc/host/sdhci-esdhc-imx.c |  4 ++--
+ drivers/mmc/host/sdhci-pxav2.c     |  2 +-
+ drivers/mmc/host/sdhci-s3c.c       |  4 ++--
+ drivers/mmc/host/tmio_mmc_core.c   |  2 +-
+ drivers/mmc/host/wmt-sdmmc.c       |  6 ++----
+ 7 files changed, 23 insertions(+), 25 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-index 1bb24d46e4eec..6e17cb0726918 100644
---- a/Documentation/devicetree/bindings/arm/qcom.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-@@ -226,6 +226,7 @@ properties:
-               - thwc,uf896
-               - thwc,ufi001c
-               - wingtech,wt88047
-+              - yiming,uz801-v3
-           - const: qcom,msm8916
+diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
+index b9e5dfe74e5c..f2b2e8b0574e 100644
+--- a/drivers/mmc/host/mmci.c
++++ b/drivers/mmc/host/mmci.c
+@@ -1962,28 +1962,28 @@ static int mmci_of_parse(struct device_node *np, struct mmc_host *mmc)
+ 	if (ret)
+ 		return ret;
  
-       - items:
+-	if (of_get_property(np, "st,sig-dir-dat0", NULL))
++	if (of_property_read_bool(np, "st,sig-dir-dat0"))
+ 		host->pwr_reg_add |= MCI_ST_DATA0DIREN;
+-	if (of_get_property(np, "st,sig-dir-dat2", NULL))
++	if (of_property_read_bool(np, "st,sig-dir-dat2"))
+ 		host->pwr_reg_add |= MCI_ST_DATA2DIREN;
+-	if (of_get_property(np, "st,sig-dir-dat31", NULL))
++	if (of_property_read_bool(np, "st,sig-dir-dat31"))
+ 		host->pwr_reg_add |= MCI_ST_DATA31DIREN;
+-	if (of_get_property(np, "st,sig-dir-dat74", NULL))
++	if (of_property_read_bool(np, "st,sig-dir-dat74"))
+ 		host->pwr_reg_add |= MCI_ST_DATA74DIREN;
+-	if (of_get_property(np, "st,sig-dir-cmd", NULL))
++	if (of_property_read_bool(np, "st,sig-dir-cmd"))
+ 		host->pwr_reg_add |= MCI_ST_CMDDIREN;
+-	if (of_get_property(np, "st,sig-pin-fbclk", NULL))
++	if (of_property_read_bool(np, "st,sig-pin-fbclk"))
+ 		host->pwr_reg_add |= MCI_ST_FBCLKEN;
+-	if (of_get_property(np, "st,sig-dir", NULL))
++	if (of_property_read_bool(np, "st,sig-dir"))
+ 		host->pwr_reg_add |= MCI_STM32_DIRPOL;
+-	if (of_get_property(np, "st,neg-edge", NULL))
++	if (of_property_read_bool(np, "st,neg-edge"))
+ 		host->clk_reg_add |= MCI_STM32_CLK_NEGEDGE;
+-	if (of_get_property(np, "st,use-ckin", NULL))
++	if (of_property_read_bool(np, "st,use-ckin"))
+ 		mmci_probe_level_translator(mmc);
+ 
+-	if (of_get_property(np, "mmc-cap-mmc-highspeed", NULL))
++	if (of_property_read_bool(np, "mmc-cap-mmc-highspeed"))
+ 		mmc->caps |= MMC_CAP_MMC_HIGHSPEED;
+-	if (of_get_property(np, "mmc-cap-sd-highspeed", NULL))
++	if (of_property_read_bool(np, "mmc-cap-sd-highspeed"))
+ 		mmc->caps |= MMC_CAP_SD_HIGHSPEED;
+ 
+ 	return 0;
+diff --git a/drivers/mmc/host/omap_hsmmc.c b/drivers/mmc/host/omap_hsmmc.c
+index 4bd744755205..517dde777413 100644
+--- a/drivers/mmc/host/omap_hsmmc.c
++++ b/drivers/mmc/host/omap_hsmmc.c
+@@ -1736,18 +1736,18 @@ static struct omap_hsmmc_platform_data *of_get_hsmmc_pdata(struct device *dev)
+ 	if (legacy && legacy->name)
+ 		pdata->name = legacy->name;
+ 
+-	if (of_find_property(np, "ti,dual-volt", NULL))
++	if (of_property_read_bool(np, "ti,dual-volt"))
+ 		pdata->controller_flags |= OMAP_HSMMC_SUPPORTS_DUAL_VOLT;
+ 
+-	if (of_find_property(np, "ti,non-removable", NULL)) {
++	if (of_property_read_bool(np, "ti,non-removable")) {
+ 		pdata->nonremovable = true;
+ 		pdata->no_regulator_off_init = true;
+ 	}
+ 
+-	if (of_find_property(np, "ti,needs-special-reset", NULL))
++	if (of_property_read_bool(np, "ti,needs-special-reset"))
+ 		pdata->features |= HSMMC_HAS_UPDATED_RESET;
+ 
+-	if (of_find_property(np, "ti,needs-special-hs-handling", NULL))
++	if (of_property_read_bool(np, "ti,needs-special-hs-handling"))
+ 		pdata->features |= HSMMC_HAS_HSPE_SUPPORT;
+ 
+ 	return pdata;
+diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
+index 58f042fdd4f4..d7c0c0b9e26c 100644
+--- a/drivers/mmc/host/sdhci-esdhc-imx.c
++++ b/drivers/mmc/host/sdhci-esdhc-imx.c
+@@ -1597,7 +1597,7 @@ sdhci_esdhc_imx_probe_dt(struct platform_device *pdev,
+ 	struct esdhc_platform_data *boarddata = &imx_data->boarddata;
+ 	int ret;
+ 
+-	if (of_get_property(np, "fsl,wp-controller", NULL))
++	if (of_property_read_bool(np, "fsl,wp-controller"))
+ 		boarddata->wp_type = ESDHC_WP_CONTROLLER;
+ 
+ 	/*
+@@ -1614,7 +1614,7 @@ sdhci_esdhc_imx_probe_dt(struct platform_device *pdev,
+ 
+ 	of_property_read_u32(np, "fsl,strobe-dll-delay-target",
+ 				&boarddata->strobe_dll_delay_target);
+-	if (of_find_property(np, "no-1-8-v", NULL))
++	if (of_property_read_bool(np, "no-1-8-v"))
+ 		host->quirks2 |= SDHCI_QUIRK2_NO_1_8_V;
+ 
+ 	if (of_property_read_u32(np, "fsl,delay-line", &boarddata->delay_line))
+diff --git a/drivers/mmc/host/sdhci-pxav2.c b/drivers/mmc/host/sdhci-pxav2.c
+index fc306eb1f845..91aca8f8d6ef 100644
+--- a/drivers/mmc/host/sdhci-pxav2.c
++++ b/drivers/mmc/host/sdhci-pxav2.c
+@@ -228,7 +228,7 @@ static struct sdhci_pxa_platdata *pxav2_get_mmc_pdata(struct device *dev)
+ 	if (!pdata)
+ 		return NULL;
+ 
+-	if (of_find_property(np, "non-removable", NULL))
++	if (of_property_read_bool(np, "non-removable"))
+ 		pdata->flags |= PXA_FLAG_CARD_PERMANENT;
+ 
+ 	of_property_read_u32(np, "bus-width", &bus_width);
+diff --git a/drivers/mmc/host/sdhci-s3c.c b/drivers/mmc/host/sdhci-s3c.c
+index 9085f3932443..504015e84308 100644
+--- a/drivers/mmc/host/sdhci-s3c.c
++++ b/drivers/mmc/host/sdhci-s3c.c
+@@ -437,12 +437,12 @@ static int sdhci_s3c_parse_dt(struct device *dev,
+ 	pdata->max_width = max_width;
+ 
+ 	/* get the card detection method */
+-	if (of_get_property(node, "broken-cd", NULL)) {
++	if (of_property_read_bool(node, "broken-cd")) {
+ 		pdata->cd_type = S3C_SDHCI_CD_NONE;
+ 		return 0;
+ 	}
+ 
+-	if (of_get_property(node, "non-removable", NULL)) {
++	if (of_property_read_bool(node, "non-removable")) {
+ 		pdata->cd_type = S3C_SDHCI_CD_PERMANENT;
+ 		return 0;
+ 	}
+diff --git a/drivers/mmc/host/tmio_mmc_core.c b/drivers/mmc/host/tmio_mmc_core.c
+index e24c3d284515..be7f18fd4836 100644
+--- a/drivers/mmc/host/tmio_mmc_core.c
++++ b/drivers/mmc/host/tmio_mmc_core.c
+@@ -1084,7 +1084,7 @@ static void tmio_mmc_of_parse(struct platform_device *pdev,
+ 	 * For new platforms, please use "disable-wp" instead of
+ 	 * "toshiba,mmc-wrprotect-disable"
+ 	 */
+-	if (of_get_property(np, "toshiba,mmc-wrprotect-disable", NULL))
++	if (of_property_read_bool(np, "toshiba,mmc-wrprotect-disable"))
+ 		mmc->caps2 |= MMC_CAP2_NO_WRITE_PROTECT;
+ }
+ 
+diff --git a/drivers/mmc/host/wmt-sdmmc.c b/drivers/mmc/host/wmt-sdmmc.c
+index 9aa3027ca25e..68525d900046 100644
+--- a/drivers/mmc/host/wmt-sdmmc.c
++++ b/drivers/mmc/host/wmt-sdmmc.c
+@@ -802,10 +802,8 @@ static int wmt_mci_probe(struct platform_device *pdev)
+ 	priv->power_inverted = 0;
+ 	priv->cd_inverted = 0;
+ 
+-	if (of_get_property(np, "sdon-inverted", NULL))
+-		priv->power_inverted = 1;
+-	if (of_get_property(np, "cd-inverted", NULL))
+-		priv->cd_inverted = 1;
++	priv->power_inverted = of_property_read_bool(np, "sdon-inverted");
++	priv->cd_inverted = of_property_read_bool(np, "cd-inverted");
+ 
+ 	priv->sdmmc_base = of_iomap(np, 0);
+ 	if (!priv->sdmmc_base) {
 -- 
-2.39.1
+2.39.2
 
