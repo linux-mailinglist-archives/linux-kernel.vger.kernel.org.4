@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE326B4773
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DDF6B47BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbjCJOuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:50:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
+        id S233286AbjCJOxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:53:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233266AbjCJOta (ORCPT
+        with ESMTP id S233489AbjCJOxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:49:30 -0500
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984BF1220B3;
-        Fri, 10 Mar 2023 06:47:48 -0800 (PST)
-Received: by mail-ot1-f52.google.com with SMTP id o4-20020a9d6d04000000b00694127788f4so3036933otp.6;
-        Fri, 10 Mar 2023 06:47:48 -0800 (PST)
+        Fri, 10 Mar 2023 09:53:20 -0500
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDBF12B026;
+        Fri, 10 Mar 2023 06:49:22 -0800 (PST)
+Received: by mail-oi1-f179.google.com with SMTP id bg11so4401311oib.5;
+        Fri, 10 Mar 2023 06:49:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459668;
+        d=1e100.net; s=20210112; t=1678459700;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BnkBIbnz4vOeZORUW8cnuffMpZ7B9RlqYee18NB6XoY=;
-        b=kSegSH2ge9meEexopNwscw/mDo77fJCwsRmMJScGL1VeeDdaHcWV5eYwZepHe6smNv
-         bkCR8kKrCbJraxKBt0ZtXv8s0FEKXyYFoay/i0n1H1Ayhld0vj1gr8WLFtPKb7xzc590
-         Z8G1oJ0xx3o446DGEooOeon8cxnmnE+HHkr7K4nZ9J2gBFoHT1Kx7CXlv3rBwpH3klSa
-         eyyvCRora78tts8LJbdOH+Fxb1tSiN/gy62v4m2RyujmFrJ9o0+sa4eViIL8bHS7eGxH
-         GxJRse477MkTPQXBsXaEHG3N2VCUGxPToXrNRZoI/UNEj59cTpHRNLn0Bh+NOActnd0a
-         ZDHQ==
-X-Gm-Message-State: AO0yUKWkKPxfaxm62rfYJwqbTLZ1cJw8dMM2unOu9psWtkp1W6eCSRO2
-        uYeoYHmoBsndfGR6CJ6beA==
-X-Google-Smtp-Source: AK7set/5K9xkOxRXHTghD5+c/dagxGmwvMLb3ksbgoSl8gw3zLJtj8L8jtL7TmDHtKFFm8q9QTWPPg==
-X-Received: by 2002:a05:6830:1f42:b0:68d:41b2:5b75 with SMTP id u2-20020a0568301f4200b0068d41b25b75mr11972670oth.11.1678459668155;
-        Fri, 10 Mar 2023 06:47:48 -0800 (PST)
+        bh=tCm7q3U60/6KX9NcfTGr2pgCK75ismvU0cilf2FoiGw=;
+        b=BgrvSnFROC0ijHIi650QY2Fx+hT4+KyHeonVoBY+ygi5mmTSabAya8yv4za8rvKvXC
+         YJDhs8e1Jhld1LWTbQKG9JlSCCit85cejfKKj0/SCbIQt/tebepplnfHo/zXhrBbEwIQ
+         4EYTxXcaW39k9JHo19R7hzBQ9sYva0OH7s/T6dHQrzflNTCVn7q5ABrSIccfgLFJPKcq
+         c0R0VVD98IhuB6+aX0qEEWI244MQ7qXkZhoimM5XlvtPYcMIVmnUodn8lmNxW0WUq5WG
+         k851etgYLHdXYKkWGsXclytNuz+FdhEkkhhNElZgLAQrjj7LY8epFBSmnSPWT/9V0XdZ
+         hNoA==
+X-Gm-Message-State: AO0yUKWu80XvnxL6A/3D/OcoDgpFGqXDvuZZosKW8F37P3zcoUsPAgXT
+        eNbYET2qA8PzyAFzkkvTJg==
+X-Google-Smtp-Source: AK7set+/P06XaRp7GkTwg3tc6gShVPdQ5zxSFTjc+shqKUaog2xzKowKu9ROn/VBl+65mw2D8Tw0Yw==
+X-Received: by 2002:a05:6808:86:b0:384:67e1:ca00 with SMTP id s6-20020a056808008600b0038467e1ca00mr9966724oic.48.1678459700609;
+        Fri, 10 Mar 2023 06:48:20 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q19-20020a05683022d300b0068bd20cf07dsm115038otc.48.2023.03.10.06.47.47
+        by smtp.gmail.com with ESMTPSA id u26-20020a9d4d9a000000b00686a19ffef1sm92062otk.80.2023.03.10.06.48.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:47:47 -0800 (PST)
-Received: (nullmailer pid 1545656 invoked by uid 1000);
-        Fri, 10 Mar 2023 14:47:27 -0000
+        Fri, 10 Mar 2023 06:48:20 -0800 (PST)
+Received: (nullmailer pid 1545813 invoked by uid 1000);
+        Fri, 10 Mar 2023 14:47:28 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
+        Bin Liu <b-liu@ti.com>, Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        sparclinux@vger.kernel.org
-Subject: [PATCH] serial: Use of_property_present() for testing DT property presence
-Date:   Fri, 10 Mar 2023 08:47:26 -0600
-Message-Id: <20230310144727.1545630-1-robh@kernel.org>
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
+Subject: [PATCH] usb: Use of_property_present() for testing DT property presence
+Date:   Fri, 10 Mar 2023 08:47:27 -0600
+Message-Id: <20230310144728.1545786-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,60 +77,82 @@ for presence of a property and nothing more.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/tty/serial/imx.c      | 3 +--
- drivers/tty/serial/sh-sci.c   | 2 +-
- drivers/tty/serial/sunzilog.c | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ drivers/usb/gadget/udc/snps_udc_plat.c | 2 +-
+ drivers/usb/host/fsl-mph-dr-of.c       | 4 ++--
+ drivers/usb/musb/omap2430.c            | 2 +-
+ drivers/usb/phy/phy-mxs-usb.c          | 2 +-
+ drivers/usb/phy/phy-tegra-usb.c        | 2 +-
+ 5 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index 523f296d5747..5712a4f29607 100644
---- a/drivers/tty/serial/imx.c
-+++ b/drivers/tty/serial/imx.c
-@@ -2269,8 +2269,7 @@ static int imx_uart_probe(struct platform_device *pdev)
- 	if (of_get_property(np, "fsl,dte-mode", NULL))
- 		sport->dte_mode = 1;
- 
--	if (of_get_property(np, "rts-gpios", NULL))
--		sport->have_rtsgpio = 1;
-+	sport->have_rtsgpio = of_property_present(np, "rts-gpios");
- 
- 	if (of_get_property(np, "fsl,inverted-tx", NULL))
- 		sport->inverted_tx = 1;
-diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index 7bd080720929..a3e12e985e0d 100644
---- a/drivers/tty/serial/sh-sci.c
-+++ b/drivers/tty/serial/sh-sci.c
-@@ -1573,7 +1573,7 @@ static void sci_request_dma(struct uart_port *port)
- 	 * Don't request a dma channel if no channel was specified
- 	 * in the device tree.
- 	 */
--	if (!of_find_property(port->dev->of_node, "dmas", NULL))
-+	if (!of_property_present(port->dev->of_node, "dmas"))
- 		return;
- 
- 	chan = sci_request_dma_chan(port, DMA_MEM_TO_DEV);
-diff --git a/drivers/tty/serial/sunzilog.c b/drivers/tty/serial/sunzilog.c
-index ccb809216e94..0fbeb3dbd843 100644
---- a/drivers/tty/serial/sunzilog.c
-+++ b/drivers/tty/serial/sunzilog.c
-@@ -1403,7 +1403,7 @@ static int zs_probe(struct platform_device *op)
- 	int keyboard_mouse = 0;
- 	int err;
- 
--	if (of_find_property(op->dev.of_node, "keyboard", NULL))
-+	if (of_property_present(op->dev.of_node, "keyboard"))
- 		keyboard_mouse = 1;
- 
- 	/* uarts must come before keyboards/mice */
-@@ -1553,7 +1553,7 @@ static int __init sunzilog_init(void)
- 
- 	for_each_node_by_name(dp, "zs") {
- 		num_sunzilog++;
--		if (of_find_property(dp, "keyboard", NULL))
-+		if (of_property_present(dp, "keyboard"))
- 			num_keybms++;
+diff --git a/drivers/usb/gadget/udc/snps_udc_plat.c b/drivers/usb/gadget/udc/snps_udc_plat.c
+index 8bbb89c80348..0d3e705655b9 100644
+--- a/drivers/usb/gadget/udc/snps_udc_plat.c
++++ b/drivers/usb/gadget/udc/snps_udc_plat.c
+@@ -158,7 +158,7 @@ static int udc_plat_probe(struct platform_device *pdev)
  	}
  
+ 	/* Register for extcon if supported */
+-	if (of_get_property(dev->of_node, "extcon", NULL)) {
++	if (of_property_present(dev->of_node, "extcon")) {
+ 		udc->edev = extcon_get_edev_by_phandle(dev, 0);
+ 		if (IS_ERR(udc->edev)) {
+ 			if (PTR_ERR(udc->edev) == -EPROBE_DEFER)
+diff --git a/drivers/usb/host/fsl-mph-dr-of.c b/drivers/usb/host/fsl-mph-dr-of.c
+index 46c6a152b865..cdf71b716c2b 100644
+--- a/drivers/usb/host/fsl-mph-dr-of.c
++++ b/drivers/usb/host/fsl-mph-dr-of.c
+@@ -200,10 +200,10 @@ static int fsl_usb2_mph_dr_of_probe(struct platform_device *ofdev)
+ 	dev_data = get_dr_mode_data(np);
+ 
+ 	if (of_device_is_compatible(np, "fsl-usb2-mph")) {
+-		if (of_get_property(np, "port0", NULL))
++		if (of_property_present(np, "port0"))
+ 			pdata->port_enables |= FSL_USB2_PORT0_ENABLED;
+ 
+-		if (of_get_property(np, "port1", NULL))
++		if (of_property_present(np, "port1"))
+ 			pdata->port_enables |= FSL_USB2_PORT1_ENABLED;
+ 
+ 		pdata->operating_mode = FSL_USB2_MPH_HOST;
+diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
+index 44a21ec865fb..7f305b352591 100644
+--- a/drivers/usb/musb/omap2430.c
++++ b/drivers/usb/musb/omap2430.c
+@@ -334,7 +334,7 @@ static int omap2430_probe(struct platform_device *pdev)
+ 	 * Legacy SoCs using omap_device get confused if node is moved
+ 	 * because of interconnect properties mixed into the node.
+ 	 */
+-	if (of_get_property(np, "ti,hwmods", NULL)) {
++	if (of_property_present(np, "ti,hwmods")) {
+ 		dev_warn(&pdev->dev, "please update to probe with ti-sysc\n");
+ 		populate_irqs = true;
+ 	} else {
+diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
+index d2836ef5d15c..0a8e3fd699ca 100644
+--- a/drivers/usb/phy/phy-mxs-usb.c
++++ b/drivers/usb/phy/phy-mxs-usb.c
+@@ -733,7 +733,7 @@ static int mxs_phy_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	/* Some SoCs don't have anatop registers */
+-	if (of_get_property(np, "fsl,anatop", NULL)) {
++	if (of_property_present(np, "fsl,anatop")) {
+ 		mxs_phy->regmap_anatop = syscon_regmap_lookup_by_phandle
+ 			(np, "fsl,anatop");
+ 		if (IS_ERR(mxs_phy->regmap_anatop)) {
+diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
+index f0240107edb1..4d207ce3ddf2 100644
+--- a/drivers/usb/phy/phy-tegra-usb.c
++++ b/drivers/usb/phy/phy-tegra-usb.c
+@@ -1375,7 +1375,7 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
+ 	tegra_phy->is_legacy_phy =
+ 		of_property_read_bool(np, "nvidia,has-legacy-mode");
+ 
+-	if (of_find_property(np, "dr_mode", NULL))
++	if (of_property_present(np, "dr_mode"))
+ 		tegra_phy->mode = usb_get_dr_mode(&pdev->dev);
+ 	else
+ 		tegra_phy->mode = USB_DR_MODE_HOST;
 -- 
 2.39.2
 
