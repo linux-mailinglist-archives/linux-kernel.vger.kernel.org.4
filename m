@@ -2,77 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C117F6B3C7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:41:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 799336B3C87
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjCJKlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 05:41:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
+        id S229830AbjCJKm1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 05:42:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCJKlB (ORCPT
+        with ESMTP id S229628AbjCJKmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 05:41:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897C7E348C;
-        Fri, 10 Mar 2023 02:40:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EF2861355;
-        Fri, 10 Mar 2023 10:40:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F6AAC433D2;
-        Fri, 10 Mar 2023 10:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678444832;
-        bh=DD48udtqkyZS6kvJb3EFINWyU+CCt8eEvkAUyiqzJhk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cOf77dI3dzwnNLmdgJtbKJYLrBZUvib2G5Kj7AT73no62YMgBGRCxOh15stIhMCgW
-         Xn00l9zWCMxbiPXnwfsRsSv6XjILgm2AwEbkBmahSjVQIB87hNF7svEqZyTuAIpq+N
-         EEv3US+uFq/2GJdyp/4Z8j12S4C1jFNvQK5Lacap0i5hRFDPtRy18Tb4SZO/lAzaxu
-         u1xCLo+abO+J9+MkBq+rGvHbef4DDX5Wj02QikU8H8K9QvZDYXhYkAxpq8yFKLifFC
-         98NmfJlmRzzSEXgHqir+8KBg2idEKlzX5TI320y7jGkMoHXts/owYSHH39qwAEwQa3
-         WFXPPP5jMIHMA==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Josh Triplett <josh@joshtriplett.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: kirin: select REGMAP and REGMAP_MMIO
-Date:   Fri, 10 Mar 2023 11:40:26 +0100
-Message-Id: <167844411812.1209684.12017386820985241641.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <04636141da1d6d592174eefb56760511468d035d.1668410580.git.josh@joshtriplett.org>
-References: <04636141da1d6d592174eefb56760511468d035d.1668410580.git.josh@joshtriplett.org>
+        Fri, 10 Mar 2023 05:42:24 -0500
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A1F5FCC;
+        Fri, 10 Mar 2023 02:41:57 -0800 (PST)
+Received: by mail-qv1-f47.google.com with SMTP id m4so3342962qvq.3;
+        Fri, 10 Mar 2023 02:41:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678444914;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ArWKK4kIoJ2P09oAJ7o5KooW+KJp4qT/SfAsM2P6J9E=;
+        b=oIt+4vccCh1tetH/tjaal6J6dKblGjj1BkZJeb4yZaPKNFapvShTzfRY7v0sN/ffMt
+         rstzw3TuA1SA7IU8SleGFeBIYF45kRGpKVMzT3M6P1qtXbDmGs57G+z3TpLUNoK0eh8Z
+         P8/3A7EAWKEsrbdsE0VnLPy0sW+C79iWjVB66+3FPA1jcjPshv0xfSr9IiLDlVrcJYsR
+         l5CPMDvTWbDBl4GMBrJQFrDmnntzS1QAi3kamfr9OpC2vt8BYgStOjx+RKZsdSlwfUYY
+         q+IYqvxQHd7Bjy3O2UfKUEmDs34/y4BtOVNP2CX+S0Knv2+19USlfEWis1bcRr1plZek
+         BNGg==
+X-Gm-Message-State: AO0yUKXAHoTYVF5IEBi5Zg9AHpchQ1f+MfnJdCmKLKFXmPUnvXiaaQbQ
+        MX1NhghNNNKgwBSwZvRE04pKHdmi4YzCtA==
+X-Google-Smtp-Source: AK7set/GtL7xqKMU2ZaFLyKTUQ6Pk2VxIKiSgfMEYQt1fO3qQSqzrn91eYXDYz8rpiyNq7GHv15aBA==
+X-Received: by 2002:a05:6214:250e:b0:56e:bdfb:f4c5 with SMTP id gf14-20020a056214250e00b0056ebdfbf4c5mr17094238qvb.36.1678444914398;
+        Fri, 10 Mar 2023 02:41:54 -0800 (PST)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id 11-20020a05620a048b00b007339c5114a9sm1056949qkr.103.2023.03.10.02.41.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 02:41:53 -0800 (PST)
+Received: by mail-yb1-f169.google.com with SMTP id e194so4823076ybf.1;
+        Fri, 10 Mar 2023 02:41:53 -0800 (PST)
+X-Received: by 2002:a05:6902:208:b0:a98:bd27:91de with SMTP id
+ j8-20020a056902020800b00a98bd2791demr15376283ybs.7.1678444913472; Fri, 10 Mar
+ 2023 02:41:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230131223529.11905-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdX3OHuq15m=g56faaU6EySYeKmRvbmJdty1xZ6JOu-yzg@mail.gmail.com>
+In-Reply-To: <CAMuHMdX3OHuq15m=g56faaU6EySYeKmRvbmJdty1xZ6JOu-yzg@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 10 Mar 2023 11:41:40 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVB13VX32Qi3Y5pTWA1j6yODFohrNArhRvdVUQX085sWw@mail.gmail.com>
+Message-ID: <CAMuHMdVB13VX32Qi3Y5pTWA1j6yODFohrNArhRvdVUQX085sWw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Share RZ/G2L SoC DTSI with RZ/V2L SoC
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 13 Nov 2022 23:23:26 -0800, Josh Triplett wrote:
-> pcie-kirin uses regmaps, and needs to pull them in; otherwise, with
-> CONFIG_PCIE_KIRIN=y and without CONFIG_REGMAP:
-> 
-> drivers/pci/controller/dwc/pcie-kirin.c:359:21: error: variable ‘pcie_kirin_regmap_conf’ has initializer but incomplete type
->   359 | static const struct regmap_config pcie_kirin_regmap_conf = {
-> 
-> Similarly, without CONFIG_REGMAP_MMIO, pcie-kirin produces a linker
-> failure looking for __devm_regmap_init_mmio_clk.
-> 
-> [...]
+Hi Prabhakar,
 
-Applied to controller/kirin, thanks!
+On Mon, Feb 13, 2023 at 3:16 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Tue, Jan 31, 2023 at 11:42 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > This series aims to reuse RZ/G2L SoC DTSI with RZ/V2L as both the SoCs are
+> > almost identical.
+> >
+> > v1 -> v2
+> > * Patch 1/2 unchanged, for patch 2/2 sorted the nodes based on the names.
+> >
+> > v1: https://patchwork.kernel.org/project/linux-renesas-soc/cover/20230127133909.144774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> >
+> > Cheers,
+> > Prabhakar
+> >
+> > Lad Prabhakar (2):
+> >   arm64: dts: renesas: r9a07g044: Use SoC specific macro for CPG and
+> >     RESET
+> >   arm64: dts: renesas: r9a07g054: Reuse RZ/G2L SoC DTSI
+> >
+> >  arch/arm64/boot/dts/renesas/r9a07g044.dtsi |  254 ++---
+> >  arch/arm64/boot/dts/renesas/r9a07g054.dtsi | 1149 +++-----------------
+> >  2 files changed, 256 insertions(+), 1147 deletions(-)
+>
+> Do you have an opinion on this series?
+> Is this acceptable for you?
+> The final generated DTBs are identical to before.
 
-[1/1] PCI: kirin: select REGMAP and REGMAP_MMIO
-      https://git.kernel.org/pci/pci/c/3a2776e8a0e1
+Given the feedback from Krzysztof and Rob on patch 1, and on IRC,
+I'm rejecting this series.
 
-Thanks,
-Lorenzo
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
