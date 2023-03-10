@@ -2,196 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CEB6B4FBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 19:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8706B4FC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 19:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231263AbjCJSFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 13:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
+        id S230027AbjCJSHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 13:07:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjCJSFc (ORCPT
+        with ESMTP id S229659AbjCJSHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 13:05:32 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B1A1308E1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 10:05:29 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id h9so6201231ljq.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 10:05:29 -0800 (PST)
+        Fri, 10 Mar 2023 13:07:22 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88221314C7;
+        Fri, 10 Mar 2023 10:07:21 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id me6-20020a17090b17c600b0023816b0c7ceso10713900pjb.2;
+        Fri, 10 Mar 2023 10:07:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678471527;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rBjBAbRPm56BQ/eTKboqTkN6AUznZBRmPA9kqc4XcyQ=;
-        b=cntpW1qI/KsIzpeM76IKOGuCeB73EAc3rug0E3ELKWVQSDgrYXJlSaskG8e1qZG866
-         bxHNWvSZFGYfKZ4X/onCRPBdQTpUH7Fpx+BV+be7ZugqTpDO388N4EU7wyvY3vL/7rxj
-         kkJzV8JIla7e8mHlL0EAAUi6e0ZaBmOSH/4fvImOyuVsf6JFxCyxppFbcsRGDD44JTx7
-         Lu0OwSFfMVUmCt8vJRlNRpaCVZvFspYA+/FgGkaomcFrbXaldVUZFbKDrHbsYYNYXE28
-         Krp1qliABahK1U0bMRfZA09803nEVXFiwaEvl68PF+hsD/ygzxPLYsjX993D6MYIiHHl
-         BvfA==
+        d=gmail.com; s=20210112; t=1678471641;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+5jGJYm0wL4TU+GInA55FTV+ma7xO70le58dL4DX4ys=;
+        b=MZvRpi166r8cPLxmI4Wj2nTjboTVgIlUSNoTZ0GEKuD172rYOKmAnVQb5/nQYacoWT
+         TovuiPpr7y2PnF1VP2kZ97vtg8bSK8YZ5yMoTO3ZTmP+LC5nxfLhYxpr+8YWDljyQFfL
+         RjZ890CYGCRocpbCh9ZVKMs1L/UYwiX/CWVse4HJiH4QPkbXtNCKqXJrGbZfojm/F7ca
+         A6N/nkZOj0E4UOwL3L7xhVmh6f0Yjk6iHCr2diO27gnOWhQZvbAZ+a4x//nxwoljrlGP
+         qBCms2xT0VDOFEs1YxgjFlhxSirsnvnkpg87zsMHfutd11qmxoYxyOf4ff8s1ugbZnm7
+         ycVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678471527;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rBjBAbRPm56BQ/eTKboqTkN6AUznZBRmPA9kqc4XcyQ=;
-        b=e6UsWlcpP8KVim2xLLr2zWtnGWofmMJYJw3G0vDIrrLOwXUsQaAjb4rJfjkpHb4a5H
-         HoAy/1hH9ufXTy935DTh3AAlqEc1ebjxUkv9ZzBnsh8YKv78EohwtBjVkTIP6toihvTW
-         UKyHe+Fdd/w5Ebg4+FsC6jzvNuYM1sr6oebFxg/n3SfGehsAuiJYpwceJ3JNFNj49L0m
-         VQctDP/vZu5NZqUDIkm73xXk0cOzUMnb39wJ9VgNRxW2T19DX4ThnILFou6SnNC4bENU
-         CJizA2+E+U7j0Bibg7HgIF3jMoh17AvepPelciehFR8avNfqjHw+TKu3CdWMuMIJE5He
-         O8FA==
-X-Gm-Message-State: AO0yUKVdDkEYeWuhug4TACGbMh/LjuRAeqlMHcmKZWHQ84HOX/GkQDWl
-        7TOJua3z8fudLn989ziuQ+G9yA==
-X-Google-Smtp-Source: AK7set+LStnbYuO7wMtSj1sLy7WPF1lvNmLMrshaGf4g4TvXPrrrGTtU2l1r6N3cibjsBRx7qigUPQ==
-X-Received: by 2002:a2e:9555:0:b0:28b:6d76:e9ce with SMTP id t21-20020a2e9555000000b0028b6d76e9cemr7702361ljh.23.1678471527328;
-        Fri, 10 Mar 2023 10:05:27 -0800 (PST)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id f13-20020a05651c03cd00b00295a8d1ecc7sm84447ljp.18.2023.03.10.10.05.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 10:05:21 -0800 (PST)
-Message-ID: <858a8925-f11b-652d-3f02-f5ceea7d11fa@linaro.org>
-Date:   Fri, 10 Mar 2023 19:05:16 +0100
+        d=1e100.net; s=20210112; t=1678471641;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+5jGJYm0wL4TU+GInA55FTV+ma7xO70le58dL4DX4ys=;
+        b=Fr44AdkZ1RJsXDIA0x4BnNW9HhtqmvKeIuzFo7Ah0u96wqR80Oy4uqBFjcDIm9W3YW
+         mVWRFQ4zkHgximwuBlebKMKFfkeXjESJroaTxvwuv5bBB71ZLvn2vMZwxGe7kmesypW+
+         MrMj8PQFv/sR83zb6D7Q9PFcp5vzmqSAeSR6TWgOcEpO1NVfExtvQmWhuXb+MIzRgzLk
+         IfZLnboJaXswJmyWQieaoVr22Iq/i+35wf7aV5dDatqPLe0vqPAW8PVcof0mWAQvNGky
+         oPEv6CeNCt5m9SRPPonMqG8ZbuxmGZFk2XITzZLPP69YQPbCvrjA3Mp5VFRf1gsBeW5U
+         j+HA==
+X-Gm-Message-State: AO0yUKUzGoUXdFYztDno0cp6g4hNEfO0auQrGVZ15kWidsuz9KGpLRu9
+        nEkJiv+DMo6GACZBHq7CGjQzRlmEqt4=
+X-Google-Smtp-Source: AK7set/6HkbBFXtz3z8XyA+x6G75td2z6mPUHNDgY11R3c9ADc80r5wuC4UgzbgQZmk2Zktp4juJyw==
+X-Received: by 2002:a17:90a:18e:b0:232:fa13:4453 with SMTP id 14-20020a17090a018e00b00232fa134453mr26741085pjc.13.1678471641394;
+        Fri, 10 Mar 2023 10:07:21 -0800 (PST)
+Received: from Gentoo (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id jx18-20020a17090b46d200b00233e860f69esm201403pjb.56.2023.03.10.10.07.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 10:07:20 -0800 (PST)
+Date:   Sat, 11 Mar 2023 02:07:13 +0800
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] drm/panel: Add driver for Novatek NT36523
+Message-ID: <ZAtx0c4U70DtMuyV@Gentoo>
+References: <20230310132144.2241-1-lujianhua000@gmail.com>
+ <20230310132144.2241-2-lujianhua000@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-6-815606092fff@linaro.org>
- <50f03895-816f-be8d-d956-d237fb13f5a0@linaro.org>
- <6d10906e-08cd-0380-5f5d-3ac0eec60276@linaro.org>
- <67590cd3-5543-59ed-6158-b272103ebd05@linaro.org>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <67590cd3-5543-59ed-6158-b272103ebd05@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310132144.2241-2-lujianhua000@gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10.03.2023 17:47, Bryan O'Donoghue wrote:
-> On 10/03/2023 14:26, Konrad Dybcio wrote:
->>
->>
->> On 10.03.2023 15:21, Bryan O'Donoghue wrote:
->>> On 08/03/2023 21:40, Konrad Dybcio wrote:
->>>> Some (but not all) providers (or their specific nodes) require
->>>> specific clocks to be turned on before they can be accessed. Failure
->>>> to ensure that results in a seemingly random system crash (which
->>>> would usually happen at boot with the interconnect driver built-in),
->>>> resulting in the platform not booting up properly.
->>>
->>> Can you give an example of which clocks on which SoC's ?
->> See for example 67fb53745e0b
->>
->> This was a clock documented downstream under the node-qos clocks here:
->>
->> https://github.com/sonyxperiadev/kernel/blob/aosp/LA.UM.5.7.r1/arch/arm/boot/dts/qcom/msm8996-bus.dtsi#L102-L109
->>
->> but there are occasions where such clocks are undocumented and downstream
->> skips them because it relies on them being on by miracle, such as the case
->> of MASTER_IPA and the IPA rpmcc clock on msm8998. Downstream has no
->> sync_state, so they would only set the QoS registers when the relevant
->> hardware was online, so the clocks were on already.
+On Fri, Mar 10, 2023 at 09:21:44PM +0800, Jianhua Lu wrote:
+> Add a driver for panels using the Novatek NT36523 display driver IC.
+...
+> +
+> +static int nt36523_get_modes(struct drm_panel *panel,
+> +			       struct drm_connector *connector)
+> +{
+> +	struct panel_info *pinfo = to_panel_info(panel);
+> +	int i;
+> +
+> +	for (i =0; i < pinfo->desc->num_modes; i++) {
+s/i =0/i = 0/, I forget to run checkpatch, sorry. I will fix it in v5 
+> +		const struct drm_display_mode *m = &pinfo->desc->modes[i];
+> +		struct drm_display_mode *mode;
+> +		mode = drm_mode_duplicate(connector->dev, m);
+> +		if (!mode) {
+> +			dev_err(panel->dev, "failed to add mode %ux%u@%u\n",
+> +				m->hdisplay, m->vdisplay, drm_mode_vrefresh(m));
+> +			return -ENOMEM;
+> +		}
+> +		mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
+> +		drm_mode_set_name(mode);
+> +		drm_mode_probed_add(connector, mode);
+> +	}
+> +
+> +	connector->display_info.width_mm = pinfo->desc->width_mm;
+> +	connector->display_info.height_mm = pinfo->desc->height_mm;
+> +	connector->display_info.bpc = pinfo->desc->bpc;
+> +
+> +	return pinfo->desc->num_modes;
+> +}
 > 
-> What switched the clocks on ? Presumably LK.
 > 
-> Is this a symptom of using a bootloader other than LK ? If you use the same bootloader, then why hasn't the bootloader/LK already set it up on your platform ?
-XBL* in this case (qcom fully switched to UEFI with 8998, I'm not
-using anything other to what came on the device)
-
-Setting up these dependencies happens all throughout the boot
-chain: after the SoC starts up, BIMC/PNoC/CNoC/SNoC(/AnNoC) are
-set up by some early firmware so that DDR, USB, UFS/eMMC, crypto
-engines etc. can be reachable. It's *that* level of deep..
-
-Then, they are not shut down at all, leaving USB etc. accessible
-by default.
-
-> 
->>>
->>> Is the intention of this patch to subsequently go through *.dts *.dtsi and start to remove assigned-clocks ?
->>>
->>> Are we saying that currently there ought to be assigned-clocks for some of these NoC declarations ?
->> Not really, assigned-clocks are used for static ratesetting, see
->> for example dwc3 nodes where we need it to be fast enough for
->> HS/SS operation at all times (though that should have prooobably
->> been handled in the driver but it's a separate topic), I don't
->> think any of them were used to combat what this commit tries to.
-> 
-> I think you could use assigned-clocks for that ..
-> 
-> So its not part of your series but then presumably you have a follow-on patch for the 8998 dts that points your ->intf_clks at these then ?
-> 
-> clocks = <&clock_gcc clk_aggre2_noc_clk>,
->          <&clock_gcc clk_gcc_ufs_axi_clk>,
->          <&clock_gcc clk_gcc_aggre2_ufs_axi_clk>;
-> 
-> It seems like the right thing to do..
-Why so? We're passing all clock references to clocks=<> and we handle
-them separately. This is akin to treating the "core" clock differently
-to the "iface" clock on some IP block, except on a wider scale.
-
-> 
-> Still not clear why these clocks are off.. your bootchain ?
-Generally the issue is that icc sync_states goes over *all the possible
-interconnect paths on the entire SoC*. For QoS register access, you need
-to be able to interface them. Some of the hardware blocks live on a
-separate sort of "island". That' part of why clocks such as
-GCC_CFG_NOC_USB3_PRIM_AXI_CLK exist. They're responsible for clocking
-the CNoC<->USB connection, which in the bigger picture looks more or less
-like:
-
-
-    1     2-3            2-3    3-4            3-4    4-5
-USB<->CNoC<->CNoC_to_SNoC<->SNoC<->SNoC_to_BIMC<->BIMC<->APSS
-
-where:
-
-1 = GCC_CFG_NOC_USB3_PRIM_AXI_CLK
-2 = RPM CNOC CLK
-3 = RPM SNOC CLK
-4 = RPM BIMC CLK
-5 = (usually internally managed) HMSS / GNOC CLK
-
-or something along these lines, the *NoC names may be in the wrong order
-but this is the general picture.
-
-On msm-4.x there is no such thing as sync_state. The votes are only
-cast from within the IP-block drivers themselves, using data gathered from
-qcom,msmbus-blahblah and msmbus calls from within the driver. That way,
-downstream ensures there's never unclocked QoS register access.
-
-After writing this entire email, I got an idea that we could consider not
-accessing these QoS registers from within sync_state (e.g. use sth like
-if(is_sync_state_done))..
-
-That would lead to this patch being mostly
-irrelevant (IF AND ONLY IF all the necessary clocks were handled by the
-end device drivers AND clk/icc voting was done in correct order - which
-as we can tell from the sad 8996 example, is not always the case).
-
-Not guaranteeing it (like this patch does) would make it worse from the
-standpoint of representing the hardware needs properly, but it could
-surely save some headaches. To an extent.
-
-Konrad
-> 
-> ---
-> bod
