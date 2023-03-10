@@ -2,97 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BBC6B3499
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5776B349F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbjCJDOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 22:14:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
+        id S229697AbjCJDQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 22:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbjCJDOi (ORCPT
+        with ESMTP id S229521AbjCJDQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 22:14:38 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D02EB8BD;
-        Thu,  9 Mar 2023 19:14:36 -0800 (PST)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329Lwv7h008506;
-        Fri, 10 Mar 2023 03:14:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2022-7-12;
- bh=ZQDkoOuVU4ImmZBpnAyX+3LIvJgALGGK/6O93qaTM+U=;
- b=gQ9yV9m4gewWi+5iMCnTaNTpxZiRBed9Sf0UrKIdqKbBuQJbVkp2VjFf+0BYngErCpUE
- szktGbybSbD5tCrvsXIKcAlooUsXEl/n5PPc2fXqM05nnx+l9PIi1EPW/wMqXphcVyZ+
- tv2tdSP6e2pm8+307u2c9NrgJmDc2GNMr21H/eqtvy/oiDUsNj8MzYCOhm9YhiHAnWjf
- iew6tY2oCDHSdoZvqClnDbo/fJobRtWUCbdQWS3y3jnn4YoHZ1nX23ln9FUj2uIt8CHo
- 95kp5awl5VLB8oc2sp+p/ARiLAxvC7dWDySdPqEr4FESZ5Tr9Eleg+AQ+EIT5KF2ONKv Qw== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p417cma8g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Mar 2023 03:14:33 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32A0WeO3026565;
-        Fri, 10 Mar 2023 03:14:32 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3p6g9w39km-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Mar 2023 03:14:32 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32A3ETDK023573;
-        Fri, 10 Mar 2023 03:14:31 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3p6g9w39jg-4;
-        Fri, 10 Mar 2023 03:14:31 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] scsi: message: fusion: remove unused sas_persist_task work
-Date:   Thu,  9 Mar 2023 22:14:24 -0500
-Message-Id: <167841804067.2362455.1274954694445967635.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <b2ca2164-5347-8ec1-d8b6-3225df864173@I-love.SAKURA.ne.jp>
-References: <b2ca2164-5347-8ec1-d8b6-3225df864173@I-love.SAKURA.ne.jp>
+        Thu, 9 Mar 2023 22:16:20 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809ABF2F90;
+        Thu,  9 Mar 2023 19:16:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=11AJMu/0cs/HvqxMiNs1sKMgouvxxTSuRzL9iqx/214=; b=b3pgLg2BGWVTYim4F7KQAXgPuh
+        tvBvaspI+ZuT6n1dLXX0xe2CfyfmScno/rVPwocMA8nAysYzCglC41V3TUPJUjcvIvMYWMgbcWsqA
+        mNb7CSDVKPDqEj9FhBJ3BlqtTv2rfZ3lApjmVElaxCebclvKldUPhAJs11i/u4Rq7Yp36tiJrOEj4
+        Md5bov/9vJTU9iQSlhFi31jlZEUol6H70DxfbHVTEk7oeZGF6OI/AiRPNpvQTL4/P+kXsBTDJm/bm
+        ojuazI9oWqv2bmVjTzwhBLB9gBk6dOhlqYyB/hAillxfNGe/u82JeojkeXAlQWl4Eq3y/so5OQ8Wj
+        4Bsb00ww==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1paTER-00FCSC-2a;
+        Fri, 10 Mar 2023 03:15:47 +0000
+Date:   Fri, 10 Mar 2023 03:15:47 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
+        jefflexu@linux.alibaba.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca, rpeterso@redhat.com, agruenba@redhat.com,
+        mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        brauner@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        cluster-devel@redhat.com, ocfs2-devel@oss.oracle.com,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] erofs: convert to use i_blockmask()
+Message-ID: <20230310031547.GD3390869@ZenIV>
+References: <20230309152127.41427-1-frank.li@vivo.com>
+ <20230309152127.41427-2-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_14,2023-03-09_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
- adultscore=0 bulkscore=0 spamscore=0 malwarescore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303100023
-X-Proofpoint-GUID: oOiZc2vnGR2Toio7QOjAR-4JAPvPqA_f
-X-Proofpoint-ORIG-GUID: oOiZc2vnGR2Toio7QOjAR-4JAPvPqA_f
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309152127.41427-2-frank.li@vivo.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Feb 2023 00:02:41 +0900, Tetsuo Handa wrote:
+On Thu, Mar 09, 2023 at 11:21:23PM +0800, Yangtao Li wrote:
+> Use i_blockmask() to simplify code.
 
-> MPT_ADAPTER->sas_persist_task is no longer used since
-> commit 3eb0822c6740 ("[SCSI] mpt fusion: Firmware event implementation
-> using seperate WorkQueue").
+Umm...  What's the branchpoint for that series?  Not the mainline -
+there we have i_blocksize() open-coded...
+
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+> v3:
+> -none
+> v2:
+> -convert to i_blockmask()
+>  fs/erofs/data.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+> index 7e8baf56faa5..e9d1869cd4b3 100644
+> --- a/fs/erofs/data.c
+> +++ b/fs/erofs/data.c
+> @@ -380,7 +380,7 @@ static ssize_t erofs_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
+>  		if (bdev)
+>  			blksize_mask = bdev_logical_block_size(bdev) - 1;
+>  		else
+> -			blksize_mask = i_blocksize(inode) - 1;
+> +			blksize_mask = i_blockmask(inode);
+>  
+>  		if ((iocb->ki_pos | iov_iter_count(to) |
+>  		     iov_iter_alignment(to)) & blksize_mask)
+> -- 
+> 2.25.1
 > 
-
-Applied to 6.4/scsi-queue, thanks!
-
-[1/1] scsi: message: fusion: remove unused sas_persist_task work
-      https://git.kernel.org/mkp/scsi/c/314550680a00
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
