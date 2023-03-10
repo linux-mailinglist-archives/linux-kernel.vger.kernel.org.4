@@ -2,115 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0BC6B39F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9C76B39F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjCJJQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:16:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
+        id S230189AbjCJJPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:15:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjCJJPP (ORCPT
+        with ESMTP id S230146AbjCJJO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:15:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB2114EA5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:09:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678439384;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lsjkU85N4FNU0o/oNblF3pwjNhend/N5SR9L0EvjGbM=;
-        b=XsoU7KIq5Y1vCyN0pFbbfCB91HnmnYTjlOwPnarFsZFdptDPVWbvpUHw3J0tYhwYTemlni
-        oITrvRqq3RLKKjnMZl2Chxy7QllhJJNrqn+I2orJjpznTftiIvXMmX5JhbU1ZVYEAt7zIg
-        ICCFQmNh4JTlBcibPRivKoxvAazeRio=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-614-O7Fs6qFsOuaUubcDHTvCvg-1; Fri, 10 Mar 2023 04:09:42 -0500
-X-MC-Unique: O7Fs6qFsOuaUubcDHTvCvg-1
-Received: by mail-wr1-f71.google.com with SMTP id i18-20020a05600011d200b002c94d861113so922647wrx.16
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:09:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678439381;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lsjkU85N4FNU0o/oNblF3pwjNhend/N5SR9L0EvjGbM=;
-        b=XlbQ3f/OoO2v8fWLezbD7ll4gF33QtVaVbnrVj4nuv6lGfSWAQyH1cJPsOtMZlXexm
-         5ncG7YDSW5fQT8/H9DwpXjs8T3G3TVQjZ+H6T01bngzZAk3nRuoZaXSPE2Af+tww6Cij
-         2pM4cFD+EAXrxXQVtCagxhCCjNxtiCVd7rZimHggVoMJqVRiMEJaa6dPGlyatG9g36/n
-         bZh0NcVB/Uk3UNskCtEr2+MZQTIPXNFskYmrk5KlTLcYn6oZ4hd/8pEqw16mbIqy0jpH
-         vGyDYIs8oFmBwry4ItLZow42FjqWahe+xK0OX6BlaW7l9zN+G1TcwLJXNqHs+0PQNlji
-         JMug==
-X-Gm-Message-State: AO0yUKWpOqc/tOYNFXWPrBa1und6YLHRZpAOk8DSYzlrYuwG5jud8qqa
-        vIdzsaGJX62zFVYXghly2SdbMnANOIzTELSh++G/rxn0JhzHhRphYF7/FFIFPJAGp7p5oH1mXx9
-        ynWR7/AVhzMPZRjaz4f4H/34+
-X-Received: by 2002:a05:600c:5493:b0:3ea:edc7:aa59 with SMTP id iv19-20020a05600c549300b003eaedc7aa59mr1966011wmb.32.1678439381606;
-        Fri, 10 Mar 2023 01:09:41 -0800 (PST)
-X-Google-Smtp-Source: AK7set82DcNAbEYxkRgzwkXhtStyGRG6ScEq9WaLV3HetEFKZK8m0CtX+X41h5pDK46UpFBKYqStZQ==
-X-Received: by 2002:a05:600c:5493:b0:3ea:edc7:aa59 with SMTP id iv19-20020a05600c549300b003eaedc7aa59mr1965990wmb.32.1678439381344;
-        Fri, 10 Mar 2023 01:09:41 -0800 (PST)
-Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id n12-20020a5d67cc000000b002c8476dde7asm1539421wrw.114.2023.03.10.01.09.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 01:09:40 -0800 (PST)
-Date:   Fri, 10 Mar 2023 10:09:37 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@sberdevices.ru,
-        oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v4 0/4] several updates to virtio/vsock
-Message-ID: <20230310090937.s55af2fx56zn4ewu@sgarzare-redhat>
-References: <1804d100-1652-d463-8627-da93cb61144e@sberdevices.ru>
+        Fri, 10 Mar 2023 04:14:28 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F372E15150;
+        Fri, 10 Mar 2023 01:09:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1678439400; x=1709975400;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=HRadc1zXN2PqdKrwhkkjyFW8VZrHqm0P8DnEtzPMe9M=;
+  b=k/NOxI5nwBja1wKCCYtHteMQiBkdVys1CxlfI2k/6PvA87XcYm0ieoZK
+   LjNtl2Qd3UGbZcGUX89T2D6yvSEt5zQLQh9jQpr5EWuyxEGrOXVv6vyYI
+   AiawMkwLtJis9qnFIgG8DZvl9eQ/BbBOKm7c8+Thlmy/zBasYyK/hub/0
+   eISoUmF10Ae1T2tqwKlZHBQLE9ba1Tv4KfscBd3sPmuqHh4R7q9d2NNO1
+   2cT13mfy1qj1EMcXRn87Q5p2s6dX5IR8etrTRJSDUbMVNOX8V/AytDlHw
+   Wd3OmYM05NPZ+94fXUfXIPTrVoYX1UzprYHsu7v6iFdEgDqzqaaRudJwS
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,249,1673910000"; 
+   d="scan'208";a="29600347"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 10 Mar 2023 10:09:57 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 10 Mar 2023 10:09:57 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 10 Mar 2023 10:09:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1678439397; x=1709975397;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=HRadc1zXN2PqdKrwhkkjyFW8VZrHqm0P8DnEtzPMe9M=;
+  b=byHHmwkbMM1ggXeVCc64h7izuu1M0W99MBykH8R+n7nXGjO/NF6NRF/R
+   h2Szf0n+OW3ewj/QHIJnR58DJUAzpw93l1ZNomqzEo+tMCnDVIEZ103+W
+   mV6LiEi12RwPZxj7RxXC1J/fMPxgBvmozXq7NxHdt0Q+HkkLuQwA4GOkr
+   Kbw1q9bopuVl8k4qFTJvuUG2tY4CaBmIP+e75fgSAZY/b6ZO7L11M2VjR
+   XlCqvVay9HrIv5HbL+dnEz7AqLPgIbZmXLljMlPvmlREoYVubvYQHahdK
+   NYyV7io9alp/bgdIKOyw5aYUZKK2HZFKdGcs91OprQaca/X2Ar5TxgP94
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,249,1673910000"; 
+   d="scan'208";a="29600346"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 10 Mar 2023 10:09:57 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 478AF280056;
+        Fri, 10 Mar 2023 10:09:57 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-imx@nxp.com, "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
+Subject: Re: [PATCH v1 0/4] add i.MX93 TMU support
+Date:   Fri, 10 Mar 2023 10:09:53 +0100
+Message-ID: <2570782.NG923GbCHz@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230105101748.6714-1-alice.guo@oss.nxp.com>
+References: <20230105101748.6714-1-alice.guo@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <1804d100-1652-d463-8627-da93cb61144e@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
+Am Donnerstag, 5. Januar 2023, 11:17:44 CET schrieb Alice Guo (OSS):
+> From: Alice Guo <alice.guo@nxp.com>
+>=20
+> Alice Guo (3):
+>   dt-bindings: thermal: qoriq-thermal: Add compatible for i.MX93
+>   thermal: qoriq: add i.MX93 TMU support
+>   arm64: dts: imx93: Add CPU thermal zone
+>=20
+> Pankit Garg (1):
+>   qoriq_thermal: No need to program site adjustment register
+>=20
+>  .../bindings/thermal/qoriq-thermal.yaml       |  1 +
+>  arch/arm64/boot/dts/freescale/imx93.dtsi      | 48 +++++++++++++++
+>  drivers/thermal/qoriq_thermal.c               | 59 ++++++++++++++++---
+>  3 files changed, 100 insertions(+), 8 deletions(-)
 
-On Thu, Mar 09, 2023 at 11:24:42PM +0300, Arseniy Krasnov wrote:
->Hello,
->
->this patchset evolved from previous v2 version (see link below). It does
->several updates to virtio/vsock:
->1) Changes 'virtio_transport_inc/dec_rx_pkt()' interface. Now instead of
->   using skbuff state ('head' and 'data' pointers) to update 'fwd_cnt'
->   and 'rx_bytes', integer value is passed as an input argument. This
->   makes code more simple, because in this case we don't need to update
->   skbuff state before calling 'virtio_transport_inc/dec_rx_pkt()'. In
->   more common words - we don't need to change skbuff state to update
->   'rx_bytes' and 'fwd_cnt' correctly.
->2) For SOCK_STREAM, when copying data to user fails, current skbuff is
->   not dropped. Next read attempt will use same skbuff and last offset.
->   Instead of 'skb_dequeue()', 'skb_peek()' + '__skb_unlink()' are used.
->   This behaviour was implemented before skbuff support.
->3) For SOCK_SEQPACKET it removes unneeded 'skb_pull()' call, because for
->   this type of socket each skbuff is used only once: after removing it
->   from socket's queue, it will be freed anyway.
+Additional to the small review points:
+Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+on TQMa93xxLA+MBa93xxCA.
 
-thanks for the fixes, I would wait a few days to see if there are any
-comments and then I think you can send it on net without RFC.
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
-@Bobby if you can take a look, your ack would be appreciated :-)
-
-Thanks,
-Stefano
 
