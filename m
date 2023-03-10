@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0606B3ED7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 13:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86ECE6B3EDA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 13:12:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjCJMLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 07:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        id S230236AbjCJMMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 07:12:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbjCJMKh (ORCPT
+        with ESMTP id S230197AbjCJMLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 07:10:37 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8212A18AA1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 04:10:04 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id c18so3228808wmr.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 04:10:04 -0800 (PST)
+        Fri, 10 Mar 2023 07:11:47 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECBDF9EF2;
+        Fri, 10 Mar 2023 04:11:06 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id bx12so4807270wrb.11;
+        Fri, 10 Mar 2023 04:11:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678450203;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TUAuSSPihufsLwgjlVUlKLuXucoFIBlJ+9NyNxEoo98=;
-        b=ZESYpzUhv7+DuMbIjF977hrg9hstxGIBskEMYk5RCkD8E5uUg/0ZNbjW/iE1lv6pOP
-         6nu9fydk1vICd+WfgHAydze4VtPWdXdTnCZ2YKi9i8Z3QnOkvIfsg3Rju5IzbFgcgeG2
-         SV0eZe+wc8YK6F5rAqFuTFJl60lgy55GG/EHOXeb/GcJip04jmf6Ed5YPJA/sVF0IFvL
-         yPQH2KxZSgx0TT70gWk5ZQ/c+pQeCuC14wpXR9JJrWJD/fU9tgcbm7f1fvDeUGJkzNWc
-         duTOjJJX7YoIVBNhTHoTSADtfcHHotsPkyX28Tgi2O9W+s7sXsUYZVHLd75SXK9ejEx4
-         w++w==
+        d=gmail.com; s=20210112; t=1678450264;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rlBeRbSvFIrZXSgMo0k6lv6ditnNPYMt98nq+fqCams=;
+        b=Qk7rWQ9Jc/uVlT41FlTDG2bqsywBJPY43r20sJrLQPkTulwpBHZ06Ec7DpJ+Uo/+NG
+         yvu5zWX1pi66zi5trrmf0k3ABW2Zwyf9nyAq9C6xQSfT+uVtt2cdCXc7rX7QjyKvRzOt
+         rsV4IFdxoZK7ZcGbZoNghn7Bnofm5AoVhrGcD7IX7llWE6sfZnwnLJ9qqrvuHUgUdJ14
+         iSzVYmTl63e174/K785ADYAydKaBT8c0MRfb9RsYT+h5wGV3oZMlt956VV5LvGI2p8f8
+         bF4J5l7xYnP6s3t+oXGmCQIqdn/F31UGTGUldkhuURlXgKkHWqxmvrnQ4PiJq4YvWfwo
+         alNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678450203;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TUAuSSPihufsLwgjlVUlKLuXucoFIBlJ+9NyNxEoo98=;
-        b=o6X+Q4Si1sIVo/HVoC0/0jfYPyOyu6Ucb2JVKkiezqDzQx7uujeyy41uv4XQC0/L+O
-         Lf91A/xqPk0bZZ8esVLZvVbtX+QKH9hT6bWr7JSuKj901NoUqN27BgflgCAO1+9RWyzB
-         sFiBXVkGKIWY6llMemkeAeX+2cqCo64jDhu9Iq0JrhFpBRxZANNHQ8+ITT/timWglMq0
-         UqtkqUQy0vMJrMvW+Fqbh6RmM0gJ9QHO4UHjOVVHPSDEFTXcJhZ0zwO6KWtQTf813FS3
-         seC+yr9kPStjqzIfNVqagCeKwtwgAIhz0TMzNh7kuzFsLy796g7jqkjW5ZQn0GaU8Qz+
-         b0sg==
-X-Gm-Message-State: AO0yUKWX4hJ0MyIqwzgI4E81ZS2iJ5zWl66YAwW/A881vtJnsWqO8pKJ
-        Hl8ZCzLXkz7wABCIu853czk=
-X-Google-Smtp-Source: AK7set9drKQBOGo1Ki4CARaraRy7/TexN2tg5PXXGGfnbPbHcQ5aYlYlVu2CBKstMtd0qhXarFjKRQ==
-X-Received: by 2002:a05:600c:524f:b0:3e2:5c3:bcfc with SMTP id fc15-20020a05600c524f00b003e205c3bcfcmr2534635wmb.18.1678450202989;
-        Fri, 10 Mar 2023 04:10:02 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id y10-20020a7bcd8a000000b003eb5a0873e0sm1907730wmj.39.2023.03.10.04.10.01
+        d=1e100.net; s=20210112; t=1678450264;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rlBeRbSvFIrZXSgMo0k6lv6ditnNPYMt98nq+fqCams=;
+        b=sdmhWioXJ2vCo41skUcFSmDiqFcMfSQ9knD60mJMGdox4OOCnpxeO1/AZClK0Raxg7
+         qrbJUyISK5SHIlmq73nx2aLRKJav4EpfGThxrBumiOFYi6aBRhk9maI8ToTRGONvm/nW
+         EzhrKZcZ2oSaw1hlcbdGwVbFf7kqwc3UTLOgznJrtJc39/vmeVydswCM9rubkEGlHbUe
+         4Rxv5FVYy2ROyr3wlnqQtdTdxrHwjFNTB24rzO9d6lQZzhPKlrAHhF9hzn8dPnxoKHzL
+         MXQY5b9FWZoHNl1Uo8WBDSHFXy4yHXvB8bu2DJt4JXqEJe8JMgnkHNXmRP3pxvW2jfid
+         gpJg==
+X-Gm-Message-State: AO0yUKV4gi7ybl/rb5VhwdQ7v8AGJDdGinziRF3/VyQipgeQaCrh8Kjv
+        lq4ABWolvhVLf1cLFYXr03s=
+X-Google-Smtp-Source: AK7set/aYzm+ywlxjxmDFOlQLxb0vdqvAVhyfDahFxWjRUfayMsOT/Y6SVoIn7NIRHJitKbIQ7o+Rg==
+X-Received: by 2002:a5d:5232:0:b0:2c8:4bca:7fc2 with SMTP id i18-20020a5d5232000000b002c84bca7fc2mr19225235wra.4.1678450264347;
+        Fri, 10 Mar 2023 04:11:04 -0800 (PST)
+Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
+        by smtp.gmail.com with ESMTPSA id f1-20020a1c6a01000000b003b47b80cec3sm2727289wmc.42.2023.03.10.04.11.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 04:10:02 -0800 (PST)
-Date:   Fri, 10 Mar 2023 15:09:54 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Khadija Kamran <kamrankhadijadj@gmail.com>,
-        Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        paskripkin@gmail.com, gregkh@linuxfoundation.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] Staging: r8188eu: Fixed block comment
-Message-ID: <bb4e7ac8-5ddf-46c7-8c5a-08839794c5d0@kili.mountain>
-References: <Y+8p7Hyaf4LhO/Sw@khadija-virtual-machine>
- <10238267.qUNvkh4Gvn@suse>
+        Fri, 10 Mar 2023 04:11:03 -0800 (PST)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     f.fainelli@gmail.com, jonas.gorski@gmail.com, andrew@lunn.ch,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH] net: dsa: b53: mmap: fix device tree support
+Date:   Fri, 10 Mar 2023 13:10:59 +0100
+Message-Id: <20230310121059.4498-1-noltari@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <10238267.qUNvkh4Gvn@suse>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 12:52:55PM +0100, Fabio M. De Francesco wrote:
-> On venerd� 17 febbraio 2023 08:17:00 CET Khadija Kamran wrote:
-> > Fixed block comment by adding '*' in each line. The Check message was
-> > shown by using checkpatch.pl script.
-> > 
-> > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
-> > ---
-> >  drivers/staging/r8188eu/core/rtw_br_ext.c | 19 ++++++++++---------
-> >  1 file changed, 10 insertions(+), 9 deletions(-)
-> > 
-> 
-> Hi Khadija,
-> 
-> As Greg said this driver is not here any longer. This makes me think that you 
-> forgot at least two things...
-> 
-> 1) Please pull and rebase the staging tree every day while working on patches 
-> during this period of the Outreachy project. If you had done so, you would 
-> have noticed that your patch cannot any more be applied.
+B53_CPU_PORT should also be enabled in order to get a working switch.
 
-This patch was sent long before the driver was deleted...  The patch was
-fine and would have been applied if the driver hadn't been removed.
+Fixes: a5538a777b73 ("net: dsa: b53: mmap: Add device tree support")
+Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+---
+ drivers/net/dsa/b53/b53_mmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-regards,
-dan carpenter
+diff --git a/drivers/net/dsa/b53/b53_mmap.c b/drivers/net/dsa/b53/b53_mmap.c
+index e968322dfbf0..24ea2e19dfa6 100644
+--- a/drivers/net/dsa/b53/b53_mmap.c
++++ b/drivers/net/dsa/b53/b53_mmap.c
+@@ -263,7 +263,7 @@ static int b53_mmap_probe_of(struct platform_device *pdev,
+ 		if (of_property_read_u32(of_port, "reg", &reg))
+ 			continue;
+ 
+-		if (reg < B53_CPU_PORT)
++		if (reg <= B53_CPU_PORT)
+ 			pdata->enabled_ports |= BIT(reg);
+ 	}
+ 
+-- 
+2.30.2
 
