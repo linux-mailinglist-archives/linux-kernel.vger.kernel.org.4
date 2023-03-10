@@ -2,124 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7896B4DB6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E76F6B4DBB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjCJQ5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 11:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
+        id S231604AbjCJQ5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 11:57:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbjCJQ4n (ORCPT
+        with ESMTP id S230124AbjCJQ46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:56:43 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB1F13480C;
-        Fri, 10 Mar 2023 08:54:14 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id z11so4044588pfh.4;
-        Fri, 10 Mar 2023 08:54:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678467253;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fhj/T2JAbAb2Xd/ZH/KpcyXn4Xm3/uzp1Viq6gN5yfg=;
-        b=kEmv3bahZ4kT7Bgitz3YOaRHAH3HUSL/SOaTq6y72fEeUVYNtU9MpgEoznR4JDsXYO
-         WA3uNxWfsBZvev0fWhNeDT0IsnU+I1ozxM4NMjN/LWBZtSRjo4wS9SeAGjntOy4phe8a
-         CXpAcECfi3v2cixNZC6KTmInGF0KP1jQ/IL7wysfLAY20B2yHsO3Vv3gaz6sxe1UpzCp
-         ySUQcN66Gs/2CvwkiNVQML6jTtFxn2PEAQH/b/Y3niB26Uvef4gUXScT3/+O9zTeEZAE
-         NK9ASCULKgAhViXZzLhxJKD46AOLt6XnflnMUBqlt3JLsFgi8QVK+dTn806g+gDZjT7y
-         3Hpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678467253;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fhj/T2JAbAb2Xd/ZH/KpcyXn4Xm3/uzp1Viq6gN5yfg=;
-        b=iWyPTgSkLvIgbBWjSQxQcRTG7SKIZmrQesLsjzB7caEdnQVuGrd3Cxkctqi6lgC0vL
-         qfif57yzNZNlD3ap6w682P7FaMcBLzXj4UtIa/99pEwUuSrdSjy3LLxd44jNhrq/zrIj
-         G7g1sCPBnR5NFl9KVlHvWKbAqM8AhNJsZGV/x5SfFanEujlEVOVHehDz9lY+bdca8A4Z
-         63MnHltDhgcWWfGzWO+S94NlkBL/J5GdzWufxppsh73qqbjG85V4rSnxErlamjjm+zF8
-         stqa9k0aPEy85PoUVSih3cpHkizN1iY9Mo0LP0E1mTOSf+JKko4bnkvfwiMcVCGfgxnO
-         TPbg==
-X-Gm-Message-State: AO0yUKUdvJwANBQy6VeerSw0IFD9EbIirnkBkF5xJcLH5/74iSancKlv
-        F0YdQchDnOhtwUkfjJ2GIpzL05zsuTGN4n6gh01jWetGe+GgRhnf
-X-Google-Smtp-Source: AK7set8F8jqzFxLwkszNRCT8C9n9XrJBNqQp31z8CnpW1a20zVP3ANGrXKND50vZp0yf2IrXA/GIlPZnuAIUAC7/xDI=
-X-Received: by 2002:a63:b003:0:b0:503:91ff:8dd8 with SMTP id
- h3-20020a63b003000000b0050391ff8dd8mr9119275pgf.4.1678467253430; Fri, 10 Mar
- 2023 08:54:13 -0800 (PST)
+        Fri, 10 Mar 2023 11:56:58 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA98913594D;
+        Fri, 10 Mar 2023 08:54:43 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32ACPYqc032149;
+        Fri, 10 Mar 2023 16:54:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=WywzoVOPk1XQW/04XS0vfAgwyDP6SUtf1p8b26kcZ8U=;
+ b=N1Y4aPyMIts8hVlfdJYzTuhc+apxGXSAEJj3vXDeVtBbIoKEbOa5iDX6vu3bRwK3WSSJ
+ MraTd4bjTWti7hHxqrXwWzz45sGxE476+uSlrEZ7NU5E5FJ6DLDj+FyYqZHMII1KVtvf
+ baFegNWWE5mFp7MqwQETEhd1jAe4Lg+lfctOmwM8fU5nmNe9XeX1/+000UDDXWurz3MJ
+ 7eUBagLlP42OsxpAyPwJkv2s/9XrT1u+mpq3v9yP/0aUJbNoEnIokPcMoSyVdnkr49T5
+ DpMdxVDPueCwruXbR5vqck9fEQfYPpswfK0r9FYdRRj6AztFQRPFTn5058wQgBUFKYeN Tw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p7sj7t4qt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 16:54:29 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32AGsSBb016600
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 16:54:28 GMT
+Received: from [10.216.55.163] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 10 Mar
+ 2023 08:54:21 -0800
+Message-ID: <8aadbea6-29c0-713f-ced3-263307ad0051@quicinc.com>
+Date:   Fri, 10 Mar 2023 22:24:18 +0530
 MIME-Version: 1.0
-References: <20230310084007.1403388-1-zyytlz.wz@163.com> <329d128b-5436-44ad-89a3-75d82a7a11ec@roeck-us.net>
-In-Reply-To: <329d128b-5436-44ad-89a3-75d82a7a11ec@roeck-us.net>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Sat, 11 Mar 2023 00:54:01 +0800
-Message-ID: <CAJedcCwC+hVK+55eA-Mpwcr24oJxw+7WhA+RFU+36QpKgA_Ggw@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (xgene) Fix use after free bug in
- xgene_hwmon_remove due to race condition
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        1395428693sheep@gmail.com, alex000young@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/8] dt-bindings: usb: Add bindings for multiport
+ properties on DWC3 controller
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>,
+        <quic_harshq@quicinc.com>, <ahalaney@redhat.com>,
+        <quic_shazhuss@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>
+References: <20230310163420.7582-1-quic_kriskura@quicinc.com>
+ <20230310163420.7582-2-quic_kriskura@quicinc.com>
+ <ade5b126-9506-5e0d-3071-d26c97ecfc9a@linaro.org>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ade5b126-9506-5e0d-3071-d26c97ecfc9a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Xxycwd_jZulj4EyrcYQy571dZb8zrAok
+X-Proofpoint-ORIG-GUID: Xxycwd_jZulj4EyrcYQy571dZb8zrAok
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-10_08,2023-03-10_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ adultscore=0 impostorscore=0 malwarescore=0 clxscore=1011 spamscore=0
+ suspectscore=0 mlxlogscore=597 priorityscore=1501 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303100133
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guenter Roeck <linux@roeck-us.net> =E4=BA=8E2023=E5=B9=B43=E6=9C=8811=E6=97=
-=A5=E5=91=A8=E5=85=AD 00:34=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Fri, Mar 10, 2023 at 04:40:07PM +0800, Zheng Wang wrote:
-> > In xgene_hwmon_probe, &ctx->workq is bound with
-> > xgene_hwmon_evt_work. Then it will be started.
-> >
-> > If we remove the driver which will call
-> > xgene_hwmon_remove to make cleanup, there may
-> > be a unfinished work.
-> >
-> > The possiblesequence is as follows:
-> >
-> > Fix it by finishing the work before cleanup in the
-> > xgene_hwmon_remove
-> >
-> > CPU0                  CPU1
-> >
-> >                     |xgene_hwmon_evt_work
-> > xgene_hwmon_remove   |
-> > kfifo_free(&ctx->async_msg_fifo);|
-> >                     |
-> >                     |kfifo_out_spinlocked
-> >                     |//use &ctx->async_msg_fifo
-> > Fixes: 2ca492e22cb7 ("hwmon: (xgene) Fix crash when alarm occurs before=
- driver probe")
-> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
->
-> Applied.
->
-Thanks for your effort.
 
-Best regards,
-Zheng
->
-> > ---
-> >  drivers/hwmon/xgene-hwmon.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-> > index 5cde837bfd09..d1abea49f01b 100644
-> > --- a/drivers/hwmon/xgene-hwmon.c
-> > +++ b/drivers/hwmon/xgene-hwmon.c
-> > @@ -761,6 +761,7 @@ static int xgene_hwmon_remove(struct platform_devic=
-e *pdev)
-> >  {
-> >       struct xgene_hwmon_dev *ctx =3D platform_get_drvdata(pdev);
-> >
-> > +     cancel_work_sync(&ctx->workq);
-> >       hwmon_device_unregister(ctx->hwmon_dev);
-> >       kfifo_free(&ctx->async_msg_fifo);
-> >       if (acpi_disabled)
+
+On 3/10/2023 10:11 PM, Krzysztof Kozlowski wrote:
+> On 10/03/2023 17:34, Krishna Kurapati wrote:
+>> Add bindings to indicate properties required to support multiport
+>> on Snps Dwc3 controller.
+>>
+>> Suggested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> 
+> What happened with entire previous changelog? This is not v1 but v5 or
+> more? At least v4 was here:
+> 
+> https://lore.kernel.org/all/20230115114146.12628-2-quic_kriskura@quicinc.com/
+> 
+> Best regards,
+> Krzysztof
+> 
+Hi Krzysztof,
+
+   Since I pushed a formal patch series, I mentioned PATCH in header 
+instead of "Patch v5". If the RFC v4 is to be followed by Patch-v5, I 
+can re-push the changes again with a proper header and fix my mistake.
+
+The previous change log is mentioned in cover letter.
+
+https://lore.kernel.org/all/20230310163420.7582-1-quic_kriskura@quicinc.com/
+
+Regards,
+Krishna,
