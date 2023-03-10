@@ -2,96 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA7F6B54D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE1D6B54E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbjCJWxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 17:53:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S231767AbjCJWyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 17:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231759AbjCJWwv (ORCPT
+        with ESMTP id S231864AbjCJWyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 17:52:51 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26EE10CEB6;
-        Fri, 10 Mar 2023 14:52:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=QW9GIbAobkeAXWbUYe5gq2AaLt/O0c18zzLfU/gY9Eg=; b=zGkV+OLlEKWU+12XWv2DkVkSEu
-        b3wSv+r4o8A9DyZ79zE9r+xoj5nbYWztfKpbo+APy07H1OVlcgy0S8Xu3+ANsFRXLVxQFV1Ui+wMh
-        7y+O4+fPY0EZZO0G9jj/koXh/wJ73RqLQpd9G2VpPnNfJFgGEMBhb8JYbLd56op2YEEYN+OZPwjzt
-        WEk0KZ3Sx2HpwCR+SOcLXjibh0LYRMeb/mearHB1w8lnn50wiMP4CA1x8HVytqC59RN7eTHht4zf9
-        ar8m14K6i9OnW9jXlfMlYA63nt3Cr2TKggHHjMTaeMWMRSlX8SAnZxj4/JRM9aLDF9LXLs7SyBPar
-        Pq0G6vaw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1palbL-00GWqp-RQ; Fri, 10 Mar 2023 22:52:39 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     chuck.lever@oracle.com, jlayton@kernel.org,
-        trond.myklebust@hammerspace.com, anna@kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        kuba@kernel.org, linux-nfs@vger.kernel.org
-Cc:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
-        j.granados@samsung.com, patches@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 5/5] sunrpc: simplify one-level sysctl registration for debug_table
-Date:   Fri, 10 Mar 2023 14:52:36 -0800
-Message-Id: <20230310225236.3939443-6-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230310225236.3939443-1-mcgrof@kernel.org>
-References: <20230310225236.3939443-1-mcgrof@kernel.org>
+        Fri, 10 Mar 2023 17:54:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E7C5FA46;
+        Fri, 10 Mar 2023 14:53:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB0B5B8242E;
+        Fri, 10 Mar 2023 22:53:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25656C433EF;
+        Fri, 10 Mar 2023 22:53:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678488801;
+        bh=8rw2KDCKekrHmNc8hHv1I2pH/HRctBmo8/l54PCIy2A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Bhfc0hKMNKyuw2V5FZpRwfs/xZOQNGvate7GE4kfHCmL9nZjLiejBFph1vGWYUzwC
+         RRIw7e+Jb22yIwDYnsuAQNCG9yhB46M3d3vut7435FUeCFSOutvKmeTuxcoyjQitkx
+         laNHtCV2J6F19e7K4/t01sk5dXalEXq6qL7uGY1P83seaRtQuMlkbkcS2VksCbkWSK
+         n2L1QHsoODZzmkcPvgbKS/R2TcvtBqpuQEGi0X33JE81zLv2QYZUg+MS5JT3zzn0E4
+         XSrr0yM7yH653naETdFzsarXDsLhsvTvMsi39k8LXndQ5X/oFV1BH+jlVR6QfH4LRY
+         Os/Jd8npksCfA==
+Date:   Fri, 10 Mar 2023 14:53:19 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     stable@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Mike Cloaked <mike.cloaked@gmail.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yu Kuai <yukuai3@huawei.com>, Genes Lists <lists@sapience.com>
+Subject: Re: Possible kernel fs block code regression in 6.2.3 umounting usb
+ drives
+Message-ID: <ZAu030xtaPBGFPBS@sol.localdomain>
+References: <CAOCAAm7AEY9tkZpu2j+Of91fCE4UuE_PqR0UqNv2p2mZM9kqKw@mail.gmail.com>
+ <CAOCAAm4reGhz400DSVrh0BetYD3Ljr2CZen7_3D4gXYYdB4SKQ@mail.gmail.com>
+ <ZAuPkCn49urWBN5P@sol.localdomain>
+ <ZAuQOHnfa7xGvzKI@sol.localdomain>
+ <ad021e89-c05c-f85a-2210-555837473734@kernel.dk>
+ <88b36c03-780f-61a5-4a66-e69072aa7536@sapience.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <88b36c03-780f-61a5-4a66-e69072aa7536@sapience.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to declare an extra tables to just create directory,
-this can be easily be done with a prefix path with register_sysctl().
+On Fri, Mar 10, 2023 at 04:08:21PM -0500, Genes Lists wrote:
+> On 3/10/23 15:23, Jens Axboe wrote:
+> > On 3/10/23 1:16 PM, Eric Biggers wrote:
+> ...
+> > But I would revert:
+> > 
+> > bfe46d2efe46c5c952f982e2ca94fe2ec5e58e2a
+> > 57a425badc05c2e87e9f25713e5c3c0298e4202c
+> > 
+> > in that order from 6.2.3 and see if that helps. Adding Yu.
+> > 
+> Confirm the 2 Reverts fixed in my tests as well (nvme + sata drives).
+> Nasty crash - some needed to be power cycled as they hung on shutdown.
+> 
+> Thank you!
+> 
+> gene
+> 
+> 
 
-Simplify this registration.
+Great, thanks.  BTW, 6.1 is also affected.  A simple reproducer is to run:
 
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- net/sunrpc/sysctl.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+	dmsetup create dev --table "0 128 zero"
+	dmsetup remove dev
 
-diff --git a/net/sunrpc/sysctl.c b/net/sunrpc/sysctl.c
-index 4120797bf740..8000828b139f 100644
---- a/net/sunrpc/sysctl.c
-+++ b/net/sunrpc/sysctl.c
-@@ -80,21 +80,11 @@ static struct ctl_table debug_table[] = {
- 	{ }
- };
- 
--static struct ctl_table sunrpc_table[] = {
--	{
--		.procname	= "sunrpc",
--		.mode		= 0555,
--		.child		= debug_table
--	},
--	{ }
--};
--
--
- void
- rpc_register_sysctl(void)
- {
- 	if (!sunrpc_table_header)
--		sunrpc_table_header = register_sysctl_table(sunrpc_table);
-+		sunrpc_table_header = register_sysctl("sunrpc", debug_table);
- }
- 
- void
--- 
-2.39.1
+The following kconfigs are needed for the bug to be hit:
 
+	CONFIG_BLK_CGROUP=y
+	CONFIG_BLK_DEV_THROTTLING=y
+	CONFIG_BLK_DEV_THROTTLING_LOW=y
+
+Sasha or Greg, can you please revert the indicated commits from 6.1 and 6.2?
+
+- Eric
