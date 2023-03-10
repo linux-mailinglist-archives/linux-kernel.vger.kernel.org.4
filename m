@@ -2,141 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B666B387E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:24:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3727D6B387D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjCJIYo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 03:24:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
+        id S230366AbjCJIYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:24:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjCJIYe (ORCPT
+        with ESMTP id S230250AbjCJIYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:24:34 -0500
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E13104922;
-        Fri, 10 Mar 2023 00:24:32 -0800 (PST)
-Received: by mail-qt1-f182.google.com with SMTP id c19so4851598qtn.13;
-        Fri, 10 Mar 2023 00:24:32 -0800 (PST)
+        Fri, 10 Mar 2023 03:24:33 -0500
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FBBFA8CC
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:24:32 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-536af432ee5so84871697b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:24:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678436671;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Cqbe41L79xMn0U1eZswNbJM0D6J8PpjbmWluzE5/54E=;
+        b=jda69MG4fHPANNwaP3ByFkGscFkBdPUdkzgqSHMwjiy8eEGByy3bdAjsj9frZJSuO1
+         Y4Ajuwm58IPFDLj/d48ZBpbd1ZkmkbEK39HEnYJTbVrq02Yms5eAeqvrXR7vB5joFLni
+         BZv6x7sNmOr5Vf09tx1GHZdjl+GVsnC4zoqkDDlFU9k2jbRHucDzOInxPgLCk7Og2WPw
+         BIlLnQgbtijbOnvaJeEFBbAbghdv6FdEYzvckqv7JK3/KpzLLev5jiqg2w9FdcMfjF6o
+         pa1aAlT0w/ug6KIIFgsUildTNCrLF996YIXf8SexWUwqjqHpeiCueZqlbFLkxy+fcfDa
+         zBHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678436672;
+        d=1e100.net; s=20210112; t=1678436671;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6tbDlSIaO3/jiqD80O4ij9Gm4MwJA0fTC0h0kloiqAU=;
-        b=g52CT9PE7wafM3Eu2QUl0gEMz5UsyFFfAMc/VkVYqUqnshtWSgLP2l5Zvy7zUHaPbw
-         jRQX/zw0KzdiRuigYVsPKl+cxvXFi1zr4CJEkuxObiyShGkgGWbhdXuXHnKJ5tQ8cHnq
-         jErjbpuEk6lf8uUIimjL3LQo97vMpY062zONdAsKjk8X571SEF6S52DL7kCWLjIKCHkR
-         PD46cLN7Za1PTOeQVrmvOFjnpLzeK+q/39CEmciF26LdP0j10M+opKLcWFc8Zb6pLLGp
-         otkUvylPN/b/bcE3KiWSBzd2QRp2wdFvPmuxuBajP54S3ireKNjGbFc9p5V2XqBRHVC7
-         kJCw==
-X-Gm-Message-State: AO0yUKWfLzIKfM06vos91Rca2QqRy68pBUXu7YmLCU6928kspBZNxZtN
-        cnXxzoXrB0hrWc06yeAfCj62LTaiSvkz2A==
-X-Google-Smtp-Source: AK7set80WMOjUoKIX4Fgl0lTIXYXKtrZI63h3ZBLKe9GBDtH/QBVXOqsKret16zGtksw5p3xF5waIA==
-X-Received: by 2002:ac8:7c48:0:b0:3bf:abd5:f1ef with SMTP id o8-20020ac87c48000000b003bfabd5f1efmr8259735qtv.7.1678436671775;
-        Fri, 10 Mar 2023 00:24:31 -0800 (PST)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id w10-20020ac86b0a000000b003bfad864e81sm965275qts.69.2023.03.10.00.24.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 00:24:30 -0800 (PST)
-Received: by mail-yb1-f181.google.com with SMTP id i6so4475870ybu.8;
-        Fri, 10 Mar 2023 00:24:29 -0800 (PST)
-X-Received: by 2002:a05:6902:208:b0:acd:7374:f154 with SMTP id
- j8-20020a056902020800b00acd7374f154mr15193253ybs.7.1678436669227; Fri, 10 Mar
- 2023 00:24:29 -0800 (PST)
+        bh=Cqbe41L79xMn0U1eZswNbJM0D6J8PpjbmWluzE5/54E=;
+        b=v6ROvNbYefXWNM8Ws2J15d54tXGloFr6q94h5rXdly2jNk0/WldPB8oi9KSttP9IT9
+         4waLhdrx4w198r+tMlBteL+/FcoRLpKu8JJiEov+3cMbdtPuA9mODUmtcWxMo7r4k8s8
+         qme5RWu8lr1OkBO1lbKeAvHZ/63oE05903ReN7O9/pfMWLdeCq1OnqkkUe0IqdG4pBY1
+         iKP0XL1dOgzoEAQ1t7hyR08zPCCboFZR/MXvacSLK/+GAhn0KsqPSlqipG6JkyE6YAag
+         r+M8izFajBNDojBHdp2ATbaK2LT46LgUa+VCc2NbwN2siCrMGOs6Up9TAuUHHfZxCwQd
+         QBPg==
+X-Gm-Message-State: AO0yUKWKHOuuo12slS0Cn6acEhCHt1JrBRvvQqft+NzzDrEQyJw7QjxR
+        dIrLS4OvUvBhhH/Hn1YEthb0NpG85XCa3S03t8yOM5M1pCZ2rptq
+X-Google-Smtp-Source: AK7set/ULdW4mWcU5V3nV+kxHkOjhoq7vHwNBjvgEDxD6Gw9Sd6rP/OGTdvAmMe6dAaJj5vzLRuD83T86IbYfbmPziU=
+X-Received: by 2002:a81:b61a:0:b0:52e:c79a:cda with SMTP id
+ u26-20020a81b61a000000b0052ec79a0cdamr16227783ywh.10.1678436671460; Fri, 10
+ Mar 2023 00:24:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20230309160201.5163-1-tzimmermann@suse.de>
-In-Reply-To: <20230309160201.5163-1-tzimmermann@suse.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 10 Mar 2023 09:24:16 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX9mmPDvTpeHQWMoi1pAqoDn1go4in995pGkamOQmBXjA@mail.gmail.com>
-Message-ID: <CAMuHMdX9mmPDvTpeHQWMoi1pAqoDn1go4in995pGkamOQmBXjA@mail.gmail.com>
-Subject: Re: [PATCH v2 000/101] fbdev: Fix memory leak in option parsing
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     deller@gmx.de, timur@kernel.org, rdunlap@infradead.org,
-        paulus@samba.org, benh@kernel.crashing.org, linux@armlinux.org.uk,
-        pjones@redhat.com, adaplas@gmail.com, s.hauer@pengutronix.de,
-        shawnguo@kernel.org, mbroemme@libmpq.org, thomas@winischhofer.net,
-        James.Bottomley@hansenpartnership.com, sudipm.mukherjee@gmail.com,
-        teddy.wang@siliconmotion.com, corbet@lwn.net,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
+References: <20230309225041.477440-1-sre@kernel.org> <20230309225041.477440-6-sre@kernel.org>
+In-Reply-To: <20230309225041.477440-6-sre@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 10 Mar 2023 09:24:20 +0100
+Message-ID: <CACRpkdbO9VD9-N_CEDpuUpfpwPG8hkghyTG+OQseMOEiDtO0iQ@mail.gmail.com>
+Subject: Re: [PATCHv1 05/11] power: supply: generic-adc-battery: drop jitter
+ delay support
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Thu, Mar 9, 2023 at 11:50=E2=80=AFPM Sebastian Reichel <sre@kernel.org> =
+wrote:
 
-On Thu, Mar 9, 2023 at 5:02 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Introduce struct option_iter and helpers to parse command-line
-> options with comma-separated key-value pairs. Then convert fbdev
-> drivers to the new interface. Fixes a memory leak in the parsing of
-> the video= option.
+> Drop support for configuring IRQ jitter delay by using big
+> enough fixed value.
 >
-> Before commit 73ce73c30ba9 ("fbdev: Transfer video= option strings to
-> caller; clarify ownership"), a call to fb_get_options() either
-> returned an internal string or a duplicated string; hence ownership of
-> the string's memory buffer was not well defined, but depended on how
-> users specified the video= option on the kernel command line. For
-> global settings, the caller owned the returned memory and for per-driver
-> settings, fb_get_options() owned the memory. As calling drivers were
-> unable to detect the case, they had no option but to leak the the memory.
->
-> Commit 73ce73c30ba9 ("fbdev: Transfer video= option strings to caller;
-> clarify ownership") changed semantics to caller-owned strings. Drivers
-> still leaked the memory, but at least ownership was clear.
+> Signed-off-by: Sebastian Reichel <sre@kernel.org>
 
-While I can find the actual patch[1], I cannot find this commit?
-Where was it applied?
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-[1] https://lore.kernel.org/all/20230209135509.7786-3-tzimmermann@suse.de
-
-> This patchset fixes the memory leak and changes string ownership back
-> to fb_get_options(). Patch 1 introduces struct option_iter and a few
-> helpers. The interface takes an option string, such as video=, in the
-> common form value1,key2:value2,value3 etc and returns the individual
-> comma-separated pairs. Various modules use this pattern, so the code
-> is located under lib/.
->
-> Patches 2 to 100 go through fbdev drivers and convert them to the new
-> interface. This often requires a number of cleanups. A driver would
-> typically refer to the option string's video mode. Such strings are now
-> copied to driver-allocated memory so that drivers don't refer directly
-> to the option string's memory. The option iterator then replaces manual
-> parsing loops based on strsep(","). All driver-allocated memory is
-> released by removing the device or unloading the module.
->
-> Patch 101 finally changes the ownership of the option string to be
-> internal to fb_get_option(); thereby fixing the memory leak. The option
-> iterator holds its own copy of the string and is not affected by the
-> change.
->
-> Most fbdev drivers only support to parse option strings if they are
-> built-in. I assume that's because of the original fuzzy semantics of
-> fb_get_options(). A later patchset could change the driver to respect
-> video= settings in any configuration.
->
-> v2:
->         * use kstrdup()/kfree() for video strings (Geert, Timur)
->         * fix iterator docs (Randy)
->         * update iterator interface
-
-Thanks for the update, this looks much better!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Yours,
+Linus Walleij
