@@ -2,119 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30DA6B557B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 933B26B557F
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbjCJXSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 18:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
+        id S231605AbjCJXVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 18:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231584AbjCJXSK (ORCPT
+        with ESMTP id S231539AbjCJXVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 18:18:10 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6C815C93;
-        Fri, 10 Mar 2023 15:18:07 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id p20so7206954plw.13;
-        Fri, 10 Mar 2023 15:18:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678490286;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xz51x4A7Eu2J8EAn+UJRgtV0WTJYDaCqLo8gQb4mjo8=;
-        b=IkTv3XFEIPNwy4r9MsPML+H2ITnf/hCMh/ExSQ5fRUWO2YF0FXQbGYUBvPFIsaAp/V
-         ExZwHOD9QBnhtikHQFevhWxsi2uzrNwqaec2d2sIU3WW07Wr3buOynStkbZ1yrMaO7C9
-         XdW5YJT6L/BJM0LwxaLn7iQt16DGI/8UxcchwXSAtqUZkgU6CkBLIQzS6DLTfJBElshv
-         zVSG1L3VeBMEZe/o3MtLXJX0W+kxJf6N5GkUAWNtyrN/gxdK6X280V66GzTi0j0V/fzk
-         8t3kHXQ4eU7zlU/aIB7MnkkJlalPRBy8aTFY2kKQGoOyDfJTkkqwy9w2AT12aH26ZJee
-         b9mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678490286;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xz51x4A7Eu2J8EAn+UJRgtV0WTJYDaCqLo8gQb4mjo8=;
-        b=AWxVblmUlmuLb7NNFE6yMd4onF9ZtgS2rCMdg1bqVPZDUmLiBGJZVQuRNRTXP5FNT9
-         8NOqhg5u5ow73l6oPsRpnk0rQYB8uTZ6wgpzNdPErbQC4HGjwKrkqdXvupU/TLisOqjz
-         mm4sMVTXGJkGv8GC/+3Jgm8SIOHdOXUhf+Yi+qrzuwtffYCHP0rK5adYk3XF3ICqd6gG
-         rej7p5MOzik0AfbZ4W+srNjFacsQ/Ige5CA09bZYtLg2myDa2ahlyYfVxWfMAHJ6ZSbz
-         lWKeD7ilvCVnTI3aQQa62q+VLwvaMtXJyKOu8apDp+GrxOUEwFnQXjkCPQfD+rc3WYEB
-         knGg==
-X-Gm-Message-State: AO0yUKWbvW/SsJ7IjJr3WdK1WB83ya1amw8GQY4YudEIsJS9wB0fzE/H
-        PjwHsQMWGRL4bRmh+C8Yr8wWoJSZDYc=
-X-Google-Smtp-Source: AK7set/Iz59s/NdeXOmRSALJuBKpSAOu9yMJGeQkSDCuRCUm52bWvdDU5u6oYbAy83whlCfN/Id08w==
-X-Received: by 2002:a05:6a20:3ca5:b0:cc:50de:a2be with SMTP id b37-20020a056a203ca500b000cc50dea2bemr4018231pzj.14.1678490286291;
-        Fri, 10 Mar 2023 15:18:06 -0800 (PST)
-Received: from minwoo-desktop ([1.237.94.73])
-        by smtp.gmail.com with ESMTPSA id g19-20020a62e313000000b005813f365afcsm291741pfh.189.2023.03.10.15.18.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 15:18:05 -0800 (PST)
-Date:   Sat, 11 Mar 2023 08:18:00 +0900
-From:   Minwoo Im <minwoo.im.dev@gmail.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: [PATCH] mm: mmap: remove newline at the end of the trace
-Message-ID: <ZAu6qDsNPmk82UjV@minwoo-desktop>
+        Fri, 10 Mar 2023 18:21:18 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C4C10D30B
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 15:21:17 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32ANL7Wn016908
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 18:21:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1678490470; bh=aERuYJTFhiNvAk0TIMmoiuYbNfM79mwZrLKsx6b+GvY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=SR4fdEfaXsXcSdpYZrts3zzVPP0SWi6+CFJXGIbNzdshGorWGeLqilzxhXZDGcip5
+         W1e9YV+q8Co13vnCz+utpqMauJYnEXqw9vURobMaqx2CzBFaYVZC20dpHkXtv8of61
+         3/9zS+K/zLPN+g9lxJuDp5TUyIV2g8xSHmydq/zTNYu4tvlTfIYaM4iw9Nt1qWzBzG
+         T6SiAyN4b00ij6X+U4dlOgU2DaDF+gKtNIiZ0hheKhyA+OQ1cf4Q1D9BHwctdLuRdE
+         YEuHwlyq457DUE2PesUe22iPoHsk2qc9Ju1qRMzzulB4eaHkHzDCcUviufqgrQcAbF
+         S6sZXmUDIoh7Q==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 36DDE15C42F6; Fri, 10 Mar 2023 18:21:07 -0500 (EST)
+Date:   Fri, 10 Mar 2023 18:21:07 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk
+Subject: Re: [PATCH] ext4: convert to DIV_ROUND_UP() in
+ mpage_process_page_bufs()
+Message-ID: <20230310232107.GE860405@mit.edu>
+References: <20230310060734.8780-1-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230310060734.8780-1-frank.li@vivo.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We already have newline in TP_printk so remove the redundant newline
-character at the end of the mmap trace.
+On Fri, Mar 10, 2023 at 02:07:34PM +0800, Yangtao Li wrote:
+> Just for better readability, no code logic change.
 
-<...>-345     [006] .....    95.589290: exit_mmap: mt_mod ...
+All aside from the arguments over performance, I'm not at *all*
+convinced by the "it's more readable" argument.
 
-<...>-345     [006] .....    95.589413: vm_unmapped_area: addr=...
+So yeah, let's not.  We have i_blkbits for a reason, and it's because
+shifting right is just simpler and easier.
 
-<...>-345     [006] .....    95.589571: vm_unmapped_area: addr=...
+BTW, doing a 64-bit division on a 32-bit platforms causes compile
+failures, which was the cause of the test bot complaint:
 
-<...>-345     [006] .....    95.589606: vm_unmapped_area: addr=...
+   ld: fs/ext4/inode.o: in function `mpage_process_page_bufs':
+>> inode.c:(.text+0xbda): undefined reference to `__divdi3'
 
-to
+On 32-bit platforms --- i386 in particular --- the 64-bit division
+results in an out-of-line call to a helper function that is not
+supplied in the kernel compilation environment, so not only is it
+slower, it Just Doesn't Work.
 
-<...>-336     [006] .....    44.762506: exit_mmap: mt_mod ...
-<...>-336     [006] .....    44.762654: vm_unmapped_area: addr=...
-<...>-336     [006] .....    44.762794: vm_unmapped_area: addr=...
-<...>-336     [006] .....    44.762835: vm_unmapped_area: addr=...
-
-Signed-off-by: Minwoo Im <minwoo.im.dev@gmail.com>
----
- include/trace/events/mmap.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/trace/events/mmap.h b/include/trace/events/mmap.h
-index 216de5f03621..f8d61485de16 100644
---- a/include/trace/events/mmap.h
-+++ b/include/trace/events/mmap.h
-@@ -35,7 +35,7 @@ TRACE_EVENT(vm_unmapped_area,
- 		__entry->align_offset = info->align_offset;
- 	),
- 
--	TP_printk("addr=0x%lx err=%ld total_vm=0x%lx flags=0x%lx len=0x%lx lo=0x%lx hi=0x%lx mask=0x%lx ofs=0x%lx\n",
-+	TP_printk("addr=0x%lx err=%ld total_vm=0x%lx flags=0x%lx len=0x%lx lo=0x%lx hi=0x%lx mask=0x%lx ofs=0x%lx",
- 		IS_ERR_VALUE(__entry->addr) ? 0 : __entry->addr,
- 		IS_ERR_VALUE(__entry->addr) ? __entry->addr : 0,
- 		__entry->total_vm, __entry->flags, __entry->length,
-@@ -110,7 +110,7 @@ TRACE_EVENT(exit_mmap,
- 		       __entry->mt		= &mm->mm_mt;
- 	),
- 
--	TP_printk("mt_mod %p, DESTROY\n",
-+	TP_printk("mt_mod %p, DESTROY",
- 		  __entry->mt
- 	)
- );
--- 
-2.34.1
-
+						- Ted
