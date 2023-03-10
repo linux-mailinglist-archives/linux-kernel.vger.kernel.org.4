@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4026B52C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 300146B52C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjCJVZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 16:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        id S231795AbjCJVXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 16:23:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231608AbjCJVZU (ORCPT
+        with ESMTP id S231362AbjCJVWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 16:25:20 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on20622.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e83::622])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9106B30EB3;
-        Fri, 10 Mar 2023 13:24:58 -0800 (PST)
+        Fri, 10 Mar 2023 16:22:38 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2085.outbound.protection.outlook.com [40.107.243.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A8B12B659;
+        Fri, 10 Mar 2023 13:22:37 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nLnSNujZnzZ8Wy7YyccLSaP4qqRg3VUEd5+YA1ziF/sBMDyUZQCb9JTIc+AKkwgWMZDYytjG5pFjjX093lVKX1IMYTO4ccjpTClZ13sRGmBh6wzmBUtTEJB3Oj7JWrcu/Py0En52tMihv7S029X1Mx1IWe4FGBINFyh/GkPX+VmBINZv5HoANxfyjn0TrLmBBskZwk0QXRVBNsKiFbHROK0jAUOnkibI/9gM6GKp7+wsuhlDWxP7kWRgBhV+sHZW1yiAAPnPhioSnTH0nUe+3w3AhRHFFm6glQFPA27+0OgauWURGJaKSP6GHOam4iJTK9moeQpn1Vlrp9X7ZiSHRQ==
+ b=YA3jt0tgYJRXznJNZiZdgkbjCKiQ2GctyPXT20Hij/RDOzinpcjyED7VPoh+QJZVDH9VHB47b9eGabVbGaIf/rlmuKIeFpjLkylxmmutLynx8mRMQyfknPoD07lxT6/VR6GR+0bNG+FnHdVT+Eu4f2J5kUyJ5BjlT3JFfMz/FQCznzdxwQvjI2Gq5LNZUg9FaTnI91kATSGu9eT+t9dr1ZGWBbvGTu7HplEpc/yShadQVsi4BJ1i7YMghkYGO99RdA++5Dt+Autn5sBVAwXvli9ks0kh3CVDLbjCvz0ubI0xytKbJC9IAVIbCWCsRs5YVcvXzotAhDCfuhuJlWgj2Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vVmG8q9riLCYn//zWKQ8FRdHrtalOkTEWH2u57Q5/VE=;
- b=TD0pk2L5xPjFz/CPsEwkM4eHiFwC/MzAznRYUunwi3ErI7O3ItkzC7pHIic0CFFYOimFRRadyDkiT85HB5YPjdeRvYewOrc52BQD6NlYekTcD6wcmA2PLaqHg0W+AruKJtOztQ3T10yot8YVkpt/+YoJ2l72R9t9pwc0E5BBz4XCLMTM8MeBjbDTSijiqCgjLPneNuCc+ptlEAcqrgsoKm7VruPbOKJDcFjajvk3B2Uqe0pf6SM6JWmzKuWC3fa96NnLF6L4m1Ui1fk/ziZUi1Tba0m3UR+L5pxoaYwH0C3a+3oCY5FrfkUM49CBGtM5wxxcc+IEjaKVXndjWcFVlA==
+ bh=Rxd6+gD0xK2CiphjJTVAFLuQItATGt9DyC/cZjwngzE=;
+ b=b9mfBqO5WlSvTl9ErrP/7A5f296jzgOr9mgMGgn8lfe8EmWjcqaKZe7IRj4DxzNx4GFjRj8iT+rz0iknlj/5CSa9/S9+RQYGeODh9/H3pjm4Ft8KGhkVTrKNlzvTl9IJT5C70T3cr2WgsuK4fFeRiUFuerzj/eqhQoiqWQgw7VsFEwTMJFogeXDNvBr2Wfeh6R6fnib6zAPFtAHcuUdcQKlpkAoFMLLK9hHhrKWDudGMDUi2KiIBeBvN7qXfhky/vmLY/1Ksoh3rDtGUvC8TntOd1D2CkIZ9v7aJdRYdcI9K+yjR7qZd05z2JfBkDEj+NWdpE9dVgtYJOUYO12F2YQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=semihalf.com smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vVmG8q9riLCYn//zWKQ8FRdHrtalOkTEWH2u57Q5/VE=;
- b=tt8BEbChSh7xcevL9l+Sd+kmlfcv4W6uGN6K6lYjvQ+Y1a2u71AtDcTVvWGp7WiAziZBj/pY7W0uBSQRWbV2dznoVY7PrGp3Nm9R8gtLtNyWKeLkhhWV80GEMeYlorjqRUJc5w/UztHebkkj80raVQSsXlcxLI8qkpUz7fUSi7A=
-Received: from DM6PR05CA0037.namprd05.prod.outlook.com (2603:10b6:5:335::6) by
- DM4PR12MB5325.namprd12.prod.outlook.com (2603:10b6:5:390::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.19; Fri, 10 Mar 2023 21:22:34 +0000
+ bh=Rxd6+gD0xK2CiphjJTVAFLuQItATGt9DyC/cZjwngzE=;
+ b=cGzn5UfOekXgPJYYd9eWBb7EvHy05GM1dHeAfhFwyX+NA2BiZXqN0oAJcx6tW9ZSFxdA5nK07MUjcYxw8XvGbfEutld7eM8WWaXXMByBW1OYfCNYnokwhsUgWi9uHh5kl07suak0UYZ9JC1lg30JCUnmOjyMBsUNZ9JcTLrkJIQ=
+Received: from DM6PR05CA0041.namprd05.prod.outlook.com (2603:10b6:5:335::10)
+ by SA1PR12MB6824.namprd12.prod.outlook.com (2603:10b6:806:25f::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
+ 2023 21:22:35 +0000
 Received: from DM6NAM11FT062.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:335:cafe::c) by DM6PR05CA0037.outlook.office365.com
- (2603:10b6:5:335::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19 via Frontend
- Transport; Fri, 10 Mar 2023 21:22:34 +0000
+ (2603:10b6:5:335:cafe::f) by DM6PR05CA0041.outlook.office365.com
+ (2603:10b6:5:335::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.20 via Frontend
+ Transport; Fri, 10 Mar 2023 21:22:35 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -48,25 +49,25 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  DM6NAM11FT062.mail.protection.outlook.com (10.13.173.40) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6178.20 via Frontend Transport; Fri, 10 Mar 2023 21:22:34 +0000
+ 15.20.6178.20 via Frontend Transport; Fri, 10 Mar 2023 21:22:35 +0000
 Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 10 Mar
- 2023 15:22:33 -0600
+ 2023 15:22:34 -0600
 From:   Mario Limonciello <mario.limonciello@amd.com>
 To:     =?UTF-8?q?Jan=20D=C4=85bro=C5=9B?= <jsd@semihalf.com>,
         Grzegorz Bernacki <gjb@semihalf.com>,
         <Rijo-john.Thomas@amd.com>, <Thomas.Lendacky@amd.com>,
         <herbert@gondor.apana.org.au>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "John Allen" <john.allen@amd.com>
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
 CC:     <Felix.Held@amd.com>,
         Mario Limonciello <mario.limonciello@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 7/8] crypto: ccp: Add support for ringing a platform doorbell
-Date:   Fri, 10 Mar 2023 15:19:50 -0600
-Message-ID: <20230310211954.2490-8-mario.limonciello@amd.com>
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 8/8] i2c: designware: Add doorbell support for Skyrim
+Date:   Fri, 10 Mar 2023 15:19:51 -0600
+Message-ID: <20230310211954.2490-9-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230310211954.2490-1-mario.limonciello@amd.com>
 References: <20230310211954.2490-1-mario.limonciello@amd.com>
@@ -78,233 +79,157 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT062:EE_|DM4PR12MB5325:EE_
-X-MS-Office365-Filtering-Correlation-Id: 581324e9-0827-440f-d0b8-08db21ad90b4
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT062:EE_|SA1PR12MB6824:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0156f178-771d-4904-9fe3-08db21ad9148
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a1A+ALOHf7qI+XJEH3WdEVwcNuwSLbxfQWXT/vsaVDZ3iec8xcdr72iboXfAKj6EuBLiDXf10N5khQpmH+dLzATFGRGg7RUEOva1D2J2jcDISjTsygdbXjuSC7NDfNiLhl0Y0lbUzawpKp8PNYGXiaASVfBbfhrpBnnVFvMxOqGEs15SSZK7aDnggWpUxJCRsNlh7snddRLD2spONl4mJEBmoeG5/pnIWQqCdk0+2xK07d1henJve3z08/Q9XuEe868RaoiAB3NsvTKtnxD5VT12CTau/NZzBuWP9XrFHFsBhOTC8lQm0LfmAj8M2hVCGrH0fIXwAXPUCQFgoHqS5GLWASslHT02TH1XSYVwHpTv34Mat+mL/4uMgO5K9RJ7Bww3qWBbVIZvdG8++qCtQPJmWqXAfejNYfqycr8gq1dmaReaNelUyzck2Q5waHYe+qhETAVnle4oGclRBWy1gfWwOxXDbgbcoc8p6yKG4abmoIzFt3AAD4Pl5/ybP1+JVVooB3QWfxpMkwX0ZmyvOKI2OL4Fudb0UvXl+PYTNv19K3HeD/A4k+Gwrtwyq+Vrs0nZYdEeUGUtBYgL0iu1US3bUVGYLY/9pJ37ePZCd1s/K/BHp+z2OKB/MMOfcRW+OMcnJNlQnodK/K5Jwko8SViEsftf5yb6Zc0Y1XEbp10EUwSBuLBBULYCs0o0/mSBTGhE5JgM94yCaMqm2mvfoRC0J84FQgCAUKYJXBUhHf+2vpyUgK41HvAl++6qAY1f
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(346002)(376002)(396003)(451199018)(40470700004)(46966006)(36840700001)(44832011)(36756003)(40460700003)(5660300002)(83380400001)(47076005)(426003)(7696005)(82310400005)(26005)(6666004)(966005)(1076003)(16526019)(2616005)(186003)(336012)(356005)(8676002)(70586007)(4326008)(40480700001)(70206006)(41300700001)(8936002)(316002)(110136005)(86362001)(54906003)(478600001)(6636002)(36860700001)(82740400003)(81166007)(2906002)(36900700001)(134885004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Hc645T04SX01ZYmWPMCE0VK6rBdjyLPoBbCstP5NzghMqpmDYF6ffKYUlJBV2ltZazvp2kthtHA9058TpNiZj27GVTrkiQ1jOJ5S5U1UhSAvE4YCnBCh/4Uv1pw6Nb+hIGyzGf5TXhg4JaCvSKijOl0930gmVTdd24T98GzLYTc/bfwBwiRXEOYwwPD5eFl0OFkDNyYWDmHY2LnZA4nOxfADr7YRCDVQYplY8Tm4IB0h/+iQtGdInNf3EWZTZrKxIKILCDahLPi+oRoaKkPcylDS0s7hRgzTx1KcyH4Uhsv02EeyMRYlnHGn2xw8gzFw2X4OuTEeLhBgSxj53G0sivpohE2CvJEm2+2fKSZw6pIkAyN4+hOp/68uSnnRC59l50tL7gENJ69TASpwbaHYaAN9eBorAt8JovWaKyZErQhVXZtOPuwPS4j8I8qmXPdvM4ErU4hkB6Y/suhJYQD1Dyej3D6Z0BHdAw0y3E9J6HnLg31nBGwmaQSvuqYtLvhHnYodFkdPbkb3ag784Jg9WDzubQDw09WH+gPEfeQtDhDkGuWmbVOxZTjrNXrxCms/ukDAl67Hjw26vIQ3KgqZkS6axTEMm6F9X1iyPZvEIyT7XsJGNTVsuBfrLlASecYoreFwSwMnR39yuw8IL+5Y6PTDi90Mzc9C/AkRJPyZ+IgdmMvz6T1j4URDjXOENPLS4NqhuJCZ++PksPjR9raa/YqOze4SMlx3ZaLnodfbIVQ=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(346002)(39860400002)(396003)(451199018)(40470700004)(36840700001)(46966006)(336012)(47076005)(426003)(54906003)(110136005)(36756003)(40460700003)(356005)(86362001)(40480700001)(82740400003)(81166007)(1076003)(26005)(82310400005)(83380400001)(6666004)(186003)(16526019)(2616005)(36860700001)(316002)(7696005)(5660300002)(478600001)(966005)(41300700001)(8936002)(2906002)(70206006)(44832011)(4326008)(70586007)(8676002)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 21:22:34.3103
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 21:22:35.2790
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 581324e9-0827-440f-d0b8-08db21ad90b4
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0156f178-771d-4904-9fe3-08db21ad9148
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT062.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5325
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6824
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some platforms support using a doorbell to communicate. Export
-this feature for other drivers to utilize as well.
+Skyrim and later platform don't use the platform feature mailbox for
+communication for I2C arbitration, they rely upon ringing a doorbell.
+
+Detect the platform by the device ID of the root port and choose the
+appropriate method.
 
 Link: https://lore.kernel.org/linux-i2c/20220916131854.687371-3-jsd@semihalf.com/
-Suggested-by: Jan Dabros <jsd@semihalf.com>
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
 v3->v4:
- * Add a missing check for doorbell status at start
- * Fix spurious __iomem
+ * Adjust to use PCI device ID and function pointers instead
 v2->v3:
- * Squash register values in
- * Use command and button registers
- * Correct register values for incorrect ones previously shared
- * Use a unique mutex
+ * Use CPU ID rather than ACPI ID, this will be pushed to a later patch
 v1->v2:
  * New patch
 ---
- drivers/crypto/ccp/platform-access.c | 66 ++++++++++++++++++++++++++++
- drivers/crypto/ccp/platform-access.h |  1 +
- drivers/crypto/ccp/sp-dev.h          |  3 ++
- drivers/crypto/ccp/sp-pci.c          |  2 +
- include/linux/psp-platform-access.h  | 15 +++++++
- include/linux/psp.h                  |  3 ++
- 6 files changed, 90 insertions(+)
+ drivers/i2c/busses/i2c-designware-amdpsp.c | 40 ++++++++++++++++------
+ 1 file changed, 30 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/crypto/ccp/platform-access.c b/drivers/crypto/ccp/platform-access.c
-index 9cc0c60bbf7b..b51fb1196932 100644
---- a/drivers/crypto/ccp/platform-access.c
-+++ b/drivers/crypto/ccp/platform-access.c
-@@ -20,6 +20,14 @@
+diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
+index 105584abcf8f..e5614d69c743 100644
+--- a/drivers/i2c/busses/i2c-designware-amdpsp.c
++++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
  
- #define PSP_CMD_TIMEOUT_US	(500 * USEC_PER_MSEC)
+ #include <linux/i2c.h>
++#include <linux/pci.h>
+ #include <linux/psp-platform-access.h>
+ #include <linux/psp.h>
+ #include <linux/workqueue.h>
+@@ -36,6 +37,8 @@ static u32 psp_i2c_access_count;
+ static bool psp_i2c_mbox_fail;
+ static struct device *psp_i2c_dev;
  
-+/* Doorbell shouldn't be ringing */
-+static int check_doorbell(u32 __iomem *doorbell)
-+{
-+	u32 tmp;
++static int (*_psp_send_i2c_req)(enum psp_i2c_req_type);
 +
-+	return readl_poll_timeout(doorbell, tmp, tmp != 0, 0, PSP_CMD_TIMEOUT_US);
-+}
-+
- /* Recovery field should be equal 0 to start sending commands */
- static int check_recovery(u32 __iomem *cmd)
+ /* Helper to verify status returned by PSP */
+ static int check_i2c_req_sts(struct psp_i2c_req *req)
  {
-@@ -132,6 +140,62 @@ int psp_send_platform_access_msg(enum psp_platform_access_msg msg,
- }
- EXPORT_SYMBOL_GPL(psp_send_platform_access_msg);
- 
-+int psp_ring_platform_doorbell(int msg)
-+{
-+	struct psp_device *psp = psp_get_master_device();
-+	struct psp_platform_access_device *pa_dev;
-+	u32 __iomem *button, *cmd;
-+	int ret, val;
-+
-+	if (!psp || !psp->platform_access_data)
-+		return -ENODEV;
-+
-+	pa_dev = psp->platform_access_data;
-+	button = psp->io_regs + pa_dev->vdata->doorbell_button_reg;
-+	cmd = psp->io_regs + pa_dev->vdata->doorbell_cmd_reg;
-+
-+	mutex_lock(&pa_dev->doorbell_mutex);
-+
-+	if (check_doorbell(button)) {
-+		dev_dbg(psp->dev, "doorbell is not ready\n");
-+		ret = -EBUSY;
-+		goto unlock;
-+	}
-+
-+	if (check_recovery(cmd)) {
-+		dev_dbg(psp->dev, "doorbell command in recovery\n");
-+		ret = -EBUSY;
-+		goto unlock;
-+	}
-+
-+	if (wait_cmd(cmd)) {
-+		dev_dbg(psp->dev, "doorbell command not done processing\n");
-+		ret = -EBUSY;
-+		goto unlock;
-+	}
-+
-+	iowrite32(FIELD_PREP(PSP_DRBL_MSG, msg), cmd);
-+	iowrite32(PSP_DRBL_RING, button);
-+
-+	if (wait_cmd(cmd)) {
-+		ret = -ETIMEDOUT;
-+		goto unlock;
-+	}
-+
-+	val = FIELD_GET(PSP_CMDRESP_STS, ioread32(cmd));
-+	if (val) {
-+		ret = -EIO;
-+		goto unlock;
-+	}
-+
-+	ret = 0;
-+unlock:
-+	mutex_unlock(&pa_dev->doorbell_mutex);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(psp_ring_platform_doorbell);
-+
- void platform_access_dev_destroy(struct psp_device *psp)
- {
- 	struct psp_platform_access_device *pa_dev = psp->platform_access_data;
-@@ -140,6 +204,7 @@ void platform_access_dev_destroy(struct psp_device *psp)
- 		return;
- 
- 	mutex_destroy(&pa_dev->mailbox_mutex);
-+	mutex_destroy(&pa_dev->doorbell_mutex);
- 	psp->platform_access_data = NULL;
+@@ -73,34 +76,43 @@ static int psp_send_check_i2c_req(struct psp_i2c_req *req)
+ 	return check_i2c_req_sts(req);
  }
  
-@@ -159,6 +224,7 @@ int platform_access_dev_init(struct psp_device *psp)
- 	pa_dev->vdata = (struct platform_access_vdata *)psp->vdata->platform_access;
+-static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
++static int psp_send_i2c_req_cezanne(enum psp_i2c_req_type i2c_req_type)
+ {
+ 	struct psp_i2c_req *req;
+-	unsigned long start;
+ 	int status, ret;
  
- 	mutex_init(&pa_dev->mailbox_mutex);
-+	mutex_init(&pa_dev->doorbell_mutex);
- 
- 	dev_dbg(dev, "platform access enabled\n");
- 
-diff --git a/drivers/crypto/ccp/platform-access.h b/drivers/crypto/ccp/platform-access.h
-index c3a97893320d..a83f03beb869 100644
---- a/drivers/crypto/ccp/platform-access.h
-+++ b/drivers/crypto/ccp/platform-access.h
-@@ -24,6 +24,7 @@ struct psp_platform_access_device {
- 	struct platform_access_vdata *vdata;
- 
- 	struct mutex mailbox_mutex;
-+	struct mutex doorbell_mutex;
- 
- 	void *platform_access_data;
- };
-diff --git a/drivers/crypto/ccp/sp-dev.h b/drivers/crypto/ccp/sp-dev.h
-index 5ec6c219a731..1253a0217985 100644
---- a/drivers/crypto/ccp/sp-dev.h
-+++ b/drivers/crypto/ccp/sp-dev.h
-@@ -57,6 +57,9 @@ struct platform_access_vdata {
- 	const unsigned int cmdresp_reg;
- 	const unsigned int cmdbuff_addr_lo_reg;
- 	const unsigned int cmdbuff_addr_hi_reg;
-+	const unsigned int doorbell_button_reg;
-+	const unsigned int doorbell_cmd_reg;
+ 	/* Allocate command-response buffer */
+ 	req = kzalloc(sizeof(*req), GFP_KERNEL);
+ 	if (!req)
+ 		return -ENOMEM;
+-
+ 	req->hdr.payload_size = sizeof(*req);
+ 	req->type = i2c_req_type;
+-
+-	start = jiffies;
+ 	ret = read_poll_timeout(psp_send_check_i2c_req, status,
+ 				(status != -EBUSY),
+ 				PSP_I2C_REQ_RETRY_DELAY_US,
+ 				PSP_I2C_REQ_RETRY_CNT * PSP_I2C_REQ_RETRY_DELAY_US,
+ 				0, req);
+-	if (ret) {
++	kfree(req);
 +
- };
++	if (ret)
+ 		dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
+ 			(i2c_req_type == PSP_I2C_REQ_ACQUIRE) ?
+ 			"release" : "acquire");
+-		goto cleanup;
+-	}
  
- struct psp_vdata {
-diff --git a/drivers/crypto/ccp/sp-pci.c b/drivers/crypto/ccp/sp-pci.c
-index 18aa902eb5ce..b5896f7af7ab 100644
---- a/drivers/crypto/ccp/sp-pci.c
-+++ b/drivers/crypto/ccp/sp-pci.c
-@@ -365,6 +365,8 @@ static const struct platform_access_vdata pa_v1 = {
- 	.cmdresp_reg		= 0x10570,	/* C2PMSG_28 */
- 	.cmdbuff_addr_lo_reg	= 0x10574,	/* C2PMSG_29 */
- 	.cmdbuff_addr_hi_reg	= 0x10578,	/* C2PMSG_30 */
-+	.doorbell_button_reg	= 0x10a24,	/* C2PMSG_73 */
-+	.doorbell_cmd_reg	= 0x10a40,	/* C2PMSG_80 */
- };
- 
- static const struct psp_vdata pspv1 = {
-diff --git a/include/linux/psp-platform-access.h b/include/linux/psp-platform-access.h
-index f5a03cd11f10..aca3b148af93 100644
---- a/include/linux/psp-platform-access.h
-+++ b/include/linux/psp-platform-access.h
-@@ -35,6 +35,21 @@ struct psp_request {
-  */
- int psp_send_platform_access_msg(enum psp_platform_access_msg, struct psp_request *req);
- 
-+/**
-+ * psp_ring_platform_doorbell() - Ring platform doorbell
-+ *
-+ * This function is intended to be used by drivers outside of ccp to ring the
-+ * platform doorbell with a message.
-+ *
-+ * Returns:
-+ *  0:           success
-+ *  -%EBUSY:     mailbox in recovery or in use
-+ *  -%ENODEV:    driver not bound with PSP device
-+ *  -%ETIMEDOUT: request timed out
-+ *  -%EIO:       unknown error (see kernel log)
-+ */
-+int psp_ring_platform_doorbell(int msg);
+-	ret = status;
++	return ret ? ret : status;
++}
 +
- /**
-  * psp_check_platform_access_status() - Checks whether platform features is ready
-  *
-diff --git a/include/linux/psp.h b/include/linux/psp.h
-index d3424790a70e..92e60aeef21e 100644
---- a/include/linux/psp.h
-+++ b/include/linux/psp.h
-@@ -23,4 +23,7 @@
- #define PSP_CMDRESP_RECOVERY	BIT(30)
- #define PSP_CMDRESP_RESP	BIT(31)
- 
-+#define PSP_DRBL_MSG		PSP_CMDRESP_CMD
-+#define PSP_DRBL_RING		BIT(0)
++static int psp_send_i2c_req_skyrim(enum psp_i2c_req_type i2c_req_type)
++{
++	return psp_ring_platform_doorbell(i2c_req_type);
++}
 +
- #endif /* __PSP_H */
++static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
++{
++	unsigned long start = jiffies;
++	int ret;
++
++	ret = _psp_send_i2c_req(i2c_req_type);
+ 	if (ret) {
+ 		dev_err(psp_i2c_dev, "PSP communication error\n");
+ 		goto cleanup;
+@@ -115,7 +127,6 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
+ 		psp_i2c_mbox_fail = true;
+ 	}
+ 
+-	kfree(req);
+ 	return ret;
+ }
+ 
+@@ -263,6 +274,8 @@ static const struct i2c_lock_operations i2c_dw_psp_lock_ops = {
+ 
+ int i2c_dw_amdpsp_probe_lock_support(struct dw_i2c_dev *dev)
+ {
++	struct pci_dev *rdev;
++
+ 	if (!IS_REACHABLE(CRYPTO_DEV_CCP_DD))
+ 		return -ENODEV;
+ 
+@@ -276,6 +289,13 @@ int i2c_dw_amdpsp_probe_lock_support(struct dw_i2c_dev *dev)
+ 	if (psp_i2c_dev)
+ 		return -EEXIST;
+ 
++	/* Cezanne uses platform mailbox, Skyrim and later use doorbell */
++	rdev = pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(0, 0));
++	if (rdev->device == 0x1630)
++		_psp_send_i2c_req = psp_send_i2c_req_cezanne;
++	else
++		_psp_send_i2c_req = psp_send_i2c_req_skyrim;
++
+ 	if (psp_check_platform_access_status())
+ 		return -EPROBE_DEFER;
+ 
 -- 
 2.34.1
 
