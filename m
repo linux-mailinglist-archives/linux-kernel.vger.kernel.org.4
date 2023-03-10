@@ -2,106 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4F46B45B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BA66B45C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232632AbjCJOgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:36:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
+        id S232676AbjCJOhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232626AbjCJOgP (ORCPT
+        with ESMTP id S232678AbjCJOg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:36:15 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671541194DB
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:35:58 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id k10so21157376edk.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:35:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678458957;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9dXUSpxrhc852kQQYbEFtQeOQhI46gAz+RPdDgDM6is=;
-        b=NJm58VDWAWv6i7hMdG19RulhdsV5x/wxmH+8isFWJXUEqhG9N1Iqam21CFjdWwOcf7
-         WbGU2ZLahrjJhgrwUXGZZOr/UUubNVwr+fffhEkmzZzlXjgYMTf5ileDas5NFPtnkRYz
-         rT1ppaC7hRiXW/QJZrnMQFTP/hrCdqvLkxJJnhQuhlTf8Vju7UjALujTrLiQiCu3pQ8n
-         0rBzVorTxQGCkdQN00kx2uvsvNBgqy/Ui+0y+4ofz7CSAFx+utphlSOdoiSIpzWxIxd8
-         piE0QUGtQ4uGoqve0lwBw8SSB6y06R3Awp5eeMjAxsRBNwq71v3OhLkmVdKccRmAi/nc
-         YzwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678458957;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9dXUSpxrhc852kQQYbEFtQeOQhI46gAz+RPdDgDM6is=;
-        b=k8HWCD02/JQvRIZwdK1CVMsNOdd9AGpMhEAO9STv6W9zKYhPEkE2cGaG/dXy/lVvVf
-         bRHltPQ6AMMxI1cKRiDjmBKIY2Vt7gpu5xXh+D8RNUxyfOqJYgccjC/8gd4D2scIfBum
-         F9YuLEPigvBV5CP+J6BQAcd3dRFu3eUFxzj/YPoSovDiOEZAvS0gL13LO+WfjhYsDp81
-         bT80oRnx8D55G7vBBCmujK1EfWu+89TJlV/DgkhHqJiYc1zSjOs2BiApx7v/ppPZaqRF
-         WzrkkEDdfnMZoIWTtzDzMKRPrgpUxEYGaTkSxzB32NQObBb9cVR4/5gsEWWI+ZU2CY9N
-         aQeA==
-X-Gm-Message-State: AO0yUKU+c6UeivK+U9XG4PNoCxHrR6arTB2WEBjQlMi5iK8q6iEI1TvA
-        kc6a3WpkCeD6aMlteDDGobp6wg==
-X-Google-Smtp-Source: AK7set/cT6KeCdA2Ngom7Mk8z4udlb+B1Ld/45Z85Z40xRKfE+CLp5lePmjx8hRRhNtGefKW/p0Myw==
-X-Received: by 2002:a17:906:f255:b0:886:fcbf:a1e5 with SMTP id gy21-20020a170906f25500b00886fcbfa1e5mr22623077ejb.59.1678458956870;
-        Fri, 10 Mar 2023 06:35:56 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:45c4:46be:ec71:4a51? ([2a02:810d:15c0:828:45c4:46be:ec71:4a51])
-        by smtp.gmail.com with ESMTPSA id u23-20020a509517000000b004c0cc79f4aesm80130eda.92.2023.03.10.06.35.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 06:35:56 -0800 (PST)
-Message-ID: <b5e4c34b-b0d2-0f73-7c0b-8233e545c068@linaro.org>
-Date:   Fri, 10 Mar 2023 15:35:55 +0100
+        Fri, 10 Mar 2023 09:36:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDD811A2EC;
+        Fri, 10 Mar 2023 06:36:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D16AB822DD;
+        Fri, 10 Mar 2023 14:36:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD339C433EF;
+        Fri, 10 Mar 2023 14:36:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678458993;
+        bh=qyc4HtAfs0oFkSh7TiVFkSvvHVwKqZYdZrQDv4CKMfo=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=he4Spk3glwq8JDawOjY7kt/f4Yr/NEkiMXYrgkpR4R5jEv7ZQgCQUdPAf3emcg/+x
+         otfpJUBp6QID2Ysfe6HcaNOAq88I0gA6NYOneQwNwrVmutesv+ciSfncC97CPuTaiq
+         XVvDAIOF5PWuJUjepSUeZqgRMkQXc7sOklwWoRUbES9Oy6bAsdOkcaOV0X9p01m0UO
+         pZIGyUsvvPIWnuI0JEoTY++4RqfH9EhJzZj6xfZuRmUTG/OkYRIx2xGNKYBO6ZrqPC
+         XPaaA9o93Uejfkb0PuZHACWIMayPn38CGZjjyJXULBvjGDXsKv3XEvRxzDCwxL7FIS
+         6KnYmCmpYXEDw==
+Date:   Fri, 10 Mar 2023 15:36:34 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Orlando Chamberlain <orlandoch.dev@gmail.com>
+cc:     linux-doc@vger.kernel.org, linux-input@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Aditya Garg <gargaditya08@live.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>,
+        Kerem Karabay <kekrby@gmail.com>,
+        Andy Shevchenko <andy@infradead.org>,
+        =?ISO-8859-15?Q?Thomas_Wei=DFschuh?= <thomas@t-8ch.de>
+Subject: Re: [PATCH v5 0/2] Apple Magic Keyboard Backlight
+In-Reply-To: <20230220115203.76154-1-orlandoch.dev@gmail.com>
+Message-ID: <nycvar.YFH.7.76.2303101535440.1142@cbobk.fhfr.pm>
+References: <20230220115203.76154-1-orlandoch.dev@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 0/9] ASoC: add audio digital codecs for Qualcomm SM8550
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230310132201.322148-1-krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230310132201.322148-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/03/2023 14:21, Krzysztof Kozlowski wrote:
-> Hi,
+On Mon, 20 Feb 2023, Orlando Chamberlain wrote:
+
+> This patchseries adds support for the internal keyboard backlight of
+> Macs with Apple's "Magic" keyboard (MacBookPro16,* and MacBookAir9,1),
+> and also documents what names should be used for keyboard backlight
+> leds in Documentation/leds/well-known-leds.txt.
 > 
-> Dependencies
-> ============
-> For va-macro bindings:
-> https://lore.kernel.org/r/20221118071849.25506-2-srinivas.kandagatla@linaro.org
+> v4->v5:
+> - use <tab><space><space> for help in Kconfig
+> - prepend "hid-" to filename in MAINTAINERS
 > 
-> NOT a dependency
-> ================
-> The patchset can be applied independently of my previous fix:
-> https://lore.kernel.org/linux-arm-msm/20230310100937.32485-1-krzysztof.kozlowski@linaro.org/T/#u
+> v3->v4:
+> - collect reviews from Andy and Thomas
+> - remove now unused hdev member of apple_magic_backlight
+> 
+> v2->v3:
+> - remove unneeded header inclusion
+> - use s32 for report value type
+> - remove unneeded null check
+> - don't set drvdata as its never used
+> - prepend "hid-" to module name
+> 
+> v1->v2:
+> - drop unneeded remove function
+> - combine set functions
+> - add missing header inclusions
+> - avoid char as argument in favour of u8
+> - handful of style/formatting fixes
+> - use standard led name ":white:kbd_backlight"
+> - rename USAGE_MAGIC_BL to HID_USAGE_MAGIC_BL
+> - New patch documenting preferred keyboard backlight names
+> 
+> v1: https://lore.kernel.org/linux-input/7D70F1FE-7F54-4D0A-8922-5466AA2AD364@live.com/
+> v2: https://lore.kernel.org/linux-input/20230216041224.4731-1-orlandoch.dev@gmail.com/
+> v3: https://lore.kernel.org/linux-input/20230217102319.3419-1-orlandoch.dev@gmail.com/
+> v4: https://lore.kernel.org/linux-input/20230218090709.7467-1-orlandoch.dev@gmail.com/
+> 
+> Orlando Chamberlain (2):
+>   Documentation: leds: standardise keyboard backlight led names
+>   HID: hid-apple-magic-backlight: Add driver for keyboard backlight on
+>     internal Magic Keyboards
+> 
+>  Documentation/leds/well-known-leds.txt  |   8 ++
+>  MAINTAINERS                             |   6 ++
+>  drivers/hid/Kconfig                     |  13 +++
+>  drivers/hid/Makefile                    |   1 +
+>  drivers/hid/hid-apple-magic-backlight.c | 120 ++++++++++++++++++++++++
+>  5 files changed, 148 insertions(+)
+>  create mode 100644 drivers/hid/hid-apple-magic-backlight.c
 
-DTS implementing the bindings is here:
+Hi,
 
-https://lore.kernel.org/linux-arm-msm/20230310134925.514125-1-krzysztof.kozlowski@linaro.org/T/#u
+thanks for creating the support for backlight.
 
-Best regards,
-Krzysztof
+Is there any reason why not to fold all this into existing hid-apple? I 
+don't think we need separate driver for the backlist, separated from the 
+rest of hid-apple support.
+
+Thanks,
+
+-- 
+Jiri Kosina
+SUSE Labs
 
