@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D566B35E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 06:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B21436B35E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 06:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjCJFGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 00:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
+        id S229659AbjCJFGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 00:06:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjCJFFt (ORCPT
+        with ESMTP id S229800AbjCJFGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 00:05:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C8CE1FC7
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 21:04:59 -0800 (PST)
+        Fri, 10 Mar 2023 00:06:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18538EE77E
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 21:05:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678424698;
+        s=mimecast20190719; t=1678424717;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ME1A+qs7kq3XtZD/JNtKwRMcFUQsBn2Io39lnGwhc2Y=;
-        b=eGaKfxb1vle+8tWvM3MecOk/tzbThgsNzewMQjbv6ofQuhe7XVTmfVfpnnuHSdyoSVO5tw
-        nElItrO1xbh/U9FL+ge6TPzdrpumIfwEsCB4XoK4cwz4szS+7tc61gJObSzhlFWLhfNpe4
-        wkwA3b9/kwnxSa4vPnvYstkN9Pe8b7U=
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
- [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=j9kx14cOBeOwYfDhESSA0OePt79Hb99P01lR+fSR4n4=;
+        b=QHn1XEVnWHqZHTpuhFsllzzsAQt2cF0S/GUMfTWwRv16IDRJ7mJ8JjJ2xAy+ORnzPVPK26
+        PgEB4kL/8OeJJWf3vvrCWY2HxA5hYmX9WjJ57rkc+4Qu76OY5q95e6aZwUZ4TAUBbrIPEc
+        cLVlZwGBFZ8VPRc9AZLUNbnWjguV7fU=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
+ [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-558--69_0aQSMEKnCEnPx78Sfw-1; Fri, 10 Mar 2023 00:04:49 -0500
-X-MC-Unique: -69_0aQSMEKnCEnPx78Sfw-1
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-17679dc6e16so2232073fac.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 21:04:49 -0800 (PST)
+ us-mta-433-xW4Eq0sfP22-CJO_9bbOMg-1; Fri, 10 Mar 2023 00:05:15 -0500
+X-MC-Unique: xW4Eq0sfP22-CJO_9bbOMg-1
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-176347f3b28so2216535fac.23
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 21:05:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678424689;
+        d=1e100.net; s=20210112; t=1678424714;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ME1A+qs7kq3XtZD/JNtKwRMcFUQsBn2Io39lnGwhc2Y=;
-        b=7lPEsPM0q/NpT4aiP81gce11zYklsvgU+bL7Mci2U+bl97xA2McUvGCY5ZkWwQNYgn
-         zmxytYNAH9BzPmG1b/nuddd+MyC8vahKB+cXUGvxygQn5lGhUiZEMKanr+BPqjeHi5eq
-         DFbsKzH1hqUcNx/Dr8YFV9/v+gfgF406YBZ6s7yX2keNyFxYmFnrh4eVVLvd9ylz6IKx
-         o+G9bbCTQKjCQwfhl7ZFGiXZMqPvQvX033CRGYgf8b0slSqS1BrdQb/9gWTfkgbmn3cC
-         pdBizTz7COP8dI5qYO7vrPHp75/EimZlr7/LadStB/7iFoltfc2wfauXXK0bNCOTDjcj
-         13Sg==
-X-Gm-Message-State: AO0yUKU0tVTnE516iqKyjKgMnmh0rW0mkJP9WaMU5gWT60+LqJTY3IQ0
-        lvlJd1mxaTPOjbup2dAmj57fTltAdCgZwVYqEVIlIYDxBzbBhczzFm7m/J6er/Cr1Ug7hkfBvgu
-        OrLI8Fnpd4xXPvh8Hwq7EF+ZDiugmWeCBRFj7uRvL
-X-Received: by 2002:a05:6871:6b9f:b0:176:2420:d0f4 with SMTP id zh31-20020a0568716b9f00b001762420d0f4mr8320886oab.9.1678424689081;
-        Thu, 09 Mar 2023 21:04:49 -0800 (PST)
-X-Google-Smtp-Source: AK7set/XiZx+eNpvX3Lw/Qse4ydxNP6yjeAv230lhVx1OdCN6k4J8Jxi03yh8ot3Eery2D4lXTsj9FwrPf2IjqB2gPo=
-X-Received: by 2002:a05:6871:6b9f:b0:176:2420:d0f4 with SMTP id
- zh31-20020a0568716b9f00b001762420d0f4mr8320874oab.9.1678424688713; Thu, 09
- Mar 2023 21:04:48 -0800 (PST)
+        bh=j9kx14cOBeOwYfDhESSA0OePt79Hb99P01lR+fSR4n4=;
+        b=YAHJ4Qf5dv0kjgcN+1og29o0zV1PPFvwim7b2nIZm+Z55rTv/dyP9Gm09FKZzsjW+G
+         2GDV5jMdRyEi3w52UdUlLeVh6VxTUMCw5FsltsslIr5RBe/OpbH38U1BU7+VNgQdfwXS
+         dAvtrIHM+41YIycYitqblm4cy7oY2yMFV/fT5BdMDgTiJyN3VYrgoyPthEkvf5z2fZ16
+         1Lk+nnYDzLbzCVquY1B9xGKbqA1HIAwO1AMVSkhA/EkRWD94Rl4wmZ0/ecw/sEViUyvj
+         jI+HPelSuWbjfHC7hyZ82rZmAVst7HpFIMTzvAvzVNsXwuipaUjuMJf3axeyi0xurVdO
+         1K4Q==
+X-Gm-Message-State: AO0yUKXy0UiKEhxlrpTiUhjg6o51WslHvXmoK0tIMiXoQ+Onv65lOirx
+        IXcvF3IXPEro4uDsEGPs3ZuxMQBIXRz81v5r7htTDwMicysNQ4v+Uq9445tVUj+KTx/4f3klOzA
+        Fp/qpv/JiaXAjeBQCtehQFyDBnMPhezIiRo9SSTxD
+X-Received: by 2002:a05:6808:45:b0:384:27f0:bd0a with SMTP id v5-20020a056808004500b0038427f0bd0amr7442274oic.9.1678424714384;
+        Thu, 09 Mar 2023 21:05:14 -0800 (PST)
+X-Google-Smtp-Source: AK7set/oE9nncWtTmpBXW9hMdJU3matvUyYuTnzMN/w12/txIETirBefSBIfAwdNFAcxHHOqAaaoEkc/BCo0xxWjRu0=
+X-Received: by 2002:a05:6808:45:b0:384:27f0:bd0a with SMTP id
+ v5-20020a056808004500b0038427f0bd0amr7442258oic.9.1678424713993; Thu, 09 Mar
+ 2023 21:05:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20230307113621.64153-1-gautam.dawar@amd.com> <20230307113621.64153-9-gautam.dawar@amd.com>
-In-Reply-To: <20230307113621.64153-9-gautam.dawar@amd.com>
+References: <20230307113621.64153-1-gautam.dawar@amd.com> <20230307113621.64153-10-gautam.dawar@amd.com>
+In-Reply-To: <20230307113621.64153-10-gautam.dawar@amd.com>
 From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 10 Mar 2023 13:04:37 +0800
-Message-ID: <CACGkMEut9FY-2OYnAQPr_wGpcpVc3yurOA+imQARzVcMeuTH1A@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 08/14] sfc: implement vdpa vring config operations
+Date:   Fri, 10 Mar 2023 13:05:02 +0800
+Message-ID: <CACGkMEvpK4P1TTAO2bZ+YMXuNFMk_hJHQBPszCwOTzbQX70s7w@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 09/14] sfc: implement device status related
+ vdpa config operations
 To:     Gautam Dawar <gautam.dawar@amd.com>
 Cc:     linux-net-drivers@amd.com, Edward Cree <ecree.xilinx@gmail.com>,
         Martin Habets <habetsm.xilinx@gmail.com>,
@@ -83,393 +84,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 7:37=E2=80=AFPM Gautam Dawar <gautam.dawar@amd.com> =
+On Tue, Mar 7, 2023 at 7:38=E2=80=AFPM Gautam Dawar <gautam.dawar@amd.com> =
 wrote:
 >
-> This patch implements the vDPA config operations related to
-> virtqueues or vrings. These include setting vring address,
-> getting vq state, operations to enable/disable a vq etc.
-> The resources required for vring operations eg. VI, interrupts etc.
-> are also allocated.
+> vDPA config opertions to handle get/set device status and device
+> reset have been implemented. Also .suspend config operation is
+> implemented to support Live Migration.
 >
 > Signed-off-by: Gautam Dawar <gautam.dawar@amd.com>
 > ---
->  drivers/net/ethernet/sfc/ef100_vdpa.c     |  46 +++-
->  drivers/net/ethernet/sfc/ef100_vdpa.h     |  54 +++++
->  drivers/net/ethernet/sfc/ef100_vdpa_ops.c | 275 ++++++++++++++++++++++
->  3 files changed, 374 insertions(+), 1 deletion(-)
+>  drivers/net/ethernet/sfc/ef100_vdpa.c     |  16 +-
+>  drivers/net/ethernet/sfc/ef100_vdpa.h     |   2 +
+>  drivers/net/ethernet/sfc/ef100_vdpa_ops.c | 367 ++++++++++++++++++++--
+>  3 files changed, 355 insertions(+), 30 deletions(-)
 >
 > diff --git a/drivers/net/ethernet/sfc/ef100_vdpa.c b/drivers/net/ethernet=
 /sfc/ef100_vdpa.c
-> index 4c5a98c9d6c3..c66e5aef69ea 100644
+> index c66e5aef69ea..4ba57827a6cd 100644
 > --- a/drivers/net/ethernet/sfc/ef100_vdpa.c
 > +++ b/drivers/net/ethernet/sfc/ef100_vdpa.c
-> @@ -14,6 +14,7 @@
->  #include "ef100_vdpa.h"
->  #include "mcdi_vdpa.h"
->  #include "mcdi_filters.h"
-> +#include "mcdi_functions.h"
->  #include "ef100_netdev.h"
+> @@ -68,9 +68,14 @@ static int vdpa_allocate_vis(struct efx_nic *efx, unsi=
+gned int *allocated_vis)
 >
->  static struct virtio_device_id ef100_vdpa_id_table[] =3D {
-> @@ -47,12 +48,31 @@ int ef100_vdpa_init(struct efx_probe_data *probe_data=
-)
->         return rc;
->  }
->
-> +static int vdpa_allocate_vis(struct efx_nic *efx, unsigned int *allocate=
-d_vis)
-> +{
-> +       /* The first VI is reserved for MCDI
-> +        * 1 VI each for rx + tx ring
-> +        */
-> +       unsigned int max_vis =3D 1 + EF100_VDPA_MAX_QUEUES_PAIRS;
-> +       unsigned int min_vis =3D 1 + 1;
-> +       int rc;
-> +
-> +       rc =3D efx_mcdi_alloc_vis(efx, min_vis, max_vis,
-> +                               NULL, allocated_vis);
-> +       if (!rc)
-> +               return rc;
-> +       if (*allocated_vis < min_vis)
-> +               return -ENOSPC;
-> +       return 0;
-> +}
-> +
 >  static void ef100_vdpa_delete(struct efx_nic *efx)
 >  {
+> +       struct vdpa_device *vdpa_dev;
+> +
 >         if (efx->vdpa_nic) {
+> +               vdpa_dev =3D &efx->vdpa_nic->vdpa_dev;
+> +               ef100_vdpa_reset(vdpa_dev);
+> +
 >                 /* replace with _vdpa_unregister_device later */
->                 put_device(&efx->vdpa_nic->vdpa_dev.dev);
+> -               put_device(&efx->vdpa_nic->vdpa_dev.dev);
+> +               put_device(&vdpa_dev->dev);
 >         }
-> +       efx_mcdi_free_vis(efx);
+>         efx_mcdi_free_vis(efx);
 >  }
->
->  void ef100_vdpa_fini(struct efx_probe_data *probe_data)
-> @@ -104,9 +124,19 @@ static struct ef100_vdpa_nic *ef100_vdpa_create(stru=
+> @@ -171,6 +176,15 @@ static struct ef100_vdpa_nic *ef100_vdpa_create(stru=
 ct efx_nic *efx,
->  {
->         struct ef100_nic_data *nic_data =3D efx->nic_data;
->         struct ef100_vdpa_nic *vdpa_nic;
-> +       unsigned int allocated_vis;
->         int rc;
-> +       u8 i;
+>                 }
+>         }
 >
->         nic_data->vdpa_class =3D dev_type;
-> +       rc =3D vdpa_allocate_vis(efx, &allocated_vis);
+> +       rc =3D devm_add_action_or_reset(&efx->pci_dev->dev,
+> +                                     ef100_vdpa_irq_vectors_free,
+> +                                     efx->pci_dev);
 > +       if (rc) {
 > +               pci_err(efx->pci_dev,
-> +                       "%s Alloc VIs failed for vf:%u error:%d\n",
-> +                        __func__, nic_data->vf_index, rc);
-> +               return ERR_PTR(rc);
-> +       }
-> +
->         vdpa_nic =3D vdpa_alloc_device(struct ef100_vdpa_nic,
->                                      vdpa_dev, &efx->pci_dev->dev,
->                                      &ef100_vdpa_config_ops,
-> @@ -117,7 +147,8 @@ static struct ef100_vdpa_nic *ef100_vdpa_create(struc=
-t efx_nic *efx,
->                         "vDPA device allocation failed for vf: %u\n",
->                         nic_data->vf_index);
->                 nic_data->vdpa_class =3D EF100_VDPA_CLASS_NONE;
-> -               return ERR_PTR(-ENOMEM);
-> +               rc =3D -ENOMEM;
-> +               goto err_alloc_vis_free;
->         }
->
->         mutex_init(&vdpa_nic->lock);
-> @@ -125,11 +156,21 @@ static struct ef100_vdpa_nic *ef100_vdpa_create(str=
-uct efx_nic *efx,
->         vdpa_nic->vdpa_dev.dma_dev =3D &efx->pci_dev->dev;
->         vdpa_nic->vdpa_dev.mdev =3D efx->mgmt_dev;
->         vdpa_nic->efx =3D efx;
-> +       vdpa_nic->max_queue_pairs =3D allocated_vis - 1;
->         vdpa_nic->pf_index =3D nic_data->pf_index;
->         vdpa_nic->vf_index =3D nic_data->vf_index;
->         vdpa_nic->vdpa_state =3D EF100_VDPA_STATE_INITIALIZED;
->         vdpa_nic->mac_address =3D (u8 *)&vdpa_nic->net_config.mac;
->
-> +       for (i =3D 0; i < (2 * vdpa_nic->max_queue_pairs); i++) {
-> +               rc =3D ef100_vdpa_init_vring(vdpa_nic, i);
-> +               if (rc) {
-> +                       pci_err(efx->pci_dev,
-> +                               "vring init idx: %u failed, rc: %d\n", i,=
- rc);
-> +                       goto err_put_device;
-> +               }
+> +                       "Failed adding devres for freeing irq vectors\n")=
+;
+> +               goto err_put_device;
 > +       }
 > +
 >         rc =3D get_net_config(vdpa_nic);
 >         if (rc)
 >                 goto err_put_device;
-> @@ -146,6 +187,9 @@ static struct ef100_vdpa_nic *ef100_vdpa_create(struc=
-t efx_nic *efx,
->  err_put_device:
->         /* put_device invokes ef100_vdpa_free */
->         put_device(&vdpa_nic->vdpa_dev.dev);
-> +
-> +err_alloc_vis_free:
-> +       efx_mcdi_free_vis(efx);
->         return ERR_PTR(rc);
->  }
->
 > diff --git a/drivers/net/ethernet/sfc/ef100_vdpa.h b/drivers/net/ethernet=
 /sfc/ef100_vdpa.h
-> index dcf4a8156415..348ca8a7404b 100644
+> index 348ca8a7404b..58791402e454 100644
 > --- a/drivers/net/ethernet/sfc/ef100_vdpa.h
 > +++ b/drivers/net/ethernet/sfc/ef100_vdpa.h
-> @@ -32,6 +32,21 @@
->  /* Alignment requirement of the Virtqueue */
->  #define EF100_VDPA_VQ_ALIGN 4096
->
-> +/* Vring configuration definitions */
-> +#define EF100_VRING_ADDRESS_CONFIGURED 0x1
-> +#define EF100_VRING_SIZE_CONFIGURED 0x10
-> +#define EF100_VRING_READY_CONFIGURED 0x100
-> +#define EF100_VRING_CONFIGURED (EF100_VRING_ADDRESS_CONFIGURED | \
-> +                               EF100_VRING_SIZE_CONFIGURED | \
-> +                               EF100_VRING_READY_CONFIGURED)
-> +#define EF100_VRING_CREATED 0x1000
-> +
-> +/* Maximum size of msix name */
-> +#define EF100_VDPA_MAX_MSIX_NAME_SIZE 256
-> +
-> +/* Default high IOVA for MCDI buffer */
-> +#define EF100_VDPA_IOVA_BASE_ADDR 0x20000000000
-> +
->  /**
->   * enum ef100_vdpa_nic_state - possible states for a vDPA NIC
->   *
-> @@ -57,6 +72,41 @@ enum ef100_vdpa_vq_type {
->         EF100_VDPA_VQ_NTYPES
->  };
->
-> +/**
-> + * struct ef100_vdpa_vring_info - vDPA vring data structure
-> + *
-> + * @desc: Descriptor area address of the vring
-> + * @avail: Available area address of the vring
-> + * @used: Device area address of the vring
-> + * @size: Number of entries in the vring
-> + * @vring_state: bit map to track vring configuration
-> + * @last_avail_idx: last available index of the vring
-> + * @last_used_idx: last used index of the vring
-> + * @doorbell_offset: doorbell offset
-> + * @doorbell_offset_valid: true if @doorbell_offset is updated
-> + * @vring_type: type of vring created
-> + * @vring_ctx: vring context information
-> + * @msix_name: device name for vring irq handler
-> + * @irq: irq number for vring irq handler
-> + * @cb: callback for vring interrupts
-> + */
-> +struct ef100_vdpa_vring_info {
-> +       dma_addr_t desc;
-> +       dma_addr_t avail;
-> +       dma_addr_t used;
-> +       u32 size;
-> +       u16 vring_state;
-> +       u32 last_avail_idx;
-> +       u32 last_used_idx;
-> +       u32 doorbell_offset;
-> +       bool doorbell_offset_valid;
-> +       enum ef100_vdpa_vq_type vring_type;
-> +       struct efx_vring_ctx *vring_ctx;
-> +       char msix_name[EF100_VDPA_MAX_MSIX_NAME_SIZE];
-> +       u32 irq;
-> +       struct vdpa_callback cb;
-> +};
-> +
->  /**
->   *  struct ef100_vdpa_nic - vDPA NIC data structure
->   *
-> @@ -70,6 +120,7 @@ enum ef100_vdpa_vq_type {
->   * @features: negotiated feature bits
->   * @max_queue_pairs: maximum number of queue pairs supported
->   * @net_config: virtio_net_config data
-> + * @vring: vring information of the vDPA device.
->   * @mac_address: mac address of interface associated with this vdpa devi=
-ce
->   * @mac_configured: true after MAC address is configured
->   * @cfg_cb: callback for config change
-> @@ -86,6 +137,7 @@ struct ef100_vdpa_nic {
->         u64 features;
->         u32 max_queue_pairs;
->         struct virtio_net_config net_config;
-> +       struct ef100_vdpa_vring_info vring[EF100_VDPA_MAX_QUEUES_PAIRS * =
-2];
->         u8 *mac_address;
->         bool mac_configured;
->         struct vdpa_callback cfg_cb;
-> @@ -95,6 +147,8 @@ int ef100_vdpa_init(struct efx_probe_data *probe_data)=
-;
->  void ef100_vdpa_fini(struct efx_probe_data *probe_data);
->  int ef100_vdpa_register_mgmtdev(struct efx_nic *efx);
+> @@ -149,6 +149,8 @@ int ef100_vdpa_register_mgmtdev(struct efx_nic *efx);
 >  void ef100_vdpa_unregister_mgmtdev(struct efx_nic *efx);
+>  void ef100_vdpa_irq_vectors_free(void *data);
+>  int ef100_vdpa_init_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx);
 > +void ef100_vdpa_irq_vectors_free(void *data);
-> +int ef100_vdpa_init_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx);
+> +int ef100_vdpa_reset(struct vdpa_device *vdev);
 >
 >  static inline bool efx_vdpa_is_little_endian(struct ef100_vdpa_nic *vdpa=
 _nic)
 >  {
 > diff --git a/drivers/net/ethernet/sfc/ef100_vdpa_ops.c b/drivers/net/ethe=
 rnet/sfc/ef100_vdpa_ops.c
-> index a2364ef9f492..0051c4c0e47c 100644
+> index 0051c4c0e47c..95a2177f85a2 100644
 > --- a/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
 > +++ b/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
-> @@ -9,13 +9,270 @@
->
->  #include <linux/vdpa.h>
->  #include "ef100_vdpa.h"
-> +#include "io.h"
->  #include "mcdi_vdpa.h"
->
-> +/* Get the queue's function-local index of the associated VI
-> + * virtqueue number queue 0 is reserved for MCDI
-> + */
-> +#define EFX_GET_VI_INDEX(vq_num) (((vq_num) / 2) + 1)
-> +
->  static struct ef100_vdpa_nic *get_vdpa_nic(struct vdpa_device *vdev)
->  {
+> @@ -22,11 +22,6 @@ static struct ef100_vdpa_nic *get_vdpa_nic(struct vdpa=
+_device *vdev)
 >         return container_of(vdev, struct ef100_vdpa_nic, vdpa_dev);
 >  }
 >
+> -void ef100_vdpa_irq_vectors_free(void *data)
+> -{
+> -       pci_free_irq_vectors(data);
+> -}
+> -
+>  static int create_vring_ctx(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
+>  {
+>         struct efx_vring_ctx *vring_ctx;
+> @@ -52,14 +47,6 @@ static void delete_vring_ctx(struct ef100_vdpa_nic *vd=
+pa_nic, u16 idx)
+>         vdpa_nic->vring[idx].vring_ctx =3D NULL;
+>  }
+>
+> -static void reset_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
+> -{
+> -       vdpa_nic->vring[idx].vring_type =3D EF100_VDPA_VQ_NTYPES;
+> -       vdpa_nic->vring[idx].vring_state =3D 0;
+> -       vdpa_nic->vring[idx].last_avail_idx =3D 0;
+> -       vdpa_nic->vring[idx].last_used_idx =3D 0;
+> -}
+> -
+>  int ef100_vdpa_init_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
+>  {
+>         u32 offset;
+> @@ -103,6 +90,236 @@ static bool is_qid_invalid(struct ef100_vdpa_nic *vd=
+pa_nic, u16 idx,
+>         return false;
+>  }
+>
+> +static void irq_vring_fini(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
+> +{
+> +       struct ef100_vdpa_vring_info *vring =3D &vdpa_nic->vring[idx];
+> +       struct pci_dev *pci_dev =3D vdpa_nic->efx->pci_dev;
+> +
+> +       devm_free_irq(&pci_dev->dev, vring->irq, vring);
+> +       vring->irq =3D -EINVAL;
+> +}
+> +
+> +static irqreturn_t vring_intr_handler(int irq, void *arg)
+> +{
+> +       struct ef100_vdpa_vring_info *vring =3D arg;
+> +
+> +       if (vring->cb.callback)
+> +               return vring->cb.callback(vring->cb.private);
+> +
+> +       return IRQ_NONE;
+> +}
+> +
+> +static int ef100_vdpa_irq_vectors_alloc(struct pci_dev *pci_dev, u16 nvq=
+s)
+> +{
+> +       int rc;
+> +
+> +       rc =3D pci_alloc_irq_vectors(pci_dev, nvqs, nvqs, PCI_IRQ_MSIX);
+> +       if (rc < 0)
+> +               pci_err(pci_dev,
+> +                       "Failed to alloc %d IRQ vectors, err:%d\n", nvqs,=
+ rc);
+> +       return rc;
+> +}
+> +
 > +void ef100_vdpa_irq_vectors_free(void *data)
 > +{
 > +       pci_free_irq_vectors(data);
 > +}
 > +
-> +static int create_vring_ctx(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
+> +static int irq_vring_init(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
 > +{
-> +       struct efx_vring_ctx *vring_ctx;
-> +       u32 vi_index;
-> +
-> +       if (idx % 2) /* Even VQ for RX and odd for TX */
-> +               vdpa_nic->vring[idx].vring_type =3D EF100_VDPA_VQ_TYPE_NE=
-T_TXQ;
-> +       else
-> +               vdpa_nic->vring[idx].vring_type =3D EF100_VDPA_VQ_TYPE_NE=
-T_RXQ;
-> +       vi_index =3D EFX_GET_VI_INDEX(idx);
-> +       vring_ctx =3D efx_vdpa_vring_init(vdpa_nic->efx, vi_index,
-> +                                       vdpa_nic->vring[idx].vring_type);
-> +       if (IS_ERR(vring_ctx))
-> +               return PTR_ERR(vring_ctx);
-> +
-> +       vdpa_nic->vring[idx].vring_ctx =3D vring_ctx;
-> +       return 0;
-> +}
-> +
-> +static void delete_vring_ctx(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
-> +{
-> +       efx_vdpa_vring_fini(vdpa_nic->vring[idx].vring_ctx);
-> +       vdpa_nic->vring[idx].vring_ctx =3D NULL;
-> +}
-> +
-> +static void reset_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
-> +{
-> +       vdpa_nic->vring[idx].vring_type =3D EF100_VDPA_VQ_NTYPES;
-> +       vdpa_nic->vring[idx].vring_state =3D 0;
-> +       vdpa_nic->vring[idx].last_avail_idx =3D 0;
-> +       vdpa_nic->vring[idx].last_used_idx =3D 0;
-> +}
-> +
-> +int ef100_vdpa_init_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
-> +{
-> +       u32 offset;
+> +       struct ef100_vdpa_vring_info *vring =3D &vdpa_nic->vring[idx];
+> +       struct pci_dev *pci_dev =3D vdpa_nic->efx->pci_dev;
+> +       int irq;
 > +       int rc;
 > +
-> +       vdpa_nic->vring[idx].irq =3D -EINVAL;
-> +       rc =3D create_vring_ctx(vdpa_nic, idx);
-> +       if (rc) {
-> +               dev_err(&vdpa_nic->vdpa_dev.dev,
-> +                       "%s: create_vring_ctx failed, idx:%u, err:%d\n",
-> +                       __func__, idx, rc);
-> +               return rc;
-> +       }
+> +       snprintf(vring->msix_name, 256, "x_vdpa[%s]-%d\n",
+> +                pci_name(pci_dev), idx);
+> +       irq =3D pci_irq_vector(pci_dev, idx);
+> +       rc =3D devm_request_irq(&pci_dev->dev, irq, vring_intr_handler, 0=
+,
+> +                             vring->msix_name, vring);
+> +       if (rc)
+> +               pci_err(pci_dev,
+> +                       "devm_request_irq failed for vring %d, rc %d\n",
+> +                       idx, rc);
+> +       else
+> +               vring->irq =3D irq;
 > +
-> +       rc =3D efx_vdpa_get_doorbell_offset(vdpa_nic->vring[idx].vring_ct=
-x,
-> +                                         &offset);
-> +       if (rc) {
-> +               dev_err(&vdpa_nic->vdpa_dev.dev,
-> +                       "%s: get_doorbell failed idx:%u, err:%d\n",
-> +                       __func__, idx, rc);
-> +               goto err_get_doorbell_offset;
-> +       }
-> +       vdpa_nic->vring[idx].doorbell_offset =3D offset;
-> +       vdpa_nic->vring[idx].doorbell_offset_valid =3D true;
-> +
-> +       return 0;
-> +
-> +err_get_doorbell_offset:
-> +       delete_vring_ctx(vdpa_nic, idx);
 > +       return rc;
 > +}
 > +
-> +static bool is_qid_invalid(struct ef100_vdpa_nic *vdpa_nic, u16 idx,
-> +                          const char *caller)
+> +static int delete_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
 > +{
-> +       if (unlikely(idx >=3D (vdpa_nic->max_queue_pairs * 2))) {
+> +       struct efx_vring_dyn_cfg vring_dyn_cfg;
+> +       int rc;
+> +
+> +       if (!(vdpa_nic->vring[idx].vring_state & EF100_VRING_CREATED))
+> +               return 0;
+> +
+> +       rc =3D efx_vdpa_vring_destroy(vdpa_nic->vring[idx].vring_ctx,
+> +                                   &vring_dyn_cfg);
+> +       if (rc)
 > +               dev_err(&vdpa_nic->vdpa_dev.dev,
-> +                       "%s: Invalid qid %u\n", caller, idx);
-> +               return true;
-> +       }
-> +       return false;
-> +}
+> +                       "%s: delete vring failed index:%u, err:%d\n",
+> +                       __func__, idx, rc);
+> +       vdpa_nic->vring[idx].last_avail_idx =3D vring_dyn_cfg.avail_idx;
+> +       vdpa_nic->vring[idx].last_used_idx =3D vring_dyn_cfg.used_idx;
+> +       vdpa_nic->vring[idx].vring_state &=3D ~EF100_VRING_CREATED;
 > +
-> +static int ef100_vdpa_set_vq_address(struct vdpa_device *vdev,
-> +                                    u16 idx, u64 desc_area, u64 driver_a=
-rea,
-> +                                    u64 device_area)
-> +{
-> +       struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
+> +       irq_vring_fini(vdpa_nic, idx);
 > +
-> +       if (is_qid_invalid(vdpa_nic, idx, __func__))
-> +               return -EINVAL;
-> +
-> +       mutex_lock(&vdpa_nic->lock);
-> +       vdpa_nic->vring[idx].desc =3D desc_area;
-> +       vdpa_nic->vring[idx].avail =3D driver_area;
-> +       vdpa_nic->vring[idx].used =3D device_area;
-> +       vdpa_nic->vring[idx].vring_state |=3D EF100_VRING_ADDRESS_CONFIGU=
-RED;
-> +       mutex_unlock(&vdpa_nic->lock);
-> +       return 0;
-> +}
-> +
-> +static void ef100_vdpa_set_vq_num(struct vdpa_device *vdev, u16 idx, u32=
- num)
-> +{
-> +       struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
-> +
-> +       if (is_qid_invalid(vdpa_nic, idx, __func__))
-> +               return;
-> +
-> +       if (!is_power_of_2(num)) {
-> +               dev_err(&vdev->dev, "%s: Index:%u size:%u not power of 2\=
-n",
-> +                       __func__, idx, num);
-> +               return;
-> +       }
-
-Note that this is not a requirement for packed virtqueue.
-
-"""
-Queue Size corresponds to the maximum number of descriptors in the
-virtqueue5. The Queue Size value does not have to be a power of 2.
-"""
-
-> +       if (num > EF100_VDPA_VQ_NUM_MAX_SIZE) {
-> +               dev_err(&vdev->dev, "%s: Index:%u size:%u more than max:%=
-u\n",
-> +                       __func__, idx, num, EF100_VDPA_VQ_NUM_MAX_SIZE);
-> +               return;
-> +       }
-> +       mutex_lock(&vdpa_nic->lock);
-> +       vdpa_nic->vring[idx].size  =3D num;
-> +       vdpa_nic->vring[idx].vring_state |=3D EF100_VRING_SIZE_CONFIGURED=
-;
-> +       mutex_unlock(&vdpa_nic->lock);
+> +       return rc;
 > +}
 > +
 > +static void ef100_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
@@ -482,185 +285,370 @@ u\n",
 > +
 > +       if (!(vdpa_nic->vring[idx].vring_state & EF100_VRING_CREATED))
 > +               return;
-
-In which case could we hit this condition?
-
 > +
 > +       idx_val =3D idx;
 > +       _efx_writed(vdpa_nic->efx, cpu_to_le32(idx_val),
 > +                   vdpa_nic->vring[idx].doorbell_offset);
 > +}
 > +
-> +static void ef100_vdpa_set_vq_cb(struct vdpa_device *vdev, u16 idx,
-> +                                struct vdpa_callback *cb)
+> +static bool can_create_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
 > +{
-> +       struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
+> +       if (vdpa_nic->vring[idx].vring_state =3D=3D EF100_VRING_CONFIGURE=
+D &&
+> +           vdpa_nic->status & VIRTIO_CONFIG_S_DRIVER_OK &&
+> +           !(vdpa_nic->vring[idx].vring_state & EF100_VRING_CREATED))
+> +               return true;
 > +
-> +       if (is_qid_invalid(vdpa_nic, idx, __func__))
-> +               return;
-> +
-> +       if (cb)
-> +               vdpa_nic->vring[idx].cb =3D *cb;
+> +       return false;
 > +}
 > +
-> +static void ef100_vdpa_set_vq_ready(struct vdpa_device *vdev, u16 idx,
-> +                                   bool ready)
+> +static int create_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
+> +{
+> +       struct efx_vring_dyn_cfg vring_dyn_cfg;
+> +       struct efx_vring_cfg vring_cfg;
+> +       int rc;
+> +
+> +       rc =3D irq_vring_init(vdpa_nic, idx);
+> +       if (rc) {
+> +               dev_err(&vdpa_nic->vdpa_dev.dev,
+> +                       "%s: irq_vring_init failed. index:%u, err:%d\n",
+> +                       __func__, idx, rc);
+> +               return rc;
+> +       }
+> +       vring_cfg.desc =3D vdpa_nic->vring[idx].desc;
+> +       vring_cfg.avail =3D vdpa_nic->vring[idx].avail;
+> +       vring_cfg.used =3D vdpa_nic->vring[idx].used;
+> +       vring_cfg.size =3D vdpa_nic->vring[idx].size;
+> +       vring_cfg.features =3D vdpa_nic->features;
+> +       vring_cfg.msix_vector =3D idx;
+> +       vring_dyn_cfg.avail_idx =3D vdpa_nic->vring[idx].last_avail_idx;
+> +       vring_dyn_cfg.used_idx =3D vdpa_nic->vring[idx].last_used_idx;
+> +
+> +       rc =3D efx_vdpa_vring_create(vdpa_nic->vring[idx].vring_ctx,
+> +                                  &vring_cfg, &vring_dyn_cfg);
+> +       if (rc) {
+> +               dev_err(&vdpa_nic->vdpa_dev.dev,
+> +                       "%s: vring_create failed index:%u, err:%d\n",
+> +                       __func__, idx, rc);
+> +               goto err_vring_create;
+> +       }
+> +       vdpa_nic->vring[idx].vring_state |=3D EF100_VRING_CREATED;
+> +
+> +       /* A VQ kick allows the device to read the avail_idx, which will =
+be
+> +        * required at the destination after live migration.
+> +        */
+> +       ef100_vdpa_kick_vq(&vdpa_nic->vdpa_dev, idx);
+> +
+> +       return 0;
+> +
+> +err_vring_create:
+> +       irq_vring_fini(vdpa_nic, idx);
+> +       return rc;
+> +}
+> +
+> +static void reset_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
+> +{
+> +       delete_vring(vdpa_nic, idx);
+> +       vdpa_nic->vring[idx].vring_type =3D EF100_VDPA_VQ_NTYPES;
+> +       vdpa_nic->vring[idx].vring_state =3D 0;
+> +       vdpa_nic->vring[idx].last_avail_idx =3D 0;
+> +       vdpa_nic->vring[idx].last_used_idx =3D 0;
+> +}
+> +
+> +static void ef100_reset_vdpa_device(struct ef100_vdpa_nic *vdpa_nic)
+> +{
+> +       int i;
+> +
+> +       WARN_ON(!mutex_is_locked(&vdpa_nic->lock));
+> +
+> +       if (!vdpa_nic->status)
+> +               return;
+> +
+> +       vdpa_nic->vdpa_state =3D EF100_VDPA_STATE_INITIALIZED;
+> +       vdpa_nic->status =3D 0;
+> +       vdpa_nic->features =3D 0;
+> +       for (i =3D 0; i < (vdpa_nic->max_queue_pairs * 2); i++)
+> +               reset_vring(vdpa_nic, i);
+> +       ef100_vdpa_irq_vectors_free(vdpa_nic->efx->pci_dev);
+> +}
+> +
+> +/* May be called under the rtnl lock */
+> +int ef100_vdpa_reset(struct vdpa_device *vdev)
 > +{
 > +       struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
 > +
-> +       if (is_qid_invalid(vdpa_nic, idx, __func__))
-> +               return;
+> +       /* vdpa device can be deleted anytime but the bar_config
+> +        * could still be vdpa and hence efx->state would be STATE_VDPA.
+> +        * Accordingly, ensure vdpa device exists before reset handling
+> +        */
+> +       if (!vdpa_nic)
+> +               return -ENODEV;
 > +
 > +       mutex_lock(&vdpa_nic->lock);
-> +       if (ready) {
-> +               vdpa_nic->vring[idx].vring_state |=3D
-> +                                       EF100_VRING_READY_CONFIGURED;
+> +       ef100_reset_vdpa_device(vdpa_nic);
+> +       mutex_unlock(&vdpa_nic->lock);
+> +       return 0;
+> +}
+> +
+> +static int start_vdpa_device(struct ef100_vdpa_nic *vdpa_nic)
+> +{
+> +       struct efx_nic *efx =3D vdpa_nic->efx;
+> +       struct ef100_nic_data *nic_data;
+> +       int i, j;
+> +       int rc;
+> +
+> +       nic_data =3D efx->nic_data;
+> +       rc =3D ef100_vdpa_irq_vectors_alloc(efx->pci_dev,
+> +                                         vdpa_nic->max_queue_pairs * 2);
+> +       if (rc < 0) {
+> +               pci_err(efx->pci_dev,
+> +                       "vDPA IRQ alloc failed for vf: %u err:%d\n",
+> +                       nic_data->vf_index, rc);
+> +               return rc;
+> +       }
+> +
+> +       for (i =3D 0; i < (vdpa_nic->max_queue_pairs * 2); i++) {
+> +               if (can_create_vring(vdpa_nic, i)) {
+> +                       rc =3D create_vring(vdpa_nic, i);
+> +                       if (rc)
+> +                               goto clear_vring;
+> +               }
+> +       }
+> +
+> +       vdpa_nic->vdpa_state =3D EF100_VDPA_STATE_STARTED;
 
-I think it would be sufficient to have EF100_VRING_READY_CONFIGURED
-here. With this set, the device can think the vq configuration is done
-by the driver.
+It looks to me that this duplicates with the DRIVER_OK status bit.
 
-Or is there anything special for size and num?
+> +       return 0;
+> +
+> +clear_vring:
+> +       for (j =3D 0; j < i; j++)
+> +               delete_vring(vdpa_nic, j);
+> +
+> +       ef100_vdpa_irq_vectors_free(efx->pci_dev);
+> +       return rc;
+> +}
+> +
+>  static int ef100_vdpa_set_vq_address(struct vdpa_device *vdev,
+>                                      u16 idx, u64 desc_area, u64 driver_a=
+rea,
+>                                      u64 device_area)
+> @@ -144,22 +361,6 @@ static void ef100_vdpa_set_vq_num(struct vdpa_device=
+ *vdev, u16 idx, u32 num)
+>         mutex_unlock(&vdpa_nic->lock);
+>  }
+>
+> -static void ef100_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
+> -{
+> -       struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
+> -       u32 idx_val;
+> -
+> -       if (is_qid_invalid(vdpa_nic, idx, __func__))
+> -               return;
+> -
+> -       if (!(vdpa_nic->vring[idx].vring_state & EF100_VRING_CREATED))
+> -               return;
+> -
+> -       idx_val =3D idx;
+> -       _efx_writed(vdpa_nic->efx, cpu_to_le32(idx_val),
+> -                   vdpa_nic->vring[idx].doorbell_offset);
+> -}
+> -
+>  static void ef100_vdpa_set_vq_cb(struct vdpa_device *vdev, u16 idx,
+>                                  struct vdpa_callback *cb)
+>  {
+> @@ -176,6 +377,7 @@ static void ef100_vdpa_set_vq_ready(struct vdpa_devic=
+e *vdev, u16 idx,
+>                                     bool ready)
+>  {
+>         struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
+> +       int rc;
+>
+>         if (is_qid_invalid(vdpa_nic, idx, __func__))
+>                 return;
+> @@ -184,9 +386,21 @@ static void ef100_vdpa_set_vq_ready(struct vdpa_devi=
+ce *vdev, u16 idx,
+>         if (ready) {
+>                 vdpa_nic->vring[idx].vring_state |=3D
+>                                         EF100_VRING_READY_CONFIGURED;
+> +               if (vdpa_nic->vdpa_state =3D=3D EF100_VDPA_STATE_STARTED =
+&&
+> +                   can_create_vring(vdpa_nic, idx)) {
+> +                       rc =3D create_vring(vdpa_nic, idx);
+> +                       if (rc)
+> +                               /* Rollback ready configuration
+> +                                * So that the above layer driver
+> +                                * can make another attempt to set ready
+> +                                */
+> +                               vdpa_nic->vring[idx].vring_state &=3D
+> +                                       ~EF100_VRING_READY_CONFIGURED;
+> +               }
+>         } else {
+>                 vdpa_nic->vring[idx].vring_state &=3D
+>                                         ~EF100_VRING_READY_CONFIGURED;
+> +               delete_vring(vdpa_nic, idx);
+>         }
+>         mutex_unlock(&vdpa_nic->lock);
+>  }
+> @@ -296,6 +510,12 @@ static u64 ef100_vdpa_get_device_features(struct vdp=
+a_device *vdev)
+>         }
+>
+>         features |=3D BIT_ULL(VIRTIO_NET_F_MAC);
+> +       /* As QEMU SVQ doesn't implement the following features,
+> +        * masking them off to allow Live Migration
+> +        */
+> +       features &=3D ~BIT_ULL(VIRTIO_F_IN_ORDER);
+> +       features &=3D ~BIT_ULL(VIRTIO_F_ORDER_PLATFORM);
+
+It's better not to work around userspace bugs in the kernel. We should
+fix Qemu instead.
+
+> +
+>         return features;
+>  }
+>
+> @@ -356,6 +576,77 @@ static u32 ef100_vdpa_get_vendor_id(struct vdpa_devi=
+ce *vdev)
+>         return EF100_VDPA_VENDOR_ID;
+>  }
+>
+> +static u8 ef100_vdpa_get_status(struct vdpa_device *vdev)
+> +{
+> +       struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
+> +       u8 status;
+> +
+> +       mutex_lock(&vdpa_nic->lock);
+> +       status =3D vdpa_nic->status;
+> +       mutex_unlock(&vdpa_nic->lock);
+> +       return status;
+> +}
+> +
+> +static void ef100_vdpa_set_status(struct vdpa_device *vdev, u8 status)
+> +{
+> +       struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
+> +       u8 new_status;
+> +       int rc;
+> +
+> +       mutex_lock(&vdpa_nic->lock);
+> +       if (!status) {
+> +               dev_info(&vdev->dev,
+> +                        "%s: Status received is 0. Device reset being do=
+ne\n",
+> +                        __func__);
+
+This is trigger-able by the userspace. It might be better to use
+dev_dbg() instead.
+
+> +               ef100_reset_vdpa_device(vdpa_nic);
+> +               goto unlock_return;
+> +       }
+> +       new_status =3D status & ~vdpa_nic->status;
+> +       if (new_status =3D=3D 0) {
+> +               dev_info(&vdev->dev,
+> +                        "%s: New status same as current status\n", __fun=
+c__);
+
+Same here.
+
+> +               goto unlock_return;
+> +       }
+> +       if (new_status & VIRTIO_CONFIG_S_FAILED) {
+> +               ef100_reset_vdpa_device(vdpa_nic);
+> +               goto unlock_return;
+> +       }
+> +
+> +       if (new_status & VIRTIO_CONFIG_S_ACKNOWLEDGE) {
+> +               vdpa_nic->status |=3D VIRTIO_CONFIG_S_ACKNOWLEDGE;
+> +               new_status &=3D ~VIRTIO_CONFIG_S_ACKNOWLEDGE;
+> +       }
+> +       if (new_status & VIRTIO_CONFIG_S_DRIVER) {
+> +               vdpa_nic->status |=3D VIRTIO_CONFIG_S_DRIVER;
+> +               new_status &=3D ~VIRTIO_CONFIG_S_DRIVER;
+> +       }
+> +       if (new_status & VIRTIO_CONFIG_S_FEATURES_OK) {
+> +               vdpa_nic->status |=3D VIRTIO_CONFIG_S_FEATURES_OK;
+> +               vdpa_nic->vdpa_state =3D EF100_VDPA_STATE_NEGOTIATED;
+
+It might be better to explain the reason we need to track another
+state in vdpa_state instead of simply using the device status.
+
+> +               new_status &=3D ~VIRTIO_CONFIG_S_FEATURES_OK;
+> +       }
+> +       if (new_status & VIRTIO_CONFIG_S_DRIVER_OK &&
+> +           vdpa_nic->vdpa_state =3D=3D EF100_VDPA_STATE_NEGOTIATED) {
+> +               vdpa_nic->status |=3D VIRTIO_CONFIG_S_DRIVER_OK;
+> +               rc =3D start_vdpa_device(vdpa_nic);
+> +               if (rc) {
+> +                       dev_err(&vdpa_nic->vdpa_dev.dev,
+> +                               "%s: vDPA device failed:%d\n", __func__, =
+rc);
+> +                       vdpa_nic->status &=3D ~VIRTIO_CONFIG_S_DRIVER_OK;
+> +                       goto unlock_return;
+> +               }
+> +               new_status &=3D ~VIRTIO_CONFIG_S_DRIVER_OK;
+> +       }
+> +       if (new_status) {
+> +               dev_warn(&vdev->dev,
+> +                        "%s: Mismatch Status: %x & State: %u\n",
+> +                        __func__, new_status, vdpa_nic->vdpa_state);
+> +       }
+> +
+> +unlock_return:
+> +       mutex_unlock(&vdpa_nic->lock);
+> +}
+> +
+>  static size_t ef100_vdpa_get_config_size(struct vdpa_device *vdev)
+>  {
+>         return sizeof(struct virtio_net_config);
+> @@ -393,6 +684,20 @@ static void ef100_vdpa_set_config(struct vdpa_device=
+ *vdev, unsigned int offset,
+>                 vdpa_nic->mac_configured =3D true;
+>  }
+>
+> +static int ef100_vdpa_suspend(struct vdpa_device *vdev)
+> +{
+> +       struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
+> +       int i, rc;
+> +
+> +       mutex_lock(&vdpa_nic->lock);
+> +       for (i =3D 0; i < (vdpa_nic->max_queue_pairs * 2); i++) {
+> +               rc =3D delete_vring(vdpa_nic, i);
+
+Note that the suspension matters for the whole device. It means the
+config space should not be changed. But the code here only suspends
+the vring, is this intended?
+
+Reset may have the same issue.
 
 Thanks
 
 
-> +       } else {
-> +               vdpa_nic->vring[idx].vring_state &=3D
-> +                                       ~EF100_VRING_READY_CONFIGURED;
+> +               if (rc)
+> +                       break;
 > +       }
 > +       mutex_unlock(&vdpa_nic->lock);
+> +       return rc;
 > +}
-> +
-> +static bool ef100_vdpa_get_vq_ready(struct vdpa_device *vdev, u16 idx)
-> +{
-> +       struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
-> +       bool ready;
-> +
-> +       if (is_qid_invalid(vdpa_nic, idx, __func__))
-> +               return false;
-> +
-> +       mutex_lock(&vdpa_nic->lock);
-> +       ready =3D vdpa_nic->vring[idx].vring_state & EF100_VRING_READY_CO=
-NFIGURED;
-> +       mutex_unlock(&vdpa_nic->lock);
-> +       return ready;
-> +}
-> +
-> +static int ef100_vdpa_set_vq_state(struct vdpa_device *vdev, u16 idx,
-> +                                  const struct vdpa_vq_state *state)
-> +{
-> +       struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
-> +
-> +       if (is_qid_invalid(vdpa_nic, idx, __func__))
-> +               return -EINVAL;
-> +
-> +       mutex_lock(&vdpa_nic->lock);
-> +       vdpa_nic->vring[idx].last_avail_idx =3D state->split.avail_index;
-> +       vdpa_nic->vring[idx].last_used_idx =3D state->split.avail_index;
-> +       mutex_unlock(&vdpa_nic->lock);
-> +       return 0;
-> +}
-> +
-> +static int ef100_vdpa_get_vq_state(struct vdpa_device *vdev,
-> +                                  u16 idx, struct vdpa_vq_state *state)
-> +{
-> +       struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
-> +
-> +       if (is_qid_invalid(vdpa_nic, idx, __func__))
-> +               return -EINVAL;
-> +
-> +       mutex_lock(&vdpa_nic->lock);
-> +       state->split.avail_index =3D (u16)vdpa_nic->vring[idx].last_used_=
-idx;
-> +       mutex_unlock(&vdpa_nic->lock);
-> +
-> +       return 0;
-> +}
-> +
-> +static struct vdpa_notification_area
-> +               ef100_vdpa_get_vq_notification(struct vdpa_device *vdev,
-> +                                              u16 idx)
-> +{
-> +       struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
-> +       struct vdpa_notification_area notify_area =3D {0, 0};
-> +
-> +       if (is_qid_invalid(vdpa_nic, idx, __func__))
-> +               goto end;
-> +
-> +       mutex_lock(&vdpa_nic->lock);
-> +       notify_area.addr =3D (uintptr_t)(vdpa_nic->efx->membase_phys +
-> +                               vdpa_nic->vring[idx].doorbell_offset);
-> +       /* VDPA doorbells are at a stride of VI/2
-> +        * One VI stride is shared by both rx & tx doorbells
-> +        */
-> +       notify_area.size =3D vdpa_nic->efx->vi_stride / 2;
-> +       mutex_unlock(&vdpa_nic->lock);
-> +
-> +end:
-> +       return notify_area;
-> +}
-> +
-> +static int ef100_get_vq_irq(struct vdpa_device *vdev, u16 idx)
-> +{
-> +       struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
-> +       u32 irq;
-> +
-> +       if (is_qid_invalid(vdpa_nic, idx, __func__))
-> +               return -EINVAL;
-> +
-> +       mutex_lock(&vdpa_nic->lock);
-> +       irq =3D vdpa_nic->vring[idx].irq;
-> +       mutex_unlock(&vdpa_nic->lock);
-> +
-> +       return irq;
-> +}
-> +
->  static u32 ef100_vdpa_get_vq_align(struct vdpa_device *vdev)
->  {
->         return EF100_VDPA_VQ_ALIGN;
-> @@ -80,6 +337,8 @@ static void ef100_vdpa_set_config_cb(struct vdpa_devic=
-e *vdev,
->
->         if (cb)
->                 vdpa_nic->cfg_cb =3D *cb;
-> +       else
-> +               memset(&vdpa_nic->cfg_cb, 0, sizeof(vdpa_nic->cfg_cb));
->  }
->
->  static u16 ef100_vdpa_get_vq_num_max(struct vdpa_device *vdev)
-> @@ -137,14 +396,30 @@ static void ef100_vdpa_set_config(struct vdpa_devic=
-e *vdev, unsigned int offset,
 >  static void ef100_vdpa_free(struct vdpa_device *vdev)
 >  {
 >         struct ef100_vdpa_nic *vdpa_nic =3D get_vdpa_nic(vdev);
-> +       int i;
->
->         if (vdpa_nic) {
-> +               for (i =3D 0; i < (vdpa_nic->max_queue_pairs * 2); i++) {
-> +                       reset_vring(vdpa_nic, i);
-> +                       if (vdpa_nic->vring[i].vring_ctx)
-> +                               delete_vring_ctx(vdpa_nic, i);
-> +               }
->                 mutex_destroy(&vdpa_nic->lock);
->                 vdpa_nic->efx->vdpa_nic =3D NULL;
->         }
->  }
->
->  const struct vdpa_config_ops ef100_vdpa_config_ops =3D {
-> +       .set_vq_address      =3D ef100_vdpa_set_vq_address,
-> +       .set_vq_num          =3D ef100_vdpa_set_vq_num,
-> +       .kick_vq             =3D ef100_vdpa_kick_vq,
-> +       .set_vq_cb           =3D ef100_vdpa_set_vq_cb,
-> +       .set_vq_ready        =3D ef100_vdpa_set_vq_ready,
-> +       .get_vq_ready        =3D ef100_vdpa_get_vq_ready,
-> +       .set_vq_state        =3D ef100_vdpa_set_vq_state,
-> +       .get_vq_state        =3D ef100_vdpa_get_vq_state,
-> +       .get_vq_notification =3D ef100_vdpa_get_vq_notification,
-> +       .get_vq_irq          =3D ef100_get_vq_irq,
->         .get_vq_align        =3D ef100_vdpa_get_vq_align,
->         .get_device_features =3D ef100_vdpa_get_device_features,
->         .set_driver_features =3D ef100_vdpa_set_driver_features,
+> @@ -428,9 +733,13 @@ const struct vdpa_config_ops ef100_vdpa_config_ops =
+=3D {
+>         .get_vq_num_max      =3D ef100_vdpa_get_vq_num_max,
+>         .get_device_id       =3D ef100_vdpa_get_device_id,
+>         .get_vendor_id       =3D ef100_vdpa_get_vendor_id,
+> +       .get_status          =3D ef100_vdpa_get_status,
+> +       .set_status          =3D ef100_vdpa_set_status,
+> +       .reset               =3D ef100_vdpa_reset,
+>         .get_config_size     =3D ef100_vdpa_get_config_size,
+>         .get_config          =3D ef100_vdpa_get_config,
+>         .set_config          =3D ef100_vdpa_set_config,
+>         .get_generation      =3D NULL,
+> +       .suspend             =3D ef100_vdpa_suspend,
+>         .free                =3D ef100_vdpa_free,
+>  };
 > --
 > 2.30.1
 >
