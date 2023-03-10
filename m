@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C556B3EC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 13:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 205476B3EB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 13:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjCJMGt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 07:06:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
+        id S230171AbjCJMGO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 07:06:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjCJMGR (ORCPT
+        with ESMTP id S230098AbjCJMGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 07:06:17 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B15FAAD7;
-        Fri, 10 Mar 2023 04:06:02 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        Fri, 10 Mar 2023 07:06:03 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F29BF8E51;
+        Fri, 10 Mar 2023 04:05:57 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id DE23724E257;
-        Fri, 10 Mar 2023 20:05:55 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
- 2023 20:05:55 +0800
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 3209C24E2E3;
+        Fri, 10 Mar 2023 20:05:56 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
+ 2023 20:05:56 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
  (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
  2023 20:05:55 +0800
@@ -42,9 +42,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <jack.zhu@starfivetech.com>,
         <changhuang.liang@starfivetech.com>
-Subject: [PATCH v2 2/6] media: dt-bindings: cadence-csi2rx: Convert to DT schema
-Date:   Fri, 10 Mar 2023 20:05:49 +0800
-Message-ID: <20230310120553.60586-3-jack.zhu@starfivetech.com>
+Subject: [PATCH v2 3/6] media: admin-guide: Add starfive_camss.rst for Starfive Camera Subsystem
+Date:   Fri, 10 Mar 2023 20:05:50 +0800
+Message-ID: <20230310120553.60586-4-jack.zhu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230310120553.60586-1-jack.zhu@starfivetech.com>
 References: <20230310120553.60586-1-jack.zhu@starfivetech.com>
@@ -55,313 +55,146 @@ X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
  (172.16.6.83)
 X-YovoleRuleAgent: yovoleflag
 Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert DT bindings document for Cadence MIPI-CSI2 RX controller
-to DT schema format and add new properties.
+Add the file 'starfive_camss.rst' that documents the Starfive Camera
+Subsystem driver which is used for handing image sensor data.
 
 Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
 ---
- .../devicetree/bindings/media/cdns,csi2rx.txt | 100 -----------
- .../bindings/media/cdns,csi2rx.yaml           | 163 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 3 files changed, 164 insertions(+), 100 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
- create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+ .../admin-guide/media/starfive_camss.rst      | 68 +++++++++++++++++++
+ .../media/starfive_camss_graph.dot            | 28 ++++++++
+ .../admin-guide/media/v4l-drivers.rst         |  1 +
+ 3 files changed, 97 insertions(+)
+ create mode 100644 Documentation/admin-guide/media/starfive_camss.rst
+ create mode 100644 Documentation/admin-guide/media/starfive_camss_graph.dot
 
-diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt b/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
-deleted file mode 100644
-index 6b02a0657ad9..000000000000
---- a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
-+++ /dev/null
-@@ -1,100 +0,0 @@
--Cadence MIPI-CSI2 RX controller
--===============================
--
--The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
--lanes in input, and 4 different pixel streams in output.
--
--Required properties:
--  - compatible: must be set to "cdns,csi2rx" and an SoC-specific compatible
--  - reg: base address and size of the memory mapped region
--  - clocks: phandles to the clocks driving the controller
--  - clock-names: must contain:
--    * sys_clk: main clock
--    * p_clk: register bank clock
--    * pixel_if[0-3]_clk: pixel stream output clock, one for each stream
--                         implemented in hardware, between 0 and 3
--
--Optional properties:
--  - phys: phandle to the external D-PHY, phy-names must be provided
--  - phy-names: must contain "dphy", if the implementation uses an
--               external D-PHY
--
--Required subnodes:
--  - ports: A ports node with one port child node per device input and output
--           port, in accordance with the video interface bindings defined in
--           Documentation/devicetree/bindings/media/video-interfaces.txt. The
--           port nodes are numbered as follows:
--
--           Port Description
--           -----------------------------
--           0    CSI-2 input
--           1    Stream 0 output
--           2    Stream 1 output
--           3    Stream 2 output
--           4    Stream 3 output
--
--           The stream output port nodes are optional if they are not
--           connected to anything at the hardware level or implemented
--           in the design.Since there is only one endpoint per port,
--           the endpoints are not numbered.
--
--
--Example:
--
--csi2rx: csi-bridge@0d060000 {
--	compatible = "cdns,csi2rx";
--	reg = <0x0d060000 0x1000>;
--	clocks = <&byteclock>, <&byteclock>
--		 <&coreclock>, <&coreclock>,
--		 <&coreclock>, <&coreclock>;
--	clock-names = "sys_clk", "p_clk",
--		      "pixel_if0_clk", "pixel_if1_clk",
--		      "pixel_if2_clk", "pixel_if3_clk";
--
--	ports {
--		#address-cells = <1>;
--		#size-cells = <0>;
--
--		port@0 {
--			reg = <0>;
--
--			csi2rx_in_sensor: endpoint {
--				remote-endpoint = <&sensor_out_csi2rx>;
--				clock-lanes = <0>;
--				data-lanes = <1 2>;
--			};
--		};
--
--		port@1 {
--			reg = <1>;
--
--			csi2rx_out_grabber0: endpoint {
--				remote-endpoint = <&grabber0_in_csi2rx>;
--			};
--		};
--
--		port@2 {
--			reg = <2>;
--
--			csi2rx_out_grabber1: endpoint {
--				remote-endpoint = <&grabber1_in_csi2rx>;
--			};
--		};
--
--		port@3 {
--			reg = <3>;
--
--			csi2rx_out_grabber2: endpoint {
--				remote-endpoint = <&grabber2_in_csi2rx>;
--			};
--		};
--
--		port@4 {
--			reg = <4>;
--
--			csi2rx_out_grabber3: endpoint {
--				remote-endpoint = <&grabber3_in_csi2rx>;
--			};
--		};
--	};
--};
-diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+diff --git a/Documentation/admin-guide/media/starfive_camss.rst b/Documentation/admin-guide/media/starfive_camss.rst
 new file mode 100644
-index 000000000000..ed573a67f93e
+index 000000000000..12c5ebf794b8
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-@@ -0,0 +1,163 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/cdns,csi2rx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/Documentation/admin-guide/media/starfive_camss.rst
+@@ -0,0 +1,68 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+title: Cadence MIPI-CSI2 RX controller
++.. include:: <isonum.txt>
 +
-+maintainers:
-+  - Maxime Ripard <mripard@kernel.org>
++================================
++Starfive Camera Subsystem driver
++================================
 +
-+description:
-+  The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
-+  lanes in input, and 4 different pixel streams in output.
++Introduction
++------------
 +
-+properties:
-+  compatible:
-+    enum:
-+      - cdns,csi2rx
++This file documents the driver for the Starfive Camera Subsystem found on
++Starfive JH7110 SoC. The driver is located under drivers/media/platform/starfive.
 +
-+  reg:
-+    maxItems: 1
++The driver implements V4L2, Media controller and v4l2_subdev interfaces.
++Camera sensor using V4L2 subdev interface in the kernel is supported.
 +
-+  clocks:
-+    items:
-+      - description: CSI2Rx system clock
-+      - description: Gated Register bank clock for APB interface
-+      - description: pixel Clock for Stream interface 0
-+      - description: pixel Clock for Stream interface 1
-+      - description: pixel Clock for Stream interface 2
-+      - description: pixel Clock for Stream interface 3
++The driver has been successfully used on the Gstreamer 1.18.5 with
++v4l2src plugin.
 +
-+  clock-names:
-+    items:
-+      - const: sys
-+      - const: reg_bank
-+      - const: pixel_if0
-+      - const: pixel_if1
-+      - const: pixel_if2
-+      - const: pixel_if3
 +
-+  resets:
-+    items:
-+      - description: CSI2Rx system reset
-+      - description: Gated Register bank reset for APB interface
-+      - description: pixel reset for Stream interface 0
-+      - description: pixel reset for Stream interface 1
-+      - description: pixel reset for Stream interface 2
-+      - description: pixel reset for Stream interface 3
++Starfive Camera Subsystem hardware
++----------------------------------
 +
-+  reset-names:
-+    items:
-+      - const: sys
-+      - const: reg_bank
-+      - const: pixel_if0
-+      - const: pixel_if1
-+      - const: pixel_if2
-+      - const: pixel_if3
++The Starfive Camera Subsystem hardware consists of:
 +
-+  phys:
-+    maxItems: 1
-+    description: MIPI D-PHY
++- MIPI DPHY Receiver: receives mipi data from a MIPI camera sensor.
++- MIPI CSIRx Controller: is responsible for handling and decoding CSI2 protocol
++  based camera sensor data stream.
++- ISP: handles the image data streams from the MIPI CSIRx Controller.
++- VIN(Video In): a top-level module, is responsible for controlling power
++  and clocks to other modules, dumps the input data to memory or transfers the
++  input data to ISP.
 +
-+  phy-names:
-+    items:
-+      - const: dphy
 +
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
++Topology
++--------
 +
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description:
-+          Input port node, single endpoint describing the CSI-2 transmitter.
++The media controller pipeline graph is as follows:
 +
-+        properties:
-+          endpoint:
-+            $ref: video-interfaces.yaml#
-+            unevaluatedProperties: false
++.. _starfive_camss_graph:
 +
-+            properties:
-+              bus-type:
-+                enum:
-+                  - 4
++.. kernel-figure:: starfive_camss_graph.dot
++    :alt:   starfive_camss_graph.dot
++    :align: center
 +
-+              clock-lanes:
-+                maximum: 4
++The driver has 5 video devices:
 +
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 4
-+                items:
-+                  maximum: 4
++- stf_vin0_wr_video0: capture device for images directly from the VIN module.
++- stf_vin0_isp0_video1: capture device for images without scaling.
++- stf_vin0_isp0_ss0_video2: capture device for images with adjustable
++  scale-down factor.
++- stf_vin0_isp0_ss1_video3: capture device for images with adjustable
++  scale-down factor.
++- stf_vin0_isp0_raw_video4: capture device for RAW images.
 +
-+            required:
-+              - clock-lanes
-+              - data-lanes
++The driver has 6 subdevices:
 +
-+      port@1:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description:
-+          Output port node
-+
-+    required:
-+      - port@0
-+      - port@1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - ports
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    csi2rx: csi@0d060000 {
-+        compatible = "cdns,csi2rx";
-+        reg = <0x0d060000 0x1000>;
-+        clocks = <&byteclock 7>, <&byteclock 6>,
-+                 <&coreclock 8>, <&coreclock 9>,
-+                 <&coreclock 10>, <&coreclock 11>;
-+        clock-names = "sys", "reg_bank",
-+                      "pixel_if0", "pixel_if1",
-+                      "pixel_if2", "pixel_if3";
-+        resets = <&bytereset 9>, <&bytereset 4>,
-+                 <&corereset 5>, <&corereset 6>,
-+                 <&corereset 7>, <&corereset 8>;
-+        reset-names = "sys", "reg_bank",
-+                      "pixel_if0", "pixel_if1",
-+                      "pixel_if2", "pixel_if3";
-+        phys = <&csi_phy>;
-+        phy-names = "dphy";
-+
-+        ports {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+
-+                port@0 {
-+                    reg = <0>;
-+
-+                    csi2rx_in_sensor: endpoint {
-+                        remote-endpoint = <&sensor_out_csi2rx>;
-+                        clock-lanes = <0>;
-+                        data-lanes = <1 2>;
-+                    };
-+                };
-+
-+                port@1 {
-+                    reg = <1>;
-+
-+                    csi2rx_out_grabber0: endpoint {
-+                        remote-endpoint = <&grabber0_in_csi2rx>;
-+                    };
-+                };
-+        };
-+    };
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8ddef8669efb..b2e7ca5603c3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4632,6 +4632,7 @@ M:	Maxime Ripard <mripard@kernel.org>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/media/cdns,*.txt
-+F:	Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
- F:	drivers/media/platform/cadence/cdns-csi2*
- 
- CADENCE NAND DRIVER
++- stf_isp0: is responsible for all the isp operations.
++- stf_vin0_wr: used to dump RAW images to memory.
++- stf_vin0_isp0: used to capture unscaled images for the stf_vin0_isp0_video1
++  device.
++- stf_vin0_isp0_ss0: used to resize and downsample frames for
++  the stf_vin0_isp0_ss0_video2 capture device.
++- stf_vin0_isp0_ss1: used to resize and downsample frames for
++  the stf_vin0_isp0_ss1_video3 capture device.
++- stf_vin0_isp0_raw: used to configure the camss ISP to get RAW
++  images for stf_vin0_isp0_raw_video4 capture device.
+diff --git a/Documentation/admin-guide/media/starfive_camss_graph.dot b/Documentation/admin-guide/media/starfive_camss_graph.dot
+new file mode 100644
+index 000000000000..c35dec8de254
+--- /dev/null
++++ b/Documentation/admin-guide/media/starfive_camss_graph.dot
+@@ -0,0 +1,28 @@
++digraph board {
++	rankdir=TB
++	n00000001 [label="{{<port0> 0} | stf_isp0\n/dev/v4l-subdev0 | {<port1> 1 | <port2> 2 | <port3> 3 | <port4> 4}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000001:port1 -> n00000010:port0
++	n00000001:port2 -> n00000019:port0 [style=dashed]
++	n00000001:port3 -> n00000022:port0 [style=dashed]
++	n00000001:port4 -> n0000002b:port0 [style=dashed]
++	n00000007 [label="{{<port0> 0} | stf_vin0_wr\n/dev/v4l-subdev1 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000007:port1 -> n0000000a [style=bold]
++	n0000000a [label="stf_vin0_wr_video0\n/dev/video0", shape=box, style=filled, fillcolor=yellow]
++	n00000010 [label="{{<port0> 0} | stf_vin0_isp0\n/dev/v4l-subdev2 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000010:port1 -> n00000013 [style=bold]
++	n00000013 [label="stf_vin0_isp0_video1\n/dev/video1", shape=box, style=filled, fillcolor=yellow]
++	n00000019 [label="{{<port0> 0} | stf_vin0_isp0_ss0\n/dev/v4l-subdev3 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000019:port1 -> n0000001c [style=bold]
++	n0000001c [label="stf_vin0_isp0_ss0_video2\n/dev/video2", shape=box, style=filled, fillcolor=yellow]
++	n00000022 [label="{{<port0> 0} | stf_vin0_isp0_ss1\n/dev/v4l-subdev4 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000022:port1 -> n00000025 [style=bold]
++	n00000025 [label="stf_vin0_isp0_ss1_video3\n/dev/video3", shape=box, style=filled, fillcolor=yellow]
++	n0000002b [label="{{<port0> 0} | stf_vin0_isp0_raw\n/dev/v4l-subdev5 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n0000002b:port1 -> n0000002e [style=bold]
++	n0000002e [label="stf_vin0_isp0_raw_video4\n/dev/video4", shape=box, style=filled, fillcolor=yellow]
++	n0000003c [label="{{<port0> 0} | cdns_csi2rx.19800000.csi-bridge\n/dev/v4l-subdev6 | {<port1> 1 | <port2> 2 | <port3> 3 | <port4> 4}}", shape=Mrecord, style=filled, fillcolor=green]
++	n0000003c:port1 -> n00000007:port0 [style=dashed]
++	n0000003c:port1 -> n00000001:port0
++	n00000054 [label="{{} | imx219 6-0010\n/dev/v4l-subdev7 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000054:port0 -> n0000003c:port0 [style=bold]
++}
+diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
+index 90a026ee05c6..186f8b0a082d 100644
+--- a/Documentation/admin-guide/media/v4l-drivers.rst
++++ b/Documentation/admin-guide/media/v4l-drivers.rst
+@@ -30,6 +30,7 @@ Video4Linux (V4L) driver-specific documentation
+ 	si470x
+ 	si4713
+ 	si476x
++	starfive
+ 	vimc
+ 	visl
+ 	vivid
 -- 
 2.34.1
 
