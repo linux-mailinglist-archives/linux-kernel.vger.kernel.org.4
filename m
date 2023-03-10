@@ -2,120 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE91D6B33C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 02:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E6B6B33D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 02:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjCJBq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 20:46:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
+        id S229945AbjCJBsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 20:48:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjCJBqZ (ORCPT
+        with ESMTP id S229544AbjCJBsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 20:46:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD139F4D92
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 17:45:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678412738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RtJkfRI7AXY3SogCgOFRi4FhIfSeTbcT8pIq6VJrULQ=;
-        b=DBBmhBwuS7fJK/2pupMG54iFLZptFkIzOG/988JkY1hAsJCrfA81R1lPDI3T2pxgkpfy07
-        wJZFT08T9pgmmqHoYaE1B6zMV/MuAx+i3Nzl0qA2otK5CmNLb4H9fnlvUBRVVH9jjQMofx
-        JXElAl/grywyrBnwymfXX/OWZxYuUto=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-86-woUwnrrKNFetIWSKVrCPTA-1; Thu, 09 Mar 2023 20:45:34 -0500
-X-MC-Unique: woUwnrrKNFetIWSKVrCPTA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 9 Mar 2023 20:48:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3695BAC;
+        Thu,  9 Mar 2023 17:47:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B7D531C0518D;
-        Fri, 10 Mar 2023 01:45:33 +0000 (UTC)
-Received: from localhost (ovpn-12-184.pek2.redhat.com [10.72.12.184])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BDB654010E36;
-        Fri, 10 Mar 2023 01:45:32 +0000 (UTC)
-Date:   Fri, 10 Mar 2023 09:45:28 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, mpe@ellerman.id.au,
-        geert@linux-m68k.org, mcgrof@kernel.org, hch@infradead.org,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] arch/*/io.h: remove ioremap_uc in some
- architectures
-Message-ID: <ZAqLuNrPng9i0rZV@MiWiFi-R3L-srv>
-References: <20230308130710.368085-1-bhe@redhat.com>
- <20230308130710.368085-4-bhe@redhat.com>
- <20230309143621.GA12350@alpha.franken.de>
+        by ams.source.kernel.org (Postfix) with ESMTPS id A62B5B82168;
+        Fri, 10 Mar 2023 01:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 475F9C433EF;
+        Fri, 10 Mar 2023 01:47:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678412875;
+        bh=oitd4xYPDLaZ26iTmZ1QB2D+PfMEhhPrOxGOwJG1DJw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=dM+cTHXEuF0zZMQJ5v6TB5ytChtDjF9EQbpi0oajh2EYyIFnchAsoiJ/G4QXs/E1M
+         rsqlCHuU98WB6VM7MwhzWz1I+gnnECscXicM0J/IhX0JJLG2SSB7colqYU6OA+O13Y
+         Bmz3T/szNtVeN7IUv1AQYh8Fq0v72n4MSY7LYcy3B5wVch0GZEjEmeMlM5uy6hQQHX
+         Qe4dot2hfESyVPBaEAdWXKg3DetWRKGsTA9tQ9rqo6XnYeaOmUu1TNX2RPxX8AtplM
+         cHgHQtxCxZNLfPuZz7yOWXtXKb27SAUjzAiTvQfx19Kf0gGeqw8QaDu3b9lR14GxK7
+         42kxZdVQUr86g==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id C80AC1548D6E; Thu,  9 Mar 2023 17:47:54 -0800 (PST)
+Date:   Thu, 9 Mar 2023 17:47:54 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     qiuxu.zhuo@intel.com, frederic@kernel.org, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rcu@vger.kernel.org, urezki@gmail.com
+Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
+Message-ID: <a6f9d56a-3f5f-4057-9a35-a697a96df0f2@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <1a4b1362-defb-4464-9217-32e6d3d4a8d2@paulmck-laptop>
+ <6e38d7d7-9991-b0a6-2855-0c8838cce142@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230309143621.GA12350@alpha.franken.de>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6e38d7d7-9991-b0a6-2855-0c8838cce142@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/09/23 at 03:36pm, Thomas Bogendoerfer wrote:
-> On Wed, Mar 08, 2023 at 09:07:09PM +0800, Baoquan He wrote:
-> > ioremap_uc() is only meaningful on old x86-32 systems with the PAT
-> > extension, and on ia64 with its slightly unconventional ioremap()
-> > behavior. So remove the ioremap_uc() definition in architecutures
-> > other than x86 and ia64. These architectures all have asm-generic/io.h
-> > included and will have the default ioremap_uc() definition which
-> > returns NULL.
-> > 
-> > This changes the existing behaviour, while no need to worry about
-> > any breakage because in the only callsite of ioremap_uc(), code
-> > has been adjusted to eliminate the impact. Please see
-> > atyfb_setup_generic() of drivers/video/fbdev/aty/atyfb_base.c.
-> > 
-> > If any new invocation of ioremap_uc() need be added, please consider
-> > using ioremap() intead or adding a ARCH specific version if necessary.
-> > 
-> > Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > Cc: linux-alpha@vger.kernel.org
-> > Cc: linux-hexagon@vger.kernel.org
-> > Cc: linux-m68k@lists.linux-m68k.org
-> > Cc: linux-mips@vger.kernel.org
-> > Cc: linux-parisc@vger.kernel.org
-> > Cc: linuxppc-dev@lists.ozlabs.org
-> > Cc: linux-sh@vger.kernel.org
-> > Cc: sparclinux@vger.kernel.org
-> > ---
-> >  Documentation/driver-api/device-io.rst | 9 +++++----
-> >  arch/alpha/include/asm/io.h            | 1 -
-> >  arch/hexagon/include/asm/io.h          | 3 ---
-> >  arch/m68k/include/asm/kmap.h           | 1 -
-> >  arch/mips/include/asm/io.h             | 1 -
-> >  arch/parisc/include/asm/io.h           | 2 --
-> >  arch/powerpc/include/asm/io.h          | 1 -
-> >  arch/sh/include/asm/io.h               | 2 --
-> >  arch/sparc/include/asm/io_64.h         | 1 -
-> >  9 files changed, 5 insertions(+), 16 deletions(-)
+On Fri, Mar 10, 2023 at 09:11:54AM +0900, Akira Yokosawa wrote:
+> Hi,
 > 
-> this doesn't apply to v6.3-rc1... what tree is this based on ?
+> Let me chime in this interesting thread.
+> 
+> On Thu, 9 Mar 2023 13:53:39 -0800, Paul E. McKenney wrote:
+> > On Thu, Mar 09, 2023 at 03:17:09PM +0000, Zhuo, Qiuxu wrote:
+> >> > From: Paul E. McKenney <paulmck@kernel.org>
+> >> > [...]
+> >> > >
+> >> > > a's standard deviation is ~0.4.
+> >> > > b's standard deviation is ~0.5.
+> >> > >
+> >> > > a's average 9.0 is at the upbound of the standard deviation of b's [8.0, 9].
+> >> > > So, the measurements should be statistically significant to some degree.
+> >> > 
+> >> > That single standard deviation means that you have 68% confidence that the
+> >> > difference is real.  This is not far above the 50% leval of random noise.
+> >> > 95% is the lowest level that is normally considered to be statistically
+> >> > significant.
+> >> 
+> >> 95% means there is no overlap between two standard deviations of a
+> >> and two standard deviations of b.
+> >> 
+> >> This relies on either much less noise during testing or a big enough 
+> >> difference between a and b. 
+> 
+> Appended is a histogram comparing 2 data sets.
+> 
+> As you see, the one with v2 patch is far from normal distribution.
+> I think there is at least two peaks.
+> The one at the right around 9.7 seems not affected by the patch.
+> In such a case, average and standard deviation of all the data don't
+> tell much.
+> 
+> It is hard to say anything for sure with such small set of samples.
+> And the shape of the plot is likely to be highly dependent on machine
+> setups.
+> 
+> Hope this helps.
 
-Sorry, I forgot mentioning this in cover letter. This series is
-followup of below patchset, so it's on top of below patchset and based
-on v6.3-rc1.
+Thank you, Akira!  Definitely an abnormal distribution!  ;-)
 
-https://lore.kernel.org/all/20230301034247.136007-1-bhe@redhat.com/T/#u
-[PATCH v5 00/17] mm: ioremap:  Convert architectures to take GENERIC_IOREMAP way
-
-Thanks
-Baoquan
-
+							Thanx, Paul
