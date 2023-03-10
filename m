@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8DB6B5459
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 708306B545F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232000AbjCJW3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 17:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
+        id S231678AbjCJW3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 17:29:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbjCJW3P (ORCPT
+        with ESMTP id S231915AbjCJW3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 17:29:15 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0C2122CD2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:29:09 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id a25so26663643edb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:29:09 -0800 (PST)
+        Fri, 10 Mar 2023 17:29:16 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB92E124E89
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:29:11 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id x3so26394523edb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:29:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678487349;
+        d=linaro.org; s=google; t=1678487350;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BSow9olcoHPDQWGX+9sZKUw+pImGguqL+rxp9AEhbQU=;
-        b=WMD94TIdueIJwD4R0dzXoVlrA+lBE3XxCJOkt5lcGwJl3T9aSx5oXLSImUAdS8gGWj
-         nevEWuDRfJ5RPH0TtzsEO8S3/WbblgN6c7T0caLdrg4JVyKOqAgZy1gYCF24w5rLBjjL
-         MGSsSfrwG4aZGC+l8fhUpOJRtBywlP3akFV3IGOYCLF3G4b5n7kiyAbJDLHKhRR8a7LS
-         Z2ZsSKJ0xALhO2Jtv+CXbxq0jXTpVzfN+2istoSvNEtpe8cznSwbbzPN3KeRr/R4kSF7
-         IFSRNgff5R+GmFDJEXkLP5PhiObPKCY/RCtarbKc44EdzHR0zp2QleIG+ceGsJi5jxoD
-         dz9w==
+        bh=TH+2UFUJbKaymij+b3WrxcVf44nTpYHKEBIPAlM6LWE=;
+        b=TavnzZF5kaPHm0mujD/3h+51xHQx7ZCx8G31x/bxMt3RbfzsnQrtXpv04b4bbdXXS2
+         T3YKb7NeqFFdymYQG+jvv9I0fUbqvS2izxLVgYfVePxlIpQGz/thUXh2BQxKLm8MCNAz
+         sqBFEdjft3Z9ikX2JNWpwOMLLRq6YTg/BjHv6LDnqrvnSszc5MkiEHODmrYWeiqZDifx
+         E4IflVpvfeyGhsWS7EafD2stGzcVrnCIPRNo7Jmd2BmAfOfGDaBZKuAbkZGVdpLJ3WYV
+         /KflYWU3yCTEX4qTuYr+a/+Gk0rNerW/kEfQveIZw3hp2m88bpisRoINfGmCaE4q49A7
+         f2rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678487349;
+        d=1e100.net; s=20210112; t=1678487350;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BSow9olcoHPDQWGX+9sZKUw+pImGguqL+rxp9AEhbQU=;
-        b=i4FbxUgA6b7NSlcYN4wFF2S2I1aQHqyW3prH62mlVtdbSgDdnPZsjEoIlMHd9TTl23
-         8DLfHvULh8+2naELVIWw06ZQxTjgEz9fMEw7ecgsm1wKsA3xouGgXp96lXFqT3FVoiQa
-         A4KRDG9a7buIF/ulsGZK7dbmdX4Xy5V36pm3IkDRoMx6toTz//fkDyS3Jy12mYPyRPyH
-         AOVPEzvgpAoqGdwiyvLdFCSKTUFLrgxLwHU/MPepzB1TKZ6TA3jZ34oYIEdGpWiW+Crj
-         e7JkoY//U6j6tZhYRc89FEGJoUucvC5NReEc5HfUw+P98tP4+swNHdP8FWMIBxlqFr00
-         3nyA==
-X-Gm-Message-State: AO0yUKVefbTM4StJQTqKiaKXQ6913Y8t4S0c2Is9n5Eiq0K+KWlpLBgu
-        715O39XJ2P+1g76qt5OF43S+og==
-X-Google-Smtp-Source: AK7set+ZEfdl5RMmf1uVdzsphu0VuJcqw6uo7c4Au9pdNtDAtzSnz6tjiqyq5MBaqY6lf3+ZmyTllQ==
-X-Received: by 2002:a17:906:8156:b0:886:221b:44e5 with SMTP id z22-20020a170906815600b00886221b44e5mr26872458ejw.62.1678487348858;
-        Fri, 10 Mar 2023 14:29:08 -0800 (PST)
+        bh=TH+2UFUJbKaymij+b3WrxcVf44nTpYHKEBIPAlM6LWE=;
+        b=feeNRM6DcwXz0aYt/D0+9DOqpqFCF4u/0lAEiRnQiQX7syLTfOP7BSGM/EhBKRELNn
+         vKx4gSpbVBleCyMQUJGDeuUZyCs0PRNSchRwxyayjA80UqKoL/S684dI363GBfYMY885
+         mq0DJ62k4gynCiBV6XAF2JL1rIbP/54umRxTiVqnJQtXNtf3w1jJV7na7fPj3e1Ywmj7
+         hsdstc97D1ho7aFU+70iLbZZELtJO6PvwXNiezeC3lvg8i/WHX2KEezbNpe6tX25bu1Q
+         ax5CNNy1pyTFW62ew2ENh1qF1To9lI/kRMkG8ikkYUkysDvZGHi6fXChDToV5Qvp1L31
+         oOXg==
+X-Gm-Message-State: AO0yUKWArlw5cqLZqqJ2oFq0GcbfSBR3yyXTC7Zhp9Cukru0LgK/aXg2
+        DjLDhHuvsVzNSYxGesZqIhu+Eg==
+X-Google-Smtp-Source: AK7set9cWJOlJkNbsIRY/kVw1cHXOuGBRabzfO/YisfOBi6mPLmqHO4D5ZvGGrVNRhOqaiOFRt27aA==
+X-Received: by 2002:aa7:da49:0:b0:4bf:3cdb:fb42 with SMTP id w9-20020aa7da49000000b004bf3cdbfb42mr25096957eds.6.1678487350030;
+        Fri, 10 Mar 2023 14:29:10 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:34:52e3:a77e:cac5])
-        by smtp.gmail.com with ESMTPSA id x101-20020a50baee000000b004aeeb476c5bsm525467ede.24.2023.03.10.14.29.07
+        by smtp.gmail.com with ESMTPSA id x101-20020a50baee000000b004aeeb476c5bsm525467ede.24.2023.03.10.14.29.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 14:29:08 -0800 (PST)
+        Fri, 10 Mar 2023 14:29:09 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Mark Brown <broonie@kernel.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
         Broadcom internal kernel review list 
@@ -75,9 +75,9 @@ To:     Mark Brown <broonie@kernel.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
         linux-rockchip@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH 07/16] spi: s3c64xx: Drop of_match_ptr for ID table
-Date:   Fri, 10 Mar 2023 23:28:48 +0100
-Message-Id: <20230310222857.315629-7-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 08/16] spi: img-spfi: Drop of_match_ptr for ID table
+Date:   Fri, 10 Mar 2023 23:28:49 +0100
+Message-Id: <20230310222857.315629-8-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
 References: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
@@ -94,31 +94,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver can match only via the DT table (all platforms are OF-only)
-so the table should be always used and the of_match_ptr does not have
-any sense (this also allows ACPI matching via PRP0001, even though it is
-not relevant here).
+The driver can match only via the DT table so the table should be always
+used and the of_match_ptr does not have any sense (this also allows ACPI
+matching via PRP0001, even though it is not relevant here).
 
-  drivers/spi/spi-s3c64xx.c:1496:34: error: ‘s3c64xx_spi_dt_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/spi/spi-img-spfi.c:746:34: error: ‘img_spfi_of_match’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/spi/spi-s3c64xx.c | 2 +-
+ drivers/spi/spi-img-spfi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index cc69f8ffdbdc..7aec496070e2 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -1526,7 +1526,7 @@ static struct platform_driver s3c64xx_spi_driver = {
+diff --git a/drivers/spi/spi-img-spfi.c b/drivers/spi/spi-img-spfi.c
+index c64e4fd3fdf0..bc360e779933 100644
+--- a/drivers/spi/spi-img-spfi.c
++++ b/drivers/spi/spi-img-spfi.c
+@@ -753,7 +753,7 @@ static struct platform_driver img_spfi_driver = {
  	.driver = {
- 		.name	= "s3c64xx-spi",
- 		.pm = &s3c64xx_spi_pm,
--		.of_match_table = of_match_ptr(s3c64xx_spi_dt_match),
-+		.of_match_table = s3c64xx_spi_dt_match,
+ 		.name = "img-spfi",
+ 		.pm = &img_spfi_pm_ops,
+-		.of_match_table = of_match_ptr(img_spfi_of_match),
++		.of_match_table = img_spfi_of_match,
  	},
- 	.probe = s3c64xx_spi_probe,
- 	.remove_new = s3c64xx_spi_remove,
+ 	.probe = img_spfi_probe,
+ 	.remove_new = img_spfi_remove,
 -- 
 2.34.1
 
