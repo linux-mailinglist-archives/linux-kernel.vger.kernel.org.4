@@ -2,121 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC5E6B41B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F9E6B41AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbjCJNzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 08:55:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
+        id S231175AbjCJNzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 08:55:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbjCJNzJ (ORCPT
+        with ESMTP id S231364AbjCJNzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:55:09 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B68B10F450;
-        Fri, 10 Mar 2023 05:55:08 -0800 (PST)
-Received: from [IPv6:2a00:23c6:c311:3401:45a5:b946:dcd1:2820] (unknown [IPv6:2a00:23c6:c311:3401:45a5:b946:dcd1:2820])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: martyn)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 661D7660306A;
-        Fri, 10 Mar 2023 13:55:06 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678456506;
-        bh=FVAs9g/17we+OFCvsPpsDFEOfwFHgVpxykYTajeZnY8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=jk+0ZlsTiH65liU5irk5Bhz2cSeRF04h7VEpCJ8M6o9xmO4xTL4Ga5pCN/sUqb1JB
-         dSk2GmB9BmkH61XqufQlONwZODgGaiL2CvI1N3dV/+YmaQSSeNICxuvdajbehHPxaj
-         Csr8Jvjew1NOO/vN7VU8SfuU9y2TiZq7pdPIGW+q801JtxkpAzd1IbkiJeSLHZ0P9o
-         X9sKdrSLIUDKSMwtLtPH0SRpwzDR30nCJ4YCkPjzc9M+sBzy3RqZSQiwE0OL9FDbcN
-         EOPSvQCnpJPp6D+CHDQn8NLMHo4qev+GrBdc2wndxHV4DIlencq1AoAwWpD0sFaT9h
-         bVigzsgEOvtJQ==
-Message-ID: <0b5ea25e40cad98b2a4f7b098dfa837fcc49e478.camel@collabora.com>
-Subject: Re: [PATCH v3 2/3] remoteproc: k4: Split out functions common with
- M4 driver
-From:   Martyn Welch <martyn.welch@collabora.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hari Nagalla <hnagalla@ti.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-Date:   Fri, 10 Mar 2023 13:55:03 +0000
-In-Reply-To: <0d756429-13a5-f894-cf7d-b6f0f04da92c@collabora.com>
-References: <20230302171450.1598576-1-martyn.welch@collabora.com>
-         <20230302171450.1598576-3-martyn.welch@collabora.com>
-         <400ab507-ff2f-cad8-19c6-66818407bf6d@ti.com>
-         <a2a51a0a63b7856794ac8fd6889ebf9fcb23f84e.camel@collabora.com>
-         <0d756429-13a5-f894-cf7d-b6f0f04da92c@collabora.com>
-Organization: Collabora Ltd.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-1 
+        Fri, 10 Mar 2023 08:55:08 -0500
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA28010F448;
+        Fri, 10 Mar 2023 05:55:05 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id e26-20020a9d6e1a000000b00694274b5d3aso2949282otr.5;
+        Fri, 10 Mar 2023 05:55:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678456505;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1cES9JR6anob8B/1PeJEqQZqZDCXMpYC1azdrACVsv4=;
+        b=444C6Pa8l7fJvzbmB8IWYVPgs0mcMMD3dxI3sj+4oGVi41ss6ONPyYOxzDHWA80bJ3
+         9ZNSnuo2487Gx+BsOTH58B9vnJNYszTmSRWWPtWzqNXcIpRHdgRis8+QcWGYLv4uFvY+
+         ACdf/4h09MUyzxyh3W1C/ibd5mS9Gm4Q4qyf4EyOqQxXPeYDeH7HhYMStYv2TmJwIsfi
+         U7J49huWfrFN7PVwNaLSn5Iit7XZR0hHBeWR5Z3MgTTpkvIKkxYUNf7Y2CpzczjyThSs
+         jkmGkYr/Z0EFd6pEyda5wkMZxnr0mlj3+9MPWndwqu+wW3y4BbctQ25HC6K+0ibQ6Hvz
+         Is0Q==
+X-Gm-Message-State: AO0yUKX0XLs1TZkQ9eafmLySEJzxG/EosGn3pEa8fb2xfKK576dxmKzL
+        54bMKnAMPy0nE3qacCszKg==
+X-Google-Smtp-Source: AK7set91xSxVmm1bc6gMoW8m16OBii5leH8D61yMBfeyo5aP3CIP/5w8GRmTKk8N52oHN6eErOu9Yw==
+X-Received: by 2002:a9d:62d:0:b0:693:bfc4:3eaf with SMTP id 42-20020a9d062d000000b00693bfc43eafmr11511281otn.26.1678456504945;
+        Fri, 10 Mar 2023 05:55:04 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x31-20020a056830409f00b0068bcf7995aesm50856ott.64.2023.03.10.05.55.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 05:55:04 -0800 (PST)
+Received: (nullmailer pid 1177459 invoked by uid 1000);
+        Fri, 10 Mar 2023 13:55:03 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Jack Zhu <jack.zhu@starfivetech.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Maxime Ripard <mripard@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        changhuang.liang@starfivetech.com,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Todor Tomov <todor.too@gmail.com>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+In-Reply-To: <20230310120553.60586-3-jack.zhu@starfivetech.com>
+References: <20230310120553.60586-1-jack.zhu@starfivetech.com>
+ <20230310120553.60586-3-jack.zhu@starfivetech.com>
+Message-Id: <167845582304.1165699.16322398900784780057.robh@kernel.org>
+Subject: Re: [PATCH v2 2/6] media: dt-bindings: cadence-csi2rx: Convert to
+ DT schema
+Date:   Fri, 10 Mar 2023 07:55:03 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-03-10 at 10:53 +0100, AngeloGioacchino Del Regno wrote:
-> Il 10/03/23 10:46, Martyn Welch ha scritto:
-> > On Thu, 2023-03-09 at 12:04 -0600, Hari Nagalla wrote:
-> > > On 3/2/23 11:14, Martyn Welch wrote:
-> > > > + * @ti_sci_id: TI-SCI device identifier
-> > > > + * @mbox: mailbox channel handle
-> > > > + * @client: mailbox client to request the mailbox channel
-> > > > + * @ipc_only: flag to indicate IPC-only mode
-> > > > + */
-> > > > +struct k3_rproc {
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct device *dev;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct rproc *rproc;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct k3_rproc_mem *mem=
-;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int num_mems;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct k3_rproc_mem *rme=
-m;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int num_rmems;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct reset_control *re=
-set;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct k3_rproc_de=
-v_data *data;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct ti_sci_proc *tsp;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct ti_sci_hand=
-le *ti_sci;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 ti_sci_id;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct mbox_chan *mbox;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct mbox_client clien=
-t;
-> > > > +};
-> > > > +
-> > > "ipc_only" mode element is missing in the structure.
-> >=20
-> > That's added with the M4F driver in the next patch - it's not part
-> > of
-> > the structure in the DSP driver.
->=20
-> Martyn, I get that it's added later, but the point here is that you
-> are
-> documenting something that is missing! :-)
->=20
-> You should add the kerneldoc for @ipc_only: xxxx when you actually
-> introduce
-> the new element... otherwise, this commit alone would trigger a
-> kerneldoc warning.
->=20
 
-Ah! Thanks. I'd missed that I'd left the comment in there. Yep, that
-needs to be added in the next patch rather than here... :-)
+On Fri, 10 Mar 2023 20:05:49 +0800, Jack Zhu wrote:
+> Convert DT bindings document for Cadence MIPI-CSI2 RX controller
+> to DT schema format and add new properties.
+> 
+> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+> ---
+>  .../devicetree/bindings/media/cdns,csi2rx.txt | 100 -----------
+>  .../bindings/media/cdns,csi2rx.yaml           | 163 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  3 files changed, 164 insertions(+), 100 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+>  create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+> 
 
-Martyn
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> Cheers,
-> Angelo
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/media/cdns,csi2rx.example.dts:18.30-58.11: Warning (unit_address_format): /example-0/csi@0d060000: unit name should not have leading 0s
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230310120553.60586-3-jack.zhu@starfivetech.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
