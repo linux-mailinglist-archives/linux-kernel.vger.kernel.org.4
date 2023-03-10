@@ -2,62 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 219ED6B4774
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 567606B4747
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233343AbjCJOuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:50:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S233293AbjCJOtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:49:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233297AbjCJOtn (ORCPT
+        with ESMTP id S232979AbjCJOsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:49:43 -0500
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F37D122CE8;
-        Fri, 10 Mar 2023 06:47:52 -0800 (PST)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-176eae36feaso6062884fac.6;
-        Fri, 10 Mar 2023 06:47:52 -0800 (PST)
+        Fri, 10 Mar 2023 09:48:17 -0500
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF98122399;
+        Fri, 10 Mar 2023 06:47:29 -0800 (PST)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-176261d7f45so6034839fac.11;
+        Fri, 10 Mar 2023 06:47:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459667;
+        d=1e100.net; s=20210112; t=1678459649;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ID/16gZQInzWcaBs1M1mfptd9VSUgb+tugMOzAC8KsU=;
-        b=yA215OAr9JScxnYfAtKOJCua1JPt2pJuizhBrjA13+U2oMZhf1I+MahPBN2Fs9Iy3I
-         Jp+H7MfAxa29xrvvHN5LYCM4KHV9yPfSxnrSzyWoi//kna6zqIOssZLqgISICl869gir
-         z/fxcFn8ILg4zhTn/gNLGx1WvJCcLXZujxWvpywQ+o0aY6zA4RfsqdFVw95dXcbdBSH7
-         WhvBCkzBvVbWIeWwfuew2bppTk9G5qGCKsYCyud3gfLXFBoJq3z6i/fu0fWybNkB5aY8
-         dEpupDbo72G9krJ+p8CNLXuD4D+91xeH9vDfpdYR/zb0kspUpbR79u5DkotLHXYJelXU
-         j3fw==
-X-Gm-Message-State: AO0yUKWa2y4241AqvNa5DXYzXsZXpznz3VTW0dRLO64rUjzm65Yx5iY2
-        a0Fy/Hrmp9oxzftwItkthw==
-X-Google-Smtp-Source: AK7set8iMdxoxX6e9GXoSjEAewkax5Eq5eSgzgKfIZDW+mCXcojVeKDYzqPeei2DVVH2V2SRVlMzRw==
-X-Received: by 2002:a05:6870:e0c6:b0:176:8f34:2609 with SMTP id a6-20020a056870e0c600b001768f342609mr13990149oab.58.1678459666806;
-        Fri, 10 Mar 2023 06:47:46 -0800 (PST)
+        bh=a2CxQVHwtr3wlNxH6MjBO8bDMbJbWt3MoMaK9ZWX5lU=;
+        b=14M+FGldcMZanV11C51qabmOMPfHs6nNaCHFItnzOaxMBisgUYfmKPNrsmvaF54cMa
+         8t9dLMXCt7bKlNczbj2YS9VrImY33tyEZOr3B1ruRAwP3fkpphqqX2ghYAbp7daoAlhi
+         KzIBwSA/wD1DZRla0SjhO9TaJVYIPVSr4i+pDV2ibXpPuOBei5Emg02SO/yCaGGRIZ3d
+         xJYqtT101yT1OxMt/KRGbnL/7tHGXQm5PuILjmP9hkMyqAgdxF6JLAimP3Vf8thJpiTZ
+         R19xh/4i3uFjwSZ3iutWz9DEXab0fWT+4yA4MlQd0VVvPIds7hdBSBR0pNl8fyr1V02g
+         8w/g==
+X-Gm-Message-State: AO0yUKXI79MW1W8wC5rPAlbPXaikYVC+xkTkGrABNw/O5cmnf7LrBqKZ
+        lj4Ib2yiv0vltCDZF/1dXRgZkCbL8w==
+X-Google-Smtp-Source: AK7set/0G0Lvyo7EMS2TNN30LYTyjTzCgvaBM8CcI9Z89Q0l2+Lf0Q1PcNJYwXUX/oTxFCnx4Oct2g==
+X-Received: by 2002:a05:6870:3907:b0:172:3d66:c428 with SMTP id b7-20020a056870390700b001723d66c428mr16322716oap.25.1678459649240;
+        Fri, 10 Mar 2023 06:47:29 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p10-20020a4ae14a000000b00500c1100651sm823158oot.45.2023.03.10.06.47.45
+        by smtp.gmail.com with ESMTPSA id y13-20020a4ade0d000000b005251903c669sm666oot.13.2023.03.10.06.47.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:47:46 -0800 (PST)
-Received: (nullmailer pid 1542482 invoked by uid 1000);
+        Fri, 10 Mar 2023 06:47:28 -0800 (PST)
+Received: (nullmailer pid 1542391 invoked by uid 1000);
         Fri, 10 Mar 2023 14:47:06 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: Use of_property_present() for testing DT property presence
+To:     Dipen Patel <dipenp@nvidia.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hte: Use of_property_present() for testing DT property presence
 Date:   Fri, 10 Mar 2023 08:47:06 -0600
-Message-Id: <20230310144706.1542434-1-robh@kernel.org>
+Message-Id: <20230310144706.1542365-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,39 +69,22 @@ for presence of a property and nothing more.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/hwmon/ibmpowernv.c | 4 ++--
- drivers/hwmon/pwm-fan.c    | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/hte/hte.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
-index 8e3724728cce..594254d6a72d 100644
---- a/drivers/hwmon/ibmpowernv.c
-+++ b/drivers/hwmon/ibmpowernv.c
-@@ -456,9 +456,9 @@ static int populate_attr_groups(struct platform_device *pdev)
- 		 */
- 		if (!of_property_read_string(np, "label", &label))
- 			sensor_groups[type].attr_count++;
--		if (of_find_property(np, "sensor-data-min", NULL))
-+		if (of_property_present(np, "sensor-data-min"))
- 			sensor_groups[type].attr_count++;
--		if (of_find_property(np, "sensor-data-max", NULL))
-+		if (of_property_present(np, "sensor-data-max"))
- 			sensor_groups[type].attr_count++;
- 	}
+diff --git a/drivers/hte/hte.c b/drivers/hte/hte.c
+index 7c3b4476f890..9f3221462e75 100644
+--- a/drivers/hte/hte.c
++++ b/drivers/hte/hte.c
+@@ -518,7 +518,7 @@ static struct hte_device *hte_of_get_dev(struct device *dev,
  
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 83a347ca35da..57928d270015 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -427,7 +427,7 @@ static int pwm_fan_of_get_cooling_data(struct device *dev,
- 	struct device_node *np = dev->of_node;
- 	int num, i, ret;
+ 	np = dev->of_node;
  
--	if (!of_find_property(np, "cooling-levels", NULL))
-+	if (!of_property_present(np, "cooling-levels"))
- 		return 0;
- 
- 	ret = of_property_count_u32_elems(np, "cooling-levels");
+-	if (!of_find_property(np, "timestamp-names", NULL)) {
++	if (!of_property_present(np, "timestamp-names")) {
+ 		/* Let hte core construct it during request time */
+ 		desc->attr.name = NULL;
+ 	} else {
 -- 
 2.39.2
 
