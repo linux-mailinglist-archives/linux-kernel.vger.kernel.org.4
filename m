@@ -2,141 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4426B346B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:57:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 754366B3471
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjCJC5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 21:57:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
+        id S229900AbjCJC7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 21:59:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjCJC5R (ORCPT
+        with ESMTP id S229459AbjCJC71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 21:57:17 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4752413D63
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 18:57:15 -0800 (PST)
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com [209.85.128.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id ADB493F1A0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:57:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678417033;
-        bh=3sTHzgj+J8hmROSd/9xABa2GjjvjsJIVhxYvLkB5m2o=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=jHCTnyI2xp8jLURDfYFhcuYHaE0AFrq6V7PXJpat9YC+iyQ+FLVDlmHpm9f5OmcWL
-         af2yJsdbyGbaW+efGiW5xw8NRP/dPwwrSkkJDbFwPYi9WxXMbWpHq9PenH2RQdjmc1
-         /izaR6oBbj2+6JoPGlpqc/ztnaSEhIdn9MK9yCMFNoh8B5GUOmjWZJ0omeWIgTeidS
-         LOpLf3ugt8+B0OS3tPPz2AiGrxJd+Q9P+2wslxsgM/ZY1kp2NVmYCtNQUSYedYdnWH
-         0quLF0g/wKnP9wES+TDkrnwAyrcrnx0A8kt3BAaLLPIIuGXYMm/6mAHx6kTVU3DhVC
-         nRZbnt9h05T+Q==
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-53865bdc1b1so39820627b3.16
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 18:57:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678417032;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3sTHzgj+J8hmROSd/9xABa2GjjvjsJIVhxYvLkB5m2o=;
-        b=AYa6LMwCrrjn7/4LfeZ15HZ9dz73Vt9VW2J9olBYW0Dt5S6Tbk6H38jeiSEK7lx3Ny
-         +b0DiXPz0+WpP3Bepq+sAdVHQkyrojqLJX6gKgTfq1ERH7VXzYPYGFKe5HPTadTdN+Ay
-         OfUM5YfrjoiK3CDOTUR4eHrfDXZ82uQ89CjdLY8kQ10pMS8engAdPeJhbRuh4JTiVAEg
-         537HXngsAetsZ2Nhm1/edzx6LiJ7y9jXc4FcDSVq2vmWj7RKEot2ReEKKzRCEWT7/fL8
-         nKFWjqUe12nMklKojt7G/r7hp9o3eK17YGLH8g3wkPLtVD4+ydMZQtDq43hR6p6LjIiQ
-         mEKQ==
-X-Gm-Message-State: AO0yUKUVFLoZRW9NkbNfCFqUz/g6dcch0DHY7Ow1X65u+VCT7g4+Lup9
-        z8SilEKaMdwpzt/BYwFrEbPs90/d6VRgmOWQ5qB74+0S7c02xqWyZO6GNqLk3t6Yd50TlfuiO3M
-        6Ja29lWf+U5Z3u0HB5Wt4PhHRXPRYJYB93qX/89oBHB2OLhnJ34EkcdSlh9SO272hC5b+
-X-Received: by 2002:a05:6902:2cf:b0:b21:5fb4:c6e6 with SMTP id w15-20020a05690202cf00b00b215fb4c6e6mr3887488ybh.11.1678417032574;
-        Thu, 09 Mar 2023 18:57:12 -0800 (PST)
-X-Google-Smtp-Source: AK7set/2uO0T6jpQtGwECA9hf15A2/3Lr65afkblWLIB9avG9lKThMGuaTgTiUk65PmSQJqLgUN2k2zDM4Fqoq7n5iM=
-X-Received: by 2002:a05:6902:2cf:b0:b21:5fb4:c6e6 with SMTP id
- w15-20020a05690202cf00b00b215fb4c6e6mr3887478ybh.11.1678417032315; Thu, 09
- Mar 2023 18:57:12 -0800 (PST)
+        Thu, 9 Mar 2023 21:59:27 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1475199C4;
+        Thu,  9 Mar 2023 18:59:26 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32A144ig017880;
+        Fri, 10 Mar 2023 02:59:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=PQNfu/X6r67zDWRiVTp+9AqtoRJYT0YRdJwDIpafouM=;
+ b=YhJRlgE+UATD4KmgyRCijgrk+02SEW4yB6bRR5TXBvPHgxwAsJvQnedMGXCp2moedcne
+ jSXXuKvk0CVreF5i/CzE+7e75hhhak+6hVYsLw8inEyUzAU9KxLnZDmxbgym5aCaLbZm
+ iM0pu+Ayg+d1O43Gq9OcSon+W5dqjCVrE5Yyj5C4mCac/cmF/MxdEFylIKXEW1xCL5pZ
+ lfyz2lJoxwqnz/fqjcmYK4p8xY2O8NW6tof8L2nC7WlwjMx+G/2qLMKWPhVHxs4lfoA3
+ k1NQPAvm/XBgwdgt5MNA61iIjs9JpcMdKwdX71njJTD2fuPR6BW0mTtcLyXY2Q/aZOqC Yg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p7nh2h0dr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 02:59:23 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32A2xM8t025015
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 02:59:22 GMT
+Received: from [10.79.43.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 9 Mar 2023
+ 18:59:10 -0800
+Message-ID: <c862a6ee-241a-0ff8-62a5-668ed6599ad9@quicinc.com>
+Date:   Fri, 10 Mar 2023 08:28:43 +0530
 MIME-Version: 1.0
-References: <20230308080327.33906-1-chengen.du@canonical.com> <1B808CC0-49C6-4AF6-B7E2-0772A71DB490@redhat.com>
-In-Reply-To: <1B808CC0-49C6-4AF6-B7E2-0772A71DB490@redhat.com>
-From:   Chengen Du <chengen.du@canonical.com>
-Date:   Fri, 10 Mar 2023 10:57:01 +0800
-Message-ID: <CAPza5qe=e-CkG+j4NYzF24cv5ZDFbheOFfAi+LQ_OW0pZmfc9g@mail.gmail.com>
-Subject: Re: [PATCH] NFS: Correct timing for assigning access cache timestamp
-To:     trond.myklebust@hammerspace.com
-Cc:     Benjamin Coddington <bcodding@redhat.com>, anna@kernel.org,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] firmware: qcom: scm: fix bogus irq error at probe
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Guru Das Srinagesh" <quic_gurus@quicinc.com>
+References: <20230309111209.31606-1-johan+linaro@kernel.org>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <20230309111209.31606-1-johan+linaro@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: LqWgyw-lRUHacweRThMVx-HXHzVv-JPF
+X-Proofpoint-GUID: LqWgyw-lRUHacweRThMVx-HXHzVv-JPF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_14,2023-03-09_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 phishscore=0 malwarescore=0 clxscore=1011
+ impostorscore=0 suspectscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0
+ mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303100020
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hey Johan,
 
-We would like to inform you that we have utilized the patch to create
-a test kernel,
-which has been made available for community testing.
-We are pleased to report that the feedback received thus far indicates
-that the patch has successfully resolved the issue at hand.
+Thanks for the fix.
 
-Please refer to the following link for further details on the related
-bug report:
-https://bugs.launchpad.net/ubuntu/+source/linux/+bug/2009325
+On 3/9/23 16:42, Johan Hovold wrote:
+> A recent commit added support for an optional interrupt which is only
+> available on some platforms.
+> 
+> Stop spamming the logs with bogus error messages on platforms that do
+> not use this new optional resource:
+> 
+> 	qcom_scm firmware:scm: error -ENXIO: IRQ index 0 not found
+> 
+> Fixes: 6bf325992236 ("firmware: qcom: scm: Add wait-queue handling logic")
+> Cc: Guru Das Srinagesh <quic_gurus@quicinc.com>
+> Cc: Sibi Sankar <quic_sibis@quicinc.com>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Thank you for your attention to this matter.
+Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
 
-Best regards,
-Chengen Du
-
-On Wed, Mar 8, 2023 at 10:45=E2=80=AFPM Benjamin Coddington <bcodding@redha=
-t.com> wrote:
->
-> On 8 Mar 2023, at 3:03, Chengen Du wrote:
->
-> > When the user's login time is newer than the cache's timestamp,
-> > the original entry in the RB-tree will be replaced by a new entry.
-> > Currently, the timestamp is only set if the entry is not found in
-> > the RB-tree, which can cause the timestamp to be undefined when
-> > the entry exists. This may result in a significant increase in
-> > ACCESS operations if the timestamp is set to zero.
-> >
-> > Signed-off-by: Chengen Du <chengen.du@canonical.com>
-> > ---
-> >  fs/nfs/dir.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
-> > index a41c3ee4549c..6fbcbb8d6587 100644
-> > --- a/fs/nfs/dir.c
-> > +++ b/fs/nfs/dir.c
-> > @@ -3089,7 +3089,6 @@ static void nfs_access_add_rbtree(struct inode *i=
-node,
-> >               else
-> >                       goto found;
-> >       }
-> > -     set->timestamp =3D ktime_get_ns();
-> >       rb_link_node(&set->rb_node, parent, p);
-> >       rb_insert_color(&set->rb_node, root_node);
-> >       list_add_tail(&set->lru, &nfsi->access_cache_entry_lru);
-> > @@ -3114,6 +3113,7 @@ void nfs_access_add_cache(struct inode *inode, st=
-ruct nfs_access_entry *set,
-> >       cache->fsgid =3D cred->fsgid;
-> >       cache->group_info =3D get_group_info(cred->group_info);
-> >       cache->mask =3D set->mask;
-> > +     cache->timestamp =3D ktime_get_ns();
-> >
-> >       /* The above field assignments must be visible
-> >        * before this item appears on the lru.  We cannot easily
-> > --
-> > 2.37.2
->
-> Looks good to me.
->
-> Reviewed-by: Benjamin Coddington <bcodding@redhat.com>
->
+> ---
+>   drivers/firmware/qcom_scm.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index 468d4d5ab550..b1e11f85b805 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -1479,7 +1479,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
+>   
+>   	init_completion(&__scm->waitq_comp);
+>   
+> -	irq = platform_get_irq(pdev, 0);
+> +	irq = platform_get_irq_optional(pdev, 0);
+>   	if (irq < 0) {
+>   		if (irq != -ENXIO)
+>   			return irq;
