@@ -2,81 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C145A6B3414
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A1E6B3428
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbjCJCMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 21:12:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
+        id S229893AbjCJCSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 21:18:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjCJCMe (ORCPT
+        with ESMTP id S229550AbjCJCSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 21:12:34 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546F0105572;
-        Thu,  9 Mar 2023 18:12:19 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id i34so14751686eda.7;
-        Thu, 09 Mar 2023 18:12:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google; t=1678414338;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iuW4ttN77OvnIjS1cIi9jdp1Pd2rdF64Np6HBzcn+YU=;
-        b=mJzW8Wu5I/Hg1hF0Q36rFa3tvzC3JlTYCKrjrNiltc1NI32FOW6cto00C3faNLO/6w
-         bDwXj2GgUzRfAprgDVA5Z0xJ/EkxKp/2aETvIFvUK6J68XEwLiPAfXHI5uucJ2FNMuVy
-         NzQKUKzVTY7NmiFx87rNdTfC3dwW3fM6SH7+0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678414338;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iuW4ttN77OvnIjS1cIi9jdp1Pd2rdF64Np6HBzcn+YU=;
-        b=lRQlR8FJBUtx6EELQLqQWwi5nXBTGPJsIzeuyqGSxOC7mQG6kzcr8MyP3j9luNzu2a
-         oGNZeatnq7R08CfFLvACg4PfofAhNiJqHhMoAxbPXqR+D5H63P29p3N2PFvvsS2CvLvT
-         ppW+vjuVAh+82xA4uGiKx+hjDC+12cMU+BA89Eif89whmjn6AzdAI04oll/5PndO95ki
-         npFIAwIFnLGk7Sp4d7iAOWAnYFJaoc6rZ1VkdXUb9D+hs6E7KMf3rRCwp2fZawWrvkVK
-         8fv0UMYV1iJSavJKrf9ShSnNdOwYEk4s3aVjsYTG58cefDL3Bj3doTsxU9k4RTMdrA92
-         e/eQ==
-X-Gm-Message-State: AO0yUKWGubB5Z8CucHcJKn2vhMK5DGQDQw8WkfQwhURqRmL2mP7GnAjD
-        3skbQTuftllMNaC2ELQ2HLtp1nLUQzQ8UytN/9SRcu1u
-X-Google-Smtp-Source: AK7set9H9OV3vryGZj48SNjrLUz32UJ7lBdohTX/2Nl1ENmRnSLgkqtYDeaGw9JX7zVePBeUiT1UfXwthANnNyP332I=
-X-Received: by 2002:a50:ab1e:0:b0:4ab:4933:225b with SMTP id
- s30-20020a50ab1e000000b004ab4933225bmr13188807edc.6.1678414337592; Thu, 09
- Mar 2023 18:12:17 -0800 (PST)
+        Thu, 9 Mar 2023 21:18:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176221DBB4;
+        Thu,  9 Mar 2023 18:18:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A147B6092E;
+        Fri, 10 Mar 2023 02:18:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC47EC433D2;
+        Fri, 10 Mar 2023 02:17:59 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     linux-efi@vger.kernel.org, loongarch@lists.linux.dev,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V2] efi/libstub: Call setup_graphics() before handle_kernel_image()
+Date:   Fri, 10 Mar 2023 10:17:49 +0800
+Message-Id: <20230310021749.921041-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230310130653.38c908de@canb.auug.org.au>
-In-Reply-To: <20230310130653.38c908de@canb.auug.org.au>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Fri, 10 Mar 2023 02:12:05 +0000
-Message-ID: <CACPK8Xc4wspCSK67PCUeKf4OHoiF2cT=hdfNP35Y2yRUycMK4w@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the aspeed tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023 at 02:06, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Commit
->
->   68ed3289c72a ("ARM: dts: aspeed: everest: Add reserved memory for TPM event log")
+Commit 42c8ea3dca094ab8 ("efi: libstub: Factor out EFI stub entrypoint
+into separate file") moves setup_graphics() into efi_stub_common() which
+is after handle_kernel_image(). This causes efifb no longer work because
+handle_kernel_image() may move the core kernel to its preferred address,
+which means the screen_info filled by the efistub will not be the same
+as the one accessed by the core kernel. So let us call setup_graphics()
+before handle_kernel_image() which restores the old behavior.
 
-Thanks, I've pushed out a fixed version.
+The side effect is zboot will not call setup_graphics(), but I think
+zboot doesn't need it either.
 
->
-> is missing a Signed-off-by from its committer.
->
-> --
-> Cheers,
-> Stephen Rothwell
+Fixes: 42c8ea3dca094ab8 ("efi: libstub: Factor out EFI stub entrypoint into separate file")
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+V2: Use static declaration for setup_graphics() to avoid build warnings.
+
+ drivers/firmware/efi/libstub/efi-stub-entry.c | 29 +++++++++++++++++++
+ drivers/firmware/efi/libstub/efi-stub.c       | 27 -----------------
+ 2 files changed, 29 insertions(+), 27 deletions(-)
+
+diff --git a/drivers/firmware/efi/libstub/efi-stub-entry.c b/drivers/firmware/efi/libstub/efi-stub-entry.c
+index 5245c4f031c0..f971fd25a4eb 100644
+--- a/drivers/firmware/efi/libstub/efi-stub-entry.c
++++ b/drivers/firmware/efi/libstub/efi-stub-entry.c
+@@ -5,6 +5,30 @@
+ 
+ #include "efistub.h"
+ 
++static struct screen_info *setup_graphics(void)
++{
++	unsigned long size;
++	efi_status_t status;
++	efi_guid_t gop_proto = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
++	void **gop_handle = NULL;
++	struct screen_info *si = NULL;
++
++	size = 0;
++	status = efi_bs_call(locate_handle, EFI_LOCATE_BY_PROTOCOL,
++			     &gop_proto, NULL, &size, gop_handle);
++	if (status == EFI_BUFFER_TOO_SMALL) {
++		si = alloc_screen_info();
++		if (!si)
++			return NULL;
++		status = efi_setup_gop(si, &gop_proto, size);
++		if (status != EFI_SUCCESS) {
++			free_screen_info(si);
++			return NULL;
++		}
++	}
++	return si;
++}
++
+ /*
+  * EFI entry point for the generic EFI stub used by ARM, arm64, RISC-V and
+  * LoongArch. This is the entrypoint that is described in the PE/COFF header
+@@ -22,6 +46,7 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
+ 	efi_guid_t loaded_image_proto = LOADED_IMAGE_PROTOCOL_GUID;
+ 	unsigned long reserve_addr = 0;
+ 	unsigned long reserve_size = 0;
++	struct screen_info *si;
+ 
+ 	WRITE_ONCE(efi_system_table, systab);
+ 
+@@ -47,6 +72,8 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
+ 
+ 	efi_info("Booting Linux Kernel...\n");
+ 
++	si = setup_graphics();
++
+ 	status = handle_kernel_image(&image_addr, &image_size,
+ 				     &reserve_addr,
+ 				     &reserve_size,
+@@ -58,6 +85,8 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
+ 
+ 	status = efi_stub_common(handle, image, image_addr, cmdline_ptr);
+ 
++	free_screen_info(si);
++
+ 	efi_free(image_size, image_addr);
+ 	efi_free(reserve_size, reserve_addr);
+ 
+diff --git a/drivers/firmware/efi/libstub/efi-stub.c b/drivers/firmware/efi/libstub/efi-stub.c
+index 2955c1ac6a36..bc67af721412 100644
+--- a/drivers/firmware/efi/libstub/efi-stub.c
++++ b/drivers/firmware/efi/libstub/efi-stub.c
+@@ -56,30 +56,6 @@ void __weak free_screen_info(struct screen_info *si)
+ {
+ }
+ 
+-static struct screen_info *setup_graphics(void)
+-{
+-	efi_guid_t gop_proto = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
+-	efi_status_t status;
+-	unsigned long size;
+-	void **gop_handle = NULL;
+-	struct screen_info *si = NULL;
+-
+-	size = 0;
+-	status = efi_bs_call(locate_handle, EFI_LOCATE_BY_PROTOCOL,
+-			     &gop_proto, NULL, &size, gop_handle);
+-	if (status == EFI_BUFFER_TOO_SMALL) {
+-		si = alloc_screen_info();
+-		if (!si)
+-			return NULL;
+-		status = efi_setup_gop(si, &gop_proto, size);
+-		if (status != EFI_SUCCESS) {
+-			free_screen_info(si);
+-			return NULL;
+-		}
+-	}
+-	return si;
+-}
+-
+ static void install_memreserve_table(void)
+ {
+ 	struct linux_efi_memreserve *rsv;
+@@ -163,14 +139,12 @@ efi_status_t efi_stub_common(efi_handle_t handle,
+ 			     unsigned long image_addr,
+ 			     char *cmdline_ptr)
+ {
+-	struct screen_info *si;
+ 	efi_status_t status;
+ 
+ 	status = check_platform_features();
+ 	if (status != EFI_SUCCESS)
+ 		return status;
+ 
+-	si = setup_graphics();
+ 
+ 	efi_retrieve_tpm2_eventlog();
+ 
+@@ -190,7 +164,6 @@ efi_status_t efi_stub_common(efi_handle_t handle,
+ 
+ 	status = efi_boot_kernel(handle, image, image_addr, cmdline_ptr);
+ 
+-	free_screen_info(si);
+ 	return status;
+ }
+ 
+-- 
+2.39.1
+
