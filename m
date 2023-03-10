@@ -2,124 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1206B4DB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4876B4DAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:55:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbjCJQ4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 11:56:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
+        id S231476AbjCJQyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 11:54:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbjCJQzm (ORCPT
+        with ESMTP id S231218AbjCJQyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:55:42 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062F8AD04;
-        Fri, 10 Mar 2023 08:53:07 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so6499940wmb.5;
-        Fri, 10 Mar 2023 08:53:07 -0800 (PST)
+        Fri, 10 Mar 2023 11:54:20 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D26136FC2;
+        Fri, 10 Mar 2023 08:51:21 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id h31so3406453pgl.6;
+        Fri, 10 Mar 2023 08:51:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678467181;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SIZHiPYmUfwEfRLCvC1wnxERX0JIKAMAqH6shcSzDMI=;
-        b=BFj0Hy4pAIILDu7BSbXbKqKVPhHUu21fdl+t7FBJOjPA3rbO0cjblN3I9hjshRbXEv
-         JI/xBhRs+t74TleLVPWQFXUlpUZA2OJxCj1fFbqwmUEG4xK4udUYeMkjYxUHGd3Rj+H8
-         jYnKozKktz9EHubsIaveekcGqXYXmmAwwe7VLKv+RMDvuHB6trfFEEkEmcgAgcmxlDwS
-         iwOxTpj/5dbdyxa0Ffx/xoz/HPFuNU0Mlv/jwnRqVfmb/+ucag2w6cN9pPdbjfdVPJjr
-         bYKTdpqSrXghfm0eUTTX1ZTYQtSQglIiRXh9IWKkKLLXvo/MbcpDDxNaVoIlA8RtXwJB
-         dbLQ==
+        d=gmail.com; s=20210112; t=1678467080;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Icx2k/mVThmsQ5uBdHUhfNVC8rWT1gXwAUNd336Yoms=;
+        b=HFZ/3VfEdhnnp5NbZxdwNrIEf1uscmWB3kD272c0Wws7K3GGbGW6UULgZQSeWeXLnv
+         18T16OS1tlWqWbnvmkM5NX6OPhxSZgJNz5zDFkLRNJZyw2bLG4TR1RZLuoSvF9aCb3xM
+         fUBU7YDR0mj15pHwkafnmClKuOrmFGLUl1gRvgcMe30fezs7d6NwuZRKT/aLt/sYkugJ
+         ZOoBKwV79ati5ClDhekhypxCVUXxAHtvZYdywoMp+Zp3956o/onqxaNyb6DWazQPjE+b
+         musYmZWgF5C5xQVrO627BQpE/upxHT7gQiDsaIv4a6ES0lbG0F7zEqjeKsE7Orqo9ASq
+         o0pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678467181;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SIZHiPYmUfwEfRLCvC1wnxERX0JIKAMAqH6shcSzDMI=;
-        b=lxXhLZNlsu+7nRyfANjNdWaFJ7znb7oct+jY+G7hn0VF6TXJ6o/9Qi2xEc0/CNbgrl
-         aPb4fH6j+0Op1amYHCUpeKFsOqk4exL51uq8FtZJSPko+LbvKkszlWriyLpDJiGrCpWn
-         djy/O600CZoaNvGQWTXQcI+BwL/TPkoorvEcMpCPq5EN5x4FsP88xitJivWssWl7s70h
-         VAU/cXL/PeoCY/68Qhk7YrEGIPWuhgfdYlP+hMV8EUox3c+BjIJlNCnmgGHZnhb/Ivh9
-         NgQELhQGdttBw6S+sNHie4sOa/60npsdGY8JvbMBclj1zmgqUNVaNfCNEGwuuEQU/eWA
-         mPdg==
-X-Gm-Message-State: AO0yUKUEv+ApPtkqRC1owyhMgf/ht7hiaDGL/51AZJoc/L7jzFe1j3Lz
-        1Y7LnxFt5v+QdE2gABvr9M0=
-X-Google-Smtp-Source: AK7set85HIRyC5u9XoICbRzTKjn+zmMax77FYMqrehPFpeCxCW/pYg+YZiyJvITud1PNPoYUIQc8OA==
-X-Received: by 2002:a05:600c:4f02:b0:3eb:39c3:8844 with SMTP id l2-20020a05600c4f0200b003eb39c38844mr3481192wmq.12.1678467181167;
-        Fri, 10 Mar 2023 08:53:01 -0800 (PST)
-Received: from alessandro-pc.localdomain (host-80-116-19-80.pool80116.interbusiness.it. [80.116.19.80])
-        by smtp.gmail.com with ESMTPSA id u17-20020a05600c211100b003e20fa01a86sm408427wml.13.2023.03.10.08.53.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 08:53:00 -0800 (PST)
-From:   Alessandro Manca <crizan.git@gmail.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alessandro Manca <crizan.git@gmail.com>
-Subject: [PATCH] HID: topre: Add support for 87 keys Realforce R2
-Date:   Fri, 10 Mar 2023 17:49:33 +0100
-Message-Id: <20230310164933.4798-1-crizan.git@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1678467080;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Icx2k/mVThmsQ5uBdHUhfNVC8rWT1gXwAUNd336Yoms=;
+        b=Icnf2VsKUt90dRvFh90QzuIm5GqBSvFoqFx2GdjzwN9oU2iM6pF/E3yXqeVjmEh70m
+         c1yVjiFk/e6vjof5lhSmH42itLT8FbPEtRVq5aCGyDRYxVNYG8rbRtlZ/btUBz3SaYzS
+         FtzcjB5seiZVipnTg6XmOGwBLHzDZnXrkUnEFPsnaSlbKXkcSPhQPMbDTOG7T1M6kFNj
+         HIMXZXbWyo+ZP15LBZZY44X0WV/REcS2QdU3PI+kH5FlFspT3Ool1Il2P2o7+jXx+djS
+         wJWzne95xEONKQUTDDr5w18TP6eBtajsgDAzsh9oM+9ggoRUgQNTeqQX3gkuFBG3//xa
+         MaQQ==
+X-Gm-Message-State: AO0yUKWIqyQvR0ji/V+oo9esdmxhOjy9/kddaZqBAwsXIv1nkT82WjFN
+        Mb6QP5qF93L4vJ3d9kqODM8XlUNkSxwuPHZYDN0=
+X-Google-Smtp-Source: AK7set9e8Ja8YX9td92OBoOeoViIEMnC0HKSPnKaqtXH7aK+8bHxCYhesfTOz8Ovt27usQ5SIXMHrjhSXXT/2f/4N4M=
+X-Received: by 2002:a05:6a00:1955:b0:592:5696:89ee with SMTP id
+ s21-20020a056a00195500b00592569689eemr10890910pfk.3.1678467079848; Fri, 10
+ Mar 2023 08:51:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230309165729.164440-1-zyytlz.wz@163.com> <ZAs3nOoT0GmsLfGN@corigine.com>
+In-Reply-To: <ZAs3nOoT0GmsLfGN@corigine.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Sat, 11 Mar 2023 00:51:07 +0800
+Message-ID: <CAJedcCwFE0xsQpUYNS98J7WJxMrD9At8o2Km3AZo8CuNOvqJuw@mail.gmail.com>
+Subject: Re: [PATCH net] xirc2ps_cs: Fix use after free bug in xirc2ps_detach
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        petrm@nvidia.com, thomas.lendacky@amd.com,
+        wsa+renesas@sang-engineering.com, leon@kernel.org,
+        shayagr@amazon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
+        alex000young@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tenkeyless version of the Realforce R2 has the same issue of the
-full size one, the report fixup is needed to make n-key rollover
-work instead of 6 key rollover
+Simon Horman <simon.horman@corigine.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=8810=
+=E6=97=A5=E5=91=A8=E4=BA=94 21:59=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Fri, Mar 10, 2023 at 12:57:29AM +0800, Zheng Wang wrote:
+> > In xirc2ps_probe, the local->tx_timeout_task was bounded
+> > with xirc2ps_tx_timeout_task. When timeout occurs,
+> > it will call xirc_tx_timeout->schedule_work to start the
+> > work.
+> >
+> > When we call xirc2ps_detach to remove the driver, there
+> > may be a sequence as follows:
+> >
+> > Fix it by finishing the work before cleanup in xirc2ps_detach
+> >
+> > CPU0                  CPU1
+> >
+> >                     |xirc2ps_tx_timeout_task
+> > xirc2ps_detach      |
+> >   free_netdev       |
+> >     kfree(dev);     |
+> >                     |
+> >                     | do_reset
+> >                     |   //use
+> >
+> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > ---
+> >  drivers/net/ethernet/xircom/xirc2ps_cs.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/net/ethernet/xircom/xirc2ps_cs.c b/drivers/net/eth=
+ernet/xircom/xirc2ps_cs.c
+> > index 894e92ef415b..ea7b06f75691 100644
+> > --- a/drivers/net/ethernet/xircom/xirc2ps_cs.c
+> > +++ b/drivers/net/ethernet/xircom/xirc2ps_cs.c
+> > @@ -503,7 +503,10 @@ static void
+> >  xirc2ps_detach(struct pcmcia_device *link)
+> >  {
+> >      struct net_device *dev =3D link->priv;
+> > -
+> > +             struct local_info *local;
+> > +
+> > +             local =3D netdev_priv(dev);
+> > +             cancel_work_sync(&local->tx_timeout_task)
+> >      dev_dbg(&link->dev, "detach\n");
+> >
+> >      unregister_netdev(dev);
+>
+> This doesn't compile.
+> Also, the indentation is incorrect.
 
-Signed-off-by: Alessandro Manca <crizan.git@gmail.com>
----
- drivers/hid/Kconfig     | 2 +-
- drivers/hid/hid-ids.h   | 1 +
- drivers/hid/hid-topre.c | 2 ++
- 3 files changed, 4 insertions(+), 1 deletion(-)
+Sorry for my mistake. I was hurried to report the issue and ignored
+the compile test.
 
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 82f64fb31fda..4ce012f83253 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -1122,7 +1122,7 @@ config HID_TOPRE
- 	tristate "Topre REALFORCE keyboards"
- 	depends on HID
- 	help
--	  Say Y for N-key rollover support on Topre REALFORCE R2 108 key keyboards.
-+	  Say Y for N-key rollover support on Topre REALFORCE R2 108/87 key keyboards.
- 
- config HID_THINGM
- 	tristate "ThingM blink(1) USB RGB LED"
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 63545cd307e5..50728e0a5067 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -1249,6 +1249,7 @@
- 
- #define USB_VENDOR_ID_TOPRE			0x0853
- #define USB_DEVICE_ID_TOPRE_REALFORCE_R2_108			0x0148
-+#define USB_DEVICE_ID_TOPRE_REALFORCE_R2_87			0x0146
- 
- #define USB_VENDOR_ID_TOPSEED		0x0766
- #define USB_DEVICE_ID_TOPSEED_CYBERLINK	0x0204
-diff --git a/drivers/hid/hid-topre.c b/drivers/hid/hid-topre.c
-index 88a91cdad5f8..d1d5ca310ead 100644
---- a/drivers/hid/hid-topre.c
-+++ b/drivers/hid/hid-topre.c
-@@ -36,6 +36,8 @@ static __u8 *topre_report_fixup(struct hid_device *hdev, __u8 *rdesc,
- static const struct hid_device_id topre_id_table[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_TOPRE,
- 			 USB_DEVICE_ID_TOPRE_REALFORCE_R2_108) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_TOPRE,
-+			 USB_DEVICE_ID_TOPRE_REALFORCE_R2_87) },
- 	{ }
- };
- MODULE_DEVICE_TABLE(hid, topre_id_table);
--- 
-2.39.2
+>
+> I think what should have been posted is:
 
+Yes, will correct it in the next version of patch.
+
+Best regards,
+Zheng
+
+>
+> diff --git a/drivers/net/ethernet/xircom/xirc2ps_cs.c b/drivers/net/ether=
+net/xircom/xirc2ps_cs.c
+> index 894e92ef415b..b607fea486ab 100644
+> --- a/drivers/net/ethernet/xircom/xirc2ps_cs.c
+> +++ b/drivers/net/ethernet/xircom/xirc2ps_cs.c
+> @@ -503,7 +503,10 @@ static void
+>  xirc2ps_detach(struct pcmcia_device *link)
+>  {
+>      struct net_device *dev =3D link->priv;
+> +    struct local_info *local;
+>
+> +    local =3D netdev_priv(dev);
+> +    cancel_work_sync(&local->tx_timeout_task);
+>      dev_dbg(&link->dev, "detach\n");
+>
+>      unregister_netdev(dev);
