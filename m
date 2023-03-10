@@ -2,195 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BD26B40A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C656B40AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjCJNmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 08:42:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
+        id S230132AbjCJNoE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 08:44:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjCJNms (ORCPT
+        with ESMTP id S229523AbjCJNoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:42:48 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E16111FBE;
-        Fri, 10 Mar 2023 05:42:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678455766; x=1709991766;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=B7DzPLaV7PYb4CwSpTmT+8+euC7hqUSnfgzb906Ua98=;
-  b=WdQ2vBt70GPXYXFZ0WbzXJ2qFSgU2LgdsMjPiuTk0wD2YG1lMjVsHN75
-   cq6woPjW9MWilW6kXxOHc+0ow2Q1JHOtAb1nkPzDZWmQstLkXKuhyXWob
-   +3Ta6rmkqFQefiA5UZmzU8OqDleBi4ALy6Y2iO6begFOgqtZPBhue24Q2
-   Z5M///3CRGYcnG5CECvk0IvKm548a4frPUwy7bM6CGnaI3QpU5FjUpcsa
-   N6k0wbw4mLhhjRd7wlf3pwskCFQAibI0plvHzcC6y15FlV7taxSZ1FJSQ
-   5HjsTlFn0Y8kd9Cek45XNOpxDYbDIEg6H5dGXosgkDtr3wyDyQOvJTn2U
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="338281408"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="338281408"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 05:42:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="627814390"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="627814390"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 10 Mar 2023 05:42:44 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pad18-000tdW-1a;
-        Fri, 10 Mar 2023 15:42:42 +0200
-Date:   Fri, 10 Mar 2023 15:42:42 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] block: don't embed integrity_kobj into gendisk
-Message-ID: <ZAsz0lvdS60nFwJx@smile.fi.intel.com>
-References: <20230309-kobj_release-gendisk_integrity-v1-1-a240f54eac60@weissschuh.net>
- <d85ba503-d93c-3483-25e1-6043d4af444f@alu.unizg.hr>
- <0ac9777c-7586-494f-bbc5-87f14f645b12@t-8ch.de>
- <d10f18b4-56cf-8a55-b12f-79b1163d8841@alu.unizg.hr>
- <7f977a5d-8302-4a32-9dce-f6d7637b2555@t-8ch.de>
- <dc4f7684-2bec-ece2-17bd-ecaaaa5d5c69@alu.unizg.hr>
+        Fri, 10 Mar 2023 08:44:01 -0500
+Received: from mail5.swissbit.com (mail5.swissbit.com [148.251.244.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D9277E07;
+        Fri, 10 Mar 2023 05:43:58 -0800 (PST)
+Received: from mail5.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 079703A2B24;
+        Fri, 10 Mar 2023 14:43:52 +0100 (CET)
+Received: from mail5.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id EEE1C3A2B1F;
+        Fri, 10 Mar 2023 14:43:51 +0100 (CET)
+X-TM-AS-ERS: 10.181.10.102-127.5.254.253
+X-TM-AS-SMTP: 1.0 bXgyLmRtei5zd2lzc2JpdC5jb20= Y2xvZWhsZUBoeXBlcnN0b25lLmNvb
+        Q==
+X-DDEI-TLS-USAGE: Used
+Received: from mx2.dmz.swissbit.com (mx2.dmz.swissbit.com [10.181.10.102])
+        by mail5.swissbit.com (Postfix) with ESMTPS;
+        Fri, 10 Mar 2023 14:43:51 +0100 (CET)
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>
+CC:     Wenchao Chen <wenchao.chen666@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an
+ internal cache
+Thread-Topic: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an
+ internal cache
+Thread-Index: AQHZTRVhGw7IamWdbkW+N3YLAv3UBK70EaAw
+Date:   Fri, 10 Mar 2023 13:43:50 +0000
+Message-ID: <54cee7de4ab7479db74b21e64e5f53cf@hyperstone.com>
+References: <20230302144330.274947-1-ulf.hansson@linaro.org>
+In-Reply-To: <20230302144330.274947-1-ulf.hansson@linaro.org>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dc4f7684-2bec-ece2-17bd-ecaaaa5d5c69@alu.unizg.hr>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-TMASE-Version: DDEI-5.1-9.0.1002-27494.007
+X-TMASE-Result: 10--15.961800-10.000000
+X-TMASE-MatchedRID: 0aps3uOmWi7UL3YCMmnG4rqQyAveNtg6OyEDKyNnz+8/gf7afIrQUxiQ
+        n63S7zCUOelg+pLqPPFjHpk2g6Yfbmk5Fql3Faa7PMcAlOC0qrDhx1VJT84rPWjliw+xvItdXH3
+        W+57nGflI/gFRC4jJyCcntLVR9yI1xONdUAdRajMR3SGennXG69FBNyU0Q3FE7zyq0taM3pg8Uy
+        YxPpz6Nj+Ok6f9gUlFzhQxGE0nTV42KFyqcyHlTZ4CIKY/Hg3AY2fxc+IAshspZfPxcZsT/Cq2r
+        l3dzGQ18DFFIBzQ4Q0i4mJ41W/O+n7cGd19dSFd
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: 6faa3291-c63b-4be6-97a1-769330bd3ce7-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 09:52:51AM +0100, Mirsad Todorovac wrote:
-> Hi, Thomas,
-> 
-> The good news is that the
-> 
-> "kobject: 'integrity' (000000001aa7f87a): does not have a release() function"
-> 
-> is now removed:
-> 
-> https://domac.alu.hr/~mtodorov/linux/bugreports/integrity/fix/20230310_082429.jpg
-> 
-> On 3/10/23 00:26, Thomas Weißschuh wrote:
-> > On Thu, Mar 09, 2023 at 10:46:50PM +0100, Mirsad Goran Todorovac wrote:
-> > > On 09. 03. 2023. 22:23, Thomas Weißschuh wrote:
-> > > 
-> > > Very well, but who then destroys the cache crated here:
-> > > 
-> > > security/integrity/iint.c:177-179
-> > > > 177         iint_cache =
-> > > > 178             kmem_cache_create("iint_cache", sizeof(struct integrity_iint_cache),
-> > > > 179                               0, SLAB_PANIC, init_once);
-> > > 
-> > > I assumed that it must have been done from iint.c because iint_cache is
-> > > static?
-> > 
-> > It doesn't seem like anything destroys this cache.
-> > 
-> > I'm not sure this is a problem though as iint.c can not be built as module.
-> 
-> Maybe I was just scolded when I relied on exit() to do the memory deallocation
-> from heap automatically in userspace programs. :-/
-> 
-> I suppose this cache is destroyed when virtual Linux machine is shutdown.
-> 
-> Still, it might seem prudent for all of the objects to be destroyed before shutting
-> down the kernel, assuring the call of proper destructors, and in the right order.
-> 
-> > At least it's not a problem with kobjects as those are not used here.
-> 
-> I begin to understand.
-> 
-> security/integrity/iint.c:
-> 175 static int __init integrity_iintcache_init(void)
-> 176 {
-> 177         iint_cache =
-> 178             kmem_cache_create("iint_cache", sizeof(struct integrity_iint_cache),
-> 179                               0, SLAB_PANIC, init_once);
-> 180         return 0;
-> 181 }
-> 182 DEFINE_LSM(integrity) = {
-> 183         .name = "integrity",
-> 184         .init = integrity_iintcache_init,
-> 185 };
-> 
-> and struct lsm_info
-> 
-> include/linux/lsm_hooks.h:
-> 1721 struct lsm_info {
-> 1722         const char *name;       /* Required. */
-> 1723         enum lsm_order order;   /* Optional: default is LSM_ORDER_MUTABLE */
-> 1724         unsigned long flags;    /* Optional: flags describing LSM */
-> 1725         int *enabled;           /* Optional: controlled by CONFIG_LSM */
-> 1726         int (*init)(void);      /* Required. */
-> 1727         struct lsm_blob_sizes *blobs; /* Optional: for blob sharing. */
-> 1728 };
-> 
-> Here a proper destructor might be prudent to add.
-> 
-> Naive try could be like this:
-> 
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index 6e156d2acffc..d5a6ab9b5eb2 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -1724,6 +1724,7 @@ struct lsm_info {
->         unsigned long flags;    /* Optional: flags describing LSM */
->         int *enabled;           /* Optional: controlled by CONFIG_LSM */
->         int (*init)(void);      /* Required. */
-> +       int (*release)(void);   /* Release associated resources */
->         struct lsm_blob_sizes *blobs; /* Optional: for blob sharing. */
->  };
-> 
-> diff --git a/security/integrity/iint.c b/security/integrity/iint.c
-> index 8638976f7990..3f69eb702b2e 100644
-> --- a/security/integrity/iint.c
-> +++ b/security/integrity/iint.c
-> @@ -179,9 +179,16 @@ static int __init integrity_iintcache_init(void)
->                               0, SLAB_PANIC, init_once);
->         return 0;
->  }
-> +
-> +static int __exit integrity_iintcache_release(void)
-> +{
-> +       kmem_cache_destroy(iint_cache);
-> +}
-> +
->  DEFINE_LSM(integrity) = {
->         .name = "integrity",
->         .init = integrity_iintcache_init,
-> +       .release = integrity_iintcache_release,
->  };
-> 
-> However, I lack insight of who should invoke .release() on 'integrity',
-> in 10.7 million lines of *.c and *.h files. Obviously, now no one is
-> expecting .release in LSM modules. But there might be a need for the
-> proper cleanup.
-> 
-> For it is not a kobject as you already observed? :-/
+I have benchmarked the FUA/Cache behavior a bit.
+I don't have an actual filesystem benchmark that does what I wanted and is easy to port to the target so I used:
 
-I think you may prepare a formal patch and Cc to Greg KH, who knows
-the kobject code well and this warning in particular.
+# call with
+# for loop in {1..3}; do sudo dd if=/dev/urandom bs=1M of=/dev/mmcblk2; done; for loop in {1..5}; do time ./filesystembenchmark.sh; umount /mnt; done
+mkfs.ext4 -F /dev/mmcblk2
+mount /dev/mmcblk2 /mnt
+for i in {1..3}
+do
+cp -r linux-6.2.2 /mnt/$i
+done
+for i in {1..3}
+do
+rm -r /mnt/$i
+done
+for i in {1..3}
+do
+cp -r linux-6.2.2 /mnt/$i
+done
 
-I believe, even if a dead code, the destructor to have is a good code
-behaviour, since it is might be called on the __exitcall.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I found a couple of DUTs that I can link, I also tested one industrial card.
 
+DUT1: blue PCB Foresee eMMC
+https://pine64.com/product/32gb-emmc-module/
+DUT2: green PCB SiliconGo eMMC
+Couldn't find that one online anymore unfortunately
+DUT3: orange hardkernel PCB 8GB
+https://www.hardkernel.com/shop/8gb-emmc-module-c2-android/
+DUT4: orange hardkernel PCB white dot
+https://rlx.sk/en/odroid/3198-16gb-emmc-50-module-xu3-android-for-odroid-xu3.html
+DUT5: Industrial card
+
+
+The test issued 461 DO_REL_WR during one of the iterations for DUT5
+
+DUT1:
+Cache, no FUA:
+13:04.49
+13:13.82
+13:30.59
+13:28:13
+13:20:64
+FUA:
+13:30.32
+13:36.26
+13:10.86
+13:32.52
+13:48.59
+
+DUT2:
+FUA:
+8:11.24
+7:47.73
+7:48.00
+7:48.18
+7:47.38
+Cache, no FUA:
+8:10.30
+7:48.97
+7:48.47
+7:47.93
+7:44.18
+
+DUT3:
+Cache, no FUA:
+7:02.82
+6:58.94
+7:03.20
+7:00.27
+7:00.88
+FUA:
+7:05.43
+7:03.44
+7:04.82
+7:03.26
+7:04.74
+
+DUT4:
+FUA:
+7:23.92
+7:20.15
+7:20.52
+7:19.10
+7:20.71
+Cache, no FUA:
+7:20.23
+7:20.48
+7:19.94
+7:18.90
+7:19.88
+
+Cache, no FUA:
+7:19.36
+7:02.11
+7:01.53
+7:01.35
+7:00.37
+Cache, no FUA CQE:
+7:17.55
+7:00.73
+6:59.25
+6:58.44
+6:58.60
+FUA:
+7:15.10
+6:58.99
+6:58.94
+6:59.17
+6:60.00
+FUA CQE:
+7:11.03
+6:58.04
+6:56.89
+6:56.43
+6:56:28
+
+If anyone has any comments or disagrees with the benchmark, or has a specific eMMC to test, let me know.
+
+Regards,
+Christian
+
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
 
