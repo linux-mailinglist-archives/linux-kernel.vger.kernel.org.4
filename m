@@ -2,175 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3446B385E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7A56B3862
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjCJIS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 03:18:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S230059AbjCJIT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:19:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbjCJISz (ORCPT
+        with ESMTP id S230132AbjCJITY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:18:55 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2072.outbound.protection.outlook.com [40.107.243.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FAA96A425
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:18:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g3nvcFkJaKe/0ozUfCtcV+QYl0MbL5STkaMoX6FHeriuumql+2qX2cSE1DrlzUBjzrXJC5OM1pzpSHt5oJKbVClTT4GkMIP/95Zw63nWip42884SmitdkczgXYAUw0EC40TeB7gZqU0fHa56k1Br8zVPqArNsvymupFj5pgZJf7Oz8TnW+M3DxpieL2D8ZUOVZYxfHlnmjC6+YgqmhfrwL403IKn8zdDPOKK86VqpHuuV8xi5QBQ+sQeXJg9ZFwIHhozrwfOX4C3y7F25zeHBaYTDbMyYXow7TZWqFd0LjK7estHY/kG/sektJTtvyCvc2rfGmQgdTlFD2H0XgmuoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KABzB9zNe39RbQYQvO3NRs8EF3CbP9p5ccO4VQY7fMg=;
- b=oG1D+FQH8/Mifqe8KjcGmS0+ZBR4NtjsuUiq+nZXmUCicn971kd4stjVDJ5h/EYjo1llcPSUQlGihVo8P2HhpIGJkad9Q3IiybZfVag8vl+/Clc0OIPbQoiLo4Yztf8HZw8ocCzfKZWmnsZFvaymV5XbM8qgCbF9BraIpeka0ja47XNQLhwSX9ZNrU+OrWF8m+APsmvU/WUFkykPjt9mxNThqd2GBpajwDP2z+xi4soztMqEmPWnODGv2SGIpYn/WsJwvkD1JSNc6/lEcP5ovoloFAMymPFgBMHBcWZ4tJx6rYUK2ON2UhdoBhgLBm3y9km99SlR547E9qgT+J2HCA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KABzB9zNe39RbQYQvO3NRs8EF3CbP9p5ccO4VQY7fMg=;
- b=Sy1DRrfeu2sEqjpO9BhR7tPyotNVxA/PuJdya/TNYxTt9UhvaZYG68lSlIAa0geoeFEm/NSLVAf2u950NLWEPfidZitBz7KKb0FEfzPrqwpXI4PDlIXJAtkXwJPeOhrLI2viwVxNU0MIDOjnMhzZPTByyoSs9DmGQACdvnb4NFw=
-Received: from DM5PR12MB2469.namprd12.prod.outlook.com (2603:10b6:4:af::38) by
- MN0PR12MB5762.namprd12.prod.outlook.com (2603:10b6:208:375::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Fri, 10 Mar
- 2023 08:18:49 +0000
-Received: from DM5PR12MB2469.namprd12.prod.outlook.com
- ([fe80::5ca6:3a18:d6ee:c103]) by DM5PR12MB2469.namprd12.prod.outlook.com
- ([fe80::5ca6:3a18:d6ee:c103%7]) with mapi id 15.20.6178.019; Fri, 10 Mar 2023
- 08:18:49 +0000
-From:   "Chen, Guchun" <Guchun.Chen@amd.com>
-To:     Zhenneng Li <lizhenneng@kylinos.cn>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>
-CC:     David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>
-Subject: RE: [PATCH] drm/amdgpu: resove reboot exception for si oland
-Thread-Topic: [PATCH] drm/amdgpu: resove reboot exception for si oland
-Thread-Index: AQHZUyayYDVcB0qNSkOAgOVEzBYkza7zqzhg
-Date:   Fri, 10 Mar 2023 08:18:49 +0000
-Message-ID: <DM5PR12MB2469FEB1E81CA99C51E7DAF0F1BA9@DM5PR12MB2469.namprd12.prod.outlook.com>
-References: <20230310074000.2078124-1-lizhenneng@kylinos.cn>
-In-Reply-To: <20230310074000.2078124-1-lizhenneng@kylinos.cn>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM5PR12MB2469:EE_|MN0PR12MB5762:EE_
-x-ms-office365-filtering-correlation-id: 07966422-176d-4ba4-94ae-08db2140139c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3JuZ7nnhi2qzNnxSCnLl23zBIjf4FgeUISg7odeamHUxItenGI4AyADkwggJO5BIRcOCNkxcI+KbaQ2cw1mc5STFoWHlpHYzOmBNBIThLzcDeiYfwgqIWUs/i9ODBW+MNEKIOnUAN0asS9dXgGiO6rxpHCF5+p4VjD6SgXezCudwuABPjYoPGqKE3ASx9KWar7/zhyTymdO1YMKKkeX4bT9IKtRXSetIYQcY7vLxThbVHLrCfTzfNhZwLgwFqByeKXSQ0izLW/GV5MhMkcipQjau3p8P2fgTbVXknEga1gbnIOOQcpGVvC5Lgwh3phVG7b23jxydQdKRnwyEnR+lyf8ByPWhMeHxQo+GwIX23zkNxfRO9sz3P1n56DJgS/NpNTxEeUqUzQoRV/gZPBWevvQ392HCnfSF06ydQqkDZh/ISIyUWOUTyomHt1fz7Udylk62px3600/lSEI5ky/7FWTnfG81SJp8x+iR4AK6LZBJqztteOoMceVwa7GcV5qT2sSstLKEf9iIKMAkYqS1CJp88Omj3XFBeoLLMS3HK6u5PQXMbsEUvXICGSMhWKST06g4TU4AsjSD612NReK4vqXfWu8S+gfamL7mKIqU75mvoRx7lhBXL5MHU9ltYjGOKE+dtcnrR+YfUvsGunPZy0wkIlzZ2UMdRI69JVGuqRWwLQWdp7NDdMMG8hQdDLEpL+8r005d9QiySqgE3hEyPw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2469.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(366004)(136003)(39860400002)(346002)(376002)(451199018)(33656002)(6636002)(186003)(110136005)(38100700002)(54906003)(316002)(478600001)(71200400001)(7696005)(41300700001)(66476007)(76116006)(2906002)(66556008)(64756008)(8676002)(4326008)(66946007)(66446008)(8936002)(5660300002)(38070700005)(122000001)(55016003)(86362001)(9686003)(52536014)(6506007)(26005)(53546011)(83380400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xuPXGEmIoozo3Wo8ExPkOO1N0SjIf3M8hXQMMT6US7ZS5nMZNhAvZAXPPk+B?=
- =?us-ascii?Q?KtobGowm1XXpEJyZxhPkD1PaqQnLPkINXUuco9gbMtlHe/MCLfnVmJsVk+AW?=
- =?us-ascii?Q?P+LHFmQQatCOfePrjSt8PAB/TbbydG1ZTW6x5hinyoVTb09bVKeAjJTais8J?=
- =?us-ascii?Q?ZJJNhShagjZ83xRG7Rr7nyJSmTe/oV0TylWkYBQ8JJWUb3MrU6rjUuqSdB8j?=
- =?us-ascii?Q?T9EVuvr/335XlKUEvbjSgAA5G13vYm9vzM4CRc//Baod6damGGpz5Ck12oq+?=
- =?us-ascii?Q?TkkkCpDlQANxNFgXpaD3iATbirARRCx+YwjAx2++C1izicjEXKJqqsZk7t7U?=
- =?us-ascii?Q?HzRxbo8SvaUWIXzGxqr/jo0jxG+BshPzrW9SWtip2qxlhorss10KwIZEZNO1?=
- =?us-ascii?Q?YzU0ez4sVj9Ul9DRSyIymDJrgGLMoJIKiMOs/8+AMB571lQe2jW8PeskvzDJ?=
- =?us-ascii?Q?qr/zNpbIzbdOUAu/gSGmTGpQwBsgViUEPa455OgNj+6ac9VZEE1NkA790pLA?=
- =?us-ascii?Q?/sOL8y2zlpQbbcO86ako+G3/s8ecT31cb8qs3WHn5mfiKK2XbY8WSpHdTq38?=
- =?us-ascii?Q?ig646zQgZW/8FFjYE2DdmESGl2jUOwwErpVh7tMUEF0dTcmFG1yXVKB618ZC?=
- =?us-ascii?Q?lC/xQtVGjy/vw7YSyoPI3sHxhv6S8YRcyXeNE7HptPOL3cllDHAjGNYWF/R6?=
- =?us-ascii?Q?jqRufD2ubUUq/sveKsM4ToZcYrCM6AjtozMgrWQ5xrKrg1dr176uoWyzb/5L?=
- =?us-ascii?Q?aAZFJ4xuYPgWgM326XEZnMNegnG+m3SXHV8umPojzTWNYqPnrK6CiWa+E4jK?=
- =?us-ascii?Q?082HcDHfpVAQO0ZMlrN3iuOqc5MV4mBVb5U7GL0sOpLh5TszHzuvbQqQgKsm?=
- =?us-ascii?Q?xqWtgk09VPcitYA23NIETSb76/GwUMXDWq22QKYrty+54fsvpBT/jvZ9UIxn?=
- =?us-ascii?Q?WcyykUXt+YrY6TSMFRE8qG/JQYyJEecaPye95rEqVHxpSzA1fbmuH70WmxUZ?=
- =?us-ascii?Q?kuH1zaa6idZ8FGVmByQ3XSGqI7oQhWvuO5+COJ0sIvlt42woJazg2o8XUfF+?=
- =?us-ascii?Q?WHKYMUy7HRlt/IZEb/f5acZ41T1kZP31YcgziR6TKwNcT5Lwfa9SQgqtZ/u+?=
- =?us-ascii?Q?1HSplYcVXPWhbN2J/6NljtqMItmG4RQkmyrw+I/iCYNq+jojr/A2zNxw5DYY?=
- =?us-ascii?Q?rysD/B3+6Dif6dLkMhTVew5655cw/Sk8EkBLIUGHTxXAvVlPY8VrNNLtIih1?=
- =?us-ascii?Q?N3HZWagdeqn5NNbQFRlQgoLIIvQcAfuPvrHN9ajt7X34GZK5WS7j3+pmoAKe?=
- =?us-ascii?Q?29yXVpyfHr/XTx5Nfu9v/K3jiEDC979/R4c5AwMhpxT23NJIN6vC1/8UhMTt?=
- =?us-ascii?Q?xeAQD9bWQv26Saf6c9ds7+euK8My8Rw2Iu9wuacjlvCoFi9hg/WbMDHvzJry?=
- =?us-ascii?Q?vLg+bXr69OLBUSF0ersSmdhBgeyg06vyqcozQD8HSTaI5sQLHs06XO7wT4vb?=
- =?us-ascii?Q?zqIYfer8u7VgBAPAWVskR9qOF3x/By4pOT7uzXxwhYDnrGL6CdaqyJvKyo0Z?=
- =?us-ascii?Q?j8u9vui1Vz/ZiODgWIzZ3mFsUJVXLF2B5i3EoSsl?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 10 Mar 2023 03:19:24 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC46E95475
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:19:21 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id p26so2818293wmc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:19:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678436360;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=e3+IejGerSkWVmYYthQksOk85z2qGIusABFoD8foBbU=;
+        b=WIyaXheqnXnNzAG3ZpDrMShk0xBME1mI7nZjH2KgOK59dTBG1gaB04q55SdmETCjvP
+         zMbKix1GeHqTX1SoM3+vrKysTljd2ZHbbNwZz0v1vCtTAgVPxsgQjQH1HDwzgEznIvTn
+         vOqZbsq/rEQlWkYl4tEZVoYrawpl+8Q7+4MvRV08RPemY6CFxk9a010PtG3zauuOJZUm
+         E0yLy45n6feN5/Q67wcYWHLvIYsvNVSDlwWHYiqJl4WHFpKX/zyAmqaZLppWbSAtuod/
+         LJdjpfux/3MjVbjaEtaDC09SvVu4W/NQJBXPborM5cL88zTu0Z0PqoIFmw0szevnBJAO
+         UXCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678436360;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e3+IejGerSkWVmYYthQksOk85z2qGIusABFoD8foBbU=;
+        b=jFy/mTKtFXmldrTBhG0/xngeZXf+GTzrxeMUk9ujW0amUQ8QxrmQ39+UIWpMSTZ6NG
+         nuqtC/FKShiVRB+ZTGDxb9ejd1vhUL97J00yS+JKYmv6DwJeS5HRLkicLjkJM28bn38U
+         X6wt8ivb2tLecpoRdDKlZatm01O8evXQjjkLNkR2bH+cP73jLd0Z7zGNRkCJ2nUdxyL7
+         Aw0DQk0gvCaHSbz+8Yu46/B1fhUIx/nBSmXDeWEra33UTL/a5rufLywTP5ZjB2B/sDMp
+         1Nd0zbVPgHy0THLfDvnXXwlXJu9anUifBvx8ap4ryxG7Q1u8GofDCsRud5h1a5qHKB52
+         8KdQ==
+X-Gm-Message-State: AO0yUKVxrFEB/FRIIRHsDe8F86E9Wy79iqYpw87LMqA0W3HwzqooqyQZ
+        kiP1gpH2vvaJ3jBN1UjV0GAxPSehgvIBFC7nEchQqg==
+X-Google-Smtp-Source: AK7set9rSovQkv6G8/2uFWd8dZCJdhTjKOFXRnj4/glBjRHWFtuXEHSglc64lK3dRxU/gLKgbKiUpRiWGZkosiiA86U=
+X-Received: by 2002:a7b:c2a9:0:b0:3df:97b0:ba02 with SMTP id
+ c9-20020a7bc2a9000000b003df97b0ba02mr578544wmk.3.1678436360078; Fri, 10 Mar
+ 2023 00:19:20 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2469.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07966422-176d-4ba4-94ae-08db2140139c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2023 08:18:49.3084
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uuli/hJnEcypzGjD8LWXOSlr3jFkF/VWsFrtIIu+BYuHMOT2wnCBoaKBWZeQf7PMZvbiNIO7hE0kdNDYu8mxqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5762
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302013822.1808711-1-sboyd@kernel.org> <20230302013822.1808711-4-sboyd@kernel.org>
+ <CABVgOSmR0_u8Tw0E8C1mRFxSiGKwdKG5ka_+X_36Hj4VNLdg2g@mail.gmail.com> <b0d4d450a7ad9b39336771b74b48f086.sboyd@kernel.org>
+In-Reply-To: <b0d4d450a7ad9b39336771b74b48f086.sboyd@kernel.org>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 10 Mar 2023 16:19:08 +0800
+Message-ID: <CABVgOSmVJyG2X6aPzWGe9G-hUy8C7nWAqUnNoh-a5DFou6rkQA@mail.gmail.com>
+Subject: Re: [PATCH 3/8] kunit: Add test managed platform_device/driver APIs
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 10 Mar 2023 at 07:25, Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting David Gow (2023-03-02 23:15:31)
+> > On Thu, 2 Mar 2023 at 09:38, Stephen Boyd <sboyd@kernel.org> wrote:
+> > >
+> > > Introduce KUnit resource wrappers around platform_driver_register(),
+> > > platform_device_alloc(), and platform_device_add() so that test authors
+> > > can register platform drivers/devices from their tests and have the
+> > > drivers/devices automatically be unregistered when the test is done.
+> > >
+> > > This makes test setup code simpler when a platform driver or platform
+> > > device is needed. Add a few test cases at the same time to make sure the
+> > > APIs work as intended.
+> > >
+> > > Cc: Brendan Higgins <brendan.higgins@linux.dev>
+> > > Cc: David Gow <davidgow@google.com>
+> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > > Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> > > ---
+> > >
+> > > Should this be moved to drivers/base/ and called platform_kunit.c?
+> > > The include/kunit/platform_driver.h could also be
+> > > kunit/platform_device.h to match linux/platform_device.h if that is more
+> > > familiar.
+> >
+> > DRM has a similar thing already (albeit with a root_device, which is
+> > more common with KUnit tests generally):
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/drm/drm_kunit_helpers.h
+> >
+> > But that's reasonably drm-specific, so it makes sense that it lives
+> > with DRM stuff. platform_device is a bit more generic.
+> >
+> > I'd probably personally err on the side of having these in
+> > drivers/base/, as I think we'll ultimately need similar things for a
+> > lot of different devices, and I'd rather not end up with things like
+> > USB device helpers living in the lib/kunit directory alongside the
+> > "core" KUnit code. But I could be persuaded otherwise.
+>
+> Ok no problem. I'll move it.
+>
+> >
+> > >
+> > > And I'm not super certain about allocating a driver structure and
+> > > embedding it in a wrapper struct. Maybe the code should just use
+> > > kunit_get_current_test() instead?
+> >
+> > I think there are enough cases througout the kernel where
+> > device/driver structs are needed that having this makes sense.
+> > Combined with the fact that, while kunit_get_current_test() can be
+> > used even when KUnit is not loaded, actually doing anything with the
+> > resulting struct kunit pointer will probably require (at least for the
+> > moment) KUnit functions to be reachable, so would break if
+> > CONFIG_KUNIT=m.
+>
+> Wouldn't it still work in that case? The unit tests would be modular as
+> well because they depend on CONFIG_KUNIT.
+>
 
-> -----Original Message-----
-> From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of
-> Zhenneng Li
-> Sent: Friday, March 10, 2023 3:40 PM
-> To: Deucher, Alexander <Alexander.Deucher@amd.com>
-> Cc: David Airlie <airlied@linux.ie>; Pan, Xinhui <Xinhui.Pan@amd.com>;
-> linux-kernel@vger.kernel.org; dri-devel@lists.freedesktop.org; Zhenneng L=
-i
-> <lizhenneng@kylinos.cn>; amd-gfx@lists.freedesktop.org; Daniel Vetter
-> <daniel@ffwll.ch>; Koenig, Christian <Christian.Koenig@amd.com>
-> Subject: [PATCH] drm/amdgpu: resove reboot exception for si oland
->=20
-> During reboot test on arm64 platform, it may failure on boot.
->=20
-> The error message are as follows:
-> [    6.996395][ 7] [  T295] [drm:amdgpu_device_ip_late_init [amdgpu]]
-> *ERROR*
-> 			    late_init of IP block <si_dpm> failed -22
-> [    7.006919][ 7] [  T295] amdgpu 0000:04:00.0: amdgpu_device_ip_late_in=
-it
-> failed
-> [    7.014224][ 7] [  T295] amdgpu 0000:04:00.0: Fatal error during GPU i=
-nit
-> ---
->  drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c | 3 ---
->  1 file changed, 3 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
-> b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
-> index d6d9e3b1b2c0..dee51c757ac0 100644
-> --- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
-> +++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
-> @@ -7632,9 +7632,6 @@ static int si_dpm_late_init(void *handle)
->  	if (!adev->pm.dpm_enabled)
->  		return 0;
->=20
-> -	ret =3D si_set_temperature_range(adev);
-> -	if (ret)
-> -		return ret;
+Yeah, the only case where this starts to get hairy is if the tests end
+up in the same module as the thing being tested (which sometimes
+happens to avoid having to export a bunch of symbols: see, e.g.
+thunderbolt and amdgpu), and then someone wants to build production
+kernels with CONFIG_KUNIT=m (alas, Red Hat and Android).
 
-si_set_temperature_range should be platform agnostic. Can you please elabor=
-ate more?
+So that's the only real place where you might need to avoid the
+non-'hook' KUnit functions, but those drivers are pretty few and far
+between, and most of the really useful functionality should be moving
+to 'hooks' which will be patched out cleanly at runtime.
 
-Regards,
-Guchun
+> >
+> > So, unless you actually find kunit_get_current_test() and friends to
+> > be easier to work with, I'd probably stick with this.
+> >
+>
+> Alright thanks.
+>
+> > > diff --git a/lib/kunit/platform_driver.c b/lib/kunit/platform_driver.c
+> > > new file mode 100644
+> > > index 000000000000..11d155114936
+> > > --- /dev/null
+> > > +++ b/lib/kunit/platform_driver.c
+> > > @@ -0,0 +1,207 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Test managed platform driver
+> > > + */
+> > > +
+> > > +#include <linux/device/driver.h>
+> > > +#include <linux/platform_device.h>
+> > > +
+> > > +#include <kunit/resource.h>
+> > > +
+> > > +struct kunit_platform_device_alloc_params {
+> > > +       const char *name;
+> > > +       int id;
+> > > +};
+> >
+> > FYI: It's my plan to eventually get rid of (or at least de-emphasize)
+> > the whole 'init' function aspect of KUnit resources so we don't need
+> > all of these extra structs and the like. It probably won't make it in
+> > for 6.4, but we'll see...
+>
+> Will we be able to get the error values out of the init function? It's
+> annoying that the error values can't be returned as error pointers to
+> kunit_alloc_resource(). I end up skipping init, and doing it directly
+> before or after calling the kunit_alloc_resource() function. I'll try to
+> avoid init functions in the allocations.
 
->  #if 0 //TODO ?
->  	si_dpm_powergate_uvd(adev, true);
->  #endif
-> --
-> 2.25.1
+Yeah, that's largely why the plan is to get rid of them: it just made
+passing things around an enormous pain.
+Just doing your own initialisation before adding it as a resource is
+usually the right thing to do.
 
+There's also going to be a simpler kunit_defer() wrapper around it,
+which would just allow you to schedule a cleanup function to be called
+(without the need to keep kunit_resource pointers around, etc), for
+the cases where you don't need to look up resources elsewhere.
+
+But just doing your own thing and calling kunit_alloc_resource() is
+probably best for now, and should map well onto whatever this ends up
+evolving into.
+
+Cheers,
+-- David
