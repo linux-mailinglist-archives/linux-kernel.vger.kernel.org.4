@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7226B4800
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 722036B47ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233571AbjCJO4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:56:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
+        id S233383AbjCJO43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:56:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233734AbjCJOzL (ORCPT
+        with ESMTP id S233659AbjCJOy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:55:11 -0500
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC3D12DDD3;
-        Fri, 10 Mar 2023 06:50:38 -0800 (PST)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1755e639b65so6083081fac.3;
-        Fri, 10 Mar 2023 06:50:38 -0800 (PST)
+        Fri, 10 Mar 2023 09:54:56 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821C61223B3;
+        Fri, 10 Mar 2023 06:50:28 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id bj30so4390944oib.6;
+        Fri, 10 Mar 2023 06:50:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459706;
+        d=1e100.net; s=20210112; t=1678459696;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=q3KHc2qfQy8/Fx/GchcHCRrPSc3mgzu0I8uWgkcqEU0=;
-        b=YomaDBgKcI4/WOUBsKf74VZ64VP/0kiT0fkqBA4O1u2g3zDdn+3EAhyNVaqPgT2dRM
-         asg7w43ASpptlSAW+581lRJ7skCKtB21FQhsjAnoHABHs0iHQnFU+weKPQ9d79BBSt38
-         UoyC4TW4KeQvCwXkpvKzgm5h5YV6/31b0wNHd2JUU8CTYn0Ikl9atR2SF/KV+3MBXLxh
-         hf0MCMH5rxvuR7VangIXRblSXo+DnRM/jNAFd/VZ0Es75ZFzfuYonVW5AEPzr+pDYQ+c
-         8+LinPUQcIXevPKWRhlXDDWmQHAxuJE65ugP210eqyT+C2aeDgr2i7dziLg/1wiHWWuh
-         yTzg==
-X-Gm-Message-State: AO0yUKVPaA2j8QimbJ5FQiPOBQo1MNCij7nQEORwdX6OsfHsEcF5KohT
-        d5BQBN9QPkpoiIdzdQdNnmaTMKlk4Q==
-X-Google-Smtp-Source: AK7set8QmvbQP/Bjfjc3O5nnCMjZn+KxAeSmG9Ea+h1QaqVMxanfmgnEk4F99ymmNw1xiMUHNTguXw==
-X-Received: by 2002:a05:6870:8a0e:b0:176:6b9f:7ff4 with SMTP id p14-20020a0568708a0e00b001766b9f7ff4mr13541205oaq.21.1678459706222;
-        Fri, 10 Mar 2023 06:48:26 -0800 (PST)
+        bh=y5TTyXRi55hhSah2PxX/CKxknwUOEhFUDM0k5zozbMo=;
+        b=0Gv+zibgQ90XdkAIAqnl+R8vZDAUSNC7A6YUMTjJRLAKZ7IoHMBvca+FKDKpwv4aAc
+         0piOLy5uEVRt/rINWKGeESIKK1Yco+VuWax7ATtOUFRbAYQfULv4VVVZ16VxvcPPrjL7
+         5sWBAkvyLoFqu32/r5JZdfLu1UrqzXWRk8bafZAjwdhS4lvHIQmurRqpysrfo7mhHZ6O
+         Ah4DWkIyKInpOZITHVXkBILaYSCSPh0mIr3+EfCKhmOOaq7iSO5IYLH2izz0tSWRaOjG
+         pmrfbDHicJO9eZNVsMLJSfTeMNTwxjO8i0i/GX+Ec8XJknlG/OhhnIYFvRSaBdlRAvXO
+         Ekdg==
+X-Gm-Message-State: AO0yUKVBhrQL7yBnKCmRCPSmsCXoh8P2wPn+p2n7FsZv6Hz1a1+pdmPZ
+        Afx7aljUQ8ebLElVOtZbwA==
+X-Google-Smtp-Source: AK7set/LxJpTzvFNPpQdgvphtTIbAbb1FU0vekYAeviqgfSx1aZMwJPTc5jQS0Pp8Xqpt7e1Rjy/Aw==
+X-Received: by 2002:a05:6808:2da:b0:383:f572:2646 with SMTP id a26-20020a05680802da00b00383f5722646mr11335784oid.5.1678459695959;
+        Fri, 10 Mar 2023 06:48:15 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id an10-20020a056871b18a00b001730afaeb63sm112238oac.19.2023.03.10.06.48.25
+        by smtp.gmail.com with ESMTPSA id n25-20020a0568080a1900b0037d8dbe4308sm933029oij.48.2023.03.10.06.48.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:48:25 -0800 (PST)
-Received: (nullmailer pid 1546683 invoked by uid 1000);
-        Fri, 10 Mar 2023 14:47:34 -0000
+        Fri, 10 Mar 2023 06:48:15 -0800 (PST)
+Received: (nullmailer pid 1546914 invoked by uid 1000);
+        Fri, 10 Mar 2023 14:47:35 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     devicetree@vger.kernel.org, linux-omap@vger.kernel.org,
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] bus: ti-sysc: Use of_property_present() for testing DT property presence
-Date:   Fri, 10 Mar 2023 08:47:34 -0600
-Message-Id: <20230310144734.1546656-1-robh@kernel.org>
+Subject: [PATCH] power: supply: charger-manager: Use of_property_read_bool() for boolean properties
+Date:   Fri, 10 Mar 2023 08:47:35 -0600
+Message-Id: <20230310144735.1546888-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,29 +62,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 It is preferred to use typed property access functions (i.e.
 of_property_read_<type> functions) rather than low-level
-of_get_property/of_find_property functions for reading properties. As
-part of this, convert of_get_property/of_find_property calls to the
-recently added of_property_present() helper when we just want to test
-for presence of a property and nothing more.
+of_get_property/of_find_property functions for reading properties.
+Convert reading boolean properties to to of_property_read_bool().
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/bus/ti-sysc.c | 2 +-
+ drivers/power/supply/charger-manager.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
-index 6afae9897843..34d755797db4 100644
---- a/drivers/bus/ti-sysc.c
-+++ b/drivers/bus/ti-sysc.c
-@@ -964,7 +964,7 @@ static int sysc_map_and_check_registers(struct sysc *ddata)
+diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
+index c9e8450c646f..5fa6ba7f41e1 100644
+--- a/drivers/power/supply/charger-manager.c
++++ b/drivers/power/supply/charger-manager.c
+@@ -1331,7 +1331,7 @@ static struct charger_desc *of_cm_parse_desc(struct device *dev)
+ 	of_property_read_string(np, "cm-thermal-zone", &desc->thermal_zone);
  
- 	sysc_check_children(ddata);
- 
--	if (!of_get_property(np, "reg", NULL))
-+	if (!of_property_present(np, "reg"))
- 		return 0;
- 
- 	error = sysc_parse_registers(ddata);
+ 	of_property_read_u32(np, "cm-battery-cold", &desc->temp_min);
+-	if (of_get_property(np, "cm-battery-cold-in-minus", NULL))
++	if (of_property_read_bool(np, "cm-battery-cold-in-minus"))
+ 		desc->temp_min *= -1;
+ 	of_property_read_u32(np, "cm-battery-hot", &desc->temp_max);
+ 	of_property_read_u32(np, "cm-battery-temp-diff", &desc->temp_diff);
 -- 
 2.39.2
 
