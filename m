@@ -2,182 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 427116B3A36
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83CDD6B3A41
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbjCJJTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:19:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
+        id S231185AbjCJJWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:22:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbjCJJTW (ORCPT
+        with ESMTP id S230098AbjCJJWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:19:22 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD6572BC;
-        Fri, 10 Mar 2023 01:15:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1678439709; x=1709975709;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=XoaZ4aO2Rxz/z4PPgcvUJjKxA2L97LqNjmOAYyP/NdI=;
-  b=Z2vbL74x6uMmG9IfT7B/S2q8Oq8+wik64paHZfm8ICMpZ0CsfiTiFBj9
-   ojvfU9GXX2naPyM8rL480oBMEuyMiVOSGORIHeXEHRwMVqDm926PZvyT6
-   HdHaiVXB6mCP56BWXFVC6yWJGFxTj+FH99LGltgxtl+PI2CO1tmhl8Dqx
-   ScHEJDxd3cZpDbyR0b0GZ+dTE24v0kZzQohToc8xEjbBumFuivvGSR9A0
-   waBuxcRFFhoNXDcLJaUqeDtnunHwZOMP1xYJ4e8todT+eAG+f3Z0HtO0z
-   3TIjLV3c2AmDLkaqJAV5WKGUMedMywIrR1k5TblSuY8P32QTS9iqYiaxx
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,249,1673938800"; 
-   d="scan'208";a="215684271"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2023 02:14:59 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 10 Mar 2023 02:14:59 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 10 Mar 2023 02:14:59 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iWYU+ZMF3GmNVLbFCpEcBi7E03zZV8+cClY0YulIPfhwetv3Ofbaj1+kCKqWPX7CX5RlfTNeOygYX3Jzesl9h/xoht/qZVLVGZnq+TtakmD9p4IM5tvAzc6sr29WbNEaztPSGOiOUd8U2H35FM7VpvEK5/2Sl05dGy6iLFH7+lpAzwZg4Qg6d/zU7c6ZnOp2RtH6Zi/8AjwW1ye7xUIXwCVIZ1NEuhtWLhnH6CMkKoxzxXxrWj2yyccNb++2yDwq9hrHJ7jVppxkEQwO6uS9hYN9JJhwm5Qi5Tgc0m4DjpqmT5LzQ5/8wCpKDgG/yCfOF0OENo7HACzd3uBtcXbpsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XoaZ4aO2Rxz/z4PPgcvUJjKxA2L97LqNjmOAYyP/NdI=;
- b=VGGdn7R3He78+jj+oamKUEInkbbNhS/pj2HHTsSM9L4mlP4XDXeM6xPUPa0MrnjArOL1QOH2yKaIs6c8xAZyLXkShz61v/E4kmrDV6gfPBL1b8ohe0onm1Sav0FfM27TbmvLJuWxVgFVXtS8AMIEMGZTjHq0e2FPW251FuEhMguYGeKTveo40AFfSTCDAWvm01aCHy1nlBhtD8wqKGqe8ct7WPN5/7+2siRPUJQsA4TAdI8WDJqWYTY2rzRgCs7PBB4+7PmxWB1bUarkWMmwNAecmNKNcdOL9hvH+V/oga65Dn3/YZJ5M6d+Ow6rNPYv4tOW3vGwJZu3wqcotR4oOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XoaZ4aO2Rxz/z4PPgcvUJjKxA2L97LqNjmOAYyP/NdI=;
- b=IOYpvgwGWR8369f6uF8bsAe7d0SatTRyRCifC44WNdz3I4k167kUnXwtRRsfqVtwcQWQ7kI3QkzaaSY+bwMsbIOO1/Ao9b7bz8/gyGa3SNghWXrshUk8CrHYCg0s27i2yPijVD5fDl/I3ulpfbz/lK28eNlpTpK9dAH2jt4VTrI=
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
- by SJ0PR11MB4830.namprd11.prod.outlook.com (2603:10b6:a03:2d7::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
- 2023 09:14:57 +0000
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::6eb8:36cd:3f97:ab32]) by BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::6eb8:36cd:3f97:ab32%5]) with mapi id 15.20.6178.020; Fri, 10 Mar 2023
- 09:14:56 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <chengziqiu@hust.edu.cn>, <eugen.hristev@collabora.com>,
-        <jic23@kernel.org>, <lars@metafoo.de>,
-        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>
-CC:     <dzm91@hust.edu.cn>, <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drivers: iio: remove dead code in at91_adc_probe
-Thread-Topic: [PATCH] drivers: iio: remove dead code in at91_adc_probe
-Thread-Index: AQHZUzDILSzB7cTC0E+juALPPXDwjA==
-Date:   Fri, 10 Mar 2023 09:14:56 +0000
-Message-ID: <cc97cfe5-e90a-d901-147a-2bb829a4409d@microchip.com>
-References: <20230309150502.400312-1-chengziqiu@hust.edu.cn>
-In-Reply-To: <20230309150502.400312-1-chengziqiu@hust.edu.cn>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN6PR11MB1953:EE_|SJ0PR11MB4830:EE_
-x-ms-office365-filtering-correlation-id: e9a7565c-1d97-4eaf-2eed-08db2147eab6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6f8s5QxhLZmGlyv0JVc/0wJA7w2vqTik6dfIjxjeVmE9uZmYhjNOffIbOKt+ym4+xBqvYmg0eeFvbenRueTCcMEuI71nqWnsKjHULVf0jTnt1KSPmCCFRH0EM0oB//6dwjVaev8Ba8mVF1Eq/1wRQ52J9NpYzt2rfv+ObvJyfpTs5I+2Mg8mFU4hrIjEYLidf8JzBM20xHqoKMeDmgnkFQqDpgDrP8zZHMeDHkD7oiQNig7qole5jh2Eu3vXzn4HewxzgcJj3L+EpYABjE2f/rgZoqT+j1cqaWB9ZSUAiiqJIxqi/GMiENuIwFsEWqZFqZHN19and1klaVdCLz+3GRQGlTLBJlgJKJmkLHEi2+LvzqKPlseRIgiQ9BtLL2g/H8ggRo1/cMISo1MeuNIWLgEaHK5cqiNGFXm7tbXw+Jy9Kpy0As+lKYWdDoNnbVBbFq6w1Gy/h8n080udLA5RdO5xKywpWlNMt8/1Vyet4L7dea8f+WdhdBhM076M+9M0hzI07KuY9TbG8NcHoQZpzR2Sldqluw4gbus8XeMf/ewx4iPRqgr0CiwNcf8fmSubJnu8Ycop07z/SK6FiXlLa+fq5AwHz9QF3MLF1FVZITPTfnuJBZYwxQzo4nBs9ZZ+TSsYzLuTUyeZvFI0pCWTEBeeA2cn9T25/doSTTK6Dflvu0TwZB2rXkbQ/bGLAWD7gI3DsfvV0YHAeLqxsIKvuUAAx/8M/LM7XJc21nxBQ97vndG0i4hptpm0hOC6CSmEp4QZdTTtxbsUx9Zxy1DzFg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(396003)(39860400002)(136003)(376002)(346002)(451199018)(36756003)(83380400001)(6506007)(6512007)(53546011)(26005)(186003)(6486002)(2616005)(91956017)(86362001)(66556008)(8936002)(76116006)(41300700001)(66476007)(64756008)(66946007)(8676002)(31696002)(2906002)(4326008)(5660300002)(66446008)(38070700005)(122000001)(478600001)(71200400001)(316002)(38100700002)(110136005)(54906003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SUVNMjVHZzdGcXNORytrSnlZU3piYzBNVi9iWmkwbGtuakdMNC95Z1RJZjJH?=
- =?utf-8?B?TFQvQ2hSb0RWVVVRVkdQeVJZcjN2ME1UdWlpdmhaN0ZFVGx5NFlXZzVFSnB5?=
- =?utf-8?B?SnhFRElCaG9yd1NiaW5HODdOUERGdkhmWm53cUhXQ0lGNVJDanJnMlBJSnNP?=
- =?utf-8?B?MmJNWEJJQ2dBaEJEWGlRbTNRdnZYUHF1bGI0UGlHU2U2NHY3Mk4vNXEyVzZ6?=
- =?utf-8?B?YUl6NTVzVzdZR3NGNGxoWXRKVUxBVVFyYUdYYTFlc3BZQXZYRVVGWk1SYTRu?=
- =?utf-8?B?cldRaDlzRGNnNTlxSWxpb202K253eDVrVyttMkc4ZUYvNVlySTNoRTQybVNm?=
- =?utf-8?B?NHp3TXR3ZFlaY05qTWR4MkovS2FaUVJoVjVkallIQkl6ajF3S0hvaVVRNXhT?=
- =?utf-8?B?Ykg2MHBTdHlVRURaanY4S084S2NqTFpxSHpCQ1JlM25odW9DSFcxcXNZalB2?=
- =?utf-8?B?WERLWWFtMWlJRTJPNGxoL1lGM0Y3QzlkSk00Y2dDVk5SZ2hlVC9EWVJnSzBy?=
- =?utf-8?B?cFU4ek5iemJ0OFhuSy9PR05tRjFTRFpBRFN4WFEzRE9UQmVLK28yYWZtVVVD?=
- =?utf-8?B?b2Q2OFNVMjVuQzhaUGZKdm1CMnVVTzZxeHJ4SkhhS3haWWJkMmptVCsvVWUr?=
- =?utf-8?B?dTZQVEZ6SWtkRkZvV2I3ZkMzR3FiQlFLYll5bTZDZ3lyempXdnduY1JEcU9S?=
- =?utf-8?B?RVY0UnR5UW45aDZpYUo5ZkRxWnFOOFNjQldscmxrUTZzOWgrM2NSUUVNUlZu?=
- =?utf-8?B?Y1ZuR0xKNHNXbzkxNjhlZTVMRTZDdGZSblQweXhEdENSYnp2Ri9HbVJVb2Jx?=
- =?utf-8?B?YXF2a2VsVkZyRmNJc1YxWHBqV3czRkNBck9IY0hCSGtQY0Q4NG5yb2VwbVM2?=
- =?utf-8?B?ZzRKaEljV1kvK0pwTnhydFptUkdnZ0pJczhUSEs4QmF2WGZaaWFtdTZKTE5V?=
- =?utf-8?B?WEZDV0hPcENsc3dBaWxMc29aQlVlZTE5YUZwWkZNa3VoQmw5ejZZZVpwbEJE?=
- =?utf-8?B?MGRSTFRhZFVzNnRFc1FGWDYyUlllL3RNWnpZOGNtanV5TmM4UVNtaW9wSXFP?=
- =?utf-8?B?M2taY0haYmFJcGpzRDZ6WnFIdnJwbHppTmF3WWNySXhpZTByZGk4amZ6d3JK?=
- =?utf-8?B?R201Q0s4UVZVNHpZVzdjbzY0c054SGF6cklsUG5CYkNJUkZOWDBWc0hOWnRv?=
- =?utf-8?B?c1c3Sk1OREJlOVB4dkd2V2w2SGo5d2w5UFFES05LdjBIcnRpZ0t3dTJMR091?=
- =?utf-8?B?VUdRbS93Z09RdFJENnJmTGp6MjlQRDlrNmU0dFVHbUdzVnRkY201d3hjMXh0?=
- =?utf-8?B?VHdLZ2c2Q09iYmhmR1pSR0RNVVRWS0hwQzgvZFRqeW5ZOEdrV0E5Skc1WXpP?=
- =?utf-8?B?MXBTRWRnaWc5eHhNTHRiYTZBaWFrUkEwdGkvMDcvOUVEMEVSZlM3M0pwWnVP?=
- =?utf-8?B?Nnk3VjFyNGFQcHVuWmVkeXREcFVUek52VXpxSkQ2L1hTOC9vQ3lVZFg5UDRV?=
- =?utf-8?B?blRZV0h0QStGc0ZWQmRyblRZQ0dkSlNHbVp6MDZ4aWorTzlsV3JuOFBwcjNk?=
- =?utf-8?B?YndlQmhCWFJTZTMyb2phdThCK2VGTUg4QlVLdDl6dFJESk53TmQvSVU3Y3Zh?=
- =?utf-8?B?OEFxNE9jRVJzV2EvSnFrazA5RjdaVnpNR0JmYzRvM3RXMjR0SUdMYmt6dmJG?=
- =?utf-8?B?QmUyQmN3S0ZxSXZINEVSbDZZTzdMclMrNWp6VjVyQWY2YzE5UlVjRzFRRXlN?=
- =?utf-8?B?c0FoWjJ3bjIzR1lCVS9DSEZyeitCcmYwdjltRnhiRGJzbkRrS1VjM3dBYk9K?=
- =?utf-8?B?VXJESXVpZUs3VEtSZTNOdVNNYkZsb2FGM1VwaUZucGM2SmhyTlpDMDZGdlZR?=
- =?utf-8?B?ck1FZHBTM1NpK0U4OWpSNEZDdWN6S3hUSEpvbzJEcTZXbWJ2VTZ2Z1ErbElR?=
- =?utf-8?B?M0QvT2tmdFhidFRRakUvc2FBejZkZEJEcUhJTTRybWl6emQyTWNBZmQ2dVhD?=
- =?utf-8?B?d2J1K1VHNFJYcG5QM3huYWV3czhDYUhMNUxOMzNTTS95WkdHemRTVmZSRzUz?=
- =?utf-8?B?QzVnV2ZmU3U0RjlOSlRVVTFTbFFrbjIvWUllVlVRem9JeEpqWkozSjM1SGZS?=
- =?utf-8?B?S3ZEOE1sbU1BR3orRkJIVlFYWHd3QU4rSzF5QThMNU40cWhhbEJjbnhkTmpZ?=
- =?utf-8?B?Tmc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <98FAB22AEE79344FA0C397B27BB7E5AC@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 10 Mar 2023 04:22:19 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74AB10F871;
+        Fri, 10 Mar 2023 01:18:05 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id C911242458;
+        Fri, 10 Mar 2023 09:16:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1678439823;
+        bh=byVIkKMWTjR5Cmmkm2Sp0a3H/NhMOyuFcm8eO+lduw0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=GFcv0+O/5n+8+AJuByxDlTv+ETZEtPpn0IGI1rL3l+wdJRFBLIFKEi20htg6gpqYC
+         gKhQFbAjkpgl8b9Bom9Oe2pDywjci1y671teftJpwKSbxBfKREWnx0ALiD+lQk48qL
+         x3u30njGL1YIyrKgvmGBM7/wku/rawL3uupmvSQ4qLNboPqku9ZMK+hun9JP8/mESk
+         SowUGQcrRTGiiUlgSYHV2LXRlhw78QOqbLOkV4SIGlelO/4ekH6D5av4SdSqx0xxXs
+         DQcfpvFXU/ONTz6Cnn05CtrYZukcnBM4gdVO0alOrehj5kbxxcFL5VSQ9SKkGpZxSh
+         Wox7Qpbe39hyQ==
+Message-ID: <146ef94e-d3ac-c978-025a-b3a9ec3026a6@asahilina.net>
+Date:   Fri, 10 Mar 2023 18:16:53 +0900
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e9a7565c-1d97-4eaf-2eed-08db2147eab6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2023 09:14:56.6634
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8vXc8QmqoOITheKgsXOC3Chxnd2Hr+zGEVDEuvtIESjkvxP1OcUAXtfOGxap+7A80IubB4Sk6v+CiQz6K7stsTu99oAxz/9isdImHn3Uxa4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4830
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
+Content-Language: en-US
+To:     Faith Ekstrand <faith.ekstrand@collabora.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>, Mary <mary@mary.zone>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        rust-for-linux@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, linux-sgx@vger.kernel.org,
+        asahi@lists.linux.dev
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
+ <cd788ccf-0cf1-85d5-1bf8-efc259bd7e11@amd.com>
+ <a075d886-0820-b6fb-fcd0-45bfdc75e37d@asahilina.net>
+ <2b1060e9-86ba-7e16-14f1-5b5fa63de719@amd.com>
+ <9f76bb68-b462-b138-d0ad-d27c972530d4@asahilina.net>
+ <a39c6b40-f190-002d-ae1c-8b58c6442df2@amd.com>
+ <4bbfc1a3-cfc3-87f4-897b-b6637bac3bd0@asahilina.net>
+ <b0aa78b2-b432-200a-8953-a80c462fa6ee@amd.com>
+ <c0624252-070e-bd44-2116-93a1d63a1359@asahilina.net>
+ <d1fccceb-ca77-f653-17fc-63168e0da884@amd.com>
+ <9c3dc2ad-11e4-6004-7230-8ca752e3d9f7@asahilina.net>
+ <d544748c-8a2b-7c08-f199-182a56af22be@amd.com>
+ <3e5e0120-50fd-51c0-d817-5b1dc4c14e97@asahilina.net>
+ <f93448e6-4133-8a49-a12e-7a7012cb5409@amd.com>
+ <d36046e6-acf5-89a3-46b4-1c813ca925c8@asahilina.net>
+ <f89fad4d05bc1e603fb166569e20102ceb09fb4c.camel@collabora.com>
+From:   Asahi Lina <lina@asahilina.net>
+In-Reply-To: <f89fad4d05bc1e603fb166569e20102ceb09fb4c.camel@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDkuMDMuMjAyMyAxNzowNSwgQ2hlbmcgWmlxaXUgd3JvdGU6DQo+PkZyb20gdGhlIGNvbW1l
-bnQgb2YgcGxhdGZvcm1fZ2V0X2lycSwgaXQgb25seSByZXR1cm5zIG5vbi16ZXJvIElSUQ0KPiBu
-dW1iZXIgYW5kIG5lZ2F0aXZlIGVycm9yIG51bWJlciwgb3RoZXIgdGhhbiB6ZXJvLg0KPiANCj4g
-Rml4IHRoaXMgYnkgcmVtb3ZpbmcgdGhlIGlmIGNvbmRpdGlvbi4NCj4gDQo+IFNpZ25lZC1vZmYt
-Ynk6IENoZW5nIFppcWl1IDxjaGVuZ3ppcWl1QGh1c3QuZWR1LmNuPg0KDQpJIHNlZSBGcm9tIGFu
-ZCAxc3QgU29CIG1hdGNoZXMgYnV0DQoNCj4gU2lnbmVkLW9mZi1ieTogRG9uZ2xpYW5nIE11IDxk
-em05MUBodXN0LmVkdS5jbj4NCg0KdGhpcyBTb0Igc2VlbXMgZXh0cmEuIFdoYXQgaXMgdGhlIGNv
-bnRyaWJ1dGlvbiBvZiBEb25nbGlhbmcgTXUgdG8gdGhpcyBwYXRjaD8NCg0KPiAtLS0NCj4gIGRy
-aXZlcnMvaWlvL2FkYy9hdDkxLXNhbWE1ZDJfYWRjLmMgfCA2ICstLS0tLQ0KPiAgMSBmaWxlIGNo
-YW5nZWQsIDEgaW5zZXJ0aW9uKCspLCA1IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvaWlvL2FkYy9hdDkxLXNhbWE1ZDJfYWRjLmMgYi9kcml2ZXJzL2lpby9hZGMvYXQ5
-MS1zYW1hNWQyX2FkYy5jDQo+IGluZGV4IDUwZDAyZTVmYzZmYy4uMTY4Mzk5MDkyNTkwIDEwMDY0
-NA0KPiAtLS0gYS9kcml2ZXJzL2lpby9hZGMvYXQ5MS1zYW1hNWQyX2FkYy5jDQo+ICsrKyBiL2Ry
-aXZlcnMvaWlvL2FkYy9hdDkxLXNhbWE1ZDJfYWRjLmMNCj4gQEAgLTI0MDAsMTIgKzI0MDAsOCBA
-QCBzdGF0aWMgaW50IGF0OTFfYWRjX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYp
-DQo+ICAgICAgICAgc3QtPmRtYV9zdC5waHlzX2FkZHIgPSByZXMtPnN0YXJ0Ow0KPiANCj4gICAg
-ICAgICBzdC0+aXJxID0gcGxhdGZvcm1fZ2V0X2lycShwZGV2LCAwKTsNCj4gLSAgICAgICBpZiAo
-c3QtPmlycSA8PSAwKSB7DQo+IC0gICAgICAgICAgICAgICBpZiAoIXN0LT5pcnEpDQo+IC0gICAg
-ICAgICAgICAgICAgICAgICAgIHN0LT5pcnEgPSAtRU5YSU87DQo+IC0NCj4gKyAgICAgICBpZiAo
-c3QtPmlycSA8IDApDQo+ICAgICAgICAgICAgICAgICByZXR1cm4gc3QtPmlycTsNCj4gLSAgICAg
-ICB9DQo+IA0KPiAgICAgICAgIHN0LT5wZXJfY2xrID0gZGV2bV9jbGtfZ2V0KCZwZGV2LT5kZXYs
-ICJhZGNfY2xrIik7DQo+ICAgICAgICAgaWYgKElTX0VSUihzdC0+cGVyX2NsaykpDQo+IC0tDQo+
-IDIuMzQuMQ0KPiANCg0K
+On 10/03/2023 03.50, Faith Ekstrand wrote:
+> Jumping in here quick... (Sorry, I was out yesterday and was ignoring
+> my e-mail on Tuesday so I could finally type some compiler code.)
+> 
+> On Thu, 2023-03-09 at 18:14 +0900, Asahi Lina wrote:
+>> On 09/03/2023 17.05, Christian König wrote:
+>>> Am 09.03.23 um 07:30 schrieb Asahi Lina:
+>>>> On 09/03/2023 05.14, Christian König wrote:
+>>>>>> I think you mean wake_up_interruptible(). That would be
+>>>>>> drm_sched_job_done(), on the fence callback when a job
+>>>>>> completes, which
+>>>>>> as I keep saying is the same logic used for
+>>>>>> hw_rq_count/hw_submission_limit tracking.
+>>>>> As the documentation to wait_event says:
+>>>>>
+>>>>>    * wake_up() has to be called after changing any variable
+>>>>> that could
+>>>>>    * change the result of the wait condition.
+>>>>>
+>>>>> So what you essentially try to do here is to skip that and say
+>>>>> drm_sched_job_done() would call that anyway, but when you read
+>>>>> any
+>>>>> variable to determine that state then as far as I can see
+>>>>> nothing is
+>>>>> guarantying that order.
+>>>> The driver needs to guarantee that any changes to that state
+>>>> precede a
+>>>> job completion fence signal of course, that's the entire idea of
+>>>> the
+>>>> API. It's supposed to represent a check for per-scheduler (or
+>>>> more
+>>>> specific, but not more global) resources that are released on job
+>>>> completion. Of course if you misuse the API you could cause a
+>>>> problem,
+>>>> but what I'm trying to say is that the API as designed and when
+>>>> used as
+>>>> intended does work properly.
+>>>>
+>>>> Put another way: job completions always need to cause the sched
+>>>> main
+>>>> loop to run an iteration anyway (otherwise we wouldn't make
+>>>> forward
+>>>> progress), and job completions are exactly the signal that the
+>>>> can_run_job() condition may have changed.
+>>>>
+>>>>> The only other possibility how you could use the callback
+>>>>> correctly
+>>>>> would be to call drm_fence_is_signaled() to query the state of
+>>>>> your hw
+>>>>> submission from the same fence which is then signaled. But then
+>>>>> the
+>>>>> question is once more why you don't give that fence directly to
+>>>>> the
+>>>>> scheduler?
+>>>> But the driver is supposed to guarantee that the ordering is
+>>>> always 1.
+>>>> resources freed, 2. fence signaled. So you don't need to check
+>>>> for the
+>>>> fence, you can just check for the resource state.
+>>>
+>>> Yeah, but this is exactly what the dma_fence framework tried to
+>>> prevent. 
+>>> We try very hard to avoid such side channel signaling :)
+>>
+>> Right, and it's fine, I can use the fences directly easily enough.
+>> I'm
+>> just trying to explain why my original idea works too, even if it's
+>> not
+>> the best solution for other reasons!
+>>
+>> Of course I don't have the context of what other drivers are doing or
+>> did historically and what the pitfalls are, so I can't know what the
+>> "right" solution for any of this is in that context. I did my best to
+>> understand the drm_sched code and come up with a solution that works
+>> (which it does) without any more info. When I saw the hw submission
+>> limit stuff, I thought "okay, I need the same thing but with slightly
+>> more complex logic, so let's add a callback so the driver can
+>> customize
+>> it and do its own inflight counting".
+> 
+> So, I think there's a difference here between "impossible to implement
+> correctly", "likely to be implemented correctly", and "impossible to
+> implement incorrectly".  It's obviously possible to implement
+> correctly.  You can just always return true or do exactly the same
+> check or do some simple thing where you can guarantee that it will only
+> ever return false when there's a bunch of other stuff in the queue. 
+> That doesn't mean that it's likely to be implemented correctly by some
+> other driver.  Some idiot will come along and try to take advantage of
+> it and cause themselves horrible problems.
+> 
+> And, to be clear, for the purposes of this discussion, we're ALL
+> idiots, myself included.  If there's one thing the DRM community has
+> learned over the years, it's that drivers are so complex that we all
+> turn into idiots at some point, relative to the complexity of the code
+> and hardware behavior.  That's why things like dma_fence are written so
+> incredibly defensively and why we're so harsh about the rules.  It's
+> the rules and not our individual smarts that keep us from making
+> mistakes.  (Kinda like Rust, in a way.)  So while I appreciate the
+> frustration of "I'm just trying to do something that's clearly correct
+> here", that doesn't mean that then next person to come by and fix a bug
+> by tweaking that callback isn't going to screw it up irreparably.  That
+> person may even be you in 6 to 12 months after this e-mail thread is a
+> distant memory.
+> 
+> So, yes, does the implementation you have today work without deadlocks
+> or starvation?  Maybe it does.  I've not verified.  Is the suggested
+> callback a giant foot-gun in the already treacherous territory of
+> scheduling and fencing?  Yeah, it probably is and there's another way
+> to implement the same behavior which is likely safer in the long run.
+
+I understand that... I just wish the response had been along the lines
+of "this is a huge footgun for these reasons, and you don't need it
+because you can do it this other way instead", not "the concept is
+completely broken, NAK".
+
+If the discussion were phrased around how the API can be used and
+abused, then I can understand what the concern is. But it was somehow
+always about me and what I'm doing...
+
+> This is clearly going against the idea of having jobs only depend on 
+> fences and nothing else which is mandatory for correct memory management.
+
+That implies what I'm doing breaks memory management (and that it is
+obvious).
+
+> And to make it clear this is unfortunately a complete NAK to this 
+> approach! You can't do this!
+
+Again that I can't do it... and then we got an argument over whether the
+code is actually broken or not. But that doesn't even matter, since the
+issue is how easy the API is to use or misuse, not whether I actually
+misuse it...
+
+I'll switch to prepare_job() fences for the next version, so it's not an
+issue. Using that didn't even cross my mind because, knowing nothing
+about the intended usage here, the prepare_job() callback docs are quite
+obtuse:
+
+> Called when the scheduler is considering scheduling this job next> to get another struct dma_fence for this job to block on. Once i>
+returns NULL, run_job() may be called.
+> 
+> Can be NULL if no additional preparation to the dependencies are necessary.> Skipped when jobs are killed instead of run.
+
+What's a "dependency"? To me that sounded like execution dependencies,
+and we clearly express those in the jobs themselves ahead of time. But
+it turns out the purpose of this callback is to grab resources just in
+time before execution or block on them becoming available through a
+fence, and then it makes a lot more sense how to use it to do in-flight
+command count limiting.
+
+Aside: now that I understand this, I'm tempted to make the Rust
+signature for this return a Result<(), Fence>. Returning a fence is
+essentially the "error" case here, and that means in the implementation
+you can just do:
+
+if job.foo_res.is_none() {
+    job.foo_res = Some(foo.get_resource()?);
+}
+if job.bar_res.is_none() {
+    job.bar_res = Some(bar.get_resource()?);
+}
+
+As long as all the get_resource() calls return a Result<Resource, Fence>.
+
+There's even more undocumented subtlety here though, since as far as I
+can tell if all the resources aren't always grabbed in the same order,
+or more than one of a single resource is grabbed separately you could
+deadlock or even livelock?
+
+This is theoretical since right now I don't handle this properly at all
+other than the command count limit (I need the command struct fixup
+system for this to be reasonably possible), but for example, I'll need
+1-3 event IDs per job, and if I grab them one by one, you could end up
+deadlocking with all event IDs used by jobs waiting for more. And if I
+don't store them eagerly (so drop the IDs if you can't get all of them),
+then you can end up with livelocks where every scheduler is grabbing an
+ID, then dropping it when we can't get another one, which signals a
+fence for another blocked scheduler to grab another ID, which then drops
+it because it can't get more, etc. So I probably need to grab a number
+of event IDs atomically.
+
+> Also, in a weird way, I think these conversations are sometimes better
+> than documentation.  It took a while to get around to it all but
+> there's a lot of context that was brought together in this e-mail
+> thread that wouldn't have been in the docs no matter how good they are.
+> A lot of it isn't an isolated thing that should clearly be explained in
+> the run_job docs.  It's subtle interactions which happen when all the
+> pieces come together.  I see this complaint a lot about Vulkan as well.
+> There are behaviors which only become evident when you find the right 5
+> pieces of the spec and put them all together and squint.  It'd be good
+> to call those out sometimes but there's no way we can document all of
+> them.
+
+That's true, but I think we could improve things a lot even with just
+better docs and more hyperlinking between docs... For example, the GEM
+and DMA fence docs do have quite a bit of prose that gets you some
+context (even if it's a bit outdated and not complete). But drm_sched
+just has one paragraph and a list giving a high-level design, and then
+goes straight into function docs. It definitely takes putting together
+the sched, fence, dma_resv, etc. docs together to get the big picture,
+but if those docs all at least point at each other and are individually
+reasonably complete, then we'd have a chance ^^
+
+~~ Lina
