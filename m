@@ -2,146 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A126B4B24
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC236B4B2D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234373AbjCJPby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:31:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
+        id S234395AbjCJPda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:33:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233082AbjCJPba (ORCPT
+        with ESMTP id S234350AbjCJPdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:31:30 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCE713789F;
-        Fri, 10 Mar 2023 07:19:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 88517CE2460;
-        Fri, 10 Mar 2023 15:19:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47CB8C4339E;
-        Fri, 10 Mar 2023 15:19:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678461558;
-        bh=TVIFAEXwdGY93sxI4vQsn88Ku12GrQL9LqJyB7qunzo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CU6QjWYhxZpYilM1JOl3Lx8osCvf36p0VGoXtR0lJziYSJ1hx4zoOjr4DRU9r2g65
-         TPTpWMkWHfPglwTXXlIKLBmOC2CKhQCVYOAJyfb8bIPh45tSH4mQTeNnE28wZIniYc
-         bVa365768gdQVMnJsdO6c4mWAUJ8RL0HLzmfa9RnKhqV4Y3h+nsES+05irgdIsBpGG
-         3vBpYZO85AFgGh6+62h776AQnrxpt/kkYTfxyTW5P1pEr6V9klqFFp4OelYbRleIHD
-         2zanQkBZrDkd+9JxVasg4fmVXmh6Nka8nfA1mYtgnUeCEGouWR1p57OjFUvXF47wCN
-         /Jj6X6fYgiWDA==
-Date:   Sat, 11 Mar 2023 00:19:14 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Douglas RAILLARD <douglas.raillard@arm.com>
-Subject: Re: [PATCH] tracing: Error if a trace event has an array for a
- __field()
-Message-Id: <20230311001914.9274a39d5291ff118cc85346@kernel.org>
-In-Reply-To: <20230309221302.642e82d9@gandalf.local.home>
-References: <20230309221302.642e82d9@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 10 Mar 2023 10:33:04 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD5B13F6A5;
+        Fri, 10 Mar 2023 07:20:59 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 4ED515FD0F;
+        Fri, 10 Mar 2023 18:20:53 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1678461653;
+        bh=X09i05T2/kREhahqRt82WIF4sPikD7edgXSMZW3ujkg=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=ly6ySuexcYRvYaYs5/b/UXEjD6pRxvtWloqYINgYHG+3LnbgLnmY6qVp79LE03lre
+         VYy7lPYitk8ieGvcYo2l1+RlKUZfWIfIprrq76Cr+CTfs9oqddr6IQ4V1SOpgipxcz
+         xcwn93APf436xQ+0JScsrdkVEumpuOruFudx+rUPbRi5DOwL/Dni3Zo1OEO0+7z+Fs
+         9d3vhQhiL+rYlFr5D+5qBfmRRK8Y19Ik4n22u4gfJspXe3ZTsC3lK/eMGbEVoasPZU
+         2q7y5sDpOk0jN6bKNru1IyRra6/Q28cSBUU9HU7GF8OO4vgXpnjk5O7bNEOIL7CAMG
+         77bby9kDm00Qg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 10 Mar 2023 18:20:52 +0300 (MSK)
+Date:   Fri, 10 Mar 2023 18:20:51 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Kevin Hilman <khilman@baylibre.com>
+CC:     Arnd Bergmann <arnd@arndb.de>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Alexey Romanov <avromanov@sberdevices.ru>,
+        Rob Herring <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <jbrunet@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>
+Subject: Re: [PATCH v1 0/3] Meson A1 32-bit support
+Message-ID: <20230310152051.ilz4qsgp3rplt4ad@CAB-WSD-L081021>
+References: <8e5f9bfa-d612-cd43-d722-d04c40938c62@linaro.org>
+ <20230227142809.kujmrraf3pcdhqyn@CAB-WSD-L081021>
+ <f3e42012-609c-4085-b4f4-bd32bfc34aff@app.fastmail.com>
+ <20230227155100.hhl4yvkyfqfyoa6h@CAB-WSD-L081021>
+ <a5fa8b23-4ec8-475f-be5e-538b53d6f82d@app.fastmail.com>
+ <33b58877-5167-c453-e686-1d10cdca66c0@linaro.org>
+ <20230227165049.4y7jx5nnnlibe6kg@CAB-WSD-L081021>
+ <7d29f3fd-b8c8-4687-b6a0-b8956dd39f0b@app.fastmail.com>
+ <20230228084952.mgx3d3nw65yo5ebu@CAB-WSD-L081021>
+ <7hedpxwq1i.fsf@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <7hedpxwq1i.fsf@baylibre.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/10 13:19:00 #20932143
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Mar 2023 22:13:02 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Hello Kevin,
 
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Thu, Mar 09, 2023 at 01:52:41PM -0800, Kevin Hilman wrote:
+> Dmitry Rokosov <ddrokosov@sberdevices.ru> writes:
 > 
-> A __field() in the TRACE_EVENT() macro is used to set up the fields of the
-> trace event data. It is for single storage units (word, char, int,
-> pointer, etc) and not for complex structures or arrays. Unfortunately,
-> there's nothing preventing the build from accepting:
+> > On Mon, Feb 27, 2023 at 07:19:38PM +0100, Arnd Bergmann wrote:
+> >> On Mon, Feb 27, 2023, at 17:50, Dmitry Rokosov wrote:
+> >> > On Mon, Feb 27, 2023 at 05:38:49PM +0100, Neil Armstrong wrote:
+> >> >> On 27/02/2023 17:15, Arnd Bergmann wrote:
+> >> >> > On Mon, Feb 27, 2023, at 16:51, Dmitry Rokosov wrote:
+> >> >> > 
+> >> >> > Most of these don't apply in userspace, so the incentive to
+> >> >> > run smaller 32-bit userland on systems with less than 1GB of
+> >> >> > RAM usually outweighs the benefits of 64-bit userspace.
+> >> >> 
+> >> >> Thanks for the details!
+> >> >
+> >> > Looks like Thomas has already prepared a basic patch series for buildroot,
+> >> > but maintainers declined it.
+> >> >
+> >> > https://lore.kernel.org/all/20220730194331.GA2515056@scaer/
+> >> 
+> >> I see. I know very little about buildroot, but it sounds like
+> >> there are other ways of doing the same thing here. In general,
+> >> this is pretty much an Arm specific problem. While you clearly
+> >> want compat mode for small userland on any architecture but don't
+> >> want 32-bit kernels, arm is the only one that has a different
+> >> kernel "ARCH=" value and needs a separate gcc toolchain.
+> >> 
+> >> If the problem is only the toolchain, an easy way out may
+> >> be to use clang instead of gcc as your compiler, as a single
+> >> clang binary can target both 32-bit userland and 64-bit kernel
+> >> on all supported architectures.
+> >
+> > Agreed with you. We will try different local approaches to support
+> > compat build configurations. For now, prebuilt toolchain (buildroot make
+> > sdk goal) is best way from my point of view. Anyway, we will try to
+> > solve this problem in the our sandbox and stay on the 64-bit kernel.
+> > Thank you for all the helpful details you shared, appreciate it!
 > 
->     __field(int, arr[5]);
+> Just to clarify one thing...
 > 
-> from building. It will turn into a array value. This use to work fine, as
-> the offset and size use to be determined by the macro using the field name,
-> but things have changed and the offset and size are now determined by the
-> type. So the above would only be size 4, and the next field will be
-> located 4 bytes from it (instead of 20).
+> More specifically, this is a buildroot *build system* problem.  If you
+> build the kernel separately from the rootfs, it works fine. 
 > 
-> The proper way to declare static arrays is to use the __array() macro.
-> 
-> Instead of __field(int, arr[5]) it should be __array(int, arr, 5).
-> 
-> Add some macro tricks to the building of a trace event from the
-> TRACE_EVENT() macro such that __field(int, arr[5]) will fail to build. A
-> comment by the failure will explain why the build failed.
-> 
-> Link: https://lore.kernel.org/lkml/20230306122549.236561-1-douglas.raillard@arm.com/
-> 
+> I use 32-bit buildroot (and debian) rootfs images all the time on
+> Amlogic SoCs with 64-bit kernels and it works fine.  
 
-Looks good to me.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thank you!
-
-> Reported-by: Douglas RAILLARD <douglas.raillard@arm.com>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->  include/trace/stages/stage5_get_offsets.h | 21 +++++++++++++++++----
->  1 file changed, 17 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/trace/stages/stage5_get_offsets.h b/include/trace/stages/stage5_get_offsets.h
-> index ac5c24d3beeb..e30a13be46ba 100644
-> --- a/include/trace/stages/stage5_get_offsets.h
-> +++ b/include/trace/stages/stage5_get_offsets.h
-> @@ -9,17 +9,30 @@
->  #undef __entry
->  #define __entry entry
->  
-> +/*
-> + * Fields should never declare an array: i.e. __field(int, arr[5])
-> + * If they do, it will cause issues in parsing and possibly corrupt the
-> + * events. To prevent that from happening, test the sizeof() a fictitious
-> + * type called "struct _test_no_array_##item" which will fail if "item"
-> + * contains array elements (like "arr[5]").
-> + *
-> + * If you hit this, use __array(int, arr, 5) instead.
-> + */
->  #undef __field
-> -#define __field(type, item)
-> +#define __field(type, item)					\
-> +	{ (void)sizeof(struct _test_no_array_##item *); }
->  
->  #undef __field_ext
-> -#define __field_ext(type, item, filter_type)
-> +#define __field_ext(type, item, filter_type)			\
-> +	{ (void)sizeof(struct _test_no_array_##item *); }
->  
->  #undef __field_struct
-> -#define __field_struct(type, item)
-> +#define __field_struct(type, item)				\
-> +	{ (void)sizeof(struct _test_no_array_##item *); }
->  
->  #undef __field_struct_ext
-> -#define __field_struct_ext(type, item, filter_type)
-> +#define __field_struct_ext(type, item, filter_type)		\
-> +	{ (void)sizeof(struct _test_no_array_##item *); }
->  
->  #undef __array
->  #define __array(type, item, len)
-> -- 
-> 2.39.1
-> 
-
+You are totally right. It's one of the possible ways. But in the our
+internal project we build kernel + roofs + uboot together in the one
+buildroot project ('repo' based). So we will try to stay in the such
+paradigm, but will use multi-arch toolchain, maybe.
+Anyway, thanks a lot for sharing your experience.
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thank you,
+Dmitry
