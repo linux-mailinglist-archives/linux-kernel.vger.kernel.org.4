@@ -2,133 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4B16B48EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:08:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A116B490B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:08:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233631AbjCJPIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:08:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
+        id S233961AbjCJPIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:08:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233589AbjCJPHj (ORCPT
+        with ESMTP id S233777AbjCJPIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:07:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A423212C431;
-        Fri, 10 Mar 2023 07:00:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C79B61AB3;
-        Fri, 10 Mar 2023 14:59:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 802E9C433AC;
-        Fri, 10 Mar 2023 14:59:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678460389;
-        bh=1jHWm1hHektupMVfGYAU7Ec/h6Xz3poeeAB0EdUGEqo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uF2BrzmViQWwW1LEQLJXKxB0daFUAomEdstRS+b5em0SwNeqvzUCC33Io6LqCxVCR
-         i1QYaSFF0beb+R0KGs9x2ve6HqvVm5JrdiIsR54eceHdfbDuC+GKoAicbstlOTLock
-         Bs5uanFJ+vh4FLNRiUQXc/AF9e0+nF29h0yNAsSgC0UnJuO1nfvNXSzAwo70Rpoh76
-         U63zqbe0iNTyFW99cL3xWIjuY8fezUvZNREd9HPOYjgY9nGJHSot64soNRk/A908zK
-         5rSuPt9psIt7R28CcHPV0MF3q1jWwBZy5cXzTzDTFQ1FVN8BlAYYAQAfHTNxKofkzg
-         vzVxWokhVu/oQ==
-Received: by mail-lf1-f52.google.com with SMTP id k14so6944333lfj.7;
-        Fri, 10 Mar 2023 06:59:49 -0800 (PST)
-X-Gm-Message-State: AO0yUKXUxrOmnmOxGW4ImTt8/7HV/H80JGF/ANXhX8NTJpkD6e7f8UC7
-        F5evpw3i05WQI4NBqJ09M+F1WPi+iXonJMJ6TS0=
-X-Google-Smtp-Source: AK7set8UE9g4mnJY20spZnNYYYIZuw9ViDA1dtxYc+myhHvwFACvLnYstWrXuWWWcK6KO60dHRDelfdmwz0fTxtS5I8=
-X-Received: by 2002:a19:7517:0:b0:4dd:805b:5b75 with SMTP id
- y23-20020a197517000000b004dd805b5b75mr8092903lfe.7.1678460387521; Fri, 10 Mar
- 2023 06:59:47 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1671098103.git.baskov@ispras.ru> <cb62472011a0c4151276b6a05b83b60b1bf6f352.1671098103.git.baskov@ispras.ru>
-In-Reply-To: <cb62472011a0c4151276b6a05b83b60b1bf6f352.1671098103.git.baskov@ispras.ru>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 10 Mar 2023 15:59:36 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHnQZ2EDg1F_whTPHajYvqox7Ss35aqUyJuC8RLyiuCxg@mail.gmail.com>
-Message-ID: <CAMj1kXHnQZ2EDg1F_whTPHajYvqox7Ss35aqUyJuC8RLyiuCxg@mail.gmail.com>
-Subject: Re: [PATCH v4 17/26] x86/boot: Reduce size of the DOS stub
-To:     Evgeniy Baskov <baskov@ispras.ru>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 10 Mar 2023 10:08:18 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36EF12CBD5;
+        Fri, 10 Mar 2023 07:01:02 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id d7so5867899qtr.12;
+        Fri, 10 Mar 2023 07:01:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678460394;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Cv0nqeG9ewE2ohDmFuTFqHY0vUZH9hoFb51iUvscY0c=;
+        b=czmwilVn5p14xCmVVmK12l5bW3SJulgEzJIVeTAvcmSZHya1bN7nn1VHMo/qo+ZV0j
+         R1aVo5tbFBhVmWbNyZ6Aa0vwDumsTMpbeI1sL0W6tjTbKsAeUlgDaOomPqB7kzlreRrI
+         lLd3/xgAgYYfBbNxB7N8Fc7bfeHHVlDXPqAPa/EQhn2Jo3xJIKZ1JwZ6pnVmBhl5f1fX
+         iw0uQSqQeGxYe5KEQhgJwffySbWy6tfYqNYCowVe78GEEYL9zEM+wU2CTK31wkNbs9Is
+         Jd7stn7USKoQsKVI4pkewP4M6DbPErGumTajyR7XuktUZ3Y9eAFCrzhPVs6kpcKkyJoK
+         2aMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678460394;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Cv0nqeG9ewE2ohDmFuTFqHY0vUZH9hoFb51iUvscY0c=;
+        b=ABCny72qg2l/7cBCFiMInPp8AFR2RhsZGRRhQ7+/pIy/Y+o23mjOspH7Dd/obbRrM3
+         NAsOePGKER1CpaFziMysxlBlT9lF94PzgCPChkf1eQh+vdQXnW2+OZ7xdO9r0gnwz/3L
+         9/x5JuImducbcORx46rlnleM7k5GX71udEyaXWfMO31cCrHsCyjJ9MP90mEHnlpEBy8P
+         D/qG56UQxuUJdvi1J/0Mac06ftoX+Dcu6z36z+tNwuJ8/ZeO3LZvJH5i8atB3VYIXQgp
+         VvIp7pD0LzVAMUoXFjxnnIxWuwvkpYGlX+VK7BHWMR0TKg9mHm43vqkFd1kqcR1EhpFH
+         mIyA==
+X-Gm-Message-State: AO0yUKWQFZeIpEQv3ubyUdFVRWyB7bVDVZtRkgNCdcgWgBW2SO45c3g9
+        H16ST8eadqURhnOn1a8g+LA=
+X-Google-Smtp-Source: AK7set+f+qUvbUmt/KzHLVUZlrsvvPrMFwM1YJAYDf8D1odORfl6fghTzRM20US5VWKyKujUjePzqQ==
+X-Received: by 2002:ac8:5794:0:b0:3b9:bc8c:c202 with SMTP id v20-20020ac85794000000b003b9bc8cc202mr4414727qta.13.1678460394748;
+        Fri, 10 Mar 2023 06:59:54 -0800 (PST)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id d207-20020a3768d8000000b0073df51b5127sm1472389qkc.43.2023.03.10.06.59.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 06:59:54 -0800 (PST)
+Date:   Fri, 10 Mar 2023 09:59:53 -0500
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     =?UTF-8?B?S8O2cnkgTWFpbmNlbnQ=?= <kory.maincent@bootlin.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-omap@vger.kernel.org,
+        Michael Walle <michael@walle.cc>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        thomas.petazzoni@bootlin.com, Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Minghao Chi <chi.minghao@zte.com.cn>,
+        Jie Wang <wangjie125@huawei.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Sean Anderson <sean.anderson@seco.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Marco Bonelli <marco@mebeim.net>
+Message-ID: <640b45e9c765e_1dc964208eb@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20230310154125.696a3eb3@kmaincent-XPS-13-7390>
+References: <20230308135936.761794-1-kory.maincent@bootlin.com>
+ <20230308135936.761794-4-kory.maincent@bootlin.com>
+ <6408a9b3c7ae1_13061c2082a@willemb.c.googlers.com.notmuch>
+ <20230310154125.696a3eb3@kmaincent-XPS-13-7390>
+Subject: Re: [PATCH v3 3/5] net: Let the active time stamping layer be
+ selectable.
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 at 13:40, Evgeniy Baskov <baskov@ispras.ru> wrote:
->
-> This is required to fit more sections in PE section tables,
-> since its size is restricted by zero page located at specific offset
-> after the PE header.
->
-> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
-> Tested-by: Peter Jones <pjones@redhat.com>
-> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+K=C3=B6ry Maincent wrote:
+> On Wed, 08 Mar 2023 10:28:51 -0500
+> Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
+> =
 
-I'd prefer to rip this out altogether.
+> > >  =
 
-https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=9510f6f04f579b9a3f54ad762c75ab2d905e37d8
+> > > +	enum timestamping_layer selected_timestamping_layer;
+> > > +  =
 
-(and refer to the other thread in linux-efi@)
+> > =
 
-> ---
->  arch/x86/boot/header.S | 14 ++++++--------
->  1 file changed, 6 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/x86/boot/header.S b/arch/x86/boot/header.S
-> index 9338c68e7413..9fec80bc504b 100644
-> --- a/arch/x86/boot/header.S
-> +++ b/arch/x86/boot/header.S
-> @@ -59,17 +59,16 @@ start2:
->         cld
->
->         movw    $bugger_off_msg, %si
-> +       movw    $bugger_off_msg_size, %cx
->
->  msg_loop:
->         lodsb
-> -       andb    %al, %al
-> -       jz      bs_die
->         movb    $0xe, %ah
->         movw    $7, %bx
->         int     $0x10
-> -       jmp     msg_loop
-> +       decw    %cx
-> +       jnz     msg_loop
->
-> -bs_die:
->         # Allow the user to press a key, then reboot
->         xorw    %ax, %ax
->         int     $0x16
-> @@ -90,10 +89,9 @@ bs_die:
->
->         .section ".bsdata", "a"
->  bugger_off_msg:
-> -       .ascii  "Use a boot loader.\r\n"
-> -       .ascii  "\n"
-> -       .ascii  "Remove disk and press any key to reboot...\r\n"
-> -       .byte   0
-> +       .ascii  "Use a boot loader. "
-> +       .ascii  "Press a key to reboot"
-> +       .set    bugger_off_msg_size, . - bugger_off_msg
->
->  #ifdef CONFIG_EFI_STUB
->  pe_header:
-> --
-> 2.37.4
->
+> > can perhaps be a single bit rather than an enum
+> =
+
+> I need at least two bits to be able to list the PTPs available.
+> Look at the ethtool_list_ptp function of the second patch.
+
+In the available bitmap, yes. Since there are only two options,
+in the selected case, a single bit would suffice.=
