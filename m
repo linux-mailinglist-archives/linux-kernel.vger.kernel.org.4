@@ -2,61 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8C06B3CD5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9CC6B3CD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjCJKxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 05:53:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
+        id S229932AbjCJKyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 05:54:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjCJKxn (ORCPT
+        with ESMTP id S229758AbjCJKx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 05:53:43 -0500
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40BDB77E;
-        Fri, 10 Mar 2023 02:53:41 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1paaNT-002XOa-Vx; Fri, 10 Mar 2023 18:53:37 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 10 Mar 2023 18:53:35 +0800
-Date:   Fri, 10 Mar 2023 18:53:35 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     meenakshi.aggarwal@nxp.com
-Cc:     horia.geanta@nxp.com, V.sethi@nxp.com, pankaj.gupta@nxp.com,
-        gaurav.jain@nxp.com, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        franck.lenormand@nxp.com, vijayb@linux.microsoft.com,
-        code@tyhicks.com
-Subject: Re: [PATCH] drivers: crypto: caam: jr: add .shutdown hook
-Message-ID: <ZAsML/qAyPExMudN@gondor.apana.org.au>
-References: <20230220105033.1449263-1-meenakshi.aggarwal@nxp.com>
- <20230221054047.2140558-1-meenakshi.aggarwal@nxp.com>
+        Fri, 10 Mar 2023 05:53:56 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0935F8E79;
+        Fri, 10 Mar 2023 02:53:47 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32AArfvJ115600;
+        Fri, 10 Mar 2023 04:53:41 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678445621;
+        bh=41Zx3qFHWjyM5PIkEb3swc2qxePmA2Y3iWGeDIR/8QM=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=f7SCpOhU8BE1x5DxNfcZC4ECm8htRbIbRN3JBSDwKTijaefEORIMu6Q7ri6Quyfqi
+         EIqnoT8XnSO1QiIAfNfvuYWo1aKxS5dP9tRUM9wdH1QX/Qq9ndzhGCdzgdgDdPJPhY
+         3NNoLIww6qVX9w+kddXpCgRvtcPUVMx7WgkTvxro=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32AArfK8085794
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 10 Mar 2023 04:53:41 -0600
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 10
+ Mar 2023 04:53:41 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 10 Mar 2023 04:53:41 -0600
+Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32AArbn0028520;
+        Fri, 10 Mar 2023 04:53:38 -0600
+Message-ID: <a0136dee-7ee3-6681-81f1-fb646136b5e7@ti.com>
+Date:   Fri, 10 Mar 2023 16:23:37 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230221054047.2140558-1-meenakshi.aggarwal@nxp.com>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH 0/2] Add device-tree support for CPSW5G on J7200 SoC
+Content-Language: en-US
+To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+References: <20230310101407.722334-1-s-vadapalli@ti.com>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20230310101407.722334-1-s-vadapalli@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 11:10:47AM +0530, meenakshi.aggarwal@nxp.com wrote:
->
-> @@ -653,6 +658,7 @@ static struct platform_driver caam_jr_driver = {
->  	},
->  	.probe       = caam_jr_probe,
->  	.remove      = caam_jr_remove,
-> +	.shutdown = caam_jr_platform_shutdown,
+Hello,
 
-Please make your new addition line up with the rest of the code.
+This series depends on the series at:
+https://lore.kernel.org/r/20230310103504.731845-1-s-vadapalli@ti.com
+and will cause merge conflict if merged before it.
 
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Regards,
+Siddharth.
+
+On 10/03/23 15:44, Siddharth Vadapalli wrote:
+> Hello,
+> 
+> This series adds the device-tree nodes for CPSW5G instance of CPSW
+> Ethernet Switch on TI's J7200 SoC. Additionally, an overlay file is also
+> added to enable CPSW5G nodes in QSGMII mode with the Add-On J7 QUAD Port
+> Ethernet expansion QSGMII daughtercard.
+> 
+> Siddharth Vadapalli (2):
+>   arm64: dts: ti: j7200-main: Add CPSW5G nodes
+>   arm64: dts: ti: k3-j7200: Add overlay to enable CPSW5G ports in QSGMII
+>     mode
+> 
+>  arch/arm64/boot/dts/ti/Makefile               |   2 +
+>  arch/arm64/boot/dts/ti/k3-j7200-main.dtsi     |  83 +++++++++++++++
+>  .../dts/ti/k3-j7200-quad-port-eth-exp.dtso    | 100 ++++++++++++++++++
+>  3 files changed, 185 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-quad-port-eth-exp.dtso
+> 
