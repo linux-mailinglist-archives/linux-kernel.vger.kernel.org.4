@@ -2,190 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F43A6B4027
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05FC66B402F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjCJNVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 08:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
+        id S230155AbjCJNWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 08:22:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjCJNVc (ORCPT
+        with ESMTP id S230124AbjCJNWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:21:32 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7119D13D65
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:21:30 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id A1C2660502;
-        Fri, 10 Mar 2023 14:21:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678454487; bh=JXqGLzrX3FhQnp3vxNjiKMY/n5dMhP5F5mgTr9d2sIo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ntshaxaDq24kWvcmXhgML4E4FLC3qpDK9rKQ4oEzDle7bWn+5FaxF1NtTB+WlNasq
-         bZGor4sxSxSWVO5DXk1Sj/tuKbMpStFmbdyjoGxQ12n2zCQFemc7Yh/SLm+4WXjg8u
-         fw4oYAZYaDVk2kHAsSDJOJtHirZl2XLCFysNzZxZ823cN+bOJKEsHOUdzblXAJAFjL
-         BR3KPB7JLaJLMwvdXpLvCkp/l17NKjHIemfzzqbANm2kS5N/LxagcLu/e7c40XJ/Rv
-         7Vq/voV7C4sN4efMwSssmvzqUUMzzYvEyWWtl6d/BWLDGXGm7Ti6yORUDX2ndXcO78
-         LswpuUvpcPvuQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id qI8O6gStW31Y; Fri, 10 Mar 2023 14:21:25 +0100 (CET)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id 114F960501;
-        Fri, 10 Mar 2023 14:21:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678454485; bh=JXqGLzrX3FhQnp3vxNjiKMY/n5dMhP5F5mgTr9d2sIo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ttDLDfuVTpaNhTUeGbtD/3nAVDY+ZR0pYhmSmsqbKtOOaLwvWm0UEZeQEKwX7OJSU
-         A+0Q2wHZhJwZ2FT0r83ouQ8t2pO5cw/zsEvGO3wUBAxp8P5muPwHFyZM4yzpU2p9Xh
-         kLMkoQ+oU6wIweICP6TZJG50Gky4r2tY5DLHM1YbRA3rS7eif8S3l/DUS+tBnZclW6
-         kKIaoepSno67D/bd6/zAxZhOI+AT2g1J0jb8wpyXUKPzBMT8oxPFqtwORogP7HVvNo
-         Cii1HSYqKtmtkgoiFRIc59Jm8inuSmo0ss61h53BsAziaJHvJnDFpbu+qo8+9BC0la
-         lPopz/7BUdn3g==
-Message-ID: <83bebd97-ba44-9e19-d66c-95b43b123797@alu.unizg.hr>
-Date:   Fri, 10 Mar 2023 14:21:24 +0100
+        Fri, 10 Mar 2023 08:22:01 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224CEF92FF;
+        Fri, 10 Mar 2023 05:21:55 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id p3-20020a17090ad30300b0023a1cd5065fso5182781pju.0;
+        Fri, 10 Mar 2023 05:21:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678454514;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OfHCteNV7q+dsb4Bbdwo2yP63fJ16IUesnNAhcskNRU=;
+        b=KzoY5clJwBNute/PoW2MQ6oouocVxaydnQP7158oMa776/X3aRPhiTNkSB8lMxnzj4
+         DtVmyK9GibAPj9fImIEinHv4LbGohSYZgkq/WnghAlkhZfpMv/Vv/1bVQStzwiKFNgIC
+         MdkJyaT8KcQ8P1UtvNaXwxulnHN5afDecv3Zi0r7xFYlVfI/Eo9sRGlTWSK7x9zGOXuy
+         SCT7TwjU+oXvUjPwytDrRJjvB5rRsmiOQAZirKb6jAEHhwEYuXQditq6LB2emrxMw/D3
+         S1dkW1nt2jUC4+/Lc1/1qT4NCdnZ1fmO3nYQaWF6/4dlN3xYneRBZG+y6ixARyyMEVim
+         a2lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678454514;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OfHCteNV7q+dsb4Bbdwo2yP63fJ16IUesnNAhcskNRU=;
+        b=P0UEYNeJ2zCW85ZPwmmjBNdsfoadolxEXm/Q9Wngqe7A2RShua/3l2YrCGhH97OnbM
+         NgqgsFr4kb8h2DBYq239f8hQDzRod5npBmCfF2jZkM9SpdBywkMnMrZ+ORPOnyaJeEzA
+         fi6IzV22CNeDmgEojPAWYzjYZxyeV9Avc8fiNvnlKLQoTnqULIM2syzbev8/cJoEiXWf
+         FKDvgW38/0yCpueYUcN1xyTiBKFO8vBd0XK0Xh5AWHCfOa43MbRo06ZRbNc7Bok20AW7
+         X3fF7kEW7KS0SGSKEgpB/APZ1lDDaCTFNQgvPFXkuxV762NAzikZa5JZiArPcbbhGDB0
+         KoZw==
+X-Gm-Message-State: AO0yUKUe/MrrGaVI8w+WIfm68ZSV0droITBqcgSp0yVqh2IScJP+1aeM
+        /LDNXXGpmJ5oCMbDqjaYv1M=
+X-Google-Smtp-Source: AK7set98iPwBwFkq5myreeZkbP0DGiyTHoZ2q34nC3mEd9GMRiAi+I6LYrXirgJ0+rMnqa8ClZTqWg==
+X-Received: by 2002:a17:902:c40d:b0:19e:6760:3a5d with SMTP id k13-20020a170902c40d00b0019e67603a5dmr30054230plk.18.1678454514624;
+        Fri, 10 Mar 2023 05:21:54 -0800 (PST)
+Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id e6-20020a170902b78600b0019a95baaaa6sm1421711pls.222.2023.03.10.05.21.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 05:21:54 -0800 (PST)
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jianhua Lu <lujianhua000@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 1/2] dt-bindings: display: panel: Add Novatek NT36523 bindings
+Date:   Fri, 10 Mar 2023 21:21:43 +0800
+Message-Id: <20230310132144.2241-1-lujianhua000@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 1/1] devres: Pass unique name of the resource to
- devm_add_action()
-Content-Language: en-US, hr
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20230224200745.17324-1-andriy.shevchenko@linux.intel.com>
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <20230224200745.17324-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Andy,
+Novatek NT36523 is a display driver IC used to drive DSI panels.
 
-On 2/24/23 21:07, Andy Shevchenko wrote:
-> Pass the unique name of the resource to devm_add_action(),
-> so it will be easier to debug managed resources.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->   drivers/base/devres.c  | 11 ++++++-----
->   include/linux/device.h |  5 ++++-
->   2 files changed, 10 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/base/devres.c b/drivers/base/devres.c
-> index c0e100074aa3..5c998cfac335 100644
-> --- a/drivers/base/devres.c
-> +++ b/drivers/base/devres.c
-> @@ -722,20 +722,21 @@ static void devm_action_release(struct device *dev, void *res)
->   }
->   
->   /**
-> - * devm_add_action() - add a custom action to list of managed resources
-> + * __devm_add_action() - add a custom action to list of managed resources
->    * @dev: Device that owns the action
->    * @action: Function that should be called
->    * @data: Pointer to data passed to @action implementation
-> + * @name: Name of the resource (for debugging purposes)
->    *
->    * This adds a custom action to the list of managed resources so that
->    * it gets executed as part of standard resource unwinding.
->    */
-> -int devm_add_action(struct device *dev, void (*action)(void *), void *data)
-> +int __devm_add_action(struct device *dev, void (*action)(void *), void *data, const char *name)
->   {
->   	struct action_devres *devres;
->   
-> -	devres = devres_alloc(devm_action_release,
-> -			      sizeof(struct action_devres), GFP_KERNEL);
-> +	devres = __devres_alloc_node(devm_action_release, sizeof(struct action_devres),
-> +				     GFP_KERNEL, NUMA_NO_NODE, name);
->   	if (!devres)
->   		return -ENOMEM;
->   
-> @@ -745,7 +746,7 @@ int devm_add_action(struct device *dev, void (*action)(void *), void *data)
->   	devres_add(dev, devres);
->   	return 0;
->   }
-> -EXPORT_SYMBOL_GPL(devm_add_action);
-> +EXPORT_SYMBOL_GPL(__devm_add_action);
->   
->   /**
->    * devm_remove_action() - removes previously added custom action
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 1508e637bb26..5b9f3cb22f78 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -243,10 +243,13 @@ void __iomem *devm_of_iomap(struct device *dev,
->   			    resource_size_t *size);
->   
->   /* allows to add/remove a custom action to devres stack */
-> -int devm_add_action(struct device *dev, void (*action)(void *), void *data);
->   void devm_remove_action(struct device *dev, void (*action)(void *), void *data);
->   void devm_release_action(struct device *dev, void (*action)(void *), void *data);
->   
-> +int __devm_add_action(struct device *dev, void (*action)(void *), void *data, const char *name);
-> +#define devm_add_action(release, action, data) \
-> +	__devm_add_action(release, action, data, #action)
-> +
->   static inline int devm_add_action_or_reset(struct device *dev,
->   					   void (*action)(void *), void *data)
->   {
+Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+No changes in v4
 
-I have built last couple of kernels including 6.3-rc1+ w your patch.
+Changes in v3:
+  - pick up Krzysztof's R-b
+  - remove vddpos and vddneg supply
 
-(I'm late two weeks w testing, but those were rather busy two weeks.)
+Changes in v2:
+  - Drop unnecessary description
+  - dsi0 -> dsi
+  - Correct indentation
 
-I see what it is meant to do, but I am unsure of how to test whether it works.
+ .../display/panel/novatek,nt36523.yaml        | 85 +++++++++++++++++++
+ 1 file changed, 85 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
 
-Being the unfaithful Thomas, I always prefer to test rather to just assume it
-is OK.
-
-Is this OK output you expected to see in syslog?
-
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES ADD 00000000ea28d384 action (16 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES ADD 000000000cb0e6b1 devm_kzalloc_release (16 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES ADD 0000000056043cc0 devm_kzalloc_release (40 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES ADD 00000000c904ae95 devm_kzalloc_release (24 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES ADD 00000000cd39c068 devm_kzalloc_release (40 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES ADD 00000000918a0de4 devm_kzalloc_release (40 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES ADD 000000008192a378 devm_kzalloc_release (10 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES ADD 000000004090f288 action (16 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES REL 000000004090f288 action (16 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES REL 000000008192a378 devm_kzalloc_release (10 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES REL 00000000918a0de4 devm_kzalloc_release (40 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES REL 00000000cd39c068 devm_kzalloc_release (40 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES REL 00000000c904ae95 devm_kzalloc_release (24 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES REL 0000000056043cc0 devm_kzalloc_release (40 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES REL 000000000cb0e6b1 devm_kzalloc_release (16 bytes)
-Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES REL 00000000ea28d384 action (16 bytes)
-
-NOTE: Maybe I should emphasise that this is not seen in either dmesg or kernel console.
-
-I have just checked, and DEVRES lines are only in /var/log/messages (on AlmaLinux 8.7, CentOS fork).
-
-As you must have guessed yourself already, this will frustrate debugging past the lifetime of rsyslog process.
-
-Also, there is no way known to me to access dmesg log from the previous kernel run.
-
-Thanks,
-Mirsad
-
-
+diff --git a/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml b/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
+new file mode 100644
+index 000000000000..0039561ef04c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
+@@ -0,0 +1,85 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/panel/novatek,nt36523.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Novatek NT36523 based DSI display Panels
++
++maintainers:
++  - Jianhua Lu <lujianhua000@gmail.com>
++
++description: |
++  The Novatek NT36523 is a generic DSI Panel IC used to drive dsi
++  panels. Support video mode panels from China Star Optoelectronics
++  Technology (CSOT) and BOE Technology.
++
++allOf:
++  - $ref: panel-common.yaml#
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - xiaomi,elish-boe-nt36523
++          - xiaomi,elish-csot-nt36523
++      - const: novatek,nt36523
++
++  reset-gpios:
++    maxItems: 1
++    description: phandle of gpio for reset line - This should be 8mA
++
++  vddio-supply:
++    description: regulator that supplies the I/O voltage
++
++  reg: true
++  ports: true
++  backlight: true
++
++required:
++  - compatible
++  - reg
++  - vddio-supply
++  - reset-gpios
++  - ports
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    dsi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        panel@0 {
++            compatible = "xiaomi,elish-csot-nt36523", "novatek,nt36523";
++            reg = <0>;
++
++            vddio-supply = <&vreg_l14a_1p88>;
++            reset-gpios = <&tlmm 75 GPIO_ACTIVE_LOW>;
++            backlight = <&backlight>;
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                port@0 {
++                    reg = <0>;
++                    panel_in_0: endpoint {
++                        remote-endpoint = <&dsi0_out>;
++                    };
++                };
++
++                port@1{
++                    reg = <1>;
++                    panel_in_1: endpoint {
++                        remote-endpoint = <&dsi1_out>;
++                    };
++                };
++            };
++        };
++    };
++
++...
 -- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
+2.39.2
 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
