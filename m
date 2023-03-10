@@ -2,118 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70E06B4BC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B8F6B4BC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbjCJP42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
+        id S230325AbjCJP4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:56:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbjCJP4F (ORCPT
+        with ESMTP id S230124AbjCJP4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:56:05 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F34AFCF83;
-        Fri, 10 Mar 2023 07:49:03 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id i5so6036068pla.2;
-        Fri, 10 Mar 2023 07:49:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678463343;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JEtKc8sZos+Dc0t1cvJCnmLbpSWQyhy/XbEqe/9t3YE=;
-        b=V4oF8hwnLguFv3mXEyDsumx2wAfSQ1BkJ75sLRfmlA7fZWCvpbjHwIh9ZIjfp3oj/k
-         lPFFaFlxb/C5/SG5YjaRXbn1aZMaKvwvatu6ccjB8ROCqjbmB5V5FG1qD72zTgaUyzYh
-         hEGrF5IElLdTb2Uwtfk69sg4RWdqFhEObgabdiACr9+hLAN7pHJowez/DbJ4cStFTjkL
-         uPxzlsZkj4eb5mx6f0Jd6ynpGaZVH5WweWt7g/qEBAE8CoLdwc9OUrr85BiFvWwMsfnV
-         eycvFmLlyaG+/OOjsY7iTNNU0knrsfINF1o5T96I/1miKojfIrhL9poGV4AIAd3YUvbV
-         11qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678463343;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JEtKc8sZos+Dc0t1cvJCnmLbpSWQyhy/XbEqe/9t3YE=;
-        b=tbgMlrB730acj7vRO20d2kWtQaVQtdK4asb+lUlDgO9Wyk4Zc093zTzs7miWmQxvny
-         cxN5gEmr7cROhw13cMd7OQuHJrzEirfZgJymm6uiKWZt6p7DeVDLlsbZ4Sv3WU/lRI1q
-         oVssBbGvLYRgppP0GybNEQFpnEsGhitODwZrHp/iwtCGw8/1mtGj5Q/hXhkx9vyOaYoi
-         KoU3IJrc6LcoGp3LWVnxmmdgQMUI7oZ2I5sFw0wGBJBXifskFeB0b4LZwlvlBTC2VrCE
-         AwOnF2n8GnpIxIf3E7Y5xV5A8V+tyRGH7ClP6Efs29JFFPR/GsAujXwTWp1eow32JJjc
-         kg3A==
-X-Gm-Message-State: AO0yUKVEeYTk5hEK8/UjYUzLYvwzrdPZ/JD3NJy+eSKFO4gHSbEIQCAJ
-        Yz2RQrg8qTJJ/HpQVU6bpsg=
-X-Google-Smtp-Source: AK7set897PHks1qrrgkHdgqr+up48NII37yYJ85g+JFJ5MG99gJiqPK08lELsucoAFezQa6HAYKEAQ==
-X-Received: by 2002:a17:902:e551:b0:19d:121a:6795 with SMTP id n17-20020a170902e55100b0019d121a6795mr30623064plf.55.1678463342766;
-        Fri, 10 Mar 2023 07:49:02 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id q6-20020a170902788600b0019c2cf1554csm230472pll.13.2023.03.10.07.48.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 07:49:02 -0800 (PST)
-Message-ID: <ea387ecf-ac5a-4a22-e99c-bc283b39c1e1@gmail.com>
-Date:   Fri, 10 Mar 2023 23:48:48 +0800
+        Fri, 10 Mar 2023 10:56:16 -0500
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5195E118BFE
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:49:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1678463347; bh=KUWMx4xTtQ2NV8s0yXAq68XeDXgRcHLK7NX2DqJUdEw=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=OmKncEQIA2d37NsPi0ZIa+hBXeLWs0A8pCUHXbl0tt8v8ShLcWcwvscxA6Xfyfs7S
+         jGExYDndlwAKTX1vdlGnMKb6Dhpcgk9APzuCW2v6dS/1Y4kftuLxm+fqGDEKTsN5Rd
+         7LsQJRC8DEYlG4nz+m377h8vUMptM0H+F4BJEYOk=
+Received: by b221-1.in.mailobj.net [192.168.90.21] with ESMTP
+        via ip-20.mailobj.net [213.182.54.20]
+        Fri, 10 Mar 2023 16:49:07 +0100 (CET)
+X-EA-Auth: P1Jwh5XT4/s4Cxxa0/bBk9Cr0nuDmUWCczMFH0RTWzzfcXux+9EDP4p9sHlC7NDe8Wocegms03J6L9ZBxBYkzN94YT9fPEi1
+Date:   Fri, 10 Mar 2023 21:19:00 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Sumitra Sharma <sumitraartsy@gmail.com>
+Cc:     abbotti@mev.co.uk, hsweeten@visionengravers.com,
+        outreachy@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] comedi: drivers: ni_pcimio: Remove the code enclosed by
+ #if 0 and its #endif
+Message-ID: <ZAtRbDYxNbFxQdI9@ubun2204.myguest.virtualbox.org>
+References: <20230310140119.GA12544@ubuntu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH V3 12/16] x86/sev: Add a #HV exception handler
-To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20230122024607.788454-1-ltykernel@gmail.com>
- <20230122024607.788454-13-ltykernel@gmail.com>
- <a25a21f9-0059-3e39-4284-7c4164d170ed@amd.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <a25a21f9-0059-3e39-4284-7c4164d170ed@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310140119.GA12544@ubuntu>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 3/9/2023 7:48 PM, Gupta, Pankaj wrote:
-> On 1/22/2023 3:46 AM, Tianyu Lan wrote:
->> From: Tianyu Lan <tiala@microsoft.com>
->> +    UNWIND_HINT_IRET_REGS
->> +    ASM_CLAC
->> +    pushq    $-1            /* ORIG_RAX: no syscall to restart */
->> +
->> +    testb    $3, CS-ORIG_RAX(%rsp)
->> +    jnz    .Lfrom_usermode_switch_stack_\@
->> +
->> +    call    paranoid_entry
->> +
->> +    UNWIND_HINT_REGS
->> +
->> +    /*
->> +     * Switch off the IST stack to make it free for nested exceptions.
->> +     */
->> +    movq    %rsp, %rdi        /* pt_regs pointer */
->> +    call    hv_switch_off_ist
->> +    movq    %rax, %rsp        /* Switch to new stack */
->> +
+On Fri, Mar 10, 2023 at 06:01:19AM -0800, Sumitra Sharma wrote:
+> Reported by checkpatch.pl:
 > 
-> We need "ENCODE_FRAME_POINTER" similar to "vc_switch_off_ist" here as we 
-> are switching stack?
+> WARNING: Consider removing the code enclosd by this #if 0 and its #endif
+> at line 482, 501, 570.
+> 
+> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> ---
+>  drivers/comedi/drivers/ni_pcimio.c | 48 ------------------------------
+>  1 file changed, 48 deletions(-)
+
+Hi Sumitra,
+Nice first attempt. However, you should be working in the drivers/staging
+directory for now.
+
+Also, specific to the following change, the device definitions may be useful to
+people who have those devices and can be added to the driver by simply removing
+the #if 0 condition. Hence, these commented blocks are likely retained due to
+same reason.
+
+Thank you,
+Deepak.
+
+> 
+> diff --git a/drivers/comedi/drivers/ni_pcimio.c b/drivers/comedi/drivers/ni_pcimio.c
+> index 0b055321023d..1603095f2ed9 100644
+> --- a/drivers/comedi/drivers/ni_pcimio.c
+> +++ b/drivers/comedi/drivers/ni_pcimio.c
+> @@ -479,43 +479,6 @@ static const struct ni_board_struct ni_boards[] = {
+>  		.ao_speed	= 250,
+>  		.caldac		= { ad8804, ad8804 },
+>  	},
+> -#if 0
+> -	/* The 6115 boards probably need their own driver */
+> -	[BOARD_PCI6115] = {	/* .device_id = 0x2ed0, */
+> -		.name		= "pci-6115",
+> -		.n_adchan	= 4,
+> -		.ai_maxdata	= 0x0fff,
+> -		.ai_fifo_depth	= 8192,
+> -		.gainlkup	= ai_gain_611x,
+> -		.ai_speed	= 100,
+> -		.n_aochan	= 2,
+> -		.ao_maxdata	= 0xffff,
+> -		.ao_671x	= 1,
+> -		.ao_fifo_depth	= 2048,
+> -		.ao_speed	= 250,
+> -		.reg_611x	= 1,
+> -		/* XXX */
+> -		.caldac		= { ad8804_debug, ad8804_debug, ad8804_debug },
+> -	},
+> -#endif
+> -#if 0
+> -	[BOARD_PXI6115] = {	/* .device_id = ????, */
+> -		.name		= "pxi-6115",
+> -		.n_adchan	= 4,
+> -		.ai_maxdata	= 0x0fff,
+> -		.ai_fifo_depth	= 8192,
+> -		.gainlkup	= ai_gain_611x,
+> -		.ai_speed	= 100,
+> -		.n_aochan	= 2,
+> -		.ao_maxdata	= 0xffff,
+> -		.ao_671x	= 1,
+> -		.ao_fifo_depth	= 2048,
+> -		.ao_speed	= 250,
+> -		.reg_611x	= 1,
+> -		/* XXX */
+> -		.caldac		= { ad8804_debug, ad8804_debug, ad8804_debug },
+> -	},
+> -#endif
+>  	[BOARD_PCI6711] = {
+>  		.name = "pci-6711",
+>  		.n_aochan	= 4,
+> @@ -567,17 +530,6 @@ static const struct ni_board_struct ni_boards[] = {
+>  		.reg_type	= ni_reg_6711,
+>  		.caldac		= { ad8804_debug },
+>  	},
+> -#if 0
+> -	[BOARD_PXI6731] = {	/* .device_id = ????, */
+> -		.name		= "pxi-6731",
+> -		.n_aochan	= 4,
+> -		.ao_maxdata	= 0xffff,
+> -		.ao_fifo_depth	= 8192,
+> -		.ao_range_table	= &range_bipolar10,
+> -		.reg_type	= ni_reg_6711,
+> -		.caldac		= { ad8804_debug },
+> -	},
+> -#endif
+>  	[BOARD_PCI6733] = {
+>  		.name		= "pci-6733",
+>  		.n_aochan	= 8,
+> -- 
+> 2.25.1
+> 
 > 
 
-Agree. Will add it into the next version. Thanks.
+
