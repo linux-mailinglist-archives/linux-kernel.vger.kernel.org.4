@@ -2,133 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B2B6B49A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB716B4AC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbjCJPOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:14:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47244 "EHLO
+        id S234251AbjCJP0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:26:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232910AbjCJPOL (ORCPT
+        with ESMTP id S234229AbjCJP0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:14:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4D5763D2;
-        Fri, 10 Mar 2023 07:05:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50C86B822F3;
-        Fri, 10 Mar 2023 14:49:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA022C433AA;
-        Fri, 10 Mar 2023 14:49:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678459770;
-        bh=2usUCEXzMy3dWey/bDPkNZ2hDlmy3ilAfwwyoTRfCgI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dAhabvXIwYHV1UuvRjV9l0nTTvse8EZU11qwlYefmz+AWq0n1WzYBLXmrhOEcFiH5
-         OQI5VatyEtIKjfyecxF9VOg40VhkVUVBE41Oapn8pV9ZxohFQPtImAFtQHxCRZ1UPz
-         JZ31drRQ/2PEmygtUTNB4D1BNkdvT2oA3C+Zug571P6lfQO+SqfnOhREbVaZp++j6/
-         nlqXa9k75so08TRhKrmagk0m57SrhUsFB8Y7LNHmtEDl4DzqMbZ2Rxvq92n9v4dmPO
-         MLgp7avR8FJDFXxFDSipthXO6rBaZHdyculwzjFTjo720zUDNTCG6YF++fhDXvpvUQ
-         rkpbZ3/DR7d7Q==
-Received: by mail-lj1-f171.google.com with SMTP id z5so5534073ljc.8;
-        Fri, 10 Mar 2023 06:49:29 -0800 (PST)
-X-Gm-Message-State: AO0yUKVNjY+xNN09v6wOmWaPNRQmgDx5LzIrewnurYfOn8OxwMoX0z29
-        s6jzmtGEcznrGSIPiLpCATcAOWdsCn4rtJjKR1M=
-X-Google-Smtp-Source: AK7set/l4eR+hmEvLnp41KxXlyIdYAyB7mETDP/AT8qJNWVv6ZmRgtv4KaA6m45VJZQtn1Rr9nCf+Hl6w8Q8aoG1iec=
-X-Received: by 2002:a2e:a912:0:b0:293:4ba5:f626 with SMTP id
- j18-20020a2ea912000000b002934ba5f626mr961387ljq.2.1678459768031; Fri, 10 Mar
- 2023 06:49:28 -0800 (PST)
+        Fri, 10 Mar 2023 10:26:11 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E537129725;
+        Fri, 10 Mar 2023 07:15:25 -0800 (PST)
+Message-ID: <e89667d6-e65a-e9d8-5433-1cf918f6ff14@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1678459793;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WT6x5ALV9Avon1agL1/IFmPx2GHhD7TtkWqFlKSXWUk=;
+        b=gmW/hah6lnrBAeb/26WYOxG2PLdNIOu0Q8pSZ7BFBbBhrmekFvAe1t8XGrqYNpIW3akqqI
+        nfbSgEnHHUSjH3He8LUCqHTgouYpNHfpgof3ePS7ctW+fbZSFBG30HGcxjvXt4ZeXn+3od
+        uMZeP+KDVxr6aPwfysKENJEwWA+DK/joc3At1+mh6BE8R3XfuqLlswX4OlffCVonxFLv1P
+        YkJh+yFRpBRpi3AN+SGe2+Pa7adjljbTixyHbaY1dNkk0ujfgeIMszmnqzvFNKOpT95ZsA
+        lAS5mWRdlTtYKdgFWSSHdB+mPYJfBWZtSK0JjYmctuXl0+/jVmI1JO1i8zvzag==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1678459793;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WT6x5ALV9Avon1agL1/IFmPx2GHhD7TtkWqFlKSXWUk=;
+        b=0OC5ksB15x8S4Q7OlJlm4pNkL3gVRT68cm/XJtMhBsrM/wt8jXFbNQC20moCdgqRvDZJ0Y
+        P4X1qasSwlq9YfCg==
+Date:   Fri, 10 Mar 2023 15:49:53 +0100
 MIME-Version: 1.0
-References: <cover.1671098103.git.baskov@ispras.ru> <dd39dfd18bcae4e5116597d4e9c186249aa15850.1671098103.git.baskov@ispras.ru>
-In-Reply-To: <dd39dfd18bcae4e5116597d4e9c186249aa15850.1671098103.git.baskov@ispras.ru>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 10 Mar 2023 15:49:16 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHA_Zmd2T6fCyUZ=MYt5-dTmk7a2wH9Dp2QvjFYYpCiQQ@mail.gmail.com>
-Message-ID: <CAMj1kXHA_Zmd2T6fCyUZ=MYt5-dTmk7a2wH9Dp2QvjFYYpCiQQ@mail.gmail.com>
-Subject: Re: [PATCH v4 09/26] x86/boot: Remove mapping from page fault handler
-To:     Evgeniy Baskov <baskov@ispras.ru>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CAK7LNASjiAB93mu0igQsiwgu=zrgu3gArMJZ+6CXHuJ+kG_ELg@mail.gmail.com>
+ <20230307112028.14190-1-bage@linutronix.de>
+ <20230307112028.14190-2-bage@linutronix.de>
+ <CAK7LNASJeECGBiaWNjdhDbnBP3-8TKUOCXXbmbu8C9+Qa4FDxg@mail.gmail.com>
+Content-Language: de-DE-frami
+From:   Bastian Germann <bage@linutronix.de>
+Subject: Re: [PATCH v2 1/1] kbuild: deb-pkg: default dpkg-buildpackage --build
+In-Reply-To: <CAK7LNASJeECGBiaWNjdhDbnBP3-8TKUOCXXbmbu8C9+Qa4FDxg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 at 13:40, Evgeniy Baskov <baskov@ispras.ru> wrote:
->
-> After every implicit mapping is removed, this code is no longer needed.
->
-> Remove memory mapping from page fault handler to ensure that there are
-> no hidden invalid memory accesses.
->
-> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
-> Tested-by: Peter Jones <pjones@redhat.com>
-> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+Am 10.03.23 um 15:37 schrieb Masahiro Yamada:
+> If this patch is applied, 'make deb-pkg'
+> would not produce the source package at all.
 
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+How so? Are you saying `make deb-pkg` never built a source package with <= 6.2?
+Because those never specified a --build.
 
-> ---
->  arch/x86/boot/compressed/ident_map_64.c | 26 ++++++++++---------------
->  1 file changed, 10 insertions(+), 16 deletions(-)
->
-> diff --git a/arch/x86/boot/compressed/ident_map_64.c b/arch/x86/boot/compressed/ident_map_64.c
-> index fec795a4ce23..ba5108c58a4e 100644
-> --- a/arch/x86/boot/compressed/ident_map_64.c
-> +++ b/arch/x86/boot/compressed/ident_map_64.c
-> @@ -386,27 +386,21 @@ void do_boot_page_fault(struct pt_regs *regs, unsigned long error_code)
->  {
->         unsigned long address = native_read_cr2();
->         unsigned long end;
-> -       bool ghcb_fault;
-> +       char *msg;
->
-> -       ghcb_fault = sev_es_check_ghcb_fault(address);
-> +       if (sev_es_check_ghcb_fault(address))
-> +               msg = "Page-fault on GHCB page:";
-> +       else
-> +               msg = "Unexpected page-fault:";
->
->         address   &= PMD_MASK;
->         end        = address + PMD_SIZE;
->
->         /*
-> -        * Check for unexpected error codes. Unexpected are:
-> -        *      - Faults on present pages
-> -        *      - User faults
-> -        *      - Reserved bits set
-> -        */
-> -       if (error_code & (X86_PF_PROT | X86_PF_USER | X86_PF_RSVD))
-> -               do_pf_error("Unexpected page-fault:", error_code, address, regs->ip);
-> -       else if (ghcb_fault)
-> -               do_pf_error("Page-fault on GHCB page:", error_code, address, regs->ip);
-> -
-> -       /*
-> -        * Error code is sane - now identity map the 2M region around
-> -        * the faulting address.
-> +        * Since all memory allocations are made explicit
-> +        * now, every page fault at this stage is an
-> +        * error and the error handler is there only
-> +        * for debug purposes.
->          */
-> -       kernel_add_identity_map(address, end, MAP_WRITE);
-> +       do_pf_error(msg, error_code, address, regs->ip);
->  }
-> --
-> 2.37.4
->
+> Now I recalled the reason why I added this.
+> 
+> 
+> 
+> dpkg-buildpackage(1):
+> 
+>   full
+>       Builds everything.  This is an alias for source,any,all, and the
+>       same as the default case when no build option is specified.
+>                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+full is the default for --build. I guess the wording here is so tedious
+because you can have -S, -b, -B and so on which all imply some --build.
+
+> NACK
