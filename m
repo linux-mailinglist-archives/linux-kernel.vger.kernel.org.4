@@ -2,147 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0796B4F84
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 18:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD126B4F8E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 18:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjCJRxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 12:53:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
+        id S231472AbjCJRyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 12:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjCJRxK (ORCPT
+        with ESMTP id S230041AbjCJRyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 12:53:10 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2051.outbound.protection.outlook.com [40.107.92.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4042132BF2;
-        Fri, 10 Mar 2023 09:52:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SgaInzOU1H5sJd67J2vYFGlVs38H0h/84VmZnf0YK0Cf9RY4aXQkx0ZMgZDG7wSSwnKYQKy3QLhtyi5w7/aVMtWNRJKr7ioOL3oDzvv6T65yDZIZw8/Tll5sRzfn3CGHg8lmq65k2I0FYUE/0/ez4Ls3aw0RhjTJpr9YcUtSR0mLEkK/tD7G+0J1ztFN1rMW4/duCkwkkiUwW6YivFJIqNxgb5108jWbTTnQU9rEHOsewyPpdlEd8Ci5Z24huXWwTtAbysdTNMCcoO5U+FdwXe2P+9yYLNDozzG38MVdboiXyARVd3BWmUaglcEy4qatpS/9p01cvZAnRKI7NjlIhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KBlbLBgqEZsbs+4lI1zac1466siCk/hPJuNt/jJnIko=;
- b=b4CL7nClyiJqSh4ewxW2NUq5DaN2iIFfDRojaTkFNDLFGw4mVlH0ucJ8lGM3RslqOeq22HgWCzsfCe6QTxKgyMHYwWyd0R++W+UV6ZPZAiMvbnHutRLXyg/cD2hOoJR/2noG0kO0YVrzzFCSHLVkkzH7Qc6d/k46ctFU9NCPTEywlFdoMLn2tJ6GgH/KckrbH4RrSXOt5JlHbcXpk2qjZOYLcPGaevLiw7slYllT7SDCECAp/Baz2x5JAnjeyF2A/4AmkaBf06xWsPRB19gzI6yVaOvXzVRwBkAoLJ1+8aR+/jFWQWcQU23nP75nClEhu1Il9VsI1PnzpVvxZPcGqw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KBlbLBgqEZsbs+4lI1zac1466siCk/hPJuNt/jJnIko=;
- b=O+GgCjKAzLvJ96BmlJ8aQFicvFHQxSDJJL9Av9EVwmK1J7bB31deFEAsM0aoydzFAWC6znoSkjqfIQHkO+DeyfLa9+MjLdepNc9V3IEfVa4dIXc+SHRcZ8zX+uULVoz/WT+ecdV1SNqu5afHqhw6DGJEggo23UmJCGDhhzdW1aqRRBIY5TtfXjRyOk785Ks8zvvodjxKaSgYAUu6q3SH4aUM8//oBLnSRK79oLAkCQQa9lt8TZuL9ubjSGm6YBHg+AxF5I6dUwLvXyjO+bgv4Me/1uZ+3jPUHRA6xfY9OXaStCstyySdtsNfzJiiZDDSzYVA05HPiWMVDIcG/SdFKg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by DS0PR12MB7728.namprd12.prod.outlook.com (2603:10b6:8:130::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
- 2023 17:52:49 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.017; Fri, 10 Mar 2023
- 17:52:49 +0000
-Date:   Fri, 10 Mar 2023 13:52:46 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 08/12] iommufd/device: Report supported hwpt_types
-Message-ID: <ZAtubgIHAOtrnIbL@nvidia.com>
-References: <20230309080910.607396-1-yi.l.liu@intel.com>
- <20230309080910.607396-9-yi.l.liu@intel.com>
- <f0076d6a-d764-b018-7442-08a6293f9553@linux.intel.com>
- <ZArXyj3iiPa95aCu@Asurada-Nvidia>
- <DS0PR11MB752928ECB7D395C601F14246C3BA9@DS0PR11MB7529.namprd11.prod.outlook.com>
- <ZArgAXMUpNjDfFgZ@Asurada-Nvidia>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZArgAXMUpNjDfFgZ@Asurada-Nvidia>
-X-ClientProxiedBy: BY3PR10CA0021.namprd10.prod.outlook.com
- (2603:10b6:a03:255::26) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Fri, 10 Mar 2023 12:54:10 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E70E11FFAE
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 09:53:53 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D1AA4B3;
+        Fri, 10 Mar 2023 09:54:37 -0800 (PST)
+Received: from [10.57.90.67] (unknown [10.57.90.67])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A67E73F5A1;
+        Fri, 10 Mar 2023 09:53:51 -0800 (PST)
+Message-ID: <92fdb06f-e5b1-8534-fb0e-ad47b5be9e1d@arm.com>
+Date:   Fri, 10 Mar 2023 17:53:46 +0000
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS0PR12MB7728:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6d85369e-0086-49be-a3cb-08db21904369
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UqW1bNvi14gfyQmwBwxqZ8Tk/aYTrUZpub9wmvTeohPE7Vdz0Yji8vuGOUG9AiBUXU2vCGRwGiA3SBwnBucZ0ckUDupDqx8vLXOyXF2MPwr7LYcoK9BnXR+wFTJfaWdwCc5r33fUOpX604k0Bt1uDmNKgDmCekekVgbfcSSAfTLuyK7FUxCLkltArIxxPZgyKCkQGmNwTeBPRgcJeIlgElQLKOwXyaGB3oIn3ODqKffeQ3yktuOAFTMTnyQ9ANeT35Xf1XQ+yx/LRyPSOqQjsA+F4UQzYD8a/q4wpY4BzqS5s9lGWl1SFGqf+csXt2yXbIQLja6MYMObAxZRsvTo4Y64LNxXudBHScnVBXC/d+tLu6XW8h+uArfpJV8ctjInVJXtrbSfGp4gqcg38O7g0GWNRsCFDbPuWFGLXtR9g1NY/g1nnvoHkI13+tQeafbo9MEqTAerhHmJBFT1+sd0/gYW4D0oD0Z8qDmEPndfiJa1l3LY3lvvCVaqk1kjvUS+VzGYNUGbaCRqGpE3Ysy7vW5sPggxE5Xb9dtCE59GDRRjOAVyVhuCpreNpMEee9pXjiSkO/l0NsaUhWERELAngRInWC8tlhq/48kN5L+/lAp9krK+JePEwYPcpwO5/mbDQDFNRxSi9BvmpSJyovY70A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(136003)(346002)(366004)(376002)(451199018)(36756003)(6636002)(37006003)(54906003)(478600001)(41300700001)(6486002)(8936002)(5660300002)(316002)(4326008)(7416002)(2906002)(4744005)(66476007)(8676002)(66556008)(6862004)(66946007)(6506007)(26005)(86362001)(38100700002)(6666004)(186003)(2616005)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rLjdF+s7wAXDzn6WBZ2eWeWKXd/cMxRjwRT0lqpbTZ8dsHm3qf7OblP7bT7q?=
- =?us-ascii?Q?+f0ZnPMDsP41IZcUcnrwZlt3HfSmuKkOAoNbbgcp8k2uHIfduMnmCxOCRZ0D?=
- =?us-ascii?Q?7FIk5xb0HN/WhNLuAokQqyEY7tuTbV/NrQimfcyUVsoqtXTh5qOHbcd+Uy8Z?=
- =?us-ascii?Q?OTb4FMxidKn3BfHV9YcS31be8y5a7AmRcyzVDzRyr3PJaXAvy6Bvo+J6WnQG?=
- =?us-ascii?Q?XaubkwcRoMUEohI+OrtZSlXIK+eeUJiV3MTPxzgw2dmkjK5+FrUBxwv20AfX?=
- =?us-ascii?Q?erNG6DQyAqDKGdiuBIYtNt9VA2TfbDswz6GYhh+KFxgcjn+lWBVML9XfRmGe?=
- =?us-ascii?Q?BnQBDqqlo0m08d3LPwUi5Uzt7KAckApbeZZvzcMOXR5RdNnKRKJ9XQXpmgDq?=
- =?us-ascii?Q?g5WUQsHFjdGe0jIB0jCs1uw3bsu9I1LkmT+FpvAlYA/QHbYe1kx+8RYY9jMo?=
- =?us-ascii?Q?uMNzig6Uoq72GucCllYgwp4ORZUDRWcq7CrpmBbrA946bBomjxwlHPUh+ebn?=
- =?us-ascii?Q?5bSMggs+Yh7kHIbTArpHndrnT17LqzbvlJHtOspVkGLMPOoPDbFq3zX9Eknj?=
- =?us-ascii?Q?xefN4/GOwvfoIn6GhQPSxY0rpWGQWM9+hI2Ol8c6hFqwadG4KknZVorjzFhK?=
- =?us-ascii?Q?rnWA+TOE8EnuuzRnb2A4P0sE3ME6GmH2nuI0Mv0M4Jy7VVMKv4e7nLTX+ZaT?=
- =?us-ascii?Q?cenMrNlEBRmdgT9/PITEsm1IMjD96K633Iwrxr2/8Savw07h7u+eZkUhnjXR?=
- =?us-ascii?Q?ehuiY/gePZlqtoZdLFrKveRjJfdVcWAxRXXiZxWKfAu9rH5RbHX1MjuntcJW?=
- =?us-ascii?Q?L4ENucYybefA1vU11nkqU6hk9Hvi8dOnTK4NvFcFwLAQ/OXB7Ci0ycC7ckYR?=
- =?us-ascii?Q?yFXMvQcT21/OBqdoIcKhf/vrxpUxod5DPwqNR0HMevyFsy5grj48dBBLKY2O?=
- =?us-ascii?Q?KvzryEEoeITg6dGgLfpX/NWd3Rqd1VzvnrQkK6Jo9TjlhqWDKiEB6DJv13lL?=
- =?us-ascii?Q?DJQ5wT2Z0HSGZ41tu2GYQCGUgrUCSE4IYV6YGmM4v0Xf4a0QzmZxkrF9Yjrp?=
- =?us-ascii?Q?Nen1cwx/fnEQJJdXg2K+C+ZholRMLlxD78RuF6hg0VDWYROcfAoHA/x4RzIQ?=
- =?us-ascii?Q?rZAr+HVitY1zmQLiKMYnZesUZ5GVTic5mUWpGigZXHnmSSp4hy/vtljETcUx?=
- =?us-ascii?Q?TdzowQP2f0hLmL9OzJ+aFQ5EoS1WFYgqfRHyPSpndNmTqs6jPtOeZgrLVD3a?=
- =?us-ascii?Q?XrTxIy5TmAmmiJt69kiJgEX1npCGPghFzMBFSxv1qZ/3AhyOTJbAcJgTSO4p?=
- =?us-ascii?Q?so3/p4x8gQcdykqjoQV30/9HnrCUQ1DFrYiZ6/YRFbm7M226+QG+Po/JYYHR?=
- =?us-ascii?Q?LxmRhAds0/jCDadTu0tvuLMLyTuBH/Tr1WTx8rjVXWHE/ra2tj+Htc8UvtYy?=
- =?us-ascii?Q?iYL3EJ2DULwvSs7JXqRgHDg6oNFzoWEYw7Q5yLuWDOLX1G385ldx0GAxnvP8?=
- =?us-ascii?Q?zKAw2shBDnD9e5Q3rZYm3+5X+KBtKEkwVhATCmREBt7bAYTSSZ9ATgRoFUai?=
- =?us-ascii?Q?NVbBYHo817mfAaMwctWaIDbT/ZC9iycISupOpfDp?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d85369e-0086-49be-a3cb-08db21904369
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 17:52:49.5248
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /CFHBCLFUhC8pmtUda5MN2ZSVhhdTpQZQOiYBd64LH9Nqxi7ARMErF1F2QORDMk1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7728
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
+ arm_smmu_cache_invalidate_user
+Content-Language: en-GB
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     jgg@nvidia.com, will@kernel.org, eric.auger@redhat.com,
+        kevin.tian@intel.com, baolu.lu@linux.intel.com, joro@8bytes.org,
+        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <cover.1678348754.git.nicolinc@nvidia.com>
+ <aa327f9ea61e5a4771c13e53639e33955b9acde3.1678348754.git.nicolinc@nvidia.com>
+ <1467e666-1b6c-c285-3f79-f8e8b088718b@arm.com>
+ <ZAqpOQ+DDvEfq0Dg@Asurada-Nvidia>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <ZAqpOQ+DDvEfq0Dg@Asurada-Nvidia>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 11:45:05PM -0800, Nicolin Chen wrote:
+On 2023-03-10 03:51, Nicolin Chen wrote:
+> On Thu, Mar 09, 2023 at 02:49:14PM +0000, Robin Murphy wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 2023-03-09 10:53, Nicolin Chen wrote:
+>>> Add arm_smmu_cache_invalidate_user() function for user space to invalidate
+>>> TLB entries and Context Descriptors, since either an IO page table entrie
+>>> or a Context Descriptor in the user space is still cached by the hardware.
+>>>
+>>> The input user_data is defined in "struct iommu_hwpt_invalidate_arm_smmuv3"
+>>> that contains the essential data for corresponding invalidation commands.
+>>>
+>>> Co-developed-by: Eric Auger <eric.auger@redhat.com>
+>>> Signed-off-by: Eric Auger <eric.auger@redhat.com>
+>>> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+>>> ---
+>>>    drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 56 +++++++++++++++++++++
+>>>    1 file changed, 56 insertions(+)
+>>>
+>>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>>> index ac63185ae268..7d73eab5e7f4 100644
+>>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>>> @@ -2880,9 +2880,65 @@ static void arm_smmu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
+>>>        arm_smmu_sva_remove_dev_pasid(domain, dev, pasid);
+>>>    }
+>>>
+>>> +static void arm_smmu_cache_invalidate_user(struct iommu_domain *domain,
+>>> +                                        void *user_data)
+>>> +{
+>>> +     struct iommu_hwpt_invalidate_arm_smmuv3 *inv_info = user_data;
+>>> +     struct arm_smmu_cmdq_ent cmd = { .opcode = inv_info->opcode };
+>>> +     struct arm_smmu_domain *smmu_domain = to_smmu_domain(domain);
+>>> +     struct arm_smmu_device *smmu = smmu_domain->smmu;
+>>> +     size_t granule_size = inv_info->granule_size;
+>>> +     unsigned long iova = 0;
+>>> +     size_t size = 0;
+>>> +     int ssid = 0;
+>>> +
+>>> +     if (!smmu || !smmu_domain->s2 || domain->type != IOMMU_DOMAIN_NESTED)
+>>> +             return;
+>>> +
+>>> +     switch (inv_info->opcode) {
+>>> +     case CMDQ_OP_CFGI_CD:
+>>> +     case CMDQ_OP_CFGI_CD_ALL:
+>>> +             return arm_smmu_sync_cd(smmu_domain, inv_info->ssid, true);
+>>
+>> Since we let the guest choose its own S1Fmt (and S1CDMax, yet not
+>> S1DSS?), how can we assume leaf = true here?
+> 
+> The s1dss is forwarded in the user_data structure too. So, the
+> driver should have set that too down to a nested STE. Will add
+> this missing pathway.
+> 
+> And you are right that the guest OS can use a 2-level table, so
+> we should set leaf = false to cover all cases, I think.
+> 
+>>> +     case CMDQ_OP_TLBI_NH_VA:
+>>> +             cmd.tlbi.asid = inv_info->asid;
+>>> +             fallthrough;
+>>> +     case CMDQ_OP_TLBI_NH_VAA:
+>>> +             if (!granule_size || !(granule_size & smmu->pgsize_bitmap) ||
+>>
+>> Non-range invalidations with TG=0 are perfectly legal, and should not be
+>> ignored.
+> 
+> I assume that you are talking about the pgsize_bitmap check.
+> 
+> QEMU embeds a !tg case into the granule_size [1]. So it might
+> not be straightforward to cover that case. Let me see how to
+> untangle different cases and handle them accordingly.
 
-> Yea, that's what I thought too. Yet, I am wondering a bit if
-> it'd be better to have an ops->hwpt_type in the drivers, v.s.
-> maintaining a potentially big chunk of the array here.
+Oh, double-checking patch #2, that might be me misunderstanding the 
+interface. I hadn't realised that the UAPI was apparently modelled on 
+arm_smmu_tlb_inv_range_asid() rather than actual SMMU commands :)
 
-It probably is, some ops->iommufd_data.XX is not a bad idea
+I really think UAPI should reflect the hardware and encode TG and TTL 
+directly. Especially since there's technically a flaw in the current 
+driver where we assume TTL in cases where it isn't actually known, thus 
+may potentially fail to invalidate level 2 block entries when removing a 
+level 1 table, since io-pgtable passes the level 3 granule in that case. 
+When range invalidation came along, the distinction between "all leaves 
+are definitely at the last level" and "use last-level granularity to 
+make sure everything at at any level is hit" started to matter, but the 
+interface never caught up. It hasn't seemed desperately urgent to fix 
+(who does 1GB+ unmaps outside of VFIO teardown anyway?), but we must 
+definitely not bake the same mistake into user ABI.
 
-Jason
+Of course, there might then be cases where we need to transform 
+non-range commands into range commands for the sake of workarounds, but 
+that's our own problem to deal with.
+
+> [1] https://patchew.org/QEMU/20200824094811.15439-1-peter.maydell@linaro.org/20200824094811.15439-9-peter.maydell@linaro.org/
+> 
+>>> +                 granule_size & ~(1ULL << __ffs(granule_size)))
+>>
+>> If that's intended to mean is_power_of_2(), please just use is_power_of_2().
+>>
+>>> +                     return;
+>>> +
+>>> +             iova = inv_info->range.start;
+>>> +             size = inv_info->range.last - inv_info->range.start + 1;
+>>
+>> If the design here is that user_data is so deeply driver-specific and
+>> special to the point that it can't possibly be passed as a type-checked
+>> union of the known and publicly-visible UAPI types that it is, wouldn't
+>> it make sense to just encode the whole thing in the expected format and
+>> not have to make these kinds of niggling little conversions at both ends?
+> 
+> Hmm, that makes sense to me.
+> 
+> I just tracked back the history of Eric's previous work. There
+> was a mismatch between guest and host that RIL isn't supported
+> by the hardware. Now, guest can have whatever information it'd
+> need from the host to send supported instructions.
+> 
+>>> +             if (!size)
+>>> +                     return;
+>>> +
+>>> +             cmd.tlbi.vmid = smmu_domain->s2->s2_cfg.vmid;
+>>> +             cmd.tlbi.leaf = inv_info->flags & IOMMU_SMMUV3_CMDQ_TLBI_VA_LEAF;
+>>> +             __arm_smmu_tlb_inv_range(&cmd, iova, size, granule_size, smmu_domain);
+>>> +             break;
+>>> +     case CMDQ_OP_TLBI_NH_ASID:
+>>> +             cmd.tlbi.asid = inv_info->asid;
+>>> +             fallthrough;
+>>> +     case CMDQ_OP_TLBI_NH_ALL:
+>>> +             cmd.tlbi.vmid = smmu_domain->s2->s2_cfg.vmid;
+>>> +             arm_smmu_cmdq_issue_cmd_with_sync(smmu, &cmd);
+>>> +             break;
+>>> +     case CMDQ_OP_ATC_INV:
+>>> +             ssid = inv_info->ssid;
+>>> +             iova = inv_info->range.start;
+>>> +             size = inv_info->range.last - inv_info->range.start + 1;
+>>> +             break;
+>>
+>> Can we do any better than multiplying every single ATC_INV command, even
+>> for random bogus StreamIDs, into multiple commands across every physical
+>> device? In fact, I'm not entirely confident this isn't problematic, if
+>> the guest wishes to send invalidations for one device specifically while
+>> it's put some other device into a state where sending it a command would
+>> do something bad. At the very least, it's liable to be confusing if the
+>> guest sends a command for one StreamID but gets an error back for a
+>> different one.
+> 
+> We'd need here an sid translation from the guest value to the
+> host value to specify a device, so as not to multiply the cmd
+> with the device list, if I understand it correctly?
+
+I guess it depends on whether IOMMUFD is aware of the vSID->device 
+relationships that the VMM is using. If so, then it should be OK for the 
+VMM to pass through the vSID directly, and we can translate and 
+sanity-check it internally. Otherwise, the interface might have to 
+require the VMM to translate vSID->RID and pass the corresponding host 
+RID, which we can then map back to a SID (userspace cannot do the full 
+vSID->SID by itself, and even if it could that would probably be more 
+awkward to validate).
+
+>> And if we expect ATS, what about PRI? Per patch #4 you're currently
+>> offering that to the guest as well.
+> 
+> Oh, I should have probably blocked PRI. The PRI and the fault
+> injection will be followed after the basic 2-stage translation
+> patches. And I don't have a supporting hardware to test PRI.
+> 
+>>
+>>> +     default:
+>>> +             return;
+>>
+>> What about NSNH_ALL? That still needs to invalidate all the S1 context
+>> that the guest *thinks* it's invalidating.
+> 
+> NSNH_ALL is translated to NH_ALL at the guest level. But maybe
+> it should have been done here instead.
+
+Yes. It seems the worst of both worlds to have an interface which takes 
+raw opcodes rather than an enum of supported commands, but still 
+requires userspace to know which opcodes are supported and which ones 
+don't work as expected even though they are entirely reasonable to use 
+in the context of the stage-1-only SMMU being emulated.
+
+Thanks,
+Robin.
