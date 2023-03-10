@@ -2,110 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1346B395C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBBC6B3967
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbjCJJAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S231320AbjCJJBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbjCJI7S (ORCPT
+        with ESMTP id S231240AbjCJJAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:59:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3453F102B77;
-        Fri, 10 Mar 2023 00:53:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5B9161133;
-        Fri, 10 Mar 2023 08:53:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44835C433D2;
-        Fri, 10 Mar 2023 08:52:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678438380;
-        bh=UOkvQ0uqHHfL785oiVqIn6OhjgZ1kHQ35LvccbGpGp8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lhfvytSvwJti2QPRmi2gD461byc7l2E2sCS1EbTDlWGw2vgs9ls6Oiomxxssezwir
-         2Vm0Gngbm/tDoPG1oaCkD0Ejqh/0Eh51gJKjGa+r9S2e8gav8bwcPXZhrgmu3VI0kP
-         b64j2JeGaorc1KjuiCe9ma74/B38OFVZKuvmSqJUd+iO3eMboqnQj+kndlCmU2RdjT
-         dBA6bkASMioz+pMZRyJqer+wKcKFFBmVrVyDzcv1XOkTVCGEPHQnEIy09xZ93iUwXh
-         xwOBwWYIT1S/o8bZhVC70j75bHUD4oZ3JpQxoxkWZq40Ob04J+7LlR9MlWtxsEm/Vc
-         u5gpxanSRYeVQ==
-Date:   Fri, 10 Mar 2023 09:52:54 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        chuck.lever@oracle.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] fs/locks: Remove redundant assignment to cmd
-Message-ID: <20230310085254.counxoqhuv5bmkr5@wittgenstein>
-References: <20230308071316.16410-1-jiapeng.chong@linux.alibaba.com>
- <167835349787.767856.6018396733410513369.b4-ty@kernel.org>
- <fd7e0f354da923ebb0cbe2c41188708e4d6c992a.camel@kernel.org>
- <20230310034016.GH3390869@ZenIV>
+        Fri, 10 Mar 2023 04:00:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFCCF2484
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:53:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678438427;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nyujGqY6hbL21R7JvgsLqfIPq6KmX0JyLo05ppN+aX0=;
+        b=SKVQuvQ8NgsqHx47PJ5botKhooWmTguShV+6YJPFAjEf9NjuLAu4Pq3D7oc21oWKme/Qeq
+        TXlBCLgJFYMm3l2mdLz/oUfg4BzUHx5iObAn6WVYqWKOLh1mpT641s0+VQ2Fcmo+Je8EPQ
+        wRjLGv0W9dzIrxPNFU2fWfFr8EE3fHA=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-210-VvIkpD3mOaaORk-wLNv30w-1; Fri, 10 Mar 2023 03:53:45 -0500
+X-MC-Unique: VvIkpD3mOaaORk-wLNv30w-1
+Received: by mail-wm1-f72.google.com with SMTP id e22-20020a05600c219600b003e000facbb1so3558654wme.9
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:53:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678438425;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nyujGqY6hbL21R7JvgsLqfIPq6KmX0JyLo05ppN+aX0=;
+        b=xm+/wdQ45KJIPU+yTahxpPBm9EZ9Dfe+ZodqflsYeh6qwv/auLGWIkAnakJItJXYtl
+         TTgP9FEw67iqzfhp5+TI/HbXO6y0LYJWhn+0veRLeVRcBejkuJ+4UauzjF3/ZZkGWwIQ
+         m/m22FZ2D9MVFFclxkdbIE4TUilwXhE8/Cf9hzfZ7vdeBOMbo56vkFQ/1CXSGH/+jZtL
+         fhoibYF7SuI8sGZyJKtN5MfzTneABf1gaYvtEcQIXZTcr2EuADkT80JKqv0vXrCcBpWu
+         b7nGcjNuMWWcKyUuisB8SrEbVriR57KgVp2/PfI4LhpPhD8gW5arK5Fl8h/X20lsTW89
+         VIjQ==
+X-Gm-Message-State: AO0yUKW+J03CE1EklUmFvTaGxS8idxVg77ldmGNukzXv2ivOE68/Ouyu
+        pRcV5U2BnuoQwKL3188Lur/csLHsToUyE66rHBrvGg+KKw8W7LtU7v9B1aGyhc5Vyc130dFwKds
+        fglToxq6Zjf4ORQQpq6jMXCUm
+X-Received: by 2002:a05:600c:1c17:b0:3dc:557f:6123 with SMTP id j23-20020a05600c1c1700b003dc557f6123mr1946411wms.1.1678438424835;
+        Fri, 10 Mar 2023 00:53:44 -0800 (PST)
+X-Google-Smtp-Source: AK7set82MkObAZdWQPCWwT+eXdPJoKLSsejspunYV9KZmp0T6Zmmx7jMIADOEHFaY00hmbmSF3ENFw==
+X-Received: by 2002:a05:600c:1c17:b0:3dc:557f:6123 with SMTP id j23-20020a05600c1c1700b003dc557f6123mr1946371wms.1.1678438424470;
+        Fri, 10 Mar 2023 00:53:44 -0800 (PST)
+Received: from redhat.com ([2.52.9.88])
+        by smtp.gmail.com with ESMTPSA id y6-20020a5d6146000000b002c54fb024b2sm1553272wrt.61.2023.03.10.00.53.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 00:53:43 -0800 (PST)
+Date:   Fri, 10 Mar 2023 03:53:37 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH net-next v3 0/3] vsock: add support for sockmap
+Message-ID: <20230310035307-mutt-send-email-mst@kernel.org>
+References: <20230227-vsock-sockmap-upstream-v3-0-7e7f4ce623ee@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230310034016.GH3390869@ZenIV>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230227-vsock-sockmap-upstream-v3-0-7e7f4ce623ee@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 03:40:16AM +0000, Al Viro wrote:
-> On Thu, Mar 09, 2023 at 06:50:15AM -0500, Jeff Layton wrote:
-> > On Thu, 2023-03-09 at 10:25 +0100, Christian Brauner wrote:
-> > > From: Christian Brauner (Microsoft) <brauner@kernel.org>
-> > > 
-> > > 
-> > > On Wed, 08 Mar 2023 15:13:16 +0800, Jiapeng Chong wrote:
-> > > > Variable 'cmd' set but not used.
-> > > > 
-> > > > fs/locks.c:2428:3: warning: Value stored to 'cmd' is never read.
-> > > > 
-> > > > 
-> > > 
-> > > Seems unused for quite a while. I've picked this up since there's a few other
-> > > trivial fixes I have pending. But I'm happy to drop this if you prefer this
-> > > goes via the lock tree, Jeff.
-> > > 
-> > > [1/1] fs/locks: Remove redundant assignment to cmd
-> > >       commit: dc592190a5543c559010e09e8130a1af3f9068d3
-> > 
-> > Thanks Christian,
-> > 
-> > I had already picked it into the locks-next branch (though I didn't get
-> > a chance to reply and mention that), but I'll drop it and plan to let
-> > you carry it.
+On Tue, Feb 28, 2023 at 07:04:33PM +0000, Bobby Eshleman wrote:
+> Add support for sockmap to vsock.
 > 
-> IMO that's better off in locks tree; unless Christian is planning some
-> work in the area this cycle (I definitely do not), it's better to have
-> it in the branch in your git - we can always pull a branch from it if
-> needed and it's less likely to cause conflicts that way.
+> We're testing usage of vsock as a way to redirect guest-local UDS
+> requests to the host and this patch series greatly improves the
+> performance of such a setup.
+> 
+> Compared to copying packets via userspace, this improves throughput by
+> 121% in basic testing.
 
-I have picked up another fix for fs/locks.c for idmapped mounts so I
-plan on sending that with some other smaller fixes soon. (And that
-idmapped thing needs to be backported as well.)
 
-So if there's non-trivial changes then I fully agree that the locking
-tree is absolutely the right place. Especially since Jeff will also be
-able to describe the changes properly and as you said we can always just
-pull a branch to minimize conflicts.
+besides the small comment, looks ok. Feel free to include my ack
+in v4:
 
-However, when we have simple stuff like this let's just collect it in
-our for *.misc trees and send it to Linus if we think enough stuff has
-piled up (2+?). There's no point in holding fixes like this back for a
-long time.
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
-The likelihood of getting merge conflicts for smallish things that we
-send weekly is rather low judging from my personal experience. Stephen
-will tell us that quickly anyway. And even if we do get them Linus has
-said repeatedly that he doesn't mind fixing them so we shouldn't be
-fuzzed about it. Worst(/best?) case, everyone gets to watch my head
-being torn off...
+> Tested as follows.
+> 
+> Setup: guest unix dgram sender -> guest vsock redirector -> host vsock
+>        server
+> Threads: 1
+> Payload: 64k
+> No sockmap:
+> - 76.3 MB/s
+> - The guest vsock redirector was
+>   "socat VSOCK-CONNECT:2:1234 UNIX-RECV:/path/to/sock"
+> Using sockmap (this patch):
+> - 168.8 MB/s (+121%)
+> - The guest redirector was a simple sockmap echo server,
+>   redirecting unix ingress to vsock 2:1234 egress.
+> - Same sender and server programs
+> 
+> *Note: these numbers are from RFC v1
+> 
+> Only the virtio transport has been tested. The loopback transport was
+> used in writing bpf/selftests, but not thoroughly tested otherwise.
+> 
+> This series requires the skb patch.
+> 
+> Changes in v3:
+> - vsock/bpf: Refactor wait logic in vsock_bpf_recvmsg() to avoid
+>   backwards goto
+> - vsock/bpf: Check psock before acquiring slock
+> - vsock/bpf: Return bool instead of int of 0 or 1
+> - vsock/bpf: Wrap macro args __sk/__psock in parens
+> - vsock/bpf: Place comment trailer */ on separate line
+> 
+> Changes in v2:
+> - vsock/bpf: rename vsock_dgram_* -> vsock_*
+> - vsock/bpf: change sk_psock_{get,put} and {lock,release}_sock() order
+>   to minimize slock hold time
+> - vsock/bpf: use "new style" wait
+> - vsock/bpf: fix bug in wait log
+> - vsock/bpf: add check that recvmsg sk_type is one dgram, seqpacket, or
+>   stream.  Return error if not one of the three.
+> - virtio/vsock: comment __skb_recv_datagram() usage
+> - virtio/vsock: do not init copied in read_skb()
+> - vsock/bpf: add ifdef guard around struct proto in dgram_recvmsg()
+> - selftests/bpf: add vsock loopback config for aarch64
+> - selftests/bpf: add vsock loopback config for s390x
+> - selftests/bpf: remove vsock device from vmtest.sh qemu machine
+> - selftests/bpf: remove CONFIG_VIRTIO_VSOCKETS=y from config.x86_64
+> - vsock/bpf: move transport-related (e.g., if (!vsk->transport)) checks
+>   out of fast path
+> 
+> Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> ---
+> Bobby Eshleman (3):
+>       vsock: support sockmap
+>       selftests/bpf: add vsock to vmtest.sh
+>       selftests/bpf: Add a test case for vsock sockmap
+> 
+>  drivers/vhost/vsock.c                              |   1 +
+>  include/linux/virtio_vsock.h                       |   1 +
+>  include/net/af_vsock.h                             |  17 ++
+>  net/vmw_vsock/Makefile                             |   1 +
+>  net/vmw_vsock/af_vsock.c                           |  55 ++++++-
+>  net/vmw_vsock/virtio_transport.c                   |   2 +
+>  net/vmw_vsock/virtio_transport_common.c            |  24 +++
+>  net/vmw_vsock/vsock_bpf.c                          | 175 +++++++++++++++++++++
+>  net/vmw_vsock/vsock_loopback.c                     |   2 +
+>  tools/testing/selftests/bpf/config.aarch64         |   2 +
+>  tools/testing/selftests/bpf/config.s390x           |   3 +
+>  tools/testing/selftests/bpf/config.x86_64          |   3 +
+>  .../selftests/bpf/prog_tests/sockmap_listen.c      | 163 +++++++++++++++++++
+>  13 files changed, 443 insertions(+), 6 deletions(-)
+> ---
+> base-commit: d83115ce337a632f996e44c9f9e18cadfcf5a094
+> change-id: 20230118-support-vsock-sockmap-connectible-2e1297d2111a
+> 
+> Best regards,
+> --
+> Bobby Eshleman <bobby.eshleman@bytedance.com>
+> 
+> ---
+> Bobby Eshleman (3):
+>       vsock: support sockmap
+>       selftests/bpf: add vsock to vmtest.sh
+>       selftests/bpf: add a test case for vsock sockmap
+> 
+>  drivers/vhost/vsock.c                              |   1 +
+>  include/linux/virtio_vsock.h                       |   1 +
+>  include/net/af_vsock.h                             |  17 ++
+>  net/vmw_vsock/Makefile                             |   1 +
+>  net/vmw_vsock/af_vsock.c                           |  55 ++++++-
+>  net/vmw_vsock/virtio_transport.c                   |   2 +
+>  net/vmw_vsock/virtio_transport_common.c            |  25 +++
+>  net/vmw_vsock/vsock_bpf.c                          | 174 +++++++++++++++++++++
+>  net/vmw_vsock/vsock_loopback.c                     |   2 +
+>  tools/testing/selftests/bpf/config.aarch64         |   2 +
+>  tools/testing/selftests/bpf/config.s390x           |   3 +
+>  tools/testing/selftests/bpf/config.x86_64          |   3 +
+>  .../selftests/bpf/prog_tests/sockmap_listen.c      | 163 +++++++++++++++++++
+>  13 files changed, 443 insertions(+), 6 deletions(-)
+> ---
+> base-commit: c2ea552065e43d05bce240f53c3185fd3a066204
+> change-id: 20230227-vsock-sockmap-upstream-9d65c84174a2
+> 
+> Best regards,
+> -- 
+> Bobby Eshleman <bobby.eshleman@bytedance.com>
+
