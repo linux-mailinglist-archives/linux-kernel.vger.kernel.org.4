@@ -2,71 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DD76B3D37
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:05:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE1A6B3D45
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjCJLFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 06:05:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
+        id S230021AbjCJLJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:09:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjCJLFw (ORCPT
+        with ESMTP id S229550AbjCJLJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 06:05:52 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04B0DB6FD;
-        Fri, 10 Mar 2023 03:05:51 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id a7so3350465pfx.10;
-        Fri, 10 Mar 2023 03:05:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678446351;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mGDXehSv6v2/D0JVf9XtETXZgmT2wS6LdL23tIL4g10=;
-        b=ge7D1BbJ4Alm9bFtz18cnSDZjuLOmJjClVb4OQIEIZvKSELkBpUdP6juxrj5O6os2H
-         nAnjjZGuWn4/iw1eb9hBi6I62RapyKOq45rrwmydepWzKiw83ltKiPXl+VRArXzgcl9I
-         6HsLXRa+HMrCSFwSI54Uh9O7kuH3nYPC1gJoPrcxZIgQb7f4fkBvNKMbYuBfpOrCeTBi
-         MAeQ3eNif4CceQr71Q9JPapootB0ACJ/LeB2rd2IjeRW2Nuc1fB4JrpvinElR+lu2aeX
-         WWOFMZvEPF836T0YEcwt7W9wycvOMKgRuDulX5GQbsVzhyj+ANTl6PaSI7l2beWfJIUX
-         BnmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678446351;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mGDXehSv6v2/D0JVf9XtETXZgmT2wS6LdL23tIL4g10=;
-        b=qDjk7VSEUazz7PbF0/0PI/6Rm4A4C/3SCUT0NFR/AdVHx1vRLKqmdGfibIFVd32qic
-         oKdmSZKatdBykE61CHNjSwf3uldKKsprX6Ixyt4uHCvdVWHS5jh/MOgZU/CCCeeDEKB3
-         X5oM6XmLsj8IGBnUFhT/x1945a4+xc/hDu2VIlGL/UwRFstf2WT+p3W8ACV+dok7XzBa
-         rE/KLyKmzFhPL/dqKiXFM9t5cCMYMdFtMy6jwm4sdLlLInodKxS+2vEq5IqcPm1NFoOE
-         xuKdhtXcN/niVXSZIxnd0eGuCNvft85ig540Q9fd5CuzVVSuIR5PvAKBPcNJzLZSN8Ox
-         KGWA==
-X-Gm-Message-State: AO0yUKXgtzUa+BNx+MdIhj30NZ3I0R/FRXdJJuXaeiatjyyZ2ZeVKY04
-        OWCNYIO5JPsdRYw4fncDuazH5Y0jGnA=
-X-Google-Smtp-Source: AK7set80h3e9ZU13GZnCB2/z6kk4c+Jx02r0J4nPo1t+JZz1/n6ZHQufX+AkCBRe8Lk+QproaTFffA==
-X-Received: by 2002:aa7:940b:0:b0:5a8:b705:4dd3 with SMTP id x11-20020aa7940b000000b005a8b7054dd3mr21395673pfo.13.1678446351208;
-        Fri, 10 Mar 2023 03:05:51 -0800 (PST)
-Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
-        by smtp.gmail.com with ESMTPSA id h12-20020a62b40c000000b005a8b4dcd213sm1170602pfn.78.2023.03.10.03.05.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 03:05:50 -0800 (PST)
-From:   Jianhua Lu <lujianhua000@gmail.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Jianhua Lu <lujianhua000@gmail.com>
-Subject: [PATCH] drm/mipi-dsi: Add a mipi_dual_dsi_dcs_write_seq() macro
-Date:   Fri, 10 Mar 2023 19:05:42 +0800
-Message-Id: <20230310110542.6649-1-lujianhua000@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Fri, 10 Mar 2023 06:09:24 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A65DF1476;
+        Fri, 10 Mar 2023 03:09:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1678446518; i=frank-w@public-files.de;
+        bh=p4Ry1+Uz7XRykXg/u62aElBzE539gslTt4tQPn8JGKY=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=kybU4HAuBHObpWV3Gov/u71hhW7EtHvQATKuyLgWYHUoxqf8uzAq68kXlUmADPbxC
+         CRjbfQYg0p/D3whBrgw205MJ6E2hTDgMdv/o5MKMCv+rCk5xsya3sNBhxXXg7KfBwh
+         c8/lz6XQ2D/qFIm23aspA5cikz8hvX5puFydVtZ8ca/lYukLqAvQyAOgmG03IBY1mq
+         qrUelreYRHTrQk9gzPGADoA3L15ZPBYBKkbKprIQAQZS823B/RnKAymgQi/KWhzWZ3
+         HCkeEh1uOa3+nKVDGjyPv9bTSHxe9Sou0GqQI9pNeqSCJDV1GkKwS+C+8Al+qkhm6/
+         jMA6IPRT/f5Pg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [157.180.224.176] ([157.180.224.176]) by web-mail.gmx.net
+ (3c-app-gmx-bs21.server.lan [172.19.170.73]) (via HTTP); Fri, 10 Mar 2023
+ 12:08:38 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Message-ID: <trinity-875b4841-0e54-4370-8021-6b0534e421b4-1678446518590@3c-app-gmx-bs21>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Aw: [PATCH net-next v13 11/16] net: dsa: mt7530: use external PCS
+ driver
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 10 Mar 2023 12:08:38 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <2ac2ee40d3b0e705461b50613fda6a7edfdbc4b3.1678357225.git.daniel@makrotopia.org>
+References: <cover.1678357225.git.daniel@makrotopia.org>
+ <2ac2ee40d3b0e705461b50613fda6a7edfdbc4b3.1678357225.git.daniel@makrotopia.org>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:jMnlX6H99gmtYbWVz0id357SLJcq0FXh9uVeicjq6deWbmX30NoSTwmz82nRxxdjnnF4f
+ MW1izpHVkdf5lHo+yYMzyKlIiPp1emhL6OrVn9glZRlwvWbEj9MAuzbtWssEO1mrctpJ9tSDGW3W
+ bqsZnxaJSr4Py9J0/ri2vCyUH//VxnA0ugoNhGujT2kvNu+7+vbsJL4D/55bvVZHV1kLmpT9jIOq
+ PTpKW8IUiVCHAQS+kWY1VYj28WsSo3QYYkASSQuH8y3J/1nmxUfWD8V3bMUrckB4HyvgnDbtW/Yy
+ yA=
+UI-OutboundReport: notjunk:1;M01:P0:7F1ySXjLVBA=;YIrriYjuMhKxZYMF4yrIBczPUSn
+ uMNfbPiv0EdwiGyehnU3vXLRoC7IT0Pq4B0aNCDnGcLlwiy6+P3ylsZQ/CsnjZbYgh3fLKuKA
+ VCWz5B6+8ene+gapEn1yqa3tsisEga/7xucLMliSpou5MgJ5Sy2JVGHm4Bum+X49afkNZpxYE
+ SRsVkANXohT/FCbdsZMmP4ZB/iRCAaQ3EXft6BNla8M9JDncWtvqgdtaoW30M+oHsvtHLB6Kr
+ ITTmeqrLrV7vkvxH4SgayNK+bANAGKNNmuTUgWqaz57pL9KZsFqqnRD0C+EraOVxF2fpZH9cL
+ rkkPYXsOHrENZv+jYsUPObXJNBLFli/kVqHCOy2ZrWNK4Kgn5uozsM8e7BdP+mgv0NPhcS5ii
+ cg0cg81PeopsI4pPkmdMY0KPtTZc6ZN+mjPXQz1jHYuEwikDK7k+mHAjvipFBTUwWiHu09KuJ
+ RjILdl3BbOQWbRpeJfOxFDiL6weeT3grafP9DVnS4Qpt9x5Uk2jjMXssq4ur27F2lZ4/IBt1C
+ ZP5csVBY3oguluvDRQAGn1KGRRumVuVbG4Zw8NTTILT0FUEK7evYx4cZxBKTMT0yw0NH77Wo3
+ hp/c0j5EZtYmlyKgp88ixBscNDD8nbZaN8R/E3yeIdeA3xfHCGQvyXyavg2Olig269XP4V7Nq
+ Nj/dAJ2SBILZJslQall58Z0/TmpZq86oCoPXdbmImJvpfTS7wPElnfM4erVi5PcWtFx/pKcQK
+ IOh5576kMSAgVE6J3u71Rfali4RrEkT7J38uWg52RdxpBp1pKM9Qgba5zq9JEy40SUEhkPm2D
+ F/m07UonWPFv2oo/BOvlw0kKtBavJpU0oLitu7A0gvEhg=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,41 +95,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The panels with two dsi connected (sync dual dsi mode) need to transmit
-dcs command to the two dsi host simultaneously, let's add
-mipi_dual_dsi_dcs_write_seq() macro for this kind of panels.
+Hi,
 
-Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
----
- include/drm/drm_mipi_dsi.h | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+have tested Parts 1-11 this on BananaPi-R3 (mt7986) with 1000Base-X Fibre SFP (no 2g5 available yet) on gmac1 and lan4 (mt7531 p5)
 
-diff --git a/include/drm/drm_mipi_dsi.h b/include/drm/drm_mipi_dsi.h
-index c9df0407980c..d0f0f75d4d83 100644
---- a/include/drm/drm_mipi_dsi.h
-+++ b/include/drm/drm_mipi_dsi.h
-@@ -336,6 +336,21 @@ int mipi_dsi_dcs_get_display_brightness_large(struct mipi_dsi_device *dsi,
- 		}                                                          \
- 	} while (0)
- 
-+/**
-+ * mipi_dsi_dcs_write_seq - transmit a DCS command with payload
-+ * @dsi: array of 2 DSI peripheral devices
-+ * @cmd: Command
-+ * @seq: buffer containing data to be transmitted
-+ */
-+#define mipi_dual_dsi_dcs_write_seq(dsi, cmd, seq...)                   \
-+	do {                                                             \
-+		if (ARRAY_SIZE(dsi) > 2)                                 \
-+			return -EINVAL;                                  \
-+		int i;                                                   \
-+		for (i = 0; i < ARRAY_SIZE(dsi); i++)                    \
-+			mipi_dsi_dcs_write_seq(dsi[i], cmd, seq);        \
-+	} while (0)
-+
- /**
-  * struct mipi_dsi_driver - DSI driver
-  * @driver: device driver model driver
--- 
-2.39.2
+Tested-by: Frank Wunderlich <frank-w@public-files.de>
 
+Thx Daniel for working on SFP support :)
+
+regards Frank
