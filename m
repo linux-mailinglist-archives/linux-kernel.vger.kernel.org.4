@@ -2,87 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA7C6B3BEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CF16B3BED
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjCJKVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 05:21:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
+        id S230189AbjCJKWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 05:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjCJKVG (ORCPT
+        with ESMTP id S229876AbjCJKWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 05:21:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FB46A2F7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:20:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678443619;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A9/Y92dzLPnWp4osldFaN0PHtT3hPC8y/ueP38Tax60=;
-        b=DufsuOIv3ViezqO9C1XJpTmiwz3TFaM8/wZn8Xjgc5yICV8ZAJApvO1P3+Uxp8NycoIJQI
-        3c/XLgXhl4iiNv8i2B0+q8dZivE3sn91JOjFfDuYHGWFYONyoBpqzDG2jciwkHXJvTe/nj
-        82f+gCbW7T3iB+fWEbO5kmMLf4sZDbo=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-164-VDks6QvoMRONXYUZxSEC0w-1; Fri, 10 Mar 2023 05:20:18 -0500
-X-MC-Unique: VDks6QvoMRONXYUZxSEC0w-1
-Received: by mail-lf1-f71.google.com with SMTP id s4-20020ac25c44000000b004d5811430c3so1415769lfp.7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:20:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678443617;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A9/Y92dzLPnWp4osldFaN0PHtT3hPC8y/ueP38Tax60=;
-        b=GWzdGazsYxhXhDoCacCJ9rXI2I+zt/Vcin/ydyW2mml45Iw2UyTrpuGdm63yCq7QtA
-         vZrIrT2Sgawkcs3vnQiJwsyNrecQIKkoYroT7a+hpX1z5SOFPMAjU7lAE8QmLi26iXxK
-         FN8Wg6A3Nfu7Rz8CKP2zv870XnDqMl6P9Xx9EwWhdK+4y4MvTcqUdlzkfCvTsWyYZHH1
-         WjvatrL5AN+ZW4DZxpT4RoLyHDLoQhNqzyKbllQFUUiodgKpsq99/zxbsfquiqCpca2L
-         ZG1KFofibtzh28kj7EP+2meRWEd5LCoCY+ELSuf6vc1dI4yJmwFTDPM4EnR0Yyck2QIu
-         GQBg==
-X-Gm-Message-State: AO0yUKU6qf7dhTRp+HQqDhGEritfqQoDL+emjeOSA6Mf6CnQA7K7O9b3
-        JP8eJqxQnAERpiRfaYZ2l6lYfAt1k4XvyzdxbV4W3ipQEygA3ItwY5QCyKL7GJgHctK8NHKFM3Z
-        /O+2eAkRDl1TcdigaxzWA5epQLVOZmCQn+x/R5DzO
-X-Received: by 2002:a05:651c:204e:b0:295:a372:1dc2 with SMTP id t14-20020a05651c204e00b00295a3721dc2mr7907843ljo.8.1678443617037;
-        Fri, 10 Mar 2023 02:20:17 -0800 (PST)
-X-Google-Smtp-Source: AK7set/Bl35G5xu9zj1QZPRKFm+hk+NOC48dm5Np2aUM5pJfLVPlrHr/lK4jMyX6tvpPyZ4BtskI+a05NO92AkTGE+8=
-X-Received: by 2002:a05:651c:204e:b0:295:a372:1dc2 with SMTP id
- t14-20020a05651c204e00b00295a3721dc2mr7907830ljo.8.1678443616679; Fri, 10 Mar
- 2023 02:20:16 -0800 (PST)
+        Fri, 10 Mar 2023 05:22:47 -0500
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0DE107D57;
+        Fri, 10 Mar 2023 02:22:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1678443709; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=HL+mpXGzO2n7kJaxMGabVrdt2/v6BkB2ZR/vv8rP62hVVUq1cUqFkNYCJYKH+TUiEu2hMRjHQkoT8hWamap6Pb2fcoRMq8pcrr03F1PcvHzg/6QAew9TMfvBBe/0GsrDUveieeVLz2amzjVJnAcOs8iYs9fulZyE4pPSBfn3OEM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1678443709; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=sHc02Bqeqt1C7WoOr04FIucmx4YqEdZ758jRMdp13wE=; 
+        b=Y22bKSpl27BBAE3xiJq4eySja+X1LXUCk84XWQ9xJxU5ZhxDYKDuNQgi30CdR4Qmi81uJt7iPFOsdm8HTOF2bF49rWpb9fJRmsqltD7QwoZLN8mEkdvzpiFuBVMT8nDz1dFOJ4dxw7wr+X8CsWLjqcXTYd+Z7/Im6gDoXsN7Osw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1678443709;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=sHc02Bqeqt1C7WoOr04FIucmx4YqEdZ758jRMdp13wE=;
+        b=ZEp9c76ztW+EY2sBxsB0ZbRii7UfhZARUXcD5EwDOLnVkq3N0KUICVSvhQI/Yw08
+        lKzHSphzlYRg7yrM5TfYhx75SChUBflWi1D60BHpYUSBoXTZLEoFrb8TjHy5XaRcu6E
+        Sv8+1P3qBWwcCfW3GU2UFZvQVaBexivs/JDPf/Ps=
+Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
+        with SMTPS id 1678443708111445.26386587299385; Fri, 10 Mar 2023 02:21:48 -0800 (PST)
+Message-ID: <10f872cc-b502-61ca-aefa-3047a9dfe5cd@arinc9.com>
+Date:   Fri, 10 Mar 2023 13:21:42 +0300
 MIME-Version: 1.0
-References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
- <CACO55tvR4ydDOXt=9nbR3n2aFLKrj8zeuGRR_xpezVQBBLrjqg@mail.gmail.com>
- <a6188878-f84c-0fcc-9509-b9d7ab797f4c@leemhuis.info> <d031f0a5-8d5e-af51-6db6-11844de3eeba@googlemail.com>
- <CAPM=9tz+wksJTvMi_4Ef7XWezfH0ReN2se189s8Q=obJjHC+Fw@mail.gmail.com>
- <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com> <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
- <CACO55tsvM07_6mGU3dCgeji0a6B4JJKSDOOBuCHv2Mw3rYbCHg@mail.gmail.com>
- <181bea6a-e501-f5bd-b002-de7a244a921a@googlemail.com> <CACO55tsGXfy9-a-nexvcn7pnDGoEWXMqhiQEBwCDkGyOeT1sXQ@mail.gmail.com>
- <dbfc1f77-29f3-7690-c231-55f906a4e7e5@googlemail.com> <7f6ec5b3-b5c7-f564-003e-132f112b7cf4@googlemail.com>
- <CACAvsv7Uf5=K44y8YLsiy0aMnc1zvGEQdeDe7RQF=AV+fxxzuQ@mail.gmail.com>
- <c12aa9b8-65a1-0cdf-8948-15309f16b955@googlemail.com> <CACO55tvGQdHPnZEMAGPZN3K1nUCV-ruX_QNwSqQAg_z81ab0MA@mail.gmail.com>
- <CACAvsv53xc8dr0e5HEFcV+218WoCbGVor0HDgBw-C51fPkR9kQ@mail.gmail.com> <853b7e32-f566-2a92-0f59-3490ad5d88df@googlemail.com>
-In-Reply-To: <853b7e32-f566-2a92-0f59-3490ad5d88df@googlemail.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Fri, 10 Mar 2023 11:20:04 +0100
-Message-ID: <CACO55tub2f3HmwUU5hYb=0JuuDJM=dG-2rBMvb_oCNgp0CqSHQ@mail.gmail.com>
-Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
-To:     Chris Clayton <chris2553@googlemail.com>
-Cc:     Ben Skeggs <skeggsb@gmail.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Dave Airlie <airlied@gmail.com>, bskeggs@redhat.com,
-        Lyude Paul <lyude@redhat.com>,
-        ML nouveau <nouveau@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 net 2/2] net: dsa: mt7530: set PLL frequency and trgmii
+ only when trgmii is used
+To:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>
+Cc:     netdev@vger.kernel.org, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230310073338.5836-1-arinc.unal@arinc9.com>
+ <20230310073338.5836-2-arinc.unal@arinc9.com>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230310073338.5836-2-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,261 +77,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 10:26=E2=80=AFAM Chris Clayton <chris2553@googlemai=
-l.com> wrote:
->
-> Hi.
->
-> Is it likely that this fix will be sumbmitted to mainline during the ongo=
-ing 6.3 development cycle?
->
+On 10.03.2023 10:33, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> As my testing on the MCM MT7530 switch on MT7621 SoC shows, setting the PLL
+> frequency does not affect MII modes other than trgmii on port 5 and port 6.
+> So the assumption is that the operation here called "setting the PLL
+> frequency" actually sets the frequency of the TRGMII TX clock.
+> 
+> Make it so that it and the rest of the trgmii setup run only when the
+> trgmii mode is used.
+> 
+> Tested rgmii and trgmii modes of port 6 on MCM MT7530 on MT7621AT Unielec
+> U7621-06 and standalone MT7530 on MT7623NI Bananapi BPI-R2.
+> 
+> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>   drivers/net/dsa/mt7530.c | 62 ++++++++++++++++++++--------------------
+>   1 file changed, 31 insertions(+), 31 deletions(-)
+> 
+> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+> index b1a79460df0e..c2d81b7a429d 100644
+> --- a/drivers/net/dsa/mt7530.c
+> +++ b/drivers/net/dsa/mt7530.c
+> @@ -430,8 +430,6 @@ mt7530_pad_clk_setup(struct dsa_switch *ds, phy_interface_t interface)
+>   	switch (interface) {
+>   	case PHY_INTERFACE_MODE_RGMII:
+>   		trgint = 0;
+> -		/* PLL frequency: 125MHz */
+> -		ncpo1 = 0x0c80;
+>   		break;
+>   	case PHY_INTERFACE_MODE_TRGMII:
+>   		trgint = 1;
+> @@ -462,38 +460,40 @@ mt7530_pad_clk_setup(struct dsa_switch *ds, phy_interface_t interface)
+>   	mt7530_rmw(priv, MT7530_P6ECR, P6_INTF_MODE_MASK,
+>   		   P6_INTF_MODE(trgint));
+>   
+> -	/* Lower Tx Driving for TRGMII path */
+> -	for (i = 0 ; i < NUM_TRGMII_CTRL ; i++)
+> -		mt7530_write(priv, MT7530_TRGMII_TD_ODT(i),
+> -			     TD_DM_DRVP(8) | TD_DM_DRVN(8));
+> -
+> -	/* Disable MT7530 core and TRGMII Tx clocks */
+> -	core_clear(priv, CORE_TRGMII_GSW_CLK_CG,
+> -		   REG_GSWCK_EN | REG_TRGMIICK_EN);
+> -
+> -	/* Setup the MT7530 TRGMII Tx Clock */
+> -	core_write(priv, CORE_PLL_GROUP5, RG_LCDDS_PCW_NCPO1(ncpo1));
+> -	core_write(priv, CORE_PLL_GROUP6, RG_LCDDS_PCW_NCPO0(0));
+> -	core_write(priv, CORE_PLL_GROUP10, RG_LCDDS_SSC_DELTA(ssc_delta));
+> -	core_write(priv, CORE_PLL_GROUP11, RG_LCDDS_SSC_DELTA1(ssc_delta));
+> -	core_write(priv, CORE_PLL_GROUP4,
+> -		   RG_SYSPLL_DDSFBK_EN | RG_SYSPLL_BIAS_EN |
+> -		   RG_SYSPLL_BIAS_LPF_EN);
+> -	core_write(priv, CORE_PLL_GROUP2,
+> -		   RG_SYSPLL_EN_NORMAL | RG_SYSPLL_VODEN |
+> -		   RG_SYSPLL_POSDIV(1));
+> -	core_write(priv, CORE_PLL_GROUP7,
+> -		   RG_LCDDS_PCW_NCPO_CHG | RG_LCCDS_C(3) |
+> -		   RG_LCDDS_PWDB | RG_LCDDS_ISO_EN);
+> -
+> -	/* Enable MT7530 core and TRGMII Tx clocks */
+> -	core_set(priv, CORE_TRGMII_GSW_CLK_CG,
+> -		 REG_GSWCK_EN | REG_TRGMIICK_EN);
+> -
+> -	if (!trgint)
+> +	if (trgint) {
+> +		/* Lower Tx Driving for TRGMII path */
+> +		for (i = 0 ; i < NUM_TRGMII_CTRL ; i++)
+> +			mt7530_write(priv, MT7530_TRGMII_TD_ODT(i),
+> +				     TD_DM_DRVP(8) | TD_DM_DRVN(8));
+> +
+> +		/* Disable MT7530 core and TRGMII Tx clocks */
+> +		core_clear(priv, CORE_TRGMII_GSW_CLK_CG,
+> +			   REG_GSWCK_EN | REG_TRGMIICK_EN);
+> +
+> +		/* Setup the MT7530 TRGMII Tx Clock */
+> +		core_write(priv, CORE_PLL_GROUP5, RG_LCDDS_PCW_NCPO1(ncpo1));
+> +		core_write(priv, CORE_PLL_GROUP6, RG_LCDDS_PCW_NCPO0(0));
+> +		core_write(priv, CORE_PLL_GROUP10, RG_LCDDS_SSC_DELTA(ssc_delta));
+> +		core_write(priv, CORE_PLL_GROUP11, RG_LCDDS_SSC_DELTA1(ssc_delta));
+> +		core_write(priv, CORE_PLL_GROUP4,
+> +			   RG_SYSPLL_DDSFBK_EN | RG_SYSPLL_BIAS_EN |
+> +			   RG_SYSPLL_BIAS_LPF_EN);
+> +		core_write(priv, CORE_PLL_GROUP2,
+> +			   RG_SYSPLL_EN_NORMAL | RG_SYSPLL_VODEN |
+> +			   RG_SYSPLL_POSDIV(1));
+> +		core_write(priv, CORE_PLL_GROUP7,
+> +			   RG_LCDDS_PCW_NCPO_CHG | RG_LCCDS_C(3) |
+> +			   RG_LCDDS_PWDB | RG_LCDDS_ISO_EN);
+> +
+> +		/* Enable MT7530 core and TRGMII Tx clocks */
+> +		core_set(priv, CORE_TRGMII_GSW_CLK_CG,
+> +			 REG_GSWCK_EN | REG_TRGMIICK_EN);
+> +	} else {
+>   		for (i = 0 ; i < NUM_TRGMII_CTRL; i++)
+>   			mt7530_rmw(priv, MT7530_TRGMII_RD(i),
+>   				   RD_TAP_MASK, RD_TAP(16));
 
-yes, it's already pushed to drm-misc-fixed, which then will go into
-the current devel cycle. I just don't know when it's the next time it
-will be pushed upwards, but it should get there eventually. And
-because it also contains a Fixes tag it will be backported to older
-branches as well.
+This code runs if the phy mode is not trgmii. Other than trgmii, only 
+the rgmii mode is supported on the hardware so this runs when the rgmii 
+mode is used on port 6.
 
-> Chris
->
-> On 20/02/2023 22:16, Ben Skeggs wrote:
-> > On Mon, 20 Feb 2023 at 21:27, Karol Herbst <kherbst@redhat.com> wrote:
-> >>
-> >> On Mon, Feb 20, 2023 at 11:51 AM Chris Clayton <chris2553@googlemail.c=
-om> wrote:
-> >>>
-> >>>
-> >>>
-> >>> On 20/02/2023 05:35, Ben Skeggs wrote:
-> >>>> On Sun, 19 Feb 2023 at 04:55, Chris Clayton <chris2553@googlemail.co=
-m> wrote:
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>> On 18/02/2023 15:19, Chris Clayton wrote:
-> >>>>>>
-> >>>>>>
-> >>>>>> On 18/02/2023 12:25, Karol Herbst wrote:
-> >>>>>>> On Sat, Feb 18, 2023 at 1:22 PM Chris Clayton <chris2553@googlema=
-il.com> wrote:
-> >>>>>>>>
-> >>>>>>>>
-> >>>>>>>>
-> >>>>>>>> On 15/02/2023 11:09, Karol Herbst wrote:
-> >>>>>>>>> On Wed, Feb 15, 2023 at 11:36 AM Linux regression tracking #upd=
-ate
-> >>>>>>>>> (Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
-> >>>>>>>>>>
-> >>>>>>>>>> On 13.02.23 10:14, Chris Clayton wrote:
-> >>>>>>>>>>> On 13/02/2023 02:57, Dave Airlie wrote:
-> >>>>>>>>>>>> On Sun, 12 Feb 2023 at 00:43, Chris Clayton <chris2553@googl=
-email.com> wrote:
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> On 10/02/2023 19:33, Linux regression tracking (Thorsten Le=
-emhuis) wrote:
-> >>>>>>>>>>>>>> On 10.02.23 20:01, Karol Herbst wrote:
-> >>>>>>>>>>>>>>> On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking=
- (Thorsten
-> >>>>>>>>>>>>>>> Leemhuis) <regressions@leemhuis.info> wrote:
-> >>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>> On 08.02.23 09:48, Chris Clayton wrote:
-> >>>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>>> I'm assuming  that we are not going to see a fix for th=
-is regression before 6.2 is released.
-> >>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>> Yeah, looks like it. That's unfortunate, but happens. Bu=
-t there is still
-> >>>>>>>>>>>>>>>> time to fix it and there is one thing I wonder:
-> >>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>> Did any of the nouveau developers look at the netconsole=
- captures Chris
-> >>>>>>>>>>>>>>>> posted more than a week ago to check if they somehow hel=
-p to track down
-> >>>>>>>>>>>>>>>> the root of this problem?
-> >>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>> I did now and I can't spot anything. I think at this poin=
-t it would
-> >>>>>>>>>>>>>>> make sense to dump the active tasks/threads via sqsrq key=
-s to see if
-> >>>>>>>>>>>>>>> any is in a weird state preventing the machine from shutt=
-ing down.
-> >>>>>>>>>>>>>>
-> >>>>>>>>>>>>>> Many thx for looking into it!
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> Yes, thanks Karol.
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> Attached is the output from dmesg when this block of code:
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>>         /bin/mount /dev/sda7 /mnt/sda7
-> >>>>>>>>>>>>>         /bin/mountpoint /proc || /bin/mount /proc
-> >>>>>>>>>>>>>         /bin/dmesg -w > /mnt/sda7/sysrq.dmesg.log &
-> >>>>>>>>>>>>>         /bin/echo t > /proc/sysrq-trigger
-> >>>>>>>>>>>>>         /bin/sleep 1
-> >>>>>>>>>>>>>         /bin/sync
-> >>>>>>>>>>>>>         /bin/sleep 1
-> >>>>>>>>>>>>>         kill $(pidof dmesg)
-> >>>>>>>>>>>>>         /bin/umount /mnt/sda7
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> is executed immediately before /sbin/reboot is called as th=
-e final step of rebooting my system.
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> I hope this is what you were looking for, but if not, pleas=
-e let me know what you need
-> >>>>>>>>>>>
-> >>>>>>>>>>> Thanks Dave. [...]
-> >>>>>>>>>> FWIW, in case anyone strands here in the archives: the msg was
-> >>>>>>>>>> truncated. The full post can be found in a new thread:
-> >>>>>>>>>>
-> >>>>>>>>>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d860=
-31e@googlemail.com/
-> >>>>>>>>>>
-> >>>>>>>>>> Sadly it seems the info "With runpm=3D0, both reboot and power=
-off work on
-> >>>>>>>>>> my laptop." didn't bring us much further to a solution. :-/ I =
-don't
-> >>>>>>>>>> really like it, but for regression tracking I'm now putting th=
-is on the
-> >>>>>>>>>> back-burner, as a fix is not in sight.
-> >>>>>>>>>>
-> >>>>>>>>>> #regzbot monitor:
-> >>>>>>>>>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d860=
-31e@googlemail.com/
-> >>>>>>>>>> #regzbot backburner: hard to debug and apparently rare
-> >>>>>>>>>> #regzbot ignore-activity
-> >>>>>>>>>>
-> >>>>>>>>>
-> >>>>>>>>> yeah.. this bug looks a little annoying. Sadly the only Turing =
-based
-> >>>>>>>>> laptop I got doesn't work on Nouveau because of firmware relate=
-d
-> >>>>>>>>> issues and we probably need to get updated ones from Nvidia her=
-e :(
-> >>>>>>>>>
-> >>>>>>>>> But it's a bit weird that the kernel doesn't shutdown, because =
-I don't
-> >>>>>>>>> see anything in the logs which would prevent that from happenin=
-g.
-> >>>>>>>>> Unless it's waiting on one of the tasks to complete, but none o=
-f them
-> >>>>>>>>> looked in any way nouveau related.
-> >>>>>>>>>
-> >>>>>>>>> If somebody else has any fancy kernel debugging tips here to fi=
-gure
-> >>>>>>>>> out why it hangs, that would be very helpful...
-> >>>>>>>>>
-> >>>>>>>>
-> >>>>>>>> I think I've figured this out. It's to do with how my system is =
-configured. I do have an initrd, but the only thing on
-> >>>>>>>> it is the cpu microcode which, it is recommended, should be load=
-ed early. The absence of the NVidia firmare from an
-> >>>>>>>> initrd doesn't matter because the drivers for the hardware that =
-need to load firmware are all built as modules, So, by
-> >>>>>>>> the time the devices are configured via udev, the root partition=
- is mounted and the drivers can get at the firmware.
-> >>>>>>>>
-> >>>>>>>> I've found, by turning on nouveau debug and taking a video of th=
-e screen as the system shuts down, that nouveau seems to
-> >>>>>>>> be trying to run the scrubber very very late in the shutdown pro=
-cess. The problem is that by this time, I think the root
-> >>>>>>>> partition, and thus the scrubber binary, have become inaccessibl=
-e.
-> >>>>>>>>
-> >>>>>>>> I seem to have two choices - either make the firmware accessible=
- on an initrd or unload the module in a shutdown script
-> >>>>>>>> before the scrubber binary becomes inaccessible. The latter of t=
-hese is the workaround I have implemented whilst the
-> >>>>>>>> problem I reported has been under investigation. For simplicity,=
- I think I'll promote my workaround to being the
-> >>>>>>>> permanent solution.
-> >>>>>>>>
-> >>>>>>>> So, apologies (and thanks) to everyone whose time I have taken u=
-p with this non-bug.
-> >>>>>>>>
-> >>>>>>>
-> >>>>>>> Well.. nouveau shouldn't prevent the system from shutting down if=
- the
-> >>>>>>> firmware file isn't available. Or at least it should print a
-> >>>>>>> warning/error. Mind messing with the code a little to see if skip=
-ping
-> >>>>>>> it kind of works? I probably can also come up with a patch by nex=
-t
-> >>>>>>> week.
-> >>>>>>>
-> >>>>>> Well, I'd love to but a quick glance at the code caused me to bump=
- into this obscenity:
-> >>>>>>
-> >>>>>> int
-> >>>>>> gm200_flcn_reset_wait_mem_scrubbing(struct nvkm_falcon *falcon)
-> >>>>>> {
-> >>>>>>         nvkm_falcon_mask(falcon, 0x040, 0x00000000, 0x00000000);
-> >>>>>>
-> >>>>>>         if (nvkm_msec(falcon->owner->device, 10,
-> >>>>>>                 if (!(nvkm_falcon_rd32(falcon, 0x10c) & 0x00000006=
-))
-> >>>>>>                         break;
-> >>>>>>         ) < 0)
-> >>>>>>                 return -ETIMEDOUT;
-> >>>>>>
-> >>>>>>         return 0;
-> >>>>>> }
-> >>>>>>
-> >>>>>> nvkm_msec is #defined to nvkm_usec which in turn is #defined to nv=
-km_nsec where the loop that the break is related to
-> >>>>>> appears
-> >>>>>
-> >>>>> I think someone who knows the code needs to look at this. What I ca=
-n confirm is that after a freeze, I waited for 90
-> >>>>> seconds for a timeout to occur, but it didn't.
-> >>>> Hey,
-> >>>>
-> >>>> Are you able to try the attached patch for me please?
-> >>>>
-> >>>> Thanks,
-> >>>> Ben.
-> >>>>
-> >>>
-> >>> Thanks Ben.
-> >>>
-> >>> Yes, this patch fixes the lockup on reboot and poweroff that I've bee=
-n seeing on my laptop. As you would expect,
-> >>> offloaded rendering is still working and the discrete GPU is being po=
-wered on and off as required.
-> >>>
-> >>> Thanks.
-> >>>
-> >>> Reported-by: Chris Clayton <chris2553@googlemail.com>
-> >>> Tested-by: Chris Clayton <chris2553@googlemail.com>
-> >>>
-> >>
-> >> Ben, did you manage to get push rights to drm-misc by now or should I
-> >> just pick the patch and push it through -fixes?
-> > Feel free to pick it up!
-> >
-> > Thank you,
-> > Ben.
-> >
-> >>
-> >>>>>
-> >>>>>
-> >>>>> .> Chris
-> >>>>>>>>
-> >>>>>>>>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tra=
-cker' hat)
-> >>>>>>>>>> --
-> >>>>>>>>>> Everything you wanna know about Linux kernel regression tracki=
-ng:
-> >>>>>>>>>> https://linux-regtracking.leemhuis.info/about/#tldr
-> >>>>>>>>>> That page also explains what to do if mails like this annoy yo=
-u.
-> >>>>>>>>>>
-> >>>>>>>>>> #regzbot ignore-activity
-> >>>>>>>>>>
-> >>>>>>>>>
-> >>>>>>>>
-> >>>>>>>
-> >>>
-> >>
->
+I've tested the rgmii mode on MCM and standalone MT7530 without running 
+this code and it works fine. Close to gigabit download/upload speed and 
+no packet loss. I don't understand why the TRGMII RX registers are 
+modified when the trgmii mode is not used at all.
 
+I don't suppose anyone from MediaTek would clarify, so this presumably 
+dead code will remain.
+
+Arınç
