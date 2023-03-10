@@ -2,92 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE1A6B3D45
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 327666B3D4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjCJLJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 06:09:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S230075AbjCJLKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:10:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCJLJY (ORCPT
+        with ESMTP id S229550AbjCJLKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 06:09:24 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A65DF1476;
-        Fri, 10 Mar 2023 03:09:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1678446518; i=frank-w@public-files.de;
-        bh=p4Ry1+Uz7XRykXg/u62aElBzE539gslTt4tQPn8JGKY=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=kybU4HAuBHObpWV3Gov/u71hhW7EtHvQATKuyLgWYHUoxqf8uzAq68kXlUmADPbxC
-         CRjbfQYg0p/D3whBrgw205MJ6E2hTDgMdv/o5MKMCv+rCk5xsya3sNBhxXXg7KfBwh
-         c8/lz6XQ2D/qFIm23aspA5cikz8hvX5puFydVtZ8ca/lYukLqAvQyAOgmG03IBY1mq
-         qrUelreYRHTrQk9gzPGADoA3L15ZPBYBKkbKprIQAQZS823B/RnKAymgQi/KWhzWZ3
-         HCkeEh1uOa3+nKVDGjyPv9bTSHxe9Sou0GqQI9pNeqSCJDV1GkKwS+C+8Al+qkhm6/
-         jMA6IPRT/f5Pg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [157.180.224.176] ([157.180.224.176]) by web-mail.gmx.net
- (3c-app-gmx-bs21.server.lan [172.19.170.73]) (via HTTP); Fri, 10 Mar 2023
- 12:08:38 +0100
+        Fri, 10 Mar 2023 06:10:05 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29B1F2090;
+        Fri, 10 Mar 2023 03:10:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678446604; x=1709982604;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/+tFdW/YBwQDnb1ty9VRIvJdaL18kxs2PMLLcO8L0DU=;
+  b=RGRp34MJUxpUfyxEl78Xy3HzzGeoAJi4WtxRovbJxSJRddhgJ3K56YKc
+   XILKCq3yc2GT6ff2zmtQsybILkRXFYD2qFeUVCNfhkD/GmSgjD8n9zbt9
+   IzRC6ziw0+qLgak0XkKJ3IMe302eQro2BHlkoICIazCxHDQ5iU70Yxrai
+   ZpqfkWD2outhHzhds7DwPNA41FGb+22qS1/62If9Ict33pVZYanPAKDK9
+   K6qc3DWXYwfcp6/UXlBeNZWy2bZsG/kaCZnqYRzD1p6wlp6MD0z2XKfwJ
+   qYRpJz9ajqpMy6n//eO/t7/uEbTzIOfgqwj71Q6wm1I5N8AF0npEm+tS8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="336722988"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="336722988"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 03:10:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="707973911"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="707973911"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.60.222])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 03:09:55 -0800
+Message-ID: <8d034a7c-8702-a146-3021-2101b3382848@intel.com>
+Date:   Fri, 10 Mar 2023 13:09:50 +0200
 MIME-Version: 1.0
-Message-ID: <trinity-875b4841-0e54-4370-8021-6b0534e421b4-1678446518590@3c-app-gmx-bs21>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
-        Alexander Couzens <lynxis@fe80.eu>
-Subject: Aw: [PATCH net-next v13 11/16] net: dsa: mt7530: use external PCS
- driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [PATCH v10 11/15] mmc: sdhci-cadence: Enable device specific
+ override of writel()
+Content-Language: en-US
+To:     Brad Larson <blarson@amd.com>, linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, broonie@kernel.org,
+        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
+        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
+        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
+        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
+        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
+        devicetree@vger.kernel.org
+References: <20230306040739.51488-1-blarson@amd.com>
+ <20230306040739.51488-12-blarson@amd.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230306040739.51488-12-blarson@amd.com>
 Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 10 Mar 2023 12:08:38 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <2ac2ee40d3b0e705461b50613fda6a7edfdbc4b3.1678357225.git.daniel@makrotopia.org>
-References: <cover.1678357225.git.daniel@makrotopia.org>
- <2ac2ee40d3b0e705461b50613fda6a7edfdbc4b3.1678357225.git.daniel@makrotopia.org>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:jMnlX6H99gmtYbWVz0id357SLJcq0FXh9uVeicjq6deWbmX30NoSTwmz82nRxxdjnnF4f
- MW1izpHVkdf5lHo+yYMzyKlIiPp1emhL6OrVn9glZRlwvWbEj9MAuzbtWssEO1mrctpJ9tSDGW3W
- bqsZnxaJSr4Py9J0/ri2vCyUH//VxnA0ugoNhGujT2kvNu+7+vbsJL4D/55bvVZHV1kLmpT9jIOq
- PTpKW8IUiVCHAQS+kWY1VYj28WsSo3QYYkASSQuH8y3J/1nmxUfWD8V3bMUrckB4HyvgnDbtW/Yy
- yA=
-UI-OutboundReport: notjunk:1;M01:P0:7F1ySXjLVBA=;YIrriYjuMhKxZYMF4yrIBczPUSn
- uMNfbPiv0EdwiGyehnU3vXLRoC7IT0Pq4B0aNCDnGcLlwiy6+P3ylsZQ/CsnjZbYgh3fLKuKA
- VCWz5B6+8ene+gapEn1yqa3tsisEga/7xucLMliSpou5MgJ5Sy2JVGHm4Bum+X49afkNZpxYE
- SRsVkANXohT/FCbdsZMmP4ZB/iRCAaQ3EXft6BNla8M9JDncWtvqgdtaoW30M+oHsvtHLB6Kr
- ITTmeqrLrV7vkvxH4SgayNK+bANAGKNNmuTUgWqaz57pL9KZsFqqnRD0C+EraOVxF2fpZH9cL
- rkkPYXsOHrENZv+jYsUPObXJNBLFli/kVqHCOy2ZrWNK4Kgn5uozsM8e7BdP+mgv0NPhcS5ii
- cg0cg81PeopsI4pPkmdMY0KPtTZc6ZN+mjPXQz1jHYuEwikDK7k+mHAjvipFBTUwWiHu09KuJ
- RjILdl3BbOQWbRpeJfOxFDiL6weeT3grafP9DVnS4Qpt9x5Uk2jjMXssq4ur27F2lZ4/IBt1C
- ZP5csVBY3oguluvDRQAGn1KGRRumVuVbG4Zw8NTTILT0FUEK7evYx4cZxBKTMT0yw0NH77Wo3
- hp/c0j5EZtYmlyKgp88ixBscNDD8nbZaN8R/E3yeIdeA3xfHCGQvyXyavg2Olig269XP4V7Nq
- Nj/dAJ2SBILZJslQall58Z0/TmpZq86oCoPXdbmImJvpfTS7wPElnfM4erVi5PcWtFx/pKcQK
- IOh5576kMSAgVE6J3u71Rfali4RrEkT7J38uWg52RdxpBp1pKM9Qgba5zq9JEy40SUEhkPm2D
- F/m07UonWPFv2oo/BOvlw0kKtBavJpU0oLitu7A0gvEhg=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,12 +81,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 6/03/23 06:07, Brad Larson wrote:
+> SoCs with device specific Cadence implementation, such as setting
+> byte-enables before the write, need to override writel().  Add a
+> callback where the default is writel() for all existing chips.
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
 
-have tested Parts 1-11 this on BananaPi-R3 (mt7986) with 1000Base-X Fibre SFP (no 2g5 available yet) on gmac1 and lan4 (mt7531 p5)
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-Tested-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+> 
+> v10 changes:
+> - The 1st patch adding private writel() is unchanged.  The 2nd patch is split
+>   into two patches to provide for device specific init in one patch with no
+>   effect on existing designs.  Then add the pensando support into the next patch.
+>   Then the 4th patch is mmc hardware reset support which is unchanged.
+> 
+> v9 changes:
+> - No change to this patch but as some patches are deleted and this is
+>   a respin the three successive patches to sdhci-cadence.c are
+>   patches 12, 13, and 14 which do the following:
+> 
+>   1. Add ability for Cadence specific design to have priv writel().
+>   2. Add Elba SoC support that requires its own priv writel() for
+>      byte-lane control .
+>   3. Add support for mmc hardware reset.
+> 
+> ---
+>  drivers/mmc/host/sdhci-cadence.c | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
+> index 6f2de54a5987..708d4297f241 100644
+> --- a/drivers/mmc/host/sdhci-cadence.c
+> +++ b/drivers/mmc/host/sdhci-cadence.c
+> @@ -67,6 +67,7 @@ struct sdhci_cdns_phy_param {
+>  struct sdhci_cdns_priv {
+>  	void __iomem *hrs_addr;
+>  	bool enhanced_strobe;
+> +	void (*priv_writel)(struct sdhci_cdns_priv *priv, u32 val, void __iomem *reg);
+>  	unsigned int nr_phy_params;
+>  	struct sdhci_cdns_phy_param phy_params[];
+>  };
+> @@ -90,6 +91,12 @@ static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
+>  	{ "cdns,phy-dll-delay-strobe", SDHCI_CDNS_PHY_DLY_STROBE, },
+>  };
+>  
+> +static inline void cdns_writel(struct sdhci_cdns_priv *priv, u32 val,
+> +			       void __iomem *reg)
+> +{
+> +	writel(val, reg);
+> +}
+> +
+>  static int sdhci_cdns_write_phy_reg(struct sdhci_cdns_priv *priv,
+>  				    u8 addr, u8 data)
+>  {
+> @@ -104,17 +111,17 @@ static int sdhci_cdns_write_phy_reg(struct sdhci_cdns_priv *priv,
+>  
+>  	tmp = FIELD_PREP(SDHCI_CDNS_HRS04_WDATA, data) |
+>  	      FIELD_PREP(SDHCI_CDNS_HRS04_ADDR, addr);
+> -	writel(tmp, reg);
+> +	priv->priv_writel(priv, tmp, reg);
+>  
+>  	tmp |= SDHCI_CDNS_HRS04_WR;
+> -	writel(tmp, reg);
+> +	priv->priv_writel(priv, tmp, reg);
+>  
+>  	ret = readl_poll_timeout(reg, tmp, tmp & SDHCI_CDNS_HRS04_ACK, 0, 10);
+>  	if (ret)
+>  		return ret;
+>  
+>  	tmp &= ~SDHCI_CDNS_HRS04_WR;
+> -	writel(tmp, reg);
+> +	priv->priv_writel(priv, tmp, reg);
+>  
+>  	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_HRS04_ACK),
+>  				 0, 10);
+> @@ -191,7 +198,7 @@ static void sdhci_cdns_set_emmc_mode(struct sdhci_cdns_priv *priv, u32 mode)
+>  	tmp = readl(priv->hrs_addr + SDHCI_CDNS_HRS06);
+>  	tmp &= ~SDHCI_CDNS_HRS06_MODE;
+>  	tmp |= FIELD_PREP(SDHCI_CDNS_HRS06_MODE, mode);
+> -	writel(tmp, priv->hrs_addr + SDHCI_CDNS_HRS06);
+> +	priv->priv_writel(priv, tmp, priv->hrs_addr + SDHCI_CDNS_HRS06);
+>  }
+>  
+>  static u32 sdhci_cdns_get_emmc_mode(struct sdhci_cdns_priv *priv)
+> @@ -223,7 +230,7 @@ static int sdhci_cdns_set_tune_val(struct sdhci_host *host, unsigned int val)
+>  	 */
+>  	for (i = 0; i < 2; i++) {
+>  		tmp |= SDHCI_CDNS_HRS06_TUNE_UP;
+> -		writel(tmp, reg);
+> +		priv->priv_writel(priv, tmp, reg);
+>  
+>  		ret = readl_poll_timeout(reg, tmp,
+>  					 !(tmp & SDHCI_CDNS_HRS06_TUNE_UP),
+> @@ -386,6 +393,7 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+>  	priv->nr_phy_params = nr_phy_params;
+>  	priv->hrs_addr = host->ioaddr;
+>  	priv->enhanced_strobe = false;
+> +	priv->priv_writel = cdns_writel;
+>  	host->ioaddr += SDHCI_CDNS_SRS_BASE;
+>  	host->mmc_host_ops.hs400_enhanced_strobe =
+>  				sdhci_cdns_hs400_enhanced_strobe;
 
-Thx Daniel for working on SFP support :)
-
-regards Frank
