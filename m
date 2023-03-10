@@ -2,166 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706556B3E34
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E096B3E37
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbjCJLlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 06:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
+        id S231148AbjCJLmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:42:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbjCJLlM (ORCPT
+        with ESMTP id S231228AbjCJLmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 06:41:12 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1659324712;
-        Fri, 10 Mar 2023 03:41:02 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1E8241EC0505;
-        Fri, 10 Mar 2023 12:41:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678448461;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=aKpednaPACF1732v54TE1hryNVD7OhQPM/LLNaZm8es=;
-        b=PkyOcRMZ+D8wX8CPrudIUxN7r3RAUM2G5EaHyz4Wkhd43r68Wqa8HFM4QXt1TMzCBdFu7n
-        y++yFwAg6tFulnPDx5FJKV3NYcyRQINJpFEgTQpcCmPAiVIFg/71JqrhsNydRvTJKb26s8
-        vo0fFTAD6LwoT9NlYYQGVnvx7iTdbn8=
-Date:   Fri, 10 Mar 2023 12:40:55 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v7 28/41] x86: Introduce userspace API for shadow stack
-Message-ID: <20230310114055.GAZAsXR8cc3gLAZ8c0@fat_crate.local>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-29-rick.p.edgecombe@intel.com>
- <ZAhjLAIm91rJ2Lpr@zn.tnic>
- <9e00b2a3d988f7b24d274a108d31f5f0096eeaae.camel@intel.com>
- <20230309125739.GCZAnXw5T1dfzwtqh8@fat_crate.local>
- <a4dd415ac908450b09b9abbd4421a9132b3c34cc.camel@intel.com>
- <20230309235152.GBZApxGNnXLvkGXCet@fat_crate.local>
- <e83ee9fc1a6e98cab62b681de7209598394df911.camel@intel.com>
+        Fri, 10 Mar 2023 06:42:01 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5943B2470A;
+        Fri, 10 Mar 2023 03:42:00 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id j11so19288087edq.4;
+        Fri, 10 Mar 2023 03:42:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678448519;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DOPcC/2QksUl/n+7no9y2cjpF4ZKKO4ov/Ft85Eli70=;
+        b=KK3MTstlBvwQJp3hkC+WWq7Q8LsLEA86B9IO7jTrSArp1MMzXDu+jUwwEQc7hd+Jqi
+         MxXm1s0mWYmLo0SfTccmPzkspQHxBEW6V36oPTIm5vuAdV6BqOSXsPvdsV5eVNlz3EQ3
+         ZPs+4YjHWB2O5155xrbCsYJCEDjQOdcaJGWexLVsaQe8HhivXObhMxJZHINQ9jpwdjQW
+         w41A0XAje2m17Dg6yG6f9t7Khevv6eeaAMaN4h2tJGfCWF0gG3WsQjAz/gnxD6X6wWma
+         gYrBUvhcR8oWbD3OGHchHzhCOvQgMP3XA4Zi0NpGn0MFnuQTiSt7dQTXvePQEYwXTlbm
+         vXbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678448519;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DOPcC/2QksUl/n+7no9y2cjpF4ZKKO4ov/Ft85Eli70=;
+        b=3ojab1XC2bPGgoiW+il5FDAXevBsfPq7Xomi4wYr38tao5JFLUfURDeANEyaD6OFv5
+         Garz9ZQYhdJQJYwDS8IzEQJisLxPjTwBcQFBFbpvoS/visbZ0v2B5r1BQyi+xHkwpuHI
+         ko/z25AqZ5iqMV1OdRACBwxB3WKidmtmXWQ0qZRQifsXTuzKE6FgiAc4Q/ZcUKpSujGV
+         rktC3qOIdHPaNZS5hZyRRjPyJ+vwHgDzHBloaZUvNy3b2LU1ytfHAZJ3f/tYxgAoO/U/
+         F7FaNzeN5u3li+zyiwaZ0ev4A+4Rjl3HB37ZA4j5gyIqRpqH4xVb9QMxxrmQC4C7ATpM
+         vEKg==
+X-Gm-Message-State: AO0yUKUnAzNTRiM/VVMivHaPFdGU0VBw1iMCGg5k1FKXQ6GoNbsDFHCt
+        guo4nXr6pZUjWGoFct2PcKWyNb+otZiD2LZAMuk=
+X-Google-Smtp-Source: AK7set/XQR6yt41xZ570LX5BYhbDlEkXTOEyVF2u4VCGa7EDXGSRMJeaZ7RnJuZBW0EOTgORjUsm7+YhLxfOkIg/vWo=
+X-Received: by 2002:a50:bae1:0:b0:4ad:7439:cec7 with SMTP id
+ x88-20020a50bae1000000b004ad7439cec7mr13785284ede.7.1678448518643; Fri, 10
+ Mar 2023 03:41:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e83ee9fc1a6e98cab62b681de7209598394df911.camel@intel.com>
+References: <20230310080518.78054-1-lucas.tanure@collabora.com> <20230310080518.78054-2-lucas.tanure@collabora.com>
+In-Reply-To: <20230310080518.78054-2-lucas.tanure@collabora.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Fri, 10 Mar 2023 06:41:46 -0500
+Message-ID: <CAMdYzYpL7V6udw=T7ZChTFi0xOj1tb-5CVHb84u1pL4kj3eDZA@mail.gmail.com>
+Subject: Re: [PATCH 1/7] irqchip/gic-v3: Add a DMA Non-Coherent flag
+To:     Lucas Tanure <lucas.tanure@collabora.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, Qu Wenruo <wqu@suse.com>,
+        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, kernel@collabora.com,
+        Robin Murphy <robin.murphy@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 01:13:42AM +0000, Edgecombe, Rick P wrote:
-> See "x86: Expose thread features in /proc/$PID/status" for the patch.
-> We could emit something in dmesg I guess? The logic would be:
+On Fri, Mar 10, 2023 at 3:05 AM Lucas Tanure <lucas.tanure@collabora.com> wrote:
+>
+> The GIC600 integration in RK356x, used in rk3588, doesn't support
+> any of the shareability or cacheability attributes, and requires
+> both values to be set to 0b00 for all the ITS and Redistributor
+> tables.
+>
+> This is loosely based on prior work from XiaoDong Huang and
+> Peter Geis fixing this issue specifically for Rockchip 356x.
 
-dmesg is just flaky: ring buffer can get overwritten, users don't see
-it, ...
+Good Morning,
 
-> The compatibility problems are totally the mess in this whole thing.
-> When you try to look at a "permissive" mode that actually works it gets
-> even more complex. Joao and I have been banging our heads on that
-> problem for months.
+Since the gic is using dma, would it be reasonable to have all memory
+allocations be requested with the GFP_DMA flag? Otherwise this doesn't
+fully solve the problem for rk356x, where only the lower 4GB range is
+DMA capable, but this tends to get allocated in the upper 4GB on 8GB
+boards.
 
-Oh yeah, I'm soo NOT jealous. :-\
+Very Respectfully,
+Peter Geis
 
-> But there are some expected users of this that say: we compile and
-> check our known set of binaries, we won't get any surprises. So it's
-> more of a distro problem.
-
-I'm guessing what will happen here is that distros will gradually enable
-shstk and once it is ubiquitous, there will be no reason to disable it
-at all.
-
-> You mean a late loaded dlopen()ed DSO? The enabling logic can't know
-> this will happen ahead of time.
-
-No, I meant the case where you start with shstk enabled and later
-disable it when some lib does not support it.
-
-From now on that whole process is marked as "cannot use shstk anymore"
-and any other shared object that tries to use shstk simply doesn't get
-it.
-
-But meh, this makes the situation even more convoluted as the stuff that
-has loaded before the first shstk-not-supporting lib, already uses
-shstk.
-
-So you have half and half.
-
-What a mess.
-
-> I hope non-permissive mode is the standard usage eventually.
-
-Yah.
-
-> I think if you trust your libc, glibc could implement this in userspace
-> too. It would be useful even as as testing override.
-
-No, you cannot trust any userspace. And there are other libc's beside
-glibc.
-
-This should be a kernel parameter. I'm not saying we should do it now
-but we should do it at some point.
-
-So that user Boris again, he installs his new shiny distro, he checks
-that all the use cases and software he uses there is already
-shstk-enabled and then he goes and builds the kernel with
-
-	CONFIG_X86_USER_SHADOW_STACK_STRICT=y
-
-or supplies a cmdline param and from now on, nothing can run without
-shstk. No checking, no trusting, no nothing.
-
-We fail any thread creation which doesn't init shstk.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+>
+> Suggested-by: Robin Murphy <robin.murphy@arm.com>
+> Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
+> ---
+>  drivers/irqchip/irq-gic-v3-its.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>
+> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> index 973ede0197e3..1c334dfeb647 100644
+> --- a/drivers/irqchip/irq-gic-v3-its.c
+> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> @@ -42,6 +42,7 @@
+>  #define ITS_FLAGS_CMDQ_NEEDS_FLUSHING          (1ULL << 0)
+>  #define ITS_FLAGS_WORKAROUND_CAVIUM_22375      (1ULL << 1)
+>  #define ITS_FLAGS_WORKAROUND_CAVIUM_23144      (1ULL << 2)
+> +#define ITS_FLAGS_DMA_NON_COHERENT             (1ULL << 3)
+>
+>  #define RDIST_FLAGS_PROPBASE_NEEDS_FLUSHING    (1 << 0)
+>  #define RDIST_FLAGS_RD_TABLES_PREALLOCATED     (1 << 1)
+> @@ -2359,6 +2360,13 @@ static int its_setup_baser(struct its_node *its, struct its_baser *baser,
+>         its_write_baser(its, baser, val);
+>         tmp = baser->val;
+>
+> +       if (its->flags & ITS_FLAGS_DMA_NON_COHERENT) {
+> +               if (tmp & GITS_BASER_SHAREABILITY_MASK)
+> +                       tmp &= ~GITS_BASER_SHAREABILITY_MASK;
+> +               else
+> +                       gic_flush_dcache_to_poc(base, PAGE_ORDER_TO_SIZE(order));
+> +       }
+> +
+>         if ((val ^ tmp) & GITS_BASER_SHAREABILITY_MASK) {
+>                 /*
+>                  * Shareability didn't stick. Just use
+> @@ -3055,6 +3063,7 @@ static u64 its_clear_vpend_valid(void __iomem *vlpi_base, u64 clr, u64 set)
+>
+>  static void its_cpu_init_lpis(void)
+>  {
+> +       struct its_node *its = list_first_entry(&its_nodes, struct its_node, entry);
+>         void __iomem *rbase = gic_data_rdist_rd_base();
+>         struct page *pend_page;
+>         phys_addr_t paddr;
+> @@ -3096,6 +3105,9 @@ static void its_cpu_init_lpis(void)
+>         gicr_write_propbaser(val, rbase + GICR_PROPBASER);
+>         tmp = gicr_read_propbaser(rbase + GICR_PROPBASER);
+>
+> +       if (its->flags & ITS_FLAGS_DMA_NON_COHERENT)
+> +               tmp &= ~GICR_PROPBASER_SHAREABILITY_MASK;
+> +
+>         if ((tmp ^ val) & GICR_PROPBASER_SHAREABILITY_MASK) {
+>                 if (!(tmp & GICR_PROPBASER_SHAREABILITY_MASK)) {
+>                         /*
+> @@ -3120,6 +3132,9 @@ static void its_cpu_init_lpis(void)
+>         gicr_write_pendbaser(val, rbase + GICR_PENDBASER);
+>         tmp = gicr_read_pendbaser(rbase + GICR_PENDBASER);
+>
+> +       if (its->flags & ITS_FLAGS_DMA_NON_COHERENT)
+> +               tmp &= ~GICR_PENDBASER_SHAREABILITY_MASK;
+> +
+>         if (!(tmp & GICR_PENDBASER_SHAREABILITY_MASK)) {
+>                 /*
+>                  * The HW reports non-shareable, we must remove the
+> @@ -5005,6 +5020,7 @@ static int __init its_compute_its_list_map(struct resource *res,
+>  static int __init its_probe_one(struct resource *res,
+>                                 struct fwnode_handle *handle, int numa_node)
+>  {
+> +       struct device_node *np = to_of_node(handle);
+>         struct its_node *its;
+>         void __iomem *its_base;
+>         u64 baser, tmp, typer;
+> @@ -5076,6 +5092,9 @@ static int __init its_probe_one(struct resource *res,
+>         its->get_msi_base = its_irq_get_msi_base;
+>         its->msi_domain_flags = IRQ_DOMAIN_FLAG_MSI_REMAP;
+>
+> +       if (np && !of_dma_is_coherent(np))
+> +               its->flags |= ITS_FLAGS_DMA_NON_COHERENT;
+> +
+>         its_enable_quirks(its);
+>
+>         err = its_alloc_tables(its);
+> @@ -5095,6 +5114,9 @@ static int __init its_probe_one(struct resource *res,
+>         gits_write_cbaser(baser, its->base + GITS_CBASER);
+>         tmp = gits_read_cbaser(its->base + GITS_CBASER);
+>
+> +       if (its->flags & ITS_FLAGS_DMA_NON_COHERENT)
+> +               tmp &= ~GITS_CBASER_SHAREABILITY_MASK;
+> +
+>         if ((tmp ^ baser) & GITS_CBASER_SHAREABILITY_MASK) {
+>                 if (!(tmp & GITS_CBASER_SHAREABILITY_MASK)) {
+>                         /*
+> --
+> 2.39.2
+>
