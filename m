@@ -2,86 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFF46B3ADB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 949326B3AD7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjCJJk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:40:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
+        id S229845AbjCJJk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:40:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjCJJjg (ORCPT
+        with ESMTP id S231319AbjCJJjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:39:36 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F77497C0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:37:38 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id k199so4664242ybf.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:37:38 -0800 (PST)
+        Fri, 10 Mar 2023 04:39:40 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B4434F48
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:37:45 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id cy23so17895813edb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:37:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678441057;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dkaa33xZucHUmrkT5EKmd+RR2GnIarbPW3jBS/IXiH4=;
-        b=ILgy/F6/c0pxMeQ/+6TFJeeOwNTnmur/K+JvQ701v0qAA0vS7Fs3hSM2WV0r7T71AR
-         7iyHIC6BKS6Txkgct7txGB9X1f9a5XW4YC4NUMtvVFayyucjCMRJWfK7Ml/3TEFIjoFV
-         V041ltbDeIdKFbE82x/frnGpKAk2ItooSDnmIwrBF0QnLTPC89Yo9wveO6wvD3WF0KtY
-         8WaWDVmLxFEWWA4uCYz5a/N6jiSA17yEwUyo9tEcTCEAWwyVVBd3K1utC5G7tXhiTF0j
-         71o7KVhFV0JvVVATu5MVkEh9usoL3P5lcfP10ng4cRA1ZwckPPEYmC1gjgqURqCJ/G+a
-         JyfA==
+        d=linaro.org; s=google; t=1678441064;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=72MIaSfWuU9e23TmX4jMSQ8I9cDWMHGQ0vlumsHCWRY=;
+        b=oAdyF9OPlB0+VurFpfI9tL2uxeN9JTolrLXu424nx1gEhj+QjaA/1bvJ7DJBKjT/Vz
+         V7SeOlcmUAsdK6CQhyEd2nBks0w+TzUHBmp+HaVN5zffM71mW+j6sTk9YFMO5STC2UVT
+         2OuSZpvpkUyJPsAvea1CgVh+Bx3S6F+tkmye74DpZjCqapcGkgcXcDoEfvVzts78zJTM
+         Ce+pzxyf7gsWIn3arLSZ8lNXk6vNJKt9V+TJTSAPnQusSHKEXpXa4MXeR/veeNk74MYX
+         6PYpQKLC6/iTc11ClawHywABYhEnOV6DviLmOmzWtpJqTMCrSXlCaL+2YFKc1Cst2AbG
+         Lm9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678441057;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dkaa33xZucHUmrkT5EKmd+RR2GnIarbPW3jBS/IXiH4=;
-        b=cIGU/5MJwskFWgrcZwRALDRohNKLJ/6EI9GjFIVz6TEmKXU3XXbaQgcIw+AYVfgPgD
-         L++TSWBAl9TtHEbe5yH6l5g3bgMlryu2WMSnhnFTds7EFwQRw0g1gJU+9185pRlxSQR3
-         9TuEnGuekUw9/jl60AaWxu/QxUzfbI12Grk0/S6NMo0rrf4WYmx50+5JNu20Kyrc6qT9
-         empxdVSaEUze3cyb/H1cnVlsTQUGJNi7d0+OO3vJWM5HNAUhvQwJWQT0qaJRE45rOmkT
-         SXz6A5iIE5FUVIZmVxRG7Uon813geZG7ac7woPi8exh9CTelPxhAMOjkFPZs2LSSM+Gv
-         0cNg==
-X-Gm-Message-State: AO0yUKXhkl6SQiEZ4RTC1RkG7Fedvp7uSYWoMRLvuvjf/Ai8lLui0FLV
-        PqXNS/hG3jqnpGfxnZZxh0RmOKnAiFtydcvy91Jxow==
-X-Google-Smtp-Source: AK7set+5e6x1wi7MIweB5TOI7S3BjN5EW/S43FwJZUJkRYmGqWqeeshxKBdvJTlMBkQWSrF6TT50wquIIlxgcDtOgIE=
-X-Received: by 2002:a25:e201:0:b0:b2e:f387:b428 with SMTP id
- h1-20020a25e201000000b00b2ef387b428mr1178326ybe.5.1678441057179; Fri, 10 Mar
- 2023 01:37:37 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678441064;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=72MIaSfWuU9e23TmX4jMSQ8I9cDWMHGQ0vlumsHCWRY=;
+        b=vWL9YV7jv44I5M3C67QAexIU7dWYEqSlUUJBvXlgMA0/aEBMuzFTPYqPrHZwM+SWFx
+         RsvRy5WG31ae21iZzLnhLq9/CvMFNXQnrLJyrUl+h4ROdGyq6BS8NeZIRNlPCitCllmb
+         SY9igTrsAIuZKLXg0Bij1ld234zH+cM615Sr5/G4/g0EU/Ky2HnHQAz1YF8ivvPDJO95
+         n6CPa6ffEBOS/zX66V37VQJTBj81hmkngeRS63LD1V76fbuSCb3QtG3CFP2F06W/oO+I
+         jRehhKvtTE43r2n2Fp+dCuf0TMUyoFHD5AnPeumm7IE6sHpo27vk0DzeyliofpFyDb87
+         ypZw==
+X-Gm-Message-State: AO0yUKXyuEagehXeyeoCRKUP6eOfMP2QWcYnk3V8Vi2bz8tQVlEawAak
+        JclwiExWYM8u2GP69qnxAXMDeA==
+X-Google-Smtp-Source: AK7set/eFfiMqvRDo7L2flhVa4/blql11k6Nnytdu12WJy0s9z80h3CK/JPZUQ2Clnp0i+jFDAmoew==
+X-Received: by 2002:a17:907:c24:b0:8aa:bf48:aae1 with SMTP id ga36-20020a1709070c2400b008aabf48aae1mr34138480ejc.6.1678441063852;
+        Fri, 10 Mar 2023 01:37:43 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:2a59:841a:ebc:7974? ([2a02:810d:15c0:828:2a59:841a:ebc:7974])
+        by smtp.gmail.com with ESMTPSA id i9-20020a508709000000b004c0897f045bsm605087edb.56.2023.03.10.01.37.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 01:37:43 -0800 (PST)
+Message-ID: <e9413338-7f33-8fd7-11cf-17a9b31aba57@linaro.org>
+Date:   Fri, 10 Mar 2023 10:37:42 +0100
 MIME-Version: 1.0
-References: <20230216013230.22978-1-ansuelsmth@gmail.com> <CACRpkda30Ky5oYPn_nGWGOzT5ntZYdE3gafrs7D27ZHxgGuO8A@mail.gmail.com>
- <8226f000-dd9c-4774-b972-a7f1113f0986@lunn.ch>
-In-Reply-To: <8226f000-dd9c-4774-b972-a7f1113f0986@lunn.ch>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 10 Mar 2023 10:37:25 +0100
-Message-ID: <CACRpkdapuk39vcdNhmsMN0tbTPTSYUgY9r+EBJ-O+v2dsB=wNA@mail.gmail.com>
-Subject: Re: [PATCH v8 00/13] Adds support for PHY LEDs with offload triggers
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH v2 7/7] arm64: dts: qcom: Add the Inline Crypto Engine
+ nodes
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Arun.Ramadoss@microchip.com
-Content-Type: text/plain; charset="UTF-8"
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <20230308155838.1094920-1-abel.vesa@linaro.org>
+ <20230308155838.1094920-8-abel.vesa@linaro.org>
+ <4eab53fc-2d26-dc93-3ae6-c0b2546ad3e0@linaro.org>
+ <ZAol5o5a6HZYgRaG@sol.localdomain>
+ <b5c9aa6e-69d1-165a-4ff9-b5a9f33688e6@linaro.org>
+ <ZAr2nlFSKkBBQgcY@linaro.org>
+ <4ea944dd-8a42-e83f-607c-1a36124d19bb@linaro.org>
+ <ZAr5v/jbd18K5Lug@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZAr5v/jbd18K5Lug@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,21 +98,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 4:22 PM Andrew Lunn <andrew@lunn.ch> wrote:
+On 10/03/2023 10:34, Abel Vesa wrote:
+>>> I assume you mean it breaks if someone is using old approach DTS with a
+>>> kernel that would have ICE driver merged. Yes, that it does. And for
+>>> that, in the v3, I'll make of_qcom_ice_get check if there is a reg entry
+>>> with name "ice" and create an ICE instance but for the same dev as the
+>>> consumer driver. OTOH, if there is no reg entry called "ice", it will
+>>> look up a device based on phande of qcom,ice property. This will allow
+>>> legacy style DTS to work fine, while using the unified driver as a
+>>> library, in that case. For newer platforms, the recommended approach
+>>> will be to add a new ICE node and use qcom,ice property.
+>>
+>> For the driver this sounds good. I still think that existing (older) DTS
+>> should not have regs removed, because this affects other users of kernel
+>> DTS.
+> 
+> Yes, that's what I meant, the already supported platforms will remain
+> with ice reg in the consumer node.
 
-> As to 'how a certain trigger on a certain LED is going to associate
-> itself with, say, a certain port' is clearly a property of the
-> hardware, when offloading is supported. I've not seen a switch you can
-> arbitrarily assign LEDs to ports. The Marvell switches have the LED
-> registers within the port registers, for example, two LEDs per port.
+... unless you plan to add to them UFS ICE, which would be nice feature
+thus justifying DTS re-shuffle :)
 
-Aha so there is an implicit HW dependency between the port and the
-LED, that we just cannot see in the device tree. Okay, it makes sense.
+Best regards,
+Krzysztof
 
-I think there will be a day when a switch without LED controller appears,
-but the system has a few LEDs for the ports connected to an
-arbitrary GPIO controller, and then we will need this. But we have
-not seen that yet :)
-
-Yours,
-Linus Walleij
