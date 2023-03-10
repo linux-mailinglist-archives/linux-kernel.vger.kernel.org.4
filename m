@@ -2,110 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3EF6B3BF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:24:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8E16B3C02
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbjCJKX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 05:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S230203AbjCJK1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 05:27:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbjCJKXr (ORCPT
+        with ESMTP id S230000AbjCJK1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 05:23:47 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7781A4A6;
-        Fri, 10 Mar 2023 02:23:39 -0800 (PST)
-Date:   Fri, 10 Mar 2023 10:23:36 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1678443816;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        Fri, 10 Mar 2023 05:27:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906C5110516
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:26:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678443978;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TmW1fMIiJseHqCgSBPyNA5oyhw2rY1T8DauIS/wwJKQ=;
-        b=GwcXFc/T8oNcEKfdCJ7CVXYHcBL8cb9yow5bNV2WDGHKIor9Xt1Nm9/OcTqRqJYu53rSeH
-        wcQmKqZJL1uO6vk1/GyEItVOYABmdCw7NfaX9ZWkEDA2uKr4N6YJCBQ//fsyLs5CKlU7QW
-        LkWkcexOHtbE9PJ9iPoqk2q1I6cTEiytOOpeqRlWYd8Kg7J8MaL99ibWCyBV76dpVdlrP9
-        I9PlC5U7KL1BWPCELcS6XvyvePcbVflx716UjHgbYP00s6V31sFjKQUVKVXNaG9dkKc4D5
-        k/okaEKIidDjQpnWSKMIaURREuJ9l0fUdUB1Gp4j/GwUsJsVB6NwpzEr4J9rcA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1678443816;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TmW1fMIiJseHqCgSBPyNA5oyhw2rY1T8DauIS/wwJKQ=;
-        b=1gMG8WrAo+2Rs1M8s5fkZgyOSLlzaCiIXKFjvy17AzsLJUWdj0KkioVMbeM6pxdKTGEXl8
-        hbZL9Z1xwKIoPaCg==
-From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/misc] MAINTAINERS: Add x86 hardware vulnerabilities section
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230224213522.nofavod2jzhn22wp@treble>
-References: <20230224213522.nofavod2jzhn22wp@treble>
+        bh=zSYT9NdKeIbjdIT8S3/yTKu9A/BiOzhczLFXXBYF9tk=;
+        b=MYVnxnphoDJD98CZgDLfxhXGjMIP7xTZ3zcq3kJpLlK6ihgi2ejPunrXO6duW3aEG+p983
+        mJ7vch39wvrcM+QsdrCsNpZxLkYnNL4+lWULIK/Tr8AkcSMiYBLnHTf1pj3w4zQ1i0iDK8
+        SJc3qDD2y44jX3/asxUfZnDCbg1DuFU=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-96-av8b9GlxNuG8kuSfza7DJg-1; Fri, 10 Mar 2023 05:26:17 -0500
+X-MC-Unique: av8b9GlxNuG8kuSfza7DJg-1
+Received: by mail-ed1-f69.google.com with SMTP id b7-20020a056402350700b004d2a3d5cd3fso7040650edd.8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:26:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678443976;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zSYT9NdKeIbjdIT8S3/yTKu9A/BiOzhczLFXXBYF9tk=;
+        b=z6I4c7uo+7zfb4fNp1JNzvC/AJcnyItGf7+LHbq9SzIsZ0rRalRFxV4fdjbwqBNx49
+         ZjrM0HgRtVAZQ1ElYHHl6MPwuakDa42npetJ5nhYqj5SZneTzrDME9JGMAnpi1zryky3
+         SZuP92Gx2/WutYdsNOFyDGV3BFS968fPN0l0IxBzBBQKBDeoCrxZFd0LSwzXjqJFzoUN
+         Jp0yzgdE//to5vR0w6JvZrtoI+Dman3Wq4p1CgVybMinOxKeGhcRX416KyOqKSdEtlKQ
+         9oK40oB1qHxY4E9XFdvuabbT1LZeNOfsxOHR3T2bAi7DHnX8LFyVwbgvqqU3n7gZIDx8
+         l3xQ==
+X-Gm-Message-State: AO0yUKX6iS2cjRb3n8zGS30ANMpOxg6bFGM/rV06c2bYyBLw/Q2ngUjI
+        fX7SRk5FmmzDDKcHzB5EdgfE5UQO8lLdcVGzH6m4XEj8L/0qx3ha3lDBuRcL4WwjoPXZMPSe+zd
+        L/t21vaMDxT5s+3xaFoaLnL79VjWm3Sw3
+X-Received: by 2002:a17:906:4756:b0:8ed:5af8:d4ba with SMTP id j22-20020a170906475600b008ed5af8d4bamr1557177ejs.38.1678443976130;
+        Fri, 10 Mar 2023 02:26:16 -0800 (PST)
+X-Google-Smtp-Source: AK7set+xHrvOFHbxAWQ1eD/jbBpVJSXkKAk6Q7FFe6t2ghKJjQXr/bZkp4vlYrU3T86K9j2Y0urShg==
+X-Received: by 2002:a17:906:4756:b0:8ed:5af8:d4ba with SMTP id j22-20020a170906475600b008ed5af8d4bamr1557163ejs.38.1678443975907;
+        Fri, 10 Mar 2023 02:26:15 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id m25-20020a170906235900b008ca52f7fbcbsm789348eja.1.2023.03.10.02.26.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 02:26:15 -0800 (PST)
+Message-ID: <9d0bbfb3-cb7f-15f9-0e84-172dd08c6148@redhat.com>
+Date:   Fri, 10 Mar 2023 11:26:14 +0100
 MIME-Version: 1.0
-Message-ID: <167844381609.5837.4907138475785579088.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/5] staging: rtl8723bs: remove some unused functions
+Content-Language: en-US, nl
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20230310083449.23775-1-straube.linux@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230310083449.23775-1-straube.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/misc branch of tip:
+Hi,
 
-Commit-ID:     5910f06503aae3cc4890e562683abc3e38857ff9
-Gitweb:        https://git.kernel.org/tip/5910f06503aae3cc4890e562683abc3e38857ff9
-Author:        Josh Poimboeuf <jpoimboe@kernel.org>
-AuthorDate:    Fri, 24 Feb 2023 13:35:22 -08:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Fri, 10 Mar 2023 11:13:30 +01:00
+On 3/10/23 09:34, Michael Straube wrote:
+> This series removes some unused functions from hal/hal_com.c.
 
-MAINTAINERS: Add x86 hardware vulnerabilities section
+Thanks, the entire series looks good to me:
 
-Add the bunch of losers who have to deal with this to MAINTAINERS so
-that they can get explicitly CCed on more hw nightmares.
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-  [ bp: Add commit message. ]
+for the series.
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230224213522.nofavod2jzhn22wp@treble
----
- MAINTAINERS | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Regards,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8d5bc22..d95c6cc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22660,6 +22660,17 @@ S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/asm
- F:	arch/x86/entry/
- 
-+X86 HARDWARE VULNERABILITIES
-+M:	Thomas Gleixner <tglx@linutronix.de>
-+M:	Borislav Petkov <bp@alien8.de>
-+M:	Peter Zijlstra <peterz@infradead.org>
-+M:	Josh Poimboeuf <jpoimboe@kernel.org>
-+R:	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-+S:	Maintained
-+F:	Documentation/admin-guide/hw-vuln/
-+F:	arch/x86/include/asm/nospec-branch.h
-+F:	arch/x86/kernel/cpu/bugs.c
-+
- X86 MCE INFRASTRUCTURE
- M:	Tony Luck <tony.luck@intel.com>
- M:	Borislav Petkov <bp@alien8.de>
+Hans
+
+> 
+> Michael Straube (5):
+>   staging: rtl8723bs: MapCharToHexDigit() is not used
+>   staging: rtl8723bs: ParseQualifiedString() is not used
+>   staging: rtl8723bs: isAllSpaceOrTab() is not used
+>   staging: rtl8723bs: linked_info_dump() is not used
+>   staging: rtl8723bs: rtw_get_raw_rssi_info() is not used
+> 
+>  drivers/staging/rtl8723bs/hal/hal_com.c     | 108 --------------------
+>  drivers/staging/rtl8723bs/include/hal_com.h |   9 --
+>  2 files changed, 117 deletions(-)
+> 
+
