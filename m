@@ -2,120 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841496B5001
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 19:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DB96B5004
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 19:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbjCJSV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 13:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44076 "EHLO
+        id S230321AbjCJSXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 13:23:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbjCJSVj (ORCPT
+        with ESMTP id S230256AbjCJSXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 13:21:39 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3C71386A2;
-        Fri, 10 Mar 2023 10:20:42 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32ADovRc022695;
-        Fri, 10 Mar 2023 18:20:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=DgFVAoLAXA+pGzs1RTiR1tB9IOrskv07iltnwai5cWo=;
- b=WQU/imcXQkFIa9aussINsXMJYxmLwIk1g2n+l+bB0lFdprVqz2D5b6EnYW+pYKFsNAO5
- NVW1l3jG+SO7x8S2KOZjYA+HA7rzoLRKemHlziOqFDa82nFrZCoKE67GXxRWw2M7qIbw
- 7JF2UyqQLjmMb6H5n77Unkw/3qhomWfyMuzVt1+5APFIPaTR02uD4Myli3UGlGhuaZnE
- W5EumhdOClxEuiAljdjI7cU+BE53UhjserXNj6BpV5MGht7N9oAjVP3YJn8uGL0/1kXY
- 0fTOOS5cAoC60G5i0qyI8vNYPSMtTC2wUHT2rqq3NdB2d6xt9dd6bMYG1i+zulS55nrG Mg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p7egym7p0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 18:20:17 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32AIKGD4013258
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 18:20:16 GMT
-Received: from [10.110.35.240] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 10 Mar
- 2023 10:20:15 -0800
-Message-ID: <c4b39b28-1f18-c436-e3c5-b015600ca3a2@quicinc.com>
-Date:   Fri, 10 Mar 2023 10:20:14 -0800
+        Fri, 10 Mar 2023 13:23:10 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECF91386A4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 10:22:13 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pahMt-0005Ir-Oi; Fri, 10 Mar 2023 19:21:27 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pahMr-003EWX-GI; Fri, 10 Mar 2023 19:21:25 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pahMq-003rZL-SN; Fri, 10 Mar 2023 19:21:24 +0100
+Date:   Fri, 10 Mar 2023 19:21:23 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        linux-pwm@vger.kernel.org, Greentime Hu <greentime.hu@sifive.com>,
+        devicetree@vger.kernel.org, jarkko.nikula@linux.intel.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: (subset) [PATCH v7 00/10] Designware PWM driver updates for OF
+Message-ID: <20230310182123.o5inpde7bvvbzqpr@pengutronix.de>
+References: <20221223153820.404565-1-ben.dooks@sifive.com>
+ <167664644976.3317584.11838750253013149302.b4-ty@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 0/2] Validating UAPI backwards compatibility
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>,
-        John Moon <quic_johmoo@quicinc.com>
-CC:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Nicolas Schier" <nicolas@fjasle.eu>,
-        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Todd Kjos <tkjos@google.com>,
-        Matthias Maennich <maennich@google.com>,
-        Giuliano Procida <gprocida@google.com>,
-        <kernel-team@android.com>, <libabigail@sourceware.org>,
-        Jordan Crouse <jorcrous@amazon.com>,
-        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>
-References: <20230301075402.4578-1-quic_johmoo@quicinc.com>
- <ZArlx5wrw+ZQWUg4@infradead.org>
-From:   Trilok Soni <quic_tsoni@quicinc.com>
-In-Reply-To: <ZArlx5wrw+ZQWUg4@infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: j8nBrDEWwr0u__8SclYtBFl6Esys8tp0
-X-Proofpoint-ORIG-GUID: j8nBrDEWwr0u__8SclYtBFl6Esys8tp0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-10_09,2023-03-10_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 spamscore=0 phishscore=0 impostorscore=0 suspectscore=0
- priorityscore=1501 malwarescore=0 mlxscore=0 clxscore=1011 mlxlogscore=854
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303100146
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ul54juyfdssbpzak"
+Content-Disposition: inline
+In-Reply-To: <167664644976.3317584.11838750253013149302.b4-ty@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/2023 12:09 AM, Christoph Hellwig wrote:
-> On Tue, Feb 28, 2023 at 11:54:00PM -0800, John Moon wrote:
->> Our goal is to add tooling for vendor driver developers because the
->> upstream model of expert maintainer code review can be difficult to
->> replicate in-house. Tools may help developers catch simple UAPI
->> incompatibilities that could be easily overlooked by in-house review.
-> 
-> Why would this matter in any way for the kernel?  If you tool is useful
-> for in-kernel usage it should be added to the tree and documented as
-> such, but ouf of tree crap simply does not matter.
 
-This tool will be helpful for the kernel maintainers and reviewers as 
-well if it can detect potential UAPI backward compatibilities. Even for 
-the developers while changing UAPI interfaces at kernel.org before 
-submission.
+--ul54juyfdssbpzak
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-John is trying to highlight also that this tool can be useful for 
-downstream users who want to keep the UAPI backward compatibility like 
-we do at upstream. We can remove the above text, since we would like to 
-mainline it at kernel.org.
+On Fri, Feb 17, 2023 at 04:08:09PM +0100, Thierry Reding wrote:
+> On Fri, 23 Dec 2022 15:38:10 +0000, Ben Dooks wrote:
+> > An updated set of patches for the Designware PWM driver
+> > split into PCI and OF versions. I think I got all the
+> > review issues in this set.
+> >=20
+> > Sorry for the delay in getting this out, between conferences
+> > and other absences there has been little time to deal with
+> > this set. I will be now out of office until 3rd Jan 2023.
+> >=20
+> > [...]
+>=20
+> Applied, thanks!
+>=20
+> [01/10] dt-bindings: pwm: Document Synopsys DesignWare snps,pwm-dw-apb-ti=
+mers-pwm2
+>         commit: 0f03bf300833c05d914ab7f5ab3d8bc8564e9912
+> [02/10] pwm: dwc: allow driver to be built with COMPILE_TEST
+>         commit: c901a57e39db555ad7950fd61e1470cdecc8e654
+> [03/10] pwm: dwc: change &pci->dev to dev in probe
+>         commit: 8f3c7ab881ed7329003e10a2dd58f735abda2259
+> [04/10] pwm: dwc: move memory alloc to own function
+>         commit: a4218d7cf8978f397e731d1f15ef33d28f77e42b
+> [05/10] pwm: dwc: use devm_pwmchip_add
+>         commit: 7a77daf8223e772a225d6aa6202a5b1ae2392caf
 
----Trilok Soni
+I had some comments for patches #6 and #10. Patches #7 - #9 are still
+marked as new in the PWM patchwork, but I will mark them as
+changes-requested in the assumption that you'll have to rework them to
+address my feedback for the other two patches anyhow.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--ul54juyfdssbpzak
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQLdSAACgkQwfwUeK3K
+7AmlCQf/ag5HM1MNCGGGZcXkTe/Ws77umzxCHqok6cf07JtNyq1IxL1L25/YIwAg
+46Kq24k59OmkprRS2S9h/tcwm7+5XwnX/PI921kBIer7XSSqG1lOQRu1k+J29us2
+nog8snXGnycefWxy5aHRsrRiM+TgJdRJ0aA9sGA13WdOmtpHYxfjLpqEu5X/Ka6F
+ipHb+Wg1CwF84rP4hO5CIumX8m2VDlvGPhrSrqJnPJ8qy/bhBKI/2aWuJzwSz0CJ
+2ISORXY/lGcGB/fkLYmob5Lswpc32EYMniwaC1d+XfYiqrXgyXIqkOtymKz84rnM
+zRTMdAqDQqH5IKU3xw5HBd4T4VBCxA==
+=c1R2
+-----END PGP SIGNATURE-----
+
+--ul54juyfdssbpzak--
