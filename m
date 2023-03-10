@@ -2,71 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC816B36F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 07:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E16886B3701
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjCJG6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 01:58:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55860 "EHLO
+        id S229550AbjCJHBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 02:01:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbjCJG5h (ORCPT
+        with ESMTP id S229453AbjCJHAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 01:57:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9438105F39;
-        Thu,  9 Mar 2023 22:57:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F13E0B821BE;
-        Fri, 10 Mar 2023 06:57:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 313C2C4339B;
-        Fri, 10 Mar 2023 06:57:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678431431;
-        bh=znZU5YKV5/tr94Mn/anv8wqsM1ocNElvGuGexz0++JU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=E2ka8xkQoAJf71fR68m51EtHqdlGxXnTv79eA4jG5B793KJfQ4daVuRk3ragzsG08
-         OoNrknNax77dGcy893F4+pzFq0N3j9nqQxtnaW9xRlJaoFfBSbpIUFMaJOlOXu0T6V
-         s756P+S7m1+U6wyqSwXtH4UpBwv37FxaTSQ+VzBTlFmiUVYX/LOGCMR4mxWzmzJh06
-         4JJDnZBWuairGImMZCkZIIRBf0hGOXM0TjUdodQPfCxwy4Efh9mIlzupTbiagdtAqZ
-         zYc31GyVRQKC4DPcNWvHHVnoF1RJpGDDig2pCBZ0kqt2e/4XcwvnBHt8mDo4j4yJkL
-         m5HH1wtOC/4tA==
-Date:   Thu, 9 Mar 2023 22:57:10 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Maxim Korotkov <korotkov.maxim.s@gmail.com>
-Cc:     Rasesh Mody <rmody@marvell.com>, GR-Linux-NIC-Dev@marvell.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Chan <mchan@broadcom.com>,
-        Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH net-next] bnx2: remove deadcode in bnx2_init_cpus()
-Message-ID: <20230309225710.78cd606c@kernel.org>
-In-Reply-To: <20230309174231.3135-1-korotkov.maxim.s@gmail.com>
-References: <20230309174231.3135-1-korotkov.maxim.s@gmail.com>
+        Fri, 10 Mar 2023 02:00:55 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [123.126.96.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D31BFF98D1;
+        Thu,  9 Mar 2023 23:00:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=1z6vh
+        FR7cbq9745C+sXleDgCeGXWCt5kCHk83K/xDew=; b=g12hMjc84NJkh25h4Bx4j
+        eRcKL/ZdqZd/QifDOK3nYCjtS29tiB/UYY7jLztIQIgRxI/YQ0w9tpoTiCIg9WCP
+        RdjIQL/yQdq6ZUsojVgCPkBU6ZQLGKPQnIk11zZah+JvzxZ+qbWY/lw+u78wS7dI
+        g07JxS15B5UHuG0gIUc3d0=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by smtp17 (Coremail) with SMTP id NdxpCgCHoGqY1Qpk6BJXHA--.82S2;
+        Fri, 10 Mar 2023 15:00:40 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
+        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] USB: gadget: udc: Fix use after free bug in udc_plat_remove due to race condition
+Date:   Fri, 10 Mar 2023 15:00:39 +0800
+Message-Id: <20230310070039.1288927-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NdxpCgCHoGqY1Qpk6BJXHA--.82S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ArykXw4xZF4rXr1kCF13XFb_yoW8GF47pF
+        Z3KrWxGr4DAryqyr17Gr1rZFW8Ca9rKr95KrW2k3W3Zrn5Kw43ArW8JF1fKF4xJF97ArWa
+        qF4v9r10vFWkua7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziJUU8UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzgAuU2I0XlsmAwAAsF
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  9 Mar 2023 20:42:31 +0300 Maxim Korotkov wrote:
-> The load_cpu_fw function has no error return code
-> and always returns zero. Checking the value returned by
-> this function does not make sense.
-> As a result, bnx2_init_cpus() will also return only zero
-> Therefore, it will be safe to change the type of functions
-> to void and remove checking
+In udc_plat_probe, &udc->drd_work is bound with
+udc_drd_work. udc_drd_work may be called by
+usbd_connect_notify to start the work.
 
-True, but you need to tell the reader why you're making the change.
-One of the impossible-to-hit error handling paths is missing unwind
-or some such?
+Besides, there is a invoking chain:
+udc_plat_probe
+->udc_probe
+->usb_add_gadget_udc_release
+->usb_add_gadget
+
+It will add a new gadget to the udc class driver
+ list. In usb_add_gadget, it uses usb_udc_release
+ as its release function, which will kfree(udc)
+ to when destroying the gadget.
+
+If we remove the module which will call udc_plat_remove
+  to make cleanup, there may be a unfinished work.
+The possible sequence is as follows:
+
+Fix it by finishing the work before cleanup in the udc_plat_remove
+
+Fixes: 1b9f35adb0ff ("usb: gadget: udc: Add Synopsys UDC Platform driver")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+ drivers/usb/gadget/udc/snps_udc_plat.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/gadget/udc/snps_udc_plat.c b/drivers/usb/gadget/udc/snps_udc_plat.c
+index 8bbb89c80348..6228e178cc0a 100644
+--- a/drivers/usb/gadget/udc/snps_udc_plat.c
++++ b/drivers/usb/gadget/udc/snps_udc_plat.c
+@@ -230,6 +230,7 @@ static int udc_plat_remove(struct platform_device *pdev)
+ 	struct udc *dev;
+ 
+ 	dev = platform_get_drvdata(pdev);
++	cancel_delayed_work_sync(&dev->drd_work);
+ 
+ 	usb_del_gadget_udc(&dev->gadget);
+ 	/* gadget driver must not be registered */
+-- 
+2.25.1
+
