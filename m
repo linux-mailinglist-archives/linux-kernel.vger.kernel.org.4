@@ -2,150 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C146B554B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:05:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44DE86B554D
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:06:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbjCJXFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 18:05:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
+        id S231838AbjCJXGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 18:06:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbjCJXFo (ORCPT
+        with ESMTP id S231343AbjCJXGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 18:05:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B02135955;
-        Fri, 10 Mar 2023 15:05:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28BB561D49;
-        Fri, 10 Mar 2023 23:05:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51FBFC433D2;
-        Fri, 10 Mar 2023 23:05:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678489541;
-        bh=qYf7XwsN3paZxawhDYAE5mQqUB8cGC47Gx+srOcNCLw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=WxtsZXJnV6YIb9iZHhO/zmGSkmBWj4CDw+iRqijYdhHcVErkfqUtb0zJ35Lv0EZxU
-         i5VJfsuu/mZdzc0FeisJzSsw1XDqHrK338fvVZCdjiiOJ3rch9A1YfebAGs6JohYoH
-         qsm+MaSmdexvgI44G/3sKrINfU+1fRSE8ZO3OAB2ZAVTf9yv1KCAbeZ0KKOeshsa9e
-         2kjspx8opCNRL6ffRGDjvY1Ft086IYzztnFdqwfnTZMIgpzeA3aW1S9hmaDnOqwlDL
-         TwezQaKFX8So4kX5OIdGe5HpPffjGRqgdMrWuuNbF3mRR2DRhcqEbtmLK90jdd4rFJ
-         Aa64mApHwIt6g==
-Date:   Fri, 10 Mar 2023 17:05:39 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Shawn Guo <shawn.guo@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: PCI: Add quirk for platforms running Windows
-Message-ID: <20230310230539.GA1289856@bhelgaas>
+        Fri, 10 Mar 2023 18:06:07 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AF1135B23
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 15:05:57 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id n18so6830964ybm.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 15:05:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678489557;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t1C5EaEX7RUXtbYsmEPMYf2+exssIXAhNPil5rJCHJc=;
+        b=OzwRskF5Ih0lo0aILi+OoqYAwUlYwBG7zxkn3rbE69pckwIlvzquTfLYEFlP/lFB/q
+         l0UepLZ2GlDrPh9DVI0tpvnKrTnSjtpOhOHGLcwFYeL7bxKMpMvb+nyF/Q3JHk2fjxys
+         TbjJzP9lA5zBq21Jm7TguAabdqZpMqQTM9JTUlAkTtcIkxDcH9AdSL+V05EQO/RjmqDD
+         YeUloj6KhxaVi7w9EWDEAGsvsjP9V60yRM9YThmwFbh2c+V7xVCgUte+7fEfiu3dq7/u
+         yai9qCn/Cv+Sd0SDtFv2nB/yc5RQrJfTGqDH0VOAMcxtxin/75P1ktR+vz8Z2r4cGf2K
+         WqkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678489557;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t1C5EaEX7RUXtbYsmEPMYf2+exssIXAhNPil5rJCHJc=;
+        b=iLwynDp4pltx9ygd+QDxHavoAFeexTcoBQHcuvhOgwUSO+Jr1RwH7+Fytzy9XsnGlg
+         x38LHiydKVJqt45U/KUdI5pNF0ycGvbEaFp1d0Sn+pkKZoRKjuIVlmBQ5UH0TePFhqEe
+         yhjdAp6mqap5pO+YcJ2PbZL/8r+rPcSEF5oIIZ75B/YYN0u56IF7fJ+n+c92d85jmlkt
+         FF3vjdjND5FrzIqsg2DooeIZd7gOu7OV0QshY/HuoXEmHdz9b+oWI8Zrj4K+9CSs4V5u
+         s0rq2jxzovRaoxME/hW9kWg7UMiUr9zwcZhIX8fKXpTmHBsy9Y6Fcm1P7mtwgK4FCECs
+         8kwQ==
+X-Gm-Message-State: AO0yUKVhRbssJs3+J1kIIgxoYSyJRUYTf8H+or3mXKHginXAlAF55iWs
+        p+BdelYw4tpCZ00qnxIMfAj0RLra740FOjm6J917gA==
+X-Google-Smtp-Source: AK7set/AXp8Coh32VeUVTutEizxPtbjJjz8lfxc31hn8uCQNy5KsUkfh9dktBb0fy9LNuoIzjVmbhAj73BsC0vyUcO8=
+X-Received: by 2002:a5b:386:0:b0:b0a:7108:71e9 with SMTP id
+ k6-20020a5b0386000000b00b0a710871e9mr2427934ybp.4.1678489556799; Fri, 10 Mar
+ 2023 15:05:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAswHyaYjeqjW/+A@lpieralisi>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230310110542.6649-1-lujianhua000@gmail.com> <87mt4k95zp.fsf@intel.com>
+ <ZAsgd4zsgbvWT0U0@Gentoo> <87bkl090ia.fsf@intel.com>
+In-Reply-To: <87bkl090ia.fsf@intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 11 Mar 2023 00:05:44 +0100
+Message-ID: <CACRpkdYwu5XKDcowggDMM0pSjuKdAJnZ8F92OdDyEWP7HJUC-A@mail.gmail.com>
+Subject: Re: [PATCH] drm/mipi-dsi: Add a mipi_dual_dsi_dcs_write_seq() macro
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Jianhua Lu <lujianhua000@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 02:26:55PM +0100, Lorenzo Pieralisi wrote:
-> On Wed, Mar 08, 2023 at 12:53:10PM -0600, Bjorn Helgaas wrote:
-> > On Mon, Feb 27, 2023 at 10:12:21AM +0800, Shawn Guo wrote:
-> > > Commit 8fd4391ee717 ("arm64: PCI: Exclude ACPI "consumer" resources from
-> > > host bridge windows") introduced a check to remove host bridge register
-> > > resources for all arm64 platforms, with the assumption that the PNP0A03
-> > > _CRS resources would always be host bridge registers and never as windows
-> > > on arm64.
-> > > 
-> > > The assumption stands true until Qualcomm Snapdragon Windows laptops
-> > > emerge.  These laptops describe host bridge windows in PNP0A03 _CRS
-> > > resources instead.  For example, the Microsoft Surface Pro X has host
-> > > bridges defined as
-> > > 
-> > >     Name (_HID, EisaId ("PNP0A08") /* PCI Express Bus */)  // _HID: Hardware ID
-> > >     Name (_CID, EisaId ("PNP0A03") /* PCI Bus */)  // _CID: Compatible ID
-> > > 
-> > >     Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-> > >     {
-> > >         Name (RBUF, ResourceTemplate ()
-> > >         {
-> > >             Memory32Fixed (ReadWrite,
-> > >                 0x60200000,         // Address Base
-> > >                 0x01DF0000,         // Address Length
-> > >                 )
-> > >             WordBusNumber (ResourceProducer, MinFixed, MaxFixed, PosDecode,
-> > >                 0x0000,             // Granularity
-> > >                 0x0000,             // Range Minimum
-> > >                 0x0001,             // Range Maximum
-> > >                 0x0000,             // Translation Offset
-> > >                 0x0002,             // Length
-> > >                 ,, )
-> > >         })
-> > >         Return (RBUF) /* \_SB_.PCI0._CRS.RBUF */
-> > >     }
-> > > 
-> > > The Memory32Fixed holds a host bridge window, but it's not properly
-> > > defined as a "producer" resource.  Consequently the resource gets
-> > > removed by kernel, and the BAR allocation fails later on:
-> > > 
-> > >     [ 0.150731] pci 0002:00:00.0: BAR 14: no space for [mem size 0x00100000]
-> > >     [ 0.150744] pci 0002:00:00.0: BAR 14: failed to assign [mem size 0x00100000]
-> > >     [ 0.150758] pci 0002:01:00.0: BAR 0: no space for [mem size 0x00004000 64bit]
-> > >     [ 0.150769] pci 0002:01:00.0: BAR 0: failed to assign [mem size 0x00004000 64bit]
-> > > 
-> > > This eventually prevents the PCIe NVME drive from being accessible.
-> > > 
-> > > Add a quirk for these platforms to avoid the resource being removed.
-> > > 
-> > > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> > > ---
-> > > We are running into the issue on more devices than just Surface Pro X
-> > > now, so trying to sort it out with a quirk as suggested by Lorenzo [1].
-> > 
-> > One thing I don't like about this application of quirks is that the
-> > list of affected platforms is likely to grow, which is an ongoing
-> > burden for users and developers.
-> > 
-> > Can we have a conversation with Qualcomm about how they *intend* this
-> > to work?  Linux is probably doing something wrong (interpreting
-> > something differently than Windows does), and if we could fix that, we
-> > have a better chance of future platforms working without quirks.
-> 
-> Catch-22. What if some firmware would add host bridge MMIO register
-> space (marked as consumer) in the _CRS ? We would end up allocating
-> BAR regions in there, which is not right, so your commit:
-> 
-> 8fd4391ee717 ("arm64: PCI: Exclude ACPI "consumer" resources from host bridge windows")
-> 
-> is correct and if we revert it we would trigger regressions on some
-> arm64 platforms for the reason I mention above.
-> 
-> We can look for clarification at ACPI specs level but for firmware
-> that is out there I am not sure what options we have.
+(CC Javier)
 
-I don't remember why 8fd4391ee717 exists; I assume there was some
-platform that needed it.  I should have included that in the commit
-log; mea culpa.
+On Fri, Mar 10, 2023 at 2:52=E2=80=AFPM Jani Nikula <jani.nikula@linux.inte=
+l.com> wrote:
 
-In any event, I assume Windows works on both that platform and the
-ones mentioned in this quirk, and I assume Windows doesn't require
-platform-specific quirks for something like this.  I admit that's a
-lot of assuming, but if Windows can do it, Linux should be able to do
-it, too.
+> >> > +          for (i =3D 0; i < ARRAY_SIZE(dsi); i++)                  =
+  \
+> >> > +                  mipi_dsi_dcs_write_seq(dsi[i], cmd, seq);        =
+\
+> >>
+> >> This ignores errors.
+> > mipi_dsi_dcs_write_seq is also a macro, contains error checks in the bo=
+dy block.
+>
+> Ugh, I think it's pretty scary to hide control flow like return
+> statements in macros like this.
 
-> > > +static struct acpi_platform_list qcom_platlist[] = {
-> > > +	/* Thinkpad X13s */
-> > > +	{ "LENOVO", "SDM8280 ", 0, ACPI_SIG_DSDT, all_versions, QCOM_DSDT_QUIRK },
-> > > +	/* Microsoft Surface Pro 9 (5G) and Windows Dev Kit 2023 */
-> > > +	{ "QCOMM ", "SDM8280 ", 0, ACPI_SIG_DSDT, all_versions, QCOM_DSDT_QUIRK },
-> > > +	/* Microsoft Surface Pro X */
-> > > +	{ "QCOMM ", "SDM8180 ", 0, ACPI_SIG_DSDT, all_versions, QCOM_DSDT_QUIRK },
+The macros are written like this because:
+
+#define mipi_dsi_generic_write_seq(dsi, seq...)
+(...)
+                static const u8 d[] =3D { seq };
+
+Array of bytes
+
+                ret =3D mipi_dsi_generic_write(dsi, d, ARRAY_SIZE(d));
+
+So we can use use ARRAY_SIZE() in the macro and pass in any
+arbitrary sequence, e.g.
+
+mipi_dsi_generic_write_seq(dsi, 0xfb, 0x01);
+
+Any function-esque definitions will (as in your example) require a
+length to be passed in so it would become:
+
+mipi_dsi_generic_write_seq(dsi, 0xfb, 0x01, 2);
+
+And if you grep mipi_dsi_generic_write_seq | wc -l you find all the
+245 opportunities to get that last len wrong and cause an out-of-bounds
+bug.
+
+I think this macro is the lesser evil for this reason, also it saves code
+that you otherwise have to do manually, and one should never put
+a person to do a machine's job.
+
+Any suggestions to rewrite the macro using varargs welcome.
+I think it is not very easy to do without the preprocessor.
+
+Yours,
+Linus Walleij
