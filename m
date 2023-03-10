@@ -2,151 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C33B6B51C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1959B6B51D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbjCJUX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 15:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
+        id S231421AbjCJU2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 15:28:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbjCJUXt (ORCPT
+        with ESMTP id S230297AbjCJU20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 15:23:49 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF4F10F44F
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:23:39 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id h8so6846183plf.10
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:23:39 -0800 (PST)
+        Fri, 10 Mar 2023 15:28:26 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511215980A
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:28:18 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id u9so25485226edd.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:28:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678479819;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XQF4MLI/F9HbiwBvFOYgMpG0a1e7/18h9Y3ojmNxgXg=;
-        b=BxX0opqGCk7FiaakFzUj1Ab+S5npu3tq/aetv7nIYPxLoMNPiwUDPlzmVy/6xrX8eg
-         h8iN2UTlUpLNK2YLa35isQkKrUusXzjCxQ7opCIhbw6BjQBFlzV5lJeMbtilw1o/rRHm
-         xj3qUs9fxo3EJO0lFQNNQ5BA7fIH1peHzCl/K6iQn20SjLdSWm2u1ZhBq0BWCoZo3Dt2
-         t/6TS8L+iW5VFdLr3OnGZ5ASRlQ3BXgC7ykmll8B8x7alv5LALhmj/aeUP/JOLcKtxuk
-         H1DHgFuS490Xc6BPNSErDFCA8cJl/pJQGcW8OHjR8C9fa7M0dpr2hckTZZ2tx+BopFRV
-         8i+Q==
+        d=gmail.com; s=20210112; t=1678480097;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nj5Pya6YtC6FZkwNt6VTrCVc/MqS8ZrcuQEjsXDc0Os=;
+        b=JFvBWiv4O29p9nkvZSyqySeXpLFWrG/dvB8Xwadh0onr6XyucS682UvOyAD2WFt2+Z
+         m+K0SA8O4Fivr18xiFdKwVSXouWTNf0AdrQNHTrM5G1heBYP9CfrPfB81JZ22yp8A24R
+         xygIOCHAnxYWNvHA02XbLsa0szktm21/HsHEpZanepim9l0UYc1fdHQnsRXE5Q8xSbLq
+         FKGHM4kkXEowNcwDs+O1x64Enm8hzlKAJ4VOOO6B7lwHxdUvknRQHOOK9uw+RYjKY5pl
+         8cNM95rZ4oW7iG2a8xJXNzY4tJZ54GDQhPnmzhYNvF1Qesv3Q2l1GBosJUlFVX993vM+
+         xa3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678479819;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XQF4MLI/F9HbiwBvFOYgMpG0a1e7/18h9Y3ojmNxgXg=;
-        b=ydv0e1QDjIXsC1GZZBaub24mLCASk0dYUJoncws1zUMsXoYzC03oZURNO46ZwH/JXo
-         lruFeGlaXs82wUAXGqzpr+RJGENkjeUwNZUCou4Py6mj/S8a6is48f2C2gUuI4D4dn2Q
-         ta9aUEQS2ovPtPbDm8csiaIE2pJTwPtaiSBe2NQ4SZePQAGdI6574e4MnrhmhGDh00FG
-         Xuxa1+BleLqWNX5Af6iyPGo9O3WkJwQVK0J4GcdssdA7cBWjptOhoYH0NNTPKyrR2qYG
-         jfmy0RAPoklDVQYMQUoUUKlpWkqWf73I6ytrsxdzjuI5i4BqYd0NB6DTy3jHaBABqS4+
-         KlUQ==
-X-Gm-Message-State: AO0yUKW4zXCbUJ+sbNbLdKbmlzeE5Z73QHs9kEBbe003p7KTd6jorzGM
-        yFg/hlEOl9MqnkSIuA7mtBxAqBeY9Jp/CmPhJe+20w==
-X-Google-Smtp-Source: AK7set+BSEEuCXguHDcEHUyp1G+H25LASXMUmsCu7o8DUKcffWrWX5PNcYfogkDMT3nPpIDry7aU3w==
-X-Received: by 2002:a05:6a20:440d:b0:cc:d44a:beb6 with SMTP id ce13-20020a056a20440d00b000ccd44abeb6mr4930491pzb.5.1678479818536;
-        Fri, 10 Mar 2023 12:23:38 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id k25-20020aa790d9000000b005aa60d8545esm215805pfk.61.2023.03.10.12.23.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 12:23:38 -0800 (PST)
-Message-ID: <ad021e89-c05c-f85a-2210-555837473734@kernel.dk>
-Date:   Fri, 10 Mar 2023 13:23:37 -0700
+        d=1e100.net; s=20210112; t=1678480097;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Nj5Pya6YtC6FZkwNt6VTrCVc/MqS8ZrcuQEjsXDc0Os=;
+        b=a+CgjACC5euxMgkCwggVDScKnNkeQ5bo7WJYc90DVze3MsFiMTR2NrtwfgXfwRnd4R
+         IylT4+eu5ii4UD/ty8xQ0UJTs7sW1XLoTLSPiyW9Qj+jOLM/faZ1LK8P5ovVhZNmLOlV
+         5+cW7qAxctrEnGbf697do6rmIvyAJIqd0o1igdbIHzEbIqF4tTNOCA7mynooI28ZoI6N
+         WChWjERscz+FobtnUViYvHAYWoW5iru29Xvd5Mzk7NsMztEgFk/gj6WntDxV7ED/5sVp
+         AyJm71KgIn/p9TEZ6lfjvIj4ILdMngV3HS/Pg8o0qHt9aGbBkMTzLZABDbZ+uISdST85
+         AUCw==
+X-Gm-Message-State: AO0yUKXBrs0YgUAah9o1tbQ/GVYBwUnvhWNucGNZyIhhRwUFAaDrbe7K
+        nGhD72pVi+l1WbIZPn/lts5LZPAocJtPWhnq
+X-Google-Smtp-Source: AK7set/7HZ8W4oEzbgBOxclON9yaE4uHyP6GY9Kv1zpo6Of02/JFJNnPOCT6n6xfDGMxnkAjfBNAYQ==
+X-Received: by 2002:a17:906:208a:b0:889:d24e:6017 with SMTP id 10-20020a170906208a00b00889d24e6017mr3644384ejq.3.1678480096443;
+        Fri, 10 Mar 2023 12:28:16 -0800 (PST)
+Received: from ivan-HLYL-WXX9.. ([37.252.81.68])
+        by smtp.gmail.com with ESMTPSA id xa6-20020a170907b9c600b008b26f3d45fbsm260551ejc.143.2023.03.10.12.28.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 12:28:16 -0800 (PST)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     ericvh@gmail.com, lucho@ionkov.net, asmadeus@codewreck.org,
+        linux_oss@crudebyte.com
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, skhan@linuxfoundation.org,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        himadrispandya@gmail.com,
+        syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com
+Subject: [PATCH] 9P FS: Fix wild-memory-access write in v9fs_get_acl
+Date:   Sat, 11 Mar 2023 00:26:19 +0400
+Message-Id: <20230310202619.433269-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: Possible kernel fs block code regression in 6.2.3 umounting usb
- drives
-Content-Language: en-US
-To:     Eric Biggers <ebiggers@kernel.org>,
-        Mike Cloaked <mike.cloaked@gmail.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Yu Kuai <yukuai3@huawei.com>
-References: <CAOCAAm7AEY9tkZpu2j+Of91fCE4UuE_PqR0UqNv2p2mZM9kqKw@mail.gmail.com>
- <CAOCAAm4reGhz400DSVrh0BetYD3Ljr2CZen7_3D4gXYYdB4SKQ@mail.gmail.com>
- <ZAuPkCn49urWBN5P@sol.localdomain> <ZAuQOHnfa7xGvzKI@sol.localdomain>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ZAuQOHnfa7xGvzKI@sol.localdomain>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/23 1:16 PM, Eric Biggers wrote:
-> On Fri, Mar 10, 2023 at 12:14:10PM -0800, Eric Biggers wrote:
->> On Fri, Mar 10, 2023 at 07:33:37PM +0000, Mike Cloaked wrote:
->>> With kerne. 6.2.3 if I simply plug in a usb external drive, mount it
->>> and umount it, then the journal has a kernel Oops and I have submitted
->>> a bug report, that includes the journal output, at
->>> https://bugzilla.kernel.org/show_bug.cgi?id=217174
->>>
->>> As soon as the usb drive is unmounted, the kernel Oops occurs, and the
->>> machine hangs on shutdown and needs a hard reboot.
->>>
->>> I have reproduced the same issue on three different machines, and in
->>> each case downgrading back to kernel 6.2.2 resolves the issue and it
->>> no longer occurs.
->>>
->>> This would seem to be a regression in kernel 6.2.3
->>>
->>> Mike C
->>
->> Thanks for reporting this!  If this is reliably reproducible and is known to be
->> a regression between v6.2.2 and v6.2.3, any chance you could bisect it to find
->> out the exact commit that introduced the bug?
->>
->> For reference I'm also copying the stack trace from bugzilla below:
->>
->> BUG: kernel NULL pointer dereference, address: 0000000000000028
->>  #PF: supervisor read access in kernel mode
->>  #PF: error_code(0x0000) - not-present page
->>  PGD 0 P4D 0
->>  Oops: 0000 [#1] PREEMPT SMP PTI
->>  CPU: 9 PID: 1118 Comm: lvcreate Tainted: G                T  6.2.3-1>
->>  Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./Z370 Ex>
->>  RIP: 0010:blk_throtl_update_limit_valid+0x1f/0x110
-> 
-> BTW, the block/ commits between v6.2.2 and v6.2.3 were:
-> 
-> 	blk-mq: avoid sleep in blk_mq_alloc_request_hctx
-> 	blk-mq: remove stale comment for blk_mq_sched_mark_restart_hctx
-> 	blk-mq: wait on correct sbitmap_queue in blk_mq_mark_tag_wait
-> 	blk-mq: Fix potential io hung for shared sbitmap per tagset
-> 	blk-mq: correct stale comment of .get_budget
-> 	block: sync mixed merged request's failfast with 1st bio's
-> 	block: Fix io statistics for cgroup in throttle path
-> 	block: bio-integrity: Copy flags when bio_integrity_payload is cloned
-> 	block: use proper return value from bio_failfast()
-> 	blk-iocost: fix divide by 0 error in calc_lcoefs()
-> 	blk-cgroup: dropping parent refcount after pd_free_fn() is done
-> 	blk-cgroup: synchronize pd_free_fn() from blkg_free_workfn() and blkcg_deactivate_policy()
-> 	block: don't allow multiple bios for IOCB_NOWAIT issue
-> 	block: clear bio->bi_bdev when putting a bio back in the cache
-> 	block: be a bit more careful in checking for NULL bdev while polling
-> 
-> Without having any in-depth knowledge here, I think "blk-cgroup: synchronize
-> pd_free_fn() from blkg_free_workfn() and blkcg_deactivate_policy()" looks the
-> most suspicious here...  I see that AUTOSEL selected it from a 3-patch series
-> without backporting patch 2, maybe that could be it?  Anyway, just a hunch.
+KASAN reported the following issue:
+[   36.825817][ T5923] BUG: KASAN: wild-memory-access in v9fs_get_acl+0x1a4/0x390
+[   36.827479][ T5923] Write of size 4 at addr 9fffeb37f97f1c00 by task syz-executor798/5923
+[   36.829303][ T5923]
+[   36.829846][ T5923] CPU: 0 PID: 5923 Comm: syz-executor798 Not tainted 6.2.0-syzkaller-18302-g596b6b709632 #0
+[   36.832110][ T5923] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+[   36.834464][ T5923] Call trace:
+[   36.835196][ T5923]  dump_backtrace+0x1c8/0x1f4
+[   36.836229][ T5923]  show_stack+0x2c/0x3c
+[   36.837100][ T5923]  dump_stack_lvl+0xd0/0x124
+[   36.838103][ T5923]  print_report+0xe4/0x4c0
+[   36.839068][ T5923]  kasan_report+0xd4/0x130
+[   36.840052][ T5923]  kasan_check_range+0x264/0x2a4
+[   36.841199][ T5923]  __kasan_check_write+0x2c/0x3c
+[   36.842216][ T5923]  v9fs_get_acl+0x1a4/0x390
+[   36.843232][ T5923]  v9fs_mount+0x77c/0xa5c
+[   36.844163][ T5923]  legacy_get_tree+0xd4/0x16c
+[   36.845173][ T5923]  vfs_get_tree+0x90/0x274
+[   36.846137][ T5923]  do_new_mount+0x25c/0x8c8
+[   36.847066][ T5923]  path_mount+0x590/0xe58
+[   36.848147][ T5923]  __arm64_sys_mount+0x45c/0x594
+[   36.849273][ T5923]  invoke_syscall+0x98/0x2c0
+[   36.850421][ T5923]  el0_svc_common+0x138/0x258
+[   36.851397][ T5923]  do_el0_svc+0x64/0x198
+[   36.852398][ T5923]  el0_svc+0x58/0x168
+[   36.853224][ T5923]  el0t_64_sync_handler+0x84/0xf0
+[   36.854293][ T5923]  el0t_64_sync+0x190/0x194
 
-Was just looking at this too, the primary suspects would indeed be those
-two blk-cgroup changes. And yes, they ended up in stable due to auto
-selection, and very odd how it picked 2 and not the 3rd?!
+Calling '__v9fs_get_acl' method in 'v9fs_get_acl' creates the
+following chain of function calls:
 
-But I would revert:
+__v9fs_get_acl
+	v9fs_fid_get_acl
+		v9fs_fid_xattr_get
+			p9_client_xattrwalk
 
-bfe46d2efe46c5c952f982e2ca94fe2ec5e58e2a
-57a425badc05c2e87e9f25713e5c3c0298e4202c
+Function p9_client_xattrwalk accepts a pointer to u64-typed
+variable attr_size and puts some u64 value into it. However,
+after the executing the p9_client_xattrwalk, in some circumstances
+we assign the value of u64-typed variable 'attr_size' to the
+variable 'retval', which we will return. However, the type of
+'retval' is ssize_t, and if the value of attr_size is larger
+than SSIZE_MAX, we will face the signed type overflow. If the
+overflow occurs, the result of v9fs_fid_xattr_get may be
+negative, but not classified as an error. When we try to allocate
+an acl with 'broken' size we receive an error, but don't process
+it. When we try to free this acl, we face the 'wild-memory-access'
+error (because it wasn't allocated).
 
-in that order from 6.2.3 and see if that helps. Adding Yu.
+This patch will modify the condition in the 'v9fs_fid_xattr_get'
+function, so it will return an error if the 'attr_size' is larger
+than SSIZE_MAX.
 
+Reported-by: syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com
+Link: https://syzkaller.appspot.com/bug?id=fbbef66d9e4d096242f3617de5d14d12705b4659
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+ fs/9p/xattr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/9p/xattr.c b/fs/9p/xattr.c
+index 50f7f3f6b55e..d6f7450107a8 100644
+--- a/fs/9p/xattr.c
++++ b/fs/9p/xattr.c
+@@ -35,7 +35,7 @@ ssize_t v9fs_fid_xattr_get(struct p9_fid *fid, const char *name,
+ 		return retval;
+ 	}
+ 	if (attr_size > buffer_size) {
+-		if (!buffer_size) /* request to get the attr_size */
++		if (!buffer_size && attr_size <= (u64) SSIZE_MAX) /* request to get the attr_size */
+ 			retval = attr_size;
+ 		else
+ 			retval = -ERANGE;
 -- 
-Jens Axboe
-
+2.34.1
 
