@@ -2,141 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4186B384C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A58B76B3851
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjCJIOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 03:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
+        id S229471AbjCJIPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjCJIOV (ORCPT
+        with ESMTP id S230493AbjCJIOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:14:21 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1218DABA0;
-        Fri, 10 Mar 2023 00:14:19 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id da10so17234597edb.3;
-        Fri, 10 Mar 2023 00:14:19 -0800 (PST)
+        Fri, 10 Mar 2023 03:14:55 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAE64C6F5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:14:51 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-536af432ee5so84479967b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:14:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678436058;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HTrJQYUd7w6GLVy6Pd6YkyxSkzxKW9NUVtx6qQW7j7c=;
-        b=WD6Gy/U6lBcO8zhRbaPvvQnZQc6NDyeETd4G7SR2OYqkTrHZs9fdrpkbjV3ymMJV4J
-         R+PaOarBPpSgNlRMndtDmj/D+xvd7u4q2QUGzLdVOWqFJ0XcxgqoOT9d3nyEQPMm31r9
-         ytwVGqMyJot3Ty0zEhdtjAw6lH1eNcaD7Hc+jJnqB0bzKYjGGe96C4Pg+nI9xJ4cUysw
-         zlYdbEkPVvZtsVaRprYarm5BUwFiN6IdCQEJuhuVvBhlTfuX+n3OUhyL/hH4ed26HiVj
-         2+p3Gzb8ZpCL0F9CggyRDcNEyD3jgy7znJiEnMDYBA1kp9QvLfrQXVPnwTEv9VavbQBs
-         y0aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678436058;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1678436090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HTrJQYUd7w6GLVy6Pd6YkyxSkzxKW9NUVtx6qQW7j7c=;
-        b=inJWkfTuYejF6UPSISy2iMbnCyHPk7gj111lAdBR4/BPlrknJVxRb4jLJhCoObQhzE
-         LhGprh7BAw5DU0qJfuBlduqoLO/T3wveBVaGkF1GMJgthNYnj8gZk3dlK+F1gnZhWOa8
-         WRHRCYunDNbVIxZ3sBMqiHDETZYIlcO6+sWBAtBgocegovKTrWBos9e13zyGE1WGMCag
-         ezm14HnKWVPbZWu793OybTirwJKWefJ+lRYCuBw0NtRUO8tldwJiErt0UP+14UFQyHCg
-         hduvuTCNl73rqzuzi56S+mlJmyK7cG2+HLuIjFmaVdOlN3YoiY9RrXU2XTzx8piG3zIJ
-         fJtg==
-X-Gm-Message-State: AO0yUKWbJDtMyz3zMQC3yYbiKCGp60yvDkYHhhUqPvjkhgfL/W5fjEwp
-        7YUUZUHzEP09mt1APQRMFnM=
-X-Google-Smtp-Source: AK7set/5swYgXTdVO5X7sJyrvGNo7ExkbBTQRI4vu4JDKeLjUjRVMays9X2uvBHlHLbS/h0IZEh4zQ==
-X-Received: by 2002:a17:907:7f09:b0:8b1:7e21:f0e9 with SMTP id qf9-20020a1709077f0900b008b17e21f0e9mr30768797ejc.18.1678436058196;
-        Fri, 10 Mar 2023 00:14:18 -0800 (PST)
-Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-49-172.cust.vodafonedsl.it. [188.217.49.172])
-        by smtp.gmail.com with ESMTPSA id mh21-20020a170906eb9500b008f89953b761sm656639ejb.3.2023.03.10.00.14.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 00:14:17 -0800 (PST)
-Date:   Fri, 10 Mar 2023 09:14:15 +0100
-From:   Tommaso Merciai <tomm.merciai@gmail.com>
-To:     Frank Sae <Frank.Sae@motor-comm.com>
-Cc:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        bh=quyZEe5f9jO8KHwGwidAcKdKAq7OwgEj9SHFvyGmlZM=;
+        b=Xz0I6e3/LJ+Lvtl+mKQOAS8yqInF8ZVaGOXpCLhNKcTzLKSlpWsOv0VEUV904Fu2Na
+         +9A9pGlvxI7QVFYtmKKzM6zJvyU/OvN4b4AgPCCXGFTKagrmgS5ZX9VtQAHafqBxGC6m
+         Eq+llrzRCUIwZLjEDh0TDX+4GFXgVT0pFUHmGANZJZ4RWQImFVpWbTBQIxQnCxbduSEp
+         DOThgSu4tTiGbqDTZTrSz73IR46mvjGnqF8u8lCX2TyneUEkARXtWV0c4hQwYhagD2T6
+         s1pARgBUkdpxocdhAEHK1Lt7iH0sQ+LLaf/zWu8DCwBqOqVIgx7QnMe532eqyhHcCUGD
+         RZCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678436090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=quyZEe5f9jO8KHwGwidAcKdKAq7OwgEj9SHFvyGmlZM=;
+        b=KHc3cjfZFiXQF3oY3ai8QG4HXkOTlEdyXmVISAqrPfEwgONY3iOzWHG9Z2raFr+Vo6
+         ccp/nDa4Ltc0/i75H3sR44WMHs+EaQ5hxXMwalLCiYpjIpqFlUj2oMbDD8V4oERQ3yGP
+         nFrIW6JHQkNeRTSK1J+vuWKL8mSpML93+B3pypHn3dgP3gAhpXyuoqJLj2mhp+ZpbdWJ
+         P4joGFe0dkpFfSWmhEXSXQSYE/1x01lW441VZzvtl/Ao4uowoI5y+vYLIsJNkgNRf9t2
+         Brd5VleGuyD+1pPEYvnpMOE7YPky2ZkKLI/gRR9TD5spdAOVErJjHqbvoWjeMjvY0uK3
+         kTDA==
+X-Gm-Message-State: AO0yUKXX1VkywMuYe+8SqUPynYYfWrdc2XQ/3Qsb6rZOcS0k5IKnsmGg
+        Q5Q7IINJCcONS13mglAavYWsZr4VJFV6cl4ED8UKCw==
+X-Google-Smtp-Source: AK7set//fuO9ytX567HKWcNCadQ41YDeuUs8D1KGFn4aNeWpTp2CgUPag3nEjA34y+PObgUwSM88FqO9+8UaF4aug+g=
+X-Received: by 2002:a81:b61a:0:b0:52e:cea7:f6e3 with SMTP id
+ u26-20020a81b61a000000b0052ecea7f6e3mr15413943ywh.10.1678436090623; Fri, 10
+ Mar 2023 00:14:50 -0800 (PST)
+MIME-Version: 1.0
+References: <20230309225041.477440-1-sre@kernel.org> <20230309225041.477440-2-sre@kernel.org>
+In-Reply-To: <20230309225041.477440-2-sre@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 10 Mar 2023 09:14:39 +0100
+Message-ID: <CACRpkdYWP7Fc3yho5nDB3qU6rt5o4p2Zcz_RxOvOfsAwjXgqXw@mail.gmail.com>
+Subject: Re: [PATCHv1 01/11] dt-bindings: power: supply: adc-battery: add binding
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        yanhong.wang@starfivetech.com, xiaogang.fan@motor-comm.com,
-        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH net-next v5 0/5] add dts for yt8521 and yt8531s, add
- driver for yt8531
-Message-ID: <ZArm11JCCD5ymspR@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-References: <20230202030037.9075-1-Frank.Sae@motor-comm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202030037.9075-1-Frank.Sae@motor-comm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Frank,
+Hi Sebastian,
 
-On Thu, Feb 02, 2023 at 11:00:32AM +0800, Frank Sae wrote:
->  Add dts for yt8521 and yt8531s, add driver for yt8531.
->  These patches have been verified on our AM335x platform (motherboard)
->  which has one integrated yt8521 and one RGMII interface.
->  It can connect to daughter boards like yt8531s or yt8531 board.
+thanks for your patches!
 
-Thanks for this series.
-I test on my jh7110-starfive-visionfive-2-v1.3b
-Great job!
+On Thu, Mar 9, 2023 at 11:50=E2=80=AFPM Sebastian Reichel <sre@kernel.org> =
+wrote:
 
-Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> Add binding for a battery that is only monitored via ADC
+> channels and simple status GPIOs.
+>
+> Signed-off-by: Sebastian Reichel <sre@kernel.org>
 
-Regards,
-Tommaso
+This does look very useful.
 
-> 
->  v5:
->  - change the compatible of yaml
->  - change the maintainers of yaml from "frank sae" to "Frank Sae"
-> 
->  v4:
->  - change default tx delay from 150ps to 1950ps
->  - add compatible for yaml
-> 
->  v3:
->  - change default rx delay from 1900ps to 1950ps
->  - moved ytphy_rgmii_clk_delay_config_with_lock from yt8521's patch to yt8531's patch
->  - removed unnecessary checks of phydev->attached_dev->dev_addr
-> 
->  v2:
->  - split BIT macro as one patch
->  - split "dts for yt8521/yt8531s ... " patch as two patches
->  - use standard rx-internal-delay-ps and tx-internal-delay-ps, removed motorcomm,sds-tx-amplitude
->  - removed ytphy_parse_dt, ytphy_probe_helper and ytphy_config_init_helper
->  - not store dts arg to yt8521_priv 
-> 
-> Frank Sae (5):
->   dt-bindings: net: Add Motorcomm yt8xxx ethernet phy
->   net: phy: Add BIT macro for Motorcomm yt8521/yt8531 gigabit ethernet
->     phy
->   net: phy: Add dts support for Motorcomm yt8521 gigabit ethernet phy
->   net: phy: Add dts support for Motorcomm yt8531s gigabit ethernet phy
->   net: phy: Add driver for Motorcomm yt8531 gigabit ethernet phy
-> 
->  .../bindings/net/motorcomm,yt8xxx.yaml        | 117 ++++
->  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
->  MAINTAINERS                                   |   1 +
->  drivers/net/phy/Kconfig                       |   2 +-
->  drivers/net/phy/motorcomm.c                   | 553 +++++++++++++++---
->  5 files changed, 597 insertions(+), 78 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
-> 
-> -- 
-> 2.34.1
-> 
+> +title: ADC battery
+> +
+> +maintainers:
+> +  - Sebastian Reichel <sre@kernel.org>
+> +
+> +description: |
+> +  Basic Battery, which only reports (in circuit) voltage and optionally
+> +  current via an ADC channel.
+
+I would over-specify: "voltage over the terminals" and
+"current out of the battery" so this cannot be misunderstood.
+
++ this text:
+
+It can also optionally indicate that the battery is full by pulling a GPIO
+line.
+
+> +  charged-gpios:
+> +    description:
+> +      GPIO which signals that the battery is fully charged.
+
+It doesn't say how, I guess either this is an analog circuit (!) or
+a charger IC? If it doesn't matter, no big deal, but if something is
+implicit here, then spell it out please.
+
+> +    fuel-gauge {
+
+This techno-lingo/slang term is a bit unfortunate, but if there are
+precedents then stick with it.
+
+The correct term could be something like battery-capacity-meter
+I suppose.
+
+Yours,
+Linus Walleij
