@@ -2,110 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446F26B3C12
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD066B3C17
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjCJK3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 05:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
+        id S230467AbjCJKaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 05:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbjCJK3j (ORCPT
+        with ESMTP id S230469AbjCJKaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 05:29:39 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2058.outbound.protection.outlook.com [40.107.20.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AB2E20CA;
-        Fri, 10 Mar 2023 02:29:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DaQAbqCYuVxk1xnXcZ3tUdhoq0BGCPoC97iej1ZDnVc9BP3R/RteztnqS0QoPnxstf+2Ekh5Jnh2FuHc+qZRNLvduxx9/VPYR6X/Dso2mrtxATWj+tbGyk7IkS/OKBaW9wplPhDKUhVk86kloZVlai7Ld8cJwstxCt1wjWDVyio2bnzcfszoaftjYPQtXWXl9V5KiKvMAbpzH19Omd7r8VfpmeynJRZfiShifMD8D02ZensukGspMkBr5vlyw+LFv2EqPSLz4n/c4fF5Pq6AatyYvzT/uaPmahM1RzQRHY74oH3X0y6Keegxm27pqaVI85NNH6491c0h/J7gW9iRsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ql39N5ZvR00orrSNw1Z4I8k6gUaXib5hijXJ/Z1GKww=;
- b=MPm01k0eaoFSP9iKgycybZNIQzKTOg71ErDoYicT3a+1sYlJpoxgHpcmuc9U/c4D3JwYpf0ukefvCCwyIZYvxHCi5erVNewIY6WrJqK0BEaNaK+6T7jXWocJIKSQ+aRRsoY+3umARfx9WyS5xRmdZ9yXg8JAFxCs/ywxTPKP+j8ejp0GexMLuRAsOtk870lySBf/P8XHSlAKloWuJRPcJRGMyX1gOSebF982KtQ16pYewR3PC1lm7+jXNTc2g5+CAqHtipqZOIDrgUOW09PRgfRxawKZh6fR2rWtiy/brrhuwXMBJ+XtZrvaFW7aEcn/o/G9jxY6e2DhtpStYhZLuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ql39N5ZvR00orrSNw1Z4I8k6gUaXib5hijXJ/Z1GKww=;
- b=pevL0H0Xk0n+3gmyqWOi/P1z7l2Q4IbmucKcDSiAqOJm0KCBnrEFuaXXJT9F7HCVZZD/mmOaRYDa+Bebxica76a5eqySFoUHrL6wpHhBmcrN4t+LEkxTwWigqOjO16flnk7bhB6gLdhY51YxyHncZv4ETrxmqmLdClyXomMfCYg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU0PR04MB9563.eurprd04.prod.outlook.com (2603:10a6:10:314::7)
- by AM8PR04MB7313.eurprd04.prod.outlook.com (2603:10a6:20b:1c5::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Fri, 10 Mar
- 2023 10:29:35 +0000
-Received: from DU0PR04MB9563.eurprd04.prod.outlook.com
- ([fe80::a518:512c:4af1:276e]) by DU0PR04MB9563.eurprd04.prod.outlook.com
- ([fe80::a518:512c:4af1:276e%5]) with mapi id 15.20.6156.027; Fri, 10 Mar 2023
- 10:29:35 +0000
-From:   meenakshi.aggarwal@nxp.com
-To:     V.sethi@nxp.com, pankaj.gupta@nxp.com, gaurav.jain@nxp.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
-Subject: [PATCH] crypto: tls - Use data directly in completion function
-Date:   Fri, 10 Mar 2023 15:59:12 +0530
-Message-Id: <20230310102912.1966201-1-meenakshi.aggarwal@nxp.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2P153CA0019.APCP153.PROD.OUTLOOK.COM
- (2603:1096:4:190::10) To DU0PR04MB9563.eurprd04.prod.outlook.com
- (2603:10a6:10:314::7)
+        Fri, 10 Mar 2023 05:30:07 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB614F0FD7;
+        Fri, 10 Mar 2023 02:30:05 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32A8s9Bd030175;
+        Fri, 10 Mar 2023 10:29:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=TCyLDs5/MOvvxxbkgCtsIGVGJ0wUr+yl7R4nt365p0w=;
+ b=HSsV+IJXCx359ZnztHKO0DimQKA1dDdwplVFKG9dG+Vo77kG285rsJBn7fbV5/Oi6O1C
+ DaYFk7KoBoORihFRr/yGJKgfNFyaBFOh6hWVlfdtf1SnpzWcbKehTcijf0rrKXMBJCkr
+ f19falvSvEQpGIzt79E/dpL83Qy5IPUT6q4LJMbv0/d8pHBL5NnyD32trKFEDMG7lMrk
+ N1FgYZM8JcpCEC+bH2FKNqHjt7z8ALtl8/zPEFCqd9PcUe37CbtGCgohX7BWVtYkL5z7
+ MbAnSOrPGPCnkM+kQKYRxWdn8Ly1w7SJ28nmWTACaV3VZuvrYcktxxkv7yHqYo2JxiTo Pw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p7p9w21sm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 10:29:56 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32A8rYwd020834;
+        Fri, 10 Mar 2023 10:29:56 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p7p9w21rt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 10:29:55 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32A8bsqA032279;
+        Fri, 10 Mar 2023 10:29:53 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3p6g03arrr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 10:29:53 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32AATnSV51184054
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Mar 2023 10:29:50 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D7F092004B;
+        Fri, 10 Mar 2023 10:29:49 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2D10920043;
+        Fri, 10 Mar 2023 10:29:49 +0000 (GMT)
+Received: from localhost (unknown [9.179.4.206])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri, 10 Mar 2023 10:29:49 +0000 (GMT)
+Date:   Fri, 10 Mar 2023 11:29:47 +0100
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] PCI: s390: Fix use-after-free of PCI resources
+ with per-function hotplug
+Message-ID: <your-ad-here.call-01678444187-ext-6579@work.hours>
+References: <20230306151014.60913-2-schnelle@linux.ibm.com>
+ <20230308231449.GA1057317@bhelgaas>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9563:EE_|AM8PR04MB7313:EE_
-X-MS-Office365-Filtering-Correlation-Id: 05822f71-2644-4289-7a76-08db215257c8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KjZ/wR3/Dq0N6FVUAlBCo83kZSM+1Ih3hzHr1tHO04fhRIpmqNEY+QEKIf6T1Mk9Th0i9FUisIITfPW+AW3dA0FloKco+OXGh3DGzKlZ9NDVEpcbJ3HETmwHI/aXdwTV6u0tzYDFuXBy55+yHMvZhI1/g9o9j0M6Yg5qxWrwlyUNIgaIkTkehpRs9q0pvzYjxQiqRkxSl/4LCCn2o9XMK+QHxIZlGf8ohP3fsNXzsFg5RcFNN15dD1cbeENJ+NMt+wc+DjwuARBgUbTBDJufPZftwZnSflrjJifRsNgYcbdz76sNKenvuOIJyl5lUgzb0XfW+aQxYxRd4NsUj1PlYDIJMOwaFqo0QCI4fsN0DbfTHI5dUh+oYD6FZYvMo4mMNu3L+8MD2ZLJw4y51yP1iyIM8O6cAmPgspUUzd1KCu1ALSudK8rmzyXOHGGbWW/W+tcwTN5g0cFMsSi1bur+i8X5d5J8fVCTy0L6jMiZoJEMYwj+ORlZW6GaLbt7EGzQdv+DGkmGV68lA4WUl2e+4dH78CRaBxXPZ3Y15XPCmtdWk3oJZNMAvhUv44W+9solcsyntPvqOJd8uCvrnEPy3KlEx4wuAagrEV37y+aHyUP8XsSC7i0T6YG0JBz+OPLFHDKeiJ6GcYecYv7ulKGOodbFqclvcGm4QT1qdt124VS5imUR/h47LOriH3XjyDYJO+RtR66Y/cCdzJ65oy1tVJ+xcBSmSjYm4k74tlboxPg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9563.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(451199018)(52116002)(6666004)(316002)(38350700002)(9686003)(26005)(4326008)(6512007)(1076003)(66476007)(86362001)(8676002)(186003)(36756003)(66556008)(38100700002)(66946007)(2616005)(83380400001)(5660300002)(6486002)(478600001)(6506007)(8936002)(2906002)(41300700001)(2004002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KmnAr9VEgZ/LiJ53Ze98Gdh8oHGkNfJJtX71RpKCwM9jWJvnIbYKxq2v6UmL?=
- =?us-ascii?Q?cHzNRAXnWMT4rb2zBepk/6Z/8J/NTKEPrNUJvo22Btd/osuYcgilf7ndoxMw?=
- =?us-ascii?Q?jZX7/pEuVNwh/Hfy5l2NAl9g1BaDm6WZMWM3ceMtPAQzn3wNfE/V6V8FwxsO?=
- =?us-ascii?Q?y9ZU5uKYHKMZFYijwYgvbFetowmVZUHfAmmfBFDx6Q36AE8I1CXc4YFo7e26?=
- =?us-ascii?Q?yui2vDrTuaF8Q12hwUD+VlwK5tAMcBc/LiFgolu1d18giMkEKzcOEmrm652G?=
- =?us-ascii?Q?ojA4RGi6BWY449xlFNFdAyL/+eJdEyl5GhbRENhuAUS1dnskGJ+xoEcdi6fv?=
- =?us-ascii?Q?CY0PBNAcDK3z+32HJl2hYy3A2/RF8IgwKAE0Xdp9cIyWQPq1I/oV2OyU+bxw?=
- =?us-ascii?Q?tDqtvQ2/Jknwrd+Rigx4GWpxFvcBJRTbhtXrxeXMpnyqUcItPXpzhW3ckC8H?=
- =?us-ascii?Q?OmTExXX0yzYIylIRoeRXsujaLSTzQRVfy/VDJ22HJYQJORZGvR55D9ys/923?=
- =?us-ascii?Q?5YYiXr43If+va7UScxb5jIXQhX1/1W+uYF4HmiFWSBCU7X/haEgkIDbQGUSh?=
- =?us-ascii?Q?1TjfHnQ0uUe70k0uZ/gfRqcYy+TC5hKaXNBqmfGPYrDIM6uC8p0BeaCYnJfO?=
- =?us-ascii?Q?sl7Ur1WisEp5scRXA2zM8lG0MUokvlcbdD3KJ4KWNdjZRRZOO+864km4CdWV?=
- =?us-ascii?Q?glqEk1LxcWmifDBXc9f25IqSqbVRPWzZdVPf+517ekRWY4JmX8KDGo0D6kNX?=
- =?us-ascii?Q?klgeKMipbOGmDWIwQ8GuA5+H/pTzVaQwpLPekZOZ+RvxYZuMb1gLGbo6y3xJ?=
- =?us-ascii?Q?pxpdl+IG83b36xBTh7cEnR8axDLBUTupQlS9haMG0Br7mI3/8mM4gzIBNkcn?=
- =?us-ascii?Q?F6taAAWXssDKPr1A9ZNXNtPsNg/qhPlkCZaCUm1GJGGCa/FEuWFNg9fOxZ2Z?=
- =?us-ascii?Q?1P27KSu8gnDejO6LJbX3PxCfteKsxz+oJP7pdSKqUgeS14vhH+HquYS7EpFW?=
- =?us-ascii?Q?Vsm1eOr4bepKIuXCTa2WTLclmWnh213rbKI+q/3lvgnl0qBVrRP+UYNODn3A?=
- =?us-ascii?Q?5F2vapv3ueJzrL1uouMLOwDo1tRDg01sIEjzqxZFovWf0WfEpA/fYqUCZ+mE?=
- =?us-ascii?Q?uG/IqF36uLwc5Jm/AXl5l7/FSnOCYWIo1xsbC41gejmMrU08VMLMuOXbRY1K?=
- =?us-ascii?Q?QVcDM0UE0E4So5T4BEw3TsCCJB7v73VPUxf833uUO7sMSeh/KHQzugJFD6Js?=
- =?us-ascii?Q?JiSu8FX/e2f7zVn4of1J0xGZRxTyseL8fiK6AfmZKYJGScGO0vPi1sjRZEYR?=
- =?us-ascii?Q?05s1/laXQoJkdeNooT/sggtOaCkWX6XdlG4PugYitqCytV+8GZnBFpsvNKIE?=
- =?us-ascii?Q?P7YhmyhhJgE63S88PIaXL221HNkZrEF+UY8qKpQdYpwLWBs3bmKLPpscStuY?=
- =?us-ascii?Q?zNOf8eJdttrQGBbNUyzjvczm6KJ8BFWL01Lz+R2fCOxru+vn4Bw2Igdi4ng+?=
- =?us-ascii?Q?czYyY5lvHqYOU9jbC839TC8/L/c3lM72z1fvsFl7qT0Xi3PR7M3bqvmdasVE?=
- =?us-ascii?Q?W+jkFqLjN2ITAlHPYI47W3hJa7nJUVWP2I2Crrn0Za3PSF+7zHQPZ7oeNTeB?=
- =?us-ascii?Q?bA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05822f71-2644-4289-7a76-08db215257c8
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9563.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 10:29:35.0597
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hU21fX/tLRcNZcI3SWrjMbIeUbSSK5KIIWL8T2V33FZuFlr0j4taQCuS57Vu27Ob03p5YgvilFfmaHBGRo2rQho1x/DsKXtjI5l95y3EPBY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7313
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230308231449.GA1057317@bhelgaas>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Ys4LcOQTMbqhif-Hx-DVD6d-7FgXOEhC
+X-Proofpoint-GUID: jJ9xdn3ITYUNIwv7pfsbndXPMpIAWtIm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-10_03,2023-03-09_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=569
+ malwarescore=0 mlxscore=0 impostorscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 clxscore=1011 bulkscore=0 phishscore=0
+ adultscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2303100077
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,48 +96,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
+On Wed, Mar 08, 2023 at 05:14:49PM -0600, Bjorn Helgaas wrote:
+> On Mon, Mar 06, 2023 at 04:10:11PM +0100, Niklas Schnelle wrote:
+> > On s390 PCI functions may be hotplugged individually even when they
+> > belong to a multi-function device. In particular on an SR-IOV device VFs
+> > may be removed and later re-added.
+> > 
+> > In commit a50297cf8235 ("s390/pci: separate zbus creation from
+> > scanning") it was missed however that struct pci_bus and struct
+> > zpci_bus's resource list retained a reference to the PCI functions MMIO
+> > resources even though those resources are released and freed on
+> > hot-unplug. These stale resources may subsequently be claimed when the
+> > PCI function re-appears resulting in use-after-free.
+> > 
+> > One idea of fixing this use-after-free in s390 specific code that was
+> > investigated was to simply keep resources around from the moment a PCI
+> > function first appeared until the whole virtual PCI bus created for
+> > a multi-function device disappears. The problem with this however is
+> > that due to the requirement of artificial MMIO addreesses (address
+> > cookies) extra logic is then needed to keep the address cookies
+> > compatible on re-plug. At the same time the MMIO resources semantically
+> > belong to the PCI function so tying their lifecycle to the function
+> > seems more logical.
+> > 
+> > Instead a simpler approach is to remove the resources of an individually
+> > hot-unplugged PCI function from the PCI bus's resource list while
+> > keeping the resources of other PCI functions on the PCI bus untouched.
+> > 
+> > This is done by introducing pci_bus_remove_resource() to remove an
+> > individual resource. Similarly the resource also needs to be removed
+> > from the struct zpci_bus's resource list. It turns out however, that
+> > there is really no need to add the MMIO resources to the struct
+> > zpci_bus's resource list at all and instead we can simply use the
+> > zpci_bar_struct's resource pointer directly.
+> > 
+> > Fixes: a50297cf8235 ("s390/pci: separate zbus creation from scanning")
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> 
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> The meat of this is mostly in s390, so I think it makes more sense to
+> merge via that tree.  But let me know if you'd rather that I take it.
 
-Facing build error in building tls
-error: passing argument 3 of ?ahash_request_set_callback?
-from incompatible pointer type [-Werror=incompatible-pointer-types]
-
-Issue introduced after changing prototype of "crypto_completion_t"
-function pointer in include/linux/crypto.h, conversion of
-completion function of tls was missed.
-
-Changes are done to use data directly in completion function of tls.
-
-Fixes: 255e48eb1768 ("crypto: api - Use data directly in completion function")
-Signed-off-by: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
----
- crypto/tls.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/crypto/tls.c b/crypto/tls.c
-index e04f3b450b43..f16810238d1a 100644
---- a/crypto/tls.c
-+++ b/crypto/tls.c
-@@ -1,6 +1,6 @@
- /*
-  * Copyright 2013 Freescale
-- * Copyright 2017 NXP
-+ * Copyright 2017, 2023 NXP
-  *
-  * This program is free software; you can redistribute it and/or modify it
-  * under the terms of the GNU General Public License as published by the Free
-@@ -50,9 +50,9 @@ struct async_op {
- 	int err;
- };
- 
--static void tls_async_op_done(struct crypto_async_request *req, int err)
-+static void tls_async_op_done(void *data, int err)
- {
--	struct async_op *areq = req->data;
-+	struct async_op *areq = data;
- 
- 	if (err == -EINPROGRESS)
- 		return;
--- 
-2.25.1
-
+I'll take it via s390 tree. Thanks
