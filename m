@@ -2,134 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5246B450E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9D26B451B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232538AbjCJOak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
+        id S232502AbjCJOa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:30:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232505AbjCJOaQ (ORCPT
+        with ESMTP id S232192AbjCJOad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:30:16 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2095.outbound.protection.outlook.com [40.107.237.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B52FF4D87;
-        Fri, 10 Mar 2023 06:29:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PvYTcOIUCChG3I7p/lRXAtOD4YxJjJqKKCy4pAov+vty+tl+ehnvL/1B7JxNu2PHQJkpOfJMVzdpiKbJR18XS3zSzMxy3v7dbyBU1XblNGfrK4ncM0v68ADmhWDNQUUAcPLbLxD2nzO34VATgoIDtcGQeec4YrNzUNvgReoQNUh2QBHezIOOmgZ9g5vCyR48m85hgQHsxMjdduTZI6zWENSvB6ZzVRF8NgI84SISQkxI958Vp1YJAwfuGGQw/YYjCIRj2m1wnTAL2xXX8U3JwUq0+l9ZhS2Xtvit+XVm5bl4Zs0mo8umjA34Qpc6Y5vcBVef1NzsIlZY8h0CSF6c7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6ybqA30W45pYwAr/5w7CqzvPvYLuMWbJFkoayKaHQKw=;
- b=hBBqQTsudAyyVYbxpMB47/42aKVMhFD2NDeJ8HS/7ZpCk/WuDaJHkvBdeAiGJqJTDZuwl0TLUf6oDYk8ly1hVAPSixdxM4peiElz0hBDC6b1g1V2Jm9yqogvcAWUOwkHNRKOHd+AUJANo6uWZ5IZNZEsj0UEokVWzDNDy01gTMYlFssp6xs3Tsd7R7TE/RpnEMvCnUbkC76MOkAjHddfc9ej1NvnusZkFoVgHzZfXkkvMrTrhI/zKVG0OpHzmFy29dz/u2lPxnq19Co3VLgmitsQ3KrQMrezUCKGkdsSaUfvoVKwMX2XE8w/5GtZcFLzSzR0qpcp8FC57PzehRTd2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Fri, 10 Mar 2023 09:30:33 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E18C11E6E3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:29:37 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id p26so3494788wmc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:29:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6ybqA30W45pYwAr/5w7CqzvPvYLuMWbJFkoayKaHQKw=;
- b=Y1n+B/S/2QRj7g50GiJz+wbq9ZYnRotC84EOCwO0hHRowAlzzpTriloDyngxfaWblJ/GWyhnQfxRxJg9KznS053IMXPY31kro8q5guUhYTeJFvMHtNEVZPWwkDcPCe3PZTzwZBuZ3JN1zc6ZhfWry5S3O3D+duaTrDKqGznKdOw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB6108.namprd13.prod.outlook.com (2603:10b6:510:29b::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
- 2023 14:28:59 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.020; Fri, 10 Mar 2023
- 14:28:59 +0000
-Date:   Fri, 10 Mar 2023 15:28:51 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@collabora.com,
-        kernel-janitors@vger.kernel.org, aleksander.lobakin@intel.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3] qede: remove linux/version.h and
- linux/compiler.h
-Message-ID: <ZAs+o2UaD/nCF/Cf@corigine.com>
-References: <20230309225206.2473644-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309225206.2473644-1-usama.anjum@collabora.com>
-X-ClientProxiedBy: AS4P195CA0036.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:20b:65a::29) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=linaro.org; s=google; t=1678458576;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=drju4oFbKPHB0dLpfptYEE2CtARCgsI5VNCPDcAEwmY=;
+        b=Ng2ai2gUZCRrEgTJBbhYRJH5Ts1qNc08MjhPHXp83IKjDHearutRecYpUU6KbU7upV
+         +3168LyYr2thoPluD9WtDSHKscx58tzU92MT8xzKFK4Ii2uZHBCL2IWm/vWea1SskL4a
+         qOoec1qEPcqdKAmY5me+J7MWcQLh8QUc+mNun6pRrsqvpWeh4anuUprb8xDEqKnVigLu
+         /lO9TNPglkTvTQh6kvcD8F9IeWyuZ7lj/VNbwlE0Z6z8/p7kccu5Q424nVSyGWeKcqK7
+         FlNLtKnWeGUsfLq1Do7P5+sCZJUqacFqTsmPQZF8atd51MtRgsk5jYMpSio5rMhZCp6M
+         LVKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678458576;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=drju4oFbKPHB0dLpfptYEE2CtARCgsI5VNCPDcAEwmY=;
+        b=imYTqF0wKLyLQxNIRuhorGTFopURZKY1F8PsweGcZWbp4nBgKsyK17NObRq5bTqlTO
+         CuYhcxC8ixFM7WWUyXTK564N53kqs0kVEVYu81vX9w1SKYLj0ggQMbveVrHUpHIJTsB4
+         ejGmxhGC+6LXmrswyJ2VFW7La0V54jtSU2pakiX1S6yRZSUHI5xZjQVWDoA3hlmtHOC+
+         FL+h8viXXL5ZcB9RTUJDKa9m7ApvDc62xGVkfCWaYUo9uCDbRfoeMFMekyLKBqiYi0FJ
+         sujC11pdIhp9Hhj2t1Xk7/7e1KMQdUHgfzYu2qP68An7vVAszuBy9CkEHq4fR+rbmZ9T
+         ffCg==
+X-Gm-Message-State: AO0yUKXYoNdEv5LWN40+xza4xgyhYV8u520J9yzO3tbaezDtOsd/spuG
+        EApPIGT/gfanyV6PGsVAc/MAdZ9NFGDGGTrfJWA=
+X-Google-Smtp-Source: AK7set++ZHqmzSiqhDUtpnPDrw1bxueBHlF/TxuftK4cJax73wU02+6RqvK1mU2rcERqQ5yTU3mPCg==
+X-Received: by 2002:a05:600c:c06:b0:3e1:feb9:5a33 with SMTP id fm6-20020a05600c0c0600b003e1feb95a33mr2799650wmb.9.1678458575660;
+        Fri, 10 Mar 2023 06:29:35 -0800 (PST)
+Received: from vingu-book ([2a01:e0a:f:6020:1623:815:9976:baec])
+        by smtp.gmail.com with ESMTPSA id s6-20020a7bc386000000b003db06224953sm12089wmj.41.2023.03.10.06.29.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 06:29:35 -0800 (PST)
+Date:   Fri, 10 Mar 2023 15:29:33 +0100
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     Zhang Qiao <zhangqiao22@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, rkagan@amazon.de
+Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
+Message-ID: <ZAs+zV0o9ShO7nLT@vingu-book>
+References: <20230306132418.50389-1-zhangqiao22@huawei.com>
+ <20230309130524.GA273121@hirez.programming.kicks-ass.net>
+ <CAKfTPtAf5RrzZRSHtfK+r3QvnFQ-oM3+rJ-z5SB8T4+nUv1aQw@mail.gmail.com>
+ <20230309142825.GB273121@hirez.programming.kicks-ass.net>
+ <ZAnvCGdlOrWbIC/o@hirez.programming.kicks-ass.net>
+ <CAKfTPtADUas2QHZCQyu0ad-JTKRQ=PcsB=o7+PuJNVxHwAzkCQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB6108:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6c496397-895c-4afe-ea9f-08db2173c98c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yfDR2F8B0W/80bbbOQAu/KYM1PU/KtqYCIIkxAh07EpXe9rxf4VyvUY0bpr24A+k48coZe4UggbOgZa2xuEPuMkONzXiS9gBxXxz8kog0oIP3du+0pD2MnoicNrsuP+n8pE4o7jG1VmvDJhZ81C1ZCspUHnH7W3BG47S2+2WMvpH/x1Xj9lL+aczBPtykzclOWAKU9sgflGLaR4zZv8d6M0vW2OAlVyvOSYuYJEo/PRmqKNl30qlh3Gc2Kh3ytACi+IPMN4wXvYdlgeVoVd3rtn8V7/V7Hz+3/UziBmJDAv3ssde00qY01CTqt+175nTtH/ka4puzPHU0Gg13uyMUFrd/bmxVLEab0qZDC4yI3iOVg9F0TkjOBZDrvXbNit+16lxln+rHMMjc0pz3DvenzdGnkqUu0wNlWq+l9RVezkk+eUc9vDLoNAoJK2CYGmFHUg4lrxVuvL1mrK7FavksmXDuYQl9xGjKAcZmAehvLxt+C64wZ6nZrWcHNmH62S4mIFfdf2RwrQtIgdZzgEVh7FmZS8bZnLm648mYcLkRjX1wnZOOvJwCADf0Qes0HbgKapmY3UHkuh3eb8b0TsmstT+mLHRqBsNpvZMW1AdjGI3aoELX0eYeaU4fL4tIMYw+Lk5WaMx8uMfCHNxSzoc1w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(39840400004)(366004)(346002)(396003)(451199018)(8936002)(36756003)(4744005)(5660300002)(7416002)(6506007)(6666004)(38100700002)(186003)(2616005)(86362001)(6512007)(54906003)(316002)(8676002)(4326008)(66946007)(6916009)(41300700001)(66556008)(66476007)(478600001)(6486002)(2906002)(44832011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?o5sL0KNEQ3hRdAJAnY/mapjqjniteZ6/YMIo7KqF9aCw4L7NI5yaVurQ22ao?=
- =?us-ascii?Q?hc98E9UN5/nTdJ86jl+W99GOPRtPtbgi8FAyXIHnGO1ID2v58y//5hJVJf8e?=
- =?us-ascii?Q?Rn6pJCVSSyjXOGDMmVrwNfeLvqinoZad4RuWOrEYmd9Xku6DwENa/N8iBBg7?=
- =?us-ascii?Q?HfFrZ9evStZ5MtKBwNlr1ZU8F2dud4m7lysi/4vWxAN+cxSKfqoP7Sxt/s3E?=
- =?us-ascii?Q?855AavPLAozBKvAeIiqrdxIdhdpTcJjm9VRtxilNS558118D/AEr2iXHEmCB?=
- =?us-ascii?Q?xX65AXUd2ookq6ilF5ey0fRMEErmaDDL5X2pP2XEJTpui0E15GsKy3KDkwK/?=
- =?us-ascii?Q?mlCBDetn4Z+bg54cBwgjyroq4SDiCuldWkzifVrt1VHY29LHv+SOnXcg+riU?=
- =?us-ascii?Q?8Oa1xp67RpVPbTCMbKFegt6npAMQ5Zh88Xo7TxeFG5YdoTgsgax67rnsFvDW?=
- =?us-ascii?Q?2avERSKcCTHEvGZNVZn5BB3+8cemYdLdOJN8fL1qYAZt4DtcJVeOhK18ZaBl?=
- =?us-ascii?Q?vwletwzf73YqYdCf4TTpW54HcelLUnQLf8chrEy4EYVzb8uRPp+bAIbWbDgQ?=
- =?us-ascii?Q?b53qTnFkBilfUTr6cGVVXdoPtAsyds9zZ7ac6vdIdRbxLRMyg0smEoDHpl1P?=
- =?us-ascii?Q?Up/t3kD3kJKNFlc6RKtG1yICnpImzU/xWTIVPuN7S1etLV9VZ9TPrja04JNE?=
- =?us-ascii?Q?PXSjGpvdFb90IImrmdkzKItTxwya+GP9TEVmA749gZfDdTi9U6CEGTKxy58Q?=
- =?us-ascii?Q?jV/lG8gSu+nVMTu3ZtOgIAUYOoZSkR4queTC8IV94hN1h/xXwQIuLXxwAgyV?=
- =?us-ascii?Q?uRXNLtSHSSCd75MImho+/tC/BxNbMlGJQO4iFDkqu+9I7JU2Ao8rWp8Ej8Ga?=
- =?us-ascii?Q?oTuEwBsF8IuXQ6j8zC2KpqAUKVGheNSa2/Zvqstu+L2qOA5w667gURUkebR/?=
- =?us-ascii?Q?6PiVHOHPEt5gW+ji2q7MI+I5+xPeWDzTCTMGz5np5ECvI8eLd979f3woqmiZ?=
- =?us-ascii?Q?9IMRNU/o8mtZlTTgYK6fwEMCMDoDDpVtxrK34TQhFeJ6MYrQBOsHOTZAcSXB?=
- =?us-ascii?Q?c7whOxNxXYyVN8X4/QusoDu4u3YBu1hKRASOM+7bBEyR3XZZVuz+KEbnQwZG?=
- =?us-ascii?Q?g25zWcXrW1Bgk0nZiQ6N75LA2URgbFbSaGIyxnAXMSNgHK35vEQnuk/O3m1d?=
- =?us-ascii?Q?CHA/eXaoLyqQqGD1bADUMIsqeyqS57x6tj/lLp8NJTdfRhkDO5Y7+19jPAOQ?=
- =?us-ascii?Q?NreDQX8oxXCfhpWA1gTPHfWWm17XsJiVZ8WCYv3/d096s0dD+4HUSRh20f83?=
- =?us-ascii?Q?vYlr4dTjG2T/sUqQPAlz/IquvgMudSkSE+f+rJYgmdLO0WBFC+UxMBDUgu+v?=
- =?us-ascii?Q?zdIqMKTyMgTmDiqKKz8usQQb66o//iCsQw1D6vPlW6rkXqhkt/KwAGGPEpzi?=
- =?us-ascii?Q?81zszydhdMjrczxnaJvb1AiLl4iF5XU989n9XH4aTpYlVakY+Ahny2E1Gfpm?=
- =?us-ascii?Q?NDUee5r16f8YhG734ZhOuDL/V2of8856xdxkymbYZ20Fyp1SxTKbeZkX1FBe?=
- =?us-ascii?Q?WaDgY3S2SaWM14B5xxENpr9lyT3f6HxXLdn/4YycWhkGC0iKu+LgKdXbGeNO?=
- =?us-ascii?Q?uHDE3jYJvIfaCQOrNQL8E+WTX36IHWvC6T2h4A0MpO7IyLL6hz8H8AjQzTc4?=
- =?us-ascii?Q?rBQLsA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c496397-895c-4afe-ea9f-08db2173c98c
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 14:28:59.1342
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 00+8ni/Nr/66BDxeGPcbhT3F3ldJldu4UGdUykAbTEuHajX6ei/TumfMkaI/mhGpQzcp84xFUFVHz57BaGH+q2fUmvipMHKsrd1br26p5yw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB6108
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKfTPtADUas2QHZCQyu0ad-JTKRQ=PcsB=o7+PuJNVxHwAzkCQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 03:52:05AM +0500, Muhammad Usama Anjum wrote:
-> make versioncheck reports the following:
-> ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
-> ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
+Le jeudi 09 mars 2023 à 16:14:38 (+0100), Vincent Guittot a écrit :
+> On Thu, 9 Mar 2023 at 15:37, Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Thu, Mar 09, 2023 at 03:28:25PM +0100, Peter Zijlstra wrote:
+> > > On Thu, Mar 09, 2023 at 02:34:05PM +0100, Vincent Guittot wrote:
+> > >
+> > > > Then, even if we don't clear exec_start before migrating and keep
+> > > > current value to be used in place_entity on the new cpu, we can't
+> > > > compare the rq_clock_task(rq_of(cfs_rq)) of 2 different rqs AFAICT
+> > >
+> > > Blergh -- indeed, irq and steal time can skew them between CPUs :/
+> > > I suppose we can fudge that... wait_start (which is basically what we're
+> > > making it do) also does that IIRC.
+> > >
+> > > I really dislike having this placement muck spreadout like proposed.
+> >
+> > Also, I think we might be over-engineering this, we don't care about
+> > accuracy at all, all we really care about is 'long-time'.
 > 
-> So remove linux/version.h from both of these files. Also remove
-> linux/compiler.h while at it as it is also not being used.
+> you mean taking the patch 1/2 that you mentioned here to add a
+> migrated field:
+> https://lore.kernel.org/all/68832dfbb60fda030540b5f4e39c5801942689b1.1648228023.git.tim.c.chen@linux.intel.com/T/#ma5637eb8010f3f4a4abff778af8db705429d003b
 > 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> And assume that the divergence between the rq_clock_task() can be ignored ?
+> 
+> That could probably work but we need to replace the (60LL *
+> NSEC_PER_SEC) by ((1ULL << 63) / NICE_0_LOAD) because 60sec divergence
+> would not be unrealistic.
+> and a comment to explain why it's acceptable
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Zhang,
 
+Could you try the patch below ?
+This is a rebase/merge/update of:
+-patch 1/2 above and 
+-https://lore.kernel.org/lkml/20230209193107.1432770-1-rkagan@amazon.de/
+
+The proposal accepts a divergence of up to 52 days between the 2 rqs.
+
+If this work, we will prepare a proper patch
+
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 63d242164b1a..cb8af0a137f7 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -550,6 +550,7 @@ struct sched_entity {
+        struct rb_node                  run_node;
+        struct list_head                group_node;
+        unsigned int                    on_rq;
++       unsigned int                    migrated;
+
+        u64                             exec_start;
+        u64                             sum_exec_runtime;
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 7a1b1f855b96..36acd9598b40 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -1057,6 +1057,7 @@ update_stats_curr_start(struct cfs_rq *cfs_rq, struct sched_entity *se)
+        /*
+         * We are starting a new run period:
+         */
++       se->migrated = 0;
+        se->exec_start = rq_clock_task(rq_of(cfs_rq));
+ }
+
+@@ -4684,13 +4685,23 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+
+        /*
+         * Pull vruntime of the entity being placed to the base level of
+-        * cfs_rq, to prevent boosting it if placed backwards.  If the entity
+-        * slept for a long time, don't even try to compare its vruntime with
+-        * the base as it may be too far off and the comparison may get
+-        * inversed due to s64 overflow.
++        * cfs_rq, to prevent boosting it if placed backwards.
++        * However, min_vruntime can advance much faster than real time, with
++        * the exterme being when an entity with the minimal weight always runs
++        * on the cfs_rq. If the new entity slept for long, its vruntime
++        * difference from min_vruntime may overflow s64 and their comparison
++        * may get inversed, so ignore the entity's original vruntime in that
++        * case.
++        * The maximal vruntime speedup is given by the ratio of normal to
++        * minimal weight: NICE_0_LOAD / MIN_SHARES, so cutting off on the
++        * sleep time of 2^63 / NICE_0_LOAD should be safe.
++        * When placing a migrated waking entity, its exec_start has been set
++        * from a different rq. In order to take into account a possible
++        * divergence between new and prev rq's clocks task because of irq and
++        * stolen time, we take an additional margin.
+         */
+        sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+-       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
++       if ((s64)sleep_time > (1ULL << 63) / NICE_0_LOAD / 2)
+                se->vruntime = vruntime;
+        else
+                se->vruntime = max_vruntime(se->vruntime, vruntime);
+@@ -7658,7 +7669,7 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+        se->avg.last_update_time = 0;
+
+        /* We have migrated, no longer consider this task hot */
+-       se->exec_start = 0;
++       se->migrated = 1;
+
+        update_scan_period(p, new_cpu);
+ }
+@@ -8344,6 +8355,9 @@ static int task_hot(struct task_struct *p, struct lb_env *env)
+        if (sysctl_sched_migration_cost == 0)
+                return 0;
+
++       if (p->se.migrated)
++               return 0;
++
+        delta = rq_clock_task(env->src_rq) - p->se.exec_start;
+
+        return delta < (s64)sysctl_sched_migration_cost;
+
+
+
+> 
+> 
+> >
+> >
