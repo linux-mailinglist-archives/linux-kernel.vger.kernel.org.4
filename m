@@ -2,188 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A1E6B3428
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F486B342B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjCJCSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 21:18:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
+        id S229972AbjCJCVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 21:21:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCJCSF (ORCPT
+        with ESMTP id S229603AbjCJCVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 21:18:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176221DBB4;
-        Thu,  9 Mar 2023 18:18:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A147B6092E;
-        Fri, 10 Mar 2023 02:18:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC47EC433D2;
-        Fri, 10 Mar 2023 02:17:59 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     linux-efi@vger.kernel.org, loongarch@lists.linux.dev,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2] efi/libstub: Call setup_graphics() before handle_kernel_image()
-Date:   Fri, 10 Mar 2023 10:17:49 +0800
-Message-Id: <20230310021749.921041-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
+        Thu, 9 Mar 2023 21:21:02 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5FC111F85
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 18:21:00 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id a2so4126530plm.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 18:21:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678414860;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DjwphGFAmH+P3VBKg8ccdas4BLWzgUBKFji8Q6ip/qc=;
+        b=nVgXI24fvBMAuxH0tK7nuj/+eV+NdHm4zIZz7nqgrjwY6HjG06jT0sDkEowN7K5B+N
+         WzQEcV/WCsIZA1p68Bdrx4hxL+9DjLqt78C4NjQQ3leEsfjHgBHqAiUaWKkK1SgeOzFJ
+         WJrcsoshdoB+DsfWTbEWM4Ni1QtDuKaCY5+f4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678414860;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DjwphGFAmH+P3VBKg8ccdas4BLWzgUBKFji8Q6ip/qc=;
+        b=kJlyMkkHvtZ+oBHwRxV1sy1uFVBJpY9fLQbDvsp8DvMT0Sz5TxGkhOMxS23Ip2G+eb
+         rMJpqgMlem6dQbIxz42drRLfemOiNafQ8xI5Gs380i3v3RsODUiE/s67zA/E16s21/02
+         jbQTIDNAK4j7WEm03FbfZnODXXoEqWOI3HG2L39dV1EsZARmJ19G078u5yBUTN3VavPO
+         +UsAfluXfg1DyiZZLo+CxoW5qhjp6Fp6lWPI09M6q2a+Jyw3yZEfwUAWm54obhlX0Ub0
+         6Zp+GR4DQsULDaNWEPx7C2PahlcA9UTm+378SG1Ye5oR13rzcStzA70cpOMxgN+c4eMV
+         kZ3Q==
+X-Gm-Message-State: AO0yUKUON8AEENtSgJ9OG169jLBQbR/QUMaGYswNKaAA85KavEGxIz6d
+        xEICABvoXBmRqZgIdqwyeAst+g==
+X-Google-Smtp-Source: AK7set9KyP9y8k1KMQxRXzVVbkv+aALqqNFQkpFnFJ0ubJOMVcv5Ro4XWW1twQ+UKWH9axxjE6HQOA==
+X-Received: by 2002:a05:6a21:6d9f:b0:cd:a334:a531 with SMTP id wl31-20020a056a216d9f00b000cda334a531mr30455899pzb.62.1678414859816;
+        Thu, 09 Mar 2023 18:20:59 -0800 (PST)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id y15-20020a63e24f000000b004fb997a0bd8sm259112pgj.30.2023.03.09.18.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 18:20:59 -0800 (PST)
+Date:   Fri, 10 Mar 2023 11:20:54 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, "hn.chen" <hn.chen@sunplusit.com>
+Subject: Re: [PATCH v6 3/5] media: uvcvideo: Allow hw clock updates with
+ buffers not full
+Message-ID: <20230310022054.GG1045797@google.com>
+References: <20220920-resend-hwtimestamp-v6-0-c7a99299ec35@chromium.org>
+ <20220920-resend-hwtimestamp-v6-3-c7a99299ec35@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920-resend-hwtimestamp-v6-3-c7a99299ec35@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 42c8ea3dca094ab8 ("efi: libstub: Factor out EFI stub entrypoint
-into separate file") moves setup_graphics() into efi_stub_common() which
-is after handle_kernel_image(). This causes efifb no longer work because
-handle_kernel_image() may move the core kernel to its preferred address,
-which means the screen_info filled by the efistub will not be the same
-as the one accessed by the core kernel. So let us call setup_graphics()
-before handle_kernel_image() which restores the old behavior.
+On (23/03/09 13:55), Ricardo Ribalda wrote:
+[..]
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -754,10 +754,10 @@ void uvc_video_clock_update(struct uvc_streaming *stream,
+>  
+>  	spin_lock_irqsave(&clock->lock, flags);
+>  
+> -	if (clock->count < clock->size)
+> +	if (clock->count < 2)
+>  		goto done;
+>  
+> -	first = &clock->samples[clock->head];
+> +	first = &clock->samples[(clock->head - clock->count) % clock->size];
 
-The side effect is zboot will not call setup_graphics(), but I think
-zboot doesn't need it either.
+This looks like a significant change: `rb->head` and `rb->head - INT`
+are quite different things. May I ask for some clarifications?
 
-Fixes: 42c8ea3dca094ab8 ("efi: libstub: Factor out EFI stub entrypoint into separate file")
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
-V2: Use static declaration for setup_graphics() to avoid build warnings.
+[..]
+> +	/*
+> +	 * Have at least 1/4 of a second of timestamps before we
+> +	 * try to do any calculation. Otherwise we do not have enough
+> +	 * precision. This value was determined by running Android CTS
+> +	 * on different devices.
+> +	 */
+> +	if ((y2 - y1) < (256 << 16))
 
- drivers/firmware/efi/libstub/efi-stub-entry.c | 29 +++++++++++++++++++
- drivers/firmware/efi/libstub/efi-stub.c       | 27 -----------------
- 2 files changed, 29 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/firmware/efi/libstub/efi-stub-entry.c b/drivers/firmware/efi/libstub/efi-stub-entry.c
-index 5245c4f031c0..f971fd25a4eb 100644
---- a/drivers/firmware/efi/libstub/efi-stub-entry.c
-+++ b/drivers/firmware/efi/libstub/efi-stub-entry.c
-@@ -5,6 +5,30 @@
- 
- #include "efistub.h"
- 
-+static struct screen_info *setup_graphics(void)
-+{
-+	unsigned long size;
-+	efi_status_t status;
-+	efi_guid_t gop_proto = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
-+	void **gop_handle = NULL;
-+	struct screen_info *si = NULL;
-+
-+	size = 0;
-+	status = efi_bs_call(locate_handle, EFI_LOCATE_BY_PROTOCOL,
-+			     &gop_proto, NULL, &size, gop_handle);
-+	if (status == EFI_BUFFER_TOO_SMALL) {
-+		si = alloc_screen_info();
-+		if (!si)
-+			return NULL;
-+		status = efi_setup_gop(si, &gop_proto, size);
-+		if (status != EFI_SUCCESS) {
-+			free_screen_info(si);
-+			return NULL;
-+		}
-+	}
-+	return si;
-+}
-+
- /*
-  * EFI entry point for the generic EFI stub used by ARM, arm64, RISC-V and
-  * LoongArch. This is the entrypoint that is described in the PE/COFF header
-@@ -22,6 +46,7 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
- 	efi_guid_t loaded_image_proto = LOADED_IMAGE_PROTOCOL_GUID;
- 	unsigned long reserve_addr = 0;
- 	unsigned long reserve_size = 0;
-+	struct screen_info *si;
- 
- 	WRITE_ONCE(efi_system_table, systab);
- 
-@@ -47,6 +72,8 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
- 
- 	efi_info("Booting Linux Kernel...\n");
- 
-+	si = setup_graphics();
-+
- 	status = handle_kernel_image(&image_addr, &image_size,
- 				     &reserve_addr,
- 				     &reserve_size,
-@@ -58,6 +85,8 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
- 
- 	status = efi_stub_common(handle, image, image_addr, cmdline_ptr);
- 
-+	free_screen_info(si);
-+
- 	efi_free(image_size, image_addr);
- 	efi_free(reserve_size, reserve_addr);
- 
-diff --git a/drivers/firmware/efi/libstub/efi-stub.c b/drivers/firmware/efi/libstub/efi-stub.c
-index 2955c1ac6a36..bc67af721412 100644
---- a/drivers/firmware/efi/libstub/efi-stub.c
-+++ b/drivers/firmware/efi/libstub/efi-stub.c
-@@ -56,30 +56,6 @@ void __weak free_screen_info(struct screen_info *si)
- {
- }
- 
--static struct screen_info *setup_graphics(void)
--{
--	efi_guid_t gop_proto = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
--	efi_status_t status;
--	unsigned long size;
--	void **gop_handle = NULL;
--	struct screen_info *si = NULL;
--
--	size = 0;
--	status = efi_bs_call(locate_handle, EFI_LOCATE_BY_PROTOCOL,
--			     &gop_proto, NULL, &size, gop_handle);
--	if (status == EFI_BUFFER_TOO_SMALL) {
--		si = alloc_screen_info();
--		if (!si)
--			return NULL;
--		status = efi_setup_gop(si, &gop_proto, size);
--		if (status != EFI_SUCCESS) {
--			free_screen_info(si);
--			return NULL;
--		}
--	}
--	return si;
--}
--
- static void install_memreserve_table(void)
- {
- 	struct linux_efi_memreserve *rsv;
-@@ -163,14 +139,12 @@ efi_status_t efi_stub_common(efi_handle_t handle,
- 			     unsigned long image_addr,
- 			     char *cmdline_ptr)
- {
--	struct screen_info *si;
- 	efi_status_t status;
- 
- 	status = check_platform_features();
- 	if (status != EFI_SUCCESS)
- 		return status;
- 
--	si = setup_graphics();
- 
- 	efi_retrieve_tpm2_eventlog();
- 
-@@ -190,7 +164,6 @@ efi_status_t efi_stub_common(efi_handle_t handle,
- 
- 	status = efi_boot_kernel(handle, image, image_addr, cmdline_ptr);
- 
--	free_screen_info(si);
- 	return status;
- }
- 
--- 
-2.39.1
-
+256 << 16 is 1/4 of a second?
