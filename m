@@ -2,122 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E906B4D23
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7236B4D2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbjCJQgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 11:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S231744AbjCJQha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 11:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjCJQfy (ORCPT
+        with ESMTP id S231697AbjCJQhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:35:54 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A74112DDE;
-        Fri, 10 Mar 2023 08:34:06 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id e21so4688415oie.1;
-        Fri, 10 Mar 2023 08:34:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678466045;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1LZymklHctXhGjv6HuiTRygfeCKyXWhZY1DVnyofWu8=;
-        b=M65m23wzC1245l1q1IhCmiq2UbpeAMdmU/SWKDojb/84/qMGWwLn5/0mrI55/5mcPi
-         n+eaXWzGD6ym78z/VOEr/Qcpjca5BcsHyANlBoS2lDqmxAauikijLXE3//j0Iqkdqs9B
-         HaV3WIpr6ka4LmGxdisp6/KeTB480jrd3KGib9fV1BRD+b0tBGJ4U9FhAEURVzySUovg
-         Ti6ci4i4v5m8Wk2VZjWGfGqadf+8hvs7pc398+xF4akKdS/YuRviu47eSgohhN9Rk5EA
-         ggXYmHVCBdrKQD3NJxAqUMaGnM22eetL+xRhtxdFrs1fJkq3+wm/vp0gkmycsvi2E1hp
-         eQGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678466045;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1LZymklHctXhGjv6HuiTRygfeCKyXWhZY1DVnyofWu8=;
-        b=NTfW9N7Kwlof7OHDlUXtiDtFsI/aYe91NC1e+xo2jCZL/8G4ZQ/gzI3HWyBe01FjxI
-         xC2RuFxUWq/aOfNbq2xRfIV7acofyTouXyW5jhlDFk/I51y1ReyY4v0Pq97QNuycqJIE
-         OUburzoOgTt0YlUezjBeoARXHB7aJ9rLy2e15C3osiZBibh/u4ROugIJX9iKAPjqLH3g
-         WxVtKaiveUkXWEGBnnBOA29QU3nIpBitYTy7Dinh0a1+0tZPZtc8GmI7K0NejWl8zfj7
-         qYl8joCQMZ4q23VngQf8zEn/d0F5M1/b1fTEyFQN7k1ikaypdCA58F07HR75vLR1S1Wk
-         A01Q==
-X-Gm-Message-State: AO0yUKUBcuuNY0TaihDYK0nNGhF7DfcIEtSCMk3Atl8HV7rVOkExb5+a
-        Z8qe2qnHSKq+mWqh0AMf2Ks=
-X-Google-Smtp-Source: AK7set8igdVi6XKByIK2eUyaNolvwd8Z1vrZDB0CtCNLLzuyQ5ZCtTjwrMePGo6Cheh+u7YH92Jjbw==
-X-Received: by 2002:aca:f14:0:b0:384:ea1:dbea with SMTP id 20-20020aca0f14000000b003840ea1dbeamr12211919oip.47.1678466044886;
-        Fri, 10 Mar 2023 08:34:04 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j65-20020acab944000000b0037d74967ef6sm20950oif.44.2023.03.10.08.34.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 08:34:04 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 10 Mar 2023 08:34:03 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zheng Wang <zyytlz.wz@163.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com
-Subject: Re: [PATCH] hwmon: (xgene) Fix use after free bug in
- xgene_hwmon_remove due to race condition
-Message-ID: <329d128b-5436-44ad-89a3-75d82a7a11ec@roeck-us.net>
-References: <20230310084007.1403388-1-zyytlz.wz@163.com>
+        Fri, 10 Mar 2023 11:37:03 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279491717B;
+        Fri, 10 Mar 2023 08:34:56 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32ADvGtE007100;
+        Fri, 10 Mar 2023 16:34:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=uOn43gIsWl62UJjej198pBalt9A+O9beKIfPPNQpx5I=;
+ b=GXMrBW8xz77UpAvNjlMGDf57badQYp9wLqxGM/wfmXBKsMhl89v49/xUM47Soe2VwcT2
+ eCWmnKOYUpqBxTPPgHBikNw4DWMhjdo19OOJaipyrrAWF7BUgzOcltmITuIFSSxNzR38
+ GbfkvZ2Zu7TmZWh4M04PtPMIFaLakG6fVLNBbeR70avehwZFy8cEorY43O56r7/cAFy4
+ 3sIgKbJBBsTBWKY8bG/M/WG4M10gxzQ6rOEH9RvdpUCHWwDZAqnwrzYuMCgZGG180Flv
+ fkM3D90LodUgtdMi1mO1gtVIu/4psi/P9ZVLn+/0PimhRObSHqOxxCFbA/KL4xF5KA18 oQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p7pm12g1k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 16:34:37 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32AGYapx032506
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 16:34:36 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Fri, 10 Mar 2023 08:34:30 -0800
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>,
+        <quic_harshq@quicinc.com>, <ahalaney@redhat.com>,
+        <quic_shazhuss@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH 0/8] Add multiport support for DWC3 controllers
+Date:   Fri, 10 Mar 2023 22:04:12 +0530
+Message-ID: <20230310163420.7582-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310084007.1403388-1-zyytlz.wz@163.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: HGRe_uMATpJ7ommhisvDHhM44GsAjm-U
+X-Proofpoint-ORIG-GUID: HGRe_uMATpJ7ommhisvDHhM44GsAjm-U
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-10_07,2023-03-10_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 adultscore=0 suspectscore=0 clxscore=1011 bulkscore=0
+ mlxlogscore=676 priorityscore=1501 mlxscore=0 spamscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303100130
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 04:40:07PM +0800, Zheng Wang wrote:
-> In xgene_hwmon_probe, &ctx->workq is bound with
-> xgene_hwmon_evt_work. Then it will be started.
-> 
-> If we remove the driver which will call
-> xgene_hwmon_remove to make cleanup, there may
-> be a unfinished work.
-> 
-> The possiblesequence is as follows:
-> 
-> Fix it by finishing the work before cleanup in the
-> xgene_hwmon_remove
-> 
-> CPU0                  CPU1
-> 
->                     |xgene_hwmon_evt_work
-> xgene_hwmon_remove   |
-> kfifo_free(&ctx->async_msg_fifo);|
->                     |
->                     |kfifo_out_spinlocked
->                     |//use &ctx->async_msg_fifo
-> Fixes: 2ca492e22cb7 ("hwmon: (xgene) Fix crash when alarm occurs before driver probe")
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Currently the DWC3 driver supports only single port controller which
+requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
+DWC3 controller with multiple ports that can operate in host mode.
+Some of the port supports both SS+HS and other port supports only HS
+mode.
 
-Applied.
+This change primarily refactors the Phy logic in core driver to allow
+multiport support with Generic Phy's.
 
-Thanks,
-Guenter
+Chananges have been tested on  QCOM SoC SA8295P which has 4 ports (2
+are HS+SS capable and 2 are HS only capable).
 
-> ---
->  drivers/hwmon/xgene-hwmon.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-> index 5cde837bfd09..d1abea49f01b 100644
-> --- a/drivers/hwmon/xgene-hwmon.c
-> +++ b/drivers/hwmon/xgene-hwmon.c
-> @@ -761,6 +761,7 @@ static int xgene_hwmon_remove(struct platform_device *pdev)
->  {
->  	struct xgene_hwmon_dev *ctx = platform_get_drvdata(pdev);
->  
-> +	cancel_work_sync(&ctx->workq);
->  	hwmon_device_unregister(ctx->hwmon_dev);
->  	kfifo_free(&ctx->async_msg_fifo);
->  	if (acpi_disabled)
+Changes in current version:
+Added DT support for first port of Teritiary USB controller on SA8540-Ride
+Added support for reading port info from XHCI Extended Params registers.
+
+Changes in RFC v4:
+Added DT support for SA8295p.
+
+Changes in RFC v3:
+Incase any PHY init fails, then clear/exit the PHYs that
+are already initialized.
+
+Changes in RFC v2:
+Changed dwc3_count_phys to return the number of PHY Phandles in the node.
+This will be used now in dwc3_extract_num_phys to increment num_usb2_phy 
+and num_usb3_phy.
+
+Added new parameter "ss_idx" in dwc3_core_get_phy_ny_node and changed its
+structure such that the first half is for HS-PHY and second half is for
+SS-PHY.
+
+In dwc3_core_get_phy, for multiport controller, only if SS-PHY phandle is
+present, pass proper SS_IDX else pass -1.
+
+Link to RFC v4: https://lore.kernel.org/all/20230115114146.12628-1-quic_kriskura@quicinc.com/
+Link to RFC v3: https://lore.kernel.org/all/1654709787-23686-1-git-send-email-quic_harshq@quicinc.com/#r
+Link to RFC v2: https://lore.kernel.org/all/1653560029-6937-1-git-send-email-quic_harshq@quicinc.com/#r
+
+Krishna Kurapati (8):
+  dt-bindings: usb: Add bindings for multiport properties on DWC3
+    controller
+  usb: dwc3: core: Access XHCI address space temporarily to read port
+    info
+  usb: dwc3: core: Skip setting event buffers for host only controllers
+  usb: dwc3: core: Refactor PHY logic to support Multiport Controller
+  usb: dwc3: qcom: Add multiport controller support for qcom wrapper
+  arm64: dts: qcom: sc8280xp: Add multiport controller node for SC8280
+  arm64: dts: qcom: sa8295p: Enable teritiary controller and its 4 USB
+    ports
+  arm64: dts: qcom: sa8540-ride: Enable first port of teritiary usb
+    controller
+
+ .../devicetree/bindings/usb/snps,dwc3.yaml    |  13 +-
+ arch/arm64/boot/dts/qcom/sa8295p-adp.dts      |  47 +++
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts     |  22 ++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  58 +++
+ drivers/usb/dwc3/core.c                       | 374 ++++++++++++++----
+ drivers/usb/dwc3/core.h                       |  20 +-
+ drivers/usb/dwc3/drd.c                        |  13 +-
+ drivers/usb/dwc3/dwc3-qcom.c                  |  28 +-
+ 8 files changed, 473 insertions(+), 102 deletions(-)
+
+-- 
+2.39.0
+
