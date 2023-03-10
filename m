@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1404A6B4754
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F786B475C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbjCJOt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:49:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
+        id S233081AbjCJOuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:50:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233162AbjCJOsU (ORCPT
+        with ESMTP id S233072AbjCJOtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:48:20 -0500
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFC3121153;
-        Fri, 10 Mar 2023 06:47:35 -0800 (PST)
-Received: by mail-oi1-f170.google.com with SMTP id bh20so4393519oib.9;
-        Fri, 10 Mar 2023 06:47:35 -0800 (PST)
+        Fri, 10 Mar 2023 09:49:00 -0500
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016AD1223B1;
+        Fri, 10 Mar 2023 06:47:41 -0800 (PST)
+Received: by mail-oi1-f176.google.com with SMTP id bm20so4397974oib.7;
+        Fri, 10 Mar 2023 06:47:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459654;
+        d=1e100.net; s=20210112; t=1678459661;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EIz7uldrpE/4a3Yn78TCMTOPk2yNsXBeiewFP++iTtI=;
-        b=piCRoVSjF4CJdI61gdGtwXSF21OkABigbQ0znd37VdclwKZuXIZoqcA0QMHAo/JcKD
-         Clix07FBd5kIMr2c04xiFDMqtQe5RPoCSPdIAaHeLGPYLMePdbL/nH2XRGKu+gq4Z9gn
-         ZwkQnHiKeW0NkpUqQP+6qIF0t7u+A8eaWPv8uXPTLptv01pXP1V8dRWVyGRWKXCgwZ/F
-         eSWv/+6IIdOpA97TKGtztv/Lg5xJ4i27lWI0Gq4jZvHiXCIPE1MbXS5E9el6ThSfqOHJ
-         Gwv6hxNACUx0cvzUwsE+/FiX2jRDRcNho9qtP+MAIH+WHg3MCosrVvwI847igqqLn1UK
-         5F+g==
-X-Gm-Message-State: AO0yUKX9DZcPcQgFMvSo8njwuDNkGIdMuBxyUfxhA0a6sxofKozB/Xb/
-        YqJZXfGdUBBQ0/x8o/oq4A==
-X-Google-Smtp-Source: AK7set/GOJZQNFQdvex7AhT10x8uYUWw1aDar530wB//wxV61PlLIWKRODfn7mKYRTKkWueDppQvnA==
-X-Received: by 2002:a05:6808:1d2:b0:384:167d:736b with SMTP id x18-20020a05680801d200b00384167d736bmr10994562oic.15.1678459654281;
-        Fri, 10 Mar 2023 06:47:34 -0800 (PST)
+        bh=lRN0jAfi5iqcqL3ePabHiQPwHcWvAmjJJvRbEXcLzU0=;
+        b=QdYeEeXohwb6sBoUkcnoahw9f2B2U6eRrL9r8vN1cF/H+bBRbiCEIHu8KZmUeTd/gk
+         gZwjHg04TBrhkv0sDnQ1L5ZrSh4OGNXLcGDExHKjyRZ9uwU2A+Wgn9Wfmp0upyYXHpM1
+         oNvEViEpq+YBKmZNJ3+AjsmxHARfxiHRct2Z8i6Rx1BaIuMWxCPKxv+rPld3vWl3S+Sp
+         kp8+VS+P8vfdE/JziVgPS5AjrEi3ne9HHg1pR3yIWEpTwlI0pjfHSeTR9ZZEH85qiqNv
+         V9AYaEAj17cgvevkcNl5WbhFSjzJcBOvJeydwbMX35wdyArVb8WT9ZEDX0/lHoiW8taB
+         kdgw==
+X-Gm-Message-State: AO0yUKUBDA+/75U/OIIT+kQXUsMtiWMtwGvw6Nbgke74QANcHeD1MOOQ
+        srA4pCG2dgBcnPnniLkDZw==
+X-Google-Smtp-Source: AK7set8NyE9pelZcNVRqymxGqcdHaorNLGYGKwkwEPG5NWZLihqksz6QnJRuEAnZN8WQX6FSLVz58g==
+X-Received: by 2002:a05:6808:2805:b0:37a:f32f:730c with SMTP id et5-20020a056808280500b0037af32f730cmr10660264oib.35.1678459660802;
+        Fri, 10 Mar 2023 06:47:40 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q12-20020a4ad54c000000b005252e5b6604sm834079oos.36.2023.03.10.06.47.33
+        by smtp.gmail.com with ESMTPSA id y63-20020aca3242000000b00383eaea5e88sm953962oiy.38.2023.03.10.06.47.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:47:33 -0800 (PST)
-Received: (nullmailer pid 1543252 invoked by uid 1000);
-        Fri, 10 Mar 2023 14:47:11 -0000
+        Fri, 10 Mar 2023 06:47:40 -0800 (PST)
+Received: (nullmailer pid 1543406 invoked by uid 1000);
+        Fri, 10 Mar 2023 14:47:12 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Bin Liu <bin.liu@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Hyun Kwon <hyun.kwon@xilinx.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] media: Use of_property_present() for testing DT property presence
-Date:   Fri, 10 Mar 2023 08:47:11 -0600
-Message-Id: <20230310144711.1543225-1-robh@kernel.org>
+To:     Lee Jones <lee@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH] mfd: Use of_property_present() for testing DT property presence
+Date:   Fri, 10 Mar 2023 08:47:12 -0600
+Message-Id: <20230310144712.1543379-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -80,64 +79,50 @@ for presence of a property and nothing more.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c        | 2 +-
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c | 2 +-
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c | 2 +-
- drivers/media/platform/xilinx/xilinx-vtc.c                  | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/mfd/bcm2835-pm.c | 2 +-
+ drivers/mfd/khadas-mcu.c | 2 +-
+ drivers/mfd/stmpe.c      | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 969516a940ba..1a2b3214b6f8 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -1757,7 +1757,7 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
- 	jpeg->vdev->device_caps = V4L2_CAP_STREAMING |
- 				  V4L2_CAP_VIDEO_M2M_MPLANE;
+diff --git a/drivers/mfd/bcm2835-pm.c b/drivers/mfd/bcm2835-pm.c
+index 49cd1f03884a..aa1263d22249 100644
+--- a/drivers/mfd/bcm2835-pm.c
++++ b/drivers/mfd/bcm2835-pm.c
+@@ -28,7 +28,7 @@ static const struct mfd_cell bcm2835_power_devs[] = {
+ static int bcm2835_pm_get_pdata(struct platform_device *pdev,
+ 				struct bcm2835_pm *pm)
+ {
+-	if (of_find_property(pm->dev->of_node, "reg-names", NULL)) {
++	if (of_property_present(pm->dev->of_node, "reg-names")) {
+ 		struct resource *res;
  
--	if (of_get_property(pdev->dev.of_node, "dma-ranges", NULL))
-+	if (of_property_present(pdev->dev.of_node, "dma-ranges"))
- 		dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(34));
+ 		pm->base = devm_platform_ioremap_resource_byname(pdev, "pm");
+diff --git a/drivers/mfd/khadas-mcu.c b/drivers/mfd/khadas-mcu.c
+index 7338cc16f327..1c807c0e6d25 100644
+--- a/drivers/mfd/khadas-mcu.c
++++ b/drivers/mfd/khadas-mcu.c
+@@ -112,7 +112,7 @@ static int khadas_mcu_probe(struct i2c_client *client)
+ 	if (ret)
+ 		return ret;
  
- 	ret = video_register_device(jpeg->vdev, VFL_TYPE_VIDEO, -1);
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-index 174a6eec2f54..d2db8ccaa4c0 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-@@ -321,7 +321,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		}
- 	}
+-	if (of_find_property(dev->of_node, "#cooling-cells", NULL))
++	if (of_property_present(dev->of_node, "#cooling-cells"))
+ 		return devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE,
+ 					    khadas_mcu_fan_cells,
+ 					    ARRAY_SIZE(khadas_mcu_fan_cells),
+diff --git a/drivers/mfd/stmpe.c b/drivers/mfd/stmpe.c
+index c304d20bb988..a92301dfc712 100644
+--- a/drivers/mfd/stmpe.c
++++ b/drivers/mfd/stmpe.c
+@@ -1378,7 +1378,7 @@ int stmpe_probe(struct stmpe_client_info *ci, enum stmpe_partnum partnum)
  
--	if (of_get_property(pdev->dev.of_node, "dma-ranges", NULL)) {
-+	if (of_property_present(pdev->dev.of_node, "dma-ranges")) {
- 		ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(34));
- 		if (ret) {
- 			mtk_v4l2_err("Failed to set mask");
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-index 9095186d5495..199042034a3c 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-@@ -344,7 +344,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		goto err_event_workq;
- 	}
+ 	stmpe_of_probe(pdata, np);
  
--	if (of_get_property(pdev->dev.of_node, "dma-ranges", NULL))
-+	if (of_property_present(pdev->dev.of_node, "dma-ranges"))
- 		dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(34));
+-	if (of_find_property(np, "interrupts", NULL) == NULL)
++	if (!of_property_present(np, "interrupts"))
+ 		ci->irq = -1;
  
- 	ret = video_register_device(vfd_enc, VFL_TYPE_VIDEO, -1);
-diff --git a/drivers/media/platform/xilinx/xilinx-vtc.c b/drivers/media/platform/xilinx/xilinx-vtc.c
-index 0ae0208d7529..cb4b421a348d 100644
---- a/drivers/media/platform/xilinx/xilinx-vtc.c
-+++ b/drivers/media/platform/xilinx/xilinx-vtc.c
-@@ -254,7 +254,7 @@ struct xvtc_device *xvtc_of_get(struct device_node *np)
- 	struct xvtc_device *found = NULL;
- 	struct xvtc_device *xvtc;
- 
--	if (!of_find_property(np, "xlnx,vtc", NULL))
-+	if (!of_property_present(np, "xlnx,vtc"))
- 		return NULL;
- 
- 	xvtc_node = of_parse_phandle(np, "xlnx,vtc", 0);
+ 	stmpe = devm_kzalloc(ci->dev, sizeof(struct stmpe), GFP_KERNEL);
 -- 
 2.39.2
 
