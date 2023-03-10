@@ -2,133 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE706B3857
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5E16B385A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjCJISB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 03:18:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
+        id S230036AbjCJISe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 03:18:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCJIR5 (ORCPT
+        with ESMTP id S229471AbjCJISa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:17:57 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BC010C1;
-        Fri, 10 Mar 2023 00:17:55 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PXzSb0FQ0z4f3jJ2;
-        Fri, 10 Mar 2023 16:17:51 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP4 (Coremail) with SMTP id gCh0CgC3Z6uR5wpkmoVgFA--.35999S2;
-        Fri, 10 Mar 2023 16:17:52 +0800 (CST)
-Subject: Re: [PATCH v3 00/20] Some bugfix and cleanup to mballoc
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, ojaswin@linux.ibm.com,
-        ritesh.list@gmail.com
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230303172120.3800725-1-shikemeng@huaweicloud.com>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <5e5691cd-3308-be3b-91d5-9fa1ab9ec98d@huaweicloud.com>
-Date:   Fri, 10 Mar 2023 16:17:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Fri, 10 Mar 2023 03:18:30 -0500
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FAE3D914;
+        Fri, 10 Mar 2023 00:18:28 -0800 (PST)
+Received: by mail-qt1-f179.google.com with SMTP id r5so4917612qtp.4;
+        Fri, 10 Mar 2023 00:18:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678436308;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yspyhPwTEevuTgvrljFgxGQolMO4MrGaHvprikKC5aM=;
+        b=iiObsxCrqIQLjm231L19w91Alt5cuo96Iq/qRNifujk6O1mWdvljOumB3+aGe5Cnlr
+         md4yIq78NxMirVmF+7k3I0QjhN4sLruimRgIPLQneFX/ylE8Vff7GLa714D3ChylEPlP
+         RJDxxDtcbn01M+UE1wbmLAnonuIH2DIeor25qf/h73ilifM8XH5eD72y3BQcGYq4NtqX
+         z0+ZC/dllnfwPKkYRQQ9mC+5wmbVJzCnqthQrUpDR/PVwDHf3AOYyBchp1FyeSNuml8U
+         6DWqBfF1bPDhivde2VzMx/Rb0/U3A4xVjdb8JKaUOJg95uZnWhC6z2mdnWNnEK/dbl/L
+         TnoQ==
+X-Gm-Message-State: AO0yUKWunXW8Tp56kHULAU6qHemqmVcOn99w25jWPckBRmXzcC9GLD/O
+        pisVQHm/xvjFZRwIPR0NRJ90NxXnuDelVQ==
+X-Google-Smtp-Source: AK7set/10Cxoo3LbOg/aWY6ZjdFi5u3QlgRZJ2MrBBGOzvizbJGfS1eonnBM1rVTqXCghyGVCH3g8w==
+X-Received: by 2002:a05:622a:1d1:b0:3c0:14ec:bfb2 with SMTP id t17-20020a05622a01d100b003c014ecbfb2mr15773947qtw.20.1678436307794;
+        Fri, 10 Mar 2023 00:18:27 -0800 (PST)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id c4-20020ac86604000000b003bfaae103f6sm949909qtp.89.2023.03.10.00.18.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 00:18:27 -0800 (PST)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-536b7ffdd34so83697827b3.6;
+        Fri, 10 Mar 2023 00:18:26 -0800 (PST)
+X-Received: by 2002:a81:af4b:0:b0:533:91d2:9d94 with SMTP id
+ x11-20020a81af4b000000b0053391d29d94mr16066861ywj.5.1678436306111; Fri, 10
+ Mar 2023 00:18:26 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20230303172120.3800725-1-shikemeng@huaweicloud.com>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: gCh0CgC3Z6uR5wpkmoVgFA--.35999S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXry8GrWrJr47Xw1kWr1rJFb_yoW5CF48pF
-        43CrnxK34xXr12yFZIkw45Jw1fW3y8Gw45GFyIg348Ar13Ar9aqrnrKF95uFWUJrZ7X3Zx
-        ZayavryUGw1kAa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230309160201.5163-1-tzimmermann@suse.de> <20230309160201.5163-62-tzimmermann@suse.de>
+In-Reply-To: <20230309160201.5163-62-tzimmermann@suse.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 10 Mar 2023 09:18:14 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUi9s6TCyQMsMwFErmvgb_RppAMHjBuXNSRk7rEAuiGrA@mail.gmail.com>
+Message-ID: <CAMuHMdUi9s6TCyQMsMwFErmvgb_RppAMHjBuXNSRk7rEAuiGrA@mail.gmail.com>
+Subject: Re: [PATCH v2 061/101] fbdev/ps3fb: Duplicate video-mode option string
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     deller@gmx.de, timur@kernel.org, rdunlap@infradead.org,
+        paulus@samba.org, benh@kernel.crashing.org, linux@armlinux.org.uk,
+        pjones@redhat.com, adaplas@gmail.com, s.hauer@pengutronix.de,
+        shawnguo@kernel.org, mbroemme@libmpq.org, thomas@winischhofer.net,
+        James.Bottomley@hansenpartnership.com, sudipm.mukherjee@gmail.com,
+        teddy.wang@siliconmotion.com, corbet@lwn.net,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Thomas,
 
+On Thu, Mar 9, 2023 at 5:02 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> Assume that the driver does not own the option string or its substrings
+> and hence duplicate the option string for the video mode. Allocate the
+> copy's memory with kstrdup() and free it in the module's exit function.
+>
+> Done in preparation of switching the driver to struct option_iter and
+> constifying the option string.
+>
+> v2:
+>         * replace static memory with kstrdup()/kfree() (Geert)
+>
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 
-on 3/4/2023 1:21 AM, Kemeng Shi wrote:
-> Hi, this series contain some random cleanup patches and some bugfix
-> patches to make EXT4_MB_HINT_GOAL_ONLY work properly, protect pa->pa_free
-> from race and so on. More details can be found in git log.
-> Thanks!
-> 
-> ---
-> V3:
-> -patch 01/20 "ext4: set goal start correctly in
-> ext4_mb_normalize_request" correctly record goal in ac_g_ex instead of
-> ac_f_ex, this also trigger another original bug that wanted goal maybe
-> out of valid data block range. Add valid range check in patch 01/20
-> to fully fix the bug.
-> -run "kvm-xfstests smoke" and all tests are passed except generic/454.
-> This test also failed in running kernel without this patchset, so
-> it's unlikely caused by this patchset. I'm trying to figure out the
-> reason but it may take a while as I'm not family with kvm-xfstests.
-> Just send this series for early review and maybe some help to pass
-> the failed test case.
-I re-run "kvm-xfstests smoke" with newly root_fs.img and all tests pass.
-It may be the early test which triggerred bug and corruptted the metadata
-casues failure.
-> ---
-> V2:
-> -Add signed-off from Ritesh and Ojaswin to patch 3/20 "ext4: get correct
-> ext4_group_info in ext4_mb_prefetch_fini" as this is a duplicate of
-> a patch under reviewing.
-> -Split out original patch "ext4: avoid to use preallocated blocks if
-> EXT4_MB_HINT_GOAL_ONLY is set" which will be resend after improved.
-> -Improve log information of patch 20.
-> -Collect Reviewed-by from Ojaswin and Ritesh. Now only patch 3, 12 and
-> 20 need futher review.
-> ---
-> 
-> 
-> Kemeng Shi (20):
->   ext4: set goal start correctly in ext4_mb_normalize_request
->   ext4: allow to find by goal if EXT4_MB_HINT_GOAL_ONLY is set
->   ext4: get correct ext4_group_info in ext4_mb_prefetch_fini
->   ext4: correct calculation of s_mb_preallocated
->   ext4: correct start of used group pa for debug in ext4_mb_use_group_pa
->   ext4: protect pa->pa_free in ext4_discard_allocated_blocks
->   ext4: add missed brelse in ext4_free_blocks_simple
->   ext4: remove unused return value of ext4_mb_try_best_found and
->     ext4_mb_free_metadata
->   ext4: Remove unnecessary release when memory allocation failed in
->     ext4_mb_init_cache
->   ext4: remove unnecessary e4b->bd_buddy_page check in
->     ext4_mb_load_buddy_gfp
->   ext4: remove unnecessary check in ext4_mb_new_blocks
->   ext4: remove dead check in mb_buddy_mark_free
->   ext4: remove ac->ac_found > sbi->s_mb_min_to_scan dead check in
->     ext4_mb_check_limits
->   ext4: use best found when complex scan of group finishs
->   ext4: remove unnecessary exit_meta_group_info tag
->   ext4: remove unnecessary count2 in ext4_free_data_in_buddy
->   ext4: remove unnecessary goto in ext4_mb_mark_diskspace_used
->   ext4: remove repeat assignment to ac_f_ex
->   ext4: remove comment code ext4_discard_preallocations
->   ext4: simplify calculation of blkoff in ext4_mb_new_blocks_simple
-> 
->  fs/ext4/mballoc.c | 111 ++++++++++++++++++----------------------------
->  1 file changed, 43 insertions(+), 68 deletions(-)
-> 
+Thanks for the upodate!
+
+> --- a/drivers/video/fbdev/ps3fb.c
+> +++ b/drivers/video/fbdev/ps3fb.c
+> @@ -260,6 +260,7 @@ static const struct fb_videomode ps3fb_modedb[] = {
+>  static int ps3fb_mode;
+>  module_param(ps3fb_mode, int, 0);
+>
+> +static char *mode_option_buf;
+
+Do you really need this variable? It contains the same value
+as mode_option below.
+This is a common pattern in several patches.
+
+>  static char *mode_option;
+>
+>  static int ps3fb_cmp_mode(const struct fb_videomode *vmode,
+> @@ -1276,8 +1277,11 @@ static int __init ps3fb_setup(void)
+>                         continue;
+>                 if (!strncmp(this_opt, "mode:", 5))
+>                         ps3fb_mode = simple_strtoul(this_opt + 5, NULL, 0);
+> -               else
+> -                       mode_option = this_opt;
+> +               else {
+> +                       kfree(mode_option_buf);
+> +                       mode_option_buf = kstrdup(this_opt, GFP_KERNEL); // ignore errors
+> +                       mode_option = mode_option_buf;
+> +               }
+>         }
+>         return 0;
+>  }
+> @@ -1294,6 +1298,7 @@ static void __exit ps3fb_exit(void)
+>  {
+>         pr_debug(" -> %s:%d\n", __func__, __LINE__);
+>         ps3_system_bus_driver_unregister(&ps3fb_driver);
+> +       kfree(mode_option_buf);
+>         pr_debug(" <- %s:%d\n", __func__, __LINE__);
+>  }
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Best wishes
-Kemeng Shi
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
