@@ -2,241 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194F56B4F42
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 18:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC05B6B4F51
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 18:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjCJRmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 12:42:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
+        id S231192AbjCJRpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 12:45:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbjCJRmK (ORCPT
+        with ESMTP id S231886AbjCJRpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 12:42:10 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AFF12DC0D
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 09:41:24 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id a2so6400097plm.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 09:41:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678470083;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9i01GHUbBCk3rnTRWnFMgPlkOeiOaiqgzdCZVZASJxs=;
-        b=IECSjKaVJTupiu7cziuQExZtGqDUR877vSWtG6NaFDHfm0fLdIWPGaGudpvpqieV2Q
-         2SwruSxTo/Dc+bCgJEx7kJQ0gTpUqbINF0apdm/2fxMGakqMEeu1FCLeiVpSmg/DlSXc
-         klxi3OHIww37WozkkjHY4EGDF86u06cxDbZLk9zMde+izrNUc0YxDn0SNGx+jGpIocA8
-         n7XnYaIh3WzfP7y0cHeP7iJCdgJqlgiF20sYwiQpU+OIlE42L2wUC69M157Zb66u4+jq
-         UVXaaUKgNgXbpdUP/7wvcyatiDUzkhw/KfyQxJMCXZSMLRPu3jWTlSOf/89cfVcKNTIk
-         dnJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678470083;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9i01GHUbBCk3rnTRWnFMgPlkOeiOaiqgzdCZVZASJxs=;
-        b=BI+NxBtIUdpVFh9LG/mw+otO3uoWbu8sho2ipWiSZfySjv1iMDuYS9PjYteLKPbjG9
-         hNWgHlSgqwSMRrwD3PrEM249tMq/QysOSWM+uM2sPv00wJ+FnrTuVefXQn8D3LbRmLwJ
-         YPmHb89qexlVWJ/RkyBc1YfISmb4iQAL9lpn54+sT5CiTUuLf000fwe5zHMq1OMaPBho
-         UNU8xs/qfX64sT0QyCk2ymx2sAWI+XHAkyIaSoONUJHqr6nsi37sC767zgEZhLXuyL/2
-         bEDJptoTL0tiDeq14pae+rEah7TUCN4BnZs7ycq8UNj/K2TWGrRiJQkAbvvgRONbII1e
-         wpWw==
-X-Gm-Message-State: AO0yUKVZ08m/FudNbtB/aBC6Xutw6bz0eWjyxOK4K427VLkebFcGu/38
-        NKxXLxr0T4B44vbgKwB3PtNGsK0UrvOr8egTXCw4UA==
-X-Google-Smtp-Source: AK7set+B943YKtR8tOTl36xpuw9/f7/8OomUcUBm+hMbC1PQDc3TJfFM/qdNItwupJpJWPycii8cIXVvL5+5QhY/SsU=
-X-Received: by 2002:a17:90a:c688:b0:22c:89b:8e97 with SMTP id
- n8-20020a17090ac68800b0022c089b8e97mr1183720pjt.1.1678470082815; Fri, 10 Mar
- 2023 09:41:22 -0800 (PST)
+        Fri, 10 Mar 2023 12:45:12 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2078.outbound.protection.outlook.com [40.107.93.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB5E12C420
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 09:44:27 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lEytnBFP8Fjm1zuJN0l075gOeWPQrDSlvElRVEnxyhquUu0xd5rznp+3AooCfWM5aXWioEl8o5AbTZZrAY/JaMPuvWGeTX5MwAosePyqWcW/cA7/5FHwBvKi3B2qMTlgex2hLbVR3yB/3BwNuo0JQ6YZfNRF7QWMGE7AKYwRpr53HvZnV/f0mZhafR6HYQAgHLVcN2npWGGgwUf05+cBo0fzqiBag9smRxPoZbSrlIyuXTU7Cn3pnzL3jHo60PilRGs7u971l7DpcTr0U9/bq8tlmRH3EWhmF9coRUkCHwEcQU8PLX1kQmoM/QsNo7uXQmhDLZELbolfaYsQm2Phmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hwwkSYXstHi+ju8cAOpPNznqEOLhxKgO8eKpmMfnDsc=;
+ b=BwftcvmTWDnWp26Xub5tYjHeQrR4nsDs4OvEgoz8nwZfQ4qpHeo1nG79+rMjyPiVCU6v+9TfPpPlk06M8lTibQqt2Vcc8TINtfNGOdqxdrta1dJEJKU20cpp00k2RehB0o0MBZxLHwpsD5FbamOEADcz5wr1wYWoDcAWyPN6FxOOAPubnpP+toRoZxV7w8zl2dE8eyYu+MC9nkzRjtuACbZW8fi51oDtMLwhHEpqAsxWLI/kEFQD12XA0Wt+aF8FiAT2byAED2ZAuKt+r9aO2V2mvlzetowoYmLBiIlZ7cmEsa1qMPizSWd0Y5unLdpHA0IeEeX9kBMud4t7ysTyLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hwwkSYXstHi+ju8cAOpPNznqEOLhxKgO8eKpmMfnDsc=;
+ b=ulWFwYOLyZBd+eiaBTwAqXYfpK0U/Inn5O3+aNAluY5f248UFw2/YpMa1L5KimdggA1+wrfjAsCDn6TLccnolI+GT6oqu5B9armWaVmyEeV3aQWB0d0+hy1kVJ/z8IrJtCAQNBo3Z7ERUVz0RWwUEBJenp6pufr5kjC4LZyDew4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
+ by SJ0PR12MB6880.namprd12.prod.outlook.com (2603:10b6:a03:485::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
+ 2023 17:42:56 +0000
+Received: from MN2PR12MB2941.namprd12.prod.outlook.com
+ ([fe80::699d:42b8:93ed:76da]) by MN2PR12MB2941.namprd12.prod.outlook.com
+ ([fe80::699d:42b8:93ed:76da%3]) with mapi id 15.20.6178.019; Fri, 10 Mar 2023
+ 17:42:56 +0000
+Message-ID: <300c4dd2-29bc-0f9f-1d6d-b8b65bf6c69c@amd.com>
+Date:   Fri, 10 Mar 2023 10:42:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] drm/amd/display: use a more accurate check in
+ dm_helpers_dp_read_dpcd()
+Content-Language: en-US
+To:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        amd-gfx@lists.freedesktop.org
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
+        Wayne Lin <Wayne.Lin@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Ian Chen <ian.chen@amd.com>,
+        Sung Joon Kim <sungjoon.kim@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230309213027.256243-1-hamza.mahfooz@amd.com>
+From:   Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
+In-Reply-To: <20230309213027.256243-1-hamza.mahfooz@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR03CA0450.namprd03.prod.outlook.com
+ (2603:10b6:610:10e::28) To MN2PR12MB2941.namprd12.prod.outlook.com
+ (2603:10b6:208:a9::12)
 MIME-Version: 1.0
-References: <20230301214952.2190757-1-saravanak@google.com> <aca28784-c526-566b-dd7c-9cfda17e697a@foss.st.com>
-In-Reply-To: <aca28784-c526-566b-dd7c-9cfda17e697a@foss.st.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 10 Mar 2023 09:40:46 -0800
-Message-ID: <CAGETcx8K47t6X4biCYq+m8NcQFrUMyXvHknCRYUkuUbkw1_i6g@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Yongqin Liu <yongqin.liu@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB2941:EE_|SJ0PR12MB6880:EE_
+X-MS-Office365-Filtering-Correlation-Id: f02582a3-5812-437e-3d20-08db218ee1b2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nQ+CZKJ+c8EC7muRtyxC3ElamAEORNIvwAWAKyUFR2Ze5QawpaSrJk0wwaQMTDp84HY1SAAEVyzDq/qRhKqiEAj0Iob4kJTzhng/04n7Ukc12xx6eftqg+fYpID11PoB43h7CE8ZarzwkvJG5CCIRVZ+C+8Tcl560SM3RDuWPOJJ/IW3/lbDyed2klHM4DMf2NEnoCL5w+rj3ONI7IdPNyzd7PL//8x8DqNXMkut5HX5dmBJ9mK9aKwLykAR6vIz2dga9SJSp7iloPDz1TKpimh+Xfl6aPuujWJ83lUIoi3ZoAzJq6xJL4mYGD/vSTGPTXhh7BiJ6almTmcz32ZMcnsnPz6JmFeRQ25fMWtH94AOekXYo5ofMQ8N0tzOc3j0SLhLwBQvxjiF2fwLEVQ8XmfjW+wAwDOfiZQcnHlwFGGPXJKdjdBy7OjPPNxm5+WAKlhJGp2Cy2oTgGXuv9n5b2jAqGVee4gWZnHPXGz1cDjtCe9PFt7jDHGbmpLIx6SuhBsUcTf/BoIkcVShshW2/OA/q6Vxsje4BWX9J/zCI4uvXD+e1uc6xOl0ngSMhF02J+SaYigscAVYLzI7PAY91/ItesxcWij1qwFutot2LPY68o5YJDjN6I76PsvkcrvawX54J3lKo2PIlu4RWT8dehehD2RnkYGwNtUiqX0uPhA8VPfse+AaXb+4eMH/2uw2G0mz1x/Nux+YBgK+y8mCWZJ0qXG6JSu1/dDxei+HJHE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(39860400002)(366004)(346002)(136003)(451199018)(31686004)(54906003)(316002)(36756003)(86362001)(38100700002)(31696002)(6506007)(83380400001)(6666004)(53546011)(6512007)(186003)(2616005)(5660300002)(6486002)(478600001)(8936002)(41300700001)(2906002)(66476007)(4326008)(66556008)(8676002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QlQwVVdobnlseWI0RFRFUjZWSi9GaHVCblNGbnFkZnJJYTE4aVJWZ21Rb29C?=
+ =?utf-8?B?QnlTbFBoNUN0YjJseEVvb2NMTWNXTlhNVXppU2ZMRkJVd09GbjE0bXQxS2hu?=
+ =?utf-8?B?dnAzbHpUbER6L1drcm5ZUzhNcXk4dWUvT1h1ZGs0TDlNalg0SE5UakgxMU81?=
+ =?utf-8?B?Z0c3MVZ2dzVIcW9McWlWSEp1RmJOYWY2OFNzeUR4aWh2RyszN1owbmozVVd1?=
+ =?utf-8?B?VjAzd2ZRaDJ1QWY2VHVDeVFDbkVoTG93Z2JlZGMxUnJleGhjTFlyMVlFZlBB?=
+ =?utf-8?B?NEZIcXhTRmhoaE91SnhHTUFMaDlvUmdEclUram5mbWZIbEluQ1hwTWFRK1RY?=
+ =?utf-8?B?T2NWcjRvUVNCZEcrL2NwbTRaSW8vdGZGa3IxN0VEM05tK2lTVTJDMVEzYktp?=
+ =?utf-8?B?ckNGTUp6LzRVVG1lSEM2bUtEVmFNVkRpeW9ZYytGNjRSZ3VsRDVhaGhTWDgw?=
+ =?utf-8?B?WW4rUytKNFR0Ym9HZjA5b3A3UThUUDJhOGp6OS9mRnNaaTZVbXJPQ2Z2V0dR?=
+ =?utf-8?B?QlN4Nk9rVG1OT3o5ZzJETUpRYy91T2FQRUNCT0xOSU83cHJQM1hkUytnaHU3?=
+ =?utf-8?B?SzF2am9TRjNhaVQzN3k2eklJSTdKbTVaTXpHYjJuN0pZQ1FSOFQrRU1NcWJK?=
+ =?utf-8?B?WEpHUVpHK2M4cG9BVWZaQnpDV1pZbHhmRjhQOVd1YVpxMjZVemxkemVDWnZa?=
+ =?utf-8?B?ek9BVHhVTzg1Nks5ZUtYbmtud3ZvaURtK1o0UmltejRBZ0ZYaG9RMWJmSFV4?=
+ =?utf-8?B?R3c2c2ZySEtEajFGeXdrNTVodG41Q3lqR0NXMGF3ZXl1a2dXakFxQXh2UnJo?=
+ =?utf-8?B?Sks2bkJCNXFrb3Z0MzVjcDlhZld4WkV1bWlVcGlHNDFvOGlBdFdqa2MwODBt?=
+ =?utf-8?B?YzFNT2dFTXZHWWlmMGIvUWFJTEJrK3VmR2xWYUFPOHMxU2ZrSU5pR0I5cm5J?=
+ =?utf-8?B?VVM3MzZFNHorN3AxNzRSVjhQUmZ6Qys5TjhNSmZsc1Q3RDJGY01ZcmFaMjl1?=
+ =?utf-8?B?b2NnK1h0aEJKQWJWS1IvWUlReitrc2c2d1d0aUdYY1h1QXNaelhSeTE1VDdq?=
+ =?utf-8?B?ZS9EVHpTMENrUnVIcW9CYlRndHpUMU9DS0crSUI4T0crci9QWHZTS3FaUEhK?=
+ =?utf-8?B?c0ZJbVlJWWxPTnZ2RWtiQVRWVDRuekVjYmFBcHUySWx3emhUK1Z1aWt0NzNR?=
+ =?utf-8?B?UlpYY2ZXeEgvNFZKYU9BemZ4anJiVDU0bGFYYjdvYlp4SytUSkpKWm1RTWVt?=
+ =?utf-8?B?QmJVMFllRGZoTFBMbzNweFVBandkNEM3dllpeVRCMEVjc3ZBQ3Z2Q2JCV2Fi?=
+ =?utf-8?B?ekMyTnRzM3NrUGZIQUJlSExBa0dYaFRUZXh3RElBemdoVmYrYjNoSU9MRExJ?=
+ =?utf-8?B?OEdiQU4vSnlwZHI4cHVZV01iMkx0bUdKbWNHSGh0d2pMVWFqRGdBMDBhVE4x?=
+ =?utf-8?B?NVlEc1NmT0U3NGNmeEFlOGpwamxHRnBGRU9UcWRUeXZielM2bGk0QWdkc05a?=
+ =?utf-8?B?ODJMYkxCd0QvS3pNUlc4dDJ5cUNPbUNJdnQ0VERiL285Wmw1OUY2R01VMmpk?=
+ =?utf-8?B?N1RIZnl4WFgyaFlFVkRPNk1xQVVTSkQ2YUZXMUNrU2RsS29ValpJQllQZGlw?=
+ =?utf-8?B?Q1I1RXhSNXlnd3BmR0pCSDRQS1pOSUFHSUtzWlBmN2xmYllnY01DNjU5Nzdo?=
+ =?utf-8?B?aTNWWEtXWDFkWWJQaVB4cDRUSEJqMlByZzVlVW91UUlzSlFGYUZwRWV0M3Bz?=
+ =?utf-8?B?TDdCOEtBSWp1N2xUeFdiQ1hxNDk0bVQwd3FreFVscGRoaWFnaFh5YVMwMFRU?=
+ =?utf-8?B?TXA1Z2oybU1hekx5TVhyNGg2QWtkYUJSZnhSbWZBeTRLVFB2Mlp0YWlZUUZX?=
+ =?utf-8?B?Y1hJWkx6cW04cVBDZTI2dnNUbjh2TEZXaHpSUkY4bUthVjFBcWJISU5CTVBr?=
+ =?utf-8?B?UHNNQnh4My81OWVRQzNtV1I5eWtUZDRWWm5MZkZtM2xOZWtBbUIyU2ViajFw?=
+ =?utf-8?B?b25lWE9HTFJ3cjA2NlRhTS92eE9KOHJkVm9wczFwa3lENjhnTkdvK0RISTZo?=
+ =?utf-8?B?SEZLeUcxMWlvU1ZEK2pnemxYQmNld2dFaVpaR1NIMVlPOERlTmJxRzlXVXZo?=
+ =?utf-8?B?YlpJZnkyNkdobFJOT0RveFUwc2xDd0ZpNHFtemVFenFLemNYUFovaVhoK0dQ?=
+ =?utf-8?Q?2MELNqH3ksmE1AuovYO3XmGfzIzW/e93spB8TgDtraUI?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f02582a3-5812-437e-3d20-08db218ee1b2
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 17:42:56.1184
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FD4zHpzNgZVCHuRSSoRMmH/+lsBRIR18HSGudd0L+2oWIB8ChX3r7eLg/VBLH91USLZpFvT+j+rHusVpoZ7jdg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6880
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 9:21=E2=80=AFAM Fabrice Gasnier
-<fabrice.gasnier@foss.st.com> wrote:
->
-> On 3/1/23 22:49, Saravana Kannan wrote:
-> > Yongqin, Martin, Amelie,
-> >
-> > We recent refactor of fw_devlink that ends with commit fb42378dcc7f
-> > ("mtd: mtdpart: Don't create platform device that'll never probe"),
-> > fw_devlink is smarter and doesn't depend on compatible property. So, I
-> > don't think these calls are needed anymore. But I don't have these
-> > devices to test on and be sure and the hardware I use to test changes
-> > doesn't have this issue either.
-> >
-> > Can you please test these changes on the hardware where you hit the
-> > issue to make sure things work as expected?
->
->
-> Hi Saravana,
->
-> Sorry for the late reply,
 
-Thanks for testing!
 
-> On behalf of Amelie, I did some testing on STM32MP15 DK2 board, on top
-> of commit fb42378dcc7f, and also with your series applied.
-> For reference, it's based on: arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
->
-> I noticed some error messages on this board, since the 12 patch series,
-> around the I2C PMIC device links:
->
-> [    3.585514] i2c 1-0033: Failed to create device link with 1-0033
-> [    3.590115] i2c 1-0033: Failed to create device link with 1-0033
-> [    3.596278] i2c 1-0033: Failed to create device link with 1-0033
-> [    3.602188] i2c 1-0033: Failed to create device link with 1-0033
-> [    3.608165] i2c 1-0033: Failed to create device link with 1-0033
-> [    3.614278] i2c 1-0033: Failed to create device link with 1-0033
-> [    3.620256] i2c 1-0033: Failed to create device link with 1-0033
-> [    3.626253] i2c 1-0033: Failed to create device link with 1-0033
-> [    3.632252] i2c 1-0033: Failed to create device link with 1-0033
-> [    3.639001] stpmic1 1-0033: PMIC Chip Version: 0x10
-> [    3.645398] platform 5c002000.i2c:stpmic@33:regulators: Fixed
-> dependency cycle(s) with /soc/i2c@5c00200
-> 0/stpmic@33/regulators/boost
-> [    3.655937] platform 5c002000.i2c:stpmic@33:regulators: Fixed
-> dependency cycle(s) with /soc/i2c@5c00200
-> 0/stpmic@33/regulators/buck2
-> [    3.667824] platform 5c002000.i2c:stpmic@33:regulators: Fixed
-> dependency cycle(s) with /soc/i2c@5c00200
-> 0/stpmic@33/regulators/buck4
-> [    3.719751] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
-> Failed to create device link with 1-0033
-> [    3.728099] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
-> Failed to create device link with 1-0033
-> [    3.737576] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
-> Failed to create device link with 1-0033
-> [    3.747216] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
-> Failed to create device link with 1-0033
-> [    3.756750] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
-> Failed to create device link with 1-0033
-> [    3.766382] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
-> Failed to create device link with 1-0033
-> [    3.775914] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
-> Failed to create device link with 1-0033
-> [    3.785545] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
-> Failed to create device link with 1-0033
+On 3/9/23 14:30, Hamza Mahfooz wrote:
+> We should be checking if drm_dp_dpcd_read() returns the size that we are
+> asking it to read instead of just checking if it is greater than zero.
+> Also, we should WARN_ON() here since this condition is only ever met, if
+> there is an issue worth investigating. So, compare the return value of
+> drm_dp_dpcd_read() to size and WARN_ON() if they aren't equal.
+> 
+> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+> ---
+>   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> index 8d598b322e5b..ed2ed7b1d869 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> @@ -511,8 +511,8 @@ bool dm_helpers_dp_read_dpcd(
+>   		return false;
+>   	}
+>   
+> -	return drm_dp_dpcd_read(&aconnector->dm_dp_aux.aux, address,
+> -			data, size) > 0;
+> +	return !WARN_ON(drm_dp_dpcd_read(&aconnector->dm_dp_aux.aux, address,
+> +					 data, size) != size);
+>   }
+>   
+>   bool dm_helpers_dp_write_dpcd(
 
-You can ignore all the "Failed to create device link" errors. They are
-just error logs for stuff that was being ignored silently before. So
-that's no functional regression AFAIK. I'll fix them separately if
-necessary. And I'm sure you'll see these messages even without my
-fw_devlink refactor series.
 
-> Strangely some of the regulators seems to have "Fixed dependency", but
-> not all.
+Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
 
-Yeah, that's fine too -- that's just fw_devlink being verbose about
-not enforcing probe ordering between devices in that cycle because it
-can't tell which one of the dependencies is not a probe requirement.
-Maybe I'll make it a dbg log if it's confusing people.
+and pushed to amd-staging-drm-next.
 
-> Regarding the typec stusb160x I noticed the message below. It seems
-> correct, right ?
->
-> [   15.962771] typec port0: Fixed dependency cycle(s) with
-> /soc/usb-otg@49000000/port/endpoint
-
-I don't know if there is a cyclic dependency in your DT or not. But
-this message itself is not an issue.
-
-> But sometimes (lets say 1/5 times) during boot, when I have a cable
-> already plugged in, it looks like there's some race condition. The dwc2
-> driver reports some error logs in a loop, indefinitely, up to the
-> watchdog resets the platform :-(.
-
-Can you try this series (the one you are testing) without my
-fw_devlink refactor that ends with commit fb42378dcc7f? Trying to make
-sure we can reproduce the issue Amelie was fixing before I claim my
-refactor series fixes it.
-
-> [   16.288458] dwc2 49000000.usb-otg: Mode Mismatch Interrupt: currently
-> in Host mode
-> [   16.288490] dwc2 49000000.usb-otg: Mode Mismatch Interrupt: currently
-> in Host mode
-> [   16.310429] dwc2 49000000.usb-otg: Mode Mismatch Interrupt: currently
-> in Host mode
->
-> It probably just points some already existing race condition here. Maybe
-> it isn't even linked to this patch. But I have no evidence at this
-> stage. I hope I can investigate further on this one, hopefully I can
-> free up some time for that.
-
-If you never pick up this series, are you not having any of these 1/5
-times boot issues? I wouldn't expect my changes to add any races, but
-I'll wait to see what you find here.
-
-Thanks,
-Saravana
-
->
-> Best Regards,
-> Fabrice
->
-> >
-> > Yongqin, If you didn't have the context, this affected hikey960.
-> >
-> > Greg,
-> >
-> > Let's wait for some tests before we land these.
-> >
-> > Thanks,
-> > Saravana
-> >
-> > Cc: Yongqin Liu <yongqin.liu@linaro.org>
-> > Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> > Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > Cc: Amelie Delaunay <amelie.delaunay@foss.st.com>
-> >
-> > Saravana Kannan (4):
-> >   usb: typec: stusb160x: Remove use of
-> >     fw_devlink_purge_absent_suppliers()
-> >   usb: typec: tipd: Remove use of fw_devlink_purge_absent_suppliers()
-> >   usb: typec: tcpm: Remove use of fw_devlink_purge_absent_suppliers()
-> >   driver core: Delete fw_devlink_purge_absent_suppliers()
-> >
-> >  drivers/base/core.c           | 16 ----------------
-> >  drivers/usb/typec/stusb160x.c |  9 ---------
-> >  drivers/usb/typec/tcpm/tcpm.c |  9 ---------
-> >  drivers/usb/typec/tipd/core.c |  9 ---------
-> >  include/linux/fwnode.h        |  1 -
-> >  5 files changed, 44 deletions(-)
-> >
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+Thanks
+Siqueira
