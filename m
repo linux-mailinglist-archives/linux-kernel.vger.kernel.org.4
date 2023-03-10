@@ -2,138 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2566B4F62
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 18:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 781B96B4F65
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 18:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbjCJRsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 12:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
+        id S230131AbjCJRs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 12:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjCJRsS (ORCPT
+        with ESMTP id S231314AbjCJRsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 12:48:18 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428C611A2F6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 09:47:43 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id x20-20020a17090a8a9400b00233ba727724so8306671pjn.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 09:47:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678470457;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cxGEPKOwr+tmbFiOp83p4hK/QKt7HqPKsBOKDzMhBlo=;
-        b=H8XP1MoNcr9KjteVGhX7zomURyl8s+0CZ8OFezv1JoRblg1566OYEafcR01mg4DhWw
-         36uFcnFShxOwidS6iMe0fCiWfQegp8tsjuegktg2Q7jSVKuJmQ6S3PfNecL3zUmaUUaU
-         V2bj7a00LdpAgDfhvKB28e4PvPKY28lcG1+bnG4KShTw6fhx9t8dL9DKOLzELjHL/b0u
-         bY3MV78r5K5zGnHB7DFYPn5rsmyMz5SdahEiQFPAluhXDrjz+YySUyEmsqckqImvHejX
-         0mK20SbzE9qKWWtoUa7cMhFkDmyMvEQyIhrEEUkrnFDeYMK9ILOuPscqxi7lbtyPfUD9
-         Q/Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678470457;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cxGEPKOwr+tmbFiOp83p4hK/QKt7HqPKsBOKDzMhBlo=;
-        b=Q5m6s/rF51/Tc3+X+TbbQV81FbFNzRybBWfqxw0qQOQO5lVW3bauG6vJlhhleJg2tW
-         NNl4p2cuODWL2Y4AAiEZ5An7q9Ani/0zP1nJEcUAScd3ulTcSpeaul7ujASlWxXeSAgp
-         lv4EQDToRm9NU4QadUvcazLOm/4C42C/lz/az78t66oVLMI3Z3kmbPCS1NhvQYDSklvh
-         AmJ4dYEjPzdyhoIc7KM/cXli+oyGd23WGwhwdIZuq+C0aZXJa4Kc0bZYj62VUCNR6RDH
-         tSeLc+lkflicqe6BokZOLgQhQlQ33kcw5dyCD+cJQzrsE58HJ+d93DAUEzmAe257kVWc
-         kLMg==
-X-Gm-Message-State: AO0yUKXwuaw0kxPyK0RuAlZWja2LfVi6quWAHe84VeeVBg7VCaYSkvaF
-        G6mHNQ/jr0+u9FRLQkmu+Qly29aJY3fVakFpS0G9lg==
-X-Google-Smtp-Source: AK7set9qlzyfJQkPmeS1QvtKn+DzHcVEf//e44mpadhloRlsZ0QlMRrI+kEDfbQXl075/XuicaWTao1yhsQc5P/VAV8=
-X-Received: by 2002:a17:902:edc2:b0:19a:9834:bb2c with SMTP id
- q2-20020a170902edc200b0019a9834bb2cmr10491816plk.11.1678470456953; Fri, 10
- Mar 2023 09:47:36 -0800 (PST)
+        Fri, 10 Mar 2023 12:48:52 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CF011ACBA
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 09:48:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678470506; x=1710006506;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=bee2h7Uihe+QYwTZwZ+fnOq+GIrmw0Sej7yiPuEmRfI=;
+  b=Goo01+efOzv+lyElcZDDrYd0LAEbF0grht/s9oBsVB9uZI1+wdHt5xqT
+   2O0V388RPxtwC+UmjZLm5nPwwmSB0+PABABdy0avUzWmaukb9xqLgiSFx
+   VeLp9vzNur3iGOfnOEwb2u5F8JCfB7qZpC/TYfpCSuJPB7wgnVlueCHgy
+   PE90Lg7OBL6X9DCk6WTJEpsyrklUsigrIpy+5Al2dNMiZbLAZsrrd7lOc
+   9T4FiZa71oo/O3oXg78r6LfP9G5a5Z2+8FYziToyxZtChEoRigE7r57Vf
+   C7r+k8IIlXy3GA1nv0lrkv3VCmT0cR1IWKYTodatSub0t923D5DFtuqQc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="401648388"
+X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
+   d="scan'208";a="401648388"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 09:48:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="766910021"
+X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
+   d="scan'208";a="766910021"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.70])
+  by FMSMGA003.fm.intel.com with SMTP; 10 Mar 2023 09:48:05 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Fri, 10 Mar 2023 19:48:04 +0200
+Date:   Fri, 10 Mar 2023 19:48:04 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Hamza Mahfooz <hamza.mahfooz@amd.com>
+Cc:     amd-gfx@lists.freedesktop.org, Ian Chen <ian.chen@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Wayne Lin <Wayne.Lin@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Sung Joon Kim <sungjoon.kim@amd.com>
+Subject: Re: [PATCH] drm/amd/display: use a more accurate check in
+ dm_helpers_dp_read_dpcd()
+Message-ID: <ZAttVGN/VdrfkH3y@intel.com>
+References: <20230309213027.256243-1-hamza.mahfooz@amd.com>
 MIME-Version: 1.0
-References: <20230310144703.1541888-1-robh@kernel.org>
-In-Reply-To: <20230310144703.1541888-1-robh@kernel.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 10 Mar 2023 18:46:59 +0100
-Message-ID: <CAPDyKFoVUQEmseNT+dZFJDfwh7ijTwUs5_NckpZLhRQ=VuFpFQ@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: Use of_property_present() for testing DT
- property presence
-To:     Rob Herring <robh@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230309213027.256243-1-hamza.mahfooz@amd.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023 at 15:47, Rob Herring <robh@kernel.org> wrote:
->
-> It is preferred to use typed property access functions (i.e.
-> of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties. As
-> part of this, convert of_get_property/of_find_property calls to the
-> recently added of_property_present() helper when we just want to test
-> for presence of a property and nothing more.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Rafael, can you please pick this via your tree.
-
-Kind regards
-Uffe
-
+On Thu, Mar 09, 2023 at 04:30:27PM -0500, Hamza Mahfooz wrote:
+> We should be checking if drm_dp_dpcd_read() returns the size that we are
+> asking it to read instead of just checking if it is greater than zero.
+> Also, we should WARN_ON() here since this condition is only ever met, if
+> there is an issue worth investigating. So, compare the return value of
+> drm_dp_dpcd_read() to size and WARN_ON() if they aren't equal.
+> 
+> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 > ---
->  drivers/cpuidle/cpuidle-psci-domain.c | 2 +-
->  drivers/cpuidle/cpuidle-riscv-sbi.c   | 6 +++---
->  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-> index 6ad2954948a5..e875ddadc51b 100644
-> --- a/drivers/cpuidle/cpuidle-psci-domain.c
-> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-> @@ -165,7 +165,7 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
->          * initialize a genpd/genpd-of-provider pair when it's found.
->          */
->         for_each_child_of_node(np, node) {
-> -               if (!of_find_property(node, "#power-domain-cells", NULL))
-> +               if (!of_property_present(node, "#power-domain-cells"))
->                         continue;
->
->                 ret = psci_pd_init(node, use_osi);
-> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> index be383f4b6855..1fab1abc6eb6 100644
-> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> @@ -497,7 +497,7 @@ static int sbi_genpd_probe(struct device_node *np)
->          * initialize a genpd/genpd-of-provider pair when it's found.
->          */
->         for_each_child_of_node(np, node) {
-> -               if (!of_find_property(node, "#power-domain-cells", NULL))
-> +               if (!of_property_present(node, "#power-domain-cells"))
->                         continue;
->
->                 ret = sbi_pd_init(node);
-> @@ -548,8 +548,8 @@ static int sbi_cpuidle_probe(struct platform_device *pdev)
->         for_each_possible_cpu(cpu) {
->                 np = of_cpu_device_node_get(cpu);
->                 if (np &&
-> -                   of_find_property(np, "power-domains", NULL) &&
-> -                   of_find_property(np, "power-domain-names", NULL)) {
-> +                   of_property_present(np, "power-domains") &&
-> +                   of_property_present(np, "power-domain-names")) {
->                         continue;
->                 } else {
->                         sbi_cpuidle_use_osi = false;
-> --
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> index 8d598b322e5b..ed2ed7b1d869 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> @@ -511,8 +511,8 @@ bool dm_helpers_dp_read_dpcd(
+>  		return false;
+>  	}
+>  
+> -	return drm_dp_dpcd_read(&aconnector->dm_dp_aux.aux, address,
+> -			data, size) > 0;
+> +	return !WARN_ON(drm_dp_dpcd_read(&aconnector->dm_dp_aux.aux, address,
+> +					 data, size) != size);
+
+Just FYI there are devices out there that violate the DP spec and reads
+from specific DPCD registers simply fail instead of returning the
+expected 0.
+
+>  }
+>  
+>  bool dm_helpers_dp_write_dpcd(
+> -- 
 > 2.39.2
->
+
+-- 
+Ville Syrjälä
+Intel
