@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423206B4036
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B6C6B403A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjCJNWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 08:22:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
+        id S230124AbjCJNWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 08:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbjCJNW3 (ORCPT
+        with ESMTP id S230197AbjCJNWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:22:29 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D93FAAFC
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:22:05 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id o12so20317156edb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:22:05 -0800 (PST)
+        Fri, 10 Mar 2023 08:22:30 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8E9FAFB7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:22:07 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id i34so20317006eda.7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:22:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678454524;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=n5T8f82bUHjqZUCty2l1r+11I08uBphsz2e1x3k1UV0=;
-        b=ZUTkGCW33X1K/tCGdzAxxLxfv00/g/6rmybU7DtTJStp08qmKi2SxtwB1gsNK6YkQz
-         CNvEK8w926oxIV6hH/eREA9AcURYcCiNQjL1vf7hLATC4HPBxPMdYNJlkh6GCEAr3PYo
-         WKlIW92zw5ZrfuU9110nSdts3IWyuYpluNf6Xdb2JwuHM17ItMte885aja6p/+C6RP5Q
-         wovOKc/7i5FJ5ykd3HAndnl82TqJ0fGZ4SuhnQz4/rNRhYzMERKIc2nY0kgQcUDWz0zt
-         nwz+kS+fNDMbQMm0OYoZgwbSnApcV7lJYIMYNiUwN+wIKX4OAEtkzBbb84SXLdoAKxXP
-         0yyQ==
+        d=linaro.org; s=google; t=1678454525;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BbnW+HQXXMov2YCkKGIA3Ip1jgaMjvv36rVivoZ/sxY=;
+        b=jp1ewdyS3iKqffGyu1oG2Jm5BRpT1kO1nx77XSIFlV38VmHYOe38jBFOoVttHRTNe6
+         Roumacgk5N0FLiJzU1TCG67mhTvBAtUq2SY9pgVF8aeoZlfmWmQ3bBfYSzNQtJUahwkv
+         6GuIe/C+sTi5cKK2iaJgaC1NfPxcgD7jE6I0cagnZHfqfW5Yiq1DG6rjMeQ0KBSW1tTj
+         jLv6XmhE5Yhr+PORyykLpu3JaCfhuVclH4fH0S5t02UkST8thCLJSoRBot0XGvnTx4rw
+         2ivclRZvIL8g1fJ1UxDjcLRgvaYb5D1YveDZvT5HdTAvvcZXMtIMGE2DM9jfRCI39u3c
+         nE8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678454524;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n5T8f82bUHjqZUCty2l1r+11I08uBphsz2e1x3k1UV0=;
-        b=3Q9/f0zKC8Pn0g9/855YNgnIS+nE+oAHqWS/1/mGgk31WXilq0V4iktUxq+2pB4lwi
-         Im20e4GYdeTaHZh1o/ndku3+gqhmClsCdMstAT28zRj1m2vd1yEbocBk2TEJZ1uN5mC2
-         HpPNuHGv8SCGY9+Mb8RXhnuCcfc6X9gMaNwSkIouVRdz2REmQPBCNDKrF0CV1OnUqowZ
-         g0o3XnO5TUs/V+nSc9JG7hdS+gW9iVHCZ3Fno/qVlpno4Ri0oWf/3TEtB7EzEzurm3zL
-         6luJxn8NGAirDlULdXeEX8MoTPNCV3oOVWOQYUsqL5DTEJ6+JUwzMlrkxBym2+g3ueve
-         tw4A==
-X-Gm-Message-State: AO0yUKUSbxotJKz37pcBXgp/f+zL8b6g9vJpbU201E96fvdj+j1UJsQd
-        YP+g2d0ALe02uBDr7/OZolmw8Q==
-X-Google-Smtp-Source: AK7set9GlyPV0rFLe1f2eiN1gBQ5GV1AdTOmGeTJjZwFIvAIXSn1ibLseUzeiuavtJXID8UiFUym8w==
-X-Received: by 2002:a17:906:a4b:b0:88a:cbd1:e663 with SMTP id x11-20020a1709060a4b00b0088acbd1e663mr22727203ejf.6.1678454524129;
-        Fri, 10 Mar 2023 05:22:04 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678454525;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BbnW+HQXXMov2YCkKGIA3Ip1jgaMjvv36rVivoZ/sxY=;
+        b=m7ZiccYZR1oHBGhTgOAa1LfdifT2cOdiPw7b2P/2MyrPcYVHc6cvB0Epso/OYczPsA
+         co9m74zi/5qvRlYapZVjflUaolLT9ZJvgSBS0+NynCBwQTw04xf89N9lUdfcU4Wr5rKD
+         nNZtpFV16YkORjlydZJE4UNgdE+bWLNMjaqQXib9VPjlMDjjN5gVAIvCXkA7AT0hzVfg
+         DO8Stb12buMUAZONIkKpYCcfF3ILkQ+Uyuo1rdvJpHimEH22BNXVjZC1asw2iayAGKlT
+         OI/lOjcpmdNZNBI9HPI0OZU5gmEJhY+k+9HVQSY/zKP//W6mJYgx4PvsXifV2TMDGXti
+         0k5w==
+X-Gm-Message-State: AO0yUKVu0onQw4J3uP3v+jpW91FPs6Na3pulz7KEw8rgFcKJDIj9BdsZ
+        cub+odtwgkBjXKG/SB3JO4U9oA==
+X-Google-Smtp-Source: AK7set89bwlmiWBuUwrH1uGGkGVacmOgb9VNWvOfJbCJIbNr2Ma9v0H90OaSF5yRm6toBSO+Hozexw==
+X-Received: by 2002:a17:906:eecc:b0:90b:167e:3050 with SMTP id wu12-20020a170906eecc00b0090b167e3050mr31863715ejb.36.1678454525311;
+        Fri, 10 Mar 2023 05:22:05 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:45c4:46be:ec71:4a51])
-        by smtp.gmail.com with ESMTPSA id zc4-20020a170906988400b008b17879ec95sm959124ejb.22.2023.03.10.05.22.03
+        by smtp.gmail.com with ESMTPSA id zc4-20020a170906988400b008b17879ec95sm959124ejb.22.2023.03.10.05.22.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 05:22:03 -0800 (PST)
+        Fri, 10 Mar 2023 05:22:04 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -64,10 +65,12 @@ To:     Andy Gross <agross@kernel.org>,
         alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 0/9] ASoC: add audio digital codecs for Qualcomm SM8550
-Date:   Fri, 10 Mar 2023 14:21:52 +0100
-Message-Id: <20230310132201.322148-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/9] ASoC: dt-bindings: qcom,lpass-rx-macro: narrow clocks per variants
+Date:   Fri, 10 Mar 2023 14:21:53 +0100
+Message-Id: <20230310132201.322148-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230310132201.322148-1-krzysztof.kozlowski@linaro.org>
+References: <20230310132201.322148-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,43 +83,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Currently the Qualcomm RX macro codec binding allows two different clock
+setups - with (for ADSP) and without macro/dcodec entries (for ADSP
+bypassed).  With more devices coming soon, this will keep growing, thus
+rework the clocks/clock-names to be specific for each binding.
 
-Dependencies
-============
-For va-macro bindings:
-https://lore.kernel.org/r/20221118071849.25506-2-srinivas.kandagatla@linaro.org
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/sound/qcom,lpass-rx-macro.yaml   | 58 ++++++++++++++-----
+ 1 file changed, 44 insertions(+), 14 deletions(-)
 
-NOT a dependency
-================
-The patchset can be applied independently of my previous fix:
-https://lore.kernel.org/linux-arm-msm/20230310100937.32485-1-krzysztof.kozlowski@linaro.org/T/#u
-
-Logically, better if they were together, but code will work fine other way.
-
-Best regards,
-Krzysztof
-
-Krzysztof Kozlowski (9):
-  ASoC: dt-bindings: qcom,lpass-rx-macro: narrow clocks per variants
-  ASoC: dt-bindings: qcom,lpass-rx-macro: Add SM8550 RX macro
-  ASoC: codecs: lpass-rx-macro: add support for SM8550
-  ASoC: dt-bindings: qcom,lpass-tx-macro: narrow clocks per variants
-  ASoC: dt-bindings: qcom,lpass-tx-macro: Add SM8550 TX macro
-  ASoC: codecs: lpass-tx-macro: add support for SM8550
-  ASoC: dt-bindings: qcom,lpass-va-macro: Add SM8550 VA macro
-  ASoC: dt-bindings: qcom,lpass-wsa-macro: Add SM8550 WSA macro
-  ASoC: codecs: lpass-wsa-macro: add support for SM8550
-
- .../bindings/sound/qcom,lpass-rx-macro.yaml   | 76 +++++++++++++----
- .../bindings/sound/qcom,lpass-tx-macro.yaml   | 81 +++++++++++++++----
- .../bindings/sound/qcom,lpass-va-macro.yaml   | 18 +++++
- .../bindings/sound/qcom,lpass-wsa-macro.yaml  | 23 +++++-
- sound/soc/codecs/lpass-rx-macro.c             | 39 +++++++--
- sound/soc/codecs/lpass-tx-macro.c             | 38 +++++++--
- sound/soc/codecs/lpass-wsa-macro.c            | 38 +++++++--
- 7 files changed, 256 insertions(+), 57 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml b/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml
+index b0b95689d78b..8b3d617a9578 100644
+--- a/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml
++++ b/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml
+@@ -9,9 +9,6 @@ title: LPASS(Low Power Audio Subsystem) RX Macro audio codec
+ maintainers:
+   - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+ 
+-allOf:
+-  - $ref: dai-common.yaml#
+-
+ properties:
+   compatible:
+     enum:
+@@ -34,17 +31,8 @@ properties:
+     maxItems: 5
+ 
+   clock-names:
+-    oneOf:
+-      - items:   #for ADSP based platforms
+-          - const: mclk
+-          - const: npl
+-          - const: macro
+-          - const: dcodec
+-          - const: fsgen
+-      - items:   #for ADSP bypass based platforms
+-          - const: mclk
+-          - const: npl
+-          - const: fsgen
++    minItems: 3
++    maxItems: 5
+ 
+   clock-output-names:
+     maxItems: 1
+@@ -62,6 +50,48 @@ required:
+   - reg
+   - "#sound-dai-cells"
+ 
++allOf:
++  - $ref: dai-common.yaml#
++  - if:
++      properties:
++        compatible:
++          enum:
++            - qcom,sc7280-lpass-rx-macro
++    then:
++      properties:
++        clock-names:
++          oneOf:
++            - items:   #for ADSP based platforms
++                - const: mclk
++                - const: npl
++                - const: macro
++                - const: dcodec
++                - const: fsgen
++            - items:   #for ADSP bypass based platforms
++                - const: mclk
++                - const: npl
++                - const: fsgen
++
++  - if:
++      properties:
++        compatible:
++          enum:
++            - qcom,sc8280xp-lpass-rx-macro
++            - qcom,sm8250-lpass-rx-macro
++            - qcom,sm8450-lpass-rx-macro
++    then:
++      properties:
++        clocks:
++          minItems: 5
++          maxItems: 5
++        clock-names:
++          items:
++            - const: mclk
++            - const: npl
++            - const: macro
++            - const: dcodec
++            - const: fsgen
++
+ unevaluatedProperties: false
+ 
+ examples:
 -- 
 2.34.1
 
