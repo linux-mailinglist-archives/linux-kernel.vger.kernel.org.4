@@ -2,151 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA6A6B4D59
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F846B4D65
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbjCJQm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 11:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48646 "EHLO
+        id S231830AbjCJQns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 11:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjCJQmh (ORCPT
+        with ESMTP id S231782AbjCJQnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:42:37 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E2B3C33;
-        Fri, 10 Mar 2023 08:40:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678466422; x=1710002422;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xmjvRkk2u1w6wR6YUli7dg1Fh8HG6Z/p1SZNWVWgCDU=;
-  b=bxH3twfzKf58a3MRBumNLFY010XYa7WynZo5kSPjbAlfvsQ8PcMP5vgI
-   7QfNBHPL2jJ7oOf0jAJmg4ZcZG0xqxpR/qazqyo/lqRmxtf9rPLsiEEcR
-   9UhHMQlr/5dO5MdsMzttCMatidutUOiV9VO1BnVp6x54+uE/WFtOMxjPv
-   vZyPoKxqa2JCEcJqlYRW98ioWnh6JrpfPi7JJTCHQEqs6+E2773/ts+xL
-   qauniqM6K2TLQLU7RDEn6RmzRF+osj0+KQOWvmDac7TXMUIzn9etpt6jS
-   OW34KI+36731cwpKUh0qqMavgyiZqHy3fYPLoR3Qv2JaNUvW6ta/9t6ib
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="338322249"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="338322249"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 08:38:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="671144118"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="671144118"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 10 Mar 2023 08:38:14 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 28B06143; Fri, 10 Mar 2023 18:38:57 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Kurt Kanzenbach <kurt@linutronix.de>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH net-next v5 1/1] net: dsa: hellcreek: Get rid of custom led_init_default_state_get()
-Date:   Fri, 10 Mar 2023 18:38:55 +0200
-Message-Id: <20230310163855.21757-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        Fri, 10 Mar 2023 11:43:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7F411AC84
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 08:40:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678466367;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x2rMsg6t2gpViRN6bqN88ZiiAOU5boBM+zQvjcM7TMo=;
+        b=Bz+rXBjPhg+S3sugJcJWVIsad5znj4PrQfUTFF6ly6I1k762IhIvYIEhwmZKdQ24bfvNCQ
+        K/nanyVNuACBqtvjS7EwSTUARgNEHQ1FIGowNc3562+MndaOVh9X2yv2LD9bBmG1eYsPS7
+        0rlJjKb11vFcV5OOMXQUzq1BtJC1aZM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-570-lVFc0yWeMNGuBoORAjKjsw-1; Fri, 10 Mar 2023 11:39:26 -0500
+X-MC-Unique: lVFc0yWeMNGuBoORAjKjsw-1
+Received: by mail-wm1-f71.google.com with SMTP id l20-20020a05600c1d1400b003e10d3e1c23so4102350wms.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 08:39:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678466364;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x2rMsg6t2gpViRN6bqN88ZiiAOU5boBM+zQvjcM7TMo=;
+        b=jVen0rEEIOsjih8sF5vSedQ7YP6e+qPUnQ3SezMxQtI/LLzonR0KumbOTpPl9lo8qb
+         TXgU7/YUIhLeW9X4SfQnwhvz/pLAVHldJHXI23iDDY4uPRg+WgFwQRyVpkG0Suh0H7GI
+         pGC/RLhlx8eDY0FGPPiuNKzQ00AJQtarVgty2EEi84OsnxO4Tg4s/VvN/Bxn23mtkoch
+         q/rFhuSlXJ/h4NXT0a9Po8B3d2zlaih2klDEqKY1ynSoI1LFefHUqYzDmfC+CHi+5DxM
+         ZwMNKhAbW66xogGMucwsHG36rAvzrlcHcL8uia3DE02YgUUTPLFsmcKaQ3cAO5zBHOJS
+         cu8Q==
+X-Gm-Message-State: AO0yUKVKrnql2KJ4U5SMJHX4k/klg93V6wMagG7QFFlCOfR9qlVVTe7U
+        0wJqZpKRSKd6fp3GBMMp8sLptLb9skIN14phEbVK+6LTQqFuUElEV1PVeFLJr6DXtOtp44xaEZ5
+        8bKH9zeFGkiVh9I1xGzExTXnb/W2JLIuw
+X-Received: by 2002:a05:600c:ccf:b0:3eb:36fa:b78d with SMTP id fk15-20020a05600c0ccf00b003eb36fab78dmr3280367wmb.23.1678466364783;
+        Fri, 10 Mar 2023 08:39:24 -0800 (PST)
+X-Google-Smtp-Source: AK7set83LJfy7UcSeciFVaK0LlOXd8mOfJpZCllpxwIk2za7QGb9MdB56MsPoQHTRXi3GIMHfwS0rA==
+X-Received: by 2002:a05:600c:ccf:b0:3eb:36fa:b78d with SMTP id fk15-20020a05600c0ccf00b003eb36fab78dmr3280348wmb.23.1678466364527;
+        Fri, 10 Mar 2023 08:39:24 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id u10-20020a7bcb0a000000b003e11ad0750csm305406wmj.47.2023.03.10.08.39.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 08:39:24 -0800 (PST)
+Message-ID: <1c18d68c-a20d-0f6d-4bf7-56f40557d151@redhat.com>
+Date:   Fri, 10 Mar 2023 17:39:22 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Reply-To: eric.auger@redhat.com
+Subject: Re: [PATCH v1 05/14] iommu/arm-smmu-v3: Remove ARM_SMMU_DOMAIN_NESTED
+Content-Language: en-US
+To:     Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
+        robin.murphy@arm.com, will@kernel.org
+Cc:     kevin.tian@intel.com, baolu.lu@linux.intel.com, joro@8bytes.org,
+        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <cover.1678348754.git.nicolinc@nvidia.com>
+ <c62c9405ff31ab3c97a9165ff710dce68217fe22.1678348754.git.nicolinc@nvidia.com>
+From:   Eric Auger <eric.auger@redhat.com>
+In-Reply-To: <c62c9405ff31ab3c97a9165ff710dce68217fe22.1678348754.git.nicolinc@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LED core provides a helper to parse default state from firmware node.
-Use it instead of custom implementation.
+Hi Nicolin,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
----
-v5: resent after v6.3-rc1 with proper net-next prefix
- drivers/net/dsa/hirschmann/hellcreek_ptp.c | 45 ++++++++++++----------
- 1 file changed, 24 insertions(+), 21 deletions(-)
+On 3/9/23 11:53, Nicolin Chen wrote:
+> IOMMUFD designs two iommu_domain pointers to represent two stages. The S1
+s/designs/uses?
+> iommu_domain (IOMMU_DOMAIN_NESTED type) represents the Context Descriptor
+> table in the user space. The S2 iommu_domain (IOMMU_DOMAIN_UNMANAGED type)
+> represents the translation table in the kernel, owned by a hypervisor.
+>
+> So there comes to no use case of the ARM_SMMU_DOMAIN_NESTED. Drop it, and
+> use the type IOMMU_DOMAIN_NESTED instead.
+last sentence may be rephrased as this patch does not use
+IOMMU_DOMAIN_NESTED anywhere:
+Generic IOMMU_DOMAIN_NESTED type will be used in nested SMMU
+implementation instead.
+>
+> Also drop the unused arm_smmu_enable_nesting(). One following patche will
+> configure the correct smmu_domain->stage.
+>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 18 ------------------
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h |  1 -
+If you go this way you may also remove it from arm/arm-smmu/arm-smmu.c.
+Then if I am not wrong no other driver does implement enable_nesting cb.
+Shouldn't we also remove it and fellow iommu_enable_nesting()?
 
-diff --git a/drivers/net/dsa/hirschmann/hellcreek_ptp.c b/drivers/net/dsa/hirschmann/hellcreek_ptp.c
-index b28baab6d56a..793b2c296314 100644
---- a/drivers/net/dsa/hirschmann/hellcreek_ptp.c
-+++ b/drivers/net/dsa/hirschmann/hellcreek_ptp.c
-@@ -297,7 +297,8 @@ static enum led_brightness hellcreek_led_is_gm_get(struct led_classdev *ldev)
- static int hellcreek_led_setup(struct hellcreek *hellcreek)
- {
- 	struct device_node *leds, *led = NULL;
--	const char *label, *state;
-+	enum led_default_state state;
-+	const char *label;
- 	int ret = -EINVAL;
- 
- 	of_node_get(hellcreek->dev->of_node);
-@@ -318,16 +319,17 @@ static int hellcreek_led_setup(struct hellcreek *hellcreek)
- 	ret = of_property_read_string(led, "label", &label);
- 	hellcreek->led_sync_good.name = ret ? "sync_good" : label;
- 
--	ret = of_property_read_string(led, "default-state", &state);
--	if (!ret) {
--		if (!strcmp(state, "on"))
--			hellcreek->led_sync_good.brightness = 1;
--		else if (!strcmp(state, "off"))
--			hellcreek->led_sync_good.brightness = 0;
--		else if (!strcmp(state, "keep"))
--			hellcreek->led_sync_good.brightness =
--				hellcreek_get_brightness(hellcreek,
--							 STATUS_OUT_SYNC_GOOD);
-+	state = led_init_default_state_get(of_fwnode_handle(led));
-+	switch (state) {
-+	case LEDS_DEFSTATE_ON:
-+		hellcreek->led_sync_good.brightness = 1;
-+		break;
-+	case LEDS_DEFSTATE_KEEP:
-+		hellcreek->led_sync_good.brightness =
-+				hellcreek_get_brightness(hellcreek, STATUS_OUT_SYNC_GOOD);
-+		break;
-+	default:
-+		hellcreek->led_sync_good.brightness = 0;
- 	}
- 
- 	hellcreek->led_sync_good.max_brightness = 1;
-@@ -344,16 +346,17 @@ static int hellcreek_led_setup(struct hellcreek *hellcreek)
- 	ret = of_property_read_string(led, "label", &label);
- 	hellcreek->led_is_gm.name = ret ? "is_gm" : label;
- 
--	ret = of_property_read_string(led, "default-state", &state);
--	if (!ret) {
--		if (!strcmp(state, "on"))
--			hellcreek->led_is_gm.brightness = 1;
--		else if (!strcmp(state, "off"))
--			hellcreek->led_is_gm.brightness = 0;
--		else if (!strcmp(state, "keep"))
--			hellcreek->led_is_gm.brightness =
--				hellcreek_get_brightness(hellcreek,
--							 STATUS_OUT_IS_GM);
-+	state = led_init_default_state_get(of_fwnode_handle(led));
-+	switch (state) {
-+	case LEDS_DEFSTATE_ON:
-+		hellcreek->led_is_gm.brightness = 1;
-+		break;
-+	case LEDS_DEFSTATE_KEEP:
-+		hellcreek->led_is_gm.brightness =
-+				hellcreek_get_brightness(hellcreek, STATUS_OUT_IS_GM);
-+		break;
-+	default:
-+		hellcreek->led_is_gm.brightness = 0;
- 	}
- 
- 	hellcreek->led_is_gm.max_brightness = 1;
--- 
-2.39.1
+Thanks
+
+Eric
+>  2 files changed, 19 deletions(-)
+>
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> index c1aac695ae0d..c5616145e2a3 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> @@ -1279,7 +1279,6 @@ static void arm_smmu_write_strtab_ent(struct arm_smmu_master *master, u32 sid,
+>  			s1_cfg = &smmu_domain->s1_cfg;
+>  			break;
+>  		case ARM_SMMU_DOMAIN_S2:
+> -		case ARM_SMMU_DOMAIN_NESTED:
+>  			s2_cfg = &smmu_domain->s2_cfg;
+>  			break;
+>  		default:
+> @@ -2220,7 +2219,6 @@ static int arm_smmu_domain_finalise(struct iommu_domain *domain,
+>  		fmt = ARM_64_LPAE_S1;
+>  		finalise_stage_fn = arm_smmu_domain_finalise_s1;
+>  		break;
+> -	case ARM_SMMU_DOMAIN_NESTED:
+>  	case ARM_SMMU_DOMAIN_S2:
+>  		ias = smmu->ias;
+>  		oas = smmu->oas;
+> @@ -2747,21 +2745,6 @@ static struct iommu_group *arm_smmu_device_group(struct device *dev)
+>  	return group;
+>  }
+>  
+> -static int arm_smmu_enable_nesting(struct iommu_domain *domain)
+> -{
+> -	struct arm_smmu_domain *smmu_domain = to_smmu_domain(domain);
+> -	int ret = 0;
+> -
+> -	mutex_lock(&smmu_domain->init_mutex);
+> -	if (smmu_domain->smmu)
+> -		ret = -EPERM;
+> -	else
+> -		smmu_domain->stage = ARM_SMMU_DOMAIN_NESTED;
+> -	mutex_unlock(&smmu_domain->init_mutex);
+> -
+> -	return ret;
+> -}
+> -
+>  static int arm_smmu_of_xlate(struct device *dev, struct of_phandle_args *args)
+>  {
+>  	return iommu_fwspec_add_ids(dev, args->args, 1);
+> @@ -2890,7 +2873,6 @@ static struct iommu_ops arm_smmu_ops = {
+>  		.flush_iotlb_all	= arm_smmu_flush_iotlb_all,
+>  		.iotlb_sync		= arm_smmu_iotlb_sync,
+>  		.iova_to_phys		= arm_smmu_iova_to_phys,
+> -		.enable_nesting		= arm_smmu_enable_nesting,
+>  		.free			= arm_smmu_domain_free,
+>  	}
+>  };
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> index ba2b4562f4b2..233bfc377267 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> @@ -704,7 +704,6 @@ struct arm_smmu_master {
+>  enum arm_smmu_domain_stage {
+>  	ARM_SMMU_DOMAIN_S1 = 0,
+>  	ARM_SMMU_DOMAIN_S2,
+> -	ARM_SMMU_DOMAIN_NESTED,
+>  	ARM_SMMU_DOMAIN_BYPASS,
+>  };
+>  
 
