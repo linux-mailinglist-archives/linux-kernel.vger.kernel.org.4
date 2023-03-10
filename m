@@ -2,104 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D3E6B4CF8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D25686B4CFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbjCJQ3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 11:29:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
+        id S231833AbjCJQ3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 11:29:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjCJQ3N (ORCPT
+        with ESMTP id S231214AbjCJQ3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:29:13 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1507412C82C
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 08:25:48 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id t25-20020a1c7719000000b003eb052cc5ccso6443241wmi.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 08:25:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678465546;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uTjUs+xSTpJmpUXPUZmeFM9CvRhlnvmm+hubfgWSgEg=;
-        b=g5Nt/cxAmxf+NZwUWDMIdt5tWqPfaOO6REhuI1HwCOHDbEAfiRzqmh+lDYJsSg+8Ak
-         5aYZCzsx65lYjHpnSlSW+OHHzE9zzNCHRDddObmupVAJYaVR6ceqbz9did/iEl9ixr/X
-         VThVU12E5C4GdrsDexkcjzJind3/UqD2vI7l8mvmfza630TbsQXMhDPPzv9qQejdo3I9
-         S1yBpVNNU1pfUK3VMjDPEUSNPYqy9CGQFQonhVtUAFiz6PZ36oatbpxvuk60TqrJtSzU
-         x3+o9Qi0sNeohOIyY9kmELThNVMy2SXA13ZqPbYT4rZ6Si8wifo9+gV6QKZCbBakcE/c
-         GU8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678465546;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uTjUs+xSTpJmpUXPUZmeFM9CvRhlnvmm+hubfgWSgEg=;
-        b=le7rIs32BFIpKBRVBHqYqoWyIg1c2EO7Vhewhf6h7b4wLpnvQxm4iB7HS+t2G7xYJD
-         YmLa5b7PLVfpRmISx859Btxzh3nNEAhl0wzxfoEBzwdEAVy0Rq4SXUQLTvfs/NY9jZeS
-         tln0u/kI2Qluzv21wbVXANc0ujq+8IVx2DY0d3ngXqwGpa7r5VQ4Ve39jexhBYy2EBeR
-         2/cRLN5+C9rCBJQMjVIzLbiBQKZCDJuSzuzvzs8ypI/spTrzOt29yiSZEPNsK1nRm8mI
-         ioNQ6pA9s1TLtcXe++Tlkpo/w3iOxOnYGozJPeN6b0H1r+UT12h7Y2PTHWcqaATwc61K
-         wHxg==
-X-Gm-Message-State: AO0yUKVoqF1tGEC6cuNPqYi1clDt87qhhWsu57tTg8QNgt3HFQfNtDZt
-        2bbYOiY7cS41tFQbzFBGoa43hMFOITm8ovn6YnhhV9ZwbJHK61oS
-X-Google-Smtp-Source: AK7set9avmv8bq+VCtnDKgolFocuzy2nMv7JqFhNCPPGukBzD7lZ5vgsQ6zn8OH7H/p639xaoGkovQc+GN6Do+3AuSA=
-X-Received: by 2002:a05:600c:a39a:b0:3e1:eddc:e3ae with SMTP id
- hn26-20020a05600ca39a00b003e1eddce3aemr1005713wmb.0.1678465546572; Fri, 10
- Mar 2023 08:25:46 -0800 (PST)
+        Fri, 10 Mar 2023 11:29:17 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B87F132D3;
+        Fri, 10 Mar 2023 08:25:52 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32AGPjJD055636;
+        Fri, 10 Mar 2023 10:25:45 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678465545;
+        bh=IZLmJ1drzeDlkAPuPqNqYdVnaxm41aYQJiXZVCir8+w=;
+        h=From:To:CC:Subject:Date;
+        b=hf3Ksbkc/7x585yUXl8GQClBQEvFNoz6Xk++ZzTkVfGFOvQKQ3J41sNSbSq0MJUMC
+         Q8naHj2USOTxf+c73TWUnCTEHMTbQNoKIADSBtS0lR8m14chSA7DF8tUk+1870LXVm
+         CYq4BKtNid0yEUW3NKAXCb6cWDqT45rO/AI173jw=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32AGPjL5015726
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 10 Mar 2023 10:25:45 -0600
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 10
+ Mar 2023 10:25:45 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 10 Mar 2023 10:25:45 -0600
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32AGPib6010679;
+        Fri, 10 Mar 2023 10:25:45 -0600
+From:   Devarsh Thakkar <devarsht@ti.com>
+To:     <andersson@kernel.org>, <devicetree@vger.kernel.org>,
+        <mathieu.poirier@linaro.org>, <p.zabel@pengutronix.de>,
+        <linux-remoteproc@vger.kernel.org>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s-anna@ti.com>
+CC:     <hnagalla@ti.com>, <praneeth@ti.com>, <nm@ti.com>,
+        <vigneshr@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>,
+        <devarsht@ti.com>, <rogerq@kernel.org>
+Subject: [PATCH v7 0/3] Add single core R5F IPC for AM62 SoC family                                     
+Date:   Fri, 10 Mar 2023 21:55:41 +0530
+Message-ID: <20230310162544.3468365-1-devarsht@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230310144736.1546972-1-robh@kernel.org>
-In-Reply-To: <20230310144736.1546972-1-robh@kernel.org>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Fri, 10 Mar 2023 09:25:35 -0700
-Message-ID: <CANLsYkwmeZaYdpKyszh2QAs_MvMekP5W9wteX+Kbi7fsjFAPsg@mail.gmail.com>
-Subject: Re: [PATCH] remoteproc: st: Use of_property_present() for testing DT
- property presence
-To:     Rob Herring <robh@kernel.org>
-Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023 at 07:51, Rob Herring <robh@kernel.org> wrote:
->
-> It is preferred to use typed property access functions (i.e.
-> of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties. As
-> part of this, convert of_get_property/of_find_property calls to the
-> recently added of_property_present() helper when we just want to test
-> for presence of a property and nothing more.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  drivers/remoteproc/st_remoteproc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/remoteproc/st_remoteproc.c b/drivers/remoteproc/st_remoteproc.c
-> index a3268d95a50e..50ef40671652 100644
-> --- a/drivers/remoteproc/st_remoteproc.c
-> +++ b/drivers/remoteproc/st_remoteproc.c
-> @@ -379,7 +379,7 @@ static int st_rproc_probe(struct platform_device *pdev)
->                 clk_set_rate(ddata->clk, ddata->clk_rate);
->         }
->
-> -       if (of_get_property(np, "mbox-names", NULL)) {
-> +       if (of_property_present(np, "mbox-names")) {
->                 ddata->mbox_client_vq0.dev              = dev;
->                 ddata->mbox_client_vq0.tx_done          = NULL;
->                 ddata->mbox_client_vq0.tx_block = false;
+Devarsh Thakkar (3):
+  remoteproc: k3-r5: Simplify cluster mode setting usage
+  dt-bindings: remoteproc: ti: Add new compatible for AM62 SoC family
+  remoteproc: k3-r5: Use separate compatible string for TI AM62x SoC
+    family
 
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+ .../bindings/remoteproc/ti,k3-r5f-rproc.yaml  |  76 ++++++++----
+ drivers/remoteproc/ti_k3_r5_remoteproc.c      | 110 ++++++++++++------
+ 2 files changed, 130 insertions(+), 56 deletions(-)
+---
+V2: 
+  - dt-bindings: Avoid acronyms, use "Device Manager" instead of "DM" 
+V3: 
+  - dt-bindings: Use separate if block for each compatible for ti,cluster-mode property
+  - dt-bindings: Rearrange compatibles as per alphabatical order
+V4:
+  - dt-bindings: Place each enum in separate line in allOf
+V5: 
+  - No change (fixing typo in email address) 
+V6: 
+  - dt-bindings: Remove reviewed-by due to new modifications to use cluster-mode=3
+    Introduce Simplify cluster-mode setting preamble patch per review comments
+  - Use CLUSTER_MODE_SINGLECORE for AM62x
+  - Set PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE for single core.
+V7: 
+  - Override to appropriate cluster-mode per firmware status flag without checking soc_data
+  - Set appropriate mode as default if not provided in DT                         
+  - Check mode validity against SoC data during probe
+  - Rebase on top of 6.3 linux-next 
+-- 
+2.34.1
 
-> --
-> 2.39.2
->
