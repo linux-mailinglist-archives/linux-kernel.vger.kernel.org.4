@@ -2,193 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26676B4833
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4596B4874
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbjCJPAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:00:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
+        id S233663AbjCJPCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233784AbjCJO74 (ORCPT
+        with ESMTP id S233780AbjCJPCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:59:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B55212B02A;
-        Fri, 10 Mar 2023 06:54:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62F69B82314;
-        Fri, 10 Mar 2023 14:53:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 183ACC433AA;
-        Fri, 10 Mar 2023 14:53:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678459985;
-        bh=1U3ZGoxMVWmjPucnPpBAP/Pp5NuMyMLxskxUDpQAahI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=i/yeV+Zb6roRkp4hdufvESXq2SYqYvYRO/h+YE+WGVAV8SBfvjVgPCcwGN/iCz3rq
-         rsixtQmshaxwAcTRcoslV/kr/068ZuWsFVoQ97ju/2ARbAuhEn55xdaz4UGUDuLAU+
-         IcZEO/V4Tj+N//IAXAOCOEG+5x4vwaE4pA1If28GjnL+SzgzASQPArQDMDXeMWpi9/
-         +VJwo3fi2mH4C/3ZPqvbOtsYRS/9zsavEilo6m1aVYwHDEs+ZEnXtWKC8eqcpcYXNG
-         Y3PppAdyKVK1Y64gYQTHaVsWm2mr/UfH90jhioBstTr9SMk0krigovXeXywCZXNv+V
-         6vcpMjtHkEwgw==
-Received: by mail-lj1-f177.google.com with SMTP id a32so5543294ljr.9;
-        Fri, 10 Mar 2023 06:53:05 -0800 (PST)
-X-Gm-Message-State: AO0yUKWKSfw71Od6AZQTVmDAv192A77fdIa7m/HrGzvohL3EFVIvl9tE
-        g5qgQ5eb9UxQCxIB2gfMR60XjZvRWaOS1SDIddg=
-X-Google-Smtp-Source: AK7set92uO/ZIaujKuol6kgCT0IK0ijm8dq2HYhWO2YoU9AsIHslUiUioFlCWcMaKWTMA7mjBB9jZZrRQioRZ45lAJs=
-X-Received: by 2002:a05:651c:1725:b0:295:8ef2:8707 with SMTP id
- be37-20020a05651c172500b002958ef28707mr8028412ljb.2.1678459983160; Fri, 10
- Mar 2023 06:53:03 -0800 (PST)
+        Fri, 10 Mar 2023 10:02:14 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C7C11E6C3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:55:33 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id nn12so5513554pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:55:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678460070;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=899uIjNSnSBUDvGA5vdXcbUib6/TzEA7CBXfVAUpl0E=;
+        b=PfZ/1K/35eYfryGtgRaPzAfXjm/TTlzN7zmCUyYNSlqd0knXBwYP8lAgb03+zPznv+
+         eDQUmy4JZ9Gua1Q9qIgfWjg1NZA25DAABvXnJhzbrkvS5Q9luzxtKkybr5K6DXUngzk3
+         xu4AsjDEvmaEnsKbPkKvEo9ougjazOkDwSj5+0EicSGDg8K+N704m4XvG1WxIngqEKXT
+         8HnqDuCiY1eQy7JWntcKbKR2zqTLukIMarStVBBNPUg7IbLh0wStPLZ6xsPjdf1GsVNv
+         4XFrHoJwthEaIAqn+A7/8Gm6iBh7UpSq+8bCuQi+AGRFiUpeV4ro0Jg8jfuoMeN8DnOz
+         uFvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678460070;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=899uIjNSnSBUDvGA5vdXcbUib6/TzEA7CBXfVAUpl0E=;
+        b=UNSHAn3uPhF5uNCMxwLuNRwohaoHjy33eo3iI733jXH9ZvSsxUiitMEH0zpRq9QPna
+         H1e1w7PiZLdvJAMCziIgkdSPik+XevHSbniBV1LywyG5KsLL7b+2CxYc8I+U2nBtGRa7
+         gE+IOAW5ycVS6w6KaGfuRjoewT0uPl2t9zrlZ7QyS+wfFNlknIhP8XwmDf7U1WX4H8vY
+         h9qXdZtP9G48sWpCeAcmITtL4uTJCQbE9Ckf5+MCRdC0fecT4/PkWh1WStC1wFGhVljK
+         JZmCE9CJge442uZc3gBPg9ABQikdHYBiB8clT5YUR3ZPi2F1z9QFxyvO3F+mNlXvMlJ2
+         QCtQ==
+X-Gm-Message-State: AO0yUKWSbE9J0Od4kBfDTNO63nDURRBGEK+fh0qWrMkY7VIu8PdSt6Ks
+        V3cbuLsB6gndS96yKT6k2D0LXIPxsCVpa7Qdv+AG4w==
+X-Google-Smtp-Source: AK7set+0etYzFVu3Na/+89oOfp44qAlq1xHev4VKDXKuM1ZC3b+8SmFlqToekddehOw2SpuLoDcBLKODDKlT5jN+vR0=
+X-Received: by 2002:a17:90a:69c4:b0:233:bc72:1c69 with SMTP id
+ s62-20020a17090a69c400b00233bc721c69mr9062179pjj.9.1678460070046; Fri, 10 Mar
+ 2023 06:54:30 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1671098103.git.baskov@ispras.ru> <2ebefd395ecadb2b2605bc52a8ac223392c0c153.1671098103.git.baskov@ispras.ru>
-In-Reply-To: <2ebefd395ecadb2b2605bc52a8ac223392c0c153.1671098103.git.baskov@ispras.ru>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 10 Mar 2023 15:52:52 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHY045xxhbC_+JRhwy-vObfKGFA8YnZr7anh6Khuk-HAA@mail.gmail.com>
-Message-ID: <CAMj1kXHY045xxhbC_+JRhwy-vObfKGFA8YnZr7anh6Khuk-HAA@mail.gmail.com>
-Subject: Re: [PATCH v4 12/26] x86/boot: Make kernel_add_identity_map() a pointer
-To:     Evgeniy Baskov <baskov@ispras.ru>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20230302144330.274947-1-ulf.hansson@linaro.org> <54cee7de4ab7479db74b21e64e5f53cf@hyperstone.com>
+In-Reply-To: <54cee7de4ab7479db74b21e64e5f53cf@hyperstone.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 10 Mar 2023 15:53:53 +0100
+Message-ID: <CAPDyKFq-qToEX+qiuHirNbcuedii_f0KKuHiPAv7+tydrUTpqQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an
+ internal cache
+To:     =?UTF-8?Q?Christian_L=C3=B6hle?= <CLoehle@hyperstone.com>
+Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Wenchao Chen <wenchao.chen666@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 at 13:40, Evgeniy Baskov <baskov@ispras.ru> wrote:
+On Fri, 10 Mar 2023 at 14:43, Christian L=C3=B6hle <CLoehle@hyperstone.com>=
+ wrote:
 >
-> Convert kernel_add_identity_map() into a function pointer to be able
-> to provide alternative implementations of this function. Required
-> to enable calling the code using this function from EFI environment.
+> I have benchmarked the FUA/Cache behavior a bit.
+> I don't have an actual filesystem benchmark that does what I wanted and i=
+s easy to port to the target so I used:
 >
-> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
-> Tested-by: Peter Jones <pjones@redhat.com>
-> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
-> ---
->  arch/x86/boot/compressed/ident_map_64.c |  7 ++++---
->  arch/x86/boot/compressed/misc.c         | 24 ++++++++++++++++++++++++
->  arch/x86/boot/compressed/misc.h         | 15 +++------------
->  3 files changed, 31 insertions(+), 15 deletions(-)
+> # call with
+> # for loop in {1..3}; do sudo dd if=3D/dev/urandom bs=3D1M of=3D/dev/mmcb=
+lk2; done; for loop in {1..5}; do time ./filesystembenchmark.sh; umount /mn=
+t; done
+> mkfs.ext4 -F /dev/mmcblk2
+> mount /dev/mmcblk2 /mnt
+> for i in {1..3}
+> do
+> cp -r linux-6.2.2 /mnt/$i
+> done
+> for i in {1..3}
+> do
+> rm -r /mnt/$i
+> done
+> for i in {1..3}
+> do
+> cp -r linux-6.2.2 /mnt/$i
+> done
 >
-> diff --git a/arch/x86/boot/compressed/ident_map_64.c b/arch/x86/boot/compressed/ident_map_64.c
-> index ba5108c58a4e..1aee524d3c2b 100644
-> --- a/arch/x86/boot/compressed/ident_map_64.c
-> +++ b/arch/x86/boot/compressed/ident_map_64.c
-> @@ -92,9 +92,9 @@ bool has_nx; /* set in head_64.S */
->  /*
->   * Adds the specified range to the identity mappings.
->   */
-> -unsigned long kernel_add_identity_map(unsigned long start,
-> -                                     unsigned long end,
-> -                                     unsigned int flags)
-> +unsigned long kernel_add_identity_map_(unsigned long start,
+>
+> I found a couple of DUTs that I can link, I also tested one industrial ca=
+rd.
+>
+> DUT1: blue PCB Foresee eMMC
+> https://pine64.com/product/32gb-emmc-module/
+> DUT2: green PCB SiliconGo eMMC
+> Couldn't find that one online anymore unfortunately
+> DUT3: orange hardkernel PCB 8GB
+> https://www.hardkernel.com/shop/8gb-emmc-module-c2-android/
+> DUT4: orange hardkernel PCB white dot
+> https://rlx.sk/en/odroid/3198-16gb-emmc-50-module-xu3-android-for-odroid-=
+xu3.html
+> DUT5: Industrial card
 
-Please use a more discriminating name here - the trailing _ is rather
-hard to spot.
+Thanks a lot for helping out with testing! Much appreciated!
 
-> +                                      unsigned long end,
-> +                                      unsigned int flags)
->  {
->         int ret;
 >
-> @@ -142,6 +142,7 @@ void initialize_identity_maps(void *rmode)
->         struct setup_data *sd;
 >
->         boot_params = rmode;
-> +       kernel_add_identity_map = kernel_add_identity_map_;
+> The test issued 461 DO_REL_WR during one of the iterations for DUT5
 >
->         /* Exclude the encryption mask from __PHYSICAL_MASK */
->         physical_mask &= ~sme_me_mask;
-> diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
-> index aa4a22bc9cf9..c9c235d65d16 100644
-> --- a/arch/x86/boot/compressed/misc.c
-> +++ b/arch/x86/boot/compressed/misc.c
-> @@ -275,6 +275,22 @@ static void parse_elf(void *output, unsigned long output_len,
->         free(phdrs);
->  }
+> DUT1:
+> Cache, no FUA:
+> 13:04.49
+> 13:13.82
+> 13:30.59
+> 13:28:13
+> 13:20:64
+> FUA:
+> 13:30.32
+> 13:36.26
+> 13:10.86
+> 13:32.52
+> 13:48.59
 >
-> +/*
-> + * This points to actual implementation of mapping function
-> + * for current environment: either EFI API wrapper,
-> + * own implementation or dummy implementation below.
-> + */
-> +unsigned long (*kernel_add_identity_map)(unsigned long start,
-> +                                        unsigned long end,
-> +                                        unsigned int flags);
-> +
-> +static inline unsigned long kernel_add_identity_map_dummy(unsigned long start,
+> DUT2:
+> FUA:
+> 8:11.24
+> 7:47.73
+> 7:48.00
+> 7:48.18
+> 7:47.38
+> Cache, no FUA:
+> 8:10.30
+> 7:48.97
+> 7:48.47
+> 7:47.93
+> 7:44.18
+>
+> DUT3:
+> Cache, no FUA:
+> 7:02.82
+> 6:58.94
+> 7:03.20
+> 7:00.27
+> 7:00.88
+> FUA:
+> 7:05.43
+> 7:03.44
+> 7:04.82
+> 7:03.26
+> 7:04.74
+>
+> DUT4:
+> FUA:
+> 7:23.92
+> 7:20.15
+> 7:20.52
+> 7:19.10
+> 7:20.71
+> Cache, no FUA:
+> 7:20.23
+> 7:20.48
+> 7:19.94
+> 7:18.90
+> 7:19.88
 
-This function is never called, it only has its address taken, so the
-'inline' makes no sense here.
+Without going into the details of the above, it seems like for DUT1,
+DUT2, DUT3 and DUT4 there a good reasons to why we should move forward
+with $subject patch.
 
-> +                                                         unsigned long end,
-> +                                                         unsigned int flags)
-> +{
-> +       return start;
-> +}
-> +
->  /*
->   * The compressed kernel image (ZO), has been moved so that its position
->   * is against the end of the buffer used to hold the uncompressed kernel
-> @@ -312,6 +328,14 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
->
->         init_default_io_ops();
->
-> +       /*
-> +        * On 64-bit this pointer is set during page table uninitialization,
+Do you agree?
 
-initialization
+>
+> Cache, no FUA:
+> 7:19.36
+> 7:02.11
+> 7:01.53
+> 7:01.35
+> 7:00.37
+> Cache, no FUA CQE:
+> 7:17.55
+> 7:00.73
+> 6:59.25
+> 6:58.44
+> 6:58.60
+> FUA:
+> 7:15.10
+> 6:58.99
+> 6:58.94
+> 6:59.17
+> 6:60.00
+> FUA CQE:
+> 7:11.03
+> 6:58.04
+> 6:56.89
+> 6:56.43
+> 6:56:28
+>
+> If anyone has any comments or disagrees with the benchmark, or has a spec=
+ific eMMC to test, let me know.
 
-> +        * but on 32-bit it remains uninitialized, since paging is disabled.
-> +        */
-> +       if (IS_ENABLED(CONFIG_X86_32))
-> +               kernel_add_identity_map = kernel_add_identity_map_dummy;
-> +
-> +
->         /*
->          * Detect TDX guest environment.
->          *
-> diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-> index 38d31bec062d..0076b2845b4b 100644
-> --- a/arch/x86/boot/compressed/misc.h
-> +++ b/arch/x86/boot/compressed/misc.h
-> @@ -180,18 +180,9 @@ static inline int count_immovable_mem_regions(void) { return 0; }
->  #ifdef CONFIG_X86_5LEVEL
->  extern unsigned int __pgtable_l5_enabled, pgdir_shift, ptrs_per_p4d;
->  #endif
-> -#ifdef CONFIG_X86_64
-> -extern unsigned long kernel_add_identity_map(unsigned long start,
-> -                                            unsigned long end,
-> -                                            unsigned int flags);
-> -#else
-> -static inline unsigned long kernel_add_identity_map(unsigned long start,
-> -                                                   unsigned long end,
-> -                                                   unsigned int flags)
-> -{
-> -       return start;
-> -}
-> -#endif
-> +extern unsigned long (*kernel_add_identity_map)(unsigned long start,
-> +                                               unsigned long end,
-> +                                               unsigned int flags);
->  /* Used by PAGE_KERN* macros: */
->  extern pteval_t __default_kernel_pte_mask;
->
-> --
-> 2.37.4
->
+If I understand correctly, for DUT5, it seems like using FUA may be
+slightly better than just cache-flushing, right?
+
+For CQE, it seems like FUA could be slightly even better, at least for
+DUT5.  Do you know if REQ_OP_FLUSH translates into MMC_ISSUE_DCMD or
+MMC_ISSUE_SYNC for your case? See mmc_cqe_issue_type().
+
+When it comes to CQE, maybe Adrian have some additional thoughts
+around this? Perhaps we should keep using REQ_FUA, if we have CQE?
+
+Kind regards
+Uffe
