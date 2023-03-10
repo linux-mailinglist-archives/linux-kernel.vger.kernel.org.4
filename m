@@ -2,117 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D056B3811
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B616B3828
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjCJIGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 03:06:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
+        id S230406AbjCJIIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:08:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjCJIFs (ORCPT
+        with ESMTP id S230314AbjCJIIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:05:48 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C26C2DA1;
-        Fri, 10 Mar 2023 00:05:47 -0800 (PST)
-Received: from cryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: tanureal)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3A2DE66030FB;
-        Fri, 10 Mar 2023 08:05:45 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678435545;
-        bh=LOi/siaqM76rHO4gX21yMZsTjTCPrx6+roVKTERlr6Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FbW3Tac8MSWHsTylUudxehstgS7z+O257JcutLLEmD5INT4MH2QtgyZbVEy5pCt66
-         MRxJ+De2AlznRsy52qpwJqrjUknHC2dlA4FpYxbdIGKJnNLqa+yuyuNVeIcP8ufRh5
-         zxU9H/kEVM7X27C1cqXcbOzYUxxclLJ4jEr6Mf6VTQywRMyyXSXYFCWN394LhLVZQa
-         dmNii/CIGrhpYdRqQEBTyNV276lzeZxyA9pQOGh39KOsOis2SNWYZ1oYrgGgwZbZEb
-         nT9F6xjO8g+1c12jBOyusPtID0w8jWmu4CIpZWFdYx+oZqGk+TnjAmBVrqTeMsAcHh
-         DB6L0qSbs4i4g==
-From:   Lucas Tanure <lucas.tanure@collabora.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Qu Wenruo <wqu@suse.com>,
-        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org,
-        Lucas Tanure <lucas.tanure@collabora.com>, kernel@collabora.com
-Subject: [PATCH 7/7] arm64: dts: rockchip: RK3588s: Enable PCIE2.0x1 @fe190000
-Date:   Fri, 10 Mar 2023 08:05:18 +0000
-Message-Id: <20230310080518.78054-8-lucas.tanure@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230310080518.78054-1-lucas.tanure@collabora.com>
-References: <20230310080518.78054-1-lucas.tanure@collabora.com>
+        Fri, 10 Mar 2023 03:08:35 -0500
+Received: from m126.mail.126.com (m126.mail.126.com [123.126.96.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BADDCF31FF
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:07:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=8NPOT
+        jhuf/2YsFE4oXf230HJk0/cRq3047JBFhRFG8E=; b=h0dg/JQKcF2P+i9D9LWNy
+        vMIJGjRanV+hDbz+rS3XsIrbEAuJ65v6S51539mjiF4WQ0oNsKbsw20S3m81KY7M
+        1XfhShTo341QLVa3gmzpVkEsYTAD+Kyc0kvmdGsZjPvL9aTZz86sO3nUUmvgmxGE
+        1RsMwh7P4MYZmTAqKWuTwI=
+Received: from localhost.localdomain (unknown [113.91.40.179])
+        by smtp12 (Coremail) with SMTP id fORpCgDHyGTu5ApklNFkBw--.48300S2;
+        Fri, 10 Mar 2023 16:06:08 +0800 (CST)
+From:   Xujun Leng <lengxujun2007@126.com>
+To:     david@redhat.com
+Cc:     akpm@linux-foundation.org, lengxujun2007@126.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH] mm: fix potential invalid pointer dereference in kmemdup()
+Date:   Fri, 10 Mar 2023 16:06:03 +0800
+Message-Id: <20230310080603.2242-1-lengxujun2007@126.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <42d864d6-6517-6601-c9c9-e06f7b731314@redhat.com>
+References: <42d864d6-6517-6601-c9c9-e06f7b731314@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: fORpCgDHyGTu5ApklNFkBw--.48300S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3CrWDWF4fKr18KrWDJFyxKrg_yoWktw17pr
+        W5JF43KF48Jr13Jr1jqw10yr1Iqw18ZF4UWF1qq3s8AF4q9r18t397J34jkrn8Jr48Z3Wx
+        JFWFkFWakFyjyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piYFAAUUUUU=
+X-Originating-IP: [113.91.40.179]
+X-CM-SenderInfo: pohqw5hxmx0jqqqxqiyswou0bp/1tbiExAud1pECf34swAAs7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable PCIE2.0x1 @fe190000 for RTL8125 network controller in
-Rock 5B board.
+>On 09.03.23 11:04, Xujun Leng wrote:
+>>> On 09.03.23 07:46, Xujun Leng wrote:
+>>>>> On 07.03.23 10:03, Xujun Leng wrote:
+>>>>>> If kmemdup() was called with src == NULL, then memcpy() source address
+>>>>>> is fatal, and if kmemdup() was called with len == 0, kmalloc_track_caller()
+>>>>>> will return ZERO_SIZE_PTR to variable p, then memcpy() destination address
+>>>>>> is fatal. Both 2 cases will cause an invalid pointer dereference.
+>>>>>>
+>>>>
+>>>>> "fix" in subject implies that there is actually a case broken. Is there,
+>>>>> or is this rather a "sanitize" ?
+>>>> Yes, I agree that word "sanitize" is a better choice.
+>>>> And no, I don't find an actually case but in my test code as follow:
+>>>>
+>>>> #include <linux/module.h>
+>>>> #include <linux/string.h>
+>>>> #include <linux/slab.h>
+>>>> #include <linux/printk.h>
+>>>> #include <linux/err.h>
+>>>>
+>>>> /*
+>>>>    * Test cases for kmemdup() and memdup_user().
+>>>>    */
+>>>> enum {
+>>>> 	TC_KMEMDUP_ARG0_NULL, /* i.e. kmemdup(NULL, 5, GFP_KERNEL) */
+>>>> 	TC_KMEMDUP_ARG1_ZERO, /* i.e. kmemdup("12345", 0, GFP_KERNEL) */
+>>>>
+>>>> 	TC_MEMDUP_USER_ARG0_NULL, /* i.e. memdup_user(NULL, 5) */
+>>>> 	TC_MEMDUP_USER_ARG1_ZERO  /* i.e. memdup_user("12345", 0) */
+>>>> };
+>>>>
+>>>> static int test_case;
+>>>> static const char *test_func_name[] = {"kmemdup", "memdup_user"};
+>>>> static void *ptr;
+>>>>
+>>>> module_param(test_case, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+>>>>
+>>>> static void *kmemdup_arg0_null(void)
+>>>> {
+>>>> 	return kmemdup(NULL, 5, GFP_KERNEL);
+>>>> }
+>>>>
+>>>> static void *kmemdup_arg1_zero(void)
+>>>> {
+>>>> 	return kmemdup("12345", 0, GFP_KERNEL);
+>>>> }
+>>>>
+>>>> static void *memdup_user_arg0_null(void)
+>>>> {
+>>>> 	return memdup_user(NULL, 5);
+>>>> }
+>>>>
+>>>> static void *memdup_user_arg1_zero(void)
+>>>> {
+>>>> 	return memdup_user("12345", 0);
+>>>> }
+>>>>
+>>>> static int check_ptr(void)
+>>>> {
+>>>> 	if (ZERO_OR_NULL_PTR(ptr)) {
+>>>> 		printk(KERN_ERR "test case %d: %s failed, PTR_ERR(ptr) = %ld\n",
+>>>> 				test_case, test_func_name[test_case / 2], PTR_ERR(ptr));
+>>>> 		return -EINVAL;
+>>>> 	}
+>>>> 	
+>>>> 	if (IS_ERR(ptr)) {
+>>>> 		printk(KERN_ERR "test case %d: %s failed, PTR_ERR(ptr) = %ld\n",
+>>>> 				test_case, test_func_name[test_case / 2], PTR_ERR(ptr));
+>>>> 		return PTR_ERR(ptr);
+>>>> 	}
+>>>>
+>>>> 	printk(KERN_INFO "mm-util test module loaded.\n");
+>>>>
+>>>> 	return 0;
+>>>> }
+>>>>
+>>>> static int __init memdup_user_test_init(void)
+>>>> {
+>>>> 	if (test_case < 0 || test_case > TC_MEMDUP_USER_ARG1_ZERO) {
+>>>> 		printk(KERN_INFO "invalid test case %d\n", test_case);
+>>>> 		return -EINVAL;
+>>>> 	}
+>>>>
+>>>> 	printk(KERN_INFO "test case: %d\n", test_case);
+>>>>
+>>>> 	switch (test_case) {
+>>>> 	case TC_KMEMDUP_ARG0_NULL:
+>>>> 		ptr = kmemdup_arg0_null();
+>>>> 		break;
+>>>> 	case TC_KMEMDUP_ARG1_ZERO:
+>>>> 		ptr = kmemdup_arg1_zero();
+>>>> 		break;
+>>>>
+>>>> 	case TC_MEMDUP_USER_ARG0_NULL:
+>>>> 		ptr = memdup_user_arg0_null();
+>>>> 		break;
+>>>>
+>>>> 	case TC_MEMDUP_USER_ARG1_ZERO:
+>>>> 		ptr = memdup_user_arg1_zero();
+>>>> 		break;
+>>>> 	
+>>>> 	default:
+>>>> 		/* should be never happend */
+>>>> 		ptr = NULL;
+>>>> 		break;
+>>>> 	}
+>>>>
+>>>> 	return check_ptr();
+>>>> }
+>>>>
+>>>> static void __exit memdup_user_test_exit(void)
+>>>> {
+>>>> 	if (ptr) {
+>>>> 		kfree(ptr);
+>>>> 		ptr = NULL;
+>>>> 	}
+>>>>
+>>>> 	printk(KERN_INFO "mm-util test module exited.\n");
+>>>> }
+>>>>
+>>>> module_init(memdup_user_test_init);
+>>>> module_exit(memdup_user_test_exit);
+>>>>
+>>>> MODULE_LICENSE("GPL");
+>>>>
+>>>> Build the code as module, and run the module in QEMU ARM64, with different
+>>>> test case(pass 0,1,2,3 to moddule parameter "test_case"), get follow the
+>>>> results:
+>>>>
+>>>> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=0
+>>>> [  142.979506] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+>>>> [  142.983171] Mem abort info:
+>>>> [  142.984049]   ESR = 0x0000000096000004
+>>>> [  142.984556]   EC = 0x25: DABT (current EL), IL = 32 bits
+>>>> [  142.985327]   SET = 0, FnV = 0
+>>>> [  142.986867]   EA = 0, S1PTW = 0
+>>>> [  142.987198]   FSC = 0x04: level 0 translation fault
+>>>> [  142.987555] Data abort info:
+>>>> [  142.987819]   ISV = 0, ISS = 0x00000004
+>>>> [  142.988132]   CM = 0, WnR = 0
+>>>> [  142.988540] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000046168000
+>>>> [  142.989715] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+>>>> [  142.992158] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+>>>> [  142.993012] Modules linked in: memdup_kernel_user_test(+) drm ip_tables x_tables ipv6
+>>>> [  142.996663] CPU: 0 PID: 133 Comm: modprobe Not tainted 6.3.0-rc1-next-20230307-dirty #1
+>>>> [  143.002024] Hardware name: linux,dummy-virt (DT)
+>>>> [  143.003370] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>>> [  143.005461] pc : __memcpy+0x54/0x230
+>>>> [  143.006833] lr : kmemdup+0x50/0x68
+>>>> [  143.007208] sp : ffff80000aa53ae0
+>>>> [  143.011440] x29: ffff80000aa53ae0 x28: ffff8000010c0378 x27: ffff8000010c0058
+>>>> [  143.012386] x26: ffff80000a216fd8 x25: ffff80000aa53d00 x24: ffff8000010c0040
+>>>> [  143.014183] x23: 0000000000000000 x22: ffff0000037d6580 x21: 0000000000000000
+>>>> [  143.018590] x20: 0000000000000005 x19: ffff0000039a9100 x18: 0000000000000001
+>>>> [  143.020166] x17: ffff80000aa75000 x16: ffff0000047bed91 x15: ffff0000037d69f8
+>>>> [  143.021158] x14: 0000000000000147 x13: ffff0000037d69f8 x12: 00000000ffffffea
+>>>> [  143.024978] x11: 00000000ffffefff x10: 00000000ffffefff x9 : ffff80000a1fb518
+>>>> [  143.025800] x8 : 00000000ffffffff x7 : 00000000ffffffff x6 : ffff800036288000
+>>>> [  143.026667] x5 : ffff0000039a9105 x4 : 0000000000000005 x3 : 0000000080200020
+>>>> [  143.027257] x2 : 0000000000000005 x1 : 0000000000000000 x0 : ffff0000039a9100
+>>>> [  143.028177] Call trace:
+>>>> [  143.028833]  __memcpy+0x54/0x230
+>>>> [  143.029424]  memdup_user_test_init+0xd8/0x1000 [memdup_kernel_user_test]
+>>>> [  143.032466]  do_one_initcall+0x70/0x1b4
+>>>> [  143.038282]  do_init_module+0x58/0x1e8
+>>>> [  143.039354]  load_module+0x181c/0x1920
+>>>> [  143.040919]  __do_sys_finit_module+0xb8/0x10c
+>>>> [  143.041558]  __arm64_sys_finit_module+0x20/0x2c
+>>>> [  143.044052]  invoke_syscall+0x44/0x104
+>>>> [  143.044663]  el0_svc_common.constprop.0+0x44/0xec
+>>>> [  143.045562]  do_el0_svc+0x38/0x98
+>>>> [  143.047935]  el0_svc+0x2c/0x84
+>>>> [  143.048175]  el0t_64_sync_handler+0xb8/0xbc
+>>>> [  143.048295]  el0t_64_sync+0x190/0x194
+>>>> [  143.049274] Code: f9000006 f81f80a7 d65f03c0 361000c2 (b9400026)
+>>>> [  143.050933] ---[ end trace 0000000000000000 ]---
+>>>> Segmentation fault
+>>>>
+>>>> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=1
+>>>> [   87.896982] test case 1: kmemdup failed, PTR_ERR(ptr) = 16
+>>>> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Invalid argument
+>>>>
+>>>> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=2
+>>>> [  124.032509] test case 2: memdup_user failed, PTR_ERR(ptr) = -14
+>>>> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Bad address
+>>>>
+>>>> root@qemu-ubuntu:~# modprobe memdup_kernel_user_test test_case=3
+>>>> [  155.496285] test case 3: memdup_user failed, PTR_ERR(ptr) = 16
+>>>> modprobe: ERROR: could not insert 'memdup_kernel_user_test': Invalid argument
+>>>>
+>>>> To sum it up, it is:
+>>>> 1) If call kmemdup() with the src == NULL, a NULL pointer dereference
+>>>>      fault happened.
+>>>> 2) If call kmemdup() with the len == 0, an invalid address value
+>>>>      ZERO_SIZE_PTR returned, consider that many existing code check
+>>>>      kmemdup() return value like this:
+>>>>      ptr = kmemdup();
+>>>>      if (!ptr) {
+>>>>      	/* allocation failed */
+>>>>      }
+>>>>      this could be a problem, but no fault happended, memcpy() will do
+>>>>      nothing if copy length is zero, my previous statement is wrong.
+>>>> 3) If call memdup_user() with src == NULL, -EFAULT returned. Because
+>>>>      copy_from_user() takes care of the NULL pointer case, there is no
+>>>>      fault to happend.
+>>>> 4) If call memdup_user() with len == 0, an invalid address value
+>>>>      ZERO_SIZE_PTR returned. The existing code uses IS_ERR() to check
+>>>>      memdup_user() return value, unfortunately, the check range of the
+>>>>      macro function doesn't contain ZERO_SIZE_PTR value.
+>>>>
+>>>> For 1), (2), we can add the following code to kmemdup() to eliminate:
+>>>> if (!src || len == 0)
+>>>> 	return NULL;
+>>>>
+>>>> For 4), we can change the statement if (!p) of memdup_user() to
+>>>> if (ZERO_OR_NULL_PTR(s)) to solve that.
+>>>>
+>>>> BTW, the return values of kmemdup() and memdup_user() got a little
+>>>> bit confused for now:
+>>>> . kmemdup() can return ZERO_SIZE_PTR, NULL, and a valid memory allocation
+>>>>     address, the caller should check those return values with ZERO_OR_NULL_PTR(),
+>>>>     but many existing code don't follow this.
+>>>> . memdup_user() can return ZERO_SIZE_PTR,-ENOMEM,-EFAULT,NULL, and a valid
+>>>>     memory allocation address, the caller should check those return values with
+>>>>     ZERO_OR_NULL_PTR() and IS_ERR() at the same time, but i can't find any code
+>>>>     do things like this.
+>>>>
+>>>>>> Signed-off-by: Xujun Leng <lengxujun2007@126.com>
+>>>>>> ---
+>>>>>>     mm/util.c | 3 +++
+>>>>>>     1 file changed, 3 insertions(+)
+>>>>>>
+>>>>>> diff --git a/mm/util.c b/mm/util.c
+>>>>>> index dd12b9531ac4..d1a3b3d2988e 100644
+>>>>>> --- a/mm/util.c
+>>>>>> +++ b/mm/util.c
+>>>>>> @@ -128,6 +128,9 @@ void *kmemdup(const void *src, size_t len, gfp_t gfp)
+>>>>>>     {
+>>>>>>     	void *p;
+>>>>>>     
+>>>>>> +	if (!src || len == 0)
+>>>>>> +		return NULL;
+>>>>>> +
+>>>>>>     	p = kmalloc_track_caller(len, gfp);
+>>>>>>     	if (p)
+>>>>>>     		memcpy(p, src, len);
+>>>>
+>>>>> Why should we take care of kmemdup(), but not memdup_user() ? Shouldn't
+>>>>> it suffer from similar problems?
+>>>> By the foregoing, i think that both kmemdup() and memdup_user() need to
+>>>> change.
+>>>
+>>> The issue is that you can call mostly any kernel function with
+>>> unsupported arguments and trigger crashes. It all depends on with which
+>>> parameters functions are expected to be called.
+>>>
+>>> If kmemdup() is not expected to be called with !src or !len, all is
+>>> fine. And if there are no broken cases, existing code obeys these rules.
+>>>
+>>> Of course, we could improve the documentation or adjust the
+>>> implementations, if there is real need to.
+>>>
+>>> But adjusting individual functions here while others are left with he
+>>> same, theoretical (!) problems, is not a good approach IMHO.
+>> 
+>> Yes, you're right. The best way is to change kmalloc_slab(), let it always
+>> return NULL on allocate failure, even for requested size == 0. And of course,
+>> the detailed error message ZERO_SIZE_PTR will lost.
+>> 
+>> On the other hand, except kmemdup() and memdup_user(), the other functions
+>> in mm/util.c, who called kmalloc_track_caller(), like kstrdup(), kstrndup(),
+>> kmemdup_nul(), memdup_user_nul(), their all do argument check, and the
+>> len >= 1(if ignore the wrap case). So if we need change kmemdup() and
+>> memdup_user() a little, to let those all functions keep the same? If the
+>> answer is NO, we can end the disscuss to save your time.
+>
+> It's not me to decide. :) I consider sanitizing the input of all of 
+> these functions valuable, I just don't think the individual poking makes 
+> sense. So I would certainly review a patch (series) that unifies the 
+> error checks performed in these functions (e.g., be able to handle NULL 
+> pointers or len=0).
 
-This is based on prior work from XiaoDong Huang and
-Peter Geis fixing this issue specifically for Rockchip 356x.
+Ok, got it.
+However, this can be the responsibilty of the caller to handle these things. 
+Things seemed to start to get meaningless, after all, so far, nothing bad had 
+happended yet, so I'm not following up anymore, thanks anyway :).
 
-Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
----
- .../arm64/boot/dts/rockchip/rk3588-rock-5b.dts | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+--
+Best regards,
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-index df8b135cf223..c4ae20ad2fd7 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-@@ -36,6 +36,15 @@ vcc_1v1_nldo_s3: vcc-1v1-nldo-s3 {
- 		regulator-max-microvolt = <1100000>;
- 		vin-supply = <&vcc5v0_sys>;
- 	};
-+
-+	vcc3v3_pcie2x1l2: vcc3v3-pcie2x1l2 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3_pcie2x1l2";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		startup-delay-us = <5000>;
-+		vin-supply = <&vcc_3v3_s3>;
-+	};
- };
- 
- &sdhci {
-@@ -70,3 +79,12 @@ &sdmmc {
- 	status = "okay";
- };
- 
-+&combphy0_ps {
-+	status = "okay";
-+};
-+
-+&pcie2x1l2 {
-+	reset-gpios = <&gpio3 RK_PB0 GPIO_ACTIVE_HIGH>;
-+	vpcie3v3-supply = <&vcc3v3_pcie2x1l2>;
-+	status = "okay";
-+};
--- 
-2.39.2
+Xujun Leng
 
