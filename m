@@ -2,86 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A43C56B4808
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D37AC6B479C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233640AbjCJO4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:56:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
+        id S233357AbjCJOwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233908AbjCJOzn (ORCPT
+        with ESMTP id S233344AbjCJOvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:55:43 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1E11269B0;
-        Fri, 10 Mar 2023 06:51:05 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id bk32so4379457oib.10;
-        Fri, 10 Mar 2023 06:51:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459723;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qMoNKpUzGv+uhYFfBBCetA1xiKlZTK/h0rVA394M/W8=;
-        b=hOwcUGKbX8/RNsGWXsjktflvtXeogQ2fxjEkrwsaITKvTNy4dyTpn0SgF8Cbu6fkFM
-         rpn7Pi5cgK+ApMLTTnwVAoblkHZVMRi8jjLNTV0UFG+76shHWI5QW6t384xGyiG2hH1Q
-         12TLPebtdpUVMxHDGgZzG77q6UiRzyQW5oyaCVnGpfN8vvQgv2faTKYSuQ7HKQQqjI19
-         hPW1IIapOE6u5247ZMgkFYpP6pcDZbvKMG/cRcvQLoTWIPiJOhjA6aJbim0E+ONlrREe
-         wA/4crQZoMAkjFM/z3ioOcQtpWW8s9sn7Q3z4dK4UsRywSnr562g6H4tZijYVq7wFBoC
-         /84w==
-X-Gm-Message-State: AO0yUKXPEtWugKqBmxOSBmBZBRUAa9qhR8UcLPO6cils8YPigW+GN9gG
-        cwexMb102ug86sD67Mv1RY4ewg0YBw==
-X-Google-Smtp-Source: AK7set9uRxETYeNeSa/nmWQcSII4rCsfiuzpPgBDnL+Bh4mjLxjd85eQc5NPTqtZ0mG125wfC1MTBw==
-X-Received: by 2002:aca:2305:0:b0:37f:a346:bfad with SMTP id e5-20020aca2305000000b0037fa346bfadmr11019963oie.47.1678459723339;
-        Fri, 10 Mar 2023 06:48:43 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r85-20020acaa858000000b0037fa035f4f3sm930989oie.53.2023.03.10.06.48.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:48:42 -0800 (PST)
-Received: (nullmailer pid 1547226 invoked by uid 1000);
-        Fri, 10 Mar 2023 14:47:37 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Evgeniy Polyakov <zbr@ioremap.net>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] w1: w1-gpio: Use of_property_read_bool() for boolean properties
-Date:   Fri, 10 Mar 2023 08:47:36 -0600
-Message-Id: <20230310144737.1547200-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 10 Mar 2023 09:51:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52E911F631;
+        Fri, 10 Mar 2023 06:48:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 598FD6196F;
+        Fri, 10 Mar 2023 14:48:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF365C433B3;
+        Fri, 10 Mar 2023 14:48:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678459702;
+        bh=MZZ+xz3G0vilznbAM1hCF+BZtVWTz2PltybcPZKNnL8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LtvAHCO4o5meyqPkBJtVpvSiemyQ2z8bYClzjwMOCq/5vzcTeCY8oTEGpfo8x9tid
+         nWdLbH6iqLpUA8ExqOON8Vk2/AelJ2AbeoRL8nIFtm+VFzm2St/rFd6Yf4Ubg+2DBV
+         zyirIAGgKjgWTFA8DmM4fvzD4mGYf3niLB4Ab828kbwhuZp2IKp15TYb5O69d+cJrK
+         Hpz2v1Mf8VkVUCOEecNiSBzWEQbBGueKeBJ+uaLAD4hWXqbV6nFkAZkjyIfKXfnt+y
+         2DMMfsMnqW+VE/RGB5PtsfYqx8e0usUdtpN1was4RBvd2s82SwgEGbGR+9Pw0khygF
+         KyMoDQT/9uc2A==
+Received: by mail-lj1-f180.google.com with SMTP id by8so5529218ljb.7;
+        Fri, 10 Mar 2023 06:48:22 -0800 (PST)
+X-Gm-Message-State: AO0yUKWq+STV4wwV3e1OuOOqF5Zrsglq5LgZh9QMHjaEK/h2Yp/OOAAJ
+        yF8+6p/iOL9bZgUp8zm7RZt/pvKVkguPuMb54Ws=
+X-Google-Smtp-Source: AK7set+0BQ0DMOVyXPC1WgLMQEUn+f1e8kQdc94gXG38KqQMt70pg+KRu5rYeqlTUHvA7UYzqFKOy5zXh8GA+CzToc8=
+X-Received: by 2002:a2e:595:0:b0:298:6d17:eaa7 with SMTP id
+ 143-20020a2e0595000000b002986d17eaa7mr3310478ljf.2.1678459700862; Fri, 10 Mar
+ 2023 06:48:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1671098103.git.baskov@ispras.ru> <c60d49a99889cb81e177ab9e756edcfa23182b3a.1671098103.git.baskov@ispras.ru>
+In-Reply-To: <c60d49a99889cb81e177ab9e756edcfa23182b3a.1671098103.git.baskov@ispras.ru>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 10 Mar 2023 15:48:09 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHtgjK8xobe3rbsxdBaGz1xMtXCV=WT7WFbHe9nMOUnww@mail.gmail.com>
+Message-ID: <CAMj1kXHtgjK8xobe3rbsxdBaGz1xMtXCV=WT7WFbHe9nMOUnww@mail.gmail.com>
+Subject: Re: [PATCH v4 03/26] x86/boot: Set cr0 to known state in trampoline
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is preferred to use typed property access functions (i.e.
-of_property_read_<type> functions) rather than low-level
-of_get_property/of_find_property functions for reading properties.
-Convert reading boolean properties to to of_property_read_bool().
+On Thu, 15 Dec 2022 at 13:38, Evgeniy Baskov <baskov@ispras.ru> wrote:
+>
+> Ensure WP bit to be set to prevent boot code from writing to
+> non-writable memory pages.
+>
+> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+> Tested-by: Peter Jones <pjones@redhat.com>
+> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/w1/masters/w1-gpio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
 
-diff --git a/drivers/w1/masters/w1-gpio.c b/drivers/w1/masters/w1-gpio.c
-index d4632aace402..530c77b8d062 100644
---- a/drivers/w1/masters/w1-gpio.c
-+++ b/drivers/w1/masters/w1-gpio.c
-@@ -87,7 +87,7 @@ static int w1_gpio_probe(struct platform_device *pdev)
- 		 * driver it high/low like we are in full control of the line and
- 		 * open drain will happen transparently.
- 		 */
--		if (of_get_property(np, "linux,open-drain", NULL))
-+		if (of_property_present(np, "linux,open-drain"))
- 			gflags = GPIOD_OUT_LOW;
- 
- 		pdev->dev.platform_data = pdata;
--- 
-2.39.2
-
+> ---
+>  arch/x86/boot/compressed/head_64.S | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+> index a75712991df3..9f2e8f50fc71 100644
+> --- a/arch/x86/boot/compressed/head_64.S
+> +++ b/arch/x86/boot/compressed/head_64.S
+> @@ -660,9 +660,8 @@ SYM_CODE_START(trampoline_32bit_src)
+>         pushl   $__KERNEL_CS
+>         pushl   %eax
+>
+> -       /* Enable paging again. */
+> -       movl    %cr0, %eax
+> -       btsl    $X86_CR0_PG_BIT, %eax
+> +       /* Enable paging and set CR0 to known state (this also sets WP flag) */
+> +       movl    $CR0_STATE, %eax
+>         movl    %eax, %cr0
+>
+>         lret
+> --
+> 2.37.4
+>
