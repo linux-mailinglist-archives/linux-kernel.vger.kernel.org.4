@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDD76B533E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B736B5342
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232153AbjCJVqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 16:46:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57924 "EHLO
+        id S232158AbjCJVqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 16:46:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbjCJVpi (ORCPT
+        with ESMTP id S232122AbjCJVpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 16:45:38 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95665144BF1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:44:18 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id da10so26157773edb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:44:18 -0800 (PST)
+        Fri, 10 Mar 2023 16:45:40 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BED8142DC3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:44:20 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id i34so26037855eda.7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:44:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678484626;
+        d=linaro.org; s=google; t=1678484628;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EnYq1zeLkuGP06fgrJTup4yOJApLpMSwWcWTUqrcgj4=;
-        b=h8Q4NOjPl5R/WiIaAMHaK8PQKHkgJFxVXq8er9dUXTEb8Qxr+L09aiP7GPhzregD6W
-         AQOdeFCk9UrCUrhNz6fg10wdRXMjIaYNWbdEmveho99cZ6dcDq8HlC/Dh0hjyei/JSqI
-         8MpC93/Qz/cK4xwvixdyiajxszYgj68Hr6MPxaZU58xzx+0C+R2MFi+qOaIJXTLj5iVC
-         DHeGQHu5TMMDHr3N6XPjlxWg1ws2o5VzYPGrAqVip5ixR5jlb+9ubDA4K7ZM4xRrBDZx
-         PeFp0amXoCAgDfrywhfu+B/7m/1xYzMgQwfpYHtd5018ENWEr8AyBwSotrVt95xzcvZs
-         GljQ==
+        bh=TeP716t4cBIYV/Qo8houZ6GjE5tTEcSLUUsmtmHrwME=;
+        b=Xx3SrnmgKxS5czxvERbapZo0uZsV01LxxYnZdeXVvqWMaJbIqc6s7RwE0R1PdiZQbQ
+         5VvqmpWZBxmGyzQQmiflyogrwY/TNDk5BSD48fwB9vkiEReyJZQLKCSWQyW3GgMcaFvJ
+         GX9wIjCjB0UbY2BXuCkpTOkwcynB2cvUqjM8zQknB1+Nyrmgcc8UK/BpY39FN/n32OAj
+         lRJdt+Uj/pTnNn7dqxBx/km2qBCwBBtsKSatpPh8iDKCLwgNPmaNSXOLGzWfogNUMry6
+         aiKCN+Jk9unAevVTpYExN6ukJmrgIuhQ0/nio8/z1in77IIffGTubp9hE/ZgIiDkKu7G
+         QPMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678484626;
+        d=1e100.net; s=20210112; t=1678484628;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EnYq1zeLkuGP06fgrJTup4yOJApLpMSwWcWTUqrcgj4=;
-        b=Y9nIvsp2+l4ws3lRy3y/JDby1tRxXIMWqW3XqFB+zS19v2ELAb1IVe9ZX++kCEmFs3
-         P8MbM7IoJhlVTX/pS0NGpO+LpjrrF+FuuPLFT4xqs1HLhAcMKG1ZfYz2QDuzZX4Rk1im
-         0D65BR4xuBx4EikvozAP8Hy3tfEznKKoLCOm/NN7XG8gGdhqLpAcJ4F8+sCvCYf63LCd
-         xH9uqPur5Pob+ZzIRsiXAT5skEAMP185Ct+fnNfopfcp9Qt4D55tRzT+m86YRgu8Ei+/
-         G4ejgO+YDPcYbBJ9uHaPxEtDY0FFVYvs6mmsPYN7Xs3MZkm118J/Qbn8dF2Zo8nX8RTQ
-         b7eg==
-X-Gm-Message-State: AO0yUKXxyMNlSFVVsfjO763UJy4fVYvC5w10al59H1xLlZCZY+HSbpCV
-        AE5vcxP1EA3UptxQIVKMo869QA==
-X-Google-Smtp-Source: AK7set8Q/apGzf5fRe9BKFf2BS/DHloQQwv+CX45f7pu7bcAkpBEYK89UNKobe0bpL8f4xQIHE7HQA==
-X-Received: by 2002:a17:907:c20a:b0:8b1:781d:f9a2 with SMTP id ti10-20020a170907c20a00b008b1781df9a2mr26168137ejc.32.1678484626567;
-        Fri, 10 Mar 2023 13:43:46 -0800 (PST)
+        bh=TeP716t4cBIYV/Qo8houZ6GjE5tTEcSLUUsmtmHrwME=;
+        b=xqpjGb0HB1nibi59DQgFXhZcnPxVCM6xVioEFb1EB18mPGKSxI1jvBhCFzM4DzOiFF
+         FaI4wmcLhlf6HuxxTG3SNQU4fr7xHl8/Oko3pj1XG5l6oZuNpjjCf3kjWk//JtUr64MT
+         cOaZrcStz4NcoS7oaJCufV/N4/CVj4ZYpv+Vwc0/ZktiP+66WErax3YdBqhgq52KsVGz
+         ujt9tqdaZnwWG3atZPDGkEwvWFiHqfthOV/iVSBNtBZ+8VSzN3hKwI1rAlN+kHsk6U+f
+         XwLaWUavOD8BBlQ2h1JXe/eGpAozEj5SdBtsa/ZNhxKbNZWN49vUIEOy0hDhajSF6okL
+         W00A==
+X-Gm-Message-State: AO0yUKVMPWvqnNhBhrtm7O31b3MFeBxVt04qitQi8+zqL9TWN791E8LE
+        u1VWXcRlzvBSWUz0bYMWbKQGIQ==
+X-Google-Smtp-Source: AK7set+FJFc4dSGpVtgH0w1GTDHbF5wg5x4nW3Gcxvq33tKawN+X7rAHAi4mTn8Xl6rlAxUk/Z87aw==
+X-Received: by 2002:a05:6402:391:b0:4fa:4b1c:5ea4 with SMTP id o17-20020a056402039100b004fa4b1c5ea4mr244220edv.29.1678484628394;
+        Fri, 10 Mar 2023 13:43:48 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:34:52e3:a77e:cac5])
-        by smtp.gmail.com with ESMTPSA id f2-20020a1709064dc200b008dcf89a72d7sm327228ejw.147.2023.03.10.13.43.44
+        by smtp.gmail.com with ESMTPSA id f2-20020a1709064dc200b008dcf89a72d7sm327228ejw.147.2023.03.10.13.43.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 13:43:46 -0800 (PST)
+        Fri, 10 Mar 2023 13:43:47 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -72,9 +72,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 6/9] ASoC: codecs: pcm179x-spi: Mark OF related data as maybe unused
-Date:   Fri, 10 Mar 2023 22:43:30 +0100
-Message-Id: <20230310214333.274903-7-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 7/9] ASoC: codecs: rt1019: Mark OF related data as maybe unused
+Date:   Fri, 10 Mar 2023 22:43:31 +0100
+Message-Id: <20230310214333.274903-8-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230310214333.274903-1-krzysztof.kozlowski@linaro.org>
 References: <20230310214333.274903-1-krzysztof.kozlowski@linaro.org>
@@ -94,25 +94,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 The driver can be compile tested with !CONFIG_OF making certain data
 unused:
 
-  sound/soc/codecs/pcm179x-spi.c:32:34: error: ‘pcm179x_of_match’ defined but not used [-Werror=unused-const-variable=]
+  sound/soc/codecs/rt1019.c:549:34: error: ‘rt1019_of_match’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- sound/soc/codecs/pcm179x-spi.c | 2 +-
+ sound/soc/codecs/rt1019.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/pcm179x-spi.c b/sound/soc/codecs/pcm179x-spi.c
-index ebf63ea90a1c..192fee90c971 100644
---- a/sound/soc/codecs/pcm179x-spi.c
-+++ b/sound/soc/codecs/pcm179x-spi.c
-@@ -29,7 +29,7 @@ static int pcm179x_spi_probe(struct spi_device *spi)
- 	return pcm179x_common_init(&spi->dev, regmap);
- }
+diff --git a/sound/soc/codecs/rt1019.c b/sound/soc/codecs/rt1019.c
+index 49f527c61a7a..dff2596c81eb 100644
+--- a/sound/soc/codecs/rt1019.c
++++ b/sound/soc/codecs/rt1019.c
+@@ -546,7 +546,7 @@ static const struct i2c_device_id rt1019_i2c_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, rt1019_i2c_id);
  
--static const struct of_device_id pcm179x_of_match[] = {
-+static const struct of_device_id pcm179x_of_match[] __maybe_unused = {
- 	{ .compatible = "ti,pcm1792a", },
- 	{ }
+-static const struct of_device_id rt1019_of_match[] = {
++static const struct of_device_id rt1019_of_match[] __maybe_unused = {
+ 	{ .compatible = "realtek,rt1019", },
+ 	{},
  };
 -- 
 2.34.1
