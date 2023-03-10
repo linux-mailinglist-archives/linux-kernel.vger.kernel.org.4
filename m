@@ -2,102 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA246B5295
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F816B529D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbjCJVOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 16:14:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37876 "EHLO
+        id S230426AbjCJVOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 16:14:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjCJVOB (ORCPT
+        with ESMTP id S230118AbjCJVOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 16:14:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6FFEB57
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:13:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2391B8240E
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 21:13:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42712C433EF;
-        Fri, 10 Mar 2023 21:13:56 +0000 (UTC)
-Date:   Fri, 10 Mar 2023 16:13:54 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jason Baron <jbaron@akamai.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [RFC][PATCH 5/5] x86/kvm: Simplify static call handling
-Message-ID: <20230310161354.1889b539@gandalf.local.home>
-In-Reply-To: <ZAucD8gHx8Xp8Dlb@google.com>
-References: <cover.1678474914.git.jpoimboe@kernel.org>
-        <432e4844ba65840af4a24f5e3f561aead867f6e7.1678474914.git.jpoimboe@kernel.org>
-        <ZAucD8gHx8Xp8Dlb@google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 10 Mar 2023 16:14:39 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA29310A29C;
+        Fri, 10 Mar 2023 13:14:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1678482846; i=deller@gmx.de;
+        bh=We4tVJ9aX8WWemGD0IA7ECCoCjcoMbMpuqwmPkvAqqQ=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=Fs4lLH/bAjI990hi6oAWHu3X3VrWy3tjXXuztt8y3REr7ICCFlamg5QYRmGvdM5Fu
+         GHSdyxSyJiY888XV0gZzrBL+Ko5rb5YOLxATE1ZhCv2jOVEuRFWO909M3OGH7pZr75
+         k0x1rtJuDFogkmQlkVKFnxI/8XDlOeh3utjdYYwg90cukCxJmgql8lC5VeeReKk9QX
+         fpFXPD5UFxkVgQKl7Ww4eBAG0ICrOSt7bZ1rAVEPfR7OotYtt2ULvJZvjm9MJVFWyF
+         A/U4OnCaEf9lpDimlHnv1cYE6G8TPQ4rU04hN4/EYRVECsXbxTRryC4MsIRusiEKd9
+         mcYHsMUH8P6MA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.152.7]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MLi8g-1psPTK0gdc-00HffQ; Fri, 10
+ Mar 2023 22:14:06 +0100
+Message-ID: <5f807b94-9169-3120-9329-611e4031c665@gmx.de>
+Date:   Fri, 10 Mar 2023 22:14:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 3/4] arch/*/io.h: remove ioremap_uc in some
+ architectures
+Content-Language: en-US
+To:     Baoquan He <bhe@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, mpe@ellerman.id.au,
+        geert@linux-m68k.org, mcgrof@kernel.org, hch@infradead.org,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
+References: <20230308130710.368085-1-bhe@redhat.com>
+ <20230308130710.368085-4-bhe@redhat.com>
+ <20230309143621.GA12350@alpha.franken.de> <ZAqLuNrPng9i0rZV@MiWiFi-R3L-srv>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <ZAqLuNrPng9i0rZV@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:prdbfw0jkbpA2cD4PS8A/Q/bnmnu3OYgfeuy9CIfivml0OBah6B
+ MGo7+iBseCwD1PVcU+5RG0jP1OD3CZxHtN3uIEBZi1dA22tJEq0pWnkq3La76NAmGwRayBS
+ XciNoSO+Vo1DYUji/arGP4M8bHAlcRtDybpPn25b5aXw0gCZzJphAKo80pokJRNsnu3Acov
+ Kgc55jhLjK07WSzPwizYQ==
+UI-OutboundReport: notjunk:1;M01:P0:GnB6wuRuGe8=;Hhtz914/IJ7nAaMT9Ty0LJE9nJ3
+ qsX6/pRaqe8JSsd8AX0qlvxgerripOr2OMvkR5AqBzN13ZBB0WbSVdMd0wRslRJhLPVk2NfHP
+ ne08fK/1oClR0HB6P3x+0S5JVDyXfnFK9t/HMO1MyRvEKT0bxSZsgNzBtlnOZ6AhckHlp24i5
+ nwt5q+71jXG5JVP+J4zZHqgbVlUnbwuBSbnufn+NzNqGYqezWq5DgmihIjtMmcgkRsxmSIHNi
+ VdBCFyNM9HPfHABBkNRRj3iIKHCI+mpcivp4IEbCO0UWpKkKYJluXWbUa5IDZIwxvqWxpoAy7
+ TiipvhxhzW2BorDhthOlGuhZ7nYBllk/JoCQMQiBTTlJQQGbl+CXSnF+66y0XzoV0MhVD+7Uy
+ aHbxO1dajxVOJ0AfMDW5wtdd+wH/s7dS/eyeidfTAileP/wP/Wxm9bt39Wq4amDiQlhl+doB5
+ d7M3sNlxWIpyJJ412QUc0qvYN4M/iGsKJ6QmVZBaR7xZPtJ/mKYGf8Kn4W5WePzDY/TS74eeN
+ myHgsVkxZieoPf6jz69JNCOs/ClaoN/bMxmVrtj6OeY6xBykhd3tpSArDi37WEgAkyu9YkGYS
+ n+FlUHPOhs3W/Pr9cpydihcay7P9drt6ICYqYelTz1QbexPv/n7HeXvNTvSPYKMDBymqdIQaL
+ cqnrhpZg7Yd45xlppdOdVQ83zuB1eF4kyC3UfmX6P/Csto0lwOzKDKFZoMbUz05B+UcVluR1i
+ igya/wFC/IPhXB680mewg5DfSn7jCQ5CuSV3BxWu8pp9a5eV8F0C1cVKVecIAtzZSvLYpiBMc
+ /Cf5EvHPb5GrTt2niJegozx3hwjdStg7lataEEStinQVZyD4n2SpvjRo1PRXtJ6C4G4gvomaa
+ 2q1sYMfCsVv/UDyrsnqaEUKx7lI1dYWviSy0nvRw4B8HSZ//zhewIMUCNZgawtD/QEYY5Or4X
+ qEXb3zwt3cWnfN7WclsZWX/U35U=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023 13:07:27 -0800
-Sean Christopherson <seanjc@google.com> wrote:
+On 3/10/23 02:45, Baoquan He wrote:
+> On 03/09/23 at 03:36pm, Thomas Bogendoerfer wrote:
+>> On Wed, Mar 08, 2023 at 09:07:09PM +0800, Baoquan He wrote:
+>>> ioremap_uc() is only meaningful on old x86-32 systems with the PAT
+>>> extension, and on ia64 with its slightly unconventional ioremap()
+>>> behavior. So remove the ioremap_uc() definition in architecutures
+>>> other than x86 and ia64. These architectures all have asm-generic/io.h
+>>> included and will have the default ioremap_uc() definition which
+>>> returns NULL.
+>>>
+>>> This changes the existing behaviour, while no need to worry about
+>>> any breakage because in the only callsite of ioremap_uc(), code
+>>> has been adjusted to eliminate the impact. Please see
+>>> atyfb_setup_generic() of drivers/video/fbdev/aty/atyfb_base.c.
+>>>
+>>> If any new invocation of ioremap_uc() need be added, please consider
+>>> using ioremap() intead or adding a ARCH specific version if necessary.
+>>>
+>>> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>>> Signed-off-by: Baoquan He <bhe@redhat.com>
+>>> Cc: linux-alpha@vger.kernel.org
+>>> Cc: linux-hexagon@vger.kernel.org
+>>> Cc: linux-m68k@lists.linux-m68k.org
+>>> Cc: linux-mips@vger.kernel.org
+>>> Cc: linux-parisc@vger.kernel.org
+>>> Cc: linuxppc-dev@lists.ozlabs.org
+>>> Cc: linux-sh@vger.kernel.org
+>>> Cc: sparclinux@vger.kernel.org
+>>> ---
+>>>   Documentation/driver-api/device-io.rst | 9 +++++----
+>>>   arch/alpha/include/asm/io.h            | 1 -
+>>>   arch/hexagon/include/asm/io.h          | 3 ---
+>>>   arch/m68k/include/asm/kmap.h           | 1 -
+>>>   arch/mips/include/asm/io.h             | 1 -
+>>>   arch/parisc/include/asm/io.h           | 2 --
+>>>   arch/powerpc/include/asm/io.h          | 1 -
+>>>   arch/sh/include/asm/io.h               | 2 --
+>>>   arch/sparc/include/asm/io_64.h         | 1 -
+>>>   9 files changed, 5 insertions(+), 16 deletions(-)
+>>
+>> this doesn't apply to v6.3-rc1... what tree is this based on ?
+>
+> Sorry, I forgot mentioning this in cover letter. This series is
+> followup of below patchset, so it's on top of below patchset and based
+> on v6.3-rc1.
+>
+> https://lore.kernel.org/all/20230301034247.136007-1-bhe@redhat.com/T/#u
+> [PATCH v5 00/17] mm: ioremap:  Convert architectures to take GENERIC_IOR=
+EMAP way
 
-> "KVM: x86:" please, "x86/kvm" is for guest-side changes.
-> 
-> On Fri, Mar 10, 2023, Josh Poimboeuf wrote:
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index 1dfba499d3e5..612531e1c478 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1789,8 +1789,6 @@ extern struct kvm_x86_ops kvm_x86_ops;
-> >  
-> >  #define KVM_X86_OP(func) \
-> >  	DECLARE_STATIC_CALL(kvm_x86_##func, *(((struct kvm_x86_ops *)0)->func));
-> > -#define KVM_X86_OP_OPTIONAL KVM_X86_OP
-> > -#define KVM_X86_OP_OPTIONAL_RET0 KVM_X86_OP
-> >  #include <asm/kvm-x86-ops.h>
-> >  
-> >  int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops);
-> > diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-> > index 6accb46295a3..5f7f860c5f17 100644
-> > --- a/arch/x86/kvm/pmu.c
-> > +++ b/arch/x86/kvm/pmu.c
-> > @@ -77,20 +77,15 @@ static struct kvm_pmu_ops kvm_pmu_ops __read_mostly;
-> >  #define KVM_X86_PMU_OP(func)					     \
-> >  	DEFINE_STATIC_CALL_NULL(kvm_x86_pmu_##func,			     \
-> >  				*(((struct kvm_pmu_ops *)0)->func));
-> > -#define KVM_X86_PMU_OP_OPTIONAL KVM_X86_PMU_OP
-> >  #include <asm/kvm-x86-pmu-ops.h>
-> >  
-> >  void kvm_pmu_ops_update(const struct kvm_pmu_ops *pmu_ops)
-> >  {
-> >  	memcpy(&kvm_pmu_ops, pmu_ops, sizeof(kvm_pmu_ops));
-> >  
-> > -#define __KVM_X86_PMU_OP(func) \
-> > -	static_call_update(kvm_x86_pmu_##func, kvm_pmu_ops.func);
-> >  #define KVM_X86_PMU_OP(func) \
-> > -	WARN_ON(!kvm_pmu_ops.func); __KVM_X86_PMU_OP(func)  
-> 
-> I would much prefer to keep KVM mostly as-is, specifically so that we don't lose
-> this WARN_ON() that guards against a vendor module neglecting to implement a
-> mandatory callback.  This effectively gives KVM "full" protection against consuming
-> an unexpectedly-NULL function pointer.
+I've applied both patch series on top of v6.3-rc1 and
+tested it with success on the parisc platform (32- and 64-bit kernel).
 
-As in my reply to patch 0/5, I suggested that static_call_update(NULL)
-would trigger a WARN_ON() always. Then this could be cleaned up and still
-get that warning.
+You may add to both patch series:
 
--- Steve
+Acked-by: Helge Deller <deller@gmx.de>  # parisc
+
+Thank you!
+Helge
