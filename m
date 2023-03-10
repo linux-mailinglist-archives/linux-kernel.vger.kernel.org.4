@@ -2,193 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE3D6B401D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 652946B4025
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjCJNTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 08:19:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S230013AbjCJNUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 08:20:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjCJNTg (ORCPT
+        with ESMTP id S229659AbjCJNUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:19:36 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D0A14EA7;
-        Fri, 10 Mar 2023 05:19:31 -0800 (PST)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Fri, 10 Mar 2023 08:20:32 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE6414EA7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:20:30 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id A61BD85F02;
-        Fri, 10 Mar 2023 14:19:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1678454370;
-        bh=T1qPTroUrw41HD5Kfj4vg6ghP9BlWSvXjEv3ypvyj5c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QHfYaLYyxqDHW8ytxTby+1NIJqQSwyu0oR1Esw5TZcBoz5N/6ty8j0oEzgXDnVr2S
-         sQ78rBpdcU6x59RStvVoIsUDUzGxgW9xxpjyJjd3LfLXv6IRGWnIC+gHrkjrswl+y/
-         eR8CtJILtoIOyaLWpskCbBynYkBPvLypxTcZXBvhHMZoio7+02jeV+gnCMrYXFc3qD
-         QLHpeNnVKt3zi7BeQMVzKVcUsqYsbAck7JhTb8nv05DIQG4smZVbClhqhjsmG3J5Mm
-         Bvo/clTF+7wBHmiQ58wLkZ8w4K4/Ag+b+YpvkLizP6dMJ5PbTafVJ4/+afrKo3PMVF
-         rSvhc5e+XAv/g==
-Date:   Fri, 10 Mar 2023 14:19:28 +0100
-From:   Lukasz Majewski <lukma@denx.de>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/7] dsa: marvell: Correct value of max_frame_size
- variable after validation
-Message-ID: <20230310141928.00b08422@wsk>
-In-Reply-To: <ZAsdN3j8IrL0Pn0J@shell.armlinux.org.uk>
-References: <20230309125421.3900962-1-lukma@denx.de>
-        <20230309125421.3900962-7-lukma@denx.de>
-        <ZAnnk5MZc0w4VkDE@shell.armlinux.org.uk>
-        <20230309154350.0bdc54c8@wsk>
-        <0959097a-35cb-48c1-8e88-5e6c1269852d@lunn.ch>
-        <20230310125346.13f93f78@wsk>
-        <ZAsdN3j8IrL0Pn0J@shell.armlinux.org.uk>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 741F222AB9;
+        Fri, 10 Mar 2023 13:20:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1678454429; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Na7IReUqp04yyYni6gLzqdg28AZY0BZDGd6IjPJJaxo=;
+        b=i1yiuv+xQXiPmy1Vzn1pcxQHYP6cRFvd4fIWhc6Q3lzJtumHP8HfzdTbjquhrRwIZ6fznx
+        LBsDaWiqLAKmH+UPTsWRdTSIndIkRETMrgZff8YltEMUWBh064Jza/YinMhXbtmeq4Anm+
+        ka+fGzK9ssqKjkw3i1luzhiv0AKLxT4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1678454429;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Na7IReUqp04yyYni6gLzqdg28AZY0BZDGd6IjPJJaxo=;
+        b=NElPwiuJaEfuSCu1YzakYOO+cvdidG/jtCl3MvmAJj9FiQgoYZxEwiz/wWeF1hIWo2hsaJ
+        Avy87IdKhRlY23BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2FDAE134F7;
+        Fri, 10 Mar 2023 13:20:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2RVuCp0uC2SYPAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 10 Mar 2023 13:20:29 +0000
+Message-ID: <6c556799-6a78-4b67-a4c7-4de0a8f082fa@suse.de>
+Date:   Fri, 10 Mar 2023 14:20:28 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aAiJ219S1SCy7CqP8Ir=2Hx";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] drm/virtio: Enable fb damage clips property for the
+ primary plane
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Bilal Elmoussaoui <belmouss@redhat.com>,
+        Jocelyn Falempe <jfalempe@redhat.com>,
+        Enric Balletbo i Serra <eballetb@redhat.com>,
+        Christian Hergert <chergert@redhat.com>,
+        Albert Esteve <aesteve@redhat.com>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <20230310125943.912514-1-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230310125943.912514-1-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------H0HUDGi9zGc6QAbfhXC4QAHh"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/aAiJ219S1SCy7CqP8Ir=2Hx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------H0HUDGi9zGc6QAbfhXC4QAHh
+Content-Type: multipart/mixed; boundary="------------0tC6cVnrTiqjK9gsD3MhcpKk";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: Bilal Elmoussaoui <belmouss@redhat.com>,
+ Jocelyn Falempe <jfalempe@redhat.com>,
+ Enric Balletbo i Serra <eballetb@redhat.com>,
+ Christian Hergert <chergert@redhat.com>, Albert Esteve <aesteve@redhat.com>,
+ Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ David Airlie <airlied@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>,
+ Gurchetan Singh <gurchetansingh@chromium.org>,
+ dri-devel@lists.freedesktop.org, virtualization@lists.linux-foundation.org
+Message-ID: <6c556799-6a78-4b67-a4c7-4de0a8f082fa@suse.de>
+Subject: Re: [PATCH] drm/virtio: Enable fb damage clips property for the
+ primary plane
+References: <20230310125943.912514-1-javierm@redhat.com>
+In-Reply-To: <20230310125943.912514-1-javierm@redhat.com>
 
-Hi Russell,
+--------------0tC6cVnrTiqjK9gsD3MhcpKk
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> On Fri, Mar 10, 2023 at 12:53:46PM +0100, Lukasz Majewski wrote:
-> > Hi Andrew,
-> >  =20
-> > > > > If I understand this correctly, in patch 4, you add a call to
-> > > > > the 6250 family to call mv88e6185_g1_set_max_frame_size(),
-> > > > > which sets a bit called MV88E6185_G1_CTL1_MAX_FRAME_1632 if
-> > > > > the frame size is larger than 1518.   =20
-> > > >=20
-> > > > Yes, correct.
-> > > >    =20
-> > > > >=20
-> > > > > However, you're saying that 6250 has a frame size of 2048.
-> > > > > That's fine, but it makes MV88E6185_G1_CTL1_MAX_FRAME_1632
-> > > > > rather misleading as a definition. While the bit may increase
-> > > > > the frame size, I think if we're going to do this, then this
-> > > > > definition ought to be renamed.  =20
-> > > >=20
-> > > > I thought about rename, but then I've double checked; register
-> > > > offset and exact bit definition is the same as for 6185, so to
-> > > > avoid unnecessary code duplication - I've reused the existing
-> > > > function.
-> > > >=20
-> > > > Maybe comment would be just enough?   =20
-> > >=20
-> > > The driver takes care with its namespace in order to add per
-> > > switch family defines. So you can add
-> > > MV88E6250_G1_CTL1_MAX_FRAME_2048. It does not matter if it is the
-> > > same bit. You can also add a mv88e6250_g1_set_max_frame_size()
-> > > and it also does not matter if it is in effect the same as
-> > > mv88e6185_g1_set_max_frame_size().
-> > >=20
-> > > We should always make the driver understandably first, compact and
-> > > without redundancy second. We are then less likely to get into
-> > > situations like this again where it is not clear what MTU a device
-> > > actually supports because the code is cryptic. =20
-> >=20
-> > Ok, I will add new function.
-> >=20
-> > Thanks for hints. =20
->=20
-> It may be worth doing:
->=20
-> static int mv88e6xxx_g1_modify(struct mv88e6xxx_chip *chip, int reg,
-> 			       u16 mask, u16 val)
-> {
-> 	int addr =3D chip->info->global1_addr;
-> 	int err;
-> 	u16 v;
->=20
-> 	err =3D mv88e6xxx_read(chip, addr, reg, &v);
-> 	if (err < 0)
-> 		return err;
->=20
-> 	v =3D (v & ~mask) | val;
->=20
-> 	return mv88e6xxx_write(chip, addr, reg, v);
-> }
->=20
-> Then, mv88e6185_g1_set_max_frame_size() becomes:
->=20
-> int mv88e6185_g1_set_max_frame_size(struct mv88e6xxx_chip *chip, int
-> mtu) {
-> 	u16 val =3D 0;
->=20
-> 	if (mtu + ETH_HLEN + ETH_FCS_LEN > 1518)
-> 		val =3D MV88E6185_G1_CTL1_MAX_FRAME_1632;
->=20
-> 	return mv88e6xxx_g1_modify(chip, MV88E6XXX_G1_CTL1,
-> 				   MV88E6185_G1_CTL1_MAX_FRAME_1632,
-> val); }
->=20
+SGkgSmF2aWVyDQoNCkFtIDEwLjAzLjIzIHVtIDEzOjU5IHNjaHJpZWIgSmF2aWVyIE1hcnRp
+bmV6IENhbmlsbGFzOg0KPiBDaHJpc3RpYW4gSGVyZ2VydCByZXBvcnRzIHRoYXQgdGhlIGRy
+aXZlciBkb2Vzbid0IGVuYWJsZSB0aGUgcHJvcGVydHkgYW5kDQo+IHRoYXQgbGVhZHMgdG8g
+YWx3YXlzIGRvaW5nIGEgZnVsbCBwbGFuZSB1cGRhdGUsIGV2ZW4gd2hlbiB0aGUgZHJpdmVy
+IGRvZXMNCj4gc3VwcG9ydCBkYW1hZ2UgY2xpcHBpbmcgZm9yIHRoZSBwcmltYXJ5IHBsYW5l
+Lg0KPiANCj4gRG9uJ3QgZW5hYmxlIGl0IGZvciB0aGUgY3Vyc29yIHBsYW5lLCBiZWNhdXNl
+IGl0cyAuYXRvbWljX3VwZGF0ZSBjYWxsYmFjaw0KPiBkb2Vzbid0IGhhbmRsZSBkYW1hZ2Ug
+Y2xpcHMuDQo+IA0KPiBSZXBvcnRlZC1ieTogQ2hyaXN0aWFuIEhlcmdlcnQgPGNoZXJnZXJ0
+QHJlZGhhdC5jb20+DQo+IFNpZ25lZC1vZmYtYnk6IEphdmllciBNYXJ0aW5leiBDYW5pbGxh
+cyA8amF2aWVybUByZWRoYXQuY29tPg0KPiAtLS0NCj4gDQo+ICAgZHJpdmVycy9ncHUvZHJt
+L3ZpcnRpby92aXJ0Z3B1X3BsYW5lLmMgfCA0ICsrKysNCj4gICAxIGZpbGUgY2hhbmdlZCwg
+NCBpbnNlcnRpb25zKCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3Zp
+cnRpby92aXJ0Z3B1X3BsYW5lLmMgYi9kcml2ZXJzL2dwdS9kcm0vdmlydGlvL3ZpcnRncHVf
+cGxhbmUuYw0KPiBpbmRleCA0YzA5ZTMxM2JlYmMuLmEyZTA0NWYzYTAwMCAxMDA2NDQNCj4g
+LS0tIGEvZHJpdmVycy9ncHUvZHJtL3ZpcnRpby92aXJ0Z3B1X3BsYW5lLmMNCj4gKysrIGIv
+ZHJpdmVycy9ncHUvZHJtL3ZpcnRpby92aXJ0Z3B1X3BsYW5lLmMNCj4gQEAgLTM5MCw1ICsz
+OTAsOSBAQCBzdHJ1Y3QgZHJtX3BsYW5lICp2aXJ0aW9fZ3B1X3BsYW5lX2luaXQoc3RydWN0
+IHZpcnRpb19ncHVfZGV2aWNlICp2Z2RldiwNCg0KdmlydGlvX2dwdV9wbGFuZV9pbml0KCkg
+c2hvdWxkIHJlYWxseSBiZSB0d28gc2VwYXJhdGUgZnVuY3Rpb25zLiBCdXQgDQp3aXRoaW5n
+IHRoZSBjb25zdHJhaW5zIG9mIHRoZSBjdXJyZW50IGNvZGUNCg0KUmV2aWV3ZWQtYnk6IFRo
+b21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQpCZXN0IHJlZ2FyZHMN
+ClRob21hcw0KDQo+ICAgCQlyZXR1cm4gcGxhbmU7DQo+ICAgDQo+ICAgCWRybV9wbGFuZV9o
+ZWxwZXJfYWRkKHBsYW5lLCBmdW5jcyk7DQo+ICsNCj4gKwlpZiAodHlwZSA9PSBEUk1fUExB
+TkVfVFlQRV9QUklNQVJZKQ0KPiArCQlkcm1fcGxhbmVfZW5hYmxlX2ZiX2RhbWFnZV9jbGlw
+cyhwbGFuZSk7DQo+ICsNCj4gICAJcmV0dXJuIHBsYW5lOw0KPiAgIH0NCj4gDQo+IGJhc2Ut
+Y29tbWl0OiAzZTg1M2I5Zjg5ZTRiY2M4YWEzNDJmYTM1MGQ4M2ZmMGRmNjdkN2U5DQoNCi0t
+IA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0Ug
+U29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkg
+TsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOk
+ZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Yes, correct.
+--------------0tC6cVnrTiqjK9gsD3MhcpKk--
 
-> The 6250 variant becomes similar.
->=20
-> We can also think about converting all those other read-modify-writes
-> to use mv88e6xxx_g1_modify().
->=20
-> The strange thing is... we already have mv88e6xxx_g1_ctl2_mask() which
-> is an implementation of mv88e6xxx_g1_modify() specifically for
-> MV88E6XXX_G1_CTL2 register, although it uses (val & mask) rather than
-> just val. That wouldn't be necessary if the bitfield macros (e.g.
-> FIELD_PREP() were used rather than explicit __bf_shf().
->=20
-
-I do have the impression that major refactoring of the mv6xxx driver
-would be welcome...
-
-
-Best regards,
-
-Lukasz Majewski
-
---
-
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/aAiJ219S1SCy7CqP8Ir=2Hx
-Content-Type: application/pgp-signature
+--------------H0HUDGi9zGc6QAbfhXC4QAHh
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmQLLmAACgkQAR8vZIA0
-zr15EQgA0yZDpPb/UbKFQTl0gCCg94biTlYLgVqpjHqax+hhsgCx69Zla2jAV16e
-cGSNsOctFiJTSc7YI3KQQN6o7M1qV5foywwN9ob8UgKzQDDFdZvUWa0JhSQLp7rw
-UhEEA3wTY7RYiEGKjAXBHbxjMsAok+RlOGUakUzuiZjpfLtHnSDz91OyEIKFCOtc
-Qb/nDUGeq55777JmHmxrHpU8YgkV5wA0yRQbkjxN+/cFR9+Td4Dh17jizYOE0160
-neChoGoW+4TsMTLg3lP4n/6IU046IZ79aNZzDGKTO0FRNZeNXI3HTSDXUC6WnxSK
-WDG3qV5hX//iklNHHHhFsnHRlJp0EQ==
-=zMRB
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQLLpwFAwAAAAAACgkQlh/E3EQov+Am
+GBAAvJ3XEh+sW5ic+HXC4WBZJdHwDSW2DMjgbbn2NHT/Fs4DA7BuLK5F4uGp0zNTWUZ3nOfTRAIm
+45lVRZtefYzzM+/thEEomZtpZxpg7NLU1eZ48nMCvJiaZsqe5ujzN2MNej+Z299z+z5n0dVIYPdT
+XF3mRsAVlFqmCKEH8+7rbnWyQwkwEJkX5YqC/MT2e+pXWm/dNbU40cZsPKXdtY14elSkaJyEcZuY
+f7xuKdvuptb/0rb6J2JXpeb8QWjCu3ogKBoHxK+Ofl+RiNaJjHaFldOvtOWLsqKhiHGKeQpTwXZ+
+IXZTFk6266ju2SSGxLa8M2XABJOStIw58NkksxoBK4dLMZarKSBgoAsOY1xG2pPKTNCcoqGK9re0
+erK/ZPT2nkZei+pW8KzX5vGVRcYtVSxdQZ8p0kHCU5z9w12DM2YkHSztJprvBgIre0S5KFBGoQtn
+GoqcNffQ4XYnZfIIjsTUEZm7gPc799KWpJZtlkxG+E209AOtUk2jFVttZhnVrHNeoGw1MwcBz3BQ
+PD1TRYP49fPlQGLOXHskqpTI0cTkFViA8VuCTRLJIrLQByHRu5JqEubxdFXyhBjzV1kcyNI0GcgX
+60lWEBoPR5HjkrjgMECgegVksP1GSq170/adkQmxwqcHAR6FOLPtcDLCgbL9QWCc2JqUqI68mMqr
+r+s=
+=/TF1
 -----END PGP SIGNATURE-----
 
---Sig_/aAiJ219S1SCy7CqP8Ir=2Hx--
+--------------H0HUDGi9zGc6QAbfhXC4QAHh--
