@@ -2,80 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A836B5429
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F996B542E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjCJWTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 17:19:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
+        id S231589AbjCJWVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 17:21:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231702AbjCJWTh (ORCPT
+        with ESMTP id S229945AbjCJWVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 17:19:37 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFF810E586
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:19:35 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id z10so3903599pgr.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:19:35 -0800 (PST)
+        Fri, 10 Mar 2023 17:21:37 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520805DC8C
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:21:34 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id a137-20020a25ca8f000000b0091b90b20cd9so7120172ybg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:21:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678486775;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EvsKBaDtD3EgyaQ1Xn4Hp5jthv3TczAQ07c2Q2VYcmA=;
-        b=EDcj9YtfpjXPb0sCaWDI/UU3RxulYbBu2xP+2ycNiJVm7/G3WPH9L5qAmIYXoX2pU4
-         Rm4sHjPDjkt1x9fZJPlphxqIzTIYQlfQKt7WOsw1ucu6oqV1iU0Nxs9ChlotNB0h3Tae
-         BqDqTtWIKPDko3VrjcuiXbrdEAdC0/yAiBm3xV3l0lXAnbmYfCzeF+GWJGIoSppy/Aw8
-         UQrZeVZl3dUTBSekGJCCAV5V6Axfo+n4FLPzHSS142p0xWZY4vqIlDssGxt6Xh5mX1qk
-         xJo+O+O6/9lkRewVEMYQlJH7V2shnYhk4Ma8XJT0/2jPD+vxPld7gGlP1DuJw1dtC2R3
-         Go4w==
+        d=google.com; s=20210112; t=1678486893;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bNk5WMZuK/TfpBzWcYdw8aTqTSoewqS7vtwhPKDCVOo=;
+        b=h3i6N8WZ48i/Qi/G0Ngo3IG/d2/GMJ5LB0xCEcllPPJWPbRwvNzNGAPOv5trMIdEMK
+         1yx6i4+ABS+Gg2sUwFytLmkpyDkpgiJ9q0LFkXA8gDJopKigN+APi3Y6K60wkYakRJar
+         B8JQQ028OlQD9okMKRTJxtHEYWvE0J6LGp1ivsa2+iPfTbYvpO3qKTfmmz3LcE4dHYRt
+         0l//B9Wa1YIvmjF2v2KHJkZOatje3n3IcBb7tKAWXcWLPVBcf3zQPlRAqhEvFTXtrCwK
+         1SpfkoPNeVa7A/owbpj5vo7DX+VveSvM6CbseMCCGlfIP4+Qu04eJmnfYdi1MkG0eYzK
+         tdjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678486775;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EvsKBaDtD3EgyaQ1Xn4Hp5jthv3TczAQ07c2Q2VYcmA=;
-        b=zvtZ663fuQlVFX05zQ0dWZtw8utgGtdgTSwRU+9qudNFQOEv92NTiJQGPGdEtURR1d
-         pnB+jKiZz3wMM4yMqdP6wGTyT5TClAQkDVzh+zYc0hD8qua9/LgxLKlWBIaNNBqpyXwo
-         FHF6WI8JZ8Px12asXj1Y2OOfO5BSDxzWQzlR3zx34WO9tG6auSoRXOFaKt8TF8CtqsWT
-         TJ4qyLKM2ILoRR6VpAxIROfqgjaMx6DjxM7X1HAa6JtuduFBhIq9F1AP+11XTxuzvgM5
-         4OAkuMg6aPJCY7XwiLWUjeuCycub9zsnwkdwrPYc5xVnCx5a6+kbjfeanFeZr1BAgzzm
-         jgzg==
-X-Gm-Message-State: AO0yUKU8UHRAOxIlmawky1RUu+PHrAtpPmAuVikP9gACtSFY0aKtXjZM
-        ENjnz1MXe8mBJyMpZNFansjn+Z7TGyVOF0f17qHLKA==
-X-Google-Smtp-Source: AK7set/USztulmyfgqBjR02RNa4Xnjc4nNPPs5JX1UrT5r/Ag+00Y+mH/CDAByF59LR1QkDW5SAWGfzqGZZDNhPswZ4=
-X-Received: by 2002:a63:7356:0:b0:507:8088:9e0d with SMTP id
- d22-20020a637356000000b0050780889e0dmr3571131pgn.7.1678486774869; Fri, 10 Mar
- 2023 14:19:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20230301214952.2190757-1-saravanak@google.com>
- <2a8e407f4f18c9350f8629a2b5fa18673355b2ae.camel@puri.sm> <e65e08c13885468675af527ffa2ab882cc9e682d.camel@puri.sm>
- <CAGETcx93K1VjAosX9NDEyLVLPK2utPSUV6dwzdAT-Dc5BfmhzQ@mail.gmail.com> <4e8d00617de0c25dcf84847c3d3ad3f2d76ee5b9.camel@puri.sm>
-In-Reply-To: <4e8d00617de0c25dcf84847c3d3ad3f2d76ee5b9.camel@puri.sm>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 10 Mar 2023 14:18:58 -0800
-Message-ID: <CAGETcx_CDBf3eTgTkUCwYoyvXk4L7hJBDKj6rwow6k=EdbZpqA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Yongqin Liu <yongqin.liu@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
+        d=1e100.net; s=20210112; t=1678486893;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bNk5WMZuK/TfpBzWcYdw8aTqTSoewqS7vtwhPKDCVOo=;
+        b=1NNKdzj1tqyjinVi7s/NRzMlpmIoRlQ3WEB1ydKOsQcKigNtziMLITMvNS5K49W/pP
+         /iwQ82axkWCcl3AsY0tIQERHXeRups33A4BP38oxghxgYoz5QYVkmtSxbmuEex+tH7z0
+         nCjX07OvsXeG8HJoYsyyjqd4fnxNMn7YD/49LZpNchb+8l97Q0RaRJEUXhVa93QC8Sah
+         lZ7LUR3fMNORZGuvujiyslUYc+RX3w7e7GbsxK8rmPCrXbPuGkNZ6FFIHCxDvgm0Vbj6
+         d4gtI/NMJuwqmY7AmOz104d7Rqp4fPQrFNfy4omVZkUEOmXAilmtFRzBL1EfvHO2a16x
+         La6w==
+X-Gm-Message-State: AO0yUKV4hnxZ3Elk2rjDdXpWSBGNFug8XV/pkQOp8cWvCsglSjUoy38e
+        IRckd5y13DouZs3tdqxmJ969D/VVbw==
+X-Google-Smtp-Source: AK7set87HeKySNFsMz77J6UOYj/OTfMmt2G7hVuS71znb9YCtL54I8c/2svGFVigy1MCpaZO9jVVQWCCoQ==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a5b:e92:0:b0:ab8:1ed9:cfc9 with SMTP id
+ z18-20020a5b0e92000000b00ab81ed9cfc9mr16429440ybr.6.1678486893605; Fri, 10
+ Mar 2023 14:21:33 -0800 (PST)
+Date:   Fri, 10 Mar 2023 22:20:02 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230310222002.3633162-1-rmoar@google.com>
+Subject: [KTAP V2 PATCH] ktap_v2: add skip test result
+From:   Rae Moar <rmoar@google.com>
+To:     frowand.list@gmail.com, davidgow@google.com,
+        skhan@linuxfoundation.org, keescook@chromium.org,
+        Tim.Bird@sony.com, brendanhiggins@google.com
+Cc:     corbet@lwn.net, guillaume.tucker@collabora.com,
+        dlatypov@google.com, kernelci@groups.io,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rae Moar <rmoar@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,165 +71,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 2:07=E2=80=AFAM Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
->
-> Am Donnerstag, dem 09.03.2023 um 16:24 -0800 schrieb Saravana Kannan:
-> > On Thu, Mar 2, 2023 at 1:41=E2=80=AFAM Martin Kepplinger
-> > <martin.kepplinger@puri.sm> wrote:
-> > >
-> > > Am Donnerstag, dem 02.03.2023 um 10:12 +0100 schrieb Martin
-> > > Kepplinger:
-> > > > Am Mittwoch, dem 01.03.2023 um 13:49 -0800 schrieb Saravana
-> > > > Kannan:
-> > > > > Yongqin, Martin, Amelie,
-> > > > >
-> > > > > We recent refactor of fw_devlink that ends with commit
-> > > > > fb42378dcc7f
-> > > > > ("mtd: mtdpart: Don't create platform device that'll never
-> > > > > probe"),
-> > > > > fw_devlink is smarter and doesn't depend on compatible
-> > > > > property.
-> > > > > So,
-> > > > > I
-> > > > > don't think these calls are needed anymore. But I don't have
-> > > > > these
-> > > > > devices to test on and be sure and the hardware I use to test
-> > > > > changes
-> > > > > doesn't have this issue either.
-> > > > >
-> > > > > Can you please test these changes on the hardware where you hit
-> > > > > the
-> > > > > issue to make sure things work as expected?
-> > > > >
-> > > > > Yongqin, If you didn't have the context, this affected
-> > > > > hikey960.
-> > > > >
-> > > > > Greg,
-> > > > >
-> > > > > Let's wait for some tests before we land these.
-> > > > >
-> > > > > Thanks,
-> > > > > Saravana
-> > > >
-> > > > hi Sravana,
-> > > >
-> > > > I picked the 12 commits leading up to commit fb42378dcc7f ("mtd:
-> > > > mtdpart: Don't create platform device that'll never probe") (
-> > > > https://source.puri.sm/martin.kepplinger/linux-next/-/commits/test_=
-fw_devlink
-> > > > ) and included the tipd patch below to test it.
-> > > >
-> > > > With that, I get the following errors:
-> > > >
-> > > > [    0.237931] imx-uart 30890000.serial: Failed to create device
-> > > > link
-> > > > with regulator-gnss
-> > > > [    0.334054] nwl-dsi 30a00000.mipi-dsi: Failed to create device
-> > > > link
-> > > > with regulator-lcd-1v8
-> > > > [    0.346964] nwl-dsi 30a00000.mipi-dsi: Failed to create device
-> > > > link
-> > > > with backlight-dsi
-> > > >
-> > > > but they are independent of this final tipd patch below. I'll
-> > > > test a
-> > > > real linux-next tree soon, for completeness, maybe I missed
-> > > > something?
-> > > >
-> > > > Anyways, on that tree, your tipd removal patch breaks type-c
-> > > > still
-> > > > for
-> > > > me, imx8mq-librem5.dtsi
-> > > >
-> > > > just to give a first reply quickly... thanks,
-> > > >
-> > > >                              martin
-> > > >
-> > >
-> > > just confirming: it's the same as above on next-20230302 + this
-> > > patch (
-> > > https://source.puri.sm/martin.kepplinger/linux-next/-/commits/test_fw=
-_devlink_next-20230302
-> > > ) with the errors already independent from the patch. I should have
-> > > tested earlier patches -.-
-> >
-> > Thanks a lot for testing Martin!
-> >
-> > Your email is a little ambiguous to me. With the 12 refactor commits
-> > +
-> > the 4 patches in this series, things are breaking for you. But if you
-> > drop the 4 patches in this series, things work again. Is that right?
->
-> no. Sorry if I wasn't clear. I can't justify to block these 4 patches.
-> they *themselves* don't break anything.
->
-> Something broke *earlier* than these 4 patches in one of the other 12.
+Add the test result "skip" to KTAP version 2 as an alternative way to
+indicate a test was skipped.
 
-If you find out it's one of the other 12 patches in the refactor that
-broke things for you, can you please reply to the right email in that
-series[1] and let me know which patch broke things for you and provide
-the debug details there? I don't want to mix issues with unrelated
-threads -- I want them to be easy to find in the future.
+The current spec uses the "#SKIP" directive to indicate that a test was
+skipped. However, the "#SKIP" directive is not always evident when quickly
+skimming through KTAP results.
 
-[1] -  https://lore.kernel.org/lkml/20230207014207.1678715-1-saravanak@goog=
-le.com/
+The "skip" result would provide an alternative that could make it clearer
+that a test has not successfully passed because it was skipped.
 
-For all my questions below, you don't need to reply here. Just reply
-to the right thread.
+Before:
 
-> As to *what* broke: The error messages during boot,
+ KTAP version 1
+ 1..1
+   KTAP version 1
+   1..2
+   ok 1 case_1
+   ok 2 case_2 #SKIP
+ ok 1 suite
 
-The error messages, is it anything other than the "Failed to create
-device link"?
+After:
 
-> and the charger and
-> fuel gauge don't work anymore, I see:
->
-> # cat /sys/kernel/debug/devices_deferred
-> 3-0036  max17042: failed: power supply register
-> 0-003f
+ KTAP version 2
+ 1..1
+   KTAP version 2
+   1..2
+   ok 1 case_1
+   skip 2 case_2
+ ok 1 suite
 
-This seems to be the main culprit. That 0-003f isn't probing. It's
-surprising that the reason is empty too. IIRC that means it didn't do
-deferred probing, but rather failed with an error. Wild guess .... Try
-increasing the deferred_probe_timeout to see if it helps?
+Here is a link to a version of the KUnit parser that is able to parse
+the skip test result for KTAP version 2. Note this parser is still able
+to parse the "#SKIP" directive.
 
-> 38100000.usb    platform: wait for supplier endpoint
-> 32c00000.hdmi   platform: supplier 0-003f not ready
-> 3-006a  bq25890-charger: registering power supply
->
->
-> I haven't had time to track it down and see where the issue is. Could
-> be one of the 12 patches, could be a wrong description for my board:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/a=
-rch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
-> or something else (an i2c issue?).
->
-> (for completeness, the exact tree I ran:
-> https://source.puri.sm/martin.kepplinger/linux-next/-/commits/test_fw_dev=
-link
-> )
->
-> >
-> > Let's ignore the "Failed to create device link" errors for now --
-> > it's
-> > not related to this usb-c-connector series. It's basically pointing
-> > out issues that we ignored silently in the past -- it's basically
-> > pointing out holes in fw_devlink's visibility of devices. I'll get to
-> > them later.
->
-> ok. good to know. please do.
+Link: https://kunit-review.googlesource.com/c/linux/+/5689
 
-Here's a fix for the Failed to create device link issues.
-https://lore.kernel.org/lkml/20230310063910.2474472-1-saravanak@google.com/
+Signed-off-by: Rae Moar <rmoar@google.com>
+---
 
-> And since I'm the only one seeing an issue, please move the patches
-> forward. I'll need to fix this after the fact and hope to have time for
-> it next week.
+Note: this patch is based on Frank's ktap_spec_version_2 branch.
 
-I'd rather wait for you than rush these patches in. The patches are
-just removing what I expect to be cruft. I'd rather confirm that first
-than break anything.
+ Documentation/dev-tools/ktap.rst | 27 ++++++++++++++++++---------
+ 1 file changed, 18 insertions(+), 9 deletions(-)
 
--Saravana
+diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
+index ff77f4aaa6ef..f48aa00db8f0 100644
+--- a/Documentation/dev-tools/ktap.rst
++++ b/Documentation/dev-tools/ktap.rst
+@@ -74,7 +74,8 @@ They are required and must have the format:
+ 	<result> <number> [<description>][ # [<directive>] [<diagnostic data>]]
+ 
+ The result can be either "ok", which indicates the test case passed,
+-or "not ok", which indicates that the test case failed.
++"not ok", which indicates that the test case failed, or "skip", which indicates
++the test case did not run.
+ 
+ <number> represents the number of the test being performed. The first test must
+ have the number 1 and the number then must increase by 1 for each additional
+@@ -91,12 +92,13 @@ A directive is a keyword that indicates a different outcome for a test other
+ than passed and failed. The directive is optional, and consists of a single
+ keyword preceding the diagnostic data. In the event that a parser encounters
+ a directive it doesn't support, it should fall back to the "ok" / "not ok"
+-result.
++/ "skip" result.
+ 
+ Currently accepted directives are:
+ 
+-- "SKIP", which indicates a test was skipped (note the result of the test case
+-  result line can be either "ok" or "not ok" if the SKIP directive is used)
++- "SKIP", which indicates a test was skipped (note this is an alternative to
++  the "skip" result type and if the SKIP directive is used, the
++  result can be any type - "ok", "not ok", or "skip")
+ - "TODO", which indicates that a test is not expected to pass at the moment,
+   e.g. because the feature it is testing is known to be broken. While this
+   directive is inherited from TAP, its use in the kernel is discouraged.
+@@ -110,7 +112,7 @@ Currently accepted directives are:
+ 
+ The diagnostic data is a plain-text field which contains any additional details
+ about why this result was produced. This is typically an error message for ERROR
+-or failed tests, or a description of missing dependencies for a SKIP result.
++or failed tests, or a description of missing dependencies for a skipped test.
+ 
+ The diagnostic data field is optional, and results which have neither a
+ directive nor any diagnostic data do not need to include the "#" field
+@@ -130,11 +132,18 @@ The test "test_case_name" failed.
+ 
+ ::
+ 
+-	ok 1 test # SKIP necessary dependency unavailable
++	skip 1 test # necessary dependency unavailable
+ 
+-The test "test" was SKIPPED with the diagnostic message "necessary dependency
++The test "test" was skipped with the diagnostic message "necessary dependency
+ unavailable".
+ 
++::
++
++	ok 1 test_2 # SKIP this test should not run
++
++The test "test_2" was skipped with the diagnostic message "this test
++should not run".
++
+ ::
+ 
+ 	not ok 1 test # TIMEOUT 30 seconds
+@@ -225,7 +234,7 @@ An example format with multiple levels of nested testing:
+ 	    not ok 1 test_1
+ 	    ok 2 test_2
+ 	  not ok 1 test_3
+-	  ok 2 test_4 # SKIP
++	  skip 2 test_4
+ 	not ok 1 example_test_1
+ 	ok 2 example_test_2
+ 
+@@ -262,7 +271,7 @@ Example KTAP output
+ 	  ok 1 example_test_1
+ 	    KTAP version 2
+ 	    1..2
+-	    ok 1 test_1 # SKIP test_1 skipped
++	    skip 1 test_1 # test_1 skipped
+ 	    ok 2 test_2
+ 	  ok 2 example_test_2
+ 	    KTAP version 2
+
+base-commit: 906f02e42adfbd5ae70d328ee71656ecb602aaf5
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
+
