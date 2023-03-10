@@ -2,112 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963476B5363
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED7F6B5365
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjCJVu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 16:50:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
+        id S231987AbjCJVvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 16:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232300AbjCJVuA (ORCPT
+        with ESMTP id S232541AbjCJVuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 16:50:00 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BA1E7C94
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:47:06 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id i34so26056562eda.7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:47:06 -0800 (PST)
+        Fri, 10 Mar 2023 16:50:39 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADF213EBA7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:47:50 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id ec29so26108047edb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:47:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678484767;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7QldUnB9DK++r9IeP/7G8h+f/oI23uHDDVTXX+AKTbM=;
-        b=VSJs/E5dMhRtlW23myb9CxFaOl67MqXlhDSjdI07vDkatFJhqu6CTSFwx9q3jk4IJ0
-         bLNsXnJ6+2s9GtGXkd7GBt5x7sYZ+LJ6dmr6h43+y3oDVroQezV7kUy1CcFnFU1Llg/E
-         YC+gYRYEU29XI9Kozo9ZU3HdP4ifHCmd+GZJpqZhPLNUhkCMU8yoesRPvOZr46kDXbTl
-         /d1ly+BVNEqnEm1enL7nmd86UITqH1KUu17WoOU9FI/k//BzGg0h0nFednZCVIzwHxQf
-         xeGKlzIl8oKtLGBZlAVJHz3+hBVez+oQZG+JsgLigZTWVhOLq3G62m+NVQLBRN3DsFja
-         D0cQ==
+        d=linaro.org; s=google; t=1678484797;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SeJX9lSGwZbRGOASyeKJInBHWHmDyRL8Oo8/OupUB9Q=;
+        b=I4VhGR8BarZ8ZUC/EPGtBWoticWk4MDuo0tG3Tg1iNkyklQ2Ur0SuiqcPODtE2eMBf
+         PyeDV5OcJpdUHGd0wHSGqBEZB7YeXs9mEOxD3htiyMPdbfO2dAPkaOJsB+Kr6WWn9Z2s
+         8Jl4R5WOgnBRXbpBKvAa0kEOAHXE9/7qfcblWSrM0YZbuJi6EqOK4NitnHKNs4cC+3/4
+         7hjMaA4G9lfyHpVebanLvVFUMkYNajOyIg6C33wTk/rGYaR+zfx5s9neSPUZ4CrX7w9a
+         8o+Mdt+mzzNn7Cvv4pxDZHRchsZWOOmGTSFXDGk/q8Jrf3q/9lsgLKvERaYG9NyaLVKc
+         vB1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678484767;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7QldUnB9DK++r9IeP/7G8h+f/oI23uHDDVTXX+AKTbM=;
-        b=SLt2bH9VSREOdZqF6WlywWU/pHk386vLU3kUbI2Z12mrP71fxbZOxorFfP3pMwvp9n
-         T6/OZ6UueWmlaVCdQ7H61gvyQGN2s+6FprEqNqdNK+iCCWJ6CooiOnG5nugyKNMyS4+v
-         uun49+RIZn1mhHXyRuNdU6KAcO2aBU3/2unaREM06r6opRuV5QwD4Zfh+whKsiKBvEBK
-         YA82RchnI2ludtOj06IoQkkspjDHrmyYBs0oIO9bXueQ7/rIxRcsRFSGnRAcmf0Iy27q
-         XLC1ReZOKBkqUG/GeXK5BTL11P78D9KuE4Uj+XnDru9FwAnYT7MyKKzNwWkb51OxUvC1
-         z0Rw==
-X-Gm-Message-State: AO0yUKUQyCt4u4WviDq7KVO/HGsdXuDL4Ya6JnthxbqfOz1SlNcRy2SR
-        cmn1xYKfZMwxM0ZvLLRsan5S9g==
-X-Google-Smtp-Source: AK7set/TN6HEHcHKgSpnaQNAvcq6/J9mJlM0Vmdwb6gRlrMLE7hUWXDBNwCju/6Q/6+EyoGExFlw2A==
-X-Received: by 2002:aa7:d683:0:b0:4af:75fd:8214 with SMTP id d3-20020aa7d683000000b004af75fd8214mr20546242edr.38.1678484767172;
-        Fri, 10 Mar 2023 13:46:07 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678484797;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SeJX9lSGwZbRGOASyeKJInBHWHmDyRL8Oo8/OupUB9Q=;
+        b=mCpl2h0YTDcFaITQ9evjoNmQE/wHDqW7bXFl4Kr+CggFvbHgjxDKV6k881uPbFaMFn
+         gsjD20uAmGqQte/LVzQdB5gi39JSnbyA2qkD6iBCpWHO3y0ZIOaGCBuy++QG+8etVdjX
+         9vSLoh/MQrdee4yJk8Lle+MViOu0qCDKXtWeOYIOxnhqSEnyOpLGSi1bivc7R+JBjhLG
+         HDkBCLYGtntDRnzyWu937tXpEHYjK+uCW1TVgMd/VWzlNBWABXWLCbPtNm1uYKOL+QIS
+         Ydt//DDG6OMnhDW8nnFf4rPGI7xq8kjnBdEzl4ADn6XOT4rGgU4e/BkItxGncTW22vcZ
+         0X6A==
+X-Gm-Message-State: AO0yUKX5b5tJluhcnrxUbDr2q//lG0ZJcqrd6Upka8+2uGuunRn5B/hv
+        FLxf6hkxrEllRvCQtSVC/f5hlw==
+X-Google-Smtp-Source: AK7set+fefzslhk3HVdoFlRZdjEzX/BPXogkmHteV4hEH093tDdyyFmRA7z+gYHRC6c1yXWYakLf5g==
+X-Received: by 2002:a05:6402:1608:b0:4bf:da1a:2be3 with SMTP id f8-20020a056402160800b004bfda1a2be3mr22977290edv.34.1678484796905;
+        Fri, 10 Mar 2023 13:46:36 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:34:52e3:a77e:cac5])
-        by smtp.gmail.com with ESMTPSA id u7-20020a50d507000000b004be11e97ca2sm471873edi.90.2023.03.10.13.46.06
+        by smtp.gmail.com with ESMTPSA id t5-20020a50ab45000000b004bf7905559asm488088edc.44.2023.03.10.13.46.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 13:46:06 -0800 (PST)
+        Fri, 10 Mar 2023 13:46:36 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Byungho An <bh74.an@samsung.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 9/9] regulator: twl6030: Drop of_match_ptr for ID table
-Date:   Fri, 10 Mar 2023 22:45:53 +0100
-Message-Id: <20230310214553.275450-9-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/5] net: stmmac: qcom: drop of_match_ptr for ID table
+Date:   Fri, 10 Mar 2023 22:46:28 +0100
+Message-Id: <20230310214632.275648-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230310214553.275450-1-krzysztof.kozlowski@linaro.org>
-References: <20230310214553.275450-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver can match only via the DT table so the table should be always
-used and the of_match_ptr does not have any sense (this also allows ACPI
-matching via PRP0001, even though it is not relevant here).
-
-  drivers/regulator/twl6030-regulator.c:646:34: error: ‘twl_of_match’ defined but not used [-Werror=unused-const-variable=]
+The driver is specific to ARCH_QCOM which depends on OF thus the driver
+is OF-only.  Its of_device_id table is built unconditionally, thus
+of_match_ptr() for ID table does not make sense.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/regulator/twl6030-regulator.c | 2 +-
+ drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/regulator/twl6030-regulator.c b/drivers/regulator/twl6030-regulator.c
-index f3856750944f..be798f3c129e 100644
---- a/drivers/regulator/twl6030-regulator.c
-+++ b/drivers/regulator/twl6030-regulator.c
-@@ -765,7 +765,7 @@ static struct platform_driver twlreg_driver = {
- 	 */
- 	.driver  = {
- 		.name  = "twl6030_reg",
--		.of_match_table = of_match_ptr(twl_of_match),
-+		.of_match_table = twl_of_match,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+index 732774645c1a..32763566c214 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+@@ -606,7 +606,7 @@ static struct platform_driver qcom_ethqos_driver = {
+ 	.driver = {
+ 		.name           = "qcom-ethqos",
+ 		.pm		= &stmmac_pltfr_pm_ops,
+-		.of_match_table = of_match_ptr(qcom_ethqos_match),
++		.of_match_table = qcom_ethqos_match,
  	},
  };
- 
+ module_platform_driver(qcom_ethqos_driver);
 -- 
 2.34.1
 
