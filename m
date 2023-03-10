@@ -2,99 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAD76B3B60
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0416B3B61
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbjCJJxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:53:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
+        id S230337AbjCJJx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:53:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjCJJxX (ORCPT
+        with ESMTP id S229652AbjCJJxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Mar 2023 04:53:23 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4174393A;
-        Fri, 10 Mar 2023 01:53:20 -0800 (PST)
-Received: from [192.168.86.246] (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F005C115;
+        Fri, 10 Mar 2023 01:53:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: tanureal)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 27FED660305B;
-        Fri, 10 Mar 2023 09:53:19 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678441999;
-        bh=yTOKzUGzEBdFLHPokAIe0S9LUwi4oC8dcd7Rms8wGGE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=edTm25Ezw29SJrUN31+J6cyYULJUxBgIMwZ9dJFyVd4onZOYT+3tLFjuf+HPlZH7k
-         luRaOP4miwxydIwZm1IdkpVWolXDNosYMBJrcoQyJTSiDM/jtxvGZ3z9ZWWPsQRpQv
-         c4hSayZbLAffR0x0+IAn5GkEwdLZ52+FesOHymfKPrA+IcKvk6VD5fyQm+mNAwznXz
-         TXvIv99kYtKPnpEZ6o/UNbeE6oVTgrnR97533VIgUHFVdRK3xFx6Y+TKrWtsFSeRI7
-         tDRIMKUrLWJABJaCiovqsxFKn2n9Bz/v26fL7QFPN3WZwH78za3Iy6HQrxpwKD2cTe
-         +2+ACL/I4EcBQ==
-Message-ID: <37adba14-1add-187c-01b5-5109be38018e@collabora.com>
-Date:   Fri, 10 Mar 2023 09:53:16 +0000
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18A02612A8;
+        Fri, 10 Mar 2023 09:53:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 082F8C433EF;
+        Fri, 10 Mar 2023 09:53:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678442000;
+        bh=O+JWxf5jtc5BK4m+Tf9y0SQFJSX2Jhk1I5UXaxpYuMc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eBhdWPPLFmf9+chVjt2b48y1rwt+nfuK6C67wgdpvRdZyldUgd9LxLyMiFbekiUnU
+         ij99N6oYtqlQ/CxdBrg23YgsB6BDq0/ZnNL1kzvt5X+rAM2jQVAgpk7v3iCAIUoLB6
+         mOPwJxWk9LTB369AMaMJ8htfhAvH1tQA4kvGAK04=
+Date:   Fri, 10 Mar 2023 10:53:17 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sasha Finkelstein <fnkl.kernel@gmail.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] bluetooth: btbcm: Fix logic error in forming the
+ board name.
+Message-ID: <ZAr+DWZ9bt3ZxpCs@kroah.com>
+References: <20230224-btbcm-wtf-v1-1-d2dbd7ca7ae4@gmail.com>
+ <ZArmD064NVhNS96C@kroah.com>
+ <CAMT+MTT1RE2M0Fn3k+EXO=WNgAvNGPGHpidpTp0Jdus61M5UPw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/7] irqchip/gic-v3: Add a DMA Non-Coherent flag
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, Qu Wenruo <wqu@suse.com>,
-        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, kernel@collabora.com,
-        Robin Murphy <robin.murphy@arm.com>
-References: <20230310080518.78054-1-lucas.tanure@collabora.com>
- <20230310080518.78054-2-lucas.tanure@collabora.com>
- <a43dee4ef0e72c393dea6ce924347f81@kernel.org>
-From:   Lucas Tanure <lucas.tanure@collabora.com>
-In-Reply-To: <a43dee4ef0e72c393dea6ce924347f81@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMT+MTT1RE2M0Fn3k+EXO=WNgAvNGPGHpidpTp0Jdus61M5UPw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10-03-2023 08:56, Marc Zyngier wrote:
-> On 2023-03-10 08:05, Lucas Tanure wrote:
->> The GIC600 integration in RK356x, used in rk3588, doesn't support
->> any of the shareability or cacheability attributes, and requires
->> both values to be set to 0b00 for all the ITS and Redistributor
->> tables.
->>
->> This is loosely based on prior work from XiaoDong Huang and
->> Peter Geis fixing this issue specifically for Rockchip 356x.
-> 
-> No.
-> 
-> If we are going to do *anything* about this thing, it is by
-> describing the actual topology.
-What do you mean by describe the topology?
-What kind of information are you expecting?
+On Fri, Mar 10, 2023 at 10:41:28AM +0100, Sasha Finkelstein wrote:
+> > <formletter>
+> >
+> > This is not the correct way to submit patches for inclusion in the
+> > stable kernel tree.  Please read:
+> >     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+> > for how to do this properly.
+> >
+> > </formletter>
+> Sorry about that, let's just skip the stable tree part for now then.
 
+That's not how to solve the problem, if it's a bug that needs to be
+fixed in stable kernels, submit it properly and it will automatically be
+propagated there as the documentation states.
 
-And it has to work for both DT
-> and ACPI.
-> 
-> Alternatively, this is an erratum.
-> 
->          M.
+thanks,
 
+greg k-h
