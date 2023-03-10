@@ -2,170 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17046B405E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D0B6B4064
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjCJNZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 08:25:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
+        id S229804AbjCJN1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 08:27:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjCJNZh (ORCPT
+        with ESMTP id S229453AbjCJN1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:25:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF465A181;
-        Fri, 10 Mar 2023 05:25:01 -0800 (PST)
+        Fri, 10 Mar 2023 08:27:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF4B3C06;
+        Fri, 10 Mar 2023 05:27:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C389961743;
-        Fri, 10 Mar 2023 13:23:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD5DC433D2;
-        Fri, 10 Mar 2023 13:23:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40930B822AB;
+        Fri, 10 Mar 2023 13:27:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E15FC433EF;
+        Fri, 10 Mar 2023 13:26:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678454621;
-        bh=JxGawBRBiAOKWI5mLLvbiOwWip4wIDn5bcx4U5k5Nkw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nJ80UnqY7geRXzONADjCSgCs2PTfGcUUR3qPrctyesUDIck0YSBHRNbYu1ajilYq7
-         lZvbNJ+YUFxK5yqdzVksIHiQT6U/XIKt0wpnp29IV2wNpIdSE4Ug6rl9emMFjCWACa
-         2RTCzQU4znfxqahoGfB4ruot4XQzewlrqsrVvK3GYsGOM972CvQDp1m+kKxv74S9UY
-         1FAVhLtvkJ65oGHRW/4MyrS4nm/lRVcoUIW6iTlaZyEJNFui1LFeAWuu9E6l8gPJQg
-         V6ykPimE4c4oVP0mBRZ9fFstknXkh9oi4JBfwfY3GJkSRy6wS2ImQsux+NnFImGhog
-         ML4HFt+sPST4Q==
-Message-ID: <46415d8e-3c92-d489-3f44-01a586160082@kernel.org>
-Date:   Fri, 10 Mar 2023 15:23:34 +0200
+        s=k20201202; t=1678454821;
+        bh=1fevsLWDSygfQVCGJ0gejYAP/iPQR1DJXPBRLgwub5A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YZ9djVPO9O9RVXaRK81zFJza+wLcKtwndrNkdJ9Zn2JE1TAn7CBPWuyTwHWJqExFz
+         jC1FmCzmQUw45IKAZm0ZC3jJ8JnnXIacUjkzDkc0Z2pRTPPH57cClleCNoKzKj1DwL
+         NHyLRml5GBpaIJ/F727SA9BADk+mI8KY0AtqUKPns5t7gn7JPL9TE9u6XesrKjT07m
+         RuT0YYM9X9Eh4A3SuRZgs9ZMSK932suN9l3LfSjUGZdWv0zWMIhplbLM+isQEeU/ZI
+         /ORhY67EtKL/47+lGK8srv4Qiy3bqYty92ox95oiNIUX7VHrW6oNrK4/ldIVBr0yJo
+         QVJZfJ/UJHkHA==
+Date:   Fri, 10 Mar 2023 14:26:55 +0100
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Shawn Guo <shawn.guo@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: PCI: Add quirk for platforms running Windows
+Message-ID: <ZAswHyaYjeqjW/+A@lpieralisi>
+References: <20230227021221.17980-1-shawn.guo@linaro.org>
+ <20230308185310.GA1030878@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v3 3/6] soc: ti: pruss: Add
- pruss_cfg_read()/update() API
-To:     Md Danish Anwar <a0501179@ti.com>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-Cc:     linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20230306110934.2736465-1-danishanwar@ti.com>
- <20230306110934.2736465-4-danishanwar@ti.com>
- <7076208d-7dca-6980-5399-498e55648740@kernel.org>
- <afd6cd8a-8ba7-24b2-d7fc-c25a9c5f3c42@ti.com>
- <a74e5079-d89d-2420-b6af-d630c4f04380@kernel.org>
- <a4395259-9b83-1101-7c4c-d8a36c3600eb@ti.com>
- <367f6b50-e4cc-c3eb-e8e9-dabd4e044530@ti.com>
-Content-Language: en-US
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <367f6b50-e4cc-c3eb-e8e9-dabd4e044530@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308185310.GA1030878@bhelgaas>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Danish,
-
-On 10/03/2023 13:53, Md Danish Anwar wrote:
-> Hi Roger,
+On Wed, Mar 08, 2023 at 12:53:10PM -0600, Bjorn Helgaas wrote:
+> On Mon, Feb 27, 2023 at 10:12:21AM +0800, Shawn Guo wrote:
+> > Commit 8fd4391ee717 ("arm64: PCI: Exclude ACPI "consumer" resources from
+> > host bridge windows") introduced a check to remove host bridge register
+> > resources for all arm64 platforms, with the assumption that the PNP0A03
+> > _CRS resources would always be host bridge registers and never as windows
+> > on arm64.
+> > 
+> > The assumption stands true until Qualcomm Snapdragon Windows laptops
+> > emerge.  These laptops describe host bridge windows in PNP0A03 _CRS
+> > resources instead.  For example, the Microsoft Surface Pro X has host
+> > bridges defined as
+> > 
+> >     Name (_HID, EisaId ("PNP0A08") /* PCI Express Bus */)  // _HID: Hardware ID
+> >     Name (_CID, EisaId ("PNP0A03") /* PCI Bus */)  // _CID: Compatible ID
+> > 
+> >     Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+> >     {
+> >         Name (RBUF, ResourceTemplate ()
+> >         {
+> >             Memory32Fixed (ReadWrite,
+> >                 0x60200000,         // Address Base
+> >                 0x01DF0000,         // Address Length
+> >                 )
+> >             WordBusNumber (ResourceProducer, MinFixed, MaxFixed, PosDecode,
+> >                 0x0000,             // Granularity
+> >                 0x0000,             // Range Minimum
+> >                 0x0001,             // Range Maximum
+> >                 0x0000,             // Translation Offset
+> >                 0x0002,             // Length
+> >                 ,, )
+> >         })
+> >         Return (RBUF) /* \_SB_.PCI0._CRS.RBUF */
+> >     }
+> > 
+> > The Memory32Fixed holds a host bridge window, but it's not properly
+> > defined as a "producer" resource.  Consequently the resource gets
+> > removed by kernel, and the BAR allocation fails later on:
+> > 
+> >     [ 0.150731] pci 0002:00:00.0: BAR 14: no space for [mem size 0x00100000]
+> >     [ 0.150744] pci 0002:00:00.0: BAR 14: failed to assign [mem size 0x00100000]
+> >     [ 0.150758] pci 0002:01:00.0: BAR 0: no space for [mem size 0x00004000 64bit]
+> >     [ 0.150769] pci 0002:01:00.0: BAR 0: failed to assign [mem size 0x00004000 64bit]
+> > 
+> > This eventually prevents the PCIe NVME drive from being accessible.
+> > 
+> > Add a quirk for these platforms to avoid the resource being removed.
+> > 
+> > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> > ---
+> > We are running into the issue on more devices than just Surface Pro X
+> > now, so trying to sort it out with a quirk as suggested by Lorenzo [1].
 > 
-> On 09/03/23 17:00, Md Danish Anwar wrote:
->> Hi Roger,
->>
->> On 08/03/23 17:12, Roger Quadros wrote:
->>>
->>>
->>> On 08/03/2023 13:36, Md Danish Anwar wrote:
->>>> Hi Roger,
->>>>
->>>> On 08/03/23 13:57, Roger Quadros wrote:
->>>>> Hi,
->>>>>
->>>>> On 06/03/2023 13:09, MD Danish Anwar wrote:
->>>>>> From: Suman Anna <s-anna@ti.com>
->>>>>>
->>>>>> Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
->>>>>> the PRUSS platform driver to allow other drivers to read and program
->>>>>> respectively a register within the PRUSS CFG sub-module represented
->>>>>> by a syscon driver. This interface provides a simple way for client
->>>>>
->>>>> Do you really need these 2 functions to be public?
->>>>> I see that later patches (4-6) add APIs for doing specific things
->>>>> and that should be sufficient than exposing entire CFG space via
->>>>> pruss_cfg_read/update().
->>>>>
->>>>>
->>>>
->>>> I think the intention here is to keep this APIs pruss_cfg_read() and
->>>> pruss_cfg_update() public so that other drivers can read / modify PRUSS config
->>>> when needed.
->>>
->>> Where are these other drivers? If they don't exist then let's not make provision
->>> for it now.
->>> We can provide necessary API helpers when needed instead of letting client drivers
->>> do what they want as they can be misused and hard to debug.
->>>
->>
->> The ICSSG Ethernet driver uses pruss_cfg_update() API. It is posted upstream in
->> the series [1]. The ethernet driver series is dependent on this series. In
->> series [1] we are using pruss_cfg_update() in icssg_config.c file,
->> icssg_config() API.
-
-You can instead add a new API on what exactly you want it to do rather than exposing
-entire CFG space.
-
->>
->> So for this, the API pruss_cfg_update() needs to be public.
->>
->> [1] https://lore.kernel.org/all/20230210114957.2667963-3-danishanwar@ti.com/
->>
+> One thing I don't like about this application of quirks is that the
+> list of affected platforms is likely to grow, which is an ongoing
+> burden for users and developers.
 > 
-> I will keep this patch as it is as pruss_cfg_update() needs to be public for
-> ICSSG Ethernet driver and pruss_cfg_read() is kind of a complementary function
-> to update. I will do required changes in other patches and send next revision
-> if that's OK with you. Please let me know.
-> 
->>>>
->>>> The later patches (4-6) add APIs to do specific thing, but those APIs also
->>>> eventually call pruss_cfg_read/update().
->>>
->>> They can still call them but they need to be private to pruss.c
->>>
->>>>
->>>>>> drivers without having them to include and parse the CFG syscon node
->>>>>> within their respective device nodes. Various useful registers and
->>>>>> macros for certain register bit-fields and their values have also
->>>>>> been added.
->>>>>>
->>>>>> It is the responsibility of the client drivers to reconfigure or
->>>>>> reset a particular register upon any failures.
->>>>>>
->>>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
->>>>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
->>>>>> ---
->>>>>>  drivers/soc/ti/pruss.c           |  41 +++++++++++++
->>>>>>  include/linux/remoteproc/pruss.h | 102 +++++++++++++++++++++++++++++++
->>>>>>  2 files changed, 143 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
->>>>>> index c8053c0d735f..537a3910ffd8 100644
->>>>>> --- a/drivers/soc/ti/pruss.c
->>>>>> +++ b/drivers/soc/ti/pruss.c
->>>>>> @@ -164,6 +164,47 @@ int pruss_release_mem_region(struct pruss *pruss,
->>>>>>  }
->>>>>>  EXPORT_SYMBOL_GPL(pruss_release_mem_region);
->>>>>
+> Can we have a conversation with Qualcomm about how they *intend* this
+> to work?  Linux is probably doing something wrong (interpreting
+> something differently than Windows does), and if we could fix that, we
+> have a better chance of future platforms working without quirks.
 
-cheers,
--roger
+Catch-22. What if some firmware would add host bridge MMIO register
+space (marked as consumer) in the _CRS ? We would end up allocating
+BAR regions in there, which is not right, so your commit:
+
+8fd4391ee717 ("arm64: PCI: Exclude ACPI "consumer" resources from host bridge windows")
+
+is correct and if we revert it we would trigger regressions on some
+arm64 platforms for the reason I mention above.
+
+We can look for clarification at ACPI specs level but for firmware
+that is out there I am not sure what options we have.
+
+Lorenzo
+
+> > [1] https://lore.kernel.org/all/20210527093200.GA16444@lpieralisi/
+> > 
+> >  arch/arm64/kernel/pci.c | 26 ++++++++++++++++++++++++++
+> >  1 file changed, 26 insertions(+)
+> > 
+> > diff --git a/arch/arm64/kernel/pci.c b/arch/arm64/kernel/pci.c
+> > index 2276689b5411..896dbd028b67 100644
+> > --- a/arch/arm64/kernel/pci.c
+> > +++ b/arch/arm64/kernel/pci.c
+> > @@ -109,16 +109,42 @@ int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
+> >  	return 0;
+> >  }
+> >  
+> > +#define QCOM_DSDT_QUIRK "Host bridge windows in PNP0A03 _CRS"
+> > +
+> > +static struct acpi_platform_list qcom_platlist[] = {
+> > +	/* Thinkpad X13s */
+> > +	{ "LENOVO", "SDM8280 ", 0, ACPI_SIG_DSDT, all_versions, QCOM_DSDT_QUIRK },
+> > +	/* Microsoft Surface Pro 9 (5G) and Windows Dev Kit 2023 */
+> > +	{ "QCOMM ", "SDM8280 ", 0, ACPI_SIG_DSDT, all_versions, QCOM_DSDT_QUIRK },
+> > +	/* Microsoft Surface Pro X */
+> > +	{ "QCOMM ", "SDM8180 ", 0, ACPI_SIG_DSDT, all_versions, QCOM_DSDT_QUIRK },
+> > +	{ }
+> > +};
+> > +
+> >  static int pci_acpi_root_prepare_resources(struct acpi_pci_root_info *ci)
+> >  {
+> >  	struct resource_entry *entry, *tmp;
+> >  	int status;
+> > +	int idx;
+> >  
+> >  	status = acpi_pci_probe_root_resources(ci);
+> > +
+> > +	/*
+> > +	 * Most arm64 platforms that do not run Windows describe host bridge
+> > +	 * registers in PNP0A03 _CRS resources, but some like Qualcomm
+> > +	 * Snapdragon Windows laptops describe host bridge windows in there.
+> > +	 * We do not want to destroy the resources for these platforms.
+> > +	 */
+> > +	idx = acpi_match_platform_list(qcom_platlist);
+> > +	if (idx >= 0)
+> > +		goto done;
+> > +
+> >  	resource_list_for_each_entry_safe(entry, tmp, &ci->resources) {
+> >  		if (!(entry->res->flags & IORESOURCE_WINDOW))
+> >  			resource_list_destroy_entry(entry);
+> >  	}
+> > +
+> > +done:
+> >  	return status;
+> >  }
+> >  
+> > -- 
+> > 2.17.1
+> > 
