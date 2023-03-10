@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CD36B493E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DEC6B4943
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233807AbjCJPKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:10:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
+        id S233881AbjCJPK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:10:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233751AbjCJPK3 (ORCPT
+        with ESMTP id S233834AbjCJPKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:10:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EA012DDD8;
-        Fri, 10 Mar 2023 07:02:46 -0800 (PST)
+        Fri, 10 Mar 2023 10:10:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F0312EAEF
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:02:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAD3C6187C;
-        Fri, 10 Mar 2023 15:02:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80517C4339C;
-        Fri, 10 Mar 2023 15:02:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60B41B8233D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 15:02:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B1D1C433EF;
+        Fri, 10 Mar 2023 15:02:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678460558;
-        bh=4nO6S7AVKJRkqUospk0gd3rr/UVmqm229W5wXjOFSqU=;
+        s=k20201202; t=1678460563;
+        bh=rD7uHaTr84/DrLdgRVp00Y8+O40SUHVZfLkVyZSebx4=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=aInGjzrM0pCcji/YZ458YXHR90uLPoDBXPhufKIlVHPF1oUYsOmmdDfPDnJnymjPS
-         UPCWykKdDBlosBZCTOoGVn1OSgobEzk1joCjc06+G+rntnOlyY6vaCPAOyp6Nn8qJb
-         ofguEF1TwOAv6Lt3moUg6h3+E2KyIBflz/HUM+Ri5+Kfr+c3Q2+t8dlY/8rblXzje6
-         A9Yp1H0hHnQZ+EA53Xt5Nn4qbBr3IUp98y/Vfv6i3vS+GnuM9L4Rbn52MHYDbM82ak
-         cUMUvchz4BPKuQ9NDxqgrhy0LPbQTFjZINV6ndYWXuUJZTO+8AREyTxD9PQzz9PThO
-         ghTAnWA/kFlqw==
+        b=jKB4GRPB9kMli7vK5FWHPqXNier8azpYTpkazG74K7fRN7yYckay5BsmWrEX2ubqK
+         SJ1BwLhQ0665GLeCdGZIWJzbmQoUBnojKOq7Z+B1Yt0j1HT9wVMOFHuDXBj9tiOK8P
+         dh24wQK0nSbbJ3uHZCNNcpIp/u8Q+J3w8hKhSbgsDnKKun4PRt+ZUrRNZO7mEw8pt1
+         alwCwMDcE+mAPEn4V62zuPhCY1oozhKJw6qMVsHgZXVcW/dabOtZTv1CqjAPbY66ww
+         I5RFm2NGmQL3kJ9lya0Oi3sAAyiif+TGCh8F84QFBrE1QZNxgERECCnUPkC+s67eDT
+         CC9zeSw/kp6RQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, perex@perex.cz, tiwai@suse.com,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20221213112851.89212-1-claudiu.beznea@microchip.com>
-References: <20221213112851.89212-1-claudiu.beznea@microchip.com>
-Subject: Re: [PATCH v3 0/4] ASoC: microchip: power saving features and
- cleanups
-Message-Id: <167846055521.924369.14328317678015706144.b4-ty@kernel.org>
-Date:   Fri, 10 Mar 2023 15:02:35 +0000
+To:     vkoul@kernel.org, Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     yung-chuan.liao@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+In-Reply-To: <20230112171840.2098463-1-ckeepax@opensource.cirrus.com>
+References: <20230112171840.2098463-1-ckeepax@opensource.cirrus.com>
+Subject: Re: [PATCH 0/2] Minor SoundWire Regmap Tweaks
+Message-Id: <167846056128.924636.15059113415143446875.b4-ty@kernel.org>
+Date:   Fri, 10 Mar 2023 15:02:41 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,31 +55,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Dec 2022 13:28:47 +0200, Claudiu Beznea wrote:
-> The following series adds runtime PM and suspend to RAM features for
-> mchp-pdmc driver.
+On Thu, 12 Jan 2023 17:18:38 +0000, Charles Keepax wrote:
+> One minor correction to a comment and updating the allowed register
+> sizes for the SoundWire register map, to allow support of additional
+> hardware.
 > 
-> Along with it 2 cleanup patches were added:
-> - patch 1/4: use vendor,device.yaml file format for Microchip AT91 ASoC
->   bindings
-> - patch 4/4: use FIELD_PREP() in mchp-spdiftx.c
+> NOTE: The second patch requires the patch commit 62dc9f3f2fd0
+> ("soundwire: bus: export sdw_nwrite_no_pm and sdw_nread_no_pm
+> functions") from Vinod's SoundWire tree to build, so not sure if we want
+> to push these patches through his tree or merge his tree across.
 > 
 > [...]
 
 Applied to
 
-   broonie/sound.git for-next
+   broonie/regmap.git for-next
 
 Thanks!
 
-[1/4] ASoC: dt-bindings: microchip: use proper naming syntax
-      (no commit info)
-[2/4] ASoC: mchp-pdmc: use runtime pm for clock power saving
-      (no commit info)
-[3/4] ASoC: mchp-pdmc: add support for suspend to RAM
-      (no commit info)
-[4/4] ASoC: mchp-spdiftx: use FIELD_PREP() where possible
-      commit: 28ce5698456ab53540093836c6fee15119cf1821
+[1/2] regmap: sdw: Update misleading comment
+      commit: 6466b376e927d51ea3eadc1965714305d8c3c066
+[2/2] regmap: sdw: Remove 8-bit value size restriction
+      commit: 522272047dc631610dd180be0c3670043bcdf42e
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
