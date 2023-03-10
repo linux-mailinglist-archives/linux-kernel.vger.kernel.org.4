@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85C16B38D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A27D6B38D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbjCJIff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 03:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
+        id S231252AbjCJIfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbjCJIfM (ORCPT
+        with ESMTP id S230331AbjCJIfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:35:12 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8A16153C
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:35:09 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id da10so17429209edb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:35:09 -0800 (PST)
+        Fri, 10 Mar 2023 03:35:13 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9F662D88
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:35:10 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id ec29so17358921edb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:35:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678437308;
+        d=gmail.com; s=20210112; t=1678437309;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=s4eERmpGRWxN7WGTZJirAqZLtcWVZejiRDlj9T4wObg=;
-        b=QEHT/Kmafou4c+fPJ4W3mksw8ajqdo2XLzLsHGizvtqOzI7nCHZoz67aRqVygsWNYI
-         vYYEJVdHtWJ1ByZTTanLjVOpcB4EeOamopmdXVZzv4SrO/Nlgr6bIN6/EtCuiop81i1+
-         qbQPTif6bWMIjblA5muXgURhXELE2Ost6+EW/qo+b21PoubO9ZVRj9NnZg5BfYr/R6L7
-         9//z+geQJ6je0xWKAAvis5k/814C4zAeonRRvnkO6XbvwFWSvgwC0cuTio/4Eb8F6V+J
-         69/G56a6W86SdCANiBZ4DXUuH1IvLz8bI837HzWqvNxi0cF/PvApv3mg6MV1AYZB19VG
-         Da+Q==
+        bh=oFs/e/K/gilrBIUS/3vF7+owOyPjJYDXNevbCxgiE/4=;
+        b=RBkobFKJ41nf/fAPlQny3VRJNwdx8fMPH4lp5Z454gp+GwXUmlPcJuYgMoYmBq2a5N
+         U37LQ2hsJ8LRI/fJFR/ctcpJIIeIJg6LzQTB7lMCzM/wUDtN1E/6TmFG+4FlPJ16w+Ir
+         Z+KTbWNcggIOfMBWwUKuNgMC6ZInlEyST4ZsCMeaU68ZTSlVg97/Wzz/jJf+tkDknIBb
+         +wVAWiEQUyP+spNrrcXCmczq06tzSyhWG0wKAnNtmGFZno/hgtDP4DYnTAvdtCyZoKzc
+         qrEZRS/CxTmg0EAre8rcOxwkojquYa1OQvyxyy2skXFPoS1lZGeubw2/kYqyBlpOy6tA
+         8zlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678437308;
+        d=1e100.net; s=20210112; t=1678437309;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=s4eERmpGRWxN7WGTZJirAqZLtcWVZejiRDlj9T4wObg=;
-        b=W65Q7oEmN7bEbJVpZud7sSSG5VBZnY3UXL0pZ1GGw5Nq7qSocRQVpuf99Rgz51FKKh
-         EzWfjprnPtvQfkQgEpsUPLwI6MaWsx2y5FiO21wF/PdDOwQpZVg2VpNbyClSE4GZHVO8
-         ed3toFUrppB8a70q929m/lhKRYTkVlXB3XlTHiA/y0XHPIDk2iUVXrto1cVk6V0356Fh
-         aIrsuyz+wFOnLLdCsv0Lu1SqKh1ZdI6tqz+VYz86RXrZetfUAA6LxYUmeAHKEwlsnsHr
-         RnlXSfRM3VFACwgN5QnJxtLjirVjt+1BE3LVuwoY0OrbYtFimPEpyRTpWjPjplR54PYE
-         GDbg==
-X-Gm-Message-State: AO0yUKUddXTMjNp4p6afXf1rgsHIhKi/K85YAIvy1sL+JEn/4YQmGe1C
-        a/QDkDnwiU9ENsskHWQ8pQ7YGgRpPWE=
-X-Google-Smtp-Source: AK7set/gGW4PyYu6LY3aIJ3Hp9Re7e7hvAsjhgO+H1xmMX+PpYMlrAWORpE4aOBw42Vsz+6YXngpSg==
-X-Received: by 2002:a17:906:d9c2:b0:8b1:7b22:90b6 with SMTP id qk2-20020a170906d9c200b008b17b2290b6mr23302762ejb.37.1678437308487;
+        bh=oFs/e/K/gilrBIUS/3vF7+owOyPjJYDXNevbCxgiE/4=;
+        b=7x9vZEJJ9sRD6NSaMJegSgjvnjTMupwQ6cZvV7+HwQFCIKnDGp0A/2NDRPUuDSocO9
+         CjQhfrZLSK29PiDUD/yqLbruGNWotJ4volM2zrUKu/cIU7mXXOixi/ckfiXCtsiirPJP
+         brgM9/lek0HD4wQps6fDI7vFURVYNm2kTumTELpzgAVJklaevhLC5hA+951T+wnCs2Er
+         9yD8bRwW/YggQ1ByhEFrdEbWdN/4l7jHxSOY17oGUN+v/at005+/eqDEovW9YVMp3J9F
+         Jz+ZFBHFL9Isxr1O4CHAw+xx/MY3rGkWLmu6Ge6wbKVtZEBe1sx4p9/tTBRsLZE685fq
+         LcUQ==
+X-Gm-Message-State: AO0yUKXgLQqzb9l3UCTOfBBdrZp/dC8Zmdk9+HTxjHp1HvPFC9AzYYu6
+        BWCB6rZCRuJIAwHZLL5f1cw=
+X-Google-Smtp-Source: AK7set+1UXSQl+SRqmOeFWItIcmJaep95cXb1ps44FVISlcj/OWnPtRPQ4M8UE5ZmeungxVUnuDKmQ==
+X-Received: by 2002:a17:906:fcb2:b0:8aa:c105:f0bf with SMTP id qw18-20020a170906fcb200b008aac105f0bfmr28935468ejb.17.1678437308902;
         Fri, 10 Mar 2023 00:35:08 -0800 (PST)
 Received: from localhost.localdomain (ip5f5abbd3.dynamic.kabel-deutschland.de. [95.90.187.211])
         by smtp.gmail.com with ESMTPSA id h10-20020a17090619ca00b008ce5b426d77sm697888ejd.13.2023.03.10.00.35.08
@@ -55,9 +55,9 @@ To:     gregkh@linuxfoundation.org
 Cc:     hdegoede@redhat.com, Larry.Finger@lwfinger.net,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 3/5] staging: rtl8723bs: isAllSpaceOrTab() is not used
-Date:   Fri, 10 Mar 2023 09:34:47 +0100
-Message-Id: <20230310083449.23775-4-straube.linux@gmail.com>
+Subject: [PATCH 4/5] staging: rtl8723bs: linked_info_dump() is not used
+Date:   Fri, 10 Mar 2023 09:34:48 +0100
+Message-Id: <20230310083449.23775-5-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230310083449.23775-1-straube.linux@gmail.com>
 References: <20230310083449.23775-1-straube.linux@gmail.com>
@@ -73,53 +73,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function isAllSpaceOrTab() is not used anywhere, remove it.
+The function linked_info_dump() is not used anywhere, remove it.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/rtl8723bs/hal/hal_com.c     | 15 ---------------
- drivers/staging/rtl8723bs/include/hal_com.h |  2 --
- 2 files changed, 17 deletions(-)
+ drivers/staging/rtl8723bs/hal/hal_com.c     | 21 ---------------------
+ drivers/staging/rtl8723bs/include/hal_com.h |  1 -
+ 2 files changed, 22 deletions(-)
 
 diff --git a/drivers/staging/rtl8723bs/hal/hal_com.c b/drivers/staging/rtl8723bs/hal/hal_com.c
-index ff0e41bf72b0..da68557c5b20 100644
+index da68557c5b20..792636fe3270 100644
 --- a/drivers/staging/rtl8723bs/hal/hal_com.c
 +++ b/drivers/staging/rtl8723bs/hal/hal_com.c
-@@ -877,21 +877,6 @@ bool GetU1ByteIntegerFromStringInDecimal(char *Str, u8 *pInt)
- 	return true;
+@@ -897,27 +897,6 @@ void rtw_hal_check_rxfifo_full(struct adapter *adapter)
+ 	}
  }
  
--bool isAllSpaceOrTab(u8 *data, u8 size)
+-void linked_info_dump(struct adapter *padapter, u8 benable)
 -{
--	u8 cnt = 0, NumOfSpaceAndTab = 0;
+-	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(padapter);
 -
--	while (size > cnt) {
--		if (data[cnt] == ' ' || data[cnt] == '\t' || data[cnt] == '\0')
--			++NumOfSpaceAndTab;
+-	if (padapter->bLinkInfoDump == benable)
+-		return;
 -
--		++cnt;
+-	if (benable) {
+-		pwrctrlpriv->org_power_mgnt = pwrctrlpriv->power_mgnt;/* keep org value */
+-		rtw_pm_set_lps(padapter, PS_MODE_ACTIVE);
+-
+-		pwrctrlpriv->ips_org_mode = pwrctrlpriv->ips_mode;/* keep org value */
+-		rtw_pm_set_ips(padapter, IPS_NONE);
+-	} else {
+-		rtw_pm_set_ips(padapter, pwrctrlpriv->ips_org_mode);
+-
+-		rtw_pm_set_lps(padapter, pwrctrlpriv->ips_org_mode);
 -	}
--
--	return size == NumOfSpaceAndTab;
+-	padapter->bLinkInfoDump = benable;
 -}
 -
--
- void rtw_hal_check_rxfifo_full(struct adapter *adapter)
+ #ifdef DBG_RX_SIGNAL_DISPLAY_RAW_DATA
+ void rtw_get_raw_rssi_info(void *sel, struct adapter *padapter)
  {
- 	struct dvobj_priv *psdpriv = adapter->dvobj;
 diff --git a/drivers/staging/rtl8723bs/include/hal_com.h b/drivers/staging/rtl8723bs/include/hal_com.h
-index 31fdb5c45de3..839d93d8a1df 100644
+index 839d93d8a1df..c1aa7f0a35f9 100644
 --- a/drivers/staging/rtl8723bs/include/hal_com.h
 +++ b/drivers/staging/rtl8723bs/include/hal_com.h
-@@ -149,8 +149,6 @@ bool eqNByte(u8 *str1, u8 *str2, u32 num);
+@@ -149,7 +149,6 @@ bool eqNByte(u8 *str1, u8 *str2, u32 num);
  
  bool GetU1ByteIntegerFromStringInDecimal(char *str, u8 *in);
  
--bool isAllSpaceOrTab(u8 *data, u8 size);
--
- void linked_info_dump(struct adapter *padapter, u8 benable);
+-void linked_info_dump(struct adapter *padapter, u8 benable);
  #ifdef DBG_RX_SIGNAL_DISPLAY_RAW_DATA
  void rtw_get_raw_rssi_info(void *sel, struct adapter *padapter);
+ void rtw_store_phy_info(struct adapter *padapter, union recv_frame *prframe);
 -- 
 2.39.2
 
