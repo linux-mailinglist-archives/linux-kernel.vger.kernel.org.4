@@ -2,77 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16F66B49C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A660F6B49CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:15:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234074AbjCJPPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:15:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
+        id S234111AbjCJPPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:15:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234151AbjCJPPB (ORCPT
+        with ESMTP id S234184AbjCJPPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:15:01 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B1BF4B57
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:06:22 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id a9so5839946plh.11
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:06:22 -0800 (PST)
+        Fri, 10 Mar 2023 10:15:12 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904EE26C37;
+        Fri, 10 Mar 2023 07:06:28 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id y15-20020a17090aa40f00b00237ad8ee3a0so5460692pjp.2;
+        Fri, 10 Mar 2023 07:06:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google; t=1678460724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mI9SynFLOYtOEHXFt34hbbK+yCygpvgICPPgvO9gfV8=;
-        b=VJ1dnBmXbkWcmPGgaIqe8y1AjzPkpkCDA30L72GW1BCNILg9Ux93MdjuFClsREO7vk
-         lPuzSZIDtThvsRkSsKGr3zO9rAsKWjoosj6IS8v322FG/klrkxUO4FIp6lMfqPuj4TxI
-         7iye1Ahz/4AiFFf6VAwHflCsxCwez6c0dgsKDphb107iKdmAqMvuRIOUZ+bfwhCgORMs
-         iHbeIn5DKK69O/9p0RZAo34CKsm8KqzEPsCeBsRVrQgTElcQ7BdUZWM4zM+YwjZmMWwf
-         jpTB1yeDWY83Dl59FnSeE0Klte9uU8zLnIN4Ka4GVeK62dZ/tM49vJHupbAcFDxR1gnt
-         LTqA==
+        d=gmail.com; s=20210112; t=1678460729;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ofHHg6fIbSRzVuSUsZdgjV1B186kH8cm7+Ef7BphX3g=;
+        b=nN5DW1bWkerWgy4Rj0Rhc4VoP6Nt+wfTg1kWN6uWR1+RpGbC2XDs1uA9XXb2p7rIL8
+         11wtM42KsGZ3obAuL32fU0YsJ6hw6XpfFYL9wpyEMvQ7Il8LXCk7GXqajUXF7yTOcAKB
+         xc8N+gTtQZS403QkTvH1los7U7RxOI0P4K1NWEFMpcZ/uIko7LChMolev1GQ/wdDccsK
+         DEj4trqb4BB9f3yC1SIvvAdTXLoG6mlEkEeBS+fwaOZCCngyS9HcPMTvbr8BUrTuQ9wN
+         bNFNFHUqnFCl5XhS5xbzMa3IJf8ocQG2n6tanRoRgv2w5EmlqrnuTZ/iogkdA5HgXvnF
+         5uJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678460724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mI9SynFLOYtOEHXFt34hbbK+yCygpvgICPPgvO9gfV8=;
-        b=vvhqZ7tTOLYORPOFfo1rpKz+0AS1UpGHZ9i6igug5WwcwCnJ1WqnUBz3BGwjLX+e8l
-         6Mwa8Vk9syt1gT4Huaz7C7M6//Vdy5nj+umrZ7p9b7sGvFWiOca7cOJtCpz3CZDbrmwm
-         BIJGGJpYVA0d3JKVhJYd3WpQ3lGZ6YALnG0Q+zSNrSIkOwLqxhU/2nhrh6jbccpFWIHH
-         u7oVV1kQEKE8owDLzLz5HcCqlTqY1d7IzJ8JUHftHuXoEdnCnlgImszDObHV3PPCybYV
-         fz2AvfJcwcLeotaH2hS1kBrtRx+ELcBbNrGScBBLV+VIKi+eo4rJJUxxtnl0zomLEOvW
-         1+kg==
-X-Gm-Message-State: AO0yUKW4AZcNZ5reegM/8yVO9aj7POwjSIeLVhDUIgshdSs9M7UscCsC
-        AXwm+mN1h/4dCA/gYQTWt7FXHkSo7R0Jez0dMVFcXA==
-X-Google-Smtp-Source: AK7set8IWRb0c5QRI0mCvofn+53toeLUf0QAqBXeiHkxJiCHSENVWUwl0Cn9xhaO9TH0b6aLOo+bYIjEMz5NYxW8+6s=
-X-Received: by 2002:a17:902:7e09:b0:199:6fd:ecf6 with SMTP id
- b9-20020a1709027e0900b0019906fdecf6mr9641502plm.9.1678460723997; Fri, 10 Mar
- 2023 07:05:23 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678460729;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ofHHg6fIbSRzVuSUsZdgjV1B186kH8cm7+Ef7BphX3g=;
+        b=L4flV6r+XBSjnyi62CTsL3O5qJ8TOmd8rMheA6vUX15ckeyGAo+1iyKmsoqG/XZ9yH
+         YetDMjFrdFERjurlP47v82jaVDF1MfBVkfNwBC/gbEtEaSw5pg7GWKgZ5aiq4YGECecf
+         P/tjwztTAPtbd2wv8TTWMuI7w+gASQq9ZnYyUK3jZ4ru7NKD0MtTmgJ3dRO2C6npg+sj
+         JHSRJAaSq7OHoQ/stypVSLR3M7WthfC43RkLJF70tJDidCOTIYdbOa0Tc0cys5Vo5pC1
+         Ye7BMdjxmJQtijWqwQRdij6LVxcolDCrmSytZMdvNa4Wed8tNZC98E8EAQec2W+mz2L2
+         h40w==
+X-Gm-Message-State: AO0yUKVYa754DdakcAeVQgVUSJLXPZqQbNJI0uj+iuKG+D0tGXfKz4O7
+        BtsFGZS67LDu10uclQCd3IxAMqosDZAkAw==
+X-Google-Smtp-Source: AK7set+oY1uoFFeNgUn1yO1HrcKEHwrb1cP1IDqiRtZTxJ4Zq7qGTFhjLZ6bAledhV1X3jvLbwAg2Q==
+X-Received: by 2002:a17:90a:2ec4:b0:233:dd4d:6b1a with SMTP id h4-20020a17090a2ec400b00233dd4d6b1amr2718674pjs.3.1678460728870;
+        Fri, 10 Mar 2023 07:05:28 -0800 (PST)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id r20-20020a17090b051400b002376d85844dsm32741pjz.51.2023.03.10.07.05.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 07:05:28 -0800 (PST)
+Date:   Fri, 10 Mar 2023 07:05:24 -0800
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     =?iso-8859-1?Q?K=F6ry?= Maincent <kory.maincent@bootlin.com>
+Cc:     Michael Walle <michael@walle.cc>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-omap@vger.kernel.org,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        thomas.petazzoni@bootlin.com, Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Minghao Chi <chi.minghao@zte.com.cn>,
+        Jie Wang <wangjie125@huawei.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Sean Anderson <sean.anderson@seco.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Marco Bonelli <marco@mebeim.net>
+Subject: Re: [PATCH v3 3/5] net: Let the active time stamping layer be
+ selectable.
+Message-ID: <ZAtHNKPuZog0tnzW@hoboy.vegasvil.org>
+References: <20230308135936.761794-1-kory.maincent@bootlin.com>
+ <20230308135936.761794-4-kory.maincent@bootlin.com>
+ <20230308135936.761794-4-kory.maincent@bootlin.com>
+ <20230308230321.liw3v255okrhxg6s@skbuf>
+ <20230310114852.3cef643d@kmaincent-XPS-13-7390>
+ <20230310113533.l7flaoli7y3bmlnr@skbuf>
+ <b4ebfd3770ffa5ad1233d2b5e79499ee@walle.cc>
+ <20230310131529.6bahmi4obryy5dsx@soft-dev3-1>
+ <0d2304a9bc276a0d321629108cf8febd@walle.cc>
+ <20230310150436.40ed168d@kmaincent-XPS-13-7390>
 MIME-Version: 1.0
-References: <20230130105423.1338554-1-mk@semmihalf.com> <20230130135418.1604455-1-mk@semmihalf.com>
- <CAJMMOfNJV+eOqTgUoLLWKQe2MJ=6fXL3aaP6d=YrSBQvfhOXiA@mail.gmail.com>
- <DM8PR02MB8169B2AC8918F8E31628F61AF3DB9@DM8PR02MB8169.namprd02.prod.outlook.com>
- <CAJMMOfN-6fgN0VohA5ViwVXmNWtA13ycfZFoO4ys9_CLes0feA@mail.gmail.com> <CAJMMOfM41dfqx0NoiHGE=8X5hoRHo1=qPEp4KXLP1kygestEJQ@mail.gmail.com>
-In-Reply-To: <CAJMMOfM41dfqx0NoiHGE=8X5hoRHo1=qPEp4KXLP1kygestEJQ@mail.gmail.com>
-From:   =?UTF-8?Q?Micha=C5=82_Krawczyk?= <mk@semihalf.com>
-Date:   Fri, 10 Mar 2023 16:05:12 +0100
-Message-ID: <CAJMMOfN6tUzGZOkP6ZXbKCr-vszqf3nnRM-dhXfpOUSiHr2EHA@mail.gmail.com>
-Subject: Re: [PATCH v2] media: venus: dec: Fix handling of the start cmd
-To:     Vikash Garodia <vgarodia@qti.qualcomm.com>
-Cc:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        "Vikash Garodia (QUIC)" <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mw@semihalf.com" <mw@semihalf.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230310150436.40ed168d@kmaincent-XPS-13-7390>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,58 +111,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Mar 10, 2023 at 03:04:36PM +0100, Köry Maincent wrote:
 
-Any update on this patch? It would be great if we could make some
-progress there (and, hopefully, finally merge it :))
+> Adding this whitelist will add some PHY driver specific name in the phy API
+> core.
+> Will it be accepted? Is it not better to add a "legacy_default_timestamping"
+> boolean in the phy_device struct and set it for these 5 PHY drivers?
+> Then move on the default behavior to MAC default timestamping on the otehr
+> cases.
+
+This sounds okay to me.  @Russell will that work for your board?
 
 Thanks,
-Micha=C5=82
-
-pt., 10 lut 2023 o 16:18 Micha=C5=82 Krawczyk <mk@semihalf.com> napisa=C5=
-=82(a):
->
-> Hi,
->
-> I'm wondering if there are any more comments for this patch? I would
-> be happy to clarify anything that's unclear or improve the code if
-> needed.
->
-> I know it's pretty late, but it would be really great if this fix
-> could land before v6.2 is released, so I'd appreciate your help and
-> review.
->
-> Thank you,
-> Micha=C5=82
->
-> wt., 7 lut 2023 o 12:15 Micha=C5=82 Krawczyk <mk@semihalf.com> napisa=C5=
-=82(a):
-> >
-> > wt., 7 lut 2023 o 10:54 Vikash Garodia <vgarodia@qti.qualcomm.com> napi=
-sa=C5=82(a):
-> > > I have reviewed the patch, and the drain sequence handling looks good=
- to me.
-> > > Could you share some details on the test client which you are using t=
-o catch this issue ?
-> >
-> > Hi Vikash,
-> >
-> > Thank you for looking at the code!
-> >
-> > I've been testing it using the Chromium implementation of the V4L2
-> > codec [1]. Meanwhile, we were running a test suite which changes the
-> > encryption method in the middle of the video decoding. This triggers
-> > the flush behavior and the Chromium sends the stop/start cmd to the
-> > V4L2 kernel component, and the test expects the video to continue the
-> > playback normally. Unfortunately, it was causing a stall of the video
-> > at the same time.
-> >
-> > [1] https://source.chromium.org/chromium/chromium/src/+/main:media/gpu/=
-v4l2/
-> >
-> > >
-> > > > Thank you,
-> > > > Micha=C5=82
-> > >
-> > > Thanks,
-> > > Vikash
+Richard
