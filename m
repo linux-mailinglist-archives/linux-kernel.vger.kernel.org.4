@@ -2,76 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6857B6B54C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D726B54D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:53:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbjCJWvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 17:51:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
+        id S231760AbjCJWwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 17:52:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjCJWvL (ORCPT
+        with ESMTP id S230132AbjCJWwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 17:51:11 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABEC10A28D
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:51:09 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-536be69eadfso126583587b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:51:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678488668;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5LQ2HzZ5/bi/kOKo7NEBlYoMYy0KUYQz8z6lYvJaO88=;
-        b=CsRc5Yj4v6oMwTHZDXSBIJu1WUd+WKnNbbnBRzECCKZQKqAeYyk3g2skIyqllyml9N
-         YkuB1zIVR4Gz09ofgcAlgItEpzD2ZN3zrZZc7yQDar9fCWLsETqJzHdA++8HZbrRUGIB
-         a8WLKRX6xoN+4ZGFFJKJYeERlLfRbze0ycq2elEM1zAfUoNmLjjMQf2hxremPynCPFxg
-         hoIlggBNAGgThOr1cX9poKYS0U9KhEqkA54OWmkqxtTU031rj5Q2CNrhAmArdrUbC7Ze
-         5B90KoNaRJHfbtbuEAW+CvZriQxfb/bCQYgh72mBblBbL39CthVhQBJKMdIBJj8aurqr
-         IFpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678488668;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5LQ2HzZ5/bi/kOKo7NEBlYoMYy0KUYQz8z6lYvJaO88=;
-        b=gqY4G3unCtX0K5+6HmDIA3UZTQZdv8KqvFAPbjdJ8YjIlEGGni6kK1qri1tfVDdabz
-         WWCooNeUBU1c5cIL5vpH00BSfe/lL8Lzx5OX8OC2AgWGPRygjuE9ZAm2D41Y0g5i3sYE
-         qWmUzW7lq0vZDuqQ0/K5QLWdcNiIXYcXzTZ/KtQBspVv0X0LtvVrCwF5SrOrhkQ+9s2b
-         x94uXrlgmSvHGeyvGnJdvljRbnlsqZVPsD86SS4f+K8xgTD7aRkAByajpOTbuawXgQHZ
-         uW7C2mg9W2pNyUDtWuNqCPK+4TvNo86eAF5jOHtyUYGKJT7sfQTzR9Hh4wOucZqj3rP7
-         Npvw==
-X-Gm-Message-State: AO0yUKXT/hXS6rjaDRC0LSc1LylbcqAlUD5twk3NASLxPPDnxReY14+c
-        lXZKMBVEW74mDLUFguIU1vYPlWx29DGdRh5ZJg+olw==
-X-Google-Smtp-Source: AK7set9Vgsn5Grv4otQPAm23jXoXW/OhNMlrjQMLAs7IGnb7QimXeWnLl/d1v7+vmSUynvjW6CwEXRyAR13UOuRdqy0=
-X-Received: by 2002:a81:ad1e:0:b0:540:7a8d:2ae8 with SMTP id
- l30-20020a81ad1e000000b005407a8d2ae8mr944258ywh.10.1678488668485; Fri, 10 Mar
- 2023 14:51:08 -0800 (PST)
+        Fri, 10 Mar 2023 17:52:49 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE3110CEA4;
+        Fri, 10 Mar 2023 14:52:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=xq1C+pCs+PTk//P8h5Wao2x+E1zhW4GXd2PFLTG6YZg=; b=QJhjCT/UH2SS/B76vB0Dj7jyEh
+        wAzP+XwockP69rCscgjgknaDx/1Cl+2ht7/IR8vMZbAyfUcXwTAOKq3XmCrTW9xfQjEe3v/4Lq1k/
+        0FT3whmNwD0z9+iNOHWbRYFEPimcy/RXIWpikrGtjhjDcGhjAWdpG+ushNylnBmLKL4cnwJsdw9Bn
+        SCdkJpVEDKfVSPJ7dhlOrFwT81pa19EytHk0dUzd5Ied3mwn1Y6ky+DPbfkKHyD2jO8lXbTs1xdql
+        y1oyEJs5X3MaKNPueEHrCemYK1uagkPw9wxe/Jfk/5ZthVvwYjBqxYG2Qz64RQLyTdAF4A5IONwnE
+        KYnC8LlA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1palbL-00GWqc-ID; Fri, 10 Mar 2023 22:52:39 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     chuck.lever@oracle.com, jlayton@kernel.org,
+        trond.myklebust@hammerspace.com, anna@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        kuba@kernel.org, linux-nfs@vger.kernel.org
+Cc:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
+        j.granados@samsung.com, patches@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH 0/5] sunrpc: simplfy sysctl registrations
+Date:   Fri, 10 Mar 2023 14:52:31 -0800
+Message-Id: <20230310225236.3939443-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20230310132144.2241-1-lujianhua000@gmail.com> <20230310132144.2241-2-lujianhua000@gmail.com>
- <6539f132-c740-b9b6-8810-0affd6ab91ba@linaro.org> <ZAt4fTNEnyLteaas@Gentoo>
-In-Reply-To: <ZAt4fTNEnyLteaas@Gentoo>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 10 Mar 2023 23:50:57 +0100
-Message-ID: <CACRpkdavjBPaNq1sRfi-FYiT7T3W19fU-mjha0pAtooUyf-8XQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] drm/panel: Add driver for Novatek NT36523
-To:     Jianhua Lu <lujianhua000@gmail.com>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,27 +53,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 7:35=E2=80=AFPM Jianhua Lu <lujianhua000@gmail.com>=
- wrote:
-> On Fri, Mar 10, 2023 at 07:10:21PM +0100, Konrad Dybcio wrote:
-> >
-> > > +#define mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, cmd, seq...)        =
-\
-> > > +           do {                                                 \
-> > > +                   mipi_dsi_dcs_write_seq(dsi0, cmd, seq);      \
-> > > +                   mipi_dsi_dcs_write_seq(dsi1, cmd, seq);      \
-> > > +           } while (0)
-> > This should be in the same file as mipi_dsi_dcs_write_seq, imo
-> I have sent a patch to do it, upstream don't think this wrapper is a prop=
-er
-> approach to deal with dual dsi and wrap all of mipi_dsi_* function is
-> useless.
-> https://lore.kernel.org/lkml/20230310110542.6649-1-lujianhua000@gmail.com=
-/
+We're trying to deprecate the APIs for sysctl that try to do
+registration and but are exposed to recursion. Those paths are
+only needed in complex cases and even those can be simplified
+with time.
 
-We can keep it locally if the fight isn't worthwhile, but I will try to ent=
-er
-the discussion.
+Sunrpc uses has simple requirements: just to have their parent
+directory created. The new sysctl APIs can be used for this. If
+you are curious about new requirements just review the new patch
+for documentation I just posted:
 
-Yours,
-Linus Walleij
+https://lore.kernel.org/all/20230310223947.3917711-1-mcgrof@kernel.org/T/#u     
+
+So just simplify all this.
+
+I haven't even build tested this, this is all being compile tested
+now through sysctl-testing [0] along with the other rest of the
+changes.
+
+Posting this early in the development cycle so it gets proper testing
+and review.
+
+Feel free to take these patches or let me know and I'm happy to also
+take these in through sysctl-next. Typically I use sysctl-next for
+core sysctl changes or for kernel/sysctl.c cleanup to avoid conflicts.
+All these syctls however are well contained to sunrpc so they can also
+go in separately. Let me know how you'd like to go about these patches.
+
+For those curious -- yes most of this is based on Coccinelle grammar,
+you can see the SmPL patch I first wrote years ago for some other use
+cases here:
+
+https://lore.kernel.org/all/20211123202422.819032-6-mcgrof@kernel.org/
+
+This is just an evolution of that with more complex cases, however
+always writing the SmPL patch to each commit eats my time away and
+I really cannot be bothered by that. Small modifications to the above
+can be used however to do things which are similar.
+
+Luis Chamberlain (5):
+  sunrpc: simplify two-level sysctl registration for tsvcrdma_parm_table
+  sunrpc: simplify one-level sysctl registration for xr_tunables_table
+  sunrpc: simplify one-level sysctl registration for xs_tunables_table
+  sunrpc: move sunrpc_table above
+  sunrpc: simplify one-level sysctl registration for debug_table
+
+ net/sunrpc/sysctl.c             | 90 ++++++++++++++-------------------
+ net/sunrpc/xprtrdma/svc_rdma.c  | 21 +-------
+ net/sunrpc/xprtrdma/transport.c | 11 +---
+ net/sunrpc/xprtsock.c           | 13 +----
+ 4 files changed, 44 insertions(+), 91 deletions(-)
+
+-- 
+2.39.1
+
