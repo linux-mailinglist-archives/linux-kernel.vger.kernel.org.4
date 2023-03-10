@@ -2,53 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7F46B3FDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A13006B3FE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbjCJNCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 08:02:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
+        id S229924AbjCJNDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 08:03:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjCJNCM (ORCPT
+        with ESMTP id S229890AbjCJNDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:02:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C255010DE69
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:02:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56FE1B8228F
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:02:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 818B0C433D2;
-        Fri, 10 Mar 2023 13:02:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678453329;
-        bh=NULlRWZNm9leedzyrH5BhHNX7AaSEb80UKoFaAjvj20=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E/Bm07hoD1hApEGRqrgTuXXzpBaxfjMaGiy20k/OB8hpNuOdcmb5TMYleTIJ+Kl1N
-         R408glBy0SMdkmGSU59KdyqTAwMXCUuiu5VTwTS4Yio0jENiapg1CMOV+n6d2x+HEe
-         LY9Xt3czoa2iHwRzIPkX0IEQmOTi/1/NGbKk0u2ABNWRxdi+6Za25cNwjRpnB6il+k
-         6VCp8KEndJlGOBtUgezrKf3WWgGQJTU3an7V78/KLcreTuu4CKPadcIkUhCixnW+Vg
-         SU74ke8iK/ZKgFqw2hrPEoN6vJ+ZUs872OrMGzsMRWtunZnhNVYuGXyUUzmKFxOx1k
-         i9lyy2gHbN47g==
-Date:   Fri, 10 Mar 2023 13:02:13 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] regmap: cache: Do not panic for REGCACHE_NONE regmap
-Message-ID: <ZAsqVf8/C3lHOF8W@sirena.org.uk>
-References: <20230310073911.3470892-1-alexander.stein@ew.tq-group.com>
+        Fri, 10 Mar 2023 08:03:09 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4F43423E;
+        Fri, 10 Mar 2023 05:03:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=6TtIQ
+        g09ZmPHNc7fwNMyG9gkvYgQeJ5WuDUEisBpScU=; b=nZ9APEsOjKa0oCV2VufXM
+        iPmsciw9JwNWjzWhqcS3KCkJrgiOmSmpQUev6wg30ffX2OcX3MI0MdjgmPJY4/dz
+        cN4EJ0fetkCfvQHk2wHZsFbP7Wmod9vXzh0g0howXh6gjFWobi+HadxJLt/N9+fj
+        oOyTRGpDRvYHyOMJo4mXlc=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g2-0 (Coremail) with SMTP id _____wDXhZJnKgtkMLlkCw--.5392S2;
+        Fri, 10 Mar 2023 21:02:32 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     p.zabel@pengutronix.de, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] usb: renesas_usbhs: Fix use after free bug in usbhs_remove due to race condition
+Date:   Fri, 10 Mar 2023 21:02:30 +0800
+Message-Id: <20230310130230.1732896-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oyppB7n71no1RLEi"
-Content-Disposition: inline
-In-Reply-To: <20230310073911.3470892-1-alexander.stein@ew.tq-group.com>
-X-Cookie: Single tasking: Just Say No.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wDXhZJnKgtkMLlkCw--.5392S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww13Gw1rKw47WF1UAw15CFg_yoW8JF4xpa
+        15JFy8G3yrGrWjgan2qr4UXFyrCayqgr17WrZ7WwsxuwnxAa18Za4FqF4j9r13Xa93Ja1Y
+        v3Wvyr95CaykCFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziFdg_UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzgAuU2I0Xl15awABs1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,33 +52,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In usbhs_probe, &priv->notify_hotplug_work is bound with
+usbhsc_notify_hotplug. It will be started then.
 
---oyppB7n71no1RLEi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+If we remove the driver which will call usbhs_remove
+  to make cleanup, there may be a unfinished work.
 
-On Fri, Mar 10, 2023 at 08:39:10AM +0100, Alexander Stein wrote:
-> Most regcache operations do check for REGCACHE_NONE, before ensuring
-> doing BUG_ON(!map->cache_ops). The missing regcache_sync* functions
-> panic on REGCACHE_NONE regmaps instead. Add an early return for non-cached
-> ones.
+The possible sequence is as follows:
 
-Why would we be trying to do a regcache_sync() on a device with
-no cache?
+Fix it by finishing the work before cleanup in the usbhs_remove
 
---oyppB7n71no1RLEi
-Content-Type: application/pgp-signature; name="signature.asc"
+CPU0                  CPU1
 
------BEGIN PGP SIGNATURE-----
+                    |usbhsc_notify_hotplug
+usbhs_remove         |
+usbhs_mod_remove     |
+usbhs_mod_gadget_remove|
+kfree(gpriv);       |
+                    |usbhsc_hotplug
+                    |usbhs_mod_call start
+                    |usbhsg_start
+                    |usbhsg_try_start
+                    |//use gpriv
+Fixes: bc57381e6347 ("usb: renesas_usbhs: use delayed_work instead of work_struct")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+ drivers/usb/renesas_usbhs/common.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQLKlQACgkQJNaLcl1U
-h9CFfQf7BPlAaUA3obz8xBsCdO34dR9E/Ek767pi/tfvLgrxo4lrKFqOmq4B0zwt
-NwChbMMJ+tPk1RDnO9h7u18FE3kU9OzsAH3XKrKD4zDtYoz8cAhfNMUkVicA8NeQ
-068vL3zjRyEk9v5ibqr8nuIHlL6UXN+bAnE+Sb8u/lUasafbDBva/cfR5a6/c73U
-ARhj/CxIHYAdoD7YOURZLUg2MCf8WU2Ma/gdKL7EELkdr4CL1NOWwq8Ay9L2qWS3
-E0CktmeevKUhV7KgeADbNZD/g32RFfmLZTHXGEw8vtDH1eCUHWUywooMKkF9s5XD
-K1kHWrwtFtQFBwcVpwv+7KDhjhw5pQ==
-=V5aL
------END PGP SIGNATURE-----
+diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
+index 96f3939a65e2..17a0987ef4f5 100644
+--- a/drivers/usb/renesas_usbhs/common.c
++++ b/drivers/usb/renesas_usbhs/common.c
+@@ -768,6 +768,7 @@ static int usbhs_remove(struct platform_device *pdev)
+ 
+ 	dev_dbg(&pdev->dev, "usb remove\n");
+ 
++	cancel_delayed_work_sync(&priv->notify_hotplug_work);
+ 	/* power off */
+ 	if (!usbhs_get_dparam(priv, runtime_pwctrl))
+ 		usbhsc_power_ctrl(priv, 0);
+-- 
+2.25.1
 
---oyppB7n71no1RLEi--
