@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082BD6B51FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB5A6B5200
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbjCJUdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 15:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
+        id S231557AbjCJUeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 15:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjCJUdu (ORCPT
+        with ESMTP id S229994AbjCJUdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Mar 2023 15:33:50 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B67F75C
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C17F76E
         for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:33:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB95861D4A
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 20:31:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3524C433EF;
-        Fri, 10 Mar 2023 20:31:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4562B61D4D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 20:31:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 471BBC433A1;
+        Fri, 10 Mar 2023 20:31:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1678480308;
-        bh=8mhnBVXTkrddv783HXQ9jm0z3rkg9svYl+Y90WxbKYU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=M6gqPMlvKL/l8tSRPTEfwWbnMZOHwZVYY2VEM/xRb7VMc/qJ9uAHg19dgzBYwmKal
-         a1DZV6eEciPG7Mor5Hiv6SG6t2xs8kDwCVz8T5aJn6Gb1gRbc3akodX/OuauGJGzD4
-         kcGnDwO3EWWiRbQo/gcB6hgfeONzkAynMfHG/RTVzTsbb3XOZD6ZsolHlvFeVQuHmi
-         yzMacmJkAay914vilUV3q9H3C1Tb80Cs8qjkwoaiV2dLplj41wLLg3GQOuaNq4pzPr
-         3Hmsll4f+Ul+RYuVb8wKrjbcQONbOOKShVTVpNkh0UprVz8w+RC1iV//l/88pHNPv0
-         WMDGDBBQkEx6w==
+        bh=yMo6mdBxavTxXroIIa/I0/ynsahgXKDKMHjOHkltf0k=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nDBbjZZZOXowJzL/k0G4ozYPUDsri43IgnECnwBjCtR31RJeSMu6eKLZ2RgdXgXLL
+         DrLuv40QCYcEUsh0eKHNR6GtyVLeK4hnXnCYXtHWXSHkqilqbKO1dEPSkecGAK4nn7
+         n7UcCK99cPPVeWFrkUlueiqbp2K4quxWCNPJBiayd0tBx4OCFF+/8GeVbjqgiNb3Fh
+         H/xomz7ZxXjejGVAatuZHoCa/3Xy57oPE+sgfddt+UpL+pIUzKy8FJN6naTga3eUdi
+         aKPlMHcoGP/hUXu/+4T/+z8sdn2vyVbc3iUdPNySwtB69TneGDD15ubvLISlC4h+gn
+         haex9ypNqUxcw==
 From:   Josh Poimboeuf <jpoimboe@kernel.org>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -43,10 +43,12 @@ Cc:     linux-kernel@vger.kernel.org,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sean Christopherson <seanjc@google.com>
-Subject: [RFC][PATCH 0/5] Improve static call NULL handling
-Date:   Fri, 10 Mar 2023 12:31:12 -0800
-Message-Id: <cover.1678474914.git.jpoimboe@kernel.org>
+Subject: [RFC][PATCH 1/5] static_call: Make NULL static calls consistent
+Date:   Fri, 10 Mar 2023 12:31:13 -0800
+Message-Id: <016c1e9cbdf726a885a406ff6baed85087ad1213.1678474914.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <cover.1678474914.git.jpoimboe@kernel.org>
+References: <cover.1678474914.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
@@ -59,91 +61,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Static calling a NULL pointer is a NOP, unless you're one of those poor
-souls running on an arch (or backported x86 monstrosity) with
-CONFIG_HAVE_STATIC_CALL=n, then it's a panic.
+NULL static calls have inconsistent behavior.  With HAVE_STATIC_CALL=y
+they're a NOP, but with HAVE_STATIC_CALL=n they're a panic.
 
-The "fix" for this undefined behavior is to tell the user to just use
-static_call_cond() instead, if they want consistent NOP behavior.  But
-forgetting to do that is likely to cause subtle bugs.  It actually
-already did (during RHEL development).
+That's guaranteed to cause subtle bugs.  Make the behavior consistent by
+making NULL static calls a NOP with HAVE_STATIC_CALL=n.
 
-There are two ways to make it consistent:
+This is probably easier than doing the reverse (making NULL static calls
+panic with HAVE_STATIC_CALL=y).
 
-  a) Make static_call(NULL) a NOP for all configs; or
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ include/linux/static_call.h | 53 +++++++------------------------------
+ 1 file changed, 9 insertions(+), 44 deletions(-)
 
-  b) Make static_call(NULL) a panic for all configs.
-
-Do (a) because it's consistent with the existing HAVE_STATIC_CALL
-behavior.  Also it seems simpler to implement and use, and based on
-looking at the existing use cases, it's common to want the "do nothing
-and return 0" behavior by default.
-
-Then take it a step further and get rid of the distinction between
-STATIC_CALL_NULL and STATIC_CALL_RET0.
-
-The end result is less confusing semantics and simpler code all around.
-
-
-EPILOGUE
---------
-
-If any users wanted panic-on-NULL by default instead of NOP-on-NULL,
-that could be added on top of this.  They could just initialize the
-static call with a __static_call_bug() helper.
-
-  void __static_call_bug(void)
-  {
-  	BUG();
-  }
-  ..
-  DEFINE_STATIC_CALL(foo, (func_type)__static_call_bug);
-
-We could take that even further:
-
-  DEFINE_STATIC_CALL_NOP(foo, func_type);
-  DEFINE_STATIC_CALL_BUG(bar, func_type);
-  ...
-  #define STATIC_CALL_NOP (func_type)__static_call_nop
-  #define STATIC_CALL_BUG (func_type)__static_call_bug
-  ...
-  static_call_update(foo, STATIC_CALL_NOP); // do nothing and return 0
-  static_call_update(foo, STATIC_CALL_BUG); // panic
-  static_call_update(foo, NULL);	    // ???
-
-The default behavior for NULL could be a key-specific policy, stored as
-a flag in the static_call_key struct.
-
-The key-specific policy would be easier to deal with than the
-call-site-specific policy we have today with static_call_cond().
-
-
-
-Josh Poimboeuf (5):
-  static_call: Make NULL static calls consistent
-  static_call: Make NULL static calls return 0
-  static_call: Remove static_call_cond() and its usages
-  static_call: Remove DEFINE_STATIC_CALL_RET0() and its uses
-  x86/kvm: Simplify static call handling
-
- arch/powerpc/include/asm/static_call.h    |   1 -
- arch/powerpc/kernel/irq.c                 |   2 +-
- arch/x86/events/amd/core.c                |   2 +-
- arch/x86/events/core.c                    |  26 ++---
- arch/x86/include/asm/kvm-x86-ops.h        |  86 +++++++-------
- arch/x86/include/asm/kvm-x86-pmu-ops.h    |  17 +--
- arch/x86/include/asm/kvm_host.h           |   6 +-
- arch/x86/include/asm/static_call.h        |   8 --
- arch/x86/kvm/irq.c                        |   2 +-
- arch/x86/kvm/lapic.c                      |  22 ++--
- arch/x86/kvm/pmu.c                        |  11 +-
- arch/x86/kvm/x86.c                        |  36 +++---
- include/linux/static_call.h               | 131 +++++-----------------
- kernel/events/core.c                      |   8 +-
- kernel/sched/core.c                       |  10 +-
- security/keys/trusted-keys/trusted_core.c |   2 +-
- 16 files changed, 126 insertions(+), 244 deletions(-)
-
+diff --git a/include/linux/static_call.h b/include/linux/static_call.h
+index 141e6b176a1b..8b12216da0da 100644
+--- a/include/linux/static_call.h
++++ b/include/linux/static_call.h
+@@ -65,20 +65,12 @@
+  *
+  * Notes on NULL function pointers:
+  *
+- *   Static_call()s support NULL functions, with many of the caveats that
+- *   regular function pointers have.
++ *   A static_call() to a NULL function pointer is a NOP.
+  *
+- *   Clearly calling a NULL function pointer is 'BAD', so too for
+- *   static_call()s (although when HAVE_STATIC_CALL it might not be immediately
+- *   fatal). A NULL static_call can be the result of:
++ *   A NULL static call can be the result of:
+  *
+  *     DECLARE_STATIC_CALL_NULL(my_static_call, void (*)(int));
+  *
+- *   which is equivalent to declaring a NULL function pointer with just a
+- *   typename:
+- *
+- *     void (*my_func_ptr)(int arg1) = NULL;
+- *
+  *   or using static_call_update() with a NULL function. In both cases the
+  *   HAVE_STATIC_CALL implementation will patch the trampoline with a RET
+  *   instruction, instead of an immediate tail-call JMP. HAVE_STATIC_CALL_INLINE
+@@ -92,13 +84,6 @@
+  *
+  *   where the argument evaludation also depends on the pointer value.
+  *
+- *   When calling a static_call that can be NULL, use:
+- *
+- *     static_call_cond(name)(arg1);
+- *
+- *   which will include the required value tests to avoid NULL-pointer
+- *   dereferences.
+- *
+  *   To query which function is currently set to be called, use:
+  *
+  *   func = static_call_query(name);
+@@ -106,7 +91,7 @@
+  *
+  * DEFINE_STATIC_CALL_RET0 / __static_call_return0:
+  *
+- *   Just like how DEFINE_STATIC_CALL_NULL() / static_call_cond() optimize the
++ *   Just like how DEFINE_STATIC_CALL_NULL() optimizes the
+  *   conditional void function call, DEFINE_STATIC_CALL_RET0 /
+  *   __static_call_return0 optimize the do nothing return 0 function.
+  *
+@@ -279,10 +264,12 @@ extern long __static_call_return0(void);
+ #define EXPORT_STATIC_CALL_TRAMP_GPL(name)				\
+ 	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
+ 
+-#else /* Generic implementation */
++#else /* !CONFIG_HAVE_STATIC_CALL */
+ 
+ static inline int static_call_init(void) { return 0; }
+ 
++static inline void __static_call_nop(void) { }
++
+ static inline long __static_call_return0(void)
+ {
+ 	return 0;
+@@ -298,39 +285,17 @@ static inline long __static_call_return0(void)
+ 	__DEFINE_STATIC_CALL(name, _func, _func)
+ 
+ #define DEFINE_STATIC_CALL_NULL(name, _func)				\
+-	__DEFINE_STATIC_CALL(name, _func, NULL)
++	__DEFINE_STATIC_CALL(name, _func, __static_call_nop)
+ 
+ #define DEFINE_STATIC_CALL_RET0(name, _func)				\
+ 	__DEFINE_STATIC_CALL(name, _func, __static_call_return0)
+ 
+-static inline void __static_call_nop(void) { }
+-
+-/*
+- * This horrific hack takes care of two things:
+- *
+- *  - it ensures the compiler will only load the function pointer ONCE,
+- *    which avoids a reload race.
+- *
+- *  - it ensures the argument evaluation is unconditional, similar
+- *    to the HAVE_STATIC_CALL variant.
+- *
+- * Sadly current GCC/Clang (10 for both) do not optimize this properly
+- * and will emit an indirect call for the NULL case :-(
+- */
+-#define __static_call_cond(name)					\
+-({									\
+-	void *func = READ_ONCE(STATIC_CALL_KEY(name).func);		\
+-	if (!func)							\
+-		func = &__static_call_nop;				\
+-	(typeof(STATIC_CALL_TRAMP(name))*)func;				\
+-})
+-
+-#define static_call_cond(name)	(void)__static_call_cond(name)
++#define static_call_cond(name) (void)static_call(name)
+ 
+ static inline
+ void __static_call_update(struct static_call_key *key, void *tramp, void *func)
+ {
+-	WRITE_ONCE(key->func, func);
++	WRITE_ONCE(key->func, func ? : (void *)__static_call_nop);
+ }
+ 
+ static inline int static_call_text_reserved(void *start, void *end)
 -- 
 2.39.2
 
