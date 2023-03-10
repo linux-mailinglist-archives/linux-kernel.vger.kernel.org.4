@@ -2,94 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4716B3D77
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:16:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0582D6B3D7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjCJLQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 06:16:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
+        id S230375AbjCJLRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:17:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbjCJLQM (ORCPT
+        with ESMTP id S229639AbjCJLQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 06:16:12 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D23109774;
-        Fri, 10 Mar 2023 03:16:06 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id AB1D440007;
-        Fri, 10 Mar 2023 11:16:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678446965;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t4AC2Juxbrl9PMsHA6NRp4MswfzYrZ/3Kd2MMsK5Z8g=;
-        b=Li+EJ+jiTkKeHvvrc7ZV5FJhpfYTRNsDe6KnkM/uX9w3HLw/0glGkAC6XBowZGnXaTdT63
-        9OIsczQdgZ01UOCrca0kq6rJFjU+MdBaL/f/jEC1mpmvM9uZU0dAiIxhc+16BD5XuIjk3z
-        IQMH/GaqtwFMtRS8C59EAedBUu0pmDtnlRbgrEXA/NCUvqmqh/MEKplcfvXJroCLsLPJWK
-        EyX6XtPuFzCPDixD1vBx+MPs45EXnxq3/S+8nuOnFUSTFSVetIcEof0qTFEJT4t3Y+nduj
-        juj30cyKy0CYzgonm9+1qPXQayzEqkZggeqTLoGwVRX5OmQ7VZ4zd7b++NFarA==
-Date:   Fri, 10 Mar 2023 12:16:02 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Walle <michael@walle.cc>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 17/20] nvmem: layouts: sl28vpd: Add new layout driver
-Message-ID: <20230310121602.109c58e7@xps-13>
-In-Reply-To: <54e7ee75-6035-c2e9-fb8b-fe96adbb571a@linaro.org>
-References: <20230308153200.682248-1-miquel.raynal@bootlin.com>
-        <20230308153200.682248-18-miquel.raynal@bootlin.com>
-        <54e7ee75-6035-c2e9-fb8b-fe96adbb571a@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 10 Mar 2023 06:16:49 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3172310A2B2;
+        Fri, 10 Mar 2023 03:16:48 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32ABGYQu120923;
+        Fri, 10 Mar 2023 05:16:34 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678446994;
+        bh=Jxvf3WV4YIqkIxAaES8rfQzLjUb0SexxX68x8LIHteQ=;
+        h=From:To:CC:Subject:Date;
+        b=EK5QMlk0jR8srCr0X42WYjX9JwyFwlVaS/FqI9KpIHUCGCm89UddaUuKf5je4tzZA
+         c/Rlh5aBhIWCrZaXgAgz+d1GCO0vuKGePOa2N05lyb2E52ByWcGkWFkb8BCdciaUwE
+         XicMV8krNa0Cqvja3pq8GjRYbZ3Udnbb7VlU4Et4=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32ABGYbu003531
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 10 Mar 2023 05:16:34 -0600
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 10
+ Mar 2023 05:16:33 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 10 Mar 2023 05:16:33 -0600
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32ABGUx3016393;
+        Fri, 10 Mar 2023 05:16:31 -0600
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <peda@axentia.se>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [PATCH v2] dt-bindings: ti-serdes-mux: Add defines for J784S4 SoC
+Date:   Fri, 10 Mar 2023 16:46:30 +0530
+Message-ID: <20230310111630.743023-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Srinivas,
+From: Matt Ranostay <mranostay@ti.com>
 
-srinivas.kandagatla@linaro.org wrote on Fri, 10 Mar 2023 11:03:45 +0000:
+There are 4 lanes in the single instance of J784S4 SERDES. Each SERDES
+lane mux can select up to 4 different IPs. Define all the possible
+functions.
 
-> On 08/03/2023 15:31, Miquel Raynal wrote:
-> > +
-> > +static int __init sl28vpd_init(void)
-> > +{
-> > +	return nvmem_layout_register(&sl28vpd_layout);
-> > +}
-> > +
-> > +static void __exit sl28vpd_exit(void)
-> > +{
-> > +	nvmem_layout_unregister(&sl28vpd_layout);
-> > +}
-> > +
-> > +module_init(sl28vpd_init);
-> > +module_exit(sl28vpd_exit); =20
-> Looking at this pattern in two drivers, we could come up with some helper=
- macro like.
->=20
-> #define module_nvmem_layout_driver(__layout_driver) \
->          module_driver(__layout_driver, nvmem_layout_register, \
->                          nvmem_layout_unregister)
+Signed-off-by: Matt Ranostay <mranostay@ti.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+---
 
-Nice idea! I will make a patch; is it okay do it on top?
+Changes from v1:
+1. Collect Acked-by tag from Krzysztof Kozlowski.
+2. Rebase on to linux-next tagged: next-20230310.
 
-Thanks,
-Miqu=C3=A8l
+v1:
+https://lore.kernel.org/r/20221015055024.191855-1-mranostay@ti.com/
+
+ include/dt-bindings/mux/ti-serdes.h | 62 +++++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+
+diff --git a/include/dt-bindings/mux/ti-serdes.h b/include/dt-bindings/mux/ti-serdes.h
+index d3116c52ab72..669ca2d6abce 100644
+--- a/include/dt-bindings/mux/ti-serdes.h
++++ b/include/dt-bindings/mux/ti-serdes.h
+@@ -117,4 +117,66 @@
+ #define J721S2_SERDES0_LANE3_USB		0x2
+ #define J721S2_SERDES0_LANE3_IP4_UNUSED		0x3
+ 
++/* J784S4 */
++
++#define J784S4_SERDES0_LANE0_IP1_UNUSED		0x0
++#define J784S4_SERDES0_LANE0_PCIE1_LANE0	0x1
++#define J784S4_SERDES0_LANE0_IP3_UNUSED		0x2
++#define J784S4_SERDES0_LANE0_IP4_UNUSED		0x3
++
++#define J784S4_SERDES0_LANE1_IP1_UNUSED		0x0
++#define J784S4_SERDES0_LANE1_PCIE1_LANE1	0x1
++#define J784S4_SERDES0_LANE1_IP3_UNUSED		0x2
++#define J784S4_SERDES0_LANE1_IP4_UNUSED		0x3
++
++#define J784S4_SERDES0_LANE2_PCIE3_LANE0	0x0
++#define J784S4_SERDES0_LANE2_PCIE1_LANE2	0x1
++#define J784S4_SERDES0_LANE2_IP3_UNUSED		0x2
++#define J784S4_SERDES0_LANE2_IP4_UNUSED		0x3
++
++#define J784S4_SERDES0_LANE3_PCIE3_LANE1	0x0
++#define J784S4_SERDES0_LANE3_PCIE1_LANE3	0x1
++#define J784S4_SERDES0_LANE3_USB		0x2
++#define J784S4_SERDES0_LANE3_IP4_UNUSED		0x3
++
++#define J784S4_SERDES1_LANE0_QSGMII_LANE3	0x0
++#define J784S4_SERDES1_LANE0_PCIE0_LANE0	0x1
++#define J784S4_SERDES1_LANE0_IP3_UNUSED		0x2
++#define J784S4_SERDES1_LANE0_IP4_UNUSED		0x3
++
++#define J784S4_SERDES1_LANE1_QSGMII_LANE4	0x0
++#define J784S4_SERDES1_LANE1_PCIE0_LANE1	0x1
++#define J784S4_SERDES1_LANE1_IP3_UNUSED		0x2
++#define J784S4_SERDES1_LANE1_IP4_UNUSED		0x3
++
++#define J784S4_SERDES1_LANE2_QSGMII_LANE1	0x0
++#define J784S4_SERDES1_LANE2_PCIE0_LANE2	0x1
++#define J784S4_SERDES1_LANE2_PCIE2_LANE0	0x2
++#define J784S4_SERDES1_LANE2_IP4_UNUSED		0x3
++
++#define J784S4_SERDES1_LANE3_QSGMII_LANE2	0x0
++#define J784S4_SERDES1_LANE3_PCIE0_LANE3	0x1
++#define J784S4_SERDES1_LANE3_PCIE2_LANE1	0x2
++#define J784S4_SERDES1_LANE3_IP4_UNUSED		0x3
++
++#define J784S4_SERDES2_LANE0_QSGMII_LANE5	0x0
++#define J784S4_SERDES2_LANE0_IP2_UNUSED		0x1
++#define J784S4_SERDES2_LANE0_IP3_UNUSED		0x2
++#define J784S4_SERDES2_LANE0_IP4_UNUSED		0x3
++
++#define J784S4_SERDES2_LANE1_QSGMII_LANE6	0x0
++#define J784S4_SERDES2_LANE1_IP2_UNUSED		0x1
++#define J784S4_SERDES2_LANE1_IP3_UNUSED		0x2
++#define J784S4_SERDES2_LANE1_IP4_UNUSED		0x3
++
++#define J784S4_SERDES2_LANE2_QSGMII_LANE7	0x0
++#define J784S4_SERDES2_LANE2_QSGMII_LANE1	0x1
++#define J784S4_SERDES2_LANE2_IP3_UNUSED		0x2
++#define J784S4_SERDES2_LANE2_IP4_UNUSED		0x3
++
++#define J784S4_SERDES2_LANE3_QSGMII_LANE8	0x0
++#define J784S4_SERDES2_LANE3_QSGMII_LANE2	0x1
++#define J784S4_SERDES2_LANE3_IP3_UNUSED		0x2
++#define J784S4_SERDES2_LANE3_IP4_UNUSED		0x3
++
+ #endif /* _DT_BINDINGS_MUX_TI_SERDES */
+-- 
+2.25.1
+
