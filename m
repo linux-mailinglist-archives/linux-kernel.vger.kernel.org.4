@@ -2,85 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93926B560D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B458E6B560E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbjCJXyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 18:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54720 "EHLO
+        id S232017AbjCJXyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 18:54:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbjCJXyS (ORCPT
+        with ESMTP id S231994AbjCJXyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 18:54:18 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B230129729;
-        Fri, 10 Mar 2023 15:54:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678492456; x=1710028456;
-  h=from:to:cc:subject:date:message-id;
-  bh=A9Zx0Tt3VMmA6kLUzIFNHkmnQLW+8/nbOGOKlR/Y+Ig=;
-  b=CC/48PzzYqzYBd+fak/9qP5tsKei9f1+YtKpQa6JJwubE5f71lGrDFzv
-   CXUiZxEQC8HKOuC9Hb3eYjvY+B5WmdVVDAO2Sx3mfphYqUHE6/5gD6H/A
-   BLwDY1jDwdVnTbpflg62tbfmXDFJ7xNV5JnaD0JBJTMHdFE3Ibkuc8xBf
-   /Bp93CriOwRq8KdpmU2jCzsNp0Xp8CxwyNu0IgP3hgXZURINCklzPbHnc
-   DbsLZjmHJswyNWrh/jaXz9JaV4fnkbosf6IYlUFsC10thxm7BfYvFqpEw
-   nsHnAiByQZid0FqMxnlW3IN2yd+UmSIw/DK455FENk3VkuW9a+DBl6dzR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="325210179"
-X-IronPort-AV: E=Sophos;i="5.98,251,1673942400"; 
-   d="scan'208";a="325210179"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 15:54:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="680365645"
-X-IronPort-AV: E=Sophos;i="5.98,251,1673942400"; 
-   d="scan'208";a="680365645"
-Received: from wopr.jf.intel.com ([10.54.75.136])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Mar 2023 15:54:15 -0800
-From:   Todd Brandt <todd.e.brandt@intel.com>
-To:     linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     todd.e.brandt@linux.intel.com, todd.e.brandt@intel.com,
-        srinivas.pandruvada@linux.intel.com, jic23@kernel.org,
-        jikos@kernel.org, p.jungkamp@gmx.net
-Subject: [PATCH] Fix buffer overrun in HID-SENSOR name.
-Date:   Fri, 10 Mar 2023 15:54:14 -0800
-Message-Id: <20230310235414.12467-1-todd.e.brandt@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 10 Mar 2023 18:54:44 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4831112CBA7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 15:54:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=pxINQc+Ngasq0Mq+gPAA8xkkXnRUKv144A0HUyerW4g=; b=EuxiFJtH+TrAf9qF7mBCZJgaqs
+        WV1/Q5gqm2U169x2MZySKm85KTT0Q2ycAUaGnStZCBDx+nkZf5wZ/qyxRSRcAqvNNm12OhBdLfjzf
+        C7U7eFt59QCGCsAFHXeiKY8cj8NkJDHfJEBG3P45dOLCuy2hb+GP04XNnUeF4SIjcoz/7clVaP7YB
+        vdw7OjaVOK3olZfXBbB1etEpiiVaytUr1/XNeBSzSoptH79z1WKEV4w89niwyUp3ycALlLEhWE8Nk
+        L2MJFs99OHkIAo4Ikvk7MH8cK7iZfRtwkm5GIbfRXkWotsJfntkNbib17zK+mtekNNK6z71lTlB+u
+        WpxT9J3A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pamZN-00GkyF-S1; Fri, 10 Mar 2023 23:54:41 +0000
+Date:   Fri, 10 Mar 2023 15:54:41 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Jason Baron <jbaron@akamai.com>
+Cc:     linux-kernel@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH] dyndbg: cleanup dynamic usage in ib_srp.c
+Message-ID: <ZAvDQdY14BVKz09h@bombadil.infradead.org>
+References: <20230310212728.82021-1-jbaron@akamai.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310212728.82021-1-jbaron@akamai.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Philipp Jungkamp created this fix, I'm simply submitting it. I've
-verified it fixes bugzilla issue 217169.
+On Fri, Mar 10, 2023 at 04:27:28PM -0500, Jason Baron wrote:
+> Currently, in dynamic_debug.h we only provide
+> DEFINE_DYNAMIC_DEBUG_METADATA() and DYNAMIC_DEBUG_BRANCH()
+> definitions if CONFIG_DYNAMIC_CORE is enabled. Thus, drivers
+> such as infiniband srp (see: drivers/infiniband/ulp/srp/ib_srp.c)
+> must provide their own definitions for !CONFIG_DYNAMIC_CORE.
+> 
+> Thus, let's move this !CONFIG_DYNAMIC_CORE case into dynamic_debug.h.
+> However, the dynamic debug interfaces should really only be defined
+> if CONFIG_DYNAMIC_DEBUG is set or CONFIG_DYNAMIC_CORE is set along
+> with DYNAMIC_DEBUG_MODULE, (see:
+> Documentation/admin-guide/dynamic-debug-howto.rst). Thus, the
+> undefined case becomes: !((CONFIG_DYNAMIC_DEBUG ||
+> (CONFIG_DYNAMIC_CORE && DYNAMIC_DEBUG_MODULE)).
+> With those changes in place, we can remove the !CONFIG_DYNAMIC_CORE
+> case from ib_srp.c
+> 
+> This change was prompted by a build breakeage in ib_srp.c stemming
+> from the inclusion of dynamic_debug.h unconditionally in module.h, due
+> to commit 7deabd674988 ("dyndbg: use the module notifier callbacks").
+> In that case, if we have CONFIG_DYNAMIC_CORE=y and
+> CONFIG_DYNAMIC_DEBUG=n then the definitions for
+> DEFINE_DYNAMIC_DEBUG_METADATA() and DYNAMIC_DEBUG_BRANCH() are defined
+> once in ib_srp.c and then again in the dynamic_debug.h. This had been
+> working prior to the above referenced commit because dynamic_debug.h
+> was only pulled into ib_srp.c conditinally via printk.h if
+> CONFIG_DYNAMIC_DEBUG was set.
+> 
+> Cc: Jim Cromie <jim.cromie@gmail.com>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Bart Van Assche <bvanassche@acm.org>
+> Fixes: 7deabd674988 ("dyndbg: use the module notifier callbacks")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://urldefense.com/v3/__https://lore.kernel.org/oe-kbuild-all/202303071444.sIbZTDCy-lkp@intel.com/__;!!GjvTz_vk!S6X1T0wd8DP8kxf6V06_uDcxrNwKJhPOU_7dY0PNghJRL0ahqvE8bh-5544ThnyRkpVyK4Q$
+> Signed-off-by: Jason Baron <jbaron@akamai.com>
 
-Reported-and-tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=217169
-Signed-off-by: Todd Brandt <todd.e.brandt@intel.com>
----
- drivers/hid/hid-sensor-custom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks, applied and pushed to modules-next!
 
-diff --git a/drivers/hid/hid-sensor-custom.c b/drivers/hid/hid-sensor-custom.c
-index 3e3f89e01d81..d85398721659 100644
---- a/drivers/hid/hid-sensor-custom.c
-+++ b/drivers/hid/hid-sensor-custom.c
-@@ -940,7 +940,7 @@ hid_sensor_register_platform_device(struct platform_device *pdev,
- 				    struct hid_sensor_hub_device *hsdev,
- 				    const struct hid_sensor_custom_match *match)
- {
--	char real_usage[HID_SENSOR_USAGE_LENGTH];
-+	char real_usage[HID_SENSOR_USAGE_LENGTH] = { 0 };
- 	struct platform_device *custom_pdev;
- 	const char *dev_name;
- 	char *c;
--- 
-2.17.1
-
+  Luis
