@@ -2,127 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A7C6B460D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BAE6B4639
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:41:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbjCJOjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:39:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
+        id S232758AbjCJOlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:41:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232777AbjCJOjZ (ORCPT
+        with ESMTP id S232754AbjCJOlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:39:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276A665A9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678459085;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0hWiStKKnODZLc0c+LJVjS6D0rqJy8pHZVi6YDS21Zk=;
-        b=JzsT41agdPKK+rz8EOso/RNXwHS2z+2dz6p8NbM3HSIPHEM+6NTpCjoxQCCkfPL+m62c5z
-        gVSY7fFoMXoFvckrJxFF5i37Ha2i2Fui57EOfV+BffLws7pO+wXZ78aNbuSCo+rpf/fe86
-        c9hDai1fbrMUemdpvf3dn3GefJaVS7o=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-511-i8_W-FavMlyWdEqzIROPbg-1; Fri, 10 Mar 2023 09:38:03 -0500
-X-MC-Unique: i8_W-FavMlyWdEqzIROPbg-1
-Received: by mail-ed1-f72.google.com with SMTP id q13-20020a5085cd000000b004af50de0bcfso8080844edh.15
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:38:03 -0800 (PST)
+        Fri, 10 Mar 2023 09:41:13 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4DA2121B76
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:41:11 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id u9so21396473edd.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:41:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678459270;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KqYv2XkGPgl0a2AO9qEe8f7e2MICAOyButbuAgV0Ul8=;
+        b=gOo3/PUn35doFmSBbLfYFi7qJ/u9ordNAWkv3ONn4e5XvC09EsV2vmVphLF2LA/j3t
+         lUNi8EtBqpOZ2KhgPPd4LkiXRT4eMQu10wxLTjnHO5eQwUlbbTs4I179UNEMOOhRvMam
+         Fh8tUiCT/tbyyfmmbGEIEZZthHXWJKArdVddpiLo60FY2qt4qCbOTb8ekVYg/Jtewc/n
+         Ym+Cg3OszElxXmj2/4BM98xn8CnVv0wv5UriHaAJj9+JroJVBf4ffbOPRu94o/bH1iW3
+         oeK0ecDTBzIvC8p2QZ60mzEGbx+ygo3UrqvgHnbauOwcKAzQxNu9e0PovuX3DJlcJqpA
+         G+Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459082;
+        d=1e100.net; s=20210112; t=1678459270;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0hWiStKKnODZLc0c+LJVjS6D0rqJy8pHZVi6YDS21Zk=;
-        b=o1xZKzzhBBJocF5AdD2IeuV61k100lMWQrUbDkGECtcZOC/ppQoPe0v7rlg+vgE7cQ
-         ZNoeEqpbf4QXo6uiuDxBE+x1NztpMLQ8Qg8nMcTWK7Gf70bKCEVo4YgLgXsJiApLzTAV
-         8jhjXyHms0oxInwOPGVzurqv9Q9Uqu/7ibgevJxRlhLpc8ApYHGVUfo3/x9Ahh11Wvw5
-         Ryvs31XPn10o1yKahw6K/o6cihP79jy7S/TVGQQclA6kd7TsOTc73gQb6kp4aB8wNZJc
-         R3GcjmtqFPRjsN0An7F7+NlFfQCjpKYCgrFfnFkyHwSmC1ihjjFZoOG4d3LHhBxhYjg7
-         gjxQ==
-X-Gm-Message-State: AO0yUKXfIXyqe6bfjnqqR4E8ZgBq6F/AhJPrrhGjpB8xaN77YTxHYZDJ
-        va6df1R5leGmoen1y0eQXuvuWk5hihAK/lELSLOSy0prAhxmoilMoRYKO98siAzypFjEsQg5SWY
-        leYoxxMMEyGKAvx1US74SQ5La
-X-Received: by 2002:a17:907:a47:b0:8f0:143d:fa4b with SMTP id be7-20020a1709070a4700b008f0143dfa4bmr32523603ejc.7.1678459082790;
-        Fri, 10 Mar 2023 06:38:02 -0800 (PST)
-X-Google-Smtp-Source: AK7set+h1C6lft3ZKnl0GaWrxBOUoDPN4LcX0k2yuq7Mp3PoZLA+MR2xNozzo6lPAe+0xOuIvCOqww==
-X-Received: by 2002:a17:907:a47:b0:8f0:143d:fa4b with SMTP id be7-20020a1709070a4700b008f0143dfa4bmr32523584ejc.7.1678459082554;
-        Fri, 10 Mar 2023 06:38:02 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id v10-20020a1709063bca00b008ec4333fd65sm1009504ejf.188.2023.03.10.06.38.01
+        bh=KqYv2XkGPgl0a2AO9qEe8f7e2MICAOyButbuAgV0Ul8=;
+        b=6S89zIlSUUxzBbfZ99VocTQYSxYpTlq9VHVr8Ozs3TsCmpilk8kMFL0H1Ps6yIk/yi
+         rAQuJmYLMVBXyTFybdfjJNC6uyveISv2BnlMWMS3jZjQwhEapnaGfjX472O4JmmVN2+i
+         G3d7ifvZ59oX80wCPtMD92vErTKFohm97gt0h8n2C0BUTuOGS3xtxKcshDqKJa+fy5N1
+         Jwretgvdq47fVekhE7MPA23dMv3uphoNeFz6hKp5lRTXMU1AtBT5v5UP6Hdy5gpMNJrk
+         yquQnuwKJmZ5Qv5zEBWFFhO0pLjvOGy92qtq/JU2I7PJgghSBP10hDc1Gu12CnuhTsCw
+         Ax7Q==
+X-Gm-Message-State: AO0yUKWtqSnJROPezkrgSsm2CoRj/knfs+xhjlHJ+/hqUiQiSt0y/xxa
+        t+hC2AvsFpCs+Uus4h6LKGyang==
+X-Google-Smtp-Source: AK7set9xruyIODFDOTiuiX6ARk5Y8VnFAMTlrJYf5zYV864mCmu/WzgbxSoeGxCnpo1IeVQ4pxi9lA==
+X-Received: by 2002:a17:906:b04e:b0:89e:8c3d:bb87 with SMTP id bj14-20020a170906b04e00b0089e8c3dbb87mr28174111ejb.71.1678459270062;
+        Fri, 10 Mar 2023 06:41:10 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:45c4:46be:ec71:4a51? ([2a02:810d:15c0:828:45c4:46be:ec71:4a51])
+        by smtp.gmail.com with ESMTPSA id s9-20020a1709064d8900b008dd76b67ae6sm1035527eju.175.2023.03.10.06.41.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 06:38:01 -0800 (PST)
-Message-ID: <e9ffccaf-d94a-a711-1013-75af46dbfd7b@redhat.com>
-Date:   Fri, 10 Mar 2023 15:38:01 +0100
+        Fri, 10 Mar 2023 06:41:09 -0800 (PST)
+Message-ID: <611fe922-1937-d37d-a2ce-cc0a13aed9e0@linaro.org>
+Date:   Fri, 10 Mar 2023 15:41:08 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] platform/x86: x86-android-tablets: add
- CONFIG_PMIC_OPREGION dependency
-To:     Arnd Bergmann <arnd@kernel.org>, Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, platform-driver-x86@vger.kernel.org,
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 0/6] soc: samsung: pm_domains: Add Exynos850 support
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230310140023.223612-1-arnd@kernel.org>
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230310140023.223612-1-arnd@kernel.org>
+References: <CGME20230308230935eucas1p1e919f4d4b020e3386ce0eac8b4c8d299@eucas1p1.samsung.com>
+ <20230308230931.27261-1-semen.protsenko@linaro.org>
+ <d1175c3e-301d-1cbc-607c-e94051780806@samsung.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d1175c3e-301d-1cbc-607c-e94051780806@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
-
-On 3/10/23 15:00, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 09/03/2023 11:12, Marek Szyprowski wrote:
+> Hi Sam,
 > 
-> The newly added call to intel_soc_pmic_exec_mipi_pmic_seq_element()
-> requires that function to be defined:
+> On 09.03.2023 00:09, Sam Protsenko wrote:
+>> Power Domains in Exynos850 are not really different from other Exynos
+>> platforms. Enabling Exynos850 support in the PD driver is really just a
+>> matter of adding:
+>>
+>>      static const struct exynos_pm_domain_config exynos850_cfg = {
+>>          .local_pwr_cfg = 0x1,
+>>      };
+>>
+>> to the driver. But in the face of recent developments, e.g. this patch:
+>>
+>>      arm64: dts: exynos: move MIPI phy to PMU node in Exynos5433
+>>
+>> it looked logical to rework the PD driver a bit to support its nesting
+>> under the PMU node, while adding Exynos850 support to it. Initially I
+>> only wanted to add syscon regmap support via some dedicated property,
+>> but pulling PD nodes under the PMU syscon looks like more correct way.
 > 
-> x86_64-linux-ld: drivers/platform/x86/x86-android-tablets/lenovo.o: in function `lenovo_yt3_init':
-> lenovo.c:(.init.text+0x72): undefined reference to `intel_soc_pmic_exec_mipi_pmic_seq_element'
-> x86_64-linux-ld: lenovo.c:(.init.text+0x8b): undefined reference to `intel_soc_pmic_exec_mipi_pmic_seq_element'
-> 
-> Fixes: 9b1d2662b8c5 ("platform/x86: x86-android-tablets: Add touchscreen support for Lenovo Yoga Tab 3 Pro YT3-X90F")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Frankly speaking if you are changing this, you can go even further. 
+> Simply make PMU node a PM domain provider and specify the power domain 
+> as a phandle parameter. This is how it should have been done from the 
+> beginning, but for some unknown reasons wasn't. There is really no need 
+> to have a separate node for each power domain. This will also move 
+> implementation details to the PMU / power domain drivers and it will 
+> make it much easier to extend/modify it in the future. IMHO same applies 
+> for PHY nodes.
 
-Thanks, but this is a dup with:
-
-https://patchwork.kernel.org/project/platform-driver-x86/patch/20230309094035.18736-1-hdegoede@redhat.com/
-
-I just did not get around to pushing that out to pdx86/for-next yet ...
-
-Regards,
-
-Hans
+I agree. The "samsung,pd-index" property is not a correct approach.
+Either you use address space or not. If not, then this should be part of
+power domain provider, which is also matching most of other SoC
+architectures.
 
 
-> ---
->  drivers/platform/x86/x86-android-tablets/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/platform/x86/x86-android-tablets/Kconfig b/drivers/platform/x86/x86-android-tablets/Kconfig
-> index 2b3daca5380b..c31e4df34f80 100644
-> --- a/drivers/platform/x86/x86-android-tablets/Kconfig
-> +++ b/drivers/platform/x86/x86-android-tablets/Kconfig
-> @@ -6,6 +6,7 @@
->  config X86_ANDROID_TABLETS
->  	tristate "X86 Android tablet support"
->  	depends on I2C && SPI && SERIAL_DEV_BUS && ACPI && EFI && GPIOLIB
-> +	depends on PMIC_OPREGION
->  	help
->  	  X86 tablets which ship with Android as (part of) the factory image
->  	  typically have various problems with their DSDTs. The factory kernels
+Best regards,
+Krzysztof
 
