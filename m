@@ -2,175 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC05B6B4F51
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 18:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E126B4F58
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 18:46:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjCJRpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 12:45:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        id S231314AbjCJRqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 12:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbjCJRpM (ORCPT
+        with ESMTP id S230203AbjCJRqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 12:45:12 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2078.outbound.protection.outlook.com [40.107.93.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB5E12C420
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 09:44:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lEytnBFP8Fjm1zuJN0l075gOeWPQrDSlvElRVEnxyhquUu0xd5rznp+3AooCfWM5aXWioEl8o5AbTZZrAY/JaMPuvWGeTX5MwAosePyqWcW/cA7/5FHwBvKi3B2qMTlgex2hLbVR3yB/3BwNuo0JQ6YZfNRF7QWMGE7AKYwRpr53HvZnV/f0mZhafR6HYQAgHLVcN2npWGGgwUf05+cBo0fzqiBag9smRxPoZbSrlIyuXTU7Cn3pnzL3jHo60PilRGs7u971l7DpcTr0U9/bq8tlmRH3EWhmF9coRUkCHwEcQU8PLX1kQmoM/QsNo7uXQmhDLZELbolfaYsQm2Phmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hwwkSYXstHi+ju8cAOpPNznqEOLhxKgO8eKpmMfnDsc=;
- b=BwftcvmTWDnWp26Xub5tYjHeQrR4nsDs4OvEgoz8nwZfQ4qpHeo1nG79+rMjyPiVCU6v+9TfPpPlk06M8lTibQqt2Vcc8TINtfNGOdqxdrta1dJEJKU20cpp00k2RehB0o0MBZxLHwpsD5FbamOEADcz5wr1wYWoDcAWyPN6FxOOAPubnpP+toRoZxV7w8zl2dE8eyYu+MC9nkzRjtuACbZW8fi51oDtMLwhHEpqAsxWLI/kEFQD12XA0Wt+aF8FiAT2byAED2ZAuKt+r9aO2V2mvlzetowoYmLBiIlZ7cmEsa1qMPizSWd0Y5unLdpHA0IeEeX9kBMud4t7ysTyLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hwwkSYXstHi+ju8cAOpPNznqEOLhxKgO8eKpmMfnDsc=;
- b=ulWFwYOLyZBd+eiaBTwAqXYfpK0U/Inn5O3+aNAluY5f248UFw2/YpMa1L5KimdggA1+wrfjAsCDn6TLccnolI+GT6oqu5B9armWaVmyEeV3aQWB0d0+hy1kVJ/z8IrJtCAQNBo3Z7ERUVz0RWwUEBJenp6pufr5kjC4LZyDew4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
- by SJ0PR12MB6880.namprd12.prod.outlook.com (2603:10b6:a03:485::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
- 2023 17:42:56 +0000
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::699d:42b8:93ed:76da]) by MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::699d:42b8:93ed:76da%3]) with mapi id 15.20.6178.019; Fri, 10 Mar 2023
- 17:42:56 +0000
-Message-ID: <300c4dd2-29bc-0f9f-1d6d-b8b65bf6c69c@amd.com>
-Date:   Fri, 10 Mar 2023 10:42:51 -0700
+        Fri, 10 Mar 2023 12:46:17 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D4512C71D;
+        Fri, 10 Mar 2023 09:45:28 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pagmT-0007jH-Km; Fri, 10 Mar 2023 18:43:49 +0100
+Message-ID: <85df6dda-c1c9-f08e-9e64-2007d44f6683@leemhuis.info>
+Date:   Fri, 10 Mar 2023 18:43:47 +0100
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH] drm/amd/display: use a more accurate check in
- dm_helpers_dp_read_dpcd()
-Content-Language: en-US
-To:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        amd-gfx@lists.freedesktop.org
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Wayne Lin <Wayne.Lin@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Ian Chen <ian.chen@amd.com>,
-        Sung Joon Kim <sungjoon.kim@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230309213027.256243-1-hamza.mahfooz@amd.com>
-From:   Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
-In-Reply-To: <20230309213027.256243-1-hamza.mahfooz@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v3] tpm: disable hwrng for fTPM on some AMD designs
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        reach622@mailcuk.com, Bell <1138267643@qq.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+References: <20230228024439.27156-1-mario.limonciello@amd.com>
+ <Y/1wuXbaPcG9olkt@kernel.org>
+ <5e535bf9-c662-c133-7837-308d67dfac94@leemhuis.info>
+In-Reply-To: <5e535bf9-c662-c133-7837-308d67dfac94@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0450.namprd03.prod.outlook.com
- (2603:10b6:610:10e::28) To MN2PR12MB2941.namprd12.prod.outlook.com
- (2603:10b6:208:a9::12)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB2941:EE_|SJ0PR12MB6880:EE_
-X-MS-Office365-Filtering-Correlation-Id: f02582a3-5812-437e-3d20-08db218ee1b2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nQ+CZKJ+c8EC7muRtyxC3ElamAEORNIvwAWAKyUFR2Ze5QawpaSrJk0wwaQMTDp84HY1SAAEVyzDq/qRhKqiEAj0Iob4kJTzhng/04n7Ukc12xx6eftqg+fYpID11PoB43h7CE8ZarzwkvJG5CCIRVZ+C+8Tcl560SM3RDuWPOJJ/IW3/lbDyed2klHM4DMf2NEnoCL5w+rj3ONI7IdPNyzd7PL//8x8DqNXMkut5HX5dmBJ9mK9aKwLykAR6vIz2dga9SJSp7iloPDz1TKpimh+Xfl6aPuujWJ83lUIoi3ZoAzJq6xJL4mYGD/vSTGPTXhh7BiJ6almTmcz32ZMcnsnPz6JmFeRQ25fMWtH94AOekXYo5ofMQ8N0tzOc3j0SLhLwBQvxjiF2fwLEVQ8XmfjW+wAwDOfiZQcnHlwFGGPXJKdjdBy7OjPPNxm5+WAKlhJGp2Cy2oTgGXuv9n5b2jAqGVee4gWZnHPXGz1cDjtCe9PFt7jDHGbmpLIx6SuhBsUcTf/BoIkcVShshW2/OA/q6Vxsje4BWX9J/zCI4uvXD+e1uc6xOl0ngSMhF02J+SaYigscAVYLzI7PAY91/ItesxcWij1qwFutot2LPY68o5YJDjN6I76PsvkcrvawX54J3lKo2PIlu4RWT8dehehD2RnkYGwNtUiqX0uPhA8VPfse+AaXb+4eMH/2uw2G0mz1x/Nux+YBgK+y8mCWZJ0qXG6JSu1/dDxei+HJHE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(39860400002)(366004)(346002)(136003)(451199018)(31686004)(54906003)(316002)(36756003)(86362001)(38100700002)(31696002)(6506007)(83380400001)(6666004)(53546011)(6512007)(186003)(2616005)(5660300002)(6486002)(478600001)(8936002)(41300700001)(2906002)(66476007)(4326008)(66556008)(8676002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QlQwVVdobnlseWI0RFRFUjZWSi9GaHVCblNGbnFkZnJJYTE4aVJWZ21Rb29C?=
- =?utf-8?B?QnlTbFBoNUN0YjJseEVvb2NMTWNXTlhNVXppU2ZMRkJVd09GbjE0bXQxS2hu?=
- =?utf-8?B?dnAzbHpUbER6L1drcm5ZUzhNcXk4dWUvT1h1ZGs0TDlNalg0SE5UakgxMU81?=
- =?utf-8?B?Z0c3MVZ2dzVIcW9McWlWSEp1RmJOYWY2OFNzeUR4aWh2RyszN1owbmozVVd1?=
- =?utf-8?B?VjAzd2ZRaDJ1QWY2VHVDeVFDbkVoTG93Z2JlZGMxUnJleGhjTFlyMVlFZlBB?=
- =?utf-8?B?NEZIcXhTRmhoaE91SnhHTUFMaDlvUmdEclUram5mbWZIbEluQ1hwTWFRK1RY?=
- =?utf-8?B?T2NWcjRvUVNCZEcrL2NwbTRaSW8vdGZGa3IxN0VEM05tK2lTVTJDMVEzYktp?=
- =?utf-8?B?ckNGTUp6LzRVVG1lSEM2bUtEVmFNVkRpeW9ZYytGNjRSZ3VsRDVhaGhTWDgw?=
- =?utf-8?B?WW4rUytKNFR0Ym9HZjA5b3A3UThUUDJhOGp6OS9mRnNaaTZVbXJPQ2Z2V0dR?=
- =?utf-8?B?QlN4Nk9rVG1OT3o5ZzJETUpRYy91T2FQRUNCT0xOSU83cHJQM1hkUytnaHU3?=
- =?utf-8?B?SzF2am9TRjNhaVQzN3k2eklJSTdKbTVaTXpHYjJuN0pZQ1FSOFQrRU1NcWJK?=
- =?utf-8?B?WEpHUVpHK2M4cG9BVWZaQnpDV1pZbHhmRjhQOVd1YVpxMjZVemxkemVDWnZa?=
- =?utf-8?B?ek9BVHhVTzg1Nks5ZUtYbmtud3ZvaURtK1o0UmltejRBZ0ZYaG9RMWJmSFV4?=
- =?utf-8?B?R3c2c2ZySEtEajFGeXdrNTVodG41Q3lqR0NXMGF3ZXl1a2dXakFxQXh2UnJo?=
- =?utf-8?B?Sks2bkJCNXFrb3Z0MzVjcDlhZld4WkV1bWlVcGlHNDFvOGlBdFdqa2MwODBt?=
- =?utf-8?B?YzFNT2dFTXZHWWlmMGIvUWFJTEJrK3VmR2xWYUFPOHMxU2ZrSU5pR0I5cm5J?=
- =?utf-8?B?VVM3MzZFNHorN3AxNzRSVjhQUmZ6Qys5TjhNSmZsc1Q3RDJGY01ZcmFaMjl1?=
- =?utf-8?B?b2NnK1h0aEJKQWJWS1IvWUlReitrc2c2d1d0aUdYY1h1QXNaelhSeTE1VDdq?=
- =?utf-8?B?ZS9EVHpTMENrUnVIcW9CYlRndHpUMU9DS0crSUI4T0crci9QWHZTS3FaUEhK?=
- =?utf-8?B?c0ZJbVlJWWxPTnZ2RWtiQVRWVDRuekVjYmFBcHUySWx3emhUK1Z1aWt0NzNR?=
- =?utf-8?B?UlpYY2ZXeEgvNFZKYU9BemZ4anJiVDU0bGFYYjdvYlp4SytUSkpKWm1RTWVt?=
- =?utf-8?B?QmJVMFllRGZoTFBMbzNweFVBandkNEM3dllpeVRCMEVjc3ZBQ3Z2Q2JCV2Fi?=
- =?utf-8?B?ekMyTnRzM3NrUGZIQUJlSExBa0dYaFRUZXh3RElBemdoVmYrYjNoSU9MRExJ?=
- =?utf-8?B?OEdiQU4vSnlwZHI4cHVZV01iMkx0bUdKbWNHSGh0d2pMVWFqRGdBMDBhVE4x?=
- =?utf-8?B?NVlEc1NmT0U3NGNmeEFlOGpwamxHRnBGRU9UcWRUeXZielM2bGk0QWdkc05a?=
- =?utf-8?B?ODJMYkxCd0QvS3pNUlc4dDJ5cUNPbUNJdnQ0VERiL285Wmw1OUY2R01VMmpk?=
- =?utf-8?B?N1RIZnl4WFgyaFlFVkRPNk1xQVVTSkQ2YUZXMUNrU2RsS29ValpJQllQZGlw?=
- =?utf-8?B?Q1I1RXhSNXlnd3BmR0pCSDRQS1pOSUFHSUtzWlBmN2xmYllnY01DNjU5Nzdo?=
- =?utf-8?B?aTNWWEtXWDFkWWJQaVB4cDRUSEJqMlByZzVlVW91UUlzSlFGYUZwRWV0M3Bz?=
- =?utf-8?B?TDdCOEtBSWp1N2xUeFdiQ1hxNDk0bVQwd3FreFVscGRoaWFnaFh5YVMwMFRU?=
- =?utf-8?B?TXA1Z2oybU1hekx5TVhyNGg2QWtkYUJSZnhSbWZBeTRLVFB2Mlp0YWlZUUZX?=
- =?utf-8?B?Y1hJWkx6cW04cVBDZTI2dnNUbjh2TEZXaHpSUkY4bUthVjFBcWJISU5CTVBr?=
- =?utf-8?B?UHNNQnh4My81OWVRQzNtV1I5eWtUZDRWWm5MZkZtM2xOZWtBbUIyU2ViajFw?=
- =?utf-8?B?b25lWE9HTFJ3cjA2NlRhTS92eE9KOHJkVm9wczFwa3lENjhnTkdvK0RISTZo?=
- =?utf-8?B?SEZLeUcxMWlvU1ZEK2pnemxYQmNld2dFaVpaR1NIMVlPOERlTmJxRzlXVXZo?=
- =?utf-8?B?YlpJZnkyNkdobFJOT0RveFUwc2xDd0ZpNHFtemVFenFLemNYUFovaVhoK0dQ?=
- =?utf-8?Q?2MELNqH3ksmE1AuovYO3XmGfzIzW/e93spB8TgDtraUI?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f02582a3-5812-437e-3d20-08db218ee1b2
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 17:42:56.1184
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FD4zHpzNgZVCHuRSSoRMmH/+lsBRIR18HSGudd0L+2oWIB8ChX3r7eLg/VBLH91USLZpFvT+j+rHusVpoZ7jdg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6880
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678470328;7130823b;
+X-HE-SMSGID: 1pagmT-0007jH-Km
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[adding Linux to the list of recipients]
 
-
-On 3/9/23 14:30, Hamza Mahfooz wrote:
-> We should be checking if drm_dp_dpcd_read() returns the size that we are
-> asking it to read instead of just checking if it is greater than zero.
-> Also, we should WARN_ON() here since this condition is only ever met, if
-> there is an issue worth investigating. So, compare the return value of
-> drm_dp_dpcd_read() to size and WARN_ON() if they aren't equal.
+On 08.03.23 10:42, Linux regression tracking (Thorsten Leemhuis) wrote:
+> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+> for once, to make this easily accessible to everyone.
 > 
-> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
-> ---
->   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> index 8d598b322e5b..ed2ed7b1d869 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> @@ -511,8 +511,8 @@ bool dm_helpers_dp_read_dpcd(
->   		return false;
->   	}
->   
-> -	return drm_dp_dpcd_read(&aconnector->dm_dp_aux.aux, address,
-> -			data, size) > 0;
-> +	return !WARN_ON(drm_dp_dpcd_read(&aconnector->dm_dp_aux.aux, address,
-> +					 data, size) != size);
->   }
->   
->   bool dm_helpers_dp_write_dpcd(
+> Jarkko, thx for reviewing and picking below fix up. Are you planning to
+> send this to Linus anytime soon, now that the patch was a few days in
+> next? It would be good to get this 6.1 regression finally fixed, it
+> already took way longer then the time frame
+> Documentation/process/handling-regressions.rst outlines for a case like
+> this. But well, that's how it is sometimes...
 
+Linus, would you consider picking this fix up directly from here or from
+linux-next (8699d5244e37)? It's been in the latter for 9 days now
+afaics. And the issue seems to bug more than just one or two users, so
+it IMHO would be good to get this finally resolved.
 
-Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Jarkko didn't reply to my inquiry, guess something else keeps him busy.
 
-and pushed to amd-staging-drm-next.
+Ciao, Thorsten
 
-Thanks
-Siqueira
+> On 28.02.23 04:10, Jarkko Sakkinen wrote:
+>> On Mon, Feb 27, 2023 at 08:44:39PM -0600, Mario Limonciello wrote:
+>>> AMD has issued an advisory indicating that having fTPM enabled in
+>>> BIOS can cause "stuttering" in the OS.  This issue has been fixed
+>>> in newer versions of the fTPM firmware, but it's up to system
+>>> designers to decide whether to distribute it.
+>>>
+>>> This issue has existed for a while, but is more prevalent starting
+>>> with kernel 6.1 because commit b006c439d58db ("hwrng: core - start
+>>> hwrng kthread also for untrusted sources") started to use the fTPM
+>>> for hwrng by default. However, all uses of /dev/hwrng result in
+>>> unacceptable stuttering.
+>>>
+>>> So, simply disable registration of the defective hwrng when detecting
+>>> these faulty fTPM versions.  As this is caused by faulty firmware, it
+>>> is plausible that such a problem could also be reproduced by other TPM
+>>> interactions, but this hasn't been shown by any user's testing or reports.
+>>>
+>>> It is hypothesized to be triggered more frequently by the use of the RNG
+>>> because userspace software will fetch random numbers regularly.
+>>>
+>>> Intentionally continue to register other TPM functionality so that users
+>>> that rely upon PCR measurements or any storage of data will still have
+>>> access to it.  If it's found later that another TPM functionality is
+>>> exacerbating this problem a module parameter it can be turned off entirely
+>>> and a module parameter can be introduced to allow users who rely upon
+>>> fTPM functionality to turn it on even though this problem is present.
+>>>
+>>> Link: https://www.amd.com/en/support/kb/faq/pa-410
+>>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216989
+>>> Link: https://lore.kernel.org/all/20230209153120.261904-1-Jason@zx2c4.com/
+>>> Fixes: b006c439d58d ("hwrng: core - start hwrng kthread also for untrusted sources")
+>>> Cc: stable@vger.kernel.org
+>>> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+>>> Cc: Thorsten Leemhuis <regressions@leemhuis.info>
+>>> Cc: James Bottomley <James.Bottomley@hansenpartnership.com>
+>>> Tested-by: reach622@mailcuk.com
+>>> Tested-by: Bell <1138267643@qq.com>
+>>> Co-developed-by: Jason A. Donenfeld <Jason@zx2c4.com>
+>>> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>>> ---
+>>> v2->v3:
+>>>  * Revert extra curl braces back to behavior in v1
+>>>  * Remove needless goto
+>>>  * Pick up 2 tested tags
+>>> ---
+>>>  drivers/char/tpm/tpm-chip.c | 60 +++++++++++++++++++++++++++++-
+>>>  drivers/char/tpm/tpm.h      | 73 +++++++++++++++++++++++++++++++++++++
+>>>  2 files changed, 132 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+>>> index 741d8f3e8fb3..c467eeae9973 100644
+>>> --- a/drivers/char/tpm/tpm-chip.c
+>>> +++ b/drivers/char/tpm/tpm-chip.c
+>>> @@ -512,6 +512,63 @@ static int tpm_add_legacy_sysfs(struct tpm_chip *chip)
+>>>  	return 0;
+>>>  }
+>>>  
+>>> +/*
+>>> + * Some AMD fTPM versions may cause stutter
+>>> + * https://www.amd.com/en/support/kb/faq/pa-410
+>>> + *
+>>> + * Fixes are available in two series of fTPM firmware:
+>>> + * 6.x.y.z series: 6.0.18.6 +
+>>> + * 3.x.y.z series: 3.57.y.5 +
+>>> + */
+>>> +static bool tpm_amd_is_rng_defective(struct tpm_chip *chip)
+>>> +{
+>>> +	u32 val1, val2;
+>>> +	u64 version;
+>>> +	int ret;
+>>> +
+>>> +	if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
+>>> +		return false;
+>>> +
+>>> +	ret = tpm_request_locality(chip);
+>>> +	if (ret)
+>>> +		return false;
+>>> +
+>>> +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val1, NULL);
+>>> +	if (ret)
+>>> +		goto release;
+>>> +	if (val1 != 0x414D4400U /* AMD */) {
+>>> +		ret = -ENODEV;
+>>> +		goto release;
+>>> +	}
+>>> +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_FIRMWARE_VERSION_1, &val1, NULL);
+>>> +	if (ret)
+>>> +		goto release;
+>>> +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_FIRMWARE_VERSION_2, &val2, NULL);
+>>> +
+>>> +release:
+>>> +	tpm_relinquish_locality(chip);
+>>> +
+>>> +	if (ret)
+>>> +		return false;
+>>> +
+>>> +	version = ((u64)val1 << 32) | val2;
+>>> +	if ((version >> 48) == 6) {
+>>> +		if (version >= 0x0006000000180006ULL)
+>>> +			return false;
+>>> +	} else if ((version >> 48) == 3) {
+>>> +		if (version >= 0x0003005700000005ULL)
+>>> +			return false;
+>>> +	} else {
+>>> +		return false;
+>>> +	}
+>>> +
+>>> +	dev_warn(&chip->dev,
+>>> +		 "AMD fTPM version 0x%llx causes system stutter; hwrng disabled\n",
+>>> +		 version);
+>>> +
+>>> +	return true;
+>>> +}
+>>> +
+>>>  static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+>>>  {
+>>>  	struct tpm_chip *chip = container_of(rng, struct tpm_chip, hwrng);
+>>> @@ -521,7 +578,8 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+>>>  
+>>>  static int tpm_add_hwrng(struct tpm_chip *chip)
+>>>  {
+>>> -	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip))
+>>> +	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip) ||
+>>> +	    tpm_amd_is_rng_defective(chip))
+>>>  		return 0;
+>>>  
+>>>  	snprintf(chip->hwrng_name, sizeof(chip->hwrng_name),
+>>> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+>>> index 24ee4e1cc452..830014a26609 100644
+>>> --- a/drivers/char/tpm/tpm.h
+>>> +++ b/drivers/char/tpm/tpm.h
+>>> @@ -150,6 +150,79 @@ enum tpm_sub_capabilities {
+>>>  	TPM_CAP_PROP_TIS_DURATION = 0x120,
+>>>  };
+>>>  
+>>> +enum tpm2_pt_props {
+>>> +	TPM2_PT_NONE = 0x00000000,
+>>> +	TPM2_PT_GROUP = 0x00000100,
+>>> +	TPM2_PT_FIXED = TPM2_PT_GROUP * 1,
+>>> +	TPM2_PT_FAMILY_INDICATOR = TPM2_PT_FIXED + 0,
+>>> +	TPM2_PT_LEVEL = TPM2_PT_FIXED + 1,
+>>> +	TPM2_PT_REVISION = TPM2_PT_FIXED + 2,
+>>> +	TPM2_PT_DAY_OF_YEAR = TPM2_PT_FIXED + 3,
+>>> +	TPM2_PT_YEAR = TPM2_PT_FIXED + 4,
+>>> +	TPM2_PT_MANUFACTURER = TPM2_PT_FIXED + 5,
+>>> +	TPM2_PT_VENDOR_STRING_1 = TPM2_PT_FIXED + 6,
+>>> +	TPM2_PT_VENDOR_STRING_2 = TPM2_PT_FIXED + 7,
+>>> +	TPM2_PT_VENDOR_STRING_3 = TPM2_PT_FIXED + 8,
+>>> +	TPM2_PT_VENDOR_STRING_4 = TPM2_PT_FIXED + 9,
+>>> +	TPM2_PT_VENDOR_TPM_TYPE = TPM2_PT_FIXED + 10,
+>>> +	TPM2_PT_FIRMWARE_VERSION_1 = TPM2_PT_FIXED + 11,
+>>> +	TPM2_PT_FIRMWARE_VERSION_2 = TPM2_PT_FIXED + 12,
+>>> +	TPM2_PT_INPUT_BUFFER = TPM2_PT_FIXED + 13,
+>>> +	TPM2_PT_HR_TRANSIENT_MIN = TPM2_PT_FIXED + 14,
+>>> +	TPM2_PT_HR_PERSISTENT_MIN = TPM2_PT_FIXED + 15,
+>>> +	TPM2_PT_HR_LOADED_MIN = TPM2_PT_FIXED + 16,
+>>> +	TPM2_PT_ACTIVE_SESSIONS_MAX = TPM2_PT_FIXED + 17,
+>>> +	TPM2_PT_PCR_COUNT = TPM2_PT_FIXED + 18,
+>>> +	TPM2_PT_PCR_SELECT_MIN = TPM2_PT_FIXED + 19,
+>>> +	TPM2_PT_CONTEXT_GAP_MAX = TPM2_PT_FIXED + 20,
+>>> +	TPM2_PT_NV_COUNTERS_MAX = TPM2_PT_FIXED + 22,
+>>> +	TPM2_PT_NV_INDEX_MAX = TPM2_PT_FIXED + 23,
+>>> +	TPM2_PT_MEMORY = TPM2_PT_FIXED + 24,
+>>> +	TPM2_PT_CLOCK_UPDATE = TPM2_PT_FIXED + 25,
+>>> +	TPM2_PT_CONTEXT_HASH = TPM2_PT_FIXED + 26,
+>>> +	TPM2_PT_CONTEXT_SYM = TPM2_PT_FIXED + 27,
+>>> +	TPM2_PT_CONTEXT_SYM_SIZE = TPM2_PT_FIXED + 28,
+>>> +	TPM2_PT_ORDERLY_COUNT = TPM2_PT_FIXED + 29,
+>>> +	TPM2_PT_MAX_COMMAND_SIZE = TPM2_PT_FIXED + 30,
+>>> +	TPM2_PT_MAX_RESPONSE_SIZE = TPM2_PT_FIXED + 31,
+>>> +	TPM2_PT_MAX_DIGEST = TPM2_PT_FIXED + 32,
+>>> +	TPM2_PT_MAX_OBJECT_CONTEXT = TPM2_PT_FIXED + 33,
+>>> +	TPM2_PT_MAX_SESSION_CONTEXT = TPM2_PT_FIXED + 34,
+>>> +	TPM2_PT_PS_FAMILY_INDICATOR = TPM2_PT_FIXED + 35,
+>>> +	TPM2_PT_PS_LEVEL = TPM2_PT_FIXED + 36,
+>>> +	TPM2_PT_PS_REVISION = TPM2_PT_FIXED + 37,
+>>> +	TPM2_PT_PS_DAY_OF_YEAR = TPM2_PT_FIXED + 38,
+>>> +	TPM2_PT_PS_YEAR = TPM2_PT_FIXED + 39,
+>>> +	TPM2_PT_SPLIT_MAX = TPM2_PT_FIXED + 40,
+>>> +	TPM2_PT_TOTAL_COMMANDS = TPM2_PT_FIXED + 41,
+>>> +	TPM2_PT_LIBRARY_COMMANDS = TPM2_PT_FIXED + 42,
+>>> +	TPM2_PT_VENDOR_COMMANDS = TPM2_PT_FIXED + 43,
+>>> +	TPM2_PT_NV_BUFFER_MAX = TPM2_PT_FIXED + 44,
+>>> +	TPM2_PT_MODES = TPM2_PT_FIXED + 45,
+>>> +	TPM2_PT_MAX_CAP_BUFFER = TPM2_PT_FIXED + 46,
+>>> +	TPM2_PT_VAR = TPM2_PT_GROUP * 2,
+>>> +	TPM2_PT_PERMANENT = TPM2_PT_VAR + 0,
+>>> +	TPM2_PT_STARTUP_CLEAR = TPM2_PT_VAR + 1,
+>>> +	TPM2_PT_HR_NV_INDEX = TPM2_PT_VAR + 2,
+>>> +	TPM2_PT_HR_LOADED = TPM2_PT_VAR + 3,
+>>> +	TPM2_PT_HR_LOADED_AVAIL = TPM2_PT_VAR + 4,
+>>> +	TPM2_PT_HR_ACTIVE = TPM2_PT_VAR + 5,
+>>> +	TPM2_PT_HR_ACTIVE_AVAIL = TPM2_PT_VAR + 6,
+>>> +	TPM2_PT_HR_TRANSIENT_AVAIL = TPM2_PT_VAR + 7,
+>>> +	TPM2_PT_HR_PERSISTENT = TPM2_PT_VAR + 8,
+>>> +	TPM2_PT_HR_PERSISTENT_AVAIL = TPM2_PT_VAR + 9,
+>>> +	TPM2_PT_NV_COUNTERS = TPM2_PT_VAR + 10,
+>>> +	TPM2_PT_NV_COUNTERS_AVAIL = TPM2_PT_VAR + 11,
+>>> +	TPM2_PT_ALGORITHM_SET = TPM2_PT_VAR + 12,
+>>> +	TPM2_PT_LOADED_CURVES = TPM2_PT_VAR + 13,
+>>> +	TPM2_PT_LOCKOUT_COUNTER = TPM2_PT_VAR + 14,
+>>> +	TPM2_PT_MAX_AUTH_FAIL = TPM2_PT_VAR + 15,
+>>> +	TPM2_PT_LOCKOUT_INTERVAL = TPM2_PT_VAR + 16,
+>>> +	TPM2_PT_LOCKOUT_RECOVERY = TPM2_PT_VAR + 17,
+>>> +	TPM2_PT_NV_WRITE_RECOVERY = TPM2_PT_VAR + 18,
+>>> +	TPM2_PT_AUDIT_COUNTER_0 = TPM2_PT_VAR + 19,
+>>> +	TPM2_PT_AUDIT_COUNTER_1 = TPM2_PT_VAR + 20,
+>>> +};
+>>>  
+>>>  /* 128 bytes is an arbitrary cap. This could be as large as TPM_BUFSIZE - 18
+>>>   * bytes, but 128 is still a relatively large number of random bytes and
+>>> -- 
+>>> 2.34.1
+>>>
+>>
+>>
+>> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+>>
+>> BR, Jarkko
