@@ -2,113 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6F66B377E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B426B378D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjCJHjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 02:39:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S230325AbjCJHlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 02:41:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbjCJHjd (ORCPT
+        with ESMTP id S230332AbjCJHkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 02:39:33 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F84F31F1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 23:39:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1678433962; x=1709969962;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2rW9oMWvY+NquKDnF5bLOq8e5GEMLalpiu7hkMsEjBo=;
-  b=YAUb3NyWooQ+Vd/AvUw1iFoWUUTzk9L2Xu+1OioGmfCOg6pUwsn2V4z/
-   3SsNzCVyfZOPlDycwZlhVbiYm0aGbwHvMoKdZRyJpm9EjrrWSoIgLLBCG
-   OfvCcv+jEg7XVw8fQT3QXglYx3vp4wZRgAA113JwKIen75aPVx5UIMSFA
-   HyxJY0MboXYCEOR1jSysq7QhS3UhcpjPECCvIM4eVYTGeJRcGKBIlSf6P
-   T7+ADdyHHMd7Tb0LD4JqgPh/AnHqpwe3Sn2Zbr5kgZ63xP3RK0JoJIL4v
-   wjZcm2HTMOodYxxmH4NvPSzi8yleF3F9mKeaI9GpQBLNWlR7SMsM6PGHR
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,249,1673910000"; 
-   d="scan'208";a="29596581"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 10 Mar 2023 08:39:17 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 10 Mar 2023 08:39:17 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 10 Mar 2023 08:39:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1678433957; x=1709969957;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2rW9oMWvY+NquKDnF5bLOq8e5GEMLalpiu7hkMsEjBo=;
-  b=SIBj3YJi06VcVu0A2UxJudDjWg6BIt+nAcCugGlvS7a3WVzAvmecpR06
-   iek8vpUKKQZaE2TpjpXKxYK9zThKulMnwA2sVUy4+47TMFj4poa39hHek
-   DrwPg6Isn9N7bOLt3qF0nmUP5r2GK38PJjIRufvwzuUtgMDxGeValG2fS
-   BYeThnSXyXrbFkxs54o0DfLjOoaU4NOx0k7mE+HN0ReU9i7wFb3Q5AZMH
-   3WXSvNEF47GT/HSTpZoTF3kC3vQ6+CqpCZ8aUviEFibGeHVtBJkyOVsZN
-   eZELXPP3H1xm9e2cR5Kx1DV7ycfAWDhSo8tKcVju2Dx3iPKRkpi913Q1C
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,249,1673910000"; 
-   d="scan'208";a="29596579"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 10 Mar 2023 08:39:17 +0100
-Received: from steina-w.tq-net.de (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 33D7D280072;
-        Fri, 10 Mar 2023 08:39:17 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] regmap: cache: Fix return value
-Date:   Fri, 10 Mar 2023 08:39:11 +0100
-Message-Id: <20230310073911.3470892-2-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230310073911.3470892-1-alexander.stein@ew.tq-group.com>
-References: <20230310073911.3470892-1-alexander.stein@ew.tq-group.com>
+        Fri, 10 Mar 2023 02:40:24 -0500
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062ACF8647
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 23:40:11 -0800 (PST)
+X-UUID: bfaf3b3b4df0410c8d7f35f284529c16-20230310
+X-CPASD-INFO: 9d00fa27f33d41c298fadc8022794e1a@grRqUJOTYGeSU3Wwg3SubFlpmo2Esnp
+        qUmJlaWCFhrOMbFJkYl1SgIFqVmprYmBZUHt1bFZgYGJdUXh3lHKPVGBeYIJUdJOAe55QYZSR
+X-CLOUD-ID: 9d00fa27f33d41c298fadc8022794e1a
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:196.
+        0,ESV:0.0,ECOM:-5.0,ML:14.0,FD:0.0,CUTS:112.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-
+        5.0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:1.0,SPC:0,SIG:
+        -5,AUF:7,DUF:17729,ACD:257,DCD:257,SL:0,EISP:0,AG:0,CFC:0.319,CFSR:0.082,UAT:
+        0,RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM
+        :0,EAF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: bfaf3b3b4df0410c8d7f35f284529c16-20230310
+X-CPASD-BLOCK: 14
+X-CPASD-STAGE: 1
+X-UUID: bfaf3b3b4df0410c8d7f35f284529c16-20230310
+X-User: lizhenneng@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by mailgw
+        (envelope-from <lizhenneng@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1495147978; Fri, 10 Mar 2023 15:40:09 +0800
+From:   Zhenneng Li <lizhenneng@kylinos.cn>
+To:     Alex Deucher <alexander.deucher@amd.com>
+Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Zhenneng Li <lizhenneng@kylinos.cn>
+Subject: [PATCH] drm/amdgpu: resove reboot exception for si oland
+Date:   Fri, 10 Mar 2023 15:39:59 +0800
+Message-Id: <20230310074000.2078124-1-lizhenneng@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-checkpatch.pl warned:
-WARNING: ENOSYS means 'invalid syscall nr' and nothing else
-Align the return value to regcache_drop_region().
+During reboot test on arm64 platform, it may failure
+on boot.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+The error message are as follows:
+[    6.996395][ 7] [  T295] [drm:amdgpu_device_ip_late_init [amdgpu]] *ERROR*
+			    late_init of IP block <si_dpm> failed -22
+[    7.006919][ 7] [  T295] amdgpu 0000:04:00.0: amdgpu_device_ip_late_init failed
+[    7.014224][ 7] [  T295] amdgpu 0000:04:00.0: Fatal error during GPU init
 ---
-This warning popped up while initially returning ENOSYS in patch 1.
+ drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-But I'm wondering if returning 0 for regcache_write is correct or not.
-This might be a follow-up patch though.
-
- drivers/base/regmap/regcache.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/base/regmap/regcache.c b/drivers/base/regmap/regcache.c
-index b61763dbfc68..c13f5f8872ac 100644
---- a/drivers/base/regmap/regcache.c
-+++ b/drivers/base/regmap/regcache.c
-@@ -242,7 +242,7 @@ int regcache_read(struct regmap *map,
- 	int ret;
+diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+index d6d9e3b1b2c0..dee51c757ac0 100644
+--- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
++++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+@@ -7632,9 +7632,6 @@ static int si_dpm_late_init(void *handle)
+ 	if (!adev->pm.dpm_enabled)
+ 		return 0;
  
- 	if (map->cache_type == REGCACHE_NONE)
--		return -ENOSYS;
-+		return -EINVAL;
- 
- 	BUG_ON(!map->cache_ops);
- 
+-	ret = si_set_temperature_range(adev);
+-	if (ret)
+-		return ret;
+ #if 0 //TODO ?
+ 	si_dpm_powergate_uvd(adev, true);
+ #endif
 -- 
-2.34.1
+2.25.1
 
