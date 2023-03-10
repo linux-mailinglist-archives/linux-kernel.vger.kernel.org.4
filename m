@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7486B55FA
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE326B5601
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbjCJXqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 18:46:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
+        id S230444AbjCJXuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 18:50:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbjCJXpp (ORCPT
+        with ESMTP id S231269AbjCJXtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 18:45:45 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FB4126991;
-        Fri, 10 Mar 2023 15:45:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=6RSbXeOyJXMcC096K906LGWK1pufxQXw88aIMgb//hY=; b=oPkUxijQji7nsAPM9NoPoMym+I
-        AR65R3ylE5x03QCPirCr2PlHYS0RXVk6IA586IZCoN+CVwZyxHSPlfGIRAOj/TNyFpl67NiQB0txS
-        dNinDi5REGeIrrg5VGBGMjJzr6z9eF1AmBa7IFYBe5tcWeTT1u2eu7mHZsx9QBht1S6dYvGp60Lij
-        y5NMIxZAhBUSZlsUAT58b4NtLvGew+LNFw6z8eEPaI+yo1xxDFjfA08xuqBhHueLjj9y4A1VV/AqF
-        RktygUAbAEOmsDduIfaJl+JYHG2UDxfI25po7gm08BHdl3sZJ03wZ0inOuzaNEmxwVhVv0zZ8FAix
-        EUc9SXIA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pamQS-00Gj35-95; Fri, 10 Mar 2023 23:45:28 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     hca@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        linux-s390@vger.kernel.org, sudipm.mukherjee@gmail.com
-Cc:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
-        j.granados@samsung.com, patches@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 6/6] s390: simplify dynamic sysctl registration for appldata_register_ops
-Date:   Fri, 10 Mar 2023 15:45:25 -0800
-Message-Id: <20230310234525.3986352-7-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230310234525.3986352-1-mcgrof@kernel.org>
-References: <20230310234525.3986352-1-mcgrof@kernel.org>
+        Fri, 10 Mar 2023 18:49:43 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F2B12C715;
+        Fri, 10 Mar 2023 15:49:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=8/7BhUFOLEFg63ackGozBt7/egbQJCdzavg0WynPGE4=; b=mLZ3x6YQ2r6fnqslk59NjraeHR
+        Qva7B+nAA1CH2VG44/u06kiWAC8aoyQwdNGIsezbFq0cu5oDL/Z431uV3qQhcG2JIbEjuiy4uCLTY
+        eufKXWnoLiJSWufyCMNyLyCpmZMlgs6RTbTUMxNH30erOpKm36XoyVpTk2qvvmhpcoUo=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pamTv-0071Qo-BW; Sat, 11 Mar 2023 00:49:03 +0100
+Date:   Sat, 11 Mar 2023 00:49:03 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Klaus Kudielka <klaus.kudielka@gmail.com>
+Cc:     Michael Walle <michael@walle.cc>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bryan Whitehead <bryan.whitehead@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-aspeed@lists.ozlabs.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Subject: Re: [PATCH net-next v2 4/6] net: mdio: scan bus based on bus
+ capabilities for C22 and C45
+Message-ID: <4abd56aa-5b9f-4e16-b0ca-11989bb8c764@lunn.ch>
+References: <20230116-net-next-remove-probe-capabilities-v2-4-15513b05e1f4@walle.cc>
+ <449bde236c08d5ab5e54abd73b645d8b29955894.camel@gmail.com>
+ <100c439a-2a4d-4cb2-96f2-5bf273e2121a@lunn.ch>
+ <712bc92ca6d576f33f63f1e9c2edf0030b10d3ae.camel@gmail.com>
+ <db6b8a09-b680-4baa-8963-d355ad29eb09@lunn.ch>
+ <0e10aa8492eadb587949d8744b56fccaabbd183b.camel@gmail.com>
+ <72530e86-9ba9-4a01-9cd2-68835ecae7a0@lunn.ch>
+ <09d65e1ee0679e1e74b4f3a5a4c55bd48332f043.camel@gmail.com>
+ <70f5bca0-322c-4bae-b880-742e56365abe@lunn.ch>
+ <10da10caea22a8f5da8f1779df3e13b948e8a363.camel@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <10da10caea22a8f5da8f1779df3e13b948e8a363.camel@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The routine appldata_register_ops() allocates a sysctl table
-with 4 entries. The firsts one,   ops->ctl_table[0] is the parent directory
-with an empty entry following it, ops->ctl_table[1]. The next entry is
-for the the ops->name and that is ops->ctl_table[2]. It needs an empty
-entry following that, and that is ops->ctl_table[3]. And so hence the
-kcalloc(4, sizeof(struct ctl_table), GFP_KERNEL).
+> Yes, that helps. Primarily, because mdiobus_scan_bus_c45 now is called only once,
+> and at least some things are done in parallel.
 
-We can simplify this considerably since sysctl_register("foo", table)
-can create the parent directory for us if it does not exist. So we
-can just remove the first two entries and move back the ops->name to
-the first entry, and just use kcalloc(2, ...).
+Great. Could you cook up a proper patch and submit it?
 
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- arch/s390/appldata/appldata_base.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+> (Still, ~2s waiting for the C45 scan to complete).
 
-diff --git a/arch/s390/appldata/appldata_base.c b/arch/s390/appldata/appldata_base.c
-index c593f2228083..a60c1e093039 100644
---- a/arch/s390/appldata/appldata_base.c
-+++ b/arch/s390/appldata/appldata_base.c
-@@ -351,7 +351,8 @@ int appldata_register_ops(struct appldata_ops *ops)
- 	if (ops->size > APPLDATA_MAX_REC_SIZE)
- 		return -EINVAL;
- 
--	ops->ctl_table = kcalloc(4, sizeof(struct ctl_table), GFP_KERNEL);
-+	/* The last entry must be an empty one */
-+	ops->ctl_table = kcalloc(2, sizeof(struct ctl_table), GFP_KERNEL);
- 	if (!ops->ctl_table)
- 		return -ENOMEM;
- 
-@@ -359,17 +360,12 @@ int appldata_register_ops(struct appldata_ops *ops)
- 	list_add(&ops->list, &appldata_ops_list);
- 	mutex_unlock(&appldata_ops_mutex);
- 
--	ops->ctl_table[0].procname = appldata_proc_name;
--	ops->ctl_table[0].maxlen   = 0;
--	ops->ctl_table[0].mode     = S_IRUGO | S_IXUGO;
--	ops->ctl_table[0].child    = &ops->ctl_table[2];
-+	ops->ctl_table[0].procname = ops->name;
-+	ops->ctl_table[0].mode     = S_IRUGO | S_IWUSR;
-+	ops->ctl_table[0].proc_handler = appldata_generic_handler;
-+	ops->ctl_table[0].data = ops;
- 
--	ops->ctl_table[2].procname = ops->name;
--	ops->ctl_table[2].mode     = S_IRUGO | S_IWUSR;
--	ops->ctl_table[2].proc_handler = appldata_generic_handler;
--	ops->ctl_table[2].data = ops;
--
--	ops->sysctl_header = register_sysctl_table(ops->ctl_table);
-+	ops->sysctl_header = register_sysctl(appldata_proc_name, ops->ctl_table);
- 	if (!ops->sysctl_header)
- 		goto out;
- 	return 0;
--- 
-2.39.1
+The number of times it polled for the bit is somewhat high. The silly
+thing here is, you are doing MDIO over MDIO. The inner MDIO bus should
+be just as fast as the outer MDIO bus, both around 2.5MHz. So i don't
+see why it should need to loop more than once waiting for the inner
+MDIO to complete..
 
+     Andrew
