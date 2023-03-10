@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4B46B3B43
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCB96B3B45
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbjCJJr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:47:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42272 "EHLO
+        id S230287AbjCJJsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjCJJrH (ORCPT
+        with ESMTP id S229652AbjCJJsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:47:07 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E85E06D
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:46:46 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id j3so2978243wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:46:46 -0800 (PST)
+        Fri, 10 Mar 2023 04:48:19 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD688474F2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:47:48 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id o38-20020a05600c512600b003e8320d1c11so4514663wms.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:47:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1678441605;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1678441666;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KgQQy0WOaC8x36p48NSIJDImmcDBT39MIpy6PGzDwU8=;
-        b=DK0AVNF24CSovjJHjfX2BnbZdKEc3SCRhmed7jkWmNWONYRQJpkIDL/dDxC8+TqV4s
-         iPdx2usmr4K0UsSvTjdyMJmHIJpwPpBtCXOt0TWuokX7Zry9p/D+3rjrf+QNRJWTAH9d
-         FjemEPIjcSPl6Z/IT3jQJZ+EuCULRYq4LA1+kUq2ILkogKGSgomgez1hILg2QQS3XD5g
-         MnLjt536CUEpLSQiQqLquY6n4kpR5vSmgTKTmGbi96kMFXMKcVgHdPrFYi3R8Xkr71dD
-         FrlWWYDKsTczd5y5BLAiMFpgQ4ohQfrZRU/KQHi3A7pE0F0Ua9QPnaql2wwabry3iuEd
-         DTwg==
+        bh=y6J6lRuGpbM7E9O7f7bljUjx0eKgcV/6jZ6mdNRRq+4=;
+        b=JUZ6MS0ezJc5yh4n6KTD+iS0WsCulf8ihBW2NAvKNEq0/OB5Yl3u3Id3vcVGms8+Zh
+         dy0R5ZAoYZe1+5BB4Ca7JUS88v8KD9qo3j2ZtpZ3YcD6dhav6UfqVvBndyVRy4znafUr
+         SnyvqHVNZEfBo+F2qRp6xuk0sVwvpBO5NzGxZbWL64VKd3PuD6o4m+7enUFb65JiLMrD
+         5Jvj7gBmtNYyrjDHsAI5NaAPtnjzy0RkGbkThWLIaSy6KlT9qCaNhB2m3HYD5+ztqRIL
+         fDTxQFZDR13CddYNIljUltNoKv1Caa4FNdhMJm/MCwABN/OoQJutLpcdhPMIoHPiZaL8
+         5CeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678441605;
+        d=1e100.net; s=20210112; t=1678441666;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KgQQy0WOaC8x36p48NSIJDImmcDBT39MIpy6PGzDwU8=;
-        b=hv1cgTgPa6rfRc0bO4lDEPSqje0tYpBmR7cYva54FXdowIYltIpykpt2g9U5jkaW6z
-         Qkmibb/fzvF6cM/OSMirc2JuSb/vq5jkPhpVFDlRb0Vgrtu+kERChbPoT0oQtXPUsheF
-         J1rqqwz79oQ39EI26KxoxjBvFzVfo12gRFovqd0usA3HD24+v2/CtQhGKEccuSU6Y4CC
-         03ImP87iAarJPK0wUb2uHWSwWQQCHLEIZF0SElLobnwsxANavvOy42VQTkvsxaG9z8C5
-         63gUMytis8HLgg2LbV2spZyDuz+N/+FX+Pfxr5tKR70l50rrnfxDjjJmM4Vypt7dTGfm
-         nsKQ==
-X-Gm-Message-State: AO0yUKW8ehPwPxzAHD8NMI2tDS+R43Csy8bky1dTVH/TPDqkc9PRFkcb
-        9gJnzHUjqPWrEeMIA1VWi6NVsg==
-X-Google-Smtp-Source: AK7set8b349TneToQStuc8wRqpg6p575gxaExAvpkNXCodRjWOTreYyk5UxGc9fCPDchPDs9B8XsoA==
-X-Received: by 2002:a05:600c:4452:b0:3eb:2de8:b739 with SMTP id v18-20020a05600c445200b003eb2de8b739mr1958858wmn.37.1678441605417;
-        Fri, 10 Mar 2023 01:46:45 -0800 (PST)
+        bh=y6J6lRuGpbM7E9O7f7bljUjx0eKgcV/6jZ6mdNRRq+4=;
+        b=Rz1pc1qmeyBLhbe3fF11SFcW3GCjP5mhCFb1GG+3VrtWFhBX4K/WaqYhECEW+kX4cq
+         Vg6AKftloFN0d/28l/tRiIFnwAtL3lIjEC6HUexjdp2x+BWzQNB/oMbLQEB4bhJ/3hmI
+         pKIezOcmL6LG50ao9j7/WChz1TuM8ovsAy6LurJpz5gbg0OhiMlOxzqPv7uEoZWiQRw8
+         bpHoDx5KHhhfIfaIMkGrmogw2wMt4NXmcLo8kgonMLMxJiS/uZqqbETs1vuzsTcF9/2o
+         XIHBqzpqJeQdko3oxvfrjFxsuF49OoRdTLR/ApApqbcDoe4r0cgQQ+UQtoZDA7bFbBwp
+         VNnA==
+X-Gm-Message-State: AO0yUKV1fVOEcujiaRuY0bS0iks03wBZyPLBMSGZPzrP5yrJOVe4Xart
+        2xRxbVG1jBTSCyShKVvqXhJ2pg==
+X-Google-Smtp-Source: AK7set+hIKDyMZLEzQZwJrQZ4Ml18aDplEsgmJbGeNc4aX7RXiRyHxB8XeJIUJU9oYunTbo6EYqvmg==
+X-Received: by 2002:a05:600c:198e:b0:3eb:2f3b:4477 with SMTP id t14-20020a05600c198e00b003eb2f3b4477mr1930695wmq.28.1678441666270;
+        Fri, 10 Mar 2023 01:47:46 -0800 (PST)
 Received: from alex-rivos.ba.rivosinc.com (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id iz9-20020a05600c554900b003eb369abd92sm2461929wmb.2.2023.03.10.01.46.44
+        by smtp.gmail.com with ESMTPSA id g9-20020a7bc4c9000000b003e20970175dsm2410949wmk.32.2023.03.10.01.47.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 01:46:45 -0800 (PST)
+        Fri, 10 Mar 2023 01:47:46 -0800 (PST)
 From:   Alexandre Ghiti <alexghiti@rivosinc.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -64,11 +64,10 @@ To:     Catalin Marinas <catalin.marinas@arm.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
         linux-mm@kvack.org
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>
-Subject: [PATCH v7 1/4] riscv: Get rid of riscv_pfn_base variable
-Date:   Fri, 10 Mar 2023 10:45:36 +0100
-Message-Id: <20230310094539.764357-2-alexghiti@rivosinc.com>
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH v7 2/4] mm: Introduce memblock_isolate_memory
+Date:   Fri, 10 Mar 2023 10:45:37 +0100
+Message-Id: <20230310094539.764357-3-alexghiti@rivosinc.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230310094539.764357-1-alexghiti@rivosinc.com>
 References: <20230310094539.764357-1-alexghiti@rivosinc.com>
@@ -83,70 +82,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use directly phys_ram_base instead, riscv_pfn_base is just the pfn of
-the address contained in phys_ram_base.
-
-Even if there is no functional change intended in this patch, actually
-setting phys_ram_base that early changes the behaviour of
-kernel_mapping_pa_to_va during the early boot: phys_ram_base used to be
-zero before this patch and now it is set to the physical start address of
-the kernel. But it does not break the conversion of a kernel physical
-address into a virtual address since kernel_mapping_pa_to_va should only
-be used on kernel physical addresses, i.e. addresses greater than the
-physical start address of the kernel.
+This function allows to split a region in memblock.memory and will be
+useful when setting up the linear mapping with STRICT_KERNEL_RWX: it
+allows to isolate the kernel text/rodata and then avoid to map those
+regions with a PUD/P4D/PGD.
 
 Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 ---
- arch/riscv/include/asm/page.h | 3 +--
- arch/riscv/mm/init.c          | 6 +-----
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ include/linux/memblock.h |  1 +
+ mm/memblock.c            | 22 +++++++++++++++++++++-
+ 2 files changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-index 7fed7c431928..8dc686f549b6 100644
---- a/arch/riscv/include/asm/page.h
-+++ b/arch/riscv/include/asm/page.h
-@@ -91,8 +91,7 @@ typedef struct page *pgtable_t;
- #endif
+diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+index 50ad19662a32..2f7ef97c0da7 100644
+--- a/include/linux/memblock.h
++++ b/include/linux/memblock.h
+@@ -125,6 +125,7 @@ int memblock_clear_hotplug(phys_addr_t base, phys_addr_t size);
+ int memblock_mark_mirror(phys_addr_t base, phys_addr_t size);
+ int memblock_mark_nomap(phys_addr_t base, phys_addr_t size);
+ int memblock_clear_nomap(phys_addr_t base, phys_addr_t size);
++int memblock_isolate_memory(phys_addr_t base, phys_addr_t size);
  
- #ifdef CONFIG_MMU
--extern unsigned long riscv_pfn_base;
--#define ARCH_PFN_OFFSET		(riscv_pfn_base)
-+#define ARCH_PFN_OFFSET		(PFN_DOWN((unsigned long)phys_ram_base))
- #else
- #define ARCH_PFN_OFFSET		(PAGE_OFFSET >> PAGE_SHIFT)
- #endif /* CONFIG_MMU */
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 478d6763a01a..225a7d2b65cc 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -271,9 +271,6 @@ static void __init setup_bootmem(void)
- #ifdef CONFIG_MMU
- struct pt_alloc_ops pt_ops __initdata;
+ void memblock_free_all(void);
+ void memblock_free(void *ptr, size_t size);
+diff --git a/mm/memblock.c b/mm/memblock.c
+index 25fd0626a9e7..d8cf1c9eccf0 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -753,7 +753,8 @@ static int __init_memblock memblock_isolate_range(struct memblock_type *type,
+ 	int idx;
+ 	struct memblock_region *rgn;
  
--unsigned long riscv_pfn_base __ro_after_init;
--EXPORT_SYMBOL(riscv_pfn_base);
--
- pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
- pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
- static pte_t fixmap_pte[PTRS_PER_PTE] __page_aligned_bss;
-@@ -285,7 +282,6 @@ static pmd_t __maybe_unused early_dtb_pmd[PTRS_PER_PMD] __initdata __aligned(PAG
+-	*start_rgn = *end_rgn = 0;
++	if (start_rgn && end_rgn)
++		*start_rgn = *end_rgn = 0;
  
- #ifdef CONFIG_XIP_KERNEL
- #define pt_ops			(*(struct pt_alloc_ops *)XIP_FIXUP(&pt_ops))
--#define riscv_pfn_base         (*(unsigned long  *)XIP_FIXUP(&riscv_pfn_base))
- #define trampoline_pg_dir      ((pgd_t *)XIP_FIXUP(trampoline_pg_dir))
- #define fixmap_pte             ((pte_t *)XIP_FIXUP(fixmap_pte))
- #define early_pg_dir           ((pgd_t *)XIP_FIXUP(early_pg_dir))
-@@ -985,7 +981,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
- 	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
- 	kernel_map.va_kernel_pa_offset = kernel_map.virt_addr - kernel_map.phys_addr;
+ 	if (!size)
+ 		return 0;
+@@ -795,6 +796,9 @@ static int __init_memblock memblock_isolate_range(struct memblock_type *type,
+ 					       memblock_get_region_node(rgn),
+ 					       rgn->flags);
+ 		} else {
++			if (!end_rgn || !start_rgn)
++				continue;
++
+ 			/* @rgn is fully contained, record it */
+ 			if (!*end_rgn)
+ 				*start_rgn = idx;
+@@ -805,6 +809,22 @@ static int __init_memblock memblock_isolate_range(struct memblock_type *type,
+ 	return 0;
+ }
  
--	riscv_pfn_base = PFN_DOWN(kernel_map.phys_addr);
-+	phys_ram_base = kernel_map.phys_addr;
- 
- 	/*
- 	 * The default maximal physical memory size is KERN_VIRT_SIZE for 32-bit
++/**
++ * memblock_isolate_memory - isolate given range from memblock.memory
++ * @base: base of range to isolate
++ * @size: size of range to isolate
++ *
++ * Call memblock_isolate_range on memblock.memory to isolate the given range.
++ *
++ * Return:
++ * 0 on success, -errno on failure.
++ */
++
++int __init_memblock memblock_isolate_memory(phys_addr_t base, phys_addr_t size)
++{
++	return memblock_isolate_range(&memblock.memory, base, size, NULL, NULL);
++}
++
+ static int __init_memblock memblock_remove_range(struct memblock_type *type,
+ 					  phys_addr_t base, phys_addr_t size)
+ {
 -- 
 2.37.2
 
