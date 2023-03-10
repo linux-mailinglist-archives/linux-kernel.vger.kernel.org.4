@@ -2,173 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B47D6B4B30
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6D76B4B31
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234406AbjCJPdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
+        id S233528AbjCJPd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233814AbjCJPdL (ORCPT
+        with ESMTP id S234400AbjCJPdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:33:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB94B465;
-        Fri, 10 Mar 2023 07:21:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 721AEB822C2;
-        Fri, 10 Mar 2023 15:21:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30458C433A1;
-        Fri, 10 Mar 2023 15:21:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678461665;
-        bh=UGSJeidk55aYB/mqlgimvqc73fEPWHGHH+aLuRRV1Vk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hd/UDayVkDnoVJiTWwWMYmFSMZmdj/5UWuo4Kb7LuG1+Q+3kQjPlvxs1iw6dM3hRH
-         07P4GZ8PDtqYIemE9zY8hl2CquLwcY3ygsvtS9Rqu9+cXg4kNsJC3FPdIU4/dkxvAd
-         zkUlrZ1bkOaqpPlc0CF51oMLlteueHdefYFbzW5Ha/cCR5Rz4iBonhfEPannoCtgU0
-         8mDZtljRKWBet1F70S/i/e0OvCyLOE027qzKu/r/7PU0d75Xf+OJSbbNFjJhmuPtpb
-         htcU4UHuvrm8kIFdByaZcPzt4kh4hQjjCjrbotsXNsWpsehj3CQep6LZHliLb5nitk
-         PYTX8Q8VVbO+w==
-Received: by mail-lj1-f170.google.com with SMTP id y14so5666551ljq.4;
-        Fri, 10 Mar 2023 07:21:05 -0800 (PST)
-X-Gm-Message-State: AO0yUKUZZ79naG7boTSeSCixUlzd95ab6JvpaUxOQMo4g4tV4TvGr68r
-        4CW56vFQx4k8tSrlzN35ARq5ebB5ERJUlpmUByM=
-X-Google-Smtp-Source: AK7set8y6ycN0CYvwyL/kfBORtmKENALXeCm6hOuV53tD20N+3yn0SRZ3CW1Ct6//7ijSdpYHPXsIM1mGjzvEisbdLw=
-X-Received: by 2002:a2e:b8d2:0:b0:295:b0cd:522 with SMTP id
- s18-20020a2eb8d2000000b00295b0cd0522mr8518274ljp.2.1678461663173; Fri, 10 Mar
- 2023 07:21:03 -0800 (PST)
+        Fri, 10 Mar 2023 10:33:19 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345141CBE7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:21:19 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id be16so4535028oib.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:21:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678461678;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=e9lMn6VV65uWfzjqWmmufolCWaaGVCVGPcfnBRvktiU=;
+        b=pO23LVjRTOe/Pqi17BvQZxLyFh8oj6DcEb5OIH5ttExR/GXThc7CquNptfxFHVXWgZ
+         ul8jRVwlPw9zx7yIkmmRypTjIqcuLU3Ty0MN4dlNNFmZSxqiybOcJlbFaBwBrCnO0YLv
+         k151bi31IvRsJLooodKgjDmT2eY9eKy0OTYMhmw1ILIYhHEYyg4a1Zksfc4MK/ZLi+en
+         jwKJhyJR55GKaAO0oak3RxlaVDsGUgPT163ZBmlmDluD7uMStDArT1tepifoyB4VT4Ce
+         uV9JJrq/uJKMzvUqSDOJ6taUTeKOXIyx0ZQeLkgHosP9JMTByhisC9fz26YxrZ/VqN0N
+         alVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678461678;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e9lMn6VV65uWfzjqWmmufolCWaaGVCVGPcfnBRvktiU=;
+        b=fh65ls5a+sbOfkJ849mPDU1SE85xRqCTjAEH6C+m31ToGbRUXREOrlyeLwRlVSUlA5
+         auB/lo8B0Afq1GwEoRn+myxYLVKK/296eY0fYFcn+DG8vSaJdIoi8SjTrpCkNpUQZZOi
+         tBFD+4q2l3n74VIw5LlYYUcwWCIHrHk+yvpeXASW2TAQv5ylFZa5+XYgiq1Wy052uqnw
+         cW6DuH0IAr+1T8oqO5zj2sCwpF5CT5k7RYQmZVzOt00URHepN2r5FHv/I2mJzKAeetpd
+         xTucptz4mi3fBY3qqkE+t64sHqi2xDr+LTslobTLBECI2lra2Ouhe8q6qo84TnG/jd0F
+         qk3A==
+X-Gm-Message-State: AO0yUKW0llOyranJSc/NZvav7DBmETXjvgwjXQufbQUdI3xNmg38JMMr
+        ifN44PR3saydez1qzE5tn9uWpPGXVefe1c0rl6w=
+X-Google-Smtp-Source: AK7set/QNvrTKVBToHtiE+X4AER7ddGa4mlsjh2V+qz09csY1T7Jh2Eldr8lMW4bE6jaNMbgI25b1ciWyLOY4CxXG7A=
+X-Received: by 2002:aca:230d:0:b0:383:d3ae:2ef4 with SMTP id
+ e13-20020aca230d000000b00383d3ae2ef4mr7916358oie.8.1678461678504; Fri, 10 Mar
+ 2023 07:21:18 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1671098103.git.baskov@ispras.ru> <c38ad7a1b89aff743d4a29882a7022d97d4fea58.1671098103.git.baskov@ispras.ru>
-In-Reply-To: <c38ad7a1b89aff743d4a29882a7022d97d4fea58.1671098103.git.baskov@ispras.ru>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 10 Mar 2023 16:20:51 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGzXLp20nbg-NoToENbDQhn1b0Gpi2s8f9DgSSM28BbeQ@mail.gmail.com>
-Message-ID: <CAMj1kXGzXLp20nbg-NoToENbDQhn1b0Gpi2s8f9DgSSM28BbeQ@mail.gmail.com>
-Subject: Re: [PATCH v4 21/26] efi/x86: Explicitly set sections memory attributes
-To:     Evgeniy Baskov <baskov@ispras.ru>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20230310074000.2078124-1-lizhenneng@kylinos.cn> <DM5PR12MB2469FEB1E81CA99C51E7DAF0F1BA9@DM5PR12MB2469.namprd12.prod.outlook.com>
+In-Reply-To: <DM5PR12MB2469FEB1E81CA99C51E7DAF0F1BA9@DM5PR12MB2469.namprd12.prod.outlook.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 10 Mar 2023 10:21:06 -0500
+Message-ID: <CADnq5_OzDzi_LKeNdk4LNa2SwWg8Jpieci8omJye_ASDyjW3sA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: resove reboot exception for si oland
+To:     "Chen, Guchun" <Guchun.Chen@amd.com>
+Cc:     Zhenneng Li <lizhenneng@kylinos.cn>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 at 13:42, Evgeniy Baskov <baskov@ispras.ru> wrote:
+On Fri, Mar 10, 2023 at 3:18 AM Chen, Guchun <Guchun.Chen@amd.com> wrote:
 >
-> Explicitly change sections memory attributes in efi_pe_entry in case
-> of incorrect EFI implementations and to reduce access rights to
-> compressed kernel blob. By default it is set executable due to
-> restriction in maximum number of sections that can fit before zero
-> page.
 >
-> Tested-by: Peter Jones <pjones@redhat.com>
-> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+> > -----Original Message-----
+> > From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of
+> > Zhenneng Li
+> > Sent: Friday, March 10, 2023 3:40 PM
+> > To: Deucher, Alexander <Alexander.Deucher@amd.com>
+> > Cc: David Airlie <airlied@linux.ie>; Pan, Xinhui <Xinhui.Pan@amd.com>;
+> > linux-kernel@vger.kernel.org; dri-devel@lists.freedesktop.org; Zhenneng Li
+> > <lizhenneng@kylinos.cn>; amd-gfx@lists.freedesktop.org; Daniel Vetter
+> > <daniel@ffwll.ch>; Koenig, Christian <Christian.Koenig@amd.com>
+> > Subject: [PATCH] drm/amdgpu: resove reboot exception for si oland
+> >
+> > During reboot test on arm64 platform, it may failure on boot.
+> >
+> > The error message are as follows:
+> > [    6.996395][ 7] [  T295] [drm:amdgpu_device_ip_late_init [amdgpu]]
+> > *ERROR*
+> >                           late_init of IP block <si_dpm> failed -22
+> > [    7.006919][ 7] [  T295] amdgpu 0000:04:00.0: amdgpu_device_ip_late_init
+> > failed
+> > [    7.014224][ 7] [  T295] amdgpu 0000:04:00.0: Fatal error during GPU init
+> > ---
+> >  drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c | 3 ---
+> >  1 file changed, 3 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> > b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> > index d6d9e3b1b2c0..dee51c757ac0 100644
+> > --- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> > +++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> > @@ -7632,9 +7632,6 @@ static int si_dpm_late_init(void *handle)
+> >       if (!adev->pm.dpm_enabled)
+> >               return 0;
+> >
+> > -     ret = si_set_temperature_range(adev);
+> > -     if (ret)
+> > -             return ret;
+>
+> si_set_temperature_range should be platform agnostic. Can you please elaborate more?
+>
 
-I don't think we need this patch. Firmware that cares about W^X will
-map the PE image with R-X for text/rodata and RW- for data/bss, which
-is sufficient, and firmware that doesn't is a lost cause anyway.
+Yes.  Not setting this means we won't get thermal interrupts.  We
+shouldn't skip this.
+
+Alex
 
 
-> ---
->  drivers/firmware/efi/libstub/x86-stub.c | 54 +++++++++++++++++++++++++
->  1 file changed, 54 insertions(+)
+> Regards,
+> Guchun
 >
-> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> index 1f0a2e7075c3..60697fcd8950 100644
-> --- a/drivers/firmware/efi/libstub/x86-stub.c
-> +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> @@ -27,6 +27,12 @@ const efi_dxe_services_table_t *efi_dxe_table;
->  u32 image_offset __section(".data");
->  static efi_loaded_image_t *image __section(".data");
->
-> +extern char _head[], _ehead[];
-> +extern char _compressed[], _ecompressed[];
-> +extern char _text[], _etext[];
-> +extern char _rodata[], _erodata[];
-> +extern char _data[];
-> +
->  static efi_status_t
->  preserve_pci_rom_image(efi_pci_io_protocol_t *pci, struct pci_setup_rom **__rom)
->  {
-> @@ -343,6 +349,52 @@ void __noreturn efi_exit(efi_handle_t handle, efi_status_t status)
->                 asm("hlt");
->  }
->
-> +
-> +/*
-> + * Manually setup memory protection attributes for each ELF section
-> + * since we cannot do it properly by using PE sections.
-> + */
-> +static void setup_sections_memory_protection(unsigned long image_base)
-> +{
-> +#ifdef CONFIG_EFI_DXE_MEM_ATTRIBUTES
-> +       efi_dxe_table = get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
-> +
-> +       if (!efi_dxe_table ||
-> +           efi_dxe_table->hdr.signature != EFI_DXE_SERVICES_TABLE_SIGNATURE) {
-> +               efi_warn("Unable to locate EFI DXE services table\n");
-> +               efi_dxe_table = NULL;
-> +               return;
-> +       }
-> +
-> +       /* .setup [image_base, _head] */
-> +       efi_adjust_memory_range_protection(image_base,
-> +                                          (unsigned long)_head - image_base,
-> +                                          EFI_MEMORY_RO | EFI_MEMORY_XP);
-> +       /* .head.text [_head, _ehead] */
-> +       efi_adjust_memory_range_protection((unsigned long)_head,
-> +                                          (unsigned long)_ehead - (unsigned long)_head,
-> +                                          EFI_MEMORY_RO);
-> +       /* .rodata..compressed [_compressed, _ecompressed] */
-> +       efi_adjust_memory_range_protection((unsigned long)_compressed,
-> +                                          (unsigned long)_ecompressed - (unsigned long)_compressed,
-> +                                          EFI_MEMORY_RO | EFI_MEMORY_XP);
-> +       /* .text [_text, _etext] */
-> +       efi_adjust_memory_range_protection((unsigned long)_text,
-> +                                          (unsigned long)_etext - (unsigned long)_text,
-> +                                          EFI_MEMORY_RO);
-> +       /* .rodata [_rodata, _erodata] */
-> +       efi_adjust_memory_range_protection((unsigned long)_rodata,
-> +                                          (unsigned long)_erodata - (unsigned long)_rodata,
-> +                                          EFI_MEMORY_RO | EFI_MEMORY_XP);
-> +       /* .data, .bss [_data, _end] */
-> +       efi_adjust_memory_range_protection((unsigned long)_data,
-> +                                          (unsigned long)_end - (unsigned long)_data,
-> +                                          EFI_MEMORY_XP);
-> +#else
-> +       (void)image_base;
-> +#endif
-> +}
-> +
->  void __noreturn efi_stub_entry(efi_handle_t handle,
->                                efi_system_table_t *sys_table_arg,
->                                struct boot_params *boot_params);
-> @@ -687,6 +739,8 @@ asmlinkage unsigned long efi_main(efi_handle_t handle,
->                 efi_dxe_table = NULL;
->         }
->
-> +       setup_sections_memory_protection(bzimage_addr - image_offset);
-> +
->  #ifdef CONFIG_CMDLINE_BOOL
->         status = efi_parse_options(CONFIG_CMDLINE);
->         if (status != EFI_SUCCESS) {
-> --
-> 2.37.4
+> >  #if 0 //TODO ?
+> >       si_dpm_powergate_uvd(adev, true);
+> >  #endif
+> > --
+> > 2.25.1
 >
