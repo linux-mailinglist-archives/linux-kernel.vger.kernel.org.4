@@ -2,372 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEA06B4CA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:20:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CEF26B4CA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbjCJQUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 11:20:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
+        id S232386AbjCJQT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 11:19:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231509AbjCJQTj (ORCPT
+        with ESMTP id S232869AbjCJQSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:19:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61801ABF2;
-        Fri, 10 Mar 2023 08:14:55 -0800 (PST)
+        Fri, 10 Mar 2023 11:18:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA4A11D09A;
+        Fri, 10 Mar 2023 08:14:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 234FF61ACC;
-        Fri, 10 Mar 2023 16:13:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62BE0C433AA;
-        Fri, 10 Mar 2023 16:13:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC98B61A55;
+        Fri, 10 Mar 2023 16:14:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 365B5C433D2;
+        Fri, 10 Mar 2023 16:13:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678464824;
-        bh=CRmmCCVCYuRyV1UwUiAjFxshSLvmJTpKgIm19VCDeXY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZgIKlqdsy6iSEToAjTypaUx+Y83EUQipULo7XU6+TFKyBpgWGDV6hu/ALWYM2lo0E
-         VtU37+vMVU/C2GvCsmScQoRZXJGMjHfm5syAC4MYC8ZjY0uAysHwVgpHadWy6jMlYv
-         mZQo4DedoTpc3ivClJAjp/eALgKRigl3cq1SIwz+AFo4YyEaZtmk1OMg4tqDbEq7hB
-         a7CsLO80tnhCgkw3AU09jsYlVz7VYdbhF8jCUQb3Rdbcx6kpNhothT92uLYXiA+n3Y
-         ptt9PuEJbBaMYcJCIVl7rhCPEhCbUWYGN0LJ/aZzIR+ZMxYo3KUEcI5+5Hkpf6HBC8
-         fWaIl9CZzIPYQ==
-Received: by mail-lf1-f43.google.com with SMTP id j11so7239889lfg.13;
-        Fri, 10 Mar 2023 08:13:44 -0800 (PST)
-X-Gm-Message-State: AO0yUKVbYEG3X4aURBeFiD23RQYSUjQxeDemcz8dPmBCUScEFgg79GXe
-        KSB7ODWtg/GT7wTRZsRFuM+gjx1wgIFT9FNNjbg=
-X-Google-Smtp-Source: AK7set8zGIPDV5VmqUsJ1Dx3sPb/4HMTBEnfe9fRYJ0xu8hrnV7VJXBPt/rDNGhREt4fw2wWgBn2v+TrTqUQcfdUN7I=
-X-Received: by 2002:ac2:5de1:0:b0:4dd:af74:fe17 with SMTP id
- z1-20020ac25de1000000b004ddaf74fe17mr8102308lfq.7.1678464822152; Fri, 10 Mar
- 2023 08:13:42 -0800 (PST)
+        s=k20201202; t=1678464841;
+        bh=SdJT48pgc55q+97r4QIUR5Ti78tRUtjjYX4LSxKMjw8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j34HYphsqG7xv3mGnAdN/TcMjnD/3nh6wolAOf+Xp+8jhuP2lqzIU0hXn6bd/w0l6
+         +CEprugPD1ouuUNV6XGn+5vWv3MkuVdrnhp2hqa9WKO3u8UqXWo8g9Qr80og/3PFGA
+         qbnva7T1Qvk0jr3FE8mhYUCYj0LCk7QdOt8Tt9xowWBadeXnGnKwEjzHIfxruTr/ky
+         b7DJ8cna3IqDMT/rfdz6iraDqFvgK1R2UWA8UDYbwWJz2iDPr48TwteIAD2MHJdq4q
+         TAslpG3DVzCW+cUr7kilKN6BHQva1zLTSCcPNWqOfzomICgXxaOxvlS/6vs9Nsiq5r
+         QgH/gU9mHdQ2Q==
+Date:   Fri, 10 Mar 2023 17:13:56 +0100
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Hongxing Zhu <hongxing.zhu@nxp.com>
+Cc:     "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH v2] PCI: imx6: Save and restore MSI control of RC in
+ suspend and resume
+Message-ID: <ZAtXRNuTenBAUZEd@lpieralisi>
+References: <1670479534-22154-1-git-send-email-hongxing.zhu@nxp.com>
+ <Y67+cH15frjqK2vA@lpieralisi>
+ <AS8PR04MB8676F92A932B86E5A2A777798CFE9@AS8PR04MB8676.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-References: <cover.1671098103.git.baskov@ispras.ru> <911afebbf7c30cf0b4af003ce4a63e42e45095d1.1671098103.git.baskov@ispras.ru>
-In-Reply-To: <911afebbf7c30cf0b4af003ce4a63e42e45095d1.1671098103.git.baskov@ispras.ru>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 10 Mar 2023 17:13:30 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFv2V9YRgEJnMv1VrpT_TskrCUH6C09NrMO7nO3Xh3ZPQ@mail.gmail.com>
-Message-ID: <CAMj1kXFv2V9YRgEJnMv1VrpT_TskrCUH6C09NrMO7nO3Xh3ZPQ@mail.gmail.com>
-Subject: Re: [PATCH v4 23/26] efi/libstub: Use memory attribute protocol
-To:     Evgeniy Baskov <baskov@ispras.ru>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AS8PR04MB8676F92A932B86E5A2A777798CFE9@AS8PR04MB8676.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022 at 13:42, Evgeniy Baskov <baskov@ispras.ru> wrote:
->
-> Add EFI_MEMORY_ATTRIBUTE_PROTOCOL as preferred alternative to DXE
-> services for changing memory attributes in the EFISTUB.
->
-> Use DXE services only as a fallback in case aforementioned protocol
-> is not supported by UEFI implementation.
->
-> Move DXE services initialization code closer to the place they are used
-> to match EFI_MEMORY_ATTRIBUTE_PROTOCOL initialization code.
->
-> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
-> Tested-by: Peter Jones <pjones@redhat.com>
-> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+On Mon, Jan 09, 2023 at 02:08:06AM +0000, Hongxing Zhu wrote:
+> > -----Original Message-----
+> > From: Lorenzo Pieralisi <lpieralisi@kernel.org>
+> > Sent: 2022年12月30日 23:06
+> > To: Hongxing Zhu <hongxing.zhu@nxp.com>; l.stach@pengutronix.de;
+> > bhelgaas@google.com
+> > Cc: linux-pci@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+> > linux-kernel@vger.kernel.org; kernel@pengutronix.de; dl-linux-imx
+> > <linux-imx@nxp.com>
+> > Subject: Re: [PATCH v2] PCI: imx6: Save and restore MSI control of RC in
+> > suspend and resume
+> > 
+> > On Thu, Dec 08, 2022 at 02:05:34PM +0800, Richard Zhu wrote:
+> > > The MSI Enable bit controls delivery of MSI interrupts from components
+> > > below the Root Port. This bit might lost during the suspend, should be
+> > > re-stored during resume.
+> > >
+> > > Save the MSI control during suspend, and restore it in resume.
+> > 
+> > I believe that what Lucas and Bjorn asked on v1 is still not answered.
+> > 
+> > The root port is a PCI device, why do we need to save and restore the MSI cap
+> > on top of what PCI core already does ? The RP should be enumerated as a PCI
+> > device and therefore I expect the MSI cap to be saved/restored in the
+> > suspend/resume execution.
+> > 
+> > I don't think there is anything iMX6 specific in this.
+> Hi Lorenzo:
+> Thanks for your comments.
+> Sorry to reply late, since I got a high fever in the past days.
+> 
+> Based on i.MX6QP SABRESD board and XHCI PCIe2USB3.0 device, the MSI cap
+>  save/restore of PCI core is not executed(dev->msi_enabled is zero)
+>  during my suspend/resume tests.
 
-I'm not convinced about the use of the DXE services for this, and I
-think we should replace this patch with changes that base all the new
-protection code on the EFI memory attributes protocol only.
+I still do not understand. The register you are saving/restoring in the
+RC is not the root port Message control field in the root port MSI 
+capability, it is a separate register that controls the root complex
+MSI forwarding, is that correct ?
 
-We introduced that DXE code to remove protections from memory that was
-mapped read-only and/or non-executable, and described as such in the
-GCD memory map.
+The root port MSI capability does not control the root complex
+forwarding of MSIs TLPs.
 
-Using it to manipulate restricted permissions like this is quite a
-different thing, and sadly (at least in EDK2), the GCD system memory
-map is not kept in sync with the updated permissions, i.e, the W^X
-protections for loaded images and the NX protection for arbitrary page
-allocations are both based on the PI CPU arch protocol, which
-manipulates the page tables directly, but does not record the modified
-attributes in the GCD or EFI memory maps, as this would result in
-massive fragmentation and break lots of other things.
+So the bits you are saving and restoring IIUC should be MMIO space in
+the root complex, dressed as an MSI capability, that has nothing to
+do with the root port MSI capability.
 
-That means that, except for the specific use case for which we
-introduced the DXE services calls, the only reliable way to figure out
-what permission attributes a certain range of memory is using is the
-EFI memory attributes protocol, and I don't think we should use
-anything else for tightening down these protections.
+Is that correct ?
 
-
-
-
-> ---
->  drivers/firmware/efi/libstub/mem.c      | 168 ++++++++++++++++++------
->  drivers/firmware/efi/libstub/x86-stub.c |  17 ---
->  2 files changed, 128 insertions(+), 57 deletions(-)
->
-> diff --git a/drivers/firmware/efi/libstub/mem.c b/drivers/firmware/efi/libstub/mem.c
-> index 3e47e5931f04..07d54c88c62e 100644
-> --- a/drivers/firmware/efi/libstub/mem.c
-> +++ b/drivers/firmware/efi/libstub/mem.c
-> @@ -5,6 +5,9 @@
->
->  #include "efistub.h"
->
-> +const efi_dxe_services_table_t *efi_dxe_table;
-> +efi_memory_attribute_protocol_t *efi_mem_attrib_proto;
-> +
->  /**
->   * efi_get_memory_map() - get memory map
->   * @map:               pointer to memory map pointer to which to assign the
-> @@ -129,66 +132,47 @@ void efi_free(unsigned long size, unsigned long addr)
->         efi_bs_call(free_pages, addr, nr_pages);
->  }
->
-> -/**
-> - * efi_adjust_memory_range_protection() - change memory range protection attributes
-> - * @start:     memory range start address
-> - * @size:      memory range size
-> - *
-> - * Actual memory range for which memory attributes are modified is
-> - * the smallest ranged with start address and size aligned to EFI_PAGE_SIZE
-> - * that includes [start, start + size].
-> - *
-> - * @return: status code
-> - */
-> -efi_status_t efi_adjust_memory_range_protection(unsigned long start,
-> -                                               unsigned long size,
-> -                                               unsigned long attributes)
-> +static void retrieve_dxe_table(void)
-> +{
-> +       efi_dxe_table = get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
-> +       if (efi_dxe_table &&
-> +           efi_dxe_table->hdr.signature != EFI_DXE_SERVICES_TABLE_SIGNATURE) {
-> +               efi_warn("Ignoring DXE services table: invalid signature\n");
-> +               efi_dxe_table = NULL;
-> +       }
-> +}
-> +
-> +static efi_status_t adjust_mem_attrib_dxe(efi_physical_addr_t rounded_start,
-> +                                         efi_physical_addr_t rounded_end,
-> +                                         unsigned long attributes)
->  {
->         efi_status_t status;
->         efi_gcd_memory_space_desc_t desc;
-> -       efi_physical_addr_t end, next;
-> -       efi_physical_addr_t rounded_start, rounded_end;
-> +       efi_physical_addr_t end, next, start;
->         efi_physical_addr_t unprotect_start, unprotect_size;
->
-> -       if (efi_dxe_table == NULL)
-> -               return EFI_UNSUPPORTED;
-> +       if (!efi_dxe_table) {
-> +               retrieve_dxe_table();
->
-> -       /*
-> -        * This function should not be used to modify attributes
-> -        * other than writable/executable.
-> -        */
-> -
-> -       if ((attributes & ~(EFI_MEMORY_RO | EFI_MEMORY_XP)) != 0)
-> -               return EFI_INVALID_PARAMETER;
-> -
-> -       /*
-> -        * Disallow simultaniously executable and writable memory
-> -        * to inforce W^X policy if direct extraction code is enabled.
-> -        */
-> -
-> -       if ((attributes & (EFI_MEMORY_RO | EFI_MEMORY_XP)) == 0) {
-> -               efi_warn("W^X violation at [%08lx,%08lx]\n",
-> -                        (unsigned long)rounded_start,
-> -                        (unsigned long)rounded_end);
-> +               if (!efi_dxe_table)
-> +                       return EFI_UNSUPPORTED;
->         }
->
-> -       rounded_start = rounddown(start, EFI_PAGE_SIZE);
-> -       rounded_end = roundup(start + size, EFI_PAGE_SIZE);
-> -
->         /*
->          * Don't modify memory region attributes, they are
->          * already suitable, to lower the possibility to
->          * encounter firmware bugs.
->          */
->
-> -       for (end = start + size; start < end; start = next) {
-> +
-> +       for (start = rounded_start, end = rounded_end; start < end; start = next) {
->
->                 status = efi_dxe_call(get_memory_space_descriptor,
->                                       start, &desc);
->
->                 if (status != EFI_SUCCESS) {
->                         efi_warn("Unable to get memory descriptor at %lx\n",
-> -                                start);
-> +                                (unsigned long)start);
->                         return status;
->                 }
->
-> @@ -230,3 +214,107 @@ efi_status_t efi_adjust_memory_range_protection(unsigned long start,
->
->         return EFI_SUCCESS;
->  }
-> +
-> +static void retrieve_memory_attributes_proto(void)
-> +{
-> +       efi_status_t status;
-> +       efi_guid_t guid = EFI_MEMORY_ATTRIBUTE_PROTOCOL_GUID;
-> +
-> +       status = efi_bs_call(locate_protocol, &guid, NULL,
-> +                            (void **)&efi_mem_attrib_proto);
-> +       if (status != EFI_SUCCESS)
-> +               efi_mem_attrib_proto = NULL;
-> +}
-> +
-> +/**
-> + * efi_adjust_memory_range_protection() - change memory range protection attributes
-> + * @start:     memory range start address
-> + * @size:      memory range size
-> + *
-> + * Actual memory range for which memory attributes are modified is
-> + * the smallest ranged with start address and size aligned to EFI_PAGE_SIZE
-> + * that includes [start, start + size].
-> + *
-> + * This function first attempts to use EFI_MEMORY_ATTRIBUTE_PROTOCOL,
-> + * that is a part of UEFI Specification since version 2.10.
-> + * If the protocol is unavailable it falls back to DXE services functions.
-> + *
-> + * @return: status code
-> + */
-> +efi_status_t efi_adjust_memory_range_protection(unsigned long start,
-> +                                               unsigned long size,
-> +                                               unsigned long attributes)
-> +{
-> +       efi_status_t status;
-> +       efi_physical_addr_t rounded_start, rounded_end;
-> +       unsigned long attr_clear;
-> +
-> +       /*
-> +        * This function should not be used to modify attributes
-> +        * other than writable/executable.
-> +        */
-> +
-> +       if ((attributes & ~(EFI_MEMORY_RO | EFI_MEMORY_XP)) != 0)
-> +               return EFI_INVALID_PARAMETER;
-> +
-> +       /*
-> +        * Warn if requested to make memory simultaneously
-> +        * executable and writable to enforce W^X policy.
-> +        */
-> +
-> +       if ((attributes & (EFI_MEMORY_RO | EFI_MEMORY_XP)) == 0) {
-> +               efi_warn("W^X violation at  [%08lx,%08lx]",
-> +                        (unsigned long)rounded_start,
-> +                        (unsigned long)rounded_end);
-> +       }
-> +
-> +       rounded_start = rounddown(start, EFI_PAGE_SIZE);
-> +       rounded_end = roundup(start + size, EFI_PAGE_SIZE);
-> +
-> +       if (!efi_mem_attrib_proto) {
-> +               retrieve_memory_attributes_proto();
-> +
-> +               /* Fall back to DXE services if unsupported */
-> +               if (!efi_mem_attrib_proto) {
-> +                       return adjust_mem_attrib_dxe(rounded_start,
-> +                                                    rounded_end,
-> +                                                    attributes);
-> +               }
-> +       }
-> +
-> +       /*
-> +        * Unlike DXE services functions, EFI_MEMORY_ATTRIBUTE_PROTOCOL
-> +        * does not clear unset protection bit, so it needs to be cleared
-> +        * explcitly
-> +        */
-> +
-> +       attr_clear = ~attributes &
-> +                    (EFI_MEMORY_RO | EFI_MEMORY_XP | EFI_MEMORY_RP);
-> +
-> +       status = efi_call_proto(efi_mem_attrib_proto,
-> +                               clear_memory_attributes,
-> +                               rounded_start,
-> +                               rounded_end - rounded_start,
-> +                               attr_clear);
-> +       if (status != EFI_SUCCESS) {
-> +               efi_warn("Failed to clear memory attributes at [%08lx,%08lx]: %lx",
-> +                        (unsigned long)rounded_start,
-> +                        (unsigned long)rounded_end,
-> +                        status);
-> +               return status;
-> +       }
-> +
-> +       status = efi_call_proto(efi_mem_attrib_proto,
-> +                               set_memory_attributes,
-> +                               rounded_start,
-> +                               rounded_end - rounded_start,
-> +                               attributes);
-> +       if (status != EFI_SUCCESS) {
-> +               efi_warn("Failed to set memory attributes at [%08lx,%08lx]: %lx",
-> +                        (unsigned long)rounded_start,
-> +                        (unsigned long)rounded_end,
-> +                        status);
-> +       }
-> +
-> +       return status;
-> +}
-> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> index 60697fcd8950..06a62b121521 100644
-> --- a/drivers/firmware/efi/libstub/x86-stub.c
-> +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> @@ -23,7 +23,6 @@
->  #define MAXMEM_X86_64_4LEVEL (1ull << 46)
->
->  const efi_system_table_t *efi_system_table;
-> -const efi_dxe_services_table_t *efi_dxe_table;
->  u32 image_offset __section(".data");
->  static efi_loaded_image_t *image __section(".data");
->
-> @@ -357,15 +356,6 @@ void __noreturn efi_exit(efi_handle_t handle, efi_status_t status)
->  static void setup_sections_memory_protection(unsigned long image_base)
->  {
->  #ifdef CONFIG_EFI_DXE_MEM_ATTRIBUTES
-> -       efi_dxe_table = get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
-> -
-> -       if (!efi_dxe_table ||
-> -           efi_dxe_table->hdr.signature != EFI_DXE_SERVICES_TABLE_SIGNATURE) {
-> -               efi_warn("Unable to locate EFI DXE services table\n");
-> -               efi_dxe_table = NULL;
-> -               return;
-> -       }
-> -
->         /* .setup [image_base, _head] */
->         efi_adjust_memory_range_protection(image_base,
->                                            (unsigned long)_head - image_base,
-> @@ -732,13 +722,6 @@ asmlinkage unsigned long efi_main(efi_handle_t handle,
->         if (efi_system_table->hdr.signature != EFI_SYSTEM_TABLE_SIGNATURE)
->                 efi_exit(handle, EFI_INVALID_PARAMETER);
->
-> -       efi_dxe_table = get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
-> -       if (efi_dxe_table &&
-> -           efi_dxe_table->hdr.signature != EFI_DXE_SERVICES_TABLE_SIGNATURE) {
-> -               efi_warn("Ignoring DXE services table: invalid signature\n");
-> -               efi_dxe_table = NULL;
-> -       }
-> -
->         setup_sections_memory_protection(bzimage_addr - image_offset);
->
->  #ifdef CONFIG_CMDLINE_BOOL
-> --
-> 2.37.4
->
+Thanks,
+Lorenzo
+> 
+> It seems that some device might shutdown msi when do the suspend operations.
+> > 
+> > Would you mind investigating it please ?
+> Sure, I did further investigation on i.MX6QP platform.
+> The MSI_EN bit of RC MSI capability would be cleared to zero, when
+>  PCIE_RESET(BIT29 of IOMUXC_GPR1) is toggled (assertion 1b'1,
+>  then de-assertion 1b'0).
+> 
+> Verification steps:
+> MSI_EN of RC is set to 1b'1 when system is boot up.
+>  ./memtool 1ffc050 1
+> 0x01FFC050:  01017005
+> 
+> Toggle PCIe reset of i.MX6QP.
+> root@imx6qpdlsolox:~# ./memtool 20e0004=68691005
+> Writing 32-bit value 0x68691005 to address 0x020E0004
+> root@imx6qpdlsolox:~# ./memtool 20e0004=48691005
+> Writing 32-bit value 0x48691005 to address 0x020E0004
+> 
+> The MSI_EN bit of RC had been cleared to 1b'0.
+> ./memtool 1ffc050 1
+> 0x01FFC050:  01807005
+> 
+> This is why I used to reply to Bjorn the MSI_EN of RC is cleared when
+>  RESETs are toggled during the imx6_pcie_host_init() in
+>  imx6_pcie_resume_noirq() callback.
+> 
+> Best Regards
+> Richard Zhu
+> > 
+> > Lorenzo
+> > 
+> > > Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> > > ---
+> > > Changes v1-->v2:
+> > > New create one save/restore function, used save the setting in suspend
+> > > and restore the configuration in resume.
+> > > v1
+> > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatc
+> > >
+> > hwork.kernel.org%2Fproject%2Flinux-pci%2Fpatch%2F1667289595-12440-1-g
+> > i
+> > >
+> > t-send-email-hongxing.zhu%40nxp.com%2F&data=05%7C01%7Chongxing.zhu
+> > %40n
+> > >
+> > xp.com%7C3aeb1d128f854dad1a5608daea77706d%7C686ea1d3bc2b4c6fa92
+> > cd99c5c
+> > >
+> > 301635%7C0%7C0%7C638080095954881374%7CUnknown%7CTWFpbGZsb3
+> > d8eyJWIjoiMC
+> > >
+> > 4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%
+> > 7C%7C%
+> > >
+> > 7C&sdata=V8yVvvpTKGoR1UyQP5HD2IdlSjJdznBeD12bdI67dEI%3D&reserved=
+> > 0
+> > >
+> > > ---
+> > >  drivers/pci/controller/dwc/pci-imx6.c | 23 +++++++++++++++++++++++
+> > >  1 file changed, 23 insertions(+)
+> > >
+> > > diff --git a/drivers/pci/controller/dwc/pci-imx6.c
+> > > b/drivers/pci/controller/dwc/pci-imx6.c
+> > > index 1dde5c579edc..aa3096890c3b 100644
+> > > --- a/drivers/pci/controller/dwc/pci-imx6.c
+> > > +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> > > @@ -76,6 +76,7 @@ struct imx6_pcie {
+> > >  	struct clk		*pcie;
+> > >  	struct clk		*pcie_aux;
+> > >  	struct regmap		*iomuxc_gpr;
+> > > +	u16			msi_ctrl;
+> > >  	u32			controller_id;
+> > >  	struct reset_control	*pciephy_reset;
+> > >  	struct reset_control	*apps_reset;
+> > > @@ -1042,6 +1043,26 @@ static void imx6_pcie_pm_turnoff(struct
+> > imx6_pcie *imx6_pcie)
+> > >  	usleep_range(1000, 10000);
+> > >  }
+> > >
+> > > +static void imx6_pcie_msi_save_restore(struct imx6_pcie *imx6_pcie,
+> > > +bool save) {
+> > > +	u8 offset;
+> > > +	u16 val;
+> > > +	struct dw_pcie *pci = imx6_pcie->pci;
+> > > +
+> > > +	if (pci_msi_enabled()) {
+> > > +		offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
+> > > +		if (save) {
+> > > +			val = dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
+> > > +			imx6_pcie->msi_ctrl = val;
+> > > +		} else {
+> > > +			dw_pcie_dbi_ro_wr_en(pci);
+> > > +			val = imx6_pcie->msi_ctrl;
+> > > +			dw_pcie_writew_dbi(pci, offset + PCI_MSI_FLAGS, val);
+> > > +			dw_pcie_dbi_ro_wr_dis(pci);
+> > > +		}
+> > > +	}
+> > > +}
+> > > +
+> > >  static int imx6_pcie_suspend_noirq(struct device *dev)  {
+> > >  	struct imx6_pcie *imx6_pcie = dev_get_drvdata(dev); @@ -1050,6
+> > > +1071,7 @@ static int imx6_pcie_suspend_noirq(struct device *dev)
+> > >  	if (!(imx6_pcie->drvdata->flags &
+> > IMX6_PCIE_FLAG_SUPPORTS_SUSPEND))
+> > >  		return 0;
+> > >
+> > > +	imx6_pcie_msi_save_restore(imx6_pcie, true);
+> > >  	imx6_pcie_pm_turnoff(imx6_pcie);
+> > >  	imx6_pcie_stop_link(imx6_pcie->pci);
+> > >  	imx6_pcie_host_exit(pp);
+> > > @@ -1069,6 +1091,7 @@ static int imx6_pcie_resume_noirq(struct device
+> > *dev)
+> > >  	ret = imx6_pcie_host_init(pp);
+> > >  	if (ret)
+> > >  		return ret;
+> > > +	imx6_pcie_msi_save_restore(imx6_pcie, false);
+> > >  	dw_pcie_setup_rc(pp);
+> > >
+> > >  	if (imx6_pcie->link_is_up)
+> > > --
+> > > 2.25.1
+> > >
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
