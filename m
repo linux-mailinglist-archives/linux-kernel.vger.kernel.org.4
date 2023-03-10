@@ -2,81 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D69466B5369
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B49B6B5376
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbjCJVvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 16:51:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
+        id S232036AbjCJVyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 16:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbjCJVuz (ORCPT
+        with ESMTP id S231996AbjCJVxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 16:50:55 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11F31E2BC
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:48:08 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id ay14so26013412edb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:48:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678484813;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lzFx8euiB+sc2RTiijtv6CruVrC3VvrxIigbNh0lHCw=;
-        b=ousR3cOJbxC6x+UkyFQcWklCFj80NWbEJGdyDrSjeFRWdxuO7XkM0J4FPY/a+Re+ud
-         ZpQPSczG8puqE9oD4FbTWjxSyafng0QhvyE3rX2OhSQboWmKHtyqLje+08ogR2ZXDZF/
-         Hapo4z9OPfoaqBiFcu+qSq9P8cOSrWQz62T+DqqBW62Bier/CICZrks4KZkbSAqP8aOe
-         JWzDx2VsbmooiWLykyWUZcSZvQJ6a7Ef/Q0Ln6RJugf7UTqAvF9v2V6OasRULflKUcFj
-         f4e2VCpmVGy0HqNMsyeM0Od6H2sF0vA3caiLz1yNPppZ3c2+KRXn7MZubpIOVnj+0YHH
-         6mpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678484813;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lzFx8euiB+sc2RTiijtv6CruVrC3VvrxIigbNh0lHCw=;
-        b=ffIP6rh2G1pyxGXxTeFmbpmMTX2A0zA6WyrTmzwZ0VDWHAe1AtBk828dIdKQT0/KxU
-         d+tyiTADFqCWtxG6/qyiqDPgYEZYFPr5EXazLl5DeImuYWPptjbAaxj339BgWM8grvMR
-         /HbWSk1Y/e0WSnitvOKEMEUQSVCe4tQ7+vPF5jRWaTEyYzXnLrbonxmN20TapNUqTeLm
-         rbIFhwu5sa9GwqqKnH1lswpPpZe3WvaG1mCf1FbyN5VSI1BJZ/0HThBwQ7jz81l6lvWI
-         yrzpNFB/so4kDgzUL64rUirWK/ywdwZIe3FujK3PD92/kPnxyzu4TCyBF9ttysh1hkAI
-         kfIQ==
-X-Gm-Message-State: AO0yUKUXX1LkIAeuh1qt6+RrU2K077OiIMdbF4RR7FYcGPMlJdtb/9+w
-        PgXixbW5bOy7O+wZvIXgewRzHA==
-X-Google-Smtp-Source: AK7set8nWd2eBnYgMGQTtXIPbx0OtD6V7+vbCi+nDaI+pK1IzlYRDbizlxwOP2yZnDYzFE6FeI/EFw==
-X-Received: by 2002:a05:6402:1a4d:b0:4a2:223d:4514 with SMTP id bf13-20020a0564021a4d00b004a2223d4514mr25732913edb.8.1678484813196;
-        Fri, 10 Mar 2023 13:46:53 -0800 (PST)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:34:52e3:a77e:cac5])
-        by smtp.gmail.com with ESMTPSA id t5-20020a50ab45000000b004bf7905559asm488088edc.44.2023.03.10.13.46.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 13:46:52 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Byungho An <bh74.an@samsung.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 5/5] net: ni: drop of_match_ptr for ID table
-Date:   Fri, 10 Mar 2023 22:46:32 +0100
-Message-Id: <20230310214632.275648-5-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230310214632.275648-1-krzysztof.kozlowski@linaro.org>
-References: <20230310214632.275648-1-krzysztof.kozlowski@linaro.org>
+        Fri, 10 Mar 2023 16:53:47 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD0314FE07
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:50:19 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1paka5-00043Y-LX; Fri, 10 Mar 2023 22:47:17 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1paka1-003GHn-RB; Fri, 10 Mar 2023 22:47:13 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1paka1-003tZx-3f; Fri, 10 Mar 2023 22:47:13 +0100
+Date:   Fri, 10 Mar 2023 22:46:58 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     fnkl.kernel@gmail.com
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        - <asahi@lists.linux.dev>, Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v8 2/5] pwm: Add Apple PWM controller
+Message-ID: <20230310214658.424vui3frynit437@pengutronix.de>
+References: <20230214-fpwm-v8-0-65518a0d4944@gmail.com>
+ <20230214-fpwm-v8-2-65518a0d4944@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wbrnvcvhbc5cviao"
+Content-Disposition: inline
+In-Reply-To: <20230214-fpwm-v8-2-65518a0d4944@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,30 +60,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver can match only via the DT table so the table should be always
-used and the of_match_ptr does not have any sense (this also allows ACPI
-matching via PRP0001, even though it is not relevant here).
 
-  drivers/net/ethernet/ni/nixge.c:1253:34: error: ‘nixge_dt_ids’ defined but not used [-Werror=unused-const-variable=]
+--wbrnvcvhbc5cviao
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/net/ethernet/ni/nixge.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello Sascha,
 
-diff --git a/drivers/net/ethernet/ni/nixge.c b/drivers/net/ethernet/ni/nixge.c
-index 56e02cba0b8a..0fd156286d4d 100644
---- a/drivers/net/ethernet/ni/nixge.c
-+++ b/drivers/net/ethernet/ni/nixge.c
-@@ -1422,7 +1422,7 @@ static struct platform_driver nixge_driver = {
- 	.remove		= nixge_remove,
- 	.driver		= {
- 		.name		= "nixge",
--		.of_match_table	= of_match_ptr(nixge_dt_ids),
-+		.of_match_table	= nixge_dt_ids,
- 	},
- };
- module_platform_driver(nixge_driver);
--- 
-2.34.1
+On Fri, Mar 10, 2023 at 07:44:08PM +0100, Sasha Finkelstein via B4 Relay wr=
+ote:
+> +static int apple_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+> +			   const struct pwm_state *state)
+> +{
+> +	struct apple_pwm *fpwm;
+> +
+> +	if (state->polarity =3D=3D PWM_POLARITY_INVERSED)
+> +		return -EINVAL;
+> +
+> +	fpwm =3D to_apple_pwm(chip);
+> +	if (state->enabled) {
+> +		u64 on_cycles, off_cycles;
+> +
+> +		on_cycles =3D mul_u64_u64_div_u64(fpwm->clkrate,
+> +						state->duty_cycle, NSEC_PER_SEC);
+> +		if (on_cycles > 0xFFFFFFFF)
+> +			on_cycles =3D 0xFFFFFFFF;
+> +
+> +		off_cycles =3D mul_u64_u64_div_u64(fpwm->clkrate,
+> +						 state->period, NSEC_PER_SEC) - on_cycles;
+> +		if (off_cycles > 0xFFFFFFFF)
+> +			return -ERANGE;
 
+This is still wrong and needs clamping, too.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--wbrnvcvhbc5cviao
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQLpU8ACgkQwfwUeK3K
+7Al6iAf/brzDkPdu7qhixSZXlHEcf+6cCEGjYdch6SwKLkspprLcOrBvHsvEa8ay
+TYG02baQpF4eNbZdPBbBv2b4VOqDOJ92H8Bx7IvfhCQy+fdZkSCiSeXHPteY91Hc
+A56UkrBNesv68qEdfX6e4vtVYZbexHFqgaeTZMPfr8dsqt0ms0RyyMMuT/DhrpPs
+sBTZd7V0IybwXTCEomXUMbxOA1mzWfU05rEz4bPUOS14N9TL8i1Mom8VsZrMD5UH
+bO6F9Y13HCXq8xUgLKZnoxqEEm1E2r6ZunUTSb/RenSaxGE2xx9NlHlTNeyKJR2V
+FYA1FefcQgl8RIZvCowtSH9Y+Lkcvg==
+=MgXN
+-----END PGP SIGNATURE-----
+
+--wbrnvcvhbc5cviao--
