@@ -2,67 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC35A6B3450
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C55E86B3451
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:37:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbjCJChG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 21:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
+        id S229999AbjCJChk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 21:37:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjCJChD (ORCPT
+        with ESMTP id S229997AbjCJChg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 21:37:03 -0500
-Received: from out-51.mta1.migadu.com (out-51.mta1.migadu.com [95.215.58.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A501F1695
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 18:37:02 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1678415817;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lv1rTnPEj3HkjxVqfTPinxOZI/oYc4ynuPMw+iFH9c0=;
-        b=RwP2o4VCTFLqQbe5nfkWw2CZgwJQyt29NuSbWXf2J4rvN2iLG5VcBOVwMTcwDaGL969s5z
-        W4qGSxFqLmGhv/PlhZDQQHzpwK2vrYnS1c3pP5Fw0oTExRTJfDvfRpPFhHsuMhJTKqyVlr
-        mJF/Q1SLcErUo3COJGfIT3lyVTOhWzE=
+        Thu, 9 Mar 2023 21:37:36 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9728FF16B4;
+        Thu,  9 Mar 2023 18:37:34 -0800 (PST)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PXqrd44KJznWkw;
+        Fri, 10 Mar 2023 10:34:41 +0800 (CST)
+Received: from M910t (10.110.54.157) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 10 Mar
+ 2023 10:37:31 +0800
+Date:   Fri, 10 Mar 2023 10:37:14 +0800
+From:   Changbin Du <changbin.du@huawei.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     Namhyung Kim <namhyung@kernel.org>,
+        Changbin Du <changbin.du@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Hui Wang <hw.huiwang@huawei.com>
+Subject: Re: [PATCH v2 0/3] perf : fix counting when initial delay configured
+Message-ID: <20230310023714.gqmenjlunlcm3bju@M910t>
+References: <20230302031146.2801588-1-changbin.du@huawei.com>
+ <CAM9d7cigZ=TRoH8-MNbovUETzsjf+OuX7ykXA9rSyhsOY48dRg@mail.gmail.com>
+ <ZAEJsMYGo1HC5CRk@kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] mm: hugetlb: move hugeltb sysctls to its own file
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20230309122011.61969-1-wangkefeng.wang@huawei.com>
-Date:   Fri, 10 Mar 2023 10:36:16 +0800
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
-Content-Transfer-Encoding: 7bit
-Message-Id: <EDCC301D-D19F-41F6-A282-6653EF454F21@linux.dev>
-References: <20230309122011.61969-1-wangkefeng.wang@huawei.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZAEJsMYGo1HC5CRk@kernel.org>
+X-Originating-IP: [10.110.54.157]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> On Mar 9, 2023, at 20:20, Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+On Thu, Mar 02, 2023 at 05:40:16PM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Thu, Mar 02, 2023 at 11:22:37AM -0800, Namhyung Kim escreveu:
+> > Hello,
+> > 
+> > On Wed, Mar 1, 2023 at 7:12 PM Changbin Du <changbin.du@huawei.com> wrote:
+> > >
+> > > The first one fixes the problem that counters are never enabled  when initial
+> > > delay configured.
+> > > The remaining two reuse the common field target::initial_delay for
+> > > record/ftrace/trace subcommands.
+> > >
+> > > v2:
+> > >  - introduce common filed target::initial_delay
+> > >
+> > > Changbin Du (3):
+> > >   perf stat: fix counting when initial delay configured
+> > >   perf record: reuse target::initial_delay
+> > >   perf: ftrace: reuse target::initial_delay
+> > 
+> > Acked-by: Namhyung Kim <namhyung@kernel.org>
 > 
-> This moves all hugetlb sysctls to its own file, also kill an
-> useless hugetlb_treat_movable_handler() defination.
+> Thanks, applying the first to perf-tools (old perf/urgent) and the rest
+> to perf-tools-next (old perf/core).
 > 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> - Arnaldo
+> 
+Hi Arnaldo, it seems only the first one is applied. The remaining two patches
+are missed in your tree.
+ - perf record: reuse target::initial_delay
+ - perf: ftrace: reuse target::initial_delay
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-
-Thanks.
-
+-- 
+Cheers,
+Changbin Du
