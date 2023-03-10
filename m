@@ -2,133 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5EE6B4DA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1206B4DB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjCJQwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 11:52:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
+        id S231432AbjCJQ4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 11:56:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjCJQv7 (ORCPT
+        with ESMTP id S231362AbjCJQzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:51:59 -0500
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31B0E683F
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 08:48:50 -0800 (PST)
-Received: by mail-ua1-x934.google.com with SMTP id h34so3944796uag.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 08:48:50 -0800 (PST)
+        Fri, 10 Mar 2023 11:55:42 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062F8AD04;
+        Fri, 10 Mar 2023 08:53:07 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so6499940wmb.5;
+        Fri, 10 Mar 2023 08:53:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678466930;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u36L6KftAz9SvqMP+IydF0oRW2VVD9OB9u4yXp0rAoU=;
-        b=wbdbKYE/INqbqeoPrYR3GVKtd0bpDJqk202FtdJZS6WD8Ug0+xI3YRSvqPY6/aOS1S
-         s75bG3MpzBivS4c78RzTjoPZZ63VYIf+UoV93go/FS/PIcd1UhMm0w9VUEZZ6XDyoOpK
-         4L8icZkEu4oUzRbkKtsi6sWKsIrVTkXNLJFvFHMUs5CWXnKAu4vrC6Cj7n4MnCnKIA9S
-         IpOpvASVo2VBd562UqvWV1TKUqH+uMnqlYbo4MbI7M1C+/tuV5ZX9dXfuTzehxmYI+bh
-         IU2S2QHsp1xERgKuT4f0AK61D2mcvOmBFT3Mc3OkuxzSuvXy/k2mbs6BXIWn3sFonk4y
-         4FbQ==
+        d=gmail.com; s=20210112; t=1678467181;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SIZHiPYmUfwEfRLCvC1wnxERX0JIKAMAqH6shcSzDMI=;
+        b=BFj0Hy4pAIILDu7BSbXbKqKVPhHUu21fdl+t7FBJOjPA3rbO0cjblN3I9hjshRbXEv
+         JI/xBhRs+t74TleLVPWQFXUlpUZA2OJxCj1fFbqwmUEG4xK4udUYeMkjYxUHGd3Rj+H8
+         jYnKozKktz9EHubsIaveekcGqXYXmmAwwe7VLKv+RMDvuHB6trfFEEkEmcgAgcmxlDwS
+         iwOxTpj/5dbdyxa0Ffx/xoz/HPFuNU0Mlv/jwnRqVfmb/+ucag2w6cN9pPdbjfdVPJjr
+         bYKTdpqSrXghfm0eUTTX1ZTYQtSQglIiRXh9IWKkKLLXvo/MbcpDDxNaVoIlA8RtXwJB
+         dbLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678466930;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=u36L6KftAz9SvqMP+IydF0oRW2VVD9OB9u4yXp0rAoU=;
-        b=lxS3kYZhkEIcFnBzI+MIoTiLloo7CuurMZ9rK9yCC+Fr18muyd0/SA4246II6IFg2O
-         ESGc4/KOUgNJbgUQLpBKTTTitxCKrBLlIRnkR4F4+zgdVyxYmH+YgThbOkNKrwyfwtnW
-         QLEzwJcTJ0Ir+muLd873XJ2TmtGeJ9mOTOlwUHXUsOKgHdTlyxE9wD6TNGctcI0nDEpL
-         QnzyNO9cex3jk+TQ2hKDfkBcA2v2gSHeyItihK23UbuRyiXp3ApCio+qBWlfk3XxTm9y
-         4uyfotaLWtT+M+xpBy2G9xHRIMX679DNRHcvrG8IeE0JLUQZlnfqTRgHXmlbubvzBkk+
-         hAEw==
-X-Gm-Message-State: AO0yUKUriQCfhpXQJL6e4yqItvobgILK9T8jEnD84A29TSBLp5WKzZhZ
-        QE3Ba8yF1wr1MPHp93ZHHwMgEEeHe1gj18bRfx8juQ==
-X-Google-Smtp-Source: AK7set9iU4mLOUuJIxSw02g9TfJc0TByl8xMVSjGmR6w/Lifpjp4Jf/pQ8A/woVlFhHygaFZkihLUJ0dEvmQJI5BJvE=
-X-Received: by 2002:a1f:fcce:0:b0:430:ae33:a424 with SMTP id
- a197-20020a1ffcce000000b00430ae33a424mr884218vki.1.1678466929973; Fri, 10 Mar
- 2023 08:48:49 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678467181;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SIZHiPYmUfwEfRLCvC1wnxERX0JIKAMAqH6shcSzDMI=;
+        b=lxXhLZNlsu+7nRyfANjNdWaFJ7znb7oct+jY+G7hn0VF6TXJ6o/9Qi2xEc0/CNbgrl
+         aPb4fH6j+0Op1amYHCUpeKFsOqk4exL51uq8FtZJSPko+LbvKkszlWriyLpDJiGrCpWn
+         djy/O600CZoaNvGQWTXQcI+BwL/TPkoorvEcMpCPq5EN5x4FsP88xitJivWssWl7s70h
+         VAU/cXL/PeoCY/68Qhk7YrEGIPWuhgfdYlP+hMV8EUox3c+BjIJlNCnmgGHZnhb/Ivh9
+         NgQELhQGdttBw6S+sNHie4sOa/60npsdGY8JvbMBclj1zmgqUNVaNfCNEGwuuEQU/eWA
+         mPdg==
+X-Gm-Message-State: AO0yUKUEv+ApPtkqRC1owyhMgf/ht7hiaDGL/51AZJoc/L7jzFe1j3Lz
+        1Y7LnxFt5v+QdE2gABvr9M0=
+X-Google-Smtp-Source: AK7set85HIRyC5u9XoICbRzTKjn+zmMax77FYMqrehPFpeCxCW/pYg+YZiyJvITud1PNPoYUIQc8OA==
+X-Received: by 2002:a05:600c:4f02:b0:3eb:39c3:8844 with SMTP id l2-20020a05600c4f0200b003eb39c38844mr3481192wmq.12.1678467181167;
+        Fri, 10 Mar 2023 08:53:01 -0800 (PST)
+Received: from alessandro-pc.localdomain (host-80-116-19-80.pool80116.interbusiness.it. [80.116.19.80])
+        by smtp.gmail.com with ESMTPSA id u17-20020a05600c211100b003e20fa01a86sm408427wml.13.2023.03.10.08.53.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 08:53:00 -0800 (PST)
+From:   Alessandro Manca <crizan.git@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alessandro Manca <crizan.git@gmail.com>
+Subject: [PATCH] HID: topre: Add support for 87 keys Realforce R2
+Date:   Fri, 10 Mar 2023 17:49:33 +0100
+Message-Id: <20230310164933.4798-1-crizan.git@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230307182557.42215-1-andriy.shevchenko@linux.intel.com>
- <20230307182557.42215-4-andriy.shevchenko@linux.intel.com>
- <CAMRc=MdW7JjWvJUtvwJDwWLB5ygPiCRWLNM8E0iyRoD=HbzfVw@mail.gmail.com> <ZAoq+yAyPnI4zgto@smile.fi.intel.com>
-In-Reply-To: <ZAoq+yAyPnI4zgto@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 10 Mar 2023 17:48:39 +0100
-Message-ID: <CAMRc=McQKK2e86m1w7q4ysGCJcSSgDjV-tkAkFa626ko+eTeUA@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] gpiolib: Move gpiodevice_*() to gpiodev namespace
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 7:52=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Wed, Mar 08, 2023 at 11:49:53AM +0100, Bartosz Golaszewski wrote:
-> > On Tue, Mar 7, 2023 at 7:25=E2=80=AFPM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > The functions that operates on the same device object would
-> > > have the same namespace for better code understanding and
-> > > maintenance.
->
-> ...
->
-> > > -static void gpiodevice_release(struct device *dev)
-> > > +static void gpiodev_release(struct device *dev)
-> > >  {
-> > >         struct gpio_device *gdev =3D to_gpio_device(dev);
-> > >         unsigned long flags;
-> > > @@ -617,7 +617,7 @@ static int gpiochip_setup_dev(struct gpio_device =
-*gdev)
-> > >                 return ret;
-> > >
-> > >         /* From this point, the .release() function cleans up gpio_de=
-vice */
-> > > -       gdev->dev.release =3D gpiodevice_release;
-> > > +       gdev->dev.release =3D gpiodev_release;
-> > >
-> > >         ret =3D gpiochip_sysfs_register(gdev);
-> > >         if (ret)
->
-> > But the only other function that's in the gpiodev_ namespace operates
-> > on struct gpio_device so that change doesn't make much sense to me.
->
-> I'm not sure I understood the comment.
-> After this change we will have
->
-> static int gpiodev_add_to_list(struct gpio_device *gdev)
-> static void gpiodev_release(struct device *dev)
->
+The tenkeyless version of the Realforce R2 has the same issue of the
+full size one, the report fixup is needed to make n-key rollover
+work instead of 6 key rollover
 
-Do you want to use the same prefix for both because struct device in
-the latter is embedded in struct gpio_device in the former?
+Signed-off-by: Alessandro Manca <crizan.git@gmail.com>
+---
+ drivers/hid/Kconfig     | 2 +-
+ drivers/hid/hid-ids.h   | 1 +
+ drivers/hid/hid-topre.c | 2 ++
+ 3 files changed, 4 insertions(+), 1 deletion(-)
 
-Bart
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index 82f64fb31fda..4ce012f83253 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -1122,7 +1122,7 @@ config HID_TOPRE
+ 	tristate "Topre REALFORCE keyboards"
+ 	depends on HID
+ 	help
+-	  Say Y for N-key rollover support on Topre REALFORCE R2 108 key keyboards.
++	  Say Y for N-key rollover support on Topre REALFORCE R2 108/87 key keyboards.
+ 
+ config HID_THINGM
+ 	tristate "ThingM blink(1) USB RGB LED"
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index 63545cd307e5..50728e0a5067 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -1249,6 +1249,7 @@
+ 
+ #define USB_VENDOR_ID_TOPRE			0x0853
+ #define USB_DEVICE_ID_TOPRE_REALFORCE_R2_108			0x0148
++#define USB_DEVICE_ID_TOPRE_REALFORCE_R2_87			0x0146
+ 
+ #define USB_VENDOR_ID_TOPSEED		0x0766
+ #define USB_DEVICE_ID_TOPSEED_CYBERLINK	0x0204
+diff --git a/drivers/hid/hid-topre.c b/drivers/hid/hid-topre.c
+index 88a91cdad5f8..d1d5ca310ead 100644
+--- a/drivers/hid/hid-topre.c
++++ b/drivers/hid/hid-topre.c
+@@ -36,6 +36,8 @@ static __u8 *topre_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+ static const struct hid_device_id topre_id_table[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_TOPRE,
+ 			 USB_DEVICE_ID_TOPRE_REALFORCE_R2_108) },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_TOPRE,
++			 USB_DEVICE_ID_TOPRE_REALFORCE_R2_87) },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(hid, topre_id_table);
+-- 
+2.39.2
 
-> There are also gpio_device_*() I have noticed, so may be these should be
-> actually in that namespace?
->
-> And we have
->
-> static int gpiochip_setup_dev(struct gpio_device *gdev)
-> static void gpiolib_dbg_show(struct seq_file *s, struct gpio_device *gdev=
-)
->
-> That said, what do you think is the best to make this more consistent?
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
