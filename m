@@ -2,198 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185AB6B3BB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 987BF6B3BC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbjCJKHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 05:07:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
+        id S229959AbjCJKKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 05:10:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231354AbjCJKHl (ORCPT
+        with ESMTP id S229634AbjCJKKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 05:07:41 -0500
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6487A10DE53;
-        Fri, 10 Mar 2023 02:07:26 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 01EEAE9B6B;
-        Fri, 10 Mar 2023 02:06:56 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id SZ_rYQwd7qnN; Fri, 10 Mar 2023 02:06:55 -0800 (PST)
-Message-ID: <4e8d00617de0c25dcf84847c3d3ad3f2d76ee5b9.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1678442814; bh=neDVUUMD91mzk9k/2WX+tsghRdTpWiwwuz6BfoWIDxA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=sloReDyeUAG3HsYSM/6bRcyljsj6f8awYTisEoXt/6sLatvWn4cCD6YEkOPR9x5+p
-         mlbcv4jXYwsuZWsblrQXE/yQIp4yYwF+jy4T4KFp0YVT22fSV/2fl5+MBAZuPUz/8u
-         abxS7x51NhfKBs+ieDMOg6gt6u9IZ8b1iGBnDEyOxiOyUgB7+cpdQTLYWMCppAIFsI
-         gx1D55dL6txyE/Ps5aVL5okkWlZoTJ9nXAdjyuYmVLE8BWOz7OQUZWrp2GdOcBMkk3
-         H+eBnTR+Wb0TUbk4Tmd7F64kxEEka8C1erwgCk5Jl18y1UH3H6ddPMumo6GrNqyd4J
-         6qiIRC1Cl9sXQ==
-Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Yongqin Liu <yongqin.liu@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
-Date:   Fri, 10 Mar 2023 11:06:48 +0100
-In-Reply-To: <CAGETcx93K1VjAosX9NDEyLVLPK2utPSUV6dwzdAT-Dc5BfmhzQ@mail.gmail.com>
-References: <20230301214952.2190757-1-saravanak@google.com>
-         <2a8e407f4f18c9350f8629a2b5fa18673355b2ae.camel@puri.sm>
-         <e65e08c13885468675af527ffa2ab882cc9e682d.camel@puri.sm>
-         <CAGETcx93K1VjAosX9NDEyLVLPK2utPSUV6dwzdAT-Dc5BfmhzQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1+deb11u1 
+        Fri, 10 Mar 2023 05:10:11 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAB994743
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:10:09 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id k10so18241914edk.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:10:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678443008;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VES88RDu68rL5NDUHr3sXnSGJ9TXEfu2GH9TAuqlmkU=;
+        b=Ozr1iPXoEGvcAHwAy9H9S8GCoun0lCmweQbD8YnbUqziy2u/98BqZPBfzPbRnLPABx
+         nUWc5FrRdihvGHgCfjrqZPsD6V9xwGYOtcCbmoB+6DVL280iKMrB1gIdz0YBcOUR3OIN
+         HSME51Il8c5yPqHjdS1detBGS/ZTEl9SWOkFovseOvMYGbvXGa7aiXgUEXWJujXap3Es
+         70eqsFq6rsMnYTAy8/+vBxTFHEe/eDuueJgjnT3atKSChkJnq/t/GNZQK8W5z5sUNkgx
+         82jtG7DdKnmVYLKXQGGxRUaQVEgKS+tkvwpLP7lCJ+ytuj+m8sbcvWc39sJJXMhASmKR
+         svdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678443008;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VES88RDu68rL5NDUHr3sXnSGJ9TXEfu2GH9TAuqlmkU=;
+        b=J56XLAzyykt0k1M8RTxlR37smhPInwNl8BrEmFcUJsnyJj/2Zi8E09fR/jg6h8k3fO
+         70dGhdbc4/rblY5LZyGDSg5mE9nGqnGHtz8JBmvi0YduzO55I3AdiI+0v6siUrbRWDx5
+         yGEtNIOSnvmV+0Gbwa+KEKN5aZE46bOKckSpZi/af2FXEhgBGyRP59Kt20Yajyh6F9mP
+         YhHAPNvZltdnNI7yCQhKs8LUSNTQvTIncknn1v+3+yaXa6hxEBdXYz/4tWgpyaB8HX0q
+         d+CK1VoKDZ72VUbpihxHeULmLbD56L6P2wD0iKQmAY/7osWfvzVMbssdg11IVc+8lk3X
+         xjCg==
+X-Gm-Message-State: AO0yUKXO32Q/HbfhD0Z21ZxM98SzMt3TYDGxuNHPstgQd7nRnMhFp4ws
+        B6tkXozQiA+LqEDsCtuNZSNKvw==
+X-Google-Smtp-Source: AK7set/S605bhmLAtsmVPrUq/mepr0q5FJC+/eV4WvNFS5d4216qWzvQbfEOofPJqPaTziJ7CzL1Bg==
+X-Received: by 2002:a17:907:1b1e:b0:8b2:8876:2a11 with SMTP id mp30-20020a1709071b1e00b008b288762a11mr1368992ejc.28.1678443007804;
+        Fri, 10 Mar 2023 02:10:07 -0800 (PST)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:2a59:841a:ebc:7974])
+        by smtp.gmail.com with ESMTPSA id a20-20020a17090680d400b008c979c74732sm761350ejx.156.2023.03.10.02.10.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 02:10:07 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH] ASoC: dt-bindings: qcom,lpass-rx-macro: correct minItems for clocks
+Date:   Fri, 10 Mar 2023 11:09:37 +0100
+Message-Id: <20230310100937.32485-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, dem 09.03.2023 um 16:24 -0800 schrieb Saravana Kannan:
-> On Thu, Mar 2, 2023 at 1:41 AM Martin Kepplinger
-> <martin.kepplinger@puri.sm> wrote:
-> > 
-> > Am Donnerstag, dem 02.03.2023 um 10:12 +0100 schrieb Martin
-> > Kepplinger:
-> > > Am Mittwoch, dem 01.03.2023 um 13:49 -0800 schrieb Saravana
-> > > Kannan:
-> > > > Yongqin, Martin, Amelie,
-> > > > 
-> > > > We recent refactor of fw_devlink that ends with commit
-> > > > fb42378dcc7f
-> > > > ("mtd: mtdpart: Don't create platform device that'll never
-> > > > probe"),
-> > > > fw_devlink is smarter and doesn't depend on compatible
-> > > > property.
-> > > > So,
-> > > > I
-> > > > don't think these calls are needed anymore. But I don't have
-> > > > these
-> > > > devices to test on and be sure and the hardware I use to test
-> > > > changes
-> > > > doesn't have this issue either.
-> > > > 
-> > > > Can you please test these changes on the hardware where you hit
-> > > > the
-> > > > issue to make sure things work as expected?
-> > > > 
-> > > > Yongqin, If you didn't have the context, this affected
-> > > > hikey960.
-> > > > 
-> > > > Greg,
-> > > > 
-> > > > Let's wait for some tests before we land these.
-> > > > 
-> > > > Thanks,
-> > > > Saravana
-> > > 
-> > > hi Sravana,
-> > > 
-> > > I picked the 12 commits leading up to commit fb42378dcc7f ("mtd:
-> > > mtdpart: Don't create platform device that'll never probe") (
-> > > https://source.puri.sm/martin.kepplinger/linux-next/-/commits/test_fw_devlink
-> > > ) and included the tipd patch below to test it.
-> > > 
-> > > With that, I get the following errors:
-> > > 
-> > > [    0.237931] imx-uart 30890000.serial: Failed to create device
-> > > link
-> > > with regulator-gnss
-> > > [    0.334054] nwl-dsi 30a00000.mipi-dsi: Failed to create device
-> > > link
-> > > with regulator-lcd-1v8
-> > > [    0.346964] nwl-dsi 30a00000.mipi-dsi: Failed to create device
-> > > link
-> > > with backlight-dsi
-> > > 
-> > > but they are independent of this final tipd patch below. I'll
-> > > test a
-> > > real linux-next tree soon, for completeness, maybe I missed
-> > > something?
-> > > 
-> > > Anyways, on that tree, your tipd removal patch breaks type-c
-> > > still
-> > > for
-> > > me, imx8mq-librem5.dtsi
-> > > 
-> > > just to give a first reply quickly... thanks,
-> > > 
-> > >                              martin
-> > > 
-> > 
-> > just confirming: it's the same as above on next-20230302 + this
-> > patch (
-> > https://source.puri.sm/martin.kepplinger/linux-next/-/commits/test_fw_devlink_next-20230302
-> > ) with the errors already independent from the patch. I should have
-> > tested earlier patches -.-
-> 
-> Thanks a lot for testing Martin!
-> 
-> Your email is a little ambiguous to me. With the 12 refactor commits
-> +
-> the 4 patches in this series, things are breaking for you. But if you
-> drop the 4 patches in this series, things work again. Is that right?
+The RX macro codec comes on some platforms in two variants - ADSP
+and ADSP bypassed - thus the clock-names varies from 3 to 5.  The clocks
+must vary as well:
 
-no. Sorry if I wasn't clear. I can't justify to block these 4 patches.
-they *themselves* don't break anything.
+  sc7280-idp.dtb: codec@3200000: clocks: [[202, 8], [202, 7], [203]] is too short
 
-Something broke *earlier* than these 4 patches in one of the other 12.
+Fixes: 852fda58d99a ("ASoC: qcom: dt-bindings: Update bindings for clocks in lpass digital codes")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-As to *what* broke: The error messages during boot, and the charger and
-fuel gauge don't work anymore, I see:
-
-# cat /sys/kernel/debug/devices_deferred 
-3-0036	max17042: failed: power supply register
-0-003f	
-38100000.usb	platform: wait for supplier endpoint
-32c00000.hdmi	platform: supplier 0-003f not ready
-3-006a	bq25890-charger: registering power supply
-
-
-I haven't had time to track it down and see where the issue is. Could
-be one of the 12 patches, could be a wrong description for my board:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
-or something else (an i2c issue?).
-
-(for completeness, the exact tree I ran:
-https://source.puri.sm/martin.kepplinger/linux-next/-/commits/test_fw_devlink
-)
-
-> 
-> Let's ignore the "Failed to create device link" errors for now --
-> it's
-> not related to this usb-c-connector series. It's basically pointing
-> out issues that we ignored silently in the past -- it's basically
-> pointing out holes in fw_devlink's visibility of devices. I'll get to
-> them later.
-
-ok. good to know. please do.
-
-And since I'm the only one seeing an issue, please move the patches
-forward. I'll need to fix this after the fact and hope to have time for
-it next week.
-
-> 
-> -Saravana
-
-
-                           martin
-
+diff --git a/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml b/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml
+index 79c6f8da1319..b0b95689d78b 100644
+--- a/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml
++++ b/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml
+@@ -30,6 +30,7 @@ properties:
+     const: 0
+ 
+   clocks:
++    minItems: 3
+     maxItems: 5
+ 
+   clock-names:
+-- 
+2.34.1
 
