@@ -2,175 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA79C6B51F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 082BD6B51FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbjCJUa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 15:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
+        id S230517AbjCJUdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 15:33:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231535AbjCJU3z (ORCPT
+        with ESMTP id S229639AbjCJUdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 15:29:55 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1378B118815;
-        Fri, 10 Mar 2023 12:29:54 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id ec29so25432014edb.6;
-        Fri, 10 Mar 2023 12:29:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1678480193;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a8pZKlejve1428qStCG0RMeVmZ4upKoJrMvi5IlICBI=;
-        b=GqtyCN7r9RM6GkJazWR3HFollxvPGavLzejWII2UZyzcFzJwMjMGHZXwEgMhq0a4Lc
-         UiExCA8fiiGFczNheebxETAymcsajbRiR82bZ9qkehwUK3IThUTpKnipArWWryo6G/QD
-         DR0uFwBHX2ZwfQ0/yeTHpuBP5GiFIcSSAENdcF4b5NG4eF9gjUQTp6mZK01gbvZPU0mQ
-         eacQzCPTtb8tDjMkHxA0iAUPPAhEmuePvWnwNSu+JzWKCzjIT5PBxlOSrTaGK35njfNu
-         U4PaIwxvloNxCIjTWsvthKxcDVphovp/iSJelFwh4Bt490YcbsUmIJH4nQ6RcEZtRvJ4
-         odVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678480193;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a8pZKlejve1428qStCG0RMeVmZ4upKoJrMvi5IlICBI=;
-        b=UORemEf0bO5rH6qxpZw97e05kw3QVG4ozp/ei83QjwZJrf4nix5G7zejBD7WJahf93
-         8SFfNmfJWsu/sXs0jnxbwcmPYZmZtb8V7xOTTL6L8hi5mCHXSJUyvjtyDYiadX5sDBxX
-         XuTouAbt9YJcuqE/W6H3L1nv+rFi7eRb2+INXzPepZRy5dTLwOcqD3ODOIoHRSRAdWdI
-         ALhWHH0C3behkHvQVAspjWbqiP8BtdHwIAh2KC8gnmCrFJL+Gb7DBsBMdEVyPoz1EnRO
-         PMbvieTJK+dUcgMiWtNNkliUoZTAk0Fgtfb7Ppetk5pPmEWp1LXvXDLE3PH5XBeQoSIy
-         L/iQ==
-X-Gm-Message-State: AO0yUKWqQV5/79y455XCYAlCFfST30+Ig0w+CQ7oek+agLWxTX4sTJIC
-        NPT7FFFzy0erzVIJ6hcIgIHW91IzVeg=
-X-Google-Smtp-Source: AK7set9RM0579bjaZEGE6QvGIe2oGLhDMRT3CqhFy8M6d7U/msI1IK0JBp9KWYZLW80huko1gwPSjg==
-X-Received: by 2002:a17:906:4f94:b0:8ed:e8d6:42c4 with SMTP id o20-20020a1709064f9400b008ede8d642c4mr26149521eju.12.1678480193480;
-        Fri, 10 Mar 2023 12:29:53 -0800 (PST)
-Received: from localhost.localdomain (dynamic-2a01-0c23-b84f-c400-0000-0000-0000-079c.c23.pool.telefonica.de. [2a01:c23:b84f:c400::79c])
-        by smtp.googlemail.com with ESMTPSA id md10-20020a170906ae8a00b008e34bcd7940sm259047ejb.132.2023.03.10.12.29.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 12:29:53 -0800 (PST)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     linux-wireless@vger.kernel.org
-Cc:     Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Chris Morgan <macroalpha82@gmail.com>,
-        Nitin Gupta <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v2 RFC 9/9] wifi: rtw88: Add support for the SDIO based RTL8821CS chipset
-Date:   Fri, 10 Mar 2023 21:29:22 +0100
-Message-Id: <20230310202922.2459680-10-martin.blumenstingl@googlemail.com>
+        Fri, 10 Mar 2023 15:33:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B67F75C
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:33:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB95861D4A
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 20:31:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3524C433EF;
+        Fri, 10 Mar 2023 20:31:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678480308;
+        bh=8mhnBVXTkrddv783HXQ9jm0z3rkg9svYl+Y90WxbKYU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=M6gqPMlvKL/l8tSRPTEfwWbnMZOHwZVYY2VEM/xRb7VMc/qJ9uAHg19dgzBYwmKal
+         a1DZV6eEciPG7Mor5Hiv6SG6t2xs8kDwCVz8T5aJn6Gb1gRbc3akodX/OuauGJGzD4
+         kcGnDwO3EWWiRbQo/gcB6hgfeONzkAynMfHG/RTVzTsbb3XOZD6ZsolHlvFeVQuHmi
+         yzMacmJkAay914vilUV3q9H3C1Tb80Cs8qjkwoaiV2dLplj41wLLg3GQOuaNq4pzPr
+         3Hmsll4f+Ul+RYuVb8wKrjbcQONbOOKShVTVpNkh0UprVz8w+RC1iV//l/88pHNPv0
+         WMDGDBBQkEx6w==
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: [RFC][PATCH 0/5] Improve static call NULL handling
+Date:   Fri, 10 Mar 2023 12:31:12 -0800
+Message-Id: <cover.1678474914.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230310202922.2459680-1-martin.blumenstingl@googlemail.com>
-References: <20230310202922.2459680-1-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wire up RTL8821CS chipset support using the new rtw88 SDIO HCI code as
-well as the existing RTL8821C chipset code.
+Static calling a NULL pointer is a NOP, unless you're one of those poor
+souls running on an arch (or backported x86 monstrosity) with
+CONFIG_HAVE_STATIC_CALL=n, then it's a panic.
 
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
-Changes since v1:
-- use /* ... */ style for copyright comments
+The "fix" for this undefined behavior is to tell the user to just use
+static_call_cond() instead, if they want consistent NOP behavior.  But
+forgetting to do that is likely to cause subtle bugs.  It actually
+already did (during RHEL development).
+
+There are two ways to make it consistent:
+
+  a) Make static_call(NULL) a NOP for all configs; or
+
+  b) Make static_call(NULL) a panic for all configs.
+
+Do (a) because it's consistent with the existing HAVE_STATIC_CALL
+behavior.  Also it seems simpler to implement and use, and based on
+looking at the existing use cases, it's common to want the "do nothing
+and return 0" behavior by default.
+
+Then take it a step further and get rid of the distinction between
+STATIC_CALL_NULL and STATIC_CALL_RET0.
+
+The end result is less confusing semantics and simpler code all around.
 
 
- drivers/net/wireless/realtek/rtw88/Kconfig    | 11 ++++++
- drivers/net/wireless/realtek/rtw88/Makefile   |  3 ++
- .../net/wireless/realtek/rtw88/rtw8821cs.c    | 35 +++++++++++++++++++
- 3 files changed, 49 insertions(+)
- create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8821cs.c
+EPILOGUE
+--------
 
-diff --git a/drivers/net/wireless/realtek/rtw88/Kconfig b/drivers/net/wireless/realtek/rtw88/Kconfig
-index 6b65da81127f..29eb2f8e0eb7 100644
---- a/drivers/net/wireless/realtek/rtw88/Kconfig
-+++ b/drivers/net/wireless/realtek/rtw88/Kconfig
-@@ -133,6 +133,17 @@ config RTW88_8821CE
- 
- 	  802.11ac PCIe wireless network adapter
- 
-+config RTW88_8821CS
-+	tristate "Realtek 8821CS SDIO wireless network adapter"
-+	depends on MMC
-+	select RTW88_CORE
-+	select RTW88_SDIO
-+	select RTW88_8821C
-+	help
-+	  Select this option will enable support for 8821CS chipset
-+
-+	  802.11ac SDIO wireless network adapter
-+
- config RTW88_8821CU
- 	tristate "Realtek 8821CU USB wireless network adapter"
- 	depends on USB
-diff --git a/drivers/net/wireless/realtek/rtw88/Makefile b/drivers/net/wireless/realtek/rtw88/Makefile
-index 6105c2745bda..82979b30ae8d 100644
---- a/drivers/net/wireless/realtek/rtw88/Makefile
-+++ b/drivers/net/wireless/realtek/rtw88/Makefile
-@@ -59,6 +59,9 @@ rtw88_8821c-objs		:= rtw8821c.o rtw8821c_table.o
- obj-$(CONFIG_RTW88_8821CE)	+= rtw88_8821ce.o
- rtw88_8821ce-objs		:= rtw8821ce.o
- 
-+obj-$(CONFIG_RTW88_8821CS)	+= rtw88_8821cs.o
-+rtw88_8821cs-objs		:= rtw8821cs.o
-+
- obj-$(CONFIG_RTW88_8821CU)	+= rtw88_8821cu.o
- rtw88_8821cu-objs		:= rtw8821cu.o
- 
-diff --git a/drivers/net/wireless/realtek/rtw88/rtw8821cs.c b/drivers/net/wireless/realtek/rtw88/rtw8821cs.c
-new file mode 100644
-index 000000000000..7ad7c13ac9e6
---- /dev/null
-+++ b/drivers/net/wireless/realtek/rtw88/rtw8821cs.c
-@@ -0,0 +1,35 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+/* Copyright(c) Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-+ */
-+
-+#include <linux/mmc/sdio_func.h>
-+#include <linux/mmc/sdio_ids.h>
-+#include <linux/module.h>
-+#include "sdio.h"
-+#include "rtw8821c.h"
-+
-+static const struct sdio_device_id rtw_8821cs_id_table[] =  {
-+	{
-+		SDIO_DEVICE(SDIO_VENDOR_ID_REALTEK,
-+			    SDIO_DEVICE_ID_REALTEK_RTW8821CS),
-+		.driver_data = (kernel_ulong_t)&rtw8821c_hw_spec,
-+	},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(sdio, rtw_8821cs_id_table);
-+
-+static struct sdio_driver rtw_8821cs_driver = {
-+	.name = "rtw_8821cs",
-+	.probe = rtw_sdio_probe,
-+	.remove = rtw_sdio_remove,
-+	.id_table = rtw_8821cs_id_table,
-+	.drv = {
-+		.pm = &rtw_sdio_pm_ops,
-+		.shutdown = rtw_sdio_shutdown,
-+	}
-+};
-+module_sdio_driver(rtw_8821cs_driver);
-+
-+MODULE_AUTHOR("Martin Blumenstingl <martin.blumenstingl@googlemail.com>");
-+MODULE_DESCRIPTION("Realtek 802.11ac wireless 8821cs driver");
-+MODULE_LICENSE("Dual BSD/GPL");
+If any users wanted panic-on-NULL by default instead of NOP-on-NULL,
+that could be added on top of this.  They could just initialize the
+static call with a __static_call_bug() helper.
+
+  void __static_call_bug(void)
+  {
+  	BUG();
+  }
+  ..
+  DEFINE_STATIC_CALL(foo, (func_type)__static_call_bug);
+
+We could take that even further:
+
+  DEFINE_STATIC_CALL_NOP(foo, func_type);
+  DEFINE_STATIC_CALL_BUG(bar, func_type);
+  ...
+  #define STATIC_CALL_NOP (func_type)__static_call_nop
+  #define STATIC_CALL_BUG (func_type)__static_call_bug
+  ...
+  static_call_update(foo, STATIC_CALL_NOP); // do nothing and return 0
+  static_call_update(foo, STATIC_CALL_BUG); // panic
+  static_call_update(foo, NULL);	    // ???
+
+The default behavior for NULL could be a key-specific policy, stored as
+a flag in the static_call_key struct.
+
+The key-specific policy would be easier to deal with than the
+call-site-specific policy we have today with static_call_cond().
+
+
+
+Josh Poimboeuf (5):
+  static_call: Make NULL static calls consistent
+  static_call: Make NULL static calls return 0
+  static_call: Remove static_call_cond() and its usages
+  static_call: Remove DEFINE_STATIC_CALL_RET0() and its uses
+  x86/kvm: Simplify static call handling
+
+ arch/powerpc/include/asm/static_call.h    |   1 -
+ arch/powerpc/kernel/irq.c                 |   2 +-
+ arch/x86/events/amd/core.c                |   2 +-
+ arch/x86/events/core.c                    |  26 ++---
+ arch/x86/include/asm/kvm-x86-ops.h        |  86 +++++++-------
+ arch/x86/include/asm/kvm-x86-pmu-ops.h    |  17 +--
+ arch/x86/include/asm/kvm_host.h           |   6 +-
+ arch/x86/include/asm/static_call.h        |   8 --
+ arch/x86/kvm/irq.c                        |   2 +-
+ arch/x86/kvm/lapic.c                      |  22 ++--
+ arch/x86/kvm/pmu.c                        |  11 +-
+ arch/x86/kvm/x86.c                        |  36 +++---
+ include/linux/static_call.h               | 131 +++++-----------------
+ kernel/events/core.c                      |   8 +-
+ kernel/sched/core.c                       |  10 +-
+ security/keys/trusted-keys/trusted_core.c |   2 +-
+ 16 files changed, 126 insertions(+), 244 deletions(-)
+
 -- 
 2.39.2
 
