@@ -2,101 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3D96B49B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC826B4B62
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233546AbjCJPPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:15:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
+        id S234442AbjCJPnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:43:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234047AbjCJPOe (ORCPT
+        with ESMTP id S233009AbjCJPms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:14:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7BECEF8B;
-        Fri, 10 Mar 2023 07:05:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6711EB822DE;
-        Fri, 10 Mar 2023 15:05:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09315C433A4;
-        Fri, 10 Mar 2023 15:05:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678460741;
-        bh=a3EVePx4MR1kBaDwbruPRZltn9GARuNR/ULdgsWNyaU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IC6ems9fQjxrT8ZJvfO75+WYGfTK1sth7WtrAxzkW/aVo5Rd9njC+nwx4vZoPAkwv
-         +ISw1DM2ycExNM6zFU/uBiMfNgOQjw0IGNEPSUthoSK1vX+cDu3QZGY6UyMZ/SdOb0
-         uB4Xy83k5PW5MMDYolsHGFFXkYlnup7Bg7dEynDIAPx3ZTZNMUR/KDwAob3IDj6fWM
-         MGV8QkXBjJRuA6+7oG34BVGu5DCtCgAko5ZXaWU07ILqxEZOQ2UOIuVi7xD2Y2bw+e
-         878VZK+RJ1Gl/lwf0H79iY21M+HOi1o9qIUfraVDQi7x8JDKlcXAecxyUJQk4AYupL
-         4fi6wGufJ25yQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id AA6A94049F; Fri, 10 Mar 2023 12:05:38 -0300 (-03)
-Date:   Fri, 10 Mar 2023 12:05:38 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Changbin Du <changbin.du@huawei.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hui Wang <hw.huiwang@huawei.com>
-Subject: Re: [PATCH v2 0/3] perf : fix counting when initial delay configured
-Message-ID: <ZAtHQuhWz+q//pE2@kernel.org>
-References: <20230302031146.2801588-1-changbin.du@huawei.com>
- <CAM9d7cigZ=TRoH8-MNbovUETzsjf+OuX7ykXA9rSyhsOY48dRg@mail.gmail.com>
- <ZAEJsMYGo1HC5CRk@kernel.org>
- <20230310023714.gqmenjlunlcm3bju@M910t>
+        Fri, 10 Mar 2023 10:42:48 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE067431D;
+        Fri, 10 Mar 2023 07:29:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678462172; x=1709998172;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=uRO3ncPTAeH91sp2hvb+p3FEDisPorSl78+BYWZMFcs=;
+  b=f1a072YVVWTiY6veYABibib8mEgIWTPohQCguoeqRq07xTt39mNLzQtu
+   cSytQZtdfgpGLzoT/LKBd4sfUFDlF+eaUCoa48sgRb+NNsP5CToccQAW6
+   10xMQftSQkIZA93b/FemIijKq8/VP/Ss64Tkgma5rOXYq2ynJHSnpUxma
+   wAlJ+4kFIWXSPvWLutQXqT7xx0dIyXV35ZoLetLq1E98ZCsOonh0RUBbf
+   e+i/8NtqL9sepWm446o2DqZYZ7dl3/mFqhV1/LpQoFTZCqW24srSiuJt0
+   hFkmR8o3AeO+27glcjgDxwJIaekWFXt/OJ5lwMED40xtKUZo/Im+nyDIZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="399342959"
+X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
+   d="scan'208";a="399342959"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 07:06:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="655216793"
+X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
+   d="scan'208";a="655216793"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga006.jf.intel.com with ESMTP; 10 Mar 2023 07:06:19 -0800
+Message-ID: <a45ff335-0563-85c7-3b31-d6ca23a54a3f@linux.intel.com>
+Date:   Fri, 10 Mar 2023 17:07:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310023714.gqmenjlunlcm3bju@M910t>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-2-quic_wcheng@quicinc.com>
+Content-Language: en-US
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v3 01/28] xhci: Add support to allocate several
+ interrupters
+In-Reply-To: <20230308235751.495-2-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Mar 10, 2023 at 10:37:14AM +0800, Changbin Du escreveu:
-> On Thu, Mar 02, 2023 at 05:40:16PM -0300, Arnaldo Carvalho de Melo wrote:
-> > Em Thu, Mar 02, 2023 at 11:22:37AM -0800, Namhyung Kim escreveu:
-> > > Hello,
-> > > 
-> > > On Wed, Mar 1, 2023 at 7:12 PM Changbin Du <changbin.du@huawei.com> wrote:
-> > > >
-> > > > The first one fixes the problem that counters are never enabled  when initial
-> > > > delay configured.
-> > > > The remaining two reuse the common field target::initial_delay for
-> > > > record/ftrace/trace subcommands.
-> > > >
-> > > > v2:
-> > > >  - introduce common filed target::initial_delay
-> > > >
-> > > > Changbin Du (3):
-> > > >   perf stat: fix counting when initial delay configured
-> > > >   perf record: reuse target::initial_delay
-> > > >   perf: ftrace: reuse target::initial_delay
-> > > 
-> > > Acked-by: Namhyung Kim <namhyung@kernel.org>
-> > 
-> > Thanks, applying the first to perf-tools (old perf/urgent) and the rest
-> > to perf-tools-next (old perf/core).
-> > 
-> > - Arnaldo
-> > 
-> Hi Arnaldo, it seems only the first one is applied. The remaining two patches
-> are missed in your tree.
->  - perf record: reuse target::initial_delay
->  - perf: ftrace: reuse target::initial_delay
+On 9.3.2023 1.57, Wesley Cheng wrote:
+> From: Mathias Nyman <mathias.nyman@linux.intel.com>
+> 
+> Introduce xHCI APIs to allow for clients to allocate and free
+> interrupters.  This allocates an array of interrupters, which is based on
+> the max_interrupters parameter.  The primary interrupter is set as the
+> first entry in the array, and secondary interrupters following after.
+> 
 
-Those are not fixes, right? I mentioned that I would apply it after the
-first is merged.
+I'm thinking about changing this offloading xHCI API
+xhci should be aware and keep track of which devices and endpoints that
+are offloaded to avoid device getting offloaded twice, avoid xhci driver
+from queuing anything itself for these, and act properly if the offloaded
+device or entire host is removed.
 
-- Arnaldo
+So first thing audio side would need to do do is register/create an
+offload entry for the device using the API:
+
+struct xhci_sideband *xhci_sideband_register(struct usb_device *udev)
+
+(xHCI specs calls offload sideband)
+Then endpoints and interrupters can be added and removed from this
+offload entry
+
+I have some early thoughts written as non-compiling code in:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git feature_interrupters
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters
+
+Let me know what you think about this.
+
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+
+My Signed-off-by tag is being misused here.
+
+I wrote a chunk of the code in this patch as PoC that I shared in a separate topic branch.
+It was incomplete and not intended for upstream yet. (lacked locking, several fixme parts, etc..)
+The rest of the code in this patch is completely new to me.
+
+Thanks
+-Mathias
+
