@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23A46B345D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CDA6B3461
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjCJClF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Mar 2023 21:41:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
+        id S229968AbjCJCq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 21:46:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCJClD (ORCPT
+        with ESMTP id S229473AbjCJCq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 21:41:03 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE68F6039;
-        Thu,  9 Mar 2023 18:41:00 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E995C24E22F;
-        Fri, 10 Mar 2023 10:40:58 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
- 2023 10:40:59 +0800
-Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
- (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
- 2023 10:40:58 +0800
-From:   Jack Zhu <jack.zhu@starfivetech.com>
-To:     Dafna Hirschfeld <dafna@fastmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <jack.zhu@starfivetech.com>
-Subject: [PATCH v1] media: admin-guide: Update rkisp1.rst
-Date:   Fri, 10 Mar 2023 10:40:56 +0800
-Message-ID: <20230310024056.59220-1-jack.zhu@starfivetech.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 9 Mar 2023 21:46:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C73DD377;
+        Thu,  9 Mar 2023 18:46:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D38060921;
+        Fri, 10 Mar 2023 02:46:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAC90C4339B;
+        Fri, 10 Mar 2023 02:46:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678416385;
+        bh=tI+aEFnT7+/8bODwsopD97PexndTCnj+r/uQzEYXO3U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EgMfQk0m5WIUpglu2xgTkln1pLOIonelKl3UVfJFXMCVGjyOahjjP6JFIA7diPBrT
+         j0tlh6MGGMRfHOxuM1tN9CRIk0axwECB0Ej1SaoE5W5PJ7baVk0wL/+w4xRm8vWjHO
+         smxRdAh6qta08PqpVeBjGJ2qhCm7q43iHkx4+0efRgAx2exPtSJ3zsxFI6x8xUqSb/
+         KVHzl38JIqNYwVxX+Q3lCjEYZmQGkNN1jqIfZ9GrfApVBWrRPZAm0qvmalbeBHv5cJ
+         nH1GiLENps7bIy72xihAuFIg6Qnitm8bog5KNMFG7EpNeMjF9VYjTZ7CGEddcjUjR4
+         SgHwpTlM+BTgg==
+Received: by mail-ed1-f51.google.com with SMTP id g3so15067312eda.1;
+        Thu, 09 Mar 2023 18:46:25 -0800 (PST)
+X-Gm-Message-State: AO0yUKXgDNtuU5fWMG3rHVfOMXDZCj3JdeolF72aQt02NwvA90ySYW4e
+        7eHNYCf1zSqpm9nw+i3lKdTBNL1WYaj/YPiuAmI=
+X-Google-Smtp-Source: AK7set+RD1QtbOMZlvn5OyHmt5ba3zcRlj6C4U+McRvpbPwgqFpd6db/4zp+mwCWLmL/ZXEG05KXDe+Y5x+qVoVuDog=
+X-Received: by 2002:a50:d543:0:b0:4af:6e08:30c with SMTP id
+ f3-20020a50d543000000b004af6e08030cmr386406edj.4.1678416384101; Thu, 09 Mar
+ 2023 18:46:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [180.164.60.184]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
- (172.16.6.83)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230306031258.99230-1-chenhuacai@loongson.cn> <ZAoNPuyHQTqucYxn@infradead.org>
+In-Reply-To: <ZAoNPuyHQTqucYxn@infradead.org>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Fri, 10 Mar 2023 10:46:14 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7rms0X=V7fFDRh7KQWamwevvY4fHAEEuzSrQNUgVX0Ug@mail.gmail.com>
+Message-ID: <CAAhV-H7rms0X=V7fFDRh7KQWamwevvY4fHAEEuzSrQNUgVX0Ug@mail.gmail.com>
+Subject: Re: [PATCH V2] LoongArch: Provide kernel fpu functions
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update Rockchip ISP1 driver file path
+On Fri, Mar 10, 2023 at 12:45=E2=80=AFAM Christoph Hellwig <hch@infradead.o=
+rg> wrote:
+>
+> NAK, this needs to be an EXPORT_SYMBOL_GPL.
+OK, let's make it GPL again.
 
-Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
----
- Documentation/admin-guide/media/rkisp1.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/admin-guide/media/rkisp1.rst b/Documentation/admin-guide/media/rkisp1.rst
-index ccf418713623..3eec078c9eff 100644
---- a/Documentation/admin-guide/media/rkisp1.rst
-+++ b/Documentation/admin-guide/media/rkisp1.rst
-@@ -10,7 +10,7 @@ Introduction
- ============
- 
- This file documents the driver for the Rockchip ISP1 that is part of RK3288
--and RK3399 SoCs. The driver is located under drivers/staging/media/rkisp1
-+and RK3399 SoCs. The driver is located under drivers/media/platform/rockchip/rkisp1
- and uses the Media-Controller API.
- 
- Revisions
--- 
-2.34.1
-
+Huacai
+>
+> Also no way we're going to merge this without an actual user.
