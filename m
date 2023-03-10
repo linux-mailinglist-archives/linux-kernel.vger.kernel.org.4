@@ -2,127 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 454A36B3FB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 13:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C056B3FAF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 13:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjCJMwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 07:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
+        id S230142AbjCJMwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 07:52:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbjCJMwg (ORCPT
+        with ESMTP id S229550AbjCJMwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 07:52:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D72D10D747
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 04:51:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678452711;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rZIld3XXwjg/5OVDJp8fJcoorSqaGBrbmPgeKtcFSHg=;
-        b=AfG1nnjnebMBCbxovyJJGk70s16SxAVdag/+yGT0e8/8lSD3aJ0LZ1S3X3SVPOkm8fvBuI
-        VXJtExj2kaQwTsPk1tCGOdSj/aMhH8dD/exMpp4982WfJ+oQt4uLd6fhOzv/3Pp1qyTAty
-        ZALF/0kJadaLe5yowlFE90pQvhhQ0HE=
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
- [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-481-9wl-nak1N0uNX1V6HIqLfA-1; Fri, 10 Mar 2023 07:51:50 -0500
-X-MC-Unique: 9wl-nak1N0uNX1V6HIqLfA-1
-Received: by mail-yb1-f198.google.com with SMTP id m6-20020a056902118600b00aeb1e3dbd1bso5635766ybu.9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 04:51:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678452709;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rZIld3XXwjg/5OVDJp8fJcoorSqaGBrbmPgeKtcFSHg=;
-        b=e18pJ8yC8UOs+hVX0qy1+Pxi+QMZhfKG3J1e33RIB0RhjtZwAQXoZlKGMBjsais2mr
-         JdhjVthnP7KiZbKYpZvcow6yY1URyMRscZXKL2/8DYBfk6dFfdquyzkKnH7qvLsrsWm4
-         s5oErsXiHlqvvURPWmDol8KbNK0iYr7weXlgXWiQ5EuwHsBWn5jjh2OqujxDK1WIYTv0
-         NiJL9cTAsdwmsTf9RJNO7PggNnTZjCYkAbW/Xm8X0zE4tC8+NdxsiIagLXcpANTH+6MQ
-         yrEpAhfEv3nv6CLQqZR1/gFRkVuDOtcvGv5qZzypmYsgwzRYQ1/h56IdvIEEb6QjZHMj
-         oqPQ==
-X-Gm-Message-State: AO0yUKWJC4fpjVda+5Bw8kJemdseepA49/DSAZiAlkrAOy8z4FvZHwoC
-        T/8gxHvDOmhIMO9LvzBTi99qLa+j8T4kX2OMervtR0mVSeTr0QlIuOww4dBGLVnF/3bTHe7c7be
-        7IYd/h7xqC9MgzN+UMf5zz8JRmcSVnh5M+8CgWDhj
-X-Received: by 2002:a81:ae18:0:b0:52e:b22b:f99 with SMTP id m24-20020a81ae18000000b0052eb22b0f99mr16398139ywh.4.1678452709622;
-        Fri, 10 Mar 2023 04:51:49 -0800 (PST)
-X-Google-Smtp-Source: AK7set/EKPoJpsaQ6jTGPO8ZcwOExwc+c/U5tEMzDhx6YbPVnFyVYh1GTuwqNC6IUjl6U7VfvbNFIQkaXa/4X29Luic=
-X-Received: by 2002:a81:ae18:0:b0:52e:b22b:f99 with SMTP id
- m24-20020a81ae18000000b0052eb22b0f99mr16398129ywh.4.1678452709262; Fri, 10
- Mar 2023 04:51:49 -0800 (PST)
+        Fri, 10 Mar 2023 07:52:04 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAD910B1E0;
+        Fri, 10 Mar 2023 04:52:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678452720; x=1709988720;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xJvBjtXFbTfnxL0oNKT/W4JlLqLJwv/8uOZC3buZbiQ=;
+  b=SG929EYJlfcx5a/2IFs1Ft+uBZbRUEBswylRvWUTgA1I+e+aYKGxmdZa
+   pj9yYHJ91LjGP6OvF3wQ/utM0XxiEaNF/J36bieb66RUpJx+6+pMNOdDd
+   UJTCh8aekTLJ0NFCn6soAS0/uRO0dqmdd9oqhLK+yB2Mzra0Y9JGpQJ+D
+   FdAuimVI6xaPq2wL0NsGOVnd/D7/nTvVooZZbArn+3gMGyUUKrKG84YsT
+   ZCT5QU2sz0M1QMUBi9nYuKOA+hTCl/3vk8uR+HOr+Nptc08Z3WWlGrsB+
+   F8Y+NiOSY8kNaBpFAQ8LjkBdnXXYvIkgSljcIYBorrYvIx8ZHpOh3OQj7
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="336738975"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="336738975"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 04:51:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="655173436"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="655173436"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.213.50]) ([10.254.213.50])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 04:51:52 -0800
+Message-ID: <9119912c-21d2-263f-ef7a-53e2eb827b18@linux.intel.com>
+Date:   Fri, 10 Mar 2023 20:51:48 +0800
 MIME-Version: 1.0
-References: <20230309-fix-acpi-gpio-v1-1-b392d225efe8@redhat.com> <20230310114150.GA62143@black.fi.intel.com>
-In-Reply-To: <20230310114150.GA62143@black.fi.intel.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Fri, 10 Mar 2023 13:51:38 +0100
-Message-ID: <CAO-hwJK+yF+0u6cbw4CoV8vS80Vx5xkC2vwPjOQvnUox2SMdTA@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: acpi: use the fwnode in acpi_gpiochip_find()
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Kaehn <kaehndan@gmail.com>, linux-gpio@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     baolu.lu@linux.intel.com, joro@8bytes.org,
+        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
+        robin.murphy@arm.com, cohuck@redhat.com, eric.auger@redhat.com,
+        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 05/12] iommufd/hw_pagetable: Do not populate user-managed
+ hw_pagetables
+Content-Language: en-US
+To:     Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
+References: <20230309080910.607396-1-yi.l.liu@intel.com>
+ <20230309080910.607396-6-yi.l.liu@intel.com>
+ <b0ea86fd-8350-f694-a93a-a8ccecd0c8e7@linux.intel.com>
+ <ZArTN9tIDKuvmuje@Asurada-Nvidia>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <ZArTN9tIDKuvmuje@Asurada-Nvidia>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 12:42=E2=80=AFPM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> On Thu, Mar 09, 2023 at 02:40:51PM +0100, Benjamin Tissoires wrote:
-> > While trying to set up an SSDT override for a USB-2-I2C chip [0],
-> > I realized that the function acpi_gpiochip_find() was using the parent
-> > of the gpio_chip to do the ACPI matching.
-> >
-> > This works fine on my icelake laptop because AFAICT, the DSDT presents
-> > the PCI device INT3455 as the "Device (GPI0)", but is in fact handled
-> > by the pinctrl driver in Linux.
-> > The pinctrl driver then creates a gpio_chip device. This means that the
-> > gc->parent device in that case is the GPI0 device from ACPI and everyth=
-ing
-> > works.
-> >
-> > However, in the hid-cp2112 case, the parent is the USB device, and the
-> > gpio_chip is directly under that USB device. Which means that in this c=
-ase
-> > gc->parent points at the USB device, and so we can not do an ACPI match
-> > towards the GPIO device.
-> >
-> > I think it is safe to resolve the ACPI matching through the fwnode
-> > because when we call gpiochip_add_data(), the first thing it does is
-> > setting a proper gc->fwnode: if it is not there, it borrows the fwnode
-> > of the parent.
-> >
-> > So in my icelake case, gc->fwnode is the one from the parent, meaning
-> > that the ACPI handle we will get is the one from the GPI0 in the DSDT
-> > (the pincrtl one). And in the hid-cp2112 case, we get the actual
-> > fwnode from the gpiochip we created in the HID device, making it workin=
-g.
-> >
-> > Link: https://lore.kernel.org/linux-input/20230227140758.1575-1-kaehnda=
-n@gmail.com/T/#m592f18081ef3b95b618694a612ff864420c5aaf3 [0]
-> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
->
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
->
+On 2023/3/10 14:50, Nicolin Chen wrote:
+> On Fri, Mar 10, 2023 at 10:25:10AM +0800, Baolu Lu wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 3/9/23 4:09 PM, Yi Liu wrote:
+>>> From: Nicolin Chen <nicolinc@nvidia.com>
+>>>
+>>> A user-managed hw_pagetable does not need to get populated, since it is
+>>> managed by a guest OS. Move the iopt_table_add_domain and list_add_tail
+>>> calls into a helper, where the hwpt pointer will be redirected to its
+>>> hwpt->parent if it's available.
+>>>
+>>> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+>>> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+>>> ---
+>>>    drivers/iommu/iommufd/hw_pagetable.c | 20 ++++++++++++++++++--
+>>>    1 file changed, 18 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
+>>> index 16e92a1c150b..6e45ec0a66fa 100644
+>>> --- a/drivers/iommu/iommufd/hw_pagetable.c
+>>> +++ b/drivers/iommu/iommufd/hw_pagetable.c
+>>> @@ -43,6 +43,23 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
+>>>        return 0;
+>>>    }
+>>>
+>>> +static int iommufd_hw_pagetable_link_ioas(struct iommufd_hw_pagetable *hwpt)
+>>> +{
+>>> +     int rc;
+>>> +
+>>> +     if (hwpt->parent)
+>>> +             hwpt = hwpt->parent;
+>>> +
+>>> +     if (!list_empty(&hwpt->hwpt_item))
+>>> +             return 0;
+>>
+>> What is above check for? Is it "the hwpt has already been inserted into
+>> the hwpt list of its ioas in another place"?
+>>
+>> If so, is it possible that hwpt will be deleted from the list even when
+>> this user hwpt is still linked to the ioas?
+> 
+> It means that the hwpt is already linked to the ioas. And the
+> hwpt_item can be only empty after a destroy().
+> 
+> With that being said, after I think it through, perhaps Yi's
+> previous change removing it might be better. So, it could be:
+> 
+> -------------------------------------------------------------------------------
+> +	/*
+> +	 * Only a parent hwpt needs to be linked to the IOAS. And a hwpt->parent
+> +	 * must be linked to the IOAS already, when it's being allocated.
+> +	 */
+>   	if (hwpt->parent)
+> -		hwpt = hwpt->parent;
+> -
+> -	if (!list_empty(&hwpt->hwpt_item))
+>   		return 0;
+>   
+> -------------------------------------------------------------------------------
+> 
+> I was concerned about the case where a device gets attached to
+> the nested hwpt without staging at the parent hwpt first. But,
+> the link between the parent hwpt and the IOAS happened inside
+> the allocation function now, not attach() any more.
 
-Thanks to both of you for the reviews.
+Yes, it's clearer.
 
-Andy, should I resend a v2 with the rev-by from Mika and the Ice Lake chang=
-es?
-
-Cheers,
-Benjamin
-
+Best regards,
+baolu
