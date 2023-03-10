@@ -2,219 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE32C6B51B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 910636B51B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbjCJUUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 15:20:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        id S231324AbjCJUWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 15:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbjCJUTy (ORCPT
+        with ESMTP id S231158AbjCJUWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 15:19:54 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E000FF05;
-        Fri, 10 Mar 2023 12:19:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678479593; x=1710015593;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=//TmaHr6raPDG+8eiTzN/sDfNSMOm5dWQb+VKv5KBdc=;
-  b=UnqW+SQNz5hNWdfMDUL2l11bELNW+toqrIijOYU+HzG572gmIOP+sxbo
-   JfnF58qI5xqJ2H25KBahwhBShmxHnFIGS3dty6nb0vjCqW3N1eDChhlW5
-   3L2nGxxaC2TaEpxPQKka+hvwRGQ3wjVr0wlpjuRBbnK1/VG7xZJxPQVax
-   xMdQ4qpT9LvUd4L4/N/WYiK6T1ZOypGbV/xz0P0lG6r/bPtlNuY4pOUNU
-   JyraJxrHNSgUciJut/i78HVtIBhpPCRuri/BHJ4ePrdqoR1YOZBIWGAUX
-   XHBSeUlfhav70+qkGTFDGXYlvd9XrOEjLlkEyZUknOY/aVF2hYqZQxwlX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="338376447"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="338376447"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 12:19:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="788154685"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="788154685"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga002.fm.intel.com with ESMTP; 10 Mar 2023 12:19:51 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 10 Mar 2023 12:19:51 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Fri, 10 Mar 2023 12:19:51 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.172)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Fri, 10 Mar 2023 12:19:49 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cZECxbe30G8a+QScxWQ6BjpmnjTKahFhWAerNCIi/VHSCCKw59yXqN4T2SOZ9DJOSnVa3jjFUADi5hB2WUPe2/aWq+qrOk8nD1DZwA9hEwZORoe+vjdpVMkKwuO7piqsP0ytnkrmiA+kHcPfnBXXhiWb7EnK4cSKo8Oo1tmRP5vzlT8OUgrVvdaQOl8qPoArM9LwcdqV4cXPG9wSpZoO4De1WNB6pVmHjTtF2p/cKzYzxAlMwDBpbmcMxAjDaQuYsvxbVXaJ3fkGqeLFxK13/MjpB9hHQnb8BeFbuMnctdZH55DpBy55HGElk7HLeNy69Fm2Xk5XID0DTH+zMIT+Ng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=//TmaHr6raPDG+8eiTzN/sDfNSMOm5dWQb+VKv5KBdc=;
- b=naYy8jbaoCveTjaMKAgRLaXUDkl8fY8QZdu5RW2O50zZ7ktAlbYHQ7v1T64lQyswv1/FZMqyaa2mBsyhodmOWHmAUqujD+BVyMJQp6P7PYKC8UBwzd11onHYWiU7EdBoTJVB8DMyUTCpYAiEpbpwnMASoVHVmw0ud5PR00hWWp7NDSOty8c5jV3wDIkkX8b6BP2osblEJUnDgw/wrKvn3+/4PiyA7FompB/koyi1LMD0hjlXUptCBVjYs2VxgER3ENg8xt3sa3XjhfhzbwUhp+RuCCVy8UpaLgOL5bqFxl4uzvPR2guJYW8cNl5R64iWr2jgV7E5fEtmjruK9vF+Gg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by SN7PR11MB7467.namprd11.prod.outlook.com (2603:10b6:806:34f::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Fri, 10 Mar
- 2023 20:19:46 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536%3]) with mapi id 15.20.6178.019; Fri, 10 Mar 2023
- 20:19:46 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "bp@alien8.de" <bp@alien8.de>
-CC:     "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v7 33/41] x86/shstk: Introduce map_shadow_stack syscall
-Thread-Topic: [PATCH v7 33/41] x86/shstk: Introduce map_shadow_stack syscall
-Thread-Index: AQHZSvtF2ujwSwjQQE2i7wvNH++zdK70P++AgAARI4CAADA+gIAABAiA
-Date:   Fri, 10 Mar 2023 20:19:46 +0000
-Message-ID: <ff1cb291574703d027bd3ec9ff5551c34d2ffe0b.camel@intel.com>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
-         <20230227222957.24501-34-rick.p.edgecombe@intel.com>
-         <ZAtWp76svXxvQl94@zn.tnic>
-         <b85a86e8013280ce17a54d570aa162f1d463a230.camel@intel.com>
-         <20230310200519.GDZAuNf+bvYjGtazqv@fat_crate.local>
-In-Reply-To: <20230310200519.GDZAuNf+bvYjGtazqv@fat_crate.local>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|SN7PR11MB7467:EE_
-x-ms-office365-filtering-correlation-id: 61c16bc2-35b9-4df4-1156-08db21a4cabc
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zoRLP14mDVegMGzySNT77/442Mu86WY0KQE4gDaklKRh9kWrcaQ2tpp8MsLd1zlaT7bLTPR8ua0rjHUd7l3wKiv/rfd8dYRoRSyXRcbwXoomD84FQ2KETUekfQ/lNMX5IenBg74W49PkBa27n46UJec950/jy0WtK1zEr7C0BMntmaFsw5/v8JEYLAhVJYNsIf6NxKKDjA9ElggwUKWc0qmmDt5aip+QxiOJ7EEH79npSQ99AEFfLOZq8qmzeJ1biGxsP4U+uwNjk1gV95V4Ou+tk4bkno6E+If6gIZ5tHERmHyhkYRMkg/a+zdpJhU1zjoXxGC6+Kb3x1Xj79TaZVFmS4t2r+zVaIRK6xsgAvGHq5gNnVwUV7KJbVKklJZVDexp83nUFWYRqRQ2JIK+HO5mcUQcmLG4d+QGufAvBOPhZP4MkyRfGZi3M9ZiHJJM6a9siqFeW2GfVQQgxI8ilQdpVSnpVxTlkfE+uepB0X4XywMQxPIN7RdL9wd40QWM/SWFq93EcSjvLz1pFyTumVv4GDkWGiTiQMk7CMMNpj6n/3zEcvagulTLozKWx04f+5IMyYWncgW+GVLGzBvPz9evf1h9Y86vlMZsNwM1iV/bfF3h7E2Q+sV2/AOsFzC0gHn/R0IRiDeKe7sD4mrtX/05G+jREpD0qrqeXy6ootjjTbUoaWZ2vabbLNdJZ6nGZickLK5hP6kzyEgmw/5G0TwUng59Fu1wiwtD9rEhYnU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(376002)(39860400002)(366004)(346002)(136003)(451199018)(66476007)(66446008)(6916009)(64756008)(8676002)(66556008)(7406005)(4326008)(7416002)(4744005)(66946007)(76116006)(5660300002)(41300700001)(6486002)(86362001)(8936002)(83380400001)(186003)(82960400001)(2906002)(316002)(36756003)(38100700002)(478600001)(122000001)(6506007)(6512007)(26005)(54906003)(71200400001)(2616005)(38070700005)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cGJtb3Z3clZWQXN6UVBodjIybGR5SUlqajVJcVYvR3dlVE5zRlZOQzVublZp?=
- =?utf-8?B?akJrb2QrVjJ6TnhLVWxBQTVSK3cvQnlKN2ZLYnNYSU04eGdTVXRnbGpZaGU3?=
- =?utf-8?B?angvU2VLZ1VpR0dvVWJWSWhEM2w2bVBERnlENkl6UUdhZWdlUTFUb2liTmFY?=
- =?utf-8?B?UFEyTGtaL0lBZDcxNU0zTkE5Vm9Rb0VIakhpYjVqV0M1blFzQXRzWkhTYzBI?=
- =?utf-8?B?MWtPWVV4V2IrUElxQXN4K2JXbzRHKy8rbUdxWE5qcEQyeGxzMCsyU2FQYTlw?=
- =?utf-8?B?ZUVCUkdmRm9kcFJybXlVUFpVOUNRNzlKTTR4cllUV2pxcFpSS2VpQnI1Skl1?=
- =?utf-8?B?KzZtczNsSjYzdmZvY1hXQkFrTTZkWDgzd0E5UVhaWEx1SFNsUVYveVNlSWRM?=
- =?utf-8?B?YnBQSFB6QWN4Y1lENk1Scjl1czBLQVBybnBxb3p1UnkyMUhWcnFHc2JBSlo2?=
- =?utf-8?B?WEJqQm56VndoZTFiTGt3L3lHbzI0UkFhZTRWeVZEV0JFajdzQURxMGR5aGtC?=
- =?utf-8?B?bnRZcUx0cmhRMWVCU3E2RW04ZkhoUDNKT3J2YTJzV0JRbGFJYzVnYTZ0dmx6?=
- =?utf-8?B?YzhyWng5ZWZlNWNkYk11K3lDMTlvT3VDNXFidmRKVUVOUkhMSTFXa0l3TlZN?=
- =?utf-8?B?Uk9VRTFia1dOYWVnb0hRY09GeTdBRWpnaEZtVWZnaVlwVlRUR085bXRTT0pT?=
- =?utf-8?B?VzVCVWpsaXNPNDBKU0c0TFRxcEp0T0pydWRGZUtRUVl1SE5Sekx3SUc2V1ZP?=
- =?utf-8?B?d2c2OHR4dDFrNUhtaGFCdmVxd0VQTFRkT3lKY2c5aHpsOUNmN1V0a1JqVEwr?=
- =?utf-8?B?Rk85NFpqVkZYSUtZVG9UTGNXa1d1UHo1VHdiaTFka05aYlA0THhpWm1DNk5y?=
- =?utf-8?B?d2Z5MVBTUS8rWnFGTDllMFJKSFJyRG9WMDltZkMzb1VjODRQbzFaM0N1bTA3?=
- =?utf-8?B?Z3hDSGVFbnM3Vlo5cktDS3FrdDFFbzlKVHVMVDFIMThQNlkxOTJrdjFlWUlI?=
- =?utf-8?B?WFFWTDVMNlVGUmV2NFhlMlhBR1hLMXhZMithK1VCb3BWcENPczBheGQ1eUJE?=
- =?utf-8?B?cHpaRzV3b1o2WFlybTU3MThrSnhqOTFxSUtQYU1mSUNaTkFFaGt2ODZlMjE1?=
- =?utf-8?B?cXNlTzlsZVFUUGVhdnplVzhqdEFrajE3TFdEOWt5UFl4YnJSTUVNTGRmSUto?=
- =?utf-8?B?QkZBT1lKYXdvU24xZzNza3pDeVN2NDVyTjJ5U21XdWxRcDB1aGRIR1dVNW9i?=
- =?utf-8?B?SGFna2ZFbVFDUmR3d2Z2b053N29HVkUxazdRVnJkaERnUEszNVZQRnFSdTcv?=
- =?utf-8?B?MW1vRDVJZ1ZwQXZTY3g5UlVSY0M1UlNJT1E3amlSMzdBRlk1Y2dxNkFSYm9B?=
- =?utf-8?B?UDBDaHd4TmJ5eG1DNnBORUJWb2tjNXRhN2VSNGtHSDBPaUprd0VnQjZzM05U?=
- =?utf-8?B?eGpXN0hGTmFMWjVHYXU4OFdUaGMvVUtRd3l4Uy9VZHlwNkxQb0hoTDdPK0VQ?=
- =?utf-8?B?bmkySndHaTEzeFJFM0MwT1FpWFRIZXNmKzUvc3VuVzZDTVpOaEVvNkQrTitE?=
- =?utf-8?B?TEJ6WG1mdEU0ekI2aUM4NGNaMDBDc1diRzJwRER0Y3I0STZISU9IZWdWYis3?=
- =?utf-8?B?NlZaTzN6TVZsOTErTzNheTZLYnJ1eEZoRnFIbFlqRDdVdFF6OWpwcTBFeENt?=
- =?utf-8?B?cjNmMHRFVHNML1BLWktBcUMxSjcyTVFteHVCL2VwMkF5azlpUWxsTWlyaHE2?=
- =?utf-8?B?T0hFQ1hLakFHRHZHWWlWaXNpRW5ReUlHajgwWGZISUhTWmppeXh2bzJCTS9t?=
- =?utf-8?B?RjVjcm9ZWU5NTklYTnlWRFZ0QWRGWDVBN216emlaSGtiQ0hDZVcxdE4wS3pL?=
- =?utf-8?B?WmRublBrOGYxS052R3hFNDZNSDRza0h0WlhYclYxejNtaFMzeDlscXVOc1c2?=
- =?utf-8?B?ckNMRkl3V2F6Qkg2ay9BYmpDdVhJaDBob3cwKzdBT0tqV3VuNFZlb0FEUFRn?=
- =?utf-8?B?NStrZTJaVU5yNHl4WWhsVVdKbVk1djJOU0FxWnhIb0Z0ZUZJV2JKNWE2SlFm?=
- =?utf-8?B?bDVSeWtyQUFzRklpMmh3QnlWRDBNYlZuRys0N251dzU0WmFOczRMZXFFY2lC?=
- =?utf-8?B?Mjc0QkVMTy9RTVZmakdDNUdoMHFCYWVYWnVoM1ozU0htNTFtc1V2b2dURUlY?=
- =?utf-8?Q?xv30qBgJ+4VOF5vP9g6+OPk=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4142724223346943B16865DC1A13FB50@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 10 Mar 2023 15:22:49 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E888B12DC02;
+        Fri, 10 Mar 2023 12:22:47 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id s11so25354045edy.8;
+        Fri, 10 Mar 2023 12:22:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678479766;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ORasYKUX0Hwis7sfGua1CSHjFk1HruseacmaBr5a+Uk=;
+        b=Xr7tRGNyOBC3CdRyrCHS+ePzgrFutYl2lauA4U2kxId9Ibdtglafm276EA2CQoLa/I
+         YWooVbkXjxxC04X9n2QyHRKboB70j3grprJH/fRMAd6IJcrd+5PzlNG9Dts1emyWrtE2
+         j0Xcwlv0P1TvrfIHwxilUNtxFHvgMIvv0TmGpl+4JWAWlatyL0g2+o0Ht3RU02DjgI0a
+         yLOj2Ua9c5i/nalbwV3k0lFJskYGyBvmT1EAfOfTT20yRDL1b9LEiYtuFCKOP+c406PT
+         UjU9Yi1ASE1SZ+ErFPNV525RPdMD15/r/3qR1hnBaH/BKaPsvZqy+ECGYcENp1Z9orIz
+         a2kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678479766;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ORasYKUX0Hwis7sfGua1CSHjFk1HruseacmaBr5a+Uk=;
+        b=wrbCJaGl0vNYoPav1VY7YAzBKC8o1lxzuYB3KOC+9xto52086ZrgitMATlJ2EkSYG4
+         A2dQS2pIcUZpUGQUzqLVQi6Hpysf95IajsqK/xSs5OMrFt8AP9Qn0y+8BUk+rzW59jpB
+         wKXku6b3c1V+JPSqOo8j7JEnXFHm8SoMVFVFl2lINaFIyfX/VpR8L85IquJkON4+K+9c
+         F1tIkB1nLC8GKypnJibyZ9Cdrca2+RaWFwgZwrvsCntZrsa7gg1bty9cLzZ+bqutf6+J
+         xl+Ke3Zqw9dWFYqgyGYOLmyyIOCSHab+0khMcYrgt7Mmqqr+jV9tNrmM/q1Nx+x0T2mj
+         NF9A==
+X-Gm-Message-State: AO0yUKU/8zQUSziLa3o1oZElDKEY7tnFZMv0p0aEBotAUSWmcKlGuhvJ
+        pLdCryguO+/lyfZVqbE6Z7N8GumLMsb2YR9bPiA=
+X-Google-Smtp-Source: AK7set8+IJlquFhRcIll2Sg7NI6g9Rxrd9l9Dplhy9MmVoPi+eOapi1cXygTd87AZKZ9aPUtBON+QV/JWQhpJxTBm+E=
+X-Received: by 2002:a17:906:1643:b0:8af:4963:fb08 with SMTP id
+ n3-20020a170906164300b008af4963fb08mr13955189ejd.15.1678479766130; Fri, 10
+ Mar 2023 12:22:46 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61c16bc2-35b9-4df4-1156-08db21a4cabc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2023 20:19:46.2264
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AUm0LsIpqrVkN9zum8BBN3Fl2S/MAc+wG4n1zNBS2vu+HqKA1i/Q6RpoPZ7t7TR/mg30pS+lsmJ29t1upUggBiQEXpzSxfzQfXirt7GpSUc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7467
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230116010115.490713-1-irogers@google.com> <CAP-5=fVUgc8xtBzGi66YRUxZHyXvW2kiMjGz39dywaLxrO4Hpg@mail.gmail.com>
+ <Y8mAuDvs566zwG67@kernel.org> <Y8myfqy5EMit3Kr/@krava> <CAP-5=fUugnKd=pGpZve7tKThhM5b0AqGMnuiELF+fZQw-xJz9w@mail.gmail.com>
+ <ZAmRjk1x4p4TrFb0@gentoo.org> <CAEf4BzZJvEnWdTKVSgdBDr_KEgkW5HLHc7N-HRkmb-drCbg2uw@mail.gmail.com>
+ <CAP-5=fWvMFXOaKA0bKaKdzYjqOxTCXGapJy-4x34hJyZxqD-Dw@mail.gmail.com>
+In-Reply-To: <CAP-5=fWvMFXOaKA0bKaKdzYjqOxTCXGapJy-4x34hJyZxqD-Dw@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 10 Mar 2023 12:22:34 -0800
+Message-ID: <CAEf4BzZyxyqC1KB3zou46ckf3UvDY9PwgrKdofnPfbhXrN3=XQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Assume libbpf 1.0+
+To:     Ian Rogers <irogers@google.com>
+Cc:     Guilherme Amadio <amadio@gentoo.org>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andres Freund <andres@anarazel.de>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Christy Lee <christylee@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
+        Ben Hutchings <ben@decadent.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIzLTAzLTEwIGF0IDIxOjA1ICswMTAwLCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6
-DQo+IE9uIEZyaSwgTWFyIDEwLCAyMDIzIGF0IDA1OjEyOjQwUE0gKzAwMDAsIEVkZ2Vjb21iZSwg
-UmljayBQIHdyb3RlOg0KPiA+ID4gQ2FuIHdlIHVzZSBkaXN0aW5jdCBuZWdhdGl2ZSByZXR2YWxz
-IGluIGVhY2ggY2FzZSBzbyB0aGF0IGl0IGlzDQo+ID4gPiBjbGVhcg0KPiA+ID4gdG8NCj4gPiA+
-IHVzZXJzcGFjZSB3aGVyZSBpdCBmYWlscywgKmlmKiBpdCBmYWlscz8NCj4gPiANCj4gPiBHb29k
-IGlkZWEsIEkgdGhpbmsgbWF5YmUgRVJBTkdFLg0KPiANCj4gRm9yIHRob3NlIHR3bywgcmlnaHQ/
-DQo+IA0KPiAgICAgICAgIC8qIElmIHRoZXJlIGlzbid0IHNwYWNlIGZvciBhIHRva2VuICovDQo+
-ICAgICAgICAgaWYgKHNldF90b2sgJiYgc2l6ZSA8IDgpDQo+ICAgICAgICAgICAgICAgICByZXR1
-cm4gLUVJTlZBTDsNCj4gDQo+ICAgICAgICAgaWYgKGFkZHIgJiYgYWRkciA8PSAweEZGRkZGRkZG
-KQ0KPiAgICAgICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7DQo+IA0KPiBUaGV5IGFyZSBraW5k
-YSByYW5nZS1jaGVja2luZyBvZiBzb3J0cy4gQSB3aWRlciByYW5nZSBidXQgc3RpbGwNCj4gc2lt
-aWxhci4uLiANCg0KSSB3YXMgdGhpbmtpbmcgRVJBTkdFIHdvdWxkIGJlIGZvciB0aGUgNEdCIGxp
-bWl0LiBUaGlzIGlzIHRoZSB3ZWlyZCAzMg0KYml0IGxpbWl0aW5nIHRoaW5nLiBTbyBpZiBzb21l
-b25lIGhpdCBpdCB0aGV5IGNvdWxkIGxvb2sgdXAgaW4gdGhlIGRvY3MNCndoYXQgaXMgZ29pbmcg
-b24uIFRoZSBzaXplLWJpZy1lbm91Z2gtZm9yLWEtdG9rZW4gY2hlY2sgY291bGQgYmUNCkVOT1NQ
-Qz8gVGhlbiBlYWNoIHJlYXNvbiBjb3VsZCBoYXZlIGEgZGlmZmVyZW50IGVycm9yIGNvZGUuDQoN
-Cg==
+On Thu, Mar 9, 2023 at 7:26=E2=80=AFPM Ian Rogers <irogers@google.com> wrot=
+e:
+>
+> On Thu, Mar 9, 2023 at 9:25=E2=80=AFAM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Wed, Mar 8, 2023 at 11:58=E2=80=AFPM Guilherme Amadio <amadio@gentoo=
+.org> wrote:
+> > >
+> > > On Wed, Mar 08, 2023 at 06:13:34PM -0800, Ian Rogers wrote:
+> > > > On Thu, Jan 19, 2023 at 1:13=E2=80=AFPM Jiri Olsa <olsajiri@gmail.c=
+om> wrote:
+> > > > >
+> > > > > On Thu, Jan 19, 2023 at 02:41:12PM -0300, Arnaldo Carvalho de Mel=
+o wrote:
+> > > > > > Em Thu, Jan 19, 2023 at 09:11:03AM -0800, Ian Rogers escreveu:
+> > > > > > > On Sun, Jan 15, 2023 at 5:01 PM Ian Rogers <irogers@google.co=
+m> wrote:
+> > > > > > > > libbpf 1.0 was a major change in API. Perf has partially su=
+pported
+> > > > > > > > older libbpf's but an implementation may be:
+> > > > > > > > ..
+> > > > > > > >        pr_err("%s: not support, update libbpf\n", __func__)=
+;
+> > > > > > > >        return -ENOTSUP;
+> > > > > > > > ..
+> > > > > > > >
+> > > > > > > > Rather than build a binary that would fail at runtime it is
+> > > > > > > > preferrential just to build libbpf statically and link agai=
+nst
+> > > > > > > > that. The static version is in the kernel tools tree and ne=
+wer than
+> > > > > > > > 1.0.
+> > > > > > > >
+> > > > > > > > These patches change the libbpf test to only pass when at l=
+east
+> > > > > > > > version 1.0 is installed, then remove the conditional build=
+ and
+> > > > > > > > feature logic.
+> > > > > > > >
+> > > > > > > > The issue is discussed here:
+> > > > > > > > https://lore.kernel.org/lkml/20230106151320.619514-1-iroger=
+s@google.com/
+> > > > > > > > perf bpf:
+> > > > > > > >
+> > > > > > > > A variant of this fix was added to Linux 6.2 in:
+> > > > > > > > "perf bpf: Avoid build breakage with libbpf < 0.8.0 + LIBBP=
+F_DYNAMIC=3D1"
+> > > > > > > > https://lore.kernel.org/lkml/Y71+eh00Ju7WeEFX@kernel.org/
+> > > > > > > > This change goes further in removing logic that is now no l=
+onger
+> > > > > > > > necessary.
+> > > > > > > >
+> > > > > > > > v2. Rebase now that breakage fix patch is in linus/master.
+> > > > > > >
+> > > > > > > I missed the:
+> > > > > > > Acked/Tested-by: Jiri Olsa <jolsa@kernel.org>
+> > > > > > > I believe we are waiting for package maintainer input.
+> > > > > >
+> > > > > > Yes, as fedora:37 still is at libbpf 0.8.0 :-\
+> > > > >
+> > > > > rawhide (f38) is already on 1.1.0 ... I'll check how bad it'd be =
+to move
+> > > > > f37 to 1.x, but I had to do bulk update of like 10 other dependen=
+t packages
+> > > > > for f38, so not sure how bad it'd be for f37
+> > > > >
+> > > > > jirka
+> > > >
+> > > > +Guilherme
+> > > >
+> > > > We were looking for maintainer input on these changes, but there is=
+ no
+> > > > update in over a month. Here is the original lore link:
+> > > > https://lore.kernel.org/lkml/CAP-5=3DfVUgc8xtBzGi66YRUxZHyXvW2kiMjG=
+z39dywaLxrO4Hpg@mail.gmail.com/
+> > > > Should these changes land in perf-tools-next targeting Linux 6.4?
+> > >
+> > > Gentoo has libbpf-1.1 already available, so requiring >libbpf-1.0 is =
+not
+> > > a problem. We (Gentoo) just need to make sure to stabilize libbpf-1.x=
+ before
+> > > stabilizing newer versions of perf, as the stable libbpf is 0.8.1 at =
+the moment.
+> > >
+> >
+> > libbpf v0.8 is basically all the 1.0 APIs, except by default 1.0
+> > semantics is not enforced, unless libbpf_set_strict_mode() is enabled.
+> >
+> > So, if 0.8 is a restriction, perf can stay on 0.8, use all the same
+> > APIs that are in 1.0 (except newer one added later, but I'm not sure
+> > perf needs any of the newer additions), and just stick to setting
+> > libbpf_set_strict_mode() unconditionally.
+>
+> Thanks Andrii,
+>
+
+Full disclosure, I'm totally supporting the switch to v1.0+, just
+trying to be helpful here from the standpoint of 0.x vs 1.x libbpf
+transition. See below. I believe you can keep 0.8+ dependency and drop
+all the legacy code completely.
+
+But just take it as an information, and feel free to do whatever you
+think is best with it.
+
+> The default perf build is to build against tools/lib/bpf and
+> statically link libbpf in. This means by default we have the latest
+> libbpf 1.2. If any perf code has a dependency on 0.8 (we don't support
+> earlier) we need to #ifdef for it. Currently we have 7 feature tests
+> for libbpf, but perhaps there is some cruft that's carried forward.
+> The features are:
+>  - btf__load_from_kernel_by_id
+
+v0.5 API
+
+>  - bpf_prog_load
+>  - bpf_object__next_program
+>  - bpf_object__next_map
+
+all three are v0.6 APIs
+
+>  - bpf_program__set_insns
+
+v0.8 API
+
+>  - btf__raw_data
+>  - bpf_map_create
+
+both v0.6 API
+
+>
+> The not present implementations look like:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools=
+/perf/util/bpf-loader.c?h=3Dperf-tools#n36
+> ```
+> int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
+>   struct bpf_insn *new_insns __maybe_unused, size_t new_insn_cnt __maybe_=
+unused)
+> {
+> pr_err("%s: not support, update libbpf\n", __func__);
+> return -ENOTSUP;
+> }
+>
+> int libbpf_register_prog_handler(const char *sec __maybe_unused,
+>                                  enum bpf_prog_type prog_type __maybe_unu=
+sed,
+>                                  enum bpf_attach_type exp_attach_type
+> __maybe_unused,
+>                                  const struct libbpf_prog_handler_opts
+> *opts __maybe_unused)
+> {
+> pr_err("%s: not support, update libbpf\n", __func__);
+> return -ENOTSUP;
+> }
+> ```
+
+both are v0.8 APIs
+
+> This will basically mean that while you dynamically linked with libbpf
+> 0.8 you are in all likelihood not going to get proper BPF support.
+> These changes up the version requirement to 1.0 and get rid entirely
+> of the feature tests - so no runtime failing implementations. If the
+
+100% supportive on upgrade and dropping feature checks. My point is
+that you don't need those feature checks with v0.8+ requirement.
+
+The only difference between staying on v0.8+ vs going all the way to
+v1.0+ would be that you have to keep libbpf_set_strict() call. In
+v1.0+ it's a noop, so could be dropped.
+
+> build determines at build time libbpf 1.0+ isn't present then it still
+> executes, switching from dynamic libbpf to the default static libbpf
+> that is at 1.2. As mentioned in this thread, distributions like Debian
+> use the default static linking of libbpf.
+>
+
+oh, that's nice, good to know
+
+> I'm not keen to hold on to the feature tests for the complexity that
+> they hold and their needlessly (as you can always statically link)
+> broken at runtime behavior. We could but my opinion is, let's not :-)
+
+I've been consistently advocating for static linking with libbpf, so
+100% support this.
+
+>
+> Thanks,
+> Ian
+>
+> > > Best regards,
+> > > -Guilherme
+> > >
