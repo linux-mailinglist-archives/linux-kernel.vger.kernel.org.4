@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0046B5315
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9436B5317
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbjCJVom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 16:44:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
+        id S232083AbjCJVoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 16:44:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbjCJVoH (ORCPT
+        with ESMTP id S231922AbjCJVoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 16:44:07 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E419A2B9DF
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:43:17 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id ju20-20020a170903429400b0019ea5ea044aso3500155plb.21
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:43:17 -0800 (PST)
+        Fri, 10 Mar 2023 16:44:12 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1277DD0C
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:43:21 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id i22-20020aa787d6000000b0061dda189477so3473606pfo.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:43:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678484584;
+        d=google.com; s=20210112; t=1678484586;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=R1zMC0FqfyEV/0S9ZnbLP+wjU2iwXROZi5JXQooIbHQ=;
-        b=qFNLiBFLLwtMgF+IeChjoCJa+ve1zT5ko/h9MJUHy8G8CX+5NcXD0Y6sTpwQKG+qXP
-         4NqQn4eVqEyN1HTU7GFiP0F/jBTXTePyXlzK+IWl2IQ6EGzCrtkqnHUUDpWgjSChI0sf
-         lafMTJDPi9IKPx1rvVse3jbOarLoqHrFYV+QEY0OQj5LEG8F18DItVyjpN5xcfAI6RCg
-         lb1AYL8iUu/vqeb6TvGOPRXMRk1NMUUnwF4PPQrqWcmwlrGnqd2UMjgaFilM2hI2dQIa
-         kAQQa4bHO4nfqHbxjuO1rm1hp/ImvvQqskELGWC3DgLpv86gtnF7tdIaG22ZkkjAJjRe
-         2QFA==
+        bh=9q/d7g9qox1x40p0EhyhFdiJHeiHo6UfgDgcUMY2me0=;
+        b=S+PLcRgF3wy1MWeNCthYcvbQ8p4zb1869uJGzKPqf8IHd47ghO2mn5LrvcqpZ7PChJ
+         O8ClBe5JTfp9ZzVAdvjjPyTHmpLw5H/P36z9EqCJ97mX3SvEf6t+pZsjn+zSRW8fcfDS
+         Gg7lVgXuJ+Y6Hze0ASXWtX4lj0pA0Ifa+Sq8cq5zGhPCEMb8wB2uJeQsXoW+g1/g9uBV
+         DmT8vsmv5UZFoj3oWqFu8yIUW1ro+zKTDvLvPFiYJSwJ2xlk9FgfRWbvsn40KM92UvCt
+         N/oy/CZtNllQNQjX1j7F/ZeD5wJy16dR6F4GaGAKIdyvlNql+cGt3T0/l0Icy7z23zig
+         WEsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678484584;
+        d=1e100.net; s=20210112; t=1678484586;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=R1zMC0FqfyEV/0S9ZnbLP+wjU2iwXROZi5JXQooIbHQ=;
-        b=XWOXJcSvywpuCKhHYmUvqdRgh4vg8WGy2v028NXu5PSovWTXeZrYYTUemb7Q1G9CIt
-         eTds4U7O3+U3M7x09Wy0zPfWo+gVE8y+jbTSAKedI/3wvlsPwTSAZfICWjPcFy7MOaaF
-         qedT2UgLPW/tTi+RCOQaJWn25HHtzTHv/z2XucLh5GbiM5pyl3KGDlKwyGdqK5fQzu3X
-         mcIVNNpwW1Ad031Q+60pNzjxUs/ikmcxGgl4yVWTXLrB6u/HA1uThbifZZG9Y5fhqS5F
-         7t6J28pjq9frEYZ2yeZ7Mr6OX4AWcA0ADn/nh/LvyFXclnDkjRAiuzZJjklkecrsFiUp
-         oL2A==
-X-Gm-Message-State: AO0yUKUKM3IMAQsuuLOzgIeu1QcvAW9QWG4+4IUD1CIziaveOk2ZxEZc
-        yn3JY2djMiRqA8co1Omj7m+UryfhMVI=
-X-Google-Smtp-Source: AK7set8TE4zXGBqQkBmFUJYlcxB6YWIGW3QIa6wDkwV6iROjJa0Me5urReLF/uWyEXu0xpfbwbHaICFKLXE=
+        bh=9q/d7g9qox1x40p0EhyhFdiJHeiHo6UfgDgcUMY2me0=;
+        b=UG2veZLoBelvPx8/XUMkzlgYfdhiB17cnRJ6CvyFzxBuljbzjMG47qDUQIRGKaeHNj
+         iUclGOHuBvELQGwcbuiI1evW0/WL3gpArE9GLS9tYWtVfUMw4r4MPWqrf3AKGjpCa/3z
+         VQpE4OYtUmJRsDWJwGDdOPoRp58EuKKZ/UuAOUqwLKKwBg4TzEl++35WxBmPAeTJNIsv
+         TzHp/jzE814kBjya+jMl3DiH1f00KmRYGhc2rPkbkOb27aNyl1x2uHXzvDJqkP0mfYr1
+         2P9kDzuH17g1DZxQ+XKxIcVazXbnoev+gt/ECZFKq8eJ73/oISxQvbxAwVIpGYVfebTF
+         jStw==
+X-Gm-Message-State: AO0yUKXe55gltV8Bhg3PFUaI5bmcbZPOgghJhnJ9QHioJhOZvWrs0X85
+        +ooVWtgWN7RWZHQug4c4TU5ODsTbgZU=
+X-Google-Smtp-Source: AK7set9eBDlBdJkd/u8qVUijL7wqSOFyJWmNtSA05Z5YfjfZdOvP3ULboyA+bUhFSKPyqCoOOkv4QCMEqYI=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a62:d14a:0:b0:592:5eb2:84ea with SMTP id
- t10-20020a62d14a000000b005925eb284eamr10759214pfl.4.1678484584488; Fri, 10
- Mar 2023 13:43:04 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:2dcd:b0:237:64dc:5acd with SMTP id
+ q13-20020a17090a2dcd00b0023764dc5acdmr10102509pjm.7.1678484586406; Fri, 10
+ Mar 2023 13:43:06 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 10 Mar 2023 13:42:28 -0800
+Date:   Fri, 10 Mar 2023 13:42:29 -0800
 In-Reply-To: <20230310214232.806108-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230310214232.806108-1-seanjc@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230310214232.806108-15-seanjc@google.com>
-Subject: [PATCH v2 14/18] KVM: SVM: Check that the current CPU supports SVM in kvm_is_svm_supported()
+Message-ID: <20230310214232.806108-16-seanjc@google.com>
+Subject: [PATCH v2 15/18] KVM: VMX: Ensure CPU is stable when probing basic
+ VMX support
 From:   Sean Christopherson <seanjc@google.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -75,76 +76,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check "this" CPU instead of the boot CPU when querying SVM support so that
-the per-CPU checks done during hardware enabling actually function as
-intended, i.e. will detect issues where SVM isn't support on all CPUs.
+Disable migration when probing VMX support during module load to ensure
+the CPU is stable, mostly to match similar SVM logic, where allowing
+migration effective requires deliberately writing buggy code.  As a bonus,
+KVM won't report the wrong CPU to userspace if VMX is unsupported, but in
+practice that is a very, very minor bonus as the only way that reporting
+the wrong CPU would actually matter is if hardware is broken or if the
+system is misconfigured, i.e. if KVM gets migrated from a CPU that _does_
+support VMX to a CPU that does _not_ support VMX.
 
-Disable migration for the use from svm_init() mostly so that the standard
-accessors for the per-CPU data can be used without getting yelled at by
-CONFIG_DEBUG_PREEMPT=y sanity checks.  Preventing the "disabled by BIOS"
-error message from reporting the wrong CPU is largely a bonus, as ensuring
-a stable CPU during module load is a non-goal for KVM.
-
-Link: https://lore.kernel.org/all/ZAdxNgv0M6P63odE@google.com
-Cc: Kai Huang <kai.huang@intel.com>
-Cc: Chao Gao <chao.gao@intel.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/svm/svm.c | 25 +++++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
+ arch/x86/kvm/vmx/vmx.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 2934f185960d..f04b61c3d9d8 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -520,18 +520,20 @@ static void svm_init_osvw(struct kvm_vcpu *vcpu)
- 		vcpu->arch.osvw.status |= 1;
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 158853ab0d1b..374e3ddbd476 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -2766,9 +2766,9 @@ static int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+ 	return 0;
  }
  
--static bool kvm_is_svm_supported(void)
-+static bool __kvm_is_svm_supported(void)
+-static bool kvm_is_vmx_supported(void)
++static bool __kvm_is_vmx_supported(void)
  {
 -	int cpu = raw_smp_processor_id();
 +	int cpu = smp_processor_id();
-+	struct cpuinfo_x86 *c = &cpu_data(cpu);
-+
- 	u64 vm_cr;
  
--	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
--	    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON) {
-+	if (c->x86_vendor != X86_VENDOR_AMD &&
-+	    c->x86_vendor != X86_VENDOR_HYGON) {
- 		pr_err("CPU %d isn't AMD or Hygon\n", cpu);
- 		return false;
- 	}
- 
--	if (!boot_cpu_has(X86_FEATURE_SVM)) {
-+	if (!cpu_has(c, X86_FEATURE_SVM)) {
- 		pr_err("SVM not supported by CPU %d\n", cpu);
- 		return false;
- 	}
-@@ -550,9 +552,20 @@ static bool kvm_is_svm_supported(void)
+ 	if (!(cpuid_ecx(1) & feature_bit(VMX))) {
+ 		pr_err("VMX not supported by CPU %d\n", cpu);
+@@ -2784,13 +2784,24 @@ static bool kvm_is_vmx_supported(void)
  	return true;
  }
  
-+static bool kvm_is_svm_supported(void)
++static bool kvm_is_vmx_supported(void)
 +{
 +	bool supported;
 +
 +	migrate_disable();
-+	supported = __kvm_is_svm_supported();
++	supported = __kvm_is_vmx_supported();
 +	migrate_enable();
 +
 +	return supported;
 +}
 +
- static int svm_check_processor_compat(void)
+ static int vmx_check_processor_compat(void)
  {
--	if (!kvm_is_svm_supported())
-+	if (!__kvm_is_svm_supported())
+ 	int cpu = raw_smp_processor_id();
+ 	struct vmcs_config vmcs_conf;
+ 	struct vmx_capability vmx_cap;
+ 
+-	if (!kvm_is_vmx_supported())
++	if (!__kvm_is_vmx_supported())
  		return -EIO;
  
- 	return 0;
+ 	if (setup_vmcs_config(&vmcs_conf, &vmx_cap) < 0) {
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
