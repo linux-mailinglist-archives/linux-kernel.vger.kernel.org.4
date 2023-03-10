@@ -2,82 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FFF6B4BA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:50:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A904B6B4BA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbjCJPuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
+        id S229937AbjCJPwA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 10:52:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234507AbjCJPtz (ORCPT
+        with ESMTP id S231429AbjCJPvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:49:55 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7B829401;
-        Fri, 10 Mar 2023 07:42:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=btoOgygSSCmk4R4wZNoZ+rRmTeHwDCly0ggRbOBc2pw=; b=hvCbD2Vn0j+xXQfJA2GNikMks5
-        xeEt1SNuRogSUyluuQtRV/+rJMM1tQivu/UeSQ+tMQsvVAdbMhwrmTSeOkJ4DFoc7TjJ0mkMTEf6r
-        C9YFjXDh/NDgGrlzq1rJgIveGvHh4bdazGwF+EGFf8dOGdBuNtT5+yHz6b19RzUUJYjv8tAYDQEA4
-        v85ZgA48HDRtZr18k/hXomotfLX8B7vOFM3A0ZaHNPkRAOfc8jqAaJgtU19e1QpZ7N68jP8OxzT9I
-        /nDHnyHJJ8OzdvieP9PfB8fZN5QOXln+aKBZzEXcCKFBWYe3umShr2QzRUbTbupKaypV19MJcCYN7
-        +rtlc/ig==;
-Received: from 201-68-164-191.dsl.telesp.net.br ([201.68.164.191] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1paesW-002uyd-H0; Fri, 10 Mar 2023 16:41:56 +0100
-Message-ID: <9ccc161e-40c0-e66d-2802-160c0f782cf5@igalia.com>
-Date:   Fri, 10 Mar 2023 12:41:46 -0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] x86/hyperv: Mark hv_ghcb_terminate() as noreturn
+        Fri, 10 Mar 2023 10:51:39 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEBEEAB99
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:44:06 -0800 (PST)
+Received: from lhrpeml100003.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PY9Lh6fFLz6J6rP;
+        Fri, 10 Mar 2023 23:43:24 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ lhrpeml100003.china.huawei.com (7.191.160.210) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 10 Mar 2023 15:44:03 +0000
+Received: from lhrpeml500005.china.huawei.com ([7.191.163.240]) by
+ lhrpeml500005.china.huawei.com ([7.191.163.240]) with mapi id 15.01.2507.021;
+ Fri, 10 Mar 2023 15:44:03 +0000
+From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Eric Auger <eric.auger@redhat.com>
+CC:     Nicolin Chen <nicolinc@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "kevin.tian@intel.com" <kevin.tian@intel.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v1 01/14] iommu: Add iommu_get_unmanaged_domain helper
+Thread-Topic: [PATCH v1 01/14] iommu: Add iommu_get_unmanaged_domain helper
+Thread-Index: AQHZUnWRmBwtrmleCk69JH8tQLhaPq7zzWuAgABY2gCAAAIMsA==
+Date:   Fri, 10 Mar 2023 15:44:02 +0000
+Message-ID: <f61ca5693d8845eba0a2139324e52d98@huawei.com>
+References: <cover.1678348754.git.nicolinc@nvidia.com>
+ <9b1077601cace998533129327f5e7ad946752d29.1678348754.git.nicolinc@nvidia.com>
+ <eddde530-cd37-f493-7f0f-c97905f0de64@redhat.com>
+ <ZAtNrFAEHvmM4FOW@nvidia.com>
+In-Reply-To: <ZAtNrFAEHvmM4FOW@nvidia.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     linux-hyperv@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, decui@microsoft.com,
-        haiyangz@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        thomas.lendacky@amd.com, peterz@infradead.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net,
-        Arnd Bergmann <arnd@arndb.de>
-References: <20230310140251.1159036-1-gpiccoli@igalia.com>
- <20230310152442.cbrjise6uex4ak4x@treble>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20230310152442.cbrjise6uex4ak4x@treble>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.202.227.178]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/03/2023 12:24, Josh Poimboeuf wrote:
-> On Fri, Mar 10, 2023 at 11:02:52AM -0300, Guilherme G. Piccoli wrote: 
-> I'd recommend also adding it to the objtool global_noreturns list,
-> otherwise this patch will probably trigger warnings with other non-IBT
-> configs, in cases where the function is called from another translation
-> unit, where GCC knows the function is noreturn but objtool doesn't.
+
+
+> -----Original Message-----
+> From: Jason Gunthorpe [mailto:jgg@nvidia.com]
+> Sent: 10 March 2023 15:33
+> To: Eric Auger <eric.auger@redhat.com>
+> Cc: Nicolin Chen <nicolinc@nvidia.com>; robin.murphy@arm.com;
+> will@kernel.org; kevin.tian@intel.com; baolu.lu@linux.intel.com;
+> joro@8bytes.org; Shameerali Kolothum Thodi
+> <shameerali.kolothum.thodi@huawei.com>; jean-philippe@linaro.org;
+> linux-arm-kernel@lists.infradead.org; iommu@lists.linux.dev;
+> linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH v1 01/14] iommu: Add iommu_get_unmanaged_domain
+> helper
 > 
-> We're looking at ways of eliminating global_noreturns, but it's
-> unfortunately still a necessary evil at this point.
+> On Fri, Mar 10, 2023 at 11:14:59AM +0100, Eric Auger wrote:
+> > Hi Nicolin,
+> >
+> > On 3/9/23 11:53, Nicolin Chen wrote:
+> > > The nature of ITS virtualization on ARM is done via hypercalls, so
+> > > kernel handles all IOVA mappings for the MSI doorbell in
+> > > iommu_dma_prepare_msi() and iommu_dma_compose_msi_msg(). The
+> current
+> > > virtualization solution with a 2-stage nested translation setup is
+> > > to do 1:1 IOVA mappings at stage-1
+> > Note that if we still intend to use that trick there is a known issue
+> > at kernel side that needs to be fixed.
+> >
+> > ARM DEN 0049E.b IORT specification mandates that when RMRs are
+> > present, the OS must preserve PCIe configuration performed by the boot
+> > FW.
 > 
-
-Hi Josh, thanks! Makes sense, I'll respond here with a V2 doing that.
-
-
-> Also, FWIW, I have a change coming soon which make these warnings much
-> easier to diagnose.
+> This limitation doesn't seem necessary for this MSI stuff?
 > 
+> What is it for?
 
-Cool =)
+That is to make sure the Stream Ids specified in RMR are still valid and is not being
+reassigned by OS. The kernel checks for this(iort_rmr_has_dev()),
+https://lore.kernel.org/linux-arm-kernel/20220420164836.1181-5-shameerali.kolothum.thodi@huawei.com/
+
+Thanks,
+Shameer
+
+
+
