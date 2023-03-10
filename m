@@ -2,227 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2CC6B55E2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C46D06B55F4
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbjCJXn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 18:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
+        id S232030AbjCJXpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 18:45:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbjCJXnn (ORCPT
+        with ESMTP id S231236AbjCJXpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 18:43:43 -0500
-Received: from out-31.mta1.migadu.com (out-31.mta1.migadu.com [95.215.58.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353D8121407
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 15:43:42 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1678491820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SSBGLO0ZKcc5jSLq3xLNP5yCcA0qlKOn3pEju7Cd7ZE=;
-        b=qTe147JsgTpvXQaz1MuzU6p4Le749GRL4+l6KHdDbxbjugDg757OBizgyv1xrZAf+akgys
-        RT3+ihmsWdEcXCAxS5P4ef6oW0T5jdXhD7ui2fhRdioeaK9Oq8mjlqZo1/ClrUvMp+81Ke
-        O1zfZHyyRBdAWHtNAfEhKB9LtxT8WoM=
-From:   andrey.konovalov@linux.dev
-To:     Marco Elver <elver@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Weizhao Ouyang <ouyangweizhao@zeku.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH 5/5] kasan: suppress recursive reports for HW_TAGS
-Date:   Sat, 11 Mar 2023 00:43:33 +0100
-Message-Id: <59f433e00f7fa985e8bf9f7caf78574db16b67ab.1678491668.git.andreyknvl@google.com>
-In-Reply-To: <bc919c144f8684a7fd9ba70c356ac2a75e775e29.1678491668.git.andreyknvl@google.com>
-References: <bc919c144f8684a7fd9ba70c356ac2a75e775e29.1678491668.git.andreyknvl@google.com>
+        Fri, 10 Mar 2023 18:45:45 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A6E12B03B;
+        Fri, 10 Mar 2023 15:45:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=lv6AIW6lF2JPB7SbfoQQs9rQTnaHfUU5yFYPqYrcs0g=; b=HB5MVsriEhP2gANf9CHGU8lepI
+        Ejew55wdz3HG+p9zeFY3/L/5GdnF3y29cQ2x/7NmQlylhHIDANxC6ny1Z/mIL8KXWlnAxARzO+JBm
+        /CtTwB6SHmff1+imOWBr9qU+iQnDUCRniRMTq+qkWSB0pyZdlmxDa3mxr3pu7fchPnz4SEMW/kfEp
+        HyfTfBZIzIYaRsNGfHHJ1VrGCVVHLaLTBzy45KmdTXE1n2zDGZUfLQoB6BlLu+nuysyqQK4qh+0W6
+        9suAmYmlW8gAdwXtOuEKSTx8XKWDmQRbMOJ8P6k+XvFu6ejnNJaPqgdO3fnn3ms4z2UkxpKxTsP29
+        dRZDqnkQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pamQR-00Gj2p-VE; Fri, 10 Mar 2023 23:45:27 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     hca@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        linux-s390@vger.kernel.org, sudipm.mukherjee@gmail.com
+Cc:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
+        j.granados@samsung.com, patches@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH 0/6] s390: simplify sysctl registration
+Date:   Fri, 10 Mar 2023 15:45:19 -0800
+Message-Id: <20230310234525.3986352-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+s390 is the last architecture and one of the last users of
+register_sysctl_table(). It was last becuase it had one use case
+with dynamic memory allocation and it just required a bit more
+thought.
 
-KASAN suppresses reports for bad accesses done by the KASAN reporting
-code. The reporting code might access poisoned memory for reporting
-purposes.
+This is all being done to help reduce code and avoid usage of API
+calls for sysctl registration that can incur recusion. The recursion
+only happens when you have subdirectories with entries and s390 does
+not have any of that so either way recursion is avoided. Long term
+though we can do away with just removing register_sysctl_table()
+and then using ARRAY_SIZE() and save us tons of memory all over the
+place by not having to add an extra empty entry all over.
 
-Software KASAN modes do this by suppressing reports during reporting
-via current->kasan_depth, the same way they suppress reports during
-accesses to poisoned slab metadata.
+Hopefully that commit log suffices for the dynamic allocation
+conversion, but I would really like someone to test it as I haven't
+tested a single patch, I'm super guiltly to accept I've just waited for
+patches to finish compile testing and that's not over yet.
 
-Hardware Tag-Based KASAN does not use current->kasan_depth, and instead
-resets pointer tags for accesses to poisoned memory done by the reporting
-code.
+Anyway the changes other than the dynamic allocation one are pretty
+trivial. That one could use some good review.
 
-Despite that, a recursive report can still happen:
+With all this out of the way we have just one stupid last user of
+register_sysctl_table(): drivers/parport/procfs.c
 
-1. On hardware with faulty MTE support. This was observed by Weizhao
-   Ouyang on a faulty hardware that caused memory tags to randomly change
-   from time to time.
+That one is also dynamic. Hopefully the maintainer will be motivated
+to do that conversion with all the examples out there now and this
+having a complex one.
 
-2. Theoretically, due to a previous MTE-undetected memory corruption.
+For more information refer to the new docs:
 
-A recursive report can happen via:
-
-1. Accessing a pointer with a non-reset tag in the reporting code, e.g.
-   slab->slab_cache, which is what Weizhao Ouyang observed.
-
-2. Theoretically, via external non-annotated routines, e.g. stackdepot.
-
-To resolve this issue, resetting tags for all of the pointers in the
-reporting code and all the used external routines would be impractical.
-
-Instead, disable tag checking done by the CPU for the duration of KASAN
-reporting for Hardware Tag-Based KASAN.
-
-Without this fix, Hardware Tag-Based KASAN reporting code might deadlock.
-
-Fixes: 2e903b914797 ("kasan, arm64: implement HW_TAGS runtime")
-Reported-by: Weizhao Ouyang <ouyangweizhao@zeku.com>
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-
----
-
-Considering that 1. the bug this patch fixes was only observed on faulty
-MTE hardware, and 2. the patch depends on the other patches in this series,
-I don't think it's worth backporting it into stable.
----
- mm/kasan/report.c | 59 ++++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 48 insertions(+), 11 deletions(-)
-
-diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-index 89078f912827..77a88d85c0a7 100644
---- a/mm/kasan/report.c
-+++ b/mm/kasan/report.c
-@@ -72,10 +72,18 @@ static int __init kasan_set_multi_shot(char *str)
- __setup("kasan_multi_shot", kasan_set_multi_shot);
+https://lore.kernel.org/all/20230310223947.3917711-1-mcgrof@kernel.org/T/#u     
  
- /*
-- * Used to suppress reports within kasan_disable/enable_current() critical
-- * sections, which are used for marking accesses to slab metadata.
-+ * This function is used to check whether KASAN reports are suppressed for
-+ * software KASAN modes via kasan_disable/enable_current() critical sections.
-+ *
-+ * This is done to avoid:
-+ * 1. False-positive reports when accessing slab metadata,
-+ * 2. Deadlocking when poisoned memory is accessed by the reporting code.
-+ *
-+ * Hardware Tag-Based KASAN instead relies on:
-+ * For #1: Resetting tags via kasan_reset_tag().
-+ * For #2: Supression of tag checks via CPU, see report_suppress_start/end().
-  */
--static bool report_suppressed(void)
-+static bool report_suppressed_sw(void)
- {
- #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
- 	if (current->kasan_depth)
-@@ -84,6 +92,30 @@ static bool report_suppressed(void)
- 	return false;
- }
- 
-+static void report_suppress_start(void)
-+{
-+#ifdef CONFIG_KASAN_HW_TAGS
-+	/*
-+	 * Disable migration for the duration of printing a KASAN report, as
-+	 * hw_suppress_tag_checks_start() disables checks on the current CPU.
-+	 */
-+	migrate_disable();
-+	hw_suppress_tag_checks_start();
-+#else
-+	kasan_disable_current();
-+#endif
-+}
-+
-+static void report_suppress_stop(void)
-+{
-+#ifdef CONFIG_KASAN_HW_TAGS
-+	hw_suppress_tag_checks_stop();
-+	migrate_enable();
-+#else
-+	kasan_enable_current();
-+#endif
-+}
-+
- /*
-  * Used to avoid reporting more than one KASAN bug unless kasan_multi_shot
-  * is enabled. Note that KASAN tests effectively enable kasan_multi_shot
-@@ -174,7 +206,7 @@ static void start_report(unsigned long *flags, bool sync)
- 	/* Do not allow LOCKDEP mangling KASAN reports. */
- 	lockdep_off();
- 	/* Make sure we don't end up in loop. */
--	kasan_disable_current();
-+	report_suppress_start();
- 	spin_lock_irqsave(&report_lock, *flags);
- 	pr_err("==================================================================\n");
- }
-@@ -192,7 +224,7 @@ static void end_report(unsigned long *flags, void *addr)
- 		panic("kasan.fault=panic set ...\n");
- 	add_taint(TAINT_BAD_PAGE, LOCKDEP_NOW_UNRELIABLE);
- 	lockdep_on();
--	kasan_enable_current();
-+	report_suppress_stop();
- }
- 
- static void print_error_description(struct kasan_report_info *info)
-@@ -480,9 +512,13 @@ void kasan_report_invalid_free(void *ptr, unsigned long ip, enum kasan_report_ty
- 	struct kasan_report_info info;
- 
- 	/*
--	 * Do not check report_suppressed(), as an invalid-free cannot be
--	 * caused by accessing slab metadata and thus should not be
--	 * suppressed by kasan_disable/enable_current() critical sections.
-+	 * Do not check report_suppressed_sw(), as an invalid-free cannot be
-+	 * caused by accessing poisoned memory and thus should not be suppressed
-+	 * by kasan_disable/enable_current() critical sections.
-+	 *
-+	 * Note that for Hardware Tag-Based KASAN, kasan_report_invalid_free()
-+	 * is triggered by explicit tag checks and not by the ones performed by
-+	 * the CPU. Thus, reporting invalid-free is not suppressed as well.
- 	 */
- 	if (unlikely(!report_enabled()))
- 		return;
-@@ -517,7 +553,7 @@ bool kasan_report(unsigned long addr, size_t size, bool is_write,
- 	unsigned long irq_flags;
- 	struct kasan_report_info info;
- 
--	if (unlikely(report_suppressed()) || unlikely(!report_enabled())) {
-+	if (unlikely(report_suppressed_sw()) || unlikely(!report_enabled())) {
- 		ret = false;
- 		goto out;
- 	}
-@@ -549,8 +585,9 @@ void kasan_report_async(void)
- 	unsigned long flags;
- 
- 	/*
--	 * Do not check report_suppressed(), as kasan_disable/enable_current()
--	 * critical sections do not affect Hardware Tag-Based KASAN.
-+	 * Do not check report_suppressed_sw(), as
-+	 * kasan_disable/enable_current() critical sections do not affect
-+	 * Hardware Tag-Based KASAN.
- 	 */
- 	if (unlikely(!report_enabled()))
- 		return;
+Luis Chamberlain (6):
+  s390: simplify one-level sysctl registration for topology_ctl_table
+  s390: simplify one-level syctl registration for s390dbf_table
+  s390: simplify one-level sysctl registration for appldata_table
+  s390: simplify one level sysctl registration for cmm_table
+  s390: simplify one-level sysctl registration for page_table_sysctl
+  s390: simplify dynamic sysctl registration for appldata_register_ops
+
+ arch/s390/appldata/appldata_base.c | 30 ++++++++----------------------
+ arch/s390/kernel/debug.c           | 12 +-----------
+ arch/s390/kernel/topology.c        | 12 +-----------
+ arch/s390/mm/cmm.c                 | 12 +-----------
+ arch/s390/mm/pgalloc.c             | 12 +-----------
+ 5 files changed, 12 insertions(+), 66 deletions(-)
+
 -- 
-2.25.1
+2.39.1
 
