@@ -2,252 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925A16B3A7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E95D26B3A7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbjCJJbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:31:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
+        id S230145AbjCJJbg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 04:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbjCJJbP (ORCPT
+        with ESMTP id S230344AbjCJJbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:31:15 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87ABF5F519;
-        Fri, 10 Mar 2023 01:28:37 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32A9SFVu042714;
-        Fri, 10 Mar 2023 03:28:15 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678440495;
-        bh=9mGwYUc0gIJIQm5CB34LSX5n3OOTqwceEq2LAFUAH1Y=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=AYI/O8v7Ze5oXkmeHzuFPUeRV7tAW08JMpal3oLVWv5xP9+XgkOG0NTNqcYNKQgud
-         Uex6A2hz8YHy2mGeWAJTTHIxRkmetv6mKbJ6UkN8/w7UDWehtlywPWOKNnqGXhCsMe
-         c0oMJz7jkv9hPikmItRYxilQIJnAghY3oXr84XT8=
-Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32A9SFw8026728
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 10 Mar 2023 03:28:15 -0600
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 10
- Mar 2023 03:28:14 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 10 Mar 2023 03:28:15 -0600
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32A9S4LI022476;
-        Fri, 10 Mar 2023 03:28:12 -0600
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH 2/2] arm64: dts: ti: k3-j721e: Add overlay to enable CPSW9G ports in QSGMII mode
-Date:   Fri, 10 Mar 2023 14:58:04 +0530
-Message-ID: <20230310092804.692303-3-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230310092804.692303-1-s-vadapalli@ti.com>
-References: <20230310092804.692303-1-s-vadapalli@ti.com>
+        Fri, 10 Mar 2023 04:31:14 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94F928218
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:28:34 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-159-vKUi8V-KMYKHbSDPHvzBqg-1; Fri, 10 Mar 2023 09:28:22 +0000
+X-MC-Unique: vKUi8V-KMYKHbSDPHvzBqg-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Fri, 10 Mar
+ 2023 09:28:19 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.047; Fri, 10 Mar 2023 09:28:19 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Jaegeuk Kim' <jaegeuk@kernel.org>
+CC:     'Chao Yu' <chao@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Zhiguo Niu <zhiguo.niu@unisoc.com>
+Subject: RE: [PATCH] f2fs: fix unaligned field offset in 32-bits platform
+Thread-Topic: [PATCH] f2fs: fix unaligned field offset in 32-bits platform
+Thread-Index: AQHZUQf4b45n81mohk6KYf6qmq4uP67wqZ1AgAJ5ZoCAAJUJQA==
+Date:   Fri, 10 Mar 2023 09:28:19 +0000
+Message-ID: <362576043b2f4c56a3ea112364d04fcd@AcuMS.aculab.com>
+References: <20230307151408.58490-1-chao@kernel.org>
+ <942fe8111fdb48e583b846f3e2902228@AcuMS.aculab.com>
+ <ZApxy2u9j3yKFRyS@google.com>
+In-Reply-To: <ZApxy2u9j3yKFRyS@google.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The J7 Quad Port Add-On Ethernet Card for J721E Common-Proc-Board supports
-QSGMII mode. Use the overlay to configure CPSW9G ports in QSGMII mode.
+From: Jaegeuk Kim
+> Sent: 09 March 2023 23:55
+> 
+> On 03/08, David Laight wrote:
+> > From: Chao Yu <chao@kernel.org>
+> > > Sent: 07 March 2023 15:14
+> > >
+> > > F2FS-fs (dm-x): inconsistent rbtree, cur(3470333575168) next(3320009719808)
+> > > ------------[ cut here ]------------
+> > > kernel BUG at fs/f2fs/gc.c:602!
+> > > Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
+> > > PC is at get_victim_by_default+0x13c0/0x1498
+> > > LR is at f2fs_check_rb_tree_consistence+0xc4/0xd4
+> > > ....
+> > > [<c04d98b0>] (get_victim_by_default) from [<c04d4f44>] (f2fs_gc+0x220/0x6cc)
+> > > [<c04d4f44>] (f2fs_gc) from [<c04d4780>] (gc_thread_func+0x2ac/0x708)
+> > > [<c04d4780>] (gc_thread_func) from [<c015c774>] (kthread+0x1a8/0x1b4)
+> > > [<c015c774>] (kthread) from [<c01010b4>] (ret_from_fork+0x14/0x20)
+> > >
+> > > The reason is there is __packed attribute in struct rb_entry, but there
+> > > is no __packed attribute in struct victim_entry, so wrong offset of key
+> > > field will be parsed in struct rb_entry in f2fs_check_rb_tree_consistence,
+> > > it describes memory layouts of struct rb_entry and struct victim_entry in
+> > > 32-bits platform as below:
+> > >
+> > > struct rb_entry {
+> > >    [0] struct rb_node rb_node;
+> > >        union {
+> > >            struct {...};
+> > >   [12]     unsigned long long key;
+> > >        } __packed;
+> >
+> > This __packed removes the 4-byte pad before the union.
+> > I bet it should be removed...
+> 
+> struct rb_node {
+>         unsigned long  __rb_parent_color;
+>         struct rb_node *rb_right;
+>         struct rb_node *rb_left;
+> } __attribute__((aligned(sizeof(long))));
+> 
+> Hmm, isn't this aligned to 32bits originally? Why does 32bits pad 4-bytes
+> if we remove __packed?
 
-Add support to reset the PHY from kernel by using gpio-hog and gpio-reset.
+That attribute is entirely pointless.
+IIRC It is a request to increase the alignment to that of long.
+It wouldn't have any effect even if 'packed' was also specified.
+(Unless you are building for 64-bit windows.)
 
-Add aliases for CPSW9G ports to enable kernel to fetch MAC addresses
-directly from U-Boot.
+The 'issue' is that on arm32 (unlike x86) 'long long' has
+64bit alignment.
+So without the __packed on the union there is a 4 byte hole
+before the union.
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- arch/arm64/boot/dts/ti/Makefile               |   4 +
- .../dts/ti/k3-j721e-quad-port-eth-exp.dtso    | 148 ++++++++++++++++++
- 2 files changed, 152 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-quad-port-eth-exp.dtso
+...
+> IIUC, the problem comes since we access the same object with two structures
+> to handle rb_tree.
+> 
+> E.g.,
+> 
+> [struct extent_node]                   [struct rb_entry]
+> struct rb_node rb_node;                struct rb_node rb_node;
+>                                        union {
+> struct extent_info ei;                   struct {
+>   unsigned int fofs;                       unsigned int ofs;
+>   unsigned int len;                        unsigned int len;
+>                                          };
+>                                          unsigned long long key;
+>                                        } __packed;
+> 
+> So, I think if we get a different offset of fofs or ofs between in
+> extent_node and rb_entry, further work'll access a wrong memory since
+> we simply cast the object pointer between two.
 
-diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index 6acd12409d59..167bcd9b09b7 100644
---- a/arch/arm64/boot/dts/ti/Makefile
-+++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -45,3 +45,7 @@ dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
- 
- # Enable support for device-tree overlays
- DTC_FLAGS_k3-am6548-iot2050-advanced-m2 += -@
-+DTC_FLAGS_k3-j721e-common-proc-board += -@
-+
-+# Device-tree overlays
-+dtb-$(CONFIG_ARCH_K3) += k3-j721e-quad-port-eth-exp.dtbo
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-quad-port-eth-exp.dtso b/arch/arm64/boot/dts/ti/k3-j721e-quad-port-eth-exp.dtso
-new file mode 100644
-index 000000000000..c63e1454614e
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-quad-port-eth-exp.dtso
-@@ -0,0 +1,148 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/**
-+ * DT Overlay for CPSW9G in QSGMII mode using J7 Quad Port ETH EXP Add-On Ethernet Card with
-+ * J721E board.
-+ *
-+ * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/mux/ti-serdes.h>
-+#include <dt-bindings/pinctrl/k3.h>
-+#include <dt-bindings/phy/phy.h>
-+#include <dt-bindings/phy/phy-cadence.h>
-+
-+/ {
-+	fragment@102 {
-+		target-path = "/";
-+		__overlay__ {
-+			aliases {
-+				ethernet1 = "/bus@100000/ethernet@c000000/ethernet-ports/port@1";
-+				ethernet2 = "/bus@100000/ethernet@c000000/ethernet-ports/port@2";
-+				ethernet3 = "/bus@100000/ethernet@c000000/ethernet-ports/port@3";
-+				ethernet4 = "/bus@100000/ethernet@c000000/ethernet-ports/port@4";
-+			};
-+		};
-+	};
-+};
-+
-+&cpsw0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mdio_pins_default>;
-+};
-+
-+&cpsw0_port1 {
-+	phy-handle = <&cpsw9g_phy0>;
-+	phy-mode = "qsgmii";
-+	mac-address = [00 00 00 00 00 00];
-+	phys = <&cpsw0_phy_gmii_sel 1>;
-+};
-+
-+&cpsw0_port2 {
-+	phy-handle = <&cpsw9g_phy1>;
-+	phy-mode = "qsgmii";
-+	mac-address = [00 00 00 00 00 00];
-+	phys = <&cpsw0_phy_gmii_sel 2>;
-+};
-+
-+&cpsw0_port3 {
-+	phy-handle = <&cpsw9g_phy2>;
-+	phy-mode = "qsgmii";
-+	mac-address = [00 00 00 00 00 00];
-+	phys = <&cpsw0_phy_gmii_sel 3>;
-+};
-+
-+&cpsw0_port4 {
-+	phy-handle = <&cpsw9g_phy3>;
-+	phy-mode = "qsgmii";
-+	mac-address = [00 00 00 00 00 00];
-+	phys = <&cpsw0_phy_gmii_sel 4>;
-+};
-+
-+&cpsw0_port5 {
-+	status = "disabled";
-+};
-+
-+&cpsw0_port6 {
-+	status = "disabled";
-+};
-+
-+&cpsw0_port7 {
-+	status = "disabled";
-+};
-+
-+&cpsw0_port8 {
-+	status = "disabled";
-+};
-+
-+&cpsw9g_mdio {
-+	reset-gpios = <&exp2 17 GPIO_ACTIVE_LOW>;
-+	reset-post-delay-us = <120000>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	cpsw9g_phy0: ethernet-phy@17 {
-+		reg = <17>;
-+	};
-+	cpsw9g_phy1: ethernet-phy@16 {
-+		reg = <16>;
-+	};
-+	cpsw9g_phy2: ethernet-phy@18 {
-+		reg = <18>;
-+	};
-+	cpsw9g_phy3: ethernet-phy@19 {
-+		reg = <19>;
-+	};
-+};
-+
-+&exp2 {
-+	qsgmii-line-hog {
-+		gpio-hog;
-+		gpios = <16 GPIO_ACTIVE_HIGH>;
-+		output-low;
-+		line-name = "qsgmii-pwrdn-line";
-+	};
-+};
-+
-+&main_pmx0 {
-+	mdio_pins_default: mdio_pins_default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x1bc, PIN_OUTPUT, 0) /* (V24) MDIO0_MDC */
-+			J721E_IOPAD(0x1b8, PIN_INPUT, 0) /* (V26) MDIO0_MDIO */
-+		>;
-+	};
-+};
-+
-+&serdes_ln_ctrl {
-+	idle-states = <J721E_SERDES0_LANE0_PCIE0_LANE0>, <J721E_SERDES0_LANE1_QSGMII_LANE2>,
-+		      <J721E_SERDES1_LANE0_PCIE1_LANE0>, <J721E_SERDES1_LANE1_PCIE1_LANE1>,
-+		      <J721E_SERDES2_LANE0_PCIE2_LANE0>, <J721E_SERDES2_LANE1_PCIE2_LANE1>,
-+		      <J721E_SERDES3_LANE0_USB3_0_SWAP>, <J721E_SERDES3_LANE1_USB3_0>,
-+		      <J721E_SERDES4_LANE0_EDP_LANE0>, <J721E_SERDES4_LANE1_EDP_LANE1>,
-+		      <J721E_SERDES4_LANE2_EDP_LANE2>, <J721E_SERDES4_LANE3_EDP_LANE3>;
-+};
-+
-+&serdes_wiz0 {
-+	status = "okay";
-+};
-+
-+&serdes0 {
-+	status = "okay";
-+
-+	assigned-clocks = <&serdes0 CDNS_SIERRA_PLL_CMNLC>, <&serdes0 CDNS_SIERRA_PLL_CMNLC1>;
-+	assigned-clock-parents = <&wiz0_pll1_refclk>, <&wiz0_pll1_refclk>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	serdes0_qsgmii_link: phy@1 {
-+		reg = <1>;
-+		cdns,num-lanes = <1>;
-+		#phy-cells = <0>;
-+		cdns,phy-type = <PHY_TYPE_QSGMII>;
-+		resets = <&serdes_wiz0 2>;
-+	};
-+};
--- 
-2.25.1
+That example actually happens to work.
+But replace 'unsigned int' with 'long long' and it all fails.
+
+That is horribly broken (by design).
+You can't do that and expect it to work at all.
+This is another case where you don't want __packed, but to
+request a compilation error if padding was added.
+
+The safest 'fix' (it is still broken by design) is to change the
+alignment of rb_node to be that of 'long long' and remove the
+__packed from the union.
+That adds a 4 byte pad to rb_node on some, but not all, 32bit
+architectures.
+Then all the code that used the above pattern is (probably) ok.
+
+You can use (if I've spelt them right) aligned(Alignof(long long))
+but not aligned(__alignof(long long)) because the latter returns
+the preferred alignment not the actual alignment (8 not 4 on x86).
+I think Alignof() is ok for current kernels, but not for anything
+that might get backported to stable.
+You can use __alignof(struct {long long x;}).
+
+Actually this should also work:
+struct rb_node {
+    union {
+        long long alignment;
+        struct {
+            unsigned long  __rb_parent_color;
+            struct rb_node *rb_right;
+            struct rb_node *rb_left;
+        }
+    }
+};
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
