@@ -2,122 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58B76B3851
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE706B3857
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbjCJIPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 03:15:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
+        id S229994AbjCJISB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:18:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbjCJIOz (ORCPT
+        with ESMTP id S229471AbjCJIR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:14:55 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAE64C6F5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:14:51 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-536af432ee5so84479967b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:14:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678436090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=quyZEe5f9jO8KHwGwidAcKdKAq7OwgEj9SHFvyGmlZM=;
-        b=Xz0I6e3/LJ+Lvtl+mKQOAS8yqInF8ZVaGOXpCLhNKcTzLKSlpWsOv0VEUV904Fu2Na
-         +9A9pGlvxI7QVFYtmKKzM6zJvyU/OvN4b4AgPCCXGFTKagrmgS5ZX9VtQAHafqBxGC6m
-         Eq+llrzRCUIwZLjEDh0TDX+4GFXgVT0pFUHmGANZJZ4RWQImFVpWbTBQIxQnCxbduSEp
-         DOThgSu4tTiGbqDTZTrSz73IR46mvjGnqF8u8lCX2TyneUEkARXtWV0c4hQwYhagD2T6
-         s1pARgBUkdpxocdhAEHK1Lt7iH0sQ+LLaf/zWu8DCwBqOqVIgx7QnMe532eqyhHcCUGD
-         RZCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678436090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=quyZEe5f9jO8KHwGwidAcKdKAq7OwgEj9SHFvyGmlZM=;
-        b=KHc3cjfZFiXQF3oY3ai8QG4HXkOTlEdyXmVISAqrPfEwgONY3iOzWHG9Z2raFr+Vo6
-         ccp/nDa4Ltc0/i75H3sR44WMHs+EaQ5hxXMwalLCiYpjIpqFlUj2oMbDD8V4oERQ3yGP
-         nFrIW6JHQkNeRTSK1J+vuWKL8mSpML93+B3pypHn3dgP3gAhpXyuoqJLj2mhp+ZpbdWJ
-         P4joGFe0dkpFfSWmhEXSXQSYE/1x01lW441VZzvtl/Ao4uowoI5y+vYLIsJNkgNRf9t2
-         Brd5VleGuyD+1pPEYvnpMOE7YPky2ZkKLI/gRR9TD5spdAOVErJjHqbvoWjeMjvY0uK3
-         kTDA==
-X-Gm-Message-State: AO0yUKXX1VkywMuYe+8SqUPynYYfWrdc2XQ/3Qsb6rZOcS0k5IKnsmGg
-        Q5Q7IINJCcONS13mglAavYWsZr4VJFV6cl4ED8UKCw==
-X-Google-Smtp-Source: AK7set//fuO9ytX567HKWcNCadQ41YDeuUs8D1KGFn4aNeWpTp2CgUPag3nEjA34y+PObgUwSM88FqO9+8UaF4aug+g=
-X-Received: by 2002:a81:b61a:0:b0:52e:cea7:f6e3 with SMTP id
- u26-20020a81b61a000000b0052ecea7f6e3mr15413943ywh.10.1678436090623; Fri, 10
- Mar 2023 00:14:50 -0800 (PST)
+        Fri, 10 Mar 2023 03:17:57 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BC010C1;
+        Fri, 10 Mar 2023 00:17:55 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PXzSb0FQ0z4f3jJ2;
+        Fri, 10 Mar 2023 16:17:51 +0800 (CST)
+Received: from [10.174.178.129] (unknown [10.174.178.129])
+        by APP4 (Coremail) with SMTP id gCh0CgC3Z6uR5wpkmoVgFA--.35999S2;
+        Fri, 10 Mar 2023 16:17:52 +0800 (CST)
+Subject: Re: [PATCH v3 00/20] Some bugfix and cleanup to mballoc
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, ojaswin@linux.ibm.com,
+        ritesh.list@gmail.com
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230303172120.3800725-1-shikemeng@huaweicloud.com>
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+Message-ID: <5e5691cd-3308-be3b-91d5-9fa1ab9ec98d@huaweicloud.com>
+Date:   Fri, 10 Mar 2023 16:17:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
 MIME-Version: 1.0
-References: <20230309225041.477440-1-sre@kernel.org> <20230309225041.477440-2-sre@kernel.org>
-In-Reply-To: <20230309225041.477440-2-sre@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 10 Mar 2023 09:14:39 +0100
-Message-ID: <CACRpkdYWP7Fc3yho5nDB3qU6rt5o4p2Zcz_RxOvOfsAwjXgqXw@mail.gmail.com>
-Subject: Re: [PATCHv1 01/11] dt-bindings: power: supply: adc-battery: add binding
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230303172120.3800725-1-shikemeng@huaweicloud.com>
+Content-Type: text/plain; charset=gbk
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: gCh0CgC3Z6uR5wpkmoVgFA--.35999S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXry8GrWrJr47Xw1kWr1rJFb_yoW5CF48pF
+        43CrnxK34xXr12yFZIkw45Jw1fW3y8Gw45GFyIg348Ar13Ar9aqrnrKF95uFWUJrZ7X3Zx
+        ZayavryUGw1kAa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
 
-thanks for your patches!
 
-On Thu, Mar 9, 2023 at 11:50=E2=80=AFPM Sebastian Reichel <sre@kernel.org> =
-wrote:
+on 3/4/2023 1:21 AM, Kemeng Shi wrote:
+> Hi, this series contain some random cleanup patches and some bugfix
+> patches to make EXT4_MB_HINT_GOAL_ONLY work properly, protect pa->pa_free
+> from race and so on. More details can be found in git log.
+> Thanks!
+> 
+> ---
+> V3:
+> -patch 01/20 "ext4: set goal start correctly in
+> ext4_mb_normalize_request" correctly record goal in ac_g_ex instead of
+> ac_f_ex, this also trigger another original bug that wanted goal maybe
+> out of valid data block range. Add valid range check in patch 01/20
+> to fully fix the bug.
+> -run "kvm-xfstests smoke" and all tests are passed except generic/454.
+> This test also failed in running kernel without this patchset, so
+> it's unlikely caused by this patchset. I'm trying to figure out the
+> reason but it may take a while as I'm not family with kvm-xfstests.
+> Just send this series for early review and maybe some help to pass
+> the failed test case.
+I re-run "kvm-xfstests smoke" with newly root_fs.img and all tests pass.
+It may be the early test which triggerred bug and corruptted the metadata
+casues failure.
+> ---
+> V2:
+> -Add signed-off from Ritesh and Ojaswin to patch 3/20 "ext4: get correct
+> ext4_group_info in ext4_mb_prefetch_fini" as this is a duplicate of
+> a patch under reviewing.
+> -Split out original patch "ext4: avoid to use preallocated blocks if
+> EXT4_MB_HINT_GOAL_ONLY is set" which will be resend after improved.
+> -Improve log information of patch 20.
+> -Collect Reviewed-by from Ojaswin and Ritesh. Now only patch 3, 12 and
+> 20 need futher review.
+> ---
+> 
+> 
+> Kemeng Shi (20):
+>   ext4: set goal start correctly in ext4_mb_normalize_request
+>   ext4: allow to find by goal if EXT4_MB_HINT_GOAL_ONLY is set
+>   ext4: get correct ext4_group_info in ext4_mb_prefetch_fini
+>   ext4: correct calculation of s_mb_preallocated
+>   ext4: correct start of used group pa for debug in ext4_mb_use_group_pa
+>   ext4: protect pa->pa_free in ext4_discard_allocated_blocks
+>   ext4: add missed brelse in ext4_free_blocks_simple
+>   ext4: remove unused return value of ext4_mb_try_best_found and
+>     ext4_mb_free_metadata
+>   ext4: Remove unnecessary release when memory allocation failed in
+>     ext4_mb_init_cache
+>   ext4: remove unnecessary e4b->bd_buddy_page check in
+>     ext4_mb_load_buddy_gfp
+>   ext4: remove unnecessary check in ext4_mb_new_blocks
+>   ext4: remove dead check in mb_buddy_mark_free
+>   ext4: remove ac->ac_found > sbi->s_mb_min_to_scan dead check in
+>     ext4_mb_check_limits
+>   ext4: use best found when complex scan of group finishs
+>   ext4: remove unnecessary exit_meta_group_info tag
+>   ext4: remove unnecessary count2 in ext4_free_data_in_buddy
+>   ext4: remove unnecessary goto in ext4_mb_mark_diskspace_used
+>   ext4: remove repeat assignment to ac_f_ex
+>   ext4: remove comment code ext4_discard_preallocations
+>   ext4: simplify calculation of blkoff in ext4_mb_new_blocks_simple
+> 
+>  fs/ext4/mballoc.c | 111 ++++++++++++++++++----------------------------
+>  1 file changed, 43 insertions(+), 68 deletions(-)
+> 
 
-> Add binding for a battery that is only monitored via ADC
-> channels and simple status GPIOs.
->
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
+-- 
+Best wishes
+Kemeng Shi
 
-This does look very useful.
-
-> +title: ADC battery
-> +
-> +maintainers:
-> +  - Sebastian Reichel <sre@kernel.org>
-> +
-> +description: |
-> +  Basic Battery, which only reports (in circuit) voltage and optionally
-> +  current via an ADC channel.
-
-I would over-specify: "voltage over the terminals" and
-"current out of the battery" so this cannot be misunderstood.
-
-+ this text:
-
-It can also optionally indicate that the battery is full by pulling a GPIO
-line.
-
-> +  charged-gpios:
-> +    description:
-> +      GPIO which signals that the battery is fully charged.
-
-It doesn't say how, I guess either this is an analog circuit (!) or
-a charger IC? If it doesn't matter, no big deal, but if something is
-implicit here, then spell it out please.
-
-> +    fuel-gauge {
-
-This techno-lingo/slang term is a bit unfortunate, but if there are
-precedents then stick with it.
-
-The correct term could be something like battery-capacity-meter
-I suppose.
-
-Yours,
-Linus Walleij
