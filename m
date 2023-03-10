@@ -2,140 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E74D6B426E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BC06B4272
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:03:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbjCJODZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53204 "EHLO
+        id S231493AbjCJOD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:03:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjCJODB (ORCPT
+        with ESMTP id S231616AbjCJODG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:03:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF2B11662;
+        Fri, 10 Mar 2023 09:03:06 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A87993F8;
         Fri, 10 Mar 2023 06:02:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90F8560D29;
-        Fri, 10 Mar 2023 14:02:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC3FC433D2;
-        Fri, 10 Mar 2023 14:02:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678456977;
-        bh=WjooVdQedLpfOgQ4iFgnnbV+ow3gmPYiNVq5gRK7Yro=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YmAxEQiF4Pg54qMNwsu3AdcvJDybkkhW/B1p8+EUuKUWaHLbDHDOUR8IZjTwetYaz
-         ahvKpxeE0zBFYNwBRR0X3OeH+YREh5Bzn4foV6HI8GvyfKzW4gGyqMPiPMhdZaRcLG
-         TMY1KNNHrl+y5etDnoroP8SfQJ6Eol0xFko91DIxR+K3ynW020TH8Bm8OdXhcoJNrs
-         6WhuXsenjtOCAjRwqi0HTFhSv/SMGqdwScaC0C8zYBdhLZUqRqnHc+ZG6rNl0yPmVq
-         4OLyQCPQHIg11mcHNNxyx5AOQAYGxLC1kqXmxtdUsyeNHH2dJctu20eSlFlEa12wrR
-         pgt74f7fOQ3iA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Chester Lin <clin@suse.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Phu Luu An <phu.luuan@nxp.com>,
-        Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>,
-        Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>,
-        Andrei Stefanescu <andrei.stefanescu@nxp.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, NXP S32 Linux Team <s32@nxp.com>,
-        Matthew Nunez <matthew.nunez@nxp.com>,
-        Radu Pirea <radu-nicolae.pirea@nxp.com>,
-        Larisa Grigore <larisa.grigore@nxp.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] pinctrl: s32cc: fix !CONFIG_PM_SLEEP build error
-Date:   Fri, 10 Mar 2023 15:02:35 +0100
-Message-Id: <20230310140250.359147-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=32YGKG3ZrlhBGDQG6eI/L9mbKOd387mZfJEcK12WmaY=; b=meAwlmeZzy/oqHwZsp/bzke2JP
+        tAla67x+tTCnPp5qJSQ8iWYfKGvd1GYqCbXyl/5j+y/fBW6GQktPpyj2v0aMaEqgvRyE8EN9f/EWG
+        9unCk+8rBLIQkfV5SKgYxMhR50muNLswJkLhkyNKSv7aPYHtGc9EQgjzU9uIlbrCwPmBAwiIOy13N
+        /ktFNIRW8NWoTDdXrE692RDVs6Q3+iF7G756TkP411KynuYqjPLXPMldsTbz1f4EedLZQLHbSo5yk
+        ARDLy7qhoE+e+WabbL7OQ4uYQX3Yp240THSvuGzPMA91z87WhytgZddz2rJ+pVB9JfUUupkUvJPgB
+        gno8gU3g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1padKZ-00Eg1r-Rk; Fri, 10 Mar 2023 14:02:47 +0000
+Date:   Fri, 10 Mar 2023 06:02:47 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com, bvanassche@acm.org,
+        hch@infradead.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] scsi: support packing multi-segment in UNMAP command
+Message-ID: <ZAs4h2Mu90u4gc3/@infradead.org>
+References: <20230310123604.1820231-1-chao@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310123604.1820231-1-chao@kernel.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+> -	/* If command type is WRITE or DISCARD, set bitmap as dirty */
+> -	if (ufshpb_is_write_or_discard(cmd)) {
+> +	/* If command type is WRITE, set bitmap as dirty */
+> +	if (op_is_write(req_op(scsi_cmd_to_rq(cmd)))) {
 
-The declaration of s32_pinctrl_suspend/s32_pinctrl_resume is hidden
-in an #ifdef, causing a compilation failure when CONFIG_PM_SLEEP is
-disabled:
-
-drivers/pinctrl/nxp/pinctrl-s32g2.c:754:38: error: 's32_pinctrl_suspend' undeclared here (not in a function); did you mean 's32_pinctrl_probe'?
-drivers/pinctrl/nxp/pinctrl-s32g2.c:754:9: note: in expansion of macro 'SET_LATE_SYSTEM_SLEEP_PM_OPS'
-  754 |         SET_LATE_SYSTEM_SLEEP_PM_OPS(s32_pinctrl_suspend,
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Remove the bogus #ifdef and __maybe_unused annation on the global
-functions, and instead use the proper LATE_SYSTEM_SLEEP_PM_OPS()
-macro to pick set the function pointer.
-
-As the function definition is still in the #ifdef block, this leads
-to the correct code in all configurations.
-
-Fixes: fd84aaa8173d ("pinctrl: add NXP S32 SoC family support")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/pinctrl/nxp/pinctrl-s32.h   | 6 ++----
- drivers/pinctrl/nxp/pinctrl-s32cc.c | 4 ++--
- drivers/pinctrl/nxp/pinctrl-s32g2.c | 3 +--
- 3 files changed, 5 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/pinctrl/nxp/pinctrl-s32.h b/drivers/pinctrl/nxp/pinctrl-s32.h
-index b6d530a62051..545bf16b988d 100644
---- a/drivers/pinctrl/nxp/pinctrl-s32.h
-+++ b/drivers/pinctrl/nxp/pinctrl-s32.h
-@@ -68,8 +68,6 @@ struct s32_pinctrl_soc_info {
- 
- int s32_pinctrl_probe(struct platform_device *pdev,
- 			struct s32_pinctrl_soc_info *info);
--#ifdef CONFIG_PM_SLEEP
--int __maybe_unused s32_pinctrl_resume(struct device *dev);
--int __maybe_unused s32_pinctrl_suspend(struct device *dev);
--#endif
-+int s32_pinctrl_resume(struct device *dev);
-+int s32_pinctrl_suspend(struct device *dev);
- #endif /* __DRIVERS_PINCTRL_S32_H */
-diff --git a/drivers/pinctrl/nxp/pinctrl-s32cc.c b/drivers/pinctrl/nxp/pinctrl-s32cc.c
-index 2c945523af80..e1da332433a3 100644
---- a/drivers/pinctrl/nxp/pinctrl-s32cc.c
-+++ b/drivers/pinctrl/nxp/pinctrl-s32cc.c
-@@ -658,7 +658,7 @@ static bool s32_pinctrl_should_save(struct s32_pinctrl *ipctl,
- 	return false;
- }
- 
--int __maybe_unused s32_pinctrl_suspend(struct device *dev)
-+int s32_pinctrl_suspend(struct device *dev)
- {
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct s32_pinctrl *ipctl = platform_get_drvdata(pdev);
-@@ -685,7 +685,7 @@ int __maybe_unused s32_pinctrl_suspend(struct device *dev)
- 	return 0;
- }
- 
--int __maybe_unused s32_pinctrl_resume(struct device *dev)
-+int s32_pinctrl_resume(struct device *dev)
- {
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct s32_pinctrl *ipctl = platform_get_drvdata(pdev);
-diff --git a/drivers/pinctrl/nxp/pinctrl-s32g2.c b/drivers/pinctrl/nxp/pinctrl-s32g2.c
-index 7dd0b4f8904d..5028f4adc389 100644
---- a/drivers/pinctrl/nxp/pinctrl-s32g2.c
-+++ b/drivers/pinctrl/nxp/pinctrl-s32g2.c
-@@ -751,8 +751,7 @@ static int s32g_pinctrl_probe(struct platform_device *pdev)
- }
- 
- static const struct dev_pm_ops s32g_pinctrl_pm_ops = {
--	SET_LATE_SYSTEM_SLEEP_PM_OPS(s32_pinctrl_suspend,
--				     s32_pinctrl_resume)
-+	LATE_SYSTEM_SLEEP_PM_OPS(s32_pinctrl_suspend, s32_pinctrl_resume)
- };
- 
- static struct platform_driver s32g_pinctrl_driver = {
--- 
-2.39.2
-
+Umm, a driver has absolutely no business poking into the UNMAP
+payload.   Someone needs to fix the UFS driver first to not do this.
