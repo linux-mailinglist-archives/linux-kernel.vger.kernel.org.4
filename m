@@ -2,198 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4976E6B341A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A3D6B3477
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCJCPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 21:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
+        id S229956AbjCJDDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 22:03:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbjCJCOx (ORCPT
+        with ESMTP id S229459AbjCJDDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 21:14:53 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B2D1009ED
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 18:14:51 -0800 (PST)
-Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PXqMG2kjBzKpx9;
-        Fri, 10 Mar 2023 10:12:42 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpemm500016.china.huawei.com
- (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 10 Mar
- 2023 10:14:48 +0800
-From:   Yipeng Zou <zouyipeng@huawei.com>
-To:     <tglx@linutronix.de>, <maz@kernel.org>, <samuel@sholland.org>,
-        <oleksandr_tyshchenko@epam.com>, <andy.shevchenko@gmail.com>,
-        <apatel@ventanamicro.com>, <lvjianmin@loongson.cn>,
-        <jason@lakedaemon.net>, <linux-kernel@vger.kernel.org>
-CC:     <chris.zjh@huawei.com>, <liaochang1@huawei.com>
-Subject: [RFC PATCH] genirq: introduce handle_fasteoi_edge_irq flow handler
-Date:   Fri, 10 Mar 2023 10:14:17 +0000
-Message-ID: <20230310101417.1081434-1-zouyipeng@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 9 Mar 2023 22:03:21 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5584FA89;
+        Thu,  9 Mar 2023 19:03:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678417399; x=1709953399;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BZeZah513qL1E60hYmDDjs4gL8qSH8hxv+hHhbWYBmc=;
+  b=jHBR1NH/t6yCORPRAM3YrJXZLLfBmJ0Q+6iu0wbnlMmx9Q5qIrLI4PRb
+   rUffhRcf67NB5U7MltZUetpCygUwGlNb7lOG5fUgOYva/HTHrhL5julYM
+   r7OG+0bi+6JZZ2k1hPoJ7UiizoDrMdFupA5Sxpr1rwIIP34uS2JCbdaZT
+   TffY8s0HcXebEDhVvPEoPV9xrGQr+yRYhR+yY2FrEfrVKkFCsG0Jll+EM
+   CiNcB6QYMLzrVMXSrmPMgh2EU1xrDUBLL5A9s+IXcDoiG4zTFy25/XboB
+   62xv5NbC6LJfoDTQvmXL52dcsmjcPu4v3Kqu7F1mAIf1oduh4ppvUDtZl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="422900437"
+X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
+   d="scan'208";a="422900437"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 19:03:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="707855481"
+X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
+   d="scan'208";a="707855481"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga008.jf.intel.com with ESMTP; 09 Mar 2023 19:03:12 -0800
+Message-ID: <a388e79e-2547-a1f3-9e7f-4959c9ccb4e1@linux.intel.com>
+Date:   Fri, 10 Mar 2023 11:02:12 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 06/12] iommufd: IOMMU_HWPT_ALLOC allocation with user data
+Content-Language: en-US
+To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
+        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
+        robin.murphy@arm.com
+References: <20230309080910.607396-1-yi.l.liu@intel.com>
+ <20230309080910.607396-7-yi.l.liu@intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230309080910.607396-7-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recently, We have a LPI migration issue on the ARM SMP platform.
+On 3/9/23 4:09 PM, Yi Liu wrote:
+> IOMMU_HWPT_ALLOC already supports iommu_domain allocation for usersapce.
+> But it can only allocate hw_pagetables linked with IOAS. There are needs
+> to support hw_pagetable allocation with parameters specified by user. For
+> example, in nested translation, user needs to allocate hw_pagetable for
+> the stage-1 translation (e.g. a single I/O page table or a set of I/O page
+> tables) with user data. It also needs provide a stage-2 hw_pagetable which
+> is linked to the GPA IOAS.
+> 
+> This extends IOMMU_HWPT_ALLOC to accept user specified parameter and hwpt
+> ID in @pt_id field. Such as the user-managed stage-1 hwpt, which requires
+> a parent hwpt to point to stage-2 translation.
+> 
+> enum iommu_hwpt_type is defined to differentiate the user parameters use
+> by different usages. For the allocations that don't require user parameter,
+> IOMMU_HWPT_TYPE_DEFAULT is defined for backward compatibility. Other types
+> would be added by future iommu vendor driver extensions.
+> 
+> Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> ---
+>   drivers/iommu/iommufd/hw_pagetable.c | 94 +++++++++++++++++++++++++---
+>   drivers/iommu/iommufd/main.c         |  2 +-
+>   include/uapi/linux/iommufd.h         | 30 +++++++++
+>   3 files changed, 115 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
+> index 6e45ec0a66fa..64e7cf7142e1 100644
+> --- a/drivers/iommu/iommufd/hw_pagetable.c
+> +++ b/drivers/iommu/iommufd/hw_pagetable.c
+> @@ -165,34 +165,106 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+>   	return ERR_PTR(rc);
+>   }
+>   
+> +/*
+> + * size of page table type specific data, indexed by
+> + * enum iommu_hwpt_type.
+> + */
+> +static const size_t iommufd_hwpt_alloc_data_size[] = {
+> +	[IOMMU_HWPT_TYPE_DEFAULT] = 0,
+> +};
+> +
+>   int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
+>   {
+>   	struct iommu_hwpt_alloc *cmd = ucmd->cmd;
+> -	struct iommufd_hw_pagetable *hwpt;
+> +	struct iommufd_hw_pagetable *hwpt, *parent = NULL;
+> +	struct iommufd_object *pt_obj;
+>   	struct iommufd_device *idev;
+>   	struct iommufd_ioas *ioas;
+> +	const struct iommu_ops *ops;
+> +	void *data = NULL;
+> +	u32 klen;
+>   	int rc;
 
-For example, NIC device generates MSI and sends LPI to CPU0 via ITS,
-meanwhile irqbalance running on CPU1 set irq affinity of NIC to CPU1,
-the next interrupt will be sent to CPU2, due to the state of irq is
-still in progress, kernel does not end up performing irq handler on
-CPU2, which results in some userland service timeouts, the sequence
-of events is shown as follows:
+Reverse Christmas tree format. Ditto to other places in this file.
 
-NIC                     CPU0                    CPU1
+>   
+> -	if (cmd->flags)
+> +	if (cmd->__reserved || cmd->flags)
+>   		return -EOPNOTSUPP;
+>   
+>   	idev = iommufd_get_device(ucmd, cmd->dev_id);
+>   	if (IS_ERR(idev))
+>   		return PTR_ERR(idev);
+>   
+> -	ioas = iommufd_get_ioas(ucmd, cmd->pt_id);
+> -	if (IS_ERR(ioas)) {
+> -		rc = PTR_ERR(ioas);
+> +	ops = dev_iommu_ops(idev->dev);
+> +	if (!ops) {
+> +		rc = -EOPNOTSUPP;
+>   		goto out_put_idev;
+>   	}
 
-Generate IRQ#1          READ_IAR
-                        Lock irq_desc
-                        Set IRQD_IN_PROGRESS
-                        Unlock irq_desc
-                                                Lock irq_desc
-                                                Change LPI Affinity
-                                                Unlock irq_desc
-                        Call irq_handler
-Generate IRQ#2
-                                                READ_IAR
-                                                Lock irq_desc
-                                                Check IRQD_IN_PROGRESS
-                                                Unlock irq_desc
-                                                Return from interrupt#2
-                        Lock irq_desc
-                        Clear IRQD_IN_PROGRESS
-                        Unlock irq_desc
-                        return from interrupt#1
+No need to check. dev_iommu_ops() will never returns a NULL.
 
-For this scenario, The IRQ#2 will be lost. This does cause some exceptions.
+>   
+> +	/* Only support IOMMU_HWPT_TYPE_DEFAULT for now */
+> +	if (cmd->data_type != IOMMU_HWPT_TYPE_DEFAULT) {
+> +		rc = -EINVAL;
+> +		goto out_put_idev;
+> +	}
+> +
+> +	pt_obj = iommufd_get_object(ucmd->ictx, cmd->pt_id, IOMMUFD_OBJ_ANY);
+> +	if (IS_ERR(pt_obj)) {
+> +		rc = -EINVAL;
+> +		goto out_put_idev;
+> +	}
+> +
+> +	switch (pt_obj->type) {
+> +	case IOMMUFD_OBJ_IOAS:
+> +		ioas = container_of(pt_obj, struct iommufd_ioas, obj);
+> +		break;
+> +	case IOMMUFD_OBJ_HW_PAGETABLE:
+> +		/* pt_id points HWPT only when data_type is !IOMMU_HWPT_TYPE_DEFAULT */
+> +		if (cmd->data_type == IOMMU_HWPT_TYPE_DEFAULT) {
+> +			rc = -EINVAL;
+> +			goto out_put_pt;
+> +		}
+> +
+> +		parent = container_of(pt_obj, struct iommufd_hw_pagetable, obj);
+> +		/*
+> +		 * Cannot allocate user-managed hwpt linking to auto_created
+> +		 * hwpt. If the parent hwpt is already a user-managed hwpt,
+> +		 * don't allocate another user-managed hwpt linking to it.
+> +		 */
+> +		if (parent->auto_domain || parent->parent) {
+> +			rc = -EINVAL;
+> +			goto out_put_pt;
+> +		}
+> +		ioas = parent->ioas;
+> +		break;
+> +	default:
+> +		rc = -EINVAL;
+> +		goto out_put_pt;
+> +	}
+> +
+> +	klen = iommufd_hwpt_alloc_data_size[cmd->data_type];
+> +	if (klen) {
+> +		if (!cmd->data_len) {
+> +			rc = -EINVAL;
+> +			goto out_put_pt;
+> +		}
 
-For further information, see [1].
+Is the user_data still valid if (cmd->data_len < klen)?
 
-This patch introduced a new flow handler which combines fasteoi and edge
-type as a workaround.
-An additional loop will be executed if the IRQS_PENDING has been setup.
+> +
+> +		data = kzalloc(klen, GFP_KERNEL);
+> +		if (!data) {
+> +			rc = -ENOMEM;
+> +			goto out_put_pt;
+> +		}
+> +
+> +		rc = copy_struct_from_user(data, klen,
+> +					   u64_to_user_ptr(cmd->data_uptr),
+> +					   cmd->data_len);
+> +		if (rc)
+> +			goto out_free_data;
+> +	}
+> +
+>   	mutex_lock(&ioas->mutex);
+>   	hwpt = iommufd_hw_pagetable_alloc(ucmd->ictx, ioas, idev,
+> -					  NULL, NULL, false);
+> +					  parent, data, false);
+>   	mutex_unlock(&ioas->mutex);
+>   	if (IS_ERR(hwpt)) {
+>   		rc = PTR_ERR(hwpt);
+> -		goto out_put_ioas;
+> +		goto out_free_data;
+>   	}
+>   
+>   	cmd->out_hwpt_id = hwpt->obj.id;
+> @@ -200,12 +272,14 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
+>   	if (rc)
+>   		goto out_hwpt;
+>   	iommufd_object_finalize(ucmd->ictx, &hwpt->obj);
+> -	goto out_put_ioas;
+> +	goto out_free_data;
+>   
+>   out_hwpt:
+>   	iommufd_object_abort_and_destroy(ucmd->ictx, &hwpt->obj);
+> -out_put_ioas:
+> -	iommufd_put_object(&ioas->obj);
+> +out_free_data:
+> +	kfree(data);
+> +out_put_pt:
+> +	iommufd_put_object(pt_obj);
+>   out_put_idev:
+>   	iommufd_put_object(&idev->obj);
+>   	return rc;
+> diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
+> index f079c0bda46b..7ab1e2c638a1 100644
+> --- a/drivers/iommu/iommufd/main.c
+> +++ b/drivers/iommu/iommufd/main.c
+> @@ -295,7 +295,7 @@ struct iommufd_ioctl_op {
+>   static const struct iommufd_ioctl_op iommufd_ioctl_ops[] = {
+>   	IOCTL_OP(IOMMU_DESTROY, iommufd_destroy, struct iommu_destroy, id),
+>   	IOCTL_OP(IOMMU_HWPT_ALLOC, iommufd_hwpt_alloc, struct iommu_hwpt_alloc,
+> -		 __reserved),
+> +		 data_uptr),
+>   	IOCTL_OP(IOMMU_DEVICE_GET_HW_INFO, iommufd_device_get_hw_info,
+>   		 struct iommu_hw_info, __reserved),
+>   	IOCTL_OP(IOMMU_IOAS_ALLOC, iommufd_ioas_alloc_ioctl,
+> diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
+> index 4ac525897b82..48781ff40a37 100644
+> --- a/include/uapi/linux/iommufd.h
+> +++ b/include/uapi/linux/iommufd.h
+> @@ -347,6 +347,14 @@ struct iommu_vfio_ioas {
+>   };
+>   #define IOMMU_VFIO_IOAS _IO(IOMMUFD_TYPE, IOMMUFD_CMD_VFIO_IOAS)
+>   
+> +/**
+> + * enum iommu_hwpt_type - IOMMU HWPT Type
+> + * @IOMMU_HWPT_TYPE_DEFAULT: default
+> + */
+> +enum iommu_hwpt_type {
+> +	IOMMU_HWPT_TYPE_DEFAULT,
+> +};
+> +
+>   /**
+>    * struct iommu_hwpt_alloc - ioctl(IOMMU_HWPT_ALLOC)
+>    * @size: sizeof(struct iommu_hwpt_alloc)
+> @@ -355,12 +363,31 @@ struct iommu_vfio_ioas {
+>    * @pt_id: The IOAS to connect this HWPT to
+>    * @out_hwpt_id: The ID of the new HWPT
+>    * @__reserved: Must be 0
+> + * @data_type: One of enum iommu_hwpt_type
+> + * @data_len: Length of the type specific data
+> + * @data_uptr: User pointer to the type specific data
+>    *
+>    * Explicitly allocate a hardware page table object. This is the same object
+>    * type that is returned by iommufd_device_attach() and represents the
+>    * underlying iommu driver's iommu_domain kernel object.
+>    *
+>    * A normal HWPT will be created with the mappings from the given IOAS.
+> + * The @data_type for its allocation can be set to IOMMU_HWPT_TYPE_DEFAULT, or
+> + * another type (being listed below) to specialize a kernel-managed HWPT.
+> + *
+> + * A user-managed HWPT will be created from a given parent HWPT via @pt_id, in
+> + * which the parent HWPT must be allocated previously via the same ioctl from a
+> + * given IOAS. The @data_type must not be set to IOMMU_HWPT_TYPE_DEFAULT but a
+> + * pre-defined type corresponding to the underlying IOMMU hardware.
+> + *
+> + * If the @data_type is set to IOMMU_HWPT_TYPE_DEFAULT, both the @data_len and
+> + * the @data_uptr will be ignored. Otherwise, both of them must be given.
+> + *
+> + * +==============================+=====================================+===========+
+> + * | @data_type                   |    Data structure in @data_uptr     |   @pt_id  |
+> + * +------------------------------+-------------------------------------+-----------+
+> + * | IOMMU_HWPT_TYPE_DEFAULT      |               N/A                   |    IOAS   |
+> + * +------------------------------+-------------------------------------+-----------+
+>    */
+>   struct iommu_hwpt_alloc {
+>   	__u32 size;
+> @@ -369,6 +396,9 @@ struct iommu_hwpt_alloc {
+>   	__u32 pt_id;
+>   	__u32 out_hwpt_id;
+>   	__u32 __reserved;
+> +	__u32 data_type;
+> +	__u32 data_len;
+> +	__aligned_u64 data_uptr;
+>   };
+>   #define IOMMU_HWPT_ALLOC _IO(IOMMUFD_TYPE, IOMMUFD_CMD_HWPT_ALLOC)
 
-[1]: https://lore.kernel.org/all/b0f2623b-ec70-d57e-b744-26c62b1ce523@huawei.com/
-
-Fixes: cc2d3216f53c ("irqchip: GICv3: ITS command queue")
-Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
----
- drivers/irqchip/irq-gic-v3.c |  2 +-
- include/linux/irq.h          |  1 +
- kernel/irq/chip.c            | 62 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 64 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index fd134e1f481a..625ec64f0218 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -1456,7 +1456,7 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int irq,
- 		if (!gic_dist_supports_lpis())
- 			return -EPERM;
- 		irq_domain_set_info(d, irq, hw, chip, d->host_data,
--				    handle_fasteoi_irq, NULL, NULL);
-+				    handle_fasteoi_edge_irq, NULL, NULL);
- 		break;
- 
- 	default:
-diff --git a/include/linux/irq.h b/include/linux/irq.h
-index b1b28affb32a..adca5340edeb 100644
---- a/include/linux/irq.h
-+++ b/include/linux/irq.h
-@@ -656,6 +656,7 @@ static inline int irq_set_parent(int irq, int parent_irq)
-  */
- extern void handle_level_irq(struct irq_desc *desc);
- extern void handle_fasteoi_irq(struct irq_desc *desc);
-+extern void handle_fasteoi_edge_irq(struct irq_desc *desc);
- extern void handle_edge_irq(struct irq_desc *desc);
- extern void handle_edge_eoi_irq(struct irq_desc *desc);
- extern void handle_simple_irq(struct irq_desc *desc);
-diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
-index 49e7bc871fec..bd3d346b468d 100644
---- a/kernel/irq/chip.c
-+++ b/kernel/irq/chip.c
-@@ -677,6 +677,68 @@ static void cond_unmask_eoi_irq(struct irq_desc *desc, struct irq_chip *chip)
- 	}
- }
- 
-+/**
-+ *	handle_fasteoi_edge_irq - irq handler for transparent controllers
-+ *	edge type IRQ.
-+ *	@desc:	the interrupt description structure for this irq
-+ */
-+void handle_fasteoi_edge_irq(struct irq_desc *desc)
-+{
-+	struct irq_chip *chip = desc->irq_data.chip;
-+
-+	raw_spin_lock(&desc->lock);
-+
-+	if (!irq_may_run(desc)) {
-+		desc->istate |= IRQS_PENDING;
-+		mask_irq(desc);
-+		goto out;
-+	}
-+
-+	desc->istate &= ~(IRQS_REPLAY | IRQS_WAITING);
-+
-+	/*
-+	 * If its disabled or no action available
-+	 * then mask it and get out of here:
-+	 */
-+	if (unlikely(!desc->action || irqd_irq_disabled(&desc->irq_data))) {
-+		desc->istate |= IRQS_PENDING;
-+		mask_irq(desc);
-+		goto out;
-+	}
-+
-+	kstat_incr_irqs_this_cpu(desc);
-+
-+	if (desc->istate & IRQS_ONESHOT)
-+		mask_irq(desc);
-+
-+	do {
-+		/*
-+		 * When another irq arrived while we were handling
-+		 * one, we could have masked the irq.
-+		 * Reenable it, if it was not disabled in meantime.
-+		 */
-+		if (unlikely(desc->istate & IRQS_PENDING)) {
-+			if (!irqd_irq_disabled(&desc->irq_data) &&
-+			    irqd_irq_masked(&desc->irq_data))
-+				unmask_irq(desc);
-+		}
-+
-+		handle_irq_event(desc);
-+
-+	} while ((desc->istate & IRQS_PENDING) &&
-+		 !irqd_irq_disabled(&desc->irq_data));
-+
-+	cond_unmask_eoi_irq(desc, chip);
-+
-+	raw_spin_unlock(&desc->lock);
-+	return;
-+out:
-+	if (!(chip->flags & IRQCHIP_EOI_IF_HANDLED))
-+		chip->irq_eoi(&desc->irq_data);
-+	raw_spin_unlock(&desc->lock);
-+}
-+EXPORT_SYMBOL_GPL(handle_fasteoi_edge_irq);
-+
- /**
-  *	handle_fasteoi_irq - irq handler for transparent controllers
-  *	@desc:	the interrupt description structure for this irq
--- 
-2.34.1
-
+Best regards,
+baolu
