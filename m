@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA66A6B4D1B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 128896B4D19
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbjCJQf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 11:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        id S230033AbjCJQfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 11:35:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbjCJQew (ORCPT
+        with ESMTP id S231719AbjCJQev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:34:52 -0500
+        Fri, 10 Mar 2023 11:34:51 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B4B526C1C
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9CFC6974AA
         for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 08:32:11 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B11B7176B;
-        Fri, 10 Mar 2023 08:07:49 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A24E176C;
+        Fri, 10 Mar 2023 08:07:53 -0800 (PST)
 Received: from e127643.. (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CEB323F5A1;
-        Fri, 10 Mar 2023 08:07:04 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 465043F5A1;
+        Fri, 10 Mar 2023 08:07:08 -0800 (PST)
 From:   James Clark <james.clark@arm.com>
 To:     coresight@lists.linaro.org
 Cc:     James Clark <james.clark@arm.com>,
@@ -30,9 +30,9 @@ Cc:     James Clark <james.clark@arm.com>,
         Leo Yan <leo.yan@linaro.org>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/9] coresight: Refactor out buffer allocation function for ETR
-Date:   Fri, 10 Mar 2023 16:06:06 +0000
-Message-Id: <20230310160610.742382-8-james.clark@arm.com>
+Subject: [PATCH v2 8/9] coresight: Enable and disable helper devices adjacent to the path
+Date:   Fri, 10 Mar 2023 16:06:07 +0000
+Message-Id: <20230310160610.742382-9-james.clark@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230310160610.742382-1-james.clark@arm.com>
 References: <20230310160610.742382-1-james.clark@arm.com>
@@ -46,118 +46,280 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CATU is moved to the generic enable/disable path system in the
-next commit, it will need to call into ETR and get it to pre-allocate
-its buffer so add a function for it.
+Currently CATU is the only helper device, and its enable and disable
+calls are hard coded. To allow more helper devices to be added in a
+generic way, remove these hard coded calls and just enable and disable
+all helper devices.
 
-No functional changes
+This has to apply to helpers adjacent to the path, because they will
+never be in the path. CATU was already discovered in this way, so
+there is no change there.
+
+One change that is needed is for CATU to call back into ETR to allocate
+the buffer. Because the enable call was previously hard coded, it was
+done at a point where the buffer was already allocated, but this is no
+longer the case.
 
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- .../hwtracing/coresight/coresight-tmc-etr.c   | 50 ++++++++++++++++---
- drivers/hwtracing/coresight/coresight-tmc.h   |  2 +
- 2 files changed, 45 insertions(+), 7 deletions(-)
+ drivers/hwtracing/coresight/coresight-catu.c  | 34 ++++++++--
+ drivers/hwtracing/coresight/coresight-core.c  | 68 ++++++++++++++++++-
+ .../hwtracing/coresight/coresight-tmc-etr.c   | 28 --------
+ include/linux/coresight.h                     |  3 +-
+ 4 files changed, 99 insertions(+), 34 deletions(-)
 
-diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-index 223081dc3ad4..cb9621003aef 100644
---- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
-+++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-@@ -1169,7 +1169,7 @@ void tmc_etr_disable_hw(struct tmc_drvdata *drvdata)
- 	drvdata->etr_buf = NULL;
+diff --git a/drivers/hwtracing/coresight/coresight-catu.c b/drivers/hwtracing/coresight/coresight-catu.c
+index bc90a03f478f..24a08a2b96b1 100644
+--- a/drivers/hwtracing/coresight/coresight-catu.c
++++ b/drivers/hwtracing/coresight/coresight-catu.c
+@@ -395,13 +395,32 @@ static inline int catu_wait_for_ready(struct catu_drvdata *drvdata)
+ 	return coresight_timeout(csa, CATU_STATUS, CATU_STATUS_READY, 1);
  }
  
--static int tmc_enable_etr_sink_sysfs(struct coresight_device *csdev)
-+static struct etr_buf *tmc_etr_get_sysfs_buffer(struct coresight_device *csdev)
- {
- 	int ret = 0;
- 	unsigned long flags;
-@@ -1192,7 +1192,7 @@ static int tmc_enable_etr_sink_sysfs(struct coresight_device *csdev)
- 		/* Allocate memory with the locks released */
- 		free_buf = new_buf = tmc_etr_setup_sysfs_buf(drvdata);
- 		if (IS_ERR(new_buf))
--			return PTR_ERR(new_buf);
-+			return new_buf;
- 
- 		/* Let's try again */
- 		spin_lock_irqsave(&drvdata->spinlock, flags);
-@@ -1223,17 +1223,33 @@ static int tmc_enable_etr_sink_sysfs(struct coresight_device *csdev)
- 		drvdata->sysfs_buf = new_buf;
- 	}
- 
--	ret = tmc_etr_enable_hw(drvdata, drvdata->sysfs_buf);
--	if (!ret) {
--		drvdata->mode = CS_MODE_SYSFS;
--		atomic_inc(csdev->refcnt);
--	}
- out:
- 	spin_unlock_irqrestore(&drvdata->spinlock, flags);
- 
- 	/* Free memory outside the spinlock if need be */
- 	if (free_buf)
- 		tmc_etr_free_sysfs_buf(free_buf);
-+	return ret ? ERR_PTR(ret) : drvdata->sysfs_buf;
+-static int catu_enable_hw(struct catu_drvdata *drvdata, void *data)
++static struct coresight_device *
++catu_get_etr_device(struct coresight_device *csdev)
++{
++	int i;
++	struct coresight_device *tmp;
++
++	for (i = 0; i < csdev->pdata->nr_inconns; i++) {
++		tmp = csdev->pdata->in_conns[i].remote_dev;
++		if (tmp && tmp->type == CORESIGHT_DEV_TYPE_SINK &&
++		    tmp->subtype.sink_subtype ==
++			    CORESIGHT_DEV_SUBTYPE_SINK_SYSMEM)
++			return tmp;
++	}
++
++	return NULL;
 +}
 +
-+static int tmc_enable_etr_sink_sysfs(struct coresight_device *csdev)
++static int catu_enable_hw(struct catu_drvdata *drvdata, enum cs_mode cs_mode,
++			  void *data)
+ {
+ 	int rc;
+ 	u32 control, mode;
+-	struct etr_buf *etr_buf = data;
++	struct etr_buf *etr_buf = NULL;
+ 	struct device *dev = &drvdata->csdev->dev;
+ 	struct coresight_device *csdev = drvdata->csdev;
++	struct coresight_device *etrdev;
+ 
+ 	if (catu_wait_for_ready(drvdata))
+ 		dev_warn(dev, "Timeout while waiting for READY\n");
+@@ -416,6 +435,12 @@ static int catu_enable_hw(struct catu_drvdata *drvdata, void *data)
+ 	if (rc)
+ 		return rc;
+ 
++	etrdev = catu_get_etr_device(csdev);
++	if (etrdev) {
++		etr_buf = tmc_etr_get_buffer(etrdev, cs_mode, data);
++		if (IS_ERR(etr_buf))
++			return PTR_ERR(etr_buf);
++	}
+ 	control |= BIT(CATU_CONTROL_ENABLE);
+ 
+ 	if (etr_buf && etr_buf->mode == ETR_MODE_CATU) {
+@@ -441,13 +466,14 @@ static int catu_enable_hw(struct catu_drvdata *drvdata, void *data)
+ 	return 0;
+ }
+ 
+-static int catu_enable(struct coresight_device *csdev, void *data)
++static int catu_enable(struct coresight_device *csdev, enum cs_mode mode,
++		       void *data)
+ {
+ 	int rc;
+ 	struct catu_drvdata *catu_drvdata = csdev_to_catu_drvdata(csdev);
+ 
+ 	CS_UNLOCK(catu_drvdata->base);
+-	rc = catu_enable_hw(catu_drvdata, data);
++	rc = catu_enable_hw(catu_drvdata, mode, data);
+ 	CS_LOCK(catu_drvdata->base);
+ 	return rc;
+ }
+diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+index a8ba7493c09a..3e6ccd9e8d4e 100644
+--- a/drivers/hwtracing/coresight/coresight-core.c
++++ b/drivers/hwtracing/coresight/coresight-core.c
+@@ -441,6 +441,34 @@ static int coresight_enable_source(struct coresight_device *csdev,
+ 	return 0;
+ }
+ 
++static int coresight_enable_helper(struct coresight_device *csdev,
++				   enum cs_mode mode, void *sink_data)
 +{
 +	int ret;
-+	unsigned long flags;
-+	struct tmc_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
-+	struct etr_buf *sysfs_buf = tmc_etr_get_sysfs_buffer(csdev);
 +
-+	if (IS_ERR(sysfs_buf))
-+		return PTR_ERR(sysfs_buf);
++	if (!helper_ops(csdev)->enable)
++		return 0;
++	ret = helper_ops(csdev)->enable(csdev, mode, sink_data);
++	if (ret)
++		return ret;
 +
-+	spin_lock_irqsave(&drvdata->spinlock, flags);
-+	ret = tmc_etr_enable_hw(drvdata, sysfs_buf);
-+	if (!ret) {
-+		drvdata->mode = CS_MODE_SYSFS;
-+		atomic_inc(csdev->refcnt);
-+	}
++	csdev->enable = true;
++	return 0;
++}
 +
-+	spin_unlock_irqrestore(&drvdata->spinlock, flags);
- 
- 	if (!ret)
- 		dev_dbg(&csdev->dev, "TMC-ETR enabled\n");
-@@ -1241,6 +1257,26 @@ static int tmc_enable_etr_sink_sysfs(struct coresight_device *csdev)
- 	return ret;
++static void coresight_disable_helper(struct coresight_device *csdev)
++{
++	int ret;
++
++	if (!helper_ops(csdev)->disable)
++		return;
++
++	ret = helper_ops(csdev)->disable(csdev, NULL);
++	if (ret)
++		return;
++	csdev->enable = false;
++}
++
+ /**
+  *  coresight_disable_source - Drop the reference count by 1 and disable
+  *  the device if there are no users left.
+@@ -460,6 +488,18 @@ static bool coresight_disable_source(struct coresight_device *csdev)
+ 	return !csdev->enable;
  }
  
-+struct etr_buf *tmc_etr_get_buffer(struct coresight_device *csdev,
-+				   enum cs_mode mode, void *data)
++static void coresight_disable_helpers(struct coresight_device *csdev)
 +{
-+	struct perf_output_handle *handle = data;
-+	struct etr_perf_buffer *etr_perf;
++	int i;
++	struct coresight_device *helper;
 +
-+	switch (mode) {
-+	case CS_MODE_SYSFS:
-+		return tmc_etr_get_sysfs_buffer(csdev);
-+	case CS_MODE_PERF:
-+		etr_perf = etm_perf_sink_config(handle);
-+		if (WARN_ON(!etr_perf || !etr_perf->etr_buf))
-+			return ERR_PTR(-EINVAL);
-+		return etr_perf->etr_buf;
-+	default:
-+		return ERR_PTR(-EINVAL);
++	for (i = 0; i < csdev->pdata->nr_outconns; ++i) {
++		helper = csdev->pdata->out_conns[i].remote_dev;
++		if (helper && helper->type == CORESIGHT_DEV_TYPE_HELPER)
++			coresight_disable_helper(helper);
 +	}
 +}
-+EXPORT_SYMBOL_GPL(tmc_etr_get_buffer);
 +
  /*
-  * alloc_etr_buf: Allocate ETR buffer for use by perf.
-  * The size of the hardware buffer is dependent on the size configured
-diff --git a/drivers/hwtracing/coresight/coresight-tmc.h b/drivers/hwtracing/coresight/coresight-tmc.h
-index 01c0382a29c0..b97da39652d2 100644
---- a/drivers/hwtracing/coresight/coresight-tmc.h
-+++ b/drivers/hwtracing/coresight/coresight-tmc.h
-@@ -332,5 +332,7 @@ struct coresight_device *tmc_etr_get_catu_device(struct tmc_drvdata *drvdata);
+  * coresight_disable_path_from : Disable components in the given path beyond
+  * @nd in the list. If @nd is NULL, all the components, except the SOURCE are
+@@ -509,6 +549,9 @@ static void coresight_disable_path_from(struct list_head *path,
+ 		default:
+ 			break;
+ 		}
++
++		/* Disable all helpers adjacent along the path last */
++		coresight_disable_helpers(csdev);
+ 	}
+ }
  
- void tmc_etr_set_catu_ops(const struct etr_buf_operations *catu);
- void tmc_etr_remove_catu_ops(void);
-+struct etr_buf *tmc_etr_get_buffer(struct coresight_device *csdev,
-+				   enum cs_mode mode, void *data);
+@@ -518,9 +561,28 @@ void coresight_disable_path(struct list_head *path)
+ }
+ EXPORT_SYMBOL_GPL(coresight_disable_path);
  
- #endif
+-int coresight_enable_path(struct list_head *path, enum cs_mode mode, void *sink_data)
++static int coresight_enable_helpers(struct coresight_device *csdev,
++				    enum cs_mode mode, void *sink_data)
+ {
++	int i, ret = 0;
++	struct coresight_device *helper;
++
++	for (i = 0; i < csdev->pdata->nr_outconns; ++i) {
++		helper = csdev->pdata->out_conns[i].remote_dev;
++		if (!helper || helper->type != CORESIGHT_DEV_TYPE_HELPER)
++			continue;
+ 
++		ret = coresight_enable_helper(helper, mode, sink_data);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++int coresight_enable_path(struct list_head *path, enum cs_mode mode,
++			  void *sink_data)
++{
+ 	int ret = 0;
+ 	u32 type;
+ 	struct coresight_node *nd;
+@@ -530,6 +592,10 @@ int coresight_enable_path(struct list_head *path, enum cs_mode mode, void *sink_
+ 		csdev = nd->csdev;
+ 		type = csdev->type;
+ 
++		/* Enable all helpers adjacent to the path first */
++		ret = coresight_enable_helpers(csdev, mode, sink_data);
++		if (ret)
++			goto err;
+ 		/*
+ 		 * ETF devices are tricky... They can be a link or a sink,
+ 		 * depending on how they are configured.  If an ETF has been
+diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+index cb9621003aef..d6fd44fdf836 100644
+--- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
++++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+@@ -791,24 +791,6 @@ tmc_etr_get_catu_device(struct tmc_drvdata *drvdata)
+ }
+ EXPORT_SYMBOL_GPL(tmc_etr_get_catu_device);
+ 
+-static inline int tmc_etr_enable_catu(struct tmc_drvdata *drvdata,
+-				      struct etr_buf *etr_buf)
+-{
+-	struct coresight_device *catu = tmc_etr_get_catu_device(drvdata);
+-
+-	if (catu && helper_ops(catu)->enable)
+-		return helper_ops(catu)->enable(catu, etr_buf);
+-	return 0;
+-}
+-
+-static inline void tmc_etr_disable_catu(struct tmc_drvdata *drvdata)
+-{
+-	struct coresight_device *catu = tmc_etr_get_catu_device(drvdata);
+-
+-	if (catu && helper_ops(catu)->disable)
+-		helper_ops(catu)->disable(catu, drvdata->etr_buf);
+-}
+-
+ static const struct etr_buf_operations *etr_buf_ops[] = {
+ 	[ETR_MODE_FLAT] = &etr_flat_buf_ops,
+ 	[ETR_MODE_ETR_SG] = &etr_sg_buf_ops,
+@@ -1058,13 +1040,6 @@ static int tmc_etr_enable_hw(struct tmc_drvdata *drvdata,
+ 	if (WARN_ON(drvdata->etr_buf))
+ 		return -EBUSY;
+ 
+-	/*
+-	 * If this ETR is connected to a CATU, enable it before we turn
+-	 * this on.
+-	 */
+-	rc = tmc_etr_enable_catu(drvdata, etr_buf);
+-	if (rc)
+-		return rc;
+ 	rc = coresight_claim_device(drvdata->csdev);
+ 	if (!rc) {
+ 		drvdata->etr_buf = etr_buf;
+@@ -1072,7 +1047,6 @@ static int tmc_etr_enable_hw(struct tmc_drvdata *drvdata,
+ 		if (rc) {
+ 			drvdata->etr_buf = NULL;
+ 			coresight_disclaim_device(drvdata->csdev);
+-			tmc_etr_disable_catu(drvdata);
+ 		}
+ 	}
+ 
+@@ -1162,8 +1136,6 @@ static void __tmc_etr_disable_hw(struct tmc_drvdata *drvdata)
+ void tmc_etr_disable_hw(struct tmc_drvdata *drvdata)
+ {
+ 	__tmc_etr_disable_hw(drvdata);
+-	/* Disable CATU device if this ETR is connected to one */
+-	tmc_etr_disable_catu(drvdata);
+ 	coresight_disclaim_device(drvdata->csdev);
+ 	/* Reset the ETR buf used by hardware */
+ 	drvdata->etr_buf = NULL;
+diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+index fd268b24c761..c6ee1634d813 100644
+--- a/include/linux/coresight.h
++++ b/include/linux/coresight.h
+@@ -372,7 +372,8 @@ struct coresight_ops_source {
+  * @disable	: Disable the device
+  */
+ struct coresight_ops_helper {
+-	int (*enable)(struct coresight_device *csdev, void *data);
++	int (*enable)(struct coresight_device *csdev, enum cs_mode mode,
++		      void *data);
+ 	int (*disable)(struct coresight_device *csdev, void *data);
+ };
+ 
 -- 
 2.34.1
 
