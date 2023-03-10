@@ -2,51 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491076B3D13
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:59:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02BCF6B3D1B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjCJK7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 05:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S229907AbjCJLAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjCJK7B (ORCPT
+        with ESMTP id S229523AbjCJLAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 05:59:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617B36B974;
-        Fri, 10 Mar 2023 02:58:57 -0800 (PST)
+        Fri, 10 Mar 2023 06:00:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6569079E;
+        Fri, 10 Mar 2023 02:59:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01C11B82260;
-        Fri, 10 Mar 2023 10:58:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B94C433D2;
-        Fri, 10 Mar 2023 10:58:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6456661383;
+        Fri, 10 Mar 2023 10:59:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8BA6C433D2;
+        Fri, 10 Mar 2023 10:59:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678445935;
-        bh=nyY232ZY2Q5K4pNyA+3/TkUKEbZ7ZEFY5fxylZaIKmM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QzWjuZYlOZitfbd5zPN6eEJbLRnrEK1rsoZrJNy0xQFPxqOAHgAbZZoHg7mgWkjp8
-         1QnG96QPhW1u8FEGaMRpmVNRT/iaf4TNXjvyW85L68ie1bdwIFMv/ZTsyA7tGtR5X0
-         /fuHXtGw+Dnw82NpyEFFK/WHCcSCSIsR0K0oI0CskJx2KFv7G7VYgitXKPsryprHZG
-         Xsmj+bTcm9T5a9zPpKsFdQ/rfIXz5m2XgSVT5bOfIomyEC1bg1czJP73BWvvtUk0X+
-         7Gsl46aEDJY0jNSwlWte5S0W2RmwTL7kqZ//rbMlrjW5cynr1nZe3/gp0PSxV8rhET
-         o7r7KoyFuj6Uw==
-Date:   Fri, 10 Mar 2023 11:58:50 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     dchinner@redhat.com, willy@infradead.org, viro@zeniv.linux.org.uk,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        fsdevel@vger.kernel.org
-Subject: Re: [PATCH] reiserfs: remove duplicate include header in xattr.c
-Message-ID: <20230310105850.gomiydgm22eoxmxw@wittgenstein>
-References: <202303071517050653678@zte.com.cn>
+        s=k20201202; t=1678445996;
+        bh=6HNYmPSJ53e5recOteBLDrR//Q6H9ztqrpDz+ZdxIZs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TY2mrrC7snf0967lhtOTrr7oHSkmUs/i2L8OHTR4PL1rwC8tGZwq+dYYUy1IDCt/V
+         OHbDHluEC8J/Dc9AZvJw4tlAslf4BgA/xSxj6CFTxBx7cVeq9FQNTcDvruU5YHsqKe
+         sshXjlE85gxIBTi67mtZxDlZ8B78w8ubqR2WzVVxoh0/Et/cSvNA59yPEpraHRK3YE
+         +mEitmB3TWdU/+OvcuJu7tRXqNGpDe6x1nqGcOV9TY4PhBHEIOeVTkHpP0s4D6Nt3Q
+         MNrMSyrfGKYy2RyL33Pb84ya8EJ8HSM4oFGpEN8eEmJ4cNMnrLrxO4dN/DZO0inXhS
+         SmeqWBLn1yfPw==
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: (subset) [PATCH v4 0/5] dt-bindings: first batch of dt-schema conversions for Amlogic Meson bindings
+Date:   Fri, 10 Mar 2023 11:59:47 +0100
+Message-Id: <167844597212.1217818.3420848199619883504.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v4-0-34e623dbf789@linaro.org>
+References: <20221117-b4-amlogic-bindings-convert-v4-0-34e623dbf789@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202303071517050653678@zte.com.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,34 +69,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 03:17:05PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+On Wed, 08 Mar 2023 14:27:28 +0100, Neil Armstrong wrote:
+> Batch conversion of the following bindings:
+> - amlogic-efuse.txt
+> - amlogic-meson-mx-efuse.txt
+> - meson-wdt.txt
+> - meson-ir.txt
+> - rtc-meson.txt
+> - amlogic,meson6-timer.txt
+> - amlogic,meson-pcie.txt
 > 
-> linux/xattr.h is included more than once.
-> 
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
-> ---
+> [...]
 
-I mean, yeah, it's included in the local xattr.h file but honestly
-reiserfs is marked deprecated and I just don't think that we should
-bother with cleaning up things that are _that_ minor. If it was the
-compiler complaining about some unused variable then for sure but this
-just seems pointless imho at this terminal stage...
+Applied to controller/dt, thanks!
 
->  fs/reiserfs/xattr.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/fs/reiserfs/xattr.c b/fs/reiserfs/xattr.c
-> index 651027967159..ed1984775a4f 100644
-> --- a/fs/reiserfs/xattr.c
-> +++ b/fs/reiserfs/xattr.c
-> @@ -43,7 +43,6 @@
->  #include <linux/fs.h>
->  #include <linux/file.h>
->  #include <linux/pagemap.h>
-> -#include <linux/xattr.h>
->  #include "xattr.h"
->  #include "acl.h"
->  #include <linux/uaccess.h>
-> -- 
-> 2.25.1
+[5/5] dt-bindings: PCI: convert amlogic,meson-pcie.txt to dt-schema
+      https://git.kernel.org/pci/pci/c/b80b848bdf56
+
+Thanks,
+Lorenzo
