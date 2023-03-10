@@ -2,224 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D236B4344
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8683F6B4357
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbjCJOMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:12:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
+        id S231991AbjCJONr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbjCJOLs (ORCPT
+        with ESMTP id S231872AbjCJONO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:11:48 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916B01194C1;
-        Fri, 10 Mar 2023 06:11:02 -0800 (PST)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 28ADE85F3E;
-        Fri, 10 Mar 2023 15:10:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1678457459;
-        bh=AOCuZzLPvux7c3tArEIyZ8PiULFhzIkISJCzFgahT4E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uJzVvzhq1+N3Nv4sdmJi2Lc9j4e9GyFbF4aFqcetdKldRTCCNJ6AC8OX+BNH9ojLn
-         w5FcXyjF+zU6PjeQlUlkTV0F3BcToqejVfPaeikRR/itrJvT3riaQGIsrMwjKK0VMJ
-         Xa/P6tZZOZ35YNsgE7ciq0gBNc8nZ+J9JnVXX1TSIWrXECxQ6nT1XINs1Ms6rGXQKa
-         j05iwN9TgWkK7Fxe+PiJERMxGacRx2MDDU1ZhY2342cSIEXDYw30pye8sv0EvJr72o
-         P9OykStj8Bq0SnV1XMtvbnsOZcu5eONWghEGhxnDgr1IExtjEBaZQkLNS/y7FJMv61
-         oJlu+yZnDLixw==
-Date:   Fri, 10 Mar 2023 15:10:52 +0100
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] dsa: marvell: Provide per device information about
- max frame size
-Message-ID: <20230310151052.7bc677e9@wsk>
-In-Reply-To: <20230310133651.pfqldx6jdgssbe54@skbuf>
-References: <20230309125421.3900962-1-lukma@denx.de>
-        <20230309125421.3900962-2-lukma@denx.de>
-        <20230310120235.2cjxauvqxyei45li@skbuf>
-        <20230310141719.7f691b45@wsk>
-        <20230310133651.pfqldx6jdgssbe54@skbuf>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 10 Mar 2023 09:13:14 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A621194C0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 06:12:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678457526; x=1709993526;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eT1/PfAlxqAh8Ui82KVTi+GVM4QdA9Y6UqoS7N9Xvds=;
+  b=ZJ6eOTh3GHZzwph4gBOEgvS+YFAxRHPUzlBdG4HnvpnCytOiTkZSu3LF
+   lie5kK2v83ohsXjk402hpjGbr3snoq0Mke8+P0b0h2+0ewNEIoLxOdSzl
+   9nJfUpkMArY1lNHNi9Yiojw/wUT6/hUMyV1PkL+A3+zmSlxm1wUkp1hA+
+   kqdQt/ZaLcBhRtnbA7qrBdME0FR8sWdbq8tH28GJt1OOVH7i+ha8wuw/D
+   bmJ1AjKGdrBSIyid7EXT7OHJS4IY9u0WHdUCYvGwBDwBNmBrMs9OOnHt1
+   Puj4neNZLVoE28abNMFlh/UOJPlQIS5IRWaOPdpWKabf4Yp5aDwqr7l7D
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="423000167"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="423000167"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 06:11:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="1007133019"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="1007133019"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 10 Mar 2023 06:11:43 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1padTC-000wvC-0y;
+        Fri, 10 Mar 2023 16:11:42 +0200
+Date:   Fri, 10 Mar 2023 16:11:41 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v1 1/1] devres: Pass unique name of the resource to
+ devm_add_action()
+Message-ID: <ZAs6nZz05C016l0E@smile.fi.intel.com>
+References: <20230224200745.17324-1-andriy.shevchenko@linux.intel.com>
+ <83bebd97-ba44-9e19-d66c-95b43b123797@alu.unizg.hr>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/66KvUnqbJfOyKPuGiz=LZXS";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <83bebd97-ba44-9e19-d66c-95b43b123797@alu.unizg.hr>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/66KvUnqbJfOyKPuGiz=LZXS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Mar 10, 2023 at 02:21:24PM +0100, Mirsad Todorovac wrote:
+> On 2/24/23 21:07, Andy Shevchenko wrote:
+> > Pass the unique name of the resource to devm_add_action(),
+> > so it will be easier to debug managed resources.
 
-Hi Vladimir,
+...
 
-> On Fri, Mar 10, 2023 at 02:17:19PM +0100, Lukasz Majewski wrote:
-> > > > For example mv88e6185 supports max 1632 bytes, which is now
-> > > > in-driver standard value.   =20
-> > >=20
-> > > What is the criterion based on which 1632 is the "in-driver
-> > > standard value"? =20
-> >=20
-> > It comes from the documentation I suppose. Moreover, this might be
-> > the the "first" used value when set_max_mtu callback was
-> > introduced. =20
->=20
-> I'm not playing dumb, I just don't understand what is meant by
-> "in-driver standard value". Is it the return value of
-> mv88e6xxx_get_max_mtu() for the MV88E6185 chip?
+> (I'm late two weeks w testing, but those were rather busy two weeks.)
 
-The 1632 is a value from added early switch IC to this driver.
+Thank you for this test!
 
-Then the get_max_mtu function was extended to support jumbo frames.
+> I see what it is meant to do, but I am unsure of how to test whether it works.
 
-And the extension was based on having the .set_max_frame_size defined
-in *_ops structure.
+Your test below is good enough.
 
-> Because I understood
-> it to be somehow the value returned by default, for chips which don't
-> have a way to change the MTU (because of the "standard" word).
->=20
+> Being the unfaithful Thomas, I always prefer to test rather to just assume it
+> is OK.
+> 
+> Is this OK output you expected to see in syslog?
 
-Probably the "standard" shall be replaced above - it might be
-misleading. "Default" would be better.
+Not really. It seems that we need to also wrap the devm_add_action_or_reset()
+separately.
 
-> > > > On the other hand - mv88e6250 supports 2048 bytes.   =20
-> > >=20
-> > > What you mean to suggest here is that, using the current
-> > > classification from mv88e6xxx_get_max_mtu(), mv88e6250 falls into
-> > > the "none of the above" bucket, for which the driver returns 1522
-> > > - VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN // 1492. But it truly
-> > > supports a maximum frame length of 2048, per your research.
-> > >  =20
-> >=20
-> > And this cannot be easily fixed.
-> >=20
-> > I could just provide callback to .set_max_frame_size in
-> > mv88e6250_ops and the mv88e6250 would use 1632 bytes which would
-> > prevent errors.
-> >=20
-> > However, when I dig deeper - it turned out that this value is
-> > larger. And hence I wanted to do it in "right way". =20
->=20
-> Correct, I'm not debating this. I'm just saying, as a reader of this
-> patch set in linear order, that the justification is not obvious.
->=20
-> > > I have also noticed that you have not acted upon my previous
-> > > review comment:
-> > > https://patchwork.kernel.org/project/netdevbpf/patch/20230106101651.1=
-137755-1-lukma@denx.de/
-> > >=20
-> > > | 1522 - 30 =3D 1492.
-> > > |=20
-> > > | I don't believe that there are switches which don't support the
-> > > standard | MTU of 1500 ?!
-> > > |=20
-> > > | >  		.port_base_addr =3D 0x10,
-> > > | >  		.phy_base_addr =3D 0x0,
-> > > | >  		.global1_addr =3D 0x1b,
-> > > |=20
-> > > | Note that I see this behavior isn't new. But I've simulated it,
-> > > and it | will produce the following messages on probe:
-> > > |=20
-> > > | [    7.425752] mscc_felix 0000:00:00.5 swp0 (uninitialized): PHY
-> > > [0000:00:00.3:10] driver [Microsemi GE VSC8514 SyncE] (irq=3DPOLL)
-> > > | [ 7.437516] mscc_felix 0000:00:00.5: nonfatal error -34 setting
-> > > MTU to 1500 on port 0 | [    7.588585] mscc_felix 0000:00:00.5
-> > > swp1 (uninitialized): PHY [0000:00:00.3:11] driver [Microsemi GE
-> > > VSC8514 SyncE] (irq=3DPOLL) | [    7.600433] mscc_felix
-> > > 0000:00:00.5: nonfatal error -34 setting MTU to 1500 on port 1 |
-> > > [    7.752613] mscc_felix 0000:00:00.5 swp2 (uninitialized): PHY
-> > > [0000:00:00.3:12] driver [Microsemi GE VSC8514 SyncE] (irq=3DPOLL)
-> > > | [    7.764457] mscc_felix 0000:00:00.5: nonfatal error -34
-> > > setting MTU to 1500 on port 2 | [ 7.900771] mscc_felix
-> > > 0000:00:00.5 swp3 (uninitialized): PHY [0000:00:00.3:13] driver
-> > > [Microsemi GE VSC8514 SyncE] (irq=3DPOLL) | [ 7.912501] mscc_felix
-> > > 0000:00:00.5: nonfatal error -34 setting MTU to 1500 on port 3 |
-> > > | I wonder, shouldn't we first fix that, and apply this patch set
-> > > afterwards?
-> > >=20
-> > > I guess I will have to fix this now, since you haven't done it. =20
-> >=20
-> > I do agree with Russel's reply here. =20
->=20
-> It's possible that Russell might have slightly misunderstood my quoted
-> reply here, because he said something about a PHY.
->=20
-> > Moreover, as 6250 and 6220 also have max frame size equal to 2048
-> > bytes, this would be fixed in v6 after getting the "validation"
-> > function run. =20
->=20
-> The problem with this kind of fix is that it should go to the "net"
-> tree; it removes a user-visible warning that could have been avoided.
->=20
-> OTOH, the kind of "fix" for 6250 and 6220 is different. It is
-> sub-optimal use of hardware capabilities. That classifies as net-next
-> material.
->=20
-> The 2 go to different kernel branches.
->=20
+> Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES ADD 00000000ea28d384 action (16 bytes)
 
-As I said - v6 fixes it in the way which Russel proposed. I also do
-like this approach, so to avoid "wasting effort" I would opt for having
-this fix in this patchset.
+> Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES ADD 000000004090f288 action (16 bytes)
+> Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES REL 000000004090f288 action (16 bytes)
 
-(And I hope that we will finish work on it before MW closes).
+> Mar  8 22:20:36 pc-mtodorov kernel: gpio-sim gpio-sim.0: DEVRES REL 00000000ea28d384 action (16 bytes)
 
-> > This is the "patch 4" in the comment sent by Russel (to fix stuff
-> > which is already broken, but it has been visible after running the
-> > validation code):
-> >=20
-> > https://lists.openwall.net/netdev/2023/03/09/233 =20
->=20
-> I will get there.. eventually.
+Instead of 'action' we need to see the real name of the action.
+
+> NOTE: Maybe I should emphasise that this is not seen in either dmesg or kernel console.
+
+Do you have 'ignore_loglevel' in the kernel command line? You should,
+independently on this patch, for debug testing.
+
+> I have just checked, and DEVRES lines are only in /var/log/messages (on AlmaLinux 8.7, CentOS fork).
+> 
+> As you must have guessed yourself already, this will frustrate debugging past the lifetime of rsyslog process.
+> 
+> Also, there is no way known to me to access dmesg log from the previous kernel run.
+
+Can you test this on top?
+
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 0f128520f6e5..12dc08aa5c0f 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -250,17 +250,19 @@ int __devm_add_action(struct device *dev, void (*action)(void *), void *data, co
+ #define devm_add_action(release, action, data) \
+ 	__devm_add_action(release, action, data, #action)
+ 
+-static inline int devm_add_action_or_reset(struct device *dev,
+-					   void (*action)(void *), void *data)
++static inline int __devm_add_action_or_reset(struct device *dev, void (*action)(void *),
++					     void *data, const char *name)
+ {
+ 	int ret;
+ 
+-	ret = devm_add_action(dev, action, data);
++	ret = __devm_add_action(dev, action, data, name);
+ 	if (ret)
+ 		action(data);
+ 
+ 	return ret;
+ }
++#define devm_add_action_or_reset(release, action, data) \
++	__devm_add_action_or_reset(release, action, data, #action)
+ 
+ /**
+  * devm_alloc_percpu - Resource-managed alloc_percpu
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-
-
-Best regards,
-
-Lukasz Majewski
-
---
-
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/66KvUnqbJfOyKPuGiz=LZXS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmQLOmwACgkQAR8vZIA0
-zr0SdggAnlMT279Z5xFfrPUOgn2LhGbjP7xTcBRjpa3P3h19XoQtxxBvRS7M+ahB
-Qv4n3ZXYfOJDuSFLxndW7Jmzey86hLLw0utCR5nvxmdO82eTKEAXSM0WdQWlqepd
-Mm+FZgK5rwap4CZcnvsaYWRJI9NZap0mGJ2mhWccOedqCNj0AZE3GzMIc0ysfhZb
-6GAYIGJD/dPNw1//+/Bl0PcN/4lIckzwp4nfZqHPl0+EBZ9VZ6Cu/pViQDGedoI9
-vmWi72dYXg03FvH0dr5ydmfWNN6No+kqC8N/b67mhOpxkynPQrk2aHRfONwK42wi
-F61F0uuAB+J0SBapcFPnvo6R3X6lmw==
-=nx7W
------END PGP SIGNATURE-----
-
---Sig_/66KvUnqbJfOyKPuGiz=LZXS--
