@@ -2,177 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C0B6B4CE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C75E36B4CF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbjCJQ1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 11:27:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S231710AbjCJQ2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 11:28:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjCJQ0n (ORCPT
+        with ESMTP id S231697AbjCJQ2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:26:43 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4E164B20;
-        Fri, 10 Mar 2023 08:23:12 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5C3E11EC0554;
-        Fri, 10 Mar 2023 17:22:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678465377;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Zn3O1Wv8hkpbU9xlZEacvI/7IhPFKYjF4Rh+Ru4Qd7o=;
-        b=i4X5Mit4U8kl9v7iGgYtOKUsx1Wd68zbYF2p6kNYzqJ7GiZu/mWyCs3+mmgXDho/tsy1Uq
-        c4NTudr4144eQrYalak0XGyKKhUqr4axXIMb0VupXDBjeddRqYLAsrfsBXdMlD8Tpvm5Mn
-        eKKNGx344acXzkCNqDR2ES0jFJr0XuE=
-Date:   Fri, 10 Mar 2023 17:22:53 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>, x86@kernel.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH -v2] x86/CPU/AMD: Make sure EFER[AIBRSE] is set
-Message-ID: <20230310162253.GCZAtZXcpK2JK0cFkZ@fat_crate.local>
-References: <Y/knUC0s+rg6ef2r@zn.tnic>
- <Y/k/ZXUXOFiBhOiI@zn.tnic>
- <20230225000931.wrednfun4jifkqau@treble>
- <Y/lUSC5x2ZkTIGu4@zn.tnic>
- <20230225005221.425yahqvxb57c43x@desk>
- <20230225013202.g7tibykvylprsxs5@treble>
- <Y/n9XcbnCzWv2Vul@zn.tnic>
- <445daef5-8417-ddbb-abbf-3c5ab38e1c9c@intel.com>
- <Y/zO7MtvjiVLCiLg@zn.tnic>
- <3f80e71f-a995-8ad6-b7f2-2b80fefdbd46@intel.com>
+        Fri, 10 Mar 2023 11:28:07 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4401712A167;
+        Fri, 10 Mar 2023 08:24:31 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so10375193pjb.3;
+        Fri, 10 Mar 2023 08:24:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678465471;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bgoQlOpy4b0B8nZEaFVrMLHwu8XAr3moy3RuUVCTb+U=;
+        b=f9wLgtG3MTPeNDZlgCrh06fw/uLN3mr+fBgfLcSanP1SmhPI+KLxCwwdDxkL2v2P3s
+         lyLa/RNZG4SOhylUZydLb6Esv5HBs57trvRj3yBWSvPyA5zX+ft+XlGxy62315JQur1b
+         R2ETtKASVPtFV1BClXj6y/grX74G5wgws7TKVGiJOu+G/B5C9eYNdGSsg7J0gxqmMAxx
+         4hN/rluhNRqnvYXwQ/Qes7uUALbCLjMhAEg2kfA4bFtzMYESbf+mQZXsCEspbn7FvwBM
+         Of2jjlO1vrsIJw+4S8ehevrHl4A5IDcHiI8JPMeADjhk2O94DU6h4WwKQYPmTuSdwV+U
+         pdiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678465471;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bgoQlOpy4b0B8nZEaFVrMLHwu8XAr3moy3RuUVCTb+U=;
+        b=tjP2T32k4+5l1736Xj1qj2JshxTEc95jSHSK/yGLmWB9ABRA/hb7CoxzfecchcJ7lo
+         e2BxXem6DqI+57FV4Mnp2zvn98kmuH8FsCu0Hv9Cg0IneKxQ8qh1darCB+Xx8+iIsIij
+         Jv5Y5wQh4r2MngHVoChXQY7T6bHCla6aX8N9KSASi1PDiysZs1qrcRf0p9nXrmVXv7B+
+         2uOxpxLuOJZJEk0Hra/WV90Qnaw+i1aW3xGZv7Zj57QHKmYvFHOKI8yDT3YAcneBQJKc
+         O735Mj2YGDIU36FuoArL5SLQet+vCd/5DHfm6/tRYIDFFzO6zxDVr4fZ90QEGi+HbKrb
+         9Wmg==
+X-Gm-Message-State: AO0yUKUf4pltAWggkqioycmLIbRKOA1dwExoTfIiYNCeuft06DcqGZuq
+        EABtPq5KcS+VssNGv+BbSn4HgoRPKTHKRqp+U3Q=
+X-Google-Smtp-Source: AK7set+zisO5NUbf2wsvJwCJJmhHGGvYu2ER1SV1tgaoWCyvbfT/kZuk+GzHUaAB8z+UjhcA+6WXkQ/56ySAK06S1Co=
+X-Received: by 2002:a17:902:ef92:b0:19a:8259:c754 with SMTP id
+ iz18-20020a170902ef9200b0019a8259c754mr9776611plb.0.1678465470776; Fri, 10
+ Mar 2023 08:24:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3f80e71f-a995-8ad6-b7f2-2b80fefdbd46@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230309181036.262674-1-zyytlz.wz@163.com> <e5b1ee16-796e-43fe-b703-3ce06aed364d@mercury.local>
+In-Reply-To: <e5b1ee16-796e-43fe-b703-3ce06aed364d@mercury.local>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Sat, 11 Mar 2023 00:24:18 +0800
+Message-ID: <CAJedcCwt7agR8Y76Rsj5d9HK2oYJZi_QGh11v97L31QR+RDZ+A@mail.gmail.com>
+Subject: Re: [PATCH] power: supply: da9150: Fix use after free bug in
+ da9150_charger_remove due to race condition
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, support.opensource@diasemi.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        1395428693sheep@gmail.com, alex000young@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v2, with feedback addressed, and rediffed ontop of 6.3-rc1:
+Sebastian Reichel <sebastian.reichel@collabora.com> =E4=BA=8E2023=E5=B9=B43=
+=E6=9C=8810=E6=97=A5=E5=91=A8=E4=BA=94 07:39=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hi,
+>
+> On Fri, Mar 10, 2023 at 02:10:36AM +0800, Zheng Wang wrote:
+> > In da9150_charger_probe, &charger->otg_work is bound with
+> > da9150_charger_otg_work. da9150_charger_otg_ncb may be
+> > called to start the work.
+> >
+> > If we remove the module which will call da9150_charger_remove
+> >  to make cleanup, there may be a unfinished work. The possible
+> >   sequence is as follows:
+> >
+> > Fix it by canceling the work before cleanup in the mtk_jpeg_remove
+>
+> mtk_jpeg_remove?
 
----
-From: "Borislav Petkov (AMD)" <bp@alien8.de>
+Sorry that's mistake. I will correct it in the next version of patch.
 
-The AutoIBRS bit gets set only on the BSP as part of determining which
-mitigation to enable on AMD. Setting on the APs relies on the
-circumstance that the APs get booted through the trampoline and EFER
-- the MSR which contains that bit - gets replicated on every AP from the
-BSP.
+>
+> >
+> > CPU0                  CPUc1
+> >
+> >                     |da9150_charger_otg_work
+> > da9150_charger_remove      |
+> > power_supply_unregister  |
+> > device_unregister   |
+> > power_supply_dev_release|
+> > kfree(psy)          |
+> >                     |
+> >                     |         power_supply_changed(charger->usb);
+> >                     |   //use
+> > Fixes: c1a281e34dae ("power: Add support for DA9150 Charger")
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > ---
+>
+> Looks correct to me, but the cancel_work_sync should happen after
+> usb_unregister_notifier(), otherwise there is still a race
+> condition.
 
-However, this can change in the future and considering the security
-implications of this bit not being set on every CPU, make sure it is set
-by verifying EFER later in the boot process and on every AP.
+Yes, I agree that. Thanks for pointing that out. Will do in the next path.
 
-Reported-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230224185257.o3mcmloei5zqu7wa@treble
----
- arch/x86/kernel/cpu/amd.c  | 11 +++++++++++
- arch/x86/kernel/cpu/bugs.c | 10 +---------
- arch/x86/kernel/cpu/cpu.h  |  8 ++++++++
- 3 files changed, 20 insertions(+), 9 deletions(-)
+Best regards,
+Zheng
 
-diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-index 380753b14cab..dd32dbc7c33e 100644
---- a/arch/x86/kernel/cpu/amd.c
-+++ b/arch/x86/kernel/cpu/amd.c
-@@ -996,6 +996,17 @@ static void init_amd(struct cpuinfo_x86 *c)
- 		msr_set_bit(MSR_K7_HWCR, MSR_K7_HWCR_IRPERF_EN_BIT);
- 
- 	check_null_seg_clears_base(c);
-+
-+	/*
-+	 * Make sure EFER[AIBRSE - Automatic IBRS Enable] is set. The APs are brought up
-+	 * using the trampoline code and as part of it, MSR_EFER gets prepared there in
-+	 * order to be replicated onto them. Regardless, set it here again, if not set,
-+	 * to protect against any future refactoring/code reorganization which might
-+	 * miss setting this important bit.
-+	 */
-+	if (spectre_v2_in_eibrs_mode(spectre_v2_enabled) &&
-+	    cpu_has(c, X86_FEATURE_AUTOIBRS))
-+		WARN_ON_ONCE(msr_set_bit(MSR_EFER, _EFER_AUTOIBRS));
- }
- 
- #ifdef CONFIG_X86_32
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index f9d060e71c3e..182af64387d0 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -784,8 +784,7 @@ static int __init nospectre_v1_cmdline(char *str)
- }
- early_param("nospectre_v1", nospectre_v1_cmdline);
- 
--static enum spectre_v2_mitigation spectre_v2_enabled __ro_after_init =
--	SPECTRE_V2_NONE;
-+enum spectre_v2_mitigation spectre_v2_enabled __ro_after_init = SPECTRE_V2_NONE;
- 
- #undef pr_fmt
- #define pr_fmt(fmt)     "RETBleed: " fmt
-@@ -1133,13 +1132,6 @@ spectre_v2_parse_user_cmdline(void)
- 	return SPECTRE_V2_USER_CMD_AUTO;
- }
- 
--static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
--{
--	return mode == SPECTRE_V2_EIBRS ||
--	       mode == SPECTRE_V2_EIBRS_RETPOLINE ||
--	       mode == SPECTRE_V2_EIBRS_LFENCE;
--}
--
- static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mode)
- {
- 	return spectre_v2_in_eibrs_mode(mode) || mode == SPECTRE_V2_IBRS;
-diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
-index 57a5349e6954..f97b0fe13da8 100644
---- a/arch/x86/kernel/cpu/cpu.h
-+++ b/arch/x86/kernel/cpu/cpu.h
-@@ -83,4 +83,12 @@ unsigned int aperfmperf_get_khz(int cpu);
- extern void x86_spec_ctrl_setup_ap(void);
- extern void update_srbds_msr(void);
- 
-+extern enum spectre_v2_mitigation spectre_v2_enabled;
-+
-+static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
-+{
-+	return mode == SPECTRE_V2_EIBRS ||
-+	       mode == SPECTRE_V2_EIBRS_RETPOLINE ||
-+	       mode == SPECTRE_V2_EIBRS_LFENCE;
-+}
- #endif /* ARCH_X86_CPU_H */
--- 
-2.35.1
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+>
+> >  drivers/power/supply/da9150-charger.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/power/supply/da9150-charger.c b/drivers/power/supp=
+ly/da9150-charger.c
+> > index 14da5c595dd9..41b68f2f6ed8 100644
+> > --- a/drivers/power/supply/da9150-charger.c
+> > +++ b/drivers/power/supply/da9150-charger.c
+> > @@ -642,6 +642,7 @@ static int da9150_charger_remove(struct platform_de=
+vice *pdev)
+> >       struct da9150_charger *charger =3D platform_get_drvdata(pdev);
+> >       int irq;
+> >
+> > +     cancel_work_sync(&charger->otg_work);
+> >       /* Make sure IRQs are released before unregistering power supplie=
+s */
+> >       irq =3D platform_get_irq_byname(pdev, "CHG_VBUS");
+> >       free_irq(irq, charger);
+> > --
+> > 2.25.1
+> >
