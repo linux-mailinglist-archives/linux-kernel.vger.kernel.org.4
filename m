@@ -2,116 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37866B34BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E876B34BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:23:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjCJDW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 22:22:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S229613AbjCJDX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 22:23:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjCJDWY (ORCPT
+        with ESMTP id S229971AbjCJDXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 22:22:24 -0500
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6958B1070C0
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 19:22:22 -0800 (PST)
-Received: by mail-ua1-x930.google.com with SMTP id h34so2655351uag.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 19:22:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678418541;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rHr1GGsOjXLcWLjsmH/gUiANtjkEwqYh6mSdD4znyFE=;
-        b=B90+ToIXUteCBlMGv/h+HRTmHi/Hj5vUhO45dJWlo/KFuWBFEtCuLw1vHQRdVj3a9l
-         XPRRun4yKYYLVGrsnB03glAgEX+m4GKLQfT3MSfs01SXEVIWrC0H3Gj2lcuEtRZVmraP
-         Q1uW2Rqv+LQH3B2szv8EsVhwNW4VRyLMAquH4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678418541;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rHr1GGsOjXLcWLjsmH/gUiANtjkEwqYh6mSdD4znyFE=;
-        b=sk3EQd8BVujsVSCAb0mm5CQK2cz0kM6BXd8TjkPie2wUiU55fj1juQjHGy/BIrz9JB
-         VQx7r/nZ3hHdvsHZMXGCIxcPWWXOO/OYAEwRBBksolyKGAfWEMGhDIcSGtofgT1yVd2O
-         GfQ5TKOJquy+mMSeeSo0HSp6jxtfbtN/VPielQlpxafjf5vnkJgYIw76IriqjELoKhnX
-         YvLTCxVYFo1l9ZfO0/pQL4nU9JXALjM9Z5yBedF/IAKFhPcqcKQVXHO7LSdj+ffAaXjk
-         Cz6R2BtaiInnZZOfIcU3Nd8xUAuZss85zOLcQDt2ze5jDH4t/pu/rfAkurg9YS+J707J
-         O64A==
-X-Gm-Message-State: AO0yUKWTTZV/J4XKWd56Htn4bZCNlHkMgrBarrwVpIdzCnvjYb0Li3Ym
-        e1m4OGy0Dnt72cuNAgSUTWDMGnSpaQVsqPBpAcgdOA==
-X-Google-Smtp-Source: AK7set8faFGJ+bOZYGnxseavaFiHmTnrgryhuZbd0Hj/FWE/b7datWYPM+PvMM7obIRbTIYTrtYMG7ouTbxFDjo/zDE=
-X-Received: by 2002:a1f:c507:0:b0:401:2297:b2e0 with SMTP id
- v7-20020a1fc507000000b004012297b2e0mr14336398vkf.0.1678418541550; Thu, 09 Mar
- 2023 19:22:21 -0800 (PST)
+        Thu, 9 Mar 2023 22:23:54 -0500
+Received: from out-62.mta1.migadu.com (out-62.mta1.migadu.com [IPv6:2001:41d0:203:375::3e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1002D591D2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 19:23:51 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1678418630;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/jzu8+pSkAradaQDPCXdijqxCtBj4zASOgRk5utxWrw=;
+        b=RS4b3cBQknsRe1MIFarSG4NHVQkEQSZctgbU9a6tWUJ8peK7aYXBvyxG8aVCCEh43i3Y0Q
+        ZTfvFJle1VIMMzEi7f/wvch9k3nMBWT+yRcDOMrPOjV7etNoB33N4sgHpMOfRbRuRJiaI9
+        0/IHjH/fN/fWXm4nzFayTGTZpPy+HKw=
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     fancer.lancer@gmail.com
+Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: [PATCH v6 0/5] dmaengine: dw-edma: Add support for native HDMA
+Date:   Fri, 10 Mar 2023 11:23:33 +0800
+Message-Id: <20230310032342.17395-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-References: <20230307154524.118541-1-bchihi@baylibre.com>
-In-Reply-To: <20230307154524.118541-1-bchihi@baylibre.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 10 Mar 2023 11:22:10 +0800
-Message-ID: <CAGXv+5F6yFk+VMUe50YfV11Bx3qnQ=FHymeAM=dgfrqwLGrG7Q@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Add LVTS's AP thermal domain support for mt8195
-To:     bchihi@baylibre.com
-Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 11:45=E2=80=AFPM <bchihi@baylibre.com> wrote:
->
-> From: Balsam CHIHI <bchihi@baylibre.com>
->
-> Add AP thermal domain support to LVTS Driver for MediaTek MT8195 SoC.
->
-> This series is a continuation of the original series "Add LVTS Thermal Ar=
-chitecture" v14 :
->     https://patchwork.kernel.org/project/linux-pm/cover/20230209105628.50=
-294-1-bchihi@baylibre.com/
->
-> Based on top of thermal/linux-next :
->     base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
->
-> Depends on these patches as they are not yet applyied to thermal/linux-ne=
-xt branch :
->     [v14,3/6] arm64: dts: mt8195: Add efuse node to mt8195 (already inclu=
-ded in linux master branch)
->     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50=
-294-4-bchihi@baylibre.com/
->     [v14,5/6] arm64: dts: mediatek: mt8195: Add thermal zones and thermal=
- nodes
->     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50=
-294-6-bchihi@baylibre.com/
->     [v14,6/6] arm64: dts: mediatek: mt8195: Add temperature mitigation th=
-reshold
->     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50=
-294-7-bchihi@baylibre.com/
->
-> Balsam CHIHI (4):
->   dt-bindings: thermal: mediatek: Add AP domain to LVTS thermal
->     controllers for mt8195
->   thermal/drivers/mediatek/lvts_thermal: Add AP domain for mt8195
->   arm64: dts: mediatek: mt8195: Add AP domain thermal zones
->   arm64: dts: mediatek: mt8195: Add AP domain temperature thresholds
+Add support for HDMA NATIVE, as long the IP design has set
+the compatible register map parameter-HDMA_NATIVE,
+which allows compatibility for native HDMA register configuration.
 
-Whole series is
+The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
+And the native HDMA registers are different from eDMA,
+so this patch add support for HDMA NATIVE mode.
 
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+HDMA write and read channels operate independently to maximize
+the performance of the HDMA read and write data transfer over
+the link When you configure the HDMA with multiple read channels,
+then it uses a round robin (RR) arbitration scheme to select
+the next read channel to be serviced.The same applies when
+youhave multiple write channels.
 
-on MT8195 Tomato Chromebook.
+The native HDMA driver also supports a maximum of 16 independent
+channels (8 write + 8 read), which can run simultaneously.
+Both SAR (Source Address Register) and DAR (Destination Address Register)
+are aligned to byte.
+
+Cai Huoqing (2):
+  dmaengine: dw-edma: Add support for native HDMA
+  dmaengine: dw-edma: Optimization in dw_edma_v0_core_handle_int
+
+Cai huoqing (3):
+  dmaengine: dw-edma: Rename dw_edma_core_ops structure to
+    dw_edma_plat_ops
+  dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
+    abstract controller operation
+  dmaengine: dw-edma: Add HDMA DebugFS support
+
+v5->v6:
+  [1/5]
+  1.Change the commit log to explain dw_edma_core_ops structure.
+  2.Revert the instance dw_edma_pcie_plat_ops.
+  [2/5]
+  3.include "linux/irqreturn.h" to the head of the file.
+  4.Add irq state 'ret' to indicate whether the IRQ was actually handled.
+  5.Using edma_done_interrupt/_abort_interrupt() callback instead of global fucntion.
+  [3/5]
+  6.Remove some unnecessary wrapper function.
+  7.Using one loop instead two in dw_hdma_v0_core_handle_int.
+  8.Fix the method to returning the actual IRQ-handling status.
+  [4/5]
+  9.Fix 'reg' pointing error in dw_hdma_debugfs_u32_get.
+  10.Add padding_1/_2 reserve to fix wrong reg offset.
+  [5/5]
+  11.Remove some unnecessary wrapper function.
+
+v5 link:
+  https://lore.kernel.org/lkml/20230303124642.5519-1-cai.huoqing@linux.dev/
+
+ drivers/dma/dw-edma/Makefile                 |   8 +-
+ drivers/dma/dw-edma/dw-edma-core.c           |  84 +++---
+ drivers/dma/dw-edma/dw-edma-core.h           |  55 ++++
+ drivers/dma/dw-edma/dw-edma-pcie.c           |   4 +-
+ drivers/dma/dw-edma/dw-edma-v0-core.c        |  91 ++++--
+ drivers/dma/dw-edma/dw-edma-v0-core.h        |  14 +-
+ drivers/dma/dw-edma/dw-hdma-v0-core.c        | 277 +++++++++++++++++++
+ drivers/dma/dw-edma/dw-hdma-v0-core.h        |  17 ++
+ drivers/dma/dw-edma/dw-hdma-v0-debugfs.c     | 176 ++++++++++++
+ drivers/dma/dw-edma/dw-hdma-v0-debugfs.h     |  22 ++
+ drivers/dma/dw-edma/dw-hdma-v0-regs.h        | 130 +++++++++
+ drivers/pci/controller/dwc/pcie-designware.c |   2 +-
+ include/linux/dma/edma.h                     |   7 +-
+ 13 files changed, 784 insertions(+), 103 deletions(-)
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
+
+-- 
+2.34.1
+
