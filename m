@@ -2,209 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7A56B3862
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:19:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6345D6B3865
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjCJIT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 03:19:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
+        id S230250AbjCJIUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:20:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjCJITY (ORCPT
+        with ESMTP id S229846AbjCJIUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:19:24 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC46E95475
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:19:21 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id p26so2818293wmc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:19:21 -0800 (PST)
+        Fri, 10 Mar 2023 03:20:09 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9568FFAEE9;
+        Fri, 10 Mar 2023 00:20:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678436360;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e3+IejGerSkWVmYYthQksOk85z2qGIusABFoD8foBbU=;
-        b=WIyaXheqnXnNzAG3ZpDrMShk0xBME1mI7nZjH2KgOK59dTBG1gaB04q55SdmETCjvP
-         zMbKix1GeHqTX1SoM3+vrKysTljd2ZHbbNwZz0v1vCtTAgVPxsgQjQH1HDwzgEznIvTn
-         vOqZbsq/rEQlWkYl4tEZVoYrawpl+8Q7+4MvRV08RPemY6CFxk9a010PtG3zauuOJZUm
-         E0yLy45n6feN5/Q67wcYWHLvIYsvNVSDlwWHYiqJl4WHFpKX/zyAmqaZLppWbSAtuod/
-         LJdjpfux/3MjVbjaEtaDC09SvVu4W/NQJBXPborM5cL88zTu0Z0PqoIFmw0szevnBJAO
-         UXCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678436360;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e3+IejGerSkWVmYYthQksOk85z2qGIusABFoD8foBbU=;
-        b=jFy/mTKtFXmldrTBhG0/xngeZXf+GTzrxeMUk9ujW0amUQ8QxrmQ39+UIWpMSTZ6NG
-         nuqtC/FKShiVRB+ZTGDxb9ejd1vhUL97J00yS+JKYmv6DwJeS5HRLkicLjkJM28bn38U
-         X6wt8ivb2tLecpoRdDKlZatm01O8evXQjjkLNkR2bH+cP73jLd0Z7zGNRkCJ2nUdxyL7
-         Aw0DQk0gvCaHSbz+8Yu46/B1fhUIx/nBSmXDeWEra33UTL/a5rufLywTP5ZjB2B/sDMp
-         1Nd0zbVPgHy0THLfDvnXXwlXJu9anUifBvx8ap4ryxG7Q1u8GofDCsRud5h1a5qHKB52
-         8KdQ==
-X-Gm-Message-State: AO0yUKVxrFEB/FRIIRHsDe8F86E9Wy79iqYpw87LMqA0W3HwzqooqyQZ
-        kiP1gpH2vvaJ3jBN1UjV0GAxPSehgvIBFC7nEchQqg==
-X-Google-Smtp-Source: AK7set9rSovQkv6G8/2uFWd8dZCJdhTjKOFXRnj4/glBjRHWFtuXEHSglc64lK3dRxU/gLKgbKiUpRiWGZkosiiA86U=
-X-Received: by 2002:a7b:c2a9:0:b0:3df:97b0:ba02 with SMTP id
- c9-20020a7bc2a9000000b003df97b0ba02mr578544wmk.3.1678436360078; Fri, 10 Mar
- 2023 00:19:20 -0800 (PST)
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1678436407; x=1709972407;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Q2F5jQ+UF6+ouYmpPp9MVX0qcP1dWeBaAnFIKouhEoc=;
+  b=dSqjDJeFOBWKmGzgFeSbFOidRnb88T+CIo4Mq0Ox5oU2IfvQC9gJi9fo
+   k4R+e3Z3tdFoqWZW8VYGtwa/BWcHPdMH8bc86YF90d7+GaxnU6naY5AaP
+   WDcyS1dNIAVv5+0HiYVYDe3/y+HTlw+jM6MPsDAcTZltOBuJToHIHiZls
+   TJGxlzT/rbZaVw4Ix5Q81fwVOY20Bxzv7qu4V862NFyz/Iiica8XAz3/t
+   3FUPbHuxqbvoVXhl6FLSuaKo82M8Zj17KgtoxhhagkmTd9jxcQ9XkRi4I
+   KqeU1PltS8YcMMvR8KVx2OA1+KVZ7xZtJmDVHbpcCCqe8Jl2GnF1DFeay
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,249,1673910000"; 
+   d="scan'208";a="29598330"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 10 Mar 2023 09:20:05 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 10 Mar 2023 09:20:04 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 10 Mar 2023 09:20:04 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1678436405; x=1709972405;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Q2F5jQ+UF6+ouYmpPp9MVX0qcP1dWeBaAnFIKouhEoc=;
+  b=b+tp6csmpS5lUKfWdXwkoGvgfS2cff3gzgN/Gasm2ogHg0XZZk/0I3Hc
+   RPhyBF3jBq5bWfZRebj6+de4f7kDOVGcPg1yiz9RyeMzYJbwn4qqZgQFu
+   mv3je/jMtiCsmFJryADDudsgXAXewKnjAmsvsXjnYMBaXNhsGzA/loNfH
+   xC90YUj6TaJRWN00GWvZ3K4aAbFocu4Qtbs9gr2oJyelfGXAZh0ncHj2V
+   UKKnxUtGwG23sG4wlfOf/5FFo+ly6tMeSGgOdAo27eNfSwOT5eIFPn9wq
+   LHqByresjpLHB2Fo6kElmkNxb2/vL7zKOtSY2YhfSDqvcjEw4x3BDivJD
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,249,1673910000"; 
+   d="scan'208";a="29598328"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 10 Mar 2023 09:20:04 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 5918F280056;
+        Fri, 10 Mar 2023 09:20:04 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-imx@nxp.com, "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
+Subject: Re: [PATCH v1 2/4] thermal: qoriq: add i.MX93 TMU support
+Date:   Fri, 10 Mar 2023 09:20:00 +0100
+Message-ID: <2379970.Icojqenx9y@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230105101748.6714-3-alice.guo@oss.nxp.com>
+References: <20230105101748.6714-1-alice.guo@oss.nxp.com> <20230105101748.6714-3-alice.guo@oss.nxp.com>
 MIME-Version: 1.0
-References: <20230302013822.1808711-1-sboyd@kernel.org> <20230302013822.1808711-4-sboyd@kernel.org>
- <CABVgOSmR0_u8Tw0E8C1mRFxSiGKwdKG5ka_+X_36Hj4VNLdg2g@mail.gmail.com> <b0d4d450a7ad9b39336771b74b48f086.sboyd@kernel.org>
-In-Reply-To: <b0d4d450a7ad9b39336771b74b48f086.sboyd@kernel.org>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 10 Mar 2023 16:19:08 +0800
-Message-ID: <CABVgOSmVJyG2X6aPzWGe9G-hUy8C7nWAqUnNoh-a5DFou6rkQA@mail.gmail.com>
-Subject: Re: [PATCH 3/8] kunit: Add test managed platform_device/driver APIs
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023 at 07:25, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting David Gow (2023-03-02 23:15:31)
-> > On Thu, 2 Mar 2023 at 09:38, Stephen Boyd <sboyd@kernel.org> wrote:
-> > >
-> > > Introduce KUnit resource wrappers around platform_driver_register(),
-> > > platform_device_alloc(), and platform_device_add() so that test authors
-> > > can register platform drivers/devices from their tests and have the
-> > > drivers/devices automatically be unregistered when the test is done.
-> > >
-> > > This makes test setup code simpler when a platform driver or platform
-> > > device is needed. Add a few test cases at the same time to make sure the
-> > > APIs work as intended.
-> > >
-> > > Cc: Brendan Higgins <brendan.higgins@linux.dev>
-> > > Cc: David Gow <davidgow@google.com>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > > Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> > > ---
-> > >
-> > > Should this be moved to drivers/base/ and called platform_kunit.c?
-> > > The include/kunit/platform_driver.h could also be
-> > > kunit/platform_device.h to match linux/platform_device.h if that is more
-> > > familiar.
-> >
-> > DRM has a similar thing already (albeit with a root_device, which is
-> > more common with KUnit tests generally):
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/drm/drm_kunit_helpers.h
-> >
-> > But that's reasonably drm-specific, so it makes sense that it lives
-> > with DRM stuff. platform_device is a bit more generic.
-> >
-> > I'd probably personally err on the side of having these in
-> > drivers/base/, as I think we'll ultimately need similar things for a
-> > lot of different devices, and I'd rather not end up with things like
-> > USB device helpers living in the lib/kunit directory alongside the
-> > "core" KUnit code. But I could be persuaded otherwise.
->
-> Ok no problem. I'll move it.
->
-> >
-> > >
-> > > And I'm not super certain about allocating a driver structure and
-> > > embedding it in a wrapper struct. Maybe the code should just use
-> > > kunit_get_current_test() instead?
-> >
-> > I think there are enough cases througout the kernel where
-> > device/driver structs are needed that having this makes sense.
-> > Combined with the fact that, while kunit_get_current_test() can be
-> > used even when KUnit is not loaded, actually doing anything with the
-> > resulting struct kunit pointer will probably require (at least for the
-> > moment) KUnit functions to be reachable, so would break if
-> > CONFIG_KUNIT=m.
->
-> Wouldn't it still work in that case? The unit tests would be modular as
-> well because they depend on CONFIG_KUNIT.
->
+Hi,
 
-Yeah, the only case where this starts to get hairy is if the tests end
-up in the same module as the thing being tested (which sometimes
-happens to avoid having to export a bunch of symbols: see, e.g.
-thunderbolt and amdgpu), and then someone wants to build production
-kernels with CONFIG_KUNIT=m (alas, Red Hat and Android).
+Am Donnerstag, 5. Januar 2023, 11:17:46 CET schrieb Alice Guo (OSS):
+> From: Alice Guo <alice.guo@nxp.com>
+>=20
+> The procedure to program the calibration table of i.MX93 TMU:
+> 1. disable monitoring mode
+> 2. configure TCMCFG
+> 3. write TTCFGR with TTCFGR[CAL_PT] =3D n
+> 4. write TSCFGR with the sensor value of the calibration point n
+> 5. write TTRCRn associated with the calibration point n
+> Need to repeat steps 3=E2=80=945 for all calibration points from the cali=
+bration
+> table provided by the TMU device node.
+>=20
+> When TRITSR[V] =3D 1 and TRITSR[TP5] =3D 1, need to add 0.5K to
+> TRITSR[TEMP].
+>=20
+> IPBRR0s of lx2160ardb, lx2162aqds and i.MX93 have the same value
+> 0x01900201 so that use the compatible to determine whether the current
+> TMU belongs to i.MX93 or not.
+>=20
+> Signed-off-by: Alice Guo <alice.guo@nxp.com>
+> Reviewed-by: Jacky Bai <ping.bai@nxp.com>
+> Reviewed-by: Ye Li <ye.li@nxp.com>
+> Acked-by: Jason Liu <jason.hui.liu@nxp.com>
+> ---
+>  drivers/thermal/qoriq_thermal.c | 56 ++++++++++++++++++++++++++++++---
+>  1 file changed, 52 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/thermal/qoriq_thermal.c
+> b/drivers/thermal/qoriq_thermal.c index d111e218f362..18030bd68687 100644
+> --- a/drivers/thermal/qoriq_thermal.c
+> +++ b/drivers/thermal/qoriq_thermal.c
+> @@ -24,9 +24,11 @@
+>  #define TMTMIR_DEFAULT	0x0000000f
+>  #define TIER_DISABLE	0x0
+>  #define TEUMR0_V2		0x51009c00
+> +#define TEUMR0_V21		0x55010c00
+>  #define TMSARA_V2		0xe
+>  #define TMU_VER1		0x1
+>  #define TMU_VER2		0x2
+> +#define TMU_VER93		0x3
+>=20
+>  #define REGS_TMR	0x000	/* Mode Register */
+>  #define TMR_DISABLE	0x0
+> @@ -52,6 +54,7 @@
+>  					    * Site Register
+>  					    */
+>  #define TRITSR_V	BIT(31)
+> +#define TRITSR_TP5	BIT(9)
+>  #define REGS_V2_TMSAR(n)	(0x304 + 16 * (n))	/* TMU monitoring
+>  						* site adjustment=20
+register
+>  						*/
+> @@ -114,10 +117,16 @@ static int tmu_get_temp(struct thermal_zone_device
+> *tz, int *temp) 10 * USEC_PER_MSEC))
+>  		return -ENODATA;
+>=20
+> -	if (qdata->ver =3D=3D TMU_VER1)
+> +	if (qdata->ver =3D=3D TMU_VER1) {
+>  		*temp =3D (val & GENMASK(7, 0)) * MILLIDEGREE_PER_DEGREE;
+> -	else
+> +	} else if (qdata->ver =3D=3D TMU_VER93) {
+> +		if (val & TRITSR_TP5)
+> +			*temp =3D milli_kelvin_to_millicelsius((val &=20
+GENMASK(8, 0)) *
+> MILLIDEGREE_PER_DEGREE + 500); +		else
+> +			*temp =3D kelvin_to_millicelsius(val & GENMASK(8,=20
+0));
+> +	} else {
+>  		*temp =3D kelvin_to_millicelsius(val & GENMASK(8, 0));
+> +	}
+>=20
+>  	return 0;
+>  }
+> @@ -207,6 +216,33 @@ static int qoriq_tmu_calibration(struct device *dev,
+>  	return 0;
+>  }
+>=20
+> +static int imx93_tmu_calibration(struct device *dev,
+> +				 struct qoriq_tmu_data *data)
+> +{
+> +	const u32 *calibration =3D NULL;
 
-So that's the only real place where you might need to avoid the
-non-'hook' KUnit functions, but those drivers are pretty few and far
-between, and most of the really useful functionality should be moving
-to 'hooks' which will be patched out cleanly at runtime.
+This should be __be32 instead of u32.
 
-> >
-> > So, unless you actually find kunit_get_current_test() and friends to
-> > be easier to work with, I'd probably stick with this.
-> >
->
-> Alright thanks.
->
-> > > diff --git a/lib/kunit/platform_driver.c b/lib/kunit/platform_driver.c
-> > > new file mode 100644
-> > > index 000000000000..11d155114936
-> > > --- /dev/null
-> > > +++ b/lib/kunit/platform_driver.c
-> > > @@ -0,0 +1,207 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Test managed platform driver
-> > > + */
-> > > +
-> > > +#include <linux/device/driver.h>
-> > > +#include <linux/platform_device.h>
-> > > +
-> > > +#include <kunit/resource.h>
-> > > +
-> > > +struct kunit_platform_device_alloc_params {
-> > > +       const char *name;
-> > > +       int id;
-> > > +};
-> >
-> > FYI: It's my plan to eventually get rid of (or at least de-emphasize)
-> > the whole 'init' function aspect of KUnit resources so we don't need
-> > all of these extra structs and the like. It probably won't make it in
-> > for 6.4, but we'll see...
->
-> Will we be able to get the error values out of the init function? It's
-> annoying that the error values can't be returned as error pointers to
-> kunit_alloc_resource(). I end up skipping init, and doing it directly
-> before or after calling the kunit_alloc_resource() function. I'll try to
-> avoid init functions in the allocations.
+> +	u32 cal_pt =3D 0;
+> +	u32 val =3D 0;
+> +	unsigned int len =3D 0;
+> +	unsigned int i =3D 0;
+> +
+> +	calibration =3D of_get_property(dev->of_node, "fsl,tmu-calibration",=20
+&len);
+> +	if (calibration =3D=3D NULL || len / 8 > 16 || len % 8) {
+> +		dev_err(dev, "invalid tmu calibration\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	for (i =3D 0; i < len; i +=3D 0x8, calibration +=3D 2) {
+> +		cal_pt =3D i / 8;
+> +		regmap_write(data->regmap, REGS_TTCFGR, cal_pt);
+> +		val =3D of_read_number(calibration, 1);
 
-Yeah, that's largely why the plan is to get rid of them: it just made
-passing things around an enormous pain.
-Just doing your own initialisation before adding it as a resource is
-usually the right thing to do.
+of_read_number is actually expecting a __be32.
 
-There's also going to be a simpler kunit_defer() wrapper around it,
-which would just allow you to schedule a cleanup function to be called
-(without the need to keep kunit_resource pointers around, etc), for
-the cases where you don't need to look up resources elsewhere.
+Best regards,
+Alexander
 
-But just doing your own thing and calling kunit_alloc_resource() is
-probably best for now, and should map well onto whatever this ends up
-evolving into.
+> +		regmap_write(data->regmap, REGS_TSCFGR, val);
+> +		val =3D of_read_number(calibration + 1, 1);
+> +		regmap_write(data->regmap, REGS_TTRnCR(cal_pt), val);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static void qoriq_tmu_init_device(struct qoriq_tmu_data *data)
+>  {
+>  	int i;
+> @@ -218,6 +254,11 @@ static void qoriq_tmu_init_device(struct qoriq_tmu_d=
+ata
+> *data)
+>=20
+>  	if (data->ver =3D=3D TMU_VER1) {
+>  		regmap_write(data->regmap, REGS_TMTMIR, TMTMIR_DEFAULT);
+> +	} else if (data->ver =3D=3D TMU_VER93) {
+> +		regmap_write(data->regmap, REGS_V2_TMTMIR,=20
+TMTMIR_DEFAULT);
+> +		regmap_write(data->regmap, REGS_V2_TEUMR(0), TEUMR0_V21);
+> +		for (i =3D 0; i < SITES_MAX; i++)
+> +			regmap_write(data->regmap, REGS_V2_TMSAR(i),=20
+TMSARA_V2);
+>  	} else {
+>  		regmap_write(data->regmap, REGS_V2_TMTMIR,=20
+TMTMIR_DEFAULT);
+>  		regmap_write(data->regmap, REGS_V2_TEUMR(0), TEUMR0_V2);
+> @@ -231,7 +272,7 @@ static void qoriq_tmu_init_device(struct qoriq_tmu_da=
+ta
+> *data)
+>=20
+>  static const struct regmap_range qoriq_yes_ranges[] =3D {
+>  	regmap_reg_range(REGS_TMR, REGS_TSCFGR),
+> -	regmap_reg_range(REGS_TTRnCR(0), REGS_TTRnCR(3)),
+> +	regmap_reg_range(REGS_TTRnCR(0), REGS_TTRnCR(15)),
+>  	regmap_reg_range(REGS_V2_TEUMR(0), REGS_V2_TEUMR(2)),
+>  	regmap_reg_range(REGS_V2_TMSAR(0), REGS_V2_TMSAR(15)),
+>  	regmap_reg_range(REGS_IPBRR(0), REGS_IPBRR(1)),
+> @@ -319,9 +360,15 @@ static int qoriq_tmu_probe(struct platform_device
+> *pdev) }
+>  	data->ver =3D (ver >> 8) & 0xff;
+>=20
+> +	if (of_find_compatible_node(NULL, NULL, "fsl,imx93-tmu"))
+> +		data->ver =3D TMU_VER93;
+> +
+>  	qoriq_tmu_init_device(data);	/* TMU initialization */
+>=20
+> -	ret =3D qoriq_tmu_calibration(dev, data);	/* TMU calibration */
+> +	if (data->ver =3D=3D TMU_VER93)
+> +		ret =3D imx93_tmu_calibration(dev, data);
+> +	else
+> +		ret =3D qoriq_tmu_calibration(dev, data);	/* TMU=20
+calibration */
+>  	if (ret < 0)
+>  		return ret;
+>=20
+> @@ -369,6 +416,7 @@ static SIMPLE_DEV_PM_OPS(qoriq_tmu_pm_ops,
+>  static const struct of_device_id qoriq_tmu_match[] =3D {
+>  	{ .compatible =3D "fsl,qoriq-tmu", },
+>  	{ .compatible =3D "fsl,imx8mq-tmu", },
+> +	{ .compatible =3D "fsl,imx93-tmu", },
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, qoriq_tmu_match);
 
-Cheers,
--- David
+
+=2D-=20
+TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
+any
+Amtsgericht M=C3=BCnchen, HRB 105018
+Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
+neider
+http://www.tq-group.com/
+
+
