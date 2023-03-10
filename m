@@ -2,91 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C206B3893
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C626B389D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbjCJI32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 03:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        id S230089AbjCJIaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjCJI3W (ORCPT
+        with ESMTP id S230395AbjCJIaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:29:22 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86839D528
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:29:20 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id x3so17245590edb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:29:20 -0800 (PST)
+        Fri, 10 Mar 2023 03:30:14 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B61E826C
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:29:56 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-53916ab0c6bso84195297b3.7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:29:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678436959;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uB0rK1kBMI+Nt2y6Mc9XPaDU5dUgUBOxars7E0HbbVA=;
-        b=zgXBVXiVl7XoFo76/yrd+B+8ZajxnPqv4LRc4lpDiXq7OdZ7PU/xXWxE7HWrpyTF/4
-         N1lpTiy7Rd19f/jIRZij0fBTMeCwHLg6Fy+27lUQEeTbJhj52jiCJptd62K8WbgTSuAA
-         cy5EVQC1vzd2U40ptkBfNGpr1GDVSRVl5mMIX1O/utfr3GQxRecLGhuaPwZwCGHZ8h/o
-         tjsyIFnNU6Pb+rB8y+kcbencLHR5P36ivelAWTgGr/IE8D4nIhiNx9kNOkleDoXi3Mzq
-         IEnEkctP6UNzz2Xj0yGHZr+ypNEX+hydG89RjYsnqy2hhsYic3rCyHHqAKdJspIs3x7J
-         Ro3A==
+        d=linaro.org; s=google; t=1678436995;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ICV7h+pf/rdMI7ysm0+yuoMHuqjwB0UAi1mmGinxoQw=;
+        b=wwsKVggsgfCB8PI3WpaD0vy37rNiiEQaarXZf46/WQiCJVqegR/ZzRlbLrcqcjPDFr
+         JMmWGlWxoVWXzEOZOGISruOE8Uv0LkzkOmjlR5Ai6ShLF3d8soKbNlLjvwaLPUmrv9xA
+         vvYUBmiDOeVZdsrJEgCVxA7NlnuBE2XtcEqatypOOeKl31gz+ZKZk1QLFzpviWhRGBGG
+         /sUaJI6k6BBSR2XXCyD451HnhhIjmQdrCfCMTchE/RlXjBOXh/yF+KhSO342gn1xe0Sb
+         D+kWJwIGM7KZ7s6fjUWvosAJFeAjcH+ZFdxQLHSC4KYZdFaUrkIZ57m5wJvDNPfacZNS
+         z+EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678436959;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uB0rK1kBMI+Nt2y6Mc9XPaDU5dUgUBOxars7E0HbbVA=;
-        b=XubAu+BunVoqdi/Vh1ocxXHXReoizvwThLXkmmQ/nVS6CQ4BuoST2lKcKvKhztA994
-         Pp+Kn5Tm1jNC9zBlIrJI1vF8O6MMNzR/Aa4XDl2DScOO3T3Ti68bIHVf7TBYlfLWO9sj
-         yMS6RYz5ALsyCIkC2EWQvGv5bakAG5APQJNr7WvFeUItKJ5eQxZrkFEub+qHUoI7/b1c
-         t/7yW8acSnKRrmu/UZZcV3pSlQEYj9vtexRqvqQjOxrtU1gwtUkWqfJXuz8BRWOucK9J
-         EAoh54h4VOT9Vw5gmwEMsjcHRPUKOewCczYV6o82WV7nLK5sCZHyb9tyyLIr2jDUTgdu
-         vZUA==
-X-Gm-Message-State: AO0yUKVV79RMxlTwr1T+oPGCJGeLiFYjUHNgJwrZxRtsNZR9JkMiy8i1
-        /5RvFKdFJHJUID46IFnKngJCDA==
-X-Google-Smtp-Source: AK7set8UQKKMmAOVRYKQ/i/KExXg3AgioafyC3Q1XOnef/dHb+v6PnHiGYD4PqIZELC7xxX0L8tn1Q==
-X-Received: by 2002:a17:906:246:b0:8b1:fc1a:7d21 with SMTP id 6-20020a170906024600b008b1fc1a7d21mr30206548ejl.5.1678436959029;
-        Fri, 10 Mar 2023 00:29:19 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:2a59:841a:ebc:7974? ([2a02:810d:15c0:828:2a59:841a:ebc:7974])
-        by smtp.gmail.com with ESMTPSA id br5-20020a170906d14500b008ddf3476c75sm673322ejb.92.2023.03.10.00.29.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 00:29:18 -0800 (PST)
-Message-ID: <22325550-5b32-d55a-e647-3890be6b475a@linaro.org>
-Date:   Fri, 10 Mar 2023 09:29:17 +0100
+        d=1e100.net; s=20210112; t=1678436995;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ICV7h+pf/rdMI7ysm0+yuoMHuqjwB0UAi1mmGinxoQw=;
+        b=BGUowJVrU/FGa8eAVx3deXeKDESUQkREPAiIPt0KgqCC8i6BkY5/sMRUFBGxFBcbOz
+         LtO1aFbQSiwHeA+tFgRF5EobATrAmsFPWMdsIn4ssdI8DWUaEJKH2WsH0LFlVL4k5HhL
+         ZtF3bjBHMk6lvZ2peyuOcXitqjn38VI221ianmalVvO2W7rKtwC3YVUSCLWO8HTUHIwx
+         bjqz58AUW2/4zrSyxQXYm8hkgUuASJTRsF+cc0Ndeqs8N/sKbWCiR7y0Hrrh2qDoRVbx
+         psyaj9Opu0XMuOkvgK5LG5QjrUlGvAeFoOrsqs5fQ4wx5TJvwIq2jlBNCVr2S3FNHi1x
+         daLw==
+X-Gm-Message-State: AO0yUKWTGRaxrPGUI5VlIyd1hieBtEvA+wz03JtE65uA/4nzMWNrKasy
+        hg5DuOJWWWvpF7NaTWuQgo63QqgPXHPgzU9tH4ngSw==
+X-Google-Smtp-Source: AK7set/4BTgYluz28No6CAZL3nYPwWvQ+rrktL8qCi6XHRkSqmyDjnFzWioP1GfzMfc4UN9JxUKLnfoVJjBU3uSSYI4=
+X-Received: by 2002:a81:4317:0:b0:52e:dddf:82b9 with SMTP id
+ q23-20020a814317000000b0052edddf82b9mr16336442ywa.10.1678436995632; Fri, 10
+ Mar 2023 00:29:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 02/21] dt-bindings: display: mediatek: ccorr: add binding
- for MT8365 SoC
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
-        Jitao Shi <jitao.shi@mediatek.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
+References: <20230309225041.477440-1-sre@kernel.org> <20230309225041.477440-8-sre@kernel.org>
+In-Reply-To: <20230309225041.477440-8-sre@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 10 Mar 2023 09:29:44 +0100
+Message-ID: <CACRpkdZc_=C09tVSMFEfhCp4tgbYsDvtKe4w9QCyXz4Z4936ug@mail.gmail.com>
+Subject: Re: [PATCHv1 07/11] power: supply: generic-adc-battery: drop memory
+ alloc error message
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        David Airlie <airlied@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Xinlei Lee <xinlei.lee@mediatek.com>
-Cc:     Guillaume La Roque <glaroque@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230220-display-v1-0-45cbc68e188b@baylibre.com>
- <20230220-display-v1-2-45cbc68e188b@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230220-display-v1-2-45cbc68e188b@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -95,16 +73,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2023 15:22, Alexandre Mergnat wrote:
-> Display Color Correction for MT8365 is compatible with another SoC.
-> Then, add MT8365 binding along with MT8183 SoC.
-> 
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> ---
+On Thu, Mar 9, 2023 at 11:50=E2=80=AFPM Sebastian Reichel <sre@kernel.org> =
+wrote:
 
+> Error printing happens automatically for memory allocation problems.
+>
+> Signed-off-by: Sebastian Reichel <sre@kernel.org>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Best regards,
-Krzysztof
-
+Yours,
+Linus Walleij
