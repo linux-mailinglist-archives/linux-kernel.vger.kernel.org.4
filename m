@@ -2,110 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CC66B51BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C33B6B51C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjCJUXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 15:23:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
+        id S231476AbjCJUX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 15:23:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjCJUXn (ORCPT
+        with ESMTP id S231373AbjCJUXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 15:23:43 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6B822DDB;
-        Fri, 10 Mar 2023 12:23:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678479811; x=1710015811;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lNsPROUXvmiYBE2ivrrQFx+FveC84WickxXkXqMEeH4=;
-  b=ltoHE4RG8EODUODe2bR+eamzEuHodSbnVc2z1MMht49+mn3zuLuFBKr5
-   QznouC62qssDgnEYutwiZCctqVjHWguOBhsvSSGXUTXawqzL9TwQSHqGQ
-   0m4schwL0Py6XquVWNCtSNTCK/fI1FpyTRTUXmZYBaeMWkHrM16eRtl+p
-   8b5Nqws7bISLhr2rYVOknmZ45P26Qq9fxLGlOcKoSvsL8AG93BkZNwDDw
-   rWGCrJgovKfp70F2BZGFfbUzVKuQr5X3NjgC28WGa/ym7i5019z2Yh8/3
-   maRtpnbk//aZG3S2Pzp4DJjlDgs0LxsNpZnQ2RHCr7da/Z/g9B5MDHvaa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="423088046"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="423088046"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 12:23:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="923804632"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="923804632"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 10 Mar 2023 12:23:27 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pajGv-0018Z7-2D;
-        Fri, 10 Mar 2023 22:23:25 +0200
-Date:   Fri, 10 Mar 2023 22:23:25 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next v5 1/1] net: dsa: hellcreek: Get rid of custom
- led_init_default_state_get()
-Message-ID: <ZAuRvXral/eNexYD@smile.fi.intel.com>
-References: <20230310163855.21757-1-andriy.shevchenko@linux.intel.com>
- <ZAt0gqmOifS65Z91@corigine.com>
- <ZAt6dDGQ7stx36UC@smile.fi.intel.com>
- <ZAuNqChj3MUNbHqe@smile.fi.intel.com>
- <ZAuQHdPHNYB8/Von@corigine.com>
+        Fri, 10 Mar 2023 15:23:49 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF4F10F44F
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:23:39 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id h8so6846183plf.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:23:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678479819;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XQF4MLI/F9HbiwBvFOYgMpG0a1e7/18h9Y3ojmNxgXg=;
+        b=BxX0opqGCk7FiaakFzUj1Ab+S5npu3tq/aetv7nIYPxLoMNPiwUDPlzmVy/6xrX8eg
+         h8iN2UTlUpLNK2YLa35isQkKrUusXzjCxQ7opCIhbw6BjQBFlzV5lJeMbtilw1o/rRHm
+         xj3qUs9fxo3EJO0lFQNNQ5BA7fIH1peHzCl/K6iQn20SjLdSWm2u1ZhBq0BWCoZo3Dt2
+         t/6TS8L+iW5VFdLr3OnGZ5ASRlQ3BXgC7ykmll8B8x7alv5LALhmj/aeUP/JOLcKtxuk
+         H1DHgFuS490Xc6BPNSErDFCA8cJl/pJQGcW8OHjR8C9fa7M0dpr2hckTZZ2tx+BopFRV
+         8i+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678479819;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XQF4MLI/F9HbiwBvFOYgMpG0a1e7/18h9Y3ojmNxgXg=;
+        b=ydv0e1QDjIXsC1GZZBaub24mLCASk0dYUJoncws1zUMsXoYzC03oZURNO46ZwH/JXo
+         lruFeGlaXs82wUAXGqzpr+RJGENkjeUwNZUCou4Py6mj/S8a6is48f2C2gUuI4D4dn2Q
+         ta9aUEQS2ovPtPbDm8csiaIE2pJTwPtaiSBe2NQ4SZePQAGdI6574e4MnrhmhGDh00FG
+         Xuxa1+BleLqWNX5Af6iyPGo9O3WkJwQVK0J4GcdssdA7cBWjptOhoYH0NNTPKyrR2qYG
+         jfmy0RAPoklDVQYMQUoUUKlpWkqWf73I6ytrsxdzjuI5i4BqYd0NB6DTy3jHaBABqS4+
+         KlUQ==
+X-Gm-Message-State: AO0yUKW4zXCbUJ+sbNbLdKbmlzeE5Z73QHs9kEBbe003p7KTd6jorzGM
+        yFg/hlEOl9MqnkSIuA7mtBxAqBeY9Jp/CmPhJe+20w==
+X-Google-Smtp-Source: AK7set+BSEEuCXguHDcEHUyp1G+H25LASXMUmsCu7o8DUKcffWrWX5PNcYfogkDMT3nPpIDry7aU3w==
+X-Received: by 2002:a05:6a20:440d:b0:cc:d44a:beb6 with SMTP id ce13-20020a056a20440d00b000ccd44abeb6mr4930491pzb.5.1678479818536;
+        Fri, 10 Mar 2023 12:23:38 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id k25-20020aa790d9000000b005aa60d8545esm215805pfk.61.2023.03.10.12.23.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 12:23:38 -0800 (PST)
+Message-ID: <ad021e89-c05c-f85a-2210-555837473734@kernel.dk>
+Date:   Fri, 10 Mar 2023 13:23:37 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAuQHdPHNYB8/Von@corigine.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: Possible kernel fs block code regression in 6.2.3 umounting usb
+ drives
+Content-Language: en-US
+To:     Eric Biggers <ebiggers@kernel.org>,
+        Mike Cloaked <mike.cloaked@gmail.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Yu Kuai <yukuai3@huawei.com>
+References: <CAOCAAm7AEY9tkZpu2j+Of91fCE4UuE_PqR0UqNv2p2mZM9kqKw@mail.gmail.com>
+ <CAOCAAm4reGhz400DSVrh0BetYD3Ljr2CZen7_3D4gXYYdB4SKQ@mail.gmail.com>
+ <ZAuPkCn49urWBN5P@sol.localdomain> <ZAuQOHnfa7xGvzKI@sol.localdomain>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <ZAuQOHnfa7xGvzKI@sol.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 09:16:29PM +0100, Simon Horman wrote:
-> On Fri, Mar 10, 2023 at 10:06:00PM +0200, Andy Shevchenko wrote:
-> > On Fri, Mar 10, 2023 at 08:44:05PM +0200, Andy Shevchenko wrote:
-> > > On Fri, Mar 10, 2023 at 07:18:42PM +0100, Simon Horman wrote:
-> > > > On Fri, Mar 10, 2023 at 06:38:55PM +0200, Andy Shevchenko wrote:
-
-...
-
-> > > > This seems to duplicate the logic in the earlier hunk of this patch.
-> > > > Could it be moved into a helper?
-> > > 
-> > > It's possible, but in a separate patch as it's out of scope of this one.
-> > > Do you want to create a such?
-> > 
-> > FWIW, I tried and it gives us +9 lines of code. So, what would be the point?
-> > I can send as RFC in v6.
+On 3/10/23 1:16 PM, Eric Biggers wrote:
+> On Fri, Mar 10, 2023 at 12:14:10PM -0800, Eric Biggers wrote:
+>> On Fri, Mar 10, 2023 at 07:33:37PM +0000, Mike Cloaked wrote:
+>>> With kerne. 6.2.3 if I simply plug in a usb external drive, mount it
+>>> and umount it, then the journal has a kernel Oops and I have submitted
+>>> a bug report, that includes the journal output, at
+>>> https://bugzilla.kernel.org/show_bug.cgi?id=217174
+>>>
+>>> As soon as the usb drive is unmounted, the kernel Oops occurs, and the
+>>> machine hangs on shutdown and needs a hard reboot.
+>>>
+>>> I have reproduced the same issue on three different machines, and in
+>>> each case downgrading back to kernel 6.2.2 resolves the issue and it
+>>> no longer occurs.
+>>>
+>>> This would seem to be a regression in kernel 6.2.3
+>>>
+>>> Mike C
+>>
+>> Thanks for reporting this!  If this is reliably reproducible and is known to be
+>> a regression between v6.2.2 and v6.2.3, any chance you could bisect it to find
+>> out the exact commit that introduced the bug?
+>>
+>> For reference I'm also copying the stack trace from bugzilla below:
+>>
+>> BUG: kernel NULL pointer dereference, address: 0000000000000028
+>>  #PF: supervisor read access in kernel mode
+>>  #PF: error_code(0x0000) - not-present page
+>>  PGD 0 P4D 0
+>>  Oops: 0000 [#1] PREEMPT SMP PTI
+>>  CPU: 9 PID: 1118 Comm: lvcreate Tainted: G                T  6.2.3-1>
+>>  Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./Z370 Ex>
+>>  RIP: 0010:blk_throtl_update_limit_valid+0x1f/0x110
 > 
-> Less duplication is good, IMHO. But it's not a hard requirement from my side.
+> BTW, the block/ commits between v6.2.2 and v6.2.3 were:
+> 
+> 	blk-mq: avoid sleep in blk_mq_alloc_request_hctx
+> 	blk-mq: remove stale comment for blk_mq_sched_mark_restart_hctx
+> 	blk-mq: wait on correct sbitmap_queue in blk_mq_mark_tag_wait
+> 	blk-mq: Fix potential io hung for shared sbitmap per tagset
+> 	blk-mq: correct stale comment of .get_budget
+> 	block: sync mixed merged request's failfast with 1st bio's
+> 	block: Fix io statistics for cgroup in throttle path
+> 	block: bio-integrity: Copy flags when bio_integrity_payload is cloned
+> 	block: use proper return value from bio_failfast()
+> 	blk-iocost: fix divide by 0 error in calc_lcoefs()
+> 	blk-cgroup: dropping parent refcount after pd_free_fn() is done
+> 	blk-cgroup: synchronize pd_free_fn() from blkg_free_workfn() and blkcg_deactivate_policy()
+> 	block: don't allow multiple bios for IOCB_NOWAIT issue
+> 	block: clear bio->bi_bdev when putting a bio back in the cache
+> 	block: be a bit more careful in checking for NULL bdev while polling
+> 
+> Without having any in-depth knowledge here, I think "blk-cgroup: synchronize
+> pd_free_fn() from blkg_free_workfn() and blkcg_deactivate_policy()" looks the
+> most suspicious here...  I see that AUTOSEL selected it from a 3-patch series
+> without backporting patch 2, maybe that could be it?  Anyway, just a hunch.
 
-With what I see as PoC it becomes:
-a) longer (+9 LoCs);
-b) less understandable.
+Was just looking at this too, the primary suspects would indeed be those
+two blk-cgroup changes. And yes, they ended up in stable due to auto
+selection, and very odd how it picked 2 and not the 3rd?!
 
-So, I would wait for maintainers to tell me if I need this at all.
+But I would revert:
 
-Thank you for the review!
+bfe46d2efe46c5c952f982e2ca94fe2ec5e58e2a
+57a425badc05c2e87e9f25713e5c3c0298e4202c
+
+in that order from 6.2.3 and see if that helps. Adding Yu.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Jens Axboe
 
 
