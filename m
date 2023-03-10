@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2896B34B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F37866B34BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjCJDVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 22:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
+        id S229914AbjCJDW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 22:22:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjCJDVH (ORCPT
+        with ESMTP id S229770AbjCJDWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 22:21:07 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4AB103BE2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 19:21:05 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id s1so3537925vsk.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 19:21:05 -0800 (PST)
+        Thu, 9 Mar 2023 22:22:24 -0500
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6958B1070C0
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 19:22:22 -0800 (PST)
+Received: by mail-ua1-x930.google.com with SMTP id h34so2655351uag.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 19:22:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678418465;
+        d=chromium.org; s=google; t=1678418541;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jbTDjvc5ieqfrIhKoRc6A4Iamnhwe4zfbF/KdHYvMbM=;
-        b=ePB0Z4h/EVZe6K5HjRzYtbfXmGb1TicluV0XhOHpbVkr/KNK62T6oukk0GlEiwZa3n
-         mzt/b6VrT0J9pDhKgzgTuLe8B/ow3gEPUmo+4uQBs/CmbCWkkSKxeB+yMDA6hHHqfunD
-         gHJQ/rJEcbNFBbLF8zOtsNxZFidTempbV9t34=
+        bh=rHr1GGsOjXLcWLjsmH/gUiANtjkEwqYh6mSdD4znyFE=;
+        b=B90+ToIXUteCBlMGv/h+HRTmHi/Hj5vUhO45dJWlo/KFuWBFEtCuLw1vHQRdVj3a9l
+         XPRRun4yKYYLVGrsnB03glAgEX+m4GKLQfT3MSfs01SXEVIWrC0H3Gj2lcuEtRZVmraP
+         Q1uW2Rqv+LQH3B2szv8EsVhwNW4VRyLMAquH4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678418465;
+        d=1e100.net; s=20210112; t=1678418541;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jbTDjvc5ieqfrIhKoRc6A4Iamnhwe4zfbF/KdHYvMbM=;
-        b=gKOTKgrSHiE8E2wdCQZKyIcHRuO8ZVxcDLaU/0mBVJOkJZZHLrv85TpdiHo87EYeol
-         pUGwCK2qiqiKHspATkE3iA2OaU9coQnKiBIT2QVCk15kx/gK3nl8q16pi60KF1rNfNkb
-         iddbQofIDzSFNfdvLn/UlQNPr1G3SBlUqx2ph6Z9zf6jB5YwgSQBM0mf7ery2BFOnrFE
-         QZX1fJiRGZoFiEckZ2Rzl+pZkPMX6lE7m1ddBM8lxJ541rnDSbBwYAmurWKjHwiAJqmj
-         TvSM3Huxoi1ViXnQvbJ3H+fD/nPqfCla//xOyuKMrAjIJ6Wf/bITqUxqYmeXOEvmu+xR
-         qcQw==
-X-Gm-Message-State: AO0yUKUvDL7Xn2RGA+xR9KTk22KaicfLje5lBf2/o9AieqS1V1MSynKM
-        yChdxTpYRuwBgHseX7drwEpC+87Wr5hh7WnqbDtw5w==
-X-Google-Smtp-Source: AK7set+si04/1KeeWL6kRQ5LkOK77tstrb85bSbjd1w4JQ4/NvTHJ5iJ4Kv4gkWbOuFVDQCpn5vP7kaNIm7RZOiAPQ8=
-X-Received: by 2002:a05:6102:3192:b0:421:c926:4b6d with SMTP id
- c18-20020a056102319200b00421c9264b6dmr361086vsh.0.1678418464888; Thu, 09 Mar
- 2023 19:21:04 -0800 (PST)
+        bh=rHr1GGsOjXLcWLjsmH/gUiANtjkEwqYh6mSdD4znyFE=;
+        b=sk3EQd8BVujsVSCAb0mm5CQK2cz0kM6BXd8TjkPie2wUiU55fj1juQjHGy/BIrz9JB
+         VQx7r/nZ3hHdvsHZMXGCIxcPWWXOO/OYAEwRBBksolyKGAfWEMGhDIcSGtofgT1yVd2O
+         GfQ5TKOJquy+mMSeeSo0HSp6jxtfbtN/VPielQlpxafjf5vnkJgYIw76IriqjELoKhnX
+         YvLTCxVYFo1l9ZfO0/pQL4nU9JXALjM9Z5yBedF/IAKFhPcqcKQVXHO7LSdj+ffAaXjk
+         Cz6R2BtaiInnZZOfIcU3Nd8xUAuZss85zOLcQDt2ze5jDH4t/pu/rfAkurg9YS+J707J
+         O64A==
+X-Gm-Message-State: AO0yUKWTTZV/J4XKWd56Htn4bZCNlHkMgrBarrwVpIdzCnvjYb0Li3Ym
+        e1m4OGy0Dnt72cuNAgSUTWDMGnSpaQVsqPBpAcgdOA==
+X-Google-Smtp-Source: AK7set8faFGJ+bOZYGnxseavaFiHmTnrgryhuZbd0Hj/FWE/b7datWYPM+PvMM7obIRbTIYTrtYMG7ouTbxFDjo/zDE=
+X-Received: by 2002:a1f:c507:0:b0:401:2297:b2e0 with SMTP id
+ v7-20020a1fc507000000b004012297b2e0mr14336398vkf.0.1678418541550; Thu, 09 Mar
+ 2023 19:22:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20230307154524.118541-1-bchihi@baylibre.com> <20230307154524.118541-2-bchihi@baylibre.com>
- <CAGXv+5FUrWEF4SZ6DKjoF8Oai--JGFffzQ3_DyzQrUrThVEQ7Q@mail.gmail.com> <e5959cb5-af8c-9410-9530-b3e19e9b647a@linaro.org>
-In-Reply-To: <e5959cb5-af8c-9410-9530-b3e19e9b647a@linaro.org>
+References: <20230307154524.118541-1-bchihi@baylibre.com>
+In-Reply-To: <20230307154524.118541-1-bchihi@baylibre.com>
 From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 10 Mar 2023 11:20:53 +0800
-Message-ID: <CAGXv+5EhTi5t1yqDP8BqdCzWzNFSYu4n39kBi0YhEvJQPu7bLg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] dt-bindings: thermal: mediatek: Add AP domain to LVTS
- thermal controllers for mt8195
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     bchihi@baylibre.com, angelogioacchino.delregno@collabora.com,
+Date:   Fri, 10 Mar 2023 11:22:10 +0800
+Message-ID: <CAGXv+5F6yFk+VMUe50YfV11Bx3qnQ=FHymeAM=dgfrqwLGrG7Q@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Add LVTS's AP thermal domain support for mt8195
+To:     bchihi@baylibre.com
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
         rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
         matthias.bgg@gmail.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
@@ -68,114 +66,52 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 6:39=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
-o.org> wrote:
+On Tue, Mar 7, 2023 at 11:45=E2=80=AFPM <bchihi@baylibre.com> wrote:
 >
-> On 09/03/2023 05:40, Chen-Yu Tsai wrote:
-> > On Wed, Mar 8, 2023 at 12:46=E2=80=AFAM <bchihi@baylibre.com> wrote:
-> >>
-> >> From: Balsam CHIHI <bchihi@baylibre.com>
-> >>
-> >> Add AP Domain to LVTS thermal controllers dt-binding definition for mt=
-8195.
-> >>
-> >> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> >> ---
-> >>   include/dt-bindings/thermal/mediatek,lvts-thermal.h | 10 ++++++++++
-> >>   1 file changed, 10 insertions(+)
-> >>
-> >> diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/inc=
-lude/dt-bindings/thermal/mediatek,lvts-thermal.h
-> >> index c09398920468..8fa5a46675c4 100644
-> >> --- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-> >> +++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-> >> @@ -16,4 +16,14 @@
-> >>   #define MT8195_MCU_LITTLE_CPU2  6
-> >>   #define MT8195_MCU_LITTLE_CPU3  7
-> >>
-> >> +#define MT8195_AP_VPU0  8
-> >
-> > Can't this start from 0? This is a different hardware block. The index
-> > namespace is separate. Same question for MT8192.
+> From: Balsam CHIHI <bchihi@baylibre.com>
 >
-> The ID is used to differentiate the thermal zone identifier in the
-> device tree from the driver.
+> Add AP thermal domain support to LVTS Driver for MediaTek MT8195 SoC.
 >
-> +               vpu0-thermal {
-> +                       polling-delay =3D <0>;
-> +                       polling-delay-passive =3D <0>;
-> +                       thermal-sensors =3D <&lvts_ap MT8195_AP_VPU0>;
-> +
-> +                       trips {
-> +                               vpu0_crit: trip-crit {
-> +                                       temperature =3D <100000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "critical";
-> +                               };
-> +                       };
-> +               };
+> This series is a continuation of the original series "Add LVTS Thermal Ar=
+chitecture" v14 :
+>     https://patchwork.kernel.org/project/linux-pm/cover/20230209105628.50=
+294-1-bchihi@baylibre.com/
 >
-> If MT8195_AP_VPU0 is 0, then the code won't be able to differentiate
-> MT8195_AP_VPU0 and MT8195_MCU_BIG_CPU0
+> Based on top of thermal/linux-next :
+>     base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
 >
-> The LVTS driver will call devm_thermal_of_zone_register() with the
-> sensor id. If MT8195_MCU_BIG_CPU0 and MT8195_AP_VPU0 have the same id,
-> then at the moment of registering the MT8195_AP_VPU0, the underlying OF
-> thermal framework code will use MT8195_MCU_BIG_CPU0 description instead
-> because it will be the first to be find in the DT.
+> Depends on these patches as they are not yet applyied to thermal/linux-ne=
+xt branch :
+>     [v14,3/6] arm64: dts: mt8195: Add efuse node to mt8195 (already inclu=
+ded in linux master branch)
+>     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50=
+294-4-bchihi@baylibre.com/
+>     [v14,5/6] arm64: dts: mediatek: mt8195: Add thermal zones and thermal=
+ nodes
+>     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50=
+294-6-bchihi@baylibre.com/
+>     [v14,6/6] arm64: dts: mediatek: mt8195: Add temperature mitigation th=
+reshold
+>     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50=
+294-7-bchihi@baylibre.com/
 >
-> If MT8195_AP_VPU0 is described in DT before, then the same will happen
-> when registering MT8195_MCU_BIG_CPU0, MT8195_AP_VPU0 will be registered
-> instead.
->
-> IOW all ids must be different.
+> Balsam CHIHI (4):
+>   dt-bindings: thermal: mediatek: Add AP domain to LVTS thermal
+>     controllers for mt8195
+>   thermal/drivers/mediatek/lvts_thermal: Add AP domain for mt8195
+>   arm64: dts: mediatek: mt8195: Add AP domain thermal zones
+>   arm64: dts: mediatek: mt8195: Add AP domain temperature thresholds
 
-I see. I didn't realize the lookup namespace covered the whole platform.
-In that case, please ignore my request.
+Whole series is
 
-ChenYu
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
-> The namespace is already described by the macro name AFAICS, so whatever
-> the values, we see only the macro names and those IDs are private the
-> kernel implementation.
->
-> If the numbering is really important, may be something like:
->
-> #define MT8195_MCU_BIG_CPU0     00
-> #define MT8195_MCU_BIG_CPU1     01
-> #define MT8195_MCU_BIG_CPU2     02
-> #define MT8195_MCU_BIG_CPU3     03
-> #define MT8195_MCU_LITTLE_CPU0  04
-> #define MT8195_MCU_LITTLE_CPU1  05
-> #define MT8195_MCU_LITTLE_CPU2  06
-> #define MT8195_MCU_LITTLE_CPU3  07
->
-> #define MT8195_AP_VPU1  10
-> #define MT8195_AP_GPU0  11
-> #define MT8195_AP_GPU1  12
-> #define MT8195_AP_VDEC  13
-> #define MT8195_AP_IMG   14
-> #define MT8195_AP_INFRA 15
-> #define MT8195_AP_CAM0  16
-> #define MT8195_AP_CAM1  17
->
-> But I would suggest considering this change as a separate patch after
-> the AP domain is added.
->
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+on MT8195 Tomato Chromebook.
