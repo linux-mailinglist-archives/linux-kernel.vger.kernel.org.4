@@ -2,145 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B8F6B4BC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1A96B4BC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjCJP4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:56:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        id S231423AbjCJP5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:57:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjCJP4Q (ORCPT
+        with ESMTP id S230521AbjCJP5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:56:16 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5195E118BFE
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:49:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1678463347; bh=KUWMx4xTtQ2NV8s0yXAq68XeDXgRcHLK7NX2DqJUdEw=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=OmKncEQIA2d37NsPi0ZIa+hBXeLWs0A8pCUHXbl0tt8v8ShLcWcwvscxA6Xfyfs7S
-         jGExYDndlwAKTX1vdlGnMKb6Dhpcgk9APzuCW2v6dS/1Y4kftuLxm+fqGDEKTsN5Rd
-         7LsQJRC8DEYlG4nz+m377h8vUMptM0H+F4BJEYOk=
-Received: by b221-1.in.mailobj.net [192.168.90.21] with ESMTP
-        via ip-20.mailobj.net [213.182.54.20]
-        Fri, 10 Mar 2023 16:49:07 +0100 (CET)
-X-EA-Auth: P1Jwh5XT4/s4Cxxa0/bBk9Cr0nuDmUWCczMFH0RTWzzfcXux+9EDP4p9sHlC7NDe8Wocegms03J6L9ZBxBYkzN94YT9fPEi1
-Date:   Fri, 10 Mar 2023 21:19:00 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Sumitra Sharma <sumitraartsy@gmail.com>
-Cc:     abbotti@mev.co.uk, hsweeten@visionengravers.com,
-        outreachy@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] comedi: drivers: ni_pcimio: Remove the code enclosed by
- #if 0 and its #endif
-Message-ID: <ZAtRbDYxNbFxQdI9@ubun2204.myguest.virtualbox.org>
-References: <20230310140119.GA12544@ubuntu>
+        Fri, 10 Mar 2023 10:57:25 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5E2F741
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:51:36 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id l25so5478797wrb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 07:51:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678463495;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7rAHD7fKN+d5LXJmYh701SPQypdto2hSUjcoVGtRUMU=;
+        b=cYjWkG0i0JfbUWP2Y+8Ik/AMlSn1huUyNXYTvDdE6RHDKFhVt2nokYIRF0DWg4dLF/
+         9R0+rGx7j0+MavmlFqN6xyYU+e+9B+KBLBQefEMLgrpo393qK+XoMmBhipvHVfaXaR9G
+         u6VmWiqKMHxd67/ALrTg3GwhF8m8BI1hEU11L7YDtWCO2c+TQECZrH6TPg5FG7Mue8Yl
+         bg4cpxSAbUnTkRMYHZtPwoGfQeOgKsFx2YArU8B1yW4VHbuafP6jUc2qZH4+SCIO5deR
+         hcwtgHYNCKewkThTCjYS88drnP/JOSrqX+/AKm5ML6Z6aiyGT6RdO8oxgkzefYE2179v
+         m5Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678463495;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7rAHD7fKN+d5LXJmYh701SPQypdto2hSUjcoVGtRUMU=;
+        b=8RH646m+Yx9cEs+caNJaYJ/rB3vBHzfEKzNMKj1dspWmuRF5M4o2d6mN5FxACzBbiH
+         kX3qKGOSNsiX/XlYlAqMDn9ijpnidHJ8CTd/CV81/BiWgiZkxPUHXTZXOoJpKpjBQFZI
+         771FBZVEniqPCmfuChZBLqb+iyqxfwUhhsm0eLn1xelxHReeZAtHnFYXafxHDdvPcj+U
+         UA1MciQygFvVl0P5j4E9MeZO2u/a8qzGPSF0owK1kbW8tfOdpo5wrAUKg/jdR9nfpSUG
+         isfBZ3/hpkDKLdRRHjAcyCFSotCx0W1bVnMjv8/GLJNsiAXiINCq3WpNF2Dcg37fmWe0
+         jUvQ==
+X-Gm-Message-State: AO0yUKX2jQD1P6s8xjANb7WqyWvP8KEmikyIV4hLAuuopT4Cl7HYuzeq
+        pn8zOEPshf8AIDnc7U2J0vI=
+X-Google-Smtp-Source: AK7set+d7Q+0h2RUYMfZYXj6ucr0U0beV4MqE4yhacgerLbbG6Q064+eN+N6+rJ+eBQA10OxLrmbjA==
+X-Received: by 2002:adf:cc8f:0:b0:2c9:23c4:8f93 with SMTP id p15-20020adfcc8f000000b002c923c48f93mr16353992wrj.57.1678463495023;
+        Fri, 10 Mar 2023 07:51:35 -0800 (PST)
+Received: from alaa-emad.. ([41.42.191.171])
+        by smtp.gmail.com with ESMTPSA id t8-20020a05600001c800b002c7e1a39adcsm140139wrx.23.2023.03.10.07.51.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 07:51:34 -0800 (PST)
+From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     vireshk@kernel.org, johan@kernel.org, elder@kernel.org,
+        gregkh@linuxfoundation.org, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        eng.mennamahmoud.mm@gmail.com
+Subject: [PATCH 1/2] staging: greybus: Fix Alignment with parenthesis
+Date:   Fri, 10 Mar 2023 17:51:24 +0200
+Message-Id: <b6521b9a75a4088d621246b436c7ec5d35365690.1678462486.git.eng.mennamahmoud.mm@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310140119.GA12544@ubuntu>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 06:01:19AM -0800, Sumitra Sharma wrote:
-> Reported by checkpatch.pl:
-> 
-> WARNING: Consider removing the code enclosd by this #if 0 and its #endif
-> at line 482, 501, 570.
-> 
-> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
-> ---
->  drivers/comedi/drivers/ni_pcimio.c | 48 ------------------------------
->  1 file changed, 48 deletions(-)
+Fix " CHECK: Alignment should match open parenthesis "
+Reported by checkpath
 
-Hi Sumitra,
-Nice first attempt. However, you should be working in the drivers/staging
-directory for now.
+Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+---
+ drivers/staging/greybus/fw-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Also, specific to the following change, the device definitions may be useful to
-people who have those devices and can be added to the driver by simply removing
-the #if 0 condition. Hence, these commented blocks are likely retained due to
-same reason.
-
-Thank you,
-Deepak.
-
-> 
-> diff --git a/drivers/comedi/drivers/ni_pcimio.c b/drivers/comedi/drivers/ni_pcimio.c
-> index 0b055321023d..1603095f2ed9 100644
-> --- a/drivers/comedi/drivers/ni_pcimio.c
-> +++ b/drivers/comedi/drivers/ni_pcimio.c
-> @@ -479,43 +479,6 @@ static const struct ni_board_struct ni_boards[] = {
->  		.ao_speed	= 250,
->  		.caldac		= { ad8804, ad8804 },
->  	},
-> -#if 0
-> -	/* The 6115 boards probably need their own driver */
-> -	[BOARD_PCI6115] = {	/* .device_id = 0x2ed0, */
-> -		.name		= "pci-6115",
-> -		.n_adchan	= 4,
-> -		.ai_maxdata	= 0x0fff,
-> -		.ai_fifo_depth	= 8192,
-> -		.gainlkup	= ai_gain_611x,
-> -		.ai_speed	= 100,
-> -		.n_aochan	= 2,
-> -		.ao_maxdata	= 0xffff,
-> -		.ao_671x	= 1,
-> -		.ao_fifo_depth	= 2048,
-> -		.ao_speed	= 250,
-> -		.reg_611x	= 1,
-> -		/* XXX */
-> -		.caldac		= { ad8804_debug, ad8804_debug, ad8804_debug },
-> -	},
-> -#endif
-> -#if 0
-> -	[BOARD_PXI6115] = {	/* .device_id = ????, */
-> -		.name		= "pxi-6115",
-> -		.n_adchan	= 4,
-> -		.ai_maxdata	= 0x0fff,
-> -		.ai_fifo_depth	= 8192,
-> -		.gainlkup	= ai_gain_611x,
-> -		.ai_speed	= 100,
-> -		.n_aochan	= 2,
-> -		.ao_maxdata	= 0xffff,
-> -		.ao_671x	= 1,
-> -		.ao_fifo_depth	= 2048,
-> -		.ao_speed	= 250,
-> -		.reg_611x	= 1,
-> -		/* XXX */
-> -		.caldac		= { ad8804_debug, ad8804_debug, ad8804_debug },
-> -	},
-> -#endif
->  	[BOARD_PCI6711] = {
->  		.name = "pci-6711",
->  		.n_aochan	= 4,
-> @@ -567,17 +530,6 @@ static const struct ni_board_struct ni_boards[] = {
->  		.reg_type	= ni_reg_6711,
->  		.caldac		= { ad8804_debug },
->  	},
-> -#if 0
-> -	[BOARD_PXI6731] = {	/* .device_id = ????, */
-> -		.name		= "pxi-6731",
-> -		.n_aochan	= 4,
-> -		.ao_maxdata	= 0xffff,
-> -		.ao_fifo_depth	= 8192,
-> -		.ao_range_table	= &range_bipolar10,
-> -		.reg_type	= ni_reg_6711,
-> -		.caldac		= { ad8804_debug },
-> -	},
-> -#endif
->  	[BOARD_PCI6733] = {
->  		.name		= "pci-6733",
->  		.n_aochan	= 8,
-> -- 
-> 2.25.1
-> 
-> 
-
+diff --git a/drivers/staging/greybus/fw-core.c b/drivers/staging/greybus/fw-core.c
+index 57bebf24636b..f562cb12d5ad 100644
+--- a/drivers/staging/greybus/fw-core.c
++++ b/drivers/staging/greybus/fw-core.c
+@@ -89,7 +89,7 @@ static int gb_fw_core_probe(struct gb_bundle *bundle,
+ 			}
+ 
+ 			connection = gb_connection_create(bundle, cport_id,
+-						gb_fw_mgmt_request_handler);
++							  gb_fw_mgmt_request_handler);
+ 			if (IS_ERR(connection)) {
+ 				ret = PTR_ERR(connection);
+ 				dev_err(&bundle->dev,
+-- 
+2.34.1
 
