@@ -2,147 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7426B4598
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD806B45A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232452AbjCJOfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:35:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
+        id S232580AbjCJOfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:35:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232515AbjCJOfC (ORCPT
+        with ESMTP id S232565AbjCJOfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:35:02 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F31CED6B9;
-        Fri, 10 Mar 2023 06:34:58 -0800 (PST)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32AAq96o014046;
-        Fri, 10 Mar 2023 14:34:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-type : content-id :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=WVfgytBq+utMYvIF+OulEkK1koSRHd76scIyga8sFJ8=;
- b=fAyCFc7Bche4YC6WxCVNxKMPPquMP4xkBRD7eGzn3ZFX2RLArIv4NsC1HPTCAqAHO6Xe
- kvq3JiV3K0P876ASh6YKW1v9lSNAVun+bjMtjQURc8XW2wiykQaG1hN1dxGKtqTJ+rn0
- jPeVOxtxNOVkVqdT4f3as+RI1/Qy5usmJ1yMcgDinBq21uRg+A7QBR9gJHwTadwP/e5A
- nmiy9MZvBErzaOFAS5foOfPfqKkkqQzdD5WPj8W6Ob2elXQifQH98fvJqu9hc7GgKe3z
- r3fRg+SMKFLd/92kgp1NkqkGzJg5re2LVGw3jmAZnbyY2TIpvO6R1e002ItTaBL6tvEj oQ== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p418y5e16-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Mar 2023 14:34:55 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32ADZDwC015603;
-        Fri, 10 Mar 2023 14:34:54 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2104.outbound.protection.outlook.com [104.47.58.104])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3p6feq9bw7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Mar 2023 14:34:54 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WkTOjTFtjF2WNORD9FzcaU4FXTW0BuMuXQYleiXIKLehZBPV59GxKTRBILrDGWaePqwKZBY7wNUseNr1w5kUuQNH5c+ez0bR61pKBsaJA0sUycYVdE5I+3H3Jg9pBTKxDskQqI4jDPHet05PRh+1JVbUTlyifSIeoeSTD3fcGS5NHoE7qfZAqcUrWjC70yu2ujrLBCU9oUX0D10KHAzZjdZXNcTzXh54h3yGYxRS8TRErX16uwW3pU+Y0JbOeqvF6o/oYWanYT5QfuazvxfF4sqEWE7p6HXbzfkH5ekM2RsaLC8PjFkks+/dnVE8tD7RqY29NQ5PIqv9fHjQiOtT2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WVfgytBq+utMYvIF+OulEkK1koSRHd76scIyga8sFJ8=;
- b=Sj8h7qFTDtk7zoRHtuOyViTwso4K251N3VVfkmI0wNwoznmtbNRb4CMgnVVYFlP0l1ebQfYu/woBUEJUvsB/UL/LpkrVsPclWKOyLbB7DkkkVRrC/FVFs7ij6QVN/AouaEgn6hykqgZjAW0hfGiwucJnS1tOYtZY8Ofx8Hqr6sA5mZkR/mp9Lebk+/DlMSOrfXYvZmssNMOXo2j/7R18nenHfOo12p7d712Ail81jBwqhvxTc0AIqCUIpmWxZ+M0eONsM4lzO9QCkWZhIyjkK6yEnJD9AA1ki8tSHX+6UvQ+nOsvRXp0jp6iiIjrd9uaZlqg3+PGBDrooAhpLhvNgg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WVfgytBq+utMYvIF+OulEkK1koSRHd76scIyga8sFJ8=;
- b=Zu2I+cR+yYtaEh7W6uEapFHwktCc1x5rWjtiTqFlzJwLOTCIzGgZUfs8NXtHunOC3kBOdDXrFAIqfoTnjsihSoBcvl1lMnyrL1NQsneGLTTZGyraZxjo0oGEF+yd40K9nZXXLYmwriioVp7Mcx4af2YZ8SASsjyDwrX/qSgy9YY=
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
- by SJ2PR10MB7057.namprd10.prod.outlook.com (2603:10b6:a03:4c8::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Fri, 10 Mar
- 2023 14:34:52 +0000
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::5c2f:5e81:b6c4:a127]) by BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::5c2f:5e81:b6c4:a127%7]) with mapi id 15.20.6178.020; Fri, 10 Mar 2023
- 14:34:52 +0000
-From:   Chuck Lever III <chuck.lever@oracle.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jeff Layton <jlayton@kernel.org>
-Subject: [GIT PULL] nfsd fixes for 6.3-rc1
-Thread-Topic: [GIT PULL] nfsd fixes for 6.3-rc1
-Thread-Index: AQHZU115MGhDgQotVkCqMMjKMLDP8Q==
-Date:   Fri, 10 Mar 2023 14:34:51 +0000
-Message-ID: <70CF2D89-B9AD-46B9-8B2F-8164655297E0@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.2)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN0PR10MB5128:EE_|SJ2PR10MB7057:EE_
-x-ms-office365-filtering-correlation-id: a8a27e51-054a-4309-2114-08db21749bf6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yJYt9cbLwgvIYFDyur3qdvppxlqEqNkoZOAzcYCSAFMFYs2c7jD+ycDPhOi6ZWZ6Pnv885rD1qmqyx4cHlsyRj1GPTmXicdceixlmoy0afPZC+UIcqbuJEaSP+gXk1ddubWppILqShUY8Pw+BylL/ym20vohU3kv4ZzPY6TTGF0oGOKptPrSfNTDElt2PGYZgTuFlC1BRkFXmAALo1AU2vGI/SL2UYpZ8oClHFomb9dpTAS4LIa08aSq/6G2OkywChx8yAZAbkVBdkVevgw9WCHEMHVWwtdznSbb8pW6VGt5xcaXXe1Zu7tv97p9XPPtAUEd1mfYuhxqsVt2QRyFjR1L2wZmBwWq6nWAuXB8FWXJwSqxSnIYFN+UhWzCUq7Z5FRW6G6ulV8+g4sIgrrrSzfvn6rplL3loOr8VM1uDoEtAlkv4GNBHa3kZcQr44pgWY6u2IQ4OI4IpVc5AFHYXMQzuvy9ded7uXHgxT0WX7sXImZ4HZ2PX/5iQ7O5U9m3Zmd8B7TRvHyNuTpWLZHu2SsHqtlNUNCsOc6IV+XRTTc6nn8QWNyocVUETkqWehoP1JRORyjprZFzbJqLOotN8E+SEJ1ithvbUMJFR1np94EU98FnhTytOegBD/bD7RLdDKRfDH7bmlCyEybUXvRFsCfvdrueihGKpFNrRvgSPzyIOLf33VwjXS8XBDAgvjoTuuSc5QRO57gdbr4RZzg2EA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(39860400002)(376002)(136003)(396003)(451199018)(8936002)(2906002)(4744005)(5660300002)(41300700001)(8676002)(91956017)(66476007)(66946007)(66446008)(66556008)(6916009)(64756008)(4326008)(83380400001)(71200400001)(6486002)(86362001)(966005)(478600001)(33656002)(316002)(6506007)(76116006)(54906003)(6512007)(122000001)(2616005)(38070700005)(36756003)(26005)(186003)(38100700002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?mtQgzDJvVMiHvARQq4OXQMT+ViFNglrOauXhNzMRsVzUFBjuWUQ9UVNAm48c?=
- =?us-ascii?Q?TDBAvNVqmu7LLUAc/gaJiaMDNggLTs6LnEymv7+mGCrMVK4Te6pPUP45w/8T?=
- =?us-ascii?Q?yLKhG9x7IvzGBaJ4fmH2iSDClNlXEZX+HT8FC8+Z1Qh3OndDAbV6d8tnQ37D?=
- =?us-ascii?Q?K6wklcwkA+n+omDZ+9FEgpJL03EvlFMEEU9roVH24ZCr4jxK50oLXyD+o8zD?=
- =?us-ascii?Q?oC0TZAiNJA/eXcN3+gKdClf9mKF6G7RdAL12MoXdkdD1v3qpZwz30HffgBCr?=
- =?us-ascii?Q?lZu0Rg0TxUNMAI/IbDU9HzJR3MruAhmgbCBNhkUrAfpzlT+Ht0uKXVdu96mK?=
- =?us-ascii?Q?Z3kLMukIgGgGhFP6gGNdcl6Twn5/3u2sZGq/17xAITrwIWIqHpGSkQqlF7ey?=
- =?us-ascii?Q?1B/LHG3WKevU9Z3We0ZOXj29joGD2sxAzfv2YahrcMxRvg/QPLJL1N+zlLsx?=
- =?us-ascii?Q?nvzol2bBmpEhGeAA0T+2EbVN6omYbRUNIxsfN+3vM9eTENWgkugXY/Tvcqsx?=
- =?us-ascii?Q?eZK7E7rUFt44lJNFpCElfQnlownXRYtlQJvU3HcPwJ0eeQnIOJr+/CH5WE/Y?=
- =?us-ascii?Q?LoIjozB3Q0oZzlo0+q2SljbfKKW9CfwfVT6G++41f0385+wYFq3Pon1foP4t?=
- =?us-ascii?Q?39HIc4HQrUtAI93q1V0JhB4ND4F1m2gncXF2LGy5L/46ssFMmu7y5F6ap5Xd?=
- =?us-ascii?Q?J7u4nQj05PifZDn0udrb2NL8uAYIptu3Q/wd7rQg3BigrThDpgOqidFXtTu4?=
- =?us-ascii?Q?uja2mpUzH05TajZViIVmbtP8a9LBTs+0qgxfa1ckO0zXaYnodvUl5+5zVw2F?=
- =?us-ascii?Q?Z1QEOUg8sLwL5sGRnG45F/wNCwGdqlZNNlkhHu4HbznBftM2w8WY4NAtZ76w?=
- =?us-ascii?Q?WGwUXVTrBARyObi0DskkuKm177zyHxRB1xG3kHBY8B1K/qtMZorGNxMwvhD8?=
- =?us-ascii?Q?os+qrxni59wtmcVvP0/uBr3w4CJ1Q2+YclKb5vxy4gBHzMY1Vrmu1ohC1/HX?=
- =?us-ascii?Q?TtiWcr2Yb1TTQZZ2Me3wNGxiN/onJRBnfEslrNitASHbDnU7KlZguWcxoOqd?=
- =?us-ascii?Q?rWrBErX/GFpZCsx7C9K8Ks3RpVq4ntcTKhaZYs9Yipi93xEGNLo8WLRyDkJ1?=
- =?us-ascii?Q?dt/VughdI9p5LzJHhw7QLlKWH6okRmeRbbH/vhXRxgd14i/FSX98wEs7lb26?=
- =?us-ascii?Q?9qaOTu7k7V4nHckvR9Uhpn/RbUsmG1mwZon44KVTwZPaTVHLt5yB5dN+sop0?=
- =?us-ascii?Q?/MENj5TCQDHBrqqinGsjrS6NjFNXLh8DCWyNuFEqAjAxkPenSvR7PHEUh1mg?=
- =?us-ascii?Q?e+uVcW/pXRYqurjMQdoWDtpTWmDxiwEqLeLyHc1dzZ3OpAeO1iWtacHYhb9+?=
- =?us-ascii?Q?r7AtBif5iMIrbmn/IsgUiu4Udfg316j4snr5UopZYZlWh2DrUXbogrxYrEyU?=
- =?us-ascii?Q?cxPH5O75nqRCeUUPf5aEU03p1CSXWs3f1iTCVSfKp/AdVJu/O5EjbgtwfehQ?=
- =?us-ascii?Q?c/b5ytyJqNPUT5xR3LF7S+afXgcBA7alvkS5jiFbOlazwyJKrEZHaBNj59E0?=
- =?us-ascii?Q?5Jdh++nKC8sf95UyQmc2B5i2Y8rlqeERHOjuwk8I6I2j6vrOvp5yHr5SLNFU?=
- =?us-ascii?Q?oQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C1BBE32E9CF363428AF683EEEBA1C27F@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Fri, 10 Mar 2023 09:35:30 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2AADCEDB59;
+        Fri, 10 Mar 2023 06:35:23 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F6E1C14;
+        Fri, 10 Mar 2023 06:36:06 -0800 (PST)
+Received: from [192.168.4.21] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F143F3F71A;
+        Fri, 10 Mar 2023 06:35:20 -0800 (PST)
+Message-ID: <ecd41da2-d986-8890-a519-3dfc83019593@arm.com>
+Date:   Fri, 10 Mar 2023 14:35:09 +0000
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: dYLq9r/BVYh6BtgJjPJSyQbCgQLH5Y5+3LHkpnDyj9oyJFaLi9SKuYJk4gu8qkEAyeAitHvJnAxmE0ELOyAwjzlZKbIz+cZWJrZBA/zOZvy1y5c4vTQC3RIv2JH5EM8fz3DeQcYO7CyAZPrYnRIUj7+chovKxUXkc7s4frIB0Nl7MVlVSrovHOxZdc5rGoS2mPXMzvBHsc7erNZ05qbRlZ7tAZ+AFXNQjfLEQpnUv33rpgT3jzEaVNhLfSIRUP4mhB65gGJZhkC21Qaw+fJ0pBZFMrz6Fnu7RSvSQL/UA2kmJhISP9fTFzZMdcH5LCAmJh0MOYBibEeJyuNqOYfdcwCnaZx6v9ZIfqfBhgyURsfHt+5KYYYMZCOWlYnf77YPLPR8FkGELx2fKe2P7ST2SVR0K+PRvTA1UEEXyM2s2hoMwpUJR6rIMWWD1kOEpy2x7SANZFYqPEnkeDOWg1mUMfTvyPjRPT6O4Au29gfFV/Ffr63I0B4h2uJjbP7ofWQTSh6lO6wwHmBRYdp9ut3NjO/S4+OipRtLVC06rXNyaLpEBx4/ljALNRYPuQRlmsVixNfC+WWWU72GostpokFO2Gigb6JdJaOJ3/kwyRH9zP61OC3+vWBuAtJxFcjQKojdmAMuibIkHQJm86003guKsjtMF7ohTrQpUurJ9Q/wnoGlUhrJt1/vCYPLMLtlGR3bZbFqEmdhv8ElNaimRacaXAeojCHjNcCGVwOJchVdkwJJeb2nttguCu+UlK5Fp05VqfyDOs+O8uADp7JL7yxrIkijqSm3DYhKPtsRY5FAofpoNYk2s/BrSc3CeIbqE2ng3YS51PLXe7nOA2sViP7kUdT3HSRnKvXjQXlfGytrD6Q=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8a27e51-054a-4309-2114-08db21749bf6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2023 14:34:51.9110
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fH6bOCKfzYQ7Yape5d4cKNrU8u6Bwm1yWXeiKHrPeSid3xXBbSDanb0zCFNm/q1ma3J2mqU0rK4UQ1XU0v9HBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR10MB7057
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-10_06,2023-03-10_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 bulkscore=0
- mlxlogscore=999 suspectscore=0 malwarescore=0 mlxscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303100118
-X-Proofpoint-GUID: ELc7sU3kOpW2S4LeYCw3EK6RL6t5hdSP
-X-Proofpoint-ORIG-GUID: ELc7sU3kOpW2S4LeYCw3EK6RL6t5hdSP
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] vdso: Improve cmd_vdso_check to check all dynamic
+ relocations
+Content-Language: en-US
+To:     Fangrui Song <maskray@google.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220830193701.1702962-1-maskray@google.com>
+ <20220910075316.no72fdyqjvunomwm@google.com>
+ <CAFP8O3+OwanSJdzd5V3oGJ_MOJOSVdbn+4iBJJKm2LCR8mCA0Q@mail.gmail.com>
+ <9ce45cd2-dcd8-11f8-e496-7efe3649e241@csgroup.eu>
+ <20221115004625.x4wl6zbg4iiuxl5t@google.com>
+ <CAFP8O3LdSJCChGEwT57e=iZopceYkBFuW9XD=yhO1ZszVZGm4g@mail.gmail.com>
+ <3ec9737e-3d1a-c014-b91a-0e2d406a3b3d@csgroup.eu>
+ <CAFP8O3KZTkSbxXJ2yWt4w-F3xWHY_owCs03wN3Bhss57O-E_JQ@mail.gmail.com>
+ <20221221235147.45lkqmosndritfpe@google.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+In-Reply-To: <20221221235147.45lkqmosndritfpe@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -150,39 +65,243 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus-
+Hi Fangrui,
 
-The following changes since commit fb5b855d9f34927579baa0a20b4d0d8ea3740abd=
-:
+Apologize for the delay, I totally missed that you had a new version of your
+patch since it was threaded with the old one.
 
-  SUNRPC: Properly terminate test case arrays (2023-02-27 16:27:51 -0500)
+On 12/21/22 23:51, Fangrui Song wrote:
+> The actual intention is that no dynamic relocation exists. However, some
+> GNU ld ports produce unneeded R_*_NONE. (If a port fails to determine
+> the exact .rel[a].dyn size, the trailing zeros become R_*_NONE
+> relocations. E.g. ld's powerpc port recently fixed
+> https://sourceware.org/bugzilla/show_bug.cgi?id=29540) R_*_NONE are
+> generally no-op in the dynamic loaders. So just ignore them.
+> 
+> With the change, we can remove ARCH_REL_TYPE_ABS. ARCH_REL_TYPE_ABS is a
+> bit misnomer as ports may check RELAVETIVE/GLOB_DAT/JUMP_SLOT which are
+> not called "absolute relocations". (The patch is motivated by the arm64
+> port missing R_AARCH64_RELATIVE.)
 
-are available in the Git repository at:
+It makes sense to update the name, it started as "absolute relocations" but then
+it evolved into something else.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6=
-.3-2
+A part that, did you perform any testing with the generated vDSO libraries?
 
-for you to fetch changes up to 9ca6705d9d609441d34f8b853e1e4a6369b3b171:
+> 
+> Signed-off-by: Fangrui Song <maskray@google.com>
+> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+> Change from v1:
+> * rebase after 8ac3b5cd3e0521d92f9755e90d140382fc292510 (lib/vdso: use "grep -E"
+> instead of "egrep")
+> * change the commit message to mention an example GNU ld bug; no longer say the
+> patch fixes a deprecated egrep use
+> ---
+>  arch/arm/vdso/Makefile            |  3 ---
+>  arch/arm64/kernel/vdso/Makefile   |  3 ---
+>  arch/arm64/kernel/vdso32/Makefile |  3 ---
+>  arch/csky/kernel/vdso/Makefile    |  3 ---
+>  arch/loongarch/vdso/Makefile      |  3 ---
+>  arch/mips/vdso/Makefile           |  3 ---
+>  arch/powerpc/kernel/vdso/Makefile |  1 -
+>  arch/riscv/kernel/vdso/Makefile   |  3 ---
+>  arch/s390/kernel/vdso32/Makefile  |  2 --
+>  arch/s390/kernel/vdso64/Makefile  |  2 --
+>  arch/x86/entry/vdso/Makefile      |  4 ----
+>  lib/vdso/Makefile                 | 13 ++++---------
+>  12 files changed, 4 insertions(+), 39 deletions(-)
+> 
+> diff --git a/arch/arm/vdso/Makefile b/arch/arm/vdso/Makefile
+> index a7ec06ce3785..e58197bba776 100644
+> --- a/arch/arm/vdso/Makefile
+> +++ b/arch/arm/vdso/Makefile
+> @@ -1,8 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+> -# the inclusion of generic Makefile.
+> -ARCH_REL_TYPE_ABS := R_ARM_JUMP_SLOT|R_ARM_GLOB_DAT|R_ARM_ABS32
 
-  SUNRPC: Fix a server shutdown leak (2023-03-08 08:46:41 -0500)
+I would still add a comment here to say why we are including the generic
+Makefile to prevent that it gets accidentally removed (similar thing for every
+architecture touched by this patch).
 
-----------------------------------------------------------------
-nfsd-6.3 fixes:
-- Protect NFSD writes against filesystem freezing
-- Fix a potential memory leak during server shutdown
+With that:
 
-----------------------------------------------------------------
-Benjamin Coddington (1):
-      SUNRPC: Fix a server shutdown leak
+Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com> # for vDSO, aarch64
+Tested-by: Vincenzo Frascino <vincenzo.frascino@arm.com> # for aarch64
 
-Chuck Lever (1):
-      NFSD: Protect against filesystem freezing
+>  include $(srctree)/lib/vdso/Makefile
+>  
+>  hostprogs := vdsomunge
+> diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+> index beaf9586338f..1f2427b13410 100644
+> --- a/arch/arm64/kernel/vdso/Makefile
+> +++ b/arch/arm64/kernel/vdso/Makefile
+> @@ -6,9 +6,6 @@
+>  # Heavily based on the vDSO Makefiles for other archs.
+>  #
+>  
+> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+> -# the inclusion of generic Makefile.
+> -ARCH_REL_TYPE_ABS := R_AARCH64_JUMP_SLOT|R_AARCH64_GLOB_DAT|R_AARCH64_ABS64
+>  include $(srctree)/lib/vdso/Makefile
+>  
+>  obj-vdso := vgettimeofday.o note.o sigreturn.o
+> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
+> index f59bd1a4ead6..d014162c5c71 100644
+> --- a/arch/arm64/kernel/vdso32/Makefile
+> +++ b/arch/arm64/kernel/vdso32/Makefile
+> @@ -3,9 +3,6 @@
+>  # Makefile for vdso32
+>  #
+>  
+> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+> -# the inclusion of generic Makefile.
+> -ARCH_REL_TYPE_ABS := R_ARM_JUMP_SLOT|R_ARM_GLOB_DAT|R_ARM_ABS32
+>  include $(srctree)/lib/vdso/Makefile
+>  
+>  # Same as cc-*option, but using CC_COMPAT instead of CC
+> diff --git a/arch/csky/kernel/vdso/Makefile b/arch/csky/kernel/vdso/Makefile
+> index 0b6909f10667..86c8c4de1b0f 100644
+> --- a/arch/csky/kernel/vdso/Makefile
+> +++ b/arch/csky/kernel/vdso/Makefile
+> @@ -1,8 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  
+> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+> -# the inclusion of generic Makefile.
+> -ARCH_REL_TYPE_ABS := R_CKCORE_ADDR32|R_CKCORE_JUMP_SLOT
+>  include $(srctree)/lib/vdso/Makefile
+>  
+>  # Symbols present in the vdso
+> diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+> index d89e2ac75f7b..1b2e0f149f55 100644
+> --- a/arch/loongarch/vdso/Makefile
+> +++ b/arch/loongarch/vdso/Makefile
+> @@ -1,9 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  # Objects to go into the VDSO.
+>  
+> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+> -# the inclusion of generic Makefile.
+> -ARCH_REL_TYPE_ABS := R_LARCH_32|R_LARCH_64|R_LARCH_MARK_LA|R_LARCH_JUMP_SLOT
+>  include $(srctree)/lib/vdso/Makefile
+>  
+>  obj-vdso-y := elf.o vgetcpu.o vgettimeofday.o sigreturn.o
+> diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
+> index 1f7d5c6c10b0..c060f3596304 100644
+> --- a/arch/mips/vdso/Makefile
+> +++ b/arch/mips/vdso/Makefile
+> @@ -4,9 +4,6 @@
+>  # Sanitizer runtimes are unavailable and cannot be linked here.
+>   KCSAN_SANITIZE            := n
+>  
+> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+> -# the inclusion of generic Makefile.
+> -ARCH_REL_TYPE_ABS := R_MIPS_JUMP_SLOT|R_MIPS_GLOB_DAT
+>  include $(srctree)/lib/vdso/Makefile
+>  
+>  obj-vdso-y := elf.o vgettimeofday.o sigreturn.o
+> diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
+> index 6a977b0d8ffc..83c347e9136f 100644
+> --- a/arch/powerpc/kernel/vdso/Makefile
+> +++ b/arch/powerpc/kernel/vdso/Makefile
+> @@ -2,7 +2,6 @@
+>  
+>  # List of files in the vdso, has to be asm only for now
+>  
+> -ARCH_REL_TYPE_ABS :=
+> R_PPC_JUMP_SLOT|R_PPC_GLOB_DAT|R_PPC_ADDR32|R_PPC_ADDR24|R_PPC_ADDR16|R_PPC_ADDR16_LO|R_PPC_ADDR16_HI|R_PPC_ADDR16_HA|R_PPC_ADDR14|R_PPC_ADDR14_BRTAKEN|R_PPC_ADDR14_BRNTAKEN|R_PPC_REL24
+>  include $(srctree)/lib/vdso/Makefile
+>  
+>  obj-vdso32 = sigtramp32-32.o gettimeofday-32.o datapage-32.o cacheflush-32.o
+> note-32.o getcpu-32.o
+> diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
+> index 06e6b27f3bcc..d85c37e11b21 100644
+> --- a/arch/riscv/kernel/vdso/Makefile
+> +++ b/arch/riscv/kernel/vdso/Makefile
+> @@ -1,9 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  # Copied from arch/tile/kernel/vdso/Makefile
+>  
+> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+> -# the inclusion of generic Makefile.
+> -ARCH_REL_TYPE_ABS := R_RISCV_32|R_RISCV_64|R_RISCV_JUMP_SLOT
+>  include $(srctree)/lib/vdso/Makefile
+>  # Symbols present in the vdso
+>  vdso-syms  = rt_sigreturn
+> diff --git a/arch/s390/kernel/vdso32/Makefile b/arch/s390/kernel/vdso32/Makefile
+> index 245bddfe9bc0..e795fdbbf484 100644
+> --- a/arch/s390/kernel/vdso32/Makefile
+> +++ b/arch/s390/kernel/vdso32/Makefile
+> @@ -2,8 +2,6 @@
+>  # List of files in the vdso
+>  
+>  KCOV_INSTRUMENT := n
+> -ARCH_REL_TYPE_ABS := R_390_COPY|R_390_GLOB_DAT|R_390_JMP_SLOT|R_390_RELATIVE
+> -ARCH_REL_TYPE_ABS += R_390_GOT|R_390_PLT
+>  
+>  include $(srctree)/lib/vdso/Makefile
+>  obj-vdso32 = vdso_user_wrapper-32.o note-32.o
+> diff --git a/arch/s390/kernel/vdso64/Makefile b/arch/s390/kernel/vdso64/Makefile
+> index 9e2b95a222a9..47dbbfdfad68 100644
+> --- a/arch/s390/kernel/vdso64/Makefile
+> +++ b/arch/s390/kernel/vdso64/Makefile
+> @@ -2,8 +2,6 @@
+>  # List of files in the vdso
+>  
+>  KCOV_INSTRUMENT := n
+> -ARCH_REL_TYPE_ABS := R_390_COPY|R_390_GLOB_DAT|R_390_JMP_SLOT|R_390_RELATIVE
+> -ARCH_REL_TYPE_ABS += R_390_GOT|R_390_PLT
+>  
+>  include $(srctree)/lib/vdso/Makefile
+>  obj-vdso64 = vdso_user_wrapper.o note.o
+> diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+> index 838613ac15b8..b292c24acb8e 100644
+> --- a/arch/x86/entry/vdso/Makefile
+> +++ b/arch/x86/entry/vdso/Makefile
+> @@ -3,10 +3,6 @@
+>  # Building vDSO images for x86.
+>  #
+>  
+> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+> -# the inclusion of generic Makefile.
+> -ARCH_REL_TYPE_ABS := R_X86_64_JUMP_SLOT|R_X86_64_GLOB_DAT|R_X86_64_RELATIVE|
+> -ARCH_REL_TYPE_ABS += R_386_GLOB_DAT|R_386_JMP_SLOT|R_386_RELATIVE
+>  include $(srctree)/lib/vdso/Makefile
+>  
+>  # Sanitizer runtimes are unavailable and cannot be linked here.
+> diff --git a/lib/vdso/Makefile b/lib/vdso/Makefile
+> index e814061d6aa0..9f031eafc465 100644
+> --- a/lib/vdso/Makefile
+> +++ b/lib/vdso/Makefile
+> @@ -5,18 +5,13 @@ GENERIC_VDSO_DIR := $(dir $(GENERIC_VDSO_MK_PATH))
+>  
+>  c-gettimeofday-$(CONFIG_GENERIC_GETTIMEOFDAY) := $(addprefix
+> $(GENERIC_VDSO_DIR), gettimeofday.c)
+>  
+> -# This cmd checks that the vdso library does not contain absolute relocation
+> +# This cmd checks that the vdso library does not contain dynamic relocations.
+>  # It has to be called after the linking of the vdso library and requires it
+>  # as a parameter.
+>  #
+> -# $(ARCH_REL_TYPE_ABS) is defined in the arch specific makefile and corresponds
+> -# to the absolute relocation types printed by "objdump -R" and accepted by the
+> -# dynamic linker.
+> -ifndef ARCH_REL_TYPE_ABS
+> -$(error ARCH_REL_TYPE_ABS is not set)
+> -endif
+> -
+> +# As a workaround for some GNU ld ports which produce unneeded R_*_NONE
+> +# dynamic relocations, ignore R_*_NONE.
+>  quiet_cmd_vdso_check = VDSOCHK $@
+> -      cmd_vdso_check = if $(OBJDUMP) -R $@ | grep -E -h "$(ARCH_REL_TYPE_ABS)"; \
+> +      cmd_vdso_check = if $(READELF) -rW $@ | grep -v _NONE | grep -q " R_\w*_"; \
+>                 then (echo >&2 "$@: dynamic relocations are not supported"; \
+>                   rm -f $@; /bin/false); fi
 
- fs/nfsd/vfs.c    | 2 ++
- net/sunrpc/svc.c | 6 +++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
-
---
-Chuck Lever
-
-
+-- 
+Regards,
+Vincenzo
