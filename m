@@ -2,59 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F236B4703
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A62066B470D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbjCJOsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
+        id S233163AbjCJOsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:48:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233039AbjCJOr0 (ORCPT
+        with ESMTP id S232996AbjCJOra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:47:26 -0500
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB9BA402D;
-        Fri, 10 Mar 2023 06:47:08 -0800 (PST)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-17671fb717cso6048527fac.8;
-        Fri, 10 Mar 2023 06:47:08 -0800 (PST)
+        Fri, 10 Mar 2023 09:47:30 -0500
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B4712117B;
+        Fri, 10 Mar 2023 06:47:13 -0800 (PST)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-176b48a9a05so6135328fac.0;
+        Fri, 10 Mar 2023 06:47:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459626;
+        d=1e100.net; s=20210112; t=1678459631;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3Mxp++3M/xdGxspwUzy62aP4jiUX2gCDYtnUV4UMARw=;
-        b=iJK/N6/O8xD7aaHFusbGb5htfxET0MkMS1lnWZegz9LbMrG2Tzs2yYdHGSSQp7TYH/
-         z6rlW4jR4vaF1AGUQJh5Ci3wcs519t1oqhCQd2TCMEbnChJ+7IHpPhRvysWSndf7IjPJ
-         n8a6NbxfTBzk/TDDRrmwDAq6kx8iz+ulEGFyVAGEP9CZv6N5MP16BpAJMjHHFDoA6muf
-         yGhB4WvKVfWxfi2nNlcj3s7Znm+XJ7PmmAZaqvUB2vUfSj3oOFv8a2w3Xts13I0SO7Ah
-         BN+eZDY7SPcqV8YS8A4ZUNdRngrB0QfGdT2mO6W92+fDirni00u+1szR4Av3lP0+FYxv
-         zZXg==
-X-Gm-Message-State: AO0yUKWu1Dl7AJ/vr6bbQeh7M4Fb16mwQsOjz9Bw5Js/QiXPQVNrvApH
-        w5lhJ8JPKLz8Nqnkq2TL4TNKizGFJQ==
-X-Google-Smtp-Source: AK7set9VvIYu2/mX/Ddsr37S3WO3p4+3gpV8Esm/Df+5J5CGsGTCA212TN+8lbj1lvu+O700qeh1ew==
-X-Received: by 2002:a05:6870:560a:b0:176:448f:4ccd with SMTP id m10-20020a056870560a00b00176448f4ccdmr17022548oao.51.1678459625853;
-        Fri, 10 Mar 2023 06:47:05 -0800 (PST)
+        bh=OloxL41416j0dtlZQrOwSKVoKWWxTAqOsy1vcR6cR6w=;
+        b=zoF4kDNEDYdtD8udASlTO6I6boLG0OOTU9ptoMm4On6U17+Pt0UEHI1vmECPBqJ/Fq
+         /2ZJZm4ZMLs/OBx64SjcW31GaW92sojCaBq7w/vILUuuHqWxPxgJewAK7SY0tl8CdVbf
+         TrGdP6fwKpJHqAaVeSlSQmSOSx5HQdjZiOAfGc9+q4ouzUbfLFolociaXCwWKSaHkiRG
+         eOIIcemkQ7oAiKDCuZeSLXfAUWFmYGpMREjq5wqT+peCtIqn8lFxGALej+X2JnIcJ5YF
+         f6ykthSpC0Om7AgDei1U8+6pku3Fqs8mXpl01uwfjoi4znECDnC4APvZJvNpnVgdh4Ft
+         L24g==
+X-Gm-Message-State: AO0yUKXo4jhMXUKZygTmBAA6JL/5FXpxaBNUNRTAEjMbz3lej+xz+FX1
+        irIVymhA+Je4qjNB9ywZ5Q5znpMSiw==
+X-Google-Smtp-Source: AK7set8cE4u5Ar/WSEdd16NF/1QGLSArsjjzwCLB+imXcXgcq/h7vUoNgg1qv4X2jNW3kiukcdtxwQ==
+X-Received: by 2002:a05:6870:560a:b0:16e:7440:db73 with SMTP id m10-20020a056870560a00b0016e7440db73mr17913111oao.26.1678459630847;
+        Fri, 10 Mar 2023 06:47:10 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d44-20020a056870d2ac00b001727d62899bsm95690oae.26.2023.03.10.06.47.05
+        by smtp.gmail.com with ESMTPSA id s26-20020a05683004da00b00694303567b0sm129607otd.29.2023.03.10.06.47.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:47:05 -0800 (PST)
-Received: (nullmailer pid 1541302 invoked by uid 1000);
-        Fri, 10 Mar 2023 14:46:59 -0000
+        Fri, 10 Mar 2023 06:47:10 -0800 (PST)
+Received: (nullmailer pid 1541461 invoked by uid 1000);
+        Fri, 10 Mar 2023 14:47:00 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     devicetree@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] sparc: Use of_property_present() for testing DT property presence
-Date:   Fri, 10 Mar 2023 08:46:59 -0600
-Message-Id: <20230310144659.1541247-1-robh@kernel.org>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] ata: Use of_property_present() for testing DT property presence
+Date:   Fri, 10 Mar 2023 08:47:00 -0600
+Message-Id: <20230310144700.1541414-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,105 +75,59 @@ for presence of a property and nothing more.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- arch/sparc/kernel/of_device_32.c     | 4 ++--
- arch/sparc/kernel/of_device_64.c     | 6 +++---
- arch/sparc/kernel/of_device_common.c | 2 +-
- arch/sparc/kernel/prom_64.c          | 2 +-
- arch/sparc/kernel/time_32.c          | 2 +-
- 5 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/ata/ahci_mtk.c         | 2 +-
+ drivers/ata/libahci_platform.c | 2 +-
+ drivers/ata/sata_dwc_460ex.c   | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/sparc/kernel/of_device_32.c b/arch/sparc/kernel/of_device_32.c
-index 4ebf51e6e78e..b60f58e04164 100644
---- a/arch/sparc/kernel/of_device_32.c
-+++ b/arch/sparc/kernel/of_device_32.c
-@@ -29,7 +29,7 @@ static int of_bus_pci_match(struct device_node *np)
- 		 * parent as-is, not with the PCI translate
- 		 * method which chops off the top address cell.
- 		 */
--		if (!of_find_property(np, "ranges", NULL))
-+		if (!of_property_present(np, "ranges"))
- 			return 0;
+diff --git a/drivers/ata/ahci_mtk.c b/drivers/ata/ahci_mtk.c
+index c056378e3e72..5714efe3f8e7 100644
+--- a/drivers/ata/ahci_mtk.c
++++ b/drivers/ata/ahci_mtk.c
+@@ -106,7 +106,7 @@ static int mtk_ahci_parse_property(struct ahci_host_priv *hpriv,
+ 	struct device_node *np = dev->of_node;
  
- 		return 1;
-@@ -223,7 +223,7 @@ static int __init build_one_resource(struct device_node *parent,
- static int __init use_1to1_mapping(struct device_node *pp)
- {
- 	/* If we have a ranges property in the parent, use it.  */
--	if (of_find_property(pp, "ranges", NULL) != NULL)
-+	if (of_property_present(pp, "ranges"))
- 		return 0;
+ 	/* enable SATA function if needed */
+-	if (of_find_property(np, "mediatek,phy-mode", NULL)) {
++	if (of_property_present(np, "mediatek,phy-mode")) {
+ 		plat->mode = syscon_regmap_lookup_by_phandle(
+ 					np, "mediatek,phy-mode");
+ 		if (IS_ERR(plat->mode)) {
+diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
+index b9e336bacf17..f00da19670b0 100644
+--- a/drivers/ata/libahci_platform.c
++++ b/drivers/ata/libahci_platform.c
+@@ -363,7 +363,7 @@ static int ahci_platform_get_phy(struct ahci_host_priv *hpriv, u32 port,
+ 	switch (rc) {
+ 	case -ENOSYS:
+ 		/* No PHY support. Check if PHY is required. */
+-		if (of_find_property(node, "phys", NULL)) {
++		if (of_property_present(node, "phys")) {
+ 			dev_err(dev,
+ 				"couldn't get PHY in node %pOFn: ENOSYS\n",
+ 				node);
+diff --git a/drivers/ata/sata_dwc_460ex.c b/drivers/ata/sata_dwc_460ex.c
+index 21d77633a98f..3a30e6eff8a8 100644
+--- a/drivers/ata/sata_dwc_460ex.c
++++ b/drivers/ata/sata_dwc_460ex.c
+@@ -810,7 +810,7 @@ static int sata_dwc_dma_get_channel(struct sata_dwc_device_port *hsdevp)
+ 	struct device *dev = hsdev->dev;
  
- 	/* Some SBUS devices use intermediate nodes to express
-diff --git a/arch/sparc/kernel/of_device_64.c b/arch/sparc/kernel/of_device_64.c
-index 5a9f86b1d4e7..5b5143e17ba3 100644
---- a/arch/sparc/kernel/of_device_64.c
-+++ b/arch/sparc/kernel/of_device_64.c
-@@ -58,7 +58,7 @@ static int of_bus_pci_match(struct device_node *np)
- 		 * parent as-is, not with the PCI translate
- 		 * method which chops off the top address cell.
- 		 */
--		if (!of_find_property(np, "ranges", NULL))
-+		if (!of_property_present(np, "ranges"))
- 			return 0;
+ #ifdef CONFIG_SATA_DWC_OLD_DMA
+-	if (!of_find_property(dev->of_node, "dmas", NULL))
++	if (!of_property_present(dev->of_node, "dmas"))
+ 		return sata_dwc_dma_get_channel_old(hsdevp);
+ #endif
  
- 		return 1;
-@@ -78,7 +78,7 @@ static int of_bus_simba_match(struct device_node *np)
- 	 * simba.
- 	 */
- 	if (of_node_name_eq(np, "pci")) {
--		if (!of_find_property(np, "ranges", NULL))
-+		if (!of_property_present(np, "ranges"))
- 			return 1;
+@@ -1180,7 +1180,7 @@ static int sata_dwc_probe(struct platform_device *ofdev)
  	}
  
-@@ -283,7 +283,7 @@ static int __init build_one_resource(struct device_node *parent,
- static int __init use_1to1_mapping(struct device_node *pp)
- {
- 	/* If we have a ranges property in the parent, use it.  */
--	if (of_find_property(pp, "ranges", NULL) != NULL)
-+	if (of_property_present(pp, "ranges"))
- 		return 0;
- 
- 	/* If the parent is the dma node of an ISA bus, pass
-diff --git a/arch/sparc/kernel/of_device_common.c b/arch/sparc/kernel/of_device_common.c
-index e717a56efc5d..60f86b837658 100644
---- a/arch/sparc/kernel/of_device_common.c
-+++ b/arch/sparc/kernel/of_device_common.c
-@@ -162,7 +162,7 @@ int of_bus_sbus_match(struct device_node *np)
- 		 * don't have some intervening real bus that provides
- 		 * ranges based translations.
- 		 */
--		if (of_find_property(dp, "ranges", NULL) != NULL)
-+		if (of_property_present(dp, "ranges"))
- 			break;
- 
- 		dp = dp->parent;
-diff --git a/arch/sparc/kernel/prom_64.c b/arch/sparc/kernel/prom_64.c
-index f883a50fa333..998aa693d491 100644
---- a/arch/sparc/kernel/prom_64.c
-+++ b/arch/sparc/kernel/prom_64.c
-@@ -502,7 +502,7 @@ static void *fill_in_one_cpu(struct device_node *dp, int cpuid, int arg)
- 	struct device_node *portid_parent = NULL;
- 	int portid = -1;
- 
--	if (of_find_property(dp, "cpuid", NULL)) {
-+	if (of_property_present(dp, "cpuid")) {
- 		int limit = 2;
- 
- 		portid_parent = dp;
-diff --git a/arch/sparc/kernel/time_32.c b/arch/sparc/kernel/time_32.c
-index 8a08830e4a65..958c2cf4479b 100644
---- a/arch/sparc/kernel/time_32.c
-+++ b/arch/sparc/kernel/time_32.c
-@@ -277,7 +277,7 @@ static int clock_probe(struct platform_device *op)
- 		return -ENODEV;
- 
- 	/* Only the primary RTC has an address property */
--	if (!of_find_property(dp, "address", NULL))
-+	if (!of_property_present(dp, "address"))
- 		return -ENODEV;
- 
- 	m48t59_rtc.resource = &op->resource[0];
+ #ifdef CONFIG_SATA_DWC_OLD_DMA
+-	if (!of_find_property(np, "dmas", NULL)) {
++	if (!of_property_present(np, "dmas")) {
+ 		err = sata_dwc_dma_init_old(ofdev, hsdev);
+ 		if (err)
+ 			return err;
 -- 
 2.39.2
 
