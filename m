@@ -2,137 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5E16B385A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3446B385E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjCJISe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 03:18:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S230131AbjCJIS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:18:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCJISa (ORCPT
+        with ESMTP id S230057AbjCJISz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:18:30 -0500
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FAE3D914;
-        Fri, 10 Mar 2023 00:18:28 -0800 (PST)
-Received: by mail-qt1-f179.google.com with SMTP id r5so4917612qtp.4;
-        Fri, 10 Mar 2023 00:18:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678436308;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yspyhPwTEevuTgvrljFgxGQolMO4MrGaHvprikKC5aM=;
-        b=iiObsxCrqIQLjm231L19w91Alt5cuo96Iq/qRNifujk6O1mWdvljOumB3+aGe5Cnlr
-         md4yIq78NxMirVmF+7k3I0QjhN4sLruimRgIPLQneFX/ylE8Vff7GLa714D3ChylEPlP
-         RJDxxDtcbn01M+UE1wbmLAnonuIH2DIeor25qf/h73ilifM8XH5eD72y3BQcGYq4NtqX
-         z0+ZC/dllnfwPKkYRQQ9mC+5wmbVJzCnqthQrUpDR/PVwDHf3AOYyBchp1FyeSNuml8U
-         6DWqBfF1bPDhivde2VzMx/Rb0/U3A4xVjdb8JKaUOJg95uZnWhC6z2mdnWNnEK/dbl/L
-         TnoQ==
-X-Gm-Message-State: AO0yUKWunXW8Tp56kHULAU6qHemqmVcOn99w25jWPckBRmXzcC9GLD/O
-        pisVQHm/xvjFZRwIPR0NRJ90NxXnuDelVQ==
-X-Google-Smtp-Source: AK7set/10Cxoo3LbOg/aWY6ZjdFi5u3QlgRZJ2MrBBGOzvizbJGfS1eonnBM1rVTqXCghyGVCH3g8w==
-X-Received: by 2002:a05:622a:1d1:b0:3c0:14ec:bfb2 with SMTP id t17-20020a05622a01d100b003c014ecbfb2mr15773947qtw.20.1678436307794;
-        Fri, 10 Mar 2023 00:18:27 -0800 (PST)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id c4-20020ac86604000000b003bfaae103f6sm949909qtp.89.2023.03.10.00.18.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 00:18:27 -0800 (PST)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-536b7ffdd34so83697827b3.6;
-        Fri, 10 Mar 2023 00:18:26 -0800 (PST)
-X-Received: by 2002:a81:af4b:0:b0:533:91d2:9d94 with SMTP id
- x11-20020a81af4b000000b0053391d29d94mr16066861ywj.5.1678436306111; Fri, 10
- Mar 2023 00:18:26 -0800 (PST)
+        Fri, 10 Mar 2023 03:18:55 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2072.outbound.protection.outlook.com [40.107.243.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FAA96A425
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:18:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g3nvcFkJaKe/0ozUfCtcV+QYl0MbL5STkaMoX6FHeriuumql+2qX2cSE1DrlzUBjzrXJC5OM1pzpSHt5oJKbVClTT4GkMIP/95Zw63nWip42884SmitdkczgXYAUw0EC40TeB7gZqU0fHa56k1Br8zVPqArNsvymupFj5pgZJf7Oz8TnW+M3DxpieL2D8ZUOVZYxfHlnmjC6+YgqmhfrwL403IKn8zdDPOKK86VqpHuuV8xi5QBQ+sQeXJg9ZFwIHhozrwfOX4C3y7F25zeHBaYTDbMyYXow7TZWqFd0LjK7estHY/kG/sektJTtvyCvc2rfGmQgdTlFD2H0XgmuoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KABzB9zNe39RbQYQvO3NRs8EF3CbP9p5ccO4VQY7fMg=;
+ b=oG1D+FQH8/Mifqe8KjcGmS0+ZBR4NtjsuUiq+nZXmUCicn971kd4stjVDJ5h/EYjo1llcPSUQlGihVo8P2HhpIGJkad9Q3IiybZfVag8vl+/Clc0OIPbQoiLo4Yztf8HZw8ocCzfKZWmnsZFvaymV5XbM8qgCbF9BraIpeka0ja47XNQLhwSX9ZNrU+OrWF8m+APsmvU/WUFkykPjt9mxNThqd2GBpajwDP2z+xi4soztMqEmPWnODGv2SGIpYn/WsJwvkD1JSNc6/lEcP5ovoloFAMymPFgBMHBcWZ4tJx6rYUK2ON2UhdoBhgLBm3y9km99SlR547E9qgT+J2HCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KABzB9zNe39RbQYQvO3NRs8EF3CbP9p5ccO4VQY7fMg=;
+ b=Sy1DRrfeu2sEqjpO9BhR7tPyotNVxA/PuJdya/TNYxTt9UhvaZYG68lSlIAa0geoeFEm/NSLVAf2u950NLWEPfidZitBz7KKb0FEfzPrqwpXI4PDlIXJAtkXwJPeOhrLI2viwVxNU0MIDOjnMhzZPTByyoSs9DmGQACdvnb4NFw=
+Received: from DM5PR12MB2469.namprd12.prod.outlook.com (2603:10b6:4:af::38) by
+ MN0PR12MB5762.namprd12.prod.outlook.com (2603:10b6:208:375::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Fri, 10 Mar
+ 2023 08:18:49 +0000
+Received: from DM5PR12MB2469.namprd12.prod.outlook.com
+ ([fe80::5ca6:3a18:d6ee:c103]) by DM5PR12MB2469.namprd12.prod.outlook.com
+ ([fe80::5ca6:3a18:d6ee:c103%7]) with mapi id 15.20.6178.019; Fri, 10 Mar 2023
+ 08:18:49 +0000
+From:   "Chen, Guchun" <Guchun.Chen@amd.com>
+To:     Zhenneng Li <lizhenneng@kylinos.cn>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>
+CC:     David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>
+Subject: RE: [PATCH] drm/amdgpu: resove reboot exception for si oland
+Thread-Topic: [PATCH] drm/amdgpu: resove reboot exception for si oland
+Thread-Index: AQHZUyayYDVcB0qNSkOAgOVEzBYkza7zqzhg
+Date:   Fri, 10 Mar 2023 08:18:49 +0000
+Message-ID: <DM5PR12MB2469FEB1E81CA99C51E7DAF0F1BA9@DM5PR12MB2469.namprd12.prod.outlook.com>
+References: <20230310074000.2078124-1-lizhenneng@kylinos.cn>
+In-Reply-To: <20230310074000.2078124-1-lizhenneng@kylinos.cn>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM5PR12MB2469:EE_|MN0PR12MB5762:EE_
+x-ms-office365-filtering-correlation-id: 07966422-176d-4ba4-94ae-08db2140139c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3JuZ7nnhi2qzNnxSCnLl23zBIjf4FgeUISg7odeamHUxItenGI4AyADkwggJO5BIRcOCNkxcI+KbaQ2cw1mc5STFoWHlpHYzOmBNBIThLzcDeiYfwgqIWUs/i9ODBW+MNEKIOnUAN0asS9dXgGiO6rxpHCF5+p4VjD6SgXezCudwuABPjYoPGqKE3ASx9KWar7/zhyTymdO1YMKKkeX4bT9IKtRXSetIYQcY7vLxThbVHLrCfTzfNhZwLgwFqByeKXSQ0izLW/GV5MhMkcipQjau3p8P2fgTbVXknEga1gbnIOOQcpGVvC5Lgwh3phVG7b23jxydQdKRnwyEnR+lyf8ByPWhMeHxQo+GwIX23zkNxfRO9sz3P1n56DJgS/NpNTxEeUqUzQoRV/gZPBWevvQ392HCnfSF06ydQqkDZh/ISIyUWOUTyomHt1fz7Udylk62px3600/lSEI5ky/7FWTnfG81SJp8x+iR4AK6LZBJqztteOoMceVwa7GcV5qT2sSstLKEf9iIKMAkYqS1CJp88Omj3XFBeoLLMS3HK6u5PQXMbsEUvXICGSMhWKST06g4TU4AsjSD612NReK4vqXfWu8S+gfamL7mKIqU75mvoRx7lhBXL5MHU9ltYjGOKE+dtcnrR+YfUvsGunPZy0wkIlzZ2UMdRI69JVGuqRWwLQWdp7NDdMMG8hQdDLEpL+8r005d9QiySqgE3hEyPw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2469.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(366004)(136003)(39860400002)(346002)(376002)(451199018)(33656002)(6636002)(186003)(110136005)(38100700002)(54906003)(316002)(478600001)(71200400001)(7696005)(41300700001)(66476007)(76116006)(2906002)(66556008)(64756008)(8676002)(4326008)(66946007)(66446008)(8936002)(5660300002)(38070700005)(122000001)(55016003)(86362001)(9686003)(52536014)(6506007)(26005)(53546011)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xuPXGEmIoozo3Wo8ExPkOO1N0SjIf3M8hXQMMT6US7ZS5nMZNhAvZAXPPk+B?=
+ =?us-ascii?Q?KtobGowm1XXpEJyZxhPkD1PaqQnLPkINXUuco9gbMtlHe/MCLfnVmJsVk+AW?=
+ =?us-ascii?Q?P+LHFmQQatCOfePrjSt8PAB/TbbydG1ZTW6x5hinyoVTb09bVKeAjJTais8J?=
+ =?us-ascii?Q?ZJJNhShagjZ83xRG7Rr7nyJSmTe/oV0TylWkYBQ8JJWUb3MrU6rjUuqSdB8j?=
+ =?us-ascii?Q?T9EVuvr/335XlKUEvbjSgAA5G13vYm9vzM4CRc//Baod6damGGpz5Ck12oq+?=
+ =?us-ascii?Q?TkkkCpDlQANxNFgXpaD3iATbirARRCx+YwjAx2++C1izicjEXKJqqsZk7t7U?=
+ =?us-ascii?Q?HzRxbo8SvaUWIXzGxqr/jo0jxG+BshPzrW9SWtip2qxlhorss10KwIZEZNO1?=
+ =?us-ascii?Q?YzU0ez4sVj9Ul9DRSyIymDJrgGLMoJIKiMOs/8+AMB571lQe2jW8PeskvzDJ?=
+ =?us-ascii?Q?qr/zNpbIzbdOUAu/gSGmTGpQwBsgViUEPa455OgNj+6ac9VZEE1NkA790pLA?=
+ =?us-ascii?Q?/sOL8y2zlpQbbcO86ako+G3/s8ecT31cb8qs3WHn5mfiKK2XbY8WSpHdTq38?=
+ =?us-ascii?Q?ig646zQgZW/8FFjYE2DdmESGl2jUOwwErpVh7tMUEF0dTcmFG1yXVKB618ZC?=
+ =?us-ascii?Q?lC/xQtVGjy/vw7YSyoPI3sHxhv6S8YRcyXeNE7HptPOL3cllDHAjGNYWF/R6?=
+ =?us-ascii?Q?jqRufD2ubUUq/sveKsM4ToZcYrCM6AjtozMgrWQ5xrKrg1dr176uoWyzb/5L?=
+ =?us-ascii?Q?aAZFJ4xuYPgWgM326XEZnMNegnG+m3SXHV8umPojzTWNYqPnrK6CiWa+E4jK?=
+ =?us-ascii?Q?082HcDHfpVAQO0ZMlrN3iuOqc5MV4mBVb5U7GL0sOpLh5TszHzuvbQqQgKsm?=
+ =?us-ascii?Q?xqWtgk09VPcitYA23NIETSb76/GwUMXDWq22QKYrty+54fsvpBT/jvZ9UIxn?=
+ =?us-ascii?Q?WcyykUXt+YrY6TSMFRE8qG/JQYyJEecaPye95rEqVHxpSzA1fbmuH70WmxUZ?=
+ =?us-ascii?Q?kuH1zaa6idZ8FGVmByQ3XSGqI7oQhWvuO5+COJ0sIvlt42woJazg2o8XUfF+?=
+ =?us-ascii?Q?WHKYMUy7HRlt/IZEb/f5acZ41T1kZP31YcgziR6TKwNcT5Lwfa9SQgqtZ/u+?=
+ =?us-ascii?Q?1HSplYcVXPWhbN2J/6NljtqMItmG4RQkmyrw+I/iCYNq+jojr/A2zNxw5DYY?=
+ =?us-ascii?Q?rysD/B3+6Dif6dLkMhTVew5655cw/Sk8EkBLIUGHTxXAvVlPY8VrNNLtIih1?=
+ =?us-ascii?Q?N3HZWagdeqn5NNbQFRlQgoLIIvQcAfuPvrHN9ajt7X34GZK5WS7j3+pmoAKe?=
+ =?us-ascii?Q?29yXVpyfHr/XTx5Nfu9v/K3jiEDC979/R4c5AwMhpxT23NJIN6vC1/8UhMTt?=
+ =?us-ascii?Q?xeAQD9bWQv26Saf6c9ds7+euK8My8Rw2Iu9wuacjlvCoFi9hg/WbMDHvzJry?=
+ =?us-ascii?Q?vLg+bXr69OLBUSF0ersSmdhBgeyg06vyqcozQD8HSTaI5sQLHs06XO7wT4vb?=
+ =?us-ascii?Q?zqIYfer8u7VgBAPAWVskR9qOF3x/By4pOT7uzXxwhYDnrGL6CdaqyJvKyo0Z?=
+ =?us-ascii?Q?j8u9vui1Vz/ZiODgWIzZ3mFsUJVXLF2B5i3EoSsl?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20230309160201.5163-1-tzimmermann@suse.de> <20230309160201.5163-62-tzimmermann@suse.de>
-In-Reply-To: <20230309160201.5163-62-tzimmermann@suse.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 10 Mar 2023 09:18:14 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUi9s6TCyQMsMwFErmvgb_RppAMHjBuXNSRk7rEAuiGrA@mail.gmail.com>
-Message-ID: <CAMuHMdUi9s6TCyQMsMwFErmvgb_RppAMHjBuXNSRk7rEAuiGrA@mail.gmail.com>
-Subject: Re: [PATCH v2 061/101] fbdev/ps3fb: Duplicate video-mode option string
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     deller@gmx.de, timur@kernel.org, rdunlap@infradead.org,
-        paulus@samba.org, benh@kernel.crashing.org, linux@armlinux.org.uk,
-        pjones@redhat.com, adaplas@gmail.com, s.hauer@pengutronix.de,
-        shawnguo@kernel.org, mbroemme@libmpq.org, thomas@winischhofer.net,
-        James.Bottomley@hansenpartnership.com, sudipm.mukherjee@gmail.com,
-        teddy.wang@siliconmotion.com, corbet@lwn.net,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2469.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 07966422-176d-4ba4-94ae-08db2140139c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2023 08:18:49.3084
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uuli/hJnEcypzGjD8LWXOSlr3jFkF/VWsFrtIIu+BYuHMOT2wnCBoaKBWZeQf7PMZvbiNIO7hE0kdNDYu8mxqA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5762
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
 
-On Thu, Mar 9, 2023 at 5:02 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Assume that the driver does not own the option string or its substrings
-> and hence duplicate the option string for the video mode. Allocate the
-> copy's memory with kstrdup() and free it in the module's exit function.
->
-> Done in preparation of switching the driver to struct option_iter and
-> constifying the option string.
->
-> v2:
->         * replace static memory with kstrdup()/kfree() (Geert)
->
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> -----Original Message-----
+> From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of
+> Zhenneng Li
+> Sent: Friday, March 10, 2023 3:40 PM
+> To: Deucher, Alexander <Alexander.Deucher@amd.com>
+> Cc: David Airlie <airlied@linux.ie>; Pan, Xinhui <Xinhui.Pan@amd.com>;
+> linux-kernel@vger.kernel.org; dri-devel@lists.freedesktop.org; Zhenneng L=
+i
+> <lizhenneng@kylinos.cn>; amd-gfx@lists.freedesktop.org; Daniel Vetter
+> <daniel@ffwll.ch>; Koenig, Christian <Christian.Koenig@amd.com>
+> Subject: [PATCH] drm/amdgpu: resove reboot exception for si oland
+>=20
+> During reboot test on arm64 platform, it may failure on boot.
+>=20
+> The error message are as follows:
+> [    6.996395][ 7] [  T295] [drm:amdgpu_device_ip_late_init [amdgpu]]
+> *ERROR*
+> 			    late_init of IP block <si_dpm> failed -22
+> [    7.006919][ 7] [  T295] amdgpu 0000:04:00.0: amdgpu_device_ip_late_in=
+it
+> failed
+> [    7.014224][ 7] [  T295] amdgpu 0000:04:00.0: Fatal error during GPU i=
+nit
+> ---
+>  drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> index d6d9e3b1b2c0..dee51c757ac0 100644
+> --- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> +++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> @@ -7632,9 +7632,6 @@ static int si_dpm_late_init(void *handle)
+>  	if (!adev->pm.dpm_enabled)
+>  		return 0;
+>=20
+> -	ret =3D si_set_temperature_range(adev);
+> -	if (ret)
+> -		return ret;
 
-Thanks for the upodate!
+si_set_temperature_range should be platform agnostic. Can you please elabor=
+ate more?
 
-> --- a/drivers/video/fbdev/ps3fb.c
-> +++ b/drivers/video/fbdev/ps3fb.c
-> @@ -260,6 +260,7 @@ static const struct fb_videomode ps3fb_modedb[] = {
->  static int ps3fb_mode;
->  module_param(ps3fb_mode, int, 0);
->
-> +static char *mode_option_buf;
+Regards,
+Guchun
 
-Do you really need this variable? It contains the same value
-as mode_option below.
-This is a common pattern in several patches.
+>  #if 0 //TODO ?
+>  	si_dpm_powergate_uvd(adev, true);
+>  #endif
+> --
+> 2.25.1
 
->  static char *mode_option;
->
->  static int ps3fb_cmp_mode(const struct fb_videomode *vmode,
-> @@ -1276,8 +1277,11 @@ static int __init ps3fb_setup(void)
->                         continue;
->                 if (!strncmp(this_opt, "mode:", 5))
->                         ps3fb_mode = simple_strtoul(this_opt + 5, NULL, 0);
-> -               else
-> -                       mode_option = this_opt;
-> +               else {
-> +                       kfree(mode_option_buf);
-> +                       mode_option_buf = kstrdup(this_opt, GFP_KERNEL); // ignore errors
-> +                       mode_option = mode_option_buf;
-> +               }
->         }
->         return 0;
->  }
-> @@ -1294,6 +1298,7 @@ static void __exit ps3fb_exit(void)
->  {
->         pr_debug(" -> %s:%d\n", __func__, __LINE__);
->         ps3_system_bus_driver_unregister(&ps3fb_driver);
-> +       kfree(mode_option_buf);
->         pr_debug(" <- %s:%d\n", __func__, __LINE__);
->  }
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
