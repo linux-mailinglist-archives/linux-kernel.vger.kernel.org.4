@@ -2,116 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B166D6B4910
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4B16B48EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbjCJPI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:08:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
+        id S233631AbjCJPIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:08:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233929AbjCJPIf (ORCPT
+        with ESMTP id S233589AbjCJPHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:08:35 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24B41223A4;
-        Fri, 10 Mar 2023 07:01:11 -0800 (PST)
-Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F0DE92E5;
-        Fri, 10 Mar 2023 15:59:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1678460371;
-        bh=Chwv7HFTcUaY/JET0sX7VEDo3HbGbnOEAmqSg2EzMbM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ob9KojRlAz9DuOGHlgGEvMtOc+uHUeZdj/WmXCOwIiQaE+E6TVQIjry+0ODhV5NDm
-         sZWrRRWmi63Y0pejiCDV9XcL9g/v66a2k9o6100n/mK1tzl4GIN66xQFe5xjjXUFUK
-         A7Ph1q+xazouYwW0DwJjdJfy8lvW3XM7wvHAesIA=
-Date:   Fri, 10 Mar 2023 16:59:35 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm: Use of_property_read_bool() for boolean properties
-Message-ID: <20230310145935.GI5342@pendragon.ideasonboard.com>
-References: <20230310144706.1542295-1-robh@kernel.org>
+        Fri, 10 Mar 2023 10:07:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A423212C431;
+        Fri, 10 Mar 2023 07:00:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C79B61AB3;
+        Fri, 10 Mar 2023 14:59:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 802E9C433AC;
+        Fri, 10 Mar 2023 14:59:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678460389;
+        bh=1jHWm1hHektupMVfGYAU7Ec/h6Xz3poeeAB0EdUGEqo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=uF2BrzmViQWwW1LEQLJXKxB0daFUAomEdstRS+b5em0SwNeqvzUCC33Io6LqCxVCR
+         i1QYaSFF0beb+R0KGs9x2ve6HqvVm5JrdiIsR54eceHdfbDuC+GKoAicbstlOTLock
+         Bs5uanFJ+vh4FLNRiUQXc/AF9e0+nF29h0yNAsSgC0UnJuO1nfvNXSzAwo70Rpoh76
+         U63zqbe0iNTyFW99cL3xWIjuY8fezUvZNREd9HPOYjgY9nGJHSot64soNRk/A908zK
+         5rSuPt9psIt7R28CcHPV0MF3q1jWwBZy5cXzTzDTFQ1FVN8BlAYYAQAfHTNxKofkzg
+         vzVxWokhVu/oQ==
+Received: by mail-lf1-f52.google.com with SMTP id k14so6944333lfj.7;
+        Fri, 10 Mar 2023 06:59:49 -0800 (PST)
+X-Gm-Message-State: AO0yUKXUxrOmnmOxGW4ImTt8/7HV/H80JGF/ANXhX8NTJpkD6e7f8UC7
+        F5evpw3i05WQI4NBqJ09M+F1WPi+iXonJMJ6TS0=
+X-Google-Smtp-Source: AK7set8UE9g4mnJY20spZnNYYYIZuw9ViDA1dtxYc+myhHvwFACvLnYstWrXuWWWcK6KO60dHRDelfdmwz0fTxtS5I8=
+X-Received: by 2002:a19:7517:0:b0:4dd:805b:5b75 with SMTP id
+ y23-20020a197517000000b004dd805b5b75mr8092903lfe.7.1678460387521; Fri, 10 Mar
+ 2023 06:59:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230310144706.1542295-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1671098103.git.baskov@ispras.ru> <cb62472011a0c4151276b6a05b83b60b1bf6f352.1671098103.git.baskov@ispras.ru>
+In-Reply-To: <cb62472011a0c4151276b6a05b83b60b1bf6f352.1671098103.git.baskov@ispras.ru>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 10 Mar 2023 15:59:36 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHnQZ2EDg1F_whTPHajYvqox7Ss35aqUyJuC8RLyiuCxg@mail.gmail.com>
+Message-ID: <CAMj1kXHnQZ2EDg1F_whTPHajYvqox7Ss35aqUyJuC8RLyiuCxg@mail.gmail.com>
+Subject: Re: [PATCH v4 17/26] x86/boot: Reduce size of the DOS stub
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Thu, 15 Dec 2022 at 13:40, Evgeniy Baskov <baskov@ispras.ru> wrote:
+>
+> This is required to fit more sections in PE section tables,
+> since its size is restricted by zero page located at specific offset
+> after the PE header.
+>
+> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+> Tested-by: Peter Jones <pjones@redhat.com>
+> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
 
-Thank you for the patch.
+I'd prefer to rip this out altogether.
 
-On Fri, Mar 10, 2023 at 08:47:05AM -0600, Rob Herring wrote:
-> It is preferred to use typed property access functions (i.e.
-> of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties.
-> Convert reading boolean properties to to of_property_read_bool().
+https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=9510f6f04f579b9a3f54ad762c75ab2d905e37d8
 
-s/to to/to/ (or maybe "to use" ?)
+(and refer to the other thread in linux-efi@)
 
-With this,
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  drivers/gpu/drm/bridge/parade-ps8622.c | 2 +-
->  drivers/gpu/drm/tiny/ofdrm.c           | 8 ++------
->  2 files changed, 3 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/parade-ps8622.c b/drivers/gpu/drm/bridge/parade-ps8622.c
-> index 530ee6a19e7e..efa80e309b98 100644
-> --- a/drivers/gpu/drm/bridge/parade-ps8622.c
-> +++ b/drivers/gpu/drm/bridge/parade-ps8622.c
-> @@ -496,7 +496,7 @@ static int ps8622_probe(struct i2c_client *client)
->  		ps8622->lane_count = ps8622->max_lane_count;
->  	}
->  
-> -	if (!of_find_property(dev->of_node, "use-external-pwm", NULL)) {
-> +	if (!of_property_read_bool(dev->of_node, "use-external-pwm")) {
->  		ps8622->bl = backlight_device_register("ps8622-backlight",
->  				dev, ps8622, &ps8622_backlight_ops,
->  				NULL);
-> diff --git a/drivers/gpu/drm/tiny/ofdrm.c b/drivers/gpu/drm/tiny/ofdrm.c
-> index 6e349ca42485..76cd7f515bab 100644
-> --- a/drivers/gpu/drm/tiny/ofdrm.c
-> +++ b/drivers/gpu/drm/tiny/ofdrm.c
-> @@ -162,13 +162,9 @@ static bool display_get_big_endian_of(struct drm_device *dev, struct device_node
->  	bool big_endian;
->  
->  #ifdef __BIG_ENDIAN
-> -	big_endian = true;
-> -	if (of_get_property(of_node, "little-endian", NULL))
-> -		big_endian = false;
-> +	big_endian = !of_property_read_bool(of_node, "little-endian");
->  #else
-> -	big_endian = false;
-> -	if (of_get_property(of_node, "big-endian", NULL))
-> -		big_endian = true;
-> +	big_endian = of_property_read_bool(of_node, "big-endian");
->  #endif
->  
->  	return big_endian;
-
--- 
-Regards,
-
-Laurent Pinchart
+>  arch/x86/boot/header.S | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/x86/boot/header.S b/arch/x86/boot/header.S
+> index 9338c68e7413..9fec80bc504b 100644
+> --- a/arch/x86/boot/header.S
+> +++ b/arch/x86/boot/header.S
+> @@ -59,17 +59,16 @@ start2:
+>         cld
+>
+>         movw    $bugger_off_msg, %si
+> +       movw    $bugger_off_msg_size, %cx
+>
+>  msg_loop:
+>         lodsb
+> -       andb    %al, %al
+> -       jz      bs_die
+>         movb    $0xe, %ah
+>         movw    $7, %bx
+>         int     $0x10
+> -       jmp     msg_loop
+> +       decw    %cx
+> +       jnz     msg_loop
+>
+> -bs_die:
+>         # Allow the user to press a key, then reboot
+>         xorw    %ax, %ax
+>         int     $0x16
+> @@ -90,10 +89,9 @@ bs_die:
+>
+>         .section ".bsdata", "a"
+>  bugger_off_msg:
+> -       .ascii  "Use a boot loader.\r\n"
+> -       .ascii  "\n"
+> -       .ascii  "Remove disk and press any key to reboot...\r\n"
+> -       .byte   0
+> +       .ascii  "Use a boot loader. "
+> +       .ascii  "Press a key to reboot"
+> +       .set    bugger_off_msg_size, . - bugger_off_msg
+>
+>  #ifdef CONFIG_EFI_STUB
+>  pe_header:
+> --
+> 2.37.4
+>
