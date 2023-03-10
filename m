@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976B76B3785
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:40:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2116B378A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 08:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjCJHkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 02:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
+        id S230375AbjCJHki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 02:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbjCJHjt (ORCPT
+        with ESMTP id S230362AbjCJHju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 02:39:49 -0500
+        Fri, 10 Mar 2023 02:39:50 -0500
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5682FFCBD9;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87136FCF25;
         Thu,  9 Mar 2023 23:39:38 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PXycP4PsBz4f3jq3;
-        Fri, 10 Mar 2023 15:39:33 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PXycQ0XBwz4f3jqY;
+        Fri, 10 Mar 2023 15:39:34 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgDn4R+03gpkwSimEg--.34063S7;
+        by APP3 (Coremail) with SMTP id _Ch0CgDn4R+03gpkwSimEg--.34063S8;
         Fri, 10 Mar 2023 15:39:35 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     guoqing.jiang@linux.dev, song@kernel.org, jgq516@gmail.com,
@@ -27,32 +27,32 @@ To:     guoqing.jiang@linux.dev, song@kernel.org, jgq516@gmail.com,
 Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
         yangerkun@huawei.com
-Subject: [PATCH v2 3/6] md/raid10: don't BUG_ON() in raise_barrier()
-Date:   Fri, 10 Mar 2023 15:38:52 +0800
-Message-Id: <20230310073855.1337560-4-yukuai1@huaweicloud.com>
+Subject: [PATCH v2 4/6] md/radi10: fix leak of 'r10bio->remaining' for recovery
+Date:   Fri, 10 Mar 2023 15:38:53 +0800
+Message-Id: <20230310073855.1337560-5-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230310073855.1337560-1-yukuai1@huaweicloud.com>
 References: <20230310073855.1337560-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDn4R+03gpkwSimEg--.34063S7
-X-Coremail-Antispam: 1UD129KBjvdXoWrKryrGFyrXF48tF47Gw45ZFb_yoWkGFcE93
-        WfuasxZr1xJrnrKw12kFn2vrWIga1kXF1xuF4rKr13AF98ZFWkC3Wjqas5Jwn5Jay2vr17
-        ZF92va4UAr4DWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb6AFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWwA2048vs2IY02
-        0Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-        vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
-        r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04
-        v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_
-        Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x
-        0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8
-        JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIx
-        AIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbJ73DUUUUU=
-        =
+X-CM-TRANSID: _Ch0CgDn4R+03gpkwSimEg--.34063S8
+X-Coremail-Antispam: 1UD129KBjvJXoWxJryrWr1xGr4UAw4UAry8uFg_yoW8uFyUpF
+        ZIkFWFyryUGa17Ar4DJ3yDAa4Fk3ykWrW3AF42g3yfAw1avrWv9a1UJrW5Wr98uFWSg34j
+        qrn8Xr4DAFZrtF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUPF14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
+        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
+        z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
+        4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
+        3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
+        IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
+        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
+        kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+        14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIx
+        kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+        wI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
+        W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOBTY
+        UUUUU
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
@@ -66,34 +66,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-If raise_barrier() is called the first time in raid10_sync_request(), which
-means the first non-normal io is handled, raise_barrier() should wait for
-all dispatched normal io to be done. This ensures that normal io won't
-starve.
+raid10_sync_request() will add 'r10bio->remaining' for both rdev and
+replacement rdev. However, if the read io fails, recovery_request_write()
+returns without issuing the write io, in this case, end_sync_request()
+is only called once and 'remaining' is leaked, cause an io hang.
 
-However, BUG_ON() if this is broken is too aggressive. This patch replace
-BUG_ON() with WARN and fall back to not force.
+Fix the problem by decreasing 'remaining' according to if 'bio' and
+'repl_bio' is valid.
 
+Fixes: 24afd80d99f8 ("md/raid10: handle recovery of replacement devices.")
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/md/raid10.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/md/raid10.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index 4f8edb6ea3e2..a8b5fecef136 100644
+index a8b5fecef136..f7002a1aa9cf 100644
 --- a/drivers/md/raid10.c
 +++ b/drivers/md/raid10.c
-@@ -952,7 +952,9 @@ static void flush_pending_writes(struct r10conf *conf)
- static void raise_barrier(struct r10conf *conf, int force)
+@@ -2611,11 +2611,22 @@ static void recovery_request_write(struct mddev *mddev, struct r10bio *r10_bio)
  {
- 	write_seqlock_irq(&conf->resync_lock);
--	BUG_ON(force && !conf->barrier);
+ 	struct r10conf *conf = mddev->private;
+ 	int d;
+-	struct bio *wbio, *wbio2;
++	struct bio *wbio = r10_bio->devs[1].bio;
++	struct bio *wbio2 = r10_bio->devs[1].repl_bio;
 +
-+	if (WARN_ON_ONCE(force && !conf->barrier))
-+		force = false;
++	/* Need to test wbio2->bi_end_io before we call
++	 * submit_bio_noacct as if the former is NULL,
++	 * the latter is free to free wbio2.
++	 */
++	if (wbio2 && !wbio2->bi_end_io)
++		wbio2 = NULL;
  
- 	/* Wait until no block IO is waiting (unless 'force') */
- 	wait_event_barrier(conf, force || !conf->nr_waiting);
+ 	if (!test_bit(R10BIO_Uptodate, &r10_bio->state)) {
+ 		fix_recovery_read_error(r10_bio);
+-		end_sync_request(r10_bio);
++		if (wbio->bi_end_io)
++			end_sync_request(r10_bio);
++		if (wbio2)
++			end_sync_request(r10_bio);
+ 		return;
+ 	}
+ 
+@@ -2624,14 +2635,6 @@ static void recovery_request_write(struct mddev *mddev, struct r10bio *r10_bio)
+ 	 * and submit the write request
+ 	 */
+ 	d = r10_bio->devs[1].devnum;
+-	wbio = r10_bio->devs[1].bio;
+-	wbio2 = r10_bio->devs[1].repl_bio;
+-	/* Need to test wbio2->bi_end_io before we call
+-	 * submit_bio_noacct as if the former is NULL,
+-	 * the latter is free to free wbio2.
+-	 */
+-	if (wbio2 && !wbio2->bi_end_io)
+-		wbio2 = NULL;
+ 	if (wbio->bi_end_io) {
+ 		atomic_inc(&conf->mirrors[d].rdev->nr_pending);
+ 		md_sync_acct(conf->mirrors[d].rdev->bdev, bio_sectors(wbio));
 -- 
 2.31.1
 
