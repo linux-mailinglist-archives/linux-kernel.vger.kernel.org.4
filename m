@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32C26B3DCC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCD96B3DD0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjCJLb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 06:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
+        id S230245AbjCJLcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:32:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjCJLb1 (ORCPT
+        with ESMTP id S230050AbjCJLcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 06:31:27 -0500
+        Fri, 10 Mar 2023 06:32:03 -0500
 Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261E25FD6;
-        Fri, 10 Mar 2023 03:31:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2ADB9515;
+        Fri, 10 Mar 2023 03:32:02 -0800 (PST)
 Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
         by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1paaxt-002Y86-Su; Fri, 10 Mar 2023 19:31:14 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 10 Mar 2023 19:31:13 +0800
-Date:   Fri, 10 Mar 2023 19:31:13 +0800
+        id 1paayU-002Y9V-85; Fri, 10 Mar 2023 19:31:51 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 10 Mar 2023 19:31:50 +0800
+Date:   Fri, 10 Mar 2023 19:31:50 +0800
 From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-crypto@vger.kernel.org,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, Yann Droneaud <ydroneaud@opteya.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] crypto: testmgr - fix RNG performance in fuzz tests
-Message-ID: <ZAsVAXRGjM/fREEn@gondor.apana.org.au>
-References: <20230227182947.61733-1-ebiggers@kernel.org>
+To:     Jonathan McDowell <noodles@earth.li>
+Cc:     Antoine Tenart <atenart@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] crypto: inside-secure: Handle load errors better
+Message-ID: <ZAsVJjmvefrfTHwr@gondor.apana.org.au>
+References: <Y/fkOF31BTQVocSe@sevai.o362.us>
+ <cover.1677608527.git.noodles@earth.li>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230227182947.61733-1-ebiggers@kernel.org>
+In-Reply-To: <cover.1677608527.git.noodles@earth.li>
 X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
         PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
         URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
@@ -43,52 +43,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 10:29:47AM -0800, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
+On Tue, Feb 28, 2023 at 06:28:23PM +0000, Jonathan McDowell wrote:
+> 2 minor patches to improve the error handling of the safexcel driver
+> when it fails to load.
 > 
-> The performance of the crypto fuzz tests has greatly regressed since
-> v5.18.  When booting a kernel on an arm64 dev board with all software
-> crypto algorithms and CONFIG_CRYPTO_MANAGER_EXTRA_TESTS enabled, the
-> fuzz tests now take about 200 seconds to run, or about 325 seconds with
-> lockdep enabled, compared to about 5 seconds before.
+> Firstly, make it clear when the reason for a load failure is because the
+> firmware is not available.
 > 
-> The root cause is that the random number generation has become much
-> slower due to commit d4150779e60f ("random32: use real rng for
-> non-deterministic randomness").  On my same arm64 dev board, at the time
-> the fuzz tests are run, get_random_u8() is about 345x slower than
-> prandom_u32_state(), or about 469x if lockdep is enabled.
+> Secondly, ensure we clean up the ring workqueues / IRQ affinity settings
+> to avoid a kernel warning when the driver fails to load.
 > 
-> Lockdep makes a big difference, but much of the rest comes from the
-> get_random_*() functions taking a *very* slow path when the CRNG is not
-> yet initialized.  Since the crypto self-tests run early during boot,
-> even having a hardware RNG driver enabled (CONFIG_CRYPTO_DEV_QCOM_RNG in
-> my case) doesn't prevent this.  x86 systems don't have this issue, but
-> they still see a significant regression if lockdep is enabled.
+> v2:
+>  - Expand error clean up to cover ring initialisation failures
 > 
-> Converting the "Fully random bytes" case in generate_random_bytes() to
-> use get_random_bytes() helps significantly, improving the test time to
-> about 27 seconds.  But that's still over 5x slower than before.
+> Jonathan McDowell (2):
+>   crypto: inside-secure: Raise firmware load failure message to error
+>   crypto: inside-secure - Cleanup ring IRQ workqueues on load failure
 > 
-> This is all a bit silly, though, since the fuzz tests don't actually
-> need cryptographically secure random numbers.  So let's just make them
-> use a non-cryptographically-secure RNG as they did before.  The original
-> prandom_u32() is gone now, so let's use prandom_u32_state() instead,
-> with an explicitly managed state, like various other self-tests in the
-> kernel source tree (rbtree_test.c, test_scanf.c, etc.) already do.  This
-> also has the benefit that no locking is required anymore, so performance
-> should be even better than the original version that used prandom_u32().
+>  drivers/crypto/inside-secure/safexcel.c | 39 ++++++++++++++++++-------
+>  1 file changed, 28 insertions(+), 11 deletions(-)
 > 
-> Fixes: d4150779e60f ("random32: use real rng for non-deterministic randomness")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
-> 
-> v2: made init_rnd_state() use get_random_u64()
-> 
->  crypto/testmgr.c | 266 ++++++++++++++++++++++++++++++-----------------
->  1 file changed, 169 insertions(+), 97 deletions(-)
+> -- 
+> 2.39.2
 
-Patch applied.  Thanks.
+All applied.  Thanks.
 -- 
 Email: Herbert Xu <herbert@gondor.apana.org.au>
 Home Page: http://gondor.apana.org.au/~herbert/
