@@ -2,84 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516716B4067
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:28:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC976B406F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 14:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjCJN2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 08:28:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S230052AbjCJNay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 08:30:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjCJN2b (ORCPT
+        with ESMTP id S229652AbjCJNaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:28:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A481744BB
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:27:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678454867;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/oDoMqLVnOuZxZgE4flgShP8OtqI4S89KmGHHiU1L20=;
-        b=GydziM5ZFVJAK1IxKIwSiUdYQx81b1dMcuIPCO6u/nteKItWWBHaqiKzBzvAoppA0Xi5Bn
-        X7eRhQLUIhNnWNG8StWu35c83VVV8no1KS3LVkV/sglsQEYeb6iH0+l03WG/qYk0pdi7ZA
-        qnYFifAniPkxjPXG66cqniC8foUYFm8=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-378-PQv2-mPmOLuVsr7p6MwrEQ-1; Fri, 10 Mar 2023 08:27:45 -0500
-X-MC-Unique: PQv2-mPmOLuVsr7p6MwrEQ-1
-Received: by mail-wr1-f72.google.com with SMTP id u5-20020a5d6da5000000b002cd82373455so1050812wrs.9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 05:27:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678454864;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/oDoMqLVnOuZxZgE4flgShP8OtqI4S89KmGHHiU1L20=;
-        b=eRhMLv9XPysd+QwNaXkQAARFfiOsvMnvqYEAuPN1GNANK8+sAf85XEA+cWqn9rNOMM
-         F5yUaTdfA1CY6pvhiontQApUOXEwjQlxrJ1LnqLzMzEdfFTJR3u8YC+lueJGe0Hwidn5
-         I4C+Er6wMD1LfZFZmc5pM7wDH0yBQssiuZhHJbQPiLH33I3KkJBw7FXDPKM1YQW7psts
-         Tn10T6lgQvsPQLHpLWC9XsuFTsXXHXWet0XnMtACH9uNIyFivLUYhZHKlc2DHitisErQ
-         qFKUNbRikTWR+Cdqc/z6Gd7K8Gv4TPubvx2BL0Ow7UQOCNZ+sCVRtDAOB8Tp5QrxhE8f
-         OE/A==
-X-Gm-Message-State: AO0yUKXhSrxqbLN2O/BjbvKOc5ZQRP6XlHwNFy0T7Oblkw946MhrL1Ng
-        rLclJhhdEXTFv6Segd9k9cawKv/6kLcTJDahjvg0aDl9rDTT8ipACR/FCsMBXtnluF2P52gCUU5
-        vmg4O3rC45kXut0ty+Oo1SUYla0KJul6H
-X-Received: by 2002:adf:e5cf:0:b0:2c7:e60:abe8 with SMTP id a15-20020adfe5cf000000b002c70e60abe8mr1364267wrn.9.1678454863885;
-        Fri, 10 Mar 2023 05:27:43 -0800 (PST)
-X-Google-Smtp-Source: AK7set+/F5VlfIt9oBwbVxs0Diw/+nCO6V0/XYKj4aznLE1oCJqsevDI6s1JsyAlPJIAU5Rh/oqB3A==
-X-Received: by 2002:adf:e5cf:0:b0:2c7:e60:abe8 with SMTP id a15-20020adfe5cf000000b002c70e60abe8mr1364253wrn.9.1678454863604;
-        Fri, 10 Mar 2023 05:27:43 -0800 (PST)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id h19-20020a05600c351300b003e2058a7109sm3339325wmq.14.2023.03.10.05.27.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 05:27:43 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Cc:     Bilal Elmoussaoui <belmouss@redhat.com>,
-        Jocelyn Falempe <jfalempe@redhat.com>,
-        Enric Balletbo i Serra <eballetb@redhat.com>,
-        Christian Hergert <chergert@redhat.com>,
-        Albert Esteve <aesteve@redhat.com>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH] drm/virtio: Enable fb damage clips property for the
- primary plane
-In-Reply-To: <6c556799-6a78-4b67-a4c7-4de0a8f082fa@suse.de>
-References: <20230310125943.912514-1-javierm@redhat.com>
- <6c556799-6a78-4b67-a4c7-4de0a8f082fa@suse.de>
-Date:   Fri, 10 Mar 2023 14:27:42 +0100
-Message-ID: <87fsac7n3l.fsf@minerva.mail-host-address-is-not-set>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Fri, 10 Mar 2023 08:30:52 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37171009D2;
+        Fri, 10 Mar 2023 05:30:49 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32ACCBYh015137;
+        Fri, 10 Mar 2023 13:30:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=asYICjIrjQrbR77e2tmK7a69X9wRaG/debRPa7BHsck=;
+ b=hz7KbY3BGPI5wPZaMVeD45ZG9+PA/Fd9hRfNv1m69OckQBgfyA0K8UZb4Vif0ljtw9SV
+ Iz+aLB1pPx2VMXat2XqiEQQBZt1ZgYrTxgeXNiedZYid8Ko5NA6j8OVzpWRJyyZwtwV7
+ 7PJ0cimAyGWyPa0nBHYybn4uzfoNC69EsF18LsbzSv0sCANz9YR94UzQ8d2L/76KlmQF
+ rDLGTny3iqcqAkei/rXzdToEtJ2BV/9a4BeABzC4yKKlRL8GkYcO7bduVb9p2EOCMq25
+ SWP8Epxxum0yu66MkAcB6trk9ft941qBwEOm9gs86LIeUo7Mf2nnrbpuu/pCz7E0EkWz vg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p84be1urb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 13:30:21 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32AD0Nh6009740;
+        Fri, 10 Mar 2023 13:30:20 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p84be1uqv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 13:30:20 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32AClFDh007600;
+        Fri, 10 Mar 2023 13:30:19 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3p6fmy7448-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 13:30:19 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32ADUI2e13107786
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Mar 2023 13:30:18 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C93D5805F;
+        Fri, 10 Mar 2023 13:30:18 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E760B58045;
+        Fri, 10 Mar 2023 13:30:16 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.71.208])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Mar 2023 13:30:16 +0000 (GMT)
+Message-ID: <aea1e9de5120522be376e29828991f8975d3c165.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 1/3] security: Introduce LSM_ORDER_LAST and set it
+ for the integrity LSM
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, mic@digikod.net
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 10 Mar 2023 08:30:16 -0500
+In-Reply-To: <20230310085401.1964889-2-roberto.sassu@huaweicloud.com>
+References: <20230310085401.1964889-1-roberto.sassu@huaweicloud.com>
+         <20230310085401.1964889-2-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QhnLh_pJkHytYD-v3mK939KA5L0zcvjn
+X-Proofpoint-ORIG-GUID: WMY2OYkPrgpJefZDEKM2bbSCbOATQIQN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-10_03,2023-03-09_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=803
+ malwarescore=0 phishscore=0 suspectscore=0 priorityscore=1501 spamscore=0
+ impostorscore=0 clxscore=1015 bulkscore=0 adultscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303100104
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,48 +97,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thomas Zimmermann <tzimmermann@suse.de> writes:
+On Fri, 2023-03-10 at 09:53 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs needing to be
+> last, e.g. the 'integrity' LSM, without changing the kernel command line or
+> configuration.
+> 
+> Also, set this order for the 'integrity' LSM. While not enforced, this is
+> the only LSM expected to use it.
+> 
+> Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled
+> and put at the end of the LSM list, if selected in the kernel
+> configuration. Setting one of these orders alone, does not cause the LSMs
+> to be selected and compiled built-in in the kernel.
+> 
+> Finally, for LSM_ORDER_MUTABLE LSMs, set the found variable to true if an
+> LSM is found, regardless of its order. In this way, the kernel would not
+> wrongly report that the LSM is not built-in in the kernel if its order is
+> LSM_ORDER_LAST.
+> 
+> Fixes: 79f7865d844c ("LSM: Introduce "lsm=" for boottime LSM selection")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-Hello Thomas,
+Acked-by: Mimi Zohar <zohar@linux.ibm.com>
 
-> Hi Javier
->
-> Am 10.03.23 um 13:59 schrieb Javier Martinez Canillas:
->> Christian Hergert reports that the driver doesn't enable the property and
->> that leads to always doing a full plane update, even when the driver does
->> support damage clipping for the primary plane.
->> 
->> Don't enable it for the cursor plane, because its .atomic_update callback
->> doesn't handle damage clips.
->> 
->> Reported-by: Christian Hergert <chergert@redhat.com>
->> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
->> ---
->> 
->>   drivers/gpu/drm/virtio/virtgpu_plane.c | 4 ++++
->>   1 file changed, 4 insertions(+)
->> 
->> diff --git a/drivers/gpu/drm/virtio/virtgpu_plane.c b/drivers/gpu/drm/virtio/virtgpu_plane.c
->> index 4c09e313bebc..a2e045f3a000 100644
->> --- a/drivers/gpu/drm/virtio/virtgpu_plane.c
->> +++ b/drivers/gpu/drm/virtio/virtgpu_plane.c
->> @@ -390,5 +390,9 @@ struct drm_plane *virtio_gpu_plane_init(struct virtio_gpu_device *vgdev,
->
-> virtio_gpu_plane_init() should really be two separate functions. But 
-> withing the constrains of the current code
->
-
-Agreed, I thought the same. I may post a follow-up patch once this lands.
-
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
->
-
-Thanks!
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
 
