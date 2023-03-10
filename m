@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F906B4D12
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DF26B4D11
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 17:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbjCJQeL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 11:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
+        id S231478AbjCJQdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 11:33:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjCJQdm (ORCPT
+        with ESMTP id S231336AbjCJQcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:33:42 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083FD13131A
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 08:31:13 -0800 (PST)
-Received: from lhrpeml100004.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PYBNK5FzGz67LM6;
-        Sat, 11 Mar 2023 00:29:53 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- lhrpeml100004.china.huawei.com (7.191.162.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 10 Mar 2023 16:30:03 +0000
-Received: from lhrpeml500005.china.huawei.com ([7.191.163.240]) by
- lhrpeml500005.china.huawei.com ([7.191.163.240]) with mapi id 15.01.2507.021;
- Fri, 10 Mar 2023 16:30:03 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Eric Auger <eric.auger@redhat.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "kevin.tian@intel.com" <kevin.tian@intel.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v1 01/14] iommu: Add iommu_get_unmanaged_domain helper
-Thread-Topic: [PATCH v1 01/14] iommu: Add iommu_get_unmanaged_domain helper
-Thread-Index: AQHZUnWRmBwtrmleCk69JH8tQLhaPq7zzWuAgABY2gCAAAIMsIAABIwAgAABG+CAAAW9gIAAAcuw
-Date:   Fri, 10 Mar 2023 16:30:03 +0000
-Message-ID: <ba7f4b9f81264832842a6c7486cb6dd7@huawei.com>
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <9b1077601cace998533129327f5e7ad946752d29.1678348754.git.nicolinc@nvidia.com>
- <eddde530-cd37-f493-7f0f-c97905f0de64@redhat.com>
- <ZAtNrFAEHvmM4FOW@nvidia.com> <f61ca5693d8845eba0a2139324e52d98@huawei.com>
- <ZAtTNK1NbMJ4iyE0@nvidia.com> <b9e850a91c494a5397a0ae154e9ef1da@huawei.com>
- <ZAtY8S53//5P5egd@nvidia.com>
-In-Reply-To: <ZAtY8S53//5P5egd@nvidia.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.202.227.178]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Fri, 10 Mar 2023 11:32:41 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B5312CBFD;
+        Fri, 10 Mar 2023 08:30:11 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id be16so4707075oib.0;
+        Fri, 10 Mar 2023 08:30:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678465810;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oAELrHo6ArQk1t5su+5ParCDpr/c39PmM5jneNHCCFI=;
+        b=G6OI5ju/nJloSHAWprDG0Nk1vm4Xb4C61Q7iax8xymVAyR6Klu17C/62lLgJxqfoiT
+         sVMdP7kTQi50XEKpVis842nV3pua2YAE/MEbiRXKGiINrWWzPlquJvWJmBh3VX+7e3gE
+         TaOGK+L8FE7uFzoVNYLuaBoinNUZmb7lKonLxGLjcj3NeLJsmAZnHtrRhJCqjNMZGM1Y
+         b0OgvvMWkn3g1DKr0YuCdvFFKOuRfbpkJ7IGTwkLJlKXKlMRwyt5Mgs2pB04so4kpqbQ
+         FUodbPzNhqIkGoAnFvlhccDV3uOmpxw0QUhORD0mWx5zoqv0iz7MI/njsMNJlzfYpzpZ
+         vtEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678465810;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oAELrHo6ArQk1t5su+5ParCDpr/c39PmM5jneNHCCFI=;
+        b=ie8LibSEZg9SOxW94IdIPjCvxBAza7YbA0pe+og+yftflVV5xedQLLqlx96SdtT5WM
+         avhAJT1SEYOW96ZfzcZZnjp8Kdb/GWoDc1Biw36GPY7QBWG3lQN7AUMjpfUp6PTv8FJH
+         +Aq4Tc1gqmpYRfVAn0fgRwhXoGxw0EYUwA8GB9H9Fj+LRP6e65TrKmOtwheKYh++51jK
+         kMcgL0YUhI5IfzDbGXiZWJQ4RGPKaYzdVIMxtBrU08qLD1kKfHrG2aPd38zqCwa6FR54
+         DKLQeWrvXRQSoxTxdvePuswy8osMSQr/NZNqDCnXuvMyI4z3ZCEHHGX/8pV2mACm/rh/
+         AEqw==
+X-Gm-Message-State: AO0yUKXcBnnT48hEigYUefVt6sCHmj7hcgsXAhFZgKeD8Cw213ED/j7g
+        9qjScrEuL+d4XfRnRKIQhjY3zaeBobE=
+X-Google-Smtp-Source: AK7set9tPWQI1zdCnMkhi2Rg+Lvrldxw38K4OsfUZH1xNGgaU8zXp+S8x4uenoIzU3cSWzusMCQX/A==
+X-Received: by 2002:aca:f0f:0:b0:378:2270:8876 with SMTP id 15-20020aca0f0f000000b0037822708876mr11948901oip.29.1678465809746;
+        Fri, 10 Mar 2023 08:30:09 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id et3-20020a056808280300b00383e0bec93bsm14559oib.49.2023.03.10.08.30.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 08:30:09 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 10 Mar 2023 08:30:06 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: ltc4245: Use of_property_read_bool() for boolean
+ properties
+Message-ID: <138ba352-97ac-4992-9fea-afcfe84a28b8@roeck-us.net>
+References: <20230310144707.1542525-1-robh@kernel.org>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310144707.1542525-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,42 +75,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Jason Gunthorpe [mailto:jgg@nvidia.com]
-> Sent: 10 March 2023 16:21
-> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-> Cc: Eric Auger <eric.auger@redhat.com>; Nicolin Chen
-> <nicolinc@nvidia.com>; robin.murphy@arm.com; will@kernel.org;
-> kevin.tian@intel.com; baolu.lu@linux.intel.com; joro@8bytes.org;
-> jean-philippe@linaro.org; linux-arm-kernel@lists.infradead.org;
-> iommu@lists.linux.dev; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH v1 01/14] iommu: Add iommu_get_unmanaged_domain
-> helper
+On Fri, Mar 10, 2023 at 08:47:07AM -0600, Rob Herring wrote:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties.
+> Convert reading boolean properties to to of_property_read_bool().
 > 
-> On Fri, Mar 10, 2023 at 04:07:38PM +0000, Shameerali Kolothum Thodi
-> wrote:
-> > >
-> https://lore.kernel.org/linux-arm-kernel/20220420164836.1181-5-shameer
-> > > > ali.kolothum.thodi@huawei.com/
-> > >
-> > > So "boot configration" is more like "don't change the RIDs"? Ie don't
-> enable
-> > > SRIOV?
-> >
-> > Yes. Don't think it will work with SR-IOV if you can't guarantee the RMR
-> specified
-> > SID.
-> 
-> So I think we are probably good them because vSR-IOV is already not
-> supported by qemu, so it impossible for a VM to change the PCI
-> configuration in a way that would alter the RID to SID mapping?
-> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Provided we fix the issue mentioned by Eric. This was discussed here previously,
-
-https://lore.kernel.org/linux-arm-kernel/bb3688c7-8f42-039e-e22f-6529078da97d@redhat.com/
+Applied after s/to to/to/
 
 Thanks,
-Shameer
+Guenter
+
+> ---
+>  drivers/hwmon/ltc4245.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/ltc4245.c b/drivers/hwmon/ltc4245.c
+> index 5088d28b3a7c..57cbaf3b39fa 100644
+> --- a/drivers/hwmon/ltc4245.c
+> +++ b/drivers/hwmon/ltc4245.c
+> @@ -434,7 +434,7 @@ static bool ltc4245_use_extra_gpios(struct i2c_client *client)
+>  		return pdata->use_extra_gpios;
+>  
+>  	/* fallback on OF */
+> -	if (of_find_property(np, "ltc4245,use-extra-gpios", NULL))
+> +	if (of_property_read_bool(np, "ltc4245,use-extra-gpios"))
+>  		return true;
+>  
+>  	return false;
