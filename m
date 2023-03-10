@@ -2,143 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 729366B3E6C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B0E6B3E72
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCJLyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 06:54:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
+        id S230035AbjCJLyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:54:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCJLx6 (ORCPT
+        with ESMTP id S229852AbjCJLyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 06:53:58 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E222C2237;
-        Fri, 10 Mar 2023 03:53:56 -0800 (PST)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 1D5B185ACE;
-        Fri, 10 Mar 2023 12:53:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1678449234;
-        bh=U4tJ4knp+QbdBfJB/Gn1BrKZ/iCY4ZlOxNtMsP5bVHA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Z+ob/J5MC45jO4WZcvTpcTWFYgmprYE6yAEpeVZ9cwydoYVQ1MIrwzaMR4DQxRcwd
-         ccABxY/KCjwrhPwbkzS0F65fxKaCid+iI8CO7fUSFHhMTNc0g7633U7WQapXriATyW
-         Rpu/xqggk6VpfkSGFoTDupkC9xPiDxBIfwCfCDEjbgIa+8m+3n33Nb5NhybGBDqPF2
-         v7nFWF1xwaWTv6934ioO4eHyDFPTDN7vuQhyVXwURbfoSuwBaiHsZXQus5m4uV0Gl4
-         1mAM4wET1d+N9AxJ9Kd7BLITweOZ0w+N07Y4emM1m3CR0dYyU0B3Mhm1FxS3POJmQk
-         QXhYRseA82QvQ==
-Date:   Fri, 10 Mar 2023 12:53:46 +0100
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/7] dsa: marvell: Correct value of max_frame_size
- variable after validation
-Message-ID: <20230310125346.13f93f78@wsk>
-In-Reply-To: <0959097a-35cb-48c1-8e88-5e6c1269852d@lunn.ch>
-References: <20230309125421.3900962-1-lukma@denx.de>
-        <20230309125421.3900962-7-lukma@denx.de>
-        <ZAnnk5MZc0w4VkDE@shell.armlinux.org.uk>
-        <20230309154350.0bdc54c8@wsk>
-        <0959097a-35cb-48c1-8e88-5e6c1269852d@lunn.ch>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 10 Mar 2023 06:54:01 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B78DBF3AF;
+        Fri, 10 Mar 2023 03:53:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678449240; x=1709985240;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=vJmgx24AKceq+nRzDeHhXfnPAuOp6MJK0DUp51w16yM=;
+  b=URPHJc6fqt9aio76OxqHeTrt+/Jm6OL8jDxC4+ankzfZaG/B/TeViGfp
+   /s5eNK+J1lAkEu2ijNo5q6KlGHkNuryB0ObFDtSs5K8DIJTpTH7OapliC
+   P+jNrAXd8ifj4b22C32YokU5oeX8F8DOMWyRW5HAebx55OGIk/0oZ3KXB
+   V445Sy5JwXamYKr4P1dRWRnYZIj/lWDVPgGJZIMaGrQhnKjv9JJqKp24K
+   Wi0ZJV0X60d98LB4I/Gy8XUDFOjpojZaeWaN0JJhc2g6MrmQoK+Kt3QzB
+   Oj/FrScCOAnNet699pQMi01Rx73PWTEc1EFwPyUVwxJ0G5VoLrJnEDWGY
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="316362985"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="316362985"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 03:53:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="741945688"
+X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
+   d="scan'208";a="741945688"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Mar 2023 03:53:59 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 10 Mar 2023 03:53:59 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 10 Mar 2023 03:53:58 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Fri, 10 Mar 2023 03:53:58 -0800
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.42) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Fri, 10 Mar 2023 03:53:58 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Taw0X0USg2ksfKBzqt8oqryAjYX7Ih3scwBB4X+pTmmfIVLV+ZsiWupgrp1RJmOuaycjQh/lVhcnkkZgYkMFLX/dWIrJBtF1wmJGhTBK2fjzZuq9VEVFMDtSitqJG5JN35XrxwxcLfQG7Ke6bPzmBuIJGsRbXA6OdFShdWIp0UNoh7oDjzRvq9Dl+gZQj+KYJyZ/C0bgsiESLJrYE1TabixZmNd1qiZTy1bVuT4v/HLKdtJtZrrdLwAMUk1IoljnnntS4hA8A/XU9lX0rncKjJVJS2zuJCxXONITROzb92WjN935GcLcdBnwySiiQRL4qBm0KEpdfiLJQtPchu9h0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vJmgx24AKceq+nRzDeHhXfnPAuOp6MJK0DUp51w16yM=;
+ b=AldqxWnyxrRef+HsNmqNWV6RMTpdocnnUrgM3VEh5XR/3JDGeAOlUSxjdKPkH6woC9J7XBHJU/LyVMnrypjcGNp4M9HHUsbM00eFsOiYpG2vg/VCTRzdlesIwPK72p/Kl0PleaP9iZ8vbHEA2inKewrS/L8cxx32vN9j2qbsBQed2y7thUAbS5QDz+4g/SpUOarauqXLwGwgUhSU/3W8BUQR4LClEoh6ae9tZC8jzgOHiYBzxQVuV4gJMZ03Mt7770w/yCJOTMhRSxB69AIl8iJt/eL1rgRbLRguwOSoeGN+ZPidyL0J2k89SrkUfGStY356iN3qLhaFaTLxmHkXJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by DM8PR11MB5637.namprd11.prod.outlook.com (2603:10b6:8:33::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.20; Fri, 10 Mar 2023 11:53:56 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1aac:b695:f7c5:bcac%8]) with mapi id 15.20.6178.020; Fri, 10 Mar 2023
+ 11:53:56 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>
+CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>
+Subject: RE: [PATCH v4 5/5] vfio: Support IO page table replacement
+Thread-Topic: [PATCH v4 5/5] vfio: Support IO page table replacement
+Thread-Index: AQHZUcoFRLfg4HbeIES7vtug94baI67z6iAQ
+Date:   Fri, 10 Mar 2023 11:53:56 +0000
+Message-ID: <BN9PR11MB5276F7F917F76DDC0D9186DD8CBA9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <cover.1678284812.git.nicolinc@nvidia.com>
+ <600343ffb282ff3bed5eb98a9255c0084d01a859.1678284812.git.nicolinc@nvidia.com>
+In-Reply-To: <600343ffb282ff3bed5eb98a9255c0084d01a859.1678284812.git.nicolinc@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DM8PR11MB5637:EE_
+x-ms-office365-filtering-correlation-id: 553bfb29-fb43-40b2-a652-08db215e20a0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cheCSLFkLZ/YkPHudM7hAP78N2mK5xy25U1ZdO5zRfh5nIlGnJTGZqjiBYEB1/4nHA61u0FbwR4Z/A6lJB0rOlm7bADLKMnupsljaicI0nrJKXhYmqvklY9T4jnu7/iePHvH/rRV+8pq34ISiOXpjQ/SiAl/LAXay3T37sYzJT4oG2YHiyr/oqvqt8MCR3crHAj/LiVLH7Y8wIruPBY28T5Spj+R6W0MszfIG8J/OHAAt+qS4THOCvFWODgNwYkcr1pJkc1T/6byw6yobaeuYHGKmg7C97IThs3CfBs5KXTtUeik/f772JyW+Tbx+WIYo7XJh5AJIUJD8IMAF/ODnGi+o83gJHzGJkJlYQUiYP9/Is0g4ZMIR3gLqOZuQkTC/SOp7nK7TurQzjHIuyZhhHWDSAQ2H9xojqRNAWNHhW77BcnHjYtQ2XAJh5Q94i+ekbym8RBsZvMA/B/7d5DH7JWtUecivx+FsqK+3e/9Vh3AJGlH9KVhQ+EUdI1EPGhqDqYNE63ksAYDV4oQQ06Pp0dqYXoriMUle9iPSWejYzYot5D+5D5ODElKDn8MyOrLbySiDMTlRAek4FrgvAXam/rOAf8A3KDK5qtsUmRI/gFAHCEkCKHOhad5NW9ZFkRtB6JJUPWhcFk7ctqnGAyx8g6dV/ojJZVe5aNK6bpOqQgVqv5TV8ax2zb++o4duo/ydA6sKht/Pa25IwVUOqYMZg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(366004)(346002)(396003)(136003)(39860400002)(451199018)(82960400001)(33656002)(558084003)(478600001)(110136005)(54906003)(122000001)(38070700005)(55016003)(316002)(38100700002)(71200400001)(6506007)(9686003)(186003)(7696005)(26005)(76116006)(5660300002)(7416002)(2906002)(64756008)(66476007)(66556008)(8936002)(66446008)(8676002)(41300700001)(52536014)(86362001)(66946007)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZiRr6oWvNSE2Y0FxPDUrL4lnjJKFhAvEqGrxNwPmiqKlaTxiFxrzBYnZuD3y?=
+ =?us-ascii?Q?mIOmiw8mk58K9/jWe2kd8P4CBZ8yDgoIhFyDd9+NZiE5lRTa/E/WP31PwYxN?=
+ =?us-ascii?Q?q2k/RUD7FVFjvUQP+cFNSy9zQpuxh5qyaNVoTxEI358kAZlrmz3tg0VWFJmI?=
+ =?us-ascii?Q?JiOmGjPBBsXFUDhHop1QXkmr5gyt1Y9EJPLaq0n2jg1Bi4rw4iwt174Gvwfa?=
+ =?us-ascii?Q?9UzY3qh7YbjJzsXtPKz1OI5ffCiAYO1AVMj+cvkhzs0pqRAsjGS3SDJ4rx/9?=
+ =?us-ascii?Q?OopR2iYmxjCUy7pp8YzA0qh2u8pG0yfltlhps1U6G/fQRSXYhhI6IB3Kwez8?=
+ =?us-ascii?Q?CJToJGBtBFHiuViXRRXeyu7x7LrnoQbVMUg1t3a5gTqX52MT1QY/RXeNnfqI?=
+ =?us-ascii?Q?X3Mwin8bd1fWqBXOI4WStiP1ysvVAAKkLjldLcyveh6U4ddDyrpLG03lES0S?=
+ =?us-ascii?Q?OXRiH5qi0tQoY0+PY2cpa0y6fOQKtZn3gwDiUsPI3T6bkjFxsF46Nn+0j4eC?=
+ =?us-ascii?Q?gLt3qkkovIY+t1w+fWQEjIecVXvDHtqBZWBCIDIzLHsX/+TtjAHfMzx/Uaug?=
+ =?us-ascii?Q?/YxxBReMdFmOnTp3rWGvyVLKNKaWTOlxnW7qhjLxLSCRNfPswcxbpf5rHhrd?=
+ =?us-ascii?Q?3Aby3LVhN4a13OJ3Kp2zrmkuEWa2GTGphwHg0e6ixh/Rhre5mpakRM/lUPzb?=
+ =?us-ascii?Q?H2uZKkiPgFc1PXrsFPVm5ffvgwKmIoTVp8A6ux+FQ0Rl4nLSpNEKe3UW8s7/?=
+ =?us-ascii?Q?TcNBhe5lGzooJXtALt+ODjW0CZT4ueFoGpGu45gcFHKTp8iAT/dpI0U3xVKw?=
+ =?us-ascii?Q?cIhvlA6/+XB8lXnMyFav1Py5uD7WBA61aLvcfA7VC00HuGz0E4jbYmLs2098?=
+ =?us-ascii?Q?rXZ/Nrr7A2RDGtwi+Fbps/7XjhB8KezwIsBOBNecuZuMw5q450wWqTKvD7lj?=
+ =?us-ascii?Q?IoJA3Z372l4qN0SQmTeWJE3fFrVf9C9tciuWyHnr6D/max/Rqr2BI1He0TDK?=
+ =?us-ascii?Q?8KZBVsm/I4FIlpniU7i+EpV88hKttEiGnQmXMvFuCtkR/Rjbjzal1X2vitdd?=
+ =?us-ascii?Q?e+IQBEXuAlwXIIhbCosjhGarO7bEd4gDegOo6M3WGIh8Av44o8SpNIL4sHz4?=
+ =?us-ascii?Q?LKa294mRIJxrk0F2dCbepdgBKJHgP9LeTxscUqrfiRowcqfqj2uG5IzL009i?=
+ =?us-ascii?Q?QDFQGdHwcYo59BhwJJOTlH3xR9HBTZmjw5e82aYkocy+MgKqoQTyN9QobTq9?=
+ =?us-ascii?Q?5rQwwGH2lriaFm+QrKgsLiSDeq1jcRlq6GmsBUAN/LrSTnfnLCp+aQm2RrM7?=
+ =?us-ascii?Q?2IA7mV7FFh53Ip+V2W47oGe5pdNZh9t454XgNO1RyZKW3uOKCL9yVRc16Xwx?=
+ =?us-ascii?Q?+WfIGCNG6fL9MsW1K2wPnSoCA2JNo6+4RivlEcETvRuS2yShXgDtphzufBAt?=
+ =?us-ascii?Q?nj0LgC1Kig3n4YFvfOFOa1WF/hzc2WeVXbfsA5GIAW+v5ZeWWkShgrRJX2+a?=
+ =?us-ascii?Q?mQX07+7fPRkJZjfhDaaiPMKkXTKpd6OesE6gqGWOv3Dssjzohufof5j8N6BD?=
+ =?us-ascii?Q?XYMvx3r1YeK2cep2/e4SHNODTriuSC+PX9EMZPgK?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Dvf7PR1/0ITtVjq0t1uCiIa";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 553bfb29-fb43-40b2-a652-08db215e20a0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2023 11:53:56.0630
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IexEMJKK1tOaViiJ+EK7cnOZ25zppef/zcxQTESS3ZJRG25xc+4PRz3D2B4zO47qBfqU4+YiwN3y2b9MvPqqLQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5637
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Dvf7PR1/0ITtVjq0t1uCiIa
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Andrew,
-
-> > > If I understand this correctly, in patch 4, you add a call to the
-> > > 6250 family to call mv88e6185_g1_set_max_frame_size(), which sets
-> > > a bit called MV88E6185_G1_CTL1_MAX_FRAME_1632 if the frame size
-> > > is larger than 1518. =20
-> >=20
-> > Yes, correct.
-> >  =20
-> > >=20
-> > > However, you're saying that 6250 has a frame size of 2048. That's
-> > > fine, but it makes MV88E6185_G1_CTL1_MAX_FRAME_1632 rather
-> > > misleading as a definition. While the bit may increase the frame
-> > > size, I think if we're going to do this, then this definition
-> > > ought to be renamed.=20
-> >=20
-> > I thought about rename, but then I've double checked; register
-> > offset and exact bit definition is the same as for 6185, so to avoid
-> > unnecessary code duplication - I've reused the existing function.
-> >=20
-> > Maybe comment would be just enough? =20
+> From: Nicolin Chen <nicolinc@nvidia.com>
+> Sent: Wednesday, March 8, 2023 10:26 PM
 >=20
-> The driver takes care with its namespace in order to add per switch
-> family defines. So you can add MV88E6250_G1_CTL1_MAX_FRAME_2048. It
-> does not matter if it is the same bit. You can also add a
-> mv88e6250_g1_set_max_frame_size() and it also does not matter if it is
-> in effect the same as mv88e6185_g1_set_max_frame_size().
+> Now both the physical path and the emulated path should support an IO
+> page
+> table replacement.
 >=20
-> We should always make the driver understandably first, compact and
-> without redundancy second. We are then less likely to get into
-> situations like this again where it is not clear what MTU a device
-> actually supports because the code is cryptic.
-
-Ok, I will add new function.
-
-Thanks for hints.
-
+> Call iommufd_device_replace() when vdev->iommufd_attached is true.
 >=20
-> 	 Andrew
 
-
-
-
-Best regards,
-
-Lukasz Majewski
-
---
-
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/Dvf7PR1/0ITtVjq0t1uCiIa
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmQLGksACgkQAR8vZIA0
-zr3w7ggA1Hor5Ep2XfYJkQ3gTvfuczGbFeLyddNyhJ5qcRue6rXH7kTT7TLmm89M
-X80VLozQDLpcLo8TodfPfaK8aT4ynvO8KyLHmh19AOnmU7FWuMoZUJiGvRZ8xXif
-mvvUQpuC8l7ce9UtiQ08QbRzHw3f11oUrN3DYQbnqCtPW1WV+mpBfMeoigS2buQg
-Jhqgh7kGTUaUop1EqdQbD5sGc3YUMofYmJB1keZ2ZQwmRNLnxhp041FHA+8azA2M
-5y2zFdzWlearfYr7/Q7rq7OC6QvI/gMLJ4+AkFxpu76z+7AjwtgEnh/vJpKGny3N
-0fQnTO1kN5+FIAwtXoAr/OWOMYb1/A==
-=eF9h
------END PGP SIGNATURE-----
-
---Sig_/Dvf7PR1/0ITtVjq0t1uCiIa--
+why is replace enabled only in physical path in this patch?
