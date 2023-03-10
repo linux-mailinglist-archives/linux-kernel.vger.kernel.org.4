@@ -2,209 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3560E6B4BCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:58:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 171926B4BD4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 16:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjCJP6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 10:58:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
+        id S230310AbjCJP7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 10:59:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbjCJP5l (ORCPT
+        with ESMTP id S231240AbjCJP65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:57:41 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2046.outbound.protection.outlook.com [40.107.220.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C138D7A95;
-        Fri, 10 Mar 2023 07:52:47 -0800 (PST)
+        Fri, 10 Mar 2023 10:58:57 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AF0E8CFB;
+        Fri, 10 Mar 2023 07:53:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678463633; x=1709999633;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=k1n7adRSWRaeWkHjxP35U+ZAu1ZwiHFr7Lgl450Y98M=;
+  b=gyXFc8mnO56HnUisWTkgEvF+baN2iK+KTRSmXZQjhZBGbfrFJ7IrMq1b
+   9QFBeGYNmdEWkGcK1O+2W4su981NL6t66Rd/4s7NaOKyq3VyD7jswH8P5
+   SM8OEg4uPeBAN44msgeL1dwmUpnxcxwUG6A+T51fjQWVhQQO4sb+seOSF
+   TiDqbQJtLcpneI7FEmL+BG3IhBat1lzswBu3ZMaPCy19JMrKXBRCZK6ls
+   h3r6oVFJb+QQ4EV25AyMpqHX7Z8xUupUG1u6nMEFg4hqO9X7225vhWgQJ
+   TEKNaTjBXXgI4pT6hE1Ae4Rq0DFAYoqZn5W2Mcs2/Wo644NWqvsJ8xISU
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="423024661"
+X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
+   d="scan'208";a="423024661"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 07:53:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="766868988"
+X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
+   d="scan'208";a="766868988"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Mar 2023 07:53:53 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 10 Mar 2023 07:53:52 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Fri, 10 Mar 2023 07:53:52 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Fri, 10 Mar 2023 07:53:52 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NUpqxIv4McvKpUxm9zVSwc2BkQ/zQa/5ahbkXoZTnJ/Zqp3ailXDdQiN1l7uG+wcePABDoRujrmH9xkqIZzAWVIUhcMmJmC8+4fhx543/O96ODPBydIPJz81xt3jCbE+HFVlKpmlrN+BgU75Z1KGvhdOfoHRr6/YN3gOsjh4E22gjPn7kL4JqigabH0MhMhovmvvSyZIBf3nZUJrurazlZN5HbrR4EoKcJFJakTG1kGHYEC009oWcqrAnb2kWN8NlOd6o+Lzqbey6bz3poTlBI78V/SdJa9Z1xpTUObCQlgN2YEeac8efwJEa3XEdtjBjcMb0HOp8q1AW+Q2hIMgUA==
+ b=lS0Ce0zGdSDW7jcux7jYh1+3ZLbR1upTHKdCNXZY2XJYIzbjiIdYD24Zb+Av4Z18FIel4KEpOfCfJMrl0tkjVyniPkOiWFATzkRssm7IyblbAzZVjTOC7Q0DGo6ZgEat5nv0cUu7hwdyefhobKTv01UHVfS2J5HBK7PUy8ZCUCXV0nA8Jc9iE4BYm/6i6hKQ5Q5UBqc2Ea/lzGqxXzqxfkTQg51BMDCQKQ0BriV52yqH1q3q3u0oxKsnnijjv5k18DN5n630MMHdd7YQtf+kns5/rw/FhPm15i5y6/OIDDOtVyFHVD64um71OX+nvMOKv60Cs5lJWiEBiRZtlzl6vA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Jtn5xgU92dXdxPrVv6HgqsyKhfJIQsak61N/j4HyXhc=;
- b=jaKXl+acReDivHmlndUSH0qe2JfTpHXxvy3hvyf9zUSXwxw1vlQzvjgswGiL+UoQECY4hH+tpL7DVxy2PVWzzOb2O6pQcUjLVJDpiZhIzx/bp0ZG3HZFPrYOijbEYA2Pb7Dyh/iPxqM8fLFzI1jfOobmvhfBOHeOlMfPVdBeNTBBDt4s/uaLTzfA7GvkpZM/229c/eyvz19FpcFbismdMn3w7ZbgXMWbvHK+A3wR0E3JQ8YypjjFwo0OULnr/yzaI+Vd6yPKz4SNBgkuDJ0bCu4wu1wRr92DN90O+QhyvuxUa5SFWxhSLw+Rwqaa5CPRD3/sH5eVCooZqFJV8IAEfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jtn5xgU92dXdxPrVv6HgqsyKhfJIQsak61N/j4HyXhc=;
- b=Lm9U/4jceYFczvP5kzPCrmwp2DISnNXSaI22BWxbPH1xysJnqrpIpSxQEbo4IpaKXJN9yqOWkVo8fVJsIbuS6rl5Sy/1nLnQRJns93bqb+12VyetfEEu12vi2iFKtjcnT5kpsLkn6KVIigKjzQ3U8eYyYKE6YEcDmHNvr8QMm+H5y9iUZBd4cLGkOhUdJcWDaK2b8Zg5tRk4qT/8XzRGo9fJjFK64/0ZTPlVpYCNs5Ssc7SR18NQ1kL9IZQBIni7wlgD1bHRnMax63Y5WK0ko2O1Kpdak5UZ2gZirymAl+k+vgim5HCEXRea6mQJ8667Bf1R5nc0I70cFSsBjVN40g==
-Received: from BN9PR03CA0132.namprd03.prod.outlook.com (2603:10b6:408:fe::17)
- by DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) with
+ bh=awv2TYvsWfud0i523/uVFBYpHpw4KjaNNjk2O/4fdE4=;
+ b=IpIEl+wy9/603C+l03S7otpxj5rxaCLlS2mbUB7/42cd3S7zO2VVbbzMcwNGpcN8qn2aETJ1JbzjnMahyUrno99OMgyNMG74BWRiNFN5aPTMooQtQHHxGjh5DpwjmhaJ+p+kE9xHEcwvdDD3BeMk+G9nWQQyZz7Pnr2q9Svu8Jdh0Z0oGAlHNRvfpVGkkwzWnl+/E2jT+emh5D/Xfn9XDoxLpYBMWnrEYYldIr7ZEywNTZLC4XV6/apSexEcvBm/gNLHlgece22hasDP2+a882FqmeKCpEeIXS7x4kyg0alxW7IS1DbKD9U2HU3M0IY527ITD61YP4pcDHp8KQmq+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by SA2PR11MB5067.namprd11.prod.outlook.com (2603:10b6:806:111::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
- 2023 15:52:45 +0000
-Received: from BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:fe:cafe::b0) by BN9PR03CA0132.outlook.office365.com
- (2603:10b6:408:fe::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19 via Frontend
- Transport; Fri, 10 Mar 2023 15:52:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT007.mail.protection.outlook.com (10.13.177.109) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.19 via Frontend Transport; Fri, 10 Mar 2023 15:52:45 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 10 Mar 2023
- 07:52:34 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 10 Mar
- 2023 07:52:34 -0800
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server id 15.2.986.5 via Frontend
- Transport; Fri, 10 Mar 2023 07:52:30 -0800
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     <christian.koenig@amd.com>, <digetx@gmail.com>,
-        <jonathanh@nvidia.com>, <ldewangan@nvidia.com>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <sumit.semwal@linaro.org>,
-        <thierry.reding@gmail.com>, <wsa@kernel.org>
-CC:     <akhilrajeev@nvidia.com>
-Subject: [PATCH] i2c: tegra: Fix PEC support for SMBUS block read
-Date:   Fri, 10 Mar 2023 21:22:17 +0530
-Message-ID: <20230310155217.11993-1-akhilrajeev@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-X-NVConfidentiality: public
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.20; Fri, 10 Mar
+ 2023 15:53:48 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::7911:de29:ded:224]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::7911:de29:ded:224%5]) with mapi id 15.20.6178.017; Fri, 10 Mar 2023
+ 15:53:47 +0000
+Message-ID: <ae69c05b-7f7d-ccd2-fb52-f89b74eae2d4@intel.com>
+Date:   Fri, 10 Mar 2023 16:52:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH bpf-next v2 0/3] xdp: recycle Page Pool backed skbs built
+ from XDP frames
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>, <brouer@redhat.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Song Liu <song@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230303133232.2546004-1-aleksander.lobakin@intel.com>
+ <73b5076c-335b-c746-b227-0edd40435ef5@redhat.com>
+Content-Language: en-US
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <73b5076c-335b-c746-b227-0edd40435ef5@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR2P281CA0136.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9e::18) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT007:EE_|DM4PR12MB6280:EE_
-X-MS-Office365-Filtering-Correlation-Id: d1df0166-a831-4063-9eba-08db217f7dc5
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|SA2PR11MB5067:EE_
+X-MS-Office365-Filtering-Correlation-Id: 98cac9c1-728a-40be-2b7d-08db217fa2a1
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gNDygaGFIIQp+ZVuVN56MgE5JCcxX2g5Y6RSRyLK2XEYWjtBKTOpo2AT9+Wt9vtYh6UQgiAMK7jGrdkBZ0nVvDP2zBuKOGZiDtk+HWUIFda+x2vQww0gSAkQvZJU5SanGNUT49AEbakTg/tfB2CBbLjofqOH/mQSWlZbW8oskK2l+yilqu+Fs+W2UjOv+bkXob3j8NjxBKkVlbP/CDk+hnnJMPP7XsCl0jGPFXBKtef9ViRGe6/qIoE1TkcOAIhjzcFrSOsmr4CojR2JyKUS/D9W912dF7HX1SgbWh9hTGvA244y0gA306IjsiNy3uS/HQ/JERv5MEJA92KrLus1KiIUbZUpXclEw1jsOy4m96waX1enE9Uvcyf3ycKlVmeTvP5jqrQqnO962qkKY5o/8d3xi/qoXNmWBZjizvNrmudtwW+uDY+/FEIY3N7r61zH+0K0PzvTk0Mhi0N27YZcKODBr00b1gh844gKEOGpBkRvgWkwCL/LCM8XhBJc7BXvjTHuXabtmCNdyZlo4u1XaNEA/1DAWYaKa9Ks8WLiRntahrPJujy+BHqZ6bExjyAYhQh40EBpLIAGA4L1b9hV2PN2oU2Z4eIqbVQ+uTFfeox1Af/fp7cnL/nqnv5UuM95wBxFo1Iq1MQjzc2B8O4LWLZ+bRt+yy/r7sp6GnOoVpII24QARTyKLYLZ2zD+09JWPNgM+xrNGhzraRz/JRJlCQyJBhiR9VPpw+LrgBVKPq9sHrYlbH47wJPE9APZuJGR9cYiCE0dOSDtLwIhNsrZssa7mdyUwcNO2PlmkYmCXQLkcwW6d4N+rG5ze9+G5TYF
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(396003)(136003)(346002)(451199018)(40470700004)(46966006)(36840700001)(47076005)(426003)(336012)(110136005)(40460700003)(36756003)(356005)(86362001)(83380400001)(7636003)(82740400003)(36860700001)(26005)(1076003)(82310400005)(186003)(6666004)(2616005)(316002)(7696005)(5660300002)(478600001)(921005)(40480700001)(107886003)(4326008)(8936002)(2906002)(70206006)(8676002)(41300700001)(70586007)(2101003)(83996005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 15:52:45.5692
+X-Microsoft-Antispam-Message-Info: GLjYVIncwXpA05o8fkHWPsSL0TNIWaxJNtAygZ06GNR3vlXVubY/vF65D3kjQwfObfDvIsgPtT9Kn+c+Gi2jaR7diNj2X+HYU3yPtmYKlcbN9QgQF/jeGE8vynrrNRfQPKwWkx54PJPaewWTAPVPRcMb/DeBR+xEACkVt2xodW9f216iz57DXCbrjX9dGb97n2uGWpgKelV6r+r/cCtUlHqJfCg/cMl37GguVRJW1vnjZGs8JaPAd1LgBW55JeMM3kNgDCnuZYGTPlDsCnrEnuQ+pZuvLfXA+iV2ogE2zSXJJJuSm3CTRhr7jdroL9np3DRgMNhDkGH2txi7juY8wWgBGabIYLJ+bVpZPznwzeT5XpG+qaWdQLqae57B+P2Sf+PJQickefaXnSRqeyfAnK909OPy/0uOxxWfilurPplYzaaM5g3zepvYUtrZ6/gWHbWKlIYSnS8OwxlPrsVFOt2M7pDDX0gButw+hvLXAsd3XfIZ90fCs838f7DndGRHcZ07Qr9IBvi2zS8qhkKpNTEanT0/WWAlu53mx/aFQS0RmLfJdRw+Ru8t9q12h3jBDqRQxr0uNbFwk0DL5atUYyYf63G6AUlthWY699Kr8QTn+b1q6rOCkpMu1Z4FgftrIRlQw37Dsp7+Qn848wMEg97SSd5eq7cIqPGO6SOZaiDpeCjjoLhCIyTwSFK962SKYvVDdGjqZg51mNTeYmXqbYdIllzRDri4Yb5AVKNQtdM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(136003)(396003)(346002)(39860400002)(376002)(451199018)(2906002)(6486002)(966005)(6666004)(38100700002)(82960400001)(31686004)(6512007)(6506007)(8936002)(7416002)(5660300002)(4326008)(6916009)(8676002)(31696002)(2616005)(86362001)(478600001)(41300700001)(316002)(186003)(36756003)(26005)(54906003)(66556008)(66476007)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SFJTbloyV1lEUDlRVno3RUl5TmptZVl2TVErR3FUY0JFNFk5MVFiaVY5NUZQ?=
+ =?utf-8?B?YTBhT3NrZHNSTHBmaVdUTG5CNGFMTTgyWlhKdG1qc0Q5NlBVVEo5NkxoWGlu?=
+ =?utf-8?B?Qks1UmZIY1RhREhhM3JaT3NxU2VwS2s5cktvb0ZGTzg0Q0laMlkvRW5sQng2?=
+ =?utf-8?B?ejZyOHNhaGNRNzJKekRGZ0NZRFY5K2tqa2hvTkY2VDI1TVVoR3lFS1VVbDds?=
+ =?utf-8?B?dXA3bGM3ZjRKT1ZDMDBEQ2VQMjNHS3E1WXB6b3ZxMzhZejVNb0grWStoTmsr?=
+ =?utf-8?B?RkJ3RXJCTnBRK3VPaUxoaEp1dW9Oc25LRnZjVDE4NlRVeUlVQjJWcmhyVlV0?=
+ =?utf-8?B?Y3Eyay9SUi95Y3NSWjI0SHBlZlBDdVFlM1YyLzVCcjBBYjRTaUNDUDZURkxX?=
+ =?utf-8?B?VnFuUGh6R1ZuOXRRcFpDQzBuUktIWk91TndLYU41dFVzRElkZS9VNkxxRENE?=
+ =?utf-8?B?TUdRSzFJTk5nT1RRWDY2bWlRWlAwWHlTcyt2WjRPcXFxRDRNSzNzN3gvQ1hY?=
+ =?utf-8?B?TERzalFsdTErN2tMR1JsbUdQK2pycXNsb3RqU1l1SmxtQWZHVmh3a2FlbW5Q?=
+ =?utf-8?B?bWtWTElxVW5iUUVRQ3hHdUduMXRJR3RXN3lnUXdtdzVWc1FOS3lneGx0NGZl?=
+ =?utf-8?B?ekhuQzVrUllQOXNrdXNzZVVwWlFKNEp5dHlveFpTTk1QZzUwVDcwbldYSHlj?=
+ =?utf-8?B?RFZJYzd3Y1V1K2pPZWpNZHBOcEJ6eUNoQlBGUmp0K2pYbmpnbjA1NWhmZWhU?=
+ =?utf-8?B?ckpFM0x3NzZKalZBcW9YYjB1b3BvTjNjZmY5eU8vRVpFLytGZElLb3RQZmNi?=
+ =?utf-8?B?YWRQZjFxbnc1eDVacVgrRC9zL0NpSDZMZUZVcEJXWVluSWZxNDJIaSt4Qk9Q?=
+ =?utf-8?B?NmRJR3RkcTJ5d0w1cTBqMnJyVlNvMlJmdk1EblZKVGkvVEoxRTBUa0ZUWUhF?=
+ =?utf-8?B?RGZCT0FLaVJSbVJhSi84R1Y2eERwT0hKS2tUN3U2Yk5pZlE3R09QNDFjaERx?=
+ =?utf-8?B?UithMTNiMzVzUk1uWEhmcDE4eHlaOUtDSVBSdU5WU2lnd0pvc0RTTldCNm5G?=
+ =?utf-8?B?QzZrVENlVW9SeUl5THM2NjlFZ2IwZGttMTVsOTZSSFBXYi80OVpGSmVHbElt?=
+ =?utf-8?B?RGIvZ3NqTTRxaVhGM09reEk5NUJLRjlhK1lONnp2MFlEQjhwb2ZKUStpVG5B?=
+ =?utf-8?B?bnFMZWFIeTV0ZlpMdW9tQzBWUjFKYW5kK1MrZEgzTWZ3WGxiVVE0Y0JFYUgw?=
+ =?utf-8?B?Q21wOE52OEttL2xUNDNxeUxEbkFFWnMyb28xYTFZZllGa0Y1NyticXZFMXR2?=
+ =?utf-8?B?U2N0Y1JndytXbDFxN3dMZjB4Z3RLYjVRL1UwL2xiU0xVTmhKUDAzemVkS0VF?=
+ =?utf-8?B?ZWZyNWc1MlRUaDkvNU1rWnBuNnA4aU9iZ3gzUDgzT0RLNU1JTDZsaWtHaUN5?=
+ =?utf-8?B?SkhQSFdwL1lvZlRFN05aZWpmZmVVTnZGdUNjcTFkSnJiRkxXM3B2dkZocENL?=
+ =?utf-8?B?YmNlK05hUDZTNW1iUEg0d1hicTFQUDZZbzQvN1IrZmFtK2hHa1FiakRHOUlQ?=
+ =?utf-8?B?ZzNFMUVsU1B1MmxBTjVybHdoWDNRV0MxQzdMb3plTnBWd0RqMjJiSHpVWnNz?=
+ =?utf-8?B?bENaelVncjNDMEhsV2IyZXllRmgvTGVuSWZqRkFTaUgzMXl5ZWcxWHF1anRW?=
+ =?utf-8?B?aENCR3loMWFHRi8zQkhBK0NmeUJxNXJ1Q2hwZDgrRnl0NHRzd3VpejVJTHhw?=
+ =?utf-8?B?NWFZL3hscHoyNG9Ib3Q3ZGxPWDAralVtZDJGMlRiK0ZkYlJvVmpmVmpINGVh?=
+ =?utf-8?B?TzVaNEJlRTZnakt6dk5waVZML0N2WDRaeU1PTmNkNmU0ZExRL0VOQlNzZnJ3?=
+ =?utf-8?B?RmRiU1ZrRnc4WHV1d0l5aFRGcFIxTkZRbFJGZGVGNXBhWlk3MDdiTmNhdWIy?=
+ =?utf-8?B?SS9YaTZXTTZvcTlLUWh3cCt1QmF2bkxKZ0Y4QTg0S1Nid2VncmQrNDRNdFBn?=
+ =?utf-8?B?MDZVLzcyWGt3elgzZUI0SHJ3ekRwdmVKbEJub01acDRBTHFqQ1R5WDBsYmhR?=
+ =?utf-8?B?UFVEM0RYSGJKcnlteHZHRDRGRHFydWdTMGVyL2dvR0xHMzhYZWhsZUJMcERQ?=
+ =?utf-8?B?OHYxRHRrS1pKbGtPTDN6ZHFkdFJUYm5SWW50VDljYkpVdmV2VHBuTjE4clYr?=
+ =?utf-8?Q?4IYH5ZgJYb5r4SX+hLeHBnI=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98cac9c1-728a-40be-2b7d-08db217fa2a1
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 15:53:47.8279
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1df0166-a831-4063-9eba-08db217f7dc5
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6280
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EKn6g+ZiL6vNBDjAE2HoGJ7Q9Ca4h03Z3jKBX3diiQWPMTRCz1E+rdKfGwcjg/zMNMxbwn2nkouCsuKCbeXT+GNYtAkgD9XdVtp+ssmhLSE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5067
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the msg->len value correctly for SMBUS block read. The discrepancy
-went unnoticed as msg->len is used in SMBUS transfers only when a PEC
-byte is added.
+From: Jesper Dangaard Brouer <jbrouer@redhat.com>
+Date: Thu, 9 Mar 2023 17:43:51 +0100
 
-Fixes: d7583c8a5748 ("i2c: tegra: Add SMBus block read function")
-Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
----
- drivers/i2c/busses/i2c-tegra.c | 37 +++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 12 deletions(-)
+[...]
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 6aab84c8d22b..75250a46cf71 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -279,6 +279,7 @@ struct tegra_i2c_dev {
- 	size_t msg_buf_remaining;
- 	int msg_err;
- 	u8 *msg_buf;
-+	__u16 msg_len;
- 
- 	struct completion dma_complete;
- 	struct dma_chan *tx_dma_chan;
-@@ -1169,7 +1170,7 @@ static void tegra_i2c_push_packet_header(struct tegra_i2c_dev *i2c_dev,
- 	else
- 		i2c_writel(i2c_dev, packet_header, I2C_TX_FIFO);
- 
--	packet_header = msg->len - 1;
-+	packet_header = i2c_dev->msg_len - 1;
- 
- 	if (i2c_dev->dma_mode && !i2c_dev->msg_read)
- 		*dma_buf++ = packet_header;
-@@ -1242,20 +1243,32 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 		return err;
- 
- 	i2c_dev->msg_buf = msg->buf;
-+	i2c_dev->msg_len = msg->len;
- 
--	/* The condition true implies smbus block read and len is already read */
--	if (msg->flags & I2C_M_RECV_LEN && end_state != MSG_END_CONTINUE)
--		i2c_dev->msg_buf = msg->buf + 1;
--
--	i2c_dev->msg_buf_remaining = msg->len;
- 	i2c_dev->msg_err = I2C_ERR_NONE;
- 	i2c_dev->msg_read = !!(msg->flags & I2C_M_RD);
- 	reinit_completion(&i2c_dev->msg_complete);
- 
-+	/* *
-+	 * For SMBUS block read command, read only 1 byte in the first transfer.
-+	 * Adjust that 1 byte for the next transfer in the msg buffer and msg
-+	 * length.
-+	 */
-+	if (msg->flags & I2C_M_RECV_LEN) {
-+		if (end_state == MSG_END_CONTINUE) {
-+			i2c_dev->msg_len = 1;
-+		} else {
-+			i2c_dev->msg_buf += 1;
-+			i2c_dev->msg_len -= 1;
-+		}
-+	}
-+
-+	i2c_dev->msg_buf_remaining = i2c_dev->msg_len;
-+
- 	if (i2c_dev->msg_read)
--		xfer_size = msg->len;
-+		xfer_size = i2c_dev->msg_len;
- 	else
--		xfer_size = msg->len + I2C_PACKET_HEADER_SIZE;
-+		xfer_size = i2c_dev->msg_len + I2C_PACKET_HEADER_SIZE;
- 
- 	xfer_size = ALIGN(xfer_size, BYTES_PER_FIFO_WORD);
- 
-@@ -1295,7 +1308,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 	if (!i2c_dev->msg_read) {
- 		if (i2c_dev->dma_mode) {
- 			memcpy(i2c_dev->dma_buf + I2C_PACKET_HEADER_SIZE,
--			       msg->buf, msg->len);
-+			       msg->buf, i2c_dev->msg_len);
- 
- 			dma_sync_single_for_device(i2c_dev->dma_dev,
- 						   i2c_dev->dma_phys,
-@@ -1352,7 +1365,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 						i2c_dev->dma_phys,
- 						xfer_size, DMA_FROM_DEVICE);
- 
--			memcpy(i2c_dev->msg_buf, i2c_dev->dma_buf, msg->len);
-+			memcpy(i2c_dev->msg_buf, i2c_dev->dma_buf, i2c_dev->msg_len);
- 		}
- 	}
- 
-@@ -1408,8 +1421,8 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
- 			ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], MSG_END_CONTINUE);
- 			if (ret)
- 				break;
--			/* Set the read byte as msg len */
--			msgs[i].len = msgs[i].buf[0];
-+			/* Set the msg length from first byte */
-+			msgs[i].len += msgs[i].buf[0];
- 			dev_dbg(i2c_dev->dev, "reading %d bytes\n", msgs[i].len);
- 		}
- 		ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], end_type);
--- 
-2.17.1
+>> Some numbers on 1 Xeon Platinum core bombed with 27 Mpps of 64-byte
+>> IPv6 UDP, iavf w/XDP[0] (CONFIG_PAGE_POOL_STATS is enabled):
+>>
+>> Plain %XDP_PASS on baseline, Page Pool driver:
+>>
+>> src cpu Rx     drops  dst cpu Rx
+>>    2.1 Mpps       N/A    2.1 Mpps
+>>
+>> cpumap redirect (w/o leaving its node) on baseline:
+> 
+> What does it mean "without leaving its node" ?
+> I interpret this means BPF program CPU redirect to "same" CPU ?
+> Or does the "node" reference a NUMA node?
 
+Yes, NUMA node. It's a two-socket system. I redirect to a different
+physical core, but within one NUMA node. When crossing nodes, results
+usually are likely worse.
+
+> 
+>>
+>>    6.8 Mpps  5.0 Mpps    1.8 Mpps
+>>
+>> cpumap redirect with skb PP recycling:
+> 
+> Does this test use two CPUs?
+
+Yes, one serves interrupt / NAPI polling function and then redirects all
+packets to a different core, which passes them up the stack.
+
+These drops come from that the "source" CPU handles the queue much
+faster than the "dest" one is able to process (no GRO on cpumap yet* +
+software checksum computation + ...). Still faster than XDP_PASS when
+one CPU does everything.
+
+* well, there is cpumap GRO implementation in my repo, but without
+hardware checksum status it's pretty useless and currently there's no
+hints support in cpumap. So I didn't send it standalone (for now).
+
+> 
+>>
+>>    7.9 Mpps  5.7 Mpps    2.2 Mpps
+>>                         +22% (from cpumap redir on baseline)
+>> [0] https://github.com/alobakin/linux/commits/iavf-xdp
+
+[...]
+
+Thanks,
+Olek
