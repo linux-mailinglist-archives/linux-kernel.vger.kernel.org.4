@@ -2,83 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635FE6B3915
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDEFC6B3911
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 09:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjCJIpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 03:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S230427AbjCJIpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 03:45:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbjCJIom (ORCPT
+        with ESMTP id S230465AbjCJIoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:44:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEC010E268
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:41:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678437704;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PgZ9DWKppXLbZXIYqFbF8nghQRnE3BR/P3wfdlRGiz4=;
-        b=ZzMJuKv2FY7OCL/FsJvyy99Q6zcXZTVhVr2VJDsp3NfyciYZHUTVcZHi6z5Cf9BtbkAjos
-        U3y9nROGNl5q92BxUQTNWvFHhxuQeqb/kM72rp5hcHGZ1bfkEcZRaki8Nu+MD6tTI0dKyg
-        wPLwSvUlOn5AuEkV63wu3/UOnrJpC5w=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-484-99IAZUVkPViaAd0buaLRDA-1; Fri, 10 Mar 2023 03:41:42 -0500
-X-MC-Unique: 99IAZUVkPViaAd0buaLRDA-1
-Received: by mail-wr1-f71.google.com with SMTP id a7-20020a056000188700b002cdd0562b11so909018wri.11
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:41:42 -0800 (PST)
+        Fri, 10 Mar 2023 03:44:17 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1C3103ECB
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:41:54 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id k10so17330437edk.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:41:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678437713;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jY19RBdXGErSuK96SQ9CO/VfqzR61PSiwucTWNRVDbE=;
+        b=ZdR6O1tBpHF+lilFpQQlvhYUaj1uscCMv151wALtJiKxx7nhMroGk7Zx2dHnMxKrHy
+         UBAiF40+9XQLG7M5KcFaMhqxRjOdmpJvsgHFOXkNg+MgU8aGx8qWtNy9Qn3/8E4o4TF6
+         mbeqrU7JwF0dVu2x6LVeN2wbGOkHfYwdvH2eS8RZwUyYbxkoTh0aziit6x9MCaerboWJ
+         K5iMFTV4m96ZEdgcv/OagZ5f9ZKR9pUjcSiLywCJcIQthGgrnbxDQ2IwcUBv4D3qfNRx
+         0iCsNZifm1/3Ej2552eb7fjQv/mbyIUpOsDK/UxUnoNQlJlEd30jLxn8KKAEiUCvCzCs
+         5BoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678437701;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PgZ9DWKppXLbZXIYqFbF8nghQRnE3BR/P3wfdlRGiz4=;
-        b=JJSczUCtazgMvmhHb8HbR8D7v3v5IwKyVQqLPd/0S0ZUHoMPeSYAlAJY0hVaz0y9lR
-         bMWi3y89ppFN5ns65+dzZNyIbiungbFjFUWMFEhnuxt3HsaZ3R2d5DstEPyen5xNc+rW
-         keRHBSYct8K/ABmcwvn1hJrThiL+WoWu5dMtxqN3sS/uT4cMWpjP/s1Mbdj7DL+QqNP2
-         LvH43Yt36SBzkY2sZxz7Snu6OOlGLA9hAQDI7WjBN2bccYNnobaWl0sTUWhhoENtgZV3
-         oqsqokc6wt7aCO9QKQHt/jc493S0EkpTD9CTRFu4+PTEyLwLvMRXjD7ruW8nAaWIErP3
-         fHGQ==
-X-Gm-Message-State: AO0yUKV8b0lr8RsKILcWST7n0bMtuvuwRPPc1jrSKeLiH9d+ApEw6Bvn
-        wlt18hLY2aASr9ORhea1jGRT/YSopJUroEYbfu3jmh/ou8oVeTPnURoQ3t6ebt7HW1GI5ZkCqzx
-        mMxp85pslGjtTptR/CPIDTLfR
-X-Received: by 2002:adf:f006:0:b0:2c7:1a96:63f2 with SMTP id j6-20020adff006000000b002c71a9663f2mr15408164wro.3.1678437701510;
-        Fri, 10 Mar 2023 00:41:41 -0800 (PST)
-X-Google-Smtp-Source: AK7set/0zNz/ZZRX8XUCR+0UQZYSDN/cLZcU6NuWf8z1hU8kWNXs0SEm1rd0WtH4SBmkrKRw2UpQgw==
-X-Received: by 2002:adf:f006:0:b0:2c7:1a96:63f2 with SMTP id j6-20020adff006000000b002c71a9663f2mr15408153wro.3.1678437701194;
-        Fri, 10 Mar 2023 00:41:41 -0800 (PST)
-Received: from redhat.com ([2.52.9.88])
-        by smtp.gmail.com with ESMTPSA id q6-20020a05600c46c600b003eb0d6f48f3sm2337036wmo.27.2023.03.10.00.41.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 00:41:40 -0800 (PST)
-Date:   Fri, 10 Mar 2023 03:41:36 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Nanyong Sun <sunnanyong@huawei.com>, joro@8bytes.org,
-        will@kernel.org, robin.murphy@arm.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        wangrong68@huawei.com, Cindy Lu <lulu@redhat.com>
-Subject: Re: [PATCH v2] vhost/vdpa: Add MSI translation tables to iommu for
- software-managed MSI
-Message-ID: <20230310034101-mutt-send-email-mst@kernel.org>
-References: <20230207120843.1580403-1-sunnanyong@huawei.com>
- <Y+7G+tiBCjKYnxcZ@nvidia.com>
- <20230217051158-mutt-send-email-mst@kernel.org>
- <Y+92c9us3HVjO2Zq@nvidia.com>
- <CACGkMEsVBhxtpUFs7TrQzAecO8kK_NR+b1EvD2H7MjJ+2aEKJw@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1678437713;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jY19RBdXGErSuK96SQ9CO/VfqzR61PSiwucTWNRVDbE=;
+        b=UJNSPUz1M47+h/w/wnlT23Jz97r3QtVhN508MYJ0Nn/dFjX9HEDHhNZOrkG96VWqol
+         jPjig9oAb8Tb09v8gV150GzWXem09SS3rsCpkkin4YuxcVdJDcPE7sipAd9XoQfo7wXK
+         Ygs/gGOzxpdv1aJ8xMS0JWKPm7rO2IkzQbON4wO5rLtwxrKrEWiB6Gq28pOUlfGPk+Z9
+         wNAiEKpGNtkVD1GqC0s0/JUlpGJs50g3x23DOfF8HgfWnEpMj+comEXhSUq5TcHrUjLW
+         AY+sssYFaNan2HJqZ9tT5DcFSjTUySaCDaVLqi653sUYu3Tdrp060AdI7fTgM8wfHHxU
+         LTLw==
+X-Gm-Message-State: AO0yUKU2/cYETDxw03vkMC0VG/fmdLOuAMMOqvjDFA3No2XXca6MKD8b
+        fiqHIkevNeIHdybA0YCliG+QkQ==
+X-Google-Smtp-Source: AK7set/wf4w9jzDPoANKQB4e+0Ofo51LjennRsoVP/tsxVTpy93y5J3W+5W5VhClHpcVl0kpfmkn7A==
+X-Received: by 2002:a17:906:9c8b:b0:8b1:76dd:f5ef with SMTP id fj11-20020a1709069c8b00b008b176ddf5efmr25974741ejc.5.1678437713153;
+        Fri, 10 Mar 2023 00:41:53 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:2a59:841a:ebc:7974? ([2a02:810d:15c0:828:2a59:841a:ebc:7974])
+        by smtp.gmail.com with ESMTPSA id m9-20020a170906720900b008b133f9b33dsm665646ejk.169.2023.03.10.00.41.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 00:41:52 -0800 (PST)
+Message-ID: <02174928-2071-512a-3cc6-d24bcc75cc32@linaro.org>
+Date:   Fri, 10 Mar 2023 09:41:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACGkMEsVBhxtpUFs7TrQzAecO8kK_NR+b1EvD2H7MjJ+2aEKJw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 01/21] dt-bindings: display: mediatek: aal: add binding
+ for MT8365 SoC
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Xinlei Lee <xinlei.lee@mediatek.com>
+Cc:     Guillaume La Roque <glaroque@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230220-display-v1-0-45cbc68e188b@baylibre.com>
+ <20230220-display-v1-1-45cbc68e188b@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230220-display-v1-1-45cbc68e188b@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,48 +95,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 10:37:18AM +0800, Jason Wang wrote:
-> On Fri, Feb 17, 2023 at 8:43 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
-> >
-> > On Fri, Feb 17, 2023 at 05:12:29AM -0500, Michael S. Tsirkin wrote:
-> > > On Thu, Feb 16, 2023 at 08:14:50PM -0400, Jason Gunthorpe wrote:
-> > > > On Tue, Feb 07, 2023 at 08:08:43PM +0800, Nanyong Sun wrote:
-> > > > > From: Rong Wang <wangrong68@huawei.com>
-> > > > >
-> > > > > Once enable iommu domain for one device, the MSI
-> > > > > translation tables have to be there for software-managed MSI.
-> > > > > Otherwise, platform with software-managed MSI without an
-> > > > > irq bypass function, can not get a correct memory write event
-> > > > > from pcie, will not get irqs.
-> > > > > The solution is to obtain the MSI phy base address from
-> > > > > iommu reserved region, and set it to iommu MSI cookie,
-> > > > > then translation tables will be created while request irq.
-> > > >
-> > > > Probably not what anyone wants to hear, but I would prefer we not add
-> > > > more uses of this stuff. It looks like we have to get rid of
-> > > > iommu_get_msi_cookie() :\
-> > > >
-> > > > I'd like it if vdpa could move to iommufd not keep copying stuff from
-> > > > it..
-> > >
-> > > Absolutely but when is that happening?
-> >
-> > Don't know, I think it has to come from the VDPA maintainers, Nicolin
-> > made some drafts but wasn't able to get it beyond that.
+On 09/03/2023 15:22, Alexandre Mergnat wrote:
+> Display Adaptive Ambient Light for MT8365 is compatible with another SoC.
+> Then, add MT8365 binding along with MT8183 SoC.
 > 
-> Cindy (cced) will carry on the work.
-> 
-> Thanks
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-Hmm didn't see anything yet. Nanyong Sun maybe you can take a look?
 
-> >
-> > Please have people who need more iommu platform enablement to pick it
-> > up instead of merging hacks like this..
-> >
-> > We are very close to having nested translation on ARM so anyone who is
-> > serious about VDPA on ARM is going to need iommufd anyhow.
-> >
-> > Jason
-> >
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
