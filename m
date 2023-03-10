@@ -2,110 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987BF6B3BC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDBF6B3BC8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 11:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjCJKKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 05:10:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
+        id S230123AbjCJKOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 05:14:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjCJKKL (ORCPT
+        with ESMTP id S229598AbjCJKOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 05:10:11 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAB994743
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:10:09 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id k10so18241914edk.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 02:10:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678443008;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VES88RDu68rL5NDUHr3sXnSGJ9TXEfu2GH9TAuqlmkU=;
-        b=Ozr1iPXoEGvcAHwAy9H9S8GCoun0lCmweQbD8YnbUqziy2u/98BqZPBfzPbRnLPABx
-         nUWc5FrRdihvGHgCfjrqZPsD6V9xwGYOtcCbmoB+6DVL280iKMrB1gIdz0YBcOUR3OIN
-         HSME51Il8c5yPqHjdS1detBGS/ZTEl9SWOkFovseOvMYGbvXGa7aiXgUEXWJujXap3Es
-         70eqsFq6rsMnYTAy8/+vBxTFHEe/eDuueJgjnT3atKSChkJnq/t/GNZQK8W5z5sUNkgx
-         82jtG7DdKnmVYLKXQGGxRUaQVEgKS+tkvwpLP7lCJ+ytuj+m8sbcvWc39sJJXMhASmKR
-         svdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678443008;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VES88RDu68rL5NDUHr3sXnSGJ9TXEfu2GH9TAuqlmkU=;
-        b=J56XLAzyykt0k1M8RTxlR37smhPInwNl8BrEmFcUJsnyJj/2Zi8E09fR/jg6h8k3fO
-         70dGhdbc4/rblY5LZyGDSg5mE9nGqnGHtz8JBmvi0YduzO55I3AdiI+0v6siUrbRWDx5
-         yGEtNIOSnvmV+0Gbwa+KEKN5aZE46bOKckSpZi/af2FXEhgBGyRP59Kt20Yajyh6F9mP
-         YhHAPNvZltdnNI7yCQhKs8LUSNTQvTIncknn1v+3+yaXa6hxEBdXYz/4tWgpyaB8HX0q
-         d+CK1VoKDZ72VUbpihxHeULmLbD56L6P2wD0iKQmAY/7osWfvzVMbssdg11IVc+8lk3X
-         xjCg==
-X-Gm-Message-State: AO0yUKXO32Q/HbfhD0Z21ZxM98SzMt3TYDGxuNHPstgQd7nRnMhFp4ws
-        B6tkXozQiA+LqEDsCtuNZSNKvw==
-X-Google-Smtp-Source: AK7set/S605bhmLAtsmVPrUq/mepr0q5FJC+/eV4WvNFS5d4216qWzvQbfEOofPJqPaTziJ7CzL1Bg==
-X-Received: by 2002:a17:907:1b1e:b0:8b2:8876:2a11 with SMTP id mp30-20020a1709071b1e00b008b288762a11mr1368992ejc.28.1678443007804;
-        Fri, 10 Mar 2023 02:10:07 -0800 (PST)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:2a59:841a:ebc:7974])
-        by smtp.gmail.com with ESMTPSA id a20-20020a17090680d400b008c979c74732sm761350ejx.156.2023.03.10.02.10.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 02:10:07 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH] ASoC: dt-bindings: qcom,lpass-rx-macro: correct minItems for clocks
-Date:   Fri, 10 Mar 2023 11:09:37 +0100
-Message-Id: <20230310100937.32485-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 10 Mar 2023 05:14:20 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FB7BB88;
+        Fri, 10 Mar 2023 02:14:18 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32AAECol108115;
+        Fri, 10 Mar 2023 04:14:12 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678443252;
+        bh=thU5uov/bSfpJ2tqvq2wK0MJHJaTq5KtLyWMUxCIsvI=;
+        h=From:To:CC:Subject:Date;
+        b=bEyAvWZ6nheJ5ThMBqnGYtIMd405q2eJ52QnkhJL1zbGKIukwNiTrBuCsMLJ+BLRs
+         S1pV5WAa5u9O2nzmT1Abq02TBAaxIgLLz/Y8R/Z43ovYJ57m2xGvk4uSmR7UWcCeD3
+         VprmA0ox0omBSAH+Yc1ZvVIgdnqqhaIizHgVR5E8=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32AAECVR063449
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 10 Mar 2023 04:14:12 -0600
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 10
+ Mar 2023 04:14:11 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 10 Mar 2023 04:14:11 -0600
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32AAE8f7024145;
+        Fri, 10 Mar 2023 04:14:08 -0600
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [PATCH 0/2] Add device-tree support for CPSW5G on J7200 SoC
+Date:   Fri, 10 Mar 2023 15:44:05 +0530
+Message-ID: <20230310101407.722334-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The RX macro codec comes on some platforms in two variants - ADSP
-and ADSP bypassed - thus the clock-names varies from 3 to 5.  The clocks
-must vary as well:
+Hello,
 
-  sc7280-idp.dtb: codec@3200000: clocks: [[202, 8], [202, 7], [203]] is too short
+This series adds the device-tree nodes for CPSW5G instance of CPSW
+Ethernet Switch on TI's J7200 SoC. Additionally, an overlay file is also
+added to enable CPSW5G nodes in QSGMII mode with the Add-On J7 QUAD Port
+Ethernet expansion QSGMII daughtercard.
 
-Fixes: 852fda58d99a ("ASoC: qcom: dt-bindings: Update bindings for clocks in lpass digital codes")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Siddharth Vadapalli (2):
+  arm64: dts: ti: j7200-main: Add CPSW5G nodes
+  arm64: dts: ti: k3-j7200: Add overlay to enable CPSW5G ports in QSGMII
+    mode
 
-diff --git a/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml b/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml
-index 79c6f8da1319..b0b95689d78b 100644
---- a/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml
-+++ b/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml
-@@ -30,6 +30,7 @@ properties:
-     const: 0
- 
-   clocks:
-+    minItems: 3
-     maxItems: 5
- 
-   clock-names:
+ arch/arm64/boot/dts/ti/Makefile               |   2 +
+ arch/arm64/boot/dts/ti/k3-j7200-main.dtsi     |  83 +++++++++++++++
+ .../dts/ti/k3-j7200-quad-port-eth-exp.dtso    | 100 ++++++++++++++++++
+ 3 files changed, 185 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-quad-port-eth-exp.dtso
+
 -- 
-2.34.1
+2.25.1
 
