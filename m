@@ -2,119 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754366B3471
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9DFF6B3474
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjCJC7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 21:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
+        id S229761AbjCJDBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 22:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjCJC71 (ORCPT
+        with ESMTP id S229459AbjCJDBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 21:59:27 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1475199C4;
-        Thu,  9 Mar 2023 18:59:26 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32A144ig017880;
-        Fri, 10 Mar 2023 02:59:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=PQNfu/X6r67zDWRiVTp+9AqtoRJYT0YRdJwDIpafouM=;
- b=YhJRlgE+UATD4KmgyRCijgrk+02SEW4yB6bRR5TXBvPHgxwAsJvQnedMGXCp2moedcne
- jSXXuKvk0CVreF5i/CzE+7e75hhhak+6hVYsLw8inEyUzAU9KxLnZDmxbgym5aCaLbZm
- iM0pu+Ayg+d1O43Gq9OcSon+W5dqjCVrE5Yyj5C4mCac/cmF/MxdEFylIKXEW1xCL5pZ
- lfyz2lJoxwqnz/fqjcmYK4p8xY2O8NW6tof8L2nC7WlwjMx+G/2qLMKWPhVHxs4lfoA3
- k1NQPAvm/XBgwdgt5MNA61iIjs9JpcMdKwdX71njJTD2fuPR6BW0mTtcLyXY2Q/aZOqC Yg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p7nh2h0dr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 02:59:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32A2xM8t025015
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 02:59:22 GMT
-Received: from [10.79.43.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 9 Mar 2023
- 18:59:10 -0800
-Message-ID: <c862a6ee-241a-0ff8-62a5-668ed6599ad9@quicinc.com>
-Date:   Fri, 10 Mar 2023 08:28:43 +0530
+        Thu, 9 Mar 2023 22:01:16 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A021F6C41;
+        Thu,  9 Mar 2023 19:01:14 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PXrRD4KCFz4x80;
+        Fri, 10 Mar 2023 14:01:12 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678417272;
+        bh=1JrlsnXi1EOsu+4DdrGsOaAXXhmN01ZZTDilkSx+VnA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Wczv/nooJ68TzRFZEPVIQAd8jdkVpRmU68MJGjGcUryHNNkSeEwLpSby6nUePS7g8
+         SSzn3r3moLSBx/uHI+flyNP3uBjMmf6376r8e00WsTs1ma1e6PFTEtWwdPi7/5YHyL
+         8lLFFH+2DXoNyM39CPc5WLWLFnVhOwCpyMuYs8L5PTJ/4zMAisUeEiIVqF/K40Wy6i
+         rrUV38UINBO2hN1N6UH4OTI0jVsWf8G+ZgGKpH44sUEdkj85PVj5fKWujUoIPS7K+3
+         ipP07jkcARoK98bkQbjsISCRv0GkPP31QTqPszVCeG69548+xJyDSQTdWewpgRtoW5
+         RF/Xj0ZxJytAg==
+Date:   Fri, 10 Mar 2023 14:01:11 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commits in the drm-msm-lumag
+ tree
+Message-ID: <20230310140111.6843985b@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] firmware: qcom: scm: fix bogus irq error at probe
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Guru Das Srinagesh" <quic_gurus@quicinc.com>
-References: <20230309111209.31606-1-johan+linaro@kernel.org>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <20230309111209.31606-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: LqWgyw-lRUHacweRThMVx-HXHzVv-JPF
-X-Proofpoint-GUID: LqWgyw-lRUHacweRThMVx-HXHzVv-JPF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_14,2023-03-09_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 phishscore=0 malwarescore=0 clxscore=1011
- impostorscore=0 suspectscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0
- mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303100020
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/wrj2VbZs=FFensSiyBzgkuY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Johan,
+--Sig_/wrj2VbZs=FFensSiyBzgkuY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the fix.
+Hi all,
 
-On 3/9/23 16:42, Johan Hovold wrote:
-> A recent commit added support for an optional interrupt which is only
-> available on some platforms.
-> 
-> Stop spamming the logs with bogus error messages on platforms that do
-> not use this new optional resource:
-> 
-> 	qcom_scm firmware:scm: error -ENXIO: IRQ index 0 not found
-> 
-> Fixes: 6bf325992236 ("firmware: qcom: scm: Add wait-queue handling logic")
-> Cc: Guru Das Srinagesh <quic_gurus@quicinc.com>
-> Cc: Sibi Sankar <quic_sibis@quicinc.com>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Commits
 
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
+  7eaace06eaaa ("drm/msm/dp: set self refresh aware based on PSR support")
+  22459a50890f ("drm/msm/disp/dpu: update dpu_enc crtc state on crtc enable=
+/disable during self refresh")
+  31c98355c44e ("drm/msm/disp/dpu: add PSR support for eDP interface in dpu=
+ driver")
+  e57669adb9c9 ("drm/msm/disp/dpu: use atomic enable/disable callbacks for =
+encoder functions")
+  94d3b11ccbf0 ("drm/msm/dp: use the eDP bridge ops to validate eDP modes")
+  0b2997e060cc ("drm/msm/dp: Add basic PSR support for eDP")
+  884ad965b6df ("drm/msm/dp: use atomic callbacks for DP bridge ops")
+  acb0c11f657d ("drm/msm/disp/dpu: reset the datapath after timing engine d=
+isable")
+  9cc249dfddab ("drm/msm/disp/dpu: wait for extra vsync till timing engine =
+status is disabled")
+  8a9ca0105519 ("drm/msm/disp/dpu: get timing engine status from intf statu=
+s register")
+  01733a9d3510 ("drm/msm/disp/dpu: check for crtc enable rather than crtc a=
+ctive to release shared resources")
+  7a4d735b3fca ("drm/bridge: add psr support for panel bridge callbacks")
+  afed6525a251 ("drm/bridge: use atomic enable/disable callbacks for panel =
+bridge")
+  52e6ac96e351 ("drm: add helper functions to retrieve old and new crtc")
 
-> ---
->   drivers/firmware/qcom_scm.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> index 468d4d5ab550..b1e11f85b805 100644
-> --- a/drivers/firmware/qcom_scm.c
-> +++ b/drivers/firmware/qcom_scm.c
-> @@ -1479,7 +1479,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
->   
->   	init_completion(&__scm->waitq_comp);
->   
-> -	irq = platform_get_irq(pdev, 0);
-> +	irq = platform_get_irq_optional(pdev, 0);
->   	if (irq < 0) {
->   		if (irq != -ENXIO)
->   			return irq;
+are missing a Signed-off-by from their committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/wrj2VbZs=FFensSiyBzgkuY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQKnXcACgkQAVBC80lX
+0GzKzAgAgy6g4GP/oE93pII4Y4FkYEba5c+2u4nN65lERW26g2eqmcqqdrOcxrs9
+4wN4Ezf18/m0ckV1sMd8ln+R/NfRfFfRU9s0ScQhVWqcNgfBpYctMwgZKVR2byqR
+vuA0FIPvH6yb42C2LkzuBLrRv2bEBeYTaatvPopmeSiUQHZA0pi8rtuKtr5JC5nn
+M3aJbhVVYDU5yPG8GsmTeCSPo71jVhtHGDy1l8m6IH9MCb5/JID0ftykgqvUqk4Q
+NasagxxF8lSuZLL63WPOuwf4zlea5TuC4JFS3GKfwpSe49/dhmV4m7RtF3drTNUM
+vUGs0+KT9XQmVeUJy275htlsPkVW1Q==
+=3cvv
+-----END PGP SIGNATURE-----
+
+--Sig_/wrj2VbZs=FFensSiyBzgkuY--
