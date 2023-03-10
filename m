@@ -2,147 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5566B3AAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88CD16B3ABC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbjCJJgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:36:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
+        id S229453AbjCJJhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:37:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbjCJJfz (ORCPT
+        with ESMTP id S231194AbjCJJgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:35:55 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE79E3CFF
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 01:33:08 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 64AF9660305C;
-        Fri, 10 Mar 2023 09:32:38 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678440759;
-        bh=LjZ/H1yvENw4kQILyRX+BuGBgVhVeRRqw9ZZ3x2z6Lg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=n4m3XOtujNI0wBekC6tFT+w6CiJAMJ1jJ8bCGTrNkFT+T+42tocqiilxktRUEKwa0
-         MylK9Rl9uvy4WvKVTFoSteMnXblXJI0Hzqx2lOclykxBqaTUENjFgQcNq9x+rMiBdI
-         UqerTkByI39fbeGByTziQSiNu45/aJvIbi4Ccgz6V9nxFXbcqqhkZQvjpj/chw4pSw
-         UFfIRuxKvCP7fl4gT67rUVo+35dPxaiatNbfPKPwPIGTOrY7Yem1z3QvzzIZVZCS8q
-         3izr+kGoZiUwExPD0YnLc/B2a3NhxOl4nDYrvuWDkJhSJythgByNrgCY4N9cmdzKeh
-         gxfKefewvLosA==
-Message-ID: <18a8e134-6f16-51a5-e600-f68aa85118db@collabora.com>
-Date:   Fri, 10 Mar 2023 10:32:35 +0100
+        Fri, 10 Mar 2023 04:36:44 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01A3814E88;
+        Fri, 10 Mar 2023 01:34:04 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8AxJPxj+Qpk5u0KAA--.14919S3;
+        Fri, 10 Mar 2023 17:33:23 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxSL1e+QpkTcxRAA--.10888S3;
+        Fri, 10 Mar 2023 17:33:22 +0800 (CST)
+Subject: Re: [PATCH v1 1/2] dt-bindings: spi: add loongson spi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liu Peibao <liupeibao@loongson.cn>, devicetree@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn, Mark Brown <broonie@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Rob Herring <robh+dt@kernel.org>, wanghongliang@loongson.cn,
+        zhuyinbo@loongson.cn
+References: <20230308025908.21491-1-zhuyinbo@loongson.cn>
+ <20230308025908.21491-2-zhuyinbo@loongson.cn>
+ <167828359942.2612999.3798783623764270312.robh@kernel.org>
+ <1f14658a-5dc3-fc48-5291-28e14f88abaa@loongson.cn>
+ <c254b2f1-2086-498f-35c6-c87d838bcb2d@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <3370cbee-1b17-3473-4462-c574398fb83d@loongson.cn>
+Date:   Fri, 10 Mar 2023 17:33:18 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 3/3] cpufreq: mediatek: raise proc/sram max voltage for
- MT7622 and MT8516
+In-Reply-To: <c254b2f1-2086-498f-35c6-c87d838bcb2d@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-To:     "jia-wei.chang" <jia-wei.chang@mediatek.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        hsinyi@google.com, Nick <vincent@systemli.org>,
-        Dan Carpenter <error27@gmail.com>
-References: <20230310051750.4745-1-jia-wei.chang@mediatek.com>
- <20230310051750.4745-4-jia-wei.chang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230310051750.4745-4-jia-wei.chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8BxSL1e+QpkTcxRAA--.10888S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Ar45uw4UCr1fuF4UGF48Zwb_yoW8WF4Upw
+        48Can8tF4Utr13Kw4Sq345Kw1YqrWrGryYqF9xKr17GFyqg3WFvr4akr1UuFsruF17GFyx
+        ZF15Kw15KryUZr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bx8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
+        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
+        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
+        AFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
+        0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz4
+        8v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j8pnQUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/03/23 06:17, jia-wei.chang ha scritto:
-> From: "Jia-Wei Chang" <jia-wei.chang@mediatek.com>
-> 
-> Since the upper boundary of proc/sram voltage of MT7622 and MT8516 are
-> 1350 mV and 1300 mV respectively, both are greater than the value of
-> MT2701 1150 mV, we fix it by adding the corresponding platform data and
-> specify proc/sram_max_volt to support MT7622 and MT8516 individually.
-> 
-> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> Fixes: ead858bd128d ("cpufreq: mediatek: Move voltage limits to platform data")
-> Fixes: 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
-> Reported-by: Nick Hainke <vincent@systemli.org>
-> Link: https://lore.kernel.org/lkml/75216e0c-9d36-7ada-1507-1bb4a91a3326@systemli.org/T/
 
-that's 2/3 my patch, 1/3 your patch.....
-...in that case, send my patch as it is and add one more for MT8516.
+在 2023/3/10 下午5:08, Krzysztof Kozlowski 写道:
+> On 10/03/2023 03:31, zhuyinbo wrote:
+>> 在 2023/3/8 下午10:06, Rob Herring 写道:
+>>> On Wed, 08 Mar 2023 10:59:07 +0800, Yinbo Zhu wrote:
+>>>> Add the Loongson platform spi binding with DT schema format using
+>>>> json-schema.
+>>>>
+>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>> ---
+>>>>    .../bindings/spi/loongson,ls-spi.yaml         | 47 +++++++++++++++++++
+>>>>    MAINTAINERS                                   |  6 +++
+>>>>    2 files changed, 53 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+>>>>
+>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>>
+>>> yamllint warnings/errors:
+>>>
+>>> dtschema/dtc warnings/errors:
+>>> Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
+>>> FATAL ERROR: Unable to parse input tree
+>>> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
+>>> make[1]: *** Waiting for unfinished jobs....
+>>> make: *** [Makefile:1512: dt_binding_check] Error 2
+>>>
+>>> doc reference errors (make refcheckdocs):
+>> This yaml patch need depend on
+>>
+>> https://lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
+>>
+>> , then yaml  compile will be successfull.
+> Nothing in the patch changelog (where it is preferred), not even cover
+> letter, mention dependencies.
 
-Regards,
-Angelo
+okay, I will add it in changelog  in next version.
 
-> ---
->   drivers/cpufreq/mediatek-cpufreq.c | 26 ++++++++++++++++++++++----
->   1 file changed, 22 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-> index cb8b76f9c2c3..f6824d4bf85d 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -707,6 +707,15 @@ static const struct mtk_cpufreq_platform_data mt2701_platform_data = {
->   	.ccifreq_supported = false,
->   };
->   
-> +static const struct mtk_cpufreq_platform_data mt7622_platform_data = {
-> +	.min_volt_shift = 100000,
-> +	.max_volt_shift = 200000,
-> +	.proc_max_volt = 1360000,
-> +	.sram_min_volt = 0,
-> +	.sram_max_volt = 1360000,
-> +	.ccifreq_supported = false,
-> +};
-> +
->   static const struct mtk_cpufreq_platform_data mt8183_platform_data = {
->   	.min_volt_shift = 100000,
->   	.max_volt_shift = 200000,
-> @@ -725,20 +734,29 @@ static const struct mtk_cpufreq_platform_data mt8186_platform_data = {
->   	.ccifreq_supported = true,
->   };
->   
-> +static const struct mtk_cpufreq_platform_data mt8516_platform_data = {
-> +	.min_volt_shift = 100000,
-> +	.max_volt_shift = 200000,
-> +	.proc_max_volt = 1310000,
-> +	.sram_min_volt = 0,
-> +	.sram_max_volt = 1310000,
-> +	.ccifreq_supported = false,
-> +};
-> +
->   /* List of machines supported by this driver */
->   static const struct of_device_id mtk_cpufreq_machines[] __initconst = {
->   	{ .compatible = "mediatek,mt2701", .data = &mt2701_platform_data },
->   	{ .compatible = "mediatek,mt2712", .data = &mt2701_platform_data },
-> -	{ .compatible = "mediatek,mt7622", .data = &mt2701_platform_data },
-> -	{ .compatible = "mediatek,mt7623", .data = &mt2701_platform_data },
-> -	{ .compatible = "mediatek,mt8167", .data = &mt2701_platform_data },
-> +	{ .compatible = "mediatek,mt7622", .data = &mt7622_platform_data },
-> +	{ .compatible = "mediatek,mt7623", .data = &mt7622_platform_data },
-> +	{ .compatible = "mediatek,mt8167", .data = &mt8516_platform_data },
->   	{ .compatible = "mediatek,mt817x", .data = &mt2701_platform_data },
->   	{ .compatible = "mediatek,mt8173", .data = &mt2701_platform_data },
->   	{ .compatible = "mediatek,mt8176", .data = &mt2701_platform_data },
->   	{ .compatible = "mediatek,mt8183", .data = &mt8183_platform_data },
->   	{ .compatible = "mediatek,mt8186", .data = &mt8186_platform_data },
->   	{ .compatible = "mediatek,mt8365", .data = &mt2701_platform_data },
-> -	{ .compatible = "mediatek,mt8516", .data = &mt2701_platform_data },
-> +	{ .compatible = "mediatek,mt8516", .data = &mt8516_platform_data },
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(of, mtk_cpufreq_machines);
+>
+> Best regards,
+> Krzysztof
 
