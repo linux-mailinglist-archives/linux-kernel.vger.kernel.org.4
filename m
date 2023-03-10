@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA946B5477
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4F36B547C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:31:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbjCJWbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 17:31:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45310 "EHLO
+        id S231295AbjCJWbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 17:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232105AbjCJWas (ORCPT
+        with ESMTP id S230135AbjCJWbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 17:30:48 -0500
+        Fri, 10 Mar 2023 17:31:04 -0500
 Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32C712A159
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:29:42 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id o12so26458206edb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:29:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB34D125D92
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:30:06 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id ec29so26474993edb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 14:30:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678487380;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A/fmpCgDpxvA8LWrln8hMWcUkIUbZl0gDdryYs66ZNM=;
-        b=R0rVkOFTK01I8PkQgLEcrcN8h1z1TXzJ4sTyCu1Dc/T0d3rgGrCdfCJhUKaPz5ufdr
-         TX5GuQRbGajeSaex+o6jv92Y1mM2L9hji0967HOwVSVHQZLiBGNkNE7YL1z3PVto2o7E
-         jIzTNU/HR45d4Lc79wXyGiFz7u4MJd0reZLtsSmEKdZ+PYqwSHamhtlepZeIcnS/6eV+
-         fzaMtkMZX/ZD/ZwnKY5XesQoREsOIOUWeCkkUZXVpt2Pf2NnZJmOwY5XoMxZe+3ybWPD
-         CsTJzM5Lgl9HX2VmgJq1fUqPxjgwKUD2zPQueLzmEZOVa5HyJW3Iugkagtp3eqBfPpbD
-         Fclw==
+        d=linaro.org; s=google; t=1678487400;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1bKoS9pvaPD45vxy/8VN1t6bf3++/Pyh+VWncnUfWao=;
+        b=bttxm87/lgUPmpMYKydTCfUMa5cDKLYHvOBIkzCvMNEPYG4xqqJeJUWgGQQDH9PyzO
+         SaTEota3CK4/NereGVSzzNR43a+xssbGD17otOcAoR/UlGNmQ/DG/IeUJ0My8hgqsKlo
+         FdpcOxV2cHVwUjbZ9Y89PfMva8mxNaN8rdbycAdg9HUR7rKw3YUP5DFyKk6TbP95bsPT
+         MV2QY1ZSXetc9ctfkeou/ZL5xRdyUqL8uOF2OJ067z/Kqb2wpxzDJcK5trgGZiQ3BzHe
+         bzuWfwQma93PkD6JlblqZClSrAAe88Uu4R1khZlNRI5SH1YCVHkoWyGw+lcyPPF5/xfF
+         5GNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678487380;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A/fmpCgDpxvA8LWrln8hMWcUkIUbZl0gDdryYs66ZNM=;
-        b=p4KGv8vYOfdn9Ft75j0BIHrKKXHA22KwVPju6QVa7kiHKzmAjAwclIZclahDrJr5zV
-         SNSIN+6vio9CYypWzVqbTb0dYqEX6KGjitd4yJaqmdTU2r/EM/De5YhwpAQJrd6GYjxN
-         V8CJd02xIFeq/BHYpZuAjGrOPASn9nKorKhqZFO6NAcb5wd7KO5q+pmQuRdVspBVNlUL
-         6xFdRLtUyR5on2nlECxuPc0DJdFRgGx6eCTkfleMQpJaafFWWQK3FXGuqOhs+6y/6V81
-         b+mDWTNnsxaVjYa0TtbF2cjIbNEVgj/iXNG21wpALHt9Z9ZGLYRCGKMT6MDIu+Nrafks
-         McfQ==
-X-Gm-Message-State: AO0yUKWTuPideneFRwCi4r+bj49DWcT9FZTAjiJ52XiqVShHWegrb/P4
-        Dnd8oLl3DaYSsR9SN8RHABxRDcGQddgVXWKlCX8=
-X-Google-Smtp-Source: AK7set9dImNV/KN8EiLdY5EpM2XCsDXv1qyUfw+n5R9ekVwcaPaRxhGQLlDaSANKhoPsd9Ret83tWQ==
-X-Received: by 2002:a17:907:6e0f:b0:907:672b:736a with SMTP id sd15-20020a1709076e0f00b00907672b736amr33289494ejc.31.1678487380294;
-        Fri, 10 Mar 2023 14:29:40 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678487400;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1bKoS9pvaPD45vxy/8VN1t6bf3++/Pyh+VWncnUfWao=;
+        b=onCt9eikqEBT0gCQRjKuTSvH9OFF8tcdO2ms+RcMYQGMuA4M5Nzl3ITRIpnEzYe8uH
+         LqxmncuRwZyK6XwqpZTK1ohYUjQZMtkGvjU+S3iIicgj8ed1YRhsFQMtgG59U/9lsNR+
+         K2+KClAszOUFsjTZ9W8O1AXC4AWN2MEp2gE2LPXJsbFU0l1ODUGhMHW9F9Fiby2UFait
+         WBqqXlgiXW9X2BEFGtAntpTk3svuADXblcfynn7kdslC59gVLTgJkZiK/qZ1apagj76d
+         9JHY7KUT8RFd/9vAnbD4uDURgoel3q0SInD4hj/9K2yuNXPs4tk+6Z+lbInwbuWNmrp1
+         umfQ==
+X-Gm-Message-State: AO0yUKV09m1B7XQZDrrzvSR4K8ccQ6QkSCQE36EbzAfXyd8hUhMpBnSw
+        Gkn6kn1noPJdxY+R2jt5MLDSrg==
+X-Google-Smtp-Source: AK7set/tYHm3YohbJurAFpGOd/UcKCLoXe4uAxVuLCtC4yaFD/VHodM/+2UXAUZPyoY9aefDgDO9Pw==
+X-Received: by 2002:a17:906:a1c5:b0:906:3373:cfe9 with SMTP id bx5-20020a170906a1c500b009063373cfe9mr25594468ejb.10.1678487399961;
+        Fri, 10 Mar 2023 14:29:59 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:34:52e3:a77e:cac5])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170906370500b008e17dc10decsm371201ejc.52.2023.03.10.14.29.39
+        by smtp.gmail.com with ESMTPSA id k10-20020a50c08a000000b004c2158e87e6sm495695edf.97.2023.03.10.14.29.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 14:29:40 -0800 (PST)
+        Fri, 10 Mar 2023 14:29:59 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] usb: typec: fusb302: mark OF related data as maybe unused
-Date:   Fri, 10 Mar 2023 23:29:37 +0100
-Message-Id: <20230310222937.315773-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] serial: sh-sci: mark OF related data as maybe unused
+Date:   Fri, 10 Mar 2023 23:29:56 +0100
+Message-Id: <20230310222957.315848-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230310222937.315773-1-krzysztof.kozlowski@linaro.org>
-References: <20230310222937.315773-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,26 +77,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 The driver can be compile tested with !CONFIG_OF making certain data
 unused:
 
-  drivers/usb/typec/tcpm/fusb302.c:1816:34: error: ‘fusb302_dt_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/tty/serial/sh-sci.c:3144:34: error: ‘of_sci_match’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/usb/typec/tcpm/fusb302.c | 2 +-
+ drivers/tty/serial/sh-sci.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-index 1ffce00d94b4..592b0aec782f 100644
---- a/drivers/usb/typec/tcpm/fusb302.c
-+++ b/drivers/usb/typec/tcpm/fusb302.c
-@@ -1813,7 +1813,7 @@ static int fusb302_pm_resume(struct device *dev)
- 	return 0;
- }
+diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+index 7bd080720929..a12aa8ff2d51 100644
+--- a/drivers/tty/serial/sh-sci.c
++++ b/drivers/tty/serial/sh-sci.c
+@@ -3141,7 +3141,7 @@ static int sci_remove(struct platform_device *dev)
+ #define SCI_OF_TYPE(data)		((unsigned long)(data) >> 16)
+ #define SCI_OF_REGTYPE(data)		((unsigned long)(data) & 0xffff)
  
--static const struct of_device_id fusb302_dt_match[] = {
-+static const struct of_device_id fusb302_dt_match[] __maybe_unused = {
- 	{.compatible = "fcs,fusb302"},
- 	{},
- };
+-static const struct of_device_id of_sci_match[] = {
++static const struct of_device_id of_sci_match[] __maybe_unused = {
+ 	/* SoC-specific types */
+ 	{
+ 		.compatible = "renesas,scif-r7s72100",
 -- 
 2.34.1
 
